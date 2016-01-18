@@ -19,7 +19,6 @@ import com.mercadopago.core.MercadoPago;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.util.MercadoPagoUtil;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -94,23 +93,9 @@ public class PaymentMethodGuessingController {
     private void setPaymentMethodLayoutForBin(String bin) {
         if(!bin.equals(mSavedBin)) {
             mSavedBin = bin;
-            List<PaymentMethod> validPaymentMethods = getValidPaymentMethodsForBin(mSavedBin);
+            List<PaymentMethod> validPaymentMethods = MercadoPago.getValidPaymentMethodsForBin(mSavedBin, this.mPaymentMethods);
             refreshPaymentMethodLayout(validPaymentMethods);
         }
-    }
-
-    private List<PaymentMethod> getValidPaymentMethodsForBin(String mSavedBin) {
-        if(mSavedBin.length() == MercadoPago.BIN_LENGTH) {
-            List<PaymentMethod> validPaymentMethods = new ArrayList<>();
-            for (PaymentMethod pm : mPaymentMethods) {
-                if (pm.isValidForBin(mSavedBin)) {
-                    validPaymentMethods.add(pm);
-                }
-            }
-            return validPaymentMethods;
-        }
-        else
-            throw new RuntimeException("Invalid bin: " + MercadoPago.BIN_LENGTH + " digits needed, " + mSavedBin.length() + " found");
     }
 
     private void clearGuessing() {

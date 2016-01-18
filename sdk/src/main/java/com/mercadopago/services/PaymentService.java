@@ -5,6 +5,7 @@ import com.mercadopago.model.Issuer;
 import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentIntent;
 import com.mercadopago.model.PaymentMethod;
+import com.mercadopago.model.PaymentMethodSearch;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -19,6 +20,9 @@ public interface PaymentService {
 
     @GET("/v1/payment_methods")
     void getPaymentMethods(@Query("public_key") String publicKey, Callback<List<PaymentMethod>> callback);
+
+    @GET("/checkout/v1/payment_methods/search/options")
+    void getPaymentMethodSearch(@Query("public_key") String publicKey, Callback<PaymentMethodSearch> callback);
 
     @GET("/v1/payment_methods/installments")
     void getInstallments(@Query("public_key") String publicKey, @Query("bin") String bin, @Query("amount") BigDecimal amount, @Query("issuer.id") Long issuerId, @Query("payment_type_id") String paymentTypeId, @Query("locale") String locale, Callback<List<Installment>> callback);

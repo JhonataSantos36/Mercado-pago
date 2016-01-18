@@ -19,10 +19,9 @@ import java.util.List;
 
 public class Step3Activity extends ExampleActivity {
 
-    protected List<String> mSupportedPaymentTypes = new ArrayList<String>(){{
-        add("credit_card");
-        add("debit_card");
-        add("prepaid_card");
+    protected List<String> mExcludedPaymentTypes = new ArrayList<String>(){{
+        add("ticket");
+        add("atm");
     }};
 
     @Override
@@ -62,13 +61,13 @@ public class Step3Activity extends ExampleActivity {
         // Call final vault activity
         ExamplesUtils.startAdvancedVaultActivity(this, ExamplesUtils.DUMMY_MERCHANT_PUBLIC_KEY,
                 ExamplesUtils.DUMMY_MERCHANT_BASE_URL, ExamplesUtils.DUMMY_MERCHANT_GET_CUSTOMER_URI,
-                ExamplesUtils.DUMMY_MERCHANT_ACCESS_TOKEN, new BigDecimal("20"), mSupportedPaymentTypes);
+                ExamplesUtils.DUMMY_MERCHANT_ACCESS_TOKEN, new BigDecimal("20"), mExcludedPaymentTypes);
     }
 
     public void submitGuessingForm(View view) {
         // Call final vault activity
         ExamplesUtils.startAdvancedVaultActivityWithGuessing(this, ExamplesUtils.DUMMY_MERCHANT_PUBLIC_KEY,
                 ExamplesUtils.DUMMY_MERCHANT_BASE_URL, ExamplesUtils.DUMMY_MERCHANT_GET_CUSTOMER_URI,
-                ExamplesUtils.DUMMY_MERCHANT_ACCESS_TOKEN, new BigDecimal("20"), mSupportedPaymentTypes);
+                ExamplesUtils.DUMMY_MERCHANT_ACCESS_TOKEN, new BigDecimal("20"), mExcludedPaymentTypes);
     }
 }

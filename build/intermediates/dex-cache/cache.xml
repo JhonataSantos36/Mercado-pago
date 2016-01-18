@@ -2,11 +2,11 @@
 <items version="2" >
 
     <item
-        jar="/Users/mreverter/AndroidStudioProjects/sdk-android-account-money/example/build/intermediates/exploded-aar/com.mercadopago/sdk/0.9.15/jars/classes.jar"
+        jar="/Users/mreverter/AndroidStudioProjects/sdk-android-v2/example/build/intermediates/exploded-aar/com.mercadopago/sdk/0.9.15/jars/classes.jar"
         jumboMode="false"
         revision="22.0.1"
-        sha1="c4f16f4f4759f3fde6ff7ef287aa229e94f2d5af">
-        <dex dex="/Users/mreverter/AndroidStudioProjects/sdk-android-account-money/example/build/intermediates/pre-dexed/debug/classes-b45119529f37cb9b115087dafccc59ab5e41aec0.jar" />
+        sha1="12bdc1fdd3edcec16d051f026b88b010139e24b6">
+        <dex dex="/Users/mreverter/AndroidStudioProjects/sdk-android-v2/example/build/intermediates/pre-dexed/debug/classes-ff506dec79ff8a9a9ac285af2b6ed3eafcaf22ca.jar" />
     </item>
 
 </items>

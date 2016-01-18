@@ -22,6 +22,7 @@ import com.mercadopago.model.Card;
 import com.mercadopago.model.CardToken;
 import com.mercadopago.model.Customer;
 import com.mercadopago.model.PaymentMethod;
+import com.mercadopago.model.PaymentMethodPreference;
 import com.mercadopago.model.PaymentMethodRow;
 import com.mercadopago.model.SavedCardToken;
 import com.mercadopago.model.Token;
@@ -30,6 +31,7 @@ import com.mercadopago.util.LayoutUtil;
 import com.mercadopago.util.MercadoPagoUtil;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit.Callback;
@@ -43,6 +45,8 @@ public class SimpleVaultActivity extends AppCompatActivity {
     protected String mMerchantBaseUrl;
     protected String mMerchantGetCustomerUri;
     protected String mMerchantPublicKey;
+    protected List<String> mExcludedPaymentTypes;
+    protected List<String> mExcludedPaymentMethodIds;
 
     // Input controls
     protected View mSecurityCodeCard;
@@ -59,30 +63,35 @@ public class SimpleVaultActivity extends AppCompatActivity {
     protected PaymentMethodRow mSelectedPaymentMethodRow;
     protected PaymentMethod mSelectedPaymentMethod;
     protected PaymentMethod mTempPaymentMethod;
+    protected PaymentMethodPreference mPaymentMethodPreference;
+
 
     // Local vars
     protected Activity mActivity;
     protected String mExceptionOnMethod;
     protected MercadoPago mMercadoPago;
-    protected List<String> mSupportedPaymentTypes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView();
-
+        createPaymentPreference();
         // Get activity parameters
         mMerchantPublicKey = this.getIntent().getStringExtra("merchantPublicKey");
         mMerchantBaseUrl = this.getIntent().getStringExtra("merchantBaseUrl");
         mMerchantGetCustomerUri = this.getIntent().getStringExtra("merchantGetCustomerUri");
         mMerchantAccessToken = this.getIntent().getStringExtra("merchantAccessToken");
-        if (this.getIntent().getStringExtra("supportedPaymentTypes") != null) {
+        if (this.getIntent().getStringExtra("excludedPaymentTypes") != null) {
             Gson gson = new Gson();
             Type listType = new TypeToken<List<String>>(){}.getType();
-            mSupportedPaymentTypes = gson.fromJson(this.getIntent().getStringExtra("supportedPaymentTypes"), listType);
+            mExcludedPaymentTypes = gson.fromJson(this.getIntent().getStringExtra("excludedPaymentTypes"), listType);
         }
-
+        if (this.getIntent().getStringExtra("excludedPaymentMethodIds") != null) {
+            Gson gson = new Gson();
+            Type listType = new TypeToken<List<String>>(){}.getType();
+            mExcludedPaymentMethodIds = gson.fromJson(this.getIntent().getStringExtra("excludedPaymentMethodIds"), listType);
+        }
         if ((mMerchantPublicKey != null) && (!mMerchantPublicKey.equals(""))) {
 
             // Set activity
@@ -149,6 +158,12 @@ public class SimpleVaultActivity extends AppCompatActivity {
         }
     }
 
+    protected void createPaymentPreference() {
+        mPaymentMethodPreference = new PaymentMethodPreference();
+        mPaymentMethodPreference.setExcludedPaymentMethods(this.mExcludedPaymentMethodIds);
+        mPaymentMethodPreference.setExcludedPaymentTypes(this.mExcludedPaymentTypes);
+    }
+
     public void onCustomerMethodsClick(View view) {
 
         if ((mCards != null) && (mCards.size() > 0)) {  // customer cards activity
@@ -163,7 +178,7 @@ public class SimpleVaultActivity extends AppCompatActivity {
             new MercadoPago.StartActivityBuilder()
                     .setActivity(mActivity)
                     .setPublicKey(mMerchantPublicKey)
-                    .setSupportedPaymentTypes(mSupportedPaymentTypes)
+                    .setExcludedPaymentTypes(mExcludedPaymentTypes)
                     .startPaymentMethodsActivity();
         }
     }
@@ -281,7 +296,7 @@ public class SimpleVaultActivity extends AppCompatActivity {
             @Override
             public void success(Customer customer, Response response) {
 
-                mCards = customer.getCards();
+                mCards = getSupportedCustomerCards(customer.getCards());
                 LayoutUtil.showRegularLayout(mActivity);
             }
 
@@ -466,7 +481,20 @@ public class SimpleVaultActivity extends AppCompatActivity {
         new MercadoPago.StartActivityBuilder()
                 .setActivity(mActivity)
                 .setPublicKey(mMerchantPublicKey)
-                .setSupportedPaymentTypes(mSupportedPaymentTypes)
+                .setExcludedPaymentTypes(mExcludedPaymentTypes)
                 .startPaymentMethodsActivity();
+    }
+
+    private List<Card> getSupportedCustomerCards(List<Card> cards) {
+        List<Card> supportedCards = new ArrayList<>();
+        if(mPaymentMethodPreference != null) {
+            for (Card card : cards) {
+                if (mPaymentMethodPreference.isPaymentMethodSupported(card.getPaymentMethod()))
+                    supportedCards.add(card);
+            }
+            return supportedCards;
+        }
+        else
+            return cards;
     }
 }

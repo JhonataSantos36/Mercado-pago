@@ -5,7 +5,6 @@ import android.app.Instrumentation;
 import android.content.Intent;
 import android.widget.EditText;
 
-import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentMethodRow;
 import com.mercadopago.test.ActivityResult;
@@ -117,7 +116,7 @@ public class VaultActivityWithGuessingNewCardTest extends BaseTest<VaultActivity
 
     private VaultActivity prepareActivity(String merchantPublicKey, String merchantBaseUrl,
                                           String merchantGetCustomerUri, String merchantAccessToken,
-                                          BigDecimal amount, List<String> supportedPaymentTypes) {
+                                          BigDecimal amount, List<String> excludedPaymentTypes) {
 
         Intent intent = new Intent();
         if (merchantPublicKey != null) {
@@ -138,7 +137,7 @@ public class VaultActivityWithGuessingNewCardTest extends BaseTest<VaultActivity
 
         intent.putExtra("cardGuessingEnabled", true);
 
-        putListExtra(intent, "supportedPaymentTypes", supportedPaymentTypes);
+        putListExtra(intent, "excludedPaymentTypes", excludedPaymentTypes);
         setActivityIntent(intent);
         return getActivity();
     }
