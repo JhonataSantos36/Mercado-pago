@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="css/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+  <title>Customizable UI</title>
+  </head>
+  <body>
+    <header>
+      <div class="inner">
+          <img src="images/logo-mercadopago.png" alt="logoMp">
+
+          <div class="right">
+              <img class="centered" src="images/logo-android.png" alt="logoAndroid">
+          </div>
+      </div>
+    </header>
+
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          <h1>Customizable UI</h1>
+          <h2>Overview</h2>
+          <p>Use MercadoPago class to get all the information needed to make a payment.
+          <br>
+          In order to use our methods, you must create an instance of the MercadoPago class, like this:
+          </p>
+          <pre class="prettyprint">
+            MercadoPago mercadoPago = new MercadoPago.Builder()
+               .setContext(mActivity)
+               .setPublicKey(yourPublicKey)
+               .build();
+          </pre>
+
+          <p>Once you gathered all the information needed, use <b>MerchantPayment</b> and <b>MerchantServer</b> classes to make a payment. </p>
+          <h2>Getting data</h2>
+          <h3>Payment methods</h3>
+          <p>To get available payment methods, you could use this method:</p>
+          <pre class="prettyprint">
+            mercadoPago.getPaymentMethods(new Callback &lt;List&lt;PaymentMethod&gt;&gt;() {
+               @Override
+               public void success(List&lt;PaymentMethod&gt; paymentMethods, Response response) {
+                //Use the list of payment methods.
+               @Override
+               public void failure(RetrofitError error) {
+                //error handling
+                   ApiUtil.finishWithApiException(mActivity, error);
+               }
+            });
+          </pre>
+          <br>
+          <h3>Issuers</h3>
+          <p>If you want to offer installments for your payments, you need to know your user’s card issuer. However, it may not be necessary to ask for it: once your user selected a payment method, you can check if the issuer is automatically determined or not by this  method in the PaymentMethod class:</p>
+          <pre class="prettyprint">
+              paymentMethod.isIssuerRequired()
+          </pre>
+
+          <p>Then, if you have to ask for it, retrieve a list of issuers like this:</p>
+          <pre class="prettyprint">
+            mercadoPago.getIssuers(paymentMethod.getId(), new Callback&lt;List&lt;Issuer&gt;&gt;() {
+               @Override
+               public void success(List&lt;Issuer&gt; issuers, Response response) {
+
+              //use the list of issuers
+               }
+
+               @Override
+               public void failure(RetrofitError error) {
+              //error handling
+                   ApiUtil.finishWithApiException(activity, error);
+               }
+            });
+          </pre>
+          <br>
+          <h3>Card data management</h3>
+          <p>In your card data form, you need to get your user’s identification number. We provide tools to validate it. First, get the available identification types:</p>
+          <pre class="prettyprint">
+              mercadoPago.getIdentificationTypes(new Callback&lt;List&lt;IdentificationType&gt;&gt;() {
+                   @Override
+                   public void success(List&lt;IdentificationType&gt; identificationTypes, Response response) {
+                  //we have an adapter for a Spinner of IdentificationType
+                       identificationTypeSpinner.setAdapter(new IdentificationTypesAdapter(activity, identificationTypes));
+
+                   }
+
+                   @Override
+                   public void failure(RetrofitError error) {
+                       if ((error.getResponse() != null) && (error.getResponse().getStatus() == 404)) {
+
+                           // No identification type for this country
+                           mIdentificationLayout.setVisibility(View.GONE);
+
+                           // Set form "Go" button
+                           if (mSecurityCodeLayout.getVisibility() == View.GONE) {
+                               setFormGoButton(mCardHolderName);
+                           }
+                           LayoutUtil.showRegularLayout(mActivity);
+
+                       } else {
+                           ApiUtil.finishWithApiException(mActivity, error);
+                       }
+                   }
+                });
+          </pre>
+
+          <p>When card data is entered, you must create a <i><b>CardToken</b></i> object, getting the filled information:</p>
+          <pre class="prettyprint">
+            CardToken cardToken = new CardToken(getCardNumber(), getExpiryMonth(), getExpiryYear(), getSecurityCode(), getCardHolderName(), getIdentificationTypeId(getIdentificationType()), getIdentificationNumber());
+          </pre>
+
+          <p>The <i><b>CardToken</b></i> class provides card validation methods for the card’s data:</p>
+          <p>For number and the security code, our SDK checks consistency between the chosen payment method and the card data:</p>
+          <p><b>Card number validation:</b></p>
+          <pre class="prettyprint">
+            cardToken.validateCardNumber(activity, paymentMethod);
+          </pre>
+
+          <p><b>Security code validation:</b></p>
+          <pre class="prettyprint">
+            cardToken.validateSecurityCode(activity, paymentMethod);
+          </pre>
+
+          <p>Both methods will throw exceptions if an invalid data was entered.</p>
+          <p><b>Expiry date validation:</b></p>
+          <pre class="prettyprint">
+            cardToken.validateExpiryDate() //true if valid
+          </pre>
+
+          <p><b>Holder name validation:</b></p>
+          <pre class="prettyprint">
+            cardToken.validateCardholderName() // true if valid
+          </pre>
+
+          <p><b>Validation for identification number, according to the identification type you got before:</b></p>
+          <pre class="prettyprint">
+            cardToken.validateIdentificationNumber(identificationType) // true if valid
+          </pre>
+
+          <p>After validated, wiith this <i><b>CardToken</b></i>, you’ll be able to generate a <i><b>Token</b></i> object, that will be necessary to create a payment. </p>
+          <br>
+          <h3>Installments</h3>
+          <p>Once you have the PaymentMethod and, if required, the issuer, you can get the installments available for your client providing the BIN (first six digits of the card number), amount to pay, the issuer’s id and the payment type id. Do this:</p>
+          <pre class="prettyprint">
+            mercadoPago.getInstallments(bin, amount, issuerId, paymentMethod.getPaymentTypeId(), new Callback&lt;List&lt;Installment&gt;&gt;() {
+                 @Override
+                 public void success(List&lt;Installment&gt; installments, Response response) {
+
+                     if ((installments.size() > 0) && (installments.get(0).getPayerCosts().size() > 0)) {
+                         // Set installments card data and visibility
+                         mPayerCosts = installments.get(0).getPayerCosts(); //get the FIRST element of the installments list
+
+                     } else {
+                         Toast.makeText(getApplicationContext(), "invalid payment method for current amount", Toast.LENGTH_LONG).show();
+                     }
+                 }
+                 @Override
+                 public void failure(RetrofitError error) {
+
+                     mExceptionOnMethod = "getInstallmentsAsync";
+                     ApiUtil.finishWithApiException(mActivity, error);
+                 }
+              });
+          </pre>
+
+          <p>An installment has information about the payment method, the issuer and a list of <b>payer costs</b>, that you’ll have to show to your clients in order to make them choose. </p>
+          <p><b><i>PayerCost</i></b> object has a <b><i>recommended message</i></b>, that you should show to your user when they have to choose (it has a calculated amount by number of installments so you don’t have to make calculations in your app, that may have rounding errors).</p>
+          <br>
+
+          <h3>Customer’s saved cards. </h3>
+          <br>
+          <p>With MercadoPago SDK, you can manage your customer's information easily. By giving to each customer an id and syncing it with MercadoPago, we can handle your users information (preferred cards, address, name, email, etc.). In order to do this, you’ll have to set up your server with <a href="https://www.mercadopago.com.ar/developers/es/tools/">MercadoPago Server SDK</a>.
+          <br>
+          Then, to get your Customer object in your app, just do this:</p>
+          <br>
+          <pre class="prettyprint">
+            MerchantServer.getCustomer(this, mMerchantBaseUrl, mMerchantGetCustomerUri, mMerchantAccessToken, new Callback&lt;Customer&gt;() {
+                 @Override
+                 public void success(Customer customer, Response response) {
+                  //Do what you need with your Customer object
+                     }
+                 }
+
+                 @Override
+                 public void failure(RetrofitError error) {
+                    ApiUtil.finishWithApiException(mActivity, error);
+                 }
+              });
+          </pre>
+
+          <p>Once you have the Customer instance, a list of saved cards is available:</p>
+          <pre class="prettyprint">
+            customer.getCards();
+          </pre>
+
+          <p>Make your user choose one of it’s saved cards. Ask for the security code  and then create a <b><i>SavedCardToken</i></b>:</p>
+          <pre class="prettyprint">
+            SavedCardToken savedCardToken = new SavedCardToken(selectedCard.getId(), securityCode);
+          </pre>
+
+          <p>Then, validate the security code:</p>
+          <pre class="prettyprint">
+            savedCardToken.validateSecurityCode(activity, selectedCard);
+          </pre>
+
+          <p>This will throw an exception if the security code is invalid.</p>
+          <br>
+          <h3>Get a token</h3>
+          <br>
+          <p>Just do this, providing the information you gathered:</p>
+          <p>If you created a <b><i>CardToken</i></b>:</p>
+          <pre class="prettyprint">
+            mercadoPago.createToken(mCardToken, new Callback&lt;Token&gt;() {
+               @Override
+               public void success(Token o, Response response) {
+              //Here, do what you need what the token
+               }
+
+               @Override
+               public void failure(RetrofitError error) {
+
+                   mExceptionOnMethod = "getCreateTokenCallback";
+                   ApiUtil.finishWithApiException(mActivity, error);
+               }
+            });
+          </pre>
+
+          <p>Or if you created a <b><i>SavedCardToken</i></b>:</p>
+          <pre class="prettyprint">
+            mercadoPago.createToken(savedCardToken, new Callback&lt;Token&gt;() {
+               @Override
+               public void success(Token o, Response response) {
+              //Here, do what you need what the token
+               }
+
+               @Override
+               public void failure(RetrofitError error) {
+
+                   mExceptionOnMethod = "getCreateTokenCallback";
+                   ApiUtil.finishWithApiException(mActivity, error);
+               }
+            });
+          </pre>
+          <br>
+          <h3>Bank deals</h3>
+          <p>Get available promotions easilly adding this to your code:</p>
+          <pre class="prettyprint">
+            mercadoPago.getBankDeals(new Callback&lt;List&lt;BankDeal&gt;&gt;() {
+               @Override
+               public void success(List&lt;BankDeal&gt; bankDeals, Response response) {
+              //use the bank deals you’ve got
+               }
+
+               @Override
+               public void failure(RetrofitError error) {
+                   ApiUtil.finishWithApiException(mActivity, error);
+               }
+            });
+          </pre>
+
+          <p>Bank deals have “legals”, which are basically the terms and conditions of the promotion.</p>
+          <h2>Make a payment</h2>
+          <br>
+          <p>Once you got all the necessary information, see how to <a href="make_payment.html">make a payment</a> and end your flow.</p>
+          <h2>Extras</h2>
+          <h3>Payment method detection by card BIN</h3>
+          <p>If you want to ask for card data before anything else, you could filter the valid payment methods for that card's BIN from the list that MercadoPago class gives you by with this method:</p>
+          <pre class="prettyprint">
+            List&lt;PaymentMethod&gt; paymentMethods = mercadoPago.getPaymentMethodsForBin(bin, paymentMethods, supportedPaymentTypes);
+          </pre>
+          <p><b>Tip:</b> to filter payment methods by their type, create a list of strings that let you filter by:<br>
+            <i>Credit card: “credit_card”<br>
+            Debit card: “debit_card”<br>
+            <br>
+            <b>Example:</b>
+            <pre class="prettyprint">
+            protected List&lt;String&gt; supportedPaymentTypes = new ArrayList&lt;String&gt;(){{
+               add("credit_card");
+               add("debit_card");
+            }};
+            </pre>
+
+        </section>
+
+        <aside id="sidebar">
+          <a href="https://github.com/mreverter/sdk-android" class="button"><small>View project on</small> GitHub</a>
+
+          <a href="https://github.com/mreverter/sdk-android/zipball/master" class="button">
+            <small>Download</small>
+            .zip file
+          </a>
+          <a href="https://github.com/mreverter/sdk-android/tarball/master" class="button">
+            <small>Download</small>
+            .tar.gz file
+          </a>
+
+          <p class="repo-owner"><a href="https://github.com/mreverter/sdk-android"></a> is maintained by <a href="https://github.com/mreverter">mreverter</a>.</p>
+        </aside>
+      </div>
+    </div>
+  </body>
+</html>

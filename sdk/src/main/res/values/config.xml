@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-
-    <string name="mpsdk_comma_separator">,</string>
-    <string name="mpsdk_bank_deals_image_location">http://static.mlstatic.com/org-img/MP/app/wallet/android/promos-bancos/</string>
-    <string name="mpsdk_mp_app_deep_link_prefix">mercadopago://checkout/start?pref_id=</string>
-    <string name="mpsdk_mp_app_id">account_money</string>
-
-</resources>

@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="title_activity_step3">Pagos con mensualidades</string>
-    <string name="step3_description">Flujo de pagos con mensualidades y manejo de bancos.</string>
-</resources>
