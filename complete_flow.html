@@ -30,181 +30,77 @@
     <div id="content-wrapper">
       <div class="inner clearfix">
         <section id="main-content">
-          <h1>Complete payment flow tool</h1>
-          <p>Just place this code in your project <b>replacing with your data</b> to launch a full payment flow:</p>
-          <pre class="prettyprint">
-          new MercadoPago.StartActivityBuilder()
-                 .setActivity(this)
-                 .setPublicKey(yourPublicKey)
-                 .setAmount("100")
-                 .startVaultActivity();
+          <div>
+            <h1>Complete Checkout flow tool</h1>
+          </div>
+
+          <div>
+            <h2>Create a Checkout Preference</h2>
+            <p>First you need to create a checkout preference with all payment related information in your server: </p>
+            <pre class="prettyprint">
+              //Create an Item
+              Item item = new Item("itemId", 1);
+
+              //Create a CheckoutIntent with an access token to your server and the item
+              CheckoutIntent checkoutIntent = new CheckoutIntent(MERCHANT_ACCESS_TOKEN, item);
+
+              //Finally, create a preference
+              MerchantServer.createPreference("http://merchanturl.com", "/preferences",checkoutIntent, new Callback&lt;CheckoutPreference&gt() {
+              @Override
+              public void success(CheckoutPreference checkoutPreference, Response response) {
+                  //Congrats, you have a preference!
+              }
+
+              @Override
+              public void failure(RetrofitError error) {
+                  //Handle failure
+              }
+            });
+
           </pre>
-          <br>
-          <p><b>Let's see!</b></p>
-          <p>First the user selects a payment method:</p>
-          <img class="centered" src="images/screenshots/pm_list.png" alt="pm_list">
-          <br>
-          <p>Then, if it’s needed, select issuer:</p>
-          <img class="centered" src="images/screenshots/issuers_list.png" alt="issuers_list">
-          <br>
-          <p>Next step: add card information</p>
-          <img class="centered" src="images/screenshots/new_card.png" alt="new_card">
-          <br>
-          <p>Check information before paying:</p>
-          <img class="centered" src="images/screenshots/vault_new_card.png" alt="vault_new_card">
-          <br>
-          <p><b>Tip:</b> the user can select the installments he wants here.
-          </p>
-          <p><b>Tip:</b>  to filter payment methods by their type, the <i>setSupportedPaymentTypes</i> method receives a list of strings that let you filter by:<br>
-          <i>Credit card: “credit_card”<br>
-          Debit card: “debit_card”<br>
-          Pre paid card: “prepaid_card”<br>
-          Atm: “atm”<br>
-          Tickets: “ticket”<br></i>
-          <br>
-          <b>Example:</b>
-          <pre class="prettyprint">
-          protected List&lt;String&gt; supportedPaymentTypes = new ArrayList&lt;String&gt;(){{
-             add("credit_card");
-             add("debit_card");
-             add("prepaid_card");
-             add("ticket");
-             add("atm");
-          }};
+          <p>The preference payment methods will exclude those payment methods or types you don't want to display in your app. This property is not mandatory. You can check our <a href="payment_types_available.html">payment methods and payment types availables</a> for more information.</p>
+          </div>
+          <div>
+            <h2>Start checkout flow with a preference</h2>
 
-          new MercadoPago.StartActivityBuilder()
-                 .setActivity(this)
-                 .setPublicKey(yourPublicKey)
-                 .setAmount("100")
-                 .setShowBankDeals(true)
-                 .setSupportedPaymentTypes(supportedPaymentTypes)
-                 .startVaultActivity();
-          </pre>
+            <pre class="prettyprint">
+              new MercadoPago.StartActivityBuilder()
+                        .setActivity(activity)
+                        .setPublicKey(yourPublicKey)
+                        .setCheckoutPreference(preference)
+                        .setShowBankDeals(true)
+                        .startCheckoutActivity();
+            </pre>
 
-          <br>
+          <p><b>Let's take a look!</b></p>
+          <p>The following screen is shown:</p>
+          <img class="centered" src="images/screenshots/revamp-inicio.png" alt="revamp-inicio">
+          <p class="image_footer">Payment method choise example</p>
+          <p>Your users can visualize their purchase information by clicking on the shopping cart icon:</p>
+          <img class="centered" src="images/screenshots/revamp-shopping_cart.png" alt="revamp-shopping_cart">
+          <p class="image_footer">Information shown when clicking on icon in the upper right corner of the screen</p>
 
-          <a name="guessing"><h2>Guessing form feature</h2></a>
+          <p>Within this screen, your user will be able to choose a payment method by going into the shown options, as we'll see in the following sections.</p>
 
-          <p>By default, the flow launched by the code above will make the user go through a few screens to select payment data (payment methods and issuer if needed). However, if you’d like a unique form to collect it, we provide you one with payment method “guessing”. Our guessing form will fill payment method data if it can while your client enters it’s card number. If not, the user will have to select it within that form, altogether with the issuer, if needed.
-          Note that this feature is only available for credit and debit cards.
-          To enable our guessing card form, you only have to add a single line:
-          </p>
-          <pre class="prettyprint">
-          new MercadoPago.StartActivityBuilder()
-             .setActivity(this)
-             .setPublicKey("444a9ef5-8a6b-429f-abdf-587639155d88")
-             .setAmount("100")
-             .setGuessingCardFormEnabled(true) //add this
-             .startVaultActivity();
-          </pre>
-          <br>
-          <p><b>Let's see!</b></p>
+          <h3>Cards option selected</h2>
+          <p>The user will see a list of the available card types supported, for example:</p>
+          <img class="centered" src="images/screenshots/revamp-cards.png" alt="revamp-cards">
+          <p class="image_footer">Card types</p>
 
-          <p>Instead of going step by step, there’s only one form to gather payment information:</p>
-          <img class="centered" src="images/screenshots/guessing_card.png" alt="guessing_card">
-          <br>
-          <p>When card BIN is entered, if it identifies an unique payment method, it’s image is shown:</p>
-          <img class="centered" src="images/screenshots/bin_entered.png" alt="bin_entered">
-          <p class="image_footer">Visa credit card identified</p>
-          <p>If the BIN doesn’t identify a unique payment method, a selector appears:</p>
-          <img class="centered" src="images/screenshots/pm_spinner_guessing.png" alt="pm_spinner_guessing">
-          <p class="image_footer">Payment method not identified by card BIN</p>
+          <h3>Cash option selected</h2>
+          <p>The user will see a list of the available card types supported, for example:</p>
+          <img class="centered" src="images/screenshots/revamp-cash.png" alt="revamp-cash">
+          <p class="image_footer">Cash payment methods</p>
 
-          <p>Whether the payment method was “guessed” or not, if issuer selection is needed, another selector appears:</p>
-          <img class="centered" src="images/screenshots/issuer_required_guessing.png" alt="issuer_required_guessing">
-          <p class="image_footer">Issuer (bank) selector</p>
-          <br>
+          <h3>Bank transfer option selected</h2>
+          <p>The user will see a list of the available card types supported, for example:</p>
+          <img class="centered" src="images/screenshots/revamp-bank_transfer.png" alt="revamp-bank_transfer">
+          <p class="image_footer">Bank transfer payment methods</p>
 
-          <h2>Bank deals</h2>
-
-          <p>If you want to inform your users about bank deals, just add this line:</p>
-          <pre class="prettyprint">
-          new MercadoPago.StartActivityBuilder()
-               .setActivity(this)
-               .setPublicKey(yourPublicKey)
-               .setAmount("100")
-               .setShowBankDeals(true) //add this
-               .startVaultActivity();
-          </pre>
-          <br>
-          <p>Bank deals are shown in the app’s menu when the user has to select a payment method (or in the guessing form): </p>
-          <img class="centered" src="images/screenshots/bank_deals_button.png" alt="bank_deals_button">
-          <p class="image_footer">Bank deals (promotions) shown</p>
-
-          <p>When touching in “promotions”, a list of current bank deals appears:</p>
-          <img class="centered" src="images/screenshots/bank_deals.png" alt="bank_deals">
-          <p class="image_footer">Bank deals example</p>
-          <br>
-          <p>If selected, term and conditions of the bank deal are shown:</p>
-          <img class="centered" src="images/screenshots/terms_conditions.png" alt="terms_conditions">
-          <p class="image_footer">Bank deal’s terms and conditions</p>
-          <br>
-          <h2>Merchant’s customers</h2>
-
-          <p>With MercadoPago SDK, you can manage your customer's information easily. By giving to each customer an id and syncing it with MercadoPago, we can handle your users information (preferred cards, address, name, email, etc.). In order to do this, you’ll have to set up your server with <a href="https://www.mercadopago.com.ar/developers/es/tools/">MercadoPago Server SDK</a>, and then add <b>your base URL</b>, getCustomer URI and access token:</p>
-
-          <pre class="prettyprint">
-          new MercadoPago.StartActivityBuilder()
-                 .setActivity(this)
-                 .setPublicKey(yourPublicKey)
-                 .setMerchantBaseUrl("api.mercadopago.com") // add this
-                 .setMerchantGetCustomerUri(“/checkout/examples/getCustomer”) // this too
-                 .setMerchantAccessToken("mla-cards-data") // and also this
-                 .setAmount("100")
-                 .setSupportedPaymentTypes(supportedPaymentTypes)
-                 .startVaultActivity();
-          </pre>
-          <br>
-          <p>When registered customer’s saved cards are found, this flavor takes the default one and starts the payment flow showing it:</p>
-          <img class="centered" src="images/screenshots/customer_card.png" alt="customer_card">
-          <p class="image_footer">Saved card example</p>
-          <br>
-          <p>When touching on the saved card, another screen with a list of the customer’s saved cards is shown.<br>
-          If a new card is needed, the user can start the data-collection flow (it’s up to you whether to use the step by step flow or guessing form).
-          </p>
-
-          <img class="centered" src="images/screenshots/other_pm_selection.png" alt="other_pm_selection">
-          <p class="image_footer">A list of saved cards would be shown here, and also the option to pay in another way
-          </p>
-          <br>
-          <p>And finally, get the collected information in your launcher Activity:</p>
-          <pre class="prettyprint">
-          @Override
-          protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-             if (requestCode == MercadoPago.VAULT_REQUEST_CODE) {
-             if (resultCode == RESULT_OK) {
-
-                 // Set issuer id
-                 Long issuerId = (data.getStringExtra("issuerId") != null)
-                         ? Long.parseLong(data.getStringExtra("issuerId")) : null;
-
-                 // Set installments
-                 Integer installments = (data.getStringExtra("installments") != null)
-                         ? Integer.parseInt(data.getStringExtra("installments")) : null;
-
-                 // Set token
-                 String token = data.getStringExtra("token");
-
-                 // Set payment method
-                 PaymentMethod paymentMethod = JsonUtil.getInstance().fromJson(data.getStringExtra("paymentMethod"), PaymentMethod.class);
-
-                 // Create payment
-                createPayment(this, token,
-                         installments, issuerId, paymentMethod, null);
-
-             }
-          else {
-          // Error handling
-                     if ((data != null) && (data.getStringExtra("apiException") != null)) {
-                         Toast.makeText(getApplicationContext(), data.getStringExtra("apiException"), Toast.LENGTH_LONG).show();
-                     }
-                 }
-          }
-          </pre>
-
-          <p>To create a payment, have a look at: <a href="make_payment.html">Make a payment</a></p>
-
+          <h3>Review and confirm</h2>
+          <p>The user will see a the choise made and will have to confirm it:</p>
+          <img class="centered" src="images/screenshots/revamp-review_and_confirm.png" alt="revamp-review_and_confirm">
+          <p class="image_footer">Review and confirm</p>
         </section>
 
         <aside id="sidebar">
