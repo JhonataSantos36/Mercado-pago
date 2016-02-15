@@ -55,11 +55,45 @@
                @Override
                public void failure(RetrofitError error) {
                 //error handling
-                   ApiUtil.finishWithApiException(mActivity, error);
+                   //Handle failure
                }
             });
           </pre>
-          <br>
+          <p>Or, if you wish to imitate <a href="data_collection_ui">our UI</a>, you can use a service that groups payment methods.</p>
+          <pre class="prettyprint">
+                mMercadoPago.getPaymentMethodSearch(mExcludedPaymentTypes, mExcludedPaymentMethodIds, new Callback&lt;PaymentMethodSearch&gt() {
+                  @Override
+                  public void success(PaymentMethodSearch paymentMethodSearch, Response response) {
+                      //Handle the "PaymentMethodSearch" object
+                  }
+
+                  @Override
+                  public void failure(RetrofitError error) {
+                      //Handle failure
+                  }
+                });
+          </pre>
+          <p>"Payment method search" groups "items", that may or may not be payment methods. The way to identify which is in fact a payment method, is by a "type" attribute: it tells you whether the "item" is a payment method, a payment type or a group. This value will be <i>"payment_method"</i>, <i>"payment_type"</i> or <i>"group"</i></p>
+          <p>An "item" also has an "id" attribute, that in the case of being a payment method, the "id" will be the payment method's id, which you can use to make a payment.</p>
+          <p>Also, if the item's type is "payment_type", it's "id" attribute will be the payment type's "id" (you can check them <a href="payment_types_available.html">here</a>).
+
+          <p>To make exclusions, create lists with the payment methods or types to exclude:</p>
+
+          <pre class="prettyprint">
+            //Create list of excluded payment methods somewhere in your code
+            List&lt;String&lt; mExcludedPaymentTypes = new ArrayList&lt;String&lt;(){{
+                add("bancomer");
+                add("banamex");
+                add("serfin"); //Santander's id
+            }};
+            //Create list of excluded payment types somewhere in your code
+            List&lt;String&lt; excludedPaymentMethodIds = new ArrayList&lt;String&lt;(){{
+                add(PaymentType.DIGITAL_CURRENCY);
+                add(PaymentType.ATM);
+            }};
+          </pre>
+
+          <p>Feel free to check our implementation on GitHub.</p>
           <h3>Issuers</h3>
           <p>If you want to offer installments for your payments, you need to know your user’s card issuer. However, it may not be necessary to ask for it: once your user selected a payment method, you can check if the issuer is automatically determined or not by this  method in the PaymentMethod class:</p>
           <pre class="prettyprint">
@@ -71,14 +105,12 @@
             mercadoPago.getIssuers(paymentMethod.getId(), new Callback&lt;List&lt;Issuer&gt;&gt;() {
                @Override
                public void success(List&lt;Issuer&gt; issuers, Response response) {
-
-              //use the list of issuers
+                  //Use the list of issuers
                }
 
                @Override
                public void failure(RetrofitError error) {
-              //error handling
-                   ApiUtil.finishWithApiException(activity, error);
+                  //Handle failure
                }
             });
           </pre>
@@ -97,18 +129,11 @@
                    @Override
                    public void failure(RetrofitError error) {
                        if ((error.getResponse() != null) && (error.getResponse().getStatus() == 404)) {
-
                            // No identification type for this country
                            mIdentificationLayout.setVisibility(View.GONE);
 
-                           // Set form "Go" button
-                           if (mSecurityCodeLayout.getVisibility() == View.GONE) {
-                               setFormGoButton(mCardHolderName);
-                           }
-                           LayoutUtil.showRegularLayout(mActivity);
-
                        } else {
-                           ApiUtil.finishWithApiException(mActivity, error);
+                           //Handle failure
                        }
                    }
                 });
@@ -158,17 +183,15 @@
 
                      if ((installments.size() > 0) && (installments.get(0).getPayerCosts().size() > 0)) {
                          // Set installments card data and visibility
-                         mPayerCosts = installments.get(0).getPayerCosts(); //get the FIRST element of the installments list
+                         PayerCost payerCost = installments.get(0).getPayerCosts(); //get the FIRST element of the installments list
 
                      } else {
-                         Toast.makeText(getApplicationContext(), "invalid payment method for current amount", Toast.LENGTH_LONG).show();
+                         //Invalid payment method for current amount
                      }
                  }
                  @Override
                  public void failure(RetrofitError error) {
-
-                     mExceptionOnMethod = "getInstallmentsAsync";
-                     ApiUtil.finishWithApiException(mActivity, error);
+                      //Handle failure
                  }
               });
           </pre>
@@ -187,13 +210,12 @@
             MerchantServer.getCustomer(this, mMerchantBaseUrl, mMerchantGetCustomerUri, mMerchantAccessToken, new Callback&lt;Customer&gt;() {
                  @Override
                  public void success(Customer customer, Response response) {
-                  //Do what you need with your Customer object
-                     }
+                   //Do what you need with your Customer object
                  }
 
                  @Override
                  public void failure(RetrofitError error) {
-                    ApiUtil.finishWithApiException(mActivity, error);
+                    //Handle failure
                  }
               });
           </pre>
@@ -223,14 +245,12 @@
             mercadoPago.createToken(mCardToken, new Callback&lt;Token&gt;() {
                @Override
                public void success(Token o, Response response) {
-              //Here, do what you need what the token
+                    //Here, do what you need what the token
                }
 
                @Override
                public void failure(RetrofitError error) {
-
-                   mExceptionOnMethod = "getCreateTokenCallback";
-                   ApiUtil.finishWithApiException(mActivity, error);
+                    //Handle failure
                }
             });
           </pre>
@@ -240,14 +260,12 @@
             mercadoPago.createToken(savedCardToken, new Callback&lt;Token&gt;() {
                @Override
                public void success(Token o, Response response) {
-              //Here, do what you need what the token
+                    //Here, do what you need what the token
                }
 
                @Override
                public void failure(RetrofitError error) {
-
-                   mExceptionOnMethod = "getCreateTokenCallback";
-                   ApiUtil.finishWithApiException(mActivity, error);
+                    //Handle failure
                }
             });
           </pre>
@@ -263,7 +281,7 @@
 
                @Override
                public void failure(RetrofitError error) {
-                   ApiUtil.finishWithApiException(mActivity, error);
+                   //Handle failure
                }
             });
           </pre>
