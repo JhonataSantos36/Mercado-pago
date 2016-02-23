@@ -41,6 +41,7 @@ public class PaymentMethodsActivityTest extends BaseTest<PaymentMethodsActivity>
         row.setTag(paymentMethodsAdapter.getItem(0));
         paymentMethodsAdapter.getListener().onClick(row);
 
+        getApplicationContext();
         try {
             ActivityResult activityResult = getActivityResult(activity);
             PaymentMethod paymentMethod = (PaymentMethod) activityResult.getExtras().getSerializable("paymentMethod");
@@ -125,7 +126,7 @@ public class PaymentMethodsActivityTest extends BaseTest<PaymentMethodsActivity>
         assertFinishCalledWithResult(activity, Activity.RESULT_CANCELED);
     }
 
-    private Activity prepareActivity(String merchantPublicKey, List<String> excludedPaymentTypes, List<String> excludedPaymentMethodIds) {
+    private PaymentMethodsActivity prepareActivity(String merchantPublicKey, List<String> excludedPaymentTypes, List<String> excludedPaymentMethodIds) {
 
         Intent intent = new Intent();
         if (merchantPublicKey != null) {

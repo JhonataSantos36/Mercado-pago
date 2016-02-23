@@ -29,6 +29,9 @@ import retrofit.client.Response;
 public class Step1Activity extends ExampleActivity {
 
     protected List<String> mExcludedPaymentTypes = new ArrayList<String>(){{
+        add("atm");
+        add("ticket");
+        add("digital_currency");
     }};
 
     protected List<String> mExcludedPaymentIds = new ArrayList<String>(){{
@@ -53,7 +56,7 @@ public class Step1Activity extends ExampleActivity {
                 // Set payment method
                 PaymentMethod paymentMethod = (PaymentMethod) data.getSerializableExtra("paymentMethod");
 
-                // Call new card activity
+                // Call new cards activity
                 ExamplesUtils.startCardActivity(this, ExamplesUtils.DUMMY_MERCHANT_PUBLIC_KEY, paymentMethod);
             } else {
 
@@ -114,7 +117,6 @@ public class Step1Activity extends ExampleActivity {
                 .setContext(this)
                 .setPublicKey(ExamplesUtils.DUMMY_MERCHANT_PUBLIC_KEY)
                 .build();
-
 
         mercadoPago.createToken(cardToken, new Callback<Token>() {
             @Override

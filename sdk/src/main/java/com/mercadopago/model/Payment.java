@@ -1,10 +1,5 @@
 package com.mercadopago.model;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-
-import org.json.JSONObject;
-
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;

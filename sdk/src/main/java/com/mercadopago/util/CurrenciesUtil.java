@@ -10,13 +10,20 @@ import java.util.Map;
 
 public class CurrenciesUtil {
 
+    public static final String CURRENCY_ARGENTINA = "ARS";
+    public static final String CURRENCY_BRAZIL = "BRL";
+    public static final String CURRENCY_CHILE = "CLP";
+    public static final String CURRENCY_COLOMBIA = "COP";
+    public static final String CURRENCY_MEXICO = "MXN";
+    public static final String CURRENCY_VENEZUELA = "VEF";
+
     private static Map<String, Currency> currenciesList = new HashMap<String, Currency>(){{
-        put("ARS", new Currency("ARS", "Peso argentino", "$", 2, ",".charAt(0), ".".charAt(0)));
-        put("BRL", new Currency("BRL", "Real", "R$", 2, ",".charAt(0), ".".charAt(0)));
-        put("CLP", new Currency("CLP", "Peso chileno", "$", 0, ",".charAt(0), ".".charAt(0)));
-        put("COP", new Currency("COP", "Peso colombiano", "$", 0, ",".charAt(0), ".".charAt(0)));
-        put("MXN", new Currency("MXN", "Peso mexicano", "$", 2, ".".charAt(0), ",".charAt(0)));
-        put("VEF", new Currency("VEF", "Bolivar fuerte", "BsF", 2, ",".charAt(0), ".".charAt(0)));
+        put(CURRENCY_ARGENTINA, new Currency(CURRENCY_ARGENTINA, "Peso argentino", "$", 2, ",".charAt(0), ".".charAt(0)));
+        put(CURRENCY_BRAZIL, new Currency(CURRENCY_BRAZIL, "Real", "R$", 2, ",".charAt(0), ".".charAt(0)));
+        put(CURRENCY_CHILE, new Currency(CURRENCY_CHILE, "Peso chileno", "$", 0, ",".charAt(0), ".".charAt(0)));
+        put(CURRENCY_COLOMBIA, new Currency(CURRENCY_COLOMBIA, "Peso colombiano", "$", 0, ",".charAt(0), ".".charAt(0)));
+        put(CURRENCY_MEXICO, new Currency(CURRENCY_MEXICO, "Peso mexicano", "$", 2, ".".charAt(0), ",".charAt(0)));
+        put(CURRENCY_VENEZUELA, new Currency(CURRENCY_VENEZUELA, "Bolivar fuerte", "BsF", 2, ",".charAt(0), ".".charAt(0)));
 
     }};
 

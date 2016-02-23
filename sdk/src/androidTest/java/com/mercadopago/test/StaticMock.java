@@ -62,7 +62,7 @@ public class StaticMock {
     public final static Integer DUMMI_IDENTIFICATION_TYPE_MIN_LENGTH = 7;
     public final static Integer DUMMI_IDENTIFICATION_TYPE_MAX_LENGTH = 8;
 
-    // * Saved card token
+    // * Saved cards token
     public final static String DUMMY_CARD_ID = "11";
 
     public static CardToken getCardToken() {

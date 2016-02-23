@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.mercadopago" >
+    package="com.mercadopago">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -14,58 +14,50 @@
         <activity
             android:name=".VaultActivity"
             android:label="@string/mpsdk_app_name"
-            android:screenOrientation="portrait" >
-        </activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".CustomerCardsActivity"
             android:label="@string/mpsdk_title_activity_customer_pms"
-            android:screenOrientation="portrait" >
-        </activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".NewCardActivity"
             android:label="@string/mpsdk_title_activity_new_card"
-            android:screenOrientation="portrait" >
-        </activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".InstallmentsActivity"
             android:label="@string/mpsdk_title_activity_installments"
-            android:screenOrientation="portrait" >
-        </activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".PaymentMethodsActivity"
             android:label="@string/mpsdk_title_activity_payment_methods"
-            android:screenOrientation="portrait" >
-        </activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".IssuersActivity"
             android:label="@string/mpsdk_title_activity_issuers"
-            android:screenOrientation="portrait" >
-        </activity>
+            android:screenOrientation="portrait" />
         <activity
-            android:name=".CongratsActivity"
+            android:name=".OldCongratsActivity"
             android:label="@string/mpsdk_title_activity_congrats"
-            android:screenOrientation="portrait" >
-        </activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".BankDealsActivity"
             android:label="@string/mpsdk_title_activity_bank_deals"
-            android:screenOrientation="portrait" >
-        </activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".TermsAndConditionsActivity"
             android:label="@string/mpsdk_title_activity_terms_and_conditions"
-            android:screenOrientation="portrait" >
-        </activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".CheckoutActivity"
             android:label="@string/mpsdk_title_activity_checkout"
-            android:screenOrientation="portrait" >
-        </activity>
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.MercadoPagoTheme" />
         <activity
             android:name=".InstallAppActivity"
             android:label="@string/mpsdk_title_activity_install_app"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.MercadoPagoTheme">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -76,8 +68,17 @@
                 <data android:scheme="mercadopago" />
             </intent-filter>
         </activity>
-        <activity android:name=".GuessingNewCardActivity" >
-        </activity>
+        <activity android:name=".GuessingNewCardActivity" />
+        <activity
+            android:name=".PaymentVaultActivity"
+            android:label="@string/mpsdk_title_activity_payment_vault"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.MercadoPagoTheme" />
+        <activity
+            android:name=".InstructionsActivity"
+            android:screenOrientation="portrait"
+            android:launchMode="singleTask"
+            android:theme="@style/Theme.MercadoPagoTheme.NoActionBar"/>
     </application>
 
 </manifest>

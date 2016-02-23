@@ -25,23 +25,24 @@ public class PaymentMethodPreference implements Serializable {
     }
 
     public void setExcludedPaymentMethods(List<String> excludedPaymentMethods) {
-        this.excludedPaymentMethods = new ArrayList<>();
-        for(String paymentMethodId : excludedPaymentMethods)
-        {
-            PaymentMethod excludedPaymentMethod = new PaymentMethod();
-            excludedPaymentMethod.setId(paymentMethodId);
-            this.excludedPaymentMethods.add(excludedPaymentMethod);
+        if(excludedPaymentMethods != null) {
+            this.excludedPaymentMethods = new ArrayList<>();
+            for (String paymentMethodId : excludedPaymentMethods) {
+                PaymentMethod excludedPaymentMethod = new PaymentMethod();
+                excludedPaymentMethod.setId(paymentMethodId);
+                this.excludedPaymentMethods.add(excludedPaymentMethod);
+            }
         }
-
     }
 
     public void setExcludedPaymentTypes(List<String> excludedPaymentTypes) {
-        this.excludedPaymentTypes = new ArrayList<>();
-        for(String paymentTypeId : excludedPaymentTypes)
-        {
-            PaymentType excludedPaymentType = new PaymentType();
-            excludedPaymentType.setId(paymentTypeId);
-            this.excludedPaymentTypes.add(excludedPaymentType);
+        if(excludedPaymentTypes != null) {
+            this.excludedPaymentTypes = new ArrayList<>();
+            for (String paymentTypeId : excludedPaymentTypes) {
+                PaymentType excludedPaymentType = new PaymentType();
+                excludedPaymentType.setId(paymentTypeId);
+                this.excludedPaymentTypes.add(excludedPaymentType);
+            }
         }
     }
 
@@ -87,6 +88,7 @@ public class PaymentMethodPreference implements Serializable {
     }
 
     public List<PayerCost> getInstallmentsBelowMax(List<PayerCost> payerCosts){
+
         List<PayerCost> validPayerCosts = new ArrayList<>();
 
         if(this.installments != null) {
@@ -119,11 +121,11 @@ public class PaymentMethodPreference implements Serializable {
 
     public List<PaymentMethod> getSupportedPaymentMethods(List<PaymentMethod> paymentMethods) {
         List<PaymentMethod> supportedPaymentMethods =  new ArrayList<>();
-        for(PaymentMethod paymentMethod : paymentMethods)
-        {
-            if(this.isPaymentMethodSupported(paymentMethod))
-            {
-                supportedPaymentMethods.add(paymentMethod);
+        if(paymentMethods != null) {
+            for (PaymentMethod paymentMethod : paymentMethods) {
+                if (this.isPaymentMethodSupported(paymentMethod)) {
+                    supportedPaymentMethods.add(paymentMethod);
+                }
             }
         }
         return supportedPaymentMethods;
@@ -131,21 +133,24 @@ public class PaymentMethodPreference implements Serializable {
 
     public boolean isPaymentMethodSupported(PaymentMethod paymentMethod) {
         boolean isSupported = true;
-        List<String> excludedPaymentMethodIds = this.getExcludedPaymentMethodIds();
-        List<String> excludedPaymentTypes = this.getExcludedPaymentTypes();
-
-        if((excludedPaymentMethodIds != null && excludedPaymentMethodIds.contains(paymentMethod.getId()))
-                || (excludedPaymentTypes != null && excludedPaymentTypes.contains(paymentMethod.getPaymentTypeId())))
-        {
+        if(paymentMethod == null) {
             isSupported = false;
         }
+        else {
+            List<String> excludedPaymentMethodIds = this.getExcludedPaymentMethodIds();
+            List<String> excludedPaymentTypes = this.getExcludedPaymentTypes();
 
+            if ((excludedPaymentMethodIds != null && excludedPaymentMethodIds.contains(paymentMethod.getId()))
+                    || (excludedPaymentTypes != null && excludedPaymentTypes.contains(paymentMethod.getPaymentTypeId()))) {
+                isSupported = false;
+            }
+        }
         return isSupported;
     }
 
     public PaymentMethod getDefaultPaymentMethod(List<PaymentMethod> paymentMethods) {
         PaymentMethod defaultPaymentMethod = null;
-        if(this.defaultPaymentMethodId != null) {
+        if(this.defaultPaymentMethodId != null && paymentMethods != null) {
             for (PaymentMethod pm : paymentMethods) {
                 if (pm.getId().equals(this.defaultPaymentMethodId)) {
                     defaultPaymentMethod = pm;

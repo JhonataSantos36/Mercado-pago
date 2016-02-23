@@ -50,7 +50,7 @@ public class FinalVaultActivity extends AdvancedVaultActivity {
 
                 } else {
 
-                    // Call new card activity
+                    // Call new cards activity
                     startNewCardActivity();
                 }
             } else {  // Off-line methods
@@ -67,7 +67,7 @@ public class FinalVaultActivity extends AdvancedVaultActivity {
                 mCustomerMethodsText.setText(mSelectedPaymentMethod.getName());
                 mCustomerMethodsText.setCompoundDrawablesWithIntrinsicBounds(MercadoPagoUtil.getPaymentMethodIcon(mActivity, mSelectedPaymentMethod.getId()), 0, 0, 0);
 
-                // Set security card visibility
+                // Set security cards visibility
                 mSecurityCodeCard.setVisibility(View.GONE);
 
                 // Set installments visibility

@@ -16,6 +16,7 @@
     <string name="mpsdk_cod_seg_desc">Últimos <xliff:g id="numeros" example="4">%1$d</xliff:g> dígitos do verso do cartão de crédito</string>
     <string name="mpsdk_cod_seg_desc_amex"><xliff:g id="numeros" example="4">%1$d</xliff:g> dígitos da frente do cartão de crédito</string>
     <string name="mpsdk_title_activity_vault">Pagar</string>
+    <string name="mpsdk_title_activity_payment_vault">Como você quer pagar?</string>
     <string name="mpsdk_title_activity_new_card">Digite os dados do seu cartão</string>
     <string name="mpsdk_title_activity_installments">Parcelas</string>
     <string name="mpsdk_title_activity_issuers">Banco</string>
@@ -59,5 +60,12 @@
     <string name="mpsdk_bank_deals_action">Promoções</string>
     <string name="mpsdk_title_activity_guessing_card">Digite os dados do seu cartão</string>
     <string name="mpsdk_select_issuer_label">Escolha o banco…</string>
+    <string name="mpsdk_title_activity_checkout">Verifique para ver se está tudo bem…</string>
 
+    <string name="mpsdk_payment_method_groups_label">Outros</string>
+    <string name="mpsdk_shopping_cart_text">Carrinho de compras</string>
+    <string name="mpsdk_pay_button_text">Pagar</string>
+    <string name="mpsdk_text_terms_and_conditions_start">Ao pagar, afirmo que eu sou maior de idade e concordar com os </string>
+    <string name="mpsdk_text_terms_and_conditions_linked">Termos e Condições</string>
+    <string name="mpsdk_text_terms_and_conditions_end">do MercadoPago</string>
 </resources>

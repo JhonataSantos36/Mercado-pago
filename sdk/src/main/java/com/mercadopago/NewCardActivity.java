@@ -169,7 +169,7 @@ public class NewCardActivity extends AppCompatActivity {
 
         LayoutUtil.hideKeyboard(mActivity);
 
-        // Set card token
+        // Set cards token
         CardToken cardToken = new CardToken(getCardNumber(), getMonth(), getYear(), getSecurityCode(), getCardHolderName(),
                 getIdentificationTypeId(getIdentificationType()), getIdentificationNumber());
 

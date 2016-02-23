@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -17,23 +18,27 @@ import com.mercadopago.core.MercadoPago;
 import com.mercadopago.decorations.DividerItemDecoration;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentMethodPreference;
+import com.mercadopago.model.PaymentType;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.LayoutUtil;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-public class PaymentMethodsActivity extends AppCompatActivity {
+public class PaymentMethodsActivity extends Activity {
 
+    private MercadoPago mMercadoPago;
     private Activity mActivity;
     private String mMerchantPublicKey;
     private RecyclerView mRecyclerView;
     private boolean mShowBankDeals;
     private boolean mSupportMPApp;
+    private PaymentType mPaymentTypeSupported;
     private List<String> mExcludedPaymentMethodIds;
     private List<String> mExcludedPaymentTypes;
     private String mDefaultPaymentMethodId;
@@ -45,10 +50,10 @@ public class PaymentMethodsActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView();
-
         mActivity = this;
-
         getActivityParameters();
+
+        mMercadoPago = createMercadoPago(mMerchantPublicKey);
 
         createPaymentMethodPreference();
 
@@ -62,6 +67,14 @@ public class PaymentMethodsActivity extends AppCompatActivity {
 
         // Load payment methods
         getPaymentMethodsAsync(mMerchantPublicKey);
+
+    }
+
+    protected MercadoPago createMercadoPago(String publicKey) {
+        return new MercadoPago.Builder()
+                .setContext(this)
+                .setPublicKey(publicKey)
+                .build();
     }
 
     private void getActivityParameters() {
@@ -74,6 +87,7 @@ public class PaymentMethodsActivity extends AppCompatActivity {
             return;
         }
 
+        mPaymentTypeSupported = (PaymentType) this.getIntent().getSerializableExtra("paymentType");
         mShowBankDeals = this.getIntent().getBooleanExtra("showBankDeals", true);
         mSupportMPApp = this.getIntent().getBooleanExtra("supportMPApp", false);
 
@@ -99,7 +113,6 @@ public class PaymentMethodsActivity extends AppCompatActivity {
     }
 
     protected void setContentView() {
-
         setContentView(R.layout.activity_payment_methods);
     }
 
@@ -135,6 +148,7 @@ public class PaymentMethodsActivity extends AppCompatActivity {
 
     public void refreshLayout(View view) {
 
+        Toast.makeText(this, "Estoy tratando de nuevo", Toast.LENGTH_LONG).show();
         getPaymentMethodsAsync(mMerchantPublicKey);
     }
 
@@ -142,19 +156,12 @@ public class PaymentMethodsActivity extends AppCompatActivity {
 
         LayoutUtil.showProgressLayout(mActivity);
 
-        MercadoPago mercadoPago = new MercadoPago.Builder()
-                .setContext(mActivity)
-                .setPublicKey(merchantPublicKey)
-                .build();
-
-        mercadoPago.getPaymentMethods(new Callback<List<PaymentMethod>>() {
+        mMercadoPago.getPaymentMethods(new Callback<List<PaymentMethod>>() {
             @Override
             public void success(List<PaymentMethod> paymentMethods, Response response) {
-
                 mRecyclerView.setAdapter(new PaymentMethodsAdapter(mActivity, getSupportedPaymentMethods(paymentMethods), new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-
                         // Return to parent
                         Intent returnIntent = new Intent();
                         PaymentMethod selectedPaymentMethod = (PaymentMethod) view.getTag();
@@ -177,11 +184,31 @@ public class PaymentMethodsActivity extends AppCompatActivity {
     private List<PaymentMethod> getSupportedPaymentMethods(List<PaymentMethod> paymentMethods) {
 
         List<PaymentMethod> paymentMethodList = mPaymentMethodPreference.getSupportedPaymentMethods(paymentMethods);
+
+        paymentMethodList = getPaymentMethodsOfType(mPaymentTypeSupported, paymentMethodList);
+
         if(mSupportMPApp)
         {
             addMPAppMethod(paymentMethodList);
         }
         return paymentMethodList;
+    }
+
+    private List<PaymentMethod> getPaymentMethodsOfType(PaymentType paymentTypeSupported, List<PaymentMethod> paymentMethodList) {
+
+        if(paymentMethodList != null && paymentTypeSupported != null) {
+
+            List<PaymentMethod> validPaymentMethods = new ArrayList<>();
+
+            for (PaymentMethod currentPaymentMethod : paymentMethodList) {
+                if(currentPaymentMethod.getPaymentTypeId().equals(paymentTypeSupported.getId())) {
+                    validPaymentMethods.add(currentPaymentMethod);
+                }
+            }
+            return validPaymentMethods;
+        } else {
+            return paymentMethodList;
+        }
     }
 
     private void addMPAppMethod(List<PaymentMethod> list) {

@@ -113,7 +113,7 @@ public class CardToken implements Serializable {
 
         } else {
 
-            // Validate card length
+            // Validate cards length
             int cardLength = setting.getCardNumber().getLength();
             if (cardNumber.trim().length() != cardLength) {
                 throw new Exception(context.getString(R.string.mpsdk_invalid_card_length, cardLength));

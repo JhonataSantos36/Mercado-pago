@@ -141,7 +141,7 @@ public class CardActivity extends AppCompatActivity {
 
         LayoutUtil.hideKeyboard(mActivity);
 
-        // Set card token
+        // Set cards token
         mCardToken = new CardToken(getCardNumber(), getMonth(), getYear(), getSecurityCode(), getCardHolderName(),
                 getIdentificationTypeId(getIdentificationType()), getIdentificationNumber());
 
@@ -157,7 +157,7 @@ public class CardActivity extends AppCompatActivity {
         boolean result = true;
         boolean focusSet = false;
 
-        // Validate card number
+        // Validate cards number
         try {
             validateCardNumber(cardToken);
             mCardNumber.setError(null);
@@ -195,7 +195,7 @@ public class CardActivity extends AppCompatActivity {
             mExpiryError.setVisibility(View.GONE);
         }
 
-        // Validate card holder name
+        // Validate cards holder name
         if (!cardToken.validateCardholderName()) {
             mCardHolderName.setError(getString(com.mercadopago.R.string.mpsdk_invalid_field));
             if (!focusSet) {

@@ -21,6 +21,7 @@ import com.mercadopago.model.CardToken;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentMethodPreference;
+import com.mercadopago.model.PaymentType;
 import com.mercadopago.util.LayoutUtil;
 import com.mercadopago.util.MercadoPagoUtil;
 
@@ -39,7 +40,7 @@ public class GuessingNewCardActivity extends NewCardActivity {
     private List<String> mExcludedPaymentMethodIds;
     private List<String> mExcludedPaymentTypes;
     private String mDefaultPaymentMethodId;
-
+    private PaymentType mSupportedPaymentType;
 
     //Input controls
     protected Spinner mSpinnerIssuers;
@@ -92,6 +93,7 @@ public class GuessingNewCardActivity extends NewCardActivity {
         mDefaultPaymentMethodId = this.getIntent().getStringExtra("defaultPaymentMethodId");
         mShowBankDeals = this.getIntent().getBooleanExtra("showBankDeals", true);
         mRequireIssuer = this.getIntent().getBooleanExtra("requireIssuer", true);
+        mSupportedPaymentType = (PaymentType) this.getIntent().getSerializableExtra("paymentType");
     }
 
     @Override
@@ -121,7 +123,7 @@ public class GuessingNewCardActivity extends NewCardActivity {
 
         List<PaymentMethod> supportedPaymentMethods = mPaymentMethodPreference.getSupportedPaymentMethods(paymentMethods);
 
-        mPaymentMethodGuessingController = new PaymentMethodGuessingController(this, supportedPaymentMethods,
+        mPaymentMethodGuessingController = new PaymentMethodGuessingController(this, supportedPaymentMethods, mSupportedPaymentType,
                 new PaymentMethodSelectionCallback(){
                     @Override
                     public void onPaymentMethodSet(PaymentMethod paymentMethod) {
@@ -355,7 +357,7 @@ public class GuessingNewCardActivity extends NewCardActivity {
 
         LayoutUtil.hideKeyboard(mActivity);
 
-        // Set card token
+        // Set cards token
         CardToken cardToken = new CardToken(getCardNumber(), getMonth(), getYear(), getSecurityCode(), getCardHolderName(),
                 getIdentificationTypeId(getIdentificationType()), getIdentificationNumber());
 

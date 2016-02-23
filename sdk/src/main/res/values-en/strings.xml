@@ -16,6 +16,7 @@
     <string name="mpsdk_cod_seg_desc">Last <xliff:g id="numeros" example="4">%1$d</xliff:g> digits code on the back of the card</string>
     <string name="mpsdk_cod_seg_desc_amex"><xliff:g id="numeros" example="4">%1$d</xliff:g> digits code on the front of the card</string>
     <string name="mpsdk_title_activity_vault">Pay</string>
+    <string name="mpsdk_title_activity_payment_vault">How do you want to pay?</string>
     <string name="mpsdk_title_activity_new_card">Enter your credit card</string>
     <string name="mpsdk_title_activity_installments">Installments</string>
     <string name="mpsdk_title_activity_issuers">Bank</string>
@@ -60,6 +61,13 @@
     <string name="mpsdk_bank_deals_action">Promotions</string>
     <string name="mpsdk_title_activity_guessing_card">Enter your credit card</string>
     <string name="mpsdk_select_issuer_label">Select your bank…</string>
+    <string name="mpsdk_title_activity_checkout">Verify that everything is in order…</string>
 
+    <string name="mpsdk_payment_method_groups_label">Others</string>
+    <string name="mpsdk_shopping_cart_text">Shopping cart</string>
+    <string name="mpsdk_pay_button_text">Pay</string>
+    <string name="mpsdk_text_terms_and_conditions_start">By paying, I claim to be an adult and that I accept the</string>
+    <string name="mpsdk_text_terms_and_conditions_linked">Terms and Conditions</string>
+    <string name="mpsdk_text_terms_and_conditions_end">of MercadoPago</string>
 
 </resources>

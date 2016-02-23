@@ -12,7 +12,7 @@ public class MercadoPagoUtil {
 
     public static int getPaymentMethodIcon(Context context, String paymentMethodId) {
 
-        return getPaymentMethodPicture(context, "ico_tc_", paymentMethodId);
+        return getPaymentMethodPicture(context, "", paymentMethodId);
     }
 
     public static int getPaymentMethodImage(Context context, String paymentMethodId) {
@@ -34,6 +34,20 @@ public class MercadoPagoUtil {
             catch (Exception ex) {
                 resource = 0;
             }
+        }
+        return resource;
+    }
+
+    public static int getPaymentMethodSearchItemIcon(Context context, String itemId) {
+        int resource;
+        if(itemId.equals("7eleven")) {
+            itemId = "seven_eleven";
+        }
+        try {
+            resource = context.getResources().getIdentifier(itemId, "drawable", context.getPackageName());
+        }
+        catch (Exception e) {
+            resource = 0;
         }
         return resource;
     }

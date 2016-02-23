@@ -177,7 +177,7 @@ public class AdvancedVaultActivity extends SimpleVaultActivity {
 
                 } else {
 
-                    // Call new card activity
+                    // Call new cards activity
                     startNewCardActivity();
                 }
             }
@@ -217,7 +217,7 @@ public class AdvancedVaultActivity extends SimpleVaultActivity {
             // Set selection status
             mTempIssuer = (Issuer) data.getSerializableExtra("issuer");
 
-            // Call new card activity
+            // Call new cards activity
             startNewCardActivity();
 
         } else {
@@ -298,7 +298,7 @@ public class AdvancedVaultActivity extends SimpleVaultActivity {
                 mCardToken.getCardNumber().substring(mCardToken.getCardNumber().length() - 4, mCardToken.getCardNumber().length())));
         mCustomerMethodsText.setCompoundDrawablesWithIntrinsicBounds(MercadoPagoUtil.getPaymentMethodIcon(mActivity, mSelectedPaymentMethod.getId()), 0, 0, 0);
 
-        // Set security card visibility
+        // Set security cards visibility
         showSecurityCodeCard(mSelectedPaymentMethod);
 
         // Get installments
@@ -321,7 +321,7 @@ public class AdvancedVaultActivity extends SimpleVaultActivity {
 
                     if ((installments.size() > 0) && (installments.get(0).getPayerCosts().size() > 0)) {
 
-                        // Set installments card data and visibility
+                        // Set installments cards data and visibility
                         mPayerCosts = installments.get(0).getPayerCosts();
                         mSelectedPayerCost = installments.get(0).getPayerCosts().get(0);
 
@@ -371,7 +371,7 @@ public class AdvancedVaultActivity extends SimpleVaultActivity {
         mCustomerMethodsText.setText(mSelectedPaymentMethodRow.getLabel());
         mCustomerMethodsText.setCompoundDrawablesWithIntrinsicBounds(mSelectedPaymentMethodRow.getIcon(), 0, 0, 0);
 
-        // Set security card visibility
+        // Set security cards visibility
         showSecurityCodeCard(mSelectedPaymentMethodRow.getCard().getPaymentMethod());
 
         // Get installments

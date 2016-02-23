@@ -98,7 +98,7 @@ public class SavedCardTokenTest extends BaseTest<VaultActivity> {
             assertTrue(ex.getMessage().equals(getActivity().getString(R.string.mpsdk_invalid_cvv_length, 3)));
         }
 
-        // Simulate a card with security code not required
+        // Simulate a cards with security code not required
         savedCardToken.setSecurityCode(StaticMock.DUMMY_SECURITY_CODE);
         card.getSecurityCode().setLength(0);
 

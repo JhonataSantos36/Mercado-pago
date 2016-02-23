@@ -4,7 +4,10 @@
     <dimen name="mpsdk_activity_vertical_margin">16dp</dimen>
     <dimen name="mpsdk_padding_hlf">5dp</dimen>
     <dimen name="mpsdk_padding_std">10dp</dimen>
+    <dimen name="mpsdk_small_text">12dp</dimen>
+    <dimen name="mpsdk_smaller_text">10dp</dimen>
     <dimen name="mpsdk_regular_text">17dp</dimen>
+    <dimen name="mpsdk_large_text">22dp</dimen>
     <dimen name="mpsdk_box_default_stroke">1dp</dimen>
     <dimen name="mpsdk_big_text">20dp</dimen>
     <dimen name="mpsdk_medium_text">16dp</dimen>
@@ -15,5 +18,6 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
 
 </resources>

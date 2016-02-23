@@ -35,7 +35,7 @@ public class Step5Activity extends ExampleActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        if (requestCode == MercadoPago.VAULT_REQUEST_CODE) {
+        if (requestCode == MercadoPago.PAYMENT_VAULT_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
 
                 // Set issuer id
@@ -77,7 +77,7 @@ public class Step5Activity extends ExampleActivity {
                 .setExcludedPaymentMethodIds(mExcludedPaymentMethodIds)
                 .setMaxInstallments(ExamplesUtils.DUMMY_MAX_INSTALLMENTS)
                 .setShowBankDeals(true)
-                .startVaultActivity();
+                .startPaymentVaultActivity();
     }
 
     public void submitGuessingForm(View view){
@@ -95,6 +95,6 @@ public class Step5Activity extends ExampleActivity {
                 .setDefaultInstallments(ExamplesUtils.DUMMY_DEFAULT_INSTALLMENTS)
                 .setShowBankDeals(true)
                 .setGuessingCardFormEnabled(true)
-                .startVaultActivity();
+                .startPaymentVaultActivity();
     }
 }

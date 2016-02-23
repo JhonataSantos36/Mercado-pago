@@ -240,7 +240,7 @@ public class SimpleVaultActivity extends AppCompatActivity {
 
             mTempPaymentMethod = (PaymentMethod) data.getSerializableExtra("paymentMethod");
 
-            // Call new card activity
+            // Call new cards activity
             startNewCardActivity();
 
         } else {
@@ -268,7 +268,7 @@ public class SimpleVaultActivity extends AppCompatActivity {
                     mCardToken.getCardNumber().substring(mCardToken.getCardNumber().length() - 4, mCardToken.getCardNumber().length())));
             mCustomerMethodsText.setCompoundDrawablesWithIntrinsicBounds(MercadoPagoUtil.getPaymentMethodIcon(mActivity, mSelectedPaymentMethod.getId()), 0, 0, 0);
 
-            // Set security card visibility
+            // Set security cards visibility
             showSecurityCodeCard(mSelectedPaymentMethod);
 
             // Set button visibility
@@ -377,7 +377,7 @@ public class SimpleVaultActivity extends AppCompatActivity {
         mCustomerMethodsText.setText(mSelectedPaymentMethodRow.getLabel());
         mCustomerMethodsText.setCompoundDrawablesWithIntrinsicBounds(mSelectedPaymentMethodRow.getIcon(), 0, 0, 0);
 
-        // Set security card visibility
+        // Set security cards visibility
         showSecurityCodeCard(mSelectedPaymentMethodRow.getCard().getPaymentMethod());
 
         // Set button visibility

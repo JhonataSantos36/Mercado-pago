@@ -42,7 +42,7 @@ public class ExamplesUtils {
     public static final int CARD_REQUEST_CODE = 13;
 
     // * Merchant public key
-    public static final String DUMMY_MERCHANT_PUBLIC_KEY = "444a9ef5-8a6b-429f-abdf-587639155d88";
+    public static final String DUMMY_MERCHANT_PUBLIC_KEY = "6c0d81bc-99c1-4de8-9976-c8d1d62cd4f2";
     // DUMMY_MERCHANT_PUBLIC_KEY_AR = "444a9ef5-8a6b-429f-abdf-587639155d88";
     // DUMMY_MERCHANT_PUBLIC_KEY_BR = "APP_USR-f163b2d7-7462-4e7b-9bd5-9eae4a7f99c3";
     // DUMMY_MERCHANT_PUBLIC_KEY_MX = "6c0d81bc-99c1-4de8-9976-c8d1d62cd4f2";
@@ -56,7 +56,7 @@ public class ExamplesUtils {
     //public static final String DUMMY_MERCHANT_GET_DISCOUNT_URI = "/checkout/examples/getDiscounts";
 
     // * Merchant access token
-    public static final String DUMMY_MERCHANT_ACCESS_TOKEN = "mla-cards-data";
+    public static final String DUMMY_MERCHANT_ACCESS_TOKEN = "mlm-cards-data";
     // DUMMY_MERCHANT_ACCESS_TOKEN_AR = "mla-cards-data";
     // DUMMY_MERCHANT_ACCESS_TOKEN_BR = "mlb-cards-data";
     // DUMMY_MERCHANT_ACCESS_TOKEN_MX = "mlm-cards-data";
@@ -167,6 +167,7 @@ public class ExamplesUtils {
                             .setPayment(payment)
                             .setPaymentMethod(paymentMethod)
                             .startCongratsActivity();
+
                 }
 
                 @Override
@@ -192,36 +193,21 @@ public class ExamplesUtils {
         // Set checkout intent
         CheckoutIntent checkoutIntent = new CheckoutIntent(ExamplesUtils.DUMMY_MERCHANT_ACCESS_TOKEN, item);
 
-        // Create a checkout preference
-        // TODO: cambiar lo mío por el mock de OP
-        MerchantServer.createPreference(activity, "https://mp-android-sdk.herokuapp.com", "/preferences", checkoutIntent, new Callback<CheckoutPreference>() {
-            @Override
-            public void success(CheckoutPreference checkoutPreference, Response response) {
+        //TODO consumir servicio de preferencia
+        CheckoutPreference mockPreference = JsonUtil.getInstance().fromJson(getFile(activity, "mocks/preference_with_exclusions.json"), CheckoutPreference.class);
+        // Call final vault activity
+        new MercadoPago.StartActivityBuilder()
+                .setActivity(activity)
+                .setPublicKey(ExamplesUtils.DUMMY_MERCHANT_PUBLIC_KEY)
+                .setCheckoutPreference(mockPreference)
+                .setShowBankDeals(true)
+                .startCheckoutActivity();
 
-                //TODO SACAR!
-                CheckoutPreference mockPreference = JsonUtil.getInstance().fromJson(getFile(activity, "mocks/preference_with_exclusions.json"), CheckoutPreference.class);
-                // Call final vault activity
-                new MercadoPago.StartActivityBuilder()
-                        .setActivity(activity)
-                        .setPublicKey(ExamplesUtils.DUMMY_MERCHANT_PUBLIC_KEY)
-                        .setCheckoutPreference(mockPreference)
-                        .setShowBankDeals(true)
-                        .startCheckoutActivity();
+        LayoutUtil.showRegularLayout(activity);
 
-                LayoutUtil.showRegularLayout(activity);
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-
-                LayoutUtil.showRegularLayout(activity);
-                Toast.makeText(activity, error.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        });
     }
-
-    //TODO SACAR!
-    private static String getFile(Context context, String fileName) {
+    //TODO consumir servicio de preferencia
+    public static String getFile(Context context, String fileName) {
 
         try {
             AssetManager assetManager = context.getResources().getAssets();

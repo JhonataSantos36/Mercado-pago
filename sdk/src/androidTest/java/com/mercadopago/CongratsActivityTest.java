@@ -7,17 +7,17 @@ import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.test.BaseTest;
 import com.mercadopago.test.StaticMock;
 
-public class CongratsActivityTest extends BaseTest<CongratsActivity> {
+public class CongratsActivityTest extends BaseTest<OldCongratsActivity> {
 
     public CongratsActivityTest() {
 
-        super(CongratsActivity.class);
+        super(OldCongratsActivity.class);
     }
 
     public void testApprovedPaymentCongrats() {
 
         // Set activity
-        CongratsActivity activity = prepareActivity(StaticMock.getPayment(getApplicationContext()),
+        OldCongratsActivity activity = prepareActivity(StaticMock.getPayment(getApplicationContext()),
                 StaticMock.getPaymentMethod(getApplicationContext()));
 
         // Validate view
@@ -29,7 +29,7 @@ public class CongratsActivityTest extends BaseTest<CongratsActivity> {
         // Set activity
         Payment payment = StaticMock.getPayment(getApplicationContext());
         payment.setStatus("pending");
-        CongratsActivity activity = prepareActivity(payment,
+        OldCongratsActivity activity = prepareActivity(payment,
                 StaticMock.getPaymentMethod(getApplicationContext()));
 
         // Validate view
@@ -41,7 +41,7 @@ public class CongratsActivityTest extends BaseTest<CongratsActivity> {
         // Set activity
         Payment payment = StaticMock.getPayment(getApplicationContext());
         payment.setStatus("in_process");
-        CongratsActivity activity = prepareActivity(payment,
+        OldCongratsActivity activity = prepareActivity(payment,
                 StaticMock.getPaymentMethod(getApplicationContext()));
 
         // Validate view
@@ -53,14 +53,14 @@ public class CongratsActivityTest extends BaseTest<CongratsActivity> {
         // Set activity
         Payment payment = StaticMock.getPayment(getApplicationContext());
         payment.setStatus("rejected");
-        CongratsActivity activity = prepareActivity(payment,
+        OldCongratsActivity activity = prepareActivity(payment,
                 StaticMock.getPaymentMethod(getApplicationContext()));
 
         // Validate view
         assertTrue(activity.getTitle().equals(activity.getString(R.string.mpsdk_rejected_title)));
     }
 
-    private CongratsActivity prepareActivity(Payment payment, PaymentMethod paymentMethod) {
+    private OldCongratsActivity prepareActivity(Payment payment, PaymentMethod paymentMethod) {
 
         Intent intent = new Intent();
         if (payment != null) {

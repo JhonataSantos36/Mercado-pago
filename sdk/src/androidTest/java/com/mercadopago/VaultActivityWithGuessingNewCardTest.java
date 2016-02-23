@@ -26,10 +26,10 @@ public class VaultActivityWithGuessingNewCardTest extends BaseTest<VaultActivity
     // Scenario
     // * With all correct parameters
     // * select other payment method
-    // * guessing card form shows up
-    // * fill the card form
+    // * guessing cards form shows up
+    // * fill the cards form
     // * enter a security code
-    // * generate a card token
+    // * generate a cards token
 
     public void testHappyPath(){
 
@@ -61,7 +61,7 @@ public class VaultActivityWithGuessingNewCardTest extends BaseTest<VaultActivity
         Instrumentation.ActivityMonitor installmentsActivityMonitor = getInstrumentation().addMonitor(InstallmentsActivity.class.getName(), installmentsMockedResult, true);
         Instrumentation.ActivityMonitor customerCardsActivityMonitor = getInstrumentation().addMonitor(CustomerCardsActivity.class.getName(), customerCardsMockedResult , true);
 
-        // Simulate customer card selection
+        // Simulate customer cards selection
         getInstrumentation().runOnMainSync(new Runnable() {
             public void run() {
                 activity.onCustomerMethodsClick(null);

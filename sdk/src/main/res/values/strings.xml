@@ -13,9 +13,10 @@
     <string name="mpsdk_installments">Cuotas</string>
     <string name="mpsdk_confirm">Confirmar</string>
     <string name="mpsdk_security_code">Código de seguridad</string>
-    <string name="mpsdk_cod_seg_desc">Últimos <xliff:g id="numeros" example="4">%1$d</xliff:g> números al dorso de la tarjeta</string>
-    <string name="mpsdk_cod_seg_desc_amex"><xliff:g id="numeros" example="4">%1$d</xliff:g> números al frente de la tarjeta</string>
+    <string name="mpsdk_cod_seg_desc">Últimos <xliff:g example="4" id="numeros">%1$d</xliff:g> números al dorso de la tarjeta</string>
+    <string name="mpsdk_cod_seg_desc_amex"><xliff:g example="4" id="numeros">%1$d</xliff:g> números al frente de la tarjeta</string>
     <string name="mpsdk_title_activity_vault">Pagar</string>
+    <string name="mpsdk_title_activity_payment_vault">¿Cómo quieres pagar?</string>
     <string name="mpsdk_title_activity_new_card">Ingresa los datos de tu tarjeta</string>
     <string name="mpsdk_title_activity_installments">Cuotas</string>
     <string name="mpsdk_title_activity_issuers">Banco</string>
@@ -59,7 +60,7 @@
     <string name="mpsdk_title_activity_terms_and_conditions">Términos y condiciones</string>
     <string name="mpsdk_bank_deals_action">Promociones</string>
     <string name="mpsdk_mp_app_name">MercadoPago</string>
-    <string name="mpsdk_title_activity_checkout">Pagar</string>
+    <string name="mpsdk_title_activity_checkout">Revisa si está todo bien…</string>
     <string name="mpsdk_title_activity_install_app">Pagar</string>
     <string name="mpsdk_install_app_label">Para pagar, instala la aplicación de MercadoPago</string>
     <string name="mpsdk_install_app_button">Instalar la aplicación</string>
@@ -67,5 +68,12 @@
     <string name="mpsdk_title_activity_guessing_card">Ingresa los datos de tu tarjeta</string>
     <string name="mpsdk_issuer_label">Banco</string>
     <string name="mpsdk_select_issuer_label">Selecciona un banco…</string>
+
+    <string name="mpsdk_payment_method_groups_label">Otros</string>
+    <string name="mpsdk_shopping_cart_text">Carrito de compras</string>
+    <string name="mpsdk_pay_button_text">Pagar</string>
+    <string name="mpsdk_text_terms_and_conditions_start">Al pagar, afirmo que soy mayor de edad y acepto los</string>
+    <string name="mpsdk_text_terms_and_conditions_linked">Términos y Condiciones</string>
+    <string name="mpsdk_text_terms_and_conditions_end">de MercadoPago</string>
 
 </resources>

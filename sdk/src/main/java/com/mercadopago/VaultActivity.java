@@ -111,7 +111,7 @@ public class VaultActivity extends AppCompatActivity {
             mSecurityCodeCard = findViewById(R.id.securityCodeCard);
             mCVVImage = (ImageView) findViewById(R.id.cVVImage);
             mCVVDescriptor = (TextView) findViewById(R.id.cVVDescriptor);
-            mSubmitButton = (Button) findViewById(R.id.submitButton);
+            mSubmitButton = (Button) findViewById(R.id.payButton);
             mCustomerMethodsLayout = (FrameLayout) findViewById(R.id.customerMethodLayout);
             mCustomerMethodsText = (TextView) findViewById(R.id.customerMethodLabel);
             mInstallmentsLayout = (FrameLayout) findViewById(R.id.installmentsLayout);
@@ -364,7 +364,7 @@ public class VaultActivity extends AppCompatActivity {
 
                 } else {
 
-                    // Call new card activity
+                    // Call new cards activity
                     startNewCardActivity();
                 }
 
@@ -387,7 +387,7 @@ public class VaultActivity extends AppCompatActivity {
                 mCustomerMethodsText.setText(mSelectedPaymentMethod.getName());
                 mCustomerMethodsText.setCompoundDrawablesWithIntrinsicBounds(MercadoPagoUtil.getPaymentMethodIcon(mActivity, mSelectedPaymentMethod.getId()), 0, 0, 0);
 
-                // Set security card visibility
+                // Set security cards visibility
                 mSecurityCodeCard.setVisibility(View.GONE);
 
                 // Set installments visibility
@@ -441,7 +441,7 @@ public class VaultActivity extends AppCompatActivity {
             // Set selection status
             mTempIssuer = (Issuer) data.getSerializableExtra("issuer");
 
-            // Call new card activity
+            // Call new cards activity
             startNewCardActivity();
 
         } else {
@@ -525,7 +525,7 @@ public class VaultActivity extends AppCompatActivity {
                 mCardToken.getCardNumber().substring(mCardToken.getCardNumber().length() - 4, mCardToken.getCardNumber().length())));
         mCustomerMethodsText.setCompoundDrawablesWithIntrinsicBounds(MercadoPagoUtil.getPaymentMethodIcon(mActivity, mSelectedPaymentMethod.getId()), 0, 0, 0);
 
-        // Set security card visibility
+        // Set security cards visibility
         showSecurityCodeCard(mSelectedPaymentMethod);
 
         // Get installments
@@ -590,7 +590,7 @@ public class VaultActivity extends AppCompatActivity {
 
                     if ((installments.size() > 0) && (installments.get(0).getPayerCosts().size() > 0)) {
 
-                        // Set installments card data and visibility
+                        // Set installments cards data and visibility
                         List<PayerCost> availablePayerCosts = installments.get(0).getPayerCosts();
 
                         mPayerCosts = mPaymentMethodPreference.getInstallmentsBelowMax(availablePayerCosts);
@@ -663,7 +663,7 @@ public class VaultActivity extends AppCompatActivity {
                 // Set CVV image
                 mCVVImage.setImageDrawable(getResources().getDrawable(MercadoPagoUtil.getCVVImageResource(this, paymentMethod)));
 
-                // Set card visibility
+                // Set cards visibility
                 mSecurityCodeCard.setVisibility(View.VISIBLE);
 
                 return;
@@ -715,7 +715,7 @@ public class VaultActivity extends AppCompatActivity {
         mCustomerMethodsText.setText(mSelectedPaymentMethodRow.getLabel());
         mCustomerMethodsText.setCompoundDrawablesWithIntrinsicBounds(mSelectedPaymentMethodRow.getIcon(), 0, 0, 0);
 
-        // Set security card visibility
+        // Set security cards visibility
         showSecurityCodeCard(mSelectedPaymentMethodRow.getCard().getPaymentMethod());
 
         // Get installments

@@ -12,6 +12,11 @@ import com.mercadopago.core.MercadoPago;
 import com.mercadopago.examples.R;
 import com.mercadopago.examples.utils.ExamplesUtils;
 import com.mercadopago.model.ApiException;
+import com.mercadopago.model.CheckoutIntent;
+import com.mercadopago.model.CheckoutPreference;
+import com.mercadopago.model.Item;
+import com.mercadopago.util.JsonUtil;
+import com.mercadopago.util.LayoutUtil;
 
 public class Step6Activity extends ExampleActivity {
 
@@ -54,8 +59,28 @@ public class Step6Activity extends ExampleActivity {
     }
 
     public void submitForm(View view) {
-
-        // Create a checkout preference
-        ExamplesUtils.createPreference(this);
+        startCheckoutActivity("TEST-b91c1880-7bee-4fd2-ad27-87abcd4bbd99");
     }
+
+    private void startCheckoutActivity(String publicKey)
+    {
+
+        // Set item
+        Item item = new Item(ExamplesUtils.DUMMY_ITEM_ID, ExamplesUtils.DUMMY_ITEM_QUANTITY);
+
+        // Set checkout intent
+        CheckoutIntent checkoutIntent = new CheckoutIntent(ExamplesUtils.DUMMY_MERCHANT_ACCESS_TOKEN, item);
+
+        CheckoutPreference mockPreference = JsonUtil.getInstance().fromJson(ExamplesUtils.getFile(this, "mocks/preference_with_exclusions.json"), CheckoutPreference.class);
+        // Call final vault activity
+        new MercadoPago.StartActivityBuilder()
+                .setActivity(this)
+                .setPublicKey(publicKey)
+                .setCheckoutPreference(mockPreference)
+                .setShowBankDeals(true)
+                .startCheckoutActivity();
+
+        LayoutUtil.showRegularLayout(this);
+    }
+
 }

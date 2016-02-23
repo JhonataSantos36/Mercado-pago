@@ -21,17 +21,17 @@ public class VaultActivityWithCustomerCardTest extends BaseTest<VaultActivity> {
 
     // * Scenario 1:
     // * With all correct parameters
-    // * select a stored credit card
+    // * select a stored credit cards
     // * use 1 installment by default
     // * enter a security code
-    // * push the button and generate a card token
+    // * push the button and generate a cards token
     public void testHappyPath() {
 
         final VaultActivity activity = prepareActivity(StaticMock.DUMMY_MERCHANT_PUBLIC_KEY,
                 StaticMock.DUMMY_MERCHANT_BASE_URL, StaticMock.DUMMY_MERCHANT_GET_CUSTOMER_URI,
                 StaticMock.DUMMY_MERCHANT_ACCESS_TOKEN, new BigDecimal("20"), null);
 
-        // Assume a pre-selected credit card
+        // Assume a pre-selected credit cards
 
         // Wait for get customer cards and installments api call
         sleepThread();  // customer cards
@@ -45,7 +45,7 @@ public class VaultActivityWithCustomerCardTest extends BaseTest<VaultActivity> {
         // Create an ActivityMonitor that catch CustomerCardsActivity and return mock ActivityResult:
         Instrumentation.ActivityMonitor activityMonitor = getInstrumentation().addMonitor(CustomerCardsActivity.class.getName(), mockedResult , true);
 
-        // Simulate customer card selection
+        // Simulate customer cards selection
         getInstrumentation().runOnMainSync(new Runnable() {
             public void run() {
                 activity.onCustomerMethodsClick(null);
