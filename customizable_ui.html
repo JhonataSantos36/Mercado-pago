@@ -297,8 +297,8 @@
             List&lt;PaymentMethod&gt; paymentMethods = mercadoPago.getPaymentMethodsForBin(bin, paymentMethods, supportedPaymentTypes);
           </pre>
           <p><b>Tip:</b> to filter payment methods by their type, create a list of strings that let you filter by:<br>
-            <i>Credit card: “credit_card”<br>
-            Debit card: “debit_card”<br>
+            Credit card: <i>“credit_card”</i><br>
+            Debit card: <i>“debit_card”</i><br>
             <br>
             <b>Example:</b>
             <pre class="prettyprint">
@@ -307,7 +307,23 @@
                add("debit_card");
             }};
             </pre>
+            <h3>Instructions for offline payment method</h3>
+             <p>When a buyer pays with an offline payment method such as ticket or bank transfer, you need to show him instructions with the steps needed to complete the payment.</p>
+             <p>To retrieve the instructions according to the payment, you can use the following service:</p>
+             <pre class="prettyprint">
+                 mercadoPago.getInstruction(mPayment.getId(), new Callback&lt;Instruction&gt;() {
+                    @Override
+                    public void success(Instruction instruction, Response response) {
+                      //Handle instruction
+                    }
 
+                    @Override
+                    public void failure(RetrofitError error) {
+                        //Handle failure
+                      }
+                    });
+             </pre>
+             <p>The payment object is obtained when you <a href="make_a_payment.html">make a payment</a></p>
         </section>
 
         <aside id="sidebar">
