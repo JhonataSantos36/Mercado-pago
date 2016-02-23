@@ -96,7 +96,7 @@ public class VaultActivityWithCustomerCardTest extends BaseTest<VaultActivity> {
 
     private VaultActivity prepareActivity(String merchantPublicKey, String merchantBaseUrl,
                                      String merchantGetCustomerUri, String merchantAccessToken,
-                                     BigDecimal amount, List<String> supportedPaymentTypes) {
+                                     BigDecimal amount, List<String> excludedPaymentTypes) {
 
         Intent intent = new Intent();
         if (merchantPublicKey != null) {
@@ -114,7 +114,7 @@ public class VaultActivityWithCustomerCardTest extends BaseTest<VaultActivity> {
         if (amount != null) {
             intent.putExtra("amount", amount.toString());
         }
-        putListExtra(intent, "supportedPaymentTypes", supportedPaymentTypes);
+        putListExtra(intent, "excludedPaymentTypes", excludedPaymentTypes);
         setActivityIntent(intent);
         return getActivity();
     }

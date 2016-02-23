@@ -28,25 +28,15 @@ import retrofit.client.Response;
 
 public class Step1Activity extends ExampleActivity {
 
-    protected List<String> mSupportedPaymentTypes = new ArrayList<String>(){{
-        add("credit_card");
-        add("debit_card");
-        add("prepaid_card");
-    }};
     protected List<String> mExcludedPaymentTypes = new ArrayList<String>(){{
-<<<<<<< HEAD
         add("atm");
         add("ticket");
         add("digital_currency");
-=======
-        add("debit_card");
-        add("prepaid_card");
->>>>>>> parent of df039a5... matched preference to vault settings, added payment methods search classes
     }};
+
     protected List<String> mExcludedPaymentIds = new ArrayList<String>(){{
         add("visa");
     }};
-
     protected Activity mActivity;
 
     @Override
@@ -94,7 +84,7 @@ public class Step1Activity extends ExampleActivity {
                         new MercadoPago.StartActivityBuilder()
                                 .setActivity(this)
                                 .setPublicKey(ExamplesUtils.DUMMY_MERCHANT_PUBLIC_KEY)
-                                .setSupportedPaymentTypes(mSupportedPaymentTypes)
+                                .setExcludedPaymentTypes(mExcludedPaymentTypes)
                                 .startPaymentMethodsActivity();
                     }
                 }
@@ -154,7 +144,7 @@ public class Step1Activity extends ExampleActivity {
         new MercadoPago.StartActivityBuilder()
                 .setActivity(this)
                 .setPublicKey(ExamplesUtils.DUMMY_MERCHANT_PUBLIC_KEY)
-                .setSupportedPaymentTypes(mSupportedPaymentTypes)
+                .setExcludedPaymentTypes(mExcludedPaymentTypes)
                 .startPaymentMethodsActivity();
     }
 
@@ -164,7 +154,7 @@ public class Step1Activity extends ExampleActivity {
         new MercadoPago.StartActivityBuilder()
                 .setActivity(this)
                 .setPublicKey(ExamplesUtils.DUMMY_MERCHANT_PUBLIC_KEY)
-                .setSupportedPaymentTypes(mSupportedPaymentTypes)
+                .setExcludedPaymentTypes(mExcludedPaymentTypes)
                 .setExcludedPaymentTypes(mExcludedPaymentTypes)
                 .setExcludedPaymentMethodIds(mExcludedPaymentIds)
                 .startPaymentMethodsActivity();

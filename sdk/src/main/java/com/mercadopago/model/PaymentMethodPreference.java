@@ -8,22 +8,22 @@ import java.util.List;
  * Created by mreverter on 28/12/15.
  */
 public class PaymentMethodPreference implements Serializable {
-    private Integer maxInstallments;
+    //maxInstallments
+    private Integer installments;
+
     private Integer defaultInstallments;
-    private List<String> excludedPaymentMethodIds;
-    private List<String> supportedPaymentTypes;
-    private List<String> excludedPaymentTypes;
+    private List<PaymentMethod> excludedPaymentMethods;
+    private List<PaymentType> excludedPaymentTypes;
     private String defaultPaymentMethodId;
 
-    public void setMaxInstallments(Integer maxInstallments) {
-        this.maxInstallments = maxInstallments;
+    public void setInstallments(Integer installments) {
+        this.installments = installments;
     }
 
     public void setDefaultInstallments(Integer defaultInstallments) {
         this.defaultInstallments = defaultInstallments;
     }
 
-<<<<<<< HEAD
     public void setExcludedPaymentMethods(List<String> excludedPaymentMethods) {
         if(excludedPaymentMethods != null) {
             this.excludedPaymentMethods = new ArrayList<>();
@@ -49,36 +49,51 @@ public class PaymentMethodPreference implements Serializable {
     public void setDefaultPaymentMethodId(String defaultPaymentMethodId) {
         this.defaultPaymentMethodId = defaultPaymentMethodId;
     }
-=======
->>>>>>> parent of df039a5... matched preference to vault settings, added payment methods search classes
 
-    public void setExcludedPaymentMethodIds(List<String> excludedPaymentMethodIds) {
-        this.excludedPaymentMethodIds = excludedPaymentMethodIds;
+    public Integer getInstallments() {
+        return installments;
     }
 
-    public List<String> getSupportedPaymentTypes() {
-        return supportedPaymentTypes;
+    public Integer getDefaultInstallments() {
+        return defaultInstallments;
     }
 
-    public void setSupportedPaymentTypes(List<String> supportedPaymentTypes) {
-        this.supportedPaymentTypes = supportedPaymentTypes;
+    public List<String> getExcludedPaymentMethodIds() {
+        if(this.excludedPaymentMethods != null) {
+            List<String> excludedPaymentMethodIds = new ArrayList<>();
+            for (PaymentMethod paymentMethod : this.excludedPaymentMethods) {
+                excludedPaymentMethodIds.add(paymentMethod.getId());
+            }
+            return excludedPaymentMethodIds;
+        }
+        else
+            return null;
     }
 
-    public void setExcludedPaymentTypes(List<String> excludedPaymentTypes) {
-        this.excludedPaymentTypes = excludedPaymentTypes;
+    public List<String> getExcludedPaymentTypes() {
+        if(this.excludedPaymentTypes != null) {
+
+            List<String> excludedPaymentTypeIds = new ArrayList<>();
+            for (PaymentType paymentType : this.excludedPaymentTypes) {
+                excludedPaymentTypeIds.add(paymentType.getId());
+            }
+            return excludedPaymentTypeIds;
+        }
+        else
+            return null;
     }
 
-    public void setDefaultPaymentMethodId(String defaultPaymentMethodId) {
-        this.defaultPaymentMethodId = defaultPaymentMethodId;
+    public String getDefaultPaymentMethodId() {
+        return defaultPaymentMethodId;
     }
 
     public List<PayerCost> getInstallmentsBelowMax(List<PayerCost> payerCosts){
 
         List<PayerCost> validPayerCosts = new ArrayList<>();
 
-        if(this.maxInstallments != null) {
+        if(this.installments != null) {
             for (PayerCost currentPayerCost : payerCosts) {
-                if (currentPayerCost.getInstallments() <= this.maxInstallments) {
+                if (currentPayerCost.getInstallments() <= this.installments) {
                     validPayerCosts.add(currentPayerCost);
                 }
             }
@@ -105,45 +120,12 @@ public class PaymentMethodPreference implements Serializable {
     }
 
     public List<PaymentMethod> getSupportedPaymentMethods(List<PaymentMethod> paymentMethods) {
-<<<<<<< HEAD
         List<PaymentMethod> supportedPaymentMethods =  new ArrayList<>();
         if(paymentMethods != null) {
             for (PaymentMethod paymentMethod : paymentMethods) {
                 if (this.isPaymentMethodSupported(paymentMethod)) {
                     supportedPaymentMethods.add(paymentMethod);
                 }
-=======
-        if(this.excludedPaymentTypes != null || this.supportedPaymentTypes != null) {
-            paymentMethods = getPaymentMethodsWithSupportedType(paymentMethods);
-        }
-        if(this.excludedPaymentMethodIds != null)
-        {
-            paymentMethods = getNotExcludedPaymentMethods(paymentMethods);
-        }
-        return paymentMethods;
-    }
-
-    private List<PaymentMethod> getNotExcludedPaymentMethods(List<PaymentMethod> paymentMethods) {
-        List<PaymentMethod> supportedPaymentMethods = new ArrayList<>();
-        for(PaymentMethod currentPaymentMethod : paymentMethods)
-        {
-            if(!this.excludedPaymentMethodIds.contains(currentPaymentMethod.getId()))
-            {
-                supportedPaymentMethods.add(currentPaymentMethod);
-            }
-        }
-        return supportedPaymentMethods;
-    }
-
-    private List<PaymentMethod> getPaymentMethodsWithSupportedType(List<PaymentMethod> paymentMethods) {
-
-        List<PaymentMethod> supportedPaymentMethods = new ArrayList<>();
-        for(PaymentMethod currentPaymentMethod : paymentMethods)
-        {
-            if(isPaymentMethodSupported(currentPaymentMethod))
-            {
-                supportedPaymentMethods.add(currentPaymentMethod);
->>>>>>> parent of df039a5... matched preference to vault settings, added payment methods search classes
             }
         }
         return supportedPaymentMethods;
@@ -151,49 +133,18 @@ public class PaymentMethodPreference implements Serializable {
 
     public boolean isPaymentMethodSupported(PaymentMethod paymentMethod) {
         boolean isSupported = true;
-<<<<<<< HEAD
         if(paymentMethod == null) {
-=======
-
-        if(this.excludedPaymentMethodIds != null && this.excludedPaymentMethodIds.contains(paymentMethod.getId()))
-        {
->>>>>>> parent of df039a5... matched preference to vault settings, added payment methods search classes
             isSupported = false;
         }
         else {
             List<String> excludedPaymentMethodIds = this.getExcludedPaymentMethodIds();
             List<String> excludedPaymentTypes = this.getExcludedPaymentTypes();
 
-<<<<<<< HEAD
             if ((excludedPaymentMethodIds != null && excludedPaymentMethodIds.contains(paymentMethod.getId()))
                     || (excludedPaymentTypes != null && excludedPaymentTypes.contains(paymentMethod.getPaymentTypeId()))) {
                 isSupported = false;
             }
         }
-=======
-        if(isSupported) {
-            if (this.excludedPaymentTypes == null && this.supportedPaymentTypes != null) {
-
-                if (!this.supportedPaymentTypes.contains(paymentMethod.getPaymentTypeId())) {
-                    isSupported = false;
-                }
-
-            } else if (this.excludedPaymentTypes != null && this.supportedPaymentTypes == null) {
-
-                if (this.excludedPaymentTypes.contains(paymentMethod.getPaymentTypeId())){
-                    isSupported = false;
-                }
-
-            } else if (this.excludedPaymentTypes != null) {
-
-                if (!this.supportedPaymentTypes.contains(paymentMethod.getPaymentTypeId())
-                        || this.excludedPaymentTypes.contains(paymentMethod.getPaymentTypeId())) {
-                    isSupported = false;
-                }
-            }
-        }
-
->>>>>>> parent of df039a5... matched preference to vault settings, added payment methods search classes
         return isSupported;
     }
 
@@ -209,5 +160,4 @@ public class PaymentMethodPreference implements Serializable {
         }
         return defaultPaymentMethod;
     }
-
 }

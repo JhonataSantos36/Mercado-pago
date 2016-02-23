@@ -24,7 +24,7 @@ public class PaymentMethodsActivityTest extends BaseTest<PaymentMethodsActivity>
 
     public void testGetPaymentMethod() {
 
-        Activity activity = prepareActivity(StaticMock.DUMMY_MERCHANT_PUBLIC_KEY, null, null, null);
+        Activity activity = prepareActivity(StaticMock.DUMMY_MERCHANT_PUBLIC_KEY, null, null);
 
         sleepThread();
 
@@ -54,7 +54,7 @@ public class PaymentMethodsActivityTest extends BaseTest<PaymentMethodsActivity>
 
     public void testWrongMerchantPublicKey() {
 
-        Activity activity = prepareActivity("wrong_public_key", null, null, null);
+        Activity activity = prepareActivity("wrong_public_key", null, null);
 
         sleepThread();
 
@@ -68,38 +68,12 @@ public class PaymentMethodsActivityTest extends BaseTest<PaymentMethodsActivity>
         }
     }
 
-    public void testSupportedPaymentTypesFilter() {
-
-        List<String> supportedPaymentTypes = new ArrayList<String>(){{
-            add("credit_card");
-        }};
-        Activity activity = prepareActivity(StaticMock.DUMMY_MERCHANT_PUBLIC_KEY, supportedPaymentTypes, null, null);
-
-        sleepThread();
-
-        RecyclerView list = (RecyclerView) activity.findViewById(R.id.payment_methods_list);
-        PaymentMethodsAdapter adapter = (PaymentMethodsAdapter) list.getAdapter();
-        if (adapter != null) {
-            assertTrue(adapter.getItemCount() > 0);
-            boolean incorrectPaymentTypeFound = false;
-            for (int i = 0; i < adapter.getItemCount(); i++) {
-                if (!adapter.getItem(i).getPaymentTypeId().equals("credit_card")) {
-                    incorrectPaymentTypeFound = true;
-                    break;
-                }
-            }
-            assertTrue(!incorrectPaymentTypeFound);
-        } else {
-            fail("Supported payment types filter test failed, no items found");
-        }
-    }
-
     public void testExcludedPaymentTypesFilter() {
 
         List<String> excludedPaymentTypes = new ArrayList<String>(){{
             add("credit_card");
         }};
-        Activity activity = prepareActivity(StaticMock.DUMMY_MERCHANT_PUBLIC_KEY, null, excludedPaymentTypes, null);
+        Activity activity = prepareActivity(StaticMock.DUMMY_MERCHANT_PUBLIC_KEY, excludedPaymentTypes, null);
 
         sleepThread();
 
@@ -124,7 +98,7 @@ public class PaymentMethodsActivityTest extends BaseTest<PaymentMethodsActivity>
         List<String> excludedPaymentMethodIds = new ArrayList<String>(){{
             add("visa");
         }};
-        Activity activity = prepareActivity(StaticMock.DUMMY_MERCHANT_PUBLIC_KEY, null, null, excludedPaymentMethodIds);
+        Activity activity = prepareActivity(StaticMock.DUMMY_MERCHANT_PUBLIC_KEY, null, excludedPaymentMethodIds);
 
         sleepThread();
 
@@ -147,22 +121,17 @@ public class PaymentMethodsActivityTest extends BaseTest<PaymentMethodsActivity>
 
     public void testBackPressed() {
 
-        Activity activity = prepareActivity(StaticMock.DUMMY_MERCHANT_PUBLIC_KEY, null, null, null);
+        Activity activity = prepareActivity(StaticMock.DUMMY_MERCHANT_PUBLIC_KEY, null, null);
         activity.onBackPressed();
         assertFinishCalledWithResult(activity, Activity.RESULT_CANCELED);
     }
 
-<<<<<<< HEAD
     private PaymentMethodsActivity prepareActivity(String merchantPublicKey, List<String> excludedPaymentTypes, List<String> excludedPaymentMethodIds) {
-=======
-    private Activity prepareActivity(String merchantPublicKey, List<String> supportedPaymentTypes, List<String> excludedPaymentTypes, List<String> excludedPaymentMethodIds) {
->>>>>>> parent of df039a5... matched preference to vault settings, added payment methods search classes
 
         Intent intent = new Intent();
         if (merchantPublicKey != null) {
             intent.putExtra("merchantPublicKey", merchantPublicKey);
         }
-        putListExtra(intent, "supportedPaymentTypes", supportedPaymentTypes);
         putListExtra(intent, "excludedPaymentTypes", excludedPaymentTypes);
         putListExtra(intent, "excludedPaymentMethodIds", excludedPaymentMethodIds);
 

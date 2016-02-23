@@ -1,8 +1,8 @@
 package com.mercadopago;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-<<<<<<< HEAD
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 import android.view.Menu;
@@ -14,15 +14,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mercadopago.controllers.ShoppingCartController;
-=======
-import android.view.View;
-
-import com.mercadopago.adapters.CustomerCardsAdapter;
->>>>>>> parent of df039a5... matched preference to vault settings, added payment methods search classes
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.core.MerchantServer;
 import com.mercadopago.model.CheckoutPreference;
-<<<<<<< HEAD
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.Item;
 import com.mercadopago.model.MerchantPayment;
@@ -37,27 +31,23 @@ import com.mercadopago.util.LayoutUtil;
 import com.mercadopago.util.MercadoPagoUtil;
 
 import java.math.BigDecimal;
-=======
-import com.mercadopago.model.Customer;
-import com.mercadopago.model.Payment;
-import com.mercadopago.model.PaymentIntent;
-import com.mercadopago.model.PaymentMethod;
-import com.mercadopago.model.PaymentMethodRow;
-import com.mercadopago.util.ApiUtil;
-import com.mercadopago.util.LayoutUtil;
-import com.mercadopago.util.MercadoPagoUtil;
->>>>>>> parent of df039a5... matched preference to vault settings, added payment methods search classes
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-public class CheckoutActivity extends VaultActivity {
+public class CheckoutActivity extends AppCompatActivity{
 
+    //Parameters
     protected CheckoutPreference mCheckoutPreference;
+    protected String mMerchantPublicKey;
+    protected Boolean mShowBankDeals;
+
+    //Local vars
+    protected MercadoPago mMercadoPago;
+    protected Activity mActivity;
     protected Payment mPayment;
     protected boolean mSupportMPApp = true;
-<<<<<<< HEAD
     protected PaymentMethod mSelectedPaymentMethod;
     protected Issuer mSelectedIssuer;
     protected PayerCost mSelectedPayerCost;
@@ -153,25 +143,12 @@ public class CheckoutActivity extends VaultActivity {
     protected void startTermsAndConditionsActivity() {
         Intent termsAndConditionsIntent = new Intent(this, TermsAndConditionsActivity.class);
         startActivity(termsAndConditionsIntent);
-=======
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-
-        // Set checkout preference
-        mCheckoutPreference = (CheckoutPreference) this.getIntent().getSerializableExtra("checkoutPreference");
-
-        super.onCreate(savedInstanceState);
->>>>>>> parent of df039a5... matched preference to vault settings, added payment methods search classes
     }
 
-    @Override
-    protected void setContentView() {
-
-        setContentView(R.layout.activity_checkout);
+    protected void setActivity() {
+        this.mActivity = this;
     }
 
-<<<<<<< HEAD
     protected void startPaymentVaultActivity() {
 
         MercadoPago.StartActivityBuilder builder = new MercadoPago.StartActivityBuilder();
@@ -193,46 +170,8 @@ public class CheckoutActivity extends VaultActivity {
         {
             builder.setMerchantBaseUrl("https://mp-android-sdk.herokuapp.com/");
             builder.setMerchantGetCustomerUri("customers?preference_id=" + mCheckoutPreference.getId());
-=======
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-        if (!onVaultActivityResult(requestCode, resultCode, data)) {
-
-            // Set checkout result
-            Intent checkoutResult = null;
-            if (requestCode == MercadoPago.INSTALL_APP_REQUEST_CODE) {
-
-                if(data != null) {
-                    if (!data.getBooleanExtra("backButtonPressed", false)) {
-                        checkoutResult = data;
-                    } else {
-                        return;
-                    }
-                }
-
-            } else if (requestCode == MercadoPago.CONGRATS_REQUEST_CODE) {
-
-                // from SDK
-                checkoutResult = new Intent();
-                checkoutResult.putExtra("externalReference", mPayment.getExternalReference());
-                checkoutResult.putExtra("paymentId", mPayment.getId());
-                checkoutResult.putExtra("paymentStatus", mPayment.getStatus());
-                checkoutResult.putExtra("paymentType", mPayment.getPaymentTypeId());
-                checkoutResult.putExtra("preferenceId", mCheckoutPreference.getId());
-            }
-
-            // Return checkout result
-            setResult(RESULT_OK, checkoutResult);
-            finish();
->>>>>>> parent of df039a5... matched preference to vault settings, added payment methods search classes
         }
-    }
 
-    @Override
-    protected void setAmount() {
-
-<<<<<<< HEAD
         builder.startPaymentVaultActivity();
     }
 
@@ -259,42 +198,20 @@ public class CheckoutActivity extends VaultActivity {
             }
         }
         return purchaseTitle.toString();
-=======
-        if (mCheckoutPreference != null) {
-            mAmount = mCheckoutPreference.getAmount();
-        }
->>>>>>> parent of df039a5... matched preference to vault settings, added payment methods search classes
     }
+
+    protected boolean payerHasEmail() {
+
+        return mCheckoutPreference != null
+                && mCheckoutPreference.getPayer() != null
+                && mCheckoutPreference.getPayer().getEmail() != null
+                && !mCheckoutPreference.getPayer().getEmail().equals("");
+    }
+
 
     @Override
-    protected boolean validParameters() {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        if ((mMerchantPublicKey != null) && (mCheckoutPreference != null)) {
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    protected void setActivity() {
-
-        mActivity = this;
-        mActivity.setTitle(getString(R.string.mpsdk_title_activity_checkout));
-    }
-
-    @Override
-    protected void initPaymentFlow() {
-
-        // Show payment method selection or go for customer's cards
-        if ((mCheckoutPreference.getPayer() != null) &&
-                (mCheckoutPreference.getPayer().getEmail() != null) && (!mCheckoutPreference.getPayer().getEmail().equals(""))) {
-            getCustomerCardsAsync();
-        } else {
-            startPaymentMethodsActivity();
-        }
-    }
-
-<<<<<<< HEAD
         if(requestCode == MercadoPago.PAYMENT_VAULT_REQUEST_CODE) {
 
             if(resultCode == RESULT_OK) {
@@ -309,28 +226,9 @@ public class CheckoutActivity extends VaultActivity {
                     mSelectedPayerCost = (PayerCost) data.getSerializableExtra("payerCost");
 
                     mCreatedToken = (Token) data.getSerializableExtra("token");
-=======
-    @Override
-    protected void resolveCustomerCardsRequest(int resultCode, Intent data) {
 
-        if (resultCode == RESULT_OK) {
+                    mSelectedPaymentMethod = (PaymentMethod) data.getSerializableExtra("paymentMethod");
 
-            PaymentMethodRow selectedPaymentMethodRow = (PaymentMethodRow) data.getSerializableExtra("paymentMethodRow");
-
-            if (selectedPaymentMethodRow.getCard() != null) {
-
-                // Set selection status
-                mPayerCosts = null;
-                mCardToken = null;
-                mSelectedPaymentMethodRow = selectedPaymentMethodRow;
-                mSelectedPayerCost = null;
-                mTempPaymentMethod = null;
->>>>>>> parent of df039a5... matched preference to vault settings, added payment methods search classes
-
-                // Set customer method selection
-                setCustomerMethodSelection();
-
-<<<<<<< HEAD
                     if(MercadoPagoUtil.isCardPaymentType(mSelectedPaymentMethod.getPaymentTypeId()))
                     {
                         //TODO ver que poner
@@ -348,26 +246,10 @@ public class CheckoutActivity extends VaultActivity {
                     Intent returnIntent = new Intent();
                     setResult(RESULT_CANCELED, returnIntent);
                     finish();
-=======
-            } else {
-
-                if (selectedPaymentMethodRow.getLabel().equals(getResources().getString(R.string.mpsdk_mp_app_name))) {
-
-                    startMPApp();
-
-                } else {
-
-                    startPaymentMethodsActivity();
->>>>>>> parent of df039a5... matched preference to vault settings, added payment methods search classes
                 }
             }
-        } else {
 
-            if ((data != null) && (data.getStringExtra("apiException") != null)) {
-                finishWithApiException(data);
-            }
         }
-<<<<<<< HEAD
 
         Intent checkoutResult = null;
         if (requestCode == MercadoPago.INSTALL_APP_REQUEST_CODE) {
@@ -376,37 +258,9 @@ public class CheckoutActivity extends VaultActivity {
                 setResult(RESULT_OK, checkoutResult);
                 finish();
             }
-=======
-    }
 
-    @Override
-    protected void resolvePaymentMethodsRequest(int resultCode, Intent data) {
+        } else if (requestCode == MercadoPago.CONGRATS_REQUEST_CODE) {
 
-        if (resultCode == RESULT_OK) {
-
-            // Set selection status
-            mTempIssuer = null;
-            mTempPaymentMethod = (PaymentMethod) data.getSerializableExtra("paymentMethod");
-
-            if (MercadoPagoUtil.isCardPaymentType(mTempPaymentMethod.getPaymentTypeId())) {  // Card-like methods
-
-                if (mTempPaymentMethod.isIssuerRequired()) {
-
-                    // Call issuer activity
-                    startIssuersActivity();
-
-                } else {
-
-                    // Call new card activity
-                    startNewCardActivity();
-                }
-            } else if (mTempPaymentMethod.getId().equals(getResources().getString(R.string.mpsdk_mp_app_id))) {
->>>>>>> parent of df039a5... matched preference to vault settings, added payment methods search classes
-
-                // Start MercadoPago App
-                startMPApp();
-
-<<<<<<< HEAD
             // from SDK
             checkoutResult = new Intent();
             checkoutResult.putExtra("eAs" +
@@ -435,120 +289,18 @@ public class CheckoutActivity extends VaultActivity {
     @Override
     protected void onResume() {
         super.onResume();
-=======
-            } else {  // Off-line methods
+    }
 
-                // Set selection status
-                mPayerCosts = null;
-                mCardToken = null;
-                mSelectedPaymentMethodRow = null;
-                mSelectedPayerCost = null;
-                mSelectedPaymentMethod = (PaymentMethod) data.getSerializableExtra("paymentMethod");
-                mSelectedIssuer = null;
+    protected boolean validParameters() {
 
-                // Set customer method selection
-                mCustomerMethodsText.setText(mSelectedPaymentMethod.getName());
-                mCustomerMethodsText.setCompoundDrawablesWithIntrinsicBounds(MercadoPagoUtil.getPaymentMethodIcon(mActivity, mSelectedPaymentMethod.getId()), 0, 0, 0);
-
-                // Set security card visibility
-                mSecurityCodeCard.setVisibility(View.GONE);
-
-                // Set installments visibility
-                mInstallmentsCard.setVisibility(View.GONE);
-
-                // Set button visibility
-                mSubmitButton.setEnabled(true);
-            }
-        } else {
-
-            if ((data != null) && (data.getStringExtra("apiException") != null)) {
-                finishWithApiException(data);
-            } else if ((mSelectedPaymentMethodRow == null) && (mCardToken == null)) {
-                // if nothing is selected
-                finish();
-            }
+        if ((mMerchantPublicKey != null) && (mCheckoutPreference != null)) {
+            return true;
         }
+        return false;
     }
 
-    @Override
-    protected void startCustomerCardsActivity() {
-
-        // Now call customer cards activity with MP App support
-        new MercadoPago.StartActivityBuilder()
-                .setActivity(mActivity)
-                .setCards(mCards)
-                .setSupportMPApp(mSupportMPApp)
-                .startCustomerCardsActivity();
->>>>>>> parent of df039a5... matched preference to vault settings, added payment methods search classes
-    }
-
-    @Override
-    protected void startPaymentMethodsActivity() {
-
-        // Now call payment methods activity with MP App support
-        new MercadoPago.StartActivityBuilder()
-                .setActivity(mActivity)
-                .setPublicKey(mMerchantPublicKey)
-                .setSupportedPaymentTypes(mPaymentMethodPreference.getSupportedPaymentTypes())
-                .setShowBankDeals(mShowBankDeals)
-                .setSupportMPApp(mSupportMPApp)
-                .startPaymentMethodsActivity();
-    }
-
-    @Override
-    protected void getCustomerCardsAsync() {
-
-        LayoutUtil.showProgressLayout(mActivity);
-        mMercadoPago.getCustomer(mCheckoutPreference.getId(), new Callback<Customer>() {
-            @Override
-            public void success(Customer customer, Response response) {
-
-                mCards = customer.getCards();
-
-                // If the customer has saved cards show the first one, else show the payment methods step
-                if ((mCards != null) && (mCards.size() > 0)) {
-
-                    // Set selected payment method row
-                    mSelectedPaymentMethodRow = CustomerCardsAdapter.getPaymentMethodRow(mActivity, mCards.get(0));
-
-                    // Set customer method selection
-                    setCustomerMethodSelection();
-
-                } else {
-
-                    // Show payment methods step
-                    startPaymentMethodsActivity();
-
-                    LayoutUtil.showRegularLayout(mActivity);
-                }
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-
-                mExceptionOnMethod = "getCustomerCardsAsync";
-                ApiUtil.finishWithApiException(mActivity, error);
-            }
-        });
-    }
-
-<<<<<<< HEAD
     protected void createPayment() {
         PaymentIntent paymentIntent = new PaymentIntent();
-=======
-    @Override
-    protected void resolveCreateTokenSuccess(String token) {
-
-        // Set payment intent
-        PaymentIntent paymentIntent = new PaymentIntent();
-        paymentIntent.setPrefId(mCheckoutPreference.getId());
-        paymentIntent.setToken(token);
-        if (mSelectedIssuer != null) {
-            paymentIntent.setIssuerId(mSelectedIssuer.getId());
-        }
-        paymentIntent.setInstallments(mSelectedPayerCost.getInstallments());
-        paymentIntent.setPaymentMethodId(mSelectedPaymentMethod.getId());
->>>>>>> parent of df039a5... matched preference to vault settings, added payment methods search classes
 
         paymentIntent.setPrefId(mCheckoutPreference.getId());
         if(mCreatedToken != null) {
@@ -563,14 +315,7 @@ public class CheckoutActivity extends VaultActivity {
 
         paymentIntent.setPaymentMethodId(mSelectedPaymentMethod.getId());
         // Create payment
-<<<<<<< HEAD
         LayoutUtil.showProgressLayout(this);
-=======
-        LayoutUtil.showProgressLayout(mActivity);
-        mMercadoPago.createPayment(paymentIntent, new Callback<Payment>() {
-            @Override
-            public void success(Payment payment, Response response) {
->>>>>>> parent of df039a5... matched preference to vault settings, added payment methods search classes
 
         //TODO ir a nuevo servicio de payment
         createMockPayment(paymentIntent);
