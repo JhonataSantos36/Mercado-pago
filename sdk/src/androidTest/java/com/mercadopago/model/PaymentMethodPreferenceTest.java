@@ -47,7 +47,7 @@ public class PaymentMethodPreferenceTest extends TestCase {
         List<PayerCost> originalPayerCosts = getPayerCosts();
 
         PaymentMethodPreference paymentMethodPreference = new PaymentMethodPreference();
-        paymentMethodPreference.setInstallments(6);
+        paymentMethodPreference.setMaxInstallments(6);
 
         List<PayerCost> filteredPayerCosts = paymentMethodPreference.getInstallmentsBelowMax(originalPayerCosts);
 
@@ -65,10 +65,38 @@ public class PaymentMethodPreferenceTest extends TestCase {
         Assert.assertTrue(filteredPayerCosts.equals(originalPayerCosts));
     }
 
+    public void testWhenPaymentMethodTypeIsSupportedAndItsNotExcludedReturnSupported(){
+        List<String> supportedPaymentTypes = new ArrayList<String>(){{
+            add("credit_card");
+        }};
 
+        PaymentMethod paymentMethod = new PaymentMethod();
+        paymentMethod.setPaymentTypeId("credit_card");
+        PaymentMethodPreference paymentMethodPreference = new PaymentMethodPreference();
+        paymentMethodPreference.setSupportedPaymentTypes(supportedPaymentTypes);
+
+        Assert.assertTrue(paymentMethodPreference.isPaymentMethodSupported(paymentMethod));
+
+    }
+
+    public void testWhenPaymentMethodTypeIsNotSupportedReturnNotSupported(){
+        List<String> supportedPaymentTypes = new ArrayList<String>(){{
+            add("debit_card");
+        }};
+
+        PaymentMethod paymentMethod = new PaymentMethod();
+        paymentMethod.setPaymentTypeId("credit_card");
+        PaymentMethodPreference paymentMethodPreference = new PaymentMethodPreference();
+        paymentMethodPreference.setSupportedPaymentTypes(supportedPaymentTypes);
+
+        Assert.assertTrue(!paymentMethodPreference.isPaymentMethodSupported(paymentMethod));
+
+    }
 
     public void testWhenPaymentMethodTypeIsExcludedReturnNotSupported(){
-
+        List<String> supportedPaymentTypes = new ArrayList<String>(){{
+            add("debit_card");
+        }};
         List<String> excludedPaymentMethods = new ArrayList<String>(){{
             add("debit_card");
         }};
@@ -77,6 +105,7 @@ public class PaymentMethodPreferenceTest extends TestCase {
         paymentMethod.setPaymentTypeId("debit_card");
         PaymentMethodPreference paymentMethodPreference = new PaymentMethodPreference();
         paymentMethodPreference.setExcludedPaymentTypes(excludedPaymentMethods);
+        paymentMethodPreference.setSupportedPaymentTypes(supportedPaymentTypes);
 
         Assert.assertTrue(!paymentMethodPreference.isPaymentMethodSupported(paymentMethod));
     }
@@ -112,7 +141,7 @@ public class PaymentMethodPreferenceTest extends TestCase {
         PaymentMethod paymentMethod = new PaymentMethod();
         paymentMethod.setId("visa");
         PaymentMethodPreference paymentMethodPreference = new PaymentMethodPreference();
-        paymentMethodPreference.setExcludedPaymentMethods(excludedPaymentMethodIds);
+        paymentMethodPreference.setExcludedPaymentMethodIds(excludedPaymentMethodIds);
 
         Assert.assertTrue(!paymentMethodPreference.isPaymentMethodSupported(paymentMethod));
     }
@@ -126,15 +155,34 @@ public class PaymentMethodPreferenceTest extends TestCase {
         PaymentMethod paymentMethod = new PaymentMethod();
         paymentMethod.setId("master");
         PaymentMethodPreference paymentMethodPreference = new PaymentMethodPreference();
-        paymentMethodPreference.setExcludedPaymentMethods(excludedPaymentMethodIds);
+        paymentMethodPreference.setExcludedPaymentMethodIds(excludedPaymentMethodIds);
 
         Assert.assertTrue(paymentMethodPreference.isPaymentMethodSupported(paymentMethod));
     }
 
-    public void testIfPaymentMethodIdNotExcludedButPaymentTypeExcludedReturnSupportedFalse()
+    public void testIfPaymentMethodIdNotExcludedButPaymentMethodNotSupportedReturnSupportedFalse()
     {
         List<String> excludedPaymentMethodIds = new ArrayList<String>(){{
-            add("master");
+            add("visa");
+        }};
+        List<String> supportedPaymentTypes = new ArrayList<String>(){{
+            add("prepaid_card");
+        }};
+
+        PaymentMethod paymentMethod = new PaymentMethod();
+        paymentMethod.setId("visa");
+        paymentMethod.setPaymentTypeId("credit_card");
+        PaymentMethodPreference paymentMethodPreference = new PaymentMethodPreference();
+        paymentMethodPreference.setExcludedPaymentMethodIds(excludedPaymentMethodIds);
+        paymentMethodPreference.setSupportedPaymentTypes(supportedPaymentTypes);
+
+        Assert.assertTrue(!paymentMethodPreference.isPaymentMethodSupported(paymentMethod));
+    }
+
+    public void testIfPaymentMethodIdNotExcludedButPaymentMethodExcludedReturnSupportedFalse()
+    {
+        List<String> excludedPaymentMethodIds = new ArrayList<String>(){{
+            add("visa");
         }};
         List<String> excludedPaymentMethodTypes = new ArrayList<String>(){{
             add("credit_card");
@@ -145,7 +193,7 @@ public class PaymentMethodPreferenceTest extends TestCase {
         paymentMethod.setPaymentTypeId("credit_card");
         PaymentMethodPreference paymentMethodPreference = new PaymentMethodPreference();
         paymentMethodPreference.setExcludedPaymentTypes(excludedPaymentMethodTypes);
-        paymentMethodPreference.setExcludedPaymentMethods(excludedPaymentMethodIds);
+        paymentMethodPreference.setExcludedPaymentMethodIds(excludedPaymentMethodIds);
 
         Assert.assertTrue(!paymentMethodPreference.isPaymentMethodSupported(paymentMethod));
     }
@@ -157,6 +205,25 @@ public class PaymentMethodPreferenceTest extends TestCase {
         PaymentMethodPreference paymentMethodPreference = new PaymentMethodPreference();
 
         Assert.assertTrue(paymentMethodPreference.isPaymentMethodSupported(paymentMethod));
+    }
+
+    public void testFilterListBySupportedPaymentMethods(){
+
+        List<String> supportedPaymentTypes = new ArrayList<String>(){{
+            add("prepaid_card");
+            add("credit_card");
+        }};
+
+        List<PaymentMethod> originalPaymentMethods = getPaymentMethods();
+        PaymentMethodPreference paymentMethodPreference = new PaymentMethodPreference();
+        paymentMethodPreference.setSupportedPaymentTypes(supportedPaymentTypes);
+        List<PaymentMethod> filteredPaymentMethods = paymentMethodPreference.getSupportedPaymentMethods(originalPaymentMethods);
+
+        Assert.assertTrue(filteredPaymentMethods.size() != 0);
+        for(PaymentMethod pm : filteredPaymentMethods)
+        {
+            Assert.assertTrue(pm.getPaymentTypeId().equals("prepaid_card") || pm.getPaymentTypeId().equals("credit_card"));
+        }
     }
 
     public void testFilterListByExcludedPaymentMethodTypes(){
@@ -190,7 +257,7 @@ public class PaymentMethodPreferenceTest extends TestCase {
         List<PaymentMethod> originalPaymentMethods = getPaymentMethods();
         PaymentMethodPreference paymentMethodPreference = new PaymentMethodPreference();
 
-        paymentMethodPreference.setExcludedPaymentMethods(excludedPaymentMethodIds);
+        paymentMethodPreference.setExcludedPaymentMethodIds(excludedPaymentMethodIds);
 
         List<PaymentMethod> filteredPaymentMethods = paymentMethodPreference.getSupportedPaymentMethods(originalPaymentMethods);
 

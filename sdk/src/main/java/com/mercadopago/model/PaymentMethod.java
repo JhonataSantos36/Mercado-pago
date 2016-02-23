@@ -87,5 +87,4 @@ public class PaymentMethod implements Serializable {
 
         return (Setting.getSettingByBin(this.getSettings(), bin) != null);
     }
-
 }

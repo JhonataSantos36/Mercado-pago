@@ -2,11 +2,19 @@
 <items version="2" >
 
     <item
+<<<<<<< HEAD
         jar="/Users/mreverter/AndroidStudioProjects/px-android/example/build/intermediates/exploded-aar/com.mercadopago/sdk/0.9.15/jars/classes.jar"
         jumboMode="false"
         revision="22.0.1"
         sha1="202cbd57b6cfca43cab182cd4523c2e1c39f552b">
         <dex dex="/Users/mreverter/AndroidStudioProjects/px-android/example/build/intermediates/pre-dexed/debug/com.mercadopago-sdk-0.9.15_91d23e48db67c3d93bdee269d26c4c3287765610.jar" />
+=======
+        jar="/Users/mreverter/AndroidStudioProjects/sdk-android-account-money/example/build/intermediates/exploded-aar/com.mercadopago/sdk/0.9.15/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="c4f16f4f4759f3fde6ff7ef287aa229e94f2d5af">
+        <dex dex="/Users/mreverter/AndroidStudioProjects/sdk-android-account-money/example/build/intermediates/pre-dexed/debug/classes-b45119529f37cb9b115087dafccc59ab5e41aec0.jar" />
+>>>>>>> parent of df039a5... matched preference to vault settings, added payment methods search classes
     </item>
 
 </items>

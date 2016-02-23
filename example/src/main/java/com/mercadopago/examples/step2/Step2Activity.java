@@ -18,9 +18,10 @@ import java.util.List;
 
 public class Step2Activity extends ExampleActivity {
 
-    protected List<String> mExcludedPaymentTypes = new ArrayList<String>(){{
-        add("ticket");
-        add("atm");
+    protected List<String> mSupportedPaymentTypes = new ArrayList<String>(){{
+        add("credit_card");
+        add("debit_card");
+        add("prepaid_card");
     }};
 
     @Override
@@ -57,6 +58,6 @@ public class Step2Activity extends ExampleActivity {
         // Call simple vault activity
         ExamplesUtils.startSimpleVaultActivity(this, ExamplesUtils.DUMMY_MERCHANT_PUBLIC_KEY,
                 ExamplesUtils.DUMMY_MERCHANT_BASE_URL, ExamplesUtils.DUMMY_MERCHANT_GET_CUSTOMER_URI,
-                ExamplesUtils.DUMMY_MERCHANT_ACCESS_TOKEN, mExcludedPaymentTypes);
+                ExamplesUtils.DUMMY_MERCHANT_ACCESS_TOKEN, mSupportedPaymentTypes);
     }
 }

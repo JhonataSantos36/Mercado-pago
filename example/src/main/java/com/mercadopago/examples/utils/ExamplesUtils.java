@@ -1,9 +1,7 @@
 package com.mercadopago.examples.utils;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.res.AssetManager;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -22,10 +20,8 @@ import com.mercadopago.model.Item;
 import com.mercadopago.model.MerchantPayment;
 import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentMethod;
-import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;
 
-import java.io.InputStream;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.util.List;
@@ -91,29 +87,29 @@ public class ExamplesUtils {
                 .startGuessingCardActivity();
     }
 
-    public static void startSimpleVaultActivity(Activity activity, String merchantPublicKey, String merchantBaseUrl, String merchantGetCustomerUri, String merchantAccessToken, List<String> excludedPaymentTypes) {
+    public static void startSimpleVaultActivity(Activity activity, String merchantPublicKey, String merchantBaseUrl, String merchantGetCustomerUri, String merchantAccessToken, List<String> supportedPaymentTypes) {
 
         Intent simpleVaultIntent = new Intent(activity, SimpleVaultActivity.class);
         simpleVaultIntent.putExtra("merchantPublicKey", merchantPublicKey);
         simpleVaultIntent.putExtra("merchantBaseUrl", merchantBaseUrl);
         simpleVaultIntent.putExtra("merchantGetCustomerUri", merchantGetCustomerUri);
         simpleVaultIntent.putExtra("merchantAccessToken", merchantAccessToken);
-        putListExtra(simpleVaultIntent, "excludedPaymentTypes", excludedPaymentTypes);
+        putListExtra(simpleVaultIntent, "supportedPaymentTypes", supportedPaymentTypes);
         activity.startActivityForResult(simpleVaultIntent, SIMPLE_VAULT_REQUEST_CODE);
     }
-    public static void startAdvancedVaultActivity(Activity activity, String merchantPublicKey, String merchantBaseUrl, String merchantGetCustomerUri, String merchantAccessToken, BigDecimal amount, List<String> excludedPaymentTypes) {
+    public static void startAdvancedVaultActivity(Activity activity, String merchantPublicKey, String merchantBaseUrl, String merchantGetCustomerUri, String merchantAccessToken, BigDecimal amount, List<String> supportedPaymentTypes) {
         startAdvancedVaultActivity(activity, ExamplesUtils.DUMMY_MERCHANT_PUBLIC_KEY,
                 ExamplesUtils.DUMMY_MERCHANT_BASE_URL, ExamplesUtils.DUMMY_MERCHANT_GET_CUSTOMER_URI,
-                ExamplesUtils.DUMMY_MERCHANT_ACCESS_TOKEN, new BigDecimal("20"), excludedPaymentTypes, false);
+                ExamplesUtils.DUMMY_MERCHANT_ACCESS_TOKEN, new BigDecimal("20"), supportedPaymentTypes, false);
     }
 
-    public static void startAdvancedVaultActivityWithGuessing(Activity activity, String dummyMerchantPublicKey, String dummyMerchantBaseUrl, String dummyMerchantGetCustomerUri, String dummyMerchantAccessToken, BigDecimal bigDecimal, List<String> excludedPaymentTypes) {
+    public static void startAdvancedVaultActivityWithGuessing(Activity activity, String dummyMerchantPublicKey, String dummyMerchantBaseUrl, String dummyMerchantGetCustomerUri, String dummyMerchantAccessToken, BigDecimal bigDecimal, List<String> supportedPaymentTypes) {
         startAdvancedVaultActivity(activity, ExamplesUtils.DUMMY_MERCHANT_PUBLIC_KEY,
                 ExamplesUtils.DUMMY_MERCHANT_BASE_URL, ExamplesUtils.DUMMY_MERCHANT_GET_CUSTOMER_URI,
-                ExamplesUtils.DUMMY_MERCHANT_ACCESS_TOKEN, new BigDecimal("20"), excludedPaymentTypes, true);
+                ExamplesUtils.DUMMY_MERCHANT_ACCESS_TOKEN, new BigDecimal("20"), supportedPaymentTypes, true);
     }
 
-    public static void startAdvancedVaultActivity(Activity activity, String merchantPublicKey, String merchantBaseUrl, String merchantGetCustomerUri, String merchantAccessToken, BigDecimal amount, List<String> excludedPaymentTypes, Boolean guessingEnabled) {
+    public static void startAdvancedVaultActivity(Activity activity, String merchantPublicKey, String merchantBaseUrl, String merchantGetCustomerUri, String merchantAccessToken, BigDecimal amount, List<String> supportedPaymentTypes, Boolean guessingEnabled) {
 
         Intent advVaultIntent = new Intent(activity, AdvancedVaultActivity.class);
         advVaultIntent.putExtra("merchantPublicKey", merchantPublicKey);
@@ -121,11 +117,11 @@ public class ExamplesUtils {
         advVaultIntent.putExtra("merchantGetCustomerUri", merchantGetCustomerUri);
         advVaultIntent.putExtra("merchantAccessToken", merchantAccessToken);
         advVaultIntent.putExtra("amount", amount.toString());
-        putListExtra(advVaultIntent, "excludedPaymentTypes", excludedPaymentTypes);
+        putListExtra(advVaultIntent, "supportedPaymentTypes", supportedPaymentTypes);
         activity.startActivityForResult(advVaultIntent, ADVANCED_VAULT_REQUEST_CODE);
     }
 
-    public static void startFinalVaultActivity(Activity activity, String merchantPublicKey, String merchantBaseUrl, String merchantGetCustomerUri, String merchantAccessToken, BigDecimal amount, List<String> excludedPaymentTypes) {
+    public static void startFinalVaultActivity(Activity activity, String merchantPublicKey, String merchantBaseUrl, String merchantGetCustomerUri, String merchantAccessToken, BigDecimal amount, List<String> supportedPaymentTypes) {
 
         Intent finalVaultIntent = new Intent(activity, FinalVaultActivity.class);
         finalVaultIntent.putExtra("merchantPublicKey", merchantPublicKey);
@@ -133,7 +129,7 @@ public class ExamplesUtils {
         finalVaultIntent.putExtra("merchantGetCustomerUri", merchantGetCustomerUri);
         finalVaultIntent.putExtra("merchantAccessToken", merchantAccessToken);
         finalVaultIntent.putExtra("amount", amount.toString());
-        putListExtra(finalVaultIntent, "excludedPaymentTypes", excludedPaymentTypes);
+        putListExtra(finalVaultIntent, "supportedPaymentTypes", supportedPaymentTypes);
         activity.startActivityForResult(finalVaultIntent, FINAL_VAULT_REQUEST_CODE);
     }
 
@@ -193,6 +189,7 @@ public class ExamplesUtils {
         // Set checkout intent
         CheckoutIntent checkoutIntent = new CheckoutIntent(ExamplesUtils.DUMMY_MERCHANT_ACCESS_TOKEN, item);
 
+<<<<<<< HEAD
         //TODO consumir servicio de preferencia
         CheckoutPreference mockPreference = JsonUtil.getInstance().fromJson(getFile(activity, "mocks/preference_with_exclusions.json"), CheckoutPreference.class);
         // Call final vault activity
@@ -226,6 +223,34 @@ public class ExamplesUtils {
         }
     }
 
+=======
+        // Create a checkout preference
+        // TODO: cambiar lo mío por el mock de OP
+        MerchantServer.createPreference(activity, "https://mp-android-sdk.herokuapp.com", "/preferences", checkoutIntent, new Callback<CheckoutPreference>() {
+            @Override
+            public void success(CheckoutPreference checkoutPreference, Response response) {
+
+                // Call final vault activity
+                new MercadoPago.StartActivityBuilder()
+                        .setActivity(activity)
+                        .setPublicKey(ExamplesUtils.DUMMY_MERCHANT_PUBLIC_KEY)
+                        .setCheckoutPreference(checkoutPreference)
+                        .setShowBankDeals(true)
+                        .startCheckoutActivity();
+
+                LayoutUtil.showRegularLayout(activity);
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+                LayoutUtil.showRegularLayout(activity);
+                Toast.makeText(activity, error.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+>>>>>>> parent of df039a5... matched preference to vault settings, added payment methods search classes
     private static void putListExtra(Intent intent, String listName, List<String> list) {
 
         if (list != null) {

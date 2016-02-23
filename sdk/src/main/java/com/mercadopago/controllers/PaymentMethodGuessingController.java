@@ -96,12 +96,17 @@ public class PaymentMethodGuessingController {
     private void setPaymentMethodLayoutForBin(String bin) {
         if(!bin.equals(mSavedBin)) {
             mSavedBin = bin;
+<<<<<<< HEAD
             List<PaymentMethod> validPaymentMethods = MercadoPago.getValidPaymentMethodsForBin(mSavedBin, this.mPaymentMethods);
             validPaymentMethods = getValidPaymentMethodForType(mPaymentType, validPaymentMethods);
+=======
+            List<PaymentMethod> validPaymentMethods = getValidPaymentMethodsForBin(mSavedBin);
+>>>>>>> parent of df039a5... matched preference to vault settings, added payment methods search classes
             refreshPaymentMethodLayout(validPaymentMethods);
         }
     }
 
+<<<<<<< HEAD
     private List<PaymentMethod> getValidPaymentMethodForType(PaymentType paymentType, List<PaymentMethod> paymentMethods) {
         if(paymentType == null) {
             return paymentMethods;
@@ -115,6 +120,20 @@ public class PaymentMethodGuessingController {
             }
             return validPaymentMethodsForType;
         }
+=======
+    private List<PaymentMethod> getValidPaymentMethodsForBin(String mSavedBin) {
+        if(mSavedBin.length() == MercadoPago.BIN_LENGTH) {
+            List<PaymentMethod> validPaymentMethods = new ArrayList<>();
+            for (PaymentMethod pm : mPaymentMethods) {
+                if (pm.isValidForBin(mSavedBin)) {
+                    validPaymentMethods.add(pm);
+                }
+            }
+            return validPaymentMethods;
+        }
+        else
+            throw new RuntimeException("Invalid bin: " + MercadoPago.BIN_LENGTH + " digits needed, " + mSavedBin.length() + " found");
+>>>>>>> parent of df039a5... matched preference to vault settings, added payment methods search classes
     }
 
     private void clearGuessing() {

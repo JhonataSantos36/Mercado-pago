@@ -57,9 +57,9 @@ public class VaultActivity extends AppCompatActivity {
     protected Integer mDefaultInstallments;
     protected Integer mMaxInstallments;
     protected List<String> mExcludedPaymentMethodIds;
+    protected List<String> mSupportedPaymentTypes;
     protected List<String> mExcludedPaymentTypes;
     protected String mDefaultPaymentMethodId;
-    protected Boolean mSupportMPApp;
 
     // Input controls
     protected View mInstallmentsCard;
@@ -94,13 +94,11 @@ public class VaultActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-
-
         setContentView();
 
         getActivityParameters();
 
-        createPaymentPreference();
+        createPaymentMethodPreference();
 
         if (validParameters()) {
 
@@ -146,14 +144,17 @@ public class VaultActivity extends AppCompatActivity {
     public void getActivityParameters()
     {
         setAmount();
-        mSupportMPApp = this.getIntent().getBooleanExtra("supportMPApp", false);
         mMerchantPublicKey = this.getIntent().getStringExtra("merchantPublicKey");
         mMerchantBaseUrl = this.getIntent().getStringExtra("merchantBaseUrl");
         mMerchantGetCustomerUri = this.getIntent().getStringExtra("merchantGetCustomerUri");
         mMerchantAccessToken = this.getIntent().getStringExtra("merchantAccessToken");
         mCardGuessingEnabled = this.getIntent().getBooleanExtra("cardGuessingEnabled", false);
         mShowBankDeals = this.getIntent().getBooleanExtra("showBankDeals", true);
-
+        if (this.getIntent().getStringExtra("excludedPaymentMethodIds") != null) {
+            Gson gson = new Gson();
+            Type listType = new TypeToken<List<String>>(){}.getType();
+            mSupportedPaymentTypes = gson.fromJson(this.getIntent().getStringExtra("supportedPaymentTypes"), listType);
+        }
         if (this.getIntent().getStringExtra("excludedPaymentMethodIds") != null) {
             Gson gson = new Gson();
             Type listType = new TypeToken<List<String>>(){}.getType();
@@ -175,13 +176,14 @@ public class VaultActivity extends AppCompatActivity {
 
     }
 
-    protected void createPaymentPreference() {
+    private void createPaymentMethodPreference() {
         mPaymentMethodPreference = new PaymentMethodPreference();
-        mPaymentMethodPreference.setExcludedPaymentMethods(this.mExcludedPaymentMethodIds);
+        mPaymentMethodPreference.setExcludedPaymentMethodIds(this.mExcludedPaymentMethodIds);
+        mPaymentMethodPreference.setSupportedPaymentTypes(this.mSupportedPaymentTypes);
         mPaymentMethodPreference.setExcludedPaymentTypes(this.mExcludedPaymentTypes);
         mPaymentMethodPreference.setDefaultPaymentMethodId(this.mDefaultPaymentMethodId);
         mPaymentMethodPreference.setDefaultInstallments(this.mDefaultInstallments);
-        mPaymentMethodPreference.setInstallments(this.mMaxInstallments);
+        mPaymentMethodPreference.setMaxInstallments(this.mMaxInstallments);
     }
 
     protected void setContentView() {
@@ -326,11 +328,6 @@ public class VaultActivity extends AppCompatActivity {
 
                 // Set customer method selection
                 setCustomerMethodSelection();
-            }
-
-            else if (selectedPaymentMethodRow.getLabel().equals(getResources().getString(R.string.mpsdk_mp_app_name))) {
-
-                resolveMPAppNeeded();
 
             } else {
 
@@ -367,13 +364,7 @@ public class VaultActivity extends AppCompatActivity {
                     // Call new cards activity
                     startNewCardActivity();
                 }
-
-            }
-            else if (mTempPaymentMethod.getId().equals(getResources().getString(R.string.mpsdk_mp_app_id))) {
-               resolveMPAppNeeded();
-            }
-
-            else {  // Off-line methods
+            } else {  // Off-line methods
 
                 // Set selection status
                 mPayerCosts = null;
@@ -405,15 +396,6 @@ public class VaultActivity extends AppCompatActivity {
                 finish();
             }
         }
-    }
-
-    protected void resolveMPAppNeeded() {
-
-        Intent returnIntent = new Intent();
-        returnIntent.putExtra("MPAppNeeded", true);
-        setResult(RESULT_OK, returnIntent);
-        finish();
-
     }
 
     protected void resolveInstallmentsRequest(int resultCode, Intent data) {
@@ -854,7 +836,6 @@ public class VaultActivity extends AppCompatActivity {
         new MercadoPago.StartActivityBuilder()
                 .setActivity(mActivity)
                 .setCards(mCards)
-                .setSupportMPApp(mSupportMPApp)
                 .startCustomerCardsActivity();
     }
 
@@ -890,11 +871,11 @@ public class VaultActivity extends AppCompatActivity {
         new MercadoPago.StartActivityBuilder()
                 .setActivity(mActivity)
                 .setPublicKey(mMerchantPublicKey)
+                .setSupportedPaymentTypes(mSupportedPaymentTypes)
                 .setExcludedPaymentTypes(mExcludedPaymentTypes)
                 .setExcludedPaymentMethodIds(mExcludedPaymentMethodIds)
                 .setDefaultPaymentMethodId(mDefaultPaymentMethodId)
                 .setShowBankDeals(mShowBankDeals)
-                .setSupportMPApp(mSupportMPApp)
                 .startPaymentMethodsActivity();
     }
 
@@ -905,6 +886,7 @@ public class VaultActivity extends AppCompatActivity {
                 .setRequireSecurityCode(false)
                 .setRequireIssuer(true)
                 .setShowBankDeals(mShowBankDeals)
+                .setSupportedPaymentTypes(mSupportedPaymentTypes)
                 .setExcludedPaymentTypes(mExcludedPaymentTypes)
                 .setExcludedPaymentMethodIds(mExcludedPaymentMethodIds)
                 .setDefaultPaymentMethodId(mDefaultPaymentMethodId)

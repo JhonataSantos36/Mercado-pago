@@ -10,7 +10,6 @@ public class CheckoutPreference implements Serializable {
     private String id;
     private List<Item> items;
     private Payer payer;
-    private PaymentMethodPreference paymentMethods;
 
     public BigDecimal getAmount() {
 
@@ -48,38 +47,5 @@ public class CheckoutPreference implements Serializable {
 
     public void setPayer(Payer payer) {
         this.payer = payer;
-    }
-
-    public Integer getMaxInstallments() {
-        if(paymentMethods != null)
-            return paymentMethods.getInstallments();
-        else
-            return null;    }
-
-
-    public Integer getDefaultInstallments() {
-        if(paymentMethods != null)
-            return paymentMethods.getDefaultInstallments();
-        else
-            return null;    }
-
-    public List<String> getExcludedPaymentMethods() {
-        if(paymentMethods != null)
-            return paymentMethods.getExcludedPaymentMethodIds();
-        else
-            return null;
-    }
-
-    public List<String> getExcludedPaymentTypes() {
-        if(paymentMethods != null)
-            return paymentMethods.getExcludedPaymentTypes();
-        else
-            return null;    }
-
-    public String getDefaultPaymentMethodId() {
-        if(paymentMethods != null)
-            return paymentMethods.getDefaultPaymentMethodId();
-        else
-            return null;
     }
 }

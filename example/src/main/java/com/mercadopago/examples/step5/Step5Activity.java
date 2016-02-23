@@ -18,9 +18,16 @@ import java.util.List;
 
 public class Step5Activity extends ExampleActivity {
 
-
+    protected List<String> mSupportedPaymentTypes = new ArrayList<String>(){{
+        add("credit_card");
+        add("debit_card");
+        add("prepaid_card");
+        add("ticket");
+        add("atm");
+    }};
     protected List<String> mExcludedPaymentTypes = new ArrayList<String>(){{
-
+        add("prepaid_card");
+        add("ticket");
     }};
     protected List<String> mExcludedPaymentMethodIds = new ArrayList<String>(){{
         add("visa");
@@ -73,6 +80,7 @@ public class Step5Activity extends ExampleActivity {
                 .setMerchantGetCustomerUri(ExamplesUtils.DUMMY_MERCHANT_GET_CUSTOMER_URI)
                 .setMerchantAccessToken(ExamplesUtils.DUMMY_MERCHANT_ACCESS_TOKEN)
                 .setAmount(ExamplesUtils.DUMMY_ITEM_UNIT_PRICE)
+                .setSupportedPaymentTypes(mSupportedPaymentTypes)
                 .setExcludedPaymentTypes(mExcludedPaymentTypes)
                 .setExcludedPaymentMethodIds(mExcludedPaymentMethodIds)
                 .setMaxInstallments(ExamplesUtils.DUMMY_MAX_INSTALLMENTS)
@@ -89,6 +97,7 @@ public class Step5Activity extends ExampleActivity {
                 .setMerchantGetCustomerUri(ExamplesUtils.DUMMY_MERCHANT_GET_CUSTOMER_URI)
                 .setMerchantAccessToken(ExamplesUtils.DUMMY_MERCHANT_ACCESS_TOKEN)
                 .setAmount(ExamplesUtils.DUMMY_ITEM_UNIT_PRICE)
+                .setSupportedPaymentTypes(mSupportedPaymentTypes)
                 .setExcludedPaymentTypes(mExcludedPaymentTypes)
                 .setExcludedPaymentMethodIds(mExcludedPaymentMethodIds)
                 .setMaxInstallments(ExamplesUtils.DUMMY_MAX_INSTALLMENTS)

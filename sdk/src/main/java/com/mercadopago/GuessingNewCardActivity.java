@@ -38,6 +38,7 @@ public class GuessingNewCardActivity extends NewCardActivity {
     protected Boolean mRequireIssuer;
     protected Boolean mShowBankDeals;
     private List<String> mExcludedPaymentMethodIds;
+    private List<String> mSupportedPaymentTypes;
     private List<String> mExcludedPaymentTypes;
     private String mDefaultPaymentMethodId;
     private PaymentType mSupportedPaymentType;
@@ -79,6 +80,11 @@ public class GuessingNewCardActivity extends NewCardActivity {
     @Override
     protected void getActivityParameters(){
         super.getActivityParameters();
+        if (this.getIntent().getStringExtra("supportedPaymentTypes") != null) {
+            Gson gson = new Gson();
+            Type listType = new TypeToken<List<String>>(){}.getType();
+            mSupportedPaymentTypes = gson.fromJson(this.getIntent().getStringExtra("supportedPaymentTypes"), listType);
+        }
 
         if (this.getIntent().getStringExtra("excludedPaymentMethodIds") != null) {
             Gson gson = new Gson();
@@ -141,7 +147,8 @@ public class GuessingNewCardActivity extends NewCardActivity {
 
     private void createPaymentMethodPreference() {
         mPaymentMethodPreference = new PaymentMethodPreference();
-        mPaymentMethodPreference.setExcludedPaymentMethods(this.mExcludedPaymentMethodIds);
+        mPaymentMethodPreference.setExcludedPaymentMethodIds(this.mExcludedPaymentMethodIds);
+        mPaymentMethodPreference.setSupportedPaymentTypes(this.mSupportedPaymentTypes);
         mPaymentMethodPreference.setExcludedPaymentTypes(this.mExcludedPaymentTypes);
         mPaymentMethodPreference.setDefaultPaymentMethodId(this.mDefaultPaymentMethodId);
 
