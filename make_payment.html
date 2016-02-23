@@ -46,11 +46,7 @@
             MerchantServer.createPayment(activity, DUMMY_MERCHANT_BASE_URL, DUMMY_MERCHANT_CREATE_PAYMENT_URI, payment, new Callback&lt;Payment&gt;() {
                @Override
                public void success(Payment payment, Response response) {
-                   new MercadoPago.StartActivityBuilder()  //when payment creation suceeded, you can launch our payment result UI
-                           .setActivity(activity)
-                           .setPayment(payment)
-                           .setPaymentMethod(paymentMethod)
-                           .startCongratsActivity();
+                   //Handle payment
                }
                @Override
                public void failure(RetrofitError error) {
@@ -60,7 +56,32 @@
             });
         </pre>
         <br>
-        <p>And finally, aleluya!</p>
+
+        <h1>Display payment result</h1>
+
+        We recommend to use our UI solutions to display the payment result. The result should be different for instant payments or offline payment methods, such as atm or ticket.
+
+        You can check wheter a payment is automatic or not and start a corresponding UI as follows:
+        <pre class="prettyprint">
+          if(MercadoPagoUtil.isCardPaymentType(payment.getPaymentTypeId())) {
+                   new MercadoPago.StartActivityBuilder()
+                           .setActivity(mActivity)
+                           .setPayment(mPayment)
+                           .setPaymentMethod(selectedPaymentMethod)
+                           .startCongratsActivity();
+               } else {
+                   new MercadoPago.StartActivityBuilder()
+                           .setPublicKey(mMerchantPublicKey)
+                           .setActivity(mActivity)
+                           .setPayment(mPayment)
+                           .setPaymentMethod(selectedPaymentMethod)
+                           .startInstructionsActivity();
+               }
+           }
+       </pre>
+       <br>
+       <h2>Online payments</h2>
+       <p>If the payment method was online, you'll see a congrats screen:</p>
         <img class="centered" src="images/screenshots/congratulations.png" alt="congratualtions">
         <br>
         <p>Also, payments could remain pending...</p>
@@ -69,6 +90,11 @@
         <p>...or be rejected:</p>
         <img class="centered" src="images/screenshots/rejected_payment.png" alt="rejected_payment">
         <br>
+        <h2>Offline payments</h2>
+        <p>If the payment method was offline, you'll see a screen with instructions like:</p>
+        <img class="centered" src="images/screenshots/revamp-instructions.png" alt="congratualtions">
+        <br>
+
         <p>You can implement your own UI to show the result of the payment. <b><i>Payment</i></b> has a "status" attribute, that could be one of the following:</p>
         <p>
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;approved<br>
