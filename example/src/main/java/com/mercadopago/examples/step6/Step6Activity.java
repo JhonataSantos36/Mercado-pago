@@ -59,7 +59,7 @@ public class Step6Activity extends ExampleActivity {
     }
 
     public void submitForm(View view) {
-        startCheckoutActivity("TEST-b91c1880-7bee-4fd2-ad27-87abcd4bbd99");
+        startCheckoutActivity("TEST-b130744e-3dc5-4809-b027-599109307f1e");
     }
 
     private void startCheckoutActivity(String publicKey)
