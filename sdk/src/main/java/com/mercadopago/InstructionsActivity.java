@@ -124,7 +124,12 @@ public class InstructionsActivity extends AppCompatActivity {
     }
 
     private void setInformationMessages(Instruction instruction) {
-        mPrimaryInfo.setText(Html.fromHtml(getInfoHtmlText(instruction.getInfo())));
+        if(instruction.getInfo() != null && !instruction.getInfo().isEmpty()) {
+            mPrimaryInfo.setText(Html.fromHtml(getInfoHtmlText(instruction.getInfo())));
+        }
+        else {
+            mPrimaryInfo.setVisibility(View.GONE);
+        }
         if(instruction.getSecondaryInfo() != null && !instruction.getSecondaryInfo().isEmpty()) {
             mSecondaryInfo.setText(Html.fromHtml(getInfoHtmlText(instruction.getSecondaryInfo())));
         }

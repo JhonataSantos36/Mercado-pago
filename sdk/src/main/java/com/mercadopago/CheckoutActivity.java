@@ -26,7 +26,6 @@ import com.mercadopago.model.PaymentIntent;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.Token;
 import com.mercadopago.util.CurrenciesUtil;
-import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;
 import com.mercadopago.util.MercadoPagoUtil;
 
@@ -315,8 +314,6 @@ public class CheckoutActivity extends AppCompatActivity{
 
         paymentIntent.setPaymentMethodId(mSelectedPaymentMethod.getId());
         // Create payment
-        LayoutUtil.showProgressLayout(this);
-
         //TODO ir a nuevo servicio de payment
         createMockPayment(paymentIntent);
 
@@ -340,6 +337,9 @@ public class CheckoutActivity extends AppCompatActivity{
                     paymentIntent.getToken(), paymentMethodId, null, "mlm-cards-data");
 
             // Create payment
+            hideActionBar();
+            LayoutUtil.showProgressLayout(this);
+
             MerchantServer.createPayment(this, "https://www.mercadopago.com", "/checkout/examples/doPayment", payment, new Callback<Payment>() {
                 @Override
                 public void success(Payment payment, Response response) {
@@ -372,6 +372,13 @@ public class CheckoutActivity extends AppCompatActivity{
         } else {
 
             Toast.makeText(mActivity, "Invalid payment method", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void hideActionBar() {
+        android.support.v7.app.ActionBar actionBar = this.getSupportActionBar();
+        if(actionBar != null) {
+            actionBar.hide();
         }
     }
 

@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.mercadopago.InstructionsActivity"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:fillViewport="true">
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.mercadopago.InstructionsActivity"
-    android:background="@color/mpsdk_color_instructions_background">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/mpsdk_color_instructions_background">
         <include layout="@layout/view_refresh_layout"/>
         <include layout="@layout/view_progress_bar"/>
         <RelativeLayout
-            android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingLeft="15dp"
@@ -34,9 +33,9 @@
 
             <TextView
                 android:gravity="center"
+                android:layout_centerHorizontal="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Listo, ahora deposita $1000,00 en tu oficina Telecomm más cercana"
                 style="@style/mpsdk_large_label"
                 android:id="@+id/title"
                 android:layout_below="@+id/imageCashSign"/>
@@ -64,7 +63,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     style="@style/mpsdk_form_text"
-                    android:text="Indicale al cajero que es un pago de servicios Banamex y te pedirá los siguientes datos:"
                     android:id="@+id/primaryInfo"
                     android:layout_marginBottom="5dp"/>
                 <LinearLayout
@@ -81,7 +79,6 @@
                     android:layout_height="25dp"
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
-                    android:text="Ir a banca en línea"
                     android:textAllCaps="false"
                     android:id="@+id/actionButton"
                     style="@style/mpsdk_instructions_button_text"/>
@@ -93,7 +90,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
-            android:layout_marginTop="0dp"
+            android:layout_marginTop="2dp"
             android:paddingBottom="15dp"
             android:paddingTop="15dp">
             <LinearLayout
@@ -106,7 +103,6 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:text="También te mandamos los datos a tu e-mail."
                     style="@style/mpsdk_form_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -114,7 +110,6 @@
                     android:layout_marginBottom="10dp"/>
 
                 <TextView
-                    android:text="Si pagas un fin de semana o feriado, será al siguiente día hábil."
                     style="@style/mpsdk_small_form_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -143,7 +138,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:text="El pago se acreditará en menos de 1 hora."
                         android:id="@+id/accreditationMessage"
                         style="@style/mpsdk_acreditation_message"
                         android:layout_centerVertical="true"
