@@ -30,6 +30,7 @@ import com.mercadopago.util.LayoutUtil;
 import com.mercadopago.util.MercadoPagoUtil;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;

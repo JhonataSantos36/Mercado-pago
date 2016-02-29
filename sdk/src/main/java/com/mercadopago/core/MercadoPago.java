@@ -202,23 +202,27 @@ public class MercadoPago {
             PaymentService service = mRestAdapterMPApi.create(PaymentService.class);
 
             StringBuilder stringBuilder = new StringBuilder();
-            for(String typeId : excludedPaymentTypes) {
-                stringBuilder.append(typeId);
-                if(!typeId.equals(excludedPaymentTypes.get(excludedPaymentTypes.size()-1))) {
-                    stringBuilder.append(",");
+            if(excludedPaymentTypes != null) {
+
+                for (String typeId : excludedPaymentTypes) {
+                    stringBuilder.append(typeId);
+                    if (!typeId.equals(excludedPaymentTypes.get(excludedPaymentTypes.size() - 1))) {
+                        stringBuilder.append(",");
+                    }
                 }
             }
             String excludedPaymentTypesAppended = stringBuilder.toString();
 
             stringBuilder = new StringBuilder();
-            for(String paymentMethodId : excludedPaymentMethods) {
-                stringBuilder.append(paymentMethodId);
-                if(!paymentMethodId.equals(excludedPaymentMethods.get(excludedPaymentMethods.size()-1))) {
-                    stringBuilder.append(",");
+            if(excludedPaymentMethods != null) {
+                for(String paymentMethodId : excludedPaymentMethods) {
+                    stringBuilder.append(paymentMethodId);
+                    if (!paymentMethodId.equals(excludedPaymentMethods.get(excludedPaymentMethods.size() - 1))) {
+                        stringBuilder.append(",");
+                    }
                 }
             }
             String excludedPaymentMethodsAppended = stringBuilder.toString();
-
 
             service.getPaymentMethodSearch(this.mKey, amount, excludedPaymentTypesAppended, excludedPaymentMethodsAppended, callback);
         } else {

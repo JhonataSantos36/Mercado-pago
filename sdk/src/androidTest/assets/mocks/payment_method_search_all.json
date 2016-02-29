@@ -1,0 +1,36 @@
+{
+  "groups": [
+    {
+      "type": "group",
+      "comment": null,
+      "id": "cards",
+      "description": "Tarjetas",
+      "children_header": "¿Con que tarjeta?",
+      "children": []
+    },
+    {
+      "type": "payment_type",
+      "comment": null,
+      "id": "bank_transfer",
+      "description": "Transferencia Bancaria",
+      "children_header": "¿Cual es tu banco?",
+      "children": []
+    },
+    {
+      "type": "payment_type",
+      "comment": null,
+      "id": "ticket",
+      "description": "Efectivo",
+      "children_header": "¿Donde quieres pagar?",
+      "children": []
+    },
+    {
+      "type": "payment_method",
+      "comment": "Se acreditará en 2 habiles",
+      "id": "bitcoin",
+      "description": "Bitcoin",
+      "children_header": null,
+      "children": null
+    }
+  ]
+}

@@ -211,6 +211,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
     protected void setSearchLayout() {
         String initialTitle = getString(R.string.mpsdk_title_activity_payment_vault);
         setTitle(Html.fromHtml("<b><i><small>" + initialTitle + "</small></i></b>"));
+
         if(mPaymentMethodSearch.hasPreferred() && mPaymentMethodSearch.hasSearchItems()) {
             //showTitles
             populateSearchList(mPaymentMethodSearch.getGroups());

@@ -32,7 +32,7 @@ import retrofit.client.Response;
 
 public class PaymentMethodsActivity extends Activity {
 
-    private MercadoPago mMercadoPago;
+    protected MercadoPago mMercadoPago;
     private Activity mActivity;
     private String mMerchantPublicKey;
     private RecyclerView mRecyclerView;

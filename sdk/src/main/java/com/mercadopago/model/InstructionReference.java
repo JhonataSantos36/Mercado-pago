@@ -7,15 +7,15 @@ import java.util.List;
  */
 public class InstructionReference {
     private String label;
-    private List<String> value;
+    private List<String> fieldValue;
     private String separator;
 
     public String getLabel() {
         return label;
     }
 
-    public List<String> getValue() {
-        return value;
+    public List<String> getFieldValue() {
+        return fieldValue;
     }
 
     public String getSeparator() {
@@ -26,8 +26,8 @@ public class InstructionReference {
         this.label = label;
     }
 
-    public void setValue(List<String> value) {
-        this.value = value;
+    public void setFieldValue(List<String> fieldValue) {
+        this.fieldValue = fieldValue;
     }
 
     public void setSeparator(String separator) {
@@ -36,11 +36,12 @@ public class InstructionReference {
 
     public String getFormattedReference() {
         StringBuilder stringBuilder = new StringBuilder();
-        for(String string : value) {
-            stringBuilder.append(string);
-            if(value.indexOf(string) != value.size()-1)
-            {
-                stringBuilder.append(this.separator);
+        if(fieldValue != null) {
+            for (String string : fieldValue) {
+                stringBuilder.append(string);
+                if (fieldValue.indexOf(string) != fieldValue.size() - 1) {
+                    stringBuilder.append(this.separator);
+                }
             }
         }
         return stringBuilder.toString();
