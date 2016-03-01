@@ -76,4 +76,6 @@
     <string name="mpsdk_text_terms_and_conditions_linked">Términos y Condiciones</string>
     <string name="mpsdk_text_terms_and_conditions_end">de MercadoPago</string>
 
+    <string name="mpsdk_error_message_invalid_amount">Monto inválido</string>
+
 </resources>

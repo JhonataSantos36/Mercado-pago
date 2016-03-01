@@ -70,4 +70,7 @@
     <string name="mpsdk_text_terms_and_conditions_linked">Terms and Conditions</string>
     <string name="mpsdk_text_terms_and_conditions_end">of MercadoPago</string>
 
+    <string name="mpsdk_error_message_invalid_amount">Invalid amount</string>
+
+
 </resources>

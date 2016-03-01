@@ -26,7 +26,6 @@ import com.mercadopago.model.PaymentIntent;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.Token;
 import com.mercadopago.util.CurrenciesUtil;
-import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;
 import com.mercadopago.util.MercadoPagoUtil;
 
@@ -74,6 +73,31 @@ public class CheckoutActivity extends AppCompatActivity{
         mMerchantPublicKey = this.getIntent().getStringExtra("merchantPublicKey");
         mShowBankDeals = this.getIntent().getBooleanExtra("showBankDeals", true);
 
+
+        ///////////////////////////////////////////////////////
+        if(mCheckoutPreference == null) {
+            Toast.makeText(this, "La preference es null", Toast.LENGTH_SHORT).show();
+
+            Intent validatePreferenceIntent = new Intent();
+            validatePreferenceIntent.putExtra("error","La preference es null"); //check key value
+            mActivity.setResult(RESULT_CANCELED, validatePreferenceIntent);
+            mActivity.finish();
+        }
+        else{
+            try{
+                mCheckoutPreference.validate();
+            }
+            catch(IllegalStateException e){
+                Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+
+                Intent validatePreferenceIntent = new Intent();
+                validatePreferenceIntent.putExtra("error",e.getMessage());
+                mActivity.setResult(RESULT_CANCELED, validatePreferenceIntent);
+                mActivity.finish();
+            }
+        }
+        //////////////////////////////////////////////////////////////////
+
         getApplicationContext();
         initializeActivityControls();
         if(validParameters())
@@ -84,7 +108,6 @@ public class CheckoutActivity extends AppCompatActivity{
                     .setContext(this)
                     .setPublicKey(mMerchantPublicKey)
                     .build();
-
             startPaymentVaultActivity();
         }
         else {
@@ -94,6 +117,7 @@ public class CheckoutActivity extends AppCompatActivity{
             finish();
         }
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

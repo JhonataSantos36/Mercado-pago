@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -83,6 +84,12 @@ public class PaymentVaultActivity extends AppCompatActivity {
 
         getActivityParameters();
 
+        try {
+            validateActivityParameters();
+        } catch (IllegalStateException e) {
+            Toast.makeText(mActivity, e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+
         mMercadoPago = new MercadoPago.Builder()
                 .setPublicKey(mMerchantPublicKey)
                 .setContext(this)
@@ -101,6 +108,54 @@ public class PaymentVaultActivity extends AppCompatActivity {
         }
     }
 
+    ///////////////////////////////////////////////////////////////////////////
+    private void validateActivityParameters() {
+
+        if (!isAmountValid()){
+            throw new IllegalStateException(getString(R.string.mpsdk_error_message_invalid_amount));
+        }
+        else if(!isCurrencyIdValid()){
+            throw new IllegalStateException("Currency inválida");
+        }
+        else if (!isPurchaseTitleValid()){
+            throw new IllegalStateException("Titulo inválido");
+        }
+        else if (!isMerchantPublicKey()){
+            throw new IllegalStateException("Merchant inválido");
+        }
+        else if (!isInstallmentValid()){
+            throw new IllegalStateException("Installment inválidas");
+        }
+        else if (!isPaymentTypesValid()){
+            throw new IllegalStateException("PaymentTypes inválidos");
+        }
+    }
+
+    private boolean isPaymentTypesValid() {
+        return mExcludedPaymentTypes.size() < PaymentType.getAllPaymentTypes().size();
+    }
+
+    private boolean isInstallmentValid() {
+        return mDefaultInstallments >=0 && mMaxInstallments >= 0;
+    }
+
+    private boolean isAmountValid() {
+        return mAmount != null && mAmount.compareTo(BigDecimal.ZERO) >= 0;
+    }
+
+    private boolean isMerchantPublicKey() {
+        return mMerchantPublicKey != null;
+    }
+
+    private boolean isPurchaseTitleValid() {
+        return mPurchaseTitle != null;
+    }
+
+    private boolean isCurrencyIdValid() {
+        return mCurrencyId != null;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
     protected void getActivityParameters() {
         if (this.getIntent().getSerializableExtra("selectedSearchItem") != null) {
             mSelectedSearchItem = (PaymentMethodSearchItem) this.getIntent().getSerializableExtra("selectedSearchItem");
@@ -116,7 +171,9 @@ public class PaymentVaultActivity extends AppCompatActivity {
         mPurchaseTitle = getFormatedPurchaseTitle();
 
         mSupportMPApp = this.getIntent().getBooleanExtra("supportMPApp", false);
+
         mMerchantPublicKey = this.getIntent().getStringExtra("merchantPublicKey");
+
         mMerchantBaseUrl = this.getIntent().getStringExtra("merchantBaseUrl");
         mMerchantGetCustomerUri = this.getIntent().getStringExtra("merchantGetCustomerUri");
         mMerchantAccessToken = this.getIntent().getStringExtra("merchantAccessToken");
@@ -141,6 +198,8 @@ public class PaymentVaultActivity extends AppCompatActivity {
         if(this.getIntent().getStringExtra("defaultInstallments") != null) {
             mDefaultInstallments = Integer.valueOf(this.getIntent().getStringExtra("defaultInstallments"));
         }
+
+
 
     }
 
@@ -197,8 +256,13 @@ public class PaymentVaultActivity extends AppCompatActivity {
             @Override
             public void success(PaymentMethodSearch paymentMethodSearch, Response response) {
                 LayoutUtil.showRegularLayout(mActivity);
-                mPaymentMethodSearch = paymentMethodSearch;
-                setSearchLayout();
+                if(paymentMethodSearch.getGroups().isEmpty()) {
+                    finishWithEmptyPaymentMethodSearch();
+                }
+                else {
+                    mPaymentMethodSearch = paymentMethodSearch;
+                    setSearchLayout();
+                }
             }
 
             @Override
@@ -207,6 +271,13 @@ public class PaymentVaultActivity extends AppCompatActivity {
             }
         });
     }
+
+    //////////////////////////////////////////////////////////////////////
+    private void finishWithEmptyPaymentMethodSearch() {
+        Toast.makeText(mActivity, "Se excluyeron todos los paymentMethods", Toast.LENGTH_SHORT).show();
+        finish();
+    }
+    //////////////////////////////////////////////////////////////////////
 
     protected void setSearchLayout() {
         String initialTitle = getString(R.string.mpsdk_title_activity_payment_vault);
@@ -398,4 +469,6 @@ public class PaymentVaultActivity extends AppCompatActivity {
             overridePendingTransition(R.anim.slide_left_to_right_in, R.anim.silde_left_to_right_out);
         }
     }
+
+
 }
