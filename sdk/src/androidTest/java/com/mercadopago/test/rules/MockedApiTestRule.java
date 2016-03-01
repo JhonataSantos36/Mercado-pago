@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.support.test.rule.ActivityTestRule;
 
 import com.mercadopago.test.MockedHttpClient;
+import com.mercadopago.test.StaticMock;
 import com.mercadopago.util.HttpClientUtil;
 import com.mercadopago.util.JsonUtil;
 
@@ -34,23 +35,13 @@ public class MockedApiTestRule<A extends Activity> extends ActivityTestRule<A> {
         HttpClientUtil.bindClient(mockedHttpClient);
     }
 
-    public <T> void addResponseToQueue(T response, int statusCode, String reason) {
+    public <T> void addApiResponseToQueue(T response, int statusCode, String reason) {
         String jsonResponse = JsonUtil.getInstance().toJson(response);
         mockedHttpClient.addResponseToQueue(jsonResponse, statusCode, reason);
     }
 
-    public void addResponseToQueue(String jsonResponse, int statusCode, String reason) {
+    public void addApiResponseToQueue(String jsonResponse, int statusCode, String reason) {
         mockedHttpClient.addResponseToQueue(jsonResponse, statusCode, reason);
-    }
-
-    @Override
-    protected void beforeActivityLaunched() {
-        super.beforeActivityLaunched();
-    }
-
-    @Override
-    protected void afterActivityLaunched() {
-        super.afterActivityLaunched();
     }
 
     @Override

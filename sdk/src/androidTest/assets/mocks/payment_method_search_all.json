@@ -1,36 +1,152 @@
 {
-  "groups": [
-    {
-      "type": "group",
-      "comment": null,
-      "id": "cards",
-      "description": "Tarjetas",
-      "children_header": "¿Con que tarjeta?",
-      "children": []
-    },
-    {
-      "type": "payment_type",
-      "comment": null,
-      "id": "bank_transfer",
-      "description": "Transferencia Bancaria",
-      "children_header": "¿Cual es tu banco?",
-      "children": []
-    },
-    {
-      "type": "payment_type",
-      "comment": null,
-      "id": "ticket",
-      "description": "Efectivo",
-      "children_header": "¿Donde quieres pagar?",
-      "children": []
-    },
-    {
-      "type": "payment_method",
-      "comment": "Se acreditará en 2 habiles",
-      "id": "bitcoin",
-      "description": "Bitcoin",
-      "children_header": null,
-      "children": null
-    }
-  ]
+   "groups":[
+      {
+         "children":[
+            {
+               "children":null,
+               "children_header":null,
+               "comment":"",
+               "description":"Tarjeta de debito",
+               "icon_name":null,
+               "id":"debit_card",
+               "type":"payment_type"
+            },
+            {
+               "children":null,
+               "children_header":null,
+               "comment":"",
+               "description":"Tarjeta prepaga de Mercadopago",
+               "icon_name":null,
+               "id":"prepaid_card",
+               "type":"payment_type"
+            }
+         ],
+         "children_header":"¿Con que tarjeta?",
+         "comment":null,
+         "description":"Tarjetas",
+         "icon_name":null,
+         "id":"cards",
+         "type":"group"
+      },
+      {
+         "children":[
+            {
+               "children":null,
+               "children_header":null,
+               "comment":"Se acreditará en 7 habiles",
+               "description":"Santander",
+               "icon_name":null,
+               "id":"serfin_bank_transfer",
+               "type":"payment_method"
+            },
+            {
+               "children":null,
+               "children_header":null,
+               "comment":"Se acreditará en 7 habiles",
+               "description":"Banamex",
+               "icon_name":null,
+               "id":"banamex_bank_transfer",
+               "type":"payment_method"
+            },
+            {
+               "children":null,
+               "children_header":null,
+               "comment":"Se acreditará en 7 habiles",
+               "description":"BBVA Bancomer",
+               "icon_name":null,
+               "id":"bancomer_bank_transfer",
+               "type":"payment_method"
+            }
+         ],
+         "children_header":"¿Cual es tu banco?",
+         "comment":null,
+         "description":"Transferencia Bancaria",
+         "icon_name":null,
+         "id":"bank_transfer",
+         "type":"payment_type"
+      },
+      {
+         "children":[
+            {
+               "children":null,
+               "children_header":null,
+               "comment":"Se acreditará en 7 habiles",
+               "description":"Oxxo",
+               "icon_name":null,
+               "id":"oxxo",
+               "type":"payment_method"
+            },
+            {
+               "children":null,
+               "children_header":null,
+               "comment":"Se acreditará en 7 habiles",
+               "description":"Santander",
+               "icon_name":null,
+               "id":"serfin_ticket",
+               "type":"payment_method"
+            },
+            {
+               "children":null,
+               "children_header":null,
+               "comment":"Se acreditará en 7 habiles",
+               "description":"Banamex",
+               "icon_name":null,
+               "id":"banamex_ticket",
+               "type":"payment_method"
+            },
+            {
+               "children":null,
+               "children_header":null,
+               "comment":"Se acreditará en 7 habiles",
+               "description":"BBVA Bancomer",
+               "icon_name":null,
+               "id":"bancomer_ticket",
+               "type":"payment_method"
+            },
+            {
+               "children":null,
+               "children_header":null,
+               "comment":"Se acreditará en 7 habiles",
+               "description":"Telecom",
+               "icon_name":null,
+               "id":"telecom",
+               "type":"payment_method"
+            },
+            {
+               "children":null,
+               "children_header":null,
+               "comment":"Se acreditará en 7 habiles",
+               "description":"7eleven",
+               "icon_name":null,
+               "id":"7eleven",
+               "type":"payment_method"
+            },
+            {
+               "children":null,
+               "children_header":null,
+               "comment":"Se acreditará en 7 habiles",
+               "description":"Gestopago",
+               "icon_name":null,
+               "id":"gestopago",
+               "type":"payment_method"
+            }
+         ],
+         "children_header":"¿Donde quieres pagar?",
+         "comment":null,
+         "description":"Efectivo",
+         "icon_name":null,
+         "id":"ticket",
+         "type":"payment_type"
+      },
+      {
+         "children":null,
+         "children_header":null,
+         "comment":"Se acreditará en 2 habiles",
+         "description":"Bitcoin",
+         "icon_name":null,
+         "id":"bitcoin",
+         "type":"payment_method"
+      }
+   ],
+   "preferred":null
 }

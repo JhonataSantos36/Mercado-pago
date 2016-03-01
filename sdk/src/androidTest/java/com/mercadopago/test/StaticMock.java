@@ -1,6 +1,7 @@
 package com.mercadopago.test;
 
 import android.content.Context;
+import android.support.test.InstrumentationRegistry;
 
 import com.mercadopago.PaymentVaultActivity;
 import com.mercadopago.model.Card;
@@ -152,9 +153,9 @@ public class StaticMock {
         }
     }
 
-    public static String getCompletePaymentMethodSearchAsJson(Context context) {
+    public static String getCompletePaymentMethodSearchAsJson() {
         try {
-            return getFile(context, "mocks/payment_method_search_all.json");
+            return getFile(InstrumentationRegistry.getContext(), "mocks/payment_method_search_all.json");
 
         } catch (Exception ex) {
 
