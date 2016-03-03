@@ -77,5 +77,15 @@
     <string name="mpsdk_text_terms_and_conditions_end">de MercadoPago</string>
 
     <string name="mpsdk_error_message_invalid_amount">Monto inválido</string>
+    <string name="mpsdk_error_message_invalid_item">Item inválido</string>
+    <string name="mpsdk_error_message_expired_preference">Preferencia expirada</string>
+    <string name="mpsdk_error_message_inactive_preference">Preferencia inactiva</string>
+    <string name="mpsdk_error_message_invalid_installments">Número de cuotas inválido</string>
+    <string name="mpsdk_error_message_excluded_all_payment_type">Todos los tipos de pagos excluídos</string>
+    <string name="mpsdk_error_message_invalid_currency">Moneda inválida</string>
+    <string name="mpsdk_error_message_invalid_title">Título inválido</string>
+    <string name="mpsdk_error_message_invalid_merchant">Comercio inválido</string>
+
+
 
 </resources>

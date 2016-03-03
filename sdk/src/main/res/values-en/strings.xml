@@ -71,6 +71,15 @@
     <string name="mpsdk_text_terms_and_conditions_end">of MercadoPago</string>
 
     <string name="mpsdk_error_message_invalid_amount">Invalid amount</string>
+    <string name="mpsdk_error_message_invalid_item">Invalid item</string>
+    <string name="mpsdk_error_message_expired_preference">Expired preference</string>
+    <string name="mpsdk_error_message_inactive_preference">Inactive preference</string>
+    <string name="mpsdk_error_message_invalid_installments">Invalid installments number</string>
+    <string name="mpsdk_error_message_excluded_all_payment_type">Excluded all payment types</string>
+    <string name="mpsdk_error_message_invalid_currency">Invalid currency</string>
+    <string name="mpsdk_error_message_invalid_title">Invalid title</string>
+    <string name="mpsdk_error_message_invalid_merchant">Invalid merchant</string>
+
 
 
 </resources>

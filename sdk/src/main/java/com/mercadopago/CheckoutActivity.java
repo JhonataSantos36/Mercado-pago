@@ -16,6 +16,9 @@ import android.widget.Toast;
 import com.mercadopago.controllers.ShoppingCartController;
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.core.MerchantServer;
+import com.mercadopago.exceptions.CheckoutPreferenceException;
+import com.mercadopago.exceptions.ExceptionHandler;
+import com.mercadopago.exceptions.MPException;
 import com.mercadopago.model.CheckoutPreference;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.Item;
@@ -87,8 +90,9 @@ public class CheckoutActivity extends AppCompatActivity{
             try{
                 mCheckoutPreference.validate();
             }
-            catch(IllegalStateException e){
-                Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            catch(CheckoutPreferenceException e){
+                String error = ExceptionHandler.getErrorMessage(this, e);
+                Toast.makeText(this, error , Toast.LENGTH_SHORT).show();
 
                 Intent validatePreferenceIntent = new Intent();
                 validatePreferenceIntent.putExtra("error",e.getMessage());

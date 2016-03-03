@@ -1,5 +1,10 @@
 package com.mercadopago.model;
 
+import android.content.res.Resources;
+
+import com.mercadopago.R;
+import com.mercadopago.exceptions.CheckoutPreferenceException;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -18,31 +23,32 @@ public class CheckoutPreference implements Serializable {
     private Date expirationDateFrom;
 
 
-    public void validate() {
+    public void validate() throws CheckoutPreferenceException {
         if (!this.itemsValid())
         {
-            throw new IllegalStateException("Los items son invalidos");
+            throw new CheckoutPreferenceException(CheckoutPreferenceException.INVALID_ITEM);
         }
         else if(this.isExpired()){
-            throw new IllegalStateException("La preferencia expiró");
+            throw new CheckoutPreferenceException(CheckoutPreferenceException.EXPIRED_PREFERENCE);
         }
         else if (!this.isActive()){
-            throw new IllegalStateException("La preferencia está inactiva");
+            throw new CheckoutPreferenceException(CheckoutPreferenceException.INACTIVE_PREFERENCE);
         }
         else if (!this.isInstallmentsValid()){
-            throw new IllegalStateException("Installments inválidas");
+            throw new CheckoutPreferenceException(CheckoutPreferenceException.INVALID_INSTALLMENTS);
         }
         else if (!this.isExcludedPaymentTypesValid()){
-            throw new IllegalStateException("Se excluyen todos los PaymentTypes");
+            throw new CheckoutPreferenceException(CheckoutPreferenceException.EXCLUDED_ALL_PAYMENTTYPES);
         }
     }
 
     public boolean isExcludedPaymentTypesValid() {
-        return paymentMethods.getExcludedPaymentTypes().size()<PaymentType.getAllPaymentTypes().size();
+        //TODO Cambiar de List de String a Set los excludedPaymentType
+        return paymentMethods.getExcludedPaymentTypes().size() < PaymentType.getAllPaymentTypes().size();
     }
 
     public boolean isInstallmentsValid() {
-        return (paymentMethods.getInstallments()>0) && (paymentMethods.getDefaultInstallments()>0);
+        return (paymentMethods.getInstallments()>=0) && (paymentMethods.getDefaultInstallments()>=0);
     }
 
 

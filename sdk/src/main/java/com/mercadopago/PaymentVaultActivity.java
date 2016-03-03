@@ -115,19 +115,19 @@ public class PaymentVaultActivity extends AppCompatActivity {
             throw new IllegalStateException(getString(R.string.mpsdk_error_message_invalid_amount));
         }
         else if(!isCurrencyIdValid()){
-            throw new IllegalStateException("Currency inválida");
+            throw new IllegalStateException(getString(R.string.mpsdk_error_message_invalid_currency));
         }
         else if (!isPurchaseTitleValid()){
-            throw new IllegalStateException("Titulo inválido");
+            throw new IllegalStateException(getString(R.string.mpsdk_error_message_invalid_title));
         }
         else if (!isMerchantPublicKey()){
-            throw new IllegalStateException("Merchant inválido");
+            throw new IllegalStateException(getString(R.string.mpsdk_error_message_invalid_merchant));
         }
         else if (!isInstallmentValid()){
-            throw new IllegalStateException("Installment inválidas");
+            throw new IllegalStateException(getString(R.string.mpsdk_error_message_invalid_installments));
         }
         else if (!isPaymentTypesValid()){
-            throw new IllegalStateException("PaymentTypes inválidos");
+            throw new IllegalStateException(getString(R.string.mpsdk_error_message_excluded_all_payment_type));
         }
     }
 

@@ -1,5 +1,7 @@
 package com.mercadopago.model;
 
+import com.mercadopago.exceptions.CheckoutPreferenceException;
+
 import junit.framework.Assert;
 import junit.framework.TestCase;
 
@@ -13,6 +15,18 @@ import java.util.List;
  * Created by mromar on 2/24/16.
  */
 public class CheckoutPreferenceTest extends TestCase {
+
+    ///////////////////CURRENCY tests///////////////////
+    public void testWhenValidatePreferenceWithTwoItemsWithOneCurrencyNullReturnFalse() {
+        CheckoutPreference preference = getPreferenceWithTwoItemsOneHasCurrencyNull();
+        Assert.assertFalse(preference.itemsValid());
+    }
+
+    public void testWhenValidatePreferenceWithTwoItemsWithDifferentCurrencyReturnFalse() {
+        CheckoutPreference preference = getPreferenceWithTwoItemsWithDifferrentCurrency();
+        Assert.assertFalse(preference.itemsValid());
+    }
+
 
     ///////////////////PAYMENTS_TYPES tests///////////////////
     public void testWhenValidatePreferenceReturnFalseIfAllPaymentsTypesAreExcluded() {
@@ -47,13 +61,37 @@ public class CheckoutPreferenceTest extends TestCase {
     }
 
     ///////////////////EXCEPTIONS tests///////////////////
+    public void testWhenValidatePreferenceReturnTrueIfNoThrowException() {
+        CheckoutPreference preference = getPreferenceWithOneItemValidActiveAndSomePaymentTypesExcluded();
+        Boolean valid = true;
+
+        try {
+            preference.validate();
+        } catch (CheckoutPreferenceException e) {
+            valid = false;
+        }
+        finally{
+            assertTrue(valid);
+        }
+    }
+
+    public void testWhenValidatePreferenceReturnFalseIfAllPaymentTypesAreExcludedThrowException() {
+        CheckoutPreference preference = getPreferenceWithOneItemValidActiveButAllPaymentTypesExcluded();
+
+        try {
+            preference.validate();
+        } catch (CheckoutPreferenceException e) {
+            assertTrue(e.getErrorCode() == CheckoutPreferenceException.EXCLUDED_ALL_PAYMENTTYPES);
+        }
+    }
+
     public void testWhenValidatePreferenceReturnFalseIfPreferenceInstallmentsDefaultAndInstallmentsAreNegativeThrowException() {
         CheckoutPreference preference = getPreferenceWithOneItemValidButInstallmenstsDefaultAndInstallmentNegative();
 
         try {
             preference.validate();
-        } catch (IllegalStateException e) {
-            assertTrue(e.getMessage().equals("Installments inválidas"));
+        } catch (CheckoutPreferenceException e) {
+            assertTrue(e.getErrorCode() == CheckoutPreferenceException.INVALID_INSTALLMENTS);
         }
     }
 
@@ -62,8 +100,8 @@ public class CheckoutPreferenceTest extends TestCase {
 
         try {
             preference.validate();
-        } catch (IllegalStateException e) {
-            assertTrue(e.getMessage().equals("La preferencia está inactiva"));
+        } catch (CheckoutPreferenceException e) {
+            assertTrue(e.getErrorCode() == CheckoutPreferenceException.INACTIVE_PREFERENCE);
         }
     }
 
@@ -72,8 +110,8 @@ public class CheckoutPreferenceTest extends TestCase {
 
         try {
             preference.validate();
-        } catch (IllegalStateException e) {
-            assertTrue(e.getMessage().equals("La preferencia expiró"));
+        } catch (CheckoutPreferenceException e) {
+            assertTrue(e.getErrorCode() == CheckoutPreferenceException.EXPIRED_PREFERENCE);
         }
     }
 
@@ -83,8 +121,8 @@ public class CheckoutPreferenceTest extends TestCase {
 
         try {
             preference.validate();
-        } catch (IllegalStateException e) {
-            assertTrue(e.getMessage().equals("Los items son invalidos"));
+        } catch (CheckoutPreferenceException e) {
+            assertTrue(e.getErrorCode() == CheckoutPreferenceException.INVALID_ITEM);
         }
     }
 
@@ -220,6 +258,41 @@ public class CheckoutPreferenceTest extends TestCase {
         return preference;
     }
 
+    ///////////////////Getters preferences with different CURRENCY///////////////////
+    private CheckoutPreference getPreferenceWithTwoItemsOneHasCurrencyNull() {
+        CheckoutPreference preference = new CheckoutPreference();
+        List<Item> items = new ArrayList<>();
+        Item itemA = new Item("123", 1);
+        Item itemB = new Item("456", 1);
+
+        itemA.setUnitPrice(new BigDecimal(2));
+        itemB.setUnitPrice(new BigDecimal(5));
+
+        itemA.setCurrencyId("USD");
+
+        items.add(itemA);
+        items.add(itemB);
+        preference.setItems(items);
+        return preference;
+    }
+
+    private CheckoutPreference getPreferenceWithTwoItemsWithDifferrentCurrency() {
+        CheckoutPreference preference = new CheckoutPreference();
+        List<Item> items = new ArrayList<>();
+        Item itemA = new Item("123", 1);
+        Item itemB = new Item("456", 1);
+
+        itemA.setUnitPrice(new BigDecimal(2));
+        itemB.setUnitPrice(new BigDecimal(5));
+
+        itemA.setCurrencyId("USD");
+        itemB.setCurrencyId("PesoARG");
+
+        items.add(itemA);
+        items.add(itemB);
+        preference.setItems(items);
+        return preference;
+    }
 
     ///////////////////Getters preferences with different ITEMS///////////////////
     private CheckoutPreference getPreferenceWithTwoItems() {
@@ -230,6 +303,9 @@ public class CheckoutPreferenceTest extends TestCase {
 
         itemA.setUnitPrice(new BigDecimal(2));
         itemB.setUnitPrice(new BigDecimal(5));
+
+        itemA.setCurrencyId("USD");
+        itemB.setCurrencyId("USD");
 
         items.add(itemA);
         items.add(itemB);
@@ -461,6 +537,83 @@ public class CheckoutPreferenceTest extends TestCase {
     }
 
     ///////////////////Getters preferences with different EXCEPTIONS///////////////////
+    private CheckoutPreference getPreferenceWithOneItemValidActiveAndSomePaymentTypesExcluded() {
+        CheckoutPreference preference = new CheckoutPreference();
+        List<Item> items = new ArrayList<>();
+        ArrayList<String> paymentTypes= new ArrayList<>();
+        Item itemA = new Item("123", 1);
+
+        itemA.setUnitPrice(new BigDecimal(2));
+        itemA.setCurrencyId("USD");
+        items.add(itemA);
+        preference.setItems(items);
+
+        String CREDIT_CARD = "credit_card";
+        String DEBIT_CARD = "debit_card";
+        String PREPAID_CARD = "prepaid_card";
+        String TICKET = "ticket";
+        String ATM = "atm";
+        String DIGITAL_CURRENCY = "digital_currency";
+
+        paymentTypes.add(CREDIT_CARD);
+        paymentTypes.add(DEBIT_CARD);
+        paymentTypes.add(PREPAID_CARD);
+        //paymentTypes.add(TICKET);
+        //paymentTypes.add(ATM);
+        //paymentTypes.add(DIGITAL_CURRENCY);
+
+        Date pastDate = new Date();
+        pastDate.setTime((new Date().getTime()) - 1000 * 60 * 60);
+        preference.setActiveFrom(pastDate);
+
+        PaymentMethodPreference paymentMethodPreference = new PaymentMethodPreference();
+        paymentMethodPreference.setInstallments(0);
+        paymentMethodPreference.setDefaultInstallments(0);
+        paymentMethodPreference.setExcludedPaymentTypes(paymentTypes);
+        preference.setPaymentMethods(paymentMethodPreference);
+
+        return preference;
+    }
+
+    private CheckoutPreference getPreferenceWithOneItemValidActiveButAllPaymentTypesExcluded() {
+        CheckoutPreference preference = new CheckoutPreference();
+        List<Item> items = new ArrayList<>();
+        ArrayList<String> paymentTypes= new ArrayList<>();
+        Item itemA = new Item("123", 1);
+
+        itemA.setUnitPrice(new BigDecimal(2));
+        itemA.setCurrencyId("USD");
+        items.add(itemA);
+        preference.setItems(items);
+
+        String CREDIT_CARD = "credit_card";
+        String DEBIT_CARD = "debit_card";
+        String PREPAID_CARD = "prepaid_card";
+        String TICKET = "ticket";
+        String ATM = "atm";
+        String DIGITAL_CURRENCY = "digital_currency";
+
+        paymentTypes.add(CREDIT_CARD);
+        paymentTypes.add(DEBIT_CARD);
+        paymentTypes.add(PREPAID_CARD);
+        paymentTypes.add(TICKET);
+        paymentTypes.add(ATM);
+        paymentTypes.add(DIGITAL_CURRENCY);
+
+        Date pastDate = new Date();
+        pastDate.setTime((new Date().getTime()) - 1000 * 60 * 60);
+        preference.setActiveFrom(pastDate);
+
+        PaymentMethodPreference paymentMethodPreference = new PaymentMethodPreference();
+        paymentMethodPreference.setInstallments(0);
+        paymentMethodPreference.setDefaultInstallments(0);
+        paymentMethodPreference.setExcludedPaymentTypes(paymentTypes);
+        preference.setPaymentMethods(paymentMethodPreference);
+
+        return preference;
+    }
+
+
     private CheckoutPreference getPreferenceWithOneItemValidButInstallmenstsDefaultAndInstallmentNegative() {
         CheckoutPreference preference = new CheckoutPreference();
         List<Item> items = new ArrayList<>();
