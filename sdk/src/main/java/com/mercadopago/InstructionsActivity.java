@@ -61,7 +61,8 @@ public class InstructionsActivity extends AppCompatActivity {
     private void getInstructionsAsync(MercadoPago mercadoPago) {
 
         LayoutUtil.showProgressLayout(this);
-        mercadoPago.getInstruction(mPayment.getId(), new Callback<Instruction>() {
+        //TODO cambiar por mPayment.getId() cuando estén andando los servicios
+        mercadoPago.getInstructions((long) 1826446924, new Callback<Instruction>() {
             @Override
             public void success(Instruction instruction, Response response) {
                 showInstructions(instruction);
@@ -124,7 +125,12 @@ public class InstructionsActivity extends AppCompatActivity {
     }
 
     private void setInformationMessages(Instruction instruction) {
-        mPrimaryInfo.setText(Html.fromHtml(getInfoHtmlText(instruction.getInfo())));
+        if(instruction.getInfo() != null && !instruction.getInfo().isEmpty()) {
+            mPrimaryInfo.setText(Html.fromHtml(getInfoHtmlText(instruction.getInfo())));
+        }
+        else {
+            mPrimaryInfo.setVisibility(View.GONE);
+        }
         if(instruction.getSecondaryInfo() != null && !instruction.getSecondaryInfo().isEmpty()) {
             mSecondaryInfo.setText(Html.fromHtml(getInfoHtmlText(instruction.getSecondaryInfo())));
         }

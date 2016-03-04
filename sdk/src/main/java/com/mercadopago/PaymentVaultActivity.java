@@ -239,7 +239,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.shopping_cart_menu, menu);
         mShoppingCartController = new ShoppingCartController(this, menu.findItem(R.id.shopping_cart), mItemImageUri, mPurchaseTitle,
-                mAmount, mCurrencyId, false, findViewById(R.id.scrollLayout));
+                mAmount, mCurrencyId, false, findViewById(R.id.content_layout));
         return true;
     }
 
