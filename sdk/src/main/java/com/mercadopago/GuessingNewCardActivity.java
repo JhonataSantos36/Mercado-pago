@@ -21,7 +21,6 @@ import com.mercadopago.model.CardToken;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentMethodPreference;
-import com.mercadopago.model.PaymentType;
 import com.mercadopago.util.LayoutUtil;
 import com.mercadopago.util.MercadoPagoUtil;
 
@@ -40,7 +39,7 @@ public class GuessingNewCardActivity extends NewCardActivity {
     private List<String> mExcludedPaymentMethodIds;
     private List<String> mExcludedPaymentTypes;
     private String mDefaultPaymentMethodId;
-    private PaymentType mSupportedPaymentType;
+    private String mSupportedPaymentTypeId;
 
     //Input controls
     protected Spinner mSpinnerIssuers;
@@ -93,7 +92,7 @@ public class GuessingNewCardActivity extends NewCardActivity {
         mDefaultPaymentMethodId = this.getIntent().getStringExtra("defaultPaymentMethodId");
         mShowBankDeals = this.getIntent().getBooleanExtra("showBankDeals", true);
         mRequireIssuer = this.getIntent().getBooleanExtra("requireIssuer", true);
-        mSupportedPaymentType = (PaymentType) this.getIntent().getSerializableExtra("paymentType");
+        mSupportedPaymentTypeId = this.getIntent().getStringExtra("paymentTypeId");
     }
 
     @Override
@@ -123,7 +122,7 @@ public class GuessingNewCardActivity extends NewCardActivity {
 
         List<PaymentMethod> supportedPaymentMethods = mPaymentMethodPreference.getSupportedPaymentMethods(paymentMethods);
 
-        mPaymentMethodGuessingController = new PaymentMethodGuessingController(this, supportedPaymentMethods, mSupportedPaymentType,
+        mPaymentMethodGuessingController = new PaymentMethodGuessingController(this, supportedPaymentMethods, mSupportedPaymentTypeId,
                 new PaymentMethodSelectionCallback(){
                     @Override
                     public void onPaymentMethodSet(PaymentMethod paymentMethod) {

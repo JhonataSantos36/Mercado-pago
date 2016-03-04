@@ -3,7 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/example/example.iml" filepath="$PROJECT_DIR$/example/example.iml" />
-      <module fileurl="file://$PROJECT_DIR$/px-android-pref-validation.iml" filepath="$PROJECT_DIR$/px-android-pref-validation.iml" />
+      <module fileurl="file://$PROJECT_DIR$/px-android-test.iml" filepath="$PROJECT_DIR$/px-android-test.iml" />
       <module fileurl="file://$PROJECT_DIR$/sdk/sdk.iml" filepath="$PROJECT_DIR$/sdk/sdk.iml" />
     </modules>
   </component>

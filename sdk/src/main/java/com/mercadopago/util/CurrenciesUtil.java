@@ -18,6 +18,7 @@ public class CurrenciesUtil {
     public static final String CURRENCY_VENEZUELA = "VEF";
     public static final String CURRENCY_USA = "USD";
 
+
     private static Map<String, Currency> currenciesList = new HashMap<String, Currency>(){{
         put(CURRENCY_ARGENTINA, new Currency(CURRENCY_ARGENTINA, "Peso argentino", "$", 2, ",".charAt(0), ".".charAt(0)));
         put(CURRENCY_BRAZIL, new Currency(CURRENCY_BRAZIL, "Real", "R$", 2, ",".charAt(0), ".".charAt(0)));

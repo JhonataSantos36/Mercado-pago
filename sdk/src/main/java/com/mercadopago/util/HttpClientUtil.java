@@ -1,41 +1,46 @@
 package com.mercadopago.util;
 
 import com.squareup.okhttp.Cache;
-import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.OkHttpClient;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 import android.content.Context;
 import android.util.Log;
 
+import retrofit.client.Client;
 import retrofit.client.OkClient;
 
 public class HttpClientUtil {
 
-    private static OkHttpClient client;
+    private static Client client;
 
-    public static final MediaType JSON
-            = MediaType.parse("application/json; charset=utf-8");
+    protected HttpClientUtil() {}
 
-    public synchronized static OkClient getClient(Context context) {
+    public static synchronized Client getClient(Context context) {
 
         if (client == null) {
-
             Log.i("HttpClientUtil", "new instance");
-            client = new OkHttpClient();
+            OkHttpClient okHttpClient = new OkHttpClient();
 
-            client.setConnectTimeout(20, TimeUnit.SECONDS);
-            client.setWriteTimeout(20, TimeUnit.SECONDS);
-            client.setReadTimeout(20, TimeUnit.SECONDS);
+            okHttpClient.setConnectTimeout(20, TimeUnit.SECONDS);
+            okHttpClient.setWriteTimeout(20, TimeUnit.SECONDS);
+            okHttpClient.setReadTimeout(20, TimeUnit.SECONDS);
 
             int cacheSize = 10 * 1024 * 1024; // 10 MiB
             Cache cache = new Cache(new File(context.getCacheDir().getPath() + "okhttp"), cacheSize);
-            client.setCache(cache);
+            okHttpClient.setCache(cache);
+            client = new OkClient(okHttpClient);
         }
+        return client;
+    }
 
-        return new OkClient(client);
+    public static void bindClient(Client client) {
+        HttpClientUtil.client = client;
+    }
+
+    public static void unbindClient() {
+        client = null;
     }
 }

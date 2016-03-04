@@ -39,15 +39,15 @@ public class PaymentMethodGuessingController {
     private String mSavedPaymentMethodId;
     private boolean mCardNumberBlocked;
     private List<PaymentMethod> mPaymentMethods;
-    private PaymentType mPaymentType;
+    private String mPaymentTypeId;
 
     private PaymentMethodSelectionCallback mPaymentMethodSelectionCallback;
 
-    public PaymentMethodGuessingController(Activity activity, List<PaymentMethod> paymentMethods, PaymentType paymentType, PaymentMethodSelectionCallback paymentMethodSelectionCallback){
+    public PaymentMethodGuessingController(Activity activity, List<PaymentMethod> paymentMethods, String paymentTypeId, PaymentMethodSelectionCallback paymentMethodSelectionCallback){
         this.mActivity = activity;
         this.mPaymentMethods = paymentMethods;
         this.mPaymentMethodSelectionCallback = paymentMethodSelectionCallback;
-        this.mPaymentType = paymentType;
+        this.mPaymentTypeId = paymentTypeId;
         initializeComponents();
     }
 
@@ -97,20 +97,20 @@ public class PaymentMethodGuessingController {
         if(!bin.equals(mSavedBin)) {
             mSavedBin = bin;
             List<PaymentMethod> validPaymentMethods = MercadoPago.getValidPaymentMethodsForBin(mSavedBin, this.mPaymentMethods);
-            validPaymentMethods = getValidPaymentMethodForType(mPaymentType, validPaymentMethods);
+            validPaymentMethods = getValidPaymentMethodForType(mPaymentTypeId, validPaymentMethods);
             refreshPaymentMethodLayout(validPaymentMethods);
         }
     }
 
-    private List<PaymentMethod> getValidPaymentMethodForType(PaymentType paymentType, List<PaymentMethod> paymentMethods) {
-        if(paymentType == null) {
+    private List<PaymentMethod> getValidPaymentMethodForType(String paymentTypeId, List<PaymentMethod> paymentMethods) {
+        if(paymentTypeId == null) {
             return paymentMethods;
         }
         else {
             List<PaymentMethod> validPaymentMethodsForType = new ArrayList<>();
             for(PaymentMethod pm : paymentMethods)
             {
-                if(pm.getPaymentTypeId().equals(paymentType.getId()))
+                if(pm.getPaymentTypeId().equals(paymentTypeId))
                     validPaymentMethodsForType.add(pm);
             }
             return validPaymentMethodsForType;

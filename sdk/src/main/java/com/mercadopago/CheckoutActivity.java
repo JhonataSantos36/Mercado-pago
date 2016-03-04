@@ -33,6 +33,7 @@ import com.mercadopago.util.LayoutUtil;
 import com.mercadopago.util.MercadoPagoUtil;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -70,7 +71,7 @@ public class CheckoutActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_checkout);
-        setTitle(Html.fromHtml("<b><i><small>" + getString(R.string.mpsdk_title_activity_checkout) + "</small></i></b>"));
+        setTitle(Html.fromHtml("<b><small>" + getString(R.string.mpsdk_title_activity_checkout) + "</small></b>"));
 
         mCheckoutPreference = (CheckoutPreference) this.getIntent().getSerializableExtra("checkoutPreference");
         mMerchantPublicKey = this.getIntent().getStringExtra("merchantPublicKey");
@@ -266,8 +267,6 @@ public class CheckoutActivity extends AppCompatActivity{
                     else {
                         showReviewAndConfirm(data.getStringExtra("paymentMethodInfo"));
                     }
-
-
                 }
             }
             else if (resultCode == RESULT_CANCELED) {

@@ -32,13 +32,13 @@ import retrofit.client.Response;
 
 public class PaymentMethodsActivity extends Activity {
 
-    private MercadoPago mMercadoPago;
+    protected MercadoPago mMercadoPago;
     private Activity mActivity;
     private String mMerchantPublicKey;
     private RecyclerView mRecyclerView;
     private boolean mShowBankDeals;
     private boolean mSupportMPApp;
-    private PaymentType mPaymentTypeSupported;
+    private String mPaymentTypeSupported;
     private List<String> mExcludedPaymentMethodIds;
     private List<String> mExcludedPaymentTypes;
     private String mDefaultPaymentMethodId;
@@ -87,7 +87,7 @@ public class PaymentMethodsActivity extends Activity {
             return;
         }
 
-        mPaymentTypeSupported = (PaymentType) this.getIntent().getSerializableExtra("paymentType");
+        mPaymentTypeSupported = this.getIntent().getStringExtra("paymentTypeId");
         mShowBankDeals = this.getIntent().getBooleanExtra("showBankDeals", true);
         mSupportMPApp = this.getIntent().getBooleanExtra("supportMPApp", false);
 
@@ -147,8 +147,6 @@ public class PaymentMethodsActivity extends Activity {
     }
 
     public void refreshLayout(View view) {
-
-        Toast.makeText(this, "Estoy tratando de nuevo", Toast.LENGTH_LONG).show();
         getPaymentMethodsAsync(mMerchantPublicKey);
     }
 
@@ -194,14 +192,14 @@ public class PaymentMethodsActivity extends Activity {
         return paymentMethodList;
     }
 
-    private List<PaymentMethod> getPaymentMethodsOfType(PaymentType paymentTypeSupported, List<PaymentMethod> paymentMethodList) {
+    private List<PaymentMethod> getPaymentMethodsOfType(String paymentTypeId, List<PaymentMethod> paymentMethodList) {
 
-        if(paymentMethodList != null && paymentTypeSupported != null) {
+        if(paymentMethodList != null && paymentTypeId != null && !paymentTypeId.isEmpty()) {
 
             List<PaymentMethod> validPaymentMethods = new ArrayList<>();
 
             for (PaymentMethod currentPaymentMethod : paymentMethodList) {
-                if(currentPaymentMethod.getPaymentTypeId().equals(paymentTypeSupported.getId())) {
+                if(currentPaymentMethod.getPaymentTypeId().equals(paymentTypeId)) {
                     validPaymentMethods.add(currentPaymentMethod);
                 }
             }

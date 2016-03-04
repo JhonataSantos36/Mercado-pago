@@ -1,7 +1,9 @@
 package com.mercadopago.test;
 
 import android.content.Context;
+import android.support.test.InstrumentationRegistry;
 
+import com.mercadopago.PaymentVaultActivity;
 import com.mercadopago.model.Card;
 import com.mercadopago.model.CardToken;
 import com.mercadopago.model.Customer;
@@ -12,6 +14,7 @@ import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentMethodRow;
+import com.mercadopago.model.PaymentMethodSearch;
 import com.mercadopago.model.SavedCardToken;
 import com.mercadopago.util.JsonUtil;
 
@@ -143,6 +146,16 @@ public class StaticMock {
 
         try {
             return JsonUtil.getInstance().fromJson(getFile(context, "mocks/payment.json"), Payment.class);
+
+        } catch (Exception ex) {
+
+            return null;
+        }
+    }
+
+    public static String getCompletePaymentMethodSearchAsJson() {
+        try {
+            return getFile(InstrumentationRegistry.getContext(), "mocks/payment_method_search_all.json");
 
         } catch (Exception ex) {
 
