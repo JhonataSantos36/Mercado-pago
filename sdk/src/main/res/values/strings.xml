@@ -85,6 +85,7 @@
     <string name="mpsdk_error_message_invalid_currency">Moneda inválida</string>
     <string name="mpsdk_error_message_invalid_title">Título inválido</string>
     <string name="mpsdk_error_message_invalid_merchant">Comercio inválido</string>
+    <string name="mpsdk_error_message_invalid_preference">Preferencia inválida</string>
 
 
 

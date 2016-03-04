@@ -27,6 +27,7 @@ import com.mercadopago.model.PaymentMethodSearchItem;
 import com.mercadopago.model.PaymentType;
 import com.mercadopago.model.Token;
 import com.mercadopago.util.ApiUtil;
+import com.mercadopago.util.CurrenciesUtil;
 import com.mercadopago.util.LayoutUtil;
 import com.mercadopago.util.MercadoPagoUtil;
 
@@ -120,7 +121,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
         else if (!isPurchaseTitleValid()){
             throw new IllegalStateException(getString(R.string.mpsdk_error_message_invalid_title));
         }
-        else if (!isMerchantPublicKey()){
+        else if (!isMerchantPublicKeyValid()){
             throw new IllegalStateException(getString(R.string.mpsdk_error_message_invalid_merchant));
         }
         else if (!isInstallmentValid()){
@@ -136,14 +137,14 @@ public class PaymentVaultActivity extends AppCompatActivity {
     }
 
     private boolean isInstallmentValid() {
-        return mDefaultInstallments >=0 && mMaxInstallments >= 0;
+        return mDefaultInstallments > 0 && mMaxInstallments > 0;
     }
 
     private boolean isAmountValid() {
         return mAmount != null && mAmount.compareTo(BigDecimal.ZERO) >= 0;
     }
 
-    private boolean isMerchantPublicKey() {
+    private boolean isMerchantPublicKeyValid() {
         return mMerchantPublicKey != null;
     }
 
@@ -152,7 +153,22 @@ public class PaymentVaultActivity extends AppCompatActivity {
     }
 
     private boolean isCurrencyIdValid() {
-        return mCurrencyId != null;
+
+        if(mCurrencyId.equals(null)) {
+            return false;
+        }
+        else if((!mCurrencyId.equals(CurrenciesUtil.CURRENCY_ARGENTINA))
+                && (!mCurrencyId.equals(CurrenciesUtil.CURRENCY_BRAZIL))
+                && (!mCurrencyId.equals(CurrenciesUtil.CURRENCY_CHILE))
+                && (!mCurrencyId.equals(CurrenciesUtil.CURRENCY_COLOMBIA))
+                && (!mCurrencyId.equals(CurrenciesUtil.CURRENCY_MEXICO))
+                && (!mCurrencyId.equals(CurrenciesUtil.CURRENCY_VENEZUELA))
+                && (!mCurrencyId.equals(CurrenciesUtil.CURRENCY_USA))){
+            return false;
+        }
+        else{
+            return true;
+        }
     }
 
     ///////////////////////////////////////////////////////////////////////////

@@ -17,51 +17,60 @@ import java.util.List;
 public class CheckoutPreferenceTest extends TestCase {
 
     ///////////////////CURRENCY tests///////////////////
-    public void testWhenValidatePreferenceWithTwoItemsWithOneCurrencyNullReturnFalse() {
+    public void testWhenValidatePreferenceWithTwoItemsWithSameCurrencyIdReturnTrue() {
+        CheckoutPreference preference = getPreferenceWithTwoItemsWithSameCurrencyId();
+        Assert.assertTrue(preference.itemsValid());
+    }
+
+    public void testWhenValidatePreferenceWithTwoItemsWithDifferentCurrencyIdReturnFalse() {
+        CheckoutPreference preference = getPreferenceWithTwoItemsWithDifferentCurrencyId();
+        Assert.assertFalse(preference.itemsValid());
+    }
+
+    public void testWhenValidatePreferenceWithTwoItemsIfOneHasCurrencyNullReturnFalse() {
         CheckoutPreference preference = getPreferenceWithTwoItemsOneHasCurrencyNull();
         Assert.assertFalse(preference.itemsValid());
     }
 
-    public void testWhenValidatePreferenceWithTwoItemsWithDifferentCurrencyReturnFalse() {
-        CheckoutPreference preference = getPreferenceWithTwoItemsWithDifferrentCurrency();
+    public void testWhenValidatePreferenceWithTwoItemsWithIncorrectCurrencyReturnFalse() {
+        CheckoutPreference preference = getPreferenceWithTwoItemsWithIncorrectCurrencyId();
         Assert.assertFalse(preference.itemsValid());
     }
 
-
     ///////////////////PAYMENTS_TYPES tests///////////////////
-    public void testWhenValidatePreferenceReturnFalseIfAllPaymentsTypesAreExcluded() {
+    public void testWhenValidatePreferenceWithAllPaymentsTypesExcludedReturnFalse() {
         CheckoutPreference preference = getPreferenceWithAllPaymentTypesExcluded();
-        Assert.assertFalse(preference.isExcludedPaymentTypesValid());
+        Assert.assertFalse(preference.validPaymentTypeExclusion());
     }
 
-    public void testWhenValidatePreferenceReturnTrueIfSomePaymentsTypesAreExcluded() {
+    public void testWhenValidatePreferenceWithSomePaymentsTypesExcludedReturnTrue() {
         CheckoutPreference preference = getPreferenceWithSomePaymentTypesExcluded();
-        Assert.assertTrue(preference.isExcludedPaymentTypesValid());
+        Assert.assertTrue(preference.validPaymentTypeExclusion());
     }
 
     ///////////////////INSTALLMENTS tests///////////////////
-    public void testWhenValidatePreferenceReturnFalseIfPositiveInstallmentsDefaultNumberAndNegativeInstallmentDefaultNumber() {
-        CheckoutPreference preference = getPreferenceWithPositiveDefaultInstallmentsNumberAndNegativeInstallmentsNumber();
-        Assert.assertFalse(preference.isInstallmentsValid());
+    public void testWhenValidatePreferenceWithPositiveDefaultInstallmentsNumberAndNegativeMaxInstallmentsNumberReturnFalse() {
+        CheckoutPreference preference = getPreferenceWithPositiveDefaultInstallmentsNumberAndNegativeMaxInstallmentsNumber();
+        Assert.assertFalse(preference.validInstallmentsPreference());
     }
 
-    public void testWhenValidatePreferenceReturnFalseIfPositiveInstallmentsNumberAndNegativeInstallmentDefaultNumber() {
-        CheckoutPreference preference = getPreferenceWithPositiveInstallmentsNumberAndNegativeDefaultInstallmentsNumber();
-        Assert.assertFalse(preference.isInstallmentsValid());
+    public void testWhenValidatePreferenceWithPositiveMaxInstallmentsNumberAndNegativeDefaultInstallmentsNumberReturnFalse() {
+        CheckoutPreference preference = getPreferenceWithPositiveMaxInstallmentsNumberAndNegativeDefaultInstallmentsNumber();
+        Assert.assertFalse(preference.validInstallmentsPreference());
     }
 
-    public void testWhenValidatePreferenceReturnTrueIfNumberInstallmentsValid() {
-        CheckoutPreference preference = getPreferenceWithValidNumberInstallments();
-        Assert.assertTrue(preference.isInstallmentsValid());
+    public void testWhenValidatePreferenceWithMaxInstallmentsNumberPositiveReturnTrue() {
+        CheckoutPreference preference = getPreferenceWithPositiveInstallmentsNumber();
+        Assert.assertTrue(preference.validInstallmentsPreference());
     }
 
-    public void testWhenValidatePreferenceReturnFalseIfIsNegativeNumberInstallments() {
-        CheckoutPreference preference = getPreferenceWithNegativeNumberInstallments();
-        Assert.assertFalse(preference.isInstallmentsValid());
+    public void testWhenValidatePreferenceWithNegativeMaxInstallmentsNumberReturnFalse() {
+        CheckoutPreference preference = getPreferenceWithNegativeInstallmentsNumbers();
+        Assert.assertFalse(preference.validInstallmentsPreference());
     }
 
     ///////////////////EXCEPTIONS tests///////////////////
-    public void testWhenValidatePreferenceReturnTrueIfNoThrowException() {
+    public void testWhenValidatePreferenceValidNoThrowExceptionReturnTrue() {
         CheckoutPreference preference = getPreferenceWithOneItemValidActiveAndSomePaymentTypesExcluded();
         Boolean valid = true;
 
@@ -75,7 +84,7 @@ public class CheckoutPreferenceTest extends TestCase {
         }
     }
 
-    public void testWhenValidatePreferenceReturnFalseIfAllPaymentTypesAreExcludedThrowException() {
+    public void testWhenValidatePreferenceWithAllPaymentTypesExcludedThrowExceptionReturnTrue() {
         CheckoutPreference preference = getPreferenceWithOneItemValidActiveButAllPaymentTypesExcluded();
 
         try {
@@ -85,8 +94,8 @@ public class CheckoutPreferenceTest extends TestCase {
         }
     }
 
-    public void testWhenValidatePreferenceReturnFalseIfPreferenceInstallmentsDefaultAndInstallmentsAreNegativeThrowException() {
-        CheckoutPreference preference = getPreferenceWithOneItemValidButInstallmenstsDefaultAndInstallmentNegative();
+    public void testWhenValidatePreferenceWithInstallmentsDefaultNumberAndInstallmentsNumberNegativeThrowExceptionReturnTrue() {
+        CheckoutPreference preference = getPreferenceWithOneItemValidButInstallmenstsDefaultNumberAndInstallmentsNumberNegative();
 
         try {
             preference.validate();
@@ -95,8 +104,8 @@ public class CheckoutPreferenceTest extends TestCase {
         }
     }
 
-    public void testWhenValidatePreferenceReturnTrueIfPreferenceIsNotActiveThrowException() {
-        CheckoutPreference preference = getPreferenceWithOneItemValidButInactive();
+    public void testWhenValidatePreferenceWithPreferenceNotActiveThrowExceptionReturnTrue() {
+        CheckoutPreference preference = getPreferenceWithOneItemValidButPreferenceInactive();
 
         try {
             preference.validate();
@@ -105,8 +114,8 @@ public class CheckoutPreferenceTest extends TestCase {
         }
     }
 
-    public void testWhenValidatePreferenceReturnTrueIfPreferenceIsExpiredThrowException() {
-        CheckoutPreference preference = getPreferenceWithOneItemValidButExpired();
+    public void testWhenValidatePreferenceWithPreferenceExpiredThrowExceptionReturnTrue() {
+        CheckoutPreference preference = getPreferenceWithOneItemValidButPreferenceExpired();
 
         try {
             preference.validate();
@@ -116,7 +125,7 @@ public class CheckoutPreferenceTest extends TestCase {
     }
 
 
-    public void testWhenValidatePreferenceReturnTrueItemsIfItemsIsInvalidThrowException() {
+    public void testWhenValidatePreferenceWithItemsInvalidThrowExceptionReturnTrue() {
         CheckoutPreference preference = getPreferenceWithEmptyItems();
 
         try {
@@ -138,74 +147,74 @@ public class CheckoutPreferenceTest extends TestCase {
         Assert.assertFalse(preference.itemsValid());
     }
 
-    public void testWhenValidatePreferenceItemReturnFalseIfItemUnitPriceIsNegative() {
+    public void testWhenValidatePreferenceWithNegativeUnitPriceItemReturnFalse() {
         CheckoutPreference preference = getPreferenceWithNegativeUnitPriceItem();
         Assert.assertFalse(preference.itemsValid());
     }
 
-    public void testWhenValidatePreferenceItemReturnFalseIfItemUnitPriceIsNull() {
+    public void testWhenValidatePreferenceWithNullUnitPriceItemReturnFalse() {
         CheckoutPreference preference = getPreferenceWithNullUnitPriceItem();
         Assert.assertFalse(preference.itemsValid());
     }
 
-    public void testWhenValidatePreferenceItemReturnFalseIfItemQuantityIsZero() {
-        CheckoutPreference preference = getPreferenceWithZeroQuantityItem();
+    public void testWhenValidatePreferenceWithZeroItemQuantityReturnFalse() {
+        CheckoutPreference preference = getPreferenceWithZeroItemQuantity();
         Assert.assertFalse(preference.itemsValid());
     }
 
-    public void testWhenValidatePreferenceItemReturnFalseIfItemQuantityIsNegative() {
-        CheckoutPreference preference = getPreferenceWithNegativeQuantityItem();
+    public void testWhenValidatePreferenceWithNegativeItemQuantityReturnFalse() {
+        CheckoutPreference preference = getPreferenceWithNegativeItemQuantity();
         Assert.assertFalse(preference.itemsValid());
     }
 
-    public void testWhenValidatePreferenceItemReturnFalseIfItemQuantityIsNull() {
-        CheckoutPreference preference = getPreferenceWithNullQuantityItem();
+    public void testWhenValidatePreferenceWithNullItemQuantityReturnFalse() {
+        CheckoutPreference preference = getPreferenceWithNullItemQuantity();
         Assert.assertFalse(preference.itemsValid());
     }
 
-    public void testWhenValidatePreferenceItemReturnFalseIfItemIdIsNull() {
-        CheckoutPreference preference = getPreferenceWithNullIdItem();
+    public void testWhenValidatePreferenceWithNullItemIdReturnFalse() {
+        CheckoutPreference preference = getPreferenceWithNullItemId();
         Assert.assertFalse(preference.itemsValid());
     }
 
-    public void testWenValidatePreferenceItemsReturnFalseIfItemsListIsNull() {
+    public void testWenValidatePreferenceWithNullItemsListReturnFalse() {
         CheckoutPreference preference = getPreferenceWithNullItems();
         Assert.assertFalse(preference.itemsValid());
     }
 
-    public void testWhenValidatePreferenceItemsReturnFalseIfItemsListIsEmpty() {
+    public void testWhenValidatePreferenceWithEmptyItemsListReturnFalse() {
         CheckoutPreference preference = getPreferenceWithEmptyItems();
         Assert.assertFalse(preference.itemsValid());
     }
 
     ///////////////////DATES tests///////////////////
-    public void testWhenPreferenceIsActiveReturnIsActiveTrue() {
+    public void testWhenPreferenceIsActiveReturnTrue() {
         CheckoutPreference preference = getActivePreference();
         Assert.assertTrue(preference.isActive());
     }
 
-    public void testWhenPreferenceIsNotActiveReturnIsActiveFalse() {
+    public void testWhenPreferenceIsNotActiveReturnFalse() {
         CheckoutPreference preference = getInactivePreference();
         Assert.assertFalse(preference.isActive());
     }
 
-    public void testWhenPreferenceIsNotExpiredReturnExpiredFalse() {
+    public void testWhenPreferenceIsNotExpiredReturnFalse() {
         CheckoutPreference preference = getNotExpiredPreference();
         Assert.assertFalse(preference.isExpired());
     }
 
-    public void testWhenPreferenceIsExpiredReturnExpiredTrue() {
+    public void testWhenPreferenceIsExpiredReturnTrue() {
         CheckoutPreference preference = getExpiredPreference();
 
         Assert.assertTrue(preference.isExpired());
     }
 
-    public void testWhenValidatePreferenceExpirationDateToReturnFalseIfExpirationDateToIsNull() {
+    public void testWhenValidatePreferenceWithNullExpirationDateToReturnFalse() {
         CheckoutPreference preference = getPreferenceWithNullExpirationDateTo();
         Assert.assertFalse(preference.isExpired());
     }
 
-    public void testWhenValidatePreferenceExpirationDateFromReturnFalseIfExpirationDateFromIsNull() {
+    public void testWhenValidatePreferenceWithNullExpirationDateFromReturnFalse() {
         CheckoutPreference preference = getPreferenceWithNullExpirationDateFrom();
         Assert.assertFalse(preference.isActive());
     }
@@ -259,6 +268,44 @@ public class CheckoutPreferenceTest extends TestCase {
     }
 
     ///////////////////Getters preferences with different CURRENCY///////////////////
+    private CheckoutPreference getPreferenceWithTwoItemsWithSameCurrencyId() {
+        CheckoutPreference preference = new CheckoutPreference();
+        List<Item> items = new ArrayList<>();
+        Item itemA = new Item("123", 1);
+        Item itemB = new Item("456", 1);
+
+        itemA.setUnitPrice(new BigDecimal(2));
+        itemB.setUnitPrice(new BigDecimal(5));
+
+        itemA.setCurrencyId("ARS");
+        itemB.setCurrencyId("ARS");
+
+
+        items.add(itemA);
+        items.add(itemB);
+        preference.setItems(items);
+        return preference;
+    }
+
+    private CheckoutPreference getPreferenceWithTwoItemsWithDifferentCurrencyId() {
+        CheckoutPreference preference = new CheckoutPreference();
+        List<Item> items = new ArrayList<>();
+        Item itemA = new Item("123", 1);
+        Item itemB = new Item("456", 1);
+
+        itemA.setUnitPrice(new BigDecimal(2));
+        itemB.setUnitPrice(new BigDecimal(5));
+
+        itemA.setCurrencyId("US$");
+        itemB.setCurrencyId("ARS");
+
+
+        items.add(itemA);
+        items.add(itemB);
+        preference.setItems(items);
+        return preference;
+    }
+
     private CheckoutPreference getPreferenceWithTwoItemsOneHasCurrencyNull() {
         CheckoutPreference preference = new CheckoutPreference();
         List<Item> items = new ArrayList<>();
@@ -276,7 +323,7 @@ public class CheckoutPreferenceTest extends TestCase {
         return preference;
     }
 
-    private CheckoutPreference getPreferenceWithTwoItemsWithDifferrentCurrency() {
+    private CheckoutPreference getPreferenceWithTwoItemsWithIncorrectCurrencyId() {
         CheckoutPreference preference = new CheckoutPreference();
         List<Item> items = new ArrayList<>();
         Item itemA = new Item("123", 1);
@@ -349,7 +396,7 @@ public class CheckoutPreferenceTest extends TestCase {
         return preference;
     }
 
-    private CheckoutPreference getPreferenceWithZeroQuantityItem() {
+    private CheckoutPreference getPreferenceWithZeroItemQuantity() {
         CheckoutPreference preference = new CheckoutPreference();
         List<Item> items = new ArrayList<>();
         Item item = new Item("123", 0);
@@ -359,7 +406,7 @@ public class CheckoutPreferenceTest extends TestCase {
         return preference;
     }
 
-    private CheckoutPreference getPreferenceWithNegativeQuantityItem() {
+    private CheckoutPreference getPreferenceWithNegativeItemQuantity() {
         CheckoutPreference preference = new CheckoutPreference();
         List<Item> items = new ArrayList<>();
         Item item = new Item("123", -1);
@@ -369,7 +416,7 @@ public class CheckoutPreferenceTest extends TestCase {
         return preference;
     }
 
-    private CheckoutPreference getPreferenceWithNullQuantityItem() {
+    private CheckoutPreference getPreferenceWithNullItemQuantity() {
         CheckoutPreference preference = new CheckoutPreference();
         List<Item> items = new ArrayList<>();
         Item item = new Item("123", null);
@@ -379,7 +426,7 @@ public class CheckoutPreferenceTest extends TestCase {
         return preference;
     }
 
-    private CheckoutPreference getPreferenceWithNullIdItem() {
+    private CheckoutPreference getPreferenceWithNullItemId() {
         CheckoutPreference preference = new CheckoutPreference();
         List<Item> items = new ArrayList<>();
         Item item = new Item(null, 1);
@@ -464,7 +511,7 @@ public class CheckoutPreferenceTest extends TestCase {
     }
 
     ///////////////////Getters preferences with different INSTALLMENT///////////////////
-    private CheckoutPreference getPreferenceWithPositiveInstallmentsNumberAndNegativeDefaultInstallmentsNumber() {
+    private CheckoutPreference getPreferenceWithPositiveMaxInstallmentsNumberAndNegativeDefaultInstallmentsNumber() {
         CheckoutPreference preference = new CheckoutPreference();
         List<Item> items = new ArrayList<>();
         Item itemA = new Item("123", 1);
@@ -482,7 +529,7 @@ public class CheckoutPreferenceTest extends TestCase {
         return preference;
     }
 
-    private CheckoutPreference getPreferenceWithPositiveDefaultInstallmentsNumberAndNegativeInstallmentsNumber() {
+    private CheckoutPreference getPreferenceWithPositiveDefaultInstallmentsNumberAndNegativeMaxInstallmentsNumber() {
         CheckoutPreference preference = new CheckoutPreference();
         List<Item> items = new ArrayList<>();
         Item itemA = new Item("123", 1);
@@ -500,7 +547,7 @@ public class CheckoutPreferenceTest extends TestCase {
         return preference;
     }
 
-    private CheckoutPreference getPreferenceWithValidNumberInstallments() {
+    private CheckoutPreference getPreferenceWithPositiveInstallmentsNumber() {
         CheckoutPreference preference = new CheckoutPreference();
         List<Item> items = new ArrayList<>();
         Item itemA = new Item("123", 1);
@@ -518,7 +565,7 @@ public class CheckoutPreferenceTest extends TestCase {
         return preference;
     }
 
-    private CheckoutPreference getPreferenceWithNegativeNumberInstallments() {
+    private CheckoutPreference getPreferenceWithNegativeInstallmentsNumbers() {
         CheckoutPreference preference = new CheckoutPreference();
         List<Item> items = new ArrayList<>();
         Item itemA = new Item("123", 1);
@@ -567,8 +614,8 @@ public class CheckoutPreferenceTest extends TestCase {
         preference.setActiveFrom(pastDate);
 
         PaymentMethodPreference paymentMethodPreference = new PaymentMethodPreference();
-        paymentMethodPreference.setInstallments(0);
-        paymentMethodPreference.setDefaultInstallments(0);
+        paymentMethodPreference.setInstallments(1);
+        paymentMethodPreference.setDefaultInstallments(1);
         paymentMethodPreference.setExcludedPaymentTypes(paymentTypes);
         preference.setPaymentMethods(paymentMethodPreference);
 
@@ -605,8 +652,8 @@ public class CheckoutPreferenceTest extends TestCase {
         preference.setActiveFrom(pastDate);
 
         PaymentMethodPreference paymentMethodPreference = new PaymentMethodPreference();
-        paymentMethodPreference.setInstallments(0);
-        paymentMethodPreference.setDefaultInstallments(0);
+        paymentMethodPreference.setInstallments(1);
+        paymentMethodPreference.setDefaultInstallments(1);
         paymentMethodPreference.setExcludedPaymentTypes(paymentTypes);
         preference.setPaymentMethods(paymentMethodPreference);
 
@@ -614,7 +661,7 @@ public class CheckoutPreferenceTest extends TestCase {
     }
 
 
-    private CheckoutPreference getPreferenceWithOneItemValidButInstallmenstsDefaultAndInstallmentNegative() {
+    private CheckoutPreference getPreferenceWithOneItemValidButInstallmenstsDefaultNumberAndInstallmentsNumberNegative() {
         CheckoutPreference preference = new CheckoutPreference();
         List<Item> items = new ArrayList<>();
         Item itemA = new Item("123", 1);
@@ -636,7 +683,7 @@ public class CheckoutPreferenceTest extends TestCase {
         return preference;
     }
 
-    private CheckoutPreference getPreferenceWithOneItemValidButExpired() {
+    private CheckoutPreference getPreferenceWithOneItemValidButPreferenceExpired() {
         CheckoutPreference preference = new CheckoutPreference();
         List<Item> items = new ArrayList<>();
         Item itemA = new Item("123", 1);
@@ -653,7 +700,7 @@ public class CheckoutPreferenceTest extends TestCase {
         return preference;
     }
 
-    private CheckoutPreference getPreferenceWithOneItemValidButInactive() {
+    private CheckoutPreference getPreferenceWithOneItemValidButPreferenceInactive() {
         CheckoutPreference preference = new CheckoutPreference();
         List<Item> items = new ArrayList<>();
         Item itemA = new Item("123", 1);

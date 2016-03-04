@@ -1,9 +1,7 @@
 package com.mercadopago.model;
 
-import android.content.res.Resources;
-
-import com.mercadopago.R;
 import com.mercadopago.exceptions.CheckoutPreferenceException;
+import com.mercadopago.util.CurrenciesUtil;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -34,21 +32,22 @@ public class CheckoutPreference implements Serializable {
         else if (!this.isActive()){
             throw new CheckoutPreferenceException(CheckoutPreferenceException.INACTIVE_PREFERENCE);
         }
-        else if (!this.isInstallmentsValid()){
+        else if (!this.validInstallmentsPreference()){
             throw new CheckoutPreferenceException(CheckoutPreferenceException.INVALID_INSTALLMENTS);
         }
-        else if (!this.isExcludedPaymentTypesValid()){
+        else if (!this.validPaymentTypeExclusion()){
             throw new CheckoutPreferenceException(CheckoutPreferenceException.EXCLUDED_ALL_PAYMENTTYPES);
         }
     }
 
-    public boolean isExcludedPaymentTypesValid() {
+    public boolean validPaymentTypeExclusion() {
         //TODO Cambiar de List de String a Set los excludedPaymentType
         return paymentMethods.getExcludedPaymentTypes().size() < PaymentType.getAllPaymentTypes().size();
     }
 
-    public boolean isInstallmentsValid() {
-        return (paymentMethods.getInstallments()>=0) && (paymentMethods.getDefaultInstallments()>=0);
+
+    public boolean validInstallmentsPreference() {
+        return (paymentMethods.getInstallments() > 0) && (paymentMethods.getDefaultInstallments() > 0);
     }
 
 
@@ -61,20 +60,15 @@ public class CheckoutPreference implements Serializable {
             valid = false;
         }
         else {
-            String firstItemCurrencyId = items.get(0).getCurrencyId();
+            String firstCurrencyId = items.get(0).getCurrencyId();
+            String currentCurrencyId;
 
-            if(firstItemCurrencyId != null) {
-                for (Item item : this.items) {
-                    if (!isItemValid(item) ||
-                            item.getCurrencyId() == null ||
-                            !firstItemCurrencyId.equals(item.getCurrencyId())) {
-                        valid = false;
-                        break;
-                    }
+            for(Item item : items) {
+                currentCurrencyId = item.getCurrencyId();
+                if(!isItemValid(item) || !currentCurrencyId.equals(firstCurrencyId)) {
+                    valid = false;
+                    break;
                 }
-            }
-            else {
-                valid = false;
             }
         }
         return valid;
@@ -82,16 +76,31 @@ public class CheckoutPreference implements Serializable {
 
 
     private boolean isItemValid(Item item) {
-        Boolean valid = false;
+        Boolean valid = true;
 
-        if (item.getId() != null) {
-            if (item.getQuantity() != null && item.getQuantity() > 0 ) {
-                if (item.getUnitPrice() != null && item.getUnitPrice().compareTo(BigDecimal.ZERO) >= 0){
-                    valid = true;
-                }
-            }
+        if(item.getId() == null) {
+            valid = false;
         }
-        return valid;
+        else if(item.getQuantity() == null || item.getQuantity() < 1)
+        {
+            valid = false;
+        }
+        else if(item.getUnitPrice() == null || item.getUnitPrice().compareTo(BigDecimal.ZERO) < 0) {
+            valid = false;
+        }
+        else if(item.getCurrencyId() == null) {
+            valid = false;
+        }
+        else if((!item.getCurrencyId().equals(CurrenciesUtil.CURRENCY_ARGENTINA))
+                && (!item.getCurrencyId().equals(CurrenciesUtil.CURRENCY_BRAZIL))
+                && (!item.getCurrencyId().equals(CurrenciesUtil.CURRENCY_CHILE))
+                && (!item.getCurrencyId().equals(CurrenciesUtil.CURRENCY_COLOMBIA))
+                && (!item.getCurrencyId().equals(CurrenciesUtil.CURRENCY_MEXICO))
+                && (!item.getCurrencyId().equals(CurrenciesUtil.CURRENCY_VENEZUELA))
+                && (!item.getCurrencyId().equals(CurrenciesUtil.CURRENCY_USA))){
+            valid = false;
+        }
+            return valid;
     }
 
 

@@ -16,6 +16,7 @@ public class CurrenciesUtil {
     public static final String CURRENCY_COLOMBIA = "COP";
     public static final String CURRENCY_MEXICO = "MXN";
     public static final String CURRENCY_VENEZUELA = "VEF";
+    public static final String CURRENCY_USA = "USD";
 
     private static Map<String, Currency> currenciesList = new HashMap<String, Currency>(){{
         put(CURRENCY_ARGENTINA, new Currency(CURRENCY_ARGENTINA, "Peso argentino", "$", 2, ",".charAt(0), ".".charAt(0)));
@@ -24,7 +25,7 @@ public class CurrenciesUtil {
         put(CURRENCY_COLOMBIA, new Currency(CURRENCY_COLOMBIA, "Peso colombiano", "$", 0, ",".charAt(0), ".".charAt(0)));
         put(CURRENCY_MEXICO, new Currency(CURRENCY_MEXICO, "Peso mexicano", "$", 2, ".".charAt(0), ",".charAt(0)));
         put(CURRENCY_VENEZUELA, new Currency(CURRENCY_VENEZUELA, "Bolivar fuerte", "BsF", 2, ",".charAt(0), ".".charAt(0)));
-
+        put(CURRENCY_USA, new Currency(CURRENCY_USA, "Dolar americano", "US$", 2, ",".charAt(0), ".".charAt(0)));
     }};
 
     public static String formatNumber(BigDecimal amount, String currencyId) {

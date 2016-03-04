@@ -79,10 +79,11 @@ public class CheckoutActivity extends AppCompatActivity{
 
         ///////////////////////////////////////////////////////
         if(mCheckoutPreference == null) {
-            Toast.makeText(this, "La preference es null", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,getString(R.string.mpsdk_error_message_invalid_preference), Toast.LENGTH_SHORT).show();
 
             Intent validatePreferenceIntent = new Intent();
-            validatePreferenceIntent.putExtra("error","La preference es null"); //check key value
+            //TODO cambiar el message por @scring
+            validatePreferenceIntent.putExtra("error",getString(R.string.mpsdk_error_message_invalid_preference));
             mActivity.setResult(RESULT_CANCELED, validatePreferenceIntent);
             mActivity.finish();
         }
