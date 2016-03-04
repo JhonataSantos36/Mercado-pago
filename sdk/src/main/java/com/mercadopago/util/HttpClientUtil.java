@@ -36,8 +36,8 @@ public class HttpClientUtil {
         return client;
     }
 
-    public static void bindClient(Client mockClient) {
-        client = mockClient;
+    public static void bindClient(Client client) {
+        HttpClientUtil.client = client;
     }
 
     public static void unbindClient() {

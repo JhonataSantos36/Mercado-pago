@@ -1,6 +1,7 @@
 package com.mercadopago.test.rules;
 
 import android.app.Activity;
+import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.rule.ActivityTestRule;
 
 import com.mercadopago.test.MockedHttpClient;
@@ -11,7 +12,7 @@ import com.mercadopago.util.JsonUtil;
 /**
  * Created by mreverter on 29/2/16.
  */
-public class MockedApiTestRule<A extends Activity> extends ActivityTestRule<A> {
+public class MockedApiTestRule<A extends Activity> extends IntentsTestRule<A> {
 
     private MockedHttpClient mockedHttpClient;
 

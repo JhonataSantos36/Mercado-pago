@@ -23,10 +23,8 @@ import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentMethodSearch;
 import com.mercadopago.model.PaymentMethodSearchItem;
-import com.mercadopago.model.PaymentType;
 import com.mercadopago.model.Token;
 import com.mercadopago.util.ApiUtil;
-import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;
 import com.mercadopago.util.MercadoPagoUtil;
 
@@ -80,10 +78,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payment_vault);
-        setTitle(Html.fromHtml("<b><i><small>" + getString(R.string.mpsdk_title_activity_payment_vault) + "</small></i></b>"));
-
         getActivityParameters();
-
         mMercadoPago = new MercadoPago.Builder()
                 .setPublicKey(mMerchantPublicKey)
                 .setContext(this)
@@ -97,6 +92,8 @@ public class PaymentVaultActivity extends AppCompatActivity {
             showItemChildren(mSelectedSearchItem);
         }
         else {
+            String initialTitle = getString(R.string.mpsdk_title_activity_payment_vault);
+            setFormattedTitle(initialTitle);
             LayoutUtil.showProgressLayout(this);
             getPaymentMethodSearch();
         }
@@ -210,9 +207,6 @@ public class PaymentVaultActivity extends AppCompatActivity {
     }
 
     protected void setSearchLayout() {
-        String initialTitle = getString(R.string.mpsdk_title_activity_payment_vault);
-        setTitle(Html.fromHtml("<b><i><small>" + initialTitle + "</small></i></b>"));
-
         if(mPaymentMethodSearch.hasPreferred() && mPaymentMethodSearch.hasSearchItems()) {
             //showTitles
             populateSearchList(mPaymentMethodSearch.getGroups());
@@ -244,10 +238,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
                     startActivityForItem(paymentTypeItem);
                 }
                 else {
-                    PaymentType paymentType = new PaymentType();
-                    paymentType.setId(paymentTypeItem.getId());
-
-                    startNextStepForPaymentType(paymentType);
+                    startNextStepForPaymentType(paymentTypeItem.getId());
                 }
             }
 
@@ -257,6 +248,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
                     //TODO account money
                 }
                 else {
+                    //TODO buscar en servicio el pm real?
                     PaymentMethod paymentMethod = new PaymentMethod();
                     paymentMethod.setId(paymentMethodItem.getId());
 
@@ -279,19 +271,19 @@ public class PaymentVaultActivity extends AppCompatActivity {
     }
 
     protected void showItemChildren(PaymentMethodSearchItem item) {
-        setTitle(Html.fromHtml("<b><i><small>" + item.getChildrenHeader() + "</small></i></b>"));
+        setFormattedTitle(item.getChildrenHeader());
         populateSearchList(item.getChildren());
     }
 
-    protected void startNextStepForPaymentType(PaymentType paymentType) {
+    protected void startNextStepForPaymentType(String paymentTypeId) {
 
         MercadoPago.StartActivityBuilder builder = new MercadoPago.StartActivityBuilder()
                 .setActivity(this)
                 .setPublicKey(mMerchantPublicKey)
                 .setExcludedPaymentMethodIds(mExcludedPaymentMethodIds)
-                .setPaymentType(paymentType);
+                .setPaymentTypeId(paymentTypeId);
 
-        if(MercadoPagoUtil.isCardPaymentType(paymentType.getId())){
+        if(MercadoPagoUtil.isCardPaymentType(paymentTypeId)){
             builder.startGuessingCardActivity();
         }
         else {
@@ -389,6 +381,10 @@ public class PaymentVaultActivity extends AppCompatActivity {
     protected void finishWithApiException(Intent data) {
         setResult(Activity.RESULT_CANCELED, data);
         finish();
+    }
+
+    protected void setFormattedTitle(String title) {
+        setTitle(Html.fromHtml("<b><small>" + title + "</small></b>"));
     }
 
     @Override

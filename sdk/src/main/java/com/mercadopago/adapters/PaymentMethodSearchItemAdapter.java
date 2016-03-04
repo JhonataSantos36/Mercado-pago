@@ -71,7 +71,7 @@ public class PaymentMethodSearchItemAdapter extends RecyclerView.Adapter<Payment
         if(holder.mDescription != null) {
             holder.mDescription.setText(paymentMethodSearchItem.getDescription());
         }
-        if(paymentMethodSearchItem.getComment() != null) {
+        if(paymentMethodSearchItem.getComment() != null && !paymentMethodSearchItem.getId().equals("bitcoin")) {
             holder.mComment.setText(paymentMethodSearchItem.getComment());
         }
         else {
