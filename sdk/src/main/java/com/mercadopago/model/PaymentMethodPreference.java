@@ -50,7 +50,7 @@ public class PaymentMethodPreference implements Serializable {
         this.defaultPaymentMethodId = defaultPaymentMethodId;
     }
 
-    public Integer getInstallments() {
+    public Integer getMaxInstallments() {
         return installments;
     }
 

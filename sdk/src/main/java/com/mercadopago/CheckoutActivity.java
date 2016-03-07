@@ -55,10 +55,9 @@ public class CheckoutActivity extends AppCompatActivity{
     protected Issuer mSelectedIssuer;
     protected PayerCost mSelectedPayerCost;
     protected Token mCreatedToken;
-
     protected String mPurchaseTitle;
-
     protected ShoppingCartController mShoppingCartController;
+    protected String mErrorMessage;
 
     //Controls
     protected TextView mPaymentMethodCommentTextView;
@@ -77,37 +76,21 @@ public class CheckoutActivity extends AppCompatActivity{
         mMerchantPublicKey = this.getIntent().getStringExtra("merchantPublicKey");
         mShowBankDeals = this.getIntent().getBooleanExtra("showBankDeals", true);
 
-
-        ///////////////////////////////////////////////////////
-        if(mCheckoutPreference == null) {
-            Toast.makeText(this,getString(R.string.mpsdk_error_message_invalid_preference), Toast.LENGTH_SHORT).show();
-
-            Intent validatePreferenceIntent = new Intent();
-            //TODO cambiar el message por @scring
-            validatePreferenceIntent.putExtra("error",getString(R.string.mpsdk_error_message_invalid_preference));
-            mActivity.setResult(RESULT_CANCELED, validatePreferenceIntent);
-            mActivity.finish();
+        boolean validState = true;
+        try{
+            validateParameters();
         }
-        else{
-            try{
-                mCheckoutPreference.validate();
-            }
-            catch(CheckoutPreferenceException e){
-                String error = ExceptionHandler.getErrorMessage(this, e);
-                Toast.makeText(this, error , Toast.LENGTH_SHORT).show();
-
-                Intent validatePreferenceIntent = new Intent();
-                validatePreferenceIntent.putExtra("error",e.getMessage());
-                mActivity.setResult(RESULT_CANCELED, validatePreferenceIntent);
-                mActivity.finish();
-            }
+        catch(CheckoutPreferenceException e){
+            mErrorMessage = ExceptionHandler.getErrorMessage(this, e);
+            validState = false;
+        } catch (Exception e) {
+            mErrorMessage = e.getMessage();
+            validState = false;
         }
-        //////////////////////////////////////////////////////////////////
+        if(validState) {
+            getApplicationContext();
+            initializeActivityControls();
 
-        getApplicationContext();
-        initializeActivityControls();
-        if(validParameters())
-        {
             setActivity();
 
             mMercadoPago = new MercadoPago.Builder()
@@ -118,16 +101,24 @@ public class CheckoutActivity extends AppCompatActivity{
         }
         else {
             Intent returnIntent = new Intent();
-            returnIntent.putExtra("message", "Invalid parameters");
+            returnIntent.putExtra("message", mErrorMessage);
             setResult(RESULT_CANCELED, returnIntent);
             finish();
         }
     }
 
+    private void validateParameters() throws Exception {
+        if(!validParameters()) {
+            throw new IllegalStateException("Invalid parameters");
+        }
+        else {
+            mCheckoutPreference.validate();
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        mActivity.getMenuInflater().inflate(R.menu.shopping_cart_menu, menu);
+        this.getMenuInflater().inflate(R.menu.shopping_cart_menu, menu);
         mShoppingCartController = new ShoppingCartController(this, menu.findItem(R.id.shopping_cart), mCheckoutPreference.getItems().get(0).getPictureUrl(), mPurchaseTitle,
                 mCheckoutPreference.getAmount(), mCheckoutPreference.getItems().get(0).getCurrencyId(), true, findViewById(R.id.scrollLayout));
         return true;
@@ -216,7 +207,6 @@ public class CheckoutActivity extends AppCompatActivity{
 
         if(itemListSize == 1) {
             purchaseTitle.append(mCheckoutPreference.getItems().get(0).getTitle());
-
         }
         else {
             for(Item item : mCheckoutPreference.getItems()){
@@ -237,7 +227,6 @@ public class CheckoutActivity extends AppCompatActivity{
                 && mCheckoutPreference.getPayer().getEmail() != null
                 && !mCheckoutPreference.getPayer().getEmail().equals("");
     }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -276,7 +265,6 @@ public class CheckoutActivity extends AppCompatActivity{
                     finish();
                 }
             }
-
         }
 
         Intent checkoutResult = null;

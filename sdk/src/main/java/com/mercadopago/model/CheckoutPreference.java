@@ -16,7 +16,6 @@ public class CheckoutPreference implements Serializable {
     private Payer payer;
     private PaymentMethodPreference paymentMethods;
 
-    //////////////////////////////////////////////////////////////////
     private Date expirationDateTo;
     private Date expirationDateFrom;
 
@@ -47,7 +46,15 @@ public class CheckoutPreference implements Serializable {
 
 
     public boolean validInstallmentsPreference() {
-        return (paymentMethods.getInstallments() > 0) && (paymentMethods.getDefaultInstallments() > 0);
+        return (validMaxInstallments() && validDefaultInstallments());
+    }
+
+    private boolean validDefaultInstallments() {
+        return paymentMethods.getMaxInstallments() == null || paymentMethods.getMaxInstallments() > 0;
+    }
+
+    private boolean validMaxInstallments() {
+        return paymentMethods.getDefaultInstallments() == null || paymentMethods.getDefaultInstallments() > 0;
     }
 
 
@@ -120,7 +127,7 @@ public class CheckoutPreference implements Serializable {
             return date.after(expirationDateFrom);
         }
         else{
-            return false;
+            return true;
         }
     }
 
@@ -179,7 +186,7 @@ public class CheckoutPreference implements Serializable {
 
     public Integer getMaxInstallments() {
         if(paymentMethods != null)
-            return paymentMethods.getInstallments();
+            return paymentMethods.getMaxInstallments();
         else
             return null;    }
 

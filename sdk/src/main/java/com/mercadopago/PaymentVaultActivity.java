@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.mercadopago.adapters.PaymentMethodSearchItemAdapter;
+import com.mercadopago.callbacks.GetPaymentMethodCallback;
 import com.mercadopago.callbacks.PaymentMethodSearchCallback;
 import com.mercadopago.controllers.ShoppingCartController;
 import com.mercadopago.core.MercadoPago;
@@ -86,7 +87,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
         try {
             validateActivityParameters();
         } catch (IllegalStateException e) {
-            Toast.makeText(mActivity, e.getMessage(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
 
         mMercadoPago = new MercadoPago.Builder()
@@ -123,20 +124,30 @@ public class PaymentVaultActivity extends AppCompatActivity {
         else if (!isMerchantPublicKeyValid()){
             throw new IllegalStateException(getString(R.string.mpsdk_error_message_invalid_merchant));
         }
-        else if (!isInstallmentValid()){
+        else if (!validInstallmentsPreferences()){
             throw new IllegalStateException(getString(R.string.mpsdk_error_message_invalid_installments));
         }
-        else if (!isPaymentTypesValid()){
+        else if (!validPaymentTypes()){
             throw new IllegalStateException(getString(R.string.mpsdk_error_message_excluded_all_payment_type));
         }
     }
 
-    private boolean isPaymentTypesValid() {
-        return mExcludedPaymentTypes.size() < PaymentType.getAllPaymentTypes().size();
+    private boolean validPaymentTypes() {
+        boolean valid = true;
+        if(mExcludedPaymentTypes != null && mExcludedPaymentTypes.size() >= PaymentType.getAllPaymentTypes().size()) {
+            valid = false;
+        }
+        return valid;
     }
 
-    private boolean isInstallmentValid() {
-        return mDefaultInstallments > 0 && mMaxInstallments > 0;
+    private boolean validInstallmentsPreferences() {
+
+        boolean isValid = true;
+        if(mDefaultInstallments != null && mDefaultInstallments <= 0
+                || mMaxInstallments != null && mMaxInstallments <= 0) {
+            isValid = false;
+        }
+        return isValid;
     }
 
     private boolean isAmountValid() {
@@ -153,8 +164,10 @@ public class PaymentVaultActivity extends AppCompatActivity {
 
     private boolean isCurrencyIdValid() {
 
-        if(mCurrencyId.equals(null)) {
-            return false;
+        boolean isValid = true;
+
+        if(mCurrencyId == null) {
+            isValid = false;
         }
         else if((!mCurrencyId.equals(CurrenciesUtil.CURRENCY_ARGENTINA))
                 && (!mCurrencyId.equals(CurrenciesUtil.CURRENCY_BRAZIL))
@@ -163,11 +176,9 @@ public class PaymentVaultActivity extends AppCompatActivity {
                 && (!mCurrencyId.equals(CurrenciesUtil.CURRENCY_MEXICO))
                 && (!mCurrencyId.equals(CurrenciesUtil.CURRENCY_VENEZUELA))
                 && (!mCurrencyId.equals(CurrenciesUtil.CURRENCY_USA))){
-            return false;
+            isValid = false;
         }
-        else{
-            return true;
-        }
+        return isValid;
     }
 
     protected void getActivityParameters() {
@@ -212,9 +223,6 @@ public class PaymentVaultActivity extends AppCompatActivity {
         if(this.getIntent().getStringExtra("defaultInstallments") != null) {
             mDefaultInstallments = Integer.valueOf(this.getIntent().getStringExtra("defaultInstallments"));
         }
-
-
-
     }
 
     protected String getFormatedPurchaseTitle() {
@@ -270,7 +278,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
             @Override
             public void success(PaymentMethodSearch paymentMethodSearch, Response response) {
                 LayoutUtil.showRegularLayout(mActivity);
-                if(paymentMethodSearch.getGroups().isEmpty()) {
+                if(!paymentMethodSearch.hasSearchItems()) {
                     finishWithEmptyPaymentMethodSearch();
                 }
                 else {
@@ -288,7 +296,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
 
     private void finishWithEmptyPaymentMethodSearch() {
         //TODO modificar
-        Toast.makeText(mActivity, "Se excluyeron todos los paymentMethods", Toast.LENGTH_SHORT).show();
+        Toast.makeText(mActivity, "No hay medios de pago disponibles", Toast.LENGTH_SHORT).show();
         finish();
     }
 
@@ -329,16 +337,23 @@ public class PaymentVaultActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onPaymentMethodItemClicked(PaymentMethodSearchItem paymentMethodItem) {
+            public void onPaymentMethodItemClicked(final PaymentMethodSearchItem paymentMethodItem) {
                 if(paymentMethodItem.getId().equals(getResources().getString(R.string.mpsdk_mp_app_id))) {
                     //TODO account money
                 }
                 else {
-                    //TODO buscar en servicio el pm real?
-                    PaymentMethod paymentMethod = new PaymentMethod();
-                    paymentMethod.setId(paymentMethodItem.getId());
-
-                    finishWithPaymentMethodResult(paymentMethod, paymentMethodItem.getComment());
+                    mMercadoPago.getPaymentMethodById(paymentMethodItem.getId(), new GetPaymentMethodCallback() {
+                        @Override
+                        public void onSuccess(PaymentMethod paymentMethod) {
+                            finishWithPaymentMethodResult(paymentMethod, paymentMethodItem.getComment());
+                        }
+                        @Override
+                        public void onFailure() {
+                            PaymentMethod paymentMethod = new PaymentMethod();
+                            paymentMethod.setId(paymentMethodItem.getId());
+                            finishWithPaymentMethodResult(paymentMethod, paymentMethodItem.getComment());
+                        }
+                    });
                 }
             }
         };
