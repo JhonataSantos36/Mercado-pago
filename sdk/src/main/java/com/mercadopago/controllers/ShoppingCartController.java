@@ -81,9 +81,9 @@ public class ShoppingCartController {
         return CurrenciesUtil.formatNumber(amount, currencyId);
     }
 
-    public void toggle(boolean animated) {
+    public void toggle(boolean withAnimation) {
         if(!isItemShown()) {
-            showItemInfo(animated);
+            showItemInfo(withAnimation);
         }
         else {
             hideItemInfo();
@@ -96,28 +96,29 @@ public class ShoppingCartController {
     public void hideItemInfo() {
         mItemInfoLayout.setVisibility(View.GONE);
         mItemDescriptionShown = false;
-        mMenuItemTogglerShoppingCart.setIcon(R.drawable.regular_payment);
         tintTogglerDrawableWithColor(mActivity.getResources().getColor(R.color.mpsdk_white));
     }
 
-    public void showItemInfo(boolean animated) {
+    public void showItemInfo(boolean enableAnimation) {
 
         mItemInfoLayout.setVisibility(View.VISIBLE);
-        if(animated) {
-            //Create animation
-            AnimationSet animationSet = new AnimationSet(true);
-            TranslateAnimation a = new TranslateAnimation(
-                    Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF - mItemInfoLayout.getHeight(), 0);
-            a.setDuration(mActivity.getResources().getInteger(android.R.integer.config_shortAnimTime));
-            animationSet.addAnimation(a);
-
-            mViewBelowShoppingCart.setAnimation(animationSet);
-
-            mItemInfoLayout.startAnimation(AnimationUtils.loadAnimation(mActivity, R.anim.slide_up_to_down_in));
+        if(enableAnimation) {
+            enableAnimation();
         }
         mItemDescriptionShown = true;
-        mMenuItemTogglerShoppingCart.setIcon(R.drawable.close);
         tintTogglerDrawableWithColor(mActivity.getResources().getColor(R.color.mpsdk_white));
+    }
+
+    private void enableAnimation() {
+        AnimationSet animationSet = new AnimationSet(true);
+        TranslateAnimation a = new TranslateAnimation(
+                Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF - mItemInfoLayout.getHeight(), 0);
+        a.setDuration(mActivity.getResources().getInteger(android.R.integer.config_shortAnimTime));
+        animationSet.addAnimation(a);
+
+        mViewBelowShoppingCart.setAnimation(animationSet);
+
+        mItemInfoLayout.startAnimation(AnimationUtils.loadAnimation(mActivity, R.anim.slide_up_to_down_in));
     }
 
     private void tintTogglerDrawableWithColor(int color) {

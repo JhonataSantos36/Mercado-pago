@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,7 +19,6 @@ import com.mercadopago.core.MercadoPago;
 import com.mercadopago.core.MerchantServer;
 import com.mercadopago.exceptions.CheckoutPreferenceException;
 import com.mercadopago.exceptions.ExceptionHandler;
-import com.mercadopago.exceptions.MPException;
 import com.mercadopago.model.CheckoutPreference;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.Item;
@@ -33,7 +33,6 @@ import com.mercadopago.util.LayoutUtil;
 import com.mercadopago.util.MercadoPagoUtil;
 
 import java.math.BigDecimal;
-import java.util.Date;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -61,16 +60,19 @@ public class CheckoutActivity extends AppCompatActivity{
 
     //Controls
     protected TextView mPaymentMethodCommentTextView;
+    protected TextView mTermsAndConditionsTextView;
+    protected TextView mTotalAmountTextView;
     protected ImageView mPaymentMethodImageView;
     protected ImageView mEditPaymentMethodImageView;
     protected Button mPayButton;
-    protected TextView mTextTermsAndConditions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_checkout);
-        setTitle(Html.fromHtml("<b><small>" + getString(R.string.mpsdk_title_activity_checkout) + "</small></b>"));
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         mCheckoutPreference = (CheckoutPreference) this.getIntent().getSerializableExtra("checkoutPreference");
         mMerchantPublicKey = this.getIntent().getStringExtra("merchantPublicKey");
@@ -120,7 +122,7 @@ public class CheckoutActivity extends AppCompatActivity{
     public boolean onCreateOptionsMenu(Menu menu) {
         this.getMenuInflater().inflate(R.menu.shopping_cart_menu, menu);
         mShoppingCartController = new ShoppingCartController(this, menu.findItem(R.id.shopping_cart), mCheckoutPreference.getItems().get(0).getPictureUrl(), mPurchaseTitle,
-                mCheckoutPreference.getAmount(), mCheckoutPreference.getItems().get(0).getCurrencyId(), true, findViewById(R.id.scrollLayout));
+                mCheckoutPreference.getAmount(), mCheckoutPreference.getItems().get(0).getCurrencyId(), true, findViewById(R.id.contentLayout));
         return true;
     }
 
@@ -143,8 +145,8 @@ public class CheckoutActivity extends AppCompatActivity{
                 startPaymentVaultActivity();
             }
         });
-        mTextTermsAndConditions = (TextView) findViewById(R.id.termsAndConditions);
-        mTextTermsAndConditions.setOnClickListener(new View.OnClickListener() {
+        mTermsAndConditionsTextView = (TextView) findViewById(R.id.termsAndConditions);
+        mTermsAndConditionsTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startTermsAndConditionsActivity();
@@ -159,6 +161,7 @@ public class CheckoutActivity extends AppCompatActivity{
             }
         });
         mPurchaseTitle = getPurchaseTitle();
+        mTotalAmountTextView = (TextView) findViewById(R.id.totalAmount);
     }
 
     protected void startTermsAndConditionsActivity() {
@@ -291,15 +294,30 @@ public class CheckoutActivity extends AppCompatActivity{
     }
 
     private void showReviewAndConfirm(String paymentMethodInfo) {
+        drawPaymentMethodRow(paymentMethodInfo);
+        drawTermsAndConditionsText();
+        setAmountLabel();
+    }
+
+    private void setAmountLabel() {
+        StringBuilder totalAmountText = new StringBuilder();
+        totalAmountText.append(getString(R.string.mpsdk_payment_amount_to_pay));
+        totalAmountText.append(" " + this.getAmountLabel());
+        mTotalAmountTextView.setText(totalAmountText.toString());
+    }
+
+    private void drawTermsAndConditionsText() {
+        StringBuilder termsAndConditionsText = new StringBuilder();
+        termsAndConditionsText.append(getString(R.string.mpsdk_text_terms_and_conditions_start) + " ");
+        termsAndConditionsText.append(" <font color='blue'><u>" + getString(R.string.mpsdk_text_terms_and_conditions_linked) + "</u></font> ");
+        termsAndConditionsText.append(" " + getString(R.string.mpsdk_text_terms_and_conditions_end));
+        mTermsAndConditionsTextView.setText(Html.fromHtml(termsAndConditionsText.toString()));
+    }
+
+    private void drawPaymentMethodRow(String paymentMethodInfo) {
         mPaymentMethodCommentTextView.setText(paymentMethodInfo);
         int resourceId = MercadoPagoUtil.getPaymentMethodSearchItemIcon(this, mSelectedPaymentMethod.getId());
         mPaymentMethodImageView.setImageResource(resourceId);
-        mPayButton.setText(getResources().getString(R.string.mpsdk_pay_button_text) + " " + this.getAmountLabel());
-        StringBuilder termsAndConditionsText = new StringBuilder();
-        termsAndConditionsText.append(getString(R.string.mpsdk_text_terms_and_conditions_start)+" ");
-        termsAndConditionsText.append(" <font color='blue'><u>" + getString(R.string.mpsdk_text_terms_and_conditions_linked) + "</u></font> ");
-        termsAndConditionsText.append(" " + getString(R.string.mpsdk_text_terms_and_conditions_end));
-        mTextTermsAndConditions.setText(Html.fromHtml(termsAndConditionsText.toString()));
     }
 
     @Override
@@ -356,7 +374,6 @@ public class CheckoutActivity extends AppCompatActivity{
             // Create payment
             hideActionBar();
             LayoutUtil.showProgressLayout(this);
-
             MerchantServer.createPayment(this, "https://www.mercadopago.com", "/checkout/examples/doPayment", payment, new Callback<Payment>() {
                 @Override
                 public void success(Payment payment, Response response) {
@@ -377,6 +394,7 @@ public class CheckoutActivity extends AppCompatActivity{
                                 .setPaymentMethod(mSelectedPaymentMethod)
                                 .startInstructionsActivity();
                     }
+                    LayoutUtil.showRegularLayout(mActivity);
                 }
 
                 @Override

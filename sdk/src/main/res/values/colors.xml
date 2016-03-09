@@ -4,14 +4,15 @@
     <color name="mpsdk_white_background">#FFFFFF</color>
     <color name="mpsdk_base_text">#333333</color>
     <color name="mpsdk_form_text">#666666</color>
-    <color name="mpsdk_separator">#CCCCCC</color>
+    <color name="mpsdk_separator">#DEDEDE</color>
 
-    <color name="mpsdk_colorPrimary">#47b6e2</color>
     <color name="colorPrimaryDark">#0D47A1</color>
     <color name="colorAccent">#00B2EB</color>
-    <color name="groupsTintColor">#1d9fde</color>
+    <color name="mpsdk_colorPrimary">#30AFE2</color>
+    <color name="mpsdk_icon_image_color">#1D9FDE</color>
+    <color name="mpsdk_color_row_arrow_grey">#999999</color>
     <color name="commentColor">#999</color>
-    <color name="mpsdk_shopping_cart_background">#59bee7</color>
+    <color name="mpsdk_shopping_cart_background">#5ABEE7</color>
     <color name="mpsdk_color_instructions_title_background">#fbf8e3</color>
     <color name="mpsdk_color_instructions_title_image">#EFC703</color>
     <color name="mpsdk_color_instructions_background">#f1f1f1</color>

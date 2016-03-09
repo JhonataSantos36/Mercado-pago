@@ -45,7 +45,7 @@
                         android:gravity="center_vertical"
                         android:singleLine="true"
                         tools:text="Visa"
-                        tools:drawableLeft="@drawable/ico_tc_visa"
+                        tools:drawableLeft="@drawable/visa"
                         android:drawablePadding="10dp"
                         style="@style/mpsdk_list_label"/>
 

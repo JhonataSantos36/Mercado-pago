@@ -97,6 +97,10 @@ public class PaymentMethodSearchItemAdapter extends RecyclerView.Adapter<Payment
         }
 
         holder.mItem = paymentMethodSearchItem;
+
+        if(position == mItems.size()-1) {
+            holder.mSeparator.setVisibility(View.GONE);
+        }
     }
 
     private boolean itemNeedsTint(PaymentMethodSearchItem paymentMethodSearchItem) {
@@ -105,7 +109,7 @@ public class PaymentMethodSearchItemAdapter extends RecyclerView.Adapter<Payment
     }
 
     private void setTintColor(Context mContext, ImageView mIcon) {
-        mIcon.setColorFilter(mContext.getResources().getColor(R.color.groupsTintColor));
+        mIcon.setColorFilter(mContext.getResources().getColor(R.color.mpsdk_icon_image_color));
     }
 
     @Override
@@ -118,6 +122,7 @@ public class PaymentMethodSearchItemAdapter extends RecyclerView.Adapter<Payment
         private TextView mDescription;
         private TextView mComment;
         private ImageView mIcon;
+        private View mSeparator;
         private PaymentMethodSearchItem mItem;
 
         public ViewHolder(View itemView) {
@@ -133,6 +138,7 @@ public class PaymentMethodSearchItemAdapter extends RecyclerView.Adapter<Payment
             mDescription = (TextView) itemView.findViewById(R.id.title);
             mComment = (TextView) itemView.findViewById(R.id.comment);
             mIcon = (ImageView) itemView.findViewById(R.id.image);
+            mSeparator = itemView.findViewById(R.id.separator);
         }
 
         private void nextStep(PaymentMethodSearchItem mItem) {

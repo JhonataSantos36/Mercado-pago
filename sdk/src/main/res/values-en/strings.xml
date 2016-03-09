@@ -81,5 +81,6 @@
     <string name="mpsdk_error_message_invalid_merchant">Invalid merchant</string>
     <string name="mpsdk_error_message_invalid_preference">Invalid preference</string>
 
+    <string name="mpsdk_payment_amount_to_pay">Amount to pay</string>
 
 </resources>

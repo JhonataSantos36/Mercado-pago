@@ -62,7 +62,7 @@ public class InstructionsActivity extends AppCompatActivity {
 
         LayoutUtil.showProgressLayout(this);
         //TODO cambiar por mPayment.getId() cuando estén andando los servicios
-        mercadoPago.getInstructions((long) 1826446924, new Callback<Instruction>() {
+        mercadoPago.getInstructions((long) 1826446924, "oxxo", new Callback<Instruction>() {
             @Override
             public void success(Instruction instruction, Response response) {
                 showInstructions(instruction);
@@ -164,7 +164,6 @@ public class InstructionsActivity extends AppCompatActivity {
     private void initializeControls() {
         mReferencesLayout = (LinearLayout) findViewById(R.id.referencesLayout);
         mBottomCardView = (CardView) findViewById(R.id.bottomCardView);
-        mBottomCardView.setCardBackgroundColor(getResources().getColor(R.color.mpsdk_color_instructions_background));
         mTitle = (TextView) findViewById(R.id.title);
         mPrimaryInfo = (TextView) findViewById(R.id.primaryInfo);
         mSecondaryInfo = (TextView) findViewById(R.id.secondaryInfo);

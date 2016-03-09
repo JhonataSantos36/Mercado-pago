@@ -256,11 +256,11 @@ public class MercadoPago {
         }
     }
 
-    public void getInstructions(Long paymentId, final Callback<Instruction> callback) {
+    public void getInstructions(Long paymentId, String paymentMethodId, final Callback<Instruction> callback) {
 
         if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {
             PaymentService service = mRestAdapterMPApi.create(PaymentService.class);
-            service.getInstruction(this.mKey, paymentId, callback);
+            service.getInstruction(this.mKey, paymentId, paymentMethodId, callback);
         } else {
             throw new RuntimeException("Unsupported key type for this method");
         }

@@ -6,9 +6,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Html;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -77,11 +78,17 @@ public class PaymentVaultActivity extends AppCompatActivity {
     protected String mPurchaseTitle;
     protected String mItemImageUri;
     protected String mCurrencyId;
+    private TextView mActivityTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payment_vault);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setElevation(0);
+
         getActivityParameters();
 
         try {
@@ -104,7 +111,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
         }
         else {
             String initialTitle = getString(R.string.mpsdk_title_activity_payment_vault);
-            setFormattedTitle(initialTitle);
+            setActivityTitle(initialTitle);
             LayoutUtil.showProgressLayout(this);
             getPaymentMethodSearch();
         }
@@ -239,6 +246,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
 
     protected void initializeControls() {
         initializeGroupRecyclerView();
+        mActivityTitle = (TextView) findViewById(R.id.title);
     }
 
     @Override
@@ -261,7 +269,6 @@ public class PaymentVaultActivity extends AppCompatActivity {
     protected void initializeGroupRecyclerView() {
         mSearchItemsRecyclerView = (RecyclerView) findViewById(R.id.groupsList);
         mSearchItemsRecyclerView.setHasFixedSize(true);
-        mSearchItemsRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
         mSearchItemsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
@@ -372,7 +379,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
     }
 
     protected void showItemChildren(PaymentMethodSearchItem item) {
-        setFormattedTitle(item.getChildrenHeader());
+        setActivityTitle(item.getChildrenHeader());
         populateSearchList(item.getChildren());
     }
 
@@ -484,8 +491,8 @@ public class PaymentVaultActivity extends AppCompatActivity {
         finish();
     }
 
-    protected void setFormattedTitle(String title) {
-        setTitle(Html.fromHtml("<b><small>" + title + "</small></b>"));
+    protected void setActivityTitle(String title) {
+        mActivityTitle.setText(title);
     }
 
     @Override

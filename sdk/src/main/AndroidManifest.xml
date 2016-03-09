@@ -49,9 +49,8 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".CheckoutActivity"
-            android:label="@string/mpsdk_title_activity_checkout"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.MercadoPagoTheme" />
+            android:theme="@style/Theme.MercadoPagoTheme.NoActionBar" />
         <activity
             android:name=".InstallAppActivity"
             android:label="@string/mpsdk_title_activity_install_app"
@@ -71,9 +70,8 @@
         <activity android:name=".GuessingNewCardActivity" />
         <activity
             android:name=".PaymentVaultActivity"
-            android:label="@string/mpsdk_title_activity_payment_vault"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.MercadoPagoTheme" />
+            android:theme="@style/Theme.MercadoPagoTheme.NoActionBar"/>
         <activity
             android:name=".InstructionsActivity"
             android:screenOrientation="portrait"
