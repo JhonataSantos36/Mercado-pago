@@ -2,10 +2,11 @@ package com.mercadopago.callbacks;
 
 import com.mercadopago.model.PaymentMethod;
 
-/**
- * Created by mreverter on 28/12/15.
- */
+import java.util.List;
+
 public interface PaymentMethodSelectionCallback {
+    void onPaymentMethodListSet(List<PaymentMethod> paymentMethodList);
     void onPaymentMethodSet(PaymentMethod paymentMethod);
     void onPaymentMethodCleared();
+//    void onMaxCardNumberReached();
 }

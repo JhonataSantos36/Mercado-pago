@@ -32,5 +32,6 @@ public class MPEditText extends EditText {
             Typeface tf = Typeface.createFromAsset(getContext().getAssets(), mTypeName);
             setTypeface(tf);
         }
+
     }
 }

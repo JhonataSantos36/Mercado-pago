@@ -857,7 +857,7 @@ public class VaultActivity extends AppCompatActivity {
                 .setPublicKey(mMerchantPublicKey)
                 .setPaymentMethod(mTempPaymentMethod)
                 .setRequireSecurityCode(false)
-                .startNewCardActivity();
+                .startGuessingCardActivity();
     }
 
     protected void startPaymentMethodsActivity() {

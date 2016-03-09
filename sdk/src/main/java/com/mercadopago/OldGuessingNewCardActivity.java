@@ -31,7 +31,7 @@ import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-public class GuessingNewCardActivity extends NewCardActivity {
+public class OldGuessingNewCardActivity extends NewCardActivity {
 
     //Activity parameters
     protected Boolean mRequireIssuer;
@@ -122,20 +122,30 @@ public class GuessingNewCardActivity extends NewCardActivity {
 
         List<PaymentMethod> supportedPaymentMethods = mPaymentPreference.getSupportedPaymentMethods(paymentMethods);
 
-        mPaymentMethodGuessingController = new PaymentMethodGuessingController(this, supportedPaymentMethods, mSupportedPaymentTypeId,
-                new PaymentMethodSelectionCallback(){
-                    @Override
-                    public void onPaymentMethodSet(PaymentMethod paymentMethod) {
-                        mPaymentMethod = paymentMethod;
-                        setLayouts();
-                    }
-
-                    @Override
-                    public void onPaymentMethodCleared() {
-                        mPaymentMethod = null;
-                        setLayouts();
-                    }
-                });
+//        mPaymentMethodGuessingController = new PaymentMethodGuessingController(this, supportedPaymentMethods, mSupportedPaymentTypeId,
+//                new PaymentMethodSelectionCallback(){
+//                    @Override
+//                    public void onPaymentMethodSet(PaymentMethod paymentMethod) {
+//                        mPaymentMethod = paymentMethod;
+//                        setLayouts();
+//                    }
+//
+//                    @Override
+//                    public void onPaymentMethodCleared() {
+//                        mPaymentMethod = null;
+//                        setLayouts();
+//                    }
+//
+//                    @Override
+//                    public void onMaxCardNumberReached() {
+//
+//                    }
+//
+//                    @Override
+//                    public void onPaymentMethodListSet(List<PaymentMethod> paymentMethodList) {
+//
+//                    }
+//                });
     }
 
     private void createPaymentMethodPreference() {
@@ -245,11 +255,11 @@ public class GuessingNewCardActivity extends NewCardActivity {
     }
 
     protected boolean validatePaymentMethod() {
-        if(mPaymentMethodGuessingController.getCardNumberText().length() >= MercadoPago.BIN_LENGTH && mPaymentMethod == null)
-        {
-            mPaymentMethodGuessingController.setPaymentMethodError(getString(com.mercadopago.R.string.mpsdk_invalid_field));
-            return false;
-        }
+//        if(mPaymentMethodGuessingController.getCardNumberText().length() >= MercadoPago.BIN_LENGTH && mPaymentMethod == null)
+//        {
+//            mPaymentMethodGuessingController.setPaymentMethodError(getString(com.mercadopago.R.string.mpsdk_invalid_field));
+//            return false;
+//        }
         return true;
     }
 
@@ -257,24 +267,24 @@ public class GuessingNewCardActivity extends NewCardActivity {
     public boolean validateCardNumber(CardToken cardToken, boolean requestFocus)
     {
         boolean valid = true;
-        if(mPaymentMethodGuessingController.getCardNumberText().equals(""))
-        {
-            mPaymentMethodGuessingController.setCardNumberError(getString(R.string.mpsdk_invalid_empty_card));
-
-            if(requestFocus)
-                mPaymentMethodGuessingController.requestFocusForCardNumber();
-            valid = false;
-        }
-        else {
-            try {
-                validateCardNumber(cardToken);
-            } catch (Exception ex) {
-                mPaymentMethodGuessingController.setCardNumberError(ex.getMessage());
-                if (requestFocus)
-                    mPaymentMethodGuessingController.requestFocusForCardNumber();
-                valid = false;
-            }
-        }
+//        if(mPaymentMethodGuessingController.getCardNumberText().equals(""))
+//        {
+//            mPaymentMethodGuessingController.setCardNumberError(getString(R.string.mpsdk_invalid_empty_card));
+//
+//            if(requestFocus)
+//                mPaymentMethodGuessingController.requestFocusForCardNumber();
+//            valid = false;
+//        }
+//        else {
+//            try {
+//                validateCardNumber(cardToken);
+//            } catch (Exception ex) {
+//                mPaymentMethodGuessingController.setCardNumberError(ex.getMessage());
+//                if (requestFocus)
+//                    mPaymentMethodGuessingController.requestFocusForCardNumber();
+//                valid = false;
+//            }
+//        }
         return valid;
     }
 
@@ -320,7 +330,7 @@ public class GuessingNewCardActivity extends NewCardActivity {
 
     protected void getIssuersAsync() {
         if (mPaymentMethod != null) {
-            mMercadoPago.getIssuers(mPaymentMethod.getId(), new Callback<List<Issuer>>() {
+            mMercadoPago.getIssuers(mPaymentMethod.getId(), "", new Callback<List<Issuer>>() {
                 @Override
                 public void success(List<Issuer> issuers, Response response) {
                     populateIssuerSpinner(issuers);

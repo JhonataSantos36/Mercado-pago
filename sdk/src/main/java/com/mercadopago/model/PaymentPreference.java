@@ -14,11 +14,19 @@ public class PaymentPreference implements Serializable {
     @SerializedName("installments")
     private Integer maxInstallments;
     private Integer defaultInstallments;
+
+    //List<String> excludedPaymentMethodIds
     private List<PaymentMethod> excludedPaymentMethods;
+
+    //List<String> excludedPaymentTypeIds
     private List<PaymentType> excludedPaymentTypes;
+
     private String defaultPaymentMethodId;
 
-    public void setMaxInstallments(Integer installments) {
+    private String defaultPaymentTypeId;
+
+
+    public void setMaxAcceptedInstallments(Integer installments) {
         this.maxInstallments = installments;
     }
 
@@ -52,6 +60,10 @@ public class PaymentPreference implements Serializable {
         this.defaultPaymentMethodId = defaultPaymentMethodId;
     }
 
+    public void setDefaultPaymentTypeId(String defaultPaymentTypeId) {
+        this.defaultPaymentTypeId = defaultPaymentTypeId;
+    }
+
     public Integer getMaxInstallments() {
         return maxInstallments;
     }
@@ -74,7 +86,6 @@ public class PaymentPreference implements Serializable {
 
     public List<String> getExcludedPaymentTypes() {
         if(this.excludedPaymentTypes != null) {
-
             List<String> excludedPaymentTypeIds = new ArrayList<>();
             for (PaymentType paymentType : this.excludedPaymentTypes) {
                 excludedPaymentTypeIds.add(paymentType.getId());
@@ -87,6 +98,10 @@ public class PaymentPreference implements Serializable {
 
     public String getDefaultPaymentMethodId() {
         return defaultPaymentMethodId;
+    }
+
+    public String getDefaultPaymentTypeId() {
+        return defaultPaymentTypeId;
     }
 
     public List<PayerCost> getInstallmentsBelowMax(List<PayerCost> payerCosts){

@@ -20,11 +20,11 @@ import java.util.List;
 public class Step5Activity extends ExampleActivity {
 
 
-    protected List<String> mExcludedPaymentTypes = new ArrayList<String>(){{
+    protected List<String> mExcludedPaymentTypesIds = new ArrayList<String>(){{
 
     }};
     protected List<String> mExcludedPaymentMethodIds = new ArrayList<String>(){{
-        add("visa");
+//        add("visa");
     }};
     protected PaymentPreference mPaymentPreference;
 
@@ -39,8 +39,8 @@ public class Step5Activity extends ExampleActivity {
         mPaymentPreference = new PaymentPreference();
         mPaymentPreference.setDefaultInstallments(ExamplesUtils.DUMMY_DEFAULT_INSTALLMENTS);
         mPaymentPreference.setExcludedPaymentMethodIds(mExcludedPaymentMethodIds);
-        mPaymentPreference.setExcludedPaymentTypeIds(mExcludedPaymentTypes);
-        mPaymentPreference.setMaxInstallments(ExamplesUtils.DUMMY_MAX_INSTALLMENTS);
+        mPaymentPreference.setExcludedPaymentTypeIds(mExcludedPaymentTypesIds);
+        mPaymentPreference.setMaxAcceptedInstallments(ExamplesUtils.DUMMY_MAX_INSTALLMENTS);
     }
 
     @Override
@@ -76,6 +76,10 @@ public class Step5Activity extends ExampleActivity {
     }
 
     public void submitSimpleForm(View view) {
+        PaymentPreference paymentPreference = new PaymentPreference();
+        paymentPreference.setExcludedPaymentTypeIds(mExcludedPaymentTypesIds);
+        paymentPreference.setExcludedPaymentMethodIds(mExcludedPaymentMethodIds);
+        paymentPreference.setMaxAcceptedInstallments(ExamplesUtils.DUMMY_MAX_INSTALLMENTS);
         // Call final vault activity
         new MercadoPago.StartActivityBuilder()
                 .setActivity(this)
@@ -90,6 +94,11 @@ public class Step5Activity extends ExampleActivity {
     }
 
     public void submitGuessingForm(View view){
+        PaymentPreference paymentPreference = new PaymentPreference();
+        paymentPreference.setExcludedPaymentTypeIds(mExcludedPaymentTypesIds);
+        paymentPreference.setExcludedPaymentMethodIds(mExcludedPaymentMethodIds);
+        paymentPreference.setMaxAcceptedInstallments(ExamplesUtils.DUMMY_MAX_INSTALLMENTS);
+        paymentPreference.setDefaultInstallments(ExamplesUtils.DUMMY_DEFAULT_INSTALLMENTS);
         // Call final vault activity
         new MercadoPago.StartActivityBuilder()
                 .setActivity(this)
@@ -100,7 +109,6 @@ public class Step5Activity extends ExampleActivity {
                 .setAmount(ExamplesUtils.DUMMY_ITEM_UNIT_PRICE)
                 .setPaymentPreference(mPaymentPreference)
                 .setShowBankDeals(true)
-                .setGuessingCardFormEnabled(true)
                 .startPaymentVaultActivity();
     }
 }

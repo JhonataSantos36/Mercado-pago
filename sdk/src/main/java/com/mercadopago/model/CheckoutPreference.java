@@ -16,8 +16,10 @@ public class CheckoutPreference implements Serializable {
     private String id;
     private List<Item> items;
     private Payer payer;
+
     @SerializedName("payment_methods")
     private PaymentPreference paymentPreference;
+
     private Date expirationDateTo;
     private Date expirationDateFrom;
 
@@ -121,8 +123,8 @@ public class CheckoutPreference implements Serializable {
         this.expirationDateFrom = date;
     }
 
-    public void setPaymentPreference(PaymentPreference paymentMethods){
-        this.paymentPreference = paymentMethods;
+    public void setPaymentPreference(PaymentPreference paymentPreference){
+        this.paymentPreference = paymentPreference;
     }
 
     public BigDecimal getAmount() {
@@ -168,14 +170,15 @@ public class CheckoutPreference implements Serializable {
         if(paymentPreference != null)
             return paymentPreference.getMaxInstallments();
         else
-            return null;    }
-
+            return null;
+    }
 
     public Integer getDefaultInstallments() {
         if(paymentPreference != null)
             return paymentPreference.getDefaultInstallments();
         else
-            return null;    }
+            return null;
+    }
 
     public List<String> getExcludedPaymentMethods() {
         if(paymentPreference != null)
@@ -188,7 +191,8 @@ public class CheckoutPreference implements Serializable {
         if(paymentPreference != null)
             return paymentPreference.getExcludedPaymentTypes();
         else
-            return null;    }
+            return null;
+    }
 
     public String getDefaultPaymentMethodId() {
         if(paymentPreference != null)
@@ -196,7 +200,6 @@ public class CheckoutPreference implements Serializable {
         else
             return null;
     }
-
 
     public PaymentPreference getPaymentPreference() {
         return paymentPreference;

@@ -35,17 +35,18 @@ import retrofit.client.Response;
 
 public class Step1Activity extends ExampleActivity {
 
-    protected List<String> mExcludedPaymentTypes = new ArrayList<String>(){{
+    protected List<String> mExcludedPaymentTypeIds = new ArrayList<String>(){{
         add("atm");
         add("ticket");
         add("digital_currency");
     }};
 
-    protected List<String> mExcludedPaymentIds = new ArrayList<String>(){{
+    protected List<String> mExcludedPaymentMethodIds = new ArrayList<String>(){{
         add("visa");
     }};
     protected Activity mActivity;
     protected PaymentPreference mPaymentPreference;
+    protected BigDecimal mAmount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,12 +55,16 @@ public class Step1Activity extends ExampleActivity {
         setContentView(R.layout.activity_step1);
         createPaymentPreference();
         mActivity = this;
+        mPaymentPreference = new PaymentPreference();
+        mPaymentPreference.setExcludedPaymentTypeIds(mExcludedPaymentTypeIds);
+        mPaymentPreference.setExcludedPaymentMethodIds(mExcludedPaymentMethodIds);
+        mAmount = ExamplesUtils.DUMMY_ITEM_UNIT_PRICE;
     }
 
     private void createPaymentPreference() {
         mPaymentPreference = new PaymentPreference();
-        mPaymentPreference.setExcludedPaymentMethodIds(mExcludedPaymentIds);
-        mPaymentPreference.setExcludedPaymentTypeIds(mExcludedPaymentTypes);
+        mPaymentPreference.setExcludedPaymentMethodIds(mExcludedPaymentMethodIds);
+        mPaymentPreference.setExcludedPaymentTypeIds(mExcludedPaymentTypeIds);
     }
 
     @Override
@@ -97,7 +102,7 @@ public class Step1Activity extends ExampleActivity {
                     } else if (data.getBooleanExtra("backButtonPressed", false)) {
 
                         PaymentPreference paymentPreference = new PaymentPreference();
-                        paymentPreference.setExcludedPaymentTypeIds(mExcludedPaymentTypes);
+                        paymentPreference.setExcludedPaymentTypeIds(mExcludedPaymentTypeIds);
 
                         new MercadoPago.StartActivityBuilder()
                                 .setActivity(this)
@@ -177,7 +182,8 @@ public class Step1Activity extends ExampleActivity {
     }
 
     public void submitGuessingForm(View view) {
-        ExamplesUtils.startGuessingCardActivity(this, ExamplesUtils.DUMMY_MERCHANT_PUBLIC_KEY, true);
+        ExamplesUtils.startGuessingCardActivity(this, ExamplesUtils.DUMMY_MERCHANT_PUBLIC_KEY, true,
+                mPaymentPreference, mAmount);
     }
 
 }

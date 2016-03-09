@@ -22,6 +22,7 @@ import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentMethodSearch;
 import com.mercadopago.model.PaymentMethodSearchItem;
+import com.mercadopago.model.PaymentPreference;
 import com.mercadopago.model.Token;
 import com.mercadopago.uicontrollers.ViewControllerFactory;
 import com.mercadopago.uicontrollers.payercosts.PayerCostViewController;
@@ -48,6 +49,7 @@ public class CheckoutActivity extends AppCompatActivity {
     protected CheckoutPreference mCheckoutPreference;
     protected String mMerchantPublicKey;
     protected Boolean mShowBankDeals;
+    protected PaymentPreference mPaymentPreference;
 
     //Local vars
     protected MercadoPago mMercadoPago;
@@ -478,7 +480,7 @@ public class CheckoutActivity extends AppCompatActivity {
     }
 
     private void animateBackToPaymentVault() {
-        overridePendingTransition(R.anim.slide_left_to_right_in, R.anim.silde_left_to_right_out);
+        overridePendingTransition(R.anim.slide_left_to_right_in, R.anim.slide_left_to_right_out);
     }
 
     protected void finishWithApiException(Intent data) {

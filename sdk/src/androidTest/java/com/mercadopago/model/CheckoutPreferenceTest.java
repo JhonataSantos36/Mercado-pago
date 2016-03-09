@@ -495,7 +495,7 @@ public class CheckoutPreferenceTest extends TestCase {
         preference.setItems(items);
 
         PaymentPreference paymentPreference = new PaymentPreference();
-        paymentPreference.setMaxInstallments(1);
+        paymentPreference.setMaxAcceptedInstallments(1);
         paymentPreference.setDefaultInstallments(-3);
         preference.setPaymentPreference(paymentPreference);
 
@@ -513,7 +513,7 @@ public class CheckoutPreferenceTest extends TestCase {
         preference.setItems(items);
 
         PaymentPreference paymentPreference = new PaymentPreference();
-        paymentPreference.setMaxInstallments(-1);
+        paymentPreference.setMaxAcceptedInstallments(-1);
         paymentPreference.setDefaultInstallments(3);
         preference.setPaymentPreference(paymentPreference);
 
@@ -531,7 +531,7 @@ public class CheckoutPreferenceTest extends TestCase {
         preference.setItems(items);
 
         PaymentPreference paymentPreference = new PaymentPreference();
-        paymentPreference.setMaxInstallments(1);
+        paymentPreference.setMaxAcceptedInstallments(1);
         paymentPreference.setDefaultInstallments(3);
         preference.setPaymentPreference(paymentPreference);
 
@@ -549,7 +549,7 @@ public class CheckoutPreferenceTest extends TestCase {
         preference.setItems(items);
 
         PaymentPreference paymentPreference = new PaymentPreference();
-        paymentPreference.setMaxInstallments(-1);
+        paymentPreference.setMaxAcceptedInstallments(-1);
         paymentPreference.setDefaultInstallments(-1);
         preference.setPaymentPreference(paymentPreference);
 
@@ -587,7 +587,7 @@ public class CheckoutPreferenceTest extends TestCase {
         preference.setActiveFrom(pastDate);
 
         PaymentPreference paymentPreference = new PaymentPreference();
-        paymentPreference.setMaxInstallments(1);
+        paymentPreference.setMaxAcceptedInstallments(1);
         paymentPreference.setDefaultInstallments(1);
         paymentPreference.setExcludedPaymentTypeIds(paymentTypes);
         preference.setPaymentPreference(paymentPreference);
@@ -625,7 +625,7 @@ public class CheckoutPreferenceTest extends TestCase {
         preference.setActiveFrom(pastDate);
 
         PaymentPreference paymentPreference = new PaymentPreference();
-        paymentPreference.setMaxInstallments(1);
+        paymentPreference.setMaxAcceptedInstallments(1);
         paymentPreference.setDefaultInstallments(1);
         paymentPreference.setExcludedPaymentTypeIds(paymentTypes);
         preference.setPaymentPreference(paymentPreference);
@@ -649,7 +649,7 @@ public class CheckoutPreferenceTest extends TestCase {
         preference.setActiveFrom(pastDate);
 
         PaymentPreference paymentPreference = new PaymentPreference();
-        paymentPreference.setMaxInstallments(-1);
+        paymentPreference.setMaxAcceptedInstallments(-1);
         paymentPreference.setDefaultInstallments(-3);
         preference.setPaymentPreference(paymentPreference);
 

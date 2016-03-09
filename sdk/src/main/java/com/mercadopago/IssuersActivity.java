@@ -88,7 +88,7 @@ public class    IssuersActivity extends AppCompatActivity {
                 .setPublicKey(merchantPublicKey)
                 .build();
 
-        mercadoPago.getIssuers(mPaymentMethod.getId(), new Callback<List<Issuer>>() {
+        mercadoPago.getIssuers(mPaymentMethod.getId(),"", new Callback<List<Issuer>>() {
             @Override
             public void success(List<Issuer> issuers, Response response) {
                 mRecyclerView.setAdapter(new IssuersAdapter(issuers, new View.OnClickListener() {

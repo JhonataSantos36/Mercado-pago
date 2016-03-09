@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/activity_new_card_container"
+    android:layout_width="280dp"
+    android:layout_height="154dp">
+
+
+    <FrameLayout
+        android:id="@+id/activity_new_card_form_color_back"
+        android:layout_width="240dp"
+        android:layout_height="144dp"
+        android:layout_gravity="center"
+        android:background="@drawable/new_card_layout">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <FrameLayout
+                android:layout_width="240dp"
+                android:layout_height="33dp"
+                android:layout_marginTop="23dp"
+                android:background="@drawable/card_back_band">
+            </FrameLayout>
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal">
+                <FrameLayout
+                    android:layout_width="200dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center_vertical"
+                    android:background="@drawable/card_ccv_bakg">
+                </FrameLayout>
+                <FrameLayout
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_gravity="end"
+                    android:background="@drawable/card_back_ccv">
+                    <com.mercadopago.views.MPTextView
+                        android:id="@+id/cardSecurityCodeView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:singleLine="true"
+                        android:textColor="@color/mpsdk_base_text"
+                        android:textSize="16sp"/>
+                </FrameLayout>
+
+            </FrameLayout>
+
+        </LinearLayout>
+
+        <FrameLayout
+            android:layout_width="156dp"
+            android:layout_height="144dp"
+            android:background="@drawable/card_back_shadow">
+        </FrameLayout>
+    </FrameLayout>
+
+    <ImageView
+        android:id="@+id/card_shadow_border"
+        android:src="@drawable/card_shadow_rounded"
+        android:layout_width="250dp"
+        android:layout_height="154dp"
+        android:layout_gravity="center"/>
+
+</FrameLayout>
+
+
+
+
+
+

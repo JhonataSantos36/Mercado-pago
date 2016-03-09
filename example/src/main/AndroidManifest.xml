@@ -64,6 +64,9 @@
             android:name=".step6.Step6Activity"
             android:label="@string/title_activity_step6" >
         </activity>
+        <activity android:name=".step7.Step7Activity"
+            android:label="Nuevo TC">
+        </activity>
     </application>
 
 </manifest>

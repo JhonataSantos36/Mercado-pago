@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="5dp">
+
+    <LinearLayout
+        android:id="@+id/installmentsItem"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/list_item_height"
+        android:weightSum="1">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.9"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_gravity="center_vertical"
+            android:orientation="horizontal">
+            <com.mercadopago.views.MPTextView
+                android:id="@+id/adapter_installments_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginStart="8dp"
+                android:textColor="@color/mpsdk_installments_text"
+                android:text="3 de 173"
+                android:textSize="22sp"/>
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginBottom="3dp"
+                android:layout_gravity="bottom">
+                <com.mercadopago.views.MPTextView
+                    android:id="@+id/adapter_installments_zero_rate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/mpsdk_installments_zero_rate"
+                    android:text="@string/mpsdk_zero_rate"
+                    android:textSize="13sp"
+                    android:visibility="visible"/>
+                <com.mercadopago.views.MPTextView
+                    android:id="@+id/adapter_installments_with_rate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1040"
+                    android:textColor="@color/mpsdk_form_text"
+                    android:textSize="16sp"
+                    android:visibility="gone"/>
+            </FrameLayout>
+
+
+        </LinearLayout>
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.1"
+            android:layout_marginRight="8dp"
+            android:layout_marginEnd="8dp">
+            <FrameLayout
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center"
+                android:background="@drawable/arrow_right_blue"/>
+
+        </FrameLayout>
+
+
+    </LinearLayout>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="312dp"
+        android:layout_height="1dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@color/mpsdk_separator">
+
+    </LinearLayout>
+
+
+</LinearLayout>

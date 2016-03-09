@@ -13,6 +13,8 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.mercadopago.adapters.PaymentMethodSearchItemAdapter;
 import com.mercadopago.callbacks.OnSelectedCallback;
 import com.mercadopago.core.MercadoPago;
@@ -23,6 +25,8 @@ import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentPreference;
 import com.mercadopago.model.PaymentMethodSearch;
 import com.mercadopago.model.PaymentMethodSearchItem;
+import com.mercadopago.model.PaymentPreference;
+import com.mercadopago.model.PaymentType;
 import com.mercadopago.model.Token;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.CurrenciesUtil;
@@ -30,6 +34,7 @@ import com.mercadopago.util.LayoutUtil;
 import com.mercadopago.util.MercadoPagoUtil;
 import com.mercadopago.views.MPTextView;
 
+import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -53,7 +58,6 @@ public class PaymentVaultActivity extends AppCompatActivity {
     protected RecyclerView mSearchItemsRecyclerView;
     protected ImageView mShoppingCartIcon;
     protected View mContentView;
-    protected MPTextView mActivityTitle;
     protected AppBarLayout mAppBar;
 
     // Current values
@@ -73,6 +77,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
     protected String mCurrencyId;
     protected ShoppingCartFragment mShoppingCartFragment;
     protected PaymentPreference mPaymentPreference;
+    private MPTextView mActivityTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -345,6 +350,14 @@ public class PaymentVaultActivity extends AppCompatActivity {
         overridePendingTransition(R.anim.slide_right_to_left_in, R.anim.slide_right_to_left_out);
     }
 
+    private static void putListExtra(Intent intent, String listName, List<String> list) {
+        if (list != null) {
+            Gson gson = new Gson();
+            Type listType = new TypeToken<List<String>>(){}.getType();
+            intent.putExtra(listName, gson.toJson(list, listType));
+        }
+    }
+
     protected void showSelectedItemChildren() {
         setActivityTitle(mSelectedSearchItem.getChildrenHeader());
         populateSearchList(mSelectedSearchItem.getChildren());
@@ -355,8 +368,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
         MercadoPago.StartActivityBuilder builder = new MercadoPago.StartActivityBuilder()
                 .setActivity(this)
                 .setPublicKey(mMerchantPublicKey)
-                .setPaymentPreference(mPaymentPreference)
-                .setPaymentTypeId(item.getId());
+                .setPaymentPreference(mPaymentPreference);
 
         if(MercadoPagoUtil.isCardPaymentType(item.getId())){
             builder.startGuessingCardActivity();
@@ -466,6 +478,19 @@ public class PaymentVaultActivity extends AppCompatActivity {
         animatePaymentMethodSelection();
     }
 
+    protected void finishWithResult() {
+        Intent returnIntent = new Intent();
+        returnIntent.putExtra("token", mToken);
+        if (mSelectedIssuer != null) {
+            returnIntent.putExtra("issuer", mSelectedIssuer);
+        }
+        returnIntent.putExtra("payerCost", mSelectedPayerCost);
+        returnIntent.putExtra("paymentMethod", mSelectedPaymentMethod);
+        this.setResult(Activity.RESULT_OK, returnIntent);
+        this.finish();
+        animatePaymentMethodSelection();
+    }
+
     protected void finishWithApiException(Intent data) {
         setResult(Activity.RESULT_CANCELED, data);
         this.finish();
@@ -490,7 +515,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
         finish();
 
         if(isItemSelectedStart()) {
-            overridePendingTransition(R.anim.slide_left_to_right_in, R.anim.silde_left_to_right_out);
+            overridePendingTransition(R.anim.slide_left_to_right_in, R.anim.slide_left_to_right_out);
         }
     }
 }

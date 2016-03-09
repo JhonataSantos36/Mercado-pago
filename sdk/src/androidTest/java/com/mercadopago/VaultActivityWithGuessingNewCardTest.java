@@ -59,7 +59,7 @@ public class VaultActivityWithGuessingNewCardTest extends BaseTest<VaultActivity
         returnIntent.putExtra("payerCost", StaticMock.getPayerCosts(getApplicationContext()).get(2));
         Instrumentation.ActivityResult installmentsMockedResult = new Instrumentation.ActivityResult(Activity.RESULT_OK, returnIntent);
 
-        Instrumentation.ActivityMonitor guessingCardFormMonitor = getInstrumentation().addMonitor(GuessingNewCardActivity.class.getName(), guessingCardFormMockedResult, true);
+        Instrumentation.ActivityMonitor guessingCardFormMonitor = getInstrumentation().addMonitor(OldGuessingNewCardActivity.class.getName(), guessingCardFormMockedResult, true);
         Instrumentation.ActivityMonitor installmentsActivityMonitor = getInstrumentation().addMonitor(InstallmentsActivity.class.getName(), installmentsMockedResult, true);
         Instrumentation.ActivityMonitor customerCardsActivityMonitor = getInstrumentation().addMonitor(CustomerCardsActivity.class.getName(), customerCardsMockedResult , true);
 

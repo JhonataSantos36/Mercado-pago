@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/identification_card_container"
+    android:layout_width="280dp"
+    android:layout_height="154dp">
+
+
+    <FrameLayout
+        android:layout_width="270dp"
+        android:layout_height="144dp"
+        android:layout_gravity="center"
+        android:background="@drawable/new_identification_layout">
+
+        <FrameLayout
+            android:layout_width="175dp"
+            android:layout_height="144dp"
+            android:background="@drawable/card_back_shadow">
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:weightSum="1"
+            android:orientation="horizontal">
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="6dp"
+                android:layout_marginStart="6dp"
+                android:layout_weight="0.3">
+                <FrameLayout
+                    android:layout_width="69dp"
+                    android:layout_height="69dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/white_circle">
+                    <FrameLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal|bottom"
+                        android:background="@drawable/identification_man">
+                    </FrameLayout>
+                </FrameLayout>
+                <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="22dp"
+                    android:layout_marginRight="18dp"
+                    android:layout_marginEnd="18dp"
+                    android:background="@drawable/identification_icon">
+
+                </FrameLayout>
+
+            </FrameLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.7"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginRight="6dp"
+                android:layout_marginEnd="6dp"
+                android:orientation="vertical">
+
+                <com.mercadopago.views.MPTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAllCaps="true"
+                    android:textColor="@color/mpsdk_base_text"
+                    android:text="@string/mpsdk_card_identification_label"
+                    android:textSize="16sp"
+                    app:fontStyle="regular"/>
+
+                <FrameLayout
+                    android:id="@+id/idNumberClickableZone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="17dp">
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:layout_marginStart="-16dp"
+                        android:layout_marginLeft="-16dp">
+
+                        <include layout="@layout/identification_cardholder" />
+                    </FrameLayout>
+
+                    <com.mercadopago.views.MPTextView
+                        android:id="@+id/idNumberView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/mpsdk_base_text"
+                        android:textSize="17sp"
+                        android:visibility="invisible"
+                        app:fontStyle="regular"/>
+
+                </FrameLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+    <ImageView
+        android:id="@+id/id_shadow_border"
+        android:src="@drawable/card_shadow_rounded"
+        android:layout_width="280dp"
+        android:layout_height="154dp"
+        android:layout_gravity="center"/>
+</FrameLayout>
+
+

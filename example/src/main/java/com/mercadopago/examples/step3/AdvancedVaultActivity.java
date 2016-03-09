@@ -433,6 +433,7 @@ public class AdvancedVaultActivity extends SimpleVaultActivity {
                 .setPublicKey(mMerchantPublicKey)
                 .setRequireIssuer(true)
                 .setRequireSecurityCode(false)
+                .setPaymentPreference(null)
                 .startGuessingCardActivity();
     }
 }

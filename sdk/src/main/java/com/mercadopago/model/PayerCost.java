@@ -2,6 +2,7 @@ package com.mercadopago.model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 public class PayerCost implements Serializable {
@@ -82,5 +83,18 @@ public class PayerCost implements Serializable {
     @Override
     public String toString() {
         return installments.toString();
+    }
+
+    public static List<PayerCost> getPayerCosts(PaymentPreference paymentPreference, List<PayerCost> payerCosts) {
+        if (paymentPreference.getMaxInstallments() == null) {
+            return payerCosts;
+        }
+        List<PayerCost> ans = new ArrayList<>();
+        for (PayerCost payerCost: payerCosts) {
+            if (payerCost.getInstallments() <= paymentPreference.getMaxInstallments()) {
+                ans.add(payerCost);
+            }
+        }
+        return ans;
     }
 }
