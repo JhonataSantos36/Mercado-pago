@@ -87,6 +87,7 @@
     <string name="mpsdk_error_message_invalid_merchant">Comercio inválido</string>
     <string name="mpsdk_error_message_invalid_preference">Preferencia inválida</string>
     <string name="mpsdk_payment_amount_to_pay">Total a pagar</string>
+    <string name="mpsdk_processed_by_mercado_pago">© 1999–2015 Procesado por MercadoPago</string>
 
 
 </resources>

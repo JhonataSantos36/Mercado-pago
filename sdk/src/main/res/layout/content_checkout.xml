@@ -140,9 +140,10 @@
                 <TextView
                     android:layout_gravity="center"
                     android:layout_marginTop="30dp"
+                    android:layout_marginBottom="20dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="© 1999-2015 Procesado por MercadoPago"
+                    android:text="@string/mpsdk_processed_by_mercado_pago"
                     style="@style/mpsdk_smaller_warm_grey_thin_bold_text"/>
             </LinearLayout>
     </RelativeLayout>

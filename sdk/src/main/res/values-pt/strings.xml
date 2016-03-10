@@ -70,5 +70,5 @@
     <string name="mpsdk_text_terms_and_conditions_end">do MercadoPago</string>
 
     <string name="mpsdk_error_message_invalid_amount">Montante inválido</string>
-
+    <string name="mpsdk_processed_by_mercado_pago">© 1999–2015 Processado pelo MercadoPago</string>
 </resources>

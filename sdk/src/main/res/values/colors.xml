@@ -10,7 +10,7 @@
     <color name="colorAccent">#00B2EB</color>
     <color name="mpsdk_colorPrimary">#30AFE2</color>
     <color name="mpsdk_icon_image_color">#1D9FDE</color>
-    <color name="mpsdk_warm_grey">#999999</color>
+    <color name="mpsdk_warm_grey">#b7999999</color>
     <color name="commentColor">#999</color>
     <color name="mpsdk_shopping_cart_background">#5ABEE7</color>
     <color name="mpsdk_color_instructions_title_background">#fbf8e3</color>
