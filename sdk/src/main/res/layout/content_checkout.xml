@@ -118,6 +118,7 @@
                     android:layout_width="match_parent"
                     android:gravity="center"
                     android:layout_height="wrap_content"
+                    android:lineSpacingMultiplier="1.5"
                     style="@style/mpsdk_smaller_warm_grey_thin_bold_text"/>
                 <Button
                     android:id="@+id/payButton"
