@@ -18,6 +18,7 @@ import com.mercadopago.model.Instruction;
 import com.mercadopago.model.InstructionActionInfo;
 import com.mercadopago.model.InstructionReference;
 import com.mercadopago.model.Payment;
+import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.LayoutUtil;
 
@@ -43,6 +44,7 @@ public class InstructionsActivity extends AppCompatActivity {
     //Params
     private Payment mPayment;
     private String mMerchantPublicKey;
+    private PaymentMethod mPaymentMethod;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +64,7 @@ public class InstructionsActivity extends AppCompatActivity {
 
         LayoutUtil.showProgressLayout(this);
         //TODO cambiar por mPayment.getId() cuando estén andando los servicios
-        mercadoPago.getInstructions((long) 1826446924, "oxxo", new Callback<Instruction>() {
+        mercadoPago.getInstructions((long) 1826446924, mPaymentMethod.getId(), new Callback<Instruction>() {
             @Override
             public void success(Instruction instruction, Response response) {
                 showInstructions(instruction);
@@ -159,6 +161,7 @@ public class InstructionsActivity extends AppCompatActivity {
     private void getActivityParameters() {
         mPayment = (Payment) getIntent().getExtras().getSerializable("payment");
         mMerchantPublicKey = this.getIntent().getStringExtra("merchantPublicKey");
+        mPaymentMethod = (PaymentMethod) getIntent().getSerializableExtra("paymentMethod");
     }
 
     private void initializeControls() {

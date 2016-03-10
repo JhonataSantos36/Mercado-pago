@@ -3,6 +3,7 @@ package com.mercadopago.controllers;
 import android.app.Activity;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.text.Spanned;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
@@ -77,8 +78,8 @@ public class ShoppingCartController {
         tintTogglerDrawableWithColor(mActivity.getResources().getColor(R.color.mpsdk_white));
     }
 
-    public String getAmountLabel(BigDecimal amount, String currencyId) {
-        return CurrenciesUtil.formatNumber(amount, currencyId);
+    public Spanned getAmountLabel(BigDecimal amount, String currencyId) {
+        return CurrenciesUtil.formatNumber(amount, currencyId, true, true);
     }
 
     public void toggle(boolean withAnimation) {

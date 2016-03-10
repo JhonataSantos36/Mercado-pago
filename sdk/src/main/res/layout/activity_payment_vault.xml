@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     tools:context="com.mercadopago.PaymentVaultActivity">
-
+    <include layout="@layout/view_refresh_layout"/>
+    <include layout="@layout/view_progress_bar"/>
     <android.support.design.widget.AppBarLayout
         app:elevation="0dp"
         android:layout_width="match_parent"

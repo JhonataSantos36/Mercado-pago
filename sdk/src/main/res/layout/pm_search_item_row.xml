@@ -61,7 +61,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentBottom="true"
-                android:tint="@color/mpsdk_color_row_arrow_grey"/>
+                android:tint="@color/mpsdk_warm_grey"/>
             <View
                 android:layout_alignParentBottom="true"
                 android:layout_width="match_parent"

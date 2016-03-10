@@ -19,7 +19,6 @@ import com.mercadopago.callbacks.GetPaymentMethodCallback;
 import com.mercadopago.callbacks.PaymentMethodSearchCallback;
 import com.mercadopago.controllers.ShoppingCartController;
 import com.mercadopago.core.MercadoPago;
-import com.mercadopago.decorations.DividerItemDecoration;
 import com.mercadopago.model.CardToken;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.PayerCost;
@@ -504,6 +503,4 @@ public class PaymentVaultActivity extends AppCompatActivity {
             overridePendingTransition(R.anim.slide_left_to_right_in, R.anim.silde_left_to_right_out);
         }
     }
-
-
 }

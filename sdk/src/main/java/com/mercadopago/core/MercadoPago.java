@@ -204,10 +204,11 @@ public class MercadoPago {
             @Override
             public void success(List<PaymentMethod> paymentMethods, Response response) {
                 boolean paymentMethodFound = false;
-                for(PaymentMethod paymentMethod : paymentMethods) {
-                    if(paymentMethod.getId().equals(paymentMethodId)) {
+                for(PaymentMethod currentPaymentMethod : paymentMethods) {
+                    if(paymentMethodId.contains(currentPaymentMethod.getId())) {
                         paymentMethodFound = true;
-                        callback.onSuccess(paymentMethod);
+                        currentPaymentMethod.setId(paymentMethodId);
+                        callback.onSuccess(currentPaymentMethod);
                     }
                 }
                 if(!paymentMethodFound) {
@@ -306,11 +307,13 @@ public class MercadoPago {
         activity.startActivityForResult(congratsIntent, CONGRATS_REQUEST_CODE);
     }
 
-    private static void startInstructionsActivity(Activity activity, String merchantPublicKey, Payment payment) {
+    private static void startInstructionsActivity(Activity activity, String merchantPublicKey, Payment payment, PaymentMethod paymentMethod) {
 
         Intent congratsIntent = new Intent(activity, InstructionsActivity.class);
         congratsIntent.putExtra("merchantPublicKey", merchantPublicKey);
         congratsIntent.putExtra("payment", payment);
+        congratsIntent.putExtra("paymentMethod", paymentMethod);
+
         activity.startActivityForResult(congratsIntent, INSTRUCTIONS_REQUEST_CODE);
     }
 
@@ -720,7 +723,7 @@ public class MercadoPago {
             if (this.mKeyType == null) throw new IllegalStateException("key type is null");
 
             if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {
-                MercadoPago.startInstructionsActivity(this.mActivity, this.mKey, this.mPayment);
+                MercadoPago.startInstructionsActivity(this.mActivity, this.mKey, this.mPayment, this.mPaymentMethod);
             } else {
                 throw new RuntimeException("Unsupported key type for this method");
             }

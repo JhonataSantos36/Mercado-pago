@@ -1,5 +1,8 @@
 package com.mercadopago.util;
 
+import android.text.Html;
+import android.text.Spanned;
+
 import com.mercadopago.model.Currency;
 
 import java.math.BigDecimal;
@@ -48,6 +51,48 @@ public class CurrenciesUtil {
             // return formatted string
             return currency.getSymbol() + " " + df.format(amount);
 
+        } else {
+            return null;
+        }
+    }
+
+    public static Spanned formatNumber(BigDecimal amount, String currencyId, boolean symbolUp, boolean decimalsUp) {
+
+        // Get currency configuration
+        Currency currency = currenciesList.get(currencyId);
+
+        if (currency != null) {
+
+            // Set formatters
+            DecimalFormatSymbols dfs = new DecimalFormatSymbols();
+            dfs.setDecimalSeparator(currency.getDecimalSeparator());
+            dfs.setGroupingSeparator(currency.getThousandsSeparator());
+            DecimalFormat df = new DecimalFormat();
+            df.setDecimalFormatSymbols(dfs);
+            df.setMinimumFractionDigits(currency.getDecimalPlaces());
+            df.setMaximumFractionDigits(currency.getDecimalPlaces());
+
+            // return formatted string
+            String formatedAmount = df.format(amount);
+
+            int decimalDivisionIndex = formatedAmount.indexOf(currency.getDecimalSeparator());
+            String wholeNumber = formatedAmount.substring(0, decimalDivisionIndex);
+            String decimals = formatedAmount.substring(decimalDivisionIndex+1, formatedAmount.length());
+
+            StringBuilder htmlFormatBuilder = new StringBuilder();
+            if(symbolUp) {
+                htmlFormatBuilder.append("<sup><small>" + currency.getSymbol() + "</small></sup>");
+            } else {
+                htmlFormatBuilder.append(currency.getSymbol());
+            }
+            htmlFormatBuilder.append(wholeNumber);
+
+            if(decimalsUp) {
+                htmlFormatBuilder.append("<sup><small>" + decimals + "</small></sup>");
+            } else {
+                htmlFormatBuilder.append(decimals);
+            }
+            return Html.fromHtml(htmlFormatBuilder.toString());
         } else {
             return null;
         }

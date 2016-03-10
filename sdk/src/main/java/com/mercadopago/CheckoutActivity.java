@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
+import android.text.Spanned;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,13 +17,11 @@ import android.widget.Toast;
 
 import com.mercadopago.controllers.ShoppingCartController;
 import com.mercadopago.core.MercadoPago;
-import com.mercadopago.core.MerchantServer;
 import com.mercadopago.exceptions.CheckoutPreferenceException;
 import com.mercadopago.exceptions.ExceptionHandler;
 import com.mercadopago.model.CheckoutPreference;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.Item;
-import com.mercadopago.model.MerchantPayment;
 import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentIntent;
@@ -33,10 +32,6 @@ import com.mercadopago.util.LayoutUtil;
 import com.mercadopago.util.MercadoPagoUtil;
 
 import java.math.BigDecimal;
-
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
 
 public class CheckoutActivity extends AppCompatActivity{
 
@@ -199,9 +194,9 @@ public class CheckoutActivity extends AppCompatActivity{
         builder.startPaymentVaultActivity();
     }
 
-    private String getAmountLabel() {
+    private Spanned getAmountLabel() {
         String currencyId = mCheckoutPreference.getItems().get(0).getCurrencyId();
-        return CurrenciesUtil.formatNumber(mCheckoutPreference.getAmount(), currencyId);
+        return CurrenciesUtil.formatNumber(mCheckoutPreference.getAmount(), currencyId, false, true);
     }
 
     private String getPurchaseTitle() {
@@ -291,6 +286,7 @@ public class CheckoutActivity extends AppCompatActivity{
             setResult(RESULT_OK, checkoutResult);
             finish();
         }
+        this.showActionBar();
     }
 
     private void showReviewAndConfirm(String paymentMethodInfo) {
@@ -300,16 +296,13 @@ public class CheckoutActivity extends AppCompatActivity{
     }
 
     private void setAmountLabel() {
-        StringBuilder totalAmountText = new StringBuilder();
-        totalAmountText.append(getString(R.string.mpsdk_payment_amount_to_pay));
-        totalAmountText.append(" " + this.getAmountLabel());
-        mTotalAmountTextView.setText(totalAmountText.toString());
+        mTotalAmountTextView.setText(getAmountLabel());
     }
 
     private void drawTermsAndConditionsText() {
         StringBuilder termsAndConditionsText = new StringBuilder();
         termsAndConditionsText.append(getString(R.string.mpsdk_text_terms_and_conditions_start) + " ");
-        termsAndConditionsText.append(" <font color='blue'><u>" + getString(R.string.mpsdk_text_terms_and_conditions_linked) + "</u></font> ");
+        termsAndConditionsText.append(" <font color='blue'>" + getString(R.string.mpsdk_text_terms_and_conditions_linked) + "</font> ");
         termsAndConditionsText.append(" " + getString(R.string.mpsdk_text_terms_and_conditions_end));
         mTermsAndConditionsTextView.setText(Html.fromHtml(termsAndConditionsText.toString()));
     }
@@ -365,36 +358,14 @@ public class CheckoutActivity extends AppCompatActivity{
             // Set payment method id
             String paymentMethodId = paymentIntent.getPaymentMethodId();
 
-            // Set campaign id
-
-            // Set merchant payment
-            MerchantPayment payment = new MerchantPayment(item, paymentIntent.getInstallments(), paymentIntent.getIssuerId(),
-                    paymentIntent.getToken(), paymentMethodId, null, "mlm-cards-data");
-
             // Create payment
-            hideActionBar();
-            LayoutUtil.showProgressLayout(this);
+            /*MerchantPayment payment = new MerchantPayment(item, paymentIntent.getInstallments(), paymentIntent.getIssuerId(),
+                    paymentIntent.getToken(), oldPaymentMethodId, null, "mlm-cards-data");
+
             MerchantServer.createPayment(this, "https://www.mercadopago.com", "/checkout/examples/doPayment", payment, new Callback<Payment>() {
                 @Override
                 public void success(Payment payment, Response response) {
-
                     mPayment = payment;
-
-                    if(MercadoPagoUtil.isCardPaymentType(payment.getPaymentTypeId())) {
-                        new MercadoPago.StartActivityBuilder()
-                                .setActivity(mActivity)
-                                .setPayment(mPayment)
-                                .setPaymentMethod(mSelectedPaymentMethod)
-                                .startCongratsActivity();
-                    } else {
-                        new MercadoPago.StartActivityBuilder()
-                                .setPublicKey(mMerchantPublicKey)
-                                .setActivity(mActivity)
-                                .setPayment(mPayment)
-                                .setPaymentMethod(mSelectedPaymentMethod)
-                                .startInstructionsActivity();
-                    }
-                    LayoutUtil.showRegularLayout(mActivity);
                 }
 
                 @Override
@@ -404,8 +375,26 @@ public class CheckoutActivity extends AppCompatActivity{
                     Toast.makeText(mActivity, error.getMessage(), Toast.LENGTH_LONG).show();
                 }
             });
-        } else {
+       */
 
+            hideActionBar();
+            LayoutUtil.showProgressLayout(this);
+            if (MercadoPagoUtil.isCardPaymentType(mSelectedPaymentMethod.getPaymentTypeId())) {
+                new MercadoPago.StartActivityBuilder()
+                        .setActivity(mActivity)
+                        .setPayment(new Payment())
+                        .setPaymentMethod(mSelectedPaymentMethod)
+                        .startCongratsActivity();
+            } else {
+                new MercadoPago.StartActivityBuilder()
+                        .setPublicKey(mMerchantPublicKey)
+                        .setActivity(mActivity)
+                        .setPayment(new Payment())
+                        .setPaymentMethod(mSelectedPaymentMethod)
+                        .startInstructionsActivity();
+            }
+            LayoutUtil.showRegularLayout(mActivity);
+        } else {
             Toast.makeText(mActivity, "Invalid payment method", Toast.LENGTH_LONG).show();
         }
     }
@@ -416,7 +405,12 @@ public class CheckoutActivity extends AppCompatActivity{
             actionBar.hide();
         }
     }
-
+    private void showActionBar() {
+        android.support.v7.app.ActionBar actionBar = this.getSupportActionBar();
+        if(actionBar != null) {
+            actionBar.show();
+        }
+    }
     protected void startMPApp() {
 
         if ((mCheckoutPreference != null) && (mCheckoutPreference.getId() != null)) {
