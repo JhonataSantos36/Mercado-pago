@@ -97,4 +97,10 @@ public class CurrenciesUtil {
             return null;
         }
     }
+
+    public static Spanned formatCurrencyInText(String originalTitle) {
+        //TODO formatear como pide UX cuando desde el servicio venga formateado, crear amount formateado, reemplazar en
+        //TODO el título con los tags html
+        return Html.fromHtml(originalTitle);
+    }
 }

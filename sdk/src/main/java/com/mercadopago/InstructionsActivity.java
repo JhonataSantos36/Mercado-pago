@@ -5,8 +5,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.CardView;
 import android.text.Html;
+import android.text.Spanned;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +20,7 @@ import com.mercadopago.model.InstructionReference;
 import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.util.ApiUtil;
+import com.mercadopago.util.CurrenciesUtil;
 import com.mercadopago.util.LayoutUtil;
 
 import java.util.List;
@@ -31,7 +32,6 @@ import retrofit.client.Response;
 public class InstructionsActivity extends AppCompatActivity {
 
     //Controls
-    private CardView mBottomCardView;
     private LinearLayout mReferencesLayout;
     private Activity mActivity;
     private TextView mTitle;
@@ -79,11 +79,17 @@ public class InstructionsActivity extends AppCompatActivity {
     }
 
     private void showInstructions(Instruction instruction) {
-        mTitle.setText(instruction.getTitle());
+        setTitle(instruction);
         setInformationMessages(instruction);
         setReferencesInformation(instruction);
         mAccreditationMessage.setText(instruction.getAcreditationMessage());
         setActions(instruction);
+    }
+
+    private void setTitle(Instruction instruction) {
+        String originalTitle = instruction.getTitle();
+        Spanned formattedTitle = CurrenciesUtil.formatCurrencyInText(originalTitle);
+        mTitle.setText(formattedTitle);
     }
 
     private void setActions(Instruction instruction) {
@@ -116,10 +122,11 @@ public class InstructionsActivity extends AppCompatActivity {
             if(reference.getLabel() != null && !reference.getLabel().isEmpty()) {
                 currentTitleTextView.setText(reference.getLabel());
                 currentTitleTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimensionPixelSize(R.dimen.mpsdk_smaller_text));
+                currentTitleTextView.setTextColor(getResources().getColor(R.color.mpsdk_warm_grey));
                 mReferencesLayout.addView(currentTitleTextView);
             }
 
-            currentValueTextView.setText(Html.fromHtml("<b>" + reference.getFormattedReference() + "</b>"));
+            currentValueTextView.setText(reference.getFormattedReference());
             currentValueTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimensionPixelSize(R.dimen.mpsdk_large_text));
             currentTitleTextView.setLayoutParams(marginParams);
             mReferencesLayout.addView(currentValueTextView);
@@ -152,7 +159,7 @@ public class InstructionsActivity extends AppCompatActivity {
         for(String line : info) {
             stringBuilder.append(line);
             if(!line.equals(info.get(info.size() - 1))) {
-                stringBuilder.append("<br/><br/>");
+                stringBuilder.append("<br/>");
             }
         }
         return stringBuilder.toString();
@@ -166,7 +173,6 @@ public class InstructionsActivity extends AppCompatActivity {
 
     private void initializeControls() {
         mReferencesLayout = (LinearLayout) findViewById(R.id.referencesLayout);
-        mBottomCardView = (CardView) findViewById(R.id.bottomCardView);
         mTitle = (TextView) findViewById(R.id.title);
         mPrimaryInfo = (TextView) findViewById(R.id.primaryInfo);
         mSecondaryInfo = (TextView) findViewById(R.id.secondaryInfo);

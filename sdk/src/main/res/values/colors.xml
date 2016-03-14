@@ -13,9 +13,9 @@
     <color name="mpsdk_warm_grey">#b7999999</color>
     <color name="commentColor">#999</color>
     <color name="mpsdk_shopping_cart_background">#5ABEE7</color>
-    <color name="mpsdk_color_instructions_title_background">#fbf8e3</color>
+    <color name="mpsdk_color_instructions_title_background">#FBF8E1</color>
     <color name="mpsdk_color_instructions_title_image">#EFC703</color>
     <color name="mpsdk_color_instructions_background">#f1f1f1</color>
-    <color name="mpsdk_color_instructions_font">#c3a97d</color>
+    <color name="mpsdk_color_instructions_font">#B29054</color>
     <color name="mpsdk_color_instructions_button">#41c6f4</color>
 </resources>
