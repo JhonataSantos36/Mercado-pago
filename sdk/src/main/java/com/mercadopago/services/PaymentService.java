@@ -35,6 +35,6 @@ public interface PaymentService {
     @POST("/payments")
     void createPayment(@Body PaymentIntent body, Callback<Payment> callback);
 
-    @GET("/checkout/beta/v1/instructions")
-    void getInstruction(@Query("public_key") String mKey, @Query("payment_id") Long paymentId, @Query("payment_method_id") String paymentMethodId, Callback<Instruction> callback);
+    @GET("/checkout/beta/v1/instructions/{payment_id}")
+    void getInstruction(@Query("public_key") String mKey, @EncodedPath("payment_id") Long paymentId, @Query("payment_method_id") String paymentMethodId, Callback<Instruction> callback);
 }

@@ -119,17 +119,19 @@ public class InstructionsActivity extends AppCompatActivity {
             TextView currentTitleTextView = new TextView(this);
             TextView currentValueTextView = new TextView(this);
 
-            if(reference.getLabel() != null && !reference.getLabel().isEmpty()) {
-                currentTitleTextView.setText(reference.getLabel());
-                currentTitleTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimensionPixelSize(R.dimen.mpsdk_smaller_text));
-                currentTitleTextView.setTextColor(getResources().getColor(R.color.mpsdk_warm_grey));
-                mReferencesLayout.addView(currentTitleTextView);
-            }
+            if(reference.hasValue()) {
 
-            currentValueTextView.setText(reference.getFormattedReference());
-            currentValueTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimensionPixelSize(R.dimen.mpsdk_large_text));
-            currentTitleTextView.setLayoutParams(marginParams);
-            mReferencesLayout.addView(currentValueTextView);
+                if (reference.hasLabel()) {
+                    currentTitleTextView.setText(reference.getLabel().toUpperCase());
+                    currentTitleTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimensionPixelSize(R.dimen.mpsdk_smaller_text));
+                    mReferencesLayout.addView(currentTitleTextView);
+                }
+
+                currentValueTextView.setText(Html.fromHtml("<b>" + reference.getFormattedReference() + "</b>"));
+                currentValueTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimensionPixelSize(R.dimen.mpsdk_large_text));
+                currentTitleTextView.setLayoutParams(marginParams);
+                mReferencesLayout.addView(currentValueTextView);
+            }
         }
     }
 

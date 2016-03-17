@@ -286,7 +286,6 @@ public class CheckoutActivity extends AppCompatActivity{
             setResult(RESULT_OK, checkoutResult);
             finish();
         }
-        this.showActionBar();
     }
 
     private void showReviewAndConfirm(String paymentMethodInfo) {
@@ -376,8 +375,6 @@ public class CheckoutActivity extends AppCompatActivity{
                 }
             });
        */
-
-            hideActionBar();
             LayoutUtil.showProgressLayout(this);
             if (MercadoPagoUtil.isCardPaymentType(mSelectedPaymentMethod.getPaymentTypeId())) {
                 new MercadoPago.StartActivityBuilder()
@@ -399,18 +396,6 @@ public class CheckoutActivity extends AppCompatActivity{
         }
     }
 
-    private void hideActionBar() {
-        android.support.v7.app.ActionBar actionBar = this.getSupportActionBar();
-        if(actionBar != null) {
-            actionBar.hide();
-        }
-    }
-    private void showActionBar() {
-        android.support.v7.app.ActionBar actionBar = this.getSupportActionBar();
-        if(actionBar != null) {
-            actionBar.show();
-        }
-    }
     protected void startMPApp() {
 
         if ((mCheckoutPreference != null) && (mCheckoutPreference.getId() != null)) {
@@ -419,6 +404,13 @@ public class CheckoutActivity extends AppCompatActivity{
             intent.putExtra("packageName", this.getPackageName());
             intent.putExtra("deepLink", "mercadopago://mpsdk_install_app");
             startActivityForResult(intent, MercadoPago.INSTALL_APP_REQUEST_CODE);
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(mSelectedPaymentMethod != null) {
+            startPaymentVaultActivity();
         }
     }
 }

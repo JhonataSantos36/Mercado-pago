@@ -46,4 +46,12 @@ public class InstructionReference {
         }
         return stringBuilder.toString();
     }
+
+    public boolean hasLabel() {
+        return this.getLabel() != null && !this.getLabel().isEmpty();
+    }
+
+    public boolean hasValue() {
+        return this.getFieldValue() != null && this.getFieldValue().size() != 0;
+    }
 }
