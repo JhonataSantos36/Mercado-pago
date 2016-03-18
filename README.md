@@ -1,3 +1,5 @@
+https://travis-ci.com/mercadopago/px-android.svg?token=vPpQiHmLkp88siQfJcTo&branch=master
+
 #MercadoPago - Android SDK
 
 The MercadoPago Android SDK make it easy to collect your user's credit card details inside your android app. By creating tokens, MercadoPago handles the bulk of PCI compliance by preventing sensitive card data from hitting your server.
