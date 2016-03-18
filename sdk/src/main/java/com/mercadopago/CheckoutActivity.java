@@ -54,6 +54,7 @@ public class CheckoutActivity extends AppCompatActivity{
     protected String mPurchaseTitle;
     protected ShoppingCartController mShoppingCartController;
     protected String mErrorMessage;
+    protected boolean mEditingPaymentMethod;
 
     //Controls
     protected TextView mPaymentMethodCommentTextView;
@@ -147,6 +148,7 @@ public class CheckoutActivity extends AppCompatActivity{
         mEditPaymentMethodImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mEditingPaymentMethod = true;
                 startPaymentVaultActivity();
                 animateBackToPaymentVault();
             }
@@ -268,9 +270,11 @@ public class CheckoutActivity extends AppCompatActivity{
                 }
             }
             else if (resultCode == RESULT_CANCELED) {
-                Intent returnIntent = new Intent();
-                setResult(RESULT_CANCELED, returnIntent);
-                finish();
+                if(!mEditingPaymentMethod) {
+                    Intent returnIntent = new Intent();
+                    setResult(RESULT_CANCELED, returnIntent);
+                    finish();
+                }
             }
         }
 
@@ -293,6 +297,8 @@ public class CheckoutActivity extends AppCompatActivity{
             checkoutResult.putExtra("paymentType", mPayment.getPaymentTypeId() != null ? mPayment.getPaymentTypeId() : null);
             checkoutResult.putExtra("preferenceId", mCheckoutPreference.getId());
             setResult(RESULT_OK, checkoutResult);
+            finish();
+        } else if (requestCode == MercadoPago.INSTRUCTIONS_REQUEST_CODE) {
             finish();
         }
     }
