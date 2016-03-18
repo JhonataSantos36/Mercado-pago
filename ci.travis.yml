@@ -26,10 +26,6 @@ android:
 script:
    - bash "travis/run_unit_tests.sh"
 
-before_install:
- # Update Ruby version (required for fastlane)
- - rvm install 2.0.0
-
 after_success:
    - bash "travis/run_deploy.sh"
 
