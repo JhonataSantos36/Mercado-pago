@@ -104,6 +104,7 @@ public class ShoppingCartController {
     public void hideItemInfo() {
         mItemInfoLayout.setVisibility(View.GONE);
         mItemDescriptionShown = false;
+        mMenuItemTogglerShoppingCart.setIcon(R.drawable.regular_payment);
         tintTogglerDrawableWithColor(mActivity.getResources().getColor(R.color.mpsdk_white));
     }
 
@@ -114,6 +115,7 @@ public class ShoppingCartController {
             enableAnimation();
         }
         mItemDescriptionShown = true;
+        mMenuItemTogglerShoppingCart.setIcon(R.drawable.close);
         tintTogglerDrawableWithColor(mActivity.getResources().getColor(R.color.mpsdk_white));
     }
 
