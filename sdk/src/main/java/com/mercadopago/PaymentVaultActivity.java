@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -86,8 +87,14 @@ public class PaymentVaultActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-        getSupportActionBar().setElevation(0);
-
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
         getActivityParameters();
 
         try {
@@ -284,10 +291,9 @@ public class PaymentVaultActivity extends AppCompatActivity {
             @Override
             public void success(PaymentMethodSearch paymentMethodSearch, Response response) {
                 LayoutUtil.showRegularLayout(mActivity);
-                if(!paymentMethodSearch.hasSearchItems()) {
+                if (!paymentMethodSearch.hasSearchItems()) {
                     finishWithEmptyPaymentMethodSearch();
-                }
-                else {
+                } else {
                     mPaymentMethodSearch = paymentMethodSearch;
                     setSearchLayout();
                 }
@@ -471,6 +477,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
         returnIntent.putExtra("paymentMethodInfo", paymentMethodInfo);
         this.setResult(Activity.RESULT_OK, returnIntent);
         this.finish();
+        overridePendingTransition(R.anim.slide_right_to_left_in, R.anim.slide_right_to_left_out);
     }
 
     protected void finishWithTokenResult(Token token) {
@@ -483,11 +490,13 @@ public class PaymentVaultActivity extends AppCompatActivity {
         returnIntent.putExtra("paymentMethod", mSelectedPaymentMethod);
         this.setResult(Activity.RESULT_OK, returnIntent);
         this.finish();
+        overridePendingTransition(R.anim.slide_right_to_left_in, R.anim.slide_right_to_left_out);
     }
 
     protected void finishWithApiException(Intent data) {
         setResult(Activity.RESULT_CANCELED, data);
-        finish();
+        this.finish();
+        overridePendingTransition(R.anim.slide_right_to_left_in, R.anim.slide_right_to_left_out);
     }
 
     protected void setActivityTitle(String title) {
@@ -499,6 +508,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
         Intent returnIntent = new Intent();
         setResult(Activity.RESULT_CANCELED, returnIntent);
         finish();
+
         if(isItemSelected()) {
             overridePendingTransition(R.anim.slide_left_to_right_in, R.anim.silde_left_to_right_out);
         }

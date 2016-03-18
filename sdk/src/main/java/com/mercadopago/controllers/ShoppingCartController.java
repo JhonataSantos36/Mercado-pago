@@ -66,6 +66,13 @@ public class ShoppingCartController {
         if(mPictureUrl != null && !mPictureUrl.isEmpty()) {
             Picasso.with(mActivity).load(mPictureUrl).into(mItemImageView);
         }
+        else
+        {
+            int newDpPaddingValue = 24;
+            float scale = mActivity.getResources().getDisplayMetrics().density;
+            int dpAsPixels = (int) (newDpPaddingValue*scale + 0.5f);
+            mItemImageView.setPadding(dpAsPixels, dpAsPixels, dpAsPixels, dpAsPixels);
+        }
     }
 
     private void start() {

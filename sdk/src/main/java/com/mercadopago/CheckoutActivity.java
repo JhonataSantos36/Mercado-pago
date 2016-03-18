@@ -148,6 +148,7 @@ public class CheckoutActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 startPaymentVaultActivity();
+                animateBackToPaymentVault();
             }
         });
         mTermsAndConditionsTextView = (TextView) findViewById(R.id.termsAndConditions);
@@ -206,7 +207,7 @@ public class CheckoutActivity extends AppCompatActivity{
 
     private Spanned getAmountLabel() {
         String currencyId = mCheckoutPreference.getItems().get(0).getCurrencyId();
-        return CurrenciesUtil.formatNumber(mCheckoutPreference.getAmount(), currencyId, false, true);
+        return CurrenciesUtil.formatNumber(mCheckoutPreference.getAmount(), currencyId, true, true);
     }
 
     private String getPurchaseTitle() {
@@ -267,11 +268,9 @@ public class CheckoutActivity extends AppCompatActivity{
                 }
             }
             else if (resultCode == RESULT_CANCELED) {
-                if(mSelectedPaymentMethod == null) {
-                    Intent returnIntent = new Intent();
-                    setResult(RESULT_CANCELED, returnIntent);
-                    finish();
-                }
+                Intent returnIntent = new Intent();
+                setResult(RESULT_CANCELED, returnIntent);
+                finish();
             }
         }
 
@@ -311,7 +310,7 @@ public class CheckoutActivity extends AppCompatActivity{
     private void drawTermsAndConditionsText() {
         StringBuilder termsAndConditionsText = new StringBuilder();
         termsAndConditionsText.append(getString(R.string.mpsdk_text_terms_and_conditions_start) + " ");
-        termsAndConditionsText.append(" <font color='blue'>" + getString(R.string.mpsdk_text_terms_and_conditions_linked) + "</font> ");
+        termsAndConditionsText.append("<font color='#0066CC'>" + getString(R.string.mpsdk_text_terms_and_conditions_linked) +"</font>");
         termsAndConditionsText.append(" " + getString(R.string.mpsdk_text_terms_and_conditions_end));
         mTermsAndConditionsTextView.setText(Html.fromHtml(termsAndConditionsText.toString()));
     }
@@ -421,6 +420,12 @@ public class CheckoutActivity extends AppCompatActivity{
     public void onBackPressed() {
         if(mSelectedPaymentMethod != null) {
             startPaymentVaultActivity();
+            animateBackToPaymentVault();
         }
     }
+
+    private void animateBackToPaymentVault() {
+        overridePendingTransition(R.anim.slide_left_to_right_in, R.anim.silde_left_to_right_out);
+    }
+
 }

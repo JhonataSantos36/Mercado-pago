@@ -20,93 +20,86 @@
             android:orientation="vertical"
             android:layout_below="@id/itemInfoLayout"
             android:id="@+id/contentLayout">
+             <RelativeLayout
+                android:id="@+id/rowsLayout"
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/list_item_height_large"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:minHeight="45dp"
+                android:background="@color/mpsdk_white_background"
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools">
+                <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:maxWidth="100dp"
+                        android:maxHeight="20dp"
+                        android:src="@drawable/serfin_bank_transfer"
+                        android:adjustViewBounds="true"
+                        android:id="@+id/payment_method_image"
+                        android:layout_gravity="center_vertical"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_above="@+id/payment_method_comment" />
 
-            <android.support.v7.widget.CardView
-                xmlns:card_view="http://schemas.android.com/apk/res-auto"
-                android:layout_gravity="center"
+                    <TextView
+                        android:id="@+id/payment_method_comment"
+                        android:layout_marginBottom="12dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:text="Hola, soy un comentario"
+                        style="@style/mpsdk_list_label_comment"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignStart="@+id/payment_method_image"
+                        android:layout_alignLeft="@+id/payment_method_image"/>
+
+                    <ImageView
+                        android:layout_width="15dp"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/edit"
+                        android:adjustViewBounds="true"
+                        android:id="@+id/imageEdit"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentBottom="true"
+                        android:tint="@color/mpsdk_colorPrimary"/>
+            </RelativeLayout>
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/mpsdk_card_margin"
-                card_view:cardCornerRadius="@dimen/mpsdk_card_corner_radius">
-
-                <RelativeLayout
+                android:layout_height="50dp"
+                android:layout_below="@+id/rowsLayout"
+                android:gravity="center"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:background="@color/mpsdk_color_light_grey"
+                android:minHeight="45dp"
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools">
+                <TextView
+                    android:id="@+id/totalAmountText"
+                    style="@style/mpsdk_regular_dark_thin"
+                    android:text="@string/mpsdk_payment_amount_to_pay"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-                    <RelativeLayout
-                        android:id="@+id/rowsLayout"
-                        android:layout_width="fill_parent"
-                        android:layout_height="@dimen/list_item_height_large"
-                        android:paddingLeft="10dp"
-                        android:paddingRight="10dp"
-                        android:minHeight="45dp"
-                        android:background="@color/mpsdk_white_background"
-                        xmlns:android="http://schemas.android.com/apk/res/android"
-                        xmlns:tools="http://schemas.android.com/tools">
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:maxWidth="100dp"
-                                android:maxHeight="20dp"
-                                android:src="@drawable/serfin_bank_transfer"
-                                android:adjustViewBounds="true"
-                                android:id="@+id/payment_method_image"
-                                android:layout_gravity="center_vertical"
-                                android:layout_alignParentLeft="true"
-                                android:layout_alignParentStart="true"
-                                android:layout_alignParentTop="true"
-                                android:layout_above="@+id/payment_method_comment" />
-
-                            <TextView
-                                android:id="@+id/payment_method_comment"
-                                android:layout_marginBottom="12dp"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                tools:text="Hola, soy un comentario"
-                                style="@style/mpsdk_list_label_comment"
-                                android:layout_alignParentBottom="true"
-                                android:layout_alignStart="@+id/payment_method_image"
-                                android:layout_alignLeft="@+id/payment_method_image"/>
-
-                            <ImageView
-                                android:layout_width="15dp"
-                                android:layout_height="wrap_content"
-                                android:src="@drawable/edit"
-                                android:adjustViewBounds="true"
-                                android:id="@+id/imageEdit"
-                                android:layout_alignParentEnd="true"
-                                android:layout_alignParentRight="true"
-                                android:layout_alignParentTop="true"
-                                android:layout_alignParentBottom="true"
-                                android:tint="@color/mpsdk_colorPrimary"/>
-                    </RelativeLayout>
-                    <RelativeLayout
-                        android:layout_width="fill_parent"
-                        android:layout_height="50dp"
-                        android:layout_below="@+id/rowsLayout"
-                        android:gravity="center"
-                        android:paddingLeft="10dp"
-                        android:paddingRight="10dp"
-                        android:background="@color/mpsdk_color_instructions_background"
-                        android:minHeight="45dp"
-                        xmlns:android="http://schemas.android.com/apk/res/android"
-                        xmlns:tools="http://schemas.android.com/tools">
-                        <TextView
-                            android:id="@+id/totalAmountText"
-                            style="@style/mpsdk_regular_dark_thin"
-                            android:text="@string/mpsdk_payment_amount_to_pay"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
-                        <TextView
-                            android:layout_toRightOf="@+id/totalAmountText"
-                            android:layout_marginLeft="4dp"
-                            android:id="@+id/totalAmount"
-                            style="@style/mpsdk_regular_dark_thin"
-                            android:text="$100"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
-                    </RelativeLayout>
-                </RelativeLayout>
-            </android.support.v7.widget.CardView>
+                    android:layout_height="wrap_content"/>
+                <TextView
+                    android:layout_toRightOf="@+id/totalAmountText"
+                    android:layout_toEndOf="@+id/totalAmountText"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginStart="4dp"
+                    android:id="@+id/totalAmount"
+                    style="@style/mpsdk_regular_dark_thin"
+                    android:text="$X"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </RelativeLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:background="@drawable/drop_shadow">
+            </View>
             <TextView
                 android:paddingLeft="20dp"
                 android:paddingStart="20dp"
@@ -119,7 +112,7 @@
                 android:gravity="center"
                 android:layout_height="wrap_content"
                 android:lineSpacingMultiplier="1.5"
-                style="@style/mpsdk_smaller_warm_grey_thin_bold_text"/>
+                style="@style/small_comment"/>
             <Button
                 android:id="@+id/payButton"
                 android:layout_width="match_parent"
@@ -145,7 +138,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/mpsdk_processed_by_mercado_pago"
-                style="@style/mpsdk_smaller_warm_grey_thin_bold_text"/>
+                style="@style/small_comment"/>
         </LinearLayout>
     </RelativeLayout>
 </android.support.v4.widget.NestedScrollView>
