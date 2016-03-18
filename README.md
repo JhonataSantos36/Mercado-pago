@@ -1,4 +1,4 @@
-https://travis-ci.com/mercadopago/px-android.svg?token=vPpQiHmLkp88siQfJcTo&branch=master
+[![Build Status](https://travis-ci.com/mercadopago/px-android.svg?token=vPpQiHmLkp88siQfJcTo&branch=master)](https://travis-ci.com/mercadopago/px-android)
 
 #MercadoPago - Android SDK
 
