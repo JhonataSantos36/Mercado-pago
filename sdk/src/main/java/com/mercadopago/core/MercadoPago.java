@@ -391,7 +391,7 @@ public class MercadoPago {
 
     private static void startPaymentVaultActivity(Activity activity, String merchantPublicKey, String merchantBaseUrl, String merchantGetCustomerUri, String merchantAccessToken, String itemImageUri, String purchaseTitle, BigDecimal amount, String currencyId, Boolean showBankDeals, Boolean cardGuessingEnabled,
                                                   List<String> excludedPaymentMethodIds, List<String> excludedPaymentTypes, String defaultPaymentMethodId,
-                                                  Integer defaultInstallments, Integer maxInstallments) {
+                                                  Integer defaultInstallments, Integer maxInstallments, Boolean editing) {
 
         Intent vaultIntent = new Intent(activity, PaymentVaultActivity.class);
         vaultIntent.putExtra("merchantPublicKey", merchantPublicKey);
@@ -415,6 +415,8 @@ public class MercadoPago {
         if(maxInstallments != null) {
             vaultIntent.putExtra("maxInstallments", maxInstallments.toString());
         }
+
+        vaultIntent.putExtra("editing", editing);
 
         activity.startActivityForResult(vaultIntent, PAYMENT_VAULT_REQUEST_CODE);
     }
@@ -507,6 +509,7 @@ public class MercadoPago {
         private String mPurchaseTitle;
         private String mCurrencyId;
         private String mItemImageUri;
+        private Boolean mEditing;
 
         public StartActivityBuilder() {
 
@@ -678,6 +681,12 @@ public class MercadoPago {
             this.mItemImageUri = itemImageUri;
             return this;
         }
+
+        public StartActivityBuilder setEditing(boolean editing) {
+            this.mEditing = editing;
+            return this;
+        }
+
         public void startBankDealsActivity() {
 
             if (this.mActivity == null) throw new IllegalStateException("activity is null");
@@ -808,7 +817,7 @@ public class MercadoPago {
                         this.mMerchantGetCustomerUri, this.mMerchantAccessToken, this.mItemImageUri, this.mPurchaseTitle,
                         this.mAmount, this.mCurrencyId, this.mShowBankDeals, this.mCardGuessingEnabled,
                         this.mExcludedPaymentMethodIds, this.mExcludedPaymentTypes, this.mDefaultPaymentMethodId,
-                        this.mDefaultInstallments, this.mMaxInstallments);
+                        this.mDefaultInstallments, this.mMaxInstallments, this.mEditing);
             } else {
                 throw new RuntimeException("Unsupported key type for this method");
             }

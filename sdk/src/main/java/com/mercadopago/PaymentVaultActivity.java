@@ -53,6 +53,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
     protected Issuer mSelectedIssuer;
     protected PayerCost mSelectedPayerCost;
     protected ShoppingCartController mShoppingCartController;
+    protected Boolean mEditing;
 
     // Controls
     protected RecyclerView mSearchItemsRecyclerView;
@@ -78,23 +79,13 @@ public class PaymentVaultActivity extends AppCompatActivity {
     protected String mPurchaseTitle;
     protected String mItemImageUri;
     protected String mCurrencyId;
-    private TextView mActivityTitle;
+    protected TextView mActivityTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payment_vault);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
+        initializeToolbar();
         getActivityParameters();
 
         try {
@@ -111,21 +102,38 @@ public class PaymentVaultActivity extends AppCompatActivity {
         initializeControls();
         setActivity();
 
-
-        if(isItemSelected()) {
-            showItemChildren(mSelectedSearchItem);
+        if(!isItemSelected()) {
+            initPaymentMethodSearch();
         }
         else {
-            String initialTitle = getString(R.string.mpsdk_title_activity_payment_vault);
-            setActivityTitle(initialTitle);
-            LayoutUtil.showProgressLayout(this);
-            getPaymentMethodSearch();
+            showSelectedItemChildren();
         }
+    }
+
+    private void initializeToolbar() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+    }
+
+    private void initPaymentMethodSearch() {
+        String initialTitle = getString(R.string.mpsdk_title_activity_payment_vault);
+        setActivityTitle(initialTitle);
+        LayoutUtil.showProgressLayout(this);
+        getPaymentMethodSearch();
     }
 
     private void validateActivityParameters() {
 
-        if (!isAmountValid()){
+        if (!isAmountValid()) {
             throw new IllegalStateException(getString(R.string.mpsdk_error_message_invalid_amount));
         }
         else if(!isCurrencyIdValid()){
@@ -236,6 +244,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
         if(this.getIntent().getStringExtra("defaultInstallments") != null) {
             mDefaultInstallments = Integer.valueOf(this.getIntent().getStringExtra("defaultInstallments"));
         }
+        mEditing = this.getIntent().getBooleanExtra("editing", false);
     }
 
     protected String getFormatedPurchaseTitle() {
@@ -247,7 +256,9 @@ public class PaymentVaultActivity extends AppCompatActivity {
             }
             return purchaseTitle;
         }
-        else return null;
+        else {
+            return null;
+        }
     }
 
     protected void initializeControls() {
@@ -383,9 +394,9 @@ public class PaymentVaultActivity extends AppCompatActivity {
         overridePendingTransition(R.anim.slide_right_to_left_in, R.anim.slide_right_to_left_out);
     }
 
-    protected void showItemChildren(PaymentMethodSearchItem item) {
-        setActivityTitle(item.getChildrenHeader());
-        populateSearchList(item.getChildren());
+    protected void showSelectedItemChildren() {
+        setActivityTitle(mSelectedSearchItem.getChildrenHeader());
+        populateSearchList(mSelectedSearchItem.getChildren());
     }
 
     protected void startNextStepForPaymentType(String paymentTypeId) {
@@ -477,7 +488,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
         returnIntent.putExtra("paymentMethodInfo", paymentMethodInfo);
         this.setResult(Activity.RESULT_OK, returnIntent);
         this.finish();
-        overridePendingTransition(R.anim.slide_right_to_left_in, R.anim.slide_right_to_left_out);
+        animatePaymentMethodSelection();
     }
 
     protected void finishWithTokenResult(Token token) {
@@ -490,12 +501,16 @@ public class PaymentVaultActivity extends AppCompatActivity {
         returnIntent.putExtra("paymentMethod", mSelectedPaymentMethod);
         this.setResult(Activity.RESULT_OK, returnIntent);
         this.finish();
-        overridePendingTransition(R.anim.slide_right_to_left_in, R.anim.slide_right_to_left_out);
+        animatePaymentMethodSelection();
     }
 
     protected void finishWithApiException(Intent data) {
         setResult(Activity.RESULT_CANCELED, data);
         this.finish();
+        animatePaymentMethodSelection();
+    }
+
+    private void animatePaymentMethodSelection() {
         overridePendingTransition(R.anim.slide_right_to_left_in, R.anim.slide_right_to_left_out);
     }
 
@@ -511,6 +526,9 @@ public class PaymentVaultActivity extends AppCompatActivity {
 
         if(isItemSelected()) {
             overridePendingTransition(R.anim.slide_left_to_right_in, R.anim.silde_left_to_right_out);
+        }
+        else if(mEditing) {
+            animatePaymentMethodSelection();
         }
     }
 }

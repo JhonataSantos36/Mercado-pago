@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.mercadopago.R;
 import com.mercadopago.callbacks.PaymentMethodSearchCallback;
+import com.mercadopago.model.PaymentMethodSearch;
 import com.mercadopago.model.PaymentMethodSearchItem;
 import com.mercadopago.util.MercadoPagoUtil;
 
@@ -30,6 +31,13 @@ public class PaymentMethodSearchItemAdapter extends RecyclerView.Adapter<Payment
         this.mContext = context;
         this.mItems = items;
         this.mCallback = callback;
+        //TODO: Sacar cuando no venga más en el servicio
+        for(PaymentMethodSearchItem item : mItems) {
+            if(item.getId().equals("gestopago")) {
+                mItems.remove(item);
+                break;
+            }
+        }
     }
 
     @Override
