@@ -66,6 +66,13 @@ public class ShoppingCartController {
         if(mPictureUrl != null && !mPictureUrl.isEmpty()) {
             Picasso.with(mActivity).load(mPictureUrl).into(mItemImageView);
         }
+        else
+        {
+            int newDpPaddingValue = 24;
+            float scale = mActivity.getResources().getDisplayMetrics().density;
+            int dpAsPixels = (int) (newDpPaddingValue*scale + 0.5f);
+            mItemImageView.setPadding(dpAsPixels, dpAsPixels, dpAsPixels, dpAsPixels);
+        }
     }
 
     private void start() {
@@ -97,6 +104,7 @@ public class ShoppingCartController {
     public void hideItemInfo() {
         mItemInfoLayout.setVisibility(View.GONE);
         mItemDescriptionShown = false;
+        mMenuItemTogglerShoppingCart.setIcon(R.drawable.regular_payment);
         tintTogglerDrawableWithColor(mActivity.getResources().getColor(R.color.mpsdk_white));
     }
 
@@ -107,6 +115,7 @@ public class ShoppingCartController {
             enableAnimation();
         }
         mItemDescriptionShown = true;
+        mMenuItemTogglerShoppingCart.setIcon(R.drawable.close);
         tintTogglerDrawableWithColor(mActivity.getResources().getColor(R.color.mpsdk_white));
     }
 

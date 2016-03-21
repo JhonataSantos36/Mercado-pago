@@ -45,6 +45,7 @@ public class InstructionsActivity extends AppCompatActivity {
     private Payment mPayment;
     private String mMerchantPublicKey;
     private PaymentMethod mPaymentMethod;
+    private String mCurrency;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,16 +80,15 @@ public class InstructionsActivity extends AppCompatActivity {
     }
 
     private void showInstructions(Instruction instruction) {
-        setTitle(instruction);
+        setTitle(instruction.getTitle());
         setInformationMessages(instruction);
         setReferencesInformation(instruction);
         mAccreditationMessage.setText(instruction.getAcreditationMessage());
         setActions(instruction);
     }
 
-    private void setTitle(Instruction instruction) {
-        String originalTitle = instruction.getTitle();
-        Spanned formattedTitle = CurrenciesUtil.formatCurrencyInText(originalTitle);
+    private void setTitle(String title) {
+        Spanned formattedTitle = CurrenciesUtil.formatCurrencyInText(mPayment.getTransactionAmount(), mPayment.getCurrencyId(), title, true, true);
         mTitle.setText(formattedTitle);
     }
 
@@ -171,6 +171,7 @@ public class InstructionsActivity extends AppCompatActivity {
         mPayment = (Payment) getIntent().getExtras().getSerializable("payment");
         mMerchantPublicKey = this.getIntent().getStringExtra("merchantPublicKey");
         mPaymentMethod = (PaymentMethod) getIntent().getSerializableExtra("paymentMethod");
+        mCurrency = getIntent().getStringExtra("currencyId");
     }
 
     private void initializeControls() {

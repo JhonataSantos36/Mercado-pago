@@ -2,8 +2,6 @@ package com.mercadopago;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -54,6 +52,7 @@ public class CheckoutActivity extends AppCompatActivity{
     protected String mPurchaseTitle;
     protected ShoppingCartController mShoppingCartController;
     protected String mErrorMessage;
+    protected boolean mPaymentMethodEditionRequested;
 
     //Controls
     protected TextView mPaymentMethodCommentTextView;
@@ -67,17 +66,7 @@ public class CheckoutActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_checkout);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        initializeToolbar();
 
         mCheckoutPreference = (CheckoutPreference) this.getIntent().getSerializableExtra("checkoutPreference");
         mMerchantPublicKey = this.getIntent().getStringExtra("merchantPublicKey");
@@ -114,6 +103,20 @@ public class CheckoutActivity extends AppCompatActivity{
         }
     }
 
+    private void initializeToolbar() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+    }
+
     private void validateParameters() throws Exception {
         if(!validParameters()) {
             throw new IllegalStateException("Invalid parameters");
@@ -147,7 +150,9 @@ public class CheckoutActivity extends AppCompatActivity{
         mEditPaymentMethodImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mPaymentMethodEditionRequested = true;
                 startPaymentVaultActivity();
+                animateBack();
             }
         });
         mTermsAndConditionsTextView = (TextView) findViewById(R.id.termsAndConditions);
@@ -200,13 +205,17 @@ public class CheckoutActivity extends AppCompatActivity{
             builder.setMerchantBaseUrl("https://mp-android-sdk.herokuapp.com/");
             builder.setMerchantGetCustomerUri("customers?preference_id=" + mCheckoutPreference.getId());
         }
+        if(mPaymentMethodEditionRequested)
+        {
+            builder.setEditing(true);
+        }
 
         builder.startPaymentVaultActivity();
     }
 
     private Spanned getAmountLabel() {
         String currencyId = mCheckoutPreference.getItems().get(0).getCurrencyId();
-        return CurrenciesUtil.formatNumber(mCheckoutPreference.getAmount(), currencyId, false, true);
+        return CurrenciesUtil.formatNumber(mCheckoutPreference.getAmount(), currencyId, true, true);
     }
 
     private String getPurchaseTitle() {
@@ -242,32 +251,20 @@ public class CheckoutActivity extends AppCompatActivity{
         if(requestCode == MercadoPago.PAYMENT_VAULT_REQUEST_CODE) {
 
             if(resultCode == RESULT_OK) {
-                boolean MPAppNeeded = data.getBooleanExtra("MPAppNeeded", false);
-                if(MPAppNeeded) {
-                    startMPApp();
-                }
-                else {
 
-                    mSelectedIssuer = (Issuer) data.getSerializableExtra("issuer");
+                mSelectedIssuer = (Issuer) data.getSerializableExtra("issuer");
 
-                    mSelectedPayerCost = (PayerCost) data.getSerializableExtra("payerCost");
+                mSelectedPayerCost = (PayerCost) data.getSerializableExtra("payerCost");
 
-                    mCreatedToken = (Token) data.getSerializableExtra("token");
+                mCreatedToken = (Token) data.getSerializableExtra("token");
 
-                    mSelectedPaymentMethod = (PaymentMethod) data.getSerializableExtra("paymentMethod");
+                mSelectedPaymentMethod = (PaymentMethod) data.getSerializableExtra("paymentMethod");
 
-                    if(MercadoPagoUtil.isCardPaymentType(mSelectedPaymentMethod.getPaymentTypeId()))
-                    {
-                        //TODO ver que poner
-                        showReviewAndConfirm("Ver que poner");
-                    }
-                    else {
-                        showReviewAndConfirm(data.getStringExtra("paymentMethodInfo"));
-                    }
-                }
+                showReviewAndConfirm(data.getStringExtra("paymentMethodInfo"));
+
             }
             else if (resultCode == RESULT_CANCELED) {
-                if(mSelectedPaymentMethod == null) {
+                if(!mPaymentMethodEditionRequested) {
                     Intent returnIntent = new Intent();
                     setResult(RESULT_CANCELED, returnIntent);
                     finish();
@@ -295,6 +292,8 @@ public class CheckoutActivity extends AppCompatActivity{
             checkoutResult.putExtra("preferenceId", mCheckoutPreference.getId());
             setResult(RESULT_OK, checkoutResult);
             finish();
+        } else if (requestCode == MercadoPago.INSTRUCTIONS_REQUEST_CODE) {
+            finish();
         }
     }
 
@@ -311,7 +310,7 @@ public class CheckoutActivity extends AppCompatActivity{
     private void drawTermsAndConditionsText() {
         StringBuilder termsAndConditionsText = new StringBuilder();
         termsAndConditionsText.append(getString(R.string.mpsdk_text_terms_and_conditions_start) + " ");
-        termsAndConditionsText.append(" <font color='blue'>" + getString(R.string.mpsdk_text_terms_and_conditions_linked) + "</font> ");
+        termsAndConditionsText.append("<font color='#0066CC'>" + getString(R.string.mpsdk_text_terms_and_conditions_linked) +"</font>");
         termsAndConditionsText.append(" " + getString(R.string.mpsdk_text_terms_and_conditions_end));
         mTermsAndConditionsTextView.setText(Html.fromHtml(termsAndConditionsText.toString()));
     }
@@ -393,10 +392,13 @@ public class CheckoutActivity extends AppCompatActivity{
                         .setPaymentMethod(mSelectedPaymentMethod)
                         .startCongratsActivity();
             } else {
+                Payment payment = new Payment();
+                payment.setTransactionAmount(mCheckoutPreference.getAmount());
+                payment.setCurrencyId(mCheckoutPreference.getItems().get(0).getCurrencyId());
                 new MercadoPago.StartActivityBuilder()
                         .setPublicKey(mMerchantPublicKey)
                         .setActivity(mActivity)
-                        .setPayment(new Payment())
+                        .setPayment(payment)
                         .setPaymentMethod(mSelectedPaymentMethod)
                         .startInstructionsActivity();
             }
@@ -406,21 +408,15 @@ public class CheckoutActivity extends AppCompatActivity{
         }
     }
 
-    protected void startMPApp() {
-
-        if ((mCheckoutPreference != null) && (mCheckoutPreference.getId() != null)) {
-            Intent intent = new Intent(this, InstallAppActivity.class);
-            intent.putExtra("preferenceId", mCheckoutPreference.getId());
-            intent.putExtra("packageName", this.getPackageName());
-            intent.putExtra("deepLink", "mercadopago://mpsdk_install_app");
-            startActivityForResult(intent, MercadoPago.INSTALL_APP_REQUEST_CODE);
-        }
-    }
-
     @Override
     public void onBackPressed() {
-        if(mSelectedPaymentMethod != null) {
-            startPaymentVaultActivity();
-        }
+        mPaymentMethodEditionRequested = false;
+        startPaymentVaultActivity();
+        animateBack();
     }
+
+    private void animateBack() {
+        overridePendingTransition(R.anim.slide_left_to_right_in, R.anim.silde_left_to_right_out);
+    }
+
 }

@@ -11,7 +11,6 @@
 
     <include layout="@layout/shopping_cart" android:id="@+id/itemInfoLayout"/>
     <RelativeLayout
-        android:layout_marginTop="15dp"
         android:layout_marginBottom="50dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -31,6 +30,7 @@
                 android:id="@+id/groupsList"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
                 android:layout_marginBottom="20dp"
                 android:layout_below="@+id/groupsLabel"
                 android:listSelector="@android:color/transparent"

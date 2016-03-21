@@ -13,6 +13,7 @@
         android:paddingBottom="10dp">
         <ImageView
             android:id="@+id/itemImage"
+            android:background="@drawable/image_border"
             android:src="@drawable/regular_payment"
             android:layout_width="88dp"
             android:layout_height="88dp"

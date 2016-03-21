@@ -15,7 +15,6 @@ import com.mercadopago.InstallmentsActivity;
 import com.mercadopago.IssuersActivity;
 import com.mercadopago.PaymentMethodsActivity;
 import com.mercadopago.PaymentVaultActivity;
-import com.mercadopago.callbacks.GetPaymentMethodCallback;
 import com.mercadopago.model.BankDeal;
 import com.mercadopago.model.Card;
 import com.mercadopago.model.CardToken;
@@ -47,8 +46,6 @@ import java.util.List;
 
 import retrofit.Callback;
 import retrofit.RestAdapter;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
 import retrofit.converter.GsonConverter;
 
 public class MercadoPago {
@@ -196,31 +193,6 @@ public class MercadoPago {
         } else {
             throw new RuntimeException("Unsupported key type for this method");
         }
-    }
-
-    public void getPaymentMethodById(final String paymentMethodId, final GetPaymentMethodCallback callback) {
-
-        this.getPaymentMethods(new Callback<List<PaymentMethod>>() {
-            @Override
-            public void success(List<PaymentMethod> paymentMethods, Response response) {
-                boolean paymentMethodFound = false;
-                for(PaymentMethod currentPaymentMethod : paymentMethods) {
-                    if(paymentMethodId.contains(currentPaymentMethod.getId())) {
-                        paymentMethodFound = true;
-                        currentPaymentMethod.setId(paymentMethodId);
-                        callback.onSuccess(currentPaymentMethod);
-                    }
-                }
-                if(!paymentMethodFound) {
-                    callback.onFailure();
-                }
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-                callback.onFailure();
-            }
-        });
     }
 
     public void getPaymentMethodSearch(BigDecimal amount, List<String> excludedPaymentTypes, List<String> excludedPaymentMethods, final Callback<PaymentMethodSearch> callback) {
@@ -391,7 +363,7 @@ public class MercadoPago {
 
     private static void startPaymentVaultActivity(Activity activity, String merchantPublicKey, String merchantBaseUrl, String merchantGetCustomerUri, String merchantAccessToken, String itemImageUri, String purchaseTitle, BigDecimal amount, String currencyId, Boolean showBankDeals, Boolean cardGuessingEnabled,
                                                   List<String> excludedPaymentMethodIds, List<String> excludedPaymentTypes, String defaultPaymentMethodId,
-                                                  Integer defaultInstallments, Integer maxInstallments) {
+                                                  Integer defaultInstallments, Integer maxInstallments, Boolean editing) {
 
         Intent vaultIntent = new Intent(activity, PaymentVaultActivity.class);
         vaultIntent.putExtra("merchantPublicKey", merchantPublicKey);
@@ -415,6 +387,8 @@ public class MercadoPago {
         if(maxInstallments != null) {
             vaultIntent.putExtra("maxInstallments", maxInstallments.toString());
         }
+
+        vaultIntent.putExtra("editing", editing);
 
         activity.startActivityForResult(vaultIntent, PAYMENT_VAULT_REQUEST_CODE);
     }
@@ -507,6 +481,7 @@ public class MercadoPago {
         private String mPurchaseTitle;
         private String mCurrencyId;
         private String mItemImageUri;
+        private Boolean mEditing;
 
         public StartActivityBuilder() {
 
@@ -678,6 +653,12 @@ public class MercadoPago {
             this.mItemImageUri = itemImageUri;
             return this;
         }
+
+        public StartActivityBuilder setEditing(boolean editing) {
+            this.mEditing = editing;
+            return this;
+        }
+
         public void startBankDealsActivity() {
 
             if (this.mActivity == null) throw new IllegalStateException("activity is null");
@@ -808,7 +789,7 @@ public class MercadoPago {
                         this.mMerchantGetCustomerUri, this.mMerchantAccessToken, this.mItemImageUri, this.mPurchaseTitle,
                         this.mAmount, this.mCurrencyId, this.mShowBankDeals, this.mCardGuessingEnabled,
                         this.mExcludedPaymentMethodIds, this.mExcludedPaymentTypes, this.mDefaultPaymentMethodId,
-                        this.mDefaultInstallments, this.mMaxInstallments);
+                        this.mDefaultInstallments, this.mMaxInstallments, this.mEditing);
             } else {
                 throw new RuntimeException("Unsupported key type for this method");
             }

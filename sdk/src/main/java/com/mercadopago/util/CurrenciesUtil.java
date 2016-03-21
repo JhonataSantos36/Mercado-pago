@@ -74,33 +74,58 @@ public class CurrenciesUtil {
 
             // return formatted string
             String formatedAmount = df.format(amount);
+            String spannedString = getSpannedString(currency, formatedAmount, symbolUp, decimalsUp);
 
-            int decimalDivisionIndex = formatedAmount.indexOf(currency.getDecimalSeparator());
-            String wholeNumber = formatedAmount.substring(0, decimalDivisionIndex);
-            String decimals = formatedAmount.substring(decimalDivisionIndex+1, formatedAmount.length());
-
-            StringBuilder htmlFormatBuilder = new StringBuilder();
-            if(symbolUp) {
-                htmlFormatBuilder.append("<sup><small>" + currency.getSymbol() + "</small></sup>");
-            } else {
-                htmlFormatBuilder.append(currency.getSymbol());
-            }
-            htmlFormatBuilder.append(wholeNumber);
-
-            if(decimalsUp) {
-                htmlFormatBuilder.append("<sup><small>" + decimals + "</small></sup>");
-            } else {
-                htmlFormatBuilder.append(decimals);
-            }
-            return Html.fromHtml(htmlFormatBuilder.toString());
+            return Html.fromHtml(spannedString);
         } else {
             return null;
         }
     }
 
-    public static Spanned formatCurrencyInText(String originalTitle) {
-        //TODO formatear como pide UX cuando desde el servicio venga formateado, crear amount formateado, reemplazar en
-        //TODO el título con los tags html
-        return Html.fromHtml(originalTitle);
+    private static String getSpannedString(Currency currency, String formattedAmount, boolean symbolUp, boolean decimalsUp) {
+
+        if(formattedAmount.contains(currency.getSymbol())) {
+            formattedAmount = formattedAmount.replace(currency.getSymbol(), "");
+        }
+
+        int decimalDivisionIndex = formattedAmount.indexOf(currency.getDecimalSeparator());
+        String wholeNumber = formattedAmount.substring(0, decimalDivisionIndex);
+        String decimals = formattedAmount.substring(decimalDivisionIndex+1, formattedAmount.length());
+
+        StringBuilder htmlFormatBuilder = new StringBuilder();
+
+        if(symbolUp) {
+            htmlFormatBuilder.append("<sup><small><small>" + currency.getSymbol() + "</small></small></sup>");
+        } else {
+            htmlFormatBuilder.append(currency.getSymbol());
+        }
+        htmlFormatBuilder.append(wholeNumber);
+
+        if(decimalsUp) {
+            htmlFormatBuilder.append("<sup><small><small>" + decimals + "</small></small></sup>");
+        } else {
+            htmlFormatBuilder.append(decimals);
+        }
+        return htmlFormatBuilder.toString();
+    }
+
+    public static Spanned formatCurrencyInText(BigDecimal amount, String currencyId, String originalText, boolean symbolUp, boolean decimalsUp) {
+
+        Spanned spannedAmount;
+        Currency currency = currenciesList.get(currencyId);
+        String formattedAmount = formatNumber(amount, currencyId);
+        if(formattedAmount != null) {
+            String spannedString = getSpannedString(currency, formattedAmount, true, true);
+
+            String formattedText = originalText;
+            if(originalText.contains(formattedAmount)) {
+                formattedText = originalText.replace(formattedAmount, spannedString);
+            }
+            spannedAmount = Html.fromHtml(formattedText);
+        }
+        else {
+            spannedAmount = Html.fromHtml(originalText);
+        }
+        return spannedAmount;
     }
 }
