@@ -17,23 +17,20 @@
         android:src="@drawable/ico_numbers_2"
         android:layout_gravity="center_horizontal" />
 
-    <TextView
+    <com.mercadopago.views.MPTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/step2_description"
         android:gravity="center_horizontal"
         android:layout_marginTop="15dp"
         style="@style/mpsdk_form_label"/>
-
-    <Button
+    <com.mercadopago.views.MPButton
         android:id="@+id/continueButton"
         android:layout_width="match_parent"
         android:layout_height="@dimen/mpsdk_button_height"
         android:layout_marginTop="25dp"
         android:gravity="center"
         android:text="@string/mpsdk_continue_label"
-        android:layout_below="@+id/image"
         android:onClick="submitForm"
         style="@style/mpsdk_button_normal"/>
-
 </LinearLayout>

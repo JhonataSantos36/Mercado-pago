@@ -10,11 +10,9 @@ import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import com.mercadopago.adapters.IdentificationTypesAdapter;
 import com.mercadopago.core.MercadoPago;
@@ -26,6 +24,8 @@ import com.mercadopago.model.Token;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.LayoutUtil;
 import com.mercadopago.util.MercadoPagoUtil;
+import com.mercadopago.views.MPEditText;
+import com.mercadopago.views.MPTextView;
 
 import java.util.List;
 
@@ -39,15 +39,15 @@ public class CardActivity extends AppCompatActivity {
     private PaymentMethod mPaymentMethod;
 
     // Input controls
-    private EditText mCardHolderName;
-    private EditText mCardNumber;
-    private TextView mExpiryError;
-    private EditText mExpiryMonth;
-    private EditText mExpiryYear;
+    private MPEditText mCardHolderName;
+    private MPEditText mCardNumber;
+    private MPTextView mExpiryError;
+    private MPEditText mExpiryMonth;
+    private MPEditText mExpiryYear;
     private RelativeLayout mIdentificationLayout;
-    private EditText mIdentificationNumber;
+    private MPEditText mIdentificationNumber;
     private Spinner mIdentificationType;
-    private EditText mSecurityCode;
+    private MPEditText mSecurityCode;
 
     // Current values
     private CardToken mCardToken;
@@ -70,15 +70,15 @@ public class CardActivity extends AppCompatActivity {
         mMerchantPublicKey = this.getIntent().getStringExtra("merchantPublicKey");
 
         // Set input controls
-        mCardNumber = (EditText) findViewById(R.id.cardNumber);
-        mSecurityCode = (EditText) findViewById(R.id.securityCode);
-        mCardHolderName = (EditText) findViewById(R.id.cardholderName);
-        mIdentificationNumber = (EditText) findViewById(R.id.identificationNumber);
+        mCardNumber = (MPEditText) findViewById(R.id.cardNumber);
+        mSecurityCode = (MPEditText) findViewById(R.id.securityCode);
+        mCardHolderName = (MPEditText) findViewById(R.id.cardholderName);
+        mIdentificationNumber = (MPEditText) findViewById(R.id.identificationNumber);
         mIdentificationType = (Spinner) findViewById(R.id.identificationType);
         mIdentificationLayout = (RelativeLayout) findViewById(R.id.identificationLayout);
-        mExpiryError = (TextView) findViewById(R.id.expiryError);
-        mExpiryMonth = (EditText) findViewById(R.id.expiryMonth);
-        mExpiryYear = (EditText) findViewById(R.id.expiryYear);
+        mExpiryError = (MPTextView) findViewById(R.id.expiryError);
+        mExpiryMonth = (MPEditText) findViewById(R.id.expiryMonth);
+        mExpiryYear = (MPEditText) findViewById(R.id.expiryYear);
 
         // Init MercadoPago object with public key
         mMercadoPago = new MercadoPago.Builder()
@@ -295,7 +295,7 @@ public class CardActivity extends AppCompatActivity {
         });
     }
 
-    private void setFormGoButton(final EditText editText) {
+    private void setFormGoButton(final MPEditText editText) {
 
         editText.setOnKeyListener(new View.OnKeyListener() {
 
@@ -332,7 +332,7 @@ public class CardActivity extends AppCompatActivity {
         });
     }
 
-    private void setErrorTextCleaner(final EditText editText) {
+    private void setErrorTextCleaner(final MPEditText editText) {
 
         editText.addTextChangedListener(new TextWatcher() {
 

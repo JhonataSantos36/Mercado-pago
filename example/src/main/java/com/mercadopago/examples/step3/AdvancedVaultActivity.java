@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mercadopago.adapters.CustomerCardsAdapter;
@@ -21,6 +20,7 @@ import com.mercadopago.model.Token;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.LayoutUtil;
 import com.mercadopago.util.MercadoPagoUtil;
+import com.mercadopago.views.MPTextView;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -34,7 +34,7 @@ public class AdvancedVaultActivity extends SimpleVaultActivity {
     protected BigDecimal mAmount;
     protected View mInstallmentsCard;
     protected FrameLayout mInstallmentsLayout;
-    protected TextView mInstallmentsText;
+    protected MPTextView mInstallmentsText;
     protected List<PayerCost> mPayerCosts;
     protected PayerCost mSelectedPayerCost;
     protected Issuer mSelectedIssuer;
@@ -56,7 +56,7 @@ public class AdvancedVaultActivity extends SimpleVaultActivity {
 
             mInstallmentsCard = findViewById(com.mercadopago.R.id.installmentsCard);
             mInstallmentsLayout = (FrameLayout) findViewById(R.id.installmentsLayout);
-            mInstallmentsText = (TextView) findViewById(R.id.installmentsLabel);
+            mInstallmentsText = (MPTextView) findViewById(R.id.installmentsLabel);
             mInstallmentsCard.setVisibility(View.GONE);
 
         } else {

@@ -12,10 +12,10 @@ import android.view.animation.AnimationUtils;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.mercadopago.R;
 import com.mercadopago.util.CurrenciesUtil;
+import com.mercadopago.views.MPTextView;
 import com.squareup.picasso.Picasso;
 
 import java.math.BigDecimal;
@@ -55,8 +55,8 @@ public class ShoppingCartController {
         mViewBelowShoppingCart = viewBelowShoppingCart;
         mPictureUrl = pictureUri;
 
-        TextView itemDescriptionTextView = (TextView) mActivity.findViewById(R.id.itemTitle);
-        TextView itemAmountTextView = (TextView) mActivity.findViewById(R.id.itemAmount);
+        MPTextView itemDescriptionTextView = (MPTextView) mActivity.findViewById(R.id.itemTitle);
+        MPTextView itemAmountTextView = (MPTextView) mActivity.findViewById(R.id.itemAmount);
         itemDescriptionTextView.setText(purchaseTitle);
         itemAmountTextView.setText(getAmountLabel(amount, currencyId));
         showItemImage();

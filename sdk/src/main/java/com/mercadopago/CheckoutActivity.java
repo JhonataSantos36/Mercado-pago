@@ -10,9 +10,7 @@ import android.text.Spanned;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mercadopago.controllers.ShoppingCartController;
@@ -30,6 +28,8 @@ import com.mercadopago.model.Token;
 import com.mercadopago.util.CurrenciesUtil;
 import com.mercadopago.util.LayoutUtil;
 import com.mercadopago.util.MercadoPagoUtil;
+import com.mercadopago.views.MPButton;
+import com.mercadopago.views.MPTextView;
 
 import java.math.BigDecimal;
 
@@ -55,12 +55,12 @@ public class CheckoutActivity extends AppCompatActivity{
     protected boolean mPaymentMethodEditionRequested;
 
     //Controls
-    protected TextView mPaymentMethodCommentTextView;
-    protected TextView mTermsAndConditionsTextView;
-    protected TextView mTotalAmountTextView;
+    protected MPTextView mPaymentMethodCommentTextView;
+    protected MPTextView mTermsAndConditionsTextView;
+    protected MPTextView mTotalAmountTextView;
     protected ImageView mPaymentMethodImageView;
     protected ImageView mEditPaymentMethodImageView;
-    protected Button mPayButton;
+    protected MPButton mPayButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -144,7 +144,7 @@ public class CheckoutActivity extends AppCompatActivity{
     }
 
     private void initializeActivityControls() {
-        mPaymentMethodCommentTextView = (TextView) findViewById(R.id.payment_method_comment);
+        mPaymentMethodCommentTextView = (MPTextView) findViewById(R.id.payment_method_comment);
         mPaymentMethodImageView = (ImageView) findViewById(R.id.payment_method_image);
         mEditPaymentMethodImageView = (ImageView) findViewById(R.id.imageEdit);
         mEditPaymentMethodImageView.setOnClickListener(new View.OnClickListener() {
@@ -155,7 +155,7 @@ public class CheckoutActivity extends AppCompatActivity{
                 animateBack();
             }
         });
-        mTermsAndConditionsTextView = (TextView) findViewById(R.id.termsAndConditions);
+        mTermsAndConditionsTextView = (MPTextView) findViewById(R.id.termsAndConditions);
         mTermsAndConditionsTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -163,7 +163,7 @@ public class CheckoutActivity extends AppCompatActivity{
             }
         });
 
-        mPayButton = (Button) findViewById(R.id.payButton);
+        mPayButton = (MPButton) findViewById(R.id.payButton);
         mPayButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -171,7 +171,7 @@ public class CheckoutActivity extends AppCompatActivity{
             }
         });
         mPurchaseTitle = getPurchaseTitle();
-        mTotalAmountTextView = (TextView) findViewById(R.id.totalAmount);
+        mTotalAmountTextView = (MPTextView) findViewById(R.id.totalAmount);
     }
 
     protected void startTermsAndConditionsActivity() {

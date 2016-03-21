@@ -38,14 +38,14 @@
                     android:clickable="true"
                     android:onClick="onCustomerMethodsClick">
 
-                    <TextView
+                    <com.mercadopago.views.MPTextView
                         android:id="@+id/customerMethodLabel"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:gravity="center_vertical"
                         android:singleLine="true"
                         tools:text="Visa"
-                        tools:drawableLeft="@drawable/ico_tc_visa"
+                        tools:drawableLeft="@drawable/visa"
                         android:drawablePadding="10dp"
                         style="@style/mpsdk_list_label"/>
 
@@ -70,15 +70,14 @@
                     android:layout_width="match_parent"
                     android:layout_margin="@dimen/mpsdk_margin_std">
 
-                    <TextView
+                    <com.mercadopago.views.MPTextView
                         xmlns:android="http://schemas.android.com/apk/res/android"
                         android:id="@+id/text_cod_seg"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/mpsdk_security_code"
                         style="@style/mpsdk_form_label" />
-
-                    <EditText
+                    <com.mercadopago.views.MPEditText
                         android:id="@+id/securityCode"
                         android:layout_width="120dp"
                         android:layout_height="wrap_content"
@@ -88,8 +87,7 @@
                         android:singleLine="true"
                         android:imeOptions="actionGo"
                         android:layout_marginTop="@dimen/mpsdk_margin_std"
-                        style="@style/mpsdk_form_input"/>
-
+                        style="@style/mpsdk_form_input" />
                     <LinearLayout
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
@@ -104,21 +102,20 @@
                             android:layout_marginBottom="10dp"
                             tools:src="@drawable/bank" />
 
-                        <TextView
+                        <com.mercadopago.views.MPTextView
                             android:id="@+id/cVVDescriptor"
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
                             android:gravity="end"
                             tools:text="@string/mpsdk_cod_seg_desc"
                             style="@style/mpsdk_help_text" />
-
                     </LinearLayout>
 
                 </RelativeLayout>
 
             </android.support.v7.widget.CardView>
 
-            <Button
+            <com.mercadopago.views.MPButton
                 android:id="@+id/submitButton"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/mpsdk_button_height"
@@ -127,7 +124,6 @@
                 android:layout_margin="@dimen/mpsdk_margin_std"
                 android:onClick="submitForm"
                 style="@style/mpsdk_button_normal"/>
-
         </LinearLayout>
 
     </ScrollView>

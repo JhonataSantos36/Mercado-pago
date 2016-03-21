@@ -9,10 +9,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -34,6 +32,9 @@ import com.mercadopago.util.MercadoPagoUtil;
 import com.mercadopago.model.Card;
 import com.mercadopago.model.Customer;
 import com.mercadopago.model.PayerCost;
+import com.mercadopago.views.MPButton;
+import com.mercadopago.views.MPEditText;
+import com.mercadopago.views.MPTextView;
 
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
@@ -64,14 +65,14 @@ public class VaultActivity extends AppCompatActivity {
     // Input controls
     protected View mInstallmentsCard;
     protected View mSecurityCodeCard;
-    protected EditText mSecurityCodeText;
+    protected MPEditText mSecurityCodeText;
     protected FrameLayout mCustomerMethodsLayout;
-    protected TextView mCustomerMethodsText;
+    protected MPTextView mCustomerMethodsText;
     protected FrameLayout mInstallmentsLayout;
-    protected TextView mInstallmentsText;
+    protected MPTextView mInstallmentsText;
     protected ImageView mCVVImage;
-    protected TextView mCVVDescriptor;
-    protected Button mSubmitButton;
+    protected MPTextView mCVVDescriptor;
+    protected MPButton mSubmitButton;
 
     // Current values
     protected List<Card> mCards;
@@ -110,13 +111,13 @@ public class VaultActivity extends AppCompatActivity {
             mInstallmentsCard = findViewById(R.id.installmentsCard);
             mSecurityCodeCard = findViewById(R.id.securityCodeCard);
             mCVVImage = (ImageView) findViewById(R.id.cVVImage);
-            mCVVDescriptor = (TextView) findViewById(R.id.cVVDescriptor);
-            mSubmitButton = (Button) findViewById(R.id.payButton);
+            mCVVDescriptor = (MPTextView) findViewById(R.id.cVVDescriptor);
+            mSubmitButton = (MPButton) findViewById(R.id.payButton);
             mCustomerMethodsLayout = (FrameLayout) findViewById(R.id.customerMethodLayout);
-            mCustomerMethodsText = (TextView) findViewById(R.id.customerMethodLabel);
+            mCustomerMethodsText = (MPTextView) findViewById(R.id.customerMethodLabel);
             mInstallmentsLayout = (FrameLayout) findViewById(R.id.installmentsLayout);
-            mInstallmentsText = (TextView) findViewById(R.id.installmentsLabel);
-            mSecurityCodeText = (EditText) findViewById(R.id.securityCode);
+            mInstallmentsText = (MPTextView) findViewById(R.id.installmentsLabel);
+            mSecurityCodeText = (MPEditText) findViewById(R.id.securityCode);
 
             // Init MercadoPago object with public key
             mMercadoPago = new MercadoPago.Builder()
@@ -690,7 +691,7 @@ public class VaultActivity extends AppCompatActivity {
         }
     }
 
-    protected void setFormGoButton(final EditText editText) {
+    protected void setFormGoButton(final MPEditText editText) {
 
         editText.setOnKeyListener(new View.OnKeyListener() {
 

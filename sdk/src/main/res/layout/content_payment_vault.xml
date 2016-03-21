@@ -16,7 +16,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/content_layout"
         android:layout_below="@+id/itemInfoLayout">
-        <TextView
+        <com.mercadopago.views.MPTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"

@@ -14,15 +14,15 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <TextView
+        <com.mercadopago.views.MPTextView
             android:id="@+id/emptyList"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="15dp"
             android:gravity="center"
             android:text="@string/mpsdk_empty_bank_deals"
-            style="@style/mpsdk_big_text_light"
-            android:visibility="gone"/>
+            android:visibility="gone"
+            style="@style/mpsdk_big_text_light"/>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/bank_deals_list"

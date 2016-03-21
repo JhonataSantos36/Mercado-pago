@@ -7,7 +7,6 @@ import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -17,8 +16,8 @@ import com.mercadopago.adapters.PaymentMethodsSpinnerAdapter;
 import com.mercadopago.callbacks.PaymentMethodSelectionCallback;
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.model.PaymentMethod;
-import com.mercadopago.model.PaymentType;
 import com.mercadopago.util.MercadoPagoUtil;
+import com.mercadopago.views.MPEditText;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +30,7 @@ public class PaymentMethodGuessingController {
     private Activity mActivity;
 
     private ImageView mImagePaymentMethod;
-    private EditText mCardNumber;
+    private MPEditText mCardNumber;
     private LinearLayout mPaymentMethodLayout;
     private Spinner mSpinnerPaymentMethods;
 
@@ -54,7 +53,7 @@ public class PaymentMethodGuessingController {
     private void initializeComponents() {
         mImagePaymentMethod = (ImageView) mActivity.findViewById(R.id.pmImage);
 
-        mCardNumber = (EditText) mActivity.findViewById(R.id.cardNumber);
+        mCardNumber = (MPEditText) mActivity.findViewById(R.id.cardNumber);
         mCardNumber.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -140,20 +139,20 @@ public class PaymentMethodGuessingController {
         }
     }
 
-    private void blockCardNumbersInput(EditText text) {
+    private void blockCardNumbersInput(MPEditText text) {
         int maxLength = MercadoPago.BIN_LENGTH;
         setInputMaxLength(text, maxLength);
         mCardNumberBlocked = true;
     }
 
-    private void unBlockCardNumbersInput(EditText text){
+    private void unBlockCardNumbersInput(MPEditText text){
 
         int maxLength = 16;
         setInputMaxLength(text, maxLength);
         mCardNumberBlocked = false;
     }
 
-    private void setInputMaxLength(EditText text, int maxLength) {
+    private void setInputMaxLength(MPEditText text, int maxLength) {
         InputFilter[] fArray = new InputFilter[1];
         fArray[0] = new InputFilter.LengthFilter(maxLength);
         text.setFilters(fArray);

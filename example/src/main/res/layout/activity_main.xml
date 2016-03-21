@@ -19,7 +19,7 @@
             android:src="@drawable/isologo"
             android:layout_gravity="center_horizontal" />
 
-        <TextView
+        <com.mercadopago.views.MPTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/welcome_title"
@@ -31,7 +31,7 @@
             android:gravity="center_horizontal"
             style="@style/big_label"/>
 
-        <Button
+        <com.mercadopago.views.MPButton
             android:layout_width="match_parent"
             android:layout_height="@dimen/mpsdk_button_height"
             android:layout_marginTop="25dp"
@@ -40,16 +40,16 @@
             android:onClick="runStep1"
             style="@style/mpsdk_button_normal"/>
 
-        <Button
+        <com.mercadopago.views.MPButton
             android:layout_width="match_parent"
             android:layout_height="@dimen/mpsdk_button_height"
             android:layout_marginTop="10dp"
             android:gravity="center"
             android:text="@string/title_activity_step2"
             android:onClick="runStep2"
-            style="@style/mpsdk_button_normal"/>
+            style="@style/mpsdk_button_normal" />
 
-        <Button
+        <com.mercadopago.views.MPButton
             android:layout_width="match_parent"
             android:layout_height="@dimen/mpsdk_button_height"
             android:layout_marginTop="10dp"
@@ -57,8 +57,7 @@
             android:text="@string/title_activity_step3"
             android:onClick="runStep3"
             style="@style/mpsdk_button_normal"/>
-
-        <Button
+        <com.mercadopago.views.MPButton
             android:layout_width="match_parent"
             android:layout_height="@dimen/mpsdk_button_height"
             android:layout_marginTop="10dp"
@@ -66,8 +65,7 @@
             android:text="@string/title_activity_step4"
             android:onClick="runStep4"
             style="@style/mpsdk_button_normal"/>
-
-        <Button
+        <com.mercadopago.views.MPButton
             android:layout_width="match_parent"
             android:layout_height="@dimen/mpsdk_button_height"
             android:layout_marginTop="10dp"
@@ -75,8 +73,7 @@
             android:text="@string/title_activity_step5"
             android:onClick="runStep5"
             style="@style/mpsdk_button_normal"/>
-
-        <Button
+        <com.mercadopago.views.MPButton
             android:layout_width="match_parent"
             android:layout_height="@dimen/mpsdk_button_height"
             android:layout_marginTop="10dp"
@@ -84,7 +81,6 @@
             android:text="@string/title_activity_step6"
             android:onClick="runStep6"
             style="@style/mpsdk_button_normal"/>
-
     </LinearLayout>
 
 </ScrollView>

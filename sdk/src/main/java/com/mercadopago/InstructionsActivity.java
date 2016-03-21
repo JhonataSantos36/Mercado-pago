@@ -5,13 +5,13 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.Spanned;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.model.Instruction;
@@ -22,6 +22,8 @@ import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.CurrenciesUtil;
 import com.mercadopago.util.LayoutUtil;
+import com.mercadopago.views.MPButton;
+import com.mercadopago.views.MPTextView;
 
 import java.util.List;
 
@@ -34,12 +36,12 @@ public class InstructionsActivity extends AppCompatActivity {
     //Controls
     private LinearLayout mReferencesLayout;
     private Activity mActivity;
-    private TextView mTitle;
-    private TextView mPrimaryInfo;
-    private TextView mSecondaryInfo;
-    private TextView mTertiaryInfo;
-    private TextView mAccreditationMessage;
-    private TextView mActionButton;
+    private MPTextView mTitle;
+    private MPTextView mPrimaryInfo;
+    private MPTextView mSecondaryInfo;
+    private MPTextView mTertiaryInfo;
+    private MPTextView mAccreditationMessage;
+    private MPButton mActionButton;
 
     //Params
     private Payment mPayment;
@@ -113,11 +115,12 @@ public class InstructionsActivity extends AppCompatActivity {
     }
 
     private void setReferencesInformation(Instruction instruction) {
-        LinearLayout.LayoutParams marginParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams marginParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT);
         marginParams.setMargins(0, 10, 0, 10);
         for(InstructionReference reference : instruction.getReferences()) {
-            TextView currentTitleTextView = new TextView(this);
-            TextView currentValueTextView = new TextView(this);
+            MPTextView currentTitleTextView = new MPTextView(this);
+            MPTextView currentValueTextView = new MPTextView(this);
 
             if(reference.hasValue()) {
 
@@ -176,11 +179,11 @@ public class InstructionsActivity extends AppCompatActivity {
 
     private void initializeControls() {
         mReferencesLayout = (LinearLayout) findViewById(R.id.referencesLayout);
-        mTitle = (TextView) findViewById(R.id.title);
-        mPrimaryInfo = (TextView) findViewById(R.id.primaryInfo);
-        mSecondaryInfo = (TextView) findViewById(R.id.secondaryInfo);
-        mTertiaryInfo = (TextView) findViewById(R.id.tertiaryInfo);
-        mAccreditationMessage = (TextView) findViewById(R.id.accreditationMessage);
-        mActionButton = (TextView) findViewById(R.id.actionButton);
+        mTitle = (MPTextView) findViewById(R.id.title);
+        mPrimaryInfo = (MPTextView) findViewById(R.id.primaryInfo);
+        mSecondaryInfo = (MPTextView) findViewById(R.id.secondaryInfo);
+        mTertiaryInfo = (MPTextView) findViewById(R.id.tertiaryInfo);
+        mAccreditationMessage = (MPTextView) findViewById(R.id.accreditationMessage);
+        mActionButton = (MPButton) findViewById(R.id.actionButton);
     }
 }

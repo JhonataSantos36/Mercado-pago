@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.mercadopago.model.Issuer;
 import com.mercadopago.R;
+import com.mercadopago.views.MPTextView;
 
 import java.util.List;
 
@@ -18,12 +19,12 @@ public class IssuersAdapter extends  RecyclerView.Adapter<IssuersAdapter.ViewHol
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView mTextView;
+        public MPTextView mTextView;
 
         public ViewHolder(View v, View.OnClickListener listener) {
 
             super(v);
-            mTextView = (TextView) v.findViewById(R.id.label);
+            mTextView = (MPTextView) v.findViewById(R.id.label);
             if (listener != null) {
                 v.setOnClickListener(listener);
             }

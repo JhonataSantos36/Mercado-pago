@@ -6,10 +6,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.TextView;
 
 import com.mercadopago.model.IdentificationType;
 import com.mercadopago.R;
+import com.mercadopago.views.MPTextView;
 
 import java.util.List;
 
@@ -49,7 +49,7 @@ public class IdentificationTypesAdapter extends BaseAdapter {
 
         IdentificationType identificationType = mData.get(position);
 
-        TextView label = (TextView) row.findViewById(R.id.label);
+        MPTextView label = (MPTextView) row.findViewById(R.id.label);
         label.setText(identificationType.getName());
 
         return row;

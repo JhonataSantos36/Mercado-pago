@@ -6,13 +6,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.mercadopago.R;
 import com.mercadopago.callbacks.PaymentMethodSearchCallback;
 import com.mercadopago.model.PaymentMethodSearch;
 import com.mercadopago.model.PaymentMethodSearchItem;
 import com.mercadopago.util.MercadoPagoUtil;
+import com.mercadopago.views.MPTextView;
 
 import java.util.List;
 
@@ -127,8 +127,8 @@ public class PaymentMethodSearchItemAdapter extends RecyclerView.Adapter<Payment
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView mDescription;
-        private TextView mComment;
+        private MPTextView mDescription;
+        private MPTextView mComment;
         private ImageView mIcon;
         private View mSeparator;
         private PaymentMethodSearchItem mItem;
@@ -143,8 +143,8 @@ public class PaymentMethodSearchItemAdapter extends RecyclerView.Adapter<Payment
                 }
             });
 
-            mDescription = (TextView) itemView.findViewById(R.id.title);
-            mComment = (TextView) itemView.findViewById(R.id.comment);
+            mDescription = (MPTextView) itemView.findViewById(R.id.title);
+            mComment = (MPTextView) itemView.findViewById(R.id.comment);
             mIcon = (ImageView) itemView.findViewById(R.id.image);
             mSeparator = itemView.findViewById(R.id.separator);
         }

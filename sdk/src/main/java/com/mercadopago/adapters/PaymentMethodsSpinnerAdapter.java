@@ -6,10 +6,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.TextView;
 
 import com.mercadopago.R;
 import com.mercadopago.model.PaymentMethod;
+import com.mercadopago.views.MPTextView;
 
 import java.util.List;
 
@@ -63,14 +63,14 @@ public class PaymentMethodsSpinnerAdapter extends BaseAdapter {
 
         PaymentMethod pm = mData.get(position);
 
-        TextView label = (TextView) row.findViewById(R.id.label);
+        MPTextView label = (MPTextView) row.findViewById(R.id.label);
         label.setText(pm.getName());
 
         return row;
     }
 
     public void setError(View v, String error) {
-        TextView label = (TextView) v.findViewById(R.id.label);
+        MPTextView label = (MPTextView) v.findViewById(R.id.label);
         label.setError(error);
         mError = error;
     }

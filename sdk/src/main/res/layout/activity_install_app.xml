@@ -28,7 +28,7 @@
                     android:layout_gravity="center"
                     android:layout_margin="10dp">
 
-                    <TextView
+                    <com.mercadopago.views.MPTextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
@@ -44,7 +44,7 @@
 
         </LinearLayout>
 
-        <Button
+        <com.mercadopago.views.MPButton
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_marginTop="10dp"

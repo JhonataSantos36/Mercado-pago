@@ -20,24 +20,24 @@
             android:scaleType="fitXY"
             android:layout_marginStart="20dp"
             android:layout_marginLeft="20dp"/>
-        <TextView
+        <com.mercadopago.views.MPTextView
             android:id="@+id/itemTitle"
             android:text="Prueba"
-            style="@style/mpsdk_regular_white_thin_bold_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/itemImage"
             android:layout_marginStart="20dp"
             android:layout_marginLeft="20dp"
-            android:layout_marginBottom="5dp"/>
-        <TextView
+            android:layout_marginBottom="5dp"
+            style="@style/mpsdk_title_text"/>
+        <com.mercadopago.views.MPTextView
             android:id="@+id/itemAmount"
             android:text="$100"
-            style="@style/mpsdk_regular_white_thin_bold_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/itemTitle"
             android:layout_alignStart="@+id/itemTitle"
-            android:layout_alignLeft="@+id/itemTitle"/>
+            android:layout_alignLeft="@+id/itemTitle"
+            style="@style/mpsdk_regular_white_thin_bold_text"/>
     </RelativeLayout>
 </RelativeLayout>

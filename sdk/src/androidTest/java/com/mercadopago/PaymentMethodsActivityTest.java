@@ -12,6 +12,7 @@ import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.test.ActivityResult;
 import com.mercadopago.test.BaseTest;
 import com.mercadopago.test.StaticMock;
+import com.mercadopago.views.MPTextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +38,7 @@ public class PaymentMethodsActivityTest extends BaseTest<PaymentMethodsActivity>
 
         // Simulate click on first item
         PaymentMethodsAdapter paymentMethodsAdapter = (PaymentMethodsAdapter) list.getAdapter();
-        View row = new TextView(getApplicationContext());
+        View row = new MPTextView(getApplicationContext());
         row.setTag(paymentMethodsAdapter.getItem(0));
         paymentMethodsAdapter.getListener().onClick(row);
 

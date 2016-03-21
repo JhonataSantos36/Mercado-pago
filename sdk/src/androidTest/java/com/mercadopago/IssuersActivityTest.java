@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.TextView;
 
 import com.mercadopago.adapters.IssuersAdapter;
 import com.mercadopago.model.ApiException;
@@ -13,6 +12,7 @@ import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.test.ActivityResult;
 import com.mercadopago.test.BaseTest;
 import com.mercadopago.test.StaticMock;
+import com.mercadopago.views.MPTextView;
 
 public class IssuersActivityTest extends BaseTest<IssuersActivity> {
 
@@ -37,7 +37,7 @@ public class IssuersActivityTest extends BaseTest<IssuersActivity> {
 
         // Simulate click on first item
         IssuersAdapter issuersAdapter = (IssuersAdapter) list.getAdapter();
-        View row = new TextView(getApplicationContext());
+        View row = new MPTextView(getApplicationContext());
         row.setTag(issuersAdapter.getItem(0));
         Long issuerId = issuersAdapter.getItem(0).getId();
         issuersAdapter.getListener().onClick(row);

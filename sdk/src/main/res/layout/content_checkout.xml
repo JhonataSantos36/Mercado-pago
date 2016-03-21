@@ -45,16 +45,17 @@
                      android:layout_alignParentTop="true"
                      android:layout_above="@+id/payment_method_comment" />
 
-                    <TextView
+                 <com.mercadopago.views.MPTextView
                         android:id="@+id/payment_method_comment"
                         android:layout_marginBottom="12dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        tools:text="Hola, soy un comentario"
-                        style="@style/mpsdk_list_label_comment"
                         android:layout_alignParentBottom="true"
                         android:layout_alignStart="@+id/payment_method_image"
-                        android:layout_alignLeft="@+id/payment_method_image"/>
+                        android:layout_alignLeft="@+id/payment_method_image"
+                        tools:text="Hola, soy un comentario"
+                        app:fontStyle="regular"
+                        style="@style/mpsdk_list_label_comment"/>
 
                     <ImageView
                         android:layout_width="15dp"
@@ -79,29 +80,34 @@
                 android:minHeight="45dp"
                 xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:tools="http://schemas.android.com/tools">
-                <TextView
+
+
+                <com.mercadopago.views.MPTextView
                     android:id="@+id/totalAmountText"
-                    style="@style/mpsdk_regular_dark_thin"
-                    android:text="@string/mpsdk_payment_amount_to_pay"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginStart="4dp"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-                <TextView
+                    android:layout_height="wrap_content"
+                    android:text="@string/mpsdk_payment_amount_to_pay"
+                    style="@style/mpsdk_regular_dark_thin"/>
+
+                <com.mercadopago.views.MPTextView
+                    android:id="@+id/totalAmount"
                     android:layout_toRightOf="@+id/totalAmountText"
                     android:layout_toEndOf="@+id/totalAmountText"
                     android:layout_marginLeft="4dp"
                     android:layout_marginStart="4dp"
-                    android:id="@+id/totalAmount"
-                    style="@style/mpsdk_regular_dark_thin"
                     android:text="$X"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    style="@style/mpsdk_regular_dark_thin"/>
             </RelativeLayout>
             <View
                 android:layout_width="match_parent"
                 android:layout_height="3dp"
                 android:background="@drawable/drop_shadow">
             </View>
-            <TextView
+            <com.mercadopago.views.MPTextView
                 android:paddingLeft="20dp"
                 android:paddingStart="20dp"
                 android:paddingRight="20dp"
@@ -114,7 +120,8 @@
                 android:layout_height="wrap_content"
                 android:lineSpacingMultiplier="1.5"
                 style="@style/small_comment"/>
-            <Button
+
+            <com.mercadopago.views.MPButton
                 android:id="@+id/payButton"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/mpsdk_button_height"
@@ -132,14 +139,16 @@
                 android:layout_marginEnd="20dp"
                 android:layout_marginRight="20dp"
                 android:layout_gravity="center_horizontal|bottom" />
-            <TextView
+            <com.mercadopago.views.MPTextView
                 android:layout_gravity="center"
                 android:layout_marginTop="30dp"
                 android:layout_marginBottom="20dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/mpsdk_processed_by_mercado_pago"
+                app:fontStyle="regular"
                 style="@style/small_comment"/>
+
         </LinearLayout>
     </RelativeLayout>
 </android.support.v4.widget.NestedScrollView>

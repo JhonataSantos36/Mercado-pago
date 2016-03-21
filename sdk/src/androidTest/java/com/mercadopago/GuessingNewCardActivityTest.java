@@ -2,12 +2,10 @@ package com.mercadopago;
 
 import android.content.Intent;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import com.mercadopago.adapters.IssuersSpinnerAdapter;
 import com.mercadopago.adapters.PaymentMethodsSpinnerAdapter;
@@ -17,21 +15,23 @@ import com.mercadopago.model.CardToken;
 import com.mercadopago.test.ActivityResult;
 import com.mercadopago.test.BaseTest;
 import com.mercadopago.test.StaticMock;
+import com.mercadopago.views.MPEditText;
+import com.mercadopago.views.MPTextView;
 
 /**
  * Created by mreverter on 20/11/15.
  */
 public class GuessingNewCardActivityTest  extends BaseTest<GuessingNewCardActivity> {
     private GuessingNewCardActivity mActivity;
-    private EditText mCardNumberText;
-    private EditText mCardholderNameText;
-    private EditText mExpiryMonthText;
-    private EditText mExpiryYearText;
-    private TextView mExpiryErrorText;
-    private EditText mIdentificationNumberText;
-    private TextView mCVVDescriptor;
+    private MPEditText mCardNumberText;
+    private MPEditText mCardholderNameText;
+    private MPEditText mExpiryMonthText;
+    private MPEditText mExpiryYearText;
+    private MPTextView mExpiryErrorText;
+    private MPEditText mIdentificationNumberText;
+    private MPTextView mCVVDescriptor;
     private ImageView mCVVImage;
-    private EditText mSecurityCodeText;
+    private MPEditText mSecurityCodeText;
     private ImageView mPaymentMethodImage;
     private Spinner mPaymentMethodsSpinner;
     private LinearLayout mPaymentMethodsLayout;
@@ -53,16 +53,16 @@ public class GuessingNewCardActivityTest  extends BaseTest<GuessingNewCardActivi
         getInstrumentation().runOnMainSync(new Runnable() {
             public void run() {
 
-                EditText fieldText;
-                fieldText = (EditText) mActivity.findViewById(R.id.cardNumber);
+                MPEditText fieldText;
+                fieldText = (MPEditText) mActivity.findViewById(R.id.cardNumber);
                 fieldText.setText(StaticMock.DUMMY_CARD_NUMBER);
-                fieldText = (EditText) mActivity.findViewById(R.id.expiryMonth);
+                fieldText = (MPEditText) mActivity.findViewById(R.id.expiryMonth);
                 fieldText.setText(Integer.toString(StaticMock.DUMMY_EXPIRATION_MONTH));
-                fieldText = (EditText) mActivity.findViewById(R.id.expiryYear);
+                fieldText = (MPEditText) mActivity.findViewById(R.id.expiryYear);
                 fieldText.setText(Integer.toString(StaticMock.DUMMY_EXPIRATION_YEAR_SHORT));
-                fieldText = (EditText) mActivity.findViewById(R.id.cardholderName);
+                fieldText = (MPEditText) mActivity.findViewById(R.id.cardholderName);
                 fieldText.setText(StaticMock.DUMMY_CARDHOLDER_NAME);
-                fieldText = (EditText) mActivity.findViewById(R.id.identificationNumber);
+                fieldText = (MPEditText) mActivity.findViewById(R.id.identificationNumber);
                 fieldText.setText(StaticMock.DUMMY_IDENTIFICATION_NUMBER);
             }
         });
@@ -249,24 +249,24 @@ public class GuessingNewCardActivityTest  extends BaseTest<GuessingNewCardActivi
         // Set activity and set fields
         doSecurityCodeStart();
         setFields();
-        mSecurityCodeText = (EditText) mActivity.findViewById(R.id.securityCode);
+        mSecurityCodeText = (MPEditText) mActivity.findViewById(R.id.securityCode);
 
         // Fill the form and simulate button click
         getInstrumentation().runOnMainSync(new Runnable() {
             public void run() {
 
-                EditText fieldText;
-                fieldText = (EditText) mActivity.findViewById(R.id.cardNumber);
+                MPEditText fieldText;
+                fieldText = (MPEditText) mActivity.findViewById(R.id.cardNumber);
                 fieldText.setText(StaticMock.DUMMY_CARD_NUMBER);
-                fieldText = (EditText) mActivity.findViewById(R.id.expiryMonth);
+                fieldText = (MPEditText) mActivity.findViewById(R.id.expiryMonth);
                 fieldText.setText(Integer.toString(StaticMock.DUMMY_EXPIRATION_MONTH));
-                fieldText = (EditText) mActivity.findViewById(R.id.expiryYear);
+                fieldText = (MPEditText) mActivity.findViewById(R.id.expiryYear);
                 fieldText.setText(Integer.toString(StaticMock.DUMMY_EXPIRATION_YEAR_SHORT));
-                fieldText = (EditText) mActivity.findViewById(R.id.cardholderName);
+                fieldText = (MPEditText) mActivity.findViewById(R.id.cardholderName);
                 fieldText.setText(StaticMock.DUMMY_CARDHOLDER_NAME);
-                fieldText = (EditText) mActivity.findViewById(R.id.identificationNumber);
+                fieldText = (MPEditText) mActivity.findViewById(R.id.identificationNumber);
                 fieldText.setText(StaticMock.DUMMY_IDENTIFICATION_NUMBER);
-                fieldText = (EditText) mActivity.findViewById(R.id.securityCode);
+                fieldText = (MPEditText) mActivity.findViewById(R.id.securityCode);
                 fieldText.setText(StaticMock.DUMMY_SECURITY_CODE);
             }
         });
@@ -299,7 +299,7 @@ public class GuessingNewCardActivityTest  extends BaseTest<GuessingNewCardActivi
         // Set activity and set fields
         doSecurityCodeStart();
         setFields();
-        mSecurityCodeText = (EditText) mActivity.findViewById(R.id.securityCode);
+        mSecurityCodeText = (MPEditText) mActivity.findViewById(R.id.securityCode);
 
         // Fill the form and simulate button click
         getInstrumentation().runOnMainSync(new Runnable() {
@@ -616,16 +616,16 @@ public class GuessingNewCardActivityTest  extends BaseTest<GuessingNewCardActivi
 
         mPaymentMethodImage = (ImageView) mActivity.findViewById(R.id.pmImage);
         mPaymentMethodsSpinner = (Spinner) mActivity.findViewById(R.id.spinnerPaymentMethod);
-        mCardNumberText = (EditText) mActivity.findViewById(R.id.cardNumber);
-        mCardholderNameText = (EditText) mActivity.findViewById(R.id.cardholderName);
-        mExpiryMonthText = (EditText) mActivity.findViewById(R.id.expiryMonth);
-        mExpiryYearText = (EditText) mActivity.findViewById(R.id.expiryYear);
-        mExpiryErrorText = (TextView) mActivity.findViewById(R.id.expiryError);
-        mIdentificationNumberText = (EditText) mActivity.findViewById(R.id.identificationNumber);
+        mCardNumberText = (MPEditText) mActivity.findViewById(R.id.cardNumber);
+        mCardholderNameText = (MPEditText) mActivity.findViewById(R.id.cardholderName);
+        mExpiryMonthText = (MPEditText) mActivity.findViewById(R.id.expiryMonth);
+        mExpiryYearText = (MPEditText) mActivity.findViewById(R.id.expiryYear);
+        mExpiryErrorText = (MPTextView) mActivity.findViewById(R.id.expiryError);
+        mIdentificationNumberText = (MPEditText) mActivity.findViewById(R.id.identificationNumber);
         mPaymentMethodsLayout = (LinearLayout) mActivity.findViewById(R.id.paymentMethodSelectionLayout);
         mIssuersSpinner = (Spinner) mActivity.findViewById(R.id.spinnerIssuer);
         mSecurityCodeLayout = (RelativeLayout) mActivity.findViewById(R.id.securityCodeLayout);
-        mCVVDescriptor = (TextView) mActivity.findViewById(R.id.cVVDescriptor);
+        mCVVDescriptor = (MPTextView) mActivity.findViewById(R.id.cVVDescriptor);
         mCVVImage = (ImageView) mActivity.findViewById(R.id.cVVImage);
 
     }

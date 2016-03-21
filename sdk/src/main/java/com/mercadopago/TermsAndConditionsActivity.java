@@ -5,6 +5,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.webkit.WebView;
 import android.widget.TextView;
 
+import com.mercadopago.views.MPTextView;
+
 public class TermsAndConditionsActivity extends AppCompatActivity {
 
     @Override
@@ -15,7 +17,7 @@ public class TermsAndConditionsActivity extends AppCompatActivity {
 
         // Set terms and conditions
         if (getIntent().getStringExtra("termsAndConditions") != null) {
-            TextView termsAndConditions = (TextView) findViewById(R.id.termsAndConditions);
+            MPTextView termsAndConditions = (MPTextView) findViewById(R.id.termsAndConditions);
             termsAndConditions.setText(getIntent().getStringExtra("termsAndConditions"));
         }
         else

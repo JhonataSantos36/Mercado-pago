@@ -23,7 +23,7 @@
                 android:src="@drawable/ico_numbers_5"
                 android:layout_gravity="center_horizontal" />
 
-            <TextView
+            <com.mercadopago.views.MPTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/step5_description"
@@ -31,7 +31,7 @@
                 android:layout_marginTop="15dp"
                 style="@style/mpsdk_form_label"/>
 
-            <TextView
+            <com.mercadopago.views.MPTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/step5_choice_description"
@@ -39,25 +39,23 @@
                 android:layout_marginTop="15dp"
                 style="@style/mpsdk_form_label"/>
 
-            <Button
+            <com.mercadopago.views.MPButton
                 android:id="@+id/btnSimpleFlow"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/mpsdk_button_height"
                 android:layout_marginTop="25dp"
                 android:gravity="center"
                 android:text="@string/simple_card_flow_label"
-                android:layout_below="@+id/image"
                 android:onClick="submitSimpleForm"
                 style="@style/mpsdk_button_normal"/>
 
-            <Button
+            <com.mercadopago.views.MPButton
                 android:id ="@+id/btnGuessingFow"
                 android:layout_height="@dimen/mpsdk_button_height"
                 android:layout_width="match_parent"
                 android:layout_marginTop="25dp"
                 android:gravity="center"
                 android:text="@string/guessing_card_flow_label"
-                android:layout_below="@+id/image"
                 android:onClick="submitGuessingForm"
                 style="@style/mpsdk_button_normal"/>
         </LinearLayout>

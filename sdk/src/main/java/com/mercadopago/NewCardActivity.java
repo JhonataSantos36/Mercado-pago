@@ -15,7 +15,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import com.mercadopago.adapters.IdentificationTypesAdapter;
 import com.mercadopago.core.MercadoPago;
@@ -25,6 +24,8 @@ import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.LayoutUtil;
 import com.mercadopago.util.MercadoPagoUtil;
+import com.mercadopago.views.MPEditText;
+import com.mercadopago.views.MPTextView;
 
 import java.util.List;
 
@@ -41,18 +42,18 @@ public class NewCardActivity extends AppCompatActivity {
     protected Boolean mRequireSecurityCode;
 
     // Input controls
-    protected EditText mCardHolderName;
-    protected EditText mCardNumber;
-    protected TextView mCVVDescriptor;
+    protected MPEditText mCardHolderName;
+    protected MPEditText mCardNumber;
+    protected MPTextView mCVVDescriptor;
     protected ImageView mCVVImage;
-    protected TextView mExpiryError;
-    protected EditText mExpiryMonth;
-    protected EditText mExpiryYear;
-    protected EditText mIdentificationNumber;
+    protected MPTextView mExpiryError;
+    protected MPEditText mExpiryMonth;
+    protected MPEditText mExpiryYear;
+    protected MPEditText mIdentificationNumber;
     protected RelativeLayout mIdentificationLayout;
     protected Spinner mIdentificationType;
     protected RelativeLayout mSecurityCodeLayout;
-    protected EditText mSecurityCode;
+    protected MPEditText mSecurityCode;
 
     // Local vars
     protected Activity mActivity;
@@ -110,18 +111,18 @@ public class NewCardActivity extends AppCompatActivity {
     }
 
     protected void setInputControls() {
-        mCardNumber = (EditText) findViewById(R.id.cardNumber);
-        mCardHolderName = (EditText) findViewById(R.id.cardholderName);
-        mIdentificationNumber = (EditText) findViewById(R.id.identificationNumber);
+        mCardNumber = (MPEditText) findViewById(R.id.cardNumber);
+        mCardHolderName = (MPEditText) findViewById(R.id.cardholderName);
+        mIdentificationNumber = (MPEditText) findViewById(R.id.identificationNumber);
         mIdentificationType = (Spinner) findViewById(R.id.identificationType);
         mIdentificationLayout = (RelativeLayout) findViewById(R.id.identificationLayout);
         mSecurityCodeLayout = (RelativeLayout) findViewById(R.id.securityCodeLayout);
         mCVVImage = (ImageView) findViewById(R.id.cVVImage);
-        mCVVDescriptor = (TextView) findViewById(R.id.cVVDescriptor);
-        mSecurityCode = (EditText) findViewById(R.id.securityCode);
-        mExpiryError = (TextView) findViewById(R.id.expiryError);
-        mExpiryMonth = (EditText) findViewById(R.id.expiryMonth);
-        mExpiryYear = (EditText) findViewById(R.id.expiryYear);
+        mCVVDescriptor = (MPTextView) findViewById(R.id.cVVDescriptor);
+        mSecurityCode = (MPEditText) findViewById(R.id.securityCode);
+        mExpiryError = (MPTextView) findViewById(R.id.expiryError);
+        mExpiryMonth = (MPEditText) findViewById(R.id.expiryMonth);
+        mExpiryYear = (MPEditText) findViewById(R.id.expiryYear);
     }
 
     protected void setPaymentMethodImage() {

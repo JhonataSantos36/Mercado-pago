@@ -4,13 +4,13 @@ import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.TextView;
 
 import com.mercadopago.adapters.InstallmentsAdapter;
 import com.mercadopago.model.PayerCost;
 import com.mercadopago.test.ActivityResult;
 import com.mercadopago.test.BaseTest;
 import com.mercadopago.test.StaticMock;
+import com.mercadopago.views.MPTextView;
 
 import java.util.List;
 
@@ -37,7 +37,7 @@ public class InstallmentsActivityTest extends BaseTest<InstallmentsActivity> {
 
         // Simulate click on first item
         InstallmentsAdapter adapter = (InstallmentsAdapter) list.getAdapter();
-        View row = new TextView(getApplicationContext());
+        View row = new MPTextView(getApplicationContext());
         row.setTag(adapter.getItem(0));
         adapter.getListener().onClick(row);
 

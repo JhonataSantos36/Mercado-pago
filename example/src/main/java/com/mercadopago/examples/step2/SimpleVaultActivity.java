@@ -7,10 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -29,6 +27,9 @@ import com.mercadopago.model.Token;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.LayoutUtil;
 import com.mercadopago.util.MercadoPagoUtil;
+import com.mercadopago.views.MPButton;
+import com.mercadopago.views.MPEditText;
+import com.mercadopago.views.MPTextView;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -50,12 +51,12 @@ public class SimpleVaultActivity extends AppCompatActivity {
 
     // Input controls
     protected View mSecurityCodeCard;
-    protected EditText mSecurityCodeText;
+    protected MPEditText mSecurityCodeText;
     protected FrameLayout mCustomerMethodsLayout;
-    protected TextView mCustomerMethodsText;
+    protected MPTextView mCustomerMethodsText;
     protected ImageView mCVVImage;
-    protected TextView mCVVDescriptor;
-    protected Button mSubmitButton;
+    protected MPTextView mCVVDescriptor;
+    protected MPButton mSubmitButton;
 
     // Current values
     protected List<Card> mCards;
@@ -101,11 +102,11 @@ public class SimpleVaultActivity extends AppCompatActivity {
             // Set layout controls
             mSecurityCodeCard = findViewById(R.id.securityCodeCard);
             mCVVImage = (ImageView) findViewById(R.id.cVVImage);
-            mCVVDescriptor = (TextView) findViewById(R.id.cVVDescriptor);
-            mSubmitButton = (Button) findViewById(R.id.submitButton);
+            mCVVDescriptor = (MPTextView) findViewById(R.id.cVVDescriptor);
+            mSubmitButton = (MPButton) findViewById(R.id.submitButton);
             mCustomerMethodsLayout = (FrameLayout) findViewById(R.id.customerMethodLayout);
-            mCustomerMethodsText = (TextView) findViewById(R.id.customerMethodLabel);
-            mSecurityCodeText = (EditText) findViewById(R.id.securityCode);
+            mCustomerMethodsText = (MPTextView) findViewById(R.id.customerMethodLabel);
+            mSecurityCodeText = (MPEditText) findViewById(R.id.securityCode);
 
             // Init controls visibility
             mSecurityCodeCard.setVisibility(View.GONE);
@@ -353,7 +354,7 @@ public class SimpleVaultActivity extends AppCompatActivity {
         }
     }
 
-    private void setFormGoButton(final EditText editText) {
+    private void setFormGoButton(final MPEditText editText) {
 
         editText.setOnKeyListener(new View.OnKeyListener() {
 

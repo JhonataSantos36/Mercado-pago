@@ -12,10 +12,10 @@ import android.graphics.Paint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.NumberPicker;
 
 import com.mercadopago.R;
+import com.mercadopago.views.MPEditText;
 
 import java.lang.reflect.Field;
 import java.util.Calendar;
@@ -114,12 +114,12 @@ public class CustomDatePickerDialog extends DialogFragment {
         final int count = numberPicker.getChildCount();
         for (int i = 0; i < count; i++) {
             View child = numberPicker.getChildAt(i);
-            if (child instanceof EditText) {
+            if (child instanceof MPEditText) {
                 try {
                     Field selectorWheelPaintField = numberPicker.getClass().getDeclaredField("mSelectorWheelPaint");
                     selectorWheelPaintField.setAccessible(true);
                     ((Paint)selectorWheelPaintField.get(numberPicker)).setColor(color);
-                    ((EditText)child).setTextColor(color);
+                    ((MPEditText)child).setTextColor(color);
                     numberPicker.invalidate();
                     return true;
                 }

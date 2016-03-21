@@ -6,10 +6,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.TextView;
 
 import com.mercadopago.R;
 import com.mercadopago.model.Issuer;
+import com.mercadopago.views.MPTextView;
 
 import java.util.List;
 
@@ -64,14 +64,14 @@ public class IssuersSpinnerAdapter extends BaseAdapter {
 
         Issuer issuer = mData.get(position);
 
-        TextView label = (TextView) row.findViewById(R.id.label);
+        MPTextView label = (MPTextView) row.findViewById(R.id.label);
         label.setText(issuer.getName());
 
         return row;
     }
 
     public void setError(View v, String error) {
-        TextView name = (TextView) v.findViewById(R.id.label);
+        MPTextView name = (MPTextView) v.findViewById(R.id.label);
         name.setError(error);
         mError = error;
     }

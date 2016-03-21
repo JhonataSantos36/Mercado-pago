@@ -20,12 +20,12 @@
             android:layout_height="@dimen/toolbar_height"
             android:background="?attr/colorPrimary"
             app:popupTheme="@style/Theme.MercadoPagoTheme.NoActionBar">
-            <TextView
+            <com.mercadopago.views.MPTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/mpsdk_title_activity_checkout"
-                style="@style/mpsdk_title_text"
-                android:layout_gravity="center"/>
+                android:layout_gravity="center"
+                style="@style/mpsdk_title_text"/>
         </android.support.v7.widget.Toolbar>
 
     </android.support.design.widget.AppBarLayout>

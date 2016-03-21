@@ -10,7 +10,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -32,6 +31,7 @@ import com.mercadopago.util.CurrenciesUtil;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;
 import com.mercadopago.util.MercadoPagoUtil;
+import com.mercadopago.views.MPTextView;
 
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
@@ -81,7 +81,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
     protected String mPurchaseTitle;
     protected String mItemImageUri;
     protected String mCurrencyId;
-    protected TextView mActivityTitle;
+    private MPTextView mActivityTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -271,7 +271,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
 
     protected void initializeControls() {
         initializeGroupRecyclerView();
-        mActivityTitle = (TextView) findViewById(R.id.title);
+        mActivityTitle = (MPTextView) findViewById(R.id.title);
     }
 
     @Override

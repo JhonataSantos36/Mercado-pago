@@ -5,11 +5,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.util.MercadoPagoUtil;
 import com.mercadopago.R;
+import com.mercadopago.views.MPTextView;
 
 import java.util.List;
 
@@ -21,12 +21,12 @@ public class PaymentMethodsAdapter extends  RecyclerView.Adapter<PaymentMethodsA
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView mTextView;
+        public MPTextView mTextView;
 
         public ViewHolder(View v, View.OnClickListener listener) {
 
             super(v);
-            mTextView = (TextView) v.findViewById(R.id.label);
+            mTextView = (MPTextView) v.findViewById(R.id.label);
             if (listener != null) {
                 v.setOnClickListener(listener);
             }

@@ -7,10 +7,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.mercadopago.R;
 import com.mercadopago.model.BankDeal;
+import com.mercadopago.views.MPTextView;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -23,16 +23,16 @@ public class BankDealsAdapter extends  RecyclerView.Adapter<BankDealsAdapter.Vie
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView mBankDescView;
+        public MPTextView mBankDescView;
         public ImageView mBankImageView;
-        public TextView mInstallmentsView;
+        public MPTextView mInstallmentsView;
 
         public ViewHolder(View v, View.OnClickListener listener) {
 
             super(v);
-            mBankDescView = (TextView) v.findViewById(R.id.bank_desc);
+            mBankDescView = (MPTextView) v.findViewById(R.id.bank_desc);
             mBankImageView = (ImageView) v.findViewById(R.id.bank_img);
-            mInstallmentsView = (TextView) v.findViewById(R.id.installments);
+            mInstallmentsView = (MPTextView) v.findViewById(R.id.installments);
             if (listener != null) {
                 v.setOnClickListener(listener);
             }

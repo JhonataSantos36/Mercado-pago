@@ -1,6 +1,7 @@
 <FrameLayout
     android:layout_width="fill_parent"
     android:layout_height="@dimen/list_item_height_large"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
     android:paddingLeft="10dp"
     android:background="@color/mpsdk_white"
@@ -27,16 +28,16 @@
             android:layout_alignParentTop="true"
             android:layout_above="@+id/comment" />
 
-        <TextView
+        <com.mercadopago.views.MPTextView
             android:id="@+id/comment"
             android:layout_marginBottom="12dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             tools:text="Hola, soy un comentario"
-            style="@style/mpsdk_list_label_comment"
             android:layout_alignParentBottom="true"
             android:layout_alignStart="@+id/image"
-            android:layout_alignLeft="@+id/image"/>
+            android:layout_alignLeft="@+id/image"
+            style="@style/mpsdk_list_label_comment"/>
 
         <ImageView
             android:layout_width="25dp"

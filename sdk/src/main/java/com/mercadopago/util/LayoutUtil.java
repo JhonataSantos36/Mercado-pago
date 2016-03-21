@@ -4,16 +4,16 @@ import android.app.Activity;
 import android.content.Context;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 
 import com.mercadopago.R;
+import com.mercadopago.views.MPEditText;
 
 public class LayoutUtil {
 
     public static void hideKeyboard(Activity activity) {
 
         try {
-            EditText editText = (EditText) activity.getCurrentFocus();
+            MPEditText editText = (MPEditText) activity.getCurrentFocus();
             InputMethodManager imm = (InputMethodManager) activity.getSystemService(
                     Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
