@@ -109,7 +109,7 @@ public class CurrenciesUtil {
         return htmlFormatBuilder.toString();
     }
 
-    public static Spanned formatCurrencyInText(BigDecimal amount, String currencyId, String originalTitle, boolean symbolUp, boolean decimalsUp) {
+    public static Spanned formatCurrencyInText(BigDecimal amount, String currencyId, String originalText, boolean symbolUp, boolean decimalsUp) {
 
         Spanned spannedAmount;
         Currency currency = currenciesList.get(currencyId);
@@ -117,14 +117,14 @@ public class CurrenciesUtil {
         if(formattedAmount != null) {
             String spannedString = getSpannedString(currency, formattedAmount, true, true);
 
-            String formattedTitle = originalTitle;
-            if(originalTitle.contains(formattedAmount)) {
-                formattedTitle = originalTitle.replace(formattedAmount, spannedString);
+            String formattedText = originalText;
+            if(originalText.contains(formattedAmount)) {
+                formattedText = originalText.replace(formattedAmount, spannedString);
             }
-            spannedAmount = Html.fromHtml(formattedTitle);
+            spannedAmount = Html.fromHtml(formattedText);
         }
         else {
-            spannedAmount = Html.fromHtml(originalTitle);
+            spannedAmount = Html.fromHtml(originalText);
         }
         return spannedAmount;
     }

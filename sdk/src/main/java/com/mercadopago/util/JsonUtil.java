@@ -1,8 +1,14 @@
 package com.mercadopago.util;
 
+import android.content.Intent;
+
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
+import java.util.List;
 
 public class JsonUtil {
 
@@ -33,5 +39,15 @@ public class JsonUtil {
     public Gson getGson() {
 
         return mGson;
+    }
+
+    public static <T> String parseList(List<T> list) {
+
+        if (list != null) {
+            Gson gson = new Gson();
+            Type listType = new TypeToken<List<T>>(){}.getType();
+            return gson.toJson(list, listType);
+        }
+        return null;
     }
 }

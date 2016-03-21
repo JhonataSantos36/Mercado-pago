@@ -15,7 +15,6 @@ import com.mercadopago.InstallmentsActivity;
 import com.mercadopago.IssuersActivity;
 import com.mercadopago.PaymentMethodsActivity;
 import com.mercadopago.PaymentVaultActivity;
-import com.mercadopago.callbacks.GetPaymentMethodCallback;
 import com.mercadopago.model.BankDeal;
 import com.mercadopago.model.Card;
 import com.mercadopago.model.CardToken;
@@ -47,8 +46,6 @@ import java.util.List;
 
 import retrofit.Callback;
 import retrofit.RestAdapter;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
 import retrofit.converter.GsonConverter;
 
 public class MercadoPago {
@@ -196,31 +193,6 @@ public class MercadoPago {
         } else {
             throw new RuntimeException("Unsupported key type for this method");
         }
-    }
-
-    public void getPaymentMethodById(final String paymentMethodId, final GetPaymentMethodCallback callback) {
-
-        this.getPaymentMethods(new Callback<List<PaymentMethod>>() {
-            @Override
-            public void success(List<PaymentMethod> paymentMethods, Response response) {
-                boolean paymentMethodFound = false;
-                for(PaymentMethod currentPaymentMethod : paymentMethods) {
-                    if(paymentMethodId.contains(currentPaymentMethod.getId())) {
-                        paymentMethodFound = true;
-                        currentPaymentMethod.setId(paymentMethodId);
-                        callback.onSuccess(currentPaymentMethod);
-                    }
-                }
-                if(!paymentMethodFound) {
-                    callback.onFailure();
-                }
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-                callback.onFailure();
-            }
-        });
     }
 
     public void getPaymentMethodSearch(BigDecimal amount, List<String> excludedPaymentTypes, List<String> excludedPaymentMethods, final Callback<PaymentMethodSearch> callback) {
