@@ -7,13 +7,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.Spanned;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.mercadopago.controllers.ShoppingCartController;
+import com.mercadopago.controllers.ShoppingCartViewController;
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.exceptions.CheckoutPreferenceException;
 import com.mercadopago.exceptions.ExceptionHandler;
@@ -50,7 +48,7 @@ public class CheckoutActivity extends AppCompatActivity{
     protected PayerCost mSelectedPayerCost;
     protected Token mCreatedToken;
     protected String mPurchaseTitle;
-    protected ShoppingCartController mShoppingCartController;
+    protected ShoppingCartViewController mShoppingCartController;
     protected String mErrorMessage;
     protected boolean mPaymentMethodEditionRequested;
 
@@ -61,6 +59,7 @@ public class CheckoutActivity extends AppCompatActivity{
     protected ImageView mPaymentMethodImageView;
     protected ImageView mEditPaymentMethodImageView;
     protected MPButton mPayButton;
+    protected ImageView mShoppingCartIcon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,23 +125,6 @@ public class CheckoutActivity extends AppCompatActivity{
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        this.getMenuInflater().inflate(R.menu.shopping_cart_menu, menu);
-        mShoppingCartController = new ShoppingCartController(this, menu.findItem(R.id.shopping_cart), mCheckoutPreference.getItems().get(0).getPictureUrl(), mPurchaseTitle,
-                mCheckoutPreference.getAmount(), mCheckoutPreference.getItems().get(0).getCurrencyId(), true, findViewById(R.id.contentLayout));
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.shopping_cart) {
-            mShoppingCartController.toggle(true);
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
     private void initializeActivityControls() {
         mPaymentMethodCommentTextView = (MPTextView) findViewById(R.id.payment_method_comment);
         mPaymentMethodImageView = (ImageView) findViewById(R.id.payment_method_image);
@@ -172,6 +154,17 @@ public class CheckoutActivity extends AppCompatActivity{
         });
         mPurchaseTitle = getPurchaseTitle();
         mTotalAmountTextView = (MPTextView) findViewById(R.id.totalAmount);
+        mShoppingCartIcon = (ImageView) findViewById(R.id.shoppingCartIcon);
+
+        mShoppingCartIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mShoppingCartController.toggle(true);
+            }
+        });
+
+        mShoppingCartController = new ShoppingCartViewController(this, mShoppingCartIcon, mCheckoutPreference.getItems().get(0).getPictureUrl(), mPurchaseTitle,
+                mCheckoutPreference.getAmount(), mCheckoutPreference.getItems().get(0).getCurrencyId(), true, findViewById(R.id.contentLayout));
     }
 
     protected void startTermsAndConditionsActivity() {

@@ -6,7 +6,7 @@
     android:layout_height="wrap_content">
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="120dp"
+        android:layout_height="@dimen/mpsdk_shopping_cart_height"
         android:background="@color/mpsdk_shopping_cart_background"
         android:paddingTop="10dp"
         android:gravity="center_vertical"
@@ -26,18 +26,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/itemImage"
+            android:layout_toEndOf="@+id/itemImage"
             android:layout_marginStart="20dp"
             android:layout_marginLeft="20dp"
             android:layout_marginBottom="5dp"
-            style="@style/mpsdk_title_text"/>
+            style="@style/mpsdk_regular_white_thin_bold_text"/>
         <com.mercadopago.views.MPTextView
             android:id="@+id/itemAmount"
-            android:text="$100"
+            android:text="$X"
+            style="@style/mpsdk_regular_white_thin_bold_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/itemTitle"
             android:layout_alignStart="@+id/itemTitle"
-            android:layout_alignLeft="@+id/itemTitle"
-            style="@style/mpsdk_regular_white_thin_bold_text"/>
+            android:layout_alignLeft="@+id/itemTitle"/>
     </RelativeLayout>
 </RelativeLayout>

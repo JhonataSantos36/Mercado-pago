@@ -7,7 +7,6 @@ import android.text.Spanned;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
-import android.view.animation.AnimationSet;
 import android.view.animation.AnimationUtils;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
@@ -16,6 +15,7 @@ import android.widget.RelativeLayout;
 import com.mercadopago.R;
 import com.mercadopago.util.CurrenciesUtil;
 import com.mercadopago.views.MPTextView;
+import com.mercadopago.util.ScaleUtil;
 import com.squareup.picasso.Picasso;
 
 import java.math.BigDecimal;
@@ -23,7 +23,7 @@ import java.math.BigDecimal;
 /**
  * Created by mreverter on 10/2/16.
  */
-public class ShoppingCartController {
+public class ShoppingCartViewController {
 
     private Boolean mStartShowingItemInfo;
     private Activity mActivity;
@@ -36,12 +36,12 @@ public class ShoppingCartController {
     private String mPictureUrl;
     private ImageView mItemImageView;
 
-    public ShoppingCartController(Activity activity, MenuItem toggler, String pictureUri, String purchaseTitle, BigDecimal amount, String currencyId, Boolean startShowingItemInfo, View viewBelowShoppingCart) {
+    public ShoppingCartViewController(Activity activity, MenuItem toggler, String pictureUri, String purchaseTitle, BigDecimal amount, String currencyId, Boolean startShowingItemInfo, View viewBelowShoppingCart) {
         mMenuItemTogglerShoppingCart = toggler;
         initialize(activity, pictureUri, purchaseTitle, amount, currencyId, startShowingItemInfo, viewBelowShoppingCart);
         start();
     }
-    public ShoppingCartController(Activity activity, ImageView toggler, String pictureUri, String purchaseTitle, BigDecimal amount, String currencyId, Boolean startShowingItemInfo, View viewBelowShoppingCart) {
+    public ShoppingCartViewController(Activity activity, ImageView toggler, String pictureUri, String purchaseTitle, BigDecimal amount, String currencyId, Boolean startShowingItemInfo, View viewBelowShoppingCart) {
         mImageViewTogglerShoppingCart = toggler;
         initialize(activity, pictureUri, purchaseTitle, amount, currencyId, startShowingItemInfo, viewBelowShoppingCart);
         start();
@@ -68,9 +68,7 @@ public class ShoppingCartController {
         }
         else
         {
-            int newDpPaddingValue = 24;
-            float scale = mActivity.getResources().getDisplayMetrics().density;
-            int dpAsPixels = (int) (newDpPaddingValue*scale + 0.5f);
+            int dpAsPixels = ScaleUtil.getPxFromDp(24, mActivity);
             mItemImageView.setPadding(dpAsPixels, dpAsPixels, dpAsPixels, dpAsPixels);
         }
     }
@@ -104,31 +102,42 @@ public class ShoppingCartController {
     public void hideItemInfo() {
         mItemInfoLayout.setVisibility(View.GONE);
         mItemDescriptionShown = false;
-        mMenuItemTogglerShoppingCart.setIcon(R.drawable.regular_payment);
+        if(mMenuItemTogglerShoppingCart != null) {
+            mMenuItemTogglerShoppingCart.setIcon(R.drawable.icon_cart);
+        } else if(mImageViewTogglerShoppingCart != null) {
+            mImageViewTogglerShoppingCart.setImageResource(R.drawable.icon_cart);
+            int dpAsPixels = ScaleUtil.getPxFromDp(8, mActivity);
+            mImageViewTogglerShoppingCart.setPadding(dpAsPixels, dpAsPixels, dpAsPixels, dpAsPixels);
+        }
         tintTogglerDrawableWithColor(mActivity.getResources().getColor(R.color.mpsdk_white));
     }
 
     public void showItemInfo(boolean enableAnimation) {
-
         mItemInfoLayout.setVisibility(View.VISIBLE);
         if(enableAnimation) {
-            enableAnimation();
+            startAnimations();
         }
         mItemDescriptionShown = true;
-        mMenuItemTogglerShoppingCart.setIcon(R.drawable.close);
+        if(mMenuItemTogglerShoppingCart != null) {
+            mMenuItemTogglerShoppingCart.setIcon(R.drawable.close);
+        } else if(mImageViewTogglerShoppingCart != null) {
+            mImageViewTogglerShoppingCart.setImageResource(R.drawable.close);
+
+            int dpAsPixels = ScaleUtil.getPxFromDp(12, mActivity);
+            mImageViewTogglerShoppingCart.setPadding(dpAsPixels, dpAsPixels, dpAsPixels, dpAsPixels);
+        }
         tintTogglerDrawableWithColor(mActivity.getResources().getColor(R.color.mpsdk_white));
     }
 
-    private void enableAnimation() {
-        AnimationSet animationSet = new AnimationSet(true);
-        TranslateAnimation a = new TranslateAnimation(
-                Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF - mItemInfoLayout.getHeight(), 0);
-        a.setDuration(mActivity.getResources().getInteger(android.R.integer.config_shortAnimTime));
-        animationSet.addAnimation(a);
+    private void startAnimations() {
 
-        mViewBelowShoppingCart.setAnimation(animationSet);
+        int shoppingCartHeight = mActivity.getResources().getDimensionPixelSize(R.dimen.mpsdk_shopping_cart_height);
+        TranslateAnimation leavePlaceForShoppingCartAnimation = new TranslateAnimation(
+                Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF - shoppingCartHeight, 0);
+        leavePlaceForShoppingCartAnimation.setDuration(mActivity.getResources().getInteger(android.R.integer.config_shortAnimTime));
 
         mItemInfoLayout.startAnimation(AnimationUtils.loadAnimation(mActivity, R.anim.slide_up_to_down_in));
+        mViewBelowShoppingCart.startAnimation(leavePlaceForShoppingCartAnimation);
     }
 
     private void tintTogglerDrawableWithColor(int color) {

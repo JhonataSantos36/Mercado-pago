@@ -95,14 +95,14 @@ public class CurrenciesUtil {
         StringBuilder htmlFormatBuilder = new StringBuilder();
 
         if(symbolUp) {
-            htmlFormatBuilder.append("<sup><small><small>" + currency.getSymbol() + "</small></small></sup>");
+            htmlFormatBuilder.append("<sup><small><small>" + currency.getSymbol() + " </small></small></sup>");
         } else {
             htmlFormatBuilder.append(currency.getSymbol());
         }
         htmlFormatBuilder.append(wholeNumber);
 
         if(decimalsUp) {
-            htmlFormatBuilder.append("<sup><small><small>" + decimals + "</small></small></sup>");
+            htmlFormatBuilder.append("<sup><small><small> " + decimals + "</small></small></sup>");
         } else {
             htmlFormatBuilder.append(decimals);
         }

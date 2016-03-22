@@ -122,7 +122,7 @@
     </style>
 
     <style name="mpsdk_regular_white_thin_bold_text">
-        <item name="android:textSize">@dimen/mpsdk_big_text</item>
+        <item name="android:textSize">@dimen/mpsdk_regular_text</item>
         <item name="android:textColor">@color/mpsdk_white</item>
     </style>
 

@@ -124,8 +124,6 @@ public class CardToken implements Serializable {
             if (("standard".equals(luhnAlgorithm)) && (!checkLuhn(cardNumber))) {
                 throw new Exception(context.getString(R.string.mpsdk_invalid_card_luhn));
             }
-
-
         }
     }
 

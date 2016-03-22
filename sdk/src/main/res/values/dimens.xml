@@ -10,7 +10,7 @@
     <dimen name="mpsdk_title_text">18dp</dimen>
     <dimen name="mpsdk_large_text">22dp</dimen>
     <dimen name="mpsdk_box_default_stroke">1dp</dimen>
-    <dimen name="mpsdk_big_text">20dp</dimen>
+    <dimen name="mpsdk_big_text">22dp</dimen>
     <dimen name="mpsdk_medium_smaller_text">14dp</dimen>
     <dimen name="mpsdk_medium_text">16dp</dimen>
     <dimen name="mpsdk_margin_std">10dp</dimen>
@@ -24,4 +24,5 @@
     <dimen name="toolbar_height">55dp</dimen>
     <dimen name="list_item_height">60dp</dimen>
     <dimen name="list_item_height_large">72dp</dimen>
+    <dimen name="mpsdk_shopping_cart_height">120dp</dimen>
 </resources>
