@@ -14,13 +14,13 @@
   "items": [
     {
       "id": "",
-      "currency_id": "ARS",
+      "currency_id": "MXN",
       "title": "Mate de madera!",
       "picture_url": "",
       "description": "",
       "category_id": "",
       "quantity": 1,
-      "unit_price": 100
+      "unit_price": 1000
     }
   ],
   "marketplace": "NONE",
