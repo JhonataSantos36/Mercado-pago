@@ -92,20 +92,13 @@ public class MercadoPago {
                 .build();
     }
 
-    public void createPayment(PaymentIntent paymentIntent, final Callback<Payment> callback) {
-
-        // TODO: Reemplazar por servicio final
-        //PaymentService service = mRestAdapterMPApi.create(PaymentService.class);
-
-        mRestAdapterMPApi = new RestAdapter.Builder()
-                .setEndpoint("https://mp-android-sdk.herokuapp.com/")
-                .setLogLevel(Settings.RETROFIT_LOGGING)
-                .setConverter(new GsonConverter(JsonUtil.getInstance().getGson()))
-                .setClient(HttpClientUtil.getClient(this.mContext))
-                .build();
-
-        PaymentService service = mRestAdapterMPApi.create(PaymentService.class);
-        service.createPayment(paymentIntent, callback);
+    public void createPayment(String preferenceId, String email, String paymentMethodId, Integer installments, String issuerId, String tokenId, final Callback<Payment> callback) {
+        if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {
+            PaymentService service = mRestAdapterMPApi.create(PaymentService.class);
+            service.createPayment(this.mKey, preferenceId, email, paymentMethodId, installments, issuerId, tokenId, callback);
+        } else {
+            throw new RuntimeException("Unsupported key type for this method");
+        }
     }
 
     public void createToken(final SavedCardToken savedCardToken, final Callback<Token> callback) {

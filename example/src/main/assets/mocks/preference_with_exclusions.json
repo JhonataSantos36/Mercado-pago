@@ -9,7 +9,7 @@
   "expiration_date_to": null,
   "expires": false,
   "external_reference": "",
-  "id": "157723203-a225d4d6-adab-4072-ad92-6389ede0cabd",
+  "id": "167833503-bd46c6e1-1fff-47f2-9be3-0617d62e7eee",
   "init_point": "https://www.mercadopago.com/mla/checkout/start?pref_id=157723203-a225d4d6-adab-4072-ad92-6389ede0cabd",
   "items": [
     {
@@ -27,7 +27,25 @@
   "marketplace_fee": 0,
   "notification_url": null,
   "operation_type": "regular_payment",
-  "payer": {},
+  "payer": {
+      "phone": {
+      "area_code": "",
+      "number": ""
+      },
+      "address": {
+        "zip_code": "",
+        "street_name": "",
+        "street_number": null
+      },
+      "email": "test@mgmail.com",
+      "identification": {
+        "number": "",
+        "type": ""
+      },
+      "name": "",
+      "surname": "",
+      "date_created": ""
+  },
   "payment_methods": {
     "excluded_payment_methods": [
     ],

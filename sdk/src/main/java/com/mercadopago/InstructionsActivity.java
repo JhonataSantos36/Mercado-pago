@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.Spanned;
 import android.util.TypedValue;
@@ -69,7 +68,7 @@ public class InstructionsActivity extends AppCompatActivity {
         progress.setVisibility(View.VISIBLE);
 
         //TODO cambiar por mPayment.getId() cuando estén andando los servicios
-        mercadoPago.getInstructions((long) 1826446924, mPaymentMethod.getId(), new Callback<Instruction>() {
+        mercadoPago.getInstructions(mPayment.getId(), mPaymentMethod.getId(), new Callback<Instruction>() {
             @Override
             public void success(Instruction instruction, Response response) {
                 showInstructions(instruction);

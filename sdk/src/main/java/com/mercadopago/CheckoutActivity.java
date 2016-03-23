@@ -9,7 +9,6 @@ import android.text.Html;
 import android.text.Spanned;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.mercadopago.controllers.ShoppingCartViewController;
 import com.mercadopago.core.MercadoPago;
@@ -20,16 +19,18 @@ import com.mercadopago.model.Issuer;
 import com.mercadopago.model.Item;
 import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.Payment;
-import com.mercadopago.model.PaymentIntent;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.Token;
+import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.CurrenciesUtil;
 import com.mercadopago.util.LayoutUtil;
 import com.mercadopago.util.MercadoPagoUtil;
 import com.mercadopago.views.MPButton;
 import com.mercadopago.views.MPTextView;
 
-import java.math.BigDecimal;
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 public class CheckoutActivity extends AppCompatActivity{
 
@@ -321,84 +322,37 @@ public class CheckoutActivity extends AppCompatActivity{
 
     protected boolean validParameters() {
 
-        if ((mMerchantPublicKey != null) && (mCheckoutPreference != null)) {
-            return true;
-        }
-        return false;
+        return (mMerchantPublicKey != null) && (mCheckoutPreference != null);
     }
 
     protected void createPayment() {
-        PaymentIntent paymentIntent = new PaymentIntent();
-
-        paymentIntent.setPrefId(mCheckoutPreference.getId());
-        if(mCreatedToken != null) {
-            paymentIntent.setToken(mCreatedToken.getId());
-        }
-        if (mSelectedIssuer != null) {
-            paymentIntent.setIssuerId(mSelectedIssuer.getId());
-        }
-        if(mSelectedPayerCost != null) {
-            paymentIntent.setInstallments(mSelectedPayerCost.getInstallments());
-        }
-
-        paymentIntent.setPaymentMethodId(mSelectedPaymentMethod.getId());
-        // Create payment
-        //TODO ir a nuevo servicio de payment
-        createMockPayment(paymentIntent);
-
-    }
-
-    //TODO ir a nuevo servicio de payment
-    private void createMockPayment(PaymentIntent paymentIntent) {
-        if (paymentIntent.getPaymentMethodId() != null) {
-
-            // Set item
-            Item item = new Item("id1", 1,
-                    new BigDecimal("100"));
-
-            // Set payment method id
-            String paymentMethodId = paymentIntent.getPaymentMethodId();
-
-            // Create payment
-            /*MerchantPayment payment = new MerchantPayment(item, paymentIntent.getInstallments(), paymentIntent.getIssuerId(),
-                    paymentIntent.getToken(), oldPaymentMethodId, null, "mlm-cards-data");
-
-            MerchantServer.createPayment(this, "https://www.mercadopago.com", "/checkout/examples/doPayment", payment, new Callback<Payment>() {
-                @Override
-                public void success(Payment payment, Response response) {
-                    mPayment = payment;
+        LayoutUtil.showProgressLayout(mActivity);
+        mMercadoPago.createPayment(mCheckoutPreference.getId(), mCheckoutPreference.getPayer().getEmail(), mSelectedPaymentMethod.getId(), null, null, null, new Callback<Payment>() {
+            @Override
+            public void success(Payment payment, Response response) {
+                if (MercadoPagoUtil.isCardPaymentType(mSelectedPaymentMethod.getPaymentTypeId())) {
+                    new MercadoPago.StartActivityBuilder()
+                            .setActivity(mActivity)
+                            .setPayment(payment)
+                            .setPaymentMethod(mSelectedPaymentMethod)
+                            .startCongratsActivity();
+                } else {
+                    new MercadoPago.StartActivityBuilder()
+                            .setPublicKey(mMerchantPublicKey)
+                            .setActivity(mActivity)
+                            .setPayment(payment)
+                            .setPaymentMethod(mSelectedPaymentMethod)
+                            .startInstructionsActivity();
                 }
-
-                @Override
-                public void failure(RetrofitError error) {
-
-                    LayoutUtil.showRegularLayout(mActivity);
-                    Toast.makeText(mActivity, error.getMessage(), Toast.LENGTH_LONG).show();
-                }
-            });
-       */
-            LayoutUtil.showProgressLayout(this);
-            if (MercadoPagoUtil.isCardPaymentType(mSelectedPaymentMethod.getPaymentTypeId())) {
-                new MercadoPago.StartActivityBuilder()
-                        .setActivity(mActivity)
-                        .setPayment(new Payment())
-                        .setPaymentMethod(mSelectedPaymentMethod)
-                        .startCongratsActivity();
-            } else {
-                Payment payment = new Payment();
-                payment.setTransactionAmount(mCheckoutPreference.getAmount());
-                payment.setCurrencyId(mCheckoutPreference.getItems().get(0).getCurrencyId());
-                new MercadoPago.StartActivityBuilder()
-                        .setPublicKey(mMerchantPublicKey)
-                        .setActivity(mActivity)
-                        .setPayment(payment)
-                        .setPaymentMethod(mSelectedPaymentMethod)
-                        .startInstructionsActivity();
+                LayoutUtil.showRegularLayout(mActivity);
             }
-            LayoutUtil.showRegularLayout(mActivity);
-        } else {
-            Toast.makeText(mActivity, "Invalid payment method", Toast.LENGTH_LONG).show();
-        }
+
+            @Override
+            public void failure(RetrofitError error) {
+                ApiUtil.finishWithApiException(mActivity, error);
+            }
+        });
+
     }
 
     @Override

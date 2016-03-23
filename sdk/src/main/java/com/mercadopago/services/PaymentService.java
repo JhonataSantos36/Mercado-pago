@@ -32,8 +32,8 @@ public interface PaymentService {
     @GET("/v1/payment_methods/card_issuers")
     void getIssuers(@Query("public_key") String publicKey, @Query("payment_method_id") String paymentMethodId, Callback<List<Issuer>> callback);
 
-    @POST("/payments")
-    void createPayment(@Body PaymentIntent body, Callback<Payment> callback);
+    @GET("/checkout/beta/v1/native_payment")
+    void createPayment(@Query("public_key") String publicKey, @Query("pref_id") String preferenceId, @Query("email") String email, @Query("payment_method_id") String paymentMethodId, @Query("installments") Integer installments, @Query("issuer") String issuer, @Query("token") String token, Callback<Payment> callback);
 
     @GET("/checkout/beta/v1/instructions/{payment_id}")
     void getInstruction(@Query("public_key") String mKey, @EncodedPath("payment_id") Long paymentId, @Query("payment_method_id") String paymentMethodId, Callback<Instruction> callback);
