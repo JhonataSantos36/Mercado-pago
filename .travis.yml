@@ -24,10 +24,7 @@ android:
        - extra
 
 script:
-   - bash "travis/run_unit_tests.sh"
-
-after_success:
-   - bash "travis/run_deploy.sh"
-
+   - ./gradlew build connectedCheck
+   
 notifications:
    slack: mercadopagosdk:RkGMwu92uNzhHtZvylFHZaoO
