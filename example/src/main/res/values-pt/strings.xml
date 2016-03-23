@@ -22,7 +22,6 @@
     <string name="step3_description">Fluxo de pagamento para que o comprador escolha o parcelamento desejado e qual é a administradora do cartão.</string>
     <string name="step4_description">Fluxo que inclui os meios offline como meios de pagamento disponíveis.</string>
     <string name="step5_description">Fluxo de pagamento padrão. Inclui todos os módulos de pagamento.</string>
-    <string name="bank_deals_action">Promoções</string>
 
     <string name="step1_choice_description">Você pode coletar dados através de diferentes telas ou um único formulário para completar tudo o que puder para você.</string>
     <string name="step3_choice_description">A bank selection screen can be added to the simple flow, or use the guessing form.</string>
