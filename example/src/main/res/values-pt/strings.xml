@@ -33,4 +33,5 @@
 
     <string name="step6_description">Flujo de pagos por defecto. Resuelve la captura de datos de tarjeta de crédito, cuotas, tokenización, creación del pago y pantalla de felicitaciones. También permite pagar con la app de MercadoPago.</string>
     <string name="opening_mp">Abriendo MercadoPago…</string>
+    <string name="title_activity_step6">Checkout</string>
 </resources>
