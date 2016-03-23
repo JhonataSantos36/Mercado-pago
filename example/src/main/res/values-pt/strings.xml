@@ -30,4 +30,7 @@
     <string name="step5_choice_description">Um ecrã de selecção do banco pode ser adicionado ao fluxo simples, ou usar formulário guessing.</string>
     <string name="simple_card_flow_label">Distintas pantallas</string>
     <string name="guessing_card_flow_label">Formulário guessing</string>
+
+    <string name="step6_description">Flujo de pagos por defecto. Resuelve la captura de datos de tarjeta de crédito, cuotas, tokenización, creación del pago y pantalla de felicitaciones. También permite pagar con la app de MercadoPago.</string>
+    <string name="opening_mp">Abriendo MercadoPago…</string>
 </resources>
