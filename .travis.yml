@@ -20,6 +20,7 @@ android:
        - tools
        - build-tools-23.0.2
        - build-tools-22.2.1
+       - build-tools-22.0.1
        - android-23
        - android-22
        - android-15
