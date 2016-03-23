@@ -30,4 +30,6 @@
 
     <string name="simple_card_flow_label">Different screens</string>
     <string name="guessing_card_flow_label">Guessing form</string>
+    <string name="step6_description">Default Payment Flow. Collecting card data info, installments, token, payment and congrats. You can pay with MercadoPago app too.</string>
+    <string name="opening_mp">Launching MercadoPago…</string>
 </resources>
