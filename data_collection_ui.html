@@ -31,7 +31,7 @@
       <div class="inner clearfix">
         <section id="main-content">
             <h1>Data-collection UI</h1>
-            <p>We offer you solutions to collect both payment methods and shipping information. Using this flavor, once collected this information, you'll have to make a payment by yourself (if curious, have a look at <a href="make_payment.html">Make a payment</a>).</p>
+            <p>We offer you solutions to collect both payment methods and shipping information. Using this flavor, once collected this information, you'll have to make a payment by yourself (have a look at <a href="make_payment.html">Make a payment</a>).</p>
             <p>Here, you'll learn:</p>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#launch_payment_vault">How to launch a payment method selection flow</a><br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#payment_vault_ui">How our UI looks like</a><br>
@@ -51,6 +51,7 @@
                .setAmount(BigDecimal.valueOf(100))
                .setCurrency(CurrenciesUtil.CURRENCY_ARGENTINA) //Set your country currency
                .setPurchaseTitle("Item name")
+               .setItemImageUri("") //It will be shown in the shopping cart
                .startPaymentVaultActivity();
           </pre>
           <p><a name="payment_vault_ui"></a><b>Let's see!</b></p>
@@ -58,24 +59,24 @@
           <img class="centered" src="images/screenshots/revamp-inicio.png" alt="revamp-inicio">
           <p class="image_footer">Payment method choise example</p>
           <p>Your users can visualize their purchase information by clicking on the shopping cart icon:</p>
-          <img class="centered" src="images/screenshots/revamp-shopping_cart.png" alt="revamp-shopping_cart">
+          <img class="centered" src="images/screenshots/revamo-inicio-carrito.png" alt="revamo-inicio-carrito">
           <p class="image_footer">Information shown when clicking on icon in the upper right corner of the screen</p>
 
           <p>Within this screen, your user will be able to choose a payment method by going into the shown options, as we'll see in the following sections.</p>
 
           <h3>Cards option selected</h2>
           <p>The user will see a list of the available card types supported, for example:</p>
-          <img class="centered" src="images/screenshots/revamp-cards.png" alt="revamp-cards">
+          <img class="centered" src="images/screenshots/revamp-tarjetas.png" alt="revamp-cards">
           <p class="image_footer">Card types</p>
 
           <h3>Cash option selected</h2>
           <p>The user will see a list of the available card types supported, for example:</p>
-          <img class="centered" src="images/screenshots/revamp-cash.png" alt="revamp-cash">
+          <img class="centered" src="images/screenshots/revamp-efectivo.png" alt="revamp-cash">
           <p class="image_footer">Cash payment methods</p>
 
           <h3>Bank transfer option selected</h2>
           <p>The user will see a list of the available card types supported, for example:</p>
-          <img class="centered" src="images/screenshots/revamp-bank_transfer.png" alt="revamp-bank_transfer">
+          <img class="centered" src="images/screenshots/revamp-transferencia-bancaria.png" alt="revamp-bank_transfer">
           <p class="image_footer">Bank transfer payment methods</p>
 
           <h2>Retrieving the data in your activity</h2><a name="get_payment_method_data"></a>
@@ -113,12 +114,11 @@
 
           <h3></a>Payment type exclusion</h2>
 
-          <p>In this example, we will exclude digital currency (Bitcoins), and ATM payment types.</p>
+          <p>In this example, we will exclude bank transfer payment types.</p>
           <pre class="prettyprint">
           //Create list of excluded payment types somewhere in your code
           List&lt;String&gt; excludedPaymentMethodIds = new ArrayList&lt;String&gt;(){{
-              add(PaymentType.DIGITAL_CURRENCY);
-              add(PaymentType.ATM);
+              add(PaymentType.BANK_TRANSFER);
           }};
           // Call payment methods selection activity
           new MercadoPago.StartActivityBuilder()
@@ -131,17 +131,16 @@
                 .startPaymentVaultActivity();
           </pre>
           <p>And you'll see this:</p>
-          <img class="centered" src="images/screenshots/revamp-excluded_types.png" alt="revamp-excluded_types">
+          <img class="centered" src="images/screenshots/revamp-exclusiones-types.png" alt="revamp-excluded_types">
           <p class="image_footer">Types excluded</p>
 
           <h3></a>Payment method exclusion</h2>
-          <p>In this example, we will exclude all the "cash" payment methods, except "oxxo".</p>
+          <p>In this example, we will exclude all the "bank transfer" payment methods, except "bancomer_bank_transfer".</p>
           <pre class="prettyprint">
           //Create list of excluded payment methods somewhere in your code
           List&lt;String&gt; mExcludedPaymentTypes = new ArrayList&lt;String&gt;(){{
-              add("bancomer");
-              add("banamex");
-              add("serfin"); //Santander's id
+              add("banamex_bank_transfer");
+              add("serfin_bank_transfer"); //Santander's id
           }};
           // Call payment methods selection activity
           new MercadoPago.StartActivityBuilder()
@@ -155,7 +154,7 @@
                 .startPaymentVaultActivity();
           </pre>
           <p>And you'll see this:</p>
-          <img class="centered" src="images/screenshots/revamp-oxxo_fijo.png" alt="revamp-oxxo_fijo">
+          <img class="centered" src="images/screenshots/revamp-payment-method-inicio.png" alt="revamp-payment-method-inicio">
           <p class="image_footer">Payment methods excluded</p>
 
           <h3></a>Installments constraint</h2>
