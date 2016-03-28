@@ -32,7 +32,9 @@ import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-public class CheckoutActivity extends AppCompatActivity{
+public class CheckoutActivity extends AppCompatActivity {
+
+    protected static final Integer PURCHASE_TITLE_MAX_LENGTH = 50;
 
     //Parameters
     protected CheckoutPreference mCheckoutPreference;
@@ -97,7 +99,7 @@ public class CheckoutActivity extends AppCompatActivity{
         }
         else {
             Intent returnIntent = new Intent();
-            returnIntent.putExtra("message", mErrorMessage);
+            returnIntent.putExtra("error", mErrorMessage);
             setResult(RESULT_CANCELED, returnIntent);
             finish();
         }
@@ -164,7 +166,7 @@ public class CheckoutActivity extends AppCompatActivity{
             }
         });
 
-        mShoppingCartController = new ShoppingCartViewController(this, mShoppingCartIcon, mCheckoutPreference.getItems().get(0).getPictureUrl(), mPurchaseTitle,
+        mShoppingCartController = new ShoppingCartViewController(this, mShoppingCartIcon, mCheckoutPreference.getItems().get(0).getPictureUrl(), mPurchaseTitle, PURCHASE_TITLE_MAX_LENGTH,
                 mCheckoutPreference.getAmount(), mCheckoutPreference.getItems().get(0).getCurrencyId(), true, findViewById(R.id.contentLayout));
     }
 
@@ -193,17 +195,6 @@ public class CheckoutActivity extends AppCompatActivity{
         builder.setExcludedPaymentTypes(mCheckoutPreference.getExcludedPaymentTypes());
         builder.setDefaultInstallments(mCheckoutPreference.getDefaultInstallments());
         builder.setMaxInstallments(mCheckoutPreference.getMaxInstallments());
-
-        if(payerHasEmail())
-        {
-            builder.setMerchantBaseUrl("https://mp-android-sdk.herokuapp.com/");
-            builder.setMerchantGetCustomerUri("customers?preference_id=" + mCheckoutPreference.getId());
-        }
-        if(mPaymentMethodEditionRequested)
-        {
-            builder.setEditing(true);
-        }
-
         builder.startPaymentVaultActivity();
     }
 
@@ -241,7 +232,6 @@ public class CheckoutActivity extends AppCompatActivity{
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
         if(requestCode == MercadoPago.PAYMENT_VAULT_REQUEST_CODE) {
 
             if(resultCode == RESULT_OK) {
@@ -263,30 +253,12 @@ public class CheckoutActivity extends AppCompatActivity{
                     setResult(RESULT_CANCELED, returnIntent);
                     finish();
                 }
+                else {
+                    overridePendingTransition(R.anim.slide_right_to_left_in, R.anim.slide_right_to_left_out);
+                }
             }
         }
-
-        Intent checkoutResult = null;
-        if (requestCode == MercadoPago.INSTALL_APP_REQUEST_CODE) {
-            if(data != null && !data.getBooleanExtra("backButtonPressed", false)) {
-                checkoutResult = data;
-                setResult(RESULT_OK, checkoutResult);
-                finish();
-            }
-
-        } else if (requestCode == MercadoPago.CONGRATS_REQUEST_CODE) {
-
-            // from SDK
-            checkoutResult = new Intent();
-            checkoutResult.putExtra("eAs" +
-                    "xternalReference", mPayment.getExternalReference() != null ? mPayment.getExternalReference() : null);
-            checkoutResult.putExtra("paymentId", mPayment.getId() != null ? mPayment.getId() : null);
-            checkoutResult.putExtra("paymentStatus", mPayment.getStatus() != null ? mPayment.getStatus() : null);
-            checkoutResult.putExtra("paymentType", mPayment.getPaymentTypeId() != null ? mPayment.getPaymentTypeId() : null);
-            checkoutResult.putExtra("preferenceId", mCheckoutPreference.getId());
-            setResult(RESULT_OK, checkoutResult);
-            finish();
-        } else if (requestCode == MercadoPago.INSTRUCTIONS_REQUEST_CODE) {
+        else if (requestCode == MercadoPago.INSTRUCTIONS_REQUEST_CODE) {
             finish();
         }
     }

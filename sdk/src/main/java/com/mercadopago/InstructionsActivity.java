@@ -46,7 +46,6 @@ public class InstructionsActivity extends AppCompatActivity {
     private Payment mPayment;
     private String mMerchantPublicKey;
     private PaymentMethod mPaymentMethod;
-    private String mCurrency;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -175,7 +174,6 @@ public class InstructionsActivity extends AppCompatActivity {
         mPayment = (Payment) getIntent().getExtras().getSerializable("payment");
         mMerchantPublicKey = this.getIntent().getStringExtra("merchantPublicKey");
         mPaymentMethod = (PaymentMethod) getIntent().getSerializableExtra("paymentMethod");
-        mCurrency = getIntent().getStringExtra("currencyId");
     }
 
     private void initializeControls() {

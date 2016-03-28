@@ -6,9 +6,11 @@ import android.support.test.InstrumentationRegistry;
 import com.mercadopago.PaymentVaultActivity;
 import com.mercadopago.model.Card;
 import com.mercadopago.model.CardToken;
+import com.mercadopago.model.CheckoutPreference;
 import com.mercadopago.model.Customer;
 import com.mercadopago.model.IdentificationType;
 import com.mercadopago.model.Installment;
+import com.mercadopago.model.Instruction;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.Payment;
@@ -145,7 +147,19 @@ public class StaticMock {
     public static Payment getPayment(Context context) {
 
         try {
+
             return JsonUtil.getInstance().fromJson(getFile(context, "mocks/payment.json"), Payment.class);
+
+        } catch (Exception ex) {
+
+            return null;
+        }
+    }
+
+    public static Payment getPayment() {
+
+        try {
+            return JsonUtil.getInstance().fromJson(getFile(InstrumentationRegistry.getContext(), "mocks/payment.json"), Payment.class);
 
         } catch (Exception ex) {
 
@@ -159,6 +173,33 @@ public class StaticMock {
 
         } catch (Exception ex) {
 
+            return null;
+        }
+    }
+
+    public static String getCompletePaymentMethodsJson() {
+        try {
+            return getFile(InstrumentationRegistry.getContext(), "mocks/payment_methods.json");
+
+        } catch (Exception ex) {
+
+            return null;
+        }
+    }
+
+    public static CheckoutPreference getPreferenceWithoutExclusions() {
+        try {
+            String json = getFile(InstrumentationRegistry.getContext(), "mocks/preference_without_exclusions.json");
+            return JsonUtil.getInstance().fromJson(json, CheckoutPreference.class);
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+    public static String getCashInstructionsJson() {
+        try {
+            return getFile(InstrumentationRegistry.getContext(), "mocks/cash_instructions.json");
+        } catch (Exception ex) {
             return null;
         }
     }
