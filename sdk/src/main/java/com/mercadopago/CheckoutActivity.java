@@ -222,14 +222,6 @@ public class CheckoutActivity extends AppCompatActivity {
         return purchaseTitle.toString();
     }
 
-    protected boolean payerHasEmail() {
-
-        return mCheckoutPreference != null
-                && mCheckoutPreference.getPayer() != null
-                && mCheckoutPreference.getPayer().getEmail() != null
-                && !mCheckoutPreference.getPayer().getEmail().equals("");
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == MercadoPago.PAYMENT_VAULT_REQUEST_CODE) {
@@ -324,7 +316,6 @@ public class CheckoutActivity extends AppCompatActivity {
                 ApiUtil.finishWithApiException(mActivity, error);
             }
         });
-
     }
 
     @Override

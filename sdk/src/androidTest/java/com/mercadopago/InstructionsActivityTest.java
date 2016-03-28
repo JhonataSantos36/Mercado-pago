@@ -34,12 +34,12 @@ public class InstructionsActivityTest {
         validStartIntent.putExtra("payment", payment);
     }
 
-    @Test
+    /*@Test
     public void getActivityParametersOnCreate() {
         String cashInstructionsJson = StaticMock.getCashInstructionsJson();
         mTestRule.addApiResponseToQueue(cashInstructionsJson, 200, "");
         mTestRule.launchActivity(validStartIntent);
-    }
+    }*/
 
     private PaymentMethod getOfflinePaymentMethod() {
         PaymentMethod paymentMethod = new PaymentMethod();
