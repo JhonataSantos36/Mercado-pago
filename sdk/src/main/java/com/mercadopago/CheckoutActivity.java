@@ -44,7 +44,6 @@ public class CheckoutActivity extends AppCompatActivity {
     //Local vars
     protected MercadoPago mMercadoPago;
     protected Activity mActivity;
-    protected Payment mPayment;
     protected boolean mSupportMPApp = true;
     protected PaymentMethod mSelectedPaymentMethod;
     protected Issuer mSelectedIssuer;
@@ -155,7 +154,6 @@ public class CheckoutActivity extends AppCompatActivity {
                 createPayment();
             }
         });
-        mPurchaseTitle = getPurchaseTitle();
         mTotalAmountTextView = (MPTextView) findViewById(R.id.totalAmount);
         mShoppingCartIcon = (ImageView) findViewById(R.id.shoppingCartIcon);
 
@@ -166,6 +164,7 @@ public class CheckoutActivity extends AppCompatActivity {
             }
         });
 
+        mPurchaseTitle = getPurchaseTitle();
         mShoppingCartController = new ShoppingCartViewController(this, mShoppingCartIcon, mCheckoutPreference.getItems().get(0).getPictureUrl(), mPurchaseTitle, PURCHASE_TITLE_MAX_LENGTH,
                 mCheckoutPreference.getAmount(), mCheckoutPreference.getItems().get(0).getCurrencyId(), true, findViewById(R.id.contentLayout));
     }
@@ -173,6 +172,24 @@ public class CheckoutActivity extends AppCompatActivity {
     protected void startTermsAndConditionsActivity() {
         Intent termsAndConditionsIntent = new Intent(this, TermsAndConditionsActivity.class);
         startActivity(termsAndConditionsIntent);
+    }
+
+    private String getPurchaseTitle() {
+        StringBuilder purchaseTitle = new StringBuilder();
+        int itemListSize = mCheckoutPreference.getItems().size();
+
+        if(itemListSize == 1) {
+            purchaseTitle.append(mCheckoutPreference.getItems().get(0).getTitle());
+        }
+        else {
+            for(Item item : mCheckoutPreference.getItems()){
+                purchaseTitle.append(item.getTitle());
+                if(!item.equals(mCheckoutPreference.getItems().get(itemListSize-1))) {
+                    purchaseTitle.append(", ");
+                }
+            }
+        }
+        return purchaseTitle.toString();
     }
 
     protected void setActivity() {
@@ -201,25 +218,6 @@ public class CheckoutActivity extends AppCompatActivity {
     private Spanned getAmountLabel() {
         String currencyId = mCheckoutPreference.getItems().get(0).getCurrencyId();
         return CurrenciesUtil.formatNumber(mCheckoutPreference.getAmount(), currencyId, true, true);
-    }
-
-    private String getPurchaseTitle() {
-        StringBuilder purchaseTitle = new StringBuilder();
-        int itemListSize = mCheckoutPreference.getItems().size();
-
-        if(itemListSize == 1) {
-            purchaseTitle.append(mCheckoutPreference.getItems().get(0).getTitle());
-        }
-        else {
-            for(Item item : mCheckoutPreference.getItems()){
-                purchaseTitle.append(item.getTitle());
-                if(!item.equals(mCheckoutPreference.getItems().get(itemListSize))) {
-                    purchaseTitle.append(", ");
-                }
-                purchaseTitle.append(item.getTitle());
-            }
-        }
-        return purchaseTitle.toString();
     }
 
     @Override

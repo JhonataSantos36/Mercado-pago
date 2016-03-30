@@ -81,7 +81,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
     protected String mPurchaseTitle;
     protected String mItemImageUri;
     protected String mCurrencyId;
-    private MPTextView mActivityTitle;
+    protected MPTextView mActivityTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,7 +117,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
     private void finishWithIllegalStateException(String message) {
         Intent returnIntent = new Intent();
         returnIntent.putExtra("error", message);
-        this.setResult(Activity.RESULT_OK, returnIntent);
+        this.setResult(Activity.RESULT_CANCELED, returnIntent);
         this.finish();
     }
 
@@ -201,13 +201,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
         if(mCurrencyId == null) {
             isValid = false;
         }
-        else if((!mCurrencyId.equals(CurrenciesUtil.CURRENCY_ARGENTINA))
-                && (!mCurrencyId.equals(CurrenciesUtil.CURRENCY_BRAZIL))
-                && (!mCurrencyId.equals(CurrenciesUtil.CURRENCY_CHILE))
-                && (!mCurrencyId.equals(CurrenciesUtil.CURRENCY_COLOMBIA))
-                && (!mCurrencyId.equals(CurrenciesUtil.CURRENCY_MEXICO))
-                && (!mCurrencyId.equals(CurrenciesUtil.CURRENCY_VENEZUELA))
-                && (!mCurrencyId.equals(CurrenciesUtil.CURRENCY_USA))){
+        else if(CurrenciesUtil.isValidCurrency(mCurrencyId)){
             isValid = false;
         }
         return isValid;
@@ -301,9 +295,9 @@ public class PaymentVaultActivity extends AppCompatActivity {
                     finishWithEmptyPaymentMethodSearch();
                 } else {
                     mPaymentMethodSearch = paymentMethodSearch;
-                    setSearchLayout();
+                    getPaymentMethodsAsync();
                 }
-                getPaymentMethodsAsync();
+
             }
 
             @Override
@@ -318,7 +312,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
             @Override
             public void success(List<PaymentMethod> paymentMethods, Response response) {
                 mPaymentMethods = paymentMethods;
-                LayoutUtil.showRegularLayout(mActivity);
+                setSearchLayout();
             }
 
             @Override
@@ -335,9 +329,8 @@ public class PaymentVaultActivity extends AppCompatActivity {
     }
 
     protected void setSearchLayout() {
-        if(mPaymentMethodSearch.hasSearchItems()) {
-            populateSearchList(mPaymentMethodSearch.getGroups());
-        }
+        LayoutUtil.showRegularLayout(mActivity);
+        populateSearchList(mPaymentMethodSearch.getGroups());
     }
 
     protected void populateSearchList(List<PaymentMethodSearchItem> items) {
@@ -374,13 +367,19 @@ public class PaymentVaultActivity extends AppCompatActivity {
                     }
                 }
                 if(requiredPaymentMethod == null) {
-                    requiredPaymentMethod = new PaymentMethod();
-                    requiredPaymentMethod.setId(paymentMethodItem.getId());
+                    finishWithMismatchingPaymentMethod();
+                } else {
+                    finishWithPaymentMethodResult(requiredPaymentMethod, paymentMethodItem.getComment());
                 }
-
-                finishWithPaymentMethodResult(requiredPaymentMethod, paymentMethodItem.getComment());
             }
         };
+    }
+
+    private void finishWithMismatchingPaymentMethod() {
+        Intent canceledIntent = new Intent();
+        canceledIntent.putExtra("error", "Mismatching payment method");
+        setResult(RESULT_CANCELED, canceledIntent);
+        finish();
     }
 
     private void startActivityForItem(PaymentMethodSearchItem groupIem) {
@@ -435,6 +434,12 @@ public class PaymentVaultActivity extends AppCompatActivity {
         if(resultCode == RESULT_OK) {
             setResult(RESULT_OK, data);
             finish();
+        }
+        else if(resultCode == RESULT_CANCELED) {
+            if(data.hasExtra("error")) {
+                setResult(RESULT_CANCELED, data);
+                finish();
+            }
         }
     }
 

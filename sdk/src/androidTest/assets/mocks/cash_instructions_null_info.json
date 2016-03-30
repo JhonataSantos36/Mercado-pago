@@ -19,17 +19,8 @@
         "separator":" "
     }
   ],
-  "info": [
-      "Info",
-      "Info second phrase"
-  ],
-  "secondary_info": [
-    "Secondary info",
-    "Secondary second phrase"
-  ],
-  "tertiary_info": [
-    "Tertiary info",
-    "Tertiary second phrase"
-  ],
+  "info": null,
+  "secondary_info": null,
+  "tertiary_info": null,
   "accreditation_message":"accreditation time"
 }

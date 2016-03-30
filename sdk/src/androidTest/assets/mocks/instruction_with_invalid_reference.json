@@ -3,18 +3,13 @@
   "references":
   [
     {
-        "label":"Reference1",
-        "field_value": [
-          "123",
-          "456"
-        ],
+        "label":"InvalidReference1",
+        "field_value": null,
         "separator":"-"
     },
     {
-        "label":"Reference2",
+        "label":"InvalidReference2",
         "field_value": [
-          "654",
-          "321"
         ],
         "separator":" "
     }

@@ -99,6 +99,7 @@
                             android:paddingRight="10dp"
                             android:textAllCaps="false"
                             android:id="@+id/actionButton"
+                            android:visibility="gone"
                             style="@style/mpsdk_instructions_button_text"/>
                 </LinearLayout>
                 <LinearLayout

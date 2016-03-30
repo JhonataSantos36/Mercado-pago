@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.app.Instrumentation;
 import android.content.Intent;
 import android.support.test.espresso.contrib.RecyclerViewActions;
-import android.support.test.espresso.intent.Intents;
-import android.support.test.espresso.intent.matcher.IntentMatchers;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.test.runner.lifecycle.ActivityLifecycleMonitorRegistry;
 import android.test.suitebuilder.annotation.LargeTest;
@@ -13,7 +11,6 @@ import android.view.View;
 
 
 import com.mercadopago.model.CardToken;
-import com.mercadopago.model.Issuer;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentMethodSearch;
 import com.mercadopago.model.PaymentMethodSearchItem;
@@ -23,8 +20,6 @@ import com.mercadopago.test.StaticMock;
 import com.mercadopago.test.rules.MockedApiTestRule;
 import com.mercadopago.util.JsonUtil;
 
-import junit.framework.Assert;
-
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -32,10 +27,17 @@ import org.junit.runner.RunWith;
 
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.intent.Intents.intended;
+import static android.support.test.espresso.intent.Intents.intending;
+import static android.support.test.espresso.intent.matcher.IntentMatchers.*;
+import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.action.ViewActions.click;
 
 import static android.support.test.runner.lifecycle.Stage.RESUMED;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -66,33 +68,33 @@ public class PaymentVaultActivityTest {
     @Test
     public void setPublicKeyOnCreate() {
         mTestRule.launchActivity(validStartIntent);
-        Assert.assertTrue(mTestRule.getActivity().mMerchantPublicKey != null);
+        assertTrue(mTestRule.getActivity().mMerchantPublicKey != null);
     }
 
     @Test
     public void setEditingStateOnCreate() {
         validStartIntent.putExtra("editing", true);
         mTestRule.launchActivity(validStartIntent);
-        Assert.assertTrue(mTestRule.getActivity().mEditing);
+        assertTrue(mTestRule.getActivity().mEditing);
     }
 
 
     @Test
     public void setEditingFalseByDefault() {
         mTestRule.launchActivity(validStartIntent);
-        Assert.assertFalse(mTestRule.getActivity().mEditing);
+        assertFalse(mTestRule.getActivity().mEditing);
     }
 
     @Test
     public void setAmountOnCreate() {
         mTestRule.launchActivity(validStartIntent);
-        Assert.assertTrue(mTestRule.getActivity().mAmount != null);
+        assertTrue(mTestRule.getActivity().mAmount != null);
     }
 
     @Test
     public void setPurchaseTitleOnCreate() {
         mTestRule.launchActivity(validStartIntent);
-        Assert.assertTrue(mTestRule.getActivity().mPurchaseTitle != null);
+        assertTrue(mTestRule.getActivity().mPurchaseTitle != null);
     }
 
     @Test
@@ -110,21 +112,21 @@ public class PaymentVaultActivityTest {
 
         mTestRule.launchActivity(validStartIntent);
 
-        Assert.assertTrue(mTestRule.getActivity().mShoppingCartController.getPurchaseTitle().length() <= purchaseTitleMaxLength);
+        assertTrue(mTestRule.getActivity().mShoppingCartController.getPurchaseTitle().length() <= purchaseTitleMaxLength);
     }
 
     @Test
     public void setMaxInstallmentsOnCreateIfReceived() {
         validStartIntent.putExtra("maxInstallments", "3");
         mTestRule.launchActivity(validStartIntent);
-        Assert.assertTrue(mTestRule.getActivity().mMaxInstallments == 3);
+        assertTrue(mTestRule.getActivity().mMaxInstallments == 3);
     }
 
     @Test
     public void setDefaultInstallmentsOnCreateIfReceived() {
         validStartIntent.putExtra("defaultInstallments", "3");
         mTestRule.launchActivity(validStartIntent);
-        Assert.assertTrue(mTestRule.getActivity().mDefaultInstallments == 3);
+        assertTrue(mTestRule.getActivity().mDefaultInstallments == 3);
     }
 
     @Test
@@ -135,7 +137,7 @@ public class PaymentVaultActivityTest {
         String exclusions = JsonUtil.parseList(excludedTypes);
         validStartIntent.putExtra("excludedPaymentTypes", exclusions);
         mTestRule.launchActivity(validStartIntent);
-        Assert.assertTrue(mTestRule.getActivity().mExcludedPaymentTypes.contains("ticket"));
+        assertTrue(mTestRule.getActivity().mExcludedPaymentTypes.contains("ticket"));
     }
 
     @Test
@@ -146,13 +148,13 @@ public class PaymentVaultActivityTest {
         String exclusions = JsonUtil.parseList(excludedPaymentMethods);
         validStartIntent.putExtra("excludedPaymentMethodIds", exclusions);
         mTestRule.launchActivity(validStartIntent);
-        Assert.assertTrue(mTestRule.getActivity().mExcludedPaymentMethodIds.contains("oxxo"));
+        assertTrue(mTestRule.getActivity().mExcludedPaymentMethodIds.contains("oxxo"));
     }
 
     @Test
     public void initializeGroupsRecyclerViewOnCreate() {
         mTestRule.launchActivity(validStartIntent);
-        Assert.assertTrue(mTestRule.getActivity().mSearchItemsRecyclerView != null);
+        assertTrue(mTestRule.getActivity().mSearchItemsRecyclerView != null);
     }
 
     @Test
@@ -165,7 +167,7 @@ public class PaymentVaultActivityTest {
         mTestRule.addApiResponseToQueue(paymentMethodList, 200, "");
 
         mTestRule.launchActivity(validStartIntent);
-        Assert.assertTrue(mTestRule.getActivity().mPaymentMethodSearch != null);
+        assertTrue(mTestRule.getActivity().mPaymentMethodSearch != null);
     }
 
     @Test
@@ -178,7 +180,7 @@ public class PaymentVaultActivityTest {
         mTestRule.addApiResponseToQueue(paymentMethodList, 200, "");
 
         mTestRule.launchActivity(validStartIntent);
-        Assert.assertTrue(mTestRule.isActivityFinishedOrFinishing());
+        assertTrue(mTestRule.isActivityFinishedOrFinishing());
     }
 
     @Test
@@ -193,7 +195,7 @@ public class PaymentVaultActivityTest {
 
         mTestRule.launchActivity(validStartIntent);
 
-        Assert.assertTrue(mTestRule.getActivity().mSearchItemsRecyclerView.getAdapter().getItemCount() != 0);
+        assertTrue(mTestRule.getActivity().mSearchItemsRecyclerView.getAdapter().getItemCount() != 0);
     }
 
     @Test
@@ -204,7 +206,7 @@ public class PaymentVaultActivityTest {
         validStartIntent.putExtra("selectedSearchItem", paymentMethodSearch.getGroups().get(0));
         mTestRule.launchActivity(validStartIntent);
 
-        Assert.assertTrue(mTestRule.getActivity().isItemSelected());
+        assertTrue(mTestRule.getActivity().isItemSelected());
     }
 
     @Test
@@ -220,7 +222,7 @@ public class PaymentVaultActivityTest {
         validStartIntent.putExtra("selectedSearchItem", paymentMethodSearch.getGroups().get(0));
         mTestRule.launchActivity(validStartIntent);
 
-        Assert.assertTrue(mTestRule.getActivity().mPaymentMethodSearch == null);
+        assertTrue(mTestRule.getActivity().mPaymentMethodSearch == null);
     }
 
     @Test
@@ -231,7 +233,7 @@ public class PaymentVaultActivityTest {
         validStartIntent.putExtra("selectedSearchItem", item);
         mTestRule.launchActivity(validStartIntent);
 
-        Assert.assertTrue(mTestRule.getActivity().mSearchItemsRecyclerView.getAdapter().getItemCount() != 0);
+        assertTrue(mTestRule.getActivity().mSearchItemsRecyclerView.getAdapter().getItemCount() != 0);
     }
 
     @Test
@@ -255,7 +257,7 @@ public class PaymentVaultActivityTest {
                 Collection resumedActivities = ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(RESUMED);
                 if (resumedActivities.iterator().hasNext()) {
                     PaymentVaultActivity currentActivity = (PaymentVaultActivity) resumedActivities.iterator().next();
-                    Assert.assertEquals(currentActivity.mSelectedSearchItem.getId(), firstSearchItem.getId());
+                    assertEquals(currentActivity.mSelectedSearchItem.getId(), firstSearchItem.getId());
                 }
             }
         });
@@ -281,9 +283,9 @@ public class PaymentVaultActivityTest {
         PaymentMethodSearch paymentMethodSearch = JsonUtil.getInstance().fromJson(paymentMethodSearchJson, PaymentMethodSearch.class);
         PaymentMethodSearchItem item = paymentMethodSearch.getGroups().get(0).getChildren().get(0);
 
-        Intents.intended(IntentMatchers.hasComponent(GuessingNewCardActivity.class.getName()));
-        Intents.intended(IntentMatchers.hasExtra("merchantPublicKey", "1234"));
-        Intents.intended(IntentMatchers.hasExtra("paymentTypeId", item.getId()));
+        intended(hasComponent(GuessingNewCardActivity.class.getName()));
+        intended(hasExtra("merchantPublicKey", "1234"));
+        intended(hasExtra("paymentTypeId", item.getId()));
     }
 
     @Test
@@ -309,135 +311,11 @@ public class PaymentVaultActivityTest {
 
         final PaymentMethodSearchItem selectedSearchItem = paymentMethodSearch.getGroups().get(1);
 
-        Intents.intended(IntentMatchers.hasComponent(PaymentMethodsActivity.class.getName()));
-        Intents.intended(IntentMatchers.hasExtra("merchantPublicKey", "1234"));
-        Intents.intended(IntentMatchers.hasExtra("paymentTypeId", selectedSearchItem.getId()));
+        intended(hasComponent(PaymentMethodsActivity.class.getName()));
+        intended(hasExtra("merchantPublicKey", "1234"));
+        intended(hasExtra("paymentTypeId", selectedSearchItem.getId()));
     }
 
-    @Test
-    public void whenOfflinePaymentMethodSelectedSetItAsResultForCheckoutActivity() {
-        String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
-        String paymentMethodsJson = StaticMock.getCompletePaymentMethodsJson();
-
-
-        mTestRule.addApiResponseToQueue(paymentMethodSearchJson, 200, "");
-        mTestRule.addApiResponseToQueue(paymentMethodsJson, 200, "");
-
-        mTestRule.launchActivity(validStartIntent);
-
-        onView(withId(R.id.groupsList)).perform(
-                RecyclerViewActions.actionOnItemAtPosition(1, click()));
-
-        onView(withId(R.id.groupsList)).perform(
-                RecyclerViewActions.actionOnItemAtPosition(1, click()));
-
-        PaymentMethodSearch paymentMethodSearch = JsonUtil.getInstance().fromJson(paymentMethodSearchJson, PaymentMethodSearch.class);
-        final PaymentMethodSearchItem selectedSearchItem = paymentMethodSearch.getGroups().get(1).getChildren().get(0);
-
-        getInstrumentation().runOnMainSync(new Runnable() {
-            public void run() {
-                Collection resumedActivities = ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(RESUMED);
-                if (resumedActivities.iterator().hasNext()) {
-                    CheckoutActivity currentActivity = (CheckoutActivity) resumedActivities.iterator().next();
-                    Assert.assertEquals(currentActivity.mSelectedPaymentMethod.getId(), selectedSearchItem.getId());
-                }
-            }
-        });
-    }
-
-    @Test
-    public void whenResultFromGuessingNewCardFormReceivedSetItAsResultForCheckoutActivity() {
-        String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
-        List<PaymentMethod> paymentMethodList = new ArrayList<>();
-        paymentMethodList.add(new PaymentMethod());
-
-        mTestRule.addApiResponseToQueue(paymentMethodSearchJson, 200, "");
-        mTestRule.addApiResponseToQueue(paymentMethodList, 200, "");
-
-        final Token token = new Token();
-        token.setId("1");
-        mTestRule.addApiResponseToQueue(token, 200, "");
-
-        mTestRule.launchActivity(validStartIntent);
-
-        onView(withId(R.id.groupsList)).perform(
-                RecyclerViewActions.actionOnItemAtPosition(0, click()));
-
-        Intent guessingFormResultIntent = new Intent();
-        final PaymentMethod paymentMethod = new PaymentMethod();
-        paymentMethod.setId("visa");
-
-        CardToken cardToken = new CardToken("4509953566233704", 12, 99, "1234", "Holder Name Perez", "DNI", "34543454");
-
-        guessingFormResultIntent.putExtra("paymentMethod", paymentMethod);
-        guessingFormResultIntent.putExtra("cardToken", cardToken);
-        Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(Activity.RESULT_OK, guessingFormResultIntent);
-
-        Intents.intending(IntentMatchers.hasComponent(GuessingNewCardActivity.class.getName())).respondWith(result);
-
-        onView(withId(R.id.groupsList)).perform(
-                RecyclerViewActions.actionOnItemAtPosition(0, click()));
-
-        getInstrumentation().runOnMainSync(new Runnable() {
-            public void run() {
-                Collection resumedActivities = ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(RESUMED);
-                if (resumedActivities.iterator().hasNext()) {
-                    CheckoutActivity currentActivity = (CheckoutActivity) resumedActivities.iterator().next();
-                    Assert.assertEquals(currentActivity.mSelectedPaymentMethod.getId(), paymentMethod.getId());
-                    Assert.assertEquals(currentActivity.mCreatedToken.getId(), token.getId());
-                }
-            }
-        });
-    }
-
-    @Test
-    public void setResultFromGuessingNewCardWithIssuer() {
-        String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
-        List<PaymentMethod> paymentMethodList = new ArrayList<>();
-        paymentMethodList.add(new PaymentMethod());
-
-        mTestRule.addApiResponseToQueue(paymentMethodSearchJson, 200, "");
-        mTestRule.addApiResponseToQueue(paymentMethodList, 200, "");
-
-        final Token token = new Token();
-        token.setId("1");
-        mTestRule.addApiResponseToQueue(token, 200, "");
-
-        mTestRule.launchActivity(validStartIntent);
-
-        onView(withId(R.id.groupsList)).perform(
-                RecyclerViewActions.actionOnItemAtPosition(0, click()));
-
-        Intent guessingFormResultIntent = new Intent();
-        final PaymentMethod paymentMethod = new PaymentMethod();
-        paymentMethod.setId("visa");
-
-        CardToken cardToken = new CardToken("4509953566233704", 12, 99, "1234", "Holder Name Perez", "DNI", "34543454");
-        final Issuer issuer = new Issuer();
-        issuer.setId((long) 1234);
-
-        guessingFormResultIntent.putExtra("paymentMethod", paymentMethod);
-        guessingFormResultIntent.putExtra("cardToken", cardToken);
-        guessingFormResultIntent.putExtra("issuer", issuer);
-        Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(Activity.RESULT_OK, guessingFormResultIntent);
-
-        Intents.intending(IntentMatchers.hasComponent(GuessingNewCardActivity.class.getName())).respondWith(result);
-
-        onView(withId(R.id.groupsList)).perform(
-                RecyclerViewActions.actionOnItemAtPosition(0, click()));
-
-        getInstrumentation().runOnMainSync(new Runnable() {
-            public void run() {
-                Collection resumedActivities = ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(RESUMED);
-                if (resumedActivities.iterator().hasNext()) {
-                    CheckoutActivity currentActivity = (CheckoutActivity) resumedActivities.iterator().next();
-                    Assert.assertEquals(currentActivity.mSelectedPaymentMethod.getId(), paymentMethod.getId());
-                    Assert.assertEquals(currentActivity.mCreatedToken.getId(), token.getId());
-                    Assert.assertEquals(currentActivity.mSelectedIssuer.getId(), issuer.getId());
-                }
-            }
-        });
-    }
 
     @Test
     public void whenInitializedDoNotShowShoppingCart() {
@@ -452,7 +330,21 @@ public class PaymentVaultActivityTest {
 
         View itemInfoLayout = activity.findViewById(R.id.itemInfoLayout);
 
-        Assert.assertTrue(itemInfoLayout.getVisibility() != View.VISIBLE);
+        assertTrue(itemInfoLayout.getVisibility() != View.VISIBLE);
+    }
+
+    @Test
+    public void ifNavigationBackClickedGoBack() {
+        String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
+        List<PaymentMethod> paymentMethodList = new ArrayList<>();
+        paymentMethodList.add(new PaymentMethod());
+
+        mTestRule.addApiResponseToQueue(paymentMethodSearchJson, 200, "");
+        mTestRule.addApiResponseToQueue(paymentMethodList, 200, "");
+
+        mTestRule.launchActivity(validStartIntent);
+        onView(withContentDescription(R.string.abc_action_bar_up_description)).perform(click());
+        mTestRule.isActivityFinishedOrFinishing();
     }
 
     @Test
@@ -467,10 +359,10 @@ public class PaymentVaultActivityTest {
         PaymentVaultActivity activity = mTestRule.launchActivity(validStartIntent);
 
         View itemInfoLayout = activity.findViewById(R.id.itemInfoLayout);
-        Assert.assertTrue(itemInfoLayout.getVisibility() != View.VISIBLE);
+        assertTrue(itemInfoLayout.getVisibility() != View.VISIBLE);
 
         onView(withId(R.id.shoppingCartIcon)).perform(click());
-        Assert.assertEquals(itemInfoLayout.getVisibility(), View.VISIBLE);
+        assertEquals(itemInfoLayout.getVisibility(), View.VISIBLE);
     }
 
     @Test
@@ -485,14 +377,14 @@ public class PaymentVaultActivityTest {
         PaymentVaultActivity activity = mTestRule.launchActivity(validStartIntent);
 
         View itemInfoLayout = activity.findViewById(R.id.itemInfoLayout);
-        Assert.assertTrue(itemInfoLayout.getVisibility() != View.VISIBLE);
+        assertTrue(itemInfoLayout.getVisibility() != View.VISIBLE);
 
         onView(withId(R.id.shoppingCartIcon)).perform(click());
-        Assert.assertEquals(itemInfoLayout.getVisibility(), View.VISIBLE);
+        assertEquals(itemInfoLayout.getVisibility(), View.VISIBLE);
 
 
         onView(withId(R.id.shoppingCartIcon)).perform(click());
-        Assert.assertTrue(itemInfoLayout.getVisibility() != View.VISIBLE);
+        assertTrue(itemInfoLayout.getVisibility() != View.VISIBLE);
     }
 
     //VALIDATIONS TESTS
@@ -511,9 +403,26 @@ public class PaymentVaultActivityTest {
         invalidCurrencyIntent.putExtra("currencyId", "An invalid currency id");
 
         mTestRule.launchActivity(invalidCurrencyIntent);
-        Assert.assertTrue(mTestRule.isActivityFinishedOrFinishing());
+        assertTrue(mTestRule.isActivityFinishedOrFinishing());
     }
 
+    @Test
+    public void ifCurrencyIdIsNullFinishActivity() {
+
+        String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
+        List<PaymentMethod> paymentMethodList = new ArrayList<>();
+        paymentMethodList.add(new PaymentMethod());
+
+        mTestRule.addApiResponseToQueue(paymentMethodSearchJson, 200, "");
+        mTestRule.addApiResponseToQueue(paymentMethodList, 200, "");
+
+        Intent noCurrencyIntent = new Intent();
+        noCurrencyIntent.putExtras(validStartIntent.getExtras());
+        noCurrencyIntent.removeExtra("currencyId");
+
+        mTestRule.launchActivity(noCurrencyIntent);
+        assertTrue(mTestRule.isActivityFinishedOrFinishing());
+    }
 
     @Test
     public void ifAmountIsNullFinishActivity() {
@@ -529,7 +438,7 @@ public class PaymentVaultActivityTest {
         invalidAmountIntent.removeExtra("amount");
 
         mTestRule.launchActivity(invalidAmountIntent);
-        Assert.assertTrue(mTestRule.isActivityFinishedOrFinishing());
+        assertTrue(mTestRule.isActivityFinishedOrFinishing());
     }
 
     @Test
@@ -546,7 +455,7 @@ public class PaymentVaultActivityTest {
         invalidAmountIntent.putExtra("amount", new BigDecimal(-100));
 
         mTestRule.launchActivity(invalidAmountIntent);
-        Assert.assertTrue(mTestRule.isActivityFinishedOrFinishing());
+        assertTrue(mTestRule.isActivityFinishedOrFinishing());
     }
 
     @Test
@@ -563,7 +472,24 @@ public class PaymentVaultActivityTest {
         invalidAmountIntent.removeExtra("merchantPublicKey");
 
         mTestRule.launchActivity(invalidAmountIntent);
-        Assert.assertTrue(mTestRule.isActivityFinishedOrFinishing());
+        assertTrue(mTestRule.isActivityFinishedOrFinishing());
+    }
+
+    @Test
+    public void ifPurchaseTitleIsNullFinisActivity() {
+        String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
+        List<PaymentMethod> paymentMethodList = new ArrayList<>();
+        paymentMethodList.add(new PaymentMethod());
+
+        mTestRule.addApiResponseToQueue(paymentMethodSearchJson, 200, "");
+        mTestRule.addApiResponseToQueue(paymentMethodList, 200, "");
+
+        Intent invalidAmountIntent = new Intent();
+        invalidAmountIntent.putExtras(validStartIntent.getExtras());
+        invalidAmountIntent.removeExtra("purchaseTitle");
+
+        mTestRule.launchActivity(invalidAmountIntent);
+        assertTrue(mTestRule.isActivityFinishedOrFinishing());
     }
 
     @Test
@@ -580,7 +506,7 @@ public class PaymentVaultActivityTest {
         invalidMaxInstallmentsIntent.putExtra("maxInstallments", "-3");
 
         mTestRule.launchActivity(invalidMaxInstallmentsIntent);
-        Assert.assertTrue(mTestRule.isActivityFinishedOrFinishing());
+        assertTrue(mTestRule.isActivityFinishedOrFinishing());
     }
 
     @Test
@@ -597,7 +523,7 @@ public class PaymentVaultActivityTest {
         invalidMaxInstallmentsIntent.putExtra("maxInstallments", "0");
 
         mTestRule.launchActivity(invalidMaxInstallmentsIntent);
-        Assert.assertTrue(mTestRule.isActivityFinishedOrFinishing());
+        assertTrue(mTestRule.isActivityFinishedOrFinishing());
     }
 
     @Test
@@ -614,7 +540,7 @@ public class PaymentVaultActivityTest {
         invalidDefaultInstallmentsIntent.putExtra("defaultInstallments", "-3");
 
         mTestRule.launchActivity(invalidDefaultInstallmentsIntent);
-        Assert.assertTrue(mTestRule.isActivityFinishedOrFinishing());
+        assertTrue(mTestRule.isActivityFinishedOrFinishing());
     }
 
     @Test
@@ -631,7 +557,7 @@ public class PaymentVaultActivityTest {
         invalidDefaultInstallmentsIntent.putExtra("defaultInstallments", "0");
 
         mTestRule.launchActivity(invalidDefaultInstallmentsIntent);
-        Assert.assertTrue(mTestRule.isActivityFinishedOrFinishing());
+        assertTrue(mTestRule.isActivityFinishedOrFinishing());
     }
     @Test
     public void ifAllPaymentTypesExcludedFinishActivity() {
@@ -651,7 +577,28 @@ public class PaymentVaultActivityTest {
         invalidExclusionsIntent.putExtra("excludedPaymentTypes", JsonUtil.parseList(excludedPaymentTypes));
 
         mTestRule.launchActivity(invalidExclusionsIntent);
-        Assert.assertTrue(mTestRule.isActivityFinishedOrFinishing());
+        assertTrue(mTestRule.isActivityFinishedOrFinishing());
+    }
+
+    @Test
+    public void ifPaymentMethodSearchItemDoesNotHaveMatchingPaymentMethodFinishActivity() {
+        String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
+        List<PaymentMethod> paymentMethodList = new ArrayList<>();
+        PaymentMethod paymentMethod = new PaymentMethod();
+        paymentMethod.setId("oxxo");
+        paymentMethodList.add(paymentMethod);
+
+        mTestRule.addApiResponseToQueue(paymentMethodSearchJson, 200, "");
+        mTestRule.addApiResponseToQueue(paymentMethodList, 200, "");
+
+        mTestRule.launchActivity(validStartIntent);
+
+        onView(withId(R.id.groupsList)).perform(
+                RecyclerViewActions.actionOnItemAtPosition(1, click()));
+        onView(withId(R.id.groupsList)).perform(
+                RecyclerViewActions.actionOnItemAtPosition(1, click()));
+
+        assertTrue(mTestRule.isActivityFinishedOrFinishing());
     }
 
     //API EXCEPTIONS TEST
@@ -659,7 +606,7 @@ public class PaymentVaultActivityTest {
     public void ifPaymentMethodSearchAPICallFailsFinishActivity() {
         mTestRule.addApiResponseToQueue("", 401, "");
         mTestRule.launchActivity(validStartIntent);
-        Assert.assertTrue(mTestRule.isActivityFinishedOrFinishing());
+        assertTrue(mTestRule.isActivityFinishedOrFinishing());
     }
 
     @Test
@@ -668,6 +615,41 @@ public class PaymentVaultActivityTest {
         mTestRule.addApiResponseToQueue(paymentMethodSearchJson, 200, "");
         mTestRule.addApiResponseToQueue("", 401, "");
         mTestRule.launchActivity(validStartIntent);
-        Assert.assertTrue(mTestRule.isActivityFinishedOrFinishing());
+        assertTrue(mTestRule.isActivityFinishedOrFinishing());
+    }
+    @Test
+    public void whenCreateTokenAPIFailureFinishActivity() {
+        String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
+        List<PaymentMethod> paymentMethodList = new ArrayList<>();
+        paymentMethodList.add(new PaymentMethod());
+
+        mTestRule.addApiResponseToQueue(paymentMethodSearchJson, 200, "");
+        mTestRule.addApiResponseToQueue(paymentMethodList, 200, "");
+
+        final Token token = new Token();
+        token.setId("1");
+        mTestRule.addApiResponseToQueue(token, 200, "");
+
+        mTestRule.launchActivity(validStartIntent);
+
+        onView(withId(R.id.groupsList)).perform(
+                RecyclerViewActions.actionOnItemAtPosition(0, click()));
+
+        Intent guessingFormResultIntent = new Intent();
+        final PaymentMethod paymentMethod = new PaymentMethod();
+        paymentMethod.setId("visa");
+
+        CardToken cardToken = new CardToken("4509953566233704", 12, 99, "1234", "Holder Name Perez", "DNI", "34543454");
+
+        guessingFormResultIntent.putExtra("paymentMethod", paymentMethod);
+        guessingFormResultIntent.putExtra("cardToken", cardToken);
+        Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(Activity.RESULT_OK, guessingFormResultIntent);
+
+        intending(hasComponent(GuessingNewCardActivity.class.getName())).respondWith(result);
+
+        onView(withId(R.id.groupsList)).perform(
+                RecyclerViewActions.actionOnItemAtPosition(0, click()));
+
+        assertTrue(mTestRule.isActivityFinishedOrFinishing());
     }
 }

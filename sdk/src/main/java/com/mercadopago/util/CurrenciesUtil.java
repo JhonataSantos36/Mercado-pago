@@ -128,4 +128,8 @@ public class CurrenciesUtil {
         }
         return spannedAmount;
     }
+
+    public static boolean isValidCurrency(String currencyId) {
+       return (!currenciesList.containsKey(currencyId));
+    }
 }

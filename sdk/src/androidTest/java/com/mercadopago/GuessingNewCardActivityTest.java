@@ -405,6 +405,8 @@ public class GuessingNewCardActivityTest  extends BaseTest<GuessingNewCardActivi
             }
         });
         sleepThread();
+        sleepThread();
+
 
         assertTrue(mPaymentMethodImage.getDrawable() == null);
         assertTrue(mPaymentMethodsLayout.getVisibility() == View.VISIBLE);

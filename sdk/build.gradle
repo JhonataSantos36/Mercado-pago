@@ -1,6 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'maven'
 apply plugin: 'signing'
+apply plugin: 'jacoco-android'
 
 version = "0.9.15"
 group = "com.mercadopago"
@@ -16,6 +17,9 @@ android {
         versionName '1.0'
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
+    }
+    lintOptions {
+        abortOnError false
     }
     packagingOptions {
         exclude 'META-INF/services/com.fasterxml.jackson.core.JsonFactory'
@@ -63,50 +67,5 @@ dependencies {
 configurations {
     archives {
         extendsFrom configurations.default
-    }
-}
-
-signing {
-    required { has("release") && gradle.taskGraph.hasTask("uploadArchives") }
-    sign configurations.archives
-}
-
-uploadArchives {
-    configuration = configurations.archives
-    repositories.mavenDeployer {
-        beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
-
-        repository(url: sonatypeRepo) {
-            authentication(userName: sonatypeUsername,
-                    password: sonatypePassword)
-        }
-
-        pom.project {
-            name 'MercadoPago Android SDK'
-            packaging 'aar'
-            description 'MercadoPago Android SDK'
-            url 'https://github.com/mercadopago/mercadopago-android'
-
-            scm {
-                url 'https://github.com/mercadopago/mercadopago-android.git'
-                connection 'https://github.com/mercadopago/mercadopago-android.git'
-                developerConnection 'https://github.com/mercadopago/mercadopago-android.git'
-            }
-
-            licenses {
-                license {
-                    name 'The Apache Software License, Version 2.0'
-                    url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                    distribution 'repo'
-                }
-            }
-
-            developers {
-                developer {
-                    id 'scirielli'
-                    name 'Sergio Cirielli'
-                }
-            }
-        }
     }
 }
