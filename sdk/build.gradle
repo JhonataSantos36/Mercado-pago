@@ -1,6 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'maven'
 apply plugin: 'signing'
+apply plugin: 'jacoco-android'
 
 version = "0.9.15"
 group = "com.mercadopago"
@@ -36,8 +37,12 @@ android {
         debug {
             versionNameSuffix " Debug"
             debuggable true
-            testCoverageEnabled = true
+            testCoverageEnabled true
         }
+    }
+    dexOptions {
+        preDexLibraries = false
+        javaMaxHeapSize "4g"
     }
     lintOptions {
         abortOnError false
