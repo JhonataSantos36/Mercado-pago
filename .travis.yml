@@ -1,10 +1,5 @@
 sudo: false
 
-branches:
-   only:
-       - release
-       - master
-
 language: android
 
 jdk: oraclejdk7
