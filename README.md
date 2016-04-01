@@ -1,5 +1,5 @@
 [![Build Status](https://travis-ci.com/mercadopago/px-android.svg?token=vPpQiHmLkp88siQfJcTo&branch=master)](https://travis-ci.com/mercadopago/px-android)
-[![codecov.io](https://codecov.io/github/mercadopago/px-android.svg?branch=master)](https://codecov.io/github/mercadopago/px-android?branch=master)
+[![codecov.io](https://codecov.io/github/mercadopago/px-android/coverage.svg?token=ksLU5tHdUS&branch=master)](https://codecov.io/github/mercadopago/px-android?branch=master)
 [![License](https://img.shields.io/badge/license-MIT-lightgrey.svg?style=flat)](https://github.com/mercadopago/px-android)
 
 #MercadoPago - Android SDK
