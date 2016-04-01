@@ -42,7 +42,7 @@ import retrofit.client.Response;
 
 public class PaymentVaultActivity extends AppCompatActivity {
 
-    private static final int PURCHASE_TITLE_MAX_LENGTH = 50;
+    protected static final Integer PURCHASE_TITLE_MAX_LENGTH = 50;
 
     // Local vars
     protected Activity mActivity;
@@ -81,7 +81,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
     protected String mPurchaseTitle;
     protected String mItemImageUri;
     protected String mCurrencyId;
-    private MPTextView mActivityTitle;
+    protected MPTextView mActivityTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,26 +90,35 @@ public class PaymentVaultActivity extends AppCompatActivity {
         initializeToolbar();
         getActivityParameters();
 
+        boolean validParameters = true;
         try {
             validateActivityParameters();
         } catch (IllegalStateException e) {
-            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            validParameters = false;
+            finishWithIllegalStateException(e.getMessage());
         }
+        if(validParameters) {
+            mMercadoPago = new MercadoPago.Builder()
+                    .setPublicKey(mMerchantPublicKey)
+                    .setContext(this)
+                    .build();
 
-        mMercadoPago = new MercadoPago.Builder()
-                .setPublicKey(mMerchantPublicKey)
-                .setContext(this)
-                .build();
+            initializeControls();
+            setActivity();
 
-        initializeControls();
-        setActivity();
-
-        if(!isItemSelected()) {
-            initPaymentMethodSearch();
+            if (!isItemSelected()) {
+                initPaymentMethodSearch();
+            } else {
+                showSelectedItemChildren();
+            }
         }
-        else {
-            showSelectedItemChildren();
-        }
+    }
+
+    private void finishWithIllegalStateException(String message) {
+        Intent returnIntent = new Intent();
+        returnIntent.putExtra("error", message);
+        this.setResult(Activity.RESULT_CANCELED, returnIntent);
+        this.finish();
     }
 
     private void initializeToolbar() {
@@ -150,12 +159,12 @@ public class PaymentVaultActivity extends AppCompatActivity {
         else if (!validInstallmentsPreferences()){
             throw new IllegalStateException(getString(R.string.mpsdk_error_message_invalid_installments));
         }
-        else if (!validPaymentTypes()){
+        else if (!validExcludedPaymentTypes()){
             throw new IllegalStateException(getString(R.string.mpsdk_error_message_excluded_all_payment_type));
         }
     }
 
-    private boolean validPaymentTypes() {
+    private boolean validExcludedPaymentTypes() {
         boolean valid = true;
         if(mExcludedPaymentTypes != null && mExcludedPaymentTypes.size() >= PaymentType.getAllPaymentTypes().size()) {
             valid = false;
@@ -192,13 +201,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
         if(mCurrencyId == null) {
             isValid = false;
         }
-        else if((!mCurrencyId.equals(CurrenciesUtil.CURRENCY_ARGENTINA))
-                && (!mCurrencyId.equals(CurrenciesUtil.CURRENCY_BRAZIL))
-                && (!mCurrencyId.equals(CurrenciesUtil.CURRENCY_CHILE))
-                && (!mCurrencyId.equals(CurrenciesUtil.CURRENCY_COLOMBIA))
-                && (!mCurrencyId.equals(CurrenciesUtil.CURRENCY_MEXICO))
-                && (!mCurrencyId.equals(CurrenciesUtil.CURRENCY_VENEZUELA))
-                && (!mCurrencyId.equals(CurrenciesUtil.CURRENCY_USA))){
+        else if(CurrenciesUtil.isValidCurrency(mCurrencyId)){
             isValid = false;
         }
         return isValid;
@@ -216,7 +219,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
         }
         mCurrencyId = this.getIntent().getStringExtra("currencyId");
         mItemImageUri = this.getIntent().getStringExtra("itemImageUri");
-        mPurchaseTitle = getFormatedPurchaseTitle();
+        mPurchaseTitle = this.getIntent().getStringExtra("purchaseTitle");
 
         mSupportMPApp = this.getIntent().getBooleanExtra("supportMPApp", false);
 
@@ -255,20 +258,6 @@ public class PaymentVaultActivity extends AppCompatActivity {
         }
     }
 
-    protected String getFormatedPurchaseTitle() {
-        if(this.getIntent().getStringExtra("purchaseTitle") != null) {
-            String purchaseTitle = this.getIntent().getStringExtra("purchaseTitle");
-            if (purchaseTitle.length() > PURCHASE_TITLE_MAX_LENGTH) {
-                purchaseTitle = purchaseTitle.substring(0, PURCHASE_TITLE_MAX_LENGTH);
-                purchaseTitle = purchaseTitle + "…";
-            }
-            return purchaseTitle;
-        }
-        else {
-            return null;
-        }
-    }
-
     protected void initializeControls() {
         initializeGroupRecyclerView();
         mShoppingCartIcon = (ImageView) findViewById(R.id.shoppingCartIcon);
@@ -280,7 +269,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
             }
         });
 
-        mShoppingCartController = new ShoppingCartViewController(this, mShoppingCartIcon, mItemImageUri, mPurchaseTitle,
+        mShoppingCartController = new ShoppingCartViewController(this, mShoppingCartIcon, mItemImageUri, mPurchaseTitle, PURCHASE_TITLE_MAX_LENGTH,
                 mAmount, mCurrencyId, false, findViewById(R.id.content_layout));
     }
 
@@ -306,9 +295,9 @@ public class PaymentVaultActivity extends AppCompatActivity {
                     finishWithEmptyPaymentMethodSearch();
                 } else {
                     mPaymentMethodSearch = paymentMethodSearch;
-                    setSearchLayout();
+                    getPaymentMethodsAsync();
                 }
-                getPaymentMethodsAsync();
+
             }
 
             @Override
@@ -323,7 +312,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
             @Override
             public void success(List<PaymentMethod> paymentMethods, Response response) {
                 mPaymentMethods = paymentMethods;
-                LayoutUtil.showRegularLayout(mActivity);
+                setSearchLayout();
             }
 
             @Override
@@ -340,17 +329,8 @@ public class PaymentVaultActivity extends AppCompatActivity {
     }
 
     protected void setSearchLayout() {
-        if(mPaymentMethodSearch.hasPreferred() && mPaymentMethodSearch.hasSearchItems()) {
-            //showTitles
-            populateSearchList(mPaymentMethodSearch.getGroups());
-            //populatePreferredList(paymentMethodSearch.getPreferred());
-        }
-        else if(mPaymentMethodSearch.hasSearchItems()) {
-            populateSearchList(mPaymentMethodSearch.getGroups());
-        }
-        else if(mPaymentMethodSearch.hasPreferred()) {
-            //populatePreferredList(paymentMethodSearch.getPreferred());
-        }
+        LayoutUtil.showRegularLayout(mActivity);
+        populateSearchList(mPaymentMethodSearch.getGroups());
     }
 
     protected void populateSearchList(List<PaymentMethodSearchItem> items) {
@@ -387,13 +367,19 @@ public class PaymentVaultActivity extends AppCompatActivity {
                     }
                 }
                 if(requiredPaymentMethod == null) {
-                    requiredPaymentMethod = new PaymentMethod();
-                    requiredPaymentMethod.setId(paymentMethodItem.getId());
+                    finishWithMismatchingPaymentMethod();
+                } else {
+                    finishWithPaymentMethodResult(requiredPaymentMethod, paymentMethodItem.getComment());
                 }
-
-                finishWithPaymentMethodResult(requiredPaymentMethod, paymentMethodItem.getComment());
             }
         };
+    }
+
+    private void finishWithMismatchingPaymentMethod() {
+        Intent canceledIntent = new Intent();
+        canceledIntent.putExtra("error", "Mismatching payment method");
+        setResult(RESULT_CANCELED, canceledIntent);
+        finish();
     }
 
     private void startActivityForItem(PaymentMethodSearchItem groupIem) {
@@ -448,6 +434,12 @@ public class PaymentVaultActivity extends AppCompatActivity {
         if(resultCode == RESULT_OK) {
             setResult(RESULT_OK, data);
             finish();
+        }
+        else if(resultCode == RESULT_CANCELED) {
+            if(data.hasExtra("error")) {
+                setResult(RESULT_CANCELED, data);
+                finish();
+            }
         }
     }
 
@@ -541,9 +533,6 @@ public class PaymentVaultActivity extends AppCompatActivity {
 
         if(isItemSelected()) {
             overridePendingTransition(R.anim.slide_left_to_right_in, R.anim.silde_left_to_right_out);
-        }
-        else if(mEditing) {
-            animatePaymentMethodSelection();
         }
     }
 }

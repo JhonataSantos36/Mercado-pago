@@ -25,7 +25,7 @@ public class VaultActivityWithCustomerCardTest extends BaseTest<VaultActivity> {
     // * use 1 installment by default
     // * enter a security code
     // * push the button and generate a cards token
-    public void testHappyPath() {
+ /*   public void testHappyPath() {
 
         final VaultActivity activity = prepareActivity(StaticMock.DUMMY_MERCHANT_PUBLIC_KEY,
                 StaticMock.DUMMY_MERCHANT_BASE_URL, StaticMock.DUMMY_MERCHANT_GET_CUSTOMER_URI,
@@ -117,5 +117,5 @@ public class VaultActivityWithCustomerCardTest extends BaseTest<VaultActivity> {
         putListExtra(intent, "excludedPaymentTypes", excludedPaymentTypes);
         setActivityIntent(intent);
         return getActivity();
-    }
+    }*/
 }

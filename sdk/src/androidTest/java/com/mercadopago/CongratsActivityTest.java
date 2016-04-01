@@ -13,7 +13,7 @@ public class CongratsActivityTest extends BaseTest<OldCongratsActivity> {
 
         super(OldCongratsActivity.class);
     }
-
+/*
     public void testApprovedPaymentCongrats() {
 
         // Set activity
@@ -71,5 +71,5 @@ public class CongratsActivityTest extends BaseTest<OldCongratsActivity> {
         }
         setActivityIntent(intent);
         return getActivity();
-    }
+    }*/
 }

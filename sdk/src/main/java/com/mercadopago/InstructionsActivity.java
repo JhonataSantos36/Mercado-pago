@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.Spanned;
 import android.util.TypedValue;
@@ -34,20 +33,19 @@ import retrofit.client.Response;
 public class InstructionsActivity extends AppCompatActivity {
 
     //Controls
-    private LinearLayout mReferencesLayout;
-    private Activity mActivity;
-    private MPTextView mTitle;
-    private MPTextView mPrimaryInfo;
-    private MPTextView mSecondaryInfo;
-    private MPTextView mTertiaryInfo;
-    private MPTextView mAccreditationMessage;
-    private MPButton mActionButton;
+    protected LinearLayout mReferencesLayout;
+    protected Activity mActivity;
+    protected MPTextView mTitle;
+    protected MPTextView mPrimaryInfo;
+    protected MPTextView mSecondaryInfo;
+    protected MPTextView mTertiaryInfo;
+    protected MPTextView mAccreditationMessage;
+    protected MPButton mActionButton;
 
     //Params
-    private Payment mPayment;
-    private String mMerchantPublicKey;
-    private PaymentMethod mPaymentMethod;
-    private String mCurrency;
+    protected Payment mPayment;
+    protected String mMerchantPublicKey;
+    protected PaymentMethod mPaymentMethod;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,13 +61,12 @@ public class InstructionsActivity extends AppCompatActivity {
         getInstructionsAsync(mercadoPago);
     }
 
-    private void getInstructionsAsync(MercadoPago mercadoPago) {
+    protected void getInstructionsAsync(MercadoPago mercadoPago) {
 
-        final View progress = this.findViewById(R.id.progressLayout);
-        progress.setVisibility(View.VISIBLE);
 
+        LayoutUtil.showProgressLayout(this);
         //TODO cambiar por mPayment.getId() cuando estén andando los servicios
-        mercadoPago.getInstructions((long) 1826446924, mPaymentMethod.getId(), new Callback<Instruction>() {
+        mercadoPago.getInstructions(mPayment.getId(), mPaymentMethod.getId(), new Callback<Instruction>() {
             @Override
             public void success(Instruction instruction, Response response) {
                 showInstructions(instruction);
@@ -83,7 +80,7 @@ public class InstructionsActivity extends AppCompatActivity {
         });
     }
 
-    private void showInstructions(Instruction instruction) {
+    protected void showInstructions(Instruction instruction) {
         setTitle(instruction.getTitle());
         setInformationMessages(instruction);
         setReferencesInformation(instruction);
@@ -91,15 +88,16 @@ public class InstructionsActivity extends AppCompatActivity {
         setActions(instruction);
     }
 
-    private void setTitle(String title) {
+    protected void setTitle(String title) {
         Spanned formattedTitle = CurrenciesUtil.formatCurrencyInText(mPayment.getTransactionAmount(), mPayment.getCurrencyId(), title, true, true);
         mTitle.setText(formattedTitle);
     }
 
-    private void setActions(Instruction instruction) {
+    protected void setActions(Instruction instruction) {
         if(instruction.getActions() != null && !instruction.getActions().isEmpty()) {
             final InstructionActionInfo actionInfo = instruction.getActions().get(0);
-            if(actionInfo.getUrl() != null) {
+            if(actionInfo.getUrl() != null && !actionInfo.getUrl().isEmpty()) {
+                mActionButton.setVisibility(View.VISIBLE);
                 mActionButton.setText(actionInfo.getLabel());
                 mActionButton.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -110,13 +108,9 @@ public class InstructionsActivity extends AppCompatActivity {
                 });
             }
         }
-        else
-        {
-            mActionButton.setVisibility(View.GONE);
-        }
     }
 
-    private void setReferencesInformation(Instruction instruction) {
+    protected void setReferencesInformation(Instruction instruction) {
         LinearLayout.LayoutParams marginParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT);
         marginParams.setMargins(0, 10, 0, 10);
@@ -161,7 +155,7 @@ public class InstructionsActivity extends AppCompatActivity {
         }
     }
 
-    private String getInfoHtmlText(List<String> info) {
+    protected String getInfoHtmlText(List<String> info) {
         StringBuilder stringBuilder = new StringBuilder();
         for(String line : info) {
             stringBuilder.append(line);
@@ -172,14 +166,13 @@ public class InstructionsActivity extends AppCompatActivity {
         return stringBuilder.toString();
     }
 
-    private void getActivityParameters() {
+    protected void getActivityParameters() {
         mPayment = (Payment) getIntent().getExtras().getSerializable("payment");
         mMerchantPublicKey = this.getIntent().getStringExtra("merchantPublicKey");
         mPaymentMethod = (PaymentMethod) getIntent().getSerializableExtra("paymentMethod");
-        mCurrency = getIntent().getStringExtra("currencyId");
     }
 
-    private void initializeControls() {
+    protected void initializeControls() {
         mReferencesLayout = (LinearLayout) findViewById(R.id.referencesLayout);
         mTitle = (MPTextView) findViewById(R.id.title);
         mPrimaryInfo = (MPTextView) findViewById(R.id.primaryInfo);

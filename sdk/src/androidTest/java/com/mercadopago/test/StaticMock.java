@@ -6,9 +6,11 @@ import android.support.test.InstrumentationRegistry;
 import com.mercadopago.PaymentVaultActivity;
 import com.mercadopago.model.Card;
 import com.mercadopago.model.CardToken;
+import com.mercadopago.model.CheckoutPreference;
 import com.mercadopago.model.Customer;
 import com.mercadopago.model.IdentificationType;
 import com.mercadopago.model.Installment;
+import com.mercadopago.model.Instruction;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.Payment;
@@ -153,12 +155,131 @@ public class StaticMock {
         }
     }
 
+    public static Payment getPayment() {
+
+        try {
+            return JsonUtil.getInstance().fromJson(getFile(InstrumentationRegistry.getContext(), "mocks/payment.json"), Payment.class);
+
+        } catch (Exception ex) {
+
+            return null;
+        }
+    }
+
     public static String getCompletePaymentMethodSearchAsJson() {
         try {
             return getFile(InstrumentationRegistry.getContext(), "mocks/payment_method_search_all.json");
 
         } catch (Exception ex) {
 
+            return null;
+        }
+    }
+
+    public static String getCompletePaymentMethodsJson() {
+        try {
+            return getFile(InstrumentationRegistry.getContext(), "mocks/payment_methods.json");
+
+        } catch (Exception ex) {
+
+            return null;
+        }
+    }
+
+    public static CheckoutPreference getPreferenceWithoutExclusions() {
+        try {
+            String json = getFile(InstrumentationRegistry.getContext(), "mocks/preference_without_exclusions.json");
+            return JsonUtil.getInstance().fromJson(json, CheckoutPreference.class);
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+    public static Instruction getInstructionWithoutActions() {
+        try {
+            String json = getFile(InstrumentationRegistry.getContext(), "mocks/cash_instructions.json");
+            return JsonUtil.getInstance().fromJson(json, Instruction.class);
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+    public static Instruction getInstructionWithAction() {
+        try {
+            String json = getFile(InstrumentationRegistry.getContext(), "mocks/action_instructions.json");
+            return JsonUtil.getInstance().fromJson(json, Instruction.class);
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+    public static Instruction getInstructionWithActionButNullUrl() {
+        try {
+            String json = getFile(InstrumentationRegistry.getContext(), "mocks/action_instructions_without_url.json");
+            return JsonUtil.getInstance().fromJson(json, Instruction.class);
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+    public static Instruction getInstructionWithActionButEmptyUrl() {
+        try {
+            String json = getFile(InstrumentationRegistry.getContext(), "mocks/action_instructions_with_empty_url.json");
+            return JsonUtil.getInstance().fromJson(json, Instruction.class);
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+    public static Instruction getInstructionWithoutLabels() {
+        try {
+            String json = getFile(InstrumentationRegistry.getContext(), "mocks/cash_instructions_without_labels.json");
+            return JsonUtil.getInstance().fromJson(json, Instruction.class);
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+    public static Instruction getInstructionWithoutPrimaryInfo() {
+        try {
+            String json = getFile(InstrumentationRegistry.getContext(), "mocks/cash_instructions_no_primary_info.json");
+            return JsonUtil.getInstance().fromJson(json, Instruction.class);
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+    public static Instruction getInstructionWithNullInfo() {
+        try {
+            String json = getFile(InstrumentationRegistry.getContext(), "mocks/cash_instructions_null_info.json");
+            return JsonUtil.getInstance().fromJson(json, Instruction.class);
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+    public static Instruction getInstructionWithoutSecondaryInfo() {
+        try {
+            String json = getFile(InstrumentationRegistry.getContext(), "mocks/cash_instructions_no_secondary_info.json");
+            return JsonUtil.getInstance().fromJson(json, Instruction.class);
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+    public static Instruction getInstructionWithoutTertiaryInfo() {
+        try {
+            String json = getFile(InstrumentationRegistry.getContext(), "mocks/cash_instructions_no_tertiary_info.json");
+            return JsonUtil.getInstance().fromJson(json, Instruction.class);
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+    public static Instruction getInstructionWithInvalidReference() {
+        try {
+            String json = getFile(InstrumentationRegistry.getContext(), "mocks/instruction_with_invalid_reference.json");
+            return JsonUtil.getInstance().fromJson(json, Instruction.class);
+        } catch (Exception ex) {
             return null;
         }
     }

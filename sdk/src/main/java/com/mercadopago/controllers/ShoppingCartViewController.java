@@ -26,38 +26,34 @@ import java.math.BigDecimal;
 public class ShoppingCartViewController {
 
     private Boolean mStartShowingItemInfo;
-    private Activity mActivity;
-
+    private String mPurchaseTitle;
     private Boolean mItemDescriptionShown;
-    private ImageView mImageViewTogglerShoppingCart;
-    private MenuItem mMenuItemTogglerShoppingCart;
+    private String mPictureUrl;
+
+    private Activity mActivity;
     private RelativeLayout mItemInfoLayout;
     private View mViewBelowShoppingCart;
-    private String mPictureUrl;
+    private ImageView mImageViewTogglerShoppingCart;
     private ImageView mItemImageView;
 
-    public ShoppingCartViewController(Activity activity, MenuItem toggler, String pictureUri, String purchaseTitle, BigDecimal amount, String currencyId, Boolean startShowingItemInfo, View viewBelowShoppingCart) {
-        mMenuItemTogglerShoppingCart = toggler;
-        initialize(activity, pictureUri, purchaseTitle, amount, currencyId, startShowingItemInfo, viewBelowShoppingCart);
-        start();
-    }
-    public ShoppingCartViewController(Activity activity, ImageView toggler, String pictureUri, String purchaseTitle, BigDecimal amount, String currencyId, Boolean startShowingItemInfo, View viewBelowShoppingCart) {
+    public ShoppingCartViewController(Activity activity, ImageView toggler, String pictureUri, String purchaseTitle, Integer titleMaxLength, BigDecimal amount, String currencyId, Boolean startShowingItemInfo, View viewBelowShoppingCart) {
         mImageViewTogglerShoppingCart = toggler;
-        initialize(activity, pictureUri, purchaseTitle, amount, currencyId, startShowingItemInfo, viewBelowShoppingCart);
+        initialize(activity, pictureUri, purchaseTitle, titleMaxLength, amount, currencyId, startShowingItemInfo, viewBelowShoppingCart);
         start();
 
     }
-    private void initialize(Activity activity, String pictureUri, String purchaseTitle, BigDecimal amount, String currencyId, Boolean startShowingItemInfo, View viewBelowShoppingCart) {
+    private void initialize(Activity activity, String pictureUri, String purchaseTitle, Integer titleMaxLength, BigDecimal amount, String currencyId, Boolean startShowingItemInfo, View viewBelowShoppingCart) {
         mActivity = activity;
         mStartShowingItemInfo = startShowingItemInfo;
         mItemInfoLayout = (RelativeLayout) mActivity.findViewById(R.id.itemInfoLayout);
         mItemImageView = (ImageView) mActivity.findViewById(R.id.itemImage);
         mViewBelowShoppingCart = viewBelowShoppingCart;
         mPictureUrl = pictureUri;
+        mPurchaseTitle = this.getFormattedPurchaseTitle(purchaseTitle, titleMaxLength);
 
         MPTextView itemDescriptionTextView = (MPTextView) mActivity.findViewById(R.id.itemTitle);
         MPTextView itemAmountTextView = (MPTextView) mActivity.findViewById(R.id.itemAmount);
-        itemDescriptionTextView.setText(purchaseTitle);
+        itemDescriptionTextView.setText(mPurchaseTitle);
         itemAmountTextView.setText(getAmountLabel(amount, currencyId));
         showItemImage();
     }
@@ -83,6 +79,23 @@ public class ShoppingCartViewController {
         tintTogglerDrawableWithColor(mActivity.getResources().getColor(R.color.mpsdk_white));
     }
 
+    protected String getFormattedPurchaseTitle(String purchaseTitle, Integer purchaseTitleMaxLength) {
+        if(purchaseTitle != null && purchaseTitleMaxLength != null) {
+            if (purchaseTitle.length() > purchaseTitleMaxLength) {
+                purchaseTitle = purchaseTitle.substring(0, purchaseTitleMaxLength-1);
+                purchaseTitle = purchaseTitle + "…";
+            }
+            return purchaseTitle;
+        }
+        else {
+            return purchaseTitle;
+        }
+    }
+
+    public String getPurchaseTitle() {
+        return mPurchaseTitle;
+    }
+
     public Spanned getAmountLabel(BigDecimal amount, String currencyId) {
         return CurrenciesUtil.formatNumber(amount, currencyId, true, true);
     }
@@ -102,9 +115,7 @@ public class ShoppingCartViewController {
     public void hideItemInfo() {
         mItemInfoLayout.setVisibility(View.GONE);
         mItemDescriptionShown = false;
-        if(mMenuItemTogglerShoppingCart != null) {
-            mMenuItemTogglerShoppingCart.setIcon(R.drawable.icon_cart);
-        } else if(mImageViewTogglerShoppingCart != null) {
+        if(mImageViewTogglerShoppingCart != null) {
             mImageViewTogglerShoppingCart.setImageResource(R.drawable.icon_cart);
             int dpAsPixels = ScaleUtil.getPxFromDp(8, mActivity);
             mImageViewTogglerShoppingCart.setPadding(dpAsPixels, dpAsPixels, dpAsPixels, dpAsPixels);
@@ -118,9 +129,7 @@ public class ShoppingCartViewController {
             startAnimations();
         }
         mItemDescriptionShown = true;
-        if(mMenuItemTogglerShoppingCart != null) {
-            mMenuItemTogglerShoppingCart.setIcon(R.drawable.close);
-        } else if(mImageViewTogglerShoppingCart != null) {
+        if(mImageViewTogglerShoppingCart != null) {
             mImageViewTogglerShoppingCart.setImageResource(R.drawable.close);
 
             int dpAsPixels = ScaleUtil.getPxFromDp(12, mActivity);
@@ -150,10 +159,7 @@ public class ShoppingCartViewController {
 
     private Drawable getTogglerDrawable() {
         Drawable togglerDrawable = null;
-        if(mMenuItemTogglerShoppingCart != null) {
-            togglerDrawable = mMenuItemTogglerShoppingCart.getIcon();
-        }
-        else if(mImageViewTogglerShoppingCart != null) {
+        if(mImageViewTogglerShoppingCart != null) {
             togglerDrawable = mImageViewTogglerShoppingCart.getDrawable();
         }
         return togglerDrawable;

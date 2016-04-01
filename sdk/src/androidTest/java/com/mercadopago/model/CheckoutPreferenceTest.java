@@ -104,16 +104,6 @@ public class CheckoutPreferenceTest extends TestCase {
         }
     }
 
-    public void testWhenValidatePreferenceWithPreferenceNotActiveThrowExceptionReturnTrue() {
-        CheckoutPreference preference = getPreferenceWithOneItemValidButPreferenceInactive();
-
-        try {
-            preference.validate();
-        } catch (CheckoutPreferenceException e) {
-            assertTrue(e.getErrorCode() == CheckoutPreferenceException.INACTIVE_PREFERENCE);
-        }
-    }
-
     public void testWhenValidatePreferenceWithPreferenceExpiredThrowExceptionReturnTrue() {
         CheckoutPreference preference = getPreferenceWithOneItemValidButPreferenceExpired();
 
@@ -212,11 +202,6 @@ public class CheckoutPreferenceTest extends TestCase {
     public void testWhenValidatePreferenceWithNullExpirationDateToReturnFalse() {
         CheckoutPreference preference = getPreferenceWithNullExpirationDateTo();
         Assert.assertFalse(preference.isExpired());
-    }
-
-    public void testWhenValidatePreferenceWithNullExpirationDateFromReturnFalse() {
-        CheckoutPreference preference = getPreferenceWithNullExpirationDateFrom();
-        Assert.assertFalse(preference.isActive());
     }
 
     ///////////////////Getters preferences with different DATES///////////////////

@@ -9,7 +9,6 @@ import android.text.Html;
 import android.text.Spanned;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.mercadopago.controllers.ShoppingCartViewController;
 import com.mercadopago.core.MercadoPago;
@@ -20,18 +19,22 @@ import com.mercadopago.model.Issuer;
 import com.mercadopago.model.Item;
 import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.Payment;
-import com.mercadopago.model.PaymentIntent;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.Token;
+import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.CurrenciesUtil;
 import com.mercadopago.util.LayoutUtil;
 import com.mercadopago.util.MercadoPagoUtil;
 import com.mercadopago.views.MPButton;
 import com.mercadopago.views.MPTextView;
 
-import java.math.BigDecimal;
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
-public class CheckoutActivity extends AppCompatActivity{
+public class CheckoutActivity extends AppCompatActivity {
+
+    protected static final Integer PURCHASE_TITLE_MAX_LENGTH = 50;
 
     //Parameters
     protected CheckoutPreference mCheckoutPreference;
@@ -41,7 +44,6 @@ public class CheckoutActivity extends AppCompatActivity{
     //Local vars
     protected MercadoPago mMercadoPago;
     protected Activity mActivity;
-    protected Payment mPayment;
     protected boolean mSupportMPApp = true;
     protected PaymentMethod mSelectedPaymentMethod;
     protected Issuer mSelectedIssuer;
@@ -96,7 +98,7 @@ public class CheckoutActivity extends AppCompatActivity{
         }
         else {
             Intent returnIntent = new Intent();
-            returnIntent.putExtra("message", mErrorMessage);
+            returnIntent.putExtra("error", mErrorMessage);
             setResult(RESULT_CANCELED, returnIntent);
             finish();
         }
@@ -152,7 +154,6 @@ public class CheckoutActivity extends AppCompatActivity{
                 createPayment();
             }
         });
-        mPurchaseTitle = getPurchaseTitle();
         mTotalAmountTextView = (MPTextView) findViewById(R.id.totalAmount);
         mShoppingCartIcon = (ImageView) findViewById(R.id.shoppingCartIcon);
 
@@ -163,13 +164,32 @@ public class CheckoutActivity extends AppCompatActivity{
             }
         });
 
-        mShoppingCartController = new ShoppingCartViewController(this, mShoppingCartIcon, mCheckoutPreference.getItems().get(0).getPictureUrl(), mPurchaseTitle,
+        mPurchaseTitle = getPurchaseTitle();
+        mShoppingCartController = new ShoppingCartViewController(this, mShoppingCartIcon, mCheckoutPreference.getItems().get(0).getPictureUrl(), mPurchaseTitle, PURCHASE_TITLE_MAX_LENGTH,
                 mCheckoutPreference.getAmount(), mCheckoutPreference.getItems().get(0).getCurrencyId(), true, findViewById(R.id.contentLayout));
     }
 
     protected void startTermsAndConditionsActivity() {
         Intent termsAndConditionsIntent = new Intent(this, TermsAndConditionsActivity.class);
         startActivity(termsAndConditionsIntent);
+    }
+
+    private String getPurchaseTitle() {
+        StringBuilder purchaseTitle = new StringBuilder();
+        int itemListSize = mCheckoutPreference.getItems().size();
+
+        if(itemListSize == 1) {
+            purchaseTitle.append(mCheckoutPreference.getItems().get(0).getTitle());
+        }
+        else {
+            for(Item item : mCheckoutPreference.getItems()){
+                purchaseTitle.append(item.getTitle());
+                if(!item.equals(mCheckoutPreference.getItems().get(itemListSize-1))) {
+                    purchaseTitle.append(", ");
+                }
+            }
+        }
+        return purchaseTitle.toString();
     }
 
     protected void setActivity() {
@@ -192,17 +212,6 @@ public class CheckoutActivity extends AppCompatActivity{
         builder.setExcludedPaymentTypes(mCheckoutPreference.getExcludedPaymentTypes());
         builder.setDefaultInstallments(mCheckoutPreference.getDefaultInstallments());
         builder.setMaxInstallments(mCheckoutPreference.getMaxInstallments());
-
-        if(payerHasEmail())
-        {
-            builder.setMerchantBaseUrl("https://mp-android-sdk.herokuapp.com/");
-            builder.setMerchantGetCustomerUri("customers?preference_id=" + mCheckoutPreference.getId());
-        }
-        if(mPaymentMethodEditionRequested)
-        {
-            builder.setEditing(true);
-        }
-
         builder.startPaymentVaultActivity();
     }
 
@@ -211,36 +220,8 @@ public class CheckoutActivity extends AppCompatActivity{
         return CurrenciesUtil.formatNumber(mCheckoutPreference.getAmount(), currencyId, true, true);
     }
 
-    private String getPurchaseTitle() {
-        StringBuilder purchaseTitle = new StringBuilder();
-        int itemListSize = mCheckoutPreference.getItems().size();
-
-        if(itemListSize == 1) {
-            purchaseTitle.append(mCheckoutPreference.getItems().get(0).getTitle());
-        }
-        else {
-            for(Item item : mCheckoutPreference.getItems()){
-                purchaseTitle.append(item.getTitle());
-                if(!item.equals(mCheckoutPreference.getItems().get(itemListSize))) {
-                    purchaseTitle.append(", ");
-                }
-                purchaseTitle.append(item.getTitle());
-            }
-        }
-        return purchaseTitle.toString();
-    }
-
-    protected boolean payerHasEmail() {
-
-        return mCheckoutPreference != null
-                && mCheckoutPreference.getPayer() != null
-                && mCheckoutPreference.getPayer().getEmail() != null
-                && !mCheckoutPreference.getPayer().getEmail().equals("");
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
         if(requestCode == MercadoPago.PAYMENT_VAULT_REQUEST_CODE) {
 
             if(resultCode == RESULT_OK) {
@@ -262,30 +243,12 @@ public class CheckoutActivity extends AppCompatActivity{
                     setResult(RESULT_CANCELED, returnIntent);
                     finish();
                 }
+                else {
+                    overridePendingTransition(R.anim.slide_right_to_left_in, R.anim.slide_right_to_left_out);
+                }
             }
         }
-
-        Intent checkoutResult = null;
-        if (requestCode == MercadoPago.INSTALL_APP_REQUEST_CODE) {
-            if(data != null && !data.getBooleanExtra("backButtonPressed", false)) {
-                checkoutResult = data;
-                setResult(RESULT_OK, checkoutResult);
-                finish();
-            }
-
-        } else if (requestCode == MercadoPago.CONGRATS_REQUEST_CODE) {
-
-            // from SDK
-            checkoutResult = new Intent();
-            checkoutResult.putExtra("eAs" +
-                    "xternalReference", mPayment.getExternalReference() != null ? mPayment.getExternalReference() : null);
-            checkoutResult.putExtra("paymentId", mPayment.getId() != null ? mPayment.getId() : null);
-            checkoutResult.putExtra("paymentStatus", mPayment.getStatus() != null ? mPayment.getStatus() : null);
-            checkoutResult.putExtra("paymentType", mPayment.getPaymentTypeId() != null ? mPayment.getPaymentTypeId() : null);
-            checkoutResult.putExtra("preferenceId", mCheckoutPreference.getId());
-            setResult(RESULT_OK, checkoutResult);
-            finish();
-        } else if (requestCode == MercadoPago.INSTRUCTIONS_REQUEST_CODE) {
+        else if (requestCode == MercadoPago.INSTRUCTIONS_REQUEST_CODE) {
             finish();
         }
     }
@@ -321,84 +284,36 @@ public class CheckoutActivity extends AppCompatActivity{
 
     protected boolean validParameters() {
 
-        if ((mMerchantPublicKey != null) && (mCheckoutPreference != null)) {
-            return true;
-        }
-        return false;
+        return (mMerchantPublicKey != null) && (mCheckoutPreference != null);
     }
 
     protected void createPayment() {
-        PaymentIntent paymentIntent = new PaymentIntent();
-
-        paymentIntent.setPrefId(mCheckoutPreference.getId());
-        if(mCreatedToken != null) {
-            paymentIntent.setToken(mCreatedToken.getId());
-        }
-        if (mSelectedIssuer != null) {
-            paymentIntent.setIssuerId(mSelectedIssuer.getId());
-        }
-        if(mSelectedPayerCost != null) {
-            paymentIntent.setInstallments(mSelectedPayerCost.getInstallments());
-        }
-
-        paymentIntent.setPaymentMethodId(mSelectedPaymentMethod.getId());
-        // Create payment
-        //TODO ir a nuevo servicio de payment
-        createMockPayment(paymentIntent);
-
-    }
-
-    //TODO ir a nuevo servicio de payment
-    private void createMockPayment(PaymentIntent paymentIntent) {
-        if (paymentIntent.getPaymentMethodId() != null) {
-
-            // Set item
-            Item item = new Item("id1", 1,
-                    new BigDecimal("100"));
-
-            // Set payment method id
-            String paymentMethodId = paymentIntent.getPaymentMethodId();
-
-            // Create payment
-            /*MerchantPayment payment = new MerchantPayment(item, paymentIntent.getInstallments(), paymentIntent.getIssuerId(),
-                    paymentIntent.getToken(), oldPaymentMethodId, null, "mlm-cards-data");
-
-            MerchantServer.createPayment(this, "https://www.mercadopago.com", "/checkout/examples/doPayment", payment, new Callback<Payment>() {
-                @Override
-                public void success(Payment payment, Response response) {
-                    mPayment = payment;
+        LayoutUtil.showProgressLayout(mActivity);
+        mMercadoPago.createPayment(mCheckoutPreference.getId(), mCheckoutPreference.getPayer().getEmail(), mSelectedPaymentMethod.getId(), null, null, null, new Callback<Payment>() {
+            @Override
+            public void success(Payment payment, Response response) {
+                if (MercadoPagoUtil.isCardPaymentType(mSelectedPaymentMethod.getPaymentTypeId())) {
+                    new MercadoPago.StartActivityBuilder()
+                            .setActivity(mActivity)
+                            .setPayment(payment)
+                            .setPaymentMethod(mSelectedPaymentMethod)
+                            .startCongratsActivity();
+                } else {
+                    new MercadoPago.StartActivityBuilder()
+                            .setPublicKey(mMerchantPublicKey)
+                            .setActivity(mActivity)
+                            .setPayment(payment)
+                            .setPaymentMethod(mSelectedPaymentMethod)
+                            .startInstructionsActivity();
                 }
-
-                @Override
-                public void failure(RetrofitError error) {
-
-                    LayoutUtil.showRegularLayout(mActivity);
-                    Toast.makeText(mActivity, error.getMessage(), Toast.LENGTH_LONG).show();
-                }
-            });
-       */
-            LayoutUtil.showProgressLayout(this);
-            if (MercadoPagoUtil.isCardPaymentType(mSelectedPaymentMethod.getPaymentTypeId())) {
-                new MercadoPago.StartActivityBuilder()
-                        .setActivity(mActivity)
-                        .setPayment(new Payment())
-                        .setPaymentMethod(mSelectedPaymentMethod)
-                        .startCongratsActivity();
-            } else {
-                Payment payment = new Payment();
-                payment.setTransactionAmount(mCheckoutPreference.getAmount());
-                payment.setCurrencyId(mCheckoutPreference.getItems().get(0).getCurrencyId());
-                new MercadoPago.StartActivityBuilder()
-                        .setPublicKey(mMerchantPublicKey)
-                        .setActivity(mActivity)
-                        .setPayment(payment)
-                        .setPaymentMethod(mSelectedPaymentMethod)
-                        .startInstructionsActivity();
+                LayoutUtil.showRegularLayout(mActivity);
             }
-            LayoutUtil.showRegularLayout(mActivity);
-        } else {
-            Toast.makeText(mActivity, "Invalid payment method", Toast.LENGTH_LONG).show();
-        }
+
+            @Override
+            public void failure(RetrofitError error) {
+                ApiUtil.finishWithApiException(mActivity, error);
+            }
+        });
     }
 
     @Override
