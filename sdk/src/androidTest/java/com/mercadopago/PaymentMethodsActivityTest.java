@@ -22,7 +22,7 @@ public class PaymentMethodsActivityTest extends BaseTest<PaymentMethodsActivity>
     public PaymentMethodsActivityTest() {
         super(PaymentMethodsActivity.class);
     }
-
+/*
     public void testGetPaymentMethod() {
 
         Activity activity = prepareActivity(StaticMock.DUMMY_MERCHANT_PUBLIC_KEY, null, null);
@@ -139,4 +139,5 @@ public class PaymentMethodsActivityTest extends BaseTest<PaymentMethodsActivity>
         setActivityIntent(intent);
         return getActivity();
     }
+    */
 }
