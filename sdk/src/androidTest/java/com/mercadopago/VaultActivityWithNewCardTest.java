@@ -3,6 +3,7 @@ package com.mercadopago;
 import android.app.Activity;
 import android.app.Instrumentation;
 import android.content.Intent;
+import android.widget.EditText;
 
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.CardToken;
@@ -32,7 +33,8 @@ public class VaultActivityWithNewCardTest extends BaseTest<VaultActivity> {
     // * enter a security code
     // * push the button and generate a cards token
     //TODO: fix? Will be replaced by PaymentVault
-    /*public void testHappyPath() {
+    /*
+    public void testHappyPath() {
 
         final VaultActivity activity = prepareActivity(StaticMock.DUMMY_MERCHANT_PUBLIC_KEY,
                 StaticMock.DUMMY_MERCHANT_BASE_URL, StaticMock.DUMMY_MERCHANT_GET_CUSTOMER_URI,
@@ -125,8 +127,8 @@ public class VaultActivityWithNewCardTest extends BaseTest<VaultActivity> {
         } catch (Exception ex) {
             fail("Regular start test failed, cause: " + ex.getMessage());
         }
-    }*/
-/*
+    }
+
     public void testGetCustomerCardsFailure() {
 
         final VaultActivity activity = prepareActivity(StaticMock.DUMMY_MERCHANT_PUBLIC_KEY,
@@ -372,7 +374,7 @@ public class VaultActivityWithNewCardTest extends BaseTest<VaultActivity> {
         }
     }
     //TODO: fix
-    /*public void testCreateTokenFailure() {
+    public void testCreateTokenFailure() {
 
         final VaultActivity activity = prepareActivity(StaticMock.DUMMY_MERCHANT_PUBLIC_KEY,
                 StaticMock.DUMMY_MERCHANT_BASE_URL, StaticMock.DUMMY_MERCHANT_GET_CUSTOMER_URI,
@@ -425,7 +427,7 @@ public class VaultActivityWithNewCardTest extends BaseTest<VaultActivity> {
         getInstrumentation().waitForMonitorWithTimeout(newCardActivityMonitor, 5);
 
         // Wait for installments api call
-        sleepThread(15000);
+        sleepThread(1000000);
 
         // Simulate installment selection
         getInstrumentation().runOnMainSync(new Runnable() {
@@ -467,8 +469,8 @@ public class VaultActivityWithNewCardTest extends BaseTest<VaultActivity> {
         } catch (Exception ex) {
             fail("Create token failure test failed, cause: " + ex.getMessage());
         }
-    }*/
-/*
+    }
+
     public void testDefaultInstallments() {
 
         final VaultActivity activity = prepareActivity(StaticMock.DUMMY_MERCHANT_PUBLIC_KEY,
@@ -507,7 +509,7 @@ public class VaultActivityWithNewCardTest extends BaseTest<VaultActivity> {
             fail("Regular start test failed, cause: " + ex.getMessage());
         }
     }
-**/
+
     private VaultActivity prepareActivity(String merchantPublicKey, String merchantBaseUrl,
                                           String merchantGetCustomerUri, String merchantAccessToken,
                                           BigDecimal amount, List<String> excludedPaymentTypes, Integer defaultInstallments) {
@@ -534,5 +536,5 @@ public class VaultActivityWithNewCardTest extends BaseTest<VaultActivity> {
         putListExtra(intent, "excludedPaymentTypes", excludedPaymentTypes);
         setActivityIntent(intent);
         return getActivity();
-    }
+    }*/
 }

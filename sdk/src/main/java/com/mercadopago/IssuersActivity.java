@@ -14,6 +14,7 @@ import com.mercadopago.decorations.DividerItemDecoration;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.util.ApiUtil;
+import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;
 
 import java.util.List;
@@ -22,7 +23,7 @@ import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-public class IssuersActivity extends AppCompatActivity {
+public class    IssuersActivity extends AppCompatActivity {
 
     private Activity mActivity;
     private String mMerchantPublicKey;
@@ -90,7 +91,6 @@ public class IssuersActivity extends AppCompatActivity {
         mercadoPago.getIssuers(mPaymentMethod.getId(), new Callback<List<Issuer>>() {
             @Override
             public void success(List<Issuer> issuers, Response response) {
-
                 mRecyclerView.setAdapter(new IssuersAdapter(issuers, new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {

@@ -26,7 +26,7 @@ public class NewCardActivityTest extends BaseTest<NewCardActivity> {
 
         super(NewCardActivity.class);
     }
-/*
+
     public void testGetCardToken() {
 
         // Set activity
@@ -327,5 +327,5 @@ public class NewCardActivityTest extends BaseTest<NewCardActivity> {
         mExpiryYearText = (MPEditText) mActivity.findViewById(R.id.expiryYear);
         mExpiryErrorText = (MPTextView) mActivity.findViewById(R.id.expiryError);
         mIdentificationNumberText = (MPEditText) mActivity.findViewById(R.id.identificationNumber);
-    }*/
+    }
 }

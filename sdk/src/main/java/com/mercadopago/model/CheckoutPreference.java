@@ -98,16 +98,10 @@ public class CheckoutPreference implements Serializable {
         else if(item.getCurrencyId() == null) {
             valid = false;
         }
-        else if((!item.getCurrencyId().equals(CurrenciesUtil.CURRENCY_ARGENTINA))
-                && (!item.getCurrencyId().equals(CurrenciesUtil.CURRENCY_BRAZIL))
-                && (!item.getCurrencyId().equals(CurrenciesUtil.CURRENCY_CHILE))
-                && (!item.getCurrencyId().equals(CurrenciesUtil.CURRENCY_COLOMBIA))
-                && (!item.getCurrencyId().equals(CurrenciesUtil.CURRENCY_MEXICO))
-                && (!item.getCurrencyId().equals(CurrenciesUtil.CURRENCY_VENEZUELA))
-                && (!item.getCurrencyId().equals(CurrenciesUtil.CURRENCY_USA))){
+        else if((!CurrenciesUtil.isValidCurrency(item.getCurrencyId()))){
             valid = false;
         }
-            return valid;
+        return valid;
     }
 
 
@@ -144,7 +138,6 @@ public class CheckoutPreference implements Serializable {
         this.paymentMethods = paymentMethods;
     }
 
-    ////////////////////////////////////////////////////////////////
 
     public BigDecimal getAmount() {
 

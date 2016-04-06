@@ -3,7 +3,8 @@ package com.mercadopago.test;
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 
-import com.mercadopago.PaymentVaultActivity;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.mercadopago.model.Card;
 import com.mercadopago.model.CardToken;
 import com.mercadopago.model.CheckoutPreference;
@@ -16,12 +17,12 @@ import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentMethodRow;
-import com.mercadopago.model.PaymentMethodSearch;
 import com.mercadopago.model.SavedCardToken;
 import com.mercadopago.util.JsonUtil;
 
 import java.io.InputStream;
-import java.math.BigDecimal;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
 public class StaticMock {
@@ -120,6 +121,15 @@ public class StaticMock {
         return JsonUtil.getInstance().fromJson(getFile(context, "mocks/issuer.json"), Issuer.class);
     }
 
+    public static String getIssuersJson() {
+
+        try {
+            return getFile(InstrumentationRegistry.getContext(), "mocks/issuers.json");
+
+        } catch (Exception ex) {
+            return null;
+        }
+    }
     public static List<Card> getCards(Context context) {
 
         try {
@@ -127,7 +137,6 @@ public class StaticMock {
             return customer.getCards();
 
         } catch (Exception ex) {
-
             return null;
         }
     }
@@ -139,7 +148,6 @@ public class StaticMock {
             return cards.get(0);
 
         } catch (Exception ex) {
-
             return null;
         }
     }
@@ -150,7 +158,6 @@ public class StaticMock {
             return JsonUtil.getInstance().fromJson(getFile(context, "mocks/payment.json"), Payment.class);
 
         } catch (Exception ex) {
-
             return null;
         }
     }
@@ -161,7 +168,6 @@ public class StaticMock {
             return JsonUtil.getInstance().fromJson(getFile(InstrumentationRegistry.getContext(), "mocks/payment.json"), Payment.class);
 
         } catch (Exception ex) {
-
             return null;
         }
     }
@@ -171,7 +177,6 @@ public class StaticMock {
             return getFile(InstrumentationRegistry.getContext(), "mocks/payment_method_search_all.json");
 
         } catch (Exception ex) {
-
             return null;
         }
     }

@@ -19,7 +19,7 @@ public class InstallmentsActivityTest extends BaseTest<InstallmentsActivity> {
     public InstallmentsActivityTest() {
         super(InstallmentsActivity.class);
     }
-/*
+
     public void testGetInstallment() {
 
         // Set activity
@@ -77,5 +77,5 @@ public class InstallmentsActivityTest extends BaseTest<InstallmentsActivity> {
         intent.putExtra("payerCosts", "1234");
         setActivityIntent(intent);
         return getActivity();
-    }*/
+    }
 }

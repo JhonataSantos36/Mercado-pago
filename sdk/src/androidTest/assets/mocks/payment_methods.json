@@ -49,7 +49,7 @@
 {
 "id": "banamex",
 "name": "Banamex",
-"payment_type_id": "atm",
+"payment_type_id": "bank_transfer",
 "status": "active",
 "secure_thumbnail": "https://www.mercadopago.com/org-img/MP3/API/logos/banamex.gif",
 "thumbnail": "http://img.mlstatic.com/org-img/MP3/API/logos/banamex.gif",

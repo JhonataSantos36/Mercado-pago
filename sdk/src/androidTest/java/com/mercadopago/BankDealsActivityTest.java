@@ -19,7 +19,7 @@ public class BankDealsActivityTest extends BaseTest<BankDealsActivity> {
         super(BankDealsActivity.class);
     }
 
-  /*  public void testIfBankDealsReceivedShowThemInRecyclerView() {
+    public void testIfBankDealsReceivedShowThemInRecyclerView() {
 
         //Create expected data for test
         List<BankDeal> bankDeals = new ArrayList<>();
@@ -51,5 +51,5 @@ public class BankDealsActivityTest extends BaseTest<BankDealsActivity> {
         }
         setActivityIntent(intent);
         return getActivity();
-    }*/
+    }
 }

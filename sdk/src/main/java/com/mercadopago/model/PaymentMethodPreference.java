@@ -140,6 +140,7 @@ public class PaymentMethodPreference implements Serializable {
             List<String> excludedPaymentMethodIds = this.getExcludedPaymentMethodIds();
             List<String> excludedPaymentTypes = this.getExcludedPaymentTypes();
 
+            PaymentMethod paymentMethod1 = paymentMethod;
             if ((excludedPaymentMethodIds != null && excludedPaymentMethodIds.contains(paymentMethod.getId()))
                     || (excludedPaymentTypes != null && excludedPaymentTypes.contains(paymentMethod.getPaymentTypeId()))) {
                 isSupported = false;

@@ -20,7 +20,7 @@ public class CustomerCardsActivityTests extends BaseTest<CustomerCardsActivity> 
     public CustomerCardsActivityTests() {
         super(CustomerCardsActivity.class);
     }
-/*
+
     public void testGetCard() {
 
         // Set activity
@@ -79,5 +79,5 @@ public class CustomerCardsActivityTests extends BaseTest<CustomerCardsActivity> 
         intent.putExtra("cards", "1234");
         setActivityIntent(intent);
         return getActivity();
-    }*/
+    }
 }

@@ -8,6 +8,8 @@ import com.mercadopago.test.MockedHttpClient;
 import com.mercadopago.util.HttpClientUtil;
 import com.mercadopago.util.JsonUtil;
 
+import java.lang.reflect.Field;
+
 /**
  * Created by mreverter on 29/2/16.
  */
@@ -87,6 +89,23 @@ public class MockedApiTestRule<A extends Activity> extends ActivityTestRule<A> {
 
     public boolean isActivityFinishedOrFinishing() {
         return isActivityFinished || getActivity().isFinishing();
+    }
+
+    public boolean isFinishingOrFinishedWithResult(int resultCode) {
+        boolean finishingWithResult = false;
+        if(isActivityFinishedOrFinishing()) {
+            try {
+                Field field = Activity.class.getDeclaredField("mResultCode");
+                field.setAccessible(true);
+                int actualResultCode = (Integer) field.get(getActivity());
+                finishingWithResult = (actualResultCode == resultCode);
+            } catch (NoSuchFieldException e) {
+                throw new RuntimeException("Looks like the Android Activity class has changed it's private fields for mResultCode or mResultData.Time to update the reflection code.", e);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return finishingWithResult;
     }
 
     protected void sleepThread(int milliseconds) {

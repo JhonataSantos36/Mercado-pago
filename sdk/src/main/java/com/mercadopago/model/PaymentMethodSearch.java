@@ -8,6 +8,8 @@ import java.util.Stack;
  */
 public class PaymentMethodSearch {
 
+    private PaymentMethod mDeafaultPaymentMethod;
+
     private List<PaymentMethodSearchItem> preferred;
 
     private List<PaymentMethodSearchItem> groups;

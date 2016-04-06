@@ -4,14 +4,15 @@ import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.TextView;
 
 import com.mercadopago.adapters.PaymentMethodsAdapter;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.test.ActivityResult;
 import com.mercadopago.test.BaseTest;
+import com.mercadopago.test.MockedHttpClient;
 import com.mercadopago.test.StaticMock;
+import com.mercadopago.util.HttpClientUtil;
 import com.mercadopago.views.MPTextView;
 
 import java.util.ArrayList;
@@ -22,12 +23,16 @@ public class PaymentMethodsActivityTest extends BaseTest<PaymentMethodsActivity>
     public PaymentMethodsActivityTest() {
         super(PaymentMethodsActivity.class);
     }
-/*
+
     public void testGetPaymentMethod() {
 
-        Activity activity = prepareActivity(StaticMock.DUMMY_MERCHANT_PUBLIC_KEY, null, null);
+        String paymentMethodsJson = StaticMock.getCompletePaymentMethodsJson();
+        //Set mocked client to return expected data
+        MockedHttpClient client = new MockedHttpClient();
+        client.addResponseToQueue(paymentMethodsJson, 200, "");
+        HttpClientUtil.bindClient(client);
 
-        sleepThread();
+        Activity activity = prepareActivity(StaticMock.DUMMY_MERCHANT_PUBLIC_KEY, null, null);
 
         RecyclerView list = (RecyclerView) activity.findViewById(R.id.payment_methods_list);
         if ((list != null) && (list.getAdapter() != null)) {
@@ -47,10 +52,12 @@ public class PaymentMethodsActivityTest extends BaseTest<PaymentMethodsActivity>
             ActivityResult activityResult = getActivityResult(activity);
             PaymentMethod paymentMethod = (PaymentMethod) activityResult.getExtras().getSerializable("paymentMethod");
             assertTrue(activityResult.getResultCode() == Activity.RESULT_OK);
-            assertTrue(paymentMethod.getId().equals("visa"));
+            assertTrue(paymentMethod.getId().equals("bancomer"));
         } catch (Exception ex) {
             fail("Get payment method test failed, cause: " + ex.getMessage());
         }
+
+        HttpClientUtil.unbindClient();
     }
 
     public void testWrongMerchantPublicKey() {
@@ -71,8 +78,13 @@ public class PaymentMethodsActivityTest extends BaseTest<PaymentMethodsActivity>
 
     public void testExcludedPaymentTypesFilter() {
 
+        String paymentMethodsJson = StaticMock.getCompletePaymentMethodsJson();
+        MockedHttpClient client = new MockedHttpClient();
+        client.addResponseToQueue(paymentMethodsJson, 200, "");
+        HttpClientUtil.bindClient(client);
+
         List<String> excludedPaymentTypes = new ArrayList<String>(){{
-            add("credit_card");
+            add("ticket");
         }};
         Activity activity = prepareActivity(StaticMock.DUMMY_MERCHANT_PUBLIC_KEY, excludedPaymentTypes, null);
 
@@ -84,7 +96,7 @@ public class PaymentMethodsActivityTest extends BaseTest<PaymentMethodsActivity>
             assertTrue(adapter.getItemCount() > 0);
             boolean incorrectPaymentTypeFound = false;
             for (int i = 0; i < adapter.getItemCount(); i++) {
-                if (adapter.getItem(i).getPaymentTypeId().equals("credit_card")) {
+                if (adapter.getItem(i).getPaymentTypeId().equals("ticket")) {
                     incorrectPaymentTypeFound = true;
                     break;
                 }
@@ -93,11 +105,17 @@ public class PaymentMethodsActivityTest extends BaseTest<PaymentMethodsActivity>
         } else {
             fail("Excluded payment types filter test failed, no items found");
         }
+        HttpClientUtil.unbindClient();
     }
     public void testExcludedPaymentMethodIdsFilter() {
+        String paymentMethodsJson = StaticMock.getCompletePaymentMethodsJson();
+        //Set mocked client to return expected data
+        MockedHttpClient client = new MockedHttpClient();
+        client.addResponseToQueue(paymentMethodsJson, 200, "");
+        HttpClientUtil.bindClient(client);
 
         List<String> excludedPaymentMethodIds = new ArrayList<String>(){{
-            add("visa");
+            add("bancomer");
         }};
         Activity activity = prepareActivity(StaticMock.DUMMY_MERCHANT_PUBLIC_KEY, null, excludedPaymentMethodIds);
 
@@ -107,21 +125,20 @@ public class PaymentMethodsActivityTest extends BaseTest<PaymentMethodsActivity>
         PaymentMethodsAdapter adapter = (PaymentMethodsAdapter) list.getAdapter();
         if (adapter != null) {
             assertTrue(adapter.getItemCount() > 0);
-            boolean incorrectPaymentMethodId = false;
+            boolean incorrectPaymentMethodIdFound = false;
             for (int i = 0; i < adapter.getItemCount(); i++) {
-                if (adapter.getItem(i).getId().equals("visa")) {
-                    incorrectPaymentMethodId = true;
+                if (adapter.getItem(i).getId().equals("bancomer")) {
+                    incorrectPaymentMethodIdFound = true;
                     break;
                 }
             }
-            assertTrue(!incorrectPaymentMethodId);
+            assertTrue(!incorrectPaymentMethodIdFound);
         } else {
             fail("Excluded payment types filter test failed, no items found");
         }
     }
 
     public void testBackPressed() {
-
         Activity activity = prepareActivity(StaticMock.DUMMY_MERCHANT_PUBLIC_KEY, null, null);
         activity.onBackPressed();
         assertFinishCalledWithResult(activity, Activity.RESULT_CANCELED);
@@ -139,5 +156,4 @@ public class PaymentMethodsActivityTest extends BaseTest<PaymentMethodsActivity>
         setActivityIntent(intent);
         return getActivity();
     }
-    */
 }
