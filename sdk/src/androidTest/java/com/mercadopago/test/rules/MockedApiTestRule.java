@@ -53,7 +53,7 @@ public class MockedApiTestRule<A extends Activity> extends ActivityTestRule<A> {
     @Override
     protected void afterActivityLaunched() {
         super.afterActivityLaunched();
-        sleepThread(100);
+        sleepThread(500);
         isActivityFinished = false;
         if(!intentsActive) {
             this.initIntents();
