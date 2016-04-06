@@ -204,7 +204,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
         if(mCurrencyId == null) {
             isValid = false;
         }
-        else if(CurrenciesUtil.isValidCurrency(mCurrencyId)){
+        else if(!CurrenciesUtil.isValidCurrency(mCurrencyId)){
             isValid = false;
         }
         return isValid;

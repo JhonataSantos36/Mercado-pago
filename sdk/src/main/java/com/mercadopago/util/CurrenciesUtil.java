@@ -130,6 +130,6 @@ public class CurrenciesUtil {
     }
 
     public static boolean isValidCurrency(String currencyId) {
-       return (!currenciesList.containsKey(currencyId)) && currencyId != null;
+       return currenciesList.containsKey(currencyId) && currencyId != null;
     }
 }
