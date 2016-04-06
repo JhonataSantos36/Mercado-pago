@@ -6,12 +6,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.mercadopago.R;
 import com.mercadopago.callbacks.PaymentMethodSearchCallback;
+import com.mercadopago.model.Instruction;
 import com.mercadopago.model.PaymentMethodSearch;
 import com.mercadopago.model.PaymentMethodSearchItem;
 import com.mercadopago.util.MercadoPagoUtil;
+import com.mercadopago.util.ScaleUtil;
 import com.mercadopago.views.MPTextView;
 
 import java.util.List;
@@ -25,19 +28,12 @@ public class PaymentMethodSearchItemAdapter extends RecyclerView.Adapter<Payment
     private List<PaymentMethodSearchItem> mItems;
     private PaymentMethodSearchCallback mCallback;
 
-
     public PaymentMethodSearchItemAdapter(Context context, List<PaymentMethodSearchItem> items, PaymentMethodSearchCallback callback)
     {
         this.mContext = context;
         this.mItems = items;
         this.mCallback = callback;
-        //TODO: Sacar cuando no venga más en el servicio
-        for(PaymentMethodSearchItem item : mItems) {
-            if(item.getId().equals("gestopago")) {
-                mItems.remove(item);
-                break;
-            }
-        }
+
     }
 
     @Override
@@ -50,8 +46,7 @@ public class PaymentMethodSearchItemAdapter extends RecyclerView.Adapter<Payment
 
     private View getViewForItem(ViewGroup parent, PaymentMethodSearchItem item) {
         View view;
-        if(itemNeedsDescription(item))
-        {
+        if(itemNeedsDescription(item)) {
             view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.pm_search_item_row, parent, false);
         }
@@ -60,6 +55,18 @@ public class PaymentMethodSearchItemAdapter extends RecyclerView.Adapter<Payment
                     .inflate(R.layout.pm_search_pm_item_row, parent, false);
         }
         return view;
+    }
+
+    public Integer getHeightForItems() {
+        Float mCurrentHeight = (float) 0;
+        for(PaymentMethodSearchItem item : mItems) {
+            if (itemNeedsDescription(item)) {
+                mCurrentHeight += mContext.getResources().getDimension(R.dimen.list_item_height);
+            } else {
+                mCurrentHeight += mContext.getResources().getDimension(R.dimen.list_item_height_large);
+            }
+        }
+        return Math.round(mCurrentHeight);
     }
 
     private boolean itemNeedsDescription(PaymentMethodSearchItem item) {

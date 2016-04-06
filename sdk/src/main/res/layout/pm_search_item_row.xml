@@ -1,7 +1,6 @@
-<FrameLayout
+<RelativeLayout
     android:layout_width="fill_parent"
     android:layout_height="@dimen/list_item_height"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
     android:paddingLeft="0dp"
     android:paddingRight="0dp"
@@ -12,8 +11,8 @@
     <RelativeLayout
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
-            android:gravity="center_vertical">
-
+            android:gravity="center_vertical"
+            android:id="@+id/rowLayout">
             <ImageView
                 android:layout_width="30dp"
                 android:layout_height="25dp"
@@ -53,8 +52,10 @@
                 style="@style/mpsdk_list_label_comment"/>
 
             <ImageView
-                android:layout_width="25dp"
-                android:layout_height="20dp"
+                android:layout_width="15dp"
+                android:layout_height="10dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginRight="5dp"
                 android:src="@drawable/arrow_right"
                 android:adjustViewBounds="true"
                 android:id="@+id/imageArrow"
@@ -71,6 +72,5 @@
                 android:background="@color/mpsdk_separator"
                 android:layout_alignLeft="@+id/comment"
                 android:layout_alignStart="@+id/comment"/>
-
     </RelativeLayout>
-</FrameLayout>
+</RelativeLayout>

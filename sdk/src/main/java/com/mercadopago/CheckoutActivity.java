@@ -306,7 +306,6 @@ public class CheckoutActivity extends AppCompatActivity {
                             .setPaymentMethod(mSelectedPaymentMethod)
                             .startInstructionsActivity();
                 }
-                LayoutUtil.showRegularLayout(mActivity);
             }
 
             @Override

@@ -9,6 +9,8 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -30,6 +32,7 @@ import com.mercadopago.util.CurrenciesUtil;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;
 import com.mercadopago.util.MercadoPagoUtil;
+import com.mercadopago.util.ScaleUtil;
 import com.mercadopago.views.MPTextView;
 
 import java.lang.reflect.Type;
@@ -336,6 +339,11 @@ public class PaymentVaultActivity extends AppCompatActivity {
     protected void populateSearchList(List<PaymentMethodSearchItem> items) {
         PaymentMethodSearchItemAdapter groupsAdapter = new PaymentMethodSearchItemAdapter(this, items, getPaymentMethodSearchCallback());
         mSearchItemsRecyclerView.setAdapter(groupsAdapter);
+
+        //TODO update to rv 23 and replace by wrap content
+        int recyclerViewSize = groupsAdapter.getHeightForItems();
+        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, recyclerViewSize);
+        mSearchItemsRecyclerView.setLayoutParams(layoutParams);
     }
 
     protected PaymentMethodSearchCallback getPaymentMethodSearchCallback() {
