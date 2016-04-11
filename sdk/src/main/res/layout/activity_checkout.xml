@@ -31,18 +31,8 @@
                         style="@style/mpsdk_title_text"
                         android:text="@string/mpsdk_title_activity_checkout"
                         android:layout_gravity="center"/>
-                    <ImageView
-                        android:contentDescription="@string/mpsdk_shopping_cart_text"
-                        android:id="@+id/shoppingCartIcon"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:padding="8dp"
-                        android:layout_gravity="end"
-                        android:layout_marginRight="12dp"
-                        android:layout_marginEnd="12dp"
-                        android:src="@drawable/icon_cart"/>
             </android.support.v7.widget.Toolbar>
-
+            <include layout="@layout/shopping_cart" android:id="@+id/itemInfoLayout"/>
         </android.support.design.widget.AppBarLayout>
         <include layout="@layout/content_checkout"/>
     </LinearLayout>

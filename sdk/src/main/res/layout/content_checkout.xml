@@ -6,19 +6,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:showIn="@layout/activity_checkout"
-        tools:context="com.mercadopago.CheckoutActivity"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-        <include layout="@layout/shopping_cart" android:id="@+id/itemInfoLayout"/>
         <LinearLayout
             android:layout_marginTop="15dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_below="@id/itemInfoLayout"
             android:id="@+id/contentLayout">
              <RelativeLayout
                 android:id="@+id/rowsLayout"
@@ -80,7 +72,6 @@
                 xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:tools="http://schemas.android.com/tools">
 
-
                 <com.mercadopago.views.MPTextView
                     android:id="@+id/totalAmountText"
                     android:layout_marginLeft="4dp"
@@ -140,14 +131,23 @@
                 android:layout_gravity="center_horizontal|bottom" />
             <com.mercadopago.views.MPTextView
                 android:layout_gravity="center"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/mpsdk_cancel_label"
+                android:textColor="@color/mpsdk_color_link"
+                android:textSize="@dimen/mpsdk_small_text"
+                android:id="@+id/cancelTextView"
+                app:fontStyle="regular"
+                style="@style/small_comment"/>
+            <com.mercadopago.views.MPTextView
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
                 android:layout_marginBottom="20dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/mpsdk_processed_by_mercado_pago"
                 app:fontStyle="regular"
                 style="@style/small_comment"/>
-
         </LinearLayout>
-    </RelativeLayout>
 </android.support.v4.widget.NestedScrollView>

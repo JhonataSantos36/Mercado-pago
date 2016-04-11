@@ -9,7 +9,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -32,7 +31,6 @@ import com.mercadopago.util.CurrenciesUtil;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;
 import com.mercadopago.util.MercadoPagoUtil;
-import com.mercadopago.util.ScaleUtil;
 import com.mercadopago.views.MPTextView;
 
 import java.lang.reflect.Type;
@@ -85,14 +83,14 @@ public class PaymentVaultActivity extends AppCompatActivity {
     protected String mItemImageUri;
     protected String mCurrencyId;
     protected MPTextView mActivityTitle;
+    protected RelativeLayout mContentLayout;
+    protected MPTextView mCancelTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payment_vault);
-        initializeToolbar();
         getActivityParameters();
-
         boolean validParameters = true;
         try {
             validateActivityParameters();
@@ -109,33 +107,32 @@ public class PaymentVaultActivity extends AppCompatActivity {
             initializeControls();
             setActivity();
 
+            boolean enableToolbarNavigation;
             if (!isItemSelected()) {
                 initPaymentMethodSearch();
+                enableToolbarNavigation = false;
             } else {
                 showSelectedItemChildren();
+                enableToolbarNavigation = true;
             }
+            initializeToolbar(enableToolbarNavigation);
         }
     }
 
-    private void finishWithIllegalStateException(String message) {
-        Intent returnIntent = new Intent();
-        returnIntent.putExtra("error", message);
-        this.setResult(Activity.RESULT_CANCELED, returnIntent);
-        this.finish();
-    }
-
-    private void initializeToolbar() {
+    private void initializeToolbar(boolean withNavigation) {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
+        if(withNavigation) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onBackPressed();
+                }
+            });
+        }
     }
 
     private void initPaymentMethodSearch() {
@@ -265,6 +262,14 @@ public class PaymentVaultActivity extends AppCompatActivity {
         initializeGroupRecyclerView();
         mShoppingCartIcon = (ImageView) findViewById(R.id.shoppingCartIcon);
         mActivityTitle = (MPTextView) findViewById(R.id.title);
+        mContentLayout = (RelativeLayout) findViewById(R.id.content_layout);
+        mCancelTextView = (MPTextView) findViewById(R.id.cancelTextView);
+        mCancelTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onCancelClicked();
+            }
+        });
         mShoppingCartIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -273,7 +278,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
         });
 
         mShoppingCartController = new ShoppingCartViewController(this, mShoppingCartIcon, mItemImageUri, mPurchaseTitle, PURCHASE_TITLE_MAX_LENGTH,
-                mAmount, mCurrencyId, false, findViewById(R.id.content_layout));
+                mAmount, mCurrencyId, false, mContentLayout);
     }
 
     protected void initializeGroupRecyclerView() {
@@ -444,7 +449,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
             finish();
         }
         else if(resultCode == RESULT_CANCELED) {
-            if(data.hasExtra("error")) {
+            if(data.hasExtra("error") || data.hasExtra("canceled")) {
                 setResult(RESULT_CANCELED, data);
                 finish();
             }
@@ -497,6 +502,13 @@ public class PaymentVaultActivity extends AppCompatActivity {
         };
     }
 
+    protected void finishWithIllegalStateException(String message) {
+        Intent returnIntent = new Intent();
+        returnIntent.putExtra("error", message);
+        this.setResult(Activity.RESULT_CANCELED, returnIntent);
+        this.finish();
+    }
+
     protected void finishWithPaymentMethodResult(PaymentMethod paymentMethod, String paymentMethodInfo) {
         Intent returnIntent = new Intent();
         returnIntent.putExtra("paymentMethod", paymentMethod);
@@ -542,5 +554,12 @@ public class PaymentVaultActivity extends AppCompatActivity {
         if(isItemSelected()) {
             overridePendingTransition(R.anim.slide_left_to_right_in, R.anim.silde_left_to_right_out);
         }
+    }
+
+    public void onCancelClicked() {
+        Intent returnIntent = new Intent();
+        returnIntent.putExtra("canceled", true);
+        setResult(Activity.RESULT_CANCELED, returnIntent);
+        finish();
     }
 }

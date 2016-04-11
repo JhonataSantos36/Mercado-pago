@@ -13,7 +13,6 @@
         android:layout_height="wrap_content"
         tools:showIn="@layout/activity_payment_vault"
         tools:context="com.mercadopago.PaymentVaultActivity">
-        <include layout="@layout/shopping_cart" android:id="@+id/itemInfoLayout"/>
         <RelativeLayout
             android:layout_marginTop="20dp"
             android:layout_marginBottom="50dp"
@@ -56,11 +55,25 @@
                 android:layout_marginEnd="20dp"
                 android:layout_marginRight="20dp"
                 android:layout_gravity="center_horizontal|bottom" />
+
             <com.mercadopago.views.MPTextView
                 android:layout_centerHorizontal="true"
-                android:layout_below="@id/separator"
+                android:layout_below="@+id/separator"
+                android:layout_marginTop="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/mpsdk_cancel_label"
+                android:textColor="@color/mpsdk_color_link"
+                android:textSize="@dimen/mpsdk_small_text"
+                android:id="@+id/cancelTextView"
+                app:fontStyle="regular"
+                style="@style/small_comment"/>
+
+            <com.mercadopago.views.MPTextView
+                android:layout_centerHorizontal="true"
+                android:layout_below="@id/cancelTextView"
                 android:layout_gravity="center"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginBottom="20dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

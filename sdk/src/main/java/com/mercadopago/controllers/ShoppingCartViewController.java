@@ -40,7 +40,6 @@ public class ShoppingCartViewController {
         mImageViewTogglerShoppingCart = toggler;
         initialize(activity, pictureUri, purchaseTitle, titleMaxLength, amount, currencyId, startShowingItemInfo, viewBelowShoppingCart);
         start();
-
     }
     private void initialize(Activity activity, String pictureUri, String purchaseTitle, Integer titleMaxLength, BigDecimal amount, String currencyId, Boolean startShowingItemInfo, View viewBelowShoppingCart) {
         mActivity = activity;
@@ -123,10 +122,10 @@ public class ShoppingCartViewController {
         tintTogglerDrawableWithColor(mActivity.getResources().getColor(R.color.mpsdk_white));
     }
 
-    public void showItemInfo(boolean enableAnimation) {
+    public void showItemInfo(boolean withAnimation) {
         mItemInfoLayout.setVisibility(View.VISIBLE);
-        if(enableAnimation) {
-            startAnimations();
+        if(withAnimation) {
+            //startAnimations();
         }
         mItemDescriptionShown = true;
         if(mImageViewTogglerShoppingCart != null) {
@@ -143,7 +142,7 @@ public class ShoppingCartViewController {
         int shoppingCartHeight = mActivity.getResources().getDimensionPixelSize(R.dimen.mpsdk_shopping_cart_height);
         TranslateAnimation leavePlaceForShoppingCartAnimation = new TranslateAnimation(
                 Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF - shoppingCartHeight, 0);
-        leavePlaceForShoppingCartAnimation.setDuration(mActivity.getResources().getInteger(android.R.integer.config_shortAnimTime));
+        leavePlaceForShoppingCartAnimation.setDuration(mActivity.getResources().getInteger(android.R.integer.config_longAnimTime));
 
         mItemInfoLayout.startAnimation(AnimationUtils.loadAnimation(mActivity, R.anim.slide_up_to_down_in));
         mViewBelowShoppingCart.startAnimation(leavePlaceForShoppingCartAnimation);

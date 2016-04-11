@@ -57,11 +57,11 @@ public class CheckoutActivity extends AppCompatActivity {
     //Controls
     protected MPTextView mPaymentMethodCommentTextView;
     protected MPTextView mTermsAndConditionsTextView;
+    protected MPTextView mCancelTextView;
     protected MPTextView mTotalAmountTextView;
     protected ImageView mPaymentMethodImageView;
     protected ImageView mEditPaymentMethodImageView;
     protected MPButton mPayButton;
-    protected ImageView mShoppingCartIcon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,14 +108,6 @@ public class CheckoutActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
     }
 
     private void validateParameters() throws Exception {
@@ -147,6 +139,13 @@ public class CheckoutActivity extends AppCompatActivity {
             }
         });
 
+        mCancelTextView = (MPTextView) findViewById(R.id.cancelTextView);
+        mCancelTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onCancelClicked();
+            }
+        });
         mPayButton = (MPButton) findViewById(R.id.payButton);
         mPayButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -155,17 +154,8 @@ public class CheckoutActivity extends AppCompatActivity {
             }
         });
         mTotalAmountTextView = (MPTextView) findViewById(R.id.totalAmount);
-        mShoppingCartIcon = (ImageView) findViewById(R.id.shoppingCartIcon);
-
-        mShoppingCartIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mShoppingCartController.toggle(true);
-            }
-        });
-
         mPurchaseTitle = getPurchaseTitle();
-        mShoppingCartController = new ShoppingCartViewController(this, mShoppingCartIcon, mCheckoutPreference.getItems().get(0).getPictureUrl(), mPurchaseTitle, PURCHASE_TITLE_MAX_LENGTH,
+        mShoppingCartController = new ShoppingCartViewController(this, null, mCheckoutPreference.getItems().get(0).getPictureUrl(), mPurchaseTitle, PURCHASE_TITLE_MAX_LENGTH,
                 mCheckoutPreference.getAmount(), mCheckoutPreference.getItems().get(0).getCurrencyId(), true, findViewById(R.id.contentLayout));
     }
 
@@ -326,4 +316,9 @@ public class CheckoutActivity extends AppCompatActivity {
         overridePendingTransition(R.anim.slide_left_to_right_in, R.anim.silde_left_to_right_out);
     }
 
+    public void onCancelClicked() {
+        Intent returnIntent = new Intent();
+        setResult(RESULT_CANCELED, returnIntent);
+        finish();
+    }
 }
