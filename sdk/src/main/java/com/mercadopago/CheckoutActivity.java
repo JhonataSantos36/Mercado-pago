@@ -156,7 +156,7 @@ public class CheckoutActivity extends AppCompatActivity {
         mTotalAmountTextView = (MPTextView) findViewById(R.id.totalAmount);
         mPurchaseTitle = getPurchaseTitle();
         mShoppingCartController = new ShoppingCartViewController(this, null, mCheckoutPreference.getItems().get(0).getPictureUrl(), mPurchaseTitle, PURCHASE_TITLE_MAX_LENGTH,
-                mCheckoutPreference.getAmount(), mCheckoutPreference.getItems().get(0).getCurrencyId(), true, findViewById(R.id.contentLayout));
+                mCheckoutPreference.getAmount(), mCheckoutPreference.getItems().get(0).getCurrencyId(), true);
     }
 
     protected void startTermsAndConditionsActivity() {

@@ -135,11 +135,55 @@ public class PaymentVaultActivity extends AppCompatActivity {
         }
     }
 
-    private void initPaymentMethodSearch() {
-        String initialTitle = getString(R.string.mpsdk_title_activity_payment_vault);
-        setActivityTitle(initialTitle);
-        LayoutUtil.showProgressLayout(this);
-        getPaymentMethodSearch();
+    protected void getActivityParameters() {
+        if (this.getIntent().getSerializableExtra("selectedSearchItem") != null) {
+            mSelectedSearchItem = (PaymentMethodSearchItem) this.getIntent().getSerializableExtra("selectedSearchItem");
+        }
+
+        try {
+            mAmount = new BigDecimal(this.getIntent().getStringExtra("amount"));
+        } catch (Exception ex) {
+            mAmount = null;
+        }
+        mCurrencyId = this.getIntent().getStringExtra("currencyId");
+        mItemImageUri = this.getIntent().getStringExtra("itemImageUri");
+        mPurchaseTitle = this.getIntent().getStringExtra("purchaseTitle");
+
+        mSupportMPApp = this.getIntent().getBooleanExtra("supportMPApp", false);
+
+        mMerchantPublicKey = this.getIntent().getStringExtra("merchantPublicKey");
+
+        mMerchantBaseUrl = this.getIntent().getStringExtra("merchantBaseUrl");
+        mMerchantGetCustomerUri = this.getIntent().getStringExtra("merchantGetCustomerUri");
+        mMerchantAccessToken = this.getIntent().getStringExtra("merchantAccessToken");
+        mCardGuessingEnabled = this.getIntent().getBooleanExtra("cardGuessingEnabled", false);
+        mShowBankDeals = this.getIntent().getBooleanExtra("showBankDeals", true);
+
+        if (this.getIntent().getStringExtra("excludedPaymentMethodIds") != null) {
+            Gson gson = new Gson();
+            Type listType = new TypeToken<List<String>>(){}.getType();
+            mExcludedPaymentMethodIds = gson.fromJson(this.getIntent().getStringExtra("excludedPaymentMethodIds"), listType);
+        }
+        if (this.getIntent().getStringExtra("excludedPaymentTypes") != null) {
+            Gson gson = new Gson();
+            Type listType = new TypeToken<List<String>>(){}.getType();
+            mExcludedPaymentTypes = gson.fromJson(this.getIntent().getStringExtra("excludedPaymentTypes"), listType);
+        }
+        mDefaultPaymentMethodId = this.getIntent().getStringExtra("defaultPaymentMethodId");
+
+        if(this.getIntent().getStringExtra("maxInstallments") != null) {
+            mMaxInstallments = Integer.valueOf(this.getIntent().getStringExtra("maxInstallments"));
+        }
+        if(this.getIntent().getStringExtra("defaultInstallments") != null) {
+            mDefaultInstallments = Integer.valueOf(this.getIntent().getStringExtra("defaultInstallments"));
+        }
+        mEditing = this.getIntent().getBooleanExtra("editing", false);
+
+        if (this.getIntent().getStringExtra("paymentMethods") != null) {
+            Gson gson = new Gson();
+            Type listType = new TypeToken<List<PaymentMethod>>(){}.getType();
+            mPaymentMethods = gson.fromJson(this.getIntent().getStringExtra("paymentMethods"), listType);
+        }
     }
 
     private void validateActivityParameters() {
@@ -207,57 +251,6 @@ public class PaymentVaultActivity extends AppCompatActivity {
         return isValid;
     }
 
-    protected void getActivityParameters() {
-        if (this.getIntent().getSerializableExtra("selectedSearchItem") != null) {
-            mSelectedSearchItem = (PaymentMethodSearchItem) this.getIntent().getSerializableExtra("selectedSearchItem");
-        }
-
-        try {
-            mAmount = new BigDecimal(this.getIntent().getStringExtra("amount"));
-        } catch (Exception ex) {
-            mAmount = null;
-        }
-        mCurrencyId = this.getIntent().getStringExtra("currencyId");
-        mItemImageUri = this.getIntent().getStringExtra("itemImageUri");
-        mPurchaseTitle = this.getIntent().getStringExtra("purchaseTitle");
-
-        mSupportMPApp = this.getIntent().getBooleanExtra("supportMPApp", false);
-
-        mMerchantPublicKey = this.getIntent().getStringExtra("merchantPublicKey");
-
-        mMerchantBaseUrl = this.getIntent().getStringExtra("merchantBaseUrl");
-        mMerchantGetCustomerUri = this.getIntent().getStringExtra("merchantGetCustomerUri");
-        mMerchantAccessToken = this.getIntent().getStringExtra("merchantAccessToken");
-        mCardGuessingEnabled = this.getIntent().getBooleanExtra("cardGuessingEnabled", false);
-        mShowBankDeals = this.getIntent().getBooleanExtra("showBankDeals", true);
-
-        if (this.getIntent().getStringExtra("excludedPaymentMethodIds") != null) {
-            Gson gson = new Gson();
-            Type listType = new TypeToken<List<String>>(){}.getType();
-            mExcludedPaymentMethodIds = gson.fromJson(this.getIntent().getStringExtra("excludedPaymentMethodIds"), listType);
-        }
-        if (this.getIntent().getStringExtra("excludedPaymentTypes") != null) {
-            Gson gson = new Gson();
-            Type listType = new TypeToken<List<String>>(){}.getType();
-            mExcludedPaymentTypes = gson.fromJson(this.getIntent().getStringExtra("excludedPaymentTypes"), listType);
-        }
-        mDefaultPaymentMethodId = this.getIntent().getStringExtra("defaultPaymentMethodId");
-
-        if(this.getIntent().getStringExtra("maxInstallments") != null) {
-            mMaxInstallments = Integer.valueOf(this.getIntent().getStringExtra("maxInstallments"));
-        }
-        if(this.getIntent().getStringExtra("defaultInstallments") != null) {
-            mDefaultInstallments = Integer.valueOf(this.getIntent().getStringExtra("defaultInstallments"));
-        }
-        mEditing = this.getIntent().getBooleanExtra("editing", false);
-
-        if (this.getIntent().getStringExtra("paymentMethods") != null) {
-            Gson gson = new Gson();
-            Type listType = new TypeToken<List<PaymentMethod>>(){}.getType();
-            mPaymentMethods = gson.fromJson(this.getIntent().getStringExtra("paymentMethods"), listType);
-        }
-    }
-
     protected void initializeControls() {
         initializeGroupRecyclerView();
         mShoppingCartIcon = (ImageView) findViewById(R.id.shoppingCartIcon);
@@ -273,18 +266,25 @@ public class PaymentVaultActivity extends AppCompatActivity {
         mShoppingCartIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mShoppingCartController.toggle(true);
+                mShoppingCartController.toggle();
             }
         });
 
         mShoppingCartController = new ShoppingCartViewController(this, mShoppingCartIcon, mItemImageUri, mPurchaseTitle, PURCHASE_TITLE_MAX_LENGTH,
-                mAmount, mCurrencyId, false, mContentLayout);
+                mAmount, mCurrencyId, false);
     }
 
     protected void initializeGroupRecyclerView() {
         mSearchItemsRecyclerView = (RecyclerView) findViewById(R.id.groupsList);
         mSearchItemsRecyclerView.setHasFixedSize(true);
         mSearchItemsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+    }
+
+    private void initPaymentMethodSearch() {
+        String initialTitle = getString(R.string.mpsdk_title_activity_payment_vault);
+        setActivityTitle(initialTitle);
+        LayoutUtil.showProgressLayout(this);
+        getPaymentMethodSearch();
     }
 
     protected void setActivity() {
@@ -330,12 +330,6 @@ public class PaymentVaultActivity extends AppCompatActivity {
         });
     }
 
-    private void finishWithEmptyPaymentMethodSearch() {
-        //TODO modificar
-        Toast.makeText(mActivity, "No hay medios de pago disponibles", Toast.LENGTH_SHORT).show();
-        finish();
-    }
-
     protected void setSearchLayout() {
         LayoutUtil.showRegularLayout(mActivity);
         populateSearchList(mPaymentMethodSearch.getGroups());
@@ -349,50 +343,6 @@ public class PaymentVaultActivity extends AppCompatActivity {
         int recyclerViewSize = groupsAdapter.getHeightForItems();
         RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, recyclerViewSize);
         mSearchItemsRecyclerView.setLayoutParams(layoutParams);
-    }
-
-    protected PaymentMethodSearchCallback getPaymentMethodSearchCallback() {
-        return new PaymentMethodSearchCallback() {
-            @Override
-            public void onGroupItemClicked(PaymentMethodSearchItem groupIem) {
-                startActivityForItem(groupIem);
-            }
-
-            @Override
-            public void onPaymentTypeItemClicked(PaymentMethodSearchItem paymentTypeItem) {
-                if(paymentTypeItem.hasChildren()){
-                    startActivityForItem(paymentTypeItem);
-                }
-                else {
-                    startNextStepForPaymentType(paymentTypeItem.getId());
-                }
-            }
-
-            @Override
-            public void onPaymentMethodItemClicked(final PaymentMethodSearchItem paymentMethodItem) {
-
-                PaymentMethod requiredPaymentMethod = null;
-                for(PaymentMethod currentPaymentMethod : mPaymentMethods) {
-                    if(paymentMethodItem.getId().contains(currentPaymentMethod.getId())) {
-                        currentPaymentMethod.setId(paymentMethodItem.getId());
-                        requiredPaymentMethod = currentPaymentMethod;
-                        break;
-                    }
-                }
-                if(requiredPaymentMethod == null) {
-                    finishWithMismatchingPaymentMethod();
-                } else {
-                    finishWithPaymentMethodResult(requiredPaymentMethod, paymentMethodItem.getComment());
-                }
-            }
-        };
-    }
-
-    private void finishWithMismatchingPaymentMethod() {
-        Intent canceledIntent = new Intent();
-        canceledIntent.putExtra("error", "Mismatching payment method");
-        setResult(RESULT_CANCELED, canceledIntent);
-        finish();
     }
 
     private void startActivityForItem(PaymentMethodSearchItem groupIem) {
@@ -484,6 +434,43 @@ public class PaymentVaultActivity extends AppCompatActivity {
         }
     }
 
+    protected PaymentMethodSearchCallback getPaymentMethodSearchCallback() {
+        return new PaymentMethodSearchCallback() {
+            @Override
+            public void onGroupItemClicked(PaymentMethodSearchItem groupIem) {
+                startActivityForItem(groupIem);
+            }
+
+            @Override
+            public void onPaymentTypeItemClicked(PaymentMethodSearchItem paymentTypeItem) {
+                if(paymentTypeItem.hasChildren()){
+                    startActivityForItem(paymentTypeItem);
+                }
+                else {
+                    startNextStepForPaymentType(paymentTypeItem.getId());
+                }
+            }
+
+            @Override
+            public void onPaymentMethodItemClicked(final PaymentMethodSearchItem paymentMethodItem) {
+
+                PaymentMethod requiredPaymentMethod = null;
+                for(PaymentMethod currentPaymentMethod : mPaymentMethods) {
+                    if(paymentMethodItem.getId().contains(currentPaymentMethod.getId())) {
+                        currentPaymentMethod.setId(paymentMethodItem.getId());
+                        requiredPaymentMethod = currentPaymentMethod;
+                        break;
+                    }
+                }
+                if(requiredPaymentMethod == null) {
+                    finishWithMismatchingPaymentMethod();
+                } else {
+                    finishWithPaymentMethodResult(requiredPaymentMethod, paymentMethodItem.getComment());
+                }
+            }
+        };
+    }
+
     protected Callback<Token> getCreateTokenCallback() {
 
         return new Callback<Token>() {
@@ -500,6 +487,12 @@ public class PaymentVaultActivity extends AppCompatActivity {
                 ApiUtil.finishWithApiException(mActivity, error);
             }
         };
+    }
+
+    private void finishWithEmptyPaymentMethodSearch() {
+        //TODO modificar
+        Toast.makeText(mActivity, "No hay medios de pago disponibles", Toast.LENGTH_SHORT).show();
+        finish();
     }
 
     protected void finishWithIllegalStateException(String message) {
@@ -535,6 +528,13 @@ public class PaymentVaultActivity extends AppCompatActivity {
         setResult(Activity.RESULT_CANCELED, data);
         this.finish();
         animatePaymentMethodSelection();
+    }
+
+    private void finishWithMismatchingPaymentMethod() {
+        Intent canceledIntent = new Intent();
+        canceledIntent.putExtra("error", "Mismatching payment method");
+        setResult(RESULT_CANCELED, canceledIntent);
+        finish();
     }
 
     private void animatePaymentMethodSelection() {

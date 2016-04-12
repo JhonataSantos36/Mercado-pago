@@ -6,6 +6,8 @@
     android:layout_height="@dimen/mpsdk_shopping_cart_height"
     android:background="@color/mpsdk_shopping_cart_background"
     android:paddingTop="10dp"
+    android:layout_alignParentTop="true"
+    android:layout_gravity="top"
     android:gravity="center_vertical"
     android:paddingBottom="10dp">
     <ImageView

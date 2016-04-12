@@ -18,8 +18,7 @@
             android:layout_marginBottom="50dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/content_layout"
-            android:layout_below="@+id/itemInfoLayout">
+            android:id="@+id/content_layout">
             <View android:layout_width="match_parent" android:layout_height="0dp" android:focusable="true" android:focusableInTouchMode="true"><requestFocus/></View>
             <com.mercadopago.views.MPTextView
                 android:layout_width="wrap_content"
