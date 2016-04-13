@@ -60,7 +60,9 @@ public class PaymentVaultActivity extends AppCompatActivity {
     // Controls
     protected RecyclerView mSearchItemsRecyclerView;
     protected ImageView mShoppingCartIcon;
-
+    protected View mContentView;
+    protected MPTextView mActivityTitle;
+    protected MPTextView mCancelTextView;
     // Current values
     protected PaymentMethodSearch mPaymentMethodSearch;
 
@@ -82,9 +84,6 @@ public class PaymentVaultActivity extends AppCompatActivity {
     protected String mPurchaseTitle;
     protected String mItemImageUri;
     protected String mCurrencyId;
-    protected MPTextView mActivityTitle;
-    protected RelativeLayout mContentLayout;
-    protected MPTextView mCancelTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -255,7 +254,6 @@ public class PaymentVaultActivity extends AppCompatActivity {
         initializeGroupRecyclerView();
         mShoppingCartIcon = (ImageView) findViewById(R.id.shoppingCartIcon);
         mActivityTitle = (MPTextView) findViewById(R.id.title);
-        mContentLayout = (RelativeLayout) findViewById(R.id.content_layout);
         mCancelTextView = (MPTextView) findViewById(R.id.cancelTextView);
         mCancelTextView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -266,12 +264,12 @@ public class PaymentVaultActivity extends AppCompatActivity {
         mShoppingCartIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mShoppingCartController.toggle();
+                mShoppingCartController.toggle(true);
             }
         });
-
+        mContentView = findViewById(R.id.contentLayout);
         mShoppingCartController = new ShoppingCartViewController(this, mShoppingCartIcon, mItemImageUri, mPurchaseTitle, PURCHASE_TITLE_MAX_LENGTH,
-                mAmount, mCurrencyId, false);
+                mAmount, mCurrencyId, false, mContentView);
     }
 
     protected void initializeGroupRecyclerView() {

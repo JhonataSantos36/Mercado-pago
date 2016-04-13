@@ -62,16 +62,14 @@ public class CheckoutActivity extends AppCompatActivity {
     protected ImageView mPaymentMethodImageView;
     protected ImageView mEditPaymentMethodImageView;
     protected MPButton mPayButton;
+    protected View mContentView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_checkout);
         initializeToolbar();
-
-        mCheckoutPreference = (CheckoutPreference) this.getIntent().getSerializableExtra("checkoutPreference");
-        mMerchantPublicKey = this.getIntent().getStringExtra("merchantPublicKey");
-        mShowBankDeals = this.getIntent().getBooleanExtra("showBankDeals", true);
+        getActivityParameters();
 
         boolean validState = true;
         try{
@@ -102,6 +100,12 @@ public class CheckoutActivity extends AppCompatActivity {
             setResult(RESULT_CANCELED, returnIntent);
             finish();
         }
+    }
+
+    private void getActivityParameters() {
+        mCheckoutPreference = (CheckoutPreference) this.getIntent().getSerializableExtra("checkoutPreference");
+        mMerchantPublicKey = this.getIntent().getStringExtra("merchantPublicKey");
+        mShowBankDeals = this.getIntent().getBooleanExtra("showBankDeals", true);
     }
 
     private void initializeToolbar() {
@@ -155,8 +159,9 @@ public class CheckoutActivity extends AppCompatActivity {
         });
         mTotalAmountTextView = (MPTextView) findViewById(R.id.totalAmount);
         mPurchaseTitle = getPurchaseTitle();
+        mContentView = findViewById(R.id.contentLayout);
         mShoppingCartController = new ShoppingCartViewController(this, null, mCheckoutPreference.getItems().get(0).getPictureUrl(), mPurchaseTitle, PURCHASE_TITLE_MAX_LENGTH,
-                mCheckoutPreference.getAmount(), mCheckoutPreference.getItems().get(0).getCurrencyId(), true);
+                mCheckoutPreference.getAmount(), mCheckoutPreference.getItems().get(0).getCurrencyId(), true, mContentView);
     }
 
     protected void startTermsAndConditionsActivity() {

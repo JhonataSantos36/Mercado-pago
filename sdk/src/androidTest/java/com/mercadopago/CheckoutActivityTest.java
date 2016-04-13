@@ -266,51 +266,6 @@ public class CheckoutActivityTest {
         assertTrue(itemInfoLayout.getVisibility() == View.VISIBLE);
     }
 
-    @Test
-    public void testCloseShoppingCart() {
-        PaymentMethod paymentMethod = getOfflinePaymentMethod();
-        String paymentMethodInfo = "Dummy info";
-
-        Intent paymentVaultResultIntent = new Intent();
-        paymentVaultResultIntent.putExtra("paymentMethod", paymentMethod);
-        paymentVaultResultIntent.putExtra("paymentMethodInfo", paymentMethodInfo);
-        Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(Activity.RESULT_OK, paymentVaultResultIntent);
-
-        mTestRule.initIntents();
-        intending(hasComponent(PaymentVaultActivity.class.getName())).respondWith(result);
-        CheckoutActivity activity = mTestRule.launchActivity(validStartIntent);
-
-        View itemInfoLayout = activity.findViewById(R.id.itemInfoLayout);
-        assertTrue(itemInfoLayout.getVisibility() == View.VISIBLE);
-
-        onView(withId(R.id.shoppingCartIcon)).perform(click());
-        assertTrue(itemInfoLayout.getVisibility() != View.VISIBLE);
-    }
-
-    @Test
-    public void testCloseAndOpenShoppingCart() {
-        PaymentMethod paymentMethod = getOfflinePaymentMethod();
-        String paymentMethodInfo = "Dummy info";
-
-        Intent paymentVaultResultIntent = new Intent();
-        paymentVaultResultIntent.putExtra("paymentMethod", paymentMethod);
-        paymentVaultResultIntent.putExtra("paymentMethodInfo", paymentMethodInfo);
-        Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(Activity.RESULT_OK, paymentVaultResultIntent);
-
-        mTestRule.initIntents();
-        intending(hasComponent(PaymentVaultActivity.class.getName())).respondWith(result);
-        CheckoutActivity activity = mTestRule.launchActivity(validStartIntent);
-
-        View itemInfoLayout = activity.findViewById(R.id.itemInfoLayout);
-        assertTrue(itemInfoLayout.getVisibility() == View.VISIBLE);
-
-        onView(withId(R.id.shoppingCartIcon)).perform(click());
-        assertTrue(itemInfoLayout.getVisibility() != View.VISIBLE);
-
-        onView(withId(R.id.shoppingCartIcon)).perform(click());
-        assertTrue(itemInfoLayout.getVisibility() == View.VISIBLE);
-    }
-
     //VALIDATIONS TESTS
 
     @Test
