@@ -10,10 +10,10 @@ import android.text.Spanned;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.mercadopago.controllers.ShoppingCartViewController;
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.exceptions.CheckoutPreferenceException;
 import com.mercadopago.exceptions.ExceptionHandler;
+import com.mercadopago.fragments.ShoppingCartFragment;
 import com.mercadopago.model.CheckoutPreference;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.Item;
@@ -34,8 +34,6 @@ import retrofit.client.Response;
 
 public class CheckoutActivity extends AppCompatActivity {
 
-    protected static final Integer PURCHASE_TITLE_MAX_LENGTH = 50;
-
     //Parameters
     protected CheckoutPreference mCheckoutPreference;
     protected String mMerchantPublicKey;
@@ -50,7 +48,7 @@ public class CheckoutActivity extends AppCompatActivity {
     protected PayerCost mSelectedPayerCost;
     protected Token mCreatedToken;
     protected String mPurchaseTitle;
-    protected ShoppingCartViewController mShoppingCartController;
+    protected ShoppingCartFragment mShoppingCartFragment;
     protected String mErrorMessage;
     protected boolean mPaymentMethodEditionRequested;
 
@@ -160,8 +158,13 @@ public class CheckoutActivity extends AppCompatActivity {
         mTotalAmountTextView = (MPTextView) findViewById(R.id.totalAmount);
         mPurchaseTitle = getPurchaseTitle();
         mContentView = findViewById(R.id.contentLayout);
-        mShoppingCartController = new ShoppingCartViewController(this, null, mCheckoutPreference.getItems().get(0).getPictureUrl(), mPurchaseTitle, PURCHASE_TITLE_MAX_LENGTH,
-                mCheckoutPreference.getAmount(), mCheckoutPreference.getItems().get(0).getCurrencyId(), true, mContentView);
+
+        mShoppingCartFragment = ShoppingCartFragment.newInstance(mCheckoutPreference.getItems().get(0).getPictureUrl(), mPurchaseTitle, mCheckoutPreference.getAmount(), mCheckoutPreference.getItems().get(0).getCurrencyId());
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.shoppingCartFragment, mShoppingCartFragment)
+                .show(mShoppingCartFragment)
+                .commit();
     }
 
     protected void startTermsAndConditionsActivity() {

@@ -10,9 +10,9 @@
     <include layout="@layout/view_progress_bar"/>
     <android.support.design.widget.AppBarLayout
         app:elevation="0dp"
+        android:background="@null"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@null"
         android:theme="@style/Theme.MercadoPagoTheme.NoActionBar">
 
         <android.support.v7.widget.Toolbar
@@ -38,7 +38,7 @@
                 android:layout_marginEnd="12dp"
                 android:src="@drawable/icon_cart"/>
         </android.support.v7.widget.Toolbar>
-        <include layout="@layout/shopping_cart" android:id="@+id/itemInfoLayout"/>
-        <include layout="@layout/content_payment_vault"/>
+        <FrameLayout android:layout_width="match_parent" android:id="@+id/shoppingCartFragment" android:layout_height="wrap_content"/>
     </android.support.design.widget.AppBarLayout>
+    <include layout="@layout/content_payment_vault"/>
 </android.support.design.widget.CoordinatorLayout>

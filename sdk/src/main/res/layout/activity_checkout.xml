@@ -32,7 +32,7 @@
                         android:text="@string/mpsdk_title_activity_checkout"
                         android:layout_gravity="center"/>
             </android.support.v7.widget.Toolbar>
-            <include layout="@layout/shopping_cart" android:id="@+id/itemInfoLayout"/>
+            <FrameLayout android:layout_width="match_parent" android:id="@+id/shoppingCartFragment" android:layout_height="wrap_content"/>
         </android.support.design.widget.AppBarLayout>
         <include layout="@layout/content_checkout"/>
     </LinearLayout>

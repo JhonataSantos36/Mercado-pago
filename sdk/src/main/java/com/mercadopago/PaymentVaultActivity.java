@@ -1,6 +1,8 @@
 package com.mercadopago;
 
 import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,8 +18,8 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.mercadopago.adapters.PaymentMethodSearchItemAdapter;
 import com.mercadopago.callbacks.PaymentMethodSearchCallback;
-import com.mercadopago.controllers.ShoppingCartViewController;
 import com.mercadopago.core.MercadoPago;
+import com.mercadopago.fragments.ShoppingCartFragment;
 import com.mercadopago.model.CardToken;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.PayerCost;
@@ -53,7 +55,6 @@ public class PaymentVaultActivity extends AppCompatActivity {
     protected CardToken mCardToken;
     protected Issuer mSelectedIssuer;
     protected PayerCost mSelectedPayerCost;
-    protected ShoppingCartViewController mShoppingCartController;
     protected List<PaymentMethod> mPaymentMethods;
     protected Boolean mEditing;
 
@@ -63,6 +64,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
     protected View mContentView;
     protected MPTextView mActivityTitle;
     protected MPTextView mCancelTextView;
+
     // Current values
     protected PaymentMethodSearch mPaymentMethodSearch;
 
@@ -84,6 +86,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
     protected String mPurchaseTitle;
     protected String mItemImageUri;
     protected String mCurrencyId;
+    protected ShoppingCartFragment mShoppingCartFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -261,15 +264,15 @@ public class PaymentVaultActivity extends AppCompatActivity {
                 onCancelClicked();
             }
         });
-        mShoppingCartIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mShoppingCartController.toggle(true);
-            }
-        });
         mContentView = findViewById(R.id.contentLayout);
-        mShoppingCartController = new ShoppingCartViewController(this, mShoppingCartIcon, mItemImageUri, mPurchaseTitle, PURCHASE_TITLE_MAX_LENGTH,
-                mAmount, mCurrencyId, false, mContentView);
+        mShoppingCartFragment = ShoppingCartFragment.newInstance(mItemImageUri, mPurchaseTitle, mAmount, mCurrencyId);
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.shoppingCartFragment, mShoppingCartFragment)
+                .hide(mShoppingCartFragment)
+                .commit();
+        mShoppingCartFragment.setToggler(mShoppingCartIcon);
+        mShoppingCartFragment.setViewBelow(mContentView);
     }
 
     protected void initializeGroupRecyclerView() {
@@ -382,8 +385,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
 
         if(requestCode == MercadoPago.GUESSING_CARD_REQUEST_CODE) {
             resolveGuessingCardRequest(resultCode, data);
-        }
-        else if (requestCode == MercadoPago.PAYMENT_METHODS_REQUEST_CODE) {
+        } else if (requestCode == MercadoPago.PAYMENT_METHODS_REQUEST_CODE) {
             resolvePaymentMethodsRequest(resultCode, data);
         }
         else if (requestCode == MercadoPago.PAYMENT_VAULT_REQUEST_CODE) {
