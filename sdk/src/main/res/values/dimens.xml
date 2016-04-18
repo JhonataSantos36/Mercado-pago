@@ -22,7 +22,7 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="toolbar_height">55dp</dimen>
-    <dimen name="list_item_height">60dp</dimen>
+    <dimen name="list_item_height">55dp</dimen>
     <dimen name="list_item_height_large">72dp</dimen>
     <dimen name="mpsdk_shopping_cart_height">120dp</dimen>
 </resources>

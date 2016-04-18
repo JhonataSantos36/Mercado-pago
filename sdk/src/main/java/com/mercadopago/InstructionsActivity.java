@@ -42,6 +42,7 @@ public class InstructionsActivity extends AppCompatActivity {
     protected MPTextView mTertiaryInfo;
     protected MPTextView mAccreditationMessage;
     protected MPButton mActionButton;
+    protected MPTextView mExitTextView;
 
     //Params
     protected Payment mPayment;
@@ -181,5 +182,12 @@ public class InstructionsActivity extends AppCompatActivity {
         mTertiaryInfo = (MPTextView) findViewById(R.id.tertiaryInfo);
         mAccreditationMessage = (MPTextView) findViewById(R.id.accreditationMessage);
         mActionButton = (MPButton) findViewById(R.id.actionButton);
+        mExitTextView = (MPTextView) findViewById(R.id.exitTextView);
+        mExitTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
     }
 }

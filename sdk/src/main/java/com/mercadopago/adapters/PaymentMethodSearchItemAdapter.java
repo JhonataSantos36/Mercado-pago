@@ -6,15 +6,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 
 import com.mercadopago.R;
 import com.mercadopago.callbacks.PaymentMethodSearchCallback;
-import com.mercadopago.model.Instruction;
-import com.mercadopago.model.PaymentMethodSearch;
 import com.mercadopago.model.PaymentMethodSearchItem;
 import com.mercadopago.util.MercadoPagoUtil;
-import com.mercadopago.util.ScaleUtil;
 import com.mercadopago.views.MPTextView;
 
 import java.util.List;
@@ -48,11 +44,11 @@ public class PaymentMethodSearchItemAdapter extends RecyclerView.Adapter<Payment
         View view;
         if(itemNeedsDescription(item)) {
             view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.pm_search_item_row, parent, false);
+                    .inflate(R.layout.row_pm_search_item, parent, false);
         }
         else {
             view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.pm_search_pm_item_row, parent, false);
+                    .inflate(R.layout.row_pm_search_item_large, parent, false);
         }
         return view;
     }
