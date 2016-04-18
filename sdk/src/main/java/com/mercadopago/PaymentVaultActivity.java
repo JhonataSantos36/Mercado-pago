@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.support.design.widget.AppBarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -64,6 +65,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
     protected View mContentView;
     protected MPTextView mActivityTitle;
     protected MPTextView mCancelTextView;
+    protected AppBarLayout mAppBar;
 
     // Current values
     protected PaymentMethodSearch mPaymentMethodSearch;
@@ -273,6 +275,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
                 .commit();
         mShoppingCartFragment.setToggler(mShoppingCartIcon);
         mShoppingCartFragment.setViewBelow(mContentView);
+        mAppBar = (AppBarLayout) findViewById(R.id.appBar);
     }
 
     protected void initializeGroupRecyclerView() {
@@ -284,7 +287,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
     private void initPaymentMethodSearch() {
         String initialTitle = getString(R.string.mpsdk_title_activity_payment_vault);
         setActivityTitle(initialTitle);
-        LayoutUtil.showProgressLayout(this);
+        showProgress();
         getPaymentMethodSearch();
     }
 
@@ -306,7 +309,6 @@ public class PaymentVaultActivity extends AppCompatActivity {
                     mPaymentMethodSearch = paymentMethodSearch;
                     getPaymentMethodsAsync();
                 }
-
             }
 
             @Override
@@ -332,8 +334,18 @@ public class PaymentVaultActivity extends AppCompatActivity {
     }
 
     protected void setSearchLayout() {
-        LayoutUtil.showRegularLayout(mActivity);
+        showRegularLayout();
         populateSearchList(mPaymentMethodSearch.getGroups());
+    }
+
+    private void showProgress() {
+        mAppBar.setVisibility(View.INVISIBLE);
+        LayoutUtil.showProgressLayout(this);
+    }
+
+    private void showRegularLayout() {
+        mAppBar.setVisibility(View.VISIBLE);
+        LayoutUtil.showRegularLayout(mActivity);
     }
 
     protected void populateSearchList(List<PaymentMethodSearchItem> items) {

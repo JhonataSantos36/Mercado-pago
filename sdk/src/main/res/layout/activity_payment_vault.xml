@@ -10,6 +10,7 @@
     <include layout="@layout/view_progress_bar"/>
     <android.support.design.widget.AppBarLayout
         app:elevation="0dp"
+        android:id="@+id/appBar"
         android:background="@null"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
