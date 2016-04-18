@@ -87,7 +87,7 @@ public class ShoppingCartFragment extends Fragment {
 
     private void fillData() {
         String truncatedTitle = getFormattedPurchaseTitle();
-        itemDescriptionTextView.setText(mPurchaseTitle);
+        itemDescriptionTextView.setText(truncatedTitle);
         itemAmountTextView.setText(getAmountLabel(mAmount, mCurrencyId));
         setItemImage();
     }
@@ -95,22 +95,18 @@ public class ShoppingCartFragment extends Fragment {
     protected String getFormattedPurchaseTitle() {
         if(mPurchaseTitle != null) {
             if (mPurchaseTitle.length() > PURCHASE_TITLE_MAX_LENGTH) {
-                mPurchaseTitle = mPurchaseTitle.substring(0, PURCHASE_TITLE_MAX_LENGTH-1);
+                mPurchaseTitle = mPurchaseTitle.substring(0, PURCHASE_TITLE_MAX_LENGTH - 1);
                 mPurchaseTitle = mPurchaseTitle + "…";
             }
-            return mPurchaseTitle;
         }
-        else {
-            return mPurchaseTitle;
-        }
+        return mPurchaseTitle;
     }
 
     private void setItemImage() {
         if(mPictureUrl != null && !mPictureUrl.isEmpty()) {
             Picasso.with(getContext()).load(mPictureUrl).into(mItemImageView);
         }
-        else
-        {
+        else {
             int dpAsPixels = ScaleUtil.getPxFromDp(24, getContext());
             mItemImageView.setPadding(dpAsPixels, dpAsPixels, dpAsPixels, dpAsPixels);
         }
@@ -132,80 +128,105 @@ public class ShoppingCartFragment extends Fragment {
 
     public void toggle() {
         if(!isItemShown()) {
-            showItemInfo();
+            mImageViewTogglerShoppingCart.setImageResource(R.drawable.close);
+            showShoppingCart();
         }
         else {
-            hideItemInfo();
+            mImageViewTogglerShoppingCart.setImageResource(R.drawable.icon_cart);
+            hideShoppingCart();
         }
     }
 
-    public boolean isItemShown() {
-        return getView().isShown();
+    private boolean isItemShown() {
+        return getView() != null && getView().isShown();
     }
 
-    public void showItemInfo() {
-        if(mImageViewTogglerShoppingCart != null) {
-            mImageViewTogglerShoppingCart.setImageResource(R.drawable.close);
+    private void showShoppingCart() {
+        //TODO: ask for new assets
+        int dpAsPixels = ScaleUtil.getPxFromDp(12, getContext());
+        mImageViewTogglerShoppingCart.setPadding(dpAsPixels, dpAsPixels, dpAsPixels, dpAsPixels);
 
-            int dpAsPixels = ScaleUtil.getPxFromDp(12, getContext());
-            mImageViewTogglerShoppingCart.setPadding(dpAsPixels, dpAsPixels, dpAsPixels, dpAsPixels);
-
-            getActivity().getSupportFragmentManager()
-                    .beginTransaction()
-                    .setCustomAnimations(R.anim.slide_up_to_down_in, R.anim.slide_down_to_top_out)
-                    .show(this)
-                    .commit();
-
-            animateViewBelowIn();
-        }
-    }
-
-    private void animateViewBelowIn() {
-
-        int shoppingCartHeight = getContext().getResources().getDimensionPixelSize(R.dimen.mpsdk_shopping_cart_height);
-        TranslateAnimation leavePlaceForShoppingCartAnimation =
-                new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF, 0,
-                        Animation.ABSOLUTE, -shoppingCartHeight, Animation.ABSOLUTE, 0);
-        leavePlaceForShoppingCartAnimation.setDuration(getResources().getInteger(android.R.integer.config_mediumAnimTime));
+        Animation leavePlaceForShoppingCartAnimation = getLeaveSpaceForCartAnimation();
+        leavePlaceForShoppingCartAnimation.setAnimationListener(showCartOnAnimationEnd());
         mViewBelow.startAnimation(leavePlaceForShoppingCartAnimation);
     }
 
-    public void hideItemInfo() {
-        if(mImageViewTogglerShoppingCart != null) {
-            mImageViewTogglerShoppingCart.setImageResource(R.drawable.icon_cart);
-            int dpAsPixels = ScaleUtil.getPxFromDp(8, getContext());
-            mImageViewTogglerShoppingCart.setPadding(dpAsPixels, dpAsPixels, dpAsPixels, dpAsPixels);
+    private Animation.AnimationListener showCartOnAnimationEnd() {
+        return new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {}
 
-            Animation hideAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.slide_down_to_top_out);
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                showFragment();
+            }
 
-            final Fragment fragmentToHide = this;
-            hideAnimation.setAnimationListener(new Animation.AnimationListener() {
-                @Override
-                public void onAnimationStart(Animation animation) {}
-
-                @Override
-                public void onAnimationEnd(Animation animation) {
-                    getActivity().getSupportFragmentManager()
-                            .beginTransaction()
-                            .setCustomAnimations(R.anim.slide_down_to_top_out, R.anim.slide_down_to_top_out)
-                            .replace(R.id.shoppingCartFragment, fragmentToHide)
-                            .hide(fragmentToHide)
-                            .commit();
-                }
-
-                @Override
-                public void onAnimationRepeat(Animation animation) {}
-            });
-            getView().startAnimation(hideAnimation);
-        }
+            @Override
+            public void onAnimationRepeat(Animation animation) {}
+        };
     }
 
-    private void animateViewBelowOut() {
-        int shoppingCartHeight = getContext().getResources().getDimensionPixelSize(R.dimen.mpsdk_shopping_cart_height);
-        TranslateAnimation collapseShoppingCartAnimation = new TranslateAnimation(
-                Animation.RELATIVE_TO_SELF, 0, 0, -shoppingCartHeight);
+    private void showFragment() {
+        getActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .setCustomAnimations(R.anim.slide_up_to_down_in, R.anim.slide_down_to_top_out)
+                .show(this)
+                .commit();
+    }
 
-        collapseShoppingCartAnimation.setDuration(750);
+    private Animation getLeaveSpaceForCartAnimation() {
+        int shoppingCartHeight = getContext().getResources().getDimensionPixelSize(R.dimen.mpsdk_shopping_cart_height);
+        TranslateAnimation leavePlaceForShoppingCartAnimation =
+                new TranslateAnimation(0, 0, 0, shoppingCartHeight);
+        leavePlaceForShoppingCartAnimation.setDuration(getResources().getInteger(android.R.integer.config_mediumAnimTime));
+        leavePlaceForShoppingCartAnimation.setInterpolator(new AccelerateDecelerateInterpolator());
+        return leavePlaceForShoppingCartAnimation;
+    }
+
+    public void hideShoppingCart() {
+
+        //TODO: ask for new assets
+        int dpAsPixels = ScaleUtil.getPxFromDp(8, getContext());
+        mImageViewTogglerShoppingCart.setPadding(dpAsPixels, dpAsPixels, dpAsPixels, dpAsPixels);
+
+        Animation hideAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.slide_down_to_top_out);
+        hideAnimation.setAnimationListener(collapseCartSpaceOnEnd());
+        if(getView() != null) {
+            getView().startAnimation(hideAnimation);
+        }
+
+    }
+
+    private Animation.AnimationListener collapseCartSpaceOnEnd() {
+        return new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {}
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                hideFragment();
+                collapseCartSpace();
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {}
+        };
+    }
+
+    private void hideFragment() {
+        getActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .setCustomAnimations(R.anim.slide_down_to_top_out, R.anim.slide_down_to_top_out)
+                .hide(this)
+                .commit();
+    }
+
+    private void collapseCartSpace() {
+        int shoppingCartHeight = getContext().getResources().getDimensionPixelSize(R.dimen.mpsdk_shopping_cart_height);
+        TranslateAnimation collapseShoppingCartAnimation = new TranslateAnimation(0, 0, shoppingCartHeight, 0);
+
+        collapseShoppingCartAnimation.setDuration(getResources().getInteger(android.R.integer.config_mediumAnimTime));
+        collapseShoppingCartAnimation.setInterpolator(new AccelerateDecelerateInterpolator());
         mViewBelow.startAnimation(collapseShoppingCartAnimation);
     }
 

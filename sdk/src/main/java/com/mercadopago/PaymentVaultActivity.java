@@ -1,8 +1,6 @@
 package com.mercadopago;
 
 import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.support.design.widget.AppBarLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -270,7 +268,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
         mShoppingCartFragment = ShoppingCartFragment.newInstance(mItemImageUri, mPurchaseTitle, mAmount, mCurrencyId);
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.shoppingCartFragment, mShoppingCartFragment)
+                .add(R.id.shoppingCartFragment, mShoppingCartFragment)
                 .hide(mShoppingCartFragment)
                 .commit();
         mShoppingCartFragment.setToggler(mShoppingCartIcon);

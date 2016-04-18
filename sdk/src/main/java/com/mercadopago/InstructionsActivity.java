@@ -115,7 +115,9 @@ public class InstructionsActivity extends AppCompatActivity {
     protected void setReferencesInformation(Instruction instruction) {
         LinearLayout.LayoutParams marginParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT);
-        marginParams.setMargins(0, ScaleUtil.getPxFromDp(7, this), 0, ScaleUtil.getPxFromDp(3, this));
+        int marginTop = ScaleUtil.getPxFromDp(7, this);
+        int marginBottom = ScaleUtil.getPxFromDp(3, this);
+        marginParams.setMargins(0, marginTop, 0, ScaleUtil.getPxFromDp(marginBottom, this));
         for(InstructionReference reference : instruction.getReferences()) {
             MPTextView currentTitleTextView = new MPTextView(this);
             MPTextView currentValueTextView = new MPTextView(this);
