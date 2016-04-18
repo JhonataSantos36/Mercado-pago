@@ -6,6 +6,7 @@ import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.TranslateAnimation;
@@ -142,44 +143,6 @@ public class ShoppingCartFragment extends Fragment {
         return getView().isShown();
     }
 
-    public void hideItemInfo() {
-        if(mImageViewTogglerShoppingCart != null) {
-            mImageViewTogglerShoppingCart.setImageResource(R.drawable.icon_cart);
-            int dpAsPixels = ScaleUtil.getPxFromDp(8, getContext());
-            mImageViewTogglerShoppingCart.setPadding(dpAsPixels, dpAsPixels, dpAsPixels, dpAsPixels);
-
-            Animation hideAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.slide_down_to_top_out);
-
-            final Fragment fragmentToHide = this;
-            hideAnimation.setAnimationListener(new Animation.AnimationListener() {
-                @Override
-                public void onAnimationStart(Animation animation) {}
-                @Override
-                public void onAnimationEnd(Animation animation) {
-                    getActivity().getSupportFragmentManager()
-                            .beginTransaction()
-                            .setCustomAnimations(R.anim.slide_down_to_top_out, R.anim.slide_down_to_top_out)
-                            .replace(R.id.shoppingCartFragment, fragmentToHide)
-                            .hide(fragmentToHide)
-                            .commit();
-                }
-                @Override
-                public void onAnimationRepeat(Animation animation) {}
-            });
-            getView().startAnimation(hideAnimation);
-        }
-        animateViewBelowOut();
-    }
-
-    private void animateViewBelowOut() {
-        int shoppingCartHeight = getContext().getResources().getDimensionPixelSize(R.dimen.mpsdk_shopping_cart_height);
-        TranslateAnimation collapseShoppingCartAnimation = new TranslateAnimation(
-                Animation.RELATIVE_TO_SELF, 0, 0, -shoppingCartHeight);
-
-        collapseShoppingCartAnimation.setDuration(getContext().getResources().getInteger(android.R.integer.config_mediumAnimTime));
-        mViewBelow.startAnimation(collapseShoppingCartAnimation);
-    }
-
     public void showItemInfo() {
         if(mImageViewTogglerShoppingCart != null) {
             mImageViewTogglerShoppingCart.setImageResource(R.drawable.close);
@@ -192,18 +155,58 @@ public class ShoppingCartFragment extends Fragment {
                     .setCustomAnimations(R.anim.slide_up_to_down_in, R.anim.slide_down_to_top_out)
                     .show(this)
                     .commit();
+
+            animateViewBelowIn();
         }
-        animateViewBelowIn();
     }
 
     private void animateViewBelowIn() {
 
         int shoppingCartHeight = getContext().getResources().getDimensionPixelSize(R.dimen.mpsdk_shopping_cart_height);
-        TranslateAnimation leavePlaceForShoppingCartAnimation = new TranslateAnimation(
-                Animation.RELATIVE_TO_SELF, 0, -shoppingCartHeight, 0);
-
-        leavePlaceForShoppingCartAnimation.setDuration(getContext().getResources().getInteger(android.R.integer.config_mediumAnimTime));
+        TranslateAnimation leavePlaceForShoppingCartAnimation =
+                new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF, 0,
+                        Animation.ABSOLUTE, -shoppingCartHeight, Animation.ABSOLUTE, 0);
+        leavePlaceForShoppingCartAnimation.setDuration(getResources().getInteger(android.R.integer.config_mediumAnimTime));
         mViewBelow.startAnimation(leavePlaceForShoppingCartAnimation);
+    }
+
+    public void hideItemInfo() {
+        if(mImageViewTogglerShoppingCart != null) {
+            mImageViewTogglerShoppingCart.setImageResource(R.drawable.icon_cart);
+            int dpAsPixels = ScaleUtil.getPxFromDp(8, getContext());
+            mImageViewTogglerShoppingCart.setPadding(dpAsPixels, dpAsPixels, dpAsPixels, dpAsPixels);
+
+            Animation hideAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.slide_down_to_top_out);
+
+            final Fragment fragmentToHide = this;
+            hideAnimation.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {}
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    getActivity().getSupportFragmentManager()
+                            .beginTransaction()
+                            .setCustomAnimations(R.anim.slide_down_to_top_out, R.anim.slide_down_to_top_out)
+                            .replace(R.id.shoppingCartFragment, fragmentToHide)
+                            .hide(fragmentToHide)
+                            .commit();
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {}
+            });
+            getView().startAnimation(hideAnimation);
+        }
+    }
+
+    private void animateViewBelowOut() {
+        int shoppingCartHeight = getContext().getResources().getDimensionPixelSize(R.dimen.mpsdk_shopping_cart_height);
+        TranslateAnimation collapseShoppingCartAnimation = new TranslateAnimation(
+                Animation.RELATIVE_TO_SELF, 0, 0, -shoppingCartHeight);
+
+        collapseShoppingCartAnimation.setDuration(750);
+        mViewBelow.startAnimation(collapseShoppingCartAnimation);
     }
 
     public void setViewBelow(View viewBelow) {

@@ -21,6 +21,7 @@ import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.CurrenciesUtil;
 import com.mercadopago.util.LayoutUtil;
+import com.mercadopago.util.ScaleUtil;
 import com.mercadopago.views.MPButton;
 import com.mercadopago.views.MPTextView;
 
@@ -113,7 +114,7 @@ public class InstructionsActivity extends AppCompatActivity {
     protected void setReferencesInformation(Instruction instruction) {
         LinearLayout.LayoutParams marginParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT);
-        marginParams.setMargins(0, 10, 0, 10);
+        marginParams.setMargins(0, ScaleUtil.getPxFromDp(7, this), 0, ScaleUtil.getPxFromDp(3, this));
         for(InstructionReference reference : instruction.getReferences()) {
             MPTextView currentTitleTextView = new MPTextView(this);
             MPTextView currentValueTextView = new MPTextView(this);
@@ -126,7 +127,7 @@ public class InstructionsActivity extends AppCompatActivity {
                     mReferencesLayout.addView(currentTitleTextView);
                 }
 
-                currentValueTextView.setText(Html.fromHtml("<b>" + reference.getFormattedReference() + "</b>"));
+                currentValueTextView.setText(reference.getFormattedReference());
                 currentValueTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimensionPixelSize(R.dimen.mpsdk_large_text));
                 currentTitleTextView.setLayoutParams(marginParams);
                 mReferencesLayout.addView(currentValueTextView);
