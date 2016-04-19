@@ -7,7 +7,6 @@ import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.test.runner.lifecycle.ActivityLifecycleMonitorRegistry;
 import android.test.suitebuilder.annotation.LargeTest;
-import android.view.View;
 
 
 import com.mercadopago.model.CardToken;
@@ -97,7 +96,7 @@ public class PaymentVaultActivityTest {
         assertTrue(mTestRule.getActivity().mPurchaseTitle != null);
     }
 
-    @Test
+    /*@Test
     public void ifPurchaseTitleLengthIsOverMaxTruncateIt() {
 
         Integer purchaseTitleMaxLength = PaymentVaultActivity.PURCHASE_TITLE_MAX_LENGTH;
@@ -112,8 +111,8 @@ public class PaymentVaultActivityTest {
 
         mTestRule.launchActivity(validStartIntent);
 
-        assertTrue(mTestRule.getActivity().mShoppingCartController.getPurchaseTitle().length() <= purchaseTitleMaxLength);
-    }
+        onView(withId(R.id.pur))
+    }*/
 
     @Test
     public void setMaxInstallmentsOnCreateIfReceived() {
@@ -328,9 +327,7 @@ public class PaymentVaultActivityTest {
 
         PaymentVaultActivity activity = mTestRule.launchActivity(validStartIntent);
 
-        View itemInfoLayout = activity.findViewById(R.id.itemInfoLayout);
-
-        assertTrue(itemInfoLayout.getVisibility() != View.VISIBLE);
+        assertTrue(activity.mShoppingCartFragment.isHidden());
     }
 
     @Test
@@ -343,7 +340,12 @@ public class PaymentVaultActivityTest {
         mTestRule.addApiResponseToQueue(paymentMethodList, 200, "");
 
         mTestRule.launchActivity(validStartIntent);
+
+        onView(withId(R.id.groupsList)).perform(
+                RecyclerViewActions.actionOnItemAtPosition(1, click()));
+
         onView(withContentDescription(R.string.abc_action_bar_up_description)).perform(click());
+
         mTestRule.isActivityFinishedOrFinishing();
     }
 
@@ -358,11 +360,10 @@ public class PaymentVaultActivityTest {
 
         PaymentVaultActivity activity = mTestRule.launchActivity(validStartIntent);
 
-        View itemInfoLayout = activity.findViewById(R.id.itemInfoLayout);
-        assertTrue(itemInfoLayout.getVisibility() != View.VISIBLE);
+        assertTrue(activity.mShoppingCartFragment.isHidden());
 
         onView(withId(R.id.shoppingCartIcon)).perform(click());
-        assertEquals(itemInfoLayout.getVisibility(), View.VISIBLE);
+        assertTrue(!activity.mShoppingCartFragment.isHidden());
     }
 
     @Test
@@ -376,15 +377,14 @@ public class PaymentVaultActivityTest {
 
         PaymentVaultActivity activity = mTestRule.launchActivity(validStartIntent);
 
-        View itemInfoLayout = activity.findViewById(R.id.itemInfoLayout);
-        assertTrue(itemInfoLayout.getVisibility() != View.VISIBLE);
+        assertTrue(activity.mShoppingCartFragment.isHidden());
 
         onView(withId(R.id.shoppingCartIcon)).perform(click());
-        assertEquals(itemInfoLayout.getVisibility(), View.VISIBLE);
+        assertTrue(!activity.mShoppingCartFragment.isHidden());
 
 
         onView(withId(R.id.shoppingCartIcon)).perform(click());
-        assertTrue(itemInfoLayout.getVisibility() != View.VISIBLE);
+        assertTrue(activity.mShoppingCartFragment.isHidden());
     }
 
     //VALIDATIONS TESTS

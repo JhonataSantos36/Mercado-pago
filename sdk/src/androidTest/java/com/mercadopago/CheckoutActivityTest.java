@@ -262,7 +262,7 @@ public class CheckoutActivityTest {
         intending(hasComponent(PaymentVaultActivity.class.getName())).respondWith(result);
         CheckoutActivity activity = mTestRule.launchActivity(validStartIntent);
 
-        View itemInfoLayout = activity.findViewById(R.id.itemInfoLayout);
+        View itemInfoLayout = activity.findViewById(R.id.shoppingCartFragment);
         assertTrue(itemInfoLayout.getVisibility() == View.VISIBLE);
     }
 
@@ -317,25 +317,6 @@ public class CheckoutActivityTest {
                 RecyclerViewActions.actionOnItemAtPosition(1, click()));
         onView(withId(R.id.termsAndConditions)).perform(click());
         intended(hasComponent(TermsAndConditionsActivity.class.getName()));
-    }
-
-    @Test
-    public void ifNavigationBackClickedGoBack() {
-        String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
-        String paymentMethodsJson = StaticMock.getCompletePaymentMethodsJson();
-
-        mTestRule.addApiResponseToQueue(paymentMethodSearchJson, 200, "");
-        mTestRule.addApiResponseToQueue(paymentMethodsJson, 200, "");
-
-        mTestRule.launchActivity(validStartIntent);
-
-        onView(withId(R.id.groupsList)).perform(
-                RecyclerViewActions.actionOnItemAtPosition(1, click()));
-
-        onView(withId(R.id.groupsList)).perform(
-                RecyclerViewActions.actionOnItemAtPosition(1, click()));
-        onView(withContentDescription(R.string.abc_action_bar_up_description)).perform(click());
-        mTestRule.isActivityFinishedOrFinishing();
     }
 
     @Test

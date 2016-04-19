@@ -38,13 +38,12 @@
             <com.mercadopago.views.MPTextView
                 android:id="@+id/title"
                 android:gravity="center"
-                android:text="Listo, ahora paga X en tu sucursal mas cercana."
                 android:layout_centerHorizontal="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 style="@style/mpsdk_large_label"
-                android:paddingLeft="25dp"
-                android:paddingRight="25dp"
+                android:paddingLeft="22dp"
+                android:paddingRight="22dp"
                 android:layout_below="@+id/imageCashSign"/>
         </RelativeLayout>
         <View
@@ -81,7 +80,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/primaryInfo"
-                        android:layout_marginBottom="14dp"
+                        android:layout_marginBottom="10dp"
                         style="@style/mpsdk_small_dark_light"/>
                     <LinearLayout
                         android:layout_width="match_parent"

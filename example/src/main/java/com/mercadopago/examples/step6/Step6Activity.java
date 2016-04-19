@@ -15,6 +15,8 @@ import com.mercadopago.model.ApiException;
 import com.mercadopago.model.CheckoutIntent;
 import com.mercadopago.model.CheckoutPreference;
 import com.mercadopago.model.Item;
+import com.mercadopago.model.Payer;
+import com.mercadopago.model.Payment;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;
 
@@ -32,15 +34,11 @@ public class Step6Activity extends ExampleActivity {
         if (requestCode == MercadoPago.CHECKOUT_REQUEST_CODE) {
             if (resultCode == RESULT_OK && data != null) {
                 // Set message
-                String msg = "external reference: " + data.getStringExtra("externalReference") + "\n";
-                msg += "payment id: " + Long.toString(data.getLongExtra("paymentId", 0L)) + "\n";
-                msg += "payment status: " + data.getStringExtra("paymentStatus") + "\n";
-                msg += "payment type: " + data.getStringExtra("paymentType") + "\n";
-                msg += "preference id: " + data.getStringExtra("preferenceId");
+                Payment payment = (Payment) data.getSerializableExtra("payment");
 
                 new AlertDialog.Builder(this)
                         .setTitle("Test")
-                        .setMessage(msg)
+                        .setMessage("Payment Id:" + payment.getId())
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 // continue with delete
@@ -49,7 +47,6 @@ public class Step6Activity extends ExampleActivity {
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .show();
             } else {
-
                 if ((data != null) && (data.getSerializableExtra("apiException") != null)) {
                     ApiException apiException = (ApiException) data.getSerializableExtra("apiException");
                     Toast.makeText(getApplicationContext(), apiException.getMessage(), Toast.LENGTH_LONG).show();

@@ -43,10 +43,13 @@ public class CheckoutActivity extends AppCompatActivity {
     protected MercadoPago mMercadoPago;
     protected Activity mActivity;
     protected boolean mSupportMPApp = true;
+
     protected PaymentMethod mSelectedPaymentMethod;
     protected Issuer mSelectedIssuer;
     protected PayerCost mSelectedPayerCost;
     protected Token mCreatedToken;
+    private Payment mCreatedPayment;
+
     protected String mPurchaseTitle;
     protected ShoppingCartFragment mShoppingCartFragment;
     protected String mErrorMessage;
@@ -130,7 +133,7 @@ public class CheckoutActivity extends AppCompatActivity {
             public void onClick(View v) {
                 mPaymentMethodEditionRequested = true;
                 startPaymentVaultActivity();
-                animateBack();
+                animateBackToPaymentVault();
             }
         });
         mTermsAndConditionsTextView = (MPTextView) findViewById(R.id.termsAndConditions);
@@ -242,13 +245,20 @@ public class CheckoutActivity extends AppCompatActivity {
                     finish();
                 }
                 else {
-                    overridePendingTransition(R.anim.slide_right_to_left_in, R.anim.slide_right_to_left_out);
+                    animateBackFromPaymentEdition();
                 }
             }
         }
         else if (requestCode == MercadoPago.INSTRUCTIONS_REQUEST_CODE) {
+            Intent returnIntent = new Intent();
+            returnIntent.putExtra("payment", mCreatedPayment);
+            setResult(RESULT_OK, returnIntent);
             finish();
         }
+    }
+
+    private void animateBackFromPaymentEdition() {
+        overridePendingTransition(R.anim.slide_right_to_left_in, R.anim.slide_right_to_left_out);
     }
 
     private void showReviewAndConfirm(String paymentMethodInfo) {
@@ -290,17 +300,18 @@ public class CheckoutActivity extends AppCompatActivity {
         mMercadoPago.createPayment(mCheckoutPreference.getId(), mCheckoutPreference.getPayer().getEmail(), mSelectedPaymentMethod.getId(), null, null, null, new Callback<Payment>() {
             @Override
             public void success(Payment payment, Response response) {
+                mCreatedPayment = payment;
                 if (MercadoPagoUtil.isCardPaymentType(mSelectedPaymentMethod.getPaymentTypeId())) {
                     new MercadoPago.StartActivityBuilder()
                             .setActivity(mActivity)
-                            .setPayment(payment)
+                            .setPayment(mCreatedPayment)
                             .setPaymentMethod(mSelectedPaymentMethod)
                             .startCongratsActivity();
                 } else {
                     new MercadoPago.StartActivityBuilder()
                             .setPublicKey(mMerchantPublicKey)
                             .setActivity(mActivity)
-                            .setPayment(payment)
+                            .setPayment(mCreatedPayment)
                             .setPaymentMethod(mSelectedPaymentMethod)
                             .startInstructionsActivity();
                 }
@@ -313,15 +324,13 @@ public class CheckoutActivity extends AppCompatActivity {
         });
     }
 
-    @Override
-    public void onBackPressed() {
-        mPaymentMethodEditionRequested = false;
-        startPaymentVaultActivity();
-        animateBack();
+    private void animateBackToPaymentVault() {
+        overridePendingTransition(R.anim.slide_left_to_right_in, R.anim.silde_left_to_right_out);
     }
 
-    private void animateBack() {
-        overridePendingTransition(R.anim.slide_left_to_right_in, R.anim.silde_left_to_right_out);
+    protected void finishWithApiException(Intent data) {
+        setResult(RESULT_CANCELED, data);
+        finish();
     }
 
     public void onCancelClicked() {
@@ -329,4 +338,12 @@ public class CheckoutActivity extends AppCompatActivity {
         setResult(RESULT_CANCELED, returnIntent);
         finish();
     }
+
+    @Override
+    public void onBackPressed() {
+        mPaymentMethodEditionRequested = false;
+        startPaymentVaultActivity();
+        animateBackToPaymentVault();
+    }
+
 }
