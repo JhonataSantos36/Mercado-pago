@@ -19,8 +19,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:maxWidth="100dp"
-            android:maxHeight="30dp"
-            android:src="@drawable/serfin_bank_transfer"
+            android:maxHeight="25dp"
+            android:src="@drawable/cargavirtual"
             android:adjustViewBounds="true"
             android:id="@+id/image"
             android:layout_gravity="center_vertical"
@@ -62,5 +62,19 @@
             android:layout_alignLeft="@+id/comment"
             android:layout_alignStart="@+id/comment"
             android:layout_gravity="center_horizontal|bottom" />
+
+        <com.mercadopago.views.MPTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
+            android:gravity="center_vertical"
+            style="@style/mpsdk_list_label"
+            android:id="@+id/description"
+            android:layout_toRightOf="@+id/image"
+            android:layout_toEndOf="@+id/image"
+            android:layout_alignTop="@+id/image"
+            android:layout_above="@+id/comment" />
+
     </RelativeLayout>
 </RelativeLayout>

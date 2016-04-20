@@ -71,4 +71,8 @@ public class PaymentMethodSearchItem implements Serializable {
     public boolean hasChildren() {
         return children != null && children.size() != 0;
     }
+
+    public boolean hasDescription() {
+        return description != null && !description.isEmpty();
+    }
 }
