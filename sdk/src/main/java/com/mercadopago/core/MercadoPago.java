@@ -191,7 +191,13 @@ public class MercadoPago {
     public void getPaymentMethodSearch(BigDecimal amount, List<String> excludedPaymentTypes, List<String> excludedPaymentMethods, final Callback<PaymentMethodSearch> callback) {
 
         if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {
-            PaymentService service = mRestAdapterMPApi.create(PaymentService.class);
+            RestAdapter mockedRestAdapter = new RestAdapter.Builder()
+                    .setEndpoint("http://private-9376e-paymentmethodsmla.apiary-mock.com")
+                    .setLogLevel(Settings.RETROFIT_LOGGING)
+                    .setConverter(new GsonConverter(JsonUtil.getInstance().getGson()))
+                    .setClient(HttpClientUtil.getClient(this.mContext))
+                    .build();
+            PaymentService service = mockedRestAdapter.create(PaymentService.class);
 
             StringBuilder stringBuilder = new StringBuilder();
             if(excludedPaymentTypes != null) {

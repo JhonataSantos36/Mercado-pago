@@ -28,23 +28,36 @@
                     android:layout_height="wrap_content"
                     android:maxWidth="100dp"
                     android:maxHeight="30dp"
-                    android:src="@drawable/serfin_bank_transfer"
+                    android:src="@drawable/cargavirtual"
                     android:adjustViewBounds="true"
-                    android:id="@+id/payment_method_image"
+                    android:id="@+id/paymentMethodImage"
                     android:layout_gravity="center_vertical"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
-                    android:layout_above="@+id/payment_method_comment"/>
+                    android:layout_above="@+id/paymentMethodComment"/>
+
+                 <com.mercadopago.views.MPTextView
+                     android:layout_marginLeft="10dp"
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:gravity="center_vertical"
+                     style="@style/mpsdk_list_label"
+                     android:id="@+id/paymentMethodDescription"
+                     android:text="sarasa"
+                     android:layout_alignBottom="@+id/paymentMethodImage"
+                     android:layout_toEndOf="@+id/paymentMethodImage"
+                     android:layout_alignTop="@+id/paymentMethodImage"
+                     android:layout_toRightOf="@+id/paymentMethodImage" />
 
                 <com.mercadopago.views.MPTextView
-                    android:id="@+id/payment_method_comment"
+                    android:id="@+id/paymentMethodComment"
                     android:layout_marginBottom="12dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
-                    android:layout_alignStart="@+id/payment_method_image"
-                    android:layout_alignLeft="@+id/payment_method_image"
+                    android:layout_alignStart="@+id/paymentMethodImage"
+                    android:layout_alignLeft="@+id/paymentMethodImage"
                     tools:text="Hola, soy un comentario"
                     app:fontStyle="regular"
                     style="@style/mpsdk_list_label_comment"/>

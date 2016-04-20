@@ -56,6 +56,7 @@ public class CheckoutActivity extends AppCompatActivity {
     protected boolean mPaymentMethodEditionRequested;
 
     //Controls
+    protected MPTextView mPaymentMethodDescriptionTextView;
     protected MPTextView mPaymentMethodCommentTextView;
     protected MPTextView mTermsAndConditionsTextView;
     protected MPTextView mCancelTextView;
@@ -125,8 +126,9 @@ public class CheckoutActivity extends AppCompatActivity {
     }
 
     private void initializeActivityControls() {
-        mPaymentMethodCommentTextView = (MPTextView) findViewById(R.id.payment_method_comment);
-        mPaymentMethodImageView = (ImageView) findViewById(R.id.payment_method_image);
+        mPaymentMethodDescriptionTextView = (MPTextView) findViewById(R.id.paymentMethodDescription);
+        mPaymentMethodCommentTextView = (MPTextView) findViewById(R.id.paymentMethodComment);
+        mPaymentMethodImageView = (ImageView) findViewById(R.id.paymentMethodImage);
         mEditPaymentMethodImageView = (ImageView) findViewById(R.id.imageEdit);
         mEditPaymentMethodImageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -235,7 +237,7 @@ public class CheckoutActivity extends AppCompatActivity {
 
                 mSelectedPaymentMethod = (PaymentMethod) data.getSerializableExtra("paymentMethod");
 
-                showReviewAndConfirm(data.getStringExtra("paymentMethodInfo"));
+                showReviewAndConfirm(data.getStringExtra("paymentMethodComment"), data.getStringExtra("paymentMethodDescription"));
 
             }
             else if (resultCode == RESULT_CANCELED) {
@@ -261,8 +263,8 @@ public class CheckoutActivity extends AppCompatActivity {
         overridePendingTransition(R.anim.slide_right_to_left_in, R.anim.slide_right_to_left_out);
     }
 
-    private void showReviewAndConfirm(String paymentMethodInfo) {
-        drawPaymentMethodRow(paymentMethodInfo);
+    private void showReviewAndConfirm(String paymentMethodInfo, String paymentMethodDescription) {
+        drawPaymentMethodRow(paymentMethodInfo, paymentMethodDescription);
         drawTermsAndConditionsText();
         setAmountLabel();
     }
@@ -279,8 +281,11 @@ public class CheckoutActivity extends AppCompatActivity {
         mTermsAndConditionsTextView.setText(Html.fromHtml(termsAndConditionsText.toString()));
     }
 
-    private void drawPaymentMethodRow(String paymentMethodInfo) {
-        mPaymentMethodCommentTextView.setText(paymentMethodInfo);
+    private void drawPaymentMethodRow(String paymentMethodComment, String paymentMethodDescription) {
+        mPaymentMethodCommentTextView.setText(paymentMethodComment);
+        if(paymentMethodDescription != null) {
+            mPaymentMethodDescriptionTextView.setText(paymentMethodDescription);
+        }
         int resourceId = MercadoPagoUtil.getPaymentMethodSearchItemIcon(this, mSelectedPaymentMethod.getId());
         mPaymentMethodImageView.setImageResource(resourceId);
     }

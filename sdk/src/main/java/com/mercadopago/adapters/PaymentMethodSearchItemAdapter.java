@@ -79,7 +79,7 @@ public class PaymentMethodSearchItemAdapter extends RecyclerView.Adapter<Payment
     public void onBindViewHolder(ViewHolder holder, int position) {
         PaymentMethodSearchItem paymentMethodSearchItem = mItems.get(position);
 
-        if(holder.mDescription != null) {
+        if(holder.mDescription != null && paymentMethodSearchItem.hasDescription()) {
             holder.mDescription.setText(paymentMethodSearchItem.getDescription());
         }
         if(paymentMethodSearchItem.getComment() != null && !paymentMethodSearchItem.getId().equals("bitcoin")) {
@@ -146,7 +146,7 @@ public class PaymentMethodSearchItemAdapter extends RecyclerView.Adapter<Payment
                 }
             });
 
-            mDescription = (MPTextView) itemView.findViewById(R.id.title);
+            mDescription = (MPTextView) itemView.findViewById(R.id.description);
             mComment = (MPTextView) itemView.findViewById(R.id.comment);
             mIcon = (ImageView) itemView.findViewById(R.id.image);
             mSeparator = itemView.findViewById(R.id.separator);

@@ -403,7 +403,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
     protected void resolvePaymentMethodsRequest(int resultCode, Intent data) {
         if(resultCode == RESULT_OK) {
             PaymentMethod paymentMethod = (PaymentMethod) data.getSerializableExtra("paymentMethod");
-            finishWithPaymentMethodResult(paymentMethod, "");
+            finishWithPaymentMethodResult(paymentMethod, "", "");
 
         } else {
             if ((data != null) && (data.getSerializableExtra("apiException") != null)) {
@@ -437,7 +437,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
                 if(selectedPaymentMethod == null) {
                     finishWithMismatchingPaymentMethod();
                 } else {
-                    finishWithPaymentMethodResult(selectedPaymentMethod, paymentMethodItem.getComment());
+                    finishWithPaymentMethodResult(selectedPaymentMethod, paymentMethodItem.getComment(), paymentMethodItem.getDescription());
                 }
             }
         };
@@ -474,10 +474,11 @@ public class PaymentVaultActivity extends AppCompatActivity {
         this.finish();
     }
 
-    protected void finishWithPaymentMethodResult(PaymentMethod paymentMethod, String paymentMethodInfo) {
+    protected void finishWithPaymentMethodResult(PaymentMethod paymentMethod, String paymentMethodComment, String paymentMethodDescription) {
         Intent returnIntent = new Intent();
         returnIntent.putExtra("paymentMethod", paymentMethod);
-        returnIntent.putExtra("paymentMethodInfo", paymentMethodInfo);
+        returnIntent.putExtra("paymentMethodComment", paymentMethodComment);
+        returnIntent.putExtra("paymentMethodDescription", paymentMethodDescription);
         this.setResult(Activity.RESULT_OK, returnIntent);
         this.finish();
         animatePaymentMethodSelection();
