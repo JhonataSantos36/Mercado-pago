@@ -58,19 +58,6 @@
             <com.mercadopago.views.MPTextView
                 android:layout_centerHorizontal="true"
                 android:layout_below="@+id/separator"
-                android:layout_marginTop="20dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/mpsdk_cancel_label"
-                android:textColor="@color/mpsdk_color_link"
-                android:textSize="@dimen/mpsdk_small_text"
-                android:id="@+id/cancelTextView"
-                app:fontStyle="regular"
-                style="@style/small_comment"/>
-
-            <com.mercadopago.views.MPTextView
-                android:layout_centerHorizontal="true"
-                android:layout_below="@id/cancelTextView"
                 android:layout_gravity="center"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="20dp"

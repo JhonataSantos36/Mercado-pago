@@ -29,7 +29,6 @@ import com.mercadopago.model.PaymentType;
 import com.mercadopago.model.Token;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.CurrenciesUtil;
-import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;
 import com.mercadopago.util.MercadoPagoUtil;
 import com.mercadopago.views.MPTextView;
@@ -43,8 +42,6 @@ import retrofit.RetrofitError;
 import retrofit.client.Response;
 
 public class PaymentVaultActivity extends AppCompatActivity {
-
-    protected static final Integer PURCHASE_TITLE_MAX_LENGTH = 50;
 
     // Local vars
     protected Activity mActivity;
@@ -62,7 +59,6 @@ public class PaymentVaultActivity extends AppCompatActivity {
     protected ImageView mShoppingCartIcon;
     protected View mContentView;
     protected MPTextView mActivityTitle;
-    protected MPTextView mCancelTextView;
     protected AppBarLayout mAppBar;
 
     // Current values
@@ -109,37 +105,37 @@ public class PaymentVaultActivity extends AppCompatActivity {
             initializeControls();
             setActivity();
 
-            boolean enableToolbarNavigation;
-            if (!isItemSelected()) {
+            if (!isItemSelectedStart()) {
                 initPaymentMethodSearch();
-                enableToolbarNavigation = false;
             } else {
                 showSelectedItemChildren();
-                enableToolbarNavigation = true;
             }
-            initializeToolbar(enableToolbarNavigation);
+            initializeToolbar();
         }
     }
 
-    private void initializeToolbar(boolean withNavigation) {
+    private void initializeToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-        if(withNavigation) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowHomeEnabled(true);
-            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onBackPressed();
-                }
-            });
-        }
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+
     }
 
     protected void getActivityParameters() {
-        if (this.getIntent().getSerializableExtra("selectedSearchItem") != null) {
+
+        if (isItemSelectedStart()) {
             mSelectedSearchItem = (PaymentMethodSearchItem) this.getIntent().getSerializableExtra("selectedSearchItem");
+            if(this.getIntent().getSerializableExtra("paymentMethodSearch") != null) {
+                mPaymentMethodSearch = (PaymentMethodSearch) this.getIntent().getSerializableExtra("paymentMethodSearch");
+            }
         }
 
         try {
@@ -180,12 +176,6 @@ public class PaymentVaultActivity extends AppCompatActivity {
             mDefaultInstallments = Integer.valueOf(this.getIntent().getStringExtra("defaultInstallments"));
         }
         mEditing = this.getIntent().getBooleanExtra("editing", false);
-
-        if (this.getIntent().getStringExtra("paymentMethods") != null) {
-            Gson gson = new Gson();
-            Type listType = new TypeToken<List<PaymentMethod>>(){}.getType();
-            mPaymentMethods = gson.fromJson(this.getIntent().getStringExtra("paymentMethods"), listType);
-        }
     }
 
     private void validateActivityParameters() {
@@ -257,13 +247,6 @@ public class PaymentVaultActivity extends AppCompatActivity {
         initializeGroupRecyclerView();
         mShoppingCartIcon = (ImageView) findViewById(R.id.shoppingCartIcon);
         mActivityTitle = (MPTextView) findViewById(R.id.title);
-        mCancelTextView = (MPTextView) findViewById(R.id.cancelTextView);
-        mCancelTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onCancelClicked();
-            }
-        });
         mContentView = findViewById(R.id.contentLayout);
         mShoppingCartFragment = ShoppingCartFragment.newInstance(mItemImageUri, mPurchaseTitle, mAmount, mCurrencyId);
         getSupportFragmentManager()
@@ -293,8 +276,8 @@ public class PaymentVaultActivity extends AppCompatActivity {
         this.mActivity = this;
     }
 
-    protected boolean isItemSelected() {
-        return mSelectedSearchItem != null;
+    protected boolean isItemSelectedStart() {
+        return this.getIntent().getSerializableExtra("selectedSearchItem") != null;
     }
 
     protected void getPaymentMethodSearch() {
@@ -305,23 +288,8 @@ public class PaymentVaultActivity extends AppCompatActivity {
                     finishWithEmptyPaymentMethodSearch();
                 } else {
                     mPaymentMethodSearch = paymentMethodSearch;
-                    getPaymentMethodsAsync();
+                    setSearchLayout();
                 }
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-                ApiUtil.finishWithApiException(mActivity, error);
-            }
-        });
-    }
-
-    private void getPaymentMethodsAsync() {
-        mMercadoPago.getPaymentMethods(new Callback<List<PaymentMethod>>() {
-            @Override
-            public void success(List<PaymentMethod> paymentMethods, Response response) {
-                mPaymentMethods = paymentMethods;
-                setSearchLayout();
             }
 
             @Override
@@ -356,7 +324,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
         mSearchItemsRecyclerView.setLayoutParams(layoutParams);
     }
 
-    private void startActivityForItem(PaymentMethodSearchItem groupIem) {
+    private void startActivityForSelectedItem(PaymentMethodSearchItem groupIem) {
         Intent intent = new Intent(this, PaymentVaultActivity.class);
         intent.putExtra("selectedSearchItem", groupIem);
         intent.putExtra("merchantPublicKey", mMerchantPublicKey);
@@ -364,7 +332,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
         intent.putExtra("amount", mAmount.toString());
         intent.putExtra("purchaseTitle", mPurchaseTitle);
         intent.putExtra("itemImageUri", mItemImageUri);
-        intent.putExtra("paymentMethods", JsonUtil.parseList(mPaymentMethods));
+        intent.putExtra("paymentMethodSearch", mPaymentMethodSearch);
         startActivityForResult(intent, MercadoPago.PAYMENT_VAULT_REQUEST_CODE);
         overridePendingTransition(R.anim.slide_right_to_left_in, R.anim.slide_right_to_left_out);
     }
@@ -448,13 +416,13 @@ public class PaymentVaultActivity extends AppCompatActivity {
         return new PaymentMethodSearchCallback() {
             @Override
             public void onGroupItemClicked(PaymentMethodSearchItem groupIem) {
-                startActivityForItem(groupIem);
+                startActivityForSelectedItem(groupIem);
             }
 
             @Override
             public void onPaymentTypeItemClicked(PaymentMethodSearchItem paymentTypeItem) {
                 if(paymentTypeItem.hasChildren()){
-                    startActivityForItem(paymentTypeItem);
+                    startActivityForSelectedItem(paymentTypeItem);
                 }
                 else {
                     startNextStepForPaymentType(paymentTypeItem.getId());
@@ -464,18 +432,12 @@ public class PaymentVaultActivity extends AppCompatActivity {
             @Override
             public void onPaymentMethodItemClicked(final PaymentMethodSearchItem paymentMethodItem) {
 
-                PaymentMethod requiredPaymentMethod = null;
-                for(PaymentMethod currentPaymentMethod : mPaymentMethods) {
-                    if(paymentMethodItem.getId().contains(currentPaymentMethod.getId())) {
-                        currentPaymentMethod.setId(paymentMethodItem.getId());
-                        requiredPaymentMethod = currentPaymentMethod;
-                        break;
-                    }
-                }
-                if(requiredPaymentMethod == null) {
+                PaymentMethod selectedPaymentMethod = mPaymentMethodSearch.getPaymentMethodBySearchItem(paymentMethodItem);
+
+                if(selectedPaymentMethod == null) {
                     finishWithMismatchingPaymentMethod();
                 } else {
-                    finishWithPaymentMethodResult(requiredPaymentMethod, paymentMethodItem.getComment());
+                    finishWithPaymentMethodResult(selectedPaymentMethod, paymentMethodItem.getComment());
                 }
             }
         };
@@ -561,15 +523,8 @@ public class PaymentVaultActivity extends AppCompatActivity {
         setResult(Activity.RESULT_CANCELED, returnIntent);
         finish();
 
-        if(isItemSelected()) {
+        if(isItemSelectedStart()) {
             overridePendingTransition(R.anim.slide_left_to_right_in, R.anim.silde_left_to_right_out);
         }
-    }
-
-    public void onCancelClicked() {
-        Intent returnIntent = new Intent();
-        returnIntent.putExtra("canceled", true);
-        setResult(Activity.RESULT_CANCELED, returnIntent);
-        finish();
     }
 }
