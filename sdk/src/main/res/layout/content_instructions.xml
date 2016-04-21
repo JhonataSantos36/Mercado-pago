@@ -80,7 +80,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/primaryInfo"
-                        android:layout_marginBottom="10dp"
+                        android:layout_marginBottom="15dp"
                         style="@style/mpsdk_small_dark_light"/>
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -89,7 +89,7 @@
                         android:orientation="vertical"/>
                         <com.mercadopago.views.MPButton
                             android:layout_marginTop="15dp"
-                            android:layout_marginBottom="15dp"
+                            android:layout_marginBottom="5dp"
                             android:layout_gravity="center_horizontal"
                             android:background="@drawable/button_instructions"
                             android:layout_width="174dp"

@@ -115,9 +115,9 @@ public class InstructionsActivity extends AppCompatActivity {
     protected void setReferencesInformation(Instruction instruction) {
         LinearLayout.LayoutParams marginParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT);
-        int marginTop = ScaleUtil.getPxFromDp(7, this);
-        int marginBottom = ScaleUtil.getPxFromDp(3, this);
-        marginParams.setMargins(0, marginTop, 0, ScaleUtil.getPxFromDp(marginBottom, this));
+        int marginTop = ScaleUtil.getPxFromDp(3, this);
+        int marginBottom = ScaleUtil.getPxFromDp(7, this);
+        marginParams.setMargins(0, marginTop, 0, marginBottom);
         for(InstructionReference reference : instruction.getReferences()) {
             MPTextView currentTitleTextView = new MPTextView(this);
             MPTextView currentValueTextView = new MPTextView(this);
@@ -130,12 +130,28 @@ public class InstructionsActivity extends AppCompatActivity {
                     mReferencesLayout.addView(currentTitleTextView);
                 }
 
-                currentValueTextView.setText(reference.getFormattedReference());
-                currentValueTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimensionPixelSize(R.dimen.mpsdk_large_text));
-                currentTitleTextView.setLayoutParams(marginParams);
+                String formattedReference = reference.getFormattedReference();
+                int referenceSize = getTextSizeForReference(formattedReference, reference.getSeparator());
+
+                currentValueTextView.setText(formattedReference);
+                currentValueTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, referenceSize);
+                currentValueTextView.setLayoutParams(marginParams);
                 mReferencesLayout.addView(currentValueTextView);
             }
         }
+    }
+
+    private int getTextSizeForReference(String formattedReference, String separator) {
+
+        int textSize;
+        String referenceWithoutSeparator = separator == null ? formattedReference :formattedReference.replace(separator, "");
+        if(android.text.TextUtils.isDigitsOnly(referenceWithoutSeparator)) {
+            textSize = getResources().getDimensionPixelSize(R.dimen.mpsdk_large_text);
+        }
+        else {
+            textSize = getResources().getDimensionPixelSize(R.dimen.mpsdk_regular_text);
+        }
+        return textSize;
     }
 
     private void setInformationMessages(Instruction instruction) {

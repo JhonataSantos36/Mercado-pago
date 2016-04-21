@@ -34,7 +34,7 @@ public class Step6Activity extends ExampleActivity {
         if (requestCode == MercadoPago.CHECKOUT_REQUEST_CODE) {
             if (resultCode == RESULT_OK && data != null) {
                 // Set message
-                Payment payment = (Payment) data.getSerializableExtra("payment");
+                /*Payment payment = (Payment) data.getSerializableExtra("payment");
 
                 new AlertDialog.Builder(this)
                         .setTitle("Test")
@@ -45,7 +45,7 @@ public class Step6Activity extends ExampleActivity {
                             }
                         })
                         .setIcon(android.R.drawable.ic_dialog_alert)
-                        .show();
+                        .show(); */
             } else {
                 if ((data != null) && (data.getSerializableExtra("apiException") != null)) {
                     ApiException apiException = (ApiException) data.getSerializableExtra("apiException");

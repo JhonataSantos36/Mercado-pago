@@ -89,4 +89,39 @@ public class MercadoPagoUtil {
             return false;
         }
     }
+
+    public static String getAccreditationTimeMessage(int miliseconds, Context context) {
+
+        String accreditationMessage;
+
+        if(miliseconds == 0){
+            accreditationMessage = context.getString(R.string.mpsdk_instant_accreditation_time);
+        } else {
+            StringBuilder accreditationTimeMessageBuilder = new StringBuilder();
+            if (miliseconds > 1440 && miliseconds < 2880) {
+
+                accreditationTimeMessageBuilder.append(context.getString(R.string.mpsdk_accreditation_time));
+                accreditationTimeMessageBuilder.append(" 1 ");
+                accreditationTimeMessageBuilder.append(context.getString(R.string.mpsdk_working_day));
+
+            }  else if(miliseconds < 1440){
+
+                accreditationTimeMessageBuilder.append(context.getString(R.string.mpsdk_accreditation_time));
+                accreditationTimeMessageBuilder.append(" ");
+                accreditationTimeMessageBuilder.append(miliseconds/60);
+                accreditationTimeMessageBuilder.append(" ");
+                accreditationTimeMessageBuilder.append(context.getString(R.string.mpsdk_hour));
+
+            } else{
+
+                accreditationTimeMessageBuilder.append(context.getString(R.string.mpsdk_accreditation_time));
+                accreditationTimeMessageBuilder.append(" ");
+                accreditationTimeMessageBuilder.append(miliseconds/(60*24));
+                accreditationTimeMessageBuilder.append(" ");
+                accreditationTimeMessageBuilder.append(context.getString(R.string.mpsdk_working_days));
+            }
+            accreditationMessage = accreditationTimeMessageBuilder.toString();
+        }
+        return accreditationMessage;
+    };
 }
