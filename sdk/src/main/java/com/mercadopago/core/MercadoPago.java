@@ -239,8 +239,10 @@ public class MercadoPago {
 
         //TODO replace paymentId when service works
         if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {
+
             PaymentService service = mRestAdapterMPApi.create(PaymentService.class);
             service.getInstruction(this.mKey, (long)1826446924, paymentMethodId, paymentTypeId, callback);
+
         } else {
             throw new RuntimeException("Unsupported key type for this method");
         }

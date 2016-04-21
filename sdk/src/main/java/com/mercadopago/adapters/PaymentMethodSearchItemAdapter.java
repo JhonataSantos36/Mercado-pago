@@ -42,13 +42,13 @@ public class PaymentMethodSearchItemAdapter extends RecyclerView.Adapter<Payment
 
     private View getViewForItem(ViewGroup parent, PaymentMethodSearchItem item) {
         View view;
-        if(itemNeedsDescription(item)) {
+        if(withLargeRow(item)) {
             view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.row_pm_search_item, parent, false);
+                    .inflate(R.layout.row_pm_search_item_large, parent, false);
         }
         else {
             view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.row_pm_search_item_large, parent, false);
+                    .inflate(R.layout.row_pm_search_item, parent, false);
         }
         return view;
     }
@@ -56,17 +56,19 @@ public class PaymentMethodSearchItemAdapter extends RecyclerView.Adapter<Payment
     public Integer getHeightForItems() {
         Float mCurrentHeight = (float) 0;
         for(PaymentMethodSearchItem item : mItems) {
-            if (itemNeedsDescription(item)) {
-                mCurrentHeight += mContext.getResources().getDimension(R.dimen.list_item_height);
-            } else {
+            if (withLargeRow(item)) {
                 mCurrentHeight += mContext.getResources().getDimension(R.dimen.list_item_height_large);
+            } else {
+                mCurrentHeight += mContext.getResources().getDimension(R.dimen.list_item_height);
             }
         }
         return Math.round(mCurrentHeight);
     }
 
-    private boolean itemNeedsDescription(PaymentMethodSearchItem item) {
-        return !item.getType().equals("payment_method") || item.getId().equals("bitcoin");
+    private boolean withLargeRow(PaymentMethodSearchItem item) {
+        return item.getType().equals("payment_method")
+                && !item.getId().equals("bitcoin")
+                && !item.getId().contains("redlink");
     }
 
     @Override
@@ -91,7 +93,7 @@ public class PaymentMethodSearchItemAdapter extends RecyclerView.Adapter<Payment
 
         Integer resourceId;
 
-        if(paymentMethodSearchItem.getId() != null) {
+        if(paymentMethodSearchItem.getId() != null && !paymentMethodSearchItem.getId().contains("redlink")) {
             resourceId = MercadoPagoUtil.getPaymentMethodSearchItemIcon(mContext, paymentMethodSearchItem.getId());
         }
         else {

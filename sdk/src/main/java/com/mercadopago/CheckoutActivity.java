@@ -28,6 +28,8 @@ import com.mercadopago.util.MercadoPagoUtil;
 import com.mercadopago.views.MPButton;
 import com.mercadopago.views.MPTextView;
 
+import java.math.BigDecimal;
+
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -264,6 +266,9 @@ public class CheckoutActivity extends AppCompatActivity {
     }
 
     private void showReviewAndConfirm(String paymentMethodInfo, String paymentMethodDescription) {
+        if(paymentMethodInfo == null || paymentMethodInfo.isEmpty()) {
+            paymentMethodInfo = MercadoPagoUtil.getAccreditationTimeMessage(mSelectedPaymentMethod.getAccreditationTime(), this);
+        }
         drawPaymentMethodRow(paymentMethodInfo, paymentMethodDescription);
         drawTermsAndConditionsText();
         setAmountLabel();
@@ -324,7 +329,17 @@ public class CheckoutActivity extends AppCompatActivity {
 
             @Override
             public void failure(RetrofitError error) {
-                ApiUtil.finishWithApiException(mActivity, error);
+                //ApiUtil.finishWithApiException(mActivity, error);
+                Payment payment = new Payment();
+                payment.setId((long)919191);
+                payment.setCurrencyId("ARS");
+                payment.setTransactionAmount(new BigDecimal("1000"));
+                new MercadoPago.StartActivityBuilder()
+                        .setPublicKey(mMerchantPublicKey)
+                        .setActivity(mActivity)
+                        .setPayment(payment)
+                        .setPaymentMethod(mSelectedPaymentMethod)
+                        .startInstructionsActivity();
             }
         });
     }

@@ -89,9 +89,13 @@
     <string name="mpsdk_payment_amount_to_pay">Total a pagar</string>
     <string name="mpsdk_processed_by_mercado_pago">© 1999–2016 Procesado por MercadoPago</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="mpsdk_exit_label">Salir</string>
 
+    <string name="mpsdk_instant_accreditation_time">Se acreditará instantáneamente</string>
+    <string name="mpsdk_accreditation_time">Se acreditará en</string>
+    <string name="mpsdk_working_days">días hábiles</string>
+    <string name="mpsdk_working_day">día hábil</string>
+    <string name="mpsdk_hours">horas</string>
+    <string name="mpsdk_hour">hora</string>
 
 </resources>

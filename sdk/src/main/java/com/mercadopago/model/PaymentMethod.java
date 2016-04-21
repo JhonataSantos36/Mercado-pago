@@ -10,6 +10,7 @@ public class PaymentMethod implements Serializable {
     private String name;
     private String paymentTypeId;
     private List<Setting> settings;
+    private Integer accreditationTime;
 
     public List<String> getAdditionalInfoNeeded() {
         return additionalInfoNeeded;
@@ -88,4 +89,7 @@ public class PaymentMethod implements Serializable {
         return (Setting.getSettingByBin(this.getSettings(), bin) != null);
     }
 
+    public int getAccreditationTime() {
+        return accreditationTime;
+    }
 }
