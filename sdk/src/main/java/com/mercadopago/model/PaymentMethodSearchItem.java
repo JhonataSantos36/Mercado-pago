@@ -12,9 +12,10 @@ public class PaymentMethodSearchItem implements Serializable {
     private String type;
     private String description;
     private String comment;
-    private String iconName;
     private List<PaymentMethodSearchItem> children;
     private String childrenHeader;
+    private Boolean showIcon;
+
 
     public String getId() {
         return id;
@@ -56,14 +57,6 @@ public class PaymentMethodSearchItem implements Serializable {
         this.children = children;
     }
 
-    public String getIconName() {
-        return iconName;
-    }
-
-    public void setIconName(String iconName) {
-        this.iconName = iconName;
-    }
-
     public String getChildrenHeader() {
         return this.childrenHeader;
     }
@@ -74,5 +67,13 @@ public class PaymentMethodSearchItem implements Serializable {
 
     public boolean hasDescription() {
         return description != null && !description.isEmpty();
+    }
+
+    public Boolean isIconRecommended() {
+        return showIcon;
+    }
+
+    public boolean hasComment() {
+        return comment != null && !comment.isEmpty();
     }
 }
