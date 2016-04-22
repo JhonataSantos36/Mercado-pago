@@ -66,9 +66,7 @@ public class PaymentMethodSearchItemAdapter extends RecyclerView.Adapter<Payment
     }
 
     private boolean withLargeRow(PaymentMethodSearchItem item) {
-        return item.getType().equals("payment_method")
-                && !item.getId().equals("bitcoin")
-                && !item.getId().contains("redlink");
+        return item.hasComment();
     }
 
     @Override
@@ -93,7 +91,7 @@ public class PaymentMethodSearchItemAdapter extends RecyclerView.Adapter<Payment
 
         Integer resourceId;
 
-        if(paymentMethodSearchItem.getId() != null && !paymentMethodSearchItem.getId().contains("redlink")) {
+        if(paymentMethodSearchItem.isIconRecommended()) {
             resourceId = MercadoPagoUtil.getPaymentMethodSearchItemIcon(mContext, paymentMethodSearchItem.getId());
         }
         else {
