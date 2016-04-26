@@ -37,6 +37,7 @@
 
             <com.mercadopago.views.MPTextView
                 android:id="@+id/title"
+                android:text="Paga $ X en tu sucursal más cercana"
                 android:gravity="center"
                 android:layout_centerHorizontal="true"
                 android:layout_width="wrap_content"
@@ -80,6 +81,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/primaryInfo"
+                        android:text="Info primaria"
                         android:layout_marginBottom="15dp"
                         style="@style/mpsdk_small_dark_light"/>
                     <LinearLayout
@@ -115,6 +117,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/secondaryInfo"
+                        android:text="Info secundaria"
                         android:layout_marginTop="5dp"
                         android:layout_marginBottom="10dp"
                         style="@style/mpsdk_small_dark_light"/>
@@ -123,7 +126,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/tertiaryInfo"
-                        android:text="Te enviamos los datos por mail"
+                        android:text="Info terciaria"
                         android:layout_marginBottom="10dp"
                         style="@style/mpsdk_small_grey_light"/>
 
@@ -132,8 +135,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="6dp">
                         <ImageView
-                            android:layout_marginRight="3dp"
-                            android:layout_marginEnd="3dp"
+                            android:layout_marginRight="5dp"
+                            android:layout_marginEnd="5dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:id="@+id/accreditationImage"
@@ -150,10 +153,12 @@
                             android:layout_height="wrap_content"
                             android:id="@+id/accreditationMessage"
                             android:text="Se acreditara en X horas"
+                            style="@style/mpsdk_small_golden_light"
                             android:layout_centerVertical="true"
+                            android:layout_alignTop="@id/accreditationImage"
+                            android:layout_alignBottom="@id/accreditationImage"
                             android:layout_toRightOf="@+id/accreditationImage"
-                            android:layout_toEndOf="@+id/accreditationImage"
-                            style="@style/mpsdk_small_golden_light"/>
+                            android:layout_toEndOf="@+id/accreditationImage" />
                     </RelativeLayout>
                 </LinearLayout>
             </LinearLayout>

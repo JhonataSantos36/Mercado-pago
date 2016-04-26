@@ -45,14 +45,11 @@ public class PaymentVaultActivity extends AppCompatActivity {
 
     // Local vars
     protected Activity mActivity;
-    protected String mExceptionOnMethod;
     protected MercadoPago mMercadoPago;
     protected PaymentMethod mSelectedPaymentMethod;
     protected CardToken mCardToken;
     protected Issuer mSelectedIssuer;
     protected PayerCost mSelectedPayerCost;
-    protected List<PaymentMethod> mPaymentMethods;
-    protected Boolean mEditing;
 
     // Controls
     protected RecyclerView mSearchItemsRecyclerView;
@@ -131,11 +128,8 @@ public class PaymentVaultActivity extends AppCompatActivity {
 
     protected void getActivityParameters() {
 
-        if (isItemSelectedStart()) {
+        if (this.getIntent().getSerializableExtra("selectedSearchItem") != null) {
             mSelectedSearchItem = (PaymentMethodSearchItem) this.getIntent().getSerializableExtra("selectedSearchItem");
-            if(this.getIntent().getSerializableExtra("paymentMethodSearch") != null) {
-                mPaymentMethodSearch = (PaymentMethodSearch) this.getIntent().getSerializableExtra("paymentMethodSearch");
-            }
         }
 
         try {
@@ -175,7 +169,10 @@ public class PaymentVaultActivity extends AppCompatActivity {
         if(this.getIntent().getStringExtra("defaultInstallments") != null) {
             mDefaultInstallments = Integer.valueOf(this.getIntent().getStringExtra("defaultInstallments"));
         }
-        mEditing = this.getIntent().getBooleanExtra("editing", false);
+
+        if(this.getIntent().getSerializableExtra("paymentMethodSearch") != null) {
+            mPaymentMethodSearch = (PaymentMethodSearch) this.getIntent().getSerializableExtra("paymentMethodSearch");
+        }
     }
 
     private void validateActivityParameters() {
@@ -268,8 +265,17 @@ public class PaymentVaultActivity extends AppCompatActivity {
     private void initPaymentMethodSearch() {
         String initialTitle = getString(R.string.mpsdk_title_activity_payment_vault);
         setActivityTitle(initialTitle);
+
         showProgress();
-        getPaymentMethodSearch();
+        if(mPaymentMethodSearch == null) {
+            getPaymentMethodSearch();
+        }
+        else if (!mPaymentMethodSearch.hasSearchItems()) {
+            finishWithEmptyPaymentMethodSearch();
+        }
+        else {
+            setSearchLayout();
+        }
     }
 
     protected void setActivity() {
@@ -277,7 +283,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
     }
 
     protected boolean isItemSelectedStart() {
-        return this.getIntent().getSerializableExtra("selectedSearchItem") != null;
+        return mSelectedSearchItem != null;
     }
 
     protected void getPaymentMethodSearch() {
@@ -286,7 +292,8 @@ public class PaymentVaultActivity extends AppCompatActivity {
             public void success(PaymentMethodSearch paymentMethodSearch, Response response) {
                 if (!paymentMethodSearch.hasSearchItems()) {
                     finishWithEmptyPaymentMethodSearch();
-                } else {
+                }
+                else {
                     mPaymentMethodSearch = paymentMethodSearch;
                     setSearchLayout();
                 }
@@ -300,8 +307,8 @@ public class PaymentVaultActivity extends AppCompatActivity {
     }
 
     protected void setSearchLayout() {
-        showRegularLayout();
         populateSearchList(mPaymentMethodSearch.getGroups());
+        showRegularLayout();
     }
 
     private void showProgress() {
@@ -403,7 +410,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
     protected void resolvePaymentMethodsRequest(int resultCode, Intent data) {
         if(resultCode == RESULT_OK) {
             PaymentMethod paymentMethod = (PaymentMethod) data.getSerializableExtra("paymentMethod");
-            finishWithPaymentMethodResult(paymentMethod, "", "");
+            finishWithPaymentMethodResult(paymentMethod);
 
         } else {
             if ((data != null) && (data.getSerializableExtra("apiException") != null)) {
@@ -437,7 +444,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
                 if(selectedPaymentMethod == null) {
                     finishWithMismatchingPaymentMethod();
                 } else {
-                    finishWithPaymentMethodResult(selectedPaymentMethod, paymentMethodItem.getComment(), paymentMethodItem.getDescription());
+                    finishWithPaymentMethodResult(selectedPaymentMethod);
                 }
             }
         };
@@ -448,14 +455,11 @@ public class PaymentVaultActivity extends AppCompatActivity {
         return new Callback<Token>() {
             @Override
             public void success(Token token, Response response) {
-
                 finishWithTokenResult(token);
             }
 
             @Override
             public void failure(RetrofitError error) {
-
-                mExceptionOnMethod = "getCreateTokenCallback";
                 ApiUtil.finishWithApiException(mActivity, error);
             }
         };
@@ -474,11 +478,9 @@ public class PaymentVaultActivity extends AppCompatActivity {
         this.finish();
     }
 
-    protected void finishWithPaymentMethodResult(PaymentMethod paymentMethod, String paymentMethodComment, String paymentMethodDescription) {
+    protected void finishWithPaymentMethodResult(PaymentMethod paymentMethod) {
         Intent returnIntent = new Intent();
         returnIntent.putExtra("paymentMethod", paymentMethod);
-        returnIntent.putExtra("paymentMethodComment", paymentMethodComment);
-        returnIntent.putExtra("paymentMethodDescription", paymentMethodDescription);
         this.setResult(Activity.RESULT_OK, returnIntent);
         this.finish();
         animatePaymentMethodSelection();

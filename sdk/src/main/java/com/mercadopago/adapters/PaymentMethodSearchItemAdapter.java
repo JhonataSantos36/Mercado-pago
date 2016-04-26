@@ -29,7 +29,6 @@ public class PaymentMethodSearchItemAdapter extends RecyclerView.Adapter<Payment
         this.mContext = context;
         this.mItems = items;
         this.mCallback = callback;
-
     }
 
     @Override
@@ -82,7 +81,7 @@ public class PaymentMethodSearchItemAdapter extends RecyclerView.Adapter<Payment
         if(holder.mDescription != null && paymentMethodSearchItem.hasDescription()) {
             holder.mDescription.setText(paymentMethodSearchItem.getDescription());
         }
-        if(paymentMethodSearchItem.getComment() != null && !paymentMethodSearchItem.getId().equals("bitcoin")) {
+        if(paymentMethodSearchItem.hasComment()) {
             holder.mComment.setText(paymentMethodSearchItem.getComment());
         }
         else {
@@ -116,7 +115,7 @@ public class PaymentMethodSearchItemAdapter extends RecyclerView.Adapter<Payment
 
     private boolean itemNeedsTint(PaymentMethodSearchItem paymentMethodSearchItem) {
 
-        return paymentMethodSearchItem.getType().equals("group") || paymentMethodSearchItem.getType().equals("payment_type") || paymentMethodSearchItem.getId().equals("bitcoin");
+        return paymentMethodSearchItem.getType().equals(PaymentMethodSearchItem.TYPE_GROUP) || paymentMethodSearchItem.getType().equals(PaymentMethodSearchItem.TYPE_PAYMENT_TYPE) || paymentMethodSearchItem.getId().equals("bitcoin");
     }
 
     private void setTintColor(Context mContext, ImageView mIcon) {
@@ -154,13 +153,13 @@ public class PaymentMethodSearchItemAdapter extends RecyclerView.Adapter<Payment
 
         private void nextStep(PaymentMethodSearchItem mItem) {
             switch (mItem.getType()) {
-                case "group":
+                case PaymentMethodSearchItem.TYPE_GROUP:
                     mCallback.onGroupItemClicked(mItem);
                     break;
-                case "payment_type":
+                case PaymentMethodSearchItem.TYPE_PAYMENT_TYPE:
                     mCallback.onPaymentTypeItemClicked(mItem);
                     break;
-                case "payment_method":
+                case PaymentMethodSearchItem.TYPE_PAYMENT_METHOD:
                     mCallback.onPaymentMethodItemClicked(mItem);
                     break;
             }

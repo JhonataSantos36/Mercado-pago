@@ -95,7 +95,7 @@ public class StaticMock {
 
     public static PaymentMethod getPaymentMethod(Context context, String flavor) {
 
-        return JsonUtil.getInstance().fromJson(getFile(context, "mocks/payment_method" + flavor + ".json"), PaymentMethod.class);
+        return JsonUtil.getInstance().fromJson(getFile(context, "mocks/payment_method_on" + flavor + ".json"), PaymentMethod.class);
     }
 
     public static IdentificationType getIdentificationType() {
@@ -185,6 +185,24 @@ public class StaticMock {
         try {
             return getFile(InstrumentationRegistry.getContext(), "mocks/payment_methods.json");
 
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+
+    public static PaymentMethod getPaymentMethodOff() {
+        try {
+            return JsonUtil.getInstance().fromJson(getFile(InstrumentationRegistry.getContext(), "mocks/payment_method_off.json"), PaymentMethod.class);
+        } catch (Exception ex) {
+
+            return null;
+        }
+    }
+
+    public static PaymentMethod getPaymentMethodOn() {
+        try {
+            return JsonUtil.getInstance().fromJson(getFile(InstrumentationRegistry.getContext(), "mocks/payment_method_on.json"), PaymentMethod.class);
         } catch (Exception ex) {
 
             return null;

@@ -66,7 +66,6 @@ public class MercadoPago {
     public static final int GUESSING_CARD_REQUEST_CODE = 10;
     public static final int INSTRUCTIONS_REQUEST_CODE = 11;
 
-
     public static final int BIN_LENGTH = 6;
 
     private static final String MP_API_BASE_URL = "https://api.mercadopago.com";
@@ -239,10 +238,8 @@ public class MercadoPago {
 
         //TODO replace paymentId when service works
         if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {
-
             PaymentService service = mRestAdapterMPApi.create(PaymentService.class);
             service.getInstruction(this.mKey, (long)1826446924, paymentMethodId, paymentTypeId, callback);
-
         } else {
             throw new RuntimeException("Unsupported key type for this method");
         }
@@ -372,7 +369,7 @@ public class MercadoPago {
 
     private static void startPaymentVaultActivity(Activity activity, String merchantPublicKey, String merchantBaseUrl, String merchantGetCustomerUri, String merchantAccessToken, String itemImageUri, String purchaseTitle, BigDecimal amount, String currencyId, Boolean showBankDeals, Boolean cardGuessingEnabled,
                                                   List<String> excludedPaymentMethodIds, List<String> excludedPaymentTypes, String defaultPaymentMethodId,
-                                                  Integer defaultInstallments, Integer maxInstallments) {
+                                                  Integer defaultInstallments, Integer maxInstallments, PaymentMethodSearch paymentMethodSearch) {
 
         Intent vaultIntent = new Intent(activity, PaymentVaultActivity.class);
         vaultIntent.putExtra("merchantPublicKey", merchantPublicKey);
@@ -396,8 +393,9 @@ public class MercadoPago {
         if(maxInstallments != null) {
             vaultIntent.putExtra("maxInstallments", maxInstallments.toString());
         }
-
         activity.startActivityForResult(vaultIntent, PAYMENT_VAULT_REQUEST_CODE);
+
+        vaultIntent.putExtra("paymentMethodSearch", paymentMethodSearch);
     }
 
     private static void putListExtra(Intent intent, String listName, List<String> list) {
@@ -488,6 +486,7 @@ public class MercadoPago {
         private String mPurchaseTitle;
         private String mCurrencyId;
         private String mItemImageUri;
+        private PaymentMethodSearch mPaymentMethodSearch;
 
         public StartActivityBuilder() {
 
@@ -660,6 +659,11 @@ public class MercadoPago {
             return this;
         }
 
+        public StartActivityBuilder setPaymentMethodSearch(PaymentMethodSearch paymentMethodSearch) {
+            this.mPaymentMethodSearch = paymentMethodSearch;
+            return this;
+        }
+
         public void startBankDealsActivity() {
 
             if (this.mActivity == null) throw new IllegalStateException("activity is null");
@@ -790,7 +794,7 @@ public class MercadoPago {
                         this.mMerchantGetCustomerUri, this.mMerchantAccessToken, this.mItemImageUri, this.mPurchaseTitle,
                         this.mAmount, this.mCurrencyId, this.mShowBankDeals, this.mCardGuessingEnabled,
                         this.mExcludedPaymentMethodIds, this.mExcludedPaymentTypes, this.mDefaultPaymentMethodId,
-                        this.mDefaultInstallments, this.mMaxInstallments);
+                        this.mDefaultInstallments, this.mMaxInstallments, this.mPaymentMethodSearch);
             } else {
                 throw new RuntimeException("Unsupported key type for this method");
             }

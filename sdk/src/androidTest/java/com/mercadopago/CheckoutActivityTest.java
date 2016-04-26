@@ -109,12 +109,12 @@ public class CheckoutActivityTest {
 
     @Test
     public void whenPaymentMethodReceivedShowPaymentMethodRow() {
-        PaymentMethod paymentMethod = getOfflinePaymentMethod();
+        PaymentMethod paymentMethod = StaticMock.getPaymentMethodOff();
         String paymentMethodInfo = "Dummy info";
 
         Intent paymentVaultResultIntent = new Intent();
         paymentVaultResultIntent.putExtra("paymentMethod", paymentMethod);
-        paymentVaultResultIntent.putExtra("paymentMethodInfo", paymentMethodInfo);
+        paymentVaultResultIntent.putExtra("paymentMethodComment", paymentMethodInfo);
         Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(Activity.RESULT_OK, paymentVaultResultIntent);
 
         mTestRule.initIntents();
@@ -124,10 +124,10 @@ public class CheckoutActivityTest {
 
         onView(withId(R.id.contentLayout))
                 .check(matches(isDisplayed()));
-        onView(withId(R.id.payment_method_comment))
+        onView(withId(R.id.paymentMethodComment))
                 .check(matches(withText(paymentMethodInfo)));
 
-        ImageView paymentMethodImage = (ImageView) activity.findViewById(R.id.payment_method_image);
+        ImageView paymentMethodImage = (ImageView) activity.findViewById(R.id.paymentMethodImage);
 
         Bitmap bitmap = ((BitmapDrawable) paymentMethodImage.getDrawable()).getBitmap();
         Bitmap bitmap2 = ((BitmapDrawable) ContextCompat.getDrawable(activity, R.drawable.oxxo)).getBitmap();
@@ -137,11 +137,7 @@ public class CheckoutActivityTest {
 
     @Test
     public void whenEditButtonClickStartPaymentVaultActivity() {
-        PaymentMethod paymentMethod = new PaymentMethod();
-        paymentMethod.setId("oxxo");
-        paymentMethod.setName("Oxxo");
-        paymentMethod.setPaymentTypeId("ticket");
-
+        PaymentMethod paymentMethod = StaticMock.getPaymentMethodOff();
         String paymentMethodInfo = "Dummy info";
 
         Intent paymentVaultResultIntent = new Intent();
@@ -163,12 +159,12 @@ public class CheckoutActivityTest {
 
     @Test
     public void onBackPressedAfterEditImageClickedRestoreState() {
-        PaymentMethod paymentMethod = getOfflinePaymentMethod();
+        PaymentMethod paymentMethod = StaticMock.getPaymentMethodOff();
         String paymentMethodInfo = "Dummy info";
 
         Intent paymentVaultResultIntent = new Intent();
         paymentVaultResultIntent.putExtra("paymentMethod", paymentMethod);
-        paymentVaultResultIntent.putExtra("paymentMethodInfo", paymentMethodInfo);
+        paymentVaultResultIntent.putExtra("paymentMethodComment", paymentMethodInfo);
         Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(Activity.RESULT_OK, paymentVaultResultIntent);
 
         mTestRule.initIntents();
@@ -179,7 +175,6 @@ public class CheckoutActivityTest {
         mTestRule.restartIntents();
 
         mTestRule.addApiResponseToQueue(StaticMock.getCompletePaymentMethodSearchAsJson(), 200, "");
-        mTestRule.addApiResponseToQueue(StaticMock.getCompletePaymentMethodsJson(), 200, "");
 
         onView(withId(R.id.imageEdit)).perform(click());
 
@@ -187,10 +182,10 @@ public class CheckoutActivityTest {
 
         onView(withId(R.id.contentLayout))
                 .check(matches(isDisplayed()));
-        onView(withId(R.id.payment_method_comment))
+        onView(withId(R.id.paymentMethodComment))
                 .check(matches(withText(paymentMethodInfo)));
 
-        ImageView paymentMethodImage = (ImageView) activity.findViewById(R.id.payment_method_image);
+        ImageView paymentMethodImage = (ImageView) activity.findViewById(R.id.paymentMethodImage);
 
         Bitmap bitmap = ((BitmapDrawable) paymentMethodImage.getDrawable()).getBitmap();
         Bitmap bitmap2 = ((BitmapDrawable) ContextCompat.getDrawable(activity, R.drawable.oxxo)).getBitmap();
@@ -200,7 +195,7 @@ public class CheckoutActivityTest {
 
     @Test
     public void onBackPressedAfterPaymentMethodSelectionStartPaymentVault() {
-        PaymentMethod paymentMethod = getOfflinePaymentMethod();
+        PaymentMethod paymentMethod = StaticMock.getPaymentMethodOff();
         String paymentMethodInfo = "Dummy info";
 
         Intent paymentVaultResultIntent = new Intent();
@@ -226,7 +221,7 @@ public class CheckoutActivityTest {
 
     @Test(expected = NoActivityResumedException.class)
     public void onBackPressedTwiceAfterPaymentMethodSelectionFinishActivity() {
-        PaymentMethod paymentMethod = getOfflinePaymentMethod();
+        PaymentMethod paymentMethod = StaticMock.getPaymentMethodOff();
         String paymentMethodInfo = "Dummy info";
 
         Intent paymentVaultResultIntent = new Intent();
@@ -250,7 +245,7 @@ public class CheckoutActivityTest {
 
     @Test
     public void whenPaymentMethodSelectedShowShoppingCart() {
-        PaymentMethod paymentMethod = getOfflinePaymentMethod();
+        PaymentMethod paymentMethod = StaticMock.getPaymentMethodOff();
         String paymentMethodInfo = "Dummy info";
 
         Intent paymentVaultResultIntent = new Intent();
@@ -303,10 +298,8 @@ public class CheckoutActivityTest {
     @Test
     public void ifTermsAndConditionsClickedStartTermAndConditionsActivity() {
         String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
-        String paymentMethodsJson = StaticMock.getCompletePaymentMethodsJson();
 
         mTestRule.addApiResponseToQueue(paymentMethodSearchJson, 200, "");
-        mTestRule.addApiResponseToQueue(paymentMethodsJson, 200, "");
 
         mTestRule.launchActivity(validStartIntent);
 
@@ -322,10 +315,8 @@ public class CheckoutActivityTest {
     @Test
     public void whenOfflinePaymentMethodSelectedSetItAsResultForCheckoutActivity() {
         String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
-        String paymentMethodsJson = StaticMock.getCompletePaymentMethodsJson();
 
         mTestRule.addApiResponseToQueue(paymentMethodSearchJson, 200, "");
-        mTestRule.addApiResponseToQueue(paymentMethodsJson, 200, "");
 
         mTestRule.launchActivity(validStartIntent);
 
@@ -344,11 +335,8 @@ public class CheckoutActivityTest {
     @Test
     public void whenResultFromGuessingNewCardFormReceivedSetItAsResultForCheckoutActivity() {
         String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
-        List<PaymentMethod> paymentMethodList = new ArrayList<>();
-        paymentMethodList.add(new PaymentMethod());
 
         mTestRule.addApiResponseToQueue(paymentMethodSearchJson, 200, "");
-        mTestRule.addApiResponseToQueue(paymentMethodList, 200, "");
 
         final Token token = new Token();
         token.setId("1");
@@ -360,8 +348,7 @@ public class CheckoutActivityTest {
                 RecyclerViewActions.actionOnItemAtPosition(0, click()));
 
         Intent guessingFormResultIntent = new Intent();
-        final PaymentMethod paymentMethod = new PaymentMethod();
-        paymentMethod.setId("visa");
+        final PaymentMethod paymentMethod = StaticMock.getPaymentMethodOn();
 
         CardToken cardToken = new CardToken("4509953566233704", 12, 99, "1234", "Holder Name Perez", "DNI", "34543454");
 
@@ -382,11 +369,8 @@ public class CheckoutActivityTest {
     @Test
     public void setResultFromGuessingNewCardWithIssuer() {
         String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
-        List<PaymentMethod> paymentMethodList = new ArrayList<>();
-        paymentMethodList.add(new PaymentMethod());
 
         mTestRule.addApiResponseToQueue(paymentMethodSearchJson, 200, "");
-        mTestRule.addApiResponseToQueue(paymentMethodList, 200, "");
 
         final Token token = new Token();
         token.setId("1");
@@ -398,8 +382,7 @@ public class CheckoutActivityTest {
                 RecyclerViewActions.actionOnItemAtPosition(0, click()));
 
         Intent guessingFormResultIntent = new Intent();
-        final PaymentMethod paymentMethod = new PaymentMethod();
-        paymentMethod.setId("visa");
+        final PaymentMethod paymentMethod = StaticMock.getPaymentMethodOn();
 
         CardToken cardToken = new CardToken("4509953566233704", 12, 99, "1234", "Holder Name Perez", "DNI", "34543454");
         final Issuer issuer = new Issuer();
@@ -444,8 +427,7 @@ public class CheckoutActivityTest {
 
 
         Intent paymentMethodsResultIntent = new Intent();
-        final PaymentMethod paymentMethod = new PaymentMethod();
-        paymentMethod.setId("oxxo");
+        final PaymentMethod paymentMethod = StaticMock.getPaymentMethodOff();
 
         paymentMethodsResultIntent.putExtra("paymentMethod", paymentMethod);
         Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(Activity.RESULT_OK, paymentMethodsResultIntent);
@@ -461,11 +443,9 @@ public class CheckoutActivityTest {
     @Test
     public void createPaymentForOfflinePaymentMethodStartsInstructionsActivity() {
         String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
-        String paymentMethodsJson = StaticMock.getCompletePaymentMethodsJson();
         Payment payment = StaticMock.getPayment(InstrumentationRegistry.getContext());
 
         mTestRule.addApiResponseToQueue(paymentMethodSearchJson, 200, "");
-        mTestRule.addApiResponseToQueue(paymentMethodsJson, 200, "");
         mTestRule.addApiResponseToQueue(payment, 200, "");
 
 
@@ -483,16 +463,14 @@ public class CheckoutActivityTest {
     @Test
     public void createPaymentForOnlinePaymentMethodStartsCongratsActivity() {
         String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
-        List<PaymentMethod> paymentMethodList = new ArrayList<>();
-        paymentMethodList.add(new PaymentMethod());
         Payment payment = StaticMock.getPayment(InstrumentationRegistry.getContext());
 
         mTestRule.addApiResponseToQueue(paymentMethodSearchJson, 200, "");
-        mTestRule.addApiResponseToQueue(paymentMethodList, 200, "");
         mTestRule.addApiResponseToQueue(payment, 200, "");
 
         final Token token = new Token();
         token.setId("1");
+
         mTestRule.addApiResponseToQueue(token, 200, "");
 
         mTestRule.launchActivity(validStartIntent);
@@ -501,9 +479,7 @@ public class CheckoutActivityTest {
                 RecyclerViewActions.actionOnItemAtPosition(0, click()));
 
         Intent guessingFormResultIntent = new Intent();
-        final PaymentMethod paymentMethod = new PaymentMethod();
-        paymentMethod.setId("visa");
-        paymentMethod.setPaymentTypeId("credit_card");
+        final PaymentMethod paymentMethod = StaticMock.getPaymentMethod(mTestRule.getActivity());
 
         CardToken cardToken = new CardToken("4509953566233704", 12, 99, "1234", "Holder Name Perez", "DNI", "34543454");
 
@@ -529,10 +505,8 @@ public class CheckoutActivityTest {
     @Test
     public void forCreatePaymentAPIFailureFinishActivity() {
         String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
-        String paymentMethodsJson = StaticMock.getCompletePaymentMethodsJson();
 
         mTestRule.addApiResponseToQueue(paymentMethodSearchJson, 200, "");
-        mTestRule.addApiResponseToQueue(paymentMethodsJson, 200, "");
         mTestRule.addApiResponseToQueue("", 401, "");
 
 
@@ -559,13 +533,4 @@ public class CheckoutActivityTest {
         mTestRule.launchActivity(invalidStartIntent);
         assertTrue(mTestRule.isActivityFinishedOrFinishing());
     }
-
-    private PaymentMethod getOfflinePaymentMethod() {
-        PaymentMethod paymentMethod = new PaymentMethod();
-        paymentMethod.setId("oxxo");
-        paymentMethod.setName("Oxxo");
-        paymentMethod.setPaymentTypeId("ticket");
-        return paymentMethod;
-    }
-
 }

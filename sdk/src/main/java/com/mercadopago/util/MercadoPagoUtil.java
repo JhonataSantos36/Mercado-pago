@@ -97,7 +97,7 @@ public class MercadoPagoUtil {
 
         String accreditationMessage;
 
-        if(miliseconds == 0){
+        if(miliseconds == 0) {
             accreditationMessage = context.getString(R.string.mpsdk_instant_accreditation_time);
         } else {
             StringBuilder accreditationTimeMessageBuilder = new StringBuilder();

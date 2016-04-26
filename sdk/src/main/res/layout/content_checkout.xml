@@ -13,7 +13,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
              <RelativeLayout
-                android:id="@+id/rowsLayout"
+                android:id="@+id/paymentMethodLayout"
                 android:layout_width="fill_parent"
                 android:layout_height="@dimen/list_item_height_large"
                 android:paddingLeft="10dp"
@@ -38,13 +38,13 @@
                     android:layout_above="@+id/paymentMethodComment"/>
 
                  <com.mercadopago.views.MPTextView
+                     android:text="Carga Virtual"
                      android:layout_marginLeft="10dp"
                      android:layout_width="wrap_content"
                      android:layout_height="wrap_content"
                      android:gravity="center_vertical"
                      style="@style/mpsdk_list_label"
                      android:id="@+id/paymentMethodDescription"
-                     android:text="sarasa"
                      android:layout_alignBottom="@+id/paymentMethodImage"
                      android:layout_toEndOf="@+id/paymentMethodImage"
                      android:layout_alignTop="@+id/paymentMethodImage"
