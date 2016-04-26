@@ -8,6 +8,10 @@ import java.util.List;
  */
 public class PaymentMethodSearchItem implements Serializable {
 
+    public static final String TYPE_PAYMENT_METHOD = "payment_method";
+    public static final String TYPE_PAYMENT_TYPE = "payment_type";
+    public static final String TYPE_GROUP = "group";
+
     private String id;
     private String type;
     private String description;
@@ -69,8 +73,8 @@ public class PaymentMethodSearchItem implements Serializable {
         return description != null && !description.isEmpty();
     }
 
-    public Boolean isIconRecommended() {
-        return showIcon;
+    public boolean isIconRecommended() {
+        return showIcon != null ? showIcon : false;
     }
 
     public boolean hasComment() {
