@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="description" content="Sitio para desarrolladores de MercadoPago.">
+      <meta name="keywords" content="mercadopago,sdk,payment,pagos,braintree,paypal,html5,javascript,mobile,drifty,ionic,hybrid,phonegap,cordova,native,ios,android,angularjs">
+      <title>Soluciones de pago para el negocio que quieras - MercadoPago</title>
+      <link href="./css/site.css" rel="stylesheet">
+      <link href="./css/prism.css" rel="stylesheet" />
+      <script src="./js/jquery.min.js"></script>
+      <script src="./js/prism.js"></script>
+   </head>
+   <body class="getting-started-page">
+      <nav class="navbar navbar-default horizontal-gradient" role="navigation">
+         <div class="container">
+            <div class="navbar-header">
+               <button type="button" class="navbar-toggle button ionic" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+               <i class="icon ion-navicon"></i>
+               </button>
+               <a class="navbar-brand" href="http://mercadopago.com/">
+               <img src="img/iso-mercadopago.png" width="60" height="41" alt="MercadoPago SDK">
+               </a>
+            </div>
+            <div class="collapse navbar-collapse navbar-ex1-collapse">
+               <ul class="nav navbar-nav navbar-right">
+                  <li><a class="getting-started-nav nav-link" href="index.html">Checkout básico</a></li>
+                  <li><a class="docs-nav nav-link" href="f2.html">Checkout personalizado</a></li>
+                  <li><a class="blog-nav nav-link" href="http://blog.ionic.io/">Blog</a></li>
+                  <li><a class="nav-link" href="https://www.mercadopago.com.ar/developers/es/community/forum/">Foro de desarrolladores</a></li>
+               </ul>
+            </div>
+         </div>
+      </nav>
+      <div class="header horizontal-gradient">
+         <div class="container">
+            <h3>MercadoPago Android SDK</h3>
+            <h4>Soluciones de pago para el negocio que quieras.</h4>
+         </div>
+         <div class="news">
+            <div class="container">
+               <div class="row">
+                  <div class="col-sm-8 news-col">
+                     Tenes consultas? Podes intercambiarlas en nuestro <a href="https://www.mercadopago.com.ar/developers/es/community/forum/">Foro de desarrolladores</a>.
+                  </div>
+                  <div class="col-sm-4 search-col">
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+      <div class="container content-container">
+         <div class="row">
+            <div class="col-md-2 col-sm-3 aside-menu">
+               <div class="docked-menu" style="top: 20px; width: auto;">
+                  <ul class="nav left-menu">
+                     <li class="menu-title">
+                        <a href="our_flavors.html">SOLUCIONES PROPUESTAS</a>
+                     </li>
+                  </ul>
+                  <ul class="nav left-menu active-menu">
+                     <li>
+                        <a href="f2.html#data_collection_ui">UI Propuesta para tu Checkout</a>
+                     </li>
+                     <li>
+                        <a href="f2.html#cards">Cobra con tarjeta</a>
+                        <ul>
+                           <li>
+                              <a href="f2.html#card_with_installments">Con cuotas</a>
+                              <ul>
+                                 <li><a href="f2.html#issuers">Bancos</a></li>
+                                 <li><a href="f2.html#installments">Cuotas</a></li>
+                                 <li><a href="f2.html#promos">Promociones</a></li>
+                              </ul>
+                           </li>
+                           <li><a href="cards_mocked.html">Tarjetas de prueba</a></li>
+                        </ul>
+                     </li>
+                     <li>
+                        <a href="f2.html#payment_methods_root">Cobra con otros medios de pago</a>
+                        <ul>
+                           <li><a href="f2.html#payment_methods_groups">Agrupados</a></li>
+                           <li><a href="f2.html#payment_methods_cards">Tarjeta</a></li>
+                           <li><a href="f2.html#payment_methods_cash">Efectivo</a></li>
+                           <li><a href="f2.html#payment_methods_bank_transfer">Transferencia bancaria</a></li>
+                           <li><a href="f2.html#payment_methods_type_filter">Filtrado por tipo</a></li>
+                           <li><a href="f2.html#payment_methods_id_filter">Filtrado por id</a></li>
+                           <li><a href="f2.html#payment_methods_all">Sin agrupar</a></li>
+                        </ul>
+                     </li>
+                     <li>
+                        <a href="f2.html#payment_result">Comunica el estado del pago</a>
+                        <ul>
+                           <li><a href="f2.html#congrats">Tarjeta</a></li>
+                           <li><a href="f2.html#instructions">Otros medios de pago</a></li>
+                        </ul>
+                     </li>
+                  </ul>
+                  <ul class="nav left-menu">
+                     <li class="menu-title">
+                        <a href="preferences_tool.html">Creación de preferencias</a>
+                     </li>
+                  </ul>
+                  <ul class="nav left-menu">
+                     <li class="menu-title">
+                        <a href="payment_types_methods.html">Tipos y Medios de pago disponibles</a>
+                     </li>
+                  </ul>
+                  <ul class="nav left-menu">
+                     <li class="menu-title">
+                        <a href="glosario.html">Glosario</a>
+                     </li>
+                  </ul>
+               </div>
+            </div>
+            <div class="col-md-10 col-sm-9 main-content">
+               <h1 id="platform-classes">Tipos y medios de pago disponibles</h1>
+               <p>El listado de tipos y medios de pago disponibles dependerá de la public_key que utilices. Esto ocurre porque la public_key está asociada a un país. Podes usar la infomación que está a continuación para excluir tipos y medios de pago ya sea al crear tu preferencia de pago para iniciar el <a href="index.html">Checkout propuesto por MercadoPago</a> o en nuestra <a href="f2.html#data_collection_ui">propuesta de UI para tu checkout</a>.</p>
+               <h2 id="platform-device-classes">Tipos de pago disponibles</h2>
+               <p>Cuando hablamos de <b>tipos de pago</b>, nos referimos a la forma en la que el usuario va a pagar. Puede ser con tarjeta, en efectivo, entre otros.</p>
+               <table class="table">
+                  <tbody>
+                     <tr>
+                        <td>payment_type_id</td>
+                        <td>Descripción</td>
+                     </tr>
+                     <tr>
+                        <td><code>credit_card</code></td>
+                        <td>Tarjeta de crédito</td>
+                     </tr>
+                     <tr>
+                        <td><code>debit_card</code></td>
+                        <td>Tarjeta de débito</td>
+                     </tr>
+                     <tr>
+                        <td><code>prepaid_card</code></td>
+                        <td>Tarjeta prepaga</td>
+                     </tr>
+                     <tr>
+                        <td><code>account_money</code></td>
+                        <td>Dinero en cuenta de MercadoPago</td>
+                     </tr>
+                     <tr>
+                        <td><code>ticket</code></td>
+                        <td>Pago en efectivo en entidades permitidas por MercadoPago</td>
+                     </tr>
+                     <tr>
+                        <td><code>bank_transfer</code></td>
+                        <td>Transferencia bancaria</td>
+                     </tr>
+                     <tr>
+                        <td><code>atm</code></td>
+                        <td>Pagos en cajeros automáticos</td>
+                     </tr>
+                     <tr>
+                        <td><code>digital_currency</code></td>
+                        <td>Moneda digital. <b>Bitcoins</b>.</td>
+                     </tr>
+                  </tbody>
+               </table>
+               <h2 id="platform-os-version-classes">Medios de pago disponibles</h2>
+               <p>Con el <b>medio de pago</b> hacemos referencia a la entidad participante del pago en sí misma. Desde la marca de la tarjeta, pasando por la entidad de cobro en efectivo hasta el banco en el que se encuentra el cajero automático para que el usuario realice el pago. En este caso, podes visitar el link correspondiente a cada sitio en el que se encuentra habilitada la SDK para saber los medios de pago que soportamos.</p>
+               <table class="table">
+                  <tbody>
+                     <tr>
+                        <td>País</td>
+                     </tr>
+                     <tr>
+                        <td><a href="https://api.mercadopago.com/sites/MLA/payment_methods">Argentina</a></td>
+                     </tr>
+                     <tr>
+                        <td><a href="https://api.mercadopago.com/sites/MLB/payment_methods">Brasil</a></td>
+                     </tr>
+                     <tr>
+                        <td><a href="https://api.mercadopago.com/sites/MCO/payment_methods">Colombia</a></td>
+                     </tr>
+                     <tr>
+                        <td><a href="https://api.mercadopago.com/sites/MLC/payment_methods">Chile</a></td>
+                     </tr>
+                     <tr>
+                        <td><a href="https://api.mercadopago.com/sites/MLM/payment_methods">Mexico</a></td>
+                     </tr>
+                     <tr>
+                        <td><a href="https://api.mercadopago.com/sites/MLV/payment_methods">Venezuela</a></td>
+                     </tr>
+                  </tbody>
+               </table>
+               <p><i>Al crear una preferencia de pago, recuerda que puedes excluir los <b>payment_method_id</b> especificando esos medios de pago en una lista llamada <b>excludedPaymentMethods</b>.</i></p>
+            </div>
+         </div>
+      </div>
+      <div class="pre-footer">
+         <div class="row ionic">
+            <div class="col-sm-6 col-a">
+               <h4>
+                  <a href="f2.html">Arma tu propio checkout usando nuestra UI</a>
+               </h4>
+               <p>
+                  La SDK de MercadoPago te provee la interfaz gráfica resuelta para cada uno de los pasos propuestos para completar un pago. Si querés tener control sobre el flujo de compra de tu usuario, podes armar el flujo que quieras, sin preocuparte por la UI del mismo.
+               </p>
+            </div>
+            <div class="col-sm-6 col-b">
+               <h4>
+                  <a href="our_flavors.html">Usá los servicios de MercadoPago para armar tu checkout</a>
+               </h4>
+               <p>
+                  También encapsulamos los servicios en una clase para que puedas consumirlos y proveerle la interfaz gráfica que desees a tu usuario sin necesidad de entender cómo conectarte con nuestras APIs. 
+               </p>
+            </div>
+         </div>
+      </div>
+      <footer class="footer">
+         <div class="newsletter row">
+            <div class="newsletter-container">
+               <div class="col-sm-7">
+                  <div class="newsletter-text">Newsletter</div>
+                  <div class="sign-up">Suscribite a nuestro newsletter para estar al tanto de los avances en nuestra SDK, workshops, nuevos features, etc.</div>
+               </div>
+               <form action="" method="post" class="input-group col-sm-5">
+                  <input id="fieldEmail" name="cm-jytylh-jytylh" class="form-control" type="email" placeholder="Email" required="">
+                  <span class="input-group-btn">
+                  <button class="btn btn-default" type="submit">Suscribirme</button>
+                  </span>
+               </form>
+            </div>
+         </div>
+         <div class="copy">
+            <div class="copy-container">
+               <p class="authors">
+                  © 2016 MercadoLibre S.R.L.
+               </p>
+            </div>
+         </div>
+      </footer>
+      <script src="./js/bootstrap.min.js"></script>
+      <script src="./js/site.js"></script>
+      <script src="./js/cookies.min.js"></script>
+      <script>
+         $('.navbar .dropdown').on('show.bs.dropdown', function(e){
+           //$(this).find('.dropdown-menu').addClass('animated fadeInDown');
+         });
+         
+         // ADD SLIDEUP ANIMATION TO DROPDOWN //
+         $('.navbar .dropdown').on('hide.bs.dropdown', function(e){
+           //$(this).find('.dropdown-menu').first().stop(true, true).slideUp(200);
+           //$(this).find('.dropdown-menu').removeClass('animated fadeInDown');
+         });
+         
+      </script>
+   </body>
+</html>

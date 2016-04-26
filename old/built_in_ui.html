@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="css/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+  <title>Built-in UI</title>
+  </head>
+
+  <body>
+    <header>
+      <div class="inner">
+          <img src="images/logo-mercadopago.png" alt="logoMp">
+
+          <div class="right">
+              <img class="centered" src="images/logo-android.png" alt="logoAndroid">
+          </div>
+      </div>
+    </header>
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+            <h1>Built-in UI</h1>
+            <p>We offer you the following UI solutions:</p>
+            <table>
+              <tr>
+                <td><a href="#payment_methods_ui">Payment methods selection UI</a><br>
+                  <a href="#issuers_ui">Issuers selection UI</a><br>
+                  <a href="#new_card_ui">New card input UI</a></td>
+                <td><img class="bracket" src="images/bracket.png" alt="bracket"></td>
+                <td><a href="#guessing">Guessing card input UI</a></td>
+              </tr>
+              <td>
+                <br>
+                  <a href="#installments">Installments selection UI</a><br>
+                  <a href="#customer_cards">Customer cards UI</a><br>
+                  <a href="#bank_deals">Bank deals UI</a><br>
+                  <a href="#congrats">Payment result UI</a>
+              </td>
+              </table>
+
+          <br>
+          <h2><a name="payment_methods_ui"></a>Payment methods selection UI</h2>
+
+          <p>Add this code to launch the solution:</p>
+          <pre class="prettyprint">
+          // Call payment methods activity
+          new MercadoPago.StartActivityBuilder()
+               .setActivity(activity)
+               .setPublicKey(yourPublicKey)
+               .setSupportedPaymentTypes(supportedPaymentTypes)
+               .startPaymentMethodsActivity();
+          </pre>
+          <p><b>Tip:</b>  to filter payment methods by their type, the <i>setSupportedPaymentTypes</i> method receives a list of strings that let you filter by:<br>
+          <i>Credit card: “credit_card”<br>
+          Debit card: “debit_card”<br>
+          Pre paid card: “prepaid_card”<br>
+          Atm: “atm”<br>
+          Tickets: “ticket”<br></i>
+          <br>
+          <b>Example:</b>
+          <pre class="prettyprint">
+          protected List&lt;String&gt; supportedPaymentTypes = new ArrayList&lt;String&gt;(){{
+             add("credit_card");
+             add("debit_card");
+             add("prepaid_card");
+             add("ticket");
+             add("atm");
+          }};
+
+          </pre>
+
+          <p><b>Let's see!</b></p>
+          </p>A list of payment methods will show up:<p>
+          <br>
+          <img class="centered" src="images/screenshots/pm_list.png" alt="pm_list">
+          <br>
+          <p>And in your launcher activity, get the selected payment method like this:
+          </p>
+          <pre class="prettyprint">
+          protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+               if (requestCode == MercadoPago.PAYMENT_METHODS_REQUEST_CODE) {
+                   if (resultCode == RESULT_OK) {
+                       // Set payment method
+                       PaymentMethod paymentMethod = JsonUtil.getInstance().fromJson(data.getStringExtra("paymentMethod"), PaymentMethod.class);
+                  // Error handling
+                   } else {
+                       if ((data != null) && (data.getStringExtra("apiException") != null)) {
+                           Toast.makeText(getApplicationContext(), data.getStringExtra("apiException"), Toast.LENGTH_LONG).show();
+                       }
+                   }
+               }
+            }
+            </pre>
+
+          <br>
+          <h2><a name="issuers_ui"></a>Issuers selection UI</h2>
+
+          <p>If your app should support payments in installments, depending on the payment method you may need to add an issuer's selection screen.</p>
+
+          <p>Once your user has selected a payment method, to acknowledge whether issuer selection is needed or not, this will do the trick:</p>
+
+          <pre class="prettyprint">
+          selectedPaymentMethod.isIssuerRequired()
+          </pre>
+
+          <p>if it’s required, start our issuer selection UI like this:</p>
+
+          <pre class="prettyprint">
+          new MercadoPago.StartActivityBuilder()
+               .setActivity(activity)
+               .setPublicKey(yourPublicKey)
+               .setPaymentMethod(mTempPaymentMethod)
+               .startIssuersActivity();
+          </pre>
+          <p><b>Let's see!</b></p>
+          <br>
+          <p>A list of issuers is shown:</p>
+          <img class="centered" src="images/screenshots/issuers_list.png" alt="issuers_list">
+          <p>Retrieve the selected one in your launcher activity:</p>
+          <pre class="prettyprint">
+          @Override
+          protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+            if (requestCode == MercadoPago.INSTALLMENTS_REQUEST_CODE) {
+                 if (resultCode == RESULT_OK) {
+                  // Set issuer selection
+                    issuer = JsonUtil.getInstance().fromJson(data.getStringExtra("issuer"), Issuer.class);
+                  // Error handling
+                  } else {
+                     if (data != null) {
+                         if (data.getStringExtra("apiException") != null) {
+                             finishWithApiException(data);
+                         } else if (data.getBooleanExtra("backButtonPressed", false)) {
+                             startPaymentMethodsActivity();
+                         }
+                     }
+                  }
+               }
+            }
+          </pre>
+          <br>
+          <h2><a name="new_card_ui"></a>New card input UI</h2>
+          <p>Once your user has selected a payment method, your app can start a card input UI. </p>
+          <pre class="prettyprint">
+          new MercadoPago.StartActivityBuilder()
+                 .setActivity(activity)
+                 .setPublicKey(yourPublicKey)
+                 .setPaymentMethod(paymentMethod)
+                 .startNewCardActivity();
+          </pre>
+          <p><b>Tip:</b> to avoid asking for the security code more than once, if your app does it later in the flow you can hide it from the card input form:</p>
+          <pre class="prettyprint">
+          new MercadoPago.StartActivityBuilder()
+             .setActivity(activity)
+             .setPublicKey(yourPublicKey)
+             .setPaymentMethod(paymentMethod)
+             .setRequireSecurityCode(false)
+             .startNewCardActivity();
+          </pre>
+
+          <p><b>Let's see!</b></p>
+          <br>
+          <p>A card form is shown:</p>
+          <img class="centered" src="images/screenshots/new_card.png" alt="new_card">
+          <br>
+          <p>This activity’s result, if succeeded, is a <b><i>CardToken</i></b> object. This object is used to create a <b><i>Token</i></b> object, which is used to create a payment.
+          The <b><i>cardToken</i></b> must validate the security code according to the payment method. If the security code was hid, you’ll have to do it yourself. The following line of code validates it and throws an error if needed:
+          </p>
+          <pre class="prettyprint">
+          cardToken.validateSecurityCode(this, paymentMethod);
+          </pre>
+
+          <p>Get the <b><i>cardToken</i></b> in your launcher activity:</p>
+          <pre class="prettyprint">
+          protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+            if (requestCode == MercadoPago.NEW_CARD_REQUEST_CODE) {
+               if (resultCode == RESULT_OK) {
+               // Set selection status
+                 mCardToken = JsonUtil.getInstance().fromJson(data.getStringExtra(  "cardToken"), CardToken.class);
+
+                } else {
+                   if (data != null) {
+                       if (data.getStringExtra("apiException") != null) {
+                           finishWithApiException(data);
+                       }
+                   }
+                }
+            }
+          }
+          </pre>
+
+        <br>
+        <a name="guessing"><h2>Guessing card input UI</h2></a>
+        <p>Instead of collecting payment method, issuer and card data at different steps, you can use our data guessing card form, which will fill the most information it can automatically. Note that this feature is only available for credit and debit cards.
+        <br>
+        Just launch the activity like this:
+        </p>
+
+        <pre class="prettyprint">
+          new MercadoPago.StartActivityBuilder()
+               .setActivity(mActivity)
+               .setPublicKey(yourPublicKey)
+               .setSupportedPaymentTypes(supportedPaymentTypes)
+               .startGuessingCardActivity();
+        </pre>
+        <p><b>Let's see!</b></p>
+
+          <p>This will show up:</p>
+          <img class="centered" src="images/screenshots/guessing_card.png" alt="guessing_card">
+          <br>
+          <p>When card BIN is entered, if it identifies an unique payment method, it’s image is shown:</p>
+          <img class="centered" src="images/screenshots/bin_entered.png" alt="bin_entered">
+          <p class="image_footer">Visa credit card identified</p>
+          <p>If the BIN doesn’t identify a unique payment method, a selector appears:</p>
+          <img class="centered" src="images/screenshots/pm_spinner_guessing.png" alt="pm_spinner_guessing">
+          <p class="image_footer">Payment method not identified by card BIN</p>
+
+          <p>Whether the payment method was “guessed” or not, if issuer selection is needed, another selector appears:</p>
+          <img class="centered" src="images/screenshots/issuer_required_guessing.png" alt="issuer_required_guessing">
+          <p class="image_footer">Issuer (bank) selector</p>
+          <br>
+
+        <p><b>Tip:</b> you can choose if the issuer is required or not. If your app should offer payment in installments, issuer will be required. If not, just set is as not required:</p>
+
+        <pre class="prettyprint">
+          new MercadoPago.StartActivityBuilder()
+               .setActivity(mActivity)
+               .setPublicKey(yourPublicKey)
+               .setRequireIssuer(false) //just add this
+               .setSupportedPaymentTypes(supportedPaymentTypes)
+               .startGuessingCardActivity();
+        </pre>
+
+        <p><b>Tip:</b> to avoid asking for the security code more than once, if your app does it later in the flow you can hide it from the card input form:</p>
+        <pre class="prettyprint">
+          new MercadoPago.StartActivityBuilder()
+               .setActivity(activity)
+               .setPublicKey(yourPublicKey)
+               .setRequireSecurityCode(false) //just add this
+               .setSupportedPaymentTypes(supportedPaymentTypes)
+               .startGuessingCardActivity();
+        </pre>
+
+        <p><b>Tip:</b> you can choose wheter showing bank deals or not:</p>
+        <pre class="prettyprint">
+          new MercadoPago.StartActivityBuilder()
+             .setActivity(activity)
+             .setPublicKey(yourPublicKey)
+             .setShowBankDeals(true) //true to show them, false to hide
+             .setSupportedPaymentTypes(supportedPaymentTypes)
+             .startGuessingCardActivity();
+        </pre>
+        <p>Get the <b><i>paymentMethod</i></b>, <b><i>issuer</i></b>, and <b><i>cardToken</i></b> in your launcher activity:</p>
+        <pre class="prettyprint">
+
+          protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+            if (requestCode == MercadoPago.GUESSING_CARD_REQUEST_CODE) {
+              if(resultCode == RESULT_OK)
+              {
+
+                  paymentMehod = JsonUtil.getInstance().fromJson(data.getStringExtra("paymentMethod"), PaymentMethod.class);
+                  issuer = JsonUtil.getInstance().fromJson(data.getStringExtra("issuer"), Issuer.class);
+                  cardToken = JsonUtil.getInstance().fromJson(data.getStringExtra("cardToken"), CardToken.class);
+
+              }
+              else if ((data != null) && (data.getStringExtra("apiException") != null)) {
+                  finishWithApiException(data);
+              }
+            }
+          }
+        </pre>
+
+        <br>
+        <a name="installments"><h2>Installments UI</h2></a>
+        <p>
+        <br>
+        To launch our installments selection activity, you must get a list of payer costs. In order to do so, you must call a method from our SDK, providing the following information:
+        <br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Card number BIN (first six digits)<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Amount to pay<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Issuer ID<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Payment type ID (accesible from the PaymentMethod object)<br>
+        <br>
+        And a Callback object.
+        <br>
+        <br>
+        Example:
+        </p>
+
+
+        <pre class="prettyprint">
+           mMercadoPago.getInstallments(bin, amount, issuerId, paymentTypeId, new Callback&lt;List&lt;Installment&gt;&gt;() {
+             @Override
+             public void success(List&lt;Installment&gt; installments, Response response) {
+
+                 if ((installments.size() > 0) && (installments.get(0).getPayerCosts().size() > 0)) {
+                     // Set installments card data and visibility
+                     mPayerCosts = installments.get(0).getPayerCosts();  //Here you get the payer costs
+                 }
+
+             @Override
+             public void failure(RetrofitError error) {
+
+                 mExceptionOnMethod = "getInstallmentsAsync";
+                 ApiUtil.finishWithApiException(mActivity, error);
+             }
+           });
+        </pre>
+        <br>
+
+        <p>Once you got the payer costs, launch the Installments activity:</p>
+        <pre class="prettyprint">
+        new MercadoPago.StartActivityBuilder()
+                .setActivity(mActivity)
+                .setPayerCosts(mPayerCosts)
+                .startInstallmentsActivity();
+        </pre>
+
+        <p><b>Let's see!</b></p>
+
+          <p>A list of available installments will show up: </p>
+          <img class="centered" src="images/screenshots/installments_list.png" alt="installments_list">
+          <br>
+
+        <p>Get the selected <b><i>payerCost</i></b> in your launcher activity:</p>
+        <pre class="prettyprint">
+
+          protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+            if (requestCode == MercadoPago.INSTALLMENTS_REQUEST_CODE) {
+              if (resultCode == RESULT_OK) {
+
+                  // Set selection status
+                  selectedPayerCost = JsonUtil.getInstance().fromJson(data.getStringExtra("payerCost"), PayerCost.class);
+
+              //Error handling
+              } else {
+
+                  if ((data != null) && (data.getStringExtra("apiException") != null)) {
+                      finishWithApiException(data);
+                  }
+                }
+              }
+            }
+        </pre>
+
+
+
+        <br>
+        <a name="customer_cards"><h2>Customer cards UI</h2></a>
+        <br>
+        <p>With MercadoPago SDK, you can manage your customer's information easily. By giving to each customer an id and syncing it with MercadoPago, we can handle your users information (preferred cards, address, name, email, etc.). In order to do this, you’ll have to set up your server with <a href="https://www.mercadopago.com.ar/developers/es/tools/">MercadoPago Server SDK</a>, and then add your base URL, getCustomer URI and user access token to get a Customer object. A customer has a list of cards, which is needed to launch our Customer cards UI.
+        <br>
+        First, get your Customer:
+        </p>
+
+
+        <pre class="prettyprint">
+           MerchantServer.getCustomer(this, mMerchantBaseUrl, mMerchantGetCustomerUri, mMerchantAccessToken, new Callback&lt;Customer&gt;() {
+                 @Override
+                 public void success(Customer customer, Response response) {
+                     cards = customer.getCards();
+                 }
+
+                 @Override
+                 public void failure(RetrofitError error) {
+                     mExceptionOnMethod = "getCustomerCardsAsync";
+                     ApiUtil.finishWithApiException(mActivity, error);
+                 }
+              });
+            }
+        </pre>
+        <br>
+
+        <p>And then, start the Customer cards UI with the cards you've got:</p>
+        <pre class="prettyprint">
+        new MercadoPago.StartActivityBuilder()
+           .setActivity(mActivity)
+           .setCards(cards)
+           .startCustomerCardsActivity();
+        </pre>
+
+        <p><b>Let's see!</b></p>
+
+          <p>A list of available saved cards will show up: </p>
+          <img class="centered" src="images/screenshots/saved_cards.png" alt="saved_cards">
+          <br>
+
+        <p>You'll get a <b><i>PaymentMethodRow</i></b> object in your launcher activity. It has a Card object that could be null if the user did not select a card, so you'll have to check that and decide what to do (start a PaymentMethod selection UI or the guessing form). If the user selected a card, the Card object provides the corresponding PaymentMethod and Issuer.
+        <br>
+        Here's an example:
+        </p>
+        <pre class="prettyprint">
+
+          protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+            if (requestCode == MercadoPago.CUSTOMER_CARDS_REQUEST_CODE) {
+              if (resultCode == RESULT_OK) {
+
+                  PaymentMethodRow selectedPaymentMethodRow = JsonUtil.getInstance().fromJson(data.getStringExtra("paymentMethodRow"), PaymentMethodRow.class);
+
+                  if (selectedPaymentMethodRow.getCard() != null) {
+
+                      mSelectedPaymentMethod = mSelectedPaymentMethodRow.getCard().getPaymentMethod();
+                      mSelectedIssuer = mSelectedPaymentMethodRow.getCard().getIssuer();
+
+                  } else {
+                      startPaymentMethodsActivity(); //or startGuessingCardActivity();
+                  }
+              } else {
+                  if ((data != null) && (data.getStringExtra("apiException") != null)) {
+                      finishWithApiException(data);
+                  }
+              }
+            }
+          }
+        </pre>
+        <br>
+          <h2><a name="bank_deals"></a>Bank deals UI</h2>
+          <p>To show available bank deals, just add the following code to your project: </p>
+          <pre class="prettyprint">
+           new MercadoPago.StartActivityBuilder()
+                .setActivity(this)
+                .setPublicKey(yourPublicKey)
+                .startBankDealsActivity();
+          </pre>
+
+          <p><b>Let's see!</b></p>
+          <br>
+          <p>Bank deals are shown:</p>
+          <img class="centered" src="images/screenshots/bank_deals.png" alt="bank_deals">
+          <p class="image_footer">Bank deals example</p>
+          <br>
+          <br>
+          <p>If selected, term and conditions of the bank deal are shown:</p>
+          <img class="centered" src="images/screenshots/terms_conditions.png" alt="terms_conditions">
+          <p class="image_footer">Bank deal’s terms and conditions</p>
+          <br>
+
+          <h2><a name="congrats"></a>Payment result UI</h2>
+          <p>Once a payment is created, you can use our UI to show it's result. Have a look at <a href="make_payment.html">Make a payment</a> to see how to create one and the possible results. Just add this code to start our UI:</p>
+          <pre class="prettyprint">
+           new MercadoPago.StartActivityBuilder()
+                 .setActivity(activity)
+                 .setPayment(payment)
+                 .setPaymentMethod(paymentMethod)
+                 .startCongratsActivity();
+          </pre>
+
+          <p><b>Let's see!</b></p>
+          <br>
+          <p>E.g: succesful payment:</p>
+          <img class="centered" src="images/screenshots/congratulations.png" alt="congratualtions">
+          <br>
+
+        </section>
+
+        <aside id="sidebar">
+          <a href="https://github.com/mreverter/sdk-android" class="button"><small>View project on</small> GitHub</a>
+
+          <a href="https://github.com/mreverter/sdk-android/zipball/master" class="button">
+            <small>Download</small>
+            .zip file
+          </a>
+          <a href="https://github.com/mreverter/sdk-android/tarball/master" class="button">
+            <small>Download</small>
+            .tar.gz file
+          </a>
+
+          <p class="repo-owner"><a href="https://github.com/mreverter/sdk-android"></a> is maintained by <a href="https://github.com/mreverter">mreverter</a>.</p>
+        </aside>
+      </div>
+    </div>
+  </body>
+</html>

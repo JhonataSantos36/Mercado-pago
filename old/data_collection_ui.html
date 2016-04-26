@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="css/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+  <title>Data-collection UI</title>
+  </head>
+
+  <body>
+    <header>
+      <div class="inner">
+          <img src="images/logo-mercadopago.png" alt="logoMp">
+
+          <div class="right">
+              <img class="centered" src="images/logo-android.png" alt="logoAndroid">
+          </div>
+      </div>
+    </header>
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+            <h1>Data-collection UI</h1>
+            <p>We offer you solutions to collect both payment methods and shipping information. Using this flavor, once collected this information, you'll have to make a payment by yourself (have a look at <a href="make_payment.html">Make a payment</a>).</p>
+            <p>Here, you'll learn:</p>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#launch_payment_vault">How to launch a payment method selection flow</a><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#payment_vault_ui">How our UI looks like</a><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#get_payment_method_data">How to get collected data in your launcher activity</a><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#payment_method_exclusions">How exclude payment methods, payment types and more</a><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#payment_method_defaults">How to set a default payment method</a><br>
+
+
+          <h2><a name="launch_payment_vault"></a>Payment methods data collection UI</h2>
+
+          <p>Add this code to launch the solution:</p>
+          <pre class="prettyprint">
+          // Call payment methods selection activity
+          new MercadoPago.StartActivityBuilder()
+               .setActivity(activity)
+               .setPublicKey(yourPublicKey)
+               .setAmount(BigDecimal.valueOf(100))
+               .setCurrency(CurrenciesUtil.CURRENCY_ARGENTINA) //Set your country currency
+               .setPurchaseTitle("Item name")
+               .setItemImageUri("") //It will be shown in the shopping cart
+               .startPaymentVaultActivity();
+          </pre>
+          <p><a name="payment_vault_ui"></a><b>Let's see!</b></p>
+          <p>The following screen is shown:</p>
+          <img class="centered" src="images/screenshots/revamp-inicio.png" alt="revamp-inicio">
+          <p class="image_footer">Payment method choise example</p>
+          <p>Your users can visualize their purchase information by clicking on the shopping cart icon:</p>
+          <img class="centered" src="images/screenshots/revamo-inicio-carrito.png" alt="revamo-inicio-carrito">
+          <p class="image_footer">Information shown when clicking on icon in the upper right corner of the screen</p>
+
+          <p>Within this screen, your user will be able to choose a payment method by going into the shown options, as we'll see in the following sections.</p>
+
+          <h3>Cards option selected</h2>
+          <p>The user will see a list of the available card types supported, for example:</p>
+          <img class="centered" src="images/screenshots/revamp-tarjetas.png" alt="revamp-cards">
+          <p class="image_footer">Card types</p>
+
+          <h3>Cash option selected</h2>
+          <p>The user will see a list of the available card types supported, for example:</p>
+          <img class="centered" src="images/screenshots/revamp-efectivo.png" alt="revamp-cash">
+          <p class="image_footer">Cash payment methods</p>
+
+          <h3>Bank transfer option selected</h2>
+          <p>The user will see a list of the available card types supported, for example:</p>
+          <img class="centered" src="images/screenshots/revamp-transferencia-bancaria.png" alt="revamp-bank_transfer">
+          <p class="image_footer">Bank transfer payment methods</p>
+
+          <h2>Retrieving the data in your activity</h2><a name="get_payment_method_data"></a>
+          <p>Once your user has selected a payment method, you'll have to get it in the activity that launched the payment flow like this:</p>
+          <pre class="prettyprint">
+            @Override
+            protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+              if(requestCode == MercadoPago.PAYMENT_VAULT_REQUEST_CODE) {
+                  if(resultCode == RESULT_OK) {
+
+                          Issuer selectedIssuer = (Issuer) data.getSerializableExtra("issuer");
+
+                          PayerCost selectedPayerCost = (PayerCost) data.getSerializableExtra("payerCost");
+
+                          Token createdToken = (Token) data.getSerializableExtra("token");
+
+                          PaymentMethod selectedPaymentMethod = (PaymentMethod) data.getSerializableExtra("paymentMethod");
+                      }
+                  }
+                  else if (resultCode == RESULT_CANCELED) {
+                        //Handle result canceled case
+                  }
+              }
+          </pre>
+          <br>
+          <p>If a card payment method was selected, you'll get issuer, payer costs(installments), a "token" and the payment method. If any other payment method was selected, you'll just receive a payment mehtod.</p>
+
+          <p>With this information, you'll be able to <a href="make_payment.html">Make a payment</a></p>
+
+          <h2><a name="payment_method_exclusions"></a>Payment methods exclusions</h2>
+          <p>If desired, you can avoid getting paid with a particular payment method, or any payment methods of a certain type. Also, you could set constraints in the amount of installments a user can select if paying with credit card.</p>
+          <p>To get familiar with what payment types we handle and how you should manage this information, take a look at <a href="payment_types_available.html">our payment types docs.</a></p>
+          <p>When starting our payment method selection UI, you can set these exclusions:</p>
+
+          <h3></a>Payment type exclusion</h2>
+
+          <p>In this example, we will exclude bank transfer payment types.</p>
+          <pre class="prettyprint">
+          //Create list of excluded payment types somewhere in your code
+          List&lt;String&gt; excludedPaymentMethodIds = new ArrayList&lt;String&gt;(){{
+              add(PaymentType.BANK_TRANSFER);
+          }};
+          // Call payment methods selection activity
+          new MercadoPago.StartActivityBuilder()
+                .setActivity(activity)
+                .setPublicKey(yourPublicKey)
+                .setAmount(BigDecimal.valueOf(100))
+                .setCurrency(CurrenciesUtil.CURRENCY_ARGENTINA) //Set your country currency
+                .setPurchaseTitle("Item name")
+                .setExcludedPaymentTypes(excludedPaymentMethodIds);
+                .startPaymentVaultActivity();
+          </pre>
+          <p>And you'll see this:</p>
+          <img class="centered" src="images/screenshots/revamp-exclusiones-types.png" alt="revamp-excluded_types">
+          <p class="image_footer">Types excluded</p>
+
+          <h3></a>Payment method exclusion</h2>
+          <p>In this example, we will exclude all the "bank transfer" payment methods, except "bancomer_bank_transfer".</p>
+          <pre class="prettyprint">
+          //Create list of excluded payment methods somewhere in your code
+          List&lt;String&gt; mExcludedPaymentTypes = new ArrayList&lt;String&gt;(){{
+              add("banamex_bank_transfer");
+              add("serfin_bank_transfer"); //Santander's id
+          }};
+          // Call payment methods selection activity
+          new MercadoPago.StartActivityBuilder()
+                .setActivity(activity)
+                .setPublicKey(yourPublicKey)
+                .setAmount(BigDecimal.valueOf(100))
+                .setCurrency(CurrenciesUtil.CURRENCY_ARGENTINA) //Set your country currency
+                .setPurchaseTitle("Item name")
+                .setExcludedPaymentMethodIds(excludedPaymentMethods);
+                .setMaxInstallments(MAX_INSTALLMENTS);
+                .startPaymentVaultActivity();
+          </pre>
+          <p>And you'll see this:</p>
+          <img class="centered" src="images/screenshots/revamp-payment-method-inicio.png" alt="revamp-payment-method-inicio">
+          <p class="image_footer">Payment methods excluded</p>
+
+          <h3></a>Installments constraint</h2>
+          <p>In this example, we will set a limit to the amount of installments that will be offered to the payer.</p>
+          <pre class="prettyprint">
+
+          // Call payment methods selection activity
+          new MercadoPago.StartActivityBuilder()
+                .setActivity(activity)
+                .setPublicKey(yourPublicKey)
+                .setAmount(BigDecimal.valueOf(100))
+                .setCurrency(CurrenciesUtil.CURRENCY_ARGENTINA) //Set your country currency
+                .setPurchaseTitle("Item name")
+                .setExcludedPaymentMethodIds(excludedPaymentMethods);
+                .setMaxInstallments(6)
+                .startPaymentVaultActivity();
+          </pre>
+
+          <p><b>Tip:</b> all the exclusions and constraints shown can be used together.<br>
+
+        </section>
+        <aside id="sidebar">
+          <a href="https://github.com/mreverter/sdk-android" class="button"><small>View project on</small> GitHub</a>
+
+          <a href="https://github.com/mreverter/sdk-android/zipball/master" class="button">
+            <small>Download</small>
+            .zip file
+          </a>
+          <a href="https://github.com/mreverter/sdk-android/tarball/master" class="button">
+            <small>Download</small>
+            .tar.gz file
+          </a>
+
+          <p class="repo-owner"><a href="https://github.com/mreverter/sdk-android"></a> is maintained by <a href="https://github.com/mreverter">mreverter</a>.</p>
+        </aside>
+      </div>
+    </div>
+  </body>
+</html>

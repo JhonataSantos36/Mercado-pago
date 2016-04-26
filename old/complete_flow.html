@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="css/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+  <title>Complete payment flow tool</title>
+  </head>
+
+  <body>
+    <header>
+      <div class="inner">
+          <img src="images/logo-mercadopago.png" alt="logoMp">
+
+          <div class="right">
+              <img class="centered" src="images/logo-android.png" alt="logoAndroid">
+          </div>
+      </div>
+    </header>
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          <div>
+            <h1>Complete Checkout flow tool</h1>
+          </div>
+
+          <div>
+            <h2>Create a Checkout Preference</h2>
+            <p>First you need to create a checkout preference with all payment related information in your server: </p>
+            <pre class="prettyprint">
+              //Create an Item
+              Item item = new Item("itemId", 1);
+
+              //Create a CheckoutIntent with an access token to your server and the item
+              CheckoutIntent checkoutIntent = new CheckoutIntent(MERCHANT_ACCESS_TOKEN, item);
+
+              //Finally, create a preference
+              MerchantServer.createPreference("http://merchanturl.com", "/preferences",checkoutIntent, new Callback&lt;CheckoutPreference&gt() {
+              @Override
+              public void success(CheckoutPreference checkoutPreference, Response response) {
+                  //Congrats, you have a preference!
+              }
+
+              @Override
+              public void failure(RetrofitError error) {
+                  //Handle failure
+              }
+            });
+
+          </pre>
+          <p>The preference payment methods will exclude those payment methods or types you don't want to display in your app. This property is not mandatory. You can check our <a href="payment_types_available.html">payment methods and payment types availables</a> for more information.</p>
+          </div>
+          <div>
+            <h2>Start checkout flow with a preference</h2>
+
+            <pre class="prettyprint">
+              new MercadoPago.StartActivityBuilder()
+                        .setActivity(activity)
+                        .setPublicKey(yourPublicKey)
+                        .setCheckoutPreference(preference)
+                        .setShowBankDeals(true)
+                        .startCheckoutActivity();
+            </pre>
+
+          <p><b>Let's take a look!</b></p>
+          <p>The following screen is shown:</p>
+          <img class="centered" src="images/screenshots/revamp-inicio.png" alt="revamp-inicio">
+          <p class="image_footer">Payment method choise example</p>
+          <p>Your users can visualize their purchase information by clicking on the shopping cart icon:</p>
+          <img class="centered" src="images/screenshots/revamo-inicio-carrito.png" alt="revamp-shopping_cart">
+          <p class="image_footer">Information shown when clicking on icon in the upper right corner of the screen</p>
+
+          <p>Within this screen, your user will be able to choose a payment method by going into the shown options, as we'll see in the following sections.</p>
+
+          <h3>Cards option selected</h2>
+          <p>The user will see a list of the available card types supported, for example:</p>
+          <img class="centered" src="images/screenshots/revamp-tarjetas.png" alt="revamp-cards">
+          <p class="image_footer">Card types</p>
+
+          <h3>Cash option selected</h2>
+          <p>The user will see a list of the available card types supported, for example:</p>
+          <img class="centered" src="images/screenshots/revamp-efectivo.png" alt="revamp-cash">
+          <p class="image_footer">Cash payment methods</p>
+
+          <h3>Bank transfer option selected</h2>
+          <p>The user will see a list of the available card types supported, for example:</p>
+          <img class="centered" src="images/screenshots/revamp-transferencia-bancaria.png" alt="revamp-bank_transfer">
+          <p class="image_footer">Bank transfer payment methods</p>
+
+          <h3>Review and confirm</h2>
+          <p>The user will see a the choise made and will have to confirm it:</p>
+          <img class="centered" src="images/screenshots/revamp-revisa-confirma.png" alt="revamp-review_and_confirm">
+          <p class="image_footer">Review and confirm</p>
+          <h3>Online payments congrats</h3>
+          <p>If the payment method was online, you'll see a congrats screen:</p>
+           <img class="centered" src="images/screenshots/congratulations.png" alt="congratualtions">
+           <br>
+           <p>Also, payments could remain pending...</p>
+           <img class="centered" src="images/screenshots/pending_payment.png" alt="pending_payment">
+
+           <p>...or be rejected:</p>
+           <img class="centered" src="images/screenshots/rejected_payment.png" alt="rejected_payment">
+           <br>
+           <h3>Offline payments instructions</h3>
+           <p>If the payment method was offline, you'll see a screen with instructions like:</p>
+           <img class="centered" src="images/screenshots/revamp-instrucciones-efectivo.png" alt="congratualtions">
+           <br>
+
+
+        </section>
+
+        <aside id="sidebar">
+          <a href="https://github.com/mreverter/sdk-android" class="button"><small>View project on</small> GitHub</a>
+
+          <a href="https://github.com/mreverter/sdk-android/zipball/master" class="button">
+            <small>Download</small>
+            .zip file
+          </a>
+          <a href="https://github.com/mreverter/sdk-android/tarball/master" class="button">
+            <small>Download</small>
+            .tar.gz file
+          </a>
+
+          <p class="repo-owner"><a href="https://github.com/mreverter/sdk-android"></a> is maintained by <a href="https://github.com/mreverter">mreverter</a>.</p>
+        </aside>
+      </div>
+    </div>
+  </body>
+</html>
