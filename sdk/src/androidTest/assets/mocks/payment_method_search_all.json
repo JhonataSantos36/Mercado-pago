@@ -332,57 +332,9 @@
          "accreditation_time": 10080
       },
       {
-         "id": "serfin_ticket",
+         "id": "serfin",
          "name": "Santander",
-         "payment_type_id": "ticket",
-         "status": "active",
-         "secure_thumbnail": "https://www.mercadopago.com/org-img/MP3/API/logos/serfin_ticket.gif",
-         "thumbnail": "http://img.mlstatic.com/org-img/MP3/API/logos/serfin_ticket.gif",
-         "deferred_capture": "does_not_apply",
-         "settings": [
-         ],
-         "additional_info_needed": [
-         ],
-         "min_allowed_amount": 10,
-         "max_allowed_amount": 10000,
-         "accreditation_time": 10080
-      },
-      {
-         "id": "banamex_ticket",
-         "name": "Banamex",
-         "payment_type_id": "ticket",
-         "status": "active",
-         "secure_thumbnail": "https://www.mercadopago.com/org-img/MP3/API/logos/banamex_ticket.gif",
-         "thumbnail": "http://img.mlstatic.com/org-img/MP3/API/logos/banamex_ticket.gif",
-         "deferred_capture": "does_not_apply",
-         "settings": [
-         ],
-         "additional_info_needed": [
-         ],
-         "min_allowed_amount": 10,
-         "max_allowed_amount": 10000,
-         "accreditation_time": 10080
-      },
-      {
-         "id": "bancomer_ticket",
-         "name": "BBVA Bancomer",
-         "payment_type_id": "ticket",
-         "status": "active",
-         "secure_thumbnail": "https://www.mercadopago.com/org-img/MP3/API/logos/bancomer_ticket.gif",
-         "thumbnail": "http://img.mlstatic.com/org-img/MP3/API/logos/bancomer_ticket.gif",
-         "deferred_capture": "does_not_apply",
-         "settings": [
-         ],
-         "additional_info_needed": [
-         ],
-         "min_allowed_amount": 10,
-         "max_allowed_amount": 10000,
-         "accreditation_time": 10080
-      },
-      {
-         "id": "serfin_bank_transfer",
-         "name": "Santander",
-         "payment_type_id": "bank_transfer",
+         "payment_type_id": "atm",
          "status": "active",
          "secure_thumbnail": "https://www.mercadopago.com/org-img/MP3/API/logos/serfin_bank_transfer.gif",
          "thumbnail": "http://img.mlstatic.com/org-img/MP3/API/logos/serfin_bank_transfer.gif",
@@ -396,9 +348,9 @@
          "accreditation_time": 10080
       },
       {
-         "id": "banamex_bank_transfer",
+         "id": "banamex",
          "name": "Banamex",
-         "payment_type_id": "bank_transfer",
+         "payment_type_id": "atm",
          "status": "active",
          "secure_thumbnail": "https://www.mercadopago.com/org-img/MP3/API/logos/banamex_bank_transfer.gif",
          "thumbnail": "http://img.mlstatic.com/org-img/MP3/API/logos/banamex_bank_transfer.gif",
@@ -412,9 +364,9 @@
          "accreditation_time": 10080
       },
       {
-         "id": "bancomer_bank_transfer",
+         "id": "bancomer",
          "name": "BBVA Bancomer",
-         "payment_type_id": "bank_transfer",
+         "payment_type_id": "atm",
          "status": "active",
          "secure_thumbnail": "https://www.mercadopago.com/org-img/MP3/API/logos/bancomer_bank_transfer.gif",
          "thumbnail": "http://img.mlstatic.com/org-img/MP3/API/logos/bancomer_bank_transfer.gif",

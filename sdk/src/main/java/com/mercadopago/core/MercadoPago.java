@@ -393,9 +393,9 @@ public class MercadoPago {
         if(maxInstallments != null) {
             vaultIntent.putExtra("maxInstallments", maxInstallments.toString());
         }
-        activity.startActivityForResult(vaultIntent, PAYMENT_VAULT_REQUEST_CODE);
-
         vaultIntent.putExtra("paymentMethodSearch", paymentMethodSearch);
+
+        activity.startActivityForResult(vaultIntent, PAYMENT_VAULT_REQUEST_CODE);
     }
 
     private static void putListExtra(Intent intent, String listName, List<String> list) {

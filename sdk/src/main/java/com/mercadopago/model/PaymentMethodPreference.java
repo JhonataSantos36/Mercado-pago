@@ -8,9 +8,9 @@ import java.util.List;
  * Created by mreverter on 28/12/15.
  */
 public class PaymentMethodPreference implements Serializable {
+
     //maxInstallments
     private Integer installments;
-
     private Integer defaultInstallments;
     private List<PaymentMethod> excludedPaymentMethods;
     private List<PaymentType> excludedPaymentTypes;
@@ -140,7 +140,6 @@ public class PaymentMethodPreference implements Serializable {
             List<String> excludedPaymentMethodIds = this.getExcludedPaymentMethodIds();
             List<String> excludedPaymentTypes = this.getExcludedPaymentTypes();
 
-            PaymentMethod paymentMethod1 = paymentMethod;
             if ((excludedPaymentMethodIds != null && excludedPaymentMethodIds.contains(paymentMethod.getId()))
                     || (excludedPaymentTypes != null && excludedPaymentTypes.contains(paymentMethod.getPaymentTypeId()))) {
                 isSupported = false;

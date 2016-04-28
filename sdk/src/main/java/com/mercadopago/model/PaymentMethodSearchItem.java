@@ -8,9 +8,9 @@ import java.util.List;
  */
 public class PaymentMethodSearchItem implements Serializable {
 
-    public static final String TYPE_PAYMENT_METHOD = "payment_method";
-    public static final String TYPE_PAYMENT_TYPE = "payment_type";
-    public static final String TYPE_GROUP = "group";
+    private static final String TYPE_PAYMENT_METHOD = "payment_method";
+    private static final String TYPE_PAYMENT_TYPE = "payment_type";
+    private static final String TYPE_GROUP = "group";
 
     private String id;
     private String type;
@@ -79,5 +79,17 @@ public class PaymentMethodSearchItem implements Serializable {
 
     public boolean hasComment() {
         return comment != null && !comment.isEmpty();
+    }
+
+    public boolean isPaymentType() {
+        return type != null && type.equals(TYPE_PAYMENT_TYPE);
+    }
+
+    public boolean isPaymentMethod() {
+        return type != null && type.equals(TYPE_PAYMENT_METHOD);
+    }
+
+    public boolean isGroup() {
+        return type != null && type.equals(TYPE_GROUP);
     }
 }

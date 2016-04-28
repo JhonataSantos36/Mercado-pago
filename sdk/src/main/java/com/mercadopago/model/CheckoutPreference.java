@@ -40,7 +40,6 @@ public class CheckoutPreference implements Serializable {
     }
 
     public boolean validPaymentTypeExclusion() {
-        //TODO Cambiar de List de String a Set los excludedPaymentType
         return paymentMethods.getExcludedPaymentTypes() == null
                 || paymentMethods.getExcludedPaymentTypes().size() < PaymentType.getAllPaymentTypes().size();
     }

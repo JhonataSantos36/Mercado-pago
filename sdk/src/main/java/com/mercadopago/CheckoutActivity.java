@@ -135,6 +135,11 @@ public class CheckoutActivity extends AppCompatActivity {
         }
     }
 
+    protected boolean validParameters() {
+
+        return (mMerchantPublicKey != null) && (mCheckoutPreference != null);
+    }
+
     private void initializeActivityControls() {
         mPaymentMethodDescriptionTextView = (MPTextView) findViewById(R.id.paymentMethodDescription);
         mPaymentMethodCommentTextView = (MPTextView) findViewById(R.id.paymentMethodComment);
@@ -171,7 +176,7 @@ public class CheckoutActivity extends AppCompatActivity {
             }
         });
         mTotalAmountTextView = (MPTextView) findViewById(R.id.totalAmount);
-        mPurchaseTitle = getPurchaseTitle();
+        mPurchaseTitle = getPurchaseTitleFromPreference();
         mContentView = findViewById(R.id.contentLayout);
         mAppBar = (AppBarLayout) findViewById(R.id.appBar);
         mPaymentMethodLayout = (RelativeLayout) findViewById(R.id.paymentMethodLayout);
@@ -189,7 +194,7 @@ public class CheckoutActivity extends AppCompatActivity {
         startActivity(termsAndConditionsIntent);
     }
 
-    private String getPurchaseTitle() {
+    private String getPurchaseTitleFromPreference() {
         StringBuilder purchaseTitle = new StringBuilder();
         int itemListSize = mCheckoutPreference.getItems().size();
 
@@ -215,19 +220,17 @@ public class CheckoutActivity extends AppCompatActivity {
 
         showProgress();
         mMercadoPago.getPaymentMethodSearch(mCheckoutPreference.getAmount(), mCheckoutPreference.getExcludedPaymentTypes(), mCheckoutPreference.getExcludedPaymentMethods(), new Callback<PaymentMethodSearch>() {
-           @Override
-           public void success(PaymentMethodSearch paymentMethodSearch, Response response) {
-               mPaymentMethodSearch = paymentMethodSearch;
-               startPaymentVaultActivity();
-           }
+            @Override
+            public void success(PaymentMethodSearch paymentMethodSearch, Response response) {
+                mPaymentMethodSearch = paymentMethodSearch;
+                startPaymentVaultActivity();
+            }
 
-           @Override
-           public void failure(RetrofitError error) {
-               ApiUtil.finishWithApiException(mActivity, error);
-           }
+            @Override
+            public void failure(RetrofitError error) {
+                ApiUtil.finishWithApiException(mActivity, error);
+            }
         });
-
-
     }
 
     protected void startPaymentVaultActivity() {
@@ -300,10 +303,6 @@ public class CheckoutActivity extends AppCompatActivity {
         }
     }
 
-    private void animateBackFromPaymentEdition() {
-        overridePendingTransition(R.anim.slide_right_to_left_in, R.anim.slide_right_to_left_out);
-    }
-
     private void showReviewAndConfirm() {
         drawPaymentMethodRow();
         drawTermsAndConditionsText();
@@ -314,41 +313,46 @@ public class CheckoutActivity extends AppCompatActivity {
         mTotalAmountTextView.setText(getAmountLabel());
     }
 
+    private void animateBackFromPaymentEdition() {
+        overridePendingTransition(R.anim.slide_right_to_left_in, R.anim.slide_right_to_left_out);
+    }
+
     private void drawTermsAndConditionsText() {
         StringBuilder termsAndConditionsText = new StringBuilder();
         termsAndConditionsText.append(getString(R.string.mpsdk_text_terms_and_conditions_start) + " ");
-        termsAndConditionsText.append("<font color='#0066CC'>" + getString(R.string.mpsdk_text_terms_and_conditions_linked) +"</font>");
+        termsAndConditionsText.append("<font color='#0066CC'>" + getString(R.string.mpsdk_text_terms_and_conditions_linked) + "</font>");
         termsAndConditionsText.append(" " + getString(R.string.mpsdk_text_terms_and_conditions_end));
         mTermsAndConditionsTextView.setText(Html.fromHtml(termsAndConditionsText.toString()));
     }
 
     private void drawPaymentMethodRow() {
         PaymentMethodSearchItem item = mPaymentMethodSearch.getSearchItemByPaymentMethod(mSelectedPaymentMethod);
-        String paymentMethodComment = "";
-        if(item.hasComment()) {
-            paymentMethodComment = item.getComment();
-        } else {
-            paymentMethodComment = MercadoPagoUtil.getAccreditationTimeMessage(mSelectedPaymentMethod.getAccreditationTime(), this);
+
+        if(item != null ) {
+            String paymentMethodComment;
+            if (item.hasComment()) {
+                paymentMethodComment = item.getComment();
+            } else {
+                paymentMethodComment = MercadoPagoUtil.getAccreditationTimeMessage(mSelectedPaymentMethod.getAccreditationTime(), this);
+            }
+            mPaymentMethodCommentTextView.setText(paymentMethodComment);
+            if (item.hasDescription()) {
+                mPaymentMethodDescriptionTextView.setText(item.getDescription());
+            } else {
+                mPaymentMethodDescriptionTextView.setText("");
+            }
+            if (item.isIconRecommended()) {
+                int resourceId = MercadoPagoUtil.getPaymentMethodSearchItemIcon(this, item.getId());
+                if (resourceId != 0) {
+                    mPaymentMethodImageView.setImageResource(resourceId);
+                }
+            }
         }
-        mPaymentMethodCommentTextView.setText(paymentMethodComment);
-        int resourceId = MercadoPagoUtil.getPaymentMethodSearchItemIcon(this, mSelectedPaymentMethod.getId());
-        if(item.hasDescription()) {
-            mPaymentMethodDescriptionTextView.setText(item.getDescription());
-        }
-        else {
-            mPaymentMethodDescriptionTextView.setText("");
-        }
-        mPaymentMethodImageView.setImageResource(resourceId);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-    }
-
-    protected boolean validParameters() {
-
-        return (mMerchantPublicKey != null) && (mCheckoutPreference != null);
     }
 
     protected void createPayment() {

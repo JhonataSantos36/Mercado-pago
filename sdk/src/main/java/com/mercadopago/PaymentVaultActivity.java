@@ -16,7 +16,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.mercadopago.adapters.PaymentMethodSearchItemAdapter;
-import com.mercadopago.callbacks.PaymentMethodSearchCallback;
+import com.mercadopago.callbacks.OnSelectedCallback;
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.fragments.ShoppingCartFragment;
 import com.mercadopago.model.CardToken;
@@ -282,6 +282,10 @@ public class PaymentVaultActivity extends AppCompatActivity {
         this.mActivity = this;
     }
 
+    protected void setActivityTitle(String title) {
+        mActivityTitle.setText(title);
+    }
+
     protected boolean isItemSelectedStart() {
         return mSelectedSearchItem != null;
     }
@@ -292,8 +296,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
             public void success(PaymentMethodSearch paymentMethodSearch, Response response) {
                 if (!paymentMethodSearch.hasSearchItems()) {
                     finishWithEmptyPaymentMethodSearch();
-                }
-                else {
+                } else {
                     mPaymentMethodSearch = paymentMethodSearch;
                     setSearchLayout();
                 }
@@ -322,7 +325,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
     }
 
     protected void populateSearchList(List<PaymentMethodSearchItem> items) {
-        PaymentMethodSearchItemAdapter groupsAdapter = new PaymentMethodSearchItemAdapter(this, items, getPaymentMethodSearchCallback());
+        PaymentMethodSearchItemAdapter groupsAdapter = new PaymentMethodSearchItemAdapter(this, items, getPaymentMethodSearchItemSelectionCallback());
         mSearchItemsRecyclerView.setAdapter(groupsAdapter);
 
         //TODO update to rv 23 and replace by wrap content
@@ -331,7 +334,30 @@ public class PaymentVaultActivity extends AppCompatActivity {
         mSearchItemsRecyclerView.setLayoutParams(layoutParams);
     }
 
-    private void startActivityForSelectedItem(PaymentMethodSearchItem groupIem) {
+    protected OnSelectedCallback getPaymentMethodSearchItemSelectionCallback() {
+        return new OnSelectedCallback<PaymentMethodSearchItem>() {
+            @Override
+            public void onSelected(PaymentMethodSearchItem item) {
+                if (item.hasChildren()) {
+                    restartWithSelectedItem(item);
+                }
+                else if (item.isPaymentType()) {
+                    startNextStepForPaymentType(item);
+                }
+                else if (item.isPaymentMethod()) {
+                    PaymentMethod selectedPaymentMethod = mPaymentMethodSearch.getPaymentMethodBySearchItem(item);
+                    if (selectedPaymentMethod == null) {
+                        finishWithMismatchingPaymentMethod();
+                    }
+                    else {
+                        finishWithPaymentMethodResult(selectedPaymentMethod);
+                    }
+                }
+            }
+        };
+    }
+
+    private void restartWithSelectedItem(PaymentMethodSearchItem groupIem) {
         Intent intent = new Intent(this, PaymentVaultActivity.class);
         intent.putExtra("selectedSearchItem", groupIem);
         intent.putExtra("merchantPublicKey", mMerchantPublicKey);
@@ -349,15 +375,15 @@ public class PaymentVaultActivity extends AppCompatActivity {
         populateSearchList(mSelectedSearchItem.getChildren());
     }
 
-    protected void startNextStepForPaymentType(String paymentTypeId) {
+    protected void startNextStepForPaymentType(PaymentMethodSearchItem item) {
 
         MercadoPago.StartActivityBuilder builder = new MercadoPago.StartActivityBuilder()
                 .setActivity(this)
                 .setPublicKey(mMerchantPublicKey)
                 .setExcludedPaymentMethodIds(mExcludedPaymentMethodIds)
-                .setPaymentTypeId(paymentTypeId);
+                .setPaymentTypeId(item.getId());
 
-        if(MercadoPagoUtil.isCardPaymentType(paymentTypeId)){
+        if(MercadoPagoUtil.isCardPaymentType(item.getId())){
             builder.startGuessingCardActivity();
         }
         else {
@@ -370,7 +396,8 @@ public class PaymentVaultActivity extends AppCompatActivity {
 
         if(requestCode == MercadoPago.GUESSING_CARD_REQUEST_CODE) {
             resolveGuessingCardRequest(resultCode, data);
-        } else if (requestCode == MercadoPago.PAYMENT_METHODS_REQUEST_CODE) {
+        }
+        else if (requestCode == MercadoPago.PAYMENT_METHODS_REQUEST_CODE) {
             resolvePaymentMethodsRequest(resultCode, data);
         }
         else if (requestCode == MercadoPago.PAYMENT_VAULT_REQUEST_CODE) {
@@ -412,42 +439,12 @@ public class PaymentVaultActivity extends AppCompatActivity {
             PaymentMethod paymentMethod = (PaymentMethod) data.getSerializableExtra("paymentMethod");
             finishWithPaymentMethodResult(paymentMethod);
 
-        } else {
+        }
+        else {
             if ((data != null) && (data.getSerializableExtra("apiException") != null)) {
                 finishWithApiException(data);
             }
         }
-    }
-
-    protected PaymentMethodSearchCallback getPaymentMethodSearchCallback() {
-        return new PaymentMethodSearchCallback() {
-            @Override
-            public void onGroupItemClicked(PaymentMethodSearchItem groupIem) {
-                startActivityForSelectedItem(groupIem);
-            }
-
-            @Override
-            public void onPaymentTypeItemClicked(PaymentMethodSearchItem paymentTypeItem) {
-                if(paymentTypeItem.hasChildren()){
-                    startActivityForSelectedItem(paymentTypeItem);
-                }
-                else {
-                    startNextStepForPaymentType(paymentTypeItem.getId());
-                }
-            }
-
-            @Override
-            public void onPaymentMethodItemClicked(final PaymentMethodSearchItem paymentMethodItem) {
-
-                PaymentMethod selectedPaymentMethod = mPaymentMethodSearch.getPaymentMethodBySearchItem(paymentMethodItem);
-
-                if(selectedPaymentMethod == null) {
-                    finishWithMismatchingPaymentMethod();
-                } else {
-                    finishWithPaymentMethodResult(selectedPaymentMethod);
-                }
-            }
-        };
     }
 
     protected Callback<Token> getCreateTokenCallback() {
@@ -514,10 +511,6 @@ public class PaymentVaultActivity extends AppCompatActivity {
 
     private void animatePaymentMethodSelection() {
         overridePendingTransition(R.anim.slide_right_to_left_in, R.anim.slide_right_to_left_out);
-    }
-
-    protected void setActivityTitle(String title) {
-        mActivityTitle.setText(title);
     }
 
     @Override
