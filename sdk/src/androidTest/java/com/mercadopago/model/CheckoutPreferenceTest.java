@@ -495,7 +495,7 @@ public class CheckoutPreferenceTest extends TestCase {
         preference.setItems(items);
 
         PaymentMethodPreference paymentMethodPreference = new PaymentMethodPreference();
-        paymentMethodPreference.setInstallments(1);
+        paymentMethodPreference.setMaxInstallments(1);
         paymentMethodPreference.setDefaultInstallments(-3);
         preference.setPaymentMethods(paymentMethodPreference);
 
@@ -513,7 +513,7 @@ public class CheckoutPreferenceTest extends TestCase {
         preference.setItems(items);
 
         PaymentMethodPreference paymentMethodPreference = new PaymentMethodPreference();
-        paymentMethodPreference.setInstallments(-1);
+        paymentMethodPreference.setMaxInstallments(-1);
         paymentMethodPreference.setDefaultInstallments(3);
         preference.setPaymentMethods(paymentMethodPreference);
 
@@ -531,7 +531,7 @@ public class CheckoutPreferenceTest extends TestCase {
         preference.setItems(items);
 
         PaymentMethodPreference paymentMethodPreference = new PaymentMethodPreference();
-        paymentMethodPreference.setInstallments(1);
+        paymentMethodPreference.setMaxInstallments(1);
         paymentMethodPreference.setDefaultInstallments(3);
         preference.setPaymentMethods(paymentMethodPreference);
 
@@ -549,7 +549,7 @@ public class CheckoutPreferenceTest extends TestCase {
         preference.setItems(items);
 
         PaymentMethodPreference paymentMethodPreference = new PaymentMethodPreference();
-        paymentMethodPreference.setInstallments(-1);
+        paymentMethodPreference.setMaxInstallments(-1);
         paymentMethodPreference.setDefaultInstallments(-1);
         preference.setPaymentMethods(paymentMethodPreference);
 
@@ -587,7 +587,7 @@ public class CheckoutPreferenceTest extends TestCase {
         preference.setActiveFrom(pastDate);
 
         PaymentMethodPreference paymentMethodPreference = new PaymentMethodPreference();
-        paymentMethodPreference.setInstallments(1);
+        paymentMethodPreference.setMaxInstallments(1);
         paymentMethodPreference.setDefaultInstallments(1);
         paymentMethodPreference.setExcludedPaymentTypes(paymentTypes);
         preference.setPaymentMethods(paymentMethodPreference);
@@ -625,7 +625,7 @@ public class CheckoutPreferenceTest extends TestCase {
         preference.setActiveFrom(pastDate);
 
         PaymentMethodPreference paymentMethodPreference = new PaymentMethodPreference();
-        paymentMethodPreference.setInstallments(1);
+        paymentMethodPreference.setMaxInstallments(1);
         paymentMethodPreference.setDefaultInstallments(1);
         paymentMethodPreference.setExcludedPaymentTypes(paymentTypes);
         preference.setPaymentMethods(paymentMethodPreference);
@@ -649,7 +649,7 @@ public class CheckoutPreferenceTest extends TestCase {
         preference.setActiveFrom(pastDate);
 
         PaymentMethodPreference paymentMethodPreference = new PaymentMethodPreference();
-        paymentMethodPreference.setInstallments(-1);
+        paymentMethodPreference.setMaxInstallments(-1);
         paymentMethodPreference.setDefaultInstallments(-3);
         preference.setPaymentMethods(paymentMethodPreference);
 
