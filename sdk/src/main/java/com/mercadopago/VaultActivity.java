@@ -8,7 +8,6 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -182,7 +181,7 @@ public class VaultActivity extends AppCompatActivity {
         mPaymentMethodPreference.setExcludedPaymentTypes(this.mExcludedPaymentTypes);
         mPaymentMethodPreference.setDefaultPaymentMethodId(this.mDefaultPaymentMethodId);
         mPaymentMethodPreference.setDefaultInstallments(this.mDefaultInstallments);
-        mPaymentMethodPreference.setInstallments(this.mMaxInstallments);
+        mPaymentMethodPreference.setMaxInstallments(this.mMaxInstallments);
     }
 
     protected void setContentView() {

@@ -40,23 +40,12 @@ public class CheckoutPreference implements Serializable {
     }
 
     public boolean validPaymentTypeExclusion() {
-        return paymentMethods.getExcludedPaymentTypes() == null
-                || paymentMethods.getExcludedPaymentTypes().size() < PaymentType.getAllPaymentTypes().size();
+        return paymentMethods == null || paymentMethods.excludedPaymentTypesValid();
     }
-
 
     public boolean validInstallmentsPreference() {
-        return (validMaxInstallments() && validDefaultInstallments());
+        return paymentMethods.installmentPreferencesValid();
     }
-
-    private boolean validDefaultInstallments() {
-        return paymentMethods.getMaxInstallments() == null || paymentMethods.getMaxInstallments() > 0;
-    }
-
-    private boolean validMaxInstallments() {
-        return paymentMethods.getDefaultInstallments() == null || paymentMethods.getDefaultInstallments() > 0;
-    }
-
 
     public Boolean itemsValid() {
 
@@ -138,16 +127,16 @@ public class CheckoutPreference implements Serializable {
         this.paymentMethods = paymentMethods;
     }
 
-
     public BigDecimal getAmount() {
 
         BigDecimal totalAmount = BigDecimal.ZERO;
-        for(Iterator<Item> i = items.iterator(); i.hasNext(); ) {
-            Item item = i.next();
-            if ((item != null) && (item.getUnitPrice() != null) && (item.getQuantity() != null)) {
-                totalAmount = totalAmount.add(item.getUnitPrice().multiply(new BigDecimal(item.getQuantity())));
-            } else {
-                return null;
+        if(items != null) {
+            for (Item item : items) {
+                if ((item != null) && (item.getUnitPrice() != null) && (item.getQuantity() != null)) {
+                    totalAmount = totalAmount.add(item.getUnitPrice().multiply(new BigDecimal(item.getQuantity())));
+                } else {
+                    return null;
+                }
             }
         }
         return totalAmount;
@@ -211,5 +200,7 @@ public class CheckoutPreference implements Serializable {
     }
 
 
-
+    public PaymentMethodPreference getPaymentMethodPreference() {
+        return paymentMethods;
+    }
 }

@@ -23,9 +23,9 @@ import com.mercadopago.model.CardToken;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.PaymentMethod;
+import com.mercadopago.model.PaymentMethodPreference;
 import com.mercadopago.model.PaymentMethodSearch;
 import com.mercadopago.model.PaymentMethodSearchItem;
-import com.mercadopago.model.PaymentType;
 import com.mercadopago.model.Token;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.CurrenciesUtil;
@@ -69,23 +69,24 @@ public class PaymentVaultActivity extends AppCompatActivity {
     protected String mMerchantGetCustomerUri;
     protected boolean mShowBankDeals;
     protected boolean mCardGuessingEnabled;
-    protected Integer mDefaultInstallments;
-    protected Integer mMaxInstallments;
-    protected List<String> mExcludedPaymentMethodIds;
-    protected List<String> mExcludedPaymentTypes;
-    protected String mDefaultPaymentMethodId;
-    protected Boolean mSupportMPApp;
     protected PaymentMethodSearchItem mSelectedSearchItem;
     protected String mPurchaseTitle;
     protected String mItemImageUri;
     protected String mCurrencyId;
     protected ShoppingCartFragment mShoppingCartFragment;
+    protected Integer mDefaultInstallments;
+    protected Integer mMaxInstallments;
+    protected List<String> mExcludedPaymentMethodIds;
+    protected List<String> mExcludedPaymentTypes;
+    protected String mDefaultPaymentMethodId;
+    private PaymentMethodPreference mPaymentMethodPreference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payment_vault);
         getActivityParameters();
+        createPaymentMethodPreference();
         boolean validParameters = true;
         try {
             validateActivityParameters();
@@ -99,7 +100,10 @@ public class PaymentVaultActivity extends AppCompatActivity {
                     .setContext(this)
                     .build();
 
+            initializeToolbar();
             initializeControls();
+            initializeShoppingCartFragment();
+
             setActivity();
 
             if (!isItemSelectedStart()) {
@@ -107,23 +111,16 @@ public class PaymentVaultActivity extends AppCompatActivity {
             } else {
                 showSelectedItemChildren();
             }
-            initializeToolbar();
         }
     }
 
-    private void initializeToolbar() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
-
+    private void createPaymentMethodPreference() {
+        mPaymentMethodPreference = new PaymentMethodPreference();
+        mPaymentMethodPreference.setExcludedPaymentTypes(mExcludedPaymentTypes);
+        mPaymentMethodPreference.setExcludedPaymentMethods(mExcludedPaymentMethodIds);
+        mPaymentMethodPreference.setDefaultPaymentMethodId(mDefaultPaymentMethodId);
+        mPaymentMethodPreference.setMaxInstallments(mMaxInstallments);
+        mPaymentMethodPreference.setDefaultInstallments(mDefaultInstallments);
     }
 
     protected void getActivityParameters() {
@@ -131,7 +128,6 @@ public class PaymentVaultActivity extends AppCompatActivity {
         if (this.getIntent().getSerializableExtra("selectedSearchItem") != null) {
             mSelectedSearchItem = (PaymentMethodSearchItem) this.getIntent().getSerializableExtra("selectedSearchItem");
         }
-
         try {
             mAmount = new BigDecimal(this.getIntent().getStringExtra("amount"));
         } catch (Exception ex) {
@@ -140,8 +136,6 @@ public class PaymentVaultActivity extends AppCompatActivity {
         mCurrencyId = this.getIntent().getStringExtra("currencyId");
         mItemImageUri = this.getIntent().getStringExtra("itemImageUri");
         mPurchaseTitle = this.getIntent().getStringExtra("purchaseTitle");
-
-        mSupportMPApp = this.getIntent().getBooleanExtra("supportMPApp", false);
 
         mMerchantPublicKey = this.getIntent().getStringExtra("merchantPublicKey");
 
@@ -163,7 +157,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
         }
         mDefaultPaymentMethodId = this.getIntent().getStringExtra("defaultPaymentMethodId");
 
-        if(this.getIntent().getStringExtra("maxInstallments") != null) {
+        if (this.getIntent().getStringExtra("maxInstallments") != null) {
             mMaxInstallments = Integer.valueOf(this.getIntent().getStringExtra("maxInstallments"));
         }
         if(this.getIntent().getStringExtra("defaultInstallments") != null) {
@@ -177,11 +171,21 @@ public class PaymentVaultActivity extends AppCompatActivity {
 
     private void validateActivityParameters() {
 
+
+        if (!mPaymentMethodPreference.validMaxInstallments()){
+            throw new IllegalStateException(getString(R.string.mpsdk_error_message_invalid_installments));
+        }
+        else if (!mPaymentMethodPreference.validDefaultInstallments()){
+            throw new IllegalStateException(getString(R.string.mpsdk_error_message_invalid_installments));
+        }
+        else if (!mPaymentMethodPreference.excludedPaymentTypesValid()){
+            throw new IllegalStateException(getString(R.string.mpsdk_error_message_excluded_all_payment_type));
+        }
+        if(!isCurrencyIdValid()){
+            throw new IllegalStateException(getString(R.string.mpsdk_error_message_invalid_currency));
+        }
         if (!isAmountValid()) {
             throw new IllegalStateException(getString(R.string.mpsdk_error_message_invalid_amount));
-        }
-        else if(!isCurrencyIdValid()){
-            throw new IllegalStateException(getString(R.string.mpsdk_error_message_invalid_currency));
         }
         else if (!isPurchaseTitleValid()){
             throw new IllegalStateException(getString(R.string.mpsdk_error_message_invalid_title));
@@ -189,30 +193,6 @@ public class PaymentVaultActivity extends AppCompatActivity {
         else if (!isMerchantPublicKeyValid()){
             throw new IllegalStateException(getString(R.string.mpsdk_error_message_invalid_merchant));
         }
-        else if (!validInstallmentsPreferences()){
-            throw new IllegalStateException(getString(R.string.mpsdk_error_message_invalid_installments));
-        }
-        else if (!validExcludedPaymentTypes()){
-            throw new IllegalStateException(getString(R.string.mpsdk_error_message_excluded_all_payment_type));
-        }
-    }
-
-    private boolean validExcludedPaymentTypes() {
-        boolean valid = true;
-        if(mExcludedPaymentTypes != null && mExcludedPaymentTypes.size() >= PaymentType.getAllPaymentTypes().size()) {
-            valid = false;
-        }
-        return valid;
-    }
-
-    private boolean validInstallmentsPreferences() {
-
-        boolean isValid = true;
-        if(mDefaultInstallments != null && mDefaultInstallments <= 0
-                || mMaxInstallments != null && mMaxInstallments <= 0) {
-            isValid = false;
-        }
-        return isValid;
     }
 
     private boolean isAmountValid() {
@@ -240,11 +220,36 @@ public class PaymentVaultActivity extends AppCompatActivity {
         return isValid;
     }
 
+    private void initializeToolbar() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+
+    }
+
     protected void initializeControls() {
         initializeGroupRecyclerView();
-        mShoppingCartIcon = (ImageView) findViewById(R.id.shoppingCartIcon);
         mActivityTitle = (MPTextView) findViewById(R.id.title);
         mContentView = findViewById(R.id.contentLayout);
+        mShoppingCartIcon = (ImageView) findViewById(R.id.shoppingCartIcon);
+        mAppBar = (AppBarLayout) findViewById(R.id.appBar);
+    }
+
+    protected void initializeGroupRecyclerView() {
+        mSearchItemsRecyclerView = (RecyclerView) findViewById(R.id.groupsList);
+        mSearchItemsRecyclerView.setHasFixedSize(true);
+        mSearchItemsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+    }
+
+    private void initializeShoppingCartFragment() {
         mShoppingCartFragment = ShoppingCartFragment.newInstance(mItemImageUri, mPurchaseTitle, mAmount, mCurrencyId);
         getSupportFragmentManager()
                 .beginTransaction()
@@ -253,13 +258,10 @@ public class PaymentVaultActivity extends AppCompatActivity {
                 .commit();
         mShoppingCartFragment.setToggler(mShoppingCartIcon);
         mShoppingCartFragment.setViewBelow(mContentView);
-        mAppBar = (AppBarLayout) findViewById(R.id.appBar);
     }
 
-    protected void initializeGroupRecyclerView() {
-        mSearchItemsRecyclerView = (RecyclerView) findViewById(R.id.groupsList);
-        mSearchItemsRecyclerView.setHasFixedSize(true);
-        mSearchItemsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+    protected void setActivity() {
+        this.mActivity = this;
     }
 
     private void initPaymentMethodSearch() {
@@ -278,10 +280,6 @@ public class PaymentVaultActivity extends AppCompatActivity {
         }
     }
 
-    protected void setActivity() {
-        this.mActivity = this;
-    }
-
     protected void setActivityTitle(String title) {
         mActivityTitle.setText(title);
     }
@@ -291,7 +289,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
     }
 
     protected void getPaymentMethodSearch() {
-        mMercadoPago.getPaymentMethodSearch(mAmount, mExcludedPaymentTypes, mExcludedPaymentMethodIds, new Callback<PaymentMethodSearch>() {
+        mMercadoPago.getPaymentMethodSearch(mAmount, mPaymentMethodPreference.getExcludedPaymentTypes(), mPaymentMethodPreference.getExcludedPaymentMethodIds(), new Callback<PaymentMethodSearch>() {
             @Override
             public void success(PaymentMethodSearch paymentMethodSearch, Response response) {
                 if (!paymentMethodSearch.hasSearchItems()) {
@@ -312,16 +310,6 @@ public class PaymentVaultActivity extends AppCompatActivity {
     protected void setSearchLayout() {
         populateSearchList(mPaymentMethodSearch.getGroups());
         showRegularLayout();
-    }
-
-    private void showProgress() {
-        mAppBar.setVisibility(View.INVISIBLE);
-        LayoutUtil.showProgressLayout(this);
-    }
-
-    private void showRegularLayout() {
-        mAppBar.setVisibility(View.VISIBLE);
-        LayoutUtil.showRegularLayout(mActivity);
     }
 
     protected void populateSearchList(List<PaymentMethodSearchItem> items) {
@@ -380,7 +368,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
         MercadoPago.StartActivityBuilder builder = new MercadoPago.StartActivityBuilder()
                 .setActivity(this)
                 .setPublicKey(mMerchantPublicKey)
-                .setExcludedPaymentMethodIds(mExcludedPaymentMethodIds)
+                .setExcludedPaymentMethodIds(mPaymentMethodPreference.getExcludedPaymentMethodIds())
                 .setPaymentTypeId(item.getId());
 
         if(MercadoPagoUtil.isCardPaymentType(item.getId())){
@@ -389,6 +377,16 @@ public class PaymentVaultActivity extends AppCompatActivity {
         else {
             builder.startPaymentMethodsActivity();
         }
+    }
+
+    private void showProgress() {
+        mAppBar.setVisibility(View.INVISIBLE);
+        LayoutUtil.showProgressLayout(this);
+    }
+
+    private void showRegularLayout() {
+        mAppBar.setVisibility(View.VISIBLE);
+        LayoutUtil.showRegularLayout(mActivity);
     }
 
     @Override

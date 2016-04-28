@@ -14,6 +14,7 @@ import com.mercadopago.model.ApiException;
 import com.mercadopago.model.CardToken;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.PaymentMethod;
+import com.mercadopago.model.PaymentMethodPreference;
 import com.mercadopago.model.Token;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.JsonUtil;
@@ -80,6 +81,9 @@ public class Step1Activity extends ExampleActivity {
                         Toast.makeText(getApplicationContext(), apiException.getMessage(), Toast.LENGTH_LONG).show();
 
                     } else if (data.getBooleanExtra("backButtonPressed", false)) {
+
+                        PaymentMethodPreference paymentMethodPreference = new PaymentMethodPreference();
+                        paymentMethodPreference.setExcludedPaymentTypes(mExcludedPaymentTypes);
 
                         new MercadoPago.StartActivityBuilder()
                                 .setActivity(this)

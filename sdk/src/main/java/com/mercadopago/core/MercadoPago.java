@@ -28,6 +28,7 @@ import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentIntent;
 import com.mercadopago.model.PaymentMethod;
+import com.mercadopago.model.PaymentMethodPreference;
 import com.mercadopago.model.PaymentMethodSearch;
 import com.mercadopago.model.SavedCardToken;
 import com.mercadopago.model.Token;
