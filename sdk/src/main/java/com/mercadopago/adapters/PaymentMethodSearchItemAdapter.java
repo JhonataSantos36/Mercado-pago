@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.mercadopago.R;
-import com.mercadopago.callbacks.PaymentMethodSearchCallback;
+import com.mercadopago.callbacks.OnSelectedCallback;
 import com.mercadopago.model.PaymentMethodSearchItem;
 import com.mercadopago.util.MercadoPagoUtil;
 import com.mercadopago.views.MPTextView;
@@ -22,9 +22,9 @@ public class PaymentMethodSearchItemAdapter extends RecyclerView.Adapter<Payment
 
     private Context mContext;
     private List<PaymentMethodSearchItem> mItems;
-    private PaymentMethodSearchCallback mCallback;
+    private OnSelectedCallback<PaymentMethodSearchItem> mCallback;
 
-    public PaymentMethodSearchItemAdapter(Context context, List<PaymentMethodSearchItem> items, PaymentMethodSearchCallback callback)
+    public PaymentMethodSearchItemAdapter(Context context, List<PaymentMethodSearchItem> items, OnSelectedCallback<PaymentMethodSearchItem> callback)
     {
         this.mContext = context;
         this.mItems = items;
@@ -115,7 +115,9 @@ public class PaymentMethodSearchItemAdapter extends RecyclerView.Adapter<Payment
 
     private boolean itemNeedsTint(PaymentMethodSearchItem paymentMethodSearchItem) {
 
-        return paymentMethodSearchItem.getType().equals(PaymentMethodSearchItem.TYPE_GROUP) || paymentMethodSearchItem.getType().equals(PaymentMethodSearchItem.TYPE_PAYMENT_TYPE) || paymentMethodSearchItem.getId().equals("bitcoin");
+        return paymentMethodSearchItem.isGroup()
+                || paymentMethodSearchItem.isPaymentType()
+                || paymentMethodSearchItem.getId().equals("bitcoin");
     }
 
     private void setTintColor(Context mContext, ImageView mIcon) {
@@ -141,7 +143,7 @@ public class PaymentMethodSearchItemAdapter extends RecyclerView.Adapter<Payment
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    nextStep(mItem);
+                    mCallback.onSelected(mItem);
                 }
             });
 
@@ -149,20 +151,6 @@ public class PaymentMethodSearchItemAdapter extends RecyclerView.Adapter<Payment
             mComment = (MPTextView) itemView.findViewById(R.id.comment);
             mIcon = (ImageView) itemView.findViewById(R.id.image);
             mSeparator = itemView.findViewById(R.id.separator);
-        }
-
-        private void nextStep(PaymentMethodSearchItem mItem) {
-            switch (mItem.getType()) {
-                case PaymentMethodSearchItem.TYPE_GROUP:
-                    mCallback.onGroupItemClicked(mItem);
-                    break;
-                case PaymentMethodSearchItem.TYPE_PAYMENT_TYPE:
-                    mCallback.onPaymentTypeItemClicked(mItem);
-                    break;
-                case PaymentMethodSearchItem.TYPE_PAYMENT_METHOD:
-                    mCallback.onPaymentMethodItemClicked(mItem);
-                    break;
-            }
         }
     }
 }

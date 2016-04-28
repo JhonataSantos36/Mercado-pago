@@ -1,9 +1,7 @@
 package com.mercadopago.model;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Stack;
 
 /**
  * Created by mreverter on 15/1/16.
@@ -31,6 +29,7 @@ public class PaymentMethodSearch implements Serializable{
 
                     String itemPaymentType = item.getId().replace(currentPaymentMethod.getId() + "_", "");
                     if(PaymentType.getAllPaymentTypes().contains(itemPaymentType)) {
+                        //MP API v1 not contemplating different payment types for a payment method. Overriding to give consistent instructions.
                         requiredPaymentMethod.setPaymentTypeId(itemPaymentType);
                     }
                     break;
@@ -56,22 +55,20 @@ public class PaymentMethodSearch implements Serializable{
         return searchItemInList(groups, potentialItemId, paymentMethodId);
     }
 
+    //PaymentMethodSearchItem id could be the payment method id or its concatenation with the paymentTypeId
     private PaymentMethodSearchItem searchItemInList(List<PaymentMethodSearchItem> list, String potentialItemId, String paymentMethodId) {
         PaymentMethodSearchItem requiredItem = null;
         for(PaymentMethodSearchItem currentItem : list) {
+
             if(currentItem.getId().equals(paymentMethodId)
                     || currentItem.getId().equals(potentialItemId)) {
                 requiredItem = currentItem;
                 break;
             }
-        }
-        if(requiredItem == null) {
-            for(PaymentMethodSearchItem currentItem : list) {
-                if(currentItem.hasChildren()) {
-                    requiredItem = searchItemInList(currentItem.getChildren(), potentialItemId, paymentMethodId);
-                    if(requiredItem != null) {
-                        break;
-                    }
+            else if(currentItem.hasChildren()) {
+                requiredItem = searchItemInList(currentItem.getChildren(), potentialItemId, paymentMethodId);
+                if(requiredItem != null) {
+                    break;
                 }
             }
         }

@@ -440,19 +440,7 @@ public class CheckoutPreferenceTest extends TestCase {
         ArrayList<String> paymentTypes= new ArrayList<>();
         Item itemA = new Item("123", 1);
 
-        String CREDIT_CARD = "credit_card";
-        String DEBIT_CARD = "debit_card";
-        String PREPAID_CARD = "prepaid_card";
-        String TICKET = "ticket";
-        String ATM = "atm";
-        String DIGITAL_CURRENCY = "digital_currency";
-
-        paymentTypes.add(CREDIT_CARD);
-        paymentTypes.add(DEBIT_CARD);
-        paymentTypes.add(PREPAID_CARD);
-        paymentTypes.add(TICKET);
-        paymentTypes.add(ATM);
-        paymentTypes.add(DIGITAL_CURRENCY);
+        paymentTypes.addAll(PaymentType.getAllPaymentTypes());
 
         itemA.setUnitPrice(new BigDecimal(2));
         itemA.setCurrencyId("USD");
