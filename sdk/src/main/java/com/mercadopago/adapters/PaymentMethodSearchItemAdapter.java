@@ -2,16 +2,14 @@ package com.mercadopago.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import com.mercadopago.R;
 import com.mercadopago.callbacks.OnSelectedCallback;
 import com.mercadopago.model.PaymentMethodSearchItem;
-import com.mercadopago.util.MercadoPagoUtil;
-import com.mercadopago.views.MPTextView;
+import com.mercadopago.views.PaymentMethodRow;
+import com.mercadopago.views.ViewFactory;
 
 import java.util.List;
 
@@ -35,21 +33,12 @@ public class PaymentMethodSearchItemAdapter extends RecyclerView.Adapter<Payment
     public ViewHolder onCreateViewHolder(ViewGroup parent, int position) {
 
         PaymentMethodSearchItem item = mItems.get(position);
-        View view = getViewForItem(parent, item);
-        return new ViewHolder(view);
-    }
 
-    private View getViewForItem(ViewGroup parent, PaymentMethodSearchItem item) {
-        View view;
-        if(withLargeRow(item)) {
-            view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.row_pm_search_item_large, parent, false);
-        }
-        else {
-            view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.row_pm_search_item, parent, false);
-        }
-        return view;
+        PaymentMethodRow paymentMethodSearchRow = ViewFactory.getPaymentMethodSearchItemRow(item, mContext);
+
+        paymentMethodSearchRow.inflateInParent(parent);
+
+        return new ViewHolder(paymentMethodSearchRow);
     }
 
     public Integer getHeightForItems() {
@@ -78,50 +67,12 @@ public class PaymentMethodSearchItemAdapter extends RecyclerView.Adapter<Payment
     public void onBindViewHolder(ViewHolder holder, int position) {
         PaymentMethodSearchItem paymentMethodSearchItem = mItems.get(position);
 
-        if(holder.mDescription != null && paymentMethodSearchItem.hasDescription()) {
-            holder.mDescription.setText(paymentMethodSearchItem.getDescription());
-        }
-        if(paymentMethodSearchItem.hasComment()) {
-            holder.mComment.setText(paymentMethodSearchItem.getComment());
-        }
-        else {
-            holder.mComment.setVisibility(View.GONE);
-        }
+        holder.mPaymentMethodSearchRow.setFields(paymentMethodSearchItem);
 
-        Integer resourceId;
-
-        if(paymentMethodSearchItem.isIconRecommended()) {
-            resourceId = MercadoPagoUtil.getPaymentMethodSearchItemIcon(mContext, paymentMethodSearchItem.getId());
-        }
-        else {
-            resourceId = 0;
-        }
-
-        if(resourceId != 0) {
-            holder.mIcon.setImageResource(resourceId);
-            if(itemNeedsTint(paymentMethodSearchItem)) {
-                setTintColor(mContext, holder.mIcon);
-            }
-        } else {
-            holder.mIcon.setVisibility(View.GONE);
-        }
-
-        holder.mItem = paymentMethodSearchItem;
-
+        holder.mItem = mItems.get(position);
         if(position == mItems.size()-1) {
             holder.mSeparator.setVisibility(View.GONE);
         }
-    }
-
-    private boolean itemNeedsTint(PaymentMethodSearchItem paymentMethodSearchItem) {
-
-        return paymentMethodSearchItem.isGroup()
-                || paymentMethodSearchItem.isPaymentType()
-                || paymentMethodSearchItem.getId().equals("bitcoin");
-    }
-
-    private void setTintColor(Context mContext, ImageView mIcon) {
-        mIcon.setColorFilter(mContext.getResources().getColor(R.color.mpsdk_icon_image_color));
     }
 
     @Override
@@ -131,14 +82,12 @@ public class PaymentMethodSearchItemAdapter extends RecyclerView.Adapter<Payment
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        private MPTextView mDescription;
-        private MPTextView mComment;
-        private ImageView mIcon;
-        private View mSeparator;
         private PaymentMethodSearchItem mItem;
+        private View mSeparator;
+        private PaymentMethodRow mPaymentMethodSearchRow;
 
-        public ViewHolder(View itemView) {
-            super(itemView);
+        public ViewHolder(PaymentMethodRow row) {
+            super(row.getView());
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -146,11 +95,9 @@ public class PaymentMethodSearchItemAdapter extends RecyclerView.Adapter<Payment
                     mCallback.onSelected(mItem);
                 }
             });
-
-            mDescription = (MPTextView) itemView.findViewById(R.id.description);
-            mComment = (MPTextView) itemView.findViewById(R.id.comment);
-            mIcon = (ImageView) itemView.findViewById(R.id.image);
+            mPaymentMethodSearchRow = row;
             mSeparator = itemView.findViewById(R.id.separator);
+            row.initializeControls();
         }
     }
 }
