@@ -22,7 +22,7 @@ import com.mercadopago.model.Installment;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentMethodRow;
-import com.mercadopago.model.PaymentMethodPreference;
+import com.mercadopago.model.PaymentPreference;
 import com.mercadopago.model.SavedCardToken;
 import com.mercadopago.model.Token;
 import com.mercadopago.util.ApiUtil;
@@ -88,19 +88,16 @@ public class VaultActivity extends AppCompatActivity {
     protected Activity mActivity;
     protected String mExceptionOnMethod;
     protected MercadoPago mMercadoPago;
-    protected PaymentMethodPreference mPaymentMethodPreference;
+    protected PaymentPreference mPaymentPreference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
 
-
         setContentView();
 
         getActivityParameters();
-
-        createPaymentPreference();
 
         if (validParameters()) {
 
@@ -154,34 +151,10 @@ public class VaultActivity extends AppCompatActivity {
         mCardGuessingEnabled = this.getIntent().getBooleanExtra("cardGuessingEnabled", false);
         mShowBankDeals = this.getIntent().getBooleanExtra("showBankDeals", true);
 
-        if (this.getIntent().getStringExtra("excludedPaymentMethodIds") != null) {
-            Gson gson = new Gson();
-            Type listType = new TypeToken<List<String>>(){}.getType();
-            mExcludedPaymentMethodIds = gson.fromJson(this.getIntent().getStringExtra("excludedPaymentMethodIds"), listType);
-        }
-        if (this.getIntent().getStringExtra("excludedPaymentTypes") != null) {
-            Gson gson = new Gson();
-            Type listType = new TypeToken<List<String>>(){}.getType();
-            mExcludedPaymentTypes = gson.fromJson(this.getIntent().getStringExtra("excludedPaymentTypes"), listType);
-        }
-        mDefaultPaymentMethodId = this.getIntent().getStringExtra("defaultPaymentMethodId");
-
-        if(this.getIntent().getStringExtra("maxInstallments") != null) {
-            mMaxInstallments = Integer.valueOf(this.getIntent().getStringExtra("maxInstallments"));
-        }
-        if(this.getIntent().getStringExtra("defaultInstallments") != null) {
-            mDefaultInstallments = Integer.valueOf(this.getIntent().getStringExtra("defaultInstallments"));
+        if (this.getIntent().getSerializableExtra("paymentPreference") != null) {
+            mPaymentPreference = (PaymentPreference) this.getIntent().getSerializableExtra("paymentPreference");
         }
 
-    }
-
-    protected void createPaymentPreference() {
-        mPaymentMethodPreference = new PaymentMethodPreference();
-        mPaymentMethodPreference.setExcludedPaymentMethods(this.mExcludedPaymentMethodIds);
-        mPaymentMethodPreference.setExcludedPaymentTypes(this.mExcludedPaymentTypes);
-        mPaymentMethodPreference.setDefaultPaymentMethodId(this.mDefaultPaymentMethodId);
-        mPaymentMethodPreference.setDefaultInstallments(this.mDefaultInstallments);
-        mPaymentMethodPreference.setMaxInstallments(this.mMaxInstallments);
     }
 
     protected void setContentView() {
@@ -593,9 +566,9 @@ public class VaultActivity extends AppCompatActivity {
                         // Set installments cards data and visibility
                         List<PayerCost> availablePayerCosts = installments.get(0).getPayerCosts();
 
-                        mPayerCosts = mPaymentMethodPreference.getInstallmentsBelowMax(availablePayerCosts);
+                        mPayerCosts = mPaymentPreference.getInstallmentsBelowMax(availablePayerCosts);
 
-                        PayerCost defaultPayerCost = mPaymentMethodPreference.getDefaultInstallments(mPayerCosts);
+                        PayerCost defaultPayerCost = mPaymentPreference.getDefaultInstallments(mPayerCosts);
 
                         if(defaultPayerCost != null) {
                             mSelectedPayerCost = defaultPayerCost;
@@ -823,9 +796,9 @@ public class VaultActivity extends AppCompatActivity {
 
     private List<Card> getSupportedCustomerCards(List<Card> cards) {
         List<Card> supportedCards = new ArrayList<>();
-        if(mPaymentMethodPreference != null) {
+        if(mPaymentPreference != null) {
             for (Card card : cards) {
-                if (mPaymentMethodPreference.isPaymentMethodSupported(card.getPaymentMethod()))
+                if (mPaymentPreference.isPaymentMethodSupported(card.getPaymentMethod()))
                     supportedCards.add(card);
             }
             return supportedCards;
@@ -890,9 +863,7 @@ public class VaultActivity extends AppCompatActivity {
         new MercadoPago.StartActivityBuilder()
                 .setActivity(mActivity)
                 .setPublicKey(mMerchantPublicKey)
-                .setExcludedPaymentTypes(mExcludedPaymentTypes)
-                .setExcludedPaymentMethodIds(mExcludedPaymentMethodIds)
-                .setDefaultPaymentMethodId(mDefaultPaymentMethodId)
+                .setPaymentPreference(mPaymentPreference)
                 .setShowBankDeals(mShowBankDeals)
                 .setSupportMPApp(mSupportMPApp)
                 .startPaymentMethodsActivity();
@@ -905,9 +876,7 @@ public class VaultActivity extends AppCompatActivity {
                 .setRequireSecurityCode(false)
                 .setRequireIssuer(true)
                 .setShowBankDeals(mShowBankDeals)
-                .setExcludedPaymentTypes(mExcludedPaymentTypes)
-                .setExcludedPaymentMethodIds(mExcludedPaymentMethodIds)
-                .setDefaultPaymentMethodId(mDefaultPaymentMethodId)
+                .setPaymentPreference(mPaymentPreference)
                 .startGuessingCardActivity();
     }
 }

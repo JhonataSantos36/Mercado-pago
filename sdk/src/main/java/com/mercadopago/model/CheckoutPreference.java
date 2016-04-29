@@ -6,7 +6,6 @@ import com.mercadopago.util.CurrenciesUtil;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 public class CheckoutPreference implements Serializable {
@@ -14,7 +13,7 @@ public class CheckoutPreference implements Serializable {
     private String id;
     private List<Item> items;
     private Payer payer;
-    private PaymentMethodPreference paymentMethods;
+    private PaymentPreference paymentMethods;
 
     private Date expirationDateTo;
     private Date expirationDateFrom;
@@ -123,7 +122,7 @@ public class CheckoutPreference implements Serializable {
         this.expirationDateFrom = date;
     }
 
-    public void setPaymentMethods(PaymentMethodPreference paymentMethods){
+    public void setPaymentMethods(PaymentPreference paymentMethods){
         this.paymentMethods = paymentMethods;
     }
 
@@ -200,7 +199,7 @@ public class CheckoutPreference implements Serializable {
     }
 
 
-    public PaymentMethodPreference getPaymentMethodPreference() {
+    public PaymentPreference getPaymentPreference() {
         return paymentMethods;
     }
 }

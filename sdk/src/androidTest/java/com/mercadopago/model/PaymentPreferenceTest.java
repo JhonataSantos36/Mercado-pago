@@ -9,15 +9,15 @@ import java.util.List;
 /**
  * Created by mreverter on 29/12/15.
  */
-public class PaymentMethodPreferenceTest extends TestCase {
+public class PaymentPreferenceTest extends TestCase {
 
     public void testIfDefaultInstallmentsSetAndExistsInListReturnIt()
     {
         List<PayerCost> payerCosts = getPayerCosts();
 
-        PaymentMethodPreference paymentMethodPreference = new PaymentMethodPreference();
-        paymentMethodPreference.setDefaultInstallments(3);
-        PayerCost defaultPayerCost = paymentMethodPreference.getDefaultInstallments(payerCosts);
+        PaymentPreference paymentPreference = new PaymentPreference();
+        paymentPreference.setDefaultInstallments(3);
+        PayerCost defaultPayerCost = paymentPreference.getDefaultInstallments(payerCosts);
 
         Assert.assertTrue(defaultPayerCost.getInstallments() == 3);
     }
@@ -26,9 +26,9 @@ public class PaymentMethodPreferenceTest extends TestCase {
     {
         List<PayerCost> payerCosts = getPayerCosts();
 
-        PaymentMethodPreference paymentMethodPreference = new PaymentMethodPreference();
+        PaymentPreference paymentPreference = new PaymentPreference();
 
-        Assert.assertTrue(paymentMethodPreference.getDefaultInstallments(payerCosts) == null);
+        Assert.assertTrue(paymentPreference.getDefaultInstallments(payerCosts) == null);
 
     }
 
@@ -36,9 +36,9 @@ public class PaymentMethodPreferenceTest extends TestCase {
 
         List<PayerCost> payerCosts = getPayerCosts();
 
-        PaymentMethodPreference paymentMethodPreference = new PaymentMethodPreference();
-        paymentMethodPreference.setDefaultInstallments(4);
-        PayerCost defaultPayerCost = paymentMethodPreference.getDefaultInstallments(payerCosts);
+        PaymentPreference paymentPreference = new PaymentPreference();
+        paymentPreference.setDefaultInstallments(4);
+        PayerCost defaultPayerCost = paymentPreference.getDefaultInstallments(payerCosts);
 
         Assert.assertTrue(defaultPayerCost == null);
     }
@@ -46,10 +46,10 @@ public class PaymentMethodPreferenceTest extends TestCase {
     public void testIfMaxInstallmentsSetRemoveInstallmentsAboveMax(){
         List<PayerCost> originalPayerCosts = getPayerCosts();
 
-        PaymentMethodPreference paymentMethodPreference = new PaymentMethodPreference();
-        paymentMethodPreference.setMaxInstallments(6);
+        PaymentPreference paymentPreference = new PaymentPreference();
+        paymentPreference.setMaxInstallments(6);
 
-        List<PayerCost> filteredPayerCosts = paymentMethodPreference.getInstallmentsBelowMax(originalPayerCosts);
+        List<PayerCost> filteredPayerCosts = paymentPreference.getInstallmentsBelowMax(originalPayerCosts);
 
         Assert.assertTrue(getMaxPayerCost(originalPayerCosts) > 6);
         Assert.assertTrue(getMaxPayerCost(filteredPayerCosts) <= 6);
@@ -58,9 +58,9 @@ public class PaymentMethodPreferenceTest extends TestCase {
     public void testIfMaxInstallmentsNotSetReturnOriginalPayerCostsList(){
         List<PayerCost> originalPayerCosts = getPayerCosts();
 
-        PaymentMethodPreference paymentMethodPreference = new PaymentMethodPreference();
+        PaymentPreference paymentPreference = new PaymentPreference();
 
-        List<PayerCost> filteredPayerCosts = paymentMethodPreference.getInstallmentsBelowMax(originalPayerCosts);
+        List<PayerCost> filteredPayerCosts = paymentPreference.getInstallmentsBelowMax(originalPayerCosts);
 
         Assert.assertTrue(filteredPayerCosts.equals(originalPayerCosts));
     }
@@ -75,19 +75,19 @@ public class PaymentMethodPreferenceTest extends TestCase {
 
         PaymentMethod paymentMethod = new PaymentMethod();
         paymentMethod.setPaymentTypeId("debit_card");
-        PaymentMethodPreference paymentMethodPreference = new PaymentMethodPreference();
-        paymentMethodPreference.setExcludedPaymentTypes(excludedPaymentMethods);
+        PaymentPreference paymentPreference = new PaymentPreference();
+        paymentPreference.setExcludedPaymentTypeIds(excludedPaymentMethods);
 
-        Assert.assertTrue(!paymentMethodPreference.isPaymentMethodSupported(paymentMethod));
+        Assert.assertTrue(!paymentPreference.isPaymentMethodSupported(paymentMethod));
     }
 
     public void testIfNeitherExcludedOrSupportedSetSupportAnyType()
     {
         PaymentMethod paymentMethod = new PaymentMethod();
         paymentMethod.setPaymentTypeId("credit_card");
-        PaymentMethodPreference paymentMethodPreference = new PaymentMethodPreference();
+        PaymentPreference paymentPreference = new PaymentPreference();
 
-        Assert.assertTrue(paymentMethodPreference.isPaymentMethodSupported(paymentMethod));
+        Assert.assertTrue(paymentPreference.isPaymentMethodSupported(paymentMethod));
     }
 
     public void testIfSupportedAndExcludedPMSetExcludeEvenWhenSupported(){
@@ -97,10 +97,10 @@ public class PaymentMethodPreferenceTest extends TestCase {
 
         PaymentMethod paymentMethod = new PaymentMethod();
         paymentMethod.setPaymentTypeId("debit_card");
-        PaymentMethodPreference paymentMethodPreference = new PaymentMethodPreference();
-        paymentMethodPreference.setExcludedPaymentTypes(excludedPaymentMethods);
+        PaymentPreference paymentPreference = new PaymentPreference();
+        paymentPreference.setExcludedPaymentTypeIds(excludedPaymentMethods);
 
-        Assert.assertTrue(!paymentMethodPreference.isPaymentMethodSupported(paymentMethod));
+        Assert.assertTrue(!paymentPreference.isPaymentMethodSupported(paymentMethod));
     }
 
     public void testIfPaymentMethodIdExcludedReturnSupportedFalse()
@@ -111,10 +111,10 @@ public class PaymentMethodPreferenceTest extends TestCase {
 
         PaymentMethod paymentMethod = new PaymentMethod();
         paymentMethod.setId("visa");
-        PaymentMethodPreference paymentMethodPreference = new PaymentMethodPreference();
-        paymentMethodPreference.setExcludedPaymentMethods(excludedPaymentMethodIds);
+        PaymentPreference paymentPreference = new PaymentPreference();
+        paymentPreference.setExcludedPaymentMethodIds(excludedPaymentMethodIds);
 
-        Assert.assertTrue(!paymentMethodPreference.isPaymentMethodSupported(paymentMethod));
+        Assert.assertTrue(!paymentPreference.isPaymentMethodSupported(paymentMethod));
     }
 
     public void testIfPaymentMethodIdExcludedReturnSupportedTrue()
@@ -125,10 +125,10 @@ public class PaymentMethodPreferenceTest extends TestCase {
 
         PaymentMethod paymentMethod = new PaymentMethod();
         paymentMethod.setId("master");
-        PaymentMethodPreference paymentMethodPreference = new PaymentMethodPreference();
-        paymentMethodPreference.setExcludedPaymentMethods(excludedPaymentMethodIds);
+        PaymentPreference paymentPreference = new PaymentPreference();
+        paymentPreference.setExcludedPaymentMethodIds(excludedPaymentMethodIds);
 
-        Assert.assertTrue(paymentMethodPreference.isPaymentMethodSupported(paymentMethod));
+        Assert.assertTrue(paymentPreference.isPaymentMethodSupported(paymentMethod));
     }
 
     public void testIfPaymentMethodIdNotExcludedButPaymentTypeExcludedReturnSupportedFalse()
@@ -143,20 +143,20 @@ public class PaymentMethodPreferenceTest extends TestCase {
         PaymentMethod paymentMethod = new PaymentMethod();
         paymentMethod.setId("visa");
         paymentMethod.setPaymentTypeId("credit_card");
-        PaymentMethodPreference paymentMethodPreference = new PaymentMethodPreference();
-        paymentMethodPreference.setExcludedPaymentTypes(excludedPaymentMethodTypes);
-        paymentMethodPreference.setExcludedPaymentMethods(excludedPaymentMethodIds);
+        PaymentPreference paymentPreference = new PaymentPreference();
+        paymentPreference.setExcludedPaymentTypeIds(excludedPaymentMethodTypes);
+        paymentPreference.setExcludedPaymentMethodIds(excludedPaymentMethodIds);
 
-        Assert.assertTrue(!paymentMethodPreference.isPaymentMethodSupported(paymentMethod));
+        Assert.assertTrue(!paymentPreference.isPaymentMethodSupported(paymentMethod));
     }
 
     public void testIfExcludedPaymentMethodIdNotSetReturnSupportedTrue()
     {
         PaymentMethod paymentMethod = new PaymentMethod();
         paymentMethod.setId("master");
-        PaymentMethodPreference paymentMethodPreference = new PaymentMethodPreference();
+        PaymentPreference paymentPreference = new PaymentPreference();
 
-        Assert.assertTrue(paymentMethodPreference.isPaymentMethodSupported(paymentMethod));
+        Assert.assertTrue(paymentPreference.isPaymentMethodSupported(paymentMethod));
     }
 
     public void testFilterListByExcludedPaymentMethodTypes(){
@@ -167,11 +167,11 @@ public class PaymentMethodPreferenceTest extends TestCase {
         }};
 
         List<PaymentMethod> originalPaymentMethods = getPaymentMethods();
-        PaymentMethodPreference paymentMethodPreference = new PaymentMethodPreference();
+        PaymentPreference paymentPreference = new PaymentPreference();
 
-        paymentMethodPreference.setExcludedPaymentTypes(excludedPaymentMethodTypes);
+        paymentPreference.setExcludedPaymentTypeIds(excludedPaymentMethodTypes);
 
-        List<PaymentMethod> filteredPaymentMethods = paymentMethodPreference.getSupportedPaymentMethods(originalPaymentMethods);
+        List<PaymentMethod> filteredPaymentMethods = paymentPreference.getSupportedPaymentMethods(originalPaymentMethods);
 
         Assert.assertTrue(filteredPaymentMethods.size() != 0);
         for(PaymentMethod pm : filteredPaymentMethods)
@@ -188,11 +188,11 @@ public class PaymentMethodPreferenceTest extends TestCase {
         }};
 
         List<PaymentMethod> originalPaymentMethods = getPaymentMethods();
-        PaymentMethodPreference paymentMethodPreference = new PaymentMethodPreference();
+        PaymentPreference paymentPreference = new PaymentPreference();
 
-        paymentMethodPreference.setExcludedPaymentMethods(excludedPaymentMethodIds);
+        paymentPreference.setExcludedPaymentMethodIds(excludedPaymentMethodIds);
 
-        List<PaymentMethod> filteredPaymentMethods = paymentMethodPreference.getSupportedPaymentMethods(originalPaymentMethods);
+        List<PaymentMethod> filteredPaymentMethods = paymentPreference.getSupportedPaymentMethods(originalPaymentMethods);
 
         Assert.assertTrue(filteredPaymentMethods.size() != 0);
         for(PaymentMethod pm : filteredPaymentMethods)
@@ -204,10 +204,10 @@ public class PaymentMethodPreferenceTest extends TestCase {
     public void testIfDefaultPaymentMethodExistsReturnIt(){
 
         List<PaymentMethod> paymentMethods = getPaymentMethods();
-        PaymentMethodPreference paymentMethodPreference = new PaymentMethodPreference();
-        paymentMethodPreference.setDefaultPaymentMethodId("visa");
+        PaymentPreference paymentPreference = new PaymentPreference();
+        paymentPreference.setDefaultPaymentMethodId("visa");
 
-        PaymentMethod defaultPaymentMethod = paymentMethodPreference.getDefaultPaymentMethod(paymentMethods);
+        PaymentMethod defaultPaymentMethod = paymentPreference.getDefaultPaymentMethod(paymentMethods);
 
         Assert.assertTrue(defaultPaymentMethod.getId().equals("visa"));
     }
@@ -215,10 +215,10 @@ public class PaymentMethodPreferenceTest extends TestCase {
     public void testIfDefaultPaymentMethodDoesNotExistsReturnNull(){
 
         List<PaymentMethod> paymentMethods = getPaymentMethods();
-        PaymentMethodPreference paymentMethodPreference = new PaymentMethodPreference();
-        paymentMethodPreference.setDefaultPaymentMethodId("i don't exist");
+        PaymentPreference paymentPreference = new PaymentPreference();
+        paymentPreference.setDefaultPaymentMethodId("i don't exist");
 
-        PaymentMethod defaultPaymentMethod = paymentMethodPreference.getDefaultPaymentMethod(paymentMethods);
+        PaymentMethod defaultPaymentMethod = paymentPreference.getDefaultPaymentMethod(paymentMethods);
 
         Assert.assertTrue(defaultPaymentMethod == null);
     }
@@ -226,9 +226,9 @@ public class PaymentMethodPreferenceTest extends TestCase {
     public void testIfDefaultPaymentMethodIdNotSetReturnNull(){
 
         List<PaymentMethod> paymentMethods = getPaymentMethods();
-        PaymentMethodPreference paymentMethodPreference = new PaymentMethodPreference();
+        PaymentPreference paymentPreference = new PaymentPreference();
 
-        PaymentMethod defaultPaymentMethod = paymentMethodPreference.getDefaultPaymentMethod(paymentMethods);
+        PaymentMethod defaultPaymentMethod = paymentPreference.getDefaultPaymentMethod(paymentMethods);
 
         Assert.assertTrue(defaultPaymentMethod == null);
     }

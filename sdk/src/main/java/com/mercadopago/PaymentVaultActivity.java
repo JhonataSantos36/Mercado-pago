@@ -23,7 +23,7 @@ import com.mercadopago.model.CardToken;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.PaymentMethod;
-import com.mercadopago.model.PaymentMethodPreference;
+import com.mercadopago.model.PaymentPreference;
 import com.mercadopago.model.PaymentMethodSearch;
 import com.mercadopago.model.PaymentMethodSearchItem;
 import com.mercadopago.model.Token;
@@ -74,19 +74,13 @@ public class PaymentVaultActivity extends AppCompatActivity {
     protected String mItemImageUri;
     protected String mCurrencyId;
     protected ShoppingCartFragment mShoppingCartFragment;
-    protected Integer mDefaultInstallments;
-    protected Integer mMaxInstallments;
-    protected List<String> mExcludedPaymentMethodIds;
-    protected List<String> mExcludedPaymentTypes;
-    protected String mDefaultPaymentMethodId;
-    private PaymentMethodPreference mPaymentMethodPreference;
+    private PaymentPreference mPaymentPreference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payment_vault);
         getActivityParameters();
-        createPaymentMethodPreference();
         boolean validParameters = true;
         try {
             validateActivityParameters();
@@ -114,15 +108,6 @@ public class PaymentVaultActivity extends AppCompatActivity {
         }
     }
 
-    private void createPaymentMethodPreference() {
-        mPaymentMethodPreference = new PaymentMethodPreference();
-        mPaymentMethodPreference.setExcludedPaymentTypes(mExcludedPaymentTypes);
-        mPaymentMethodPreference.setExcludedPaymentMethods(mExcludedPaymentMethodIds);
-        mPaymentMethodPreference.setDefaultPaymentMethodId(mDefaultPaymentMethodId);
-        mPaymentMethodPreference.setMaxInstallments(mMaxInstallments);
-        mPaymentMethodPreference.setDefaultInstallments(mDefaultInstallments);
-    }
-
     protected void getActivityParameters() {
 
         if (this.getIntent().getSerializableExtra("selectedSearchItem") != null) {
@@ -145,23 +130,8 @@ public class PaymentVaultActivity extends AppCompatActivity {
         mCardGuessingEnabled = this.getIntent().getBooleanExtra("cardGuessingEnabled", false);
         mShowBankDeals = this.getIntent().getBooleanExtra("showBankDeals", true);
 
-        if (this.getIntent().getStringExtra("excludedPaymentMethodIds") != null) {
-            Gson gson = new Gson();
-            Type listType = new TypeToken<List<String>>(){}.getType();
-            mExcludedPaymentMethodIds = gson.fromJson(this.getIntent().getStringExtra("excludedPaymentMethodIds"), listType);
-        }
-        if (this.getIntent().getStringExtra("excludedPaymentTypes") != null) {
-            Gson gson = new Gson();
-            Type listType = new TypeToken<List<String>>(){}.getType();
-            mExcludedPaymentTypes = gson.fromJson(this.getIntent().getStringExtra("excludedPaymentTypes"), listType);
-        }
-        mDefaultPaymentMethodId = this.getIntent().getStringExtra("defaultPaymentMethodId");
-
-        if (this.getIntent().getStringExtra("maxInstallments") != null) {
-            mMaxInstallments = Integer.valueOf(this.getIntent().getStringExtra("maxInstallments"));
-        }
-        if(this.getIntent().getStringExtra("defaultInstallments") != null) {
-            mDefaultInstallments = Integer.valueOf(this.getIntent().getStringExtra("defaultInstallments"));
+        if (this.getIntent().getSerializableExtra("paymentPreference") != null) {
+           mPaymentPreference = (PaymentPreference) this.getIntent().getSerializableExtra("paymentPreference");
         }
 
         if(this.getIntent().getSerializableExtra("paymentMethodSearch") != null) {
@@ -171,17 +141,16 @@ public class PaymentVaultActivity extends AppCompatActivity {
 
     private void validateActivityParameters() {
 
-
-        if (!mPaymentMethodPreference.validMaxInstallments()){
-            throw new IllegalStateException(getString(R.string.mpsdk_error_message_invalid_installments));
+        if(mPaymentPreference != null) {
+            if (!mPaymentPreference.validMaxInstallments()) {
+                throw new IllegalStateException(getString(R.string.mpsdk_error_message_invalid_installments));
+            } else if (!mPaymentPreference.validDefaultInstallments()) {
+                throw new IllegalStateException(getString(R.string.mpsdk_error_message_invalid_installments));
+            } else if (!mPaymentPreference.excludedPaymentTypesValid()) {
+                throw new IllegalStateException(getString(R.string.mpsdk_error_message_excluded_all_payment_type));
+            }
         }
-        else if (!mPaymentMethodPreference.validDefaultInstallments()){
-            throw new IllegalStateException(getString(R.string.mpsdk_error_message_invalid_installments));
-        }
-        else if (!mPaymentMethodPreference.excludedPaymentTypesValid()){
-            throw new IllegalStateException(getString(R.string.mpsdk_error_message_excluded_all_payment_type));
-        }
-        if(!isCurrencyIdValid()){
+        if (!isCurrencyIdValid()){
             throw new IllegalStateException(getString(R.string.mpsdk_error_message_invalid_currency));
         }
         if (!isAmountValid()) {
@@ -289,7 +258,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
     }
 
     protected void getPaymentMethodSearch() {
-        mMercadoPago.getPaymentMethodSearch(mAmount, mPaymentMethodPreference.getExcludedPaymentTypes(), mPaymentMethodPreference.getExcludedPaymentMethodIds(), new Callback<PaymentMethodSearch>() {
+        mMercadoPago.getPaymentMethodSearch(mAmount, mPaymentPreference.getExcludedPaymentTypes(), mPaymentPreference.getExcludedPaymentMethodIds(), new Callback<PaymentMethodSearch>() {
             @Override
             public void success(PaymentMethodSearch paymentMethodSearch, Response response) {
                 if (!paymentMethodSearch.hasSearchItems()) {
@@ -354,6 +323,8 @@ public class PaymentVaultActivity extends AppCompatActivity {
         intent.putExtra("purchaseTitle", mPurchaseTitle);
         intent.putExtra("itemImageUri", mItemImageUri);
         intent.putExtra("paymentMethodSearch", mPaymentMethodSearch);
+        intent.putExtra("paymentMethodPreference", mPaymentPreference);
+
         startActivityForResult(intent, MercadoPago.PAYMENT_VAULT_REQUEST_CODE);
         overridePendingTransition(R.anim.slide_right_to_left_in, R.anim.slide_right_to_left_out);
     }
@@ -368,7 +339,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
         MercadoPago.StartActivityBuilder builder = new MercadoPago.StartActivityBuilder()
                 .setActivity(this)
                 .setPublicKey(mMerchantPublicKey)
-                .setExcludedPaymentMethodIds(mPaymentMethodPreference.getExcludedPaymentMethodIds())
+                .setPaymentPreference(mPaymentPreference)
                 .setPaymentTypeId(item.getId());
 
         if(MercadoPagoUtil.isCardPaymentType(item.getId())){

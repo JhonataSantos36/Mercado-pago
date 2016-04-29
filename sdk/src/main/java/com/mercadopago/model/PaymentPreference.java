@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Created by mreverter on 28/12/15.
  */
-public class PaymentMethodPreference implements Serializable {
+public class PaymentPreference implements Serializable {
 
     //maxInstallments
     private Integer installments;
@@ -24,10 +24,10 @@ public class PaymentMethodPreference implements Serializable {
         this.defaultInstallments = defaultInstallments;
     }
 
-    public void setExcludedPaymentMethods(List<String> excludedPaymentMethods) {
-        if(excludedPaymentMethods != null) {
+    public void setExcludedPaymentMethodIds(List<String> excludedPaymentMethodIds) {
+        if(excludedPaymentMethodIds != null) {
             this.excludedPaymentMethods = new ArrayList<>();
-            for (String paymentMethodId : excludedPaymentMethods) {
+            for (String paymentMethodId : excludedPaymentMethodIds) {
                 PaymentMethod excludedPaymentMethod = new PaymentMethod();
                 excludedPaymentMethod.setId(paymentMethodId);
                 this.excludedPaymentMethods.add(excludedPaymentMethod);
@@ -35,10 +35,10 @@ public class PaymentMethodPreference implements Serializable {
         }
     }
 
-    public void setExcludedPaymentTypes(List<String> excludedPaymentTypes) {
-        if(excludedPaymentTypes != null) {
+    public void setExcludedPaymentTypeIds(List<String> excludedPaymentTypeIds) {
+        if(excludedPaymentTypeIds != null) {
             this.excludedPaymentTypes = new ArrayList<>();
-            for (String paymentTypeId : excludedPaymentTypes) {
+            for (String paymentTypeId : excludedPaymentTypeIds) {
                 PaymentType excludedPaymentType = new PaymentType();
                 excludedPaymentType.setId(paymentTypeId);
                 this.excludedPaymentTypes.add(excludedPaymentType);
