@@ -11,6 +11,7 @@ import com.mercadopago.examples.R;
 import com.mercadopago.examples.utils.ExamplesUtils;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.PaymentMethod;
+import com.mercadopago.model.PaymentPreference;
 import com.mercadopago.util.LayoutUtil;
 
 import java.util.ArrayList;
@@ -25,11 +26,21 @@ public class Step5Activity extends ExampleActivity {
     protected List<String> mExcludedPaymentMethodIds = new ArrayList<String>(){{
         add("visa");
     }};
+    protected PaymentPreference mPaymentPreference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_step5);
+        createPaymentPreference();
+    }
+
+    private void createPaymentPreference() {
+        mPaymentPreference = new PaymentPreference();
+        mPaymentPreference.setDefaultInstallments(ExamplesUtils.DUMMY_DEFAULT_INSTALLMENTS);
+        mPaymentPreference.setExcludedPaymentMethodIds(mExcludedPaymentMethodIds);
+        mPaymentPreference.setExcludedPaymentTypeIds(mExcludedPaymentTypes);
+        mPaymentPreference.setMaxInstallments(ExamplesUtils.DUMMY_MAX_INSTALLMENTS);
     }
 
     @Override
@@ -73,9 +84,7 @@ public class Step5Activity extends ExampleActivity {
                 .setMerchantGetCustomerUri(ExamplesUtils.DUMMY_MERCHANT_GET_CUSTOMER_URI)
                 .setMerchantAccessToken(ExamplesUtils.DUMMY_MERCHANT_ACCESS_TOKEN)
                 .setAmount(ExamplesUtils.DUMMY_ITEM_UNIT_PRICE)
-                .setExcludedPaymentTypes(mExcludedPaymentTypes)
-                .setExcludedPaymentMethodIds(mExcludedPaymentMethodIds)
-                .setMaxInstallments(ExamplesUtils.DUMMY_MAX_INSTALLMENTS)
+                .setPaymentPreference(mPaymentPreference)
                 .setShowBankDeals(true)
                 .startPaymentVaultActivity();
     }
@@ -89,10 +98,7 @@ public class Step5Activity extends ExampleActivity {
                 .setMerchantGetCustomerUri(ExamplesUtils.DUMMY_MERCHANT_GET_CUSTOMER_URI)
                 .setMerchantAccessToken(ExamplesUtils.DUMMY_MERCHANT_ACCESS_TOKEN)
                 .setAmount(ExamplesUtils.DUMMY_ITEM_UNIT_PRICE)
-                .setExcludedPaymentTypes(mExcludedPaymentTypes)
-                .setExcludedPaymentMethodIds(mExcludedPaymentMethodIds)
-                .setMaxInstallments(ExamplesUtils.DUMMY_MAX_INSTALLMENTS)
-                .setDefaultInstallments(ExamplesUtils.DUMMY_DEFAULT_INSTALLMENTS)
+                .setPaymentPreference(mPaymentPreference)
                 .setShowBankDeals(true)
                 .setGuessingCardFormEnabled(true)
                 .startPaymentVaultActivity();

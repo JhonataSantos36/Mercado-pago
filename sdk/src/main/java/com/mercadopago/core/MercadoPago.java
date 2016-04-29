@@ -26,10 +26,9 @@ import com.mercadopago.model.Instruction;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.Payment;
-import com.mercadopago.model.PaymentIntent;
 import com.mercadopago.model.PaymentMethod;
-import com.mercadopago.model.PaymentMethodPreference;
 import com.mercadopago.model.PaymentMethodSearch;
+import com.mercadopago.model.PaymentPreference;
 import com.mercadopago.model.SavedCardToken;
 import com.mercadopago.model.Token;
 import com.mercadopago.services.BankDealService;
@@ -368,8 +367,7 @@ public class MercadoPago {
     }
 
     private static void startPaymentVaultActivity(Activity activity, String merchantPublicKey, String merchantBaseUrl, String merchantGetCustomerUri, String merchantAccessToken, String itemImageUri, String purchaseTitle, BigDecimal amount, String currencyId, Boolean showBankDeals, Boolean cardGuessingEnabled,
-                                                  List<String> excludedPaymentMethodIds, List<String> excludedPaymentTypes, String defaultPaymentMethodId,
-                                                  Integer defaultInstallments, Integer maxInstallments, PaymentMethodSearch paymentMethodSearch) {
+                                                  PaymentPreference paymentPreference, PaymentMethodSearch paymentMethodSearch) {
 
         Intent vaultIntent = new Intent(activity, PaymentVaultActivity.class);
         vaultIntent.putExtra("merchantPublicKey", merchantPublicKey);
@@ -383,16 +381,7 @@ public class MercadoPago {
         vaultIntent.putExtra("showBankDeals", showBankDeals);
 
         vaultIntent.putExtra("cardGuessingEnabled", cardGuessingEnabled);
-        putListExtra(vaultIntent, "excludedPaymentMethodIds", excludedPaymentMethodIds);
-        putListExtra(vaultIntent, "excludedPaymentTypes", excludedPaymentTypes);
-        vaultIntent.putExtra("defaultPaymentMethodId", defaultPaymentMethodId);
-
-        if(defaultInstallments != null) {
-            vaultIntent.putExtra("defaultInstallments", defaultInstallments.toString());
-        }
-        if(maxInstallments != null) {
-            vaultIntent.putExtra("maxInstallments", maxInstallments.toString());
-        }
+        vaultIntent.putExtra("paymentPreference", paymentPreference);
         vaultIntent.putExtra("paymentMethodSearch", paymentMethodSearch);
 
         activity.startActivityForResult(vaultIntent, PAYMENT_VAULT_REQUEST_CODE);
@@ -487,6 +476,7 @@ public class MercadoPago {
         private String mCurrencyId;
         private String mItemImageUri;
         private PaymentMethodSearch mPaymentMethodSearch;
+        private PaymentPreference mPaymentPreference;
 
         public StartActivityBuilder() {
 
@@ -601,37 +591,6 @@ public class MercadoPago {
             return this;
         }
 
-        public StartActivityBuilder setExcludedPaymentMethodIds(List<String> paymentMethodIds)
-        {
-            this.mExcludedPaymentMethodIds = paymentMethodIds;
-            return this;
-        }
-
-
-        public StartActivityBuilder setExcludedPaymentTypes(List<String> paymentTypes)
-        {
-            this.mExcludedPaymentTypes = paymentTypes;
-            return this;
-        }
-
-        public StartActivityBuilder setDefaultPaymentMethodId(String paymentMethodId)
-        {
-            this.mDefaultPaymentMethodId = paymentMethodId;
-            return this;
-        }
-
-        public StartActivityBuilder setDefaultInstallments(Integer defaultInstallments)
-        {
-            this.mDefaultInstallments = defaultInstallments;
-            return this;
-        }
-
-        public StartActivityBuilder setMaxInstallments(Integer maxInstallments)
-        {
-            this.mMaxInstallments = maxInstallments;
-            return this;
-        }
-
         public StartActivityBuilder setGuessingCardFormEnabled(boolean cardGuessingEnabled)
         {
             this.mCardGuessingEnabled = cardGuessingEnabled;
@@ -661,6 +620,11 @@ public class MercadoPago {
 
         public StartActivityBuilder setPaymentMethodSearch(PaymentMethodSearch paymentMethodSearch) {
             this.mPaymentMethodSearch = paymentMethodSearch;
+            return this;
+        }
+
+        public StartActivityBuilder setPaymentPreference(PaymentPreference paymentPreference) {
+            this.mPaymentPreference = paymentPreference;
             return this;
         }
 
@@ -793,8 +757,7 @@ public class MercadoPago {
                 MercadoPago.startPaymentVaultActivity(this.mActivity, this.mKey, this.mMerchantBaseUrl,
                         this.mMerchantGetCustomerUri, this.mMerchantAccessToken, this.mItemImageUri, this.mPurchaseTitle,
                         this.mAmount, this.mCurrencyId, this.mShowBankDeals, this.mCardGuessingEnabled,
-                        this.mExcludedPaymentMethodIds, this.mExcludedPaymentTypes, this.mDefaultPaymentMethodId,
-                        this.mDefaultInstallments, this.mMaxInstallments, this.mPaymentMethodSearch);
+                        this.mPaymentPreference, this.mPaymentMethodSearch);
             } else {
                 throw new RuntimeException("Unsupported key type for this method");
             }

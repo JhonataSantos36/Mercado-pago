@@ -22,9 +22,9 @@ import com.mercadopago.model.Item;
 import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentMethod;
-import com.mercadopago.model.PaymentMethodPreference;
 import com.mercadopago.model.PaymentMethodSearch;
 import com.mercadopago.model.PaymentMethodSearchItem;
+import com.mercadopago.model.PaymentPreference;
 import com.mercadopago.model.Token;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.CurrenciesUtil;
@@ -75,6 +75,7 @@ public class CheckoutActivity extends AppCompatActivity {
     protected MPButton mPayButton;
     protected View mContentView;
     protected RelativeLayout mPaymentMethodLayout;
+    protected PaymentPreference mPaymentPreference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -244,12 +245,8 @@ public class CheckoutActivity extends AppCompatActivity {
                 .setCurrency(mCheckoutPreference.getItems().get(0).getCurrencyId())
                 .setAmount(mCheckoutPreference.getAmount())
                 .setShowBankDeals(mShowBankDeals)
-                .setDefaultPaymentMethodId(mCheckoutPreference.getDefaultPaymentMethodId())
-                .setExcludedPaymentMethodIds(mCheckoutPreference.getExcludedPaymentMethods())
-                .setExcludedPaymentTypes(mCheckoutPreference.getExcludedPaymentTypes())
-                .setDefaultInstallments(mCheckoutPreference.getDefaultInstallments())
-                .setMaxInstallments(mCheckoutPreference.getMaxInstallments())
                 .setPaymentMethodSearch(mPaymentMethodSearch)
+                .setPaymentPreference(mCheckoutPreference.getPaymentPreference())
                 .startPaymentVaultActivity();
     }
 

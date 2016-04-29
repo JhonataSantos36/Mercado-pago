@@ -447,9 +447,9 @@ public class CheckoutPreferenceTest extends TestCase {
         items.add(itemA);
         preference.setItems(items);
 
-        PaymentMethodPreference paymentMethodPreference = new PaymentMethodPreference();
-        paymentMethodPreference.setExcludedPaymentTypes(paymentTypes);
-        preference.setPaymentMethods(paymentMethodPreference);
+        PaymentPreference paymentPreference = new PaymentPreference();
+        paymentPreference.setExcludedPaymentTypeIds(paymentTypes);
+        preference.setPaymentMethods(paymentPreference);
 
         return preference;
     }
@@ -476,9 +476,9 @@ public class CheckoutPreferenceTest extends TestCase {
         items.add(itemA);
         preference.setItems(items);
 
-        PaymentMethodPreference paymentMethodPreference = new PaymentMethodPreference();
-        paymentMethodPreference.setExcludedPaymentTypes(paymentTypes);
-        preference.setPaymentMethods(paymentMethodPreference);
+        PaymentPreference paymentPreference = new PaymentPreference();
+        paymentPreference.setExcludedPaymentTypeIds(paymentTypes);
+        preference.setPaymentMethods(paymentPreference);
 
         return preference;
     }
@@ -494,10 +494,10 @@ public class CheckoutPreferenceTest extends TestCase {
         items.add(itemA);
         preference.setItems(items);
 
-        PaymentMethodPreference paymentMethodPreference = new PaymentMethodPreference();
-        paymentMethodPreference.setMaxInstallments(1);
-        paymentMethodPreference.setDefaultInstallments(-3);
-        preference.setPaymentMethods(paymentMethodPreference);
+        PaymentPreference paymentPreference = new PaymentPreference();
+        paymentPreference.setMaxInstallments(1);
+        paymentPreference.setDefaultInstallments(-3);
+        preference.setPaymentMethods(paymentPreference);
 
         return preference;
     }
@@ -512,10 +512,10 @@ public class CheckoutPreferenceTest extends TestCase {
         items.add(itemA);
         preference.setItems(items);
 
-        PaymentMethodPreference paymentMethodPreference = new PaymentMethodPreference();
-        paymentMethodPreference.setMaxInstallments(-1);
-        paymentMethodPreference.setDefaultInstallments(3);
-        preference.setPaymentMethods(paymentMethodPreference);
+        PaymentPreference paymentPreference = new PaymentPreference();
+        paymentPreference.setMaxInstallments(-1);
+        paymentPreference.setDefaultInstallments(3);
+        preference.setPaymentMethods(paymentPreference);
 
         return preference;
     }
@@ -530,10 +530,10 @@ public class CheckoutPreferenceTest extends TestCase {
         items.add(itemA);
         preference.setItems(items);
 
-        PaymentMethodPreference paymentMethodPreference = new PaymentMethodPreference();
-        paymentMethodPreference.setMaxInstallments(1);
-        paymentMethodPreference.setDefaultInstallments(3);
-        preference.setPaymentMethods(paymentMethodPreference);
+        PaymentPreference paymentPreference = new PaymentPreference();
+        paymentPreference.setMaxInstallments(1);
+        paymentPreference.setDefaultInstallments(3);
+        preference.setPaymentMethods(paymentPreference);
 
         return preference;
     }
@@ -548,10 +548,10 @@ public class CheckoutPreferenceTest extends TestCase {
         items.add(itemA);
         preference.setItems(items);
 
-        PaymentMethodPreference paymentMethodPreference = new PaymentMethodPreference();
-        paymentMethodPreference.setMaxInstallments(-1);
-        paymentMethodPreference.setDefaultInstallments(-1);
-        preference.setPaymentMethods(paymentMethodPreference);
+        PaymentPreference paymentPreference = new PaymentPreference();
+        paymentPreference.setMaxInstallments(-1);
+        paymentPreference.setDefaultInstallments(-1);
+        preference.setPaymentMethods(paymentPreference);
 
         return preference;
     }
@@ -586,11 +586,11 @@ public class CheckoutPreferenceTest extends TestCase {
         pastDate.setTime((new Date().getTime()) - 1000 * 60 * 60);
         preference.setActiveFrom(pastDate);
 
-        PaymentMethodPreference paymentMethodPreference = new PaymentMethodPreference();
-        paymentMethodPreference.setMaxInstallments(1);
-        paymentMethodPreference.setDefaultInstallments(1);
-        paymentMethodPreference.setExcludedPaymentTypes(paymentTypes);
-        preference.setPaymentMethods(paymentMethodPreference);
+        PaymentPreference paymentPreference = new PaymentPreference();
+        paymentPreference.setMaxInstallments(1);
+        paymentPreference.setDefaultInstallments(1);
+        paymentPreference.setExcludedPaymentTypeIds(paymentTypes);
+        preference.setPaymentMethods(paymentPreference);
 
         return preference;
     }
@@ -624,11 +624,11 @@ public class CheckoutPreferenceTest extends TestCase {
         pastDate.setTime((new Date().getTime()) - 1000 * 60 * 60);
         preference.setActiveFrom(pastDate);
 
-        PaymentMethodPreference paymentMethodPreference = new PaymentMethodPreference();
-        paymentMethodPreference.setMaxInstallments(1);
-        paymentMethodPreference.setDefaultInstallments(1);
-        paymentMethodPreference.setExcludedPaymentTypes(paymentTypes);
-        preference.setPaymentMethods(paymentMethodPreference);
+        PaymentPreference paymentPreference = new PaymentPreference();
+        paymentPreference.setMaxInstallments(1);
+        paymentPreference.setDefaultInstallments(1);
+        paymentPreference.setExcludedPaymentTypeIds(paymentTypes);
+        preference.setPaymentMethods(paymentPreference);
 
         return preference;
     }
@@ -648,10 +648,10 @@ public class CheckoutPreferenceTest extends TestCase {
         pastDate.setTime((new Date().getTime()) - 1000 * 60 * 60);
         preference.setActiveFrom(pastDate);
 
-        PaymentMethodPreference paymentMethodPreference = new PaymentMethodPreference();
-        paymentMethodPreference.setMaxInstallments(-1);
-        paymentMethodPreference.setDefaultInstallments(-3);
-        preference.setPaymentMethods(paymentMethodPreference);
+        PaymentPreference paymentPreference = new PaymentPreference();
+        paymentPreference.setMaxInstallments(-1);
+        paymentPreference.setDefaultInstallments(-3);
+        preference.setPaymentMethods(paymentPreference);
 
         return preference;
     }

@@ -3,13 +3,11 @@ package com.mercadopago;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -17,8 +15,7 @@ import com.mercadopago.adapters.PaymentMethodsAdapter;
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.decorations.DividerItemDecoration;
 import com.mercadopago.model.PaymentMethod;
-import com.mercadopago.model.PaymentMethodPreference;
-import com.mercadopago.model.PaymentType;
+import com.mercadopago.model.PaymentPreference;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.LayoutUtil;
 
@@ -43,7 +40,7 @@ public class PaymentMethodsActivity extends Activity {
     private List<String> mExcludedPaymentTypes;
     private String mDefaultPaymentMethodId;
 
-    private PaymentMethodPreference mPaymentMethodPreference;
+    private PaymentPreference mPaymentPreference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,10 +103,10 @@ public class PaymentMethodsActivity extends Activity {
     }
 
     private void createPaymentMethodPreference() {
-        mPaymentMethodPreference = new PaymentMethodPreference();
-        mPaymentMethodPreference.setExcludedPaymentMethods(this.mExcludedPaymentMethodIds);
-        mPaymentMethodPreference.setExcludedPaymentTypes(this.mExcludedPaymentTypes);
-        mPaymentMethodPreference.setDefaultPaymentMethodId(this.mDefaultPaymentMethodId);
+        mPaymentPreference = new PaymentPreference();
+        mPaymentPreference.setExcludedPaymentMethodIds(this.mExcludedPaymentMethodIds);
+        mPaymentPreference.setExcludedPaymentTypeIds(this.mExcludedPaymentTypes);
+        mPaymentPreference.setDefaultPaymentMethodId(this.mDefaultPaymentMethodId);
     }
 
     protected void setContentView() {
@@ -181,7 +178,7 @@ public class PaymentMethodsActivity extends Activity {
 
     private List<PaymentMethod> getSupportedPaymentMethods(List<PaymentMethod> paymentMethods) {
 
-        List<PaymentMethod> paymentMethodList = mPaymentMethodPreference.getSupportedPaymentMethods(paymentMethods);
+        List<PaymentMethod> paymentMethodList = mPaymentPreference.getSupportedPaymentMethods(paymentMethods);
 
         paymentMethodList = getPaymentMethodsOfType(mPaymentTypeSupported, paymentMethodList);
 

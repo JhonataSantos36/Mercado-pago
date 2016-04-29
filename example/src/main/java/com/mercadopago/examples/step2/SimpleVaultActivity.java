@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
@@ -20,7 +19,7 @@ import com.mercadopago.model.Card;
 import com.mercadopago.model.CardToken;
 import com.mercadopago.model.Customer;
 import com.mercadopago.model.PaymentMethod;
-import com.mercadopago.model.PaymentMethodPreference;
+import com.mercadopago.model.PaymentPreference;
 import com.mercadopago.model.PaymentMethodRow;
 import com.mercadopago.model.SavedCardToken;
 import com.mercadopago.model.Token;
@@ -64,7 +63,7 @@ public class SimpleVaultActivity extends AppCompatActivity {
     protected PaymentMethodRow mSelectedPaymentMethodRow;
     protected PaymentMethod mSelectedPaymentMethod;
     protected PaymentMethod mTempPaymentMethod;
-    protected PaymentMethodPreference mPaymentMethodPreference;
+    protected PaymentPreference mPaymentPreference;
 
 
     // Local vars
@@ -160,9 +159,9 @@ public class SimpleVaultActivity extends AppCompatActivity {
     }
 
     protected void createPaymentPreference() {
-        mPaymentMethodPreference = new PaymentMethodPreference();
-        mPaymentMethodPreference.setExcludedPaymentMethods(this.mExcludedPaymentMethodIds);
-        mPaymentMethodPreference.setExcludedPaymentTypes(this.mExcludedPaymentTypes);
+        mPaymentPreference = new PaymentPreference();
+        mPaymentPreference.setExcludedPaymentMethodIds(this.mExcludedPaymentMethodIds);
+        mPaymentPreference.setExcludedPaymentTypeIds(this.mExcludedPaymentTypes);
     }
 
     public void onCustomerMethodsClick(View view) {
@@ -179,7 +178,7 @@ public class SimpleVaultActivity extends AppCompatActivity {
             new MercadoPago.StartActivityBuilder()
                     .setActivity(mActivity)
                     .setPublicKey(mMerchantPublicKey)
-                    .setExcludedPaymentTypes(mExcludedPaymentTypes)
+                    .setPaymentPreference(mPaymentPreference)
                     .startPaymentMethodsActivity();
         }
     }
@@ -482,15 +481,15 @@ public class SimpleVaultActivity extends AppCompatActivity {
         new MercadoPago.StartActivityBuilder()
                 .setActivity(mActivity)
                 .setPublicKey(mMerchantPublicKey)
-                .setExcludedPaymentTypes(mExcludedPaymentTypes)
+                .setPaymentPreference(mPaymentPreference)
                 .startPaymentMethodsActivity();
     }
 
     private List<Card> getSupportedCustomerCards(List<Card> cards) {
         List<Card> supportedCards = new ArrayList<>();
-        if(mPaymentMethodPreference != null) {
+        if(mPaymentPreference != null) {
             for (Card card : cards) {
-                if (mPaymentMethodPreference.isPaymentMethodSupported(card.getPaymentMethod()))
+                if (mPaymentPreference.isPaymentMethodSupported(card.getPaymentMethod()))
                     supportedCards.add(card);
             }
             return supportedCards;
