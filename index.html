@@ -55,7 +55,7 @@
             <div class="text-center">
                <h2>Agregá MercadoPago a tu aplicación en tres simples pasos!</h2>
                <p class="sub-heading">
-                  Con el Checkout Básico, podes recibir pagos en cuestión de minutos. Te damos todo resuelto, solo dinos qué quieres cobrar y nos encargaremos del resto. Podes seguir la integración mediante <a href="" target="_blank">este video</a> <b>(proximamente, es una idea)</b>.
+                  Con el Checkout Básico, podes recibir pagos en cuestión de minutos. Te damos todo resuelto, solo dinos qué quieres cobrar y nos encargaremos del resto. Podes seguir la integración mediante <a href="https://www.youtube.com/watch?v=iKXZuSzo388&feature=youtu.be" target="_blank">este video</a>.
                </p>
             </div>
             <div class="row" id="first-step">
@@ -65,8 +65,8 @@
                   </div>
                   <div class="desc">
                      <h3>Agregá la dependencia a tu proyecto</h3>
-                     <p>Si en tu proyecto usas <a href="">Gradle</a>, podés agregar la dependencia en tu build.gradle.</p>
-                     <p>También podes descargarte la SDK de MercadoPago en <a href="">este link</a> y agregarla a tu proyecto.</p>
+                     <p>Si en tu proyecto usas <a href="">Gradle</a>, podés agregar la dependencia en tu build.gradle</p>
+                     <p>También podes descargarte la SDK de MercadoPago en <a href="https://github.com/mercadopago/px-android">este link</a> y agregarla a tu proyecto.</p>
                   </div>
                </div>
                <div class="col-md-6 code" style="padding-right:0px; padding-left:0px;">
@@ -100,19 +100,24 @@
                         <em>*</em><b>Atención:</b> Este paso no es necesario mientras estés es un escenario de prueba. Puedes continuar al paso siguiente y retomar este punto al momento de salir a producción.
                      </p>
                      <p>
-                        La preferencia de pago es necesaria para que nuestro componente comprenda cuales son tus condiciones de cobro. 
+                        La preferencia de pago es el punto de entrada al checkout básico. Te permite configurar:
+                        <ul>
+                           <li>Datos y monto del producto que estás vendiendo.</li>
+                           <li>Medios de pago que aceptas.</li>
+                           <li>Información del comprador</li>
+                           <li>Cómo se comportará el proceso de pago.</li>
+                        </ul>
+                     </p>
+                     <p>
+                        Revisa toda la información que puedes enviar para completar la preferencia y obtener la mayor aprobación posible.
                      </p>
                      <br />
                      <p>
-                        Podes excluir medios de pago, indicar alguno por defecto, indicar la máxima cantidad de cuotas, contarnos el/los producto/s que está comprando tu usuario, entre otras cosas que puedes ver <a href="https://www.mercadopago.com.ar/developers/es/api-docs/basic-checkout/checkout-preferences/">aquí</a>.
+                        El componente es inicializado con <b>tu clave pública</b>(public_key) para que podamos identificarte y el ID de la preferencia que hayas generado. 
                      </p>
                      <br />
                      <p>
-                        El componente es inicializado con <b>tu clave pública</b> para que podamos identificarte y el ID de la preferencia en cuestión. Que recibamos el ID de la preferencia, significa que puedes asociar una preferencia a cualquier disparador de eventos, por citar algunos: Códigos QR, Beacons, Geolocalización, NFC, etc. Además del servicio que crea preferencias en tu servidor.
-                     </p>
-                     <br />
-                     <p>
-                        La preferencia debe ser creada desde <b>tu servidor </b> de modo tal que esté firmada con <b>tu clave privada</b>. De esta forma nos aseguramos que estamos protegiendo a tu usuario al momento de pagar, pero a vos también que sos quién quiere recibir una suma de dinero bajo ciertas condiciones.
+                        La preferencia debe ser creada desde <b>tu servidor </b> de modo tal que esté firmada con <b>tu clave privada</b>. De esta forma nos aseguramos nos aseguramos estar protegiendo tanto al comprador, como a tu propio usuario vendedor.
                      </p>
                      <p class="advanced-panel">
                         <em>*</em> Consulta los tipos y medios de pago disponibles <a href="payment_types_methods.html">aquí</a>.
@@ -135,7 +140,7 @@
                   <div class="desc">
                      <h3>Iniciá el Checkout de MercadoPago desde tu aplicación</h3>
                      <p class="advanced-panel">
-                        <em>*</em> <b>Atención:</b> También ofrecemos una herramienta para crear preferencias con distintas configuraciones para que puedas trabajar en un entorno de prueba y allí mismo obtener el código que debe estar en tu servidor para crear la preferencia. <a href="preferences_tool.html">Aquí</a> puedes utilizar la herramienta.
+                        <em>*</em> <b>Atención:</b> Ofrecemos una <a href="preferences_tool.html">herramienta</a> para crear preferencias con distintas configuraciones para que puedas trabajar en un entorno de prueba. Allí mismo podrás obtener el código que debe estar en tu servidor para crear la preferencia.
                      </p>
                      <br />
                      <p style="color: red;">
@@ -143,12 +148,9 @@
                      </p>
                      <br />
                      <p>
-                        Cuando el usuario hizo click en el botón para pagar, debes indicarnos la <a href="https://www.mercadopago.com/mla/account/credentials">clave pública</a> que le asignamos a tu aplicación y el ID de la preferencia de pago. Estos son los parámetros necesarios para iniciar el flujo de MercadoPago. 
+                        Los parámetros <b>obligatorios</b> para utilizar el flujo de MercadoPago son la <a href="https://www.mercadopago.com/mla/account/credentials">clave pública</a> que le asignamos a tu aplicación y el ID de la preferencia de pago. En el siguiente paso vamos a ver cómo podes acceder a la respuesta de nuestro componente.
                      </p>
                      <br />
-                     <p>
-                        Luego, debes analizar el resultado de la llamada a nuestra SDK. Te devolvemos un pago ya hecho para que puedas identificarlo y su estado, entre otros parámetros que podrás ver a la derecha.
-                     </p>
                   </div>
                </div>
                <div class="col-md-6 code">
@@ -163,7 +165,7 @@
                   <div class="desc">
                      <h3>Espera el resultado del pago</h3>
                      <p>
-                        Debes analizar el resultado de la llamada a nuestra SDK. Te devolvemos un pago ya hecho para que puedas identificarlo y su estado, entre otros parámetros que podrás ver a la derecha.
+                        Debes analizar el resultado de la llamada a nuestra SDK. Te devolvemos el pago que realizó tu cliente. Podes ver la información que tiene la entidad <b>Payment</b> <a href="">aquí</a>.
                      </p>
                   </div>
                </div>
