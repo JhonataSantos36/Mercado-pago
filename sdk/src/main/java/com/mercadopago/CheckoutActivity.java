@@ -24,7 +24,6 @@ import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentMethodSearch;
 import com.mercadopago.model.PaymentMethodSearchItem;
-import com.mercadopago.model.PaymentPreference;
 import com.mercadopago.model.Token;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.CurrenciesUtil;
@@ -32,6 +31,8 @@ import com.mercadopago.util.LayoutUtil;
 import com.mercadopago.util.MercadoPagoUtil;
 import com.mercadopago.views.MPButton;
 import com.mercadopago.views.MPTextView;
+import com.mercadopago.views.PaymentMethodRow;
+import com.mercadopago.views.ViewFactory;
 
 import java.math.BigDecimal;
 
@@ -75,7 +76,6 @@ public class CheckoutActivity extends AppCompatActivity {
     protected MPButton mPayButton;
     protected View mContentView;
     protected RelativeLayout mPaymentMethodLayout;
-    protected PaymentPreference mPaymentPreference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -143,18 +143,17 @@ public class CheckoutActivity extends AppCompatActivity {
     }
 
     private void initializeActivityControls() {
-        mPaymentMethodDescriptionTextView = (MPTextView) findViewById(R.id.paymentMethodDescription);
-        mPaymentMethodCommentTextView = (MPTextView) findViewById(R.id.paymentMethodComment);
-        mPaymentMethodImageView = (ImageView) findViewById(R.id.paymentMethodImage);
-        mEditPaymentMethodImageView = (ImageView) findViewById(R.id.imageEdit);
-        mEditPaymentMethodImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mPaymentMethodEditionRequested = true;
-                startPaymentVaultActivity();
-                animateBackToPaymentVault();
-            }
-        });
+
+//        mEditPaymentMethodImageView = (ImageView) findViewById(R.id.imageEdit);
+//        mEditPaymentMethodImageView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                mPaymentMethodEditionRequested = true;
+//                startPaymentVaultActivity();
+//                animateBackToPaymentVault();
+//            }
+//        });
+
         mTermsAndConditionsTextView = (MPTextView) findViewById(R.id.termsAndConditions);
         mTermsAndConditionsTextView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -325,28 +324,12 @@ public class CheckoutActivity extends AppCompatActivity {
     }
 
     private void drawPaymentMethodRow() {
+        mPaymentMethodLayout.removeAllViewsInLayout();
         PaymentMethodSearchItem item = mPaymentMethodSearch.getSearchItemByPaymentMethod(mSelectedPaymentMethod);
-
-        if(item != null ) {
-            String paymentMethodComment;
-            if (item.hasComment()) {
-                paymentMethodComment = item.getComment();
-            } else {
-                paymentMethodComment = MercadoPagoUtil.getAccreditationTimeMessage(mSelectedPaymentMethod.getAccreditationTime(), this);
-            }
-            mPaymentMethodCommentTextView.setText(paymentMethodComment);
-            if (item.hasDescription()) {
-                mPaymentMethodDescriptionTextView.setText(item.getDescription());
-            } else {
-                mPaymentMethodDescriptionTextView.setText("");
-            }
-            if (item.isIconRecommended()) {
-                int resourceId = MercadoPagoUtil.getPaymentMethodSearchItemIcon(this, item.getId());
-                if (resourceId != 0) {
-                    mPaymentMethodImageView.setImageResource(resourceId);
-                }
-            }
-        }
+        PaymentMethodRow paymentMethodRow = ViewFactory.getPaymentMethodEditableRow(this);
+        paymentMethodRow.inflateInParent(mPaymentMethodLayout);
+        paymentMethodRow.initializeControls();
+        paymentMethodRow.setFields(item);
     }
 
     @Override
