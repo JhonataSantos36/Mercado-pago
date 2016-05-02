@@ -8,8 +8,8 @@ import android.view.ViewGroup;
 import com.mercadopago.R;
 import com.mercadopago.callbacks.OnSelectedCallback;
 import com.mercadopago.model.PaymentMethodSearchItem;
-import com.mercadopago.views.PaymentMethodRow;
-import com.mercadopago.views.ViewFactory;
+import com.mercadopago.uicontrollers.PaymentMethodViewController;
+import com.mercadopago.uicontrollers.ViewControllerFactory;
 
 import java.util.List;
 
@@ -34,9 +34,9 @@ public class PaymentMethodSearchItemAdapter extends RecyclerView.Adapter<Payment
 
         PaymentMethodSearchItem item = mItems.get(position);
 
-        PaymentMethodRow paymentMethodSearchRow = ViewFactory.getPaymentMethodSearchItemRow(item, mContext);
+        PaymentMethodViewController paymentMethodSearchRow = ViewControllerFactory.getPaymentMethodSelectionViewController(item, mContext);
 
-        paymentMethodSearchRow.inflateInParent(parent);
+        paymentMethodSearchRow.inflateInParent(parent, false);
 
         return new ViewHolder(paymentMethodSearchRow);
     }
@@ -67,7 +67,7 @@ public class PaymentMethodSearchItemAdapter extends RecyclerView.Adapter<Payment
     public void onBindViewHolder(ViewHolder holder, int position) {
         PaymentMethodSearchItem paymentMethodSearchItem = mItems.get(position);
 
-        holder.mPaymentMethodSearchRow.setFields(paymentMethodSearchItem);
+        holder.mPaymentMethodSearchViewController.drawPaymentMethod(paymentMethodSearchItem);
 
         holder.mItem = mItems.get(position);
         if(position == mItems.size()-1) {
@@ -84,20 +84,20 @@ public class PaymentMethodSearchItemAdapter extends RecyclerView.Adapter<Payment
 
         private PaymentMethodSearchItem mItem;
         private View mSeparator;
-        private PaymentMethodRow mPaymentMethodSearchRow;
+        private PaymentMethodViewController mPaymentMethodSearchViewController;
 
-        public ViewHolder(PaymentMethodRow row) {
-            super(row.getView());
+        public ViewHolder(PaymentMethodViewController paymentMethodViewController) {
+            super(paymentMethodViewController.getView());
+            mPaymentMethodSearchViewController = paymentMethodViewController;
+            mSeparator = itemView.findViewById(R.id.separator);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
+            mPaymentMethodSearchViewController.initializeControls();
+            mPaymentMethodSearchViewController.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     mCallback.onSelected(mItem);
                 }
             });
-            mPaymentMethodSearchRow = row;
-            mSeparator = itemView.findViewById(R.id.separator);
-            row.initializeControls();
         }
     }
 }

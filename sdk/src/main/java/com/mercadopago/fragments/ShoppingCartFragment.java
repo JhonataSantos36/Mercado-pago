@@ -184,7 +184,6 @@ public class ShoppingCartFragment extends Fragment {
     }
 
     public void hideShoppingCart() {
-
         //TODO: ask for new assets
         int dpAsPixels = ScaleUtil.getPxFromDp(8, getContext());
         mImageViewTogglerShoppingCart.setPadding(dpAsPixels, dpAsPixels, dpAsPixels, dpAsPixels);

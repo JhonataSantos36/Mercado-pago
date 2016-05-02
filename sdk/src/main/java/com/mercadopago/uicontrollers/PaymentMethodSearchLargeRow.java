@@ -1,4 +1,4 @@
-package com.mercadopago.views;
+package com.mercadopago.uicontrollers;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,11 +9,12 @@ import android.widget.ImageView;
 import com.mercadopago.R;
 import com.mercadopago.model.PaymentMethodSearchItem;
 import com.mercadopago.util.MercadoPagoUtil;
+import com.mercadopago.views.MPTextView;
 
 /**
  * Created by mreverter on 29/4/16.
  */
-public class PaymentMethodEditableRow implements PaymentMethodRow {
+public class PaymentMethodSearchLargeRow implements PaymentMethodViewController {
 
     private Context mContext;
     private View mView;
@@ -21,23 +22,33 @@ public class PaymentMethodEditableRow implements PaymentMethodRow {
     private MPTextView mComment;
     private ImageView mIcon;
 
-    public PaymentMethodEditableRow(Context context) {
+    public PaymentMethodSearchLargeRow(Context context) {
         mContext = context;
     }
 
+    public View inflateInParent(ViewGroup parent, boolean attachToRoot) {
+        mView = LayoutInflater.from(mContext)
+                .inflate(R.layout.row_pm_search_item_large, parent, attachToRoot);
+        return mView;
+    }
+
     @Override
-    public void setFields(PaymentMethodSearchItem item) {
+    public View getView() {
+        return mView;
+    }
+
+    public void initializeControls() {
+        mDescription = (MPTextView) mView.findViewById(R.id.description);
+        mComment = (MPTextView) mView.findViewById(R.id.comment);
+        mIcon = (ImageView) mView.findViewById(R.id.image);
+    }
+
+    public void drawPaymentMethod(PaymentMethodSearchItem item) {
         if(item.hasDescription()) {
             mDescription.setText(item.getDescription());
         }
-        else {
-            mDescription.setText("");
-        }
         if(item.hasComment()) {
             mComment.setText(item.getComment());
-        }
-        else {
-            mComment.setVisibility(View.GONE);
         }
         int resourceId = 0;
 
@@ -53,21 +64,7 @@ public class PaymentMethodEditableRow implements PaymentMethodRow {
     }
 
     @Override
-    public void initializeControls() {
-        mDescription = (MPTextView) mView.findViewById(R.id.description);
-        mComment = (MPTextView) mView.findViewById(R.id.comment);
-        mIcon = (ImageView) mView.findViewById(R.id.image);
-    }
-
-    @Override
-    public View inflateInParent(ViewGroup parent) {
-        mView = LayoutInflater.from(mContext)
-                .inflate(R.layout.row_payment_method_edit_large, parent, true);
-        return mView;
-    }
-
-    @Override
-    public View getView() {
-        return mView;
+    public void setOnClickListener(View.OnClickListener listener) {
+        mView.setOnClickListener(listener);
     }
 }

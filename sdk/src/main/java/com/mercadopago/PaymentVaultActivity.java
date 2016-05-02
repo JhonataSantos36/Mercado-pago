@@ -74,7 +74,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
     protected String mItemImageUri;
     protected String mCurrencyId;
     protected ShoppingCartFragment mShoppingCartFragment;
-    private PaymentPreference mPaymentPreference;
+    protected PaymentPreference mPaymentPreference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

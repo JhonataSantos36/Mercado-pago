@@ -205,7 +205,12 @@ public class InstructionsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 onBackPressed();
+                animateOut();
             }
         });
+    }
+
+    private void animateOut() {
+        overridePendingTransition(R.anim.slide_right_to_left_in, R.anim.slide_right_to_left_out);
     }
 }
