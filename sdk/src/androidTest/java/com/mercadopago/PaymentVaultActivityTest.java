@@ -422,9 +422,12 @@ public class PaymentVaultActivityTest {
 
         mTestRule.addApiResponseToQueue(paymentMethodSearchJson, 200, "");
 
+        PaymentPreference paymentPreference = new PaymentPreference();
+        paymentPreference.setMaxInstallments(-3);
+
         Intent invalidMaxInstallmentsIntent = new Intent();
         invalidMaxInstallmentsIntent.putExtras(validStartIntent.getExtras());
-        invalidMaxInstallmentsIntent.putExtra("maxInstallments", "-3");
+        invalidMaxInstallmentsIntent.putExtra("paymentPreference", paymentPreference);
 
         mTestRule.launchActivity(invalidMaxInstallmentsIntent);
         assertTrue(mTestRule.isActivityFinishedOrFinishing());
@@ -436,9 +439,12 @@ public class PaymentVaultActivityTest {
 
         mTestRule.addApiResponseToQueue(paymentMethodSearchJson, 200, "");
 
+        PaymentPreference paymentPreference = new PaymentPreference();
+        paymentPreference.setMaxInstallments(0);
+
         Intent invalidMaxInstallmentsIntent = new Intent();
         invalidMaxInstallmentsIntent.putExtras(validStartIntent.getExtras());
-        invalidMaxInstallmentsIntent.putExtra("maxInstallments", "0");
+        invalidMaxInstallmentsIntent.putExtra("paymentPreference", paymentPreference);
 
         mTestRule.launchActivity(invalidMaxInstallmentsIntent);
         assertTrue(mTestRule.isActivityFinishedOrFinishing());
@@ -450,9 +456,12 @@ public class PaymentVaultActivityTest {
 
         mTestRule.addApiResponseToQueue(paymentMethodSearchJson, 200, "");
 
+        PaymentPreference paymentPreference = new PaymentPreference();
+        paymentPreference.setDefaultInstallments(-3);
+
         Intent invalidDefaultInstallmentsIntent = new Intent();
         invalidDefaultInstallmentsIntent.putExtras(validStartIntent.getExtras());
-        invalidDefaultInstallmentsIntent.putExtra("defaultInstallments", "-3");
+        invalidDefaultInstallmentsIntent.putExtra("paymentPreference", paymentPreference);
 
         mTestRule.launchActivity(invalidDefaultInstallmentsIntent);
         assertTrue(mTestRule.isActivityFinishedOrFinishing());
@@ -463,10 +472,12 @@ public class PaymentVaultActivityTest {
         String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
 
         mTestRule.addApiResponseToQueue(paymentMethodSearchJson, 200, "");
+        PaymentPreference paymentPreference = new PaymentPreference();
+        paymentPreference.setDefaultInstallments(0);
 
         Intent invalidDefaultInstallmentsIntent = new Intent();
         invalidDefaultInstallmentsIntent.putExtras(validStartIntent.getExtras());
-        invalidDefaultInstallmentsIntent.putExtra("defaultInstallments", "0");
+        invalidDefaultInstallmentsIntent.putExtra("paymentPreference", paymentPreference);
 
         mTestRule.launchActivity(invalidDefaultInstallmentsIntent);
         assertTrue(mTestRule.isActivityFinishedOrFinishing());
@@ -481,9 +492,12 @@ public class PaymentVaultActivityTest {
             addAll(PaymentType.getAllPaymentTypes());
         }};
 
+        PaymentPreference paymentPreference = new PaymentPreference();
+        paymentPreference.setExcludedPaymentTypeIds(excludedPaymentTypes);
+
         Intent invalidExclusionsIntent = new Intent();
         invalidExclusionsIntent.putExtras(validStartIntent.getExtras());
-        invalidExclusionsIntent.putExtra("excludedPaymentTypes", JsonUtil.parseList(excludedPaymentTypes));
+        invalidExclusionsIntent.putExtra("paymentPreference", paymentPreference);
 
         mTestRule.launchActivity(invalidExclusionsIntent);
         assertTrue(mTestRule.isActivityFinishedOrFinishing());

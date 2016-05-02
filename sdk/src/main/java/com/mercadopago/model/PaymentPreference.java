@@ -110,7 +110,7 @@ public class PaymentPreference implements Serializable {
 
         for(PayerCost currentPayerCost : payerCosts)
         {
-            if(currentPayerCost.getInstallments() == this.defaultInstallments) {
+            if(currentPayerCost.getInstallments().equals(this.defaultInstallments)) {
                 defaultPayerCost = currentPayerCost;
                 break;
             }
