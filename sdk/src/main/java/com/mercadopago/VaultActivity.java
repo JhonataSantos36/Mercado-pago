@@ -564,11 +564,13 @@ public class VaultActivity extends AppCompatActivity {
                     if ((installments.size() > 0) && (installments.get(0).getPayerCosts().size() > 0)) {
 
                         // Set installments cards data and visibility
-                        List<PayerCost> availablePayerCosts = installments.get(0).getPayerCosts();
+                        mPayerCosts = installments.get(0).getPayerCosts();
+                        PayerCost defaultPayerCost = null;
 
-                        mPayerCosts = mPaymentPreference.getInstallmentsBelowMax(availablePayerCosts);
-
-                        PayerCost defaultPayerCost = mPaymentPreference.getDefaultInstallments(mPayerCosts);
+                        if(mPaymentPreference != null) {
+                            mPayerCosts = mPaymentPreference.getInstallmentsBelowMax(mPayerCosts);
+                            defaultPayerCost = mPaymentPreference.getDefaultInstallments(mPayerCosts);
+                        }
 
                         if(defaultPayerCost != null) {
                             mSelectedPayerCost = defaultPayerCost;

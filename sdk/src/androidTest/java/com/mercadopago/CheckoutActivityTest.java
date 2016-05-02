@@ -119,6 +119,7 @@ public class CheckoutActivityTest {
         intending(hasComponent(PaymentVaultActivity.class.getName())).respondWith(result);
 
         PaymentMethodSearch paymentMethodSearch = JsonUtil.getInstance().fromJson(StaticMock.getCompletePaymentMethodSearchAsJson(), PaymentMethodSearch.class);
+        mTestRule.addApiResponseToQueue(StaticMock.getCompletePaymentMethodSearchAsJson(), 200, "");
 
         CheckoutActivity activity = mTestRule.launchActivity(validStartIntent);
 

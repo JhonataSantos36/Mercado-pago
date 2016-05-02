@@ -131,7 +131,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
         mShowBankDeals = this.getIntent().getBooleanExtra("showBankDeals", true);
 
         if (this.getIntent().getSerializableExtra("paymentPreference") != null) {
-           mPaymentPreference = (PaymentPreference) this.getIntent().getSerializableExtra("paymentPreference");
+            mPaymentPreference = (PaymentPreference) this.getIntent().getSerializableExtra("paymentPreference");
         }
 
         if(this.getIntent().getSerializableExtra("paymentMethodSearch") != null) {
@@ -258,7 +258,11 @@ public class PaymentVaultActivity extends AppCompatActivity {
     }
 
     protected void getPaymentMethodSearch() {
-        mMercadoPago.getPaymentMethodSearch(mAmount, mPaymentPreference.getExcludedPaymentTypes(), mPaymentPreference.getExcludedPaymentMethodIds(), new Callback<PaymentMethodSearch>() {
+
+        List<String> excludedPaymentTypes = mPaymentPreference != null ? mPaymentPreference.getExcludedPaymentTypes() : null;
+        List<String> excludedPaymentMethodIds = mPaymentPreference != null ? mPaymentPreference.getExcludedPaymentMethodIds() : null;
+
+        mMercadoPago.getPaymentMethodSearch(mAmount, excludedPaymentTypes, excludedPaymentMethodIds, new Callback<PaymentMethodSearch>() {
             @Override
             public void success(PaymentMethodSearch paymentMethodSearch, Response response) {
                 if (!paymentMethodSearch.hasSearchItems()) {

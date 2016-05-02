@@ -308,21 +308,22 @@ public class CheckoutActivity extends AppCompatActivity {
     private void drawPaymentMethodRow() {
         mPaymentMethodLayout.removeAllViewsInLayout();
         PaymentMethodSearchItem item = mPaymentMethodSearch.getSearchItemByPaymentMethod(mSelectedPaymentMethod);
+        if(item != null) {
+            PaymentMethodViewController paymentMethodViewController = ViewControllerFactory.getPaymentMethodEditionViewController(this);
 
-        PaymentMethodViewController paymentMethodViewController = ViewControllerFactory.getPaymentMethodEditionViewController(this);
+            paymentMethodViewController.inflateInParent(mPaymentMethodLayout, true);
+            paymentMethodViewController.initializeControls();
+            paymentMethodViewController.drawPaymentMethod(item);
 
-        paymentMethodViewController.inflateInParent(mPaymentMethodLayout, true);
-        paymentMethodViewController.initializeControls();
-        paymentMethodViewController.drawPaymentMethod(item);
-
-        paymentMethodViewController.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mPaymentMethodEditionRequested = true;
-                startPaymentVaultActivity();
-                animateBackToPaymentVault();
-            }
-        });
+            paymentMethodViewController.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mPaymentMethodEditionRequested = true;
+                    startPaymentVaultActivity();
+                    animateBackToPaymentVault();
+                }
+            });
+        }
     }
 
     @Override
