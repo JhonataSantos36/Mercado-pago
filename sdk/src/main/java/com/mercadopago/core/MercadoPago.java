@@ -94,12 +94,19 @@ public class MercadoPago {
 
     public void createPayment(String preferenceId, String email, String paymentMethodId, Integer installments, String issuerId, String tokenId, final Callback<Payment> callback) {
         if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {
+            PaymentIntent paymentIntent = new PaymentIntent();
+            paymentIntent.setPrefId(preferenceId);
+            paymentIntent.setPublicKey(this.mKey);
+            paymentIntent.setPaymentMethodId(paymentMethodId);
+            paymentIntent.setEmail(email);
+
             PaymentService service = mRestAdapterMPApi.create(PaymentService.class);
-            service.createPayment(this.mKey, preferenceId, email, paymentMethodId, installments, issuerId, tokenId, callback);
+            service.createPayment(paymentIntent, callback);
         } else {
             throw new RuntimeException("Unsupported key type for this method");
         }
     }
+
 
     public void createToken(final SavedCardToken savedCardToken, final Callback<Token> callback) {
 
@@ -222,12 +229,12 @@ public class MercadoPago {
         }
     }
 
-    public void getInstructions(Long paymentId, String paymentMethodId, final Callback<Instruction> callback) {
+    public void getInstructions(Long paymentId, String paymentMethodId, String paymentTypeId, final Callback<Instruction> callback) {
 
         //TODO replace paymentId when service works
         if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {
             PaymentService service = mRestAdapterMPApi.create(PaymentService.class);
-            service.getInstruction(this.mKey, (long)1826446924, paymentMethodId, callback);
+            service.getInstruction(this.mKey, (long)1826446924, paymentMethodId, paymentTypeId, callback);
         } else {
             throw new RuntimeException("Unsupported key type for this method");
         }

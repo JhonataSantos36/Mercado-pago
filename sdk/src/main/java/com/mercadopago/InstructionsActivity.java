@@ -68,7 +68,7 @@ public class InstructionsActivity extends AppCompatActivity {
 
         LayoutUtil.showProgressLayout(this);
         //TODO cambiar por mPayment.getId() cuando estén andando los servicios
-        mercadoPago.getInstructions(mPayment.getId(), mPaymentMethod.getId(), new Callback<Instruction>() {
+        mercadoPago.getInstructions(mPayment.getId(), mPaymentMethod.getId(), mPaymentMethod.getPaymentTypeId(), new Callback<Instruction>() {
             @Override
             public void success(Instruction instruction, Response response) {
                 showInstructions(instruction);

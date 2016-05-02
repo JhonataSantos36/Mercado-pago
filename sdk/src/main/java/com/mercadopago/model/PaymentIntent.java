@@ -9,6 +9,8 @@ public class PaymentIntent implements Serializable {
     private String paymentMethodId;
     private String prefId;
     private String token;
+    private String publicKey;
+    private String email;
 
     public Integer getInstallments() {
         return installments;
@@ -48,5 +50,13 @@ public class PaymentIntent implements Serializable {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public void setPublicKey(String publicKey) {
+        this.publicKey = publicKey;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }
