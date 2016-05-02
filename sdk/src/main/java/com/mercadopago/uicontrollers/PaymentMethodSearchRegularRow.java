@@ -1,4 +1,4 @@
-package com.mercadopago.views;
+package com.mercadopago.uicontrollers;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,11 +9,12 @@ import android.widget.ImageView;
 import com.mercadopago.R;
 import com.mercadopago.model.PaymentMethodSearchItem;
 import com.mercadopago.util.MercadoPagoUtil;
+import com.mercadopago.views.MPTextView;
 
 /**
  * Created by mreverter on 29/4/16.
  */
-public class PaymentMethodRegularRow implements PaymentMethodRow {
+public class PaymentMethodSearchRegularRow implements PaymentMethodViewController {
 
     public Context mContext;
     private MPTextView mDescription;
@@ -21,13 +22,12 @@ public class PaymentMethodRegularRow implements PaymentMethodRow {
     private ImageView mIcon;
     private View mView;
 
-
-    public PaymentMethodRegularRow(Context context) {
+    public PaymentMethodSearchRegularRow(Context context) {
         mContext = context;
     }
 
     @Override
-    public void setFields(PaymentMethodSearchItem item) {
+    public void drawPaymentMethod(PaymentMethodSearchItem item) {
         if(item.hasDescription()) {
             mDescription.setText(item.getDescription());
         }
@@ -51,6 +51,11 @@ public class PaymentMethodRegularRow implements PaymentMethodRow {
     }
 
     @Override
+    public void setOnClickListener(View.OnClickListener listener) {
+        mView.setOnClickListener(listener);
+    }
+
+    @Override
     public void initializeControls() {
         mDescription = (MPTextView) mView.findViewById(R.id.description);
         mComment = (MPTextView) mView.findViewById(R.id.comment);
@@ -58,9 +63,9 @@ public class PaymentMethodRegularRow implements PaymentMethodRow {
     }
 
     @Override
-    public View inflateInParent(ViewGroup parent) {
+    public View inflateInParent(ViewGroup parent, boolean attachToRoot) {
         mView = LayoutInflater.from(mContext)
-                .inflate(R.layout.row_pm_search_item, parent, false);
+                .inflate(R.layout.row_pm_search_item, parent, attachToRoot);
         return mView;
     }
 

@@ -3,7 +3,11 @@
 buildscript {
     repositories {
         jcenter()
+        maven {
+            url 'https://dl.bintray.com/matiasromar/maven'
+        }
     }
+
     dependencies {
         classpath 'com.android.tools.build:gradle:1.5.0'
         classpath 'com.dicedmelon.gradle:jacoco-android:0.1.1'

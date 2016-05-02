@@ -118,17 +118,18 @@ public class CheckoutActivityTest {
         mTestRule.initIntents();
         intending(hasComponent(PaymentVaultActivity.class.getName())).respondWith(result);
 
+        PaymentMethodSearch paymentMethodSearch = JsonUtil.getInstance().fromJson(StaticMock.getCompletePaymentMethodSearchAsJson(), PaymentMethodSearch.class);
+
         CheckoutActivity activity = mTestRule.launchActivity(validStartIntent);
 
-        PaymentMethodSearch paymentMethodSearch = JsonUtil.getInstance().fromJson(StaticMock.getCompletePaymentMethodsJson(), PaymentMethodSearch.class);
         String comment = paymentMethodSearch.getSearchItemByPaymentMethod(paymentMethod).getComment();
 
         onView(withId(R.id.contentLayout))
                 .check(matches(isDisplayed()));
-        onView(withId(R.id.paymentMethodComment))
+        onView(withId(R.id.comment))
                 .check(matches(withText(comment)));
 
-        ImageView paymentMethodImage = (ImageView) activity.findViewById(R.id.paymentMethodImage);
+        ImageView paymentMethodImage = (ImageView) activity.findViewById(R.id.image);
 
         Bitmap bitmap = ((BitmapDrawable) paymentMethodImage.getDrawable()).getBitmap();
         Bitmap bitmap2 = ((BitmapDrawable) ContextCompat.getDrawable(activity, R.drawable.oxxo)).getBitmap();
@@ -186,10 +187,10 @@ public class CheckoutActivityTest {
 
         onView(withId(R.id.contentLayout))
                 .check(matches(isDisplayed()));
-        onView(withId(R.id.paymentMethodComment))
+        onView(withId(R.id.comment))
                 .check(matches(withText(comment)));
 
-        ImageView paymentMethodImage = (ImageView) activity.findViewById(R.id.paymentMethodImage);
+        ImageView paymentMethodImage = (ImageView) activity.findViewById(R.id.image);
 
         Bitmap bitmap = ((BitmapDrawable) paymentMethodImage.getDrawable()).getBitmap();
         Bitmap bitmap2 = ((BitmapDrawable) ContextCompat.getDrawable(activity, R.drawable.oxxo)).getBitmap();

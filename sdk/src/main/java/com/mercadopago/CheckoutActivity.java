@@ -3,13 +3,11 @@ package com.mercadopago;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.AppBarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.Spanned;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.mercadopago.core.MercadoPago;
@@ -31,8 +29,8 @@ import com.mercadopago.util.LayoutUtil;
 import com.mercadopago.util.MercadoPagoUtil;
 import com.mercadopago.views.MPButton;
 import com.mercadopago.views.MPTextView;
-import com.mercadopago.views.PaymentMethodRow;
-import com.mercadopago.views.ViewFactory;
+import com.mercadopago.uicontrollers.PaymentMethodViewController;
+import com.mercadopago.uicontrollers.ViewControllerFactory;
 
 import java.math.BigDecimal;
 
@@ -65,14 +63,9 @@ public class CheckoutActivity extends AppCompatActivity {
     protected boolean mPaymentMethodEditionRequested;
 
     //Controls
-    protected AppBarLayout mAppBar;
-    protected MPTextView mPaymentMethodDescriptionTextView;
-    protected MPTextView mPaymentMethodCommentTextView;
     protected MPTextView mTermsAndConditionsTextView;
     protected MPTextView mCancelTextView;
     protected MPTextView mTotalAmountTextView;
-    protected ImageView mPaymentMethodImageView;
-    protected ImageView mEditPaymentMethodImageView;
     protected MPButton mPayButton;
     protected View mContentView;
     protected RelativeLayout mPaymentMethodLayout;
@@ -144,16 +137,6 @@ public class CheckoutActivity extends AppCompatActivity {
 
     private void initializeActivityControls() {
 
-//        mEditPaymentMethodImageView = (ImageView) findViewById(R.id.imageEdit);
-//        mEditPaymentMethodImageView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                mPaymentMethodEditionRequested = true;
-//                startPaymentVaultActivity();
-//                animateBackToPaymentVault();
-//            }
-//        });
-
         mTermsAndConditionsTextView = (MPTextView) findViewById(R.id.termsAndConditions);
         mTermsAndConditionsTextView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -179,7 +162,6 @@ public class CheckoutActivity extends AppCompatActivity {
         mTotalAmountTextView = (MPTextView) findViewById(R.id.totalAmount);
         mPurchaseTitle = getPurchaseTitleFromPreference();
         mContentView = findViewById(R.id.contentLayout);
-        mAppBar = (AppBarLayout) findViewById(R.id.appBar);
         mPaymentMethodLayout = (RelativeLayout) findViewById(R.id.paymentMethodLayout);
 
         mShoppingCartFragment = ShoppingCartFragment.newInstance(mCheckoutPreference.getItems().get(0).getPictureUrl(), mPurchaseTitle, mCheckoutPreference.getAmount(), mCheckoutPreference.getItems().get(0).getCurrencyId());
@@ -255,12 +237,12 @@ public class CheckoutActivity extends AppCompatActivity {
     }
 
     private void showProgress() {
-        mAppBar.setVisibility(View.INVISIBLE);
+        getSupportActionBar().hide();
         LayoutUtil.showProgressLayout(this);
     }
 
     private void showRegularLayout() {
-        mAppBar.setVisibility(View.VISIBLE);
+        getSupportActionBar().show();
         LayoutUtil.showRegularLayout(mActivity);
     }
     @Override
@@ -326,10 +308,21 @@ public class CheckoutActivity extends AppCompatActivity {
     private void drawPaymentMethodRow() {
         mPaymentMethodLayout.removeAllViewsInLayout();
         PaymentMethodSearchItem item = mPaymentMethodSearch.getSearchItemByPaymentMethod(mSelectedPaymentMethod);
-        PaymentMethodRow paymentMethodRow = ViewFactory.getPaymentMethodEditableRow(this);
-        paymentMethodRow.inflateInParent(mPaymentMethodLayout);
-        paymentMethodRow.initializeControls();
-        paymentMethodRow.setFields(item);
+
+        PaymentMethodViewController paymentMethodViewController = ViewControllerFactory.getPaymentMethodEditionViewController(this);
+
+        paymentMethodViewController.inflateInParent(mPaymentMethodLayout, true);
+        paymentMethodViewController.initializeControls();
+        paymentMethodViewController.drawPaymentMethod(item);
+
+        paymentMethodViewController.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPaymentMethodEditionRequested = true;
+                startPaymentVaultActivity();
+                animateBackToPaymentVault();
+            }
+        });
     }
 
     @Override

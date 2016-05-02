@@ -13,6 +13,7 @@ import com.mercadopago.model.CardToken;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentMethodSearch;
 import com.mercadopago.model.PaymentMethodSearchItem;
+import com.mercadopago.model.PaymentPreference;
 import com.mercadopago.model.PaymentType;
 import com.mercadopago.model.Token;
 import com.mercadopago.test.StaticMock;
@@ -85,16 +86,20 @@ public class PaymentVaultActivityTest {
 
     @Test
     public void setMaxInstallmentsOnCreateIfReceived() {
-        validStartIntent.putExtra("maxInstallments", "3");
+        PaymentPreference paymentPreference = new PaymentPreference();
+        paymentPreference.setMaxInstallments(3);
+        validStartIntent.putExtra("paymentPreference", paymentPreference);
         mTestRule.launchActivity(validStartIntent);
-        assertTrue(mTestRule.getActivity().mMaxInstallments == 3);
+        assertTrue(mTestRule.getActivity().mPaymentPreference.getMaxInstallments() == 3);
     }
 
     @Test
     public void setDefaultInstallmentsOnCreateIfReceived() {
-        validStartIntent.putExtra("defaultInstallments", "3");
+        PaymentPreference paymentPreference = new PaymentPreference();
+        paymentPreference.setDefaultInstallments(3);
+        validStartIntent.putExtra("paymentPreference", paymentPreference);
         mTestRule.launchActivity(validStartIntent);
-        assertTrue(mTestRule.getActivity().mDefaultInstallments == 3);
+        assertTrue(mTestRule.getActivity().mPaymentPreference.getDefaultInstallments() == 3);
     }
 
     @Test
@@ -102,10 +107,11 @@ public class PaymentVaultActivityTest {
         List<String> excludedTypes = new ArrayList<String>() {{
             add("ticket");
         }};
-        String exclusions = JsonUtil.parseList(excludedTypes);
-        validStartIntent.putExtra("excludedPaymentTypes", exclusions);
+        PaymentPreference paymentPreference = new PaymentPreference();
+        paymentPreference.setExcludedPaymentTypeIds(excludedTypes);
+        validStartIntent.putExtra("paymentPreference", paymentPreference);
         mTestRule.launchActivity(validStartIntent);
-        assertTrue(mTestRule.getActivity().mExcludedPaymentTypes.contains("ticket"));
+        assertTrue(mTestRule.getActivity().mPaymentPreference.getExcludedPaymentTypes().contains("ticket"));
     }
 
     @Test
@@ -113,10 +119,11 @@ public class PaymentVaultActivityTest {
         List<String> excludedPaymentMethods = new ArrayList<String>() {{
             add("oxxo");
         }};
-        String exclusions = JsonUtil.parseList(excludedPaymentMethods);
-        validStartIntent.putExtra("excludedPaymentMethodIds", exclusions);
+        PaymentPreference paymentPreference = new PaymentPreference();
+        paymentPreference.setExcludedPaymentMethodIds(excludedPaymentMethods);
+        validStartIntent.putExtra("paymentPreference", paymentPreference);
         mTestRule.launchActivity(validStartIntent);
-        assertTrue(mTestRule.getActivity().mExcludedPaymentMethodIds.contains("oxxo"));
+        assertTrue(mTestRule.getActivity().mPaymentPreference.getExcludedPaymentMethodIds().contains("oxxo"));
     }
 
     @Test
