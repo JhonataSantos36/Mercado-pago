@@ -48,9 +48,6 @@
   },
   "payment_methods": {
     "excluded_payment_methods": [
-      {
-        "id":"pagofacil"
-      }
     ],
     "default_installments": null,
     "default_payment_method_id": null,
