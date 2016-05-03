@@ -171,10 +171,10 @@ public class PaymentPreference implements Serializable {
     }
 
     public boolean validDefaultInstallments() {
-        return installments == null || installments > 0;
+        return defaultInstallments == null || defaultInstallments > 0;
     }
 
     public boolean validMaxInstallments() {
-        return defaultInstallments == null || defaultInstallments > 0;
+        return installments == null || installments > 0;
     }
 }
