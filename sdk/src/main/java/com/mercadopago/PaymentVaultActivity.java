@@ -143,9 +143,9 @@ public class PaymentVaultActivity extends AppCompatActivity {
 
         if(mPaymentPreference != null) {
             if (!mPaymentPreference.validMaxInstallments()) {
-                throw new IllegalStateException(getString(R.string.mpsdk_error_message_invalid_installments));
+                throw new IllegalStateException(getString(R.string.mpsdk_error_message_invalid_max_installments));
             } else if (!mPaymentPreference.validDefaultInstallments()) {
-                throw new IllegalStateException(getString(R.string.mpsdk_error_message_invalid_installments));
+                throw new IllegalStateException(getString(R.string.mpsdk_error_message_invalid_default_installments));
             } else if (!mPaymentPreference.excludedPaymentTypesValid()) {
                 throw new IllegalStateException(getString(R.string.mpsdk_error_message_excluded_all_payment_type));
             }
