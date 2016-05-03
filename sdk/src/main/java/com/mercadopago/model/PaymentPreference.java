@@ -1,5 +1,7 @@
 package com.mercadopago.model;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,15 +11,15 @@ import java.util.List;
  */
 public class PaymentPreference implements Serializable {
 
-    //maxInstallments
-    private Integer installments;
+    @SerializedName("installments")
+    private Integer maxInstallments;
     private Integer defaultInstallments;
     private List<PaymentMethod> excludedPaymentMethods;
     private List<PaymentType> excludedPaymentTypes;
     private String defaultPaymentMethodId;
 
     public void setMaxInstallments(Integer installments) {
-        this.installments = installments;
+        this.maxInstallments = installments;
     }
 
     public void setDefaultInstallments(Integer defaultInstallments) {
@@ -51,7 +53,7 @@ public class PaymentPreference implements Serializable {
     }
 
     public Integer getMaxInstallments() {
-        return installments;
+        return maxInstallments;
     }
 
     public Integer getDefaultInstallments() {
@@ -91,9 +93,9 @@ public class PaymentPreference implements Serializable {
 
         List<PayerCost> validPayerCosts = new ArrayList<>();
 
-        if(this.installments != null) {
+        if(this.maxInstallments != null) {
             for (PayerCost currentPayerCost : payerCosts) {
-                if (currentPayerCost.getInstallments() <= this.installments) {
+                if (currentPayerCost.getInstallments() <= this.maxInstallments) {
                     validPayerCosts.add(currentPayerCost);
                 }
             }
@@ -175,6 +177,6 @@ public class PaymentPreference implements Serializable {
     }
 
     public boolean validMaxInstallments() {
-        return installments == null || installments > 0;
+        return maxInstallments == null || maxInstallments > 0;
     }
 }
