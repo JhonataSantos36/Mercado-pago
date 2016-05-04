@@ -7,6 +7,9 @@ import com.mercadopago.model.Discount;
 import com.mercadopago.model.MerchantPayment;
 import com.mercadopago.model.Payment;
 
+import java.util.Dictionary;
+import java.util.Map;
+
 import retrofit.Callback;
 import retrofit.http.Body;
 import retrofit.http.EncodedPath;
@@ -23,5 +26,5 @@ public interface MerchantService {
     void createPayment(@EncodedPath("uri") String uri, @Body MerchantPayment body, Callback<Payment> callback);
 
     @POST("/{uri}")
-    void createPreference(@EncodedPath("uri") String uri, @Body CheckoutIntent body, Callback<CheckoutPreference> callback);
+    void createPreference(@EncodedPath("uri") String uri, @Body Map<String, Object> body, Callback<CheckoutPreference> callback);
 }

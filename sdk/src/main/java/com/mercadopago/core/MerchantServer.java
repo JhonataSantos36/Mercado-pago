@@ -11,16 +11,19 @@ import com.mercadopago.services.MerchantService;
 import com.mercadopago.util.HttpClientUtil;
 import com.mercadopago.util.JsonUtil;
 
+import java.util.Dictionary;
+import java.util.Map;
+
 import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.converter.GsonConverter;
 
 public class MerchantServer {
 
-    public static void createPreference(Context context, String merchantBaseUrl, String merchantCreatePreferenceUri, CheckoutIntent checkoutIntent, Callback<CheckoutPreference> callback) {
+    public static void createPreference(Context context, String merchantBaseUrl, String merchantCreatePreferenceUri, Map<String, Object> checkoutData, Callback<CheckoutPreference> callback) {
 
         MerchantService service = getService(context, merchantBaseUrl);
-        service.createPreference(ripFirstSlash(merchantCreatePreferenceUri), checkoutIntent, callback);
+        service.createPreference(ripFirstSlash(merchantCreatePreferenceUri), checkoutData, callback);
     }
 
     public static void getCustomer(Context context, String merchantBaseUrl, String merchantGetCustomerUri, String merchantAccessToken, Callback<Customer> callback) {

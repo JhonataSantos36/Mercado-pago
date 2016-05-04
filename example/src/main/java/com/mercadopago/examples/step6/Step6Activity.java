@@ -1,7 +1,5 @@
 package com.mercadopago.examples.step6;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -9,16 +7,24 @@ import android.widget.Toast;
 
 import com.mercadopago.ExampleActivity;
 import com.mercadopago.core.MercadoPago;
+import com.mercadopago.core.MerchantServer;
 import com.mercadopago.examples.R;
 import com.mercadopago.examples.utils.ExamplesUtils;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.CheckoutIntent;
 import com.mercadopago.model.CheckoutPreference;
 import com.mercadopago.model.Item;
-import com.mercadopago.model.Payer;
-import com.mercadopago.model.Payment;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;
+
+import java.math.BigDecimal;
+import java.util.Dictionary;
+import java.util.HashMap;
+import java.util.Map;
+
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 public class Step6Activity extends ExampleActivity {
 
@@ -56,24 +62,15 @@ public class Step6Activity extends ExampleActivity {
     }
 
     public void submitForm(View view) {
-        startCheckoutActivity("444a9ef5-8a6b-429f-abdf-587639155d88");
+        startCheckoutActivity("APP_USR-5a399d42-6015-4f6a-8ff8-dd7d368068f8");
     }
 
     private void startCheckoutActivity(String publicKey)
     {
-
-        // Set item
-        Item item = new Item(ExamplesUtils.DUMMY_ITEM_ID, ExamplesUtils.DUMMY_ITEM_QUANTITY);
-
-        // Set checkout intent
-        CheckoutIntent checkoutIntent = new CheckoutIntent(ExamplesUtils.DUMMY_MERCHANT_ACCESS_TOKEN, item);
-
-        CheckoutPreference mockPreference = JsonUtil.getInstance().fromJson(ExamplesUtils.getFile(this, "mocks/preference_with_exclusions.json"), CheckoutPreference.class);
-        // Call final vault activity
         new MercadoPago.StartActivityBuilder()
                 .setActivity(this)
                 .setPublicKey(publicKey)
-                .setCheckoutPreference(mockPreference)
+                .setCheckoutPreferenceId("150216849-a2e6c898-db8d-4f93-925b-66105c4b632e")
                 .setShowBankDeals(true)
                 .startCheckoutActivity();
 

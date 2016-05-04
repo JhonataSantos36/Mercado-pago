@@ -2,6 +2,7 @@ package com.mercadopago.uicontrollers;
 
 import android.view.View;
 
+import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentMethodSearchItem;
 
 /**
@@ -9,5 +10,6 @@ import com.mercadopago.model.PaymentMethodSearchItem;
  */
 public interface PaymentMethodViewController extends CustomViewController {
     void drawPaymentMethod(PaymentMethodSearchItem item);
+    void drawPaymentMethod(PaymentMethod paymentMethod);
     void setOnClickListener(View.OnClickListener listener);
 }
