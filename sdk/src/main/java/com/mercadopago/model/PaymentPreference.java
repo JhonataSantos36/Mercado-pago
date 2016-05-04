@@ -1,5 +1,7 @@
 package com.mercadopago.model;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -7,27 +9,27 @@ import java.util.List;
 /**
  * Created by mreverter on 28/12/15.
  */
-public class PaymentMethodPreference implements Serializable {
-    //maxInstallments
-    private Integer installments;
+public class PaymentPreference implements Serializable {
 
+    @SerializedName("installments")
+    private Integer maxInstallments;
     private Integer defaultInstallments;
     private List<PaymentMethod> excludedPaymentMethods;
     private List<PaymentType> excludedPaymentTypes;
     private String defaultPaymentMethodId;
 
-    public void setInstallments(Integer installments) {
-        this.installments = installments;
+    public void setMaxInstallments(Integer installments) {
+        this.maxInstallments = installments;
     }
 
     public void setDefaultInstallments(Integer defaultInstallments) {
         this.defaultInstallments = defaultInstallments;
     }
 
-    public void setExcludedPaymentMethods(List<String> excludedPaymentMethods) {
-        if(excludedPaymentMethods != null) {
+    public void setExcludedPaymentMethodIds(List<String> excludedPaymentMethodIds) {
+        if(excludedPaymentMethodIds != null) {
             this.excludedPaymentMethods = new ArrayList<>();
-            for (String paymentMethodId : excludedPaymentMethods) {
+            for (String paymentMethodId : excludedPaymentMethodIds) {
                 PaymentMethod excludedPaymentMethod = new PaymentMethod();
                 excludedPaymentMethod.setId(paymentMethodId);
                 this.excludedPaymentMethods.add(excludedPaymentMethod);
@@ -35,10 +37,10 @@ public class PaymentMethodPreference implements Serializable {
         }
     }
 
-    public void setExcludedPaymentTypes(List<String> excludedPaymentTypes) {
-        if(excludedPaymentTypes != null) {
+    public void setExcludedPaymentTypeIds(List<String> excludedPaymentTypeIds) {
+        if(excludedPaymentTypeIds != null) {
             this.excludedPaymentTypes = new ArrayList<>();
-            for (String paymentTypeId : excludedPaymentTypes) {
+            for (String paymentTypeId : excludedPaymentTypeIds) {
                 PaymentType excludedPaymentType = new PaymentType();
                 excludedPaymentType.setId(paymentTypeId);
                 this.excludedPaymentTypes.add(excludedPaymentType);
@@ -51,7 +53,7 @@ public class PaymentMethodPreference implements Serializable {
     }
 
     public Integer getMaxInstallments() {
-        return installments;
+        return maxInstallments;
     }
 
     public Integer getDefaultInstallments() {
@@ -91,9 +93,9 @@ public class PaymentMethodPreference implements Serializable {
 
         List<PayerCost> validPayerCosts = new ArrayList<>();
 
-        if(this.installments != null) {
+        if(this.maxInstallments != null) {
             for (PayerCost currentPayerCost : payerCosts) {
-                if (currentPayerCost.getInstallments() <= this.installments) {
+                if (currentPayerCost.getInstallments() <= this.maxInstallments) {
                     validPayerCosts.add(currentPayerCost);
                 }
             }
@@ -110,7 +112,7 @@ public class PaymentMethodPreference implements Serializable {
 
         for(PayerCost currentPayerCost : payerCosts)
         {
-            if(currentPayerCost.getInstallments() == this.defaultInstallments) {
+            if(currentPayerCost.getInstallments().equals(this.defaultInstallments)) {
                 defaultPayerCost = currentPayerCost;
                 break;
             }
@@ -140,7 +142,6 @@ public class PaymentMethodPreference implements Serializable {
             List<String> excludedPaymentMethodIds = this.getExcludedPaymentMethodIds();
             List<String> excludedPaymentTypes = this.getExcludedPaymentTypes();
 
-            PaymentMethod paymentMethod1 = paymentMethod;
             if ((excludedPaymentMethodIds != null && excludedPaymentMethodIds.contains(paymentMethod.getId()))
                     || (excludedPaymentTypes != null && excludedPaymentTypes.contains(paymentMethod.getPaymentTypeId()))) {
                 isSupported = false;
@@ -160,5 +161,22 @@ public class PaymentMethodPreference implements Serializable {
             }
         }
         return defaultPaymentMethod;
+    }
+
+    public boolean installmentPreferencesValid() {
+        return validDefaultInstallments() && validMaxInstallments();
+    }
+
+    public boolean excludedPaymentTypesValid() {
+        return excludedPaymentTypes == null
+                || excludedPaymentTypes.size() < PaymentType.getAllPaymentTypes().size();
+    }
+
+    public boolean validDefaultInstallments() {
+        return defaultInstallments == null || defaultInstallments > 0;
+    }
+
+    public boolean validMaxInstallments() {
+        return maxInstallments == null || maxInstallments > 0;
     }
 }

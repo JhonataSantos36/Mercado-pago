@@ -20,7 +20,7 @@ import com.mercadopago.core.MercadoPago;
 import com.mercadopago.model.CardToken;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.PaymentMethod;
-import com.mercadopago.model.PaymentMethodPreference;
+import com.mercadopago.model.PaymentPreference;
 import com.mercadopago.util.LayoutUtil;
 import com.mercadopago.util.MercadoPagoUtil;
 
@@ -50,7 +50,7 @@ public class GuessingNewCardActivity extends NewCardActivity {
     //Local vars
     protected Issuer mIssuer;
     protected MercadoPago mMercadoPago;
-    private PaymentMethodPreference mPaymentMethodPreference;
+    private PaymentPreference mPaymentPreference;
 
 
     @Override
@@ -120,7 +120,7 @@ public class GuessingNewCardActivity extends NewCardActivity {
 
     protected void initializeGuessingCardNumberController(List<PaymentMethod> paymentMethods) {
 
-        List<PaymentMethod> supportedPaymentMethods = mPaymentMethodPreference.getSupportedPaymentMethods(paymentMethods);
+        List<PaymentMethod> supportedPaymentMethods = mPaymentPreference.getSupportedPaymentMethods(paymentMethods);
 
         mPaymentMethodGuessingController = new PaymentMethodGuessingController(this, supportedPaymentMethods, mSupportedPaymentTypeId,
                 new PaymentMethodSelectionCallback(){
@@ -139,10 +139,10 @@ public class GuessingNewCardActivity extends NewCardActivity {
     }
 
     private void createPaymentMethodPreference() {
-        mPaymentMethodPreference = new PaymentMethodPreference();
-        mPaymentMethodPreference.setExcludedPaymentMethods(this.mExcludedPaymentMethodIds);
-        mPaymentMethodPreference.setExcludedPaymentTypes(this.mExcludedPaymentTypes);
-        mPaymentMethodPreference.setDefaultPaymentMethodId(this.mDefaultPaymentMethodId);
+        mPaymentPreference = new PaymentPreference();
+        mPaymentPreference.setExcludedPaymentMethodIds(this.mExcludedPaymentMethodIds);
+        mPaymentPreference.setExcludedPaymentTypeIds(this.mExcludedPaymentTypes);
+        mPaymentPreference.setDefaultPaymentMethodId(this.mDefaultPaymentMethodId);
 
     }
 

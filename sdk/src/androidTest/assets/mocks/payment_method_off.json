@@ -1,0 +1,16 @@
+{
+  "id": "oxxo",
+  "name": "Oxxo",
+  "payment_type_id": "ticket",
+  "status": "active",
+  "secure_thumbnail": "https://www.mercadopago.com/org-img/MP3/API/logos/oxxo.gif",
+  "thumbnail": "http://img.mlstatic.com/org-img/MP3/API/logos/oxxo.gif",
+  "deferred_capture": "does_not_apply",
+  "settings": [
+  ],
+  "additional_info_needed": [
+  ],
+  "min_allowed_amount": 10,
+  "max_allowed_amount": 10000,
+  "accreditation_time": 10080
+}
