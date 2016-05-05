@@ -277,7 +277,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
     }
 
     protected void setSearchLayout() {
-        if(mPaymentMethodSearch.getGroups().size() != 1) {
+        if(mPaymentMethodSearch.getGroups().size() > 1) {
             populateSearchList(mPaymentMethodSearch.getGroups());
             showRegularLayout();
         }
@@ -332,13 +332,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
     private void restartWithSelectedItem(PaymentMethodSearchItem groupIem) {
         Intent intent = new Intent(this, PaymentVaultActivity.class);
         intent.putExtra("selectedSearchItem", groupIem);
-        intent.putExtra("merchantPublicKey", mMerchantPublicKey);
-        intent.putExtra("currencyId", mCurrencyId);
-        intent.putExtra("amount", mAmount.toString());
-        intent.putExtra("purchaseTitle", mPurchaseTitle);
-        intent.putExtra("itemImageUri", mItemImageUri);
-        intent.putExtra("paymentMethodSearch", mPaymentMethodSearch);
-        intent.putExtra("paymentMethodPreference", mPaymentPreference);
+        intent.putExtras(this.getIntent());
 
         startActivityForResult(intent, MercadoPago.PAYMENT_VAULT_REQUEST_CODE);
         overridePendingTransition(R.anim.slide_right_to_left_in, R.anim.slide_right_to_left_out);

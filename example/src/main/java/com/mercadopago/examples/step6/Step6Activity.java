@@ -67,10 +67,13 @@ public class Step6Activity extends ExampleActivity {
 
     private void startCheckoutActivity(String publicKey)
     {
+        //PREF CON SOLO CARGAVIRTUAL: 150216849-b7fb60e9-aee2-40af-a3de-b5b2e57e4e61
+        //PREF CON SOLO TC: 150216849-db0ef449-0f5c-49e9-83c6-087f5edfc2d3
+        //PREF SIN EXCLUSIONES: 150216849-53df0831-8142-4b7c-b7ce-af51fa48dffa
         new MercadoPago.StartActivityBuilder()
                 .setActivity(this)
                 .setPublicKey(publicKey)
-                .setCheckoutPreferenceId("150216849-67ded384-b560-4d88-a6d2-d92dde33c53d")
+                .setCheckoutPreferenceId("150216849-53df0831-8142-4b7c-b7ce-af51fa48dffa")
                 .setShowBankDeals(true)
                 .startCheckoutActivity();
 
