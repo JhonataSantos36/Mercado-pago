@@ -156,6 +156,24 @@ public class CheckoutActivity extends AppCompatActivity {
                 .commit();
     }
 
+    private String getPurchaseTitleFromPreference() {
+        StringBuilder purchaseTitle = new StringBuilder();
+        int itemListSize = mCheckoutPreference.getItems().size();
+
+        if(itemListSize == 1) {
+            purchaseTitle.append(mCheckoutPreference.getItems().get(0).getTitle());
+        }
+        else {
+            for(Item item : mCheckoutPreference.getItems()){
+                purchaseTitle.append(item.getTitle());
+                if(!item.equals(mCheckoutPreference.getItems().get(itemListSize-1))) {
+                    purchaseTitle.append(", ");
+                }
+            }
+        }
+        return purchaseTitle.toString();
+    }
+
     private void getActivityParameters() {
         mCheckoutPreferenceId = this.getIntent().getStringExtra("checkoutPreferenceId");
         mMerchantPublicKey = this.getIntent().getStringExtra("merchantPublicKey");
@@ -211,24 +229,6 @@ public class CheckoutActivity extends AppCompatActivity {
     protected void startTermsAndConditionsActivity() {
         Intent termsAndConditionsIntent = new Intent(this, TermsAndConditionsActivity.class);
         startActivity(termsAndConditionsIntent);
-    }
-
-    private String getPurchaseTitleFromPreference() {
-        StringBuilder purchaseTitle = new StringBuilder();
-        int itemListSize = mCheckoutPreference.getItems().size();
-
-        if(itemListSize == 1) {
-            purchaseTitle.append(mCheckoutPreference.getItems().get(0).getTitle());
-        }
-        else {
-            for(Item item : mCheckoutPreference.getItems()){
-                purchaseTitle.append(item.getTitle());
-                if(!item.equals(mCheckoutPreference.getItems().get(itemListSize-1))) {
-                    purchaseTitle.append(", ");
-                }
-            }
-        }
-        return purchaseTitle.toString();
     }
 
     protected void setActivity() {
