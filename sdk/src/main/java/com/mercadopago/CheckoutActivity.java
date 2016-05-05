@@ -356,16 +356,22 @@ public class CheckoutActivity extends AppCompatActivity {
         else {
             paymentMethodViewController.drawPaymentMethod(mSelectedPaymentMethod);
         }
+        if(!isUniquePaymentMethod()) {
+            paymentMethodViewController.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mPaymentMethodEditionRequested = true;
+                    startPaymentVaultActivity();
+                    animateBackToPaymentVault();
+                }
+            });
+        }
 
-        paymentMethodViewController.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mPaymentMethodEditionRequested = true;
-                startPaymentVaultActivity();
-                animateBackToPaymentVault();
-            }
-        });
+    }
 
+    private boolean isUniquePaymentMethod() {
+        return mPaymentMethodSearch.getGroups().size() == 1
+                && mPaymentMethodSearch.getGroups().get(0).isPaymentMethod();
     }
 
     @Override
@@ -429,8 +435,14 @@ public class CheckoutActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        mPaymentMethodEditionRequested = false;
-        startPaymentVaultActivity();
+
+        if(isUniquePaymentMethod()) {
+            super.onBackPressed();
+        }
+        else {
+            mPaymentMethodEditionRequested = false;
+            startPaymentVaultActivity();
+        }
         animateBackToPaymentVault();
     }
 

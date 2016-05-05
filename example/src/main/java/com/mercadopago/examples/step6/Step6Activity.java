@@ -70,7 +70,7 @@ public class Step6Activity extends ExampleActivity {
         new MercadoPago.StartActivityBuilder()
                 .setActivity(this)
                 .setPublicKey(publicKey)
-                .setCheckoutPreferenceId("150216849-a2e6c898-db8d-4f93-925b-66105c4b632e")
+                .setCheckoutPreferenceId("150216849-67ded384-b560-4d88-a6d2-d92dde33c53d")
                 .setShowBankDeals(true)
                 .startCheckoutActivity();
 

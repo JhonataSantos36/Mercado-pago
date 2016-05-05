@@ -277,8 +277,19 @@ public class PaymentVaultActivity extends AppCompatActivity {
     }
 
     protected void setSearchLayout() {
-        populateSearchList(mPaymentMethodSearch.getGroups());
-        showRegularLayout();
+        if(mPaymentMethodSearch.getGroups().size() != 1) {
+            populateSearchList(mPaymentMethodSearch.getGroups());
+            showRegularLayout();
+        }
+        else {
+            PaymentMethodSearchItem uniqueItem = mPaymentMethodSearch.getGroups().get(0);
+            if(MercadoPagoUtil.isCardPaymentType(uniqueItem.getId())) {
+                startNextStepForPaymentType(uniqueItem);
+            }
+            else if(uniqueItem.isPaymentMethod()) {
+                resolvePaymentMethodSelection(uniqueItem);
+            }
+        }
     }
 
     protected void populateSearchList(List<PaymentMethodSearchItem> items) {
@@ -302,16 +313,20 @@ public class PaymentVaultActivity extends AppCompatActivity {
                     startNextStepForPaymentType(item);
                 }
                 else if (item.isPaymentMethod()) {
-                    PaymentMethod selectedPaymentMethod = mPaymentMethodSearch.getPaymentMethodBySearchItem(item);
-                    if (selectedPaymentMethod == null) {
-                        finishWithMismatchingPaymentMethod();
-                    }
-                    else {
-                        finishWithPaymentMethodResult(selectedPaymentMethod);
-                    }
+                    resolvePaymentMethodSelection(item);
                 }
             }
         };
+    }
+
+    private void resolvePaymentMethodSelection(PaymentMethodSearchItem item) {
+        PaymentMethod selectedPaymentMethod = mPaymentMethodSearch.getPaymentMethodBySearchItem(item);
+        if (selectedPaymentMethod == null) {
+            finishWithMismatchingPaymentMethod();
+        }
+        else {
+            finishWithPaymentMethodResult(selectedPaymentMethod);
+        }
     }
 
     private void restartWithSelectedItem(PaymentMethodSearchItem groupIem) {
@@ -397,6 +412,9 @@ public class PaymentVaultActivity extends AppCompatActivity {
 
         } else if ((data != null) && (data.getSerializableExtra("apiException") != null)) {
             finishWithApiException(data);
+        } else if(mPaymentMethodSearch.getGroups().size() == 1) {
+            setResult(RESULT_CANCELED, data);
+            finish();
         }
     }
 

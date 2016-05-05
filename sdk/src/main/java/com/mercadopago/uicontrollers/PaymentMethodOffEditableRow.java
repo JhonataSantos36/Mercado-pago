@@ -71,6 +71,7 @@ public class PaymentMethodOffEditableRow implements PaymentMethodViewController 
 
     @Override
     public void setOnClickListener(View.OnClickListener listener) {
+        mEditImage.setVisibility(View.VISIBLE);
         mEditImage.setOnClickListener(listener);
     }
 
