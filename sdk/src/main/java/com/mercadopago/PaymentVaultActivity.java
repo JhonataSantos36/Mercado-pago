@@ -13,8 +13,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.mercadopago.adapters.PaymentMethodSearchItemAdapter;
 import com.mercadopago.callbacks.OnSelectedCallback;
 import com.mercadopago.core.MercadoPago;
@@ -33,13 +31,14 @@ import com.mercadopago.util.LayoutUtil;
 import com.mercadopago.util.MercadoPagoUtil;
 import com.mercadopago.views.MPTextView;
 
-import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.util.List;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
+
+import static android.text.TextUtils.isEmpty;
 
 public class PaymentVaultActivity extends AppCompatActivity {
 
@@ -96,7 +95,13 @@ public class PaymentVaultActivity extends AppCompatActivity {
 
             initializeToolbar();
             initializeControls();
-            initializeShoppingCartFragment();
+
+            if(isShoppingCartDataAvailable()) {
+                initializeShoppingCartFragment();
+            }
+            else {
+                mShoppingCartIcon.setVisibility(View.GONE);
+            }
 
             setActivity();
 
@@ -106,6 +111,10 @@ public class PaymentVaultActivity extends AppCompatActivity {
                 showSelectedItemChildren();
             }
         }
+    }
+
+    private boolean isShoppingCartDataAvailable() {
+        return isPurchaseTitleValid() && isCurrencyIdValid();
     }
 
     protected void getActivityParameters() {
@@ -150,14 +159,8 @@ public class PaymentVaultActivity extends AppCompatActivity {
                 throw new IllegalStateException(getString(R.string.mpsdk_error_message_excluded_all_payment_type));
             }
         }
-        if (!isCurrencyIdValid()){
-            throw new IllegalStateException(getString(R.string.mpsdk_error_message_invalid_currency));
-        }
         if (!isAmountValid()) {
             throw new IllegalStateException(getString(R.string.mpsdk_error_message_invalid_amount));
-        }
-        else if (!isPurchaseTitleValid()){
-            throw new IllegalStateException(getString(R.string.mpsdk_error_message_invalid_title));
         }
         else if (!isMerchantPublicKeyValid()){
             throw new IllegalStateException(getString(R.string.mpsdk_error_message_invalid_merchant));
@@ -173,7 +176,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
     }
 
     private boolean isPurchaseTitleValid() {
-        return mPurchaseTitle != null;
+        return !isEmpty(mPurchaseTitle);
     }
 
     private boolean isCurrencyIdValid() {
