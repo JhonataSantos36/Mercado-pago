@@ -13,13 +13,10 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.mercadopago.adapters.PaymentMethodSearchItemAdapter;
 import com.mercadopago.callbacks.OnSelectedCallback;
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.fragments.ShoppingCartFragment;
-import com.mercadopago.model.CardToken;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.PaymentMethod;
@@ -33,7 +30,6 @@ import com.mercadopago.util.LayoutUtil;
 import com.mercadopago.util.MercadoPagoUtil;
 import com.mercadopago.views.MPTextView;
 
-import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -47,7 +43,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
     protected Activity mActivity;
     protected MercadoPago mMercadoPago;
     protected PaymentMethod mSelectedPaymentMethod;
-    protected CardToken mCardToken;
+    protected Token mToken;
     protected Issuer mSelectedIssuer;
     protected PayerCost mSelectedPayerCost;
 
@@ -394,13 +390,10 @@ public class PaymentVaultActivity extends AppCompatActivity {
     protected void resolveGuessingCardRequest(int resultCode, Intent data) {
         if(resultCode == RESULT_OK) {
             mSelectedPaymentMethod = (PaymentMethod) data.getSerializableExtra("paymentMethod");
-            mCardToken = (CardToken) data.getSerializableExtra("cardToken");
+            mToken = (Token) data.getSerializableExtra("token");
             mSelectedIssuer = (Issuer) data.getSerializableExtra("issuer");
             mSelectedPayerCost = (PayerCost) data.getSerializableExtra("payerCost");
-
-            LayoutUtil.showProgressLayout(mActivity);
-            mMercadoPago.createToken(mCardToken, getCreateTokenCallback());
-
+            finishWithTokenResult();
 
         } else if ((data != null) && (data.getSerializableExtra("apiException") != null)) {
             finishWithApiException(data);
@@ -418,21 +411,6 @@ public class PaymentVaultActivity extends AppCompatActivity {
                 finishWithApiException(data);
             }
         }
-    }
-
-    protected Callback<Token> getCreateTokenCallback() {
-
-        return new Callback<Token>() {
-            @Override
-            public void success(Token token, Response response) {
-                finishWithTokenResult(token);
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-                ApiUtil.finishWithApiException(mActivity, error);
-            }
-        };
     }
 
     private void finishWithEmptyPaymentMethodSearch() {
@@ -456,9 +434,9 @@ public class PaymentVaultActivity extends AppCompatActivity {
         animatePaymentMethodSelection();
     }
 
-    protected void finishWithTokenResult(Token token) {
+    protected void finishWithTokenResult() {
         Intent returnIntent = new Intent();
-        returnIntent.putExtra("token", token);
+        returnIntent.putExtra("token", mToken);
         if (mSelectedIssuer != null) {
             returnIntent.putExtra("issuer", mSelectedIssuer);
         }

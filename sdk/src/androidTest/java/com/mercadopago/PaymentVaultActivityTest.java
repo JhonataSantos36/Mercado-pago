@@ -9,7 +9,6 @@ import android.support.test.runner.lifecycle.ActivityLifecycleMonitorRegistry;
 import android.test.suitebuilder.annotation.LargeTest;
 
 
-import com.mercadopago.model.CardToken;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentMethodSearch;
 import com.mercadopago.model.PaymentMethodSearchItem;
@@ -526,10 +525,6 @@ public class PaymentVaultActivityTest {
 
         mTestRule.addApiResponseToQueue(paymentMethodSearchJson, 200, "");
 
-        final Token token = new Token();
-        token.setId("1");
-        mTestRule.addApiResponseToQueue(token, 200, "");
-
         mTestRule.launchActivity(validStartIntent);
 
         onView(withId(R.id.groupsList)).perform(
@@ -538,11 +533,10 @@ public class PaymentVaultActivityTest {
         Intent guessingFormResultIntent = new Intent();
         final PaymentMethod paymentMethod = new PaymentMethod();
         paymentMethod.setId("visa");
-
-        CardToken cardToken = new CardToken("4509953566233704", 12, 99, "1234", "Holder Name Perez", "DNI", "34543454");
-
+        final Token token = new Token();
+        token.setId("1");
         guessingFormResultIntent.putExtra("paymentMethod", paymentMethod);
-        guessingFormResultIntent.putExtra("cardToken", cardToken);
+        guessingFormResultIntent.putExtra("token", token);
         Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(Activity.RESULT_OK, guessingFormResultIntent);
 
         intending(hasComponent(GuessingNewCardActivity.class.getName())).respondWith(result);

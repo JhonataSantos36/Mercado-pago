@@ -7,7 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.Spanned;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.RelativeLayout;
 
@@ -24,7 +23,6 @@ import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentMethodSearch;
 import com.mercadopago.model.PaymentMethodSearchItem;
 import com.mercadopago.model.Token;
-import com.mercadopago.uicontrollers.PaymentMethodOffEditableRow;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.CurrenciesUtil;
 import com.mercadopago.util.LayoutUtil;
@@ -134,6 +132,9 @@ public class CheckoutActivity extends AppCompatActivity {
     private void validatePreference() {
         try {
             mCheckoutPreference.validate();
+            if(!mCheckoutPreference.getId().equals(mCheckoutPreferenceId)) {
+                throw new CheckoutPreferenceException(CheckoutPreferenceException.PREF_ID_NOT_MATCHING_REQUESTED);
+            }
         }
         catch(CheckoutPreferenceException e) {
             mErrorMessage = ExceptionHandler.getErrorMessage(this, e);

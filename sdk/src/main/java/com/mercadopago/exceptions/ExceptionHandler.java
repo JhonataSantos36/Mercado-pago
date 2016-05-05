@@ -28,7 +28,7 @@ public class ExceptionHandler {
                 errorMessage = context.getString(R.string.mpsdk_error_message_invalid_installments);
                 break;
 
-            case CheckoutPreferenceException.EXCLUDED_ALL_PAYMENTTYPES:
+            case CheckoutPreferenceException.EXCLUDED_ALL_PAYMENT_TYPES:
                 errorMessage = context.getString(R.string.mpsdk_error_message_excluded_all_payment_type);
                 break;
             }

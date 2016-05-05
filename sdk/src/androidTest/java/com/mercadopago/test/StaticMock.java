@@ -218,6 +218,24 @@ public class StaticMock {
         }
     }
 
+    public static CheckoutPreference getPreferenceWithExclusions() {
+        try {
+            String json = getFile(InstrumentationRegistry.getContext(), "mocks/preference_with_exclusions.json");
+            return JsonUtil.getInstance().fromJson(json, CheckoutPreference.class);
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+    public static CheckoutPreference getPreferenceWithoutItem() {
+        try {
+            String json = getFile(InstrumentationRegistry.getContext(), "mocks/preference_without_item.json");
+            return JsonUtil.getInstance().fromJson(json, CheckoutPreference.class);
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
     public static Instruction getInstructionWithoutActions() {
         try {
             String json = getFile(InstrumentationRegistry.getContext(), "mocks/cash_instructions.json");
