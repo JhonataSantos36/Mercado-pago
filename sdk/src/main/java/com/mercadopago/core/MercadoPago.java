@@ -651,7 +651,7 @@ public class MercadoPago {
         public void startCheckoutActivity() {
 
             if (this.mActivity == null) throw new IllegalStateException("activity is null");
-            if (this.mCheckoutPreferenceId == null) throw new IllegalStateException("checkout preference is null");
+            if (this.mCheckoutPreferenceId == null) throw new IllegalStateException("checkout preference id is null");
             if (this.mKey == null) throw new IllegalStateException("key is null");
             if (this.mKeyType == null) throw new IllegalStateException("key type is null");
 

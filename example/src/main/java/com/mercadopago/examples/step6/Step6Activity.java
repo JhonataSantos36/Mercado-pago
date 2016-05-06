@@ -28,10 +28,13 @@ import retrofit.client.Response;
 
 public class Step6Activity extends ExampleActivity {
 
+    private CheckoutPreference mCheckoutPreference;
+    private String mMerchantPublicKey;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_step6);
+        mMerchantPublicKey = "APP_USR-5a399d42-6015-4f6a-8ff8-dd7d368068f8";
     }
 
     @Override
@@ -62,18 +65,32 @@ public class Step6Activity extends ExampleActivity {
     }
 
     public void submitForm(View view) {
-        startCheckoutActivity("APP_USR-5a399d42-6015-4f6a-8ff8-dd7d368068f8");
+        Map<String, Object> map = new HashMap<>();
+        map.put("item_id", "1");
+        map.put("amount", new BigDecimal(10));
+        MerchantServer.createPreference(this, "http://private-9376e-paymentmethodsmla.apiary-mock.com/", "merchantUri/merchant_preference", map, new Callback<CheckoutPreference>() {
+            @Override
+            public void success(CheckoutPreference checkoutPreference, Response response) {
+                mCheckoutPreference = checkoutPreference;
+                startCheckoutActivity();
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                //Handle failure;
+            }
+        });
     }
 
-    private void startCheckoutActivity(String publicKey)
+    private void startCheckoutActivity()
     {
         //PREF CON SOLO CARGAVIRTUAL: 150216849-b7fb60e9-aee2-40af-a3de-b5b2e57e4e61
         //PREF CON SOLO TC: 150216849-db0ef449-0f5c-49e9-83c6-087f5edfc2d3
         //PREF SIN EXCLUSIONES: 150216849-53df0831-8142-4b7c-b7ce-af51fa48dffa
         new MercadoPago.StartActivityBuilder()
                 .setActivity(this)
-                .setPublicKey(publicKey)
-                .setCheckoutPreferenceId("150216849-53df0831-8142-4b7c-b7ce-af51fa48dffa")
+                .setPublicKey(mMerchantPublicKey)
+                .setCheckoutPreferenceId(mCheckoutPreference.getId())
                 .setShowBankDeals(true)
                 .startCheckoutActivity();
 
