@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/mpsdk_color_light_grey">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <android.support.v7.widget.CardView
+                xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/mpsdk_card_margin"
+                card_view:cardCornerRadius="@dimen/mpsdk_card_corner_radius"
+                card_view:cardBackgroundColor="@color/mpsdk_color_congrats_call_for_authorize_background">
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="15dp"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/icon"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:tint="@color/mpsdk_color_congrats_call_for_authorize_image"
+                        android:src="@drawable/call_sign"
+                        android:layout_gravity="center_horizontal" />
+
+                    <com.mercadopago.views.MPTextView
+                        android:id="@+id/authorize"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:gravity="bottom|center"
+                        android:textSize="25dp"
+                        android:text="Debes autorizar ante Visa el"
+                        style="@style/mpsdk_big_text_light" />
+
+                    <com.mercadopago.views.MPTextView
+                        android:id="@+id/paymentAmount"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="bottom|center"
+                        android:layout_marginTop="10dp"
+                        android:textSize="25dp"
+                        android:text="pago de $12300 45 a"
+                        style="@style/mpsdk_big_text_light" />
+
+                    <com.mercadopago.views.MPTextView
+                        android:id="@+id/descriptionResult"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="bottom|center"
+                        android:layout_marginTop="10dp"
+                        android:textSize="25dp"
+                        android:text="MercadoPago"
+                        style="@style/mpsdk_big_text_light" />
+
+                    <com.mercadopago.views.MPTextView
+                        android:id="@+id/emailOrder"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:gravity="bottom|center"
+                        android:textSize="17dp"
+                        android:text="El teléfono está al dorso de tu tarjeta."
+                        style="@style/mpsdk_big_text_light" />
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:background="@color/mpsdk_color_congrats_rejection_button_background"
+                android:orientation="vertical">
+
+                <com.mercadopago.views.MPTextView
+                    android:id="@+id/authorized"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="20dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp"
+                    android:text="Ya hablé con Visa y me autorizó"
+                    android:textColor="@color/mpsdk_color_link"
+                    android:textSize="16dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:background="@color/mpsdk_color_congrats_rejection_button_background"
+                    android:orientation="vertical">
+
+                    <com.mercadopago.views.MPTextView
+                        android:id="@+id/noAuthorized"
+                        android:layout_width="fill_parent"
+                        android:gravity="bottom|center"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:textSize="18dp"
+                        android:text="¿No pudiste autorizarlo?" />
+
+                    <com.mercadopago.views.MPTextView
+                        android:id="@+id/otherPaymentMethod"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="15dp"
+                        android:text="Elige otro medio de pago"
+                        android:textColor="@color/mpsdk_color_link"
+                        android:textSize="18dp"
+                        style="@style/small_comment"/>
+
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

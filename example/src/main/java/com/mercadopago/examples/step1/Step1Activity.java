@@ -6,7 +6,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
+import com.mercadopago.CallForAuthorizeActivity;
+import com.mercadopago.CongratsActivity;
 import com.mercadopago.ExampleActivity;
+import com.mercadopago.OldCongratsActivity;
+import com.mercadopago.RejectionActivity;
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.examples.R;
 import com.mercadopago.examples.utils.ExamplesUtils;
@@ -48,6 +52,10 @@ public class Step1Activity extends ExampleActivity {
         setContentView(R.layout.activity_step1);
         createPaymentPreference();
         mActivity = this;
+
+        //TODO borrar, pruebas pantallas
+        Intent intent = new Intent(this, CongratsActivity.class);
+        startActivity(intent);
     }
 
     private void createPaymentPreference() {

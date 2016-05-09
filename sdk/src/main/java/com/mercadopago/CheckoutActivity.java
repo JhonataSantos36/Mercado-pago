@@ -440,11 +440,7 @@ public class CheckoutActivity extends AppCompatActivity {
             public void success(Payment payment, Response response) {
                 mCreatedPayment = payment;
                 if (MercadoPagoUtil.isCardPaymentType(mSelectedPaymentMethod.getPaymentTypeId())) {
-                    new MercadoPago.StartActivityBuilder()
-                            .setActivity(mActivity)
-                            .setPayment(mCreatedPayment)
-                            .setPaymentMethod(mSelectedPaymentMethod)
-                            .startCongratsActivity();
+                    resolvePaymentStatusMessageActivity(payment);
                 } else {
                     new MercadoPago.StartActivityBuilder()
                             .setPublicKey(mMerchantPublicKey)
@@ -470,6 +466,26 @@ public class CheckoutActivity extends AppCompatActivity {
                         .startInstructionsActivity();
             }
         });
+    }
+
+    private void resolvePaymentStatusMessageActivity(Payment payment) {
+
+        MercadoPago.StartActivityBuilder builder = new MercadoPago.StartActivityBuilder()
+                .setPublicKey(mMerchantPublicKey)
+                .setActivity(mActivity)
+                .setPayment(payment)//mCreatedPayment)//TODO ver cual va, mCreatedPayment o payment
+                .setPaymentMethod(mSelectedPaymentMethod);
+
+        //TODO validar los status
+        if(payment.getStatus().equals("approved")) {
+            builder.startCongratsActivity();
+        }
+        else if(payment.getStatus().equals("pending")){
+            builder.startRejectionActivity();
+        }
+        else if(payment.getStatus().equals("call_for_authorize")){
+            builder.startCallForAuthorizeActivity();
+        }
     }
 
     private void animateBackToPaymentVault() {
