@@ -7,6 +7,7 @@ import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.test.runner.lifecycle.ActivityLifecycleMonitorRegistry;
 import android.test.suitebuilder.annotation.LargeTest;
+import android.view.View;
 
 
 import com.mercadopago.model.PaymentMethod;
@@ -331,7 +332,7 @@ public class PaymentVaultActivityTest {
     //VALIDATIONS TESTS
 
     @Test
-    public void ifCurrencyIdIsInvalidFinishActivity() {
+    public void ifCurrencyIdIsInvalidHideShoppingCartIcon() {
         String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
 
         mTestRule.addApiResponseToQueue(paymentMethodSearchJson, 200, "");
@@ -341,11 +342,11 @@ public class PaymentVaultActivityTest {
         invalidCurrencyIntent.putExtra("currencyId", "An invalid currency id");
 
         mTestRule.launchActivity(invalidCurrencyIntent);
-        assertTrue(mTestRule.isActivityFinishedOrFinishing());
+        assertTrue(!mTestRule.getActivity().mShoppingCartIcon.isShown());
     }
 
     @Test
-    public void ifCurrencyIdIsNullFinishActivity() {
+    public void ifCurrencyIdIsNullHideShoppingCartIcon() {
 
         String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
 
@@ -356,7 +357,7 @@ public class PaymentVaultActivityTest {
         noCurrencyIntent.removeExtra("currencyId");
 
         mTestRule.launchActivity(noCurrencyIntent);
-        assertTrue(mTestRule.isActivityFinishedOrFinishing());
+        assertTrue(!mTestRule.getActivity().mShoppingCartIcon.isShown());
     }
 
     @Test
@@ -402,7 +403,7 @@ public class PaymentVaultActivityTest {
     }
 
     @Test
-    public void ifPurchaseTitleIsNullFinisActivity() {
+    public void ifPurchaseTitleIsNullHideShoppingCart() {
         String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
 
         mTestRule.addApiResponseToQueue(paymentMethodSearchJson, 200, "");
@@ -412,7 +413,7 @@ public class PaymentVaultActivityTest {
         invalidAmountIntent.removeExtra("purchaseTitle");
 
         mTestRule.launchActivity(invalidAmountIntent);
-        assertTrue(mTestRule.isActivityFinishedOrFinishing());
+        assertTrue(!mTestRule.getActivity().mShoppingCartIcon.isShown());
     }
 
     @Test
