@@ -78,23 +78,28 @@
         </activity>
         <activity android:name=".OldGuessingNewCardActivity"
             android:theme="@style/Theme.MercadoPagoTheme"/>
+
+        <activity
+            android:name=".GuessingNewCardActivity"
+            android:theme="@style/Theme.MercadoPagoTheme" />
+
         <activity
             android:name=".PaymentVaultActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.MercadoPagoTheme.NoActionBar" />
+
         <activity
             android:name=".InstructionsActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.MercadoPagoTheme.NoActionBar" />
+
         <activity
             android:name=".CongratsActivity"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.MercadoPagoTheme.NoActionBar"/>
-        <activity android:name=".GuessingNewCardActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.MercadoPagoTheme.NoActionBar">
-        </activity>
+
         <activity android:name=".CardInstallmentsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.MercadoPagoTheme.NoActionBar">
@@ -108,6 +113,9 @@
             android:theme="@style/Theme.MercadoPagoTheme.NoActionBar">
         </activity>
 
+        <activity android:name=".ErrorActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.MercadoPagoTheme.NoActionBar" />
     </application>
-
 </manifest>

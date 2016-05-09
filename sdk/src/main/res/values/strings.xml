@@ -143,6 +143,7 @@
     <string name="mpsdk_payment_amount_to_pay">Total a pagar</string>
     <string name="mpsdk_processed_by_mercado_pago">© 1999–2016 Procesado por MercadoPago</string>
     <string name="mpsdk_exit_label">Salir</string>
+    <string name="mpsdk_standard_error_message">Algo salió mal</string>
     <string name="mpsdk_instant_accreditation_time">Se acreditará instantáneamente</string>
     <string name="mpsdk_accreditation_time">Se acreditará en</string>
     <string name="mpsdk_working_days">días hábiles</string>

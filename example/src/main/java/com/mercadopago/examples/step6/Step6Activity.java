@@ -10,6 +10,7 @@ import com.mercadopago.core.MercadoPago;
 import com.mercadopago.core.MerchantServer;
 import com.mercadopago.examples.R;
 import com.mercadopago.examples.utils.ExamplesUtils;
+import com.mercadopago.exceptions.MPException;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.CheckoutIntent;
 import com.mercadopago.model.CheckoutPreference;
@@ -56,9 +57,9 @@ public class Step6Activity extends ExampleActivity {
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .show(); */
             } else {
-                if ((data != null) && (data.getSerializableExtra("apiException") != null)) {
-                    ApiException apiException = (ApiException) data.getSerializableExtra("apiException");
-                    Toast.makeText(getApplicationContext(), apiException.getMessage(), Toast.LENGTH_LONG).show();
+                if ((data != null) && (data.getSerializableExtra("mpException") != null)) {
+                    MPException mpException = (MPException) data.getSerializableExtra("mpException");
+                    Toast.makeText(getApplicationContext(), mpException.getMessage(), Toast.LENGTH_LONG).show();
                 }
             }
         }
