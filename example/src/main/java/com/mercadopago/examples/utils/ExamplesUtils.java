@@ -183,48 +183,26 @@ public class ExamplesUtils {
         }
     }
 
-    public static void createPreference(final Activity activity) {
-
-        Toast.makeText(activity, activity.getString(R.string.opening_mp), Toast.LENGTH_LONG).show();
-
-        // Set item
-        Item item = new Item(DUMMY_ITEM_ID, DUMMY_ITEM_QUANTITY);
-
-        // Set checkout intent
-        CheckoutIntent checkoutIntent = new CheckoutIntent(ExamplesUtils.DUMMY_MERCHANT_ACCESS_TOKEN, item);
-
-        //TODO consumir servicio de preferencia
-        CheckoutPreference mockPreference = JsonUtil.getInstance().fromJson(getFile(activity, "mocks/preference_with_exclusions.json"), CheckoutPreference.class);
-        // Call final vault activity
-        new MercadoPago.StartActivityBuilder()
-                .setActivity(activity)
-                .setPublicKey(ExamplesUtils.DUMMY_MERCHANT_PUBLIC_KEY)
-                .setCheckoutPreference(mockPreference)
-                .setShowBankDeals(true)
-                .startCheckoutActivity();
-
-        LayoutUtil.showRegularLayout(activity);
-
-    }
-    //TODO consumir servicio de preferencia
-    public static String getFile(Context context, String fileName) {
-
-        try {
-            AssetManager assetManager = context.getResources().getAssets();
-
-            InputStream is = assetManager.open(fileName);
-            int size = is.available();
-            byte[] buffer = new byte[size];
-            is.read(buffer);
-            is.close();
-
-            return new String(buffer);
-
-        } catch (Exception e) {
-
-            return "";
-        }
-    }
+//
+//    //TODO consumir servicio de preferencia
+//    public static String getFile(Context context, String fileName) {
+//
+//        try {
+//            AssetManager assetManager = context.getResources().getAssets();
+//
+//            InputStream is = assetManager.open(fileName);
+//            int size = is.available();
+//            byte[] buffer = new byte[size];
+//            is.read(buffer);
+//            is.close();
+//
+//            return new String(buffer);
+//
+//        } catch (Exception e) {
+//
+//            return "";
+//        }
+//    }
 
     private static void putListExtra(Intent intent, String listName, List<String> list) {
 

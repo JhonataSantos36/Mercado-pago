@@ -35,7 +35,7 @@ public class CheckoutPreference implements Serializable {
             throw new CheckoutPreferenceException(CheckoutPreferenceException.INVALID_INSTALLMENTS);
         }
         else if (!this.validPaymentTypeExclusion()){
-            throw new CheckoutPreferenceException(CheckoutPreferenceException.EXCLUDED_ALL_PAYMENTTYPES);
+            throw new CheckoutPreferenceException(CheckoutPreferenceException.EXCLUDED_ALL_PAYMENT_TYPES);
         }
     }
 

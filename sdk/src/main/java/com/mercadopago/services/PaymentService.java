@@ -1,5 +1,6 @@
 package com.mercadopago.services;
 
+import com.mercadopago.model.CheckoutPreference;
 import com.mercadopago.model.Installment;
 import com.mercadopago.model.Instruction;
 import com.mercadopago.model.Issuer;
@@ -37,4 +38,7 @@ public interface PaymentService {
 
     @GET("/beta/checkout/instructions/{payment_id}")
     void getInstruction(@Query("public_key") String mKey, @EncodedPath("payment_id") Long paymentId, @Query("payment_method_id") String paymentMethodId, @Query("payment_type_id") String paymentTypeId, Callback<Instruction> callback);
+
+    @GET("/beta/checkout/preferences/{preference_id}")
+    void getPreference(@Query("public_key") String publicKey, @EncodedPath("preference_id") String checkoutPreferenceId, Callback<CheckoutPreference> callback);
 }

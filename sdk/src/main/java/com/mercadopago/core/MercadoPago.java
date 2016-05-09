@@ -92,8 +92,18 @@ public class MercadoPago {
                 .build();
     }
 
+    public void getPreference(String checkoutPreferenceId, Callback<CheckoutPreference> callback) {
+        if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {
+            PaymentService service = mRestAdapterMPApi.create(PaymentService.class);
+            service.getPreference(this.mKey, checkoutPreferenceId, callback);
+        } else {
+            throw new RuntimeException("Unsupported key type for this method");
+        }
+    }
+
     public void createPayment(String preferenceId, String email, String paymentMethodId, Integer installments, String issuerId, String tokenId, final Callback<Payment> callback) {
         if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {
+
             PaymentIntent paymentIntent = new PaymentIntent();
             paymentIntent.setPrefId(preferenceId);
             paymentIntent.setPublicKey(this.mKey);
@@ -232,9 +242,16 @@ public class MercadoPago {
 
     public void getInstructions(Long paymentId, String paymentMethodId, String paymentTypeId, final Callback<Instruction> callback) {
 
+        RestAdapter restAdapter = new RestAdapter.Builder()
+                .setEndpoint("http://private-9376e-paymentmethodsmla.apiary-mock.com")
+                .setLogLevel(Settings.RETROFIT_LOGGING)
+                .setConverter(new GsonConverter(JsonUtil.getInstance().getGson()))
+                .setClient(HttpClientUtil.getClient(this.mContext))
+                .build();
+
         //TODO replace paymentId when service works
         if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {
-            PaymentService service = mRestAdapterMPApi.create(PaymentService.class);
+            PaymentService service = restAdapter.create(PaymentService.class);
             service.getInstruction(this.mKey, (long)1826446924, paymentMethodId, paymentTypeId, callback);
         } else {
             throw new RuntimeException("Unsupported key type for this method");
@@ -264,11 +281,11 @@ public class MercadoPago {
         activity.startActivityForResult(bankDealsIntent, BANK_DEALS_REQUEST_CODE);
     }
 
-    private static void startCheckoutActivity(Activity activity, String merchantPublicKey, CheckoutPreference checkoutPreference, Boolean showBankDeals) {
+    private static void startCheckoutActivity(Activity activity, String merchantPublicKey, String checkoutPreferenceId, Boolean showBankDeals) {
 
         Intent checkoutIntent = new Intent(activity, CheckoutActivity.class);
         checkoutIntent.putExtra("merchantPublicKey", merchantPublicKey);
-        checkoutIntent.putExtra("checkoutPreference", checkoutPreference);
+        checkoutIntent.putExtra("checkoutPreferenceId", checkoutPreferenceId);
         checkoutIntent.putExtra("showBankDeals", showBankDeals);
         activity.startActivityForResult(checkoutIntent, CHECKOUT_REQUEST_CODE);
     }
@@ -447,7 +464,7 @@ public class MercadoPago {
         private Activity mActivity;
         private BigDecimal mAmount;
         private List<Card> mCards;
-        private CheckoutPreference mCheckoutPreference;
+        private String mCheckoutPreferenceId;
         private String mKey;
         private String mKeyType;
         private String mMerchantAccessToken;
@@ -494,9 +511,9 @@ public class MercadoPago {
             return this;
         }
 
-        public StartActivityBuilder setCheckoutPreference(CheckoutPreference checkoutPreference) {
+        public StartActivityBuilder setCheckoutPreferenceId(String checkoutPreferenceId) {
 
-            this.mCheckoutPreference = checkoutPreference;
+            this.mCheckoutPreferenceId = checkoutPreferenceId;
             return this;
         }
 
@@ -634,13 +651,13 @@ public class MercadoPago {
         public void startCheckoutActivity() {
 
             if (this.mActivity == null) throw new IllegalStateException("activity is null");
-            if (this.mCheckoutPreference == null) throw new IllegalStateException("checkout preference is null");
+            if (this.mCheckoutPreferenceId == null) throw new IllegalStateException("checkout preference id is null");
             if (this.mKey == null) throw new IllegalStateException("key is null");
             if (this.mKeyType == null) throw new IllegalStateException("key type is null");
 
             if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {
                 MercadoPago.startCheckoutActivity(this.mActivity, this.mKey,
-                        this.mCheckoutPreference, this.mShowBankDeals);
+                        this.mCheckoutPreferenceId, this.mShowBankDeals);
             } else {
                 throw new RuntimeException("Unsupported key type for this method");
             }

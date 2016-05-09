@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.mercadopago.R;
+import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentMethodSearchItem;
 import com.mercadopago.util.MercadoPagoUtil;
 import com.mercadopago.views.MPTextView;
@@ -45,6 +46,20 @@ public class PaymentMethodSearchRegularRow implements PaymentMethodViewControlle
             if(itemNeedsTint(item)) {
                 setTintColor(mContext, mIcon);
             }
+        } else {
+            mIcon.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void drawPaymentMethod(PaymentMethod paymentMethod) {
+        String accreditationTimeMessage = MercadoPagoUtil.getAccreditationTimeMessage(paymentMethod.getAccreditationTime(), mContext);
+        mComment.setText(accreditationTimeMessage);
+
+        int resourceId = MercadoPagoUtil.getPaymentMethodIcon(mContext, paymentMethod.getId());
+
+        if(resourceId != 0) {
+            mIcon.setImageResource(resourceId);
         } else {
             mIcon.setVisibility(View.GONE);
         }
