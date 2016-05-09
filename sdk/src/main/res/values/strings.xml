@@ -92,6 +92,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="mpsdk_exit_label">Salir</string>
+    <string name="mpsdk_standard_error_message">Algo salió mal</string>
 
 
 </resources>

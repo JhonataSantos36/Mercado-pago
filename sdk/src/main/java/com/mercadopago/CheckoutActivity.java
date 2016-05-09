@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.exceptions.CheckoutPreferenceException;
 import com.mercadopago.exceptions.ExceptionHandler;
+import com.mercadopago.exceptions.MPException;
 import com.mercadopago.fragments.ShoppingCartFragment;
 import com.mercadopago.model.CheckoutPreference;
 import com.mercadopago.model.Issuer;
@@ -23,6 +24,7 @@ import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.Token;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.CurrenciesUtil;
+import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.LayoutUtil;
 import com.mercadopago.util.MercadoPagoUtil;
 import com.mercadopago.views.MPButton;
@@ -96,10 +98,8 @@ public class CheckoutActivity extends AppCompatActivity {
             startPaymentVaultActivity();
         }
         else {
-            Intent returnIntent = new Intent();
-            returnIntent.putExtra("error", mErrorMessage);
-            setResult(RESULT_CANCELED, returnIntent);
-            finish();
+            MPException mpException = new MPException(mErrorMessage, false);
+            ErrorUtil.startErrorActivity(this, mpException);
         }
     }
 
@@ -255,6 +255,12 @@ public class CheckoutActivity extends AppCompatActivity {
             setResult(RESULT_OK, returnIntent);
             finish();
         }
+        else if (requestCode == ErrorUtil.ERROR_REQUEST_CODE) {
+            Intent returnIntent = new Intent();
+            returnIntent.putExtras(returnIntent);
+            setResult(RESULT_CANCELED, returnIntent);
+            finish();
+        }
     }
 
     private void animateBackFromPaymentEdition() {
@@ -300,7 +306,7 @@ public class CheckoutActivity extends AppCompatActivity {
         mMercadoPago.createPayment(mCheckoutPreference.getId(), mCheckoutPreference.getPayer().getEmail(), mSelectedPaymentMethod.getId(), null, null, null, new Callback<Payment>() {
             @Override
             public void success(Payment payment, Response response) {
-                mCreatedPayment = payment;
+                /*mCreatedPayment = payment;
                 if (MercadoPagoUtil.isCardPaymentType(mSelectedPaymentMethod.getPaymentTypeId())) {
                     new MercadoPago.StartActivityBuilder()
                             .setActivity(mActivity)
@@ -314,12 +320,14 @@ public class CheckoutActivity extends AppCompatActivity {
                             .setPayment(mCreatedPayment)
                             .setPaymentMethod(mSelectedPaymentMethod)
                             .startInstructionsActivity();
-                }
+                }*/
+
+                ApiUtil.showApiExceptionError(mActivity, null);
             }
 
             @Override
             public void failure(RetrofitError error) {
-                ApiUtil.finishWithApiException(mActivity, error);
+                ApiUtil.showApiExceptionError(mActivity, error);
             }
         });
     }

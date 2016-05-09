@@ -1,5 +1,7 @@
 package com.mercadopago.model;
 
+import com.google.gson.JsonObject;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -26,7 +28,7 @@ public class Payment implements Serializable {
     private Integer installments;
     private Integer issuerId;
     private Boolean liveMode;
-    private Map metadata;
+    private JsonObject metadata;
     private Date moneyReleaseDate;
     private String notificationUrl;
     private String operationType;
@@ -186,11 +188,11 @@ public class Payment implements Serializable {
         this.liveMode = liveMode;
     }
 
-    public Map getMetadata() {
+    public JsonObject getMetadata() {
         return metadata;
     }
 
-    public void setMetadata(Map metadata) {
+    public void setMetadata(JsonObject metadata) {
         this.metadata = metadata;
     }
 

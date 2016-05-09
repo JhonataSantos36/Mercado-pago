@@ -66,7 +66,6 @@ public class MercadoPago {
     public static final int GUESSING_CARD_REQUEST_CODE = 10;
     public static final int INSTRUCTIONS_REQUEST_CODE = 11;
 
-
     public static final int BIN_LENGTH = 6;
 
     private static final String MP_API_BASE_URL = "https://api.mercadopago.com";

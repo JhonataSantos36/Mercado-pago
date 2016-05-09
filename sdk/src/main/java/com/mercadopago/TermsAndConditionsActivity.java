@@ -25,7 +25,7 @@ public class TermsAndConditionsActivity extends AppCompatActivity {
             WebView webview = new WebView(this);
             setContentView(webview);
             //TODO ir a pagina correspondiente segun PK
-            webview.loadUrl("https://www.mercadopago.com.mx/ayuda/terminos-y-condiciones_715");
+            webview.loadUrl("https://www.mercadopago.com.ar/ayuda/terminos-y-condiciones_299");
         }
     }
 

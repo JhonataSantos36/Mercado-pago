@@ -90,7 +90,7 @@ public class CheckoutPreferenceTest extends TestCase {
         try {
             preference.validate();
         } catch (CheckoutPreferenceException e) {
-            assertTrue(e.getErrorCode() == CheckoutPreferenceException.EXCLUDED_ALL_PAYMENTTYPES);
+            assertTrue(e.getErrorCode() == CheckoutPreferenceException.EXCLUDED_ALL_PAYMENT_TYPES);
         }
     }
 
