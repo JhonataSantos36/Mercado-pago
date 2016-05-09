@@ -13,6 +13,7 @@ import android.widget.RelativeLayout;
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.exceptions.CheckoutPreferenceException;
 import com.mercadopago.exceptions.ExceptionHandler;
+import com.mercadopago.exceptions.MPException;
 import com.mercadopago.fragments.ShoppingCartFragment;
 import com.mercadopago.model.CheckoutPreference;
 import com.mercadopago.model.Issuer;
@@ -25,6 +26,7 @@ import com.mercadopago.model.PaymentMethodSearchItem;
 import com.mercadopago.model.Token;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.CurrenciesUtil;
+import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.LayoutUtil;
 import com.mercadopago.util.MercadoPagoUtil;
 import com.mercadopago.views.MPButton;
@@ -101,7 +103,8 @@ public class CheckoutActivity extends AppCompatActivity {
             getCheckoutPreference();
         }
         else {
-           finishWithErrorMessage();
+            MPException mpException = new MPException(mErrorMessage, false);
+            ErrorUtil.startErrorActivity(this, mpException);
         }
     }
 
@@ -317,6 +320,12 @@ public class CheckoutActivity extends AppCompatActivity {
             setResult(RESULT_OK, returnIntent);
             finish();
         }
+        else if (requestCode == ErrorUtil.ERROR_REQUEST_CODE) {
+            Intent returnIntent = new Intent();
+            returnIntent.putExtras(returnIntent);
+            setResult(RESULT_CANCELED, returnIntent);
+            finish();
+        }
     }
 
     private void showReviewAndConfirm() {
@@ -403,17 +412,7 @@ public class CheckoutActivity extends AppCompatActivity {
 
             @Override
             public void failure(RetrofitError error) {
-                //TODO cambiar esto cuando vuelva a andar el servicio de payments ApiUtil.finishWithApiException(mActivity, error);
-                Payment payment = new Payment();
-                payment.setId((long) 919191);
-                payment.setCurrencyId("ARS");
-                payment.setTransactionAmount(new BigDecimal("1000"));
-                new MercadoPago.StartActivityBuilder()
-                        .setPublicKey(mMerchantPublicKey)
-                        .setActivity(mActivity)
-                        .setPayment(payment)
-                        .setPaymentMethod(mSelectedPaymentMethod)
-                        .startInstructionsActivity();
+                ApiUtil.showApiExceptionError(mActivity, error);
             }
         });
     }

@@ -26,6 +26,7 @@ import com.mercadopago.model.PaymentMethodSearchItem;
 import com.mercadopago.model.Token;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.CurrenciesUtil;
+import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.LayoutUtil;
 import com.mercadopago.util.MercadoPagoUtil;
 import com.mercadopago.views.MPTextView;
@@ -265,6 +266,8 @@ public class PaymentVaultActivity extends AppCompatActivity {
         List<String> excludedPaymentMethodIds = mPaymentPreference != null ? mPaymentPreference.getExcludedPaymentMethodIds() : null;
 
         mMercadoPago.getPaymentMethodSearch(mAmount, excludedPaymentTypes, excludedPaymentMethodIds, new Callback<PaymentMethodSearch>() {
+
+
             @Override
             public void success(PaymentMethodSearch paymentMethodSearch, Response response) {
                 if (!paymentMethodSearch.hasSearchItems()) {
@@ -277,7 +280,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
 
             @Override
             public void failure(RetrofitError error) {
-                ApiUtil.finishWithApiException(mActivity, error);
+                ApiUtil.showApiExceptionError(mActivity, error);
             }
         });
     }
@@ -386,6 +389,19 @@ public class PaymentVaultActivity extends AppCompatActivity {
         }
         else if (requestCode == MercadoPago.PAYMENT_VAULT_REQUEST_CODE) {
             resolvePaymentVaultRequest(resultCode, data);
+        }
+        else if (requestCode == ErrorUtil.ERROR_REQUEST_CODE) {
+            resolveErrorRequest(resultCode, data);
+        }
+    }
+
+    private void resolveErrorRequest(int resultCode, Intent data) {
+        if(resultCode == RESULT_CANCELED) {
+            setResult(resultCode, data);
+            finish();
+        }
+        else {
+            initPaymentMethodSearch();
         }
     }
 
