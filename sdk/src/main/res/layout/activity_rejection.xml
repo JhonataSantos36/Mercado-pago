@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/mpsdk_color_light_grey">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:background="@color/mpsdk_color_light_grey">
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <android.support.v7.widget.CardView
+                    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/mpsdk_card_margin"
+                    card_view:cardCornerRadius="@dimen/mpsdk_card_corner_radius"
+                    card_view:cardBackgroundColor="@color/mpsdk_color_congrats_rejection_background">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginBottom="15dp"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:id="@+id/icon"
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:layout_marginTop="26dp"
+                            android:layout_marginBottom="14dp"
+                            android:tint="@color/mpsdk_color_congrats_rejection_image"
+                            android:src="@drawable/error_sign"
+                            android:layout_gravity="center_horizontal" />
+
+                        <com.mercadopago.views.MPTextView
+                            android:id="@+id/descriptionResult"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="bottom|center"
+                            android:layout_marginTop="10dp"
+                            android:textSize="23dp"
+                            android:textColor="@color/mpsdk_color_congrats_rejection_result_text"
+                            android:text="Mastercard no procesó el pago" />
+
+                        <com.mercadopago.views.MPTextView
+                            android:id="@+id/dataOrder"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="bottom|center"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginBottom="10dp"
+                            android:textSize="17dp"
+                            android:text="Usa otra tarjeta u otro medio de pago"
+                            style="@style/mpsdk_big_text_light" />
+
+                    </LinearLayout>
+                </android.support.v7.widget.CardView>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="15dp"
+                    android:orientation="vertical"
+                    android:background="@color/mpsdk_color_light_grey">
+
+                        <com.mercadopago.views.MPButton
+                            android:id="@+id/otherPaymentMethod"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/mpsdk_button_height"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="10dp"
+                            android:layout_marginTop="40dp"
+                            android:layout_marginBottom="60dp"
+                            android:text="Usar otro medio de pago"
+                            android:textColor="@color/mpsdk_color_congrats_installments"
+                            android:background="@color/mpsdk_white_background" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

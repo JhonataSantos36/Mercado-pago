@@ -93,6 +93,7 @@ public class CheckoutActivity extends AppCompatActivity {
                     .setContext(this)
                     .setPublicKey(mMerchantPublicKey)
                     .build();
+
             startPaymentVaultActivity();
         }
         else {
@@ -291,7 +292,6 @@ public class CheckoutActivity extends AppCompatActivity {
     }
 
     protected boolean validParameters() {
-
         return (mMerchantPublicKey != null) && (mCheckoutPreference != null);
     }
 
@@ -302,11 +302,7 @@ public class CheckoutActivity extends AppCompatActivity {
             public void success(Payment payment, Response response) {
                 mCreatedPayment = payment;
                 if (MercadoPagoUtil.isCardPaymentType(mSelectedPaymentMethod.getPaymentTypeId())) {
-                    new MercadoPago.StartActivityBuilder()
-                            .setActivity(mActivity)
-                            .setPayment(mCreatedPayment)
-                            .setPaymentMethod(mSelectedPaymentMethod)
-                            .startCongratsActivity();
+                    resolvePaymentStatusMessageActivity(payment);
                 } else {
                     new MercadoPago.StartActivityBuilder()
                             .setPublicKey(mMerchantPublicKey)
@@ -319,9 +315,36 @@ public class CheckoutActivity extends AppCompatActivity {
 
             @Override
             public void failure(RetrofitError error) {
+
+                //TODO volar, no va, es para probar
+                Payment payment = new Payment();
+                payment.setStatus("approved");
+                resolvePaymentStatusMessageActivity(payment);
+                //
+
                 ApiUtil.finishWithApiException(mActivity, error);
             }
         });
+    }
+
+    private void resolvePaymentStatusMessageActivity(Payment payment) {
+
+        MercadoPago.StartActivityBuilder builder = new MercadoPago.StartActivityBuilder()
+                .setPublicKey(mMerchantPublicKey)
+                .setActivity(mActivity)
+                .setPayment(payment)//mCreatedPayment)//TODO ver cual va, mCreatedPayment o payment
+                .setPaymentMethod(mSelectedPaymentMethod);
+
+        //TODO validar los status
+        if(payment.getStatus().equals("approved")) {
+            builder.startCongratsActivity();
+        }
+        else if(payment.getStatus().equals("pending")){
+            builder.startRejectionActivity();
+        }
+        else if(payment.getStatus().equals("call_for_authorize")){
+            builder.startCallForAuthorizeActivity();
+        }
     }
 
     private void animateBackToPaymentVault() {

@@ -10,7 +10,6 @@ import android.widget.ImageView;
 import com.mercadopago.adapters.CustomerCardsAdapter;
 import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentMethod;
-import com.mercadopago.model.PaymentMethodRow;
 import com.mercadopago.util.CurrenciesUtil;
 import com.mercadopago.util.MercadoPagoUtil;
 import com.mercadopago.views.MPButton;
@@ -43,7 +42,7 @@ public class OldCongratsActivity extends AppCompatActivity {
 
     protected void setContentView() {
 
-        setContentView(R.layout.activity_congrats);
+        setContentView(R.layout.activity_old_congrats);
     }
 
     @Override
