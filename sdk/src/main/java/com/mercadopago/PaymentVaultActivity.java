@@ -16,8 +16,10 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.mercadopago.adapters.PaymentMethodSearchItemAdapter;
+import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.callbacks.OnSelectedCallback;
 import com.mercadopago.core.MercadoPago;
+import com.mercadopago.exceptions.MPException;
 import com.mercadopago.fragments.ShoppingCartFragment;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.PayerCost;
@@ -54,6 +56,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
     protected Token mToken;
     protected Issuer mSelectedIssuer;
     protected PayerCost mSelectedPayerCost;
+    protected FailureRecovery failureRecovery;
 
     // Controls
     protected RecyclerView mSearchItemsRecyclerView;
@@ -91,7 +94,8 @@ public class PaymentVaultActivity extends AppCompatActivity {
             validateActivityParameters();
         } catch (IllegalStateException e) {
             validParameters = false;
-            finishWithIllegalStateException(e.getMessage());
+            MPException mpException = new MPException(e.getMessage(), false);
+            ErrorUtil.startErrorActivity(this, mpException);
         }
         if(validParameters) {
             mMercadoPago = new MercadoPago.Builder()
@@ -278,12 +282,18 @@ public class PaymentVaultActivity extends AppCompatActivity {
             @Override
             public void failure(RetrofitError error) {
                 ApiUtil.showApiExceptionError(mActivity, error);
+                failureRecovery = new FailureRecovery() {
+                    @Override
+                    public void recover() {
+                        getPaymentMethodSearch();
+                    }
+                };
             }
         });
     }
 
     protected void setSearchLayout() {
-        if(mPaymentMethodSearch.getGroups().size() > 1) {
+        if(!isUniqueSelectionAvailable()) {
             populateSearchList(mPaymentMethodSearch.getGroups());
             showRegularLayout();
         }
@@ -296,6 +306,10 @@ public class PaymentVaultActivity extends AppCompatActivity {
                 resolvePaymentMethodSelection(uniqueItem);
             }
         }
+    }
+
+    private boolean isUniqueSelectionAvailable() {
+        return mPaymentMethodSearch.getGroups().size() == 1;
     }
 
     protected void populateSearchList(List<PaymentMethodSearchItem> items) {
@@ -392,13 +406,20 @@ public class PaymentVaultActivity extends AppCompatActivity {
     }
 
     private void resolveErrorRequest(int resultCode, Intent data) {
-        if(resultCode == RESULT_CANCELED) {
+        if(resultCode == RESULT_OK) {
+            recoverFromFailure();
+        }
+        else if(noUserInteraction()){
             setResult(resultCode, data);
             finish();
         }
         else {
-            initPaymentMethodSearch();
+            showRegularLayout();
         }
+    }
+
+    private boolean noUserInteraction() {
+        return mSelectedSearchItem == null;
     }
 
     private void resolvePaymentVaultRequest(int resultCode, Intent data) {
@@ -422,9 +443,10 @@ public class PaymentVaultActivity extends AppCompatActivity {
             mSelectedPayerCost = (PayerCost) data.getSerializableExtra("payerCost");
             finishWithTokenResult();
 
-        } else if ((data != null) && (data.getSerializableExtra("apiException") != null)) {
-            finishWithApiException(data);
-        } else if(mPaymentMethodSearch.getGroups().size() == 1) {
+        } else if ((data != null) && (data.getSerializableExtra("mpException") != null)) {
+            finishWithMpException(data);
+
+        } else if(isUniqueSelectionAvailable()) {
             setResult(RESULT_CANCELED, data);
             finish();
         }
@@ -438,7 +460,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
         }
         else {
             if ((data != null) && (data.getSerializableExtra("apiException") != null)) {
-                finishWithApiException(data);
+                finishWithMpException(data);
             }
         }
     }
@@ -477,21 +499,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
         animatePaymentMethodSelection();
     }
 
-    protected void finishWithResult() {
-        Intent returnIntent = new Intent();
-        returnIntent.putExtra("token", mToken);
-        if (mSelectedIssuer != null) {
-            returnIntent.putExtra("issuer", mSelectedIssuer);
-        }
-        returnIntent.putExtra("payerCost", mSelectedPayerCost);
-        returnIntent.putExtra("paymentMethod", mSelectedPaymentMethod);
-        this.setResult(Activity.RESULT_OK, returnIntent);
-        this.finish();
-        animatePaymentMethodSelection();
-    }
-
-    protected void finishWithApiException(Intent data) {
-        setResult(Activity.RESULT_CANCELED, data);
+    protected void finishWithMpException(Intent data) {        setResult(Activity.RESULT_CANCELED, data);
         this.finish();
         animatePaymentMethodSelection();
     }
@@ -515,6 +523,12 @@ public class PaymentVaultActivity extends AppCompatActivity {
 
         if(isItemSelectedStart()) {
             overridePendingTransition(R.anim.slide_left_to_right_in, R.anim.slide_left_to_right_out);
+        }
+    }
+
+    private void recoverFromFailure() {
+        if(failureRecovery != null) {
+            failureRecovery.recover();
         }
     }
 }

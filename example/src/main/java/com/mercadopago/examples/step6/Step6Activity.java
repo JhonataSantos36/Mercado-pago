@@ -1,5 +1,6 @@
 package com.mercadopago.examples.step6;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -31,11 +32,14 @@ public class Step6Activity extends ExampleActivity {
 
     private CheckoutPreference mCheckoutPreference;
     private String mMerchantPublicKey;
+    private Activity mActivity;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_step6);
         mMerchantPublicKey = "APP_USR-5a399d42-6015-4f6a-8ff8-dd7d368068f8";
+        mActivity = this;
     }
 
     @Override
@@ -78,7 +82,7 @@ public class Step6Activity extends ExampleActivity {
 
             @Override
             public void failure(RetrofitError error) {
-                //Handle failure;
+                Toast.makeText(mActivity, "Preference creation failed", Toast.LENGTH_LONG).show();
             }
         });
     }

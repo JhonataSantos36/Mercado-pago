@@ -8,6 +8,7 @@ import android.net.NetworkInfo;
 import android.widget.Toast;
 
 import com.mercadopago.R;
+import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.exceptions.MPException;
 import com.mercadopago.model.ApiException;
 

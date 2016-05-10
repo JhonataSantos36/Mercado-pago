@@ -103,7 +103,7 @@
         <activity android:name=".CardInstallmentsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.MercadoPagoTheme.NoActionBar">
-        </activity>
+        </activity>p
         <activity android:name=".CardIssuersActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.MercadoPagoTheme.NoActionBar">
