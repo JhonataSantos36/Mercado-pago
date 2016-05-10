@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 public class PaymentIntent implements Serializable {
 
+    private Integer transactionId;
     private Integer installments;
     private Long issuerId;
     private String paymentMethodId;
@@ -58,5 +59,13 @@ public class PaymentIntent implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public Integer getTransactionId() {
+        return transactionId;
+    }
+
+    public void setTransactionId(Long transactionId) {
+
     }
 }

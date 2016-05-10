@@ -11,7 +11,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -86,18 +85,21 @@ public class PaymentVaultActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_payment_vault);
         getActivityParameters();
+        setActivity();
+
         boolean validParameters = true;
 
         try {
             validateActivityParameters();
         } catch (IllegalStateException e) {
             validParameters = false;
-            MPException mpException = new MPException(e.getMessage(), false);
-            ErrorUtil.startErrorActivity(this, mpException);
+            ErrorUtil.startErrorActivity(this, e.getMessage(), false);
         }
         if(validParameters) {
+
             mMercadoPago = new MercadoPago.Builder()
                     .setPublicKey(mMerchantPublicKey)
                     .setContext(this)
@@ -113,12 +115,10 @@ public class PaymentVaultActivity extends AppCompatActivity {
                 mShoppingCartIcon.setVisibility(View.GONE);
             }
 
-            setActivity();
-
-            if (!isItemSelectedStart()) {
-                initPaymentMethodSearch();
-            } else {
+            if (isItemSelected()) {
                 showSelectedItemChildren();
+            } else {
+                initPaymentMethodSearch();
             }
         }
     }
@@ -257,7 +257,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
         mActivityTitle.setText(title);
     }
 
-    protected boolean isItemSelectedStart() {
+    protected boolean isItemSelected() {
         return mSelectedSearchItem != null;
     }
 
@@ -268,11 +268,10 @@ public class PaymentVaultActivity extends AppCompatActivity {
 
         mMercadoPago.getPaymentMethodSearch(mAmount, excludedPaymentTypes, excludedPaymentMethodIds, new Callback<PaymentMethodSearch>() {
 
-
             @Override
             public void success(PaymentMethodSearch paymentMethodSearch, Response response) {
                 if (!paymentMethodSearch.hasSearchItems()) {
-                    finishWithEmptyPaymentMethodSearch();
+                    showEmptyPaymentMethodsError();
                 } else {
                     mPaymentMethodSearch = paymentMethodSearch;
                     setSearchLayout();
@@ -342,7 +341,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
     private void resolvePaymentMethodSelection(PaymentMethodSearchItem item) {
         PaymentMethod selectedPaymentMethod = mPaymentMethodSearch.getPaymentMethodBySearchItem(item);
         if (selectedPaymentMethod == null) {
-            finishWithMismatchingPaymentMethod();
+            showMismatchingPaymentMethodError();
         }
         else {
             finishWithPaymentMethodResult(selectedPaymentMethod);
@@ -350,6 +349,11 @@ public class PaymentVaultActivity extends AppCompatActivity {
     }
 
     private void restartWithSelectedItem(PaymentMethodSearchItem groupIem) {
+
+        if(getIntent().getSerializableExtra("paymentMethodSearch") == null) {
+            getIntent().putExtra("paymentMethodSearch", mPaymentMethodSearch);
+        }
+
         Intent intent = new Intent(this, PaymentVaultActivity.class);
         intent.putExtra("selectedSearchItem", groupIem);
         intent.putExtras(this.getIntent());
@@ -427,11 +431,9 @@ public class PaymentVaultActivity extends AppCompatActivity {
             setResult(RESULT_OK, data);
             finish();
         }
-        else if(resultCode == RESULT_CANCELED) {
-            if(data.hasExtra("error") || data.hasExtra("canceled")) {
-                setResult(RESULT_CANCELED, data);
-                finish();
-            }
+        else if(resultCode == RESULT_CANCELED && data != null && data.hasExtra("mpException")) {
+            setResult(Activity.RESULT_CANCELED, data);
+            this.finish();
         }
     }
 
@@ -443,12 +445,11 @@ public class PaymentVaultActivity extends AppCompatActivity {
             mSelectedPayerCost = (PayerCost) data.getSerializableExtra("payerCost");
             finishWithTokenResult();
 
-        } else if ((data != null) && (data.getSerializableExtra("mpException") != null)) {
-            finishWithMpException(data);
+        } else if (isUniqueSelectionAvailable()||
+                ((data != null) && (data.getSerializableExtra("mpException") != null))){
 
-        } else if(isUniqueSelectionAvailable()) {
-            setResult(RESULT_CANCELED, data);
-            finish();
+            setResult(Activity.RESULT_CANCELED, data);
+            this.finish();
         }
     }
 
@@ -460,22 +461,10 @@ public class PaymentVaultActivity extends AppCompatActivity {
         }
         else {
             if ((data != null) && (data.getSerializableExtra("apiException") != null)) {
-                finishWithMpException(data);
+                setResult(Activity.RESULT_CANCELED, data);
+                this.finish();
             }
         }
-    }
-
-    private void finishWithEmptyPaymentMethodSearch() {
-        //TODO modificar
-        Toast.makeText(mActivity, "No hay medios de pago disponibles", Toast.LENGTH_SHORT).show();
-        finish();
-    }
-
-    protected void finishWithIllegalStateException(String message) {
-        Intent returnIntent = new Intent();
-        returnIntent.putExtra("error", message);
-        this.setResult(Activity.RESULT_CANCELED, returnIntent);
-        this.finish();
     }
 
     protected void finishWithPaymentMethodResult(PaymentMethod paymentMethod) {
@@ -499,6 +488,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
         animatePaymentMethodSelection();
     }
 
+<<<<<<< 4d4b218c3707268fba6eb5d18ceae652c9aa9a63
     protected void finishWithMpException(Intent data) {        setResult(Activity.RESULT_CANCELED, data);
         this.finish();
         animatePaymentMethodSelection();
@@ -511,19 +501,33 @@ public class PaymentVaultActivity extends AppCompatActivity {
         finish();
     }
 
+=======
+>>>>>>> added transaction manager, pref with siteid, and handled errors with mpexception
     private void animatePaymentMethodSelection() {
         overridePendingTransition(R.anim.slide_right_to_left_in, R.anim.slide_right_to_left_out);
     }
 
     @Override
     public void onBackPressed() {
-        Intent returnIntent = new Intent();
-        setResult(Activity.RESULT_CANCELED, returnIntent);
+        setResult(Activity.RESULT_CANCELED);
         finish();
 
+<<<<<<< 4d4b218c3707268fba6eb5d18ceae652c9aa9a63
         if(isItemSelectedStart()) {
             overridePendingTransition(R.anim.slide_left_to_right_in, R.anim.slide_left_to_right_out);
+=======
+        if(isItemSelected()) {
+            overridePendingTransition(R.anim.slide_left_to_right_in, R.anim.silde_left_to_right_out);
+>>>>>>> added transaction manager, pref with siteid, and handled errors with mpexception
         }
+    }
+
+    private void showMismatchingPaymentMethodError() {
+        ErrorUtil.startErrorActivity(this, getString(R.string.mpsdk_standard_error_message), "Payment method in search not found", false);
+    }
+
+    private void showEmptyPaymentMethodsError() {
+        ErrorUtil.startErrorActivity(this, getString(R.string.mpsdk_no_payment_methods_found), false);
     }
 
     private void recoverFromFailure() {

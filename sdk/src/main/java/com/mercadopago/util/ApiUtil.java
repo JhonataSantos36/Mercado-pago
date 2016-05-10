@@ -74,7 +74,7 @@ public class ApiUtil {
             }
             else {
                 errorMessage = activity.getString(R.string.mpsdk_standard_error_message);
-                mpException = new MPException(errorMessage, true);
+                mpException = new MPException(errorMessage, error.getMessage(), true);
             }
         }
 

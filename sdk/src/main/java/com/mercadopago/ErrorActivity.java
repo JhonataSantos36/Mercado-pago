@@ -72,6 +72,7 @@ public class ErrorActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         Intent intent = new Intent();
+        intent.putExtra("mpException", mMPException);
         setResult(RESULT_CANCELED, intent);
         finish();
     }

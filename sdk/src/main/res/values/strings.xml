@@ -150,6 +150,11 @@
     <string name="mpsdk_working_day">día hábil</string>
     <string name="mpsdk_hours">horas</string>
     <string name="mpsdk_hour">hora</string>
+<<<<<<< 4d4b218c3707268fba6eb5d18ceae652c9aa9a63
+=======
+    <string name="mpsdk_no_payment_methods_found">No hay medios de pago disponibles</string>
+
+>>>>>>> added transaction manager, pref with siteid, and handled errors with mpexception
     <string name="mpsdk_zero_rate">Sin intereses</string>
     <string name="mpsdk_installments_of">de</string>
     <string name="mpsdk_card_data_title">Datos de tu tarjeta</string>
