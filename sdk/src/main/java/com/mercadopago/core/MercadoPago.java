@@ -116,8 +116,16 @@ public class MercadoPago {
             paymentIntent.setPaymentMethodId(paymentMethodId);
             paymentIntent.setEmail(email);
 
-            PaymentService service = mRestAdapterMPApi.create(PaymentService.class);
+            RestAdapter paymentsRestAdapter = new RestAdapter.Builder()
+                    .setEndpoint(MP_API_BASE_URL)
+                    .setLogLevel(Settings.RETROFIT_LOGGING)
+                    .setConverter(new GsonConverter(JsonUtil.getInstance().getGson()))
+                    .setClient(HttpClientUtil.getPaymentClient(this.mContext))
+                    .build();
+
+            PaymentService service = paymentsRestAdapter.create(PaymentService.class);
             service.createPayment(paymentIntent, callback);
+
         } else {
             throw new RuntimeException("Unsupported key type for this method");
         }

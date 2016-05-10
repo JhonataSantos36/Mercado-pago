@@ -36,6 +36,24 @@ public class HttpClientUtil {
         return client;
     }
 
+    public static synchronized Client getPaymentClient(Context context) {
+
+        if (client == null) {
+            Log.i("HttpClientUtil", "new instance");
+            OkHttpClient okHttpClient = new OkHttpClient();
+
+            okHttpClient.setConnectTimeout(40, TimeUnit.SECONDS);
+            okHttpClient.setWriteTimeout(40, TimeUnit.SECONDS);
+            okHttpClient.setReadTimeout(40, TimeUnit.SECONDS);
+
+            int cacheSize = 10 * 1024 * 1024; // 10 MiB
+            Cache cache = new Cache(new File(context.getCacheDir().getPath() + "okhttp"), cacheSize);
+            okHttpClient.setCache(cache);
+            client = new OkClient(okHttpClient);
+        }
+        return client;
+    }
+
     public static void bindClient(Client client) {
         HttpClientUtil.client = client;
     }
