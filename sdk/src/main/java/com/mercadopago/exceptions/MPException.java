@@ -36,6 +36,7 @@ public class MPException implements Serializable{
         return apiException;
     }
 
+
     public boolean isRecoverable() {
         return recoverable;
     }
@@ -49,9 +50,5 @@ public class MPException implements Serializable{
             errorDetail = "";
         }
         return errorDetail;
-    }
-
-    public void setErrorDetail(String errorDetail) {
-        this.errorDetail = errorDetail;
     }
 }

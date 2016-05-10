@@ -14,6 +14,7 @@ import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.exceptions.CheckoutPreferenceException;
 import com.mercadopago.exceptions.ExceptionHandler;
+import com.mercadopago.exceptions.MPException;
 import com.mercadopago.fragments.ShoppingCartFragment;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.CheckoutPreference;
@@ -431,6 +432,7 @@ public class CheckoutActivity extends AppCompatActivity {
                             .setPaymentMethod(mSelectedPaymentMethod)
                             .startInstructionsActivity();
                 }
+
                 TransactionManager.getInstance().releaseTransaction();
             }
 
