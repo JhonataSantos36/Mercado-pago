@@ -10,11 +10,13 @@ import android.text.Spanned;
 import android.view.View;
 import android.widget.RelativeLayout;
 
+import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.exceptions.CheckoutPreferenceException;
 import com.mercadopago.exceptions.ExceptionHandler;
 import com.mercadopago.exceptions.MPException;
 import com.mercadopago.fragments.ShoppingCartFragment;
+import com.mercadopago.model.ApiException;
 import com.mercadopago.model.CheckoutPreference;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.Item;
@@ -33,8 +35,6 @@ import com.mercadopago.views.MPButton;
 import com.mercadopago.views.MPTextView;
 import com.mercadopago.uicontrollers.PaymentMethodViewController;
 import com.mercadopago.uicontrollers.ViewControllerFactory;
-
-import java.math.BigDecimal;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -66,6 +66,8 @@ public class CheckoutActivity extends AppCompatActivity {
     protected ShoppingCartFragment mShoppingCartFragment;
     protected String mErrorMessage;
     protected boolean mPaymentMethodEditionRequested;
+
+    protected FailureRecovery failureRecovery;
 
     //Controls
     protected MPTextView mTermsAndConditionsTextView;
@@ -127,7 +129,13 @@ public class CheckoutActivity extends AppCompatActivity {
 
             @Override
             public void failure(RetrofitError error) {
-                ApiUtil.finishWithApiException(mActivity, error);
+                ApiUtil.showApiExceptionError(mActivity, error);
+                failureRecovery = new FailureRecovery() {
+                    @Override
+                    public void recover() {
+                        getCheckoutPreference();
+                    }
+                };
             }
         });
     }
@@ -250,7 +258,13 @@ public class CheckoutActivity extends AppCompatActivity {
 
             @Override
             public void failure(RetrofitError error) {
-                ApiUtil.finishWithApiException(mActivity, error);
+                ApiUtil.showApiExceptionError(mActivity, error);
+                failureRecovery = new FailureRecovery() {
+                    @Override
+                    public void recover() {
+                        getPaymentMethodSearch();
+                    }
+                };
             }
         });
     }
@@ -275,15 +289,6 @@ public class CheckoutActivity extends AppCompatActivity {
         return CurrenciesUtil.formatNumber(mCheckoutPreference.getAmount(), currencyId, true, true);
     }
 
-    private void showProgress() {
-        getSupportActionBar().hide();
-        LayoutUtil.showProgressLayout(this);
-    }
-
-    private void showRegularLayout() {
-        getSupportActionBar().show();
-        LayoutUtil.showRegularLayout(mActivity);
-    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == MercadoPago.PAYMENT_VAULT_REQUEST_CODE) {
@@ -321,11 +326,21 @@ public class CheckoutActivity extends AppCompatActivity {
             finish();
         }
         else if (requestCode == ErrorUtil.ERROR_REQUEST_CODE) {
-            Intent returnIntent = new Intent();
-            returnIntent.putExtras(returnIntent);
-            setResult(RESULT_CANCELED, returnIntent);
-            finish();
+            if(resultCode == RESULT_OK) {
+                recoverFromFailure();
+            }
+            else if(noUserInteractionReached()) {
+                setResult(RESULT_OK, data);
+                finish();
+            }
+            else {
+                showRegularLayout();
+            }
         }
+    }
+
+    private boolean noUserInteractionReached() {
+        return mSelectedPaymentMethod == null;
     }
 
     private void showReviewAndConfirm() {
@@ -375,7 +390,6 @@ public class CheckoutActivity extends AppCompatActivity {
                 }
             });
         }
-
     }
 
     private boolean isUniquePaymentMethod() {
@@ -412,9 +426,31 @@ public class CheckoutActivity extends AppCompatActivity {
 
             @Override
             public void failure(RetrofitError error) {
-                ApiUtil.showApiExceptionError(mActivity, error);
+                resolvePaymentFailure(error);
             }
         });
+    }
+
+    private void resolvePaymentFailure(RetrofitError error) {
+        if(error.getKind() == RetrofitError.Kind.NETWORK) {
+            ApiUtil.showApiExceptionError(this, error);
+            failureRecovery = new FailureRecovery() {
+                @Override
+                public void recover() {
+                    createPayment();
+                }
+            };
+        }
+        else {
+            ApiException apiException = ApiUtil.getApiException(error);
+            if(apiException.getStatus() == 503) {
+                startPaymentInProcessActivity();
+            }
+        }
+    }
+
+    private void startPaymentInProcessActivity() {
+        //TODO ver que hacer
     }
 
     private void animateBackToPaymentVault() {
@@ -443,6 +479,22 @@ public class CheckoutActivity extends AppCompatActivity {
             startPaymentVaultActivity();
         }
         animateBackToPaymentVault();
+    }
+
+    private void showProgress() {
+        getSupportActionBar().hide();
+        LayoutUtil.showProgressLayout(this);
+    }
+
+    private void showRegularLayout() {
+        getSupportActionBar().show();
+        LayoutUtil.showRegularLayout(this);
+    }
+
+    private void recoverFromFailure() {
+        if(failureRecovery != null) {
+            failureRecovery.recover();
+        }
     }
 
 }

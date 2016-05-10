@@ -167,12 +167,10 @@ public class ExamplesUtils {
                             .setPayment(payment)
                             .setPaymentMethod(paymentMethod)
                             .startCongratsActivity();
-
                 }
 
                 @Override
                 public void failure(RetrofitError error) {
-
                     LayoutUtil.showRegularLayout(activity);
                     Toast.makeText(activity, error.getMessage(), Toast.LENGTH_LONG).show();
                 }
