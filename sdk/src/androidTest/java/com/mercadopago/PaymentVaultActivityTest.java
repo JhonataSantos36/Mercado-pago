@@ -7,7 +7,6 @@ import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.test.runner.lifecycle.ActivityLifecycleMonitorRegistry;
 import android.test.suitebuilder.annotation.LargeTest;
-import android.view.View;
 
 
 import com.mercadopago.model.PaymentMethod;
@@ -171,7 +170,7 @@ public class PaymentVaultActivityTest {
         validStartIntent.putExtra("selectedSearchItem", paymentMethodSearch.getGroups().get(0));
         mTestRule.launchActivity(validStartIntent);
 
-        assertTrue(mTestRule.getActivity().isItemSelectedStart());
+        assertTrue(mTestRule.getActivity().isItemSelected());
     }
 
     @Test

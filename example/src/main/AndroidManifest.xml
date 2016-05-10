@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.mercadopago.examples" >
+    package="com.mercadopago.examples">
 
     <application
         android:allowBackup="true"
@@ -10,7 +10,7 @@
         <activity
             android:name="com.mercadopago.MainActivity"
             android:label="@string/app_name"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -20,50 +20,41 @@
         <activity
             android:name=".step2.SimpleVaultActivity"
             android:label="@string/title_activity_simple_vault"
-            android:screenOrientation="portrait">
-        </activity>
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".step3.AdvancedVaultActivity"
             android:label="@string/title_activity_final_vault"
-            android:screenOrientation="portrait" >
-        </activity>
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".step1.Step1Activity"
             android:label="@string/title_activity_step1"
-            android:screenOrientation="portrait" >
-        </activity>
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".step1.CardActivity"
             android:label="@string/title_activity_card"
-            android:screenOrientation="portrait" >
-        </activity>
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".step2.Step2Activity"
             android:label="@string/title_activity_step2"
-            android:screenOrientation="portrait" >
-        </activity>
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".step3.Step3Activity"
             android:label="@string/title_activity_step3"
-            android:screenOrientation="portrait" >
-        </activity>
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".step4.Step4Activity"
             android:label="@string/title_activity_step4"
-            android:screenOrientation="portrait" >
-        </activity>
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".step4.FinalVaultActivity"
-            android:label="@string/title_activity_final_vault" >
-        </activity>
+            android:label="@string/title_activity_final_vault"></activity>
         <activity
             android:name=".step5.Step5Activity"
-            android:label="@string/title_activity_step5" >
-        </activity>
+            android:label="@string/title_activity_step5"></activity>
         <activity
             android:name=".step6.Step6Activity"
-            android:label="@string/title_activity_step6" >
-        </activity>
+            android:label="@string/title_activity_step6"></activity>
+        <activity android:name=".Step8.F2Activity"></activity>
     </application>
 
 </manifest>

@@ -18,7 +18,7 @@ public class CheckoutPreference implements Serializable {
     private PaymentPreference paymentPreference;
     private Date expirationDateTo;
     private Date expirationDateFrom;
-
+    private String siteId;
 
     public void validate() throws CheckoutPreferenceException {
         if (!this.itemsValid())
@@ -199,8 +199,11 @@ public class CheckoutPreference implements Serializable {
             return null;
     }
 
-
     public PaymentPreference getPaymentPreference() {
         return paymentPreference;
+    }
+
+    public String getSiteId() {
+        return siteId;
     }
 }

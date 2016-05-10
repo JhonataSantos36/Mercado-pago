@@ -101,14 +101,8 @@ public class MercadoPago {
         }
     }
 
-    public void createPayment(String preferenceId, String email, String paymentMethodId, Integer installments, String issuerId, String tokenId, final Callback<Payment> callback) {
+    public void createPayment(PaymentIntent paymentIntent, final Callback<Payment> callback) {
         if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {
-
-            PaymentIntent paymentIntent = new PaymentIntent();
-            paymentIntent.setPrefId(preferenceId);
-            paymentIntent.setPublicKey(this.mKey);
-            paymentIntent.setPaymentMethodId(paymentMethodId);
-            paymentIntent.setEmail(email);
 
             RestAdapter paymentsRestAdapter = new RestAdapter.Builder()
                     .setEndpoint(MP_API_BASE_URL)
@@ -684,6 +678,7 @@ public class MercadoPago {
 
             if (this.mActivity == null) throw new IllegalStateException("activity is null");
             if (this.mPayment == null) throw new IllegalStateException("payment is null");
+            if (this.mPaymentMethod == null) throw new IllegalStateException("payment method is null");
             if (this.mKey == null) throw new IllegalStateException("key is null");
             if (this.mKeyType == null) throw new IllegalStateException("key type is null");
 

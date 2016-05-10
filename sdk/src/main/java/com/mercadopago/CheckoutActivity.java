@@ -14,7 +14,6 @@ import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.exceptions.CheckoutPreferenceException;
 import com.mercadopago.exceptions.ExceptionHandler;
-import com.mercadopago.exceptions.MPException;
 import com.mercadopago.fragments.ShoppingCartFragment;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.CheckoutPreference;
@@ -22,10 +21,12 @@ import com.mercadopago.model.Issuer;
 import com.mercadopago.model.Item;
 import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.Payment;
+import com.mercadopago.model.PaymentIntent;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentMethodSearch;
 import com.mercadopago.model.PaymentMethodSearchItem;
 import com.mercadopago.model.Token;
+import com.mercadopago.model.TransactionManager;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.CurrenciesUtil;
 import com.mercadopago.util.ErrorUtil;
@@ -105,8 +106,7 @@ public class CheckoutActivity extends AppCompatActivity {
             getCheckoutPreference();
         }
         else {
-            MPException mpException = new MPException(mErrorMessage, false);
-            ErrorUtil.startErrorActivity(this, mpException);
+            ErrorUtil.startErrorActivity(this, mErrorMessage, false);
         }
     }
 
@@ -240,6 +240,7 @@ public class CheckoutActivity extends AppCompatActivity {
 
     protected void startTermsAndConditionsActivity() {
         Intent termsAndConditionsIntent = new Intent(this, TermsAndConditionsActivity.class);
+        termsAndConditionsIntent.putExtra("siteId", mCheckoutPreference.getSiteId());
         startActivity(termsAndConditionsIntent);
     }
 
@@ -404,7 +405,15 @@ public class CheckoutActivity extends AppCompatActivity {
 
     protected void createPayment() {
         LayoutUtil.showProgressLayout(mActivity);
-        mMercadoPago.createPayment(mCheckoutPreference.getId(), mCheckoutPreference.getPayer().getEmail(), mSelectedPaymentMethod.getId(), null, null, null, new Callback<Payment>() {
+
+        PaymentIntent paymentIntent = new PaymentIntent();
+        paymentIntent.setPrefId(mCheckoutPreference.getId());
+        paymentIntent.setPublicKey(mMerchantPublicKey);
+        paymentIntent.setPaymentMethodId(mSelectedPaymentMethod.getId());
+        paymentIntent.setEmail(mCheckoutPreference.getPayer().getEmail());
+        paymentIntent.setTransactionId(TransactionManager.getInstance().getTransactionId());
+
+        mMercadoPago.createPayment(paymentIntent, new Callback<Payment>() {
             @Override
             public void success(Payment payment, Response response) {
                 mCreatedPayment = payment;
@@ -422,6 +431,7 @@ public class CheckoutActivity extends AppCompatActivity {
                             .setPaymentMethod(mSelectedPaymentMethod)
                             .startInstructionsActivity();
                 }
+                TransactionManager.getInstance().releaseTransaction();
             }
 
             @Override
@@ -432,7 +442,11 @@ public class CheckoutActivity extends AppCompatActivity {
     }
 
     private void resolvePaymentFailure(RetrofitError error) {
-        if(error.getKind() == RetrofitError.Kind.NETWORK) {
+        //TODO analizar y ordenar
+        ApiException apiException = ApiUtil.getApiException(error);
+
+        if(error.getResponse().getStatus() == 408) {
+            //Request timeout
             ApiUtil.showApiExceptionError(this, error);
             failureRecovery = new FailureRecovery() {
                 @Override
@@ -441,16 +455,24 @@ public class CheckoutActivity extends AppCompatActivity {
                 }
             };
         }
-        else {
-            ApiException apiException = ApiUtil.getApiException(error);
-            if(apiException.getStatus() == 503) {
-                startPaymentInProcessActivity();
-            }
+        else if(apiException != null && apiException.getStatus() == 503) {
+            startPaymentInProcessActivity();
+            TransactionManager.getInstance().releaseTransaction();
+        }
+        else if(apiException != null) { //Any other failure from wrapper
+            //Request timeout
+            ApiUtil.showApiExceptionError(this, error);
+            failureRecovery = new FailureRecovery() {
+                @Override
+                public void recover() {
+                    createPayment();
+                }
+            };
         }
     }
 
     private void startPaymentInProcessActivity() {
-        //TODO ver que hacer
+        //TODO start in process activity
     }
 
     private void animateBackToPaymentVault() {

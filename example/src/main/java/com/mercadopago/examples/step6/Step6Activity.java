@@ -99,7 +99,7 @@ public class Step6Activity extends ExampleActivity {
                 .setShowBankDeals(true)
                 .startCheckoutActivity();
 
-        LayoutUtil.showRegularLayout(this);
+        LayoutUtil.showProgressLayout(this);
     }
 
 }

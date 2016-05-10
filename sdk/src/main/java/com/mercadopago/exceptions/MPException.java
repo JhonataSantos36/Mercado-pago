@@ -12,6 +12,7 @@ import java.util.List;
 public class MPException implements Serializable{
 
     private String message;
+    private String errorDetail;
     private ApiException apiException;
     private boolean recoverable;
 
@@ -20,9 +21,14 @@ public class MPException implements Serializable{
         this.recoverable = recoverable;
     }
 
+    public MPException(String message, String detail, boolean recoverable) {
+        this.message = message;
+        this.errorDetail = detail;
+        this.recoverable = recoverable;
+    }
+
     public MPException(ApiException apiException) {
         this.apiException = apiException;
-        //TODO analizar casos
         this.recoverable = true;
     }
 
@@ -36,5 +42,16 @@ public class MPException implements Serializable{
 
     public String getMessage() {
         return message;
+    }
+
+    public String getErrorDetail() {
+        if(errorDetail == null) {
+            errorDetail = "";
+        }
+        return errorDetail;
+    }
+
+    public void setErrorDetail(String errorDetail) {
+        this.errorDetail = errorDetail;
     }
 }
