@@ -473,7 +473,7 @@ public class CheckoutActivity extends AppCompatActivity {
         MercadoPago.StartActivityBuilder builder = new MercadoPago.StartActivityBuilder()
                 .setPublicKey(mMerchantPublicKey)
                 .setActivity(mActivity)
-                .setPayment(payment)//mCreatedPayment)//TODO ver cual va, mCreatedPayment o payment
+                .setPayment(payment)
                 .setPaymentMethod(mSelectedPaymentMethod);
 
         //TODO validar los status

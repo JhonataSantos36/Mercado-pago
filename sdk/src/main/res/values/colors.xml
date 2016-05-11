@@ -15,21 +15,22 @@
     <color name="mpsdk_shopping_cart_background">#5ABEE7</color>
     <color name="mpsdk_color_instructions_title_background">#FBF8E1</color>
     <color name="mpsdk_color_instructions_title_image">#EFC703</color>
-    <color name="mpsdk_color_light_grey">#f1f1f1</color>
+    <color name="mpsdk_color_light_grey">#F1F1F1</color>
     <color name="mpsdk_color_instructions_font">#B29054</color>
     <color name="mpsdk_color_instructions_button">#41c6f4</color>
     <color name="mpsdk_color_link">#0066CC</color>
+
     <color name="mpsdk_color_congrats_image">#2FB000</color>
     <color name="mpsdk_color_congrats_background">#E9FFE4</color>
     <color name="mpsdk_color_congrats_installments">#009FDE</color>
 
-    <color name="mpsdk_color_congrats_rejection_image">#990601</color>
-    <color name="mpsdk_color_congrats_call_for_authorize_image">#3188AA</color>
-    <color name="mpsdk_color_congrats_rejection_background">#D9D9D9</color>
-    <color name="mpsdk_color_congrats_call_for_authorize_background">#E3F2F8</color>
-    <color name="mpsdk_color_congrats_rejection_button_background">#F1F1F1</color>
-    <color name="mpsdk_color_congrats_rejection_result_text">#BD494A</color>
+    <color name="mpsdk_color_rejection_background">#D9D9D9</color>
+    <color name="mpsdk_color_rejection_image">#990601</color>
+    <color name="mpsdk_color_rejection_result_text">#BD494A</color>
 
     <color name="mpsdk_installments_text">#009FDE</color>
     <color name="mpsdk_installments_zero_rate">#43B000</color>
+    <color name="mpsdk_color_call_for_authorize_image">#3188AA</color>
+    <color name="mpsdk_color_call_for_authorize_background">#E3F2F8</color>
+
 </resources>

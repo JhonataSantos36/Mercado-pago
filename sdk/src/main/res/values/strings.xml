@@ -10,6 +10,7 @@
     <string name="mpsdk_title_activity_customer_pms">Medios de pago</string>
     <string name="mpsdk_title_activity_payment_methods">Medio de pago</string>
     <string name="mpsdk_payment_method">Medio de pago</string>
+    <string name="mpsdk_payment_id_description">Comprobante:</string>
     <string name="mpsdk_installments">Cuotas</string>
     <string name="mpsdk_confirm">Confirmar</string>
     <string name="mpsdk_security_code">Código de seguridad</string>
@@ -75,6 +76,21 @@
     <string name="mpsdk_text_terms_and_conditions_start">Al pagar, afirmo que soy mayor de edad y acepto los</string>
     <string name="mpsdk_text_terms_and_conditions_linked">Términos y Condiciones</string>
     <string name="mpsdk_text_terms_and_conditions_end">de MercadoPago</string>
+
+    <string name="mpsdk_title_activity_congrat">¡Listo, se acreditó tu pago!</string>
+    <string name="mpsdk_text_action_activity_congrat">Te enviaremos los datos a</string>
+    <string name="mpsdk_text_email_activity_congrat">juan-carlos@email.com</string>
+    <string name="mpsdk_text_state_acount_activity_congrat">En tu estado de cuenta verás el cargo como MERCADOPAGO</string>
+    <string name="mpsdk_text_mercado_pago">MercadoPago</string>
+    <string name="mpsdk_title_activity_call_for_authorize">Debes autorizar ante Visa el</string>
+    <string name="mpsdk_text_order_call_for_authorize">El teléfono está al dorso de tu tarjeta.</string>
+    <string name="mpsdk_text_authorized_call_for_authorize">Ya hablé con Visa y me autorizó</string>
+    <string name="mpsdk_text_question_call_for_authorize">¿No pudiste autorizarlo?</string>
+    <string name="mpsdk_text_select_other_payment_method">Elige otro medio de pago</string>
+    <string name="mpsdk_title_amount_call_for_authorize">pago de $x a</string>
+    <string name="mpsdk_title_rejection">Mastercard no procesó el pago</string>
+    <string name="mpsdk_text_select_other_rejection">Usa otra tarjeta u otro medio de pago</string>
+    <string name="mpsdk_text_other_payment_method_button_rejection">Usar otro medio de pago</string>
 
     <string name="mpsdk_error_message_invalid_amount">Monto inválido</string>
     <string name="mpsdk_error_message_invalid_item">Item inválido</string>
