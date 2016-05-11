@@ -17,6 +17,7 @@ import com.mercadopago.examples.utils.ExamplesUtils;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.CardToken;
 import com.mercadopago.model.Issuer;
+import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.Token;
 import com.mercadopago.util.ApiUtil;
@@ -51,8 +52,12 @@ public class Step1Activity extends ExampleActivity {
         mActivity = this;
 
         //TODO borrar, pruebas pantallas
+        Payment payment = new Payment();
+        payment.setId(123456789L);
+
         Intent intent = new Intent(this, CongratsActivity.class);
         startActivity(intent);
+        //
     }
 
     @Override
