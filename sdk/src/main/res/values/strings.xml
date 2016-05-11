@@ -100,5 +100,6 @@
     <string name="mpsdk_hours">horas</string>
     <string name="mpsdk_hour">hora</string>
     <string name="mpsdk_no_payment_methods_found">No hay medios de pago disponibles</string>
+    <string name="mpsdk_error_message_email_required">El email es requerido</string>
 
 </resources>

@@ -9,6 +9,8 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
+import static android.text.TextUtils.isEmpty;
+
 public class CheckoutPreference implements Serializable {
 
     private String id;
@@ -37,6 +39,13 @@ public class CheckoutPreference implements Serializable {
         else if (!this.validPaymentTypeExclusion()){
             throw new CheckoutPreferenceException(CheckoutPreferenceException.EXCLUDED_ALL_PAYMENT_TYPES);
         }
+        else if (this.hasEmail()){
+            throw new CheckoutPreferenceException(CheckoutPreferenceException.NO_EMAIL_FOUND);
+        }
+    }
+
+    private boolean hasEmail() {
+        return this.payer != null && !isEmpty(this.payer.getEmail());
     }
 
     public boolean validPaymentTypeExclusion() {

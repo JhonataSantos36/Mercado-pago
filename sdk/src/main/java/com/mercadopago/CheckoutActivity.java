@@ -14,6 +14,7 @@ import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.exceptions.CheckoutPreferenceException;
 import com.mercadopago.exceptions.ExceptionHandler;
+import com.mercadopago.exceptions.MPException;
 import com.mercadopago.fragments.ShoppingCartFragment;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.CheckoutPreference;
@@ -123,8 +124,13 @@ public class CheckoutActivity extends AppCompatActivity {
             @Override
             public void success(CheckoutPreference checkoutPreference, Response response) {
                 mCheckoutPreference = checkoutPreference;
-                validatePreference();
-                initializeCheckout();
+                try {
+                    validatePreference();
+                    initializeCheckout();
+                } catch(CheckoutPreferenceException e) {
+                    mErrorMessage = ExceptionHandler.getErrorMessage(mActivity, e);
+                    finishWithErrorMessage();
+                }
             }
 
             @Override
@@ -140,16 +146,10 @@ public class CheckoutActivity extends AppCompatActivity {
         });
     }
 
-    private void validatePreference() {
-        try {
-            mCheckoutPreference.validate();
-            if(!mCheckoutPreference.getId().equals(mCheckoutPreferenceId)) {
-                throw new CheckoutPreferenceException(CheckoutPreferenceException.PREF_ID_NOT_MATCHING_REQUESTED);
-            }
-        }
-        catch(CheckoutPreferenceException e) {
-            mErrorMessage = ExceptionHandler.getErrorMessage(this, e);
-            finishWithErrorMessage();
+    private void validatePreference() throws CheckoutPreferenceException {
+        mCheckoutPreference.validate();
+        if(!mCheckoutPreference.getId().equals(mCheckoutPreferenceId)) {
+            throw new CheckoutPreferenceException(CheckoutPreferenceException.PREF_ID_NOT_MATCHING_REQUESTED);
         }
     }
 
@@ -435,7 +435,16 @@ public class CheckoutActivity extends AppCompatActivity {
 
             @Override
             public void failure(RetrofitError error) {
-                resolvePaymentFailure(error);
+                Payment payment = new Payment();
+                payment.setPaymentMethodId(mSelectedPaymentMethod.getId());
+                payment.setPaymentTypeId(mSelectedPaymentMethod.getPaymentTypeId());
+                new MercadoPago.StartActivityBuilder()
+                        .setPublicKey(mMerchantPublicKey)
+                        .setActivity(mActivity)
+                        .setPayment(payment)
+                        .setPaymentMethod(mSelectedPaymentMethod)
+                        .startInstructionsActivity();
+                //resolvePaymentFailure(error);
             }
         });
     }
@@ -460,7 +469,8 @@ public class CheckoutActivity extends AppCompatActivity {
             TransactionManager.getInstance().releaseTransaction();
         }
         else if(apiException != null) {
-            //Any other failure from wrapper, analise
+            MPException mpException = new MPException(apiException);
+            ErrorUtil.startErrorActivity(this, mpException);
         }
     }
 
@@ -486,7 +496,7 @@ public class CheckoutActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
 
-        if(isUniquePaymentMethod()) {
+        if(mPaymentMethodSearch == null || isUniquePaymentMethod()) {
             super.onBackPressed();
         }
         else {
