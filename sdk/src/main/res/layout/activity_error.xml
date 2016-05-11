@@ -36,7 +36,7 @@
         android:id="@+id/errorImage"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        tools:src="@drawable/ic_refresh"
+        tools:src="@drawable/ic_rejected"
         android:layout_gravity="center_horizontal|top"
         android:layout_above="@+id/linearLayout"
         android:layout_centerHorizontal="true" />

@@ -124,9 +124,6 @@ public class CheckoutActivity extends AppCompatActivity {
         mMercadoPago.getPreference(mCheckoutPreferenceId, new Callback<CheckoutPreference>() {
             @Override
             public void success(CheckoutPreference checkoutPreference, Response response) {
-                Integer a = null;
-                a.toString();
-
                 mCheckoutPreference = checkoutPreference;
                 validatePreference();
                 initializeCheckout();
@@ -212,13 +209,12 @@ public class CheckoutActivity extends AppCompatActivity {
     }
 
     private void validateParameters() {
-        if(!validParameters()) {
-            throw new IllegalStateException("Invalid parameters");
+        if(isEmpty(mMerchantPublicKey)) {
+            throw new IllegalStateException("public key not set");
         }
-    }
-
-    protected boolean validParameters() {
-        return (mMerchantPublicKey != null) && (!isEmpty(mCheckoutPreferenceId));
+        else if (isEmpty(mCheckoutPreferenceId)) {
+            throw new IllegalStateException("preference id not set");
+        }
     }
 
     private void initializeActivityControls() {

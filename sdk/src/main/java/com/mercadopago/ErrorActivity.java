@@ -64,7 +64,7 @@ public class ErrorActivity extends AppCompatActivity {
         }
         else
         {
-            mErrorImageView.setImageResource(R.drawable.close);
+            mErrorImageView.setImageResource(R.drawable.ic_rejected);
             mRetryTextView.setVisibility(View.GONE);
         }
     }
