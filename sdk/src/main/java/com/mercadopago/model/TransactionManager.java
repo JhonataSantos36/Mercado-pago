@@ -21,8 +21,7 @@ public class TransactionManager {
 
     public Long getTransactionId() {
         if(transactionId == null) {
-            Double random = Math.random();
-            transactionId = Calendar.getInstance().getTimeInMillis() + Math.round(random);
+            transactionId = Calendar.getInstance().getTimeInMillis() + Math.round(Math.random()) * Math.round(Math.random());
         }
         return transactionId;
     }

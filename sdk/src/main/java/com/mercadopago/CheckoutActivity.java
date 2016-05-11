@@ -14,7 +14,6 @@ import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.exceptions.CheckoutPreferenceException;
 import com.mercadopago.exceptions.ExceptionHandler;
-import com.mercadopago.exceptions.MPException;
 import com.mercadopago.fragments.ShoppingCartFragment;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.CheckoutPreference;
@@ -123,6 +122,9 @@ public class CheckoutActivity extends AppCompatActivity {
         mMercadoPago.getPreference(mCheckoutPreferenceId, new Callback<CheckoutPreference>() {
             @Override
             public void success(CheckoutPreference checkoutPreference, Response response) {
+                Integer a = null;
+                a.toString();
+
                 mCheckoutPreference = checkoutPreference;
                 validatePreference();
                 initializeCheckout();
@@ -432,7 +434,6 @@ public class CheckoutActivity extends AppCompatActivity {
                             .setPaymentMethod(mSelectedPaymentMethod)
                             .startInstructionsActivity();
                 }
-
                 TransactionManager.getInstance().releaseTransaction();
             }
 
@@ -458,18 +459,12 @@ public class CheckoutActivity extends AppCompatActivity {
             };
         }
         else if(apiException != null && apiException.getStatus() == 503) {
+            //Payment in process
             startPaymentInProcessActivity();
             TransactionManager.getInstance().releaseTransaction();
         }
-        else if(apiException != null) { //Any other failure from wrapper
-            //Request timeout
-            ApiUtil.showApiExceptionError(this, error);
-            failureRecovery = new FailureRecovery() {
-                @Override
-                public void recover() {
-                    createPayment();
-                }
-            };
+        else if(apiException != null) {
+            //Any other failure from wrapper, analise
         }
     }
 
@@ -516,9 +511,8 @@ public class CheckoutActivity extends AppCompatActivity {
     }
 
     private void recoverFromFailure() {
-        if(failureRecovery != null) {
+        if (failureRecovery != null) {
             failureRecovery.recover();
         }
     }
-
 }
