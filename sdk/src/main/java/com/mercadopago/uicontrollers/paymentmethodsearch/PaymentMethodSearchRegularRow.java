@@ -1,4 +1,4 @@
-package com.mercadopago.uicontrollers;
+package com.mercadopago.uicontrollers.paymentmethodsearch;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.mercadopago.R;
-import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentMethodSearchItem;
 import com.mercadopago.util.MercadoPagoUtil;
 import com.mercadopago.views.MPTextView;
@@ -15,16 +14,16 @@ import com.mercadopago.views.MPTextView;
 /**
  * Created by mreverter on 29/4/16.
  */
-public class PaymentMethodOffEditableRow implements PaymentMethodViewController {
+public class PaymentMethodSearchRegularRow implements PaymentMethodSearchViewController {
 
-    private Context mContext;
-    private View mView;
+    public Context mContext;
+    private View mSeparator;
     private MPTextView mDescription;
     private MPTextView mComment;
     private ImageView mIcon;
-    private ImageView mEditImage;
+    private View mView;
 
-    public PaymentMethodOffEditableRow(Context context) {
+    public PaymentMethodSearchRegularRow(Context context) {
         mContext = context;
     }
 
@@ -33,14 +32,8 @@ public class PaymentMethodOffEditableRow implements PaymentMethodViewController 
         if(item.hasDescription()) {
             mDescription.setText(item.getDescription());
         }
-        else {
-            mDescription.setText("");
-        }
         if(item.hasComment()) {
             mComment.setText(item.getComment());
-        }
-        else {
-            mComment.setVisibility(View.GONE);
         }
         int resourceId = 0;
 
@@ -50,20 +43,9 @@ public class PaymentMethodOffEditableRow implements PaymentMethodViewController 
 
         if(resourceId != 0) {
             mIcon.setImageResource(resourceId);
-        } else {
-            mIcon.setVisibility(View.GONE);
-        }
-    }
-
-    @Override
-    public void drawPaymentMethod(PaymentMethod paymentMethod) {
-        String accreditationTimeMessage = MercadoPagoUtil.getAccreditationTimeMessage(paymentMethod.getAccreditationTime(), mContext);
-        mComment.setText(accreditationTimeMessage);
-
-        int resourceId = MercadoPagoUtil.getPaymentMethodIcon(mContext, paymentMethod.getId());
-
-        if(resourceId != 0) {
-            mIcon.setImageResource(resourceId);
+            if(itemNeedsTint(item)) {
+                setTintColor(mContext, mIcon);
+            }
         } else {
             mIcon.setVisibility(View.GONE);
         }
@@ -71,8 +53,7 @@ public class PaymentMethodOffEditableRow implements PaymentMethodViewController 
 
     @Override
     public void setOnClickListener(View.OnClickListener listener) {
-        mEditImage.setVisibility(View.VISIBLE);
-        mEditImage.setOnClickListener(listener);
+        mView.setOnClickListener(listener);
     }
 
     @Override
@@ -80,18 +61,34 @@ public class PaymentMethodOffEditableRow implements PaymentMethodViewController 
         mDescription = (MPTextView) mView.findViewById(R.id.description);
         mComment = (MPTextView) mView.findViewById(R.id.comment);
         mIcon = (ImageView) mView.findViewById(R.id.image);
-        mEditImage = (ImageView) mView.findViewById(R.id.imageEdit);
+        mSeparator = mView.findViewById(R.id.separator);
     }
 
     @Override
     public View inflateInParent(ViewGroup parent, boolean attachToRoot) {
         mView = LayoutInflater.from(mContext)
-                .inflate(R.layout.row_payment_method_edit_large, parent, attachToRoot);
+                .inflate(R.layout.row_pm_search_item, parent, attachToRoot);
         return mView;
+    }
+
+    @Override
+    public void showSeparator() {
+        mSeparator.setVisibility(View.VISIBLE);
     }
 
     @Override
     public View getView() {
         return mView;
+    }
+
+    private void setTintColor(Context mContext, ImageView mIcon) {
+        mIcon.setColorFilter(mContext.getResources().getColor(R.color.mpsdk_icon_image_color));
+    }
+
+    private boolean itemNeedsTint(PaymentMethodSearchItem paymentMethodSearchItem) {
+
+        return paymentMethodSearchItem.isGroup()
+                || paymentMethodSearchItem.isPaymentType()
+                || paymentMethodSearchItem.getId().equals("bitcoin");
     }
 }

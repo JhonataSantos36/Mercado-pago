@@ -1,15 +1,16 @@
-package com.mercadopago.uicontrollers;
+package com.mercadopago.uicontrollers.paymentmethodsearch;
 
 import android.view.View;
 
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentMethodSearchItem;
+import com.mercadopago.uicontrollers.CustomViewController;
 
 /**
  * Created by mreverter on 29/4/16.
  */
-public interface PaymentMethodViewController extends CustomViewController {
+public interface PaymentMethodSearchViewController extends CustomViewController {
     void drawPaymentMethod(PaymentMethodSearchItem item);
-    void drawPaymentMethod(PaymentMethod paymentMethod);
+    void showSeparator();
     void setOnClickListener(View.OnClickListener listener);
 }

@@ -1,4 +1,4 @@
-package com.mercadopago.uicontrollers;
+package com.mercadopago.uicontrollers.paymentmethodsearch;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,8 +7,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.mercadopago.R;
-import com.mercadopago.core.MercadoPago;
-import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentMethodSearchItem;
 import com.mercadopago.util.MercadoPagoUtil;
 import com.mercadopago.views.MPTextView;
@@ -16,10 +14,11 @@ import com.mercadopago.views.MPTextView;
 /**
  * Created by mreverter on 29/4/16.
  */
-public class PaymentMethodSearchLargeRow implements PaymentMethodViewController {
+public class PaymentMethodSearchLargeRow implements PaymentMethodSearchViewController {
 
     private Context mContext;
     private View mView;
+    private View mSeparator;
     private MPTextView mDescription;
     private MPTextView mComment;
     private ImageView mIcon;
@@ -43,6 +42,7 @@ public class PaymentMethodSearchLargeRow implements PaymentMethodViewController 
         mDescription = (MPTextView) mView.findViewById(R.id.description);
         mComment = (MPTextView) mView.findViewById(R.id.comment);
         mIcon = (ImageView) mView.findViewById(R.id.image);
+        mSeparator = mView.findViewById(R.id.separator);
     }
 
     public void drawPaymentMethod(PaymentMethodSearchItem item) {
@@ -66,17 +66,8 @@ public class PaymentMethodSearchLargeRow implements PaymentMethodViewController 
     }
 
     @Override
-    public void drawPaymentMethod(PaymentMethod paymentMethod) {
-        String accreditationTimeMessage = MercadoPagoUtil.getAccreditationTimeMessage(paymentMethod.getAccreditationTime(), mContext);
-        mComment.setText(accreditationTimeMessage);
-
-        int resourceId = MercadoPagoUtil.getPaymentMethodIcon(mContext, paymentMethod.getId());
-
-        if(resourceId != 0) {
-            mIcon.setImageResource(resourceId);
-        } else {
-            mIcon.setVisibility(View.GONE);
-        }
+    public void showSeparator() {
+        mSeparator.setVisibility(View.VISIBLE);
     }
 
     @Override

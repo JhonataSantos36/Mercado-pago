@@ -99,4 +99,8 @@
     <string name="mpsdk_hours">horas</string>
     <string name="mpsdk_hour">hora</string>
 
+    <string name="mpsdk_zero_rate">Sin intereses</string>
+    <string name="mpsdk_installments_of">de</string>
+    <string name="mpsdk_card_installments_title">¿En cuántas mensualidades?</string>
+
 </resources>

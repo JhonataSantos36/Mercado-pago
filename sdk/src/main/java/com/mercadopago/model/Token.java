@@ -23,6 +23,8 @@ public class Token implements Serializable {
     private Integer expirationYear;
     private Date lastModifiedDate;
     private Date dueDate;
+    private String firstSixDigits;
+    private String lastFourDigits;
 
     public Integer getSecurityCodeLength() {
         return securityCodeLength;
@@ -136,6 +138,18 @@ public class Token implements Serializable {
         this.publicKey = publicKey;
     }
 
+    public String getLastFourDigits() {
+        return lastFourDigits;
+    }
+
+    public void setLastFourDigits(String lastFourDigits) {
+        this.lastFourDigits = lastFourDigits;
+    }
+
+    public String getFirstSixDigits() {
+        return firstSixDigits;
+    }
+
     public static Token parseJson(String json) {
 
         Gson gson = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).serializeNulls().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").create();
@@ -147,4 +161,5 @@ public class Token implements Serializable {
         Gson gson = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).serializeNulls().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").create();
         return gson.toJson(this);
     }
+
 }

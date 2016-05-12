@@ -23,13 +23,14 @@ import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentMethodSearch;
 import com.mercadopago.model.PaymentMethodSearchItem;
 import com.mercadopago.model.Token;
+import com.mercadopago.uicontrollers.payercosts.PayerCostViewController;
+import com.mercadopago.uicontrollers.paymentmethods.PaymentMethodViewController;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.CurrenciesUtil;
 import com.mercadopago.util.LayoutUtil;
 import com.mercadopago.util.MercadoPagoUtil;
 import com.mercadopago.views.MPButton;
 import com.mercadopago.views.MPTextView;
-import com.mercadopago.uicontrollers.PaymentMethodViewController;
 import com.mercadopago.uicontrollers.ViewControllerFactory;
 
 import java.math.BigDecimal;
@@ -65,6 +66,9 @@ public class CheckoutActivity extends AppCompatActivity {
     protected String mErrorMessage;
     protected boolean mPaymentMethodEditionRequested;
 
+    protected PaymentMethodViewController mPaymentMethodRow;
+    protected PayerCostViewController mPayerCostRow;
+
     //Controls
     protected MPTextView mTermsAndConditionsTextView;
     protected MPTextView mCancelTextView;
@@ -72,6 +76,7 @@ public class CheckoutActivity extends AppCompatActivity {
     protected MPButton mPayButton;
     protected View mContentView;
     protected RelativeLayout mPaymentMethodLayout;
+    protected RelativeLayout mPayerCostLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -224,6 +229,7 @@ public class CheckoutActivity extends AppCompatActivity {
         mTotalAmountTextView = (MPTextView) findViewById(R.id.totalAmount);
         mContentView = findViewById(R.id.contentLayout);
         mPaymentMethodLayout = (RelativeLayout) findViewById(R.id.paymentMethodLayout);
+        mPayerCostLayout = (RelativeLayout) findViewById(R.id.payerCostLayout);
 
     }
 
@@ -320,17 +326,72 @@ public class CheckoutActivity extends AppCompatActivity {
     }
 
     private void showReviewAndConfirm() {
+        mSelectedPayerCost = new PayerCost();
+        mSelectedPayerCost.setInstallments(3);
+        mSelectedPayerCost.setInstallmentAmount(new BigDecimal(1));
+        mSelectedPayerCost.setTotalAmount(new BigDecimal(3));
+        mSelectedPayerCost.setInstallmentRate(new BigDecimal(0));
+
         drawPaymentMethodRow();
+        if(mSelectedPayerCost != null) {
+            drawPayerCost();
+        }
         drawTermsAndConditionsText();
         setAmountLabel();
     }
 
-    private void setAmountLabel() {
-        mTotalAmountTextView.setText(getAmountLabel());
+
+    private void drawPaymentMethodRow() {
+        mSelectedPaymentMethod.setPaymentTypeId("credit_card");
+        mSelectedPaymentMethod.setId("visa");
+        mCreatedToken = new Token();
+        mCreatedToken.setTruncCardNumber("4509953566233704");
+        mCreatedToken.setLastFourDigits("1234");
+
+        mPaymentMethodLayout.removeAllViewsInLayout();
+
+        if(MercadoPagoUtil.isCardPaymentType(mSelectedPaymentMethod.getPaymentTypeId())) {
+            mPaymentMethodRow = ViewControllerFactory.getPaymentMethodOnEditionViewController(this, mSelectedPaymentMethod, mCreatedToken);
+        }
+        else {
+            PaymentMethodSearchItem item = mPaymentMethodSearch.getSearchItemByPaymentMethod(mSelectedPaymentMethod);
+            mPaymentMethodRow = ViewControllerFactory.getPaymentMethodOffEditionViewController(this, item);
+        }
+
+        mPaymentMethodRow.inflateInParent(mPaymentMethodLayout, true);
+        mPaymentMethodRow.initializeControls();
+        mPaymentMethodRow.drawPaymentMethod();
+
+        if(!isUniquePaymentMethod()) {
+            mPaymentMethodRow.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mPaymentMethodEditionRequested = true;
+                    startPaymentVaultActivity();
+                    animateBackToPaymentVault();
+                }
+            });
+        }
     }
 
-    private void animateBackFromPaymentEdition() {
-        overridePendingTransition(R.anim.slide_right_to_left_in, R.anim.slide_right_to_left_out);
+    private void drawPayerCost() {
+
+        mPaymentMethodRow.showSeparator();
+
+        mPayerCostRow = ViewControllerFactory.getPayerCostEditionViewController(this, mCheckoutPreference.getItems().get(0).getCurrencyId());
+        mPayerCostRow.inflateInParent(mPayerCostLayout, true);
+        mPayerCostRow.initializeControls();
+        mPayerCostRow.drawPayerCost(mSelectedPayerCost);
+        mPayerCostRow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO start payer costs activity
+            }
+        });
+    }
+
+    private void setAmountLabel() {
+        mTotalAmountTextView.setText(getAmountLabel());
     }
 
     private void drawTermsAndConditionsText() {
@@ -341,32 +402,8 @@ public class CheckoutActivity extends AppCompatActivity {
         mTermsAndConditionsTextView.setText(Html.fromHtml(termsAndConditionsText.toString()));
     }
 
-    private void drawPaymentMethodRow() {
-        mPaymentMethodLayout.removeAllViewsInLayout();
-        PaymentMethodSearchItem item = mPaymentMethodSearch.getSearchItemByPaymentMethod(mSelectedPaymentMethod);
-
-        PaymentMethodViewController paymentMethodViewController = ViewControllerFactory.getPaymentMethodEditionViewController(this);
-
-        paymentMethodViewController.inflateInParent(mPaymentMethodLayout, true);
-        paymentMethodViewController.initializeControls();
-
-        if(item != null) {
-            paymentMethodViewController.drawPaymentMethod(item);
-        }
-        else {
-            paymentMethodViewController.drawPaymentMethod(mSelectedPaymentMethod);
-        }
-        if(!isUniquePaymentMethod()) {
-            paymentMethodViewController.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mPaymentMethodEditionRequested = true;
-                    startPaymentVaultActivity();
-                    animateBackToPaymentVault();
-                }
-            });
-        }
-
+    private void animateBackFromPaymentEdition() {
+        overridePendingTransition(R.anim.slide_right_to_left_in, R.anim.slide_right_to_left_out);
     }
 
     private boolean isUniquePaymentMethod() {

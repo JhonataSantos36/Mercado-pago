@@ -58,6 +58,7 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:id="@+id/separator"
+            android:visibility="gone"
             android:background="@color/mpsdk_separator"
             android:layout_alignLeft="@+id/comment"
             android:layout_alignStart="@+id/comment"

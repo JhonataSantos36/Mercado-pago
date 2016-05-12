@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import com.mercadopago.R;
 import com.mercadopago.callbacks.OnSelectedCallback;
 import com.mercadopago.model.PaymentMethodSearchItem;
-import com.mercadopago.uicontrollers.PaymentMethodViewController;
+import com.mercadopago.uicontrollers.paymentmethodsearch.PaymentMethodSearchViewController;
 import com.mercadopago.uicontrollers.ViewControllerFactory;
 
 import java.util.List;
@@ -34,7 +34,7 @@ public class PaymentMethodSearchItemAdapter extends RecyclerView.Adapter<Payment
 
         PaymentMethodSearchItem item = mItems.get(position);
 
-        PaymentMethodViewController paymentMethodSearchRow = ViewControllerFactory.getPaymentMethodSelectionViewController(item, mContext);
+        PaymentMethodSearchViewController paymentMethodSearchRow = ViewControllerFactory.getPaymentMethodSelectionViewController(item, mContext);
 
         paymentMethodSearchRow.inflateInParent(parent, false);
 
@@ -70,8 +70,8 @@ public class PaymentMethodSearchItemAdapter extends RecyclerView.Adapter<Payment
         holder.mPaymentMethodSearchViewController.drawPaymentMethod(paymentMethodSearchItem);
 
         holder.mItem = mItems.get(position);
-        if(position == mItems.size()-1) {
-            holder.mSeparator.setVisibility(View.GONE);
+        if(position != mItems.size()-1) {
+            holder.mPaymentMethodSearchViewController.showSeparator();
         }
     }
 
@@ -83,13 +83,11 @@ public class PaymentMethodSearchItemAdapter extends RecyclerView.Adapter<Payment
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         private PaymentMethodSearchItem mItem;
-        private View mSeparator;
-        private PaymentMethodViewController mPaymentMethodSearchViewController;
+        private PaymentMethodSearchViewController mPaymentMethodSearchViewController;
 
-        public ViewHolder(PaymentMethodViewController paymentMethodViewController) {
+        public ViewHolder(PaymentMethodSearchViewController paymentMethodViewController) {
             super(paymentMethodViewController.getView());
             mPaymentMethodSearchViewController = paymentMethodViewController;
-            mSeparator = itemView.findViewById(R.id.separator);
 
             mPaymentMethodSearchViewController.initializeControls();
             mPaymentMethodSearchViewController.setOnClickListener(new View.OnClickListener() {

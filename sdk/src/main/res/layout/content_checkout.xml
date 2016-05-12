@@ -13,7 +13,14 @@
             android:orientation="vertical">
              <RelativeLayout
                 android:id="@+id/paymentMethodLayout"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/mpsdk_white_background"
+                xmlns:android="http://schemas.android.com/apk/res/android">
+            </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/payerCostLayout"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/mpsdk_white_background"
                 xmlns:android="http://schemas.android.com/apk/res/android">
