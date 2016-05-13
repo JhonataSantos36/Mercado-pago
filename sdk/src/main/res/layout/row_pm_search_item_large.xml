@@ -1,81 +1,74 @@
-<RelativeLayout
-    android:layout_width="fill_parent"
-    android:layout_height="@dimen/list_item_height_large"
-    android:orientation="horizontal"
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
     android:paddingLeft="10dp"
     android:paddingStart="10dp"
     android:background="@color/mpsdk_white"
     android:minHeight="45dp"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-    <RelativeLayout
-            android:id="@+id/rowLayout"
-            android:layout_width="fill_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/list_item_height_large"
+        android:orientation="horizontal"
+        android:weightSum="1">
+        <RelativeLayout
+            android:layout_weight="0.99"
+                android:layout_width="0dp"
+                android:layout_height="match_parent">
+            <ImageView
+                android:layout_marginTop="8dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxWidth="100dp"
+                android:maxHeight="25dp"
+                android:src="@drawable/cargavirtual"
+                android:adjustViewBounds="true"
+                android:id="@+id/image"
+                android:layout_gravity="center_vertical"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_above="@+id/comment" />
 
-        <ImageView
-            android:layout_marginTop="8dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:maxWidth="100dp"
-            android:maxHeight="25dp"
-            android:src="@drawable/cargavirtual"
-            android:adjustViewBounds="true"
-            android:id="@+id/image"
-            android:layout_gravity="center_vertical"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_above="@+id/comment" />
+            <com.mercadopago.views.MPTextView
+                android:id="@+id/comment"
+                android:layout_marginBottom="12dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="Hola, soy un comentario"
+                android:layout_alignParentBottom="true"
+                android:layout_alignStart="@+id/image"
+                android:layout_alignLeft="@+id/image"
+                style="@style/mpsdk_list_label_comment"/>
 
-        <com.mercadopago.views.MPTextView
-            android:id="@+id/comment"
-            android:layout_marginBottom="12dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            tools:text="Hola, soy un comentario"
-            android:layout_alignParentBottom="true"
-            android:layout_alignStart="@+id/image"
-            android:layout_alignLeft="@+id/image"
-            style="@style/mpsdk_list_label_comment"/>
+            <com.mercadopago.views.MPTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
+                android:gravity="center_vertical"
+                style="@style/mpsdk_list_label"
+                android:id="@+id/description"
+                android:layout_toRightOf="@+id/image"
+                android:layout_toEndOf="@+id/image"
+                android:layout_alignTop="@+id/image"
+                android:layout_above="@+id/comment" />
+
+        </RelativeLayout>
 
         <ImageView
             android:layout_width="15dp"
-            android:layout_height="10dp"
-            android:layout_marginEnd="5dp"
-            android:layout_marginRight="5dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:src="@drawable/arrow_right"
             android:adjustViewBounds="true"
-            android:id="@+id/imageArrow"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentBottom="true"
-            android:tint="@color/mpsdk_warm_grey"/>
-        <View
-            android:layout_alignParentBottom="true"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:id="@+id/separator"
-            android:visibility="gone"
-            android:background="@color/mpsdk_separator"
-            android:layout_alignLeft="@+id/comment"
-            android:layout_alignStart="@+id/comment"
-            android:layout_gravity="center_horizontal|bottom" />
-
-        <com.mercadopago.views.MPTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginStart="10dp"
-            android:gravity="center_vertical"
-            style="@style/mpsdk_list_label"
-            android:id="@+id/description"
-            android:layout_toRightOf="@+id/image"
-            android:layout_toEndOf="@+id/image"
-            android:layout_alignTop="@+id/image"
-            android:layout_above="@+id/comment" />
-
-    </RelativeLayout>
-</RelativeLayout>
+            android:id="@+id/editHint"/>
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:id="@+id/separator"
+        android:background="@color/mpsdk_separator"/>
+</LinearLayout>

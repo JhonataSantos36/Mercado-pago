@@ -15,7 +15,7 @@
         android:weightSum="1"
         android:orientation="horizontal">
         <LinearLayout
-            android:layout_weight="0.95"
+            android:layout_weight="0.99"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:orientation="horizontal">
@@ -64,22 +64,16 @@
                     style="@style/mpsdk_list_label_comment"/>
             </RelativeLayout>
         </LinearLayout>
-        <FrameLayout
-            android:layout_width="30dp"
-            android:layout_height="match_parent">
-            <ImageView
-                android:layout_width="15dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:src="@drawable/arrow_right"
-                android:adjustViewBounds="true"
-                android:visibility="visible"
-                android:id="@+id/imageEdit"
-                android:tint="@color/mpsdk_colorPrimary"/>
-        </FrameLayout>
+        <ImageView
+            android:layout_width="15dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/arrow_right"
+            android:adjustViewBounds="true"
+            android:id="@+id/editHint"
+            android:tint="@color/mpsdk_colorPrimary"/>
     </LinearLayout>
     <View
-        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:id="@+id/separator"

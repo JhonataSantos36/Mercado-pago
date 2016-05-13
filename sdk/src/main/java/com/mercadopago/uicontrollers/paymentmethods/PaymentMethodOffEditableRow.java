@@ -25,7 +25,7 @@ public class PaymentMethodOffEditableRow implements PaymentMethodViewController 
     private MPTextView mDescription;
     private MPTextView mComment;
     private ImageView mIcon;
-    private ImageView mEditImage;
+    private View mEditHint;
 
     public PaymentMethodOffEditableRow(Context context, PaymentMethodSearchItem item) {
         mContext = context;
@@ -80,8 +80,8 @@ public class PaymentMethodOffEditableRow implements PaymentMethodViewController 
 
     @Override
     public void setOnClickListener(View.OnClickListener listener) {
-        mEditImage.setVisibility(View.VISIBLE);
-        mEditImage.setOnClickListener(listener);
+        mEditHint.setVisibility(View.VISIBLE);
+        mView.setOnClickListener(listener);
     }
 
     @Override
@@ -89,8 +89,11 @@ public class PaymentMethodOffEditableRow implements PaymentMethodViewController 
         mComment = (MPTextView) mView.findViewById(R.id.comment);
         mDescription = (MPTextView) mView.findViewById(R.id.description);
         mIcon = (ImageView) mView.findViewById(R.id.image);
-        mEditImage = (ImageView) mView.findViewById(R.id.imageEdit);
+        mEditHint = mView.findViewById(R.id.editHint);
         mSeparator = mView.findViewById(R.id.separator);
+
+        mEditHint.setVisibility(View.GONE);
+        mSeparator.setVisibility(View.GONE);
     }
 
     @Override

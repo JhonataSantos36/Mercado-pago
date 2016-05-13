@@ -8,13 +8,9 @@ import android.widget.ImageView;
 
 import com.mercadopago.R;
 import com.mercadopago.model.PaymentMethod;
-import com.mercadopago.model.PaymentMethodSearchItem;
 import com.mercadopago.model.Token;
-import com.mercadopago.uicontrollers.paymentmethodsearch.PaymentMethodSearchViewController;
 import com.mercadopago.util.MercadoPagoUtil;
 import com.mercadopago.views.MPTextView;
-
-import static android.text.TextUtils.isEmpty;
 
 /**
  * Created by mreverter on 12/5/16.
@@ -28,7 +24,7 @@ public class PaymentMethodCardEditableRow implements PaymentMethodViewController
     private View mView;
     private MPTextView mDescription;
     private ImageView mIcon;
-    private ImageView mEditImage;
+    private View mEditHint;
 
     public PaymentMethodCardEditableRow(Context context, PaymentMethod paymentMethod, Token token) {
         mContext = context;
@@ -52,15 +48,15 @@ public class PaymentMethodCardEditableRow implements PaymentMethodViewController
 
     @Override
     public void setOnClickListener(View.OnClickListener listener) {
-        mEditImage.setVisibility(View.VISIBLE);
-        mEditImage.setOnClickListener(listener);
+        mEditHint.setVisibility(View.VISIBLE);
+        mView.setOnClickListener(listener);
     }
 
     @Override
     public void initializeControls() {
         mDescription = (MPTextView) mView.findViewById(R.id.description);
         mIcon = (ImageView) mView.findViewById(R.id.image);
-        mEditImage = (ImageView) mView.findViewById(R.id.imageEdit);
+        mEditHint = mView.findViewById(R.id.editHint);
         mSeparator = mView.findViewById(R.id.separator);
     }
 

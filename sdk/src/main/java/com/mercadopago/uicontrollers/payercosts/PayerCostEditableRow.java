@@ -27,7 +27,7 @@ public class PayerCostEditableRow implements PayerCostViewController {
     private TextView mInstallmentsTextView;
     private TextView mZeroRateText;
     private TextView mRateText;
-    private ImageView mEditImage;
+    private View mEditHint;
 
     public PayerCostEditableRow(Context context, String currencyId) {
         this.mContext = context;
@@ -73,7 +73,8 @@ public class PayerCostEditableRow implements PayerCostViewController {
 
     @Override
     public void setOnClickListener(View.OnClickListener listener) {
-        mEditImage.setOnClickListener(listener);
+        mEditHint.setVisibility(View.VISIBLE);
+        mView.setOnClickListener(listener);
     }
 
     @Override
@@ -81,7 +82,9 @@ public class PayerCostEditableRow implements PayerCostViewController {
         mInstallmentsTextView = (TextView) mView.findViewById(R.id.installments_text);
         mZeroRateText = (TextView) mView.findViewById(R.id.installments_zero_rate);
         mRateText = (TextView) mView.findViewById(R.id.installments_with_rate);
-        mEditImage = (ImageView) mView.findViewById(R.id.imageEdit);
+        mEditHint = mView.findViewById(R.id.editHint);
+
+        mEditHint.setVisibility(View.GONE);
     }
 
     @Override

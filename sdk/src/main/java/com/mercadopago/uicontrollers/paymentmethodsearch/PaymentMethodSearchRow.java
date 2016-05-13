@@ -43,6 +43,8 @@ public class PaymentMethodSearchRow implements PaymentMethodSearchViewController
         mComment = (MPTextView) mView.findViewById(R.id.comment);
         mIcon = (ImageView) mView.findViewById(R.id.image);
         mSeparator = mView.findViewById(R.id.separator);
+
+        mSeparator.setVisibility(View.GONE);
     }
 
     public void drawPaymentMethod(PaymentMethodSearchItem item) {
