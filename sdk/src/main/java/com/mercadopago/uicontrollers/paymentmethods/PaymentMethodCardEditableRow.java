@@ -39,8 +39,9 @@ public class PaymentMethodCardEditableRow implements PaymentMethodViewController
     @Override
     public void drawPaymentMethod() {
 
-        mDescription.setText(mContext.getString(R.string.mpsdk_last_digits_label) + " " + mToken.getLastFourDigits());
-
+        if(mToken != null) {
+            mDescription.setText(mContext.getString(R.string.mpsdk_last_digits_label) + " " + mToken.getLastFourDigits());
+        }
         int resourceId = MercadoPagoUtil.getPaymentMethodIcon(mContext, mPaymentMethod.getId());
         if(resourceId != 0) {
             mIcon.setImageResource(resourceId);

@@ -5,6 +5,7 @@ import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mercadopago.R;
@@ -26,6 +27,7 @@ public class PayerCostEditableRow implements PayerCostViewController {
     private TextView mInstallmentsTextView;
     private TextView mZeroRateText;
     private TextView mRateText;
+    private ImageView mEditImage;
 
     public PayerCostEditableRow(Context context, String currencyId) {
         this.mContext = context;
@@ -71,7 +73,7 @@ public class PayerCostEditableRow implements PayerCostViewController {
 
     @Override
     public void setOnClickListener(View.OnClickListener listener) {
-
+        mEditImage.setOnClickListener(listener);
     }
 
     @Override
@@ -79,6 +81,7 @@ public class PayerCostEditableRow implements PayerCostViewController {
         mInstallmentsTextView = (TextView) mView.findViewById(R.id.installments_text);
         mZeroRateText = (TextView) mView.findViewById(R.id.installments_zero_rate);
         mRateText = (TextView) mView.findViewById(R.id.installments_with_rate);
+        mEditImage = (ImageView) mView.findViewById(R.id.imageEdit);
     }
 
     @Override

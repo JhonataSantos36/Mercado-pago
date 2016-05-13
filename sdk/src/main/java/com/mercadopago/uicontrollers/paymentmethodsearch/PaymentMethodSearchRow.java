@@ -14,16 +14,16 @@ import com.mercadopago.views.MPTextView;
 /**
  * Created by mreverter on 29/4/16.
  */
-public class PaymentMethodSearchLargeRow implements PaymentMethodSearchViewController {
+public class PaymentMethodSearchRow implements PaymentMethodSearchViewController {
 
-    private Context mContext;
-    private View mView;
-    private View mSeparator;
-    private MPTextView mDescription;
-    private MPTextView mComment;
-    private ImageView mIcon;
+    protected Context mContext;
+    protected View mView;
+    protected View mSeparator;
+    protected MPTextView mDescription;
+    protected MPTextView mComment;
+    protected ImageView mIcon;
 
-    public PaymentMethodSearchLargeRow(Context context) {
+    public PaymentMethodSearchRow(Context context) {
         mContext = context;
     }
 

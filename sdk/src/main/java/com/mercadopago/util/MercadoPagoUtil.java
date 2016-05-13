@@ -93,25 +93,25 @@ public class MercadoPagoUtil {
         }
     }
 
-    public static String getAccreditationTimeMessage(int miliseconds, Context context) {
+    public static String getAccreditationTimeMessage(Context context, int milliseconds) {
 
         String accreditationMessage;
 
-        if(miliseconds == 0) {
+        if(milliseconds == 0) {
             accreditationMessage = context.getString(R.string.mpsdk_instant_accreditation_time);
         } else {
             StringBuilder accreditationTimeMessageBuilder = new StringBuilder();
-            if (miliseconds > 1440 && miliseconds < 2880) {
+            if (milliseconds > 1440 && milliseconds < 2880) {
 
                 accreditationTimeMessageBuilder.append(context.getString(R.string.mpsdk_accreditation_time));
                 accreditationTimeMessageBuilder.append(" 1 ");
                 accreditationTimeMessageBuilder.append(context.getString(R.string.mpsdk_working_day));
 
-            }  else if(miliseconds < 1440){
+            }  else if(milliseconds < 1440){
 
                 accreditationTimeMessageBuilder.append(context.getString(R.string.mpsdk_accreditation_time));
                 accreditationTimeMessageBuilder.append(" ");
-                accreditationTimeMessageBuilder.append(miliseconds/60);
+                accreditationTimeMessageBuilder.append(milliseconds/60);
                 accreditationTimeMessageBuilder.append(" ");
                 accreditationTimeMessageBuilder.append(context.getString(R.string.mpsdk_hour));
 
@@ -119,7 +119,7 @@ public class MercadoPagoUtil {
 
                 accreditationTimeMessageBuilder.append(context.getString(R.string.mpsdk_accreditation_time));
                 accreditationTimeMessageBuilder.append(" ");
-                accreditationTimeMessageBuilder.append(miliseconds/(60*24));
+                accreditationTimeMessageBuilder.append(milliseconds/(60*24));
                 accreditationTimeMessageBuilder.append(" ");
                 accreditationTimeMessageBuilder.append(context.getString(R.string.mpsdk_working_days));
             }

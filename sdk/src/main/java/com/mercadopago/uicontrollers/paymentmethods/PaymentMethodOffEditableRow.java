@@ -9,7 +9,6 @@ import android.widget.ImageView;
 import com.mercadopago.R;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentMethodSearchItem;
-import com.mercadopago.uicontrollers.paymentmethodsearch.PaymentMethodSearchViewController;
 import com.mercadopago.util.MercadoPagoUtil;
 import com.mercadopago.views.MPTextView;
 
@@ -18,6 +17,7 @@ import com.mercadopago.views.MPTextView;
  */
 public class PaymentMethodOffEditableRow implements PaymentMethodViewController {
 
+    private PaymentMethod mPaymentMethod;
     private PaymentMethodSearchItem mItem;
     private Context mContext;
     private View mSeparator;
@@ -32,8 +32,33 @@ public class PaymentMethodOffEditableRow implements PaymentMethodViewController 
         mItem = item;
     }
 
+    public PaymentMethodOffEditableRow(Context context, PaymentMethod paymentMethod) {
+        mContext = context;
+        mPaymentMethod = paymentMethod;
+    }
+
     @Override
     public void drawPaymentMethod() {
+        if(mItem != null) {
+            drawWithSearchItem();
+        } else if(mPaymentMethod != null) {
+            drawWithPaymentMethod();
+        }
+    }
+
+    private void drawWithPaymentMethod() {
+
+        mComment.setText(MercadoPagoUtil.getAccreditationTimeMessage(mContext, mPaymentMethod.getAccreditationTime()));
+        int resourceId = MercadoPagoUtil.getPaymentMethodIcon(mContext, mPaymentMethod.getId());
+
+        if(resourceId != 0) {
+            mIcon.setImageResource(resourceId);
+        } else {
+            mIcon.setVisibility(View.GONE);
+        }
+    }
+
+    private void drawWithSearchItem() {
         if(mItem.hasDescription()) {
             mDescription.setText(mItem.getDescription());
         }

@@ -9,22 +9,14 @@ import android.widget.ImageView;
 import com.mercadopago.R;
 import com.mercadopago.model.PaymentMethodSearchItem;
 import com.mercadopago.util.MercadoPagoUtil;
-import com.mercadopago.views.MPTextView;
 
 /**
  * Created by mreverter on 29/4/16.
  */
-public class PaymentMethodSearchRegularRow implements PaymentMethodSearchViewController {
+public class PaymentMethodSearchSmallRow extends PaymentMethodSearchRow {
 
-    public Context mContext;
-    private View mSeparator;
-    private MPTextView mDescription;
-    private MPTextView mComment;
-    private ImageView mIcon;
-    private View mView;
-
-    public PaymentMethodSearchRegularRow(Context context) {
-        mContext = context;
+    public PaymentMethodSearchSmallRow(Context context) {
+        super(context);
     }
 
     @Override
@@ -52,32 +44,9 @@ public class PaymentMethodSearchRegularRow implements PaymentMethodSearchViewCon
     }
 
     @Override
-    public void setOnClickListener(View.OnClickListener listener) {
-        mView.setOnClickListener(listener);
-    }
-
-    @Override
-    public void initializeControls() {
-        mDescription = (MPTextView) mView.findViewById(R.id.description);
-        mComment = (MPTextView) mView.findViewById(R.id.comment);
-        mIcon = (ImageView) mView.findViewById(R.id.image);
-        mSeparator = mView.findViewById(R.id.separator);
-    }
-
-    @Override
     public View inflateInParent(ViewGroup parent, boolean attachToRoot) {
         mView = LayoutInflater.from(mContext)
                 .inflate(R.layout.row_pm_search_item, parent, attachToRoot);
-        return mView;
-    }
-
-    @Override
-    public void showSeparator() {
-        mSeparator.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    public View getView() {
         return mView;
     }
 
