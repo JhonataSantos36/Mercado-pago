@@ -46,6 +46,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import retrofit.Callback;
+import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;
 import retrofit.converter.GsonConverter;
 
@@ -101,14 +102,20 @@ public class MercadoPago {
         }
     }
 
-    public void createPayment(PaymentIntent paymentIntent, final Callback<Payment> callback) {
+    public void createPayment(final PaymentIntent paymentIntent, final Callback<Payment> callback) {
         if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {
-
+            RequestInterceptor requestInterceptor = new RequestInterceptor() {
+                @Override
+                public void intercept(RequestFacade request) {
+                    request.addHeader("X-Idempotency-Key", String.valueOf(paymentIntent.getTransactionId()));
+                }
+            };
             RestAdapter paymentsRestAdapter = new RestAdapter.Builder()
                     .setEndpoint(MP_API_BASE_URL)
                     .setLogLevel(Settings.RETROFIT_LOGGING)
                     .setConverter(new GsonConverter(JsonUtil.getInstance().getGson()))
                     .setClient(HttpClientUtil.getPaymentClient(this.mContext))
+                    .setRequestInterceptor(requestInterceptor)
                     .build();
 
             PaymentService service = paymentsRestAdapter.create(PaymentService.class);
