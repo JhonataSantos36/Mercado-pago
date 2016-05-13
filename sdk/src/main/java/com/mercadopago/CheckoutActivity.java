@@ -128,7 +128,7 @@ public class CheckoutActivity extends AppCompatActivity {
                 try {
                     validatePreference();
                     initializeCheckout();
-                } catch(CheckoutPreferenceException e) {
+                } catch (CheckoutPreferenceException e) {
                     mErrorMessage = ExceptionHandler.getErrorMessage(mActivity, e);
                     showError();
                 }
@@ -176,7 +176,7 @@ public class CheckoutActivity extends AppCompatActivity {
                 .show(mShoppingCartFragment)
                 .commit();
     }
-
+    
     private String getPurchaseTitleFromPreference() {
         StringBuilder purchaseTitle = new StringBuilder();
         int itemListSize = mCheckoutPreference.getItems().size();
