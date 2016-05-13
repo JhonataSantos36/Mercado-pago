@@ -48,17 +48,17 @@
                             android:layout_gravity="center_horizontal" />
 
                         <com.mercadopago.views.MPTextView
-                            android:id="@+id/paymentMethodRejectedDescription"
+                            android:id="@+id/rejectionTitle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="bottom|center"
                             android:layout_marginTop="10dp"
                             android:textSize="27dp"
                             android:textColor="@color/mpsdk_color_rejection_result_text"
-                            android:text="@string/mpsdk_title_rejection" />
+                            android:text="@string/mpsdk_title_other_reason_rejection" />
 
                         <com.mercadopago.views.MPTextView
-                            android:id="@+id/orderDescription"
+                            android:id="@+id/rejectionSubtitle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
@@ -107,7 +107,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:layout_marginTop="40dp"
-                            android:text="Ir a AliExpress"
+                            android:text="@string/mpsdk_text_go_out"
                             android:textColor="@color/mpsdk_color_link"
                             android:textSize="18dp" />
                 </LinearLayout>

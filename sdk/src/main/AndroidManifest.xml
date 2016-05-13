@@ -91,10 +91,10 @@
         <activity
             android:name=".CongratsActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.MercadoPagoTheme.NoActionBar">
-        </activity>
+            android:theme="@style/Theme.MercadoPagoTheme.NoActionBar"></activity>
         <activity android:name=".RejectionActivity" />
-        <activity android:name=".CallForAuthorizeActivity"></activity>
+        <activity android:name=".CallForAuthorizeActivity" />
+        <activity android:name=".PendingActivity"></activity>
     </application>
 
 </manifest>

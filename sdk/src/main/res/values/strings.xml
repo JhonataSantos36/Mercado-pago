@@ -78,7 +78,7 @@
     <string name="mpsdk_text_terms_and_conditions_end">de MercadoPago</string>
 
     <string name="mpsdk_title_activity_congrat">¡Listo, se acreditó tu pago!</string>
-    <string name="mpsdk_text_action_activity_congrat">Te enviaremos los datos a</string>
+    <string name="mpsdk_subtitle_action_activity_congrat">Te enviaremos los datos a</string>
     <string name="mpsdk_text_email_activity_congrat">juan-carlos@email.com</string>
     <string name="mpsdk_text_state_acount_activity_congrat">En tu estado de cuenta verás el cargo como MERCADOPAGO</string>
     <string name="mpsdk_text_mercado_pago">MercadoPago</string>
@@ -88,9 +88,23 @@
     <string name="mpsdk_text_question_call_for_authorize">¿No pudiste autorizarlo?</string>
     <string name="mpsdk_text_select_other_payment_method">Elige otro medio de pago</string>
     <string name="mpsdk_title_amount_call_for_authorize">pago de $x a</string>
-    <string name="mpsdk_title_rejection">Mastercard no procesó el pago</string>
+    <string name="mpsdk_title_other_reason_rejection">no procesó el pago</string>
+    <string name="mpsdk_title_bad_filled_other_rejection">Uy, no pudimos procesar el pago</string>
+    <string name="mpsdk_title_bad_filled_security_code_rejection">El código de seguridad no es el correcto.</string>
+    <string name="mpsdk_title_bad_filled_date_rejection">La fecha de vencimiento no es la correcta.</string>
     <string name="mpsdk_text_select_other_rejection">Usa otra tarjeta u otro medio de pago</string>
     <string name="mpsdk_text_other_payment_method_button_rejection">Usar otro medio de pago</string>
+    <string name="mpsdk_text_go_out">Seguir Comprando</string>
+    <string name="mpsdk_text_without_interest">Sin intereses</string>
+    <string name="mpsdk_title_pending">Estamos procesando el pago</string>
+    <string name="mpsdk_subtitle_pending_contingency">En menos de 1 hora te enviaremos por e-mail el resultado.</string>
+    <string name="mpsdk_title_rejection_high_risk">Por seguridad, tuvimos que rechazar tu pago</string>
+    <string name="mpsdk_subtitle_rejection_high_risk">Si quieres pagar con el dinero de tu cuenta, contactate con Atención al Cliente de MercadoPago. O si prefieres, puedes elegir otro medio de pago.</string>
+    <string name="mpsdk_subtitle_rejection_insufficient_amount">¡No te desanimes! Recárgala en cualquier banco o desde tu banca electrónica e inténtalo de nuevo. O si prefieres, puedes elegir otro medio de pago.</string>
+    <string name="mpsdk_title_rejection_max_attempts">Llegaste al límite de intentos permitidos</string>
+    <string name="mpsdk_subtitle_rejection_max_attempts">Elige otra tarjeta u otro medio de pago.</string>
+    <string name="mpsdk_subtitle_rejection_duplicated_payment">Si necesitas volver a pagar usa otra tarjeta u otro medio de pago.</string>
+    <string name="mpsdk_subtitle_rejection_card_disabled">El teléfono está al dorso de tu tarjeta.</string>
 
     <string name="mpsdk_error_message_invalid_amount">Monto inválido</string>
     <string name="mpsdk_error_message_invalid_item">Item inválido</string>
@@ -104,7 +118,6 @@
     <string name="mpsdk_error_message_invalid_preference">Preferencia inválida</string>
     <string name="mpsdk_payment_amount_to_pay">Total a pagar</string>
     <string name="mpsdk_processed_by_mercado_pago">© 1999–2016 Procesado por MercadoPago</string>
-
 
 
     <!-- TODO: Remove or change this placeholder text -->
