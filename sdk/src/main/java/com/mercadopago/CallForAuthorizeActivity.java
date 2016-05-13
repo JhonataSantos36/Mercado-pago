@@ -21,7 +21,6 @@ public class CallForAuthorizeActivity extends AppCompatActivity {
     protected MPTextView mSelectPaymentMethod;
     protected MPTextView mExitOfCallForAuthorize;
 
-
     // Activity parameters
     protected Payment mPayment;
 
@@ -74,15 +73,15 @@ public class CallForAuthorizeActivity extends AppCompatActivity {
         }
     }
 
+    protected void getActivityParameters() {
+        mPayment = (Payment) this.getIntent().getSerializableExtra("payment");
+    }
+
     protected void initializeControls() {
         mAuthorizeDescription = (MPTextView) findViewById(R.id.authorizeDescription);
         mPaymentAmountDescription = (MPTextView) findViewById(R.id.paymentAmountDescription);
         mAuthorized = (MPTextView) findViewById(R.id.authorized);
         mSelectPaymentMethod = (MPTextView) findViewById(R.id.selectPaymentMethod);
         mExitOfCallForAuthorize = (MPTextView) findViewById(R.id.exitOfCallForAuthorize);
-    }
-
-    protected void getActivityParameters() {
-        mPayment = (Payment) this.getIntent().getSerializableExtra("payment");
     }
 }

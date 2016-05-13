@@ -13,7 +13,7 @@ import static android.text.TextUtils.isEmpty;
 public class RejectionActivity extends AppCompatActivity {
 
     // Controls
-    protected MPTextView mPaymentMethodRejectedDescription;
+    protected MPTextView mRejectionTitle;
 
     // Activity parameters
     protected String mMerchantPublicKey;
@@ -25,9 +25,9 @@ public class RejectionActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_rejection);
-
         getActivityParameters();
+
+        setContentView(R.layout.activity_rejection);
         initializeControls();
         setLayoutData();
     }
@@ -37,7 +37,6 @@ public class RejectionActivity extends AppCompatActivity {
     protected void setLayoutData() {
         if (mPayment != null) {
             setPaymentMethodRejection();
-
         }
         else {
             //TODO validar si mandamos RESULT_CANCELED
@@ -49,15 +48,15 @@ public class RejectionActivity extends AppCompatActivity {
 
     protected void setPaymentMethodRejection(){
         if (mPayment.getCard() != null && !isEmpty(mPayment.getCard().getPaymentMethod().getId())){
-            mPaymentMethodRejectedDescription.setText(getString(R.string.mpsdk_title_rejection) + mPayment.getCard().getPaymentMethod().getId());
+
         }
         else{
-            mPaymentMethodRejectedDescription.setVisibility(View.GONE);
+            mRejectionTitle.setVisibility(View.GONE);
         }
     }
 
     protected void initializeControls() {
-        mPaymentMethodRejectedDescription = (MPTextView) findViewById(R.id.paymentMethodRejectedDescription);
+        mRejectionTitle = (MPTextView) findViewById(R.id.rejectionTitle);
     }
 
     protected void getActivityParameters() {

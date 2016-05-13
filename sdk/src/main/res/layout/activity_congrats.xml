@@ -47,7 +47,7 @@
                             android:src="@drawable/ok_sign" />
 
                         <com.mercadopago.views.MPTextView
-                            android:id="@+id/congratulations"
+                            android:id="@+id/congratulationsTitle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
@@ -56,13 +56,13 @@
                             android:text="@string/mpsdk_title_activity_congrat"/>
 
                         <com.mercadopago.views.MPTextView
-                            android:id="@+id/actionDescription"
+                            android:id="@+id/congratulationsSubtitle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="20dp"
                             android:gravity="bottom|center"
                             android:textSize="18dp"
-                            android:text="@string/mpsdk_text_action_activity_congrat"/>
+                            android:text="@string/mpsdk_subtitle_action_activity_congrat"/>
 
                         <com.mercadopago.views.MPTextView
                             android:id="@+id/payerEmailDescription"
@@ -127,7 +127,8 @@
                                 android:layout_marginLeft="17dp"
                                 android:gravity="bottom"
                                 android:textSize="18dp"
-                                android:text="($ 960 00)"/>
+                                android:textColor="@color/mpsdk_color_congrats_interest"
+                                android:text="@string/mpsdk_text_without_interest"/>
                         </LinearLayout>
 
                             <com.mercadopago.views.MPTextView
@@ -157,10 +158,9 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="30dp"
-                android:text="Ir a AliExpress"
+                android:text="@string/mpsdk_text_go_out"
                 android:textColor="@color/mpsdk_color_link"
-                android:textSize="18dp"
-                style="@style/small_comment"/>
+                android:textSize="18dp" />
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

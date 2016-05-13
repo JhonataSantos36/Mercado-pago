@@ -142,7 +142,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginTop="40dp"
-                    android:text="Ir a AliExpress"
+                    android:text="@string/mpsdk_text_go_out"
                     android:textColor="@color/mpsdk_color_link"
                     android:textSize="18dp" />
 

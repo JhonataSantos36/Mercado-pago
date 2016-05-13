@@ -15,16 +15,21 @@ import com.mercadopago.core.MercadoPago;
 import com.mercadopago.examples.R;
 import com.mercadopago.examples.utils.ExamplesUtils;
 import com.mercadopago.model.ApiException;
+import com.mercadopago.model.Card;
 import com.mercadopago.model.CardToken;
 import com.mercadopago.model.Issuer;
+import com.mercadopago.model.Payer;
+import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentPreference;
 import com.mercadopago.model.Token;
+import com.mercadopago.model.TransactionDetails;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,13 +59,32 @@ public class Step1Activity extends ExampleActivity {
         createPaymentPreference();
         mActivity = this;
 
-        //TODO borrar, pruebas pantallas
+        //TODO borrar, era para probar congrats
         Payment payment = new Payment();
-        payment.setId(123456789L);
+        Payer payer = new Payer();
+        Card card = new Card();
+        PaymentMethod paymentMethod = new PaymentMethod();
+
+        payment.setId(11111111L);
+        payment.setStatus("approved");
+        payment.setStatusDetail("cc_rejected_other_reason");
+        payer.setEmail("matias.romar@mercadolibre.com");
+        payment.setPayer(payer);
+        card.setLastFourDigits("2323");
+        paymentMethod.setId("master");
+        card.setPaymentMethod(paymentMethod);
+        payment.setCard(card);
+        payment.setInstallments(6);
+        TransactionDetails transactionDetails = new TransactionDetails();
+        transactionDetails.setInstallmentAmount(new BigDecimal(1000));
+        payment.setTransactionDetails(transactionDetails);
+        transactionDetails.setTotalPaidAmount(new BigDecimal(6000));
+
 
         Intent intent = new Intent(this, CongratsActivity.class);
+        intent.putExtra("payment", payment);
         startActivity(intent);
-        //
+        ////////////////////////////////////////////////
     }
 
     private void createPaymentPreference() {
