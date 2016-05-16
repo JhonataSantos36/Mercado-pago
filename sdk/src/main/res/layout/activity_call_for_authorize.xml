@@ -45,7 +45,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="15dp"
                         android:gravity="bottom|center"
-                        android:textSize="27dp"
+                        android:textSize="24dp"
                         android:text="@string/mpsdk_title_activity_call_for_authorize" />
 
                     <com.mercadopago.views.MPTextView
@@ -54,7 +54,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="bottom|center"
                         android:layout_marginTop="10dp"
-                        android:textSize="27dp"
+                        android:textSize="24dp"
                         android:text="@string/mpsdk_title_amount_call_for_authorize" />
 
                     <com.mercadopago.views.MPTextView
@@ -63,7 +63,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="bottom|center"
                         android:layout_marginTop="10dp"
-                        android:textSize="27dp"
+                        android:textSize="24dp"
                         android:text="@string/mpsdk_text_mercado_pago" />
 
                     <com.mercadopago.views.MPTextView

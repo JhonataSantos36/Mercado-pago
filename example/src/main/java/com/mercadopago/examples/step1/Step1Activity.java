@@ -65,20 +65,23 @@ public class Step1Activity extends ExampleActivity {
         Card card = new Card();
         PaymentMethod paymentMethod = new PaymentMethod();
 
-        payment.setId(11111111L);
-        payment.setStatus("approved");
-        payment.setStatusDetail("cc_rejected_other_reason");
-        payer.setEmail("matias.romar@mercadolibre.com");
+        payment.setId(123456789L);
+        payment.setStatus("in_process");
+        payment.setStatusDetail("pending_contingency");
+        payer.setEmail("juan-carlos@email.com");
         payment.setPayer(payer);
-        card.setLastFourDigits("2323");
+        card.setLastFourDigits("5676");
         paymentMethod.setId("master");
+        paymentMethod.setName("Master");
         card.setPaymentMethod(paymentMethod);
         payment.setCard(card);
         payment.setInstallments(6);
         TransactionDetails transactionDetails = new TransactionDetails();
-        transactionDetails.setInstallmentAmount(new BigDecimal(1000));
+        transactionDetails.setInstallmentAmount(new BigDecimal(173.33));
+        transactionDetails.setTotalPaidAmount(new BigDecimal(1038));
         payment.setTransactionDetails(transactionDetails);
-        transactionDetails.setTotalPaidAmount(new BigDecimal(6000));
+        payment.setCurrencyId("MXN");
+
 
 
         Intent intent = new Intent(this, CongratsActivity.class);

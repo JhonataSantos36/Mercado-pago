@@ -3,9 +3,11 @@ package com.mercadopago;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Spanned;
 import android.view.View;
 
 import com.mercadopago.model.Payment;
+import com.mercadopago.util.CurrenciesUtil;
 import com.mercadopago.views.MPTextView;
 
 import java.math.BigDecimal;
@@ -23,7 +25,6 @@ public class CallForAuthorizeActivity extends AppCompatActivity {
 
     // Activity parameters
     protected Payment mPayment;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +44,6 @@ public class CallForAuthorizeActivity extends AppCompatActivity {
             setAuthorized();
         }
         else {
-            //TODO validar si mandamos RESULT_CANCELED
             Intent returnIntent = new Intent();
             setResult(RESULT_CANCELED, returnIntent);
             finish();
@@ -51,8 +51,11 @@ public class CallForAuthorizeActivity extends AppCompatActivity {
     }
 
     protected void setAuthorized(){
-        if (mPayment.getCard() != null && !isEmpty(mPayment.getCard().getPaymentMethod().getId())){
-            mAuthorized.setText(getString(R.string.mpsdk_text_authorized_call_for_authorize) + mPayment.getCard().getPaymentMethod().getId());
+        if (mPayment.getCard() != null && mPayment.getPaymentMethodId() != null &&
+                mPayment.getCard().getPaymentMethod().getName() != null && !isEmpty(mPayment.getCard().getPaymentMethod().getName())){
+
+            String message = "Ya hablé con " + mPayment.getCard().getPaymentMethod().getName() + "y me autorizó";
+            mAuthorized.setText(message);
         }
         else{
             mAuthorized.setVisibility(View.GONE);
@@ -60,12 +63,17 @@ public class CallForAuthorizeActivity extends AppCompatActivity {
     }
 
     protected void setDescription() {
-        if (mPayment.getCard() != null && !isEmpty(mPayment.getCard().getPaymentMethod().getId()) &&
-                mPayment.getTransactionAmount() != null && mPayment.getTransactionAmount().compareTo(BigDecimal.ZERO) >= 0){
+        if (mPayment.getCard() != null && mPayment.getCard().getPaymentMethod() != null &&
+                mPayment.getCard().getPaymentMethod().getName() != null &&
+                !isEmpty(mPayment.getCard().getPaymentMethod().getName()) &&
+                mPayment.getTransactionDetails() != null &&
+                mPayment.getTransactionDetails().getTotalPaidAmount() != null ){//&& mPayment.getTransactionDetails().getTotalPaidAmount().compareTo(BigDecimal.ZERO) >= 0){
 
-            //TODO concatenar el amount con el string
-            mAuthorizeDescription.setText(getString(R.string.mpsdk_title_activity_call_for_authorize) + mPayment.getCard().getPaymentMethod().getId());
-            mPaymentAmountDescription.setText(getString(R.string.mpsdk_title_amount_call_for_authorize) + mPayment.getTransactionAmount());
+            String titlePaymentMethodMessage = getString(R.string.mpsdk_title_activity_call_for_authorize) + " " + mPayment.getCard().getPaymentMethod().getName() + " el";
+            String titlePaymentAmount = "pago de " + getInstallmentsText() + " a" ;
+
+            mAuthorizeDescription.setText(titlePaymentMethodMessage);
+            mPaymentAmountDescription.setText(titlePaymentAmount);
         }
         else {
             mAuthorizeDescription.setVisibility(View.GONE);
@@ -83,5 +91,17 @@ public class CallForAuthorizeActivity extends AppCompatActivity {
         mAuthorized = (MPTextView) findViewById(R.id.authorized);
         mSelectPaymentMethod = (MPTextView) findViewById(R.id.selectPaymentMethod);
         mExitOfCallForAuthorize = (MPTextView) findViewById(R.id.exitOfCallForAuthorize);
+    }
+
+    //TODO agregar al set paymentAmount
+    private Spanned getInstallmentsText() {
+        StringBuffer sb = new StringBuffer();
+        sb.append(mPayment.getInstallments());
+        sb.append(" ");
+        sb.append("de");
+        sb.append(" ");
+        sb.append(CurrenciesUtil.formatNumber(mPayment.getTransactionDetails().getInstallmentAmount(), mPayment.getCurrencyId()));
+        return CurrenciesUtil.formatCurrencyInText(mPayment.getTransactionDetails().getInstallmentAmount(),
+                mPayment.getCurrencyId(), sb.toString(), true, true);
     }
 }

@@ -6,14 +6,12 @@ import android.os.Bundle;
 import android.text.Spanned;
 import android.view.View;
 
-import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.Payment;
 import com.mercadopago.util.CurrenciesUtil;
 import com.mercadopago.util.MercadoPagoUtil;
 import com.mercadopago.views.MPTextView;
 
 import java.math.BigDecimal;
-import java.util.Iterator;
 
 import static android.text.TextUtils.isEmpty;
 
@@ -83,8 +81,8 @@ public class CongratsActivity extends AppCompatActivity {
 
     private void showRejection() {
         setContentView(R.layout.activity_rejection);
-        initializeRejectionControls();
-        fillRejectedData();
+        //initializeRejectionControls();
+        //fillRejectedData();
     }
 
     private void showCallForAuthorize() {
@@ -160,8 +158,9 @@ public class CongratsActivity extends AppCompatActivity {
 
     private void fillRejectedData(){
         if (mPayment.getCard() != null && !isEmpty(mPayment.getCard().getPaymentMethod().getId()) && mPayment.getStatusDetail() != null && !isEmpty(mPayment.getStatusDetail())){
+            //TODO agregar validaciones
             if (mPayment.getStatusDetail().equals("cc_rejected_other_reason")) {
-                String titleMessage = mPayment.getCard().getPaymentMethod().getId() + " " + getString(R.string.mpsdk_title_other_reason_rejection);
+                String titleMessage = mPayment.getCard().getPaymentMethod().getName() + " " + getString(R.string.mpsdk_title_other_reason_rejection);
                 mRejectionTitle.setText(titleMessage);
                 mRejectionSubtitle.setText(getString(R.string.mpsdk_text_select_other_rejection));
             }
@@ -224,7 +223,7 @@ public class CongratsActivity extends AppCompatActivity {
 
     private void setAuthorized(){
         if (mPayment.getCard() != null && !isEmpty(mPayment.getCard().getPaymentMethod().getId())){
-            String message = getString(R.string.mpsdk_text_authorized_call_for_authorize) + mPayment.getCard().getPaymentMethod().getId();
+            String message = getString(R.string.mpsdk_text_authorized_call_for_authorize) + " " + mPayment.getCard().getPaymentMethod().getName() + " " + "y me autorizó";
             mAuthorized.setText(message);
         }
         else{
@@ -233,15 +232,13 @@ public class CongratsActivity extends AppCompatActivity {
     }
 
     private void setDescription() {
-        if (mPayment.getCard() != null && !isEmpty(mPayment.getCard().getPaymentMethod().getId()) &&
-                mPayment.getTransactionAmount() != null && mPayment.getTransactionAmount().compareTo(BigDecimal.ZERO) >= 0){
+        //TODO revisar las validacionees
+        if (mPayment.getCard() != null && !isEmpty(mPayment.getCard().getPaymentMethod().getName()) &&
+                mPayment.getTransactionDetails().getTotalPaidAmount() != null && mPayment.getTransactionDetails().getTotalPaidAmount().compareTo(BigDecimal.ZERO) >= 0){
+            String authorizeDescription = getString(R.string.mpsdk_title_activity_call_for_authorize) + " " + mPayment.getCard().getPaymentMethod().getName() + " el";
 
-            String authorizeDescription = getString(R.string.mpsdk_title_activity_call_for_authorize) + mPayment.getCard().getPaymentMethod().getId();
-            String paymentAmountDescription = getString(R.string.mpsdk_title_amount_call_for_authorize) + mPayment.getTransactionAmount();
-
-            //TODO concatenar el amount con el string
             mAuthorizeDescription.setText(authorizeDescription);
-            mPaymentAmountDescription.setText(paymentAmountDescription);
+            mPaymentAmountDescription.setText(getTotalAmountText());
         }
         else {
             mAuthorizeDescription.setVisibility(View.GONE);
@@ -349,10 +346,21 @@ public class CongratsActivity extends AppCompatActivity {
         sb.append(" ");
         sb.append("de");
         sb.append(" ");
-        sb.append(CurrenciesUtil.formatNumber(mPayment.getTransactionDetails().getInstallmentAmount(), "MXN"));
+        sb.append(CurrenciesUtil.formatNumber(mPayment.getTransactionDetails().getInstallmentAmount(), mPayment.getCurrencyId()));
         return CurrenciesUtil.formatCurrencyInText(mPayment.getTransactionDetails().getInstallmentAmount(),
-                "MXN", sb.toString(), true, true);
+                mPayment.getCurrencyId(), sb.toString(), true, true);
     }
 
-
+    private Spanned getTotalAmountText() {
+        StringBuffer sb = new StringBuffer();
+        sb.append("pago");
+        sb.append(" ");
+        sb.append("de");
+        sb.append(" ");
+        sb.append(CurrenciesUtil.formatNumber(mPayment.getTransactionDetails().getTotalPaidAmount(), mPayment.getCurrencyId()));
+        sb.append(" ");
+        sb.append("a");
+        return CurrenciesUtil.formatCurrencyInText(mPayment.getTransactionDetails().getTotalPaidAmount(),
+                mPayment.getCurrencyId(), sb.toString(), true, true);
+    }
 }

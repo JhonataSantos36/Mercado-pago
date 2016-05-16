@@ -21,68 +21,63 @@
                 android:orientation="vertical"
                 android:background="@color/mpsdk_white_background">
 
-                <android.support.v7.widget.CardView
-                    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/mpsdk_card_margin"
-                    card_view:cardCornerRadius="@dimen/mpsdk_card_corner_radius"
-                    card_view:cardBackgroundColor="@color/mpsdk_color_congrats_background">
+                    android:orientation="vertical"
+                    android:background="@color/mpsdk_color_congrats_background">
 
-                    <LinearLayout
+                    <ImageView
+                        android:id="@+id/icon"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        android:layout_marginTop="26dp"
+                        android:layout_marginBottom="16dp"
+                        android:layout_gravity="center_horizontal"
+                        android:tint="@color/mpsdk_color_congrats_image"
+                        android:src="@drawable/ok_sign" />
+
+                    <com.mercadopago.views.MPTextView
+                        android:id="@+id/congratulationsTitle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:layout_marginBottom="15dp"
-                        android:orientation="vertical">
+                        android:gravity="bottom|center"
+                        android:textSize="25dp"
+                        android:text="@string/mpsdk_title_activity_congrat"/>
 
-                        <ImageView
-                            android:id="@+id/icon"
-                            android:layout_width="70dp"
-                            android:layout_height="70dp"
-                            android:layout_marginTop="26dp"
-                            android:layout_marginBottom="16dp"
-                            android:layout_gravity="center_horizontal"
-                            android:tint="@color/mpsdk_color_congrats_image"
-                            android:src="@drawable/ok_sign" />
+                    <com.mercadopago.views.MPTextView
+                        android:id="@+id/congratulationsSubtitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="18dp"
+                        android:gravity="bottom|center"
+                        android:textSize="18dp"
+                        android:text="@string/mpsdk_subtitle_action_activity_congrat"/>
 
-                        <com.mercadopago.views.MPTextView
-                            android:id="@+id/congratulationsTitle"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
-                            android:gravity="bottom|center"
-                            android:textSize="25dp"
-                            android:text="@string/mpsdk_title_activity_congrat"/>
+                    <com.mercadopago.views.MPTextView
+                        android:id="@+id/payerEmailDescription"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="1dp"
+                        android:layout_marginBottom="20dp"
+                        android:gravity="bottom|center"
+                        android:textSize="18dp"
+                        android:text="@string/mpsdk_text_email_activity_congrat"/>
 
-                        <com.mercadopago.views.MPTextView
-                            android:id="@+id/congratulationsSubtitle"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="20dp"
-                            android:gravity="bottom|center"
-                            android:textSize="18dp"
-                            android:text="@string/mpsdk_subtitle_action_activity_congrat"/>
-
-                        <com.mercadopago.views.MPTextView
-                            android:id="@+id/payerEmailDescription"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="1dp"
-                            android:layout_marginBottom="25dp"
-                            android:gravity="bottom|center"
-                            android:textSize="18dp"
-                            android:text="@string/mpsdk_text_email_activity_congrat"/>
-                    </LinearLayout>
-                </android.support.v7.widget.CardView>
-
-                <android.support.v7.widget.CardView
-                    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                    <View
+                        android:id="@+id/titleSeparator"
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:background="@color/mpsdk_separator"
+                        android:layout_gravity="center_horizontal|bottom" />
+                </LinearLayout>
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/mpsdk_card_margin"
-                    card_view:cardCornerRadius="@dimen/mpsdk_card_corner_radius"
-                    card_view:cardBackgroundColor="@color/mpsdk_white_background">
+
+                    android:background="@color/mpsdk_white_background"
+                    android:orientation="vertical">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -139,25 +134,36 @@
                                 android:textSize="18dp"
                                 android:text="@string/mpsdk_text_state_acount_activity_congrat"/>
                     </LinearLayout>
-                </android.support.v7.widget.CardView>
-
+                    <View
+                        android:id="@+id/paymentIdSeparator"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/mpsdk_separator"
+                        android:layout_gravity="center_horizontal|bottom" />
+                </LinearLayout>
                     <com.mercadopago.views.MPTextView
                         android:id="@+id/paymentIdDescription"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="20dp"
+                        android:layout_marginBottom="13dp"
+                        android:layout_marginTop="18dp"
                         android:gravity="bottom|center"
-                        android:layout_marginTop="23dp"
                         android:textSize="18dp"
                         android:text="@string/mpsdk_payment_id_description" />
             </LinearLayout>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="center"
+                android:src="@drawable/voucher_clipped_border"/>
 
             <com.mercadopago.views.MPTextView
                 android:id="@+id/exitOfCongrat"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="20dp"
                 android:text="@string/mpsdk_text_go_out"
                 android:textColor="@color/mpsdk_color_link"
                 android:textSize="18dp" />
