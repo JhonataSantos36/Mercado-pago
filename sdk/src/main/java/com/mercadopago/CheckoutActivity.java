@@ -122,9 +122,9 @@ public class CheckoutActivity extends AppCompatActivity {
         mMercadoPago.getPreference(mCheckoutPreferenceId, new Callback<CheckoutPreference>() {
             @Override
             public void success(CheckoutPreference checkoutPreference, Response response) {
-                mCheckoutPreference = checkoutPreference;
-                validatePreference();
-                initializeCheckout();
+                    mCheckoutPreference = checkoutPreference;
+                    validatePreference();
+                    initializeCheckout();
             }
 
             @Override
@@ -155,15 +155,11 @@ public class CheckoutActivity extends AppCompatActivity {
     private void initializeShoppingCart() {
         mPurchaseTitle = getPurchaseTitleFromPreference();
         mShoppingCartFragment = ShoppingCartFragment.newInstance(mCheckoutPreference.getItems().get(0).getPictureUrl(), mPurchaseTitle, mCheckoutPreference.getAmount(), mCheckoutPreference.getItems().get(0).getCurrencyId());
-        try {
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.shoppingCartFragment, mShoppingCartFragment)
-                    .show(mShoppingCartFragment)
-                    .commit();
-        } catch (Exception e) {
-            //do nothing
-        }
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.shoppingCartFragment, mShoppingCartFragment)
+                .show(mShoppingCartFragment)
+                .commit();
     }
 
     private String getPurchaseTitleFromPreference() {
