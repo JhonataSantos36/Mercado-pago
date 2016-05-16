@@ -20,7 +20,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:background="@color/mpsdk_color_light_grey">
 
                 <android.support.v7.widget.CardView
                     xmlns:card_view="http://schemas.android.com/apk/res-auto"
@@ -28,14 +29,15 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/mpsdk_card_margin"
                     card_view:cardCornerRadius="@dimen/mpsdk_card_corner_radius"
-                    card_view:cardBackgroundColor="@color/mpsdk_color_rejection_background">
+                    card_view:cardBackgroundColor="@color/mpsdk_color_rejection_title_background">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="15dp"
                         android:layout_marginBottom="15dp"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:background="@color/mpsdk_color_rejection_title_background">
 
                         <ImageView
                             android:id="@+id/icon"
@@ -85,9 +87,11 @@
                             android:layout_marginRight="10dp"
                             android:layout_marginTop="30dp"
                             android:layout_marginBottom="60dp"
+                            android:textAllCaps="false"
                             android:text="@string/mpsdk_text_other_payment_method_button_rejection"
+                            android:textSize="22dp"
                             android:textColor="@color/mpsdk_color_congrats_installments"
-                            android:background="@color/mpsdk_white_background" />
+                            android:background="@drawable/button_bg_stroke" />
 
                         <View
                             android:id="@+id/separator"

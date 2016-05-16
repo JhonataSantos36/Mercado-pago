@@ -82,13 +82,13 @@
     <string name="mpsdk_text_email_activity_congrat">juan-carlos@email.com</string>
     <string name="mpsdk_text_state_acount_activity_congrat">En tu estado de cuenta verás el cargo como MERCADOPAGO</string>
     <string name="mpsdk_text_mercado_pago">MercadoPago</string>
-    <string name="mpsdk_title_activity_call_for_authorize">Debes autorizar ante Visa el</string>
+    <string name="mpsdk_title_activity_call_for_authorize">Debes autorizar ante</string>
     <string name="mpsdk_text_order_call_for_authorize">El teléfono está al dorso de tu tarjeta.</string>
-    <string name="mpsdk_text_authorized_call_for_authorize">Ya hablé con Visa y me autorizó</string>
+    <string name="mpsdk_text_authorized_call_for_authorize">Ya hablé con</string>
     <string name="mpsdk_text_question_call_for_authorize">¿No pudiste autorizarlo?</string>
     <string name="mpsdk_text_select_other_payment_method">Elige otro medio de pago</string>
-    <string name="mpsdk_title_amount_call_for_authorize">pago de $x a</string>
-    <string name="mpsdk_title_other_reason_rejection">no procesó el pago</string>
+    <string name="mpsdk_title_amount_call_for_authorize">pago de</string>
+    <string name="mpsdk_title_other_reason_rejection">Master no procesó el pago</string>
     <string name="mpsdk_title_bad_filled_other_rejection">Uy, no pudimos procesar el pago</string>
     <string name="mpsdk_title_bad_filled_security_code_rejection">El código de seguridad no es el correcto.</string>
     <string name="mpsdk_title_bad_filled_date_rejection">La fecha de vencimiento no es la correcta.</string>
