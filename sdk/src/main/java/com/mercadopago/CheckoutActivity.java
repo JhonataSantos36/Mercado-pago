@@ -342,9 +342,6 @@ public class CheckoutActivity extends AppCompatActivity {
         else if(payment.getStatus().equals("pending")){
             builder.startRejectionActivity();
         }
-        else if(payment.getStatus().equals("call_for_authorize")){
-            builder.startCallForAuthorizeActivity();
-        }
     }
 
     private void animateBackToPaymentVault() {

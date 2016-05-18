@@ -47,7 +47,7 @@
                         android:text="@string/mpsdk_title_activity_congrat"/>
 
                     <com.mercadopago.views.MPTextView
-                        android:id="@+id/congratulationsSubtitle"
+                        android:id="@+id/congratulationSubtitle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="18dp"
@@ -116,7 +116,7 @@
                                 android:text="12 de $80 00"/>
 
                             <com.mercadopago.views.MPTextView
-                                android:id="@+id/totalAmountDescription"
+                                android:id="@+id/interestAmountDescription"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="17dp"
@@ -159,7 +159,7 @@
                 android:src="@drawable/voucher_clipped_border"/>
 
             <com.mercadopago.views.MPTextView
-                android:id="@+id/exitOfCongrat"
+                android:id="@+id/exitCongrat"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"

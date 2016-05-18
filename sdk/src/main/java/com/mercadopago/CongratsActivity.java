@@ -19,24 +19,24 @@ public class CongratsActivity extends AppCompatActivity {
 
     // Controls
     protected MPTextView mPayerEmailDescription;
-    protected MPTextView mLastFourDigitsTextView;
+    protected MPTextView mLastFourDigitsDescription;
     protected MPTextView mInstallmentsDescription;
-    protected MPTextView mTotalAmountDescription;
+    protected MPTextView mInterestAmountDescription;
     protected MPTextView mPaymentIdDescription;
     protected MPTextView mCongratulationSubtitle;
-    protected MPTextView mExitOfCongrat;
+    protected MPTextView mExitCongrat;
 
-    protected MPTextView mAuthorizeDescription;
+    protected MPTextView mPaymentMethodAuthorizeDescription;
     protected MPTextView mPaymentAmountDescription;
-    protected MPTextView mAuthorized;
-    protected MPTextView mSelectPaymentMethod;
-    protected MPTextView mExitOfCallForAuthorize;
+    protected MPTextView mAuthorizedPaymentMethod;
+    protected MPTextView mSelectOtherPaymentMethod;
+    protected MPTextView mExitCallForAuthorize;
 
     protected MPTextView mRejectionTitle;
     protected MPTextView mRejectionSubtitle;
 
     protected MPTextView mPendingSubtitle;
-    protected MPTextView mExitOfPending;
+    protected MPTextView mExitPending;
 
     // Activity parameters
     protected Payment mPayment;
@@ -51,6 +51,7 @@ public class CongratsActivity extends AppCompatActivity {
             if (mPayment.getStatus().equals("approved")){
                 showCongrats();
             }
+
             if (mPayment.getStatus().equals("in_process")){
                 showPending();
             }
@@ -99,8 +100,8 @@ public class CongratsActivity extends AppCompatActivity {
 
     private void initializePendingControls(){
         mPendingSubtitle = (MPTextView) findViewById(R.id.pendingSubtitle);
-        mExitOfPending = (MPTextView) findViewById(R.id.exitOfPending);
-        mExitOfPending.setOnClickListener(new View.OnClickListener() {
+        mExitPending = (MPTextView) findViewById(R.id.exitPending);
+        mExitPending.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent returnIntent = new Intent();
@@ -116,22 +117,30 @@ public class CongratsActivity extends AppCompatActivity {
     }
 
     private void initializeCallForAuthControls() {
-        mAuthorizeDescription = (MPTextView) findViewById(R.id.authorizeDescription);
-        mPaymentAmountDescription = (MPTextView) findViewById(R.id.paymentAmountDescription);
-        mAuthorized = (MPTextView) findViewById(R.id.authorized);
-        mSelectPaymentMethod = (MPTextView) findViewById(R.id.selectPaymentMethod);
-        mExitOfCallForAuthorize = (MPTextView) findViewById(R.id.exitOfCallForAuthorize);
+        mPaymentMethodAuthorizeDescription = (MPTextView) findViewById(R.id.callForAuthorizeTitleFirstRow);
+        mPaymentAmountDescription = (MPTextView) findViewById(R.id.callForAuthorizeTitleSecondRow);
+        mAuthorizedPaymentMethod = (MPTextView) findViewById(R.id.authorizedPaymentMethod);
+        mSelectOtherPaymentMethod = (MPTextView) findViewById(R.id.selectOtherPaymentMethod);
+        mExitCallForAuthorize = (MPTextView) findViewById(R.id.exitCallForAuthorize);
+        mExitCallForAuthorize.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent returnIntent = new Intent();
+                setResult(RESULT_OK, returnIntent);
+                finish();
+            }
+        });
     }
 
     private void initializeCongratsControls() {
         mPayerEmailDescription = (MPTextView) findViewById(R.id.payerEmailDescription);
-        mLastFourDigitsTextView = (MPTextView) findViewById(R.id.lastFourDigitsDescription);
+        mLastFourDigitsDescription = (MPTextView) findViewById(R.id.lastFourDigitsDescription);
         mInstallmentsDescription = (MPTextView) findViewById(R.id.installmentsDescription);
-        mTotalAmountDescription = (MPTextView) findViewById(R.id.totalAmountDescription);
+        mInterestAmountDescription = (MPTextView) findViewById(R.id.interestAmountDescription);
         mPaymentIdDescription = (MPTextView) findViewById(R.id.paymentIdDescription);
-        mCongratulationSubtitle = (MPTextView) findViewById(R.id.congratulationsSubtitle);
-        mExitOfCongrat = (MPTextView) findViewById(R.id.exitOfCongrat);
-        mExitOfCongrat.setOnClickListener(new View.OnClickListener() {
+        mCongratulationSubtitle = (MPTextView) findViewById(R.id.congratulationSubtitle);
+        mExitCongrat = (MPTextView) findViewById(R.id.exitCongrat);
+        mExitCongrat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent returnIntent = new Intent();
@@ -142,16 +151,26 @@ public class CongratsActivity extends AppCompatActivity {
     }
 
     private void fillPendingData(){
-        if (mPayment.getStatusDetail() != null && !isEmpty(mPayment.getStatusDetail())){
-            if(mPayment.getStatusDetail().equals("pending_contingency")){
-                mPendingSubtitle.setText(getString(R.string.mpsdk_subtitle_pending_contingency));
-            }
-            if(mPayment.getStatusDetail().equals("pending_review_manual")){
-                //TODO ver que subtitulos van
-                mPendingSubtitle.setText("Que ponemos acá?");
-            }
+        if (mPayment != null) {
+            setPendingSubtitle();
         }
         else {
+            Intent returnIntent = new Intent();
+            setResult(RESULT_CANCELED, returnIntent);
+            finish();
+        }
+    }
+
+    private void setPendingSubtitle() {
+        if (mPayment.getStatusDetail() != null && !isEmpty(mPayment.getStatusDetail())) {
+            if (mPayment.getStatusDetail().equals("pending_contingency")) {
+                mPendingSubtitle.setText(getString(R.string.mpsdk_subtitle_pending_contingency));
+            }
+            if (mPayment.getStatusDetail().equals("pending_review_manual")) {
+                //TODO ver que subtitulos van, preguntar a Cris que mensaje mostramos acá
+                mPendingSubtitle.setText(getString(R.string.mpsdk_subtitle_pending_contingency));
+            }
+        } else {
             mPendingSubtitle.setVisibility(View.GONE);
         }
     }
@@ -217,31 +236,48 @@ public class CongratsActivity extends AppCompatActivity {
     }
 
     private void fillCallForAuthData(){
-        setDescription();
-        setAuthorized();
+        if (mPayment != null) {
+            setDescription();
+            setAuthorized();
+        }
+        else {
+            Intent returnIntent = new Intent();
+            setResult(RESULT_CANCELED, returnIntent);
+            finish();
+        }
     }
 
     private void setAuthorized(){
-        if (mPayment.getCard() != null && !isEmpty(mPayment.getCard().getPaymentMethod().getId())){
+        if (mPayment.getCard() != null && mPayment.getCard().getPaymentMethod() != null  &&
+                mPayment.getCard().getPaymentMethod().getName() != null &&
+                !isEmpty(mPayment.getCard().getPaymentMethod().getName())){
+
             String message = getString(R.string.mpsdk_text_authorized_call_for_authorize) + " " + mPayment.getCard().getPaymentMethod().getName() + " " + "y me autorizó";
-            mAuthorized.setText(message);
+            mAuthorizedPaymentMethod.setText(message);
         }
         else{
-            mAuthorized.setVisibility(View.GONE);
+            mAuthorizedPaymentMethod.setVisibility(View.GONE);
         }
     }
 
     private void setDescription() {
         //TODO revisar las validacionees
-        if (mPayment.getCard() != null && !isEmpty(mPayment.getCard().getPaymentMethod().getName()) &&
-                mPayment.getTransactionDetails().getTotalPaidAmount() != null && mPayment.getTransactionDetails().getTotalPaidAmount().compareTo(BigDecimal.ZERO) >= 0){
-            String authorizeDescription = getString(R.string.mpsdk_title_activity_call_for_authorize) + " " + mPayment.getCard().getPaymentMethod().getName() + " el";
+        if (mPayment.getCard() != null && mPayment.getCard().getPaymentMethod() != null &&
+                mPayment.getCard().getPaymentMethod().getName() != null &&
+                !isEmpty(mPayment.getCard().getPaymentMethod().getName()) &&
+                mPayment.getCurrencyId() != null &&
+                !isEmpty(mPayment.getCurrencyId()) &&
+                mPayment.getTransactionDetails() != null &&
+                mPayment.getTransactionDetails().getTotalPaidAmount() != null &&
+                mPayment.getTransactionDetails().getTotalPaidAmount().compareTo(BigDecimal.ZERO) >= 0){
 
-            mAuthorizeDescription.setText(authorizeDescription);
+            String paymentMethodAuthorizeDescription = getString(R.string.mpsdk_title_activity_call_for_authorize) + " " + mPayment.getCard().getPaymentMethod().getName() + " el";
+
+            mPaymentMethodAuthorizeDescription.setText(paymentMethodAuthorizeDescription);
             mPaymentAmountDescription.setText(getTotalAmountText());
         }
         else {
-            mAuthorizeDescription.setVisibility(View.GONE);
+            mPaymentMethodAuthorizeDescription.setVisibility(View.GONE);
             mPaymentAmountDescription.setVisibility(View.GONE);
         }
     }
@@ -251,8 +287,8 @@ public class CongratsActivity extends AppCompatActivity {
             setPaymentEmailDescription();
             setLastFourDigitsCard();
             setInstallmentsDescription();
-            setTotalAmountDescription();
-            setPaymentDescription();
+            setInterestAmountDescription();
+            setPaymentIdDescription();
         }
         else {
             Intent returnIntent = new Intent();
@@ -261,9 +297,9 @@ public class CongratsActivity extends AppCompatActivity {
         }
     }
 
-    private void setPaymentDescription() {
+    private void setPaymentIdDescription() {
         if(mPayment.getId() != null && mPayment.getId() >= 0){
-            String message = getString(R.string.mpsdk_payment_id_description) + mPayment.getId();
+            String message = getString(R.string.mpsdk_payment_id_description) + " " + mPayment.getId();
             mPaymentIdDescription.setText(message);
         }
         else{
@@ -271,20 +307,20 @@ public class CongratsActivity extends AppCompatActivity {
         }
     }
 
-    private void setTotalAmountDescription() {
+    private void setInterestAmountDescription() {
         if(mPayment.getTransactionDetails() != null && mPayment.getTransactionDetails().getTotalPaidAmount() != null
                 && (mPayment.getTransactionDetails().getTotalPaidAmount().compareTo(BigDecimal.ZERO))>=0){
 
             if (hasInterests()){
                 String message = "(" + (mPayment.getTransactionDetails().getTotalPaidAmount()).toString() + ")";
-                mTotalAmountDescription.setText(message);
+                mInterestAmountDescription.setText(message);
             }
             else{
-                mTotalAmountDescription.setText(getString(R.string.mpsdk_text_without_interest));
+                mInterestAmountDescription.setText(getString(R.string.mpsdk_text_without_interest));
             }
         }
         else{
-            mTotalAmountDescription.setVisibility(View.GONE);
+            mInterestAmountDescription.setVisibility(View.GONE);
         }
     }
 
@@ -301,7 +337,10 @@ public class CongratsActivity extends AppCompatActivity {
 
     private void setInstallmentsDescription() {
         if (mPayment.getInstallments() != null && mPayment.getInstallments() >= 0
-                && mPayment.getTransactionDetails().getInstallmentAmount() != null){
+                && mPayment.getTransactionDetails() != null
+                && mPayment.getTransactionDetails().getInstallmentAmount() != null
+                && mPayment.getTransactionDetails().getInstallmentAmount().compareTo(BigDecimal.ZERO) >= 0){
+
             mInstallmentsDescription.setText(getInstallmentsText());
         }
         else {
@@ -310,14 +349,16 @@ public class CongratsActivity extends AppCompatActivity {
     }
 
     private void setLastFourDigitsCard() {
-        if (mPayment.getCard() != null && !isEmpty(mPayment.getCard().getLastFourDigits()) && !isEmpty(mPayment.getCard().getPaymentMethod().getId())){
-            String message = getString(R.string.mpsdk_last_digits_label) + " " + mPayment.getCard().getLastFourDigits();
+        if (mPayment.getCard() != null && mPayment.getCard().getLastFourDigits() != null &&
+                !isEmpty(mPayment.getCard().getLastFourDigits()) &&
+                !isEmpty(mPayment.getCard().getPaymentMethod().getName())){
 
-            mLastFourDigitsTextView.setText(message);
-            mLastFourDigitsTextView.setCompoundDrawablesWithIntrinsicBounds(MercadoPagoUtil.getPaymentMethodIcon(this, mPayment.getCard().getPaymentMethod().getId()), 0, 0, 0);
+            String message = getString(R.string.mpsdk_last_digits_label) + " " + mPayment.getCard().getLastFourDigits();
+            mLastFourDigitsDescription.setText(message);
+            mLastFourDigitsDescription.setCompoundDrawablesWithIntrinsicBounds(MercadoPagoUtil.getPaymentMethodIcon(this, mPayment.getCard().getPaymentMethod().getId()), 0, 0, 0);
         }
         else{
-            mLastFourDigitsTextView.setVisibility(View.GONE);
+            mLastFourDigitsDescription.setVisibility(View.GONE);
         }
     }
 
