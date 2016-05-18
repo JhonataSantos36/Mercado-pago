@@ -154,7 +154,10 @@ public class CheckoutActivity extends AppCompatActivity {
 
     private void initializeShoppingCart() {
         mPurchaseTitle = getPurchaseTitleFromPreference();
-        mShoppingCartFragment = ShoppingCartFragment.newInstance(mCheckoutPreference.getItems().get(0).getPictureUrl(), mPurchaseTitle, mCheckoutPreference.getAmount(), mCheckoutPreference.getItems().get(0).getCurrencyId());
+        String currencyId = mCheckoutPreference.getItems().get(0).getCurrencyId();
+        String pictureUrl = mCheckoutPreference.getItems().get(0).getPictureUrl();
+
+        mShoppingCartFragment = ShoppingCartFragment.newInstance(pictureUrl, mPurchaseTitle, mCheckoutPreference.getAmount(), currencyId);
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.shoppingCartFragment, mShoppingCartFragment)
@@ -169,7 +172,7 @@ public class CheckoutActivity extends AppCompatActivity {
         if(itemListSize == 1) {
             purchaseTitle.append(mCheckoutPreference.getItems().get(0).getTitle());
         }
-        else {
+        else if (itemListSize > 1){
             for(Item item : mCheckoutPreference.getItems()){
                 purchaseTitle.append(item.getTitle());
                 if(!item.equals(mCheckoutPreference.getItems().get(itemListSize-1))) {
