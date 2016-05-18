@@ -20,4 +20,6 @@
     <color name="mpsdk_color_instructions_button">#41c6f4</color>
     <color name="mpsdk_color_link">#0066CC</color>
 
+    <color name="mpsdk_installments_text">#009FDE</color>
+    <color name="mpsdk_installments_zero_rate">#43B000</color>
 </resources>

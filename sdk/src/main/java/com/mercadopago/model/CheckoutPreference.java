@@ -9,6 +9,8 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
+import static android.text.TextUtils.isEmpty;
+
 public class CheckoutPreference implements Serializable {
 
     private String id;
@@ -51,8 +53,11 @@ public class CheckoutPreference implements Serializable {
 
         boolean valid = true;
 
-        if(this.items == null || this.items.isEmpty())
+        if(this.items == null || this.items.isEmpty() || items.get(0) == null)
         {
+            valid = false;
+        }
+        else if (isEmpty(items.get(0).getCurrencyId())) {
             valid = false;
         }
         else {
@@ -74,7 +79,10 @@ public class CheckoutPreference implements Serializable {
     private boolean isItemValid(Item item) {
         Boolean valid = true;
 
-        if(item.getId() == null) {
+        if(item == null) {
+            valid = false;
+        }
+        else if(item.getId() == null) {
             valid = false;
         }
         else if(item.getQuantity() == null || item.getQuantity() < 1)
@@ -94,24 +102,14 @@ public class CheckoutPreference implements Serializable {
     }
 
 
-    public Boolean isExpired(){
+    public Boolean isExpired() {
         Date date = new Date();
-        if (expirationDateTo != null){
-            return date.after(expirationDateTo);
-        }
-        else{
-            return false;
-        }
+        return expirationDateTo != null && date.after(expirationDateTo);
     }
 
-    public Boolean isActive(){
+    public Boolean isActive() {
         Date date = new Date();
-        if (expirationDateFrom != null){
-            return date.after(expirationDateFrom);
-        }
-        else{
-            return true;
-        }
+        return expirationDateFrom == null || date.after(expirationDateFrom);
     }
 
 

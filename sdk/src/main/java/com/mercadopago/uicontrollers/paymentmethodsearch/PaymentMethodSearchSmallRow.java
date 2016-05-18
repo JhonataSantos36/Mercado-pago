@@ -1,4 +1,4 @@
-package com.mercadopago.uicontrollers;
+package com.mercadopago.uicontrollers.paymentmethodsearch;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,24 +7,16 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.mercadopago.R;
-import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentMethodSearchItem;
 import com.mercadopago.util.MercadoPagoUtil;
-import com.mercadopago.views.MPTextView;
 
 /**
  * Created by mreverter on 29/4/16.
  */
-public class PaymentMethodSearchRegularRow implements PaymentMethodViewController {
+public class PaymentMethodSearchSmallRow extends PaymentMethodSearchRow {
 
-    public Context mContext;
-    private MPTextView mDescription;
-    private MPTextView mComment;
-    private ImageView mIcon;
-    private View mView;
-
-    public PaymentMethodSearchRegularRow(Context context) {
-        mContext = context;
+    public PaymentMethodSearchSmallRow(Context context) {
+        super(context);
     }
 
     @Override
@@ -52,40 +44,9 @@ public class PaymentMethodSearchRegularRow implements PaymentMethodViewControlle
     }
 
     @Override
-    public void drawPaymentMethod(PaymentMethod paymentMethod) {
-        String accreditationTimeMessage = MercadoPagoUtil.getAccreditationTimeMessage(paymentMethod.getAccreditationTime(), mContext);
-        mComment.setText(accreditationTimeMessage);
-
-        int resourceId = MercadoPagoUtil.getPaymentMethodIcon(mContext, paymentMethod.getId());
-
-        if(resourceId != 0) {
-            mIcon.setImageResource(resourceId);
-        } else {
-            mIcon.setVisibility(View.GONE);
-        }
-    }
-
-    @Override
-    public void setOnClickListener(View.OnClickListener listener) {
-        mView.setOnClickListener(listener);
-    }
-
-    @Override
-    public void initializeControls() {
-        mDescription = (MPTextView) mView.findViewById(R.id.description);
-        mComment = (MPTextView) mView.findViewById(R.id.comment);
-        mIcon = (ImageView) mView.findViewById(R.id.image);
-    }
-
-    @Override
     public View inflateInParent(ViewGroup parent, boolean attachToRoot) {
         mView = LayoutInflater.from(mContext)
                 .inflate(R.layout.row_pm_search_item, parent, attachToRoot);
-        return mView;
-    }
-
-    @Override
-    public View getView() {
         return mView;
     }
 
