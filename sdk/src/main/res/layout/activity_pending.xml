@@ -22,60 +22,58 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <android.support.v7.widget.CardView
-                    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/mpsdk_card_margin"
-                    card_view:cardCornerRadius="@dimen/mpsdk_card_corner_radius"
-                    card_view:cardBackgroundColor="@color/mpsdk_color_pending_background">
+                    android:layout_marginBottom="15dp"
+                    android:background="@color/mpsdk_color_pending_background"
+                    android:orientation="vertical">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="15dp"
-                        android:layout_marginBottom="15dp"
-                        android:orientation="vertical">
-
-                        <ImageView
-                            android:id="@+id/icon"
-                            android:layout_width="80dp"
-                            android:layout_height="80dp"
-                            android:layout_marginTop="26dp"
-                            android:layout_marginBottom="14dp"
-                            android:tint="@color/mpsdk_color_pending_image"
-                            android:src="@drawable/pending_sign"
-                            android:layout_gravity="center_horizontal" />
-
-                        <com.mercadopago.views.MPTextView
-                            android:id="@+id/pendingTitle"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="bottom|center"
-                            android:layout_marginTop="10dp"
-                            android:textSize="24dp"
-                            android:text="@string/mpsdk_title_pending" />
-
-                        <com.mercadopago.views.MPTextView
-                            android:id="@+id/pendingSubtitle"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
-                            android:layout_marginBottom="10dp"
-                            android:layout_marginLeft="20dp"
-                            android:layout_marginRight="20dp"
-                            android:gravity="bottom|center"
-                            android:textSize="16dp"
-                            android:text="@string/mpsdk_subtitle_pending_contingency" />
-                    </LinearLayout>
-                </android.support.v7.widget.CardView>
+                    <ImageView
+                        android:id="@+id/icon"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:layout_marginTop="26dp"
+                        android:layout_marginBottom="14dp"
+                        android:tint="@color/mpsdk_color_pending_image"
+                        android:src="@drawable/pending_sign"
+                        android:layout_gravity="center_horizontal" />
 
                     <com.mercadopago.views.MPTextView
-                        android:id="@+id/exitOfPending"
+                        android:id="@+id/pendingTitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="bottom|center"
+                        android:layout_marginTop="10dp"
+                        android:textSize="24dp"
+                        android:text="@string/mpsdk_title_pending" />
+
+                    <com.mercadopago.views.MPTextView
+                        android:id="@+id/pendingSubtitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="20dp"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
+                        android:gravity="bottom|center"
+                        android:textSize="16dp"
+                        android:text="@string/mpsdk_subtitle_pending_contingency" />
+
+                    <View
+                        android:id="@+id/titleSeparator"
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:background="@color/mpsdk_separator"
+                        android:layout_gravity="center_horizontal|bottom" />
+                </LinearLayout>
+
+                    <com.mercadopago.views.MPTextView
+                        android:id="@+id/exitPending"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_marginTop="40dp"
+                        android:layout_marginTop="35dp"
                         android:text="@string/mpsdk_text_go_out"
                         android:textColor="@color/mpsdk_color_link"
                         android:textSize="18dp" />

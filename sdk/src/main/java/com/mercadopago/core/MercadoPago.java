@@ -7,11 +7,9 @@ import android.content.Intent;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.mercadopago.BankDealsActivity;
-import com.mercadopago.CallForAuthorizeActivity;
 import com.mercadopago.CheckoutActivity;
 import com.mercadopago.CongratsActivity;
 import com.mercadopago.InstructionsActivity;
-import com.mercadopago.OldCongratsActivity;
 import com.mercadopago.CustomerCardsActivity;
 import com.mercadopago.InstallmentsActivity;
 import com.mercadopago.IssuersActivity;
@@ -308,15 +306,6 @@ public class MercadoPago {
         rejectionIntent.putExtra("paymentMethod", paymentMethod);
         activity.startActivityForResult(rejectionIntent, CONGRATS_REQUEST_CODE);
     }
-
-    private static void startCallForAuthorizeActivity(Activity activity, Payment payment, PaymentMethod paymentMethod) {
-
-        Intent callForAuthorizeIntent = new Intent(activity, CallForAuthorizeActivity.class);
-        callForAuthorizeIntent.putExtra("payment", payment);
-        callForAuthorizeIntent.putExtra("paymentMethod", paymentMethod);
-        activity.startActivityForResult(callForAuthorizeIntent, CONGRATS_REQUEST_CODE);
-    }
-
 
     private static void startInstructionsActivity(Activity activity, String merchantPublicKey, Payment payment, PaymentMethod paymentMethod) {
 
@@ -700,17 +689,6 @@ public class MercadoPago {
 
             MercadoPago.startRejectionActivity(this.mActivity, this.mPayment, this.mPaymentMethod);
         }
-
-        public void startCallForAuthorizeActivity() {
-
-            if (this.mActivity == null) throw new IllegalStateException("activity is null");
-            if (this.mPayment == null) throw new IllegalStateException("payment is null");
-            if (this.mPaymentMethod == null) throw new IllegalStateException("payment method is null");
-
-            MercadoPago.startCallForAuthorizeActivity(this.mActivity, this.mPayment, this.mPaymentMethod);
-        }
-
-
 
         public void startInstructionsActivity() {
 
