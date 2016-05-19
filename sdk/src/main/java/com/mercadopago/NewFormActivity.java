@@ -70,9 +70,9 @@ public class NewFormActivity extends FrontCardActivity {
     private MPEditText mCardExpiryDateEditText;
     private MPEditText mCardSecurityCodeEditText;
     private MPEditText mCardIdentificationNumberEditText;
-//    private FrameLayout mSubmitButtonContainer;
+    private MPTextView mBackButtonText;
+    private MPTextView mErrorTextView;
     private LinearLayout mSecurityCodeEditView;
-    private FrameLayout mSecurityCodeErrorContainer;
     private LinearLayout mInputContainer;
     private Spinner mIdentificationTypeSpinner;
     private LinearLayout mIdentificationTypeContainer;
@@ -81,15 +81,8 @@ public class NewFormActivity extends FrontCardActivity {
     private ProgressBar mProgressBar;
     private FrameLayout mBackButton;
     private FrameLayout mNextButton;
-    private MPTextView mBackButtonText;
-
-    // Input error Views
-    private MPTextView mCardNumberError;
-    private MPTextView mCardholderNameError;
-    private MPTextView mCardExpiryDateError;
-    private MPTextView mCardSecurityCodeError;
-    private MPTextView mCardIdentificationTypeError;
-    private MPTextView mCardIdentificationNumberError;
+    private FrameLayout mErrorContainer;
+    private LinearLayout mButtonContainer;
 
     //Card container
     private int mCurrentColor;
@@ -120,7 +113,6 @@ public class NewFormActivity extends FrontCardActivity {
         setContentView();
         initializeLayout(savedInstanceState);
         setInputControls();
-        setCardInputViews();
         initializeToolbar();
         getActivityParameters();
         verifyValidCreate();
@@ -192,11 +184,7 @@ public class NewFormActivity extends FrontCardActivity {
     private void initializeLayout(Bundle savedInstanceState) {
         mActivity = this;
         mCurrentColor = ContextCompat.getColor(this, CardInterface.NEUTRAL_CARD_COLOR);
-        mCardNumberState = CardInterface.NORMAL_STATE;
-        mCardNameState = CardInterface.NORMAL_STATE;
-        mExpiryDateState = CardInterface.NORMAL_STATE;
-        mSecurityCodeState = CardInterface.NORMAL_STATE;
-        mCardIdentificationNumberState = CardInterface.NORMAL_STATE;
+        mErrorState = CardInterface.NORMAL_STATE;
         mCardToken = new CardToken("", null, null, "", "", "", "");
         if (mFrontFragment == null) {
             mFrontFragment = new CardFrontFragment();
@@ -223,7 +211,6 @@ public class NewFormActivity extends FrontCardActivity {
         mCardSecurityCodeEditText = (MPEditText) findViewById(R.id.cardSecurityCode);
         mCardIdentificationNumberEditText = (MPEditText) findViewById(R.id.cardIdentificationNumber);
         mSecurityCodeEditView = (LinearLayout) findViewById(R.id.cardSecurityCodeContainer);
-        mSecurityCodeErrorContainer = (FrameLayout) findViewById(R.id.cardSecurityErrorContainer);
         mInputContainer = (LinearLayout) findViewById(R.id.newCardInputContainer);
         mIdentificationTypeSpinner = (Spinner) findViewById(R.id.cardIdentificationType);
         mIdentificationTypeContainer = (LinearLayout) findViewById(R.id.cardIdentificationTypeContainer);
@@ -232,19 +219,14 @@ public class NewFormActivity extends FrontCardActivity {
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
         mBackButton = (FrameLayout) findViewById(R.id.backButton);
         mNextButton = (FrameLayout) findViewById(R.id.nextButton);
+        mButtonContainer = (LinearLayout) findViewById(R.id.buttonContainer);
+        mErrorContainer = (FrameLayout) findViewById(R.id.errorContainer);
         mBackButtonText = (MPTextView) findViewById(R.id.backButtonText);
+        mErrorTextView = (MPTextView) findViewById(R.id.errorTextView);
         mProgressBar.setVisibility(View.GONE);
         mIdentificationTypeContainer.setVisibility(View.GONE);
         mIdentificationNumberContainer.setVisibility(View.GONE);
-    }
-
-    protected void setCardInputViews() {
-        mCardNumberError = (MPTextView) findViewById(R.id.cardNumberError);
-        mCardholderNameError = (MPTextView) findViewById(R.id.cardholderNameError);
-        mCardExpiryDateError = (MPTextView) findViewById(R.id.cardExpiryDateError);
-        mCardSecurityCodeError = (MPTextView) findViewById(R.id.cardSecurityCodeError);
-        mCardIdentificationTypeError = (MPTextView) findViewById(R.id.cardIdentificationTypeError);
-        mCardIdentificationNumberError = (MPTextView) findViewById(R.id.cardIdentificationNumberCodeError);
+        mButtonContainer.setVisibility(View.VISIBLE);
     }
 
     protected void getActivityParameters() {
@@ -294,9 +276,9 @@ public class NewFormActivity extends FrontCardActivity {
         mBackButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!mCurrentEditingEditText.equals(CARD_NUMBER_INPUT)) {
-                    checkIsEmptyOrValid();
-                }
+            if (!mCurrentEditingEditText.equals(CARD_NUMBER_INPUT)) {
+                checkIsEmptyOrValid();
+            }
             }
         });
     }
@@ -464,7 +446,7 @@ public class NewFormActivity extends FrontCardActivity {
                     public void onPaymentMethodListSet(List<PaymentMethod> paymentMethodList) {
                         if (paymentMethodList.size() == 0) {
                             mPaymentMethodGuessingController.blockCardNumbersInput(mCardNumberEditText);
-                            setCardNumberError(getString(R.string.mpsdk_invalid_payment_method));
+                            setErrorView(getString(R.string.mpsdk_invalid_payment_method));
                         } else if (paymentMethodList.size() == 1) {
                             onPaymentMethodSet(paymentMethodList.get(0));
                         } else {
@@ -485,7 +467,7 @@ public class NewFormActivity extends FrontCardActivity {
 
                     @Override
                     public void onPaymentMethodCleared() {
-                        clearCardNumberError();
+                        clearErrorView();
                         if (mCurrentPaymentMethod == null) return;
                         mCurrentPaymentMethod = null;
                         mPaymentMethodGuessingController.setSecurityCodeLocation(null);
@@ -608,13 +590,11 @@ public class NewFormActivity extends FrontCardActivity {
 
     private void showSecurityCodeView() {
         mSecurityCodeEditView.setVisibility(View.VISIBLE);
-        mSecurityCodeErrorContainer.setVisibility(View.VISIBLE);
     }
 
     private void hideSecurityCodeView() {
         clearSecurityCodeFront();
         mSecurityCodeEditView.setVisibility(View.GONE);
-        mSecurityCodeErrorContainer.setVisibility(View.GONE);
     }
 
     private void setCardNumberLength(int maxLength) {
@@ -644,8 +624,7 @@ public class NewFormActivity extends FrontCardActivity {
     }
 
     private void setCardSecurityCodeErrorView(String message, boolean requestFocus) {
-        mCardSecurityCodeError.setText(message);
-        mSecurityCodeState = CardInterface.ERROR_STATE;
+        setErrorView(message);
         String location = mPaymentMethodGuessingController.getSecurityCodeLocation();
         if (location != null) {
             if (location.equals(CardInterface.CARD_SIDE_BACK)) {
@@ -671,28 +650,13 @@ public class NewFormActivity extends FrontCardActivity {
         return mPaymentMethodGuessingController.getSecurityCodeLocation();
     }
 
-    private void clearCardSecurityCodeErrorView() {
-        mCardSecurityCodeError.setText("");
-        mSecurityCodeState = CardInterface.NORMAL_STATE;
-    }
-
     private void setCardIdentificationErrorView(String message, boolean requestFocus) {
-        mCardIdentificationNumberError.setText(message);
-        saveCardIdentificationNumberState(CardInterface.ERROR_STATE);
+        setErrorView(message);
         if (requestFocus) {
             mCardIdentificationNumberEditText.requestFocus();
             mHorizontalScrollView.fullScroll(HorizontalScrollView.FOCUS_RIGHT);
         }
     }
-
-    private void clearCardIdentificationErrorView() {
-        if (getCardIdentificationNumberState().equals(CardInterface.NORMAL_STATE)) {
-            return;
-        }
-        mCardIdentificationNumberError.setText("");
-        saveCardIdentificationNumberState(CardInterface.NORMAL_STATE);
-    }
-
 
     private void clearSecurityCodeFront() {
         mFrontFragment.hideCardSecurityView();
@@ -744,6 +708,16 @@ public class NewFormActivity extends FrontCardActivity {
     }
 
     private void setCardNumberFocusListener() {
+        mCardNumberEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_NEXT) {
+                    validateCurrentEditText(true);
+                    return true;
+                }
+                return false;
+            }
+        });
         mCardNumberEditText.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -757,14 +731,22 @@ public class NewFormActivity extends FrontCardActivity {
                     openKeyboard(mCardNumberEditText);
                     checkFlipCardToFront();
                     mCurrentEditingEditText = CARD_NUMBER_INPUT;
-                } else {
-                    validateCardNumber(false);
                 }
             }
         });
     }
 
     private void setCardNameFocusListener() {
+        mCardHolderNameEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_NEXT) {
+                    validateCurrentEditText(true);
+                    return true;
+                }
+                return false;
+            }
+        });
         mCardHolderNameEditText.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -778,14 +760,22 @@ public class NewFormActivity extends FrontCardActivity {
                     openKeyboard(mCardHolderNameEditText);
                     checkFlipCardToFront();
                     mCurrentEditingEditText = CARDHOLDER_NAME_INPUT;
-                } else {
-                    validateCardName(false);
                 }
             }
         });
     }
 
     private void setCardExpiryDateFocusListener() {
+        mCardExpiryDateEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_NEXT) {
+                    validateCurrentEditText(true);
+                    return true;
+                }
+                return false;
+            }
+        });
         mCardExpiryDateEditText.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -799,14 +789,22 @@ public class NewFormActivity extends FrontCardActivity {
                     openKeyboard(mCardExpiryDateEditText);
                     checkFlipCardToFront();
                     mCurrentEditingEditText = CARD_EXPIRYDATE_INPUT;
-                } else {
-                    validateExpiryDate(false);
                 }
             }
         });
     }
 
     private void setCardSecurityCodeFocusListener() {
+        mCardSecurityCodeEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_NEXT) {
+                    validateCurrentEditText(true);
+                    return true;
+                }
+                return false;
+            }
+        });
         mCardSecurityCodeEditText.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -825,8 +823,6 @@ public class NewFormActivity extends FrontCardActivity {
                     } else {
                         checkFlipCardToFront();
                     }
-                } else {
-                    validateSecurityCode(false);
                 }
             }
         });
@@ -874,6 +870,16 @@ public class NewFormActivity extends FrontCardActivity {
                 return false;
             }
         });
+        mCardIdentificationNumberEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_NEXT) {
+                    validateCurrentEditText(true);
+                    return true;
+                }
+                return false;
+            }
+        });
         mCardIdentificationNumberEditText.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -887,8 +893,6 @@ public class NewFormActivity extends FrontCardActivity {
                     openKeyboard(mCardIdentificationNumberEditText);
                     checkTransitionCardToId();
                     mCurrentEditingEditText = CARD_IDENTIFICATION_INPUT;
-                } else {
-                    validateIdentificationNumber(false);
                 }
             }
         });
@@ -916,6 +920,7 @@ public class NewFormActivity extends FrontCardActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
+                checkChangeErrorView();
                 if (showingBack() && mBackFragment != null) {
                     mBackFragment.afterSecurityTextChanged(s);
                 } else if (mFrontFragment != null) {
@@ -947,6 +952,7 @@ public class NewFormActivity extends FrontCardActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
+                checkChangeErrorView();
                 if (showingIdentification() && mCardIdentificationFragment != null) {
                     mCardIdentificationFragment.afterNumberTextChanged(s);
                 }
@@ -1001,7 +1007,7 @@ public class NewFormActivity extends FrontCardActivity {
         if (mPaymentMethodGuessingController.isSecurityCodeRequired()) {
             try {
                 cardToken.validateSecurityCode(this, mCurrentPaymentMethod);
-                clearCardSecurityCodeErrorView();
+                clearErrorView();
                 createToken();
             } catch (Exception e) {
                 setCardSecurityCodeErrorView(e.getMessage(), true);
@@ -1040,13 +1046,15 @@ public class NewFormActivity extends FrontCardActivity {
                     throw new RuntimeException(getString(R.string.mpsdk_invalid_card_number_incomplete));
                 } else if (getCardNumber().length() == MercadoPago.BIN_LENGTH) {
                     throw new RuntimeException(getString(R.string.mpsdk_invalid_payment_method));
+                } else {
+                    throw new RuntimeException(getString(R.string.mpsdk_invalid_payment_method));
                 }
             }
             mCardToken.validateCardNumber(this, mCurrentPaymentMethod);
-            clearCardNumberError();
+            clearErrorView();
             return true;
         } catch (Exception e) {
-            setCardNumberError(e.getMessage());
+            setErrorView(e.getMessage());
             if (requestFocus) {
                 mCardNumberEditText.requestFocus();
             }
@@ -1060,10 +1068,10 @@ public class NewFormActivity extends FrontCardActivity {
         cardHolder.setIdentification(mIdentification);
         mCardToken.setCardholder(cardHolder);
         if (mCardToken.validateCardholderName()) {
-            clearCardNameError();
+            clearErrorView();
             return true;
         } else {
-            setCardNameError();
+            setErrorView(getString(R.string.mpsdk_invalid_empty_name));
             if (requestFocus) {
                 mCardHolderNameEditText.requestFocus();
             }
@@ -1077,10 +1085,10 @@ public class NewFormActivity extends FrontCardActivity {
         mCardToken.setExpirationMonth(month);
         mCardToken.setExpirationYear(year);
         if (mCardToken.validateExpiryDate()) {
-            clearCardDateError();
+            clearErrorView();
             return true;
         } else {
-            setCardDateError();
+            setErrorView(getString(R.string.mpsdk_invalid_expiry_date));
             if (requestFocus) {
                 mCardExpiryDateEditText.requestFocus();
             }
@@ -1092,7 +1100,8 @@ public class NewFormActivity extends FrontCardActivity {
         mCardToken.setSecurityCode(mSecurityCode);
         try {
             mCardToken.validateSecurityCode(this, mCurrentPaymentMethod);
-            clearCardSecurityCodeErrorView();
+            clearErrorView();
+//            clearCardSecurityCodeErrorView();
             return true;
         } catch (Exception e) {
             setCardSecurityCodeErrorView(e.getMessage(), requestFocus);
@@ -1105,9 +1114,10 @@ public class NewFormActivity extends FrontCardActivity {
         mCardToken.getCardholder().setIdentification(mIdentification);
         boolean ans = mCardToken.validateIdentification();
         if (ans) {
-            clearCardIdentificationErrorView();
+            clearErrorView();
         } else {
-            setCardIdentificationErrorView(getString(R.string.mpsdk_invalid_identification_number), requestFocus);
+            setCardIdentificationErrorView(getString(R.string.mpsdk_invalid_identification_number),
+                    requestFocus);
         }
         return ans;
     }
@@ -1123,34 +1133,25 @@ public class NewFormActivity extends FrontCardActivity {
         return sb.toString();
     }
 
-    public void clearCardNumberError() {
-        mCardNumberError.setText("");
-        mCardNumberState = CardInterface.NORMAL_STATE;
+    @Override
+    public void checkChangeErrorView() {
+        if (mErrorState.equals(ERROR_STATE)) {
+            clearErrorView();
+        }
     }
 
-    public void setCardNumberError(String message) {
-        mCardNumberError.setText(message);
-        mCardNumberState = CardInterface.ERROR_STATE;
+    public void setErrorView(String message) {
+        mButtonContainer.setVisibility(View.GONE);
+        mErrorContainer.setVisibility(View.VISIBLE);
+        mErrorTextView.setText(message);
+        mErrorState = CardInterface.ERROR_STATE;
     }
 
-    public void clearCardNameError() {
-        mCardholderNameError.setText("");
-        mCardNameState = CardInterface.NORMAL_STATE;
-    }
-
-    public void setCardNameError() {
-        mCardholderNameError.setText(getString(R.string.mpsdk_invalid_empty_name));
-        mCardNameState = CardInterface.ERROR_STATE;
-    }
-
-    public void clearCardDateError() {
-        mCardExpiryDateError.setText("");
-        mExpiryDateState = CardInterface.NORMAL_STATE;
-    }
-
-    public void setCardDateError() {
-        mCardExpiryDateError.setText(getString(R.string.mpsdk_invalid_expiry_date));
-        mExpiryDateState = CardInterface.ERROR_STATE;
+    public void clearErrorView() {
+        mButtonContainer.setVisibility(View.VISIBLE);
+        mErrorContainer.setVisibility(View.GONE);
+        mErrorTextView.setText("");
+        mErrorState = CardInterface.NORMAL_STATE;
     }
 
     public void checkStartIssuersActivity() {

@@ -2,6 +2,7 @@ package com.mercadopago.fragments;
 
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -153,6 +154,7 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
     }
 
     public void afterSecurityTextChanged(Editable s) {
+        mActivity.checkChangeErrorView();
         mActivity.saveCardSecurityCode(s.toString());
         if (s.length() == 0) {
             mCardSecurityCodeView.setVisibility(View.INVISIBLE);
@@ -219,8 +221,8 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
 
                 @Override
                 public void afterTextChanged(Editable s) {
+                    mActivity.checkChangeErrorView();
                     if (s.length() == 2) {
-
                         if (mActivity.getCurrentPaymentMethod() != null) {
                             int color = mActivity.getCardFontColor(mActivity.getCurrentPaymentMethod());
                             mCardExpiryYearView.setText(getResources().getString(R.string.mpsdk_card_expiry_year_hint));
@@ -241,7 +243,6 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
                             mCardExpiryMonthView.setTextColor(getResources().getColor(CardInterface.FULL_TEXT_VIEW_COLOR));
                             mCardDateDividerView.setTextColor(getResources().getColor(CardInterface.FULL_TEXT_VIEW_COLOR));
                         }
-
                         mActivity.saveCardExpiryMonth(null);
                     }
                 }
@@ -269,6 +270,7 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
 
                 @Override
                 public void afterTextChanged(Editable s) {
+                    mActivity.checkChangeErrorView();
                     mActivity.saveCardNumber(s.toString());
                     if (s.length() == 0) {
                         mCardNumberView.setVisibility(View.INVISIBLE);
@@ -291,7 +293,6 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                     s = s.toString().toUpperCase();
-
                     if (mActivity.getCurrentPaymentMethod() != null) {
                         int color = mActivity.getCardFontColor(mActivity.getCurrentPaymentMethod());
                         mCardholderNameView.setText(s);
@@ -304,6 +305,7 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
 
                 @Override
                 public void afterTextChanged(Editable s) {
+                    mActivity.checkChangeErrorView();
                     mActivity.saveCardName(s.toString());
                     if (s.length() == 0) {
                         if (mActivity.getCurrentPaymentMethod() != null) {
@@ -372,7 +374,6 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
         } else {
             mBaseCardholderView.setVisibility(View.INVISIBLE);
             mCardNumberView.setVisibility(View.VISIBLE);
-//            String state = mActivity.getCardNumberState();
             int color = CardInterface.FULL_TEXT_VIEW_COLOR;
             String number = mActivity.buildNumberWithMask(cardNumber);
             setText(mCardNumberView, number, color);
@@ -381,7 +382,6 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
 
     private void populateCardName() {
         String cardName = mActivity.getCardHolderName();
-//        String state = mActivity.getCardHolderNameState();
         if (cardName == null) {
             mCardholderNameView.setText(getResources().getString(R.string.mpsdk_cardholder_name_short));
         } else {
@@ -392,7 +392,6 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
     }
 
     private void populateCardMonth() {
-//        String dateState = mActivity.getExpiryDateState();
         String cardMonth = mActivity.getExpiryMonth();
         if (cardMonth == null) {
             mCardExpiryMonthView.setText(getResources()
@@ -405,7 +404,6 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
     }
 
     private void populateCardYear() {
-//        String dateState = mActivity.getExpiryDateState();
         String cardYear = mActivity.getExpiryYear();
         if (cardYear == null) {
             mCardExpiryYearView.setText(getResources().getString(R.string.mpsdk_card_expiry_year_hint));

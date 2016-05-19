@@ -51,13 +51,16 @@
 
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:background="@color/mpsdk_white">
                 <LinearLayout
+                    android:id="@+id/buttonContainer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:layout_gravity="bottom"
-                    android:weightSum="1">
+                    android:weightSum="1"
+                    android:visibility="gone">
                     <FrameLayout
                         android:id="@+id/backButton"
                         android:layout_width="0dp"
@@ -86,6 +89,21 @@
                             android:text="@string/mpsdk_input_button_next"/>
                     </FrameLayout>
                 </LinearLayout>
+                <FrameLayout
+                    android:id="@+id/errorContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_gravity="bottom"
+                    android:background="@color/mpsdk_light_gray"
+                    android:visibility="gone">
+                    <com.mercadopago.views.MPTextView
+                        android:id="@+id/errorTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:textSize="14sp"
+                        android:textColor="@color/mpsdk_color_red_error"/>
+                </FrameLayout>
                 <ProgressBar
                     android:id="@+id/progressBar"
                     android:layout_width="wrap_content"

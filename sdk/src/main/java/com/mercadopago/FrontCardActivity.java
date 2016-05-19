@@ -12,11 +12,7 @@ public abstract class FrontCardActivity extends AppCompatActivity implements Car
     protected String mExpiryMonth;
     protected String mExpiryYear;
     protected String mCardIdentificationNumber;
-    protected String mCardNumberState;
-    protected String mCardNameState;
-    protected String mExpiryDateState;
-    protected String mSecurityCodeState;
-    protected String mCardIdentificationNumberState;
+    protected String mErrorState;
 
     protected String mSecurityCode = "";
     protected PaymentMethod mCurrentPaymentMethod;
@@ -37,10 +33,6 @@ public abstract class FrontCardActivity extends AppCompatActivity implements Car
         return s.toString();
     }
 
-    public String getSecurityCodeState() {
-        return mSecurityCodeState;
-    }
-
     public String getCardNumber() {
         return mCardNumber;
     }
@@ -49,28 +41,20 @@ public abstract class FrontCardActivity extends AppCompatActivity implements Car
         return this.mCardIdentificationNumber;
     }
 
-    public String getCardNumberState() {
-        return mCardNumberState;
-    }
-
     public String getCardHolderName() {
         return mCardHolderName;
-    }
-
-    public String getCardHolderNameState() {
-        return mCardNameState;
     }
 
     public String getExpiryMonth() {
         return mExpiryMonth;
     }
 
-    public String getExpiryDateState() {
-        return mExpiryDateState;
-    }
-
     public String getExpiryYear() {
         return mExpiryYear;
+    }
+
+    public String getSecurityCode() {
+        return mSecurityCode;
     }
 
     public PaymentMethod getCurrentPaymentMethod() {
@@ -101,12 +85,12 @@ public abstract class FrontCardActivity extends AppCompatActivity implements Car
         this.mCardIdentificationNumber = number;
     }
 
-    public String getCardIdentificationNumberState() {
-        return mCardIdentificationNumberState;
+    public String getErrorState() {
+        return mErrorState;
     }
 
-    public void saveCardIdentificationNumberState(String state) {
-        this.mCardIdentificationNumberState = state;
+    public void saveErrorState(String state) {
+        this.mErrorState = state;
     }
 
     public int getCardImage(PaymentMethod paymentMethod) {
@@ -127,27 +111,4 @@ public abstract class FrontCardActivity extends AppCompatActivity implements Car
         return color;
     }
 
-    public String getSecurityCode() {
-        return mSecurityCode;
-    }
-
-    @Override
-    public void saveCardHolderNameState(String state) {
-        this.mCardNameState = state;
-    }
-
-    @Override
-    public void saveCardNumberState(String state) {
-        this.mCardNumberState = state;
-    }
-
-    @Override
-    public void saveSecurityCodeState(String state) {
-        this.mSecurityCodeState = state;
-    }
-
-    @Override
-    public void saveExpiryDateState(String state) {
-        this.mExpiryDateState = state;
-    }
 }

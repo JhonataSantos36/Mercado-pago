@@ -124,6 +124,11 @@ public class CardIssuersActivity extends StaticFrontCardActivity {
     }
 
     @Override
+    public void checkChangeErrorView() {
+
+    }
+
+    @Override
     public void onBackPressed() {
         Intent returnIntent = new Intent();
         returnIntent.putExtra("backButtonPressed", true);

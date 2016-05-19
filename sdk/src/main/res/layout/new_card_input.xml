@@ -34,24 +34,10 @@
                 android:textSize="15sp"
                 android:textColor="@color/abc_search_url_text_selected"
                 android:inputType="number"
-                android:singleLine="true"
                 android:imeOptions="actionNext"
-                android:nextFocusRight="@+id/cardholderName"
+                android:singleLine="true"
                 android:maxLength="16"/>
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <com.mercadopago.views.MPTextView
-                    android:id="@+id/cardNumberError"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginStart="20dp"
-                    android:paddingBottom="10dp"
-                    android:layout_gravity="top"
-                    android:textSize="12sp"
-                    android:textColor="@color/mpsdk_color_red_error" />
-            </FrameLayout>
+
         </LinearLayout>
 
         <LinearLayout
@@ -78,24 +64,11 @@
                 android:maxLength="50"
                 android:singleLine="true"
                 android:imeOptions="actionNext"
-                android:nextFocusRight="@+id/cardExpiryDate"
+                android:textAllCaps="true"
                 android:textSize="15sp"
                 android:inputType="textVisiblePassword"
                 android:textColor="@color/abc_search_url_text_selected" />
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <com.mercadopago.views.MPTextView
-                    android:id="@+id/cardholderNameError"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginStart="20dp"
-                    android:paddingBottom="10dp"
-                    android:layout_gravity="top"
-                    android:textSize="12sp"
-                    android:textColor="@color/mpsdk_color_red_error" />
-            </FrameLayout>
+
         </LinearLayout>
 
         <LinearLayout
@@ -121,25 +94,10 @@
                 android:layout_marginTop="2dp"
                 android:singleLine="true"
                 android:imeOptions="actionNext"
-                android:nextFocusRight="@+id/cardSecurityCode"
                 android:inputType="number"
                 android:textSize="15sp"
                 android:textColor="@color/abc_search_url_text_selected"
                 android:maxLength="4"/>
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <com.mercadopago.views.MPTextView
-                    android:id="@+id/cardExpiryDateError"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginStart="20dp"
-                    android:paddingBottom="10dp"
-                    android:layout_gravity="top"
-                    android:textSize="12sp"
-                    android:textColor="@color/mpsdk_color_red_error" />
-            </FrameLayout>
 
         </LinearLayout>
 
@@ -173,23 +131,6 @@
                 android:inputType="number"
                 android:textSize="15sp"
                 android:textColor="@color/abc_search_url_text_selected" />
-
-            <FrameLayout
-                android:id="@+id/cardSecurityErrorContainer"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="visible">
-                <com.mercadopago.views.MPTextView
-                    android:id="@+id/cardSecurityCodeError"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginStart="20dp"
-                    android:paddingBottom="10dp"
-                    android:layout_gravity="top"
-                    android:textSize="12sp"
-                    android:textColor="@color/mpsdk_color_red_error" />
-            </FrameLayout>
 
         </LinearLayout>
 
@@ -241,24 +182,6 @@
                 android:layout_width="100dp"
                 android:layout_height="36dp"/>
 
-            <FrameLayout
-                android:id="@+id/cardIdentificationTypeErrorContainer"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:visibility="visible">
-                <com.mercadopago.views.MPTextView
-                    android:id="@+id/cardIdentificationTypeError"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginStart="20dp"
-                    android:paddingBottom="10dp"
-                    android:layout_gravity="top"
-                    android:textSize="12sp"
-                    android:textColor="@color/mpsdk_color_red_error" />
-            </FrameLayout>
-
         </LinearLayout>
 
         <LinearLayout
@@ -299,58 +222,17 @@
                             android:layout_marginLeft="15dp"
                             android:layout_marginRight="15dp"
                             android:layout_marginTop="2dp"
+                            android:imeOptions="actionNext"
                             android:singleLine="true"
                             android:maxLength="15"
-                            android:imeOptions="actionDone"
-                            android:nextFocusRight="@+id/cardNumber"
                             android:textSize="15sp"
                             android:textColor="@color/abc_search_url_text_selected" />
                     </LinearLayout>
 
-
-
                 </LinearLayout>
-                <FrameLayout
-                    android:id="@+id/cardIdentificationNumberErrorContainer"
-                    android:layout_width="180dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
-                    android:visibility="visible">
-                    <com.mercadopago.views.MPTextView
-                        android:id="@+id/cardIdentificationNumberCodeError"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginStart="20dp"
-                        android:paddingBottom="10dp"
-                        android:layout_gravity="top"
-                        android:textSize="12sp"
-                        android:textColor="@color/mpsdk_color_red_error" />
-                </FrameLayout>
+
             </LinearLayout>
 
-            <!--<FrameLayout-->
-                <!--android:id="@+id/cardSubmitButtonContainer"-->
-                <!--android:layout_width="50dp"-->
-                <!--android:layout_height="100dp"-->
-                <!--android:layout_gravity="start">-->
-
-                <!--<FrameLayout-->
-                    <!--android:id="@+id/cardSubmitButton"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_gravity="center_vertical"-->
-                    <!--android:background="@drawable/submit_button"-->
-                    <!--android:onClick="onFormSubmitted">-->
-                    <!--<FrameLayout-->
-                        <!--android:layout_width="24dp"-->
-                        <!--android:layout_height="24dp"-->
-                        <!--android:layout_gravity="center"-->
-                        <!--android:background="@drawable/arrow_right_white"/>-->
-
-                <!--</FrameLayout>-->
-
-            <!--</FrameLayout>-->
         </LinearLayout>
     </LinearLayout>
 

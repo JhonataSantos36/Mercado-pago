@@ -87,7 +87,6 @@ public class CardIdentificationFragment extends android.support.v4.app.Fragment 
         } else {
             mBaseIdNumberView.setVisibility(View.INVISIBLE);
             mCardIdentificationNumberView.setVisibility(View.VISIBLE);
-//            String state = mActivity.getCardIdentificationNumberState();
             int color = CardInterface.FULL_TEXT_VIEW_COLOR;
             String number = mActivity.buildIdentificationNumberWithMask(identificationNumber);
             setText(mCardIdentificationNumberView, number, color);
@@ -135,6 +134,7 @@ public class CardIdentificationFragment extends android.support.v4.app.Fragment 
 
                 @Override
                 public void afterTextChanged(Editable s) {
+                    mActivity.checkChangeErrorView();
                     mActivity.saveCardIdentificationNumber(s.toString());
                     if (s.length() == 0) {
                         mCardIdentificationNumberView.setVisibility(View.INVISIBLE);

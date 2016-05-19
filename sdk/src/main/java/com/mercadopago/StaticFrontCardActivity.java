@@ -134,10 +134,7 @@ public abstract class StaticFrontCardActivity extends FrontCardActivity {
     }
 
     protected void initializeFrontFragment() {
-        saveCardNumberState(NORMAL_STATE);
-        saveExpiryDateState(NORMAL_STATE);
-        saveSecurityCodeState(NORMAL_STATE);
-        saveCardHolderNameState(NORMAL_STATE);
+        saveErrorState(NORMAL_STATE);
         if (mFrontFragment == null) {
             mFrontFragment = new CardFrontFragment();
             mFrontFragment.disableAnimate();

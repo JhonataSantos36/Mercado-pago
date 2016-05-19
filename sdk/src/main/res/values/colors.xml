@@ -45,7 +45,7 @@
     <color name="mpsdk_color_new_card_form_background">#59C0ED</color>
     <color name="mpsdk_color_new_card_text">#999999</color>
     <color name="mpsdk_color_new_card_image">#D8D8D8</color>
-    <color name="mpsdk_color_red_error">#E50000</color>
+    <color name="mpsdk_color_red_error">#F04449</color>
 
     <!-- Card Colors -->
     <color name="mpsdk_visa">#001D77</color>

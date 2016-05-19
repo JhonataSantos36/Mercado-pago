@@ -65,6 +65,7 @@ public class CardBackFragment extends android.support.v4.app.Fragment {
     }
 
     public void afterSecurityTextChanged(Editable s) {
+        ((NewFormActivity) getActivity()).checkChangeErrorView();
         ((NewFormActivity) getActivity()).saveCardSecurityCode(s.toString());
         if (s.length() == 0) {
             mCardSecurityView.setText("");
@@ -75,7 +76,6 @@ public class CardBackFragment extends android.support.v4.app.Fragment {
 
     private void populateCardSecurityCode() {
         String securityCode = ((NewFormActivity)getActivity()).getSecurityCode();
-//        String state = ((NewFormActivity)getActivity()).getSecurityCodeState();
         if (securityCode != null) {
             mCardSecurityView.setText(securityCode);
             mCardSecurityView.setTextColor(getResources()

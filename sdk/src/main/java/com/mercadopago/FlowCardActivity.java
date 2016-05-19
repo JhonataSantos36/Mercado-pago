@@ -218,4 +218,9 @@ public class FlowCardActivity extends StaticFrontCardActivity {
     protected void initializeAdapter() {
 
     }
+
+    @Override
+    public void checkChangeErrorView() {
+
+    }
 }

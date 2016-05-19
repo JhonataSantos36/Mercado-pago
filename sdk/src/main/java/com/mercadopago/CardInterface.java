@@ -27,11 +27,7 @@ public interface CardInterface {
 
     public String getSecurityCode();
 
-    public String getSecurityCodeState();
-
     public String getSecurityCodeLocation();
-
-    public void saveSecurityCodeState(String state);
 
     public void saveCardExpiryMonth(String expiryMonth);
 
@@ -41,23 +37,11 @@ public interface CardInterface {
 
     public void saveCardNumber(String cardNumber);
 
-    public String getCardNumberState();
-
-    public void saveCardNumberState(String state);
-
     public String buildNumberWithMask(CharSequence s);
 
     public String buildIdentificationNumberWithMask(CharSequence s);
 
     public String getCardHolderName();
-
-    public String getCardHolderNameState();
-
-    public void saveCardHolderNameState(String state);
-
-    public String getExpiryDateState();
-
-    public void saveExpiryDateState(String state);
 
     public String getExpiryMonth();
 
@@ -67,6 +51,8 @@ public interface CardInterface {
 
     public void saveCardExpiryYear(String year);
 
+    public void saveCardIdentificationNumber(String number);
+
     public PaymentMethod getCurrentPaymentMethod();
 
     public int getCardImage(PaymentMethod paymentMethod);
@@ -75,14 +61,12 @@ public interface CardInterface {
 
     public int getCardFontColor(PaymentMethod paymentMethod);
 
+    public boolean isSecurityCodeRequired();
+
     public void checkFocusOnSecurityCode();
 
     public boolean hasToFlipCard();
 
-    public void saveCardIdentificationNumber(String number);
-
-    public String getCardIdentificationNumberState();
-
-    public boolean isSecurityCodeRequired();
+    public void checkChangeErrorView();
 
 }

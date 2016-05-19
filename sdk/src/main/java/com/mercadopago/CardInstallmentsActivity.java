@@ -152,4 +152,8 @@ public class CardInstallmentsActivity extends StaticFrontCardActivity {
         mInstallmentsAdapter.addResults(mPayerCosts);
     }
 
+    @Override
+    public void checkChangeErrorView() {
+
+    }
 }
