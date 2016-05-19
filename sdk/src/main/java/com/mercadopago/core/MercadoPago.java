@@ -15,7 +15,6 @@ import com.mercadopago.InstallmentsActivity;
 import com.mercadopago.IssuersActivity;
 import com.mercadopago.PaymentMethodsActivity;
 import com.mercadopago.PaymentVaultActivity;
-import com.mercadopago.RejectionActivity;
 import com.mercadopago.model.BankDeal;
 import com.mercadopago.model.Card;
 import com.mercadopago.model.CardToken;
@@ -297,14 +296,6 @@ public class MercadoPago {
         congratsIntent.putExtra("payment", payment);
         congratsIntent.putExtra("paymentMethod", paymentMethod);
         activity.startActivityForResult(congratsIntent, CONGRATS_REQUEST_CODE);
-    }
-
-    private static void startRejectionActivity(Activity activity, Payment payment, PaymentMethod paymentMethod) {
-
-        Intent rejectionIntent = new Intent(activity, RejectionActivity.class);
-        rejectionIntent.putExtra("payment", payment);
-        rejectionIntent.putExtra("paymentMethod", paymentMethod);
-        activity.startActivityForResult(rejectionIntent, CONGRATS_REQUEST_CODE);
     }
 
     private static void startInstructionsActivity(Activity activity, String merchantPublicKey, Payment payment, PaymentMethod paymentMethod) {
@@ -681,14 +672,6 @@ public class MercadoPago {
             MercadoPago.startCongratsActivity(this.mActivity, this.mPayment, this.mPaymentMethod);
         }
 
-        public void startRejectionActivity() {
-
-            if (this.mActivity == null) throw new IllegalStateException("activity is null");
-            if (this.mPayment == null) throw new IllegalStateException("payment is null");
-            if (this.mPaymentMethod == null) throw new IllegalStateException("payment method is null");
-
-            MercadoPago.startRejectionActivity(this.mActivity, this.mPayment, this.mPaymentMethod);
-        }
 
         public void startInstructionsActivity() {
 

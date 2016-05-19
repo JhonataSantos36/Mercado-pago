@@ -80,7 +80,7 @@
                     android:background="@color/mpsdk_color_light_grey">
 
                         <com.mercadopago.views.MPButton
-                            android:id="@+id/otherPaymentMethod"
+                            android:id="@+id/selectOtherPaymentMethodByRejection"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/mpsdk_button_height"
                             android:layout_marginLeft="10dp"
@@ -106,12 +106,12 @@
                             android:layout_gravity="center_horizontal|bottom" />
 
                         <com.mercadopago.views.MPTextView
-                            android:id="@+id/exitOfRejection"
+                            android:id="@+id/exitRejection"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:layout_marginTop="40dp"
-                            android:text="@string/mpsdk_text_go_out"
+                            android:text="@string/mpsdk_text_keep_buying"
                             android:textColor="@color/mpsdk_color_link"
                             android:textSize="18dp" />
                 </LinearLayout>

@@ -74,7 +74,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginTop="35dp"
-                        android:text="@string/mpsdk_text_go_out"
+                        android:text="@string/mpsdk_text_keep_buying"
                         android:textColor="@color/mpsdk_color_link"
                         android:textSize="18dp" />
             </LinearLayout>
