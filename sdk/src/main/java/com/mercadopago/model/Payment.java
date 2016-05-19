@@ -8,6 +8,24 @@ import java.util.Map;
 
 public class Payment implements Serializable {
 
+    public final String STATUS_APPROVED = "approved";
+    public final String STATUS_IN_PROCESS = "in_process";
+    public final String STATUS_REJECTED = "rejected";
+
+    public final String STATUS_DETAIL_CC_REJECTED_CALL_FOR_AUTHORIZE = "cc_rejected_call_for_authorize";
+    public final String STATUS_DETAIL_PENDING_CONTINGENCY = "pending_contingency";
+    public final String STATUS_DETAIL_PENDING_REVIEW_MANUAL = "pending_review_manual";
+    public final String STATUS_DETAIL_CC_REJECTED_OTHER_REASON = "cc_rejected_other_reason";
+    public final String STATUS_DETAIL_CC_REJECTED_BAD_FILLED_OTHER = "cc_rejected_bad_filled_other";
+    public final String CC_REJECTED_BAD_FILLED_CARD_NUMBER = "cc_rejected_bad_filled_card_number";
+    public final String CC_REJECTED_BAD_FILLED_SECURITY_CODE = "cc_rejected_bad_filled_security_code";
+    public final String CC_REJECTED_BAD_FILLED_DATE = "cc_rejected_bad_filled_date";
+    public final String REJECTED_HIGH_RISK = "rejected_high_risk";
+    public final String CC_REJECTED_INSUFFICIENT_AMOUNT = "cc_rejected_insufficient_amount";
+    public final String CC_REJECTED_MAX_ATTEMPTS = "cc_rejected_max_attempts";
+    public final String CC_REJECTED_DUPLICATED_PAYMENT = "cc_rejected_duplicated_payment";
+    public final String CC_REJECTED_CARD_DISABLED = "cc_rejected_card_disabled";
+
     private Boolean binaryMode;
     private String callForAuthorizeId;
     private Boolean captured;

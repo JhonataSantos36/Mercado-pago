@@ -32,4 +32,8 @@ public class FeeDetail implements Serializable {
     public void setType(String type) {
         this.type = type;
     }
+
+    public Boolean isFinancialFree(){
+        return type != null && type.equals("financing_fee");
+    }
 }

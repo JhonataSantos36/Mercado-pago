@@ -109,6 +109,11 @@
     <string name="mpsdk_subtitle_rejection_max_attempts">Elige otra tarjeta u otro medio de pago.</string>
     <string name="mpsdk_subtitle_rejection_duplicated_payment">Si necesitas volver a pagar usa otra tarjeta u otro medio de pago.</string>
     <string name="mpsdk_subtitle_rejection_card_disabled">El teléfono está al dorso de tu tarjeta.</string>
+    <string name="mpsdk_text_a">a</string>
+    <string name="mpsdk_text_you">Tu</string>
+    <string name="mpsdk_text_call_to">Llama a</string>
+    <string name="mpsdk_text_the">el</string>
+    <string name="mpsdk_text_and_he_authorized">y me autorizó</string>
 
     <string name="mpsdk_error_message_invalid_amount">Monto inválido</string>
     <string name="mpsdk_error_message_invalid_item">Item inválido</string>
@@ -136,5 +141,7 @@
     <string name="mpsdk_zero_rate">Sin intereses</string>
     <string name="mpsdk_installments_of">de</string>
     <string name="mpsdk_card_installments_title">¿En cuántas mensualidades?</string>
+
+
 
 </resources>

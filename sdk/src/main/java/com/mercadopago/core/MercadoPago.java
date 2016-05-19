@@ -294,7 +294,6 @@ public class MercadoPago {
 
         Intent congratsIntent = new Intent(activity, CongratsActivity.class);
         congratsIntent.putExtra("payment", payment);
-        congratsIntent.putExtra("paymentMethod", paymentMethod);
         activity.startActivityForResult(congratsIntent, CONGRATS_REQUEST_CODE);
     }
 
