@@ -257,7 +257,7 @@ public class CheckoutActivity extends AppCompatActivity {
                 setResult(RESULT_OK, returnIntent);
                 finish();
             }
-            else if (requestCode == RESULT_CANCELED){
+            else if (resultCode == RESULT_CANCELED){
                 if (data.getSerializableExtra("congratsResult") == MercadoPago.OTHER_PAYMENT_METHOD_CODE){
                     startPaymentVaultActivity();
                 }
