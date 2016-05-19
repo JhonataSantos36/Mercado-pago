@@ -45,48 +45,14 @@ public abstract class StaticFrontCardActivity extends FrontCardActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView();
-        setLayout();
-        initializeAdapter();
-        getActivityParameters();
-        initializeToolbar();
-        mMercadoPago = new MercadoPago.Builder()
-                .setContext(this)
-                .setPublicKey(mKey)
-                .build();
-
-        if (mCurrentPaymentMethod == null) {
-            guessPaymentMethod();
-        } else {
-            initializeCard();
-            initializeFrontFragment();
-        }
     }
 
-    protected abstract void setContentView();
-    protected abstract void setLayout();
-    protected abstract void initializeToolbar();
     protected abstract void finishWithResult();
-    protected abstract void initializeAdapter();
-    protected abstract void onItemSelected(View view, int position);
-
-    protected void initializeAdapterListener(RecyclerView.Adapter adapter, RecyclerView view) {
-        view.setAdapter(adapter);
-        view.setLayoutManager(new LinearLayoutManager(this));
-        view.addOnItemTouchListener(new RecyclerItemClickListener(this,
-                new RecyclerItemClickListener.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(View view, int position) {
-                        onItemSelected(view, position);
-                        finishWithResult();
-                    }
-                }));
-    }
 
     protected void getActivityParameters() {
         mCurrentPaymentMethod = JsonUtil.getInstance().fromJson(
-                this.getIntent().getStringExtra("payment_method"), PaymentMethod.class);
-        mKey = getIntent().getStringExtra("key");
+                this.getIntent().getStringExtra("paymentMethod"), PaymentMethod.class);
+        mKey = getIntent().getStringExtra("publicKey");
         mToken = JsonUtil.getInstance().fromJson(
                 this.getIntent().getStringExtra("token"), Token.class);
         mBin = mToken.getFirstSixDigits();
@@ -123,6 +89,9 @@ public abstract class StaticFrontCardActivity extends FrontCardActivity {
     }
 
     protected void initializeCard() {
+        if (mCurrentPaymentMethod == null || mToken == null || mCardholder == null) {
+            return;
+        }
         saveCardNumber(getCardNumberHidden());
         saveCardName(mCardholder.getName());
         saveCardExpiryMonth(String.valueOf(mToken.getExpirationMonth()));
@@ -168,16 +137,6 @@ public abstract class StaticFrontCardActivity extends FrontCardActivity {
     public void onBackPressed() {
         super.onBackPressed();
         overridePendingTransition(R.anim.fade_in_seamless, R.anim.fade_out_seamless);
-    }
-
-    @Override
-    public void checkFocusOnSecurityCode() {
-
-    }
-
-    @Override
-    public boolean hasToFlipCard() {
-        return false;
     }
 
     @Override

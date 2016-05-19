@@ -77,7 +77,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
     protected String mCurrencyId;
     protected ShoppingCartFragment mShoppingCartFragment;
     protected PaymentPreference mPaymentPreference;
-    private MPTextView mActivityTitle;
+    protected MPTextView mActivityTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -348,14 +348,6 @@ public class PaymentVaultActivity extends AppCompatActivity {
 
         startActivityForResult(intent, MercadoPago.PAYMENT_VAULT_REQUEST_CODE);
         overridePendingTransition(R.anim.slide_right_to_left_in, R.anim.slide_right_to_left_out);
-    }
-
-    private static void putListExtra(Intent intent, String listName, List<String> list) {
-        if (list != null) {
-            Gson gson = new Gson();
-            Type listType = new TypeToken<List<String>>(){}.getType();
-            intent.putExtra(listName, gson.toJson(list, listType));
-        }
     }
 
     protected void showSelectedItemChildren() {

@@ -3,6 +3,7 @@ package com.mercadopago;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -10,6 +11,8 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.mercadopago.adapters.CardInstallmentsAdapter;
+import com.mercadopago.core.MercadoPago;
+import com.mercadopago.listeners.RecyclerItemClickListener;
 import com.mercadopago.model.Installment;
 import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.PaymentPreference;
@@ -39,32 +42,44 @@ public class CardInstallmentsActivity extends StaticFrontCardActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView();
+        setLayout();
+        initializeAdapter();
+        getActivityParameters();
+        initializeToolbar();
+
+        mMercadoPago = new MercadoPago.Builder()
+                .setContext(this)
+                .setPublicKey(mKey)
+                .build();
+
+        if (mCurrentPaymentMethod == null) {
+            guessPaymentMethod();
+        } else {
+            initializeCard();
+            initializeFrontFragment();
+        }
     }
 
-    @Override
     protected void setContentView() {
         setContentView(R.layout.activity_new_installments);
     }
 
-    @Override
     protected void setLayout() {
         mInstallmentsContainer = (LinearLayout) findViewById(R.id.newCardInstallmentsContainer);
         mInstallmentsView = (RecyclerView) findViewById(R.id.activity_installments_view);
         mCardContainer = (FrameLayout) findViewById(R.id.activity_new_card_container);
     }
 
-    @Override
     protected void initializeAdapter() {
         mInstallmentsAdapter = new CardInstallmentsAdapter(this);
-        super.initializeAdapterListener(mInstallmentsAdapter, mInstallmentsView);
+        initializeAdapterListener(mInstallmentsAdapter, mInstallmentsView);
     }
 
-    @Override
     protected void onItemSelected(View view, int position) {
         mSelectedPayerCost = mPayerCosts.get(position);
     }
 
-    @Override
     protected void initializeToolbar() {
         super.initializeToolbarWithTitle(getString(R.string.mpsdk_card_installments_title));
     }
@@ -148,12 +163,22 @@ public class CardInstallmentsActivity extends StaticFrontCardActivity {
         finish();
     }
 
+    protected void initializeAdapterListener(RecyclerView.Adapter adapter, RecyclerView view) {
+        view.setAdapter(adapter);
+        view.setLayoutManager(new LinearLayoutManager(this));
+        view.addOnItemTouchListener(new RecyclerItemClickListener(this,
+                new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        onItemSelected(view, position);
+                        finishWithResult();
+                    }
+                }));
+    }
+
     private void initializeInstallments() {
         mInstallmentsAdapter.addResults(mPayerCosts);
     }
 
-    @Override
-    public void checkChangeErrorView() {
 
-    }
 }

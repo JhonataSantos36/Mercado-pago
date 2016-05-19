@@ -2,7 +2,6 @@ package com.mercadopago.fragments;
 
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -15,7 +14,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.mercadopago.CardInterface;
-import com.mercadopago.NewFormActivity;
 import com.mercadopago.R;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.views.MPEditText;
@@ -154,7 +152,6 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
     }
 
     public void afterSecurityTextChanged(Editable s) {
-        mActivity.checkChangeErrorView();
         mActivity.saveCardSecurityCode(s.toString());
         if (s.length() == 0) {
             mCardSecurityCodeView.setVisibility(View.INVISIBLE);
@@ -221,7 +218,6 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
 
                 @Override
                 public void afterTextChanged(Editable s) {
-                    mActivity.checkChangeErrorView();
                     if (s.length() == 2) {
                         if (mActivity.getCurrentPaymentMethod() != null) {
                             int color = mActivity.getCardFontColor(mActivity.getCurrentPaymentMethod());
@@ -270,7 +266,6 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
 
                 @Override
                 public void afterTextChanged(Editable s) {
-                    mActivity.checkChangeErrorView();
                     mActivity.saveCardNumber(s.toString());
                     if (s.length() == 0) {
                         mCardNumberView.setVisibility(View.INVISIBLE);
@@ -305,7 +300,6 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
 
                 @Override
                 public void afterTextChanged(Editable s) {
-                    mActivity.checkChangeErrorView();
                     mActivity.saveCardName(s.toString());
                     if (s.length() == 0) {
                         if (mActivity.getCurrentPaymentMethod() != null) {

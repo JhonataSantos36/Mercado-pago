@@ -1,72 +1,65 @@
 package com.mercadopago;
 
-import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentMethod;
 
 public interface CardInterface {
 
-    public static int NEUTRAL_CARD_COLOR = R.color.mpsdk_white;
-    public static int EMPTY_TEXT_VIEW_COLOR = R.color.mpsdk_base_text;
-    public static int FULL_TEXT_VIEW_COLOR = R.color.mpsdk_base_text;
-    public static int ERROR_TEXT_VIEW_COLOR = R.color.mpsdk_color_red_error;
+    int NEUTRAL_CARD_COLOR = R.color.mpsdk_white;
+    int FULL_TEXT_VIEW_COLOR = R.color.mpsdk_base_text;
+    int ERROR_TEXT_VIEW_COLOR = R.color.mpsdk_color_red_error;
 
-    public static String CARD_SIDE_FRONT = "front";
-    public static String CARD_SIDE_BACK = "back";
-    public static String CARD_IDENTIFICATION = "identification";
-    public static String ERROR_STATE = "textview_error";
-    public static String NORMAL_STATE = "textview_normal";
+    String CARD_SIDE_FRONT = "front";
+    String CARD_SIDE_BACK = "back";
+    String CARD_IDENTIFICATION = "identification";
 
-    public static String CARD_NUMBER_INPUT = "cardNumber";
-    public static String CARDHOLDER_NAME_INPUT = "cardHolderName";
-    public static String CARD_EXPIRYDATE_INPUT = "cardExpiryDate";
-    public static String CARD_SECURITYCODE_INPUT = "cardSecurityCode";
-    public static String CARD_IDENTIFICATION_INPUT = "cardIdentification";
-    public static String CARD_INPUT_FINISH = "card_input_finish";
+    String ERROR_STATE = "textview_error";
+    String NORMAL_STATE = "textview_normal";
 
-    public void saveCardSecurityCode(String securityCode);
+    String CARD_NUMBER_INPUT = "cardNumber";
+    String CARDHOLDER_NAME_INPUT = "cardHolderName";
+    String CARD_EXPIRYDATE_INPUT = "cardExpiryDate";
+    String CARD_SECURITYCODE_INPUT = "cardSecurityCode";
+    String CARD_IDENTIFICATION_INPUT = "cardIdentification";
+    String CARD_INPUT_FINISH = "card_input_finish";
 
-    public String getSecurityCode();
+    void saveCardSecurityCode(String securityCode);
 
-    public String getSecurityCodeLocation();
+    String getSecurityCode();
 
-    public void saveCardExpiryMonth(String expiryMonth);
+    String getSecurityCodeLocation();
 
-    public void saveCardName(String cardName);
+    void saveCardExpiryMonth(String expiryMonth);
 
-    public String getCardNumber();
+    void saveCardName(String cardName);
 
-    public void saveCardNumber(String cardNumber);
+    String getCardNumber();
 
-    public String buildNumberWithMask(CharSequence s);
+    void saveCardNumber(String cardNumber);
 
-    public String buildIdentificationNumberWithMask(CharSequence s);
+    String buildNumberWithMask(CharSequence s);
 
-    public String getCardHolderName();
+    String buildIdentificationNumberWithMask(CharSequence s);
 
-    public String getExpiryMonth();
+    String getCardHolderName();
 
-    public String getExpiryYear();
+    String getExpiryMonth();
 
-    public String getCardIdentificationNumber();
+    String getExpiryYear();
 
-    public void saveCardExpiryYear(String year);
+    String getCardIdentificationNumber();
 
-    public void saveCardIdentificationNumber(String number);
+    void saveCardExpiryYear(String year);
 
-    public PaymentMethod getCurrentPaymentMethod();
+    void saveCardIdentificationNumber(String number);
 
-    public int getCardImage(PaymentMethod paymentMethod);
+    PaymentMethod getCurrentPaymentMethod();
 
-    public int getCardColor(PaymentMethod paymentMethod);
+    int getCardImage(PaymentMethod paymentMethod);
 
-    public int getCardFontColor(PaymentMethod paymentMethod);
+    int getCardColor(PaymentMethod paymentMethod);
 
-    public boolean isSecurityCodeRequired();
+    int getCardFontColor(PaymentMethod paymentMethod);
 
-    public void checkFocusOnSecurityCode();
-
-    public boolean hasToFlipCard();
-
-    public void checkChangeErrorView();
+    boolean isSecurityCodeRequired();
 
 }

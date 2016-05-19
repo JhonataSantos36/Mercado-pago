@@ -91,8 +91,7 @@
             android:name=".CongratsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.MercadoPagoTheme.NoActionBar"/>
-
-        <activity android:name=".NewFormActivity"
+        <activity android:name=".GuessingNewCardActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.MercadoPagoTheme.NoActionBar">
         </activity>
@@ -104,7 +103,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.MercadoPagoTheme.NoActionBar">
         </activity>
-        <activity android:name=".FlowCardActivity"
+        <activity android:name=".CardVaultActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.MercadoPagoTheme.NoActionBar">
         </activity>

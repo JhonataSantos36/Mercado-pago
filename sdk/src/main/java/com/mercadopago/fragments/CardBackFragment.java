@@ -1,24 +1,21 @@
 package com.mercadopago.fragments;
 
-import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.FrameLayout;
 
-import com.mercadopago.NewFormActivity;
+import com.mercadopago.CardInterface;
+import com.mercadopago.GuessingNewCardActivity;
 import com.mercadopago.R;
 import com.mercadopago.views.MPTextView;
 
 public class CardBackFragment extends android.support.v4.app.Fragment {
 
-    private EditText mCardSecurityCodeEditText;
     private MPTextView mCardSecurityView;
-    private FrameLayout mBaseCard;
-    private GradientDrawable mBaseDrawableCard;
+
+    private CardInterface mActivity;
 
     public CardBackFragment() {
 
@@ -27,6 +24,7 @@ public class CardBackFragment extends android.support.v4.app.Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        mActivity = (CardInterface)getActivity();
     }
 
     @Override
@@ -48,11 +46,8 @@ public class CardBackFragment extends android.support.v4.app.Fragment {
     }
 
     public void setCardInputViews() {
-        mCardSecurityCodeEditText = (EditText) getActivity().findViewById(R.id.cardSecurityCode);
         if (getView() != null) {
             mCardSecurityView = (MPTextView) getView().findViewById(R.id.cardSecurityCodeView);
-            mBaseCard = (FrameLayout) getView().findViewById(R.id.activity_new_card_form_color_back);
-            mBaseDrawableCard = (GradientDrawable) mBaseCard.getBackground();
         }
     }
 
@@ -65,30 +60,21 @@ public class CardBackFragment extends android.support.v4.app.Fragment {
     }
 
     public void afterSecurityTextChanged(Editable s) {
-        ((NewFormActivity) getActivity()).checkChangeErrorView();
-        ((NewFormActivity) getActivity()).saveCardSecurityCode(s.toString());
+        mActivity.saveCardSecurityCode(s.toString());
         if (s.length() == 0) {
             mCardSecurityView.setText("");
-            ((NewFormActivity) getActivity()).saveCardSecurityCode("");
+            mActivity.saveCardSecurityCode("");
         }
     }
 
 
     private void populateCardSecurityCode() {
-        String securityCode = ((NewFormActivity)getActivity()).getSecurityCode();
+        String securityCode = mActivity.getSecurityCode();
         if (securityCode != null) {
             mCardSecurityView.setText(securityCode);
             mCardSecurityView.setTextColor(getResources()
-                    .getColor(NewFormActivity.FULL_TEXT_VIEW_COLOR));
+                    .getColor(GuessingNewCardActivity.FULL_TEXT_VIEW_COLOR));
         }
-    }
-
-    public void setCardSecurityCodeErrorView() {
-        mCardSecurityView.setTextColor(getResources().getColor(NewFormActivity.ERROR_TEXT_VIEW_COLOR));
-    }
-
-    public void clearCardSecurityCodeErrorView() {
-        mCardSecurityView.setTextColor(getResources().getColor(NewFormActivity.FULL_TEXT_VIEW_COLOR));
     }
 
 }

@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.mercadopago.core.MercadoPago;
+import com.mercadopago.core.Settings;
 import com.mercadopago.model.Cardholder;
 import com.mercadopago.model.Installment;
 import com.mercadopago.model.Issuer;
@@ -14,6 +15,7 @@ import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentPreference;
 import com.mercadopago.model.PaymentType;
+import com.mercadopago.model.Setting;
 import com.mercadopago.model.Token;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.LayoutUtil;
@@ -27,7 +29,7 @@ import retrofit.RetrofitError;
 import retrofit.client.Response;
 
 
-public class FlowCardActivity extends StaticFrontCardActivity {
+public class CardVaultActivity extends StaticFrontCardActivity {
 
     private Activity mActivity;
 
@@ -38,12 +40,27 @@ public class FlowCardActivity extends StaticFrontCardActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mActivity = this;
+        setContentView();
+        getActivityParameters();
+
+        mMercadoPago = new MercadoPago.Builder()
+                .setContext(this)
+                .setPublicKey(mKey)
+                .build();
+
+        if (mCurrentPaymentMethod == null) {
+            guessPaymentMethod();
+        } else {
+            initializeCard();
+            initializeFrontFragment();
+        }
+
         fadeInFormActivity();
     }
 
     @Override
     protected void getActivityParameters() {
-        mKey = getIntent().getStringExtra("key");
+        mKey = getIntent().getStringExtra("publicKey");
         mSecurityCodeLocation = CardInterface.CARD_SIDE_BACK;
         mAmount = new BigDecimal(getIntent().getStringExtra("amount"));
         mPaymentPreference = (PaymentPreference) this.getIntent().getSerializableExtra("paymentPreference");
@@ -52,7 +69,7 @@ public class FlowCardActivity extends StaticFrontCardActivity {
         }
     }
 
-    @Override
+//    @Override
     protected void setContentView() {
         setContentView(R.layout.activity_flow_card);
     }
@@ -95,13 +112,13 @@ public class FlowCardActivity extends StaticFrontCardActivity {
             mCurrentPaymentMethod = (PaymentMethod) data.getSerializableExtra("paymentMethod");
             mToken = (Token) data.getSerializableExtra("token");
             mSelectedIssuer = (Issuer) data.getSerializableExtra("issuer");
-            String cardHolderName = data.getStringExtra("cardHolderName");
-            if (mToken != null) {
+            if (mToken != null && mCurrentPaymentMethod != null) {
                 mBin = mToken.getFirstSixDigits();
+                mCardholder = mToken.getCardholder();
+                List<Setting> settings = mCurrentPaymentMethod.getSettings();
+                Setting setting = Setting.getSettingByBin(settings, mBin);
+                mSecurityCodeLocation = setting.getSecurityCode().getCardLocation();
             }
-            mCardholder = new Cardholder();
-            mCardholder.setName(cardHolderName);
-            mSecurityCodeLocation = data.getStringExtra("securityCodeLocation");
             initializeCard();
             checkStartInstallmentsActivity();
 
@@ -120,12 +137,10 @@ public class FlowCardActivity extends StaticFrontCardActivity {
                 new Callback<List<Installment>>() {
                     @Override
                     public void success(List<Installment> installments, Response response) {
-                        if (installments.size() == 0) {
-                            //TODO
-                        } else if (installments.size() == 1) {
+                        if (installments.size() == 1) {
                             resolvePayerCosts(installments.get(0).getPayerCosts());
-                        } else if (installments.size() > 1) {
-                            //TODO
+                        } else {
+                            //TODO agregar error
                         }
                     }
 
@@ -187,17 +202,6 @@ public class FlowCardActivity extends StaticFrontCardActivity {
             fadeInInstallmentsActivity(supportedPayerCosts);
         }
     }
-
-    @Override
-    protected void setLayout() {
-
-    }
-
-    @Override
-    protected void initializeToolbar() {
-
-    }
-
     @Override
     protected void finishWithResult() {
         Intent returnIntent = new Intent();
@@ -207,20 +211,5 @@ public class FlowCardActivity extends StaticFrontCardActivity {
         returnIntent.putExtra("issuer", mSelectedIssuer);
         setResult(RESULT_OK, returnIntent);
         finish();
-    }
-
-    @Override
-    protected void onItemSelected(View view, int position) {
-
-    }
-
-    @Override
-    protected void initializeAdapter() {
-
-    }
-
-    @Override
-    public void checkChangeErrorView() {
-
     }
 }

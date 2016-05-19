@@ -1,19 +1,13 @@
 package com.mercadopago.examples.step7;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Toast;
 
-import com.mercadopago.CardInstallmentsActivity;
-import com.mercadopago.FlowCardActivity;
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.examples.R;
 import com.mercadopago.examples.utils.ExamplesUtils;
-import com.mercadopago.model.ApiException;
 import com.mercadopago.model.CardToken;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.PayerCost;
@@ -22,10 +16,7 @@ import com.mercadopago.model.PaymentPreference;
 import com.mercadopago.model.PaymentType;
 import com.mercadopago.model.Token;
 import com.mercadopago.util.ApiUtil;
-import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;
-
-import java.util.ArrayList;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -91,7 +82,7 @@ public class Step7Activity extends AppCompatActivity {
                 .setPublicKey(publicKeyMLA)
                 .setAmount(ExamplesUtils.DUMMY_ITEM_UNIT_PRICE)
                 .setPaymentPreference(paymentPreference)
-                .startFlowCardActivity();
+                .startCardVaultActivity();
 
     }
 

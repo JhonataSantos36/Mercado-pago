@@ -53,16 +53,12 @@ import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-public class NewFormActivity extends FrontCardActivity {
+public class GuessingNewCardActivity extends FrontCardActivity {
 
 
     // Activity parameters
     private String mKey;
-    private Boolean mRequireSecurityCode;
-    private Boolean mRequireIssuer;
-    private Boolean mShowBankDeals;
     private MPTextView mToolbarTitle;
-    private Boolean hasToFlipCard;
 
     // Input controls
     private MPEditText mCardHolderNameEditText;
@@ -119,6 +115,8 @@ public class NewFormActivity extends FrontCardActivity {
         setListeners();
         setSecurityCodeTextWatcher();
         setIdentificationNumberTextWatcher();
+        setCardholderNameTextWatcher();
+        setDateTextWatcher();
         openKeyboard(mCardNumberEditText);
         mCurrentEditingEditText = CardInterface.CARD_NUMBER_INPUT;
 
@@ -231,10 +229,8 @@ public class NewFormActivity extends FrontCardActivity {
 
     protected void getActivityParameters() {
         mKey = this.getIntent().getStringExtra("publicKey");
-        mRequireSecurityCode = this.getIntent().getBooleanExtra("requireSecurityCode", true);
         mPaymentPreference = (PaymentPreference) this.getIntent().getSerializableExtra("paymentPreference");
         mToken = (Token) this.getIntent().getSerializableExtra("token");
-        hasToFlipCard = (mToken == null);
         mIdentification = new Identification();
         mIdentificationNumberRequired = false;
         mIdentificationTypeRequired = false;
@@ -426,10 +422,6 @@ public class NewFormActivity extends FrontCardActivity {
         mCardNumberEditText.requestFocus();
     }
 
-    public boolean hasToFlipCard() {
-        return hasToFlipCard;
-    }
-
     protected void initializeGuessingCardNumberController(List<PaymentMethod> paymentMethods) {
         List<PaymentMethod> supportedPaymentMethods = mPaymentPreference
                 .getSupportedPaymentMethods(paymentMethods);
@@ -439,6 +431,22 @@ public class NewFormActivity extends FrontCardActivity {
     }
 
     public void setCardNumberListener() {
+        mCardNumberEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                checkChangeErrorView();
+            }
+        });
         mCardNumberEditText.addTextChangedListener(new CardNumberTextWatcher(
                 mPaymentMethodGuessingController,
                 new PaymentMethodSelectionCallback() {
@@ -539,12 +547,6 @@ public class NewFormActivity extends FrontCardActivity {
                 .replace(R.id.activity_new_card_container, mBackFragment)
                 .addToBackStack(null)
                 .commit();
-    }
-
-    public void checkFocusOnSecurityCode() {
-        if (mPaymentMethodGuessingController.isSecurityCodeRequired()) {
-            focusOnSecurityCode();
-        }
     }
 
     public void manageSettings() {
@@ -661,16 +663,6 @@ public class NewFormActivity extends FrontCardActivity {
     private void clearSecurityCodeFront() {
         mFrontFragment.hideCardSecurityView();
         setCardSecurityCodeFocusListener();
-    }
-
-    public void focusOnSecurityCode() {
-        String location = mPaymentMethodGuessingController.getSecurityCodeLocation();
-        if (location == null || location.equals(CardInterface.CARD_SIDE_BACK)) {
-            checkFlipCardToBack();
-        } else {
-            checkFlipCardToFront();
-        }
-        mCardSecurityCodeEditText.requestFocus();
     }
 
     public void changeCardColor(int color, int font) {
@@ -960,6 +952,44 @@ public class NewFormActivity extends FrontCardActivity {
         });
     }
 
+    public void setCardholderNameTextWatcher() {
+        mCardHolderNameEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                checkChangeErrorView();
+            }
+        });
+    }
+
+    public void setDateTextWatcher() {
+        mCardExpiryDateEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                checkChangeErrorView();
+            }
+        });
+    }
+
     public boolean canCreateCardToken() {
         boolean result = true;
         boolean requestFocus = true;
@@ -1133,7 +1163,6 @@ public class NewFormActivity extends FrontCardActivity {
         return sb.toString();
     }
 
-    @Override
     public void checkChangeErrorView() {
         if (mErrorState.equals(ERROR_STATE)) {
             clearErrorView();
@@ -1232,9 +1261,6 @@ public class NewFormActivity extends FrontCardActivity {
         returnIntent.putExtra("paymentMethod", mCurrentPaymentMethod);
         returnIntent.putExtra("token", mToken);
         returnIntent.putExtra("issuer", mSelectedIssuer);
-        returnIntent.putExtra("cardHolderName", mCardHolderName);
-        returnIntent.putExtra("securityCodeLocation",
-                mPaymentMethodGuessingController.getSecurityCodeLocation());
         setResult(RESULT_OK, returnIntent);
         finish();
     }

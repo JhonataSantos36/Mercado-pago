@@ -10,7 +10,7 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 import com.mercadopago.CardInterface;
-import com.mercadopago.NewFormActivity;
+import com.mercadopago.GuessingNewCardActivity;
 import com.mercadopago.R;
 import com.mercadopago.views.MPEditText;
 import com.mercadopago.views.MPTextView;
@@ -53,10 +53,10 @@ public class CardIdentificationFragment extends android.support.v4.app.Fragment 
     }
 
     public void afterNumberTextChanged(Editable s) {
-        ((NewFormActivity) getActivity()).saveCardIdentificationNumber(s.toString());
+        ((GuessingNewCardActivity) getActivity()).saveCardIdentificationNumber(s.toString());
         if (s.length() == 0) {
             mCardIdentificationNumberView.setText("");
-            ((NewFormActivity) getActivity()).saveCardIdentificationNumber(null);
+            ((GuessingNewCardActivity) getActivity()).saveCardIdentificationNumber(null);
         }
     }
 
@@ -134,7 +134,6 @@ public class CardIdentificationFragment extends android.support.v4.app.Fragment 
 
                 @Override
                 public void afterTextChanged(Editable s) {
-                    mActivity.checkChangeErrorView();
                     mActivity.saveCardIdentificationNumber(s.toString());
                     if (s.length() == 0) {
                         mCardIdentificationNumberView.setVisibility(View.INVISIBLE);

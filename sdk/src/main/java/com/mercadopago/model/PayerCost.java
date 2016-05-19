@@ -85,16 +85,4 @@ public class PayerCost implements Serializable {
         return installments.toString();
     }
 
-    public static List<PayerCost> getPayerCosts(PaymentPreference paymentPreference, List<PayerCost> payerCosts) {
-        if (paymentPreference.getMaxInstallments() == null) {
-            return payerCosts;
-        }
-        List<PayerCost> ans = new ArrayList<>();
-        for (PayerCost payerCost: payerCosts) {
-            if (payerCost.getInstallments() <= paymentPreference.getMaxInstallments()) {
-                ans.add(payerCost);
-            }
-        }
-        return ans;
-    }
 }
