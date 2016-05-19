@@ -54,36 +54,6 @@ public class Step1Activity extends ExampleActivity {
         setContentView(R.layout.activity_step1);
         createPaymentPreference();
         mActivity = this;
-
-        //TODO borrar, era para probar congrats
-        Payment payment = new Payment();
-        Payer payer = new Payer();
-        Card card = new Card();
-        PaymentMethod paymentMethod = new PaymentMethod();
-
-        payment.setId(123456789L);
-        payment.setStatus("rejected");
-        payment.setStatusDetail("cc_rejected_other_reason");
-        payer.setEmail("juan-carlos@email.com");
-        payment.setPayer(payer);
-        card.setLastFourDigits("5676");
-        paymentMethod.setId("master");
-        paymentMethod.setName("Master");
-        card.setPaymentMethod(paymentMethod);
-        payment.setCard(card);
-        payment.setInstallments(6);
-        TransactionDetails transactionDetails = new TransactionDetails();
-        transactionDetails.setInstallmentAmount(new BigDecimal(173.33));
-        transactionDetails.setTotalPaidAmount(new BigDecimal(1038));
-        payment.setTransactionDetails(transactionDetails);
-        payment.setCurrencyId("MXN");
-
-
-
-        Intent intent = new Intent(this, CongratsActivity.class);
-        intent.putExtra("payment", payment);
-        startActivity(intent);
-        ////////////////////////////////////////////////
     }
 
     private void createPaymentPreference() {

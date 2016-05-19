@@ -288,6 +288,11 @@ public class CheckoutActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == MercadoPago.PAYMENT_VAULT_REQUEST_CODE) {
             if(resultCode == RESULT_OK) {
+                mSelectedIssuer = (Issuer) data.getSerializableExtra("issuer");
+                mSelectedPayerCost = (PayerCost) data.getSerializableExtra("payerCost");
+                mCreatedToken = (Token) data.getSerializableExtra("token");
+                mSelectedPaymentMethod = (PaymentMethod) data.getSerializableExtra("paymentMethod");
+
                 showRegularLayout();
                 showReviewAndConfirm();
             }

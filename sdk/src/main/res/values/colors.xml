@@ -37,4 +37,5 @@
     
     <color name="mpsdk_color_pending_background">#FBF8E1</color>
     <color name="mpsdk_color_pending_image">#EFC701</color>
+
 </resources>
