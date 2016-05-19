@@ -225,19 +225,13 @@ public class CheckoutActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == MercadoPago.PAYMENT_VAULT_REQUEST_CODE) {
-
             if(resultCode == RESULT_OK) {
-
                 mSelectedIssuer = (Issuer) data.getSerializableExtra("issuer");
-
                 mSelectedPayerCost = (PayerCost) data.getSerializableExtra("payerCost");
-
                 mCreatedToken = (Token) data.getSerializableExtra("token");
-
                 mSelectedPaymentMethod = (PaymentMethod) data.getSerializableExtra("paymentMethod");
 
                 showReviewAndConfirm(data.getStringExtra("paymentMethodInfo"));
-
             }
             else if (resultCode == RESULT_CANCELED) {
                 if(!mPaymentMethodEditionRequested) {
@@ -255,6 +249,22 @@ public class CheckoutActivity extends AppCompatActivity {
             returnIntent.putExtra("payment", mCreatedPayment);
             setResult(RESULT_OK, returnIntent);
             finish();
+        }
+        else if (requestCode == MercadoPago.CONGRATS_REQUEST_CODE){
+            if (resultCode == RESULT_OK){
+                Intent returnIntent = new Intent();
+                returnIntent.putExtra("payment", mCreatedPayment);
+                setResult(RESULT_OK, returnIntent);
+                finish();
+            }
+            else if (requestCode == RESULT_CANCELED){
+                if (data.getSerializableExtra("congratsResult") == MercadoPago.OTHER_PAYMENT_METHOD_CODE){
+                    startPaymentVaultActivity();
+                }
+                else if (data.getSerializableExtra("congratsResult") == MercadoPago.RETRY_CODE){
+                    //TODO mandar a ingrese de nuevo el código de seguridad
+                }
+            }
         }
     }
 
@@ -302,7 +312,7 @@ public class CheckoutActivity extends AppCompatActivity {
             public void success(Payment payment, Response response) {
                 mCreatedPayment = payment;
                 if (MercadoPagoUtil.isCardPaymentType(mSelectedPaymentMethod.getPaymentTypeId())) {
-                    resolvePaymentStatusMessageActivity(payment);
+                    startCongratActivity(payment);
                 } else {
                     new MercadoPago.StartActivityBuilder()
                             .setPublicKey(mMerchantPublicKey)
@@ -315,33 +325,19 @@ public class CheckoutActivity extends AppCompatActivity {
 
             @Override
             public void failure(RetrofitError error) {
-
-                //TODO volar, no va, es para probar
-                Payment payment = new Payment();
-                payment.setStatus("approved");
-                resolvePaymentStatusMessageActivity(payment);
-                //
-
                 ApiUtil.finishWithApiException(mActivity, error);
             }
         });
     }
 
-    private void resolvePaymentStatusMessageActivity(Payment payment) {
-
+    private void startCongratActivity(Payment payment) {
         MercadoPago.StartActivityBuilder builder = new MercadoPago.StartActivityBuilder()
                 .setPublicKey(mMerchantPublicKey)
                 .setActivity(mActivity)
                 .setPayment(payment)
                 .setPaymentMethod(mSelectedPaymentMethod);
 
-        //TODO validar los status
-        if(payment.getStatus().equals("approved")) {
-            builder.startCongratsActivity();
-        }
-        else if(payment.getStatus().equals("pending")){
-            builder.startRejectionActivity();
-        }
+        builder.startCongratsActivity();
     }
 
     private void animateBackToPaymentVault() {

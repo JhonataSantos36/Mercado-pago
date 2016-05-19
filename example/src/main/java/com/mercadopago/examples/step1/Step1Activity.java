@@ -59,8 +59,8 @@ public class Step1Activity extends ExampleActivity {
         PaymentMethod paymentMethod = new PaymentMethod();
 
         payment.setId(123456789L);
-        payment.setStatus("in_process");
-        payment.setStatusDetail("pending_contingency");
+        payment.setStatus("rejected");
+        payment.setStatusDetail("cc_rejected_other_reason");
         payer.setEmail("juan-carlos@email.com");
         payment.setPayer(payer);
         card.setLastFourDigits("5676");

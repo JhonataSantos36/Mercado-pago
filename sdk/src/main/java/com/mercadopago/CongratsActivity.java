@@ -6,9 +6,11 @@ import android.os.Bundle;
 import android.text.Spanned;
 import android.view.View;
 
+import com.mercadopago.core.MercadoPago;
 import com.mercadopago.model.Payment;
 import com.mercadopago.util.CurrenciesUtil;
 import com.mercadopago.util.MercadoPagoUtil;
+import com.mercadopago.views.MPButton;
 import com.mercadopago.views.MPTextView;
 
 import java.math.BigDecimal;
@@ -34,6 +36,8 @@ public class CongratsActivity extends AppCompatActivity {
 
     protected MPTextView mRejectionTitle;
     protected MPTextView mRejectionSubtitle;
+    protected MPTextView mExitRejection;
+    protected MPButton mSelectOtherPaymentMethodByRejection;
 
     protected MPTextView mPendingSubtitle;
     protected MPTextView mExitPending;
@@ -51,12 +55,11 @@ public class CongratsActivity extends AppCompatActivity {
             if (mPayment.getStatus().equals("approved")){
                 showCongrats();
             }
-
-            if (mPayment.getStatus().equals("in_process")){
+            else if (mPayment.getStatus().equals("in_process")){
                 showPending();
             }
             else if (mPayment.getStatus().equals("rejected")){
-                if(mPayment.getStatusDetail() != null && !isEmpty(mPayment.getStatusDetail())) {
+                if(isStatusDetailValid()) {
                     if (mPayment.getStatusDetail().equals("cc_rejected_call_for_authorize")) {
                         showCallForAuthorize();
                     }
@@ -67,6 +70,9 @@ public class CongratsActivity extends AppCompatActivity {
                 else {
                     cancelAndFinishActivity();
                 }
+            }
+            else{
+                cancelAndFinishActivity();
             }
         }
         else {
@@ -82,8 +88,8 @@ public class CongratsActivity extends AppCompatActivity {
 
     private void showRejection() {
         setContentView(R.layout.activity_rejection);
-        //initializeRejectionControls();
-        //fillRejectedData();
+        initializeRejectionControls();
+        fillRejectionData();
     }
 
     private void showCallForAuthorize() {
@@ -114,13 +120,51 @@ public class CongratsActivity extends AppCompatActivity {
     private void initializeRejectionControls() {
         mRejectionTitle = (MPTextView) findViewById(R.id.rejectionTitle);
         mRejectionSubtitle = (MPTextView) findViewById(R.id.rejectionSubtitle);
+        mSelectOtherPaymentMethodByRejection = (MPButton) findViewById(R.id.selectOtherPaymentMethodByRejection);
+        mSelectOtherPaymentMethodByRejection.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent returnIntent = new Intent();
+                returnIntent.putExtra("congratsResult", MercadoPago.OTHER_PAYMENT_METHOD_CODE);
+                setResult(RESULT_CANCELED, returnIntent);
+                finish();
+            }
+        });
+        mExitRejection = (MPTextView) findViewById(R.id.exitRejection);
+        mExitRejection.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent returnIntent = new Intent();
+                setResult(RESULT_OK, returnIntent);
+                finish();
+            }
+        });
+
     }
 
     private void initializeCallForAuthControls() {
         mPaymentMethodAuthorizeDescription = (MPTextView) findViewById(R.id.callForAuthorizeTitleFirstRow);
         mPaymentAmountDescription = (MPTextView) findViewById(R.id.callForAuthorizeTitleSecondRow);
         mAuthorizedPaymentMethod = (MPTextView) findViewById(R.id.authorizedPaymentMethod);
+        mAuthorizedPaymentMethod.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent returnIntent = new Intent();
+                returnIntent.putExtra("congratsResult", MercadoPago.RETRY_CODE);
+                setResult(RESULT_CANCELED, returnIntent);
+                finish();
+            }
+        });
         mSelectOtherPaymentMethod = (MPTextView) findViewById(R.id.selectOtherPaymentMethod);
+        mSelectOtherPaymentMethod.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent returnIntent = new Intent();
+                returnIntent.putExtra("congratsResult", MercadoPago.OTHER_PAYMENT_METHOD_CODE);
+                setResult(RESULT_CANCELED, returnIntent);
+                finish();
+            }
+        });
         mExitCallForAuthorize = (MPTextView) findViewById(R.id.exitCallForAuthorize);
         mExitCallForAuthorize.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -150,24 +194,13 @@ public class CongratsActivity extends AppCompatActivity {
         });
     }
 
-    private void fillPendingData(){
-        if (mPayment != null) {
-            setPendingSubtitle();
-        }
-        else {
-            Intent returnIntent = new Intent();
-            setResult(RESULT_CANCELED, returnIntent);
-            finish();
-        }
-    }
-
-    private void setPendingSubtitle() {
-        if (mPayment.getStatusDetail() != null && !isEmpty(mPayment.getStatusDetail())) {
+    private void fillPendingData() {
+        if (isStatusDetailValid()) {
             if (mPayment.getStatusDetail().equals("pending_contingency")) {
                 mPendingSubtitle.setText(getString(R.string.mpsdk_subtitle_pending_contingency));
             }
             if (mPayment.getStatusDetail().equals("pending_review_manual")) {
-                //TODO ver que subtitulos van, preguntar a Cris que mensaje mostramos acá
+                //TODO ver que subtitulo va
                 mPendingSubtitle.setText(getString(R.string.mpsdk_subtitle_pending_contingency));
             }
         } else {
@@ -175,52 +208,51 @@ public class CongratsActivity extends AppCompatActivity {
         }
     }
 
-    private void fillRejectedData(){
-        if (mPayment.getCard() != null && !isEmpty(mPayment.getCard().getPaymentMethod().getId()) && mPayment.getStatusDetail() != null && !isEmpty(mPayment.getStatusDetail())){
-            //TODO agregar validaciones
+    private void fillRejectionData() {
+        if (isPaymentMethodNameValid()){
             if (mPayment.getStatusDetail().equals("cc_rejected_other_reason")) {
                 String titleMessage = mPayment.getCard().getPaymentMethod().getName() + " " + getString(R.string.mpsdk_title_other_reason_rejection);
                 mRejectionTitle.setText(titleMessage);
                 mRejectionSubtitle.setText(getString(R.string.mpsdk_text_select_other_rejection));
             }
-            if (mPayment.getStatusDetail().equals("cc_rejected_bad_filled_other")){
+            else if (mPayment.getStatusDetail().equals("cc_rejected_bad_filled_other")){
                 mRejectionTitle.setText(getString(R.string.mpsdk_title_bad_filled_other_rejection));
-                String subtitleMessage = "Algún dato de tu " + mPayment.getCard().getPaymentMethod().getId() + " es incorrecto.";
+                String subtitleMessage = getString(R.string.mpsdk_text_some_number) + " " + mPayment.getCard().getPaymentMethod().getName() + " " + getString(R.string.mpsdk_text_is_incorrect);
                 mRejectionSubtitle.setText(subtitleMessage);
             }
-            if (mPayment.getStatusDetail().equals("cc_rejected_bad_filled_card_number")){
+            else if (mPayment.getStatusDetail().equals("cc_rejected_bad_filled_card_number")){
                 mRejectionTitle.setText(getString(R.string.mpsdk_title_bad_filled_other_rejection));
-                String subtitleMessage = "Algún número de tu " + mPayment.getCard().getPaymentMethod().getId() + " es incorrecto.";
+                String subtitleMessage = getString(R.string.mpsdk_text_some_number) + " " + mPayment.getCard().getPaymentMethod().getName() + " " + getString(R.string.mpsdk_text_is_incorrect);
                 mRejectionSubtitle.setText(subtitleMessage);
             }
-            if (mPayment.getStatusDetail().equals("cc_rejected_bad_filled_security_code")){
+            else if (mPayment.getStatusDetail().equals("cc_rejected_bad_filled_security_code")){
                 mRejectionTitle.setText(getString(R.string.mpsdk_title_bad_filled_other_rejection));
                 mRejectionSubtitle.setText(getString(R.string.mpsdk_title_bad_filled_security_code_rejection));
             }
-            if (mPayment.getStatusDetail().equals("cc_rejected_bad_filled_date")){
+            else if (mPayment.getStatusDetail().equals("cc_rejected_bad_filled_date")){
                 mRejectionTitle.setText(getString(R.string.mpsdk_title_bad_filled_other_rejection));
                 mRejectionSubtitle.setText(getString(R.string.mpsdk_title_bad_filled_date_rejection));
             }
-            if (mPayment.getStatusDetail().equals("rejected_high_risk")){
+            else if (mPayment.getStatusDetail().equals("rejected_high_risk")){
                 mRejectionTitle.setText(getString(R.string.mpsdk_title_rejection_high_risk));
                 mRejectionSubtitle.setText(getString(R.string.mpsdk_subtitle_rejection_high_risk));
             }
-            if (mPayment.getStatusDetail().equals("cc_rejected_insufficient_amount")){
-                String titleMenssage = "Tu " + mPayment.getCard().getPaymentMethod().getName() + " no tiene fondos suficientes";
-                mRejectionTitle.setText(titleMenssage);
+            else if (mPayment.getStatusDetail().equals("cc_rejected_insufficient_amount")){
+                String titleMessage = "Tu " + mPayment.getCard().getPaymentMethod().getName() + " " + getString(R.string.mpsdk_text_insufficient_amount);
+                mRejectionTitle.setText(titleMessage);
                 mRejectionSubtitle.setText(getString(R.string.mpsdk_subtitle_rejection_insufficient_amount));
             }
-            if (mPayment.getStatusDetail().equals("cc_rejected_max_attempts")){
+            else if (mPayment.getStatusDetail().equals("cc_rejected_max_attempts")){
                 mRejectionTitle.setText(getString(R.string.mpsdk_title_rejection_max_attempts));
                 mRejectionSubtitle.setText(getString(R.string.mpsdk_subtitle_rejection_max_attempts));
             }
-            if (mPayment.getStatusDetail().equals("cc_rejected_duplicated_payment")){
-                String titleMessage = mPayment.getCard().getPaymentMethod().getName() + " no procesó el pago";
+            else if (mPayment.getStatusDetail().equals("cc_rejected_duplicated_payment")){
+                String titleMessage = mPayment.getCard().getPaymentMethod().getName() + " " + getString(R.string.mpsdk_title_other_reason_rejection);
                 mRejectionTitle.setText(titleMessage);
                 mRejectionSubtitle.setText(getString(R.string.mpsdk_subtitle_rejection_duplicated_payment));
             }
-            if (mPayment.getStatusDetail().equals("cc_rejected_card_disabled")){
-                String titleMessage = "Llama a " + mPayment.getCard().getPaymentMethod().getName() + " para que active tu tarjeta";
+            else if (mPayment.getStatusDetail().equals("cc_rejected_card_disabled")){
+                String titleMessage = "Llama a " + mPayment.getCard().getPaymentMethod().getName() + " " + getString(R.string.mpsdk_text_active_card);
                 mRejectionTitle.setText(titleMessage);
                 mRejectionSubtitle.setText(getString(R.string.mpsdk_subtitle_rejection_card_disabled));
             }
@@ -232,26 +264,15 @@ public class CongratsActivity extends AppCompatActivity {
             mRejectionTitle.setVisibility(View.GONE);
             mRejectionSubtitle.setVisibility(View.GONE);
         }
-
     }
 
     private void fillCallForAuthData(){
-        if (mPayment != null) {
             setDescription();
             setAuthorized();
-        }
-        else {
-            Intent returnIntent = new Intent();
-            setResult(RESULT_CANCELED, returnIntent);
-            finish();
-        }
     }
 
     private void setAuthorized(){
-        if (mPayment.getCard() != null && mPayment.getCard().getPaymentMethod() != null  &&
-                mPayment.getCard().getPaymentMethod().getName() != null &&
-                !isEmpty(mPayment.getCard().getPaymentMethod().getName())){
-
+        if (isPaymentMethodNameValid()){
             String message = getString(R.string.mpsdk_text_authorized_call_for_authorize) + " " + mPayment.getCard().getPaymentMethod().getName() + " " + "y me autorizó";
             mAuthorizedPaymentMethod.setText(message);
         }
@@ -261,18 +282,8 @@ public class CongratsActivity extends AppCompatActivity {
     }
 
     private void setDescription() {
-        //TODO revisar las validacionees
-        if (mPayment.getCard() != null && mPayment.getCard().getPaymentMethod() != null &&
-                mPayment.getCard().getPaymentMethod().getName() != null &&
-                !isEmpty(mPayment.getCard().getPaymentMethod().getName()) &&
-                mPayment.getCurrencyId() != null &&
-                !isEmpty(mPayment.getCurrencyId()) &&
-                mPayment.getTransactionDetails() != null &&
-                mPayment.getTransactionDetails().getTotalPaidAmount() != null &&
-                mPayment.getTransactionDetails().getTotalPaidAmount().compareTo(BigDecimal.ZERO) >= 0){
-
+        if (isPaymentMethodNameValid() && isCurrencyIdValid() && isTotalPaidAmountValid()){
             String paymentMethodAuthorizeDescription = getString(R.string.mpsdk_title_activity_call_for_authorize) + " " + mPayment.getCard().getPaymentMethod().getName() + " el";
-
             mPaymentMethodAuthorizeDescription.setText(paymentMethodAuthorizeDescription);
             mPaymentAmountDescription.setText(getTotalAmountText());
         }
@@ -283,22 +294,15 @@ public class CongratsActivity extends AppCompatActivity {
     }
 
     private void fillCongratsData() {
-        if (mPayment != null) {
-            setPaymentEmailDescription();
-            setLastFourDigitsCard();
-            setInstallmentsDescription();
-            setInterestAmountDescription();
-            setPaymentIdDescription();
-        }
-        else {
-            Intent returnIntent = new Intent();
-            setResult(RESULT_CANCELED, returnIntent);
-            finish();
-        }
+        setPaymentEmailDescription();
+        setLastFourDigitsCard();
+        setInstallmentsDescription();
+        setInterestAmountDescription();
+        setPaymentIdDescription();
     }
 
     private void setPaymentIdDescription() {
-        if(mPayment.getId() != null && mPayment.getId() >= 0){
+        if(isPaymentIdValid()){
             String message = getString(R.string.mpsdk_payment_id_description) + " " + mPayment.getId();
             mPaymentIdDescription.setText(message);
         }
@@ -308,9 +312,7 @@ public class CongratsActivity extends AppCompatActivity {
     }
 
     private void setInterestAmountDescription() {
-        if(mPayment.getTransactionDetails() != null && mPayment.getTransactionDetails().getTotalPaidAmount() != null
-                && (mPayment.getTransactionDetails().getTotalPaidAmount().compareTo(BigDecimal.ZERO))>=0){
-
+        if(isTotalPaidAmountValid()){
             if (hasInterests()){
                 String message = "(" + (mPayment.getTransactionDetails().getTotalPaidAmount()).toString() + ")";
                 mInterestAmountDescription.setText(message);
@@ -336,11 +338,7 @@ public class CongratsActivity extends AppCompatActivity {
     }
 
     private void setInstallmentsDescription() {
-        if (mPayment.getInstallments() != null && mPayment.getInstallments() >= 0
-                && mPayment.getTransactionDetails() != null
-                && mPayment.getTransactionDetails().getInstallmentAmount() != null
-                && mPayment.getTransactionDetails().getInstallmentAmount().compareTo(BigDecimal.ZERO) >= 0){
-
+        if (isInstallmentQuantityValid() && isInstallmentAmountValid()){
             mInstallmentsDescription.setText(getInstallmentsText());
         }
         else {
@@ -349,10 +347,7 @@ public class CongratsActivity extends AppCompatActivity {
     }
 
     private void setLastFourDigitsCard() {
-        if (mPayment.getCard() != null && mPayment.getCard().getLastFourDigits() != null &&
-                !isEmpty(mPayment.getCard().getLastFourDigits()) &&
-                !isEmpty(mPayment.getCard().getPaymentMethod().getName())){
-
+        if (isLastFourDigitsValid() && isPaymentMethodIdValid()){
             String message = getString(R.string.mpsdk_last_digits_label) + " " + mPayment.getCard().getLastFourDigits();
             mLastFourDigitsDescription.setText(message);
             mLastFourDigitsDescription.setCompoundDrawablesWithIntrinsicBounds(MercadoPagoUtil.getPaymentMethodIcon(this, mPayment.getCard().getPaymentMethod().getId()), 0, 0, 0);
@@ -363,12 +358,58 @@ public class CongratsActivity extends AppCompatActivity {
     }
 
     private void setPaymentEmailDescription() {
-        if(mPayment.getPayer() != null && !isEmpty(mPayment.getPayer().getEmail())) {
+        if(isPayerEmailValid()) {
             mPayerEmailDescription.setText(mPayment.getPayer().getEmail());
         } else {
             mCongratulationSubtitle.setVisibility(View.GONE);
             mPayerEmailDescription.setVisibility(View.GONE);
         }
+    }
+
+    private Boolean isStatusDetailValid(){
+        return mPayment.getStatusDetail() != null && !isEmpty(mPayment.getStatusDetail());
+    }
+
+    private Boolean isCurrencyIdValid(){
+        return mPayment.getCurrencyId() != null && !isEmpty(mPayment.getCurrencyId());
+    }
+
+    private Boolean isPaymentIdValid(){
+        return mPayment.getId() != null && mPayment.getId() >= 0;
+    }
+
+    private Boolean isTotalPaidAmountValid(){
+        return mPayment.getTransactionDetails() != null && mPayment.getTransactionDetails().getTotalPaidAmount() != null
+                && (mPayment.getTransactionDetails().getTotalPaidAmount().compareTo(BigDecimal.ZERO))>=0;
+    }
+
+    private Boolean isInstallmentAmountValid(){
+        return mPayment.getTransactionDetails() != null && mPayment.getTransactionDetails().getInstallmentAmount() != null &&
+                    mPayment.getTransactionDetails().getInstallmentAmount().compareTo(BigDecimal.ZERO) >= 0;
+    }
+
+    private Boolean isInstallmentQuantityValid(){
+        return mPayment.getInstallments() != null && mPayment.getInstallments() >= 0;
+    }
+
+    private Boolean isPayerEmailValid(){
+        return mPayment.getPayer() != null && mPayment.getPayer().getEmail() != null &&
+                !isEmpty(mPayment.getPayer().getEmail());
+    }
+
+    private Boolean isPaymentMethodNameValid(){
+        return mPayment.getCard() != null && mPayment.getCard().getPaymentMethod() != null &&
+                mPayment.getCard().getPaymentMethod().getName() != null && !isEmpty(mPayment.getCard().getPaymentMethod().getName());
+    }
+
+    private Boolean isPaymentMethodIdValid(){
+        return mPayment.getCard() != null && mPayment.getCard().getPaymentMethod() != null &&
+                mPayment.getCard().getPaymentMethod().getId() != null && !isEmpty(mPayment.getCard().getPaymentMethod().getId());
+    }
+
+    private Boolean isLastFourDigitsValid(){
+        return mPayment.getCard() != null && mPayment.getCard().getLastFourDigits() != null &&
+                !isEmpty(mPayment.getCard().getLastFourDigits());
     }
 
     private void getActivityParameters(){
