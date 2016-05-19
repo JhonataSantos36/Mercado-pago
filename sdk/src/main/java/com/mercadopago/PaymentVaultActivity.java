@@ -80,6 +80,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
         setContentView(R.layout.activity_payment_vault);
         getActivityParameters();
         boolean validParameters = true;
+
         try {
             validateActivityParameters();
         } catch (IllegalStateException e) {

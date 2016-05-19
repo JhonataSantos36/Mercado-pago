@@ -8,8 +8,8 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.mercadopago.BankDealsActivity;
 import com.mercadopago.CheckoutActivity;
+import com.mercadopago.CongratsActivity;
 import com.mercadopago.InstructionsActivity;
-import com.mercadopago.OldCongratsActivity;
 import com.mercadopago.CustomerCardsActivity;
 import com.mercadopago.InstallmentsActivity;
 import com.mercadopago.IssuersActivity;
@@ -292,9 +292,8 @@ public class MercadoPago {
 
     private static void startCongratsActivity(Activity activity, Payment payment, PaymentMethod paymentMethod) {
 
-        Intent congratsIntent = new Intent(activity, OldCongratsActivity.class);
+        Intent congratsIntent = new Intent(activity, CongratsActivity.class);
         congratsIntent.putExtra("payment", payment);
-        congratsIntent.putExtra("paymentMethod", paymentMethod);
         activity.startActivityForResult(congratsIntent, CONGRATS_REQUEST_CODE);
     }
 
@@ -671,6 +670,7 @@ public class MercadoPago {
 
             MercadoPago.startCongratsActivity(this.mActivity, this.mPayment, this.mPaymentMethod);
         }
+
 
         public void startInstructionsActivity() {
 

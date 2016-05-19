@@ -6,20 +6,26 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
+import com.mercadopago.CongratsActivity;
 import com.mercadopago.ExampleActivity;
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.examples.R;
 import com.mercadopago.examples.utils.ExamplesUtils;
 import com.mercadopago.model.ApiException;
+import com.mercadopago.model.Card;
 import com.mercadopago.model.CardToken;
 import com.mercadopago.model.Issuer;
+import com.mercadopago.model.Payer;
+import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentPreference;
 import com.mercadopago.model.Token;
+import com.mercadopago.model.TransactionDetails;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
