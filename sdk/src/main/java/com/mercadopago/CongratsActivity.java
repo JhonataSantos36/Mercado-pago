@@ -1,12 +1,11 @@
 package com.mercadopago;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Spanned;
 import android.view.View;
 
-import com.mercadopago.core.MercadoPago;
 import com.mercadopago.model.Payment;
 import com.mercadopago.util.CurrenciesUtil;
 import com.mercadopago.util.MercadoPagoUtil;
@@ -41,9 +40,6 @@ public class CongratsActivity extends AppCompatActivity {
 
     protected MPTextView mPendingSubtitle;
     protected MPTextView mExitPending;
-
-    // Payment status
-
 
     // Activity parameters
     protected Payment mPayment;

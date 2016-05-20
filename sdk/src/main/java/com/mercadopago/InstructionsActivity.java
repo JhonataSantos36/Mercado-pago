@@ -197,7 +197,7 @@ public class InstructionsActivity extends AppCompatActivity {
     }
 
     protected void getActivityParameters() {
-        mPayment = (Payment) getIntent().getExtras().getSerializable("payment");
+        mPayment = (Payment) getIntent().getSerializableExtra("payment");
         mMerchantPublicKey = this.getIntent().getStringExtra("merchantPublicKey");
         mPaymentMethod = (PaymentMethod) getIntent().getSerializableExtra("paymentMethod");
     }

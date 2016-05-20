@@ -257,17 +257,9 @@ public class MercadoPago {
 
     public void getInstructions(Long paymentId, String paymentMethodId, String paymentTypeId, final Callback<Instruction> callback) {
 
-        RestAdapter restAdapter = new RestAdapter.Builder()
-                .setEndpoint("http://private-9376e-paymentmethodsmla.apiary-mock.com")
-                .setLogLevel(Settings.RETROFIT_LOGGING)
-                .setConverter(new GsonConverter(JsonUtil.getInstance().getGson()))
-                .setClient(HttpClientUtil.getClient(this.mContext))
-                .build();
-
-        //TODO replace paymentId when service works
         if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {
-            PaymentService service = restAdapter.create(PaymentService.class);
-            service.getInstruction(this.mKey, (long)1826446924, paymentMethodId, paymentTypeId, callback);
+            PaymentService service = mRestAdapterMPApi.create(PaymentService.class);
+            service.getInstruction(this.mKey, paymentId, paymentMethodId, paymentTypeId, callback);
         } else {
             throw new RuntimeException("Unsupported key type for this method");
         }

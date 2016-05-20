@@ -103,18 +103,19 @@
         <activity android:name=".CardInstallmentsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.MercadoPagoTheme.NoActionBar">
-        </activity>p
+        </activity>
+
         <activity android:name=".CardIssuersActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.MercadoPagoTheme.NoActionBar">
         </activity>
+
         <activity android:name=".CardVaultActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.MercadoPagoTheme.NoActionBar">
         </activity>
 
         <activity android:name=".ErrorActivity"
-            android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.MercadoPagoTheme.NoActionBar" />
     </application>

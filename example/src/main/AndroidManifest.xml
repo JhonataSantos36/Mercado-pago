@@ -50,19 +50,15 @@
             android:label="@string/title_activity_final_vault"></activity>
         <activity
             android:name=".step5.Step5Activity"
-            android:label="@string/title_activity_step5"></activity>
+            android:label="@string/title_activity_step5"/>
         <activity
             android:name=".step6.Step6Activity"
-<<<<<<< 4d4b218c3707268fba6eb5d18ceae652c9aa9a63
-            android:label="@string/title_activity_step6" >
-        </activity>
+            android:label="@string/title_activity_step6" />
+
         <activity android:name=".step7.Step7Activity"
             android:label="Nuevo TC">
         </activity>
-=======
-            android:label="@string/title_activity_step6"></activity>
-        <activity android:name=".Step8.F2Activity"></activity>
->>>>>>> added transaction manager, pref with siteid, and handled errors with mpexception
+        <activity android:name=".Step8.F2Activity"/>
     </application>
 
 </manifest>

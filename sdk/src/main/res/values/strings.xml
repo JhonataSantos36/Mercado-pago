@@ -144,18 +144,16 @@
     <string name="mpsdk_processed_by_mercado_pago">© 1999–2016 Procesado por MercadoPago</string>
     <string name="mpsdk_exit_label">Salir</string>
     <string name="mpsdk_standard_error_message">Algo salió mal</string>
+
     <string name="mpsdk_instant_accreditation_time">Se acreditará instantáneamente</string>
     <string name="mpsdk_accreditation_time">Se acreditará en</string>
     <string name="mpsdk_working_days">días hábiles</string>
     <string name="mpsdk_working_day">día hábil</string>
     <string name="mpsdk_hours">horas</string>
     <string name="mpsdk_hour">hora</string>
-<<<<<<< 4d4b218c3707268fba6eb5d18ceae652c9aa9a63
-=======
     <string name="mpsdk_no_payment_methods_found">No hay medios de pago disponibles</string>
     <string name="mpsdk_error_message_email_required">El email es requerido</string>
 
->>>>>>> added transaction manager, pref with siteid, and handled errors with mpexception
     <string name="mpsdk_zero_rate">Sin intereses</string>
     <string name="mpsdk_installments_of">de</string>
     <string name="mpsdk_card_data_title">Datos de tu tarjeta</string>

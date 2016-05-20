@@ -487,21 +487,6 @@ public class PaymentVaultActivity extends AppCompatActivity {
         animatePaymentMethodSelection();
     }
 
-<<<<<<< 4d4b218c3707268fba6eb5d18ceae652c9aa9a63
-    protected void finishWithMpException(Intent data) {        setResult(Activity.RESULT_CANCELED, data);
-        this.finish();
-        animatePaymentMethodSelection();
-    }
-
-    private void finishWithMismatchingPaymentMethod() {
-        Intent canceledIntent = new Intent();
-        canceledIntent.putExtra("error", "Mismatching payment method");
-        setResult(RESULT_CANCELED, canceledIntent);
-        finish();
-    }
-
-=======
->>>>>>> added transaction manager, pref with siteid, and handled errors with mpexception
     private void animatePaymentMethodSelection() {
         overridePendingTransition(R.anim.slide_right_to_left_in, R.anim.slide_right_to_left_out);
     }
@@ -511,13 +496,8 @@ public class PaymentVaultActivity extends AppCompatActivity {
         setResult(Activity.RESULT_CANCELED);
         finish();
 
-<<<<<<< 4d4b218c3707268fba6eb5d18ceae652c9aa9a63
-        if(isItemSelectedStart()) {
-            overridePendingTransition(R.anim.slide_left_to_right_in, R.anim.slide_left_to_right_out);
-=======
         if(isItemSelected()) {
-            overridePendingTransition(R.anim.slide_left_to_right_in, R.anim.silde_left_to_right_out);
->>>>>>> added transaction manager, pref with siteid, and handled errors with mpexception
+            overridePendingTransition(R.anim.slide_left_to_right_in, R.anim.slide_left_to_right_out);
         }
     }
 

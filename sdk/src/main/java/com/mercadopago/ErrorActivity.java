@@ -57,7 +57,8 @@ public class ErrorActivity extends AppCompatActivity {
             mRefreshLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    setResult(RESULT_OK);
+                    Intent intent = new Intent();
+                    setResult(RESULT_OK, intent);
                     finish();
                 }
             });

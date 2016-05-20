@@ -32,12 +32,12 @@ public interface PaymentService {
 
     @GET("/v1/payment_methods/card_issuers")
     void getIssuers(@Query("public_key") String publicKey, @Query("payment_method_id") String paymentMethodId, @Query("bin") String bin, Callback<List<Issuer>> callback);
-
-    @POST("/beta/checkout/native_payment")
+    
+    @POST("/beta/checkout/payments")
     void createPayment(@Body PaymentIntent body, Callback<Payment> callback);
 
-    @GET("/beta/checkout/instructions/{payment_id}")
-    void getInstruction(@Query("public_key") String mKey, @EncodedPath("payment_id") Long paymentId, @Query("payment_method_id") String paymentMethodId, @Query("payment_type_id") String paymentTypeId, Callback<Instruction> callback);
+    @GET("/beta/checkout/payments/{payment_id}/results")
+    void getInstruction(@Query("public_key") String mKey, @EncodedPath("payment_id") Long paymentId, @Query("payment_method_id") String paymentMethodId, @Query("payment_type") String paymentTypeId, Callback<Instruction> callback);
 
     @GET("/beta/checkout/preferences/{preference_id}")
     void getPreference(@Query("public_key") String publicKey, @EncodedPath("preference_id") String checkoutPreferenceId, Callback<CheckoutPreference> callback);

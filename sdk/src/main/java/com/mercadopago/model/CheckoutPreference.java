@@ -41,7 +41,7 @@ public class CheckoutPreference implements Serializable {
         else if (!this.validPaymentTypeExclusion()){
             throw new CheckoutPreferenceException(CheckoutPreferenceException.EXCLUDED_ALL_PAYMENT_TYPES);
         }
-        else if (this.hasEmail()){
+        else if (!this.hasEmail()){
             throw new CheckoutPreferenceException(CheckoutPreferenceException.NO_EMAIL_FOUND);
         }
     }

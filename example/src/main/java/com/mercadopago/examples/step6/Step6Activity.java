@@ -98,8 +98,6 @@ public class Step6Activity extends ExampleActivity {
                 .setCheckoutPreferenceId(mCheckoutPreference.getId())
                 .setShowBankDeals(true)
                 .startCheckoutActivity();
-
-
     }
 
 }

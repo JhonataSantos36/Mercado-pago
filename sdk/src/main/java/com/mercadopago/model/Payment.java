@@ -46,7 +46,7 @@ public class Payment implements Serializable {
     private Integer installments;
     private Integer issuerId;
     private Boolean liveMode;
-    private JsonObject metadata;
+    private Map metadata;
     private Date moneyReleaseDate;
     private String notificationUrl;
     private String operationType;
@@ -206,11 +206,11 @@ public class Payment implements Serializable {
         this.liveMode = liveMode;
     }
 
-    public JsonObject getMetadata() {
+    public Map getMetadata() {
         return metadata;
     }
 
-    public void setMetadata(JsonObject metadata) {
+    public void setMetadata(Map metadata) {
         this.metadata = metadata;
     }
 

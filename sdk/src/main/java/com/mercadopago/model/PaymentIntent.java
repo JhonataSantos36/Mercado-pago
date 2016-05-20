@@ -1,15 +1,19 @@
 package com.mercadopago.model;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 
 public class PaymentIntent implements Serializable {
 
     private Long transactionId;
     private Integer installments;
+    @SerializedName("issuer")
     private Long issuerId;
     private String paymentMethodId;
     private String prefId;
-    private String token;
+    @SerializedName("token")
+    private String tokenId;
     private String publicKey;
     private String email;
 
@@ -45,12 +49,12 @@ public class PaymentIntent implements Serializable {
         this.prefId = prefId;
     }
 
-    public String getToken() {
-        return token;
+    public String getTokenId() {
+        return tokenId;
     }
 
-    public void setToken(String token) {
-        this.token = token;
+    public void setTokenId(String tokenId) {
+        this.tokenId = tokenId;
     }
 
     public void setPublicKey(String publicKey) {
