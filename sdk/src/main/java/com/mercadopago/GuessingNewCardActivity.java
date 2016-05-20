@@ -96,7 +96,11 @@ public class GuessingNewCardActivity extends FrontCardActivity {
     private boolean mIdentificationNumberRequired;
     private String mCardSideState;
     private String mCurrentEditingEditText;
-
+    protected PaymentMethodGuessingController mPaymentMethodGuessingController;
+    private boolean mIsSecurityCodeRequired;
+    private int mCardSecurityCodeLength;
+    private int mCardNumberLength;
+    private String mSecurityCodeLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -174,6 +178,10 @@ public class GuessingNewCardActivity extends FrontCardActivity {
         mActivity = this;
         mErrorState = CardInterface.NORMAL_STATE;
         mCardToken = new CardToken("", null, null, "", "", "", "");
+        mIsSecurityCodeRequired = true;
+        mCardSecurityCodeLength = CARD_DEFAULT_SECURITY_CODE_LENGTH;
+        mCardNumberLength = CARD_NUMBER_MAX_LENGTH;
+        mSecurityCodeLocation = null;
         if (mFrontFragment == null) {
             mFrontFragment = new CardFrontFragment();
         }
@@ -418,7 +426,7 @@ public class GuessingNewCardActivity extends FrontCardActivity {
     protected void initializeGuessingCardNumberController(List<PaymentMethod> paymentMethods) {
         List<PaymentMethod> supportedPaymentMethods = mPaymentPreference
                 .getSupportedPaymentMethods(paymentMethods);
-        mPaymentMethodGuessingController = new PaymentMethodGuessingController(this,
+        mPaymentMethodGuessingController = new PaymentMethodGuessingController(
                 supportedPaymentMethods, mPaymentPreference.getDefaultPaymentTypeId(),
                 mPaymentPreference.getExcludedPaymentTypes());
     }
@@ -446,7 +454,7 @@ public class GuessingNewCardActivity extends FrontCardActivity {
                     @Override
                     public void onPaymentMethodListSet(List<PaymentMethod> paymentMethodList) {
                         if (paymentMethodList.size() == 0) {
-                            mPaymentMethodGuessingController.blockCardNumbersInput(mCardNumberEditText);
+                            blockCardNumbersInput(mCardNumberEditText);
                             setErrorView(getString(R.string.mpsdk_invalid_payment_method));
                         } else if (paymentMethodList.size() == 1) {
                             onPaymentMethodSet(paymentMethodList.get(0));
@@ -471,7 +479,7 @@ public class GuessingNewCardActivity extends FrontCardActivity {
                         clearErrorView();
                         if (mCurrentPaymentMethod == null) return;
                         mCurrentPaymentMethod = null;
-                        mPaymentMethodGuessingController.setSecurityCodeLocation(null);
+                        setSecurityCodeLocation(null);
                         changeCardColor(CardInterface.NEUTRAL_CARD_COLOR, CardInterface.FULL_TEXT_VIEW_COLOR);
                         clearCardImage();
                         clearSecurityCodeFront();
@@ -550,12 +558,12 @@ public class GuessingNewCardActivity extends FrontCardActivity {
 
         if (mCurrentPaymentMethod.isSecurityCodeRequired(bin)) {
             SecurityCode securityCode = setting.getSecurityCode();
-            mPaymentMethodGuessingController.setSecurityCodeRestrictions(true, securityCode);
+            setSecurityCodeRestrictions(true, securityCode);
             setSecurityCodeViewRestrictions(securityCode);
             showSecurityCodeView();
         } else {
             mSecurityCode = null;
-            mPaymentMethodGuessingController.setSecurityCodeRestrictions(false, null);
+            setSecurityCodeRestrictions(false, null);
             hideSecurityCodeView();
         }
     }
@@ -591,9 +599,21 @@ public class GuessingNewCardActivity extends FrontCardActivity {
         mSecurityCodeEditView.setVisibility(View.GONE);
     }
 
+    public void blockCardNumbersInput(MPEditText text) {
+        int maxLength = MercadoPago.BIN_LENGTH;
+        setInputMaxLength(text, maxLength);
+    }
+
+    public void setInputMaxLength(MPEditText text, int maxLength) {
+        InputFilter[] fArray = new InputFilter[1];
+        fArray[0] = new InputFilter.LengthFilter(maxLength);
+        text.setFilters(fArray);
+    }
+
+
     private void setCardNumberLength(int maxLength) {
-        mPaymentMethodGuessingController.setCardNumberLength(maxLength);
-        mPaymentMethodGuessingController.setInputMaxLength(mCardNumberEditText, maxLength);
+        mCardNumberLength = maxLength;
+        setInputMaxLength(mCardNumberEditText, maxLength);
     }
 
     private void setSecurityCodeViewRestrictions(SecurityCode securityCode) {
@@ -619,13 +639,12 @@ public class GuessingNewCardActivity extends FrontCardActivity {
 
     private void setCardSecurityCodeErrorView(String message, boolean requestFocus) {
         setErrorView(message);
-        String location = mPaymentMethodGuessingController.getSecurityCodeLocation();
-        if (location != null) {
-            if (location.equals(CardInterface.CARD_SIDE_BACK)) {
+        if (mSecurityCodeLocation != null) {
+            if (mSecurityCodeLocation.equals(CardInterface.CARD_SIDE_BACK)) {
                 if (showingBack() && mBackFragment != null) {
                     checkFlipCardToBack();
                 }
-            } else if (location.equals(CardInterface.CARD_SIDE_FRONT)) {
+            } else if (mSecurityCodeLocation.equals(CardInterface.CARD_SIDE_FRONT)) {
                 if (showingFront() && mFrontFragment != null) {
                     checkFlipCardToFront();
                 }
@@ -636,12 +655,16 @@ public class GuessingNewCardActivity extends FrontCardActivity {
         }
     }
 
+    public int getCardNumberLength() {
+        return mCardNumberLength;
+    }
+
     @Override
     public String getSecurityCodeLocation() {
-        if (mPaymentMethodGuessingController == null) {
+        if (mSecurityCodeLocation == null) {
             return CardInterface.CARD_SIDE_BACK;
         }
-        return mPaymentMethodGuessingController.getSecurityCodeLocation();
+        return mSecurityCodeLocation;
     }
 
     private void setCardIdentificationErrorView(String message, boolean requestFocus) {
@@ -778,11 +801,10 @@ public class GuessingNewCardActivity extends FrontCardActivity {
         mCardSecurityCodeEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                String location = mPaymentMethodGuessingController.getSecurityCodeLocation();
                 if (hasFocus) {
                     openKeyboard(mCardSecurityCodeEditText);
                     mCurrentEditingEditText = CARD_SECURITYCODE_INPUT;
-                    if (location == null || location.equals(CardInterface.CARD_SIDE_BACK)) {
+                    if (mSecurityCodeLocation == null || mSecurityCodeLocation.equals(CardInterface.CARD_SIDE_BACK)) {
                         checkFlipCardToBack();
                     } else {
                         checkFlipCardToFront();
@@ -877,7 +899,7 @@ public class GuessingNewCardActivity extends FrontCardActivity {
                     mFrontFragment.onSecurityTextChanged(s, start, before, count);
                 }
 
-                if (s.length() == mPaymentMethodGuessingController.getSecurityCodeLength()) {
+                if (s.length() == mCardSecurityCodeLength) {
                     mSecurityCode = s.toString();
                 }
             }
@@ -977,7 +999,7 @@ public class GuessingNewCardActivity extends FrontCardActivity {
             result = false;
             requestFocus = false;
         }
-        if (mPaymentMethodGuessingController.isSecurityCodeRequired() &&
+        if (isSecurityCodeRequired() &&
                 !validateSecurityCode(requestFocus)) {
             result = false;
             requestFocus= false;
@@ -992,8 +1014,30 @@ public class GuessingNewCardActivity extends FrontCardActivity {
 
     @Override
     public boolean isSecurityCodeRequired() {
-        return mPaymentMethodGuessingController == null ||
-                mPaymentMethodGuessingController.isSecurityCodeRequired();
+        return mIsSecurityCodeRequired;
+    }
+
+    public void setSecurityCodeRequired(boolean required) {
+        this.mIsSecurityCodeRequired = required;
+    }
+
+    public void setSecurityCodeLength(int length) {
+        this.mCardSecurityCodeLength = length;
+    }
+
+    public void setSecurityCodeLocation(String location) {
+        this.mSecurityCodeLocation = location;
+    }
+
+    public void setSecurityCodeRestrictions(boolean isRequired, SecurityCode securityCode) {
+        setSecurityCodeRequired(isRequired);
+        if (securityCode == null) {
+            setSecurityCodeLocation(null);
+            setSecurityCodeLength(CARD_DEFAULT_SECURITY_CODE_LENGTH);
+            return;
+        }
+        setSecurityCodeLocation(securityCode.getCardLocation());
+        setSecurityCodeLength(securityCode.getLength());
     }
 
     private void createCardToken() {
@@ -1006,7 +1050,7 @@ public class GuessingNewCardActivity extends FrontCardActivity {
 
         CardToken cardToken = new CardToken(getCardNumber(), month, year, getSecurityCode(),
                 getCardHolderName(), identificationTypeId, identificationNumber);
-        if (mPaymentMethodGuessingController.isSecurityCodeRequired()) {
+        if (isSecurityCodeRequired()) {
             try {
                 cardToken.validateSecurityCode(this, mCurrentPaymentMethod);
                 clearErrorView();
@@ -1152,7 +1196,6 @@ public class GuessingNewCardActivity extends FrontCardActivity {
                             //error
                         } else if (issuers.size() == 1) {
                             mSelectedIssuer = issuers.get(0);
-                            mPaymentMethodGuessingController.setIssuer(issuers.get(0));
                             checkFlipCardToFront();
                             finishWithResult();
                         } else {
@@ -1194,7 +1237,6 @@ public class GuessingNewCardActivity extends FrontCardActivity {
             if (resultCode == RESULT_OK) {
                 Bundle bundle = data.getExtras();
                 mSelectedIssuer = (Issuer) bundle.getSerializable("issuer");
-                mPaymentMethodGuessingController.setIssuer(mSelectedIssuer);
                 checkFlipCardToFront();
                 finishWithResult();
             } else if (resultCode == RESULT_CANCELED) {

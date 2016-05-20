@@ -2,7 +2,6 @@ package com.mercadopago;
 
 import android.support.v7.app.AppCompatActivity;
 
-import com.mercadopago.controllers.PaymentMethodGuessingController;
 import com.mercadopago.model.PaymentMethod;
 
 public abstract class FrontCardActivity extends AppCompatActivity implements CardInterface {
@@ -13,10 +12,8 @@ public abstract class FrontCardActivity extends AppCompatActivity implements Car
     protected String mExpiryYear;
     protected String mCardIdentificationNumber;
     protected String mErrorState;
-
     protected String mSecurityCode = "";
     protected PaymentMethod mCurrentPaymentMethod;
-    protected PaymentMethodGuessingController mPaymentMethodGuessingController;
 
 
     public String getCardNumber() {

@@ -4,6 +4,9 @@ import com.mercadopago.model.PaymentMethod;
 
 public interface CardInterface {
 
+    int CARD_NUMBER_MAX_LENGTH = 16;
+    int CARD_DEFAULT_SECURITY_CODE_LENGTH = 4;
+
     int NEUTRAL_CARD_COLOR = R.color.mpsdk_white;
     int FULL_TEXT_VIEW_COLOR = R.color.mpsdk_base_text;
     int ERROR_TEXT_VIEW_COLOR = R.color.mpsdk_color_red_error;
