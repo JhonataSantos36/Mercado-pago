@@ -19,7 +19,6 @@ import com.mercadopago.exceptions.MPException;
 import com.mercadopago.fragments.ShoppingCartFragment;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.CheckoutPreference;
-import com.mercadopago.model.Installment;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.Item;
 import com.mercadopago.model.PayerCost;
@@ -28,8 +27,6 @@ import com.mercadopago.model.PaymentIntent;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentMethodSearch;
 import com.mercadopago.model.PaymentMethodSearchItem;
-import com.mercadopago.model.PaymentPreference;
-import com.mercadopago.model.PaymentType;
 import com.mercadopago.model.Token;
 import com.mercadopago.uicontrollers.ViewControllerFactory;
 import com.mercadopago.uicontrollers.payercosts.PayerCostViewController;
@@ -45,8 +42,6 @@ import com.mercadopago.views.MPTextView;
 import java.math.BigDecimal;
 
 import java.util.Calendar;
-import java.util.List;
-
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -181,7 +176,7 @@ public class CheckoutActivity extends AppCompatActivity {
                 .show(mShoppingCartFragment)
                 .commitAllowingStateLoss();
     }
-
+    
     private String getPurchaseTitleFromPreference() {
         StringBuilder purchaseTitle = new StringBuilder();
         int itemListSize = mCheckoutPreference.getItems().size();
@@ -360,6 +355,22 @@ public class CheckoutActivity extends AppCompatActivity {
                 showRegularLayout();
             }
         }
+        else if (requestCode == ErrorUtil.ERROR_REQUEST_CODE) {
+            if(resultCode == RESULT_OK) {
+                recoverFromFailure();
+            }
+            else if(noUserInteractionReached()) {
+                setResult(RESULT_OK, data);
+                finish();
+            }
+            else {
+                showRegularLayout();
+            }
+        }
+    }
+
+    private boolean noUserInteractionReached() {
+        return mSelectedPaymentMethod == null;
     }
 
     protected void resolveInstallmentsRequest(int resultCode, Intent data) {
@@ -378,10 +389,6 @@ public class CheckoutActivity extends AppCompatActivity {
         paymentResultIntent.putExtra("payment", mCreatedPayment);
         setResult(RESULT_OK, paymentResultIntent);
         finish();
-    }
-
-    private boolean noUserInteractionReached() {
-        return mSelectedPaymentMethod == null;
     }
 
     private void showReviewAndConfirm() {
@@ -531,6 +538,7 @@ public class CheckoutActivity extends AppCompatActivity {
             }
         });
     }
+
 
     private PaymentIntent createPaymentIntent() {
         PaymentIntent paymentIntent = new PaymentIntent();

@@ -76,6 +76,7 @@
                 <data android:scheme="mercadopago" />
             </intent-filter>
         </activity>
+
         <activity android:name=".OldGuessingNewCardActivity"
             android:theme="@style/Theme.MercadoPagoTheme"/>
 
