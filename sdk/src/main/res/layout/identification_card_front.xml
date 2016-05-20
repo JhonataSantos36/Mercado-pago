@@ -5,7 +5,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/identification_card_container"
     android:layout_width="280dp"
-    android:layout_height="154dp">
+    android:layout_height="154dp"
+    android:layout_gravity="center_horizontal">
 
 
     <FrameLayout

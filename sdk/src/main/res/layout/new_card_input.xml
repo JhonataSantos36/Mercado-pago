@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.mercadopago.views.CustomScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
     android:id="@+id/scrollViewContainer"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -36,7 +37,8 @@
                 android:inputType="number"
                 android:imeOptions="actionNext"
                 android:singleLine="true"
-                android:maxLength="16"/>
+                android:maxLength="16"
+                custom:errorColor="@color/mpsdk_color_red_error"/>
 
         </LinearLayout>
 
@@ -67,7 +69,8 @@
                 android:textAllCaps="true"
                 android:textSize="15sp"
                 android:inputType="textVisiblePassword"
-                android:textColor="@color/abc_search_url_text_selected" />
+                android:textColor="@color/abc_search_url_text_selected"
+                custom:errorColor="@color/mpsdk_color_red_error"/>
 
         </LinearLayout>
 
@@ -97,7 +100,8 @@
                 android:inputType="number"
                 android:textSize="15sp"
                 android:textColor="@color/abc_search_url_text_selected"
-                android:maxLength="4"/>
+                android:maxLength="4"
+                custom:errorColor="@color/mpsdk_color_red_error"/>
 
         </LinearLayout>
 
@@ -130,7 +134,8 @@
                 android:imeOptions="actionNext"
                 android:inputType="number"
                 android:textSize="15sp"
-                android:textColor="@color/abc_search_url_text_selected" />
+                android:textColor="@color/abc_search_url_text_selected"
+                custom:errorColor="@color/mpsdk_color_red_error"/>
 
         </LinearLayout>
 
@@ -226,7 +231,8 @@
                             android:singleLine="true"
                             android:maxLength="15"
                             android:textSize="15sp"
-                            android:textColor="@color/abc_search_url_text_selected" />
+                            android:textColor="@color/abc_search_url_text_selected"
+                            custom:errorColor="@color/mpsdk_color_red_error"/>
                     </LinearLayout>
 
                 </LinearLayout>

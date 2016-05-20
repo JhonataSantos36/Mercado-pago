@@ -446,6 +446,7 @@ public class GuessingNewCardActivity extends FrontCardActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 checkChangeErrorView();
+                mCardNumberEditText.toggleLineColorOnError(false);
             }
         });
         mCardNumberEditText.addTextChangedListener(new CardNumberTextWatcher(
@@ -651,6 +652,7 @@ public class GuessingNewCardActivity extends FrontCardActivity {
             }
         }
         if (requestFocus) {
+            mCardSecurityCodeEditText.toggleLineColorOnError(true);
             mCardSecurityCodeEditText.requestFocus();
         }
     }
@@ -670,6 +672,7 @@ public class GuessingNewCardActivity extends FrontCardActivity {
     private void setCardIdentificationErrorView(String message, boolean requestFocus) {
         setErrorView(message);
         if (requestFocus) {
+            mCardIdentificationNumberEditText.toggleLineColorOnError(true);
             mCardIdentificationNumberEditText.requestFocus();
             mHorizontalScrollView.fullScroll(HorizontalScrollView.FOCUS_RIGHT);
         }
@@ -907,6 +910,7 @@ public class GuessingNewCardActivity extends FrontCardActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 checkChangeErrorView();
+                mCardSecurityCodeEditText.toggleLineColorOnError(false);
                 if (showingBack() && mBackFragment != null) {
                     mBackFragment.afterSecurityTextChanged(s);
                 } else if (mFrontFragment != null) {
@@ -939,6 +943,7 @@ public class GuessingNewCardActivity extends FrontCardActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 checkChangeErrorView();
+                mCardIdentificationNumberEditText.toggleLineColorOnError(false);
                 if (showingIdentification() && mCardIdentificationFragment != null) {
                     mCardIdentificationFragment.afterNumberTextChanged(s);
                 }
@@ -961,6 +966,7 @@ public class GuessingNewCardActivity extends FrontCardActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 checkChangeErrorView();
+                mCardHolderNameEditText.toggleLineColorOnError(false);
             }
         });
     }
@@ -980,6 +986,7 @@ public class GuessingNewCardActivity extends FrontCardActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 checkChangeErrorView();
+                mCardExpiryDateEditText.toggleLineColorOnError(false);
             }
         });
     }
@@ -1102,6 +1109,7 @@ public class GuessingNewCardActivity extends FrontCardActivity {
         } catch (Exception e) {
             setErrorView(e.getMessage());
             if (requestFocus) {
+                mCardNumberEditText.toggleLineColorOnError(true);
                 mCardNumberEditText.requestFocus();
             }
             return false;
@@ -1119,6 +1127,7 @@ public class GuessingNewCardActivity extends FrontCardActivity {
         } else {
             setErrorView(getString(R.string.mpsdk_invalid_empty_name));
             if (requestFocus) {
+                mCardHolderNameEditText.toggleLineColorOnError(true);
                 mCardHolderNameEditText.requestFocus();
             }
             return false;
@@ -1136,6 +1145,7 @@ public class GuessingNewCardActivity extends FrontCardActivity {
         } else {
             setErrorView(getString(R.string.mpsdk_invalid_expiry_date));
             if (requestFocus) {
+                mCardExpiryDateEditText.toggleLineColorOnError(true);
                 mCardExpiryDateEditText.requestFocus();
             }
             return false;
