@@ -47,7 +47,7 @@ public class PaymentPreferenceTest extends TestCase {
         List<PayerCost> originalPayerCosts = getPayerCosts();
 
         PaymentPreference paymentPreference = new PaymentPreference();
-        paymentPreference.setMaxInstallments(6);
+        paymentPreference.setMaxAcceptedInstallments(6);
 
         List<PayerCost> filteredPayerCosts = paymentPreference.getInstallmentsBelowMax(originalPayerCosts);
 

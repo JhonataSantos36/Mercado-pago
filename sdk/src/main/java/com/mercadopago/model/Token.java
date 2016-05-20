@@ -25,6 +25,7 @@ public class Token implements Serializable {
     private Date dueDate;
     private String firstSixDigits;
     private String lastFourDigits;
+    private Cardholder cardholder;
 
     public Integer getSecurityCodeLength() {
         return securityCodeLength;
@@ -138,6 +139,14 @@ public class Token implements Serializable {
         this.publicKey = publicKey;
     }
 
+    public String getFirstSixDigits() {
+        return firstSixDigits;
+    }
+
+    public void setFirstSixDigits(String firstSixDigits) {
+        this.firstSixDigits = firstSixDigits;
+    }
+
     public String getLastFourDigits() {
         return lastFourDigits;
     }
@@ -146,8 +155,12 @@ public class Token implements Serializable {
         this.lastFourDigits = lastFourDigits;
     }
 
-    public String getFirstSixDigits() {
-        return firstSixDigits;
+    public Cardholder getCardholder() {
+        return cardholder;
+    }
+
+    public void setCardholder(Cardholder cardholder) {
+        this.cardholder = cardholder;
     }
 
     public static Token parseJson(String json) {

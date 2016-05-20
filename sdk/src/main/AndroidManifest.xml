@@ -76,9 +76,8 @@
                 <data android:scheme="mercadopago" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".GuessingNewCardActivity"
-            android:theme="@style/Theme.MercadoPagoTheme" />
+        <activity android:name=".OldGuessingNewCardActivity"
+            android:theme="@style/Theme.MercadoPagoTheme"/>
         <activity
             android:name=".PaymentVaultActivity"
             android:screenOrientation="portrait"
@@ -91,7 +90,24 @@
         <activity
             android:name=".CongratsActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.MercadoPagoTheme.NoActionBar"></activity>
+            android:theme="@style/Theme.MercadoPagoTheme.NoActionBar"/>
+        <activity android:name=".GuessingNewCardActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.MercadoPagoTheme.NoActionBar">
+        </activity>
+        <activity android:name=".CardInstallmentsActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.MercadoPagoTheme.NoActionBar">
+        </activity>
+        <activity android:name=".CardIssuersActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.MercadoPagoTheme.NoActionBar">
+        </activity>
+        <activity android:name=".CardVaultActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.MercadoPagoTheme.NoActionBar">
+        </activity>
+
     </application>
 
 </manifest>

@@ -21,8 +21,8 @@ import com.mercadopago.views.MPTextView;
 /**
  * Created by mreverter on 20/11/15.
  */
-public class GuessingNewCardActivityTest  extends BaseTest<GuessingNewCardActivity> {
-    private GuessingNewCardActivity mActivity;
+public class OldGuessingNewCardActivityTest  extends BaseTest<OldGuessingNewCardActivity> {
+    private OldGuessingNewCardActivity mActivity;
     private MPEditText mCardNumberText;
     private MPEditText mCardholderNameText;
     private MPEditText mExpiryMonthText;
@@ -39,9 +39,9 @@ public class GuessingNewCardActivityTest  extends BaseTest<GuessingNewCardActivi
 
     private Spinner mIssuersSpinner;
 
-    public GuessingNewCardActivityTest() {
+    public OldGuessingNewCardActivityTest() {
 
-        super(GuessingNewCardActivity.class);
+        super(OldGuessingNewCardActivity.class);
     }
 
     public void testGetCardToken() {
@@ -553,7 +553,7 @@ public class GuessingNewCardActivityTest  extends BaseTest<GuessingNewCardActivi
 
     }
 
-    private GuessingNewCardActivity prepareActivity(String keyType,
+    private OldGuessingNewCardActivity prepareActivity(String keyType,
                                                  String key, Boolean requireSecurityCode, Boolean requireIssuer) {
 
         Intent intent = new Intent();

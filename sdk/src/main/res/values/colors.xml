@@ -5,6 +5,8 @@
     <color name="mpsdk_base_text">#333333</color>
     <color name="mpsdk_form_text">#666666</color>
     <color name="mpsdk_separator">#DEDEDE</color>
+    <color name="mpsdk_light_gray">#EEEEEE</color>
+    <color name="mpsdk_gray">#d6d6d6</color>
 
     <color name="colorPrimaryDark">#0D47A1</color>
     <color name="colorAccent">#00B2EB</color>
@@ -14,11 +16,14 @@
     <color name="commentColor">#999</color>
     <color name="mpsdk_shopping_cart_background">#5ABEE7</color>
     <color name="mpsdk_color_instructions_title_background">#FBF8E1</color>
+    <color name="transparent">#00000000</color>
     <color name="mpsdk_color_instructions_title_image">#EFC703</color>
     <color name="mpsdk_color_light_grey">#F1F1F1</color>
     <color name="mpsdk_color_instructions_font">#B29054</color>
     <color name="mpsdk_color_instructions_button">#41c6f4</color>
     <color name="mpsdk_color_link">#0066CC</color>
+    <color name="mpsdk_active_button">#3383FA</color>
+    <color name="mpsdk_inactive_button">#84b4fc</color>
 
     <color name="mpsdk_color_congrats_image">#2FB000</color>
     <color name="mpsdk_color_congrats_background">#E9FFE4</color>
@@ -37,5 +42,62 @@
     
     <color name="mpsdk_color_pending_background">#FBF8E1</color>
     <color name="mpsdk_color_pending_image">#EFC701</color>
+    <color name="mpsdk_color_new_card_form_background">#59C0ED</color>
+    <color name="mpsdk_color_new_card_text">#999999</color>
+    <color name="mpsdk_color_new_card_image">#D8D8D8</color>
+    <color name="mpsdk_color_red_error">#F04449</color>
+
+    <!-- Card Colors -->
+    <color name="mpsdk_visa">#001D77</color>
+    <color name="mpsdk_master">#405B72</color>
+    <color name="mpsdk_amex">#A1CCAA</color>
+    <color name="mpsdk_diners">#CECECE</color>
+    <color name="mpsdk_elo">#666666</color>
+    <color name="mpsdk_hipercard">#941F16</color>
+    <color name="mpsdk_melicard">#2D3277</color>
+    <color name="mpsdk_naranja">#FF723F</color>
+    <color name="mpsdk_nativa">#013C76</color>
+    <color name="mpsdk_tarshop">#3D4064</color>
+    <color name="mpsdk_cencosud">#F7F7F7</color>
+    <color name="mpsdk_cabal">#D4B44B</color>
+    <color name="mpsdk_argencard">#405B72</color>
+    <color name="mpsdk_cordobesa">#5BAB97</color>
+    <color name="mpsdk_cordial">#CBD8DF</color>
+    <color name="mpsdk_mercadopago_cc">#DCDDD9</color>
+
+    <color name="mpsdk_pagofacil">#FFFFFF</color>
+    <color name="mpsdk_rapipago">#FFFFFF</color>
+    <color name="mpsdk_redlink">#FFFFFF</color>
+    <color name="mpsdk_bapropagos">#FFFFFF</color>
+    <color name="mpsdk_cargavirtual">#FFFFFF</color>
+    <color name="mpsdk_cmr">#FFFFFF</color>
+
+    <color name="mpsdk_submit">#1B9EE3</color>
+    <color name="mpsdk_submit_pressed">#1976D2</color>
+
+    <!-- Card font color -->
+    <color name="mpsdk_font_visa">#FFFFFF</color>
+    <color name="mpsdk_font_master">#FFFFFF</color>
+    <color name="mpsdk_font_amex">#333333</color>
+    <color name="mpsdk_font_diners">#333333</color>
+    <color name="mpsdk_font_elo">#FFFFFF</color>
+    <color name="mpsdk_font_hipercard">#FFFFFF</color>
+    <color name="mpsdk_font_melicard">#FFFFFF</color>
+    <color name="mpsdk_font_naranja">#FFFFFF</color>
+    <color name="mpsdk_font_nativa">#FFFFFF</color>
+    <color name="mpsdk_font_tarshop">#FFFFFF</color>
+    <color name="mpsdk_font_cencosud">#333333</color>
+    <color name="mpsdk_font_cabal">#333333</color>
+    <color name="mpsdk_font_argencard">#FFFFFF</color>
+    <color name="mpsdk_font_cordobesa">#333333</color>
+    <color name="mpsdk_font_cordial">#333333</color>
+    <color name="mpsdk_font_mercadopago_cc">#333333</color>
+
+    <color name="mpsdk_font_pagofacil">#333333</color>
+    <color name="mpsdk_font_rapipago">#333333</color>
+    <color name="mpsdk_font_redlink">#333333</color>
+    <color name="mpsdk_font_bapropagos">#333333</color>
+    <color name="mpsdk_font_cargavirtual">#333333</color>
+    <color name="mpsdk_font_cmr">#333333</color>
 
 </resources>

@@ -72,6 +72,14 @@ public class PaymentMethod implements Serializable {
         }
     }
 
+    public boolean isIdentificationTypeRequired() {
+        return isAdditionalInfoNeeded("cardholder_identification_type");
+    }
+
+    public boolean isIdentificationNumberRequired() {
+        return isAdditionalInfoNeeded("cardholder_identification_number");
+    }
+
     private boolean isAdditionalInfoNeeded(String param) {
 
         if ((additionalInfoNeeded != null) && (additionalInfoNeeded.size() > 0)) {

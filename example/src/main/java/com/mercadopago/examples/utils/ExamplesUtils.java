@@ -22,6 +22,7 @@ import com.mercadopago.model.Item;
 import com.mercadopago.model.MerchantPayment;
 import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentMethod;
+import com.mercadopago.model.PaymentPreference;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;
 
@@ -80,7 +81,9 @@ public class ExamplesUtils {
         activity.startActivityForResult(cardIntent, CARD_REQUEST_CODE);
     }
 
-    public static void startGuessingCardActivity(Activity activity, String merchantPublicKey, boolean issuerRequired) {
+    public static void startGuessingCardActivity(Activity activity, String merchantPublicKey,
+                                                 boolean issuerRequired, PaymentPreference paymentPreference,
+                                                 BigDecimal amount) {
 
         new MercadoPago.StartActivityBuilder()
                 .setActivity(activity)
@@ -88,6 +91,8 @@ public class ExamplesUtils {
                 .setRequireSecurityCode(true)
                 .setRequireIssuer(issuerRequired)
                 .setShowBankDeals(true)
+                .setAmount(amount)
+                .setPaymentPreference(paymentPreference)
                 .startGuessingCardActivity();
     }
 

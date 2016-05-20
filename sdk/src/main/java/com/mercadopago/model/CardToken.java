@@ -74,7 +74,7 @@ public class CardToken implements Serializable {
     }
 
     public void setExpirationYear(Integer expirationYear) {
-        this.expirationYear = expirationYear;
+        this.expirationYear = CardToken.normalizeYear(expirationYear);
     }
 
     public String getSecurityCode() {
@@ -104,7 +104,8 @@ public class CardToken implements Serializable {
             throw new Exception(context.getString(R.string.mpsdk_invalid_empty_card));
         }
 
-        Setting setting = Setting.getSettingByBin(paymentMethod.getSettings(), (cardNumber.length() >= MercadoPago.BIN_LENGTH ? cardNumber.substring(0, MercadoPago.BIN_LENGTH) : ""));
+        Setting setting = Setting.getSettingByBin(paymentMethod.getSettings(), (cardNumber.length()
+                >= MercadoPago.BIN_LENGTH ? cardNumber.substring(0, MercadoPago.BIN_LENGTH) : ""));
 
         if (setting == null) {
 
@@ -150,7 +151,7 @@ public class CardToken implements Serializable {
             // Validate security code length
             if (setting != null) {
                 int cvvLength = setting.getSecurityCode().getLength();
-                if ((cvvLength != 0) && (securityCode.trim().length() != cvvLength)) {
+                if ((securityCode == null) || ((cvvLength != 0) && (securityCode.trim().length() != cvvLength))) {
                     throw new Exception(context.getString(R.string.mpsdk_invalid_cvv_length, cvvLength));
                 }
             } else {

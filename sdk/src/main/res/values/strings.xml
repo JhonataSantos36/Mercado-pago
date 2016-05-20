@@ -24,17 +24,29 @@
     <string name="mpsdk_card_number_label">Número de tarjeta</string>
     <string name="mpsdk_card_expire_date_label">Válida hasta</string>
     <string name="mpsdk_card_expiry_date_hint">Mes / Año</string>
+    <string name="mpsdk_card_expiry_month_hint">MM</string>
+    <string name="mpsdk_card_expiry_divider_hint">/</string>
+    <string name="mpsdk_card_expiry_year_hint">AA</string>
+    <string name="mpsdk_card_identification_label">Documento del titular de la tarjeta</string>
+    <string name="mpsdk_card_identification_number">Número</string>
+    <string name="mpsdk_card_identification_type">Tipo</string>
     <string name="mpsdk_cardholder_name">Nombre y apellido impreso en la tarjeta</string>
+    <string name="mpsdk_cardholder_name_short">NOMBRE APELLIDO</string>
     <string name="mpsdk_doc_type_label">Tipo</string>
     <string name="mpsdk_doc_number_label">Documento</string>
     <string name="mpsdk_accept_label">Aceptar</string>
     <string name="mpsdk_cancel_label">Cancelar</string>
     <string name="mpsdk_invalid_field">Revisa este dato</string>
     <string name="mpsdk_invalid_empty_card">Ingresa el número de la tarjeta de crédito</string>
+    <string name="mpsdk_invalid_card_number_incomplete">Ingresa todos los números de la tarjeta</string>
     <string name="mpsdk_invalid_card_bin">El número de tarjeta que ingresaste no se corresponde con el tipo de tarjeta</string>
     <string name="mpsdk_invalid_card_luhn">El número de tarjeta que ingresaste es incorrecto</string>
     <string name="mpsdk_invalid_card_length">Ingresa los %1$s números de la tarjeta</string>
     <string name="mpsdk_invalid_cvv_length">Ingresa los %1$s números del código de seguridad</string>
+    <string name="mpsdk_invalid_empty_name">Ingresa el nombre y apellido impreso en la tarjeta</string>
+    <string name="mpsdk_invalid_expiry_date">La fecha que ingresaste es inválida</string>
+    <string name="mpsdk_invalid_identification_number">Ingresa todos los números</string>
+    <string name="mpsdk_invalid_payment_method">Método de pago no soportado</string>
     <string name="mpsdk_title_activity_congrats">¡Felicitaciones!</string>
     <string name="mpsdk_total_amount">Total</string>
     <string name="mpsdk_payment_method_detail">Medio de pago</string>
@@ -65,6 +77,7 @@
     <string name="mpsdk_title_activity_install_app">Pagar</string>
     <string name="mpsdk_install_app_label">Para pagar, instala la aplicación de MercadoPago</string>
     <string name="mpsdk_install_app_button">Instalar la aplicación</string>
+    <string name="mpsdk_submit_button">&gt;</string>
 
     <string name="mpsdk_title_activity_guessing_card">Ingresa los datos de tu tarjeta</string>
     <string name="mpsdk_issuer_label">Banco</string>
@@ -126,21 +139,23 @@
     <string name="mpsdk_error_message_invalid_title">Título inválido</string>
     <string name="mpsdk_error_message_invalid_merchant">Comercio inválido</string>
     <string name="mpsdk_error_message_invalid_preference">Preferencia inválida</string>
+    <string name="mpsdk_error_message_invalid_installments">Número de cuotas inválido</string>
     <string name="mpsdk_payment_amount_to_pay">Total a pagar</string>
     <string name="mpsdk_processed_by_mercado_pago">© 1999–2016 Procesado por MercadoPago</string>
-
     <string name="mpsdk_exit_label">Salir</string>
-
     <string name="mpsdk_instant_accreditation_time">Se acreditará instantáneamente</string>
     <string name="mpsdk_accreditation_time">Se acreditará en</string>
     <string name="mpsdk_working_days">días hábiles</string>
     <string name="mpsdk_working_day">día hábil</string>
     <string name="mpsdk_hours">horas</string>
     <string name="mpsdk_hour">hora</string>
-
     <string name="mpsdk_zero_rate">Sin intereses</string>
     <string name="mpsdk_installments_of">de</string>
-    <string name="mpsdk_card_installments_title">¿En cuántas mensualidades?</string>
+    <string name="mpsdk_card_data_title">Datos de tu tarjeta</string>
+    <string name="mpsdk_card_installments_title">¿En cuántas cuotas?</string>
+    <string name="mpsdk_card_issuers_title">Elegir banco</string>
+    <string name="mpsdk_input_button_back">Anterior</string>
+    <string name="mpsdk_input_button_next">Continuar</string>
 
 
 

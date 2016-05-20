@@ -3,4 +3,7 @@
     <declare-styleable name="MPTextView">
         <attr name="fontStyle" format="string" />
     </declare-styleable>
+    <declare-styleable name="MPEditText">
+        <attr name="errorColor" format="reference" />
+    </declare-styleable>
 </resources>
