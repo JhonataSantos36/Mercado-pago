@@ -8,7 +8,7 @@ public class PaymentIntent implements Serializable {
 
     private Long transactionId;
     private Integer installments;
-    @SerializedName("issuer")
+    @SerializedName("issuer_id")
     private Long issuerId;
     private String paymentMethodId;
     private String prefId;
