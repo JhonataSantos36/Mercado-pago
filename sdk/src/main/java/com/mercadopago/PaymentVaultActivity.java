@@ -338,13 +338,10 @@ public class PaymentVaultActivity extends AppCompatActivity {
 
     private void restartWithSelectedItem(PaymentMethodSearchItem groupIem) {
 
-        if(getIntent().getSerializableExtra("paymentMethodSearch") == null) {
-            getIntent().putExtra("paymentMethodSearch", mPaymentMethodSearch);
-        }
-
         Intent intent = new Intent(this, PaymentVaultActivity.class);
-        intent.putExtra("selectedSearchItem", groupIem);
         intent.putExtras(this.getIntent());
+        intent.putExtra("selectedSearchItem", groupIem);
+        intent.putExtra("paymentMethodSearch", mPaymentMethodSearch);
 
         startActivityForResult(intent, MercadoPago.PAYMENT_VAULT_REQUEST_CODE);
         overridePendingTransition(R.anim.slide_right_to_left_in, R.anim.slide_right_to_left_out);
