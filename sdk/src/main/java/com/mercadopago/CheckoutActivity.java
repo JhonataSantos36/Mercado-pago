@@ -330,7 +330,7 @@ public class CheckoutActivity extends AppCompatActivity {
                 returnIntent.putExtra("payment", mCreatedPayment);
                 setResult(RESULT_OK, returnIntent);
                 finish();
-            } else if (resultCode == RESULT_CANCELED) {
+            } else if (resultCode == RESULT_CANCELED && data != null) {
                 if (data.getBooleanExtra("selectOther", false)) {
                     startPaymentVaultActivity();
                 } else if (data.getBooleanExtra("retry", false)) {
@@ -474,6 +474,7 @@ public class CheckoutActivity extends AppCompatActivity {
         paymentIntent.setPrefId(mCheckoutPreference.getId());
         paymentIntent.setPublicKey(mMerchantPublicKey);
         paymentIntent.setPaymentMethodId(mSelectedPaymentMethod.getId());
+        paymentIntent.setTokenId(mCreatedToken.getId());
         paymentIntent.setEmail(mCheckoutPreference.getPayer().getEmail());
 
         if(!existsTransactionId() || !MercadoPagoUtil.isCardPaymentType(mSelectedPaymentMethod.getPaymentTypeId())) {

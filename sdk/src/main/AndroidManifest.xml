@@ -81,7 +81,8 @@
 
         <activity
             android:name=".GuessingNewCardActivity"
-            android:theme="@style/Theme.MercadoPagoTheme" />
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.MercadoPagoTheme.NoActionBar" />
 
         <activity
             android:name=".PaymentVaultActivity"

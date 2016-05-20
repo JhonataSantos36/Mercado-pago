@@ -441,7 +441,7 @@ public class MercadoPago {
         vaultIntent.putExtra("amount", amount.toString());
         vaultIntent.putExtra("currencyId", currencyId);
         vaultIntent.putExtra("showBankDeals", showBankDeals);
-
+        vaultIntent.putExtra("paymentMethodSearch", paymentMethodSearch);
         vaultIntent.putExtra("paymentPreference", paymentPreference);
 
         activity.startActivityForResult(vaultIntent, PAYMENT_VAULT_REQUEST_CODE);
