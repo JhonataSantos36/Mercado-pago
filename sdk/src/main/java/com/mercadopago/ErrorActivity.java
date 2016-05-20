@@ -24,8 +24,19 @@ public class ErrorActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_error);
         getActivityParameters();
-        initializeControls();
-        fillData();
+        if(validParameters()) {
+            initializeControls();
+            fillData();
+        }
+        else {
+            Intent intent = new Intent();
+            setResult(RESULT_CANCELED, intent);
+            finish();
+        }
+    }
+
+    private boolean validParameters() {
+        return mMPException != null;
     }
 
     private void getActivityParameters() {

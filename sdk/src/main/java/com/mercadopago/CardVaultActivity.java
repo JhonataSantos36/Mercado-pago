@@ -32,6 +32,7 @@ public class CardVaultActivity extends ShowCardActivity {
     private PayerCost mPayerCost;
     private PaymentPreference mPaymentPreference;
     private FailureRecovery mFailureRecovery;
+    private String mCurrencyId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +56,7 @@ public class CardVaultActivity extends ShowCardActivity {
     @Override
     protected void getActivityParameters() {
         mPublicKey = getIntent().getStringExtra("publicKey");
+        mCurrencyId = getIntent().getStringExtra("currencyId");
         mSecurityCodeLocation = CardInterface.CARD_SIDE_BACK;
         mAmount = new BigDecimal(getIntent().getStringExtra("amount"));
         mPaymentPreference = (PaymentPreference) this.getIntent().getSerializableExtra("paymentPreference");
@@ -186,6 +188,7 @@ public class CardVaultActivity extends ShowCardActivity {
                         .setPayerCosts(payerCosts)
                         .setIssuer(mSelectedIssuer)
                         .setPaymentPreference(mPaymentPreference)
+                        .setCurrency(mCurrencyId)
                         .startCardInstallmentsActivity();
                 overridePendingTransition(R.anim.fade_in_seamless, R.anim.fade_out_seamless);
             }

@@ -21,9 +21,11 @@ public class CardInstallmentsAdapter extends  RecyclerView.Adapter<CardInstallme
 
     private Context mContext;
     private List<PayerCost> mInstallmentsList;
+    private String mCurrencyId;
 
-    public CardInstallmentsAdapter(Context context) {
+    public CardInstallmentsAdapter(Context context, String currency) {
         this.mContext = context;
+        this.mCurrencyId = currency;
         this.mInstallmentsList = new ArrayList<>();
     }
 
@@ -73,19 +75,19 @@ public class CardInstallmentsAdapter extends  RecyclerView.Adapter<CardInstallme
         sb.append(" ");
         sb.append(mContext.getString(R.string.mpsdk_installments_of));
         sb.append(" ");
-        //TODO no vamos a tener currency
-        sb.append(CurrenciesUtil.formatNumber(payerCost.getInstallmentAmount(), "MXN"));
+
+        sb.append(CurrenciesUtil.formatNumber(payerCost.getInstallmentAmount(), mCurrencyId));
         return CurrenciesUtil.formatCurrencyInText(payerCost.getInstallmentAmount(),
-                "MXN", sb.toString(), true, true);
+                mCurrencyId, sb.toString(), true, true);
     }
 
     private Spanned getInstallmentsRateText(PayerCost payerCost) {
         StringBuffer sb = new StringBuffer();
         sb.append("( ");
-        sb.append(CurrenciesUtil.formatNumber(payerCost.getTotalAmount(), "MXN"));
+        sb.append(CurrenciesUtil.formatNumber(payerCost.getTotalAmount(), mCurrencyId));
         sb.append(" )");
         return CurrenciesUtil.formatCurrencyInText(payerCost.getTotalAmount(),
-                "MXN", sb.toString(), true, true);
+                mCurrencyId, sb.toString(), true, true);
     }
 
     public PayerCost getItem(int position) {

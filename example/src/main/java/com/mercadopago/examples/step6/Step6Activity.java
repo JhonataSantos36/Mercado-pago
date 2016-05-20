@@ -44,6 +44,7 @@ public class Step6Activity extends ExampleActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        LayoutUtil.showRegularLayout(this);
 
         if (requestCode == MercadoPago.CHECKOUT_REQUEST_CODE) {
             if (resultCode == RESULT_OK && data != null) {
@@ -70,6 +71,7 @@ public class Step6Activity extends ExampleActivity {
     }
 
     public void submitForm(View view) {
+        LayoutUtil.showProgressLayout(this);
         Map<String, Object> map = new HashMap<>();
         map.put("item_id", "1");
         map.put("amount", new BigDecimal(10));

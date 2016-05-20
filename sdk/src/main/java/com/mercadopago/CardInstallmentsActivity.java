@@ -37,6 +37,7 @@ public class CardInstallmentsActivity extends ShowCardActivity {
 
     //Local vars
     private List<PayerCost> mPayerCosts;
+    private String mCurrencyId;
     private PayerCost mSelectedPayerCost;
     private PaymentPreference mPaymentPreference;
     private FailureRecovery mFailureRecovery;
@@ -47,8 +48,8 @@ public class CardInstallmentsActivity extends ShowCardActivity {
         setContentView();
         mActivity = this;
         setLayout();
-        initializeAdapter();
         getActivityParameters();
+        initializeAdapter();
         initializeToolbar();
 
         mMercadoPago = new MercadoPago.Builder()
@@ -72,7 +73,7 @@ public class CardInstallmentsActivity extends ShowCardActivity {
     }
 
     protected void initializeAdapter() {
-        mInstallmentsAdapter = new CardInstallmentsAdapter(this);
+        mInstallmentsAdapter = new CardInstallmentsAdapter(this, mCurrencyId);
         initializeAdapterListener(mInstallmentsAdapter, mInstallmentsView);
     }
 
@@ -100,6 +101,7 @@ public class CardInstallmentsActivity extends ShowCardActivity {
     protected void getActivityParameters() {
         super.getActivityParameters();
         mAmount = new BigDecimal(this.getIntent().getStringExtra("amount"));
+        mCurrencyId = this.getIntent().getStringExtra("currencyId");
         mPayerCosts = (ArrayList<PayerCost>)getIntent().getSerializableExtra("payerCosts");
         mPaymentPreference = (PaymentPreference) this.getIntent().getSerializableExtra("paymentPreference");
         if (mPaymentPreference == null) {

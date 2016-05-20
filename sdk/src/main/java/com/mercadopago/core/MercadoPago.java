@@ -333,13 +333,14 @@ public class MercadoPago {
         activity.startActivityForResult(installmentsIntent, INSTALLMENTS_REQUEST_CODE);
     }
 
-    private static void startCardInstallmentsActivity(Activity activity, BigDecimal amount,
+    private static void startCardInstallmentsActivity(Activity activity, BigDecimal amount, String currencyId,
                                                       Token token, String publicKey,
                                                       List<PayerCost> payerCosts,
                                                       PaymentPreference paymentPreference,
                                                       Issuer issuer, PaymentMethod paymentMethod) {
         Intent intent = new Intent(activity, CardInstallmentsActivity.class);
         intent.putExtra("amount", amount.toString());
+        intent.putExtra("currencyId", currencyId);
         intent.putExtra("paymentMethod",  JsonUtil.getInstance().toJson(paymentMethod));
         intent.putExtra("token", JsonUtil.getInstance().toJson(token));
         intent.putExtra("publicKey", publicKey);
@@ -401,6 +402,7 @@ public class MercadoPago {
     private static void startCardVaultActivity(Activity activity,
                                                String key,
                                                BigDecimal amount,
+                                               String currencyId,
                                                PaymentPreference paymentPreference,
                                                Token token) {
 
@@ -408,6 +410,8 @@ public class MercadoPago {
         guessingCardIntent.putExtra("publicKey", key);
 
         guessingCardIntent.putExtra("amount", amount.toString());
+
+        guessingCardIntent.putExtra("currencyId", currencyId);
 
         guessingCardIntent.putExtra("paymentPreference", paymentPreference);
 
@@ -761,12 +765,13 @@ public class MercadoPago {
         public void startCardInstallmentsActivity() {
             if (this.mActivity == null) throw new IllegalStateException("activity is null");
             if (this.mKey == null) throw new IllegalStateException("key is null");
+            if (this.mCurrencyId == null) throw new IllegalStateException("currencyId is null");
             if (this.mAmount == null) throw new IllegalStateException("amount is null");
             if (this.mToken == null) throw new IllegalStateException("token is null");
             if (this.mIssuer == null) throw new IllegalStateException("issuer is null");
             if (this.mPaymentMethod == null) throw new IllegalStateException("payment method is null");
 
-            MercadoPago.startCardInstallmentsActivity(mActivity, mAmount, mToken,
+            MercadoPago.startCardInstallmentsActivity(mActivity, mAmount, mCurrencyId, mToken,
                     mKey, mPayerCosts, mPaymentPreference, mIssuer, mPaymentMethod);
         }
 
@@ -810,7 +815,8 @@ public class MercadoPago {
             if (this.mActivity == null) throw new IllegalStateException("activity is null");
             if (this.mKey == null) throw new IllegalStateException("key is null");
             if (this.mAmount == null) throw new IllegalStateException("amount is null");
-            MercadoPago.startCardVaultActivity(this.mActivity, this.mKey, this.mAmount,
+            if (this.mCurrencyId == null) throw new IllegalStateException("currencyId is null");
+            MercadoPago.startCardVaultActivity(this.mActivity, this.mKey, this.mAmount, this.mCurrencyId,
                      this.mPaymentPreference, this.mToken);
         }
 

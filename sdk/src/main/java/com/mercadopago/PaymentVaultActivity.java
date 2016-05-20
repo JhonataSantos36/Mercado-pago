@@ -360,10 +360,11 @@ public class PaymentVaultActivity extends AppCompatActivity {
         MercadoPago.StartActivityBuilder builder = new MercadoPago.StartActivityBuilder()
                 .setActivity(this)
                 .setPublicKey(mMerchantPublicKey)
-                .setPaymentPreference(mPaymentPreference)
-                .setAmount(mAmount);
+                .setPaymentPreference(mPaymentPreference);
 
         if(MercadoPagoUtil.isCardPaymentType(item.getId())){
+            builder.setAmount(mAmount);
+            builder.setCurrency(mCurrencyId);
             builder.startCardVaultActivity();
             animatePaymentMethodSelection();
         }
