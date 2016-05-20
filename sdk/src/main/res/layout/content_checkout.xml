@@ -3,6 +3,7 @@
         android:id="@+id/contentLayout"
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
@@ -49,7 +50,7 @@
                     android:layout_toEndOf="@+id/totalAmountText"
                     android:layout_marginLeft="4dp"
                     android:layout_marginStart="4dp"
-                    android:text="$X"
+                    tools:text="$X"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     style="@style/mpsdk_regular_dark_thin"/>
@@ -60,17 +61,18 @@
                 android:background="@drawable/drop_shadow">
             </View>
             <com.mercadopago.views.MPTextView
-                android:paddingLeft="20dp"
-                android:paddingStart="20dp"
-                android:paddingRight="20dp"
-                android:paddingEnd="20dp"
                 android:id="@+id/termsAndConditions"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="5dp"
-                android:layout_width="match_parent"
-                android:gravity="center"
                 android:layout_height="wrap_content"
-                android:lineSpacingMultiplier="1.5"
+                android:layout_marginLeft="60dp"
+                android:layout_marginStart="60dp"
+                android:layout_marginRight="60dp"
+                android:layout_marginEnd="60dp"
+                android:layout_width="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center"
+                tools:text="Al pagar, afirmo que soy mayor de edad y acepto los terminos y condiciones de MercadoPago"
                 style="@style/small_comment"/>
 
             <com.mercadopago.views.MPButton
@@ -96,7 +98,7 @@
                 android:layout_marginTop="20dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/mpsdk_cancel_label"
+                android:text="@string/mpsdk_cancel_payment"
                 android:textColor="@color/mpsdk_color_link"
                 android:textSize="@dimen/mpsdk_small_text"
                 android:id="@+id/cancelTextView"

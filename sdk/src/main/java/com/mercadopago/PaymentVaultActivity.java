@@ -10,7 +10,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 
 import com.mercadopago.adapters.PaymentMethodSearchItemAdapter;
 import com.mercadopago.callbacks.FailureRecovery;
@@ -49,7 +48,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
     protected Token mToken;
     protected Issuer mSelectedIssuer;
     protected PayerCost mSelectedPayerCost;
-    protected FailureRecovery failureRecovery;
+    protected FailureRecovery mFailureRecovery;
 
     // Controls
     protected RecyclerView mSearchItemsRecyclerView;
@@ -275,7 +274,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
             @Override
             public void failure(RetrofitError error) {
                 ApiUtil.showApiExceptionError(mActivity, error);
-                failureRecovery = new FailureRecovery() {
+                mFailureRecovery = new FailureRecovery() {
                     @Override
                     public void recover() {
                         getPaymentMethodSearch();
@@ -307,15 +306,10 @@ public class PaymentVaultActivity extends AppCompatActivity {
 
     protected void populateSearchList(List<PaymentMethodSearchItem> items) {
         PaymentMethodSearchItemAdapter groupsAdapter = new PaymentMethodSearchItemAdapter(this, items, getPaymentMethodSearchItemSelectionCallback());
-        mSearchItemsRecyclerView.setAdapter(groupsAdapter);
-
-        //TODO update to rv 23 and replace by wrap content
-        int recyclerViewSize = groupsAdapter.getHeightForItems();
-        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, recyclerViewSize);
-        mSearchItemsRecyclerView.setLayoutParams(layoutParams);
+        mSearchItemsRecyclerView.setAdapter(groupsAdapter);;
     }
 
-    protected OnSelectedCallback getPaymentMethodSearchItemSelectionCallback() {
+    protected OnSelectedCallback<PaymentMethodSearchItem> getPaymentMethodSearchItemSelectionCallback() {
         return new OnSelectedCallback<PaymentMethodSearchItem>() {
             @Override
             public void onSelected(PaymentMethodSearchItem item) {
@@ -366,10 +360,12 @@ public class PaymentVaultActivity extends AppCompatActivity {
         MercadoPago.StartActivityBuilder builder = new MercadoPago.StartActivityBuilder()
                 .setActivity(this)
                 .setPublicKey(mMerchantPublicKey)
-                .setPaymentPreference(mPaymentPreference);
+                .setPaymentPreference(mPaymentPreference)
+                .setAmount(mAmount);
 
         if(MercadoPagoUtil.isCardPaymentType(item.getId())){
-            builder.startGuessingCardActivity();
+            builder.startCardVaultActivity();
+            animatePaymentMethodSelection();
         }
         else {
             builder.startPaymentMethodsActivity();
@@ -389,8 +385,8 @@ public class PaymentVaultActivity extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        if(requestCode == MercadoPago.GUESSING_CARD_REQUEST_CODE) {
-            resolveGuessingCardRequest(resultCode, data);
+        if(requestCode == MercadoPago.CARD_VAULT_REQUEST_CODE) {
+            resolveCardRequest(resultCode, data);
         }
         else if (requestCode == MercadoPago.PAYMENT_METHODS_REQUEST_CODE) {
             resolvePaymentMethodsRequest(resultCode, data);
@@ -431,13 +427,13 @@ public class PaymentVaultActivity extends AppCompatActivity {
         }
     }
 
-    protected void resolveGuessingCardRequest(int resultCode, Intent data) {
+    protected void resolveCardRequest(int resultCode, Intent data) {
         if(resultCode == RESULT_OK) {
             mSelectedPaymentMethod = (PaymentMethod) data.getSerializableExtra("paymentMethod");
             mToken = (Token) data.getSerializableExtra("token");
             mSelectedIssuer = (Issuer) data.getSerializableExtra("issuer");
             mSelectedPayerCost = (PayerCost) data.getSerializableExtra("payerCost");
-            finishWithTokenResult();
+            finishWithCardResult();
 
         } else if (isUniqueSelectionAvailable()||
                 ((data != null) && (data.getSerializableExtra("mpException") != null))){
@@ -469,7 +465,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
         animatePaymentMethodSelection();
     }
 
-    protected void finishWithTokenResult() {
+    protected void finishWithCardResult() {
         Intent returnIntent = new Intent();
         returnIntent.putExtra("token", mToken);
         if (mSelectedIssuer != null) {
@@ -505,8 +501,8 @@ public class PaymentVaultActivity extends AppCompatActivity {
     }
 
     private void recoverFromFailure() {
-        if(failureRecovery != null) {
-            failureRecovery.recover();
+        if(mFailureRecovery != null) {
+            mFailureRecovery.recover();
         }
     }
 }

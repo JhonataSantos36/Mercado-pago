@@ -15,7 +15,7 @@
         android:weightSum="1"
         android:orientation="horizontal">
         <LinearLayout
-            android:layout_weight="0.99"
+            android:layout_weight="0.98"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:orientation="horizontal">

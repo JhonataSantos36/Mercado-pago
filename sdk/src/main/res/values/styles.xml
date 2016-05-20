@@ -6,9 +6,10 @@
     </style>
 
     <style name="mpsdk_button_normal" parent="@android:style/Widget.Button">
-        <item name="android:background">@drawable/button</item>
+        <item name="android:background">@drawable/mpsdk_button</item>
         <item name="android:textSize">@dimen/mpsdk_big_text</item>
         <item name="android:textColor">@color/mpsdk_white</item>
+        <item name="android:stateListAnimator">@null</item>
     </style>
 
     <style name="mpsdk_title_text">
@@ -74,7 +75,7 @@
     <style name="mpsdk_large_label">
         <item name="android:textSize">@dimen/mpsdk_large_text</item>
         <item name="android:textColor">@color/mpsdk_form_text</item>
-        <item name="android:lineSpacingMultiplier">1.3</item>
+        <item name="android:lineSpacingMultiplier">1.7</item>
     </style>
 
     <style name="mpsdk_list_label_comment">
@@ -149,6 +150,15 @@
     <style name="Theme.MercadoPagoTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.ProcessMercadoPagoTheme.NoActionbar" parent="Theme.MercadoPagoTheme.NoActionBar">
+            <item name="android:statusBarColor">@color/mpsdk_process_color_dark</item>
+   </style>
+
+    <style name="Theme.InfoMercadoPagoTheme.NoActionbar" parent="Theme.MercadoPagoTheme.NoActionBar">
+        <item name="android:statusBarColor">@color/mpsdk_info_color_dark</item>
+        <item name="android:windowLightStatusBar">true</item>
     </style>
 
     <style name="Theme.MercadoPagoTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />

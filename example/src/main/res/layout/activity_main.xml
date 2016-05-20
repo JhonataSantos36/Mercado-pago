@@ -86,6 +86,7 @@
             android:layout_height="@dimen/mpsdk_button_height"
             android:layout_marginTop="10dp"
             android:gravity="center"
+            android:text="Flavor 2"
             android:onClick="runStepF2"
             style="@style/mpsdk_button_normal"/>
         <com.mercadopago.views.MPButton

@@ -68,10 +68,9 @@ public class MercadoPago {
     public static final int PAYMENT_VAULT_REQUEST_CODE = 6;
     public static final int BANK_DEALS_REQUEST_CODE = 7;
     public static final int CHECKOUT_REQUEST_CODE = 8;
-    public static final int INSTALL_APP_REQUEST_CODE = 9;
     public static final int GUESSING_CARD_REQUEST_CODE = 10;
     public static final int INSTRUCTIONS_REQUEST_CODE = 11;
-    public static final int FLOW_CARD_REQUEST_CODE = 12;
+    public static final int CARD_VAULT_REQUEST_CODE = 12;
 
 
     public static final int BIN_LENGTH = 6;
@@ -297,7 +296,7 @@ public class MercadoPago {
         activity.startActivityForResult(checkoutIntent, CHECKOUT_REQUEST_CODE);
     }
 
-    private static void startCongratsActivity(Activity activity, Payment payment, PaymentMethod paymentMethod) {
+    private static void startCongratsActivity(Activity activity, Payment payment) {
 
         Intent congratsIntent = new Intent(activity, CongratsActivity.class);
         congratsIntent.putExtra("payment", payment);
@@ -414,7 +413,7 @@ public class MercadoPago {
 
         guessingCardIntent.putExtra("token", token);
 
-        activity.startActivityForResult(guessingCardIntent, FLOW_CARD_REQUEST_CODE);
+        activity.startActivityForResult(guessingCardIntent, CARD_VAULT_REQUEST_CODE);
     }
 
 
@@ -722,9 +721,8 @@ public class MercadoPago {
 
             if (this.mActivity == null) throw new IllegalStateException("activity is null");
             if (this.mPayment == null) throw new IllegalStateException("payment is null");
-            if (this.mPaymentMethod == null) throw new IllegalStateException("payment method is null");
 
-            MercadoPago.startCongratsActivity(this.mActivity, this.mPayment, this.mPaymentMethod);
+            MercadoPago.startCongratsActivity(this.mActivity, this.mPayment);
         }
 
 

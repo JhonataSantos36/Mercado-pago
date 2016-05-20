@@ -25,6 +25,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.mercadopago.adapters.IdentificationTypesAdapter;
+import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.callbacks.PaymentMethodSelectionCallback;
 import com.mercadopago.controllers.PaymentMethodGuessingController;
 import com.mercadopago.core.MercadoPago;
@@ -41,6 +42,8 @@ import com.mercadopago.model.PaymentPreference;
 import com.mercadopago.model.SecurityCode;
 import com.mercadopago.model.Setting;
 import com.mercadopago.model.Token;
+import com.mercadopago.util.ApiUtil;
+import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.LayoutUtil;
 import com.mercadopago.views.MPEditText;
 import com.mercadopago.views.MPTextView;
@@ -101,6 +104,7 @@ public class GuessingNewCardActivity extends FrontCardActivity {
     private int mCardSecurityCodeLength;
     private int mCardNumberLength;
     private String mSecurityCodeLocation;
+    private FailureRecovery mFailureRecovery;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -397,7 +401,13 @@ public class GuessingNewCardActivity extends FrontCardActivity {
 
             @Override
             public void failure(RetrofitError error) {
-                //TODO manejar el error
+                mFailureRecovery = new FailureRecovery() {
+                    @Override
+                    public void recover() {
+                        getPaymentMethodsAsync();
+                    }
+                };
+                ApiUtil.showApiExceptionError(mActivity, error);
             }
         });
     }
@@ -585,7 +595,13 @@ public class GuessingNewCardActivity extends FrontCardActivity {
 
                 @Override
                 public void failure(RetrofitError error) {
-                    //TODO manejar el error
+                    mFailureRecovery = new FailureRecovery() {
+                        @Override
+                        public void recover() {
+                            manageAdditionalInfoNeeded();
+                        }
+                    };
+                    ApiUtil.showApiExceptionError(mActivity, error);
                 }
             });
         }
@@ -1085,7 +1101,13 @@ public class GuessingNewCardActivity extends FrontCardActivity {
 
             @Override
             public void failure(RetrofitError error) {
-                //TODO manejar el error
+                mFailureRecovery = new FailureRecovery() {
+                    @Override
+                    public void recover() {
+                        createToken();
+                    }
+                };
+                ApiUtil.showApiExceptionError(mActivity, error);
             }
         });
     }
@@ -1215,7 +1237,13 @@ public class GuessingNewCardActivity extends FrontCardActivity {
 
                     @Override
                     public void failure(RetrofitError error) {
-                        //TODO manejar el error
+                        mFailureRecovery = new FailureRecovery() {
+                            @Override
+                            public void recover() {
+                                checkStartIssuersActivity();
+                            }
+                        };
+                        ApiUtil.showApiExceptionError(mActivity, error);
                     }
                 });
     }
@@ -1250,6 +1278,15 @@ public class GuessingNewCardActivity extends FrontCardActivity {
                 checkFlipCardToFront();
                 finishWithResult();
             } else if (resultCode == RESULT_CANCELED) {
+                finish();
+            }
+        }
+        else if(requestCode == ErrorUtil.ERROR_REQUEST_CODE) {
+            if(resultCode == RESULT_OK) {
+                recoverFromFailure();
+            }
+            else {
+                setResult(resultCode, data);
                 finish();
             }
         }
@@ -1299,4 +1336,9 @@ public class GuessingNewCardActivity extends FrontCardActivity {
         }
     }
 
+    private void recoverFromFailure() {
+        if(mFailureRecovery != null) {
+            mFailureRecovery.recover();
+        }
+    }
 }

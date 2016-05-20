@@ -162,6 +162,6 @@
     <string name="mpsdk_input_button_back">Anterior</string>
     <string name="mpsdk_input_button_next">Continuar</string>
 
-
+    <string name="mpsdk_cancel_payment">Cancelar pago</string>
 
 </resources>

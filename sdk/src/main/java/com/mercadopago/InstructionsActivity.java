@@ -126,7 +126,7 @@ public class InstructionsActivity extends AppCompatActivity {
         LinearLayout.LayoutParams marginParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT);
         int marginTop = ScaleUtil.getPxFromDp(3, this);
-        int marginBottom = ScaleUtil.getPxFromDp(7, this);
+        int marginBottom = ScaleUtil.getPxFromDp(20, this);
         marginParams.setMargins(0, marginTop, 0, marginBottom);
         for(InstructionReference reference : instruction.getReferences()) {
             MPTextView currentTitleTextView = new MPTextView(this);

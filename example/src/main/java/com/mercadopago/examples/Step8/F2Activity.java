@@ -28,7 +28,7 @@ public class F2Activity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == MercadoPago.PAYMENT_VAULT_REQUEST_CODE) {
-            if(resultCode == RESULT_CANCELED && data.hasExtra("mpException")) {
+            if(resultCode == RESULT_CANCELED && data != null && data.hasExtra("mpException")) {
                 MPException mpException = (MPException) data.getSerializableExtra("mpException");
                 Toast.makeText(this, mpException.getMessage()+ ". "+ mpException.getErrorDetail(), Toast.LENGTH_LONG).show();
             }
