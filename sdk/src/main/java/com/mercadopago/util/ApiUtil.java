@@ -8,6 +8,7 @@ import android.net.NetworkInfo;
 import android.widget.Toast;
 
 import com.mercadopago.R;
+import com.mercadopago.exceptions.MPException;
 import com.mercadopago.model.ApiException;
 
 import retrofit.RetrofitError;
@@ -55,6 +56,28 @@ public class ApiUtil {
             intent.putExtra("apiException", apiException);
             activity.finish();
         }
+    }
+
+    public static void showApiExceptionError(Activity activity, RetrofitError error) {
+        MPException mpException;
+        String errorMessage;
+
+        if(!ApiUtil.checkConnection(activity)){
+            errorMessage = activity.getString(R.string.mpsdk_no_connection_message);
+            mpException = new MPException(errorMessage, true);
+        }
+        else {
+            ApiException apiException = getApiException(error);
+            if(apiException != null) {
+                mpException = new MPException(apiException);
+            }
+            else {
+                errorMessage = activity.getString(R.string.mpsdk_standard_error_message);
+                mpException = new MPException(errorMessage, error.getMessage(), true);
+            }
+        }
+
+        ErrorUtil.startErrorActivity(activity, mpException);
     }
 
     public static boolean checkConnection(Context context) {

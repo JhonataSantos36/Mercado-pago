@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.model.Instruction;
 import com.mercadopago.model.InstructionActionInfo;
@@ -20,6 +21,7 @@ import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.CurrenciesUtil;
+import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.LayoutUtil;
 import com.mercadopago.util.ScaleUtil;
 import com.mercadopago.views.MPButton;
@@ -32,6 +34,10 @@ import retrofit.RetrofitError;
 import retrofit.client.Response;
 
 public class InstructionsActivity extends AppCompatActivity {
+
+    //Values
+    protected MercadoPago mMercadoPago;
+    protected FailureRecovery failureRecovery;
 
     //Controls
     protected LinearLayout mReferencesLayout;
@@ -56,19 +62,17 @@ public class InstructionsActivity extends AppCompatActivity {
         getActivityParameters();
         initializeControls();
         mActivity = this;
-        MercadoPago mercadoPago = new MercadoPago.Builder()
+        mMercadoPago = new MercadoPago.Builder()
                 .setContext(this)
                 .setPublicKey(mMerchantPublicKey)
                 .build();
-        getInstructionsAsync(mercadoPago);
+        getInstructionsAsync();
     }
 
-    protected void getInstructionsAsync(MercadoPago mercadoPago) {
-
+    protected void getInstructionsAsync() {
 
         LayoutUtil.showProgressLayout(this);
-        //TODO cambiar por mPayment.getId() cuando estén andando los servicios
-        mercadoPago.getInstructions(mPayment.getId(), mPaymentMethod.getId(), mPaymentMethod.getPaymentTypeId(), new Callback<Instruction>() {
+        mMercadoPago.getInstructions(mPayment.getId(), mPaymentMethod.getId(), mPaymentMethod.getPaymentTypeId(), new Callback<Instruction>() {
             @Override
             public void success(Instruction instruction, Response response) {
                 showInstructions(instruction);
@@ -77,7 +81,13 @@ public class InstructionsActivity extends AppCompatActivity {
 
             @Override
             public void failure(RetrofitError error) {
-                ApiUtil.finishWithApiException(mActivity, error);
+                ApiUtil.showApiExceptionError(mActivity, error);
+                failureRecovery = new FailureRecovery() {
+                    @Override
+                    public void recover() {
+                        getInstructionsAsync();
+                    }
+                };
             }
         });
     }
@@ -116,7 +126,7 @@ public class InstructionsActivity extends AppCompatActivity {
         LinearLayout.LayoutParams marginParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT);
         int marginTop = ScaleUtil.getPxFromDp(3, this);
-        int marginBottom = ScaleUtil.getPxFromDp(7, this);
+        int marginBottom = ScaleUtil.getPxFromDp(20, this);
         marginParams.setMargins(0, marginTop, 0, marginBottom);
         for(InstructionReference reference : instruction.getReferences()) {
             MPTextView currentTitleTextView = new MPTextView(this);
@@ -187,7 +197,7 @@ public class InstructionsActivity extends AppCompatActivity {
     }
 
     protected void getActivityParameters() {
-        mPayment = (Payment) getIntent().getExtras().getSerializable("payment");
+        mPayment = (Payment) getIntent().getSerializableExtra("payment");
         mMerchantPublicKey = this.getIntent().getStringExtra("merchantPublicKey");
         mPaymentMethod = (PaymentMethod) getIntent().getSerializableExtra("paymentMethod");
     }
@@ -210,7 +220,26 @@ public class InstructionsActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == ErrorUtil.ERROR_REQUEST_CODE) {
+            if(resultCode == RESULT_OK) {
+                recoverFromFailure();
+            }
+            else {
+                setResult(RESULT_CANCELED, data);
+                finish();
+            }
+        }
+    }
+
     private void animateOut() {
         overridePendingTransition(R.anim.slide_right_to_left_in, R.anim.slide_right_to_left_out);
+    }
+
+    private void recoverFromFailure() {
+        if(failureRecovery != null) {
+            failureRecovery.recover();
+        }
     }
 }

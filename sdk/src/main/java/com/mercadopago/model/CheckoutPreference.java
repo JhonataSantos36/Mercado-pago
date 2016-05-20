@@ -22,7 +22,7 @@ public class CheckoutPreference implements Serializable {
 
     private Date expirationDateTo;
     private Date expirationDateFrom;
-
+    private String siteId;
 
     public void validate() throws CheckoutPreferenceException {
         if (!this.itemsValid())
@@ -41,6 +41,13 @@ public class CheckoutPreference implements Serializable {
         else if (!this.validPaymentTypeExclusion()){
             throw new CheckoutPreferenceException(CheckoutPreferenceException.EXCLUDED_ALL_PAYMENT_TYPES);
         }
+        else if (!this.hasEmail()){
+            throw new CheckoutPreferenceException(CheckoutPreferenceException.NO_EMAIL_FOUND);
+        }
+    }
+
+    private boolean hasEmail() {
+        return this.payer != null && !isEmpty(this.payer.getEmail());
     }
 
     public boolean validPaymentTypeExclusion() {
@@ -203,5 +210,9 @@ public class CheckoutPreference implements Serializable {
 
     public PaymentPreference getPaymentPreference() {
         return paymentPreference;
+    }
+
+    public String getSiteId() {
+        return siteId;
     }
 }

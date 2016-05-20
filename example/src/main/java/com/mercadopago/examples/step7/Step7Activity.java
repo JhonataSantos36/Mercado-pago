@@ -45,7 +45,7 @@ public class Step7Activity extends AppCompatActivity {
             resolveGuessingCardRequest(resultCode, data);
         } else if(requestCode == MercadoPago.GUESSING_CARD_REQUEST_CODE) {
             resolveGuessingCardRequest(resultCode, data);
-        } else if(requestCode == MercadoPago.FLOW_CARD_REQUEST_CODE) {
+        } else if(requestCode == MercadoPago.CARD_VAULT_REQUEST_CODE) {
             resolveGuessingCardRequest(resultCode, data);
         }
     }

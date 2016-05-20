@@ -41,22 +41,6 @@ public class PaymentMethodSearchItemAdapter extends RecyclerView.Adapter<Payment
         return new ViewHolder(paymentMethodSearchRow);
     }
 
-    public Integer getHeightForItems() {
-        Float mCurrentHeight = (float) 0;
-        for(PaymentMethodSearchItem item : mItems) {
-            if (withLargeRow(item)) {
-                mCurrentHeight += mContext.getResources().getDimension(R.dimen.list_item_height_large);
-            } else {
-                mCurrentHeight += mContext.getResources().getDimension(R.dimen.list_item_height);
-            }
-        }
-        return Math.round(mCurrentHeight);
-    }
-
-    private boolean withLargeRow(PaymentMethodSearchItem item) {
-        return item.hasComment();
-    }
-
     @Override
     public int getItemViewType(int position)
     {

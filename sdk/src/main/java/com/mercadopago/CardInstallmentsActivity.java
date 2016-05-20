@@ -1,6 +1,7 @@
 package com.mercadopago;
 
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,11 +10,14 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 import com.mercadopago.adapters.CardInstallmentsAdapter;
+import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.listeners.RecyclerItemClickListener;
 import com.mercadopago.model.Installment;
 import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.PaymentPreference;
+import com.mercadopago.util.ApiUtil;
+import com.mercadopago.util.ErrorUtil;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -29,19 +33,23 @@ public class CardInstallmentsActivity extends ShowCardActivity {
     private RecyclerView mInstallmentsView;
     private CardInstallmentsAdapter mInstallmentsAdapter;
 
+    private Activity mActivity;
 
     //Local vars
     private List<PayerCost> mPayerCosts;
+    private String mCurrencyId;
     private PayerCost mSelectedPayerCost;
     private PaymentPreference mPaymentPreference;
+    private FailureRecovery mFailureRecovery;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView();
+        mActivity = this;
         setLayout();
-        initializeAdapter();
         getActivityParameters();
+        initializeAdapter();
         initializeToolbar();
 
         mMercadoPago = new MercadoPago.Builder()
@@ -65,7 +73,7 @@ public class CardInstallmentsActivity extends ShowCardActivity {
     }
 
     protected void initializeAdapter() {
-        mInstallmentsAdapter = new CardInstallmentsAdapter(this);
+        mInstallmentsAdapter = new CardInstallmentsAdapter(this, mCurrencyId);
         initializeAdapterListener(mInstallmentsAdapter, mInstallmentsView);
     }
 
@@ -76,7 +84,6 @@ public class CardInstallmentsActivity extends ShowCardActivity {
     protected void initializeToolbar() {
         super.initializeToolbarWithTitle(getString(R.string.mpsdk_card_installments_title));
     }
-
 
     @Override
     protected void initializeCard() {
@@ -94,6 +101,7 @@ public class CardInstallmentsActivity extends ShowCardActivity {
     protected void getActivityParameters() {
         super.getActivityParameters();
         mAmount = new BigDecimal(this.getIntent().getStringExtra("amount"));
+        mCurrencyId = this.getIntent().getStringExtra("currencyId");
         mPayerCosts = (ArrayList<PayerCost>)getIntent().getSerializableExtra("payerCosts");
         mPaymentPreference = (PaymentPreference) this.getIntent().getSerializableExtra("paymentPreference");
         if (mPaymentPreference == null) {
@@ -107,18 +115,23 @@ public class CardInstallmentsActivity extends ShowCardActivity {
                     @Override
                     public void success(List<Installment> installments, Response response) {
                         if (installments.size() == 0) {
-                            //TODO error
+                            ErrorUtil.startErrorActivity(mActivity, getString(R.string.mpsdk_standard_error_message), "no installments found for an issuer at CardInstallmentsActivity", false);
                         } else if (installments.size() == 1) {
                             resolvePayerCosts(installments.get(0).getPayerCosts());
                         } else if (installments.size() > 1) {
-                            //TODO error
+                            ErrorUtil.startErrorActivity(mActivity, getString(R.string.mpsdk_standard_error_message), "multiple installments found for an issuer at CardInstallmentsActivity" ,false);
                         }
-
                     }
 
                     @Override
                     public void failure(RetrofitError error) {
-                        //TODO manejar el error
+                        mFailureRecovery = new FailureRecovery() {
+                            @Override
+                            public void recover() {
+                                getInstallmentsAsync();
+                            }
+                        };
+                        ApiUtil.showApiExceptionError(mActivity, error);
                     }
                 });
     }
@@ -131,7 +144,7 @@ public class CardInstallmentsActivity extends ShowCardActivity {
             mSelectedPayerCost = defaultPayerCost;
             finishWithResult();
         } else if(mPayerCosts.isEmpty()) {
-            //TODO tirarle error
+            ErrorUtil.startErrorActivity(mActivity, getString(R.string.mpsdk_standard_error_message), "no payer costs found at CardInstallmentsActivity" ,false);
         } else if (mPayerCosts.size() == 1) {
             mSelectedPayerCost = payerCosts.get(0);
             finishWithResult();
@@ -173,5 +186,24 @@ public class CardInstallmentsActivity extends ShowCardActivity {
         mInstallmentsAdapter.addResults(mPayerCosts);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == ErrorUtil.ERROR_REQUEST_CODE) {
+            if(resultCode == RESULT_OK) {
+                recoverFromFailure();
+            }
+            else {
+                setResult(resultCode, data);
+                finish();
+            }
+        }
+    }
+
+    private void recoverFromFailure() {
+        if(mFailureRecovery != null) {
+            mFailureRecovery.recover();
+        }
+    }
 
 }

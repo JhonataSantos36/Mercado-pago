@@ -50,6 +50,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import retrofit.Callback;
+import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;
 import retrofit.converter.GsonConverter;
 
@@ -67,10 +68,9 @@ public class MercadoPago {
     public static final int PAYMENT_VAULT_REQUEST_CODE = 6;
     public static final int BANK_DEALS_REQUEST_CODE = 7;
     public static final int CHECKOUT_REQUEST_CODE = 8;
-    public static final int INSTALL_APP_REQUEST_CODE = 9;
     public static final int GUESSING_CARD_REQUEST_CODE = 10;
     public static final int INSTRUCTIONS_REQUEST_CODE = 11;
-    public static final int FLOW_CARD_REQUEST_CODE = 12;
+    public static final int CARD_VAULT_REQUEST_CODE = 12;
 
 
     public static final int BIN_LENGTH = 6;
@@ -107,17 +107,25 @@ public class MercadoPago {
         }
     }
 
-    public void createPayment(String preferenceId, String email, String paymentMethodId, Integer installments, String issuerId, String tokenId, final Callback<Payment> callback) {
+    public void createPayment(final PaymentIntent paymentIntent, final Callback<Payment> callback) {
         if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {
+            RequestInterceptor requestInterceptor = new RequestInterceptor() {
+                @Override
+                public void intercept(RequestFacade request) {
+                    request.addHeader("X-Idempotency-Key", String.valueOf(paymentIntent.getTransactionId()));
+                }
+            };
+            RestAdapter paymentsRestAdapter = new RestAdapter.Builder()
+                    .setEndpoint(MP_API_BASE_URL)
+                    .setLogLevel(Settings.RETROFIT_LOGGING)
+                    .setConverter(new GsonConverter(JsonUtil.getInstance().getGson()))
+                    .setClient(HttpClientUtil.getPaymentClient(this.mContext))
+                    .setRequestInterceptor(requestInterceptor)
+                    .build();
 
-            PaymentIntent paymentIntent = new PaymentIntent();
-            paymentIntent.setPrefId(preferenceId);
-            paymentIntent.setPublicKey(this.mKey);
-            paymentIntent.setPaymentMethodId(paymentMethodId);
-            paymentIntent.setEmail(email);
-
-            PaymentService service = mRestAdapterMPApi.create(PaymentService.class);
+            PaymentService service = paymentsRestAdapter.create(PaymentService.class);
             service.createPayment(paymentIntent, callback);
+
         } else {
             throw new RuntimeException("Unsupported key type for this method");
         }
@@ -248,17 +256,9 @@ public class MercadoPago {
 
     public void getInstructions(Long paymentId, String paymentMethodId, String paymentTypeId, final Callback<Instruction> callback) {
 
-        RestAdapter restAdapter = new RestAdapter.Builder()
-                .setEndpoint("http://private-9376e-paymentmethodsmla.apiary-mock.com")
-                .setLogLevel(Settings.RETROFIT_LOGGING)
-                .setConverter(new GsonConverter(JsonUtil.getInstance().getGson()))
-                .setClient(HttpClientUtil.getClient(this.mContext))
-                .build();
-
-        //TODO replace paymentId when service works
         if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {
-            PaymentService service = restAdapter.create(PaymentService.class);
-            service.getInstruction(this.mKey, (long)1826446924, paymentMethodId, paymentTypeId, callback);
+            PaymentService service = mRestAdapterMPApi.create(PaymentService.class);
+            service.getInstruction(this.mKey, paymentId, paymentMethodId, paymentTypeId, callback);
         } else {
             throw new RuntimeException("Unsupported key type for this method");
         }
@@ -296,7 +296,7 @@ public class MercadoPago {
         activity.startActivityForResult(checkoutIntent, CHECKOUT_REQUEST_CODE);
     }
 
-    private static void startCongratsActivity(Activity activity, Payment payment, PaymentMethod paymentMethod) {
+    private static void startCongratsActivity(Activity activity, Payment payment) {
 
         Intent congratsIntent = new Intent(activity, CongratsActivity.class);
         congratsIntent.putExtra("payment", payment);
@@ -333,13 +333,14 @@ public class MercadoPago {
         activity.startActivityForResult(installmentsIntent, INSTALLMENTS_REQUEST_CODE);
     }
 
-    private static void startCardInstallmentsActivity(Activity activity, BigDecimal amount,
+    private static void startCardInstallmentsActivity(Activity activity, BigDecimal amount, String currencyId,
                                                       Token token, String publicKey,
                                                       List<PayerCost> payerCosts,
                                                       PaymentPreference paymentPreference,
                                                       Issuer issuer, PaymentMethod paymentMethod) {
         Intent intent = new Intent(activity, CardInstallmentsActivity.class);
         intent.putExtra("amount", amount.toString());
+        intent.putExtra("currencyId", currencyId);
         intent.putExtra("paymentMethod",  JsonUtil.getInstance().toJson(paymentMethod));
         intent.putExtra("token", JsonUtil.getInstance().toJson(token));
         intent.putExtra("publicKey", publicKey);
@@ -401,6 +402,7 @@ public class MercadoPago {
     private static void startCardVaultActivity(Activity activity,
                                                String key,
                                                BigDecimal amount,
+                                               String currencyId,
                                                PaymentPreference paymentPreference,
                                                Token token) {
 
@@ -409,11 +411,13 @@ public class MercadoPago {
 
         guessingCardIntent.putExtra("amount", amount.toString());
 
+        guessingCardIntent.putExtra("currencyId", currencyId);
+
         guessingCardIntent.putExtra("paymentPreference", paymentPreference);
 
         guessingCardIntent.putExtra("token", token);
 
-        activity.startActivityForResult(guessingCardIntent, FLOW_CARD_REQUEST_CODE);
+        activity.startActivityForResult(guessingCardIntent, CARD_VAULT_REQUEST_CODE);
     }
 
 
@@ -440,7 +444,7 @@ public class MercadoPago {
         vaultIntent.putExtra("amount", amount.toString());
         vaultIntent.putExtra("currencyId", currencyId);
         vaultIntent.putExtra("showBankDeals", showBankDeals);
-
+        vaultIntent.putExtra("paymentMethodSearch", paymentMethodSearch);
         vaultIntent.putExtra("paymentPreference", paymentPreference);
 
         activity.startActivityForResult(vaultIntent, PAYMENT_VAULT_REQUEST_CODE);
@@ -721,9 +725,8 @@ public class MercadoPago {
 
             if (this.mActivity == null) throw new IllegalStateException("activity is null");
             if (this.mPayment == null) throw new IllegalStateException("payment is null");
-            if (this.mPaymentMethod == null) throw new IllegalStateException("payment method is null");
 
-            MercadoPago.startCongratsActivity(this.mActivity, this.mPayment, this.mPaymentMethod);
+            MercadoPago.startCongratsActivity(this.mActivity, this.mPayment);
         }
 
 
@@ -731,6 +734,7 @@ public class MercadoPago {
 
             if (this.mActivity == null) throw new IllegalStateException("activity is null");
             if (this.mPayment == null) throw new IllegalStateException("payment is null");
+            if (this.mPaymentMethod == null) throw new IllegalStateException("payment method is null");
             if (this.mKey == null) throw new IllegalStateException("key is null");
             if (this.mKeyType == null) throw new IllegalStateException("key type is null");
 
@@ -761,12 +765,13 @@ public class MercadoPago {
         public void startCardInstallmentsActivity() {
             if (this.mActivity == null) throw new IllegalStateException("activity is null");
             if (this.mKey == null) throw new IllegalStateException("key is null");
+            if (this.mCurrencyId == null) throw new IllegalStateException("currencyId is null");
             if (this.mAmount == null) throw new IllegalStateException("amount is null");
             if (this.mToken == null) throw new IllegalStateException("token is null");
             if (this.mIssuer == null) throw new IllegalStateException("issuer is null");
             if (this.mPaymentMethod == null) throw new IllegalStateException("payment method is null");
 
-            MercadoPago.startCardInstallmentsActivity(mActivity, mAmount, mToken,
+            MercadoPago.startCardInstallmentsActivity(mActivity, mAmount, mCurrencyId, mToken,
                     mKey, mPayerCosts, mPaymentPreference, mIssuer, mPaymentMethod);
         }
 
@@ -810,7 +815,8 @@ public class MercadoPago {
             if (this.mActivity == null) throw new IllegalStateException("activity is null");
             if (this.mKey == null) throw new IllegalStateException("key is null");
             if (this.mAmount == null) throw new IllegalStateException("amount is null");
-            MercadoPago.startCardVaultActivity(this.mActivity, this.mKey, this.mAmount,
+            if (this.mCurrencyId == null) throw new IllegalStateException("currencyId is null");
+            MercadoPago.startCardVaultActivity(this.mActivity, this.mKey, this.mAmount, this.mCurrencyId,
                      this.mPaymentPreference, this.mToken);
         }
 

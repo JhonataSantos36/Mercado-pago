@@ -1,5 +1,6 @@
 package com.mercadopago;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -9,10 +10,12 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 import com.mercadopago.adapters.CardIssuersAdapter;
+import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.listeners.RecyclerItemClickListener;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.util.ApiUtil;
+import com.mercadopago.util.ErrorUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,11 +32,14 @@ public class CardIssuersActivity extends ShowCardActivity {
 
     //Local vars
     private List<Issuer> mIssuers;
+    private FailureRecovery mFailureRecovery;
+    private Activity mActivity;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView();
+        mActivity = this;
         setLayout();
         initializeAdapter();
         getActivityParameters();
@@ -96,7 +102,7 @@ public class CardIssuersActivity extends ShowCardActivity {
                     @Override
                     public void success(List<Issuer> issuers, Response response) {
                         if (issuers.isEmpty()) {
-                            //TODO error
+                            ErrorUtil.startErrorActivity(mActivity, getString(R.string.mpsdk_standard_error_message), "no issuers found at CardIssuersActivity", false);
                         } else if (issuers.size() == 1) {
                             mSelectedIssuer = issuers.get(0);
                             finishWithResult();
@@ -107,7 +113,13 @@ public class CardIssuersActivity extends ShowCardActivity {
 
                     @Override
                     public void failure(RetrofitError error) {
-                        //TODO manejar el error
+                        mFailureRecovery = new FailureRecovery() {
+                            @Override
+                            public void recover() {
+                                getIssuersAsync();
+                            }
+                        };
+                        ApiUtil.showApiExceptionError(mActivity, error);
                     }
                 });
     }
@@ -143,5 +155,24 @@ public class CardIssuersActivity extends ShowCardActivity {
         returnIntent.putExtra("backButtonPressed", true);
         setResult(RESULT_CANCELED, returnIntent);
         finish();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == ErrorUtil.ERROR_REQUEST_CODE) {
+            if(resultCode == RESULT_OK) {
+                recoverFromFailure();
+            }
+            else {
+                setResult(resultCode, data);
+                finish();
+            }
+        }
+    }
+    private void recoverFromFailure() {
+        if(mFailureRecovery != null) {
+            mFailureRecovery.recover();
+        }
     }
 }

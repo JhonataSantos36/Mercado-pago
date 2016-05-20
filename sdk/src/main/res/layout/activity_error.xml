@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/refreshLayout"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:clickable="true">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_centerInParent="true"
+        android:id="@+id/linearLayout">
+
+    </LinearLayout>
+
+    <com.mercadopago.views.MPTextView
+        android:id="@+id/errorMessage"
+        android:layout_width="wrap_content"
+        android:gravity="bottom|center"
+        android:textAlignment="gravity"
+        android:layout_height="wrap_content"
+        tools:text="Sin conexión"
+        android:layout_gravity="center_horizontal|top"
+        android:textSize="25dp"
+        android:textColor="#999999"
+        android:layout_above="@+id/errorImage"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="73dp" />
+
+    <ImageView
+        android:tint="@color/mpsdk_warm_grey"
+        android:id="@+id/errorImage"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        tools:src="@drawable/ic_refresh"
+        android:layout_gravity="center_horizontal|top"
+        android:layout_above="@+id/linearLayout"
+        android:layout_centerHorizontal="true" />
+
+    <com.mercadopago.views.MPTextView
+        android:id="@+id/errorRetry"
+        android:layout_width="wrap_content"
+        android:gravity="bottom|center"
+        android:textAlignment="gravity"
+        android:layout_height="wrap_content"
+        tools:text="@string/mpsdk_refresh_message"
+        android:layout_gravity="center_horizontal|top"
+        android:layout_below="@+id/linearLayout"
+        android:layout_centerHorizontal="true"
+        android:textColor="#999999"
+        android:textSize="20dp"
+        android:layout_marginTop="55dp" />
+
+</RelativeLayout>

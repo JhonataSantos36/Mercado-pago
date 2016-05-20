@@ -170,7 +170,7 @@ public class PaymentVaultActivityTest {
         validStartIntent.putExtra("selectedSearchItem", paymentMethodSearch.getGroups().get(0));
         mTestRule.launchActivity(validStartIntent);
 
-        assertTrue(mTestRule.getActivity().isItemSelectedStart());
+        assertTrue(mTestRule.getActivity().isItemSelected());
     }
 
     @Test
