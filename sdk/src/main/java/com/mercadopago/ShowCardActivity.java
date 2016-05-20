@@ -105,6 +105,7 @@ public abstract class ShowCardActivity extends FrontCardActivity {
                 .beginTransaction()
                 .add(R.id.activity_new_card_container, mFrontFragment)
                 .commit();
+
     }
 
     private String getCardNumberHidden() {

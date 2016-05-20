@@ -47,6 +47,7 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
 
     //Local vars
     private Animation mAnimFadeIn;
+    private Animation mQuickAnim;
     private boolean mAnimate;
 
     private CardInterface mActivity;
@@ -74,6 +75,7 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
     public void onResume() {
         super.onResume();
         populateViews();
+        setFontColor();
     }
 
     public void setCardInputViews() {
@@ -83,6 +85,7 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
         mCardSecurityEditText = (MPEditText) getActivity().findViewById(R.id.cardSecurityCode);
         mBaseCardholderView = (LinearLayout) getActivity().findViewById(R.id.baseCardholderContainer);
         mAnimFadeIn = AnimationUtils.loadAnimation(getActivity(), R.anim.fade_in);
+        mQuickAnim = AnimationUtils.loadAnimation(getActivity(), R.anim.quick_anim);
         if (getView() != null) {
             mCardNumberView = (MPTextView) getView().findViewById(R.id.cardNumberView);
             mCardholderNameView = (MPTextView) getView().findViewById(R.id.cardholderNameView);
@@ -316,9 +319,18 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
         }
     }
 
-    public void transitionColor(int color, int font) {
+    public void transitionColor(int color) {
         setCardColor(color);
         mColorCard.startAnimation(mAnimFadeIn);
+        setFontColor();
+    }
+
+    public void setFontColor() {
+        PaymentMethod currentPaymentMethod = mActivity.getCurrentPaymentMethod();
+        int font = CardInterface.FULL_TEXT_VIEW_COLOR;
+        if (currentPaymentMethod != null) {
+            font = mActivity.getCardFontColor(currentPaymentMethod);
+        }
         mCardNumberView.setTextColor(ContextCompat.getColor(getContext(), font));
         mCardholderNameView.setTextColor(ContextCompat.getColor(getContext(), font));
         mCardExpiryMonthView.setTextColor(ContextCompat.getColor(getContext(), font));
@@ -335,6 +347,12 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
             color = CardInterface.NEUTRAL_CARD_COLOR;
         }
         mColorDrawableCard.setColor(ContextCompat.getColor(getContext(), color));
+    }
+
+    public void quickTransition(int color) {
+        setCardColor(color);
+        mColorCard.startAnimation(mQuickAnim);
+        setFontColor();
     }
 
     public void transitionImage(int image) {
@@ -417,16 +435,14 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
             transitionImage(image);
         }
     }
-
+    
     private void populateCardColor() {
-        PaymentMethod currentPaymentMethod = mActivity.getCurrentPaymentMethod();
-        int color = 0;
-        int font = CardInterface.FULL_TEXT_VIEW_COLOR;
-        if (currentPaymentMethod != null) {
-            color = mActivity.getCardColor(currentPaymentMethod);
-            font = mActivity.getCardFontColor(currentPaymentMethod);
+        if (mActivity.getCurrentPaymentMethod() != null) {
+            int color = mActivity.getCardColor(mActivity.getCurrentPaymentMethod());
+            quickTransition(color);
+        } else {
+            quickTransition(CardInterface.NEUTRAL_CARD_COLOR);
         }
-        transitionColor(color, font);
     }
 
     public void setText(MPTextView textView, CharSequence text, int color) {

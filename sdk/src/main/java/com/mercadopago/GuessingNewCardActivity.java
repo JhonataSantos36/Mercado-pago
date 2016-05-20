@@ -477,9 +477,9 @@ public class GuessingNewCardActivity extends FrontCardActivity {
                     @Override
                     public void onPaymentMethodSet(PaymentMethod paymentMethod) {
                         if (mCurrentPaymentMethod == null) {
-                            changeCardColor(getCardColor(paymentMethod), getCardFontColor(paymentMethod));
-                            changeCardImage(getCardImage(paymentMethod));
                             mCurrentPaymentMethod = paymentMethod;
+                            changeCardColor(getCardColor(paymentMethod));
+                            changeCardImage(getCardImage(paymentMethod));
                             manageSettings();
                             manageAdditionalInfoNeeded();
                         }
@@ -491,7 +491,7 @@ public class GuessingNewCardActivity extends FrontCardActivity {
                         if (mCurrentPaymentMethod == null) return;
                         mCurrentPaymentMethod = null;
                         setSecurityCodeLocation(null);
-                        changeCardColor(CardInterface.NEUTRAL_CARD_COLOR, CardInterface.FULL_TEXT_VIEW_COLOR);
+                        changeCardColor(CardInterface.NEUTRAL_CARD_COLOR);
                         clearCardImage();
                         clearSecurityCodeFront();
                     }
@@ -699,9 +699,9 @@ public class GuessingNewCardActivity extends FrontCardActivity {
         setCardSecurityCodeFocusListener();
     }
 
-    public void changeCardColor(int color, int font) {
+    public void changeCardColor(int color) {
         if (!showingBack() && mFrontFragment != null) {
-            mFrontFragment.transitionColor(color, font);
+            mFrontFragment.transitionColor(color);
         }
     }
 
