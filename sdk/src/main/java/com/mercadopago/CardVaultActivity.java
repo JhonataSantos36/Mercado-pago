@@ -3,12 +3,8 @@ package com.mercadopago;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Toast;
 
 import com.mercadopago.core.MercadoPago;
-import com.mercadopago.core.Settings;
-import com.mercadopago.model.Cardholder;
 import com.mercadopago.model.Installment;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.PayerCost;
@@ -18,10 +14,8 @@ import com.mercadopago.model.PaymentType;
 import com.mercadopago.model.Setting;
 import com.mercadopago.model.Token;
 import com.mercadopago.util.ApiUtil;
-import com.mercadopago.util.LayoutUtil;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 
 import retrofit.Callback;
@@ -29,7 +23,7 @@ import retrofit.RetrofitError;
 import retrofit.client.Response;
 
 
-public class CardVaultActivity extends StaticFrontCardActivity {
+public class CardVaultActivity extends ShowCardActivity {
 
     private Activity mActivity;
 
@@ -45,22 +39,19 @@ public class CardVaultActivity extends StaticFrontCardActivity {
 
         mMercadoPago = new MercadoPago.Builder()
                 .setContext(this)
-                .setPublicKey(mKey)
+                .setPublicKey(mPublicKey)
                 .build();
 
-        if (mCurrentPaymentMethod == null) {
-            guessPaymentMethod();
-        } else {
+        if (mCurrentPaymentMethod != null) {
             initializeCard();
-            initializeFrontFragment();
         }
-
+        initializeFrontFragment();
         fadeInFormActivity();
     }
 
     @Override
     protected void getActivityParameters() {
-        mKey = getIntent().getStringExtra("publicKey");
+        mPublicKey = getIntent().getStringExtra("publicKey");
         mSecurityCodeLocation = CardInterface.CARD_SIDE_BACK;
         mAmount = new BigDecimal(getIntent().getStringExtra("amount"));
         mPaymentPreference = (PaymentPreference) this.getIntent().getSerializableExtra("paymentPreference");
@@ -69,7 +60,6 @@ public class CardVaultActivity extends StaticFrontCardActivity {
         }
     }
 
-//    @Override
     protected void setContentView() {
         setContentView(R.layout.activity_flow_card);
     }
@@ -79,7 +69,7 @@ public class CardVaultActivity extends StaticFrontCardActivity {
             public void run() {
                 new MercadoPago.StartActivityBuilder()
                         .setActivity(mActivity)
-                        .setPublicKey(mKey)
+                        .setPublicKey(mPublicKey)
                         .setAmount(new BigDecimal(100))
                         .setPaymentPreference(mPaymentPreference)
                         .startGuessingCardActivity();
@@ -146,17 +136,17 @@ public class CardVaultActivity extends StaticFrontCardActivity {
 
                     @Override
                     public void failure(RetrofitError error) {
-                        ApiUtil.finishWithApiException(getParent(), error);
+                        //TODO manejar el error
                     }
                 });
     }
 
-    public void startInstallmentsActivity(final List<PayerCost> payerCosts) {
+    public void fadeInInstallmentsActivity(final List<PayerCost> payerCosts) {
         runOnUiThread(new Runnable() {
             public void run() {
                 new MercadoPago.StartActivityBuilder()
                         .setActivity(mActivity)
-                        .setPublicKey(mKey)
+                        .setPublicKey(mPublicKey)
                         .setPaymentMethod(mCurrentPaymentMethod)
                         .setAmount(mAmount)
                         .setToken(mToken)
@@ -167,23 +157,6 @@ public class CardVaultActivity extends StaticFrontCardActivity {
                 overridePendingTransition(R.anim.fade_in_seamless, R.anim.fade_out_seamless);
             }
         });
-    }
-
-    public void fadeInInstallmentsActivity(final List<PayerCost> payerCosts) {
-        Thread thread = new Thread() {
-            @Override
-            public void run() {
-                try {
-                    synchronized (this) {
-                        wait(500);
-                        startInstallmentsActivity(payerCosts);
-                    }
-                } catch (InterruptedException ex) {
-                    //TODO
-                }
-            }
-        };
-        thread.start();
     }
 
     private void resolvePayerCosts(List<PayerCost> payerCosts) {
@@ -202,6 +175,7 @@ public class CardVaultActivity extends StaticFrontCardActivity {
             fadeInInstallmentsActivity(supportedPayerCosts);
         }
     }
+
     @Override
     protected void finishWithResult() {
         Intent returnIntent = new Intent();

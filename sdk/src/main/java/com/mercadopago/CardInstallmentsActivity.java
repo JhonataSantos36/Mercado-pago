@@ -7,8 +7,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.mercadopago.adapters.CardInstallmentsAdapter;
 import com.mercadopago.core.MercadoPago;
@@ -16,7 +14,6 @@ import com.mercadopago.listeners.RecyclerItemClickListener;
 import com.mercadopago.model.Installment;
 import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.PaymentPreference;
-import com.mercadopago.util.ApiUtil;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -26,10 +23,9 @@ import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-public class CardInstallmentsActivity extends StaticFrontCardActivity {
+public class CardInstallmentsActivity extends ShowCardActivity {
 
     //InstallmentsContainer
-    private LinearLayout mInstallmentsContainer;
     private RecyclerView mInstallmentsView;
     private CardInstallmentsAdapter mInstallmentsAdapter;
 
@@ -50,15 +46,13 @@ public class CardInstallmentsActivity extends StaticFrontCardActivity {
 
         mMercadoPago = new MercadoPago.Builder()
                 .setContext(this)
-                .setPublicKey(mKey)
+                .setPublicKey(mPublicKey)
                 .build();
 
-        if (mCurrentPaymentMethod == null) {
-            guessPaymentMethod();
-        } else {
+        if (mCurrentPaymentMethod != null) {
             initializeCard();
-            initializeFrontFragment();
         }
+        initializeFrontFragment();
     }
 
     protected void setContentView() {
@@ -66,7 +60,6 @@ public class CardInstallmentsActivity extends StaticFrontCardActivity {
     }
 
     protected void setLayout() {
-        mInstallmentsContainer = (LinearLayout) findViewById(R.id.newCardInstallmentsContainer);
         mInstallmentsView = (RecyclerView) findViewById(R.id.activity_installments_view);
         mCardContainer = (FrameLayout) findViewById(R.id.activity_new_card_container);
     }
@@ -118,14 +111,14 @@ public class CardInstallmentsActivity extends StaticFrontCardActivity {
                         } else if (installments.size() == 1) {
                             resolvePayerCosts(installments.get(0).getPayerCosts());
                         } else if (installments.size() > 1) {
-                            //TODO
+                            //TODO error
                         }
 
                     }
 
                     @Override
                     public void failure(RetrofitError error) {
-                        ApiUtil.finishWithApiException(getParent(), error);
+                        //TODO manejar el error
                     }
                 });
     }

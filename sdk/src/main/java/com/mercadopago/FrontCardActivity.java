@@ -18,20 +18,6 @@ public abstract class FrontCardActivity extends AppCompatActivity implements Car
     protected PaymentMethod mCurrentPaymentMethod;
     protected PaymentMethodGuessingController mPaymentMethodGuessingController;
 
-    public String buildNumberWithMask(CharSequence s) {
-        StringBuffer sb = new StringBuffer();
-        for (int i = 1; i <= s.length(); i++) {
-            sb.append(s.charAt(i-1));
-            if (i % 4 == 0) {
-                sb.append("  ");
-            }
-        }
-        return sb.toString();
-    }
-
-    public String buildIdentificationNumberWithMask(CharSequence s) {
-        return s.toString();
-    }
 
     public String getCardNumber() {
         return mCardNumber;
@@ -93,6 +79,7 @@ public abstract class FrontCardActivity extends AppCompatActivity implements Car
         this.mErrorState = state;
     }
 
+    @Override
     public int getCardImage(PaymentMethod paymentMethod) {
         String imageName = "ico_card_" + paymentMethod.getId().toLowerCase();
         return getResources().getIdentifier(imageName, "drawable", getPackageName());
@@ -106,9 +93,27 @@ public abstract class FrontCardActivity extends AppCompatActivity implements Car
 
     @Override
     public int getCardFontColor(PaymentMethod paymentMethod) {
+        if (paymentMethod == null) {
+            return getResources().getColor(CardInterface.FULL_TEXT_VIEW_COLOR);
+        }
         String colorName = "mpsdk_font_" + paymentMethod.getId().toLowerCase();
         int color = getResources().getIdentifier(colorName, "color", getPackageName());
         return color;
+    }
+
+    public String buildNumberWithMask(CharSequence s) {
+        StringBuffer sb = new StringBuffer();
+        for (int i = 1; i <= s.length(); i++) {
+            sb.append(s.charAt(i-1));
+            if (i % 4 == 0) {
+                sb.append("  ");
+            }
+        }
+        return sb.toString();
+    }
+
+    public String buildIdentificationNumberWithMask(CharSequence s) {
+        return s.toString();
     }
 
 }

@@ -11,7 +11,6 @@ import android.text.InputFilter;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -42,7 +41,6 @@ import com.mercadopago.model.PaymentPreference;
 import com.mercadopago.model.SecurityCode;
 import com.mercadopago.model.Setting;
 import com.mercadopago.model.Token;
-import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.LayoutUtil;
 import com.mercadopago.views.MPEditText;
 import com.mercadopago.views.MPTextView;
@@ -57,7 +55,7 @@ public class GuessingNewCardActivity extends FrontCardActivity {
 
 
     // Activity parameters
-    private String mKey;
+    private String mPublicKey;
     private MPTextView mToolbarTitle;
 
     // Input controls
@@ -81,8 +79,6 @@ public class GuessingNewCardActivity extends FrontCardActivity {
     private LinearLayout mButtonContainer;
 
     //Card container
-    private int mCurrentColor;
-    private int mCurrentImage;
     private CardFrontFragment mFrontFragment;
     private CardBackFragment mBackFragment;
     private CardIdentificationFragment mCardIdentificationFragment;
@@ -98,7 +94,6 @@ public class GuessingNewCardActivity extends FrontCardActivity {
     private Issuer mSelectedIssuer;
     private IdentificationType mSelectedIdentificationType;
     private boolean mIdentificationNumberRequired;
-    private boolean mIdentificationTypeRequired;
     private String mCardSideState;
     private String mCurrentEditingEditText;
 
@@ -113,16 +108,12 @@ public class GuessingNewCardActivity extends FrontCardActivity {
         getActivityParameters();
         verifyValidCreate();
         setListeners();
-        setSecurityCodeTextWatcher();
-        setIdentificationNumberTextWatcher();
-        setCardholderNameTextWatcher();
-        setDateTextWatcher();
         openKeyboard(mCardNumberEditText);
         mCurrentEditingEditText = CardInterface.CARD_NUMBER_INPUT;
 
         mMercadoPago = new MercadoPago.Builder()
                 .setContext(mActivity)
-                .setPublicKey(mKey)
+                .setPublicKey(mPublicKey)
                 .build();
 
         getPaymentMethodsAsync();
@@ -181,7 +172,6 @@ public class GuessingNewCardActivity extends FrontCardActivity {
 
     private void initializeLayout(Bundle savedInstanceState) {
         mActivity = this;
-        mCurrentColor = ContextCompat.getColor(this, CardInterface.NEUTRAL_CARD_COLOR);
         mErrorState = CardInterface.NORMAL_STATE;
         mCardToken = new CardToken("", null, null, "", "", "", "");
         if (mFrontFragment == null) {
@@ -228,19 +218,18 @@ public class GuessingNewCardActivity extends FrontCardActivity {
     }
 
     protected void getActivityParameters() {
-        mKey = this.getIntent().getStringExtra("publicKey");
+        mPublicKey = this.getIntent().getStringExtra("publicKey");
         mPaymentPreference = (PaymentPreference) this.getIntent().getSerializableExtra("paymentPreference");
         mToken = (Token) this.getIntent().getSerializableExtra("token");
         mIdentification = new Identification();
         mIdentificationNumberRequired = false;
-        mIdentificationTypeRequired = false;
         if (mPaymentPreference == null) {
             mPaymentPreference = new PaymentPreference();
         }
     }
 
     protected void verifyValidCreate() {
-        if (mKey == null) {
+        if (mPublicKey == null) {
             Intent returnIntent = new Intent();
             setResult(RESULT_CANCELED, returnIntent);
             finish();
@@ -254,6 +243,10 @@ public class GuessingNewCardActivity extends FrontCardActivity {
         setCardSecurityCodeFocusListener();
         setCardIdentificationFocusListener();
         setNavigationButtonsListeners();
+        setSecurityCodeTextWatcher();
+        setIdentificationNumberTextWatcher();
+        setCardholderNameTextWatcher();
+        setExpiryDateTextWatcher();
     }
 
     public void openKeyboard(MPEditText ediText) {
@@ -396,7 +389,7 @@ public class GuessingNewCardActivity extends FrontCardActivity {
 
             @Override
             public void failure(RetrofitError error) {
-                error.printStackTrace();
+                //TODO manejar el error
             }
         });
     }
@@ -568,7 +561,6 @@ public class GuessingNewCardActivity extends FrontCardActivity {
     }
 
     public void manageAdditionalInfoNeeded() {
-        mIdentificationTypeRequired = mCurrentPaymentMethod.isIdentificationTypeRequired();
         mIdentificationNumberRequired = mCurrentPaymentMethod.isIdentificationNumberRequired();
         if (mIdentificationNumberRequired) {
             mIdentificationNumberContainer.setVisibility(View.VISIBLE);
@@ -584,7 +576,7 @@ public class GuessingNewCardActivity extends FrontCardActivity {
 
                 @Override
                 public void failure(RetrofitError error) {
-                    Log.d("lala",error.getMessage());
+                    //TODO manejar el error
                 }
             });
         }
@@ -669,34 +661,14 @@ public class GuessingNewCardActivity extends FrontCardActivity {
         if (!showingBack() && mFrontFragment != null) {
             mFrontFragment.transitionColor(color, font);
         }
-        mCurrentColor = color;
     }
 
     public void changeCardImage(int image) {
         mFrontFragment.transitionImage(image);
-        mCurrentImage = image;
     }
 
     public void clearCardImage() {
         mFrontFragment.clearImage();
-    }
-
-    @Override
-    public int getCardColor(PaymentMethod paymentMethod) {
-        String colorName = "mpsdk_" + paymentMethod.getId().toLowerCase();
-        int color = getResources().getIdentifier(colorName, "color", getPackageName());
-        mCurrentColor = color;
-        return color;
-    }
-
-    @Override
-    public int getCardFontColor(PaymentMethod paymentMethod) {
-        if (paymentMethod == null) {
-            return getResources().getColor(CardInterface.FULL_TEXT_VIEW_COLOR);
-        }
-        String colorName = "mpsdk_font_" + paymentMethod.getId().toLowerCase();
-        int color = getResources().getIdentifier(colorName, "color", getPackageName());
-        return color;
     }
 
     private void setCardNumberFocusListener() {
@@ -971,7 +943,7 @@ public class GuessingNewCardActivity extends FrontCardActivity {
         });
     }
 
-    public void setDateTextWatcher() {
+    public void setExpiryDateTextWatcher() {
         mCardExpiryDateEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -1062,7 +1034,7 @@ public class GuessingNewCardActivity extends FrontCardActivity {
 
             @Override
             public void failure(RetrofitError error) {
-                ApiUtil.finishWithApiException(getParent(), error);
+                //TODO manejar el error
             }
         });
     }
@@ -1131,7 +1103,6 @@ public class GuessingNewCardActivity extends FrontCardActivity {
         try {
             mCardToken.validateSecurityCode(this, mCurrentPaymentMethod);
             clearErrorView();
-//            clearCardSecurityCodeErrorView();
             return true;
         } catch (Exception e) {
             setCardSecurityCodeErrorView(e.getMessage(), requestFocus);
@@ -1150,17 +1121,6 @@ public class GuessingNewCardActivity extends FrontCardActivity {
                     requestFocus);
         }
         return ans;
-    }
-
-    public String buildNumberWithMask(CharSequence s) {
-        StringBuffer sb = new StringBuffer();
-        for (int i = 1; i <= s.length(); i++) {
-            sb.append(s.charAt(i - 1));
-            if (i % 4 == 0) {
-                sb.append("  ");
-            }
-        }
-        return sb.toString();
     }
 
     public void checkChangeErrorView() {
@@ -1202,27 +1162,14 @@ public class GuessingNewCardActivity extends FrontCardActivity {
 
                     @Override
                     public void failure(RetrofitError error) {
-
+                        //TODO manejar el error
                     }
                 });
     }
 
     public void fadeInIssuersActivity(final List<Issuer> issuers) {
         checkFlipCardToFront();
-        Thread thread = new Thread() {
-            @Override
-            public void run() {
-                try {
-                    synchronized (this) {
-                        wait(500);
-                        startIssuersActivity(issuers);
-                    }
-                } catch (InterruptedException ex) {
-                    //TODO
-                }
-            }
-        };
-        thread.start();
+        startIssuersActivity(issuers);
     }
 
     public void startIssuersActivity(final List<Issuer> issuers) {
@@ -1230,7 +1177,7 @@ public class GuessingNewCardActivity extends FrontCardActivity {
             public void run() {
                 new MercadoPago.StartActivityBuilder()
                         .setActivity(mActivity)
-                        .setPublicKey(mKey)
+                        .setPublicKey(mPublicKey)
                         .setPaymentMethod(mCurrentPaymentMethod)
                         .setToken(mToken)
                         .setIssuers(issuers)

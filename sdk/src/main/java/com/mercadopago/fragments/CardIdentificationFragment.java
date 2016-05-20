@@ -1,6 +1,7 @@
 package com.mercadopago.fragments;
 
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -19,8 +20,6 @@ public class CardIdentificationFragment extends android.support.v4.app.Fragment 
 
     private MPTextView mCardIdentificationNumberView;
     private MPEditText mCardIdentificationNumberEditText;
-    private FrameLayout mCardContainer;
-    private FrameLayout mCardNumberClickableZone;
     private LinearLayout mBaseIdNumberView;
 
     private CardInterface mActivity;
@@ -65,9 +64,7 @@ public class CardIdentificationFragment extends android.support.v4.app.Fragment 
         mCardIdentificationNumberEditText.requestFocus();
         if (getView() != null) {
             mBaseIdNumberView = (LinearLayout) getView().findViewById(R.id.identificationCardholderContainer);
-            mCardNumberClickableZone = (FrameLayout) getView().findViewById(R.id.idNumberClickableZone);
             mCardIdentificationNumberView = (MPTextView) getView().findViewById(R.id.idNumberView);
-            mCardContainer = (FrameLayout) getView().findViewById(R.id.identification_card_container);
         }
     }
 
@@ -91,28 +88,6 @@ public class CardIdentificationFragment extends android.support.v4.app.Fragment 
             String number = mActivity.buildIdentificationNumberWithMask(identificationNumber);
             setText(mCardIdentificationNumberView, number, color);
         }
-    }
-
-    public void setText(MPTextView textView, CharSequence text, int color) {
-        textView.setTextColor(getResources().getColor(color));
-        textView.setText(text);
-    }
-
-    public int getColorByState(String state) {
-        if (state.equals(CardInterface.NORMAL_STATE)) {
-            return CardInterface.FULL_TEXT_VIEW_COLOR;
-        } else if (state.equals(CardInterface.ERROR_STATE)) {
-            return CardInterface.ERROR_TEXT_VIEW_COLOR;
-        }
-        return 0;
-    }
-
-    public void setCardIdentificationNumberErrorView() {
-        mCardIdentificationNumberView.setTextColor(getResources().getColor(CardInterface.ERROR_TEXT_VIEW_COLOR));
-    }
-
-    public void clearCardIdentificationNumberErrorView() {
-        mCardIdentificationNumberView.setTextColor(getResources().getColor(CardInterface.FULL_TEXT_VIEW_COLOR));
     }
 
     private void setCardIdentificationListener() {
@@ -143,5 +118,10 @@ public class CardIdentificationFragment extends android.support.v4.app.Fragment 
                 }
             });
         }
+    }
+
+    public void setText(MPTextView textView, CharSequence text, int color) {
+        textView.setTextColor(ContextCompat.getColor(getContext(), color));
+        textView.setText(text);
     }
 }

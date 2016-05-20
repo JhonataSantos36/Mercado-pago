@@ -1,6 +1,7 @@
 package com.mercadopago.fragments;
 
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -71,10 +72,13 @@ public class CardBackFragment extends android.support.v4.app.Fragment {
     private void populateCardSecurityCode() {
         String securityCode = mActivity.getSecurityCode();
         if (securityCode != null) {
-            mCardSecurityView.setText(securityCode);
-            mCardSecurityView.setTextColor(getResources()
-                    .getColor(GuessingNewCardActivity.FULL_TEXT_VIEW_COLOR));
+            setText(mCardSecurityView, securityCode, GuessingNewCardActivity.FULL_TEXT_VIEW_COLOR);
         }
+    }
+
+    public void setText(MPTextView textView, CharSequence text, int color) {
+        textView.setTextColor(ContextCompat.getColor(getContext(), color));
+        textView.setText(text);
     }
 
 }

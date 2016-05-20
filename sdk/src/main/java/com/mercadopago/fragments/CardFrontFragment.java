@@ -2,6 +2,7 @@ package com.mercadopago.fragments;
 
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -46,7 +47,6 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
 
     //Local vars
     private Animation mAnimFadeIn;
-    private Animation mAnimFadeOut;
     private boolean mAnimate;
 
     private CardInterface mActivity;
@@ -83,7 +83,6 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
         mCardSecurityEditText = (MPEditText) getActivity().findViewById(R.id.cardSecurityCode);
         mBaseCardholderView = (LinearLayout) getActivity().findViewById(R.id.baseCardholderContainer);
         mAnimFadeIn = AnimationUtils.loadAnimation(getActivity(), R.anim.fade_in);
-        mAnimFadeOut = AnimationUtils.loadAnimation(getActivity(), R.anim.fade_out);
         if (getView() != null) {
             mCardNumberView = (MPTextView) getView().findViewById(R.id.cardNumberView);
             mCardholderNameView = (MPTextView) getView().findViewById(R.id.cardholderNameView);
@@ -192,13 +191,13 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
 
                         if (mActivity.getCurrentPaymentMethod() != null) {
                             int color = mActivity.getCardFontColor(mActivity.getCurrentPaymentMethod());
-                            mCardExpiryMonthView.setText(s);
-                            mCardExpiryMonthView.setTextColor(getResources().getColor(color));
-                            mCardDateDividerView.setTextColor(getResources().getColor(color));
+                            setText(mCardExpiryMonthView, s, color);
+                            mCardDateDividerView.setTextColor(ContextCompat.getColor(getContext(),
+                                    color));
                         } else {
-                            mCardExpiryMonthView.setText(s);
-                            mCardExpiryMonthView.setTextColor(getResources().getColor(CardInterface.FULL_TEXT_VIEW_COLOR));
-                            mCardDateDividerView.setTextColor(getResources().getColor(CardInterface.FULL_TEXT_VIEW_COLOR));
+                            setText(mCardExpiryMonthView, s, CardInterface.FULL_TEXT_VIEW_COLOR);
+                            mCardDateDividerView.setTextColor(ContextCompat.getColor(getContext(),
+                                    CardInterface.FULL_TEXT_VIEW_COLOR));
                         }
 
                         mActivity.saveCardExpiryMonth(s.toString());
@@ -208,9 +207,10 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
 
                         if (mActivity.getCurrentPaymentMethod() != null) {
                             int color = mActivity.getCardFontColor(mActivity.getCurrentPaymentMethod());
-                            mCardExpiryYearView.setTextColor(getResources().getColor(color));
+                            mCardExpiryYearView.setTextColor(ContextCompat.getColor(getContext(), color));
                         } else {
-                            mCardExpiryYearView.setTextColor(getResources().getColor(CardInterface.FULL_TEXT_VIEW_COLOR));
+                            mCardExpiryYearView.setTextColor(ContextCompat.getColor(getContext(),
+                                    CardInterface.FULL_TEXT_VIEW_COLOR));
                         }
                         mActivity.saveCardExpiryYear(year.toString());
                     }
@@ -221,23 +221,24 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
                     if (s.length() == 2) {
                         if (mActivity.getCurrentPaymentMethod() != null) {
                             int color = mActivity.getCardFontColor(mActivity.getCurrentPaymentMethod());
-                            mCardExpiryYearView.setText(getResources().getString(R.string.mpsdk_card_expiry_year_hint));
-                            mCardExpiryYearView.setTextColor(getResources().getColor(color));
+                            setText(mCardExpiryYearView, getResources().getString(R.string.mpsdk_card_expiry_year_hint),
+                                    color);
                         } else {
-                            mCardExpiryYearView.setText(getResources().getString(R.string.mpsdk_card_expiry_year_hint));
-                            mCardExpiryYearView.setTextColor(getResources().getColor(CardInterface.FULL_TEXT_VIEW_COLOR));
+                            setText(mCardExpiryYearView, getResources().getString(R.string.mpsdk_card_expiry_year_hint),
+                                    CardInterface.FULL_TEXT_VIEW_COLOR);
                         }
                         mActivity.saveCardExpiryYear(null);
                     } else if (s.length() == 0) {
                         if (mActivity.getCurrentPaymentMethod() != null) {
                             int color = mActivity.getCardFontColor(mActivity.getCurrentPaymentMethod());
-                            mCardExpiryMonthView.setText(getResources().getString(R.string.mpsdk_card_expiry_month_hint));
-                            mCardExpiryMonthView.setTextColor(getResources().getColor(color));
-                            mCardDateDividerView.setTextColor(getResources().getColor(color));
+                            setText(mCardExpiryMonthView, getResources().getString(R.string.mpsdk_card_expiry_month_hint),
+                                    color);
+                            mCardDateDividerView.setTextColor(ContextCompat.getColor(getContext(), color));
                         } else {
-                            mCardExpiryMonthView.setText(getResources().getString(R.string.mpsdk_card_expiry_month_hint));
-                            mCardExpiryMonthView.setTextColor(getResources().getColor(CardInterface.FULL_TEXT_VIEW_COLOR));
-                            mCardDateDividerView.setTextColor(getResources().getColor(CardInterface.FULL_TEXT_VIEW_COLOR));
+                            setText(mCardExpiryMonthView, getResources().getString(R.string.mpsdk_card_expiry_month_hint),
+                                    CardInterface.FULL_TEXT_VIEW_COLOR);
+                            mCardDateDividerView.setTextColor(ContextCompat.getColor(getContext(),
+                                    CardInterface.FULL_TEXT_VIEW_COLOR));
                         }
                         mActivity.saveCardExpiryMonth(null);
                     }
@@ -290,11 +291,9 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
                     s = s.toString().toUpperCase();
                     if (mActivity.getCurrentPaymentMethod() != null) {
                         int color = mActivity.getCardFontColor(mActivity.getCurrentPaymentMethod());
-                        mCardholderNameView.setText(s);
-                        mCardholderNameView.setTextColor(getResources().getColor(color));
+                        setText(mCardholderNameView, s, color);
                     } else {
-                        mCardholderNameView.setText(s);
-                        mCardholderNameView.setTextColor(getResources().getColor(CardInterface.FULL_TEXT_VIEW_COLOR));
+                        setText(mCardholderNameView, s, CardInterface.FULL_TEXT_VIEW_COLOR);
                     }
                 }
 
@@ -304,11 +303,11 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
                     if (s.length() == 0) {
                         if (mActivity.getCurrentPaymentMethod() != null) {
                             int color = mActivity.getCardFontColor(mActivity.getCurrentPaymentMethod());
-                            mCardholderNameView.setText(getResources().getString(R.string.mpsdk_cardholder_name_short));
-                            mCardholderNameView.setTextColor(getResources().getColor(color));
+                            setText(mCardholderNameView, getResources().getString(R.string.mpsdk_cardholder_name_short),
+                                    color);
                         } else {
-                            mCardholderNameView.setText(getResources().getString(R.string.mpsdk_cardholder_name_short));
-                            mCardholderNameView.setTextColor(getResources().getColor(CardInterface.FULL_TEXT_VIEW_COLOR));
+                            setText(mCardholderNameView, getResources().getString(R.string.mpsdk_cardholder_name_short),
+                                    CardInterface.FULL_TEXT_VIEW_COLOR);
                         }
                         mActivity.saveCardName(null);
                     }
@@ -318,17 +317,16 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
     }
 
     public void transitionColor(int color, int font) {
-        setCardColor(CardInterface.NEUTRAL_CARD_COLOR);
         setCardColor(color);
         mColorCard.startAnimation(mAnimFadeIn);
-        mCardNumberView.setTextColor(getResources().getColor(font));
-        mCardholderNameView.setTextColor(getResources().getColor(font));
-        mCardExpiryMonthView.setTextColor(getResources().getColor(font));
-        mCardExpiryYearView.setTextColor(getResources().getColor(font));
-        mCardDateDividerView.setTextColor(getResources().getColor(font));
+        mCardNumberView.setTextColor(ContextCompat.getColor(getContext(), font));
+        mCardholderNameView.setTextColor(ContextCompat.getColor(getContext(), font));
+        mCardExpiryMonthView.setTextColor(ContextCompat.getColor(getContext(), font));
+        mCardExpiryYearView.setTextColor(ContextCompat.getColor(getContext(), font));
+        mCardDateDividerView.setTextColor(ContextCompat.getColor(getContext(), font));
         if (mActivity.getSecurityCodeLocation() != null &&
                 mActivity.getSecurityCodeLocation().equals(CardInterface.CARD_SIDE_FRONT)) {
-            mCardSecurityCodeView.setTextColor(getResources().getColor(font));
+            mCardSecurityCodeView.setTextColor(ContextCompat.getColor(getContext(), font));
         }
     }
 
@@ -336,7 +334,7 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
         if (color == 0) {
             color = CardInterface.NEUTRAL_CARD_COLOR;
         }
-        mColorDrawableCard.setColor(getResources().getColor(color));
+        mColorDrawableCard.setColor(ContextCompat.getColor(getContext(), color));
     }
 
     public void transitionImage(int image) {
@@ -381,8 +379,8 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
         } else {
             mCardholderNameView.setText(cardName.toUpperCase());
         }
-        mCardholderNameView.setTextColor(getResources()
-                        .getColor(CardInterface.FULL_TEXT_VIEW_COLOR));
+        mCardholderNameView.setTextColor(ContextCompat.getColor(getContext(),
+                CardInterface.FULL_TEXT_VIEW_COLOR));
     }
 
     private void populateCardMonth() {
@@ -393,8 +391,10 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
         } else {
             mCardExpiryMonthView.setText(cardMonth);
         }
-        mCardExpiryMonthView.setTextColor(getResources().getColor(CardInterface.FULL_TEXT_VIEW_COLOR));
-        mCardDateDividerView.setTextColor(getResources().getColor(CardInterface.FULL_TEXT_VIEW_COLOR));
+        mCardExpiryMonthView.setTextColor(ContextCompat.getColor(getContext(),
+                CardInterface.FULL_TEXT_VIEW_COLOR));
+        mCardDateDividerView.setTextColor(ContextCompat.getColor(getContext(),
+                CardInterface.FULL_TEXT_VIEW_COLOR));
     }
 
     private void populateCardYear() {
@@ -404,8 +404,8 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
         } else {
             mCardExpiryYearView.setText(cardYear);
         }
-        mCardExpiryYearView.setTextColor(getResources()
-                .getColor(CardInterface.FULL_TEXT_VIEW_COLOR));
+        mCardExpiryYearView.setTextColor(ContextCompat.getColor(getContext(),
+                CardInterface.FULL_TEXT_VIEW_COLOR));
     }
 
     private void populateCardImage() {
@@ -419,81 +419,19 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
     }
 
     private void populateCardColor() {
-        PaymentMethod currentPM = mActivity.getCurrentPaymentMethod();
+        PaymentMethod currentPaymentMethod = mActivity.getCurrentPaymentMethod();
         int color = 0;
         int font = CardInterface.FULL_TEXT_VIEW_COLOR;
-        if (currentPM != null) {
-            color = mActivity.getCardColor(currentPM);
-            font = mActivity.getCardFontColor(currentPM);
+        if (currentPaymentMethod != null) {
+            color = mActivity.getCardColor(currentPaymentMethod);
+            font = mActivity.getCardFontColor(currentPaymentMethod);
         }
         transitionColor(color, font);
     }
 
     public void setText(MPTextView textView, CharSequence text, int color) {
-        textView.setTextColor(getResources().getColor(color));
+        textView.setTextColor(ContextCompat.getColor(getContext(), color));
         textView.setText(text);
-    }
-
-//    public void setCardDateDividerColor(int color) {
-//        mCardDateDividerView.setTextColor(getResources().getColor(color));
-//    }
-
-    public void setCardNumberErrorView() {
-        mCardNumberView.setTextColor(getResources().getColor(CardInterface.ERROR_TEXT_VIEW_COLOR));
-    }
-
-    public void clearCardNumberErrorView() {
-        if (mActivity.getCurrentPaymentMethod() != null) {
-            int color = mActivity.getCardFontColor(mActivity.getCurrentPaymentMethod());
-            mCardNumberView.setTextColor(getResources().getColor(color));
-        } else {
-            mCardNumberView.setTextColor(getResources().getColor(CardInterface.FULL_TEXT_VIEW_COLOR));
-        }
-    }
-
-    public void setCardNameErrorView() {
-        mCardholderNameView.setTextColor(getResources().getColor(CardInterface.ERROR_TEXT_VIEW_COLOR));
-    }
-
-    public void clearCardNameErrorView() {
-        if (mActivity.getCurrentPaymentMethod() != null) {
-            int color = mActivity.getCardFontColor(mActivity.getCurrentPaymentMethod());
-            mCardholderNameView.setTextColor(getResources().getColor(color));
-        } else {
-            mCardholderNameView.setTextColor(getResources().getColor(CardInterface.FULL_TEXT_VIEW_COLOR));
-        }
-    }
-
-    public void setCardExpiryDateErrorView() {
-        mCardExpiryMonthView.setTextColor(getResources().getColor(CardInterface.ERROR_TEXT_VIEW_COLOR));
-        mCardExpiryYearView.setTextColor(getResources().getColor(CardInterface.ERROR_TEXT_VIEW_COLOR));
-        mCardDateDividerView.setTextColor(getResources().getColor(CardInterface.ERROR_TEXT_VIEW_COLOR));
-    }
-
-    public void clearCardDateErrorView() {
-        if (mActivity.getCurrentPaymentMethod() != null) {
-            int color = mActivity.getCardFontColor(mActivity.getCurrentPaymentMethod());
-            mCardExpiryMonthView.setTextColor(getResources().getColor(color));
-            mCardExpiryYearView.setTextColor(getResources().getColor(color));
-            mCardDateDividerView.setTextColor(getResources().getColor(color));
-        } else {
-            mCardExpiryMonthView.setTextColor(getResources().getColor(CardInterface.FULL_TEXT_VIEW_COLOR));
-            mCardExpiryYearView.setTextColor(getResources().getColor(CardInterface.FULL_TEXT_VIEW_COLOR));
-            mCardDateDividerView.setTextColor(getResources().getColor(CardInterface.FULL_TEXT_VIEW_COLOR));
-        }
-    }
-
-    public void setCardSecurityCodeErrorView() {
-        mCardSecurityCodeView.setTextColor(getResources().getColor(CardInterface.ERROR_TEXT_VIEW_COLOR));
-    }
-
-    public void clearCardSecurityCodeErrorView() {
-        if (mActivity.getCurrentPaymentMethod() != null) {
-            int color = mActivity.getCardFontColor(mActivity.getCurrentPaymentMethod());
-            mCardSecurityCodeView.setTextColor(getResources().getColor(color));
-        } else {
-            mCardSecurityCodeView.setTextColor(getResources().getColor(CardInterface.FULL_TEXT_VIEW_COLOR));
-        }
     }
 
 }

@@ -1,15 +1,12 @@
 package com.mercadopago;
 
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.FrameLayout;
 
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.fragments.CardFrontFragment;
-import com.mercadopago.listeners.RecyclerItemClickListener;
 import com.mercadopago.model.Cardholder;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.PaymentMethod;
@@ -20,7 +17,7 @@ import com.mercadopago.views.MPTextView;
 
 import java.math.BigDecimal;
 
-public abstract class StaticFrontCardActivity extends FrontCardActivity {
+public abstract class ShowCardActivity extends FrontCardActivity {
 
     public static Integer LAST_DIGITIS_LENGTH = 4;
 
@@ -33,7 +30,7 @@ public abstract class StaticFrontCardActivity extends FrontCardActivity {
     //Card data
     protected String mBin;
     protected BigDecimal mAmount;
-    protected String mKey;
+    protected String mPublicKey;
     protected Token mToken;
     protected String mSecurityCodeLocation;
     protected Cardholder mCardholder;
@@ -52,7 +49,7 @@ public abstract class StaticFrontCardActivity extends FrontCardActivity {
     protected void getActivityParameters() {
         mCurrentPaymentMethod = JsonUtil.getInstance().fromJson(
                 this.getIntent().getStringExtra("paymentMethod"), PaymentMethod.class);
-        mKey = getIntent().getStringExtra("publicKey");
+        mPublicKey = getIntent().getStringExtra("publicKey");
         mToken = JsonUtil.getInstance().fromJson(
                 this.getIntent().getStringExtra("token"), Token.class);
         mBin = mToken.getFirstSixDigits();
@@ -77,15 +74,6 @@ public abstract class StaticFrontCardActivity extends FrontCardActivity {
                 onBackPressed();
             }
         });
-    }
-
-    protected void guessPaymentMethod() {
-//        List<PaymentMethod> list = mController.guessPaymentMethodsByBin(mBin);
-        //cuando haya un paymentmethod
-        if (mCurrentPaymentMethod != null) {
-            initializeCard();
-        }
-        initializeFrontFragment();
     }
 
     protected void initializeCard() {

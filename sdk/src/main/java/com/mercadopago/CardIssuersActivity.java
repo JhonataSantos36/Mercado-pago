@@ -7,7 +7,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 
 import com.mercadopago.adapters.CardIssuersAdapter;
 import com.mercadopago.core.MercadoPago;
@@ -22,10 +21,9 @@ import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-public class CardIssuersActivity extends StaticFrontCardActivity {
+public class CardIssuersActivity extends ShowCardActivity {
 
     //IssuersContainer
-    private LinearLayout mIssuersContainer;
     private RecyclerView mIssuersView;
     private CardIssuersAdapter mIssuersAdapter;
 
@@ -43,15 +41,13 @@ public class CardIssuersActivity extends StaticFrontCardActivity {
 
         mMercadoPago = new MercadoPago.Builder()
                 .setContext(this)
-                .setPublicKey(mKey)
+                .setPublicKey(mPublicKey)
                 .build();
 
-        if (mCurrentPaymentMethod == null) {
-            guessPaymentMethod();
-        } else {
+        if (mCurrentPaymentMethod != null) {
             initializeCard();
-            initializeFrontFragment();
         }
+        initializeFrontFragment();
     }
 
     protected void setContentView() {
@@ -59,7 +55,6 @@ public class CardIssuersActivity extends StaticFrontCardActivity {
     }
 
     protected void setLayout() {
-        mIssuersContainer = (LinearLayout) findViewById(R.id.newCardIssuersContainer);
         mIssuersView = (RecyclerView) findViewById(R.id.activity_issuers_view);
         mCardContainer = (FrameLayout) findViewById(R.id.activity_new_card_container);
     }
@@ -112,7 +107,7 @@ public class CardIssuersActivity extends StaticFrontCardActivity {
 
                     @Override
                     public void failure(RetrofitError error) {
-                        ApiUtil.finishWithApiException(getParent(), error);
+                        //TODO manejar el error
                     }
                 });
     }
