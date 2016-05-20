@@ -462,6 +462,7 @@ public class CheckoutActivity extends AppCompatActivity {
                 .setAmount(mCheckoutPreference.getAmount())
                 .setToken(mCreatedToken)
                 .setIssuer(mSelectedIssuer)
+                .setCurrency(mCheckoutPreference.getItems().get(0).getCurrencyId())
                 .startCardInstallmentsActivity();
         overridePendingTransition(R.anim.slide_right_to_left_in, R.anim.slide_right_to_left_out);
     }
@@ -609,6 +610,7 @@ public class CheckoutActivity extends AppCompatActivity {
 //            ErrorUtil.startErrorActivity(this, mpException);
 //        }
         Toast.makeText(this, "Payments API Exception: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+        showRegularLayout();
     }
 
     private void startPaymentInProcessActivity() {

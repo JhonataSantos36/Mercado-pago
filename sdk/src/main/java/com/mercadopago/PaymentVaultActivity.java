@@ -448,7 +448,6 @@ public class PaymentVaultActivity extends AppCompatActivity {
         if(resultCode == RESULT_OK) {
             PaymentMethod paymentMethod = (PaymentMethod) data.getSerializableExtra("paymentMethod");
             finishWithPaymentMethodResult(paymentMethod);
-
         }
         else {
             if ((data != null) && (data.getSerializableExtra("apiException") != null)) {
