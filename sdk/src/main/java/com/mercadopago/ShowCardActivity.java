@@ -13,7 +13,6 @@ import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.Setting;
 import com.mercadopago.model.Token;
 import com.mercadopago.util.JsonUtil;
-import com.mercadopago.util.LayoutUtil;
 import com.mercadopago.views.MPTextView;
 
 import java.math.BigDecimal;
