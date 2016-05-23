@@ -5,9 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".GuessingNewCardActivity">
+    tools:context=".GuessingNewCardActivity"
+    android:background="@color/mpsdk_color_new_card_form_background">
 
-    <include layout="@layout/mpsdk_toolbar"/>
+    <include layout="@layout/mpsdk_transparent_toolbar"/>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -20,14 +21,14 @@
 
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="176dp"
+                android:layout_height="190dp"
                 android:background="@color/mpsdk_color_new_card_form_background">
 
                 <FrameLayout
                     android:id="@+id/activity_new_card_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
+                    android:layout_gravity="center_horizontal|top"
                     android:background="@color/mpsdk_color_new_card_form_background"/>
 
 
