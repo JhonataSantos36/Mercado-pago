@@ -82,7 +82,7 @@ public class CardInstallmentsActivity extends ShowCardActivity {
     }
 
     protected void initializeToolbar() {
-        super.initializeToolbarWithTitle(getString(R.string.mpsdk_card_installments_title));
+        super.initializeToolbarWithTitle("");
     }
 
     @Override

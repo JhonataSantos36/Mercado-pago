@@ -38,7 +38,8 @@ public class Step6Activity extends ExampleActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_step6);
-        mMerchantPublicKey = "APP_USR-5a399d42-6015-4f6a-8ff8-dd7d368068f8";
+//        mMerchantPublicKey = "APP_USR-5a399d42-6015-4f6a-8ff8-dd7d368068f8";
+        mMerchantPublicKey = "TEST-ad365c37-8012-4014-84f5-6c895b3f8e0a";
         mActivity = this;
     }
 
@@ -74,8 +75,9 @@ public class Step6Activity extends ExampleActivity {
         LayoutUtil.showProgressLayout(this);
         Map<String, Object> map = new HashMap<>();
         map.put("item_id", "1");
-        map.put("amount", new BigDecimal(10));
-        MerchantServer.createPreference(this, "http://private-9376e-paymentmethodsmla.apiary-mock.com/", "merchantUri/merchant_preference", map, new Callback<CheckoutPreference>() {
+        map.put("amount", new BigDecimal(300));
+        MerchantServer.createPreference(this, "http://private-9376e-paymentmethodsmla.apiary-mock.com/",
+                "merchantUri/merchant_preference", map, new Callback<CheckoutPreference>() {
             @Override
             public void success(CheckoutPreference checkoutPreference, Response response) {
                 mCheckoutPreference = checkoutPreference;

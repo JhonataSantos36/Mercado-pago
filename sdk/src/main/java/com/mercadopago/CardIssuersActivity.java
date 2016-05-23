@@ -78,7 +78,7 @@ public class CardIssuersActivity extends ShowCardActivity {
     }
 
     protected void initializeToolbar() {
-        super.initializeToolbarWithTitle(getString(R.string.mpsdk_card_issuers_title));
+        super.initializeToolbarWithTitle("");
     }
 
     @Override
