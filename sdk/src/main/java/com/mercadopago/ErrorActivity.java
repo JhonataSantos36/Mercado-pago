@@ -22,6 +22,7 @@ public class ErrorActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        animateErrorScreenLaunch();
         setContentView(R.layout.activity_error);
         getActivityParameters();
         if(validParameters()) {
@@ -33,6 +34,10 @@ public class ErrorActivity extends AppCompatActivity {
             setResult(RESULT_CANCELED, intent);
             finish();
         }
+    }
+
+    private void animateErrorScreenLaunch() {
+        overridePendingTransition(R.anim.fade_in_seamless, R.anim.fade_out_seamless);
     }
 
     private boolean validParameters() {

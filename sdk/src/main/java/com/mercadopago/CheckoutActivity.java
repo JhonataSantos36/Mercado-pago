@@ -519,12 +519,7 @@ public class CheckoutActivity extends AppCompatActivity {
                 if (MercadoPagoUtil.isCardPaymentType(mSelectedPaymentMethod.getPaymentTypeId())) {
                     startCongratsActivity();
                 } else {
-                    new MercadoPago.StartActivityBuilder()
-                            .setPublicKey(mMerchantPublicKey)
-                            .setActivity(mActivity)
-                            .setPayment(mCreatedPayment)
-                            .setPaymentMethod(mSelectedPaymentMethod)
-                            .startInstructionsActivity();
+                    startInstructionsActivity();
                 }
                 cleanTransactionId();
             }
@@ -534,6 +529,15 @@ public class CheckoutActivity extends AppCompatActivity {
                 resolvePaymentFailure(error);
             }
         });
+    }
+
+    private void startInstructionsActivity() {
+        new MercadoPago.StartActivityBuilder()
+                .setPublicKey(mMerchantPublicKey)
+                .setActivity(mActivity)
+                .setPayment(mCreatedPayment)
+                .setPaymentMethod(mSelectedPaymentMethod)
+                .startInstructionsActivity();
     }
 
 

@@ -68,6 +68,8 @@
     </LinearLayout>
     <View
         android:visibility="gone"
+        android:layout_marginLeft="40dp"
+        android:layout_marginStart="40dp"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:id="@+id/separator"

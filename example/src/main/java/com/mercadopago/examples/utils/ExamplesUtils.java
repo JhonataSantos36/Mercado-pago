@@ -43,7 +43,7 @@ public class ExamplesUtils {
     public static final int CARD_REQUEST_CODE = 13;
 
     // * Merchant public key
-    public static final String DUMMY_MERCHANT_PUBLIC_KEY = "6c0d81bc-99c1-4de8-9976-c8d1d62cd4f2";
+    public static final String DUMMY_MERCHANT_PUBLIC_KEY = "APP_USR-5a399d42-6015-4f6a-8ff8-dd7d368068f8";
     // DUMMY_MERCHANT_PUBLIC_KEY_AR = "444a9ef5-8a6b-429f-abdf-587639155d88";
     // DUMMY_MERCHANT_PUBLIC_KEY_BR = "APP_USR-f163b2d7-7462-4e7b-9bd5-9eae4a7f99c3";
     // DUMMY_MERCHANT_PUBLIC_KEY_MX = "6c0d81bc-99c1-4de8-9976-c8d1d62cd4f2";
@@ -106,6 +106,7 @@ public class ExamplesUtils {
         putListExtra(simpleVaultIntent, "excludedPaymentTypes", excludedPaymentTypes);
         activity.startActivityForResult(simpleVaultIntent, SIMPLE_VAULT_REQUEST_CODE);
     }
+
     public static void startAdvancedVaultActivity(Activity activity, String merchantPublicKey, String merchantBaseUrl, String merchantGetCustomerUri, String merchantAccessToken, BigDecimal amount, List<String> excludedPaymentTypes) {
         startAdvancedVaultActivity(activity, ExamplesUtils.DUMMY_MERCHANT_PUBLIC_KEY,
                 ExamplesUtils.DUMMY_MERCHANT_BASE_URL, ExamplesUtils.DUMMY_MERCHANT_GET_CUSTOMER_URI,

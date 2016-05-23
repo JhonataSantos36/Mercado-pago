@@ -8,13 +8,16 @@ import android.widget.Toast;
 
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.examples.R;
+import com.mercadopago.examples.utils.ExamplesUtils;
 import com.mercadopago.exceptions.MPException;
 import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentMethod;
-import com.mercadopago.model.PaymentMethodSearch;
+import com.mercadopago.model.PaymentPreference;
 import com.mercadopago.util.CurrenciesUtil;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 public class F2Activity extends AppCompatActivity {
 
@@ -24,7 +27,7 @@ public class F2Activity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_f2);
-        mMerchantPublicKey = "APP_USR-5a399d42-6015-4f6a-8ff8-dd7d368068f8";
+        mMerchantPublicKey = ExamplesUtils.DUMMY_MERCHANT_PUBLIC_KEY;
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -43,14 +46,27 @@ public class F2Activity extends AppCompatActivity {
 
     }
     public void submitForm(View view) {
-        PaymentMethodSearch paymentMethodSearch = new PaymentMethodSearch();
+
+        List<String> excludedPaymentTypeIds = new ArrayList<String>() {{
+            add("credit_card");
+        }};
+
+        List<String> excludedPaymentMethodIds = new ArrayList<String>() {{
+            add("rapipago");
+        }};
+
+        PaymentPreference paymentPreference = new PaymentPreference();
+        paymentPreference.setExcludedPaymentTypeIds(excludedPaymentTypeIds);
+        paymentPreference.setExcludedPaymentMethodIds(excludedPaymentMethodIds);
+        paymentPreference.setMaxAcceptedInstallments(3);
+        paymentPreference.setDefaultInstallments(3);
 
         new MercadoPago.StartActivityBuilder()
                 .setActivity(this)
-                .setPaymentMethodSearch(paymentMethodSearch)
                 .setPublicKey(mMerchantPublicKey)
                 .setAmount(new BigDecimal(100))
                 .setCurrency(CurrenciesUtil.CURRENCY_ARGENTINA)
+                .setPaymentPreference(paymentPreference)
                 .startPaymentVaultActivity();
     }
 
@@ -69,7 +85,6 @@ public class F2Activity extends AppCompatActivity {
                 .setPaymentMethod(paymentMethod)
                 .setPublicKey(mMerchantPublicKey)
                 .setAmount(new BigDecimal(100))
-                .setCurrency(CurrenciesUtil.CURRENCY_ARGENTINA)
                 .startInstructionsActivity();
     }
 }

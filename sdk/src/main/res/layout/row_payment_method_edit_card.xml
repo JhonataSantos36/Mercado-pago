@@ -49,8 +49,7 @@
             android:layout_gravity="center"
             android:src="@drawable/arrow_right"
             android:adjustViewBounds="true"
-            android:id="@+id/editHint"
-            android:tint="@color/mpsdk_colorPrimary"/>
+            android:id="@+id/editHint"/>
     </LinearLayout>
     <View
         android:visibility="gone"

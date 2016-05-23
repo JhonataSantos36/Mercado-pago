@@ -38,8 +38,7 @@ public class Step6Activity extends ExampleActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_step6);
-//        mMerchantPublicKey = "APP_USR-5a399d42-6015-4f6a-8ff8-dd7d368068f8";
-        mMerchantPublicKey = "TEST-ad365c37-8012-4014-84f5-6c895b3f8e0a";
+        mMerchantPublicKey = ExamplesUtils.DUMMY_MERCHANT_PUBLIC_KEY;
         mActivity = this;
     }
 
@@ -100,7 +99,6 @@ public class Step6Activity extends ExampleActivity {
                 .setActivity(this)
                 .setPublicKey(mMerchantPublicKey)
                 .setCheckoutPreferenceId(mCheckoutPreference.getId())
-                .setShowBankDeals(true)
                 .startCheckoutActivity();
     }
 
