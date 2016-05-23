@@ -9,6 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputType;
+import android.text.Layout;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
@@ -17,6 +18,7 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
@@ -735,6 +737,7 @@ public class GuessingNewCardActivity extends FrontCardActivity {
                     openKeyboard(mCardNumberEditText);
                     checkFlipCardToFront();
                     mCurrentEditingEditText = CARD_NUMBER_INPUT;
+                    mHorizontalScrollView.fullScroll(HorizontalScrollView.FOCUS_LEFT);
                 }
             }
         });
@@ -867,6 +870,9 @@ public class GuessingNewCardActivity extends FrontCardActivity {
         mIdentificationTypeSpinner.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
+                if (mCurrentEditingEditText.equals(CARD_SECURITYCODE_INPUT)) {
+                    return false;
+                }
                 checkTransitionCardToId();
                 mHorizontalScrollView.fullScroll(HorizontalScrollView.FOCUS_RIGHT);
                 mCardIdentificationNumberEditText.requestFocus();
@@ -1004,6 +1010,7 @@ public class GuessingNewCardActivity extends FrontCardActivity {
             }
         });
     }
+
 
     public boolean canCreateCardToken() {
         boolean result = true;
