@@ -290,11 +290,8 @@ public class CheckoutActivity extends AppCompatActivity {
         new MercadoPago.StartActivityBuilder()
                 .setActivity(this)
                 .setPublicKey(mMerchantPublicKey)
-                .setItemImageUri(mCheckoutPreference.getItems().get(0).getPictureUrl())
-                .setPurchaseTitle(mPurchaseTitle)
                 .setCurrency(mCheckoutPreference.getItems().get(0).getCurrencyId())
                 .setAmount(mCheckoutPreference.getAmount())
-                .setShowBankDeals(mShowBankDeals)
                 .setPaymentMethodSearch(mPaymentMethodSearch)
                 .setPaymentPreference(mCheckoutPreference.getPaymentPreference())
                 .startPaymentVaultActivity();

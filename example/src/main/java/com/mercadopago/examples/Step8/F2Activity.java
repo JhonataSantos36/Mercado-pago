@@ -12,6 +12,7 @@ import com.mercadopago.exceptions.MPException;
 import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentMethodSearch;
+import com.mercadopago.util.CurrenciesUtil;
 
 import java.math.BigDecimal;
 
@@ -49,6 +50,7 @@ public class F2Activity extends AppCompatActivity {
                 .setPaymentMethodSearch(paymentMethodSearch)
                 .setPublicKey(mMerchantPublicKey)
                 .setAmount(new BigDecimal(100))
+                .setCurrency(CurrenciesUtil.CURRENCY_ARGENTINA)
                 .startPaymentVaultActivity();
     }
 
@@ -67,6 +69,7 @@ public class F2Activity extends AppCompatActivity {
                 .setPaymentMethod(paymentMethod)
                 .setPublicKey(mMerchantPublicKey)
                 .setAmount(new BigDecimal(100))
+                .setCurrency(CurrenciesUtil.CURRENCY_ARGENTINA)
                 .startInstructionsActivity();
     }
 }

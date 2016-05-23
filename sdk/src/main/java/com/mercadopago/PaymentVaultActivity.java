@@ -9,13 +9,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.ImageView;
 
 import com.mercadopago.adapters.PaymentMethodSearchItemAdapter;
 import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.callbacks.OnSelectedCallback;
 import com.mercadopago.core.MercadoPago;
-import com.mercadopago.fragments.ShoppingCartFragment;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.PaymentMethod;
@@ -37,8 +35,6 @@ import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-import static android.text.TextUtils.isEmpty;
-
 public class PaymentVaultActivity extends AppCompatActivity {
 
     // Local vars
@@ -52,8 +48,6 @@ public class PaymentVaultActivity extends AppCompatActivity {
 
     // Controls
     protected RecyclerView mSearchItemsRecyclerView;
-    protected ImageView mShoppingCartIcon;
-    protected View mContentView;
     protected AppBarLayout mAppBar;
 
     // Current values
@@ -68,10 +62,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
     protected boolean mShowBankDeals;
     protected boolean mCardGuessingEnabled;
     protected PaymentMethodSearchItem mSelectedSearchItem;
-    protected String mPurchaseTitle;
-    protected String mItemImageUri;
     protected String mCurrencyId;
-    protected ShoppingCartFragment mShoppingCartFragment;
     protected PaymentPreference mPaymentPreference;
     protected MPTextView mActivityTitle;
 
@@ -101,23 +92,12 @@ public class PaymentVaultActivity extends AppCompatActivity {
             initializeToolbar();
             initializeControls();
 
-            if(isShoppingCartDataAvailable()) {
-                initializeShoppingCartFragment();
-            }
-            else {
-                mShoppingCartIcon.setVisibility(View.GONE);
-            }
-
             if (isItemSelected()) {
                 showSelectedItemChildren();
             } else {
                 initPaymentMethodSearch();
             }
         }
-    }
-
-    private boolean isShoppingCartDataAvailable() {
-        return isPurchaseTitleValid() && isCurrencyIdValid();
     }
 
     protected void getActivityParameters() {
@@ -131,8 +111,6 @@ public class PaymentVaultActivity extends AppCompatActivity {
             mAmount = null;
         }
         mCurrencyId = this.getIntent().getStringExtra("currencyId");
-        mItemImageUri = this.getIntent().getStringExtra("itemImageUri");
-        mPurchaseTitle = this.getIntent().getStringExtra("purchaseTitle");
 
         mMerchantPublicKey = this.getIntent().getStringExtra("merchantPublicKey");
 
@@ -165,6 +143,9 @@ public class PaymentVaultActivity extends AppCompatActivity {
         if (!isAmountValid()) {
             throw new IllegalStateException(getString(R.string.mpsdk_error_message_invalid_amount));
         }
+        else if (!isCurrencyIdValid()) {
+            throw new IllegalStateException(getString(R.string.mpsdk_error_message_invalid_currency));
+        }
         else if (!isMerchantPublicKeyValid()){
             throw new IllegalStateException(getString(R.string.mpsdk_error_message_invalid_merchant));
         }
@@ -176,10 +157,6 @@ public class PaymentVaultActivity extends AppCompatActivity {
 
     private boolean isMerchantPublicKeyValid() {
         return mMerchantPublicKey != null;
-    }
-
-    private boolean isPurchaseTitleValid() {
-        return !isEmpty(mPurchaseTitle);
     }
 
     private boolean isCurrencyIdValid() {
@@ -213,8 +190,6 @@ public class PaymentVaultActivity extends AppCompatActivity {
     protected void initializeControls() {
         initializeGroupRecyclerView();
         mActivityTitle = (MPTextView) findViewById(R.id.title);
-        mContentView = findViewById(R.id.contentLayout);
-        mShoppingCartIcon = (ImageView) findViewById(R.id.shoppingCartIcon);
         mAppBar = (AppBarLayout) findViewById(R.id.appBar);
     }
 
@@ -224,17 +199,6 @@ public class PaymentVaultActivity extends AppCompatActivity {
         mSearchItemsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
-    private void initializeShoppingCartFragment() {
-        mShoppingCartFragment = ShoppingCartFragment.newInstance(mItemImageUri, mPurchaseTitle, mAmount, mCurrencyId);
-        getSupportFragmentManager()
-                .beginTransaction()
-                .add(R.id.shoppingCartFragment, mShoppingCartFragment)
-                .hide(mShoppingCartFragment)
-                .commit();
-        mShoppingCartFragment.setToggler(mShoppingCartIcon);
-        mShoppingCartFragment.setViewBelow(mContentView);
-    }
-
     protected void setActivity() {
         this.mActivity = this;
     }
@@ -242,8 +206,14 @@ public class PaymentVaultActivity extends AppCompatActivity {
     private void initPaymentMethodSearch() {
         String initialTitle = getString(R.string.mpsdk_title_activity_payment_vault);
         setActivityTitle(initialTitle);
-        showProgress();
-        getPaymentMethodSearch();
+
+        if(mPaymentMethodSearch != null) {
+            setSearchLayout();
+        }
+        else {
+            showProgress();
+            getPaymentMethodSearch();
+        }
     }
 
     protected void setActivityTitle(String title) {

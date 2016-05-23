@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Spanned;
 import android.view.View;
+import android.widget.Toast;
 
 import com.mercadopago.model.Payment;
 import com.mercadopago.util.CurrenciesUtil;
@@ -46,11 +47,15 @@ public class CongratsActivity extends AppCompatActivity {
     // Activity parameters
     protected Payment mPayment;
 
+    //Local values
+    private boolean mBackPressedOnce;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         getActivityParameters();
+        this.mBackPressedOnce = false;
 
         if (mPayment != null && mPayment.getStatus() != null && !isEmpty(mPayment.getStatus())){
             if (mPayment.getStatus().equals(mPayment.STATUS_APPROVED)){
@@ -447,5 +452,31 @@ public class CongratsActivity extends AppCompatActivity {
         sb.append(getString(R.string.mpsdk_text_a));
         return CurrenciesUtil.formatCurrencyInText(mPayment.getTransactionDetails().getTotalPaidAmount(),
                 mPayment.getCurrencyId(), sb.toString(), true, true);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(mBackPressedOnce) {
+            super.onBackPressed();
+        }
+        else {
+            Toast.makeText(this, getString(R.string.mpsdk_press_again_to_leave), Toast.LENGTH_LONG).show();
+            mBackPressedOnce = true;
+            resetBackPressedOnceIn(2000);
+        }
+    }
+
+    private void resetBackPressedOnceIn(final int mills) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(mills);
+                    mBackPressedOnce = false;
+                } catch (InterruptedException e) {
+                    //Do nothing
+                }
+            }
+        }).start();
     }
 }

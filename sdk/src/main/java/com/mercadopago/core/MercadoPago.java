@@ -35,6 +35,7 @@ import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentMethodSearch;
 import com.mercadopago.model.PaymentPreference;
 import com.mercadopago.model.SavedCardToken;
+import com.mercadopago.model.Setting;
 import com.mercadopago.model.Token;
 import com.mercadopago.services.BankDealService;
 import com.mercadopago.services.CustomerService;
@@ -257,6 +258,7 @@ public class MercadoPago {
     public void getInstructions(Long paymentId, String paymentMethodId, String paymentTypeId, final Callback<Instruction> callback) {
 
         if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {
+
             PaymentService service = mRestAdapterMPApi.create(PaymentService.class);
             service.getInstruction(this.mKey, paymentId, paymentMethodId, paymentTypeId, callback);
         } else {
@@ -426,12 +428,10 @@ public class MercadoPago {
         Intent paymentMethodsIntent = new Intent(activity, PaymentMethodsActivity.class);
         paymentMethodsIntent.putExtra("merchantPublicKey", merchantPublicKey);
         paymentMethodsIntent.putExtra("showBankDeals", showBankDeals);
-        //TODO pasar objeto paymentPreference
-//        paymentMethodsIntent.putExtra("paymentTypeId", paymentTypeId);
         activity.startActivityForResult(paymentMethodsIntent, PAYMENT_METHODS_REQUEST_CODE);
     }
 
-    private static void startPaymentVaultActivity(Activity activity, String merchantPublicKey, String merchantBaseUrl, String merchantGetCustomerUri, String merchantAccessToken, String itemImageUri, String purchaseTitle, BigDecimal amount, String currencyId, Boolean showBankDeals,
+    private static void startPaymentVaultActivity(Activity activity, String merchantPublicKey, String merchantBaseUrl, String merchantGetCustomerUri, String merchantAccessToken, BigDecimal amount, String currencyId, Boolean showBankDeals,
                                                   PaymentPreference paymentPreference, PaymentMethodSearch paymentMethodSearch) {
 
         Intent vaultIntent = new Intent(activity, PaymentVaultActivity.class);
@@ -439,8 +439,6 @@ public class MercadoPago {
         vaultIntent.putExtra("merchantBaseUrl", merchantBaseUrl);
         vaultIntent.putExtra("merchantGetCustomerUri", merchantGetCustomerUri);
         vaultIntent.putExtra("merchantAccessToken", merchantAccessToken);
-        vaultIntent.putExtra("itemImageUri", itemImageUri);
-        vaultIntent.putExtra("purchaseTitle", purchaseTitle);
         vaultIntent.putExtra("amount", amount.toString());
         vaultIntent.putExtra("currencyId", currencyId);
         vaultIntent.putExtra("showBankDeals", showBankDeals);
@@ -448,15 +446,6 @@ public class MercadoPago {
         vaultIntent.putExtra("paymentPreference", paymentPreference);
 
         activity.startActivityForResult(vaultIntent, PAYMENT_VAULT_REQUEST_CODE);
-    }
-
-    private static void putListExtra(Intent intent, String listName, List<String> list) {
-
-        if (list != null) {
-            Gson gson = new Gson();
-            Type listType = new TypeToken<List<String>>(){}.getType();
-            intent.putExtra(listName, gson.toJson(list, listType));
-        }
     }
 
     public static class Builder {
@@ -838,12 +827,13 @@ public class MercadoPago {
 
             if (this.mActivity == null) throw new IllegalStateException("activity is null");
             if (this.mAmount == null) throw new IllegalStateException("amount is null");
+            if (this.mCurrencyId == null) throw new IllegalStateException("currency is null");
             if (this.mKey == null) throw new IllegalStateException("key is null");
             if (this.mKeyType == null) throw new IllegalStateException("key type is null");
 
             if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {
                 MercadoPago.startPaymentVaultActivity(this.mActivity, this.mKey, this.mMerchantBaseUrl,
-                        this.mMerchantGetCustomerUri, this.mMerchantAccessToken, this.mItemImageUri, this.mPurchaseTitle,
+                        this.mMerchantGetCustomerUri, this.mMerchantAccessToken,
                         this.mAmount, this.mCurrencyId, this.mShowBankDeals,
                         this.mPaymentPreference, this.mPaymentMethodSearch);
             } else {
