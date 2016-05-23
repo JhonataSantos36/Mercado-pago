@@ -59,6 +59,19 @@ public class Step1Activity extends ExampleActivity {
         mPaymentPreference.setExcludedPaymentTypeIds(mExcludedPaymentTypeIds);
         mPaymentPreference.setExcludedPaymentMethodIds(mExcludedPaymentMethodIds);
         mAmount = ExamplesUtils.DUMMY_ITEM_UNIT_PRICE;
+
+        //TODO borrar, test congrats
+        Payment payment = new Payment();
+        payment.setStatus("approved");
+        payment.setStatusDetail("cc_rejected_other_reason");
+        Intent intent = new Intent(this, CongratsActivity.class);
+        intent.putExtra("payment", payment);
+        new MercadoPago.StartActivityBuilder()
+                .setPublicKey(ExamplesUtils.DUMMY_MERCHANT_PUBLIC_KEY)
+                .setActivity(mActivity)
+                .setPayment(payment)
+                .startCongratsActivity();
+
     }
 
     private void createPaymentPreference() {

@@ -26,6 +26,7 @@ public class CongratsActivity extends AppCompatActivity {
     protected MPTextView mPaymentIdDescription;
     protected MPTextView mCongratulationSubtitle;
     protected MPTextView mExitCongrat;
+    protected View mPaymentIdSeparator;
 
     protected MPTextView mPaymentMethodAuthorizeDescription;
     protected MPTextView mPaymentAmountDescription;
@@ -81,24 +82,28 @@ public class CongratsActivity extends AppCompatActivity {
     }
 
     private void showPending(){
+        setTheme(R.style.Theme_InfoMercadoPagoTheme_NoActionbar);
         setContentView(R.layout.activity_pending);
         initializePendingControls();
         fillPendingData();
     }
 
     private void showRejection() {
+        setTheme(R.style.Theme_RejectionMercadoPagoTheme_NoActionbar);
         setContentView(R.layout.activity_rejection);
         initializeRejectionControls();
         fillRejectionData();
     }
 
     private void showCallForAuthorize() {
+        setTheme(R.style.Theme_CallForAuthorizeMercadoPagoTheme_NoActionbar);
         setContentView(R.layout.activity_call_for_authorize);
         initializeCallForAuthControls();
         fillCallForAuthData();
     }
 
     private void showCongrats() {
+        setTheme(R.style.Theme_CongratsMercadoPagoTheme_NoActionbar);
         setContentView(R.layout.activity_congrats);
         initializeCongratsControls();
         fillCongratsData();
@@ -184,6 +189,7 @@ public class CongratsActivity extends AppCompatActivity {
         mInterestAmountDescription = (MPTextView) findViewById(R.id.interestAmountDescription);
         mPaymentIdDescription = (MPTextView) findViewById(R.id.paymentIdDescription);
         mCongratulationSubtitle = (MPTextView) findViewById(R.id.congratulationSubtitle);
+        mPaymentIdSeparator = findViewById(R.id.paymentIdSeparator);
         mExitCongrat = (MPTextView) findViewById(R.id.exitCongrat);
         mExitCongrat.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -310,6 +316,7 @@ public class CongratsActivity extends AppCompatActivity {
         }
         else{
             mPaymentIdDescription.setVisibility(View.GONE);
+            mPaymentIdSeparator.setVisibility(View.GONE);
         }
     }
 
