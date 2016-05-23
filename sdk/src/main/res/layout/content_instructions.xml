@@ -174,9 +174,7 @@
                 android:text="@string/mpsdk_text_keep_buying"
                 android:textColor="@color/mpsdk_color_link"
                 android:textSize="@dimen/mpsdk_small_text"
-                android:id="@+id/exitTextView"
-                app:fontStyle="regular"
-                style="@style/small_comment"/>
+                android:id="@+id/exitTextView"/>
         </LinearLayout>
     </LinearLayout>
 </android.support.v4.widget.NestedScrollView>

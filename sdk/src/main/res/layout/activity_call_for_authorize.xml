@@ -140,7 +140,7 @@
                     android:layout_marginTop="30dp"
                     android:text="@string/mpsdk_text_keep_buying"
                     android:textColor="@color/mpsdk_color_link"
-                    android:textSize="18dp" />
+                    android:textSize="14dp" />
 
             </LinearLayout>
         </LinearLayout>

@@ -137,7 +137,6 @@
     <style name="small_comment">
         <item name="android:textSize">@dimen/mpsdk_smaller_text</item>
         <item name="android:textColor">@color/commentColor</item>
-        <item name="android:fontFamily">sans-serif-thin</item>
         <item name="android:textStyle">bold</item>
         <item name="android:lineSpacingMultiplier">1.7</item>
     </style>
