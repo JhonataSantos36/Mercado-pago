@@ -82,17 +82,7 @@
                 android:text="@string/mpsdk_pay_button_text"
                 android:layout_margin="@dimen/mpsdk_margin_std"
                 style="@style/mpsdk_button_normal"/>
-            <View
-                android:layout_marginTop="45dp"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:id="@+id/separator"
-                android:background="@color/mpsdk_separator"
-                android:layout_marginStart="20dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginEnd="20dp"
-                android:layout_marginRight="20dp"
-                android:layout_gravity="center_horizontal|bottom" />
+
             <com.mercadopago.views.MPTextView
                 android:layout_gravity="center"
                 android:layout_marginTop="20dp"
@@ -102,15 +92,6 @@
                 android:textColor="@color/mpsdk_color_link"
                 android:textSize="@dimen/mpsdk_small_text"
                 android:id="@+id/cancelTextView"
-                app:fontStyle="regular"
-                style="@style/small_comment"/>
-            <com.mercadopago.views.MPTextView
-                android:layout_gravity="center"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="20dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/mpsdk_processed_by_mercado_pago"
                 app:fontStyle="regular"
                 style="@style/small_comment"/>
         </LinearLayout>
