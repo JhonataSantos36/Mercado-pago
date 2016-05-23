@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.Toolbar
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/toolbar"
+    app:theme="@style/MPTransparentActionBar"
+    android:layout_width="match_parent"
+    android:layout_height="45dp"
+    android:minHeight="?attr/actionBarSize"
+    android:background="@android:color/transparent">
+
+
+    <com.mercadopago.views.MPTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/title"
+        android:layout_gravity="center"
+        style="@style/mpsdk_title_text"/>
+
+    <com.mercadopago.views.MPTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/buttonText"
+        android:layout_gravity="end"
+        style="@style/mpsdk_title_text"/>
+
+</android.support.v7.widget.Toolbar>
+

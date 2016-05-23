@@ -152,6 +152,12 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <style name="MPTransparentActionBar" parent="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="android:windowActionBarOverlay">true</item>
+        <!-- Support library compatibility -->
+        <item name="windowActionBarOverlay">true</item>
+    </style>
+
     <style name="Theme.ProcessMercadoPagoTheme.NoActionbar" parent="Theme.MercadoPagoTheme.NoActionBar">
             <item name="android:statusBarColor">@color/mpsdk_process_color_dark</item>
    </style>

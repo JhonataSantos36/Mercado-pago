@@ -5,9 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".CardInstallmentsActivity">
-
-    <include layout="@layout/mpsdk_toolbar"/>
+    tools:context=".CardInstallmentsActivity"
+    android:background="@color/mpsdk_color_new_card_form_background">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -20,16 +19,14 @@
 
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="176dp"
-                android:background="@color/mpsdk_color_new_card_form_background">
-
+                android:layout_height="220dp">
+                <include layout="@layout/mpsdk_transparent_toolbar"/>
                 <FrameLayout
                     android:id="@+id/activity_new_card_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:background="@color/mpsdk_color_new_card_form_background"/>
-
+                    android:layout_gravity="center_horizontal|top"
+                    android:layout_marginTop="36dp"/>
 
             </FrameLayout>
 

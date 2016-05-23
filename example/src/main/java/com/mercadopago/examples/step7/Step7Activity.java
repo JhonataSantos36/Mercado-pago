@@ -16,7 +16,11 @@ import com.mercadopago.model.PaymentPreference;
 import com.mercadopago.model.PaymentType;
 import com.mercadopago.model.Token;
 import com.mercadopago.util.ApiUtil;
+import com.mercadopago.util.CurrenciesUtil;
 import com.mercadopago.util.LayoutUtil;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -33,6 +37,9 @@ public class Step7Activity extends AppCompatActivity {
     private Issuer mIssuer;
     private PayerCost mPayerCost;
 
+    private String publicKey = "TEST-ad365c37-8012-4014-84f5-6c895b3f8e0a";
+    private String prefId = "150216849-9fa110ac-8351-4526-b874-00871f9f94ef";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,14 +48,14 @@ public class Step7Activity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == MercadoPago.PAYMENT_VAULT_REQUEST_CODE) {
-            resolveGuessingCardRequest(resultCode, data);
-        } else if(requestCode == MercadoPago.GUESSING_CARD_REQUEST_CODE) {
+        if(requestCode == MercadoPago.GUESSING_CARD_REQUEST_CODE) {
             resolveGuessingCardRequest(resultCode, data);
         } else if(requestCode == MercadoPago.CARD_VAULT_REQUEST_CODE) {
-            resolveGuessingCardRequest(resultCode, data);
+            resolveCardVaultRequest(resultCode, data);
         }
     }
+
+
 
     protected void resolveGuessingCardRequest(int resultCode, Intent data) {
         if(resultCode == RESULT_OK) {
@@ -63,25 +70,48 @@ public class Step7Activity extends AppCompatActivity {
         }
     }
 
+    protected void resolveCardVaultRequest(int resultCode, Intent data) {
+        if(resultCode == RESULT_OK) {
+            mPaymentMethod = (PaymentMethod) data.getSerializableExtra("paymentMethod");
+            mToken = (Token) data.getSerializableExtra("token");
+            mIssuer = (Issuer) data.getSerializableExtra("issuer");
+            mPayerCost = (PayerCost) data.getSerializableExtra("payerCost");
+
+            LayoutUtil.showProgressLayout(this);
+
+        } else if ((data != null) && (data.getSerializableExtra("apiException") != null)) {
+            finish();
+        }
+    }
+
     public void submitFlowCard(View view) {
         startFullFlowActivity();
     }
 
     private void startFullFlowActivity() {
 
-        String publicKeyMLX = "6c0d81bc-99c1-4de8-9976-c8d1d62cd4f2";
-        String publicKeyMLA = "444a9ef5-8a6b-429f-abdf-587639155d88";
+//        String publicKeyMLX = "6c0d81bc-99c1-4de8-9976-c8d1d62cd4f2";
+//        String publicKeyMLA = "444a9ef5-8a6b-429f-abdf-587639155d88";
 
         PaymentPreference paymentPreference = new PaymentPreference();
         paymentPreference.setDefaultPaymentTypeId(PaymentType.CREDIT_CARD);
 //        paymentPreference.setMaxAcceptedInstallments(6);
 //        paymentPreference.setDefaultInstallments(6);
+        List<String> excludedPaymentTypeIds = new ArrayList<>();
+        excludedPaymentTypeIds.add(PaymentType.DEBIT_CARD);
+
+        List<String> excludedPaymentMethodIds = new ArrayList<>();
+        excludedPaymentMethodIds.add("visa");
+
+        paymentPreference.setExcludedPaymentTypeIds(excludedPaymentTypeIds);
+        paymentPreference.setExcludedPaymentMethodIds(excludedPaymentMethodIds);
 //
         new MercadoPago.StartActivityBuilder()
                 .setActivity(this)
-                .setPublicKey(publicKeyMLA)
+                .setPublicKey(publicKey)
                 .setAmount(ExamplesUtils.DUMMY_ITEM_UNIT_PRICE)
                 .setPaymentPreference(paymentPreference)
+                .setCurrency(CurrenciesUtil.CURRENCY_ARGENTINA)
                 .startCardVaultActivity();
 
     }
@@ -91,12 +121,12 @@ public class Step7Activity extends AppCompatActivity {
     }
 
     private void startNewFormActivity() {
-        final String publicKeyMLX = "6c0d81bc-99c1-4de8-9976-c8d1d62cd4f2";
-        final String publicKeyMLA = "444a9ef5-8a6b-429f-abdf-587639155d88";
+//        final String publicKeyMLX = "6c0d81bc-99c1-4de8-9976-c8d1d62cd4f2";
+//        final String publicKeyMLA = "444a9ef5-8a6b-429f-abdf-587639155d88";
 
         MercadoPago mercadoPago = new MercadoPago.Builder()
                 .setContext(this)
-                .setPublicKey(publicKeyMLA)
+                .setPublicKey(publicKey)
                 .build();
 
         //ARG
@@ -108,7 +138,7 @@ public class Step7Activity extends AppCompatActivity {
             @Override
             public void success(Token token, Response response) {
                 mToken = token;
-                callNewFormActivity(publicKeyMLA);
+                callNewFormActivity(publicKey);
             }
 
             @Override
@@ -141,12 +171,12 @@ public class Step7Activity extends AppCompatActivity {
     }
 
     private void startInstallmentsActivity() {
-        final String publicKeyMLX = "6c0d81bc-99c1-4de8-9976-c8d1d62cd4f2";
-        final String publicKeyMLA = "444a9ef5-8a6b-429f-abdf-587639155d88";
+//        final String publicKeyMLX = "6c0d81bc-99c1-4de8-9976-c8d1d62cd4f2";
+//        final String publicKeyMLA = "444a9ef5-8a6b-429f-abdf-587639155d88";
 
         MercadoPago mercadoPago = new MercadoPago.Builder()
                 .setContext(this)
-                .setPublicKey(publicKeyMLA)
+                .setPublicKey(publicKey)
                 .build();
 
         CardToken cardToken = new CardToken("5031755734530604", 12, 19, "123", "pepe", null, "35900841" );
@@ -156,7 +186,7 @@ public class Step7Activity extends AppCompatActivity {
             @Override
             public void success(Token token, Response response) {
                 mToken = token;
-                callInstallmentsActivity(publicKeyMLA);
+                callInstallmentsActivity(publicKey);
             }
 
             @Override
@@ -171,7 +201,8 @@ public class Step7Activity extends AppCompatActivity {
     private void callInstallmentsActivity(String publicKey) {
         final PaymentPreference paymentPreference = new PaymentPreference();
         paymentPreference.setDefaultPaymentMethodId("master");
-
+        paymentPreference.setMaxAcceptedInstallments(6);
+        paymentPreference.setDefaultInstallments(3);
 
 
         new MercadoPago.StartActivityBuilder()
@@ -179,6 +210,8 @@ public class Step7Activity extends AppCompatActivity {
                 .setPublicKey(publicKey)
                 .setAmount(ExamplesUtils.DUMMY_ITEM_UNIT_PRICE)
                 .setPaymentPreference(paymentPreference)
+                .setCurrency(CurrenciesUtil.CURRENCY_ARGENTINA)
+
 //                .setIssuer(issuer)
 //                .setPaymentMethod(paymentMethod)
                 .setToken(mToken)
@@ -192,12 +225,12 @@ public class Step7Activity extends AppCompatActivity {
     }
 
     private void startIssuersActivity() {
-        final String publicKeyMLX = "6c0d81bc-99c1-4de8-9976-c8d1d62cd4f2";
-        final String publicKeyMLA = "444a9ef5-8a6b-429f-abdf-587639155d88";
+//        final String publicKeyMLX = "6c0d81bc-99c1-4de8-9976-c8d1d62cd4f2";
+//        final String publicKeyMLA = "444a9ef5-8a6b-429f-abdf-587639155d88";
 
         MercadoPago mercadoPago = new MercadoPago.Builder()
                 .setContext(this)
-                .setPublicKey(publicKeyMLA)
+                .setPublicKey(publicKey)
                 .build();
 
         CardToken cardToken = new CardToken("5031755734530604", 12, 19, "123", "pepe", null, "35900841" );
@@ -207,7 +240,7 @@ public class Step7Activity extends AppCompatActivity {
             @Override
             public void success(Token token, Response response) {
                 mToken = token;
-                callIssuersActivity(publicKeyMLA);
+                callIssuersActivity(publicKey);
             }
 
             @Override

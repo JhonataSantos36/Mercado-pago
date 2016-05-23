@@ -40,6 +40,7 @@ public class CardVaultActivity extends ShowCardActivity {
         mActivity = this;
         setContentView();
         getActivityParameters();
+        initializeToolbar();
 
         mMercadoPago = new MercadoPago.Builder()
                 .setContext(this)
@@ -63,6 +64,10 @@ public class CardVaultActivity extends ShowCardActivity {
         if (mPaymentPreference == null) {
             mPaymentPreference = new PaymentPreference();
         }
+    }
+
+    protected void initializeToolbar() {
+        super.initializeToolbarWithTitle("");
     }
 
     protected void setContentView() {
