@@ -4,6 +4,9 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.mercadopago.model.PaymentMethod;
 
+import java.text.DecimalFormat;
+import java.util.Locale;
+
 public abstract class FrontCardActivity extends AppCompatActivity implements CardInterface {
 
     protected String mCardNumber;
@@ -110,7 +113,12 @@ public abstract class FrontCardActivity extends AppCompatActivity implements Car
     }
 
     public String buildIdentificationNumberWithMask(CharSequence s) {
-        return s.toString();
+        if (s.length() == 0) {
+            return s.toString();
+        }
+        Integer value = Integer.valueOf(s.toString());
+        Locale.setDefault(Locale.GERMAN);
+        return String.format("%,d", value);
     }
 
 }
