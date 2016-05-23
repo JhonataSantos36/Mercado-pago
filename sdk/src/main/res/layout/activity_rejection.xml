@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -79,7 +79,7 @@
                     android:orientation="vertical"
                     android:background="@color/mpsdk_color_light_grey">
 
-                        <com.mercadopago.views.MPButton
+                        <FrameLayout
                             android:id="@+id/selectOtherPaymentMethodByRejection"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/mpsdk_button_height"
@@ -87,11 +87,16 @@
                             android:layout_marginRight="10dp"
                             android:layout_marginTop="30dp"
                             android:layout_marginBottom="60dp"
-                            android:textAllCaps="false"
-                            android:text="@string/mpsdk_text_other_payment_method_button_rejection"
-                            android:textSize="22dp"
-                            android:textColor="@color/mpsdk_color_congrats_installments"
-                            android:background="@drawable/button_bg_stroke" />
+                            android:background="@drawable/button_bg_stroke" >
+                                <com.mercadopago.views.MPTextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:textAllCaps="false"
+                                    android:textSize="22dp"
+                                    android:textColor="@color/mpsdk_color_congrats_installments"
+                                    android:text="@string/mpsdk_text_other_payment_method_button_rejection"/>
+                            </FrameLayout>
 
                         <View
                             android:id="@+id/separator"
