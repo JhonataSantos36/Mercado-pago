@@ -30,29 +30,5 @@
         <include layout="@layout/cardholder_group_dots"/>
     </FrameLayout>
 
-    <FrameLayout
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.25">
-        <FrameLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal">
-            <FrameLayout
-                android:layout_width="4dp"
-                android:layout_height="4dp"
-                android:background="@drawable/cardholder_dot">
-            </FrameLayout>
-            <FrameLayout
-                android:layout_width="4dp"
-                android:layout_height="4dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_gravity="top"
-                android:background="@drawable/cardholder_dot">
-            </FrameLayout>
-        </FrameLayout>
-    </FrameLayout>
 
 </LinearLayout>
