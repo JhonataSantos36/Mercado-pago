@@ -6,11 +6,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Spanned;
 import android.view.View;
 import android.widget.Toast;
+import android.widget.FrameLayout;
 
 import com.mercadopago.model.Payment;
 import com.mercadopago.util.CurrenciesUtil;
 import com.mercadopago.util.MercadoPagoUtil;
-import com.mercadopago.views.MPButton;
 import com.mercadopago.views.MPTextView;
 
 import java.math.BigDecimal;
@@ -39,7 +39,7 @@ public class CongratsActivity extends AppCompatActivity {
     protected MPTextView mRejectionTitle;
     protected MPTextView mRejectionSubtitle;
     protected MPTextView mExitRejection;
-    protected MPButton mSelectOtherPaymentMethodByRejection;
+    protected FrameLayout mSelectOtherPaymentMethodByRejection;
 
     protected MPTextView mPendingSubtitle;
     protected MPTextView mExitPending;
@@ -130,7 +130,8 @@ public class CongratsActivity extends AppCompatActivity {
     private void initializeRejectionControls() {
         mRejectionTitle = (MPTextView) findViewById(R.id.rejectionTitle);
         mRejectionSubtitle = (MPTextView) findViewById(R.id.rejectionSubtitle);
-        mSelectOtherPaymentMethodByRejection = (MPButton) findViewById(R.id.selectOtherPaymentMethodByRejection);
+        mSelectOtherPaymentMethodByRejection = (FrameLayout) findViewById(R.id.selectOtherPaymentMethodByRejection);
+
         mSelectOtherPaymentMethodByRejection.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
