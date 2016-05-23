@@ -26,9 +26,11 @@ public class CongratsActivity extends AppCompatActivity {
     protected MPTextView mPaymentIdDescription;
     protected MPTextView mCongratulationSubtitle;
     protected MPTextView mExitCongrat;
+    protected View mPaymentIdSeparator;
 
     protected MPTextView mPaymentMethodAuthorizeDescription;
     protected MPTextView mPaymentAmountDescription;
+    protected MPTextView mMercadoPagoDescription;
     protected MPTextView mAuthorizedPaymentMethod;
     protected MPTextView mSelectOtherPaymentMethod;
     protected MPTextView mExitCallForAuthorize;
@@ -50,7 +52,7 @@ public class CongratsActivity extends AppCompatActivity {
 
         getActivityParameters();
 
-        if (mPayment.getStatus() != null && !isEmpty(mPayment.getStatus())){
+        if (mPayment != null && mPayment.getStatus() != null && !isEmpty(mPayment.getStatus())){
             if (mPayment.getStatus().equals(mPayment.STATUS_APPROVED)){
                 showCongrats();
             }
@@ -67,37 +69,41 @@ public class CongratsActivity extends AppCompatActivity {
                     }
                 }
                 else {
-                    cancelAndFinishActivity();
+                    showRejection();
                 }
             }
             else{
-                cancelAndFinishActivity();
+                showRejection();
             }
         }
         else {
-            cancelAndFinishActivity();
+            showRejection();
         }
     }
 
     private void showPending(){
+        setTheme(R.style.Theme_InfoMercadoPagoTheme_NoActionbar);
         setContentView(R.layout.activity_pending);
         initializePendingControls();
         fillPendingData();
     }
 
     private void showRejection() {
+        setTheme(R.style.Theme_RejectionMercadoPagoTheme_NoActionbar);
         setContentView(R.layout.activity_rejection);
         initializeRejectionControls();
         fillRejectionData();
     }
 
     private void showCallForAuthorize() {
+        setTheme(R.style.Theme_CallForAuthorizeMercadoPagoTheme_NoActionbar);
         setContentView(R.layout.activity_call_for_authorize);
         initializeCallForAuthControls();
         fillCallForAuthData();
     }
 
     private void showCongrats() {
+        setTheme(R.style.Theme_CongratsMercadoPagoTheme_NoActionbar);
         setContentView(R.layout.activity_congrats);
         initializeCongratsControls();
         fillCongratsData();
@@ -144,6 +150,7 @@ public class CongratsActivity extends AppCompatActivity {
     private void initializeCallForAuthControls() {
         mPaymentMethodAuthorizeDescription = (MPTextView) findViewById(R.id.callForAuthorizeTitleFirstRow);
         mPaymentAmountDescription = (MPTextView) findViewById(R.id.callForAuthorizeTitleSecondRow);
+        mMercadoPagoDescription = (MPTextView) findViewById(R.id.callForAuthorizeTitleThirdRow);
         mAuthorizedPaymentMethod = (MPTextView) findViewById(R.id.authorizedPaymentMethod);
         mAuthorizedPaymentMethod.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -182,6 +189,7 @@ public class CongratsActivity extends AppCompatActivity {
         mInterestAmountDescription = (MPTextView) findViewById(R.id.interestAmountDescription);
         mPaymentIdDescription = (MPTextView) findViewById(R.id.paymentIdDescription);
         mCongratulationSubtitle = (MPTextView) findViewById(R.id.congratulationSubtitle);
+        mPaymentIdSeparator = findViewById(R.id.paymentIdSeparator);
         mExitCongrat = (MPTextView) findViewById(R.id.exitCongrat);
         mExitCongrat.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -208,7 +216,7 @@ public class CongratsActivity extends AppCompatActivity {
     }
 
     private void fillRejectionData() {
-        if (isPaymentMethodNameValid()){
+        if (mPayment != null && isPaymentMethodNameValid()){
             if (mPayment.getStatusDetail().equals(mPayment.STATUS_DETAIL_CC_REJECTED_OTHER_REASON)) {
                 String titleMessage = mPayment.getCard().getPaymentMethod().getName() + " " + getString(R.string.mpsdk_title_other_reason_rejection);
                 mRejectionTitle.setText(titleMessage);
@@ -256,11 +264,11 @@ public class CongratsActivity extends AppCompatActivity {
                 mRejectionSubtitle.setText(getString(R.string.mpsdk_subtitle_rejection_card_disabled));
             }
             else{
-                cancelAndFinishActivity();
+                mRejectionTitle.setText(R.string.mpsdk_title_bad_filled_other_rejection);
             }
         }
         else{
-            mRejectionTitle.setVisibility(View.GONE);
+            mRejectionTitle.setText(R.string.mpsdk_title_bad_filled_other_rejection);
             mRejectionSubtitle.setVisibility(View.GONE);
         }
     }
@@ -287,8 +295,9 @@ public class CongratsActivity extends AppCompatActivity {
             mPaymentAmountDescription.setText(getTotalAmountText());
         }
         else {
-            mPaymentMethodAuthorizeDescription.setVisibility(View.GONE);
+            mPaymentMethodAuthorizeDescription.setText(getString(R.string.mpsdk_error_title_activity_call_for_authorize));
             mPaymentAmountDescription.setVisibility(View.GONE);
+            mMercadoPagoDescription.setVisibility(View.GONE);
         }
     }
 
@@ -307,6 +316,7 @@ public class CongratsActivity extends AppCompatActivity {
         }
         else{
             mPaymentIdDescription.setVisibility(View.GONE);
+            mPaymentIdSeparator.setVisibility(View.GONE);
         }
     }
 
@@ -322,6 +332,7 @@ public class CongratsActivity extends AppCompatActivity {
         }
         else{
             mInterestAmountDescription.setVisibility(View.GONE);
+            mInstallmentsDescription.setVisibility(View.GONE);
         }
     }
 
@@ -342,6 +353,7 @@ public class CongratsActivity extends AppCompatActivity {
         }
         else {
             mInstallmentsDescription.setVisibility(View.GONE);
+            mInterestAmountDescription.setVisibility(View.GONE);
         }
     }
 
@@ -413,12 +425,6 @@ public class CongratsActivity extends AppCompatActivity {
 
     private void getActivityParameters(){
         mPayment = (Payment) getIntent().getExtras().getSerializable("payment");
-    }
-
-    private void cancelAndFinishActivity(){
-        Intent returnIntent = new Intent();
-        setResult(RESULT_CANCELED, returnIntent);
-        finish();
     }
 
     private Spanned getInstallmentsText() {

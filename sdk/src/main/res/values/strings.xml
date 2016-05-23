@@ -127,6 +127,7 @@
     <string name="mpsdk_text_call_to">Llama a</string>
     <string name="mpsdk_text_the">el</string>
     <string name="mpsdk_text_and_he_authorized">y me autorizó</string>
+    <string name="mpsdk_error_title_activity_call_for_authorize">"Debes autorizar el pago ante tu tarjeta"</string>
 
     <string name="mpsdk_error_message_invalid_amount">Monto inválido</string>
     <string name="mpsdk_error_message_invalid_item">Item inválido</string>

@@ -161,6 +161,21 @@
         <item name="android:windowLightStatusBar">true</item>
     </style>
 
+    <style name="Theme.CongratsMercadoPagoTheme.NoActionbar" parent="Theme.MercadoPagoTheme.NoActionBar">
+        <item name="android:statusBarColor">@color/mpsdk_congrats_color_dark</item>
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
+
+    <style name="Theme.CallForAuthorizeMercadoPagoTheme.NoActionbar" parent="Theme.MercadoPagoTheme.NoActionBar">
+        <item name="android:statusBarColor">@color/mpsdk_call_for_authorize_color_dark</item>
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
+
+    <style name="Theme.RejectionMercadoPagoTheme.NoActionbar" parent="Theme.MercadoPagoTheme.NoActionBar">
+        <item name="android:statusBarColor">@color/mpsdk_rejection_color_dark</item>
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
+
     <style name="Theme.MercadoPagoTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.MercadoPagoTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />

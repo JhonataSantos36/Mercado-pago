@@ -8,8 +8,17 @@
     <color name="mpsdk_light_gray">#EEEEEE</color>
     <color name="mpsdk_gray">#d6d6d6</color>
     <color name="colorPrimaryDark">#2196f3</color>
+
     <color name="mpsdk_info_color_light">#FBF8E1</color>
     <color name="mpsdk_info_color_dark">#F5F1D3</color>
+
+    <color name="mpsdk_congrats_color_light">#EAFFE1</color>
+    <color name="mpsdk_congrats_color_dark">#D2E5CA</color>
+    <color name="mpsdk_call_for_authorize_color_light">#E4F2F9</color>
+    <color name="mpsdk_call_for_authorize_color_dark">#C7E6F5</color>
+    <color name="mpsdk_rejection_color_light">#F8E9E9</color>
+    <color name="mpsdk_rejection_color_dark">#F8DADA</color>
+
     <color name="mpsdk_process_color_dark">#c921a6f3</color>
     <color name="colorAccent">#00B2EB</color>
     <color name="mpsdk_colorPrimary">#30AFE2</color>

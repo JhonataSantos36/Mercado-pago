@@ -166,20 +166,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-            <View
-                android:layout_marginTop="45dp"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:id="@+id/separator"
-                android:background="@color/mpsdk_separator"
-                android:layout_marginStart="20dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginEnd="20dp"
-                android:layout_marginRight="20dp"
-                android:layout_gravity="center_horizontal|bottom" />
             <com.mercadopago.views.MPTextView
                 android:layout_gravity="center"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="40dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/mpsdk_text_keep_buying"
@@ -188,14 +177,6 @@
                 android:id="@+id/exitTextView"
                 app:fontStyle="regular"
                 style="@style/small_comment"/>
-            <com.mercadopago.views.MPTextView
-                android:layout_gravity="center"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="20dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/mpsdk_processed_by_mercado_pago"
-                style="@style/mpsdk_smaller_warm_grey_thin_bold_text"/>
         </LinearLayout>
     </LinearLayout>
 </android.support.v4.widget.NestedScrollView>
