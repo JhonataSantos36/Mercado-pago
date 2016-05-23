@@ -11,6 +11,7 @@ import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.core.MercadoPago;
@@ -38,6 +39,7 @@ public class InstructionsActivity extends AppCompatActivity {
     //Values
     protected MercadoPago mMercadoPago;
     protected FailureRecovery failureRecovery;
+    protected Boolean mBackPressedOnce;
 
     //Controls
     protected LinearLayout mReferencesLayout;
@@ -61,6 +63,7 @@ public class InstructionsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_instructions);
         getActivityParameters();
         initializeControls();
+        mBackPressedOnce = false;
         mActivity = this;
         mMercadoPago = new MercadoPago.Builder()
                 .setContext(this)
@@ -241,5 +244,31 @@ public class InstructionsActivity extends AppCompatActivity {
         if(failureRecovery != null) {
             failureRecovery.recover();
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(mBackPressedOnce) {
+            super.onBackPressed();
+        }
+        else {
+            Toast.makeText(this, getString(R.string.mpsdk_press_again_to_leave), Toast.LENGTH_LONG).show();
+            mBackPressedOnce = true;
+            resetBackPressedOnceIn(2000);
+        }
+    }
+
+    private void resetBackPressedOnceIn(final int mills) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(mills);
+                    mBackPressedOnce = false;
+                } catch (InterruptedException e) {
+                    //Do nothing
+                }
+            }
+        }).start();
     }
 }

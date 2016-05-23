@@ -164,5 +164,6 @@
     <string name="mpsdk_input_button_next">Continuar</string>
 
     <string name="mpsdk_cancel_payment">Cancelar pago</string>
+    <string name="mpsdk_press_again_to_leave">Presiona de nuevo para salir</string>
 
 </resources>
