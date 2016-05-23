@@ -92,7 +92,7 @@ public class CardInstallmentsActivity extends ShowCardActivity {
         if (mPayerCosts == null) {
             getInstallmentsAsync();
         } else {
-            initializeInstallments();
+            resolvePayerCosts(mPayerCosts);
         }
     }
 
