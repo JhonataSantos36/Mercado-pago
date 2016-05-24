@@ -116,6 +116,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:layout_marginTop="40dp"
+                            android:layout_marginBottom="30dp"
                             android:text="@string/mpsdk_text_keep_buying"
                             android:textColor="@color/mpsdk_color_link"
                             android:textSize="14dp" />
