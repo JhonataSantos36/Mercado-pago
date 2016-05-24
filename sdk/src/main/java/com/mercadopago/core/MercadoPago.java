@@ -519,10 +519,7 @@ public class MercadoPago {
         private Boolean mRequireSecurityCode;
         private Boolean mShowBankDeals;
         private Boolean mSupportMPApp;
-        private Boolean mCardGuessingEnabled;
-        private String mPurchaseTitle;
         private String mCurrencyId;
-        private String mItemImageUri;
         private PaymentMethodSearch mPaymentMethodSearch;
         private PaymentPreference mPaymentPreference;
         private Token mToken;
@@ -652,18 +649,8 @@ public class MercadoPago {
             return this;
         }
 
-        public StartActivityBuilder setPurchaseTitle(String purchaseTitle) {
-            this.mPurchaseTitle = purchaseTitle;
-            return this;
-        }
-
         public StartActivityBuilder setCurrency(String currency) {
             this.mCurrencyId = currency;
-            return this;
-        }
-
-        public StartActivityBuilder setItemImageUri(String itemImageUri) {
-            this.mItemImageUri = itemImageUri;
             return this;
         }
 

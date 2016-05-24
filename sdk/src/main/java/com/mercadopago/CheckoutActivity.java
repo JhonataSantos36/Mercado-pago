@@ -3,6 +3,7 @@ package com.mercadopago;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
@@ -85,11 +86,13 @@ public class CheckoutActivity extends AppCompatActivity {
     protected View mContentView;
     protected RelativeLayout mPaymentMethodLayout;
     protected RelativeLayout mPayerCostLayout;
+    protected boolean mBackPressedOnce;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_checkout);
+        mBackPressedOnce = false;
         initializeToolbar();
         getActivityParameters();
 
@@ -635,14 +638,14 @@ public class CheckoutActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
 
-        if(mPaymentMethodSearch == null || isUniquePaymentMethod()) {
-            super.onBackPressed();
+        if(mBackPressedOnce || mPaymentMethodSearch == null || isUniquePaymentMethod()) {
+            onCancelClicked();
         }
         else {
-            mPaymentMethodEditionRequested = false;
-            startPaymentVaultActivity();
+            Snackbar.make(mPaymentMethodLayout, getString(R.string.mpsdk_press_again_to_leave_checkout), Snackbar.LENGTH_LONG).show();
+            mBackPressedOnce = true;
+            resetBackPressedOnceIn(4000);
         }
-        animateBackToPaymentVault();
     }
 
     private void showProgress() {
@@ -659,5 +662,19 @@ public class CheckoutActivity extends AppCompatActivity {
         if (failureRecovery != null) {
             failureRecovery.recover();
         }
+    }
+
+    private void resetBackPressedOnceIn(final int mills) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(mills);
+                    mBackPressedOnce = false;
+                } catch (InterruptedException e) {
+                    //Do nothing
+                }
+            }
+        }).start();
     }
 }

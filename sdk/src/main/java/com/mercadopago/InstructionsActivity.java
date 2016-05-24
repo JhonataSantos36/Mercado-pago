@@ -3,6 +3,7 @@ package com.mercadopago;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Html;
@@ -11,7 +12,6 @@ import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.core.MercadoPago;
@@ -252,9 +252,9 @@ public class InstructionsActivity extends AppCompatActivity {
             super.onBackPressed();
         }
         else {
-            Toast.makeText(this, getString(R.string.mpsdk_press_again_to_leave), Toast.LENGTH_LONG).show();
+            Snackbar.make(mTertiaryInfo, getString(R.string.mpsdk_press_again_to_leave), Snackbar.LENGTH_LONG).show();
             mBackPressedOnce = true;
-            resetBackPressedOnceIn(2000);
+            resetBackPressedOnceIn(4000);
         }
     }
 

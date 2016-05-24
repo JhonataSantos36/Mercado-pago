@@ -111,7 +111,7 @@
     <string name="mpsdk_title_bad_filled_date_rejection">La fecha de vencimiento no es la correcta.</string>
     <string name="mpsdk_text_select_other_rejection">Usa otra tarjeta u otro medio de pago</string>
     <string name="mpsdk_text_other_payment_method_button_rejection">Usar otro medio de pago</string>
-    <string name="mpsdk_text_keep_buying">Seguir Comprando</string>
+    <string name="mpsdk_text_keep_buying">Seguir comprando</string>
     <string name="mpsdk_text_without_interest">Sin intereses</string>
     <string name="mpsdk_title_pending">Estamos procesando el pago</string>
     <string name="mpsdk_subtitle_pending_contingency">En menos de 1 hora te enviaremos por e-mail el resultado.</string>
@@ -165,5 +165,6 @@
 
     <string name="mpsdk_cancel_payment">Cancelar pago</string>
     <string name="mpsdk_press_again_to_leave">Presiona de nuevo para salir</string>
+    <string name="mpsdk_press_again_to_leave_checkout">Si sales perderás tu selección. Presiona de nuevo para salir.</string>
 
 </resources>
