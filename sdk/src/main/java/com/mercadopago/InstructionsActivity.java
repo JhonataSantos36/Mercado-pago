@@ -254,7 +254,7 @@ public class InstructionsActivity extends AppCompatActivity {
         else {
             Toast.makeText(this, getString(R.string.mpsdk_press_again_to_leave), Toast.LENGTH_LONG).show();
             mBackPressedOnce = true;
-            resetBackPressedOnceIn(2000);
+            resetBackPressedOnceIn(4000);
         }
     }
 

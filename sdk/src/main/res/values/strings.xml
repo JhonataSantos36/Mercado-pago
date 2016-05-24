@@ -165,5 +165,6 @@
 
     <string name="mpsdk_cancel_payment">Cancelar pago</string>
     <string name="mpsdk_press_again_to_leave">Presiona de nuevo para salir</string>
+    <string name="mpsdk_press_again_to_leave_checkout">Si sales perderás tu selección. Presiona de nuevo para salir.</string>
 
 </resources>
