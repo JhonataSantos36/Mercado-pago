@@ -25,8 +25,9 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    tools:src="@drawable/visa"
+                    tools:src="@drawable/amex"
                     android:adjustViewBounds="true"
+                    android:maxHeight="20dp"
                     android:id="@+id/image"
                     android:layout_centerVertical="true"/>
                 <com.mercadopago.views.MPTextView
