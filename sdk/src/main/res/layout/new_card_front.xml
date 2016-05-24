@@ -98,7 +98,7 @@
                     android:layout_gravity="bottom"
                     android:visibility="invisible">
 
-                    <include layout="@layout/security_code_group_dots"/>
+                    <include layout="@layout/security_code_group_dots_front"/>
                 </FrameLayout>
 
                 <com.mercadopago.views.MPTextView
