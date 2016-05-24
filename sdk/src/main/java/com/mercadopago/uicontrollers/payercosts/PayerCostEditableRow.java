@@ -41,7 +41,9 @@ public class PayerCostEditableRow implements PayerCostViewController {
 
         if(payerCost.getInstallmentRate().compareTo(BigDecimal.ZERO) == 0) {
             mRateText.setVisibility(View.GONE);
-            mZeroRateText.setVisibility(View.VISIBLE);
+            if(payerCost.getInstallments() > 1) {
+                mZeroRateText.setVisibility(View.VISIBLE);
+            }
         }
         else {
             setAmountWithRateText();

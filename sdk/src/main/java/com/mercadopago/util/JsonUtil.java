@@ -3,10 +3,12 @@ package com.mercadopago.util;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.mercadopago.model.PaymentMethod;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
 public class JsonUtil {
@@ -38,6 +40,24 @@ public class JsonUtil {
     public Gson getGson() {
 
         return mGson;
+    }
+
+    public <T> List<T> listFromJson(String json, Class<T> tClass) {
+
+        Gson gson = new Gson();
+
+        Type listType = new TypeToken<List<JsonObject>>() {
+        }.getType();
+
+        List<JsonObject> jsonItems = gson.fromJson(json, listType);
+
+        List<T> listObjects = new ArrayList<>();
+
+        for (JsonObject jsonItem : jsonItems) {
+            listObjects.add(fromJson(jsonItem.toString(), tClass));
+        }
+
+        return listObjects;
     }
 
     public static <T> String parseList(List<T> list) {
