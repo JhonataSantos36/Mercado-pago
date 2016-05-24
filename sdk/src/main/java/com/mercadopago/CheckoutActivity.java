@@ -3,6 +3,7 @@ package com.mercadopago;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
@@ -641,7 +642,7 @@ public class CheckoutActivity extends AppCompatActivity {
             onCancelClicked();
         }
         else {
-            Toast.makeText(this, getString(R.string.mpsdk_press_again_to_leave_checkout), Toast.LENGTH_LONG).show();
+            Snackbar.make(mPaymentMethodLayout, getString(R.string.mpsdk_press_again_to_leave_checkout), Snackbar.LENGTH_LONG).show();
             mBackPressedOnce = true;
             resetBackPressedOnceIn(4000);
         }

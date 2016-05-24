@@ -2,10 +2,10 @@ package com.mercadopago;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Spanned;
 import android.view.View;
-import android.widget.Toast;
 import android.widget.FrameLayout;
 
 import com.mercadopago.model.Payment;
@@ -26,7 +26,6 @@ public class CongratsActivity extends AppCompatActivity {
     protected MPTextView mInterestAmountDescription;
     protected MPTextView mPaymentIdDescription;
     protected MPTextView mCongratulationSubtitle;
-    protected MPTextView mExitCongrat;
     protected View mPaymentIdSeparator;
 
     protected MPTextView mPaymentMethodAuthorizeDescription;
@@ -34,15 +33,14 @@ public class CongratsActivity extends AppCompatActivity {
     protected MPTextView mMercadoPagoDescription;
     protected MPTextView mAuthorizedPaymentMethod;
     protected MPTextView mSelectOtherPaymentMethod;
-    protected MPTextView mExitCallForAuthorize;
 
     protected MPTextView mRejectionTitle;
     protected MPTextView mRejectionSubtitle;
-    protected MPTextView mExitRejection;
     protected FrameLayout mSelectOtherPaymentMethodByRejection;
 
     protected MPTextView mPendingSubtitle;
-    protected MPTextView mExitPending;
+
+    protected MPTextView mExit;
 
     // Activity parameters
     protected Payment mPayment;
@@ -116,13 +114,11 @@ public class CongratsActivity extends AppCompatActivity {
 
     private void initializePendingControls(){
         mPendingSubtitle = (MPTextView) findViewById(R.id.pendingSubtitle);
-        mExitPending = (MPTextView) findViewById(R.id.exitPending);
-        mExitPending.setOnClickListener(new View.OnClickListener() {
+        mExit = (MPTextView) findViewById(R.id.exitPending);
+        mExit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent returnIntent = new Intent();
-                setResult(RESULT_OK, returnIntent);
-                finish();
+                finishWithOkResult();
             }
         });
     }
@@ -141,13 +137,11 @@ public class CongratsActivity extends AppCompatActivity {
                 finish();
             }
         });
-        mExitRejection = (MPTextView) findViewById(R.id.exitRejection);
-        mExitRejection.setOnClickListener(new View.OnClickListener() {
+        mExit = (MPTextView) findViewById(R.id.exitRejection);
+        mExit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent returnIntent = new Intent();
-                setResult(RESULT_OK, returnIntent);
-                finish();
+                finishWithOkResult();
             }
         });
 
@@ -177,13 +171,11 @@ public class CongratsActivity extends AppCompatActivity {
                 finish();
             }
         });
-        mExitCallForAuthorize = (MPTextView) findViewById(R.id.exitCallForAuthorize);
-        mExitCallForAuthorize.setOnClickListener(new View.OnClickListener() {
+        mExit = (MPTextView) findViewById(R.id.exitCallForAuthorize);
+        mExit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent returnIntent = new Intent();
-                setResult(RESULT_OK, returnIntent);
-                finish();
+                finishWithOkResult();
             }
         });
     }
@@ -196,13 +188,11 @@ public class CongratsActivity extends AppCompatActivity {
         mPaymentIdDescription = (MPTextView) findViewById(R.id.paymentIdDescription);
         mCongratulationSubtitle = (MPTextView) findViewById(R.id.congratulationSubtitle);
         mPaymentIdSeparator = findViewById(R.id.paymentIdSeparator);
-        mExitCongrat = (MPTextView) findViewById(R.id.exitCongrat);
-        mExitCongrat.setOnClickListener(new View.OnClickListener() {
+        mExit = (MPTextView) findViewById(R.id.exitCongrat);
+        mExit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent returnIntent = new Intent();
-                setResult(RESULT_OK, returnIntent);
-                finish();
+                finishWithOkResult();
             }
         });
     }
@@ -458,13 +448,19 @@ public class CongratsActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         if(mBackPressedOnce) {
-            super.onBackPressed();
+            finishWithOkResult();
         }
         else {
-            Toast.makeText(this, getString(R.string.mpsdk_press_again_to_leave), Toast.LENGTH_LONG).show();
+            Snackbar.make(mExit, getString(R.string.mpsdk_press_again_to_leave), Snackbar.LENGTH_LONG).show();
             mBackPressedOnce = true;
             resetBackPressedOnceIn(4000);
         }
+    }
+
+    private void finishWithOkResult() {
+        Intent returnIntent = new Intent();
+        setResult(RESULT_OK, returnIntent);
+        finish();
     }
 
     private void resetBackPressedOnceIn(final int mills) {
