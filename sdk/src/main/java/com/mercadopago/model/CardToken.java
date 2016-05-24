@@ -204,7 +204,6 @@ public class CardToken implements Serializable {
     }
 
     public boolean validateIdentificationNumber(IdentificationType identificationType){
-
         if (identificationType != null) {
             if ((cardholder != null) &&
                     (cardholder.getIdentification() != null) &&

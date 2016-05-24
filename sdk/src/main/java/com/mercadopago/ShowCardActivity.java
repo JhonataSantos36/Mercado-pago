@@ -109,9 +109,8 @@ public abstract class ShowCardActivity extends FrontCardActivity {
 
     private String getCardNumberHidden() {
         StringBuilder sb = new StringBuilder();
-        sb.append(mBin);
         int length = mToken.getCardNumberLength();
-        for (int i = 0; i < length - MercadoPago.BIN_LENGTH - LAST_DIGITIS_LENGTH; i++) {
+        for (int i = 0; i < length - LAST_DIGITIS_LENGTH; i++) {
             sb.append("X");
         }
         sb.append(mToken.getLastFourDigits());
