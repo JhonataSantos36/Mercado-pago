@@ -1194,7 +1194,7 @@ public class GuessingNewCardActivity extends FrontCardActivity {
     public boolean validateIdentificationNumber(boolean requestFocus) {
         mIdentification.setNumber(getCardIdentificationNumber());
         mCardToken.getCardholder().setIdentification(mIdentification);
-        boolean ans = mCardToken.validateIdentification();
+        boolean ans = mCardToken.validateIdentificationNumber(mSelectedIdentificationType);
         if (ans) {
             clearErrorView();
         } else {
