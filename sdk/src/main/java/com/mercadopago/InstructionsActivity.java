@@ -217,7 +217,7 @@ public class InstructionsActivity extends AppCompatActivity {
         mExitTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onBackPressed();
+                finish();
                 animateOut();
             }
         });
