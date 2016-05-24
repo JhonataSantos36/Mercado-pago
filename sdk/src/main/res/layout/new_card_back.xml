@@ -40,6 +40,16 @@
                     android:layout_height="48dp"
                     android:layout_gravity="end"
                     android:background="@drawable/card_back_ccv">
+                    <FrameLayout
+                        android:id="@+id/base_card_security_container"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="5dp"
+                        android:visibility="visible">
+
+                        <include layout="@layout/security_code_group_dots_back"/>
+                    </FrameLayout>
                     <com.mercadopago.views.MPTextView
                         android:id="@+id/cardSecurityCodeView"
                         android:layout_width="wrap_content"
@@ -48,7 +58,8 @@
                         android:singleLine="true"
                         android:gravity="start"
                         android:textColor="@color/mpsdk_base_text"
-                        android:textSize="16sp"/>
+                        android:textSize="16sp"
+                        android:visibility="invisible"/>
                 </FrameLayout>
 
             </FrameLayout>
