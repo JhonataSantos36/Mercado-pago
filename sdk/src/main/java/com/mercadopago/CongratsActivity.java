@@ -388,15 +388,15 @@ public class CongratsActivity extends AppCompatActivity {
     }
 
     private Boolean isStatusValid(){
-        return mPayment.getStatus() != null && !isEmpty(mPayment.getStatus());
+        return !isEmpty(mPayment.getStatus());
     }
 
     private Boolean isStatusDetailValid(){
-        return mPayment.getStatusDetail() != null && !isEmpty(mPayment.getStatusDetail());
+        return !isEmpty(mPayment.getStatusDetail());
     }
 
     private Boolean isCurrencyIdValid(){
-        return mPayment.getCurrencyId() != null && !isEmpty(mPayment.getCurrencyId());
+        return !isEmpty(mPayment.getCurrencyId());
     }
 
     private Boolean isPaymentIdValid(){
@@ -418,23 +418,19 @@ public class CongratsActivity extends AppCompatActivity {
     }
 
     private Boolean isPayerEmailValid(){
-        return mPayment.getPayer() != null && mPayment.getPayer().getEmail() != null &&
-                !isEmpty(mPayment.getPayer().getEmail());
+        return mPayment.getPayer() != null && !isEmpty(mPayment.getPayer().getEmail());
     }
 
     private Boolean isPaymentMethodNameValid(){
-        return mPayment.getCard() != null && mPayment.getCard().getPaymentMethod() != null &&
-                mPayment.getCard().getPaymentMethod().getName() != null && !isEmpty(mPayment.getCard().getPaymentMethod().getName());
+        return mPayment.getCard() != null && mPayment.getCard().getPaymentMethod() != null && !isEmpty(mPayment.getCard().getPaymentMethod().getName());
     }
 
     private Boolean isPaymentMethodIdValid(){
-        return mPayment.getCard() != null && mPayment.getCard().getPaymentMethod() != null &&
-                mPayment.getCard().getPaymentMethod().getId() != null && !isEmpty(mPayment.getCard().getPaymentMethod().getId());
+        return mPayment.getCard() != null && mPayment.getCard().getPaymentMethod() != null && !isEmpty(mPayment.getCard().getPaymentMethod().getId());
     }
 
     private Boolean isLastFourDigitsValid(){
-        return mPayment.getCard() != null && mPayment.getCard().getLastFourDigits() != null &&
-                !isEmpty(mPayment.getCard().getLastFourDigits());
+        return mPayment.getCard() != null && !isEmpty(mPayment.getCard().getLastFourDigits());
     }
 
     private void getActivityParameters(){
