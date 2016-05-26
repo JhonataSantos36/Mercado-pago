@@ -94,7 +94,7 @@
     <string name="mpsdk_subtitle_action_activity_congrat">Te enviaremos los datos a</string>
     <string name="mpsdk_text_email_activity_congrat">juan-carlos@email.com</string>
     <string name="mpsdk_text_state_acount_activity_congrat">En tu estado de cuenta verás el cargo como MERCADOPAGO</string>
-    <string name="mpsdk_text_mercado_pago">MercadoPago</string>
+    <string name="mpsdk_text_to_mercado_pago">a MercadoPago</string>
     <string name="mpsdk_title_activity_call_for_authorize">Debes autorizar ante</string>
     <string name="mpsdk_text_order_call_for_authorize">El teléfono está al dorso de tu tarjeta.</string>
     <string name="mpsdk_text_authorized_call_for_authorize">Ya hablé con</string>
@@ -122,10 +122,9 @@
     <string name="mpsdk_subtitle_rejection_max_attempts">Elige otra tarjeta u otro medio de pago.</string>
     <string name="mpsdk_subtitle_rejection_duplicated_payment">Si necesitas volver a pagar usa otra tarjeta u otro medio de pago.</string>
     <string name="mpsdk_subtitle_rejection_card_disabled">El teléfono está al dorso de tu tarjeta.</string>
-    <string name="mpsdk_text_a">a</string>
     <string name="mpsdk_text_you">Tu</string>
     <string name="mpsdk_text_call_to">Llama a</string>
-    <string name="mpsdk_text_the">el</string>
+    <string name="mpsdk_text_the_payment">el pago de</string>
     <string name="mpsdk_text_and_he_authorized">y me autorizó</string>
     <string name="mpsdk_error_title_activity_call_for_authorize">"Debes autorizar el pago ante tu tarjeta"</string>
 

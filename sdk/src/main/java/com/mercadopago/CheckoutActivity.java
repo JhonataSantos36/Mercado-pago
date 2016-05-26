@@ -574,6 +574,7 @@ public class CheckoutActivity extends AppCompatActivity {
             .setPublicKey(mMerchantPublicKey)
             .setActivity(mActivity)
             .setPayment(mCreatedPayment)
+            .setPaymentMethod(mSelectedPaymentMethod)
             .startCongratsActivity();
     }
 
