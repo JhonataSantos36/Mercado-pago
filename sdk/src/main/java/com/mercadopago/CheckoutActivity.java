@@ -88,6 +88,7 @@ public class CheckoutActivity extends AppCompatActivity {
     protected RelativeLayout mPaymentMethodLayout;
     protected RelativeLayout mPayerCostLayout;
     protected Boolean mBackPressedOnce;
+    protected Snackbar mSnackbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -639,12 +640,14 @@ public class CheckoutActivity extends AppCompatActivity {
             onCancelClicked();
         }
         else if(mBackPressedOnce){
+            mSnackbar.dismiss();
             mPaymentMethodEditionRequested = false;
             startPaymentVaultActivity();
             animateBackToPaymentVault();
         }
         else {
-            Snackbar.make(mPaymentMethodLayout, getString(R.string.mpsdk_press_again_confirm), Snackbar.LENGTH_LONG).show();
+            mSnackbar = Snackbar.make(mPaymentMethodLayout, getString(R.string.mpsdk_press_again_confirm), Snackbar.LENGTH_LONG);
+            mSnackbar.show();
             mBackPressedOnce = true;
             resetBackPressedOnceIn(4000);
         }
