@@ -355,18 +355,6 @@ public class CheckoutActivity extends AppCompatActivity {
                 showRegularLayout();
             }
         }
-        else if (requestCode == ErrorUtil.ERROR_REQUEST_CODE) {
-            if(resultCode == RESULT_OK) {
-                recoverFromFailure();
-            }
-            else if(noUserInteractionReached()) {
-                setResult(RESULT_OK, data);
-                finish();
-            }
-            else {
-                showRegularLayout();
-            }
-        }
     }
 
     private boolean noUserInteractionReached() {
@@ -658,12 +646,16 @@ public class CheckoutActivity extends AppCompatActivity {
     }
 
     private void showProgress() {
-        getSupportActionBar().hide();
+        if(getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
         LayoutUtil.showProgressLayout(this);
     }
 
     private void showRegularLayout() {
-        getSupportActionBar().show();
+        if(getSupportActionBar() != null) {
+            getSupportActionBar().show();
+        }
         LayoutUtil.showRegularLayout(this);
     }
 
