@@ -2,6 +2,7 @@ package com.mercadopago.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -98,7 +99,8 @@ public class ShoppingCartFragment extends Fragment {
 
     private void setItemImage() {
         if(mPictureUrl != null && !mPictureUrl.isEmpty()) {
-            Picasso.with(getContext()).load(mPictureUrl).into(mItemImageView);
+            mItemImageView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.mpsdk_white));
+            Picasso.with(getContext()).load(mPictureUrl).placeholder(R.drawable.progress).into(mItemImageView);
         }
         else {
             int dpAsPixels = ScaleUtil.getPxFromDp(24, getContext());

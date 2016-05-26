@@ -107,7 +107,6 @@ public class CheckoutActivity extends AppCompatActivity {
         if(validState) {
             getApplicationContext();
             initializeActivityControls();
-
             setActivity();
 
             mMercadoPago = new MercadoPago.Builder()
