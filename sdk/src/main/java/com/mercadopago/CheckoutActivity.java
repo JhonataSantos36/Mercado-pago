@@ -72,6 +72,7 @@ public class CheckoutActivity extends AppCompatActivity {
     protected String mPurchaseTitle;
     protected ShoppingCartFragment mShoppingCartFragment;
     protected String mErrorMessage;
+
     protected boolean mPaymentMethodEditionRequested;
 
     protected PaymentMethodViewController mPaymentMethodRow;
@@ -86,16 +87,15 @@ public class CheckoutActivity extends AppCompatActivity {
     protected View mContentView;
     protected RelativeLayout mPaymentMethodLayout;
     protected RelativeLayout mPayerCostLayout;
-    protected boolean mBackPressedOnce;
+    protected Boolean mBackPressedOnce;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_checkout);
-        mBackPressedOnce = false;
         initializeToolbar();
         getActivityParameters();
-
+        mBackPressedOnce = false;
         boolean validState = true;
         try{
             validateParameters();
@@ -411,7 +411,7 @@ public class CheckoutActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     mPaymentMethodEditionRequested = true;
                     startPaymentVaultActivity();
-                    animateBackToPaymentVault();
+                    overridePendingTransition(R.anim.slide_right_to_left_in, R.anim.slide_right_to_left_out);
                 }
             });
         }
@@ -497,7 +497,7 @@ public class CheckoutActivity extends AppCompatActivity {
     }
 
     private void animateBackFromPaymentEdition() {
-        overridePendingTransition(R.anim.slide_right_to_left_in, R.anim.slide_right_to_left_out);
+        overridePendingTransition(R.anim.slide_left_to_right_in, R.anim.slide_left_to_right_out);
     }
 
     private boolean isUniquePaymentMethod() {
@@ -620,10 +620,6 @@ public class CheckoutActivity extends AppCompatActivity {
         //TODO start in process activity
     }
 
-    private void animateBackToPaymentVault() {
-        overridePendingTransition(R.anim.slide_left_to_right_in, R.anim.slide_left_to_right_out);
-    }
-
     protected void finishWithApiException(Intent data) {
         setResult(RESULT_CANCELED, data);
         finish();
@@ -638,14 +634,23 @@ public class CheckoutActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
 
-        if(mBackPressedOnce || mPaymentMethodSearch == null || isUniquePaymentMethod()) {
+        if(mPaymentMethodSearch == null || isUniquePaymentMethod()) {
             onCancelClicked();
         }
+        else if(mBackPressedOnce){
+            mPaymentMethodEditionRequested = false;
+            startPaymentVaultActivity();
+            animateBackToPaymentVault();
+        }
         else {
-            Snackbar.make(mPaymentMethodLayout, getString(R.string.mpsdk_press_again_to_leave_checkout), Snackbar.LENGTH_LONG).show();
+            Snackbar.make(mPaymentMethodLayout, getString(R.string.mpsdk_press_again_confirm), Snackbar.LENGTH_LONG).show();
             mBackPressedOnce = true;
             resetBackPressedOnceIn(4000);
         }
+    }
+
+    private void animateBackToPaymentVault() {
+        overridePendingTransition(R.anim.slide_left_to_right_in, R.anim.slide_left_to_right_out);
     }
 
     private void showProgress() {
