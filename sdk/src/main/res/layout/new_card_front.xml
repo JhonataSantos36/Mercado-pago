@@ -144,7 +144,7 @@
                         android:paddingRight="5dp"
                         android:paddingEnd="5dp">
                         <com.mercadopago.views.MPTextView
-                            android:id="@+id/cardNumberView"
+                            android:id="@+id/cardNumberTextView"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:gravity="start"

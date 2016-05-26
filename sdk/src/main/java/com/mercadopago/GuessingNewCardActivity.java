@@ -9,7 +9,6 @@ import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputType;
-import android.text.Layout;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
@@ -18,7 +17,6 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
@@ -980,7 +978,6 @@ public class GuessingNewCardActivity extends FrontCardActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
             }
 
             @Override
@@ -1000,7 +997,12 @@ public class GuessingNewCardActivity extends FrontCardActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+                if (s.length() == 2 && before == 0) {
+                    mCardExpiryDateEditText.append("/");
+                }
+                if (s.length() == 2 && before == 1) {
+                    mCardExpiryDateEditText.getText().delete(s.length() - 1, s.length());
+                }
             }
 
             @Override

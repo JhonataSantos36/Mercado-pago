@@ -98,9 +98,10 @@
                 android:singleLine="true"
                 android:imeOptions="actionNext"
                 android:inputType="number"
+                android:digits="0123456789/"
                 android:textSize="15sp"
                 android:textColor="@color/abc_search_url_text_selected"
-                android:maxLength="4"
+                android:maxLength="5"
                 custom:errorColor="@color/mpsdk_color_red_error"/>
 
         </LinearLayout>
