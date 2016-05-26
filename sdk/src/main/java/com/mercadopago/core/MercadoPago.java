@@ -298,10 +298,12 @@ public class MercadoPago {
         activity.startActivityForResult(checkoutIntent, CHECKOUT_REQUEST_CODE);
     }
 
-    private static void startCongratsActivity(Activity activity, Payment payment) {
+    private static void startCongratsActivity(Activity activity, Payment payment, PaymentMethod paymentMethod) {
 
         Intent congratsIntent = new Intent(activity, CongratsActivity.class);
         congratsIntent.putExtra("payment", payment);
+        congratsIntent.putExtra("paymentMethod", paymentMethod);
+
         activity.startActivityForResult(congratsIntent, CONGRATS_REQUEST_CODE);
     }
 
@@ -701,8 +703,9 @@ public class MercadoPago {
 
             if (this.mActivity == null) throw new IllegalStateException("activity is null");
             if (this.mPayment == null) throw new IllegalStateException("payment is null");
+            if (this.mPaymentMethod == null) throw new IllegalStateException("payment method is null");
 
-            MercadoPago.startCongratsActivity(this.mActivity, this.mPayment);
+            MercadoPago.startCongratsActivity(this.mActivity, this.mPayment, this.mPaymentMethod);
         }
 
 
