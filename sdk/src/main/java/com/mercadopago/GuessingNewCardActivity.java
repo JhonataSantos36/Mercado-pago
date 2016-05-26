@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.MotionEventCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.InputFilter;
@@ -213,7 +214,7 @@ public class GuessingNewCardActivity extends FrontCardActivity {
         mIdentificationTypeSpinner = (Spinner) findViewById(R.id.cardIdentificationType);
         mIdentificationTypeContainer = (LinearLayout) findViewById(R.id.cardIdentificationTypeContainer);
         mIdentificationNumberContainer = (LinearLayout) findViewById(R.id.cardIdentificationNumberContainer);
-        mHorizontalScrollView = (HorizontalScrollView) findViewById(R.id.scrollViewContainer);
+        mHorizontalScrollView = (HorizontalScrollView) findViewById(R.id.horizontalScrollViewContainer);
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
         mBackButton = (FrameLayout) findViewById(R.id.backButton);
         mNextButton = (FrameLayout) findViewById(R.id.nextButton);
@@ -725,6 +726,10 @@ public class GuessingNewCardActivity extends FrontCardActivity {
         mCardNumberEditText.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
+                int action = MotionEventCompat.getActionMasked(event);
+                if (action == MotionEvent.ACTION_DOWN) {
+                    openKeyboard(mCardNumberEditText);
+                }
                 return true;
             }
         });
@@ -755,6 +760,10 @@ public class GuessingNewCardActivity extends FrontCardActivity {
         mCardHolderNameEditText.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
+                int action = MotionEventCompat.getActionMasked(event);
+                if (action == MotionEvent.ACTION_DOWN) {
+                    openKeyboard(mCardHolderNameEditText);
+                }
                 return true;
             }
         });
@@ -784,6 +793,10 @@ public class GuessingNewCardActivity extends FrontCardActivity {
         mCardExpiryDateEditText.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
+                int action = MotionEventCompat.getActionMasked(event);
+                if (action == MotionEvent.ACTION_DOWN) {
+                    openKeyboard(mCardExpiryDateEditText);
+                }
                 return true;
             }
         });
@@ -813,6 +826,10 @@ public class GuessingNewCardActivity extends FrontCardActivity {
         mCardSecurityCodeEditText.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
+                int action = MotionEventCompat.getActionMasked(event);
+                if (action == MotionEvent.ACTION_DOWN) {
+                    openKeyboard(mCardSecurityCodeEditText);
+                }
                 return true;
             }
         });
@@ -890,6 +907,10 @@ public class GuessingNewCardActivity extends FrontCardActivity {
         mCardIdentificationNumberEditText.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
+                int action = MotionEventCompat.getActionMasked(event);
+                if (action == MotionEvent.ACTION_DOWN) {
+                    openKeyboard(mCardIdentificationNumberEditText);
+                }
                 return true;
             }
         });
