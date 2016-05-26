@@ -409,6 +409,9 @@ public class PaymentVaultActivity extends AppCompatActivity {
             setResult(Activity.RESULT_CANCELED, data);
             this.finish();
         }
+        else {
+            overridePendingTransition(R.anim.slide_left_to_right_in, R.anim.slide_left_to_right_out);
+        }
     }
 
     protected void resolvePaymentMethodsRequest(int resultCode, Intent data) {

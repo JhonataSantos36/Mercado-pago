@@ -71,6 +71,8 @@ public class Step6Activity extends ExampleActivity {
     }
 
     public void submitForm(View view) {
+        startCheckoutActivity(mMerchantPublicKey);
+        /*
         LayoutUtil.showProgressLayout(this);
         Map<String, Object> map = new HashMap<>();
         map.put("item_id", "1");
@@ -88,6 +90,7 @@ public class Step6Activity extends ExampleActivity {
                 Toast.makeText(mActivity, "Preference creation failed", Toast.LENGTH_LONG).show();
             }
         });
+        */
     }
 
     private void startCheckoutActivity(String publicKey)
@@ -98,13 +101,16 @@ public class Step6Activity extends ExampleActivity {
         new MercadoPago.StartActivityBuilder()
                 .setActivity(this)
                 .setPublicKey(publicKey)
-                .setCheckoutPreferenceId(mCheckoutPreference.getId())
+                .setCheckoutPreferenceId("150216849-15aa2321-4203-47fa-af9a-eea5c9a42dd4")
                 .startCheckoutActivity();
     }
 
     public void submitFormTest(View view) {
+
         LayoutUtil.showProgressLayout(this);
-        Map<String, Object> map = new HashMap<>();
+        startCheckoutActivity("TEST-ad365c37-8012-4014-84f5-6c895b3f8e0a");
+
+        /*Map<String, Object> map = new HashMap<>();
         map.put("item_id", "1");
         map.put("amount", new BigDecimal(300));
         MerchantServer.createPreference(this, "http://private-9376e-paymentmethodsmla.apiary-mock.com/",
@@ -120,5 +126,6 @@ public class Step6Activity extends ExampleActivity {
                         Toast.makeText(mActivity, "Preference creation failed", Toast.LENGTH_LONG).show();
                     }
                 });
+                */
     }
 }

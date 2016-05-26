@@ -370,6 +370,7 @@ public class CheckoutActivity extends AppCompatActivity {
         } else if (resultCode == RESULT_CANCELED) {
             finish();
         }
+        overridePendingTransition(R.anim.slide_left_to_right_in, R.anim.slide_left_to_right_out);
     }
 
     private void finishWithPaymentResult() {
