@@ -9,6 +9,7 @@
     android:background="@color/mpsdk_color_new_card_form_background">
 
     <ScrollView
+        android:id="@+id/scrollViewContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true">
