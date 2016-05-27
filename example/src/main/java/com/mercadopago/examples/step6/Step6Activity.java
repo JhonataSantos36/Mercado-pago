@@ -71,8 +71,7 @@ public class Step6Activity extends ExampleActivity {
     }
 
     public void submitForm(View view) {
-        startCheckoutActivity(mMerchantPublicKey);
-        /*
+
         LayoutUtil.showProgressLayout(this);
         Map<String, Object> map = new HashMap<>();
         map.put("item_id", "1");
@@ -90,7 +89,7 @@ public class Step6Activity extends ExampleActivity {
                 Toast.makeText(mActivity, "Preference creation failed", Toast.LENGTH_LONG).show();
             }
         });
-        */
+
     }
 
     private void startCheckoutActivity(String publicKey)
@@ -108,24 +107,23 @@ public class Step6Activity extends ExampleActivity {
     public void submitFormTest(View view) {
 
         LayoutUtil.showProgressLayout(this);
-        startCheckoutActivity("TEST-ad365c37-8012-4014-84f5-6c895b3f8e0a");
 
-        /*Map<String, Object> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<>();
         map.put("item_id", "1");
         map.put("amount", new BigDecimal(300));
         MerchantServer.createPreference(this, "http://private-9376e-paymentmethodsmla.apiary-mock.com/",
-                "merchantUri/merchant_preference", map, new Callback<CheckoutPreference>() {
-                    @Override
-                    public void success(CheckoutPreference checkoutPreference, Response response) {
-                        mCheckoutPreference = checkoutPreference;
-                        startCheckoutActivity("TEST-ad365c37-8012-4014-84f5-6c895b3f8e0a");
-                    }
+            "merchantUri/merchant_preference", map, new Callback<CheckoutPreference>() {
+            @Override
+            public void success(CheckoutPreference checkoutPreference, Response response) {
+                mCheckoutPreference = checkoutPreference;
+                startCheckoutActivity("TEST-ad365c37-8012-4014-84f5-6c895b3f8e0a");
+            }
 
-                    @Override
-                    public void failure(RetrofitError error) {
-                        Toast.makeText(mActivity, "Preference creation failed", Toast.LENGTH_LONG).show();
-                    }
-                });
-                */
+            @Override
+            public void failure(RetrofitError error) {
+                Toast.makeText(mActivity, "Preference creation failed", Toast.LENGTH_LONG).show();
+            }
+        });
+
     }
 }
