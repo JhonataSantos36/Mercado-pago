@@ -11,6 +11,26 @@
  * Designed and built with all the love in the world by @mdo and @fat.
  */
 /*! normalize.css v2.1.0 | MIT License | git.io/normalize */
+
+.copy-button {
+  top: 2px;
+  right: 2px;
+  padding: 2px 6px;
+  position: absolute;
+  font-size: 13px;
+  font-weight: bold;
+  line-height: 20px;
+  color: #333;
+  white-space: nowrap;
+  vertical-align: middle;
+  cursor: pointer;
+  background-color: #eee;
+  background-image: linear-gradient(#fcfcfc,#eee);
+  border: 1px solid #d5d5d5;
+  border-radius: 3px;
+  -webkit-user-select: none;
+}
+
 article,
 aside,
 details,
@@ -38,7 +58,7 @@ audio:not([controls]) {
   display: none; }
 
 html {
-  font-family: sans-serif;
+  font-family: Lato;
   -webkit-text-size-adjust: 100%;
   -ms-text-size-adjust: 100%; }
 
@@ -238,7 +258,7 @@ html {
   -webkit-tap-highlight-color: transparent; }
 
 body {
-  font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+  font-family: Lato;
   font-size: 15px;
   line-height: 1.42857;
   color: #333;
@@ -355,7 +375,7 @@ cite {
 
 h1, h2, h3, h4, h5, h6,
 .h1, .h2, .h3, .h4, .h5, .h6 {
-  font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+  font-family: Lato;
   font-weight: 500;
   line-height: 1.1; }
   h1 small, h2 small, h3 small, h4 small, h5 small, h6 small,
@@ -1491,7 +1511,7 @@ textarea.input-lg, .input-group-lg > textarea.form-control,
   display: inline-block;
   padding: 6px 12px;
   margin-bottom: 0;
-  font-family: "AvenirNextLTPro-Regular", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: Lato;
   font-weight: normal;
   font-size: 15px;
   line-height: 1.42857;
@@ -3080,7 +3100,7 @@ input[type="button"].btn-block {
 .navbar-default {
   /*background-color: $navbar-default-bg;
   border-color: $navbar-default-border;*/
-  font-family: "AvenirNextLTPro-Medium", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: Lato;
   font-weight: normal;
   -webkit-font-smoothing: antialiased; }
   .navbar-default .navbar-brand {
@@ -4730,100 +4750,6 @@ td.visible-print {
   td.hidden-print {
     display: none !important; } }
 
-/* @license
- * MyFonts Webfont Build ID 2656303, 2013-10-02T11:03:28-0400
- *
- * The fonts listed in this notice are subject to the End User License
- * Agreement(s) entered into by the website owner. All other parties are
- * explicitly restricted from using the Licensed Webfonts(s).
- *
- * You may obtain a valid license at the URLs below.
- *
- * Webfont: Avenir Next Pro Regular by Linotype
- * URL: http://www.myfonts.com/fonts/linotype/avenir-next-pro/pro-regular/
- *
- * Webfont: Avenir Next Pro Medium by Linotype
- * URL: http://www.myfonts.com/fonts/linotype/avenir-next-pro/pro-medium/
- *
- *
- * License: http://www.myfonts.com/viewlicense?type=web&buildid=2656303
- * Licensed pageviews: 250,000
- * Webfonts copyright: Copyright &#x00A9; 2004 - 2007 Linotype GmbH, www.linotype.com. All rights reserved. This font software may not be reproduced, modified, disclosed or transferred without the express written approval of Linotype GmbH. Avenir is a trademark of Linotype GmbH
- *
- * © 2013 MyFonts Inc
-*/
-/* @import must be at top of file, otherwise CSS will not work
-@import url("//hello.myfonts.net/count/28882f");*/
-/* Avenir Next Pro */
-@font-face {
-  font-family: 'AvenirNextLTPro-Regular';
-  src: url("http://code.ionicframework.com/assets/fonts/28882F_0_0.eot");
-  src: url("http://code.ionicframework.com/assets/fonts/28882F_0_0.eot?#iefix") format("embedded-opentype"), url("http://code.ionicframework.com/assets/fonts/28882F_0_0.woff") format("woff"), url("http://code.ionicframework.com/assets/fonts/28882F_0_0.ttf") format("truetype"); }
-
-@font-face {
-  font-family: 'AvenirNextLTPro-Medium';
-  src: url("http://code.ionicframework.com/assets/fonts/28882F_1_0.eot");
-  src: url("http://code.ionicframework.com/assets/fonts/28882F_1_0.eot?#iefix") format("embedded-opentype"), url("http://code.ionicframework.com/assets/fonts/28882F_1_0.woff") format("woff"), url("http://code.ionicframework.com/assets/fonts/28882F_1_0.ttf") format("truetype"); }
-
-@font-face {
-  font-family: 'AvenirNextLTPro-UltLt';
-  src: url("http://code.ionicframework.com/assets/fonts/29CC36_0_0.eot");
-  src: url("http://code.ionicframework.com/assets/fonts/29CC36_0_0.eot?#iefix") format("embedded-opentype"), url("http://code.ionicframework.com/assets/fonts/29CC36_0_0.woff") format("woff"), url("http://code.ionicframework.com/assets/fonts/29CC36_0_0.ttf") format("truetype"); }
-
-/* Consolidated Avenir */
-@font-face {
-  font-family: 'Avenir Next';
-  src: url("/fonts/avenir-next/bold.eot");
-  src: url("/fonts/avenir-next/bold.eot?#iefix") format("embedded-opentype"), url("/fonts/avenir-next/bold.woff2") format("woff2"), url("/fonts/avenir-next/bold.woff") format("woff"), url("/fonts/avenir-next/bold.ttf") format("truetype");
-  font-weight: 700; }
-
-@font-face {
-  font-family: 'Avenir Next';
-  src: url("/fonts/avenir-next/demi.eot");
-  src: url("/fonts/avenir-next/demi.eot?#iefix") format("embedded-opentype"), url("/fonts/avenir-next/demi.woff2") format("woff2"), url("/fonts/avenir-next/demi.woff") format("woff"), url("/fonts/avenir-next/demi.ttf") format("truetype");
-  font-weight: 600; }
-
-@font-face {
-  font-family: 'Avenir Next';
-  src: url("/fonts/avenir-next/medium.eot");
-  src: url("/fonts/avenir-next/medium.eot?#iefix") format("embedded-opentype"), url("/fonts/avenir-next/medium.woff") format("woff"), url("/fonts/avenir-next/medium.ttf") format("truetype");
-  font-weight: 500; }
-
-@font-face {
-  font-family: 'Avenir Next';
-  src: url("/fonts/avenir-next/regular.eot");
-  src: url("/fonts/avenir-next/regular.eot?#iefix") format("embedded-opentype"), url("/fonts/avenir-next/regular.woff") format("woff"), url("/fonts/avenir-next/regular.ttf") format("truetype");
-  font-weight: 400; }
-
-@font-face {
-  font-family: 'Avenir Next';
-  src: url("/fonts/avenir-next/thin.eot");
-  src: url("/fonts/avenir-next/thin.eot?#iefix") format("embedded-opentype"), url("/fonts/avenir-next/thin.woff2") format("woff2"), url("/fonts/avenir-next/thin.woff") format("woff"), url("/fonts/avenir-next/thin.ttf") format("truetype");
-  font-weight: 300; }
-
-@font-face {
-  font-family: 'Avenir Next';
-  src: url("/fonts/avenir-next/ultralight.eot");
-  src: url("/fonts/avenir-next/ultralight.eot?#iefix") format("embedded-opentype"), url("/fonts/avenir-next/ultralight.woff") format("woff"), url("/fonts/avenir-next/ultralight.ttf") format("truetype");
-  font-weight: 200; }
-
-/* Frieght Text Pro */
-@font-face {
-  font-family: 'FreightTextProBook-Regular';
-  src: url("http://code.ionicframework.com/assets/fonts/29D26A_0_0.eot");
-  src: url("http://code.ionicframework.com/assets/fonts/29D26A_0_0.eot?#iefix") format("embedded-opentype"), url("http://code.ionicframework.com/assets/fonts/29D26A_0_0.woff") format("woff"), url("http://code.ionicframework.com/assets/fonts/29D26A_0_0.ttf") format("truetype"); }
-
-@font-face {
-  font-family: 'FreightTextProMedium-Regular';
-  src: url("http://code.ionicframework.com/assets/fonts/29D26A_1_0.eot");
-  src: url("http://code.ionicframework.com/assets/fonts/29D26A_1_0.eot?#iefix") format("embedded-opentype"), url("http://code.ionicframework.com/assets/fonts/29D26A_1_0.woff") format("woff"), url("http://code.ionicframework.com/assets/fonts/29D26A_1_0.ttf") format("truetype"); }
-
-@font-face {
-  font-family: "Ionicons";
-  src: url("../fonts/ionicons.eot?v=2.0.1");
-  src: url("../fonts/ionicons.eot?v=2.0.1#iefix") format("embedded-opentype"), url("../fonts/ionicons.ttf?v=2.0.1") format("truetype"), url("../fonts/ionicons.woff?v=2.0.1") format("woff"), url("../fonts/ionicons.woff") format("woff"), url("../fonts/ionicons.svg?v=2.0.1#Ionicons") format("svg");
-  font-weight: normal;
-  font-style: normal; }
 
 /*
  * Some CSS adapted from LayerVault, http://layervault.com
@@ -4848,7 +4774,7 @@ td.visible-print {
 .input-container,
 .input-container * {
   box-sizing: border-box;
-  font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; }
+  font-family: Lato; }
 
 .input-container {
   margin-bottom: 10px;
@@ -4862,7 +4788,7 @@ td.visible-print {
   .input-container input,
   .input-container textarea {
     font-size: 16px;
-    font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+    font-family: Lato;
     -webkit-font-smoothing: antialiased;
     width: 100%;
     height: 60px;
@@ -4915,7 +4841,7 @@ h3 {
 
 h1, h2, h3, h4, h5, h6, .btn {
   font-weight: normal;
-  font-family: "AvenirNextLTPro-Regular", "Helvetica Neue", Helvetica, Arial, sans-serif; }
+  font-family: Lato; }
 
 h1, h2, h3, h4, h5, h6 {
   color: #333; }
@@ -4976,7 +4902,7 @@ h1 + h2 + p {
   .home .primary-row h1, .home .primary-row h2 {
     border: none;
     font-weight: normal;
-    font-family: "AvenirNextLTPro-Regular", "Helvetica Neue", Helvetica, Arial, sans-serif; }
+    font-family: Lato; }
   .home .primary-row h1 {
     margin: 10px 0 0 0;
     color: #ebf3ff;
@@ -4987,7 +4913,7 @@ h1 + h2 + p {
     font-size: 16px;
     line-height: 28px;
     font-weight: bold;
-    font-family: "AvenirNextLTPro-Ultlt", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: Lato;
     cursor: default;
     -webkit-font-smoothing: antialiased;
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1); }
@@ -5002,7 +4928,7 @@ h1 + h2 + p {
     width: 280px;
     border: 0;
     font-size: 22px;
-    font-family: "AvenirNextLTPro-Regular", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: Lato;
     opacity: 1; }
   .home .btn-row .btn-download {
     border: none;
@@ -5062,10 +4988,6 @@ h1 + h2 + p {
       visibility: visible; }
     .home .feature-img.one .app-icon {
       visibility: visible; }
-  .home .feature-img .app-icon.two {
-    background-image: url(/img/homepage/frontpage-icon@2x.png); }
-  .home .feature-img .app-icon.one {
-    background-image: url(/img/homepage/ionicview-icon_2x.png); }
   .home .feature-img .app-icon {
     background-size: 84px 84px;
     background-repeat: no-repeat;
@@ -5100,7 +5022,7 @@ h1 + h2 + p {
     text-decoration: underline;
     font-weight: 300;
     font-size: 11px;
-    font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+    font-family: Lato-Light;
     text-decoration: none;
     text-shadow: 0px 1px 6px rgba(0, 0, 0, 0.2); }
 
@@ -5131,7 +5053,7 @@ h1 + h2 + p {
     .home .primary-row h1 {
       margin: 100px 0 0 0;
       font-size: 48px;
-      font-family: "AvenirNextLTPro-UltLt", "HelveticaNeue-Light", Helvetica, Arial, sans-serif;
+      font-family: Lato;
       font-weight: bold;
       letter-spacing: -1px;
       -webkit-font-smoothing: antialiased;
@@ -5163,12 +5085,12 @@ h1 + h2 + p {
     color: #fff;
     margin-bottom: 40px;
     margin-top: 20px;
-    font-family: "AvenirNextLTPro-UltLt", "HelveticaNeue-Light", Helvetica, Arial, sans-serif; }
+    font-family: Lato; }
   .home .creator-bar p {
     margin-bottom: 20px;
     color: #F7FAFF;
     font-weight: bold;
-    font-family: "AvenirNextLTPro-Ultlt", "Helvetica Neue", Helvetica, Arial, sans-serif; }
+    font-family: Lato; }
   .home .creator-bar a.btn {
     opacity: 1;
     background-color: #4E8EF7;
@@ -5177,7 +5099,7 @@ h1 + h2 + p {
     border-radius: 1px;
     padding: 14px 28px;
     font-size: 13px;
-    font-family: "AvenirNextLTPro-Medium", "Helvetica Neue", Helvetica, Arial, sans-serif; }
+    font-family: Lato; }
   .home .creator-bar .container {
     overflow: hidden;
     color: #DAE7FD;
@@ -5203,7 +5125,7 @@ h1 + h2 + p {
     color: white;
     box-shadow: none;
     font-weight: normal;
-    font-family: "AvenirNextLTPro-Regular", "Helvetica Neue", Helvetica, Arial, sans-serif; }
+    font-family: Lato; }
     .home .utility-bar input:focus {
       box-shadow: none;
       border: 1px solid #84A6E2;
@@ -5240,7 +5162,7 @@ h1 + h2 + p {
 @media (min-width: 992px) {
   .home .social-row {
     margin: 7px 0 0 0;
-    font-family: "AvenirNextLTPro-UltLt", "HelveticaNeue-Light", Helvetica, Arial, sans-serif;
+    font-family: Lato;
     font-weight: bold; } }
 
 .home .social-row li {
@@ -5293,7 +5215,7 @@ h1 + h2 + p {
     color: #474f5c;
     font-weight: 300;
     font-size: 18px;
-    font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; }
+    font-family: Lato; }
 
 .home .feature-row-strong {
   color: #6a7586;
@@ -5312,7 +5234,7 @@ h1 + h2 + p {
     color: #858f9f;
     font-weight: 300;
     font-size: 14px;
-    font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; }
+    font-family: Lato; }
 
 @media (min-width: 768px) {
   .home .feature-row {
@@ -5353,22 +5275,6 @@ h1 + h2 + p {
 .home .img-nerds {
   background-image: url("/img/nerds.png"); }
 
-@media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (min-device-pixel-ratio: 1.3), only screen and (min-resolution: 124dpi) {
-  .home .feature-row.img-performance {
-    background-image: url("/img/performance@2x.png"); }
-  .home .feature-row.img-angular {
-    background-image: url("/img/angular-ionic@2x.png"); }
-  .home .feature-row.img-native {
-    background-image: url("/img/native@2x.png"); }
-  .home .feature-row.img-design {
-    background-image: url("/img/design@2x.png"); }
-  .home .feature-row.img-cli {
-    background-image: url("/img/cli@2x.png"); }
-  .home .feature-row.img-learn {
-    background-image: url("/img/learn@2x.png"); }
-  .home .feature-row.img-nerds {
-    background-image: url("/img/nerds@2x.png"); } }
-
 .home .examples-row h3 {
   padding-top: 10px; }
 
@@ -5396,7 +5302,7 @@ h1 + h2 + p {
     color: #474F5C;
     font-weight: 300;
     font-size: 18px;
-    font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; }
+    font-family: Lato; }
   .home .features img {
     width: 80px; }
   .home .features .row {
@@ -5410,7 +5316,7 @@ h1 + h2 + p {
     color: #626B78;
     font-weight: 300;
     font-size: 14px;
-    font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+    font-family: Lato;
     line-height: 24px;
     max-width: 286px; }
     .home .features p i {
@@ -5430,10 +5336,10 @@ h1 + h2 + p {
     text-transform: uppercase;
     letter-spacing: 4px;
     font-size: 16px;
-    font-family: "AvenirNextLTPro-Regular", "Helvetica Neue", Helvetica, Arial, sans-serif; }
+    font-family: Lato; }
   .pre-footer.footer-social .spread-word {
     color: #fff;
-    font-family: "AvenirNextLTPro-Medium", "Helvetica Neue", Helvetica, Arial, sans-serif; }
+    font-family: Lato; }
   .pre-footer.footer-social .share-row {
     margin: 30px auto 0 auto;
     max-width: 900px; }
@@ -5526,7 +5432,7 @@ h1 + h2 + p {
       opacity: .7; }
     .home .creator-home-feature hgroup.desc-row .btn-white {
       background: white;
-      font-family: "Avenir Next", "Helvetica Neue", Helvetica, sans-serif;
+      font-family: Lato;
       font-weight: 500;
       font-size: 19px;
       padding: 17px 39px;
@@ -5589,14 +5495,14 @@ h1 + h2 + p {
   #slider h1 {
     margin: 112px 0 0 0;
     font-size: 48px;
-    font-family: "AvenirNextLTPro-UltLt", "HelveticaNeue-Light", Helvetica, Arial, sans-serif;
+    font-family: Lato;
     font-weight: bold;
     letter-spacing: -0.02em;
     -webkit-font-smoothing: antialiased;
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
     cursor: default; }
     #slider h1 strong {
-      font-family: "AvenirNextLTPro-Regular", "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-family: Lato;
       font-weight: 600; }
   #slider h2 {
     font-size: 32px;
@@ -5605,7 +5511,7 @@ h1 + h2 + p {
     color: #B2CEFF;
     font-size: 20px;
     font-weight: 400;
-    font-family: "Avenir Next", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: Lato;
     margin: 4px 0px 32px;
     line-height: 1.4;
     letter-spacing: -0.01em; }
@@ -5634,12 +5540,12 @@ h1 + h2 + p {
   #slider .slide-creator h2 {
     margin: 20px 0 20px;
     font-weight: 500;
-    font-family: "Avenir Next", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: Lato;
     letter-spacing: -0.02em; }
   #slider .slide-lab h2 {
     margin: 20px 0 20px;
     font-weight: 500;
-    font-family: "Avenir Next", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: Lato;
     letter-spacing: -0.02em; }
   #slider .slide-lab h3 {
     color: #C8E3FF;
@@ -5660,9 +5566,7 @@ h1 + h2 + p {
       max-width: 440px; }
     #slider .slide-market .btn-row .btn-download {
       color: #04499e; }
-    #slider .slide-market .feature-img {
-      background: no-repeat center top url("/img/homepage/market-bag-img.png");
-      background-size: 70%; }
+    
 
 @supports (overflow: -webkit-marquee) and ((-webkit-justify-content: inherit) or (-ms-flex-pack: inherit) or (justify-content: inherit)) {
   #slider {
@@ -5896,13 +5800,6 @@ h1 + h2 + p {
       height: 94px;
       background-size: 88px 80px; } }
 
-@font-face {
-  font-weight: normal;
-  font-style: normal;
-  font-family: "Ionicons";
-  src: url("../fonts/ionicons-v2.eot?v=1.3.0");
-  src: url("../fonts/ionicons-v2.eot?v=1.3.0#iefix") format("embedded-opentype"), url("../fonts/ionicons-v2.ttf?v=1.3.0") format("truetype"), url("../fonts/ionicons-v2.woff?v=1.3.0") format("woff"), url("../fonts/ionicons-v2.svg?v=1.3.0#Ionicons") format("svg"); }
-
 .fixed-menu {
   position: fixed;
   -webkit-transform: translate3d(0, 0, 0);
@@ -5994,11 +5891,6 @@ h1 + h2 + p {
   .docs-section td, .docs-section th {
     font-size: 12px !important; }
 
-pre {
-  border: 0;
-  border-left: 4px solid #D7DBE4;
-  background: #F0F3F8; }
-
 .device-preview-page .docs-section {
   padding-bottom: 60px;
   min-height: 320px; }
@@ -6075,10 +5967,7 @@ pre {
       opacity: 1; }
     .device-preview-page .device-preview > div.screen-bg {
       opacity: 1 !important; }
-  .device-preview-page .default-screen .content {
-    height: 100%;
-    background: url("/img/ionic_icon.svg") no-repeat center 115px;
-    background-size: 250px 250px; }
+  
 
 .attention-arrow {
   position: absolute;
@@ -6179,14 +6068,14 @@ pre {
     margin-top: 50px; }
   .docs-home-row h3 {
     color: #333;
-    font-family: "AvenirNextLTPro-Medium", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: Lato;
     margin-top: 8px; }
   .docs-home-row h4 {
     margin-bottom: 8px; }
   .docs-home-row p {
     color: #888;
     font-size: 13px;
-    font-family: "AvenirNextLTPro-Regular", "Helvetica Neue", Helvetica, Arial, sans-serif; }
+    font-family: Lato; }
   .docs-home-row a {
     color: black; }
   .docs-home-row a:hover {
@@ -6321,14 +6210,14 @@ pre {
 #getting-started {
   padding: 40px 0px; }
   #getting-started .italic {
-    font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+    font-family: Lato;
     font-weight: 300;
     margin: 20px 0px;
     line-height: 26px; }
   #getting-started i {
     color: #999; }
   #getting-started .row {
-    margin-bottom: 100px; }
+    margin-bottom: 50px; }
   #getting-started .num {
     float: left;
     width: 80px; }
@@ -6345,18 +6234,17 @@ pre {
     color: #444;
     font-weight: 300;
     font-size: 18px;
-    font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; }
+    font-family: Lato; }
   #getting-started .desc {
-    font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+    font-family: Lato;
     color: #333;
     font-weight: 300;
     font-size: 14px;
     margin-top: 16px;
-    margin-left: 80px;
     margin-right: 20px;
     line-height: 26px; }
   #getting-started .code {
-    margin-top: 66px; }
+    margin-top: 60px; }
   #getting-started .highlight {
     background: #eee; }
   #getting-started input {
@@ -6529,7 +6417,7 @@ h2.underline {
   #blog-top a {
     opacity: 1; }
   #blog-top h3 {
-    font-family: "AvenirNextLTPro-Regular", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: Lato;
     color: #222;
     font-weight: normal; }
   #blog-top h5 {
@@ -6656,7 +6544,7 @@ h2.underline {
     line-height: 34px;
     margin-bottom: 15px; }
   .join-bottom input {
-    font-family: "AvenirNextLTPro-Regular", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: Lato;
     height: 39px;
     box-shadow: none;
     border: 2px solid #E1E1E1;
@@ -7368,7 +7256,7 @@ a {
   font-size: 14px;
   padding-top: 8px;
   padding-bottom: 8px;
-  font-family: "AvenirNextLTPro-Regular", "Helvetica Neue", Helvetica, Arial, sans-serif; }
+  font-family: Lato; }
   .navbar .dropdown-menu > li > a:hover, .navbar .dropdown-menu > li > a:active, .navbar .dropdown-menu > li > a:focus {
     background-color: #EFF1F5;
     color: #677184 !important;
@@ -7442,10 +7330,10 @@ a {
   .header h3 {
     color: #ebf3ff;
     font-size: 28px;
-    font-family: "AvenirNextLTPro-Regular", "Helvetica Neue", Helvetica, Arial, sans-serif; }
+    font-family: Lato; }
   .header h4 {
     color: #c2d8ff;
-    font-family: "AvenirNextLTPro-Regular", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: Lato;
     opacity: .8; }
   .header ul {
     position: absolute;
@@ -7457,7 +7345,7 @@ a {
     margin: 0 5px;
     list-style: none;
     font-size: 14px;
-    font-family: "AvenirNextLTPro-Regular", "Helvetica Neue", Helvetica, Arial, sans-serif; }
+    font-family: Lato; }
     .header li:first-child a {
       padding-left: 0; }
   .header a {
@@ -7526,7 +7414,7 @@ a {
     text-transform: uppercase;
     letter-spacing: 3px;
     font-size: 12px;
-    font-family: "AvenirNextLTPro-Medium", "Helvetica Neue", Helvetica, Arial, sans-serif; }
+    font-family: Lato; }
   .search-results ul {
     margin: 0 0 0 -10px;
     padding: 0; }
@@ -7646,7 +7534,7 @@ a {
   background: rgba(255, 255, 255, 0.2);
   letter-spacing: -0.03em;
   font-weight: bold;
-  font-family: "AvenirNextLTPro-Ultlt", "Helvetica Neue", Helvetica, Arial, sans-serif; }
+  font-family: Lato; }
   .news .container {
     overflow: hidden;
     color: #B6D1FF;
@@ -15498,11 +15386,10 @@ a {
   position: relative;
   z-index: 100;
   padding: 20px 0 0 0;
-  background: #2b3442;
-  color: #a4b3cd;
+  
   text-align: center;
   font-size: 14px;
-  font-family: "AvenirNextLTPro-Regular", "Helvetica Neue", Helvetica, Arial, sans-serif; }
+  font-family: Lato; }
   .footer a {
     color: #e2eeff;
     opacity: 1;
@@ -15540,7 +15427,7 @@ a {
     letter-spacing: 2px;
     font-weight: bold;
     font-size: 13px;
-    font-family: "AvenirNextLTPro-Medium", "Helvetica Neue", Helvetica, Arial, sans-serif; }
+    font-family: Lato; }
   .footer .newsletter-text {
     padding-bottom: 4px; }
   .footer .base-links dd {
@@ -15554,8 +15441,7 @@ a {
       color: #dde9ff;
       text-decoration: none; }
   .footer .copy {
-    padding: 18px;
-    background: #202532; }
+    padding: 18px; }
   .footer .copy-container {
     margin: 0 auto;
     max-width: 1170px; }
@@ -15575,10 +15461,8 @@ a {
   .footer .newsletter {
     clear: both;
     margin: 0 auto 30px;
-    max-width: 1170px;
-    border-top: 1px solid #555f6e; }
+    max-width: 1170px;}
   .footer .newsletter-container {
-    margin-top: 30px;
     text-align: left; }
     .footer .newsletter-container .sign-up {
       padding-bottom: 10px;
@@ -15593,33 +15477,13 @@ a {
         padding-left: 0; }
       .footer .newsletter-container .col-sm-5 {
         padding-right: 0; } }
-    .footer .newsletter-container input {
-      border: none;
-      background: #45546D;
-      color: white; }
-      .footer .newsletter-container input:focus {
-        background: #51627E;
-        box-shadow: none;
-        box-shadow: inset 0px 0px 0px 1px #4E8EF7; }
-      .footer .newsletter-container input::-webkit-input-placeholder {
-        color: #8e9fb8; }
-      .footer .newsletter-container input::-moz-placeholder {
-        color: #8e9fb8; }
     .footer .newsletter-container button {
       padding-right: 15px;
       padding-left: 15px;
-      border: 1px solid #4e8ef7;
-      background: #4e8ef7;
-      box-shadow: 0px 1px 0px rgba(0, 0, 0, 0.3);
       color: white; }
       .footer .newsletter-container button:hover {
         background: #5998FF;
         color: white; }
-      .footer .newsletter-container button:active {
-        border: 1px solid #3E75CE;
-        background: #4683E7;
-        box-shadow: none;
-        color: #B1C4E4; }
 
 .pre-footer {
   position: relative;
@@ -15628,7 +15492,7 @@ a {
   background: #EBF0F6; }
   .pre-footer h4 {
     color: #363b43;
-    font-family: "AvenirNextLTPro-Medium", "Helvetica Neue", Helvetica, Arial, sans-serif; }
+    font-family: Lato; }
   .pre-footer .row {
     margin: 0 auto;
     max-width: 1170px; }
@@ -15636,7 +15500,7 @@ a {
     color: #999;
     color: #737e90;
     font-size: 14px;
-    font-family: "AvenirNextLTPro-Regular", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: Lato;
     line-height: 28px; }
   .pre-footer a:hover {
     color: #4E8EF7;

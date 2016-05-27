@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="css/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+    <header>
+      <div class="inner">
+          <img src="images/logo-mercadopago.png" alt="logoMp">
+
+          <div class="right">
+              <img class="centered" src="images/logo-android.png" alt="logoAndroid">
+          </div>
+      </div>
+    </header>
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          <h1>Make a payment</h1>
+          <p>To create a payment, the basic information needed is:</p>
+          <ul>
+            <li>MercadoPago’s token</li>
+            <li>Payment method</li>
+            <li>Issuer (if needed, some payment methods don’t need it to be sent)</li>
+          </ul>
+          <p>Also, you may want to specify:</p>
+          <ul>
+            <li>Installments</li>
+            <li>Discount</li>
+          </ul>
+          <br>
+          <p>Create a MerchantPayment object:</p>
+         <pre class="prettyprint">
+            MerchantServer.createPayment(activity, DUMMY_MERCHANT_BASE_URL, DUMMY_MERCHANT_CREATE_PAYMENT_URI, payment, new Callback&lt;Payment&gt;() {
+               @Override
+               public void success(Payment payment, Response response) {
+                   //Handle payment
+               }
+               @Override
+               public void failure(RetrofitError error) {
+                   LayoutUtil.showRegularLayout(activity);
+                   Toast.makeText(activity, error.getMessage(), Toast.LENGTH_LONG).show();
+               }
+            });
+        </pre>
+        <br>
+
+        <h1>Display payment result</h1>
+
+        We recommend to use our UI solutions to display the payment result. The result should be different for instant payments or offline payment methods, such as atm or ticket.
+
+        You can check wheter a payment is automatic or not and start a corresponding UI as follows:
+        <pre class="prettyprint">
+          if(MercadoPagoUtil.isCardPaymentType(payment.getPaymentTypeId())) {
+                   new MercadoPago.StartActivityBuilder()
+                           .setActivity(mActivity)
+                           .setPayment(mPayment)
+                           .setPaymentMethod(selectedPaymentMethod)
+                           .startCongratsActivity();
+               } else {
+                   new MercadoPago.StartActivityBuilder()
+                           .setPublicKey(mMerchantPublicKey)
+                           .setActivity(mActivity)
+                           .setPayment(mPayment)
+                           .setPaymentMethod(selectedPaymentMethod)
+                           .startInstructionsActivity();
+               }
+           }
+       </pre>
+       <br>
+       <h2>Online payments</h2>
+       <p>If the payment method was online, you'll see a congrats screen:</p>
+        <img class="centered" src="images/screenshots/congratulations.png" alt="congratualtions">
+        <br>
+        <p>Also, payments could remain pending...</p>
+        <img class="centered" src="images/screenshots/pending_payment.png" alt="pending_payment">
+
+        <p>...or be rejected:</p>
+        <img class="centered" src="images/screenshots/rejected_payment.png" alt="rejected_payment">
+        <br>
+        <h2>Offline payments</h2>
+        <p>If the payment method was offline, you'll see a screen with instructions like:</p>
+        <img class="centered" src="images/screenshots/revamp-instrucciones-efectivo.png" alt="congratualtions">
+        <br>
+
+        <p>You can implement your own UI to show the result of the payment. <b><i>Payment</i></b> has a "status" attribute, that could be one of the following:</p>
+        <p>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;approved<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pending<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in_process<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rejected
+        </p>
+
+        </section>
+
+        <aside id="sidebar">
+          <a href="https://github.com/mreverter/sdk-android" class="button"><small>View project on</small> GitHub</a>
+
+          <a href="https://github.com/mreverter/sdk-android/zipball/master" class="button">
+            <small>Download</small>
+            .zip file
+          </a>
+          <a href="https://github.com/mreverter/sdk-android/tarball/master" class="button">
+            <small>Download</small>
+            .tar.gz file
+          </a>
+
+          <p class="repo-owner"><a href="https://github.com/mreverter/sdk-android"></a> is maintained by <a href="https://github.com/mreverter">mreverter</a>.</p>
+        </aside>
+      </div>
+    </div>
+  </body>
+</html>

@@ -5,40 +5,27 @@
  * @author Lea Verou
  */
 
+.snippet {
+	border: 1px solid #ddd;
+	border-radius: 2px 2px 0 0;
+}
+
 code[class*="language-"],
 pre[class*="language-"] {
 	color: black;
-	background: none;
-	text-shadow: 0 1px white;
-	font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
-	font-size: 13px;
-	text-align: left;
+	background: #eee;
+	font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
+	font-size: 12px;
+    line-height: 18px;
+    text-align: left;
 	white-space: pre;
 	word-spacing: normal;
 	word-break: normal;
 	word-wrap: normal;
-	line-height: 1.5;
-
+	
 	-moz-tab-size: 4;
 	-o-tab-size: 4;
 	tab-size: 4;
-
-	-webkit-hyphens: none;
-	-moz-hyphens: none;
-	-ms-hyphens: none;
-	hyphens: none;
-}
-
-pre[class*="language-"]::-moz-selection, pre[class*="language-"] ::-moz-selection,
-code[class*="language-"]::-moz-selection, code[class*="language-"] ::-moz-selection {
-	text-shadow: none;
-	background: #b3d4fc;
-}
-
-pre[class*="language-"]::selection, pre[class*="language-"] ::selection,
-code[class*="language-"]::selection, code[class*="language-"] ::selection {
-	text-shadow: none;
-	background: #b3d4fc;
 }
 
 @media print {
@@ -53,11 +40,6 @@ pre[class*="language-"] {
 	padding: 1em;
 	margin: .5em 0;
 	overflow: auto;
-}
-
-:not(pre) > code[class*="language-"],
-pre[class*="language-"] {
-	background: #F0F3F8;
 }
 
 /* Inline code */
@@ -107,7 +89,6 @@ pre[class*="language-"] {
 .language-css .token.string,
 .style .token.string {
 	color: #a67f59;
-	background: hsla(0, 0%, 100%, .5);
 }
 
 .token.atrule,
@@ -151,30 +132,28 @@ pre.line-numbers > code {
 .line-numbers .line-numbers-rows {
 	position: absolute;
 	pointer-events: none;
-	top: 0;
+	top: 0.3em;
 	font-size: 100%;
 	left: -4.8em;
 	width: 3em; /* works for line-numbers below 1000 lines */
 	letter-spacing: -1px;
-	border-right: 1px solid #666;
 
-	-webkit-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
-	user-select: none;
-
+	margin-top: -5px;
+	
+	color: rgba(0, 0, 0, 0.3);
+    border: solid #eee;
+    border-width: 0 1px 0 0;
 }
 
 	.line-numbers-rows > span {
 		pointer-events: none;
 		display: block;
 		counter-increment: linenumber;
+
 	}
 
 		.line-numbers-rows > span:before {
 			content: counter(linenumber);
-			color: #abbbd8;
 			display: block;
-			padding-right: 0.8em;
 			text-align: right;
 		}

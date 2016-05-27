@@ -1,0 +1,94 @@
+/*--------------------------------------------------------------
+## Subscribe form 
+--------------------------------------------------------------*/
+.newsletter-subscription {
+	padding: 35px 60px;
+	clear: both;
+	background: #eee;
+	overflow: hidden;
+}
+
+.newsletter-subscription p {
+	font-size: 16px;
+	margin: 10px 0 25px;
+}
+
+.newsletter-letter-icon {
+	float: left;
+}
+
+.newsletter-form {
+	margin-left: 220px;
+}
+
+.newsletter-country-field,
+.newsletter-email-field {
+	display: inline-block;
+}
+
+.newsletter-country-field {
+	margin-right: 10px;
+}
+
+.newsletter-email-field {
+	position: relative;
+	width: 300px;
+}
+
+.newsletter-country-field select,
+.newsletter-email-field input{
+	height: 40px;
+	padding: 0 55px 0 15px;
+	width: 100%;
+	border: 1px solid #ddd;
+	outline: none;
+}
+
+.newsletter-submit-button {
+    border: none;
+    background: none;
+    box-shadow: none;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    font-size: 22px;
+    padding: 0;
+    outline: none;
+}
+
+.newsletter-error-message {
+	color: red;
+	font-size: 15px;
+	display: none;
+}
+
+.newsletter-error-message em {
+	margin-right: 5px;
+}
+
+@media (max-width: 768px) { 
+	
+	.newsletter-section {
+		margin: 0 -15px;
+	}
+
+	.newsletter-subscription {
+		padding: 25px;
+	}
+
+	.newsletter-subscription p {
+		font-size: inherit;
+	}
+	.newsletter-letter-icon {
+		display: none;
+	}
+
+	.newsletter-form {
+		margin-left: 0;
+	}
+
+	.newsletter-email-field {
+		margin-top: 10px;
+		width: 100%;
+	}
+}
