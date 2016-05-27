@@ -59,6 +59,22 @@ public class Step1Activity extends ExampleActivity {
         mPaymentPreference.setExcludedPaymentTypeIds(mExcludedPaymentTypeIds);
         mPaymentPreference.setExcludedPaymentMethodIds(mExcludedPaymentMethodIds);
         mAmount = ExamplesUtils.DUMMY_ITEM_UNIT_PRICE;
+
+        Payment payment = new Payment();
+        payment.setStatus("rejected");
+        payment.setStatusDetail("cc_rejected_insufficient_amount");
+        payment.setPaymentMethodId("master");
+        PaymentMethod paymentMethod = new PaymentMethod();
+        paymentMethod.setName("Master");
+        paymentMethod.setPaymentTypeId("credit_card");
+        paymentMethod.setId("master");
+
+        new MercadoPago.StartActivityBuilder()
+                .setPublicKey(ExamplesUtils.DUMMY_MERCHANT_PUBLIC_KEY)
+                .setActivity(mActivity)
+                .setPayment(payment)
+                .setPaymentMethod(paymentMethod)
+                .startCongratsActivity();
     }
 
     private void createPaymentPreference() {
