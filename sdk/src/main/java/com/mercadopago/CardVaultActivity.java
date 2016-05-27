@@ -83,6 +83,7 @@ public class CardVaultActivity extends ShowCardActivity {
                         .setAmount(new BigDecimal(100))
                         .setPaymentPreference(mPaymentPreference)
                         .startGuessingCardActivity();
+                overridePendingTransition(R.anim.fade_in_seamless, R.anim.fade_out_seamless);
             }
         });
     }
@@ -133,6 +134,10 @@ public class CardVaultActivity extends ShowCardActivity {
                 mSecurityCodeLocation = setting.getSecurityCode().getCardLocation();
             }
             initializeCard();
+            if (mCurrentPaymentMethod != null) {
+                int color = getCardColor(mCurrentPaymentMethod);
+                mFrontFragment.quickTransition(color);
+            }
             checkStartInstallmentsActivity();
 
         } else if (resultCode == RESULT_CANCELED){
