@@ -380,7 +380,8 @@ public class MercadoPago {
                                                   Boolean requireIssuer,
                                                   Boolean showBankDeals,
                                                   PaymentPreference paymentPreference,
-                                                  Token token) {
+                                                  Token token,
+                                                  List<PaymentMethod> paymentMethodList) {
 
         Intent guessingCardIntent = new Intent(activity, GuessingNewCardActivity.class);
         guessingCardIntent.putExtra("publicKey", key);
@@ -400,6 +401,8 @@ public class MercadoPago {
 
         guessingCardIntent.putExtra("token", token);
 
+        guessingCardIntent.putExtra("paymentMethodList", (ArrayList<PaymentMethod>) paymentMethodList);
+
         activity.startActivityForResult(guessingCardIntent, GUESSING_CARD_REQUEST_CODE);
     }
 
@@ -408,20 +411,23 @@ public class MercadoPago {
                                                BigDecimal amount,
                                                String currencyId,
                                                PaymentPreference paymentPreference,
-                                               Token token) {
+                                               Token token,
+                                               List<PaymentMethod> paymentMethodList) {
 
-        Intent guessingCardIntent = new Intent(activity, CardVaultActivity.class);
-        guessingCardIntent.putExtra("publicKey", key);
+        Intent cardVaultIntent = new Intent(activity, CardVaultActivity.class);
+        cardVaultIntent.putExtra("publicKey", key);
 
-        guessingCardIntent.putExtra("amount", amount.toString());
+        cardVaultIntent.putExtra("amount", amount.toString());
 
-        guessingCardIntent.putExtra("currencyId", currencyId);
+        cardVaultIntent.putExtra("currencyId", currencyId);
 
-        guessingCardIntent.putExtra("paymentPreference", paymentPreference);
+        cardVaultIntent.putExtra("paymentPreference", paymentPreference);
 
-        guessingCardIntent.putExtra("token", token);
+        cardVaultIntent.putExtra("token", token);
 
-        activity.startActivityForResult(guessingCardIntent, CARD_VAULT_REQUEST_CODE);
+        cardVaultIntent.putExtra("paymentMethodList", (ArrayList<PaymentMethod>) paymentMethodList);
+
+        activity.startActivityForResult(cardVaultIntent, CARD_VAULT_REQUEST_CODE);
     }
 
 
@@ -433,8 +439,16 @@ public class MercadoPago {
         activity.startActivityForResult(paymentMethodsIntent, PAYMENT_METHODS_REQUEST_CODE);
     }
 
-    private static void startPaymentVaultActivity(Activity activity, String merchantPublicKey, String merchantBaseUrl, String merchantGetCustomerUri, String merchantAccessToken, BigDecimal amount, String currencyId, Boolean showBankDeals,
-                                                  PaymentPreference paymentPreference, PaymentMethodSearch paymentMethodSearch) {
+    private static void startPaymentVaultActivity(Activity activity,
+                                                  String merchantPublicKey,
+                                                  String merchantBaseUrl,
+                                                  String merchantGetCustomerUri,
+                                                  String merchantAccessToken,
+                                                  BigDecimal amount,
+                                                  String currencyId,
+                                                  Boolean showBankDeals,
+                                                  PaymentPreference paymentPreference,
+                                                  PaymentMethodSearch paymentMethodSearch) {
 
         Intent vaultIntent = new Intent(activity, PaymentVaultActivity.class);
         vaultIntent.putExtra("merchantPublicKey", merchantPublicKey);
@@ -517,6 +531,7 @@ public class MercadoPago {
         private List<Issuer> mIssuers;
         private Payment mPayment;
         private PaymentMethod mPaymentMethod;
+        private List<PaymentMethod> mPaymentMethodList;
         private Boolean mRequireIssuer;
         private Boolean mRequireSecurityCode;
         private Boolean mShowBankDeals;
@@ -624,6 +639,12 @@ public class MercadoPago {
         public StartActivityBuilder setPaymentMethod(PaymentMethod paymentMethod) {
 
             this.mPaymentMethod = paymentMethod;
+            return this;
+        }
+
+        public StartActivityBuilder setSupportedPaymentMethods(List<PaymentMethod> paymentMethodList) {
+
+            this.mPaymentMethodList = paymentMethodList;
             return this;
         }
 
@@ -787,7 +808,7 @@ public class MercadoPago {
             if (this.mKeyType == null) throw new IllegalStateException("key type is null");
             MercadoPago.startGuessingCardActivity(this.mActivity, this.mKey, this.mRequireSecurityCode,
                     this.mRequireIssuer, this.mShowBankDeals, this.mPaymentPreference,
-                    this.mToken);
+                    this.mToken, this.mPaymentMethodList);
         }
 
         public void startCardVaultActivity() {
@@ -796,7 +817,7 @@ public class MercadoPago {
             if (this.mAmount == null) throw new IllegalStateException("amount is null");
             if (this.mCurrencyId == null) throw new IllegalStateException("currencyId is null");
             MercadoPago.startCardVaultActivity(this.mActivity, this.mKey, this.mAmount, this.mCurrencyId,
-                     this.mPaymentPreference, this.mToken);
+                     this.mPaymentPreference, this.mToken, this.mPaymentMethodList);
         }
 
         public void startPaymentMethodsActivity() {

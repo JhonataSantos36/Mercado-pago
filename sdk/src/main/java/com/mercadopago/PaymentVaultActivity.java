@@ -328,6 +328,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
     }
 
     protected void startNextStepForPaymentType(PaymentMethodSearchItem item) {
+        mPaymentPreference.setDefaultPaymentTypeId(item.getId());
 
         MercadoPago.StartActivityBuilder builder = new MercadoPago.StartActivityBuilder()
                 .setActivity(this)
@@ -337,6 +338,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
         if(MercadoPagoUtil.isCardPaymentType(item.getId())){
             builder.setAmount(mAmount);
             builder.setCurrency(mCurrencyId);
+            builder.setSupportedPaymentMethods(mPaymentMethodSearch.getPaymentMethods());
             builder.startCardVaultActivity();
             animatePaymentMethodSelection();
         }

@@ -16,6 +16,9 @@ public class PaymentMethodSearch implements Serializable{
         return groups;
     }
 
+    public List<PaymentMethod> getPaymentMethods() {
+        return paymentMethods;
+    }
     public boolean hasSearchItems() {
         return this.groups != null && !this.groups.isEmpty();
     }

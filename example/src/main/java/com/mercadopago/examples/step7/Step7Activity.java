@@ -150,6 +150,8 @@ public class Step7Activity extends AppCompatActivity {
         LayoutUtil.showRegularLayout(this);
     }
 
+
+
     private void callNewFormActivity(String publicKey) {
 
         PaymentPreference paymentPreference = new PaymentPreference();
@@ -163,6 +165,16 @@ public class Step7Activity extends AppCompatActivity {
                 .startGuessingCardActivity();
 
         LayoutUtil.showRegularLayout(this);
+    }
+
+    public void submitPaymentMethodList(View view) {
+        startGuessingWithPaymentMethodList();
+    }
+
+    private void startGuessingWithPaymentMethodList() {
+        Intent intent = new Intent(this, PaymentMethodTypeActivity.class);
+        startActivity(intent);
+
     }
 
 
