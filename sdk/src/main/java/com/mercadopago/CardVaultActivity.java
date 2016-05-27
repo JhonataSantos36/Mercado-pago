@@ -51,7 +51,7 @@ public class CardVaultActivity extends ShowCardActivity {
             initializeCard();
         }
         initializeFrontFragment();
-        fadeInFormActivity();
+        startGuessingCardActivity();
     }
 
     @Override
@@ -74,7 +74,7 @@ public class CardVaultActivity extends ShowCardActivity {
         setContentView(R.layout.activity_flow_card);
     }
 
-    private void fadeInFormActivity() {
+    private void startGuessingCardActivity() {
         runOnUiThread(new Runnable() {
             public void run() {
                 new MercadoPago.StartActivityBuilder()
@@ -83,7 +83,6 @@ public class CardVaultActivity extends ShowCardActivity {
                         .setAmount(new BigDecimal(100))
                         .setPaymentPreference(mPaymentPreference)
                         .startGuessingCardActivity();
-                overridePendingTransition(R.anim.fade_in_seamless, R.anim.fade_out_seamless);
             }
         });
     }

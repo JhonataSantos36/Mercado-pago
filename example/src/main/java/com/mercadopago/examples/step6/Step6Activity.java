@@ -124,6 +124,5 @@ public class Step6Activity extends ExampleActivity {
                 Toast.makeText(mActivity, "Preference creation failed", Toast.LENGTH_LONG).show();
             }
         });
-
     }
 }
