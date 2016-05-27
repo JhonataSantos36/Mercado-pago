@@ -212,7 +212,6 @@ public class PaymentVaultActivity extends AppCompatActivity {
             setSearchLayout();
         }
         else {
-            showProgress();
             getPaymentMethodSearch();
         }
     }
@@ -230,6 +229,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
         List<String> excludedPaymentTypes = mPaymentPreference != null ? mPaymentPreference.getExcludedPaymentTypes() : null;
         List<String> excludedPaymentMethodIds = mPaymentPreference != null ? mPaymentPreference.getExcludedPaymentMethodIds() : null;
 
+        showProgress();
         mMercadoPago.getPaymentMethodSearch(mAmount, excludedPaymentTypes, excludedPaymentMethodIds, new Callback<PaymentMethodSearch>() {
 
             @Override

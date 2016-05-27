@@ -34,7 +34,6 @@ import com.mercadopago.uicontrollers.paymentmethods.PaymentMethodViewController;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.CurrenciesUtil;
 import com.mercadopago.util.ErrorUtil;
-import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;
 import com.mercadopago.util.MercadoPagoUtil;
 import com.mercadopago.views.MPButton;
@@ -61,7 +60,7 @@ public class CheckoutActivity extends AppCompatActivity {
     //Local vars
     protected MercadoPago mMercadoPago;
     protected Activity mActivity;
-    protected boolean mActivityActive;
+    protected boolean mActiveActivity;
 
     protected PaymentMethodSearch mPaymentMethodSearch;
 
@@ -100,7 +99,7 @@ public class CheckoutActivity extends AppCompatActivity {
         initializeToolbar();
         getActivityParameters();
         mBackPressedOnce = false;
-        mActivityActive = true;
+        mActiveActivity = true;
         boolean validState = true;
         try{
             validateParameters();
@@ -130,8 +129,8 @@ public class CheckoutActivity extends AppCompatActivity {
         mMercadoPago.getPreference(mCheckoutPreferenceId, new Callback<CheckoutPreference>() {
             @Override
             public void success(CheckoutPreference checkoutPreference, Response response) {
-                if(mActivityActive) {
-                    mCheckoutPreference = checkoutPreference;
+                mCheckoutPreference = checkoutPreference;
+                if(mActiveActivity) {
                     try {
                         validatePreference();
                         initializeCheckout();
@@ -144,7 +143,7 @@ public class CheckoutActivity extends AppCompatActivity {
 
             @Override
             public void failure(RetrofitError error) {
-                if(mActivityActive) {
+                if(mActiveActivity) {
                     ApiUtil.showApiExceptionError(mActivity, error);
                     failureRecovery = new FailureRecovery() {
                         @Override
@@ -221,8 +220,8 @@ public class CheckoutActivity extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    onBackPressed();
-                }
+                onBackPressed();
+            }
         });
     }
 
@@ -277,18 +276,19 @@ public class CheckoutActivity extends AppCompatActivity {
 
     protected void getPaymentMethodSearch() {
 
+        showProgress();
         mMercadoPago.getPaymentMethodSearch(mCheckoutPreference.getAmount(), mCheckoutPreference.getExcludedPaymentTypes(), mCheckoutPreference.getExcludedPaymentMethods(), new Callback<PaymentMethodSearch>() {
             @Override
             public void success(PaymentMethodSearch paymentMethodSearch, Response response) {
-                if (mActivityActive) {
-                    mPaymentMethodSearch = paymentMethodSearch;
+                mPaymentMethodSearch = paymentMethodSearch;
+                if (mActiveActivity) {
                     startPaymentVaultActivity();
                 }
             }
 
             @Override
             public void failure(RetrofitError error) {
-                if (mActivityActive) {
+                if (mActiveActivity) {
                     failureRecovery = new FailureRecovery() {
                         @Override
                         public void recover() {
@@ -519,25 +519,25 @@ public class CheckoutActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-        mActivityActive = true;
+        mActiveActivity = true;
         super.onResume();
     }
 
     @Override
     protected void onDestroy() {
-        mActivityActive = false;
+        mActiveActivity = false;
         super.onDestroy();
     }
 
     @Override
     protected void onPause() {
-        mActivityActive = false;
+        mActiveActivity = false;
         super.onPause();
     }
 
     @Override
     protected void onStop() {
-        mActivityActive = false;
+        mActiveActivity = false;
         super.onStop();
     }
 
