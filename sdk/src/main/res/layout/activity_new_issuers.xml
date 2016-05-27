@@ -30,16 +30,25 @@
 
             </FrameLayout>
 
-            <LinearLayout
-                android:id="@+id/newCardIssuersContainer"
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:background="@color/mpsdk_white"
-                android:visibility="visible">
-                <include layout="@layout/new_card_issuers"/>
-            </LinearLayout>
-
+                android:layout_height="match_parent">
+                <LinearLayout
+                    android:id="@+id/newCardIssuersContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:background="@color/mpsdk_white"
+                    android:visibility="visible">
+                    <include layout="@layout/new_card_issuers"/>
+                </LinearLayout>
+                <ProgressBar
+                    android:id="@+id/progressBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:visibility="gone"/>
+            </FrameLayout>
 
         </LinearLayout>
     </ScrollView>
