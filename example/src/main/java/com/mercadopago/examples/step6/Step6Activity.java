@@ -71,6 +71,8 @@ public class Step6Activity extends ExampleActivity {
     }
 
     public void submitForm(View view) {
+        startCheckoutActivity(mMerchantPublicKey);
+        /*
         LayoutUtil.showProgressLayout(this);
         Map<String, Object> map = new HashMap<>();
         map.put("item_id", "1");
@@ -80,7 +82,7 @@ public class Step6Activity extends ExampleActivity {
             @Override
             public void success(CheckoutPreference checkoutPreference, Response response) {
                 mCheckoutPreference = checkoutPreference;
-                startCheckoutActivity();
+                startCheckoutActivity(mMerchantPublicKey);
             }
 
             @Override
@@ -88,18 +90,42 @@ public class Step6Activity extends ExampleActivity {
                 Toast.makeText(mActivity, "Preference creation failed", Toast.LENGTH_LONG).show();
             }
         });
+        */
     }
 
-    private void startCheckoutActivity()
+    private void startCheckoutActivity(String publicKey)
     {
         //PREF CON SOLO CARGAVIRTUAL: 150216849-b7fb60e9-aee2-40af-a3de-b5b2e57e4e61
         //PREF CON SOLO TC: 150216849-db0ef449-0f5c-49e9-83c6-087f5edfc2d3
         //PREF SIN EXCLUSIONES: 150216849-53df0831-8142-4b7c-b7ce-af51fa48dffa
         new MercadoPago.StartActivityBuilder()
                 .setActivity(this)
-                .setPublicKey(mMerchantPublicKey)
-                .setCheckoutPreferenceId(mCheckoutPreference.getId())
+                .setPublicKey(publicKey)
+                .setCheckoutPreferenceId("150216849-15aa2321-4203-47fa-af9a-eea5c9a42dd4")
                 .startCheckoutActivity();
     }
 
+    public void submitFormTest(View view) {
+
+        LayoutUtil.showProgressLayout(this);
+        startCheckoutActivity("TEST-ad365c37-8012-4014-84f5-6c895b3f8e0a");
+
+        /*Map<String, Object> map = new HashMap<>();
+        map.put("item_id", "1");
+        map.put("amount", new BigDecimal(300));
+        MerchantServer.createPreference(this, "http://private-9376e-paymentmethodsmla.apiary-mock.com/",
+                "merchantUri/merchant_preference", map, new Callback<CheckoutPreference>() {
+                    @Override
+                    public void success(CheckoutPreference checkoutPreference, Response response) {
+                        mCheckoutPreference = checkoutPreference;
+                        startCheckoutActivity("TEST-ad365c37-8012-4014-84f5-6c895b3f8e0a");
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+                        Toast.makeText(mActivity, "Preference creation failed", Toast.LENGTH_LONG).show();
+                    }
+                });
+                */
+    }
 }

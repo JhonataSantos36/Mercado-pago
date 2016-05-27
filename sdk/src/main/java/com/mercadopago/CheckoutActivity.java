@@ -88,6 +88,7 @@ public class CheckoutActivity extends AppCompatActivity {
     protected RelativeLayout mPaymentMethodLayout;
     protected RelativeLayout mPayerCostLayout;
     protected Boolean mBackPressedOnce;
+    protected Snackbar mSnackbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,7 +107,6 @@ public class CheckoutActivity extends AppCompatActivity {
         if(validState) {
             getApplicationContext();
             initializeActivityControls();
-
             setActivity();
 
             mMercadoPago = new MercadoPago.Builder()
@@ -354,18 +354,6 @@ public class CheckoutActivity extends AppCompatActivity {
                 showRegularLayout();
             }
         }
-        else if (requestCode == ErrorUtil.ERROR_REQUEST_CODE) {
-            if(resultCode == RESULT_OK) {
-                recoverFromFailure();
-            }
-            else if(noUserInteractionReached()) {
-                setResult(RESULT_OK, data);
-                finish();
-            }
-            else {
-                showRegularLayout();
-            }
-        }
     }
 
     private boolean noUserInteractionReached() {
@@ -381,6 +369,7 @@ public class CheckoutActivity extends AppCompatActivity {
         } else if (resultCode == RESULT_CANCELED) {
             finish();
         }
+        overridePendingTransition(R.anim.slide_left_to_right_in, R.anim.slide_left_to_right_out);
     }
 
     private void finishWithPaymentResult() {
@@ -639,12 +628,14 @@ public class CheckoutActivity extends AppCompatActivity {
             onCancelClicked();
         }
         else if(mBackPressedOnce){
+            mSnackbar.dismiss();
             mPaymentMethodEditionRequested = false;
             startPaymentVaultActivity();
             animateBackToPaymentVault();
         }
         else {
-            Snackbar.make(mPaymentMethodLayout, getString(R.string.mpsdk_press_again_confirm), Snackbar.LENGTH_LONG).show();
+            mSnackbar = Snackbar.make(mPaymentMethodLayout, getString(R.string.mpsdk_press_again_confirm), Snackbar.LENGTH_LONG);
+            mSnackbar.show();
             mBackPressedOnce = true;
             resetBackPressedOnceIn(4000);
         }
@@ -655,12 +646,16 @@ public class CheckoutActivity extends AppCompatActivity {
     }
 
     private void showProgress() {
-        getSupportActionBar().hide();
+        if(getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
         LayoutUtil.showProgressLayout(this);
     }
 
     private void showRegularLayout() {
-        getSupportActionBar().show();
+        if(getSupportActionBar() != null) {
+            getSupportActionBar().show();
+        }
         LayoutUtil.showRegularLayout(this);
     }
 
