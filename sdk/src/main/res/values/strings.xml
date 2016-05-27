@@ -118,6 +118,7 @@
     <string name="mpsdk_title_rejection_high_risk">Por seguridad, tuvimos que rechazar tu pago</string>
     <string name="mpsdk_subtitle_rejection_high_risk">Si quieres pagar con el dinero de tu cuenta, contactate con Atención al Cliente de MercadoPago. O si prefieres, puedes elegir otro medio de pago.</string>
     <string name="mpsdk_subtitle_rejection_insufficient_amount">¡No te desanimes! Recárgala en cualquier banco o desde tu banca electrónica e inténtalo de nuevo. O si prefieres, puedes elegir otro medio de pago.</string>
+    <string name="mpsdk_subtitle_rejection_insufficient_amount_credit_card">¡No te desanimes! Puedes elegir otro medio de pago.</string>
     <string name="mpsdk_title_rejection_max_attempts">Llegaste al límite de intentos permitidos</string>
     <string name="mpsdk_subtitle_rejection_max_attempts">Elige otra tarjeta u otro medio de pago.</string>
     <string name="mpsdk_subtitle_rejection_duplicated_payment">Si necesitas volver a pagar usa otra tarjeta u otro medio de pago.</string>

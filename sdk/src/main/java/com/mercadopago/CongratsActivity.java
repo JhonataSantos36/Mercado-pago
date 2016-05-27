@@ -245,7 +245,13 @@ public class CongratsActivity extends AppCompatActivity {
             else if (isPaymentMethodNameValid() && mPayment.getStatusDetail().equals(mPayment.CC_REJECTED_INSUFFICIENT_AMOUNT)){
                 String titleMessage = getString(R.string.mpsdk_text_you) + " " + mPaymentMethod.getName() + " " + getString(R.string.mpsdk_text_insufficient_amount);
                 mRejectionTitle.setText(titleMessage);
-                mRejectionSubtitle.setText(getString(R.string.mpsdk_subtitle_rejection_insufficient_amount));
+
+                if (isCardPaymentTypeCreditCard()){
+                    mRejectionSubtitle.setText(getString(R.string.mpsdk_subtitle_rejection_insufficient_amount_credit_card));
+                }
+                else {
+                    mRejectionSubtitle.setText(getString(R.string.mpsdk_subtitle_rejection_insufficient_amount));
+                }
             }
             else if (mPayment.getStatusDetail().equals(mPayment.CC_REJECTED_MAX_ATTEMPTS)){
                 mRejectionTitle.setText(getString(R.string.mpsdk_title_rejection_max_attempts));
@@ -269,6 +275,10 @@ public class CongratsActivity extends AppCompatActivity {
             mRejectionTitle.setText(R.string.mpsdk_title_bad_filled_other_rejection);
             mRejectionSubtitle.setVisibility(View.GONE);
         }
+    }
+
+    private boolean isCardPaymentTypeCreditCard(){
+        return MercadoPagoUtil.isCardPaymentType(mPaymentMethod.getPaymentTypeId()) && mPaymentMethod.getPaymentTypeId().equals("credit_card");
     }
 
     private void fillCallForAuthData(){

@@ -65,6 +65,8 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
                             android:layout_marginBottom="10dp"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="10dp"
                             android:gravity="bottom|center"
                             android:textSize="18dp"
                             android:text="@string/mpsdk_text_select_other_rejection" />
