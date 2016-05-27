@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ProgressBar;
 
 import com.mercadopago.adapters.CardInstallmentsAdapter;
 import com.mercadopago.callbacks.FailureRecovery;
@@ -32,6 +33,7 @@ public class CardInstallmentsActivity extends ShowCardActivity {
     //InstallmentsContainer
     private RecyclerView mInstallmentsView;
     private CardInstallmentsAdapter mInstallmentsAdapter;
+    private ProgressBar mProgressBar;
 
     private Activity mActivity;
 
@@ -70,6 +72,8 @@ public class CardInstallmentsActivity extends ShowCardActivity {
     protected void setLayout() {
         mInstallmentsView = (RecyclerView) findViewById(R.id.activity_installments_view);
         mCardContainer = (FrameLayout) findViewById(R.id.activity_new_card_container);
+        mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
+        mProgressBar.setVisibility(View.GONE);
     }
 
     protected void initializeAdapter() {
@@ -110,10 +114,12 @@ public class CardInstallmentsActivity extends ShowCardActivity {
     }
 
     private void getInstallmentsAsync() {
+        mProgressBar.setVisibility(View.VISIBLE);
         mMercadoPago.getInstallments(mBin, mAmount, mSelectedIssuer.getId(), mCurrentPaymentMethod.getId(),
                 new Callback<List<Installment>>() {
                     @Override
                     public void success(List<Installment> installments, Response response) {
+                        mProgressBar.setVisibility(View.GONE);
                         if (installments.size() == 0) {
                             ErrorUtil.startErrorActivity(mActivity, getString(R.string.mpsdk_standard_error_message), "no installments found for an issuer at CardInstallmentsActivity", false);
                         } else if (installments.size() == 1) {
@@ -125,6 +131,7 @@ public class CardInstallmentsActivity extends ShowCardActivity {
 
                     @Override
                     public void failure(RetrofitError error) {
+                        mProgressBar.setVisibility(View.GONE);
                         mFailureRecovery = new FailureRecovery() {
                             @Override
                             public void recover() {
