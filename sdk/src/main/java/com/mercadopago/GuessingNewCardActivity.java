@@ -470,6 +470,15 @@ public class GuessingNewCardActivity extends FrontCardActivity {
                             onPaymentMethodSet(paymentMethodList.get(0));
                         } else {
                             //TODO muchos metodos de pago posibles, o no setearon el payment type
+                            //Cobranded
+                            if (mPaymentMethodGuessingController.getSavedBin().equals("515073") ||
+                                    mPaymentMethodGuessingController.getSavedBin().equals("515070")) {
+                                for (PaymentMethod pm : paymentMethodList) {
+                                    if (pm.getId().equals("mercadopago_cc")) {
+                                        onPaymentMethodSet(pm);
+                                    }
+                                }
+                            }
                         }
                     }
 
