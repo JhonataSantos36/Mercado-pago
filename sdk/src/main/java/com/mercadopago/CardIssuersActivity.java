@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ProgressBar;
 
 import com.mercadopago.adapters.CardIssuersAdapter;
 import com.mercadopago.callbacks.FailureRecovery;
@@ -32,6 +33,7 @@ public class CardIssuersActivity extends ShowCardActivity {
     //IssuersContainer
     private RecyclerView mIssuersView;
     private CardIssuersAdapter mIssuersAdapter;
+    private ProgressBar mProgressBar;
 
     //Local vars
     private List<Issuer> mIssuers;
@@ -66,6 +68,8 @@ public class CardIssuersActivity extends ShowCardActivity {
     protected void setLayout() {
         mIssuersView = (RecyclerView) findViewById(R.id.activity_issuers_view);
         mCardContainer = (FrameLayout) findViewById(R.id.activity_new_card_container);
+        mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
+        mProgressBar.setVisibility(View.GONE);
     }
 
     protected void initializeAdapter() {
@@ -100,10 +104,12 @@ public class CardIssuersActivity extends ShowCardActivity {
     }
 
     protected void getIssuersAsync() {
+        mProgressBar.setVisibility(View.VISIBLE);
         mMercadoPago.getIssuers(mCurrentPaymentMethod.getId(), mBin,
                 new Callback<List<Issuer>>() {
                     @Override
                     public void success(List<Issuer> issuers, Response response) {
+                        mProgressBar.setVisibility(View.GONE);
                         if (issuers.isEmpty()) {
                             ErrorUtil.startErrorActivity(mActivity, getString(R.string.mpsdk_standard_error_message), "no issuers found at CardIssuersActivity", false);
                         } else if (issuers.size() == 1) {
@@ -116,6 +122,7 @@ public class CardIssuersActivity extends ShowCardActivity {
 
                     @Override
                     public void failure(RetrofitError error) {
+                        mProgressBar.setVisibility(View.GONE);
                         mFailureRecovery = new FailureRecovery() {
                             @Override
                             public void recover() {
