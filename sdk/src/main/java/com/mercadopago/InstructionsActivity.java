@@ -40,6 +40,7 @@ public class InstructionsActivity extends AppCompatActivity {
     protected MercadoPago mMercadoPago;
     protected FailureRecovery failureRecovery;
     protected Boolean mBackPressedOnce;
+    protected boolean mActiveActivity;
 
     //Controls
     protected LinearLayout mReferencesLayout;
@@ -65,6 +66,7 @@ public class InstructionsActivity extends AppCompatActivity {
         initializeControls();
         mBackPressedOnce = false;
         mActivity = this;
+        mActiveActivity = true;
         mMercadoPago = new MercadoPago.Builder()
                 .setContext(this)
                 .setPublicKey(mMerchantPublicKey)
@@ -84,13 +86,15 @@ public class InstructionsActivity extends AppCompatActivity {
 
             @Override
             public void failure(RetrofitError error) {
-                ApiUtil.showApiExceptionError(mActivity, error);
-                failureRecovery = new FailureRecovery() {
-                    @Override
-                    public void recover() {
-                        getInstructionsAsync();
-                    }
-                };
+                if(mActiveActivity) {
+                    ApiUtil.showApiExceptionError(mActivity, error);
+                    failureRecovery = new FailureRecovery() {
+                        @Override
+                        public void recover() {
+                            getInstructionsAsync();
+                        }
+                    };
+                }
             }
         });
     }
@@ -244,6 +248,30 @@ public class InstructionsActivity extends AppCompatActivity {
         if(failureRecovery != null) {
             failureRecovery.recover();
         }
+    }
+
+    @Override
+    protected void onResume() {
+        mActiveActivity = true;
+        super.onResume();
+    }
+
+    @Override
+    protected void onDestroy() {
+        mActiveActivity = false;
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onPause() {
+        mActiveActivity = false;
+        super.onPause();
+    }
+
+    @Override
+    protected void onStop() {
+        mActiveActivity = false;
+        super.onStop();
     }
 
     @Override

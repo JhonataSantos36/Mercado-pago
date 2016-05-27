@@ -52,6 +52,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
 
     // Current values
     protected PaymentMethodSearch mPaymentMethodSearch;
+    protected boolean mActivityActive;
 
     // Activity parameters
     protected String mMerchantPublicKey;
@@ -73,7 +74,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
         setContentView(R.layout.activity_payment_vault);
         getActivityParameters();
         setActivity();
-
+        mActivityActive = true;
         boolean validParameters = true;
 
         try {
@@ -211,7 +212,6 @@ public class PaymentVaultActivity extends AppCompatActivity {
             setSearchLayout();
         }
         else {
-            showProgress();
             getPaymentMethodSearch();
         }
     }
@@ -229,27 +229,32 @@ public class PaymentVaultActivity extends AppCompatActivity {
         List<String> excludedPaymentTypes = mPaymentPreference != null ? mPaymentPreference.getExcludedPaymentTypes() : null;
         List<String> excludedPaymentMethodIds = mPaymentPreference != null ? mPaymentPreference.getExcludedPaymentMethodIds() : null;
 
+        showProgress();
         mMercadoPago.getPaymentMethodSearch(mAmount, excludedPaymentTypes, excludedPaymentMethodIds, new Callback<PaymentMethodSearch>() {
 
             @Override
             public void success(PaymentMethodSearch paymentMethodSearch, Response response) {
-                if (!paymentMethodSearch.hasSearchItems()) {
-                    showEmptyPaymentMethodsError();
-                } else {
-                    mPaymentMethodSearch = paymentMethodSearch;
-                    setSearchLayout();
+                if(mActivityActive) {
+                    if (!paymentMethodSearch.hasSearchItems()) {
+                        showEmptyPaymentMethodsError();
+                    } else {
+                        mPaymentMethodSearch = paymentMethodSearch;
+                        setSearchLayout();
+                    }
                 }
             }
 
             @Override
             public void failure(RetrofitError error) {
-                ApiUtil.showApiExceptionError(mActivity, error);
-                mFailureRecovery = new FailureRecovery() {
-                    @Override
-                    public void recover() {
-                        getPaymentMethodSearch();
-                    }
-                };
+                if (mActivityActive) {
+                    ApiUtil.showApiExceptionError(mActivity, error);
+                    mFailureRecovery = new FailureRecovery() {
+                        @Override
+                        public void recover() {
+                            getPaymentMethodSearch();
+                        }
+                    };
+                }
             }
         });
     }
@@ -450,6 +455,30 @@ public class PaymentVaultActivity extends AppCompatActivity {
 
     private void animatePaymentMethodSelection() {
         overridePendingTransition(R.anim.slide_right_to_left_in, R.anim.slide_right_to_left_out);
+    }
+
+    @Override
+    protected void onResume() {
+        mActivityActive = true;
+        super.onResume();
+    }
+
+    @Override
+    protected void onDestroy() {
+        mActivityActive = false;
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onPause() {
+        mActivityActive = false;
+        super.onPause();
+    }
+
+    @Override
+    protected void onStop() {
+        mActivityActive = false;
+        super.onStop();
     }
 
     @Override
