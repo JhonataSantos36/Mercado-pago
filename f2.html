@@ -26,9 +26,8 @@
             </div>
             <div class="collapse navbar-collapse navbar-ex1-collapse">
                <ul class="nav navbar-nav navbar-right" style="color: white;">
-                  <li><a class="getting-started-nav nav-link" href="index.html">Checkout básico</a></li>
-                  <li><a class="docs-nav nav-link" href="f2.html">Checkout personalizado</a></li>
-                  <li><a class="blog-nav nav-link" href="#">Blog</a></li>
+                  <li><a class="getting-started-nav nav-link" href="index.html">Nuestro checkout</a></li>
+                  <li><a class="docs-nav nav-link" href="f2.html">Tu checkout</a></li>
                   <li><a class="nav-link" href="https://www.mercadopago.com.ar/developers/es/community/forum/">Foro de desarrolladores</a></li>
                </ul>
             </div>
@@ -39,14 +38,14 @@
     padding-top: 110px;
 ">
             <h3>MercadoPago Android SDK</h3>
-            <h4>Soluciones de pago para el negocio que quieras.</h4>
+            <h4>Fácil, rápido, simple. La mejor experiencia de pagos en tu aplicación.</h4>
          </div>
          
       </div>
-      <div id="mati_header" style="height: 500px; margin: 0 auto; padding: 0;position: relative;width: 100%;top: -276px;overflow-x: hidden;OVERFLOW-Y: hidden;z-index: -100;background: url('./img/landing.jpg');background-size: cover;">
-         <div style="background: rgba(0,0,0,0.1); height: 500px;" ></div>
+      <div id="mati_header" style="height: 500px;margin: 0 auto;padding: 0;position: relative;width: 100%;top: -276px;overflow-x: hidden;OVERFLOW-Y: hidden;z-index: -100;background: url('./img/landing_f2.jpg');background-size: cover;background-position-x: 0px;background-position-y: -70px;">
+         <div style="background: rgba(0,0,0,0.5);height: 500px;"></div>
       </div>
-      <div class="container content-container" style="margin-top: -300px;">
+      <div class="container content-container" style="margin-top: -250px;">
          <div class="row">
             <div class="col-md-2 col-sm-3 aside-menu">
                <div class="docked-menu" style="top: 20px;">
@@ -392,39 +391,73 @@
             </div>
          </div>
       </div>
-      <div class="pre-footer">
-         <div class="row ionic">
-            <div class="col-sm-6 col-a">
-               <h4>
-                  <a href="f2.html">Arma tu propio checkout usando nuestra UI</a>
-               </h4>
-               <p>
-                  La SDK de MercadoPago te provee la interfaz gráfica resuelta para cada uno de los pasos propuestos para completar un pago. Si querés tener control sobre el flujo de compra de tu usuario, podes armar el flujo que quieras, sin preocuparte por la UI del mismo.
-               </p>
-            </div>
-            <div class="col-sm-6 col-b">
-               <h4>
-                  <a href="our_flavors.html">Usá los servicios de MercadoPago para armar tu checkout</a>
-               </h4>
-               <p>
-                  También encapsulamos los servicios en una clase para que puedas consumirlos y proveerle la interfaz gráfica que desees a tu usuario sin necesidad de entender cómo conectarte con nuestras APIs. 
-               </p>
-            </div>
-         </div>
-      </div>
+      
       <footer class="footer">
-         <div class="newsletter row">
+        <div class="newsletter row">
             <div class="newsletter-container">
-               <div class="col-sm-7">
-                  <div class="newsletter-text">Newsletter</div>
-                  <div class="sign-up">Suscribite a nuestro newsletter para estar al tanto de los avances en nuestra SDK, workshops, nuevos features, etc.</div>
-               </div>
-               <form action="" method="post" class="input-group col-sm-5">
-                  <input id="fieldEmail" name="cm-jytylh-jytylh" class="form-control" type="email" placeholder="Email" required="">
-                  <span class="input-group-btn">
-                  <button class="btn btn-default" type="submit">Suscribirme</button>
-                  </span>
-               </form>
+        
+
+
+<script type="text/javascript">
+//<![CDATA[
+if (typeof newsletter_check !== "function") {
+window.newsletter_check = function (f) {
+    var re = /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-]{1,})+\.)+([a-zA-Z0-9]{2,})+$/;
+    console.log(f.elements["np1"].value);
+
+    if (!re.test(f.elements["ne"].value)) {
+      jQuery('.newsletter-email-field input').css('border-color','red');
+        jQuery('.newsletter-error-message').css('display','inline-block');
+        return false;
+    }
+    return true;
+}
+}
+//]]>
+</script>
+<link href="./css/newsletter.css" rel="stylesheet" />
+
+
+<br>
+<div class="newsletter newsletter-subscription">
+<img class="newsletter-letter-icon" src="./img/newsletter.png">
+<form method="post">
+<div class="newsletter-form">
+  <h2>Mantenete actualizado!</h2>
+  <p>Estamos en constante mejora de nuestro producto y hacemos meet ups para que puedas integrarnos de la mejor manera. </p>
+  <p>Suscribite a nuestro portal de noticias!</p>  
+    <div class="newsletter-country-field">
+      <select class="" name="np1" required="">
+        <option value="">Seleccioná tu país</option>
+        <option>Argentina</option>
+        <option>Brasil</option>
+        <option>Chile</option>
+        <option>Colombia</option>
+        <option>Costa Rica</option>
+        <option>Ecuador</option>
+        <option>México</option>
+        <option>Paraguay</option>
+        <option>Perú</option>
+        <option>Portugal</option>
+        <option>República Dominicana</option>
+        <option>Estados Unidos</option>
+        <option>Uruguay</option>
+        <option>Venezuela</option>
+      </select>
+    </div>
+    <div class="newsletter-email-field">
+      <input name="ne" size="30" placeholder="Tu email" required="">
+      <div id="alert" style="color:#FF5050"></div>
+      <button class="newsletter-submit-button" type="submit" style="right: 0; height: 40px; top: 0; width: 25%;">
+        <img src="./img/newsletter-icon-send.png">
+      </button>
+    </div>
+    <span class="newsletter-error-message"><em>*</em>Ingresá un email válido.</span>
+</div>
+</form>
+</div>
+<br>
+
             </div>
          </div>
          <div class="copy">

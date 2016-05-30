@@ -64,7 +64,7 @@
                <div class="col-md-6 code">
                   <pre class="snippet">
                      <code id="flavor_3_step_1" class="line-numbers language-java">dependencies {
-   compile ('com.mercadopago:sdk:PRE_BETA@aar') { transitive = true }
+   compile ('com.mercadopago:sdk:BETA_WORKSHOP@aar') { transitive = true }
 }
                      </code>
          <button class="copy-button" alt="Copiar código">
@@ -79,19 +79,16 @@
                   <div class="desc">
                      <h3>2.   Agregá un botón de pago en tu aplicación</h3>
                      <p>
-                        Podés realizarlo de forma automática, desde un link u otro control que te sea útil. 
-                     </p>
-                     <p>
                         A modo de ejemplo proponemos que inicies el flujo de MercadoPago desde un botón. 
                      </p>
                      <p>
-                        Creá una Activity (MainActivity, por ejemplo) para insertar el botón. También agregamos un campo de texto para mostrar los resultados del pago.
+                        Creá una Activity (MainActivity, por ejemplo) para insertar el botón. También agregá un campo de texto para mostrar los resultados del pago.
                      </p>
                      <p>
                         Pegá el código de la derecha en <i>res/layout/activity_main.xml</i>.
                      </p>
                      <p>
-                        En el siguiente paso vamos a estar trabajando sobre el evento asociado al click botón (submit).
+                        En el siguiente paso estarás trabajando sobre el evento asociado al click botón (submit).
                      </p>
                   </div>
                </div>
@@ -113,7 +110,7 @@
                   <div class="desc">
                      <h3>3.   Iniciá el Checkout de MercadoPago desde tu aplicación</h3>
                       <p class="advanced-panel">
-                        <em>*</em> <b>Atención:</b> En este paso utilizamos datos de prueba. En el paso 5 vamos a contarte cómo testear nuestro checkout y en el paso 6, te contamos cómo llegar a producción.
+                        <em>*</em> <b>Atención:</b> En este paso te ofrecemos datos de testeo para que puedas probar el flujo completo. En los siguientes pasos te contamos cómo deberás generarlos.
                       </p>
                       <p>
                       </p>
@@ -121,7 +118,7 @@
                         Si querés usar tus credenciales, sólo necesitarás la <a href="https://www.mercadopago.com/mla/account/credentials" target="_blank">clave pública</a> que le asignamos a tu aplicación.
                       </p>
                       <p>
-                         Si querés utilizar otra preferencia de pago, debes indicarnos el ID correspondiente.
+                         Revisa el paso 6 para ver cómo generar preferencias de pago desde tu servidor. Si prefieres seguir testeando, puedes utilizar nuestra <a href="">herramienta para generar preferencias</a>.
                       </p>
                      <br>
                   </div>
@@ -139,7 +136,7 @@ public void submit(View view) {
   new MercadoPago.StartActivityBuilder()
     .setActivity(this)
     .setPublicKey("444a9ef5-8a6b-429f-abdf-587639155d88")
-    .setCheckoutPreferenceId("167833503-bd46c6e1-1fff-47f2-9be3-0617d62e7eee")
+    .setCheckoutPreferenceId("150216849-e1185083-1a83-45ce-9d22-1b3f5299bf89")
     .startCheckoutActivity();
     
 }
@@ -156,13 +153,13 @@ public void submit(View view) {
                   <div class="desc">
                      <h3>4.   Esperá el resultado del pago</h3>
                      <p>
-                        Una vez finalizado el checkout retornamos el pago que realizó tu cliente. 
+                        Una vez finalizado el flujo, el SDK retornará el pago que realizó tu cliente. 
                       </p>
                       <p>
                         Si algún error irrecuperable sucediera dentro del flujo o tu usuario lo abandonara, retornaremos una excepción para que puedas entender qué sucedió.
                       </p>
                       <p>
-                        Si querés conocer los atributos del objeto <b>Payment</b>, hace click <a href="https://www.mercadopago.com.ar/developers/es/api-docs/account/payments/" target="_blank">aquí</a>.
+                        <a href="https://www.mercadopago.com.ar/developers/es/api-docs/account/payments/" target="_blank">Conocé</a> más de los atributos del objeto <b>Payment</b>.
                      </p>
                   </div>
                </div>
@@ -228,10 +225,14 @@ Intent data) {
                         Si querés usar tus credenciales hacé click <a href="https://www.mercadopago.com/mla/account/credentials" target="_blank">aquí</a>. <b>Va a ser necesario que nos indiques tu clave cuando quieras salir a producción.</b>
                       </p>
                       <p>
-                        Ofrecemos una <a href="preferences_tool.html" target="_blank">herramienta</a> para crear preferencias con distintas configuraciones para que puedas trabajar en un entorno de prueba.
-                      </p>
-                      <p>
-                        Las configuraciones que permiten las prefrencias son: exclusión de medios de pago, exclusión de tipos de pago (sólo tarjeta, por ejemplo), indicar un medio de pago por defecto (la tarjeta que más usa tu cliente), limitar la cantidad de cuotas o seleccionar las cuotas a pagar por defecto.
+                        Ofrecemos una <a href="preferences_tool.html" target="_blank">herramienta</a> para crear preferencias con distintas configuraciones para que puedas trabajar en un entorno de prueba.Las configuraciones que permiten las prefrencias son: 
+                        <ul>
+                          <li>Excluír medios de pago</li>
+                          <li>Excluír tipos de pago (sólo tarjeta, por ejemplo)</li>
+                          <li>Indicar un medio de pago por defecto (la tarjeta que más usa tu cliente)</li>
+                          <li>Limitar la cantidad de cuotas</li>
+                          <li>Seleccionar las cuotas a pagar por defecto.</li>
+                        </ul>
                       </p>
                   </div>
                </div>
@@ -265,17 +266,14 @@ Con ellos podrás probar distintos estados de pago.
                   <div class="desc">
                      <h3>6.   Cómo hago para salir a producción?</h3>                     
                         <p>
-                          Antes de ir a producción, seguí los pasos que te contamos anteriormente, probá nuestro checkout y luego asegurate las siguientes cosas:
+                          Antes de salir a producción asegurate:
                         </p>
                         <p>
                           <ul>
-                           <li style="list-style-type: decimal;">Tener o <a href="https://registration.mercadopago.com.ar/registration-mp?mode=mp" target="_blank">crear</a> una cuenta de MercadoPago.</li>
+                           <li style="list-style-type: decimal;">Tener o <a href="https://registration.mercadopago.com.ar/registration-mp?mode=mp" target="_blank">crear</a> una cuenta de MercadoPago dónde recibirás el dinero.</li>
                            <li style="list-style-type: decimal;">Configurar tus <a href="https://www.mercadopago.com/mla/account/credentials?type=basic" target="_blank">credenciales</a>.</li>
-                           <li style="list-style-type: decimal;">Crear una <a href="https://www.mercadopago.com.ar/developers/es/api-docs/basic-checkout/checkout-preferences/" target="_blank">Preferencia de pago</a>.</li>
+                           <li style="list-style-type: decimal;">Crear una <a href="https://www.mercadopago.com.ar/developers/es/api-docs/basic-checkout/checkout-preferences/" target="_blank">Preferencia de pago</a> desde tu servidor.</li>
                           </ul>
-                        </p>
-                        <p>
-                          Listo! Ya estás cobrando por medio del nuestro checkout en tu aplicación! El dinero te llega a tu cuenta de Mercadopago.
                         </p>
                       <br>
                       <p>
