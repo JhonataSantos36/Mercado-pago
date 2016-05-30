@@ -2,8 +2,6 @@
     android:id="@+id/paymentMethodLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingLeft="10dp"
-    android:paddingStart="10dp"
     android:minHeight="45dp"
     android:background="@color/mpsdk_white_background"
     android:orientation="vertical"
@@ -11,6 +9,8 @@
     xmlns:tools="http://schemas.android.com/tools">
     <LinearLayout
         android:layout_width="match_parent"
+        android:paddingLeft="10dp"
+        android:paddingStart="10dp"
         android:layout_height="@dimen/list_item_height"
         android:weightSum="1"
         android:orientation="horizontal">

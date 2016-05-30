@@ -31,7 +31,8 @@ public class PayerCostEditableRow implements PayerCostViewController {
 
     public PayerCostEditableRow(Context context, String currencyId) {
         this.mContext = context;
-        mCurrencyId = currencyId;
+        this.mCurrencyId = currencyId;
+
     } 
     
     @Override
@@ -51,6 +52,7 @@ public class PayerCostEditableRow implements PayerCostViewController {
     }
 
     private void setAmountWithRateText() {
+        mRateText.setVisibility(View.VISIBLE);
         StringBuilder sb = new StringBuilder();
         sb.append("( ");
         sb.append(CurrenciesUtil.formatNumber(mPayerCost.getTotalAmount(), mCurrencyId));

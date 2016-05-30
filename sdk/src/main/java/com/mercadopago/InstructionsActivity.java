@@ -86,7 +86,7 @@ public class InstructionsActivity extends AppCompatActivity {
 
             @Override
             public void failure(RetrofitError error) {
-                if(mActiveActivity) {
+                if (mActiveActivity) {
                     ApiUtil.showApiExceptionError(mActivity, error);
                     failureRecovery = new FailureRecovery() {
                         @Override
@@ -148,7 +148,7 @@ public class InstructionsActivity extends AppCompatActivity {
                 }
 
                 String formattedReference = reference.getFormattedReference();
-                int referenceSize = getTextSizeForReference(formattedReference, reference.getSeparator());
+                int referenceSize = getTextSizeForReference();
 
                 currentValueTextView.setText(formattedReference);
                 currentValueTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, referenceSize);
@@ -158,17 +158,8 @@ public class InstructionsActivity extends AppCompatActivity {
         }
     }
 
-    private int getTextSizeForReference(String formattedReference, String separator) {
-
-        int textSize;
-        String referenceWithoutSeparator = separator == null ? formattedReference :formattedReference.replace(separator, "");
-        if(android.text.TextUtils.isDigitsOnly(referenceWithoutSeparator)) {
-            textSize = getResources().getDimensionPixelSize(R.dimen.mpsdk_large_text);
-        }
-        else {
-            textSize = getResources().getDimensionPixelSize(R.dimen.mpsdk_regular_text);
-        }
-        return textSize;
+    private int getTextSizeForReference() {
+        return getResources().getDimensionPixelSize(R.dimen.mpsdk_large_text);
     }
 
     private void setInformationMessages(Instruction instruction) {
