@@ -215,14 +215,6 @@ public class CheckoutActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
     }
 
     private void validateParameters() {
@@ -258,7 +250,7 @@ public class CheckoutActivity extends AppCompatActivity {
                 createPayment();
             }
         });
-        mTotalAmountTextView = (MPTextView) findViewById(R.id.totalAmount);
+        mTotalAmountTextView = (MPTextView) findViewById(R.id.totalAmountText);
         mContentView = findViewById(R.id.contentLayout);
         mPaymentMethodLayout = (RelativeLayout) findViewById(R.id.paymentMethodLayout);
         mPayerCostLayout = (RelativeLayout) findViewById(R.id.payerCostLayout);
@@ -485,7 +477,14 @@ public class CheckoutActivity extends AppCompatActivity {
     private Spanned getAmountLabel() {
         BigDecimal totalAmount = getTotalAmount();
         String currencyId = mCheckoutPreference.getItems().get(0).getCurrencyId();
-        return CurrenciesUtil.formatNumber(totalAmount, currencyId, true, true);
+        String amountText = CurrenciesUtil.formatNumber(totalAmount, currencyId);
+
+        StringBuilder totalAmountTextBuilder = new StringBuilder();
+        totalAmountTextBuilder.append(getString(R.string.mpsdk_payment_amount_to_pay));
+        totalAmountTextBuilder.append(" ");
+        totalAmountTextBuilder.append(amountText);
+
+        return CurrenciesUtil.formatCurrencyInText(totalAmount, currencyId, totalAmountTextBuilder.toString(), true, true);
     }
 
     private BigDecimal getTotalAmount() {

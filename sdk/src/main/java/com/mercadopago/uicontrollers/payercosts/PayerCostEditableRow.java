@@ -28,10 +28,12 @@ public class PayerCostEditableRow implements PayerCostViewController {
     private TextView mZeroRateText;
     private TextView mRateText;
     private View mEditHint;
+    private View mSeparator;
 
     public PayerCostEditableRow(Context context, String currencyId) {
         this.mContext = context;
-        mCurrencyId = currencyId;
+        this.mCurrencyId = currencyId;
+
     } 
     
     @Override
@@ -51,6 +53,7 @@ public class PayerCostEditableRow implements PayerCostViewController {
     }
 
     private void setAmountWithRateText() {
+        mRateText.setVisibility(View.VISIBLE);
         StringBuilder sb = new StringBuilder();
         sb.append("( ");
         sb.append(CurrenciesUtil.formatNumber(mPayerCost.getTotalAmount(), mCurrencyId));
@@ -80,12 +83,18 @@ public class PayerCostEditableRow implements PayerCostViewController {
     }
 
     @Override
+    public void showSeparator() {
+        mSeparator.setVisibility(View.VISIBLE);
+    }
+
+    @Override
     public void initializeControls() {
         mInstallmentsTextView = (TextView) mView.findViewById(R.id.installments_text);
         mZeroRateText = (TextView) mView.findViewById(R.id.installments_zero_rate);
         mRateText = (TextView) mView.findViewById(R.id.installments_with_rate);
         mEditHint = mView.findViewById(R.id.editHint);
-
+        mSeparator = mView.findViewById(R.id.separator);
+        mSeparator.setVisibility(View.GONE);
         mEditHint.setVisibility(View.GONE);
     }
 

@@ -19,13 +19,13 @@
     <color name="mpsdk_rejection_color_light">#F8E9E9</color>
     <color name="mpsdk_rejection_color_dark">#F8DADA</color>
 
-    <color name="mpsdk_process_color_dark">#c921a6f3</color>
+    <color name="mpsdk_process_color_dark">#30AFE2</color>
     <color name="colorAccent">#00B2EB</color>
-    <color name="mpsdk_colorPrimary">#30AFE2</color>
+    <color name="mpsdk_colorPrimary">#5ABEE7</color>
     <color name="mpsdk_icon_image_color">#1D9FDE</color>
     <color name="mpsdk_warm_grey">#b7999999</color>
     <color name="commentColor">#999</color>
-    <color name="mpsdk_shopping_cart_background">#5ABEE7</color>
+    <color name="mpsdk_shopping_cart_background">#ce76cdf1</color>
     <color name="transparent">#00000000</color>
     <color name="mpsdk_color_instructions_title_image">#EFC703</color>
     <color name="mpsdk_color_light_grey">#F1F1F1</color>

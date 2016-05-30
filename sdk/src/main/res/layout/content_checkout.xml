@@ -31,29 +31,18 @@
                 android:layout_height="50dp"
                 android:gravity="center"
                 android:paddingLeft="10dp"
+                android:paddingStart="10dp"
                 android:paddingRight="10dp"
+                android:paddingEnd="10dp"
                 android:background="@color/mpsdk_color_light_grey"
                 android:minHeight="45dp">
 
                 <com.mercadopago.views.MPTextView
                     android:id="@+id/totalAmountText"
-                    android:layout_marginLeft="4dp"
-                    android:layout_marginStart="4dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/mpsdk_payment_amount_to_pay"
-                    style="@style/mpsdk_regular_dark_thin"/>
-
-                <com.mercadopago.views.MPTextView
-                    android:id="@+id/totalAmount"
-                    android:layout_toRightOf="@+id/totalAmountText"
-                    android:layout_toEndOf="@+id/totalAmountText"
-                    android:layout_marginLeft="4dp"
-                    android:layout_marginStart="4dp"
-                    tools:text="$X"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    style="@style/mpsdk_regular_dark_thin"/>
+                    tools:text="Total a pagar $ 1000,00"
+                    style="@style/mpsdk_total_amount"/>
             </RelativeLayout>
             <View
                 android:layout_width="match_parent"
@@ -84,8 +73,12 @@
                 style="@style/mpsdk_button_normal"/>
 
             <com.mercadopago.views.MPTextView
-                android:layout_gravity="center"
                 android:layout_marginTop="20dp"
+                android:paddingLeft="40dp"
+                android:paddingRight="40dp"
+                android:paddingTop="20dp"
+                android:paddingBottom="20dp"
+                android:layout_gravity="center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/mpsdk_cancel_payment"

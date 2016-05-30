@@ -10,7 +10,7 @@
         android:id="@+id/installmentsItem"
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="55dp"
         android:weightSum="1">
         <LinearLayout
             android:layout_width="0dp"
@@ -28,7 +28,7 @@
                 android:layout_marginStart="8dp"
                 android:textColor="@color/mpsdk_installments_text"
                 tools:text="3 de 173"
-                android:textSize="22sp"/>
+                android:textSize="25dp"/>
             <FrameLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -42,7 +42,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/mpsdk_installments_zero_rate"
                     android:text="@string/mpsdk_zero_rate"
-                    android:textSize="13sp"
+                    android:textSize="17dp"
                     android:visibility="gone"/>
                 <com.mercadopago.views.MPTextView
                     android:id="@+id/installments_with_rate"
@@ -50,8 +50,8 @@
                     android:layout_height="wrap_content"
                     tools:text="1040"
                     android:textColor="@color/mpsdk_form_text"
-                    android:textSize="16sp"
-                    android:visibility="visible"/>
+                    android:textSize="18dp"
+                    android:visibility="gone"/>
             </FrameLayout>
         </LinearLayout>
 
