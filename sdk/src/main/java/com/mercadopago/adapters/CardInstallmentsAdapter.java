@@ -43,7 +43,7 @@ public class CardInstallmentsAdapter extends  RecyclerView.Adapter<CardInstallme
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         LayoutInflater inflater = LayoutInflater.from(mContext);
-        View adapterView = inflater.inflate(R.layout.adapter_installments, parent, false);
+        View adapterView = inflater.inflate(R.layout.row_payer_cost_edit, parent, false);
         ViewHolder viewHolder = new ViewHolder(adapterView);
         return viewHolder;
     }
@@ -107,9 +107,9 @@ public class CardInstallmentsAdapter extends  RecyclerView.Adapter<CardInstallme
 
         public ViewHolder(View itemView) {
             super(itemView);
-            mInstallmentsTextView = (MPTextView) itemView.findViewById(R.id.adapter_installments_text);
-            mZeroRateTextView = (MPTextView) itemView.findViewById(R.id.adapter_installments_zero_rate);
-            mRateTextView = (MPTextView) itemView.findViewById(R.id.adapter_installments_with_rate);
+            mInstallmentsTextView = (MPTextView) itemView.findViewById(R.id.installments_text);
+            mZeroRateTextView = (MPTextView) itemView.findViewById(R.id.installments_zero_rate);
+            mRateTextView = (MPTextView) itemView.findViewById(R.id.installments_with_rate);
         }
     }
 
