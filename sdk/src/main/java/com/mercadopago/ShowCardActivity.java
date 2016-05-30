@@ -112,7 +112,7 @@ public abstract class ShowCardActivity extends FrontCardActivity {
         StringBuilder sb = new StringBuilder();
         int length = mToken.getCardNumberLength();
         for (int i = 0; i < length - LAST_DIGITIS_LENGTH; i++) {
-            sb.append("X");
+            sb.append("x");
         }
         sb.append(mToken.getLastFourDigits());
         return sb.toString();
@@ -121,7 +121,7 @@ public abstract class ShowCardActivity extends FrontCardActivity {
     private String getSecurityCodeHidden() {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < mToken.getSecurityCodeLength(); i++) {
-            sb.append("X");
+            sb.append("x");
         }
         return sb.toString();
     }

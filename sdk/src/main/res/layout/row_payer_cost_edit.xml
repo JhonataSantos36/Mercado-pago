@@ -3,14 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:layout_marginTop="5dp">
 
     <LinearLayout
         android:id="@+id/installmentsItem"
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
+        android:layout_height="50dp"
         android:weightSum="1">
         <LinearLayout
             android:layout_width="0dp"
@@ -63,4 +63,9 @@
             android:adjustViewBounds="true"
             android:id="@+id/editHint"/>
     </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:id="@+id/separator"
+        android:background="@color/mpsdk_separator"/>
 </LinearLayout>
