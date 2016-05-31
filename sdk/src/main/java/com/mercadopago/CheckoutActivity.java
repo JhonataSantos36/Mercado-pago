@@ -631,7 +631,6 @@ public class CheckoutActivity extends AppCompatActivity {
                     }
                 };
             } else if (error.getResponse().getStatus() == 503) {
-                //Payment in process
                 startPaymentInProcessActivity();
                 cleanTransactionId();
             }
