@@ -441,7 +441,7 @@ public class CheckoutActivity extends AppCompatActivity {
 
         mPayerCostLayout.removeAllViews();
 
-        if(mSelectedPayerCost != null) {
+        if(mSelectedPayerCost != null && mCheckoutPreference != null) {
             mPaymentMethodRow.showSeparator();
 
             mPayerCostRow = ViewControllerFactory.getPayerCostEditionViewController(this, mCheckoutPreference.getItems().get(0).getCurrencyId());

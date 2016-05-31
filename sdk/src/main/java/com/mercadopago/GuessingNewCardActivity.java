@@ -79,6 +79,7 @@ public class GuessingNewCardActivity extends FrontCardActivity {
     private ProgressBar mProgressBar;
     private FrameLayout mBackButton;
     private FrameLayout mNextButton;
+    private FrameLayout mBackInactiveButton;
     private FrameLayout mErrorContainer;
     private LinearLayout mButtonContainer;
 
@@ -218,6 +219,7 @@ public class GuessingNewCardActivity extends FrontCardActivity {
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
         mBackButton = (FrameLayout) findViewById(R.id.backButton);
         mNextButton = (FrameLayout) findViewById(R.id.nextButton);
+        mBackInactiveButton = (FrameLayout) findViewById(R.id.backInactiveButton);
         mButtonContainer = (LinearLayout) findViewById(R.id.buttonContainer);
         mErrorContainer = (FrameLayout) findViewById(R.id.errorContainer);
         mBackButtonText = (MPTextView) findViewById(R.id.backButtonText);
@@ -272,13 +274,12 @@ public class GuessingNewCardActivity extends FrontCardActivity {
                 validateCurrentEditText(true);
             }
         });
-        mBackButtonText.setTextColor(ContextCompat.getColor(this, R.color.mpsdk_active_button));
         mBackButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            if (!mCurrentEditingEditText.equals(CARD_NUMBER_INPUT)) {
-                checkIsEmptyOrValid();
-            }
+                if (!mCurrentEditingEditText.equals(CARD_NUMBER_INPUT)) {
+                    checkIsEmptyOrValid();
+                }
             }
         });
     }
@@ -746,6 +747,7 @@ public class GuessingNewCardActivity extends FrontCardActivity {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
+                    disableBackInputButton();
                     openKeyboard(mCardNumberEditText);
                     checkFlipCardToFront();
                     mCurrentEditingEditText = CARD_NUMBER_INPUT;
@@ -753,6 +755,16 @@ public class GuessingNewCardActivity extends FrontCardActivity {
                 }
             }
         });
+    }
+
+    private void disableBackInputButton() {
+        mBackButton.setVisibility(View.GONE);
+        mBackInactiveButton.setVisibility(View.VISIBLE);
+    }
+
+    private void enableBackInputButton() {
+        mBackButton.setVisibility(View.VISIBLE);
+        mBackInactiveButton.setVisibility(View.GONE);
     }
 
     private void setCardNameFocusListener() {
@@ -781,6 +793,7 @@ public class GuessingNewCardActivity extends FrontCardActivity {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
+                    enableBackInputButton();
                     openKeyboard(mCardHolderNameEditText);
                     checkFlipCardToFront();
                     mCurrentEditingEditText = CARDHOLDER_NAME_INPUT;
@@ -814,6 +827,7 @@ public class GuessingNewCardActivity extends FrontCardActivity {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
+                    enableBackInputButton();
                     openKeyboard(mCardExpiryDateEditText);
                     checkFlipCardToFront();
                     mCurrentEditingEditText = CARD_EXPIRYDATE_INPUT;
@@ -847,6 +861,7 @@ public class GuessingNewCardActivity extends FrontCardActivity {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
+                    enableBackInputButton();
                     openKeyboard(mCardSecurityCodeEditText);
                     mCurrentEditingEditText = CARD_SECURITYCODE_INPUT;
                     if (mSecurityCodeLocation == null || mSecurityCodeLocation.equals(CardInterface.CARD_SIDE_BACK)) {
@@ -931,6 +946,7 @@ public class GuessingNewCardActivity extends FrontCardActivity {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
+                    enableBackInputButton();
                     openKeyboard(mCardIdentificationNumberEditText);
                     checkTransitionCardToId();
                     mCurrentEditingEditText = CARD_IDENTIFICATION_INPUT;

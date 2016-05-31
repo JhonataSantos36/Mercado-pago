@@ -60,19 +60,37 @@
                     android:weightSum="1"
                     android:visibility="gone">
                     <FrameLayout
-                        android:id="@+id/backButton"
                         android:layout_width="0dp"
                         android:layout_height="40dp"
-                        android:layout_weight="0.5"
-                        android:background="@drawable/form_input_button">
-                        <com.mercadopago.views.MPTextView
-                            android:id="@+id/backButtonText"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:textColor="@color/mpsdk_active_button"
-                            android:text="@string/mpsdk_input_button_back"/>
+                        android:layout_weight="0.5">
+                        <FrameLayout
+                            android:id="@+id/backButton"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/form_input_button">
+                            <com.mercadopago.views.MPTextView
+                                android:id="@+id/backButtonText"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:textColor="@color/mpsdk_active_button"
+                                android:text="@string/mpsdk_input_button_back"/>
+                        </FrameLayout>
+                       <FrameLayout
+                           android:id="@+id/backInactiveButton"
+                           android:layout_width="match_parent"
+                           android:layout_height="match_parent"
+                           android:background="@color/mpsdk_light_gray"
+                           android:visibility="gone">
+                           <com.mercadopago.views.MPTextView
+                               android:layout_width="wrap_content"
+                               android:layout_height="wrap_content"
+                               android:layout_gravity="center"
+                               android:textColor="@color/mpsdk_inactive_button"
+                               android:text="@string/mpsdk_input_button_back" />
+                       </FrameLayout>
                     </FrameLayout>
+
                     <FrameLayout
                         android:id="@+id/nextButton"
                         android:layout_width="0dp"
