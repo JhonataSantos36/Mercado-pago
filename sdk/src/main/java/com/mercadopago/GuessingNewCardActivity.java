@@ -23,6 +23,7 @@ import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -78,7 +79,7 @@ public class GuessingNewCardActivity extends FrontCardActivity {
     private Spinner mIdentificationTypeSpinner;
     private LinearLayout mIdentificationTypeContainer;
     private LinearLayout mIdentificationNumberContainer;
-    private HorizontalScrollView mHorizontalScrollView;
+    private ScrollView mScrollView;
     private ProgressBar mProgressBar;
     private FrameLayout mBackButton;
     private FrameLayout mNextButton;
@@ -86,6 +87,10 @@ public class GuessingNewCardActivity extends FrontCardActivity {
     private FrameLayout mErrorContainer;
     private LinearLayout mButtonContainer;
     private View mCardBackground;
+    private LinearLayout mCardNumberInput;
+    private LinearLayout mCardholderNameInput;
+    private LinearLayout mCardExpiryDateInput;
+    private LinearLayout mCardIdNumberInput;
 
     //Card container
     private CardFrontFragment mFrontFragment;
@@ -149,7 +154,7 @@ public class GuessingNewCardActivity extends FrontCardActivity {
             mCardSideState = CARD_SIDE_FRONT;
         }
         if (showingFront()) {
-            mCardNumberEditText.requestFocus();
+            openKeyboard(mCardNumberEditText);
             mCurrentEditingEditText = CardInterface.CARD_NUMBER_INPUT;
         }
     }
@@ -280,7 +285,6 @@ public class GuessingNewCardActivity extends FrontCardActivity {
         mIdentificationTypeSpinner = (Spinner) findViewById(R.id.mpsdkCardIdentificationType);
         mIdentificationTypeContainer = (LinearLayout) findViewById(R.id.mpsdkCardIdentificationTypeContainer);
         mIdentificationNumberContainer = (LinearLayout) findViewById(R.id.mpsdkCardIdentificationNumberContainer);
-        mHorizontalScrollView = (HorizontalScrollView) findViewById(R.id.mpsdkHorizontalScrollViewContainer);
         mProgressBar = (ProgressBar) findViewById(R.id.mpsdkProgressBar);
         mBackButton = (FrameLayout) findViewById(R.id.mpsdkBackButton);
         mNextButton = (FrameLayout) findViewById(R.id.mpsdkNextButton);
@@ -289,6 +293,11 @@ public class GuessingNewCardActivity extends FrontCardActivity {
         mErrorContainer = (FrameLayout) findViewById(R.id.mpsdkErrorContainer);
         mBackButtonText = (MPTextView) findViewById(R.id.mpsdkBackButtonText);
         mErrorTextView = (MPTextView) findViewById(R.id.mpsdkErrorTextView);
+        mScrollView = (ScrollView) findViewById(R.id.mpsdkScrollViewContainer);
+        mCardNumberInput = (LinearLayout) findViewById(R.id.mpsdkCardNumberInput);
+        mCardholderNameInput = (LinearLayout) findViewById(R.id.mpsdkCardholderNameInput);
+        mCardExpiryDateInput = (LinearLayout) findViewById(R.id.mpsdkExpiryDateInput);
+        mCardIdNumberInput = (LinearLayout) findViewById(R.id.mpsdkCardIdentificationInput);
         mProgressBar.setVisibility(View.GONE);
         mIdentificationTypeContainer.setVisibility(View.GONE);
         mIdentificationNumberContainer.setVisibility(View.GONE);
@@ -301,8 +310,20 @@ public class GuessingNewCardActivity extends FrontCardActivity {
             mCardBackground.setBackgroundColor(mDecorationPreference.getLighterColor());
         }
 
+        fullScrollDown();
+    }
 
+    private void fullScrollDown() {
+        Runnable r = new Runnable()
+        {
+            public void run()
+            {
+                mScrollView.fullScroll(View.FOCUS_DOWN);
 
+            }
+        };
+        mScrollView.post(r);
+        r.run();
     }
 
     protected void getActivityParameters() {
@@ -344,6 +365,7 @@ public class GuessingNewCardActivity extends FrontCardActivity {
     public void openKeyboard(MPEditText ediText) {
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.showSoftInput(ediText, InputMethodManager.SHOW_IMPLICIT);
+        fullScrollDown();
     }
 
     private void setNavigationButtonsListeners() {
@@ -367,35 +389,55 @@ public class GuessingNewCardActivity extends FrontCardActivity {
         switch (mCurrentEditingEditText) {
             case CARD_NUMBER_INPUT:
                 if (validateCardNumber(true)){
+                    mCardNumberInput.setVisibility(View.GONE);
                     mCardHolderNameEditText.requestFocus();
+                    mCardExpiryDateInput.setVisibility(View.VISIBLE);
                     return true;
                 }
                 return false;
             case CARDHOLDER_NAME_INPUT:
                 if (validateCardName(true)) {
+                    mCardholderNameInput.setVisibility(View.GONE);
                     mCardExpiryDateEditText.requestFocus();
+                    if (isSecurityCodeRequired()) {
+                        mSecurityCodeEditView.setVisibility(View.VISIBLE);
+                    } else if (mIdentificationNumberRequired) {
+                        mIdentificationTypeContainer.setVisibility(View.VISIBLE);
+                    }
                     return true;
                 }
                 return false;
             case CARD_EXPIRYDATE_INPUT:
                 if (validateExpiryDate(true)) {
+                    mCardExpiryDateInput.setVisibility(View.GONE);
                     if (isSecurityCodeRequired()) {
                         mCardSecurityCodeEditText.requestFocus();
+                        if (mIdentificationNumberRequired) {
+                            mIdentificationTypeContainer.setVisibility(View.VISIBLE);
+                        }
                     } else if (mIdentificationNumberRequired) {
                         mCardIdentificationNumberEditText.requestFocus();
+                        mCardIdNumberInput.setVisibility(View.VISIBLE);
+                    } else {
+                        mCurrentEditingEditText = CARD_INPUT_FINISH;
+                        if (onFinish) {
+                            submitForm();
+                        }
                     }
                     return true;
                 }
                 return false;
             case CARD_SECURITYCODE_INPUT:
                 if (validateSecurityCode(true)) {
+                    mSecurityCodeEditView.setVisibility(View.GONE);
                     if (mIdentificationNumberRequired) {
                         mCardIdentificationNumberEditText.requestFocus();
+                        mCardIdNumberInput.setVisibility(View.VISIBLE);
                     } else {
                         mCurrentEditingEditText = CARD_INPUT_FINISH;
-                      if (onFinish) {
-                          submitForm();
-                      }
+                        if (onFinish) {
+                            submitForm();
+                        }
                     }
                     return true;
                 }
@@ -422,27 +464,39 @@ public class GuessingNewCardActivity extends FrontCardActivity {
         switch (mCurrentEditingEditText) {
             case CARDHOLDER_NAME_INPUT:
                 if (TextUtils.isEmpty(mCardHolderName) || validateCardName(true)) {
+                    mCardExpiryDateInput.setVisibility(View.GONE);
+                    mCardNumberInput.setVisibility(View.VISIBLE);
                     mCardNumberEditText.requestFocus();
                     return true;
                 }
                 return false;
             case CARD_EXPIRYDATE_INPUT:
                 if (mExpiryMonth == null || validateExpiryDate(true)) {
+                    mIdentificationTypeContainer.setVisibility(View.GONE);
+                    mSecurityCodeEditView.setVisibility(View.GONE);
+                    mCardIdNumberInput.setVisibility(View.GONE);
+                    mCardholderNameInput.setVisibility(View.VISIBLE);
                     mCardHolderNameEditText.requestFocus();
                     return true;
                 }
                 return false;
             case CARD_SECURITYCODE_INPUT:
                 if (TextUtils.isEmpty(mSecurityCode) || validateSecurityCode(true)) {
+                    mIdentificationTypeContainer.setVisibility(View.GONE);
+                    mCardIdNumberInput.setVisibility(View.GONE);
+                    mCardExpiryDateInput.setVisibility(View.VISIBLE);
                     mCardExpiryDateEditText.requestFocus();
                     return true;
                 }
                 return false;
             case CARD_IDENTIFICATION_INPUT:
                 if (TextUtils.isEmpty(mCardIdentificationNumber) || validateIdentificationNumber(true)) {
+                   mCardIdNumberInput.setVisibility(View.GONE);
                    if (isSecurityCodeRequired()) {
+                       mSecurityCodeEditView.setVisibility(View.VISIBLE);
                        mCardSecurityCodeEditText.requestFocus();
                    } else {
+                       mCardExpiryDateInput.setVisibility(View.VISIBLE);
                        mCardExpiryDateEditText.requestFocus();
                    }
                     return true;
@@ -537,12 +591,16 @@ public class GuessingNewCardActivity extends FrontCardActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.length() == 1) {
+                    openKeyboard(mCardNumberEditText);
+                }
                 if (before == 0 && needsMask(s)) {
                     mCardNumberEditText.append(" ");
                 }
                 if (before == 1 && needsMask(s)) {
                     mCardNumberEditText.getText().delete(s.length() - 1, s.length());
                 }
+
             }
 
             @Override
@@ -829,7 +887,6 @@ public class GuessingNewCardActivity extends FrontCardActivity {
         if (requestFocus) {
             mCardIdentificationNumberEditText.toggleLineColorOnError(true);
             mCardIdentificationNumberEditText.requestFocus();
-            mHorizontalScrollView.fullScroll(HorizontalScrollView.FOCUS_RIGHT);
         }
     }
 
@@ -882,7 +939,6 @@ public class GuessingNewCardActivity extends FrontCardActivity {
                     openKeyboard(mCardNumberEditText);
                     checkFlipCardToFront(true);
                     mCurrentEditingEditText = CARD_NUMBER_INPUT;
-                    mHorizontalScrollView.fullScroll(HorizontalScrollView.FOCUS_LEFT);
                 }
             }
         });
@@ -1051,7 +1107,6 @@ public class GuessingNewCardActivity extends FrontCardActivity {
                     return false;
                 }
                 checkTransitionCardToId();
-                mHorizontalScrollView.fullScroll(HorizontalScrollView.FOCUS_RIGHT);
                 mCardIdentificationNumberEditText.requestFocus();
                 return false;
             }
