@@ -113,8 +113,6 @@
     <string name="mpsdk_text_other_payment_method_button_rejection">Usar otro medio de pago</string>
     <string name="mpsdk_text_keep_buying">Seguir comprando</string>
 
-    <string name="mpsdk_text_without_interest">Sin interés</string>
-
     <string name="mpsdk_title_pending">Estamos procesando el pago</string>
     <string name="mpsdk_subtitle_pending_contingency">En menos de 1 hora te enviaremos por e-mail el resultado.</string>
     <string name="mpsdk_title_rejection_high_risk">Por seguridad, tuvimos que rechazar tu pago</string>
@@ -157,7 +155,7 @@
     <string name="mpsdk_no_payment_methods_found">No hay medios de pago disponibles</string>
     <string name="mpsdk_error_message_email_required">El email es requerido</string>
 
-    <string name="mpsdk_zero_rate">Sin intereses</string>
+    <string name="mpsdk_zero_rate">Sin interés</string>
     <string name="mpsdk_installments_of">de</string>
     <string name="mpsdk_card_data_title">Datos de tu tarjeta</string>
     <string name="mpsdk_card_installments_title">¿En cuántas cuotas?</string>

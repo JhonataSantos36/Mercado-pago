@@ -346,7 +346,7 @@ public class CongratsActivity extends AppCompatActivity {
                             mPayment.getCurrencyId(), sb.toString(), true, true));
                 }
                 else {
-                    mInterestAmountDescription.setText(getString(R.string.mpsdk_text_without_interest));
+                    mInterestAmountDescription.setText(getString(R.string.mpsdk_zero_rate));
                 }
             }
             else{

@@ -140,7 +140,7 @@
                                 android:gravity="bottom"
                                 android:textSize="18dp"
                                 android:textColor="@color/mpsdk_color_congrats_interest"
-                                android:text="@string/mpsdk_text_without_interest"/>
+                                android:text="@string/mpsdk_zero_rate"/>
                         </LinearLayout>
 
                             <com.mercadopago.views.MPTextView
