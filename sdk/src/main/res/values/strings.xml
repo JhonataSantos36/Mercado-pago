@@ -112,7 +112,11 @@
     <string name="mpsdk_text_select_other_rejection">Usa otra tarjeta u otro medio de pago</string>
     <string name="mpsdk_text_other_payment_method_button_rejection">Usar otro medio de pago</string>
     <string name="mpsdk_text_keep_buying">Seguir comprando</string>
+<<<<<<< a614262e5f63adff023d7c950909b8a16e63e3f2
     <string name="mpsdk_text_without_interest">Sin interés</string>
+=======
+    <string name="mpsdk_text_without_interest">Sin interes</string>
+>>>>>>> New assets and change with out interest text in congrats
     <string name="mpsdk_title_pending">Estamos procesando el pago</string>
     <string name="mpsdk_subtitle_pending_contingency">En menos de 1 hora te enviaremos por e-mail el resultado.</string>
     <string name="mpsdk_title_rejection_high_risk">Por seguridad, tuvimos que rechazar tu pago</string>
