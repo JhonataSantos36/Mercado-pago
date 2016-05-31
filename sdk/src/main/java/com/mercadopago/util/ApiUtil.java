@@ -190,4 +190,10 @@ public class ApiUtil {
         }
         return message;
     }
+
+    public class StatusCode {
+        public static final int INTERNAL_SERVER_ERROR = 500;
+        public static final int PAYMENT_IN_PROCESS = 503;
+        public static final int BAD_REQUEST = 400;
+    }
 }

@@ -116,7 +116,7 @@ public class Step6Activity extends ExampleActivity {
             @Override
             public void success(CheckoutPreference checkoutPreference, Response response) {
                 mCheckoutPreference = checkoutPreference;
-                startCheckoutActivity("TEST-ad365c37-8012-4014-84f5-6c895b3f8e0a");
+                startCheckoutActivity(ExamplesUtils.DUMMY_MERCHANT_PUBLIC_KEY);
             }
 
             @Override

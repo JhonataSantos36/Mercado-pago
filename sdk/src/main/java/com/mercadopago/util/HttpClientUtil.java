@@ -1,6 +1,7 @@
 package com.mercadopago.util;
 
 import com.squareup.okhttp.Cache;
+import com.squareup.okhttp.CacheControl;
 import com.squareup.okhttp.OkHttpClient;
 
 import java.io.File;
@@ -28,9 +29,11 @@ public class HttpClientUtil {
             okHttpClient.setWriteTimeout(20, TimeUnit.SECONDS);
             okHttpClient.setReadTimeout(20, TimeUnit.SECONDS);
 
+
+
             int cacheSize = 10 * 1024 * 1024; // 10 MiB
             Cache cache = new Cache(new File(context.getCacheDir().getPath() + "okhttp"), cacheSize);
-            okHttpClient.setCache(cache);
+            //okHttpClient.setCache(cache);
             client = new OkClient(okHttpClient);
         }
         return client;

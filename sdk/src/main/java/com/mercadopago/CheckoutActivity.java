@@ -622,7 +622,9 @@ public class CheckoutActivity extends AppCompatActivity {
 
     private void resolvePaymentFailure(RetrofitError error) {
         if(error.getResponse() != null) {
-            if (String.valueOf(error.getResponse().getStatus()).startsWith("5") && error.getResponse().getStatus() != 503) {
+            String serverErrorFirstDigit = String.valueOf(ApiUtil.StatusCode.INTERNAL_SERVER_ERROR).substring(0, 1);
+            if (String.valueOf(error.getResponse().getStatus()).startsWith(serverErrorFirstDigit)
+                    && error.getResponse().getStatus() != ApiUtil.StatusCode.PAYMENT_IN_PROCESS) {
                 ApiUtil.showApiExceptionError(this, error);
                 failureRecovery = new FailureRecovery() {
                     @Override
@@ -630,11 +632,11 @@ public class CheckoutActivity extends AppCompatActivity {
                         createPayment();
                     }
                 };
-            } else if (error.getResponse().getStatus() == 503) {
+            } else if (error.getResponse().getStatus() == ApiUtil.StatusCode.PAYMENT_IN_PROCESS) {
                 startPaymentInProcessActivity();
                 cleanTransactionId();
             }
-            else if (error.getResponse().getStatus() == 400) {
+            else if (error.getResponse().getStatus() == ApiUtil.StatusCode.BAD_REQUEST) {
                 ApiException apiException = ApiUtil.getApiException(error);
                 MPException mpException = new MPException(apiException);
                 ErrorUtil.startErrorActivity(this, mpException);
@@ -642,9 +644,11 @@ public class CheckoutActivity extends AppCompatActivity {
             else {
                 ApiUtil.showApiExceptionError(this, error);
             }
-            showRegularLayout();
         }
-        ApiUtil.showApiExceptionError(mActivity, error);
+        else {
+            ApiUtil.showApiExceptionError(this, error);
+        }
+        showRegularLayout();
     }
 
     private void startPaymentInProcessActivity() {
