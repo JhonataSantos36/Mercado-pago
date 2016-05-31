@@ -11,6 +11,7 @@ import android.widget.ImageView;
 
 import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentMethod;
+import com.mercadopago.mptracker.MPTracker;
 import com.mercadopago.util.CurrenciesUtil;
 import com.mercadopago.util.MercadoPagoUtil;
 import com.mercadopago.views.MPTextView;
@@ -336,9 +337,15 @@ public class CongratsActivity extends AppCompatActivity {
         if(isTotalPaidAmountValid()){
             if (mPayment.getInstallments()>1) {
                 if (hasInterests()) {
-                    String message = "(" + (mPayment.getTransactionDetails().getTotalPaidAmount()).toString() + ")";
-                    mInterestAmountDescription.setText(message);
-                } else {
+                    StringBuilder sb = new StringBuilder();
+
+                    sb.append(" (");
+                    sb.append(CurrenciesUtil.formatNumber(mPayment.getTransactionDetails().getTotalPaidAmount(), mPayment.getCurrencyId()));
+                    sb.append(")");
+                    mInterestAmountDescription.setText(CurrenciesUtil.formatCurrencyInText(mPayment.getTransactionDetails().getTotalPaidAmount(),
+                            mPayment.getCurrencyId(), sb.toString(), true, true));
+                }
+                else {
                     mInterestAmountDescription.setText(getString(R.string.mpsdk_text_without_interest));
                 }
             }
