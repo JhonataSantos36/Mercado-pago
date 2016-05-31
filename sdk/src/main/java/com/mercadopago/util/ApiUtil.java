@@ -78,7 +78,6 @@ public class ApiUtil {
                 mpException = new MPException(errorMessage, error.getMessage(), true);
             }
         }
-
         ErrorUtil.startErrorActivity(activity, mpException);
     }
 
@@ -114,7 +113,7 @@ public class ApiUtil {
     public static String getApiExceptionMessage(Context context, ApiException apiException) {
         String message;
 
-        if(!apiException.getCause().isEmpty()) {
+        if(apiException.getCause() != null && !apiException.getCause().isEmpty()) {
             Cause cause = apiException.getCause().get(0);
             String errorCode = cause.getCode();
             switch (errorCode) {

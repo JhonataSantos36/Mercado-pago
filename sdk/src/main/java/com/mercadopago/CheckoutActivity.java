@@ -644,6 +644,7 @@ public class CheckoutActivity extends AppCompatActivity {
             }
             showRegularLayout();
         }
+        ApiUtil.showApiExceptionError(mActivity, error);
     }
 
     private void startPaymentInProcessActivity() {
