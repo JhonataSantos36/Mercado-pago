@@ -58,15 +58,15 @@ public class CongratsActivity extends AppCompatActivity {
         this.mBackPressedOnce = false;
 
         if (mPayment != null && isStatusValid()){
-            if (mPayment.getStatus().equals(mPayment.STATUS_APPROVED)){
+            if (mPayment.getStatus().equals(Payment.StatusCodes.STATUS_APPROVED)){
                 showCongrats();
             }
-            else if (mPayment.getStatus().equals(mPayment.STATUS_IN_PROCESS)){
+            else if (mPayment.getStatus().equals(Payment.StatusCodes.STATUS_IN_PROCESS)){
                 showPending();
             }
-            else if (mPayment.getStatus().equals(mPayment.STATUS_REJECTED)){
+            else if (mPayment.getStatus().equals(Payment.StatusCodes.STATUS_REJECTED)){
                 if(isStatusDetailValid()) {
-                    if (mPayment.getStatusDetail().equals(mPayment.STATUS_DETAIL_CC_REJECTED_CALL_FOR_AUTHORIZE)) {
+                    if (mPayment.getStatusDetail().equals(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_CALL_FOR_AUTHORIZE)) {
                         showCallForAuthorize();
                     }
                     else {
@@ -200,10 +200,10 @@ public class CongratsActivity extends AppCompatActivity {
 
     private void fillPendingData() {
         if (isStatusDetailValid()) {
-            if (mPayment.getStatusDetail().equals(mPayment.STATUS_DETAIL_PENDING_CONTINGENCY)) {
+            if (mPayment.getStatusDetail().equals(Payment.StatusCodes.STATUS_DETAIL_PENDING_CONTINGENCY)) {
                 mPendingSubtitle.setText(getString(R.string.mpsdk_subtitle_pending_contingency));
             }
-            if (mPayment.getStatusDetail().equals(mPayment.STATUS_DETAIL_PENDING_REVIEW_MANUAL)) {
+            if (mPayment.getStatusDetail().equals(Payment.StatusCodes.STATUS_DETAIL_PENDING_REVIEW_MANUAL)) {
                 //TODO ver que subtitulo va
                 mPendingSubtitle.setText(getString(R.string.mpsdk_subtitle_pending_contingency));
             }
@@ -215,34 +215,34 @@ public class CongratsActivity extends AppCompatActivity {
     private void fillRejectionData() {
         if (mPayment != null && isStatusDetailValid()){
 
-            if (isPaymentMethodNameValid() && mPayment.getStatusDetail().equals(mPayment.STATUS_DETAIL_CC_REJECTED_OTHER_REASON)) {
+            if (isPaymentMethodNameValid() && mPayment.getStatusDetail().equals(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_OTHER_REASON)) {
                 String titleMessage = mPaymentMethod.getName() + " " + getString(R.string.mpsdk_title_other_reason_rejection);
                 mRejectionTitle.setText(titleMessage);
                 mRejectionSubtitle.setText(getString(R.string.mpsdk_text_select_other_rejection));
             }
-            else if (isPaymentMethodNameValid() && mPayment.getStatusDetail().equals(mPayment.STATUS_DETAIL_CC_REJECTED_BAD_FILLED_OTHER)){
+            else if (isPaymentMethodNameValid() && mPayment.getStatusDetail().equals(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_BAD_FILLED_OTHER)){
                 mRejectionTitle.setText(getString(R.string.mpsdk_title_bad_filled_other_rejection));
                 String subtitleMessage = getString(R.string.mpsdk_text_some_number) + " " + mPaymentMethod.getName() + " " + getString(R.string.mpsdk_text_is_incorrect);
                 mRejectionSubtitle.setText(subtitleMessage);
             }
-            else if (isPaymentMethodNameValid() && mPayment.getStatusDetail().equals(mPayment.CC_REJECTED_BAD_FILLED_CARD_NUMBER)){
+            else if (isPaymentMethodNameValid() && mPayment.getStatusDetail().equals(Payment.StatusCodes.CC_REJECTED_BAD_FILLED_CARD_NUMBER)){
                 mRejectionTitle.setText(getString(R.string.mpsdk_title_bad_filled_other_rejection));
                 String subtitleMessage = getString(R.string.mpsdk_text_some_number) + " " + mPaymentMethod.getName() + " " + getString(R.string.mpsdk_text_is_incorrect);
                 mRejectionSubtitle.setText(subtitleMessage);
             }
-            else if (mPayment.getStatusDetail().equals(mPayment.CC_REJECTED_BAD_FILLED_SECURITY_CODE)){
+            else if (mPayment.getStatusDetail().equals(Payment.StatusCodes.CC_REJECTED_BAD_FILLED_SECURITY_CODE)){
                 mRejectionTitle.setText(getString(R.string.mpsdk_title_bad_filled_other_rejection));
                 mRejectionSubtitle.setText(getString(R.string.mpsdk_title_bad_filled_security_code_rejection));
             }
-            else if (mPayment.getStatusDetail().equals(mPayment.CC_REJECTED_BAD_FILLED_DATE)){
+            else if (mPayment.getStatusDetail().equals(Payment.StatusCodes.CC_REJECTED_BAD_FILLED_DATE)){
                 mRejectionTitle.setText(getString(R.string.mpsdk_title_bad_filled_other_rejection));
                 mRejectionSubtitle.setText(getString(R.string.mpsdk_title_bad_filled_date_rejection));
             }
-            else if (mPayment.getStatusDetail().equals(mPayment.REJECTED_HIGH_RISK)){
+            else if (mPayment.getStatusDetail().equals(Payment.StatusCodes.REJECTED_HIGH_RISK)){
                 mRejectionTitle.setText(getString(R.string.mpsdk_title_rejection_high_risk));
                 mRejectionSubtitle.setText(getString(R.string.mpsdk_subtitle_rejection_high_risk));
             }
-            else if (isPaymentMethodNameValid() && mPayment.getStatusDetail().equals(mPayment.CC_REJECTED_INSUFFICIENT_AMOUNT)){
+            else if (isPaymentMethodNameValid() && mPayment.getStatusDetail().equals(Payment.StatusCodes.CC_REJECTED_INSUFFICIENT_AMOUNT)){
                 String titleMessage = getString(R.string.mpsdk_text_you) + " " + mPaymentMethod.getName() + " " + getString(R.string.mpsdk_text_insufficient_amount);
                 mRejectionTitle.setText(titleMessage);
 
@@ -253,16 +253,16 @@ public class CongratsActivity extends AppCompatActivity {
                     mRejectionSubtitle.setText(getString(R.string.mpsdk_subtitle_rejection_insufficient_amount));
                 }
             }
-            else if (mPayment.getStatusDetail().equals(mPayment.CC_REJECTED_MAX_ATTEMPTS)){
+            else if (mPayment.getStatusDetail().equals(Payment.StatusCodes.CC_REJECTED_MAX_ATTEMPTS)){
                 mRejectionTitle.setText(getString(R.string.mpsdk_title_rejection_max_attempts));
                 mRejectionSubtitle.setText(getString(R.string.mpsdk_subtitle_rejection_max_attempts));
             }
-            else if (isPaymentMethodNameValid() && mPayment.getStatusDetail().equals(mPayment.CC_REJECTED_DUPLICATED_PAYMENT)){
+            else if (isPaymentMethodNameValid() && mPayment.getStatusDetail().equals(Payment.StatusCodes.CC_REJECTED_DUPLICATED_PAYMENT)){
                 String titleMessage = mPaymentMethod.getName() + " " + getString(R.string.mpsdk_title_other_reason_rejection);
                 mRejectionTitle.setText(titleMessage);
                 mRejectionSubtitle.setText(getString(R.string.mpsdk_subtitle_rejection_duplicated_payment));
             }
-            else if (isPaymentMethodNameValid() && mPayment.getStatusDetail().equals(mPayment.CC_REJECTED_CARD_DISABLED)){
+            else if (isPaymentMethodNameValid() && mPayment.getStatusDetail().equals(Payment.StatusCodes.CC_REJECTED_CARD_DISABLED)){
                 String titleMessage = getString(R.string.mpsdk_text_call_to) + " " + mPaymentMethod.getName() + " " + getString(R.string.mpsdk_text_active_card);
                 mRejectionTitle.setText(titleMessage);
                 mRejectionSubtitle.setText(getString(R.string.mpsdk_subtitle_rejection_card_disabled));

@@ -10,7 +10,6 @@ import android.text.Html;
 import android.text.Spanned;
 import android.view.View;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.core.MercadoPago;
@@ -18,6 +17,7 @@ import com.mercadopago.exceptions.CheckoutPreferenceException;
 import com.mercadopago.exceptions.ExceptionHandler;
 import com.mercadopago.exceptions.MPException;
 import com.mercadopago.fragments.ShoppingCartFragment;
+import com.mercadopago.model.ApiException;
 import com.mercadopago.model.CheckoutPreference;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.Item;
@@ -130,7 +130,7 @@ public class CheckoutActivity extends AppCompatActivity {
             @Override
             public void success(CheckoutPreference checkoutPreference, Response response) {
                 mCheckoutPreference = checkoutPreference;
-                if(mActiveActivity) {
+                if (mActiveActivity) {
                     try {
                         validatePreference();
                         initializeCheckout();
@@ -143,7 +143,7 @@ public class CheckoutActivity extends AppCompatActivity {
 
             @Override
             public void failure(RetrofitError error) {
-                if(mActiveActivity) {
+                if (mActiveActivity) {
                     ApiUtil.showApiExceptionError(mActivity, error);
                     failureRecovery = new FailureRecovery() {
                         @Override
@@ -621,34 +621,37 @@ public class CheckoutActivity extends AppCompatActivity {
     }
 
     private void resolvePaymentFailure(RetrofitError error) {
-//        //TODO analizar y ordenar
-//        ApiException apiException = ApiUtil.getApiException(error);
-//
-//        if(error.getResponse() != null && error.getResponse().getStatus() == 408) {
-//            //Request timeout
-//            ApiUtil.showApiExceptionError(this, error);
-//            failureRecovery = new FailureRecovery() {
-//                @Override
-//                public void recover() {
-//                    createPayment();
-//                }
-//            };
-//        }
-//        else if(apiException != null && apiException.getStatus() == 503) {
-//            //Payment in process
-//            startPaymentInProcessActivity();
-//            cleanTransactionId();
-//        }
-//        else if(apiException != null) {
-//            MPException mpException = new MPException(apiException);
-//            ErrorUtil.startErrorActivity(this, mpException);
-//        }
-        Toast.makeText(this, "Payments API Exception: " + error.getMessage(), Toast.LENGTH_SHORT).show();
-        showRegularLayout();
+        if(error.getResponse() != null) {
+            if (String.valueOf(error.getResponse().getStatus()).startsWith("5") && error.getResponse().getStatus() != 503) {
+                ApiUtil.showApiExceptionError(this, error);
+                failureRecovery = new FailureRecovery() {
+                    @Override
+                    public void recover() {
+                        createPayment();
+                    }
+                };
+            } else if (error.getResponse().getStatus() == 503) {
+                //Payment in process
+                startPaymentInProcessActivity();
+                cleanTransactionId();
+            }
+            else if (error.getResponse().getStatus() == 400) {
+                ApiException apiException = ApiUtil.getApiException(error);
+                MPException mpException = new MPException(apiException);
+                ErrorUtil.startErrorActivity(this, mpException);
+            }
+            else {
+                ApiUtil.showApiExceptionError(this, error);
+            }
+            showRegularLayout();
+        }
     }
 
     private void startPaymentInProcessActivity() {
-        //TODO start in process activity
+        mCreatedPayment = new Payment();
+        mCreatedPayment.setStatus(Payment.StatusCodes.STATUS_IN_PROCESS);
+        mCreatedPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_PENDING_CONTINGENCY);
+        startCongratsActivity();
     }
 
     protected void finishWithApiException(Intent data) {

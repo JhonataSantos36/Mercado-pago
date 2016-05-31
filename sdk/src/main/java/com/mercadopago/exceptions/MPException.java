@@ -29,7 +29,7 @@ public class MPException implements Serializable{
 
     public MPException(ApiException apiException) {
         this.apiException = apiException;
-        this.recoverable = true;
+        this.recoverable = false;
     }
 
     public ApiException getApiException() {
