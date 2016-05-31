@@ -46,7 +46,7 @@
                             android:layout_marginTop="26dp"
                             android:layout_marginBottom="14dp"
                             android:tint="@color/mpsdk_color_rejection_image"
-                            android:src="@drawable/error_sign"
+                            android:src="@drawable/icon_error"
                             android:layout_gravity="center_horizontal" />
 
                         <com.mercadopago.views.MPTextView

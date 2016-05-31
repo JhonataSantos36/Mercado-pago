@@ -3,6 +3,9 @@
 buildscript {
     repositories {
         jcenter()
+        maven {
+            url 'https://bintray.com/matiasromar/maven'
+        }
     }
 
     dependencies {
@@ -20,5 +23,8 @@ ext {
 allprojects {
     repositories {
         jcenter()
+        maven {
+            url 'https://dl.bintray.com/matiasromar/maven'
+        }
     }
 }

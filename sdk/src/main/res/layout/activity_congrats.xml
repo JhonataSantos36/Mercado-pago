@@ -36,7 +36,7 @@
                         android:layout_marginBottom="16dp"
                         android:layout_gravity="center_horizontal"
                         android:tint="@color/mpsdk_color_congrats_image"
-                        android:src="@drawable/ok_sign" />
+                        android:src="@drawable/icon_ok" />
 
                     <com.mercadopago.views.MPTextView
                         android:id="@+id/congratulationsTitle"

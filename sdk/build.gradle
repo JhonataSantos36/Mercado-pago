@@ -67,6 +67,7 @@ dependencies {
     compile 'com.squareup.retrofit:retrofit:1.9.0'
     compile 'com.android.support:design:23.3.0'
     compile 'com.android.support:support-v4:23.3.0'
+    compile 'com.mercadopago:sdkTracking:1.1'
 }
 
 configurations {

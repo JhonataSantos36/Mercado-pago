@@ -29,7 +29,7 @@
                     android:layout_height="70dp"
                     android:layout_marginTop="30dp"
                     android:tint="@color/mpsdk_color_call_for_authorize_image"
-                    android:src="@drawable/call_sign"
+                    android:src="@drawable/icon_call"
                     android:layout_gravity="center_horizontal" />
 
                 <com.mercadopago.views.MPTextView

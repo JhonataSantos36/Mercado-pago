@@ -28,6 +28,7 @@ import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentMethodSearch;
 import com.mercadopago.model.PaymentMethodSearchItem;
 import com.mercadopago.model.Token;
+import com.mercadopago.mptracker.MPTracker;
 import com.mercadopago.uicontrollers.ViewControllerFactory;
 import com.mercadopago.uicontrollers.payercosts.PayerCostViewController;
 import com.mercadopago.uicontrollers.paymentmethods.PaymentMethodViewController;
@@ -101,6 +102,7 @@ public class CheckoutActivity extends AppCompatActivity {
         mBackPressedOnce = false;
         mActiveActivity = true;
         boolean validState = true;
+
         try{
             validateParameters();
         } catch (Exception e) {
