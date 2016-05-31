@@ -29,6 +29,8 @@ import com.mercadopago.model.PaymentMethodSearch;
 import com.mercadopago.model.PaymentMethodSearchItem;
 import com.mercadopago.model.Token;
 import com.mercadopago.mptracker.MPTracker;
+import com.mercadopago.mptracker.delegate.MPTrackerDelegate;
+import com.mercadopago.mptracker.informer.MPPaymentTrackInformer;
 import com.mercadopago.uicontrollers.ViewControllerFactory;
 import com.mercadopago.uicontrollers.payercosts.PayerCostViewController;
 import com.mercadopago.uicontrollers.paymentmethods.PaymentMethodViewController;
@@ -93,6 +95,8 @@ public class CheckoutActivity extends AppCompatActivity {
     protected Boolean mBackPressedOnce;
     protected Snackbar mSnackbar;
 
+    protected MPTrackerDelegate mTrackerDelegate;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,6 +106,10 @@ public class CheckoutActivity extends AppCompatActivity {
         mBackPressedOnce = false;
         mActiveActivity = true;
         boolean validState = true;
+
+        //TODO validate
+        createMPTrackerDelegate();
+        MPTracker.getInstance().trackEvent("CHECKOUT","INIT_CHECKOUT","3",mTrackerDelegate,this);
 
         try{
             validateParameters();
@@ -124,6 +132,27 @@ public class CheckoutActivity extends AppCompatActivity {
         else {
             showError();
         }
+    }
+
+    private void createMPTrackerDelegate() {
+        mTrackerDelegate = new MPTrackerDelegate() {
+            @Override
+            public String getPublicKey() {
+                return mMerchantPublicKey;
+            }
+
+            @Override
+            public String getSdkVersion() {
+                //TODO que sea constante
+                return "1.0";
+            }
+
+            @Override
+            public String getSite() {
+                //TODO que sea contante
+                return "MCO";
+            }
+        };
     }
 
     private void getCheckoutPreference() {
@@ -261,6 +290,10 @@ public class CheckoutActivity extends AppCompatActivity {
     protected void startTermsAndConditionsActivity() {
         Intent termsAndConditionsIntent = new Intent(this, TermsAndConditionsActivity.class);
         termsAndConditionsIntent.putExtra("siteId", mCheckoutPreference.getSiteId());
+
+        //TODO validate
+        MPTracker.getInstance().trackEvent("CHECKOUT","TERMS_AND_CONDITIONS","3",mTrackerDelegate,this);
+
         startActivity(termsAndConditionsIntent);
     }
 
@@ -275,6 +308,10 @@ public class CheckoutActivity extends AppCompatActivity {
             @Override
             public void success(PaymentMethodSearch paymentMethodSearch, Response response) {
                 mPaymentMethodSearch = paymentMethodSearch;
+
+                //TODO validate
+                MPTracker.getInstance().trackEvent("CHECKOUT","GET_PAYMENT_METHOD_SEARCH","SUCCESS","3",mTrackerDelegate,mActivity);
+
                 if (mActiveActivity) {
                     startPaymentVaultActivity();
                 }
@@ -333,12 +370,20 @@ public class CheckoutActivity extends AppCompatActivity {
             mSelectedPayerCost = (PayerCost) data.getSerializableExtra("payerCost");
             mCreatedToken = (Token) data.getSerializableExtra("token");
             mSelectedPaymentMethod = (PaymentMethod) data.getSerializableExtra("paymentMethod");
+
+            //TODO Tracke, delete TODO
+            MPTracker.getInstance().trackToken(mCreatedToken.getId(),"3", mTrackerDelegate,this);
+
             showReviewAndConfirm();
             showRegularLayout();
         }
         else if (resultCode == RESULT_CANCELED) {
             if(!mPaymentMethodEditionRequested) {
                 Intent returnIntent = new Intent();
+
+                //TODO validate
+
+
                 setResult(RESULT_CANCELED, returnIntent);
                 finish();
             }
@@ -551,6 +596,10 @@ public class CheckoutActivity extends AppCompatActivity {
             @Override
             public void success(Payment payment, Response response) {
                 mCreatedPayment = payment;
+
+                //TODO validate
+                MPTracker.getInstance().trackPayment("CHECKOUT","CREATE_PAYMENT","3", mTrackerDelegate, createMPTrackerInformer(),mActivity);
+
                 if (MercadoPagoUtil.isCardPaymentType(mSelectedPaymentMethod.getPaymentTypeId())) {
                     startCongratsActivity();
                 } else {
@@ -564,6 +613,41 @@ public class CheckoutActivity extends AppCompatActivity {
                 resolvePaymentFailure(error);
             }
         });
+    }
+
+    private MPPaymentTrackInformer createMPTrackerInformer(){
+        MPPaymentTrackInformer mpPaymentTrackInformer = new MPPaymentTrackInformer() {
+            @Override
+            public String getPaymentMethodId() {
+                return mCreatedPayment.getPaymentMethodId();
+            }
+
+            @Override
+            public String getStatus() {
+                return mCreatedPayment.getStatus();
+            }
+
+            @Override
+            public String getStatusDetail() {
+                return mCreatedPayment.getStatusDetail();
+            }
+
+            @Override
+            public String getTypeId() {
+                return mCreatedPayment.getPaymentTypeId();
+            }
+
+            @Override
+            public Integer getInstallments() {
+                return mCreatedPayment.getInstallments();
+            }
+
+            @Override
+            public Integer getIssuerId() {
+                return mCreatedPayment.getIssuerId();
+            }
+        };
+        return mpPaymentTrackInformer;
     }
 
     private void startInstructionsActivity() {
@@ -666,11 +750,13 @@ public class CheckoutActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-
         if(mPaymentMethodSearch == null || isUniquePaymentMethod()) {
             onCancelClicked();
         }
-        else if(mBackPressedOnce){
+        else if(mBackPressedOnce) {
+            //TODO validate
+            MPTracker.getInstance().trackEvent("CHECKOUT","BACK_PRESSED","3",mTrackerDelegate,this);
+
             mSnackbar.dismiss();
             mPaymentMethodEditionRequested = false;
             startPaymentVaultActivity();
