@@ -33,7 +33,7 @@ public class HttpClientUtil {
 
             int cacheSize = 10 * 1024 * 1024; // 10 MiB
             Cache cache = new Cache(new File(context.getCacheDir().getPath() + "okhttp"), cacheSize);
-            //okHttpClient.setCache(cache);
+            okHttpClient.setCache(cache);
             client = new OkClient(okHttpClient);
         }
         return client;
