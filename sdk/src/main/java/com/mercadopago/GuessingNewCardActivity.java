@@ -884,6 +884,9 @@ public class GuessingNewCardActivity extends FrontCardActivity {
                     } else {
                         mCardIdentificationNumberEditText.setInputType(InputType.TYPE_CLASS_TEXT);
                     }
+                    if (!mCardIdentificationNumberEditText.getText().toString().isEmpty()) {
+                        validateIdentificationNumber(true);
+                    }
                 }
             }
 
@@ -1230,6 +1233,7 @@ public class GuessingNewCardActivity extends FrontCardActivity {
         boolean ans = mCardToken.validateIdentificationNumber(mSelectedIdentificationType);
         if (ans) {
             clearErrorView();
+            mCardIdentificationNumberEditText.toggleLineColorOnError(false);
         } else {
             setCardIdentificationErrorView(getString(R.string.mpsdk_invalid_identification_number),
                     requestFocus);
