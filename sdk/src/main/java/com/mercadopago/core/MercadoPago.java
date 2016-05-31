@@ -117,7 +117,7 @@ public class MercadoPago {
                 }
             };
             RestAdapter paymentsRestAdapter = new RestAdapter.Builder()
-                    .setEndpoint("http://private-9376e-paymentmethodsmla.apiary-mock.com")
+                    .setEndpoint(MP_API_BASE_URL)
                     .setLogLevel(Settings.RETROFIT_LOGGING)
                     .setConverter(new GsonConverter(JsonUtil.getInstance().getGson()))
                     .setClient(HttpClientUtil.getPaymentClient(this.mContext))
