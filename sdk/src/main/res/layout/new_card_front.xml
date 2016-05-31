@@ -3,9 +3,9 @@
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/activity_new_card_container"
-    android:layout_gravity="center_horizontal"
+    android:layout_height="171dp"
     android:layout_width="wrap_content"
-    android:layout_height="171dp">
+    android:layout_gravity="center_horizontal">
 
     <FrameLayout
         android:layout_width="250dp"
@@ -31,7 +31,7 @@
 
 
         <FrameLayout
-            android:layout_width="166dp"
+            android:layout_width="171dp"
             android:layout_height="161dp">
 
             <ImageView
@@ -208,9 +208,9 @@
 
     <ImageView
         android:id="@+id/card_shadow_border"
-        android:src="@drawable/card_shadow_rounded"
         android:layout_width="260dp"
         android:layout_height="171dp"
-        android:layout_gravity="center"/>
+        android:layout_gravity="center"
+        android:src="@drawable/card_shadow_rounded"/>
 
 </FrameLayout>
