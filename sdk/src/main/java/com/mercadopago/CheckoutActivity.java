@@ -161,7 +161,7 @@ public class CheckoutActivity extends AppCompatActivity {
             @Override
             public void success(CheckoutPreference checkoutPreference, Response response) {
                 mCheckoutPreference = checkoutPreference;
-                if(mActiveActivity) {
+                if (mActiveActivity) {
                     try {
                         validatePreference();
                         initializeCheckout();
@@ -174,7 +174,7 @@ public class CheckoutActivity extends AppCompatActivity {
 
             @Override
             public void failure(RetrofitError error) {
-                if(mActiveActivity) {
+                if (mActiveActivity) {
                     ApiUtil.showApiExceptionError(mActivity, error);
                     failureRecovery = new FailureRecovery() {
                         @Override
@@ -382,7 +382,7 @@ public class CheckoutActivity extends AppCompatActivity {
                 Intent returnIntent = new Intent();
 
                 //TODO validate
-
+                MPTracker.getInstance().trackEvent("CHECKOUT","CANCELED","3",mTrackerDelegate,this);
 
                 setResult(RESULT_CANCELED, returnIntent);
                 finish();
@@ -598,7 +598,7 @@ public class CheckoutActivity extends AppCompatActivity {
                 mCreatedPayment = payment;
 
                 //TODO validate
-                MPTracker.getInstance().trackPayment("CHECKOUT","CREATE_PAYMENT","3", mTrackerDelegate, createMPTrackerInformer(),mActivity);
+                MPTracker.getInstance().trackPayment("CHECKOUT", "CREATE_PAYMENT", "3", mTrackerDelegate, createMPTrackerInformer(), mActivity);
 
                 if (MercadoPagoUtil.isCardPaymentType(mSelectedPaymentMethod.getPaymentTypeId())) {
                     startCongratsActivity();
