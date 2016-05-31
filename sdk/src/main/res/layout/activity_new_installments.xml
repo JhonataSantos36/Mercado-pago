@@ -6,33 +6,34 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".CardInstallmentsActivity"
-    android:background="@color/mpsdk_color_new_card_form_background">
+    android:background="@color/mpsdk_white">
 
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/mpsdk_color_new_card_form_background">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="220dp">
+            <include layout="@layout/mpsdk_transparent_toolbar"/>
+            <FrameLayout
+                android:id="@+id/activity_new_card_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|top"
+                android:layout_marginTop="36dp"/>
+
+        </FrameLayout>
+    </LinearLayout>
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true">
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="220dp">
-                <include layout="@layout/mpsdk_transparent_toolbar"/>
-                <FrameLayout
-                    android:id="@+id/activity_new_card_container"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal|top"
-                    android:layout_marginTop="36dp"/>
-
-            </FrameLayout>
-
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content">
 
                 <LinearLayout
                     android:id="@+id/newCardInstallmentsContainer"
@@ -50,7 +51,5 @@
                     android:layout_gravity="center"
                     android:visibility="gone"/>
             </FrameLayout>
-
-        </LinearLayout>
     </ScrollView>
 </LinearLayout>
