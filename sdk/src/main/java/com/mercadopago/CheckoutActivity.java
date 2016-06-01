@@ -656,7 +656,7 @@ public class CheckoutActivity extends AppCompatActivity {
     }
 
     private MPPaymentTrackInformer createMPTrackerInformer(){
-        MPPaymentTrackInformer mpPaymentTrackInformer = new MPPaymentTrackInformer() {
+        return new MPPaymentTrackInformer() {
             @Override
             public String getPaymentMethodId() {
                 return mCreatedPayment.getPaymentMethodId();
@@ -687,7 +687,6 @@ public class CheckoutActivity extends AppCompatActivity {
                 return mCreatedPayment.getIssuerId();
             }
         };
-        return mpPaymentTrackInformer;
     }
 
     private void startInstructionsActivity() {
