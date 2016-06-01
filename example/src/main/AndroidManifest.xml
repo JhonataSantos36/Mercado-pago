@@ -58,6 +58,9 @@
         <activity android:name=".step7.Step7Activity"
             android:label="Nuevo TC">
         </activity>
+        <activity android:name=".step7.PaymentMethodTypeActivity"
+            android:label="Con paymentMethodList">
+        </activity>
         <activity android:name=".Step8.F2Activity"/>
     </application>
 

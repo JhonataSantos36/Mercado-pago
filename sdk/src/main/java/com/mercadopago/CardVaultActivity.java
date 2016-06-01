@@ -18,6 +18,7 @@ import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.ErrorUtil;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit.Callback;
@@ -33,6 +34,7 @@ public class CardVaultActivity extends ShowCardActivity {
     private PaymentPreference mPaymentPreference;
     private FailureRecovery mFailureRecovery;
     private String mCurrencyId;
+    private List<PaymentMethod> mPaymentMethodList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +62,7 @@ public class CardVaultActivity extends ShowCardActivity {
         mCurrencyId = getIntent().getStringExtra("currencyId");
         mSecurityCodeLocation = CardInterface.CARD_SIDE_BACK;
         mAmount = new BigDecimal(getIntent().getStringExtra("amount"));
+        mPaymentMethodList = (ArrayList<PaymentMethod>) this.getIntent().getSerializableExtra("paymentMethodList");
         mPaymentPreference = (PaymentPreference) this.getIntent().getSerializableExtra("paymentPreference");
         if (mPaymentPreference == null) {
             mPaymentPreference = new PaymentPreference();
@@ -82,6 +85,7 @@ public class CardVaultActivity extends ShowCardActivity {
                         .setPublicKey(mPublicKey)
                         .setAmount(new BigDecimal(100))
                         .setPaymentPreference(mPaymentPreference)
+                        .setSupportedPaymentMethods(mPaymentMethodList)
                         .startGuessingCardActivity();
             }
         });

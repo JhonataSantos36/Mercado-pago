@@ -42,31 +42,5 @@ public class JsonUtil {
         return mGson;
     }
 
-    public <T> List<T> listFromJson(String json, Class<T> tClass) {
 
-        Gson gson = new Gson();
-
-        Type listType = new TypeToken<List<JsonObject>>() {
-        }.getType();
-
-        List<JsonObject> jsonItems = gson.fromJson(json, listType);
-
-        List<T> listObjects = new ArrayList<>();
-
-        for (JsonObject jsonItem : jsonItems) {
-            listObjects.add(fromJson(jsonItem.toString(), tClass));
-        }
-
-        return listObjects;
-    }
-
-    public static <T> String parseList(List<T> list) {
-
-        if (list != null) {
-            Gson gson = new Gson();
-            Type listType = new TypeToken<List<T>>(){}.getType();
-            return gson.toJson(list, listType);
-        }
-        return null;
-    }
 }

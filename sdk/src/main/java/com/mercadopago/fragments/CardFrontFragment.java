@@ -329,9 +329,12 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
 
     public void setFontColor() {
         PaymentMethod currentPaymentMethod = mActivity.getCurrentPaymentMethod();
-        int font = CardInterface.FULL_TEXT_VIEW_COLOR;
+        int font = 0;
         if (currentPaymentMethod != null) {
             font = mActivity.getCardFontColor(currentPaymentMethod);
+        }
+        if (font == 0) {
+            font = CardInterface.FULL_TEXT_VIEW_COLOR;
         }
         mCardNumberView.setTextColor(ContextCompat.getColor(getContext(), font));
         mCardholderNameView.setTextColor(ContextCompat.getColor(getContext(), font));

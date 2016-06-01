@@ -49,6 +49,7 @@ import com.mercadopago.util.LayoutUtil;
 import com.mercadopago.views.MPEditText;
 import com.mercadopago.views.MPTextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit.Callback;
@@ -107,6 +108,7 @@ public class GuessingNewCardActivity extends FrontCardActivity {
     private int mCardNumberLength;
     private String mSecurityCodeLocation;
     private FailureRecovery mFailureRecovery;
+    private List<PaymentMethod> mPaymentMethodList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,7 +128,11 @@ public class GuessingNewCardActivity extends FrontCardActivity {
                 .setPublicKey(mPublicKey)
                 .build();
 
-        getPaymentMethodsAsync();
+        if (mPaymentMethodList == null) {
+            getPaymentMethodsAsync();
+        } else {
+            startGuessingForm(mPaymentMethodList);
+        }
     }
 
     @Override
@@ -234,6 +240,7 @@ public class GuessingNewCardActivity extends FrontCardActivity {
         mPublicKey = this.getIntent().getStringExtra("publicKey");
         mPaymentPreference = (PaymentPreference) this.getIntent().getSerializableExtra("paymentPreference");
         mToken = (Token) this.getIntent().getSerializableExtra("token");
+        mPaymentMethodList = (ArrayList<PaymentMethod>) this.getIntent().getSerializableExtra("paymentMethodList");
         mIdentification = new Identification();
         mIdentificationNumberRequired = false;
         if (mPaymentPreference == null) {
@@ -392,11 +399,7 @@ public class GuessingNewCardActivity extends FrontCardActivity {
         mMercadoPago.getPaymentMethods(new Callback<List<PaymentMethod>>() {
             @Override
             public void success(List<PaymentMethod> paymentMethods, Response response) {
-                initializeGuessingCardNumberController(paymentMethods);
-                setCardNumberListener();
-                if (mToken != null) {
-                    initializeCardByToken();
-                }
+                startGuessingForm(paymentMethods);
             }
 
             @Override
@@ -410,6 +413,14 @@ public class GuessingNewCardActivity extends FrontCardActivity {
                 ApiUtil.showApiExceptionError(mActivity, error);
             }
         });
+    }
+
+    protected void startGuessingForm(List<PaymentMethod> paymentMethods) {
+        initializeGuessingCardNumberController(paymentMethods);
+        setCardNumberListener();
+        if (mToken != null) {
+            initializeCardByToken();
+        }
     }
 
     protected void initializeCardByToken() {

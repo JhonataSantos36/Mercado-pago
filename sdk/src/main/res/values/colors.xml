@@ -59,7 +59,9 @@
 
     <!-- Card Colors -->
     <color name="mpsdk_visa">#001D77</color>
+    <color name="mpsdk_debvisa">#001D77</color>
     <color name="mpsdk_master">#405B72</color>
+    <color name="mpsdk_debmaster">#405B72</color>
     <color name="mpsdk_amex">#A1CCAA</color>
     <color name="mpsdk_diners">#CECECE</color>
     <color name="mpsdk_elo">#666666</color>
@@ -74,6 +76,7 @@
     <color name="mpsdk_cordobesa">#5BAB97</color>
     <color name="mpsdk_cordial">#CBD8DF</color>
     <color name="mpsdk_mercadopago_cc">#DCDDD9</color>
+    <color name="mpsdk_mercadopagocard">#DCDDD9</color>
 
     <color name="mpsdk_pagofacil">#FFFFFF</color>
     <color name="mpsdk_rapipago">#FFFFFF</color>
@@ -87,7 +90,9 @@
 
     <!-- Card font color -->
     <color name="mpsdk_font_visa">#FFFFFF</color>
+    <color name="mpsdk_font_debvisa">#FFFFFF</color>
     <color name="mpsdk_font_master">#FFFFFF</color>
+    <color name="mpsdk_font_debmaster">#FFFFFF</color>
     <color name="mpsdk_font_amex">#333333</color>
     <color name="mpsdk_font_diners">#333333</color>
     <color name="mpsdk_font_elo">#FFFFFF</color>
@@ -102,6 +107,7 @@
     <color name="mpsdk_font_cordobesa">#333333</color>
     <color name="mpsdk_font_cordial">#333333</color>
     <color name="mpsdk_font_mercadopago_cc">#333333</color>
+    <color name="mpsdk_font_mercadopagocard">#333333</color>
 
     <color name="mpsdk_font_pagofacil">#333333</color>
     <color name="mpsdk_font_rapipago">#333333</color>
