@@ -60,7 +60,7 @@ public class GuessingNewCardActivity extends FrontCardActivity {
 
     // Activity parameters
     private String mPublicKey;
-    private MPTextView mToolbarTitle;
+    private MPTextView mToolbarButton;
 
     // Input controls
     private MPEditText mCardHolderNameEditText;
@@ -157,6 +157,7 @@ public class GuessingNewCardActivity extends FrontCardActivity {
 
     private void initializeToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbarButton = (MPTextView) findViewById(R.id.buttonText);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -171,6 +172,16 @@ public class GuessingNewCardActivity extends FrontCardActivity {
                 }
             });
         }
+        mToolbarButton.setText(getString(R.string.mpsdk_bank_deals_action));
+        mToolbarButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new MercadoPago.StartActivityBuilder()
+                        .setActivity(mActivity)
+                        .setPublicKey(mPublicKey)
+                        .startBankDealsActivity();
+            }
+        });
         LayoutUtil.showProgressLayout(this);
     }
 

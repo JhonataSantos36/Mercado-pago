@@ -24,7 +24,7 @@ import retrofit.client.Response;
 public class BankDealsActivity extends AppCompatActivity {
 
     // Activity parameters
-    protected String mMerchantPublicKey;
+    protected String mPublicKey;
 
     // Local vars
     protected Activity mActivity;
@@ -41,12 +41,12 @@ public class BankDealsActivity extends AppCompatActivity {
         mActivity = this;
 
         // Get activity parameters
-        mMerchantPublicKey = mActivity.getIntent().getStringExtra("merchantPublicKey");
+        mPublicKey = mActivity.getIntent().getStringExtra("publicKey");
 
         // Init MercadoPago object with public key
         mMercadoPago = new MercadoPago.Builder()
                 .setContext(mActivity)
-                .setPublicKey(mMerchantPublicKey)
+                .setPublicKey(mPublicKey)
                 .build();
 
         // Set recycler view

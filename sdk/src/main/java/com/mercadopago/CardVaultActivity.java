@@ -71,7 +71,7 @@ public class CardVaultActivity extends ShowCardActivity {
     }
 
     protected void setContentView() {
-        setContentView(R.layout.activity_flow_card);
+        setContentView(R.layout.activity_new_card_vault);
     }
 
     private void startGuessingCardActivity() {
