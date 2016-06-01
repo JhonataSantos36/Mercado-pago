@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mercadopago.exceptions.MPException;
+import com.mercadopago.util.ApiUtil;
 
 public class ErrorActivity extends AppCompatActivity {
 
@@ -59,7 +60,7 @@ public class ErrorActivity extends AppCompatActivity {
     private void fillData() {
         String message;
         if(mMPException.getApiException() != null) {
-            message = this.getString(R.string.mpsdk_standard_error_message);
+            message = ApiUtil.getApiExceptionMessage(this, mMPException.getApiException());
         }
         else {
             message = mMPException.getMessage();

@@ -29,7 +29,7 @@ public class MPException implements Serializable{
 
     public MPException(ApiException apiException) {
         this.apiException = apiException;
-        this.recoverable = true;
+        this.recoverable = apiException.getCause() == null || apiException.getCause().isEmpty();
     }
 
     public ApiException getApiException() {
@@ -49,9 +49,5 @@ public class MPException implements Serializable{
             errorDetail = "";
         }
         return errorDetail;
-    }
-
-    public void setErrorDetail(String errorDetail) {
-        this.errorDetail = errorDetail;
     }
 }

@@ -75,7 +75,7 @@
     <style name="mpsdk_large_label">
         <item name="android:textSize">@dimen/mpsdk_large_text</item>
         <item name="android:textColor">@color/mpsdk_form_text</item>
-        <item name="android:lineSpacingMultiplier">1.7</item>
+        <item name="android:lineSpacingMultiplier">1.5</item>
     </style>
 
     <style name="mpsdk_list_label_comment">

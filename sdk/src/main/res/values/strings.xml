@@ -167,4 +167,24 @@
     <string name="mpsdk_press_again_to_leave">Presiona de nuevo para salir</string>
     <string name="mpsdk_press_again_confirm">Si presionas de nuevo reiniciarás la selección</string>
 
+    <string name="mpsdk_customer_not_allowed_to_operate">No tienes permitido operar</string>
+    <string name="mpsdk_collector_not_allowed_to_operate">El vendedor no tiene permitido operar</string>
+    <string name="mpsdk_invalid_users_involved">Usuarios no válidos involucrados</string>
+    <string name="mpsdk_customer_equal_to_collector">Mismo usuario cliente y vendedor</string>
+    <string name="mpsdk_invalid_card_holder_name">Nombre del titular de la tarjeta inválido</string>
+    <string name="mpsdk_unauthorized_client">Cliente no autorizado</string>
+    <string name="mpsdk_payment_method_not_found">No encontramos el medio de pago seleccionado</string>
+    <string name="mpsdk_invalid_security_code">Código de seguridad inválido</string>
+    <string name="mpsdk_security_code_required">Código de seguridad requerido</string>
+    <string name="mpsdk_invalid_card_number">Número de tarjeta inválido</string>
+    <string name="mpsdk_empty_card_expiration_month">No se ingresó el mes de la fecha de expiración de la tarjeta</string>
+    <string name="mpsdk_empty_card_expiration_year">No se ingresó el año de la fecha de expiración de la tarjeta</string>
+    <string name="mpsdk_empty_card_holder_name">No se ingresó el nombre del titular de la tarjeta</string>
+    <string name="mpsdk_empty_document_number">No se ingresó el número de documento del titular de la tarjeta</string>
+    <string name="mpsdk_empty_document_type">No se ingresó el tipo de documento del titular de la tarjeta</string>
+    <string name="mpsdk_invalid_payment_type_id">Tipo de medio de pago inválido</string>
+    <string name="mpsdk_invalid_card_expiration_month">Mes de expiración de la tarjeta inválido</string>
+    <string name="mpsdk_invalid_card_expiration_year">Año de expiración de la tarjeta inválido</string>
+    <string name="mpsdk_invalid_payer_email">Email del cliente inválido</string>
+
 </resources>
