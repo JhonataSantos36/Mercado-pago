@@ -282,10 +282,10 @@ public class MercadoPago {
 
     // * Static methods for StartActivityBuilder implementation
 
-    private static void startBankDealsActivity(Activity activity, String merchantPublicKey) {
+    private static void startBankDealsActivity(Activity activity, String publicKey) {
 
         Intent bankDealsIntent = new Intent(activity, BankDealsActivity.class);
-        bankDealsIntent.putExtra("merchantPublicKey", merchantPublicKey);
+        bankDealsIntent.putExtra("publicKey", publicKey);
         activity.startActivityForResult(bankDealsIntent, BANK_DEALS_REQUEST_CODE);
     }
 
