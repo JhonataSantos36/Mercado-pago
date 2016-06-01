@@ -132,6 +132,9 @@ public class GuessingNewCardActivity extends FrontCardActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        if (mCardSideState == null) {
+            mCardSideState = CARD_SIDE_FRONT;
+        }
         if (showingFront()) {
             mCardNumberEditText.requestFocus();
             mCurrentEditingEditText = CardInterface.CARD_NUMBER_INPUT;
