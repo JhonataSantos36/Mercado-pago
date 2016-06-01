@@ -339,9 +339,9 @@ public class CongratsActivity extends AppCompatActivity {
                 if (hasInterests()) {
                     StringBuilder sb = new StringBuilder();
 
-                    sb.append(" (");
+                    sb.append("( ");
                     sb.append(CurrenciesUtil.formatNumber(mPayment.getTransactionDetails().getTotalPaidAmount(), mPayment.getCurrencyId()));
-                    sb.append(")");
+                    sb.append(" )");
                     mInterestAmountDescription.setText(CurrenciesUtil.formatCurrencyInText(mPayment.getTransactionDetails().getTotalPaidAmount(),
                             mPayment.getCurrencyId(), sb.toString(), true, true));
                 }

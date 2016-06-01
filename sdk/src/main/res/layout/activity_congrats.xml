@@ -136,7 +136,7 @@
                                 android:id="@+id/interestAmountDescription"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginLeft="17dp"
+                                android:layout_marginLeft="10dp"
                                 android:gravity="bottom"
                                 android:textSize="18dp"
                                 android:textColor="@color/mpsdk_color_congrats_interest"
