@@ -23,27 +23,17 @@
                 android:orientation="vertical"
                 android:background="@color/mpsdk_color_light_grey">
 
-                <android.support.v7.widget.CardView
-                    xmlns:card_view="http://schemas.android.com/apk/res-auto"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/mpsdk_card_margin"
-                    card_view:cardCornerRadius="@dimen/mpsdk_card_corner_radius"
-                    card_view:cardBackgroundColor="@color/mpsdk_color_rejection_title_background">
-
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="15dp"
-                        android:layout_marginBottom="15dp"
                         android:orientation="vertical"
                         android:background="@color/mpsdk_color_rejection_title_background">
 
                         <ImageView
                             android:id="@+id/icon"
-                            android:layout_width="70dp"
-                            android:layout_height="70dp"
-                            android:layout_marginTop="26dp"
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:layout_marginTop="24dp"
                             android:layout_marginBottom="14dp"
                             android:tint="@color/mpsdk_color_rejection_image"
                             android:src="@drawable/icon_error"
@@ -54,8 +44,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="bottom|center"
-                            android:layout_marginTop="10dp"
-                            android:textSize="27dp"
+                            android:textSize="22dp"
                             android:textColor="@color/mpsdk_color_rejection_result_text"
                             android:text="@string/mpsdk_title_other_reason_rejection" />
 
@@ -63,16 +52,21 @@
                             android:id="@+id/rejectionSubtitle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
-                            android:layout_marginBottom="10dp"
+                            android:layout_marginTop="12dp"
+                            android:layout_marginBottom="20dp"
                             android:layout_marginLeft="10dp"
                             android:layout_marginRight="10dp"
                             android:gravity="bottom|center"
-                            android:textSize="18dp"
+                            android:textSize="15dp"
                             android:text="@string/mpsdk_text_select_other_rejection" />
-                    </LinearLayout>
-                </android.support.v7.widget.CardView>
 
+                        <View
+                            android:id="@+id/titleSeparator"
+                            android:layout_width="match_parent"
+                            android:layout_height="2dp"
+                            android:background="@color/mpsdk_separator"
+                            android:layout_gravity="center_horizontal|bottom" />
+                    </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -84,22 +78,21 @@
                         <FrameLayout
                             android:id="@+id/selectOtherPaymentMethodByRejection"
                             android:layout_width="match_parent"
-                            android:layout_height="@dimen/mpsdk_button_height"
-                            android:layout_marginLeft="10dp"
-                            android:layout_marginRight="10dp"
-                            android:layout_marginTop="30dp"
-                            android:layout_marginBottom="30dp"
+                            android:layout_height="40dp"
+                            android:layout_marginLeft="15dp"
+                            android:layout_marginRight="15dp"
+                            android:layout_marginTop="24dp"
+                            android:layout_marginBottom="24dp"
                             android:background="@drawable/button_bg_stroke" >
                                 <com.mercadopago.views.MPTextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
                                     android:textAllCaps="false"
-                                    android:textSize="22dp"
+                                    android:textSize="19dp"
                                     android:textColor="@color/mpsdk_color_congrats_installments"
                                     android:text="@string/mpsdk_text_other_payment_method_button_rejection"/>
                             </FrameLayout>
-
                         <View
                             android:id="@+id/separator"
                             android:layout_width="match_parent"
@@ -113,7 +106,7 @@
                             android:layout_gravity="center_horizontal|bottom" />
 
                         <com.mercadopago.views.MPTextView
-                            android:layout_marginTop="20dp"
+                            android:layout_marginTop="10dp"
                             android:paddingLeft="40dp"
                             android:paddingRight="40dp"
                             android:paddingTop="20dp"
