@@ -34,6 +34,7 @@ public abstract class ShowCardActivity extends FrontCardActivity {
     protected Token mToken;
     protected String mSecurityCodeLocation;
     protected Cardholder mCardholder;
+    protected int mCardNumberLength;
 
     //Local vars
     protected Issuer mSelectedIssuer;
@@ -56,6 +57,11 @@ public abstract class ShowCardActivity extends FrontCardActivity {
         mCardholder = mToken.getCardholder();
         Setting setting = Setting.getSettingByBin(mCurrentPaymentMethod.getSettings(),
                 mToken.getFirstSixDigits());
+        if (setting != null) {
+            mCardNumberLength = setting.getCardNumber().getLength();
+        } else {
+            mCardNumberLength = CARD_NUMBER_MAX_LENGTH;
+        }
         mSecurityCodeLocation = setting.getSecurityCode().getCardLocation();
         mSelectedIssuer = (Issuer) this.getIntent().getSerializableExtra("issuer");
     }
@@ -124,6 +130,11 @@ public abstract class ShowCardActivity extends FrontCardActivity {
             sb.append("x");
         }
         return sb.toString();
+    }
+
+    @Override
+    public int getCardNumberLength() {
+        return mCardNumberLength;
     }
 
     @Override

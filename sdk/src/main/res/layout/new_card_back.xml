@@ -10,7 +10,7 @@
 
     <FrameLayout
         android:id="@+id/activity_new_card_form_color_back"
-        android:layout_width="250dp"
+        android:layout_width="256dp"
         android:layout_height="161dp"
         android:layout_gravity="center"
         android:background="@drawable/new_card_layout">
@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
             <FrameLayout
-                android:layout_width="250dp"
+                android:layout_width="256dp"
                 android:layout_height="33dp"
                 android:layout_marginTop="33dp"
                 android:background="@drawable/card_back_band">
@@ -30,7 +30,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal">
                 <FrameLayout
-                    android:layout_width="210dp"
+                    android:layout_width="216dp"
                     android:layout_height="24dp"
                     android:layout_gravity="center_vertical"
                     android:background="@drawable/card_ccv_bakg">
@@ -67,7 +67,7 @@
         </LinearLayout>
 
         <FrameLayout
-            android:layout_width="171dp"
+            android:layout_width="177dp"
             android:layout_height="161dp"
             android:background="@drawable/card_back_shadow">
         </FrameLayout>
@@ -75,7 +75,7 @@
 
     <ImageView
         android:id="@+id/card_shadow_border"
-        android:layout_width="260dp"
+        android:layout_width="266dp"
         android:layout_height="171dp"
         android:layout_gravity="center"
         android:src="@drawable/card_shadow_rounded"/>

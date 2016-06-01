@@ -12,10 +12,10 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 
 import com.mercadopago.CardInterface;
 import com.mercadopago.R;
+import com.mercadopago.core.MercadoPago;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.views.MPEditText;
 import com.mercadopago.views.MPTextView;
@@ -29,8 +29,6 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
     private MPTextView mCardExpiryYearView;
     private MPTextView mCardDateDividerView;
     private MPTextView mCardSecurityCodeView;
-    private LinearLayout mBaseCardholderView;
-    private FrameLayout mCardNumberClickableZone;
     private FrameLayout mCardSecurityClickableZone;
     private FrameLayout mBaseCard;
     private FrameLayout mBaseSecurity;
@@ -51,6 +49,8 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
     private boolean mAnimate;
 
     private CardInterface mActivity;
+
+    public static String BASE_NUMBER_CARDHOLDER = "···· ···· ···· ····";
 
     public CardFrontFragment() {
         this.mAnimate = true;
@@ -83,7 +83,6 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
         mCardHolderNameEditText = (MPEditText) getActivity().findViewById(R.id.cardholderName);
         mCardExpiryDateEditText = (MPEditText) getActivity().findViewById(R.id.cardExpiryDate);
         mCardSecurityEditText = (MPEditText) getActivity().findViewById(R.id.cardSecurityCode);
-        mBaseCardholderView = (LinearLayout) getActivity().findViewById(R.id.baseCardholderContainer);
         mAnimFadeIn = AnimationUtils.loadAnimation(getActivity(), R.anim.fade_in);
         mQuickAnim = AnimationUtils.loadAnimation(getActivity(), R.anim.quick_anim);
         if (getView() != null) {
@@ -93,7 +92,6 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
             mCardExpiryYearView = (MPTextView) getView().findViewById(R.id.cardHolderExpiryYear);
             mCardDateDividerView = (MPTextView) getView().findViewById(R.id.cardHolderDateDivider);
             mCardSecurityCodeView = (MPTextView) getView().findViewById(R.id.cardSecurityView);
-            mCardNumberClickableZone = (FrameLayout) getView().findViewById(R.id.cardNumberClickableZone);
             mCardSecurityClickableZone = (FrameLayout) getView().findViewById(R.id.cardSecurityClickableZone);
             mBaseCard = (FrameLayout) getView().findViewById(R.id.activity_new_card_form_basecolor_front);
             mBaseSecurity = (FrameLayout) getView().findViewById(R.id.base_card_security_container);
@@ -105,7 +103,7 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
     }
 
     public void populateViews() {
-        populateCardNumber();
+        populateCardNumber(mActivity.getCardNumber());
         populateCardName();
         populateCardMonth();
         populateCardYear();
@@ -147,7 +145,7 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
         mCardSecurityClickableZone.setVisibility(View.INVISIBLE);
     }
 
-    public void onSecurityTextChanged(CharSequence s, int start, int before, int count) {
+    public void onSecurityTextChanged(CharSequence s) {
         mBaseSecurity.setVisibility(View.INVISIBLE);
         mCardSecurityCodeView.setVisibility(View.VISIBLE);
         mCardSecurityCodeView.setText(s);
@@ -263,10 +261,7 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
 
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    mBaseCardholderView.setVisibility(View.INVISIBLE);
-                    mCardNumberView.setVisibility(View.VISIBLE);
-                    String number = mActivity.buildNumberWithMask(s);
-                    mCardNumberView.setText(number);
+                    populateCardNumber(s);
                 }
 
 
@@ -274,8 +269,7 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
                 public void afterTextChanged(Editable s) {
                     mActivity.saveCardNumber(s.toString());
                     if (s.length() == 0) {
-                        mCardNumberView.setVisibility(View.INVISIBLE);
-                        mBaseCardholderView.setVisibility(View.VISIBLE);
+                        setText(mCardNumberView, BASE_NUMBER_CARDHOLDER, CardInterface.FULL_TEXT_VIEW_COLOR);
                         mActivity.saveCardNumber(null);
                     }
                 }
@@ -381,18 +375,19 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
         }
     }
 
-    private void populateCardNumber() {
-        String cardNumber = mActivity.getCardNumber();
-        if (cardNumber == null) {
-            mCardNumberView.setVisibility(View.INVISIBLE);
-            mBaseCardholderView.setVisibility(View.VISIBLE);
+    public void populateCardNumber(CharSequence s) {
+        String number;
+        if (s == null || s.length() == 0) {
+            number = BASE_NUMBER_CARDHOLDER;
+        } else if ((s.length() < MercadoPago.BIN_LENGTH)
+                || (s.length() == MercadoPago.BIN_LENGTH && mActivity.getCurrentPaymentMethod() == null)
+                || (mActivity.getCurrentPaymentMethod() == null) ) {
+            number = mActivity.buildNumberWithMask(CardInterface.CARD_NUMBER_MAX_LENGTH, s.toString());
         } else {
-            mBaseCardholderView.setVisibility(View.INVISIBLE);
-            mCardNumberView.setVisibility(View.VISIBLE);
-            int color = CardInterface.FULL_TEXT_VIEW_COLOR;
-            String number = mActivity.buildNumberWithMask(cardNumber);
-            setText(mCardNumberView, number, color);
+            int length = mActivity.getCardNumberLength();
+            number = mActivity.buildNumberWithMask(length, s.toString());
         }
+        mCardNumberView.setText(number);
     }
 
     private void populateCardName() {

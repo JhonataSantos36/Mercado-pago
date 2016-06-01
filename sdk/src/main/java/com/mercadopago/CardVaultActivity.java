@@ -135,6 +135,7 @@ public class CardVaultActivity extends ShowCardActivity {
                 List<Setting> settings = mCurrentPaymentMethod.getSettings();
                 Setting setting = Setting.getSettingByBin(settings, mBin);
                 mSecurityCodeLocation = setting.getSecurityCode().getCardLocation();
+                mCardNumberLength = setting.getCardNumber().getLength();
             }
             initializeCard();
             if (mCurrentPaymentMethod != null) {

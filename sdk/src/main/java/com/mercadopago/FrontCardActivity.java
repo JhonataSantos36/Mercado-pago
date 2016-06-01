@@ -97,28 +97,78 @@ public abstract class FrontCardActivity extends AppCompatActivity implements Car
             return getResources().getColor(CardInterface.FULL_TEXT_VIEW_COLOR);
         }
         String colorName = "mpsdk_font_" + paymentMethod.getId().toLowerCase();
-        int color = getResources().getIdentifier(colorName, "color", getPackageName());
-        return color;
+        return getResources().getIdentifier(colorName, "color", getPackageName());
     }
 
-    public String buildNumberWithMask(CharSequence s) {
-        StringBuffer sb = new StringBuffer();
-        for (int i = 1; i <= s.length(); i++) {
-            sb.append(s.charAt(i-1));
-            if (i % 4 == 0) {
-                sb.append("  ");
+    @Override
+    public String buildNumberWithMask(int cardLength, String s) {
+        String result = "";
+        if (cardLength == CARD_NUMBER_AMEX_LENGTH) {
+            StringBuffer sb = new StringBuffer();
+            for (int i = 0; i < 4 ; i++) {
+                char c = getCharOfCard(s, i);
+                sb.append(c);
             }
+            sb.append(" ");
+            for (int i = 4; i < 10; i++) {
+                char c = getCharOfCard(s, i);
+                sb.append(c);
+            }
+            sb.append(" ");
+            for (int i = 10; i < CARD_NUMBER_AMEX_LENGTH; i++) {
+                char c = getCharOfCard(s, i);
+                sb.append(c);
+            }
+            result = sb.toString();
+        } else if (cardLength == CARD_NUMBER_DINERS_LENGTH) {
+            StringBuffer sb = new StringBuffer();
+            for (int i = 0; i < 4 ; i++) {
+                char c = getCharOfCard(s, i);
+                sb.append(c);
+            }
+            sb.append(" ");
+            for (int i = 4; i < 10; i++) {
+                char c = getCharOfCard(s, i);
+                sb.append(c);
+            }
+            sb.append(" ");
+            for (int i = 10; i < CARD_NUMBER_DINERS_LENGTH; i++) {
+                char c = getCharOfCard(s, i);
+                sb.append(c);
+            }
+            result = sb.toString();
+        } else if (cardLength == CARD_NUMBER_MAX_LENGTH){
+            StringBuffer sb = new StringBuffer();
+            for (int i = 1; i <= CARD_NUMBER_MAX_LENGTH; i++) {
+                sb.append(getCharOfCard(s, i-1));
+                if (i % 4 == 0) {
+                    sb.append(" ");
+                }
+            }
+            result = sb.toString();
         }
-        return sb.toString();
+        return result;
+    }
+
+    private char getCharOfCard(String s, int i) {
+        if (i < s.length()) {
+            return s.charAt(i);
+        } else {
+            return "·".charAt(0);
+        }
     }
 
     public String buildIdentificationNumberWithMask(CharSequence s) {
         if (s.length() == 0) {
             return s.toString();
         }
-        Integer value = Integer.valueOf(s.toString());
-        Locale.setDefault(Locale.GERMAN);
-        return String.format("%,d", value);
+        try {
+            Integer value = Integer.valueOf(s.toString());
+            Locale.setDefault(Locale.GERMAN);
+            return String.format("%,d", value);
+        } catch (NumberFormatException e) {
+            return "";
+        }
     }
 
 }

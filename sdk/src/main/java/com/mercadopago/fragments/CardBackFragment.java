@@ -58,7 +58,7 @@ public class CardBackFragment extends android.support.v4.app.Fragment {
         populateCardSecurityCode();
     }
     
-    public void onSecurityTextChanged(CharSequence s, int start, int before, int count) {
+    public void onSecurityTextChanged(CharSequence s) {
         mBaseCardSecurityCode.setVisibility(View.INVISIBLE);
         mCardSecurityCodeTextView.setVisibility(View.VISIBLE);
         mCardSecurityCodeTextView.setText(s);
