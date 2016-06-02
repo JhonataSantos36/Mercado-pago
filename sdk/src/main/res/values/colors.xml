@@ -77,13 +77,14 @@
     <color name="mpsdk_cordial">#CBD8DF</color>
     <color name="mpsdk_mercadopago_cc">#DCDDD9</color>
     <color name="mpsdk_mercadopagocard">#DCDDD9</color>
+    <color name="mpsdk_cmr">#3D7D4E</color>
+
 
     <color name="mpsdk_pagofacil">#FFFFFF</color>
     <color name="mpsdk_rapipago">#FFFFFF</color>
     <color name="mpsdk_redlink">#FFFFFF</color>
     <color name="mpsdk_bapropagos">#FFFFFF</color>
     <color name="mpsdk_cargavirtual">#FFFFFF</color>
-    <color name="mpsdk_cmr">#FFFFFF</color>
 
     <color name="mpsdk_submit">#1B9EE3</color>
     <color name="mpsdk_submit_pressed">#1976D2</color>
@@ -108,12 +109,12 @@
     <color name="mpsdk_font_cordial">#333333</color>
     <color name="mpsdk_font_mercadopago_cc">#333333</color>
     <color name="mpsdk_font_mercadopagocard">#333333</color>
+    <color name="mpsdk_font_cmr">#FFFFFF</color>
 
     <color name="mpsdk_font_pagofacil">#333333</color>
     <color name="mpsdk_font_rapipago">#333333</color>
     <color name="mpsdk_font_redlink">#333333</color>
     <color name="mpsdk_font_bapropagos">#333333</color>
     <color name="mpsdk_font_cargavirtual">#333333</color>
-    <color name="mpsdk_font_cmr">#333333</color>
 
 </resources>
