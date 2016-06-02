@@ -139,6 +139,9 @@ public abstract class ShowCardActivity extends FrontCardActivity {
 
     @Override
     public int getSecurityCodeLength() {
+        if (mToken == null) {
+            return CARD_DEFAULT_SECURITY_CODE_LENGTH;
+        }
         return mToken.getSecurityCodeLength();
     }
 
