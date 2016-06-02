@@ -145,13 +145,13 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
     }
 
     public void onSecurityTextChanged(CharSequence s) {
-        mCardSecurityCodeTextView.setText(buildSecurityCode(mActivity.getSecurityCodeLength(), s.toString()));
+        mCardSecurityCodeTextView.setText(buildSecurityCode(mActivity.getSecurityCodeLength(), s));
     }
 
     public void afterSecurityTextChanged(Editable s) {
         mActivity.saveCardSecurityCode(s.toString());
         if (s.length() == 0) {
-            mCardSecurityCodeTextView.setText(buildSecurityCode(mActivity.getSecurityCodeLength(), s.toString()));
+            mCardSecurityCodeTextView.setText(buildSecurityCode(mActivity.getSecurityCodeLength(), s));
             mActivity.saveCardSecurityCode(null);
         }
     }
@@ -455,6 +455,14 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
             sb.append(c);
         }
         return sb.toString();
+    }
+
+    public String buildSecurityCode(int cardLength, CharSequence s) {
+        if (s == null) {
+            return BASE_FRONT_SECURITY_CODE;
+        } else {
+            return buildSecurityCode(cardLength, s.toString());
+        }
     }
 
     private char getCharOfCard(String s, int i) {
