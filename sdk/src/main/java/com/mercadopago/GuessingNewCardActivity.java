@@ -723,6 +723,11 @@ public class GuessingNewCardActivity extends FrontCardActivity {
     }
 
     @Override
+    public int getSecurityCodeLength() {
+        return mCardSecurityCodeLength;
+    }
+
+    @Override
     public String getSecurityCodeLocation() {
         if (mSecurityCodeLocation == null) {
             return CardInterface.CARD_SIDE_BACK;

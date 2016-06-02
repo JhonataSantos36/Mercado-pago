@@ -69,4 +69,6 @@ public interface CardInterface {
 
     int getCardNumberLength();
 
+    int getSecurityCodeLength();
+
 }
