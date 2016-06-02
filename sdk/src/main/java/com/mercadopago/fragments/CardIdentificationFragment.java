@@ -20,7 +20,7 @@ public class CardIdentificationFragment extends android.support.v4.app.Fragment 
 
     private MPTextView mCardIdentificationNumberView;
     private MPEditText mCardIdentificationNumberEditText;
-    private LinearLayout mBaseIdNumberView;
+    private MPTextView mBaseIdNumberView;
 
     private CardInterface mActivity;
 
@@ -63,7 +63,7 @@ public class CardIdentificationFragment extends android.support.v4.app.Fragment 
         mCardIdentificationNumberEditText = (MPEditText) getActivity().findViewById(R.id.cardIdentificationNumber);
         mCardIdentificationNumberEditText.requestFocus();
         if (getView() != null) {
-            mBaseIdNumberView = (LinearLayout) getView().findViewById(R.id.identificationCardholderContainer);
+            mBaseIdNumberView = (MPTextView) getView().findViewById(R.id.identificationCardholderContainer);
             mCardIdentificationNumberView = (MPTextView) getView().findViewById(R.id.idNumberView);
         }
     }

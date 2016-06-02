@@ -18,7 +18,7 @@ public class CardBackFragment extends android.support.v4.app.Fragment {
 
     private CardInterface mActivity;
 
-    public static String BASE_BACK_SECURITY_CODE = "···";
+    public static String BASE_BACK_SECURITY_CODE = "•••";
 
     public CardBackFragment() {
 
@@ -97,7 +97,7 @@ public class CardBackFragment extends android.support.v4.app.Fragment {
         if (i < s.length()) {
             return s.charAt(i);
         } else {
-            return "·".charAt(0);
+            return "•".charAt(0);
         }
     }
 

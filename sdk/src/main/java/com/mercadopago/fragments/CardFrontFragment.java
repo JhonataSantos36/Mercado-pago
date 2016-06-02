@@ -49,8 +49,8 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
 
     private CardInterface mActivity;
 
-    public static String BASE_NUMBER_CARDHOLDER = "···· ···· ···· ····";
-    public static String BASE_FRONT_SECURITY_CODE = "····";
+    public static String BASE_NUMBER_CARDHOLDER = "•••• •••• •••• ••••";
+    public static String BASE_FRONT_SECURITY_CODE = "••••";
 
     public CardFrontFragment() {
         this.mAnimate = true;
@@ -461,7 +461,7 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
         if (i < s.length()) {
             return s.charAt(i);
         } else {
-            return "·".charAt(0);
+            return "•".charAt(0);
         }
     }
 

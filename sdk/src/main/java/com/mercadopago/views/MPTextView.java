@@ -27,6 +27,7 @@ public class MPTextView extends TextView {
     public static final String COND_SEMI_BOLD = "cond_semi_bold";
     public static final String COND_SEMI_BOLD_ITALIC = "cond_semi_bold_italic";
     public static final String ROBOTO_REGULAR = "roboto_regular";
+    public static final String ROBOTO_BOLD = "roboto_bold";
 
     private String mTypeName;
 
@@ -112,6 +113,9 @@ public class MPTextView extends TextView {
                     break;
                 case ROBOTO_REGULAR:
                     mTypeName = "fonts/RobotoMono-Regular.ttf";
+                    break;
+                case ROBOTO_BOLD:
+                    mTypeName = "fonts/RobotoMono-Bold.ttf";
                     break;
                 default:
                     mTypeName = "fonts/ProximaNova-Light.otf";

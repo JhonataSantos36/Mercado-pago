@@ -154,7 +154,7 @@ public abstract class FrontCardActivity extends AppCompatActivity implements Car
         if (i < s.length()) {
             return s.charAt(i);
         } else {
-            return "·".charAt(0);
+            return "•".charAt(0);
         }
     }
 
