@@ -133,8 +133,7 @@ public class InstructionsActivity extends AppCompatActivity {
         LinearLayout.LayoutParams marginParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT);
         int marginTop = ScaleUtil.getPxFromDp(3, this);
-        int marginBottom = ScaleUtil.getPxFromDp(20, this);
-        marginParams.setMargins(0, marginTop, 0, marginBottom);
+        int marginBottom = ScaleUtil.getPxFromDp(15, this);
         for(InstructionReference reference : instruction.getReferences()) {
             MPTextView currentTitleTextView = new MPTextView(this);
             MPTextView currentValueTextView = new MPTextView(this);
@@ -152,6 +151,8 @@ public class InstructionsActivity extends AppCompatActivity {
 
                 currentValueTextView.setText(formattedReference);
                 currentValueTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, referenceSize);
+
+                marginParams.setMargins(0, marginTop, 0, marginBottom);
                 currentValueTextView.setLayoutParams(marginParams);
                 mReferencesLayout.addView(currentValueTextView);
             }

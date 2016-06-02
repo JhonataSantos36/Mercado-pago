@@ -372,8 +372,9 @@ public class CheckoutActivity extends AppCompatActivity {
             mSelectedPaymentMethod = (PaymentMethod) data.getSerializableExtra("paymentMethod");
 
             //TODO Tracke, delete TODO
-            MPTracker.getInstance().trackToken(mCreatedToken.getId(),"3", mTrackerDelegate,this);
-
+            if(mCreatedToken != null) {
+                MPTracker.getInstance().trackToken(mCreatedToken.getId(), "3", mTrackerDelegate, this);
+            }
             showReviewAndConfirm();
             showRegularLayout();
         }
