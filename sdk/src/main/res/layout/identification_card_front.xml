@@ -109,8 +109,7 @@
                         android:layout_gravity="start"
                         android:textColor="@color/mpsdk_base_text"
                         android:textSize="21sp"
-                        android:visibility="invisible"
-                        app:fontStyle="roboto_regular"/>
+                        android:visibility="invisible"/>
 
                 </FrameLayout>
             </LinearLayout>
