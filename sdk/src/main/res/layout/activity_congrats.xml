@@ -30,10 +30,10 @@
 
                     <ImageView
                         android:id="@+id/icon"
-                        android:layout_width="70dp"
-                        android:layout_height="70dp"
-                        android:layout_marginTop="26dp"
-                        android:layout_marginBottom="16dp"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:layout_marginTop="24dp"
+                        android:layout_marginBottom="14dp"
                         android:layout_gravity="center_horizontal"
                         android:tint="@color/mpsdk_color_congrats_image"
                         android:src="@drawable/icon_ok" />
@@ -42,18 +42,18 @@
                         android:id="@+id/congratulationsTitle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginTop="8dp"
                         android:gravity="bottom|center"
-                        android:textSize="25dp"
+                        android:textSize="22dp"
                         android:text="@string/mpsdk_title_activity_congrat"/>
 
                     <com.mercadopago.views.MPTextView
                         android:id="@+id/congratulationSubtitle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="18dp"
+                        android:layout_marginTop="14dp"
                         android:gravity="bottom|center"
-                        android:textSize="18dp"
+                        android:textSize="15dp"
                         android:text="@string/mpsdk_subtitle_action_activity_congrat"/>
 
                     <com.mercadopago.views.MPTextView
@@ -61,9 +61,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="1dp"
-                        android:layout_marginBottom="20dp"
+                        android:layout_marginBottom="18dp"
                         android:gravity="bottom|center"
-                        android:textSize="18dp"
+                        android:textSize="15dp"
                         android:text="@string/mpsdk_text_email_activity_congrat"/>
 
                     <View
@@ -76,21 +76,20 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-
                     android:background="@color/mpsdk_white_background"
                     android:orientation="vertical">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp"
-                        android:layout_marginBottom="20dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginBottom="15dp"
                         android:layout_marginLeft="20dp"
                         android:layout_marginRight="20dp"
                         android:orientation="vertical">
 
                         <LinearLayout
-                            android:layout_marginTop="5dp"
+                            android:layout_marginTop="4dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal">
@@ -100,7 +99,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 tools:src="@drawable/master"
-                                android:maxHeight="20dp"
+                                android:maxHeight="18dp"
                                 android:adjustViewBounds="true"
                                 android:layout_gravity="center_vertical"/>
 
@@ -111,7 +110,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:singleLine="true"
-                                android:textSize="21dp"
+                                android:textSize="18dp"
                                 android:layout_gravity="center_vertical"
                                 android:text="@string/mpsdk_last_digits_label"/>
 
@@ -119,7 +118,7 @@
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="18dp"
+                            android:layout_marginTop="13dp"
                             android:layout_marginBottom="7dp"
                             android:orientation="horizontal">
 
@@ -128,7 +127,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:gravity="bottom"
-                                android:textSize="27dp"
+                                android:textSize="23dp"
                                 android:textColor="@color/mpsdk_color_congrats_installments"
                                 android:text="12 de $80 00"/>
 
@@ -138,7 +137,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="10dp"
                                 android:gravity="bottom"
-                                android:textSize="18dp"
+                                android:textSize="16dp"
                                 android:textColor="@color/mpsdk_color_congrats_interest"
                                 android:text="@string/mpsdk_zero_rate"/>
                         </LinearLayout>
@@ -148,7 +147,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:gravity="bottom"
-                                android:textSize="18dp"
+                                android:textSize="16dp"
                                 android:text="@string/mpsdk_text_state_acount_activity_congrat"/>
                     </LinearLayout>
                     <View
@@ -162,10 +161,10 @@
                         android:id="@+id/paymentIdDescription"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="13dp"
-                        android:layout_marginTop="18dp"
+                        android:layout_marginBottom="11dp"
+                        android:layout_marginTop="16dp"
                         android:gravity="bottom|center"
-                        android:textSize="18dp"
+                        android:textSize="@dimen/mpsdk_small_text"
                         android:text="@string/mpsdk_payment_id_description" />
             </LinearLayout>
 
@@ -176,7 +175,7 @@
                 android:src="@drawable/voucher_clipped_border"/>
 
             <com.mercadopago.views.MPTextView
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="10dp"
                 android:paddingLeft="40dp"
                 android:paddingRight="40dp"
                 android:paddingTop="20dp"

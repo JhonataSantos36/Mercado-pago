@@ -7,7 +7,7 @@
                 android:width="1dp"
                 android:color="@color/mpsdk_color_congrats_installments"/>
             <corners
-                android:radius="10dp">
+                android:radius="4dp">
             </corners>
             <solid android:color="@color/mpsdk_white"
                 ></solid>
