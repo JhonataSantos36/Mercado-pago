@@ -72,7 +72,6 @@
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
                     android:paddingTop="10dp"
-                    android:paddingBottom="0dp"
                     android:orientation="vertical"
                     android:background="@color/mpsdk_white">
                     <com.mercadopago.views.MPTextView
