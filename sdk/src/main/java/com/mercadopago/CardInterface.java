@@ -5,6 +5,8 @@ import com.mercadopago.model.PaymentMethod;
 public interface CardInterface {
 
     int CARD_NUMBER_MAX_LENGTH = 16;
+    int CARD_NUMBER_AMEX_LENGTH = 15;
+    int CARD_NUMBER_DINERS_LENGTH = 14;
     int CARD_DEFAULT_SECURITY_CODE_LENGTH = 4;
 
     int NEUTRAL_CARD_COLOR = R.color.mpsdk_white;
@@ -39,7 +41,7 @@ public interface CardInterface {
 
     void saveCardNumber(String cardNumber);
 
-    String buildNumberWithMask(CharSequence s);
+    String buildNumberWithMask(int cardLength, String s);
 
     String buildIdentificationNumberWithMask(CharSequence s);
 
@@ -64,5 +66,9 @@ public interface CardInterface {
     int getCardFontColor(PaymentMethod paymentMethod);
 
     boolean isSecurityCodeRequired();
+
+    int getCardNumberLength();
+
+    int getSecurityCodeLength();
 
 }

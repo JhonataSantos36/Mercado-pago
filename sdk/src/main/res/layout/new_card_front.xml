@@ -2,19 +2,20 @@
 
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/activity_new_card_container"
     android:layout_height="171dp"
     android:layout_width="wrap_content"
     android:layout_gravity="center_horizontal">
 
     <FrameLayout
-        android:layout_width="250dp"
+        android:layout_width="256dp"
         android:layout_height="161dp"
         android:layout_gravity="center">
 
         <FrameLayout
             android:id="@+id/activity_new_card_form_basecolor_front"
-            android:layout_width="250dp"
+            android:layout_width="256dp"
             android:layout_height="161dp"
             android:layout_gravity="center"
             android:background="@drawable/new_card_layout"/>
@@ -22,7 +23,7 @@
 
         <FrameLayout
             android:id="@+id/activity_new_card_form_color_front"
-            android:layout_width="250dp"
+            android:layout_width="256dp"
             android:layout_height="161dp"
             android:layout_gravity="center"
             android:background="@drawable/new_card_layout"
@@ -31,7 +32,7 @@
 
 
         <FrameLayout
-            android:layout_width="171dp"
+            android:layout_width="177dp"
             android:layout_height="161dp">
 
             <ImageView
@@ -85,16 +86,6 @@
                 android:layout_gravity="end"
                 android:visibility="invisible">
 
-                <FrameLayout
-                    android:id="@+id/base_card_security_container"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
-                    android:visibility="invisible">
-
-                    <include layout="@layout/security_code_group_dots_front"/>
-                </FrameLayout>
-
                 <com.mercadopago.views.MPTextView
                     android:id="@+id/cardSecurityView"
                     android:layout_width="match_parent"
@@ -102,7 +93,7 @@
                     android:textColor="@color/mpsdk_base_text"
                     android:textSize="18sp"
                     android:gravity="end"
-                    android:visibility="invisible" />
+                    app:fontStyle="roboto_regular"/>
 
             </FrameLayout>
 
@@ -112,38 +103,25 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp">
 
-                <FrameLayout
-                    android:id="@+id/cardNumberClickableZone"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal">
-
                     <FrameLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="bottom">
-
-                        <include layout="@layout/base_cardholder" />
-                    </FrameLayout>
-
-                    <FrameLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingStart="15dp"
-                        android:paddingLeft="15dp"
-                        android:paddingRight="15dp"
-                        android:paddingEnd="15dp">
+                        android:layout_marginStart="15dp"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="15dp"
+                        android:layout_marginEnd="15dp">
                         <com.mercadopago.views.MPTextView
                             android:id="@+id/cardNumberTextView"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:gravity="start"
                             android:singleLine="true"
+                            android:ellipsize="none"
                             android:textColor="@color/mpsdk_base_text"
                             android:textSize="19dp"
-                            android:visibility="invisible" />
+                            app:fontStyle="roboto_regular"
+                            android:visibility="visible" />
                     </FrameLayout>
-                </FrameLayout>
             </FrameLayout>
 
             <LinearLayout
@@ -208,7 +186,7 @@
 
     <ImageView
         android:id="@+id/card_shadow_border"
-        android:layout_width="260dp"
+        android:layout_width="266dp"
         android:layout_height="171dp"
         android:layout_gravity="center"
         android:src="@drawable/card_shadow_rounded"/>

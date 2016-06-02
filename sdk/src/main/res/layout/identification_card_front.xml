@@ -87,15 +87,18 @@
                     android:paddingRight="10dp"
                     android:layout_marginTop="17dp">
 
-                    <FrameLayout
+                    <com.mercadopago.views.MPTextView
+                        android:id="@+id/identificationCardholderContainer"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="bottom"
-                        android:layout_marginStart="-30dp"
-                        android:layout_marginLeft="-30dp">
-
-                        <include layout="@layout/identification_cardholder" />
-                    </FrameLayout>
+                        android:layout_marginStart="12dp"
+                        android:layout_marginLeft="12dp"
+                        android:layout_gravity="start"
+                        android:textColor="@color/mpsdk_base_text"
+                        android:textSize="21sp"
+                        android:visibility="visible"
+                        android:text="•• ••• •••"
+                        app:fontStyle="roboto_regular"/>
 
                     <com.mercadopago.views.MPTextView
                         android:id="@+id/idNumberView"
@@ -107,7 +110,7 @@
                         android:textColor="@color/mpsdk_base_text"
                         android:textSize="21sp"
                         android:visibility="invisible"
-                        app:fontStyle="regular"/>
+                        app:fontStyle="roboto_regular"/>
 
                 </FrameLayout>
             </LinearLayout>

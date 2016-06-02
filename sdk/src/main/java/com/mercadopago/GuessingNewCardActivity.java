@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
@@ -507,6 +506,7 @@ public class GuessingNewCardActivity extends FrontCardActivity {
                             changeCardImage(getCardImage(paymentMethod));
                             manageSettings();
                             manageAdditionalInfoNeeded();
+                            mFrontFragment.populateCardNumber(getCardNumber());
                         }
                     }
 
@@ -524,15 +524,24 @@ public class GuessingNewCardActivity extends FrontCardActivity {
                 }));
     }
 
+    private void initCardState() {
+        if (mCardSideState == null) {
+            mCardSideState = CARD_SIDE_FRONT;
+        }
+    }
+
     protected boolean showingIdentification() {
+        initCardState();
         return mCardSideState.equals(CARD_IDENTIFICATION);
     }
 
     protected boolean showingBack() {
+        initCardState();
         return mCardSideState.equals(CARD_SIDE_BACK);
     }
 
     protected boolean showingFront() {
+        initCardState();
         return mCardSideState.equals(CARD_SIDE_FRONT);
     }
 
@@ -605,6 +614,7 @@ public class GuessingNewCardActivity extends FrontCardActivity {
     }
 
     public void manageAdditionalInfoNeeded() {
+        if (mCurrentPaymentMethod == null) return;
         mIdentificationNumberRequired = mCurrentPaymentMethod.isIdentificationNumberRequired();
         if (mIdentificationNumberRequired) {
             mIdentificationNumberContainer.setVisibility(View.VISIBLE);
@@ -698,8 +708,14 @@ public class GuessingNewCardActivity extends FrontCardActivity {
         }
     }
 
+    @Override
     public int getCardNumberLength() {
         return mCardNumberLength;
+    }
+
+    @Override
+    public int getSecurityCodeLength() {
+        return mCardSecurityCodeLength;
     }
 
     @Override
@@ -981,9 +997,9 @@ public class GuessingNewCardActivity extends FrontCardActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (showingBack() && mBackFragment != null) {
-                    mBackFragment.onSecurityTextChanged(s, start, before, count);
+                    mBackFragment.onSecurityTextChanged(s);
                 } else if (mFrontFragment != null) {
-                    mFrontFragment.onSecurityTextChanged(s, start, before, count);
+                    mFrontFragment.onSecurityTextChanged(s);
                 }
 
                 if (s.length() == mCardSecurityCodeLength) {
