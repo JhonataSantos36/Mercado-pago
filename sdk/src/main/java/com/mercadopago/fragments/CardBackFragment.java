@@ -15,9 +15,10 @@ import com.mercadopago.views.MPTextView;
 public class CardBackFragment extends android.support.v4.app.Fragment {
 
     private MPTextView mCardSecurityCodeTextView;
-    private FrameLayout mBaseCardSecurityCode;
 
     private CardInterface mActivity;
+
+    public static String BASE_BACK_SECURITY_CODE = "···";
 
     public CardBackFragment() {
 
@@ -50,7 +51,6 @@ public class CardBackFragment extends android.support.v4.app.Fragment {
     public void setCardInputViews() {
         if (getView() != null) {
             mCardSecurityCodeTextView = (MPTextView) getView().findViewById(R.id.cardSecurityCodeView);
-            mBaseCardSecurityCode = (FrameLayout) getView().findViewById(R.id.base_card_security_container);
         }
     }
 
@@ -59,35 +59,46 @@ public class CardBackFragment extends android.support.v4.app.Fragment {
     }
     
     public void onSecurityTextChanged(CharSequence s) {
-        mBaseCardSecurityCode.setVisibility(View.INVISIBLE);
-        mCardSecurityCodeTextView.setVisibility(View.VISIBLE);
-        mCardSecurityCodeTextView.setText(s);
+        mCardSecurityCodeTextView.setText(buildSecurityCode(mActivity.getSecurityCodeLength(), s.toString()));
     }
 
     public void afterSecurityTextChanged(Editable s) {
         mActivity.saveCardSecurityCode(s.toString());
         if (s.length() == 0) {
-            mCardSecurityCodeTextView.setVisibility(View.INVISIBLE);
-            mBaseCardSecurityCode.setVisibility(View.VISIBLE);
+            mCardSecurityCodeTextView.setText(buildSecurityCode(mActivity.getSecurityCodeLength(), s.toString()));
             mActivity.saveCardSecurityCode(null);
         }
     }
 
     private void populateCardSecurityCode() {
         String securityCode = mActivity.getSecurityCode();
-        if (securityCode == null || securityCode.equals("")) {
-            mBaseCardSecurityCode.setVisibility(View.VISIBLE);
-            mCardSecurityCodeTextView.setVisibility(View.INVISIBLE);
-        } else {
-            mBaseCardSecurityCode.setVisibility(View.INVISIBLE);
-            mCardSecurityCodeTextView.setVisibility(View.VISIBLE);
-            setText(mCardSecurityCodeTextView, securityCode, CardInterface.FULL_TEXT_VIEW_COLOR);
-        }
+        setText(mCardSecurityCodeTextView, buildSecurityCode(mActivity.getSecurityCodeLength(), securityCode),
+                CardInterface.FULL_TEXT_VIEW_COLOR);
     }
 
     public void setText(MPTextView textView, CharSequence text, int color) {
         textView.setTextColor(ContextCompat.getColor(getContext(), color));
         textView.setText(text);
+    }
+
+    public String buildSecurityCode(int cardLength, String s) {
+        StringBuffer sb = new StringBuffer();
+        if (s == null || s.length() == 0) {
+            return BASE_BACK_SECURITY_CODE;
+        }
+        for (int i = 0; i < cardLength ; i++) {
+            char c = getCharOfCard(s, i);
+            sb.append(c);
+        }
+        return sb.toString();
+    }
+
+    private char getCharOfCard(String s, int i) {
+        if (i < s.length()) {
+            return s.charAt(i);
+        } else {
+            return "·".charAt(0);
+        }
     }
 
 }
