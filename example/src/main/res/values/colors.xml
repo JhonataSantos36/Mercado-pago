@@ -9,5 +9,5 @@
     <color name="button">#00B2EB</color>
     <color name="button_pressed">#0277BD</color>
     <color name="button_disabled">#CCCCCC</color>
-
+    <color name="myPrimaryColor">#FFD300</color>
 </resources>

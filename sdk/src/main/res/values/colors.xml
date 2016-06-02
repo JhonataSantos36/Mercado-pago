@@ -57,6 +57,8 @@
     <color name="mpsdk_color_new_card_image">#D8D8D8</color>
     <color name="mpsdk_color_red_error">#F04449</color>
 
+    <color name="mpsdk_dark_font_color">#212121</color>
+
     <!-- Card Colors -->
     <color name="mpsdk_visa">#001D77</color>
     <color name="mpsdk_debvisa">#001D77</color>

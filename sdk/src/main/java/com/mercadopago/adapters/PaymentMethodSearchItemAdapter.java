@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 
 import com.mercadopago.R;
 import com.mercadopago.callbacks.OnSelectedCallback;
+import com.mercadopago.model.DecorationPreference;
 import com.mercadopago.model.PaymentMethodSearchItem;
 import com.mercadopago.uicontrollers.paymentmethodsearch.PaymentMethodSearchViewController;
 import com.mercadopago.uicontrollers.ViewControllerFactory;
@@ -18,12 +19,14 @@ import java.util.List;
  */
 public class PaymentMethodSearchItemAdapter extends RecyclerView.Adapter<PaymentMethodSearchItemAdapter.ViewHolder>{
 
+    private DecorationPreference mDecorationPreference;
     private Context mContext;
     private List<PaymentMethodSearchItem> mItems;
     private OnSelectedCallback<PaymentMethodSearchItem> mCallback;
 
-    public PaymentMethodSearchItemAdapter(Context context, List<PaymentMethodSearchItem> items, OnSelectedCallback<PaymentMethodSearchItem> callback)
+    public PaymentMethodSearchItemAdapter(Context context, List<PaymentMethodSearchItem> items, OnSelectedCallback<PaymentMethodSearchItem> callback, DecorationPreference decorationPreference)
     {
+        this.mDecorationPreference = decorationPreference;
         this.mContext = context;
         this.mItems = items;
         this.mCallback = callback;
@@ -34,7 +37,7 @@ public class PaymentMethodSearchItemAdapter extends RecyclerView.Adapter<Payment
 
         PaymentMethodSearchItem item = mItems.get(position);
 
-        PaymentMethodSearchViewController paymentMethodSearchRow = ViewControllerFactory.getPaymentMethodSelectionViewController(item, mContext);
+        PaymentMethodSearchViewController paymentMethodSearchRow = ViewControllerFactory.getPaymentMethodSelectionViewController(item, mDecorationPreference, mContext);
 
         paymentMethodSearchRow.inflateInParent(parent, false);
 

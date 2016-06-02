@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.mercadopago.R;
+import com.mercadopago.model.DecorationPreference;
 import com.mercadopago.model.PaymentMethodSearchItem;
 import com.mercadopago.util.MercadoPagoUtil;
 
@@ -15,10 +16,15 @@ import com.mercadopago.util.MercadoPagoUtil;
  */
 public class PaymentMethodSearchSmallRow extends PaymentMethodSearchRow {
 
+    private DecorationPreference mDecorationPreference;
+
     public PaymentMethodSearchSmallRow(Context context) {
         super(context);
     }
-
+    public PaymentMethodSearchSmallRow(Context context, DecorationPreference decorationPreference) {
+        super(context);
+        mDecorationPreference = decorationPreference;
+    }
     @Override
     public void drawPaymentMethod(PaymentMethodSearchItem item) {
         if(item.hasDescription()) {
@@ -51,7 +57,12 @@ public class PaymentMethodSearchSmallRow extends PaymentMethodSearchRow {
     }
 
     private void setTintColor(Context mContext, ImageView mIcon) {
-        mIcon.setColorFilter(mContext.getResources().getColor(R.color.mpsdk_icon_image_color));
+        if(mDecorationPreference != null && mDecorationPreference.hasColors()) {
+            mIcon.setColorFilter(mDecorationPreference.getBaseColor());
+        }
+        else {
+            mIcon.setColorFilter(mContext.getResources().getColor(R.color.mpsdk_icon_image_color));
+        }
     }
 
     private boolean itemNeedsTint(PaymentMethodSearchItem paymentMethodSearchItem) {

@@ -3,6 +3,7 @@ package com.mercadopago.examples.step6;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.Toast;
 
@@ -15,6 +16,7 @@ import com.mercadopago.exceptions.MPException;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.CheckoutIntent;
 import com.mercadopago.model.CheckoutPreference;
+import com.mercadopago.model.DecorationPreference;
 import com.mercadopago.model.Item;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;
@@ -94,6 +96,10 @@ public class Step6Activity extends ExampleActivity {
 
     private void startCheckoutActivity(String publicKey)
     {
+
+        DecorationPreference decorationPreference = new DecorationPreference();
+        decorationPreference.setBaseColor(ContextCompat.getColor(this, R.color.myPrimaryColor));
+        decorationPreference.enableDarkFont();
         //PREF CON SOLO CARGAVIRTUAL: 150216849-b7fb60e9-aee2-40af-a3de-b5b2e57e4e61
         //PREF CON SOLO TC: 150216849-db0ef449-0f5c-49e9-83c6-087f5edfc2d3
         //PREF SIN EXCLUSIONES: 150216849-53df0831-8142-4b7c-b7ce-af51fa48dffa
@@ -101,6 +107,7 @@ public class Step6Activity extends ExampleActivity {
                 .setActivity(this)
                 .setPublicKey(publicKey)
                 .setCheckoutPreferenceId(mCheckoutPreference.getId())
+                .setDecorationPreference(decorationPreference)
                 .startCheckoutActivity();
     }
 

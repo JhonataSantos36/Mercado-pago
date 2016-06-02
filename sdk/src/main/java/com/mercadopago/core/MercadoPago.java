@@ -24,6 +24,7 @@ import com.mercadopago.model.Card;
 import com.mercadopago.model.CardToken;
 import com.mercadopago.model.CheckoutPreference;
 import com.mercadopago.model.Customer;
+import com.mercadopago.model.DecorationPreference;
 import com.mercadopago.model.IdentificationType;
 import com.mercadopago.model.Installment;
 import com.mercadopago.model.Instruction;
@@ -289,12 +290,13 @@ public class MercadoPago {
         activity.startActivityForResult(bankDealsIntent, BANK_DEALS_REQUEST_CODE);
     }
 
-    private static void startCheckoutActivity(Activity activity, String merchantPublicKey, String checkoutPreferenceId, Boolean showBankDeals) {
+    private static void startCheckoutActivity(Activity activity, String merchantPublicKey, String checkoutPreferenceId, Boolean showBankDeals, DecorationPreference decorationPreference) {
 
         Intent checkoutIntent = new Intent(activity, CheckoutActivity.class);
         checkoutIntent.putExtra("merchantPublicKey", merchantPublicKey);
         checkoutIntent.putExtra("checkoutPreferenceId", checkoutPreferenceId);
         checkoutIntent.putExtra("showBankDeals", showBankDeals);
+        checkoutIntent.putExtra("decorationPreference", decorationPreference);
         activity.startActivityForResult(checkoutIntent, CHECKOUT_REQUEST_CODE);
     }
 
@@ -448,6 +450,7 @@ public class MercadoPago {
                                                   Site site,
                                                   Boolean showBankDeals,
                                                   PaymentPreference paymentPreference,
+                                                  DecorationPreference decorationPreference,
                                                   PaymentMethodSearch paymentMethodSearch) {
 
         Intent vaultIntent = new Intent(activity, PaymentVaultActivity.class);
@@ -460,6 +463,7 @@ public class MercadoPago {
         vaultIntent.putExtra("showBankDeals", showBankDeals);
         vaultIntent.putExtra("paymentMethodSearch", paymentMethodSearch);
         vaultIntent.putExtra("paymentPreference", paymentPreference);
+        vaultIntent.putExtra("decorationPreference", decorationPreference);
 
         activity.startActivityForResult(vaultIntent, PAYMENT_VAULT_REQUEST_CODE);
     }
@@ -541,6 +545,7 @@ public class MercadoPago {
         private Token mToken;
         private Issuer mIssuer;
         private Site mSite;
+        private DecorationPreference mDecorationPreference;
 
         public StartActivityBuilder() {
 
@@ -692,6 +697,11 @@ public class MercadoPago {
             return this;
         }
 
+        public StartActivityBuilder setDecorationPreference(DecorationPreference decorationPreference) {
+            this.mDecorationPreference = decorationPreference;
+            return this;
+        }
+
         public void startBankDealsActivity() {
 
             if (this.mActivity == null) throw new IllegalStateException("activity is null");
@@ -714,7 +724,7 @@ public class MercadoPago {
 
             if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {
                 MercadoPago.startCheckoutActivity(this.mActivity, this.mKey,
-                        this.mCheckoutPreferenceId, this.mShowBankDeals);
+                        this.mCheckoutPreferenceId, this.mShowBankDeals, this.mDecorationPreference);
             } else {
                 throw new RuntimeException("Unsupported key type for this method");
             }
@@ -846,7 +856,7 @@ public class MercadoPago {
                 MercadoPago.startPaymentVaultActivity(this.mActivity, this.mKey, this.mMerchantBaseUrl,
                         this.mMerchantGetCustomerUri, this.mMerchantAccessToken,
                         this.mAmount, this.mSite, this.mShowBankDeals,
-                        this.mPaymentPreference, this.mPaymentMethodSearch);
+                        this.mPaymentPreference, this.mDecorationPreference, this.mPaymentMethodSearch);
             } else {
                 throw new RuntimeException("Unsupported key type for this method");
             }

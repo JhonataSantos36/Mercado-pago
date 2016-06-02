@@ -2,6 +2,8 @@ package com.mercadopago;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.support.design.widget.AppBarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,11 +11,13 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.TextView;
 
 import com.mercadopago.adapters.PaymentMethodSearchItemAdapter;
 import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.callbacks.OnSelectedCallback;
 import com.mercadopago.core.MercadoPago;
+import com.mercadopago.model.DecorationPreference;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.PaymentMethod;
@@ -51,6 +55,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
     // Controls
     protected RecyclerView mSearchItemsRecyclerView;
     protected AppBarLayout mAppBar;
+    protected MPTextView mActivityTitle;
 
     // Current values
     protected PaymentMethodSearch mPaymentMethodSearch;
@@ -66,14 +71,16 @@ public class PaymentVaultActivity extends AppCompatActivity {
     protected boolean mCardGuessingEnabled;
     protected PaymentMethodSearchItem mSelectedSearchItem;
     protected PaymentPreference mPaymentPreference;
-    protected MPTextView mActivityTitle;
+    protected DecorationPreference mDecorationPreference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        setContentView(R.layout.activity_payment_vault);
         getActivityParameters();
+        if(mDecorationPreference != null && mDecorationPreference.hasColors()) {
+            setTheme(R.style.Theme_MercadoPagoTheme_NoActionBar);
+        }
+        setContentView(R.layout.activity_payment_vault);
         setActivity();
         mActivityActive = true;
         boolean validParameters = true;
@@ -128,6 +135,10 @@ public class PaymentVaultActivity extends AppCompatActivity {
 
         if(this.getIntent().getSerializableExtra("paymentMethodSearch") != null) {
             mPaymentMethodSearch = (PaymentMethodSearch) this.getIntent().getSerializableExtra("paymentMethodSearch");
+        }
+
+        if(this.getIntent().getSerializableExtra("decorationPreference") != null) {
+            mDecorationPreference = (DecorationPreference) this.getIntent().getSerializableExtra("decorationPreference");
         }
     }
 
@@ -185,6 +196,19 @@ public class PaymentVaultActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
+
+        if(mDecorationPreference != null) {
+            if(mDecorationPreference.hasColors()) {
+                toolbar.setBackgroundColor(mDecorationPreference.getBaseColor());
+            }
+            if(mDecorationPreference.isDarkFontEnabled()) {
+                TextView title = (TextView) findViewById(R.id.title);
+                title.setTextColor(mDecorationPreference.getDarkFontColor(this));
+                Drawable upArrow = toolbar.getNavigationIcon();
+                upArrow.setColorFilter(mDecorationPreference.getDarkFontColor(this), PorterDuff.Mode.SRC_ATOP);
+                getSupportActionBar().setHomeAsUpIndicator(upArrow);
+            }
+        }
 
     }
 
@@ -280,8 +304,8 @@ public class PaymentVaultActivity extends AppCompatActivity {
     }
 
     protected void populateSearchList(List<PaymentMethodSearchItem> items) {
-        PaymentMethodSearchItemAdapter groupsAdapter = new PaymentMethodSearchItemAdapter(this, items, getPaymentMethodSearchItemSelectionCallback());
-        mSearchItemsRecyclerView.setAdapter(groupsAdapter);;
+        PaymentMethodSearchItemAdapter groupsAdapter = new PaymentMethodSearchItemAdapter(this, items, getPaymentMethodSearchItemSelectionCallback(), mDecorationPreference);
+        mSearchItemsRecyclerView.setAdapter(groupsAdapter);
     }
 
     protected OnSelectedCallback<PaymentMethodSearchItem> getPaymentMethodSearchItemSelectionCallback() {
