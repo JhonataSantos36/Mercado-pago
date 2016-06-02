@@ -36,6 +36,7 @@ public class CardInstallmentsActivity extends ShowCardActivity {
     private ProgressBar mProgressBar;
 
     private Activity mActivity;
+    protected boolean mActiveActivity;
 
     //Local vars
     private List<PayerCost> mPayerCosts;
@@ -49,6 +50,7 @@ public class CardInstallmentsActivity extends ShowCardActivity {
         super.onCreate(savedInstanceState);
         setContentView();
         mActivity = this;
+        mActiveActivity = true;
         setLayout();
         getActivityParameters();
         initializeAdapter();
@@ -63,6 +65,30 @@ public class CardInstallmentsActivity extends ShowCardActivity {
             initializeCard();
         }
         initializeFrontFragment();
+    }
+
+    @Override
+    protected void onResume() {
+        mActiveActivity = true;
+        super.onResume();
+    }
+
+    @Override
+    protected void onDestroy() {
+        mActiveActivity = false;
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onPause() {
+        mActiveActivity = false;
+        super.onPause();
+    }
+
+    @Override
+    protected void onStop() {
+        mActiveActivity = false;
+        super.onStop();
     }
 
     protected void setContentView() {
@@ -119,26 +145,30 @@ public class CardInstallmentsActivity extends ShowCardActivity {
                 new Callback<List<Installment>>() {
                     @Override
                     public void success(List<Installment> installments, Response response) {
-                        mProgressBar.setVisibility(View.GONE);
-                        if (installments.size() == 0) {
-                            ErrorUtil.startErrorActivity(mActivity, getString(R.string.mpsdk_standard_error_message), "no installments found for an issuer at CardInstallmentsActivity", false);
-                        } else if (installments.size() == 1) {
-                            resolvePayerCosts(installments.get(0).getPayerCosts());
-                        } else if (installments.size() > 1) {
-                            ErrorUtil.startErrorActivity(mActivity, getString(R.string.mpsdk_standard_error_message), "multiple installments found for an issuer at CardInstallmentsActivity" ,false);
+                        if (mActiveActivity) {
+                            mProgressBar.setVisibility(View.GONE);
+                            if (installments.size() == 0) {
+                                ErrorUtil.startErrorActivity(mActivity, getString(R.string.mpsdk_standard_error_message), "no installments found for an issuer at CardInstallmentsActivity", false);
+                            } else if (installments.size() == 1) {
+                                resolvePayerCosts(installments.get(0).getPayerCosts());
+                            } else if (installments.size() > 1) {
+                                ErrorUtil.startErrorActivity(mActivity, getString(R.string.mpsdk_standard_error_message), "multiple installments found for an issuer at CardInstallmentsActivity", false);
+                            }
                         }
                     }
 
                     @Override
                     public void failure(RetrofitError error) {
-                        mProgressBar.setVisibility(View.GONE);
-                        mFailureRecovery = new FailureRecovery() {
-                            @Override
-                            public void recover() {
-                                getInstallmentsAsync();
-                            }
-                        };
-                        ApiUtil.showApiExceptionError(mActivity, error);
+                        if (mActiveActivity) {
+                            mProgressBar.setVisibility(View.GONE);
+                            mFailureRecovery = new FailureRecovery() {
+                                @Override
+                                public void recover() {
+                                    getInstallmentsAsync();
+                                }
+                            };
+                            ApiUtil.showApiExceptionError(mActivity, error);
+                        }
                     }
                 });
     }

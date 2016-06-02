@@ -91,6 +91,7 @@ public class GuessingNewCardActivity extends FrontCardActivity {
 
     // Local vars
     private Activity mActivity;
+    protected boolean mActiveActivity;
     private MercadoPago mMercadoPago;
     private PaymentPreference mPaymentPreference;
     private CardToken mCardToken;
@@ -137,6 +138,7 @@ public class GuessingNewCardActivity extends FrontCardActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        mActiveActivity = true;
         if (mCardSideState == null) {
             mCardSideState = CARD_SIDE_FRONT;
         }
@@ -148,10 +150,23 @@ public class GuessingNewCardActivity extends FrontCardActivity {
 
     @Override
     protected void onDestroy() {
+        mActiveActivity = false;
         if (showingFront() && mFrontFragment != null) {
             mFrontFragment.setCardColor(CardInterface.NEUTRAL_CARD_COLOR);
         }
         super.onDestroy();
+    }
+
+    @Override
+    protected void onPause() {
+        mActiveActivity = false;
+        super.onPause();
+    }
+
+    @Override
+    protected void onStop() {
+        mActiveActivity = false;
+        super.onStop();
     }
 
     @Override
@@ -199,6 +214,7 @@ public class GuessingNewCardActivity extends FrontCardActivity {
 
     private void initializeLayout(Bundle savedInstanceState) {
         mActivity = this;
+        mActiveActivity = true;
         mErrorState = CardInterface.NORMAL_STATE;
         mCardToken = new CardToken("", null, null, "", "", "", "");
         mIsSecurityCodeRequired = true;
@@ -412,18 +428,22 @@ public class GuessingNewCardActivity extends FrontCardActivity {
         mMercadoPago.getPaymentMethods(new Callback<List<PaymentMethod>>() {
             @Override
             public void success(List<PaymentMethod> paymentMethods, Response response) {
-                startGuessingForm(paymentMethods);
+                if (mActiveActivity) {
+                    startGuessingForm(paymentMethods);
+                }
             }
 
             @Override
             public void failure(RetrofitError error) {
-                mFailureRecovery = new FailureRecovery() {
-                    @Override
-                    public void recover() {
-                        getPaymentMethodsAsync();
-                    }
-                };
-                ApiUtil.showApiExceptionError(mActivity, error);
+                if (mActiveActivity) {
+                    mFailureRecovery = new FailureRecovery() {
+                        @Override
+                        public void recover() {
+                            getPaymentMethodsAsync();
+                        }
+                    };
+                    ApiUtil.showApiExceptionError(mActivity, error);
+                }
             }
         });
     }
@@ -621,22 +641,26 @@ public class GuessingNewCardActivity extends FrontCardActivity {
             mMercadoPago.getIdentificationTypes(new Callback<List<IdentificationType>>() {
                 @Override
                 public void success(List<IdentificationType> identificationTypes, Response response) {
-                    if (!identificationTypes.isEmpty()) {
-                        mSelectedIdentificationType = identificationTypes.get(0);
-                        mIdentificationTypeSpinner.setAdapter(new IdentificationTypesAdapter(mActivity, identificationTypes));
-                        mIdentificationTypeContainer.setVisibility(View.VISIBLE);
+                    if (mActiveActivity) {
+                        if (!identificationTypes.isEmpty()) {
+                            mSelectedIdentificationType = identificationTypes.get(0);
+                            mIdentificationTypeSpinner.setAdapter(new IdentificationTypesAdapter(mActivity, identificationTypes));
+                            mIdentificationTypeContainer.setVisibility(View.VISIBLE);
+                        }
                     }
                 }
 
                 @Override
                 public void failure(RetrofitError error) {
-                    mFailureRecovery = new FailureRecovery() {
-                        @Override
-                        public void recover() {
-                            manageAdditionalInfoNeeded();
-                        }
-                    };
-                    ApiUtil.showApiExceptionError(mActivity, error);
+                    if (mActiveActivity) {
+                        mFailureRecovery = new FailureRecovery() {
+                            @Override
+                            public void recover() {
+                                manageAdditionalInfoNeeded();
+                            }
+                        };
+                        ApiUtil.showApiExceptionError(mActivity, error);
+                    }
                 }
             });
         }
@@ -1183,20 +1207,24 @@ public class GuessingNewCardActivity extends FrontCardActivity {
         mMercadoPago.createToken(mCardToken, new Callback<Token>() {
             @Override
             public void success(Token token, Response response) {
-                mToken = token;
-                //TODO: solo en credit card??
-                checkStartIssuersActivity();
+                if (mActiveActivity) {
+                    mToken = token;
+                    //TODO: solo en credit card??
+                    checkStartIssuersActivity();
+                }
             }
 
             @Override
             public void failure(RetrofitError error) {
-                mFailureRecovery = new FailureRecovery() {
-                    @Override
-                    public void recover() {
-                        createToken();
-                    }
-                };
-                ApiUtil.showApiExceptionError(mActivity, error);
+                if (mActiveActivity) {
+                    mFailureRecovery = new FailureRecovery() {
+                        @Override
+                        public void recover() {
+                            createToken();
+                        }
+                    };
+                    ApiUtil.showApiExceptionError(mActivity, error);
+                }
             }
         });
     }
@@ -1314,26 +1342,30 @@ public class GuessingNewCardActivity extends FrontCardActivity {
                 new Callback<List<Issuer>>() {
                     @Override
                     public void success(List<Issuer> issuers, Response response) {
-                        if (issuers.isEmpty()) {
-                            //error
-                        } else if (issuers.size() == 1) {
-                            mSelectedIssuer = issuers.get(0);
-                            checkFlipCardToFront();
-                            finishWithResult();
-                        } else {
-                            fadeInIssuersActivity(issuers);
+                        if (mActiveActivity) {
+                            if (issuers.isEmpty()) {
+                                //error
+                            } else if (issuers.size() == 1) {
+                                mSelectedIssuer = issuers.get(0);
+                                checkFlipCardToFront();
+                                finishWithResult();
+                            } else {
+                                fadeInIssuersActivity(issuers);
+                            }
                         }
                     }
 
                     @Override
                     public void failure(RetrofitError error) {
-                        mFailureRecovery = new FailureRecovery() {
-                            @Override
-                            public void recover() {
-                                checkStartIssuersActivity();
-                            }
-                        };
-                        ApiUtil.showApiExceptionError(mActivity, error);
+                        if (mActiveActivity) {
+                            mFailureRecovery = new FailureRecovery() {
+                                @Override
+                                public void recover() {
+                                    checkStartIssuersActivity();
+                                }
+                            };
+                            ApiUtil.showApiExceptionError(mActivity, error);
+                        }
                     }
                 });
     }

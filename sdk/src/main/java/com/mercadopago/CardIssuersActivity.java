@@ -39,12 +39,14 @@ public class CardIssuersActivity extends ShowCardActivity {
     private List<Issuer> mIssuers;
     private FailureRecovery mFailureRecovery;
     private Activity mActivity;
+    protected boolean mActiveActivity;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView();
         mActivity = this;
+        mActiveActivity = true;
         setLayout();
         initializeAdapter();
         getActivityParameters();
@@ -59,6 +61,30 @@ public class CardIssuersActivity extends ShowCardActivity {
             initializeCard();
         }
         initializeFrontFragment();
+    }
+
+    @Override
+    protected void onResume() {
+        mActiveActivity = true;
+        super.onResume();
+    }
+
+    @Override
+    protected void onDestroy() {
+        mActiveActivity = false;
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onPause() {
+        mActiveActivity = false;
+        super.onPause();
+    }
+
+    @Override
+    protected void onStop() {
+        mActiveActivity = false;
+        super.onStop();
     }
 
     protected void setContentView() {
@@ -109,27 +135,31 @@ public class CardIssuersActivity extends ShowCardActivity {
                 new Callback<List<Issuer>>() {
                     @Override
                     public void success(List<Issuer> issuers, Response response) {
-                        mProgressBar.setVisibility(View.GONE);
-                        if (issuers.isEmpty()) {
-                            ErrorUtil.startErrorActivity(mActivity, getString(R.string.mpsdk_standard_error_message), "no issuers found at CardIssuersActivity", false);
-                        } else if (issuers.size() == 1) {
-                            mSelectedIssuer = issuers.get(0);
-                            finishWithResult();
-                        } else {
-                            initializeIssuers();
+                        if (mActiveActivity) {
+                            mProgressBar.setVisibility(View.GONE);
+                            if (issuers.isEmpty()) {
+                                ErrorUtil.startErrorActivity(mActivity, getString(R.string.mpsdk_standard_error_message), "no issuers found at CardIssuersActivity", false);
+                            } else if (issuers.size() == 1) {
+                                mSelectedIssuer = issuers.get(0);
+                                finishWithResult();
+                            } else {
+                                initializeIssuers();
+                            }
                         }
                     }
 
                     @Override
                     public void failure(RetrofitError error) {
-                        mProgressBar.setVisibility(View.GONE);
-                        mFailureRecovery = new FailureRecovery() {
-                            @Override
-                            public void recover() {
-                                getIssuersAsync();
-                            }
-                        };
-                        ApiUtil.showApiExceptionError(mActivity, error);
+                        if (mActiveActivity) {
+                            mProgressBar.setVisibility(View.GONE);
+                            mFailureRecovery = new FailureRecovery() {
+                                @Override
+                                public void recover() {
+                                    getIssuersAsync();
+                                }
+                            };
+                            ApiUtil.showApiExceptionError(mActivity, error);
+                        }
                     }
                 });
     }
