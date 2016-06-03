@@ -36,6 +36,7 @@ import com.mercadopago.model.PaymentMethodSearch;
 import com.mercadopago.model.PaymentPreference;
 import com.mercadopago.model.SavedCardToken;
 import com.mercadopago.model.Setting;
+import com.mercadopago.model.Site;
 import com.mercadopago.model.Token;
 import com.mercadopago.services.BankDealService;
 import com.mercadopago.services.CustomerService;
@@ -72,7 +73,6 @@ public class MercadoPago {
     public static final int GUESSING_CARD_REQUEST_CODE = 10;
     public static final int INSTRUCTIONS_REQUEST_CODE = 11;
     public static final int CARD_VAULT_REQUEST_CODE = 12;
-
 
     public static final int BIN_LENGTH = 6;
 
@@ -337,14 +337,14 @@ public class MercadoPago {
         activity.startActivityForResult(installmentsIntent, INSTALLMENTS_REQUEST_CODE);
     }
 
-    private static void startCardInstallmentsActivity(Activity activity, BigDecimal amount, String currencyId,
+    private static void startCardInstallmentsActivity(Activity activity, BigDecimal amount, Site site,
                                                       Token token, String publicKey,
                                                       List<PayerCost> payerCosts,
                                                       PaymentPreference paymentPreference,
                                                       Issuer issuer, PaymentMethod paymentMethod) {
         Intent intent = new Intent(activity, CardInstallmentsActivity.class);
         intent.putExtra("amount", amount.toString());
-        intent.putExtra("currencyId", currencyId);
+        intent.putExtra("site", site);
         intent.putExtra("paymentMethod",  JsonUtil.getInstance().toJson(paymentMethod));
         intent.putExtra("token", JsonUtil.getInstance().toJson(token));
         intent.putExtra("publicKey", publicKey);
@@ -409,7 +409,7 @@ public class MercadoPago {
     private static void startCardVaultActivity(Activity activity,
                                                String key,
                                                BigDecimal amount,
-                                               String currencyId,
+                                               Site site,
                                                PaymentPreference paymentPreference,
                                                Token token,
                                                List<PaymentMethod> paymentMethodList) {
@@ -419,7 +419,7 @@ public class MercadoPago {
 
         cardVaultIntent.putExtra("amount", amount.toString());
 
-        cardVaultIntent.putExtra("currencyId", currencyId);
+        cardVaultIntent.putExtra("site", site);
 
         cardVaultIntent.putExtra("paymentPreference", paymentPreference);
 
@@ -445,7 +445,7 @@ public class MercadoPago {
                                                   String merchantGetCustomerUri,
                                                   String merchantAccessToken,
                                                   BigDecimal amount,
-                                                  String currencyId,
+                                                  Site site,
                                                   Boolean showBankDeals,
                                                   PaymentPreference paymentPreference,
                                                   PaymentMethodSearch paymentMethodSearch) {
@@ -456,7 +456,7 @@ public class MercadoPago {
         vaultIntent.putExtra("merchantGetCustomerUri", merchantGetCustomerUri);
         vaultIntent.putExtra("merchantAccessToken", merchantAccessToken);
         vaultIntent.putExtra("amount", amount.toString());
-        vaultIntent.putExtra("currencyId", currencyId);
+        vaultIntent.putExtra("site", site);
         vaultIntent.putExtra("showBankDeals", showBankDeals);
         vaultIntent.putExtra("paymentMethodSearch", paymentMethodSearch);
         vaultIntent.putExtra("paymentPreference", paymentPreference);
@@ -536,11 +536,11 @@ public class MercadoPago {
         private Boolean mRequireSecurityCode;
         private Boolean mShowBankDeals;
         private Boolean mSupportMPApp;
-        private String mCurrencyId;
         private PaymentMethodSearch mPaymentMethodSearch;
         private PaymentPreference mPaymentPreference;
         private Token mToken;
         private Issuer mIssuer;
+        private Site mSite;
 
         public StartActivityBuilder() {
 
@@ -672,11 +672,6 @@ public class MercadoPago {
             return this;
         }
 
-        public StartActivityBuilder setCurrency(String currency) {
-            this.mCurrencyId = currency;
-            return this;
-        }
-
         public StartActivityBuilder setPaymentMethodSearch(PaymentMethodSearch paymentMethodSearch) {
             this.mPaymentMethodSearch = paymentMethodSearch;
             return this;
@@ -689,6 +684,11 @@ public class MercadoPago {
 
         public StartActivityBuilder setToken(Token token) {
             this.mToken = token;
+            return this;
+        }
+
+        public StartActivityBuilder setSite(Site site) {
+            this.mSite = site;
             return this;
         }
 
@@ -765,13 +765,13 @@ public class MercadoPago {
         public void startCardInstallmentsActivity() {
             if (this.mActivity == null) throw new IllegalStateException("activity is null");
             if (this.mKey == null) throw new IllegalStateException("key is null");
-            if (this.mCurrencyId == null) throw new IllegalStateException("currencyId is null");
+            if (this.mSite == null) throw new IllegalStateException("site is null");
             if (this.mAmount == null) throw new IllegalStateException("amount is null");
             if (this.mToken == null) throw new IllegalStateException("token is null");
             if (this.mIssuer == null) throw new IllegalStateException("issuer is null");
             if (this.mPaymentMethod == null) throw new IllegalStateException("payment method is null");
 
-            MercadoPago.startCardInstallmentsActivity(mActivity, mAmount, mCurrencyId, mToken,
+            MercadoPago.startCardInstallmentsActivity(mActivity, mAmount, mSite, mToken,
                     mKey, mPayerCosts, mPaymentPreference, mIssuer, mPaymentMethod);
         }
 
@@ -815,9 +815,9 @@ public class MercadoPago {
             if (this.mActivity == null) throw new IllegalStateException("activity is null");
             if (this.mKey == null) throw new IllegalStateException("key is null");
             if (this.mAmount == null) throw new IllegalStateException("amount is null");
-            if (this.mCurrencyId == null) throw new IllegalStateException("currencyId is null");
-            MercadoPago.startCardVaultActivity(this.mActivity, this.mKey, this.mAmount, this.mCurrencyId,
-                     this.mPaymentPreference, this.mToken, this.mPaymentMethodList);
+            if (this.mSite == null) throw new IllegalStateException("site is null");
+            MercadoPago.startCardVaultActivity(this.mActivity, this.mKey, this.mAmount, this.mSite,
+                    this.mPaymentPreference, this.mToken, this.mPaymentMethodList);
         }
 
         public void startPaymentMethodsActivity() {
@@ -838,14 +838,14 @@ public class MercadoPago {
 
             if (this.mActivity == null) throw new IllegalStateException("activity is null");
             if (this.mAmount == null) throw new IllegalStateException("amount is null");
-            if (this.mCurrencyId == null) throw new IllegalStateException("currency is null");
+            if (this.mSite == null) throw new IllegalStateException("site is null");
             if (this.mKey == null) throw new IllegalStateException("key is null");
             if (this.mKeyType == null) throw new IllegalStateException("key type is null");
 
             if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {
                 MercadoPago.startPaymentVaultActivity(this.mActivity, this.mKey, this.mMerchantBaseUrl,
                         this.mMerchantGetCustomerUri, this.mMerchantAccessToken,
-                        this.mAmount, this.mCurrencyId, this.mShowBankDeals,
+                        this.mAmount, this.mSite, this.mShowBankDeals,
                         this.mPaymentPreference, this.mPaymentMethodSearch);
             } else {
                 throw new RuntimeException("Unsupported key type for this method");

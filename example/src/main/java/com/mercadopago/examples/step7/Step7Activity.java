@@ -14,6 +14,7 @@ import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentPreference;
 import com.mercadopago.model.PaymentType;
+import com.mercadopago.model.Sites;
 import com.mercadopago.model.Token;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.CurrenciesUtil;
@@ -111,7 +112,7 @@ public class Step7Activity extends AppCompatActivity {
                 .setPublicKey(publicKey)
                 .setAmount(ExamplesUtils.DUMMY_ITEM_UNIT_PRICE)
                 .setPaymentPreference(paymentPreference)
-                .setCurrency(CurrenciesUtil.CURRENCY_ARGENTINA)
+                .setSite(Sites.ARGENTINA)
                 .startCardVaultActivity();
 
     }
@@ -222,7 +223,7 @@ public class Step7Activity extends AppCompatActivity {
                 .setPublicKey(publicKey)
                 .setAmount(ExamplesUtils.DUMMY_ITEM_UNIT_PRICE)
                 .setPaymentPreference(paymentPreference)
-                .setCurrency(CurrenciesUtil.CURRENCY_ARGENTINA)
+                .setSite(Sites.ARGENTINA)
 
 //                .setIssuer(issuer)
 //                .setPaymentMethod(paymentMethod)

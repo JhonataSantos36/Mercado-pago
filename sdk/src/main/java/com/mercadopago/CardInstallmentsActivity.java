@@ -17,6 +17,7 @@ import com.mercadopago.listeners.RecyclerItemClickListener;
 import com.mercadopago.model.Installment;
 import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.PaymentPreference;
+import com.mercadopago.model.Site;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.ErrorUtil;
 
@@ -39,10 +40,10 @@ public class CardInstallmentsActivity extends ShowCardActivity {
 
     //Local vars
     private List<PayerCost> mPayerCosts;
-    private String mCurrencyId;
     private PayerCost mSelectedPayerCost;
     private PaymentPreference mPaymentPreference;
     private FailureRecovery mFailureRecovery;
+    private Site mSite;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +78,7 @@ public class CardInstallmentsActivity extends ShowCardActivity {
     }
 
     protected void initializeAdapter() {
-        mInstallmentsAdapter = new CardInstallmentsAdapter(this, mCurrencyId);
+        mInstallmentsAdapter = new CardInstallmentsAdapter(this, mSite.getCurrencyId());
         initializeAdapterListener(mInstallmentsAdapter, mInstallmentsView);
     }
 
@@ -105,7 +106,7 @@ public class CardInstallmentsActivity extends ShowCardActivity {
     protected void getActivityParameters() {
         super.getActivityParameters();
         mAmount = new BigDecimal(this.getIntent().getStringExtra("amount"));
-        mCurrencyId = this.getIntent().getStringExtra("currencyId");
+        mSite = (Site) this.getIntent().getSerializableExtra("site");
         mPayerCosts = (ArrayList<PayerCost>)getIntent().getSerializableExtra("payerCosts");
         mPaymentPreference = (PaymentPreference) this.getIntent().getSerializableExtra("paymentPreference");
         if (mPaymentPreference == null) {

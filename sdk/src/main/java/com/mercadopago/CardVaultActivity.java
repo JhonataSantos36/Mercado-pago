@@ -13,6 +13,7 @@ import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentPreference;
 import com.mercadopago.model.PaymentType;
 import com.mercadopago.model.Setting;
+import com.mercadopago.model.Site;
 import com.mercadopago.model.Token;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.ErrorUtil;
@@ -33,8 +34,8 @@ public class CardVaultActivity extends ShowCardActivity {
     private PayerCost mPayerCost;
     private PaymentPreference mPaymentPreference;
     private FailureRecovery mFailureRecovery;
-    private String mCurrencyId;
     private List<PaymentMethod> mPaymentMethodList;
+    private Site mSite;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +60,7 @@ public class CardVaultActivity extends ShowCardActivity {
     @Override
     protected void getActivityParameters() {
         mPublicKey = getIntent().getStringExtra("publicKey");
-        mCurrencyId = getIntent().getStringExtra("currencyId");
+        mSite = (Site) getIntent().getSerializableExtra("site");
         mSecurityCodeLocation = CardInterface.CARD_SIDE_BACK;
         mAmount = new BigDecimal(getIntent().getStringExtra("amount"));
         mPaymentMethodList = (ArrayList<PaymentMethod>) this.getIntent().getSerializableExtra("paymentMethodList");
@@ -202,7 +203,7 @@ public class CardVaultActivity extends ShowCardActivity {
                         .setPayerCosts(payerCosts)
                         .setIssuer(mSelectedIssuer)
                         .setPaymentPreference(mPaymentPreference)
-                        .setCurrency(mCurrencyId)
+                        .setSite(mSite)
                         .startCardInstallmentsActivity();
                 overridePendingTransition(R.anim.fade_in_seamless, R.anim.fade_out_seamless);
             }

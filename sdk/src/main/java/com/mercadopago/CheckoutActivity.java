@@ -27,6 +27,7 @@ import com.mercadopago.model.PaymentIntent;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentMethodSearch;
 import com.mercadopago.model.PaymentMethodSearchItem;
+import com.mercadopago.model.Site;
 import com.mercadopago.model.Token;
 import com.mercadopago.mptracker.MPTracker;
 import com.mercadopago.mptracker.delegate.MPTrackerDelegate;
@@ -73,6 +74,7 @@ public class CheckoutActivity extends AppCompatActivity {
     protected PayerCost mSelectedPayerCost;
     protected Token mCreatedToken;
     protected Payment mCreatedPayment;
+    protected Site mSite;
 
     protected String mPurchaseTitle;
     protected ShoppingCartFragment mShoppingCartFragment;
@@ -150,7 +152,7 @@ public class CheckoutActivity extends AppCompatActivity {
             @Override
             public String getSite() {
                 //TODO que sea contante
-                return "MCO";
+                return "MLA";
             }
         };
     }
@@ -200,6 +202,7 @@ public class CheckoutActivity extends AppCompatActivity {
     }
 
     private void initializeCheckout() {
+        mSite = new Site(mCheckoutPreference.getSiteId(), mCheckoutPreference.getItems().get(0).getCurrencyId());
         initializeShoppingCart();
         getPaymentMethodSearch();
     }
@@ -337,7 +340,7 @@ public class CheckoutActivity extends AppCompatActivity {
         new MercadoPago.StartActivityBuilder()
                 .setActivity(this)
                 .setPublicKey(mMerchantPublicKey)
-                .setCurrency(mCheckoutPreference.getItems().get(0).getCurrencyId())
+                .setSite(mSite)
                 .setAmount(mCheckoutPreference.getAmount())
                 .setPaymentMethodSearch(mPaymentMethodSearch)
                 .setPaymentPreference(mCheckoutPreference.getPaymentPreference())
@@ -513,7 +516,7 @@ public class CheckoutActivity extends AppCompatActivity {
                 .setAmount(mCheckoutPreference.getAmount())
                 .setToken(mCreatedToken)
                 .setIssuer(mSelectedIssuer)
-                .setCurrency(mCheckoutPreference.getItems().get(0).getCurrencyId())
+                .setSite(mSite)
                 .startCardInstallmentsActivity();
         overridePendingTransition(R.anim.slide_right_to_left_in, R.anim.slide_right_to_left_out);
     }

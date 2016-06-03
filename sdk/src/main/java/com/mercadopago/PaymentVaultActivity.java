@@ -20,6 +20,7 @@ import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentPreference;
 import com.mercadopago.model.PaymentMethodSearch;
 import com.mercadopago.model.PaymentMethodSearchItem;
+import com.mercadopago.model.Site;
 import com.mercadopago.model.Token;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.CurrenciesUtil;
@@ -45,6 +46,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
     protected Issuer mSelectedIssuer;
     protected PayerCost mSelectedPayerCost;
     protected FailureRecovery mFailureRecovery;
+    protected Site mSite;
 
     // Controls
     protected RecyclerView mSearchItemsRecyclerView;
@@ -63,7 +65,6 @@ public class PaymentVaultActivity extends AppCompatActivity {
     protected boolean mShowBankDeals;
     protected boolean mCardGuessingEnabled;
     protected PaymentMethodSearchItem mSelectedSearchItem;
-    protected String mCurrencyId;
     protected PaymentPreference mPaymentPreference;
     protected MPTextView mActivityTitle;
 
@@ -111,7 +112,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
         } catch (Exception ex) {
             mAmount = null;
         }
-        mCurrencyId = this.getIntent().getStringExtra("currencyId");
+        mSite = (Site) this.getIntent().getSerializableExtra("site");
 
         mMerchantPublicKey = this.getIntent().getStringExtra("merchantPublicKey");
 
@@ -161,13 +162,12 @@ public class PaymentVaultActivity extends AppCompatActivity {
     }
 
     private boolean isCurrencyIdValid() {
-
         boolean isValid = true;
 
-        if(mCurrencyId == null) {
+        if(mSite.getCurrencyId() == null) {
             isValid = false;
         }
-        else if(!CurrenciesUtil.isValidCurrency(mCurrencyId)){
+        else if(!CurrenciesUtil.isValidCurrency(mSite.getCurrencyId())){
             isValid = false;
         }
         return isValid;
@@ -337,7 +337,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
 
         if(MercadoPagoUtil.isCardPaymentType(item.getId())){
             builder.setAmount(mAmount);
-            builder.setCurrency(mCurrencyId);
+            builder.setSite(mSite);
             builder.setSupportedPaymentMethods(mPaymentMethodSearch.getPaymentMethods());
             builder.startCardVaultActivity();
             animatePaymentMethodSelection();
