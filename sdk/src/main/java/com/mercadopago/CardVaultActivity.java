@@ -3,9 +3,11 @@ package com.mercadopago;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.core.MercadoPago;
+import com.mercadopago.model.DecorationPreference;
 import com.mercadopago.model.Installment;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.PayerCost;
@@ -32,21 +34,27 @@ public class CardVaultActivity extends ShowCardActivity {
     private Activity mActivity;
     protected boolean mActiveActivity;
 
+    private View mCardBackground;
+
     private PayerCost mPayerCost;
     private PaymentPreference mPaymentPreference;
     private FailureRecovery mFailureRecovery;
     private List<PaymentMethod> mPaymentMethodList;
     private Site mSite;
+    private DecorationPreference mDecorationPreference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if(mDecorationPreference != null && mDecorationPreference.hasColors()) {
+            setTheme(R.style.Theme_MercadoPagoTheme_NoActionBar);
+        }
         mActivity = this;
         mActiveActivity = true;
         setContentView();
         getActivityParameters();
         initializeToolbar();
-
+        initializeActivityControls();
         mMercadoPago = new MercadoPago.Builder()
                 .setContext(this)
                 .setPublicKey(mPublicKey)
@@ -57,6 +65,15 @@ public class CardVaultActivity extends ShowCardActivity {
         }
         initializeFrontFragment();
         startGuessingCardActivity();
+    }
+
+    private void initializeActivityControls() {
+        mCardBackground = findViewById(R.id.card_background);
+
+        if(mDecorationPreference != null && mDecorationPreference.hasColors())
+        {
+            mCardBackground.setBackgroundColor(mDecorationPreference.getLighterColor());
+        }
     }
 
     @Override
@@ -94,6 +111,10 @@ public class CardVaultActivity extends ShowCardActivity {
         if (mPaymentPreference == null) {
             mPaymentPreference = new PaymentPreference();
         }
+        if(this.getIntent().getSerializableExtra("decorationPreference") != null) {
+            mDecorationPreference = (DecorationPreference) this.getIntent().getSerializableExtra("decorationPreference");
+        }
+
     }
 
     protected void initializeToolbar() {
@@ -113,6 +134,7 @@ public class CardVaultActivity extends ShowCardActivity {
                         .setAmount(new BigDecimal(100))
                         .setPaymentPreference(mPaymentPreference)
                         .setSupportedPaymentMethods(mPaymentMethodList)
+                        .setDecorationPreference(mDecorationPreference)
                         .startGuessingCardActivity();
             }
         });
@@ -232,6 +254,7 @@ public class CardVaultActivity extends ShowCardActivity {
                         .setIssuer(mSelectedIssuer)
                         .setPaymentPreference(mPaymentPreference)
                         .setSite(mSite)
+                        .setDecorationPreference(mDecorationPreference)
                         .startCardInstallmentsActivity();
                 overridePendingTransition(R.anim.fade_in_seamless, R.anim.fade_out_seamless);
             }

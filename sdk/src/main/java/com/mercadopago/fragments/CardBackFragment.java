@@ -1,20 +1,24 @@
 package com.mercadopago.fragments;
 
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
+import android.widget.ImageView;
 
 import com.mercadopago.CardInterface;
 import com.mercadopago.R;
+import com.mercadopago.model.DecorationPreference;
+import com.mercadopago.util.ScaleUtil;
 import com.mercadopago.views.MPTextView;
 
 public class CardBackFragment extends android.support.v4.app.Fragment {
 
     private MPTextView mCardSecurityCodeTextView;
+    private DecorationPreference mDecorationPreference;
 
     private CardInterface mActivity;
 
@@ -51,6 +55,14 @@ public class CardBackFragment extends android.support.v4.app.Fragment {
     public void setCardInputViews() {
         if (getView() != null) {
             mCardSecurityCodeTextView = (MPTextView) getView().findViewById(R.id.cardSecurityCodeView);
+            if(mDecorationPreference != null) {
+                if(mDecorationPreference.hasColors()) {
+                    ImageView mCardBorder = (ImageView) getView().findViewById(R.id.card_shadow_border);
+                    GradientDrawable cardShadowRounded = (GradientDrawable) ContextCompat.getDrawable(getActivity(), R.drawable.card_shadow_rounded);
+                    cardShadowRounded.setStroke(ScaleUtil.getPxFromDp(6, getActivity()), mDecorationPreference.getLighterColor());
+                    mCardBorder.setImageDrawable(cardShadowRounded);
+                }
+            }
         }
     }
 
@@ -109,4 +121,7 @@ public class CardBackFragment extends android.support.v4.app.Fragment {
         }
     }
 
+    public void setDecorationPreference(DecorationPreference decorationPreference) {
+        mDecorationPreference = decorationPreference;
+    }
 }

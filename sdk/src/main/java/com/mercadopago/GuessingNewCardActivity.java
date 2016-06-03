@@ -3,7 +3,11 @@ package com.mercadopago;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
@@ -19,6 +23,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
@@ -34,6 +39,7 @@ import com.mercadopago.fragments.CardFrontFragment;
 import com.mercadopago.fragments.CardIdentificationFragment;
 import com.mercadopago.model.CardToken;
 import com.mercadopago.model.Cardholder;
+import com.mercadopago.model.DecorationPreference;
 import com.mercadopago.model.Identification;
 import com.mercadopago.model.IdentificationType;
 import com.mercadopago.model.Issuer;
@@ -45,6 +51,7 @@ import com.mercadopago.model.Token;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.LayoutUtil;
+import com.mercadopago.util.ScaleUtil;
 import com.mercadopago.views.MPEditText;
 import com.mercadopago.views.MPTextView;
 
@@ -60,9 +67,11 @@ public class GuessingNewCardActivity extends FrontCardActivity {
 
     // Activity parameters
     private String mPublicKey;
-    private MPTextView mToolbarButton;
+    private List<PaymentMethod> mPaymentMethodList;
+    private DecorationPreference mDecorationPreference;
 
     // Input controls
+    private MPTextView mToolbarButton;
     private MPEditText mCardHolderNameEditText;
     private MPEditText mCardNumberEditText;
     private MPEditText mCardExpiryDateEditText;
@@ -82,6 +91,7 @@ public class GuessingNewCardActivity extends FrontCardActivity {
     private FrameLayout mBackInactiveButton;
     private FrameLayout mErrorContainer;
     private LinearLayout mButtonContainer;
+    private View mCardBackground;
 
     //Card container
     private CardFrontFragment mFrontFragment;
@@ -108,16 +118,18 @@ public class GuessingNewCardActivity extends FrontCardActivity {
     private int mCardNumberLength;
     private String mSecurityCodeLocation;
     private FailureRecovery mFailureRecovery;
-    private List<PaymentMethod> mPaymentMethodList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getActivityParameters();
+        if(mDecorationPreference != null && mDecorationPreference.hasColors()) {
+            setTheme(R.style.Theme_MercadoPagoTheme_NoActionBar);
+        }
         setContentView();
         initializeLayout(savedInstanceState);
         setInputControls();
         initializeToolbar();
-        getActivityParameters();
         verifyValidCreate();
         setListeners();
         openKeyboard(mCardNumberEditText);
@@ -205,7 +217,28 @@ public class GuessingNewCardActivity extends FrontCardActivity {
                         .startBankDealsActivity();
             }
         });
+
+        if(mDecorationPreference != null) {
+            if(mDecorationPreference.hasColors()) {
+                if(toolbar != null) {
+                   decorateToolbar(toolbar);
+                }
+            }
+
+        }
         LayoutUtil.showProgressLayout(this);
+    }
+
+    private void decorateToolbar(Toolbar toolbar) {
+        if(mDecorationPreference.isDarkFontEnabled()) {
+            mToolbarButton.setTextColor(mDecorationPreference.getDarkFontColor(this));
+            Drawable upArrow = toolbar.getNavigationIcon();
+            if(upArrow != null) {
+                upArrow.setColorFilter(mDecorationPreference.getDarkFontColor(this), PorterDuff.Mode.SRC_ATOP);
+            }
+            getSupportActionBar().setHomeAsUpIndicator(upArrow);
+        }
+        toolbar.setBackgroundColor(mDecorationPreference.getLighterColor());
     }
 
     protected void setContentView() {
@@ -223,9 +256,11 @@ public class GuessingNewCardActivity extends FrontCardActivity {
         mSecurityCodeLocation = null;
         if (mFrontFragment == null) {
             mFrontFragment = new CardFrontFragment();
+            mFrontFragment.setDecorationPreference(mDecorationPreference);
         }
         if (mBackFragment == null) {
             mBackFragment = new CardBackFragment();
+            mBackFragment.setDecorationPreference(mDecorationPreference);
         }
         if (mCardIdentificationFragment == null) {
             mCardIdentificationFragment = new CardIdentificationFragment();
@@ -263,6 +298,16 @@ public class GuessingNewCardActivity extends FrontCardActivity {
         mIdentificationTypeContainer.setVisibility(View.GONE);
         mIdentificationNumberContainer.setVisibility(View.GONE);
         mButtonContainer.setVisibility(View.VISIBLE);
+
+        mCardBackground = findViewById(R.id.card_background);
+
+        if(mDecorationPreference != null && mDecorationPreference.hasColors())
+        {
+            mCardBackground.setBackgroundColor(mDecorationPreference.getLighterColor());
+        }
+
+
+
     }
 
     protected void getActivityParameters() {
@@ -274,6 +319,9 @@ public class GuessingNewCardActivity extends FrontCardActivity {
         mIdentificationNumberRequired = false;
         if (mPaymentPreference == null) {
             mPaymentPreference = new PaymentPreference();
+        }
+        if(this.getIntent().getSerializableExtra("decorationPreference") != null) {
+            mDecorationPreference = (DecorationPreference) this.getIntent().getSerializableExtra("decorationPreference");
         }
     }
 
@@ -1384,6 +1432,7 @@ public class GuessingNewCardActivity extends FrontCardActivity {
                         .setPaymentMethod(mCurrentPaymentMethod)
                         .setToken(mToken)
                         .setIssuers(issuers)
+                        .setDecorationPreference(mDecorationPreference)
                         .startCardIssuersActivity();
                 overridePendingTransition(R.anim.fade_in_seamless, R.anim.fade_out_seamless);
             }

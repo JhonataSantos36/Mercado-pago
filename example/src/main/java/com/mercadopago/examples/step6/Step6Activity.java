@@ -13,16 +13,11 @@ import com.mercadopago.core.MerchantServer;
 import com.mercadopago.examples.R;
 import com.mercadopago.examples.utils.ExamplesUtils;
 import com.mercadopago.exceptions.MPException;
-import com.mercadopago.model.ApiException;
-import com.mercadopago.model.CheckoutIntent;
 import com.mercadopago.model.CheckoutPreference;
 import com.mercadopago.model.DecorationPreference;
-import com.mercadopago.model.Item;
-import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;
 
 import java.math.BigDecimal;
-import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -100,9 +95,11 @@ public class Step6Activity extends ExampleActivity {
         DecorationPreference decorationPreference = new DecorationPreference();
         decorationPreference.setBaseColor(ContextCompat.getColor(this, R.color.myPrimaryColor));
         decorationPreference.enableDarkFont();
+
         //PREF CON SOLO CARGAVIRTUAL: 150216849-b7fb60e9-aee2-40af-a3de-b5b2e57e4e61
         //PREF CON SOLO TC: 150216849-db0ef449-0f5c-49e9-83c6-087f5edfc2d3
         //PREF SIN EXCLUSIONES: 150216849-53df0831-8142-4b7c-b7ce-af51fa48dffa
+
         new MercadoPago.StartActivityBuilder()
                 .setActivity(this)
                 .setPublicKey(publicKey)

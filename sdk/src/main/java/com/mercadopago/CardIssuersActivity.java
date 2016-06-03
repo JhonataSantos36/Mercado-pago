@@ -2,6 +2,8 @@ package com.mercadopago;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -34,6 +36,7 @@ public class CardIssuersActivity extends ShowCardActivity {
     private RecyclerView mIssuersView;
     private CardIssuersAdapter mIssuersAdapter;
     private ProgressBar mProgressBar;
+    private View mCardBackground;
 
     //Local vars
     private List<Issuer> mIssuers;
@@ -44,12 +47,12 @@ public class CardIssuersActivity extends ShowCardActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getActivityParameters();
         setContentView();
         mActivity = this;
         mActiveActivity = true;
         setLayout();
         initializeAdapter();
-        getActivityParameters();
         initializeToolbar();
 
         mMercadoPago = new MercadoPago.Builder()
@@ -95,6 +98,12 @@ public class CardIssuersActivity extends ShowCardActivity {
         mIssuersView = (RecyclerView) findViewById(R.id.activity_issuers_view);
         mCardContainer = (FrameLayout) findViewById(R.id.activity_new_card_container);
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
+
+        mCardBackground = findViewById(R.id.card_background);
+        if(mDecorationPreference != null && mDecorationPreference.hasColors())
+        {
+            mCardBackground.setBackgroundColor(mDecorationPreference.getLighterColor());
+        }
         mProgressBar.setVisibility(View.GONE);
     }
 

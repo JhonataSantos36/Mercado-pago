@@ -20,10 +20,6 @@ public class DecorationPreference implements Serializable{
         this.baseColor = color;
     }
 
-    public int getLighterColor() {
-        return ColorsUtil.lighter(baseColor);
-    }
-
     public boolean hasColors() {
         return baseColor != null;
     }
@@ -32,16 +28,16 @@ public class DecorationPreference implements Serializable{
         return baseColor;
     }
 
-    public int getDarkerColor() {
-        return ColorsUtil.darker(baseColor);
+    public void enableDarkFont() {
+        this.darkFontEnabled = true;
     }
 
     public boolean isDarkFontEnabled() {
         return darkFontEnabled;
     }
 
-    public void enableDarkFont() {
-        this.darkFontEnabled = true;
+    public int getLighterColor() {
+        return ColorsUtil.lighter(baseColor);
     }
 
     public int getDarkFontColor(Context context) {

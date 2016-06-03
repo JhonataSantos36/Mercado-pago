@@ -15,6 +15,7 @@
         android:background="@color/mpsdk_color_new_card_form_background">
 
         <FrameLayout
+            android:id="@+id/card_background"
             android:layout_width="match_parent"
             android:layout_height="220dp">
             <include layout="@layout/mpsdk_transparent_toolbar"/>

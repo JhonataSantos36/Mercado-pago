@@ -219,7 +219,7 @@ public class CheckoutActivity extends AppCompatActivity {
         String currencyId = mCheckoutPreference.getItems().get(0).getCurrencyId();
         String pictureUrl = mCheckoutPreference.getItems().get(0).getPictureUrl();
 
-        if(mDecorationPreference.hasColors()) {
+        if(mDecorationPreference != null && mDecorationPreference.hasColors()) {
             mShoppingCartFragment = ShoppingCartFragment.newInstance(pictureUrl, mPurchaseTitle, mCheckoutPreference.getAmount(), currencyId, mDecorationPreference);
         }
         else {
@@ -254,7 +254,9 @@ public class CheckoutActivity extends AppCompatActivity {
         mCheckoutPreferenceId = this.getIntent().getStringExtra("checkoutPreferenceId");
         mMerchantPublicKey = this.getIntent().getStringExtra("merchantPublicKey");
         mShowBankDeals = this.getIntent().getBooleanExtra("showBankDeals", true);
-        mDecorationPreference = (DecorationPreference) this.getIntent().getSerializableExtra("decorationPreference");
+        if(this.getIntent().getSerializableExtra("decorationPreference") != null) {
+            mDecorationPreference = (DecorationPreference) this.getIntent().getSerializableExtra("decorationPreference");
+        }
     }
 
     private void initializeToolbar() {
