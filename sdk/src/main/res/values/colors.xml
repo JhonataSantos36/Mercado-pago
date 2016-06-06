@@ -2,6 +2,7 @@
 <resources>
     <color name="mpsdk_white">#FFFFFF</color>
     <color name="mpsdk_white_background">#FFFFFF</color>
+    <color name="mpsdk_base_text_alpha">#B3333333</color>
     <color name="mpsdk_base_text">#333333</color>
     <color name="mpsdk_form_text">#666666</color>
     <color name="mpsdk_separator">#DEDEDE</color>
@@ -92,31 +93,31 @@
     <color name="mpsdk_submit_pressed">#1976D2</color>
 
     <!-- Card font color -->
-    <color name="mpsdk_font_visa">#FFFFFF</color>
-    <color name="mpsdk_font_debvisa">#FFFFFF</color>
-    <color name="mpsdk_font_master">#FFFFFF</color>
-    <color name="mpsdk_font_debmaster">#FFFFFF</color>
-    <color name="mpsdk_font_amex">#333333</color>
-    <color name="mpsdk_font_diners">#333333</color>
-    <color name="mpsdk_font_elo">#FFFFFF</color>
-    <color name="mpsdk_font_hipercard">#FFFFFF</color>
-    <color name="mpsdk_font_melicard">#FFFFFF</color>
-    <color name="mpsdk_font_naranja">#FFFFFF</color>
-    <color name="mpsdk_font_nativa">#FFFFFF</color>
-    <color name="mpsdk_font_tarshop">#FFFFFF</color>
-    <color name="mpsdk_font_cencosud">#333333</color>
-    <color name="mpsdk_font_cabal">#333333</color>
-    <color name="mpsdk_font_argencard">#FFFFFF</color>
-    <color name="mpsdk_font_cordobesa">#333333</color>
-    <color name="mpsdk_font_cordial">#333333</color>
-    <color name="mpsdk_font_mercadopago_cc">#333333</color>
-    <color name="mpsdk_font_mercadopagocard">#333333</color>
-    <color name="mpsdk_font_cmr">#FFFFFF</color>
+    <color name="mpsdk_font_visa">#B3FFFFFF</color>
+    <color name="mpsdk_font_debvisa">#B3FFFFFF</color>
+    <color name="mpsdk_font_master">#B3FFFFFF</color>
+    <color name="mpsdk_font_debmaster">#B3FFFFFF</color>
+    <color name="mpsdk_font_amex">#B3333333</color>
+    <color name="mpsdk_font_diners">#B3333333</color>
+    <color name="mpsdk_font_elo">#B3FFFFFF</color>
+    <color name="mpsdk_font_hipercard">#B3FFFFFF</color>
+    <color name="mpsdk_font_melicard">#B3FFFFFF</color>
+    <color name="mpsdk_font_naranja">#B3FFFFFF</color>
+    <color name="mpsdk_font_nativa">#B3FFFFFF</color>
+    <color name="mpsdk_font_tarshop">#B3FFFFFF</color>
+    <color name="mpsdk_font_cencosud">#B3333333</color>
+    <color name="mpsdk_font_cabal">#B3333333</color>
+    <color name="mpsdk_font_argencard">#B3FFFFFF</color>
+    <color name="mpsdk_font_cordobesa">#B3333333</color>
+    <color name="mpsdk_font_cordial">#B3333333</color>
+    <color name="mpsdk_font_mercadopago_cc">#B3333333</color>
+    <color name="mpsdk_font_mercadopagocard">#B3333333</color>
+    <color name="mpsdk_font_cmr">#B3FFFFFF</color>
 
-    <color name="mpsdk_font_pagofacil">#333333</color>
-    <color name="mpsdk_font_rapipago">#333333</color>
-    <color name="mpsdk_font_redlink">#333333</color>
-    <color name="mpsdk_font_bapropagos">#333333</color>
-    <color name="mpsdk_font_cargavirtual">#333333</color>
+    <color name="mpsdk_font_pagofacil">#B3333333</color>
+    <color name="mpsdk_font_rapipago">#B3333333</color>
+    <color name="mpsdk_font_redlink">#B3333333</color>
+    <color name="mpsdk_font_bapropagos">#B3333333</color>
+    <color name="mpsdk_font_cargavirtual">#B3333333</color>
 
 </resources>

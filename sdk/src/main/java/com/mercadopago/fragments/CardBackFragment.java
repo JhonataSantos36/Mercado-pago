@@ -90,7 +90,7 @@ public class CardBackFragment extends android.support.v4.app.Fragment {
     private void populateCardSecurityCode() {
         String securityCode = mActivity.getSecurityCode();
         setText(mCardSecurityCodeTextView, buildSecurityCode(mActivity.getSecurityCodeLength(), securityCode),
-                CardInterface.FULL_TEXT_VIEW_COLOR);
+                CardInterface.NORMAL_TEXT_VIEW_COLOR);
     }
 
     public void setText(MPTextView textView, CharSequence text, int color) {
