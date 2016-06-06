@@ -51,6 +51,9 @@ public class CardInstallmentsActivity extends ShowCardActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getActivityParameters();
+        if(mDecorationPreference != null && mDecorationPreference.hasColors()) {
+            setTheme(R.style.Theme_MercadoPagoTheme_NoActionBar);
+        }
         setContentView();
         mActivity = this;
         mActiveActivity = true;

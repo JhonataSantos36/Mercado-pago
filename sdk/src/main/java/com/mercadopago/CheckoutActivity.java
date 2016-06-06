@@ -328,7 +328,7 @@ public class CheckoutActivity extends AppCompatActivity {
     protected void startTermsAndConditionsActivity() {
         Intent termsAndConditionsIntent = new Intent(this, TermsAndConditionsActivity.class);
         termsAndConditionsIntent.putExtra("siteId", mCheckoutPreference.getSiteId());
-
+        termsAndConditionsIntent.putExtra("decorationPreference", mDecorationPreference);
         //TODO validate
         MPTracker.getInstance().trackEvent("CHECKOUT","TERMS_AND_CONDITIONS","3",mTrackerDelegate,this);
 
@@ -348,7 +348,7 @@ public class CheckoutActivity extends AppCompatActivity {
                 mPaymentMethodSearch = paymentMethodSearch;
 
                 //TODO validate
-                MPTracker.getInstance().trackEvent("CHECKOUT","GET_PAYMENT_METHOD_SEARCH","SUCCESS","3",mTrackerDelegate,mActivity);
+                MPTracker.getInstance().trackEvent("CHECKOUT", "GET_PAYMENT_METHOD_SEARCH", "SUCCESS", "3", mTrackerDelegate, mActivity);
 
                 if (mActiveActivity) {
                     startPaymentVaultActivity();
@@ -469,8 +469,6 @@ public class CheckoutActivity extends AppCompatActivity {
             mSelectedPayerCost = (PayerCost) bundle.getSerializable("payerCost");
             drawPayerCostRow();
             setAmountLabel();
-        } else if (resultCode == RESULT_CANCELED) {
-            finish();
         }
         overridePendingTransition(R.anim.slide_left_to_right_in, R.anim.slide_left_to_right_out);
     }
@@ -553,7 +551,9 @@ public class CheckoutActivity extends AppCompatActivity {
                 .setToken(mCreatedToken)
                 .setIssuer(mSelectedIssuer)
                 .setSite(mSite)
+                .setDecorationPreference(mDecorationPreference)
                 .startCardInstallmentsActivity();
+
         overridePendingTransition(R.anim.slide_right_to_left_in, R.anim.slide_right_to_left_out);
     }
 

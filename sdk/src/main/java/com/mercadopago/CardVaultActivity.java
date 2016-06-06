@@ -46,13 +46,13 @@ public class CardVaultActivity extends ShowCardActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getActivityParameters();
         if(mDecorationPreference != null && mDecorationPreference.hasColors()) {
             setTheme(R.style.Theme_MercadoPagoTheme_NoActionBar);
         }
         mActivity = this;
         mActiveActivity = true;
         setContentView();
-        getActivityParameters();
         initializeToolbar();
         initializeActivityControls();
         mMercadoPago = new MercadoPago.Builder()
@@ -102,6 +102,7 @@ public class CardVaultActivity extends ShowCardActivity {
 
     @Override
     protected void getActivityParameters() {
+        super.getActivityParameters();
         mPublicKey = getIntent().getStringExtra("publicKey");
         mSite = (Site) getIntent().getSerializableExtra("site");
         mSecurityCodeLocation = CardInterface.CARD_SIDE_BACK;
@@ -111,10 +112,6 @@ public class CardVaultActivity extends ShowCardActivity {
         if (mPaymentPreference == null) {
             mPaymentPreference = new PaymentPreference();
         }
-        if(this.getIntent().getSerializableExtra("decorationPreference") != null) {
-            mDecorationPreference = (DecorationPreference) this.getIntent().getSerializableExtra("decorationPreference");
-        }
-
     }
 
     protected void initializeToolbar() {

@@ -43,7 +43,7 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
     protected MPEditText mCardNumberEditText;
     protected MPEditText mCardExpiryDateEditText;
     protected MPEditText mCardSecurityEditText;
-
+    protected ImageView mCardBorder;
     //Local vars
     private Animation mAnimFadeIn;
     private Animation mQuickAnim;
@@ -101,10 +101,15 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
             mColorDrawableCard = (GradientDrawable) mColorCard.getBackground();
             mBaseImageCard = (FrameLayout) getView().findViewById(R.id.baseImageCard);
             mImageCardContainer = (ImageView) getView().findViewById(R.id.imageCardContainer);
+            mCardBorder = (ImageView) getView().findViewById(R.id.card_shadow_border);
+
         }
+        decorate();
+    }
+
+    private void decorate() {
         if(mDecorationPreference != null) {
             if(mDecorationPreference.hasColors()) {
-                ImageView mCardBorder = (ImageView) getView().findViewById(R.id.card_shadow_border);
                 GradientDrawable cardShadowRounded = (GradientDrawable) ContextCompat.getDrawable(getActivity(), R.drawable.card_shadow_rounded);
                 cardShadowRounded.setStroke(ScaleUtil.getPxFromDp(6, getActivity()), mDecorationPreference.getLighterColor());
                 mCardBorder.setImageDrawable(cardShadowRounded);
@@ -443,6 +448,7 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
     }
     
     private void populateCardColor() {
+        decorate();
         if (mActivity.getCurrentPaymentMethod() != null) {
             int color = mActivity.getCardColor(mActivity.getCurrentPaymentMethod());
             quickTransition(color);

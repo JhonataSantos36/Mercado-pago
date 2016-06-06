@@ -1,5 +1,7 @@
 package com.mercadopago;
 
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -7,7 +9,9 @@ import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
+import com.mercadopago.model.DecorationPreference;
 import com.mercadopago.views.MPTextView;
 
 public class TermsAndConditionsActivity extends AppCompatActivity {
@@ -16,11 +20,18 @@ public class TermsAndConditionsActivity extends AppCompatActivity {
     protected View mBankDealsTermsAndConditionsView;
     protected WebView mTermsAndConditionsWebView;
     protected ProgressBar mProgressbar;
+    protected DecorationPreference mDecorationPreference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+        if(this.getIntent().getSerializableExtra("decorationPreference") != null) {
+            mDecorationPreference = (DecorationPreference) this.getIntent().getSerializableExtra("decorationPreference");
+        }
+        if(mDecorationPreference != null && mDecorationPreference.hasColors()) {
+            setTheme(R.style.Theme_MercadoPagoTheme_NoActionBar);
+        }
         setContentView();
         initializeControls();
         initializeToolbar();
@@ -44,11 +55,33 @@ public class TermsAndConditionsActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onBackPressed();
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+        if(mDecorationPreference != null) {
+            if(mDecorationPreference.hasColors()) {
+                if(toolbar != null) {
+                    decorateToolbar(toolbar);
                 }
-            });
+            }
+            if(mDecorationPreference.isDarkFontEnabled()) {
+                TextView title = (TextView) findViewById(R.id.title);
+                title.setTextColor(mDecorationPreference.getDarkFontColor(this));
+            }
+        }
+    }
+
+    private void decorateToolbar(Toolbar toolbar) {
+        if(mDecorationPreference.isDarkFontEnabled()) {
+            Drawable upArrow = toolbar.getNavigationIcon();
+            if(upArrow != null) {
+                upArrow.setColorFilter(mDecorationPreference.getDarkFontColor(this), PorterDuff.Mode.SRC_ATOP);
+            }
+            getSupportActionBar().setHomeAsUpIndicator(upArrow);
+        }
+        toolbar.setBackgroundColor(mDecorationPreference.getLighterColor());
     }
 
     private void showMPTermsAndConditions() {

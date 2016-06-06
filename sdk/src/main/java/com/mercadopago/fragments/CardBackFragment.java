@@ -18,8 +18,9 @@ import com.mercadopago.views.MPTextView;
 public class CardBackFragment extends android.support.v4.app.Fragment {
 
     private MPTextView mCardSecurityCodeTextView;
-    private DecorationPreference mDecorationPreference;
+    private ImageView mCardBorder;
 
+    private DecorationPreference mDecorationPreference;
     private CardInterface mActivity;
 
     public static String BASE_BACK_SECURITY_CODE = "•••";
@@ -55,13 +56,17 @@ public class CardBackFragment extends android.support.v4.app.Fragment {
     public void setCardInputViews() {
         if (getView() != null) {
             mCardSecurityCodeTextView = (MPTextView) getView().findViewById(R.id.cardSecurityCodeView);
-            if(mDecorationPreference != null) {
-                if(mDecorationPreference.hasColors()) {
-                    ImageView mCardBorder = (ImageView) getView().findViewById(R.id.card_shadow_border);
-                    GradientDrawable cardShadowRounded = (GradientDrawable) ContextCompat.getDrawable(getActivity(), R.drawable.card_shadow_rounded);
-                    cardShadowRounded.setStroke(ScaleUtil.getPxFromDp(6, getActivity()), mDecorationPreference.getLighterColor());
-                    mCardBorder.setImageDrawable(cardShadowRounded);
-                }
+            mCardBorder = (ImageView) getView().findViewById(R.id.card_shadow_border);
+            decorate();
+        }
+    }
+
+    private void decorate() {
+        if(mDecorationPreference != null) {
+            if(mDecorationPreference.hasColors()) {
+                GradientDrawable cardShadowRounded = (GradientDrawable) ContextCompat.getDrawable(getActivity(), R.drawable.card_shadow_rounded);
+                cardShadowRounded.setStroke(ScaleUtil.getPxFromDp(6, getActivity()), mDecorationPreference.getLighterColor());
+                mCardBorder.setImageDrawable(cardShadowRounded);
             }
         }
     }

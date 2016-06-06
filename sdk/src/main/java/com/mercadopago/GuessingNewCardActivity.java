@@ -214,6 +214,7 @@ public class GuessingNewCardActivity extends FrontCardActivity {
                 new MercadoPago.StartActivityBuilder()
                         .setActivity(mActivity)
                         .setPublicKey(mPublicKey)
+                        .setDecorationPreference(mDecorationPreference)
                         .startBankDealsActivity();
             }
         });

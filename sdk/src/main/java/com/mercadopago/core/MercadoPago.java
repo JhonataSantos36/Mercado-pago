@@ -283,10 +283,11 @@ public class MercadoPago {
 
     // * Static methods for StartActivityBuilder implementation
 
-    private static void startBankDealsActivity(Activity activity, String publicKey) {
+    private static void startBankDealsActivity(Activity activity, String publicKey, DecorationPreference decorationPreference) {
 
         Intent bankDealsIntent = new Intent(activity, BankDealsActivity.class);
         bankDealsIntent.putExtra("publicKey", publicKey);
+        bankDealsIntent.putExtra("decorationPreference", decorationPreference);
         activity.startActivityForResult(bankDealsIntent, BANK_DEALS_REQUEST_CODE);
     }
 
@@ -718,7 +719,7 @@ public class MercadoPago {
             if (this.mKeyType == null) throw new IllegalStateException("key type is null");
 
             if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {
-                MercadoPago.startBankDealsActivity(this.mActivity, this.mKey);
+                MercadoPago.startBankDealsActivity(this.mActivity, this.mKey, this.mDecorationPreference);
             } else {
                 throw new RuntimeException("Unsupported key type for this method");
             }

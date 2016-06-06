@@ -57,20 +57,30 @@ public abstract class ShowCardActivity extends FrontCardActivity {
         mPublicKey = getIntent().getStringExtra("publicKey");
         mToken = JsonUtil.getInstance().fromJson(
                 this.getIntent().getStringExtra("token"), Token.class);
+        mSelectedIssuer = (Issuer) this.getIntent().getSerializableExtra("issuer");
+
+        if(this.getIntent().getSerializableExtra("decorationPreference") != null) {
+            mDecorationPreference = (DecorationPreference) this.getIntent().getSerializableExtra("decorationPreference");
+        }
+
+        if(mToken != null) {
+            setCardInfo();
+        }
+    }
+
+    private void setCardInfo() {
         mBin = mToken.getFirstSixDigits();
         mCardholder = mToken.getCardholder();
         Setting setting = Setting.getSettingByBin(mCurrentPaymentMethod.getSettings(),
                 mToken.getFirstSixDigits());
+
         if (setting != null) {
             mCardNumberLength = setting.getCardNumber().getLength();
         } else {
             mCardNumberLength = CARD_NUMBER_MAX_LENGTH;
         }
+
         mSecurityCodeLocation = setting.getSecurityCode().getCardLocation();
-        mSelectedIssuer = (Issuer) this.getIntent().getSerializableExtra("issuer");
-        if(this.getIntent().getSerializableExtra("decorationPreference") != null) {
-            mDecorationPreference = (DecorationPreference) this.getIntent().getSerializableExtra("decorationPreference");
-        }
     }
 
     protected void initializeToolbarWithTitle(String title) {
@@ -130,12 +140,12 @@ public abstract class ShowCardActivity extends FrontCardActivity {
         if (mFrontFragment == null) {
             mFrontFragment = new CardFrontFragment();
             mFrontFragment.disableAnimate();
+            mFrontFragment.setDecorationPreference(mDecorationPreference);
         }
         getSupportFragmentManager()
                 .beginTransaction()
                 .add(R.id.activity_new_card_container, mFrontFragment)
                 .commit();
-
     }
 
     private String getCardNumberHidden() {
