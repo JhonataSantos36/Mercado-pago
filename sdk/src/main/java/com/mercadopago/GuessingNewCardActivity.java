@@ -851,6 +851,7 @@ public class GuessingNewCardActivity extends FrontCardActivity {
         mCardNumberEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
+                mFrontFragment.setFontColor();
                 if (hasFocus) {
                     disableBackInputButton();
                     openKeyboard(mCardNumberEditText);
@@ -897,6 +898,7 @@ public class GuessingNewCardActivity extends FrontCardActivity {
         mCardHolderNameEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
+                mFrontFragment.setFontColor();
                 if (hasFocus) {
                     enableBackInputButton();
                     openKeyboard(mCardHolderNameEditText);
@@ -931,6 +933,7 @@ public class GuessingNewCardActivity extends FrontCardActivity {
         mCardExpiryDateEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
+                mFrontFragment.setFontColor();
                 if (hasFocus) {
                     enableBackInputButton();
                     openKeyboard(mCardExpiryDateEditText);
@@ -965,6 +968,7 @@ public class GuessingNewCardActivity extends FrontCardActivity {
         mCardSecurityCodeEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
+                mFrontFragment.setFontColor();
                 if (hasFocus) {
                     enableBackInputButton();
                     openKeyboard(mCardSecurityCodeEditText);
@@ -1050,6 +1054,7 @@ public class GuessingNewCardActivity extends FrontCardActivity {
         mCardIdentificationNumberEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
+                mFrontFragment.setFontColor();
                 if (hasFocus) {
                     enableBackInputButton();
                     openKeyboard(mCardIdentificationNumberEditText);

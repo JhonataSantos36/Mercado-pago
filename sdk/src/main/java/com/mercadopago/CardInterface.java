@@ -10,8 +10,8 @@ public interface CardInterface {
     int CARD_DEFAULT_SECURITY_CODE_LENGTH = 4;
 
     int NEUTRAL_CARD_COLOR = R.color.mpsdk_white;
-    int FULL_TEXT_VIEW_COLOR = R.color.mpsdk_base_text;
-    int ERROR_TEXT_VIEW_COLOR = R.color.mpsdk_color_red_error;
+    int FULL_TEXT_VIEW_COLOR = R.color.mpsdk_base_text_alpha;
+    int NORMAL_TEXT_VIEW_COLOR = R.color.mpsdk_base_text;
 
     String CARD_SIDE_FRONT = "front";
     String CARD_SIDE_BACK = "back";

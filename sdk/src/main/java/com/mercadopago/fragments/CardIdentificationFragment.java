@@ -7,8 +7,6 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 
 import com.mercadopago.CardInterface;
 import com.mercadopago.GuessingNewCardActivity;
@@ -84,7 +82,7 @@ public class CardIdentificationFragment extends android.support.v4.app.Fragment 
         } else {
             mBaseIdNumberView.setVisibility(View.INVISIBLE);
             mCardIdentificationNumberView.setVisibility(View.VISIBLE);
-            int color = CardInterface.FULL_TEXT_VIEW_COLOR;
+            int color = CardInterface.NORMAL_TEXT_VIEW_COLOR;
             String number = mActivity.buildIdentificationNumberWithMask(identificationNumber);
             setText(mCardIdentificationNumberView, number, color);
         }
