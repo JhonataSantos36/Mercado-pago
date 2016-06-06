@@ -256,13 +256,13 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
 
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    mActivity.saveCardNumber(s.toString());
                     populateCardNumber(s);
                 }
 
 
                 @Override
                 public void afterTextChanged(Editable s) {
-                    mActivity.saveCardNumber(s.toString());
                     if (s.length() == 0) {
                         setText(mCardNumberTextView, BASE_NUMBER_CARDHOLDER, CardInterface.FULL_TEXT_VIEW_COLOR);
                         mActivity.saveCardNumber(null);
