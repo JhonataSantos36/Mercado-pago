@@ -5,18 +5,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import com.mercadopago.callbacks.Callback;
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.examples.R;
+import com.mercadopago.model.ApiException;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentType;
 import com.mercadopago.util.LayoutUtil;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
 
 /**
  * Created by vaserber on 5/27/16.
@@ -62,13 +60,13 @@ public class PaymentMethodTypeActivity  extends AppCompatActivity {
                 .build();
         mercadoPago.getPaymentMethods(new Callback<List<PaymentMethod>>() {
             @Override
-            public void success(List<PaymentMethod> paymentMethods, Response response) {
+            public void success(List<PaymentMethod> paymentMethods) {
                 mContainer.setVisibility(View.VISIBLE);
                 submitDebitMLX(paymentMethods);
             }
 
             @Override
-            public void failure(RetrofitError error) {
+            public void failure(ApiException error) {
 
             }
         });
@@ -95,13 +93,13 @@ public class PaymentMethodTypeActivity  extends AppCompatActivity {
                 .build();
         mercadoPago.getPaymentMethods(new Callback<List<PaymentMethod>>() {
             @Override
-            public void success(List<PaymentMethod> paymentMethods, Response response) {
+            public void success(List<PaymentMethod> paymentMethods) {
                 mContainer.setVisibility(View.VISIBLE);
                 submitPrepaidMLX(paymentMethods);
             }
 
             @Override
-            public void failure(RetrofitError error) {
+            public void failure(ApiException error) {
 
             }
         });
@@ -132,13 +130,13 @@ public class PaymentMethodTypeActivity  extends AppCompatActivity {
     protected void getPaymentMethodsAsync() {
         mMercadoPago.getPaymentMethods(new Callback<List<PaymentMethod>>() {
             @Override
-            public void success(List<PaymentMethod> paymentMethods, Response response) {
+            public void success(List<PaymentMethod> paymentMethods) {
                 mPaymentMethods = paymentMethods;
                 mContainer.setVisibility(View.VISIBLE);
             }
 
             @Override
-            public void failure(RetrofitError error) {
+            public void failure(ApiException error) {
 
             }
         });

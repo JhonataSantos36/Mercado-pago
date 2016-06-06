@@ -1,13 +1,13 @@
 package com.mercadopago.services;
 
+import com.mercadopago.adapters.MPCall;
 import com.mercadopago.model.Customer;
 
-import retrofit.Callback;
-import retrofit.http.GET;
-import retrofit.http.Query;
+import retrofit2.http.GET;
+import retrofit2.http.Query;
 
 public interface CustomerService {
 
     @GET("/customers")
-    void getCustomer(@Query("preference_id") String preferenceId, Callback<Customer> callback);
+    MPCall<Customer> getCustomer(@Query("preference_id") String preferenceId);
 }

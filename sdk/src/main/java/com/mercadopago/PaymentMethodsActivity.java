@@ -12,8 +12,10 @@ import android.view.View;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.mercadopago.adapters.PaymentMethodsAdapter;
+import com.mercadopago.callbacks.Callback;
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.decorations.DividerItemDecoration;
+import com.mercadopago.model.ApiException;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentPreference;
 import com.mercadopago.util.ApiUtil;
@@ -22,10 +24,6 @@ import com.mercadopago.util.LayoutUtil;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
-
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
 
 public class PaymentMethodsActivity extends Activity {
 
@@ -153,7 +151,7 @@ public class PaymentMethodsActivity extends Activity {
 
         mMercadoPago.getPaymentMethods(new Callback<List<PaymentMethod>>() {
             @Override
-            public void success(List<PaymentMethod> paymentMethods, Response response) {
+            public void success(List<PaymentMethod> paymentMethods) {
                 mRecyclerView.setAdapter(new PaymentMethodsAdapter(mActivity, getSupportedPaymentMethods(paymentMethods), new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -169,9 +167,9 @@ public class PaymentMethodsActivity extends Activity {
             }
 
             @Override
-            public void failure(RetrofitError error) {
+            public void failure(ApiException apiException) {
 
-                ApiUtil.finishWithApiException(mActivity, error);
+                ApiUtil.finishWithApiException(mActivity, apiException);
             }
         });
     }

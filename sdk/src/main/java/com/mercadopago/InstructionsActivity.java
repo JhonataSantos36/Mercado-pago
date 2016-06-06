@@ -13,8 +13,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import com.mercadopago.callbacks.Callback;
 import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.core.MercadoPago;
+import com.mercadopago.model.ApiException;
 import com.mercadopago.model.Instruction;
 import com.mercadopago.model.InstructionActionInfo;
 import com.mercadopago.model.InstructionReference;
@@ -29,10 +31,6 @@ import com.mercadopago.views.MPButton;
 import com.mercadopago.views.MPTextView;
 
 import java.util.List;
-
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
 
 public class InstructionsActivity extends AppCompatActivity {
 
@@ -77,17 +75,17 @@ public class InstructionsActivity extends AppCompatActivity {
     protected void getInstructionsAsync() {
 
         LayoutUtil.showProgressLayout(this);
-        mMercadoPago.getInstructions(mPayment.getId(), mPaymentMethod.getId(), mPaymentMethod.getPaymentTypeId(), new Callback<Instruction>() {
+        mMercadoPago.getInstructions(mPayment.getId(), mPaymentMethod.getPaymentTypeId(), new Callback<Instruction>() {
             @Override
-            public void success(Instruction instruction, Response response) {
+            public void success(Instruction instruction) {
                 showInstructions(instruction);
                 LayoutUtil.showRegularLayout(mActivity);
             }
 
             @Override
-            public void failure(RetrofitError error) {
+            public void failure(ApiException apiException) {
                 if (mActiveActivity) {
-                    ApiUtil.showApiExceptionError(mActivity, error);
+                    ApiUtil.showApiExceptionError(mActivity, apiException);
                     failureRecovery = new FailureRecovery() {
                         @Override
                         public void recover() {

@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.mercadopago.BankDealsActivity;
 import com.mercadopago.CardInstallmentsActivity;
 import com.mercadopago.CardIssuersActivity;
@@ -19,11 +18,12 @@ import com.mercadopago.InstallmentsActivity;
 import com.mercadopago.IssuersActivity;
 import com.mercadopago.PaymentMethodsActivity;
 import com.mercadopago.PaymentVaultActivity;
+import com.mercadopago.adapters.ErrorHandlingCallAdapter;
+import com.mercadopago.callbacks.Callback;
 import com.mercadopago.model.BankDeal;
 import com.mercadopago.model.Card;
 import com.mercadopago.model.CardToken;
 import com.mercadopago.model.CheckoutPreference;
-import com.mercadopago.model.Customer;
 import com.mercadopago.model.DecorationPreference;
 import com.mercadopago.model.IdentificationType;
 import com.mercadopago.model.Installment;
@@ -36,26 +36,21 @@ import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentMethodSearch;
 import com.mercadopago.model.PaymentPreference;
 import com.mercadopago.model.SavedCardToken;
-import com.mercadopago.model.Setting;
 import com.mercadopago.model.Site;
 import com.mercadopago.model.Token;
 import com.mercadopago.services.BankDealService;
-import com.mercadopago.services.CustomerService;
 import com.mercadopago.services.GatewayService;
 import com.mercadopago.services.IdentificationService;
 import com.mercadopago.services.PaymentService;
 import com.mercadopago.util.HttpClientUtil;
 import com.mercadopago.util.JsonUtil;
 
-import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import retrofit.Callback;
-import retrofit.RequestInterceptor;
-import retrofit.RestAdapter;
-import retrofit.converter.GsonConverter;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MercadoPago {
 
@@ -82,7 +77,7 @@ public class MercadoPago {
     private String mKeyType = null;
     private Context mContext = null;
 
-    RestAdapter mRestAdapterMPApi;
+    Retrofit mRetrofit;
 
     private MercadoPago(Builder builder) {
 
@@ -92,18 +87,18 @@ public class MercadoPago {
 
         System.setProperty("http.keepAlive", "false");
 
-        mRestAdapterMPApi = new RestAdapter.Builder()
-                .setEndpoint(MP_API_BASE_URL)
-                .setLogLevel(Settings.RETROFIT_LOGGING)
-                .setConverter(new GsonConverter(JsonUtil.getInstance().getGson()))
-                .setClient(HttpClientUtil.getClient(this.mContext))
+        mRetrofit = new Retrofit.Builder()
+                .baseUrl(MP_API_BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create(JsonUtil.getInstance().getGson()))
+                .client(HttpClientUtil.getClient(this.mContext, 10, 20, 20))
+                .addCallAdapterFactory(new ErrorHandlingCallAdapter.ErrorHandlingCallAdapterFactory())
                 .build();
     }
 
     public void getPreference(String checkoutPreferenceId, Callback<CheckoutPreference> callback) {
         if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {
-            PaymentService service = mRestAdapterMPApi.create(PaymentService.class);
-            service.getPreference(this.mKey, checkoutPreferenceId, callback);
+            PaymentService service = mRetrofit.create(PaymentService.class);
+            service.getPreference(checkoutPreferenceId, this.mKey).enqueue(callback);
         } else {
             throw new RuntimeException("Unsupported key type for this method");
         }
@@ -111,22 +106,15 @@ public class MercadoPago {
 
     public void createPayment(final PaymentIntent paymentIntent, final Callback<Payment> callback) {
         if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {
-            RequestInterceptor requestInterceptor = new RequestInterceptor() {
-                @Override
-                public void intercept(RequestFacade request) {
-                    request.addHeader("X-Idempotency-Key", String.valueOf(paymentIntent.getTransactionId()));
-                }
-            };
-            RestAdapter paymentsRestAdapter = new RestAdapter.Builder()
-                    .setEndpoint(MP_API_BASE_URL)
-                    .setLogLevel(Settings.RETROFIT_LOGGING)
-                    .setConverter(new GsonConverter(JsonUtil.getInstance().getGson()))
-                    .setClient(HttpClientUtil.getPaymentClient(this.mContext))
-                    .setRequestInterceptor(requestInterceptor)
+            Retrofit paymentsRetrofitAdapter = new Retrofit.Builder()
+                    .baseUrl(MP_API_BASE_URL)
+                    .addConverterFactory(GsonConverterFactory.create(JsonUtil.getInstance().getGson()))
+                    .client(HttpClientUtil.getClient(this.mContext, 10, 40, 40))
+                    .addCallAdapterFactory(new ErrorHandlingCallAdapter.ErrorHandlingCallAdapterFactory())
                     .build();
 
-            PaymentService service = paymentsRestAdapter.create(PaymentService.class);
-            service.createPayment(paymentIntent, callback);
+            PaymentService service = paymentsRetrofitAdapter.create(PaymentService.class);
+            service.createPayment(String.valueOf(paymentIntent.getTransactionId()), paymentIntent).enqueue(callback);
 
         } else {
             throw new RuntimeException("Unsupported key type for this method");
@@ -138,8 +126,8 @@ public class MercadoPago {
 
         if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {
             savedCardToken.setDevice(mContext);
-            GatewayService service = mRestAdapterMPApi.create(GatewayService.class);
-            service.getToken(this.mKey, savedCardToken, callback);
+            GatewayService service = mRetrofit.create(GatewayService.class);
+            service.getToken(this.mKey, savedCardToken).enqueue(callback);
         } else {
             throw new RuntimeException("Unsupported key type for this method");
         }
@@ -149,8 +137,8 @@ public class MercadoPago {
 
         if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {
             cardToken.setDevice(mContext);
-            GatewayService service = mRestAdapterMPApi.create(GatewayService.class);
-            service.getToken(this.mKey, cardToken, callback);
+            GatewayService service = mRetrofit.create(GatewayService.class);
+            service.getToken(this.mKey, cardToken).enqueue(callback);
         } else {
             throw new RuntimeException("Unsupported key type for this method");
         }
@@ -159,43 +147,29 @@ public class MercadoPago {
     public void getBankDeals(final Callback<List<BankDeal>> callback) {
 
         if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {
-            BankDealService service = mRestAdapterMPApi.create(BankDealService.class);
-            service.getBankDeals(this.mKey, mContext.getResources().getConfiguration().locale.toString(), callback);
+            BankDealService service = mRetrofit.create(BankDealService.class);
+            service.getBankDeals(this.mKey, mContext.getResources().getConfiguration().locale.toString()).enqueue(callback);
         } else {
             throw new RuntimeException("Unsupported key type for this method");
         }
     }
 
-    public void getCustomer(String preferenceId, final Callback<Customer> callback) {
-
-        // TODO: Reemplazar por servicio final
-        //CustomerService service = mRestAdapterMPApi.create(CustomerService.class);
-        RestAdapter restAdapterBeta = new RestAdapter.Builder()
-                .setEndpoint("https://mp-android-sdk.herokuapp.com/")
-                .setLogLevel(Settings.RETROFIT_LOGGING)
-                .setConverter(new GsonConverter(JsonUtil.getInstance().getGson()))
-                .setClient(HttpClientUtil.getClient(this.mContext))
-                .build();
-        CustomerService service = restAdapterBeta.create(CustomerService.class);
-        service.getCustomer(preferenceId, callback);
-    }
-
     public void getIdentificationTypes(Callback<List<IdentificationType>> callback) {
 
-        IdentificationService service = mRestAdapterMPApi.create(IdentificationService.class);
+        IdentificationService service = mRetrofit.create(IdentificationService.class);
         if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {
-            service.getIdentificationTypes(this.mKey, null, callback);
+            service.getIdentificationTypes(this.mKey, null).enqueue(callback);
         } else {
-            service.getIdentificationTypes(null, this.mKey, callback);
+            service.getIdentificationTypes(null, this.mKey).enqueue(callback);
         }
     }
 
     public void getInstallments(String bin, BigDecimal amount, Long issuerId, String paymentMethodId, Callback<List<Installment>> callback) {
 
         if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {
-            PaymentService service = mRestAdapterMPApi.create(PaymentService.class);
+            PaymentService service = mRetrofit.create(PaymentService.class);
             service.getInstallments(this.mKey, bin, amount, issuerId, paymentMethodId,
-                    mContext.getResources().getConfiguration().locale.toString(), callback);
+                    mContext.getResources().getConfiguration().locale.toString()).enqueue(callback);
         } else {
             throw new RuntimeException("Unsupported key type for this method");
         }
@@ -204,8 +178,8 @@ public class MercadoPago {
     public void getIssuers(String paymentMethodId, String bin, final Callback<List<Issuer>> callback) {
 
         if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {
-            PaymentService service = mRestAdapterMPApi.create(PaymentService.class);
-            service.getIssuers(this.mKey, paymentMethodId, bin, callback);
+            PaymentService service = mRetrofit.create(PaymentService.class);
+            service.getIssuers(this.mKey, paymentMethodId, bin).enqueue(callback);
         } else {
             throw new RuntimeException("Unsupported key type for this method");
         }
@@ -214,8 +188,8 @@ public class MercadoPago {
     public void getPaymentMethods(final Callback<List<PaymentMethod>> callback) {
 
         if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {
-            PaymentService service = mRestAdapterMPApi.create(PaymentService.class);
-            service.getPaymentMethods(this.mKey, callback);
+            PaymentService service = mRetrofit.create(PaymentService.class);
+            service.getPaymentMethods(this.mKey).enqueue(callback);
         } else {
             throw new RuntimeException("Unsupported key type for this method");
         }
@@ -225,7 +199,7 @@ public class MercadoPago {
 
         if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {
 
-            PaymentService service = mRestAdapterMPApi.create(PaymentService.class);
+            PaymentService service = mRetrofit.create(PaymentService.class);
 
             StringBuilder stringBuilder = new StringBuilder();
             if(excludedPaymentTypes != null) {
@@ -250,18 +224,17 @@ public class MercadoPago {
             }
             String excludedPaymentMethodsAppended = stringBuilder.toString();
 
-            service.getPaymentMethodSearch(this.mKey, amount, excludedPaymentTypesAppended, excludedPaymentMethodsAppended, callback);
+            service.getPaymentMethodSearch(this.mKey, amount, excludedPaymentTypesAppended, excludedPaymentMethodsAppended).enqueue(callback);
         } else {
             throw new RuntimeException("Unsupported key type for this method");
         }
     }
 
-    public void getInstructions(Long paymentId, String paymentMethodId, String paymentTypeId, final Callback<Instruction> callback) {
+    public void getInstructions(Long paymentId, String paymentTypeId, final Callback<Instruction> callback) {
 
         if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {
-
-            PaymentService service = mRestAdapterMPApi.create(PaymentService.class);
-            service.getInstruction(this.mKey, paymentId, paymentMethodId, paymentTypeId, callback);
+            PaymentService service = mRetrofit.create(PaymentService.class);
+            service.getInstruction(paymentId, this.mKey, paymentTypeId).enqueue(callback);
         } else {
             throw new RuntimeException("Unsupported key type for this method");
         }

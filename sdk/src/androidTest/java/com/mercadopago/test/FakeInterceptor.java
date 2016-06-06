@@ -1,36 +1,49 @@
 package com.mercadopago.test;
 
-import com.mercadopago.util.HttpClientUtil;
 import com.mercadopago.util.JsonUtil;
 
 import java.io.IOException;
+import java.net.URI;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 
-import retrofit.client.Client;
-import retrofit.client.Request;
-import retrofit.client.Response;
-import retrofit.mime.TypedByteArray;
+import okhttp3.Interceptor;
+import okhttp3.MediaType;
+import okhttp3.Protocol;
+import okhttp3.Response;
+import okhttp3.ResponseBody;
 
 /**
- * Created by mreverter on 24/2/16.
+ * Created by mreverter on 17/5/16.
  */
-public class MockedHttpClient implements Client {
-
-    private static final String MIME_TYPE = "application/json";
+public class FakeInterceptor implements Interceptor {
 
     private List<QueuedResponse> queuedResponses;
 
-    public MockedHttpClient() {
-        this.queuedResponses = new ArrayList<>();
+    public FakeInterceptor() {
+        queuedResponses = new ArrayList<>();
     }
 
     @Override
-    public Response execute(Request request) throws IOException {
-        QueuedResponse queuedResponse = getNextResponse();
-        return createDummyJsonResponse(request.getUrl(), queuedResponse.statusCode, queuedResponse.reason, queuedResponse.jsonResponse);
+    public Response intercept(Chain chain) throws IOException {
+        Response response = null;
+        if(BuildConfig.DEBUG) {
+            QueuedResponse nextResponse = getNextResponse();
+            String responseString = nextResponse.jsonResponse;
+            response = new Response.Builder()
+                    .code(nextResponse.statusCode)
+                    .message(responseString)
+                    .request(chain.request())
+                    .protocol(Protocol.HTTP_1_0)
+                    .body(ResponseBody.create(MediaType.parse("application/json"), responseString.getBytes()))
+                    .addHeader("content-type", "application/json")
+                    .build();
+        }
+        else {
+            response = chain.proceed(chain.request());
+        }
+
+        return response;
     }
 
     private QueuedResponse getNextResponse() {
@@ -42,11 +55,6 @@ public class MockedHttpClient implements Client {
             return new QueuedResponse("", 401, "");
         }
     }
-    
-    private Response createDummyJsonResponse(String url, int responseCode, String reason, String json) {
-        return new Response(url, responseCode, reason, Collections.EMPTY_LIST,
-                new TypedByteArray(MIME_TYPE, json.getBytes()));
-    }
 
     public <T> void addResponseToQueue(T response, int statusCode, String reason) {
         String jsonResponse = JsonUtil.getInstance().toJson(response);
@@ -57,6 +65,10 @@ public class MockedHttpClient implements Client {
     public void addResponseToQueue(String jsonResponse, int statusCode, String reason) {
         QueuedResponse queuedResponse = new QueuedResponse(jsonResponse, statusCode, reason);
         this.queuedResponses.add(queuedResponse);
+    }
+
+    public void cleanQueue() {
+        this.queuedResponses.clear();
     }
 
     private class QueuedResponse {

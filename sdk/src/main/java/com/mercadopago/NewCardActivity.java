@@ -9,7 +9,6 @@ import android.text.InputType;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -17,7 +16,9 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 
 import com.mercadopago.adapters.IdentificationTypesAdapter;
+import com.mercadopago.callbacks.Callback;
 import com.mercadopago.core.MercadoPago;
+import com.mercadopago.model.ApiException;
 import com.mercadopago.model.CardToken;
 import com.mercadopago.model.IdentificationType;
 import com.mercadopago.model.PaymentMethod;
@@ -28,10 +29,6 @@ import com.mercadopago.views.MPEditText;
 import com.mercadopago.views.MPTextView;
 
 import java.util.List;
-
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
 
 public class NewCardActivity extends AppCompatActivity {
 
@@ -309,7 +306,7 @@ public class NewCardActivity extends AppCompatActivity {
 
         mercadoPago.getIdentificationTypes(new Callback<List<IdentificationType>>() {
             @Override
-            public void success(List<IdentificationType> identificationTypes, Response response) {
+            public void success(List<IdentificationType> identificationTypes) {
 
                 mIdentificationType.setAdapter(new IdentificationTypesAdapter(mActivity, identificationTypes));
 
@@ -322,9 +319,9 @@ public class NewCardActivity extends AppCompatActivity {
             }
 
             @Override
-            public void failure(RetrofitError error) {
+            public void failure(ApiException apiException) {
 
-                if ((error.getResponse() != null) && (error.getResponse().getStatus() == 404)) {
+                if ((apiException.getStatus() != null) && (apiException.getStatus() == 404)) {
 
                     // No identification type for this country
                     mIdentificationLayout.setVisibility(View.GONE);
@@ -338,7 +335,7 @@ public class NewCardActivity extends AppCompatActivity {
 
                 } else {
 
-                    ApiUtil.finishWithApiException(mActivity, error);
+                    ApiUtil.finishWithApiException(mActivity, apiException);
                 }
             }
         });

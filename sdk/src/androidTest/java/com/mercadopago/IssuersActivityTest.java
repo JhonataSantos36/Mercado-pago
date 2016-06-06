@@ -11,7 +11,6 @@ import com.mercadopago.model.Issuer;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.test.ActivityResult;
 import com.mercadopago.test.BaseTest;
-import com.mercadopago.test.MockedHttpClient;
 import com.mercadopago.test.StaticMock;
 import com.mercadopago.util.HttpClientUtil;
 import com.mercadopago.views.MPTextView;
@@ -23,11 +22,6 @@ public class IssuersActivityTest extends BaseTest<IssuersActivity> {
     }
 
     public void testGetIssuer() {
-
-        String issuersJson = StaticMock.getIssuersJson();
-        MockedHttpClient client = new MockedHttpClient();
-        client.addResponseToQueue(issuersJson, 200, "");
-        HttpClientUtil.bindClient(client);
 
         Activity activity = prepareActivity(StaticMock.DUMMY_MERCHANT_PUBLIC_KEY,
                 StaticMock.getPaymentMethod(getApplicationContext()));
@@ -57,23 +51,14 @@ public class IssuersActivityTest extends BaseTest<IssuersActivity> {
         } catch (Exception ex) {
             fail("Get issuer test failed, cause: " + ex.getMessage());
         }
-
-        HttpClientUtil.unbindClient();
     }
 
     public void testMerchantPublicKeyNull() {
-        MockedHttpClient client = new MockedHttpClient();
-        client.addResponseToQueue("", 404, "");
-        HttpClientUtil.bindClient(client);
         Activity activity = prepareActivity(null, StaticMock.getPaymentMethod(getApplicationContext()));
         assertFinishCalledWithResult(activity, Activity.RESULT_CANCELED);
-        HttpClientUtil.unbindClient();
     }
 
     public void testWrongMerchantPublicKey() {
-        MockedHttpClient client = new MockedHttpClient();
-        client.addResponseToQueue("", 404, "");
-        HttpClientUtil.bindClient(client);
         Activity activity = prepareActivity("wrong_public_key", StaticMock.getPaymentMethod(getApplicationContext()));
 
         sleepThread();
@@ -86,7 +71,6 @@ public class IssuersActivityTest extends BaseTest<IssuersActivity> {
         } catch (Exception ex) {
             fail("Wrong merchant public key test failed, cause: " + ex.getMessage());
         }
-        HttpClientUtil.unbindClient();
     }
 
     public void testPaymentMethodNull() {
