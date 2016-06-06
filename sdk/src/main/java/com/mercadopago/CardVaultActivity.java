@@ -7,7 +7,6 @@ import android.view.View;
 
 import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.core.MercadoPago;
-import com.mercadopago.model.DecorationPreference;
 import com.mercadopago.model.Installment;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.PayerCost;
@@ -41,7 +40,6 @@ public class CardVaultActivity extends ShowCardActivity {
     private FailureRecovery mFailureRecovery;
     private List<PaymentMethod> mPaymentMethodList;
     private Site mSite;
-    private DecorationPreference mDecorationPreference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
