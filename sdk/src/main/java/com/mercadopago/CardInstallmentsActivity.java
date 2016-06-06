@@ -35,6 +35,7 @@ public class CardInstallmentsActivity extends ShowCardActivity {
     private RecyclerView mInstallmentsView;
     private CardInstallmentsAdapter mInstallmentsAdapter;
     private ProgressBar mProgressBar;
+    private View mCardBackground;
 
     private Activity mActivity;
     protected boolean mActiveActivity;
@@ -49,11 +50,14 @@ public class CardInstallmentsActivity extends ShowCardActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getActivityParameters();
+        if(mDecorationPreference != null && mDecorationPreference.hasColors()) {
+            setTheme(R.style.Theme_MercadoPagoTheme_NoActionBar);
+        }
         setContentView();
         mActivity = this;
         mActiveActivity = true;
         setLayout();
-        getActivityParameters();
         initializeAdapter();
         initializeToolbar();
 
@@ -100,6 +104,12 @@ public class CardInstallmentsActivity extends ShowCardActivity {
         mInstallmentsView = (RecyclerView) findViewById(R.id.activity_installments_view);
         mCardContainer = (FrameLayout) findViewById(R.id.activity_new_card_container);
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
+        mCardBackground = findViewById(R.id.card_background);
+
+        if(mDecorationPreference != null && mDecorationPreference.hasColors())
+        {
+            mCardBackground.setBackgroundColor(mDecorationPreference.getLighterColor());
+        }
         mProgressBar.setVisibility(View.GONE);
     }
 

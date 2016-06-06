@@ -20,7 +20,7 @@
     <color name="mpsdk_rejection_color_dark">#F8DADA</color>
 
     <color name="mpsdk_process_color_dark">#30AFE2</color>
-    <color name="colorAccent">#00B2EB</color>
+    <color name="colorAccent">#b7999999</color>
     <color name="mpsdk_colorPrimary">#5ABEE7</color>
     <color name="mpsdk_icon_image_color">#1D9FDE</color>
     <color name="mpsdk_warm_grey">#b7999999</color>
@@ -56,6 +56,8 @@
     <color name="mpsdk_color_new_card_text">#999999</color>
     <color name="mpsdk_color_new_card_image">#D8D8D8</color>
     <color name="mpsdk_color_red_error">#F04449</color>
+
+    <color name="mpsdk_dark_font_color">#212121</color>
 
     <!-- Card Colors -->
     <color name="mpsdk_visa">#001D77</color>

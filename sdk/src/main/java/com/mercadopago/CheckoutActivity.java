@@ -10,6 +10,7 @@ import android.text.Html;
 import android.text.Spanned;
 import android.view.View;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.core.MercadoPago;
@@ -19,6 +20,7 @@ import com.mercadopago.exceptions.MPException;
 import com.mercadopago.fragments.ShoppingCartFragment;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.CheckoutPreference;
+import com.mercadopago.model.DecorationPreference;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.Item;
 import com.mercadopago.model.PayerCost;
@@ -87,6 +89,7 @@ public class CheckoutActivity extends AppCompatActivity {
     protected FailureRecovery failureRecovery;
 
     //Controls
+    protected Toolbar mToolbar;
     protected MPTextView mTermsAndConditionsTextView;
     protected MPTextView mCancelTextView;
     protected MPTextView mTotalAmountTextView;
@@ -98,20 +101,24 @@ public class CheckoutActivity extends AppCompatActivity {
     protected Snackbar mSnackbar;
 
     protected MPTrackerDelegate mTrackerDelegate;
+    protected DecorationPreference mDecorationPreference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getActivityParameters();
+        if(mDecorationPreference != null && mDecorationPreference.hasColors()) {
+            setTheme(R.style.Theme_MercadoPagoTheme_NoActionBar);
+        }
         setContentView(R.layout.activity_checkout);
         initializeToolbar();
-        getActivityParameters();
         mBackPressedOnce = false;
         mActiveActivity = true;
         boolean validState = true;
 
         //TODO validate
         createMPTrackerDelegate();
-        MPTracker.getInstance().trackEvent("CHECKOUT","INIT_CHECKOUT","3",mTrackerDelegate,this);
+        MPTracker.getInstance().trackEvent("CHECKOUT", "INIT_CHECKOUT", "3", mTrackerDelegate, this);
 
         try{
             validateParameters();
@@ -120,7 +127,6 @@ public class CheckoutActivity extends AppCompatActivity {
             validState = false;
         }
         if(validState) {
-            getApplicationContext();
             initializeActivityControls();
             setActivity();
 
@@ -135,6 +141,7 @@ public class CheckoutActivity extends AppCompatActivity {
             showError();
         }
     }
+
 
     private void createMPTrackerDelegate() {
         mTrackerDelegate = new MPTrackerDelegate() {
@@ -212,8 +219,12 @@ public class CheckoutActivity extends AppCompatActivity {
         String currencyId = mCheckoutPreference.getItems().get(0).getCurrencyId();
         String pictureUrl = mCheckoutPreference.getItems().get(0).getPictureUrl();
 
-        mShoppingCartFragment = ShoppingCartFragment.newInstance(pictureUrl, mPurchaseTitle, mCheckoutPreference.getAmount(), currencyId);
-
+        if(mDecorationPreference != null && mDecorationPreference.hasColors()) {
+            mShoppingCartFragment = ShoppingCartFragment.newInstance(pictureUrl, mPurchaseTitle, mCheckoutPreference.getAmount(), currencyId, mDecorationPreference);
+        }
+        else {
+            mShoppingCartFragment = ShoppingCartFragment.newInstance(pictureUrl, mPurchaseTitle, mCheckoutPreference.getAmount(), currencyId);
+        }
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.shoppingCartFragment, mShoppingCartFragment)
@@ -243,12 +254,25 @@ public class CheckoutActivity extends AppCompatActivity {
         mCheckoutPreferenceId = this.getIntent().getStringExtra("checkoutPreferenceId");
         mMerchantPublicKey = this.getIntent().getStringExtra("merchantPublicKey");
         mShowBankDeals = this.getIntent().getBooleanExtra("showBankDeals", true);
+        if(this.getIntent().getSerializableExtra("decorationPreference") != null) {
+            mDecorationPreference = (DecorationPreference) this.getIntent().getSerializableExtra("decorationPreference");
+        }
     }
 
     private void initializeToolbar() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        if(mDecorationPreference != null) {
+            if(mDecorationPreference.hasColors()) {
+                mToolbar.setBackgroundColor(mDecorationPreference.getBaseColor());
+            }
+            if(mDecorationPreference.isDarkFontEnabled()) {
+                TextView title = (TextView) findViewById(R.id.title);
+                title.setTextColor(mDecorationPreference.getDarkFontColor(this));
+            }
+        }
     }
 
     private void validateParameters() {
@@ -277,6 +301,7 @@ public class CheckoutActivity extends AppCompatActivity {
                 onCancelClicked();
             }
         });
+
         mPayButton = (MPButton) findViewById(R.id.payButton);
         mPayButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -284,6 +309,16 @@ public class CheckoutActivity extends AppCompatActivity {
                 createPayment();
             }
         });
+
+        if(mDecorationPreference != null) {
+            if(mDecorationPreference.hasColors()) {
+                mPayButton.setBackgroundColor(mDecorationPreference.getBaseColor());
+            }
+            if(mDecorationPreference.isDarkFontEnabled()) {
+                mPayButton.setTextColor(mDecorationPreference.getDarkFontColor(this));
+            }
+        }
+
         mTotalAmountTextView = (MPTextView) findViewById(R.id.totalAmountText);
         mContentView = findViewById(R.id.contentLayout);
         mPaymentMethodLayout = (RelativeLayout) findViewById(R.id.paymentMethodLayout);
@@ -293,7 +328,7 @@ public class CheckoutActivity extends AppCompatActivity {
     protected void startTermsAndConditionsActivity() {
         Intent termsAndConditionsIntent = new Intent(this, TermsAndConditionsActivity.class);
         termsAndConditionsIntent.putExtra("siteId", mCheckoutPreference.getSiteId());
-
+        termsAndConditionsIntent.putExtra("decorationPreference", mDecorationPreference);
         //TODO validate
         MPTracker.getInstance().trackEvent("CHECKOUT","TERMS_AND_CONDITIONS","3",mTrackerDelegate,this);
 
@@ -313,7 +348,7 @@ public class CheckoutActivity extends AppCompatActivity {
                 mPaymentMethodSearch = paymentMethodSearch;
 
                 //TODO validate
-                MPTracker.getInstance().trackEvent("CHECKOUT","GET_PAYMENT_METHOD_SEARCH","SUCCESS","3",mTrackerDelegate,mActivity);
+                MPTracker.getInstance().trackEvent("CHECKOUT", "GET_PAYMENT_METHOD_SEARCH", "SUCCESS", "3", mTrackerDelegate, mActivity);
 
                 if (mActiveActivity) {
                     startPaymentVaultActivity();
@@ -344,6 +379,7 @@ public class CheckoutActivity extends AppCompatActivity {
                 .setAmount(mCheckoutPreference.getAmount())
                 .setPaymentMethodSearch(mPaymentMethodSearch)
                 .setPaymentPreference(mCheckoutPreference.getPaymentPreference())
+                .setDecorationPreference(mDecorationPreference)
                 .startPaymentVaultActivity();
     }
 
@@ -433,8 +469,6 @@ public class CheckoutActivity extends AppCompatActivity {
             mSelectedPayerCost = (PayerCost) bundle.getSerializable("payerCost");
             drawPayerCostRow();
             setAmountLabel();
-        } else if (resultCode == RESULT_CANCELED) {
-            finish();
         }
         overridePendingTransition(R.anim.slide_left_to_right_in, R.anim.slide_left_to_right_out);
     }
@@ -517,7 +551,9 @@ public class CheckoutActivity extends AppCompatActivity {
                 .setToken(mCreatedToken)
                 .setIssuer(mSelectedIssuer)
                 .setSite(mSite)
+                .setDecorationPreference(mDecorationPreference)
                 .startCardInstallmentsActivity();
+
         overridePendingTransition(R.anim.slide_right_to_left_in, R.anim.slide_right_to_left_out);
     }
 

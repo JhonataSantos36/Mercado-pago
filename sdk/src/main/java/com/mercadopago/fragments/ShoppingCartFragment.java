@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.mercadopago.R;
+import com.mercadopago.model.DecorationPreference;
 import com.mercadopago.util.CurrenciesUtil;
 import com.mercadopago.util.ScaleUtil;
 import com.mercadopago.views.MPTextView;
@@ -27,8 +28,10 @@ public class ShoppingCartFragment extends Fragment {
     private String mCurrencyId;
 
     private ImageView mItemImageView;
-    private MPTextView itemDescriptionTextView;
-    private MPTextView itemAmountTextView;
+    private MPTextView mItemDescriptionTextView;
+    private MPTextView mItemAmountTextView;
+    private View mShoppingCartLayout;
+    private DecorationPreference mDecorationPreference;
 
     public ShoppingCartFragment() {}
 
@@ -45,6 +48,20 @@ public class ShoppingCartFragment extends Fragment {
         return fragment;
     }
 
+    public static ShoppingCartFragment newInstance(String pictureUrl, String purchaseTitle, BigDecimal amount, String currrencyId, DecorationPreference decorationPreference) {
+
+        ShoppingCartFragment fragment = new ShoppingCartFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("pictureUrl", pictureUrl);
+        bundle.putString("amount", amount.toString());
+        bundle.putString("currencyId", currrencyId);
+        bundle.putString("purchaseTitle", purchaseTitle);
+        bundle.putSerializable("decorationPreference", decorationPreference);
+
+        fragment.setArguments(bundle);
+        return fragment;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,6 +73,7 @@ public class ShoppingCartFragment extends Fragment {
             if(amountParameter != null) {
                 mAmount = new BigDecimal(amountParameter);
             }
+            mDecorationPreference = (DecorationPreference) getArguments().getSerializable("decorationPreference");
         }
     }
 
@@ -75,16 +93,25 @@ public class ShoppingCartFragment extends Fragment {
     private void initializeControls() {
         if(getView() != null) {
             mItemImageView = (ImageView) getView().findViewById(R.id.itemImage);
-            itemDescriptionTextView = (MPTextView) getView().findViewById(R.id.itemTitle);
-            itemAmountTextView = (MPTextView) getView().findViewById(R.id.itemAmount);
+            mItemDescriptionTextView = (MPTextView) getView().findViewById(R.id.itemTitle);
+            mItemAmountTextView = (MPTextView) getView().findViewById(R.id.itemAmount);
+            mShoppingCartLayout = getView().findViewById(R.id.shoppingCartLayout);
         }
     }
 
     private void fillData() {
         String truncatedTitle = getFormattedPurchaseTitle();
-        itemDescriptionTextView.setText(truncatedTitle);
-        itemAmountTextView.setText(getAmountLabel(mAmount, mCurrencyId));
+        mItemDescriptionTextView.setText(truncatedTitle);
+        mItemAmountTextView.setText(getAmountLabel(mAmount, mCurrencyId));
         setItemImage();
+
+        if(mDecorationPreference != null) {
+            mShoppingCartLayout.setBackgroundColor(mDecorationPreference.getLighterColor());
+            if(mDecorationPreference.isDarkFontEnabled()) {
+                mItemAmountTextView.setTextColor(mDecorationPreference.getDarkFontColor(getActivity()));
+                mItemDescriptionTextView.setTextColor(mDecorationPreference.getDarkFontColor(getActivity()));
+            }
+        }
     }
 
     protected String getFormattedPurchaseTitle() {

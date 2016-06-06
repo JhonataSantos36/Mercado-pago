@@ -3,6 +3,7 @@ package com.mercadopago;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.core.MercadoPago;
@@ -32,6 +33,8 @@ public class CardVaultActivity extends ShowCardActivity {
     private Activity mActivity;
     protected boolean mActiveActivity;
 
+    private View mCardBackground;
+
     private PayerCost mPayerCost;
     private PaymentPreference mPaymentPreference;
     private FailureRecovery mFailureRecovery;
@@ -41,12 +44,15 @@ public class CardVaultActivity extends ShowCardActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getActivityParameters();
+        if(mDecorationPreference != null && mDecorationPreference.hasColors()) {
+            setTheme(R.style.Theme_MercadoPagoTheme_NoActionBar);
+        }
         mActivity = this;
         mActiveActivity = true;
         setContentView();
-        getActivityParameters();
         initializeToolbar();
-
+        initializeActivityControls();
         mMercadoPago = new MercadoPago.Builder()
                 .setContext(this)
                 .setPublicKey(mPublicKey)
@@ -57,6 +63,15 @@ public class CardVaultActivity extends ShowCardActivity {
         }
         initializeFrontFragment();
         startGuessingCardActivity();
+    }
+
+    private void initializeActivityControls() {
+        mCardBackground = findViewById(R.id.card_background);
+
+        if(mDecorationPreference != null && mDecorationPreference.hasColors())
+        {
+            mCardBackground.setBackgroundColor(mDecorationPreference.getLighterColor());
+        }
     }
 
     @Override
@@ -85,6 +100,7 @@ public class CardVaultActivity extends ShowCardActivity {
 
     @Override
     protected void getActivityParameters() {
+        super.getActivityParameters();
         mPublicKey = getIntent().getStringExtra("publicKey");
         mSite = (Site) getIntent().getSerializableExtra("site");
         mSecurityCodeLocation = CardInterface.CARD_SIDE_BACK;
@@ -113,6 +129,7 @@ public class CardVaultActivity extends ShowCardActivity {
                         .setAmount(new BigDecimal(100))
                         .setPaymentPreference(mPaymentPreference)
                         .setSupportedPaymentMethods(mPaymentMethodList)
+                        .setDecorationPreference(mDecorationPreference)
                         .startGuessingCardActivity();
             }
         });
@@ -232,6 +249,7 @@ public class CardVaultActivity extends ShowCardActivity {
                         .setIssuer(mSelectedIssuer)
                         .setPaymentPreference(mPaymentPreference)
                         .setSite(mSite)
+                        .setDecorationPreference(mDecorationPreference)
                         .startCardInstallmentsActivity();
                 overridePendingTransition(R.anim.fade_in_seamless, R.anim.fade_out_seamless);
             }

@@ -1,5 +1,7 @@
 package com.mercadopago;
 
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -8,6 +10,7 @@ import android.widget.FrameLayout;
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.fragments.CardFrontFragment;
 import com.mercadopago.model.Cardholder;
+import com.mercadopago.model.DecorationPreference;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.Setting;
@@ -39,6 +42,7 @@ public abstract class ShowCardActivity extends FrontCardActivity {
     //Local vars
     protected Issuer mSelectedIssuer;
     protected MPTextView mToolbarTitle;
+    protected DecorationPreference mDecorationPreference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,17 +57,30 @@ public abstract class ShowCardActivity extends FrontCardActivity {
         mPublicKey = getIntent().getStringExtra("publicKey");
         mToken = JsonUtil.getInstance().fromJson(
                 this.getIntent().getStringExtra("token"), Token.class);
+        mSelectedIssuer = (Issuer) this.getIntent().getSerializableExtra("issuer");
+
+        if(this.getIntent().getSerializableExtra("decorationPreference") != null) {
+            mDecorationPreference = (DecorationPreference) this.getIntent().getSerializableExtra("decorationPreference");
+        }
+
+        if(mToken != null) {
+            setCardInfo();
+        }
+    }
+
+    private void setCardInfo() {
         mBin = mToken.getFirstSixDigits();
         mCardholder = mToken.getCardholder();
         Setting setting = Setting.getSettingByBin(mCurrentPaymentMethod.getSettings(),
                 mToken.getFirstSixDigits());
+
         if (setting != null) {
             mCardNumberLength = setting.getCardNumber().getLength();
         } else {
             mCardNumberLength = CARD_NUMBER_MAX_LENGTH;
         }
+
         mSecurityCodeLocation = setting.getSecurityCode().getCardLocation();
-        mSelectedIssuer = (Issuer) this.getIntent().getSerializableExtra("issuer");
     }
 
     protected void initializeToolbarWithTitle(String title) {
@@ -84,7 +101,24 @@ public abstract class ShowCardActivity extends FrontCardActivity {
                 }
             });
         }
+        if(mDecorationPreference != null) {
+            if(mDecorationPreference.hasColors()) {
+                if(toolbar != null) {
+                    decorateToolbar(toolbar);
+                }
+            }
+        }
+    }
 
+    private void decorateToolbar(Toolbar toolbar) {
+        if(mDecorationPreference.isDarkFontEnabled()) {
+            Drawable upArrow = toolbar.getNavigationIcon();
+            if(upArrow != null) {
+                upArrow.setColorFilter(mDecorationPreference.getDarkFontColor(this), PorterDuff.Mode.SRC_ATOP);
+            }
+            getSupportActionBar().setHomeAsUpIndicator(upArrow);
+        }
+        toolbar.setBackgroundColor(mDecorationPreference.getLighterColor());
     }
 
     protected void initializeCard() {
@@ -106,12 +140,12 @@ public abstract class ShowCardActivity extends FrontCardActivity {
         if (mFrontFragment == null) {
             mFrontFragment = new CardFrontFragment();
             mFrontFragment.disableAnimate();
+            mFrontFragment.setDecorationPreference(mDecorationPreference);
         }
         getSupportFragmentManager()
                 .beginTransaction()
                 .add(R.id.activity_new_card_container, mFrontFragment)
                 .commit();
-
     }
 
     private String getCardNumberHidden() {

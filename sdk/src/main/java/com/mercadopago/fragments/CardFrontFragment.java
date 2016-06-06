@@ -16,7 +16,9 @@ import android.widget.ImageView;
 import com.mercadopago.CardInterface;
 import com.mercadopago.R;
 import com.mercadopago.core.MercadoPago;
+import com.mercadopago.model.DecorationPreference;
 import com.mercadopago.model.PaymentMethod;
+import com.mercadopago.util.ScaleUtil;
 import com.mercadopago.views.MPEditText;
 import com.mercadopago.views.MPTextView;
 
@@ -41,11 +43,12 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
     protected MPEditText mCardNumberEditText;
     protected MPEditText mCardExpiryDateEditText;
     protected MPEditText mCardSecurityEditText;
-
+    protected ImageView mCardBorder;
     //Local vars
     private Animation mAnimFadeIn;
     private Animation mQuickAnim;
     private boolean mAnimate;
+    private DecorationPreference mDecorationPreference;
 
     private CardInterface mActivity;
 
@@ -98,6 +101,19 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
             mColorDrawableCard = (GradientDrawable) mColorCard.getBackground();
             mBaseImageCard = (FrameLayout) getView().findViewById(R.id.baseImageCard);
             mImageCardContainer = (ImageView) getView().findViewById(R.id.imageCardContainer);
+            mCardBorder = (ImageView) getView().findViewById(R.id.card_shadow_border);
+
+        }
+        decorate();
+    }
+
+    private void decorate() {
+        if(mDecorationPreference != null) {
+            if(mDecorationPreference.hasColors()) {
+                GradientDrawable cardShadowRounded = (GradientDrawable) ContextCompat.getDrawable(getActivity(), R.drawable.card_shadow_rounded);
+                cardShadowRounded.setStroke(ScaleUtil.getPxFromDp(6, getActivity()), mDecorationPreference.getLighterColor());
+                mCardBorder.setImageDrawable(cardShadowRounded);
+            }
         }
     }
 
@@ -186,7 +202,7 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
                     if (start <= 2) {
                         CharSequence month = s;
                         if (s.length() == 3) {
-                            month = s.subSequence(0,2);
+                            month = s.subSequence(0, 2);
                         }
                         if (mActivity.getCurrentPaymentMethod() != null) {
                             int color = mActivity.getCardFontColor(mActivity.getCurrentPaymentMethod());
@@ -432,6 +448,7 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
     }
     
     private void populateCardColor() {
+        decorate();
         if (mActivity.getCurrentPaymentMethod() != null) {
             int color = mActivity.getCardColor(mActivity.getCurrentPaymentMethod());
             quickTransition(color);
@@ -473,4 +490,7 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
         }
     }
 
+    public void setDecorationPreference(DecorationPreference decorationPreference) {
+        mDecorationPreference = decorationPreference;
+    }
 }
