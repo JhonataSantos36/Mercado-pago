@@ -17,7 +17,6 @@ import android.widget.ImageView;
 import com.mercadopago.model.CheckoutPreference;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.Item;
-import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentMethodSearch;

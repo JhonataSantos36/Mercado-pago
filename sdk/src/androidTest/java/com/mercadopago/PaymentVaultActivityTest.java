@@ -13,6 +13,7 @@ import com.mercadopago.model.PaymentMethodSearch;
 import com.mercadopago.model.PaymentMethodSearchItem;
 import com.mercadopago.model.PaymentPreference;
 import com.mercadopago.model.PaymentType;
+import com.mercadopago.model.Sites;
 import com.mercadopago.model.Token;
 import com.mercadopago.test.StaticMock;
 import com.mercadopago.test.rules.MockedApiTestRule;
@@ -61,7 +62,7 @@ public class PaymentVaultActivityTest {
         validStartIntent.putExtra("merchantPublicKey", "1234");
         validStartIntent.putExtra("amount", "100");
         validStartIntent.putExtra("purchaseTitle", "test item");
-        validStartIntent.putExtra("currencyId", "ARS");
+        validStartIntent.putExtra("site", Sites.ARGENTINA);
     }
 
     @Test
