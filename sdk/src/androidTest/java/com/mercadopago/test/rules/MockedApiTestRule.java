@@ -22,7 +22,6 @@ public class MockedApiTestRule<A extends Activity> extends ActivityTestRule<A> {
     public MockedApiTestRule(Class<A> activityClass) {
         super(activityClass);
         intentsActive = false;
-
         setUpMockedClient();
     }
 
@@ -57,9 +56,6 @@ public class MockedApiTestRule<A extends Activity> extends ActivityTestRule<A> {
         super.afterActivityLaunched();
         sleepThread(500);
         isActivityFinished = false;
-        if(!intentsActive) {
-            this.initIntents();
-        }
     }
 
     @Override
@@ -72,7 +68,7 @@ public class MockedApiTestRule<A extends Activity> extends ActivityTestRule<A> {
         HttpClientUtil.unbindClient();
     }
 
-    public void initIntents() {
+    public void initIntentsRecording() {
         Intents.init();
         intentsActive = true;
     }
@@ -84,7 +80,7 @@ public class MockedApiTestRule<A extends Activity> extends ActivityTestRule<A> {
 
     public void restartIntents() {
         this.releaseIntents();
-        this.initIntents();
+        this.initIntentsRecording();
     }
 
     public boolean isActivityFinishedOrFinishing() {

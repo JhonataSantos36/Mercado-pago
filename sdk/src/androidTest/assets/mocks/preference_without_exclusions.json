@@ -23,11 +23,19 @@
       "unit_price": 100
     }
   ],
+  "payer":{
+    "email":"test@hotmail.com",
+    "id":null,
+    "identification":{
+      "number":"",
+      "type":""
+    },
+    "type":null
+  },
   "marketplace": "NONE",
   "marketplace_fee": 0,
   "notification_url": null,
   "operation_type": "regular_payment",
-  "payer": {},
   "payment_methods": {
     "excluded_payment_methods": null,
     "default_installments": null,

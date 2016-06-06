@@ -1,7 +1,6 @@
 package com.mercadopago;
 
 import android.content.Intent;
-import android.support.test.espresso.intent.Intents;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.suitebuilder.annotation.LargeTest;
 import android.view.View;
@@ -26,7 +25,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static android.support.test.espresso.assertion.ViewAssertions.*;
+import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasAction;
+import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasData;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
@@ -267,22 +268,25 @@ public class InstructionsActivityTest {
     public void onActionButtonClickIntentToUrl() {
         Instruction instructionWithoutActions = StaticMock.getInstructionWithAction();
         mTestRule.addApiResponseToQueue(instructionWithoutActions, 200, "");
+
+        mTestRule.initIntentsRecording();
         mTestRule.launchActivity(validStartIntent);
 
         InstructionActionInfo actionInfo = instructionWithoutActions.getActions().get(0);
 
         onView(withId(R.id.actionButton)).perform(click());
 
-        Intents.intended(allOf(
+        intended(allOf(
                 hasAction(Intent.ACTION_VIEW),
                 hasData(actionInfo.getUrl())));
     }
 
     @Test
-    public void ifApiFailureFinishActivity() {
+    public void ifApiFailureShowErrorActivity() {
+        mTestRule.initIntentsRecording();
         mTestRule.addApiResponseToQueue("", 401, "");
         mTestRule.launchActivity(validStartIntent);
-        assertTrue(mTestRule.isActivityFinishedOrFinishing());
+        intended(hasComponent(ErrorActivity.class.getName()));
     }
 
     private PaymentMethod getOfflinePaymentMethod() {

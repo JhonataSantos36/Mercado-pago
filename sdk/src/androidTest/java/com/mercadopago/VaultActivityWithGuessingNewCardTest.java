@@ -32,8 +32,8 @@ public class VaultActivityWithGuessingNewCardTest extends BaseTest<VaultActivity
     // * generate a cards token
 
     //TODO fix
-    /*
-    public void testHappyPath(){
+
+   /* public void testHappyPath(){
 
         final VaultActivity activity = prepareActivity(StaticMock.DUMMY_MERCHANT_PUBLIC_KEY, StaticMock.DUMMY_MERCHANT_BASE_URL,
                 StaticMock.DUMMY_MERCHANT_GET_CUSTOMER_URI, StaticMock.DUMMY_MERCHANT_ACCESS_TOKEN, new BigDecimal("100"), null);

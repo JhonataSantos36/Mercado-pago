@@ -14,7 +14,6 @@ import android.test.suitebuilder.annotation.LargeTest;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.mercadopago.model.CardToken;
 import com.mercadopago.model.CheckoutPreference;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.Item;
@@ -25,6 +24,7 @@ import com.mercadopago.model.PaymentMethodSearchItem;
 import com.mercadopago.model.Token;
 import com.mercadopago.test.StaticMock;
 import com.mercadopago.test.rules.MockedApiTestRule;
+import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.JsonUtil;
 
 import org.junit.Before;
@@ -42,8 +42,6 @@ import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.Intents.intending;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.*;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.withChild;
-import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
@@ -97,14 +95,15 @@ public class CheckoutActivityTest {
     }
 
     @Test
-    public void ifPreferenceIdFromAPIIsDifferentFinishActivity() {
+    public void ifPreferenceIdFromAPIIsDifferentShowErrorActivity() {
         CheckoutPreference preference = StaticMock.getPreferenceWithoutExclusions();
         mTestRule.addApiResponseToQueue(preference, 200, "");
         validStartIntent.putExtra("checkoutPreferenceId", "1234");
 
+        mTestRule.initIntentsRecording();
         mTestRule.launchActivity(validStartIntent);
 
-        assertTrue(mTestRule.isActivityFinishedOrFinishing());
+        intended(hasComponent(ErrorActivity.class.getName()));
     }
 
     @Test
@@ -138,7 +137,7 @@ public class CheckoutActivityTest {
         paymentVaultResultIntent.putExtra("paymentMethod", paymentMethod);
         Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(Activity.RESULT_OK, paymentVaultResultIntent);
 
-        mTestRule.initIntents();
+        mTestRule.initIntentsRecording();
         intending(hasComponent(PaymentVaultActivity.class.getName())).respondWith(result);
 
         //Preparing mocked api responses
@@ -176,7 +175,7 @@ public class CheckoutActivityTest {
         paymentVaultResultIntent.putExtra("paymentMethod", paymentMethod);
         Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(Activity.RESULT_OK, paymentVaultResultIntent);
 
-        mTestRule.initIntents();
+        mTestRule.initIntentsRecording();
         intending(hasComponent(PaymentVaultActivity.class.getName())).respondWith(result);
 
         //Prepare mocked api responses
@@ -188,7 +187,7 @@ public class CheckoutActivityTest {
         mTestRule.launchActivity(validStartIntent);
         //perform actions
         mTestRule.restartIntents();
-        onView(withId(R.id.imageEdit)).perform(click());
+        onView(withId(R.id.editHint)).perform(click());
 
         //validations
         intended(hasComponent(PaymentVaultActivity.class.getName()));
@@ -204,7 +203,7 @@ public class CheckoutActivityTest {
         paymentVaultResultIntent.putExtra("paymentMethod", paymentMethod);
         Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(Activity.RESULT_OK, paymentVaultResultIntent);
 
-        mTestRule.initIntents();
+        mTestRule.initIntentsRecording();
         intending(hasComponent(PaymentVaultActivity.class.getName())).respondWith(result);
 
         //Prepare mocked api responses
@@ -216,7 +215,7 @@ public class CheckoutActivityTest {
         CheckoutActivity activity = mTestRule.launchActivity(validStartIntent);
 
         //Perform actions
-        onView(withId(R.id.imageEdit)).perform(click());
+        onView(withId(R.id.editHint)).perform(click());
         pressBack();
 
         //Validations
@@ -236,7 +235,7 @@ public class CheckoutActivityTest {
     }
 
     @Test
-    public void onBackPressedAfterPaymentMethodSelectionStartPaymentVault() {
+    public void onBackPressedTwiceAfterPaymentMethodSelectionStartPaymentVault() {
 
         //prepare next activity result
         PaymentMethod paymentMethod = StaticMock.getPaymentMethodOff();
@@ -245,7 +244,7 @@ public class CheckoutActivityTest {
         paymentVaultResultIntent.putExtra("paymentMethod", paymentMethod);
         Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(Activity.RESULT_OK, paymentVaultResultIntent);
 
-        mTestRule.initIntents();
+        mTestRule.initIntentsRecording();
 
         intending(hasComponent(PaymentVaultActivity.class.getName())).respondWith(result);
 
@@ -260,31 +259,37 @@ public class CheckoutActivityTest {
 
         //perform actions
         pressBack();
-
+        pressBack();
         //validations
         onView(withId(R.id.groupsList))
                 .check(matches(isDisplayed()));
     }
 
     @Test(expected = NoActivityResumedException.class)
-    public void onBackPressedTwiceAfterPaymentMethodSelectionFinishActivity() {
+    public void onBackPressedThreeTimesAfterPaymentMethodSelectionFinishActivity() {
         //prepare next activity result
         PaymentMethod paymentMethod = StaticMock.getPaymentMethodOff();
-
-        Intent paymentVaultResultIntent = new Intent();
-        paymentVaultResultIntent.putExtra("paymentMethod", paymentMethod);
-        Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(Activity.RESULT_OK, paymentVaultResultIntent);
-
-        mTestRule.initIntents();
-        intending(hasComponent(PaymentVaultActivity.class.getName())).respondWith(result);
 
         //prepare mocked api response
         CheckoutPreference preference = StaticMock.getPreferenceWithoutExclusions();
         mTestRule.addApiResponseToQueue(preference, 200, "");
         mTestRule.addApiResponseToQueue(StaticMock.getCompletePaymentMethodSearchAsJson(), 200, "");
 
+        mTestRule.initIntentsRecording();
+
+        Intent paymentVaultResultIntent = new Intent();
+        paymentVaultResultIntent.putExtra("paymentMethod", paymentMethod);
+        Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(Activity.RESULT_OK, paymentVaultResultIntent);
+
+        intending(hasComponent(PaymentVaultActivity.class.getName())).respondWith(result);
+
         mTestRule.launchActivity(validStartIntent);
+
+        pressBack();
+
+        //Let payment vault start
         mTestRule.releaseIntents();
+
         pressBack();
         pressBack();
     }
@@ -298,7 +303,7 @@ public class CheckoutActivityTest {
         paymentVaultResultIntent.putExtra("paymentMethod", paymentMethod);
         Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(Activity.RESULT_OK, paymentVaultResultIntent);
 
-        mTestRule.initIntents();
+        mTestRule.initIntentsRecording();
         intending(hasComponent(PaymentVaultActivity.class.getName())).respondWith(result);
 
         //prepare mocked api response
@@ -316,35 +321,36 @@ public class CheckoutActivityTest {
 
     @Test
     public void ifPublicKeyNotSetCallFinish() {
-        mTestRule.initIntents();
+        mTestRule.initIntentsRecording();
 
         Intent invalidStartIntent = new Intent();
         invalidStartIntent.putExtra("checkoutPreferenceId", PREF_ID);
 
         mTestRule.addApiResponseToQueue(StaticMock.getPreferenceWithExclusions(), 200, "");
         mTestRule.launchActivity(invalidStartIntent);
-        assertTrue(mTestRule.isActivityFinishedOrFinishing());
+
+        intending(hasComponent(ErrorActivity.class.getName()));
     }
 
     @Test
-    public void ifPreferenceIdNotSetCallFinish() {
-        mTestRule.initIntents();
+    public void ifPreferenceIdNotSetShowErrorActivity() {
+        mTestRule.initIntentsRecording();
 
         Intent invalidStartIntent = new Intent();
         invalidStartIntent.putExtra("publicKey", "1234");
 
         mTestRule.launchActivity(invalidStartIntent);
-        assertTrue(mTestRule.isActivityFinishedOrFinishing());
+        intended(hasComponent(ErrorActivity.class.getName()));
     }
 
     @Test
-    public void ifNeitherPreferenceIdNorPublicKeySetCallFinish() {
-        mTestRule.initIntents();
+    public void ifNeitherPreferenceIdNorPublicKeySetStartErrorActivity() {
+        mTestRule.initIntentsRecording();
 
         Intent invalidStartIntent = new Intent();
 
         mTestRule.launchActivity(invalidStartIntent);
-        assertTrue(mTestRule.isActivityFinishedOrFinishing());
+        intended(hasComponent(ErrorActivity.class.getName()));
     }
 
     @Test
@@ -356,6 +362,7 @@ public class CheckoutActivityTest {
         String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
         mTestRule.addApiResponseToQueue(paymentMethodSearchJson, 200, "");
 
+        mTestRule.initIntentsRecording();
         mTestRule.launchActivity(validStartIntent);
 
         //perform actions
@@ -379,19 +386,21 @@ public class CheckoutActivityTest {
         String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
         mTestRule.addApiResponseToQueue(paymentMethodSearchJson, 200, "");
 
-        mTestRule.launchActivity(validStartIntent);
-
-        //perform actions
-        onView(withId(R.id.groupsList)).perform(
-                RecyclerViewActions.actionOnItemAtPosition(1, click()));
-
-        onView(withId(R.id.groupsList)).perform(
-                RecyclerViewActions.actionOnItemAtPosition(1, click()));
-
-        //validations
         PaymentMethodSearch paymentMethodSearch = JsonUtil.getInstance().fromJson(paymentMethodSearchJson, PaymentMethodSearch.class);
         final PaymentMethodSearchItem selectedSearchItem = paymentMethodSearch.getGroups().get(1).getChildren().get(1);
 
+        PaymentMethod selectedPaymentMethod = new PaymentMethod();
+        selectedPaymentMethod.setId(selectedSearchItem.getId());
+        Intent resultIntent = new Intent();
+        resultIntent.putExtra("paymentMethod", selectedPaymentMethod);
+        Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(Activity.RESULT_OK, resultIntent);
+
+        mTestRule.initIntentsRecording();
+        intending(hasComponent(PaymentVaultActivity.class.getName())).respondWith(result);
+
+        mTestRule.launchActivity(validStartIntent);
+
+        //validations
         assertTrue(selectedSearchItem.getId().contains(mTestRule.getActivity().mSelectedPaymentMethod.getId()));
     }
 
@@ -404,6 +413,7 @@ public class CheckoutActivityTest {
         String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
         mTestRule.addApiResponseToQueue(paymentMethodSearchJson, 200, "");
 
+        mTestRule.initIntentsRecording();
         mTestRule.launchActivity(validStartIntent);
 
         //perform actions
@@ -421,7 +431,7 @@ public class CheckoutActivityTest {
         guessingFormResultIntent.putExtra("token", token);
         Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(Activity.RESULT_OK, guessingFormResultIntent);
 
-        intending(hasComponent(GuessingNewCardActivity.class.getName())).respondWith(result);
+        intending(hasComponent(CardVaultActivity.class.getName())).respondWith(result);
 
         //perform actions
         onView(withId(R.id.groupsList)).perform(
@@ -434,7 +444,7 @@ public class CheckoutActivityTest {
     }
 
     @Test
-    public void setResultFromGuessingNewCardWithIssuer() {
+    public void setPaymentMethodResultWithIssuer() {
         //prepare mocked api responses
         CheckoutPreference preference = StaticMock.getPreferenceWithoutExclusions();
         mTestRule.addApiResponseToQueue(preference, 200, "");
@@ -442,26 +452,28 @@ public class CheckoutActivityTest {
         String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
         mTestRule.addApiResponseToQueue(paymentMethodSearchJson, 200, "");
 
-        mTestRule.launchActivity(validStartIntent);
-
-        //perform actions
-        onView(withId(R.id.groupsList)).perform(
-                RecyclerViewActions.actionOnItemAtPosition(0, click()));
+        mTestRule.initIntentsRecording();
 
         //prepare next activity result
-        Intent guessingFormResultIntent = new Intent();
+        Intent paymentMethodSelectionResult = new Intent();
         final PaymentMethod paymentMethod = StaticMock.getPaymentMethodOn();
         final Token token = new Token();
         token.setId("1");
         final Issuer issuer = new Issuer();
         issuer.setId((long) 1234);
 
-        guessingFormResultIntent.putExtra("paymentMethod", paymentMethod);
-        guessingFormResultIntent.putExtra("token", token);
-        guessingFormResultIntent.putExtra("issuer", issuer);
-        Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(Activity.RESULT_OK, guessingFormResultIntent);
+        paymentMethodSelectionResult.putExtra("paymentMethod", paymentMethod);
+        paymentMethodSelectionResult.putExtra("token", token);
+        paymentMethodSelectionResult.putExtra("issuer", issuer);
+        Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(Activity.RESULT_OK, paymentMethodSelectionResult);
 
-        intending(hasComponent(GuessingNewCardActivity.class.getName())).respondWith(result);
+        intending(hasComponent(CardVaultActivity.class.getName())).respondWith(result);
+
+        mTestRule.launchActivity(validStartIntent);
+
+        //perform actions
+        onView(withId(R.id.groupsList)).perform(
+                RecyclerViewActions.actionOnItemAtPosition(0, click()));
 
         //perform actions
         onView(withId(R.id.groupsList)).perform(
@@ -488,6 +500,7 @@ public class CheckoutActivityTest {
 
         mTestRule.addApiResponseToQueue(paymentMethodSearch, 200, "");
 
+        mTestRule.initIntentsRecording();
         mTestRule.launchActivity(validStartIntent);
 
         //
@@ -516,9 +529,10 @@ public class CheckoutActivityTest {
         String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
         mTestRule.addApiResponseToQueue(paymentMethodSearchJson, 200, "");
 
-        Payment payment = StaticMock.getPayment(InstrumentationRegistry.getContext());
+        Payment payment = StaticMock.getPayment();
         mTestRule.addApiResponseToQueue(payment, 200, "");
 
+        mTestRule.initIntentsRecording();
         mTestRule.launchActivity(validStartIntent);
 
         //perform actions
@@ -544,48 +558,34 @@ public class CheckoutActivityTest {
         Payment payment = StaticMock.getPayment(InstrumentationRegistry.getContext());
         mTestRule.addApiResponseToQueue(payment, 200, "");
 
+        //prepare next activity result
+        Intent resultIntent = new Intent();
+        final PaymentMethod paymentMethod = StaticMock.getPaymentMethod(InstrumentationRegistry.getContext());
+
+        resultIntent.putExtra("paymentMethod", paymentMethod);
+        Instrumentation.ActivityResult paymentMethodResult = new Instrumentation.ActivityResult(Activity.RESULT_OK, resultIntent);
+
+        mTestRule.initIntentsRecording();
+
+        intending(hasComponent(PaymentVaultActivity.class.getName())).respondWith(paymentMethodResult);
         mTestRule.launchActivity(validStartIntent);
 
-        mTestRule.releaseIntents();
-        //perform actions
-        onView(withId(R.id.groupsList)).perform(
-                RecyclerViewActions.actionOnItemAtPosition(0, click()));
-
-        mTestRule.initIntents();
-
-        //prepare next activity result
-        Intent guessingFormResultIntent = new Intent();
-        final PaymentMethod paymentMethod = StaticMock.getPaymentMethod(mTestRule.getActivity());
-
-        guessingFormResultIntent.putExtra("paymentMethod", paymentMethod);
-        Instrumentation.ActivityResult guessingCardResult = new Instrumentation.ActivityResult(Activity.RESULT_OK, guessingFormResultIntent);
-
-        intending(hasComponent(GuessingNewCardActivity.class.getName())).respondWith(guessingCardResult);
-
-        onView(withId(R.id.groupsList)).perform(
-                RecyclerViewActions.actionOnItemAtPosition(0, click()));
-
-        Intent congratsIntent = new Intent();
-        Instrumentation.ActivityResult congratsResult = new Instrumentation.ActivityResult(Activity.RESULT_OK, congratsIntent);
-
-        intending(hasComponent(OldCongratsActivity.class.getName())).respondWith(congratsResult);
         onView(withId(R.id.payButton)).perform(click());
 
-        //TODO cambiar cuando creemos la nueva congrats
-        //validations
-        intended(hasComponent(OldCongratsActivity.class.getName()));
+        intended(hasComponent(CongratsActivity.class.getName()));
     }
 
     @Test
-    public void forCreatePaymentAPIFailureFinishActivity() {
+    public void whenPaymentCreationFailsWithBadRequestShowErrorScreen() {
         //Prepare mocked api responses
         CheckoutPreference preference = StaticMock.getPreferenceWithoutExclusions();
         mTestRule.addApiResponseToQueue(preference, 200, "");
 
         String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
         mTestRule.addApiResponseToQueue(paymentMethodSearchJson, 200, "");
-        mTestRule.addApiResponseToQueue("", 401, "");
+        mTestRule.addApiResponseToQueue("", ApiUtil.StatusCodes.BAD_REQUEST, "");
 
+        mTestRule.initIntentsRecording();
         mTestRule.launchActivity(validStartIntent);
 
         //perform actions
@@ -595,14 +595,58 @@ public class CheckoutActivityTest {
                 RecyclerViewActions.actionOnItemAtPosition(1, click()));
         onView(withId(R.id.payButton)).perform(click());
 
-        //validations
-        mTestRule.isActivityFinishedOrFinishing();
+        intended(hasComponent(ErrorActivity.class.getName()));
     }
 
     @Test
-    public void ifInvalidPreferenceSetCallFinish() {
-        mTestRule.initIntents();
+    public void whenPaymentCreationFailsWithServerErrorShowErrorScreen() {
+        //Prepare mocked api responses
+        CheckoutPreference preference = StaticMock.getPreferenceWithoutExclusions();
+        mTestRule.addApiResponseToQueue(preference, 200, "");
 
+        String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
+        mTestRule.addApiResponseToQueue(paymentMethodSearchJson, 200, "");
+        mTestRule.addApiResponseToQueue("", ApiUtil.StatusCodes.INTERNAL_SERVER_ERROR, "");
+
+        mTestRule.initIntentsRecording();
+        mTestRule.launchActivity(validStartIntent);
+
+        //perform actions
+        onView(withId(R.id.groupsList)).perform(
+                RecyclerViewActions.actionOnItemAtPosition(1, click()));
+        onView(withId(R.id.groupsList)).perform(
+                RecyclerViewActions.actionOnItemAtPosition(1, click()));
+        onView(withId(R.id.payButton)).perform(click());
+
+        intended(hasComponent(ErrorActivity.class.getName()));
+    }
+
+    @Test
+    public void whenPaymentCreationFailsWithProcessingCodeShowCongratsActivityInProcess() {
+        //Prepare mocked api responses
+        CheckoutPreference preference = StaticMock.getPreferenceWithoutExclusions();
+        mTestRule.addApiResponseToQueue(preference, 200, "");
+
+        String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
+        mTestRule.addApiResponseToQueue(paymentMethodSearchJson, 200, "");
+        mTestRule.addApiResponseToQueue("", ApiUtil.StatusCodes.PROCESSING, "");
+
+        mTestRule.initIntentsRecording();
+        mTestRule.launchActivity(validStartIntent);
+
+        //perform actions
+        onView(withId(R.id.groupsList)).perform(
+                RecyclerViewActions.actionOnItemAtPosition(1, click()));
+        onView(withId(R.id.groupsList)).perform(
+                RecyclerViewActions.actionOnItemAtPosition(1, click()));
+        onView(withId(R.id.payButton)).perform(click());
+
+        intended(hasComponent(CongratsActivity.class.getName()));
+        onView(withText(mTestRule.getActivity().getString(R.string.mpsdk_title_pending))).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void ifInvalidPreferenceSetStartErrorActivity() {
         Intent invalidStartIntent = new Intent();
         CheckoutPreference invalidPreference = StaticMock.getPreferenceWithExclusions();
         invalidPreference.setItems(null);
@@ -610,7 +654,9 @@ public class CheckoutActivityTest {
         validStartIntent.putExtra("checkoutPreferenceId", PREF_ID);
 
         mTestRule.addApiResponseToQueue(invalidPreference, 200, "");
+
+        mTestRule.initIntentsRecording();
         mTestRule.launchActivity(invalidStartIntent);
-        assertTrue(mTestRule.isActivityFinishedOrFinishing());
+        intending(hasComponent(ErrorActivity.class.getName()));
     }
 }

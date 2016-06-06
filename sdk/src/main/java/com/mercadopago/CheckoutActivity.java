@@ -656,7 +656,7 @@ public class CheckoutActivity extends AppCompatActivity {
     }
 
     private MPPaymentTrackInformer createMPTrackerInformer(){
-        MPPaymentTrackInformer mpPaymentTrackInformer = new MPPaymentTrackInformer() {
+        return new MPPaymentTrackInformer() {
             @Override
             public String getPaymentMethodId() {
                 return mCreatedPayment.getPaymentMethodId();
@@ -687,7 +687,6 @@ public class CheckoutActivity extends AppCompatActivity {
                 return mCreatedPayment.getIssuerId();
             }
         };
-        return mpPaymentTrackInformer;
     }
 
     private void startInstructionsActivity() {
@@ -748,9 +747,9 @@ public class CheckoutActivity extends AppCompatActivity {
 
     private void resolvePaymentFailure(RetrofitError error) {
         if(error.getResponse() != null) {
-            String serverErrorFirstDigit = String.valueOf(ApiUtil.StatusCode.INTERNAL_SERVER_ERROR).substring(0, 1);
+            String serverErrorFirstDigit = String.valueOf(ApiUtil.StatusCodes.INTERNAL_SERVER_ERROR).substring(0, 1);
             if (String.valueOf(error.getResponse().getStatus()).startsWith(serverErrorFirstDigit)
-                    && error.getResponse().getStatus() != ApiUtil.StatusCode.PAYMENT_IN_PROCESS) {
+                    && error.getResponse().getStatus() != ApiUtil.StatusCodes.PROCESSING) {
                 ApiUtil.showApiExceptionError(this, error);
                 failureRecovery = new FailureRecovery() {
                     @Override
@@ -758,11 +757,11 @@ public class CheckoutActivity extends AppCompatActivity {
                         createPayment();
                     }
                 };
-            } else if (error.getResponse().getStatus() == ApiUtil.StatusCode.PAYMENT_IN_PROCESS) {
+            } else if (error.getResponse().getStatus() == ApiUtil.StatusCodes.PROCESSING) {
                 startPaymentInProcessActivity();
                 cleanTransactionId();
             }
-            else if (error.getResponse().getStatus() == ApiUtil.StatusCode.BAD_REQUEST) {
+            else if (error.getResponse().getStatus() == ApiUtil.StatusCodes.BAD_REQUEST) {
                 ApiException apiException = ApiUtil.getApiException(error);
                 MPException mpException = new MPException(apiException);
                 ErrorUtil.startErrorActivity(this, mpException);
