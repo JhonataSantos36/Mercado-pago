@@ -30,6 +30,7 @@ import retrofit.client.Response;
 public class CardVaultActivity extends ShowCardActivity {
 
     private Activity mActivity;
+    protected boolean mActiveActivity;
 
     private PayerCost mPayerCost;
     private PaymentPreference mPaymentPreference;
@@ -41,6 +42,7 @@ public class CardVaultActivity extends ShowCardActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mActivity = this;
+        mActiveActivity = true;
         setContentView();
         getActivityParameters();
         initializeToolbar();
@@ -55,6 +57,30 @@ public class CardVaultActivity extends ShowCardActivity {
         }
         initializeFrontFragment();
         startGuessingCardActivity();
+    }
+
+    @Override
+    protected void onResume() {
+        mActiveActivity = true;
+        super.onResume();
+    }
+
+    @Override
+    protected void onDestroy() {
+        mActiveActivity = false;
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onPause() {
+        mActiveActivity = false;
+        super.onPause();
+    }
+
+    @Override
+    protected void onStop() {
+        mActiveActivity = false;
+        super.onStop();
     }
 
     @Override
@@ -160,32 +186,34 @@ public class CardVaultActivity extends ShowCardActivity {
                     new Callback<List<Installment>>() {
                         @Override
                         public void success(List<Installment> installments, Response response) {
-                            if (installments.size() == 1) {
-                                if(installments.get(0).getPayerCosts().size() == 1) {
-                                    mPayerCost = installments.get(0).getPayerCosts().get(0);
-                                    finishWithResult();
-                                }
-                                if(installments.get(0).getPayerCosts().size() > 1)
-                                {
-                                    startInstallmentsActivity(installments.get(0).getPayerCosts());
-                                }
-                                else {
+                            if (mActiveActivity) {
+                                if (installments.size() == 1) {
+                                    if (installments.get(0).getPayerCosts().size() == 1) {
+                                        mPayerCost = installments.get(0).getPayerCosts().get(0);
+                                        finishWithResult();
+                                    }
+                                    if (installments.get(0).getPayerCosts().size() > 1) {
+                                        startInstallmentsActivity(installments.get(0).getPayerCosts());
+                                    } else {
+                                        ErrorUtil.startErrorActivity(mActivity, getString(R.string.mpsdk_standard_error_message), false);
+                                    }
+                                } else {
                                     ErrorUtil.startErrorActivity(mActivity, getString(R.string.mpsdk_standard_error_message), false);
                                 }
-                            } else {
-                                ErrorUtil.startErrorActivity(mActivity, getString(R.string.mpsdk_standard_error_message), false);
                             }
                         }
 
                         @Override
                         public void failure(RetrofitError error) {
-                            mFailureRecovery = new FailureRecovery() {
-                                @Override
-                                public void recover() {
-                                    checkStartInstallmentsActivity();
-                                }
-                            };
-                            ApiUtil.showApiExceptionError(mActivity, error);
+                            if (mActiveActivity) {
+                                mFailureRecovery = new FailureRecovery() {
+                                    @Override
+                                    public void recover() {
+                                        checkStartInstallmentsActivity();
+                                    }
+                                };
+                                ApiUtil.showApiExceptionError(mActivity, error);
+                            }
                         }
                     });
         }

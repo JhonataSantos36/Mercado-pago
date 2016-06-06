@@ -28,6 +28,7 @@ public class BankDealsActivity extends AppCompatActivity {
 
     // Local vars
     protected Activity mActivity;
+    protected boolean mActiveActivity;
     protected MercadoPago mMercadoPago;
     protected RecyclerView mRecyclerView;
 
@@ -39,6 +40,7 @@ public class BankDealsActivity extends AppCompatActivity {
 
         // Set activity
         mActivity = this;
+        mActiveActivity = true;
 
         // Get activity parameters
         mPublicKey = mActivity.getIntent().getStringExtra("publicKey");
@@ -61,6 +63,30 @@ public class BankDealsActivity extends AppCompatActivity {
         getBankDeals();
     }
 
+    @Override
+    protected void onResume() {
+        mActiveActivity = true;
+        super.onResume();
+    }
+
+    @Override
+    protected void onDestroy() {
+        mActiveActivity = false;
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onPause() {
+        mActiveActivity = false;
+        super.onPause();
+    }
+
+    @Override
+    protected void onStop() {
+        mActiveActivity = false;
+        super.onStop();
+    }
+
     protected void setContentView() {
 
         setContentView(R.layout.activity_bank_deals);
@@ -76,25 +102,27 @@ public class BankDealsActivity extends AppCompatActivity {
         mMercadoPago.getBankDeals(new Callback<List<BankDeal>>() {
             @Override
             public void success(List<BankDeal> bankDeals, Response response) {
+                if (mActiveActivity) {
+                    mRecyclerView.setAdapter(new BankDealsAdapter(mActivity, bankDeals, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
 
-                mRecyclerView.setAdapter(new BankDealsAdapter(mActivity, bankDeals, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
+                            BankDeal selectedBankDeal = (BankDeal) view.getTag();
+                            Intent intent = new Intent(mActivity, TermsAndConditionsActivity.class);
+                            intent.putExtra("termsAndConditions", selectedBankDeal.getLegals());
+                            startActivity(intent);
+                        }
+                    }));
 
-                        BankDeal selectedBankDeal = (BankDeal) view.getTag();
-                        Intent intent = new Intent(mActivity, TermsAndConditionsActivity.class);
-                        intent.putExtra("termsAndConditions", selectedBankDeal.getLegals());
-                        startActivity(intent);
-                    }
-                }));
-
-                LayoutUtil.showRegularLayout(mActivity);
+                    LayoutUtil.showRegularLayout(mActivity);
+                }
             }
 
             @Override
             public void failure(RetrofitError error) {
-
-                ApiUtil.finishWithApiException(mActivity, error);
+                if (mActiveActivity) {
+                    ApiUtil.finishWithApiException(mActivity, error);
+                }
             }
         });
     }
