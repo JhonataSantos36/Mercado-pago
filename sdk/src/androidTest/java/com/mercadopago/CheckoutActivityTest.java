@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import com.mercadopago.model.CheckoutPreference;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.Item;
+import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentMethodSearch;
@@ -24,6 +25,7 @@ import com.mercadopago.model.PaymentMethodSearchItem;
 import com.mercadopago.model.Token;
 import com.mercadopago.test.StaticMock;
 import com.mercadopago.test.rules.MockedApiTestRule;
+import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.JsonUtil;
 
 import org.junit.Before;
@@ -41,13 +43,11 @@ import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.Intents.intending;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.*;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static junit.framework.Assert.assertTrue;
-import static org.hamcrest.Matchers.allOf;
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -576,32 +576,78 @@ public class CheckoutActivityTest {
         intended(hasComponent(CongratsActivity.class.getName()));
     }
 
-    //TODO PAYMENT FAILURE TESTS
-//    @Test
-//    public void forCreatePaymentAPIFailureFinishActivity() {
-//        //Prepare mocked api responses
-//        CheckoutPreference preference = StaticMock.getPreferenceWithoutExclusions();
-//        mTestRule.addApiResponseToQueue(preference, 200, "");
-//
-//        String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
-//        mTestRule.addApiResponseToQueue(paymentMethodSearchJson, 200, "");
-//        mTestRule.addApiResponseToQueue("", 401, "");
-//
-//        mTestRule.launchActivity(validStartIntent);
-//
-//        //perform actions
-//        onView(withId(R.id.groupsList)).perform(
-//                RecyclerViewActions.actionOnItemAtPosition(1, click()));
-//        onView(withId(R.id.groupsList)).perform(
-//                RecyclerViewActions.actionOnItemAtPosition(1, click()));
-//        onView(withId(R.id.payButton)).perform(click());
-//
-//        //validations
-//        mTestRule.isActivityFinishedOrFinishing();
-//    }
+    @Test
+    public void whenPaymentCreationFailsWithBadRequestShowErrorScreen() {
+        //Prepare mocked api responses
+        CheckoutPreference preference = StaticMock.getPreferenceWithoutExclusions();
+        mTestRule.addApiResponseToQueue(preference, 200, "");
+
+        String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
+        mTestRule.addApiResponseToQueue(paymentMethodSearchJson, 200, "");
+        mTestRule.addApiResponseToQueue("", ApiUtil.StatusCodes.BAD_REQUEST, "");
+
+        mTestRule.initIntentsRecording();
+        mTestRule.launchActivity(validStartIntent);
+
+        //perform actions
+        onView(withId(R.id.groupsList)).perform(
+                RecyclerViewActions.actionOnItemAtPosition(1, click()));
+        onView(withId(R.id.groupsList)).perform(
+                RecyclerViewActions.actionOnItemAtPosition(1, click()));
+        onView(withId(R.id.payButton)).perform(click());
+
+        intended(hasComponent(ErrorActivity.class.getName()));
+    }
 
     @Test
-    public void ifInvalidPreferenceSetCallFinish() {
+    public void whenPaymentCreationFailsWithServerErrorShowErrorScreen() {
+        //Prepare mocked api responses
+        CheckoutPreference preference = StaticMock.getPreferenceWithoutExclusions();
+        mTestRule.addApiResponseToQueue(preference, 200, "");
+
+        String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
+        mTestRule.addApiResponseToQueue(paymentMethodSearchJson, 200, "");
+        mTestRule.addApiResponseToQueue("", ApiUtil.StatusCodes.INTERNAL_SERVER_ERROR, "");
+
+        mTestRule.initIntentsRecording();
+        mTestRule.launchActivity(validStartIntent);
+
+        //perform actions
+        onView(withId(R.id.groupsList)).perform(
+                RecyclerViewActions.actionOnItemAtPosition(1, click()));
+        onView(withId(R.id.groupsList)).perform(
+                RecyclerViewActions.actionOnItemAtPosition(1, click()));
+        onView(withId(R.id.payButton)).perform(click());
+
+        intended(hasComponent(ErrorActivity.class.getName()));
+    }
+
+    @Test
+    public void whenPaymentCreationFailsWithProcessingCodeShowCongratsActivityInProcess() {
+        //Prepare mocked api responses
+        CheckoutPreference preference = StaticMock.getPreferenceWithoutExclusions();
+        mTestRule.addApiResponseToQueue(preference, 200, "");
+
+        String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
+        mTestRule.addApiResponseToQueue(paymentMethodSearchJson, 200, "");
+        mTestRule.addApiResponseToQueue("", ApiUtil.StatusCodes.PROCESSING, "");
+
+        mTestRule.initIntentsRecording();
+        mTestRule.launchActivity(validStartIntent);
+
+        //perform actions
+        onView(withId(R.id.groupsList)).perform(
+                RecyclerViewActions.actionOnItemAtPosition(1, click()));
+        onView(withId(R.id.groupsList)).perform(
+                RecyclerViewActions.actionOnItemAtPosition(1, click()));
+        onView(withId(R.id.payButton)).perform(click());
+
+        intended(hasComponent(CongratsActivity.class.getName()));
+        onView(withText(mTestRule.getActivity().getString(R.string.mpsdk_title_pending))).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void ifInvalidPreferenceSetStartErrorActivity() {
         Intent invalidStartIntent = new Intent();
         CheckoutPreference invalidPreference = StaticMock.getPreferenceWithExclusions();
         invalidPreference.setItems(null);
