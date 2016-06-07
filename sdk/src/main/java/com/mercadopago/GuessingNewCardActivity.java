@@ -543,7 +543,12 @@ public class GuessingNewCardActivity extends FrontCardActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+                if (before == 0 && needsMask(s)) {
+                    mCardNumberEditText.append(" ");
+                }
+                if (before == 1 && needsMask(s)) {
+                    mCardNumberEditText.getText().delete(s.length() - 1, s.length());
+                }
             }
 
             @Override
@@ -552,6 +557,7 @@ public class GuessingNewCardActivity extends FrontCardActivity {
                 mCardNumberEditText.toggleLineColorOnError(false);
             }
         });
+
         mCardNumberEditText.addTextChangedListener(new CardNumberTextWatcher(
                 mPaymentMethodGuessingController,
                 new PaymentMethodSelectionCallback() {
@@ -591,6 +597,15 @@ public class GuessingNewCardActivity extends FrontCardActivity {
                     }
 
                 }));
+    }
+
+    private boolean needsMask(CharSequence s) {
+        if (mCardNumberLength == CARD_NUMBER_MAX_LENGTH) {
+            return s.length() == 4 || s.length() == 9 || s.length() == 14;
+        } else if (mCardNumberLength == CARD_NUMBER_AMEX_LENGTH || mCardNumberLength == CARD_NUMBER_DINERS_LENGTH) {
+            return s.length() == 4 || s.length() == 11;
+        }
+        return false;
     }
 
     private void initCardState() {
@@ -738,7 +753,11 @@ public class GuessingNewCardActivity extends FrontCardActivity {
 
     private void setCardNumberLength(int maxLength) {
         mCardNumberLength = maxLength;
-        setInputMaxLength(mCardNumberEditText, maxLength);
+        int spaces = CARD_DEFAULT_AMOUNT_SPACES;
+        if (maxLength == CARD_NUMBER_DINERS_LENGTH || maxLength == CARD_NUMBER_AMEX_LENGTH) {
+            spaces = CARD_AMEX_DINERS_AMOUNT_SPACES;
+        }
+        setInputMaxLength(mCardNumberEditText, mCardNumberLength + spaces);
     }
 
     private void setSecurityCodeViewRestrictions(SecurityCode securityCode) {
@@ -1503,10 +1522,11 @@ public class GuessingNewCardActivity extends FrontCardActivity {
         @Override
         public void afterTextChanged(Editable s) {
             if (mController == null) return;
-            if (s.length() == MercadoPago.BIN_LENGTH - 1) {
+            String number = s.toString().replaceAll("\\s", "");
+            if (number.length() == MercadoPago.BIN_LENGTH - 1) {
                 mCallback.onPaymentMethodCleared();
-            } else if (s.length() >= MercadoPago.BIN_LENGTH) {
-                mBin = s.subSequence(0, MercadoPago.BIN_LENGTH).toString();
+            } else if (number.length() >= MercadoPago.BIN_LENGTH) {
+                mBin = number.subSequence(0, MercadoPago.BIN_LENGTH).toString();
                 List<PaymentMethod> list = mController.guessPaymentMethodsByBin(mBin);
                 mCallback.onPaymentMethodListSet(list);
             }

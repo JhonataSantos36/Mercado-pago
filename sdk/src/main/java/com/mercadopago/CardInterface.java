@@ -8,6 +8,8 @@ public interface CardInterface {
     int CARD_NUMBER_AMEX_LENGTH = 15;
     int CARD_NUMBER_DINERS_LENGTH = 14;
     int CARD_DEFAULT_SECURITY_CODE_LENGTH = 4;
+    int CARD_DEFAULT_AMOUNT_SPACES = 3;
+    int CARD_AMEX_DINERS_AMOUNT_SPACES = 2;
 
     int NEUTRAL_CARD_COLOR = R.color.mpsdk_white;
     int FULL_TEXT_VIEW_COLOR = R.color.mpsdk_base_text_alpha;

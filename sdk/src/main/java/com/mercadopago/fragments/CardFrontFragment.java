@@ -239,8 +239,9 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
 
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    mActivity.saveCardNumber(s.toString());
-                    populateCardNumber(s);
+                    String number = s.toString().replaceAll("\\s", "");
+                    mActivity.saveCardNumber(number);
+                    populateCardNumber(number);
                 }
 
 
