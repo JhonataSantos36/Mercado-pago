@@ -16,7 +16,7 @@ import retrofit2.Response;
 
 public class ApiUtil {
 
-    public static ApiException getApiException(Response<?> response) {
+    public static <T> ApiException getApiException(Response<T> response) {
 
         ApiException apiException = null;
         try {
@@ -24,12 +24,13 @@ public class ApiUtil {
             apiException = JsonUtil.getInstance().fromJson(errorString, ApiException.class);
         } catch (Exception ex) {
             //Do nothing
+        } finally {
+            if(apiException == null) {
+                apiException = new ApiException();
+                apiException.setStatus(response.code());
+            }
         }
 
-        if(apiException == null) {
-            apiException = new ApiException();
-            apiException.setStatus(response.code());
-        }
 
         return apiException;
     }
