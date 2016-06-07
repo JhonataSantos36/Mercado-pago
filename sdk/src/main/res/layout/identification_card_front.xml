@@ -24,37 +24,22 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
             android:weightSum="1"
             android:orientation="horizontal">
 
             <FrameLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="6dp"
-                android:layout_marginStart="6dp"
+                android:layout_gravity="center_vertical"
+                android:paddingLeft="10dp"
+                android:paddingStart="10dp"
                 android:layout_weight="0.3">
-                <FrameLayout
-                    android:layout_width="69dp"
-                    android:layout_height="69dp"
-                    android:layout_gravity="center"
-                    android:background="@drawable/white_circle">
-                    <FrameLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal|bottom"
-                        android:background="@drawable/identification_man">
-                    </FrameLayout>
-                </FrameLayout>
-                <FrameLayout
+                <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginTop="22dp"
-                    android:layout_marginRight="18dp"
-                    android:layout_marginEnd="18dp"
-                    android:background="@drawable/identification_icon">
-
-                </FrameLayout>
+                    android:src="@drawable/foto_sello"/>
 
             </FrameLayout>
             <LinearLayout
@@ -62,40 +47,48 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.7"
                 android:layout_gravity="center_vertical"
-                android:layout_marginLeft="10dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginRight="6dp"
-                android:layout_marginEnd="6dp"
+                android:paddingLeft="8dp"
+                android:paddingStart="8dp"
+                android:paddingRight="16dp"
+                android:paddingEnd="16dp"
                 android:orientation="vertical">
 
                 <com.mercadopago.views.MPTextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textAllCaps="true"
-                    android:textColor="@color/mpsdk_base_text"
-                    android:text="@string/mpsdk_card_identification_label"
-                    android:textSize="16sp"
+                    android:paddingRight="14dp"
+                    android:paddingEnd="14dp"
+                    android:textColor="@color/mpsdk_base_text_alpha"
+                    android:text="@string/mpsdk_card_identification_label_part1"
+                    android:textSize="13sp"
+                    app:fontStyle="regular"/>
+                <com.mercadopago.views.MPTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:paddingRight="14dp"
+                    android:paddingEnd="14dp"
+                    android:textColor="@color/mpsdk_base_text_alpha"
+                    android:text="@string/mpsdk_card_identification_label_part2"
+                    android:textSize="13sp"
                     app:fontStyle="regular"/>
 
                 <FrameLayout
                     android:id="@+id/idNumberClickableZone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingStart="10dp"
-                    android:paddingLeft="10dp"
+                    android:layout_gravity="start"
                     android:paddingEnd="10dp"
                     android:paddingRight="10dp"
-                    android:layout_marginTop="17dp">
+                    android:layout_marginTop="10dp">
 
                     <com.mercadopago.views.MPTextView
                         android:id="@+id/identificationCardholderContainer"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp"
-                        android:layout_marginLeft="12dp"
                         android:layout_gravity="start"
                         android:textColor="@color/mpsdk_base_text"
-                        android:textSize="21sp"
+                        android:textSize="20sp"
                         android:visibility="visible"
                         android:text="•• ••• •••"
                         app:fontStyle="roboto_regular"/>
@@ -104,11 +97,9 @@
                         android:id="@+id/idNumberView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp"
-                        android:layout_marginLeft="12dp"
                         android:layout_gravity="start"
                         android:textColor="@color/mpsdk_base_text"
-                        android:textSize="21sp"
+                        android:textSize="20sp"
                         android:visibility="invisible"/>
 
                 </FrameLayout>

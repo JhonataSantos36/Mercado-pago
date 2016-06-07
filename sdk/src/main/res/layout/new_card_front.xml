@@ -128,7 +128,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="15dp"
                 android:orientation="horizontal"
                 android:weightSum="1">
 
@@ -136,7 +136,6 @@
                     android:id="@+id/cardholderNameView"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="19dp"
                     android:layout_weight="0.6"
                     android:singleLine="true"
                     android:paddingStart="15dp"
@@ -149,7 +148,6 @@
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="19dp"
                     android:layout_weight="0.4"
                     android:paddingRight="15dp"
                     android:paddingEnd="15dp"

@@ -27,7 +27,8 @@
     <string name="mpsdk_card_expiry_month_hint">MM</string>
     <string name="mpsdk_card_expiry_divider_hint">/</string>
     <string name="mpsdk_card_expiry_year_hint">AA</string>
-    <string name="mpsdk_card_identification_label">Documento del titular de la tarjeta</string>
+    <string name="mpsdk_card_identification_label_part1">DOCUMENTO DEL TITULAR</string>
+    <string name="mpsdk_card_identification_label_part2">DE LA TARJETA</string>
     <string name="mpsdk_card_identification_number">Número</string>
     <string name="mpsdk_card_identification_type">Tipo</string>
     <string name="mpsdk_cardholder_name">Nombre y apellido</string>
