@@ -5,9 +5,11 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
+import com.mercadopago.callbacks.Callback;
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.examples.R;
 import com.mercadopago.examples.utils.ExamplesUtils;
+import com.mercadopago.model.ApiException;
 import com.mercadopago.model.CardToken;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.PayerCost;
@@ -17,16 +19,10 @@ import com.mercadopago.model.PaymentType;
 import com.mercadopago.model.Sites;
 import com.mercadopago.model.Token;
 import com.mercadopago.util.ApiUtil;
-import com.mercadopago.util.CurrenciesUtil;
 import com.mercadopago.util.LayoutUtil;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
-
 /**
  * Created by vaserber on 5/2/16.
  */
@@ -137,13 +133,13 @@ public class Step7Activity extends AppCompatActivity {
 
         mercadoPago.createToken(cardTokenArg, new Callback<Token>() {
             @Override
-            public void success(Token token, Response response) {
+            public void success(Token token) {
                 mToken = token;
                 callNewFormActivity(publicKey);
             }
 
             @Override
-            public void failure(RetrofitError error) {
+            public void failure(ApiException error) {
                 ApiUtil.finishWithApiException(getParent(), error);
             }
         });
@@ -197,13 +193,13 @@ public class Step7Activity extends AppCompatActivity {
 
         mercadoPago.createToken(cardToken, new Callback<Token>() {
             @Override
-            public void success(Token token, Response response) {
+            public void success(Token token) {
                 mToken = token;
                 callInstallmentsActivity(publicKey);
             }
 
             @Override
-            public void failure(RetrofitError error) {
+            public void failure(ApiException error) {
                 ApiUtil.finishWithApiException(getParent(), error);
             }
         });
@@ -251,13 +247,13 @@ public class Step7Activity extends AppCompatActivity {
 
         mercadoPago.createToken(cardToken, new Callback<Token>() {
             @Override
-            public void success(Token token, Response response) {
+            public void success(Token token) {
                 mToken = token;
                 callIssuersActivity(publicKey);
             }
 
             @Override
-            public void failure(RetrofitError error) {
+            public void failure(ApiException error) {
                 ApiUtil.finishWithApiException(getParent(), error);
             }
         });

@@ -13,17 +13,16 @@ import android.widget.TextView;
 import com.mercadopago.adapters.BankDealsAdapter;
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.decorations.DividerItemDecoration;
+import com.mercadopago.model.ApiException;
 import com.mercadopago.model.BankDeal;
 import com.mercadopago.model.DecorationPreference;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.LayoutUtil;
 
-import java.io.Serializable;
+import com.mercadopago.callbacks.Callback;
+
 import java.util.List;
 
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
 
 public class BankDealsActivity extends AppCompatActivity {
 
@@ -126,7 +125,7 @@ public class BankDealsActivity extends AppCompatActivity {
         LayoutUtil.showProgressLayout(mActivity);
         mMercadoPago.getBankDeals(new Callback<List<BankDeal>>() {
             @Override
-            public void success(List<BankDeal> bankDeals, Response response) {
+            public void success(List<BankDeal> bankDeals) {
                 if (mActiveActivity) {
                     mRecyclerView.setAdapter(new BankDealsAdapter(mActivity, bankDeals, new View.OnClickListener() {
                         @Override
@@ -144,9 +143,9 @@ public class BankDealsActivity extends AppCompatActivity {
             }
 
             @Override
-            public void failure(RetrofitError error) {
+            public void failure(ApiException apiException) {
                 if (mActiveActivity) {
-                    ApiUtil.finishWithApiException(mActivity, error);
+                    ApiUtil.finishWithApiException(mActivity, apiException);
                 }
             }
         });

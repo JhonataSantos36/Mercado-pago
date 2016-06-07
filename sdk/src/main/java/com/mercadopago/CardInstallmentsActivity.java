@@ -11,9 +11,11 @@ import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 
 import com.mercadopago.adapters.CardInstallmentsAdapter;
+import com.mercadopago.callbacks.Callback;
 import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.listeners.RecyclerItemClickListener;
+import com.mercadopago.model.ApiException;
 import com.mercadopago.model.Installment;
 import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.PaymentPreference;
@@ -24,10 +26,6 @@ import com.mercadopago.util.ErrorUtil;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
 
 public class CardInstallmentsActivity extends ShowCardActivity {
 
@@ -155,7 +153,7 @@ public class CardInstallmentsActivity extends ShowCardActivity {
         mMercadoPago.getInstallments(mBin, mAmount, mSelectedIssuer.getId(), mCurrentPaymentMethod.getId(),
                 new Callback<List<Installment>>() {
                     @Override
-                    public void success(List<Installment> installments, Response response) {
+                    public void success(List<Installment> installments) {
                         if (mActiveActivity) {
                             mProgressBar.setVisibility(View.GONE);
                             if (installments.size() == 0) {
@@ -169,7 +167,7 @@ public class CardInstallmentsActivity extends ShowCardActivity {
                     }
 
                     @Override
-                    public void failure(RetrofitError error) {
+                    public void failure(ApiException apiException) {
                         if (mActiveActivity) {
                             mProgressBar.setVisibility(View.GONE);
                             mFailureRecovery = new FailureRecovery() {
@@ -178,7 +176,7 @@ public class CardInstallmentsActivity extends ShowCardActivity {
                                     getInstallmentsAsync();
                                 }
                             };
-                            ApiUtil.showApiExceptionError(mActivity, error);
+                            ApiUtil.showApiExceptionError(mActivity, apiException);
                         }
                     }
                 });

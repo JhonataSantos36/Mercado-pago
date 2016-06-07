@@ -7,9 +7,11 @@ import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.mercadopago.adapters.CustomerCardsAdapter;
+import com.mercadopago.callbacks.Callback;
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.examples.R;
 import com.mercadopago.examples.step2.SimpleVaultActivity;
+import com.mercadopago.model.ApiException;
 import com.mercadopago.model.CardToken;
 import com.mercadopago.model.Installment;
 import com.mercadopago.model.Issuer;
@@ -24,10 +26,6 @@ import com.mercadopago.views.MPTextView;
 
 import java.math.BigDecimal;
 import java.util.List;
-
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
 
 public class AdvancedVaultActivity extends SimpleVaultActivity {
 
@@ -315,7 +313,7 @@ public class AdvancedVaultActivity extends SimpleVaultActivity {
             LayoutUtil.showProgressLayout(mActivity);
             mMercadoPago.getInstallments(bin, amount, issuerId, paymentTypeId, new Callback<List<Installment>>() {
                 @Override
-                public void success(List<Installment> installments, Response response) {
+                public void success(List<Installment> installments) {
 
                     LayoutUtil.showRegularLayout(mActivity);
 
@@ -344,7 +342,7 @@ public class AdvancedVaultActivity extends SimpleVaultActivity {
                 }
 
                 @Override
-                public void failure(RetrofitError error) {
+                public void failure(ApiException error) {
 
                     mExceptionOnMethod = "getInstallmentsAsync";
                     ApiUtil.finishWithApiException(mActivity, error);
@@ -396,7 +394,7 @@ public class AdvancedVaultActivity extends SimpleVaultActivity {
 
         return new Callback<Token>() {
             @Override
-            public void success(Token o, Response response) {
+            public void success(Token o) {
 
                 Intent returnIntent = new Intent();
                 returnIntent.putExtra("token", o.getId());
@@ -410,7 +408,7 @@ public class AdvancedVaultActivity extends SimpleVaultActivity {
             }
 
             @Override
-            public void failure(RetrofitError error) {
+            public void failure(ApiException error) {
 
                 mExceptionOnMethod = "getCreateTokenCallback";
                 ApiUtil.finishWithApiException(mActivity, error);

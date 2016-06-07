@@ -7,41 +7,47 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.widget.Toast;
 
-import com.mercadopago.ErrorActivity;
 import com.mercadopago.R;
 import com.mercadopago.exceptions.MPException;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.Cause;
 
-import retrofit.RetrofitError;
+import retrofit2.Response;
 
 public class ApiUtil {
 
-    public static ApiException getApiException(RetrofitError error) {
+    public static <T> ApiException getApiException(Response<T> response) {
 
         ApiException apiException = null;
         try {
-            apiException = (ApiException) error.getBodyAs(ApiException.class);
-
+            String errorString = response.errorBody().string();
+            apiException = JsonUtil.getInstance().fromJson(errorString, ApiException.class);
         } catch (Exception ex) {
-            // do nothing
+            //Do nothing
+        } finally {
+            if(apiException == null) {
+                apiException = new ApiException();
+                apiException.setStatus(response.code());
+            }
         }
 
-        if (apiException == null) {
-            apiException = new ApiException();
-            try {
-                apiException.setMessage(error.getMessage());
-                apiException.setStatus(error.getResponse().getStatus());
 
-            } catch (Exception ex) {
-                // do nothing
-            }
+        return apiException;
+    }
+
+    public static ApiException getApiException(Throwable throwable) {
+
+        ApiException apiException = new ApiException();
+        try {
+            apiException.setMessage(throwable.getMessage());
+        } catch (Exception ex) {
+            // do nothing
         }
 
         return apiException;
     }
 
-    public static void finishWithApiException(Activity activity, RetrofitError error) {
+    public static void finishWithApiException(Activity activity, ApiException apiException) {
 
         if (!ApiUtil.checkConnection(activity)) {  // check for connection error
 
@@ -53,14 +59,13 @@ public class ApiUtil {
 
             // Return with api exception
             Intent intent = new Intent();
-            activity.setResult(activity.RESULT_CANCELED, intent);
-            ApiException apiException = getApiException(error);
+            activity.setResult(Activity.RESULT_CANCELED, intent);
             intent.putExtra("apiException", apiException);
             activity.finish();
         }
     }
 
-    public static void showApiExceptionError(Activity activity, RetrofitError error) {
+    public static void showApiExceptionError(Activity activity, ApiException apiException) {
         MPException mpException;
         String errorMessage;
 
@@ -69,14 +74,7 @@ public class ApiUtil {
             mpException = new MPException(errorMessage, true);
         }
         else {
-            ApiException apiException = getApiException(error);
-            if(apiException != null) {
-                mpException = new MPException(apiException);
-            }
-            else {
-                errorMessage = activity.getString(R.string.mpsdk_standard_error_message);
-                mpException = new MPException(errorMessage, error.getMessage(), true);
-            }
+            mpException = new MPException(apiException);
         }
         ErrorUtil.startErrorActivity(activity, mpException);
     }

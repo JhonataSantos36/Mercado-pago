@@ -9,19 +9,16 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.mercadopago.adapters.IssuersAdapter;
+import com.mercadopago.callbacks.Callback;
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.decorations.DividerItemDecoration;
+import com.mercadopago.model.ApiException;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.util.ApiUtil;
-import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;
 
 import java.util.List;
-
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
 
 public class    IssuersActivity extends AppCompatActivity {
 
@@ -91,7 +88,7 @@ public class    IssuersActivity extends AppCompatActivity {
         //TODO revisar si funciona con el bin vacio
         mercadoPago.getIssuers(mPaymentMethod.getId(),"", new Callback<List<Issuer>>() {
             @Override
-            public void success(List<Issuer> issuers, Response response) {
+            public void success(List<Issuer> issuers) {
                 mRecyclerView.setAdapter(new IssuersAdapter(issuers, new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -108,8 +105,8 @@ public class    IssuersActivity extends AppCompatActivity {
             }
 
             @Override
-            public void failure(RetrofitError error) {
-                ApiUtil.finishWithApiException(mActivity, error);
+            public void failure(ApiException apiException) {
+                ApiUtil.finishWithApiException(mActivity, apiException);
             }
         });
     }

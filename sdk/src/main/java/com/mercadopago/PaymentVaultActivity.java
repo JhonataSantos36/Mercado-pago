@@ -14,9 +14,11 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.mercadopago.adapters.PaymentMethodSearchItemAdapter;
+import com.mercadopago.callbacks.Callback;
 import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.callbacks.OnSelectedCallback;
 import com.mercadopago.core.MercadoPago;
+import com.mercadopago.model.ApiException;
 import com.mercadopago.model.DecorationPreference;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.PayerCost;
@@ -35,10 +37,6 @@ import com.mercadopago.views.MPTextView;
 
 import java.math.BigDecimal;
 import java.util.List;
-
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
 
 public class PaymentVaultActivity extends AppCompatActivity {
 
@@ -257,7 +255,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
         mMercadoPago.getPaymentMethodSearch(mAmount, excludedPaymentTypes, excludedPaymentMethodIds, new Callback<PaymentMethodSearch>() {
 
             @Override
-            public void success(PaymentMethodSearch paymentMethodSearch, Response response) {
+            public void success(PaymentMethodSearch paymentMethodSearch) {
                 if(mActivityActive) {
                     if (!paymentMethodSearch.hasSearchItems()) {
                         showEmptyPaymentMethodsError();
@@ -269,9 +267,9 @@ public class PaymentVaultActivity extends AppCompatActivity {
             }
 
             @Override
-            public void failure(RetrofitError error) {
+            public void failure(ApiException apiException) {
                 if (mActivityActive) {
-                    ApiUtil.showApiExceptionError(mActivity, error);
+                    ApiUtil.showApiExceptionError(mActivity, apiException);
                     mFailureRecovery = new FailureRecovery() {
                         @Override
                         public void recover() {

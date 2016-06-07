@@ -12,9 +12,11 @@ import android.widget.ImageView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.mercadopago.adapters.CustomerCardsAdapter;
+import com.mercadopago.callbacks.Callback;
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.core.MerchantServer;
 import com.mercadopago.examples.R;
+import com.mercadopago.model.ApiException;
 import com.mercadopago.model.Card;
 import com.mercadopago.model.CardToken;
 import com.mercadopago.model.Customer;
@@ -33,10 +35,6 @@ import com.mercadopago.views.MPTextView;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
-
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
 
 public class SimpleVaultActivity extends AppCompatActivity {
 
@@ -294,14 +292,14 @@ public class SimpleVaultActivity extends AppCompatActivity {
         LayoutUtil.showProgressLayout(mActivity);
         MerchantServer.getCustomer(this, mMerchantBaseUrl, mMerchantGetCustomerUri, mMerchantAccessToken, new Callback<Customer>() {
             @Override
-            public void success(Customer customer, Response response) {
+            public void success(Customer customer) {
 
                 mCards = getSupportedCustomerCards(customer.getCards());
                 LayoutUtil.showRegularLayout(mActivity);
             }
 
             @Override
-            public void failure(RetrofitError error) {
+            public void failure(ApiException error) {
 
                 mExceptionOnMethod = "getCustomerCardsAsync";
                 ApiUtil.finishWithApiException(mActivity, error);
@@ -442,7 +440,7 @@ public class SimpleVaultActivity extends AppCompatActivity {
 
         return new Callback<Token>() {
             @Override
-            public void success(Token token, Response response) {
+            public void success(Token token) {
 
                 Intent returnIntent = new Intent();
                 returnIntent.putExtra("token", token.getId());
@@ -452,7 +450,7 @@ public class SimpleVaultActivity extends AppCompatActivity {
             }
 
             @Override
-            public void failure(RetrofitError error) {
+            public void failure(ApiException error) {
 
                 mExceptionOnMethod = "getCreateTokenCallback";
                 ApiUtil.finishWithApiException(mActivity, error);

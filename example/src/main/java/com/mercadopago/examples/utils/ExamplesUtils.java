@@ -1,39 +1,30 @@
 package com.mercadopago.examples.utils;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.res.AssetManager;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.mercadopago.callbacks.Callback;
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.core.MerchantServer;
-import com.mercadopago.examples.R;
 import com.mercadopago.examples.step2.SimpleVaultActivity;
 import com.mercadopago.examples.step3.AdvancedVaultActivity;
 import com.mercadopago.examples.step1.CardActivity;
 import com.mercadopago.examples.step4.FinalVaultActivity;
-import com.mercadopago.model.CheckoutIntent;
-import com.mercadopago.model.CheckoutPreference;
+import com.mercadopago.model.ApiException;
 import com.mercadopago.model.Discount;
 import com.mercadopago.model.Item;
 import com.mercadopago.model.MerchantPayment;
 import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentPreference;
-import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;
 
-import java.io.InputStream;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.util.List;
-
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
 
 public class ExamplesUtils {
 
@@ -166,7 +157,7 @@ public class ExamplesUtils {
             // Create payment
             MerchantServer.createPayment(activity, DUMMY_MERCHANT_BASE_URL, DUMMY_MERCHANT_CREATE_PAYMENT_URI, payment, new Callback<Payment>() {
                 @Override
-                public void success(Payment payment, Response response) {
+                public void success(Payment payment) {
 
                     new MercadoPago.StartActivityBuilder()
                             .setActivity(activity)
@@ -176,7 +167,7 @@ public class ExamplesUtils {
                 }
 
                 @Override
-                public void failure(RetrofitError error) {
+                public void failure(ApiException error) {
                     LayoutUtil.showRegularLayout(activity);
                     Toast.makeText(activity, error.getMessage(), Toast.LENGTH_LONG).show();
                 }

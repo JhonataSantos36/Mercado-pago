@@ -2,33 +2,26 @@ package com.mercadopago;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 
 import com.mercadopago.adapters.CardIssuersAdapter;
+import com.mercadopago.callbacks.Callback;
 import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.listeners.RecyclerItemClickListener;
+import com.mercadopago.model.ApiException;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.ErrorUtil;
-import com.mercadopago.util.LayoutUtil;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
 
 public class CardIssuersActivity extends ShowCardActivity {
 
@@ -146,7 +139,7 @@ public class CardIssuersActivity extends ShowCardActivity {
         mMercadoPago.getIssuers(mCurrentPaymentMethod.getId(), mBin,
                 new Callback<List<Issuer>>() {
                     @Override
-                    public void success(List<Issuer> issuers, Response response) {
+                    public void success(List<Issuer> issuers) {
                         if (mActiveActivity) {
                             mProgressBar.setVisibility(View.GONE);
                             if (issuers.isEmpty()) {
@@ -161,7 +154,7 @@ public class CardIssuersActivity extends ShowCardActivity {
                     }
 
                     @Override
-                    public void failure(RetrofitError error) {
+                    public void failure(ApiException apiException) {
                         if (mActiveActivity) {
                             mProgressBar.setVisibility(View.GONE);
                             mFailureRecovery = new FailureRecovery() {
@@ -170,7 +163,7 @@ public class CardIssuersActivity extends ShowCardActivity {
                                     getIssuersAsync();
                                 }
                             };
-                            ApiUtil.showApiExceptionError(mActivity, error);
+                            ApiUtil.showApiExceptionError(mActivity, apiException);
                         }
                     }
                 });

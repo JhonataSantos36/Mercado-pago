@@ -5,8 +5,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import com.mercadopago.callbacks.Callback;
 import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.core.MercadoPago;
+import com.mercadopago.model.ApiException;
 import com.mercadopago.model.Installment;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.PayerCost;
@@ -22,10 +24,6 @@ import com.mercadopago.util.ErrorUtil;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
 
 
 public class CardVaultActivity extends ShowCardActivity {
@@ -202,7 +200,7 @@ public class CardVaultActivity extends ShowCardActivity {
             mMercadoPago.getInstallments(mBin, mAmount, mSelectedIssuer.getId(), mCurrentPaymentMethod.getId(),
                     new Callback<List<Installment>>() {
                         @Override
-                        public void success(List<Installment> installments, Response response) {
+                        public void success(List<Installment> installments) {
                             if (mActiveActivity) {
                                 if (installments.size() == 1) {
                                     if (installments.get(0).getPayerCosts().size() == 1) {
@@ -221,7 +219,7 @@ public class CardVaultActivity extends ShowCardActivity {
                         }
 
                         @Override
-                        public void failure(RetrofitError error) {
+                        public void failure(ApiException apiException) {
                             if (mActiveActivity) {
                                 mFailureRecovery = new FailureRecovery() {
                                     @Override
@@ -229,7 +227,7 @@ public class CardVaultActivity extends ShowCardActivity {
                                         checkStartInstallmentsActivity();
                                     }
                                 };
-                                ApiUtil.showApiExceptionError(mActivity, error);
+                                ApiUtil.showApiExceptionError(mActivity, apiException);
                             }
                         }
                     });

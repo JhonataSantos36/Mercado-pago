@@ -14,9 +14,10 @@ import android.widget.Spinner;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.mercadopago.adapters.IssuersSpinnerAdapter;
-import com.mercadopago.callbacks.PaymentMethodSelectionCallback;
+import com.mercadopago.callbacks.Callback;
 import com.mercadopago.controllers.PaymentMethodGuessingController;
 import com.mercadopago.core.MercadoPago;
+import com.mercadopago.model.ApiException;
 import com.mercadopago.model.CardToken;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.PaymentMethod;
@@ -26,10 +27,6 @@ import com.mercadopago.util.MercadoPagoUtil;
 
 import java.lang.reflect.Type;
 import java.util.List;
-
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
 
 public class OldGuessingNewCardActivity extends NewCardActivity {
 
@@ -106,14 +103,14 @@ public class OldGuessingNewCardActivity extends NewCardActivity {
     protected void getPaymentMethodsAsync() {
         mMercadoPago.getPaymentMethods(new Callback<List<PaymentMethod>>() {
             @Override
-            public void success(List<PaymentMethod> paymentMethods, Response response) {
+            public void success(List<PaymentMethod> paymentMethods) {
                 initializeGuessingCardNumberController(paymentMethods);
                 LayoutUtil.showRegularLayout(mActivity);
             }
 
             @Override
-            public void failure(RetrofitError error) {
-                error.printStackTrace();
+            public void failure(ApiException apiException) {
+                apiException.getMessage();
             }
         });
     }
@@ -332,13 +329,13 @@ public class OldGuessingNewCardActivity extends NewCardActivity {
         if (mPaymentMethod != null) {
             mMercadoPago.getIssuers(mPaymentMethod.getId(), "", new Callback<List<Issuer>>() {
                 @Override
-                public void success(List<Issuer> issuers, Response response) {
+                public void success(List<Issuer> issuers) {
                     populateIssuerSpinner(issuers);
                 }
 
                 @Override
-                public void failure(RetrofitError error) {
-                    error.printStackTrace();
+                public void failure(ApiException error) {
+
                 }
             });
         }

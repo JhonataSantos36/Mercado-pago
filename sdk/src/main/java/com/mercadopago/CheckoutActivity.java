@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.mercadopago.callbacks.Callback;
 import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.exceptions.CheckoutPreferenceException;
@@ -48,10 +49,6 @@ import com.mercadopago.views.MPTextView;
 import java.math.BigDecimal;
 
 import java.util.Calendar;
-
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
 
 import static android.text.TextUtils.isEmpty;
 
@@ -168,7 +165,7 @@ public class CheckoutActivity extends AppCompatActivity {
         showProgress();
         mMercadoPago.getPreference(mCheckoutPreferenceId, new Callback<CheckoutPreference>() {
             @Override
-            public void success(CheckoutPreference checkoutPreference, Response response) {
+            public void success(CheckoutPreference checkoutPreference) {
                 mCheckoutPreference = checkoutPreference;
                 if (mActiveActivity) {
                     try {
@@ -182,9 +179,9 @@ public class CheckoutActivity extends AppCompatActivity {
             }
 
             @Override
-            public void failure(RetrofitError error) {
+            public void failure(ApiException apiException) {
                 if (mActiveActivity) {
-                    ApiUtil.showApiExceptionError(mActivity, error);
+                    ApiUtil.showApiExceptionError(mActivity, apiException);
                     failureRecovery = new FailureRecovery() {
                         @Override
                         public void recover() {
@@ -344,7 +341,7 @@ public class CheckoutActivity extends AppCompatActivity {
         showProgress();
         mMercadoPago.getPaymentMethodSearch(mCheckoutPreference.getAmount(), mCheckoutPreference.getExcludedPaymentTypes(), mCheckoutPreference.getExcludedPaymentMethods(), new Callback<PaymentMethodSearch>() {
             @Override
-            public void success(PaymentMethodSearch paymentMethodSearch, Response response) {
+            public void success(PaymentMethodSearch paymentMethodSearch) {
                 mPaymentMethodSearch = paymentMethodSearch;
 
                 //TODO validate
@@ -356,7 +353,7 @@ public class CheckoutActivity extends AppCompatActivity {
             }
 
             @Override
-            public void failure(RetrofitError error) {
+            public void failure(ApiException apiException) {
                 if (mActiveActivity) {
                     failureRecovery = new FailureRecovery() {
                         @Override
@@ -364,7 +361,7 @@ public class CheckoutActivity extends AppCompatActivity {
                             getPaymentMethodSearch();
                         }
                     };
-                    ApiUtil.showApiExceptionError(mActivity, error);
+                    ApiUtil.showApiExceptionError(mActivity, apiException);
                 }
             }
         });
@@ -634,7 +631,7 @@ public class CheckoutActivity extends AppCompatActivity {
 
         mMercadoPago.createPayment(paymentIntent, new Callback<Payment>() {
             @Override
-            public void success(Payment payment, Response response) {
+            public void success(Payment payment) {
                 mCreatedPayment = payment;
 
                 //TODO validate
@@ -649,8 +646,8 @@ public class CheckoutActivity extends AppCompatActivity {
             }
 
             @Override
-            public void failure(RetrofitError error) {
-                resolvePaymentFailure(error);
+            public void failure(ApiException apiException) {
+                resolvePaymentFailure(apiException);
             }
         });
     }
@@ -745,33 +742,33 @@ public class CheckoutActivity extends AppCompatActivity {
         mTransactionId = null;
     }
 
-    private void resolvePaymentFailure(RetrofitError error) {
-        if(error.getResponse() != null) {
+    private void resolvePaymentFailure(ApiException apiException) {
+        //TODO REVISAR
+        if(apiException.getStatus() != null) {
             String serverErrorFirstDigit = String.valueOf(ApiUtil.StatusCodes.INTERNAL_SERVER_ERROR).substring(0, 1);
-            if (String.valueOf(error.getResponse().getStatus()).startsWith(serverErrorFirstDigit)
-                    && error.getResponse().getStatus() != ApiUtil.StatusCodes.PROCESSING) {
-                ApiUtil.showApiExceptionError(this, error);
+            if (String.valueOf(apiException.getStatus()).startsWith(serverErrorFirstDigit)
+                    && apiException.getStatus() != ApiUtil.StatusCodes.PROCESSING) {
+                ApiUtil.showApiExceptionError(this, apiException);
                 failureRecovery = new FailureRecovery() {
                     @Override
                     public void recover() {
                         createPayment();
                     }
                 };
-            } else if (error.getResponse().getStatus() == ApiUtil.StatusCodes.PROCESSING) {
+            } else if (apiException.getStatus() == ApiUtil.StatusCodes.PROCESSING) {
                 startPaymentInProcessActivity();
                 cleanTransactionId();
             }
-            else if (error.getResponse().getStatus() == ApiUtil.StatusCodes.BAD_REQUEST) {
-                ApiException apiException = ApiUtil.getApiException(error);
+            else if (apiException.getStatus() == ApiUtil.StatusCodes.BAD_REQUEST) {
                 MPException mpException = new MPException(apiException);
                 ErrorUtil.startErrorActivity(this, mpException);
             }
             else {
-                ApiUtil.showApiExceptionError(this, error);
+                ApiUtil.showApiExceptionError(this, apiException);
             }
         }
         else {
-            ApiUtil.showApiExceptionError(this, error);
+            ApiUtil.showApiExceptionError(this, apiException);
         }
         showRegularLayout();
     }

@@ -3,27 +3,23 @@ package com.mercadopago.examples.step6;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.Toast;
 
 import com.mercadopago.ExampleActivity;
+import com.mercadopago.callbacks.Callback;
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.core.MerchantServer;
 import com.mercadopago.examples.R;
 import com.mercadopago.examples.utils.ExamplesUtils;
 import com.mercadopago.exceptions.MPException;
+import com.mercadopago.model.ApiException;
 import com.mercadopago.model.CheckoutPreference;
-import com.mercadopago.model.DecorationPreference;
 import com.mercadopago.util.LayoutUtil;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
-
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
 
 public class Step6Activity extends ExampleActivity {
 
@@ -76,13 +72,13 @@ public class Step6Activity extends ExampleActivity {
         MerchantServer.createPreference(this, "http://private-9376e-paymentmethodsmla.apiary-mock.com/",
                 "merchantUri/merchant_preference", map, new Callback<CheckoutPreference>() {
             @Override
-            public void success(CheckoutPreference checkoutPreference, Response response) {
+            public void success(CheckoutPreference checkoutPreference) {
                 mCheckoutPreference = checkoutPreference;
                 startCheckoutActivity(mMerchantPublicKey);
             }
 
             @Override
-            public void failure(RetrofitError error) {
+            public void failure(ApiException error) {
                 Toast.makeText(mActivity, "Preference creation failed", Toast.LENGTH_LONG).show();
             }
         });
@@ -113,13 +109,13 @@ public class Step6Activity extends ExampleActivity {
         MerchantServer.createPreference(this, "http://private-9376e-paymentmethodsmla.apiary-mock.com/",
             "merchantUri/merchant_preference", map, new Callback<CheckoutPreference>() {
             @Override
-            public void success(CheckoutPreference checkoutPreference, Response response) {
+            public void success(CheckoutPreference checkoutPreference) {
                 mCheckoutPreference = checkoutPreference;
                 startCheckoutActivity(ExamplesUtils.DUMMY_MERCHANT_PUBLIC_KEY);
             }
 
             @Override
-            public void failure(RetrofitError error) {
+            public void failure(ApiException error) {
                 Toast.makeText(mActivity, "Preference creation failed", Toast.LENGTH_LONG).show();
             }
         });

@@ -1,30 +1,27 @@
 package com.mercadopago.services;
 
-import com.mercadopago.model.CheckoutIntent;
+import com.mercadopago.adapters.MPCall;
 import com.mercadopago.model.CheckoutPreference;
 import com.mercadopago.model.Customer;
-import com.mercadopago.model.Discount;
 import com.mercadopago.model.MerchantPayment;
 import com.mercadopago.model.Payment;
 
-import java.util.Dictionary;
 import java.util.Map;
 
-import retrofit.Callback;
-import retrofit.http.Body;
-import retrofit.http.EncodedPath;
-import retrofit.http.GET;
-import retrofit.http.POST;
-import retrofit.http.Query;
+import retrofit2.http.Body;
+import retrofit2.http.GET;
+import retrofit2.http.POST;
+import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface MerchantService {
 
     @GET("/{uri}")
-    void getCustomer(@EncodedPath("uri") String uri, @Query("merchant_access_token") String merchantAccessToken, Callback<Customer> callback);
+    MPCall<Customer> getCustomer(@Path(value="uri", encoded = true) String uri, @Query(value="merchant_access_token", encoded = true) String merchantAccessToken);
 
     @POST("/{uri}")
-    void createPayment(@EncodedPath("uri") String uri, @Body MerchantPayment body, Callback<Payment> callback);
+    MPCall<Payment> createPayment(@Path(value="uri", encoded = true) String uri, @Body MerchantPayment body);
 
     @POST("/{uri}")
-    void createPreference(@EncodedPath("uri") String uri, @Body Map<String, Object> body, Callback<CheckoutPreference> callback);
+    MPCall<CheckoutPreference> createPreference(@Path(value = "uri", encoded = true) String uri, @Body Map<String, Object> body);
 }
