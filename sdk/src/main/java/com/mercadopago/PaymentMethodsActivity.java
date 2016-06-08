@@ -53,7 +53,7 @@ public class PaymentMethodsActivity extends Activity {
         createPaymentMethodPreference();
 
         // Set recycler view
-        mRecyclerView = (RecyclerView) findViewById(R.id.payment_methods_list);
+        mRecyclerView = (RecyclerView) findViewById(R.id.mpsdkPaymentMethodsList);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
 
@@ -121,7 +121,7 @@ public class PaymentMethodsActivity extends Activity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.action_bank_deals) {
+        if (item.getItemId() == R.id.mpsdkActionBankDeals) {
             new MercadoPago.StartActivityBuilder()
                     .setActivity(this)
                     .setPublicKey(mMerchantPublicKey)

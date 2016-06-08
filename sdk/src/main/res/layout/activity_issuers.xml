@@ -8,13 +8,13 @@
     <include layout="@layout/view_progress_bar"/>
 
     <LinearLayout
-        android:id="@+id/regularLayout"
+        android:id="@+id/mpsdkRegularLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/issuers_list"
+            android:id="@+id/mpsdkIssuersList"
             android:scrollbars="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>

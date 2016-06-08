@@ -91,11 +91,11 @@ public class CardIssuersActivity extends ShowCardActivity {
     }
 
     protected void setLayout() {
-        mIssuersView = (RecyclerView) findViewById(R.id.activity_issuers_view);
-        mCardContainer = (FrameLayout) findViewById(R.id.activity_new_card_container);
-        mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
+        mIssuersView = (RecyclerView) findViewById(R.id.mpsdkActivityIssuersView);
+        mCardContainer = (FrameLayout) findViewById(R.id.mpsdkActivityNewCardContainer);
+        mProgressBar = (ProgressBar) findViewById(R.id.mpsdkProgressBar);
 
-        mCardBackground = findViewById(R.id.card_background);
+        mCardBackground = findViewById(R.id.mpsdkCardBackground);
         if(mDecorationPreference != null && mDecorationPreference.hasColors())
         {
             mCardBackground.setBackgroundColor(mDecorationPreference.getLighterColor());

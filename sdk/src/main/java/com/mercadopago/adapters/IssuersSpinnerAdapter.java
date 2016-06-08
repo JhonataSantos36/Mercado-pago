@@ -64,14 +64,14 @@ public class IssuersSpinnerAdapter extends BaseAdapter {
 
         Issuer issuer = mData.get(position);
 
-        MPTextView label = (MPTextView) row.findViewById(R.id.label);
+        MPTextView label = (MPTextView) row.findViewById(R.id.mpsdkLabel);
         label.setText(issuer.getName());
 
         return row;
     }
 
     public void setError(View v, String error) {
-        MPTextView name = (MPTextView) v.findViewById(R.id.label);
+        MPTextView name = (MPTextView) v.findViewById(R.id.mpsdkLabel);
         name.setError(error);
         mError = error;
     }

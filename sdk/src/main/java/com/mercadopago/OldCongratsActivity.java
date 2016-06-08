@@ -128,7 +128,7 @@ public class OldCongratsActivity extends AppCompatActivity {
     private void setDescription(Payment payment) {
 
         if (payment != null) {
-            MPTextView descriptionText = (MPTextView) findViewById(R.id.description);
+            MPTextView descriptionText = (MPTextView) findViewById(R.id.mpsdkDescription);
             if (payment.getStatus().equals("approved")) {
                 descriptionText.setText(getString(R.string.mpsdk_approved_message));
             } else if (payment.getStatus().equals("pending")) {
@@ -147,7 +147,7 @@ public class OldCongratsActivity extends AppCompatActivity {
             String formattedAmount = CurrenciesUtil.formatNumber(payment.getTransactionDetails().getTotalPaidAmount(),
                     payment.getCurrencyId());
             if (formattedAmount != null) {
-                MPTextView amount = (MPTextView) findViewById(R.id.amount);
+                MPTextView amount = (MPTextView) findViewById(R.id.mpsdkAmount);
                 amount.setText(formattedAmount);
             }
         }
@@ -156,14 +156,14 @@ public class OldCongratsActivity extends AppCompatActivity {
     private void setPaymentId(Payment payment) {
 
         if (payment.getId() != null) {
-            MPTextView paymentIdText = (MPTextView) findViewById(R.id.paymentId);
+            MPTextView paymentIdText = (MPTextView) findViewById(R.id.mpsdkPaymentId);
             paymentIdText.setText(Long.toString(payment.getId()));
         }
     }
 
     private void setPaymentMethodDescription(Payment payment) {
 
-        MPTextView paymentMethodText = (MPTextView) findViewById(R.id.paymentMethod);
+        MPTextView paymentMethodText = (MPTextView) findViewById(R.id.mpsdkPaymentMethod);
         if ((payment.getCard() != null) && (payment.getCard().getPaymentMethod() != null)) {
             paymentMethodText.setText(CustomerCardsAdapter.getPaymentMethodLabel(this,
                     payment.getCard().getPaymentMethod().getName(), payment.getCard().getLastFourDigits(), true));
@@ -181,7 +181,7 @@ public class OldCongratsActivity extends AppCompatActivity {
     private void setDateCreated(Payment payment) {
 
         if (payment.getDateCreated() != null) {
-            MPTextView dateCreatedText = (MPTextView) findViewById(R.id.dateCreated);
+            MPTextView dateCreatedText = (MPTextView) findViewById(R.id.mpsdkDateCreated);
             dateCreatedText.setText(MercadoPagoUtil.formatDate(this, payment.getDateCreated()));
         }
     }
@@ -189,7 +189,7 @@ public class OldCongratsActivity extends AppCompatActivity {
     private void setButtonText(Payment payment) {
 
         if (payment != null) {
-            MPButton button = (MPButton) findViewById(R.id.button);
+            MPButton button = (MPButton) findViewById(R.id.mpsdkButton);
             if (payment.getStatus().equals("pending")) {
                 button.setText(R.string.mpsdk_print_ticket_label);
                 mCouponUrl = payment.getTransactionDetails().getExternalResourceUrl();

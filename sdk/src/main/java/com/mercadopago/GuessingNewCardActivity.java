@@ -185,8 +185,8 @@ public class GuessingNewCardActivity extends FrontCardActivity {
     }
 
     private void initializeToolbar() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        mToolbarButton = (MPTextView) findViewById(R.id.buttonText);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.mpsdkToolbar);
+        mToolbarButton = (MPTextView) findViewById(R.id.mpsdkButtonText);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -264,37 +264,37 @@ public class GuessingNewCardActivity extends FrontCardActivity {
             mCardSideState = CARD_SIDE_FRONT;
             getSupportFragmentManager()
                     .beginTransaction()
-                    .add(R.id.activity_new_card_container, mFrontFragment)
+                    .add(R.id.mpsdkActivityNewCardContainer, mFrontFragment)
                     .commit();
         }
     }
 
     protected void setInputControls() {
-        mCardNumberEditText = (MPEditText) findViewById(R.id.cardNumber);
-        mCardHolderNameEditText = (MPEditText) findViewById(R.id.cardholderName);
-        mCardExpiryDateEditText = (MPEditText) findViewById(R.id.cardExpiryDate);
-        mCardSecurityCodeEditText = (MPEditText) findViewById(R.id.cardSecurityCode);
-        mCardIdentificationNumberEditText = (MPEditText) findViewById(R.id.cardIdentificationNumber);
-        mSecurityCodeEditView = (LinearLayout) findViewById(R.id.cardSecurityCodeContainer);
-        mInputContainer = (LinearLayout) findViewById(R.id.newCardInputContainer);
-        mIdentificationTypeSpinner = (Spinner) findViewById(R.id.cardIdentificationType);
-        mIdentificationTypeContainer = (LinearLayout) findViewById(R.id.cardIdentificationTypeContainer);
-        mIdentificationNumberContainer = (LinearLayout) findViewById(R.id.cardIdentificationNumberContainer);
-        mHorizontalScrollView = (HorizontalScrollView) findViewById(R.id.horizontalScrollViewContainer);
-        mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
-        mBackButton = (FrameLayout) findViewById(R.id.backButton);
-        mNextButton = (FrameLayout) findViewById(R.id.nextButton);
-        mBackInactiveButton = (FrameLayout) findViewById(R.id.backInactiveButton);
-        mButtonContainer = (LinearLayout) findViewById(R.id.buttonContainer);
-        mErrorContainer = (FrameLayout) findViewById(R.id.errorContainer);
-        mBackButtonText = (MPTextView) findViewById(R.id.backButtonText);
-        mErrorTextView = (MPTextView) findViewById(R.id.errorTextView);
+        mCardNumberEditText = (MPEditText) findViewById(R.id.mpsdkCardNumber);
+        mCardHolderNameEditText = (MPEditText) findViewById(R.id.mpsdkCardholderName);
+        mCardExpiryDateEditText = (MPEditText) findViewById(R.id.mpsdkCardExpiryDate);
+        mCardSecurityCodeEditText = (MPEditText) findViewById(R.id.mpsdkCardSecurityCode);
+        mCardIdentificationNumberEditText = (MPEditText) findViewById(R.id.mpsdkCardIdentificationNumber);
+        mSecurityCodeEditView = (LinearLayout) findViewById(R.id.mpsdkCardSecurityCodeContainer);
+        mInputContainer = (LinearLayout) findViewById(R.id.mpsdkNewCardInputContainer);
+        mIdentificationTypeSpinner = (Spinner) findViewById(R.id.mpsdkCardIdentificationType);
+        mIdentificationTypeContainer = (LinearLayout) findViewById(R.id.mpsdkCardIdentificationTypeContainer);
+        mIdentificationNumberContainer = (LinearLayout) findViewById(R.id.mpsdkCardIdentificationNumberContainer);
+        mHorizontalScrollView = (HorizontalScrollView) findViewById(R.id.mpsdkHorizontalScrollViewContainer);
+        mProgressBar = (ProgressBar) findViewById(R.id.mpsdkProgressBar);
+        mBackButton = (FrameLayout) findViewById(R.id.mpsdkBackButton);
+        mNextButton = (FrameLayout) findViewById(R.id.mpsdkNextButton);
+        mBackInactiveButton = (FrameLayout) findViewById(R.id.mpsdkBackInactiveButton);
+        mButtonContainer = (LinearLayout) findViewById(R.id.mpsdkButtonContainer);
+        mErrorContainer = (FrameLayout) findViewById(R.id.mpsdkErrorContainer);
+        mBackButtonText = (MPTextView) findViewById(R.id.mpsdkBackButtonText);
+        mErrorTextView = (MPTextView) findViewById(R.id.mpsdkErrorTextView);
         mProgressBar.setVisibility(View.GONE);
         mIdentificationTypeContainer.setVisibility(View.GONE);
         mIdentificationNumberContainer.setVisibility(View.GONE);
         mButtonContainer.setVisibility(View.VISIBLE);
 
-        mCardBackground = findViewById(R.id.card_background);
+        mCardBackground = findViewById(R.id.mpsdkCardBackground);
 
         if(mDecorationPreference != null && mDecorationPreference.hasColors())
         {
@@ -664,7 +664,7 @@ public class GuessingNewCardActivity extends FrontCardActivity {
                 .beginTransaction()
                 .setCustomAnimations(R.anim.slide_right_to_left_in_slower, R.anim.slide_right_to_left_out_slower,
                         R.anim.slide_left_to_right_in_slower, R.anim.slide_left_to_right_out_slower)
-                .replace(R.id.activity_new_card_container, mCardIdentificationFragment)
+                .replace(R.id.mpsdkActivityNewCardContainer, mCardIdentificationFragment)
                 .addToBackStack(null)
                 .commit();
     }
@@ -675,7 +675,7 @@ public class GuessingNewCardActivity extends FrontCardActivity {
                 .beginTransaction()
                 .setCustomAnimations(R.anim.from_middle_left, R.anim.to_middle_left,
                         R.anim.from_middle_left, R.anim.to_middle_left)
-                .replace(R.id.activity_new_card_container, mBackFragment)
+                .replace(R.id.mpsdkActivityNewCardContainer, mBackFragment)
                 .addToBackStack(null)
                 .commit();
     }

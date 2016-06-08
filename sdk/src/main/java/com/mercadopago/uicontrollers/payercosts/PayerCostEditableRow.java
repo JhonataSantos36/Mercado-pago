@@ -89,11 +89,11 @@ public class PayerCostEditableRow implements PayerCostViewController {
 
     @Override
     public void initializeControls() {
-        mInstallmentsTextView = (TextView) mView.findViewById(R.id.installments_text);
-        mZeroRateText = (TextView) mView.findViewById(R.id.installments_zero_rate);
-        mRateText = (TextView) mView.findViewById(R.id.installments_with_rate);
-        mEditHint = mView.findViewById(R.id.editHint);
-        mSeparator = mView.findViewById(R.id.separator);
+        mInstallmentsTextView = (TextView) mView.findViewById(R.id.mpsdkInstallmentsText);
+        mZeroRateText = (TextView) mView.findViewById(R.id.mpsdkInstallmentsZeroRate);
+        mRateText = (TextView) mView.findViewById(R.id.mpsdkInstallmentsWithRate);
+        mEditHint = mView.findViewById(R.id.mpsdkEditHint);
+        mSeparator = mView.findViewById(R.id.mpsdkSeparator);
         mSeparator.setVisibility(View.GONE);
         mEditHint.setVisibility(View.GONE);
     }

@@ -55,8 +55,8 @@ public class CardBackFragment extends android.support.v4.app.Fragment {
 
     public void setCardInputViews() {
         if (getView() != null) {
-            mCardSecurityCodeTextView = (MPTextView) getView().findViewById(R.id.cardSecurityCodeView);
-            mCardBorder = (ImageView) getView().findViewById(R.id.card_shadow_border);
+            mCardSecurityCodeTextView = (MPTextView) getView().findViewById(R.id.mpsdkCardSecurityCodeView);
+            mCardBorder = (ImageView) getView().findViewById(R.id.mpsdkCardShadowBorder);
             decorate();
         }
     }

@@ -39,10 +39,10 @@ public class PaymentMethodSearchRow implements PaymentMethodSearchViewController
     }
 
     public void initializeControls() {
-        mDescription = (MPTextView) mView.findViewById(R.id.description);
-        mComment = (MPTextView) mView.findViewById(R.id.comment);
-        mIcon = (ImageView) mView.findViewById(R.id.image);
-        mSeparator = mView.findViewById(R.id.separator);
+        mDescription = (MPTextView) mView.findViewById(R.id.mpsdkDescription);
+        mComment = (MPTextView) mView.findViewById(R.id.mpsdkComment);
+        mIcon = (ImageView) mView.findViewById(R.id.mpsdkImage);
+        mSeparator = mView.findViewById(R.id.mpsdkSeparator);
 
         mSeparator.setVisibility(View.GONE);
     }

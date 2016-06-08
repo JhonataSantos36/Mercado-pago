@@ -52,9 +52,9 @@ public class AdvancedVaultActivity extends SimpleVaultActivity {
 
         if (mAmount != null) {
 
-            mInstallmentsCard = findViewById(com.mercadopago.R.id.installmentsCard);
-            mInstallmentsLayout = (FrameLayout) findViewById(R.id.installmentsLayout);
-            mInstallmentsText = (MPTextView) findViewById(R.id.installmentsLabel);
+            mInstallmentsCard = findViewById(com.mercadopago.R.id.mpsdkInstallmentsCard);
+            mInstallmentsLayout = (FrameLayout) findViewById(R.id.mpsdkInstallmentsLayout);
+            mInstallmentsText = (MPTextView) findViewById(R.id.mpsdkInstallmentsLabel);
             mInstallmentsCard.setVisibility(View.GONE);
 
         } else {

@@ -13,14 +13,14 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
              <RelativeLayout
-                android:id="@+id/paymentMethodLayout"
+                android:id="@+id/mpsdkPaymentMethodLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/mpsdk_white_background"
                 xmlns:android="http://schemas.android.com/apk/res/android">
             </RelativeLayout>
             <RelativeLayout
-                android:id="@+id/payerCostLayout"
+                android:id="@+id/mpsdkPayerCostLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/mpsdk_white_background"
@@ -38,7 +38,7 @@
                 android:minHeight="45dp">
 
                 <com.mercadopago.views.MPTextView
-                    android:id="@+id/totalAmountText"
+                    android:id="@+id/mpsdkTotalAmountText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     tools:text="Total a pagar $ 1000,00"
@@ -50,7 +50,7 @@
                 android:background="@drawable/drop_shadow">
             </View>
             <com.mercadopago.views.MPTextView
-                android:id="@+id/termsAndConditions"
+                android:id="@+id/mpsdkTermsAndConditions"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="5dp"
                 android:layout_height="wrap_content"
@@ -65,7 +65,7 @@
                 style="@style/small_comment"/>
 
             <com.mercadopago.views.MPButton
-                android:id="@+id/payButton"
+                android:id="@+id/mpsdkPayButton"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/mpsdk_button_height"
                 android:text="@string/mpsdk_pay_button_text"
@@ -73,6 +73,7 @@
                 style="@style/mpsdk_button_normal"/>
 
             <com.mercadopago.views.MPTextView
+                android:id="@+id/mpsdkCancelTextView"
                 android:layout_marginTop="20dp"
                 android:paddingLeft="40dp"
                 android:paddingRight="40dp"
@@ -83,7 +84,6 @@
                 android:layout_height="wrap_content"
                 android:text="@string/mpsdk_cancel_payment"
                 android:textColor="@color/mpsdk_color_link"
-                android:textSize="@dimen/mpsdk_small_text"
-                android:id="@+id/cancelTextView"/>
+                android:textSize="@dimen/mpsdk_small_text"/>
         </LinearLayout>
 </android.support.v4.widget.NestedScrollView>

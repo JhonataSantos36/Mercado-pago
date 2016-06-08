@@ -50,11 +50,11 @@ public class ErrorActivity extends AppCompatActivity {
     }
 
     private void initializeControls() {
-        this.mRefreshLayout = (ViewGroup) findViewById(R.id.refreshLayout);
-        this.mErrorMessageTextView = (TextView) findViewById(R.id.errorMessage);
-        this.mRetryTextView = (TextView) findViewById(R.id.errorRetry);
-        this.mRetryTextView = (TextView) findViewById(R.id.errorRetry);
-        this.mErrorImageView = (ImageView) findViewById(R.id.errorImage);
+        this.mRefreshLayout = (ViewGroup) findViewById(R.id.mpsdkRefreshLayout);
+        this.mErrorMessageTextView = (TextView) findViewById(R.id.mpsdkErrorMessage);
+        this.mRetryTextView = (TextView) findViewById(R.id.mpsdkErrorRetry);
+        this.mRetryTextView = (TextView) findViewById(R.id.mpsdkErrorRetry);
+        this.mErrorImageView = (ImageView) findViewById(R.id.mpsdkErrorImage);
     }
 
     private void fillData() {

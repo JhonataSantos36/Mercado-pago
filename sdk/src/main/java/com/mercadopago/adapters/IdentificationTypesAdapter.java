@@ -53,7 +53,7 @@ public class IdentificationTypesAdapter extends BaseAdapter {
 
         IdentificationType identificationType = mData.get(position);
 
-        MPTextView label = (MPTextView) row.findViewById(R.id.label);
+        MPTextView label = (MPTextView) row.findViewById(R.id.mpsdkLabel);
         label.setText(identificationType.getName());
 
         return row;

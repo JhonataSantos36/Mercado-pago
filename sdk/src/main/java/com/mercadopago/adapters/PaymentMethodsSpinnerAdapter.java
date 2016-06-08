@@ -63,14 +63,14 @@ public class PaymentMethodsSpinnerAdapter extends BaseAdapter {
 
         PaymentMethod pm = mData.get(position);
 
-        MPTextView label = (MPTextView) row.findViewById(R.id.label);
+        MPTextView label = (MPTextView) row.findViewById(R.id.mpsdkLabel);
         label.setText(pm.getName());
 
         return row;
     }
 
     public void setError(View v, String error) {
-        MPTextView label = (MPTextView) v.findViewById(R.id.label);
+        MPTextView label = (MPTextView) v.findViewById(R.id.mpsdkLabel);
         label.setError(error);
         mError = error;
     }

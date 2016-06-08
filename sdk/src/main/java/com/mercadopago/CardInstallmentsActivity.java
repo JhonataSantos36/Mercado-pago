@@ -99,10 +99,10 @@ public class CardInstallmentsActivity extends ShowCardActivity {
     }
 
     protected void setLayout() {
-        mInstallmentsView = (RecyclerView) findViewById(R.id.activity_installments_view);
-        mCardContainer = (FrameLayout) findViewById(R.id.activity_new_card_container);
-        mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
-        mCardBackground = findViewById(R.id.card_background);
+        mInstallmentsView = (RecyclerView) findViewById(R.id.mpsdkActivityInstallmentsView);
+        mCardContainer = (FrameLayout) findViewById(R.id.mpsdkActivityNewCardContainer);
+        mProgressBar = (ProgressBar) findViewById(R.id.mpsdkProgressBar);
+        mCardBackground = findViewById(R.id.mpsdkCardBackground);
 
         if(mDecorationPreference != null && mDecorationPreference.hasColors())
         {

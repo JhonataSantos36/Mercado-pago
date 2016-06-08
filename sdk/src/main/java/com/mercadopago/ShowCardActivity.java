@@ -84,8 +84,8 @@ public abstract class ShowCardActivity extends FrontCardActivity {
     }
 
     protected void initializeToolbarWithTitle(String title) {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        mToolbarTitle = (MPTextView) findViewById(R.id.title);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.mpsdkToolbar);
+        mToolbarTitle = (MPTextView) findViewById(R.id.mpsdkTitle);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -144,7 +144,7 @@ public abstract class ShowCardActivity extends FrontCardActivity {
         }
         getSupportFragmentManager()
                 .beginTransaction()
-                .add(R.id.activity_new_card_container, mFrontFragment)
+                .add(R.id.mpsdkActivityNewCardContainer, mFrontFragment)
                 .commit();
     }
 

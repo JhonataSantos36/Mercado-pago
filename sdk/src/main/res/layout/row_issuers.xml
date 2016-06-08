@@ -6,10 +6,10 @@
     android:layout_marginTop="5dp">
 
     <LinearLayout
-        android:id="@+id/issuersItem"
+        android:id="@+id/mpsdkIssuersItem"
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/list_item_height"
+        android:layout_height="@dimen/mpsdk_list_item_height"
         android:weightSum="1">
 
         <LinearLayout
@@ -21,7 +21,7 @@
             android:layout_gravity="center_vertical"
             android:orientation="horizontal">
             <com.mercadopago.views.MPTextView
-                android:id="@+id/adapter_issuers_text"
+                android:id="@+id/mpsdkAdapterIssuersText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
@@ -33,19 +33,19 @@
         </LinearLayout>
 
         <ImageView
+            android:id="@+id/mpsdkEditHint"
             android:layout_width="15dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:src="@drawable/arrow_right"
-            android:adjustViewBounds="true"
-            android:id="@+id/editHint"/>
+            android:adjustViewBounds="true"/>
 
 
     </LinearLayout>
     <View
+        android:id="@+id/mpsdkSeparator"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:id="@+id/separator"
         android:background="@color/mpsdk_separator"/>
 
 

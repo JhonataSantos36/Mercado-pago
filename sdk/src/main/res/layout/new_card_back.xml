@@ -3,14 +3,14 @@
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/activity_new_card_container"
+    android:id="@+id/mpsdkActivityNewCardContainer"
     android:layout_height="171dp"
     android:layout_width="wrap_content"
     android:layout_gravity="center_horizontal">
 
 
     <FrameLayout
-        android:id="@+id/activity_new_card_form_color_back"
+        android:id="@+id/mpsdkActivityNewCardFormColorBack"
         android:layout_width="256dp"
         android:layout_height="161dp"
         android:layout_gravity="center"
@@ -42,7 +42,7 @@
                     android:layout_gravity="end"
                     android:background="@drawable/card_back_ccv">
                     <com.mercadopago.views.MPTextView
-                        android:id="@+id/cardSecurityCodeView"
+                        android:id="@+id/mpsdkCardSecurityCodeView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -65,7 +65,7 @@
     </FrameLayout>
 
     <ImageView
-        android:id="@+id/card_shadow_border"
+        android:id="@+id/mpsdkCardShadowBorder"
         android:layout_width="266dp"
         android:layout_height="171dp"
         android:layout_gravity="center"

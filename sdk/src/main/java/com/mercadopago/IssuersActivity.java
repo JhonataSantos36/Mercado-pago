@@ -46,7 +46,7 @@ public class    IssuersActivity extends AppCompatActivity {
         }
 
         // Set recycler view
-        mRecyclerView = (RecyclerView) findViewById(R.id.issuers_list);
+        mRecyclerView = (RecyclerView) findViewById(R.id.mpsdkIssuersList);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
 

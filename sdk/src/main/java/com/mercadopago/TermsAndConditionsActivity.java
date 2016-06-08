@@ -49,7 +49,7 @@ public class TermsAndConditionsActivity extends AppCompatActivity {
     }
 
     private void initializeToolbar() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.mpsdkToolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -67,7 +67,7 @@ public class TermsAndConditionsActivity extends AppCompatActivity {
                 }
             }
             if(mDecorationPreference.isDarkFontEnabled()) {
-                TextView title = (TextView) findViewById(R.id.title);
+                TextView title = (TextView) findViewById(R.id.mpsdkTitle);
                 title.setTextColor(mDecorationPreference.getDarkFontColor(this));
             }
         }
@@ -112,15 +112,15 @@ public class TermsAndConditionsActivity extends AppCompatActivity {
     }
 
     private void showBankDealsTermsAndConditions() {
-        MPTextView termsAndConditions = (MPTextView) findViewById(R.id.termsAndConditions);
+        MPTextView termsAndConditions = (MPTextView) findViewById(R.id.mpsdkTermsAndConditions);
         termsAndConditions.setText(getIntent().getStringExtra("termsAndConditions"));
     }
 
     private void initializeControls() {
-        mBankDealsTermsAndConditionsView = findViewById(R.id.bankDealsTermsAndConditions);
-        mProgressbar = (ProgressBar) findViewById(R.id.progressBar);
-        mMPTermsAndConditionsView = findViewById(R.id.MPTermsAndConditions);
-        mTermsAndConditionsWebView = (WebView) findViewById(R.id.termsAndConditionsWebView);
+        mBankDealsTermsAndConditionsView = findViewById(R.id.mpsdkBankDealsTermsAndConditions);
+        mProgressbar = (ProgressBar) findViewById(R.id.mpsdkProgressBar);
+        mMPTermsAndConditionsView = findViewById(R.id.mpsdkMPTermsAndConditions);
+        mTermsAndConditionsWebView = (WebView) findViewById(R.id.mpsdkTermsAndConditionsWebView);
         mTermsAndConditionsWebView.setVerticalScrollBarEnabled(true);
         mTermsAndConditionsWebView.setHorizontalScrollBarEnabled(true);
     }

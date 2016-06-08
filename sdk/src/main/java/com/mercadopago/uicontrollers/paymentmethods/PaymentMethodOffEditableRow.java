@@ -86,11 +86,11 @@ public class PaymentMethodOffEditableRow implements PaymentMethodViewController 
 
     @Override
     public void initializeControls() {
-        mComment = (MPTextView) mView.findViewById(R.id.comment);
-        mDescription = (MPTextView) mView.findViewById(R.id.description);
-        mIcon = (ImageView) mView.findViewById(R.id.image);
-        mEditHint = mView.findViewById(R.id.editHint);
-        mSeparator = mView.findViewById(R.id.separator);
+        mComment = (MPTextView) mView.findViewById(R.id.mpsdkComment);
+        mDescription = (MPTextView) mView.findViewById(R.id.mpsdkDescription);
+        mIcon = (ImageView) mView.findViewById(R.id.mpsdkImage);
+        mEditHint = mView.findViewById(R.id.mpsdkEditHint);
+        mSeparator = mView.findViewById(R.id.mpsdkSeparator);
 
         mEditHint.setVisibility(View.GONE);
         mSeparator.setVisibility(View.GONE);

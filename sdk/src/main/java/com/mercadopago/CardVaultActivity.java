@@ -64,7 +64,7 @@ public class CardVaultActivity extends ShowCardActivity {
     }
 
     private void initializeActivityControls() {
-        mCardBackground = findViewById(R.id.card_background);
+        mCardBackground = findViewById(R.id.mpsdkCardBackground);
 
         if(mDecorationPreference != null && mDecorationPreference.hasColors())
         {

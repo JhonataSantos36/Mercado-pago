@@ -1,7 +1,6 @@
 <FrameLayout
     android:layout_width="fill_parent"
     android:layout_height="?android:attr/listPreferredItemHeight"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
     android:paddingLeft="10dp"
     android:paddingRight="10dp"
@@ -11,7 +10,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
         <com.mercadopago.views.MPTextView
-            android:id="@+id/label"
+            android:id="@+id/mpsdkLabel"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center_vertical"

@@ -58,11 +58,11 @@ public class CardIdentificationFragment extends android.support.v4.app.Fragment 
     }
 
     public void setCardInputViews() {
-        mCardIdentificationNumberEditText = (MPEditText) getActivity().findViewById(R.id.cardIdentificationNumber);
+        mCardIdentificationNumberEditText = (MPEditText) getActivity().findViewById(R.id.mpsdkCardIdentificationNumber);
         mCardIdentificationNumberEditText.requestFocus();
         if (getView() != null) {
-            mBaseIdNumberView = (MPTextView) getView().findViewById(R.id.identificationCardholderContainer);
-            mCardIdentificationNumberView = (MPTextView) getView().findViewById(R.id.idNumberView);
+            mBaseIdNumberView = (MPTextView) getView().findViewById(R.id.mpsdkIdentificationCardholderContainer);
+            mCardIdentificationNumberView = (MPTextView) getView().findViewById(R.id.mpsdkIdNumberView);
         }
     }
 

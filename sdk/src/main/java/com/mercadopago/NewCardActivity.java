@@ -108,23 +108,23 @@ public class NewCardActivity extends AppCompatActivity {
     }
 
     protected void setInputControls() {
-        mCardNumber = (MPEditText) findViewById(R.id.cardNumber);
-        mCardHolderName = (MPEditText) findViewById(R.id.cardholderName);
-        mIdentificationNumber = (MPEditText) findViewById(R.id.identificationNumber);
-        mIdentificationType = (Spinner) findViewById(R.id.identificationType);
-        mIdentificationLayout = (RelativeLayout) findViewById(R.id.identificationLayout);
-        mSecurityCodeLayout = (RelativeLayout) findViewById(R.id.securityCodeLayout);
-        mCVVImage = (ImageView) findViewById(R.id.cVVImage);
-        mCVVDescriptor = (MPTextView) findViewById(R.id.cVVDescriptor);
-        mSecurityCode = (MPEditText) findViewById(R.id.securityCode);
-        mExpiryError = (MPTextView) findViewById(R.id.expiryError);
-        mExpiryMonth = (MPEditText) findViewById(R.id.expiryMonth);
-        mExpiryYear = (MPEditText) findViewById(R.id.expiryYear);
+        mCardNumber = (MPEditText) findViewById(R.id.mpsdkCardNumber);
+        mCardHolderName = (MPEditText) findViewById(R.id.mpsdkCardholderName);
+        mIdentificationNumber = (MPEditText) findViewById(R.id.mpsdkIdentificationNumber);
+        mIdentificationType = (Spinner) findViewById(R.id.mpsdkIdentificationType);
+        mIdentificationLayout = (RelativeLayout) findViewById(R.id.mpsdkIdentificationLayout);
+        mSecurityCodeLayout = (RelativeLayout) findViewById(R.id.mpsdkSecurityCodeLayout);
+        mCVVImage = (ImageView) findViewById(R.id.mpsdkCVVImage);
+        mCVVDescriptor = (MPTextView) findViewById(R.id.mpsdkCVVDescriptor);
+        mSecurityCode = (MPEditText) findViewById(R.id.mpsdkSecurityCode);
+        mExpiryError = (MPTextView) findViewById(R.id.mpsdkExpiryError);
+        mExpiryMonth = (MPEditText) findViewById(R.id.mpsdkExpiryMonth);
+        mExpiryYear = (MPEditText) findViewById(R.id.mpsdkExpiryYear);
     }
 
     protected void setPaymentMethodImage() {
         if (mPaymentMethod.getId() != null) {
-            ImageView pmImage = (ImageView) findViewById(R.id.pmImage);
+            ImageView pmImage = (ImageView) findViewById(R.id.mpsdkPmImage);
             if (pmImage != null) {
                 pmImage.setImageResource(MercadoPagoUtil.getPaymentMethodIcon(this, mPaymentMethod.getId()));
             }
@@ -145,8 +145,8 @@ public class NewCardActivity extends AppCompatActivity {
     }
 
     protected void setFocusOrder() {
-        mCardNumber.setNextFocusDownId(R.id.expiryMonth);
-        mExpiryMonth.setNextFocusDownId(R.id.expiryYear);
+        mCardNumber.setNextFocusDownId(R.id.mpsdkExpiryMonth);
+        mExpiryMonth.setNextFocusDownId(R.id.mpsdkExpiryYear);
     }
 
     @Override

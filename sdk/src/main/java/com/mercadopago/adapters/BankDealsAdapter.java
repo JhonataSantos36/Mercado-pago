@@ -30,9 +30,9 @@ public class BankDealsAdapter extends  RecyclerView.Adapter<BankDealsAdapter.Vie
         public ViewHolder(View v, View.OnClickListener listener) {
 
             super(v);
-            mBankDescView = (MPTextView) v.findViewById(R.id.bank_desc);
-            mBankImageView = (ImageView) v.findViewById(R.id.bank_img);
-            mInstallmentsView = (MPTextView) v.findViewById(R.id.installments);
+            mBankDescView = (MPTextView) v.findViewById(R.id.mpsdkBankDesc);
+            mBankImageView = (ImageView) v.findViewById(R.id.mpsdkBankImg);
+            mInstallmentsView = (MPTextView) v.findViewById(R.id.mpsdkInstallments);
             if (listener != null) {
                 v.setOnClickListener(listener);
             }
