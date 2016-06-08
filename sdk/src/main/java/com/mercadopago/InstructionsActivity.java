@@ -22,6 +22,7 @@ import com.mercadopago.model.InstructionActionInfo;
 import com.mercadopago.model.InstructionReference;
 import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentMethod;
+import com.mercadopago.mptracker.MPTracker;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.CurrenciesUtil;
 import com.mercadopago.util.ErrorUtil;
@@ -78,12 +79,14 @@ public class InstructionsActivity extends AppCompatActivity {
         mMercadoPago.getInstructions(mPayment.getId(), mPaymentMethod.getPaymentTypeId(), new Callback<Instruction>() {
             @Override
             public void success(Instruction instruction) {
+                MPTracker.getInstance().trackEvent( "INSTRUCTIONS", "GET_INSTRUCTION_RESPONSE", "SUCCESS", "2", mMerchantPublicKey, "MLA", "1.0", mActivity);
                 showInstructions(instruction);
                 LayoutUtil.showRegularLayout(mActivity);
             }
 
             @Override
             public void failure(ApiException apiException) {
+                MPTracker.getInstance().trackEvent( "INSTRUCTIONS", "GET_INSTRUCTION_RESPONSE", "FAIL", "2", mMerchantPublicKey, "MLA", "1.0", mActivity);
                 if (mActiveActivity) {
                     ApiUtil.showApiExceptionError(mActivity, apiException);
                     failureRecovery = new FailureRecovery() {
@@ -98,6 +101,8 @@ public class InstructionsActivity extends AppCompatActivity {
     }
 
     protected void showInstructions(Instruction instruction) {
+        MPTracker.getInstance().trackScreen( "INSTRUCTIONS", "2", mMerchantPublicKey, "MLA", "1.0", this);
+
         setTitle(instruction.getTitle());
         setInformationMessages(instruction);
         setReferencesInformation(instruction);
@@ -270,6 +275,7 @@ public class InstructionsActivity extends AppCompatActivity {
             super.onBackPressed();
         }
         else {
+            MPTracker.getInstance().trackEvent("INSTRUCTION", "BACK_PRESSED", "2", mMerchantPublicKey, "MLA", "1.0", this);
             Snackbar.make(mTertiaryInfo, getString(R.string.mpsdk_press_again_to_leave), Snackbar.LENGTH_LONG).show();
             mBackPressedOnce = true;
             resetBackPressedOnceIn(4000);

@@ -20,6 +20,7 @@ import com.mercadopago.model.Installment;
 import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.PaymentPreference;
 import com.mercadopago.model.Site;
+import com.mercadopago.mptracker.MPTracker;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.ErrorUtil;
 
@@ -95,6 +96,7 @@ public class CardInstallmentsActivity extends ShowCardActivity {
     }
 
     protected void setContentView() {
+        MPTracker.getInstance().trackScreen( "CARD_INSTALLMENTS", "2", mPublicKey, "MLA", "1.0", this);
         setContentView(R.layout.activity_new_installments);
     }
 
@@ -154,6 +156,7 @@ public class CardInstallmentsActivity extends ShowCardActivity {
                 new Callback<List<Installment>>() {
                     @Override
                     public void success(List<Installment> installments) {
+                        MPTracker.getInstance().trackEvent("CARD_INSTALLMENTS", "GET_INSTALLMENTS_RESPONSE", "SUCCESS", "2",mPublicKey, "MLA", "1.0", mActivity);
                         if (mActiveActivity) {
                             mProgressBar.setVisibility(View.GONE);
                             if (installments.size() == 0) {
@@ -168,6 +171,7 @@ public class CardInstallmentsActivity extends ShowCardActivity {
 
                     @Override
                     public void failure(ApiException apiException) {
+                        MPTracker.getInstance().trackEvent("CARD_INSTALLMENTS", "GET_INSTALLMENTS_RESPONSE", "FAIL", "2",mPublicKey, "MLA", "1.0", mActivity);
                         if (mActiveActivity) {
                             mProgressBar.setVisibility(View.GONE);
                             mFailureRecovery = new FailureRecovery() {
@@ -209,6 +213,8 @@ public class CardInstallmentsActivity extends ShowCardActivity {
 
     @Override
     public void onBackPressed() {
+        MPTracker.getInstance().trackEvent("CARD_INSTALLMENTS", "BACK_PRESSED", "2", mPublicKey, "MLA", "1.0", this);
+
         Intent returnIntent = new Intent();
         returnIntent.putExtra("backButtonPressed", true);
         setResult(RESULT_CANCELED, returnIntent);

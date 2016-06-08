@@ -16,6 +16,7 @@ import com.mercadopago.decorations.DividerItemDecoration;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.BankDeal;
 import com.mercadopago.model.DecorationPreference;
+import com.mercadopago.mptracker.MPTracker;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.LayoutUtil;
 
@@ -112,7 +113,6 @@ public class BankDealsActivity extends AppCompatActivity {
     }
 
     protected void setContentView() {
-
         setContentView(R.layout.activity_bank_deals);
     }
 
@@ -121,11 +121,12 @@ public class BankDealsActivity extends AppCompatActivity {
     }
 
     private void getBankDeals() {
-
         LayoutUtil.showProgressLayout(mActivity);
         mMercadoPago.getBankDeals(new Callback<List<BankDeal>>() {
             @Override
             public void success(List<BankDeal> bankDeals) {
+                MPTracker.getInstance().trackScreen("BANK_DEALS", "2", mPublicKey, "MLA", "1.0", mActivity);
+                MPTracker.getInstance().trackEvent("BANK_DEALS", "GET_BANK_DEALS_RESPONSE", "SUCCESS", "2", mPublicKey, "MLA", "1.0", mActivity);
                 if (mActiveActivity) {
                     mRecyclerView.setAdapter(new BankDealsAdapter(mActivity, bankDeals, new View.OnClickListener() {
                         @Override
@@ -144,6 +145,7 @@ public class BankDealsActivity extends AppCompatActivity {
 
             @Override
             public void failure(ApiException apiException) {
+                MPTracker.getInstance().trackEvent("BANK_DEALS", "GET_BANK_DEALS_RESPONSE", "FAIL", "2", mPublicKey, "MLA", "1.0", mActivity);
                 if (mActiveActivity) {
                     ApiUtil.finishWithApiException(mActivity, apiException);
                 }
