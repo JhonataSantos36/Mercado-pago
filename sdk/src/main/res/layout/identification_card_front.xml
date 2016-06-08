@@ -60,7 +60,7 @@
                     android:paddingEnd="14dp"
                     android:textColor="@color/mpsdk_base_text_alpha"
                     android:text="@string/mpsdk_card_identification_label_part1"
-                    android:textSize="13sp"
+                    android:textSize="13dp"
                     app:fontStyle="regular"/>
                 <com.mercadopago.views.MPTextView
                     android:layout_width="match_parent"
@@ -70,7 +70,7 @@
                     android:paddingEnd="14dp"
                     android:textColor="@color/mpsdk_base_text_alpha"
                     android:text="@string/mpsdk_card_identification_label_part2"
-                    android:textSize="13sp"
+                    android:textSize="13dp"
                     app:fontStyle="regular"/>
 
                 <FrameLayout
@@ -88,7 +88,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="start"
                         android:textColor="@color/mpsdk_base_text"
-                        android:textSize="20sp"
+                        android:textSize="20dp"
                         android:visibility="visible"
                         android:text="•• ••• •••"
                         app:fontStyle="roboto_regular"/>
@@ -99,7 +99,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="start"
                         android:textColor="@color/mpsdk_base_text"
-                        android:textSize="20sp"
+                        android:textSize="20dp"
                         android:visibility="invisible"/>
 
                 </FrameLayout>
