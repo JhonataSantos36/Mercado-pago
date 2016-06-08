@@ -21,7 +21,7 @@
             <FrameLayout
                 android:id="@+id/card_background"
                 android:layout_width="match_parent"
-                android:layout_height="220dp">
+                android:layout_height="@dimen/mpsdk_card_background_height">
                 <include layout="@layout/mpsdk_transparent_toolbar"/>
                 <FrameLayout
                     android:id="@+id/activity_new_card_container"
