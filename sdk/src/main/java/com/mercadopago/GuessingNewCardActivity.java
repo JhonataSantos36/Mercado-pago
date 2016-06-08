@@ -582,6 +582,7 @@ public class GuessingNewCardActivity extends FrontCardActivity {
                     @Override
                     public void onPaymentMethodCleared() {
                         clearErrorView();
+                        clearCardNumbersInput(mCardNumberEditText);
                         if (mCurrentPaymentMethod == null) return;
                         mCurrentPaymentMethod = null;
                         setSecurityCodeLocation(null);
@@ -594,12 +595,11 @@ public class GuessingNewCardActivity extends FrontCardActivity {
     }
 
     private boolean needsMask(CharSequence s) {
-        if (mCardNumberLength == CARD_NUMBER_MAX_LENGTH) {
-            return s.length() == 4 || s.length() == 9 || s.length() == 14;
-        } else if (mCardNumberLength == CARD_NUMBER_AMEX_LENGTH || mCardNumberLength == CARD_NUMBER_DINERS_LENGTH) {
+        if (mCardNumberLength == CARD_NUMBER_AMEX_LENGTH || mCardNumberLength == CARD_NUMBER_DINERS_LENGTH) {
             return s.length() == 4 || s.length() == 11;
+        } else {
+            return s.length() == 4 || s.length() == 9 || s.length() == 14;
         }
-        return false;
     }
 
     private void initCardState() {
@@ -735,6 +735,11 @@ public class GuessingNewCardActivity extends FrontCardActivity {
 
     public void blockCardNumbersInput(MPEditText text) {
         int maxLength = MercadoPago.BIN_LENGTH;
+        setInputMaxLength(text, maxLength);
+    }
+
+    public void clearCardNumbersInput(MPEditText text) {
+        int maxLength = CardInterface.CARD_NUMBER_MAX_LENGTH;
         setInputMaxLength(text, maxLength);
     }
 

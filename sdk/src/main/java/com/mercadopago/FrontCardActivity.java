@@ -137,9 +137,9 @@ public abstract class FrontCardActivity extends AppCompatActivity implements Car
                 sb.append(c);
             }
             result = sb.toString();
-        } else if (cardLength == CARD_NUMBER_MAX_LENGTH){
+        } else {
             StringBuffer sb = new StringBuffer();
-            for (int i = 1; i <= CARD_NUMBER_MAX_LENGTH; i++) {
+            for (int i = 1; i <= cardLength; i++) {
                 sb.append(getCharOfCard(s, i-1));
                 if (i % 4 == 0) {
                     sb.append(" ");
