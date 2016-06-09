@@ -8,7 +8,7 @@
     <string name="mpsdk_invalid_pm_for_current_amount">El medio de pago que elegiste no se puede usar para pagar ese monto. Por favor selecciona otro</string>
     <string name="mpsdk_transition_view_name">transitionView</string>
     <string name="mpsdk_title_activity_customer_pms">Medios de pago</string>
-    <string name="mpsdk_title_activity_payment_methods">Medio de pago</string>
+    <string name="mpsdk_title_activity_payment_methods">¿Cómo quieres pagar?</string>
     <string name="mpsdk_payment_method">Medio de pago</string>
     <string name="mpsdk_payment_id_description">Comprobante:</string>
     <string name="mpsdk_installments">Cuotas</string>

@@ -35,7 +35,7 @@
             android:name=".PaymentMethodsActivity"
             android:label="@string/mpsdk_title_activity_payment_methods"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.MercadoPagoTheme" />
+            android:theme="@style/Theme.MercadoPagoTheme.NoActionBar" />
         <activity
             android:name=".IssuersActivity"
             android:label="@string/mpsdk_title_activity_issuers"

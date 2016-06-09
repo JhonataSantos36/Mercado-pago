@@ -1,12 +1,8 @@
 package com.mercadopago.util;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 
-import com.mercadopago.ErrorActivity;
 import com.mercadopago.R;
-import com.mercadopago.core.MercadoPago;
 import com.mercadopago.model.PaymentMethod;
 
 import java.text.SimpleDateFormat;
