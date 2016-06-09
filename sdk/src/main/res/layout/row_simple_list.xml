@@ -13,7 +13,7 @@
         android:layout_height="match_parent"
         android:orientation="horizontal"
         android:weightSum="1">
-        <LinearLayout
+        <FrameLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.1"
@@ -26,8 +26,8 @@
                 android:id="@+id/pmImage"
                 android:maxWidth="40dp"
                 android:layout_gravity="center_vertical"/>
-        </LinearLayout>
-        <LinearLayout
+        </FrameLayout>
+        <FrameLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.89"
@@ -41,7 +41,7 @@
                 style="@style/mpsdk_list_label"
                 tools:text="American Express"
                 android:id="@+id/pmName"/>
-            </LinearLayout>
+            </FrameLayout>
         <ImageView
             android:layout_width="15dp"
             android:layout_height="wrap_content"

@@ -165,6 +165,7 @@ public class Step1Activity extends ExampleActivity {
                 .setActivity(this)
                 .setPublicKey(ExamplesUtils.DUMMY_MERCHANT_PUBLIC_KEY)
                 .setPaymentPreference(mPaymentPreference)
+                .setShowBankDeals(false)
                 .startPaymentMethodsActivity();
     }
 
