@@ -65,7 +65,7 @@
     <string name="mpsdk_rejected_title">¡Ups! Ocurrió un problema</string>
     <string name="mpsdk_format_date"><![CDATA[ %1$s/%2$s/%3$s - %4$s]]></string>
     <string name="mpsdk_no_connection_message">Sin conexión</string>
-    <string name="mpsdk_refresh_message">Reintentar</string>
+    <string name="mpsdk_refresh_message">Intenta una vez más</string>
     <string name="mpsdk_title_activity_bank_deals">Promociones</string>
     <string name="mpsdk_empty_bank_deals">No tienes ninguna promoción disponible</string>
     <string name="mpsdk_bank">banco</string>
@@ -145,7 +145,7 @@
     <string name="mpsdk_payment_amount_to_pay">Total a pagar</string>
     <string name="mpsdk_processed_by_mercado_pago">© 1999–2016 Procesado por MercadoPago</string>
     <string name="mpsdk_exit_label">Salir</string>
-    <string name="mpsdk_standard_error_message">Algo salió mal</string>
+    <string name="mpsdk_standard_error_message">Ups, algo salió mal</string>
 
     <string name="mpsdk_instant_accreditation_time">Se acreditará instantáneamente</string>
     <string name="mpsdk_accreditation_time">Se acreditará en</string>
