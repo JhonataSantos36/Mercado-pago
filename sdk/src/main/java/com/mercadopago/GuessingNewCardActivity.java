@@ -177,7 +177,7 @@ public class GuessingNewCardActivity extends FrontCardActivity {
 
     @Override
     public void onBackPressed() {
-        checkFlipCardToFront();
+        checkFlipCardToFront(true);
         Intent returnIntent = new Intent();
         returnIntent.putExtra("backButtonPressed", true);
         setResult(RESULT_CANCELED, returnIntent);
@@ -623,19 +623,25 @@ public class GuessingNewCardActivity extends FrontCardActivity {
         return mCardSideState.equals(CARD_SIDE_FRONT);
     }
 
-    public void checkFlipCardToFront() {
+    public void checkFlipCardToFront(boolean showBankDeals) {
         if (showingBack() || showingIdentification()) {
             getSupportFragmentManager().popBackStack();
             mCardSideState = CARD_SIDE_FRONT;
+            if (showBankDeals) {
+                mToolbarButton.setVisibility(View.VISIBLE);
+            }
         }
     }
 
-    public void checkFlipCardToBack() {
+    public void checkFlipCardToBack(boolean showBankDeals) {
         if (showingFront()) {
             startBackFragment();
         } else if (showingIdentification()) {
             getSupportFragmentManager().popBackStack();
             startBackFragment();
+            if (showBankDeals) {
+                mToolbarButton.setVisibility(View.VISIBLE);
+            }
         }
     }
 
@@ -653,6 +659,7 @@ public class GuessingNewCardActivity extends FrontCardActivity {
 
     private void startIdentificationFragment() {
         mCardSideState = CARD_IDENTIFICATION;
+        mToolbarButton.setVisibility(View.GONE);
         getSupportFragmentManager()
                 .beginTransaction()
                 .setCustomAnimations(R.anim.slide_right_to_left_in_slower, R.anim.slide_right_to_left_out_slower,
@@ -785,11 +792,11 @@ public class GuessingNewCardActivity extends FrontCardActivity {
         if (mSecurityCodeLocation != null) {
             if (mSecurityCodeLocation.equals(CardInterface.CARD_SIDE_BACK)) {
                 if (showingBack() && mBackFragment != null) {
-                    checkFlipCardToBack();
+                    checkFlipCardToBack(true);
                 }
             } else if (mSecurityCodeLocation.equals(CardInterface.CARD_SIDE_FRONT)) {
                 if (showingFront() && mFrontFragment != null) {
-                    checkFlipCardToFront();
+                    checkFlipCardToFront(true);
                 }
             }
         }
@@ -873,7 +880,7 @@ public class GuessingNewCardActivity extends FrontCardActivity {
                 if (hasFocus) {
                     disableBackInputButton();
                     openKeyboard(mCardNumberEditText);
-                    checkFlipCardToFront();
+                    checkFlipCardToFront(true);
                     mCurrentEditingEditText = CARD_NUMBER_INPUT;
                     mHorizontalScrollView.fullScroll(HorizontalScrollView.FOCUS_LEFT);
                 }
@@ -920,7 +927,7 @@ public class GuessingNewCardActivity extends FrontCardActivity {
                 if (hasFocus) {
                     enableBackInputButton();
                     openKeyboard(mCardHolderNameEditText);
-                    checkFlipCardToFront();
+                    checkFlipCardToFront(true);
                     mCurrentEditingEditText = CARDHOLDER_NAME_INPUT;
                 }
             }
@@ -955,7 +962,7 @@ public class GuessingNewCardActivity extends FrontCardActivity {
                 if (hasFocus) {
                     enableBackInputButton();
                     openKeyboard(mCardExpiryDateEditText);
-                    checkFlipCardToFront();
+                    checkFlipCardToFront(true);
                     mCurrentEditingEditText = CARD_EXPIRYDATE_INPUT;
                 }
             }
@@ -992,9 +999,9 @@ public class GuessingNewCardActivity extends FrontCardActivity {
                     openKeyboard(mCardSecurityCodeEditText);
                     mCurrentEditingEditText = CARD_SECURITYCODE_INPUT;
                     if (mSecurityCodeLocation == null || mSecurityCodeLocation.equals(CardInterface.CARD_SIDE_BACK)) {
-                        checkFlipCardToBack();
+                        checkFlipCardToBack(true);
                     } else {
-                        checkFlipCardToFront();
+                        checkFlipCardToFront(true);
                     }
                 }
             }
@@ -1270,7 +1277,7 @@ public class GuessingNewCardActivity extends FrontCardActivity {
     }
 
     private void createToken() {
-        checkFlipCardToFront();
+        checkFlipCardToFront(false);
         LayoutUtil.hideKeyboard(this);
         mInputContainer.setVisibility(View.GONE);
         mProgressBar.setVisibility(View.VISIBLE);
@@ -1419,7 +1426,7 @@ public class GuessingNewCardActivity extends FrontCardActivity {
                                 //error
                             } else if (issuers.size() == 1) {
                                 mSelectedIssuer = issuers.get(0);
-                                checkFlipCardToFront();
+                                checkFlipCardToFront(false);
                                 finishWithResult();
                             } else {
                                 fadeInIssuersActivity(issuers);
@@ -1443,7 +1450,7 @@ public class GuessingNewCardActivity extends FrontCardActivity {
     }
 
     public void fadeInIssuersActivity(final List<Issuer> issuers) {
-        checkFlipCardToFront();
+        checkFlipCardToFront(false);
         startIssuersActivity(issuers);
     }
 
@@ -1470,7 +1477,7 @@ public class GuessingNewCardActivity extends FrontCardActivity {
             if (resultCode == RESULT_OK) {
                 Bundle bundle = data.getExtras();
                 mSelectedIssuer = (Issuer) bundle.getSerializable("issuer");
-                checkFlipCardToFront();
+                checkFlipCardToFront(false);
                 finishWithResult();
             } else if (resultCode == RESULT_CANCELED) {
                 finish();
