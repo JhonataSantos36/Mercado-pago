@@ -33,7 +33,7 @@
                 android:tint="@color/mpsdk_color_instructions_title_image" />
 
             <com.mercadopago.views.MPTextView
-                android:id="@+id/mpsdkTitle"
+                android:id="@+id/title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:text="Paga $ X en tu sucursal más cercana"
@@ -43,6 +43,7 @@
                 android:textSize="22dp"
                 android:layout_below="@+id/mpsdkImageCashSign"
                 android:tint="@color/mpsdk_color_instructions_title_image"/>
+
         </RelativeLayout>
         <View
             android:layout_width="match_parent"
