@@ -239,9 +239,6 @@ public class GuessingNewCardActivity extends FrontCardActivity {
     }
 
     protected void setContentView() {
-        //TODO validate
-        MPTracker.getInstance().trackScreen("GUESSING_CARD", "3", mPublicKey, "MLA", "1.0", this);
-
         setContentView(R.layout.activity_new_card_form);
     }
 
@@ -885,7 +882,6 @@ public class GuessingNewCardActivity extends FrontCardActivity {
             public void onFocusChange(View v, boolean hasFocus) {
                 mFrontFragment.setFontColor();
                 if (hasFocus) {
-                    //TODO validate
                     MPTracker.getInstance().trackScreen("CARD_NUMBER", "2", mPublicKey, "MLA", "1.0", mActivity);
 
                     disableBackInputButton();
@@ -935,7 +931,7 @@ public class GuessingNewCardActivity extends FrontCardActivity {
             public void onFocusChange(View v, boolean hasFocus) {
                 mFrontFragment.setFontColor();
                 if (hasFocus) {
-                    MPTracker.getInstance().trackScreen("CARD_HOLDER", "2", mPublicKey, "MLA", "1.0", mActivity);
+                    MPTracker.getInstance().trackScreen("CARD_HOLDER_NAME", "2", mPublicKey, "MLA", "1.0", mActivity);
 
                     enableBackInputButton();
                     openKeyboard(mCardHolderNameEditText);
@@ -1037,6 +1033,8 @@ public class GuessingNewCardActivity extends FrontCardActivity {
     }
 
     public void setCardIdentificationFocusListener() {
+        MPTracker.getInstance().trackScreen("IDENTIFICATION_NUMBER", "2", mPublicKey, "MLA", "1.0", this);
+
         mIdentificationTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {

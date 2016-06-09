@@ -380,6 +380,7 @@ public class CheckoutActivity extends AppCompatActivity {
                 MPTracker.getInstance().trackToken(mCreatedToken.getId(), "3", mMerchantPublicKey, mCheckoutPreference.getSiteId(), "1.0", this);
             }
 
+            MPTracker.getInstance().trackScreen("REVIEW_AND_CONFIRM", "3", mMerchantPublicKey, "MLA", "1.0", this);
             showReviewAndConfirm();
             showRegularLayout();
         }
@@ -700,6 +701,20 @@ public class CheckoutActivity extends AppCompatActivity {
     }
 
     private void startCongratsActivity(){
+        //TODO cuando tengamos el contexto con publicKey, site y version mover a congratsActivity
+        if (mCreatedPayment.getStatus().equals("approved")){
+            MPTracker.getInstance().trackScreen("CONGRATS", "3", mMerchantPublicKey, "MLA", "1.0", mActivity);
+        }else if (mCreatedPayment.getStatus().equals("in_process")){
+            MPTracker.getInstance().trackScreen("PENDING", "3", mMerchantPublicKey, "MLA", "1.0", mActivity);
+        }else {
+            if (mCreatedPayment.getStatusDetail().equals("cc_rejected_call_for_authorize")){
+                MPTracker.getInstance().trackScreen("CALL_FOR_AUTHORIZE", "3", mMerchantPublicKey, "MLA", "1.0", mActivity);
+            }
+            else{
+                MPTracker.getInstance().trackScreen("REJECTED", "3", mMerchantPublicKey, "MLA", "1.0", mActivity);
+            }
+        }
+
         new MercadoPago.StartActivityBuilder()
             .setPublicKey(mMerchantPublicKey)
             .setActivity(mActivity)
