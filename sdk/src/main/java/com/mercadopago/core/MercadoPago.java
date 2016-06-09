@@ -416,12 +416,14 @@ public class MercadoPago {
     }
 
 
-    private static void startPaymentMethodsActivity(Activity activity, String merchantPublicKey, Boolean showBankDeals, PaymentPreference paymentPreference) {
+    private static void startPaymentMethodsActivity(Activity activity, String merchantPublicKey, Boolean showBankDeals, PaymentPreference paymentPreference, DecorationPreference decorationPreference) {
 
         Intent paymentMethodsIntent = new Intent(activity, PaymentMethodsActivity.class);
         paymentMethodsIntent.putExtra("merchantPublicKey", merchantPublicKey);
         paymentMethodsIntent.putExtra("showBankDeals", showBankDeals);
         paymentMethodsIntent.putExtra("paymentPreference", paymentPreference);
+        paymentMethodsIntent.putExtra("decorationPreference", decorationPreference);
+
         activity.startActivityForResult(paymentMethodsIntent, PAYMENT_METHODS_REQUEST_CODE);
     }
 
@@ -822,7 +824,7 @@ public class MercadoPago {
 
             if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {
                 MercadoPago.startPaymentMethodsActivity(this.mActivity, this.mKey,
-                        this.mShowBankDeals, this.mPaymentPreference);
+                        this.mShowBankDeals, this.mPaymentPreference, this.mDecorationPreference);
             } else {
                 throw new RuntimeException("Unsupported key type for this method");
             }

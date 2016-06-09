@@ -8,17 +8,46 @@
     android:minHeight="45dp"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-
-        <com.mercadopago.views.MPTextView
-            android:id="@+id/mpsdkLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:singleLine="true"
-            tools:text="Visa"
-            tools:drawableLeft="@drawable/visa"
-            android:drawablePadding="10dp"
-            style="@style/mpsdk_list_label"/>
-
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:weightSum="1">
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"
+            android:layout_gravity="center_vertical">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="25dp"
+                tools:src="@drawable/amex"
+                android:adjustViewBounds="true"
+                android:id="@+id/mpsdkPmImage"
+                android:maxWidth="40dp"
+                android:layout_gravity="center_vertical"/>
+        </FrameLayout>
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.89"
+            android:layout_gravity="center_vertical">
+            <com.mercadopago.views.MPTextView
+                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                style="@style/mpsdk_list_label"
+                tools:text="American Express"
+                android:id="@+id/mpsdkPmName"/>
+            </FrameLayout>
+        <ImageView
+            android:layout_width="15dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/arrow_right"
+            android:adjustViewBounds="true"/>
+    </LinearLayout>
 </FrameLayout>
 

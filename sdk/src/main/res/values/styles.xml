@@ -127,6 +127,11 @@
         <item name="android:textColor">@color/mpsdk_white</item>
     </style>
 
+    <style name="mpsdk_small_white_text">
+        <item name="android:textSize">@dimen/mpsdk_small_text</item>
+        <item name="android:textColor">@color/mpsdk_white</item>
+    </style>
+
     <!--bold-->
     <style name="mpsdk_smaller_warm_grey_thin_bold_text">
         <item name="android:textSize">@dimen/mpsdk_small_text</item>

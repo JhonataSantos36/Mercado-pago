@@ -3,6 +3,7 @@ package com.mercadopago.examples.step1;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.Toast;
 
@@ -13,6 +14,7 @@ import com.mercadopago.examples.R;
 import com.mercadopago.examples.utils.ExamplesUtils;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.CardToken;
+import com.mercadopago.model.DecorationPreference;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentPreference;
@@ -28,7 +30,6 @@ import java.util.List;
 public class Step1Activity extends ExampleActivity {
 
     protected List<String> mExcludedPaymentTypeIds = new ArrayList<String>(){{
-        add("atm");
         add("ticket");
         add("digital_currency");
     }};
@@ -45,18 +46,12 @@ public class Step1Activity extends ExampleActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_step1);
-        createPaymentPreference();
         mActivity = this;
         mPaymentPreference = new PaymentPreference();
         mPaymentPreference.setExcludedPaymentTypeIds(mExcludedPaymentTypeIds);
         mPaymentPreference.setExcludedPaymentMethodIds(mExcludedPaymentMethodIds);
-        mAmount = ExamplesUtils.DUMMY_ITEM_UNIT_PRICE;
-    }
 
-    private void createPaymentPreference() {
-        mPaymentPreference = new PaymentPreference();
-        mPaymentPreference.setExcludedPaymentMethodIds(mExcludedPaymentMethodIds);
-        mPaymentPreference.setExcludedPaymentTypeIds(mExcludedPaymentTypeIds);
+        mAmount = ExamplesUtils.DUMMY_ITEM_UNIT_PRICE;
     }
 
     @Override
@@ -170,6 +165,7 @@ public class Step1Activity extends ExampleActivity {
                 .setActivity(this)
                 .setPublicKey(ExamplesUtils.DUMMY_MERCHANT_PUBLIC_KEY)
                 .setPaymentPreference(mPaymentPreference)
+                .setShowBankDeals(false)
                 .startPaymentMethodsActivity();
     }
 
