@@ -30,8 +30,8 @@ public class PaymentMethodsAdapter extends  RecyclerView.Adapter<PaymentMethodsA
         public ViewHolder(View v, View.OnClickListener listener) {
 
             super(v);
-            mPaymentMethodImage = (ImageView) v.findViewById(R.id.pmImage);
-            mPaymentMethodName = (TextView) v.findViewById(R.id.pmName);
+            mPaymentMethodImage = (ImageView) v.findViewById(R.id.mpsdkPmImage);
+            mPaymentMethodName = (TextView) v.findViewById(R.id.mpsdkPmName);
             if (listener != null) {
                 v.setOnClickListener(listener);
             }

@@ -68,9 +68,9 @@ public class PaymentMethodsActivity extends AppCompatActivity {
 
     private void initializeToolbar() {
 
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        mBankDealsTextView = (TextView) findViewById(R.id.bankDeals);
-        mTitle = (TextView) findViewById(R.id.title);
+        mToolbar = (Toolbar) findViewById(R.id.mpsdkToolbar);
+        mBankDealsTextView = (TextView) findViewById(R.id.mpsdkBankDeals);
+        mTitle = (TextView) findViewById(R.id.mpsdkToolbarTitle);
 
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
