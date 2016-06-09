@@ -45,7 +45,7 @@ public class CustomerCardsActivity extends AppCompatActivity {
         boolean supportMPApp = this.getIntent().getBooleanExtra("supportMPApp", false);
 
         // Set recycler view
-        mRecyclerView = (RecyclerView) findViewById(R.id.customer_cards_list);
+        mRecyclerView = (RecyclerView) findViewById(R.id.mpsdkCustomerCardsList);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
 

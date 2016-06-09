@@ -24,7 +24,7 @@ public class InstallmentsAdapter extends  RecyclerView.Adapter<InstallmentsAdapt
         public ViewHolder(View v, View.OnClickListener listener) {
 
             super(v);
-            mTextView = (MPTextView) v.findViewById(R.id.label);
+            mTextView = (MPTextView) v.findViewById(R.id.mpsdkLabel);
             if (listener != null) {
                 v.setOnClickListener(listener);
             }

@@ -15,12 +15,12 @@
         android:background="@color/mpsdk_color_new_card_form_background">
 
         <FrameLayout
-            android:id="@+id/card_background"
+            android:id="@+id/mpsdkCardBackground"
             android:layout_width="match_parent"
             android:layout_height="@dimen/mpsdk_card_background_height">
             <include layout="@layout/mpsdk_transparent_toolbar"/>
             <FrameLayout
-                android:id="@+id/activity_new_card_container"
+                android:id="@+id/mpsdkActivityNewCardContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal|top"
@@ -36,7 +36,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <LinearLayout
-                    android:id="@+id/newCardIssuersContainer"
+                    android:id="@+id/mpsdkNewCardIssuersContainer"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical"
@@ -45,7 +45,7 @@
                     <include layout="@layout/new_card_issuers"/>
                 </LinearLayout>
                 <ProgressBar
-                    android:id="@+id/progressBar"
+                    android:id="@+id/mpsdkProgressBar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"

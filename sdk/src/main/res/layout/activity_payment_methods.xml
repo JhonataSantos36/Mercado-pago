@@ -8,12 +8,12 @@
     <include layout="@layout/view_progress_bar"/>
 
     <FrameLayout
-        android:id="@+id/regularLayout"
+        android:id="@+id/mpsdkRegularLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/payment_methods_list"
+            android:id="@+id/mpsdkPaymentMethodsList"
             android:scrollbars="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>

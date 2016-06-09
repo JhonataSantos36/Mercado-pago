@@ -96,8 +96,8 @@ public class OldGuessingNewCardActivity extends NewCardActivity {
     protected void setInputControls()
     {
         super.setInputControls();
-        mIssuerLayout = (LinearLayout) findViewById(R.id.issuerSelectionLayout);
-        mSpinnerIssuers = (Spinner) findViewById(R.id.spinnerIssuer);
+        mIssuerLayout = (LinearLayout) findViewById(R.id.mpsdkIssuerSelectionLayout);
+        mSpinnerIssuers = (Spinner) findViewById(R.id.mpsdkSpinnerIssuer);
     }
 
     protected void getPaymentMethodsAsync() {
@@ -164,7 +164,7 @@ public class OldGuessingNewCardActivity extends NewCardActivity {
 
     @Override
     public void setPaymentMethodImage(){
-        ImageView pmImage = (ImageView) findViewById(R.id.pmImage);
+        ImageView pmImage = (ImageView) findViewById(R.id.mpsdkPmImage);
         if (pmImage != null) {
             pmImage.setImageDrawable(null);
         }
@@ -186,7 +186,7 @@ public class OldGuessingNewCardActivity extends NewCardActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.action_bank_deals) {
+        if (item.getItemId() == R.id.mpsdkActionBankDeals) {
             new MercadoPago.StartActivityBuilder()
                     .setActivity(this)
                     .setPublicKey(mKey)

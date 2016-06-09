@@ -107,9 +107,9 @@ public class CardInstallmentsAdapter extends  RecyclerView.Adapter<CardInstallme
 
         public ViewHolder(View itemView) {
             super(itemView);
-            mInstallmentsTextView = (MPTextView) itemView.findViewById(R.id.installments_text);
-            mZeroRateTextView = (MPTextView) itemView.findViewById(R.id.installments_zero_rate);
-            mRateTextView = (MPTextView) itemView.findViewById(R.id.installments_with_rate);
+            mInstallmentsTextView = (MPTextView) itemView.findViewById(R.id.mpsdkInstallmentsText);
+            mZeroRateTextView = (MPTextView) itemView.findViewById(R.id.mpsdkInstallmentsZeroRate);
+            mRateTextView = (MPTextView) itemView.findViewById(R.id.mpsdkInstallmentsWithRate);
         }
     }
 

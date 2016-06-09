@@ -7,7 +7,7 @@
     android:layout_marginTop="5dp">
 
     <LinearLayout
-        android:id="@+id/installmentsItem"
+        android:id="@+id/mpsdkInstallmentsItem"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="55dp"
@@ -21,7 +21,7 @@
             android:layout_gravity="center_vertical"
             android:orientation="horizontal">
             <com.mercadopago.views.MPTextView
-                android:id="@+id/installments_text"
+                android:id="@+id/mpsdkInstallmentsText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
@@ -37,7 +37,7 @@
                 android:layout_marginBottom="3dp"
                 android:layout_gravity="bottom">
                 <com.mercadopago.views.MPTextView
-                    android:id="@+id/installments_zero_rate"
+                    android:id="@+id/mpsdkInstallmentsZeroRate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/mpsdk_installments_zero_rate"
@@ -45,7 +45,7 @@
                     android:textSize="17dp"
                     android:visibility="gone"/>
                 <com.mercadopago.views.MPTextView
-                    android:id="@+id/installments_with_rate"
+                    android:id="@+id/mpsdkInstallmentsWithRate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     tools:text="1040"
@@ -56,16 +56,16 @@
         </LinearLayout>
 
         <ImageView
+            android:id="@+id/mpsdkEditHint"
             android:layout_width="15dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:src="@drawable/arrow_right"
-            android:adjustViewBounds="true"
-            android:id="@+id/editHint"/>
+            android:adjustViewBounds="true"/>
     </LinearLayout>
     <View
+        android:id="@+id/mpsdkSeparator"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:id="@+id/separator"
         android:background="@color/mpsdk_separator"/>
 </LinearLayout>

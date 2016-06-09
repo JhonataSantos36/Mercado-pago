@@ -67,13 +67,13 @@ public class CustomDatePickerDialog extends DialogFragment {
         int textColor = getDatePickerTextColor(getActivity().getApplicationContext());
 
         // Set month control
-        mMonth = (NumberPicker) view.findViewById(R.id.dialogMonth);
+        mMonth = (NumberPicker) view.findViewById(R.id.mpsdkDialogMonth);
         mMonth.setMinValue(1);
         mMonth.setMaxValue(12);
         setNumberPickerTextColor(mMonth, textColor);
 
         // Set year control
-        mYear = (NumberPicker) view.findViewById(R.id.dialogYear);
+        mYear = (NumberPicker) view.findViewById(R.id.mpsdkDialogYear);
         int minYear = Calendar.getInstance().get(Calendar.YEAR);
         mYear.setMinValue(minYear);
         mYear.setMaxValue(minYear + 20);

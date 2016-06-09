@@ -92,10 +92,10 @@ public class ShoppingCartFragment extends Fragment {
 
     private void initializeControls() {
         if(getView() != null) {
-            mItemImageView = (ImageView) getView().findViewById(R.id.itemImage);
-            mItemDescriptionTextView = (MPTextView) getView().findViewById(R.id.itemTitle);
-            mItemAmountTextView = (MPTextView) getView().findViewById(R.id.itemAmount);
-            mShoppingCartLayout = getView().findViewById(R.id.shoppingCartLayout);
+            mItemImageView = (ImageView) getView().findViewById(R.id.mpsdkItemImage);
+            mItemDescriptionTextView = (MPTextView) getView().findViewById(R.id.mpsdkItemTitle);
+            mItemAmountTextView = (MPTextView) getView().findViewById(R.id.mpsdkItemAmount);
+            mShoppingCartLayout = getView().findViewById(R.id.mpsdkShoppingCartLayout);
         }
     }
 

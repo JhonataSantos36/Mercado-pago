@@ -3,7 +3,7 @@
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/identification_card_container"
+    android:id="@+id/mpsdkIdentificationCardContainer"
     android:layout_width="300dp"
     android:layout_height="171dp"
     android:layout_gravity="center_horizontal">
@@ -74,7 +74,7 @@
                     app:fontStyle="regular"/>
 
                 <FrameLayout
-                    android:id="@+id/idNumberClickableZone"
+                    android:id="@+id/mpsdkIdNumberClickableZone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
@@ -83,7 +83,7 @@
                     android:layout_marginTop="10dp">
 
                     <com.mercadopago.views.MPTextView
-                        android:id="@+id/identificationCardholderContainer"
+                        android:id="@+id/mpsdkIdentificationCardholderContainer"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="start"
@@ -94,7 +94,7 @@
                         app:fontStyle="roboto_regular"/>
 
                     <com.mercadopago.views.MPTextView
-                        android:id="@+id/idNumberView"
+                        android:id="@+id/mpsdkIdNumberView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="start"
@@ -110,7 +110,7 @@
     </FrameLayout>
 
     <ImageView
-        android:id="@+id/id_shadow_border"
+        android:id="@+id/mpsdkIdShadowBorder"
         android:src="@drawable/card_shadow_rounded"
         android:layout_width="300dp"
         android:layout_height="171dp"

@@ -224,7 +224,7 @@ public class CheckoutActivity extends AppCompatActivity {
         }
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.shoppingCartFragment, mShoppingCartFragment)
+                .replace(R.id.mpsdkShoppingCartFragment, mShoppingCartFragment)
                 .show(mShoppingCartFragment)
                 .commitAllowingStateLoss();
     }
@@ -257,7 +257,7 @@ public class CheckoutActivity extends AppCompatActivity {
     }
 
     private void initializeToolbar() {
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbar = (Toolbar) findViewById(R.id.mpsdkToolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
@@ -266,7 +266,7 @@ public class CheckoutActivity extends AppCompatActivity {
                 mToolbar.setBackgroundColor(mDecorationPreference.getBaseColor());
             }
             if(mDecorationPreference.isDarkFontEnabled()) {
-                TextView title = (TextView) findViewById(R.id.title);
+                TextView title = (TextView) findViewById(R.id.mpsdkTitle);
                 title.setTextColor(mDecorationPreference.getDarkFontColor(this));
             }
         }
@@ -283,7 +283,7 @@ public class CheckoutActivity extends AppCompatActivity {
 
     private void initializeActivityControls() {
 
-        mTermsAndConditionsTextView = (MPTextView) findViewById(R.id.termsAndConditions);
+        mTermsAndConditionsTextView = (MPTextView) findViewById(R.id.mpsdkTermsAndConditions);
         mTermsAndConditionsTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -291,7 +291,7 @@ public class CheckoutActivity extends AppCompatActivity {
             }
         });
 
-        mCancelTextView = (MPTextView) findViewById(R.id.cancelTextView);
+        mCancelTextView = (MPTextView) findViewById(R.id.mpsdkCancelTextView);
         mCancelTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -299,7 +299,7 @@ public class CheckoutActivity extends AppCompatActivity {
             }
         });
 
-        mPayButton = (MPButton) findViewById(R.id.payButton);
+        mPayButton = (MPButton) findViewById(R.id.mpsdkPayButton);
         mPayButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -316,10 +316,10 @@ public class CheckoutActivity extends AppCompatActivity {
             }
         }
 
-        mTotalAmountTextView = (MPTextView) findViewById(R.id.totalAmountText);
-        mContentView = findViewById(R.id.contentLayout);
-        mPaymentMethodLayout = (RelativeLayout) findViewById(R.id.paymentMethodLayout);
-        mPayerCostLayout = (RelativeLayout) findViewById(R.id.payerCostLayout);
+        mTotalAmountTextView = (MPTextView) findViewById(R.id.mpsdkTotalAmountText);
+        mContentView = findViewById(R.id.mpsdkContentLayout);
+        mPaymentMethodLayout = (RelativeLayout) findViewById(R.id.mpsdkPaymentMethodLayout);
+        mPayerCostLayout = (RelativeLayout) findViewById(R.id.mpsdkPayerCostLayout);
     }
 
     protected void startTermsAndConditionsActivity() {

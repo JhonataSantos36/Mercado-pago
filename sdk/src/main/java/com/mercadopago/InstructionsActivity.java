@@ -200,14 +200,14 @@ public class InstructionsActivity extends AppCompatActivity {
     }
 
     protected void initializeControls() {
-        mReferencesLayout = (LinearLayout) findViewById(R.id.referencesLayout);
-        mTitle = (MPTextView) findViewById(R.id.title);
-        mPrimaryInfo = (MPTextView) findViewById(R.id.primaryInfo);
-        mSecondaryInfo = (MPTextView) findViewById(R.id.secondaryInfo);
-        mTertiaryInfo = (MPTextView) findViewById(R.id.tertiaryInfo);
-        mAccreditationMessage = (MPTextView) findViewById(R.id.accreditationMessage);
-        mActionButton = (MPButton) findViewById(R.id.actionButton);
-        mExitTextView = (MPTextView) findViewById(R.id.exitTextView);
+        mReferencesLayout = (LinearLayout) findViewById(R.id.mpsdkReferencesLayout);
+        mTitle = (MPTextView) findViewById(R.id.mpsdkTitle);
+        mPrimaryInfo = (MPTextView) findViewById(R.id.mpsdkPrimaryInfo);
+        mSecondaryInfo = (MPTextView) findViewById(R.id.mpsdkSecondaryInfo);
+        mTertiaryInfo = (MPTextView) findViewById(R.id.mpsdkTertiaryInfo);
+        mAccreditationMessage = (MPTextView) findViewById(R.id.mpsdkAccreditationMessage);
+        mActionButton = (MPButton) findViewById(R.id.mpsdkActionButton);
+        mExitTextView = (MPTextView) findViewById(R.id.mpsdkExitTextView);
         mExitTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

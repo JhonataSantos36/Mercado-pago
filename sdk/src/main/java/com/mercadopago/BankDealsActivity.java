@@ -60,7 +60,7 @@ public class BankDealsActivity extends AppCompatActivity {
                 .build();
 
         // Set recycler view
-        mRecyclerView = (RecyclerView) findViewById(R.id.bank_deals_list);
+        mRecyclerView = (RecyclerView) findViewById(R.id.mpsdkBankDealsList);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.addItemDecoration(new DividerItemDecoration(mActivity, DividerItemDecoration.VERTICAL_LIST));
 
@@ -96,7 +96,7 @@ public class BankDealsActivity extends AppCompatActivity {
     }
 
     private void initializeToolbar() {
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbar = (Toolbar) findViewById(R.id.mpsdkToolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
@@ -105,7 +105,7 @@ public class BankDealsActivity extends AppCompatActivity {
                 mToolbar.setBackgroundColor(mDecorationPreference.getBaseColor());
             }
             if(mDecorationPreference.isDarkFontEnabled()) {
-                TextView title = (TextView) findViewById(R.id.title);
+                TextView title = (TextView) findViewById(R.id.mpsdkTitle);
                 title.setTextColor(mDecorationPreference.getDarkFontColor(this));
             }
         }

@@ -42,7 +42,7 @@ public class InstallmentsActivity extends AppCompatActivity {
         }
 
         // Set recycler view
-        mRecyclerView = (RecyclerView) findViewById(R.id.installments_list);
+        mRecyclerView = (RecyclerView) findViewById(R.id.mpsdkInstallmentsList);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
 

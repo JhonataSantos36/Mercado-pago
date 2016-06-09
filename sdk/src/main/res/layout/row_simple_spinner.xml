@@ -4,7 +4,7 @@
     android:gravity="center_vertical">
 
     <com.mercadopago.views.MPTextView
-        android:id="@+id/label"
+        android:id="@+id/mpsdkLabel"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:gravity="center"

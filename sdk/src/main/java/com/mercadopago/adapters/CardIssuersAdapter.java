@@ -64,7 +64,7 @@ public class CardIssuersAdapter extends  RecyclerView.Adapter<CardIssuersAdapter
 
         public ViewHolder(View itemView) {
             super(itemView);
-            mIssuersTextView = (MPTextView) itemView.findViewById(R.id.adapter_issuers_text);
+            mIssuersTextView = (MPTextView) itemView.findViewById(R.id.mpsdkAdapterIssuersText);
         }
     }
 

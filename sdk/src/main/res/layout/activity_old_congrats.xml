@@ -32,14 +32,14 @@
                     android:orientation="vertical">
 
                     <ImageView
-                        android:id="@+id/icon"
+                        android:id="@+id/mpsdkIcon"
                         android:layout_width="62dp"
                         android:layout_height="62dp"
                         tools:src="@drawable/ic_approved"
                         android:layout_gravity="center_horizontal" />
 
                     <com.mercadopago.views.MPTextView
-                        android:id="@+id/description"
+                        android:id="@+id/mpsdkDescription"
                         android:layout_width="fill_parent"
                         android:gravity="bottom|center"
                         android:layout_height="wrap_content"
@@ -65,13 +65,13 @@
                     android:orientation="vertical">
 
                     <!-- operation amount -->
-                    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    <LinearLayout
+                        android:id="@+id/mpsdkTotalLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:minHeight="?android:attr/listPreferredItemHeight"
                         android:gravity="center_vertical"
                         android:orientation="vertical"
-                        android:id="@+id/totalLayout"
                         android:padding="10dp">
 
                         <com.mercadopago.views.MPTextView
@@ -82,7 +82,7 @@
                             style="@style/mpsdk_form_label"/>
 
                         <com.mercadopago.views.MPTextView
-                            android:id="@+id/amount"
+                            android:id="@+id/mpsdkAmount"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             tools:text="$ 100,50"
@@ -109,7 +109,7 @@
                             style="@style/mpsdk_form_label"/>
 
                         <com.mercadopago.views.MPTextView
-                            android:id="@+id/paymentMethod"
+                            android:id="@+id/mpsdkPaymentMethod"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:gravity="center_vertical"
@@ -124,13 +124,13 @@
                     <include layout="@layout/view_dashed_line_separator"/>
 
                     <!--  payment id -->
-                    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    <LinearLayout
+                        android:id="@+id/mpsdkOperationLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:minHeight="?android:attr/listPreferredItemHeight"
                         android:gravity="center_vertical"
                         android:orientation="vertical"
-                        android:id="@+id/operationLayout"
                         android:padding="10dp">
 
                         <com.mercadopago.views.MPTextView
@@ -141,7 +141,7 @@
                             style="@style/mpsdk_form_label"/>
 
                         <com.mercadopago.views.MPTextView
-                            android:id="@+id/paymentId"
+                            android:id="@+id/mpsdkPaymentId"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             tools:text="123123"
@@ -152,13 +152,13 @@
                     <include layout="@layout/view_dashed_line_separator"/>
 
                     <!-- operation date -->
-                    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    <LinearLayout
+                        android:id="@+id/mpsdkDateLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:minHeight="?android:attr/listPreferredItemHeight"
                         android:gravity="center_vertical"
                         android:orientation="vertical"
-                        android:id="@+id/dateLayout"
                         android:padding="10dp">
 
                         <com.mercadopago.views.MPTextView
@@ -169,7 +169,7 @@
                             style="@style/mpsdk_form_label"/>
 
                         <com.mercadopago.views.MPTextView
-                            android:id="@+id/dateCreated"
+                            android:id="@+id/mpsdkDateCreated"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             tools:text="12/10"
@@ -182,7 +182,7 @@
             </android.support.v7.widget.CardView>
 
             <com.mercadopago.views.MPButton
-                android:id="@+id/button"
+                android:id="@+id/mpsdkButton"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/mpsdk_button_height"
                 android:text="@string/mpsdk_finish_label"

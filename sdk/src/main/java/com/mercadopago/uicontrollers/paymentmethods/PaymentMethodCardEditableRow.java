@@ -54,10 +54,10 @@ public class PaymentMethodCardEditableRow implements PaymentMethodViewController
 
     @Override
     public void initializeControls() {
-        mDescription = (MPTextView) mView.findViewById(R.id.description);
-        mIcon = (ImageView) mView.findViewById(R.id.image);
-        mEditHint = mView.findViewById(R.id.editHint);
-        mSeparator = mView.findViewById(R.id.separator);
+        mDescription = (MPTextView) mView.findViewById(R.id.mpsdkDescription);
+        mIcon = (ImageView) mView.findViewById(R.id.mpsdkImage);
+        mEditHint = mView.findViewById(R.id.mpsdkEditHint);
+        mSeparator = mView.findViewById(R.id.mpsdkSeparator);
     }
 
     @Override

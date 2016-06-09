@@ -116,8 +116,8 @@ public class CongratsActivity extends AppCompatActivity {
     }
 
     private void initializePendingControls(){
-        mPendingSubtitle = (MPTextView) findViewById(R.id.pendingSubtitle);
-        mExit = (MPTextView) findViewById(R.id.exitPending);
+        mPendingSubtitle = (MPTextView) findViewById(R.id.mpsdkPendingSubtitle);
+        mExit = (MPTextView) findViewById(R.id.mpsdkExitPending);
         mExit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -127,9 +127,9 @@ public class CongratsActivity extends AppCompatActivity {
     }
 
     private void initializeRejectionControls() {
-        mRejectionTitle = (MPTextView) findViewById(R.id.rejectionTitle);
-        mRejectionSubtitle = (MPTextView) findViewById(R.id.rejectionSubtitle);
-        mSelectOtherPaymentMethodByRejection = (FrameLayout) findViewById(R.id.selectOtherPaymentMethodByRejection);
+        mRejectionTitle = (MPTextView) findViewById(R.id.mpsdkRejectionTitle);
+        mRejectionSubtitle = (MPTextView) findViewById(R.id.mpsdkRejectionSubtitle);
+        mSelectOtherPaymentMethodByRejection = (FrameLayout) findViewById(R.id.mpsdkSelectOtherPaymentMethodByRejection);
 
         mSelectOtherPaymentMethodByRejection.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -140,7 +140,7 @@ public class CongratsActivity extends AppCompatActivity {
                 finish();
             }
         });
-        mExit = (MPTextView) findViewById(R.id.exitRejection);
+        mExit = (MPTextView) findViewById(R.id.mpsdkExitRejection);
         mExit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -151,8 +151,8 @@ public class CongratsActivity extends AppCompatActivity {
     }
 
     private void initializeCallForAuthControls() {
-        mCallForAuthTitle = (MPTextView) findViewById(R.id.callForAuthorizeTitle);
-        mAuthorizedPaymentMethod = (MPTextView) findViewById(R.id.authorizedPaymentMethod);
+        mCallForAuthTitle = (MPTextView) findViewById(R.id.mpsdkCallForAuthorizeTitle);
+        mAuthorizedPaymentMethod = (MPTextView) findViewById(R.id.mpsdkAuthorizedPaymentMethod);
         mAuthorizedPaymentMethod.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -162,7 +162,7 @@ public class CongratsActivity extends AppCompatActivity {
                 finish();
             }
         });
-        mSelectOtherPaymentMethod = (MPTextView) findViewById(R.id.selectOtherPaymentMethod);
+        mSelectOtherPaymentMethod = (MPTextView) findViewById(R.id.mpsdkSelectOtherPaymentMethod);
         mSelectOtherPaymentMethod.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -172,7 +172,7 @@ public class CongratsActivity extends AppCompatActivity {
                 finish();
             }
         });
-        mExit = (MPTextView) findViewById(R.id.exitCallForAuthorize);
+        mExit = (MPTextView) findViewById(R.id.mpsdkExitCallForAuthorize);
         mExit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -182,15 +182,15 @@ public class CongratsActivity extends AppCompatActivity {
     }
 
     private void initializeCongratsControls() {
-        mPayerEmailDescription = (MPTextView) findViewById(R.id.payerEmailDescription);
-        mLastFourDigitsDescription = (MPTextView) findViewById(R.id.lastFourDigitsDescription);
-        mInstallmentsDescription = (MPTextView) findViewById(R.id.installmentsDescription);
-        mInterestAmountDescription = (MPTextView) findViewById(R.id.interestAmountDescription);
-        mPaymentIdDescription = (MPTextView) findViewById(R.id.paymentIdDescription);
-        mCongratulationSubtitle = (MPTextView) findViewById(R.id.congratulationSubtitle);
-        mPaymentIdSeparator = findViewById(R.id.paymentIdSeparator);
-        mPaymentMethodImage = (ImageView) findViewById(R.id.paymentMethodImage);
-        mExit = (MPTextView) findViewById(R.id.exitCongrat);
+        mPayerEmailDescription = (MPTextView) findViewById(R.id.mpsdkPayerEmailDescription);
+        mLastFourDigitsDescription = (MPTextView) findViewById(R.id.mpsdkLastFourDigitsDescription);
+        mInstallmentsDescription = (MPTextView) findViewById(R.id.mpsdkInstallmentsDescription);
+        mInterestAmountDescription = (MPTextView) findViewById(R.id.mpsdkInterestAmountDescription);
+        mPaymentIdDescription = (MPTextView) findViewById(R.id.mpsdkPaymentIdDescription);
+        mCongratulationSubtitle = (MPTextView) findViewById(R.id.mpsdkCongratulationSubtitle);
+        mPaymentIdSeparator = findViewById(R.id.mpsdkPaymentIdSeparator);
+        mPaymentMethodImage = (ImageView) findViewById(R.id.mpsdkPaymentMethodImage);
+        mExit = (MPTextView) findViewById(R.id.mpsdkExitCongrats);
         mExit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

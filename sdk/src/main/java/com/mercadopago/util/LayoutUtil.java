@@ -36,9 +36,9 @@ public class LayoutUtil {
 
     private static void showLayout(Activity activity, final boolean showProgress, final boolean showLayout, final boolean showRefresh) {
 
-        final View form = activity.findViewById(R.id.regularLayout);
-        final View progress = activity.findViewById(R.id.progressLayout);
-        final View refresh = activity.findViewById(R.id.refreshLayout);
+        final View form = activity.findViewById(R.id.mpsdkRegularLayout);
+        final View progress = activity.findViewById(R.id.mpsdkProgressLayout);
+        final View refresh = activity.findViewById(R.id.mpsdkRefreshLayout);
 
         if(progress != null) {
             progress.setVisibility(showRefresh || showLayout ? View.GONE : View.VISIBLE);

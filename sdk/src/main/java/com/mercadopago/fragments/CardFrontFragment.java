@@ -87,26 +87,26 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
     }
 
     public void setCardInputViews() {
-        mCardNumberEditText = (MPEditText) getActivity().findViewById(R.id.cardNumber);
-        mCardHolderNameEditText = (MPEditText) getActivity().findViewById(R.id.cardholderName);
-        mCardExpiryDateEditText = (MPEditText) getActivity().findViewById(R.id.cardExpiryDate);
-        mCardSecurityEditText = (MPEditText) getActivity().findViewById(R.id.cardSecurityCode);
+        mCardNumberEditText = (MPEditText) getActivity().findViewById(R.id.mpsdkCardNumber);
+        mCardHolderNameEditText = (MPEditText) getActivity().findViewById(R.id.mpsdkCardholderName);
+        mCardExpiryDateEditText = (MPEditText) getActivity().findViewById(R.id.mpsdkCardExpiryDate);
+        mCardSecurityEditText = (MPEditText) getActivity().findViewById(R.id.mpsdkCardSecurityCode);
         mAnimFadeIn = AnimationUtils.loadAnimation(getActivity(), R.anim.fade_in);
         mQuickAnim = AnimationUtils.loadAnimation(getActivity(), R.anim.quick_anim);
         if (getView() != null) {
-            mCardNumberTextView = (MPTextView) getView().findViewById(R.id.cardNumberTextView);
-            mCardholderNameTextView = (MPTextView) getView().findViewById(R.id.cardholderNameView);
-            mCardExpiryMonthTextView = (MPTextView) getView().findViewById(R.id.cardHolderExpiryMonth);
-            mCardExpiryYearTextView = (MPTextView) getView().findViewById(R.id.cardHolderExpiryYear);
-            mCardDateDividerTextView = (MPTextView) getView().findViewById(R.id.cardHolderDateDivider);
-            mCardSecurityCodeTextView = (MPTextView) getView().findViewById(R.id.cardSecurityView);
-            mCardSecurityClickableZone = (FrameLayout) getView().findViewById(R.id.cardSecurityClickableZone);
-            mBaseCard = (FrameLayout) getView().findViewById(R.id.activity_new_card_form_basecolor_front);
-            mColorCard = (FrameLayout) getView().findViewById(R.id.activity_new_card_form_color_front);
+            mCardNumberTextView = (MPTextView) getView().findViewById(R.id.mpsdkCardNumberTextView);
+            mCardholderNameTextView = (MPTextView) getView().findViewById(R.id.mpsdkCardholderNameView);
+            mCardExpiryMonthTextView = (MPTextView) getView().findViewById(R.id.mpsdkCardHolderExpiryMonth);
+            mCardExpiryYearTextView = (MPTextView) getView().findViewById(R.id.mpsdkCardHolderExpiryYear);
+            mCardDateDividerTextView = (MPTextView) getView().findViewById(R.id.mpsdkCardHolderDateDivider);
+            mCardSecurityCodeTextView = (MPTextView) getView().findViewById(R.id.mpsdkCardSecurityView);
+            mCardSecurityClickableZone = (FrameLayout) getView().findViewById(R.id.mpsdkCardSecurityClickableZone);
+            mBaseCard = (FrameLayout) getView().findViewById(R.id.mpsdkActivityNewCardFormBasecolorFront);
+            mColorCard = (FrameLayout) getView().findViewById(R.id.mpsdkActivityNewCardFormColorFront);
             mColorDrawableCard = (GradientDrawable) mColorCard.getBackground();
-            mBaseImageCard = (FrameLayout) getView().findViewById(R.id.baseImageCard);
-            mImageCardContainer = (ImageView) getView().findViewById(R.id.imageCardContainer);
-            mCardBorder = (ImageView) getView().findViewById(R.id.card_shadow_border);
+            mBaseImageCard = (FrameLayout) getView().findViewById(R.id.mpsdkBaseImageCard);
+            mImageCardContainer = (ImageView) getView().findViewById(R.id.mpsdkImageCardContainer);
+            mCardBorder = (ImageView) getView().findViewById(R.id.mpsdkCardShadowBorder);
 
         }
         decorate();

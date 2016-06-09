@@ -183,7 +183,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
     }
 
     private void initializeToolbar() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.mpsdkToolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -200,7 +200,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
                 toolbar.setBackgroundColor(mDecorationPreference.getBaseColor());
             }
             if(mDecorationPreference.isDarkFontEnabled()) {
-                TextView title = (TextView) findViewById(R.id.title);
+                TextView title = (TextView) findViewById(R.id.mpsdkTitle);
                 title.setTextColor(mDecorationPreference.getDarkFontColor(this));
                 Drawable upArrow = toolbar.getNavigationIcon();
                 upArrow.setColorFilter(mDecorationPreference.getDarkFontColor(this), PorterDuff.Mode.SRC_ATOP);
@@ -212,12 +212,12 @@ public class PaymentVaultActivity extends AppCompatActivity {
 
     protected void initializeControls() {
         initializeGroupRecyclerView();
-        mActivityTitle = (MPTextView) findViewById(R.id.title);
-        mAppBar = (AppBarLayout) findViewById(R.id.appBar);
+        mActivityTitle = (MPTextView) findViewById(R.id.mpsdkTitle);
+        mAppBar = (AppBarLayout) findViewById(R.id.mpsdkAppBar);
     }
 
     protected void initializeGroupRecyclerView() {
-        mSearchItemsRecyclerView = (RecyclerView) findViewById(R.id.groupsList);
+        mSearchItemsRecyclerView = (RecyclerView) findViewById(R.id.mpsdkGroupsList);
         mSearchItemsRecyclerView.setHasFixedSize(true);
         mSearchItemsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
