@@ -437,7 +437,6 @@ public class PaymentVaultActivity extends AppCompatActivity {
             finish();
         }
         else if(resultCode == RESULT_CANCELED && data != null && data.hasExtra("mpException")) {
-            //TODO validate
             MPTracker.getInstance().trackEvent("PAYMENT_VAULT","CANCELED","2",mMerchantPublicKey, mSite.getId(), "1.0",this);
 
             setResult(Activity.RESULT_CANCELED, data);

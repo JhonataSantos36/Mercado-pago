@@ -127,7 +127,6 @@ public class TermsAndConditionsActivity extends AppCompatActivity {
     }
 
     protected void setContentView() {
-        //TODO validate AGREGAR PUBLICKEY
         MPTracker.getInstance().trackScreen("TERMS_AND_CONDITIONS", "2", "publicKey", "MLA", "1.0", this);
 
         setContentView(R.layout.activity_terms_and_conditions);

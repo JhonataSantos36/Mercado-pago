@@ -116,9 +116,6 @@ public class CardVaultActivity extends ShowCardActivity {
     }
 
     protected void setContentView() {
-        //TODO validate
-        //MPTracker.getInstance().trackScreen("CARD_VAULT", "2", mPublicKey, "MLA", "1.0", this);
-
         setContentView(R.layout.activity_new_card_vault);
     }
 

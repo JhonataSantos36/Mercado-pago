@@ -146,7 +146,6 @@ public class PaymentMethodsActivity extends AppCompatActivity {
     }
 
     public void onBackPressed() {
-        //TODO validate
         MPTracker.getInstance().trackEvent("PAYMENT_METHODS", "BACK_PRESSED", "2", mMerchantPublicKey, "MLA", "1.0", this);
 
         Intent returnIntent = new Intent();
