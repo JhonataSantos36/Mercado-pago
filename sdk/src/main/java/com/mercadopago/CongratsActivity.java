@@ -89,6 +89,7 @@ public class CongratsActivity extends AppCompatActivity {
 
     private void showPending(){
         setTheme(R.style.Theme_InfoMercadoPagoTheme_NoActionbar);
+
         setContentView(R.layout.activity_pending);
         initializePendingControls();
         fillPendingData();

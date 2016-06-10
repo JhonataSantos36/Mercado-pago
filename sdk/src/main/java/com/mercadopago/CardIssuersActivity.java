@@ -17,6 +17,7 @@ import com.mercadopago.core.MercadoPago;
 import com.mercadopago.listeners.RecyclerItemClickListener;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.Issuer;
+import com.mercadopago.mptracker.MPTracker;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.ErrorUtil;
 
@@ -96,6 +97,7 @@ public class CardIssuersActivity extends ShowCardActivity {
     }
 
     protected void setContentView() {
+        MPTracker.getInstance().trackScreen("CARD_ISSUERS", "2", mPublicKey, "MLA", "1.0", this);
         setContentView(R.layout.activity_new_issuers);
     }
 
@@ -154,6 +156,7 @@ public class CardIssuersActivity extends ShowCardActivity {
                     @Override
                     public void success(List<Issuer> issuers) {
                         mIssuers = issuers;
+                        MPTracker.getInstance().trackEvent("CARD_ISSUERS", "GET_ISSUERS_RESPONSE", "SUCCESS", mPublicKey, "MLA", "1.0", mActivity);
                         if (mActiveActivity) {
                             mProgressBar.setVisibility(View.GONE);
                             if (mIssuers.isEmpty()) {
@@ -169,21 +172,24 @@ public class CardIssuersActivity extends ShowCardActivity {
 
                     @Override
                     public void failure(ApiException apiException) {
-                        if (mActiveActivity) {
-                            mProgressBar.setVisibility(View.GONE);
-                            mFailureRecovery = new FailureRecovery() {
-                                @Override
-                                public void recover() {
-                                    getIssuersAsync();
-                                }
-                            };
-                            ApiUtil.showApiExceptionError(mActivity, apiException);
+                        MPTracker.getInstance().trackEvent("CARD_ISSUERS", "GET_ISSUERS_RESPONSE", "FAIL", mPublicKey, "MLA", "1.0", mActivity);
+                            if (mActiveActivity) {
+                                mProgressBar.setVisibility(View.GONE);
+                                mFailureRecovery = new FailureRecovery() {
+                                    @Override
+                                    public void recover() {
+                                        getIssuersAsync();
+                                    }
+                                };
+                                ApiUtil.showApiExceptionError(mActivity, apiException);
+                            }
                         }
                     }
-                });
-    }
 
-    @Override
+                    );
+                }
+
+        @Override
     protected void finishWithResult() {
         Intent returnIntent = new Intent();
         returnIntent.putExtra("issuer", mSelectedIssuer);
@@ -210,6 +216,8 @@ public class CardIssuersActivity extends ShowCardActivity {
 
     @Override
     public void onBackPressed() {
+        MPTracker.getInstance().trackEvent("CARD_ISSUERS", "BACK_PRESSED", "2", mPublicKey, "MLA", "1.0", this);
+
         Intent returnIntent = new Intent();
         returnIntent.putExtra("backButtonPressed", true);
         setResult(RESULT_CANCELED, returnIntent);

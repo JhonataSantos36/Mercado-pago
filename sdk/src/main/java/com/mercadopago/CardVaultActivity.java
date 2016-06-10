@@ -18,6 +18,7 @@ import com.mercadopago.model.PaymentType;
 import com.mercadopago.model.Setting;
 import com.mercadopago.model.Site;
 import com.mercadopago.model.Token;
+import com.mercadopago.mptracker.MPTracker;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.ErrorUtil;
 
@@ -161,6 +162,8 @@ public class CardVaultActivity extends ShowCardActivity {
             mPayerCost = (PayerCost) bundle.getSerializable("payerCost");
             finishWithResult();
         } else if (resultCode == RESULT_CANCELED) {
+            MPTracker.getInstance().trackEvent( "INSTALLMENTS", "CANCELED", "2", mPublicKey, "MLA", "1.0", this);
+
             setResult(RESULT_CANCELED, data);
             finish();
         }
@@ -187,6 +190,8 @@ public class CardVaultActivity extends ShowCardActivity {
             checkStartInstallmentsActivity();
 
         } else if (resultCode == RESULT_CANCELED){
+            MPTracker.getInstance().trackEvent( "GUESSING_CARD", "CANCELED", "2", mPublicKey, "MLA", "1.0", this);
+
             setResult(RESULT_CANCELED, data);
             finish();
         }
@@ -201,6 +206,7 @@ public class CardVaultActivity extends ShowCardActivity {
                     new Callback<List<Installment>>() {
                         @Override
                         public void success(List<Installment> installments) {
+                            MPTracker.getInstance().trackEvent("CARD_INSTALLMENTS", "GET_INSTALLMENTS_RESPONSE", "SUCCESS", "2", mPublicKey, "MLA", "1.0", mActivity);
                             if (mActiveActivity) {
                                 if (installments.size() == 1) {
                                     if (installments.get(0).getPayerCosts().size() == 1) {
@@ -220,6 +226,7 @@ public class CardVaultActivity extends ShowCardActivity {
 
                         @Override
                         public void failure(ApiException apiException) {
+                            MPTracker.getInstance().trackEvent("CARD_INSTALLMENTS", "GET_INSTALLMENTS_RESPONSE", "FAIL", "2", mPublicKey, "MLA", "1.0", mActivity);
                             if (mActiveActivity) {
                                 mFailureRecovery = new FailureRecovery() {
                                     @Override

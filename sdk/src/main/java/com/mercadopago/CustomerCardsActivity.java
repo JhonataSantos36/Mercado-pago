@@ -13,7 +13,9 @@ import com.mercadopago.adapters.CustomerCardsAdapter;
 import com.mercadopago.decorations.DividerItemDecoration;
 import com.mercadopago.model.Card;
 import com.mercadopago.model.PaymentMethodRow;
+import com.mercadopago.mptracker.MPTracker;
 
+import java.lang.reflect.MalformedParameterizedTypeException;
 import java.lang.reflect.Type;
 import java.util.List;
 
@@ -68,12 +70,14 @@ public class CustomerCardsActivity extends AppCompatActivity {
     }
 
     protected void setContentView() {
-
+        //TODO validate AGREGAR PUBLIC KEY
+        MPTracker.getInstance().trackScreen("CUSTOMER_CARDS", "2", "publicKey", "MLA", "1.0", this);
         setContentView(R.layout.activity_customer_cards);
     }
 
     @Override
     public void onBackPressed() {
+        MPTracker.getInstance().trackEvent("CUSTOMER_CARDS", "BACK_PRESSED", "2", "publicKey", "MLA", "1.0", this);
 
         Intent returnIntent = new Intent();
         returnIntent.putExtra("backButtonPressed", true);

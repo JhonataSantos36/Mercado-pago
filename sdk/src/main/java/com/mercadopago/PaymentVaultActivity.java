@@ -28,6 +28,7 @@ import com.mercadopago.model.PaymentMethodSearch;
 import com.mercadopago.model.PaymentMethodSearchItem;
 import com.mercadopago.model.Site;
 import com.mercadopago.model.Token;
+import com.mercadopago.mptracker.MPTracker;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.CurrenciesUtil;
 import com.mercadopago.util.ErrorUtil;
@@ -79,6 +80,9 @@ public class PaymentVaultActivity extends AppCompatActivity {
             setTheme(R.style.Theme_MercadoPagoTheme_NoActionBar);
         }
         setContentView(R.layout.activity_payment_vault);
+
+        MPTracker.getInstance().trackScreen("PAYMENT_METHOD_SEARCH", "2", mMerchantPublicKey, "MLA", "1.0", this);
+
         setActivity();
         mActivityActive = true;
         boolean validParameters = true;
@@ -95,6 +99,8 @@ public class PaymentVaultActivity extends AppCompatActivity {
                     .setPublicKey(mMerchantPublicKey)
                     .setContext(this)
                     .build();
+
+            MPTracker.getInstance().trackEvent("PAYMENT_METHOD_SEARCH","INIT_PAYMENT_VAULT","2", mMerchantPublicKey, mSite.getId(), "1.0", this);
 
             initializeToolbar();
             initializeControls();
@@ -256,6 +262,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
 
             @Override
             public void success(PaymentMethodSearch paymentMethodSearch) {
+                MPTracker.getInstance().trackEvent("PAYMENT_METHOD_SEARCH","GET_PAYMENT_METHOD_SEARCH_RESPONSE", "SUCCESS","2", mMerchantPublicKey, mSite.getId(), "1.0", mActivity);
                 if(mActivityActive) {
                     if (!paymentMethodSearch.hasSearchItems()) {
                         showEmptyPaymentMethodsError();
@@ -268,6 +275,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
 
             @Override
             public void failure(ApiException apiException) {
+                MPTracker.getInstance().trackEvent("PAYMENT_METHOD_SEARCH","GET_PAYMENT_METHOD_SEARCH_RESPONSE", "FAIL","2", mMerchantPublicKey, mSite.getId(), "1.0", mActivity);
                 if (mActivityActive) {
                     ApiUtil.showApiExceptionError(mActivity, apiException);
                     mFailureRecovery = new FailureRecovery() {
@@ -334,7 +342,6 @@ public class PaymentVaultActivity extends AppCompatActivity {
     }
 
     private void restartWithSelectedItem(PaymentMethodSearchItem groupIem) {
-
         Intent intent = new Intent(this, PaymentVaultActivity.class);
         intent.putExtras(this.getIntent());
         intent.putExtra("selectedSearchItem", groupIem);
@@ -430,6 +437,8 @@ public class PaymentVaultActivity extends AppCompatActivity {
             finish();
         }
         else if(resultCode == RESULT_CANCELED && data != null && data.hasExtra("mpException")) {
+            MPTracker.getInstance().trackEvent("PAYMENT_VAULT","CANCELED","2",mMerchantPublicKey, mSite.getId(), "1.0",this);
+
             setResult(Activity.RESULT_CANCELED, data);
             this.finish();
         }
@@ -446,6 +455,9 @@ public class PaymentVaultActivity extends AppCompatActivity {
         } else if (isUniqueSelectionAvailable()||
                 ((data != null) && (data.getSerializableExtra("mpException") != null))){
 
+            //TODO validate
+            MPTracker.getInstance().trackEvent("PAYMENT_VAULT","CANCELED","2",mMerchantPublicKey, mSite.getId(), "1.0",this);
+
             setResult(Activity.RESULT_CANCELED, data);
             this.finish();
         }
@@ -461,6 +473,9 @@ public class PaymentVaultActivity extends AppCompatActivity {
         }
         else {
             if ((data != null) && (data.getSerializableExtra("apiException") != null)) {
+                //TODO validate
+                MPTracker.getInstance().trackEvent("PAYMENT_VAULT","CANCELED","2",mMerchantPublicKey, mSite.getId(), "1.0",this);
+
                 setResult(Activity.RESULT_CANCELED, data);
                 this.finish();
             }
@@ -518,6 +533,8 @@ public class PaymentVaultActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        MPTracker.getInstance().trackEvent("PAYMENT_METHOD_SEARCH","BACK_PRESSED","2", mMerchantPublicKey, mSite.getId(), "1.0",this);
+
         setResult(Activity.RESULT_CANCELED);
         finish();
 

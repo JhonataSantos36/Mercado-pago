@@ -48,6 +48,7 @@ import com.mercadopago.model.PaymentPreference;
 import com.mercadopago.model.SecurityCode;
 import com.mercadopago.model.Setting;
 import com.mercadopago.model.Token;
+import com.mercadopago.mptracker.MPTracker;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.LayoutUtil;
@@ -180,6 +181,7 @@ public class GuessingNewCardActivity extends FrontCardActivity {
     @Override
     public void onBackPressed() {
         checkFlipCardToFront(true);
+        MPTracker.getInstance().trackEvent("GUESSING_CARD", "BACK_PRESSED", "2", mPublicKey, "MLA", "1.0", this);
         Intent returnIntent = new Intent();
         returnIntent.putExtra("backButtonPressed", true);
         setResult(RESULT_CANCELED, returnIntent);
@@ -545,6 +547,7 @@ public class GuessingNewCardActivity extends FrontCardActivity {
         mMercadoPago.getPaymentMethods(new Callback<List<PaymentMethod>>() {
             @Override
             public void success(List<PaymentMethod> paymentMethods) {
+                MPTracker.getInstance().trackEvent("PAYMENT_METHODS", "GET_PAYMENT_METHODS_RESPONSE", "SUCCESS", "2", mPublicKey, "MLA", "1.0", mActivity);
                 if (mActiveActivity) {
                     startGuessingForm(paymentMethods);
                 }
@@ -552,6 +555,7 @@ public class GuessingNewCardActivity extends FrontCardActivity {
 
             @Override
             public void failure(ApiException apiException) {
+                MPTracker.getInstance().trackEvent("PAYMENT_METHODS", "GET_PAYMENT_METHODS_RESPONSE", "FAIL", "2", mPublicKey, "MLA", "1.0", mActivity);
                 if (mActiveActivity) {
                     mFailureRecovery = new FailureRecovery() {
                         @Override
@@ -955,6 +959,8 @@ public class GuessingNewCardActivity extends FrontCardActivity {
             public void onFocusChange(View v, boolean hasFocus) {
                 mFrontFragment.setFontColor();
                 if (hasFocus) {
+                    MPTracker.getInstance().trackScreen("CARD_NUMBER", "2", mPublicKey, "MLA", "1.0", mActivity);
+
                     disableBackInputButton();
                     openKeyboard(mCardNumberEditText);
                     checkFlipCardToFront(true);
@@ -1001,6 +1007,8 @@ public class GuessingNewCardActivity extends FrontCardActivity {
             public void onFocusChange(View v, boolean hasFocus) {
                 mFrontFragment.setFontColor();
                 if (hasFocus) {
+                    MPTracker.getInstance().trackScreen("CARD_HOLDER_NAME", "2", mPublicKey, "MLA", "1.0", mActivity);
+
                     enableBackInputButton();
                     openKeyboard(mCardHolderNameEditText);
                     checkFlipCardToFront(true);
@@ -1036,6 +1044,8 @@ public class GuessingNewCardActivity extends FrontCardActivity {
             public void onFocusChange(View v, boolean hasFocus) {
                 mFrontFragment.setFontColor();
                 if (hasFocus) {
+                    MPTracker.getInstance().trackScreen("CARD_EXPIRY_DATE", "2", mPublicKey, "MLA", "1.0", mActivity);
+
                     enableBackInputButton();
                     openKeyboard(mCardExpiryDateEditText);
                     checkFlipCardToFront(true);
@@ -1071,6 +1081,8 @@ public class GuessingNewCardActivity extends FrontCardActivity {
             public void onFocusChange(View v, boolean hasFocus) {
                 mFrontFragment.setFontColor();
                 if (hasFocus) {
+                    MPTracker.getInstance().trackScreen("CARD_SECURITY_CODE", "2", mPublicKey, "MLA", "1.0", mActivity);
+
                     enableBackInputButton();
                     openKeyboard(mCardSecurityCodeEditText);
                     mCurrentEditingEditText = CARD_SECURITYCODE_INPUT;
@@ -1097,6 +1109,8 @@ public class GuessingNewCardActivity extends FrontCardActivity {
     }
 
     public void setCardIdentificationFocusListener() {
+        MPTracker.getInstance().trackScreen("IDENTIFICATION_NUMBER", "2", mPublicKey, "MLA", "1.0", this);
+
         mIdentificationTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -1273,7 +1287,6 @@ public class GuessingNewCardActivity extends FrontCardActivity {
         });
     }
 
-
     public boolean canCreateCardToken() {
         boolean result = true;
         boolean requestFocus = true;
@@ -1382,7 +1395,6 @@ public class GuessingNewCardActivity extends FrontCardActivity {
             }
         });
     }
-
 
     private boolean validateCardNumber(boolean requestFocus) {
         mCardToken.setCardNumber(getCardNumber());
@@ -1496,6 +1508,7 @@ public class GuessingNewCardActivity extends FrontCardActivity {
                 new Callback<List<Issuer>>() {
                     @Override
                     public void success(List<Issuer> issuers) {
+                        MPTracker.getInstance().trackEvent("CARD_ISSUER", "GET_ISSUERS_RESPONSE", "SUCCESS", "2", mPublicKey, "MLA", "1.0", mActivity);
                         if (mActiveActivity) {
                             if (issuers.isEmpty()) {
                                 //error
@@ -1511,6 +1524,7 @@ public class GuessingNewCardActivity extends FrontCardActivity {
 
                     @Override
                     public void failure(ApiException apiException) {
+                        MPTracker.getInstance().trackEvent("CARD_ISSUER", "GET_ISSUERS_RESPONSE", "FAIL", "2", mPublicKey, "MLA", "1.0", mActivity);
                         if (mActiveActivity) {
                             mFailureRecovery = new FailureRecovery() {
                                 @Override
