@@ -162,7 +162,7 @@ public class CardVaultActivity extends ShowCardActivity {
             mPayerCost = (PayerCost) bundle.getSerializable("payerCost");
             finishWithResult();
         } else if (resultCode == RESULT_CANCELED) {
-            MPTracker.getInstance().trackEvent( "CARD_VAULT", "CANCELED", "2", mPublicKey, "MLA", "1.0", this);
+            MPTracker.getInstance().trackEvent( "INSTALLMENTS", "CANCELED", "2", mPublicKey, "MLA", "1.0", this);
 
             setResult(RESULT_CANCELED, data);
             finish();
@@ -190,7 +190,7 @@ public class CardVaultActivity extends ShowCardActivity {
             checkStartInstallmentsActivity();
 
         } else if (resultCode == RESULT_CANCELED){
-            MPTracker.getInstance().trackEvent( "CARD_VAULT", "CANCELED", "2", mPublicKey, "MLA", "1.0", this);
+            MPTracker.getInstance().trackEvent( "GUESSING_CARD", "CANCELED", "2", mPublicKey, "MLA", "1.0", this);
 
             setResult(RESULT_CANCELED, data);
             finish();
