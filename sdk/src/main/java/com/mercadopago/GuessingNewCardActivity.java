@@ -153,6 +153,7 @@ public class GuessingNewCardActivity extends FrontCardActivity {
         if (mCardSideState == null) {
             mCardSideState = CARD_SIDE_FRONT;
         }
+        openKeyboard();
     }
 
     @Override
@@ -379,6 +380,29 @@ public class GuessingNewCardActivity extends FrontCardActivity {
                 }
             }
         });
+    }
+
+    private void openKeyboard() {
+        if (mCurrentEditingEditText == null) {
+            mCurrentEditingEditText = CARD_NUMBER_INPUT;
+        }
+        switch (mCurrentEditingEditText) {
+            case CARD_NUMBER_INPUT:
+                openKeyboard(mCardNumberEditText);
+                break;
+            case CARDHOLDER_NAME_INPUT:
+                openKeyboard(mCardHolderNameEditText);
+                break;
+            case CARD_EXPIRYDATE_INPUT:
+                openKeyboard(mCardExpiryDateEditText);
+                break;
+            case CARD_SECURITYCODE_INPUT:
+                openKeyboard(mCardSecurityCodeEditText);
+                break;
+            case CARD_IDENTIFICATION_INPUT:
+                openKeyboard(mCardIdentificationNumberEditText);
+                break;
+        }
     }
 
     private boolean validateCurrentEditText(boolean onFinish) {
