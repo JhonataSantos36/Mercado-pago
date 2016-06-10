@@ -27,7 +27,7 @@
             <div class="collapse navbar-collapse navbar-ex1-collapse">
                <ul class="nav navbar-nav navbar-right" style="color: white;">
                   <li><a class="getting-started-nav nav-link" href="index.html">Nuestro checkout</a></li>
-                  <li><a class="docs-nav nav-link" href="f2.html">Tu checkout</a></li>
+                  <li><a class="docs-nav nav-link" href="checkout_custom.html">Tu checkout</a></li>
                   <li><a class="nav-link" href="https://www.mercadopago.com.ar/developers/es/community/forum/">Foro de desarrolladores</a></li>
                </ul>
             </div>
@@ -54,7 +54,21 @@
                </p>
                <br />
             </div>
-            
+
+    <!--      <div class="row" id="template-images">
+    <div class="template">
+      <div class="template-image" style="background: url('./img/android/index_card_form.gif') no-repeat transparent;"></div>
+      <b>Nuevo formulario de tarjeta</b>
+    </div>
+    <div class="template">
+      <div class="template-image" id="start-template-tabs-image"></div>
+      <code>$ ionic start myApp tabs</code>
+    </div>
+    <div class="template">
+      <div class="template-image" id="start-template-sidemenu-image"></div>
+      <code>$ ionic start myApp sidemenu</code>
+    </div>
+  </div>   -->         
 
             <div class="row" id="step-one">
                <div class="col-md-6 step-desc">
@@ -88,10 +102,10 @@
                         Creá una Activity (MainActivity, por ejemplo) para insertar el botón. También agregá un campo de texto para mostrar los resultados del pago.
                      </p>
                      <p>
-                        Pegá el código de la derecha en <u>res/layout/activity_main.xml</u>.
+                        Pegá el siguiente código en <b>res/layout/activity_main.xml</b>.
                      </p>
                      <p>
-                        En el siguiente paso estarás trabajando sobre el evento asociado al click botón (submit). 
+                        El siguiente paso corresponde al click en el botón (submit). 
                      </p>
                   </div>
                </div>
@@ -147,7 +161,7 @@ public void submit(View view) {
                         <img src="./img/clippy.svg" width="13" alt="Copy to clipboard">
                     </button>
                   </pre>
-                  <p class="advanced-panel" style="font-weight: 300; font-size: 14px;">
+                  <p class="advanced-panel" style="font-weight: 300; font-size: 15px;">
                         <em>*</em> A modo de prueba, estamos usando una preferencia cuyo producto es un Bajo de $100 y acepta todos los medios de pago disponibles en MercadoPago.
                       </p>
                   <!--<script src="https://gist.github.com/matiasgualino/2b5deb4e179e038108a654f414f27527.js"></script>-->
@@ -241,26 +255,26 @@ Intent data) {
                       </p>
                   </div>
                </div>
-               <div class="col-md-6 code" style="font-weight: 300; font-size: 14px;">
+               <div class="col-md-6 code" style="font-weight: 300;font-size: 15px;line-height: 30px;">
                   <p>
                     Tarjetas para probar nuestro checkout:
                     <ul>
-                      <li><u>Visa</u>:             4509 9535 6623 3704</li>
-                      <li><u>Mastercard</u>:       5031 7557 3453 0604</li>
-                      <li><u>American Express</u>: 3711 803032 57522</li>
+                      <li>Visa:             4509 9535 6623 3704</li>
+                      <li>Mastercard:       5031 7557 3453 0604</li>
+                      <li>American Express: 3711 803032 57522</li>
                     </ul>
                   </p>
                   <p>
                     Prefijos del nombre del titular de la tarjeta.
                     <ul>
-                      <li><u>APRO</u>: Pago aprobado</li>
-                      <li><u>CONT</u>: Pago pendiente</li>
-                      <li><u>CALL</u>: Rechazo llamar para autorizar</li>
-                      <li><u>FUND</u>: Rechazo por monto insuficiente</li>
-                      <li><u>SECU</u>: Rechazo por código de seguridad</li>
-                      <li><u>EXPI</u>: Rechazo por fecha de expiración</li>
-                      <li><u>FORM</u>: Rechazo por error en formulario</li>
-                      <li><u>OTHE</u>: Rechazo general</li>
+                      <li>APRO: Pago aprobado</li>
+                      <li>CONT: Pago pendiente</li>
+                      <li>CALL: Rechazo llamar para autorizar</li>
+                      <li>FUND: Rechazo por monto insuficiente</li>
+                      <li>SECU: Rechazo por código de seguridad</li>
+                      <li>EXPI: Rechazo por fecha de expiración</li>
+                      <li>FORM: Rechazo por error en formulario</li>
+                      <li>OTHE: Rechazo general</li>
                     </ul>
                     <p class="advanced-panel">
                       <b>APROJuan Perez</b> retornará un pago aprobado.
@@ -290,14 +304,14 @@ Intent data) {
                         La preferencia debe ser creada desde <b>tu servidor</b> ya que debes firmarla con <b>tu clave privada</b>. De esta forma nos aseguramos estar protegiendo tanto al comprador, como a tu propio usuario vendedor. <a href="https://www.mercadopago.com.ar/developers/es/solutions/payments/basic-checkout/receive-payments/" target="_blank">Aquí</a> te contamos cómo crear preferencias desde tu servidor.
                         <br />
                         <p class="advanced-panel">
-                          Creá una preferencia de pago tan <a href="https://www.mercadopago.com.ar/developers/es/solutions/payments/basic-checkout/receive-payments/additional-info/"><b>completa</b></a> como puedas. Mientras más información nos envíes, mejor será tu experiencia y la de tus usuarios.
+                          Creá una preferencia de pago tan <a href="https://www.mercadopago.com.ar/developers/es/solutions/payments/basic-checkout/receive-payments/additional-info/"  target="_blank"><b>completa</b></a> como puedas. Mientras más información nos envíes, mejor será tu experiencia y la de tus usuarios.
                         </p>
                       </p>
                       <p><b><u>¿Y desde tu aplicación?</u></b>
                         <br />
-                        Te ofrecemos una clase llamada <a href="">MerchantServer</a> con métodos que se conectan con tu servidor. En este caso, el método <b>createPreference</b> hace un POST y envía como cuerpo del mensaje el mapa que hayas definido (preferenceMap). Por eso debes indicarnos tu URL base (https://api.tunombre.com) y la uri (/create_preference) donde esperas los datos para crear la preferencia. 
+                        Te ofrecemos una clase llamada <a href="https://github.com/mercadopago/px-android/blob/master/sdk/src/main/java/com/mercadopago/core/MerchantServer.java" target="_blank">MerchantServer</a> con métodos que se conectan con tu servidor. En este caso, el método <b>createPreference</b> hace un POST y envía como cuerpo del mensaje el mapa que hayas definido (preferenceMap). Por eso debes indicarnos tu URL base (https://api.tunombre.com) y la uri (/create_preference) donde esperas los datos para crear la preferencia. 
                         <br />
-                        <a href="">MerchantServer</a> se encargará de transformar la respuesta de tu servicio (la misma que los servicios de MercadoPago) en un objeto <a href="">CheckoutPreference</a> cuyo ID es el punto de entrada a nuestro checkout.
+                        <a href="https://github.com/mercadopago/px-android/blob/master/sdk/src/main/java/com/mercadopago/core/MerchantServer.java" target="_blank">MerchantServer</a> se encargará de transformar la respuesta de tu servicio (la misma que los servicios de MercadoPago) en un objeto <a href="https://github.com/mercadopago/px-android/blob/master/sdk/src/main/java/com/mercadopago/model/CheckoutPreference.java" target="_blank">CheckoutPreference</a> cuyo ID es el punto de entrada a nuestro checkout.
                       </p>
                   </div>
                </div>
@@ -307,14 +321,14 @@ Intent data) {
 public void submit() {
 
   // Armá un mapa con los datos de la compra y el mail de tu cliente.
-  Map<String, Object> preferenceMap = new HashMap<>();
+  Map&lt;String, Object&gt; preferenceMap = new HashMap&lt;&gt;();
   preferenceMap.put("item_id", "1");
   preferenceMap.put("amount", new BigDecimal(10));
   preferenceMap.put("payer_email", "mail_de_tu_cliente@gmail.com");
 
   // Envia la información a tu servidor
   MerchantServer.createPreference(this, "https://api.tunombre.com", 
-    "/create_preference", preferenceMap, new Callback<CheckoutPreference>() {
+    "/create_preference", preferenceMap, new Callback&lt;CheckoutPreference&gt;() {
     
       @Override
       public void success(CheckoutPreference checkoutPreference, 

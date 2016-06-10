@@ -12,6 +12,84 @@
  */
 /*! normalize.css v2.1.0 | MIT License | git.io/normalize */
 
+@font-face {
+  font-family: 'devsite-icons';
+  src:url('fonts/icons.eot');
+  src:url('fonts/icons.eot') format('embedded-opentype'),
+    url('fonts/icons.woff') format('woff'),
+    url('fonts/icons.ttf') format('truetype');
+
+}
+
+.article-icon {
+  width:45%; 
+  margin:0; 
+  vertical-align: top; 
+  display: inline-block; 
+  text-align: center;
+}
+
+.div-icon {
+  width: 180px; 
+  height: 180px; 
+  border-width: 2px; 
+  border-color: #03B3EB; 
+  border-radius: 50%; 
+  border-style: solid; 
+  vertical-align: middle; 
+  display: inline-block;
+}
+
+.icon-big {
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  text-align: center;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: #03B3EB;
+  font-size: 100px;
+  margin: 35px;
+}
+
+.start-button {
+  border-color: #00B2EB; 
+  background-color: #00B2EB; 
+  color: #fff; 
+  text-decoration: none; 
+  border-style: solid; 
+  border-width: 1px; 
+  border-radius: 3px; 
+  display: inline-block; 
+  line-height: 16px; 
+  font-size: 16px; 
+  text-align: center; 
+  padding: 10px 30px; 
+  margin: 5px 10px 5px 0;
+}
+
+.icon-plug-outline:before {
+  font-family: 'devsite-icons';
+  content: "\e605";  
+}
+
+.icon-puzzle:before {
+  font-family: 'FontAwesome';
+  font-size: 120px;
+  content: "\f12e";
+}
+
+.icon-ninja-filled:before {
+  font-family: 'devsite-icons';
+  content: "\e606";
+}
+
 .copy-button {
   top: 2px;
   right: 2px;
@@ -279,10 +357,10 @@ textarea {
   background-image: none; }
 
 a {
-  color: #4F8EF7;
+  color: #0066CC;
   text-decoration: none; }
   a:hover, a:focus {
-    color: #0b60ef;
+    color: #0066CC;
     text-decoration: underline; }
   a:focus {
     outline: none; }
@@ -397,32 +475,32 @@ h6 {
   margin-bottom: 10.5px; }
 
 h1, .h1 {
-  font-size: 32px; }
+  font-size: 35px; }
 
 h2, .h2 {
-  font-size: 26px; }
+  font-size: 29px; }
 
 h3, .h3 {
-  font-size: 22px; }
+  font-size: 25px; }
 
 h4, .h4 {
   font-size: 19px; }
 
 h5, .h5 {
-  font-size: 17px; }
-
-h6, .h6 {
-  font-size: 15px; }
-
-h1 small, .h1 small {
   font-size: 19px; }
 
-h2 small, .h2 small {
+h6, .h6 {
   font-size: 17px; }
+
+h1 small, .h1 small {
+  font-size: 21px; }
+
+h2 small, .h2 small {
+  font-size: 19px; }
 
 h3 small, .h3 small,
 h4 small, .h4 small {
-  font-size: 15px; }
+  font-size: 17px; }
 
 .page-header {
   padding-bottom: 9.5px;
@@ -5823,7 +5901,7 @@ h1 + h2 + p {
   margin-top: 8px;
   padding-left: 0;
   list-style: none;
-  font-size: 12px; }
+  font-size: 13px; }
   .left-menu:first-child {
     margin-top: 0; }
   .left-menu a {
@@ -5871,8 +5949,8 @@ h1 + h2 + p {
 .docs-section {
   padding-bottom: 20px;
   color: #444;
-  font-size: 14px;
-  line-height: 1.9em; }
+  font-size: 15px;
+  line-height: 30px; }
   .docs-section .panel-heading {
     font-family: Monaco, Menlo, Consolas, "Courier New", monospace; }
   .docs-section .highlight {
@@ -6239,10 +6317,10 @@ h1 + h2 + p {
     font-family: Lato;
     color: #333;
     font-weight: 300;
-    font-size: 14px;
+    font-size: 15px;
     margin-top: 16px;
     margin-right: 20px;
-    line-height: 26px; }
+    line-height: 30px; }
   #getting-started .code {
     margin-top: 60px; }
   #getting-started .highlight {
@@ -6268,7 +6346,6 @@ h1 + h2 + p {
   #getting-started #first-step {
     margin-top: 60px; }
   #getting-started #template-images {
-    margin-top: -60px;
     padding-left: 95px; }
     @media (max-width: 992px) {
       #getting-started #template-images {
@@ -6312,7 +6389,7 @@ h1 + h2 + p {
       width: 308px;
       height: 263px; }
   #getting-started #start-template-blank-image {
-    background: url("/img/getting-started/blank-app.png") no-repeat transparent; }
+    background: url("/img/android/index_card_form.gif") no-repeat transparent; }
   #getting-started #start-template-tabs-image {
     background: url("/img/getting-started/tabs-app.png") no-repeat transparent; }
   #getting-started #start-template-sidemenu-image {

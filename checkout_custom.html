@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="description" content="Sitio para desarrolladores de MercadoPago.">
+      <meta name="keywords" content="mercadopago,sdk,payment,pagos,braintree,paypal,html5,javascript,mobile,drifty,ionic,hybrid,phonegap,cordova,native,ios,android,angularjs">
+      <title>Soluciones de pago para el negocio que quieras - MercadoPago</title>
+      <link href="./css/site.css" rel="stylesheet">
+      <link href="./css/font-awesome.css" rel="stylesheet">
+      
+      <script src="./js/jquery.min.js"></script>
+      <link rel="stylesheet" type="text/css" href="./css/lato.css" />
+
+   </head>
+   <body class="docs docs-page docs-css">
+      <nav class="navbar navbar-default" role="navigation">
+         <div class="container">
+            <div class="navbar-header">
+               <button type="button" class="navbar-toggle button ionic" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+               <i class="icon ion-navicon"></i>
+               </button>
+               <a class="navbar-brand" href="http://mercadopago.com/">
+               <img src="img/iso-mercadopago.png" width="60" height="41" alt="MercadoPago SDK">
+               </a>
+            </div>
+            <div class="collapse navbar-collapse navbar-ex1-collapse">
+               <ul class="nav navbar-nav navbar-right" style="color: white;">
+                  <li><a class="getting-started-nav nav-link" href="index.html">Nuestro checkout</a></li>
+                  <li><a class="docs-nav nav-link" href="checkout_custom.html">Tu checkout</a></li>
+                  <li><a class="nav-link" href="https://www.mercadopago.com.ar/developers/es/community/forum/">Foro de desarrolladores</a></li>
+               </ul>
+            </div>
+         </div>
+      </nav>
+      <div class="header">
+         <div class="container" style="
+    padding-top: 70px;
+">
+            <h3>MercadoPago Android SDK</h3>
+            <h4>Fácil, rápido, simple. La mejor experiencia de pagos en tu aplicación.</h4>
+         </div>
+         
+      </div>
+      <div id="mati_header" style="height: 300px;margin: 0 auto;padding: 0;position: relative;width: 100%;top: -276px;overflow-x: hidden;OVERFLOW-Y: hidden;z-index: -100;background: url('./img/landing_f2.jpg');background-size: cover;background-position-x: 0px;background-position-y: -160px;">
+         <div style="background: rgba(0,0,0,0.65);height: 300px;"></div>
+      </div>
+      <div class="container content-container" style="margin-top: -250px;">
+         <div class="row">
+            <div class="col-md-3 col-sm-4 aside-menu">
+               <div class="docked-menu" style="top: 20px;">
+                  <ul class="nav left-menu">
+                     <li class="menu-title">
+                        <a href="our_flavors.html">SOLUCIONES PROPUESTAS</a>
+                     </li>
+                  </ul>
+                  <ul class="nav left-menu">
+                     <li class="menu-title">
+                        <a href="index.html">NUESTRO CHECKOUT</a>
+                     </li>
+                  </ul>
+                  <ul class="nav left-menu active-menu">
+                     <li>
+                        <a href="checkout_custom.html">TU CHECKOUT</a>
+                        <ul>
+                           <li><a href="checkout_custom.html#our_proposal">¿Qué ofrecemos?</a></li>
+                           <li><a href="checkout_custom.html#payment_info">Información obligatoria para cobrar</a></li>
+                           <li><a href="checkout_custom.html#what_you_need">¿Qué necesitás?</a></li>
+                           <li><a href="checkout_custom.html#modes">Modo sandbox y productivo</a></li>
+                           <li><a href="checkout_custom.html#your_credentials">Usá tus credenciales</a></li>
+                           <li><a href="checkout_custom.html#notifications">Recibí notificaciones de pagos</a></li>
+                           <li>
+                              <a href="f2.html">Nuestros componentes de UI</a>
+                              <ul>
+                                 <li><a href="f2.html#f2_payment_methods">Medios de pago</a></li>
+                                 <li><a href="f2.html#f2_card_issuers">Bancos</a></li>
+                                 <li><a href="f2.html#f2_payer_costs">Cuotas</a></li>
+                                 <li><a href="f2.html#f2_bank_deals">Promociones</a></li>
+                                 <li><a href="f2.html#f2_card_form">Formulario de tarjeta</a></li>
+                                 <li><a href="f2.html#f2_payment_vault">Componente completo</a></li>
+                              </ul>
+                           </li>
+                           <li>
+                              <a href="f1.html">Personalizá tu checkout</a>
+                              <ul>
+                                 <li><a href="f1.html#f1_payment_methods">Medios de pago</a></li>
+                                 <li><a href="f1.html#f1_card_issuers">Bancos</a></li>
+                                 <li><a href="f1.html#f1_payer_costs">Cuotas</a></li>
+                                 <li><a href="f1.html#f1_identification_types">Tipos de documento</a></li>
+                                 <li><a href="f1.html#f1_card_tokens">Tokenización de datos</a></li>
+                                 <li><a href="f1.html#f1_bank_deals">Promociones</a></li>
+                                 <li>
+                                    <a href="f1.html#f1_merchant_server">MerchantServer</a>
+                                    <ul>
+                                       <li><a href="f1.html#f1_create_payment">Pagos</a></li>
+                                       <li><a href="f1.html#f1_create_preference">Preferencias</a></li>
+                                    </ul>
+                                 </li>
+                              </ul>
+                           </li>
+                        </ul>
+                     </li>
+                  </ul>
+                  <ul class="nav left-menu">
+                     <li class="menu-title">
+                        <a href="payment_types_methods.html">Tipos y Medios de pago disponibles</a>
+                     </li>
+                  </ul>
+                  <ul class="nav left-menu">
+                     <li class="menu-title">
+                        <a href="glosario.html">Glosario</a>
+                     </li>
+                  </ul>
+               </div>
+            </div>
+            <div class="col-md-9 col-sm-8 main-content">
+               <section class="docs-section" id="our_proposal">
+                  <h3 class="title">¿Qué ofrecemos para que personalices tu checkout?</h3>
+                  <br />
+                  <p style="color: red;">SOLO NINJA</p>
+                  <br />
+                  <article class="article-icon">
+                     <div class="div-icon">
+                        <div class="icon-puzzle icon-big" style="margin-left: 40px; margin-top: 30px;"></div>
+                     </div>
+                     <h5><b>Componentes visuales</b></h5>
+                     <p>Te ayudarán a recolectar la información necesaria para realizar el pago.</p>
+                     <a href="f2.html" class="start-button">Empezar</a>
+                  </article>
+
+                  <article class="article-icon">
+                     <div class="div-icon">
+                        <div class="icon-ninja-filled icon-big"></div>
+                     </div>
+                     <h5><b>Nuestros servicios</b></h5>
+                     <p>Te conectarán con nuestras APIs para que puedas personalizar al máximo tu experiencia.</p>
+                     <a href="f1.html" class="start-button">Empezar</a>
+                  </article>
+               </section>
+               <section class="docs-section" id="payment_info">
+                  <h3 class="title">Información obligatoria para cobrar</h3>
+                  <p>
+                     Necesitás recolectar la información con la que <b>desde tu servidor</b> vas a invocar nuestros servicios. Es obligatorio que al momento de hacer el pago nos envíes los siguientes datos:
+                     <ul>
+                        <li><b>Monto que deseas cobrar.</b></li>
+                        <li><b>Mail del comprador:</b> Sólo por si algo extraño sucediera durante o luego del pago. Esto es una protección tanto para tu usuario como para tu servicio posventa.</li>
+                        <li><b>Medio de pago:</b> La marca de la tarjeta, la entidad de cobro en efectivo (ya sea un cajero automático o por ventanilla). Cada medio de pago tiene sus particularidades: tiempo de acreditación para medios de pago offline; longitud del número de tarjeta, del código de seguridad, entre otros para medios de pago de tarjetas.</li>
+                        <li><b>Banco (sólo para tarjetas):</b> Es el emisor de la tarjeta. Con quienes establecemos planes de cuotas sin interes para que tus usuarios paguen de manera más cómoda.</li>
+                        <li><b>Cuotas (sólo para tarjetas):</b> La cantidad de cuotas seleccionadas por tu usuario. Nosotros nos encargamos de saber si el pago debe ser procesado con o sin interés dependiendo del medio de pago y el banco de la tarjeta.</li>
+                        <li><b>Token (sólo para tarjetas):</b> Necesitamos el número, el nombre, la fecha de expiración y el código de seguridad de la tarjeta de tu usuario. En algunos países también es necesario que nos indiques su tipo y número de documento. <b>MercadoPago tokeniza estos datos para proteger la información sensible de la tarjeta.</b></li>
+                     </ul>
+                  </p>
+               </section>
+               <section class="docs-section" id="what_you_need">
+                  <h3 class="title">¿Qué necesitás para empezar?</h3>
+                  <p>
+                     <ul>
+                        <li style="list-style-type: decimal;">Tener o <a href="https://registration.mercadopago.com.ar/registration-mp?mode=mp" target="_blank">crear</a> una cuenta de MercadoPago dónde recibirás el dinero.</li>
+                        <li style="list-style-type: decimal;"><a href="https://applications.mercadopago.com.ar" target="_blank">Crear</a> una aplicación.</li>
+                        <li style="list-style-type: decimal;">Configurar tus <a href="https://www.mercadopago.com/mla/account/credentials?type=personalized" target="_blank">credenciales</a>.</li>
+                     </ul>
+                  </p>
+               </section>
+               <section class="docs-section" id="modes">
+                  <h3 class="title">Modo sandbox y productivo</h3>
+                  <p>
+                     Con el Checkout personalizado puedes recibir pagos en modo sandbox o productivo. La diferencia para procesar en uno u otro modo está en el tipo de credenciales que uses para autenticarte en la API.
+                     <br />
+                     Desarrolla tu aplicación usando tus credenciales para modo sandbox. Cuando esté lista para recibir pagos productivos, deberás pasar un proceso de homologación y reemplazar las credenciales por las de producción. No necesitas cambiar otra cosa de tu código. De esta forma puedes realizar pagos de prueba mientras tus clientes están procesando pagos productivos con sólo utilizar las claves correspondientes.
+                     <br />
+                     El entorno de sandbox es una réplica exacta de producción, diseñado con el objetivo de facilitar las pruebas durante la integración. El uso de este modo no genera ningún tipo de cargo real. Además de las credenciales correspondientes, en modo sandbox debes utilizar las tarjetas de prueba que te brindamos.
+                  </p>
+               </section>
+               <section class="docs-section" id="your_credentials">
+                  <h3 class="title">Usá tus credenciales</h3>
+                  <p>
+                     Cada aplicación tiene dos pares de claves para conectarse con la API de MercadoPago. Estas claves las encuentras en la sección credenciales de tu cuenta.
+                     <br />
+                     Las claves de modo sandbox te permiten realizar pagos de prueba y las de modo producción, pagos reales.
+                     <br />
+                     Además de los modos sandbox y producción, una de las claves es pública y la otra privada.
+                     <br />
+                     Las claves públicas identifican tu cuenta de MercadoPago y no son secretas. Se utilizan en el frontend.
+                     <br />
+                     Con las claves públicas puedes acceder a los siguientes recursos mediante nuestra SDK:
+                     <ul>
+                        <li><a href="f1.html#payment_methods">Medios de pago (payment_methods)</a></li>
+                        <li><a href="f1.html#issuers">Bancos (card_issuers)</a></li>
+                        <li><a href="f1.html#payer_costs">Cuotas (installments)</a></li>
+                        <li><a href="f1.html#identification_types">Tipos de documento (identification_types)</a></li>
+                        <li><a href="f1.html#card_tokens">Tokenización de datos (card_tokens)</a></li>
+                     </ul>
+                     Las claves privadas deben ser mantenidas confidencialmente en tus servidores de backend y nunca deben ser publicadas.
+                     <br />
+                     Estas claves te permiten acceder a los siguientes recursos:
+                     <ul>
+                        <li><a href="https://www.mercadopago.com.ar/developers/es/api-docs/custom-checkout/create-payments/" target="_blank">Pagos (payments)</a></li>
+                        <li>Devoluciones (refunds)</a></li>
+                        <li><a href="https://www.mercadopago.com.ar/developers/es/api-docs/custom-checkout/customers-cards/" target="_blank">Clientes (customers)</a></li>
+                        <li><a href="https://www.mercadopago.com.ar/developers/es/api-docs/custom-checkout/customers-cards/" target="_blank">Tarjetas (cards)</a></li>
+                     </ul>
+                  </p>
+               </section>
+               <section class="docs-section" id="notifications">
+                  <h3 class="title">Recibí notificaciones de pagos</h3>
+                  <p>
+                     Cada vez que recibes un pago o se modifique uno que te hicieron, te podemos avisar mediante Notificaciones de Pagos que se envían desde los servidores de Mercadopago a los tuyos. Esto te permitirá conocer el estado del pago, administrar tu stock o saber quién te está pagando.
+                     <br />
+                     Te mostramos un ejemplo sencillo de <a href="https://www.mercadopago.com.ar/developers/es/solutions/payments/basic-checkout/receive-notifications/" target="_blank">cómo recibir notificaciones de pagos</a>, que puedes utilizar.
+                  </p>
+               </section>
+            </div>
+         </div>
+      </div>
+      
+      <footer class="footer">
+         <div class="copy">
+            <div class="copy-container">
+               <p class="authors">
+                  © 2016 MercadoLibre S.R.L.
+               </p>
+            </div>
+         </div>
+      </footer>
+      <script src="./js/bootstrap.min.js"></script>
+      <script src="./js/site.js"></script>
+      <script src="./js/cookies.min.js"></script>
+      <script src="./js/clipboard.js"></script>
+   <script>
+
+   (function() {
+
+    new Clipboard('.copy-button');
+    var pre = document.getElementsByTagName('pre');
+    for (var i = 0; i < pre.length; i++) {
+      var isLanguage = pre[i].children[0].className.indexOf('language-');
+      if ( isLanguage === 0 ) {
+        var button = document.createElement('button');
+        button.className = 'copy-button';
+        pre[i].appendChild(button);
+      }
+    }
+
+var copyCode = new Clipboard('.copy-button', {
+    target: function(trigger) {
+        return trigger.previousElementSibling;
+    }
+});
+   
+})();
+</script>
+   </body>
+</html>
