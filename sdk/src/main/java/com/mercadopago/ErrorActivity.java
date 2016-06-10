@@ -14,11 +14,9 @@ import com.mercadopago.util.ApiUtil;
 public class ErrorActivity extends AppCompatActivity {
 
     private MPException mMPException;
-
     private TextView mErrorMessageTextView;
     private TextView mRetryTextView;
-    private ImageView mErrorImageView;
-    private ViewGroup mRefreshLayout;
+    private TextView mExit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,11 +48,15 @@ public class ErrorActivity extends AppCompatActivity {
     }
 
     private void initializeControls() {
-        this.mRefreshLayout = (ViewGroup) findViewById(R.id.mpsdkRefreshLayout);
         this.mErrorMessageTextView = (TextView) findViewById(R.id.mpsdkErrorMessage);
         this.mRetryTextView = (TextView) findViewById(R.id.mpsdkErrorRetry);
-        this.mRetryTextView = (TextView) findViewById(R.id.mpsdkErrorRetry);
-        this.mErrorImageView = (ImageView) findViewById(R.id.mpsdkErrorImage);
+        this.mExit = (TextView) findViewById(R.id.mpsdkExit);
+        this.mExit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
     }
 
     private void fillData() {
@@ -70,8 +72,7 @@ public class ErrorActivity extends AppCompatActivity {
 
         if (mMPException.isRecoverable())
         {
-            mErrorImageView.setImageResource(R.drawable.ic_refresh);
-            mRefreshLayout.setOnClickListener(new View.OnClickListener() {
+            mRetryTextView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent();
@@ -80,9 +81,7 @@ public class ErrorActivity extends AppCompatActivity {
                 }
             });
         }
-        else
-        {
-            mErrorImageView.setImageResource(R.drawable.ic_rejected);
+        else {
             mRetryTextView.setVisibility(View.GONE);
         }
     }

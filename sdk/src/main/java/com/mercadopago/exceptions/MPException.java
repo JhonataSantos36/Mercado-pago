@@ -1,6 +1,7 @@
 package com.mercadopago.exceptions;
 
 import com.mercadopago.model.ApiException;
+import com.mercadopago.util.ApiUtil;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -29,7 +30,7 @@ public class MPException implements Serializable{
 
     public MPException(ApiException apiException) {
         this.apiException = apiException;
-        this.recoverable = apiException.getCause() == null || apiException.getCause().isEmpty();
+        this.recoverable = apiException.isRecoverable();
     }
 
     public ApiException getApiException() {
