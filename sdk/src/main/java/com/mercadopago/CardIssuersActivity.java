@@ -125,7 +125,7 @@ public class CardIssuersActivity extends ShowCardActivity {
         if(mToken != null) {
             super.initializeToolbar("", true);
         } else {
-            super.initializeToolbar(getString(R.string.mpsdk_title_activity_issuers), false);
+            super.initializeToolbar(getString(R.string.mpsdk_card_issuers_title), false);
         }
     }
 

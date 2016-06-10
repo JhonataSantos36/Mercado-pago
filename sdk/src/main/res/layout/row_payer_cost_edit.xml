@@ -28,7 +28,7 @@
                 android:layout_marginStart="8dp"
                 android:textColor="@color/mpsdk_installments_text"
                 tools:text="3 de 173"
-                android:textSize="25dp"/>
+                android:textSize="20dp"/>
             <FrameLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

@@ -133,7 +133,7 @@ public class CardInstallmentsActivity extends ShowCardActivity {
         if(mToken != null) {
             super.initializeToolbar("", true);
         } else {
-            super.initializeToolbar(getString(R.string.mpsdk_title_activity_installments), false);
+            super.initializeToolbar(getString(R.string.mpsdk_card_installments_title), false);
         }
     }
 
