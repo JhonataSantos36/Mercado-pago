@@ -14,36 +14,36 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:background="@color/mpsdk_color_light_grey">
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minHeight="213dp"
             android:paddingLeft="12dp"
             android:paddingRight="12dp"
-            android:paddingTop="15dp"
-            android:paddingBottom="25dp"
             android:background="@color/mpsdk_info_color_light">
 
             <ImageView
                 android:id="@+id/mpsdkImageCashSign"
                 android:layout_centerHorizontal="true"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="14dp"
                 android:src="@drawable/icon_cash"
-                android:tint="@color/mpsdk_color_instructions_title_image"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="15dp"
-                android:paddingBottom="10dp"/>
+                android:tint="@color/mpsdk_color_instructions_title_image" />
 
             <com.mercadopago.views.MPTextView
-                android:id="@+id/mpsdkTitle"
-                tools:text="Paga $ X en tu sucursal más cercana"
-                android:gravity="center"
-                android:layout_centerHorizontal="true"
+                android:id="@+id/title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="@style/mpsdk_large_label"
-                android:layout_below="@+id/mpsdkImageCashSign"/>
+                tools:text="Paga $ X en tu sucursal más cercana"
+                android:gravity="center"
+                android:layout_marginBottom="18dp"
+                android:layout_centerHorizontal="true"
+                android:textSize="22dp"
+                android:layout_below="@+id/mpsdkImageCashSign"
+                android:tint="@color/mpsdk_color_instructions_title_image"/>
+
         </RelativeLayout>
         <View
             android:layout_width="match_parent"
@@ -89,7 +89,7 @@
                         <com.mercadopago.views.MPButton
                             android:id="@+id/mpsdkActionButton"
                             android:layout_marginTop="15dp"
-                            android:layout_marginBottom="5dp"
+                            android:layout_marginBottom="15dp"
                             android:layout_gravity="center_horizontal"
                             android:background="@drawable/button_instructions"
                             android:layout_width="174dp"
