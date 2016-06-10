@@ -63,7 +63,6 @@ public class PaymentMethod implements Serializable {
     }
 
     public boolean isSecurityCodeRequired(String bin) {
-
         Setting setting = Setting.getSettingByBin(settings, bin);
         if ((setting != null) && (setting.getSecurityCode().getLength() != 0)) {
             return true;
