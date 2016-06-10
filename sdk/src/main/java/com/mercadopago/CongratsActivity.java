@@ -89,9 +89,6 @@ public class CongratsActivity extends AppCompatActivity {
 
     private void showPending(){
         setTheme(R.style.Theme_InfoMercadoPagoTheme_NoActionbar);
-        //TODO validate AGREGAR PublicKey
-        MPTracker.getInstance().trackScreen("PENDING", "2", "publicKey", "MLA", "1.0", this);
-
         setContentView(R.layout.activity_pending);
         initializePendingControls();
         fillPendingData();
@@ -99,9 +96,6 @@ public class CongratsActivity extends AppCompatActivity {
 
     private void showRejection() {
         setTheme(R.style.Theme_RejectionMercadoPagoTheme_NoActionbar);
-        //TODO validate AGREGAR PublicKey
-        MPTracker.getInstance().trackScreen("REJECTION", "2", "publicKey", "MLA", "1.0", this);
-
         setContentView(R.layout.activity_rejection);
         initializeRejectionControls();
         fillRejectionData();
@@ -109,9 +103,6 @@ public class CongratsActivity extends AppCompatActivity {
 
     private void showCallForAuthorize() {
         setTheme(R.style.Theme_CallForAuthorizeMercadoPagoTheme_NoActionbar);
-        //TODO validate AGREGAR PublicKey
-        MPTracker.getInstance().trackScreen("CALL_FOR_AUTHORIZE", "2", "publicKey", "MLA", "1.0", this);
-
         setContentView(R.layout.activity_call_for_authorize);
         initializeCallForAuthControls();
         fillCallForAuthData();
@@ -119,9 +110,6 @@ public class CongratsActivity extends AppCompatActivity {
 
     private void showCongrats() {
         setTheme(R.style.Theme_CongratsMercadoPagoTheme_NoActionbar);
-        //TODO validate AGREGAR PublicKey
-        MPTracker.getInstance().trackScreen("CONGRATS", "2", "publicKey", "MLA", "1.0", this);
-
         setContentView(R.layout.activity_congrats);
         initializeCongratsControls();
         fillCongratsData();

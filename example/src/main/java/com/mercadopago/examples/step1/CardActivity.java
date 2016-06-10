@@ -93,7 +93,7 @@ public class CardActivity extends AppCompatActivity {
         // Set payment method image
         mPaymentMethod = (PaymentMethod) this.getIntent().getSerializableExtra("paymentMethod");
         if ((mPaymentMethod != null) && (mPaymentMethod.getId() != null)) {
-            ImageView pmImage = (ImageView) findViewById(com.mercadopago.R.id.pmImage);
+            ImageView pmImage = (ImageView) findViewById(com.mercadopago.R.id.mpsdkPmImage);
             pmImage.setImageResource(MercadoPagoUtil.getPaymentMethodIcon(this, mPaymentMethod.getId()));
         }
 
