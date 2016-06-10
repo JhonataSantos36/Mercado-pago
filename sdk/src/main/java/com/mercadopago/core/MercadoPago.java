@@ -763,7 +763,6 @@ public class MercadoPago {
             if (this.mKey == null) throw new IllegalStateException("key is null");
             if (this.mSite == null) throw new IllegalStateException("site is null");
             if (this.mAmount == null) throw new IllegalStateException("amount is null");
-            if (this.mToken == null) throw new IllegalStateException("token is null");
             if (this.mIssuer == null) throw new IllegalStateException("issuer is null");
             if (this.mPaymentMethod == null) throw new IllegalStateException("payment method is null");
 
@@ -775,7 +774,6 @@ public class MercadoPago {
             if (this.mActivity == null) throw new IllegalStateException("activity is null");
             if (this.mKey == null) throw new IllegalStateException("key is null");
             if (this.mPaymentMethod == null) throw new IllegalStateException("payment method is null");
-            if (this.mToken == null) throw new IllegalStateException("token is null");
 
             MercadoPago.startCardIssuersActivity(this.mActivity, this.mKey, this.mPaymentMethod,
                     this.mToken, this.mIssuers, this.mDecorationPreference);

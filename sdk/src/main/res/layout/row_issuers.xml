@@ -28,7 +28,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_gravity="center_vertical"
                 android:textColor="@color/mpsdk_base_text"
-                android:textSize="22sp"/>
+                android:textSize="@dimen/mpsdk_regular_text"/>
 
         </LinearLayout>
 

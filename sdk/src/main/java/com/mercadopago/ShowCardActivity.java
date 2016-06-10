@@ -44,6 +44,7 @@ public abstract class ShowCardActivity extends FrontCardActivity {
     protected MPTextView mToolbarTitle;
     protected DecorationPreference mDecorationPreference;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,8 +84,15 @@ public abstract class ShowCardActivity extends FrontCardActivity {
         mSecurityCodeLocation = setting.getSecurityCode().getCardLocation();
     }
 
-    protected void initializeToolbarWithTitle(String title) {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.mpsdkToolbar);
+    protected void initializeToolbar(String title, boolean transparent) {
+        Toolbar toolbar;
+        if(transparent) {
+            toolbar = (Toolbar) findViewById(R.id.mpsdkToolbar);
+        }
+        else {
+            toolbar = (Toolbar) findViewById(R.id.mpsdkRegularToolbar);
+            toolbar.setVisibility(View.VISIBLE);
+        }
         mToolbarTitle = (MPTextView) findViewById(R.id.mpsdkTitle);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
@@ -117,6 +125,7 @@ public abstract class ShowCardActivity extends FrontCardActivity {
                 upArrow.setColorFilter(mDecorationPreference.getDarkFontColor(this), PorterDuff.Mode.SRC_ATOP);
             }
             getSupportActionBar().setHomeAsUpIndicator(upArrow);
+            mToolbarTitle.setTextColor(mDecorationPreference.getDarkFontColor(this));
         }
         toolbar.setBackgroundColor(mDecorationPreference.getLighterColor());
     }

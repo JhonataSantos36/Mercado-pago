@@ -59,7 +59,16 @@ public class CardIssuersActivity extends ShowCardActivity {
         if (mCurrentPaymentMethod != null) {
             initializeCard();
         }
-        initializeFrontFragment();
+        if(mToken != null) {
+            initializeFrontFragment();
+        }
+        else {
+            hideCardLayout();
+        }
+    }
+
+    private void hideCardLayout() {
+        mCardBackground.setVisibility(View.GONE);
     }
 
     @Override
@@ -113,7 +122,11 @@ public class CardIssuersActivity extends ShowCardActivity {
     }
 
     protected void initializeToolbar() {
-        super.initializeToolbarWithTitle("");
+        if(mToken != null) {
+            super.initializeToolbar("", true);
+        } else {
+            super.initializeToolbar(getString(R.string.mpsdk_card_issuers_title), false);
+        }
     }
 
     @Override
@@ -140,12 +153,13 @@ public class CardIssuersActivity extends ShowCardActivity {
                 new Callback<List<Issuer>>() {
                     @Override
                     public void success(List<Issuer> issuers) {
+                        mIssuers = issuers;
                         if (mActiveActivity) {
                             mProgressBar.setVisibility(View.GONE);
-                            if (issuers.isEmpty()) {
+                            if (mIssuers.isEmpty()) {
                                 ErrorUtil.startErrorActivity(mActivity, getString(R.string.mpsdk_standard_error_message), "no issuers found at CardIssuersActivity", false);
-                            } else if (issuers.size() == 1) {
-                                mSelectedIssuer = issuers.get(0);
+                            } else if (mIssuers.size() == 1) {
+                                mSelectedIssuer = mIssuers.get(0);
                                 finishWithResult();
                             } else {
                                 initializeIssuers();

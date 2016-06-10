@@ -160,7 +160,7 @@
     <string name="mpsdk_installments_of">de</string>
     <string name="mpsdk_card_data_title">Datos de tu tarjeta</string>
     <string name="mpsdk_card_installments_title">¿En cuántas cuotas?</string>
-    <string name="mpsdk_card_issuers_title">Elegir banco</string>
+    <string name="mpsdk_card_issuers_title">¿Cuál es tu banco?</string>
     <string name="mpsdk_input_button_back">Anterior</string>
     <string name="mpsdk_input_button_next">Continuar</string>
 
