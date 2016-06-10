@@ -153,10 +153,6 @@ public class GuessingNewCardActivity extends FrontCardActivity {
         if (mCardSideState == null) {
             mCardSideState = CARD_SIDE_FRONT;
         }
-        if (showingFront()) {
-            openKeyboard(mCardNumberEditText);
-            mCurrentEditingEditText = CardInterface.CARD_NUMBER_INPUT;
-        }
     }
 
     @Override
