@@ -641,7 +641,7 @@ public class GuessingNewCardActivity extends FrontCardActivity {
                         } else if (paymentMethodList.size() == 1) {
                             onPaymentMethodSet(paymentMethodList.get(0));
                         } else {
-                            //TODO muchos metodos de pago posibles, o no setearon el payment type
+                            //TODO many payment methods possible, or payment type not set
                         }
                     }
 

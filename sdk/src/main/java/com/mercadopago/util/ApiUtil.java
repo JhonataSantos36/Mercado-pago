@@ -31,7 +31,6 @@ public class ApiUtil {
             }
         }
 
-
         return apiException;
     }
 
@@ -193,5 +192,6 @@ public class ApiUtil {
         public static final int INTERNAL_SERVER_ERROR = 500;
         public static final int PROCESSING = 503;
         public static final int BAD_REQUEST = 400;
+        public static final int NOT_FOUND = 404;
     }
 }

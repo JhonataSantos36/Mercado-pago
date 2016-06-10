@@ -121,7 +121,6 @@ public class MercadoPago {
         }
     }
 
-
     public void createToken(final SavedCardToken savedCardToken, final Callback<Token> callback) {
 
         if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {

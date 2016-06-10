@@ -204,8 +204,8 @@ public class CongratsActivity extends AppCompatActivity {
             if (mPayment.getStatusDetail().equals(Payment.StatusCodes.STATUS_DETAIL_PENDING_CONTINGENCY)) {
                 mPendingSubtitle.setText(getString(R.string.mpsdk_subtitle_pending_contingency));
             }
-            if (mPayment.getStatusDetail().equals(Payment.StatusCodes.STATUS_DETAIL_PENDING_REVIEW_MANUAL)) {
-                //TODO ver que subtitulo va
+            else if (mPayment.getStatusDetail().equals(Payment.StatusCodes.STATUS_DETAIL_PENDING_REVIEW_MANUAL)) {
+                //TODO review subtitle
                 mPendingSubtitle.setText(getString(R.string.mpsdk_subtitle_pending_contingency));
             }
         } else {

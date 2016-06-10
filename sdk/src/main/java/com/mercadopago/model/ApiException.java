@@ -1,5 +1,7 @@
 package com.mercadopago.model;
 
+import com.mercadopago.util.ApiUtil;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -51,6 +53,11 @@ public class ApiException implements Serializable {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public boolean isRecoverable() {
+        return getStatus() != ApiUtil.StatusCodes.NOT_FOUND
+                && (getCause() == null || getCause().isEmpty());
     }
 
     public class ErrorCodes {

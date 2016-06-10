@@ -743,7 +743,6 @@ public class CheckoutActivity extends AppCompatActivity {
     }
 
     private void resolvePaymentFailure(ApiException apiException) {
-        //TODO REVISAR
         if(apiException.getStatus() != null) {
             String serverErrorFirstDigit = String.valueOf(ApiUtil.StatusCodes.INTERNAL_SERVER_ERROR).substring(0, 1);
             if (String.valueOf(apiException.getStatus()).startsWith(serverErrorFirstDigit)
