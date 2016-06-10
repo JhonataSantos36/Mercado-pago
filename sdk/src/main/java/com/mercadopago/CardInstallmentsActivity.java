@@ -67,7 +67,16 @@ public class CardInstallmentsActivity extends ShowCardActivity {
         if (mCurrentPaymentMethod != null) {
             initializeCard();
         }
-        initializeFrontFragment();
+        if(mToken != null) {
+            initializeFrontFragment();
+        }
+        else {
+            hideCardLayout();
+        }
+    }
+
+    private void hideCardLayout() {
+        mCardBackground.setVisibility(View.GONE);
     }
 
     @Override
@@ -121,7 +130,11 @@ public class CardInstallmentsActivity extends ShowCardActivity {
     }
 
     protected void initializeToolbar() {
-        super.initializeToolbarWithTitle("");
+        if(mToken != null) {
+            super.initializeToolbar("", true);
+        } else {
+            super.initializeToolbar(getString(R.string.mpsdk_title_activity_installments), false);
+        }
     }
 
     @Override

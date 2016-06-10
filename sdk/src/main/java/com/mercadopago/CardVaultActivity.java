@@ -111,7 +111,7 @@ public class CardVaultActivity extends ShowCardActivity {
     }
 
     protected void initializeToolbar() {
-        super.initializeToolbarWithTitle("");
+        super.initializeToolbar("", true);
     }
 
     protected void setContentView() {
