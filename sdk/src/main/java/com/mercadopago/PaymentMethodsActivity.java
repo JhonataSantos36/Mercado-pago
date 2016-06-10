@@ -20,6 +20,7 @@ import com.mercadopago.model.ApiException;
 import com.mercadopago.model.DecorationPreference;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentPreference;
+import com.mercadopago.mptracker.MPTracker;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.LayoutUtil;
 
@@ -140,10 +141,13 @@ public class PaymentMethodsActivity extends AppCompatActivity {
 
 
     protected void setContentView() {
+        MPTracker.getInstance().trackScreen("PAYMENT_METHODS", "2", mMerchantPublicKey, "MLA", "1.0", this);
         setContentView(R.layout.activity_payment_methods);
     }
 
     public void onBackPressed() {
+        //TODO validate
+        MPTracker.getInstance().trackEvent("PAYMENT_METHODS", "BACK_PRESSED", "2", mMerchantPublicKey, "MLA", "1.0", this);
 
         Intent returnIntent = new Intent();
         returnIntent.putExtra("backButtonPressed", true);
@@ -156,12 +160,12 @@ public class PaymentMethodsActivity extends AppCompatActivity {
     }
 
     private void getPaymentMethodsAsync() {
-
         LayoutUtil.showProgressLayout(mActivity);
 
         mMercadoPago.getPaymentMethods(new Callback<List<PaymentMethod>>() {
             @Override
             public void success(List<PaymentMethod> paymentMethods) {
+                MPTracker.getInstance().trackEvent("PAYMENT_METHODS", "GET_PAYMENT_METHODS_RESPONSE", "SUCCESS", "2", mMerchantPublicKey, "MLA", "1.0", mActivity);
                 mRecyclerView.setAdapter(new PaymentMethodsAdapter(mActivity, getSupportedPaymentMethods(paymentMethods), new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -178,7 +182,7 @@ public class PaymentMethodsActivity extends AppCompatActivity {
 
             @Override
             public void failure(ApiException apiException) {
-
+                MPTracker.getInstance().trackEvent("PAYMENT_METHODS", "GET_PAYMENT_METHODS_RESPONSE", "FAIL", "2", mMerchantPublicKey, "MLA", "1.0", mActivity);
                 ApiUtil.finishWithApiException(mActivity, apiException);
             }
         });
