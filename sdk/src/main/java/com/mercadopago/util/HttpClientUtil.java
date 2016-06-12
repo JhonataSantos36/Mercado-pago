@@ -1,10 +1,11 @@
 package com.mercadopago.util;
 
+import android.content.Context;
+
 import com.mercadopago.core.Settings;
+
 import java.io.File;
 import java.util.concurrent.TimeUnit;
-
-import android.content.Context;
 
 import okhttp3.Interceptor;
 import okhttp3.MediaType;

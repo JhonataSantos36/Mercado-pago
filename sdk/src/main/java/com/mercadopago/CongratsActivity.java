@@ -11,7 +11,6 @@ import android.widget.ImageView;
 
 import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentMethod;
-import com.mercadopago.mptracker.MPTracker;
 import com.mercadopago.util.CurrenciesUtil;
 import com.mercadopago.util.MercadoPagoUtil;
 import com.mercadopago.views.MPTextView;

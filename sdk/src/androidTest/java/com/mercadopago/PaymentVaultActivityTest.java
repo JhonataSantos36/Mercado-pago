@@ -199,7 +199,7 @@ public class PaymentVaultActivityTest {
         mTestRule.addApiResponseToQueue(paymentMethodSearchJson, 200, "");
 
         mTestRule.launchActivity(validStartIntent);
-        onView(withId(R.id.groupsList)).perform(
+        onView(withId(R.id.mpsdkGroupsList)).perform(
                 actionOnItemAtPosition(0, click()));
 
         PaymentMethodSearch paymentMethodSearch = JsonUtil.getInstance().fromJson(paymentMethodSearchJson, PaymentMethodSearch.class);
@@ -224,17 +224,17 @@ public class PaymentVaultActivityTest {
 
         mTestRule.launchActivity(validStartIntent);
 
-        onView(withId(R.id.groupsList)).perform(
+        onView(withId(R.id.mpsdkGroupsList)).perform(
                 actionOnItemAtPosition(0, click()));
 
-        onView(withId(R.id.groupsList)).perform(
+        onView(withId(R.id.mpsdkGroupsList)).perform(
                 actionOnItemAtPosition(0, click()));
 
         PaymentMethodSearch paymentMethodSearch = JsonUtil.getInstance().fromJson(paymentMethodSearchJson, PaymentMethodSearch.class);
         PaymentMethodSearchItem item = paymentMethodSearch.getGroups().get(0).getChildren().get(0);
 
         //TODO cambiar por flowcard
-        /*intended(hasComponent(GuessingNewCardActivity.class.getName()));
+        /*intended(hasComponent(GuessingCardActivity.class.getName()));
         intended(hasExtra("merchantPublicKey", "1234"));
         intended(hasExtra("paymentTypeId", item.getId()));*/
     }
@@ -254,7 +254,7 @@ public class PaymentVaultActivityTest {
         mTestRule.initIntentsRecording();
         mTestRule.launchActivity(validStartIntent);
 
-        onView(withId(R.id.groupsList)).perform(
+        onView(withId(R.id.mpsdkGroupsList)).perform(
                 actionOnItemAtPosition(1, click()));
 
         final PaymentMethodSearchItem selectedSearchItem = paymentMethodSearch.getGroups().get(1);
@@ -275,7 +275,7 @@ public class PaymentVaultActivityTest {
 
         mTestRule.launchActivity(validStartIntent);
 
-        onView(withId(R.id.groupsList)).perform(
+        onView(withId(R.id.mpsdkGroupsList)).perform(
                 actionOnItemAtPosition(1, click()));
 
         onView(withContentDescription(R.string.abc_action_bar_up_description)).perform(click());
@@ -454,7 +454,7 @@ public class PaymentVaultActivityTest {
         mTestRule.initIntentsRecording();
         mTestRule.launchActivity(validStartIntent);
 
-        onView(withId(R.id.groupsList)).perform(
+        onView(withId(R.id.mpsdkGroupsList)).perform(
                 actionOnItemAtPosition(0, click()));
 
         Intent guessingFormResultIntent = new Intent();
@@ -468,7 +468,7 @@ public class PaymentVaultActivityTest {
 
         intending(hasComponent(CardVaultActivity.class.getName())).respondWith(result);
 
-        onView(withId(R.id.groupsList)).perform(
+        onView(withId(R.id.mpsdkGroupsList)).perform(
                 actionOnItemAtPosition(0, click()));
 
         assertTrue(mTestRule.isActivityFinishedOrFinishing());

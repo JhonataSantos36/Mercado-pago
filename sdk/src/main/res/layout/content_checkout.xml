@@ -36,11 +36,11 @@
                 android:paddingEnd="10dp"
                 android:background="@color/mpsdk_color_light_grey"
                 android:minHeight="45dp">
-
                 <com.mercadopago.views.MPTextView
                     android:id="@+id/mpsdkTotalAmountText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
                     tools:text="Total a pagar $ 1000,00"
                     style="@style/mpsdk_total_amount"/>
             </RelativeLayout>

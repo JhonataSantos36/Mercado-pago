@@ -5,12 +5,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.mercadopago.R;
 import com.mercadopago.callbacks.OnSelectedCallback;
 import com.mercadopago.model.DecorationPreference;
 import com.mercadopago.model.PaymentMethodSearchItem;
-import com.mercadopago.uicontrollers.paymentmethodsearch.PaymentMethodSearchViewController;
 import com.mercadopago.uicontrollers.ViewControllerFactory;
+import com.mercadopago.uicontrollers.paymentmethodsearch.PaymentMethodSearchViewController;
 
 import java.util.List;
 

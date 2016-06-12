@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".CardInstallmentsActivity"
+    tools:context=".InstallmentsActivity"
     android:background="@color/mpsdk_color_new_card_form_background">
 
     <ScrollView

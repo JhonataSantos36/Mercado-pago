@@ -73,6 +73,7 @@
     <string name="mpsdk_and">y</string>
     <string name="mpsdk_title_activity_terms_and_conditions">Términos y condiciones</string>
     <string name="mpsdk_bank_deals_action">Ver promociones</string>
+    <string name="mpsdk_bank_deals">Promociones</string>
     <string name="mpsdk_mp_app_name">MercadoPago</string>
     <string name="mpsdk_title_activity_checkout">Revisa si está todo bien…</string>
     <string name="mpsdk_title_activity_install_app">Pagar</string>

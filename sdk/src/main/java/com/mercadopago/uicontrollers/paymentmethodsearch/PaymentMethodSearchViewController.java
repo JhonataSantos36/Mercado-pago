@@ -2,7 +2,6 @@ package com.mercadopago.uicontrollers.paymentmethodsearch;
 
 import android.view.View;
 
-import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentMethodSearchItem;
 import com.mercadopago.uicontrollers.CustomViewController;
 

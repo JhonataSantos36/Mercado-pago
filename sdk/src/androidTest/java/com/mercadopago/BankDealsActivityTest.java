@@ -27,7 +27,7 @@ public class BankDealsActivityTest extends BaseTest<BankDealsActivity> {
         BankDealsActivity activity = prepareActivity(StaticMock.DUMMY_MERCHANT_PUBLIC_KEY);
 
         // Validate view
-        RecyclerView list = (RecyclerView) activity.findViewById(R.id.bank_deals_list);
+        RecyclerView list = (RecyclerView) activity.findViewById(R.id.mpsdkBankDealsList);
         if ((list != null) && (list.getAdapter() != null)) {
             assertTrue(list.getAdapter().getItemCount() > 0);
         } else {

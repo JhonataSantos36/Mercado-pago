@@ -1,11 +1,8 @@
 package com.mercadopago.exceptions;
 
 import com.mercadopago.model.ApiException;
-import com.mercadopago.util.ApiUtil;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by mromar on 3/2/16.
