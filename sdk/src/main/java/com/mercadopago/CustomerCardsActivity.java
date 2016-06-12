@@ -15,7 +15,6 @@ import com.mercadopago.model.Card;
 import com.mercadopago.model.PaymentMethodRow;
 import com.mercadopago.mptracker.MPTracker;
 
-import java.lang.reflect.MalformedParameterizedTypeException;
 import java.lang.reflect.Type;
 import java.util.List;
 
@@ -44,7 +43,6 @@ public class CustomerCardsActivity extends AppCompatActivity {
             finish();
             return;
         }
-        boolean supportMPApp = this.getIntent().getBooleanExtra("supportMPApp", false);
 
         // Set recycler view
         mRecyclerView = (RecyclerView) findViewById(R.id.mpsdkCustomerCardsList);
@@ -55,7 +53,7 @@ public class CustomerCardsActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         // Load cards
-        mRecyclerView.setAdapter(new CustomerCardsAdapter(this, cards, supportMPApp, new View.OnClickListener() {
+        mRecyclerView.setAdapter(new CustomerCardsAdapter(this, cards, new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 

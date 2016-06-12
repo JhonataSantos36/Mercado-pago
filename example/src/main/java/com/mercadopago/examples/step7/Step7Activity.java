@@ -225,7 +225,7 @@ public class Step7Activity extends AppCompatActivity {
 //                .setPaymentMethod(paymentMethod)
                 .setToken(mToken)
 //                .setPayerCosts(payerCosts)  //opcional
-                .startCardInstallmentsActivity();
+                .startInstallmentsActivity();
 
     }
 
@@ -269,7 +269,7 @@ public class Step7Activity extends AppCompatActivity {
 //                .setPaymentMethod(mCurrentPaymentMethod)
                 .setToken(mToken)
 //                .setIssuers(issuers)  //opcional
-                .startCardIssuersActivity();
+                .startIssuersActivity();
     }
 
 

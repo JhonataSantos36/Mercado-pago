@@ -5,10 +5,7 @@ import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
-import android.os.Handler;
 import android.util.AttributeSet;
-import android.view.KeyEvent;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
 import com.mercadopago.R;

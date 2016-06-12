@@ -20,7 +20,6 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
-import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
@@ -58,7 +57,7 @@ import com.mercadopago.views.MPTextView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GuessingNewCardActivity extends FrontCardActivity {
+public class GuessingCardActivity extends FrontCardActivity {
 
 
     // Activity parameters
@@ -1553,7 +1552,7 @@ public class GuessingNewCardActivity extends FrontCardActivity {
                         .setToken(mToken)
                         .setIssuers(issuers)
                         .setDecorationPreference(mDecorationPreference)
-                        .startCardIssuersActivity();
+                        .startIssuersActivity();
                 overridePendingTransition(R.anim.fade_in_seamless, R.anim.fade_out_seamless);
             }
         });

@@ -3,8 +3,8 @@ package com.mercadopago.model;
 import android.content.Context;
 import android.text.TextUtils;
 
-import com.mercadopago.core.MercadoPago;
 import com.mercadopago.R;
+import com.mercadopago.core.MercadoPago;
 
 import java.io.Serializable;
 import java.util.Calendar;

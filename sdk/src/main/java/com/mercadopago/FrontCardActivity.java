@@ -4,7 +4,6 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.mercadopago.model.PaymentMethod;
 
-import java.text.DecimalFormat;
 import java.util.Locale;
 
 public abstract class FrontCardActivity extends AppCompatActivity implements CardInterface {

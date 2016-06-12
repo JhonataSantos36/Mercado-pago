@@ -155,7 +155,7 @@ public class CheckoutActivityTest {
 
         onView(withId(R.id.contentLayout))
                 .check(matches(isDisplayed()));
-        onView(withId(R.id.comment))
+        onView(withId(R.id.mpsdkComment))
                 .check(matches(withText(comment)));
 
         ImageView paymentMethodImage = (ImageView) activity.findViewById(R.id.image);
@@ -187,7 +187,7 @@ public class CheckoutActivityTest {
         mTestRule.launchActivity(validStartIntent);
         //perform actions
         mTestRule.restartIntents();
-        onView(withId(R.id.editHint)).perform(click());
+        onView(withId(R.id.mpsdkEditHint)).perform(click());
 
         //validations
         intended(hasComponent(PaymentVaultActivity.class.getName()));
@@ -215,7 +215,7 @@ public class CheckoutActivityTest {
         CheckoutActivity activity = mTestRule.launchActivity(validStartIntent);
 
         //Perform actions
-        onView(withId(R.id.editHint)).perform(click());
+        onView(withId(R.id.mpsdkEditHint)).perform(click());
         pressBack();
 
         //Validations
@@ -223,7 +223,7 @@ public class CheckoutActivityTest {
 
         onView(withId(R.id.contentLayout))
                 .check(matches(isDisplayed()));
-        onView(withId(R.id.comment))
+        onView(withId(R.id.mpsdkComment))
                 .check(matches(withText(comment)));
 
         ImageView paymentMethodImage = (ImageView) activity.findViewById(R.id.image);
@@ -261,7 +261,7 @@ public class CheckoutActivityTest {
         pressBack();
         pressBack();
         //validations
-        onView(withId(R.id.groupsList))
+        onView(withId(R.id.mpsdkGroupsList))
                 .check(matches(isDisplayed()));
     }
 
@@ -313,7 +313,7 @@ public class CheckoutActivityTest {
         CheckoutActivity activity = mTestRule.launchActivity(validStartIntent);
 
         //validations
-        View itemInfoLayout = activity.findViewById(R.id.shoppingCartFragment);
+        View itemInfoLayout = activity.findViewById(R.id.mpsdkShoppingCartFragment);
         assertTrue(itemInfoLayout.getVisibility() == View.VISIBLE);
     }
 
@@ -366,12 +366,12 @@ public class CheckoutActivityTest {
         mTestRule.launchActivity(validStartIntent);
 
         //perform actions
-        onView(withId(R.id.groupsList)).perform(
+        onView(withId(R.id.mpsdkGroupsList)).perform(
                 RecyclerViewActions.actionOnItemAtPosition(1, click()));
 
-        onView(withId(R.id.groupsList)).perform(
+        onView(withId(R.id.mpsdkGroupsList)).perform(
                 RecyclerViewActions.actionOnItemAtPosition(1, click()));
-        onView(withId(R.id.termsAndConditions)).perform(click());
+        onView(withId(R.id.mpsdkTermsAndConditions)).perform(click());
 
         //validations
         intended(hasComponent(TermsAndConditionsActivity.class.getName()));
@@ -417,7 +417,7 @@ public class CheckoutActivityTest {
         mTestRule.launchActivity(validStartIntent);
 
         //perform actions
-        onView(withId(R.id.groupsList)).perform(
+        onView(withId(R.id.mpsdkGroupsList)).perform(
                 RecyclerViewActions.actionOnItemAtPosition(0, click()));
 
         //prepare next activity result
@@ -434,7 +434,7 @@ public class CheckoutActivityTest {
         intending(hasComponent(CardVaultActivity.class.getName())).respondWith(result);
 
         //perform actions
-        onView(withId(R.id.groupsList)).perform(
+        onView(withId(R.id.mpsdkGroupsList)).perform(
                 RecyclerViewActions.actionOnItemAtPosition(0, click()));
 
         //validations
@@ -472,11 +472,11 @@ public class CheckoutActivityTest {
         mTestRule.launchActivity(validStartIntent);
 
         //perform actions
-        onView(withId(R.id.groupsList)).perform(
+        onView(withId(R.id.mpsdkGroupsList)).perform(
                 RecyclerViewActions.actionOnItemAtPosition(0, click()));
 
         //perform actions
-        onView(withId(R.id.groupsList)).perform(
+        onView(withId(R.id.mpsdkGroupsList)).perform(
                 RecyclerViewActions.actionOnItemAtPosition(0, click()));
 
         //validations
@@ -513,7 +513,7 @@ public class CheckoutActivityTest {
         intending(hasComponent(PaymentMethodsActivity.class.getName())).respondWith(result);
 
 
-        onView(withId(R.id.groupsList)).perform(
+        onView(withId(R.id.mpsdkGroupsList)).perform(
                 RecyclerViewActions.actionOnItemAtPosition(1, click()));
 
 
@@ -536,11 +536,11 @@ public class CheckoutActivityTest {
         mTestRule.launchActivity(validStartIntent);
 
         //perform actions
-        onView(withId(R.id.groupsList)).perform(
+        onView(withId(R.id.mpsdkGroupsList)).perform(
                 RecyclerViewActions.actionOnItemAtPosition(1, click()));
-        onView(withId(R.id.groupsList)).perform(
+        onView(withId(R.id.mpsdkGroupsList)).perform(
                 RecyclerViewActions.actionOnItemAtPosition(1, click()));
-        onView(withId(R.id.payButton)).perform(click());
+        onView(withId(R.id.mpsdkPayButton)).perform(click());
 
         //validations
         intended(hasComponent(InstructionsActivity.class.getName()));
@@ -570,7 +570,7 @@ public class CheckoutActivityTest {
         intending(hasComponent(PaymentVaultActivity.class.getName())).respondWith(paymentMethodResult);
         mTestRule.launchActivity(validStartIntent);
 
-        onView(withId(R.id.payButton)).perform(click());
+        onView(withId(R.id.mpsdkPayButton)).perform(click());
 
         intended(hasComponent(CongratsActivity.class.getName()));
     }
@@ -589,11 +589,11 @@ public class CheckoutActivityTest {
         mTestRule.launchActivity(validStartIntent);
 
         //perform actions
-        onView(withId(R.id.groupsList)).perform(
+        onView(withId(R.id.mpsdkGroupsList)).perform(
                 RecyclerViewActions.actionOnItemAtPosition(1, click()));
-        onView(withId(R.id.groupsList)).perform(
+        onView(withId(R.id.mpsdkGroupsList)).perform(
                 RecyclerViewActions.actionOnItemAtPosition(1, click()));
-        onView(withId(R.id.payButton)).perform(click());
+        onView(withId(R.id.mpsdkPayButton)).perform(click());
 
         intended(hasComponent(ErrorActivity.class.getName()));
     }
@@ -612,11 +612,11 @@ public class CheckoutActivityTest {
         mTestRule.launchActivity(validStartIntent);
 
         //perform actions
-        onView(withId(R.id.groupsList)).perform(
+        onView(withId(R.id.mpsdkGroupsList)).perform(
                 RecyclerViewActions.actionOnItemAtPosition(1, click()));
-        onView(withId(R.id.groupsList)).perform(
+        onView(withId(R.id.mpsdkGroupsList)).perform(
                 RecyclerViewActions.actionOnItemAtPosition(1, click()));
-        onView(withId(R.id.payButton)).perform(click());
+        onView(withId(R.id.mpsdkPayButton)).perform(click());
 
         intended(hasComponent(ErrorActivity.class.getName()));
     }
@@ -635,11 +635,11 @@ public class CheckoutActivityTest {
         mTestRule.launchActivity(validStartIntent);
 
         //perform actions
-        onView(withId(R.id.groupsList)).perform(
+        onView(withId(R.id.mpsdkGroupsList)).perform(
                 RecyclerViewActions.actionOnItemAtPosition(1, click()));
-        onView(withId(R.id.groupsList)).perform(
+        onView(withId(R.id.mpsdkGroupsList)).perform(
                 RecyclerViewActions.actionOnItemAtPosition(1, click()));
-        onView(withId(R.id.payButton)).perform(click());
+        onView(withId(R.id.mpsdkPayButton)).perform(click());
 
         intended(hasComponent(CongratsActivity.class.getName()));
         onView(withText(mTestRule.getActivity().getString(R.string.mpsdk_title_pending))).check(matches(isDisplayed()));

@@ -1,6 +1,21 @@
 package com.mercadopago;
 
+import android.app.Activity;
+import android.app.Instrumentation;
+import android.content.Intent;
+import android.widget.EditText;
+
+import com.mercadopago.model.ApiException;
+import com.mercadopago.model.CardToken;
+import com.mercadopago.model.PaymentMethod;
+import com.mercadopago.model.PaymentMethodRow;
+import com.mercadopago.test.ActivityResult;
 import com.mercadopago.test.BaseTest;
+import com.mercadopago.test.StaticMock;
+import com.mercadopago.views.MPEditText;
+
+import java.math.BigDecimal;
+import java.util.List;
 
 public class VaultActivityWithNewCardTest extends BaseTest<VaultActivity> {
 
@@ -18,7 +33,7 @@ public class VaultActivityWithNewCardTest extends BaseTest<VaultActivity> {
     // * enter a security code
     // * push the button and generate a cards token
     //TODO: fix? Will be replaced by PaymentVault
-    /*
+
     public void testHappyPath() {
 
         final VaultActivity activity = prepareActivity(StaticMock.DUMMY_MERCHANT_PUBLIC_KEY,
@@ -86,7 +101,7 @@ public class VaultActivityWithNewCardTest extends BaseTest<VaultActivity> {
         // Complete security code
         getInstrumentation().runOnMainSync(new Runnable() {
             public void run() {
-                EditText securityCodeText = (EditText) activity.findViewById(R.id.securityCode);
+                EditText securityCodeText = (EditText) activity.findViewById(R.id.mpsdkSecurityCode);
                 securityCodeText.setText(StaticMock.DUMMY_SECURITY_CODE);
             }
         });
@@ -426,7 +441,7 @@ public class VaultActivityWithNewCardTest extends BaseTest<VaultActivity> {
         // Complete security code
         getInstrumentation().runOnMainSync(new Runnable() {
             public void run() {
-                EditText securityCodeText = (EditText) activity.findViewById(R.id.securityCode);
+                EditText securityCodeText = (EditText) activity.findViewById(R.id.mpsdkSecurityCode);
                 securityCodeText.setText(StaticMock.DUMMY_SECURITY_CODE);
             }
         });
@@ -471,7 +486,7 @@ public class VaultActivityWithNewCardTest extends BaseTest<VaultActivity> {
         // Complete security code
         getInstrumentation().runOnMainSync(new Runnable() {
             public void run() {
-                MPEditText securityCodeText = (MPEditText) activity.findViewById(R.id.securityCode);
+                MPEditText securityCodeText = (MPEditText) activity.findViewById(R.id.mpsdkSecurityCode);
                 securityCodeText.setText(StaticMock.DUMMY_SECURITY_CODE);
             }
         });
@@ -521,5 +536,5 @@ public class VaultActivityWithNewCardTest extends BaseTest<VaultActivity> {
         putListExtra(intent, "excludedPaymentTypes", excludedPaymentTypes);
         setActivityIntent(intent);
         return getActivity();
-    }*/
+    }
 }

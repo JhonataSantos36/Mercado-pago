@@ -1,73 +1,71 @@
 package com.mercadopago.adapters;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
-import com.mercadopago.model.Issuer;
 import com.mercadopago.R;
+import com.mercadopago.model.Issuer;
 import com.mercadopago.views.MPTextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class IssuersAdapter extends  RecyclerView.Adapter<IssuersAdapter.ViewHolder> {
 
-    private List<Issuer> mData;
-    private View.OnClickListener mListener = null;
+    private Context mContext;
+    private List<Issuer> mIssuers;
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-
-        public MPTextView mTextView;
-
-        public ViewHolder(View v, View.OnClickListener listener) {
-
-            super(v);
-            mTextView = (MPTextView) v.findViewById(R.id.mpsdkLabel);
-            if (listener != null) {
-                v.setOnClickListener(listener);
-            }
-        }
+    public IssuersAdapter(Context context) {
+        this.mContext = context;
+        this.mIssuers = new ArrayList<>();
     }
 
-    public IssuersAdapter(List<Issuer> data, View.OnClickListener listener) {
+    public void addResults(List<Issuer> list) {
+        mIssuers.addAll(list);
+        notifyDataSetChanged();
+    }
 
-        mData = data;
-        mListener = listener;
+    public void clear() {
+        mIssuers.clear();
+        notifyDataSetChanged();
     }
 
     @Override
-    public IssuersAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
-                                                               int viewType) {
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.row_simple_list, parent, false);
-
-        return new ViewHolder(v, mListener);
+        LayoutInflater inflater = LayoutInflater.from(mContext);
+        View adapterView = inflater.inflate(R.layout.row_issuers, parent, false);
+        ViewHolder viewHolder = new ViewHolder(adapterView);
+        return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
+        Issuer issuer = mIssuers.get(position);
+        holder.mIssuersTextView.setText(issuer.getName());
+    }
 
-        // Set current issuer
-        Issuer issuer = mData.get(position);
 
-        // Set label
-        holder.mTextView.setText(issuer.getName());
-
-        // Set view tag item
-        holder.itemView.setTag(issuer);
+    public Issuer getItem(int position) {
+        return mIssuers.get(position);
     }
 
     @Override
     public int getItemCount() {
-        return mData.size();
+        return mIssuers.size();
     }
 
-    public Issuer getItem(int position) {
-        return mData.get(position);
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+
+        public MPTextView mIssuersTextView;
+
+        public ViewHolder(View itemView) {
+            super(itemView);
+            mIssuersTextView = (MPTextView) itemView.findViewById(R.id.mpsdkAdapterIssuersText);
+        }
     }
 
-    public View.OnClickListener getListener() { return mListener; }
 }

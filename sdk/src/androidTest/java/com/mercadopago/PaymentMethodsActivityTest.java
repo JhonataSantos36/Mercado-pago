@@ -29,7 +29,7 @@ public class PaymentMethodsActivityTest extends BaseTest<PaymentMethodsActivity>
 
         Activity activity = prepareActivity(StaticMock.DUMMY_MERCHANT_PUBLIC_KEY, null, null);
 
-        RecyclerView list = (RecyclerView) activity.findViewById(R.id.payment_methods_list);
+        RecyclerView list = (RecyclerView) activity.findViewById(R.id.mpsdkPaymentMethodsList);
         if ((list != null) && (list.getAdapter() != null)) {
             assertTrue(list.getAdapter().getItemCount() > 0);
         } else {
@@ -81,7 +81,7 @@ public class PaymentMethodsActivityTest extends BaseTest<PaymentMethodsActivity>
 
         sleepThread();
 
-        RecyclerView list = (RecyclerView) activity.findViewById(R.id.payment_methods_list);
+        RecyclerView list = (RecyclerView) activity.findViewById(R.id.mpsdkPaymentMethodsList);
         PaymentMethodsAdapter adapter = (PaymentMethodsAdapter) list.getAdapter();
         if (adapter != null) {
             assertTrue(adapter.getItemCount() > 0);
@@ -107,7 +107,7 @@ public class PaymentMethodsActivityTest extends BaseTest<PaymentMethodsActivity>
 
         sleepThread();
 
-        RecyclerView list = (RecyclerView) activity.findViewById(R.id.payment_methods_list);
+        RecyclerView list = (RecyclerView) activity.findViewById(R.id.mpsdkPaymentMethodsList);
         PaymentMethodsAdapter adapter = (PaymentMethodsAdapter) list.getAdapter();
         if (adapter != null) {
             assertTrue(adapter.getItemCount() > 0);

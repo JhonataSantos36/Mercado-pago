@@ -255,7 +255,7 @@ public class CardVaultActivity extends ShowCardActivity {
                         .setPaymentPreference(mPaymentPreference)
                         .setSite(mSite)
                         .setDecorationPreference(mDecorationPreference)
-                        .startCardInstallmentsActivity();
+                        .startInstallmentsActivity();
                 overridePendingTransition(R.anim.fade_in_seamless, R.anim.fade_out_seamless);
             }
         });

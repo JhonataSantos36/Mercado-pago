@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.mercadopago.adapters.BankDealsAdapter;
+import com.mercadopago.callbacks.Callback;
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.decorations.DividerItemDecoration;
 import com.mercadopago.model.ApiException;
@@ -19,8 +20,6 @@ import com.mercadopago.model.DecorationPreference;
 import com.mercadopago.mptracker.MPTracker;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.LayoutUtil;
-
-import com.mercadopago.callbacks.Callback;
 
 import java.util.List;
 

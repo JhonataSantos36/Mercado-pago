@@ -8,11 +8,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.mercadopago.core.MercadoPago;
+import com.mercadopago.R;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.util.MercadoPagoUtil;
-import com.mercadopago.R;
-import com.mercadopago.views.MPTextView;
 
 import java.util.List;
 

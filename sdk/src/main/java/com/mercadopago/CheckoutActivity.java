@@ -46,7 +46,6 @@ import com.mercadopago.views.MPButton;
 import com.mercadopago.views.MPTextView;
 
 import java.math.BigDecimal;
-
 import java.util.Calendar;
 
 import static android.text.TextUtils.isEmpty;
@@ -525,7 +524,7 @@ public class CheckoutActivity extends AppCompatActivity {
                 .setIssuer(mSelectedIssuer)
                 .setSite(mSite)
                 .setDecorationPreference(mDecorationPreference)
-                .startCardInstallmentsActivity();
+                .startInstallmentsActivity();
 
         overridePendingTransition(R.anim.slide_right_to_left_in, R.anim.slide_right_to_left_out);
     }

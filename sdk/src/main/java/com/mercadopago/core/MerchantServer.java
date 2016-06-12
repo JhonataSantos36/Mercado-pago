@@ -3,7 +3,6 @@ package com.mercadopago.core;
 import android.content.Context;
 
 import com.mercadopago.adapters.ErrorHandlingCallAdapter;
-import com.mercadopago.adapters.MPCall;
 import com.mercadopago.callbacks.Callback;
 import com.mercadopago.model.CheckoutPreference;
 import com.mercadopago.model.Customer;
