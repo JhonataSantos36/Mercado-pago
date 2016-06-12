@@ -108,7 +108,7 @@ public class InstructionsActivityTest {
     }
 
     @Test
-    public void showmpsdkSecondaryInfoOnCreate() {
+    public void showSecondaryInfoOnCreate() {
         Instruction instructionWithoutActions = StaticMock.getInstructionWithoutActions();
         mTestRule.addApiResponseToQueue(instructionWithoutActions, 200, "");
         mTestRule.launchActivity(validStartIntent);
@@ -141,7 +141,7 @@ public class InstructionsActivityTest {
     }
 
     @Test
-    public void ifmpsdkPrimaryInfoDoNotDisplayInfoTextView() {
+    public void ifPrimaryInfoDoNotDisplayInfoTextView() {
         Instruction instruction = StaticMock.getInstructionWithNullInfo();
 
         mTestRule.addApiResponseToQueue(instruction, 200, "");
@@ -153,7 +153,7 @@ public class InstructionsActivityTest {
     }
 
     @Test
-    public void ifNompsdkSecondaryInfoDoNotDisplayInfoTextView() {
+    public void ifNoSecondaryInfoDoNotDisplayInfoTextView() {
         Instruction instruction = StaticMock.getInstructionWithoutSecondaryInfo();
         mTestRule.addApiResponseToQueue(instruction, 200, "");
         mTestRule.launchActivity(validStartIntent);
