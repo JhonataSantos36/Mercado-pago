@@ -160,7 +160,8 @@ public class IssuersActivity extends ShowCardActivity {
                         if (mActiveActivity) {
                             mProgressBar.setVisibility(View.GONE);
                             if (mIssuers.isEmpty()) {
-                                ErrorUtil.startErrorActivity(mActivity, getString(R.string.mpsdk_standard_error_message), "no issuers found at IssuersActivity", false);
+                                mSelectedIssuer = null;
+                                finishWithResult();
                             } else if (mIssuers.size() == 1) {
                                 mSelectedIssuer = mIssuers.get(0);
                                 finishWithResult();
