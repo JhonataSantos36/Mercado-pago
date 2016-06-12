@@ -38,7 +38,7 @@
     padding-top: 70px;
 ">
             <h3>MercadoPago Android SDK</h3>
-            <h4>Fácil, rápido, simple. La mejor experiencia de pagos en tu aplicación.</h4>
+            <h4>La manera más rápida de cobrar en una app con la mejor experiencia.</h4>
          </div>
          
       </div>
@@ -215,10 +215,9 @@ public void startCardFormActivity(View view) {
   
   // Llamar al activity propuesta por MP
   new MercadoPago.StartActivityBuilder()
-     .setActivity(this)
-     .setPublicKey("TEST-ad365c37-8012-4014-84f5-6c895b3f8e0a")
-     .setAmount(MONTO)
-     .startCardFormActivity();
+    .setActivity(this)
+    .setPublicKey(TU_PUBLIC_KEY)
+    .startGuessingCardActivity();
     
 }
 
@@ -226,7 +225,7 @@ public void startCardFormActivity(View view) {
 protected void onActivityResult(int requestCode, int resultCode, 
 Intent data) {
 
-    if (requestCode == MercadoPago.CARD_FORM_REQUEST_CODE) {
+    if (requestCode == MercadoPago.GUESSING_CARD_REQUEST_CODE) {
         if (resultCode == RESULT_OK && data != null) {
             // Obtené los datos cargados por tu usuario
             PaymentMethod selectedPaymentMethod = 
@@ -277,10 +276,11 @@ public void startCardFlowActivity(View view) {
   
   // Llamar al activity propuesta por MP
   new MercadoPago.StartActivityBuilder()
-     .setActivity(this)
-     .setPublicKey(TU_PUBLIC_KEY)
-     .setAmount(MONTO)
-     .startCardFlowActivity();
+    .setActivity(this)
+    .setPublicKey(TU_PUBLIC_KEY)
+    .setAmount(MONTO)
+    .setSite(Sites.ARGENTINA)
+    .startCardVaultActivity();
     
 }
 
@@ -392,7 +392,7 @@ Intent data) {
                      </pre>
                   </p>
                   <div class="doc-example ionic">
-                     <img src="./img/android/payment_methods_f1.png" class="img-phone-case"></img>
+                     <img src="./img/android/f2_payment_methods.png" class="img-phone-case"></img>
                   </div>
                </section>
                <section class="docs-section" id="f2_card_issuers">
@@ -407,14 +407,15 @@ Intent data) {
                      <pre class="snippet">
                         <code class="line-numbers language-java">
 public void startIssuersActivity(View view) {
-  
+  PaymentMethod paymentMethod = JsonUtil.getInstance()
+    .fromJson(intent.getStringExtra("payment_method"), PaymentMethod.class);
+
   // Llamar al activity propuesta por MP
   new MercadoPago.StartActivityBuilder()
      .setActivity(this)
      .setPublicKey(TU_PUBLIC_KEY)
-     .setPaymentMethod(mCurrentPaymentMethod)
-     .setAmount(MONTO)
-     .startCardIssuersActivity();
+     .setPaymentMethod(paymentMethod)
+     .startIssuersActivity();
     
 }
 
@@ -422,7 +423,7 @@ public void startIssuersActivity(View view) {
 protected void onActivityResult(int requestCode, int resultCode, 
 Intent data) {
 
-    if (requestCode == MercadoPago.CARD_ISSUERS_REQUEST_CODE) {
+    if (requestCode == MercadoPago.ISSUERS_REQUEST_CODE) {
         if (resultCode == RESULT_OK && data != null) {
             // Obtené el banco seleccionado por el usuario
             Issuer issuer = JsonUtil.getInstance()
@@ -449,7 +450,7 @@ Intent data) {
                      </pre>
                   </p>
                   <div class="doc-example ionic">
-                     <img src="./img/android/card_form_issuers.png" class="img-phone-case"></img>
+                     <img src="./img/android/f2_card_issuers.png" class="img-phone-case"></img>
                   </div>
                </section>
                <section class="docs-section" id="f2_payer_costs">
@@ -465,15 +466,19 @@ Intent data) {
                      <pre class="snippet">
                         <code class="line-numbers language-java">
 public void startInstallmentsActivity(View view) {
-  
+  Long issuerId = 326;
+  PaymentMethod paymentMethod = JsonUtil.getInstance()
+    .fromJson(intent.getStringExtra("payment_method"), PaymentMethod.class);
+
   // Llamar al activity propuesta por MP
   new MercadoPago.StartActivityBuilder()
-     .setActivity(this)
-     .setPublicKey(TU_PUBLIC_KEY)
-     .setPaymentMethod(mCurrentPaymentMethod)
-     .setIssuer(mCurrentIssuer)
-     .setAmount(MONTO)
-     .startCardInstallmentsActivity();
+    .setActivity(this)
+    .setPublicKey(TU_PUBLIC_KEY)
+    .setSite(Sites.ARGENTINA)
+    .setAmount(MONTO)
+    .setIssuer(issuerId)
+    .setPaymentMethod(paymentMethod)
+    .startInstallmentsActivity();
     
 }
 
@@ -481,7 +486,7 @@ public void startInstallmentsActivity(View view) {
 protected void onActivityResult(int requestCode, int resultCode, 
 Intent data) {
 
-    if (requestCode == MercadoPago.CARD_INSTALLMENTS_REQUEST_CODE) {
+    if (requestCode == MercadoPago.INSTALLMENTS_REQUEST_CODE) {
         if (resultCode == RESULT_OK && data != null) {
             // Obtené las cuotas seleccionadas por el usuario
             PayerCost payerCost = JsonUtil.getInstance()
@@ -508,7 +513,7 @@ Intent data) {
                      </pre>
                   </p>
                   <div class="doc-example ionic">
-                     <img src="./img/android/card_form_installments.png" class="img-phone-case"></img>
+                     <img src="./img/android/f2_payer_costs.png" class="img-phone-case"></img>
                   </div>
                </section>
                <section class="docs-section" id="f2_bank_deals">

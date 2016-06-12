@@ -1,6 +1,5 @@
 @charset "UTF-8";
 
-@import "compass/css3";
 /*!
  * Bootstrap v3.0.0
  *
@@ -6293,7 +6292,7 @@ h1 + h2 + p {
     margin: 20px 0px;
     line-height: 26px; }
   #getting-started i {
-    color: #999; }
+    color: #333; }
   #getting-started .row {
     margin-bottom: 50px; }
   #getting-started .num {

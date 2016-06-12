@@ -40,7 +40,7 @@
     padding-top: 70px;
 ">
             <h3>MercadoPago Android SDK</h3>
-            <h4>Fácil, rápido, simple. La mejor experiencia de pagos en tu aplicación.</h4>
+            <h4>La manera más rápida de cobrar en una app con la mejor experiencia.</h4>
          </div>
          
       </div>
@@ -181,12 +181,15 @@ mercadoPago.getPaymentMethods(new Callback &lt;List&lt;PaymentMethod&gt;&gt;() {
                         <code class="line-numbers language-java">
 String paymentMethodId = "master";
 
+// Primeros seis dígitos de la tarjeta (nullable).
+String bin = "503175"; 
+
 MercadoPago mercadoPago = new MercadoPago.Builder()
    .setContext(this)
    .setPublicKey("TEST-ad365c37-8012-4014-84f5-6c895b3f8e0a")
    .build();
 
-mercadoPago.getIssuers(paymentMethodId, new Callback &lt;List&lt;Issuers&gt;&gt;() {
+mercadoPago.getIssuers(paymentMethodId, bin, new Callback &lt;List&lt;Issuers&gt;&gt;() {
    @Override
    public void success(List&lt;Issuers&gt; issuers, Response response) {
       // Listo, armá tu UI para el listado de bancos
@@ -239,8 +242,8 @@ MercadoPago mercadoPago = new MercadoPago.Builder()
    .setPublicKey("TEST-ad365c37-8012-4014-84f5-6c895b3f8e0a")
    .build();
 
-mercadoPago.getInstallments(mBin, mAmount, mPaymentMethodId, 
-   mIssuerId, new Callback &lt;List&lt;Installment&gt;&gt;() {
+mercadoPago.getInstallments(bin, amount, paymentMethodId, 
+   issuerId, new Callback &lt;List&lt;Installment&gt;&gt;() {
       @Override
       public void success(List&lt;Installment&gt; installments, Response response) {
          // Listo, armá tu UI para el listado de cuotas
@@ -453,13 +456,14 @@ mercadoPago.getBankDeals(new Callback&lt;List&lt;BankDeal&gt;&gt;() {
                         <code class="line-numbers language-java">
 Long paymentId = 1234567;
 String paymentMethodId = "pagofacil";
+String paymentTypeId = "ticket";
 
 MercadoPago mercadoPago = new MercadoPago.Builder()
    .setContext(this)
    .setPublicKey("TEST-ad365c37-8012-4014-84f5-6c895b3f8e0a")
    .build();
 
-mercadoPago.getInstructions(paymentId, paymentMethodId, new Callback&lt;Instruction&gt;() {
+mercadoPago.getInstructions(paymentId, paymentMethodId, paymentTypeId, new Callback&lt;Instruction&gt;() {
    @Override
    public void success(Instruction instruction, Response response) {
       // Listo, aquí ya tienes las instrucciones para

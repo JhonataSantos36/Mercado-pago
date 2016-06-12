@@ -38,7 +38,7 @@
     padding-top: 70px;
 ">
             <h3>MercadoPago Android SDK</h3>
-            <h4>Fácil, rápido, simple. La mejor experiencia de pagos en tu aplicación.</h4>
+            <h4>La manera más rápida de cobrar en una app con la mejor experiencia.</h4>
          </div>
          
       </div>
@@ -116,7 +116,7 @@
                         <div class="icon-puzzle icon-big" style="margin-left: 40px; margin-top: 30px;"></div>
                      </div>
                      <h5><b>Componentes visuales</b></h5>
-                     <p>Te ayudarán a recolectar la información necesaria para realizar el pago.</p>
+                     <p>Te ayudarán a recolectar la información necesaria para hacer el pago.</p>
                      <a href="f2.html" class="start-button">Empezar</a>
                   </article>
 
@@ -132,14 +132,14 @@
                <section class="docs-section" id="payment_info">
                   <h3 class="title">Información obligatoria para cobrar</h3>
                   <p>
-                     Necesitás recolectar la información con la que <b>desde tu servidor</b> vas a invocar nuestros servicios. Es obligatorio que al momento de hacer el pago nos envíes los siguientes datos:
+                     Al momento de hacer el pago necesitamos que sí o sí nos envíes los siguientes datos desde tu servidor:
                      <ul>
-                        <li><b>Monto que deseas cobrar.</b></li>
-                        <li><b>Mail del comprador:</b> Sólo por si algo extraño sucediera durante o luego del pago. Esto es una protección tanto para tu usuario como para tu servicio posventa.</li>
+                        <li><b>Monto a cobrar.</b></li>
+                        <li><b>E-mail del comprador:</b> Sólo por si algo extraño sucediera durante o luego del pago. Es una protección tanto para tu usuario como para tu servicio posventa.</li>
                         <li><b>Medio de pago:</b> La marca de la tarjeta, la entidad de cobro en efectivo (ya sea un cajero automático o por ventanilla). Cada medio de pago tiene sus particularidades: tiempo de acreditación para medios de pago offline; longitud del número de tarjeta, del código de seguridad, entre otros para medios de pago de tarjetas.</li>
-                        <li><b>Banco (sólo para tarjetas):</b> Es el emisor de la tarjeta. Con quienes establecemos planes de cuotas sin interes para que tus usuarios paguen de manera más cómoda.</li>
-                        <li><b>Cuotas (sólo para tarjetas):</b> La cantidad de cuotas seleccionadas por tu usuario. Nosotros nos encargamos de saber si el pago debe ser procesado con o sin interés dependiendo del medio de pago y el banco de la tarjeta.</li>
-                        <li><b>Token (sólo para tarjetas):</b> Necesitamos el número, el nombre, la fecha de expiración y el código de seguridad de la tarjeta de tu usuario. En algunos países también es necesario que nos indiques su tipo y número de documento. <b>MercadoPago tokeniza estos datos para proteger la información sensible de la tarjeta.</b></li>
+                        <li><b>Banco (solo para tarjetas):</b> Es el emisor de la tarjeta. Con quienes establecemos planes de cuotas sin interés para que tus usuarios para que tus usuarios tengan la mejor financiación.</li>
+                        <li><b>Cuotas (solo para tarjetas):</b> La cantidad de cuotas seleccionadas por tu usuario. Nosotros nos encargamos de saber si el pago debe ser procesado con o sin interés dependiendo del medio de pago y el banco de la tarjeta.</li>
+                        <li><b>Token (solo para tarjetas):</b> Necesitamos el número, el nombre, la fecha de expiración y el código de seguridad de la tarjeta de tu usuario. En algunos países también es necesario que nos indiques su tipo y número de documento. <b>MercadoPago tokeniza estos datos para proteger la información sensible de la tarjeta.</b></li>
                      </ul>
                   </p>
                </section>
@@ -147,18 +147,18 @@
                   <h3 class="title">¿Qué necesitás para empezar?</h3>
                   <p>
                      <ul>
-                        <li style="list-style-type: decimal;">Tener o <a href="https://registration.mercadopago.com.ar/registration-mp?mode=mp" target="_blank">crear</a> una cuenta de MercadoPago dónde recibirás el dinero.</li>
-                        <li style="list-style-type: decimal;"><a href="https://applications.mercadopago.com.ar" target="_blank">Crear</a> una aplicación.</li>
-                        <li style="list-style-type: decimal;">Configurar tus <a href="https://www.mercadopago.com/mla/account/credentials?type=personalized" target="_blank">credenciales</a>.</li>
+                        <li style="list-style-type: decimal;"><a href="https://registration.mercadopago.com.ar/registration-mp?mode=mp" target="_blank">Registrar</a> una cuenta de MercadoPago donde recibirás el dinero.</li>
+                        <li style="list-style-type: decimal;"><a href="https://applications.mercadopago.com.ar" target="_blank">Crear una aplicación</a>.</li>
+                        <li style="list-style-type: decimal;"><a href="https://www.mercadopago.com/mla/account/credentials?type=personalized" target="_blank">Configurar credenciales</a>.</li>
                      </ul>
                   </p>
                </section>
                <section class="docs-section" id="modes">
                   <h3 class="title">Modo sandbox y productivo</h3>
                   <p>
-                     Con el Checkout personalizado puedes recibir pagos en modo sandbox o productivo. La diferencia para procesar en uno u otro modo está en el tipo de credenciales que uses para autenticarte en la API.
+                     Con el <i>Checkout personalizado</i> puedes recibir pagos en modo sandbox o productivo. La diferencia entre uno y otro está en el tipo de credenciales que uses para autenticarte en la API.
                      <br />
-                     Desarrolla tu aplicación usando tus credenciales para modo sandbox. Cuando esté lista para recibir pagos productivos, deberás pasar un proceso de homologación y reemplazar las credenciales por las de producción. No necesitas cambiar otra cosa de tu código. De esta forma puedes realizar pagos de prueba mientras tus clientes están procesando pagos productivos con sólo utilizar las claves correspondientes.
+                     Desarrolla tu aplicación usando tus credenciales para modo sandbox. Cuando esté lista para recibir pagos productivos, deberás pasar un proceso de homologación y reemplazar las credenciales por las de producción. No necesitas cambiar nada más de tu código. De esta forma puedes realizar pagos de prueba mientras tus clientes están procesando pagos productivos con sólo utilizar las claves correspondientes.
                      <br />
                      El entorno de sandbox es una réplica exacta de producción, diseñado con el objetivo de facilitar las pruebas durante la integración. El uso de este modo no genera ningún tipo de cargo real. Además de las credenciales correspondientes, en modo sandbox debes utilizar las tarjetas de prueba que te brindamos.
                   </p>
