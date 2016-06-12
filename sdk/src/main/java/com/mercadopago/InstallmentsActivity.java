@@ -165,7 +165,8 @@ public class InstallmentsActivity extends ShowCardActivity {
 
     private void getInstallmentsAsync() {
         mProgressBar.setVisibility(View.VISIBLE);
-        mMercadoPago.getInstallments(mBin, mAmount, mSelectedIssuer.getId(), mCurrentPaymentMethod.getId(),
+        Long issuerId = mSelectedIssuer == null ? null : mSelectedIssuer.getId();
+        mMercadoPago.getInstallments(mBin, mAmount, issuerId, mCurrentPaymentMethod.getId(),
                 new Callback<List<Installment>>() {
                     @Override
                     public void success(List<Installment> installments) {
