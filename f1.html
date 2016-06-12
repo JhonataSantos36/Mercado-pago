@@ -53,11 +53,6 @@
                <div class="docked-menu" style="top: 20px;">
                   <ul class="nav left-menu">
                      <li class="menu-title">
-                        <a href="our_flavors.html">SOLUCIONES PROPUESTAS</a>
-                     </li>
-                  </ul>
-                  <ul class="nav left-menu">
-                     <li class="menu-title">
                         <a href="index.html">NUESTRO CHECKOUT</a>
                      </li>
                   </ul>
@@ -72,14 +67,22 @@
                            <li><a href="checkout_custom.html#your_credentials">Usá tus credenciales</a></li>
                            <li><a href="checkout_custom.html#notifications">Recibí notificaciones de pagos</a></li>
                            <li>
-                              <a href="f2.html">Nuestros componentes de UI</a>
+                              <a href="f2.html">Componentes de UI</a>
                               <ul>
+                                 <li><a href="f2.html#f2_payment_vault">Componente completo</a></li>
+                                 <li><a href="f2.html#f2_card_form">Cobra con tarjeta</a></li>
+                                 <li><a href="f2.html#f2_card_form_installments">Cobra con tarjeta en cuotas</a></li>
                                  <li><a href="f2.html#f2_payment_methods">Medios de pago</a></li>
                                  <li><a href="f2.html#f2_card_issuers">Bancos</a></li>
                                  <li><a href="f2.html#f2_payer_costs">Cuotas</a></li>
                                  <li><a href="f2.html#f2_bank_deals">Promociones</a></li>
-                                 <li><a href="f2.html#f2_card_form">Formulario de tarjeta</a></li>
-                                 <li><a href="f2.html#f2_payment_vault">Componente completo</a></li>
+                                 <li>
+                                    <a href="f2.html#f2_payment_result">Resultados de pago</a>
+                                    <ul>
+                                       <li><a href="f2.html#f2_payment_results_cards">Pagos con tarjeta</a></li>
+                                       <li><a href="f2.html#f2_instructions">Pagos en efectivo</a></li>
+                                    </ul>
+                                 </li>
                               </ul>
                            </li>
                            <li>
@@ -91,6 +94,7 @@
                                  <li><a href="f1.html#f1_identification_types">Tipos de documento</a></li>
                                  <li><a href="f1.html#f1_card_tokens">Tokenización de datos</a></li>
                                  <li><a href="f1.html#f1_bank_deals">Promociones</a></li>
+                                 <li><a href="f1.html#f1_instructions">Instrucciones</a></li>
                                  <li>
                                     <a href="f1.html#f1_merchant_server">MerchantServer</a>
                                     <ul>
@@ -101,16 +105,6 @@
                               </ul>
                            </li>
                         </ul>
-                     </li>
-                  </ul>
-                  <ul class="nav left-menu">
-                     <li class="menu-title">
-                        <a href="payment_types_methods.html">Tipos y Medios de pago disponibles</a>
-                     </li>
-                  </ul>
-                  <ul class="nav left-menu">
-                     <li class="menu-title">
-                        <a href="glosario.html">Glosario</a>
                      </li>
                   </ul>
                </div>
@@ -448,7 +442,42 @@ mercadoPago.getBankDeals(new Callback&lt;List&lt;BankDeal&gt;&gt;() {
                         </button>
                      </pre>
                   </p>
-                  <!--<script src="https://gist.github.com/matiasgualino/b60ae9a6fac0a49fc7eaca2c60426498.js"></script>-->
+               </section>
+               <section class="docs-section" id="f1_instructions">
+                  <h3 class="title">Medios de pago offline - Instrucciones</h3>
+                  <p>
+                     Cuando el usuario selecciona un medio de pago offline, te aconsejamos contarle las instrucciones que debe realizar para poder finalizar el pago. Te ofrecemos un servicio que, dado el identificador del pago y el medio elegido por el usuario, retorna los pasos a seguir por el usuario y todos los códigos de pago que debe mencionarle a los cajeros.
+                  </p>
+                  <p>
+                     <pre class="snippet">
+                        <code class="line-numbers language-java">
+Long paymentId = 1234567;
+String paymentMethodId = "pagofacil";
+
+MercadoPago mercadoPago = new MercadoPago.Builder()
+   .setContext(this)
+   .setPublicKey("TEST-ad365c37-8012-4014-84f5-6c895b3f8e0a")
+   .build();
+
+mercadoPago.getInstructions(paymentId, paymentMethodId, new Callback&lt;Instruction&gt;() {
+   @Override
+   public void success(Instruction instruction, Response response) {
+      // Listo, aquí ya tienes las instrucciones para
+      //contarle a tu usuario cómo finalizar el pago.
+      showInstructions(instruction);
+   }
+
+   @Override
+   public void failure(RetrofitError error) {
+      // Ups, ha ocurrido un error.
+   }
+});
+                        </code>
+                        <button class="copy-button">
+                           <img src="./img/clippy.svg" width="13" alt="Copy to clipboard">
+                        </button>
+                     </pre>
+                  </p>
                </section>
                <section class="docs-section" id="f1_merchant_server">
                   <h3 class="title">MerchantServer</h3>

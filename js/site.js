@@ -61,13 +61,20 @@ var site = (function(){
     fixedMenu = $('.docked-menu');
     if(fixedMenu.length) {
 
+      var locationhref = document.location.href;
+      var lastPathSegment = locationhref.substr(locationhref.lastIndexOf('/') + 1);
+      lastPathSegment = lastPathSegment.split('#');
+      lastPathSegment = lastPathSegment[0];  
+
       var targets = fixedMenu.find('.active-menu').find('a');
       targets.each(function() {
         var href = $(this).attr('href');
         if(href && href.indexOf('#') > -1) {
           href = href.split('#');
-          href = "#" + href[ href.length - 1 ];
-          $(this).attr('href', href);
+          if(href[0] == lastPathSegment) {
+            href = "#" + href[ href.length - 1 ];  
+            $(this).attr('href', href);
+          }
         }
       });
 
