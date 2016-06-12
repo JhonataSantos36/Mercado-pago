@@ -98,26 +98,4 @@ public class Step6Activity extends ExampleActivity {
                 .setCheckoutPreferenceId(mCheckoutPreference.getId())
                 .startCheckoutActivity();
     }
-
-    public void submitFormTest(View view) {
-
-        LayoutUtil.showProgressLayout(this);
-
-        Map<String, Object> map = new HashMap<>();
-        map.put("item_id", "1");
-        map.put("amount", new BigDecimal(300));
-        MerchantServer.createPreference(this, "http://private-9376e-paymentmethodsmla.apiary-mock.com/",
-            "merchantUri/merchant_preference", map, new Callback<CheckoutPreference>() {
-            @Override
-            public void success(CheckoutPreference checkoutPreference) {
-                mCheckoutPreference = checkoutPreference;
-                startCheckoutActivity(ExamplesUtils.DUMMY_MERCHANT_PUBLIC_KEY);
-            }
-
-            @Override
-            public void failure(ApiException error) {
-                Toast.makeText(mActivity, "Preference creation failed", Toast.LENGTH_LONG).show();
-            }
-        });
-    }
 }
