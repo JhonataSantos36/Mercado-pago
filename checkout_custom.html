@@ -135,8 +135,8 @@
                      Necesitás recolectar la información con la que <b>desde tu servidor</b> vas a invocar nuestros servicios. Es obligatorio que al momento de hacer el pago nos envíes los siguientes datos:
                      <ul>
                         <li><b>Monto que deseas cobrar.</b></li>
-                        <li><b>Mail del comprador:</b> Sólo por si algo extraño sucediera durante o luego del pago. Esto es una protección tanto para tu usuario como para tu servicio posventa.</li>
-                        <li><b>Medio de pago:</b> La marca de la tarjeta, la entidad de cobro en efectivo (ya sea un cajero automático o por ventanilla). Cada medio de pago tiene sus particularidades: tiempo de acreditación para medios de pago offline; longitud del número de tarjeta, del código de seguridad, entre otros para medios de pago de tarjetas.</li>
+                        <li><b>Mail del comprador:</b> Sólo por si algo extraño sucediera durante o luego del pago. Esta información nos permite ofrecer una protección tanto al vendedor como al comprado y mejorar así tu servicio posventa.</li>
+                        <li><b>Medio de pago:</b> Marca de la tarjeta o entidad de cobro en efectivo (ya sea un cajero automático o por ventanilla). Notar que cada medio de pago tiene sus particularidades. Por ejemplo: para pagos que no son con tarjeta (offline), tenemos el tiempo de acreditación o para los pagos con tarjeta, longitud del número de tarjeta, del código de seguridad, entre otros. </li>
                         <li><b>Banco (sólo para tarjetas):</b> Es el emisor de la tarjeta. Con quienes establecemos planes de cuotas sin interes para que tus usuarios paguen de manera más cómoda.</li>
                         <li><b>Cuotas (sólo para tarjetas):</b> La cantidad de cuotas seleccionadas por tu usuario. Nosotros nos encargamos de saber si el pago debe ser procesado con o sin interés dependiendo del medio de pago y el banco de la tarjeta.</li>
                         <li><b>Token (sólo para tarjetas):</b> Necesitamos el número, el nombre, la fecha de expiración y el código de seguridad de la tarjeta de tu usuario. En algunos países también es necesario que nos indiques su tipo y número de documento. <b>MercadoPago tokeniza estos datos para proteger la información sensible de la tarjeta.</b></li>
@@ -166,15 +166,17 @@
                <section class="docs-section" id="your_credentials">
                   <h3 class="title">Usá tus credenciales</h3>
                   <p>
-                     Cada aplicación tiene dos pares de claves para conectarse con la API de MercadoPago. Estas claves las encuentras en la sección credenciales de tu cuenta.
-                     <br />
-                     Las claves de modo sandbox te permiten realizar pagos de prueba y las de modo producción, pagos reales.
-                     <br />
-                     Además de los modos sandbox y producción, una de las claves es pública y la otra privada.
-                     <br />
-                     Las claves públicas identifican tu cuenta de MercadoPago y no son secretas. Se utilizan en el frontend.
-                     <br />
-                     Con las claves públicas puedes acceder a los siguientes recursos mediante nuestra SDK:
+                     Cada aplicación tiene dos pares de claves para conectarse con la API de MercadoPago. Estas claves las encuentras en la sección credenciales de tu cuenta. Existen dos tipos de claves:
+                     <ul>
+                     <li><b>Claves públicas:</b> identifican tu cuenta de MercadoPago y no son secretas. Se utilizan en el frontend</li>
+                     <li><b>Claves privadas (o access token):</b> permiten acceder a operaciones privadas de tu usuario. La mismas deben ser mantenidas confidencialmente en tus servidores de backend y nunca deben ser publicadas</li>
+                     </ul>
+                     Para estas claves existen dos modos de uso:
+                     <ul>
+                        <li><b>Claves modo sandbox:</b> te permiten realizar pagos de prueba</li>
+                        <li><b>Claves modo producción:</b> te permiten realizar pagos reales</li>
+                     </ul>
+                     Las claves públicas puedes acceder a los siguientes recursos mediante nuestra SDK:
                      <ul>
                         <li><a href="f1.html#payment_methods">Medios de pago (payment_methods)</a></li>
                         <li><a href="f1.html#issuers">Bancos (card_issuers)</a></li>
@@ -182,9 +184,7 @@
                         <li><a href="f1.html#identification_types">Tipos de documento (identification_types)</a></li>
                         <li><a href="f1.html#card_tokens">Tokenización de datos (card_tokens)</a></li>
                      </ul>
-                     Las claves privadas deben ser mantenidas confidencialmente en tus servidores de backend y nunca deben ser publicadas.
-                     <br />
-                     Estas claves te permiten acceder a los siguientes recursos:
+                     Las claves privadas te permiten acceder a los siguientes recursos:
                      <ul>
                         <li><a href="https://www.mercadopago.com.ar/developers/es/api-docs/custom-checkout/create-payments/" target="_blank">Pagos (payments)</a></li>
                         <li>Devoluciones (refunds)</a></li>
