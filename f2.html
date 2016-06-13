@@ -60,10 +60,10 @@
                         <ul>
                            <li><a href="checkout_custom.html#our_proposal">¿Qué ofrecemos?</a></li>
                            <li><a href="checkout_custom.html#payment_info">Información obligatoria para cobrar</a></li>
-                           <li><a href="checkout_custom.html#what_you_need">¿Qué necesitás?</a></li>
+                           <li><a href="checkout_custom.html#what_you_need">¿Qué necesitas?</a></li>
                            <li><a href="checkout_custom.html#modes">Modo sandbox y productivo</a></li>
-                           <li><a href="checkout_custom.html#your_credentials">Usá tus credenciales</a></li>
-                           <li><a href="checkout_custom.html#notifications">Recibí notificaciones de pagos</a></li>
+                           <li><a href="checkout_custom.html#your_credentials">Usa tus credenciales</a></li>
+                           <li><a href="checkout_custom.html#notifications">Recibe notificaciones de pagos</a></li>
                            <li>
                               <a href="f2.html">Componentes de UI</a>
                               <ul>
@@ -84,7 +84,7 @@
                               </ul>
                            </li>
                            <li>
-                              <a href="f1.html">Personalizá tu experiencia</a>
+                              <a href="f1.html">Personaliza tu experiencia</a>
                               <ul>
                                  <li><a href="f1.html#f1_payment_methods">Medios de pago</a></li>
                                  <li><a href="f1.html#f1_card_issuers">Bancos</a></li>
@@ -118,9 +118,8 @@
                </div>
                   <section class="docs-section">
                   <h3 class="title">Nuestros componentes visuales en tu checkout</h3>
-                  <p>
-                     El primer paso es agregar la SDK a tu proyecto. Podés agregar una dependencia en el build.gradle del módulo donde nos integres o <a href="https://github.com/mercadopago/px-android/releases" target="_blank">descargar la SDK de MercadoPago</a> y agregarla a tu proyecto.
-                  </p>
+                  <p>¿Usas Gradle? Agrégala en el build.gradle del módulo donde nos integres.</p>
+                  <p>Sino <a href="https://github.com/mercadopago/px-android/releases" target="_blank">descarga el SDK</a> de MercadoPago.</p>
                   <p>
                      <pre class="snippet">
                         <code class="line-numbers language-java">dependencies {
@@ -139,9 +138,9 @@
                   <section class="docs-section" id="f2_payment_vault">
                   <h3 class="title">UI para la recolección de datos</h3>
                   <p>
-                     El más completo de nuestros componentes visuales es <b>PaymentVault</b> con el cual estarás en condiciones de enviar los datos a tu servidor. Con este componente tendrás a disposición el medio de pago seleccionado (<a href="https://github.com/mercadopago/px-android/blob/master/sdk/src/main/java/com/mercadopago/model/PaymentMethod.java" target="_blank">PaymentMethod</a>) y en el caso de que el usuario paga con tarjeta, el banco (<a href="https://github.com/mercadopago/px-android/blob/master/sdk/src/main/java/com/mercadopago/model/Issuer.java" target="_blank">Issuer</a>), las cuotas (<a href="https://github.com/mercadopago/px-android/blob/master/sdk/src/main/java/com/mercadopago/model/PayerCost.java" target="_blank">PayerCost</a>) y la información de la tarjeta encriptada (<a href="https://github.com/mercadopago/px-android/blob/master/sdk/src/main/java/com/mercadopago/model/Token.java" target="_blank">Token</a>). 
+                     El más completo de nuestros componentes visuales es <b>PaymentVault</b> con el cual estarás en condiciones de enviar los datos a tu servidor. Con este componente tendrás a disposición el medio de pago seleccionado (<a href="https://github.com/mercadopago/px-android/blob/master/sdk/src/main/java/com/mercadopago/model/PaymentMethod.java" target="_blank">PaymentMethod</a>) y si tu usuario paga con tarjeta, el banco (<a href="https://github.com/mercadopago/px-android/blob/master/sdk/src/main/java/com/mercadopago/model/Issuer.java" target="_blank">Issuer</a>), las cuotas (<a href="https://github.com/mercadopago/px-android/blob/master/sdk/src/main/java/com/mercadopago/model/PayerCost.java" target="_blank">PayerCost</a>) y la información de la tarjeta encriptada (<a href="https://github.com/mercadopago/px-android/blob/master/sdk/src/main/java/com/mercadopago/model/Token.java" target="_blank">Token</a>). 
                      <br />
-                     Para utilizarlo, agregá un botón:
+                     Para utilizarlo, agrega un botón:
                   </p>
                   <p>
                      <pre class="snippet">
@@ -154,14 +153,14 @@
                      </pre>
                   </p>
                   <p>
-                     Luego, cuando el botón es presionado, por medio de nuestra SDK invocá a <b>PaymentVault</b> y esperá el resultado para conocer los datos que seleccionó el usuario dentro del flujo.
+                     Luego, cuando el botón es presionado, por medio de nuestra SDK invoca a <b>PaymentVault</b> y espera el resultado para conocer los datos que seleccionó el usuario dentro del flujo.
                   </p>
                   <p>
                      <pre class="snippet">
                         <code class="line-numbers language-java">
 // Método ejecutado al hacer clic en el botón
 public void submit(View view) {
-  // Iniciá el flujo de recolección de datos
+  // Inicia el flujo de recolección de datos
   new MercadoPago.StartActivityBuilder()
     .setActivity(activity)
     .setPublicKey("TEST-ad365c37-8012-4014-84f5-6c895b3f8e0a")
@@ -169,6 +168,7 @@ public void submit(View view) {
     .startPaymentVaultActivity();   
 }
 
+// Espera los resultados
 @Override
 protected void onActivityResult(int requestCode, int resultCode, 
 Intent data) {
@@ -184,7 +184,7 @@ Intent data) {
          Token createdToken = 
           (Token) data.getSerializableExtra("token");
       
-        // Enviá estos datos a tu servidor para finalizar el pago.
+        // Envía estos datos a tu servidor para finalizar el pago.
             
         } else {
             // Ups, ocurrió un error.
@@ -204,7 +204,7 @@ Intent data) {
                <section class="docs-section" id="f2_card_form">
                   <h3 class="title">Cobra con tarjeta</h3>
                   <p>
-                     Para recolectar sólamente los datos de la tarjeta de tu usuario, y que sea de una forma intuitiva y segura te brindamos un componente que resuelve esta necesidad. Sólo tienes que invocar el formulario de tarjeta y esperar el resultado: <a href="https://github.com/mercadopago/px-android/blob/master/sdk/src/main/java/com/mercadopago/model/PaymentMethod.java" target="_blank">PaymentMethod</a> (marca de la tarjeta), <a href="https://github.com/mercadopago/px-android/blob/master/sdk/src/main/java/com/mercadopago/model/Issuer.java" target="_blank">Issuer</a> (banco de la tarjeta) y <a href="https://github.com/mercadopago/px-android/blob/master/sdk/src/main/java/com/mercadopago/model/Token.java" target="_blank">Token</a> (información encriptada de la tarjeta). 
+                     Para recolectar sólamente los datos de la tarjeta de tu usuario te brindamos un componente que resuelve esta necesidad de una forma intuitiva y segura. Sólo tienes que invocar el formulario de tarjeta y esperar el resultado: <a href="https://github.com/mercadopago/px-android/blob/master/sdk/src/main/java/com/mercadopago/model/PaymentMethod.java" target="_blank">PaymentMethod</a> (marca de la tarjeta), <a href="https://github.com/mercadopago/px-android/blob/master/sdk/src/main/java/com/mercadopago/model/Issuer.java" target="_blank">Issuer</a> (banco de la tarjeta) y <a href="https://github.com/mercadopago/px-android/blob/master/sdk/src/main/java/com/mercadopago/model/Token.java" target="_blank">Token</a> (información encriptada de la tarjeta). 
                      <br />
                      <b>Sigue navegando si quieres ver cómo cobrar en cuotas.</b>
                   </p>
@@ -212,13 +212,11 @@ Intent data) {
                      <pre class="snippet">
                         <code class="line-numbers language-java">
 public void startCardFormActivity(View view) {
-  
-  // Llamar al activity propuesta por MP
+  // Llama al activity propuesta por MP
   new MercadoPago.StartActivityBuilder()
     .setActivity(this)
     .setPublicKey(TU_PUBLIC_KEY)
-    .startGuessingCardActivity();
-    
+    .startGuessingCardActivity();   
 }
 
 @Override
@@ -235,7 +233,7 @@ Intent data) {
             Token createdToken = 
               (Token) data.getSerializableExtra("token");
         
-            // Ahora podes continuar con tu flujo.
+            // Ahora puedes continuar con tu flujo.
             
         } else {
 
@@ -274,7 +272,7 @@ Intent data) {
                         <code class="line-numbers language-java">
 public void startCardFlowActivity(View view) {
   
-  // Llamar al activity propuesta por MP
+  // Llama al activity propuesta por MP
   new MercadoPago.StartActivityBuilder()
     .setActivity(this)
     .setPublicKey(TU_PUBLIC_KEY)
@@ -302,7 +300,7 @@ Intent data) {
             PayerCost selectedPayerCost = 
               (PayerCost) data.getSerializableExtra("payerCost");
         
-            // Ahora podes continuar con tu flujo.
+            // Listo! Puedes enviar estos datos a tu servidor!
             
         } else {
 
@@ -329,19 +327,16 @@ Intent data) {
                <section class="docs-section" id="f2_payment_methods">
                   <h3 class="title">Medios de pago</h3>
                   <p>
-                     Es la entidad participante del pago en sí misma. Desde la marca de la tarjeta, pasando por la entidad de cobro en efectivo hasta el banco en el que se encuentra el cajero automático para que el usuario realice el pago. 
+                     Es la entidad participante del pago en sí misma. Desde la marca de la tarjeta, pasando por la entidad de cobro en efectivo hasta el lugar dónde se encuentra el cajero automático para que el usuario realice el pago. 
                      <br />
-                     Si el medio de pago pertenece a una <b>tarjeta</b> te brindamos la información que necesitás para armar tu formulario de tarjeta y sus validaciones, por ejemplo la longitud del número de tarjeta, si el código de seguridad está al frente o al dorso de la tarjeta, su longitud, entre otros. El medio de pago puede ser <b>offline</b>. En este caso te indicaremos, entre otros, el tiempo de acreditación ya que el pago quedará en un estado pendiente que cambiará cuando el usuario se acerque a la entidad correspondiente a finalizar el pago en efectivo.
-                     <br />
+                     Si el medio de pago pertenece a una <b>tarjeta</b> te brindamos la información necesaria para armar tu formulario de tarjeta y sus validaciones, por ejemplo la longitud del número de tarjeta, si el código de seguridad está al frente o al dorso de la tarjeta, su longitud, entre otros. Pero también, el medio de pago puede ser <b>offline</b>. En este caso te indicamos, entre otros, el tiempo de acreditación ya que el pago quedará en un estado pendiente que cambiará cuando el usuario se acerque a la entidad correspondiente a finalizar el pago en efectivo.
                   </p>
                   <p>
                      <pre class="snippet">
                         <code class="line-numbers language-java">
-// Button onClick method
 public void startPaymentMethodsActivity(View view) {
-  
-  // Decinos qué tipos de pagos soportas.
-  protected List<string> mSupportedPaymentTypes = new ArrayList<string>(){{
+  // Dinos qué tipos de pagos soportas.
+  protected List&lt;String&gt; supportedPaymentTypes = new ArrayList&lt;String&gt;(){{
     add("credit_card");
     add("debit_card");
     add("prepaid_card");
@@ -349,12 +344,10 @@ public void startPaymentMethodsActivity(View view) {
     add("atm");
   }};
 
-  // Llamar al activity propuesta por MP
-  // especificando qué medios soporto
   new MercadoPago.StartActivityBuilder()
     .setActivity(this)
-    .setPublicKey(yourPublicKey)
-    .setSupportedPaymentTypes(mSupportedPaymentTypes)
+    .setPublicKey(TU_PUBLIC_KEY)
+    .setSupportedPaymentTypes(supportedPaymentTypes)
     .startPaymentMethodsActivity();
     
 }
@@ -365,13 +358,13 @@ Intent data) {
 
     if (requestCode == MercadoPago.PAYMENT_METHODS_REQUEST_CODE) {
         if (resultCode == RESULT_OK && data != null) {
-            // Obtené el medio de pago
+            // Obtén el medio de pago
             PaymentMethod paymentMethod = JsonUtil.getInstance()
               .fromJson(data.getStringExtra("paymentMethod"), 
                PaymentMethod.class);
 
-            // Ahora podes continuar con tu flujo.
-            // No te olvides de verificar si el medio de pago es offline!
+            // Ahora puedes continuar con tu flujo.
+            // Recuerda verificar si el medio de pago es offline!
             
         } else {
 
@@ -398,7 +391,7 @@ Intent data) {
                <section class="docs-section" id="f2_card_issuers">
                   <h3 class="title">Bancos</h3>
                   <p>
-                     El banco es la entidad que emite la tarjeta. Como procesadores de pagos establecemos promociones con los distintos bancos para que tus usuarios puedan tener mayor flexibilidad a la hora de comprar. La mayoría de las veces, en BIN nos ayuda a a definir tanto el medio de pago como el banco, pero cuando no podemos determinar el banco, debemos pedirle al usuario que nos lo indique. 
+                     El banco es la entidad que emite la tarjeta. Como procesadores de pagos establecemos promociones con los distintos bancos para que tus usuarios puedan tener mayor flexibilidad a la hora de comprar. La marca de la tarjeta de tu usuario puede ser emitida por más de un banco. Para ofrecerle las promociones correctas, necesitamos que nos indique el banco que emitió su tarjeta.
                   </p>
                   <p>
                      Por eso tenemos un componente para seleccionar bancos. Es tan sólo una pantalla en la que listamos los bancos posibles para un BIN y el medio de pago de la tarjeta.
@@ -410,13 +403,11 @@ public void startIssuersActivity(View view) {
   PaymentMethod paymentMethod = JsonUtil.getInstance()
     .fromJson(intent.getStringExtra("payment_method"), PaymentMethod.class);
 
-  // Llamar al activity propuesta por MP
   new MercadoPago.StartActivityBuilder()
      .setActivity(this)
      .setPublicKey(TU_PUBLIC_KEY)
      .setPaymentMethod(paymentMethod)
      .startIssuersActivity();
-    
 }
 
 @Override
@@ -425,14 +416,12 @@ Intent data) {
 
     if (requestCode == MercadoPago.ISSUERS_REQUEST_CODE) {
         if (resultCode == RESULT_OK && data != null) {
-            // Obtené el banco seleccionado por el usuario
+            // Obtén el banco seleccionado por el usuario
             Issuer issuer = JsonUtil.getInstance()
               .fromJson(data.getStringExtra("issuer"), Issuer.class);
 
-            // Ahora podes continuar con tu flujo.
-            
+            // Ahora puedes continuar con tu flujo.
         } else {
-
             if ((data != null) && 
                 (data.getSerializableExtra("apiException") != null)) {
                 ApiException apiException 
@@ -458,9 +447,7 @@ Intent data) {
                   <p>
                      Una vez que tu usuario seleccione el medio de pago y el banco que emitió su tarjeta, es importante que, para ofrecerle mayor flexibilidad al momento de pagar, le permitas seleccionar la cantidad de cuotas en la que va a realizar el pago.
                      <br />
-                     Sólo te pedimos que nos indiques el medio de pago que seleccionó el usuario, el banco y, de tenerlo, el BIN de la tarjeta (dependiendo cómo pensaste tu experiencia de pagos). 
-                     <br />
-                     Te pedimos el monto, ya que nos permite obtener una descripción recomendada para indicarle a tu usuario la cantidad de cuotas, el valor de cada una y el monto final.
+                     Sólo indícanos qué datos seleccionó (medio de pago y banco). Te pedimos el monto, ya que nos permite obtener una descripción recomendada para indicarle a tu usuario la cantidad de cuotas, el valor de cada una y el monto final.
                   </p>
                   <p>
                      <pre class="snippet">
@@ -470,7 +457,6 @@ public void startInstallmentsActivity(View view) {
   PaymentMethod paymentMethod = JsonUtil.getInstance()
     .fromJson(intent.getStringExtra("payment_method"), PaymentMethod.class);
 
-  // Llamar al activity propuesta por MP
   new MercadoPago.StartActivityBuilder()
     .setActivity(this)
     .setPublicKey(TU_PUBLIC_KEY)
@@ -488,11 +474,11 @@ Intent data) {
 
     if (requestCode == MercadoPago.INSTALLMENTS_REQUEST_CODE) {
         if (resultCode == RESULT_OK && data != null) {
-            // Obtené las cuotas seleccionadas por el usuario
+            // Obtén las cuotas seleccionadas por el usuario
             PayerCost payerCost = JsonUtil.getInstance()
               .fromJson(data.getStringExtra("payerCost"), PayerCost.class);
 
-            // Ahora podes continuar con tu flujo.
+            // Ahora puedes continuar con tu flujo.
             
         } else {
 
@@ -651,7 +637,7 @@ public void startCongratsActivity(Payment payment, PaymentMethod paymentMethod) 
                <section class="docs-section" id="f2_instructions">
                   <h3 class="title">Resultados de pago - Medios offline</h3>
                   <p>
-                     Si el usuario eligió un medio de pago offline (efectivo, transferencia bancaria) te aconsejamos que le indiques los pasos que debe realizar para poder completar el pago, ya que el mismo se encuentra en estado pendiente.
+                     Si el usuario eligió un medio de pago offline (efectivo o transferencia bancaria) te aconsejamos que le indiques los pasos que debe realizar para poder completar el pago, ya que el mismo se encuentra en estado pendiente.
                   </p>
                   <p>
                      Hace un tiempo le contábamos los pasos en un mail al usuario, pero ahora te damos la posibilidad de que vos mismo puedas contarle dentro de tu aplicación cómo puede hacer para concretar el pago y tener más rápido su producto.
@@ -686,73 +672,7 @@ public void startInstructionsActivity(Payment payment, PaymentMethod paymentMeth
       </div>
       
       <footer class="footer">
-        <!--<div class="newsletter row">
-            <div class="newsletter-container">
-        
 
-
-<script type="text/javascript">
-//<![CDATA[
-if (typeof newsletter_check !== "function") {
-window.newsletter_check = function (f) {
-    var re = /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-]{1,})+\.)+([a-zA-Z0-9]{2,})+$/;
-    console.log(f.elements["np1"].value);
-
-    if (!re.test(f.elements["ne"].value)) {
-      jQuery('.newsletter-email-field input').css('border-color','red');
-        jQuery('.newsletter-error-message').css('display','inline-block');
-        return false;
-    }
-    return true;
-}
-}
-//]]>
-</script>
-<link href="./css/newsletter.css" rel="stylesheet" />
-
-
-<br>
-<div class="newsletter newsletter-subscription">
-<img class="newsletter-letter-icon" src="./img/newsletter.png">
-<form method="post">
-<div class="newsletter-form">
-  <h2>Mantenete actualizado!</h2>
-  <p>Estamos en constante mejora de nuestro producto y hacemos meet ups para que puedas integrarnos de la mejor manera. </p>
-  <p>Suscribite a nuestro portal de noticias!</p>  
-    <div class="newsletter-country-field">
-      <select class="" name="np1" required="">
-        <option value="">Seleccioná tu país</option>
-        <option>Argentina</option>
-        <option>Brasil</option>
-        <option>Chile</option>
-        <option>Colombia</option>
-        <option>Costa Rica</option>
-        <option>Ecuador</option>
-        <option>México</option>
-        <option>Paraguay</option>
-        <option>Perú</option>
-        <option>Portugal</option>
-        <option>República Dominicana</option>
-        <option>Estados Unidos</option>
-        <option>Uruguay</option>
-        <option>Venezuela</option>
-      </select>
-    </div>
-    <div class="newsletter-email-field">
-      <input name="ne" size="30" placeholder="Tu email" required="">
-      <div id="alert" style="color:#FF5050"></div>
-      <button class="newsletter-submit-button" type="submit" style="right: 0; height: 40px; top: 0; width: 25%;">
-        <img src="./img/newsletter-icon-send.png">
-      </button>
-    </div>
-    <span class="newsletter-error-message"><em>*</em>Ingresá un email válido.</span>
-</div>
-</form>
-</div>
-<br>
-
-            </div>
-         </div>-->
          <div class="copy">
             <div class="copy-container">
                <p class="authors">

@@ -109,7 +109,7 @@
                       Agrega un campo de texto, para mostrar el resultado del pago. 
                     </p>
                      <p>
-                        Pega este código de ejemplo en res/layout/activity_main.xml.
+                        Pega este código de ejemplo en <b>res/layout/activity_main.xml</b>.
                      </p>
                   </div>
                </div>
@@ -127,7 +127,7 @@
             <div class="row" id="step-three">
                <div class="col-md-6 step-desc">
                   <div class="desc">
-                     <h3>3.   Iniciá el <i>checkout</i> desde tu aplicación</h3>
+                     <h3>3.   Inicia el <i>checkout</i> desde tu aplicación</h3>
 
                       <p class="advanced-panel">
                         <b>Pruébalo con nuestros datos: </b>
@@ -136,20 +136,24 @@
                         <br />
                         Cuando quieras ir a <a href="#step-six">producción</a>, sólo necesitarás usar tus propios datos. 
                       </p>
-                      <p>Para iniciar nuestro checkout sólo necesitas:
-                      <li style="list-style-type: decimal;"><b>Clave pública:</b> Es un identificador que agrupa tu cuenta, tu aplicación y sus configuraciones. 
+                      <p>
+                        Para iniciar nuestro checkout sólo necesitas:
                         <ul>
-                          <li><a href="https://www.mercadopago.com/mla/account/credentials" target="_blank">Crea tus credenciales</a></li>
-                          <li><a href="https://applications.mercadopago.com/" target="_blank">Configura tu aplicación</a></li>
+                          <li style="list-style-type: decimal;"><b>Clave pública:</b> Es un identificador que agrupa tu cuenta, tu aplicación y sus configuraciones. 
+                            <ul>
+                              <li><a href="https://www.mercadopago.com/mla/account/credentials" target="_blank">Crea tus credenciales</a>.</li>
+                              <li><a href="https://applications.mercadopago.com/" target="_blank">Configura tu aplicación</a>.</li>
+                            </ul>
+                          </li>
+                          <li style="list-style-type: decimal;"><b>Identificador de la preferencia de pago:</b> Es una representación de lo que cobras. Incluye estos atributos:
+                            <ul>
+                             <li>Datos y monto.</li>
+                             <li>Medios de pago que aceptas.</li>
+                             <li>Información del comprador (Por seguridad, el <b>e-mail es obligatorio</b>).</li>
+                            </ul>
+                          </li>
                         </ul>
-                      </li>
-                      <li style="list-style-type: decimal;"><b>Identificador de la preferencia de pago:</b> Es una representación de lo que cobras. Incluye estos atributos:
-                        <ul>
-                         <li>Datos y monto.</li>
-                         <li>Medios de pago que aceptas.</li>
-                         <li>Información del comprador (Por seguridad, el e-mail es obligatorio)</li>
-                        </ul>
-                      </li>
+                    </p>
                   </div>
                </div>
                <div class="col-md-6 code">
@@ -174,13 +178,12 @@ public void submit(View view) {
                   <p class="advanced-panel" style="font-weight: 300; font-size: 15px;">
                         <em>*</em> A modo de prueba, estamos usando una preferencia cuyo producto es un Bajo de $100 con todos los medios de pago disponibles en MercadoPago.
                   </p>
-                  <!--<script src="https://gist.github.com/matiasgualino/2b5deb4e179e038108a654f414f27527.js"></script>-->
                </div>
             </div>
             <div class="row" id="step-four">
                <div class="col-md-6 step-desc">
                   <div class="desc">
-                     <h3>4.   Esperá el resultado del pago</h3>
+                     <h3>4.   Espera el resultado del pago</h3>
                      <p>
                         El SDK devolverá siempre un resultado del pago. 
                       </p>
@@ -200,7 +203,7 @@ public void submit(View view) {
                         </ul>
                       </p>
                       <p>
-                        Conocé más sobre el objeto Payment <a href="https://www.mercadopago.com.ar/developers/es/api-docs/account/payments/" target="_blank">aquí</a>.
+                        Conoce más sobre el objeto Payment <a href="https://www.mercadopago.com.ar/developers/es/api-docs/account/payments/" target="_blank">aquí</a>.
                      </p>
                   </div>
                </div>
@@ -223,7 +226,7 @@ Intent data) {
           results.setText("PaymentID: " + payment.getId() + 
           " - PaymentStatus: " + payment.getStatus());
       } else {
-          results.setText("El usuario no concretó un pago.");
+          results.setText("El usuario no concretó el pago.");
       }
     
     } else {
@@ -246,12 +249,9 @@ Intent data) {
             <div class="row" id="step-five">
                <div class="col-md-6 step-desc">
                   <div class="desc">
-                     <h3>5.   Testeá nuestro checkout</h3>
+                     <h3>5.   Testea nuestro checkout</h3>
                      <p>
                         Usa estas tarjetas de prueba para testear los diferentes resultados del pago. 
-                      </p>
-                      <p>
-                        A la derecha podes ver un listado de tarjetas para probar nuestro checkout y prefijos para el nombre del portador de la tarjeta de modo que puedas obtener pagos con distintos resultados. 
                       </p>
                       <p>
                         Luego podrás usar nuestra <a href="" target="_blank">herramienta de preferencias de pago</a>, para que trabajes con diferentes configuraciones: 
@@ -289,27 +289,26 @@ Intent data) {
                       <b>APROJuan Perez</b> retornará un pago acreditado.
                     </p>
                   </p>
-                  <!--<script src="https://gist.github.com/matiasgualino/4a169219fc874a3bc90b0b0f666a8d17.js"></script>-->
                </div>
             </div>
             <div class="row" id="step-six">
                <div class="col-md-6 step-desc">
                   <div class="desc">
-                     <h3>6.  Poné tu aplicación en producción</h3>                     
+                     <h3>6.  Sal a producción</h3>                     
                         <p>
-                          Antes de salir a producción asegurate:
+                          <b>Primero:</b>
                         </p>
                         <p>
                           <ul>
                            <li style="list-style-type: decimal;"><a href="https://registration.mercadopago.com.ar/registration-mp?mode=mp" target="_blank">Registra la cuenta de MercadoPago</a> dónde recibirás el dinero.</li>
                            <li style="list-style-type: decimal;"><a href="https://applications.mercadopago.com.ar" target="_blank">Crea una aplicación</a>.</li>
-                           <li style="list-style-type: decimal;"><a href="https://www.mercadopago.com/mla/account/credentials?type=basic" target="_blank">Configurar tus credenciales</a>.</li>
+                           <li style="list-style-type: decimal;"><a href="https://www.mercadopago.com/mla/account/credentials?type=basic" target="_blank">Configura tus credenciales</a>.</li>
                           </ul>
                         </p>
-                      <p><b><u>¿Qué tenes que hacer desde tu servidor?</u></b>
+                      <p><b>Desde tu servidor:</b>
                         <br />
-                        Desde tu servidor, sólo tienes que <a href="https://www.mercadopago.com.ar/developers/es/api-docs/basic-checkout/checkout-preferences/" target="_blank">crear una preferencia de pago</a> y retornar la misma respuesta que te dan nuestros servicios. 
-                        La preferencia debe ser creada desde <b>tu servidor</b> ya que debes firmarla con <b>tu clave privada</b>. De esta forma nos aseguramos estar protegiendo tanto al comprador, como a tu propio usuario vendedor. <a href="https://www.mercadopago.com.ar/developers/es/solutions/payments/basic-checkout/receive-payments/" target="_blank">Aquí</a> te contamos cómo crear preferencias desde tu servidor.
+                        Sólo tienes que <a href="https://www.mercadopago.com.ar/developers/es/api-docs/basic-checkout/checkout-preferences/" target="_blank">crear una preferencia de pago</a> y retornar la respuesta que te dan nuestros servicios. 
+                        <b>Hazlo desde tu servidor, porque tendrás que firmarla con tu clave privada</b>. De esta forma nos aseguramos proteger tanto al comprador, como a tu propio usuario vendedor. <a href="https://www.mercadopago.com.ar/developers/es/solutions/payments/basic-checkout/receive-payments/" target="_blank">Cómo crear una preferencia desde tu servidor</a>.
                         <br />
                         <p class="advanced-panel">
                           <a href="https://www.mercadopago.com.ar/developers/es/solutions/payments/basic-checkout/receive-payments/additional-info/" target="_blank">Las preferencias completas</a> funcionan mucho mejor.
@@ -317,11 +316,11 @@ Intent data) {
                           Envíanos toda la información que puedas y verás que ofrecerás tan buena experiencia para los compradores, que ¡tendrás más pagos acreditados!
                         </p>
                       </p>
-                      <p><b><u>¿Y desde tu aplicación?</u></b>
+                      <p><b>Desde tu aplicación:</b>
                         <br />
-                        Te ofrecemos una clase llamada <a href="https://github.com/mercadopago/px-android/blob/master/sdk/src/main/java/com/mercadopago/core/MerchantServer.java" target="_blank">MerchantServer</a> con métodos que se conectan con tu servidor. El método <b>createPreference</b> hace un POST y envía como cuerpo del mensaje el mapa que hayas definido (preferenceMap). Por eso debes indicarnos tu URL base (https://api.tunombre.com) y la uri (/create_preference) donde esperas los datos para crear la preferencia. 
+                        Te ofrecemos una clase llamada <a href="https://github.com/mercadopago/px-android/blob/master/sdk/src/main/java/com/mercadopago/core/MerchantServer.java" target="_blank">MerchantServer</a> que se conecta con tu servidor. El método <b>createPreference</b> hace un POST y envía como cuerpo del mensaje el mapa que hayas definido (preferenceMap). Indícanos tu URL base (https://api.tunombre.com) y la URI (/create_preference) donde esperas los datos para crear la preferencia. 
                         <br />
-                        <a href="https://github.com/mercadopago/px-android/blob/master/sdk/src/main/java/com/mercadopago/core/MerchantServer.java" target="_blank">MerchantServer</a> se encargará de transformar la respuesta de tu servicio (la misma que los servicios de MercadoPago) en un objeto <a href="https://github.com/mercadopago/px-android/blob/master/sdk/src/main/java/com/mercadopago/model/CheckoutPreference.java" target="_blank">CheckoutPreference</a> cuyo ID es el punto de entrada a nuestro checkout.
+                        <a href="https://github.com/mercadopago/px-android/blob/master/sdk/src/main/java/com/mercadopago/core/MerchantServer.java" target="_blank">MerchantServer</a> se encargará de transformar la respuesta de tu servicio (la misma que los servicios de Mercado Pago) en un objeto <a href="https://github.com/mercadopago/px-android/blob/master/sdk/src/main/java/com/mercadopago/model/CheckoutPreference.java" target="_blank">CheckoutPreference</a> cuyo ID es el punto de entrada a nuestro checkout.
                       </p>
                   </div>
                </div>
@@ -330,13 +329,13 @@ Intent data) {
                      <code class="line-numbers language-java">
 public void submit() {
 
-  // Armá un mapa con los datos de la compra y el mail de tu cliente.
+  // Crea un mapa con los datos de la compra y el mail de tu cliente.
   Map&lt;String, Object&gt; preferenceMap = new HashMap&lt;&gt;();
   preferenceMap.put("item_id", "1");
   preferenceMap.put("amount", new BigDecimal(10));
   preferenceMap.put("payer_email", "mail_de_tu_cliente@gmail.com");
 
-  // Envia la información a tu servidor
+  // Envía la información a tu servidor
   MerchantServer.createPreference(this, "https://api.tunombre.com", 
     "/create_preference", preferenceMap, new Callback&lt;CheckoutPreference&gt;() {
     
@@ -363,79 +362,12 @@ public void submit() {
                         <img src="./img/clippy.svg" width="13" alt="Copy to clipboard">
                     </button>
                   </pre>
-                  <!--<script src="https://gist.github.com/matiasgualino/4a169219fc874a3bc90b0b0f666a8d17.js"></script>-->
                </div>
             </div>
          </div>
       </div>
       <footer class="footer">
-  <!--       <div class="newsletter row">
-            <div class="newsletter-container">
-        
 
-
-<script type="text/javascript">
-//<![CDATA[
-if (typeof newsletter_check !== "function") {
-window.newsletter_check = function (f) {
-    var re = /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-]{1,})+\.)+([a-zA-Z0-9]{2,})+$/;
-    console.log(f.elements["np1"].value);
-
-    if (!re.test(f.elements["ne"].value)) {
-      jQuery('.newsletter-email-field input').css('border-color','red');
-        jQuery('.newsletter-error-message').css('display','inline-block');
-        return false;
-    }
-    return true;
-}
-}
-//]]>
-</script>
-<link href="./css/newsletter.css" rel="stylesheet" />
-
-
-<br>
-<div class="newsletter newsletter-subscription">
-<img class="newsletter-letter-icon" src="./img/newsletter.png">
-<form method="post">
-<div class="newsletter-form">
-  <h2>Mantenete actualizado!</h2>
-  <p>Estamos en constante mejora de nuestro producto y hacemos meet ups para que puedas integrarnos de la mejor manera. </p>
-  <p>Suscribite a nuestro portal de noticias!</p>  
-    <div class="newsletter-country-field">
-      <select class="" name="np1" required="">
-        <option value="">Seleccioná tu país</option>
-        <option>Argentina</option>
-        <option>Brasil</option>
-        <option>Chile</option>
-        <option>Colombia</option>
-        <option>Costa Rica</option>
-        <option>Ecuador</option>
-        <option>México</option>
-        <option>Paraguay</option>
-        <option>Perú</option>
-        <option>Portugal</option>
-        <option>República Dominicana</option>
-        <option>Estados Unidos</option>
-        <option>Uruguay</option>
-        <option>Venezuela</option>
-      </select>
-    </div>
-    <div class="newsletter-email-field">
-      <input name="ne" size="30" placeholder="Tu email" required="">
-      <div id="alert" style="color:#FF5050"></div>
-      <button class="newsletter-submit-button" type="submit" style="right: 0; height: 40px; top: 0; width: 25%;">
-        <img src="./img/newsletter-icon-send.png">
-      </button>
-    </div>
-    <span class="newsletter-error-message"><em>*</em>Ingresá un email válido.</span>
-</div>
-</form>
-</div>
-<br>
-
-            </div>
-         </div>-->
          <div class="copy">
             <div class="copy-container">
                <p class="authors">

@@ -60,10 +60,10 @@
                         <ul>
                            <li><a href="checkout_custom.html#our_proposal">¿Qué ofrecemos?</a></li>
                            <li><a href="checkout_custom.html#payment_info">Información obligatoria para cobrar</a></li>
-                           <li><a href="checkout_custom.html#what_you_need">¿Qué necesitás?</a></li>
+                           <li><a href="checkout_custom.html#what_you_need">¿Qué necesitas?</a></li>
                            <li><a href="checkout_custom.html#modes">Modo sandbox y productivo</a></li>
-                           <li><a href="checkout_custom.html#your_credentials">Usá tus credenciales</a></li>
-                           <li><a href="checkout_custom.html#notifications">Recibí notificaciones de pagos</a></li>
+                           <li><a href="checkout_custom.html#your_credentials">Usa tus credenciales</a></li>
+                           <li><a href="checkout_custom.html#notifications">Recibe notificaciones de pagos</a></li>
                            <li>
                               <a href="f2.html">Componentes de UI</a>
                               <ul>
@@ -84,7 +84,7 @@
                               </ul>
                            </li>
                            <li>
-                              <a href="f1.html">Personalizá tu experiencia</a>
+                              <a href="f1.html">Personaliza tu experiencia</a>
                               <ul>
                                  <li><a href="f1.html#f1_payment_methods">Medios de pago</a></li>
                                  <li><a href="f1.html#f1_card_issuers">Bancos</a></li>
@@ -134,17 +134,17 @@
                   <p>
                      Al momento de hacer el pago necesitamos que sí o sí nos envíes los siguientes datos desde tu servidor:
                      <ul>
-                        <li><b>Monto que deseas cobrar.</b></li>
-                        <li><b>Mail del comprador:</b> Sólo por si algo extraño sucediera durante o luego del pago. Es una protección tanto al vendedor como al comprador y mejorar así tu servicio posventa.</li>
+                        <li><b>Monto a cobrar.</b></li>
+                        <li><b>Mail del comprador:</b> Sólo por si algo extraño sucediera durante o luego del pago. Es una protección al comprador para mejorar así tu servicio posventa.</li>
                         <li><b>Medio de pago:</b> Marca de la tarjeta o entidad de cobro en efectivo (ya sea un cajero automático o por ventanilla). Notar que cada medio de pago tiene sus particularidades. Por ejemplo: para pagos que no son con tarjeta (offline), tenemos el tiempo de acreditación o para los pagos con tarjeta, longitud del número de tarjeta, del código de seguridad, entre otros. </li>
-                        <li><b>Banco (sólo para tarjetas):</b> Es el emisor de la tarjeta. Con quienes establecemos planes de cuotas sin interes para que tus usuarios paguen de manera más cómoda.</li>
-                        <li><b>Cuotas (sólo para tarjetas):</b> La cantidad de cuotas seleccionadas por tu usuario. Nosotros nos encargamos de saber si el pago debe ser procesado con o sin interés dependiendo del medio de pago y el banco de la tarjeta.</li>
-                        <li><b>Token (sólo para tarjetas):</b> Necesitamos el número, el nombre, la fecha de expiración y el código de seguridad de la tarjeta de tu usuario. En algunos países también es necesario que nos indiques su tipo y número de documento. <b>MercadoPago tokeniza estos datos para proteger la información sensible de la tarjeta.</b></li>
+                        <li><b>Banco (solo para tarjetas):</b> Es el emisor de la tarjeta. Con quienes establecemos planes de cuotas sin interes para que tus usuarios tengan la mejor financiación.</li>
+                        <li><b>Cuotas (solo para tarjetas):</b> La cantidad de cuotas seleccionadas por tu usuario. Nosotros nos encargamos de saber si el pago debe ser procesado con o sin interés dependiendo del medio de pago y el banco de la tarjeta.</li>
+                        <li><b>Token (solo para tarjetas):</b> Necesitamos el número, el nombre, la fecha de expiración y el código de seguridad de la tarjeta de tu usuario. En algunos países también es necesario que nos indiques su tipo y número de documento. <b>MercadoPago tokeniza estos datos para proteger la información sensible de la tarjeta.</b></li>
                      </ul>
                   </p>
                </section>
                <section class="docs-section" id="what_you_need">
-                  <h3 class="title">¿Qué necesitás para empezar?</h3>
+                  <h3 class="title">¿Qué necesitas para empezar?</h3>
                   <p>
                      <ul>
                         <li style="list-style-type: decimal;"><a href="https://registration.mercadopago.com.ar/registration-mp?mode=mp" target="_blank">Registrar</a> una cuenta de MercadoPago donde recibirás el dinero.</li>
@@ -164,19 +164,19 @@
                   </p>
                </section>
                <section class="docs-section" id="your_credentials">
-                  <h3 class="title">Usá tus credenciales</h3>
+                  <h3 class="title">Usa tus credenciales</h3>
                   <p>
-                     Cada aplicación tiene dos pares de claves para conectarse con la API de MercadoPago. Estas claves las encuentras en la sección credenciales de tu cuenta. Existen dos tipos de claves:
+                     Existen dos tipos de claves:
                      <ul>
-                     <li><b>Claves públicas:</b> identifican tu cuenta de MercadoPago y no son secretas. Se utilizan en el frontend</li>
-                     <li><b>Claves privadas (o access token):</b> permiten acceder a operaciones privadas de tu usuario. La mismas deben ser mantenidas confidencialmente en tus servidores de backend y nunca deben ser publicadas</li>
+                     <li><b>Claves públicas:</b> identifican tu cuenta de MercadoPago y no son secretas. Se utilizan en el frontend.</li>
+                     <li><b>Claves privadas (o access token):</b> permiten acceder a operaciones privadas de tu cuenta. La mismas deben ser mantenidas confidencialmente en tus servidores de backend y <b>nunca</b> deben ser publicadas.</li>
                      </ul>
                      Para estas claves existen dos modos de uso:
                      <ul>
-                        <li><b>Claves modo sandbox:</b> te permiten realizar pagos de prueba</li>
-                        <li><b>Claves modo producción:</b> te permiten realizar pagos reales</li>
+                        <li><b>Modo sandbox:</b> te permiten realizar pagos de prueba.</li>
+                        <li><b>Modo producción:</b> te permiten realizar pagos reales.</li>
                      </ul>
-                     Las claves públicas puedes acceder a los siguientes recursos mediante nuestra SDK:
+                     Con la clave pública puedes acceder a los siguientes recursos mediante nuestra SDK:
                      <ul>
                         <li><a href="f1.html#payment_methods">Medios de pago (payment_methods)</a></li>
                         <li><a href="f1.html#issuers">Bancos (card_issuers)</a></li>
@@ -184,7 +184,7 @@
                         <li><a href="f1.html#identification_types">Tipos de documento (identification_types)</a></li>
                         <li><a href="f1.html#card_tokens">Tokenización de datos (card_tokens)</a></li>
                      </ul>
-                     Las claves privadas te permiten acceder a los siguientes recursos:
+                     Además, con la clave privada, puedes acceder a estos recursos:
                      <ul>
                         <li><a href="https://www.mercadopago.com.ar/developers/es/api-docs/custom-checkout/create-payments/" target="_blank">Pagos (payments)</a></li>
                         <li>Devoluciones (refunds)</a></li>
@@ -192,9 +192,12 @@
                         <li><a href="https://www.mercadopago.com.ar/developers/es/api-docs/custom-checkout/customers-cards/" target="_blank">Tarjetas (cards)</a></li>
                      </ul>
                   </p>
+                  <p class="advanced-panel">
+                    <em>*</em><a href="https://www.mercadopago.com/mla/account/credentials?type=personalized" target="_blank">Accede a tus credenciales</a>
+                  </p>
                </section>
                <section class="docs-section" id="notifications">
-                  <h3 class="title">Recibí notificaciones de pagos</h3>
+                  <h3 class="title">Recibe notificaciones de pagos</h3>
                   <p>
                      Cada vez que recibes un pago o se modifique uno que te hicieron, te podemos avisar mediante Notificaciones de Pagos que se envían desde los servidores de Mercadopago a los tuyos. Esto te permitirá conocer el estado del pago, administrar tu stock o saber quién te está pagando.
                      <br />
