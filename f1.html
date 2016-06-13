@@ -37,15 +37,15 @@
       </nav>
       <div class="header">
          <div class="container" style="
-    padding-top: 70px;
+    padding-top: 120px;
 ">
             <h3>MercadoPago Android SDK</h3>
             <h4>La manera más rápida de cobrar en una app con la mejor experiencia.</h4>
          </div>
          
       </div>
-      <div id="mati_header" style="height: 300px;margin: 0 auto;padding: 0;position: relative;width: 100%;top: -276px;overflow-x: hidden;OVERFLOW-Y: hidden;z-index: -100;background: url('./img/landing_f2.jpg');background-size: cover;background-position-x: 0px;background-position-y: -160px;">
-         <div style="background: rgba(0,0,0,0.65);height: 300px;"></div>
+      <div id="mati_header" style="height: 500px;margin: 0 auto;padding: 0;position: relative;width: 100%;top: -276px;overflow-x: hidden;OVERFLOW-Y: hidden;z-index: -100;background: url('./img/landing_f2.jpg');background-size: cover;background-position-x: 0px;background-position-y: -100px;">
+         <div style="background: rgba(0,0,0,0.5);height: 500px;"></div>
       </div>
       <div class="container content-container" style="margin-top: -250px;">
          <div class="row">
@@ -117,7 +117,7 @@
                   <p>
                      <pre class="snippet">
                         <code class="line-numbers language-java">dependencies {
-   compile ('com.mercadopago:sdk:BETA_WORKSHOP@aar') { transitive = true }
+   compile ('com.mercadopago:sdk:WORKSHOP@aar') { transitive = true }
 }
                         </code>
                         <button class="copy-button" alt="Copiar código">
@@ -141,6 +141,9 @@
                   <p>
                      <pre class="snippet">
                         <code class="line-numbers language-java">
+// Cuidado! Es el callback de MercadoPago. 
+import com.mercadopago.callbacks.Callback;
+
 MercadoPago mercadoPago = new MercadoPago.Builder()
   .setContext(this)
   .setPublicKey("TEST-ad365c37-8012-4014-84f5-6c895b3f8e0a")
@@ -148,12 +151,12 @@ MercadoPago mercadoPago = new MercadoPago.Builder()
 
 mercadoPago.getPaymentMethods(new Callback &lt;List&lt;PaymentMethod&gt;&gt;() {
    @Override
-   public void success(List&lt;PaymentMethod&gt; paymentMethods, Response response) {
+   public void success(List&lt;PaymentMethod&gt; paymentMethods) {
       // Listo, arma tu UI para el listado de medios de pago
    }
 
   @Override
-  public void failure(RetrofitError error) {
+  public void failure(ApiException error) {
     // UPS! Algo salió mal.
   }
 });
@@ -178,6 +181,9 @@ mercadoPago.getPaymentMethods(new Callback &lt;List&lt;PaymentMethod&gt;&gt;() {
                   <p>
                      <pre class="snippet">
                         <code class="line-numbers language-java">
+// Cuidado! Es el callback de MercadoPago. 
+import com.mercadopago.callbacks.Callback;
+
 String paymentMethodId = "master";
 
 // Primeros seis dígitos de la tarjeta (nullable).
@@ -190,12 +196,12 @@ MercadoPago mercadoPago = new MercadoPago.Builder()
 
 mercadoPago.getIssuers(paymentMethodId, bin, new Callback &lt;List&lt;Issuers&gt;&gt;() {
    @Override
-   public void success(List&lt;Issuers&gt; issuers, Response response) {
+   public void success(List&lt;Issuers&gt; issuers) {
       // Listo, arma tu UI para el listado de bancos
    }
 
   @Override
-  public void failure(RetrofitError error) {
+  public void failure(ApiException error) {
     // UPS! Algo salió mal.
   }
 });
@@ -225,6 +231,9 @@ mercadoPago.getIssuers(paymentMethodId, bin, new Callback &lt;List&lt;Issuers&gt
                   <p>
                      <pre class="snippet">
                         <code class="line-numbers language-java">
+// Cuidado! Es el callback de MercadoPago. 
+import com.mercadopago.callbacks.Callback;
+
 // Medio de pago seleccionado
 String paymentMethodId = "master";
 
@@ -245,12 +254,12 @@ MercadoPago mercadoPago = new MercadoPago.Builder()
 mercadoPago.getInstallments(bin, amount, paymentMethodId, 
    issuerId, new Callback &lt;List&lt;Installment&gt;&gt;() {
       @Override
-      public void success(List&lt;Installment&gt; installments, Response response) {
+      public void success(List&lt;Installment&gt; installments) {
          // Listo, arma tu UI para el listado de cuotas
       }
 
       @Override
-      public void failure(RetrofitError error) {
+      public void failure(ApiException error) {
          // UPS! Algo salió mal.
       }
 });
@@ -274,6 +283,9 @@ mercadoPago.getInstallments(bin, amount, paymentMethodId,
                   <p>
                      <pre class="snippet">
                         <code class="line-numbers language-java">
+// Cuidado! Es el callback de MercadoPago. 
+import com.mercadopago.callbacks.Callback;
+
 MercadoPago mercadoPago = new MercadoPago.Builder()
    .setContext(this)
    .setPublicKey("TEST-ad365c37-8012-4014-84f5-6c895b3f8e0a")
@@ -286,7 +298,7 @@ mercadoPago.getIdentificationTypes(new Callback&lt;List&lt;IdentificationType&gt
    }
   
    @Override
-   public void failure(RetrofitError error) {
+   public void failure(ApiException error) {
       // Ups, ha ocurrido un error.
    }
 });
@@ -386,6 +398,9 @@ private boolean validateCardToken(CardToken cardToken, PaymentMethod paymentMeth
                   <p>
                      <pre class="snippet">
                         <code class="line-numbers language-java">
+// Cuidado! Es el callback de MercadoPago. 
+import com.mercadopago.callbacks.Callback;
+
 // Si los datos son válidos, envíanos para que los guardemos de forma segura
 MercadoPago mercadoPago = new MercadoPago.Builder()
    .setContext(this)
@@ -422,6 +437,9 @@ mercadoPago.createToken(cardToken, new Callback&lt;Token&gt;() {
                   <p>
                      <pre class="snippet">
                         <code class="line-numbers language-java">
+// Cuidado! Es el callback de MercadoPago. 
+import com.mercadopago.callbacks.Callback;
+
 MercadoPago mercadoPago = new MercadoPago.Builder()
    .setContext(this)
    .setPublicKey("TEST-ad365c37-8012-4014-84f5-6c895b3f8e0a")
@@ -429,12 +447,12 @@ MercadoPago mercadoPago = new MercadoPago.Builder()
       
 mercadoPago.getBankDeals(new Callback&lt;List&lt;BankDeal&gt;&gt;() {
    @Override
-   public void success(List&lt;BankDeal&gt; bankDeals, Response response) {
+   public void success(List&lt;BankDeal&gt; bankDeals) {
       // Listo, arma tu UI para el listado de promociones
    }
   
    @Override
-   public void failure(RetrofitError error) {
+   public void failure(ApiException error) {
       // Ups, ha ocurrido un error.
    }
 });
@@ -453,6 +471,9 @@ mercadoPago.getBankDeals(new Callback&lt;List&lt;BankDeal&gt;&gt;() {
                   <p>
                      <pre class="snippet">
                         <code class="line-numbers language-java">
+// Cuidado! Es el callback de MercadoPago. 
+import com.mercadopago.callbacks.Callback;
+
 Long paymentId = 1234567;
 String paymentMethodId = "pagofacil";
 String paymentTypeId = "ticket";
@@ -464,14 +485,14 @@ MercadoPago mercadoPago = new MercadoPago.Builder()
 
 mercadoPago.getInstructions(paymentId, paymentMethodId, paymentTypeId, new Callback&lt;Instruction&gt;() {
    @Override
-   public void success(Instruction instruction, Response response) {
+   public void success(Instruction instruction) {
       // Listo, aquí ya tienes las instrucciones para
       // contarle a tu usuario cómo finalizar el pago.
       showInstructions(instruction);
    }
 
    @Override
-   public void failure(RetrofitError error) {
+   public void failure(ApiException error) {
       // Ups, ha ocurrido un error.
    }
 });
@@ -508,30 +529,37 @@ mercadoPago.getInstructions(paymentId, paymentMethodId, paymentTypeId, new Callb
                   <p>
                      <pre class="snippet">
                         <code class="line-numbers language-java">
-Item item = new Item("item_id", 1, new BigDecimal("100"));
-String paymentMethodId = "master";
-Integer installments = 6;
-Long cardIssuerId = 326;
-String token = "abcdef123456";
-
-// Entidad que llegará a tu servidor
-MerchantPayment merchantPayment = new MerchantPayment(item, installments, cardIssuerId,
-   token, paymentMethodId, "tu_user_id");
-
-// Enviamos la entidad a tu servidor y esperamos un payment como respuesta
-MerchantServer.createPayment(activity, "http://api.tunombre.com", "/create_payment", 
-   merchantPayment, new Callback&lt;Payment&gt;() {
+private void createPayment(final PaymentMethod paymentMethod, Issuer issuer, PayerCost payerCost, Token token) {
+   Item item = new Item("id", 5);
+   MerchantPayment payment = new MerchantPayment(item, payerCost.getInstallments(), issuer.getId(), token.getId(), paymentMethod.getId(), null, "mla-at");
+   
+   MerchantServer.createPayment(this, "mauro.com", "createPayment", payment, new Callback<Payment>() {
       @Override
       public void success(Payment payment) {
-         // Listo, ya está el pago creado. 
-         // Puedes mostrar una pantalla de resultados.
+         if(MercadoPagoUtil.isCardPaymentType(paymentMethod.getPaymentTypeId())) {
+            new MercadoPago.StartActivityBuilder()
+            .setPublicKey(mMyPublicKey)
+            .setActivity(mActivity)
+            .setPayment(payment)
+            .setPaymentMethod(paymentMethod)
+            .startCongratsActivity();
+         }
+         else {
+            new MercadoPago.StartActivityBuilder()
+            .setPublicKey(mMyPublicKey)
+            .setActivity(mActivity)
+            .setPayment(payment)
+            .setPaymentMethod(paymentMethod)
+            .startInstructionsActivity();
+         }
       }
 
       @Override
-      public void failure(ApiException error) {
-         // Ups, ha ocurrido un error.
+      public void failure(ApiException apiException) {
+
       }
-});
+   });
+}
                         </code>
                         <button class="copy-button">
                            <img src="./img/clippy.svg" width="13" alt="Copy to clipboard">
@@ -570,6 +598,9 @@ MerchantServer.createPayment(activity, "http://api.tunombre.com", "/create_payme
                   <p>
                      <pre class="snippet">
                         <code class="line-numbers language-java">
+// Cuidado! Es el callback de MercadoPago. 
+import com.mercadopago.callbacks.Callback;
+
 // Crea un mapa con los datos de la compra y el mail de tu cliente.
 Map&lt;String, Object&gt; preferenceMap = new HashMap&lt;&gt;();
 preferenceMap.put("item_id", "1");
@@ -581,8 +612,7 @@ MerchantServer.createPreference(this, "https://api.tunombre.com",
  "/create_preference", preferenceMap, new Callback&lt;CheckoutPreference&gt;() {
  
    @Override
-   public void success(CheckoutPreference checkoutPreference, 
-     Response response) {
+   public void success(CheckoutPreference checkoutPreference) {
        // La preferencia se creó correctamente.
        // Aquí puedes iniciar el Checkout de MercadoPago.
        new MercadoPago.StartActivityBuilder()
@@ -593,7 +623,7 @@ MerchantServer.createPreference(this, "https://api.tunombre.com",
    }
 
    @Override
-   public void failure(RetrofitError error) {
+   public void failure(ApiException error) {
      // Ups, ocurrió un error
    }
 });

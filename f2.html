@@ -35,15 +35,15 @@
       </nav>
       <div class="header">
          <div class="container" style="
-    padding-top: 70px;
+    padding-top: 120px;
 ">
             <h3>MercadoPago Android SDK</h3>
             <h4>La manera más rápida de cobrar en una app con la mejor experiencia.</h4>
          </div>
          
       </div>
-      <div id="mati_header" style="height: 300px;margin: 0 auto;padding: 0;position: relative;width: 100%;top: -276px;overflow-x: hidden;OVERFLOW-Y: hidden;z-index: -100;background: url('./img/landing_f2.jpg');background-size: cover;background-position-x: 0px;background-position-y: -160px;">
-         <div style="background: rgba(0,0,0,0.65);height: 300px;"></div>
+      <div id="mati_header" style="height: 500px;margin: 0 auto;padding: 0;position: relative;width: 100%;top: -276px;overflow-x: hidden;OVERFLOW-Y: hidden;z-index: -100;background: url('./img/landing_f2.jpg');background-size: cover;background-position-x: 0px;background-position-y: -100px;">
+         <div style="background: rgba(0,0,0,0.5);height: 500px;"></div>
       </div>
       <div class="container content-container" style="margin-top: -250px;">
          <div class="row">
@@ -81,6 +81,7 @@
                                        <li><a href="f2.html#f2_instructions">Pagos en efectivo</a></li>
                                     </ul>
                                  </li>
+                                 <li><a href="f2.html#f2_create_payment">Crear pagos</a></li>
                               </ul>
                            </li>
                            <li>
@@ -116,14 +117,14 @@
                      </div>
                   </div>
                </div>
-                  <section class="docs-section">
+                  <section class="docs-section" id="f2_payment_vault">
                   <h3 class="title">Nuestros componentes visuales en tu checkout</h3>
                   <p>¿Usas Gradle? Agrégala en el build.gradle del módulo donde nos integres.</p>
                   <p>Sino <a href="https://github.com/mercadopago/px-android/releases" target="_blank">descarga el SDK</a> de MercadoPago.</p>
                   <p>
                      <pre class="snippet">
                         <code class="line-numbers language-java">dependencies {
-   compile ('com.mercadopago:sdk:BETA_WORKSHOP@aar') { transitive = true }
+   compile ('com.mercadopago:sdk:WORKSHOP@aar') { transitive = true }
 }
                         </code>
                         <button class="copy-button" alt="Copiar código">
@@ -132,7 +133,7 @@
                      </pre>
                   </p>
                   <div class="doc-example ionic">
-                     <img src="./img/android/payment_vault.gif" class="img-phone-case"></img>
+                     <img src="./img/phone/payment_vault.gif" class="img-phone-case"></img>
                   </div>
                </section>
                   <section class="docs-section" id="f2_payment_vault">
@@ -158,38 +159,35 @@
                   <p>
                      <pre class="snippet">
                         <code class="line-numbers language-java">
-// Método ejecutado al hacer clic en el botón
-public void submit(View view) {
-  // Inicia el flujo de recolección de datos
+public void startPaymentVaultComponent(View view) {
   new MercadoPago.StartActivityBuilder()
-    .setActivity(activity)
-    .setPublicKey("TEST-ad365c37-8012-4014-84f5-6c895b3f8e0a")
-    .setAmount(BigDecimal.valueOf("100.0"))
-    .startPaymentVaultActivity();   
+    .setActivity(this)
+    .setPublicKey(TU_PUBLIC_KEY)
+    .setAmount(MONTO_A_COBRAR)
+    .setSite(Sites.ARGENTINA)
+    .startPaymentVaultActivity();
 }
 
 // Espera los resultados
 @Override
 protected void onActivityResult(int requestCode, int resultCode, 
 Intent data) {
+  if(requestCode == MercadoPago.PAYMENT_VAULT_REQUEST_CODE) {
+    if(resultCode == RESULT_OK) {
+      PaymentMethod paymentMethod = (PaymentMethod) data.getSerializableExtra("paymentMethod");
+      Issuer issuer = (Issuer) data.getSerializableExtra("issuer");
+      Token token = (Token) data.getSerializableExtra("token");
+      PayerCost payerCost = (PayerCost) data.getSerializableExtra("payerCost");
 
-    if(requestCode == MercadoPago.PAYMENT_VAULT_REQUEST_CODE) {
-      if(resultCode == RESULT_OK) {
-         PaymentMethod selectedPaymentMethod = 
-          (PaymentMethod) data.getSerializableExtra("paymentMethod");
-         Issuer selectedIssuer = 
-          (Issuer) data.getSerializableExtra("issuer");
-         PayerCost selectedPayerCost = 
-          (PayerCost) data.getSerializableExtra("payerCost");
-         Token createdToken = 
-          (Token) data.getSerializableExtra("token");
-      
-        // Envía estos datos a tu servidor para finalizar el pago.
-            
-        } else {
-            // Ups, ocurrió un error.
-        }
+      createPayment(paymentMethod, issuer, payerCost, token);
+    } else {
+      if ((data != null) && 
+        (data.getSerializableExtra("mpException") != null)) {
+          MPException exception 
+            = (MPException) data.getSerializableExtra("mpException");                
+      }
     }
+  }
 }
                         </code>
                         <button class="copy-button">
@@ -198,7 +196,7 @@ Intent data) {
                      </pre>
                   </p>
                   <div class="doc-example ionic">
-                     <img src="./img/android/payment_vault.gif" class="img-phone-case"></img>
+                     <img src="./img/phone/payment_vault.gif" class="img-phone-case"></img>
                   </div>
                </section>
                <section class="docs-section" id="f2_card_form">
@@ -211,41 +209,33 @@ Intent data) {
                   <p>
                      <pre class="snippet">
                         <code class="line-numbers language-java">
-public void startCardFormActivity(View view) {
-  // Llama al activity propuesta por MP
+public void startCardWithoutInstallmentsComponent(View view) {
   new MercadoPago.StartActivityBuilder()
     .setActivity(this)
     .setPublicKey(TU_PUBLIC_KEY)
-    .startGuessingCardActivity();   
+    .startGuessingCardActivity();
 }
 
 @Override
 protected void onActivityResult(int requestCode, int resultCode, 
 Intent data) {
 
-    if (requestCode == MercadoPago.GUESSING_CARD_REQUEST_CODE) {
-        if (resultCode == RESULT_OK && data != null) {
-            // Obtené los datos cargados por tu usuario
-            PaymentMethod selectedPaymentMethod = 
-              (PaymentMethod) data.getSerializableExtra("paymentMethod");
-            Issuer selectedIssuer = 
-              (Issuer) data.getSerializableExtra("issuer");
-            Token createdToken = 
-              (Token) data.getSerializableExtra("token");
-        
-            // Ahora puedes continuar con tu flujo.
-            
-        } else {
+  if(requestCode == MercadoPago.GUESSING_CARD_REQUEST_CODE) {
+    if(resultCode == RESULT_OK) {
+      PaymentMethod paymentMethod = (PaymentMethod) data.getSerializableExtra("paymentMethod");
+      Issuer issuer = (Issuer) data.getSerializableExtra("issuer");
+      Token token = (Token) data.getSerializableExtra("token");
+      
+      // Listo! Envía los datos a tu servidor!
 
-            if ((data != null) && 
-                (data.getSerializableExtra("apiException") != null)) {
-                ApiException apiException 
-                    = (ApiException) data.getSerializableExtra("apiException");
-                Toast.makeText(getApplicationContext(), apiException.getMessage(), 
-                  Toast.LENGTH_LONG).show();
-            }
-        }
-    }
+    } else {
+      if ((data != null) && 
+        (data.getSerializableExtra("mpException") != null)) {
+          MPException exception 
+            = (MPException) data.getSerializableExtra("mpException");                
+      }
+    } 
+  }
 }
                         </code>
                         <button class="copy-button">
@@ -259,7 +249,7 @@ Intent data) {
                      Dado el BIN de la tarjeta (6 primeros dígitos), podemos determinar el medio de pago (Visa, Mastercard, Amex, etc) y mediante expresiones regulares, muchas veces podemos determinar el banco. En los casos en que no podemos determinar el banco que emitió la tarjeta, le pedimos a tu usuario que lo elija.
                   </p>
                   <div class="doc-example ionic">
-                     <img src="./img/android/card_form.gif" class="img-phone-case"></img>
+                     <img src="./img/phone/card_form.gif" class="img-phone-case"></img>
                   </div>
                </section>
                <section class="docs-section" id="f2_card_form_installments">
@@ -270,49 +260,36 @@ Intent data) {
                   <p>
                      <pre class="snippet">
                         <code class="line-numbers language-java">
-public void startCardFlowActivity(View view) {
-  
-  // Llama al activity propuesta por MP
+public void startCardWithInstallmentsComponent(View view) {
+        
   new MercadoPago.StartActivityBuilder()
     .setActivity(this)
     .setPublicKey(TU_PUBLIC_KEY)
-    .setAmount(MONTO)
+    .setAmount(MONTO_A_COBRAR)
     .setSite(Sites.ARGENTINA)
     .startCardVaultActivity();
-    
 }
 
 @Override
 protected void onActivityResult(int requestCode, int resultCode, 
 Intent data) {
 
-    if (requestCode == MercadoPago.CARD_FLOW_REQUEST_CODE) {
-        if (resultCode == RESULT_OK && data != null) {
-            // Obtené los datos cargados por tu usuario
-            PaymentMethod selectedPaymentMethod = 
-              (PaymentMethod) data.getSerializableExtra("paymentMethod");
-            Issuer selectedIssuer = 
-              (Issuer) data.getSerializableExtra("issuer");
-            Token createdToken = 
-              (Token) data.getSerializableExtra("token");
-              
-            // Aquí estan las cuotas!
-            PayerCost selectedPayerCost = 
-              (PayerCost) data.getSerializableExtra("payerCost");
-        
-            // Listo! Puedes enviar estos datos a tu servidor!
-            
-        } else {
-
-            if ((data != null) && 
-                (data.getSerializableExtra("apiException") != null)) {
-                ApiException apiException 
-                    = (ApiException) data.getSerializableExtra("apiException");
-                Toast.makeText(getApplicationContext(), apiException.getMessage(), 
-                  Toast.LENGTH_LONG).show();
-            }
+  if(requestCode == MercadoPago.CARD_VAULT_REQUEST_CODE) {
+      if(resultCode == RESULT_OK) {
+          PaymentMethod paymentMethod = (PaymentMethod) data.getSerializableExtra("paymentMethod");
+          Issuer issuer = (Issuer) data.getSerializableExtra("issuer");
+          Token token = (Token) data.getSerializableExtra("token");
+          PayerCost payerCost = (PayerCost) data.getSerializableExtra("payerCost");
+          
+          // Listo! Envía los datos a tu servidor!
+      } else {
+        if ((data != null) && 
+          (data.getSerializableExtra("mpException") != null)) {
+            MPException exception 
+              = (MPException) data.getSerializableExtra("mpException");                
         }
-    }
+      } 
+  }
 }
                         </code>
                         <button class="copy-button">
@@ -321,7 +298,7 @@ Intent data) {
                      </pre>
                   </p>
                   <div class="doc-example ionic">
-                     <img src="./img/android/card_form_installments.gif" class="img-phone-case"></img>
+                     <img src="./img/phone/card_form_installments.gif" class="img-phone-case"></img>
                   </div>
                </section>
                <section class="docs-section" id="f2_payment_methods">
@@ -334,48 +311,29 @@ Intent data) {
                   <p>
                      <pre class="snippet">
                         <code class="line-numbers language-java">
-public void startPaymentMethodsActivity(View view) {
-  // Dinos qué tipos de pagos soportas.
-  protected List&lt;String&gt; supportedPaymentTypes = new ArrayList&lt;String&gt;(){{
-    add("credit_card");
-    add("debit_card");
-    add("prepaid_card");
-    add("ticket");
-    add("atm");
-  }};
-
+public void startPaymentMethodsComponent(View view) {
   new MercadoPago.StartActivityBuilder()
     .setActivity(this)
-    .setPublicKey(TU_PUBLIC_KEY)
-    .setSupportedPaymentTypes(supportedPaymentTypes)
+    .setPublicKey(mMyPublicKey)
     .startPaymentMethodsActivity();
-    
 }
 
 @Override
 protected void onActivityResult(int requestCode, int resultCode, 
 Intent data) {
 
-    if (requestCode == MercadoPago.PAYMENT_METHODS_REQUEST_CODE) {
-        if (resultCode == RESULT_OK && data != null) {
-            // Obtén el medio de pago
-            PaymentMethod paymentMethod = JsonUtil.getInstance()
-              .fromJson(data.getStringExtra("paymentMethod"), 
-               PaymentMethod.class);
-
+    if(requestCode == MercadoPago.PAYMENT_METHODS_REQUEST_CODE) {
+        if(resultCode == RESULT_OK) {
+            PaymentMethod paymentMethod = (PaymentMethod) data.getSerializableExtra("paymentMethod");
             // Ahora puedes continuar con tu flujo.
             // Recuerda verificar si el medio de pago es offline!
-            
         } else {
-
-            if ((data != null) && 
-                (data.getSerializableExtra("apiException") != null)) {
-                ApiException apiException 
-                    = (ApiException) data.getSerializableExtra("apiException");
-                Toast.makeText(getApplicationContext(), 
-                  apiException.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        }
+          if ((data != null) && 
+            (data.getSerializableExtra("mpException") != null)) {
+              MPException exception 
+                = (MPException) data.getSerializableExtra("mpException");                
+          }
+        } 
     }
 }
                         </code>
@@ -385,7 +343,7 @@ Intent data) {
                      </pre>
                   </p>
                   <div class="doc-example ionic">
-                     <img src="./img/android/f2_payment_methods.png" class="img-phone-case"></img>
+                     <img src="./img/phone/f2_payment_methods.png" class="img-phone-case"></img>
                   </div>
                </section>
                <section class="docs-section" id="f2_card_issuers">
@@ -399,36 +357,30 @@ Intent data) {
                   <p>
                      <pre class="snippet">
                         <code class="line-numbers language-java">
-public void startIssuersActivity(View view) {
-  PaymentMethod paymentMethod = JsonUtil.getInstance()
-    .fromJson(intent.getStringExtra("payment_method"), PaymentMethod.class);
+public void startIssuersComponent(View view) {
+  PaymentMethod paymentMethod = (PaymentMethod) data.getSerializableExtra("paymentMethod");
 
   new MercadoPago.StartActivityBuilder()
-     .setActivity(this)
-     .setPublicKey(TU_PUBLIC_KEY)
-     .setPaymentMethod(paymentMethod)
-     .startIssuersActivity();
+    .setActivity(this)
+    .setPublicKey(TU_PUBLIC_KEY)
+    .setPaymentMethod(paymentMethod)
+    .startIssuersActivity();
 }
 
 @Override
 protected void onActivityResult(int requestCode, int resultCode, 
 Intent data) {
 
-    if (requestCode == MercadoPago.ISSUERS_REQUEST_CODE) {
-        if (resultCode == RESULT_OK && data != null) {
-            // Obtén el banco seleccionado por el usuario
-            Issuer issuer = JsonUtil.getInstance()
-              .fromJson(data.getStringExtra("issuer"), Issuer.class);
-
+    if(requestCode == MercadoPago.ISSUERS_REQUEST_CODE) {
+        if(resultCode == RESULT_OK) {
+            Issuer issuer = (Issuer) data.getSerializableExtra("issuer");
             // Ahora puedes continuar con tu flujo.
         } else {
-            if ((data != null) && 
-                (data.getSerializableExtra("apiException") != null)) {
-                ApiException apiException 
-                    = (ApiException) data.getSerializableExtra("apiException");
-                Toast.makeText(getApplicationContext(), apiException.getMessage(), 
-                  Toast.LENGTH_LONG).show();
-            }
+          if ((data != null) && 
+            (data.getSerializableExtra("mpException") != null)) {
+              MPException exception 
+                = (MPException) data.getSerializableExtra("mpException");                
+          }
         }
     }
 }
@@ -439,7 +391,7 @@ Intent data) {
                      </pre>
                   </p>
                   <div class="doc-example ionic">
-                     <img src="./img/android/f2_card_issuers.png" class="img-phone-case"></img>
+                     <img src="./img/phone/f2_card_issuers.png" class="img-phone-case"></img>
                   </div>
                </section>
                <section class="docs-section" id="f2_payer_costs">
@@ -453,43 +405,34 @@ Intent data) {
                      <pre class="snippet">
                         <code class="line-numbers language-java">
 public void startInstallmentsActivity(View view) {
-  Long issuerId = 326;
-  PaymentMethod paymentMethod = JsonUtil.getInstance()
-    .fromJson(intent.getStringExtra("payment_method"), PaymentMethod.class);
+  PaymentMethod paymentMethod = (PaymentMethod) data.getSerializableExtra("paymentMethod");
+  Issuer issuer = (Issuer) data.getSerializableExtra("issuer");
 
   new MercadoPago.StartActivityBuilder()
     .setActivity(this)
     .setPublicKey(TU_PUBLIC_KEY)
     .setSite(Sites.ARGENTINA)
-    .setAmount(MONTO)
-    .setIssuer(issuerId)
+    .setAmount(MONTO_A_COBRAR)
+    .setIssuer(issuer)
     .setPaymentMethod(paymentMethod)
     .startInstallmentsActivity();
-    
 }
 
 @Override
 protected void onActivityResult(int requestCode, int resultCode, 
 Intent data) {
 
-    if (requestCode == MercadoPago.INSTALLMENTS_REQUEST_CODE) {
-        if (resultCode == RESULT_OK && data != null) {
-            // Obtén las cuotas seleccionadas por el usuario
-            PayerCost payerCost = JsonUtil.getInstance()
-              .fromJson(data.getStringExtra("payerCost"), PayerCost.class);
-
-            // Ahora puedes continuar con tu flujo.
-            
-        } else {
-
-            if ((data != null) && 
-                (data.getSerializableExtra("apiException") != null)) {
-                ApiException apiException 
-                    = (ApiException) data.getSerializableExtra("apiException");
-                Toast.makeText(getApplicationContext(), apiException.getMessage(), 
-                  Toast.LENGTH_LONG).show();
-            }
-        }
+    if(requestCode == MercadoPago.INSTALLMENTS_REQUEST_CODE) {
+      if(resultCode == RESULT_OK) {
+        PayerCost payerCost = (PayerCost) data.getSerializableExtra("payerCost");
+        // Ahora puedes continuar con tu flujo.
+      } else {
+          if ((data != null) && 
+            (data.getSerializableExtra("mpException") != null)) {
+              MPException exception 
+                = (MPException) data.getSerializableExtra("mpException");                
+          }
+      }
     }
 }
                         </code>
@@ -499,7 +442,7 @@ Intent data) {
                      </pre>
                   </p>
                   <div class="doc-example ionic">
-                     <img src="./img/android/f2_payer_costs.png" class="img-phone-case"></img>
+                     <img src="./img/phone/f2_payer_costs.png" class="img-phone-case"></img>
                   </div>
                </section>
                <section class="docs-section" id="f2_bank_deals">
@@ -523,7 +466,7 @@ public void submit(View view) {
                      </pre>
                   </p>
                   <div class="doc-example ionic">
-                     <img src="./img/android/bank_deals.png" class="img-phone-case"></img>
+                     <img src="./img/phone/bank_deals.png" class="img-phone-case"></img>
                   </div>
                </section>
                <section class="docs-section" id="f2_payment_result">
@@ -545,6 +488,8 @@ public void submit(View view) {
                   <p>
                      <pre class="snippet">
                         <code class="line-numbers language-java">
+import com.mercadopago.callbacks.Callback;
+
 public void createPayment(final Activity activity, String token, 
 Integer installments, Long cardIssuerId, final PaymentMethod paymentMethod) {
 
@@ -601,7 +546,7 @@ Integer installments, Long cardIssuerId, final PaymentMethod paymentMethod) {
                      </pre>
                   </p>
                   <div class="doc-example ionic">
-                     <img src="./img/android/payment_results.gif" class="img-phone-case" usemap="#revamp_review_confirm_map"></img>
+                     <img src="./img/phone/payment_results.gif" class="img-phone-case" usemap="#revamp_review_confirm_map"></img>
                   </div>
                </section>
                <section class="docs-section" id="f2_payment_results_cards">
@@ -631,7 +576,7 @@ public void startCongratsActivity(Payment payment, PaymentMethod paymentMethod) 
                      </pre>
                   </p>
                   <div class="doc-example ionic">
-                     <img src="./img/android/payment_results_cards.gif" class="img-phone-case"></img>
+                     <img src="./img/phone/payment_results_cards.gif" class="img-phone-case"></img>
                   </div>
                </section>
                <section class="docs-section" id="f2_instructions">
@@ -664,8 +609,67 @@ public void startInstructionsActivity(Payment payment, PaymentMethod paymentMeth
                      </pre>
                   </p>
                   <div class="doc-example ionic">
-                     <img src="./img/android/instructions.png" class="img-phone-case"></img>
+                     <img src="./img/phone/instructions.png" class="img-phone-case"></img>
                   </div>
+               </section>
+               <section class="docs-section" id="f2_create_payment">
+                  <h3 class="title">Crear pagos</h3>
+                  <p>
+                     Antes de crear el pago, te recomendamos que hagas todas las validaciones necesarias para entender si la transacción que se está llevando a cabo es lícita: puedes verificar el precio del item u objeto a comprar, validar stock si fuera necesario y si tu usuario está en condiciones para realizar la compra.
+                     <br />
+                     Junto con el token creado necesitas enviar también el medio de pago, cuotas y banco seleccionados por el usuario, además de un identificador del artículo o servicio que se está pagando y del usuario que está presente en tu aplicación.
+                     <br />
+                     En este caso, el método <b>createPayment</b> hace un POST y envía como cuerpo del mensaje el objeto <a href="https://github.com/mercadopago/px-android/blob/master/sdk/src/main/java/com/mercadopago/core/MerchantPayment.java">MerchantPayment</a> que agrupa toda la información que precisas tener en tu servidor para conectarte con el nuestro. Por eso debes indicarnos tu URL base (https://api.tunombre.com) y la uri (/create_payment) donde esperas los datos para crear el pago. 
+                     <a href="https://github.com/mercadopago/px-android/blob/master/sdk/src/main/java/com/mercadopago/core/MerchantServer.java" target="_blank">MerchantServer</a> transformará la respuesta de tu servicio (la misma que los servicios de MercadoPago) en un objeto <a href="https://github.com/mercadopago/px-android/blob/master/sdk/src/main/java/com/mercadopago/model/Payment.java" target="_blank">Payment</a>.
+                  </p>
+                  <p>
+                     Una vez recibida la información en tus servidores, puedes crear el pago usando uno de los SDKs de MercadoPago. En <a href="https://github.com/mercadopago/code-examples/tree/master/customized-checkout/payment/basic" target="_blank">este link</a> podrás ver ejemplos de cómo utilizar nuestras SDK para realizar pagos. Los ejemplos están disponibles para PHP, cURL, ASP.NET, Java, Node.js, Phyton y Ruby.
+                     <br />
+                     <b>Recuerda que debes utilizar tu clave privada en este caso.</b>
+                  </p>
+                  <p>
+                     <pre class="snippet">
+                        <code class="line-numbers language-java">
+private void createPayment(final PaymentMethod paymentMethod, Issuer issuer, PayerCost payerCost, Token token) {
+   Item item = new Item("id", 5);
+   MerchantPayment payment = new MerchantPayment(item, payerCost.getInstallments(), issuer.getId(), token.getId(), paymentMethod.getId(), null, "mla-at");
+   
+   MerchantServer.createPayment(this, "mauro.com", "createPayment", payment, new Callback<Payment>() {
+      @Override
+      public void success(Payment payment) {
+         if(MercadoPagoUtil.isCardPaymentType(paymentMethod.getPaymentTypeId())) {
+            new MercadoPago.StartActivityBuilder()
+            .setPublicKey(mMyPublicKey)
+            .setActivity(mActivity)
+            .setPayment(payment)
+            .setPaymentMethod(paymentMethod)
+            .startCongratsActivity();
+         }
+         else {
+            new MercadoPago.StartActivityBuilder()
+            .setPublicKey(mMyPublicKey)
+            .setActivity(mActivity)
+            .setPayment(payment)
+            .setPaymentMethod(paymentMethod)
+            .startInstructionsActivity();
+         }
+      }
+
+      @Override
+      public void failure(ApiException apiException) {
+
+      }
+   });
+}
+                        </code>
+                        <button class="copy-button">
+                           <img src="./img/clippy.svg" width="13" alt="Copy to clipboard">
+                        </button>
+                     </pre>
+                  </p>
+                  <p class="advanced-panel">
+                        <em>*</em> <a href="https://www.mercadopago.com.ar/developers/es/related/custom-additional-info/" target="_blank">Envía tantos datos del pago como puedas</a>. Mientras más información nos envíes, mejor será tu experiencia y la de tus usuarios.
+                  </p>
                </section>
             </div>
          </div>

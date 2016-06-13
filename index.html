@@ -85,7 +85,7 @@
                <div class="col-md-6 code">
                   <pre class="snippet">
                      <code id="flavor_3_step_1" class="line-numbers language-java">dependencies {
-   compile ('com.mercadopago:sdk:BETA_WORKSHOP@aar') { transitive = true }
+   compile ('com.mercadopago:sdk:WORKSHOP@aar') { transitive = true }
 }
                      </code>
          <button class="copy-button" alt="Copiar código">
@@ -327,12 +327,16 @@ Intent data) {
                <div class="col-md-6 code">
                   <pre class="snippet">
                      <code class="line-numbers language-java">
-public void submit() {
+// Cuidado! Es el callback de MercadoPago. 
+import com.mercadopago.callbacks.Callback;
+
+public void submit(View view) {
 
   // Crea un mapa con los datos de la compra y el mail de tu cliente.
   Map&lt;String, Object&gt; preferenceMap = new HashMap&lt;&gt;();
   preferenceMap.put("item_id", "1");
   preferenceMap.put("amount", new BigDecimal(10));
+  preferenceMap.put("currency_id", "ARS");
   preferenceMap.put("payer_email", "mail_de_tu_cliente@gmail.com");
 
   // Envía la información a tu servidor
@@ -340,19 +344,18 @@ public void submit() {
     "/create_preference", preferenceMap, new Callback&lt;CheckoutPreference&gt;() {
     
       @Override
-      public void success(CheckoutPreference checkoutPreference, 
-        Response response) {
+      public void success(CheckoutPreference checkoutPreference) {
           // La preferencia se creó correctamente.
           // Aquí puedes iniciar el Checkout de MercadoPago.
           new MercadoPago.StartActivityBuilder()
-            .setActivity(activity)
+            .setActivity(mActivity)
             .setPublicKey("TEST-ad365c37-8012-4014-84f5-6c895b3f8e0a")
             .setCheckoutPreferenceId(checkoutPreference.getId())
             .startCheckoutActivity();
       }
 
       @Override
-      public void failure(RetrofitError error) {
+      public void failure(ApiException error) {
         // Ups, ocurrió un error
       }
   });
