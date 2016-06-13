@@ -121,6 +121,8 @@ public class CheckoutActivity extends AppCompatActivity {
             initializeActivityControls();
             setActivity();
 
+            MPTracker.getInstance().trackEvent("CHECKOUT", "INIT_CHECKOUT", "3", mMerchantPublicKey, "MLA", "1.0", this);
+
             mMercadoPago = new MercadoPago.Builder()
                     .setContext(this)
                     .setPublicKey(mMerchantPublicKey)
