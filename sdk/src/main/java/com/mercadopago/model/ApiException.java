@@ -56,7 +56,7 @@ public class ApiException implements Serializable {
     }
 
     public boolean isRecoverable() {
-        return getStatus() != ApiUtil.StatusCodes.NOT_FOUND
+        return getStatus() == null || getStatus() != ApiUtil.StatusCodes.NOT_FOUND
                 && (getCause() == null || getCause().isEmpty());
     }
 
