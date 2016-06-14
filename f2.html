@@ -508,13 +508,13 @@ Integer installments, Long cardIssuerId, final PaymentMethod paymentMethod) {
       *  a tu usuario para que puedas asignarle a éste el movimiento
       */
       MerchantPayment payment = new MerchantPayment(item, installments, 
-      cardIssuerId, token, paymentMethodId, DUMMY_MERCHANT_ACCESS_TOKEN);
+      cardIssuerId, token, paymentMethodId, DUMMY_CAMPAIGN_ID, DUMMY_MERCHANT_ACCESS_TOKEN);
       
       // Enviar los datos a tu servidor
       MerchantServer.createPayment(activity, TU_BASE_URL, TU_CREATE_PAYMENT_URI, 
       payment, new Callback&lt;Payment&gt;() {
          @Override
-         public void success(Payment payment, Response response) {
+         public void success(Payment payment) {
             // Ya se realizó el pago.
             // Verifica si el pago es con tarjeta, sino es un medio offline.
             if (MercadoPagoUtil.isCardPaymentType(paymentMethod.getPaymentTypeId())) {
@@ -529,10 +529,10 @@ Integer installments, Long cardIssuerId, final PaymentMethod paymentMethod) {
          }
          
          @Override
-         public void failure(RetrofitError error) {
+         public void failure(ApiException apiException) {
          
             // Ups, ha ocurrido un error.
-            Toast.makeText(activity, error.getMessage(), Toast.LENGTH_LONG).show();
+          
          }
       });
    } else {

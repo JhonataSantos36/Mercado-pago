@@ -194,9 +194,9 @@ MercadoPago mercadoPago = new MercadoPago.Builder()
    .setPublicKey("TEST-ad365c37-8012-4014-84f5-6c895b3f8e0a")
    .build();
 
-mercadoPago.getIssuers(paymentMethodId, bin, new Callback &lt;List&lt;Issuers&gt;&gt;() {
+mercadoPago.getIssuers(paymentMethodId, bin, new Callback &lt;List&lt;Issuer&gt;&gt;() {
    @Override
-   public void success(List&lt;Issuers&gt; issuers) {
+   public void success(List&lt;Issuer&gt; issuers) {
       // Listo, arma tu UI para el listado de bancos
    }
 
@@ -222,11 +222,11 @@ mercadoPago.getIssuers(paymentMethodId, bin, new Callback &lt;List&lt;Issuers&gt
                   </p>
                   <p>
                      <p class="advanced-panel">
-                        <em>*</em>Prueba un <a href="api.mercadopago.com/v1/payment_methods/installments?public_key=444a9ef5-8a6b-429f-abdf-587639155d88&bin=503175&amount=100&issuer.id=326" target="_blank">ejemplo de respuesta</a> de la API de cuotas para el monto que deseas cobrar y el medio de pago y banco seleccionados (/v1/payment_methods/installments).
+                        <em>*</em>Prueba un <a href="https://api.mercadopago.com/v1/payment_methods/installments?public_key=444a9ef5-8a6b-429f-abdf-587639155d88&bin=503175&amount=100&issuer.id=326" target="_blank">ejemplo de respuesta</a> de la API de cuotas para el monto que deseas cobrar y el medio de pago y banco seleccionados (/v1/payment_methods/installments).
                      </p>
                      Si lo tuvieras, dependiendo cómo pensaste tu experiencia de pagos, puedes enviarnos el BIN, que son los primeros seis dígitos de la tarjeta. Con el BIN podemos conocer el medio de pago de la tarjeta y, en algunos casos, el banco que emitió la tarjeta.
                      <br />
-                     El siguiente código hace el llamado a la API enviando los parámetros mecionados y convierte la respuesta en un listado de <a href="https://github.com/mercadopago/px-android/blob/master/sdk/src/main/java/com/mercadopago/model/Installment.java" target="_blank">Installment</a>.
+                     El siguiente código hace el llamado a la API enviando los parámetros mencionados y convierte la respuesta en un listado de <a href="https://github.com/mercadopago/px-android/blob/master/sdk/src/main/java/com/mercadopago/model/Installment.java" target="_blank">Installment</a>.
                   </p>
                   <p>
                      <pre class="snippet">
@@ -238,21 +238,21 @@ import com.mercadopago.callbacks.Callback;
 String paymentMethodId = "master";
 
 // Banco seleccionado en el paso anterior
-String issuerId = "326";
+Long issuerId = 326L;
 
 // Primeros seis dígitos de la tarjeta
 String bin = "503175"; 
 
 // Monto que vas a cobrar
-BigDecimal amount = new BigDecimal("100.0");
+BigDecimal amount = new BigDecimal(100);
 
 MercadoPago mercadoPago = new MercadoPago.Builder()
    .setContext(this)
    .setPublicKey("TEST-ad365c37-8012-4014-84f5-6c895b3f8e0a")
    .build();
 
-mercadoPago.getInstallments(bin, amount, paymentMethodId, 
-   issuerId, new Callback &lt;List&lt;Installment&gt;&gt;() {
+mercadoPago.getInstallments(bin, amount, issuerId,
+   paymentMethodId, new Callback &lt;List&lt;Installment&gt;&gt;() {
       @Override
       public void success(List&lt;Installment&gt; installments) {
          // Listo, arma tu UI para el listado de cuotas
@@ -325,7 +325,7 @@ PaymentMethod paymentMethod = (PaymentMethod) this.getIntent().getSerializableEx
 
 /* Crea un CardToken con los datos ingresados por tu usuario.
 *  Este es un ejemplo con datos de prueba */
-CardToken cardToken = new CardToken("5031755734530604", "11", "19", 
+CardToken cardToken = new CardToken("5031755734530604", 11, 19, 
    "123", "APROJuan Perez", "DNI", "12345678");
 
 // Valida los datos ingresados por tu usuario
@@ -381,7 +381,7 @@ private boolean validateCardToken(CardToken cardToken, PaymentMethod paymentMeth
    /* Si se seleccionó un tipo de documento, 
    *  validamos que cumpla con sus configuraciones */
    if (getIdentificationType() != null &&
-      !cardToken.validateIdentificationNumber()) {
+      !cardToken.validateIdentificationNumber(getIdentificationType())) {
         result = false;
    }
    return result;
@@ -474,7 +474,7 @@ mercadoPago.getBankDeals(new Callback&lt;List&lt;BankDeal&gt;&gt;() {
 // Cuidado! Es el callback de MercadoPago. 
 import com.mercadopago.callbacks.Callback;
 
-Long paymentId = 1234567;
+Long paymentId = 1234567L;
 String paymentMethodId = "pagofacil";
 String paymentTypeId = "ticket";
 
@@ -605,6 +605,7 @@ import com.mercadopago.callbacks.Callback;
 Map&lt;String, Object&gt; preferenceMap = new HashMap&lt;&gt;();
 preferenceMap.put("item_id", "1");
 preferenceMap.put("amount", new BigDecimal(10));
+preferenceMap.put("currency_id", "ARS");
 preferenceMap.put("payer_email", "mail_de_tu_cliente@gmail.com");
 
 // Envía la información a tu servidor
