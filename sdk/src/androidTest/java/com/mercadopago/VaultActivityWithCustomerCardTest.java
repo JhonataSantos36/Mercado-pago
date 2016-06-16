@@ -61,7 +61,7 @@ public class VaultActivityWithCustomerCardTest extends BaseTest<VaultActivity> {
         // Complete security code
         getInstrumentation().runOnMainSync(new Runnable() {
             public void run() {
-                MPEditText securityCodeText = (MPEditText) activity.findViewById(R.id.securityCode);
+                MPEditText securityCodeText = (MPEditText) activity.findViewById(R.id.mpsdkSecurityCode);
                 securityCodeText.setText(StaticMock.DUMMY_SECURITY_CODE);
             }
         });

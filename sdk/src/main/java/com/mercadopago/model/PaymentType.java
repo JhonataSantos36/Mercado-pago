@@ -15,6 +15,8 @@ public class PaymentType implements Serializable {
     public static String TICKET = "ticket";
     public static String ATM = "atm";
     public static String DIGITAL_CURRENCY = "digital_currency";
+    public static String BANK_TRANSFER = "bank_transfer";
+    public static String ACCOUNT_MONEY = "account_money";
 
     private String id;
 
@@ -34,6 +36,7 @@ public class PaymentType implements Serializable {
             add(TICKET);
             add(ATM);
             add(DIGITAL_CURRENCY);
+            add(BANK_TRANSFER);
         }};
     }
 }

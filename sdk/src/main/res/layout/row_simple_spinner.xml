@@ -4,13 +4,12 @@
     android:gravity="center_vertical">
 
     <com.mercadopago.views.MPTextView
-        android:id="@+id/label"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:gravity="center_vertical"
+        android:id="@+id/mpsdkLabel"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
         android:singleLine="true"
         android:drawablePadding="@dimen/mpsdk_padding_hlf"
-        android:paddingLeft="@dimen/mpsdk_padding_std"
         style="@style/mpsdk_simple_spinner"/>
 
 </RelativeLayout>

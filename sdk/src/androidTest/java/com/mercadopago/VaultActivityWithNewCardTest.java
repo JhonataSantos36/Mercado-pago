@@ -33,7 +33,7 @@ public class VaultActivityWithNewCardTest extends BaseTest<VaultActivity> {
     // * enter a security code
     // * push the button and generate a cards token
     //TODO: fix? Will be replaced by PaymentVault
-    /*
+
     public void testHappyPath() {
 
         final VaultActivity activity = prepareActivity(StaticMock.DUMMY_MERCHANT_PUBLIC_KEY,
@@ -101,7 +101,7 @@ public class VaultActivityWithNewCardTest extends BaseTest<VaultActivity> {
         // Complete security code
         getInstrumentation().runOnMainSync(new Runnable() {
             public void run() {
-                EditText securityCodeText = (EditText) activity.findViewById(R.id.securityCode);
+                EditText securityCodeText = (EditText) activity.findViewById(R.id.mpsdkSecurityCode);
                 securityCodeText.setText(StaticMock.DUMMY_SECURITY_CODE);
             }
         });
@@ -441,7 +441,7 @@ public class VaultActivityWithNewCardTest extends BaseTest<VaultActivity> {
         // Complete security code
         getInstrumentation().runOnMainSync(new Runnable() {
             public void run() {
-                EditText securityCodeText = (EditText) activity.findViewById(R.id.securityCode);
+                EditText securityCodeText = (EditText) activity.findViewById(R.id.mpsdkSecurityCode);
                 securityCodeText.setText(StaticMock.DUMMY_SECURITY_CODE);
             }
         });
@@ -486,7 +486,7 @@ public class VaultActivityWithNewCardTest extends BaseTest<VaultActivity> {
         // Complete security code
         getInstrumentation().runOnMainSync(new Runnable() {
             public void run() {
-                MPEditText securityCodeText = (MPEditText) activity.findViewById(R.id.securityCode);
+                MPEditText securityCodeText = (MPEditText) activity.findViewById(R.id.mpsdkSecurityCode);
                 securityCodeText.setText(StaticMock.DUMMY_SECURITY_CODE);
             }
         });
@@ -536,5 +536,5 @@ public class VaultActivityWithNewCardTest extends BaseTest<VaultActivity> {
         putListExtra(intent, "excludedPaymentTypes", excludedPaymentTypes);
         setActivityIntent(intent);
         return getActivity();
-    }*/
+    }
 }

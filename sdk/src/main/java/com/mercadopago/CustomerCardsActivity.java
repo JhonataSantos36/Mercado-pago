@@ -13,6 +13,7 @@ import com.mercadopago.adapters.CustomerCardsAdapter;
 import com.mercadopago.decorations.DividerItemDecoration;
 import com.mercadopago.model.Card;
 import com.mercadopago.model.PaymentMethodRow;
+import com.mercadopago.mptracker.MPTracker;
 
 import java.lang.reflect.Type;
 import java.util.List;
@@ -42,10 +43,9 @@ public class CustomerCardsActivity extends AppCompatActivity {
             finish();
             return;
         }
-        boolean supportMPApp = this.getIntent().getBooleanExtra("supportMPApp", false);
 
         // Set recycler view
-        mRecyclerView = (RecyclerView) findViewById(R.id.customer_cards_list);
+        mRecyclerView = (RecyclerView) findViewById(R.id.mpsdkCustomerCardsList);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
 
@@ -53,7 +53,7 @@ public class CustomerCardsActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         // Load cards
-        mRecyclerView.setAdapter(new CustomerCardsAdapter(this, cards, supportMPApp, new View.OnClickListener() {
+        mRecyclerView.setAdapter(new CustomerCardsAdapter(this, cards, new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -68,12 +68,14 @@ public class CustomerCardsActivity extends AppCompatActivity {
     }
 
     protected void setContentView() {
-
+        //TODO validate AGREGAR PUBLIC KEY
+        MPTracker.getInstance().trackScreen("CUSTOMER_CARDS", "2", "publicKey", "MLA", "1.0", this);
         setContentView(R.layout.activity_customer_cards);
     }
 
     @Override
     public void onBackPressed() {
+        MPTracker.getInstance().trackEvent("CUSTOMER_CARDS", "BACK_PRESSED", "2", "publicKey", "MLA", "1.0", this);
 
         Intent returnIntent = new Intent();
         returnIntent.putExtra("backButtonPressed", true);

@@ -1,7 +1,6 @@
 package com.mercadopago;
 
 import android.content.Intent;
-import android.support.test.espresso.intent.Intents;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.suitebuilder.annotation.LargeTest;
 import android.view.View;
@@ -26,7 +25,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static android.support.test.espresso.assertion.ViewAssertions.*;
+import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasAction;
+import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasData;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
@@ -91,7 +92,7 @@ public class InstructionsActivityTest {
         Instruction instructionWithoutActions = StaticMock.getInstructionWithoutActions();
         mTestRule.addApiResponseToQueue(instructionWithoutActions, 200, "");
         mTestRule.launchActivity(validStartIntent);
-        onView(withId(R.id.accreditationMessage)).check(matches(withText(instructionWithoutActions.getAcreditationMessage())));
+        onView(withId(R.id.mpsdkAccreditationMessage)).check(matches(withText(instructionWithoutActions.getAcreditationMessage())));
     }
 
     @Test
@@ -102,8 +103,8 @@ public class InstructionsActivityTest {
 
         String infoFirstPhrase = instructionWithoutActions.getInfo().get(0);
         String infoSecondPhrase = instructionWithoutActions.getInfo().get(1);
-        onView(withId(R.id.primaryInfo)).check(matches(withText(containsString(infoFirstPhrase))));
-        onView(withId(R.id.primaryInfo)).check(matches(withText(containsString(infoSecondPhrase))));
+        onView(withId(R.id.mpsdkPrimaryInfo)).check(matches(withText(containsString(infoFirstPhrase))));
+        onView(withId(R.id.mpsdkPrimaryInfo)).check(matches(withText(containsString(infoSecondPhrase))));
     }
 
     @Test
@@ -114,8 +115,8 @@ public class InstructionsActivityTest {
 
         String infoFirstPhrase = instructionWithoutActions.getSecondaryInfo().get(0);
         String infoSecondPhrase = instructionWithoutActions.getSecondaryInfo().get(1);
-        onView(withId(R.id.secondaryInfo)).check(matches(withText(containsString(infoFirstPhrase))));
-        onView(withId(R.id.secondaryInfo)).check(matches(withText(containsString(infoSecondPhrase))));
+        onView(withId(R.id.mpsdkSecondaryInfo)).check(matches(withText(containsString(infoFirstPhrase))));
+        onView(withId(R.id.mpsdkSecondaryInfo)).check(matches(withText(containsString(infoSecondPhrase))));
     }
 
     @Test
@@ -126,8 +127,8 @@ public class InstructionsActivityTest {
 
         String infoFirstPhrase = instructionWithoutActions.getTertiaryInfo().get(0);
         String infoSecondPhrase = instructionWithoutActions.getTertiaryInfo().get(1);
-        onView(withId(R.id.tertiaryInfo)).check(matches(withText(containsString(infoFirstPhrase))));
-        onView(withId(R.id.tertiaryInfo)).check(matches(withText(containsString(infoSecondPhrase))));
+        onView(withId(R.id.mpsdkTertiaryInfo)).check(matches(withText(containsString(infoFirstPhrase))));
+        onView(withId(R.id.mpsdkTertiaryInfo)).check(matches(withText(containsString(infoSecondPhrase))));
     }
 
     @Test
@@ -136,7 +137,7 @@ public class InstructionsActivityTest {
         mTestRule.addApiResponseToQueue(instruction, 200, "");
         mTestRule.launchActivity(validStartIntent);
 
-        onView(withId(R.id.primaryInfo)).check(matches(not(isDisplayed())));
+        onView(withId(R.id.mpsdkPrimaryInfo)).check(matches(not(isDisplayed())));
     }
 
     @Test
@@ -146,9 +147,9 @@ public class InstructionsActivityTest {
         mTestRule.addApiResponseToQueue(instruction, 200, "");
         mTestRule.launchActivity(validStartIntent);
 
-        onView(withId(R.id.primaryInfo)).check(matches(not(isDisplayed())));
-        onView(withId(R.id.secondaryInfo)).check(matches(not(isDisplayed())));
-        onView(withId(R.id.tertiaryInfo)).check(matches(not(isDisplayed())));
+        onView(withId(R.id.mpsdkPrimaryInfo)).check(matches(not(isDisplayed())));
+        onView(withId(R.id.mpsdkSecondaryInfo)).check(matches(not(isDisplayed())));
+        onView(withId(R.id.mpsdkTertiaryInfo)).check(matches(not(isDisplayed())));
     }
 
     @Test
@@ -157,7 +158,7 @@ public class InstructionsActivityTest {
         mTestRule.addApiResponseToQueue(instruction, 200, "");
         mTestRule.launchActivity(validStartIntent);
 
-        onView(withId(R.id.secondaryInfo)).check(matches(not(isDisplayed())));
+        onView(withId(R.id.mpsdkSecondaryInfo)).check(matches(not(isDisplayed())));
     }
 
     @Test
@@ -166,7 +167,7 @@ public class InstructionsActivityTest {
         mTestRule.addApiResponseToQueue(instruction, 200, "");
         mTestRule.launchActivity(validStartIntent);
 
-        onView(withId(R.id.tertiaryInfo)).check(matches(not(isDisplayed())));
+        onView(withId(R.id.mpsdkTertiaryInfo)).check(matches(not(isDisplayed())));
     }
 
     @Test public void ifReferenceDoesNotHaveValueDoNotShowIt() {
@@ -177,8 +178,8 @@ public class InstructionsActivityTest {
         InstructionReference firstReference = instruction.getReferences().get(0);
         InstructionReference secondReference = instruction.getReferences().get(1);
 
-        onView(withId(R.id.referencesLayout)).check(matches(not(withAnyChildText(firstReference.getLabel()))));
-        onView(withId(R.id.referencesLayout)).check(matches(not(withAnyChildText(secondReference.getLabel()))));
+        onView(withId(R.id.mpsdkReferencesLayout)).check(matches(not(withAnyChildText(firstReference.getLabel()))));
+        onView(withId(R.id.mpsdkReferencesLayout)).check(matches(not(withAnyChildText(secondReference.getLabel()))));
     }
 
     @Test
@@ -191,8 +192,8 @@ public class InstructionsActivityTest {
         InstructionReference firstReference = instructionWithoutActions.getReferences().get(0);
         InstructionReference secondReference = instructionWithoutActions.getReferences().get(1);
 
-        onView(withId(R.id.referencesLayout)).check(matches(withAnyChildText(firstReference.getFormattedReference())));
-        onView(withId(R.id.referencesLayout)).check(matches(withAnyChildText(secondReference.getFormattedReference())));
+        onView(withId(R.id.mpsdkReferencesLayout)).check(matches(withAnyChildText(firstReference.getFormattedReference())));
+        onView(withId(R.id.mpsdkReferencesLayout)).check(matches(withAnyChildText(secondReference.getFormattedReference())));
     }
 
     @Test
@@ -205,8 +206,8 @@ public class InstructionsActivityTest {
         InstructionReference firstReference = instructionWithoutActions.getReferences().get(0);
         InstructionReference secondReference = instructionWithoutActions.getReferences().get(1);
 
-        onView(withId(R.id.referencesLayout)).check(matches(withAnyChildText(firstReference.getLabel().toUpperCase())));
-        onView(withId(R.id.referencesLayout)).check(matches(withAnyChildText(secondReference.getLabel().toUpperCase())));
+        onView(withId(R.id.mpsdkReferencesLayout)).check(matches(withAnyChildText(firstReference.getLabel().toUpperCase())));
+        onView(withId(R.id.mpsdkReferencesLayout)).check(matches(withAnyChildText(secondReference.getLabel().toUpperCase())));
     }
 
     @Test
@@ -215,7 +216,7 @@ public class InstructionsActivityTest {
         mTestRule.addApiResponseToQueue(instructionWithoutActions, 200, "");
         mTestRule.launchActivity(validStartIntent);
 
-        LinearLayout referencesLayout = (LinearLayout) mTestRule.getActivity().findViewById(R.id.referencesLayout);
+        LinearLayout referencesLayout = (LinearLayout) mTestRule.getActivity().findViewById(R.id.mpsdkReferencesLayout);
 
         //Check that only the reference values are shown
         assertTrue(referencesLayout.getChildCount() == 2);
@@ -228,7 +229,7 @@ public class InstructionsActivityTest {
 
         mTestRule.launchActivity(validStartIntent);
 
-        onView(withId(R.id.actionButton)).check(matches(not(isDisplayed())));
+        onView(withId(R.id.mpsdkActionButton)).check(matches(not(isDisplayed())));
     }
 
     @Test
@@ -240,7 +241,7 @@ public class InstructionsActivityTest {
 
         InstructionActionInfo actionInfo = instructionWithAction.getActions().get(0);
 
-        onView(withId(R.id.actionButton)).check(matches(withText(actionInfo.getLabel())));
+        onView(withId(R.id.mpsdkActionButton)).check(matches(withText(actionInfo.getLabel())));
     }
 
     @Test
@@ -250,7 +251,7 @@ public class InstructionsActivityTest {
 
         mTestRule.launchActivity(validStartIntent);
 
-        onView(withId(R.id.actionButton)).check(matches(not(isDisplayed())));
+        onView(withId(R.id.mpsdkActionButton)).check(matches(not(isDisplayed())));
     }
 
     @Test
@@ -260,29 +261,32 @@ public class InstructionsActivityTest {
 
         mTestRule.launchActivity(validStartIntent);
 
-        onView(withId(R.id.actionButton)).check(matches(not(isDisplayed())));
+        onView(withId(R.id.mpsdkActionButton)).check(matches(not(isDisplayed())));
     }
 
     @Test
     public void onActionButtonClickIntentToUrl() {
         Instruction instructionWithoutActions = StaticMock.getInstructionWithAction();
         mTestRule.addApiResponseToQueue(instructionWithoutActions, 200, "");
+
+        mTestRule.initIntentsRecording();
         mTestRule.launchActivity(validStartIntent);
 
         InstructionActionInfo actionInfo = instructionWithoutActions.getActions().get(0);
 
-        onView(withId(R.id.actionButton)).perform(click());
+        onView(withId(R.id.mpsdkActionButton)).perform(click());
 
-        Intents.intended(allOf(
+        intended(allOf(
                 hasAction(Intent.ACTION_VIEW),
                 hasData(actionInfo.getUrl())));
     }
 
     @Test
-    public void ifApiFailureFinishActivity() {
+    public void ifApiFailureShowErrorActivity() {
+        mTestRule.initIntentsRecording();
         mTestRule.addApiResponseToQueue("", 401, "");
         mTestRule.launchActivity(validStartIntent);
-        assertTrue(mTestRule.isActivityFinishedOrFinishing());
+        intended(hasComponent(ErrorActivity.class.getName()));
     }
 
     private PaymentMethod getOfflinePaymentMethod() {

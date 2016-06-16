@@ -8,7 +8,9 @@ import com.mercadopago.model.Currency;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class CurrenciesUtil {
@@ -33,7 +35,6 @@ public class CurrenciesUtil {
     }};
 
     public static String formatNumber(BigDecimal amount, String currencyId) {
-
         // Get currency configuration
         Currency currency = currenciesList.get(currencyId);
 
@@ -130,6 +131,10 @@ public class CurrenciesUtil {
     }
 
     public static boolean isValidCurrency(String currencyId) {
-       return currenciesList.containsKey(currencyId) && currencyId != null;
+       return currencyId != null && currenciesList.containsKey(currencyId);
+    }
+
+    public static List<Currency> getAllCurrencies() {
+        return new ArrayList<>(currenciesList.values());
     }
 }

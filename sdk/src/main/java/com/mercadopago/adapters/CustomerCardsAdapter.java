@@ -7,10 +7,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.mercadopago.R;
 import com.mercadopago.model.Card;
 import com.mercadopago.model.PaymentMethodRow;
 import com.mercadopago.util.MercadoPagoUtil;
-import com.mercadopago.R;
 import com.mercadopago.views.MPTextView;
 
 import java.util.ArrayList;
@@ -20,7 +20,6 @@ public class CustomerCardsAdapter extends  RecyclerView.Adapter<CustomerCardsAda
 
     private List<PaymentMethodRow> mData;
     private View.OnClickListener mListener = null;
-    private boolean mSupportMPApp;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -29,16 +28,15 @@ public class CustomerCardsAdapter extends  RecyclerView.Adapter<CustomerCardsAda
         public ViewHolder(View v, View.OnClickListener listener) {
 
             super(v);
-            mTextView = (MPTextView) v.findViewById(R.id.label);
+            mTextView = (MPTextView) v.findViewById(R.id.mpsdkLabel);
             if (listener != null) {
                 v.setOnClickListener(listener);
             }
         }
     }
 
-    public CustomerCardsAdapter(Activity activity, List<Card> data, boolean supportMPApp, View.OnClickListener listener) {
+    public CustomerCardsAdapter(Activity activity, List<Card> data, View.OnClickListener listener) {
 
-        mSupportMPApp = supportMPApp;
         mData = getRows(activity, data);
         mListener = listener;
     }
@@ -77,11 +75,6 @@ public class CustomerCardsAdapter extends  RecyclerView.Adapter<CustomerCardsAda
     private List<PaymentMethodRow> getRows(Context context, List<Card> data) {
 
         List<PaymentMethodRow> rows = new ArrayList<>();
-
-        // Add MercadoPago App
-        if (mSupportMPApp) {
-            rows.add(new PaymentMethodRow(null, context.getResources().getString(R.string.mpsdk_mp_app_name), MercadoPagoUtil.getPaymentMethodIcon(context, "account_money")));
-        }
 
         // Add cards
         for (int i = 0; i < data.size(); i++) {

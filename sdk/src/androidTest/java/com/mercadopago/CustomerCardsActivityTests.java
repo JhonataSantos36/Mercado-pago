@@ -29,7 +29,7 @@ public class CustomerCardsActivityTests extends BaseTest<CustomerCardsActivity> 
         sleepThread();
 
         // Validate list
-        RecyclerView list = (RecyclerView) activity.findViewById(R.id.customer_cards_list);
+        RecyclerView list = (RecyclerView) activity.findViewById(R.id.mpsdkCustomerCardsList);
         if ((list != null) && (list.getAdapter() != null)) {
             assertTrue(list.getAdapter().getItemCount() > 0);
         } else {

@@ -1,5 +1,3 @@
-[![Build Status](https://travis-ci.com/mercadopago/px-android.svg?token=vPpQiHmLkp88siQfJcTo&branch=master)](https://travis-ci.com/mercadopago/px-android)
-[![codecov.io](https://codecov.io/github/mercadopago/px-android/coverage.svg?token=ksLU5tHdUS&branch=master)](https://codecov.io/github/mercadopago/px-android?branch=master)
 [![License](https://img.shields.io/badge/license-MIT-lightgrey.svg?style=flat)](https://github.com/mercadopago/px-android)
 
 #MercadoPago - Android SDK
@@ -14,7 +12,7 @@ The MercadoPago Android SDK make it easy to collect your user's credit card deta
 
 Add this line to your app's `build.gradle` inside the `dependencies` section:
 
-    compile ('com.mercadopago:android-sdk:0.9.15@aar') { transitive = true }
+    compile ('com.mercadopago:sdk:WORKSHOP@aar') { transitive = true }
 
 ###Eclipse
 
@@ -29,19 +27,9 @@ If you're planning on optimizing your app with ProGuard, make sure that you excl
 
     -keep class com.mercadopago.** { *; }
 
-## Examples
-
-This project includes five examples you can follow to understand how MercadoPago SDK works:
-
-1. Start with a simple card form payment flow
-2. Add your customers' cards to the flow
-3. Manage installments and bank issuers
-4. Pay with other payment types (ticket, atm)
-5. Let MercadoPago SDK do steps 1-4 for you!
-
 ## Documentation
 
-+ [Read more about this 5 steps integration.](http://www.mercadopago.com.ar/developers/en/solutions/payments/custom-checkout/charge-with-creditcard/android/)
++ [Read more about this 6 steps integration.](https://github.com/mercadopago/px-android)
 + [Check out MercadoPago Developers Site!](http://www.mercadopago.com.ar/developers)
 
 ## Feedback

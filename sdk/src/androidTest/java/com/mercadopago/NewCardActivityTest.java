@@ -37,15 +37,15 @@ public class NewCardActivityTest extends BaseTest<NewCardActivity> {
             public void run() {
 
                 MPEditText fieldText;
-                fieldText = (MPEditText) mActivity.findViewById(R.id.cardNumber);
+                fieldText = (MPEditText) mActivity.findViewById(R.id.mpsdkCardNumber);
                 fieldText.setText(StaticMock.DUMMY_CARD_NUMBER);
-                fieldText = (MPEditText) mActivity.findViewById(R.id.expiryMonth);
+                fieldText = (MPEditText) mActivity.findViewById(R.id.mpsdkExpiryMonth);
                 fieldText.setText(Integer.toString(StaticMock.DUMMY_EXPIRATION_MONTH));
-                fieldText = (MPEditText) mActivity.findViewById(R.id.expiryYear);
+                fieldText = (MPEditText) mActivity.findViewById(R.id.mpsdkExpiryYear);
                 fieldText.setText(Integer.toString(StaticMock.DUMMY_EXPIRATION_YEAR_SHORT));
-                fieldText = (MPEditText) mActivity.findViewById(R.id.cardholderName);
+                fieldText = (MPEditText) mActivity.findViewById(R.id.mpsdkCardholderName);
                 fieldText.setText(StaticMock.DUMMY_CARDHOLDER_NAME);
-                fieldText = (MPEditText) mActivity.findViewById(R.id.identificationNumber);
+                fieldText = (MPEditText) mActivity.findViewById(R.id.mpsdkIdentificationNumber);
                 fieldText.setText(StaticMock.DUMMY_IDENTIFICATION_NUMBER);
 
                 mActivity.submitForm(null);
@@ -208,24 +208,24 @@ public class NewCardActivityTest extends BaseTest<NewCardActivity> {
         // Set activity and set fields
         doSecurityCodeStart();
         setFields();
-        mSecurityCodeText = (MPEditText) mActivity.findViewById(R.id.securityCode);
+        mSecurityCodeText = (MPEditText) mActivity.findViewById(R.id.mpsdkSecurityCode);
 
         // Fill the form and simulate button click
         getInstrumentation().runOnMainSync(new Runnable() {
             public void run() {
 
                 MPEditText fieldText;
-                fieldText = (MPEditText) mActivity.findViewById(R.id.cardNumber);
+                fieldText = (MPEditText) mActivity.findViewById(R.id.mpsdkCardNumber);
                 fieldText.setText(StaticMock.DUMMY_CARD_NUMBER);
-                fieldText = (MPEditText) mActivity.findViewById(R.id.expiryMonth);
+                fieldText = (MPEditText) mActivity.findViewById(R.id.mpsdkExpiryMonth);
                 fieldText.setText(Integer.toString(StaticMock.DUMMY_EXPIRATION_MONTH));
-                fieldText = (MPEditText) mActivity.findViewById(R.id.expiryYear);
+                fieldText = (MPEditText) mActivity.findViewById(R.id.mpsdkExpiryYear);
                 fieldText.setText(Integer.toString(StaticMock.DUMMY_EXPIRATION_YEAR_SHORT));
-                fieldText = (MPEditText) mActivity.findViewById(R.id.cardholderName);
+                fieldText = (MPEditText) mActivity.findViewById(R.id.mpsdkCardholderName);
                 fieldText.setText(StaticMock.DUMMY_CARDHOLDER_NAME);
-                fieldText = (MPEditText) mActivity.findViewById(R.id.identificationNumber);
+                fieldText = (MPEditText) mActivity.findViewById(R.id.mpsdkIdentificationNumber);
                 fieldText.setText(StaticMock.DUMMY_IDENTIFICATION_NUMBER);
-                fieldText = (MPEditText) mActivity.findViewById(R.id.securityCode);
+                fieldText = (MPEditText) mActivity.findViewById(R.id.mpsdkSecurityCode);
                 fieldText.setText(StaticMock.DUMMY_SECURITY_CODE);
 
                 mActivity.submitForm(null);
@@ -254,7 +254,7 @@ public class NewCardActivityTest extends BaseTest<NewCardActivity> {
         // Set activity and set fields
         doSecurityCodeStart();
         setFields();
-        mSecurityCodeText = (MPEditText) mActivity.findViewById(R.id.securityCode);
+        mSecurityCodeText = (MPEditText) mActivity.findViewById(R.id.mpsdkSecurityCode);
 
         // Fill the form and simulate button click
         getInstrumentation().runOnMainSync(new Runnable() {
@@ -321,11 +321,11 @@ public class NewCardActivityTest extends BaseTest<NewCardActivity> {
 
     private void setFields() {
 
-        mCardNumberText = (MPEditText) mActivity.findViewById(R.id.cardNumber);
-        mCardholderNameText = (MPEditText) mActivity.findViewById(R.id.cardholderName);
-        mExpiryMonthText = (MPEditText) mActivity.findViewById(R.id.expiryMonth);
-        mExpiryYearText = (MPEditText) mActivity.findViewById(R.id.expiryYear);
-        mExpiryErrorText = (MPTextView) mActivity.findViewById(R.id.expiryError);
-        mIdentificationNumberText = (MPEditText) mActivity.findViewById(R.id.identificationNumber);
+        mCardNumberText = (MPEditText) mActivity.findViewById(R.id.mpsdkCardNumber);
+        mCardholderNameText = (MPEditText) mActivity.findViewById(R.id.mpsdkCardholderName);
+        mExpiryMonthText = (MPEditText) mActivity.findViewById(R.id.mpsdkExpiryMonth);
+        mExpiryYearText = (MPEditText) mActivity.findViewById(R.id.mpsdkExpiryYear);
+        mExpiryErrorText = (MPTextView) mActivity.findViewById(R.id.mpsdkExpiryError);
+        mIdentificationNumberText = (MPEditText) mActivity.findViewById(R.id.mpsdkIdentificationNumber);
     }
 }

@@ -83,4 +83,5 @@ public class PayerCost implements Serializable {
     public String toString() {
         return installments.toString();
     }
+
 }

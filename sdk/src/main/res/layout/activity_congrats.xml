@@ -4,194 +4,189 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
-
-    <include layout="@layout/view_progress_bar"/>
+    android:orientation="vertical"
+    android:background="@color/mpsdk_color_light_grey">
 
     <ScrollView
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
 
         <LinearLayout
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <android.support.v7.widget.CardView
-                xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/mpsdk_card_margin"
-                card_view:cardCornerRadius="@dimen/mpsdk_card_corner_radius">
+                android:orientation="vertical"
+                android:background="@color/mpsdk_white_background">
 
                 <LinearLayout
-                    android:layout_width="fill_parent"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginBottom="15dp"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:background="@color/mpsdk_color_congrats_background">
 
                     <ImageView
-                        android:id="@+id/icon"
-                        android:layout_width="62dp"
-                        android:layout_height="62dp"
-                        tools:src="@drawable/ic_approved"
-                        android:layout_gravity="center_horizontal" />
+                        android:id="@+id/mpsdkIcon"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:layout_marginTop="24dp"
+                        android:layout_marginBottom="14dp"
+                        android:layout_gravity="center_horizontal"
+                        android:tint="@color/mpsdk_color_congrats_image"
+                        android:src="@drawable/icon_ok" />
 
                     <com.mercadopago.views.MPTextView
-                        android:id="@+id/description"
-                        android:layout_width="fill_parent"
-                        android:gravity="bottom|center"
+                        android:id="@+id/mpsdkCongratulationsTitle"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        tools:text="APROBADO"
-                        style="@style/mpsdk_big_text_light" />
+                        android:layout_marginTop="8dp"
+                        android:gravity="bottom|center"
+                        android:textSize="22dp"
+                        android:text="@string/mpsdk_title_activity_congrat"/>
 
+                    <com.mercadopago.views.MPTextView
+                        android:id="@+id/mpsdkCongratulationSubtitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="14dp"
+                        android:gravity="bottom|center"
+                        android:textSize="15dp"
+                        android:text="@string/mpsdk_subtitle_action_activity_congrat"/>
+
+                    <com.mercadopago.views.MPTextView
+                        android:id="@+id/mpsdkPayerEmailDescription"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="1dp"
+                        android:layout_marginBottom="18dp"
+                        android:gravity="bottom|center"
+                        android:textSize="15dp"
+                        android:text="@string/mpsdk_text_email_activity_congrat"/>
+
+                    <View
+                        android:id="@+id/mpsdkTitleSeparator"
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:background="@color/mpsdk_separator"
+                        android:layout_gravity="center_horizontal|bottom" />
                 </LinearLayout>
-
-            </android.support.v7.widget.CardView>
-
-            <android.support.v7.widget.CardView
-                xmlns:card_view="http://schemas.android.com/apk/res-auto"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/mpsdk_white_background"
-                android:layout_margin="@dimen/mpsdk_card_margin"
-                card_view:cardCornerRadius="@dimen/mpsdk_card_corner_radius">
-
                 <LinearLayout
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/mpsdk_white_background"
                     android:orientation="vertical">
 
-                    <!-- operation amount -->
-                    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:minHeight="?android:attr/listPreferredItemHeight"
-                        android:gravity="center_vertical"
-                        android:orientation="vertical"
-                        android:id="@+id/totalLayout"
-                        android:padding="10dp">
+                        android:layout_marginTop="15dp"
+                        android:layout_marginBottom="15dp"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
+                        android:orientation="vertical">
 
-                        <com.mercadopago.views.MPTextView
+                        <LinearLayout
+                            android:layout_marginTop="4dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/mpsdk_total_amount"
-                            android:paddingBottom="5dp"
-                            style="@style/mpsdk_form_label"/>
+                            android:orientation="horizontal">
 
-                        <com.mercadopago.views.MPTextView
-                            android:id="@+id/amount"
+                            <ImageView
+                                android:id="@+id/mpsdkPaymentMethodImage"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                tools:src="@drawable/visa"
+                                android:maxHeight="13dp"
+                                android:adjustViewBounds="true"
+                                android:layout_gravity="center_vertical"/>
+
+                            <com.mercadopago.views.MPTextView
+                                android:id="@+id/mpsdkLastFourDigitsDescription"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginStart="10dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:singleLine="true"
+                                android:textSize="18dp"
+                                android:layout_gravity="center_vertical"
+                                android:text="@string/mpsdk_last_digits_label"/>
+
+                        </LinearLayout>
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            tools:text="$ 100,50"
-                            style="@style/mpsdk_form_label"/>
+                            android:layout_marginTop="13dp"
+                            android:layout_marginBottom="7dp"
+                            android:orientation="horizontal">
 
+                            <com.mercadopago.views.MPTextView
+                                android:id="@+id/mpsdkInstallmentsDescription"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="bottom"
+                                android:textSize="23dp"
+                                android:textColor="@color/mpsdk_color_congrats_installments"
+                                android:text="12 de $80 00"/>
+
+                            <com.mercadopago.views.MPTextView
+                                android:id="@+id/mpsdkInterestAmountDescription"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="10dp"
+                                android:gravity="bottom"
+                                android:textSize="16dp"
+                                android:textColor="@color/mpsdk_color_congrats_interest"
+                                android:text="@string/mpsdk_zero_rate"/>
+                        </LinearLayout>
+
+                            <com.mercadopago.views.MPTextView
+                                android:id="@+id/mpsdkStateDescription"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="bottom"
+                                android:textSize="16dp"
+                                android:text="@string/mpsdk_text_state_acount_activity_congrat"/>
                     </LinearLayout>
-
-                    <include layout="@layout/view_dashed_line_separator"/>
-
-                    <!--  payment method detail -->
-                    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    <View
+                        android:id="@+id/mpsdkPaymentIdSeparator"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:minHeight="?android:attr/listPreferredItemHeight"
-                        android:gravity="center_vertical"
-                        android:orientation="vertical"
-                        android:padding="10dp">
-
-                        <com.mercadopago.views.MPTextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/mpsdk_payment_method_detail"
-                            android:paddingBottom="5dp"
-                            style="@style/mpsdk_form_label"/>
-
-                        <com.mercadopago.views.MPTextView
-                            android:id="@+id/paymentMethod"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:gravity="center_vertical"
-                            android:singleLine="true"
-                            tools:text="terminada en 0000"
-                            tools:drawableLeft="@drawable/visa"
-                            android:drawablePadding="10dp"
-                            style="@style/mpsdk_form_label" />
-
-                    </LinearLayout>
-
-                    <include layout="@layout/view_dashed_line_separator"/>
-
-                    <!--  payment id -->
-                    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:minHeight="?android:attr/listPreferredItemHeight"
-                        android:gravity="center_vertical"
-                        android:orientation="vertical"
-                        android:id="@+id/operationLayout"
-                        android:padding="10dp">
-
-                        <com.mercadopago.views.MPTextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/mpsdk_operation"
-                            android:paddingBottom="5dp"
-                            style="@style/mpsdk_form_label"/>
-
-                        <com.mercadopago.views.MPTextView
-                            android:id="@+id/paymentId"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            tools:text="123123"
-                            style="@style/mpsdk_form_label"/>
-
-                    </LinearLayout>
-
-                    <include layout="@layout/view_dashed_line_separator"/>
-
-                    <!-- operation date -->
-                    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:minHeight="?android:attr/listPreferredItemHeight"
-                        android:gravity="center_vertical"
-                        android:orientation="vertical"
-                        android:id="@+id/dateLayout"
-                        android:padding="10dp">
-
-                        <com.mercadopago.views.MPTextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/mpsdk_date_created"
-                            android:paddingBottom="5dp"
-                            style="@style/mpsdk_form_label"/>
-
-                        <com.mercadopago.views.MPTextView
-                            android:id="@+id/dateCreated"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            tools:text="12/10"
-                            style="@style/mpsdk_form_label"/>
-
-                    </LinearLayout>
-
+                        android:layout_height="1dp"
+                        android:background="@color/mpsdk_separator"
+                        android:layout_gravity="center_horizontal|bottom" />
                 </LinearLayout>
+                    <com.mercadopago.views.MPTextView
+                        android:id="@+id/mpsdkPaymentIdDescription"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="11dp"
+                        android:layout_marginTop="16dp"
+                        android:gravity="bottom|center"
+                        android:textSize="@dimen/mpsdk_small_text"
+                        android:text="@string/mpsdk_payment_id_description" />
+            </LinearLayout>
 
-            </android.support.v7.widget.CardView>
-
-            <com.mercadopago.views.MPButton
-                android:id="@+id/button"
+            <ImageView
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/mpsdk_button_height"
-                android:text="@string/mpsdk_finish_label"
-                android:onClick="finalize"
-                android:layout_margin="10dp"
-                style="@style/mpsdk_button_normal"/>
+                android:layout_height="match_parent"
+                android:scaleType="center"
+                android:src="@drawable/voucher_clipped_border"/>
 
+            <com.mercadopago.views.MPTextView
+                android:id="@+id/mpsdkExitCongrats"
+                android:layout_marginTop="10dp"
+                android:paddingLeft="40dp"
+                android:paddingRight="40dp"
+                android:paddingTop="20dp"
+                android:paddingBottom="20dp"
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/mpsdk_text_keep_buying"
+                android:textColor="@color/mpsdk_color_link"
+                android:textSize="@dimen/mpsdk_small_text" />
         </LinearLayout>
-
     </ScrollView>
-
 </LinearLayout>

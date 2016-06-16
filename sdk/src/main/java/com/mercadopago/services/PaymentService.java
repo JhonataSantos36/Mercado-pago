@@ -1,5 +1,7 @@
 package com.mercadopago.services;
 
+import com.mercadopago.adapters.MPCall;
+import com.mercadopago.model.CheckoutPreference;
 import com.mercadopago.model.Installment;
 import com.mercadopago.model.Instruction;
 import com.mercadopago.model.Issuer;
@@ -11,30 +13,33 @@ import com.mercadopago.model.PaymentMethodSearch;
 import java.math.BigDecimal;
 import java.util.List;
 
-import retrofit.Callback;
-import retrofit.http.Body;
-import retrofit.http.EncodedPath;
-import retrofit.http.GET;
-import retrofit.http.POST;
-import retrofit.http.Query;
+import retrofit2.http.Body;
+import retrofit2.http.GET;
+import retrofit2.http.Header;
+import retrofit2.http.POST;
+import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface PaymentService {
 
     @GET("/v1/payment_methods")
-    void getPaymentMethods(@Query("public_key") String publicKey, Callback<List<PaymentMethod>> callback);
+    MPCall<List<PaymentMethod>> getPaymentMethods(@Query("public_key") String publicKey);
 
-    @GET("/checkout/beta/v1/payment_methods/search/options")
-    void getPaymentMethodSearch(@Query("public_key") String publicKey, @Query("amount") BigDecimal amount, @Query("excluded_payment_types") String excludedPaymentTypes, @Query("excluded_payment_methods") String excludedPaymentMethods, Callback<PaymentMethodSearch> callback);
+    @GET("/v1/checkout/payment_methods/search/options")
+    MPCall<PaymentMethodSearch> getPaymentMethodSearch(@Query("public_key") String publicKey, @Query("amount") BigDecimal amount, @Query("excluded_payment_types") String excludedPaymentTypes, @Query("excluded_payment_methods") String excludedPaymentMethods);
 
     @GET("/v1/payment_methods/installments")
-    void getInstallments(@Query("public_key") String publicKey, @Query("bin") String bin, @Query("amount") BigDecimal amount, @Query("issuer.id") Long issuerId, @Query("payment_type_id") String paymentTypeId, @Query("locale") String locale, Callback<List<Installment>> callback);
+    MPCall<List<Installment>> getInstallments(@Query("public_key") String publicKey, @Query("bin") String bin, @Query("amount") BigDecimal amount, @Query("issuer.id") Long issuerId, @Query("payment_method_id") String paymentMethodId, @Query("locale") String locale);
 
     @GET("/v1/payment_methods/card_issuers")
-    void getIssuers(@Query("public_key") String publicKey, @Query("payment_method_id") String paymentMethodId, Callback<List<Issuer>> callback);
+    MPCall<List<Issuer>> getIssuers(@Query("public_key") String publicKey, @Query("payment_method_id") String paymentMethodId, @Query("bin") String bin);
 
-    @GET("/checkout/beta/v1/native_payment")
-    void createPayment(@Query("public_key") String publicKey, @Query("pref_id") String preferenceId, @Query("email") String email, @Query("payment_method_id") String paymentMethodId, @Query("installments") Integer installments, @Query("issuer") String issuer, @Query("token") String token, Callback<Payment> callback);
+    @POST("/v1/checkout/payments")
+    MPCall<Payment> createPayment(@Header("X-Idempotency-Key") String transactionId, @Body PaymentIntent body);
 
-    @GET("/checkout/beta/v1/instructions/{payment_id}")
-    void getInstruction(@Query("public_key") String mKey, @EncodedPath("payment_id") Long paymentId, @Query("payment_method_id") String paymentMethodId, Callback<Instruction> callback);
+    @GET("/v1/checkout/payments/{payment_id}/results")
+    MPCall<Instruction> getInstruction(@Path(value = "payment_id", encoded = true) Long paymentId, @Query("public_key") String mKey, @Query("payment_type") String paymentTypeId);
+
+    @GET("/v1/checkout/preferences/{preference_id}")
+    MPCall<CheckoutPreference> getPreference(@Path(value = "preference_id", encoded = true) String checkoutPreferenceId, @Query("public_key") String publicKey);
 }

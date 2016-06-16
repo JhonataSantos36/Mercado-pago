@@ -9,9 +9,9 @@ import com.mercadopago.R;
  */
 public class ExceptionHandler {
 
-    public static String getErrorMessage(Context context, CheckoutPreferenceException mpException) {
+    public static String getErrorMessage(Context context, CheckoutPreferenceException exception) {
         String errorMessage = "";
-        switch (mpException.getErrorCode()) {
+        switch (exception.getErrorCode()) {
             case CheckoutPreferenceException.INVALID_ITEM:
                 errorMessage = context.getString(R.string.mpsdk_error_message_invalid_item);
                 break;
@@ -28,8 +28,11 @@ public class ExceptionHandler {
                 errorMessage = context.getString(R.string.mpsdk_error_message_invalid_installments);
                 break;
 
-            case CheckoutPreferenceException.EXCLUDED_ALL_PAYMENTTYPES:
+            case CheckoutPreferenceException.EXCLUDED_ALL_PAYMENT_TYPES:
                 errorMessage = context.getString(R.string.mpsdk_error_message_excluded_all_payment_type);
+                break;
+            case CheckoutPreferenceException.NO_EMAIL_FOUND:
+                errorMessage = context.getString(R.string.mpsdk_error_message_email_required);
                 break;
             }
         return errorMessage;

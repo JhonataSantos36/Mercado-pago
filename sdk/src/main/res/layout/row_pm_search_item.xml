@@ -1,76 +1,75 @@
-<RelativeLayout
-    android:layout_width="fill_parent"
-    android:layout_height="@dimen/list_item_height"
-    android:orientation="horizontal"
-    android:paddingLeft="0dp"
-    android:paddingRight="0dp"
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
     android:background="@color/mpsdk_white"
     android:minHeight="45dp"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-    <RelativeLayout
-            android:layout_width="fill_parent"
+    <LinearLayout
+        android:paddingLeft="10dp"
+        android:paddingStart="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/mpsdk_list_item_height"
+        android:weightSum="1"
+        android:orientation="horizontal">
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:id="@+id/rowLayout">
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="25dp"
-                android:src="@drawable/cards"
-                android:adjustViewBounds="true"
-                android:id="@+id/image"
-                android:layout_marginLeft="10dp"
-                android:layout_marginStart="10dp"
-                android:layout_gravity="center_vertical"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentTop="true"/>
+            android:layout_weight="0.98"
+            android:orientation="horizontal">
+            <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                    <ImageView
+                        android:id="@+id/mpsdkImage"
+                        android:layout_width="30dp"
+                        android:layout_height="25dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentTop="true"
+                        android:src="@drawable/cards"
+                        android:adjustViewBounds="true" />
 
-            <com.mercadopago.views.MPTextView
-                android:id="@+id/title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:singleLine="true"
-                tools:text="Tarjetas"
-                android:layout_centerVertical="true"
-                android:layout_toRightOf="@+id/image"
-                android:layout_toEndOf="@+id/image"
-                android:layout_marginLeft="10dp"
-                android:layout_marginStart="10dp"
-                style="@style/mpsdk_list_label"/>
+                    <com.mercadopago.views.MPTextView
+                        android:id="@+id/mpsdkDescription"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toRightOf="@+id/mpsdkImage"
+                        android:layout_toEndOf="@+id/mpsdkImage"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginStart="10dp"
+                        android:singleLine="true"
+                        tools:text="Tarjetas"
+                        style="@style/mpsdk_list_label"/>
 
-            <com.mercadopago.views.MPTextView
-                android:id="@+id/comment"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:text="Hola, soy un comentario"
-                android:layout_alignParentBottom="true"
-                android:layout_alignLeft="@+id/title"
-                android:layout_alignStart="@+id/title"
-                android:layout_below="@+id/title"
-                style="@style/mpsdk_list_label_comment"/>
+                    <com.mercadopago.views.MPTextView
+                        android:id="@+id/mpsdkComment"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignLeft="@+id/mpsdkDescription"
+                        android:layout_alignStart="@+id/mpsdkDescription"
+                        android:layout_below="@+id/mpsdkDescription"
+                        android:layout_alignParentBottom="true"
+                        tools:text="Hola, soy un comentario"
+                        style="@style/mpsdk_list_label_comment"/>
 
-            <ImageView
-                android:layout_width="15dp"
-                android:layout_height="10dp"
-                android:layout_marginEnd="5dp"
-                android:layout_marginRight="5dp"
-                android:src="@drawable/arrow_right"
-                android:adjustViewBounds="true"
-                android:id="@+id/imageArrow"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentBottom="true"
-                android:tint="@color/mpsdk_warm_grey"/>
-            <View
-                android:layout_alignParentBottom="true"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:id="@+id/separator"
-                android:background="@color/mpsdk_separator"
-                android:layout_alignLeft="@+id/comment"
-                android:layout_alignStart="@+id/comment"/>
-    </RelativeLayout>
-</RelativeLayout>
+            </RelativeLayout>
+        </LinearLayout>
+        <ImageView
+            android:layout_width="15dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/arrow_right"
+            android:adjustViewBounds="true"/>
+    </LinearLayout>
+    <View
+        android:id="@+id/mpsdkSeparator"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/mpsdk_separator"/>
+</LinearLayout>

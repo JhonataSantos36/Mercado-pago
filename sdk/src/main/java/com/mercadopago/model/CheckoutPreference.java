@@ -1,24 +1,28 @@
 package com.mercadopago.model;
 
+import com.google.gson.annotations.SerializedName;
 import com.mercadopago.exceptions.CheckoutPreferenceException;
 import com.mercadopago.util.CurrenciesUtil;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
+
+import static android.text.TextUtils.isEmpty;
 
 public class CheckoutPreference implements Serializable {
 
     private String id;
     private List<Item> items;
     private Payer payer;
-    private PaymentMethodPreference paymentMethods;
+
+    @SerializedName("payment_methods")
+    private PaymentPreference paymentPreference;
 
     private Date expirationDateTo;
     private Date expirationDateFrom;
-
+    private String siteId;
 
     public void validate() throws CheckoutPreferenceException {
         if (!this.itemsValid())
@@ -35,35 +39,34 @@ public class CheckoutPreference implements Serializable {
             throw new CheckoutPreferenceException(CheckoutPreferenceException.INVALID_INSTALLMENTS);
         }
         else if (!this.validPaymentTypeExclusion()){
-            throw new CheckoutPreferenceException(CheckoutPreferenceException.EXCLUDED_ALL_PAYMENTTYPES);
+            throw new CheckoutPreferenceException(CheckoutPreferenceException.EXCLUDED_ALL_PAYMENT_TYPES);
+        }
+        else if (!this.hasEmail()){
+            throw new CheckoutPreferenceException(CheckoutPreferenceException.NO_EMAIL_FOUND);
         }
     }
 
-    public boolean validPaymentTypeExclusion() {
-        //TODO Cambiar de List de String a Set los excludedPaymentType
-        return paymentMethods.getExcludedPaymentTypes().size() < PaymentType.getAllPaymentTypes().size();
+    private boolean hasEmail() {
+        return this.payer != null && !isEmpty(this.payer.getEmail());
     }
 
+    public boolean validPaymentTypeExclusion() {
+        return paymentPreference == null || paymentPreference.excludedPaymentTypesValid();
+    }
 
     public boolean validInstallmentsPreference() {
-        return (validMaxInstallments() && validDefaultInstallments());
+        return paymentPreference.installmentPreferencesValid();
     }
-
-    private boolean validDefaultInstallments() {
-        return paymentMethods.getMaxInstallments() == null || paymentMethods.getMaxInstallments() > 0;
-    }
-
-    private boolean validMaxInstallments() {
-        return paymentMethods.getDefaultInstallments() == null || paymentMethods.getDefaultInstallments() > 0;
-    }
-
 
     public Boolean itemsValid() {
 
         boolean valid = true;
 
-        if(this.items == null || this.items.isEmpty())
+        if(this.items == null || this.items.isEmpty() || items.get(0) == null)
         {
+            valid = false;
+        }
+        else if (isEmpty(items.get(0).getCurrencyId())) {
             valid = false;
         }
         else {
@@ -85,7 +88,10 @@ public class CheckoutPreference implements Serializable {
     private boolean isItemValid(Item item) {
         Boolean valid = true;
 
-        if(item.getId() == null) {
+        if(item == null) {
+            valid = false;
+        }
+        else if(item.getId() == null) {
             valid = false;
         }
         else if(item.getQuantity() == null || item.getQuantity() < 1)
@@ -105,24 +111,14 @@ public class CheckoutPreference implements Serializable {
     }
 
 
-    public Boolean isExpired(){
+    public Boolean isExpired() {
         Date date = new Date();
-        if (expirationDateTo != null){
-            return date.after(expirationDateTo);
-        }
-        else{
-            return false;
-        }
+        return expirationDateTo != null && date.after(expirationDateTo);
     }
 
-    public Boolean isActive(){
+    public Boolean isActive() {
         Date date = new Date();
-        if (expirationDateFrom != null){
-            return date.after(expirationDateFrom);
-        }
-        else{
-            return true;
-        }
+        return expirationDateFrom == null || date.after(expirationDateFrom);
     }
 
 
@@ -134,20 +130,20 @@ public class CheckoutPreference implements Serializable {
         this.expirationDateFrom = date;
     }
 
-    public void setPaymentMethods(PaymentMethodPreference paymentMethods){
-        this.paymentMethods = paymentMethods;
+    public void setPaymentPreference(PaymentPreference paymentPreference){
+        this.paymentPreference = paymentPreference;
     }
-
 
     public BigDecimal getAmount() {
 
         BigDecimal totalAmount = BigDecimal.ZERO;
-        for(Iterator<Item> i = items.iterator(); i.hasNext(); ) {
-            Item item = i.next();
-            if ((item != null) && (item.getUnitPrice() != null) && (item.getQuantity() != null)) {
-                totalAmount = totalAmount.add(item.getUnitPrice().multiply(new BigDecimal(item.getQuantity())));
-            } else {
-                return null;
+        if(items != null) {
+            for (Item item : items) {
+                if ((item != null) && (item.getUnitPrice() != null) && (item.getQuantity() != null)) {
+                    totalAmount = totalAmount.add(item.getUnitPrice().multiply(new BigDecimal(item.getQuantity())));
+                } else {
+                    return null;
+                }
             }
         }
         return totalAmount;
@@ -178,38 +174,45 @@ public class CheckoutPreference implements Serializable {
     }
 
     public Integer getMaxInstallments() {
-        if(paymentMethods != null)
-            return paymentMethods.getMaxInstallments();
+        if(paymentPreference != null)
+            return paymentPreference.getMaxInstallments();
         else
-            return null;    }
-
+            return null;
+    }
 
     public Integer getDefaultInstallments() {
-        if(paymentMethods != null)
-            return paymentMethods.getDefaultInstallments();
+        if(paymentPreference != null)
+            return paymentPreference.getDefaultInstallments();
         else
-            return null;    }
+            return null;
+    }
 
     public List<String> getExcludedPaymentMethods() {
-        if(paymentMethods != null)
-            return paymentMethods.getExcludedPaymentMethodIds();
+        if(paymentPreference != null)
+            return paymentPreference.getExcludedPaymentMethodIds();
         else
             return null;
     }
 
     public List<String> getExcludedPaymentTypes() {
-        if(paymentMethods != null)
-            return paymentMethods.getExcludedPaymentTypes();
-        else
-            return null;    }
-
-    public String getDefaultPaymentMethodId() {
-        if(paymentMethods != null)
-            return paymentMethods.getDefaultPaymentMethodId();
+        if(paymentPreference != null)
+            return paymentPreference.getExcludedPaymentTypes();
         else
             return null;
     }
 
+    public String getDefaultPaymentMethodId() {
+        if(paymentPreference != null)
+            return paymentPreference.getDefaultPaymentMethodId();
+        else
+            return null;
+    }
 
+    public PaymentPreference getPaymentPreference() {
+        return paymentPreference;
+    }
 
+    public String getSiteId() {
+        return siteId;
+    }
 }

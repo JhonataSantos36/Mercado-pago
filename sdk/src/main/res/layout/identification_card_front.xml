@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/mpsdkIdentificationCardContainer"
+    android:layout_width="300dp"
+    android:layout_height="171dp"
+    android:layout_gravity="center_horizontal">
+
+
+    <FrameLayout
+        android:layout_width="290dp"
+        android:layout_height="161dp"
+        android:layout_gravity="center"
+        android:background="@drawable/new_identification_layout">
+
+        <FrameLayout
+            android:layout_width="192dp"
+            android:layout_height="161dp"
+            android:background="@drawable/card_back_shadow">
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:weightSum="1"
+            android:orientation="horizontal">
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:paddingLeft="10dp"
+                android:paddingStart="10dp"
+                android:layout_weight="0.3">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:src="@drawable/foto_sello"/>
+
+            </FrameLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.7"
+                android:layout_gravity="center_vertical"
+                android:paddingLeft="8dp"
+                android:paddingStart="8dp"
+                android:paddingRight="16dp"
+                android:paddingEnd="16dp"
+                android:orientation="vertical">
+
+                <com.mercadopago.views.MPTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingRight="14dp"
+                    android:paddingEnd="14dp"
+                    android:textColor="@color/mpsdk_base_text_alpha"
+                    android:text="@string/mpsdk_card_identification_label_part1"
+                    android:textSize="13dp"
+                    app:fontStyle="regular"/>
+                <com.mercadopago.views.MPTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:paddingRight="14dp"
+                    android:paddingEnd="14dp"
+                    android:textColor="@color/mpsdk_base_text_alpha"
+                    android:text="@string/mpsdk_card_identification_label_part2"
+                    android:textSize="13dp"
+                    app:fontStyle="regular"/>
+
+                <FrameLayout
+                    android:id="@+id/mpsdkIdNumberClickableZone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:paddingEnd="10dp"
+                    android:paddingRight="10dp"
+                    android:layout_marginTop="10dp">
+
+                    <com.mercadopago.views.MPTextView
+                        android:id="@+id/mpsdkIdentificationCardholderContainer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start"
+                        android:textColor="@color/mpsdk_base_text"
+                        android:textSize="20dp"
+                        android:visibility="visible"
+                        android:text="•• ••• •••"
+                        app:fontStyle="roboto_regular"/>
+
+                    <com.mercadopago.views.MPTextView
+                        android:id="@+id/mpsdkIdNumberView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start"
+                        android:textColor="@color/mpsdk_base_text"
+                        android:textSize="20dp"
+                        android:visibility="invisible"/>
+
+                </FrameLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+    <ImageView
+        android:id="@+id/mpsdkIdShadowBorder"
+        android:src="@drawable/card_shadow_rounded"
+        android:layout_width="300dp"
+        android:layout_height="171dp"
+        android:layout_gravity="center"/>
+</FrameLayout>
+
+

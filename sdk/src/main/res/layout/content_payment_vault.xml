@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView
-    android:id="@+id/contentLayout"
+    android:id="@+id/mpsdkContentLayout"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -9,7 +9,7 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     android:layout_marginBottom="20dp">
     <RelativeLayout
-        android:id="@+id/regularLayout"
+        android:id="@+id/mpsdkRegularLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:showIn="@layout/activity_payment_vault"
@@ -21,51 +21,26 @@
             android:layout_height="wrap_content">
             <View android:layout_width="match_parent" android:layout_height="0dp" android:focusable="true" android:focusableInTouchMode="true"><requestFocus/></View>
             <com.mercadopago.views.MPTextView
+                android:id="@+id/mpsdkGroupsLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="@string/mpsdk_payment_method_groups_label"
                 android:layout_marginLeft="10dp"
                 android:layout_marginStart="10dp"
-                android:id="@+id/groupsLabel"
                 android:visibility="gone"/>
             <android.support.v7.widget.RecyclerView
-                android:id="@+id/groupsList"
+                android:id="@+id/mpsdkGroupsList"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="20dp"
-                android:layout_below="@+id/groupsLabel"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/mpsdkGroupsLabel"
                 android:listSelector="@android:color/transparent"
                 android:divider="@null"/>
             <View
-                android:layout_below="@id/groupsList"
+                android:layout_below="@id/mpsdkGroupsList"
                 android:layout_width="match_parent"
                 android:layout_height="3dp"
                 android:background="@drawable/drop_shadow"/>
-            <View
-                android:layout_below="@id/groupsList"
-                android:layout_marginTop="45dp"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:id="@+id/separator"
-                android:background="@color/mpsdk_separator"
-                android:layout_marginStart="20dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginEnd="20dp"
-                android:layout_marginRight="20dp"
-                android:layout_gravity="center_horizontal|bottom" />
-
-            <com.mercadopago.views.MPTextView
-                android:layout_centerHorizontal="true"
-                android:layout_below="@+id/separator"
-                android:layout_gravity="center"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="20dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/mpsdk_processed_by_mercado_pago"
-                app:fontStyle="regular"
-                style="@style/small_comment"/>
         </RelativeLayout>
     </RelativeLayout>
 </ScrollView>

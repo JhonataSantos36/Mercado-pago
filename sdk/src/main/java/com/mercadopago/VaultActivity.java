@@ -5,45 +5,39 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.mercadopago.adapters.CustomerCardsAdapter;
+import com.mercadopago.callbacks.Callback;
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.core.MerchantServer;
+import com.mercadopago.model.ApiException;
+import com.mercadopago.model.Card;
 import com.mercadopago.model.CardToken;
+import com.mercadopago.model.Customer;
 import com.mercadopago.model.Installment;
 import com.mercadopago.model.Issuer;
+import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentMethodRow;
-import com.mercadopago.model.PaymentMethodPreference;
+import com.mercadopago.model.PaymentPreference;
 import com.mercadopago.model.SavedCardToken;
 import com.mercadopago.model.Token;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.LayoutUtil;
 import com.mercadopago.util.MercadoPagoUtil;
-import com.mercadopago.model.Card;
-import com.mercadopago.model.Customer;
-import com.mercadopago.model.PayerCost;
 import com.mercadopago.views.MPButton;
 import com.mercadopago.views.MPEditText;
 import com.mercadopago.views.MPTextView;
 
-import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
 
 public class VaultActivity extends AppCompatActivity {
 
@@ -55,11 +49,6 @@ public class VaultActivity extends AppCompatActivity {
     protected String mMerchantPublicKey;
     protected boolean mShowBankDeals;
     protected boolean mCardGuessingEnabled;
-    protected Integer mDefaultInstallments;
-    protected Integer mMaxInstallments;
-    protected List<String> mExcludedPaymentMethodIds;
-    protected List<String> mExcludedPaymentTypes;
-    protected String mDefaultPaymentMethodId;
     protected Boolean mSupportMPApp;
 
     // Input controls
@@ -89,35 +78,32 @@ public class VaultActivity extends AppCompatActivity {
     protected Activity mActivity;
     protected String mExceptionOnMethod;
     protected MercadoPago mMercadoPago;
-    protected PaymentMethodPreference mPaymentMethodPreference;
+    protected PaymentPreference mPaymentPreference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
 
-
         setContentView();
 
         getActivityParameters();
-
-        createPaymentPreference();
 
         if (validParameters()) {
 
             setActivity();
 
             // Set layout controls
-            mInstallmentsCard = findViewById(R.id.installmentsCard);
-            mSecurityCodeCard = findViewById(R.id.securityCodeCard);
-            mCVVImage = (ImageView) findViewById(R.id.cVVImage);
-            mCVVDescriptor = (MPTextView) findViewById(R.id.cVVDescriptor);
-            mSubmitButton = (MPButton) findViewById(R.id.payButton);
-            mCustomerMethodsLayout = (FrameLayout) findViewById(R.id.customerMethodLayout);
-            mCustomerMethodsText = (MPTextView) findViewById(R.id.customerMethodLabel);
-            mInstallmentsLayout = (FrameLayout) findViewById(R.id.installmentsLayout);
-            mInstallmentsText = (MPTextView) findViewById(R.id.installmentsLabel);
-            mSecurityCodeText = (MPEditText) findViewById(R.id.securityCode);
+            mInstallmentsCard = findViewById(R.id.mpsdkInstallmentsCard);
+            mSecurityCodeCard = findViewById(R.id.mpsdkSecurityCodeCard);
+            mCVVImage = (ImageView) findViewById(R.id.mpsdkCVVImage);
+            mCVVDescriptor = (MPTextView) findViewById(R.id.mpsdkCVVDescriptor);
+            mSubmitButton = (MPButton) findViewById(R.id.mpsdkPayButton);
+            mCustomerMethodsLayout = (FrameLayout) findViewById(R.id.mpsdkCustomerMethodLayout);
+            mCustomerMethodsText = (MPTextView) findViewById(R.id.mpsdkCustomerMethodLabel);
+            mInstallmentsLayout = (FrameLayout) findViewById(R.id.mpsdkInstallmentsLayout);
+            mInstallmentsText = (MPTextView) findViewById(R.id.mpsdkInstallmentsLabel);
+            mSecurityCodeText = (MPEditText) findViewById(R.id.mpsdkSecurityCode);
 
             // Init MercadoPago object with public key
             mMercadoPago = new MercadoPago.Builder()
@@ -155,34 +141,10 @@ public class VaultActivity extends AppCompatActivity {
         mCardGuessingEnabled = this.getIntent().getBooleanExtra("cardGuessingEnabled", false);
         mShowBankDeals = this.getIntent().getBooleanExtra("showBankDeals", true);
 
-        if (this.getIntent().getStringExtra("excludedPaymentMethodIds") != null) {
-            Gson gson = new Gson();
-            Type listType = new TypeToken<List<String>>(){}.getType();
-            mExcludedPaymentMethodIds = gson.fromJson(this.getIntent().getStringExtra("excludedPaymentMethodIds"), listType);
-        }
-        if (this.getIntent().getStringExtra("excludedPaymentTypes") != null) {
-            Gson gson = new Gson();
-            Type listType = new TypeToken<List<String>>(){}.getType();
-            mExcludedPaymentTypes = gson.fromJson(this.getIntent().getStringExtra("excludedPaymentTypes"), listType);
-        }
-        mDefaultPaymentMethodId = this.getIntent().getStringExtra("defaultPaymentMethodId");
-
-        if(this.getIntent().getStringExtra("maxInstallments") != null) {
-            mMaxInstallments = Integer.valueOf(this.getIntent().getStringExtra("maxInstallments"));
-        }
-        if(this.getIntent().getStringExtra("defaultInstallments") != null) {
-            mDefaultInstallments = Integer.valueOf(this.getIntent().getStringExtra("defaultInstallments"));
+        if (this.getIntent().getSerializableExtra("paymentPreference") != null) {
+            mPaymentPreference = (PaymentPreference) this.getIntent().getSerializableExtra("paymentPreference");
         }
 
-    }
-
-    protected void createPaymentPreference() {
-        mPaymentMethodPreference = new PaymentMethodPreference();
-        mPaymentMethodPreference.setExcludedPaymentMethods(this.mExcludedPaymentMethodIds);
-        mPaymentMethodPreference.setExcludedPaymentTypes(this.mExcludedPaymentTypes);
-        mPaymentMethodPreference.setDefaultPaymentMethodId(this.mDefaultPaymentMethodId);
-        mPaymentMethodPreference.setDefaultInstallments(this.mDefaultInstallments);
-        mPaymentMethodPreference.setInstallments(this.mMaxInstallments);
     }
 
     protected void setContentView() {
@@ -227,16 +189,8 @@ public class VaultActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        if (mShowBankDeals) {
-            getMenuInflater().inflate(R.menu.vault, menu);
-        }
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.action_bank_deals) {
+        if (item.getItemId() == R.id.mpsdkActionBankDeals) {
             startBankDealsActivity();
         } else {
             return super.onOptionsItemSelected(item);
@@ -538,7 +492,7 @@ public class VaultActivity extends AppCompatActivity {
         LayoutUtil.showProgressLayout(mActivity);
         MerchantServer.getCustomer(this, mMerchantBaseUrl, mMerchantGetCustomerUri, mMerchantAccessToken, new Callback<Customer>() {
             @Override
-            public void success(Customer customer, Response response) {
+            public void success(Customer customer) {
 
                 List<Card> customerCards = customer.getCards();
                 if (customerCards != null)
@@ -566,10 +520,10 @@ public class VaultActivity extends AppCompatActivity {
             }
 
             @Override
-            public void failure(RetrofitError error) {
+            public void failure(ApiException apiException) {
 
                 mExceptionOnMethod = "getCustomerCardsAsync";
-                ApiUtil.finishWithApiException(mActivity, error);
+                ApiUtil.finishWithApiException(mActivity, apiException);
             }
         });
     }
@@ -585,18 +539,20 @@ public class VaultActivity extends AppCompatActivity {
             LayoutUtil.showProgressLayout(mActivity);
             mMercadoPago.getInstallments(bin, amount, issuerId, paymentTypeId, new Callback<List<Installment>>() {
                 @Override
-                public void success(List<Installment> installments, Response response) {
+                public void success(List<Installment> installments) {
 
                     LayoutUtil.showRegularLayout(mActivity);
 
                     if ((installments.size() > 0) && (installments.get(0).getPayerCosts().size() > 0)) {
 
                         // Set installments cards data and visibility
-                        List<PayerCost> availablePayerCosts = installments.get(0).getPayerCosts();
+                        mPayerCosts = installments.get(0).getPayerCosts();
+                        PayerCost defaultPayerCost = null;
 
-                        mPayerCosts = mPaymentMethodPreference.getInstallmentsBelowMax(availablePayerCosts);
-
-                        PayerCost defaultPayerCost = mPaymentMethodPreference.getDefaultInstallments(mPayerCosts);
+                        if(mPaymentPreference != null) {
+                            mPayerCosts = mPaymentPreference.getInstallmentsBelowMax(mPayerCosts);
+                            defaultPayerCost = mPaymentPreference.getDefaultInstallments(mPayerCosts);
+                        }
 
                         if(defaultPayerCost != null) {
                             mSelectedPayerCost = defaultPayerCost;
@@ -624,10 +580,10 @@ public class VaultActivity extends AppCompatActivity {
                 }
 
                 @Override
-                public void failure(RetrofitError error) {
+                public void failure(ApiException apiException) {
 
                     mExceptionOnMethod = "getInstallmentsAsync";
-                    ApiUtil.finishWithApiException(mActivity, error);
+                    ApiUtil.finishWithApiException(mActivity, apiException);
                 }
             });
         }
@@ -795,16 +751,16 @@ public class VaultActivity extends AppCompatActivity {
 
         return new Callback<Token>() {
             @Override
-            public void success(Token o, Response response) {
+            public void success(Token o) {
 
                 resolveCreateTokenSuccess(o.getId());
             }
 
             @Override
-            public void failure(RetrofitError error) {
+            public void failure(ApiException apiException) {
 
                 mExceptionOnMethod = "getCreateTokenCallback";
-                ApiUtil.finishWithApiException(mActivity, error);
+                ApiUtil.finishWithApiException(mActivity, apiException);
             }
         };
     }
@@ -824,9 +780,9 @@ public class VaultActivity extends AppCompatActivity {
 
     private List<Card> getSupportedCustomerCards(List<Card> cards) {
         List<Card> supportedCards = new ArrayList<>();
-        if(mPaymentMethodPreference != null) {
+        if(mPaymentPreference != null) {
             for (Card card : cards) {
-                if (mPaymentMethodPreference.isPaymentMethodSupported(card.getPaymentMethod()))
+                if (mPaymentPreference.isPaymentMethodSupported(card.getPaymentMethod()))
                     supportedCards.add(card);
             }
             return supportedCards;
@@ -855,7 +811,6 @@ public class VaultActivity extends AppCompatActivity {
         new MercadoPago.StartActivityBuilder()
                 .setActivity(mActivity)
                 .setCards(mCards)
-                .setSupportMPApp(mSupportMPApp)
                 .startCustomerCardsActivity();
     }
 
@@ -883,7 +838,7 @@ public class VaultActivity extends AppCompatActivity {
                 .setPublicKey(mMerchantPublicKey)
                 .setPaymentMethod(mTempPaymentMethod)
                 .setRequireSecurityCode(false)
-                .startNewCardActivity();
+                .startGuessingCardActivity();
     }
 
     protected void startPaymentMethodsActivity() {
@@ -891,11 +846,8 @@ public class VaultActivity extends AppCompatActivity {
         new MercadoPago.StartActivityBuilder()
                 .setActivity(mActivity)
                 .setPublicKey(mMerchantPublicKey)
-                .setExcludedPaymentTypes(mExcludedPaymentTypes)
-                .setExcludedPaymentMethodIds(mExcludedPaymentMethodIds)
-                .setDefaultPaymentMethodId(mDefaultPaymentMethodId)
+                .setPaymentPreference(mPaymentPreference)
                 .setShowBankDeals(mShowBankDeals)
-                .setSupportMPApp(mSupportMPApp)
                 .startPaymentMethodsActivity();
     }
 
@@ -906,9 +858,7 @@ public class VaultActivity extends AppCompatActivity {
                 .setRequireSecurityCode(false)
                 .setRequireIssuer(true)
                 .setShowBankDeals(mShowBankDeals)
-                .setExcludedPaymentTypes(mExcludedPaymentTypes)
-                .setExcludedPaymentMethodIds(mExcludedPaymentMethodIds)
-                .setDefaultPaymentMethodId(mDefaultPaymentMethodId)
+                .setPaymentPreference(mPaymentPreference)
                 .startGuessingCardActivity();
     }
 }

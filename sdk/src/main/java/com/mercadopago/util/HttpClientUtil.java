@@ -1,46 +1,57 @@
 package com.mercadopago.util;
 
-import com.squareup.okhttp.Cache;
-import com.squareup.okhttp.OkHttpClient;
+import android.content.Context;
+
+import com.mercadopago.core.Settings;
 
 import java.io.File;
 import java.util.concurrent.TimeUnit;
 
-import android.content.Context;
-import android.util.Log;
-
-import retrofit.client.Client;
-import retrofit.client.OkClient;
+import okhttp3.Interceptor;
+import okhttp3.MediaType;
+import okhttp3.logging.HttpLoggingInterceptor;
 
 public class HttpClientUtil {
 
-    private static Client client;
+    private static okhttp3.OkHttpClient client;
+    private static Interceptor mInterceptor;
 
-    protected HttpClientUtil() {}
+    public static final MediaType JSON
+            = MediaType.parse("application/json; charset=utf-8");
 
-    public static synchronized Client getClient(Context context) {
+    public synchronized static okhttp3.OkHttpClient getClient(Context context, int connectTimeout, int readTimeout, int writeTimeout) {
 
         if (client == null) {
-            Log.i("HttpClientUtil", "new instance");
-            OkHttpClient okHttpClient = new OkHttpClient();
 
-            okHttpClient.setConnectTimeout(20, TimeUnit.SECONDS);
-            okHttpClient.setWriteTimeout(20, TimeUnit.SECONDS);
-            okHttpClient.setReadTimeout(20, TimeUnit.SECONDS);
+            // Set log info
+            HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+            interceptor.setLevel(Settings.OKHTTP_LOGGING);
 
+            // Set cache size
             int cacheSize = 10 * 1024 * 1024; // 10 MiB
-            Cache cache = new Cache(new File(context.getCacheDir().getPath() + "okhttp"), cacheSize);
-            okHttpClient.setCache(cache);
-            client = new OkClient(okHttpClient);
+            okhttp3.Cache cache = new okhttp3.Cache(new File(context.getCacheDir().getPath() + "okhttp"), cacheSize);
+
+            // Set client
+            okhttp3.OkHttpClient.Builder okHttpClientBuilder = new okhttp3.OkHttpClient.Builder()
+                    .connectTimeout(connectTimeout, TimeUnit.SECONDS)
+                    .writeTimeout(writeTimeout, TimeUnit.SECONDS)
+                    .readTimeout(readTimeout, TimeUnit.SECONDS)
+                    .cache(cache)
+                    .addInterceptor(interceptor);
+            if(mInterceptor != null) {
+                okHttpClientBuilder.addInterceptor(mInterceptor);
+            }
+            client = okHttpClientBuilder.build();
         }
+
         return client;
     }
 
-    public static void bindClient(Client client) {
-        HttpClientUtil.client = client;
+    public static void bindInterceptor(Interceptor interceptor) {
+        mInterceptor = interceptor;
     }
 
-    public static void unbindClient() {
-        client = null;
+    public static void unbindInterceptor() {
+        mInterceptor = null;
     }
 }

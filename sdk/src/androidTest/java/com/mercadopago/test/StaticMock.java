@@ -95,7 +95,7 @@ public class StaticMock {
 
     public static PaymentMethod getPaymentMethod(Context context, String flavor) {
 
-        return JsonUtil.getInstance().fromJson(getFile(context, "mocks/payment_method" + flavor + ".json"), PaymentMethod.class);
+        return JsonUtil.getInstance().fromJson(getFile(context, "mocks/payment_method_on" + flavor + ".json"), PaymentMethod.class);
     }
 
     public static IdentificationType getIdentificationType() {
@@ -186,6 +186,24 @@ public class StaticMock {
             return getFile(InstrumentationRegistry.getContext(), "mocks/payment_methods.json");
 
         } catch (Exception ex) {
+            return null;
+        }
+    }
+
+
+    public static PaymentMethod getPaymentMethodOff() {
+        try {
+            return JsonUtil.getInstance().fromJson(getFile(InstrumentationRegistry.getContext(), "mocks/payment_method_off.json"), PaymentMethod.class);
+        } catch (Exception ex) {
+
+            return null;
+        }
+    }
+
+    public static PaymentMethod getPaymentMethodOn() {
+        try {
+            return JsonUtil.getInstance().fromJson(getFile(InstrumentationRegistry.getContext(), "mocks/payment_method_on.json"), PaymentMethod.class);
+        } catch (Exception ex) {
 
             return null;
         }
@@ -194,6 +212,24 @@ public class StaticMock {
     public static CheckoutPreference getPreferenceWithoutExclusions() {
         try {
             String json = getFile(InstrumentationRegistry.getContext(), "mocks/preference_without_exclusions.json");
+            return JsonUtil.getInstance().fromJson(json, CheckoutPreference.class);
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+    public static CheckoutPreference getPreferenceWithExclusions() {
+        try {
+            String json = getFile(InstrumentationRegistry.getContext(), "mocks/preference_with_exclusions.json");
+            return JsonUtil.getInstance().fromJson(json, CheckoutPreference.class);
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+    public static CheckoutPreference getPreferenceWithoutItem() {
+        try {
+            String json = getFile(InstrumentationRegistry.getContext(), "mocks/preference_without_item.json");
             return JsonUtil.getInstance().fromJson(json, CheckoutPreference.class);
         } catch (Exception ex) {
             return null;

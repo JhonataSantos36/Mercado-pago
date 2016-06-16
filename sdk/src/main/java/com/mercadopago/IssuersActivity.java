@@ -3,70 +3,221 @@ package com.mercadopago;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.ProgressBar;
 
 import com.mercadopago.adapters.IssuersAdapter;
+import com.mercadopago.callbacks.Callback;
+import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.core.MercadoPago;
-import com.mercadopago.decorations.DividerItemDecoration;
+import com.mercadopago.listeners.RecyclerItemClickListener;
+import com.mercadopago.model.ApiException;
 import com.mercadopago.model.Issuer;
-import com.mercadopago.model.PaymentMethod;
+import com.mercadopago.mptracker.MPTracker;
 import com.mercadopago.util.ApiUtil;
-import com.mercadopago.util.JsonUtil;
-import com.mercadopago.util.LayoutUtil;
+import com.mercadopago.util.ErrorUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
+public class IssuersActivity extends ShowCardActivity {
 
-public class    IssuersActivity extends AppCompatActivity {
+    //IssuersContainer
+    private RecyclerView mIssuersView;
+    private IssuersAdapter mIssuersAdapter;
+    private ProgressBar mProgressBar;
+    private View mCardBackground;
 
+    //Local vars
+    private List<Issuer> mIssuers;
+    private FailureRecovery mFailureRecovery;
     private Activity mActivity;
-    private String mMerchantPublicKey;
-    private PaymentMethod mPaymentMethod;
-    private RecyclerView mRecyclerView;
+    protected boolean mActiveActivity;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView();
-
-        mActivity = this;
-
-        // Get activity parameters
-        mMerchantPublicKey = this.getIntent().getStringExtra("merchantPublicKey");
-        mPaymentMethod = (PaymentMethod) this.getIntent().getSerializableExtra("paymentMethod");
-        if ((mMerchantPublicKey == null) || (mPaymentMethod == null)) {
-            Intent returnIntent = new Intent();
-            setResult(RESULT_CANCELED, returnIntent);
-            finish();
-            return;
+        getActivityParameters();
+        if(mDecorationPreference != null && mDecorationPreference.hasColors()) {
+            setTheme(R.style.Theme_MercadoPagoTheme_NoActionBar);
         }
+        setContentView();
+        mActivity = this;
+        mActiveActivity = true;
+        setLayout();
+        initializeAdapter();
+        initializeToolbar();
 
-        // Set recycler view
-        mRecyclerView = (RecyclerView) findViewById(R.id.issuers_list);
-        mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
+        mMercadoPago = new MercadoPago.Builder()
+                .setContext(this)
+                .setPublicKey(mPublicKey)
+                .build();
 
-        // Set a linear layout manager
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        if (mCurrentPaymentMethod != null) {
+            initializeCard();
+        }
+        if(mToken != null) {
+            initializeFrontFragment();
+        }
+        else {
+            hideCardLayout();
+        }
+    }
 
-        // Load payment methods
-        getIssuersAsync(mMerchantPublicKey);
+    private void hideCardLayout() {
+        mCardBackground.setVisibility(View.GONE);
+    }
+
+    @Override
+    protected void onResume() {
+        mActiveActivity = true;
+        super.onResume();
+    }
+
+    @Override
+    protected void onDestroy() {
+        mActiveActivity = false;
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onPause() {
+        mActiveActivity = false;
+        super.onPause();
+    }
+
+    @Override
+    protected void onStop() {
+        mActiveActivity = false;
+        super.onStop();
     }
 
     protected void setContentView() {
+        MPTracker.getInstance().trackScreen("CARD_ISSUERS", "2", mPublicKey, "MLA", "1.0", this);
+        setContentView(R.layout.activity_new_issuers);
+    }
 
-        setContentView(R.layout.activity_issuers);
+    protected void setLayout() {
+        mIssuersView = (RecyclerView) findViewById(R.id.mpsdkActivityIssuersView);
+        mCardContainer = (FrameLayout) findViewById(R.id.mpsdkActivityNewCardContainer);
+        mProgressBar = (ProgressBar) findViewById(R.id.mpsdkProgressBar);
+
+        mCardBackground = findViewById(R.id.mpsdkCardBackground);
+        if(mDecorationPreference != null && mDecorationPreference.hasColors())
+        {
+            mCardBackground.setBackgroundColor(mDecorationPreference.getLighterColor());
+        }
+        mProgressBar.setVisibility(View.GONE);
+    }
+
+    protected void initializeAdapter() {
+        mIssuersAdapter = new IssuersAdapter(this);
+        initializeAdapterListener(mIssuersAdapter, mIssuersView);
+    }
+
+    protected void onItemSelected(View view, int position) {
+        mSelectedIssuer = mIssuers.get(position);
+    }
+
+    protected void initializeToolbar() {
+        if(mToken != null) {
+            super.initializeToolbar("", true);
+        } else {
+            super.initializeToolbar(getString(R.string.mpsdk_card_issuers_title), false);
+        }
+    }
+
+    @Override
+    protected void initializeCard() {
+        super.initializeCard();
+
+        if (mIssuers == null) {
+            getIssuersAsync();
+        } else {
+            initializeIssuers();
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    protected void getActivityParameters() {
+        super.getActivityParameters();
+        mIssuers = (ArrayList<Issuer>)getIntent().getSerializableExtra("issuers");
+    }
+
+    protected void getIssuersAsync() {
+        mProgressBar.setVisibility(View.VISIBLE);
+        mMercadoPago.getIssuers(mCurrentPaymentMethod.getId(), mBin,
+                new Callback<List<Issuer>>() {
+                    @Override
+                    public void success(List<Issuer> issuers) {
+                        mIssuers = issuers;
+                        MPTracker.getInstance().trackEvent("CARD_ISSUERS", "GET_ISSUERS_RESPONSE", "SUCCESS", mPublicKey, "MLA", "1.0", mActivity);
+                        if (mActiveActivity) {
+                            mProgressBar.setVisibility(View.GONE);
+                            if (mIssuers.isEmpty()) {
+                                mSelectedIssuer = null;
+                                finishWithResult();
+                            } else if (mIssuers.size() == 1) {
+                                mSelectedIssuer = mIssuers.get(0);
+                                finishWithResult();
+                            } else {
+                                initializeIssuers();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void failure(ApiException apiException) {
+                        MPTracker.getInstance().trackEvent("CARD_ISSUERS", "GET_ISSUERS_RESPONSE", "FAIL", mPublicKey, "MLA", "1.0", mActivity);
+                            if (mActiveActivity) {
+                                mProgressBar.setVisibility(View.GONE);
+                                mFailureRecovery = new FailureRecovery() {
+                                    @Override
+                                    public void recover() {
+                                        getIssuersAsync();
+                                    }
+                                };
+                                ApiUtil.showApiExceptionError(mActivity, apiException);
+                            }
+                        }
+                    }
+
+                    );
+                }
+
+        @Override
+    protected void finishWithResult() {
+        Intent returnIntent = new Intent();
+        returnIntent.putExtra("issuer", mSelectedIssuer);
+        setResult(RESULT_OK, returnIntent);
+        finish();
+    }
+
+    private void initializeIssuers() {
+        mIssuersAdapter.addResults(mIssuers);
+    }
+
+    protected void initializeAdapterListener(RecyclerView.Adapter adapter, RecyclerView view) {
+        view.setAdapter(adapter);
+        view.setLayoutManager(new LinearLayoutManager(this));
+        view.addOnItemTouchListener(new RecyclerItemClickListener(this,
+                new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        onItemSelected(view, position);
+                        finishWithResult();
+                    }
+                }));
     }
 
     @Override
     public void onBackPressed() {
+        MPTracker.getInstance().trackEvent("CARD_ISSUERS", "BACK_PRESSED", "2", mPublicKey, "MLA", "1.0", this);
 
         Intent returnIntent = new Intent();
         returnIntent.putExtra("backButtonPressed", true);
@@ -74,42 +225,22 @@ public class    IssuersActivity extends AppCompatActivity {
         finish();
     }
 
-    public void refreshLayout(View view) {
-
-        getIssuersAsync(mMerchantPublicKey);
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == ErrorUtil.ERROR_REQUEST_CODE) {
+            if(resultCode == RESULT_OK) {
+                recoverFromFailure();
+            }
+            else {
+                setResult(resultCode, data);
+                finish();
+            }
+        }
     }
-
-    private void getIssuersAsync(String merchantPublicKey) {
-
-        LayoutUtil.showProgressLayout(mActivity);
-
-        MercadoPago mercadoPago = new MercadoPago.Builder()
-                .setContext(mActivity)
-                .setPublicKey(merchantPublicKey)
-                .build();
-
-        mercadoPago.getIssuers(mPaymentMethod.getId(), new Callback<List<Issuer>>() {
-            @Override
-            public void success(List<Issuer> issuers, Response response) {
-                mRecyclerView.setAdapter(new IssuersAdapter(issuers, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-
-                        // Return to parent
-                        Intent returnIntent = new Intent();
-                        Issuer selectedIssuer = (Issuer) view.getTag();
-                        returnIntent.putExtra("issuer", selectedIssuer);
-                        setResult(RESULT_OK, returnIntent);
-                        finish();
-                    }
-                }));
-                LayoutUtil.showRegularLayout(mActivity);
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-                ApiUtil.finishWithApiException(mActivity, error);
-            }
-        });
+    private void recoverFromFailure() {
+        if(mFailureRecovery != null) {
+            mFailureRecovery.recover();
+        }
     }
 }

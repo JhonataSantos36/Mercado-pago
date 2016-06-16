@@ -42,8 +42,8 @@ public class Setting implements Serializable {
             for (Setting setting : settings) {
 
                 if (!"".equals(bin) && bin.matches(setting.getBin().getPattern() + ".*") &&
-                        (setting.getBin().getExclusionPattern() == null ||
-                                !bin.matches(setting.getBin().getExclusionPattern() + ".*"))) {
+                        (setting.getBin().getExclusionPattern() == null || setting.getBin().getExclusionPattern().isEmpty()
+                                || !bin.matches(setting.getBin().getExclusionPattern() + ".*"))) {
                     selectedSetting = setting;
                 }
             }

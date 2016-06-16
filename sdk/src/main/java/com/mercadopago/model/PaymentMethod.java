@@ -10,6 +10,7 @@ public class PaymentMethod implements Serializable {
     private String name;
     private String paymentTypeId;
     private List<Setting> settings;
+    private Integer accreditationTime;
 
     public List<String> getAdditionalInfoNeeded() {
         return additionalInfoNeeded;
@@ -62,13 +63,20 @@ public class PaymentMethod implements Serializable {
     }
 
     public boolean isSecurityCodeRequired(String bin) {
-
         Setting setting = Setting.getSettingByBin(settings, bin);
         if ((setting != null) && (setting.getSecurityCode().getLength() != 0)) {
             return true;
         } else {
             return false;
         }
+    }
+
+    public boolean isIdentificationTypeRequired() {
+        return isAdditionalInfoNeeded("cardholder_identification_type");
+    }
+
+    public boolean isIdentificationNumberRequired() {
+        return isAdditionalInfoNeeded("cardholder_identification_number");
     }
 
     private boolean isAdditionalInfoNeeded(String param) {
@@ -88,4 +96,7 @@ public class PaymentMethod implements Serializable {
         return (Setting.getSettingByBin(this.getSettings(), bin) != null);
     }
 
+    public int getAccreditationTime() {
+        return accreditationTime;
+    }
 }

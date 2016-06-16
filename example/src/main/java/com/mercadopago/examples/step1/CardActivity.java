@@ -15,8 +15,10 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 
 import com.mercadopago.adapters.IdentificationTypesAdapter;
+import com.mercadopago.callbacks.Callback;
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.examples.R;
+import com.mercadopago.model.ApiException;
 import com.mercadopago.model.CardToken;
 import com.mercadopago.model.IdentificationType;
 import com.mercadopago.model.PaymentMethod;
@@ -28,10 +30,6 @@ import com.mercadopago.views.MPEditText;
 import com.mercadopago.views.MPTextView;
 
 import java.util.List;
-
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
 
 public class CardActivity extends AppCompatActivity {
 
@@ -95,7 +93,7 @@ public class CardActivity extends AppCompatActivity {
         // Set payment method image
         mPaymentMethod = (PaymentMethod) this.getIntent().getSerializableExtra("paymentMethod");
         if ((mPaymentMethod != null) && (mPaymentMethod.getId() != null)) {
-            ImageView pmImage = (ImageView) findViewById(com.mercadopago.R.id.pmImage);
+            ImageView pmImage = (ImageView) findViewById(com.mercadopago.R.id.mpsdkPmImage);
             pmImage.setImageResource(MercadoPagoUtil.getPaymentMethodIcon(this, mPaymentMethod.getId()));
         }
 
@@ -239,7 +237,7 @@ public class CardActivity extends AppCompatActivity {
 
         mMercadoPago.getIdentificationTypes(new Callback<List<IdentificationType>>() {
             @Override
-            public void success(List<IdentificationType> identificationTypes, Response response) {
+            public void success(List<IdentificationType> identificationTypes) {
 
                 mIdentificationType.setAdapter(new IdentificationTypesAdapter(mActivity, identificationTypes));
 
@@ -250,9 +248,9 @@ public class CardActivity extends AppCompatActivity {
             }
 
             @Override
-            public void failure(RetrofitError error) {
+            public void failure(ApiException error) {
 
-                if ((error.getResponse() != null) && (error.getResponse().getStatus() == 404)) {
+                if ((error.getStatus() != null) && (error.getStatus() == 404)) {
 
                     // No identification type for this country
                     mIdentificationLayout.setVisibility(View.GONE);
@@ -277,7 +275,7 @@ public class CardActivity extends AppCompatActivity {
 
         mMercadoPago.createToken(mCardToken, new Callback<Token>() {
             @Override
-            public void success(Token token, Response response) {
+            public void success(Token token) {
 
                 Intent returnIntent = new Intent();
                 returnIntent.putExtra("token", token.getId());
@@ -287,7 +285,7 @@ public class CardActivity extends AppCompatActivity {
             }
 
             @Override
-            public void failure(RetrofitError error) {
+            public void failure(ApiException error) {
 
                 mExceptionOnMethod = "createTokenAsync";
                 ApiUtil.finishWithApiException(mActivity, error);

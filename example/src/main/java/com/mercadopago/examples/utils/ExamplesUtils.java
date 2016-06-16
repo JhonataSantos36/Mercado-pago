@@ -1,38 +1,30 @@
 package com.mercadopago.examples.utils;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.res.AssetManager;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.mercadopago.callbacks.Callback;
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.core.MerchantServer;
-import com.mercadopago.examples.R;
 import com.mercadopago.examples.step2.SimpleVaultActivity;
 import com.mercadopago.examples.step3.AdvancedVaultActivity;
 import com.mercadopago.examples.step1.CardActivity;
 import com.mercadopago.examples.step4.FinalVaultActivity;
-import com.mercadopago.model.CheckoutIntent;
-import com.mercadopago.model.CheckoutPreference;
+import com.mercadopago.model.ApiException;
 import com.mercadopago.model.Discount;
 import com.mercadopago.model.Item;
 import com.mercadopago.model.MerchantPayment;
 import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentMethod;
-import com.mercadopago.util.JsonUtil;
+import com.mercadopago.model.PaymentPreference;
 import com.mercadopago.util.LayoutUtil;
 
-import java.io.InputStream;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.util.List;
-
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
 
 public class ExamplesUtils {
 
@@ -42,7 +34,7 @@ public class ExamplesUtils {
     public static final int CARD_REQUEST_CODE = 13;
 
     // * Merchant public key
-    public static final String DUMMY_MERCHANT_PUBLIC_KEY = "6c0d81bc-99c1-4de8-9976-c8d1d62cd4f2";
+    public static final String DUMMY_MERCHANT_PUBLIC_KEY = "TEST-ad365c37-8012-4014-84f5-6c895b3f8e0a";
     // DUMMY_MERCHANT_PUBLIC_KEY_AR = "444a9ef5-8a6b-429f-abdf-587639155d88";
     // DUMMY_MERCHANT_PUBLIC_KEY_BR = "APP_USR-f163b2d7-7462-4e7b-9bd5-9eae4a7f99c3";
     // DUMMY_MERCHANT_PUBLIC_KEY_MX = "6c0d81bc-99c1-4de8-9976-c8d1d62cd4f2";
@@ -80,7 +72,9 @@ public class ExamplesUtils {
         activity.startActivityForResult(cardIntent, CARD_REQUEST_CODE);
     }
 
-    public static void startGuessingCardActivity(Activity activity, String merchantPublicKey, boolean issuerRequired) {
+    public static void startGuessingCardActivity(Activity activity, String merchantPublicKey,
+                                                 boolean issuerRequired, PaymentPreference paymentPreference,
+                                                 BigDecimal amount) {
 
         new MercadoPago.StartActivityBuilder()
                 .setActivity(activity)
@@ -88,6 +82,8 @@ public class ExamplesUtils {
                 .setRequireSecurityCode(true)
                 .setRequireIssuer(issuerRequired)
                 .setShowBankDeals(true)
+                .setAmount(amount)
+                .setPaymentPreference(paymentPreference)
                 .startGuessingCardActivity();
     }
 
@@ -101,6 +97,7 @@ public class ExamplesUtils {
         putListExtra(simpleVaultIntent, "excludedPaymentTypes", excludedPaymentTypes);
         activity.startActivityForResult(simpleVaultIntent, SIMPLE_VAULT_REQUEST_CODE);
     }
+
     public static void startAdvancedVaultActivity(Activity activity, String merchantPublicKey, String merchantBaseUrl, String merchantGetCustomerUri, String merchantAccessToken, BigDecimal amount, List<String> excludedPaymentTypes) {
         startAdvancedVaultActivity(activity, ExamplesUtils.DUMMY_MERCHANT_PUBLIC_KEY,
                 ExamplesUtils.DUMMY_MERCHANT_BASE_URL, ExamplesUtils.DUMMY_MERCHANT_GET_CUSTOMER_URI,
@@ -160,19 +157,17 @@ public class ExamplesUtils {
             // Create payment
             MerchantServer.createPayment(activity, DUMMY_MERCHANT_BASE_URL, DUMMY_MERCHANT_CREATE_PAYMENT_URI, payment, new Callback<Payment>() {
                 @Override
-                public void success(Payment payment, Response response) {
+                public void success(Payment payment) {
 
                     new MercadoPago.StartActivityBuilder()
                             .setActivity(activity)
                             .setPayment(payment)
                             .setPaymentMethod(paymentMethod)
                             .startCongratsActivity();
-
                 }
 
                 @Override
-                public void failure(RetrofitError error) {
-
+                public void failure(ApiException error) {
                     LayoutUtil.showRegularLayout(activity);
                     Toast.makeText(activity, error.getMessage(), Toast.LENGTH_LONG).show();
                 }
@@ -183,48 +178,26 @@ public class ExamplesUtils {
         }
     }
 
-    public static void createPreference(final Activity activity) {
-
-        Toast.makeText(activity, activity.getString(R.string.opening_mp), Toast.LENGTH_LONG).show();
-
-        // Set item
-        Item item = new Item(DUMMY_ITEM_ID, DUMMY_ITEM_QUANTITY);
-
-        // Set checkout intent
-        CheckoutIntent checkoutIntent = new CheckoutIntent(ExamplesUtils.DUMMY_MERCHANT_ACCESS_TOKEN, item);
-
-        //TODO consumir servicio de preferencia
-        CheckoutPreference mockPreference = JsonUtil.getInstance().fromJson(getFile(activity, "mocks/preference_with_exclusions.json"), CheckoutPreference.class);
-        // Call final vault activity
-        new MercadoPago.StartActivityBuilder()
-                .setActivity(activity)
-                .setPublicKey(ExamplesUtils.DUMMY_MERCHANT_PUBLIC_KEY)
-                .setCheckoutPreference(mockPreference)
-                .setShowBankDeals(true)
-                .startCheckoutActivity();
-
-        LayoutUtil.showRegularLayout(activity);
-
-    }
-    //TODO consumir servicio de preferencia
-    public static String getFile(Context context, String fileName) {
-
-        try {
-            AssetManager assetManager = context.getResources().getAssets();
-
-            InputStream is = assetManager.open(fileName);
-            int size = is.available();
-            byte[] buffer = new byte[size];
-            is.read(buffer);
-            is.close();
-
-            return new String(buffer);
-
-        } catch (Exception e) {
-
-            return "";
-        }
-    }
+//
+//    //TODO consumir servicio de preferencia
+//    public static String getFile(Context context, String fileName) {
+//
+//        try {
+//            AssetManager assetManager = context.getResources().getAssets();
+//
+//            InputStream is = assetManager.open(fileName);
+//            int size = is.available();
+//            byte[] buffer = new byte[size];
+//            is.read(buffer);
+//            is.close();
+//
+//            return new String(buffer);
+//
+//        } catch (Exception e) {
+//
+//            return "";
+//        }
+//    }
 
     private static void putListExtra(Intent intent, String listName, List<String> list) {
 

@@ -2,7 +2,6 @@ package com.mercadopago.model;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.Stack;
 
 /**
  * Created by mreverter on 15/1/16.
@@ -17,22 +16,25 @@ public class PaymentMethodSearch implements Serializable{
         return groups;
     }
 
+    public List<PaymentMethod> getPaymentMethods() {
+        return paymentMethods;
+    }
     public boolean hasSearchItems() {
-        return this.groups != null;
+        return this.groups != null && !this.groups.isEmpty();
     }
 
     public PaymentMethod getPaymentMethodBySearchItem(PaymentMethodSearchItem item) {
-        return getPaymentMethodById(item.getId());
-    }
-
-    public PaymentMethod getPaymentMethodById(String paymentMethodId) {
         PaymentMethod requiredPaymentMethod = null;
-        if(paymentMethods != null && paymentMethodId != null) {
+        if(paymentMethods != null && item != null && item.getId() != null) {
             for (PaymentMethod currentPaymentMethod : paymentMethods) {
-                if (paymentMethodId.contains(currentPaymentMethod.getId())) {
-                    //TODO cuando de payment methods cambien los ids y agreguen bank_transfer, ticket, etc borrar el set.
-                    currentPaymentMethod.setId(paymentMethodId);
+                if (item.getId().contains(currentPaymentMethod.getId())) {
                     requiredPaymentMethod = currentPaymentMethod;
+
+                    String itemPaymentType = item.getId().replace(currentPaymentMethod.getId() + "_", "");
+                    if(PaymentType.getAllPaymentTypes().contains(itemPaymentType)) {
+                        //MP API v1 not contemplating different payment types for a payment method. Overriding to give consistent instructions.
+                        requiredPaymentMethod.setPaymentTypeId(itemPaymentType);
+                    }
                     break;
                 }
             }
@@ -40,4 +42,39 @@ public class PaymentMethodSearch implements Serializable{
         return requiredPaymentMethod;
     }
 
+    public PaymentMethodSearchItem getSearchItemByPaymentMethod(PaymentMethod selectedPaymentMethod) {
+        PaymentMethodSearchItem requiredItem = null;
+        if(selectedPaymentMethod != null) {
+
+            requiredItem = searchItemMatchingPaymentMethod(selectedPaymentMethod);
+
+        }
+        return requiredItem;
+    }
+
+    private PaymentMethodSearchItem searchItemMatchingPaymentMethod(PaymentMethod paymentMethod) {
+        String potentialItemId = paymentMethod.getId() + "_" + paymentMethod.getPaymentTypeId();
+        String paymentMethodId = paymentMethod.getId();
+        return searchItemInList(groups, potentialItemId, paymentMethodId);
+    }
+
+    //PaymentMethodSearchItem id could be the payment method id or its concatenation with the paymentTypeId
+    private PaymentMethodSearchItem searchItemInList(List<PaymentMethodSearchItem> list, String potentialItemId, String paymentMethodId) {
+        PaymentMethodSearchItem requiredItem = null;
+        for(PaymentMethodSearchItem currentItem : list) {
+
+            if(currentItem.getId().equals(paymentMethodId)
+                    || currentItem.getId().equals(potentialItemId)) {
+                requiredItem = currentItem;
+                break;
+            }
+            else if(currentItem.hasChildren()) {
+                requiredItem = searchItemInList(currentItem.getChildren(), potentialItemId, paymentMethodId);
+                if(requiredItem != null) {
+                    break;
+                }
+            }
+        }
+        return requiredItem;
+    }
 }

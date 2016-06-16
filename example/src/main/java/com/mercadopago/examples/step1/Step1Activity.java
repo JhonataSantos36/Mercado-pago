@@ -3,41 +3,43 @@ package com.mercadopago.examples.step1;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.Toast;
 
 import com.mercadopago.ExampleActivity;
+import com.mercadopago.callbacks.Callback;
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.examples.R;
 import com.mercadopago.examples.utils.ExamplesUtils;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.CardToken;
+import com.mercadopago.model.DecorationPreference;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.PaymentMethod;
+import com.mercadopago.model.PaymentPreference;
 import com.mercadopago.model.Token;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
-
 public class Step1Activity extends ExampleActivity {
 
-    protected List<String> mExcludedPaymentTypes = new ArrayList<String>(){{
-        add("atm");
+    protected List<String> mExcludedPaymentTypeIds = new ArrayList<String>(){{
         add("ticket");
         add("digital_currency");
     }};
 
-    protected List<String> mExcludedPaymentIds = new ArrayList<String>(){{
+    protected List<String> mExcludedPaymentMethodIds = new ArrayList<String>(){{
         add("visa");
     }};
     protected Activity mActivity;
+    protected PaymentPreference mPaymentPreference;
+    protected BigDecimal mAmount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +47,11 @@ public class Step1Activity extends ExampleActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_step1);
         mActivity = this;
+        mPaymentPreference = new PaymentPreference();
+        mPaymentPreference.setExcludedPaymentTypeIds(mExcludedPaymentTypeIds);
+        mPaymentPreference.setExcludedPaymentMethodIds(mExcludedPaymentMethodIds);
+
+        mAmount = ExamplesUtils.DUMMY_ITEM_UNIT_PRICE;
     }
 
     @Override
@@ -81,10 +88,13 @@ public class Step1Activity extends ExampleActivity {
 
                     } else if (data.getBooleanExtra("backButtonPressed", false)) {
 
+                        PaymentPreference paymentPreference = new PaymentPreference();
+                        paymentPreference.setExcludedPaymentTypeIds(mExcludedPaymentTypeIds);
+
                         new MercadoPago.StartActivityBuilder()
                                 .setActivity(this)
                                 .setPublicKey(ExamplesUtils.DUMMY_MERCHANT_PUBLIC_KEY)
-                                .setExcludedPaymentTypes(mExcludedPaymentTypes)
+                                .setPaymentPreference(mPaymentPreference)
                                 .startPaymentMethodsActivity();
                     }
                 }
@@ -120,7 +130,7 @@ public class Step1Activity extends ExampleActivity {
 
         mercadoPago.createToken(cardToken, new Callback<Token>() {
             @Override
-            public void success(Token token, Response response) {
+            public void success(Token token) {
                 LayoutUtil.showRegularLayout(mActivity);
                 Long issuerId = null;
                 if(issuer != null)
@@ -131,7 +141,7 @@ public class Step1Activity extends ExampleActivity {
             }
 
             @Override
-            public void failure(RetrofitError error) {
+            public void failure(ApiException error) {
                 ApiUtil.finishWithApiException(mActivity, error);
             }
         });
@@ -144,7 +154,7 @@ public class Step1Activity extends ExampleActivity {
         new MercadoPago.StartActivityBuilder()
                 .setActivity(this)
                 .setPublicKey(ExamplesUtils.DUMMY_MERCHANT_PUBLIC_KEY)
-                .setExcludedPaymentTypes(mExcludedPaymentTypes)
+                .setPaymentPreference(mPaymentPreference)
                 .startPaymentMethodsActivity();
     }
 
@@ -154,14 +164,14 @@ public class Step1Activity extends ExampleActivity {
         new MercadoPago.StartActivityBuilder()
                 .setActivity(this)
                 .setPublicKey(ExamplesUtils.DUMMY_MERCHANT_PUBLIC_KEY)
-                .setExcludedPaymentTypes(mExcludedPaymentTypes)
-                .setExcludedPaymentTypes(mExcludedPaymentTypes)
-                .setExcludedPaymentMethodIds(mExcludedPaymentIds)
+                .setPaymentPreference(mPaymentPreference)
+                .setShowBankDeals(false)
                 .startPaymentMethodsActivity();
     }
 
     public void submitGuessingForm(View view) {
-        ExamplesUtils.startGuessingCardActivity(this, ExamplesUtils.DUMMY_MERCHANT_PUBLIC_KEY, true);
+        ExamplesUtils.startGuessingCardActivity(this, ExamplesUtils.DUMMY_MERCHANT_PUBLIC_KEY, true,
+                mPaymentPreference, mAmount);
     }
 
 }

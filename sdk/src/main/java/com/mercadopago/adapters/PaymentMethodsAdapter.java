@@ -5,11 +5,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.mercadopago.R;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.util.MercadoPagoUtil;
-import com.mercadopago.R;
-import com.mercadopago.views.MPTextView;
 
 import java.util.List;
 
@@ -21,12 +22,14 @@ public class PaymentMethodsAdapter extends  RecyclerView.Adapter<PaymentMethodsA
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        public MPTextView mTextView;
+        public ImageView mPaymentMethodImage;
+        public TextView mPaymentMethodName;
 
         public ViewHolder(View v, View.OnClickListener listener) {
 
             super(v);
-            mTextView = (MPTextView) v.findViewById(R.id.label);
+            mPaymentMethodImage = (ImageView) v.findViewById(R.id.mpsdkPmImage);
+            mPaymentMethodName = (TextView) v.findViewById(R.id.mpsdkPmName);
             if (listener != null) {
                 v.setOnClickListener(listener);
             }
@@ -53,15 +56,10 @@ public class PaymentMethodsAdapter extends  RecyclerView.Adapter<PaymentMethodsA
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
 
-        // Set current payment method
         PaymentMethod paymentMethod = mData.get(position);
 
-        // Set label
-        holder.mTextView.setText(paymentMethod.getName());
-
-        // Set picture
-        holder.mTextView.setCompoundDrawablesWithIntrinsicBounds(MercadoPagoUtil.getPaymentMethodIcon(mActivity, paymentMethod.getId()), 0, 0, 0);
-
+        holder.mPaymentMethodImage.setImageResource(MercadoPagoUtil.getPaymentMethodIcon(mActivity, paymentMethod.getId()));
+        holder.mPaymentMethodName.setText(paymentMethod.getName());
         // Set view tag item
         holder.itemView.setTag(paymentMethod);
     }

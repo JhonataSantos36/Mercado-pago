@@ -11,6 +11,7 @@ import com.mercadopago.examples.R;
 import com.mercadopago.examples.utils.ExamplesUtils;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.PaymentMethod;
+import com.mercadopago.model.PaymentPreference;
 import com.mercadopago.util.LayoutUtil;
 
 import java.util.ArrayList;
@@ -19,17 +20,27 @@ import java.util.List;
 public class Step5Activity extends ExampleActivity {
 
 
-    protected List<String> mExcludedPaymentTypes = new ArrayList<String>(){{
+    protected List<String> mExcludedPaymentTypesIds = new ArrayList<String>(){{
 
     }};
     protected List<String> mExcludedPaymentMethodIds = new ArrayList<String>(){{
-        add("visa");
+//        add("visa");
     }};
+    protected PaymentPreference mPaymentPreference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_step5);
+        createPaymentPreference();
+    }
+
+    private void createPaymentPreference() {
+        mPaymentPreference = new PaymentPreference();
+        mPaymentPreference.setDefaultInstallments(ExamplesUtils.DUMMY_DEFAULT_INSTALLMENTS);
+        mPaymentPreference.setExcludedPaymentMethodIds(mExcludedPaymentMethodIds);
+        mPaymentPreference.setExcludedPaymentTypeIds(mExcludedPaymentTypesIds);
+        mPaymentPreference.setMaxAcceptedInstallments(ExamplesUtils.DUMMY_MAX_INSTALLMENTS);
     }
 
     @Override
@@ -65,6 +76,10 @@ public class Step5Activity extends ExampleActivity {
     }
 
     public void submitSimpleForm(View view) {
+        PaymentPreference paymentPreference = new PaymentPreference();
+        paymentPreference.setExcludedPaymentTypeIds(mExcludedPaymentTypesIds);
+        paymentPreference.setExcludedPaymentMethodIds(mExcludedPaymentMethodIds);
+        paymentPreference.setMaxAcceptedInstallments(ExamplesUtils.DUMMY_MAX_INSTALLMENTS);
         // Call final vault activity
         new MercadoPago.StartActivityBuilder()
                 .setActivity(this)
@@ -73,14 +88,17 @@ public class Step5Activity extends ExampleActivity {
                 .setMerchantGetCustomerUri(ExamplesUtils.DUMMY_MERCHANT_GET_CUSTOMER_URI)
                 .setMerchantAccessToken(ExamplesUtils.DUMMY_MERCHANT_ACCESS_TOKEN)
                 .setAmount(ExamplesUtils.DUMMY_ITEM_UNIT_PRICE)
-                .setExcludedPaymentTypes(mExcludedPaymentTypes)
-                .setExcludedPaymentMethodIds(mExcludedPaymentMethodIds)
-                .setMaxInstallments(ExamplesUtils.DUMMY_MAX_INSTALLMENTS)
+                .setPaymentPreference(mPaymentPreference)
                 .setShowBankDeals(true)
                 .startPaymentVaultActivity();
     }
 
     public void submitGuessingForm(View view){
+        PaymentPreference paymentPreference = new PaymentPreference();
+        paymentPreference.setExcludedPaymentTypeIds(mExcludedPaymentTypesIds);
+        paymentPreference.setExcludedPaymentMethodIds(mExcludedPaymentMethodIds);
+        paymentPreference.setMaxAcceptedInstallments(ExamplesUtils.DUMMY_MAX_INSTALLMENTS);
+        paymentPreference.setDefaultInstallments(ExamplesUtils.DUMMY_DEFAULT_INSTALLMENTS);
         // Call final vault activity
         new MercadoPago.StartActivityBuilder()
                 .setActivity(this)
@@ -89,12 +107,8 @@ public class Step5Activity extends ExampleActivity {
                 .setMerchantGetCustomerUri(ExamplesUtils.DUMMY_MERCHANT_GET_CUSTOMER_URI)
                 .setMerchantAccessToken(ExamplesUtils.DUMMY_MERCHANT_ACCESS_TOKEN)
                 .setAmount(ExamplesUtils.DUMMY_ITEM_UNIT_PRICE)
-                .setExcludedPaymentTypes(mExcludedPaymentTypes)
-                .setExcludedPaymentMethodIds(mExcludedPaymentMethodIds)
-                .setMaxInstallments(ExamplesUtils.DUMMY_MAX_INSTALLMENTS)
-                .setDefaultInstallments(ExamplesUtils.DUMMY_DEFAULT_INSTALLMENTS)
+                .setPaymentPreference(mPaymentPreference)
                 .setShowBankDeals(true)
-                .setGuessingCardFormEnabled(true)
                 .startPaymentVaultActivity();
     }
 }

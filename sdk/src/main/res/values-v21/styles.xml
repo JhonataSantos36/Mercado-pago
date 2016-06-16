@@ -1,9 +1,10 @@
-<resources>>
+<resources>
 
     <style name="Theme.MercadoPagoTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:statusBarColor">@color/colorPrimaryDark</item>
+        <item name="android:colorPrimary">@color/mpsdk_colorPrimary</item>
     </style>
 </resources>
