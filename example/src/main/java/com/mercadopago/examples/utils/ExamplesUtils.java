@@ -15,6 +15,7 @@ import com.mercadopago.examples.step1.CardActivity;
 import com.mercadopago.examples.step4.FinalVaultActivity;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.Discount;
+import com.mercadopago.model.Issuer;
 import com.mercadopago.model.Item;
 import com.mercadopago.model.MerchantPayment;
 import com.mercadopago.model.Payment;
@@ -63,6 +64,18 @@ public class ExamplesUtils {
 
     public static final Integer DUMMY_MAX_INSTALLMENTS = 6;
     public static final Integer DUMMY_DEFAULT_INSTALLMENTS = 3;
+
+    public static PaymentMethod getDummyPaymentMethod() {
+        PaymentMethod paymentMethod = new PaymentMethod();
+        paymentMethod.setId("master");
+        return paymentMethod;
+    }
+
+    public static Issuer getDummyIssuer() {
+        Issuer issuer = new Issuer();
+        issuer.setId((long)338);
+        return issuer;
+    }
 
     public static void startCardActivity(Activity activity, String merchantPublicKey, PaymentMethod paymentMethod) {
 

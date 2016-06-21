@@ -52,6 +52,8 @@
                         android:layout_height="wrap_content"
                         android:layout_alignLeft="@+id/mpsdkDescription"
                         android:layout_alignStart="@+id/mpsdkDescription"
+                        android:layout_marginLeft="1dp"
+                        android:layout_marginStart="1dp"
                         android:layout_below="@+id/mpsdkDescription"
                         android:layout_alignParentBottom="true"
                         tools:text="Hola, soy un comentario"
