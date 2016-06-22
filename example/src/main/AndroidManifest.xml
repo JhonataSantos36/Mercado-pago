@@ -48,24 +48,13 @@
         <activity
             android:name=".services.step4.FinalVaultActivity"
             android:label="@string/title_activity_final_vault" />
-        <activity
-            android:name=".services.step5.Step5Activity"
-            android:label="@string/title_activity_step5" />
-        <activity
-            android:name=".step6.Step6Activity"
-            android:label="@string/title_activity_step6" />
-        <activity
-            android:name=".step7.Step7Activity"
-            android:label="Nuevo TC" />
-        <activity
-            android:name=".step7.PaymentMethodTypeActivity"
-            android:label="Con paymentMethodList" />
-        <activity android:name=".Step8.F2Activity" />
+
         <activity android:name=".checkout.CheckoutExampleActivity"
             android:label="@string/title_activity_checkout_example"/>
         <activity android:name=".components.ComponentsExampleActivity"
-            android:label="@string/title_activity_components_example"/>
-        <activity android:name=".services.ServicesExampleActivity"></activity>
+            android:label="@string/title_activity_customized_example"/>
+        <activity android:name=".services.ServicesExampleActivity"
+            android:label="@string/title_activity_customized_example"/>
     </application>
 
 </manifest>
