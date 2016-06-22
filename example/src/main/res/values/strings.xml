@@ -35,12 +35,24 @@
     <string name="pick_color">¡Elije un color!</string>
     <string name="dark_font">Fuente oscura</string>
     <string name="title_activity_checkout_example">Nuestro checkout</string>
-    <string name="components_title">Ensambla tu propio checkout</string>
+    <string name="components_title">Arma tu propio checkout</string>
     <string name="components_description">Utiliza los componentes que te provee nuestra librería para armar un checkout a tu gusto.</string>
     <string name="components_comment">Cada uno de estos componentes puede usarse independientemente de los demás, y puedes utilizarlos junto con tus propias interfaces.</string>
     <string name="title_activity_components_example">Checkout personalizado</string>
     <string name="payment_creation_failed">Falló la creación del pago</string>
     <string name="services_example_title">¡Mira todo lo que puedes hacer!</string>
     <string name="services_example_description">Utiliza nuestros servicios para crear la experiencia que desees.</string>
+    <string name="reset">Restablecer</string>
+    <string name="complete_payment_method_selection">Selección de medio de pago completa</string>
+    <string name="card_with_installments">Cobra con tarjeta en cuotas</string>
+    <string name="card_without_installments">Cobra con tarjeta sin cuotas</string>
+    <string name="simple_payment_method_selection">Selección de medio de pago simple</string>
+    <string name="issuer_selection">Selección de banco</string>
+    <string name="installments_selection">Selección de cuotas</string>
+    <string name="lets_create_a_payment">¡Realicemos un pago! Recolecta los datos necesarios con nuestros componentes y envíalos a tu servidor para realizarlo. Veamos un ejemplo.</string>
+    <string name="pay">¡Pagar!</string>
+    <string name="cutomization_description">¡Puedes customizar los componentes según tus necesidades!</string>
+    <string name="exclude_visa">Excluir Visa</string>
+    <string name="exclude_cash">Excluir efectivo</string>
 
 </resources>

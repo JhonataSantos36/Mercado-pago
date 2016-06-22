@@ -264,13 +264,14 @@ public class ComponentsExampleActivity extends AppCompatActivity {
     }
 
     public void changeColor(View view) {
-        new ColorPickerDialog(this, new ColorPickerDialog.OnColorChangedListener() {
+        new ColorPickerDialog(this, mDefaultColor, new ColorPickerDialog.OnColorSelectedListener() {
             @Override
-            public void colorChanged(int color) {
+            public void onColorSelected(int color) {
+                mDarkFontEnabled.setEnabled(true);
                 mColorSample.setBackgroundColor(color);
                 mSelectedColor = color;
             }
-        }, mDefaultColor).show();
+        }).show();
     }
 
     private DecorationPreference getCurrentDecorationPreference() {
@@ -371,5 +372,14 @@ public class ComponentsExampleActivity extends AppCompatActivity {
     private void showProgressLayout() {
         mProgressBar.setVisibility(View.VISIBLE);
         mRegularLayout.setVisibility(View.GONE);
+    }
+
+    public void resetSelection(View view) {
+        mSelectedColor = null;
+        mColorSample.setBackgroundColor(mDefaultColor);
+        mDarkFontEnabled.setChecked(false);
+        mDarkFontEnabled.setEnabled(false);
+        mVisaExcluded.setChecked(false);
+        mCashExcluded.setChecked(false);
     }
 }

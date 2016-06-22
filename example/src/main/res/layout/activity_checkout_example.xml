@@ -19,7 +19,7 @@
         android:visibility="visible">
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:padding="10dp">
                 <ImageView
@@ -63,31 +63,53 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:layout_marginTop="25dp"
-                    android:onClick="changeColor"
-                    android:padding="10dp"
-                    android:layout_gravity="center_horizontal">
-                    <ImageView
-                        android:layout_gravity="center"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:background="@color/colorPrimary"
-                        android:id="@+id/colorSample"/>
-                    <com.mercadopago.views.MPTextView
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginStart="5dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="25dp">
+
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/pick_color"
-                        style="@style/form_label"/>
+                        android:orientation="horizontal"
+                        android:onClick="changeColor"
+                        android:layout_gravity="center">
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:background="@color/colorPrimary"
+                            android:id="@+id/colorSample"/>
+
+                        <com.mercadopago.views.MPTextView
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginStart="5dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/pick_color"
+                            style="@style/form_label"/>
+                    </LinearLayout>
+
+                    <CheckBox
+                        android:enabled="false"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginLeft="10dp"
+                        android:id="@+id/darkFontEnabled"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="@string/dark_font"
+                        android:textSize="14dp"/>
                 </LinearLayout>
-                <CheckBox
-                    android:id="@+id/darkFontEnabled"
+                <com.mercadopago.views.MPTextView
+                    android:layout_marginTop="15dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:padding="10dp"
                     android:layout_gravity="center"
-                    android:text="@string/dark_font"
-                    android:textSize="14dp"/>
+                    android:textColor="@color/mpsdk_color_link"
+                    android:textSize="15dp"
+                    android:clickable="true"
+                    android:onClick="resetSelection"
+                    android:text="@string/reset"/>
             </LinearLayout>
     </ScrollView>
 </LinearLayout>

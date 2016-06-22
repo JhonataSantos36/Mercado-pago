@@ -59,7 +59,7 @@ public class Step1Activity extends ExampleActivity {
                 PaymentMethod paymentMethod = (PaymentMethod) data.getSerializableExtra("paymentMethod");
 
                 // Call new cards activity
-                ExamplesUtils.startCardActivity(this, ExamplesUtils.DUMMY_MERCHANT_PUBLIC_KEY, paymentMethod);
+                ExamplesUtils.startCardActivity(this, ExamplesUtils.DUMMY_MERCHANT_PUBLIC_KEY_EXAMPLES, paymentMethod);
             } else {
 
                 if ((data != null) && (data.getSerializableExtra("apiException") != null)) {
@@ -86,7 +86,7 @@ public class Step1Activity extends ExampleActivity {
                     } else if (data.getBooleanExtra("backButtonPressed", false)) {
                         new MercadoPago.StartActivityBuilder()
                                 .setActivity(this)
-                                .setPublicKey(ExamplesUtils.DUMMY_MERCHANT_PUBLIC_KEY)
+                                .setPublicKey(ExamplesUtils.DUMMY_MERCHANT_PUBLIC_KEY_EXAMPLES)
                                 .setPaymentPreference(mPaymentPreference)
                                 .startPaymentMethodsActivity();
                     }
@@ -97,57 +97,15 @@ public class Step1Activity extends ExampleActivity {
         }
     }
 
-    private void createTokenAsyncAndPay(final PaymentMethod paymentMethod, final Issuer issuer, CardToken cardToken) {
-        LayoutUtil.showProgressLayout(this);
-        MercadoPago mercadoPago = new MercadoPago.Builder()
-                .setContext(this)
-                .setPublicKey(ExamplesUtils.DUMMY_MERCHANT_PUBLIC_KEY)
-                .build();
-
-        mercadoPago.createToken(cardToken, new Callback<Token>() {
-            @Override
-            public void success(Token token) {
-                LayoutUtil.showRegularLayout(mActivity);
-                Long issuerId = null;
-                if(issuer != null)
-                    issuerId = issuer.getId();
-
-                ExamplesUtils.createPayment(mActivity, token.getId(),
-                        1, issuerId, paymentMethod, null);
-            }
-
-            @Override
-            public void failure(ApiException error) {
-                ApiUtil.finishWithApiException(mActivity, error);
-            }
-        });
-    }
-
-
-    public void submitForm(View view) {
-
-        // Call payment methods activity
-        new MercadoPago.StartActivityBuilder()
-                .setActivity(this)
-                .setPublicKey(ExamplesUtils.DUMMY_MERCHANT_PUBLIC_KEY)
-                .setPaymentPreference(mPaymentPreference)
-                .startPaymentMethodsActivity();
-    }
-
     public void submitSimpleForm(View view) {
 
         // Call payment methods activity
         new MercadoPago.StartActivityBuilder()
                 .setActivity(this)
-                .setPublicKey(ExamplesUtils.DUMMY_MERCHANT_PUBLIC_KEY)
+                .setPublicKey(ExamplesUtils.DUMMY_MERCHANT_PUBLIC_KEY_EXAMPLES)
                 .setPaymentPreference(mPaymentPreference)
                 .setShowBankDeals(false)
                 .startPaymentMethodsActivity();
-    }
-
-    public void submitGuessingForm(View view) {
-        ExamplesUtils.startGuessingCardActivity(this, ExamplesUtils.DUMMY_MERCHANT_PUBLIC_KEY, true,
-                mPaymentPreference, mAmount);
     }
 
 }

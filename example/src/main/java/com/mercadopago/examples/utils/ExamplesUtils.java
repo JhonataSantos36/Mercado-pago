@@ -20,8 +20,6 @@ import com.mercadopago.model.Item;
 import com.mercadopago.model.MerchantPayment;
 import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentMethod;
-import com.mercadopago.model.PaymentPreference;
-import com.mercadopago.model.Token;
 import com.mercadopago.util.LayoutUtil;
 import com.mercadopago.util.MercadoPagoUtil;
 
@@ -37,7 +35,8 @@ public class ExamplesUtils {
     public static final int CARD_REQUEST_CODE = 13;
 
     // * Merchant public key
-    public static final String DUMMY_MERCHANT_PUBLIC_KEY = "444a9ef5-8a6b-429f-abdf-587639155d88";
+    public static final String DUMMY_MERCHANT_PUBLIC_KEY = "TEST-ad365c37-8012-4014-84f5-6c895b3f8e0a";
+    public static final String DUMMY_MERCHANT_PUBLIC_KEY_EXAMPLES = "444a9ef5-8a6b-429f-abdf-587639155d88";
     // DUMMY_MERCHANT_PUBLIC_KEY_AR = "444a9ef5-8a6b-429f-abdf-587639155d88";
     // DUMMY_MERCHANT_PUBLIC_KEY_BR = "APP_USR-f163b2d7-7462-4e7b-9bd5-9eae4a7f99c3";
     // DUMMY_MERCHANT_PUBLIC_KEY_MX = "6c0d81bc-99c1-4de8-9976-c8d1d62cd4f2";
@@ -64,9 +63,6 @@ public class ExamplesUtils {
     public static final Integer DUMMY_ITEM_QUANTITY = 1;
     public static final BigDecimal DUMMY_ITEM_UNIT_PRICE = new BigDecimal("100");
 
-    public static final Integer DUMMY_MAX_INSTALLMENTS = 6;
-    public static final Integer DUMMY_DEFAULT_INSTALLMENTS = 3;
-
     public static PaymentMethod getDummyPaymentMethod() {
         PaymentMethod paymentMethod = new PaymentMethod();
         paymentMethod.setId("visa");
@@ -81,35 +77,12 @@ public class ExamplesUtils {
         return issuer;
     }
 
-    public static Token getDummyToken() {
-        Token token = new Token();
-        token.setId("0958e8895507c693d8b8c3c2f196eaed");
-        token.setLastFourDigits("1234");
-        token.setFirstSixDigits("545454");
-        return token;
-    }
-
     public static void startCardActivity(Activity activity, String merchantPublicKey, PaymentMethod paymentMethod) {
 
         Intent cardIntent = new Intent(activity, CardActivity.class);
         cardIntent.putExtra("merchantPublicKey", merchantPublicKey);
         cardIntent.putExtra("paymentMethod", paymentMethod);
         activity.startActivityForResult(cardIntent, CARD_REQUEST_CODE);
-    }
-
-    public static void startGuessingCardActivity(Activity activity, String merchantPublicKey,
-                                                 boolean issuerRequired, PaymentPreference paymentPreference,
-                                                 BigDecimal amount) {
-
-        new MercadoPago.StartActivityBuilder()
-                .setActivity(activity)
-                .setPublicKey(merchantPublicKey)
-                .setRequireSecurityCode(true)
-                .setRequireIssuer(issuerRequired)
-                .setShowBankDeals(true)
-                .setAmount(amount)
-                .setPaymentPreference(paymentPreference)
-                .startGuessingCardActivity();
     }
 
     public static void startSimpleVaultActivity(Activity activity, String merchantPublicKey, String merchantBaseUrl, String merchantGetCustomerUri, String merchantAccessToken, List<String> excludedPaymentTypes) {
@@ -124,18 +97,6 @@ public class ExamplesUtils {
     }
 
     public static void startAdvancedVaultActivity(Activity activity, String merchantPublicKey, String merchantBaseUrl, String merchantGetCustomerUri, String merchantAccessToken, BigDecimal amount, List<String> excludedPaymentTypes) {
-        startAdvancedVaultActivity(activity, ExamplesUtils.DUMMY_MERCHANT_PUBLIC_KEY,
-                ExamplesUtils.DUMMY_MERCHANT_BASE_URL, ExamplesUtils.DUMMY_MERCHANT_GET_CUSTOMER_URI,
-                ExamplesUtils.DUMMY_MERCHANT_ACCESS_TOKEN, new BigDecimal("20"), excludedPaymentTypes, false);
-    }
-
-    public static void startAdvancedVaultActivityWithGuessing(Activity activity, String dummyMerchantPublicKey, String dummyMerchantBaseUrl, String dummyMerchantGetCustomerUri, String dummyMerchantAccessToken, BigDecimal bigDecimal, List<String> excludedPaymentTypes) {
-        startAdvancedVaultActivity(activity, ExamplesUtils.DUMMY_MERCHANT_PUBLIC_KEY,
-                ExamplesUtils.DUMMY_MERCHANT_BASE_URL, ExamplesUtils.DUMMY_MERCHANT_GET_CUSTOMER_URI,
-                ExamplesUtils.DUMMY_MERCHANT_ACCESS_TOKEN, new BigDecimal("20"), excludedPaymentTypes, true);
-    }
-
-    public static void startAdvancedVaultActivity(Activity activity, String merchantPublicKey, String merchantBaseUrl, String merchantGetCustomerUri, String merchantAccessToken, BigDecimal amount, List<String> excludedPaymentTypes, Boolean guessingEnabled) {
 
         Intent advVaultIntent = new Intent(activity, AdvancedVaultActivity.class);
         advVaultIntent.putExtra("merchantPublicKey", merchantPublicKey);
@@ -212,27 +173,6 @@ public class ExamplesUtils {
             Toast.makeText(activity, "Invalid payment method", Toast.LENGTH_LONG).show();
         }
     }
-
-//
-//    //TODO consumir servicio de preferencia
-//    public static String getFile(Context context, String fileName) {
-//
-//        try {
-//            AssetManager assetManager = context.getResources().getAssets();
-//
-//            InputStream is = assetManager.open(fileName);
-//            int size = is.available();
-//            byte[] buffer = new byte[size];
-//            is.read(buffer);
-//            is.close();
-//
-//            return new String(buffer);
-//
-//        } catch (Exception e) {
-//
-//            return "";
-//        }
-//    }
 
     private static void putListExtra(Intent intent, String listName, List<String> list) {
 

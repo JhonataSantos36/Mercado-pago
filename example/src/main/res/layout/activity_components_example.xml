@@ -67,6 +67,96 @@
                 android:gravity="center_horizontal"
                 android:textSize="12dp"/>
 
+            <com.mercadopago.views.MPButton
+                android:padding="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:text="@string/complete_payment_method_selection"
+                android:onClick="onCompletePaymentMethodSelectionClicked"
+                style="@style/mpsdk_button_normal"/>
+
+            <com.mercadopago.views.MPButton
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/mpsdk_button_height"
+                android:layout_marginTop="15dp"
+                android:text="@string/card_with_installments"
+                android:onClick="onCardWithInstallmentsClicked"
+                style="@style/mpsdk_button_normal"/>
+
+            <com.mercadopago.views.MPButton
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/mpsdk_button_height"
+                android:layout_marginTop="15dp"
+                android:text="@string/card_without_installments"
+                android:onClick="onCardWithoutInstallmentsClicked"
+                style="@style/mpsdk_button_normal"/>
+
+            <com.mercadopago.views.MPButton
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/mpsdk_button_height"
+                android:layout_marginTop="15dp"
+                android:text="@string/simple_payment_method_selection"
+                android:onClick="onPaymentMethodsSelectionClicked"
+                style="@style/mpsdk_button_normal"/>
+
+            <com.mercadopago.views.MPButton
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/mpsdk_button_height"
+                android:layout_marginTop="15dp"
+                android:text="@string/issuer_selection"
+                android:onClick="onIssuersSelectionClicked"
+                style="@style/mpsdk_button_normal"/>
+
+            <com.mercadopago.views.MPButton
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/mpsdk_button_height"
+                android:layout_marginTop="15dp"
+                android:text="@string/installments_selection"
+                android:onClick="onInstallmentsSelectionClicked"
+                style="@style/mpsdk_button_normal"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/mpsdk_warm_grey"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="15dp"/>
+
+            <com.mercadopago.views.MPTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/lets_create_a_payment"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:singleLine="false"
+                android:gravity="center_horizontal"
+                style="@style/form_label"/>
+
+            <com.mercadopago.views.MPButton
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/mpsdk_button_height"
+                android:layout_marginTop="25dp"
+                android:text="@string/pay"
+                android:onClick="onPayButtonClicked"
+                style="@style/mpsdk_button_normal"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/mpsdk_warm_grey"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="15dp"/>
+
+            <com.mercadopago.views.MPTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/cutomization_description"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:singleLine="false"
+                android:gravity="center_horizontal"
+                style="@style/form_label"/>
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -97,6 +187,7 @@
                 </LinearLayout>
 
                 <CheckBox
+                    android:enabled="false"
                     android:layout_marginStart="10dp"
                     android:layout_marginLeft="10dp"
                     android:id="@+id/darkFontEnabled"
@@ -106,6 +197,7 @@
                     android:text="@string/dark_font"
                     android:textSize="14dp"/>
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -120,7 +212,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="Excluir Visa"
+                    android:text="@string/exclude_visa"
                     android:textSize="14dp"/>
 
                 <CheckBox
@@ -130,82 +222,21 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="Excluir efectivo"
+                    android:text="@string/exclude_cash"
                     android:textSize="14dp"/>
             </LinearLayout>
-            <com.mercadopago.views.MPButton
-                android:padding="5dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="25dp"
-                android:text="Selección de medio de pago completa"
-                android:onClick="onCompletePaymentMethodSelectionClicked"
-                style="@style/mpsdk_button_normal"/>
-
-            <com.mercadopago.views.MPButton
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/mpsdk_button_height"
-                android:layout_marginTop="15dp"
-                android:text="Cobra con tarjeta en cuotas"
-                android:onClick="onCardWithInstallmentsClicked"
-                style="@style/mpsdk_button_normal"/>
-
-            <com.mercadopago.views.MPButton
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/mpsdk_button_height"
-                android:layout_marginTop="15dp"
-                android:text="Cobra con tarjeta sin cuotas"
-                android:onClick="onCardWithoutInstallmentsClicked"
-                style="@style/mpsdk_button_normal"/>
-
-            <com.mercadopago.views.MPButton
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/mpsdk_button_height"
-                android:layout_marginTop="15dp"
-                android:text="Selección de medio de pago simple"
-                android:onClick="onPaymentMethodsSelectionClicked"
-                style="@style/mpsdk_button_normal"/>
-
-            <com.mercadopago.views.MPButton
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/mpsdk_button_height"
-                android:layout_marginTop="15dp"
-                android:text="Selección de banco"
-                android:onClick="onIssuersSelectionClicked"
-                style="@style/mpsdk_button_normal"/>
-
-            <com.mercadopago.views.MPButton
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/mpsdk_button_height"
-                android:layout_marginTop="15dp"
-                android:text="Selección de cuotas"
-                android:onClick="onInstallmentsSelectionClicked"
-                style="@style/mpsdk_button_normal"/>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/mpsdk_warm_grey"
-                android:layout_marginTop="15dp"
-                android:layout_marginBottom="15dp"/>
 
             <com.mercadopago.views.MPTextView
+                android:layout_marginTop="15dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="¡Realicemos un pago! Recolecta los datos necesarios con nuestros componentes y envíalos a tu servidor para realizarlo. Veamos un ejemplo."
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:singleLine="false"
-                android:gravity="center_horizontal"
-                style="@style/form_label"/>
-
-            <com.mercadopago.views.MPButton
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/mpsdk_button_height"
-                android:layout_marginTop="25dp"
-                android:text="¡Pagar!"
-                android:onClick="onPayButtonClicked"
-                style="@style/mpsdk_button_normal"
-                android:layout_marginBottom="25dp"/>
+                android:padding="10dp"
+                android:layout_gravity="center"
+                android:textColor="@color/mpsdk_color_link"
+                android:textSize="15dp"
+                android:clickable="true"
+                android:onClick="resetSelection"
+                android:text="@string/reset"/>
 
         </LinearLayout>
 
