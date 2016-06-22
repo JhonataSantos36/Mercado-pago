@@ -55,7 +55,7 @@ public class Step2Activity extends ExampleActivity {
     public void submitForm(View view) {
 
         // Call simple vault activity
-        ExamplesUtils.startSimpleVaultActivity(this, ExamplesUtils.DUMMY_MERCHANT_PUBLIC_KEY_EXAMPLES,
+        ExamplesUtils.startSimpleVaultActivity(this, ExamplesUtils.DUMMY_MERCHANT_PUBLIC_KEY_EXAMPLES_SERVICE,
                 ExamplesUtils.DUMMY_MERCHANT_BASE_URL, ExamplesUtils.DUMMY_MERCHANT_GET_CUSTOMER_URI,
                 ExamplesUtils.DUMMY_MERCHANT_ACCESS_TOKEN, mExcludedPaymentTypes);
     }

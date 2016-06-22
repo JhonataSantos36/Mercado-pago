@@ -313,13 +313,14 @@ public class MercadoPago {
                                                   PaymentPreference paymentPreference, Issuer issuer,
                                                   PaymentMethod paymentMethod, DecorationPreference decorationPreference) {
         Intent intent = new Intent(activity, InstallmentsActivity.class);
-        if(payerCosts == null) {
+
+        if(amount != null) {
             intent.putExtra("amount", amount.toString());
-            intent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
-            intent.putExtra("token", JsonUtil.getInstance().toJson(token));
-            intent.putExtra("publicKey", publicKey);
-            intent.putExtra("issuer", issuer);
         }
+        intent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
+        intent.putExtra("token", JsonUtil.getInstance().toJson(token));
+        intent.putExtra("publicKey", publicKey);
+        intent.putExtra("issuer", issuer);
         intent.putExtra("site", site);
         intent.putExtra("payerCosts", (ArrayList<PayerCost>) payerCosts);
         intent.putExtra("paymentPreference", paymentPreference);
@@ -711,12 +712,11 @@ public class MercadoPago {
         public void startInstallmentsActivity() {
             if (this.mActivity == null) throw new IllegalStateException("activity is null");
             if (this.mSite == null) throw new IllegalStateException("site is null");
-            if(this.mPayerCosts == null) {
-                if (this.mKey == null) throw new IllegalStateException("key is null");
-                if (this.mAmount == null) throw new IllegalStateException("amount is null");
+            if (this.mKey == null) throw new IllegalStateException("key is null");
+            if (this.mAmount == null) throw new IllegalStateException("amount is null");
+            if (this.mPaymentMethod == null) throw new IllegalStateException("payment method is null");
+            if(mPayerCosts == null) {
                 if (this.mIssuer == null) throw new IllegalStateException("issuer is null");
-                if (this.mPaymentMethod == null)
-                    throw new IllegalStateException("payment method is null");
             }
 
             MercadoPago.startInstallmentsActivity(mActivity, mAmount, mSite, mToken,

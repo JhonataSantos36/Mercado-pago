@@ -323,7 +323,9 @@ public class AdvancedVaultActivity extends SimpleVaultActivity {
 
         new MercadoPago.StartActivityBuilder()
                 .setActivity(mActivity)
+                .setPublicKey(mMerchantPublicKey)
                 .setPayerCosts(mPayerCosts)
+                .setPaymentMethod(mSelectedPaymentMethod)
                 .setSite(Sites.ARGENTINA)
                 .startInstallmentsActivity();
     }

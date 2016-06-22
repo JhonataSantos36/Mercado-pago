@@ -7,18 +7,13 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.mercadopago.ExampleActivity;
-import com.mercadopago.callbacks.Callback;
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.examples.R;
 import com.mercadopago.examples.utils.ExamplesUtils;
 import com.mercadopago.model.ApiException;
-import com.mercadopago.model.CardToken;
-import com.mercadopago.model.Issuer;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentPreference;
 import com.mercadopago.model.Token;
-import com.mercadopago.util.ApiUtil;
-import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;
 
 import java.math.BigDecimal;
@@ -59,7 +54,7 @@ public class Step1Activity extends ExampleActivity {
                 PaymentMethod paymentMethod = (PaymentMethod) data.getSerializableExtra("paymentMethod");
 
                 // Call new cards activity
-                ExamplesUtils.startCardActivity(this, ExamplesUtils.DUMMY_MERCHANT_PUBLIC_KEY_EXAMPLES, paymentMethod);
+                ExamplesUtils.startCardActivity(this, ExamplesUtils.DUMMY_MERCHANT_PUBLIC_KEY_EXAMPLES_SERVICE, paymentMethod);
             } else {
 
                 if ((data != null) && (data.getSerializableExtra("apiException") != null)) {
@@ -86,7 +81,7 @@ public class Step1Activity extends ExampleActivity {
                     } else if (data.getBooleanExtra("backButtonPressed", false)) {
                         new MercadoPago.StartActivityBuilder()
                                 .setActivity(this)
-                                .setPublicKey(ExamplesUtils.DUMMY_MERCHANT_PUBLIC_KEY_EXAMPLES)
+                                .setPublicKey(ExamplesUtils.DUMMY_MERCHANT_PUBLIC_KEY_EXAMPLES_SERVICE)
                                 .setPaymentPreference(mPaymentPreference)
                                 .startPaymentMethodsActivity();
                     }
@@ -102,7 +97,7 @@ public class Step1Activity extends ExampleActivity {
         // Call payment methods activity
         new MercadoPago.StartActivityBuilder()
                 .setActivity(this)
-                .setPublicKey(ExamplesUtils.DUMMY_MERCHANT_PUBLIC_KEY_EXAMPLES)
+                .setPublicKey(ExamplesUtils.DUMMY_MERCHANT_PUBLIC_KEY_EXAMPLES_SERVICE)
                 .setPaymentPreference(mPaymentPreference)
                 .setShowBankDeals(false)
                 .startPaymentMethodsActivity();

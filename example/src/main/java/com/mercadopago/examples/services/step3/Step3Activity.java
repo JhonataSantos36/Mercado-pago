@@ -58,7 +58,7 @@ public class Step3Activity extends ExampleActivity {
 
     public void submitSimpleForm(View view) {
         // Call final vault activity
-        ExamplesUtils.startAdvancedVaultActivity(this, ExamplesUtils.DUMMY_MERCHANT_PUBLIC_KEY_EXAMPLES,
+        ExamplesUtils.startAdvancedVaultActivity(this, ExamplesUtils.DUMMY_MERCHANT_PUBLIC_KEY_EXAMPLES_SERVICE,
                 ExamplesUtils.DUMMY_MERCHANT_BASE_URL, ExamplesUtils.DUMMY_MERCHANT_GET_CUSTOMER_URI,
                 ExamplesUtils.DUMMY_MERCHANT_ACCESS_TOKEN, new BigDecimal("20"), mExcludedPaymentTypes);
     }

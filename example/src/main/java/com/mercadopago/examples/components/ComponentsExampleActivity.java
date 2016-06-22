@@ -66,7 +66,7 @@ public class ComponentsExampleActivity extends AppCompatActivity {
         mVisaExcluded = (CheckBox) findViewById(R.id.visaExcluded);
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
         mRegularLayout = findViewById(R.id.regularLayout);
-        mPublicKey = ExamplesUtils.DUMMY_MERCHANT_PUBLIC_KEY;
+        mPublicKey = ExamplesUtils.DUMMY_MERCHANT_PUBLIC_KEY_EXAMPLES_SERVICE;
         mAmount = new BigDecimal(100);
     }
 
