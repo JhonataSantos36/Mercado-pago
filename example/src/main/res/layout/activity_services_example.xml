@@ -12,8 +12,8 @@
         android:orientation="vertical">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="150dp"
+            android:layout_height="100dp"
             android:id="@+id/imageView"
             android:layout_marginTop="20dp"
             android:src="@drawable/ninja"
@@ -75,14 +75,6 @@
             android:gravity="center"
             android:text="@string/title_activity_step4"
             android:onClick="runStep4"
-            style="@style/mpsdk_button_normal"/>
-        <com.mercadopago.views.MPButton
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/mpsdk_button_height"
-            android:layout_marginTop="10dp"
-            android:gravity="center"
-            android:text="@string/title_activity_step5"
-            android:onClick="runStep5"
             style="@style/mpsdk_button_normal"/>
     </LinearLayout>
 

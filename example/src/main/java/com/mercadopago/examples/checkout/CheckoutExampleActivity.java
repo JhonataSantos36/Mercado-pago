@@ -75,7 +75,6 @@ public class CheckoutExampleActivity extends AppCompatActivity {
                 "merchantUri/merchant_preference", map, new Callback<CheckoutPreference>() {
                     @Override
                     public void success(CheckoutPreference checkoutPreference) {
-                        showRegularLayout();
                         mCheckoutPreference = checkoutPreference;
                         startMercadoPagoCheckout();
                     }
@@ -116,7 +115,9 @@ public class CheckoutExampleActivity extends AppCompatActivity {
         LayoutUtil.showRegularLayout(this);
 
         if (requestCode == MercadoPago.CHECKOUT_REQUEST_CODE) {
+            showRegularLayout();
             if (resultCode == RESULT_OK && data != null) {
+
                 // Set message
                 Payment payment = (Payment) data.getSerializableExtra("payment");
                 Toast.makeText(mActivity, getString(R.string.payment_received_congrats) + payment.getId(), Toast.LENGTH_LONG).show();

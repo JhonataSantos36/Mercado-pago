@@ -8,6 +8,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -16,6 +17,7 @@ import com.mercadopago.callbacks.Callback;
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.core.MerchantServer;
 import com.mercadopago.examples.R;
+import com.mercadopago.examples.utils.ExamplesUtils;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.Card;
 import com.mercadopago.model.CardToken;
@@ -49,7 +51,7 @@ public class SimpleVaultActivity extends AppCompatActivity {
     // Input controls
     protected View mSecurityCodeCard;
     protected MPEditText mSecurityCodeText;
-    protected FrameLayout mCustomerMethodsLayout;
+    protected LinearLayout mCustomerMethodsLayout;
     protected MPTextView mCustomerMethodsText;
     protected ImageView mCVVImage;
     protected MPTextView mCVVDescriptor;
@@ -57,7 +59,7 @@ public class SimpleVaultActivity extends AppCompatActivity {
 
     // Current values
     protected List<Card> mCards;
-    protected CardToken mCardToken;
+    protected Token mToken;
     protected PaymentMethodRow mSelectedPaymentMethodRow;
     protected PaymentMethod mSelectedPaymentMethod;
     protected PaymentMethod mTempPaymentMethod;
@@ -68,42 +70,22 @@ public class SimpleVaultActivity extends AppCompatActivity {
     protected Activity mActivity;
     protected String mExceptionOnMethod;
     protected MercadoPago mMercadoPago;
+    protected ImageView mPaymentMethodImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView();
-        createPaymentPreference();
         // Get activity parameters
-        mMerchantPublicKey = this.getIntent().getStringExtra("merchantPublicKey");
-        mMerchantBaseUrl = this.getIntent().getStringExtra("merchantBaseUrl");
-        mMerchantGetCustomerUri = this.getIntent().getStringExtra("merchantGetCustomerUri");
-        mMerchantAccessToken = this.getIntent().getStringExtra("merchantAccessToken");
-        if (this.getIntent().getStringExtra("excludedPaymentTypes") != null) {
-            Gson gson = new Gson();
-            Type listType = new TypeToken<List<String>>(){}.getType();
-            mExcludedPaymentTypes = gson.fromJson(this.getIntent().getStringExtra("excludedPaymentTypes"), listType);
-        }
-        if (this.getIntent().getStringExtra("excludedPaymentMethodIds") != null) {
-            Gson gson = new Gson();
-            Type listType = new TypeToken<List<String>>(){}.getType();
-            mExcludedPaymentMethodIds = gson.fromJson(this.getIntent().getStringExtra("excludedPaymentMethodIds"), listType);
-        }
+        getActivityParameters();
         if ((mMerchantPublicKey != null) && (!mMerchantPublicKey.equals(""))) {
 
             // Set activity
             mActivity = this;
             mActivity.setTitle(getString(R.string.mpsdk_title_activity_vault));
 
-            // Set layout controls
-            mSecurityCodeCard = findViewById(R.id.securityCodeCard);
-            mCVVImage = (ImageView) findViewById(R.id.cVVImage);
-            mCVVDescriptor = (MPTextView) findViewById(R.id.cVVDescriptor);
-            mSubmitButton = (MPButton) findViewById(R.id.submitButton);
-            mCustomerMethodsLayout = (FrameLayout) findViewById(R.id.customerMethodLayout);
-            mCustomerMethodsText = (MPTextView) findViewById(R.id.customerMethodLabel);
-            mSecurityCodeText = (MPEditText) findViewById(R.id.securityCode);
+            initializeControls();
 
             // Init controls visibility
             mSecurityCodeCard.setVisibility(View.GONE);
@@ -124,12 +106,41 @@ public class SimpleVaultActivity extends AppCompatActivity {
             if ((mMerchantBaseUrl != null) && (!mMerchantBaseUrl.equals("") && (mMerchantGetCustomerUri != null) && (!mMerchantGetCustomerUri.equals("")))) {
                 getCustomerCardsAsync();
             }
+            createPaymentPreference();
         }
         else {
             Intent returnIntent = new Intent();
             setResult(RESULT_CANCELED, returnIntent);
             returnIntent.putExtra("message", "Invalid parameters");
             finish();
+        }
+    }
+
+    private void initializeControls() {
+        mSecurityCodeCard = findViewById(R.id.securityCodeCard);
+        mCVVImage = (ImageView) findViewById(R.id.cVVImage);
+        mCVVDescriptor = (MPTextView) findViewById(R.id.cVVDescriptor);
+        mSubmitButton = (MPButton) findViewById(R.id.submitButton);
+        mCustomerMethodsLayout = (LinearLayout) findViewById(R.id.customerMethodLayout);
+        mPaymentMethodImage = (ImageView) findViewById(R.id.pmImage);
+        mCustomerMethodsText = (MPTextView) findViewById(R.id.customerMethodLabel);
+        mSecurityCodeText = (MPEditText) findViewById(R.id.securityCode);
+    }
+
+    private void getActivityParameters() {
+        mMerchantPublicKey = this.getIntent().getStringExtra("merchantPublicKey");
+        mMerchantBaseUrl = this.getIntent().getStringExtra("merchantBaseUrl");
+        mMerchantGetCustomerUri = this.getIntent().getStringExtra("merchantGetCustomerUri");
+        mMerchantAccessToken = this.getIntent().getStringExtra("merchantAccessToken");
+        if (this.getIntent().getStringExtra("excludedPaymentTypes") != null) {
+            Gson gson = new Gson();
+            Type listType = new TypeToken<List<String>>(){}.getType();
+            mExcludedPaymentTypes = gson.fromJson(this.getIntent().getStringExtra("excludedPaymentTypes"), listType);
+        }
+        if (this.getIntent().getStringExtra("excludedPaymentMethodIds") != null) {
+            Gson gson = new Gson();
+            Type listType = new TypeToken<List<String>>(){}.getType();
+            mExcludedPaymentMethodIds = gson.fromJson(this.getIntent().getStringExtra("excludedPaymentMethodIds"), listType);
         }
     }
 
@@ -150,8 +161,6 @@ public class SimpleVaultActivity extends AppCompatActivity {
         } else if (mExceptionOnMethod.equals("getCreateTokenCallback")) {
             if (mSelectedPaymentMethodRow != null) {
                 createSavedCardToken();
-            } else if (mCardToken != null) {
-                createNewCardToken();
             }
         }
     }
@@ -192,9 +201,9 @@ public class SimpleVaultActivity extends AppCompatActivity {
 
             resolvePaymentMethodsRequest(resultCode, data);
 
-        } else if (requestCode == MercadoPago.NEW_CARD_REQUEST_CODE) {
+        } else if (requestCode == ExamplesUtils.CARD_REQUEST_CODE) {
 
-            resolveNewCardRequest(resultCode, data);
+            resolveCardRequest(resultCode, data);
         }
     }
 
@@ -212,7 +221,7 @@ public class SimpleVaultActivity extends AppCompatActivity {
             if (selectedPaymentMethodRow.getCard() != null) {
 
                 // Set selection status
-                mCardToken = null;
+                mToken = null;
                 mSelectedPaymentMethodRow = selectedPaymentMethodRow;
                 mSelectedPaymentMethod = null;
                 mTempPaymentMethod = null;
@@ -239,32 +248,32 @@ public class SimpleVaultActivity extends AppCompatActivity {
             mTempPaymentMethod = (PaymentMethod) data.getSerializableExtra("paymentMethod");
 
             // Call new cards activity
-            startNewCardActivity();
+            startCardActivity();
 
         } else {
 
             if ((data != null) && (data.getStringExtra("apiException") != null)) {
                 finishWithApiException(data);
-            } else if ((mSelectedPaymentMethodRow == null) && (mCardToken == null)) {
+            } else if ((mSelectedPaymentMethodRow == null) && (mToken == null)) {
                 // if nothing is selected
                 finish();
             }
         }
     }
 
-    protected void resolveNewCardRequest(int resultCode, Intent data) {
+    protected void resolveCardRequest(int resultCode, Intent data) {
 
         if (resultCode == RESULT_OK) {
 
             // Set selection status
-            mCardToken = (CardToken) data.getSerializableExtra("cardToken");
+            mToken = (Token) data.getSerializableExtra("token");
             mSelectedPaymentMethodRow = null;
             mSelectedPaymentMethod = mTempPaymentMethod;
 
             // Set customer method selection
             mCustomerMethodsText.setText(CustomerCardsAdapter.getPaymentMethodLabel(mActivity, mSelectedPaymentMethod.getName(),
-                    mCardToken.getCardNumber().substring(mCardToken.getCardNumber().length() - 4, mCardToken.getCardNumber().length())));
-            mCustomerMethodsText.setCompoundDrawablesWithIntrinsicBounds(MercadoPagoUtil.getPaymentMethodIcon(mActivity, mSelectedPaymentMethod.getId()), 0, 0, 0);
+                    mToken.getLastFourDigits()));
+            mPaymentMethodImage.setImageResource(MercadoPagoUtil.getPaymentMethodIcon(mActivity, mSelectedPaymentMethod.getId()));
 
             // Set security cards visibility
             showSecurityCodeCard(mSelectedPaymentMethod);
@@ -338,7 +347,7 @@ public class SimpleVaultActivity extends AppCompatActivity {
         if (mSelectedPaymentMethodRow != null) {
             return mSelectedPaymentMethodRow.getCard().getFirstSixDigits();
         } else {
-            return mCardToken.getCardNumber().substring(0, MercadoPago.BIN_LENGTH);
+            return mToken.getFirstSixDigits();
         }
     }
 
@@ -373,7 +382,7 @@ public class SimpleVaultActivity extends AppCompatActivity {
 
         // Set customer method selection
         mCustomerMethodsText.setText(mSelectedPaymentMethodRow.getLabel());
-        mCustomerMethodsText.setCompoundDrawablesWithIntrinsicBounds(mSelectedPaymentMethodRow.getIcon(), 0, 0, 0);
+        mPaymentMethodImage.setImageResource(MercadoPagoUtil.getPaymentMethodIcon(mActivity, mSelectedPaymentMethod.getId()));
 
         // Set security cards visibility
         showSecurityCodeCard(mSelectedPaymentMethodRow.getCard().getPaymentMethod());
@@ -388,33 +397,13 @@ public class SimpleVaultActivity extends AppCompatActivity {
 
         // Create token
         if (mSelectedPaymentMethodRow != null) {
-
             createSavedCardToken();
-
-        } else if (mCardToken != null) {
-
-            createNewCardToken();
+        }
+        else if(mToken != null){
+            finishWithTokenResult(mToken);
         }
     }
 
-    protected void createNewCardToken() {
-
-        // Validate CVV
-        try {
-            mCardToken.setSecurityCode(mSecurityCodeText.getText().toString());
-            mCardToken.validateSecurityCode(this, mSelectedPaymentMethod);
-            mSecurityCodeText.setError(null);
-        }
-        catch (Exception ex) {
-            mSecurityCodeText.setError(ex.getMessage());
-            mSecurityCodeText.requestFocus();
-            return;
-        }
-
-        // Create token
-        LayoutUtil.showProgressLayout(mActivity);
-        mMercadoPago.createToken(mCardToken, getCreateTokenCallback());
-    }
 
     protected void createSavedCardToken() {
 
@@ -441,12 +430,7 @@ public class SimpleVaultActivity extends AppCompatActivity {
         return new Callback<Token>() {
             @Override
             public void success(Token token) {
-
-                Intent returnIntent = new Intent();
-                returnIntent.putExtra("token", token.getId());
-                returnIntent.putExtra("paymentMethod", mSelectedPaymentMethod);
-                setResult(RESULT_OK, returnIntent);
-                finish();
+                finishWithTokenResult(token);
             }
 
             @Override
@@ -458,20 +442,23 @@ public class SimpleVaultActivity extends AppCompatActivity {
         };
     }
 
+    private void finishWithTokenResult(Token token) {
+        Intent returnIntent = new Intent();
+        returnIntent.putExtra("token", token.getId());
+        returnIntent.putExtra("paymentMethod", mSelectedPaymentMethod);
+        setResult(RESULT_OK, returnIntent);
+        finish();
+    }
+
     protected void finishWithApiException(Intent data) {
 
         setResult(RESULT_CANCELED, data);
         finish();
     }
 
-    protected void startNewCardActivity() {
+    protected void startCardActivity() {
 
-        new MercadoPago.StartActivityBuilder()
-                .setActivity(mActivity)
-                .setPublicKey(mMerchantPublicKey)
-                .setPaymentMethod(mTempPaymentMethod)
-                .setRequireSecurityCode(false)
-                .startGuessingCardActivity();
+        ExamplesUtils.startCardActivity(this, mMerchantPublicKey, mTempPaymentMethod);
     }
 
     protected void startPaymentMethodsActivity() {

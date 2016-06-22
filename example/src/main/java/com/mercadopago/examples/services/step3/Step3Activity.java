@@ -52,7 +52,6 @@ public class Step3Activity extends ExampleActivity {
                 }
             }
         } else if (requestCode == MercadoPago.CONGRATS_REQUEST_CODE) {
-
             LayoutUtil.showRegularLayout(this);
         }
     }

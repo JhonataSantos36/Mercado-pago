@@ -59,11 +59,7 @@ public class InstallmentsActivity extends ShowCardActivity {
         setLayout();
         initializeAdapter();
         initializeToolbar();
-
-        mMercadoPago = new MercadoPago.Builder()
-                .setContext(this)
-                .setPublicKey(mPublicKey)
-                .build();
+        setInstallments();
 
         if (mCurrentPaymentMethod != null) {
             initializeCard();
@@ -74,6 +70,22 @@ public class InstallmentsActivity extends ShowCardActivity {
         else {
             hideCardLayout();
         }
+    }
+
+    private void setInstallments() {
+        if (mPayerCosts == null) {
+            createMercadoPago();
+            getInstallmentsAsync();
+        } else {
+            resolvePayerCosts(mPayerCosts);
+        }
+    }
+
+    private void createMercadoPago() {
+        mMercadoPago = new MercadoPago.Builder()
+                .setContext(this)
+                .setPublicKey(mPublicKey)
+                .build();
     }
 
     private void hideCardLayout() {
@@ -139,22 +151,13 @@ public class InstallmentsActivity extends ShowCardActivity {
         }
     }
 
-    @Override
-    protected void initializeCard() {
-        super.initializeCard();
-
-        if (mPayerCosts == null) {
-            getInstallmentsAsync();
-        } else {
-            resolvePayerCosts(mPayerCosts);
-        }
-    }
-
     @SuppressWarnings("unchecked")
     @Override
     protected void getActivityParameters() {
         super.getActivityParameters();
-        mAmount = new BigDecimal(this.getIntent().getStringExtra("amount"));
+        if(this.getIntent().getStringExtra("amount") != null) {
+            mAmount = new BigDecimal(this.getIntent().getStringExtra("amount"));
+        }
         mSite = (Site) this.getIntent().getSerializableExtra("site");
         mPayerCosts = (ArrayList<PayerCost>)getIntent().getSerializableExtra("payerCosts");
         mPaymentPreference = (PaymentPreference) this.getIntent().getSerializableExtra("paymentPreference");
@@ -164,6 +167,7 @@ public class InstallmentsActivity extends ShowCardActivity {
     }
 
     private void getInstallmentsAsync() {
+
         mProgressBar.setVisibility(View.VISIBLE);
         Long issuerId = mSelectedIssuer == null ? null : mSelectedIssuer.getId();
         mMercadoPago.getInstallments(mBin, mAmount, issuerId, mCurrentPaymentMethod.getId(),

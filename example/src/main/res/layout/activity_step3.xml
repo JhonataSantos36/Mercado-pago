@@ -7,54 +7,36 @@
     android:paddingBottom="@dimen/mpsdk_activity_vertical_margin"
     android:orientation="vertical"
     tools:context=".services.step3.Step3Activity">
-    <ScrollView
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent" >
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:orientation="vertical" >
-            <include layout="@layout/mpsdk_view_progress_bar"/>
 
-            <ImageView
-                android:id="@+id/image"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:src="@drawable/ico_numbers_3"
-                android:layout_gravity="center_horizontal" />
+    <include layout="@layout/mpsdk_view_progress_bar"/>
 
-            <com.mercadopago.views.MPTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/step3_description"
-                android:gravity="center_horizontal"
-                android:layout_marginTop="15dp"
-                style="@style/mpsdk_form_label" />
-            <com.mercadopago.views.MPTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/step3_choice_description"
-                android:gravity="center_horizontal"
-                android:layout_marginTop="15dp"
-                style="@style/mpsdk_form_label"/>
-            <com.mercadopago.views.MPButton
-                android:id="@+id/btnSimpleFlow"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/mpsdk_button_height"
-                android:layout_marginTop="25dp"
-                android:gravity="center"
-                android:text="@string/simple_card_flow_label"
-                android:onClick="submitSimpleForm"
-                style="@style/mpsdk_button_normal"/>
-            <com.mercadopago.views.MPButton
-                android:id ="@+id/btnGuessingFow"
-                android:layout_height="@dimen/mpsdk_button_height"
-                android:layout_width="match_parent"
-                android:layout_marginTop="25dp"
-                android:gravity="center"
-                android:text="@string/guessing_card_flow_label"
-                android:onClick="submitGuessingForm"
-                style="@style/mpsdk_button_normal"/>
-        </LinearLayout>
-    </ScrollView>
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/ico_numbers_3"
+        android:layout_gravity="center_horizontal" />
+    <LinearLayout
+        android:id="@+id/mpsdkRegularLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <com.mercadopago.views.MPTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/step3_description"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="15dp"
+            style="@style/mpsdk_form_label" />
+
+        <com.mercadopago.views.MPButton
+            android:id="@+id/btnSimpleFlow"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/mpsdk_button_height"
+            android:layout_marginTop="25dp"
+            android:gravity="center"
+            android:text="@string/mpsdk_continue_label"
+            android:onClick="submitSimpleForm"
+            style="@style/mpsdk_button_normal"/>
+    </LinearLayout>
 </LinearLayout>

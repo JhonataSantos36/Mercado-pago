@@ -51,13 +51,13 @@ public class FinalVaultActivity extends AdvancedVaultActivity {
                 } else {
 
                     // Call new cards activity
-                    startNewCardActivity();
+                    startCardActivity();
                 }
             } else {  // Off-line methods
 
                 // Set selection status
                 mPayerCosts = null;
-                mCardToken = null;
+                mToken = null;
                 mSelectedPaymentMethodRow = null;
                 mSelectedPayerCost = null;
                 mSelectedPaymentMethod = (PaymentMethod) data.getSerializableExtra("paymentMethod");
@@ -65,7 +65,7 @@ public class FinalVaultActivity extends AdvancedVaultActivity {
 
                 // Set customer method selection
                 mCustomerMethodsText.setText(mSelectedPaymentMethod.getName());
-                mCustomerMethodsText.setCompoundDrawablesWithIntrinsicBounds(MercadoPagoUtil.getPaymentMethodIcon(mActivity, mSelectedPaymentMethod.getId()), 0, 0, 0);
+                mPaymentMethodImage.setImageResource(MercadoPagoUtil.getPaymentMethodIcon(mActivity, mSelectedPaymentMethod.getId()));
 
                 // Set security cards visibility
                 mSecurityCodeCard.setVisibility(View.GONE);
@@ -80,7 +80,7 @@ public class FinalVaultActivity extends AdvancedVaultActivity {
 
             if ((data != null) && (data.getStringExtra("apiException") != null)) {
                 finishWithApiException(data);
-            } else if ((mSelectedPaymentMethodRow == null) && (mCardToken == null)) {
+            } else if ((mSelectedPaymentMethodRow == null) && (mToken == null)) {
                 // if nothing is selected
                 finish();
             }
@@ -93,7 +93,7 @@ public class FinalVaultActivity extends AdvancedVaultActivity {
         LayoutUtil.hideKeyboard(mActivity);
 
         // Validate installments
-        if (((mSelectedPaymentMethodRow != null) || (mCardToken != null)) && mSelectedPayerCost == null) {
+        if (((mSelectedPaymentMethodRow != null) || (mToken != null)) && mSelectedPayerCost == null) {
             return;
         }
 
@@ -102,11 +102,8 @@ public class FinalVaultActivity extends AdvancedVaultActivity {
 
             createSavedCardToken();
 
-        } else if (mCardToken != null) {
-
-            createNewCardToken();
-
-        } else {  // Off-line methods
+        }
+        else {  // Off-line methods
 
             // Return payment method id
             LayoutUtil.showRegularLayout(mActivity);

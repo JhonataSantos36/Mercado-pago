@@ -171,21 +171,23 @@ public class ComponentsExampleActivity extends AppCompatActivity {
         if (requestCode == MercadoPago.PAYMENT_VAULT_REQUEST_CODE) {
             resolvePaymentVaultRequest(resultCode, data);
         }
-        if(requestCode == MercadoPago.CARD_VAULT_REQUEST_CODE) {
+        else if(requestCode == MercadoPago.CARD_VAULT_REQUEST_CODE) {
             resolveCardVaultRequest(resultCode, data);
         }
-        if(requestCode == MercadoPago.GUESSING_CARD_REQUEST_CODE) {
+        else if(requestCode == MercadoPago.GUESSING_CARD_REQUEST_CODE) {
             resolveGuessingCardRequest(resultCode, data);
         }
-        if(requestCode == MercadoPago.PAYMENT_METHODS_REQUEST_CODE) {
+        else if(requestCode == MercadoPago.PAYMENT_METHODS_REQUEST_CODE) {
             resolvePaymentMethodsRequest(resultCode, data);
         }
-
-        if(requestCode == MercadoPago.ISSUERS_REQUEST_CODE) {
+        else if(requestCode == MercadoPago.ISSUERS_REQUEST_CODE) {
             resolveIssuerRequest(resultCode, data);
         }
-        if(requestCode == MercadoPago.INSTALLMENTS_REQUEST_CODE) {
+        else if(requestCode == MercadoPago.INSTALLMENTS_REQUEST_CODE) {
             resolveInstallmentsRequest(resultCode, data);
+        }
+        else {
+            showRegularLayout();
         }
     }
 
@@ -326,7 +328,6 @@ public class ComponentsExampleActivity extends AppCompatActivity {
         MerchantServer.createPayment(this, ExamplesUtils.DUMMY_MERCHANT_BASE_URL, ExamplesUtils.DUMMY_MERCHANT_CREATE_PAYMENT_URI, payment, new Callback<Payment>() {
             @Override
             public void success(Payment payment) {
-                showRegularLayout();
                 new MercadoPago.StartActivityBuilder()
                         .setActivity(mActivity)
                         .setPayment(payment)

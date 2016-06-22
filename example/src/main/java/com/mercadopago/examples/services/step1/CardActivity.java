@@ -93,7 +93,7 @@ public class CardActivity extends AppCompatActivity {
         // Set payment method image
         mPaymentMethod = (PaymentMethod) this.getIntent().getSerializableExtra("paymentMethod");
         if ((mPaymentMethod != null) && (mPaymentMethod.getId() != null)) {
-            ImageView pmImage = (ImageView) findViewById(com.mercadopago.R.id.mpsdkPmImage);
+            ImageView pmImage = (ImageView) findViewById(R.id.pmImage);
             pmImage.setImageResource(MercadoPagoUtil.getPaymentMethodIcon(this, mPaymentMethod.getId()));
         }
 
@@ -182,7 +182,7 @@ public class CardActivity extends AppCompatActivity {
         // Validate expiry month and year
         if (!cardToken.validateExpiryDate()) {
             mExpiryError.setVisibility(View.VISIBLE);
-            mExpiryError.setError(getString(com.mercadopago.R.string.mpsdk_invalid_field));
+            mExpiryError.setError(getString(R.string.mpsdk_invalid_field));
             if (!focusSet) {
                 mExpiryMonth.requestFocus();
                 focusSet = true;
@@ -195,7 +195,7 @@ public class CardActivity extends AppCompatActivity {
 
         // Validate cards holder name
         if (!cardToken.validateCardholderName()) {
-            mCardHolderName.setError(getString(com.mercadopago.R.string.mpsdk_invalid_field));
+            mCardHolderName.setError(getString(R.string.mpsdk_invalid_field));
             if (!focusSet) {
                 mCardHolderName.requestFocus();
                 focusSet = true;
@@ -208,7 +208,7 @@ public class CardActivity extends AppCompatActivity {
         // Validate identification number
         if (getIdentificationType() != null) {
             if (!cardToken.validateIdentificationNumber()) {
-                mIdentificationNumber.setError(getString(com.mercadopago.R.string.mpsdk_invalid_field));
+                mIdentificationNumber.setError(getString(R.string.mpsdk_invalid_field));
                 if (!focusSet) {
                     mIdentificationNumber.requestFocus();
                 }
@@ -278,7 +278,7 @@ public class CardActivity extends AppCompatActivity {
             public void success(Token token) {
 
                 Intent returnIntent = new Intent();
-                returnIntent.putExtra("token", token.getId());
+                returnIntent.putExtra("token", token);
                 returnIntent.putExtra("paymentMethod", mPaymentMethod);
                 setResult(RESULT_OK, returnIntent);
                 finish();

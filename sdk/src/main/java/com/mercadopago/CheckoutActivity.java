@@ -618,7 +618,6 @@ public class CheckoutActivity extends AppCompatActivity {
                     startCongratsActivity();
                 } else {
                     MPTracker.getInstance().trackPaymentId(mCreatedPayment.getId().toString(), "3", mMerchantPublicKey, "MLA", "1.0", mActivity);
-
                     startInstructionsActivity();
                 }
                 cleanTransactionId();

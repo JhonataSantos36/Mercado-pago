@@ -56,8 +56,7 @@ public class Step4Activity extends ExampleActivity {
                     Toast.makeText(getApplicationContext(), apiException.getMessage(), Toast.LENGTH_LONG).show();
                 }
             }
-        } else if (requestCode == MercadoPago.CONGRATS_REQUEST_CODE) {
-
+        } else {
             LayoutUtil.showRegularLayout(this);
         }
     }

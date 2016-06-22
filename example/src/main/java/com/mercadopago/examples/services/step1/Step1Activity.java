@@ -55,7 +55,6 @@ public class Step1Activity extends ExampleActivity {
 
         if (requestCode == MercadoPago.PAYMENT_METHODS_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
-
                 // Set payment method
                 PaymentMethod paymentMethod = (PaymentMethod) data.getSerializableExtra("paymentMethod");
 
@@ -71,9 +70,11 @@ public class Step1Activity extends ExampleActivity {
         } else if (requestCode == ExamplesUtils.CARD_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
 
+                Token token = (Token) data.getSerializableExtra("token");
+                PaymentMethod paymentMethod = (PaymentMethod) data.getSerializableExtra("paymentMethod");
                 // Create payment
-                ExamplesUtils.createPayment(this, data.getStringExtra("token"),
-                        1, null, (PaymentMethod) data.getSerializableExtra("paymentMethod"), null);
+                ExamplesUtils.createPayment(this, token.getId(),
+                        1, null, paymentMethod, null);
 
             } else {
 
@@ -83,10 +84,6 @@ public class Step1Activity extends ExampleActivity {
                         Toast.makeText(getApplicationContext(), apiException.getMessage(), Toast.LENGTH_LONG).show();
 
                     } else if (data.getBooleanExtra("backButtonPressed", false)) {
-
-                        PaymentPreference paymentPreference = new PaymentPreference();
-                        paymentPreference.setExcludedPaymentTypeIds(mExcludedPaymentTypeIds);
-
                         new MercadoPago.StartActivityBuilder()
                                 .setActivity(this)
                                 .setPublicKey(ExamplesUtils.DUMMY_MERCHANT_PUBLIC_KEY)
@@ -96,27 +93,10 @@ public class Step1Activity extends ExampleActivity {
                 }
             }
         } else if (requestCode == MercadoPago.CONGRATS_REQUEST_CODE) {
-
             LayoutUtil.showRegularLayout(this);
-        } else if (requestCode == MercadoPago.GUESSING_CARD_REQUEST_CODE){
-
-            if(resultCode == RESULT_OK){
-                PaymentMethod paymentMethod = JsonUtil.getInstance().fromJson(data.getStringExtra("paymentMethod"), PaymentMethod.class);
-                Issuer issuer = JsonUtil.getInstance().fromJson(data.getStringExtra("issuer"), Issuer.class);
-                CardToken cardToken = JsonUtil.getInstance().fromJson(data.getStringExtra("cardToken"), CardToken.class);
-
-                createTokenAsyncAndPay(paymentMethod, issuer, cardToken);
-
-            } else {
-
-                if ((data != null) && (data.getStringExtra("apiException") != null)) {
-                    Toast.makeText(getApplicationContext(), data.getStringExtra("apiException"), Toast.LENGTH_LONG).show();
-                }
-            }
-
         }
-
     }
+
     private void createTokenAsyncAndPay(final PaymentMethod paymentMethod, final Issuer issuer, CardToken cardToken) {
         LayoutUtil.showProgressLayout(this);
         MercadoPago mercadoPago = new MercadoPago.Builder()
