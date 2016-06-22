@@ -1,4 +1,4 @@
-package com.mercadopago.examples.step2;
+package com.mercadopago.examples.services.step4;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,35 +13,45 @@ import com.mercadopago.model.ApiException;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.util.LayoutUtil;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Step2Activity extends ExampleActivity {
+public class Step4Activity extends ExampleActivity {
 
     protected List<String> mExcludedPaymentTypes = new ArrayList<String>(){{
-        add("ticket");
-        add("atm");
+        add("debit_card");
+        add("credit_card");
     }};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_step2);
+        setContentView(R.layout.activity_step4);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        if (requestCode == ExamplesUtils.SIMPLE_VAULT_REQUEST_CODE) {
+        if (requestCode == ExamplesUtils.FINAL_VAULT_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
+
+                // Set issuer id
+                Long issuerId = (data.getStringExtra("issuerId") != null)
+                        ? Long.parseLong(data.getStringExtra("issuerId")) : null;
+
+                // Set installments
+                Integer installments = (data.getStringExtra("installments") != null)
+                        ? Integer.parseInt(data.getStringExtra("installments")) : null;
 
                 // Create payment
                 ExamplesUtils.createPayment(this, data.getStringExtra("token"),
-                        1, null, (PaymentMethod) data.getSerializableExtra("paymentMethod"), null);
+                        installments, issuerId,
+                        (PaymentMethod) data.getSerializableExtra("paymentMethod"), null);
 
-            } else if(data != null){
+            } else {
 
-                if (data.getSerializableExtra("apiException") != null) {
+                if (data != null && data.getSerializableExtra("apiException") != null) {
                     ApiException apiException = (ApiException) data.getSerializableExtra("apiException");
                     Toast.makeText(getApplicationContext(), apiException.getMessage(), Toast.LENGTH_LONG).show();
                 }
@@ -54,9 +64,9 @@ public class Step2Activity extends ExampleActivity {
 
     public void submitForm(View view) {
 
-        // Call simple vault activity
-        ExamplesUtils.startSimpleVaultActivity(this, ExamplesUtils.DUMMY_MERCHANT_PUBLIC_KEY,
+        // Call final vault activity
+        ExamplesUtils.startFinalVaultActivity(this, ExamplesUtils.DUMMY_MERCHANT_PUBLIC_KEY,
                 ExamplesUtils.DUMMY_MERCHANT_BASE_URL, ExamplesUtils.DUMMY_MERCHANT_GET_CUSTOMER_URI,
-                ExamplesUtils.DUMMY_MERCHANT_ACCESS_TOKEN, mExcludedPaymentTypes);
+                ExamplesUtils.DUMMY_MERCHANT_ACCESS_TOKEN, new BigDecimal("20"), mExcludedPaymentTypes);
     }
 }

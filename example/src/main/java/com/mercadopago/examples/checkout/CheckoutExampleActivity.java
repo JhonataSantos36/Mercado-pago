@@ -75,12 +75,14 @@ public class CheckoutExampleActivity extends AppCompatActivity {
                 "merchantUri/merchant_preference", map, new Callback<CheckoutPreference>() {
                     @Override
                     public void success(CheckoutPreference checkoutPreference) {
+                        showRegularLayout();
                         mCheckoutPreference = checkoutPreference;
                         startMercadoPagoCheckout();
                     }
 
                     @Override
                     public void failure(ApiException error) {
+                        showRegularLayout();
                         Toast.makeText(mActivity, getString(R.string.preference_creation_failed), Toast.LENGTH_LONG).show();
                     }
                 });

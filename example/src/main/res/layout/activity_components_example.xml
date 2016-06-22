@@ -181,6 +181,31 @@
                 android:text="Selección de cuotas"
                 android:onClick="onInstallmentsSelectionClicked"
                 style="@style/mpsdk_button_normal"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/mpsdk_warm_grey"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="15dp"/>
+
+            <com.mercadopago.views.MPTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="¡Realicemos un pago! Recolecta los datos necesarios con nuestros componentes y envíalos a tu servidor para realizarlo. Veamos un ejemplo."
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:singleLine="false"
+                android:gravity="center_horizontal"
+                style="@style/form_label"/>
+
+            <com.mercadopago.views.MPButton
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/mpsdk_button_height"
+                android:layout_marginTop="25dp"
+                android:text="¡Pagar!"
+                android:onClick="onPayButtonClicked"
+                style="@style/mpsdk_button_normal"
+                android:layout_marginBottom="25dp"/>
 
         </LinearLayout>
 

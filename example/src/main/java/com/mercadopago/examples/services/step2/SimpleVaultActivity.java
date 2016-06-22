@@ -1,4 +1,4 @@
-package com.mercadopago.examples.step2;
+package com.mercadopago.examples.services.step2;
 
 import android.app.Activity;
 import android.content.Intent;

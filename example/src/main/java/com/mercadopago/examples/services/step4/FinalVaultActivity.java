@@ -1,11 +1,11 @@
-package com.mercadopago.examples.step4;
+package com.mercadopago.examples.services.step4;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
 import com.mercadopago.examples.R;
-import com.mercadopago.examples.step3.AdvancedVaultActivity;
+import com.mercadopago.examples.services.step3.AdvancedVaultActivity;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.util.LayoutUtil;
 import com.mercadopago.util.MercadoPagoUtil;

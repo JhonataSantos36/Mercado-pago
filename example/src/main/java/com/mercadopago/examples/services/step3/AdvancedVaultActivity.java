@@ -1,4 +1,4 @@
-package com.mercadopago.examples.step3;
+package com.mercadopago.examples.services.step3;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,7 +10,7 @@ import com.mercadopago.adapters.CustomerCardsAdapter;
 import com.mercadopago.callbacks.Callback;
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.examples.R;
-import com.mercadopago.examples.step2.SimpleVaultActivity;
+import com.mercadopago.examples.services.step2.SimpleVaultActivity;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.CardToken;
 import com.mercadopago.model.Installment;

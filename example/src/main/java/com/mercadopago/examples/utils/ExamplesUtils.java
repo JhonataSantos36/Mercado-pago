@@ -9,10 +9,10 @@ import com.google.gson.reflect.TypeToken;
 import com.mercadopago.callbacks.Callback;
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.core.MerchantServer;
-import com.mercadopago.examples.step2.SimpleVaultActivity;
-import com.mercadopago.examples.step3.AdvancedVaultActivity;
-import com.mercadopago.examples.step1.CardActivity;
-import com.mercadopago.examples.step4.FinalVaultActivity;
+import com.mercadopago.examples.services.step2.SimpleVaultActivity;
+import com.mercadopago.examples.services.step3.AdvancedVaultActivity;
+import com.mercadopago.examples.services.step1.CardActivity;
+import com.mercadopago.examples.services.step4.FinalVaultActivity;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.Discount;
 import com.mercadopago.model.Issuer;
@@ -21,6 +21,7 @@ import com.mercadopago.model.MerchantPayment;
 import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentPreference;
+import com.mercadopago.model.Token;
 import com.mercadopago.util.LayoutUtil;
 
 import java.lang.reflect.Type;
@@ -35,7 +36,7 @@ public class ExamplesUtils {
     public static final int CARD_REQUEST_CODE = 13;
 
     // * Merchant public key
-    public static final String DUMMY_MERCHANT_PUBLIC_KEY = "TEST-ad365c37-8012-4014-84f5-6c895b3f8e0a";
+    public static final String DUMMY_MERCHANT_PUBLIC_KEY = "444a9ef5-8a6b-429f-abdf-587639155d88";
     // DUMMY_MERCHANT_PUBLIC_KEY_AR = "444a9ef5-8a6b-429f-abdf-587639155d88";
     // DUMMY_MERCHANT_PUBLIC_KEY_BR = "APP_USR-f163b2d7-7462-4e7b-9bd5-9eae4a7f99c3";
     // DUMMY_MERCHANT_PUBLIC_KEY_MX = "6c0d81bc-99c1-4de8-9976-c8d1d62cd4f2";
@@ -49,7 +50,7 @@ public class ExamplesUtils {
     //public static final String DUMMY_MERCHANT_GET_DISCOUNT_URI = "/checkout/examples/getDiscounts";
 
     // * Merchant access token
-    public static final String DUMMY_MERCHANT_ACCESS_TOKEN = "mlm-cards-data";
+    public static final String DUMMY_MERCHANT_ACCESS_TOKEN = "mla-cards-data";
     // DUMMY_MERCHANT_ACCESS_TOKEN_AR = "mla-cards-data";
     // DUMMY_MERCHANT_ACCESS_TOKEN_BR = "mlb-cards-data";
     // DUMMY_MERCHANT_ACCESS_TOKEN_MX = "mlm-cards-data";
@@ -67,14 +68,24 @@ public class ExamplesUtils {
 
     public static PaymentMethod getDummyPaymentMethod() {
         PaymentMethod paymentMethod = new PaymentMethod();
-        paymentMethod.setId("master");
+        paymentMethod.setId("visa");
+        paymentMethod.setName("Visa");
+        paymentMethod.setPaymentTypeId("credit_card");
         return paymentMethod;
     }
 
     public static Issuer getDummyIssuer() {
         Issuer issuer = new Issuer();
-        issuer.setId((long)338);
+        issuer.setId((long) 338);
         return issuer;
+    }
+
+    public static Token getDummyToken() {
+        Token token = new Token();
+        token.setId("0958e8895507c693d8b8c3c2f196eaed");
+        token.setLastFourDigits("1234");
+        token.setFirstSixDigits("545454");
+        return token;
     }
 
     public static void startCardActivity(Activity activity, String merchantPublicKey, PaymentMethod paymentMethod) {

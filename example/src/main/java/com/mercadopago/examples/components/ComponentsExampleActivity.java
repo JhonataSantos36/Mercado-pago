@@ -11,14 +11,21 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.mercadopago.callbacks.Callback;
 import com.mercadopago.core.MercadoPago;
+import com.mercadopago.core.MerchantServer;
 import com.mercadopago.examples.R;
 import com.mercadopago.examples.utils.ColorPickerDialog;
 import com.mercadopago.examples.utils.ExamplesUtils;
 import com.mercadopago.exceptions.MPException;
+import com.mercadopago.model.ApiException;
 import com.mercadopago.model.DecorationPreference;
+import com.mercadopago.model.Discount;
 import com.mercadopago.model.Issuer;
+import com.mercadopago.model.Item;
+import com.mercadopago.model.MerchantPayment;
 import com.mercadopago.model.PayerCost;
+import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentPreference;
 import com.mercadopago.model.PaymentType;
@@ -43,6 +50,7 @@ public class ComponentsExampleActivity extends AppCompatActivity {
     private Integer mSelectedColor;
     private Integer mDefaultColor;
     private BigDecimal mAmount;
+    private boolean mCreatePaymentExampleSelected;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +58,7 @@ public class ComponentsExampleActivity extends AppCompatActivity {
         setContentView(R.layout.activity_components_example);
 
         mActivity = this;
+        mCreatePaymentExampleSelected = false;
         mColorSample = (ImageView) findViewById(R.id.colorSample);
         mDefaultColor = ContextCompat.getColor(this, R.color.colorPrimary);
         mDarkFontEnabled = (CheckBox) findViewById(R.id.darkFontEnabled);
@@ -76,6 +85,10 @@ public class ComponentsExampleActivity extends AppCompatActivity {
     }
 
     public void onCardWithInstallmentsClicked(View view) {
+       startCardVaultActivity();
+    }
+
+    private void startCardVaultActivity() {
         PaymentPreference paymentPreference = getCurrentPaymentPreference();
         DecorationPreference decorationPreference = getCurrentDecorationPreference();
 
@@ -201,7 +214,13 @@ public class ComponentsExampleActivity extends AppCompatActivity {
             Token token = (Token) data.getSerializableExtra("token");
             PayerCost payerCost = (PayerCost) data.getSerializableExtra("payerCost");
 
-            showResult(paymentMethod, issuer, payerCost, token);
+            if(mCreatePaymentExampleSelected) {
+                createPayment(token, payerCost, issuer, paymentMethod, null);
+                mCreatePaymentExampleSelected = false;
+            }
+            else {
+                showResult(paymentMethod, issuer, payerCost, token);
+            }
         }
     }
 
@@ -279,6 +298,50 @@ public class ComponentsExampleActivity extends AppCompatActivity {
         return paymentPreference;
     }
 
+    public void onPayButtonClicked(View view) {
+        mCreatePaymentExampleSelected = true;
+        startCardVaultActivity();
+    }
+
+    private void createPayment(Token token, PayerCost payerCost, Issuer issuer, final PaymentMethod paymentMethod, Discount discount) {
+        // Set item
+        Item item = new Item(ExamplesUtils.DUMMY_ITEM_ID, ExamplesUtils.DUMMY_ITEM_QUANTITY,
+                ExamplesUtils.DUMMY_ITEM_UNIT_PRICE);
+
+        // Set payment method id
+        String paymentMethodId = paymentMethod.getId();
+
+        // Set campaign id
+        Long campaignId = (discount != null) ? discount.getId() : null;
+
+        // Set merchant payment
+        String tokenId = token != null ? token.getId() : null;
+        Integer installments = payerCost != null ? payerCost.getInstallments() : null;
+        Long issuerId = issuer != null ? issuer.getId() : null;
+        MerchantPayment payment = new MerchantPayment(item, installments, issuerId,
+                tokenId, paymentMethodId, campaignId, ExamplesUtils.DUMMY_MERCHANT_ACCESS_TOKEN);
+
+        // Create payment
+        showProgressLayout();
+        MerchantServer.createPayment(this, ExamplesUtils.DUMMY_MERCHANT_BASE_URL, ExamplesUtils.DUMMY_MERCHANT_CREATE_PAYMENT_URI, payment, new Callback<Payment>() {
+            @Override
+            public void success(Payment payment) {
+                showRegularLayout();
+                new MercadoPago.StartActivityBuilder()
+                        .setActivity(mActivity)
+                        .setPayment(payment)
+                        .setPaymentMethod(paymentMethod)
+                        .startCongratsActivity();
+            }
+
+            @Override
+            public void failure(ApiException apiException) {
+                showRegularLayout();
+                showText(apiException.getMessage());
+            }
+        });
+    }
+
     private void showResult(PaymentMethod paymentMethod, Issuer issuer, PayerCost payerCost, Token token) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("Se seleccionó: ");
@@ -297,12 +360,6 @@ public class ComponentsExampleActivity extends AppCompatActivity {
 
     private void showText(String text) {
         Toast.makeText(this, text, Toast.LENGTH_LONG).show();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        showRegularLayout();
     }
 
     private void showRegularLayout() {
