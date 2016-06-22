@@ -48,11 +48,10 @@
             android:layout_height="@dimen/mpsdk_button_height"
             android:layout_marginTop="25dp"
             android:padding="10dp"
-            android:gravity="center"
             android:onClick="runCheckoutExample"
             style="@style/mpsdk_button_normal">
             <ImageView
-                android:layout_width="60dp"
+                android:layout_width="30dp"
                 android:layout_height="wrap_content"
                 android:src="@drawable/plugandplay"
                 android:tint="@color/mpsdk_white"/>
@@ -61,8 +60,10 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/white"
                 android:textSize="20dp"
-                android:text="Nuestro Checkout"/>
-            </LinearLayout>
+                android:layout_marginLeft="5dp"
+                android:layout_marginStart="5dp"
+                android:text="@string/checkout_button"/>
+        </LinearLayout>
 
         <LinearLayout
             android:orientation="horizontal"
@@ -74,7 +75,7 @@
             android:onClick="runComponentsExample"
             style="@style/mpsdk_button_normal">
             <ImageView
-                android:layout_width="60dp"
+                android:layout_width="30dp"
                 android:layout_height="35dp"
                 android:src="@drawable/puzzle"
                 android:tint="@color/mpsdk_white"/>
@@ -83,7 +84,9 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/white"
                 android:textSize="20dp"
-                android:text="Componentes de UI"/>
+                android:layout_marginLeft="5dp"
+                android:layout_marginStart="5dp"
+                android:text="@string/components_button"/>
         </LinearLayout>
 
         <LinearLayout
@@ -96,7 +99,7 @@
             android:onClick="runServicesExample"
             style="@style/mpsdk_button_normal">
             <ImageView
-                android:layout_width="60dp"
+                android:layout_width="30dp"
                 android:layout_height="35dp"
                 android:src="@drawable/ninja"
                 android:tint="@color/mpsdk_white"/>
@@ -105,7 +108,9 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/white"
                 android:textSize="20dp"
-                android:text="Servicios"/>
+                android:layout_marginLeft="5dp"
+                android:layout_marginStart="5dp"
+                android:text="@string/services_button"/>
         </LinearLayout>
 
     </LinearLayout>

@@ -54,5 +54,8 @@
     <string name="cutomization_description">¡Puedes customizar los componentes según tus necesidades!</string>
     <string name="exclude_visa">Excluir Visa</string>
     <string name="exclude_cash">Excluir efectivo</string>
+    <string name="checkout_button">Nuestro Checkout</string>
+    <string name="components_button">Componentes de UI</string>
+    <string name="services_button">Servicios</string>
 
 </resources>
