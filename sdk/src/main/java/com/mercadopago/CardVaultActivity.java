@@ -7,6 +7,7 @@ import android.view.View;
 
 import com.mercadopago.callbacks.Callback;
 import com.mercadopago.callbacks.FailureRecovery;
+import com.mercadopago.constants.PaymentTypes;
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.Installment;
@@ -198,7 +199,7 @@ public class CardVaultActivity extends ShowCardActivity {
     }
 
     public void checkStartInstallmentsActivity() {
-        if (!mCurrentPaymentMethod.getPaymentTypeId().equals(PaymentType.CREDIT_CARD)) {
+        if (!mCurrentPaymentMethod.getPaymentTypeId().equals(PaymentTypes.CREDIT_CARD)) {
             finishWithResult();
         }
         else {

@@ -1,4 +1,4 @@
-package com.mercadopago.model;
+package com.mercadopago.constants;
 
 /**
  * Created by mromar on 6/21/16.
@@ -63,4 +63,6 @@ public class PaymentMethods {
         public static final String EFECTY = "efecty";
         public static final String DAVIVIENDA = "davivienda";
     }
+
+    private PaymentMethods(){}
 }
