@@ -149,7 +149,7 @@ public class VaultActivity extends AppCompatActivity {
 
     protected void setContentView() {
 
-        setContentView(R.layout.activity_vault);
+        setContentView(R.layout.mpsdk_activity_vault);
     }
 
     protected void setAmount() {

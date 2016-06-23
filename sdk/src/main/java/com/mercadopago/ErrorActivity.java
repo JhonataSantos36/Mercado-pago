@@ -20,7 +20,7 @@ public class ErrorActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         animateErrorScreenLaunch();
-        setContentView(R.layout.activity_error);
+        setContentView(R.layout.mpsdk_activity_error);
         getActivityParameters();
         if(validParameters()) {
             initializeControls();
@@ -34,7 +34,7 @@ public class ErrorActivity extends AppCompatActivity {
     }
 
     private void animateErrorScreenLaunch() {
-        overridePendingTransition(R.anim.fade_in_seamless, R.anim.fade_out_seamless);
+        overridePendingTransition(R.anim.mpsdk_fade_in_seamless, R.anim.mpsdk_fade_out_seamless);
     }
 
     private boolean validParameters() {

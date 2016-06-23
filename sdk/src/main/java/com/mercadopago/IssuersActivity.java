@@ -98,7 +98,7 @@ public class IssuersActivity extends ShowCardActivity {
 
     protected void setContentView() {
         MPTracker.getInstance().trackScreen("CARD_ISSUERS", "2", mPublicKey, "MLA", "1.0", this);
-        setContentView(R.layout.activity_new_issuers);
+        setContentView(R.layout.mpsdk_activity_new_issuers);
     }
 
     protected void setLayout() {

@@ -60,7 +60,7 @@ public class InstructionsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_instructions);
+        setContentView(R.layout.mpsdk_activity_instructions);
         getActivityParameters();
         initializeControls();
         mBackPressedOnce = false;
@@ -236,7 +236,7 @@ public class InstructionsActivity extends AppCompatActivity {
     }
 
     private void animateOut() {
-        overridePendingTransition(R.anim.slide_right_to_left_in, R.anim.slide_right_to_left_out);
+        overridePendingTransition(R.anim.mpsdk_slide_right_to_left_in, R.anim.mpsdk_slide_right_to_left_out);
     }
 
     private void recoverFromFailure() {

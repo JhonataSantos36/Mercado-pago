@@ -116,7 +116,7 @@ public class CardVaultActivity extends ShowCardActivity {
     }
 
     protected void setContentView() {
-        setContentView(R.layout.activity_new_card_vault);
+        setContentView(R.layout.mpsdk_activity_new_card_vault);
     }
 
     private void startGuessingCardActivity() {
@@ -256,7 +256,7 @@ public class CardVaultActivity extends ShowCardActivity {
                         .setSite(mSite)
                         .setDecorationPreference(mDecorationPreference)
                         .startInstallmentsActivity();
-                overridePendingTransition(R.anim.fade_in_seamless, R.anim.fade_out_seamless);
+                overridePendingTransition(R.anim.mpsdk_fade_in_seamless, R.anim.mpsdk_fade_out_seamless);
             }
         });
     }

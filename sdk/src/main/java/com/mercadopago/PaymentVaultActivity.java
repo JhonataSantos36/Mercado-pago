@@ -79,7 +79,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
         if(mDecorationPreference != null && mDecorationPreference.hasColors()) {
             setTheme(R.style.Theme_MercadoPagoTheme_NoActionBar);
         }
-        setContentView(R.layout.activity_payment_vault);
+        setContentView(R.layout.mpsdk_activity_payment_vault);
 
         MPTracker.getInstance().trackScreen("PAYMENT_METHOD_SEARCH", "2", mMerchantPublicKey, "MLA", "1.0", this);
 
@@ -348,7 +348,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
         intent.putExtra("paymentMethodSearch", mPaymentMethodSearch);
 
         startActivityForResult(intent, MercadoPago.PAYMENT_VAULT_REQUEST_CODE);
-        overridePendingTransition(R.anim.slide_right_to_left_in, R.anim.slide_right_to_left_out);
+        overridePendingTransition(R.anim.mpsdk_slide_right_to_left_in, R.anim.mpsdk_slide_right_to_left_out);
     }
 
     protected void showSelectedItemChildren() {
@@ -462,7 +462,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
             this.finish();
         }
         else {
-            overridePendingTransition(R.anim.slide_left_to_right_in, R.anim.slide_left_to_right_out);
+            overridePendingTransition(R.anim.mpsdk_slide_left_to_right_in, R.anim.mpsdk_slide_left_to_right_out);
         }
     }
 
@@ -504,7 +504,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
     }
 
     private void animatePaymentMethodSelection() {
-        overridePendingTransition(R.anim.slide_right_to_left_in, R.anim.slide_right_to_left_out);
+        overridePendingTransition(R.anim.mpsdk_slide_right_to_left_in, R.anim.mpsdk_slide_right_to_left_out);
     }
 
     @Override
@@ -539,7 +539,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
         finish();
 
         if(isItemSelected()) {
-            overridePendingTransition(R.anim.slide_left_to_right_in, R.anim.slide_left_to_right_out);
+            overridePendingTransition(R.anim.mpsdk_slide_left_to_right_in, R.anim.mpsdk_slide_left_to_right_out);
         }
     }
 

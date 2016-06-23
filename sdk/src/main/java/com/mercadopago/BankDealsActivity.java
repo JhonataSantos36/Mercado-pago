@@ -112,7 +112,7 @@ public class BankDealsActivity extends AppCompatActivity {
     }
 
     protected void setContentView() {
-        setContentView(R.layout.activity_bank_deals);
+        setContentView(R.layout.mpsdk_activity_bank_deals);
     }
 
     public void refreshLayout(View view) {

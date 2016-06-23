@@ -89,28 +89,28 @@ public class CongratsActivity extends AppCompatActivity {
     private void showPending(){
         setTheme(R.style.Theme_InfoMercadoPagoTheme_NoActionbar);
 
-        setContentView(R.layout.activity_pending);
+        setContentView(R.layout.mpsdk_activity_pending);
         initializePendingControls();
         fillPendingData();
     }
 
     private void showRejection() {
         setTheme(R.style.Theme_RejectionMercadoPagoTheme_NoActionbar);
-        setContentView(R.layout.activity_rejection);
+        setContentView(R.layout.mpsdk_activity_rejection);
         initializeRejectionControls();
         fillRejectionData();
     }
 
     private void showCallForAuthorize() {
         setTheme(R.style.Theme_CallForAuthorizeMercadoPagoTheme_NoActionbar);
-        setContentView(R.layout.activity_call_for_authorize);
+        setContentView(R.layout.mpsdk_activity_call_for_authorize);
         initializeCallForAuthControls();
         fillCallForAuthData();
     }
 
     private void showCongrats() {
         setTheme(R.style.Theme_CongratsMercadoPagoTheme_NoActionbar);
-        setContentView(R.layout.activity_congrats);
+        setContentView(R.layout.mpsdk_activity_congrats);
         initializeCongratsControls();
         fillCongratsData();
     }

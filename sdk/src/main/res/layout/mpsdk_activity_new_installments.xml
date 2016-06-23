@@ -45,7 +45,7 @@
                     android:orientation="vertical"
                     android:background="@color/mpsdk_white"
                     android:visibility="visible">
-                    <include layout="@layout/new_card_installments"/>
+                    <include layout="@layout/mpsdk_new_card_installments"/>
                 </LinearLayout>
                 <ProgressBar
                     android:id="@+id/mpsdkProgressBar"

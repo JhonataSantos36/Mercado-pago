@@ -191,7 +191,7 @@ public abstract class ShowCardActivity extends FrontCardActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        overridePendingTransition(R.anim.fade_in_seamless, R.anim.fade_out_seamless);
+        overridePendingTransition(R.anim.mpsdk_fade_in_seamless, R.anim.mpsdk_fade_out_seamless);
     }
 
     @Override

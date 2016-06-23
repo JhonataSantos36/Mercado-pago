@@ -8,7 +8,7 @@
     android:orientation="vertical"
     tools:context="com.mercadopago.examples.step8.F2Activity">
 
-    <include layout="@layout/view_progress_bar"/>
+    <include layout="@layout/mpsdk_view_progress_bar"/>
 
     <ImageView
         android:id="@+id/image"
