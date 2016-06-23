@@ -20,16 +20,4 @@ public class PaymentType implements Serializable {
     public void setId(String id) {
         this.id = id;
     }
-
-    public static List<String> getAllPaymentTypes() {
-        return new ArrayList<String>(){{
-            add(PaymentTypes.CREDIT_CARD);
-            add(PaymentTypes.DEBIT_CARD);
-            add(PaymentTypes.PREPAID_CARD);
-            add(PaymentTypes.TICKET);
-            add(PaymentTypes.ATM);
-            add(PaymentTypes.DIGITAL_CURRENCY);
-            add(PaymentTypes.BANK_TRANSFER);
-        }};
-    }
 }

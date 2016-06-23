@@ -1,5 +1,8 @@
 package com.mercadopago.constants;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by mromar on 6/23/16.
  */
@@ -15,4 +18,16 @@ public class PaymentTypes {
     public static String ACCOUNT_MONEY = "account_money";
 
     private PaymentTypes(){}
+
+    public static List<String> getAllPaymentTypes() {
+        return new ArrayList<String>(){{
+            add(CREDIT_CARD);
+            add(DEBIT_CARD);
+            add(PREPAID_CARD);
+            add(TICKET);
+            add(ATM);
+            add(DIGITAL_CURRENCY);
+            add(BANK_TRANSFER);
+        }};
+    }
 }

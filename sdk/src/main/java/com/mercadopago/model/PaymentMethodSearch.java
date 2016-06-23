@@ -1,5 +1,7 @@
 package com.mercadopago.model;
 
+import com.mercadopago.constants.PaymentTypes;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -31,7 +33,7 @@ public class PaymentMethodSearch implements Serializable{
                     requiredPaymentMethod = currentPaymentMethod;
 
                     String itemPaymentType = item.getId().replace(currentPaymentMethod.getId() + "_", "");
-                    if(PaymentType.getAllPaymentTypes().contains(itemPaymentType)) {
+                    if(PaymentTypes.getAllPaymentTypes().contains(itemPaymentType)) {
                         //MP API v1 not contemplating different payment types for a payment method. Overriding to give consistent instructions.
                         requiredPaymentMethod.setPaymentTypeId(itemPaymentType);
                     }

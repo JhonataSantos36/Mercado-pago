@@ -8,12 +8,13 @@ import android.support.test.runner.lifecycle.ActivityLifecycleMonitorRegistry;
 import android.test.suitebuilder.annotation.LargeTest;
 
 
+import com.mercadopago.constants.PaymentTypes;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentMethodSearch;
 import com.mercadopago.model.PaymentMethodSearchItem;
 import com.mercadopago.model.PaymentPreference;
 import com.mercadopago.model.PaymentType;
-import com.mercadopago.model.Sites;
+import com.mercadopago.constants.Sites;
 import com.mercadopago.model.Token;
 import com.mercadopago.test.StaticMock;
 import com.mercadopago.test.rules.MockedApiTestRule;
@@ -409,7 +410,7 @@ public class PaymentVaultActivityTest {
         mTestRule.addApiResponseToQueue(paymentMethodSearchJson, 200, "");
 
         List<String> excludedPaymentTypes = new ArrayList<String>(){{
-            addAll(PaymentType.getAllPaymentTypes());
+            addAll(PaymentTypes.getAllPaymentTypes());
         }};
 
         PaymentPreference paymentPreference = new PaymentPreference();
