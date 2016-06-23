@@ -1,10 +1,12 @@
 package com.mercadopago;
 
 import android.content.Intent;
+import android.support.test.espresso.matcher.BoundedMatcher;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.suitebuilder.annotation.LargeTest;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.mercadopago.model.Instruction;
 import com.mercadopago.model.InstructionActionInfo;
@@ -14,9 +16,6 @@ import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.test.StaticMock;
 import com.mercadopago.test.rules.MockedApiTestRule;
 
-import android.support.test.espresso.matcher.BoundedMatcher;
-import android.widget.TextView;
-
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.junit.Before;
@@ -24,21 +23,20 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static android.support.test.espresso.assertion.ViewAssertions.*;
+import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasAction;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasData;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertEquals;
-
-import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static android.support.test.espresso.action.ViewActions.click;
 import static org.junit.Assert.assertTrue;
 
 /**

@@ -57,5 +57,9 @@
     <string name="checkout_button">Nuestro Checkout</string>
     <string name="components_button">Componentes de UI</string>
     <string name="services_button">Servicios</string>
+    <string name="result_message_was_selected">"Se seleccionó: "</string>
+    <string name="result_message_issued_by">" emitida por "</string>
+    <string name="result_message_with">" con  "</string>
+    <string name="result_message_and_token">" y token id: "</string>
 
 </resources>

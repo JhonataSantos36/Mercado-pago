@@ -7,12 +7,15 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.mercadopago.ExampleActivity;
+import com.mercadopago.constants.PaymentMethods;
+import com.mercadopago.constants.PaymentTypes;
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.examples.R;
 import com.mercadopago.examples.utils.ExamplesUtils;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentPreference;
+import com.mercadopago.model.PaymentType;
 import com.mercadopago.model.Token;
 import com.mercadopago.util.LayoutUtil;
 
@@ -23,12 +26,12 @@ import java.util.List;
 public class Step1Activity extends ExampleActivity {
 
     protected List<String> mExcludedPaymentTypeIds = new ArrayList<String>(){{
-        add("ticket");
-        add("digital_currency");
+        add(PaymentTypes.TICKET);
+        add(PaymentTypes.DIGITAL_CURRENCY);
     }};
 
     protected List<String> mExcludedPaymentMethodIds = new ArrayList<String>(){{
-        add("visa");
+        add(PaymentMethods.ARGENTINA.VISA);
     }};
     protected Activity mActivity;
     protected PaymentPreference mPaymentPreference;

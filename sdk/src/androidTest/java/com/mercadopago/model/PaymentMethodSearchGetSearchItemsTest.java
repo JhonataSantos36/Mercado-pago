@@ -1,8 +1,5 @@
 package com.mercadopago.model;
 
-import android.test.AndroidTestCase;
-
-import com.mercadopago.test.BaseTest;
 import com.mercadopago.test.StaticMock;
 import com.mercadopago.util.JsonUtil;
 
@@ -12,7 +9,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
-import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Collection;
 

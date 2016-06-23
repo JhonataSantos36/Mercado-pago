@@ -2,9 +2,9 @@ package com.mercadopago.examples.components;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.ImageView;
@@ -12,6 +12,9 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.mercadopago.callbacks.Callback;
+import com.mercadopago.constants.PaymentMethods;
+import com.mercadopago.constants.PaymentTypes;
+import com.mercadopago.constants.Sites;
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.core.MerchantServer;
 import com.mercadopago.examples.R;
@@ -28,8 +31,6 @@ import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentPreference;
-import com.mercadopago.model.PaymentType;
-import com.mercadopago.model.Sites;
 import com.mercadopago.model.Token;
 import com.mercadopago.util.LayoutUtil;
 
@@ -67,7 +68,7 @@ public class ComponentsExampleActivity extends AppCompatActivity {
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
         mRegularLayout = findViewById(R.id.regularLayout);
         mPublicKey = ExamplesUtils.DUMMY_MERCHANT_PUBLIC_KEY_EXAMPLES_SERVICE;
-        mAmount = new BigDecimal(100);
+        mAmount = ExamplesUtils.DUMMY_ITEM_UNIT_PRICE;
     }
 
     public void onCompletePaymentMethodSelectionClicked(View view) {
@@ -290,12 +291,12 @@ public class ComponentsExampleActivity extends AppCompatActivity {
         PaymentPreference paymentPreference = new PaymentPreference();
         if(mCashExcluded.isChecked()) {
             paymentPreference.setExcludedPaymentTypeIds(new ArrayList<String>() {{
-                add(PaymentType.TICKET);
+                add(PaymentTypes.TICKET);
             }});
         }
         if(mVisaExcluded.isChecked()) {
             paymentPreference.setExcludedPaymentMethodIds(new ArrayList<String>() {{
-                add("visa");
+                add(PaymentMethods.ARGENTINA.VISA);
             }});
         }
         return paymentPreference;
@@ -346,16 +347,16 @@ public class ComponentsExampleActivity extends AppCompatActivity {
 
     private void showResult(PaymentMethod paymentMethod, Issuer issuer, PayerCost payerCost, Token token) {
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("Se seleccionó: ");
+        stringBuilder.append(getString(R.string.result_message_was_selected));
         stringBuilder.append(paymentMethod.getName());
         if(issuer != null) {
-            stringBuilder.append(" emitida por " + issuer.getName());
+            stringBuilder.append(getString(R.string.result_message_issued_by) + issuer.getName());
         }
         if(payerCost != null) {
-            stringBuilder.append(" con  " + payerCost.getRecommendedMessage());
+            stringBuilder.append(getString(R.string.result_message_with) + payerCost.getRecommendedMessage());
         }
         if(token != null) {
-            stringBuilder.append(" y token id: " + token.getId());
+            stringBuilder.append(getString(R.string.result_message_and_token) + token.getId());
         }
         showText(stringBuilder.toString());
     }

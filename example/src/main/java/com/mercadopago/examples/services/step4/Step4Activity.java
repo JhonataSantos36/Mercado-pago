@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.mercadopago.ExampleActivity;
+import com.mercadopago.constants.PaymentTypes;
 import com.mercadopago.examples.R;
 import com.mercadopago.examples.utils.ExamplesUtils;
 import com.mercadopago.model.ApiException;
@@ -19,8 +20,8 @@ import java.util.List;
 public class Step4Activity extends ExampleActivity {
 
     protected List<String> mExcludedPaymentTypes = new ArrayList<String>(){{
-        add("debit_card");
-        add("credit_card");
+        add(PaymentTypes.DEBIT_CARD);
+        add(PaymentTypes.CREDIT_CARD);
     }};
 
     @Override

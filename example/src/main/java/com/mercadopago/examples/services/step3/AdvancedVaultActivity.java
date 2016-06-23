@@ -8,6 +8,7 @@ import android.widget.Toast;
 
 import com.mercadopago.adapters.CustomerCardsAdapter;
 import com.mercadopago.callbacks.Callback;
+import com.mercadopago.constants.Sites;
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.examples.R;
 import com.mercadopago.examples.services.step2.SimpleVaultActivity;
@@ -17,7 +18,6 @@ import com.mercadopago.model.Issuer;
 import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentMethodRow;
-import com.mercadopago.model.Sites;
 import com.mercadopago.model.Token;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.LayoutUtil;
@@ -326,6 +326,7 @@ public class AdvancedVaultActivity extends SimpleVaultActivity {
                 .setPublicKey(mMerchantPublicKey)
                 .setPayerCosts(mPayerCosts)
                 .setPaymentMethod(mSelectedPaymentMethod)
+                .setAmount(mAmount)
                 .setSite(Sites.ARGENTINA)
                 .startInstallmentsActivity();
     }

@@ -3,8 +3,6 @@ package com.mercadopago.test;
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.mercadopago.model.Card;
 import com.mercadopago.model.CardToken;
 import com.mercadopago.model.CheckoutPreference;
@@ -21,8 +19,6 @@ import com.mercadopago.model.SavedCardToken;
 import com.mercadopago.util.JsonUtil;
 
 import java.io.InputStream;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.List;
 
 public class StaticMock {

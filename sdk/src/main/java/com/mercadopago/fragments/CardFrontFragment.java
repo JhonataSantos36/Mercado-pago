@@ -116,7 +116,7 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
         if(mDecorationPreference != null && mDecorationPreference.hasColors()) {
             cardShadowColor = mDecorationPreference.getLighterColor();
         }
-        GradientDrawable cardShadowRounded = (GradientDrawable) ContextCompat.getDrawable(getActivity(), R.drawable.card_shadow_rounded);
+        GradientDrawable cardShadowRounded = (GradientDrawable) ContextCompat.getDrawable(getActivity(), R.drawable.mpsdk_card_shadow_rounded);
         cardShadowRounded.setStroke(ScaleUtil.getPxFromDp(6, getActivity()), cardShadowColor);
         mCardBorder.setImageDrawable(cardShadowRounded);
     }

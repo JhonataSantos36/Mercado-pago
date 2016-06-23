@@ -3,7 +3,6 @@ package com.mercadopago.test;
 import com.mercadopago.util.JsonUtil;
 
 import java.io.IOException;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
