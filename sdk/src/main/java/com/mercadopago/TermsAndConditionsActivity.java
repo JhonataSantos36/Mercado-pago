@@ -129,6 +129,6 @@ public class TermsAndConditionsActivity extends AppCompatActivity {
     protected void setContentView() {
         MPTracker.getInstance().trackScreen("TERMS_AND_CONDITIONS", "2", "publicKey", "MLA", "1.0", this);
 
-        setContentView(R.layout.activity_terms_and_conditions);
+        setContentView(R.layout.mpsdk_activity_terms_and_conditions);
     }
 }

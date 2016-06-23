@@ -141,7 +141,7 @@ public class NewCardActivity extends AppCompatActivity {
 
     protected void setContentView() {
 
-        setContentView(R.layout.activity_new_card);
+        setContentView(R.layout.mpsdk_activity_new_card);
     }
 
     protected void setFocusOrder() {

@@ -63,7 +63,7 @@ public class PaymentMethodCardEditableRow implements PaymentMethodViewController
     @Override
     public View inflateInParent(ViewGroup parent, boolean attachToRoot) {
         mView = LayoutInflater.from(mContext)
-                .inflate(R.layout.row_payment_method_edit_card, parent, attachToRoot);
+                .inflate(R.layout.mpsdk_row_payment_method_edit_card, parent, attachToRoot);
         return mView;
     }
 

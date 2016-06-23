@@ -104,7 +104,7 @@ public class CheckoutActivity extends AppCompatActivity {
         if(mDecorationPreference != null && mDecorationPreference.hasColors()) {
             setTheme(R.style.Theme_MercadoPagoTheme_NoActionBar);
         }
-        setContentView(R.layout.activity_checkout);
+        setContentView(R.layout.mpsdk_activity_checkout);
 
         initializeToolbar();
         mBackPressedOnce = false;
@@ -444,7 +444,7 @@ public class CheckoutActivity extends AppCompatActivity {
             drawPayerCostRow();
             setAmountLabel();
         }
-        overridePendingTransition(R.anim.slide_left_to_right_in, R.anim.slide_left_to_right_out);
+        overridePendingTransition(R.anim.mpsdk_slide_left_to_right_in, R.anim.mpsdk_slide_left_to_right_out);
     }
 
     private void finishWithPaymentResult() {
@@ -475,7 +475,7 @@ public class CheckoutActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     mPaymentMethodEditionRequested = true;
                     startPaymentVaultActivity();
-                    overridePendingTransition(R.anim.slide_right_to_left_in, R.anim.slide_right_to_left_out);
+                    overridePendingTransition(R.anim.mpsdk_slide_right_to_left_in, R.anim.mpsdk_slide_right_to_left_out);
                 }
             });
         }
@@ -528,7 +528,7 @@ public class CheckoutActivity extends AppCompatActivity {
                 .setDecorationPreference(mDecorationPreference)
                 .startInstallmentsActivity();
 
-        overridePendingTransition(R.anim.slide_right_to_left_in, R.anim.slide_right_to_left_out);
+        overridePendingTransition(R.anim.mpsdk_slide_right_to_left_in, R.anim.mpsdk_slide_right_to_left_out);
     }
 
     private void setAmountLabel() {
@@ -569,7 +569,7 @@ public class CheckoutActivity extends AppCompatActivity {
     }
 
     private void animateBackFromPaymentEdition() {
-        overridePendingTransition(R.anim.slide_left_to_right_in, R.anim.slide_left_to_right_out);
+        overridePendingTransition(R.anim.mpsdk_slide_left_to_right_in, R.anim.mpsdk_slide_left_to_right_out);
     }
 
     private boolean isUniquePaymentMethod() {
@@ -806,7 +806,7 @@ public class CheckoutActivity extends AppCompatActivity {
     }
 
     private void animateBackToPaymentVault() {
-        overridePendingTransition(R.anim.slide_left_to_right_in, R.anim.slide_left_to_right_out);
+        overridePendingTransition(R.anim.mpsdk_slide_left_to_right_in, R.anim.mpsdk_slide_left_to_right_out);
     }
 
     private void showProgress() {

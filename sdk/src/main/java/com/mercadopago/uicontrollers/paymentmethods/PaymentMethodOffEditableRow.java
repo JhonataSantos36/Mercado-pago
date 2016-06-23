@@ -99,7 +99,7 @@ public class PaymentMethodOffEditableRow implements PaymentMethodViewController 
     @Override
     public View inflateInParent(ViewGroup parent, boolean attachToRoot) {
         mView = LayoutInflater.from(mContext)
-                .inflate(R.layout.row_payment_method_edit_large, parent, attachToRoot);
+                .inflate(R.layout.mpsdk_row_payment_method_edit_large, parent, attachToRoot);
         return mView;
     }
 

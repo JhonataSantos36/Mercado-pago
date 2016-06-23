@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimaryDark">#2196f3</color>
-    <color name="colorAccent">#b7999999</color>
-    <color name="commentColor">#999</color>
-
+    <color name="mpsdk_comment_color">#999</color>
     <color name="mpsdk_white">#FFFFFF</color>
     <color name="mpsdk_white_background">#FFFFFF</color>
     <color name="mpsdk_base_text_alpha">#B3333333</color>

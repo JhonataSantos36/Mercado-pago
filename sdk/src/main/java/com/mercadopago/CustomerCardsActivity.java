@@ -70,7 +70,7 @@ public class CustomerCardsActivity extends AppCompatActivity {
     protected void setContentView() {
         //TODO validate AGREGAR PUBLIC KEY
         MPTracker.getInstance().trackScreen("CUSTOMER_CARDS", "2", "publicKey", "MLA", "1.0", this);
-        setContentView(R.layout.activity_customer_cards);
+        setContentView(R.layout.mpsdk_activity_customer_cards);
     }
 
     @Override

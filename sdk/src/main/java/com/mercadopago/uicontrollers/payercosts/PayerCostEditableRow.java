@@ -100,7 +100,7 @@ public class PayerCostEditableRow implements PayerCostViewController {
     @Override
     public View inflateInParent(ViewGroup parent, boolean attachToRoot) {
         mView = LayoutInflater.from(mContext)
-                .inflate(R.layout.row_payer_cost_edit, parent, attachToRoot);
+                .inflate(R.layout.mpsdk_row_payer_cost_edit, parent, attachToRoot);
         return mView;
     }
 

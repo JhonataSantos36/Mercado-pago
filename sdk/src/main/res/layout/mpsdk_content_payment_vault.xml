@@ -12,7 +12,7 @@
         android:id="@+id/mpsdkRegularLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:showIn="@layout/activity_payment_vault"
+        tools:showIn="@layout/mpsdk_activity_payment_vault"
         tools:context="com.mercadopago.PaymentVaultActivity">
         <RelativeLayout
             android:layout_marginTop="20dp"
@@ -40,7 +40,7 @@
                 android:layout_below="@id/mpsdkGroupsList"
                 android:layout_width="match_parent"
                 android:layout_height="3dp"
-                android:background="@drawable/drop_shadow"/>
+                android:background="@drawable/mpsdk_drop_shadow"/>
         </RelativeLayout>
     </RelativeLayout>
 </ScrollView>

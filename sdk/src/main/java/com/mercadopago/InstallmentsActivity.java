@@ -10,7 +10,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 
-import com.mercadopago.adapters.InstallmentsAdapter;
+import com.mercadopago.adapters.PayerCostsAdapter;
 import com.mercadopago.callbacks.Callback;
 import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.core.MercadoPago;
@@ -32,7 +32,7 @@ public class InstallmentsActivity extends ShowCardActivity {
 
     //InstallmentsContainer
     private RecyclerView mInstallmentsView;
-    private InstallmentsAdapter mInstallmentsAdapter;
+    private PayerCostsAdapter mPayerCostsAdapter;
     private ProgressBar mProgressBar;
     private View mCardBackground;
 
@@ -106,7 +106,7 @@ public class InstallmentsActivity extends ShowCardActivity {
 
     protected void setContentView() {
         MPTracker.getInstance().trackScreen( "CARD_INSTALLMENTS", "2", mPublicKey, "MLA", "1.0", this);
-        setContentView(R.layout.activity_new_installments);
+        setContentView(R.layout.mpsdk_activity_new_installments);
     }
 
     protected void setLayout() {
@@ -123,8 +123,8 @@ public class InstallmentsActivity extends ShowCardActivity {
     }
 
     protected void initializeAdapter() {
-        mInstallmentsAdapter = new InstallmentsAdapter(this, mSite.getCurrencyId());
-        initializeAdapterListener(mInstallmentsAdapter, mInstallmentsView);
+        mPayerCostsAdapter = new PayerCostsAdapter(this, mSite.getCurrencyId());
+        initializeAdapterListener(mPayerCostsAdapter, mInstallmentsView);
     }
 
     protected void onItemSelected(View view, int position) {
@@ -249,7 +249,7 @@ public class InstallmentsActivity extends ShowCardActivity {
     }
 
     private void initializeInstallments() {
-        mInstallmentsAdapter.addResults(mPayerCosts);
+        mPayerCostsAdapter.addResults(mPayerCosts);
     }
 
     @Override

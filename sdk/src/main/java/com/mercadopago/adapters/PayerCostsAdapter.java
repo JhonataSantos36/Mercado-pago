@@ -16,14 +16,14 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-public class InstallmentsAdapter extends  RecyclerView.Adapter<InstallmentsAdapter.ViewHolder> {
+public class PayerCostsAdapter extends  RecyclerView.Adapter<PayerCostsAdapter.ViewHolder> {
 
 
     private Context mContext;
     private List<PayerCost> mInstallmentsList;
     private String mCurrencyId;
 
-    public InstallmentsAdapter(Context context, String currency) {
+    public PayerCostsAdapter(Context context, String currency) {
         this.mContext = context;
         this.mCurrencyId = currency;
         this.mInstallmentsList = new ArrayList<>();
@@ -43,7 +43,7 @@ public class InstallmentsAdapter extends  RecyclerView.Adapter<InstallmentsAdapt
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         LayoutInflater inflater = LayoutInflater.from(mContext);
-        View adapterView = inflater.inflate(R.layout.row_payer_cost_edit, parent, false);
+        View adapterView = inflater.inflate(R.layout.mpsdk_row_payer_cost_edit, parent, false);
         ViewHolder viewHolder = new ViewHolder(adapterView);
         return viewHolder;
     }

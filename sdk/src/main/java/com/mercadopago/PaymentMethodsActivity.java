@@ -173,7 +173,7 @@ public class PaymentMethodsActivity extends AppCompatActivity {
 
     protected void setContentView() {
         MPTracker.getInstance().trackScreen("PAYMENT_METHODS", "2", mMerchantPublicKey, "MLA", "1.0", this);
-        setContentView(R.layout.activity_payment_methods);
+        setContentView(R.layout.mpsdk_activity_payment_methods);
     }
 
     public void onBackPressed() {

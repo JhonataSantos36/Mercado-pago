@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
-    tools:showIn="@layout/activity_instructions"
+    tools:showIn="@layout/mpsdk_activity_instructions"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
     <LinearLayout
         android:layout_width="match_parent"
@@ -46,7 +46,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="3dp"
-            android:background="@drawable/drop_shadow"
+            android:background="@drawable/mpsdk_drop_shadow"
             android:layout_marginBottom="15dp">
         </View>
 
@@ -89,7 +89,7 @@
                             android:layout_marginTop="15dp"
                             android:layout_marginBottom="15dp"
                             android:layout_gravity="center_horizontal"
-                            android:background="@drawable/button_instructions"
+                            android:background="@drawable/mpsdk_button_instructions"
                             android:layout_width="174dp"
                             android:layout_height="36dp"
                             android:paddingLeft="10dp"

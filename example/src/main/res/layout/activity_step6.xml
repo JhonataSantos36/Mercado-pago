@@ -9,7 +9,7 @@
     android:id="@+id/regularLayout"
     tools:context="com.mercadopago.examples.step6.Step6Activity">
 
-    <include layout="@layout/view_progress_bar"/>
+    <include layout="@layout/mpsdk_view_progress_bar"/>
 
     <ImageView
         android:id="@+id/image"

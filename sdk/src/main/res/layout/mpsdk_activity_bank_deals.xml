@@ -6,8 +6,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <include layout="@layout/view_refresh_layout"/>
-    <include layout="@layout/view_progress_bar"/>
+    <include layout="@layout/mpsdk_view_refresh_layout"/>
+    <include layout="@layout/mpsdk_view_progress_bar"/>
     <android.support.v7.widget.Toolbar
         android:id="@+id/mpsdkToolbar"
         android:layout_width="match_parent"

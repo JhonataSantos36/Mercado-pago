@@ -80,7 +80,7 @@ public class ShoppingCartFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_shopping_cart, container, false);
+        return inflater.inflate(R.layout.mpsdk_fragment_shopping_cart, container, false);
     }
 
     @Override

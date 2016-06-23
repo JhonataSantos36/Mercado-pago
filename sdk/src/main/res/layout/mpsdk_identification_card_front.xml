@@ -13,7 +13,7 @@
         android:layout_width="290dp"
         android:layout_height="161dp"
         android:layout_gravity="center"
-        android:background="@drawable/new_identification_layout">
+        android:background="@drawable/mpsdk_new_identification_layout">
 
         <FrameLayout
             android:layout_width="192dp"
@@ -111,7 +111,7 @@
 
     <ImageView
         android:id="@+id/mpsdkIdShadowBorder"
-        android:src="@drawable/card_shadow_rounded"
+        android:src="@drawable/mpsdk_card_shadow_rounded"
         android:layout_width="300dp"
         android:layout_height="171dp"
         android:layout_gravity="center"/>

@@ -240,7 +240,7 @@ public class GuessingCardActivity extends FrontCardActivity {
     }
 
     protected void setContentView() {
-        setContentView(R.layout.activity_new_card_form);
+        setContentView(R.layout.mpsdk_activity_new_card_form);
     }
 
     private void initializeLayout(Bundle savedInstanceState) {
@@ -743,8 +743,8 @@ public class GuessingCardActivity extends FrontCardActivity {
         mToolbarButton.setVisibility(View.GONE);
         getSupportFragmentManager()
                 .beginTransaction()
-                .setCustomAnimations(R.anim.slide_right_to_left_in_slower, R.anim.slide_right_to_left_out_slower,
-                        R.anim.slide_left_to_right_in_slower, R.anim.slide_left_to_right_out_slower)
+                .setCustomAnimations(R.anim.mpsdk_slide_right_to_left_in_slower, R.anim.mpsdk_slide_right_to_left_out_slower,
+                        R.anim.mpsdk_slide_left_to_right_in_slower, R.anim.mpsdk_slide_left_to_right_out_slower)
                 .replace(R.id.mpsdkActivityNewCardContainer, mCardIdentificationFragment)
                 .addToBackStack(null)
                 .commit();
@@ -754,8 +754,8 @@ public class GuessingCardActivity extends FrontCardActivity {
         mCardSideState = CARD_SIDE_BACK;
         getSupportFragmentManager()
                 .beginTransaction()
-                .setCustomAnimations(R.anim.from_middle_left, R.anim.to_middle_left,
-                        R.anim.from_middle_left, R.anim.to_middle_left)
+                .setCustomAnimations(R.anim.mpsdk_from_middle_left, R.anim.mpsdk_to_middle_left,
+                        R.anim.mpsdk_from_middle_left, R.anim.mpsdk_to_middle_left)
                 .replace(R.id.mpsdkActivityNewCardContainer, mBackFragment)
                 .addToBackStack(null)
                 .commit();
@@ -1553,7 +1553,7 @@ public class GuessingCardActivity extends FrontCardActivity {
                         .setIssuers(issuers)
                         .setDecorationPreference(mDecorationPreference)
                         .startIssuersActivity();
-                overridePendingTransition(R.anim.fade_in_seamless, R.anim.fade_out_seamless);
+                overridePendingTransition(R.anim.mpsdk_fade_in_seamless, R.anim.mpsdk_fade_out_seamless);
             }
         });
     }
