@@ -1,4 +1,6 @@
-package com.mercadopago.model;
+package com.mercadopago.constants;
+
+import com.mercadopago.model.Site;
 
 /**
  * Created by mromar on 6/3/16.
@@ -12,4 +14,6 @@ public class Sites {
     public static final Site COLOMBIA = new Site("MCO", "COP");
     public static final Site VENEZUELA = new Site("MLV", "VEF");
     public static final Site USA = new Site("USA", "USD");
+
+    private Sites(){}
 }

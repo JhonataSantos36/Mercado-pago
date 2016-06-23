@@ -1,6 +1,7 @@
 package com.mercadopago.model;
 
 import com.google.gson.annotations.SerializedName;
+import com.mercadopago.constants.PaymentTypes;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -184,7 +185,7 @@ public class PaymentPreference implements Serializable {
 
     public boolean excludedPaymentTypesValid() {
         return excludedPaymentTypes == null
-                || excludedPaymentTypes.size() < PaymentType.getAllPaymentTypes().size();
+                || excludedPaymentTypes.size() < PaymentTypes.getAllPaymentTypes().size();
     }
 
     public boolean validDefaultInstallments() {

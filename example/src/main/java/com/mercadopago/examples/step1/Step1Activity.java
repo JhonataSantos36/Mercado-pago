@@ -3,7 +3,6 @@ package com.mercadopago.examples.step1;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.Toast;
 
@@ -14,7 +13,6 @@ import com.mercadopago.examples.R;
 import com.mercadopago.examples.utils.ExamplesUtils;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.CardToken;
-import com.mercadopago.model.DecorationPreference;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentPreference;
@@ -50,8 +48,6 @@ public class Step1Activity extends ExampleActivity {
         mPaymentPreference = new PaymentPreference();
         mPaymentPreference.setExcludedPaymentTypeIds(mExcludedPaymentTypeIds);
         mPaymentPreference.setExcludedPaymentMethodIds(mExcludedPaymentMethodIds);
-
-        mAmount = ExamplesUtils.DUMMY_ITEM_UNIT_PRICE;
     }
 
     @Override

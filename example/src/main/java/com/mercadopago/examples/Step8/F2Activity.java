@@ -13,8 +13,7 @@ import com.mercadopago.exceptions.MPException;
 import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentPreference;
-import com.mercadopago.model.Sites;
-import com.mercadopago.util.CurrenciesUtil;
+import com.mercadopago.constants.Sites;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
