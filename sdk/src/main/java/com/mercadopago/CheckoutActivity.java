@@ -157,7 +157,7 @@ public class CheckoutActivity extends AppCompatActivity {
 
             @Override
             public void failure(ApiException apiException) {
-                MPTracker.getInstance().trackEvent("PREFERENCE", "GET_PREFERENCE_RESPONSE", "FAIL", "3", mMerchantPublicKey, mCheckoutPreference.getSiteId(), "1.0", mActivity);
+                //TODO site from context MPTracker.getInstance().trackEvent("PREFERENCE", "GET_PREFERENCE_RESPONSE", "FAIL", "3", mMerchantPublicKey, mCheckoutPreference.getSiteId(), "1.0", mActivity);
                 if (mActiveActivity) {
                     ApiUtil.showApiExceptionError(mActivity, apiException);
                     failureRecovery = new FailureRecovery() {
@@ -618,7 +618,6 @@ public class CheckoutActivity extends AppCompatActivity {
                     startCongratsActivity();
                 } else {
                     MPTracker.getInstance().trackPaymentId(mCreatedPayment.getId().toString(), "3", mMerchantPublicKey, "MLA", "1.0", mActivity);
-
                     startInstructionsActivity();
                 }
                 cleanTransactionId();

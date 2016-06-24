@@ -1,7 +1,7 @@
 package com.mercadopago.model;
 
-import com.mercadopago.VaultActivity;
 import com.mercadopago.R;
+import com.mercadopago.VaultActivity;
 import com.mercadopago.test.BaseTest;
 import com.mercadopago.test.StaticMock;
 

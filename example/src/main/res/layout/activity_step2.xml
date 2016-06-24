@@ -6,31 +6,36 @@
     android:paddingTop="@dimen/mpsdk_activity_vertical_margin"
     android:paddingBottom="@dimen/mpsdk_activity_vertical_margin"
     android:orientation="vertical"
-    tools:context="com.mercadopago.examples.step2.Step2Activity">
+    tools:context=".services.step2.Step2Activity">
 
     <include layout="@layout/mpsdk_view_progress_bar"/>
-
-    <ImageView
-        android:id="@+id/image"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:src="@drawable/ico_numbers_2"
-        android:layout_gravity="center_horizontal" />
-
-    <com.mercadopago.views.MPTextView
+    <LinearLayout
+        android:id="@+id/mpsdkRegularLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/step2_description"
-        android:gravity="center_horizontal"
-        android:layout_marginTop="15dp"
-        style="@style/mpsdk_form_label"/>
-    <com.mercadopago.views.MPButton
-        android:id="@+id/continueButton"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/mpsdk_button_height"
-        android:layout_marginTop="25dp"
-        android:gravity="center"
-        android:text="@string/mpsdk_continue_label"
-        android:onClick="submitForm"
-        style="@style/mpsdk_button_normal"/>
+        android:orientation="vertical">
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/ico_numbers_2"
+            android:layout_gravity="center_horizontal" />
+
+        <com.mercadopago.views.MPTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/step2_description"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="15dp"
+            style="@style/mpsdk_form_label"/>
+        <com.mercadopago.views.MPButton
+            android:id="@+id/continueButton"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/mpsdk_button_height"
+            android:layout_marginTop="25dp"
+            android:gravity="center"
+            android:text="@string/mpsdk_continue_label"
+            android:onClick="submitForm"
+            style="@style/mpsdk_button_normal"/>
+    </LinearLayout>
 </LinearLayout>

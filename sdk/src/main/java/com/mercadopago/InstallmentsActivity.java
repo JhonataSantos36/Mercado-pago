@@ -154,7 +154,9 @@ public class InstallmentsActivity extends ShowCardActivity {
     @Override
     protected void getActivityParameters() {
         super.getActivityParameters();
-        mAmount = new BigDecimal(this.getIntent().getStringExtra("amount"));
+        if(this.getIntent().getStringExtra("amount") != null) {
+            mAmount = new BigDecimal(this.getIntent().getStringExtra("amount"));
+        }
         mSite = (Site) this.getIntent().getSerializableExtra("site");
         mPayerCosts = (ArrayList<PayerCost>)getIntent().getSerializableExtra("payerCosts");
         mPaymentPreference = (PaymentPreference) this.getIntent().getSerializableExtra("paymentPreference");

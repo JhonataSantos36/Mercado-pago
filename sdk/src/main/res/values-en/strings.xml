@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:xliff="rn:oasis:names:tc:xliff:document:1.2">
+<resources>
     <!--<string name="mpsdk_app_name">MercadoPago Android SDK</string>-->
     <!--<string name="mpsdk_continue_label">Continue</string>-->
     <!--<string name="mpsdk_select_pm_label">Choose a payment method ...</string>-->

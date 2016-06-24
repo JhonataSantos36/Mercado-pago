@@ -112,7 +112,7 @@
 
                                 <com.mercadopago.views.MPEditText
                                     android:id="@+id/expiryMonth"
-                                    android:layout_width="30dp"
+                                    android:layout_width="40dp"
                                     android:layout_height="wrap_content"
                                     android:maxLength="2"
                                     android:inputType="number"
@@ -132,7 +132,7 @@
 
                                 <com.mercadopago.views.MPEditText
                                     android:id="@+id/expiryYear"
-                                    android:layout_width="30dp"
+                                    android:layout_width="40dp"
                                     android:layout_height="wrap_content"
                                     android:maxLength="2"
                                     android:inputType="number"

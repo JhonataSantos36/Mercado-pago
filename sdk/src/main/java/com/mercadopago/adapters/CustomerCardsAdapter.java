@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.mercadopago.R;
 import com.mercadopago.model.Card;
@@ -18,17 +19,20 @@ import java.util.List;
 
 public class CustomerCardsAdapter extends  RecyclerView.Adapter<CustomerCardsAdapter.ViewHolder> {
 
+    private Activity mActivity;
     private List<PaymentMethodRow> mData;
     private View.OnClickListener mListener = null;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
+        public ImageView mPaymentMethodImage;
         public MPTextView mTextView;
 
         public ViewHolder(View v, View.OnClickListener listener) {
 
             super(v);
-            mTextView = (MPTextView) v.findViewById(R.id.mpsdkLabel);
+            mPaymentMethodImage = (ImageView) v.findViewById(R.id.mpsdkPmImage);
+            mTextView = (MPTextView) v.findViewById(R.id.mpsdkPmName);
             if (listener != null) {
                 v.setOnClickListener(listener);
             }
@@ -36,7 +40,7 @@ public class CustomerCardsAdapter extends  RecyclerView.Adapter<CustomerCardsAda
     }
 
     public CustomerCardsAdapter(Activity activity, List<Card> data, View.OnClickListener listener) {
-
+        mActivity = activity;
         mData = getRows(activity, data);
         mListener = listener;
     }
@@ -61,7 +65,7 @@ public class CustomerCardsAdapter extends  RecyclerView.Adapter<CustomerCardsAda
         holder.mTextView.setText(row.getLabel());
 
         // Set row picture
-        holder.mTextView.setCompoundDrawablesWithIntrinsicBounds(row.getIcon(), 0, 0, 0);
+        holder.mPaymentMethodImage.setImageResource(row.getIcon());
 
         // Set view tag item
         holder.itemView.setTag(row);

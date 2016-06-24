@@ -1,4 +1,4 @@
-package com.mercadopago.examples.step4;
+package com.mercadopago.examples.services.step4;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,7 +6,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.mercadopago.ExampleActivity;
-import com.mercadopago.core.MercadoPago;
+import com.mercadopago.constants.PaymentTypes;
 import com.mercadopago.examples.R;
 import com.mercadopago.examples.utils.ExamplesUtils;
 import com.mercadopago.model.ApiException;
@@ -20,8 +20,8 @@ import java.util.List;
 public class Step4Activity extends ExampleActivity {
 
     protected List<String> mExcludedPaymentTypes = new ArrayList<String>(){{
-        add("debit_card");
-        add("credit_card");
+        add(PaymentTypes.DEBIT_CARD);
+        add(PaymentTypes.CREDIT_CARD);
     }};
 
     @Override
@@ -56,8 +56,7 @@ public class Step4Activity extends ExampleActivity {
                     Toast.makeText(getApplicationContext(), apiException.getMessage(), Toast.LENGTH_LONG).show();
                 }
             }
-        } else if (requestCode == MercadoPago.CONGRATS_REQUEST_CODE) {
-
+        } else {
             LayoutUtil.showRegularLayout(this);
         }
     }

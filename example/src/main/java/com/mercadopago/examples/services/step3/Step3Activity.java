@@ -1,4 +1,4 @@
-package com.mercadopago.examples.step3;
+package com.mercadopago.examples.services.step3;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.mercadopago.ExampleActivity;
+import com.mercadopago.constants.PaymentTypes;
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.examples.R;
 import com.mercadopago.examples.utils.ExamplesUtils;
@@ -20,8 +21,8 @@ import java.util.List;
 public class Step3Activity extends ExampleActivity {
 
     protected List<String> mExcludedPaymentTypes = new ArrayList<String>(){{
-        add("ticket");
-        add("atm");
+        add(PaymentTypes.TICKET);
+        add(PaymentTypes.ATM);
     }};
 
     @Override
@@ -52,21 +53,13 @@ public class Step3Activity extends ExampleActivity {
                 }
             }
         } else if (requestCode == MercadoPago.CONGRATS_REQUEST_CODE) {
-
             LayoutUtil.showRegularLayout(this);
         }
     }
 
     public void submitSimpleForm(View view) {
         // Call final vault activity
-        ExamplesUtils.startAdvancedVaultActivity(this, ExamplesUtils.DUMMY_MERCHANT_PUBLIC_KEY,
-                ExamplesUtils.DUMMY_MERCHANT_BASE_URL, ExamplesUtils.DUMMY_MERCHANT_GET_CUSTOMER_URI,
-                ExamplesUtils.DUMMY_MERCHANT_ACCESS_TOKEN, new BigDecimal("20"), mExcludedPaymentTypes);
-    }
-
-    public void submitGuessingForm(View view) {
-        // Call final vault activity
-        ExamplesUtils.startAdvancedVaultActivityWithGuessing(this, ExamplesUtils.DUMMY_MERCHANT_PUBLIC_KEY,
+        ExamplesUtils.startAdvancedVaultActivity(this, ExamplesUtils.DUMMY_MERCHANT_PUBLIC_KEY_EXAMPLES_SERVICE,
                 ExamplesUtils.DUMMY_MERCHANT_BASE_URL, ExamplesUtils.DUMMY_MERCHANT_GET_CUSTOMER_URI,
                 ExamplesUtils.DUMMY_MERCHANT_ACCESS_TOKEN, new BigDecimal("20"), mExcludedPaymentTypes);
     }

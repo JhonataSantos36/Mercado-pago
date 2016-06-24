@@ -1,4 +1,4 @@
-package com.mercadopago.examples.step2;
+package com.mercadopago.examples.services.step2;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.mercadopago.ExampleActivity;
+import com.mercadopago.constants.PaymentTypes;
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.examples.R;
 import com.mercadopago.examples.utils.ExamplesUtils;
@@ -19,8 +20,8 @@ import java.util.List;
 public class Step2Activity extends ExampleActivity {
 
     protected List<String> mExcludedPaymentTypes = new ArrayList<String>(){{
-        add("ticket");
-        add("atm");
+        add(PaymentTypes.TICKET);
+        add(PaymentTypes.ATM);
     }};
 
     @Override
@@ -55,7 +56,7 @@ public class Step2Activity extends ExampleActivity {
     public void submitForm(View view) {
 
         // Call simple vault activity
-        ExamplesUtils.startSimpleVaultActivity(this, ExamplesUtils.DUMMY_MERCHANT_PUBLIC_KEY,
+        ExamplesUtils.startSimpleVaultActivity(this, ExamplesUtils.DUMMY_MERCHANT_PUBLIC_KEY_EXAMPLES_SERVICE,
                 ExamplesUtils.DUMMY_MERCHANT_BASE_URL, ExamplesUtils.DUMMY_MERCHANT_GET_CUSTOMER_URI,
                 ExamplesUtils.DUMMY_MERCHANT_ACCESS_TOKEN, mExcludedPaymentTypes);
     }
