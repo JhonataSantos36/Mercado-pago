@@ -37,7 +37,7 @@
     <string name="title_activity_checkout_example">Nuestro checkout</string>
     <string name="components_title">Arma tu propio checkout</string>
     <string name="components_description">Utiliza los componentes que te provee nuestra librería para armar un checkout a tu gusto.</string>
-    <string name="components_comment">Cada uno de estos componentes puede usarse independientemente de los demás, y puedes utilizarlos junto con tus propias interfaces.</string>
+    <string name="components_comment">Cada uno de estos componentes puede usarse independientemente de los demás, y puedes combinarlos con tus propias pantallas.</string>
     <string name="title_activity_customized_example">Checkout personalizado</string>
     <string name="payment_creation_failed">Falló la creación del pago</string>
     <string name="services_example_title">¡Mira todo lo que puedes hacer!</string>
