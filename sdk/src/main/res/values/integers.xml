@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <integer name="mpsdk_card_flip_time_full">300</integer>
-    <integer name="mpsdk_card_flip_time_half">150</integer>
+    <integer name="mpsdk_card_flip_time_full">800</integer>
+    <integer name="mpsdk_card_flip_time_half">400</integer>
+    <integer name="mpsdk_default_animation_time">300</integer>
+    <integer name="mpsdk_document_anim_time">400</integer>
+    <integer name="mpsdk_default_animation_offset">100</integer>
 </resources>

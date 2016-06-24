@@ -3,6 +3,7 @@ package com.mercadopago;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 
 import com.google.gson.reflect.TypeToken;
@@ -137,6 +138,7 @@ public class CardVaultActivity extends ShowCardActivity {
                         .setSupportedPaymentMethods(mPaymentMethodList)
                         .setDecorationPreference(mDecorationPreference)
                         .startGuessingCardActivity();
+                overridePendingTransition(R.anim.mpsdk_slide_right_to_left_in, R.anim.mpsdk_slide_right_to_left_out);
             }
         });
     }
@@ -192,7 +194,7 @@ public class CardVaultActivity extends ShowCardActivity {
             initializeCard();
             if (mCurrentPaymentMethod != null) {
                 int color = getCardColor(mCurrentPaymentMethod);
-                mFrontFragment.quickTransition(color);
+                mFrontFragment.setCardColor(color);
             }
             checkStartInstallmentsActivity();
 
@@ -249,8 +251,10 @@ public class CardVaultActivity extends ShowCardActivity {
     }
 
     public void startInstallmentsActivity(final List<PayerCost> payerCosts) {
-        runOnUiThread(new Runnable() {
-            public void run() {
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable(){
+            @Override
+            public void run(){
                 new MercadoPago.StartActivityBuilder()
                         .setActivity(mActivity)
                         .setPublicKey(mPublicKey)
@@ -263,9 +267,9 @@ public class CardVaultActivity extends ShowCardActivity {
                         .setSite(mSite)
                         .setDecorationPreference(mDecorationPreference)
                         .startInstallmentsActivity();
-                overridePendingTransition(R.anim.mpsdk_fade_in_seamless, R.anim.mpsdk_fade_out_seamless);
+                overridePendingTransition(R.anim.mpsdk_hold, R.anim.mpsdk_hold);
             }
-        });
+        }, 3000);
     }
 
     @Override

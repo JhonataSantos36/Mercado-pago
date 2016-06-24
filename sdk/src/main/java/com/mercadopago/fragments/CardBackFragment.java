@@ -12,6 +12,8 @@ import android.widget.ImageView;
 import com.mercadopago.CardInterface;
 import com.mercadopago.R;
 import com.mercadopago.model.DecorationPreference;
+import com.mercadopago.model.PaymentMethod;
+import com.mercadopago.util.MPAnimationUtils;
 import com.mercadopago.util.ScaleUtil;
 import com.mercadopago.views.MPTextView;
 
@@ -19,6 +21,7 @@ public class CardBackFragment extends android.support.v4.app.Fragment {
 
     private MPTextView mCardSecurityCodeTextView;
     private ImageView mCardBorder;
+    private ImageView mCardImageView;
 
     private DecorationPreference mDecorationPreference;
     private CardInterface mActivity;
@@ -57,6 +60,7 @@ public class CardBackFragment extends android.support.v4.app.Fragment {
         if (getView() != null) {
             mCardSecurityCodeTextView = (MPTextView) getView().findViewById(R.id.mpsdkCardSecurityCodeView);
             mCardBorder = (ImageView) getView().findViewById(R.id.mpsdkCardShadowBorder);
+            mCardImageView = (ImageView) getView().findViewById(R.id.mpsdkCardImageView);
             decorate();
         }
     }
@@ -72,6 +76,7 @@ public class CardBackFragment extends android.support.v4.app.Fragment {
     }
 
     public void populateViews() {
+        populateCardColor();
         populateCardSecurityCode();
     }
     
@@ -84,6 +89,13 @@ public class CardBackFragment extends android.support.v4.app.Fragment {
         if (s.length() == 0) {
             mCardSecurityCodeTextView.setText(buildSecurityCode(mActivity.getSecurityCodeLength(), s));
             mActivity.saveCardSecurityCode(null);
+        }
+    }
+
+    private void populateCardColor() {
+        PaymentMethod paymentMethod = mActivity.getCurrentPaymentMethod();
+        if (paymentMethod != null) {
+            MPAnimationUtils.setCardColor(mCardImageView, getContext(), mActivity.getCardColor(paymentMethod));
         }
     }
 

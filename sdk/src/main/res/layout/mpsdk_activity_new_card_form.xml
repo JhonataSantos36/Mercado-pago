@@ -25,7 +25,13 @@
                 android:background="@color/mpsdk_color_new_card_form_background">
                 <include layout="@layout/mpsdk_transparent_toolbar"/>
                 <FrameLayout
-                    android:id="@+id/mpsdkActivityNewCardContainer"
+                    android:id="@+id/mpsdkActivityNewCardContainerFront"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal|top"
+                    android:layout_marginTop="45dp" />
+                <FrameLayout
+                    android:id="@+id/mpsdkActivityNewCardContainerBack"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal|top"

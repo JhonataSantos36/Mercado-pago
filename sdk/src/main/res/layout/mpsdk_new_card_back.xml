@@ -16,6 +16,12 @@
         android:layout_gravity="center"
         android:background="@drawable/mpsdk_new_card_layout">
 
+        <ImageView
+            android:id="@+id/mpsdkCardImageView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/mpsdk_white"/>
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

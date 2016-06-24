@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<set xmlns:android="http://schemas.android.com/apk/res/android"
+    android:interpolator="@anim/mpsdk_overshoot_interpolator"
+    android:fillBefore="true"
+    android:fillAfter="true"
+    android:fillEnabled="true">
+
+    <translate
+        android:fromXDelta="-100%p"
+        android:toXDelta="0%p"
+        android:duration="@integer/mpsdk_document_anim_time"
+        android:startOffset="@integer/mpsdk_default_animation_offset"/>
+
+</set>

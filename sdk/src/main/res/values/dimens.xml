@@ -23,7 +23,5 @@
     <dimen name="mpsdk_list_item_height">55dp</dimen>
     <dimen name="mpsdk_list_item_height_large">72dp</dimen>
     <dimen name="mpsdk_shopping_cart_height">120dp</dimen>
-    <!-- Default screen margins, per the Android Design guidelines. -->
-    <dimen name="activity_horizontal_margin">16dp</dimen>
-    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="mpsdk_card_camera_distance">2560dp</dimen>
 </resources>

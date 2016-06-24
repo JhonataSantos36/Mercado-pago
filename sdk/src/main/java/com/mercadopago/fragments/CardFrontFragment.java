@@ -2,6 +2,7 @@ package com.mercadopago.fragments;
 
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.text.Editable;
@@ -19,6 +20,7 @@ import com.mercadopago.R;
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.model.DecorationPreference;
 import com.mercadopago.model.PaymentMethod;
+import com.mercadopago.util.MPAnimationUtils;
 import com.mercadopago.util.ScaleUtil;
 import com.mercadopago.views.MPEditText;
 import com.mercadopago.views.MPTextView;
@@ -36,11 +38,10 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
     private MPTextView mCardDateDividerTextView;
     private MPTextView mCardSecurityCodeTextView;
     private FrameLayout mCardSecurityClickableZone;
-    private FrameLayout mBaseCard;
-    private FrameLayout mColorCard;
     private FrameLayout mBaseImageCard;
     private ImageView mImageCardContainer;
-    private GradientDrawable mColorDrawableCard;
+    private ImageView mCardLowApiImageView;
+    private ImageView mCardLollipopImageView;
 
     // Input controls
     protected MPEditText mCardHolderNameEditText;
@@ -50,7 +51,6 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
     protected ImageView mCardBorder;
     //Local vars
     private Animation mAnimFadeIn;
-    private Animation mQuickAnim;
     private boolean mAnimate;
     private DecorationPreference mDecorationPreference;
 
@@ -74,7 +74,6 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
         super.onViewCreated(view, savedInstanceState);
         setCardInputViews();
         setEditTextListeners();
-        setAnimationListener();
         mActivity = (CardInterface)getActivity();
     }
 
@@ -91,7 +90,6 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
         mCardExpiryDateEditText = (MPEditText) getActivity().findViewById(R.id.mpsdkCardExpiryDate);
         mCardSecurityEditText = (MPEditText) getActivity().findViewById(R.id.mpsdkCardSecurityCode);
         mAnimFadeIn = AnimationUtils.loadAnimation(getActivity(), R.anim.mpsdk_fade_in);
-        mQuickAnim = AnimationUtils.loadAnimation(getActivity(), R.anim.mpsdk_quick_anim);
         if (getView() != null) {
             mCardNumberTextView = (MPTextView) getView().findViewById(R.id.mpsdkCardNumberTextView);
             mCardholderNameTextView = (MPTextView) getView().findViewById(R.id.mpsdkCardholderNameView);
@@ -100,13 +98,11 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
             mCardDateDividerTextView = (MPTextView) getView().findViewById(R.id.mpsdkCardHolderDateDivider);
             mCardSecurityCodeTextView = (MPTextView) getView().findViewById(R.id.mpsdkCardSecurityView);
             mCardSecurityClickableZone = (FrameLayout) getView().findViewById(R.id.mpsdkCardSecurityClickableZone);
-            mBaseCard = (FrameLayout) getView().findViewById(R.id.mpsdkActivityNewCardFormBasecolorFront);
-            mColorCard = (FrameLayout) getView().findViewById(R.id.mpsdkActivityNewCardFormColorFront);
-            mColorDrawableCard = (GradientDrawable) mColorCard.getBackground();
             mBaseImageCard = (FrameLayout) getView().findViewById(R.id.mpsdkBaseImageCard);
             mImageCardContainer = (ImageView) getView().findViewById(R.id.mpsdkImageCardContainer);
             mCardBorder = (ImageView) getView().findViewById(R.id.mpsdkCardShadowBorder);
-
+            mCardLowApiImageView = (ImageView) getView().findViewById(R.id.mpsdkCardLowApiImageView);
+            mCardLollipopImageView = (ImageView) getView().findViewById(R.id.mpsdkCardLollipopImageView);
         }
         decorate();
     }
@@ -141,25 +137,6 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
         setCardExpiryDateListener();
     }
 
-    protected void setAnimationListener() {
-        mAnimFadeIn.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-                mColorCard.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
-            }
-        });
-    }
-
     public void hideCardSecurityView() {
         mCardSecurityClickableZone.setVisibility(View.INVISIBLE);
     }
@@ -183,9 +160,6 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
         }
         mCardSecurityClickableZone.setVisibility(View.VISIBLE);
         String securityCode = mActivity.getSecurityCode();
-        if (securityCode != null && !securityCode.equals("")) {
-            mBaseCard.setVisibility(View.INVISIBLE);
-        }
         mCardSecurityCodeTextView.setText(buildSecurityCode(mActivity.getSecurityCodeLength(), securityCode));
     }
 
@@ -280,9 +254,29 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
         }
     }
 
-    public void transitionColor(int color) {
-        setCardColor(color);
-        mColorCard.startAnimation(mAnimFadeIn);
+    public void fadeInColor(int color) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            mCardLowApiImageView.setVisibility(View.GONE);
+            mCardLollipopImageView.setVisibility(View.VISIBLE);
+            MPAnimationUtils.fadeInLollipop(color, mCardLollipopImageView, getContext());
+        } else {
+            mCardLollipopImageView.setVisibility(View.GONE);
+            mCardLowApiImageView.setVisibility(View.VISIBLE);
+            MPAnimationUtils.fadeIn(color, mCardLowApiImageView, getContext());
+        }
+        setFontColor();
+    }
+
+    public void fadeOutColor(int color) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            mCardLowApiImageView.setVisibility(View.GONE);
+            mCardLollipopImageView.setVisibility(View.VISIBLE);
+            MPAnimationUtils.fadeOutLollipop(color, mCardLollipopImageView, getContext());
+        } else {
+            mCardLollipopImageView.setVisibility(View.GONE);
+            mCardLowApiImageView.setVisibility(View.VISIBLE);
+            MPAnimationUtils.fadeOut(color, mCardLowApiImageView, getContext());
+        }
         setFontColor();
     }
 
@@ -315,19 +309,6 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
         int color = ContextCompat.getColor(getContext(), font);
         int newColor = Color.argb(alpha, Color.red(color), Color.green(color), Color.blue(color));
         textView.setTextColor(newColor);
-    }
-
-    public void setCardColor(int color) {
-        if (color == 0) {
-            color = CardInterface.NEUTRAL_CARD_COLOR;
-        }
-        mColorDrawableCard.setColor(ContextCompat.getColor(getContext(), color));
-    }
-
-    public void quickTransition(int color) {
-        setCardColor(color);
-        mColorCard.startAnimation(mQuickAnim);
-        setFontColor();
     }
 
     public void transitionImage(int image) {
@@ -406,11 +387,22 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
     
     private void populateCardColor() {
         decorate();
+        int color = CardInterface.NEUTRAL_CARD_COLOR;
         if (mActivity.getCurrentPaymentMethod() != null) {
-            int color = mActivity.getCardColor(mActivity.getCurrentPaymentMethod());
-            quickTransition(color);
+            color = mActivity.getCardColor(mActivity.getCurrentPaymentMethod());
+        }
+        setCardColor(color);
+    }
+
+    public void setCardColor(int color) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            mCardLowApiImageView.setVisibility(View.GONE);
+            mCardLollipopImageView.setVisibility(View.VISIBLE);
+            MPAnimationUtils.setCardColorLollipop(mCardLollipopImageView, getContext(), color);
         } else {
-            quickTransition(CardInterface.NEUTRAL_CARD_COLOR);
+            mCardLollipopImageView.setVisibility(View.GONE);
+            mCardLowApiImageView.setVisibility(View.VISIBLE);
+            MPAnimationUtils.setCardColor(mCardLowApiImageView, getContext(), color);
         }
     }
 
