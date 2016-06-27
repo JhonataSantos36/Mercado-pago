@@ -311,18 +311,19 @@ public class Payment implements Serializable {
         public static final String STATUS_IN_PROCESS = "in_process";
         public static final String STATUS_REJECTED = "rejected";
 
+        public static final String STATUS_DETAIL_ACCREDITED = "accredited";
         public static final String STATUS_DETAIL_CC_REJECTED_CALL_FOR_AUTHORIZE = "cc_rejected_call_for_authorize";
         public static final String STATUS_DETAIL_PENDING_CONTINGENCY = "pending_contingency";
         public static final String STATUS_DETAIL_PENDING_REVIEW_MANUAL = "pending_review_manual";
         public static final String STATUS_DETAIL_CC_REJECTED_OTHER_REASON = "cc_rejected_other_reason";
         public static final String STATUS_DETAIL_CC_REJECTED_BAD_FILLED_OTHER = "cc_rejected_bad_filled_other";
-        public static final String CC_REJECTED_BAD_FILLED_CARD_NUMBER = "cc_rejected_bad_filled_card_number";
-        public static final String CC_REJECTED_BAD_FILLED_SECURITY_CODE = "cc_rejected_bad_filled_security_code";
-        public static final String CC_REJECTED_BAD_FILLED_DATE = "cc_rejected_bad_filled_date";
-        public static final String REJECTED_HIGH_RISK = "rejected_high_risk";
-        public static final String CC_REJECTED_INSUFFICIENT_AMOUNT = "cc_rejected_insufficient_amount";
-        public static final String CC_REJECTED_MAX_ATTEMPTS = "cc_rejected_max_attempts";
-        public static final String CC_REJECTED_DUPLICATED_PAYMENT = "cc_rejected_duplicated_payment";
-        public static final String CC_REJECTED_CARD_DISABLED = "cc_rejected_card_disabled";
+        public static final String STATUS_DETAIL_CC_REJECTED_BAD_FILLED_CARD_NUMBER = "cc_rejected_bad_filled_card_number";
+        public static final String STATUS_DETAIL_CC_REJECTED_BAD_FILLED_SECURITY_CODE = "cc_rejected_bad_filled_security_code";
+        public static final String STATUS_DETAIL_CC_REJECTED_BAD_FILLED_DATE = "cc_rejected_bad_filled_date";
+        public static final String STATUS_DETAIL_REJECTED_HIGH_RISK = "rejected_high_risk";
+        public static final String STATUS_DETAIL_CC_REJECTED_INSUFFICIENT_AMOUNT = "cc_rejected_insufficient_amount";
+        public static final String STATUS_DETAIL_CC_REJECTED_MAX_ATTEMPTS = "cc_rejected_max_attempts";
+        public static final String STATUS_DETAIL_CC_REJECTED_DUPLICATED_PAYMENT = "cc_rejected_duplicated_payment";
+        public static final String STATUS_DETAIL_CC_REJECTED_CARD_DISABLED = "cc_rejected_card_disabled";
     }
 }
