@@ -29,14 +29,13 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.RandomAccessFile;
-import java.io.Serializable;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Fingerprint implements Serializable {
+public class Fingerprint {
     private static final String TAG = "Fingerprint";
     private static final String SHARED_PREFS_FINGERPRINT_LOCATION = "FINGERPRINT_LOCATION";
 

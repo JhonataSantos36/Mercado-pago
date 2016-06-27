@@ -15,6 +15,7 @@ import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.test.StaticMock;
 import com.mercadopago.test.rules.MockedApiTestRule;
+import com.mercadopago.util.JsonUtil;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -63,8 +64,8 @@ public class InstructionsActivityTest {
 
         validStartIntent = new Intent();
         validStartIntent.putExtra("merchantPublicKey", mMerchantPublicKey);
-        validStartIntent.putExtra("paymentMethod", mPaymentMethod);
-        validStartIntent.putExtra("payment", mPayment);
+        validStartIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(mPaymentMethod));
+        validStartIntent.putExtra("payment", JsonUtil.getInstance().toJson(mPayment));
     }
 
     @Test

@@ -20,6 +20,7 @@ import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentMethodRow;
 import com.mercadopago.model.Token;
 import com.mercadopago.util.ApiUtil;
+import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;
 import com.mercadopago.util.MercadoPagoUtil;
 import com.mercadopago.views.MPTextView;
@@ -122,7 +123,7 @@ public class AdvancedVaultActivity extends SimpleVaultActivity {
 
         if (resultCode == RESULT_OK) {
 
-            PaymentMethodRow selectedPaymentMethodRow = (PaymentMethodRow) data.getSerializableExtra("paymentMethodRow");
+            PaymentMethodRow selectedPaymentMethodRow = JsonUtil.getInstance().fromJson(data.getStringExtra("paymentMethodRow"), PaymentMethodRow.class);
 
             if (selectedPaymentMethodRow.getCard() != null) {
 
@@ -153,7 +154,7 @@ public class AdvancedVaultActivity extends SimpleVaultActivity {
 
             // Set selection status
             mTempIssuer = null;
-            mTempPaymentMethod = (PaymentMethod) data.getSerializableExtra("paymentMethod");
+            mTempPaymentMethod = JsonUtil.getInstance().fromJson(data.getStringExtra("paymentMethod"), PaymentMethod.class);
 
             if (MercadoPagoUtil.isCardPaymentType(mTempPaymentMethod.getPaymentTypeId())) {  // Card-like methods
 
@@ -184,7 +185,7 @@ public class AdvancedVaultActivity extends SimpleVaultActivity {
         if (resultCode == RESULT_OK) {
 
             // Set selection status
-            mSelectedPayerCost = (PayerCost) data.getSerializableExtra("payerCost");
+            mSelectedPayerCost = JsonUtil.getInstance().fromJson(data.getStringExtra("payerCost"), PayerCost.class);
 
             // Update installments view
             mInstallmentsText.setText(mSelectedPayerCost.getRecommendedMessage());
@@ -202,7 +203,7 @@ public class AdvancedVaultActivity extends SimpleVaultActivity {
         if (resultCode == RESULT_OK) {
 
             // Set selection status
-            mTempIssuer = (Issuer) data.getSerializableExtra("issuer");
+            mTempIssuer = JsonUtil.getInstance().fromJson(data.getStringExtra("issuer"), Issuer.class);
 
             // Call new cards activity
             startCardActivity();
@@ -228,7 +229,7 @@ public class AdvancedVaultActivity extends SimpleVaultActivity {
 
             // Set selection status
             mPayerCosts = null;
-            mToken = (Token) data.getSerializableExtra("token");
+            mToken = JsonUtil.getInstance().fromJson(data.getStringExtra("token"), Token.class);
             mSelectedPaymentMethodRow = null;
             mSelectedPayerCost = null;
             mSelectedPaymentMethod = mTempPaymentMethod;
@@ -374,7 +375,7 @@ public class AdvancedVaultActivity extends SimpleVaultActivity {
                     returnIntent.putExtra("issuerId", Long.toString(mSelectedIssuer.getId()));
                 }
                 returnIntent.putExtra("installments", Integer.toString(mSelectedPayerCost.getInstallments()));
-                returnIntent.putExtra("paymentMethod", mSelectedPaymentMethod);
+                returnIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(mSelectedPaymentMethod));
                 setResult(RESULT_OK, returnIntent);
                 finish();
             }

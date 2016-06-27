@@ -28,6 +28,7 @@ import com.mercadopago.model.PaymentPreference;
 import com.mercadopago.model.SavedCardToken;
 import com.mercadopago.model.Token;
 import com.mercadopago.util.ApiUtil;
+import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;
 import com.mercadopago.util.MercadoPagoUtil;
 import com.mercadopago.views.MPButton;
@@ -49,7 +50,6 @@ public class VaultActivity extends AppCompatActivity {
     protected String mMerchantPublicKey;
     protected boolean mShowBankDeals;
     protected boolean mCardGuessingEnabled;
-    protected Boolean mSupportMPApp;
 
     // Input controls
     protected View mInstallmentsCard;
@@ -133,7 +133,6 @@ public class VaultActivity extends AppCompatActivity {
     public void getActivityParameters()
     {
         setAmount();
-        mSupportMPApp = this.getIntent().getBooleanExtra("supportMPApp", false);
         mMerchantPublicKey = this.getIntent().getStringExtra("merchantPublicKey");
         mMerchantBaseUrl = this.getIntent().getStringExtra("merchantBaseUrl");
         mMerchantGetCustomerUri = this.getIntent().getStringExtra("merchantGetCustomerUri");
@@ -141,8 +140,8 @@ public class VaultActivity extends AppCompatActivity {
         mCardGuessingEnabled = this.getIntent().getBooleanExtra("cardGuessingEnabled", false);
         mShowBankDeals = this.getIntent().getBooleanExtra("showBankDeals", true);
 
-        if (this.getIntent().getSerializableExtra("paymentPreference") != null) {
-            mPaymentPreference = (PaymentPreference) this.getIntent().getSerializableExtra("paymentPreference");
+        if (this.getIntent().getStringExtra("paymentPreference") != null) {
+            mPaymentPreference = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("paymentPreference"), PaymentPreference.class);
         }
 
     }
@@ -268,7 +267,7 @@ public class VaultActivity extends AppCompatActivity {
 
         if (resultCode == RESULT_OK) {
 
-            PaymentMethodRow selectedPaymentMethodRow = (PaymentMethodRow) data.getSerializableExtra("paymentMethodRow");
+            PaymentMethodRow selectedPaymentMethodRow = JsonUtil.getInstance().fromJson(data.getStringExtra("paymentMethodRow"), PaymentMethodRow.class);
 
             if (selectedPaymentMethodRow.getCard() != null) {
 
@@ -296,7 +295,7 @@ public class VaultActivity extends AppCompatActivity {
             }
         } else {
 
-            if ((data != null) && (data.getSerializableExtra("apiException") != null)) {
+            if ((data != null) && (data.getStringExtra("apiException") != null)) {
                 finishWithApiException(data);
             }
         }
@@ -308,7 +307,7 @@ public class VaultActivity extends AppCompatActivity {
 
             // Set selection status
             mTempIssuer = null;
-            mTempPaymentMethod = (PaymentMethod) data.getSerializableExtra("paymentMethod");
+            mTempPaymentMethod = JsonUtil.getInstance().fromJson(data.getStringExtra("paymentMethod"), PaymentMethod.class);
 
             if (MercadoPagoUtil.isCardPaymentType(mTempPaymentMethod.getPaymentTypeId())) {  // Card-like methods
 
@@ -335,7 +334,7 @@ public class VaultActivity extends AppCompatActivity {
                 mCardToken = null;
                 mSelectedPaymentMethodRow = null;
                 mSelectedPayerCost = null;
-                mSelectedPaymentMethod = (PaymentMethod) data.getSerializableExtra("paymentMethod");
+                mSelectedPaymentMethod = JsonUtil.getInstance().fromJson(data.getStringExtra("paymentMethod"), PaymentMethod.class);
                 mSelectedIssuer = null;
 
                 // Set customer method selection
@@ -353,7 +352,7 @@ public class VaultActivity extends AppCompatActivity {
             }
         } else {
 
-            if ((data != null) && (data.getSerializableExtra("apiException") != null)) {
+            if ((data != null) && (data.getStringExtra("apiException") != null)) {
                 finishWithApiException(data);
             } else if ((mSelectedPaymentMethodRow == null) && (mCardToken == null)) {
                 // if nothing is selected
@@ -376,14 +375,14 @@ public class VaultActivity extends AppCompatActivity {
         if (resultCode == RESULT_OK) {
 
             // Set selection status
-            mSelectedPayerCost = (PayerCost) data.getSerializableExtra("payerCost");
+            mSelectedPayerCost = JsonUtil.getInstance().fromJson(data.getStringExtra("payerCost"), PayerCost.class);
 
             // Update installments view
             mInstallmentsText.setText(mSelectedPayerCost.getRecommendedMessage());
 
         } else {
 
-            if ((data != null) && (data.getSerializableExtra("apiException") != null)) {
+            if ((data != null) && (data.getStringExtra("apiException") != null)) {
                 finishWithApiException(data);
             }
         }
@@ -394,7 +393,7 @@ public class VaultActivity extends AppCompatActivity {
         if (resultCode == RESULT_OK) {
 
             // Set selection status
-            mTempIssuer = (Issuer) data.getSerializableExtra("issuer");
+            mTempIssuer = JsonUtil.getInstance().fromJson(data.getStringExtra("issuer"), Issuer.class);
 
             // Call new cards activity
             startNewCardActivity();
@@ -402,7 +401,7 @@ public class VaultActivity extends AppCompatActivity {
         } else {
 
             if (data != null) {
-                if (data.getSerializableExtra("apiException") != null) {
+                if (data.getStringExtra("apiException") != null) {
 
                     finishWithApiException(data);
 
@@ -420,7 +419,7 @@ public class VaultActivity extends AppCompatActivity {
 
             // Set selection status
             mPayerCosts = null;
-            mCardToken = (CardToken) data.getSerializableExtra("cardToken");
+            mCardToken = JsonUtil.getInstance().fromJson(data.getStringExtra("cardToken"), CardToken.class);
             mSelectedPaymentMethodRow = null;
             mSelectedPayerCost = null;
             mSelectedPaymentMethod = mTempPaymentMethod;
@@ -431,7 +430,7 @@ public class VaultActivity extends AppCompatActivity {
         } else {
 
             if (data != null) {
-                if (data.getSerializableExtra("apiException") != null) {
+                if (data.getStringExtra("apiException") != null) {
 
                     finishWithApiException(data);
 
@@ -462,9 +461,9 @@ public class VaultActivity extends AppCompatActivity {
             mTempPaymentMethod = null;
             mTempIssuer =  null;
 
-            mSelectedPaymentMethod = (PaymentMethod) data.getSerializableExtra("paymentMethod");
-            mCardToken = (CardToken) data.getSerializableExtra("cardToken");
-            mSelectedIssuer = (Issuer) data.getSerializableExtra("issuer");
+            mSelectedPaymentMethod = JsonUtil.getInstance().fromJson(data.getStringExtra("paymentMethod"), PaymentMethod.class);
+            mCardToken = JsonUtil.getInstance().fromJson(data.getStringExtra("cardToken"), CardToken.class);
+            mSelectedIssuer = JsonUtil.getInstance().fromJson(data.getStringExtra("issuer"), Issuer.class);
 
             this.refreshCardData();
 
@@ -702,7 +701,7 @@ public class VaultActivity extends AppCompatActivity {
             // Return payment method id
             LayoutUtil.showRegularLayout(mActivity);
             Intent returnIntent = new Intent();
-            returnIntent.putExtra("paymentMethod", mSelectedPaymentMethod);
+            returnIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(mSelectedPaymentMethod));
             setResult(RESULT_OK, returnIntent);
             finish();
         }
@@ -773,7 +772,7 @@ public class VaultActivity extends AppCompatActivity {
             returnIntent.putExtra("issuerId", Long.toString(mSelectedIssuer.getId()));
         }
         returnIntent.putExtra("installments", Integer.toString(mSelectedPayerCost.getInstallments()));
-        returnIntent.putExtra("paymentMethod", mSelectedPaymentMethod);
+        returnIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(mSelectedPaymentMethod));
         setResult(RESULT_OK, returnIntent);
         finish();
     }

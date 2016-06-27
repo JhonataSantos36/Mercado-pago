@@ -17,6 +17,7 @@ import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentPreference;
 import com.mercadopago.model.PaymentType;
 import com.mercadopago.model.Token;
+import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;
 
 import java.math.BigDecimal;
@@ -35,7 +36,6 @@ public class Step1Activity extends ExampleActivity {
     }};
     protected Activity mActivity;
     protected PaymentPreference mPaymentPreference;
-    protected BigDecimal mAmount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,22 +54,22 @@ public class Step1Activity extends ExampleActivity {
         if (requestCode == MercadoPago.PAYMENT_METHODS_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 // Set payment method
-                PaymentMethod paymentMethod = (PaymentMethod) data.getSerializableExtra("paymentMethod");
+                PaymentMethod paymentMethod = JsonUtil.getInstance().fromJson(data.getStringExtra("paymentMethod"), PaymentMethod.class);
 
                 // Call new cards activity
                 ExamplesUtils.startCardActivity(this, ExamplesUtils.DUMMY_MERCHANT_PUBLIC_KEY_EXAMPLES_SERVICE, paymentMethod);
             } else {
 
-                if ((data != null) && (data.getSerializableExtra("apiException") != null)) {
-                    ApiException apiException = (ApiException) data.getSerializableExtra("apiException");
+                if ((data != null) && (data.getStringExtra("apiException") != null)) {
+                    ApiException apiException = JsonUtil.getInstance().fromJson(data.getStringExtra("apiException"), ApiException.class);
                     Toast.makeText(getApplicationContext(), apiException.getMessage(), Toast.LENGTH_LONG).show();
                 }
             }
         } else if (requestCode == ExamplesUtils.CARD_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
 
-                Token token = (Token) data.getSerializableExtra("token");
-                PaymentMethod paymentMethod = (PaymentMethod) data.getSerializableExtra("paymentMethod");
+                Token token = JsonUtil.getInstance().fromJson(data.getStringExtra("token"), Token.class);
+                PaymentMethod paymentMethod = JsonUtil.getInstance().fromJson(data.getStringExtra("paymentMethod"), PaymentMethod.class);
                 // Create payment
                 ExamplesUtils.createPayment(this, token.getId(),
                         1, null, paymentMethod, null);
@@ -77,8 +77,8 @@ public class Step1Activity extends ExampleActivity {
             } else {
 
                 if (data != null) {
-                    if (data.getSerializableExtra("apiException") != null) {
-                        ApiException apiException = (ApiException) data.getSerializableExtra("apiException");
+                    if (data.getStringExtra("apiException") != null) {
+                        ApiException apiException = JsonUtil.getInstance().fromJson(data.getStringExtra("apiException"), ApiException.class);
                         Toast.makeText(getApplicationContext(), apiException.getMessage(), Toast.LENGTH_LONG).show();
 
                     } else if (data.getBooleanExtra("backButtonPressed", false)) {

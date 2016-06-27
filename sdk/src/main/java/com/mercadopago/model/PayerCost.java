@@ -1,10 +1,9 @@
 package com.mercadopago.model;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 
-public class PayerCost implements Serializable {
+public class PayerCost {
 
     private Integer installments;
     private BigDecimal installmentRate;

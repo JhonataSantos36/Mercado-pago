@@ -26,6 +26,7 @@ import com.mercadopago.mptracker.MPTracker;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.CurrenciesUtil;
 import com.mercadopago.util.ErrorUtil;
+import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;
 import com.mercadopago.util.ScaleUtil;
 import com.mercadopago.views.MPButton;
@@ -199,9 +200,9 @@ public class InstructionsActivity extends AppCompatActivity {
     }
 
     protected void getActivityParameters() {
-        mPayment = (Payment) getIntent().getSerializableExtra("payment");
+        mPayment = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("payment"), Payment.class);
         mMerchantPublicKey = this.getIntent().getStringExtra("merchantPublicKey");
-        mPaymentMethod = (PaymentMethod) getIntent().getSerializableExtra("paymentMethod");
+        mPaymentMethod = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("paymentMethod"), PaymentMethod.class);
     }
 
     protected void initializeControls() {

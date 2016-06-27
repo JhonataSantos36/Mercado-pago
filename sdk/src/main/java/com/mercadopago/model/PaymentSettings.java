@@ -1,9 +1,8 @@
 package com.mercadopago.model;
 
-import java.io.Serializable;
 import java.util.List;
 
-public class PaymentSettings implements Serializable {
+public class PaymentSettings {
 
     private Integer defaultInstallments;
     private Integer maxAcceptedInstallments;

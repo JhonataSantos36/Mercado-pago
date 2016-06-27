@@ -8,6 +8,7 @@ import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.test.ActivityResult;
 import com.mercadopago.test.BaseTest;
 import com.mercadopago.test.StaticMock;
+import com.mercadopago.util.JsonUtil;
 import com.mercadopago.views.MPEditText;
 
 import java.math.BigDecimal;
@@ -39,7 +40,7 @@ public class VaultActivityWithCustomerCardTest extends BaseTest<VaultActivity> {
 
         // Mock up an ActivityResult:
         Intent returnIntent = new Intent();
-        returnIntent.putExtra("paymentMethodRow", StaticMock.getPaymentMethodRow(getApplicationContext()));
+        returnIntent.putExtra("paymentMethodRow", JsonUtil.getInstance().toJson(StaticMock.getPaymentMethodRow(getApplicationContext())));
         Instrumentation.ActivityResult mockedResult = new Instrumentation.ActivityResult(Activity.RESULT_OK, returnIntent);
 
         // Create an ActivityMonitor that catch CustomerCardsActivity and return mock ActivityResult:

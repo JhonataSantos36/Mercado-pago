@@ -12,6 +12,7 @@ import com.mercadopago.model.PaymentMethodRow;
 import com.mercadopago.test.ActivityResult;
 import com.mercadopago.test.BaseTest;
 import com.mercadopago.test.StaticMock;
+import com.mercadopago.util.JsonUtil;
 import com.mercadopago.views.MPEditText;
 
 import java.math.BigDecimal;
@@ -49,23 +50,23 @@ public class VaultActivityWithNewCardTest extends BaseTest<VaultActivity> {
         Intent returnIntent = new Intent();
 
         PaymentMethodRow paymentMethodRow = new PaymentMethodRow(null, "label", 0);
-        returnIntent.putExtra("paymentMethodRow", paymentMethodRow);
+        returnIntent.putExtra("paymentMethodRow", JsonUtil.getInstance().toJson(paymentMethodRow));
         Instrumentation.ActivityResult customerCardsMockedResult = new Instrumentation.ActivityResult(Activity.RESULT_OK, returnIntent);
 
         returnIntent = new Intent();
-        returnIntent.putExtra("paymentMethod", StaticMock.getPaymentMethod(getApplicationContext(), "_issuer_required"));
+        returnIntent.putExtra("paymentMethod",JsonUtil.getInstance().toJson(StaticMock.getPaymentMethod(getApplicationContext(), "_issuer_required")));
         Instrumentation.ActivityResult paymentMethodsMockedResult = new Instrumentation.ActivityResult(Activity.RESULT_OK, returnIntent);
 
         returnIntent = new Intent();
-        returnIntent.putExtra("cardToken", StaticMock.getCardToken(getApplicationContext(), "_issuer_required"));
+        returnIntent.putExtra("cardToken", JsonUtil.getInstance().toJson(StaticMock.getCardToken(getApplicationContext(), "_issuer_required")));
         Instrumentation.ActivityResult newCardMockedResult = new Instrumentation.ActivityResult(Activity.RESULT_OK, returnIntent);
 
         returnIntent = new Intent();
-        returnIntent.putExtra("payerCost", StaticMock.getPayerCosts(getApplicationContext()).get(2));
+        returnIntent.putExtra("payerCost", JsonUtil.getInstance().toJson(StaticMock.getPayerCosts(getApplicationContext()).get(2)));
         Instrumentation.ActivityResult installmentsMockedResult = new Instrumentation.ActivityResult(Activity.RESULT_OK, returnIntent);
 
         returnIntent = new Intent();
-        returnIntent.putExtra("issuer", StaticMock.getIssuer(getApplicationContext()));
+        returnIntent.putExtra("issuer", JsonUtil.getInstance().toJson(StaticMock.getIssuer(getApplicationContext())));
         Instrumentation.ActivityResult issuersMockedResult = new Instrumentation.ActivityResult(Activity.RESULT_OK, returnIntent);
 
         Instrumentation.ActivityMonitor installmentsActivityMonitor = getInstrumentation().addMonitor(InstallmentsActivity.class.getName(), installmentsMockedResult , true);
@@ -167,12 +168,12 @@ public class VaultActivityWithNewCardTest extends BaseTest<VaultActivity> {
         // Mock up an ActivityResult with select other payment method
         Intent returnIntent = new Intent();
         PaymentMethodRow paymentMethodRow = new PaymentMethodRow(null, "label", 0);
-        returnIntent.putExtra("paymentMethodRow", paymentMethodRow);
+        returnIntent.putExtra("paymentMethodRow", JsonUtil.getInstance().toJson(paymentMethodRow));
         Instrumentation.ActivityResult customerCardsMockedResult = new Instrumentation.ActivityResult(Activity.RESULT_OK, returnIntent);
 
         returnIntent = new Intent();
         ApiException apiException = new ApiException("some message", 500, null, null);
-        returnIntent.putExtra("apiException", apiException);
+        returnIntent.putExtra("apiException", JsonUtil.getInstance().toJson(apiException));
         Instrumentation.ActivityResult paymentMethodsMockedResult = new Instrumentation.ActivityResult(Activity.RESULT_CANCELED, returnIntent);
 
         Instrumentation.ActivityMonitor paymentMethodsActivityMonitor = getInstrumentation().addMonitor(PaymentMethodsActivity.class.getName(), paymentMethodsMockedResult , true);
@@ -214,16 +215,16 @@ public class VaultActivityWithNewCardTest extends BaseTest<VaultActivity> {
         // Mock up an ActivityResult with select other payment method
         Intent returnIntent = new Intent();
         PaymentMethodRow paymentMethodRow = new PaymentMethodRow(null, "label", 0);
-        returnIntent.putExtra("paymentMethodRow", paymentMethodRow);
+        returnIntent.putExtra("paymentMethodRow", JsonUtil.getInstance().toJson(paymentMethodRow));
         Instrumentation.ActivityResult customerCardsMockedResult = new Instrumentation.ActivityResult(Activity.RESULT_OK, returnIntent);
 
         returnIntent = new Intent();
-        returnIntent.putExtra("paymentMethod", StaticMock.getPaymentMethod(getApplicationContext(), "_issuer_required"));
+        returnIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(StaticMock.getPaymentMethod(getApplicationContext(), "_issuer_required")));
         Instrumentation.ActivityResult paymentMethodsMockedResult = new Instrumentation.ActivityResult(Activity.RESULT_OK, returnIntent);
 
         returnIntent = new Intent();
         ApiException apiException = new ApiException("some message", 500, null, null);
-        returnIntent.putExtra("apiException", apiException);
+        returnIntent.putExtra("apiException", JsonUtil.getInstance().toJson(apiException));
         Instrumentation.ActivityResult issuersMockedResult = new Instrumentation.ActivityResult(Activity.RESULT_CANCELED, returnIntent);
 
         Instrumentation.ActivityMonitor issuersActivityMonitor = getInstrumentation().addMonitor(IssuersActivity.class.getName(), issuersMockedResult , true);
@@ -267,21 +268,21 @@ public class VaultActivityWithNewCardTest extends BaseTest<VaultActivity> {
         // Mock up an ActivityResult with select other payment method
         PaymentMethodRow paymentMethodRow = new PaymentMethodRow(null, "label", 0);
         Intent returnIntent = new Intent();
-        returnIntent.putExtra("paymentMethodRow", paymentMethodRow);
+        returnIntent.putExtra("paymentMethodRow", JsonUtil.getInstance().toJson(paymentMethodRow));
         Instrumentation.ActivityResult customerCardsMockedResult = new Instrumentation.ActivityResult(Activity.RESULT_OK, returnIntent);
 
         returnIntent = new Intent();
-        returnIntent.putExtra("paymentMethod", StaticMock.getPaymentMethod(getApplicationContext(), "_issuer_required"));
+        returnIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(StaticMock.getPaymentMethod(getApplicationContext(), "_issuer_required")));
         Instrumentation.ActivityResult paymentMethodsMockedResult = new Instrumentation.ActivityResult(Activity.RESULT_OK, returnIntent);
 
         returnIntent = new Intent();
         CardToken wrongToken = StaticMock.getCardToken(getApplicationContext(), "_issuer_required");
         wrongToken.setCardNumber("8888880000000000");
-        returnIntent.putExtra("cardToken", wrongToken);
+        returnIntent.putExtra("cardToken", JsonUtil.getInstance().toJson(wrongToken));
         Instrumentation.ActivityResult newCardMockedResult = new Instrumentation.ActivityResult(Activity.RESULT_OK, returnIntent);
 
         returnIntent = new Intent();
-        returnIntent.putExtra("issuer", StaticMock.getIssuer(getApplicationContext()));
+        returnIntent.putExtra("issuer", JsonUtil.getInstance().toJson(StaticMock.getIssuer(getApplicationContext())));
         Instrumentation.ActivityResult issuersMockedResult = new Instrumentation.ActivityResult(Activity.RESULT_OK, returnIntent);
 
         Instrumentation.ActivityMonitor newCardActivityMonitor = getInstrumentation().addMonitor(NewCardActivity.class.getName(), newCardMockedResult , true);
@@ -330,20 +331,20 @@ public class VaultActivityWithNewCardTest extends BaseTest<VaultActivity> {
         // Mock up an ActivityResult with select other payment method
         Intent returnIntent = new Intent();
         PaymentMethodRow paymentMethodRow = new PaymentMethodRow(null, "label", 0);
-        returnIntent.putExtra("paymentMethodRow", paymentMethodRow);
+        returnIntent.putExtra("paymentMethodRow", JsonUtil.getInstance().toJson(paymentMethodRow));
         Instrumentation.ActivityResult customerCardsMockedResult = new Instrumentation.ActivityResult(Activity.RESULT_OK, returnIntent);
 
         returnIntent = new Intent();
-        returnIntent.putExtra("paymentMethod", StaticMock.getPaymentMethod(getApplicationContext(), "_issuer_required"));
+        returnIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(StaticMock.getPaymentMethod(getApplicationContext(), "_issuer_required")));
         Instrumentation.ActivityResult paymentMethodsMockedResult = new Instrumentation.ActivityResult(Activity.RESULT_OK, returnIntent);
 
         returnIntent = new Intent();
         ApiException apiException = new ApiException("some message", 500, null, null);
-        returnIntent.putExtra("apiException", apiException);
+        returnIntent.putExtra("apiException", JsonUtil.getInstance().toJson(apiException));
         Instrumentation.ActivityResult newCardMockedResult = new Instrumentation.ActivityResult(Activity.RESULT_CANCELED, returnIntent);
 
         returnIntent = new Intent();
-        returnIntent.putExtra("issuer", StaticMock.getIssuer(getApplicationContext()));
+        returnIntent.putExtra("issuer", JsonUtil.getInstance().toJson(StaticMock.getIssuer(getApplicationContext())));
         Instrumentation.ActivityResult issuersMockedResult = new Instrumentation.ActivityResult(Activity.RESULT_OK, returnIntent);
 
         Instrumentation.ActivityMonitor newCardActivityMonitor = getInstrumentation().addMonitor(NewCardActivity.class.getName(), newCardMockedResult , true);
@@ -389,23 +390,23 @@ public class VaultActivityWithNewCardTest extends BaseTest<VaultActivity> {
         // Mock up an ActivityResult with select other payment method
         Intent returnIntent = new Intent();
         PaymentMethodRow paymentMethodRow = new PaymentMethodRow(null, "label", 0);
-        returnIntent.putExtra("paymentMethodRow", paymentMethodRow);
+        returnIntent.putExtra("paymentMethodRow", JsonUtil.getInstance().toJson(paymentMethodRow));
         Instrumentation.ActivityResult customerCardsMockedResult = new Instrumentation.ActivityResult(Activity.RESULT_OK, returnIntent);
 
         returnIntent = new Intent();
-        returnIntent.putExtra("paymentMethod", StaticMock.getPaymentMethod(getApplicationContext(), "_issuer_required"));
+        returnIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(StaticMock.getPaymentMethod(getApplicationContext(), "_issuer_required")));
         Instrumentation.ActivityResult paymentMethodsMockedResult = new Instrumentation.ActivityResult(Activity.RESULT_OK, returnIntent);
 
         returnIntent = new Intent();
-        returnIntent.putExtra("cardToken", StaticMock.getCardToken(getApplicationContext(), "_issuer_required"));
+        returnIntent.putExtra("cardToken", JsonUtil.getInstance().toJson(StaticMock.getCardToken(getApplicationContext(), "_issuer_required")));
         Instrumentation.ActivityResult newCardMockedResult = new Instrumentation.ActivityResult(Activity.RESULT_OK, returnIntent);
 
         returnIntent = new Intent();
-        returnIntent.putExtra("payerCost", StaticMock.getPayerCosts(getApplicationContext()).get(2));
+        returnIntent.putExtra("payerCost", JsonUtil.getInstance().toJson(StaticMock.getPayerCosts(getApplicationContext()).get(2)));
         Instrumentation.ActivityResult installmentsMockedResult = new Instrumentation.ActivityResult(Activity.RESULT_OK, returnIntent);
 
         returnIntent = new Intent();
-        returnIntent.putExtra("issuer", StaticMock.getIssuer(getApplicationContext()));
+        returnIntent.putExtra("issuer", JsonUtil.getInstance().toJson(StaticMock.getIssuer(getApplicationContext())));
         Instrumentation.ActivityResult issuersMockedResult = new Instrumentation.ActivityResult(Activity.RESULT_OK, returnIntent);
 
         Instrumentation.ActivityMonitor installmentsActivityMonitor = getInstrumentation().addMonitor(InstallmentsActivity.class.getName(), installmentsMockedResult , true);

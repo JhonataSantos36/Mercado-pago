@@ -14,6 +14,7 @@ import com.mercadopago.decorations.DividerItemDecoration;
 import com.mercadopago.model.Card;
 import com.mercadopago.model.PaymentMethodRow;
 import com.mercadopago.mptracker.MPTracker;
+import com.mercadopago.util.JsonUtil;
 
 import java.lang.reflect.Type;
 import java.util.List;
@@ -60,7 +61,7 @@ public class CustomerCardsActivity extends AppCompatActivity {
                 // Return to parent
                 Intent returnIntent = new Intent();
                 PaymentMethodRow selectedRow = (PaymentMethodRow) view.getTag();
-                returnIntent.putExtra("paymentMethodRow", selectedRow);
+                returnIntent.putExtra("paymentMethodRow", JsonUtil.getInstance().toJson(selectedRow));
                 setResult(RESULT_OK, returnIntent);
                 finish();
             }

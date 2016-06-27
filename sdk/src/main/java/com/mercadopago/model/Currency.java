@@ -1,8 +1,6 @@
 package com.mercadopago.model;
 
-import java.io.Serializable;
-
-public class Currency implements Serializable {
+public class Currency {
 
     private String id;
     private String description;

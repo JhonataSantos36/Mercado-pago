@@ -26,6 +26,7 @@ import com.mercadopago.model.PaymentPreference;
 import com.mercadopago.model.SavedCardToken;
 import com.mercadopago.model.Token;
 import com.mercadopago.util.ApiUtil;
+import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;
 import com.mercadopago.util.MercadoPagoUtil;
 import com.mercadopago.views.MPButton;
@@ -214,7 +215,7 @@ public class SimpleVaultActivity extends AppCompatActivity {
 
         if (resultCode == RESULT_OK) {
 
-            PaymentMethodRow selectedPaymentMethodRow = (PaymentMethodRow) data.getSerializableExtra("paymentMethodRow");
+            PaymentMethodRow selectedPaymentMethodRow = JsonUtil.getInstance().fromJson(data.getStringExtra("paymentMethodRow"), PaymentMethodRow.class);
 
             if (selectedPaymentMethodRow.getCard() != null) {
 
@@ -243,7 +244,7 @@ public class SimpleVaultActivity extends AppCompatActivity {
 
         if (resultCode == RESULT_OK) {
 
-            mTempPaymentMethod = (PaymentMethod) data.getSerializableExtra("paymentMethod");
+            mTempPaymentMethod = JsonUtil.getInstance().fromJson(data.getStringExtra("paymentMethod"), PaymentMethod.class);
 
             // Call new cards activity
             startCardActivity();
@@ -264,7 +265,7 @@ public class SimpleVaultActivity extends AppCompatActivity {
         if (resultCode == RESULT_OK) {
 
             // Set selection status
-            mToken = (Token) data.getSerializableExtra("token");
+            mToken = JsonUtil.getInstance().fromJson(data.getStringExtra("token"), Token.class);
             mSelectedPaymentMethodRow = null;
             mSelectedPaymentMethod = mTempPaymentMethod;
 
@@ -443,7 +444,7 @@ public class SimpleVaultActivity extends AppCompatActivity {
     private void finishWithTokenResult(Token token) {
         Intent returnIntent = new Intent();
         returnIntent.putExtra("token", token.getId());
-        returnIntent.putExtra("paymentMethod", mSelectedPaymentMethod);
+        returnIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(mSelectedPaymentMethod));
         setResult(RESULT_OK, returnIntent);
         finish();
     }

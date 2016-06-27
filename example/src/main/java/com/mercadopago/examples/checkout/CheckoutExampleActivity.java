@@ -22,6 +22,7 @@ import com.mercadopago.model.ApiException;
 import com.mercadopago.model.CheckoutPreference;
 import com.mercadopago.model.DecorationPreference;
 import com.mercadopago.model.Payment;
+import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;
 
 import java.math.BigDecimal;
@@ -120,12 +121,12 @@ public class CheckoutExampleActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK && data != null) {
 
                 // Set message
-                Payment payment = (Payment) data.getSerializableExtra("payment");
+                Payment payment = JsonUtil.getInstance().fromJson(data.getStringExtra("payment"), Payment.class);
                 Toast.makeText(mActivity, getString(R.string.payment_received_congrats) + payment.getId(), Toast.LENGTH_LONG).show();
 
             } else {
-                if ((data != null) && (data.getSerializableExtra("mpException") != null)) {
-                    MPException mpException = (MPException) data.getSerializableExtra("mpException");
+                if ((data != null) && (data.getStringExtra("mpException") != null)) {
+                    MPException mpException = JsonUtil.getInstance().fromJson(data.getStringExtra("mpException"), MPException.class);
                     Toast.makeText(mActivity, mpException.getMessage(), Toast.LENGTH_LONG).show();
                 }
             }

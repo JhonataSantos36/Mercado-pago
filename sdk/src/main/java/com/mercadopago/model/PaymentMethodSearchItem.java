@@ -1,12 +1,11 @@
 package com.mercadopago.model;
 
-import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by mreverter on 15/1/16.
  */
-public class PaymentMethodSearchItem implements Serializable {
+public class PaymentMethodSearchItem {
 
     private static final String TYPE_PAYMENT_METHOD = "payment_method";
     private static final String TYPE_PAYMENT_TYPE = "payment_type";

@@ -1,8 +1,6 @@
 package com.mercadopago.model;
 
-import java.io.Serializable;
-
-public class PaymentMethodRow implements Serializable {
+public class PaymentMethodRow {
 
     private String label;
     private Card card;

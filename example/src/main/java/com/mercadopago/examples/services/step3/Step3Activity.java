@@ -12,6 +12,7 @@ import com.mercadopago.examples.R;
 import com.mercadopago.examples.utils.ExamplesUtils;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.PaymentMethod;
+import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;
 
 import java.math.BigDecimal;
@@ -43,12 +44,12 @@ public class Step3Activity extends ExampleActivity {
                 // Create payment
                 ExamplesUtils.createPayment(this, data.getStringExtra("token"),
                         Integer.parseInt(data.getStringExtra("installments")),
-                        issuerId, (PaymentMethod) data.getSerializableExtra("paymentMethod"), null);
+                        issuerId, JsonUtil.getInstance().fromJson(data.getStringExtra("paymentMethod"), PaymentMethod.class), null);
 
             } else {
 
-                if (data != null && data.getSerializableExtra("apiException") != null) {
-                    ApiException apiException = (ApiException) data.getSerializableExtra("apiException");
+                if (data != null && data.getStringExtra("apiException") != null) {
+                    ApiException apiException = JsonUtil.getInstance().fromJson(data.getStringExtra("apiException"), ApiException.class);
                     Toast.makeText(getApplicationContext(), apiException.getMessage(), Toast.LENGTH_LONG).show();
                 }
             }
