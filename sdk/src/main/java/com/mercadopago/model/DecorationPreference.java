@@ -9,7 +9,7 @@ import com.mercadopago.util.ColorsUtil;
 /**
  * Created by mreverter on 2/6/16.
  */
-public class DecorationPreference{
+public class DecorationPreference {
 
     private Integer baseColor;
     private boolean darkFontEnabled;
