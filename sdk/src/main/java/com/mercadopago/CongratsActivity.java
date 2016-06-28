@@ -215,62 +215,69 @@ public class CongratsActivity extends AppCompatActivity {
 
     private void fillRejectionData() {
         if (mPayment != null && mPaymentMethod != null && isStatusDetailValid()){
-
-            if (isPaymentMethodNameValid() && mPayment.getStatusDetail().equals(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_OTHER_REASON)) {
-                String titleMessage = mPaymentMethod.getName() + " " + getString(R.string.mpsdk_title_other_reason_rejection);
-                mRejectionTitle.setText(titleMessage);
-                mRejectionSubtitle.setText(getString(R.string.mpsdk_text_select_other_rejection));
-            }
-            else if (isPaymentMethodNameValid() && mPayment.getStatusDetail().equals(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_BAD_FILLED_OTHER)){
-                mRejectionTitle.setText(getString(R.string.mpsdk_title_bad_filled_other_rejection));
-                String subtitleMessage = getString(R.string.mpsdk_text_some_number) + " " + mPaymentMethod.getName() + " " + getString(R.string.mpsdk_text_is_incorrect);
-                mRejectionSubtitle.setText(subtitleMessage);
-            }
-            else if (isPaymentMethodNameValid() && mPayment.getStatusDetail().equals(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_BAD_FILLED_CARD_NUMBER)){
-                mRejectionTitle.setText(getString(R.string.mpsdk_title_bad_filled_other_rejection));
-                String subtitleMessage = getString(R.string.mpsdk_text_some_number) + " " + mPaymentMethod.getName() + " " + getString(R.string.mpsdk_text_is_incorrect);
-                mRejectionSubtitle.setText(subtitleMessage);
-            }
-            else if (mPayment.getStatusDetail().equals(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_BAD_FILLED_SECURITY_CODE)){
-                mRejectionTitle.setText(getString(R.string.mpsdk_title_bad_filled_other_rejection));
-                mRejectionSubtitle.setText(getString(R.string.mpsdk_title_bad_filled_security_code_rejection));
-            }
-            else if (mPayment.getStatusDetail().equals(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_BAD_FILLED_DATE)){
-                mRejectionTitle.setText(getString(R.string.mpsdk_title_bad_filled_other_rejection));
-                mRejectionSubtitle.setText(getString(R.string.mpsdk_title_bad_filled_date_rejection));
-            }
-            else if (mPayment.getStatusDetail().equals(Payment.StatusCodes.STATUS_DETAIL_REJECTED_HIGH_RISK)){
-                mRejectionTitle.setText(getString(R.string.mpsdk_title_rejection_high_risk));
-                mRejectionSubtitle.setText(getString(R.string.mpsdk_subtitle_rejection_high_risk));
-            }
-            else if (isPaymentMethodNameValid() && mPayment.getStatusDetail().equals(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_INSUFFICIENT_AMOUNT)){
-                String titleMessage = getString(R.string.mpsdk_text_you) + " " + mPaymentMethod.getName() + " " + getString(R.string.mpsdk_text_insufficient_amount);
-                mRejectionTitle.setText(titleMessage);
-
-                if (isCardPaymentTypeCreditCard()){
-                    mRejectionSubtitle.setText(getString(R.string.mpsdk_subtitle_rejection_insufficient_amount_credit_card));
+            if (isPaymentMethodNameValid()){
+                if (mPayment.getStatusDetail().equals(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_OTHER_REASON)) {
+                    String titleMessage = mPaymentMethod.getName() + " " + getString(R.string.mpsdk_title_other_reason_rejection);
+                    mRejectionTitle.setText(titleMessage);
+                    mRejectionSubtitle.setText(getString(R.string.mpsdk_text_select_other_rejection));
                 }
-                else {
-                    mRejectionSubtitle.setText(getString(R.string.mpsdk_subtitle_rejection_insufficient_amount));
+                else if (mPayment.getStatusDetail().equals(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_BAD_FILLED_OTHER)){
+                    mRejectionTitle.setText(getString(R.string.mpsdk_title_bad_filled_other_rejection));
+                    String subtitleMessage = getString(R.string.mpsdk_text_some_number) + " " + mPaymentMethod.getName() + " " + getString(R.string.mpsdk_text_is_incorrect);
+                    mRejectionSubtitle.setText(subtitleMessage);
+                }
+                else if (mPayment.getStatusDetail().equals(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_BAD_FILLED_CARD_NUMBER)){
+                    mRejectionTitle.setText(getString(R.string.mpsdk_title_bad_filled_other_rejection));
+                    String subtitleMessage = getString(R.string.mpsdk_text_some_number) + " " + mPaymentMethod.getName() + " " + getString(R.string.mpsdk_text_is_incorrect);
+                    mRejectionSubtitle.setText(subtitleMessage);
+                }
+                else if (mPayment.getStatusDetail().equals(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_INSUFFICIENT_AMOUNT)){
+                    String titleMessage = getString(R.string.mpsdk_text_you) + " " + mPaymentMethod.getName() + " " + getString(R.string.mpsdk_text_insufficient_amount);
+                    mRejectionTitle.setText(titleMessage);
+
+                    if (isCardPaymentTypeCreditCard()){
+                        mRejectionSubtitle.setText(getString(R.string.mpsdk_subtitle_rejection_insufficient_amount_credit_card));
+                    }
+                    else {
+                        mRejectionSubtitle.setText(getString(R.string.mpsdk_subtitle_rejection_insufficient_amount));
+                    }
+                }
+                else if (mPayment.getStatusDetail().equals(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_DUPLICATED_PAYMENT)){
+                    String titleMessage = mPaymentMethod.getName() + " " + getString(R.string.mpsdk_title_other_reason_rejection);
+                    mRejectionTitle.setText(titleMessage);
+                    mRejectionSubtitle.setText(getString(R.string.mpsdk_subtitle_rejection_duplicated_payment));
+                }
+                else if (mPayment.getStatusDetail().equals(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_CARD_DISABLED)){
+                    String titleMessage = getString(R.string.mpsdk_text_call_to) + " " + mPaymentMethod.getName() + " " + getString(R.string.mpsdk_text_active_card);
+                    mRejectionTitle.setText(titleMessage);
+                    mRejectionSubtitle.setText(getString(R.string.mpsdk_subtitle_rejection_card_disabled));
+                }
+                else{
+                    mRejectionTitle.setText(R.string.mpsdk_title_bad_filled_other_rejection);
+                    mRejectionSubtitle.setVisibility(View.GONE);
                 }
             }
-            else if (mPayment.getStatusDetail().equals(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_MAX_ATTEMPTS)){
-                mRejectionTitle.setText(getString(R.string.mpsdk_title_rejection_max_attempts));
-                mRejectionSubtitle.setText(getString(R.string.mpsdk_subtitle_rejection_max_attempts));
-            }
-            else if (isPaymentMethodNameValid() && mPayment.getStatusDetail().equals(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_DUPLICATED_PAYMENT)){
-                String titleMessage = mPaymentMethod.getName() + " " + getString(R.string.mpsdk_title_other_reason_rejection);
-                mRejectionTitle.setText(titleMessage);
-                mRejectionSubtitle.setText(getString(R.string.mpsdk_subtitle_rejection_duplicated_payment));
-            }
-            else if (isPaymentMethodNameValid() && mPayment.getStatusDetail().equals(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_CARD_DISABLED)){
-                String titleMessage = getString(R.string.mpsdk_text_call_to) + " " + mPaymentMethod.getName() + " " + getString(R.string.mpsdk_text_active_card);
-                mRejectionTitle.setText(titleMessage);
-                mRejectionSubtitle.setText(getString(R.string.mpsdk_subtitle_rejection_card_disabled));
-            }
-            else{
-                mRejectionTitle.setText(R.string.mpsdk_title_bad_filled_other_rejection);
-                mRejectionSubtitle.setVisibility(View.GONE);
+            else {
+                if (mPayment.getStatusDetail().equals(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_BAD_FILLED_SECURITY_CODE)){
+                    mRejectionTitle.setText(getString(R.string.mpsdk_title_bad_filled_other_rejection));
+                    mRejectionSubtitle.setText(getString(R.string.mpsdk_title_bad_filled_security_code_rejection));
+                }
+                else if (mPayment.getStatusDetail().equals(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_BAD_FILLED_DATE)){
+                    mRejectionTitle.setText(getString(R.string.mpsdk_title_bad_filled_other_rejection));
+                    mRejectionSubtitle.setText(getString(R.string.mpsdk_title_bad_filled_date_rejection));
+                }
+                else if (mPayment.getStatusDetail().equals(Payment.StatusCodes.STATUS_DETAIL_REJECTED_HIGH_RISK)){
+                    mRejectionTitle.setText(getString(R.string.mpsdk_title_rejection_high_risk));
+                    mRejectionSubtitle.setText(getString(R.string.mpsdk_subtitle_rejection_high_risk));
+                }
+                else if (mPayment.getStatusDetail().equals(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_MAX_ATTEMPTS)){
+                    mRejectionTitle.setText(getString(R.string.mpsdk_title_rejection_max_attempts));
+                    mRejectionSubtitle.setText(getString(R.string.mpsdk_subtitle_rejection_max_attempts));
+                }
+                else{
+                    mRejectionTitle.setText(R.string.mpsdk_title_bad_filled_other_rejection);
+                    mRejectionSubtitle.setVisibility(View.GONE);
+                }
             }
         }
         else{
@@ -319,7 +326,6 @@ public class CongratsActivity extends AppCompatActivity {
         setPaymentEmailDescription();
         setLastFourDigitsCard();
         setInstallmentsDescription();
-        setInterestAmountDescription();
         setPaymentIdDescription();
     }
 
@@ -336,22 +342,17 @@ public class CongratsActivity extends AppCompatActivity {
 
     private void setInterestAmountDescription() {
         if(isTotalPaidAmountValid()){
-            if (mPayment.getInstallments()>1) {
-                if (hasInterests()) {
-                    StringBuilder sb = new StringBuilder();
+            if (hasInterests()) {
+                StringBuilder sb = new StringBuilder();
 
-                    sb.append("( ");
-                    sb.append(CurrenciesUtil.formatNumber(mPayment.getTransactionDetails().getTotalPaidAmount(), mPayment.getCurrencyId()));
-                    sb.append(" )");
-                    mInterestAmountDescription.setText(CurrenciesUtil.formatCurrencyInText(mPayment.getTransactionDetails().getTotalPaidAmount(),
-                            mPayment.getCurrencyId(), sb.toString(), true, true));
-                }
-                else {
-                    mInterestAmountDescription.setText(getString(R.string.mpsdk_zero_rate));
-                }
+                sb.append("( ");
+                sb.append(CurrenciesUtil.formatNumber(mPayment.getTransactionDetails().getTotalPaidAmount(), mPayment.getCurrencyId()));
+                sb.append(" )");
+                mInterestAmountDescription.setText(CurrenciesUtil.formatCurrencyInText(mPayment.getTransactionDetails().getTotalPaidAmount(),
+                        mPayment.getCurrencyId(), sb.toString(), true, true));
             }
-            else{
-                mInterestAmountDescription.setVisibility(View.GONE);
+            else {
+                mInterestAmountDescription.setText(getString(R.string.mpsdk_zero_rate));
             }
         }
         else{
@@ -372,16 +373,19 @@ public class CongratsActivity extends AppCompatActivity {
     }
 
     private void setInstallmentsDescription() {
-        if (isInstallmentQuantityValid() && isInstallmentAmountValid()){
+        if (isInstallmentQuantityValid() && isInstallmentAmountValid() && isTotalPaidAmountValid() && isCurrencyIdValid()){
             if (mPayment.getInstallments()>1){
                 mInstallmentsDescription.setText(getInstallmentsText());
+                setInterestAmountDescription();
             }
             else {
+                //Installments quantity 0 or 1
                 StringBuilder sb = new StringBuilder();
                 sb.append(CurrenciesUtil.formatNumber(mPayment.getTransactionDetails().getTotalPaidAmount(), mPayment.getCurrencyId()));
 
                 mInstallmentsDescription.setText(CurrenciesUtil.formatCurrencyInText(mPayment.getTransactionDetails().getTotalPaidAmount(),
                         mPayment.getCurrencyId(), sb.toString(), true, true));
+
                 mInterestAmountDescription.setVisibility(View.GONE);
             }
         }
@@ -430,7 +434,7 @@ public class CongratsActivity extends AppCompatActivity {
     }
 
     private Boolean isCurrencyIdValid(){
-        return !isEmpty(mPayment.getCurrencyId());
+        return !isEmpty(mPayment.getCurrencyId()) && CurrenciesUtil.isValidCurrency(mPayment.getCurrencyId());
     }
 
     private Boolean isPaymentIdValid(){
@@ -439,12 +443,12 @@ public class CongratsActivity extends AppCompatActivity {
 
     private Boolean isTotalPaidAmountValid(){
         return mPayment.getTransactionDetails() != null && mPayment.getTransactionDetails().getTotalPaidAmount() != null
-                && (mPayment.getTransactionDetails().getTotalPaidAmount().compareTo(BigDecimal.ZERO))>=0;
+                && (mPayment.getTransactionDetails().getTotalPaidAmount().compareTo(BigDecimal.ZERO))>0;
     }
 
     private Boolean isInstallmentAmountValid(){
         return mPayment.getTransactionDetails() != null && mPayment.getTransactionDetails().getInstallmentAmount() != null &&
-                    mPayment.getTransactionDetails().getInstallmentAmount().compareTo(BigDecimal.ZERO) >= 0;
+                    mPayment.getTransactionDetails().getInstallmentAmount().compareTo(BigDecimal.ZERO) > 0;
     }
 
     private Boolean isInstallmentQuantityValid(){
