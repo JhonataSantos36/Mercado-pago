@@ -12,15 +12,10 @@
 
     <application android:allowBackup="true">
         <activity
-            android:name=".VaultActivity"
-            android:label="@string/mpsdk_app_name"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.MercadoPagoTheme" />
-        <activity
             android:name=".CustomerCardsActivity"
             android:label="@string/mpsdk_title_activity_customer_pms"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.MercadoPagoTheme" />
+            android:theme="@style/Theme.MercadoPagoTheme.NoActionBar" />
         <activity
             android:name=".NewCardActivity"
             android:label="@string/mpsdk_title_activity_new_card"

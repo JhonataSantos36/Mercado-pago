@@ -6,18 +6,17 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
-import com.mercadopago.adapters.CustomerCardsAdapter;
 import com.mercadopago.callbacks.Callback;
 import com.mercadopago.constants.Sites;
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.examples.R;
 import com.mercadopago.examples.services.step2.SimpleVaultActivity;
 import com.mercadopago.model.ApiException;
+import com.mercadopago.model.Card;
 import com.mercadopago.model.Installment;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.PaymentMethod;
-import com.mercadopago.model.PaymentMethodRow;
 import com.mercadopago.model.Token;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.JsonUtil;
@@ -88,7 +87,7 @@ public class AdvancedVaultActivity extends SimpleVaultActivity {
         } else if (mExceptionOnMethod.equals("getInstallmentsAsync")) {
             getInstallmentsAsync();
         } else if (mExceptionOnMethod.equals("getCreateTokenCallback")) {
-            if (mSelectedPaymentMethodRow != null) {
+            if (mSelectedCard != null) {
                 createSavedCardToken();
             }
         }
@@ -123,14 +122,14 @@ public class AdvancedVaultActivity extends SimpleVaultActivity {
 
         if (resultCode == RESULT_OK) {
 
-            PaymentMethodRow selectedPaymentMethodRow = JsonUtil.getInstance().fromJson(data.getStringExtra("paymentMethodRow"), PaymentMethodRow.class);
+            Card card = JsonUtil.getInstance().fromJson(data.getStringExtra("card"), Card.class);
 
-            if (selectedPaymentMethodRow.getCard() != null) {
+            if (card != null) {
 
                 // Set selection status
                 mPayerCosts = null;
                 mToken = null;
-                mSelectedPaymentMethodRow = selectedPaymentMethodRow;
+                mSelectedCard = card;
                 mSelectedPayerCost = null;
                 mTempPaymentMethod = null;
 
@@ -173,7 +172,7 @@ public class AdvancedVaultActivity extends SimpleVaultActivity {
 
             if ((data != null) && (data.getStringExtra("apiException") != null)) {
                 finishWithApiException(data);
-            } else if ((mSelectedPaymentMethodRow == null) && (mToken == null)) {
+            } else if ((mSelectedCard == null) && (mToken == null)) {
                 // if nothing is selected
                 finish();
             }
@@ -230,7 +229,7 @@ public class AdvancedVaultActivity extends SimpleVaultActivity {
             // Set selection status
             mPayerCosts = null;
             mToken = JsonUtil.getInstance().fromJson(data.getStringExtra("token"), Token.class);
-            mSelectedPaymentMethodRow = null;
+            mSelectedCard = null;
             mSelectedPayerCost = null;
             mSelectedPaymentMethod = mTempPaymentMethod;
             mSelectedIssuer = mTempIssuer;
@@ -261,8 +260,8 @@ public class AdvancedVaultActivity extends SimpleVaultActivity {
 
     protected void refreshCardData() {
         // Set customer method selection
-        mCustomerMethodsText.setText(CustomerCardsAdapter.getPaymentMethodLabel(mActivity, mSelectedPaymentMethod.getName(),
-                mToken.getLastFourDigits(), true));
+        mCustomerMethodsText.setText(getPaymentMethodLabel(mSelectedPaymentMethod.getName(),
+                mToken.getLastFourDigits()));
         mPaymentMethodImage.setImageResource(MercadoPagoUtil.getPaymentMethodIcon(mActivity, mSelectedPaymentMethod.getId()));
 
         // Set security cards visibility
@@ -271,6 +270,7 @@ public class AdvancedVaultActivity extends SimpleVaultActivity {
         // Get installments
         getInstallmentsAsync();
     }
+
     private void getInstallmentsAsync() {
 
         String bin = getSelectedPMBin();
@@ -335,15 +335,15 @@ public class AdvancedVaultActivity extends SimpleVaultActivity {
     protected void setCustomerMethodSelection() {
 
         // Set payment method and issuer
-        mSelectedPaymentMethod = mSelectedPaymentMethodRow.getCard().getPaymentMethod();
-        mSelectedIssuer = mSelectedPaymentMethodRow.getCard().getIssuer();
+        mSelectedPaymentMethod = mSelectedCard.getPaymentMethod();
+        mSelectedIssuer = mSelectedCard.getIssuer();
 
         // Set customer method selection
-        mCustomerMethodsText.setText(mSelectedPaymentMethodRow.getLabel());
+        mCustomerMethodsText.setText(getPaymentMethodLabel(mSelectedPaymentMethod.getName(), mSelectedCard.getLastFourDigits()));
         mPaymentMethodImage.setImageResource(MercadoPagoUtil.getPaymentMethodIcon(mActivity, mSelectedPaymentMethod.getId()));
 
         // Set security cards visibility
-        showSecurityCodeCard(mSelectedPaymentMethodRow.getCard().getPaymentMethod());
+        showSecurityCodeCard(mSelectedCard.getPaymentMethod());
 
         // Get installments
         getInstallmentsAsync();

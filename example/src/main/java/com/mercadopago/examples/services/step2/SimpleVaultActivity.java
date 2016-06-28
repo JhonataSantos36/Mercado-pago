@@ -11,7 +11,6 @@ import android.widget.LinearLayout;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.mercadopago.adapters.CustomerCardsAdapter;
 import com.mercadopago.callbacks.Callback;
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.core.MerchantServer;
@@ -21,7 +20,6 @@ import com.mercadopago.model.ApiException;
 import com.mercadopago.model.Card;
 import com.mercadopago.model.Customer;
 import com.mercadopago.model.PaymentMethod;
-import com.mercadopago.model.PaymentMethodRow;
 import com.mercadopago.model.PaymentPreference;
 import com.mercadopago.model.SavedCardToken;
 import com.mercadopago.model.Token;
@@ -59,7 +57,7 @@ public class SimpleVaultActivity extends AppCompatActivity {
     // Current values
     protected List<Card> mCards;
     protected Token mToken;
-    protected PaymentMethodRow mSelectedPaymentMethodRow;
+    protected Card mSelectedCard;
     protected PaymentMethod mSelectedPaymentMethod;
     protected PaymentMethod mTempPaymentMethod;
     protected PaymentPreference mPaymentPreference;
@@ -158,7 +156,7 @@ public class SimpleVaultActivity extends AppCompatActivity {
         if (mExceptionOnMethod.equals("getCustomerCardsAsync")) {
             getCustomerCardsAsync();
         } else if (mExceptionOnMethod.equals("getCreateTokenCallback")) {
-            if (mSelectedPaymentMethodRow != null) {
+            if (mSelectedCard != null) {
                 createSavedCardToken();
             }
         }
@@ -215,13 +213,13 @@ public class SimpleVaultActivity extends AppCompatActivity {
 
         if (resultCode == RESULT_OK) {
 
-            PaymentMethodRow selectedPaymentMethodRow = JsonUtil.getInstance().fromJson(data.getStringExtra("paymentMethodRow"), PaymentMethodRow.class);
+            Card card = JsonUtil.getInstance().fromJson(data.getStringExtra("card"), Card.class);
 
-            if (selectedPaymentMethodRow.getCard() != null) {
+            if (card != null) {
 
                 // Set selection status
                 mToken = null;
-                mSelectedPaymentMethodRow = selectedPaymentMethodRow;
+                mSelectedCard = card;
                 mSelectedPaymentMethod = null;
                 mTempPaymentMethod = null;
 
@@ -253,7 +251,7 @@ public class SimpleVaultActivity extends AppCompatActivity {
 
             if ((data != null) && (data.getStringExtra("apiException") != null)) {
                 finishWithApiException(data);
-            } else if ((mSelectedPaymentMethodRow == null) && (mToken == null)) {
+            } else if ((mSelectedCard == null) && (mToken == null)) {
                 // if nothing is selected
                 finish();
             }
@@ -266,11 +264,13 @@ public class SimpleVaultActivity extends AppCompatActivity {
 
             // Set selection status
             mToken = JsonUtil.getInstance().fromJson(data.getStringExtra("token"), Token.class);
-            mSelectedPaymentMethodRow = null;
+
+            mSelectedCard = null;
+
             mSelectedPaymentMethod = mTempPaymentMethod;
 
             // Set customer method selection
-            mCustomerMethodsText.setText(CustomerCardsAdapter.getPaymentMethodLabel(mActivity, mSelectedPaymentMethod.getName(),
+            mCustomerMethodsText.setText(getPaymentMethodLabel(mSelectedPaymentMethod.getName(),
                     mToken.getLastFourDigits()));
             mPaymentMethodImage.setImageResource(MercadoPagoUtil.getPaymentMethodIcon(mActivity, mSelectedPaymentMethod.getId()));
 
@@ -293,6 +293,10 @@ public class SimpleVaultActivity extends AppCompatActivity {
                 }
             }
         }
+    }
+
+    protected String getPaymentMethodLabel(String name, String lastFourDigits) {
+        return name + " " + getString(com.mercadopago.R.string.mpsdk_last_digits_label) + " " + lastFourDigits;
     }
 
     protected void getCustomerCardsAsync() {
@@ -343,8 +347,8 @@ public class SimpleVaultActivity extends AppCompatActivity {
 
     protected String getSelectedPMBin() {
 
-        if (mSelectedPaymentMethodRow != null) {
-            return mSelectedPaymentMethodRow.getCard().getFirstSixDigits();
+        if (mSelectedCard != null) {
+            return mSelectedCard.getFirstSixDigits();
         } else {
             return mToken.getFirstSixDigits();
         }
@@ -352,8 +356,8 @@ public class SimpleVaultActivity extends AppCompatActivity {
 
     private boolean isSecurityCodeRequired() {
 
-        if (mSelectedPaymentMethodRow != null) {
-            return mSelectedPaymentMethodRow.getCard().isSecurityCodeRequired();
+        if (mSelectedCard != null) {
+            return mSelectedCard.isSecurityCodeRequired();
         } else {
             return mSelectedPaymentMethod.isSecurityCodeRequired(getSelectedPMBin());
         }
@@ -377,14 +381,14 @@ public class SimpleVaultActivity extends AppCompatActivity {
     protected void setCustomerMethodSelection() {
 
         // Set payment method
-        mSelectedPaymentMethod = mSelectedPaymentMethodRow.getCard().getPaymentMethod();
+        mSelectedPaymentMethod = mSelectedCard.getPaymentMethod();
 
         // Set customer method selection
-        mCustomerMethodsText.setText(mSelectedPaymentMethodRow.getLabel());
+        mCustomerMethodsText.setText(getPaymentMethodLabel(mSelectedPaymentMethod.getName(), mSelectedCard.getLastFourDigits()));
         mPaymentMethodImage.setImageResource(MercadoPagoUtil.getPaymentMethodIcon(mActivity, mSelectedPaymentMethod.getId()));
 
         // Set security cards visibility
-        showSecurityCodeCard(mSelectedPaymentMethodRow.getCard().getPaymentMethod());
+        showSecurityCodeCard(mSelectedCard.getPaymentMethod());
 
         // Set button visibility
         mSubmitButton.setEnabled(true);
@@ -395,7 +399,7 @@ public class SimpleVaultActivity extends AppCompatActivity {
         LayoutUtil.hideKeyboard(mActivity);
 
         // Create token
-        if (mSelectedPaymentMethodRow != null) {
+        if (mSelectedCard != null) {
             createSavedCardToken();
         }
         else if(mToken != null){
@@ -406,11 +410,11 @@ public class SimpleVaultActivity extends AppCompatActivity {
 
     protected void createSavedCardToken() {
 
-        SavedCardToken savedCardToken = new SavedCardToken(mSelectedPaymentMethodRow.getCard().getId(), mSecurityCodeText.getText().toString());
+        SavedCardToken savedCardToken = new SavedCardToken(mSelectedCard.getId(), mSecurityCodeText.getText().toString());
 
         // Validate CVV
         try {
-            savedCardToken.validateSecurityCode(this, mSelectedPaymentMethodRow.getCard());
+            savedCardToken.validateSecurityCode(this, mSelectedCard);
             mSecurityCodeText.setError(null);
         }
         catch (Exception ex) {

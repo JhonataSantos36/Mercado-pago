@@ -59,7 +59,7 @@ public class FinalVaultActivity extends AdvancedVaultActivity {
                 // Set selection status
                 mPayerCosts = null;
                 mToken = null;
-                mSelectedPaymentMethodRow = null;
+                mSelectedCard = null;
                 mSelectedPayerCost = null;
                 mSelectedPaymentMethod = JsonUtil.getInstance().fromJson(data.getStringExtra("paymentMethod"), PaymentMethod.class);
                 mSelectedIssuer = null;
@@ -81,7 +81,7 @@ public class FinalVaultActivity extends AdvancedVaultActivity {
 
             if ((data != null) && (data.getStringExtra("apiException") != null)) {
                 finishWithApiException(data);
-            } else if ((mSelectedPaymentMethodRow == null) && (mToken == null)) {
+            } else if ((mSelectedCard == null) && (mToken == null)) {
                 // if nothing is selected
                 finish();
             }
@@ -94,12 +94,12 @@ public class FinalVaultActivity extends AdvancedVaultActivity {
         LayoutUtil.hideKeyboard(mActivity);
 
         // Validate installments
-        if (((mSelectedPaymentMethodRow != null) || (mToken != null)) && mSelectedPayerCost == null) {
+        if (((mSelectedCard != null) || (mToken != null)) && mSelectedPayerCost == null) {
             return;
         }
 
         // Create token
-        if (mSelectedPaymentMethodRow != null) {
+        if (mSelectedCard != null) {
 
             createSavedCardToken();
 
