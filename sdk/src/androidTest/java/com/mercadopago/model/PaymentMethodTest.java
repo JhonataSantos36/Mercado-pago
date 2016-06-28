@@ -1,6 +1,5 @@
 package com.mercadopago.model;
 
-import com.mercadopago.VaultActivity;
 import com.mercadopago.test.BaseTest;
 
 public class PaymentMethodTest extends BaseTest<VaultActivity> {

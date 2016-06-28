@@ -14,7 +14,6 @@ import com.mercadopago.model.Issuer;
 import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentMethod;
-import com.mercadopago.model.PaymentMethodRow;
 import com.mercadopago.model.SavedCardToken;
 import com.mercadopago.util.JsonUtil;
 
@@ -99,11 +98,6 @@ public class StaticMock {
         return new IdentificationType(DUMMI_IDENTIFICATION_TYPE_ID, DUMMI_IDENTIFICATION_TYPE_NAME,
                 DUMMI_IDENTIFICATION_TYPE_TYPE, DUMMI_IDENTIFICATION_TYPE_MIN_LENGTH,
                 DUMMI_IDENTIFICATION_TYPE_MAX_LENGTH);
-    }
-
-    public static PaymentMethodRow getPaymentMethodRow(Context context) {
-
-        return JsonUtil.getInstance().fromJson(getFile(context, "mocks/payment_method_row.json"), PaymentMethodRow.class);
     }
 
     public static List<PayerCost> getPayerCosts(Context context) {
