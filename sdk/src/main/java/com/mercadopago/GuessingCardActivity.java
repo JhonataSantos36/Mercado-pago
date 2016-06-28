@@ -26,6 +26,7 @@ import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.google.gson.reflect.TypeToken;
 import com.mercadopago.adapters.IdentificationTypesAdapter;
 import com.mercadopago.callbacks.Callback;
 import com.mercadopago.callbacks.FailureRecovery;
@@ -50,11 +51,12 @@ import com.mercadopago.model.Token;
 import com.mercadopago.mptracker.MPTracker;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.ErrorUtil;
+import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;
 import com.mercadopago.views.MPEditText;
 import com.mercadopago.views.MPTextView;
 
-import java.util.ArrayList;
+import java.lang.reflect.Type;
 import java.util.List;
 
 public class GuessingCardActivity extends FrontCardActivity {
@@ -326,16 +328,23 @@ public class GuessingCardActivity extends FrontCardActivity {
 
     protected void getActivityParameters() {
         mPublicKey = this.getIntent().getStringExtra("publicKey");
-        mPaymentPreference = (PaymentPreference) this.getIntent().getSerializableExtra("paymentPreference");
-        mToken = (Token) this.getIntent().getSerializableExtra("token");
-        mPaymentMethodList = (ArrayList<PaymentMethod>) this.getIntent().getSerializableExtra("paymentMethodList");
+        mPaymentPreference = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("paymentPreference"), PaymentPreference.class);
+        mToken = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("token"), Token.class);
+
+        try {
+            Type listType = new TypeToken<List<PaymentMethod>>(){}.getType();
+            mPaymentMethodList =  JsonUtil.getInstance().getGson().fromJson(this.getIntent().getStringExtra("paymentMethodList"), listType);
+        } catch (Exception ex) {
+            mPaymentMethodList = null;
+        }
+
         mIdentification = new Identification();
         mIdentificationNumberRequired = false;
         if (mPaymentPreference == null) {
             mPaymentPreference = new PaymentPreference();
         }
-        if(this.getIntent().getSerializableExtra("decorationPreference") != null) {
-            mDecorationPreference = (DecorationPreference) this.getIntent().getSerializableExtra("decorationPreference");
+        if(this.getIntent().getStringExtra("decorationPreference") != null) {
+            mDecorationPreference = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("decorationPreference"), DecorationPreference.class);
         }
     }
 
@@ -1564,7 +1573,7 @@ public class GuessingCardActivity extends FrontCardActivity {
         if (requestCode == MercadoPago.ISSUERS_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 Bundle bundle = data.getExtras();
-                mSelectedIssuer = (Issuer) bundle.getSerializable("issuer");
+                mSelectedIssuer = JsonUtil.getInstance().fromJson(bundle.getString("issuer"), Issuer.class);
                 checkFlipCardToFront(false);
                 finishWithResult();
             } else if (resultCode == RESULT_CANCELED) {
@@ -1584,9 +1593,9 @@ public class GuessingCardActivity extends FrontCardActivity {
 
     private void finishWithResult() {
         Intent returnIntent = new Intent();
-        returnIntent.putExtra("paymentMethod", mCurrentPaymentMethod);
-        returnIntent.putExtra("token", mToken);
-        returnIntent.putExtra("issuer", mSelectedIssuer);
+        returnIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(mCurrentPaymentMethod));
+        returnIntent.putExtra("token", JsonUtil.getInstance().toJson(mToken));
+        returnIntent.putExtra("issuer", JsonUtil.getInstance().toJson(mSelectedIssuer));
         setResult(RESULT_OK, returnIntent);
         finish();
     }

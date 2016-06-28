@@ -1,9 +1,8 @@
 package com.mercadopago.model;
 
-import java.io.Serializable;
 import java.util.List;
 
-public class PaymentMethod implements Serializable {
+public class PaymentMethod {
 
     private List<String> additionalInfoNeeded;
     private String id;

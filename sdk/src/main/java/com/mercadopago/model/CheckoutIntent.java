@@ -1,8 +1,6 @@
 package com.mercadopago.model;
 
-import java.io.Serializable;
-
-public class CheckoutIntent implements Serializable {
+public class CheckoutIntent {
 
     private Item item;
     private String merchantAccessToken;

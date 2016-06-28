@@ -1,9 +1,8 @@
 package com.mercadopago.model;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class TransactionDetails implements Serializable {
+public class TransactionDetails {
 
     private String externalResourceUrl;
     private String financialInstitution;

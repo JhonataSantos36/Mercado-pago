@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.mercadopago.exceptions.MPException;
 import com.mercadopago.util.ApiUtil;
+import com.mercadopago.util.JsonUtil;
 
 public class ErrorActivity extends AppCompatActivity {
 
@@ -42,7 +43,7 @@ public class ErrorActivity extends AppCompatActivity {
     }
 
     private void getActivityParameters() {
-        this.mMPException = (MPException) getIntent().getSerializableExtra("mpException");
+        this.mMPException = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("mpException"), MPException.class);
     }
 
     private void initializeControls() {
@@ -87,7 +88,7 @@ public class ErrorActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         Intent intent = new Intent();
-        intent.putExtra("mpException", mMPException);
+        intent.putExtra("mpException", JsonUtil.getInstance().toJson(mMPException));
         setResult(RESULT_CANCELED, intent);
         finish();
     }

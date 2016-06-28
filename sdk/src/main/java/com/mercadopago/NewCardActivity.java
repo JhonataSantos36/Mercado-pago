@@ -23,6 +23,7 @@ import com.mercadopago.model.CardToken;
 import com.mercadopago.model.IdentificationType;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.util.ApiUtil;
+import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;
 import com.mercadopago.util.MercadoPagoUtil;
 import com.mercadopago.views.MPEditText;
@@ -104,7 +105,7 @@ public class NewCardActivity extends AppCompatActivity {
         mKeyType = this.getIntent().getStringExtra("keyType");
         mKey = this.getIntent().getStringExtra("key");
         mRequireSecurityCode = this.getIntent().getBooleanExtra("requireSecurityCode", true);
-        mPaymentMethod = (PaymentMethod) this.getIntent().getSerializableExtra("paymentMethod");
+        mPaymentMethod = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("paymentMethod"), PaymentMethod.class);
     }
 
     protected void setInputControls() {
@@ -174,7 +175,7 @@ public class NewCardActivity extends AppCompatActivity {
         if (validateForm(cardToken)) {
             // Return to parent
             Intent returnIntent = new Intent();
-            returnIntent.putExtra("cardToken", cardToken);
+            returnIntent.putExtra("cardToken", JsonUtil.getInstance().toJson(cardToken));
             setResult(RESULT_OK, returnIntent);
             finish();
         }

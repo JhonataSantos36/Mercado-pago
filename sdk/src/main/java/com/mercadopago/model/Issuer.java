@@ -1,8 +1,6 @@
 package com.mercadopago.model;
 
-import java.io.Serializable;
-
-public class Issuer implements Serializable {
+public class Issuer {
 
     private Long id;
     private String name;

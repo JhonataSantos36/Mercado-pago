@@ -32,6 +32,7 @@ import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentPreference;
 import com.mercadopago.model.Token;
+import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;
 
 import java.math.BigDecimal;
@@ -195,16 +196,16 @@ public class ComponentsExampleActivity extends AppCompatActivity {
     private void resolvePaymentVaultRequest(int resultCode, Intent data) {
         if (resultCode == RESULT_OK && data != null) {
             // Set message
-            PaymentMethod paymentMethod = (PaymentMethod) data.getSerializableExtra("paymentMethod");
-            Issuer issuer = (Issuer) data.getSerializableExtra("issuer");
-            PayerCost payerCost = (PayerCost) data.getSerializableExtra("payerCost");
-            Token token = (Token) data.getSerializableExtra("token");
+            PaymentMethod paymentMethod = JsonUtil.getInstance().fromJson(data.getStringExtra("paymentMethod"), PaymentMethod.class);
+            Issuer issuer = JsonUtil.getInstance().fromJson(data.getStringExtra("issuer"), Issuer.class);
+            PayerCost payerCost = JsonUtil.getInstance().fromJson(data.getStringExtra("payerCost"), PayerCost.class);
+            Token token = JsonUtil.getInstance().fromJson(data.getStringExtra("token"), Token.class);
 
             showResult(paymentMethod, issuer, payerCost, token);
 
         } else {
-            if ((data != null) && (data.getSerializableExtra("mpException") != null)) {
-                MPException mpException = (MPException) data.getSerializableExtra("mpException");
+            if ((data != null) && (data.getStringExtra("mpException") != null)) {
+                MPException mpException = JsonUtil.getInstance().fromJson(data.getStringExtra("mpException"), MPException.class);
                 Toast.makeText(mActivity, mpException.getMessage(), Toast.LENGTH_LONG).show();
             }
         }
@@ -212,10 +213,10 @@ public class ComponentsExampleActivity extends AppCompatActivity {
 
     private void resolveCardVaultRequest(int resultCode, Intent data) {
         if(resultCode == RESULT_OK) {
-            PaymentMethod paymentMethod = (PaymentMethod) data.getSerializableExtra("paymentMethod");
-            Issuer issuer = (Issuer) data.getSerializableExtra("issuer");
-            Token token = (Token) data.getSerializableExtra("token");
-            PayerCost payerCost = (PayerCost) data.getSerializableExtra("payerCost");
+            PaymentMethod paymentMethod = JsonUtil.getInstance().fromJson(data.getStringExtra("paymentMethod"), PaymentMethod.class);
+            Issuer issuer = JsonUtil.getInstance().fromJson(data.getStringExtra("issuer"), Issuer.class);
+            PayerCost payerCost = JsonUtil.getInstance().fromJson(data.getStringExtra("payerCost"), PayerCost.class);
+            Token token = JsonUtil.getInstance().fromJson(data.getStringExtra("token"), Token.class);
 
             if(mCreatePaymentExampleSelected) {
                 createPayment(token, payerCost, issuer, paymentMethod, null);
@@ -229,9 +230,9 @@ public class ComponentsExampleActivity extends AppCompatActivity {
 
     private void resolveGuessingCardRequest(int resultCode, Intent data) {
         if(resultCode == RESULT_OK) {
-            PaymentMethod paymentMethod = (PaymentMethod) data.getSerializableExtra("paymentMethod");
-            Issuer issuer = (Issuer) data.getSerializableExtra("issuer");
-            Token token = (Token) data.getSerializableExtra("token");
+            PaymentMethod paymentMethod = JsonUtil.getInstance().fromJson(data.getStringExtra("paymentMethod"), PaymentMethod.class);
+            Issuer issuer = JsonUtil.getInstance().fromJson(data.getStringExtra("issuer"), Issuer.class);
+            Token token = JsonUtil.getInstance().fromJson(data.getStringExtra("token"), Token.class);
 
             showResult(paymentMethod, issuer, null, token);
         }
@@ -239,27 +240,27 @@ public class ComponentsExampleActivity extends AppCompatActivity {
 
     private void resolvePaymentMethodsRequest(int resultCode, Intent data) {
         if(resultCode == RESULT_OK) {
-            PaymentMethod paymentMethod = (PaymentMethod) data.getSerializableExtra("paymentMethod");
+            PaymentMethod paymentMethod = JsonUtil.getInstance().fromJson(data.getStringExtra("paymentMethod"), PaymentMethod.class);
             showResult(paymentMethod, null, null, null);
         } else {
             if ((data != null) &&
-                    (data.getSerializableExtra("mpException") != null)) {
-                MPException exception
-                        = (MPException) data.getSerializableExtra("mpException");
+                    (data.getStringExtra("mpException") != null)) {
+                MPException mpException = JsonUtil.getInstance().fromJson(data.getStringExtra("mpException"), MPException.class);
+
             }
         }
     }
 
     private void resolveInstallmentsRequest(int resultCode, Intent data) {
         if(resultCode == RESULT_OK) {
-            PayerCost payerCost = (PayerCost) data.getSerializableExtra("payerCost");
+            PayerCost payerCost = JsonUtil.getInstance().fromJson(data.getStringExtra("payerCost"), PayerCost.class);
             showText("Se seleccionó: " + payerCost.getRecommendedMessage());
         }
     }
 
     private void resolveIssuerRequest(int resultCode, Intent data) {
         if(resultCode == RESULT_OK) {
-            Issuer issuer = (Issuer) data.getSerializableExtra("issuer");
+            Issuer issuer = JsonUtil.getInstance().fromJson(data.getStringExtra("issuer"), Issuer.class);
             showText("Banco " + issuer.getName() + " seleccionado");
         }
     }

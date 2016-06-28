@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.util.CurrenciesUtil;
+import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.MercadoPagoUtil;
 import com.mercadopago.views.MPTextView;
 
@@ -456,8 +457,8 @@ public class CongratsActivity extends AppCompatActivity {
     }
 
     private void getActivityParameters(){
-        mPayment = (Payment) getIntent().getExtras().getSerializable("payment");
-        mPaymentMethod = (PaymentMethod) getIntent().getExtras().getSerializable("paymentMethod");
+        mPayment = JsonUtil.getInstance().fromJson(getIntent().getExtras().getString("payment"), Payment.class);
+        mPaymentMethod = JsonUtil.getInstance().fromJson(getIntent().getExtras().getString("paymentMethod"), PaymentMethod.class);
     }
 
     private Spanned getInstallmentsText() {

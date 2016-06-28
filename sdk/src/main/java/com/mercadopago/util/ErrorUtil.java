@@ -25,7 +25,7 @@ public class ErrorUtil {
 
     public static void startErrorActivity(Activity launcherActivity, MPException mpException) {
         Intent intent = new Intent(launcherActivity, ErrorActivity.class);
-        intent.putExtra("mpException", mpException);
+        intent.putExtra("mpException", JsonUtil.getInstance().toJson(mpException));
         launcherActivity.startActivityForResult(intent, ERROR_REQUEST_CODE);
     }
 }

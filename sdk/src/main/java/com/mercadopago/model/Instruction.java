@@ -1,12 +1,11 @@
 package com.mercadopago.model;
 
-import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by mreverter on 16/2/16.
  */
-public class Instruction implements Serializable {
+public class Instruction {
     private List<InstructionReference> references;
     private String title;
     private List<String> info;

@@ -59,7 +59,7 @@ public class ApiUtil {
             // Return with api exception
             Intent intent = new Intent();
             activity.setResult(Activity.RESULT_CANCELED, intent);
-            intent.putExtra("apiException", apiException);
+            intent.putExtra("apiException", JsonUtil.getInstance().toJson(apiException));
             activity.finish();
         }
     }

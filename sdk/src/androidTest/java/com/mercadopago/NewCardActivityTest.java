@@ -8,6 +8,7 @@ import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.test.ActivityResult;
 import com.mercadopago.test.BaseTest;
 import com.mercadopago.test.StaticMock;
+import com.mercadopago.util.JsonUtil;
 import com.mercadopago.views.MPEditText;
 import com.mercadopago.views.MPTextView;
 
@@ -284,7 +285,7 @@ public class NewCardActivityTest extends BaseTest<NewCardActivity> {
 
         Intent intent = new Intent();
         if (paymentMethod != null) {
-            intent.putExtra("paymentMethod", paymentMethod);
+            intent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
         }
         if (keyType != null) {
             intent.putExtra("keyType", keyType);

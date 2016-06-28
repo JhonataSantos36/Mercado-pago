@@ -20,6 +20,7 @@ import com.mercadopago.model.Item;
 import com.mercadopago.model.MerchantPayment;
 import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentMethod;
+import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;
 import com.mercadopago.util.MercadoPagoUtil;
 
@@ -81,7 +82,7 @@ public class ExamplesUtils {
 
         Intent cardIntent = new Intent(activity, CardActivity.class);
         cardIntent.putExtra("merchantPublicKey", merchantPublicKey);
-        cardIntent.putExtra("paymentMethod", paymentMethod);
+        cardIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
         activity.startActivityForResult(cardIntent, CARD_REQUEST_CODE);
     }
 

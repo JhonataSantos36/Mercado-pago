@@ -264,7 +264,7 @@ public class MercadoPago {
 
         Intent bankDealsIntent = new Intent(activity, BankDealsActivity.class);
         bankDealsIntent.putExtra("publicKey", publicKey);
-        bankDealsIntent.putExtra("decorationPreference", decorationPreference);
+        bankDealsIntent.putExtra("decorationPreference", JsonUtil.getInstance().toJson(decorationPreference));
         activity.startActivityForResult(bankDealsIntent, BANK_DEALS_REQUEST_CODE);
     }
 
@@ -274,15 +274,15 @@ public class MercadoPago {
         checkoutIntent.putExtra("merchantPublicKey", merchantPublicKey);
         checkoutIntent.putExtra("checkoutPreferenceId", checkoutPreferenceId);
         checkoutIntent.putExtra("showBankDeals", showBankDeals);
-        checkoutIntent.putExtra("decorationPreference", decorationPreference);
+        checkoutIntent.putExtra("decorationPreference", JsonUtil.getInstance().toJson(decorationPreference));
         activity.startActivityForResult(checkoutIntent, CHECKOUT_REQUEST_CODE);
     }
 
     private static void startCongratsActivity(Activity activity, Payment payment, PaymentMethod paymentMethod) {
 
         Intent congratsIntent = new Intent(activity, CongratsActivity.class);
-        congratsIntent.putExtra("payment", payment);
-        congratsIntent.putExtra("paymentMethod", paymentMethod);
+        congratsIntent.putExtra("payment", JsonUtil.getInstance().toJson(payment));
+        congratsIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
 
         activity.startActivityForResult(congratsIntent, CONGRATS_REQUEST_CODE);
     }
@@ -291,8 +291,8 @@ public class MercadoPago {
 
         Intent congratsIntent = new Intent(activity, InstructionsActivity.class);
         congratsIntent.putExtra("merchantPublicKey", merchantPublicKey);
-        congratsIntent.putExtra("payment", payment);
-        congratsIntent.putExtra("paymentMethod", paymentMethod);
+        congratsIntent.putExtra("payment", JsonUtil.getInstance().toJson(payment));
+        congratsIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
 
         activity.startActivityForResult(congratsIntent, INSTRUCTIONS_REQUEST_CODE);
     }
@@ -320,11 +320,11 @@ public class MercadoPago {
         intent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
         intent.putExtra("token", JsonUtil.getInstance().toJson(token));
         intent.putExtra("publicKey", publicKey);
-        intent.putExtra("issuer", issuer);
-        intent.putExtra("site", site);
-        intent.putExtra("payerCosts", (ArrayList<PayerCost>) payerCosts);
-        intent.putExtra("paymentPreference", paymentPreference);
-        intent.putExtra("decorationPreference", decorationPreference);
+        intent.putExtra("issuer", JsonUtil.getInstance().toJson(issuer));
+        intent.putExtra("site", JsonUtil.getInstance().toJson(site));
+        intent.putExtra("payerCosts", JsonUtil.getInstance().toJson(payerCosts));
+        intent.putExtra("paymentPreference", JsonUtil.getInstance().toJson(paymentPreference));
+        intent.putExtra("decorationPreference", JsonUtil.getInstance().toJson(decorationPreference));
 
         activity.startActivityForResult(intent, INSTALLMENTS_REQUEST_CODE);
     }
@@ -337,8 +337,8 @@ public class MercadoPago {
         intent.putExtra("paymentMethod",  JsonUtil.getInstance().toJson(paymentMethod));
         intent.putExtra("token", JsonUtil.getInstance().toJson(token));
         intent.putExtra("publicKey", publicKey);
-        intent.putExtra("issuers", (ArrayList<Issuer>) issuers);
-        intent.putExtra("decorationPreference", decorationPreference);
+        intent.putExtra("issuers", JsonUtil.getInstance().toJson(issuers));
+        intent.putExtra("decorationPreference", JsonUtil.getInstance().toJson(decorationPreference));
         activity.startActivityForResult(intent, ISSUERS_REQUEST_CODE);
 
     }
@@ -362,13 +362,13 @@ public class MercadoPago {
         }
         guessingCardIntent.putExtra("showBankDeals", showBankDeals);
 
-        guessingCardIntent.putExtra("paymentPreference", paymentPreference);
+        guessingCardIntent.putExtra("paymentPreference", JsonUtil.getInstance().toJson(paymentPreference));
 
-        guessingCardIntent.putExtra("token", token);
+        guessingCardIntent.putExtra("token", JsonUtil.getInstance().toJson(token));
 
-        guessingCardIntent.putExtra("paymentMethodList", (ArrayList<PaymentMethod>) paymentMethodList);
+        guessingCardIntent.putExtra("paymentMethodList", JsonUtil.getInstance().toJson(paymentMethodList));
 
-        guessingCardIntent.putExtra("decorationPreference", decorationPreference);
+        guessingCardIntent.putExtra("decorationPreference", JsonUtil.getInstance().toJson(decorationPreference));
 
         activity.startActivityForResult(guessingCardIntent, GUESSING_CARD_REQUEST_CODE);
     }
@@ -382,15 +382,15 @@ public class MercadoPago {
 
         cardVaultIntent.putExtra("amount", amount.toString());
 
-        cardVaultIntent.putExtra("site", site);
+        cardVaultIntent.putExtra("site", JsonUtil.getInstance().toJson(site));
 
-        cardVaultIntent.putExtra("paymentPreference", paymentPreference);
+        cardVaultIntent.putExtra("paymentPreference", JsonUtil.getInstance().toJson(paymentPreference));
 
-        cardVaultIntent.putExtra("token", token);
+        cardVaultIntent.putExtra("token", JsonUtil.getInstance().toJson(token));
 
-        cardVaultIntent.putExtra("paymentMethodList", (ArrayList<PaymentMethod>) paymentMethodList);
+        cardVaultIntent.putExtra("paymentMethodList", JsonUtil.getInstance().toJson(paymentMethodList));
 
-        cardVaultIntent.putExtra("decorationPreference", decorationPreference);
+        cardVaultIntent.putExtra("decorationPreference", JsonUtil.getInstance().toJson(decorationPreference));
 
         activity.startActivityForResult(cardVaultIntent, CARD_VAULT_REQUEST_CODE);
     }
@@ -401,8 +401,8 @@ public class MercadoPago {
         Intent paymentMethodsIntent = new Intent(activity, PaymentMethodsActivity.class);
         paymentMethodsIntent.putExtra("merchantPublicKey", merchantPublicKey);
         paymentMethodsIntent.putExtra("showBankDeals", showBankDeals);
-        paymentMethodsIntent.putExtra("paymentPreference", paymentPreference);
-        paymentMethodsIntent.putExtra("decorationPreference", decorationPreference);
+        paymentMethodsIntent.putExtra("paymentPreference", JsonUtil.getInstance().toJson(paymentPreference));
+        paymentMethodsIntent.putExtra("decorationPreference", JsonUtil.getInstance().toJson(decorationPreference));
 
         activity.startActivityForResult(paymentMethodsIntent, PAYMENT_METHODS_REQUEST_CODE);
     }
@@ -425,11 +425,11 @@ public class MercadoPago {
         vaultIntent.putExtra("merchantGetCustomerUri", merchantGetCustomerUri);
         vaultIntent.putExtra("merchantAccessToken", merchantAccessToken);
         vaultIntent.putExtra("amount", amount.toString());
-        vaultIntent.putExtra("site", site);
+        vaultIntent.putExtra("site", JsonUtil.getInstance().toJson(site));
         vaultIntent.putExtra("showBankDeals", showBankDeals);
-        vaultIntent.putExtra("paymentMethodSearch", paymentMethodSearch);
-        vaultIntent.putExtra("paymentPreference", paymentPreference);
-        vaultIntent.putExtra("decorationPreference", decorationPreference);
+        vaultIntent.putExtra("paymentMethodSearch", JsonUtil.getInstance().toJson(paymentMethodSearch));
+        vaultIntent.putExtra("paymentPreference", JsonUtil.getInstance().toJson(paymentPreference));
+        vaultIntent.putExtra("decorationPreference", JsonUtil.getInstance().toJson(decorationPreference));
 
         activity.startActivityForResult(vaultIntent, PAYMENT_VAULT_REQUEST_CODE);
     }

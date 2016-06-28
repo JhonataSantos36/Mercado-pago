@@ -1,9 +1,8 @@
 package com.mercadopago.model;
 
-import java.io.Serializable;
 import java.util.List;
 
-public class Installment implements Serializable {
+public class Installment {
 
     private Issuer issuer;
     private List<PayerCost> payerCosts;

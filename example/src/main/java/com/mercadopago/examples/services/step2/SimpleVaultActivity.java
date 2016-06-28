@@ -242,7 +242,7 @@ public class SimpleVaultActivity extends AppCompatActivity {
 
         if (resultCode == RESULT_OK) {
 
-            mTempPaymentMethod = (PaymentMethod) data.getSerializableExtra("paymentMethod");
+            mTempPaymentMethod = JsonUtil.getInstance().fromJson(data.getStringExtra("paymentMethod"), PaymentMethod.class);
 
             // Call new cards activity
             startCardActivity();
@@ -263,8 +263,10 @@ public class SimpleVaultActivity extends AppCompatActivity {
         if (resultCode == RESULT_OK) {
 
             // Set selection status
-            mToken = (Token) data.getSerializableExtra("token");
+            mToken = JsonUtil.getInstance().fromJson(data.getStringExtra("token"), Token.class);
+
             mSelectedCard = null;
+
             mSelectedPaymentMethod = mTempPaymentMethod;
 
             // Set customer method selection
@@ -446,7 +448,7 @@ public class SimpleVaultActivity extends AppCompatActivity {
     private void finishWithTokenResult(Token token) {
         Intent returnIntent = new Intent();
         returnIntent.putExtra("token", token.getId());
-        returnIntent.putExtra("paymentMethod", mSelectedPaymentMethod);
+        returnIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(mSelectedPaymentMethod));
         setResult(RESULT_OK, returnIntent);
         finish();
     }

@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 
+import com.google.gson.reflect.TypeToken;
 import com.mercadopago.adapters.PayerCostsAdapter;
 import com.mercadopago.callbacks.Callback;
 import com.mercadopago.callbacks.FailureRecovery;
@@ -23,9 +24,10 @@ import com.mercadopago.model.Site;
 import com.mercadopago.mptracker.MPTracker;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.ErrorUtil;
+import com.mercadopago.util.JsonUtil;
 
+import java.lang.reflect.Type;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 
 public class InstallmentsActivity extends ShowCardActivity {
@@ -157,9 +159,14 @@ public class InstallmentsActivity extends ShowCardActivity {
         if(this.getIntent().getStringExtra("amount") != null) {
             mAmount = new BigDecimal(this.getIntent().getStringExtra("amount"));
         }
-        mSite = (Site) this.getIntent().getSerializableExtra("site");
-        mPayerCosts = (ArrayList<PayerCost>)getIntent().getSerializableExtra("payerCosts");
-        mPaymentPreference = (PaymentPreference) this.getIntent().getSerializableExtra("paymentPreference");
+        mSite = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("site"), Site.class);
+        try {
+            Type listType = new TypeToken<List<PayerCost>>(){}.getType();
+            mPayerCosts =  JsonUtil.getInstance().getGson().fromJson(this.getIntent().getStringExtra("payerCosts"), listType);
+        } catch (Exception ex) {
+            mPayerCosts = null;
+        }
+        mPaymentPreference = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("paymentPreference"), PaymentPreference.class);
         if (mPaymentPreference == null) {
             mPaymentPreference = new PaymentPreference();
         }
@@ -222,7 +229,7 @@ public class InstallmentsActivity extends ShowCardActivity {
     @Override
     protected void finishWithResult() {
         Intent returnIntent = new Intent();
-        returnIntent.putExtra("payerCost", mSelectedPayerCost);
+        returnIntent.putExtra("payerCost", JsonUtil.getInstance().toJson(mSelectedPayerCost));
         setResult(RESULT_OK, returnIntent);
         finish();
     }

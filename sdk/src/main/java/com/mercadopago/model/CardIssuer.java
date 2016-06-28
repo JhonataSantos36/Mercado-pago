@@ -1,9 +1,8 @@
 package com.mercadopago.model;
 
-import java.io.Serializable;
 import java.util.List;
 
-public class CardIssuer implements Serializable {
+public class CardIssuer {
 
     private String id;
     private List<String> labels;

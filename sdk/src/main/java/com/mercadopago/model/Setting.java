@@ -1,9 +1,8 @@
 package com.mercadopago.model;
 
-import java.io.Serializable;
 import java.util.List;
 
-public class Setting implements Serializable {
+public class Setting {
 
     private Bin bin;
     private CardNumber cardNumber;

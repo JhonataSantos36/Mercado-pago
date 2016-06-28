@@ -1,8 +1,6 @@
 package com.mercadopago.model;
 
-import java.io.Serializable;
-
-public class Cardholder implements Serializable {
+public class Cardholder {
 
     private Identification identification;
     private String name;

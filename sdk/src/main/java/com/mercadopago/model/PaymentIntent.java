@@ -2,9 +2,7 @@ package com.mercadopago.model;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.io.Serializable;
-
-public class PaymentIntent implements Serializable {
+public class PaymentIntent {
 
     private Long transactionId;
     private Integer installments;

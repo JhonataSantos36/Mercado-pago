@@ -1,8 +1,6 @@
 package com.mercadopago.model;
 
-import java.io.Serializable;
-
-public class Payer implements Serializable {
+public class Payer {
 
     private String email;
     private String id;
