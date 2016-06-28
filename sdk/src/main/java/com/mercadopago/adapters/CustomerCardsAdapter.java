@@ -1,119 +1,74 @@
 package com.mercadopago.adapters;
 
-import android.app.Activity;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
-import com.mercadopago.R;
+import com.mercadopago.callbacks.OnSelectedCallback;
 import com.mercadopago.model.Card;
-import com.mercadopago.model.PaymentMethodRow;
-import com.mercadopago.util.MercadoPagoUtil;
-import com.mercadopago.views.MPTextView;
+import com.mercadopago.uicontrollers.paymentmethods.card.PaymentMethodCardSelectionRow;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class CustomerCardsAdapter extends  RecyclerView.Adapter<CustomerCardsAdapter.ViewHolder> {
 
-    private Activity mActivity;
-    private List<PaymentMethodRow> mData;
-    private View.OnClickListener mListener = null;
+    private Context mContext;
+    private List<Card> mData;
+    private OnSelectedCallback<Card> mSelectionCallback;
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder {
 
-        public ImageView mPaymentMethodImage;
-        public MPTextView mTextView;
+        public Card mCard;
+        public PaymentMethodCardSelectionRow mPaymentMethodCardRow;
 
-        public ViewHolder(View v, View.OnClickListener listener) {
+        public ViewHolder(PaymentMethodCardSelectionRow paymentMethodCardRow, Card card) {
+            super(paymentMethodCardRow.getView());
+            mCard = card;
+            mPaymentMethodCardRow = paymentMethodCardRow;
 
-            super(v);
-            mPaymentMethodImage = (ImageView) v.findViewById(R.id.mpsdkPmImage);
-            mTextView = (MPTextView) v.findViewById(R.id.mpsdkPmName);
-            if (listener != null) {
-                v.setOnClickListener(listener);
-            }
+            mPaymentMethodCardRow.initializeControls();
+            mPaymentMethodCardRow.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mSelectionCallback.onSelected(mCard);
+                }
+            });
         }
     }
 
-    public CustomerCardsAdapter(Activity activity, List<Card> data, View.OnClickListener listener) {
-        mActivity = activity;
-        mData = getRows(activity, data);
-        mListener = listener;
+    public CustomerCardsAdapter(Context context, List<Card> data, OnSelectedCallback<Card> callback) {
+        mContext = context;
+        mData = data;
+        mSelectionCallback = callback;
     }
 
     @Override
     public CustomerCardsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
-                                                   int viewType) {
+                                                   int position) {
 
-        View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.mpsdk_row_simple_list, parent, false);
+        Card card = mData.get(position);
 
-        return new ViewHolder(v, mListener);
+        PaymentMethodCardSelectionRow paymentMethodCardSelectionRow = new PaymentMethodCardSelectionRow(mContext, card);
+
+        paymentMethodCardSelectionRow.inflateInParent(parent, false);
+
+        return new ViewHolder(paymentMethodCardSelectionRow, card);
+    }
+
+    @Override
+    public int getItemViewType(int position)
+    {
+        return position;
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-
-        // Set current row
-        PaymentMethodRow row = mData.get(position);
-
-        // Set row label
-        holder.mTextView.setText(row.getLabel());
-
-        // Set row picture
-        holder.mPaymentMethodImage.setImageResource(row.getIcon());
-
-        // Set view tag item
-        holder.itemView.setTag(row);
+        holder.mPaymentMethodCardRow.drawPaymentMethod();
     }
 
     @Override
     public int getItemCount() {
         return mData.size();
     }
-
-    private List<PaymentMethodRow> getRows(Context context, List<Card> data) {
-
-        List<PaymentMethodRow> rows = new ArrayList<>();
-
-        // Add cards
-        for (int i = 0; i < data.size(); i++) {
-            rows.add(getPaymentMethodRow(context, data.get(i)));
-        }
-
-        // Add other payment method row
-        rows.add(new PaymentMethodRow(null, context.getString(R.string.mpsdk_other_pm_label), 0));
-
-        return rows;
-    }
-
-    public static PaymentMethodRow getPaymentMethodRow(Context context, Card card) {
-
-        int icon = MercadoPagoUtil.getPaymentMethodIcon(context, card.getPaymentMethod().getId());
-        return new PaymentMethodRow(card, getPaymentMethodLabel(context, card.getPaymentMethod().getName(), card.getLastFourDigits()), icon);
-    }
-
-    public static String getPaymentMethodLabel(Context context, String name, String lastFourDigits) {
-
-        return getPaymentMethodLabel(context, name, lastFourDigits, false);
-    }
-
-    public static String getPaymentMethodLabel(Context context, String name, String lastFourDigits, boolean noName) {
-
-        if (noName) {
-            return context.getString(R.string.mpsdk_last_digits_label) + " " + lastFourDigits;
-        } else {
-            return name + " " + context.getString(R.string.mpsdk_last_digits_label) + " " + lastFourDigits;
-        }
-    }
-
-    public PaymentMethodRow getItem(int position) {
-        return mData.get(position);
-    }
-
-    public View.OnClickListener getListener() { return mListener; }
 }

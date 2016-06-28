@@ -1,42 +1,34 @@
-package com.mercadopago.uicontrollers.paymentmethods;
+package com.mercadopago.uicontrollers.paymentmethods.card;
 
 import android.content.Context;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.mercadopago.R;
 import com.mercadopago.model.PaymentMethod;
-import com.mercadopago.model.Token;
+import com.mercadopago.uicontrollers.paymentmethods.PaymentMethodViewController;
 import com.mercadopago.util.MercadoPagoUtil;
 import com.mercadopago.views.MPTextView;
 
 /**
- * Created by mreverter on 12/5/16.
+ * Created by mreverter on 28/6/16.
  */
-public class PaymentMethodCardEditableRow implements PaymentMethodViewController {
+public abstract class PaymentMethodCard implements PaymentMethodViewController {
 
-    private PaymentMethod mPaymentMethod;
-    private Token mToken;
-    private Context mContext;
-    private View mSeparator;
-    private View mView;
-    private MPTextView mDescription;
-    private ImageView mIcon;
-    private View mEditHint;
-
-    public PaymentMethodCardEditableRow(Context context, PaymentMethod paymentMethod, Token token) {
-        mContext = context;
-        mPaymentMethod = paymentMethod;
-        mToken = token;
-    }
+    protected PaymentMethod mPaymentMethod;
+    protected Context mContext;
+    protected View mSeparator;
+    protected View mView;
+    protected MPTextView mDescription;
+    protected ImageView mIcon;
+    protected View mEditHint;
 
     @Override
     public void drawPaymentMethod() {
 
-        if(mToken != null) {
-            mDescription.setText(mContext.getString(R.string.mpsdk_last_digits_label) + " " + mToken.getLastFourDigits());
+        if(getLastFourDigits() != null) {
+            mDescription.setText(mContext.getString(R.string.mpsdk_last_digits_label) + " " + getLastFourDigits());
         }
         int resourceId = MercadoPagoUtil.getPaymentMethodIcon(mContext, mPaymentMethod.getId());
         if(resourceId != 0) {
@@ -45,6 +37,8 @@ public class PaymentMethodCardEditableRow implements PaymentMethodViewController
             mIcon.setVisibility(View.GONE);
         }
     }
+
+    protected abstract String getLastFourDigits();
 
     @Override
     public void setOnClickListener(View.OnClickListener listener) {
@@ -61,11 +55,7 @@ public class PaymentMethodCardEditableRow implements PaymentMethodViewController
     }
 
     @Override
-    public View inflateInParent(ViewGroup parent, boolean attachToRoot) {
-        mView = LayoutInflater.from(mContext)
-                .inflate(R.layout.mpsdk_row_payment_method_edit_card, parent, attachToRoot);
-        return mView;
-    }
+    public abstract View inflateInParent(ViewGroup parent, boolean attachToRoot);
 
     @Override
     public void showSeparator() {

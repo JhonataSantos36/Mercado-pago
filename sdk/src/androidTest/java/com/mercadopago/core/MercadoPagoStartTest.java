@@ -1,6 +1,5 @@
 package com.mercadopago.core;
 
-import com.mercadopago.VaultActivity;
 import com.mercadopago.test.BaseTest;
 import com.mercadopago.test.StaticMock;
 
