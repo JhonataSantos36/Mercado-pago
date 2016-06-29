@@ -3,11 +3,9 @@ package com.mercadopago;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
-import android.support.annotation.NonNull;
-import android.support.test.espresso.NoActivityResumedException;
+import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.widget.SlidingPaneLayout;
 import android.test.suitebuilder.annotation.LargeTest;
 import android.text.Spanned;
 import android.widget.ImageView;
@@ -18,7 +16,6 @@ import com.mercadopago.model.Payer;
 import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.TransactionDetails;
-import com.mercadopago.test.rules.MockedApiTestRule;
 import com.mercadopago.util.CurrenciesUtil;
 
 import junit.framework.TestCase;
@@ -30,10 +27,7 @@ import org.junit.runner.RunWith;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -41,7 +35,6 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static junit.framework.Assert.assertTrue;
 import static org.hamcrest.Matchers.not;
 
 /**
@@ -54,7 +47,7 @@ import static org.hamcrest.Matchers.not;
 public class CongratsActivityTest extends TestCase {
 
     @Rule
-    public MockedApiTestRule<CongratsActivity> mTestRule = new MockedApiTestRule<>(CongratsActivity.class, true, false);
+    public ActivityTestRule<CongratsActivity> mTestRule = new ActivityTestRule<>(CongratsActivity.class, true, false);
     public Intent validStartIntent;
 
     private Payment mPayment;
@@ -891,7 +884,6 @@ public class CongratsActivityTest extends TestCase {
         onView(withId(R.id.mpsdkExitCongrats)).check(matches(isDisplayed()));
     }
 
-
     @Test
     public void showCongratsLayoutWithoutTotalAmountDescriptionWhenCongratsReceiveZeroTotalAmount(){
         String paymentIdDescription, lastFourDigitsDescription;
@@ -997,8 +989,7 @@ public class CongratsActivityTest extends TestCase {
         onView(withId(R.id.mpsdkExitCongrats)).check(matches(isDisplayed()));
     }
 
-    //TODO validar
-    @Test(expected = NoActivityResumedException.class)
+    @Test
     public void finishCongratsLayoutWhenClickOnExitCongrats(){
         mPayment = getPayment();
         mPayment.setStatus(Payment.StatusCodes.STATUS_APPROVED);
@@ -1012,6 +1003,9 @@ public class CongratsActivityTest extends TestCase {
 
         //Click on exit button
         onView(withId(R.id.mpsdkExitCongrats)).perform(click());
+
+        //Congrats finish
+        assertTrue(mTestRule.getActivity().isFinishing());
     }
 
     @Test
@@ -1048,8 +1042,7 @@ public class CongratsActivityTest extends TestCase {
         onView(withId(R.id.mpsdkExitPending)).check(matches(isDisplayed()));
     }
 
-    //TODO resolver, falla
-    @Test(expected = NoActivityResumedException.class)
+    @Test
     public void finishPendingLayoutWhenClickOnExitPending(){
         mPayment = getPayment();
         mPayment.setStatus(Payment.StatusCodes.STATUS_IN_PROCESS);
@@ -1063,6 +1056,9 @@ public class CongratsActivityTest extends TestCase {
 
         //Click on exit button
         onView(withId(R.id.mpsdkExitPending)).perform(click());
+
+        //Congrats finish
+        assertTrue(mTestRule.getActivity().isFinishing());
     }
 
     @Test
@@ -1382,8 +1378,7 @@ public class CongratsActivityTest extends TestCase {
         onView(withId(R.id.mpsdkExitCallForAuthorize)).check(matches(isDisplayed()));
     }
 
-    //TODO resolver, falla
-    @Test(expected = NoActivityResumedException.class)
+    @Test
     public void finishCallForAuthorizeLayoutWhenClickOnAuthorizedPaymentMethod(){
         mPayment = getPayment();
         mPayment.setStatus(Payment.StatusCodes.STATUS_REJECTED);
@@ -1397,10 +1392,12 @@ public class CongratsActivityTest extends TestCase {
 
         //Click on exit button
         onView(withId(R.id.mpsdkAuthorizedPaymentMethod)).perform(click());
+
+        //Congrats finish
+        assertTrue(mTestRule.getActivity().isFinishing());
     }
 
-    //TODO resolver, falla
-    @Test(expected = NoActivityResumedException.class)
+    @Test
     public void finishCallForAuthorizeLayoutWhenClickOnSelectOtherPaymentMethod(){
         mPayment = getPayment();
         mPayment.setStatus(Payment.StatusCodes.STATUS_REJECTED);
@@ -1414,10 +1411,12 @@ public class CongratsActivityTest extends TestCase {
 
         //Click on exit button
         onView(withId(R.id.mpsdkSelectOtherPaymentMethod)).perform(click());
+
+        //Congrats finish
+        assertTrue(mTestRule.getActivity().isFinishing());
     }
 
-    //TODO resolver, falla
-    @Test(expected = NoActivityResumedException.class)
+    @Test
     public void finishCallForAuthorizeLayoutWhenClickOnExitCallForAuthorize(){
         mPayment = getPayment();
         mPayment.setStatus(Payment.StatusCodes.STATUS_REJECTED);
@@ -1431,6 +1430,9 @@ public class CongratsActivityTest extends TestCase {
 
         //Click on exit button
         onView(withId(R.id.mpsdkExitCallForAuthorize)).perform(click());
+
+        //Congrats finish
+        assertTrue(mTestRule.getActivity().isFinishing());
     }
 
     private Spanned setCallForAuthorizeTitle() {
@@ -1486,106 +1488,6 @@ public class CongratsActivityTest extends TestCase {
 
         //Exit button is displayed
         onView(withId(R.id.mpsdkExitRejection)).check(matches(isDisplayed()));
-    }
-
-    @Test
-    public void showRejectedLayoutWhenPaymentIsRejectedForInsufficientAmountWithPaymentMethodIdNull(){
-        PaymentMethod paymentMethod = new PaymentMethod();
-        paymentMethod.setId(null);
-        paymentMethod.setName("Master");
-        paymentMethod.setPaymentTypeId("credit_card");
-        mPaymentMethod = paymentMethod;
-
-        mPayment = getPayment();
-        mPayment.setStatus(Payment.StatusCodes.STATUS_REJECTED);
-        mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_INSUFFICIENT_AMOUNT);
-
-        validStartIntent = new Intent();
-        validStartIntent.putExtra("merchantPublicKey", mMerchantPublicKey);
-        validStartIntent.putExtra("paymentMethod", mPaymentMethod);
-        validStartIntent.putExtra("payment", mPayment);
-
-        createIntent();
-        mTestRule.launchActivity(validStartIntent);
-
-        //Title and subtitle
-        onView(withId(R.id.mpsdkRejectionTitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_title_bad_filled_other_rejection))));
-        onView(withId(R.id.mpsdkRejectionSubtitle)).check(matches(not(isDisplayed())));
-    }
-
-    @Test
-    public void showRejectedLayoutWhenPaymentIsRejectedForInsufficientAmountWithPaymentMethodIdEmpty(){
-        PaymentMethod paymentMethod = new PaymentMethod();
-        paymentMethod.setId("");
-        paymentMethod.setName("Master");
-        paymentMethod.setPaymentTypeId("credit_card");
-        mPaymentMethod = paymentMethod;
-
-        mPayment = getPayment();
-        mPayment.setStatus(Payment.StatusCodes.STATUS_REJECTED);
-        mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_INSUFFICIENT_AMOUNT);
-
-        validStartIntent = new Intent();
-        validStartIntent.putExtra("merchantPublicKey", mMerchantPublicKey);
-        validStartIntent.putExtra("paymentMethod", mPaymentMethod);
-        validStartIntent.putExtra("payment", mPayment);
-
-        createIntent();
-        mTestRule.launchActivity(validStartIntent);
-
-        //Title and subtitle
-        onView(withId(R.id.mpsdkRejectionTitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_title_bad_filled_other_rejection))));
-        onView(withId(R.id.mpsdkRejectionSubtitle)).check(matches(not(isDisplayed())));
-    }
-
-    @Test
-    public void showRejectedLayoutWhenPaymentIsRejectedForInsufficientAmountWithPaymentMethodNameNull(){
-        PaymentMethod paymentMethod = new PaymentMethod();
-        paymentMethod.setId("master");
-        paymentMethod.setName(null);
-        paymentMethod.setPaymentTypeId("credit_card");
-        mPaymentMethod = paymentMethod;
-
-        mPayment = getPayment();
-        mPayment.setStatus(Payment.StatusCodes.STATUS_REJECTED);
-        mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_INSUFFICIENT_AMOUNT);
-
-        validStartIntent = new Intent();
-        validStartIntent.putExtra("merchantPublicKey", mMerchantPublicKey);
-        validStartIntent.putExtra("paymentMethod", mPaymentMethod);
-        validStartIntent.putExtra("payment", mPayment);
-
-        createIntent();
-        mTestRule.launchActivity(validStartIntent);
-
-        //Title and subtitle
-        onView(withId(R.id.mpsdkRejectionTitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_title_bad_filled_other_rejection))));
-        onView(withId(R.id.mpsdkRejectionSubtitle)).check(matches(not(isDisplayed())));
-    }
-
-    @Test
-    public void showRejectedLayoutWhenPaymentIsRejectedForInsufficientAmountWithPaymentMethodNameEmpty(){
-        PaymentMethod paymentMethod = new PaymentMethod();
-        paymentMethod.setId("master");
-        paymentMethod.setName("");
-        paymentMethod.setPaymentTypeId("credit_card");
-        mPaymentMethod = paymentMethod;
-
-        mPayment = getPayment();
-        mPayment.setStatus(Payment.StatusCodes.STATUS_REJECTED);
-        mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_INSUFFICIENT_AMOUNT);
-
-        validStartIntent = new Intent();
-        validStartIntent.putExtra("merchantPublicKey", mMerchantPublicKey);
-        validStartIntent.putExtra("paymentMethod", mPaymentMethod);
-        validStartIntent.putExtra("payment", mPayment);
-
-        createIntent();
-        mTestRule.launchActivity(validStartIntent);
-
-        //Title and subtitle
-        onView(withId(R.id.mpsdkRejectionTitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_title_bad_filled_other_rejection))));
-        onView(withId(R.id.mpsdkRejectionSubtitle)).check(matches(not(isDisplayed())));
     }
 
     @Test
@@ -1763,8 +1665,7 @@ public class CongratsActivityTest extends TestCase {
         onView(withId(R.id.mpsdkExitRejection)).check(matches(isDisplayed()));
     }
 
-    //TODO resolver, falla
-    @Test(expected = NoActivityResumedException.class)
+    @Test
     public void finishRejectionLayoutWhenClickOnSelectOtherPaymentMethod(){
         mPayment = getPayment();
         mPayment.setStatus(Payment.StatusCodes.STATUS_REJECTED);
@@ -1778,10 +1679,12 @@ public class CongratsActivityTest extends TestCase {
 
         //Click on exit button
         onView(withId(R.id.mpsdkSelectOtherPaymentMethodByRejection)).perform(click());
+
+        //Congrats finish
+        assertTrue(mTestRule.getActivity().isFinishing());
     }
 
-    //TODO resolver, falla
-    @Test(expected = NoActivityResumedException.class)
+    @Test
     public void finishRejectionLayoutWhenClickOnExitRejection(){
         mPayment = getPayment();
         mPayment.setStatus(Payment.StatusCodes.STATUS_REJECTED);
@@ -1795,6 +1698,9 @@ public class CongratsActivityTest extends TestCase {
 
         //Click on exit button
         onView(withId(R.id.mpsdkExitRejection)).perform(click());
+
+        //Congrats finish
+        assertTrue(mTestRule.getActivity().isFinishing());
     }
 
     @Test
