@@ -69,8 +69,7 @@ public class ErrorActivity extends AppCompatActivity {
 
         this.mErrorMessageTextView.setText(message);
 
-        if (mMPException.isRecoverable())
-        {
+        if (mMPException.isRecoverable()) {
             mRetryTextView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

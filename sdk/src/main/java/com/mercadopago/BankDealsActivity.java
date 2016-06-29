@@ -1,9 +1,6 @@
 package com.mercadopago;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -19,81 +16,48 @@ import com.mercadopago.model.BankDeal;
 import com.mercadopago.model.DecorationPreference;
 import com.mercadopago.mptracker.MPTracker;
 import com.mercadopago.util.ApiUtil;
-import com.mercadopago.util.JsonUtil;
+import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.LayoutUtil;
 
 import java.util.List;
 
 
-public class BankDealsActivity extends AppCompatActivity {
-
-    // Activity parameters
-    protected String mPublicKey;
+public class BankDealsActivity extends MercadoPagoActivity {
 
     // Local vars
-    protected Activity mActivity;
-    protected boolean mActiveActivity;
     protected MercadoPago mMercadoPago;
     protected RecyclerView mRecyclerView;
     protected DecorationPreference mDecorationPreference;
     protected Toolbar mToolbar;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onValidStart() {
 
-        super.onCreate(savedInstanceState);
-        setContentView();
-
-        // Set activity
-        mActivity = this;
-        mActiveActivity = true;
-
-        // Get activity parameters
-        mPublicKey = mActivity.getIntent().getStringExtra("publicKey");
-        mDecorationPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("decorationPreference"), DecorationPreference.class);
-
-        initializeToolbar();
-
-        /// / Init MercadoPago object with public key
         mMercadoPago = new MercadoPago.Builder()
-                .setContext(mActivity)
-                .setPublicKey(mPublicKey)
+                .setContext(getActivity())
+                .setPublicKey(getMerchantPublicKey())
                 .build();
 
-        // Set recycler view
-        mRecyclerView = (RecyclerView) findViewById(R.id.mpsdkBankDealsList);
-        mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(mActivity, DividerItemDecoration.VERTICAL_LIST));
-
-        // Set a linear layout manager
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(mActivity));
-
-        // Get bank deals
         getBankDeals();
     }
 
     @Override
-    protected void onResume() {
-        mActiveActivity = true;
-        super.onResume();
+    protected void showError(String message) {
+        ErrorUtil.startErrorActivity(this, message, false);
     }
 
     @Override
-    protected void onDestroy() {
-        mActiveActivity = false;
-        super.onDestroy();
+    protected void setContentView() {
+        setContentView(R.layout.mpsdk_activity_bank_deals);
     }
 
     @Override
-    protected void onPause() {
-        mActiveActivity = false;
-        super.onPause();
-    }
-
-    @Override
-    protected void onStop() {
-        mActiveActivity = false;
-        super.onStop();
+    protected void initializeControls() {
+        initializeToolbar();
+        mRecyclerView = (RecyclerView) findViewById(R.id.mpsdkBankDealsList);
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
     private void initializeToolbar() {
@@ -101,19 +65,20 @@ public class BankDealsActivity extends AppCompatActivity {
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        if(mDecorationPreference != null) {
-            if(mDecorationPreference.hasColors()) {
-                mToolbar.setBackgroundColor(mDecorationPreference.getBaseColor());
-            }
-            if(mDecorationPreference.isDarkFontEnabled()) {
-                TextView title = (TextView) findViewById(R.id.mpsdkTitle);
-                title.setTextColor(mDecorationPreference.getDarkFontColor(this));
-            }
+        if(isCustomColorSet()) {
+            mToolbar.setBackgroundColor(getCustomBaseColor());
+        }
+        if(mDecorationPreference.isDarkFontEnabled()) {
+            TextView title = (TextView) findViewById(R.id.mpsdkTitle);
+            title.setTextColor(getDarkFontColor());
         }
     }
 
-    protected void setContentView() {
-        setContentView(R.layout.mpsdk_activity_bank_deals);
+    @Override
+    protected void validateActivityParameters() throws IllegalStateException {
+        if(getMerchantPublicKey() == null) {
+            throw new IllegalStateException("public key not set");
+        }
     }
 
     public void refreshLayout(View view) {
@@ -121,33 +86,33 @@ public class BankDealsActivity extends AppCompatActivity {
     }
 
     private void getBankDeals() {
-        LayoutUtil.showProgressLayout(mActivity);
+        LayoutUtil.showProgressLayout(this);
         mMercadoPago.getBankDeals(new Callback<List<BankDeal>>() {
             @Override
             public void success(List<BankDeal> bankDeals) {
-                MPTracker.getInstance().trackScreen("BANK_DEALS", "2", mPublicKey, "MLA", "1.0", mActivity);
-                MPTracker.getInstance().trackEvent("BANK_DEALS", "GET_BANK_DEALS_RESPONSE", "SUCCESS", "2", mPublicKey, "MLA", "1.0", mActivity);
-                if (mActiveActivity) {
-                    mRecyclerView.setAdapter(new BankDealsAdapter(mActivity, bankDeals, new View.OnClickListener() {
+                MPTracker.getInstance().trackScreen("BANK_DEALS", "2", getMerchantPublicKey(), "MLA", "1.0", getActivity());
+                MPTracker.getInstance().trackEvent("BANK_DEALS", "GET_BANK_DEALS_RESPONSE", "SUCCESS", "2", mMerchantAccessToken, "MLA", "1.0", getActivity());
+                if (isActivityActive()) {
+                    mRecyclerView.setAdapter(new BankDealsAdapter(getActivity(), bankDeals, new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
 
                             BankDeal selectedBankDeal = (BankDeal) view.getTag();
-                            Intent intent = new Intent(mActivity, TermsAndConditionsActivity.class);
+                            Intent intent = new Intent(getActivity(), TermsAndConditionsActivity.class);
                             intent.putExtra("termsAndConditions", selectedBankDeal.getLegals());
                             startActivity(intent);
                         }
                     }));
 
-                    LayoutUtil.showRegularLayout(mActivity);
+                    LayoutUtil.showRegularLayout(getActivity());
                 }
             }
 
             @Override
             public void failure(ApiException apiException) {
-                MPTracker.getInstance().trackEvent("BANK_DEALS", "GET_BANK_DEALS_RESPONSE", "FAIL", "2", mPublicKey, "MLA", "1.0", mActivity);
-                if (mActiveActivity) {
-                    ApiUtil.finishWithApiException(mActivity, apiException);
+                MPTracker.getInstance().trackEvent("BANK_DEALS", "GET_BANK_DEALS_RESPONSE", "FAIL", "2", getMerchantPublicKey(), "MLA", "1.0", getActivity());
+                if (isActivityActive()) {
+                    ApiUtil.finishWithApiException(getActivity(), apiException);
                 }
             }
         });
