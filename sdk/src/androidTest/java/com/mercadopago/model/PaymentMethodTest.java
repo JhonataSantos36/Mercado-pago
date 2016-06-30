@@ -1,11 +1,12 @@
 package com.mercadopago.model;
 
+import com.mercadopago.CheckoutActivity;
 import com.mercadopago.test.BaseTest;
 
-public class PaymentMethodTest extends BaseTest<VaultActivity> {
+public class PaymentMethodTest extends BaseTest<CheckoutActivity> {
 
     public PaymentMethodTest() {
-        super(VaultActivity.class);
+        super(CheckoutActivity.class);
     }
 
     //TODO: fix
