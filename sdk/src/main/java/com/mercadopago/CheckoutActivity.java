@@ -140,11 +140,6 @@ public class CheckoutActivity extends MercadoPagoActivity {
     }
 
     @Override
-    protected void showError(String message) {
-        ErrorUtil.startErrorActivity(this, message, false);
-    }
-
-    @Override
     protected void onValidStart() {
         MPTracker.getInstance().trackEvent("CHECKOUT", "INIT_CHECKOUT", "3", getMerchantPublicKey(), "MLA", "1.0", this);
         mBackPressedOnce = false;
@@ -155,6 +150,11 @@ public class CheckoutActivity extends MercadoPagoActivity {
                 .build();
 
         getCheckoutPreference();
+    }
+
+    @Override
+    protected void onInvalidStart(String message) {
+        ErrorUtil.startErrorActivity(this, message, false);
     }
 
     private void getCheckoutPreference() {

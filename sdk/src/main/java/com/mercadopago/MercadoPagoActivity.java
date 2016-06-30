@@ -38,7 +38,7 @@ public abstract class MercadoPagoActivity extends AppCompatActivity {
             initializeControls();
             onValidStart();
         } catch (IllegalStateException exception) {
-            showError(exception.getMessage());
+            onInvalidStart(exception.getMessage());
         }
     }
 
@@ -56,7 +56,7 @@ public abstract class MercadoPagoActivity extends AppCompatActivity {
 
     protected abstract void onValidStart();
 
-    protected abstract void showError(String message);
+    protected abstract void onInvalidStart(String message);
 
     protected abstract void setContentView();
 

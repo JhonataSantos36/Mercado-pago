@@ -42,7 +42,7 @@ public class PaymentMethodsActivity extends MercadoPagoActivity {
     }
 
     @Override
-    protected void showError(String message) {
+    protected void onInvalidStart(String message) {
         ErrorUtil.startErrorActivity(this, message, false);
     }
 
