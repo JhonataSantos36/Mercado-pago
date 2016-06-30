@@ -4,14 +4,13 @@ import com.google.gson.annotations.SerializedName;
 import com.mercadopago.exceptions.CheckoutPreferenceException;
 import com.mercadopago.util.CurrenciesUtil;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
 import static android.text.TextUtils.isEmpty;
 
-public class CheckoutPreference implements Serializable {
+public class CheckoutPreference {
 
     private String id;
     private List<Item> items;

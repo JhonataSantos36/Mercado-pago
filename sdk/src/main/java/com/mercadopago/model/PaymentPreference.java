@@ -1,15 +1,15 @@
 package com.mercadopago.model;
 
 import com.google.gson.annotations.SerializedName;
+import com.mercadopago.constants.PaymentTypes;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by mreverter on 28/12/15.
  */
-public class PaymentPreference implements Serializable {
+public class PaymentPreference {
 
     @SerializedName("installments")
     private Integer maxInstallments;
@@ -137,7 +137,7 @@ public class PaymentPreference implements Serializable {
     }
 
     public List<PaymentMethod> getSupportedPaymentMethods(List<PaymentMethod> paymentMethods) {
-        List<PaymentMethod> supportedPaymentMethods =  new ArrayList<>();
+        List<PaymentMethod> supportedPaymentMethods = new ArrayList<>();
         if(paymentMethods != null) {
             for (PaymentMethod paymentMethod : paymentMethods) {
                 if (this.isPaymentMethodSupported(paymentMethod)) {
@@ -184,7 +184,7 @@ public class PaymentPreference implements Serializable {
 
     public boolean excludedPaymentTypesValid() {
         return excludedPaymentTypes == null
-                || excludedPaymentTypes.size() < PaymentType.getAllPaymentTypes().size();
+                || excludedPaymentTypes.size() < PaymentTypes.getAllPaymentTypes().size();
     }
 
     public boolean validDefaultInstallments() {

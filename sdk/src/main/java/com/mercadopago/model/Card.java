@@ -1,9 +1,8 @@
 package com.mercadopago.model;
 
-import java.io.Serializable;
 import java.util.Date;
 
-public class Card implements Serializable {
+public class Card {
 
     private Cardholder cardHolder;
     private String customerId;

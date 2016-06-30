@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 
+import com.google.gson.reflect.TypeToken;
 import com.mercadopago.adapters.IssuersAdapter;
 import com.mercadopago.callbacks.Callback;
 import com.mercadopago.callbacks.FailureRecovery;
@@ -20,8 +21,9 @@ import com.mercadopago.model.Issuer;
 import com.mercadopago.mptracker.MPTracker;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.ErrorUtil;
+import com.mercadopago.util.JsonUtil;
 
-import java.util.ArrayList;
+import java.lang.reflect.Type;
 import java.util.List;
 
 public class IssuersActivity extends ShowCardActivity {
@@ -98,7 +100,7 @@ public class IssuersActivity extends ShowCardActivity {
 
     protected void setContentView() {
         MPTracker.getInstance().trackScreen("CARD_ISSUERS", "2", mPublicKey, "MLA", "1.0", this);
-        setContentView(R.layout.activity_new_issuers);
+        setContentView(R.layout.mpsdk_activity_new_issuers);
     }
 
     protected void setLayout() {
@@ -146,7 +148,12 @@ public class IssuersActivity extends ShowCardActivity {
     @Override
     protected void getActivityParameters() {
         super.getActivityParameters();
-        mIssuers = (ArrayList<Issuer>)getIntent().getSerializableExtra("issuers");
+        try {
+            Type listType = new TypeToken<List<Issuer>>(){}.getType();
+            mIssuers =  JsonUtil.getInstance().getGson().fromJson(this.getIntent().getStringExtra("issuers"), listType);
+        } catch (Exception ex) {
+            mIssuers = null;
+        }
     }
 
     protected void getIssuersAsync() {
@@ -193,7 +200,7 @@ public class IssuersActivity extends ShowCardActivity {
         @Override
     protected void finishWithResult() {
         Intent returnIntent = new Intent();
-        returnIntent.putExtra("issuer", mSelectedIssuer);
+        returnIntent.putExtra("issuer", JsonUtil.getInstance().toJson(mSelectedIssuer));
         setResult(RESULT_OK, returnIntent);
         finish();
     }

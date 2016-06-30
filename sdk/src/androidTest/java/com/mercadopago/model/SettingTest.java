@@ -1,15 +1,15 @@
 package com.mercadopago.model;
 
-import com.mercadopago.VaultActivity;
+import com.mercadopago.CheckoutActivity;
 import com.mercadopago.test.BaseTest;
 import com.mercadopago.test.StaticMock;
 
 import java.util.ArrayList;
 
-public class SettingTest extends BaseTest<VaultActivity> {
+public class SettingTest extends BaseTest<CheckoutActivity> {
 
     public SettingTest() {
-        super(VaultActivity.class);
+        super(CheckoutActivity.class);
     }
 
     public void testGetSettingByBin() {

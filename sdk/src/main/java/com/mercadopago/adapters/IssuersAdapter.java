@@ -37,7 +37,7 @@ public class IssuersAdapter extends  RecyclerView.Adapter<IssuersAdapter.ViewHol
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         LayoutInflater inflater = LayoutInflater.from(mContext);
-        View adapterView = inflater.inflate(R.layout.row_issuers, parent, false);
+        View adapterView = inflater.inflate(R.layout.mpsdk_row_issuers, parent, false);
         ViewHolder viewHolder = new ViewHolder(adapterView);
         return viewHolder;
     }

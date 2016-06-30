@@ -1,13 +1,13 @@
 package com.mercadopago.model;
 
-import com.mercadopago.VaultActivity;
+import com.mercadopago.CheckoutActivity;
 import com.mercadopago.test.BaseTest;
 import com.mercadopago.test.StaticMock;
 
-public class CardTest extends BaseTest<VaultActivity> {
+public class CardTest extends BaseTest<CheckoutActivity> {
 
     public CardTest() {
-        super(VaultActivity.class);
+        super(CheckoutActivity.class);
     }
 
     public void testIsSecurityCodeRequired() {

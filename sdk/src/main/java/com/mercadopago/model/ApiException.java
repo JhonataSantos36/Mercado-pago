@@ -2,10 +2,9 @@ package com.mercadopago.model;
 
 import com.mercadopago.util.ApiUtil;
 
-import java.io.Serializable;
 import java.util.List;
 
-public class ApiException implements Serializable {
+public class ApiException {
 
     private List<Cause> cause;
     private String error;

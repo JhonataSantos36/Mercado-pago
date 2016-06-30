@@ -1,11 +1,9 @@
 package com.mercadopago.model;
 
-import java.io.Serializable;
-
 /**
  * Created by mreverter on 25/4/16.
  */
-public class PaymentMethodResult implements Serializable {
+public class PaymentMethodResult {
 
     private PaymentMethod paymentMethod;
     private String recommendedDescription;

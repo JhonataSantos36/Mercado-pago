@@ -1,8 +1,6 @@
 package com.mercadopago.model;
 
-import java.io.Serializable;
-
-public class CardNumber implements Serializable {
+public class CardNumber {
 
     private Integer length;
     private String validation;

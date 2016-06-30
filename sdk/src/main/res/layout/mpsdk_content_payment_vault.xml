@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    android:id="@+id/mpsdkContentLayout"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    android:layout_marginBottom="20dp">
+    <RelativeLayout
+        android:id="@+id/mpsdkRegularLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:showIn="@layout/mpsdk_activity_payment_vault"
+        tools:context="com.mercadopago.PaymentVaultActivity">
+        <RelativeLayout
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="50dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <View android:layout_width="match_parent" android:layout_height="0dp" android:focusable="true" android:focusableInTouchMode="true"><requestFocus/></View>
+            <com.mercadopago.views.MPTextView
+                android:id="@+id/mpsdkGroupsLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/mpsdk_payment_method_groups_label"
+                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
+                android:visibility="gone"/>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/mpsdkGroupsList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/mpsdkGroupsLabel"
+                android:listSelector="@android:color/transparent"
+                android:divider="@null"/>
+            <View
+                android:layout_below="@id/mpsdkGroupsList"
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:background="@drawable/mpsdk_drop_shadow"/>
+        </RelativeLayout>
+    </RelativeLayout>
+</ScrollView>

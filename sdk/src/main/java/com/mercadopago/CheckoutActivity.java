@@ -40,6 +40,7 @@ import com.mercadopago.uicontrollers.paymentmethods.PaymentMethodViewController;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.CurrenciesUtil;
 import com.mercadopago.util.ErrorUtil;
+import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;
 import com.mercadopago.util.MercadoPagoUtil;
 import com.mercadopago.views.MPButton;
@@ -104,7 +105,7 @@ public class CheckoutActivity extends AppCompatActivity {
         if(mDecorationPreference != null && mDecorationPreference.hasColors()) {
             setTheme(R.style.Theme_MercadoPagoTheme_NoActionBar);
         }
-        setContentView(R.layout.activity_checkout);
+        setContentView(R.layout.mpsdk_activity_checkout);
 
         initializeToolbar();
         mBackPressedOnce = false;
@@ -157,7 +158,7 @@ public class CheckoutActivity extends AppCompatActivity {
 
             @Override
             public void failure(ApiException apiException) {
-                MPTracker.getInstance().trackEvent("PREFERENCE", "GET_PREFERENCE_RESPONSE", "FAIL", "3", mMerchantPublicKey, mCheckoutPreference.getSiteId(), "1.0", mActivity);
+                //TODO site from context MPTracker.getInstance().trackEvent("PREFERENCE", "GET_PREFERENCE_RESPONSE", "FAIL", "3", mMerchantPublicKey, mCheckoutPreference.getSiteId(), "1.0", mActivity);
                 if (mActiveActivity) {
                     ApiUtil.showApiExceptionError(mActivity, apiException);
                     failureRecovery = new FailureRecovery() {
@@ -229,8 +230,8 @@ public class CheckoutActivity extends AppCompatActivity {
         mCheckoutPreferenceId = this.getIntent().getStringExtra("checkoutPreferenceId");
         mMerchantPublicKey = this.getIntent().getStringExtra("merchantPublicKey");
         mShowBankDeals = this.getIntent().getBooleanExtra("showBankDeals", true);
-        if(this.getIntent().getSerializableExtra("decorationPreference") != null) {
-            mDecorationPreference = (DecorationPreference) this.getIntent().getSerializableExtra("decorationPreference");
+        if(this.getIntent().getStringExtra("decorationPreference") != null) {
+            mDecorationPreference = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("decorationPreference"), DecorationPreference.class);
         }
     }
 
@@ -302,7 +303,7 @@ public class CheckoutActivity extends AppCompatActivity {
     protected void startTermsAndConditionsActivity() {
         Intent termsAndConditionsIntent = new Intent(this, TermsAndConditionsActivity.class);
         termsAndConditionsIntent.putExtra("siteId", mCheckoutPreference.getSiteId());
-        termsAndConditionsIntent.putExtra("decorationPreference", mDecorationPreference);
+        termsAndConditionsIntent.putExtra("decorationPreference", JsonUtil.getInstance().toJson(mDecorationPreference));
         startActivity(termsAndConditionsIntent);
     }
 
@@ -372,10 +373,10 @@ public class CheckoutActivity extends AppCompatActivity {
 
     private void resolvePaymentVaultRequest(int resultCode, Intent data) {
         if(resultCode == RESULT_OK) {
-            mSelectedIssuer = (Issuer) data.getSerializableExtra("issuer");
-            mSelectedPayerCost = (PayerCost) data.getSerializableExtra("payerCost");
-            mCreatedToken = (Token) data.getSerializableExtra("token");
-            mSelectedPaymentMethod = (PaymentMethod) data.getSerializableExtra("paymentMethod");
+            mSelectedIssuer = JsonUtil.getInstance().fromJson(data.getStringExtra("issuer"), Issuer.class);
+            mSelectedPayerCost = JsonUtil.getInstance().fromJson(data.getStringExtra("payerCost"), PayerCost.class);
+            mCreatedToken = JsonUtil.getInstance().fromJson(data.getStringExtra("token"), Token.class);
+            mSelectedPaymentMethod = JsonUtil.getInstance().fromJson(data.getStringExtra("paymentMethod"), PaymentMethod.class);
 
             if(mCreatedToken != null) {
                 MPTracker.getInstance().trackToken(mCreatedToken.getId(), "3", mMerchantPublicKey, mCheckoutPreference.getSiteId(), "1.0", this);
@@ -440,16 +441,16 @@ public class CheckoutActivity extends AppCompatActivity {
     protected void resolveInstallmentsRequest(int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
             Bundle bundle = data.getExtras();
-            mSelectedPayerCost = (PayerCost) bundle.getSerializable("payerCost");
+            mSelectedPayerCost = JsonUtil.getInstance().fromJson(bundle.getString("payerCost"), PayerCost.class);
             drawPayerCostRow();
             setAmountLabel();
         }
-        overridePendingTransition(R.anim.slide_left_to_right_in, R.anim.slide_left_to_right_out);
+        overridePendingTransition(R.anim.mpsdk_slide_left_to_right_in, R.anim.mpsdk_slide_left_to_right_out);
     }
 
     private void finishWithPaymentResult() {
         Intent paymentResultIntent = new Intent();
-        paymentResultIntent.putExtra("payment", mCreatedPayment);
+        paymentResultIntent.putExtra("payment", JsonUtil.getInstance().toJson(mCreatedPayment));
         setResult(RESULT_OK, paymentResultIntent);
         finish();
     }
@@ -475,7 +476,7 @@ public class CheckoutActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     mPaymentMethodEditionRequested = true;
                     startPaymentVaultActivity();
-                    overridePendingTransition(R.anim.slide_right_to_left_in, R.anim.slide_right_to_left_out);
+                    overridePendingTransition(R.anim.mpsdk_slide_right_to_left_in, R.anim.mpsdk_slide_right_to_left_out);
                 }
             });
         }
@@ -528,7 +529,7 @@ public class CheckoutActivity extends AppCompatActivity {
                 .setDecorationPreference(mDecorationPreference)
                 .startInstallmentsActivity();
 
-        overridePendingTransition(R.anim.slide_right_to_left_in, R.anim.slide_right_to_left_out);
+        overridePendingTransition(R.anim.mpsdk_slide_right_to_left_in, R.anim.mpsdk_slide_right_to_left_out);
     }
 
     private void setAmountLabel() {
@@ -569,7 +570,7 @@ public class CheckoutActivity extends AppCompatActivity {
     }
 
     private void animateBackFromPaymentEdition() {
-        overridePendingTransition(R.anim.slide_left_to_right_in, R.anim.slide_left_to_right_out);
+        overridePendingTransition(R.anim.mpsdk_slide_left_to_right_in, R.anim.mpsdk_slide_left_to_right_out);
     }
 
     private boolean isUniquePaymentMethod() {
@@ -618,7 +619,6 @@ public class CheckoutActivity extends AppCompatActivity {
                     startCongratsActivity();
                 } else {
                     MPTracker.getInstance().trackPaymentId(mCreatedPayment.getId().toString(), "3", mMerchantPublicKey, "MLA", "1.0", mActivity);
-
                     startInstructionsActivity();
                 }
                 cleanTransactionId();
@@ -806,7 +806,7 @@ public class CheckoutActivity extends AppCompatActivity {
     }
 
     private void animateBackToPaymentVault() {
-        overridePendingTransition(R.anim.slide_left_to_right_in, R.anim.slide_left_to_right_out);
+        overridePendingTransition(R.anim.mpsdk_slide_left_to_right_in, R.anim.mpsdk_slide_left_to_right_out);
     }
 
     private void showProgress() {

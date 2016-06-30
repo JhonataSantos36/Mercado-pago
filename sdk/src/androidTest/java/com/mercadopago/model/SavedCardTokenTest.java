@@ -1,14 +1,14 @@
 package com.mercadopago.model;
 
+import com.mercadopago.CheckoutActivity;
 import com.mercadopago.R;
-import com.mercadopago.VaultActivity;
 import com.mercadopago.test.BaseTest;
 import com.mercadopago.test.StaticMock;
 
-public class SavedCardTokenTest extends BaseTest<VaultActivity> {
+public class SavedCardTokenTest extends BaseTest<CheckoutActivity> {
 
     public SavedCardTokenTest() {
-        super(VaultActivity.class);
+        super(CheckoutActivity.class);
     }
 
     public void testConstructor() {

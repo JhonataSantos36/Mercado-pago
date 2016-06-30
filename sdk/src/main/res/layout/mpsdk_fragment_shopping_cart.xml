@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mpsdkShoppingCartLayout"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/mpsdk_shopping_cart_height"
+    android:background="@color/mpsdk_shopping_cart_background"
+    android:paddingTop="10dp"
+    android:layout_alignParentTop="true"
+    android:layout_gravity="top"
+    android:gravity="center_vertical"
+    android:paddingBottom="10dp"
+    tools:context="com.mercadopago.fragments.ShoppingCartFragment">
+    <ImageView
+        android:id="@+id/mpsdkItemImage"
+        android:background="@drawable/mpsdk_image_border"
+        android:src="@drawable/regular_payment"
+        android:layout_width="88dp"
+        android:layout_height="88dp"
+        android:scaleType="fitXY"
+        android:layout_marginStart="20dp"
+        android:layout_marginLeft="20dp"/>
+    <com.mercadopago.views.MPTextView
+        android:id="@+id/mpsdkItemTitle"
+        android:text="Prueba"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/mpsdkItemImage"
+        android:layout_toEndOf="@+id/mpsdkItemImage"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginBottom="5dp"
+        style="@style/mpsdk_regular_white_thin_bold_text"/>
+    <com.mercadopago.views.MPTextView
+        android:id="@+id/mpsdkItemAmount"
+        tools:text="$X"
+        style="@style/mpsdk_regular_white_thin_bold_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/mpsdkItemTitle"
+        android:layout_alignStart="@+id/mpsdkItemTitle"
+        android:layout_alignLeft="@+id/mpsdkItemTitle"/>
+</RelativeLayout>

@@ -1,11 +1,9 @@
 package com.mercadopago.model;
 
-import java.io.Serializable;
-
 /**
  * Created by mromar on 6/3/16.
  */
-public class Site implements Serializable {
+public class Site {
 
     private String id;
     private String currencyId;

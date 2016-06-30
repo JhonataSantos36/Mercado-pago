@@ -17,6 +17,7 @@ import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.TransactionDetails;
 import com.mercadopago.util.CurrenciesUtil;
+import com.mercadopago.util.JsonUtil;
 
 import junit.framework.TestCase;
 
@@ -98,8 +99,8 @@ public class CongratsActivityTest extends TestCase {
     private void createIntent(){
         validStartIntent = new Intent();
         validStartIntent.putExtra("merchantPublicKey", mMerchantPublicKey);
-        validStartIntent.putExtra("paymentMethod", mPaymentMethod);
-        validStartIntent.putExtra("payment", mPayment);
+        validStartIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(mPaymentMethod));
+        validStartIntent.putExtra("payment", JsonUtil.getInstance().toJson(mPayment));
     }
 
     @Test

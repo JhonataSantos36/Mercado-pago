@@ -6,11 +6,10 @@ import android.text.TextUtils;
 import com.mercadopago.R;
 import com.mercadopago.core.MercadoPago;
 
-import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Locale;
 
-public class CardToken implements Serializable {
+public class CardToken {
 
     private final static Calendar now = Calendar.getInstance();
     public static final int MIN_LENGTH_NUMBER = 10;

@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.mercadopago.exceptions.MPException;
 import com.mercadopago.util.ApiUtil;
+import com.mercadopago.util.JsonUtil;
 
 public class ErrorActivity extends AppCompatActivity {
 
@@ -20,7 +21,7 @@ public class ErrorActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         animateErrorScreenLaunch();
-        setContentView(R.layout.activity_error);
+        setContentView(R.layout.mpsdk_activity_error);
         getActivityParameters();
         if(validParameters()) {
             initializeControls();
@@ -34,7 +35,7 @@ public class ErrorActivity extends AppCompatActivity {
     }
 
     private void animateErrorScreenLaunch() {
-        overridePendingTransition(R.anim.fade_in_seamless, R.anim.fade_out_seamless);
+        overridePendingTransition(R.anim.mpsdk_fade_in_seamless, R.anim.mpsdk_fade_out_seamless);
     }
 
     private boolean validParameters() {
@@ -42,7 +43,7 @@ public class ErrorActivity extends AppCompatActivity {
     }
 
     private void getActivityParameters() {
-        this.mMPException = (MPException) getIntent().getSerializableExtra("mpException");
+        this.mMPException = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("mpException"), MPException.class);
     }
 
     private void initializeControls() {
@@ -87,7 +88,7 @@ public class ErrorActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         Intent intent = new Intent();
-        intent.putExtra("mpException", mMPException);
+        intent.putExtra("mpException", JsonUtil.getInstance().toJson(mMPException));
         setResult(RESULT_CANCELED, intent);
         finish();
     }

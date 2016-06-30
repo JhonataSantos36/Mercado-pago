@@ -11,7 +11,6 @@ import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.test.ActivityResult;
 import com.mercadopago.test.BaseTest;
 import com.mercadopago.test.StaticMock;
-import com.mercadopago.util.HttpClientUtil;
 import com.mercadopago.views.MPTextView;
 
 import java.util.ArrayList;

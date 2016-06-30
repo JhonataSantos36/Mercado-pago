@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import com.mercadopago.R;
 import com.mercadopago.model.DecorationPreference;
 import com.mercadopago.util.CurrenciesUtil;
+import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.ScaleUtil;
 import com.mercadopago.views.MPTextView;
 import com.squareup.picasso.Picasso;
@@ -56,7 +57,7 @@ public class ShoppingCartFragment extends Fragment {
         bundle.putString("amount", amount.toString());
         bundle.putString("currencyId", currrencyId);
         bundle.putString("purchaseTitle", purchaseTitle);
-        bundle.putSerializable("decorationPreference", decorationPreference);
+        bundle.putString("decorationPreference", JsonUtil.getInstance().toJson(decorationPreference));
 
         fragment.setArguments(bundle);
         return fragment;
@@ -73,14 +74,14 @@ public class ShoppingCartFragment extends Fragment {
             if(amountParameter != null) {
                 mAmount = new BigDecimal(amountParameter);
             }
-            mDecorationPreference = (DecorationPreference) getArguments().getSerializable("decorationPreference");
+            mDecorationPreference = JsonUtil.getInstance().fromJson(getArguments().getString("decorationPreference"), DecorationPreference.class);
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_shopping_cart, container, false);
+        return inflater.inflate(R.layout.mpsdk_fragment_shopping_cart, container, false);
     }
 
     @Override

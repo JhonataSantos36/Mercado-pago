@@ -5,9 +5,7 @@ import android.text.TextUtils;
 
 import com.mercadopago.R;
 
-import java.io.Serializable;
-
-public class SavedCardToken implements Serializable {
+public class SavedCardToken {
 
     private String cardId;
     private String securityCode;

@@ -2,11 +2,10 @@ package com.mercadopago.model;
 
 import com.google.gson.JsonObject;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class Refund implements Serializable {
+public class Refund {
 
     private BigDecimal amount;
     private Date dateCreated;

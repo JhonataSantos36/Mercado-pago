@@ -66,7 +66,7 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.new_card_front, container, false);
+        return inflater.inflate(R.layout.mpsdk_new_card_front, container, false);
     }
 
     @Override
@@ -90,8 +90,8 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
         mCardHolderNameEditText = (MPEditText) getActivity().findViewById(R.id.mpsdkCardholderName);
         mCardExpiryDateEditText = (MPEditText) getActivity().findViewById(R.id.mpsdkCardExpiryDate);
         mCardSecurityEditText = (MPEditText) getActivity().findViewById(R.id.mpsdkCardSecurityCode);
-        mAnimFadeIn = AnimationUtils.loadAnimation(getActivity(), R.anim.fade_in);
-        mQuickAnim = AnimationUtils.loadAnimation(getActivity(), R.anim.quick_anim);
+        mAnimFadeIn = AnimationUtils.loadAnimation(getActivity(), R.anim.mpsdk_fade_in);
+        mQuickAnim = AnimationUtils.loadAnimation(getActivity(), R.anim.mpsdk_quick_anim);
         if (getView() != null) {
             mCardNumberTextView = (MPTextView) getView().findViewById(R.id.mpsdkCardNumberTextView);
             mCardholderNameTextView = (MPTextView) getView().findViewById(R.id.mpsdkCardholderNameView);
@@ -112,13 +112,13 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
     }
 
     private void decorate() {
-        if(mDecorationPreference != null) {
-            if(mDecorationPreference.hasColors()) {
-                GradientDrawable cardShadowRounded = (GradientDrawable) ContextCompat.getDrawable(getActivity(), R.drawable.card_shadow_rounded);
-                cardShadowRounded.setStroke(ScaleUtil.getPxFromDp(6, getActivity()), mDecorationPreference.getLighterColor());
-                mCardBorder.setImageDrawable(cardShadowRounded);
-            }
+        int cardShadowColor = ContextCompat.getColor(getContext(), R.color.mpsdk_color_new_card_form_background);
+        if(mDecorationPreference != null && mDecorationPreference.hasColors()) {
+            cardShadowColor = mDecorationPreference.getLighterColor();
         }
+        GradientDrawable cardShadowRounded = (GradientDrawable) ContextCompat.getDrawable(getActivity(), R.drawable.mpsdk_card_shadow_rounded);
+        cardShadowRounded.setStroke(ScaleUtil.getPxFromDp(6, getActivity()), cardShadowColor);
+        mCardBorder.setImageDrawable(cardShadowRounded);
     }
 
     public void populateViews() {

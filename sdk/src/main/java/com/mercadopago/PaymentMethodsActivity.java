@@ -24,6 +24,7 @@ import com.mercadopago.model.PaymentPreference;
 import com.mercadopago.mptracker.MPTracker;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.ErrorUtil;
+import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;
 
 import java.util.ArrayList;
@@ -161,11 +162,11 @@ public class PaymentMethodsActivity extends AppCompatActivity {
             finish();
             return;
         }
-        if (this.getIntent().getSerializableExtra("paymentPreference") != null) {
-            mPaymentPreference = (PaymentPreference) this.getIntent().getSerializableExtra("paymentPreference");
+        if (this.getIntent().getStringExtra("paymentPreference") != null) {
+            mPaymentPreference = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("paymentPreference"), PaymentPreference.class);
         }
-        if (this.getIntent().getSerializableExtra("decorationPreference") != null) {
-            mDecorationPreference = (DecorationPreference) this.getIntent().getSerializableExtra("decorationPreference");
+        if (this.getIntent().getStringExtra("decorationPreference") != null) {
+            mDecorationPreference = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("decorationPreference"), DecorationPreference.class);
         }
         mShowBankDeals = this.getIntent().getBooleanExtra("showBankDeals", true);
     }
@@ -173,7 +174,7 @@ public class PaymentMethodsActivity extends AppCompatActivity {
 
     protected void setContentView() {
         MPTracker.getInstance().trackScreen("PAYMENT_METHODS", "2", mMerchantPublicKey, "MLA", "1.0", this);
-        setContentView(R.layout.activity_payment_methods);
+        setContentView(R.layout.mpsdk_activity_payment_methods);
     }
 
     public void onBackPressed() {
@@ -203,7 +204,7 @@ public class PaymentMethodsActivity extends AppCompatActivity {
                             // Return to parent
                             Intent returnIntent = new Intent();
                             PaymentMethod selectedPaymentMethod = (PaymentMethod) view.getTag();
-                            returnIntent.putExtra("paymentMethod", selectedPaymentMethod);
+                            returnIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(selectedPaymentMethod));
                             setResult(RESULT_OK, returnIntent);
                             finish();
                         }

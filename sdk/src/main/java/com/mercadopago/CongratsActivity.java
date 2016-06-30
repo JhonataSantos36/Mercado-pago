@@ -13,6 +13,7 @@ import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.util.CurrenciesUtil;
 import com.mercadopago.util.ErrorUtil;
+import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.MercadoPagoUtil;
 import com.mercadopago.views.MPTextView;
 
@@ -100,28 +101,28 @@ public class CongratsActivity extends AppCompatActivity {
     private void showPending(){
         setTheme(R.style.Theme_InfoMercadoPagoTheme_NoActionbar);
 
-        setContentView(R.layout.activity_pending);
+        setContentView(R.layout.mpsdk_activity_pending);
         initializePendingControls();
         fillPendingData();
     }
 
     private void showRejection() {
         setTheme(R.style.Theme_RejectionMercadoPagoTheme_NoActionbar);
-        setContentView(R.layout.activity_rejection);
+        setContentView(R.layout.mpsdk_activity_rejection);
         initializeRejectionControls();
         fillRejectionData();
     }
 
     private void showCallForAuthorize() {
         setTheme(R.style.Theme_CallForAuthorizeMercadoPagoTheme_NoActionbar);
-        setContentView(R.layout.activity_call_for_authorize);
+        setContentView(R.layout.mpsdk_activity_call_for_authorize);
         initializeCallForAuthControls();
         fillCallForAuthData();
     }
 
     private void showCongrats() {
         setTheme(R.style.Theme_CongratsMercadoPagoTheme_NoActionbar);
-        setContentView(R.layout.activity_congrats);
+        setContentView(R.layout.mpsdk_activity_congrats);
         initializeCongratsControls();
         fillCongratsData();
     }
@@ -469,8 +470,8 @@ public class CongratsActivity extends AppCompatActivity {
     }
 
     private void getActivityParameters(){
-        mPayment = (Payment) getIntent().getExtras().getSerializable("payment");
-        mPaymentMethod = (PaymentMethod) getIntent().getExtras().getSerializable("paymentMethod");
+        mPayment = JsonUtil.getInstance().fromJson(getIntent().getExtras().getString("payment"), Payment.class);
+        mPaymentMethod = JsonUtil.getInstance().fromJson(getIntent().getExtras().getString("paymentMethod"), PaymentMethod.class);
     }
 
     private Spanned getInstallmentsText() {

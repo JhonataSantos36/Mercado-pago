@@ -49,7 +49,7 @@ public class IdentificationTypesAdapter extends BaseAdapter {
         View row = convertView;
 
         if(convertView == null)
-            row = mInflater.inflate(R.layout.row_simple_spinner, parent, false);
+            row = mInflater.inflate(R.layout.mpsdk_row_simple_spinner, parent, false);
 
         IdentificationType identificationType = mData.get(position);
 

@@ -10,7 +10,8 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 
-import com.mercadopago.adapters.InstallmentsAdapter;
+import com.google.gson.reflect.TypeToken;
+import com.mercadopago.adapters.PayerCostsAdapter;
 import com.mercadopago.callbacks.Callback;
 import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.core.MercadoPago;
@@ -23,16 +24,17 @@ import com.mercadopago.model.Site;
 import com.mercadopago.mptracker.MPTracker;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.ErrorUtil;
+import com.mercadopago.util.JsonUtil;
 
+import java.lang.reflect.Type;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 
 public class InstallmentsActivity extends ShowCardActivity {
 
     //InstallmentsContainer
     private RecyclerView mInstallmentsView;
-    private InstallmentsAdapter mInstallmentsAdapter;
+    private PayerCostsAdapter mPayerCostsAdapter;
     private ProgressBar mProgressBar;
     private View mCardBackground;
 
@@ -106,7 +108,7 @@ public class InstallmentsActivity extends ShowCardActivity {
 
     protected void setContentView() {
         MPTracker.getInstance().trackScreen( "CARD_INSTALLMENTS", "2", mPublicKey, "MLA", "1.0", this);
-        setContentView(R.layout.activity_new_installments);
+        setContentView(R.layout.mpsdk_activity_new_installments);
     }
 
     protected void setLayout() {
@@ -123,8 +125,8 @@ public class InstallmentsActivity extends ShowCardActivity {
     }
 
     protected void initializeAdapter() {
-        mInstallmentsAdapter = new InstallmentsAdapter(this, mSite.getCurrencyId());
-        initializeAdapterListener(mInstallmentsAdapter, mInstallmentsView);
+        mPayerCostsAdapter = new PayerCostsAdapter(this, mSite.getCurrencyId());
+        initializeAdapterListener(mPayerCostsAdapter, mInstallmentsView);
     }
 
     protected void onItemSelected(View view, int position) {
@@ -154,10 +156,17 @@ public class InstallmentsActivity extends ShowCardActivity {
     @Override
     protected void getActivityParameters() {
         super.getActivityParameters();
-        mAmount = new BigDecimal(this.getIntent().getStringExtra("amount"));
-        mSite = (Site) this.getIntent().getSerializableExtra("site");
-        mPayerCosts = (ArrayList<PayerCost>)getIntent().getSerializableExtra("payerCosts");
-        mPaymentPreference = (PaymentPreference) this.getIntent().getSerializableExtra("paymentPreference");
+        if(this.getIntent().getStringExtra("amount") != null) {
+            mAmount = new BigDecimal(this.getIntent().getStringExtra("amount"));
+        }
+        mSite = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("site"), Site.class);
+        try {
+            Type listType = new TypeToken<List<PayerCost>>(){}.getType();
+            mPayerCosts =  JsonUtil.getInstance().getGson().fromJson(this.getIntent().getStringExtra("payerCosts"), listType);
+        } catch (Exception ex) {
+            mPayerCosts = null;
+        }
+        mPaymentPreference = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("paymentPreference"), PaymentPreference.class);
         if (mPaymentPreference == null) {
             mPaymentPreference = new PaymentPreference();
         }
@@ -220,7 +229,7 @@ public class InstallmentsActivity extends ShowCardActivity {
     @Override
     protected void finishWithResult() {
         Intent returnIntent = new Intent();
-        returnIntent.putExtra("payerCost", mSelectedPayerCost);
+        returnIntent.putExtra("payerCost", JsonUtil.getInstance().toJson(mSelectedPayerCost));
         setResult(RESULT_OK, returnIntent);
         finish();
     }
@@ -249,7 +258,7 @@ public class InstallmentsActivity extends ShowCardActivity {
     }
 
     private void initializeInstallments() {
-        mInstallmentsAdapter.addResults(mPayerCosts);
+        mPayerCostsAdapter.addResults(mPayerCosts);
     }
 
     @Override

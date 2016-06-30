@@ -52,7 +52,7 @@ public class PaymentMethodSearchSmallRow extends PaymentMethodSearchRow {
     @Override
     public View inflateInParent(ViewGroup parent, boolean attachToRoot) {
         mView = LayoutInflater.from(mContext)
-                .inflate(R.layout.row_pm_search_item, parent, attachToRoot);
+                .inflate(R.layout.mpsdk_row_pm_search_item, parent, attachToRoot);
         return mView;
     }
 

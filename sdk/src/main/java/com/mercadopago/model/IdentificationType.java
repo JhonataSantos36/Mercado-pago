@@ -1,8 +1,6 @@
 package com.mercadopago.model;
 
-import java.io.Serializable;
-
-public class IdentificationType implements Serializable {
+public class IdentificationType {
 
     private String id;
     private String name;

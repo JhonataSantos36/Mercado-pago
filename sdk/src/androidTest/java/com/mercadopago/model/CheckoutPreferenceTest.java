@@ -1,5 +1,6 @@
 package com.mercadopago.model;
 
+import com.mercadopago.constants.PaymentTypes;
 import com.mercadopago.exceptions.CheckoutPreferenceException;
 
 import junit.framework.Assert;
@@ -440,7 +441,7 @@ public class CheckoutPreferenceTest extends TestCase {
         ArrayList<String> paymentTypes= new ArrayList<>();
         Item itemA = new Item("123", 1);
 
-        paymentTypes.addAll(PaymentType.getAllPaymentTypes());
+        paymentTypes.addAll(PaymentTypes.getAllPaymentTypes());
 
         itemA.setUnitPrice(new BigDecimal(2));
         itemA.setCurrencyId("USD");

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:background="@color/mpsdk_color_light_grey"
+    tools:context="com.mercadopago.CheckoutActivity">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <include layout="@layout/mpsdk_view_progress_bar"/>
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/mpsdkAppBar"
+            app:elevation="0dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/Theme.MercadoPagoTheme.NoActionBar">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/mpsdkToolbar"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/mpsdk_toolbar_height"
+                android:background="?attr/colorPrimary"
+                android:theme="@style/ToolbarTheme"
+                app:popupTheme="@style/Theme.MercadoPagoTheme.NoActionBar">
+                    <com.mercadopago.views.MPTextView
+                        android:id="@+id/mpsdkTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/mpsdk_title_text"
+                        android:text="@string/mpsdk_title_activity_checkout"
+                        android:layout_gravity="center"/>
+            </android.support.v7.widget.Toolbar>
+            <FrameLayout
+                android:id="@+id/mpsdkShoppingCartFragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </android.support.design.widget.AppBarLayout>
+        <include layout="@layout/mpsdk_content_checkout"/>
+    </LinearLayout>
+</android.support.design.widget.CoordinatorLayout>

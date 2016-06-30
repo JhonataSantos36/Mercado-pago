@@ -7,14 +7,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.mercadopago.examples.R;
-import com.mercadopago.examples.Step8.F2Activity;
-import com.mercadopago.examples.step1.Step1Activity;
-import com.mercadopago.examples.step2.Step2Activity;
-import com.mercadopago.examples.step3.Step3Activity;
-import com.mercadopago.examples.step4.Step4Activity;
-import com.mercadopago.examples.step5.Step5Activity;
-import com.mercadopago.examples.step6.Step6Activity;
-import com.mercadopago.examples.step7.Step7Activity;
+import com.mercadopago.examples.checkout.CheckoutExampleActivity;
+import com.mercadopago.examples.components.ComponentsExampleActivity;
+import com.mercadopago.examples.services.ServicesExampleActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -25,42 +20,19 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
     }
 
-    public void runStep1(View view) {
+    public void runCheckoutExample(View view) {
 
-        runStep(new Step1Activity());
+        runStep(new CheckoutExampleActivity());
     }
 
-    public void runStep2(View view) {
+    public void runComponentsExample(View view) {
 
-        runStep(new Step2Activity());
+        runStep(new ComponentsExampleActivity());
     }
 
-    public void runStep3(View view) {
+    public void runServicesExample(View view) {
 
-        runStep(new Step3Activity());
-    }
-
-    public void runStep4(View view) {
-
-        runStep(new Step4Activity());
-    }
-
-    public void runStep5(View view) {
-
-        runStep(new Step5Activity());
-    }
-
-    public void runStep6(View view) {
-
-        runStep(new Step6Activity());
-    }
-
-    public void runStep7(View view) {
-        runStep(new Step7Activity());
-    }
-
-    public void runStepF2(View view) {
-        runStep(new F2Activity());
+        runStep(new ServicesExampleActivity());
     }
 
     private void runStep(Activity activity) {

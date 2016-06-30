@@ -1,6 +1,6 @@
 package com.mercadopago.model;
 
-import com.mercadopago.VaultActivity;
+import com.mercadopago.CheckoutActivity;
 import com.mercadopago.test.BaseTest;
 import com.mercadopago.test.StaticMock;
 
@@ -8,10 +8,10 @@ import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class AllModelTest extends BaseTest<VaultActivity> {
+public class AllModelTest extends BaseTest<CheckoutActivity> {
 
     public AllModelTest() {
-        super(VaultActivity.class);
+        super(CheckoutActivity.class);
     }
 
     public void testAddress() {

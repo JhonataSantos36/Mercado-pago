@@ -38,7 +38,7 @@ public class CardBackFragment extends android.support.v4.app.Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.new_card_back, container, false);
+        return inflater.inflate(R.layout.mpsdk_new_card_back, container, false);
     }
 
     @Override
@@ -62,13 +62,13 @@ public class CardBackFragment extends android.support.v4.app.Fragment {
     }
 
     private void decorate() {
-        if(mDecorationPreference != null) {
-            if(mDecorationPreference.hasColors()) {
-                GradientDrawable cardShadowRounded = (GradientDrawable) ContextCompat.getDrawable(getActivity(), R.drawable.card_shadow_rounded);
-                cardShadowRounded.setStroke(ScaleUtil.getPxFromDp(6, getActivity()), mDecorationPreference.getLighterColor());
-                mCardBorder.setImageDrawable(cardShadowRounded);
-            }
+        int cardShadowColor = ContextCompat.getColor(getContext(), R.color.mpsdk_color_new_card_form_background);
+        if(mDecorationPreference != null && mDecorationPreference.hasColors()) {
+            cardShadowColor = mDecorationPreference.getLighterColor();
         }
+        GradientDrawable cardShadowRounded = (GradientDrawable) ContextCompat.getDrawable(getActivity(), R.drawable.mpsdk_card_shadow_rounded);
+        cardShadowRounded.setStroke(ScaleUtil.getPxFromDp(6, getActivity()), cardShadowColor);
+        mCardBorder.setImageDrawable(cardShadowRounded);
     }
 
     public void populateViews() {

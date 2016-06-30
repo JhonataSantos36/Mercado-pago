@@ -29,7 +29,7 @@ public class PaymentMethodSearchRow implements PaymentMethodSearchViewController
 
     public View inflateInParent(ViewGroup parent, boolean attachToRoot) {
         mView = LayoutInflater.from(mContext)
-                .inflate(R.layout.row_pm_search_item_large, parent, attachToRoot);
+                .inflate(R.layout.mpsdk_row_pm_search_item_large, parent, attachToRoot);
         return mView;
     }
 

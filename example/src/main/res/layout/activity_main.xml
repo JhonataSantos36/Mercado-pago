@@ -31,72 +31,88 @@
             android:gravity="center_horizontal"
             style="@style/big_label"/>
 
-        <com.mercadopago.views.MPButton
+        <com.mercadopago.views.MPTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/welcome_text"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:singleLine="false"
+            android:gravity="center_horizontal"
+            style="@style/form_label"/>
+
+        <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="@dimen/mpsdk_button_height"
             android:layout_marginTop="25dp"
-            android:gravity="center"
-            android:text="@string/title_activity_step1"
-            android:onClick="runStep1"
-            style="@style/mpsdk_button_normal"/>
+            android:padding="10dp"
+            android:onClick="runCheckoutExample"
+            style="@style/mpsdk_button_normal">
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="wrap_content"
+                android:src="@drawable/plugandplay"
+                android:tint="@color/mpsdk_white"/>
+            <com.mercadopago.views.MPTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:textSize="20dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginStart="5dp"
+                android:text="@string/checkout_button"/>
+        </LinearLayout>
 
-        <com.mercadopago.views.MPButton
+        <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="@dimen/mpsdk_button_height"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="15dp"
+            android:padding="10dp"
             android:gravity="center"
-            android:text="@string/title_activity_step2"
-            android:onClick="runStep2"
-            style="@style/mpsdk_button_normal" />
+            android:onClick="runComponentsExample"
+            style="@style/mpsdk_button_normal">
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="35dp"
+                android:src="@drawable/puzzle"
+                android:tint="@color/mpsdk_white"/>
+            <com.mercadopago.views.MPTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:textSize="20dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginStart="5dp"
+                android:text="@string/components_button"/>
+        </LinearLayout>
 
-        <com.mercadopago.views.MPButton
+        <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="@dimen/mpsdk_button_height"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="15dp"
+            android:padding="10dp"
             android:gravity="center"
-            android:text="@string/title_activity_step3"
-            android:onClick="runStep3"
-            style="@style/mpsdk_button_normal"/>
-        <com.mercadopago.views.MPButton
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/mpsdk_button_height"
-            android:layout_marginTop="10dp"
-            android:gravity="center"
-            android:text="@string/title_activity_step4"
-            android:onClick="runStep4"
-            style="@style/mpsdk_button_normal"/>
-        <com.mercadopago.views.MPButton
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/mpsdk_button_height"
-            android:layout_marginTop="10dp"
-            android:gravity="center"
-            android:text="@string/title_activity_step5"
-            android:onClick="runStep5"
-            style="@style/mpsdk_button_normal"/>
-        <com.mercadopago.views.MPButton
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/mpsdk_button_height"
-            android:layout_marginTop="10dp"
-            android:gravity="center"
-            android:text="@string/title_activity_step6"
-            android:onClick="runStep6"
-            style="@style/mpsdk_button_normal"/>
-        <com.mercadopago.views.MPButton
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/mpsdk_button_height"
-            android:layout_marginTop="10dp"
-            android:gravity="center"
-            android:text="Flavor 2"
-            android:onClick="runStepF2"
-            style="@style/mpsdk_button_normal"/>
-        <com.mercadopago.views.MPButton
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/mpsdk_button_height"
-            android:layout_marginTop="10dp"
-            android:gravity="center"
-            android:text="Nuevo TC"
-            android:onClick="runStep7"
-            style="@style/mpsdk_button_normal"/>
+            android:onClick="runServicesExample"
+            style="@style/mpsdk_button_normal">
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="35dp"
+                android:src="@drawable/ninja"
+                android:tint="@color/mpsdk_white"/>
+            <com.mercadopago.views.MPTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:textSize="20dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginStart="5dp"
+                android:text="@string/services_button"/>
+        </LinearLayout>
+
     </LinearLayout>
 
 </ScrollView>

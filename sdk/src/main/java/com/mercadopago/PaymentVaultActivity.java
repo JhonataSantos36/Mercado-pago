@@ -32,6 +32,7 @@ import com.mercadopago.mptracker.MPTracker;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.CurrenciesUtil;
 import com.mercadopago.util.ErrorUtil;
+import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;
 import com.mercadopago.util.MercadoPagoUtil;
 import com.mercadopago.views.MPTextView;
@@ -79,7 +80,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
         if(mDecorationPreference != null && mDecorationPreference.hasColors()) {
             setTheme(R.style.Theme_MercadoPagoTheme_NoActionBar);
         }
-        setContentView(R.layout.activity_payment_vault);
+        setContentView(R.layout.mpsdk_activity_payment_vault);
 
         MPTracker.getInstance().trackScreen("PAYMENT_METHOD_SEARCH", "2", mMerchantPublicKey, "MLA", "1.0", this);
 
@@ -115,15 +116,16 @@ public class PaymentVaultActivity extends AppCompatActivity {
 
     protected void getActivityParameters() {
 
-        if (this.getIntent().getSerializableExtra("selectedSearchItem") != null) {
-            mSelectedSearchItem = (PaymentMethodSearchItem) this.getIntent().getSerializableExtra("selectedSearchItem");
+        if (this.getIntent().getStringExtra("selectedSearchItem") != null) {
+            mSelectedSearchItem = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("selectedSearchItem"), PaymentMethodSearchItem.class);
         }
         try {
             mAmount = new BigDecimal(this.getIntent().getStringExtra("amount"));
         } catch (Exception ex) {
             mAmount = null;
         }
-        mSite = (Site) this.getIntent().getSerializableExtra("site");
+
+        mSite = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("site"), Site.class);
 
         mMerchantPublicKey = this.getIntent().getStringExtra("merchantPublicKey");
 
@@ -133,16 +135,16 @@ public class PaymentVaultActivity extends AppCompatActivity {
         mCardGuessingEnabled = this.getIntent().getBooleanExtra("cardGuessingEnabled", false);
         mShowBankDeals = this.getIntent().getBooleanExtra("showBankDeals", true);
 
-        if (this.getIntent().getSerializableExtra("paymentPreference") != null) {
-            mPaymentPreference = (PaymentPreference) this.getIntent().getSerializableExtra("paymentPreference");
+        if (this.getIntent().getStringExtra("paymentPreference") != null) {
+            mPaymentPreference = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("paymentPreference"), PaymentPreference.class);
         }
 
-        if(this.getIntent().getSerializableExtra("paymentMethodSearch") != null) {
-            mPaymentMethodSearch = (PaymentMethodSearch) this.getIntent().getSerializableExtra("paymentMethodSearch");
+        if(this.getIntent().getStringExtra("paymentMethodSearch") != null) {
+            mPaymentMethodSearch = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("paymentMethodSearch"), PaymentMethodSearch.class);
         }
 
-        if(this.getIntent().getSerializableExtra("decorationPreference") != null) {
-            mDecorationPreference = (DecorationPreference) this.getIntent().getSerializableExtra("decorationPreference");
+        if(this.getIntent().getStringExtra("decorationPreference") != null) {
+            mDecorationPreference = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("decorationPreference"), DecorationPreference.class);
         }
     }
 
@@ -344,11 +346,11 @@ public class PaymentVaultActivity extends AppCompatActivity {
     private void restartWithSelectedItem(PaymentMethodSearchItem groupIem) {
         Intent intent = new Intent(this, PaymentVaultActivity.class);
         intent.putExtras(this.getIntent());
-        intent.putExtra("selectedSearchItem", groupIem);
-        intent.putExtra("paymentMethodSearch", mPaymentMethodSearch);
+        intent.putExtra("selectedSearchItem", JsonUtil.getInstance().toJson(groupIem));
+        intent.putExtra("paymentMethodSearch", JsonUtil.getInstance().toJson(mPaymentMethodSearch));
 
         startActivityForResult(intent, MercadoPago.PAYMENT_VAULT_REQUEST_CODE);
-        overridePendingTransition(R.anim.slide_right_to_left_in, R.anim.slide_right_to_left_out);
+        overridePendingTransition(R.anim.mpsdk_slide_right_to_left_in, R.anim.mpsdk_slide_right_to_left_out);
     }
 
     protected void showSelectedItemChildren() {
@@ -446,14 +448,14 @@ public class PaymentVaultActivity extends AppCompatActivity {
 
     protected void resolveCardRequest(int resultCode, Intent data) {
         if(resultCode == RESULT_OK) {
-            mSelectedPaymentMethod = (PaymentMethod) data.getSerializableExtra("paymentMethod");
-            mToken = (Token) data.getSerializableExtra("token");
-            mSelectedIssuer = (Issuer) data.getSerializableExtra("issuer");
-            mSelectedPayerCost = (PayerCost) data.getSerializableExtra("payerCost");
+            mSelectedPaymentMethod = JsonUtil.getInstance().fromJson(data.getStringExtra("paymentMethod"), PaymentMethod.class);
+            mToken = JsonUtil.getInstance().fromJson(data.getStringExtra("token"), Token.class);
+            mSelectedIssuer = JsonUtil.getInstance().fromJson(data.getStringExtra("issuer"), Issuer.class);
+            mSelectedPayerCost = JsonUtil.getInstance().fromJson(data.getStringExtra("payerCost"), PayerCost.class);
             finishWithCardResult();
 
         } else if (isUniqueSelectionAvailable()||
-                ((data != null) && (data.getSerializableExtra("mpException") != null))){
+                ((data != null) && (data.getStringExtra("mpException") != null))){
 
             //TODO validate
             MPTracker.getInstance().trackEvent("PAYMENT_VAULT","CANCELED","2",mMerchantPublicKey, mSite.getId(), "1.0",this);
@@ -462,17 +464,17 @@ public class PaymentVaultActivity extends AppCompatActivity {
             this.finish();
         }
         else {
-            overridePendingTransition(R.anim.slide_left_to_right_in, R.anim.slide_left_to_right_out);
+            overridePendingTransition(R.anim.mpsdk_slide_left_to_right_in, R.anim.mpsdk_slide_left_to_right_out);
         }
     }
 
     protected void resolvePaymentMethodsRequest(int resultCode, Intent data) {
         if(resultCode == RESULT_OK) {
-            PaymentMethod paymentMethod = (PaymentMethod) data.getSerializableExtra("paymentMethod");
+            PaymentMethod paymentMethod = JsonUtil.getInstance().fromJson(data.getStringExtra("paymentMethod"), PaymentMethod.class);
             finishWithPaymentMethodResult(paymentMethod);
         }
         else {
-            if ((data != null) && (data.getSerializableExtra("apiException") != null)) {
+            if ((data != null) && (data.getStringExtra("apiException") != null)) {
                 //TODO validate
                 MPTracker.getInstance().trackEvent("PAYMENT_VAULT","CANCELED","2",mMerchantPublicKey, mSite.getId(), "1.0",this);
 
@@ -484,7 +486,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
 
     protected void finishWithPaymentMethodResult(PaymentMethod paymentMethod) {
         Intent returnIntent = new Intent();
-        returnIntent.putExtra("paymentMethod", paymentMethod);
+        returnIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
         this.setResult(Activity.RESULT_OK, returnIntent);
         this.finish();
         animatePaymentMethodSelection();
@@ -492,19 +494,19 @@ public class PaymentVaultActivity extends AppCompatActivity {
 
     protected void finishWithCardResult() {
         Intent returnIntent = new Intent();
-        returnIntent.putExtra("token", mToken);
+        returnIntent.putExtra("token", JsonUtil.getInstance().toJson(mToken));
         if (mSelectedIssuer != null) {
-            returnIntent.putExtra("issuer", mSelectedIssuer);
+            returnIntent.putExtra("issuer", JsonUtil.getInstance().toJson(mSelectedIssuer));
         }
-        returnIntent.putExtra("payerCost", mSelectedPayerCost);
-        returnIntent.putExtra("paymentMethod", mSelectedPaymentMethod);
+        returnIntent.putExtra("payerCost", JsonUtil.getInstance().toJson(mSelectedPayerCost));
+        returnIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(mSelectedPaymentMethod));
         this.setResult(Activity.RESULT_OK, returnIntent);
         this.finish();
         animatePaymentMethodSelection();
     }
 
     private void animatePaymentMethodSelection() {
-        overridePendingTransition(R.anim.slide_right_to_left_in, R.anim.slide_right_to_left_out);
+        overridePendingTransition(R.anim.mpsdk_slide_right_to_left_in, R.anim.mpsdk_slide_right_to_left_out);
     }
 
     @Override
@@ -539,7 +541,7 @@ public class PaymentVaultActivity extends AppCompatActivity {
         finish();
 
         if(isItemSelected()) {
-            overridePendingTransition(R.anim.slide_left_to_right_in, R.anim.slide_left_to_right_out);
+            overridePendingTransition(R.anim.mpsdk_slide_left_to_right_in, R.anim.mpsdk_slide_left_to_right_out);
         }
     }
 

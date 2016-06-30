@@ -6,12 +6,10 @@ import android.support.v4.content.ContextCompat;
 import com.mercadopago.R;
 import com.mercadopago.util.ColorsUtil;
 
-import java.io.Serializable;
-
 /**
  * Created by mreverter on 2/6/16.
  */
-public class DecorationPreference implements Serializable{
+public class DecorationPreference {
 
     private Integer baseColor;
     private boolean darkFontEnabled;

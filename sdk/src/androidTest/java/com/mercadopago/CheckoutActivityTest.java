@@ -38,13 +38,13 @@ import java.util.List;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.pressBack;
-import static android.support.test.espresso.intent.Intents.intended;
-import static android.support.test.espresso.intent.Intents.intending;
-import static android.support.test.espresso.intent.matcher.IntentMatchers.*;
-import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.intent.Intents.intended;
+import static android.support.test.espresso.intent.Intents.intending;
+import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static junit.framework.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
@@ -134,7 +134,7 @@ public class CheckoutActivityTest {
         //Prepare result from next activity
         PaymentMethod paymentMethod = StaticMock.getPaymentMethodOff();
         Intent paymentVaultResultIntent = new Intent();
-        paymentVaultResultIntent.putExtra("paymentMethod", paymentMethod);
+        paymentVaultResultIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
         Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(Activity.RESULT_OK, paymentVaultResultIntent);
 
         mTestRule.initIntentsRecording();
@@ -172,7 +172,7 @@ public class CheckoutActivityTest {
         PaymentMethod paymentMethod = StaticMock.getPaymentMethodOff();
 
         Intent paymentVaultResultIntent = new Intent();
-        paymentVaultResultIntent.putExtra("paymentMethod", paymentMethod);
+        paymentVaultResultIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
         Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(Activity.RESULT_OK, paymentVaultResultIntent);
 
         mTestRule.initIntentsRecording();
@@ -200,7 +200,7 @@ public class CheckoutActivityTest {
         PaymentMethod paymentMethod = StaticMock.getPaymentMethodOff();
 
         Intent paymentVaultResultIntent = new Intent();
-        paymentVaultResultIntent.putExtra("paymentMethod", paymentMethod);
+        paymentVaultResultIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
         Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(Activity.RESULT_OK, paymentVaultResultIntent);
 
         mTestRule.initIntentsRecording();
@@ -241,7 +241,7 @@ public class CheckoutActivityTest {
         PaymentMethod paymentMethod = StaticMock.getPaymentMethodOff();
 
         Intent paymentVaultResultIntent = new Intent();
-        paymentVaultResultIntent.putExtra("paymentMethod", paymentMethod);
+        paymentVaultResultIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
         Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(Activity.RESULT_OK, paymentVaultResultIntent);
 
         mTestRule.initIntentsRecording();
@@ -278,7 +278,7 @@ public class CheckoutActivityTest {
         mTestRule.initIntentsRecording();
 
         Intent paymentVaultResultIntent = new Intent();
-        paymentVaultResultIntent.putExtra("paymentMethod", paymentMethod);
+        paymentVaultResultIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
         Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(Activity.RESULT_OK, paymentVaultResultIntent);
 
         intending(hasComponent(PaymentVaultActivity.class.getName())).respondWith(result);
@@ -300,7 +300,7 @@ public class CheckoutActivityTest {
         PaymentMethod paymentMethod = StaticMock.getPaymentMethodOff();
 
         Intent paymentVaultResultIntent = new Intent();
-        paymentVaultResultIntent.putExtra("paymentMethod", paymentMethod);
+        paymentVaultResultIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
         Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(Activity.RESULT_OK, paymentVaultResultIntent);
 
         mTestRule.initIntentsRecording();
@@ -392,7 +392,7 @@ public class CheckoutActivityTest {
         PaymentMethod selectedPaymentMethod = new PaymentMethod();
         selectedPaymentMethod.setId(selectedSearchItem.getId());
         Intent resultIntent = new Intent();
-        resultIntent.putExtra("paymentMethod", selectedPaymentMethod);
+        resultIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(selectedPaymentMethod));
         Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(Activity.RESULT_OK, resultIntent);
 
         mTestRule.initIntentsRecording();
@@ -427,8 +427,8 @@ public class CheckoutActivityTest {
         final Token token = new Token();
         token.setId("1");
 
-        guessingFormResultIntent.putExtra("paymentMethod", paymentMethod);
-        guessingFormResultIntent.putExtra("token", token);
+        guessingFormResultIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
+        guessingFormResultIntent.putExtra("token", JsonUtil.getInstance().toJson(token));
         Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(Activity.RESULT_OK, guessingFormResultIntent);
 
         intending(hasComponent(CardVaultActivity.class.getName())).respondWith(result);
@@ -462,9 +462,9 @@ public class CheckoutActivityTest {
         final Issuer issuer = new Issuer();
         issuer.setId((long) 1234);
 
-        paymentMethodSelectionResult.putExtra("paymentMethod", paymentMethod);
-        paymentMethodSelectionResult.putExtra("token", token);
-        paymentMethodSelectionResult.putExtra("issuer", issuer);
+        paymentMethodSelectionResult.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
+        paymentMethodSelectionResult.putExtra("token", JsonUtil.getInstance().toJson(token));
+        paymentMethodSelectionResult.putExtra("issuer", JsonUtil.getInstance().toJson(issuer));
         Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(Activity.RESULT_OK, paymentMethodSelectionResult);
 
         intending(hasComponent(CardVaultActivity.class.getName())).respondWith(result);
@@ -507,7 +507,7 @@ public class CheckoutActivityTest {
         Intent paymentMethodsResultIntent = new Intent();
         final PaymentMethod paymentMethod = StaticMock.getPaymentMethodOff();
 
-        paymentMethodsResultIntent.putExtra("paymentMethod", paymentMethod);
+        paymentMethodsResultIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
         Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(Activity.RESULT_OK, paymentMethodsResultIntent);
 
         intending(hasComponent(PaymentMethodsActivity.class.getName())).respondWith(result);
@@ -562,7 +562,7 @@ public class CheckoutActivityTest {
         Intent resultIntent = new Intent();
         final PaymentMethod paymentMethod = StaticMock.getPaymentMethod(InstrumentationRegistry.getContext());
 
-        resultIntent.putExtra("paymentMethod", paymentMethod);
+        resultIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
         Instrumentation.ActivityResult paymentMethodResult = new Instrumentation.ActivityResult(Activity.RESULT_OK, resultIntent);
 
         mTestRule.initIntentsRecording();

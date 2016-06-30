@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.mercadopago.model.DecorationPreference;
 import com.mercadopago.mptracker.MPTracker;
+import com.mercadopago.util.JsonUtil;
 import com.mercadopago.views.MPTextView;
 
 public class TermsAndConditionsActivity extends AppCompatActivity {
@@ -27,8 +28,8 @@ public class TermsAndConditionsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        if(this.getIntent().getSerializableExtra("decorationPreference") != null) {
-            mDecorationPreference = (DecorationPreference) this.getIntent().getSerializableExtra("decorationPreference");
+        if(this.getIntent().getStringExtra("decorationPreference") != null) {
+            mDecorationPreference = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("decorationPreference"), DecorationPreference.class);
         }
         if(mDecorationPreference != null && mDecorationPreference.hasColors()) {
             setTheme(R.style.Theme_MercadoPagoTheme_NoActionBar);
@@ -129,6 +130,6 @@ public class TermsAndConditionsActivity extends AppCompatActivity {
     protected void setContentView() {
         MPTracker.getInstance().trackScreen("TERMS_AND_CONDITIONS", "2", "publicKey", "MLA", "1.0", this);
 
-        setContentView(R.layout.activity_terms_and_conditions);
+        setContentView(R.layout.mpsdk_activity_terms_and_conditions);
     }
 }

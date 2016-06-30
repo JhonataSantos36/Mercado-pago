@@ -5,8 +5,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import com.google.gson.reflect.TypeToken;
 import com.mercadopago.callbacks.Callback;
 import com.mercadopago.callbacks.FailureRecovery;
+import com.mercadopago.constants.PaymentTypes;
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.Installment;
@@ -14,16 +16,16 @@ import com.mercadopago.model.Issuer;
 import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentPreference;
-import com.mercadopago.model.PaymentType;
 import com.mercadopago.model.Setting;
 import com.mercadopago.model.Site;
 import com.mercadopago.model.Token;
 import com.mercadopago.mptracker.MPTracker;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.ErrorUtil;
+import com.mercadopago.util.JsonUtil;
 
+import java.lang.reflect.Type;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -101,11 +103,16 @@ public class CardVaultActivity extends ShowCardActivity {
     protected void getActivityParameters() {
         super.getActivityParameters();
         mPublicKey = getIntent().getStringExtra("publicKey");
-        mSite = (Site) getIntent().getSerializableExtra("site");
+        mSite = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("site"), Site.class);
         mSecurityCodeLocation = CardInterface.CARD_SIDE_BACK;
         mAmount = new BigDecimal(getIntent().getStringExtra("amount"));
-        mPaymentMethodList = (ArrayList<PaymentMethod>) this.getIntent().getSerializableExtra("paymentMethodList");
-        mPaymentPreference = (PaymentPreference) this.getIntent().getSerializableExtra("paymentPreference");
+        try {
+            Type listType = new TypeToken<List<PaymentMethod>>(){}.getType();
+            mPaymentMethodList =  JsonUtil.getInstance().getGson().fromJson(this.getIntent().getStringExtra("paymentMethodList"), listType);
+        } catch (Exception ex) {
+            mPaymentMethodList = null;
+        }
+        mPaymentPreference = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("paymentPreference"), PaymentPreference.class);
         if (mPaymentPreference == null) {
             mPaymentPreference = new PaymentPreference();
         }
@@ -116,7 +123,7 @@ public class CardVaultActivity extends ShowCardActivity {
     }
 
     protected void setContentView() {
-        setContentView(R.layout.activity_new_card_vault);
+        setContentView(R.layout.mpsdk_activity_new_card_vault);
     }
 
     private void startGuessingCardActivity() {
@@ -159,7 +166,7 @@ public class CardVaultActivity extends ShowCardActivity {
     protected void resolveInstallmentsRequest(int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
             Bundle bundle = data.getExtras();
-            mPayerCost = (PayerCost) bundle.getSerializable("payerCost");
+            mPayerCost = JsonUtil.getInstance().fromJson(bundle.getString("payerCost"), PayerCost.class);
             finishWithResult();
         } else if (resultCode == RESULT_CANCELED) {
             MPTracker.getInstance().trackEvent( "INSTALLMENTS", "CANCELED", "2", mPublicKey, "MLA", "1.0", this);
@@ -171,9 +178,9 @@ public class CardVaultActivity extends ShowCardActivity {
 
     protected void resolveGuessingCardRequest(int resultCode, Intent data) {
         if(resultCode == RESULT_OK) {
-            mCurrentPaymentMethod = (PaymentMethod) data.getSerializableExtra("paymentMethod");
-            mToken = (Token) data.getSerializableExtra("token");
-            mSelectedIssuer = (Issuer) data.getSerializableExtra("issuer");
+            mCurrentPaymentMethod = JsonUtil.getInstance().fromJson(data.getStringExtra("paymentMethod"), PaymentMethod.class);
+            mToken = JsonUtil.getInstance().fromJson(data.getStringExtra("token"), Token.class);
+            mSelectedIssuer = JsonUtil.getInstance().fromJson(data.getStringExtra("issuer"), Issuer.class);
             if (mToken != null && mCurrentPaymentMethod != null) {
                 mBin = mToken.getFirstSixDigits();
                 mCardholder = mToken.getCardholder();
@@ -198,7 +205,7 @@ public class CardVaultActivity extends ShowCardActivity {
     }
 
     public void checkStartInstallmentsActivity() {
-        if (!mCurrentPaymentMethod.getPaymentTypeId().equals(PaymentType.CREDIT_CARD)) {
+        if (!mCurrentPaymentMethod.getPaymentTypeId().equals(PaymentTypes.CREDIT_CARD)) {
             finishWithResult();
         }
         else {
@@ -256,7 +263,7 @@ public class CardVaultActivity extends ShowCardActivity {
                         .setSite(mSite)
                         .setDecorationPreference(mDecorationPreference)
                         .startInstallmentsActivity();
-                overridePendingTransition(R.anim.fade_in_seamless, R.anim.fade_out_seamless);
+                overridePendingTransition(R.anim.mpsdk_fade_in_seamless, R.anim.mpsdk_fade_out_seamless);
             }
         });
     }
@@ -264,10 +271,10 @@ public class CardVaultActivity extends ShowCardActivity {
     @Override
     protected void finishWithResult() {
         Intent returnIntent = new Intent();
-        returnIntent.putExtra("payerCost", mPayerCost);
-        returnIntent.putExtra("paymentMethod", mCurrentPaymentMethod);
-        returnIntent.putExtra("token", mToken);
-        returnIntent.putExtra("issuer", mSelectedIssuer);
+        returnIntent.putExtra("payerCost", JsonUtil.getInstance().toJson(mPayerCost));
+        returnIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(mCurrentPaymentMethod));
+        returnIntent.putExtra("token", JsonUtil.getInstance().toJson(mToken));
+        returnIntent.putExtra("issuer", JsonUtil.getInstance().toJson(mSelectedIssuer));
         setResult(RESULT_OK, returnIntent);
         finish();
     }

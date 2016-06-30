@@ -19,6 +19,7 @@ import com.mercadopago.model.BankDeal;
 import com.mercadopago.model.DecorationPreference;
 import com.mercadopago.mptracker.MPTracker;
 import com.mercadopago.util.ApiUtil;
+import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;
 
 import java.util.List;
@@ -49,7 +50,7 @@ public class BankDealsActivity extends AppCompatActivity {
 
         // Get activity parameters
         mPublicKey = mActivity.getIntent().getStringExtra("publicKey");
-        mDecorationPreference = (DecorationPreference) getIntent().getSerializableExtra("decorationPreference");
+        mDecorationPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("decorationPreference"), DecorationPreference.class);
 
         initializeToolbar();
 
@@ -112,7 +113,7 @@ public class BankDealsActivity extends AppCompatActivity {
     }
 
     protected void setContentView() {
-        setContentView(R.layout.activity_bank_deals);
+        setContentView(R.layout.mpsdk_activity_bank_deals);
     }
 
     public void refreshLayout(View view) {

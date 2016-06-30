@@ -1,13 +1,13 @@
 package com.mercadopago.core;
 
-import com.mercadopago.VaultActivity;
+import com.mercadopago.CheckoutActivity;
 import com.mercadopago.test.BaseTest;
 import com.mercadopago.test.StaticMock;
 
-public class MercadoPagoStartTest extends BaseTest<VaultActivity> {
+public class MercadoPagoStartTest extends BaseTest<CheckoutActivity> {
 
     public MercadoPagoStartTest() {
-        super(VaultActivity.class);
+        super(CheckoutActivity.class);
     }
 
     public void testStartOk() {

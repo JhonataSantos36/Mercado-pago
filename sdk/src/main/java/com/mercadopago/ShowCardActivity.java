@@ -58,10 +58,10 @@ public abstract class ShowCardActivity extends FrontCardActivity {
         mPublicKey = getIntent().getStringExtra("publicKey");
         mToken = JsonUtil.getInstance().fromJson(
                 this.getIntent().getStringExtra("token"), Token.class);
-        mSelectedIssuer = (Issuer) this.getIntent().getSerializableExtra("issuer");
+        mSelectedIssuer = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("issuer"), Issuer.class);
 
-        if(this.getIntent().getSerializableExtra("decorationPreference") != null) {
-            mDecorationPreference = (DecorationPreference) this.getIntent().getSerializableExtra("decorationPreference");
+        if(this.getIntent().getStringExtra("decorationPreference") != null) {
+            mDecorationPreference = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("decorationPreference"), DecorationPreference.class);
         }
 
         if(mToken != null) {
@@ -191,7 +191,7 @@ public abstract class ShowCardActivity extends FrontCardActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        overridePendingTransition(R.anim.fade_in_seamless, R.anim.fade_out_seamless);
+        overridePendingTransition(R.anim.mpsdk_fade_in_seamless, R.anim.mpsdk_fade_out_seamless);
     }
 
     @Override
