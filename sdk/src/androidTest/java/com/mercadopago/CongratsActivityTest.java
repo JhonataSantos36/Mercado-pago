@@ -55,7 +55,7 @@ public class CongratsActivityTest extends TestCase {
     private PaymentMethod mPaymentMethod;
 
     @Before
-    public void validStartIntent() {
+    public void validStartParameters() {
         mPayment = getPayment();
         mMerchantPublicKey = "1234";
         mPaymentMethod = getPaymentMethodCard();
@@ -102,25 +102,12 @@ public class CongratsActivityTest extends TestCase {
         validStartIntent.putExtra("payment", mPayment);
     }
 
-    private void createIntentWithoutPayment(){
-        validStartIntent = new Intent();
-        validStartIntent.putExtra("merchantPublicKey", mMerchantPublicKey);
-        validStartIntent.putExtra("paymentMethod", mPaymentMethod);
-    }
-
-    private void createIntentWithoutPaymentMethod(){
-        validStartIntent = new Intent();
-        validStartIntent.putExtra("merchantPublicKey", mMerchantPublicKey);
-        validStartIntent.putExtra("payment", mPayment);
-    }
-
     @Test
     public void showCongratsLayoutWithZeroRateWhenApprovedPaymentHasZeroRate(){
         String paymentIdDescription, lastFourDigitsDescription;
         Spanned installmentsDescription;
         Bitmap bitmap, paymentBitmap;
 
-        mPayment = getPayment();
         mPayment.setStatus(Payment.StatusCodes.STATUS_APPROVED);
         mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_ACCREDITED);
 
@@ -132,10 +119,10 @@ public class CongratsActivityTest extends TestCase {
         onView(withId(R.id.mpsdkCongratulationSubtitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_subtitle_action_activity_congrat))));
 
         //Email description
-        onView(withId(R.id.mpsdkPayerEmailDescription)).check(matches(withText("juan.perez@email.com")));
+        onView(withId(R.id.mpsdkPayerEmailDescription)).check(matches(withText(mPayment.getPayer().getEmail())));
 
         //LastFourDigits Card
-        lastFourDigitsDescription = mTestRule.getActivity().getString(R.string.mpsdk_last_digits_label) + " " + "1234";
+        lastFourDigitsDescription = mTestRule.getActivity().getString(R.string.mpsdk_last_digits_label) + " " + mPayment.getCard().getLastFourDigits();
         onView(withId(R.id.mpsdkLastFourDigitsDescription)).check(matches(withText(lastFourDigitsDescription)));
 
         //PaymentMethod image
@@ -157,7 +144,7 @@ public class CongratsActivityTest extends TestCase {
         onView(withId(R.id.mpsdkStateDescription)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_text_state_acount_activity_congrat))));
 
         //Correct paymentId
-        paymentIdDescription = mTestRule.getActivity().getString(R.string.mpsdk_payment_id_description) + " " + "123456789";
+        paymentIdDescription = mTestRule.getActivity().getString(R.string.mpsdk_payment_id_description) + " " + mPayment.getId();
         onView(withId(R.id.mpsdkPaymentIdDescription)).check(matches(withText(paymentIdDescription)));
 
         //Exit button isDisplayed
@@ -200,7 +187,6 @@ public class CongratsActivityTest extends TestCase {
         List<FeeDetail> feeDetails = new ArrayList<>();
         feeDetails.add(feeDetail);
 
-        mPayment = getPayment();
         mPayment.setStatus(Payment.StatusCodes.STATUS_APPROVED);
         mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_ACCREDITED);
         mPayment.setFeeDetails(feeDetails);
@@ -213,10 +199,10 @@ public class CongratsActivityTest extends TestCase {
         onView(withId(R.id.mpsdkCongratulationSubtitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_subtitle_action_activity_congrat))));
 
         //Email description
-        onView(withId(R.id.mpsdkPayerEmailDescription)).check(matches(withText("juan.perez@email.com")));
+        onView(withId(R.id.mpsdkPayerEmailDescription)).check(matches(withText(mPayment.getPayer().getEmail())));
 
         //LastFourDigits Card
-        lastFourDigitsDescription = mTestRule.getActivity().getString(R.string.mpsdk_last_digits_label) + " " + "1234";
+        lastFourDigitsDescription = mTestRule.getActivity().getString(R.string.mpsdk_last_digits_label) + " " + mPayment.getCard().getLastFourDigits();
         onView(withId(R.id.mpsdkLastFourDigitsDescription)).check(matches(withText(lastFourDigitsDescription)));
 
         //PaymentMethod image
@@ -239,7 +225,7 @@ public class CongratsActivityTest extends TestCase {
         onView(withId(R.id.mpsdkStateDescription)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_text_state_acount_activity_congrat))));
 
         //Correct paymentId
-        paymentIdDescription = mTestRule.getActivity().getString(R.string.mpsdk_payment_id_description) + " " + "123456789";
+        paymentIdDescription = mTestRule.getActivity().getString(R.string.mpsdk_payment_id_description) + " " + mPayment.getId();
         onView(withId(R.id.mpsdkPaymentIdDescription)).check(matches(withText(paymentIdDescription)));
 
         //Exit button isDisplayed
@@ -253,10 +239,8 @@ public class CongratsActivityTest extends TestCase {
         Bitmap bitmap, paymentBitmap;
 
         Payer payer = new Payer();
-        payer.setId("178101336");
         payer.setEmail(null);
 
-        mPayment = getPayment();
         mPayment.setPayer(payer);
         mPayment.setStatus(Payment.StatusCodes.STATUS_APPROVED);
         mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_ACCREDITED);
@@ -272,7 +256,7 @@ public class CongratsActivityTest extends TestCase {
         onView(withId(R.id.mpsdkPayerEmailDescription)).check(matches(not(isDisplayed())));
 
         //LastFourDigits Card
-        lastFourDigitsDescription = mTestRule.getActivity().getString(R.string.mpsdk_last_digits_label) + " " + "1234";
+        lastFourDigitsDescription = mTestRule.getActivity().getString(R.string.mpsdk_last_digits_label) + " " + mPayment.getCard().getLastFourDigits();
         onView(withId(R.id.mpsdkLastFourDigitsDescription)).check(matches(withText(lastFourDigitsDescription)));
 
         //PaymentMethod image
@@ -294,7 +278,7 @@ public class CongratsActivityTest extends TestCase {
         onView(withId(R.id.mpsdkStateDescription)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_text_state_acount_activity_congrat))));
 
         //Correct paymentId
-        paymentIdDescription = mTestRule.getActivity().getString(R.string.mpsdk_payment_id_description) + " " + "123456789";
+        paymentIdDescription = mTestRule.getActivity().getString(R.string.mpsdk_payment_id_description) + " " + mPayment.getId();
         onView(withId(R.id.mpsdkPaymentIdDescription)).check(matches(withText(paymentIdDescription)));
 
         //Exit button isDisplayed
@@ -308,10 +292,8 @@ public class CongratsActivityTest extends TestCase {
         Bitmap bitmap, paymentBitmap;
 
         Payer payer = new Payer();
-        payer.setId("178101336");
         payer.setEmail("");
 
-        mPayment = getPayment();
         mPayment.setPayer(payer);
         mPayment.setStatus(Payment.StatusCodes.STATUS_APPROVED);
         mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_ACCREDITED);
@@ -327,7 +309,7 @@ public class CongratsActivityTest extends TestCase {
         onView(withId(R.id.mpsdkPayerEmailDescription)).check(matches(not(isDisplayed())));
 
         //LastFourDigits Card
-        lastFourDigitsDescription = mTestRule.getActivity().getString(R.string.mpsdk_last_digits_label) + " " + "1234";
+        lastFourDigitsDescription = mTestRule.getActivity().getString(R.string.mpsdk_last_digits_label) + " " + mPayment.getCard().getLastFourDigits();
         onView(withId(R.id.mpsdkLastFourDigitsDescription)).check(matches(withText(lastFourDigitsDescription)));
 
         //PaymentMethod image
@@ -349,7 +331,7 @@ public class CongratsActivityTest extends TestCase {
         onView(withId(R.id.mpsdkStateDescription)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_text_state_acount_activity_congrat))));
 
         //Correct paymentId
-        paymentIdDescription = mTestRule.getActivity().getString(R.string.mpsdk_payment_id_description) + " " + "123456789";
+        paymentIdDescription = mTestRule.getActivity().getString(R.string.mpsdk_payment_id_description) + " " + mPayment.getId();
         onView(withId(R.id.mpsdkPaymentIdDescription)).check(matches(withText(paymentIdDescription)));
 
         //Exit button isDisplayed
@@ -361,7 +343,6 @@ public class CongratsActivityTest extends TestCase {
         String paymentIdDescription;
         Spanned installmentsDescription;
 
-        mPayment = getPayment();
         mPayment.setCard(null);
         mPayment.setStatus(Payment.StatusCodes.STATUS_APPROVED);
         mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_ACCREDITED);
@@ -374,7 +355,7 @@ public class CongratsActivityTest extends TestCase {
         onView(withId(R.id.mpsdkCongratulationSubtitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_subtitle_action_activity_congrat))));
 
         //Email description
-        onView(withId(R.id.mpsdkPayerEmailDescription)).check(matches(withText("juan.perez@email.com")));
+        onView(withId(R.id.mpsdkPayerEmailDescription)).check(matches(withText(mPayment.getPayer().getEmail())));
 
         //LastFourDigits Card
         onView(withId(R.id.mpsdkLastFourDigitsDescription)).check(matches(not(isDisplayed())));
@@ -393,7 +374,7 @@ public class CongratsActivityTest extends TestCase {
         onView(withId(R.id.mpsdkStateDescription)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_text_state_acount_activity_congrat))));
 
         //Correct paymentId
-        paymentIdDescription = mTestRule.getActivity().getString(R.string.mpsdk_payment_id_description) + " " + "123456789";
+        paymentIdDescription = mTestRule.getActivity().getString(R.string.mpsdk_payment_id_description) + " " + mPayment.getId();
         onView(withId(R.id.mpsdkPaymentIdDescription)).check(matches(withText(paymentIdDescription)));
 
         //Exit button isDisplayed
@@ -405,7 +386,6 @@ public class CongratsActivityTest extends TestCase {
         String paymentIdDescription, lastFourDigitsDescription;
         Bitmap bitmap, paymentBitmap;
 
-        mPayment = getPayment();
         mPayment.setInstallments(-1);
         mPayment.setStatus(Payment.StatusCodes.STATUS_APPROVED);
         mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_ACCREDITED);
@@ -418,10 +398,10 @@ public class CongratsActivityTest extends TestCase {
         onView(withId(R.id.mpsdkCongratulationSubtitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_subtitle_action_activity_congrat))));
 
         //Email description
-        onView(withId(R.id.mpsdkPayerEmailDescription)).check(matches(withText("juan.perez@email.com")));
+        onView(withId(R.id.mpsdkPayerEmailDescription)).check(matches(withText(mPayment.getPayer().getEmail())));
 
         //LastFourDigits Card
-        lastFourDigitsDescription = mTestRule.getActivity().getString(R.string.mpsdk_last_digits_label) + " " + "1234";
+        lastFourDigitsDescription = mTestRule.getActivity().getString(R.string.mpsdk_last_digits_label) + " " + mPayment.getCard().getLastFourDigits();
         onView(withId(R.id.mpsdkLastFourDigitsDescription)).check(matches(withText(lastFourDigitsDescription)));
 
         //PaymentMethod image
@@ -442,7 +422,7 @@ public class CongratsActivityTest extends TestCase {
         onView(withId(R.id.mpsdkStateDescription)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_text_state_acount_activity_congrat))));
 
         //Correct paymentId
-        paymentIdDescription = mTestRule.getActivity().getString(R.string.mpsdk_payment_id_description) + " " + "123456789";
+        paymentIdDescription = mTestRule.getActivity().getString(R.string.mpsdk_payment_id_description) + " " + mPayment.getId();
         onView(withId(R.id.mpsdkPaymentIdDescription)).check(matches(withText(paymentIdDescription)));
 
         //Exit button isDisplayed
@@ -456,7 +436,6 @@ public class CongratsActivityTest extends TestCase {
         Spanned installmentsDescription;
         Bitmap bitmap, paymentBitmap;
 
-        mPayment = getPayment();
         mPayment.setInstallments(0);
         mPayment.setStatus(Payment.StatusCodes.STATUS_APPROVED);
         mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_ACCREDITED);
@@ -469,10 +448,10 @@ public class CongratsActivityTest extends TestCase {
         onView(withId(R.id.mpsdkCongratulationSubtitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_subtitle_action_activity_congrat))));
 
         //Email description
-        onView(withId(R.id.mpsdkPayerEmailDescription)).check(matches(withText("juan.perez@email.com")));
+        onView(withId(R.id.mpsdkPayerEmailDescription)).check(matches(withText(mPayment.getPayer().getEmail())));
 
         //LastFourDigits Card
-        lastFourDigitsDescription = mTestRule.getActivity().getString(R.string.mpsdk_last_digits_label) + " " + "1234";
+        lastFourDigitsDescription = mTestRule.getActivity().getString(R.string.mpsdk_last_digits_label) + " " + mPayment.getCard().getLastFourDigits();
         onView(withId(R.id.mpsdkLastFourDigitsDescription)).check(matches(withText(lastFourDigitsDescription)));
 
         //PaymentMethod image
@@ -496,7 +475,7 @@ public class CongratsActivityTest extends TestCase {
         onView(withId(R.id.mpsdkStateDescription)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_text_state_acount_activity_congrat))));
 
         //Correct paymentId
-        paymentIdDescription = mTestRule.getActivity().getString(R.string.mpsdk_payment_id_description) + " " + "123456789";
+        paymentIdDescription = mTestRule.getActivity().getString(R.string.mpsdk_payment_id_description) + " " + mPayment.getId();
         onView(withId(R.id.mpsdkPaymentIdDescription)).check(matches(withText(paymentIdDescription)));
 
         //Exit button isDisplayed
@@ -510,7 +489,6 @@ public class CongratsActivityTest extends TestCase {
         Spanned installmentsDescription;
         Bitmap bitmap, paymentBitmap;
 
-        mPayment = getPayment();
         mPayment.setInstallments(1);
         mPayment.setStatus(Payment.StatusCodes.STATUS_APPROVED);
         mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_ACCREDITED);
@@ -523,10 +501,10 @@ public class CongratsActivityTest extends TestCase {
         onView(withId(R.id.mpsdkCongratulationSubtitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_subtitle_action_activity_congrat))));
 
         //Email description
-        onView(withId(R.id.mpsdkPayerEmailDescription)).check(matches(withText("juan.perez@email.com")));
+        onView(withId(R.id.mpsdkPayerEmailDescription)).check(matches(withText(mPayment.getPayer().getEmail())));
 
         //LastFourDigits Card
-        lastFourDigitsDescription = mTestRule.getActivity().getString(R.string.mpsdk_last_digits_label) + " " + "1234";
+        lastFourDigitsDescription = mTestRule.getActivity().getString(R.string.mpsdk_last_digits_label) + " " + mPayment.getCard().getLastFourDigits();
         onView(withId(R.id.mpsdkLastFourDigitsDescription)).check(matches(withText(lastFourDigitsDescription)));
 
         //PaymentMethod image
@@ -550,7 +528,7 @@ public class CongratsActivityTest extends TestCase {
         onView(withId(R.id.mpsdkStateDescription)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_text_state_acount_activity_congrat))));
 
         //Correct paymentId
-        paymentIdDescription = mTestRule.getActivity().getString(R.string.mpsdk_payment_id_description) + " " + "123456789";
+        paymentIdDescription = mTestRule.getActivity().getString(R.string.mpsdk_payment_id_description) + " " + mPayment.getId();
         onView(withId(R.id.mpsdkPaymentIdDescription)).check(matches(withText(paymentIdDescription)));
 
         //Exit button isDisplayed
@@ -566,8 +544,6 @@ public class CongratsActivityTest extends TestCase {
         transactionDetails.setInstallmentAmount(new BigDecimal(-10));
         transactionDetails.setTotalPaidAmount(new BigDecimal(1800));
 
-        mPayment = getPayment();
-        mPayment.setInstallments(6);
         mPayment.setTransactionDetails(transactionDetails);
         mPayment.setStatus(Payment.StatusCodes.STATUS_APPROVED);
         mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_ACCREDITED);
@@ -580,10 +556,10 @@ public class CongratsActivityTest extends TestCase {
         onView(withId(R.id.mpsdkCongratulationSubtitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_subtitle_action_activity_congrat))));
 
         //Email description
-        onView(withId(R.id.mpsdkPayerEmailDescription)).check(matches(withText("juan.perez@email.com")));
+        onView(withId(R.id.mpsdkPayerEmailDescription)).check(matches(withText(mPayment.getPayer().getEmail())));
 
         //LastFourDigits Card
-        lastFourDigitsDescription = mTestRule.getActivity().getString(R.string.mpsdk_last_digits_label) + " " + "1234";
+        lastFourDigitsDescription = mTestRule.getActivity().getString(R.string.mpsdk_last_digits_label) + " " + mPayment.getCard().getLastFourDigits();
         onView(withId(R.id.mpsdkLastFourDigitsDescription)).check(matches(withText(lastFourDigitsDescription)));
 
         //PaymentMethod image
@@ -604,7 +580,7 @@ public class CongratsActivityTest extends TestCase {
         onView(withId(R.id.mpsdkStateDescription)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_text_state_acount_activity_congrat))));
 
         //Correct paymentId
-        paymentIdDescription = mTestRule.getActivity().getString(R.string.mpsdk_payment_id_description) + " " + "123456789";
+        paymentIdDescription = mTestRule.getActivity().getString(R.string.mpsdk_payment_id_description) + " " + mPayment.getId();
         onView(withId(R.id.mpsdkPaymentIdDescription)).check(matches(withText(paymentIdDescription)));
 
         //Exit button isDisplayed
@@ -620,8 +596,6 @@ public class CongratsActivityTest extends TestCase {
         transactionDetails.setInstallmentAmount(new BigDecimal(0));
         transactionDetails.setTotalPaidAmount(new BigDecimal(1800));
 
-        mPayment = getPayment();
-        mPayment.setInstallments(6);
         mPayment.setTransactionDetails(transactionDetails);
         mPayment.setStatus(Payment.StatusCodes.STATUS_APPROVED);
         mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_ACCREDITED);
@@ -634,10 +608,10 @@ public class CongratsActivityTest extends TestCase {
         onView(withId(R.id.mpsdkCongratulationSubtitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_subtitle_action_activity_congrat))));
 
         //Email description
-        onView(withId(R.id.mpsdkPayerEmailDescription)).check(matches(withText("juan.perez@email.com")));
+        onView(withId(R.id.mpsdkPayerEmailDescription)).check(matches(withText(mPayment.getPayer().getEmail())));
 
         //LastFourDigits Card
-        lastFourDigitsDescription = mTestRule.getActivity().getString(R.string.mpsdk_last_digits_label) + " " + "1234";
+        lastFourDigitsDescription = mTestRule.getActivity().getString(R.string.mpsdk_last_digits_label) + " " + mPayment.getCard().getLastFourDigits();
         onView(withId(R.id.mpsdkLastFourDigitsDescription)).check(matches(withText(lastFourDigitsDescription)));
 
         //PaymentMethod image
@@ -658,7 +632,7 @@ public class CongratsActivityTest extends TestCase {
         onView(withId(R.id.mpsdkStateDescription)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_text_state_acount_activity_congrat))));
 
         //Correct paymentId
-        paymentIdDescription = mTestRule.getActivity().getString(R.string.mpsdk_payment_id_description) + " " + "123456789";
+        paymentIdDescription = mTestRule.getActivity().getString(R.string.mpsdk_payment_id_description) + " " + mPayment.getId();
         onView(withId(R.id.mpsdkPaymentIdDescription)).check(matches(withText(paymentIdDescription)));
 
         //Exit button isDisplayed
@@ -674,9 +648,7 @@ public class CongratsActivityTest extends TestCase {
         transactionDetails.setInstallmentAmount(new BigDecimal(0));
         transactionDetails.setTotalPaidAmount(new BigDecimal(1800));
 
-        mPayment = getPayment();
         mPayment.setCurrencyId(null);
-        mPayment.setInstallments(6);
         mPayment.setTransactionDetails(transactionDetails);
         mPayment.setStatus(Payment.StatusCodes.STATUS_APPROVED);
         mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_ACCREDITED);
@@ -689,10 +661,10 @@ public class CongratsActivityTest extends TestCase {
         onView(withId(R.id.mpsdkCongratulationSubtitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_subtitle_action_activity_congrat))));
 
         //Email description
-        onView(withId(R.id.mpsdkPayerEmailDescription)).check(matches(withText("juan.perez@email.com")));
+        onView(withId(R.id.mpsdkPayerEmailDescription)).check(matches(withText(mPayment.getPayer().getEmail())));
 
         //LastFourDigits Card
-        lastFourDigitsDescription = mTestRule.getActivity().getString(R.string.mpsdk_last_digits_label) + " " + "1234";
+        lastFourDigitsDescription = mTestRule.getActivity().getString(R.string.mpsdk_last_digits_label) + " " + mPayment.getCard().getLastFourDigits();
         onView(withId(R.id.mpsdkLastFourDigitsDescription)).check(matches(withText(lastFourDigitsDescription)));
 
         //PaymentMethod image
@@ -713,7 +685,7 @@ public class CongratsActivityTest extends TestCase {
         onView(withId(R.id.mpsdkStateDescription)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_text_state_acount_activity_congrat))));
 
         //Correct paymentId
-        paymentIdDescription = mTestRule.getActivity().getString(R.string.mpsdk_payment_id_description) + " " + "123456789";
+        paymentIdDescription = mTestRule.getActivity().getString(R.string.mpsdk_payment_id_description) + " " + mPayment.getId();
         onView(withId(R.id.mpsdkPaymentIdDescription)).check(matches(withText(paymentIdDescription)));
 
         //Exit button isDisplayed
@@ -729,9 +701,7 @@ public class CongratsActivityTest extends TestCase {
         transactionDetails.setInstallmentAmount(new BigDecimal(0));
         transactionDetails.setTotalPaidAmount(new BigDecimal(1800));
 
-        mPayment = getPayment();
         mPayment.setCurrencyId("");
-        mPayment.setInstallments(6);
         mPayment.setTransactionDetails(transactionDetails);
         mPayment.setStatus(Payment.StatusCodes.STATUS_APPROVED);
         mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_ACCREDITED);
@@ -744,10 +714,10 @@ public class CongratsActivityTest extends TestCase {
         onView(withId(R.id.mpsdkCongratulationSubtitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_subtitle_action_activity_congrat))));
 
         //Email description
-        onView(withId(R.id.mpsdkPayerEmailDescription)).check(matches(withText("juan.perez@email.com")));
+        onView(withId(R.id.mpsdkPayerEmailDescription)).check(matches(withText(mPayment.getPayer().getEmail())));
 
         //LastFourDigits Card
-        lastFourDigitsDescription = mTestRule.getActivity().getString(R.string.mpsdk_last_digits_label) + " " + "1234";
+        lastFourDigitsDescription = mTestRule.getActivity().getString(R.string.mpsdk_last_digits_label) + " " + mPayment.getCard().getLastFourDigits();
         onView(withId(R.id.mpsdkLastFourDigitsDescription)).check(matches(withText(lastFourDigitsDescription)));
 
         //PaymentMethod image
@@ -768,7 +738,7 @@ public class CongratsActivityTest extends TestCase {
         onView(withId(R.id.mpsdkStateDescription)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_text_state_acount_activity_congrat))));
 
         //Correct paymentId
-        paymentIdDescription = mTestRule.getActivity().getString(R.string.mpsdk_payment_id_description) + " " + "123456789";
+        paymentIdDescription = mTestRule.getActivity().getString(R.string.mpsdk_payment_id_description) + " " + mPayment.getId();
         onView(withId(R.id.mpsdkPaymentIdDescription)).check(matches(withText(paymentIdDescription)));
 
         //Exit button isDisplayed
@@ -784,9 +754,7 @@ public class CongratsActivityTest extends TestCase {
         transactionDetails.setInstallmentAmount(new BigDecimal(0));
         transactionDetails.setTotalPaidAmount(new BigDecimal(1800));
 
-        mPayment = getPayment();
         mPayment.setCurrencyId("MLA");
-        mPayment.setInstallments(6);
         mPayment.setTransactionDetails(transactionDetails);
         mPayment.setStatus(Payment.StatusCodes.STATUS_APPROVED);
         mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_ACCREDITED);
@@ -799,10 +767,10 @@ public class CongratsActivityTest extends TestCase {
         onView(withId(R.id.mpsdkCongratulationSubtitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_subtitle_action_activity_congrat))));
 
         //Email description
-        onView(withId(R.id.mpsdkPayerEmailDescription)).check(matches(withText("juan.perez@email.com")));
+        onView(withId(R.id.mpsdkPayerEmailDescription)).check(matches(withText(mPayment.getPayer().getEmail())));
 
         //LastFourDigits Card
-        lastFourDigitsDescription = mTestRule.getActivity().getString(R.string.mpsdk_last_digits_label) + " " + "1234";
+        lastFourDigitsDescription = mTestRule.getActivity().getString(R.string.mpsdk_last_digits_label) + " " + mPayment.getCard().getLastFourDigits();
         onView(withId(R.id.mpsdkLastFourDigitsDescription)).check(matches(withText(lastFourDigitsDescription)));
 
         //PaymentMethod image
@@ -823,7 +791,7 @@ public class CongratsActivityTest extends TestCase {
         onView(withId(R.id.mpsdkStateDescription)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_text_state_acount_activity_congrat))));
 
         //Correct paymentId
-        paymentIdDescription = mTestRule.getActivity().getString(R.string.mpsdk_payment_id_description) + " " + "123456789";
+        paymentIdDescription = mTestRule.getActivity().getString(R.string.mpsdk_payment_id_description) + " " + mPayment.getId();
         onView(withId(R.id.mpsdkPaymentIdDescription)).check(matches(withText(paymentIdDescription)));
 
         //Exit button isDisplayed
@@ -839,8 +807,6 @@ public class CongratsActivityTest extends TestCase {
         transactionDetails.setInstallmentAmount(new BigDecimal(250));
         transactionDetails.setTotalPaidAmount(new BigDecimal(-1800));
 
-        mPayment = getPayment();
-        mPayment.setInstallments(6);
         mPayment.setTransactionDetails(transactionDetails);
         mPayment.setStatus(Payment.StatusCodes.STATUS_APPROVED);
         mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_ACCREDITED);
@@ -853,10 +819,10 @@ public class CongratsActivityTest extends TestCase {
         onView(withId(R.id.mpsdkCongratulationSubtitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_subtitle_action_activity_congrat))));
 
         //Email description
-        onView(withId(R.id.mpsdkPayerEmailDescription)).check(matches(withText("juan.perez@email.com")));
+        onView(withId(R.id.mpsdkPayerEmailDescription)).check(matches(withText(mPayment.getPayer().getEmail())));
 
         //LastFourDigits Card
-        lastFourDigitsDescription = mTestRule.getActivity().getString(R.string.mpsdk_last_digits_label) + " " + "1234";
+        lastFourDigitsDescription = mTestRule.getActivity().getString(R.string.mpsdk_last_digits_label) + " " + mPayment.getCard().getLastFourDigits();
         onView(withId(R.id.mpsdkLastFourDigitsDescription)).check(matches(withText(lastFourDigitsDescription)));
 
         //PaymentMethod image
@@ -877,7 +843,7 @@ public class CongratsActivityTest extends TestCase {
         onView(withId(R.id.mpsdkStateDescription)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_text_state_acount_activity_congrat))));
 
         //Correct paymentId
-        paymentIdDescription = mTestRule.getActivity().getString(R.string.mpsdk_payment_id_description) + " " + "123456789";
+        paymentIdDescription = mTestRule.getActivity().getString(R.string.mpsdk_payment_id_description) + " " + mPayment.getId();
         onView(withId(R.id.mpsdkPaymentIdDescription)).check(matches(withText(paymentIdDescription)));
 
         //Exit button isDisplayed
@@ -893,8 +859,6 @@ public class CongratsActivityTest extends TestCase {
         transactionDetails.setInstallmentAmount(new BigDecimal(250));
         transactionDetails.setTotalPaidAmount(new BigDecimal(0));
 
-        mPayment = getPayment();
-        mPayment.setInstallments(6);
         mPayment.setTransactionDetails(transactionDetails);
         mPayment.setStatus(Payment.StatusCodes.STATUS_APPROVED);
         mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_ACCREDITED);
@@ -907,10 +871,10 @@ public class CongratsActivityTest extends TestCase {
         onView(withId(R.id.mpsdkCongratulationSubtitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_subtitle_action_activity_congrat))));
 
         //Email description
-        onView(withId(R.id.mpsdkPayerEmailDescription)).check(matches(withText("juan.perez@email.com")));
+        onView(withId(R.id.mpsdkPayerEmailDescription)).check(matches(withText(mPayment.getPayer().getEmail())));
 
         //LastFourDigits Card
-        lastFourDigitsDescription = mTestRule.getActivity().getString(R.string.mpsdk_last_digits_label) + " " + "1234";
+        lastFourDigitsDescription = mTestRule.getActivity().getString(R.string.mpsdk_last_digits_label) + " " + mPayment.getCard().getLastFourDigits();
         onView(withId(R.id.mpsdkLastFourDigitsDescription)).check(matches(withText(lastFourDigitsDescription)));
 
         //PaymentMethod image
@@ -931,7 +895,7 @@ public class CongratsActivityTest extends TestCase {
         onView(withId(R.id.mpsdkStateDescription)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_text_state_acount_activity_congrat))));
 
         //Correct paymentId
-        paymentIdDescription = mTestRule.getActivity().getString(R.string.mpsdk_payment_id_description) + " " + "123456789";
+        paymentIdDescription = mTestRule.getActivity().getString(R.string.mpsdk_payment_id_description) + " " + mPayment.getId();
         onView(withId(R.id.mpsdkPaymentIdDescription)).check(matches(withText(paymentIdDescription)));
 
         //Exit button isDisplayed
@@ -944,7 +908,6 @@ public class CongratsActivityTest extends TestCase {
         Spanned installmentsDescription;
         Bitmap bitmap, paymentBitmap;
 
-        mPayment = getPayment();
         mPayment.setId(null);
         mPayment.setStatus(Payment.StatusCodes.STATUS_APPROVED);
         mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_ACCREDITED);
@@ -957,10 +920,10 @@ public class CongratsActivityTest extends TestCase {
         onView(withId(R.id.mpsdkCongratulationSubtitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_subtitle_action_activity_congrat))));
 
         //Email description
-        onView(withId(R.id.mpsdkPayerEmailDescription)).check(matches(withText("juan.perez@email.com")));
+        onView(withId(R.id.mpsdkPayerEmailDescription)).check(matches(withText(mPayment.getPayer().getEmail())));
 
         //LastFourDigits Card
-        lastFourDigitsDescription = mTestRule.getActivity().getString(R.string.mpsdk_last_digits_label) + " " + "1234";
+        lastFourDigitsDescription = mTestRule.getActivity().getString(R.string.mpsdk_last_digits_label) + " " + mPayment.getCard().getLastFourDigits();
         onView(withId(R.id.mpsdkLastFourDigitsDescription)).check(matches(withText(lastFourDigitsDescription)));
 
         //PaymentMethod image
@@ -991,7 +954,6 @@ public class CongratsActivityTest extends TestCase {
 
     @Test
     public void finishCongratsLayoutWhenClickOnExitCongrats(){
-        mPayment = getPayment();
         mPayment.setStatus(Payment.StatusCodes.STATUS_APPROVED);
         mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_ACCREDITED);
 
@@ -1010,7 +972,6 @@ public class CongratsActivityTest extends TestCase {
 
     @Test
     public void showPendingLayoutWhenPaymentIsPendingForContingency(){
-        mPayment = getPayment();
         mPayment.setStatus(Payment.StatusCodes.STATUS_IN_PROCESS);
         mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_PENDING_CONTINGENCY);
 
@@ -1027,7 +988,6 @@ public class CongratsActivityTest extends TestCase {
 
     @Test
     public void showPendingLayoutWhenPaymentIsPendingForReviewManual(){
-        mPayment = getPayment();
         mPayment.setStatus(Payment.StatusCodes.STATUS_IN_PROCESS);
         mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_PENDING_REVIEW_MANUAL);
 
@@ -1044,7 +1004,6 @@ public class CongratsActivityTest extends TestCase {
 
     @Test
     public void finishPendingLayoutWhenClickOnExitPending(){
-        mPayment = getPayment();
         mPayment.setStatus(Payment.StatusCodes.STATUS_IN_PROCESS);
         mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_PENDING_CONTINGENCY);
 
@@ -1065,7 +1024,6 @@ public class CongratsActivityTest extends TestCase {
     public void showCallForAuthorizeLayoutWhenPaymentIsRejectedForCallForAuthorize(){
         Spanned callForAuthorizeTitle;
 
-        mPayment = getPayment();
         mPayment.setStatus(Payment.StatusCodes.STATUS_REJECTED);
         mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_CALL_FOR_AUTHORIZE);
 
@@ -1091,158 +1049,10 @@ public class CongratsActivityTest extends TestCase {
     }
 
     @Test
-    public void showCallForAuthorizeLayoutWithoutPaymentMethodIdWhenPaymentMethodIsNull(){
-        PaymentMethod paymentMethod = new PaymentMethod();
-        paymentMethod.setId(null);
-        paymentMethod.setPaymentTypeId("credit_card");
-        mPaymentMethod = paymentMethod;
-
-        mPayment = getPayment();
-        mPayment.setStatus(Payment.StatusCodes.STATUS_REJECTED);
-        mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_CALL_FOR_AUTHORIZE);
-
-        validStartIntent = new Intent();
-        validStartIntent.putExtra("merchantPublicKey", mMerchantPublicKey);
-        validStartIntent.putExtra("paymentMethod", mPaymentMethod);
-        validStartIntent.putExtra("payment", mPayment);
-
-        //createIntent();
-        mTestRule.launchActivity(validStartIntent);
-
-        //Title and subtitle
-        onView(withId(R.id.mpsdkCallForAuthorizeTitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_error_title_activity_call_for_authorize))));
-        onView(withId(R.id.mpsdkCallForAuthorizeSubtitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_text_order_call_for_authorize))));
-
-        //Authorize button
-        onView(withId(R.id.mpsdkAuthorizedPaymentMethod)).check(matches(not(isDisplayed())));
-
-        //PaymentNoAuthorized
-        onView(withId(R.id.mpsdkPaymentNoAuthorized)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_text_question_call_for_authorize))));
-
-        //SelectOtherPaymentMethod button is displayed
-        onView(withId(R.id.mpsdkSelectOtherPaymentMethod)).check(matches(isDisplayed()));
-
-        //Exit button is displayed
-        onView(withId(R.id.mpsdkExitCallForAuthorize)).check(matches(isDisplayed()));
-    }
-
-    @Test
-    public void showCallForAuthorizeLayoutWithoutPaymentMethodIdWhenPaymentMethodIsEmpty(){
-        PaymentMethod paymentMethod = new PaymentMethod();
-        paymentMethod.setId("");
-        //paymentMethod.setName("Master");
-        paymentMethod.setPaymentTypeId("credit_card");
-        mPaymentMethod = paymentMethod;
-
-        mPayment = getPayment();
-        mPayment.setStatus(Payment.StatusCodes.STATUS_REJECTED);
-        mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_CALL_FOR_AUTHORIZE);
-
-        validStartIntent = new Intent();
-        validStartIntent.putExtra("merchantPublicKey", mMerchantPublicKey);
-        validStartIntent.putExtra("paymentMethod", mPaymentMethod);
-        validStartIntent.putExtra("payment", mPayment);
-
-        //createIntent();
-        mTestRule.launchActivity(validStartIntent);
-
-        //Title and subtitle
-        onView(withId(R.id.mpsdkCallForAuthorizeTitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_error_title_activity_call_for_authorize))));
-        onView(withId(R.id.mpsdkCallForAuthorizeSubtitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_text_order_call_for_authorize))));
-
-        //Authorize button
-        onView(withId(R.id.mpsdkAuthorizedPaymentMethod)).check(matches(not(isDisplayed())));
-
-        //PaymentNoAuthorized
-        onView(withId(R.id.mpsdkPaymentNoAuthorized)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_text_question_call_for_authorize))));
-
-        //SelectOtherPaymentMethod button is displayed
-        onView(withId(R.id.mpsdkSelectOtherPaymentMethod)).check(matches(isDisplayed()));
-
-        //Exit button is displayed
-        onView(withId(R.id.mpsdkExitCallForAuthorize)).check(matches(isDisplayed()));
-    }
-
-    @Test
-    public void showCallForAuthorizeLayoutWithoutPaymentMethodNameWhenPaymentMethodIsNull(){
-        PaymentMethod paymentMethod = new PaymentMethod();
-        paymentMethod.setId("master");
-        paymentMethod.setName(null);
-        paymentMethod.setPaymentTypeId("credit_card");
-        mPaymentMethod = paymentMethod;
-
-        mPayment = getPayment();
-        mPayment.setStatus(Payment.StatusCodes.STATUS_REJECTED);
-        mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_CALL_FOR_AUTHORIZE);
-
-        validStartIntent = new Intent();
-        validStartIntent.putExtra("merchantPublicKey", mMerchantPublicKey);
-        validStartIntent.putExtra("paymentMethod", mPaymentMethod);
-        validStartIntent.putExtra("payment", mPayment);
-
-        //createIntent();
-        mTestRule.launchActivity(validStartIntent);
-
-        //Title and subtitle
-        onView(withId(R.id.mpsdkCallForAuthorizeTitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_error_title_activity_call_for_authorize))));
-        onView(withId(R.id.mpsdkCallForAuthorizeSubtitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_text_order_call_for_authorize))));
-
-        //Authorize button
-        onView(withId(R.id.mpsdkAuthorizedPaymentMethod)).check(matches(not(isDisplayed())));
-
-        //PaymentNoAuthorized
-        onView(withId(R.id.mpsdkPaymentNoAuthorized)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_text_question_call_for_authorize))));
-
-        //SelectOtherPaymentMethod button is displayed
-        onView(withId(R.id.mpsdkSelectOtherPaymentMethod)).check(matches(isDisplayed()));
-
-        //Exit button is displayed
-        onView(withId(R.id.mpsdkExitCallForAuthorize)).check(matches(isDisplayed()));
-    }
-
-    @Test
-    public void showCallForAuthorizeLayoutWithoutPaymentMethodNameWhenPaymentMethodIsEmpty(){
-        PaymentMethod paymentMethod = new PaymentMethod();
-        paymentMethod.setId("master");
-        paymentMethod.setName("");
-        paymentMethod.setPaymentTypeId("credit_card");
-        mPaymentMethod = paymentMethod;
-
-        mPayment = getPayment();
-        mPayment.setStatus(Payment.StatusCodes.STATUS_REJECTED);
-        mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_CALL_FOR_AUTHORIZE);
-
-        validStartIntent = new Intent();
-        validStartIntent.putExtra("merchantPublicKey", mMerchantPublicKey);
-        validStartIntent.putExtra("paymentMethod", mPaymentMethod);
-        validStartIntent.putExtra("payment", mPayment);
-
-        //createIntent();
-        mTestRule.launchActivity(validStartIntent);
-
-        //Title and subtitle
-        onView(withId(R.id.mpsdkCallForAuthorizeTitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_error_title_activity_call_for_authorize))));
-        onView(withId(R.id.mpsdkCallForAuthorizeSubtitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_text_order_call_for_authorize))));
-
-        //Authorize button
-        onView(withId(R.id.mpsdkAuthorizedPaymentMethod)).check(matches(not(isDisplayed())));
-
-        //PaymentNoAuthorized
-        onView(withId(R.id.mpsdkPaymentNoAuthorized)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_text_question_call_for_authorize))));
-
-        //SelectOtherPaymentMethod button is displayed
-        onView(withId(R.id.mpsdkSelectOtherPaymentMethod)).check(matches(isDisplayed()));
-
-        //Exit button is displayed
-        onView(withId(R.id.mpsdkExitCallForAuthorize)).check(matches(isDisplayed()));
-    }
-
-    @Test
     public void showCallForAuthorizeLayoutWithoutTotalAmountWhenTotalAmountIsNegative(){
         TransactionDetails transactionDetails = new TransactionDetails();
         transactionDetails.setTotalPaidAmount(new BigDecimal(-1));
 
-        mPayment = getPayment();
         mPayment.setStatus(Payment.StatusCodes.STATUS_REJECTED);
         mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_CALL_FOR_AUTHORIZE);
         mPayment.setTransactionDetails(transactionDetails);
@@ -1272,7 +1082,6 @@ public class CongratsActivityTest extends TestCase {
         TransactionDetails transactionDetails = new TransactionDetails();
         transactionDetails.setTotalPaidAmount(new BigDecimal(0));
 
-        mPayment = getPayment();
         mPayment.setStatus(Payment.StatusCodes.STATUS_REJECTED);
         mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_CALL_FOR_AUTHORIZE);
         mPayment.setTransactionDetails(transactionDetails);
@@ -1299,7 +1108,6 @@ public class CongratsActivityTest extends TestCase {
 
     @Test
     public void showCallForAuthorizeLayoutWithoutTotalAmountWhenCurrencyIsNull(){
-        mPayment = getPayment();
         mPayment.setCurrencyId(null);
         mPayment.setStatus(Payment.StatusCodes.STATUS_REJECTED);
         mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_CALL_FOR_AUTHORIZE);
@@ -1326,7 +1134,6 @@ public class CongratsActivityTest extends TestCase {
 
     @Test
     public void showCallForAuthorizeLayoutWithoutTotalAmountWhenCurrencyIsEmpty(){
-        mPayment = getPayment();
         mPayment.setCurrencyId("");
         mPayment.setStatus(Payment.StatusCodes.STATUS_REJECTED);
         mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_CALL_FOR_AUTHORIZE);
@@ -1353,7 +1160,6 @@ public class CongratsActivityTest extends TestCase {
 
     @Test
     public void showCallForAuthorizeLayoutWithoutTotalAmountWhenCurrencyIsInvalid(){
-        mPayment = getPayment();
         mPayment.setCurrencyId("MLA");
         mPayment.setStatus(Payment.StatusCodes.STATUS_REJECTED);
         mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_CALL_FOR_AUTHORIZE);
@@ -1380,7 +1186,6 @@ public class CongratsActivityTest extends TestCase {
 
     @Test
     public void finishCallForAuthorizeLayoutWhenClickOnAuthorizedPaymentMethod(){
-        mPayment = getPayment();
         mPayment.setStatus(Payment.StatusCodes.STATUS_REJECTED);
         mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_CALL_FOR_AUTHORIZE);
 
@@ -1399,7 +1204,6 @@ public class CongratsActivityTest extends TestCase {
 
     @Test
     public void finishCallForAuthorizeLayoutWhenClickOnSelectOtherPaymentMethod(){
-        mPayment = getPayment();
         mPayment.setStatus(Payment.StatusCodes.STATUS_REJECTED);
         mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_CALL_FOR_AUTHORIZE);
 
@@ -1418,7 +1222,6 @@ public class CongratsActivityTest extends TestCase {
 
     @Test
     public void finishCallForAuthorizeLayoutWhenClickOnExitCallForAuthorize(){
-        mPayment = getPayment();
         mPayment.setStatus(Payment.StatusCodes.STATUS_REJECTED);
         mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_CALL_FOR_AUTHORIZE);
 
@@ -1449,7 +1252,6 @@ public class CongratsActivityTest extends TestCase {
 
     @Test
     public void showRejectedLayoutWhenPaymentIsRejectedForHighRisk(){
-        mPayment = getPayment();
         mPayment.setStatus(Payment.StatusCodes.STATUS_REJECTED);
         mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_REJECTED_HIGH_RISK);
 
@@ -1471,7 +1273,6 @@ public class CongratsActivityTest extends TestCase {
     public void showRejectedLayoutWhenPaymentIsRejectedForInsufficientAmount(){
         String titleMessage;
 
-        mPayment = getPayment();
         mPayment.setStatus(Payment.StatusCodes.STATUS_REJECTED);
         mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_INSUFFICIENT_AMOUNT);
 
@@ -1494,7 +1295,6 @@ public class CongratsActivityTest extends TestCase {
     public void showRejectedLayoutWhenPaymentIsRejectedForOtherReason(){
         String titleMessage;
 
-        mPayment = getPayment();
         mPayment.setStatus(Payment.StatusCodes.STATUS_REJECTED);
         mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_OTHER_REASON);
 
@@ -1515,7 +1315,6 @@ public class CongratsActivityTest extends TestCase {
 
     @Test
     public void showRejectedLayoutWhenPaymentIsRejectedForMaxAttempts(){
-        mPayment = getPayment();
         mPayment.setStatus(Payment.StatusCodes.STATUS_REJECTED);
         mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_MAX_ATTEMPTS);
 
@@ -1537,7 +1336,6 @@ public class CongratsActivityTest extends TestCase {
     public void showRejectedLayoutWhenPaymentIsRejectedForDuplicatedPayment(){
         String titleMessage;
 
-        mPayment = getPayment();
         mPayment.setStatus(Payment.StatusCodes.STATUS_REJECTED);
         mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_DUPLICATED_PAYMENT);
 
@@ -1560,7 +1358,6 @@ public class CongratsActivityTest extends TestCase {
     public void showRejectedLayoutWhenPaymentIsRejectedForCardDisabled(){
         String titleMessage;
 
-        mPayment = getPayment();
         mPayment.setStatus(Payment.StatusCodes.STATUS_REJECTED);
         mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_CARD_DISABLED);
 
@@ -1583,7 +1380,6 @@ public class CongratsActivityTest extends TestCase {
     public void showRejectedLayoutWhenPaymentIsRejectedForBadFilledOther(){
         String subtitleMessage;
 
-        mPayment = getPayment();
         mPayment.setStatus(Payment.StatusCodes.STATUS_REJECTED);
         mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_BAD_FILLED_OTHER);
 
@@ -1606,7 +1402,6 @@ public class CongratsActivityTest extends TestCase {
     public void showRejectedLayoutWhenPaymentIsRejectedForBadFilledCardNumber(){
         String subtitleMessage;
 
-        mPayment = getPayment();
         mPayment.setStatus(Payment.StatusCodes.STATUS_REJECTED);
         mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_BAD_FILLED_CARD_NUMBER);
 
@@ -1627,7 +1422,6 @@ public class CongratsActivityTest extends TestCase {
 
     @Test
     public void showRejectedLayoutWhenPaymentIsRejectedForBadFilledSecurityCode(){
-        mPayment = getPayment();
         mPayment.setStatus(Payment.StatusCodes.STATUS_REJECTED);
         mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_BAD_FILLED_SECURITY_CODE);
 
@@ -1647,7 +1441,6 @@ public class CongratsActivityTest extends TestCase {
 
     @Test
     public void showRejectedLayoutWhenPaymentIsRejectedForBadFilledDate(){
-        mPayment = getPayment();
         mPayment.setStatus(Payment.StatusCodes.STATUS_REJECTED);
         mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_BAD_FILLED_DATE);
 
@@ -1667,7 +1460,6 @@ public class CongratsActivityTest extends TestCase {
 
     @Test
     public void finishRejectionLayoutWhenClickOnSelectOtherPaymentMethod(){
-        mPayment = getPayment();
         mPayment.setStatus(Payment.StatusCodes.STATUS_REJECTED);
         mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_BAD_FILLED_DATE);
 
@@ -1686,7 +1478,6 @@ public class CongratsActivityTest extends TestCase {
 
     @Test
     public void finishRejectionLayoutWhenClickOnExitRejection(){
-        mPayment = getPayment();
         mPayment.setStatus(Payment.StatusCodes.STATUS_REJECTED);
         mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_BAD_FILLED_DATE);
 
@@ -1701,25 +1492,5 @@ public class CongratsActivityTest extends TestCase {
 
         //Congrats finish
         assertTrue(mTestRule.getActivity().isFinishing());
-    }
-
-    @Test
-    public void showRejectedLayoutWhenPaymentIsRejectedForNullPayment(){
-        createIntentWithoutPayment();
-        mTestRule.launchActivity(validStartIntent);
-
-        //Title and subtitle
-        onView(withId(R.id.mpsdkRejectionTitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_title_bad_filled_other_rejection))));
-        onView(withId(R.id.mpsdkRejectionSubtitle)).check(matches(not(isDisplayed())));
-    }
-
-    @Test
-    public void showRejectedLayoutWhenPaymentIsRejectedForNullPaymentMethod(){
-        createIntentWithoutPaymentMethod();
-        mTestRule.launchActivity(validStartIntent);
-
-        //Title and subtitle
-        onView(withId(R.id.mpsdkRejectionTitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_title_bad_filled_other_rejection))));
-        onView(withId(R.id.mpsdkRejectionSubtitle)).check(matches(not(isDisplayed())));
     }
 }

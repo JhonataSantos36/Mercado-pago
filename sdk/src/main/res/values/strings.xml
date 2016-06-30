@@ -106,6 +106,8 @@
     <string name="mpsdk_title_other_reason_rejection">no procesó el pago</string>
     <string name="mpsdk_text_active_card">para que active tu tarjeta</string>
     <string name="mpsdk_title_bad_filled_other_rejection">Uy, no pudimos procesar el pago</string>
+    <string name="mpsdk_payment_method_error">Medio de pago no establecido</string>
+    <string name="mpsdk_payment_error">Pago no establecido</string>
     <string name="mpsdk_text_some_number">Algún número de tu</string>
     <string name="mpsdk_text_is_incorrect">es incorrecto.</string>
     <string name="mpsdk_text_insufficient_amount">no tiene fondos suficientes</string>
