@@ -27,8 +27,7 @@ public class FakeAPI {
             queuedResponses = new ArrayList<>();
         }
         String jsonResponse = JsonUtil.getInstance().toJson(response);
-        QueuedResponse queuedResponse = new QueuedResponse(jsonResponse, statusCode, reason);
-        queuedResponses.add(queuedResponse);
+        addResponseToQueue(jsonResponse, statusCode, reason);
     }
 
     public static void addResponseToQueue(String jsonResponse, int statusCode, String reason) {
