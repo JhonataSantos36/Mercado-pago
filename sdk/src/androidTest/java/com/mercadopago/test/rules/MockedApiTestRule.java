@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.support.test.espresso.intent.Intents;
 import android.support.test.rule.ActivityTestRule;
 
+import com.mercadopago.test.FakeAPI;
 import com.mercadopago.test.FakeInterceptor;
 import com.mercadopago.util.HttpClientUtil;
 import com.mercadopago.util.JsonUtil;
@@ -22,33 +23,33 @@ public class MockedApiTestRule<A extends Activity> extends ActivityTestRule<A> {
     public MockedApiTestRule(Class<A> activityClass) {
         super(activityClass);
         intentsActive = false;
-        setUpMockedClient();
+        setUpFakeInterceptor();
     }
 
     public MockedApiTestRule(Class<A> activityClass, boolean initialTouchMode) {
         super(activityClass, initialTouchMode);
         intentsActive = false;
-        setUpMockedClient();
+        setUpFakeInterceptor();
     }
 
     public MockedApiTestRule(Class<A> activityClass, boolean initialTouchMode, boolean launchActivity) {
         super(activityClass, initialTouchMode, launchActivity);
         intentsActive = false;
-        setUpMockedClient();
+        setUpFakeInterceptor();
     }
 
-    private void setUpMockedClient() {
+    private void setUpFakeInterceptor() {
         fakeInterceptor = new FakeInterceptor();
         HttpClientUtil.bindInterceptor(fakeInterceptor);
     }
 
     public <T> void addApiResponseToQueue(T response, int statusCode, String reason) {
         String jsonResponse = JsonUtil.getInstance().toJson(response);
-        fakeInterceptor.addResponseToQueue(jsonResponse, statusCode, reason);
+        FakeAPI.addResponseToQueue(jsonResponse, statusCode, reason);
     }
 
     public void addApiResponseToQueue(String jsonResponse, int statusCode, String reason) {
-        fakeInterceptor.addResponseToQueue(jsonResponse, statusCode, reason);
+        FakeAPI.addResponseToQueue(jsonResponse, statusCode, reason);
     }
 
     @Override
@@ -65,7 +66,7 @@ public class MockedApiTestRule<A extends Activity> extends ActivityTestRule<A> {
         if(intentsActive) {
             this.releaseIntents();
         }
-        fakeInterceptor.cleanQueue();
+        FakeAPI.cleanQueue();
     }
 
     public void initIntentsRecording() {

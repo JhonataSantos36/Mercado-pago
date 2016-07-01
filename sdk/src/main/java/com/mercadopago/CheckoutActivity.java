@@ -90,7 +90,6 @@ public class CheckoutActivity extends AppCompatActivity {
     protected MPTextView mCancelTextView;
     protected MPTextView mTotalAmountTextView;
     protected MPButton mPayButton;
-    protected View mContentView;
     protected RelativeLayout mPaymentMethodLayout;
     protected RelativeLayout mPayerCostLayout;
     protected Boolean mBackPressedOnce;
@@ -295,7 +294,6 @@ public class CheckoutActivity extends AppCompatActivity {
         }
 
         mTotalAmountTextView = (MPTextView) findViewById(R.id.mpsdkTotalAmountText);
-        mContentView = findViewById(R.id.mpsdkContentLayout);
         mPaymentMethodLayout = (RelativeLayout) findViewById(R.id.mpsdkPaymentMethodLayout);
         mPayerCostLayout = (RelativeLayout) findViewById(R.id.mpsdkPayerCostLayout);
     }
