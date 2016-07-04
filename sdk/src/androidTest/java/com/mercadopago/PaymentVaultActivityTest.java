@@ -67,7 +67,7 @@ public class PaymentVaultActivityTest {
     @Test
     public void setPublicKeyOnCreate() {
         mTestRule.launchActivity(validStartIntent);
-        assertTrue(mTestRule.getActivity().mMerchantPublicKey != null);
+        assertTrue(mTestRule.getActivity().getMerchantPublicKey() != null);
     }
 
     @Test

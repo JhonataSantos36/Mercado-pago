@@ -3,8 +3,6 @@ package com.mercadopago;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -17,14 +15,14 @@ import com.mercadopago.adapters.CustomerCardsAdapter;
 import com.mercadopago.callbacks.OnSelectedCallback;
 import com.mercadopago.decorations.DividerItemDecoration;
 import com.mercadopago.model.Card;
-import com.mercadopago.model.DecorationPreference;
 import com.mercadopago.mptracker.MPTracker;
+import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
 
 import java.lang.reflect.Type;
 import java.util.List;
 
-public class CustomerCardsActivity extends AppCompatActivity {
+public class CustomerCardsActivity extends MercadoPagoActivity {
 
     private RecyclerView mRecyclerView;
     private Toolbar mToolbar;
@@ -32,31 +30,14 @@ public class CustomerCardsActivity extends AppCompatActivity {
 
     private List<Card> mCards;
 
-    private DecorationPreference mDecorationPreference;
+    @Override
+    protected void onValidStart() {
+        fillData();
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        getActivityParameters();
-
-        if(mDecorationPreference != null && mDecorationPreference.hasColors()) {
-            setTheme(R.style.Theme_MercadoPagoTheme_NoActionBar);
-        }
-
-        setContentView();
-
-        initializeToolbar();
-
-        if (mCards == null) {
-            Intent returnIntent = new Intent();
-            setResult(RESULT_CANCELED, returnIntent);
-            finish();
-            return;
-        }
-
-        initializeControls();
-        fillData();
+    protected void onInvalidStart(String message) {
+        ErrorUtil.startErrorActivity(this, message, false);
     }
 
     protected void setContentView() {
@@ -80,21 +61,20 @@ public class CustomerCardsActivity extends AppCompatActivity {
             }
         });
 
-        if(mDecorationPreference != null) {
-            if(mDecorationPreference.hasColors()) {
-                mToolbar.setBackgroundColor(mDecorationPreference.getBaseColor());
-            }
-            if(mDecorationPreference.isDarkFontEnabled()) {
-                mTitle.setTextColor(mDecorationPreference.getDarkFontColor(this));
-                Drawable upArrow = mToolbar.getNavigationIcon();
-                upArrow.setColorFilter(mDecorationPreference.getDarkFontColor(this), PorterDuff.Mode.SRC_ATOP);
-                getSupportActionBar().setHomeAsUpIndicator(upArrow);
-            }
+        if(isCustomColorSet()) {
+            mToolbar.setBackgroundColor(getCustomBaseColor());
+        }
+        if(isDarkFontEnabled()) {
+            mTitle.setTextColor(getDarkFontColor());
+            Drawable upArrow = mToolbar.getNavigationIcon();
+            upArrow.setColorFilter(getDarkFontColor(), PorterDuff.Mode.SRC_ATOP);
+            getSupportActionBar().setHomeAsUpIndicator(upArrow);
         }
     }
 
-    private void getActivityParameters() {
-
+    @Override
+    protected void getActivityParameters() {
+        super.getActivityParameters();
         try {
             Gson gson = new Gson();
             Type listType = new TypeToken<List<Card>>(){}.getType();
@@ -102,13 +82,18 @@ public class CustomerCardsActivity extends AppCompatActivity {
         } catch (Exception ex) {
             mCards = null;
         }
+    }
 
-        if(getIntent().getStringExtra("decorationPreference") != null) {
-            mDecorationPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("decorationPreference"), DecorationPreference.class);
+    @Override
+    protected void validateActivityParameters() throws IllegalStateException {
+        if(mCards == null) {
+            throw new IllegalStateException("cards not set");
         }
     }
 
-    private void initializeControls() {
+    @Override
+    protected void initializeControls() {
+        initializeToolbar();
         mRecyclerView = (RecyclerView) findViewById(R.id.mpsdkCustomerCardsList);
     }
 

@@ -1,9 +1,5 @@
 package com.mercadopago;
 
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.webkit.WebView;
@@ -13,10 +9,10 @@ import android.widget.TextView;
 
 import com.mercadopago.model.DecorationPreference;
 import com.mercadopago.mptracker.MPTracker;
-import com.mercadopago.util.JsonUtil;
+import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.views.MPTextView;
 
-public class TermsAndConditionsActivity extends AppCompatActivity {
+public class TermsAndConditionsActivity extends MercadoPagoActivity {
 
     protected View mMPTermsAndConditionsView;
     protected View mBankDealsTermsAndConditionsView;
@@ -25,34 +21,27 @@ public class TermsAndConditionsActivity extends AppCompatActivity {
     protected DecorationPreference mDecorationPreference;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-
-        super.onCreate(savedInstanceState);
-        if(this.getIntent().getStringExtra("decorationPreference") != null) {
-            mDecorationPreference = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("decorationPreference"), DecorationPreference.class);
-        }
-        if(mDecorationPreference != null && mDecorationPreference.hasColors()) {
-            setTheme(R.style.Theme_MercadoPagoTheme_NoActionBar);
-        }
-        setContentView();
-        initializeControls();
-        initializeToolbar();
-
-        // Set terms and conditions
+    protected void onValidStart() {
         if (getIntent().getStringExtra("termsAndConditions") != null) {
             mMPTermsAndConditionsView.setVisibility(View.GONE);
             showBankDealsTermsAndConditions();
         }
-        else
-        {
+        else {
             mBankDealsTermsAndConditionsView.setVisibility(View.GONE);
             showMPTermsAndConditions();
         }
     }
 
+    @Override
+    protected void onInvalidStart(String message) {
+        ErrorUtil.startErrorActivity(this, message, false);
+    }
+
     private void initializeToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.mpsdkToolbar);
         setSupportActionBar(toolbar);
+        TextView title = (TextView) findViewById(R.id.mpsdkTitle);
+
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -62,28 +51,9 @@ public class TermsAndConditionsActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
-        if(mDecorationPreference != null) {
-            if(mDecorationPreference.hasColors()) {
-                if(toolbar != null) {
-                    decorateToolbar(toolbar);
-                }
-            }
-            if(mDecorationPreference.isDarkFontEnabled()) {
-                TextView title = (TextView) findViewById(R.id.mpsdkTitle);
-                title.setTextColor(mDecorationPreference.getDarkFontColor(this));
-            }
-        }
-    }
 
-    private void decorateToolbar(Toolbar toolbar) {
-        if(mDecorationPreference.isDarkFontEnabled()) {
-            Drawable upArrow = toolbar.getNavigationIcon();
-            if(upArrow != null) {
-                upArrow.setColorFilter(mDecorationPreference.getDarkFontColor(this), PorterDuff.Mode.SRC_ATOP);
-            }
-            getSupportActionBar().setHomeAsUpIndicator(upArrow);
-        }
-        toolbar.setBackgroundColor(mDecorationPreference.getLighterColor());
+        decorate(toolbar);
+        decorate(title);
     }
 
     private void showMPTermsAndConditions() {
@@ -118,18 +88,28 @@ public class TermsAndConditionsActivity extends AppCompatActivity {
         termsAndConditions.setText(getIntent().getStringExtra("termsAndConditions"));
     }
 
-    private void initializeControls() {
+    @Override
+    protected void initializeControls() {
         mBankDealsTermsAndConditionsView = findViewById(R.id.mpsdkBankDealsTermsAndConditions);
         mProgressbar = (ProgressBar) findViewById(R.id.mpsdkProgressBar);
         mMPTermsAndConditionsView = findViewById(R.id.mpsdkMPTermsAndConditions);
         mTermsAndConditionsWebView = (WebView) findViewById(R.id.mpsdkTermsAndConditionsWebView);
         mTermsAndConditionsWebView.setVerticalScrollBarEnabled(true);
         mTermsAndConditionsWebView.setHorizontalScrollBarEnabled(true);
+        initializeToolbar();
     }
 
+    @Override
+    protected void validateActivityParameters() throws IllegalStateException {
+        if(getIntent().getStringExtra("termsAndConditions") == null
+                && getIntent().getStringExtra("siteId") == null) {
+            throw new IllegalStateException("bank deal terms or site id required");
+        }
+    }
+
+    @Override
     protected void setContentView() {
         MPTracker.getInstance().trackScreen("TERMS_AND_CONDITIONS", "2", "publicKey", "MLA", "1.0", this);
-
         setContentView(R.layout.mpsdk_activity_terms_and_conditions);
     }
 }

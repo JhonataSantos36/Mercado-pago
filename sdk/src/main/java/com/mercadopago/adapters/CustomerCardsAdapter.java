@@ -57,8 +57,7 @@ public class CustomerCardsAdapter extends  RecyclerView.Adapter<CustomerCardsAda
     }
 
     @Override
-    public int getItemViewType(int position)
-    {
+    public int getItemViewType(int position) {
         return position;
     }
 

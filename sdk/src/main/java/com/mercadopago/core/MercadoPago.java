@@ -263,7 +263,7 @@ public class MercadoPago {
     private static void startBankDealsActivity(Activity activity, String publicKey, DecorationPreference decorationPreference) {
 
         Intent bankDealsIntent = new Intent(activity, BankDealsActivity.class);
-        bankDealsIntent.putExtra("publicKey", publicKey);
+        bankDealsIntent.putExtra("merchantPublicKey", publicKey);
         bankDealsIntent.putExtra("decorationPreference", JsonUtil.getInstance().toJson(decorationPreference));
         activity.startActivityForResult(bankDealsIntent, BANK_DEALS_REQUEST_CODE);
     }

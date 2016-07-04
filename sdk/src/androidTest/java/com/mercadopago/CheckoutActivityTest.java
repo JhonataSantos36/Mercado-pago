@@ -76,8 +76,8 @@ public class CheckoutActivityTest {
         CheckoutActivity activity = mTestRule.launchActivity(validStartIntent);
         assertTrue(activity.mCheckoutPreference != null
                 && activity.mCheckoutPreferenceId.equals(PREF_ID)
-                && activity.mMerchantPublicKey != null
-                && activity.mMerchantPublicKey.equals("1234"));
+                && activity.getMerchantPublicKey() != null
+                && activity.getMerchantPublicKey().equals("1234"));
     }
 
     @Test

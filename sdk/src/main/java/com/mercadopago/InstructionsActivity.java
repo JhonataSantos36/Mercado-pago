@@ -1,11 +1,8 @@
 package com.mercadopago;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Bundle;
 import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 import android.text.Spanned;
 import android.util.TypedValue;
@@ -34,17 +31,14 @@ import com.mercadopago.views.MPTextView;
 
 import java.util.List;
 
-public class InstructionsActivity extends AppCompatActivity {
+public class InstructionsActivity extends MercadoPagoActivity {
 
     //Values
     protected MercadoPago mMercadoPago;
-    protected FailureRecovery failureRecovery;
     protected Boolean mBackPressedOnce;
-    protected boolean mActiveActivity;
 
     //Controls
     protected LinearLayout mReferencesLayout;
-    protected Activity mActivity;
     protected MPTextView mTitle;
     protected MPTextView mPrimaryInfo;
     protected MPTextView mSecondaryInfo;
@@ -55,23 +49,26 @@ public class InstructionsActivity extends AppCompatActivity {
 
     //Params
     protected Payment mPayment;
-    protected String mMerchantPublicKey;
     protected PaymentMethod mPaymentMethod;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.mpsdk_activity_instructions);
-        getActivityParameters();
-        initializeControls();
+    protected void onInvalidStart(String message) {
+        ErrorUtil.startErrorActivity(this, message, false);
+    }
+
+    @Override
+    protected void onValidStart() {
         mBackPressedOnce = false;
-        mActivity = this;
-        mActiveActivity = true;
         mMercadoPago = new MercadoPago.Builder()
                 .setContext(this)
-                .setPublicKey(mMerchantPublicKey)
+                .setPublicKey(getMerchantPublicKey())
                 .build();
         getInstructionsAsync();
+    }
+
+    @Override
+    protected void setContentView() {
+        setContentView(R.layout.mpsdk_activity_instructions);
     }
 
     protected void getInstructionsAsync() {
@@ -80,29 +77,29 @@ public class InstructionsActivity extends AppCompatActivity {
         mMercadoPago.getInstructions(mPayment.getId(), mPaymentMethod.getPaymentTypeId(), new Callback<Instruction>() {
             @Override
             public void success(Instruction instruction) {
-                MPTracker.getInstance().trackEvent( "INSTRUCTIONS", "GET_INSTRUCTION_RESPONSE", "SUCCESS", "2", mMerchantPublicKey, "MLA", "1.0", mActivity);
+                MPTracker.getInstance().trackEvent("INSTRUCTIONS", "GET_INSTRUCTION_RESPONSE", "SUCCESS", "2", getMerchantPublicKey(), "MLA", "1.0", getActivity());
                 showInstructions(instruction);
-                LayoutUtil.showRegularLayout(mActivity);
+                LayoutUtil.showRegularLayout(getActivity());
             }
 
             @Override
             public void failure(ApiException apiException) {
-                MPTracker.getInstance().trackEvent( "INSTRUCTIONS", "GET_INSTRUCTION_RESPONSE", "FAIL", "2", mMerchantPublicKey, "MLA", "1.0", mActivity);
-                if (mActiveActivity) {
-                    ApiUtil.showApiExceptionError(mActivity, apiException);
-                    failureRecovery = new FailureRecovery() {
+                MPTracker.getInstance().trackEvent("INSTRUCTIONS", "GET_INSTRUCTION_RESPONSE", "FAIL", "2", getMerchantPublicKey(), "MLA", "1.0", getActivity());
+                if (isActivityActive()) {
+                    ApiUtil.showApiExceptionError(getActivity(), apiException);
+                    setFailureRecovery(new FailureRecovery() {
                         @Override
                         public void recover() {
                             getInstructionsAsync();
                         }
-                    };
+                    });
                 }
             }
         });
     }
 
     protected void showInstructions(Instruction instruction) {
-        MPTracker.getInstance().trackScreen( "INSTRUCTIONS", "2", mMerchantPublicKey, "MLA", "1.0", this);
+        MPTracker.getInstance().trackScreen( "INSTRUCTIONS", "2", getMerchantPublicKey(), "MLA", "1.0", this);
 
         setTitle(instruction.getTitle());
         setInformationMessages(instruction);
@@ -199,12 +196,27 @@ public class InstructionsActivity extends AppCompatActivity {
         return stringBuilder.toString();
     }
 
+    @Override
     protected void getActivityParameters() {
+        super.getActivityParameters();
         mPayment = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("payment"), Payment.class);
-        mMerchantPublicKey = this.getIntent().getStringExtra("merchantPublicKey");
         mPaymentMethod = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("paymentMethod"), PaymentMethod.class);
     }
 
+    @Override
+    protected void validateActivityParameters() throws IllegalStateException {
+        if(getMerchantPublicKey() == null) {
+            throw new IllegalStateException("merchant public key not set");
+        }
+        if(mPayment == null) {
+            throw new IllegalStateException("payment not set");
+        }
+        if(mPaymentMethod == null) {
+            throw new IllegalStateException("payment method not set");
+        }
+    }
+
+    @Override
     protected void initializeControls() {
         mReferencesLayout = (LinearLayout) findViewById(R.id.mpsdkReferencesLayout);
         mTitle = (MPTextView) findViewById(R.id.mpsdkTitle);
@@ -240,43 +252,13 @@ public class InstructionsActivity extends AppCompatActivity {
         overridePendingTransition(R.anim.mpsdk_slide_right_to_left_in, R.anim.mpsdk_slide_right_to_left_out);
     }
 
-    private void recoverFromFailure() {
-        if(failureRecovery != null) {
-            failureRecovery.recover();
-        }
-    }
-
-    @Override
-    protected void onResume() {
-        mActiveActivity = true;
-        super.onResume();
-    }
-
-    @Override
-    protected void onDestroy() {
-        mActiveActivity = false;
-        super.onDestroy();
-    }
-
-    @Override
-    protected void onPause() {
-        mActiveActivity = false;
-        super.onPause();
-    }
-
-    @Override
-    protected void onStop() {
-        mActiveActivity = false;
-        super.onStop();
-    }
-
     @Override
     public void onBackPressed() {
         if(mBackPressedOnce) {
             super.onBackPressed();
         }
         else {
-            MPTracker.getInstance().trackEvent("INSTRUCTION", "BACK_PRESSED", "2", mMerchantPublicKey, "MLA", "1.0", this);
+            MPTracker.getInstance().trackEvent("INSTRUCTION", "BACK_PRESSED", "2", getMerchantPublicKey(), "MLA", "1.0", this);
             Snackbar.make(mTertiaryInfo, getString(R.string.mpsdk_press_again_to_leave), Snackbar.LENGTH_LONG).show();
             mBackPressedOnce = true;
             resetBackPressedOnceIn(4000);

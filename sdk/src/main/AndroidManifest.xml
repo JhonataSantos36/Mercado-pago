@@ -39,44 +39,42 @@
         <activity
             android:name=".CheckoutActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.ProcessMercadoPagoTheme.NoActionbar"/>
-
+            android:theme="@style/Theme.ProcessMercadoPagoTheme.NoActionbar" />
         <activity
             android:name=".GuessingCardActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize"
-            android:theme="@style/Theme.ProcessMercadoPagoTheme.NoActionbar"/>
-
+            android:theme="@style/Theme.ProcessMercadoPagoTheme.NoActionbar"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".PaymentVaultActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.ProcessMercadoPagoTheme.NoActionbar"/>
-
+            android:theme="@style/Theme.ProcessMercadoPagoTheme.NoActionbar" />
         <activity
             android:name=".InstructionsActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.InfoMercadoPagoTheme.NoActionbar"/>
-
+            android:theme="@style/Theme.InfoMercadoPagoTheme.NoActionbar" />
         <activity
             android:name=".CongratsActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.MercadoPagoTheme.NoActionBar"/>
-
-        <activity android:name=".InstallmentsActivity"
+            android:theme="@style/Theme.MercadoPagoTheme.NoActionBar" />
+        <activity
+            android:name=".InstallmentsActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.ProcessMercadoPagoTheme.NoActionbar"/>
-
-        <activity android:name=".IssuersActivity"
+            android:theme="@style/Theme.ProcessMercadoPagoTheme.NoActionbar" />
+        <activity
+            android:name=".IssuersActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.ProcessMercadoPagoTheme.NoActionbar"/>
-
-        <activity android:name=".CardVaultActivity"
+            android:theme="@style/Theme.ProcessMercadoPagoTheme.NoActionbar" />
+        <activity
+            android:name=".CardVaultActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.ProcessMercadoPagoTheme.NoActionbar"/>
-
-        <activity android:name=".ErrorActivity"
+            android:theme="@style/Theme.ProcessMercadoPagoTheme.NoActionbar" />
+        <activity
+            android:name=".ErrorActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.MercadoPagoTheme.NoActionBar" />
+        <activity android:name=".MercadoPagoActivity"></activity>
     </application>
+
 </manifest>

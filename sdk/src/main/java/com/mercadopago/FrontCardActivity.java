@@ -17,7 +17,6 @@ public abstract class FrontCardActivity extends AppCompatActivity implements Car
     protected String mSecurityCode = "";
     protected PaymentMethod mCurrentPaymentMethod;
 
-
     public String getCardNumber() {
         return mCardNumber;
     }
