@@ -73,7 +73,7 @@ public class InstructionsActivityTest {
         Instruction instructionWithoutActions = StaticMock.getInstructionWithoutActions();
         mTestRule.addApiResponseToQueue(instructionWithoutActions, 200, "");
         InstructionsActivity activity = mTestRule.launchActivity(validStartIntent);
-        assertEquals(activity.mMerchantPublicKey, mMerchantPublicKey);
+        assertEquals(activity.getMerchantPublicKey(), mMerchantPublicKey);
         assertEquals(activity.mPayment.getId(), mPayment.getId());
         assertEquals(activity.mPaymentMethod.getId(), mPaymentMethod.getId());
     }
