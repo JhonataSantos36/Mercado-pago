@@ -19,7 +19,6 @@ import com.mercadopago.util.JsonUtil;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
