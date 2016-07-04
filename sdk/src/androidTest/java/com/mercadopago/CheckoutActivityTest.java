@@ -153,8 +153,6 @@ public class CheckoutActivityTest {
         //Validations
         String comment = paymentMethodSearch.getSearchItemByPaymentMethod(paymentMethod).getComment();
 
-        onView(withId(R.id.contentLayout))
-                .check(matches(isDisplayed()));
         onView(withId(R.id.mpsdkComment))
                 .check(matches(withText(comment)));
 
@@ -185,6 +183,11 @@ public class CheckoutActivityTest {
         mTestRule.addApiResponseToQueue(paymentMethodSearchJson, 200, "");
 
         mTestRule.launchActivity(validStartIntent);
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         //perform actions
         mTestRule.restartIntents();
         onView(withId(R.id.mpsdkEditHint)).perform(click());
@@ -221,12 +224,10 @@ public class CheckoutActivityTest {
         //Validations
         String comment = paymentMethodSearch.getSearchItemByPaymentMethod(paymentMethod).getComment();
 
-        onView(withId(R.id.contentLayout))
-                .check(matches(isDisplayed()));
         onView(withId(R.id.mpsdkComment))
                 .check(matches(withText(comment)));
 
-        ImageView paymentMethodImage = (ImageView) activity.findViewById(R.id.image);
+        ImageView paymentMethodImage = (ImageView) activity.findViewById(R.id.mpsdkImage);
 
         Bitmap bitmap = ((BitmapDrawable) paymentMethodImage.getDrawable()).getBitmap();
         Bitmap bitmap2 = ((BitmapDrawable) ContextCompat.getDrawable(activity, R.drawable.oxxo)).getBitmap();

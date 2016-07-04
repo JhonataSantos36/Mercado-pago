@@ -19,6 +19,7 @@ import com.mercadopago.util.JsonUtil;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -83,7 +84,7 @@ public class InstructionsActivityTest {
         Instruction instructionWithoutActions = StaticMock.getInstructionWithoutActions();
         mTestRule.addApiResponseToQueue(instructionWithoutActions, 200, "");
         mTestRule.launchActivity(validStartIntent);
-        onView(withId(R.id.title)).check(matches(withText(instructionWithoutActions.getTitle())));
+        onView(withId(R.id.mpsdkTitle)).check(matches(withText(instructionWithoutActions.getTitle())));
     }
 
     @Test
