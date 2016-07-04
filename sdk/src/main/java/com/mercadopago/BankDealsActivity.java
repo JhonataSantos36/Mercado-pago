@@ -62,16 +62,22 @@ public class BankDealsActivity extends MercadoPagoActivity {
 
     private void initializeToolbar() {
         mToolbar = (Toolbar) findViewById(R.id.mpsdkToolbar);
+        TextView title = (TextView) findViewById(R.id.mpsdkTitle);
+
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
 
-        if(isCustomColorSet()) {
-            mToolbar.setBackgroundColor(getCustomBaseColor());
-        }
-        if(mDecorationPreference.isDarkFontEnabled()) {
-            TextView title = (TextView) findViewById(R.id.mpsdkTitle);
-            title.setTextColor(getDarkFontColor());
-        }
+        decorate(mToolbar);
+        decorate(title);
     }
 
     @Override
@@ -116,5 +122,12 @@ public class BankDealsActivity extends MercadoPagoActivity {
                 }
             }
         });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == ErrorUtil.ERROR_REQUEST_CODE) {
+            finish();
+        }
     }
 }

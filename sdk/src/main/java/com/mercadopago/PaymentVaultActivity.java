@@ -179,18 +179,10 @@ public class PaymentVaultActivity extends MercadoPagoActivity {
             }
         });
 
-        if(isCustomColorSet()) {
-            toolbar.setBackgroundColor(getCustomBaseColor());
-        }
+        TextView toolbarTitle = (TextView) findViewById(R.id.mpsdkTitle);
 
-        if(isDarkFontEnabled()) {
-            int darkFont = getDarkFontColor();
-            TextView title = (TextView) findViewById(R.id.mpsdkTitle);
-            title.setTextColor(darkFont);
-            Drawable upArrow = toolbar.getNavigationIcon();
-            upArrow.setColorFilter(darkFont, PorterDuff.Mode.SRC_ATOP);
-            getSupportActionBar().setHomeAsUpIndicator(upArrow);
-        }
+        decorate(toolbar);
+        decorate(toolbarTitle);
     }
 
     protected void initializeGroupRecyclerView() {

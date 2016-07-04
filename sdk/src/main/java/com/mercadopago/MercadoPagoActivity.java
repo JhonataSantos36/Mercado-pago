@@ -1,9 +1,14 @@
 package com.mercadopago;
 
 import android.app.Activity;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.model.DecorationPreference;
@@ -133,5 +138,40 @@ public abstract class MercadoPagoActivity extends AppCompatActivity {
         return mDecorationPreference.getDarkFontColor(this);
     }
 
+    protected void decorate(Button button) {
+        if(isCustomColorSet()) {
+            button.setBackgroundColor(getCustomBaseColor());
+        }
 
+        if(isDarkFontEnabled()) {
+            button.setTextColor(getDarkFontColor());
+        }
+    }
+
+    protected void decorate(Toolbar toolbar) {
+        if(toolbar != null) {
+            if (isCustomColorSet()) {
+                toolbar.setBackgroundColor(getCustomBaseColor());
+            }
+
+            if (isDarkFontEnabled()) {
+                int darkFont = getDarkFontColor();
+                Drawable upArrow = toolbar.getNavigationIcon();
+                if (upArrow != null) {
+                    upArrow.setColorFilter(darkFont, PorterDuff.Mode.SRC_ATOP);
+                    if (getSupportActionBar() != null) {
+                        getSupportActionBar().setHomeAsUpIndicator(upArrow);
+                    }
+                }
+            }
+        }
+    }
+
+    protected void decorate(TextView textView) {
+        if(textView != null) {
+            if (isDarkFontEnabled()) {
+                textView.setTextColor(getDarkFontColor());
+            }
+        }
+    }
 }

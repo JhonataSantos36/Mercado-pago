@@ -1,7 +1,5 @@
 package com.mercadopago;
 
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.webkit.WebView;
@@ -42,6 +40,8 @@ public class TermsAndConditionsActivity extends MercadoPagoActivity {
     private void initializeToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.mpsdkToolbar);
         setSupportActionBar(toolbar);
+        TextView title = (TextView) findViewById(R.id.mpsdkTitle);
+
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -52,26 +52,8 @@ public class TermsAndConditionsActivity extends MercadoPagoActivity {
             }
         });
 
-        if(isCustomColorSet()) {
-            if(toolbar != null) {
-                decorateToolbar(toolbar);
-            }
-        }
-        if(isDarkFontEnabled()) {
-            TextView title = (TextView) findViewById(R.id.mpsdkTitle);
-            title.setTextColor(getDarkFontColor());
-        }
-    }
-
-    private void decorateToolbar(Toolbar toolbar) {
-        if(isDarkFontEnabled()) {
-            Drawable upArrow = toolbar.getNavigationIcon();
-            if(upArrow != null) {
-                upArrow.setColorFilter(getDarkFontColor(), PorterDuff.Mode.SRC_ATOP);
-            }
-            getSupportActionBar().setHomeAsUpIndicator(upArrow);
-        }
-        toolbar.setBackgroundColor(getCustomBaseColor());
+        decorate(toolbar);
+        decorate(title);
     }
 
     private void showMPTermsAndConditions() {

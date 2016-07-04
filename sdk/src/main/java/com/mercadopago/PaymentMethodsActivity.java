@@ -77,17 +77,10 @@ public class PaymentMethodsActivity extends MercadoPagoActivity {
             });
         }
 
-        if(isCustomColorSet()) {
-            mToolbar.setBackgroundColor(getCustomBaseColor());
-        }
-        if(isDarkFontEnabled()) {
-            mTitle.setTextColor(getDarkFontColor());
-            Drawable upArrow = mToolbar.getNavigationIcon();
-            upArrow.setColorFilter(getDarkFontColor(), PorterDuff.Mode.SRC_ATOP);
-            getSupportActionBar().setHomeAsUpIndicator(upArrow);
-            if(mShowBankDeals) {
-                mBankDealsTextView.setTextColor(getDarkFontColor());
-            }
+        decorate(mToolbar);
+        decorate(mTitle);
+        if(mShowBankDeals) {
+            decorate(mBankDealsTextView);
         }
     }
 

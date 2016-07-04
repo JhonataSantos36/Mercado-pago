@@ -124,13 +124,7 @@ public class CheckoutActivity extends MercadoPagoActivity {
                 createPayment();
             }
         });
-
-        if(isCustomColorSet()) {
-            mPayButton.setBackgroundColor(getCustomBaseColor());
-        }
-        if(isDarkFontEnabled()) {
-            mPayButton.setTextColor(getDarkFontColor());
-        }
+        decorate(mPayButton);
 
         mTotalAmountTextView = (MPTextView) findViewById(R.id.mpsdkTotalAmountText);
         mPaymentMethodLayout = (RelativeLayout) findViewById(R.id.mpsdkPaymentMethodLayout);
