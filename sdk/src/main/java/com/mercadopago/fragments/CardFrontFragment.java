@@ -398,11 +398,11 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             mCardLowApiImageView.setVisibility(View.GONE);
             mCardLollipopImageView.setVisibility(View.VISIBLE);
-            MPAnimationUtils.setCardColorLollipop(mCardLollipopImageView, getContext(), color);
+            MPAnimationUtils.setImageViewColorLollipop(mCardLollipopImageView, getContext(), color);
         } else {
             mCardLollipopImageView.setVisibility(View.GONE);
             mCardLowApiImageView.setVisibility(View.VISIBLE);
-            MPAnimationUtils.setCardColor(mCardLowApiImageView, getContext(), color);
+            MPAnimationUtils.setImageViewColor(mCardLowApiImageView, getContext(), color);
         }
     }
 

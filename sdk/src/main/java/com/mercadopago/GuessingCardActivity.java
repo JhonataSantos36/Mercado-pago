@@ -7,7 +7,6 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
@@ -1639,21 +1638,15 @@ public class GuessingCardActivity extends FrontCardActivity {
     }
 
     public void startIssuersActivity(final List<Issuer> issuers) {
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable(){
-            @Override
-            public void run(){
-                new MercadoPago.StartActivityBuilder()
-                        .setActivity(mActivity)
-                        .setPublicKey(mPublicKey)
-                        .setPaymentMethod(mCurrentPaymentMethod)
-                        .setToken(mToken)
-                        .setIssuers(issuers)
-                        .setDecorationPreference(mDecorationPreference)
-                        .startIssuersActivity();
-                overridePendingTransition(R.anim.mpsdk_slide_right_to_left_in, R.anim.mpsdk_slide_right_to_left_out);
-            }
-        }, 3000);
+        new MercadoPago.StartActivityBuilder()
+            .setActivity(mActivity)
+            .setPublicKey(mPublicKey)
+            .setPaymentMethod(mCurrentPaymentMethod)
+            .setToken(mToken)
+            .setIssuers(issuers)
+            .setDecorationPreference(mDecorationPreference)
+            .startIssuersActivity();
+        overridePendingTransition(R.anim.mpsdk_slide_right_to_left_in, R.anim.mpsdk_slide_right_to_left_out);
     }
 
     @Override

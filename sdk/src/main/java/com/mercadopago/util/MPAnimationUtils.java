@@ -126,12 +126,12 @@ public class MPAnimationUtils {
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public static void setCardColorLollipop(ImageView imageView, Context context, int color) {
+    public static void setImageViewColorLollipop(ImageView imageView, Context context, int color) {
         imageView.setColorFilter(ContextCompat.getColor(context, color),
                 PorterDuff.Mode.SRC_ATOP);
     }
 
-    public static void setCardColor(ImageView imageView, Context context, int color) {
+    public static void setImageViewColor(ImageView imageView, Context context, int color) {
         imageView.setBackgroundColor(ContextCompat.getColor(context, color));
     }
 

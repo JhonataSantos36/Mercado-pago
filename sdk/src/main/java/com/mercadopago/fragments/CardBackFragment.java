@@ -95,7 +95,7 @@ public class CardBackFragment extends android.support.v4.app.Fragment {
     private void populateCardColor() {
         PaymentMethod paymentMethod = mActivity.getCurrentPaymentMethod();
         if (paymentMethod != null) {
-            MPAnimationUtils.setCardColor(mCardImageView, getContext(), mActivity.getCardColor(paymentMethod));
+            MPAnimationUtils.setImageViewColor(mCardImageView, getContext(), mActivity.getCardColor(paymentMethod));
         }
     }
 

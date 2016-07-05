@@ -3,7 +3,6 @@ package com.mercadopago;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.View;
 
 import com.google.gson.reflect.TypeToken;
@@ -251,25 +250,19 @@ public class CardVaultActivity extends ShowCardActivity {
     }
 
     public void startInstallmentsActivity(final List<PayerCost> payerCosts) {
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable(){
-            @Override
-            public void run(){
-                new MercadoPago.StartActivityBuilder()
-                        .setActivity(mActivity)
-                        .setPublicKey(mPublicKey)
-                        .setPaymentMethod(mCurrentPaymentMethod)
-                        .setAmount(mAmount)
-                        .setToken(mToken)
-                        .setPayerCosts(payerCosts)
-                        .setIssuer(mSelectedIssuer)
-                        .setPaymentPreference(mPaymentPreference)
-                        .setSite(mSite)
-                        .setDecorationPreference(mDecorationPreference)
-                        .startInstallmentsActivity();
-                overridePendingTransition(R.anim.mpsdk_hold, R.anim.mpsdk_hold);
-            }
-        }, 3000);
+        new MercadoPago.StartActivityBuilder()
+            .setActivity(mActivity)
+            .setPublicKey(mPublicKey)
+            .setPaymentMethod(mCurrentPaymentMethod)
+            .setAmount(mAmount)
+            .setToken(mToken)
+            .setPayerCosts(payerCosts)
+            .setIssuer(mSelectedIssuer)
+            .setPaymentPreference(mPaymentPreference)
+            .setSite(mSite)
+            .setDecorationPreference(mDecorationPreference)
+            .startInstallmentsActivity();
+        overridePendingTransition(R.anim.mpsdk_hold, R.anim.mpsdk_hold);
     }
 
     @Override
