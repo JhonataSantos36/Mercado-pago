@@ -74,7 +74,11 @@
             android:name=".ErrorActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.MercadoPagoTheme.NoActionBar" />
-        <activity android:name=".MercadoPagoActivity"></activity>
+        <activity android:name=".MercadoPagoActivity" />
+        <activity android:name=".CallForAuthorizeActivity" />
+        <activity android:name=".RejectionActivity" />
+        <activity android:name=".PendingActivity" />
+        <activity android:name=".ResultActivity"></activity>
     </application>
 
 </manifest>
