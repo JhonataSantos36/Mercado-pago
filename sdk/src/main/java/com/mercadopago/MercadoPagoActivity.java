@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.annotation.CallSuper;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.Button;
@@ -12,25 +11,19 @@ import android.widget.TextView;
 
 import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.model.DecorationPreference;
-import com.mercadopago.model.PaymentPreference;
 import com.mercadopago.util.JsonUtil;
 
 public abstract class MercadoPagoActivity extends AppCompatActivity {
 
     private boolean mActivityActive;
-    private String mMerchantPublicKey;
-    protected String mMerchantBaseUrl;
-    protected String mMerchantGetCustomerUri;
-    protected String mMerchantCreatePaymentUri;
-    protected String mMerchantAccessToken;
     protected DecorationPreference mDecorationPreference;
-    protected PaymentPreference mPaymentPreference;
     private FailureRecovery mFailureRecovery;
     private Activity mActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getDecorationPreference();
         getActivityParameters();
         if(mDecorationPreference != null && mDecorationPreference.hasColors()) {
             setTheme(R.style.Theme_MercadoPagoTheme_NoActionBar);
@@ -55,34 +48,23 @@ public abstract class MercadoPagoActivity extends AppCompatActivity {
        return mActivity;
     }
 
-    protected String getMerchantPublicKey() {
-        return mMerchantPublicKey;
-    }
+    protected abstract void getActivityParameters();
 
-    protected abstract void onValidStart();
-
-    protected abstract void onInvalidStart(String message);
+    protected abstract void validateActivityParameters() throws IllegalStateException;
 
     protected abstract void setContentView();
 
     protected abstract void initializeControls();
 
-    @CallSuper
-    protected void getActivityParameters() {
-        if(getIntent().getStringExtra("paymentPreference") != null) {
-            mPaymentPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("paymentPreference"), PaymentPreference.class);
-        }
+    protected abstract void onValidStart();
+
+    protected abstract void onInvalidStart(String message);
+
+    private void getDecorationPreference() {
         if(getIntent().getStringExtra("decorationPreference") != null) {
             mDecorationPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("decorationPreference"), DecorationPreference.class);
         }
-        mMerchantPublicKey = getIntent().getStringExtra("merchantPublicKey");
-        mMerchantBaseUrl = getIntent().getStringExtra("merchantBaseUrl");
-        mMerchantGetCustomerUri = getIntent().getStringExtra("getCustomerUri");
-        mMerchantCreatePaymentUri = getIntent().getStringExtra("createPaymentUri");
-        mMerchantAccessToken = getIntent().getStringExtra("merchantAccessToken");
-    };
-
-    protected abstract void validateActivityParameters() throws IllegalStateException;
+    }
 
     @Override
     protected void onResume() {

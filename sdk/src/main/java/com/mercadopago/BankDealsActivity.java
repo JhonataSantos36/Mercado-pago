@@ -24,6 +24,9 @@ import java.util.List;
 
 public class BankDealsActivity extends MercadoPagoActivity {
 
+    //Activity parameters
+    protected String mMerchantPublicKey;
+
     // Local vars
     protected MercadoPago mMercadoPago;
     protected RecyclerView mRecyclerView;
@@ -35,7 +38,7 @@ public class BankDealsActivity extends MercadoPagoActivity {
 
         mMercadoPago = new MercadoPago.Builder()
                 .setContext(getActivity())
-                .setPublicKey(getMerchantPublicKey())
+                .setPublicKey(mMerchantPublicKey)
                 .build();
 
         getBankDeals();
@@ -60,6 +63,11 @@ public class BankDealsActivity extends MercadoPagoActivity {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
+    @Override
+    protected void getActivityParameters() {
+        mMerchantPublicKey = getIntent().getStringExtra("merchantPublicKey");
+    }
+
     private void initializeToolbar() {
         mToolbar = (Toolbar) findViewById(R.id.mpsdkToolbar);
         TextView title = (TextView) findViewById(R.id.mpsdkTitle);
@@ -82,7 +90,7 @@ public class BankDealsActivity extends MercadoPagoActivity {
 
     @Override
     protected void validateActivityParameters() throws IllegalStateException {
-        if(getMerchantPublicKey() == null) {
+        if(mMerchantPublicKey == null) {
             throw new IllegalStateException("public key not set");
         }
     }
@@ -96,8 +104,8 @@ public class BankDealsActivity extends MercadoPagoActivity {
         mMercadoPago.getBankDeals(new Callback<List<BankDeal>>() {
             @Override
             public void success(List<BankDeal> bankDeals) {
-                MPTracker.getInstance().trackScreen("BANK_DEALS", "2", getMerchantPublicKey(), "MLA", "1.0", getActivity());
-                MPTracker.getInstance().trackEvent("BANK_DEALS", "GET_BANK_DEALS_RESPONSE", "SUCCESS", "2", mMerchantAccessToken, "MLA", "1.0", getActivity());
+                MPTracker.getInstance().trackScreen("BANK_DEALS", "2", mMerchantPublicKey, "MLA", "1.0", getActivity());
+                MPTracker.getInstance().trackEvent("BANK_DEALS", "GET_BANK_DEALS_RESPONSE", "SUCCESS", "2", mMerchantPublicKey, "MLA", "1.0", getActivity());
                 if (isActivityActive()) {
                     mRecyclerView.setAdapter(new BankDealsAdapter(getActivity(), bankDeals, new View.OnClickListener() {
                         @Override
@@ -116,7 +124,7 @@ public class BankDealsActivity extends MercadoPagoActivity {
 
             @Override
             public void failure(ApiException apiException) {
-                MPTracker.getInstance().trackEvent("BANK_DEALS", "GET_BANK_DEALS_RESPONSE", "FAIL", "2", getMerchantPublicKey(), "MLA", "1.0", getActivity());
+                MPTracker.getInstance().trackEvent("BANK_DEALS", "GET_BANK_DEALS_RESPONSE", "FAIL", "2", mMerchantPublicKey, "MLA", "1.0", getActivity());
                 if (isActivityActive()) {
                     ApiUtil.finishWithApiException(getActivity(), apiException);
                 }

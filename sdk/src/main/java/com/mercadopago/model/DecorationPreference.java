@@ -11,11 +11,13 @@ import com.mercadopago.util.ColorsUtil;
  */
 public class DecorationPreference {
 
+    private Integer lighterColor;
     private Integer baseColor;
     private boolean darkFontEnabled;
 
     public void setBaseColor(int color) {
         this.baseColor = color;
+        this.lighterColor = ColorsUtil.lighter(baseColor);
     }
 
     public boolean hasColors() {
@@ -35,7 +37,7 @@ public class DecorationPreference {
     }
 
     public int getLighterColor() {
-        return ColorsUtil.lighter(baseColor);
+        return lighterColor;
     }
 
     public int getDarkFontColor(Context context) {

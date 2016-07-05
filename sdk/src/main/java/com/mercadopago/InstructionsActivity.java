@@ -50,6 +50,51 @@ public class InstructionsActivity extends MercadoPagoActivity {
     //Params
     protected Payment mPayment;
     protected PaymentMethod mPaymentMethod;
+    protected String mMerchantPublicKey;
+
+    @Override
+    protected void getActivityParameters() {
+        mMerchantPublicKey = getIntent().getStringExtra("merchantPublicKey");
+        mPayment = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("payment"), Payment.class);
+        mPaymentMethod = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("paymentMethod"), PaymentMethod.class);
+    }
+
+    @Override
+    protected void validateActivityParameters() throws IllegalStateException {
+        if(mMerchantPublicKey == null) {
+            throw new IllegalStateException("merchant public key not set");
+        }
+        if(mPayment == null) {
+            throw new IllegalStateException("payment not set");
+        }
+        if(mPaymentMethod == null) {
+            throw new IllegalStateException("payment method not set");
+        }
+    }
+
+    @Override
+    protected void setContentView() {
+        setContentView(R.layout.mpsdk_activity_instructions);
+    }
+
+    @Override
+    protected void initializeControls() {
+        mReferencesLayout = (LinearLayout) findViewById(R.id.mpsdkReferencesLayout);
+        mTitle = (MPTextView) findViewById(R.id.mpsdkTitle);
+        mPrimaryInfo = (MPTextView) findViewById(R.id.mpsdkPrimaryInfo);
+        mSecondaryInfo = (MPTextView) findViewById(R.id.mpsdkSecondaryInfo);
+        mTertiaryInfo = (MPTextView) findViewById(R.id.mpsdkTertiaryInfo);
+        mAccreditationMessage = (MPTextView) findViewById(R.id.mpsdkAccreditationMessage);
+        mActionButton = (MPButton) findViewById(R.id.mpsdkActionButton);
+        mExitTextView = (MPTextView) findViewById(R.id.mpsdkExitTextView);
+        mExitTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+                animateOut();
+            }
+        });
+    }
 
     @Override
     protected void onInvalidStart(String message) {
@@ -61,14 +106,9 @@ public class InstructionsActivity extends MercadoPagoActivity {
         mBackPressedOnce = false;
         mMercadoPago = new MercadoPago.Builder()
                 .setContext(this)
-                .setPublicKey(getMerchantPublicKey())
+                .setPublicKey(mMerchantPublicKey)
                 .build();
         getInstructionsAsync();
-    }
-
-    @Override
-    protected void setContentView() {
-        setContentView(R.layout.mpsdk_activity_instructions);
     }
 
     protected void getInstructionsAsync() {
@@ -77,14 +117,14 @@ public class InstructionsActivity extends MercadoPagoActivity {
         mMercadoPago.getInstructions(mPayment.getId(), mPaymentMethod.getPaymentTypeId(), new Callback<Instruction>() {
             @Override
             public void success(Instruction instruction) {
-                MPTracker.getInstance().trackEvent("INSTRUCTIONS", "GET_INSTRUCTION_RESPONSE", "SUCCESS", "2", getMerchantPublicKey(), "MLA", "1.0", getActivity());
+                MPTracker.getInstance().trackEvent("INSTRUCTIONS", "GET_INSTRUCTION_RESPONSE", "SUCCESS", "2", mMerchantPublicKey, "MLA", "1.0", getActivity());
                 showInstructions(instruction);
                 LayoutUtil.showRegularLayout(getActivity());
             }
 
             @Override
             public void failure(ApiException apiException) {
-                MPTracker.getInstance().trackEvent("INSTRUCTIONS", "GET_INSTRUCTION_RESPONSE", "FAIL", "2", getMerchantPublicKey(), "MLA", "1.0", getActivity());
+                MPTracker.getInstance().trackEvent("INSTRUCTIONS", "GET_INSTRUCTION_RESPONSE", "FAIL", "2", mMerchantPublicKey, "MLA", "1.0", getActivity());
                 if (isActivityActive()) {
                     ApiUtil.showApiExceptionError(getActivity(), apiException);
                     setFailureRecovery(new FailureRecovery() {
@@ -99,7 +139,7 @@ public class InstructionsActivity extends MercadoPagoActivity {
     }
 
     protected void showInstructions(Instruction instruction) {
-        MPTracker.getInstance().trackScreen( "INSTRUCTIONS", "2", getMerchantPublicKey(), "MLA", "1.0", this);
+        MPTracker.getInstance().trackScreen( "INSTRUCTIONS", "2", mMerchantPublicKey, "MLA", "1.0", this);
 
         setTitle(instruction.getTitle());
         setInformationMessages(instruction);
@@ -197,45 +237,6 @@ public class InstructionsActivity extends MercadoPagoActivity {
     }
 
     @Override
-    protected void getActivityParameters() {
-        super.getActivityParameters();
-        mPayment = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("payment"), Payment.class);
-        mPaymentMethod = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("paymentMethod"), PaymentMethod.class);
-    }
-
-    @Override
-    protected void validateActivityParameters() throws IllegalStateException {
-        if(getMerchantPublicKey() == null) {
-            throw new IllegalStateException("merchant public key not set");
-        }
-        if(mPayment == null) {
-            throw new IllegalStateException("payment not set");
-        }
-        if(mPaymentMethod == null) {
-            throw new IllegalStateException("payment method not set");
-        }
-    }
-
-    @Override
-    protected void initializeControls() {
-        mReferencesLayout = (LinearLayout) findViewById(R.id.mpsdkReferencesLayout);
-        mTitle = (MPTextView) findViewById(R.id.mpsdkTitle);
-        mPrimaryInfo = (MPTextView) findViewById(R.id.mpsdkPrimaryInfo);
-        mSecondaryInfo = (MPTextView) findViewById(R.id.mpsdkSecondaryInfo);
-        mTertiaryInfo = (MPTextView) findViewById(R.id.mpsdkTertiaryInfo);
-        mAccreditationMessage = (MPTextView) findViewById(R.id.mpsdkAccreditationMessage);
-        mActionButton = (MPButton) findViewById(R.id.mpsdkActionButton);
-        mExitTextView = (MPTextView) findViewById(R.id.mpsdkExitTextView);
-        mExitTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-                animateOut();
-            }
-        });
-    }
-
-    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == ErrorUtil.ERROR_REQUEST_CODE) {
             if(resultCode == RESULT_OK) {
@@ -258,7 +259,7 @@ public class InstructionsActivity extends MercadoPagoActivity {
             super.onBackPressed();
         }
         else {
-            MPTracker.getInstance().trackEvent("INSTRUCTION", "BACK_PRESSED", "2", getMerchantPublicKey(), "MLA", "1.0", this);
+            MPTracker.getInstance().trackEvent("INSTRUCTION", "BACK_PRESSED", "2", mMerchantPublicKey, "MLA", "1.0", this);
             Snackbar.make(mTertiaryInfo, getString(R.string.mpsdk_press_again_to_leave), Snackbar.LENGTH_LONG).show();
             mBackPressedOnce = true;
             resetBackPressedOnceIn(4000);

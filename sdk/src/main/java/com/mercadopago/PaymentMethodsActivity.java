@@ -14,6 +14,7 @@ import com.mercadopago.core.MercadoPago;
 import com.mercadopago.decorations.DividerItemDecoration;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.PaymentMethod;
+import com.mercadopago.model.PaymentPreference;
 import com.mercadopago.mptracker.MPTracker;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.ErrorUtil;
@@ -32,10 +33,45 @@ public class PaymentMethodsActivity extends MercadoPagoActivity {
     private Toolbar mToolbar;
     private TextView mBankDealsTextView;
     private TextView mTitle;
+    private String mMerchantPublicKey;
+    private PaymentPreference mPaymentPreference;
+
+    @Override
+    protected void getActivityParameters() {
+        mMerchantPublicKey = this.getIntent().getStringExtra("merchantPublicKey");
+        mShowBankDeals = this.getIntent().getBooleanExtra("showBankDeals", true);
+        if(getIntent().getStringExtra("paymentPreference") != null) {
+            mPaymentPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("paymentPreference"), PaymentPreference.class);
+        }
+    }
+
+    @Override
+    protected void validateActivityParameters() throws IllegalStateException {
+        if(mMerchantPublicKey == null) {
+            throw new IllegalStateException("public key not set");
+        }
+    }
+
+    @Override
+    protected void setContentView() {
+        MPTracker.getInstance().trackScreen("PAYMENT_METHODS", "2", mMerchantPublicKey, "MLA", "1.0", this);
+        setContentView(R.layout.mpsdk_activity_payment_methods);
+    }
+
+    @Override
+    protected void initializeControls() {
+        mRecyclerView = (RecyclerView) findViewById(R.id.mpsdkPaymentMethodsList);
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
+
+        // Set a linear layout manager
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        initializeToolbar();
+    }
 
     @Override
     protected void onValidStart() {
-        mMercadoPago = createMercadoPago(getMerchantPublicKey());
+        mMercadoPago = createMercadoPago(mMerchantPublicKey);
         getPaymentMethodsAsync();
     }
 
@@ -68,7 +104,7 @@ public class PaymentMethodsActivity extends MercadoPagoActivity {
                 public void onClick(View v) {
                     new MercadoPago.StartActivityBuilder()
                             .setActivity(getActivity())
-                            .setPublicKey(getMerchantPublicKey())
+                            .setPublicKey(mMerchantPublicKey)
                             .setDecorationPreference(mDecorationPreference)
                             .startBankDealsActivity();
                 }
@@ -89,38 +125,8 @@ public class PaymentMethodsActivity extends MercadoPagoActivity {
                 .build();
     }
 
-    @Override
-    protected void getActivityParameters() {
-        super.getActivityParameters();
-        mShowBankDeals = this.getIntent().getBooleanExtra("showBankDeals", true);
-    }
-
-    @Override
-    protected void validateActivityParameters() throws IllegalStateException {
-        if(getMerchantPublicKey() == null) {
-            throw new IllegalStateException("public key not set");
-        }
-    }
-
-    @Override
-    protected void setContentView() {
-        MPTracker.getInstance().trackScreen("PAYMENT_METHODS", "2", getMerchantPublicKey(), "MLA", "1.0", this);
-        setContentView(R.layout.mpsdk_activity_payment_methods);
-    }
-
-    @Override
-    protected void initializeControls() {
-        mRecyclerView = (RecyclerView) findViewById(R.id.mpsdkPaymentMethodsList);
-        mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
-
-        // Set a linear layout manager
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        initializeToolbar();
-    }
-
     public void onBackPressed() {
-        MPTracker.getInstance().trackEvent("PAYMENT_METHODS", "BACK_PRESSED", "2", getMerchantPublicKey(), "MLA", "1.0", this);
+        MPTracker.getInstance().trackEvent("PAYMENT_METHODS", "BACK_PRESSED", "2", mMerchantPublicKey, "MLA", "1.0", this);
 
         Intent returnIntent = new Intent();
         returnIntent.putExtra("backButtonPressed", true);
@@ -139,7 +145,7 @@ public class PaymentMethodsActivity extends MercadoPagoActivity {
             @Override
             public void success(List<PaymentMethod> paymentMethods) {
                 if (isActivityActive()) {
-                    MPTracker.getInstance().trackEvent("PAYMENT_METHODS", "GET_PAYMENT_METHODS_RESPONSE", "SUCCESS", "2", getMerchantPublicKey(), "MLA", "1.0", getActivity());
+                    MPTracker.getInstance().trackEvent("PAYMENT_METHODS", "GET_PAYMENT_METHODS_RESPONSE", "SUCCESS", "2", mMerchantPublicKey, "MLA", "1.0", getActivity());
                     mRecyclerView.setAdapter(new PaymentMethodsAdapter(getActivity(), getSupportedPaymentMethods(paymentMethods), new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -157,7 +163,7 @@ public class PaymentMethodsActivity extends MercadoPagoActivity {
 
             @Override
             public void failure(ApiException apiException) {
-                MPTracker.getInstance().trackEvent("PAYMENT_METHODS", "GET_PAYMENT_METHODS_RESPONSE", "FAIL", "2", getMerchantPublicKey(), "MLA", "1.0", getActivity());
+                MPTracker.getInstance().trackEvent("PAYMENT_METHODS", "GET_PAYMENT_METHODS_RESPONSE", "FAIL", "2", mMerchantPublicKey, "MLA", "1.0", getActivity());
                 if (isActivityActive()) {
                     setFailureRecovery(new FailureRecovery() {
                         @Override
