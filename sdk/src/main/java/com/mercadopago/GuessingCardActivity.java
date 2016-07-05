@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v7.widget.Toolbar;
@@ -16,6 +17,7 @@ import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -49,6 +51,7 @@ import com.mercadopago.model.SecurityCode;
 import com.mercadopago.model.Setting;
 import com.mercadopago.model.Token;
 import com.mercadopago.mptracker.MPTracker;
+import com.mercadopago.util.MPAnimationUtils;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
@@ -93,6 +96,8 @@ public class GuessingCardActivity extends FrontCardActivity {
     private LinearLayout mCardholderNameInput;
     private LinearLayout mCardExpiryDateInput;
     private LinearLayout mCardIdNumberInput;
+    private View mFrontView;
+    private View mBackView;
 
     //Card container
     private CardFrontFragment mFrontFragment;
@@ -119,6 +124,7 @@ public class GuessingCardActivity extends FrontCardActivity {
     private int mCardNumberLength;
     private String mSecurityCodeLocation;
     private FailureRecovery mFailureRecovery;
+    private boolean mIssuerFound;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -248,6 +254,7 @@ public class GuessingCardActivity extends FrontCardActivity {
     private void initializeLayout(Bundle savedInstanceState) {
         mActivity = this;
         mActiveActivity = true;
+        mIssuerFound = true;
         mErrorState = CardInterface.NORMAL_STATE;
         mCardToken = new CardToken("", null, null, "", "", "", "");
         mIsSecurityCodeRequired = true;
@@ -266,11 +273,36 @@ public class GuessingCardActivity extends FrontCardActivity {
             mCardIdentificationFragment = new CardIdentificationFragment();
         }
         if (savedInstanceState == null) {
-            mCardSideState = CARD_SIDE_FRONT;
+            initializeFrontFragment();
+            initializeBackFragment();
+        }
+    }
+
+    private void initializeFrontFragment() {
+        mFrontView = findViewById(R.id.mpsdkActivityNewCardContainerFront);
+
+        mCardSideState = CARD_SIDE_FRONT;
+        getSupportFragmentManager()
+                .beginTransaction()
+                .add(R.id.mpsdkActivityNewCardContainerFront, mFrontFragment)
+                .commit();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR1) {
+            mFrontView.setAlpha(1.0f);
+        }
+    }
+
+    private void initializeBackFragment() {
+        mBackView = findViewById(R.id.mpsdkActivityNewCardContainerBack);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR1) {
+
             getSupportFragmentManager()
                     .beginTransaction()
-                    .add(R.id.mpsdkActivityNewCardContainer, mFrontFragment)
+                    .add(R.id.mpsdkActivityNewCardContainerBack, mBackFragment)
                     .commit();
+
+            mBackView.setAlpha(0);
         }
     }
 
@@ -661,7 +693,7 @@ public class GuessingCardActivity extends FrontCardActivity {
                     public void onPaymentMethodSet(PaymentMethod paymentMethod) {
                         if (mCurrentPaymentMethod == null) {
                             mCurrentPaymentMethod = paymentMethod;
-                            changeCardColor(getCardColor(paymentMethod));
+                            fadeInColor(getCardColor(paymentMethod));
                             changeCardImage(getCardImage(paymentMethod));
                             manageSettings();
                             manageAdditionalInfoNeeded();
@@ -676,7 +708,7 @@ public class GuessingCardActivity extends FrontCardActivity {
                         if (mCurrentPaymentMethod == null) return;
                         mCurrentPaymentMethod = null;
                         setSecurityCodeLocation(null);
-                        changeCardColor(CardInterface.NEUTRAL_CARD_COLOR);
+                        fadeOutColor();
                         clearCardImage();
                         clearSecurityCodeFront();
                     }
@@ -715,11 +747,32 @@ public class GuessingCardActivity extends FrontCardActivity {
 
     public void checkFlipCardToFront(boolean showBankDeals) {
         if (showingBack() || showingIdentification()) {
-            getSupportFragmentManager().popBackStack();
-            mCardSideState = CARD_SIDE_FRONT;
+            if (showingBack()) {
+                showFrontFragmentFromBack();
+            } else if (showingIdentification()) {
+                getSupportFragmentManager().popBackStack();
+                mCardSideState = CARD_SIDE_FRONT;
+            }
             if (showBankDeals) {
                 mToolbarButton.setVisibility(View.VISIBLE);
             }
+        }
+    }
+
+    private void showFrontFragmentFromBack() {
+        mCardSideState = CARD_SIDE_FRONT;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR1) {
+            getWindow().setFlags(
+                    WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED,
+                    WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED);
+
+            float distance = mCardBackground.getResources().getDimension(R.dimen.mpsdk_card_camera_distance);
+            float scale = getResources().getDisplayMetrics().density;
+            float cameraDistance = scale * distance;
+
+            MPAnimationUtils.flipToFront(this, cameraDistance, mFrontView, mBackView);
+        } else {
+            getSupportFragmentManager().popBackStack();
         }
     }
 
@@ -728,7 +781,7 @@ public class GuessingCardActivity extends FrontCardActivity {
             startBackFragment();
         } else if (showingIdentification()) {
             getSupportFragmentManager().popBackStack();
-            startBackFragment();
+            mCardSideState = CARD_SIDE_BACK;
             if (showBankDeals) {
                 mToolbarButton.setVisibility(View.VISIBLE);
             }
@@ -739,35 +792,60 @@ public class GuessingCardActivity extends FrontCardActivity {
         if (!mIdentificationNumberRequired) {
             return;
         }
-        if (showingFront()) {
-            startIdentificationFragment();
-        } else if (showingBack()) {
-            getSupportFragmentManager().popBackStack();
+        if (showingFront() || showingBack()) {
             startIdentificationFragment();
         }
     }
 
     private void startIdentificationFragment() {
-        mCardSideState = CARD_IDENTIFICATION;
         mToolbarButton.setVisibility(View.GONE);
+
+        int container = R.id.mpsdkActivityNewCardContainerFront;
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR1) {
+            if (showingBack()) {
+                container = R.id.mpsdkActivityNewCardContainerBack;
+            } else if (showingFront()) {
+                container = R.id.mpsdkActivityNewCardContainerFront;
+            }
+        }
+        mCardSideState = CARD_IDENTIFICATION;
+
         getSupportFragmentManager()
                 .beginTransaction()
-                .setCustomAnimations(R.anim.mpsdk_slide_right_to_left_in_slower, R.anim.mpsdk_slide_right_to_left_out_slower,
-                        R.anim.mpsdk_slide_left_to_right_in_slower, R.anim.mpsdk_slide_left_to_right_out_slower)
-                .replace(R.id.mpsdkActivityNewCardContainer, mCardIdentificationFragment)
-                .addToBackStack(null)
+                .setCustomAnimations(R.anim.mpsdk_appear_from_right, R.anim.mpsdk_dissapear_to_left,
+                        R.anim.mpsdk_appear_from_left, R.anim.mpsdk_dissapear_to_right)
+                .replace(container, mCardIdentificationFragment)
+                .addToBackStack("IDENTIFICATION_FRAGMENT")
                 .commit();
     }
 
     private void startBackFragment() {
         mCardSideState = CARD_SIDE_BACK;
-        getSupportFragmentManager()
-                .beginTransaction()
-                .setCustomAnimations(R.anim.mpsdk_from_middle_left, R.anim.mpsdk_to_middle_left,
-                        R.anim.mpsdk_from_middle_left, R.anim.mpsdk_to_middle_left)
-                .replace(R.id.mpsdkActivityNewCardContainer, mBackFragment)
-                .addToBackStack(null)
-                .commit();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR1) {
+
+            mBackFragment.populateViews();
+
+            getWindow().setFlags(
+                    WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED,
+                    WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED);
+
+            float distance = mCardBackground.getResources().getDimension(R.dimen.mpsdk_card_camera_distance);
+            float scale = getResources().getDisplayMetrics().density;
+            float cameraDistance = scale * distance;
+
+            MPAnimationUtils.flipToBack(this, cameraDistance, mFrontView, mBackView);
+
+        } else {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .setCustomAnimations(R.anim.mpsdk_from_middle_left, R.anim.mpsdk_to_middle_left,
+                            R.anim.mpsdk_from_middle_left, R.anim.mpsdk_to_middle_left)
+                    .replace(R.id.mpsdkActivityNewCardContainerFront, mBackFragment, "BACK_FRAGMENT")
+                    .addToBackStack(null)
+                    .commit();
+        }
     }
 
     public void manageSettings() {
@@ -927,9 +1005,15 @@ public class GuessingCardActivity extends FrontCardActivity {
         setCardSecurityCodeFocusListener();
     }
 
-    public void changeCardColor(int color) {
+    public void fadeInColor(int color) {
         if (!showingBack() && mFrontFragment != null) {
-            mFrontFragment.transitionColor(color);
+            mFrontFragment.fadeInColor(color);
+        }
+    }
+
+    public void fadeOutColor() {
+        if (!showingBack() && mFrontFragment != null) {
+            mFrontFragment.fadeOutColor(CardInterface.NEUTRAL_CARD_COLOR);
         }
     }
 
@@ -1373,7 +1457,6 @@ public class GuessingCardActivity extends FrontCardActivity {
     }
 
     private void createToken() {
-        checkFlipCardToFront(false);
         LayoutUtil.hideKeyboard(this);
         mInputContainer.setVisibility(View.GONE);
         mProgressBar.setVisibility(View.VISIBLE);
@@ -1522,10 +1605,10 @@ public class GuessingCardActivity extends FrontCardActivity {
                                 //error
                             } else if (issuers.size() == 1) {
                                 mSelectedIssuer = issuers.get(0);
-                                checkFlipCardToFront(false);
+                                mIssuerFound = true;
                                 finishWithResult();
                             } else {
-                                fadeInIssuersActivity(issuers);
+                                startIssuersActivity(issuers);
                             }
                         }
                     }
@@ -1546,25 +1629,24 @@ public class GuessingCardActivity extends FrontCardActivity {
                 });
     }
 
-    public void fadeInIssuersActivity(final List<Issuer> issuers) {
-        checkFlipCardToFront(false);
-        startIssuersActivity(issuers);
+    private void setIssuerDefaultAnimation() {
+        overridePendingTransition(R.anim.mpsdk_slide_right_to_left_in, R.anim.mpsdk_slide_right_to_left_out);
+    }
+
+    private void setIssuerSelectedAnimation() {
+        overridePendingTransition(R.anim.mpsdk_hold, R.anim.mpsdk_hold);
     }
 
     public void startIssuersActivity(final List<Issuer> issuers) {
-        runOnUiThread(new Runnable() {
-            public void run() {
-                new MercadoPago.StartActivityBuilder()
-                        .setActivity(mActivity)
-                        .setPublicKey(mPublicKey)
-                        .setPaymentMethod(mCurrentPaymentMethod)
-                        .setToken(mToken)
-                        .setIssuers(issuers)
-                        .setDecorationPreference(mDecorationPreference)
-                        .startIssuersActivity();
-                overridePendingTransition(R.anim.mpsdk_fade_in_seamless, R.anim.mpsdk_fade_out_seamless);
-            }
-        });
+        new MercadoPago.StartActivityBuilder()
+            .setActivity(mActivity)
+            .setPublicKey(mPublicKey)
+            .setPaymentMethod(mCurrentPaymentMethod)
+            .setToken(mToken)
+            .setIssuers(issuers)
+            .setDecorationPreference(mDecorationPreference)
+            .startIssuersActivity();
+        overridePendingTransition(R.anim.mpsdk_slide_right_to_left_in, R.anim.mpsdk_slide_right_to_left_out);
     }
 
     @Override
@@ -1575,6 +1657,7 @@ public class GuessingCardActivity extends FrontCardActivity {
                 Bundle bundle = data.getExtras();
                 mSelectedIssuer = JsonUtil.getInstance().fromJson(bundle.getString("issuer"), Issuer.class);
                 checkFlipCardToFront(false);
+                mIssuerFound = false;
                 finishWithResult();
             } else if (resultCode == RESULT_CANCELED) {
                 finish();
@@ -1598,6 +1681,11 @@ public class GuessingCardActivity extends FrontCardActivity {
         returnIntent.putExtra("issuer", JsonUtil.getInstance().toJson(mSelectedIssuer));
         setResult(RESULT_OK, returnIntent);
         finish();
+        if (mIssuerFound) {
+            setIssuerDefaultAnimation();
+        } else {
+            setIssuerSelectedAnimation();
+        }
     }
 
     private static class CardNumberTextWatcher implements TextWatcher {
