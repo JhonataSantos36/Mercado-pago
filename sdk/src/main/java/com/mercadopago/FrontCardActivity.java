@@ -1,12 +1,11 @@
 package com.mercadopago;
 
-import android.support.v7.app.AppCompatActivity;
 
 import com.mercadopago.model.PaymentMethod;
 
 import java.util.Locale;
 
-public abstract class FrontCardActivity extends AppCompatActivity implements CardInterface {
+public abstract class FrontCardActivity extends MercadoPagoActivity implements CardInterface {
 
     protected String mCardNumber;
     protected String mCardHolderName;

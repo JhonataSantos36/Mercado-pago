@@ -2,7 +2,6 @@ package com.mercadopago;
 
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -10,7 +9,6 @@ import android.widget.FrameLayout;
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.fragments.CardFrontFragment;
 import com.mercadopago.model.Cardholder;
-import com.mercadopago.model.DecorationPreference;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.Setting;
@@ -42,13 +40,6 @@ public abstract class ShowCardActivity extends FrontCardActivity {
     //Local vars
     protected Issuer mSelectedIssuer;
     protected MPTextView mToolbarTitle;
-    protected DecorationPreference mDecorationPreference;
-
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
 
     protected abstract void finishWithResult();
 
@@ -59,10 +50,6 @@ public abstract class ShowCardActivity extends FrontCardActivity {
         mToken = JsonUtil.getInstance().fromJson(
                 this.getIntent().getStringExtra("token"), Token.class);
         mSelectedIssuer = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("issuer"), Issuer.class);
-
-        if(this.getIntent().getStringExtra("decorationPreference") != null) {
-            mDecorationPreference = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("decorationPreference"), DecorationPreference.class);
-        }
 
         if(mToken != null) {
             setCardInfo();
