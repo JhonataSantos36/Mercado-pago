@@ -54,10 +54,12 @@ public class PaymentVaultActivity extends MercadoPagoActivity {
     protected PaymentMethodSearch mPaymentMethodSearch;
 
     // Activity parameters
+    protected String mMerchantPublicKey;
     protected BigDecimal mAmount;
     protected boolean mShowBankDeals;
     protected boolean mCardGuessingEnabled;
     protected PaymentMethodSearchItem mSelectedSearchItem;
+    protected PaymentPreference mPaymentPreference;
 
     @Override
     protected void setContentView() {
@@ -66,7 +68,12 @@ public class PaymentVaultActivity extends MercadoPagoActivity {
 
     @Override
     protected void getActivityParameters() {
-        super.getActivityParameters();
+        mMerchantPublicKey = getIntent().getStringExtra("merchantPublicKey");
+
+        if(getIntent().getStringExtra("paymentPreference") != null) {
+            mPaymentPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("paymentPreference"), PaymentPreference.class);
+        }
+
         if (this.getIntent().getStringExtra("selectedSearchItem") != null) {
             mSelectedSearchItem = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("selectedSearchItem"), PaymentMethodSearchItem.class);
         }
@@ -86,14 +93,6 @@ public class PaymentVaultActivity extends MercadoPagoActivity {
         if(this.getIntent().getStringExtra("paymentMethodSearch") != null) {
             mPaymentMethodSearch = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("paymentMethodSearch"), PaymentMethodSearch.class);
         }
-    }
-
-    @Override
-    protected void initializeControls() {
-        initializeGroupRecyclerView();
-        mActivityTitle = (MPTextView) findViewById(R.id.mpsdkTitle);
-        mAppBar = (AppBarLayout) findViewById(R.id.mpsdkAppBar);
-        initializeToolbar();
     }
 
     @Override
@@ -120,6 +119,14 @@ public class PaymentVaultActivity extends MercadoPagoActivity {
     }
 
     @Override
+    protected void initializeControls() {
+        initializeGroupRecyclerView();
+        mActivityTitle = (MPTextView) findViewById(R.id.mpsdkTitle);
+        mAppBar = (AppBarLayout) findViewById(R.id.mpsdkAppBar);
+        initializeToolbar();
+    }
+
+    @Override
     protected void onInvalidStart(String message) {
         ErrorUtil.startErrorActivity(this, message, false);
     }
@@ -128,12 +135,12 @@ public class PaymentVaultActivity extends MercadoPagoActivity {
     protected void onValidStart() {
 
         mMercadoPago = new MercadoPago.Builder()
-                .setPublicKey(getMerchantPublicKey())
+                .setPublicKey(mMerchantPublicKey)
                 .setContext(this)
                 .build();
 
-        MPTracker.getInstance().trackScreen("PAYMENT_METHOD_SEARCH", "2", getMerchantPublicKey(), "MLA", "1.0", this);
-        MPTracker.getInstance().trackEvent("PAYMENT_METHOD_SEARCH", "INIT_PAYMENT_VAULT", "2", getMerchantPublicKey(), mSite.getId(), "1.0", this);
+        MPTracker.getInstance().trackScreen("PAYMENT_METHOD_SEARCH", "2", mMerchantPublicKey, "MLA", "1.0", this);
+        MPTracker.getInstance().trackEvent("PAYMENT_METHOD_SEARCH", "INIT_PAYMENT_VAULT", "2", mMerchantPublicKey, mSite.getId(), "1.0", this);
 
         if (isItemSelected()) {
             showSelectedItemChildren();
@@ -147,7 +154,7 @@ public class PaymentVaultActivity extends MercadoPagoActivity {
     }
 
     private boolean isMerchantPublicKeyValid() {
-        return getMerchantPublicKey() != null;
+        return mMerchantPublicKey != null;
     }
 
     private boolean isCurrencyIdValid() {
@@ -219,7 +226,7 @@ public class PaymentVaultActivity extends MercadoPagoActivity {
 
             @Override
             public void success(PaymentMethodSearch paymentMethodSearch) {
-                MPTracker.getInstance().trackEvent("PAYMENT_METHOD_SEARCH","GET_PAYMENT_METHOD_SEARCH_RESPONSE", "SUCCESS","2", getMerchantPublicKey(), mSite.getId(), "1.0", getActivity());
+                MPTracker.getInstance().trackEvent("PAYMENT_METHOD_SEARCH","GET_PAYMENT_METHOD_SEARCH_RESPONSE", "SUCCESS","2", mMerchantPublicKey, mSite.getId(), "1.0", getActivity());
                 if(isActivityActive()) {
                     if (!paymentMethodSearch.hasSearchItems()) {
                         showEmptyPaymentMethodsError();
@@ -232,7 +239,7 @@ public class PaymentVaultActivity extends MercadoPagoActivity {
 
             @Override
             public void failure(ApiException apiException) {
-                MPTracker.getInstance().trackEvent("PAYMENT_METHOD_SEARCH","GET_PAYMENT_METHOD_SEARCH_RESPONSE", "FAIL","2", getMerchantPublicKey(), mSite.getId(), "1.0", getActivity());
+                MPTracker.getInstance().trackEvent("PAYMENT_METHOD_SEARCH","GET_PAYMENT_METHOD_SEARCH_RESPONSE", "FAIL","2", mMerchantPublicKey, mSite.getId(), "1.0", getActivity());
                 if (isActivityActive()) {
                     ApiUtil.showApiExceptionError(getActivity(), apiException);
                     setFailureRecovery(new FailureRecovery() {
@@ -322,7 +329,7 @@ public class PaymentVaultActivity extends MercadoPagoActivity {
 
         MercadoPago.StartActivityBuilder builder = new MercadoPago.StartActivityBuilder()
                 .setActivity(this)
-                .setPublicKey(getMerchantPublicKey())
+                .setPublicKey(mMerchantPublicKey)
                 .setPaymentPreference(mPaymentPreference)
                 .setDecorationPreference(mDecorationPreference);
 
@@ -388,7 +395,7 @@ public class PaymentVaultActivity extends MercadoPagoActivity {
             finish();
         }
         else if(resultCode == RESULT_CANCELED && data != null && data.hasExtra("mpException")) {
-            MPTracker.getInstance().trackEvent("PAYMENT_VAULT","CANCELED","2", getMerchantPublicKey(), mSite.getId(), "1.0",this);
+            MPTracker.getInstance().trackEvent("PAYMENT_VAULT","CANCELED","2", mMerchantPublicKey, mSite.getId(), "1.0",this);
 
             setResult(Activity.RESULT_CANCELED, data);
             this.finish();
@@ -407,7 +414,7 @@ public class PaymentVaultActivity extends MercadoPagoActivity {
                 ((data != null) && (data.getStringExtra("mpException") != null))){
 
             //TODO validate
-            MPTracker.getInstance().trackEvent("PAYMENT_VAULT","CANCELED","2", getMerchantPublicKey(), mSite.getId(), "1.0",this);
+            MPTracker.getInstance().trackEvent("PAYMENT_VAULT","CANCELED","2", mMerchantPublicKey, mSite.getId(), "1.0",this);
 
             setResult(Activity.RESULT_CANCELED, data);
             this.finish();
@@ -425,7 +432,7 @@ public class PaymentVaultActivity extends MercadoPagoActivity {
         else {
             if ((data != null) && (data.getStringExtra("apiException") != null)) {
                 //TODO validate
-                MPTracker.getInstance().trackEvent("PAYMENT_VAULT","CANCELED","2", getMerchantPublicKey(), mSite.getId(), "1.0",this);
+                MPTracker.getInstance().trackEvent("PAYMENT_VAULT","CANCELED","2", mMerchantPublicKey, mSite.getId(), "1.0",this);
 
                 setResult(Activity.RESULT_CANCELED, data);
                 this.finish();
@@ -460,7 +467,7 @@ public class PaymentVaultActivity extends MercadoPagoActivity {
 
     @Override
     public void onBackPressed() {
-        MPTracker.getInstance().trackEvent("PAYMENT_METHOD_SEARCH","BACK_PRESSED","2", getMerchantPublicKey(), mSite.getId(), "1.0",this);
+        MPTracker.getInstance().trackEvent("PAYMENT_METHOD_SEARCH","BACK_PRESSED","2", mMerchantPublicKey, mSite.getId(), "1.0",this);
 
         setResult(Activity.RESULT_CANCELED);
         finish();

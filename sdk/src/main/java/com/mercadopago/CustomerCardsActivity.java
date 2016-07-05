@@ -31,6 +31,37 @@ public class CustomerCardsActivity extends MercadoPagoActivity {
     private List<Card> mCards;
 
     @Override
+    protected void getActivityParameters() {
+        try {
+            Gson gson = new Gson();
+            Type listType = new TypeToken<List<Card>>(){}.getType();
+            mCards = gson.fromJson(this.getIntent().getStringExtra("cards"), listType);
+        } catch (Exception ex) {
+            mCards = null;
+        }
+    }
+
+    @Override
+    protected void validateActivityParameters() throws IllegalStateException {
+        if(mCards == null) {
+            throw new IllegalStateException("cards not set");
+        }
+    }
+
+    @Override
+    protected void setContentView() {
+        //TODO validate AGREGAR PUBLIC KEY
+        MPTracker.getInstance().trackScreen("CUSTOMER_CARDS", "2", "publicKey", "MLA", "1.0", this);
+        setContentView(R.layout.mpsdk_activity_customer_cards);
+    }
+
+    @Override
+    protected void initializeControls() {
+        initializeToolbar();
+        mRecyclerView = (RecyclerView) findViewById(R.id.mpsdkCustomerCardsList);
+    }
+
+    @Override
     protected void onValidStart() {
         fillData();
     }
@@ -38,12 +69,6 @@ public class CustomerCardsActivity extends MercadoPagoActivity {
     @Override
     protected void onInvalidStart(String message) {
         ErrorUtil.startErrorActivity(this, message, false);
-    }
-
-    protected void setContentView() {
-        //TODO validate AGREGAR PUBLIC KEY
-        MPTracker.getInstance().trackScreen("CUSTOMER_CARDS", "2", "publicKey", "MLA", "1.0", this);
-        setContentView(R.layout.mpsdk_activity_customer_cards);
     }
 
     private void initializeToolbar() {
@@ -70,31 +95,6 @@ public class CustomerCardsActivity extends MercadoPagoActivity {
             upArrow.setColorFilter(getDarkFontColor(), PorterDuff.Mode.SRC_ATOP);
             getSupportActionBar().setHomeAsUpIndicator(upArrow);
         }
-    }
-
-    @Override
-    protected void getActivityParameters() {
-        super.getActivityParameters();
-        try {
-            Gson gson = new Gson();
-            Type listType = new TypeToken<List<Card>>(){}.getType();
-            mCards = gson.fromJson(this.getIntent().getStringExtra("cards"), listType);
-        } catch (Exception ex) {
-            mCards = null;
-        }
-    }
-
-    @Override
-    protected void validateActivityParameters() throws IllegalStateException {
-        if(mCards == null) {
-            throw new IllegalStateException("cards not set");
-        }
-    }
-
-    @Override
-    protected void initializeControls() {
-        initializeToolbar();
-        mRecyclerView = (RecyclerView) findViewById(R.id.mpsdkCustomerCardsList);
     }
 
     private void fillData() {

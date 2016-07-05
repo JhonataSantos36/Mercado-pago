@@ -51,11 +51,11 @@ import com.mercadopago.model.SecurityCode;
 import com.mercadopago.model.Setting;
 import com.mercadopago.model.Token;
 import com.mercadopago.mptracker.MPTracker;
-import com.mercadopago.util.MPAnimationUtils;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;
+import com.mercadopago.util.MPAnimationUtils;
 import com.mercadopago.views.MPEditText;
 import com.mercadopago.views.MPTextView;
 
