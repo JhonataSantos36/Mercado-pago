@@ -314,10 +314,7 @@ public class CheckoutActivity extends MercadoPagoActivity {
         if(requestCode == MercadoPago.PAYMENT_VAULT_REQUEST_CODE) {
             resolvePaymentVaultRequest(resultCode, data);
         }
-        else if (requestCode == MercadoPago.INSTRUCTIONS_REQUEST_CODE) {
-            finishWithPaymentResult();
-        }
-        else if (requestCode == MercadoPago.CONGRATS_REQUEST_CODE) {
+        else if (requestCode == MercadoPago.RESULT_REQUEST_CODE) {
             resolveCongratsRequest(resultCode, data);
         }
         else if (requestCode == MercadoPago.INSTALLMENTS_REQUEST_CODE) {

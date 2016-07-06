@@ -316,12 +316,11 @@ public class MercadoPago {
         activity.startActivityForResult(callForAuthorizeIntent, CALL_FOR_AUTHORIZE_REQUEST_CODE);
     }
 
-    private static void startPendingActivity(Activity activity, String merchantPublicKey , Payment payment, PaymentMethod paymentMethod) {
+    private static void startPendingActivity(Activity activity, String merchantPublicKey, Payment payment) {
 
         Intent pendingIntent = new Intent(activity, PendingActivity.class);
         pendingIntent.putExtra("merchantPublicKey", merchantPublicKey);
         pendingIntent.putExtra("payment", JsonUtil.getInstance().toJson(payment));
-        pendingIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
 
         activity.startActivityForResult(pendingIntent, PENDING_REQUEST_CODE);
     }
@@ -773,12 +772,11 @@ public class MercadoPago {
 
             if (this.mActivity == null) throw new IllegalStateException("activity is null");
             if (this.mPayment == null) throw new IllegalStateException("payment is null");
-            if (this.mPaymentMethod == null) throw new IllegalStateException("payment method is null");
             if (this.mKey == null) throw new IllegalStateException("key is null");
             if (this.mKeyType == null) throw new IllegalStateException("key type is null");
 
             if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {
-                MercadoPago.startPendingActivity(this.mActivity, this.mKey, this.mPayment, this.mPaymentMethod);
+                MercadoPago.startPendingActivity(this.mActivity, this.mKey, this.mPayment);
             } else {
                 throw new RuntimeException("Unsupported key type for this method");
             }

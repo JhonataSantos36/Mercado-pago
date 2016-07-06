@@ -1,6 +1,7 @@
 package com.mercadopago;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
@@ -8,9 +9,7 @@ import com.mercadopago.core.MercadoPago;
 import com.mercadopago.model.DecorationPreference;
 import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentMethod;
-import com.mercadopago.model.PaymentPreference;
 import com.mercadopago.mptracker.MPTracker;
-import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.MercadoPagoUtil;
 
@@ -59,10 +58,13 @@ public class ResultActivity extends AppCompatActivity {
     }
 
     protected void validateActivityParameters() throws IllegalStateException {
-        if(mPayment == null) {
-            throw new IllegalStateException("payment not set");
+        if(!isStatusValid()) {
+            throw new IllegalStateException("payment status not set");
         }
-        if(mPaymentMethod == null) {
+        if(!isStatusDetailValid()) {
+            throw new IllegalStateException("payment status detail not set");
+        }
+        if (!isPaymentMethodValid()){
             throw new IllegalStateException("payment method not set");
         }
     }
@@ -78,26 +80,18 @@ public class ResultActivity extends AppCompatActivity {
     }
 
     private void startCardPaymentTypeResult(){
-        if (mPayment != null && isPaymentMethodValid() && isStatusValid()) {
-            if (mPayment.getStatus().equals(Payment.StatusCodes.STATUS_APPROVED)) {
-                startCongratsActivity();
-            } else if (mPayment.getStatus().equals(Payment.StatusCodes.STATUS_IN_PROCESS)) {
-                startPendingActivity();
-            } else if (mPayment.getStatus().equals(Payment.StatusCodes.STATUS_REJECTED)) {
-                if (isStatusDetailValid()) {
-                    if (mPayment.getStatusDetail().equals(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_CALL_FOR_AUTHORIZE)) {
-                        startCallForAuthorizeActivity();
-                    } else {
-                        startRejectionActivity();
-                    }
-                } else {
-                    showError();
-                }
+        if (mPayment.getStatus().equals(Payment.StatusCodes.STATUS_APPROVED)) {
+            startCongratsActivity();
+        } else if (mPayment.getStatus().equals(Payment.StatusCodes.STATUS_IN_PROCESS)) {
+            startPendingActivity();
+        } else if (mPayment.getStatus().equals(Payment.StatusCodes.STATUS_REJECTED)) {
+            if (mPayment.getStatusDetail().equals(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_CALL_FOR_AUTHORIZE)) {
+                startCallForAuthorizeActivity();
             } else {
-                showError();
+                startRejectionActivity();
             }
         } else {
-            showError();
+            throw new IllegalStateException("invalid status or status detail");
         }
     }
 
@@ -133,7 +127,6 @@ public class ResultActivity extends AppCompatActivity {
                 .setPublicKey(getMerchantPublicKey())
                 .setActivity(mActivity)
                 .setPayment(mPayment)
-                .setPaymentMethod(mPaymentMethod)
                 .startPendingActivity();
     }
 
@@ -146,15 +139,8 @@ public class ResultActivity extends AppCompatActivity {
                 .startRejectionActivity();
     }
 
-    //TODO lanzar exception
-    private void showError(){
-        if (mPayment==null){
-            ErrorUtil.startErrorActivity(this, getString(R.string.mpsdk_payment_error), false);
-        }
-        else {
-            ErrorUtil.startErrorActivity(this, getString(R.string.mpsdk_payment_method_error), false);
-        }
-
+    private Boolean isStatusValid(){
+        return !isEmpty(mPayment.getStatus());
     }
 
     private Boolean isStatusDetailValid(){
@@ -162,19 +148,52 @@ public class ResultActivity extends AppCompatActivity {
     }
 
     private Boolean isPaymentMethodValid(){
-        return mPaymentMethod != null && isPaymentMethodIdValid() && !isEmpty(mPaymentMethod.getName());
+        return isPaymentMethodIdValid() && !isEmpty(mPaymentMethod.getName()) && !isEmpty(mPaymentMethod.getPaymentTypeId());
     }
 
     private Boolean isPaymentMethodIdValid(){
         return !isEmpty(mPaymentMethod.getId()) && mPayment.getPaymentMethodId().equals(mPaymentMethod.getId());
     }
 
-    private Boolean isStatusValid(){
-        return !isEmpty(mPayment.getStatus());
-    }
-
     protected void onInvalidStart(String message){
-        ErrorUtil.startErrorActivity(this, message, false);
+        throw new IllegalStateException(message);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == MercadoPago.CONGRATS_REQUEST_CODE) {
+            finishWithOkResult();
+        }
+        else if (requestCode == MercadoPago.PENDING_REQUEST_CODE) {
+            finishWithOkResult();
+        }
+        else if (requestCode == MercadoPago.REJECTION_REQUEST_CODE) {
+            resolveRequest(resultCode, data);
+        }
+        else if (requestCode == MercadoPago.CALL_FOR_AUTHORIZE_REQUEST_CODE) {
+            resolveRequest(resultCode, data);
+        }
+        else if (requestCode == MercadoPago.INSTRUCTIONS_REQUEST_CODE) {
+            finishWithOkResult();
+        }
+    }
+
+    private void resolveRequest(int resultCode, Intent data){
+        if (resultCode == RESULT_CANCELED && data != null) {
+            finishWithCancelResult(data);
+        } else {
+            finishWithOkResult();
+        }
+    }
+
+    private void finishWithCancelResult(Intent data) {
+        setResult(RESULT_CANCELED, data);
+        finish();
+    }
+
+    private void finishWithOkResult() {
+        Intent paymentResultIntent = new Intent();
+        setResult(RESULT_OK, paymentResultIntent);
+        finish();
+    }
 }

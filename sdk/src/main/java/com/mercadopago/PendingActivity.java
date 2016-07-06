@@ -26,7 +26,6 @@ public class PendingActivity extends MercadoPagoActivity {
     protected void getActivityParameters() {
         super.getActivityParameters();
         mPayment = JsonUtil.getInstance().fromJson(getIntent().getExtras().getString("payment"), Payment.class);
-        mPaymentMethod = JsonUtil.getInstance().fromJson(getIntent().getExtras().getString("paymentMethod"), PaymentMethod.class);
     }
 
     @Override
@@ -45,9 +44,6 @@ public class PendingActivity extends MercadoPagoActivity {
         if(mPayment == null) {
             throw new IllegalStateException("payment not set");
         }
-        if(mPaymentMethod == null) {
-            throw new IllegalStateException("payment method not set");
-        }
     }
 
     @Override
@@ -60,12 +56,6 @@ public class PendingActivity extends MercadoPagoActivity {
                 finishWithOkResult();
             }
         });
-    }
-
-    private void finishWithOkResult() {
-        Intent returnIntent = new Intent();
-        setResult(RESULT_OK, returnIntent);
-        finish();
     }
 
     @Override
@@ -90,5 +80,11 @@ public class PendingActivity extends MercadoPagoActivity {
     @Override
     protected void onInvalidStart(String message){
         ErrorUtil.startErrorActivity(this, message, false);
+    }
+
+    private void finishWithOkResult() {
+        Intent returnIntent = new Intent();
+        setResult(RESULT_OK, returnIntent);
+        finish();
     }
 }
