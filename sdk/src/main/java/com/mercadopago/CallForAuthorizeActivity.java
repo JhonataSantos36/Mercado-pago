@@ -1,6 +1,7 @@
 package com.mercadopago;
 
 import android.content.Intent;
+import android.support.design.widget.Snackbar;
 import android.view.View;
 
 import com.mercadopago.model.Payment;
@@ -26,25 +27,21 @@ public class CallForAuthorizeActivity extends MercadoPagoActivity {
     //Params
     protected Payment mPayment;
     protected PaymentMethod mPaymentMethod;
+    protected String mMerchantPublicKey;
+
+    //Local values
+    private boolean mBackPressedOnce;
 
     @Override
     protected void getActivityParameters() {
-        super.getActivityParameters();
+        mMerchantPublicKey = getIntent().getStringExtra("merchantPublicKey");
         mPayment = JsonUtil.getInstance().fromJson(getIntent().getExtras().getString("payment"), Payment.class);
         mPaymentMethod = JsonUtil.getInstance().fromJson(getIntent().getExtras().getString("paymentMethod"), PaymentMethod.class);
     }
 
     @Override
-    protected void setContentView() {
-        MPTracker.getInstance().trackScreen("CALL_FOR_AUTHORIZE", "3", getMerchantPublicKey(), "MLA", "1.0", getActivity());
-
-        setTheme(R.style.Theme_CallForAuthorizeMercadoPagoTheme_NoActionbar);
-        setContentView(R.layout.mpsdk_activity_call_for_authorize);
-    }
-
-    @Override
     protected void validateActivityParameters() throws IllegalStateException {
-        if(getMerchantPublicKey() == null) {
+        if(mMerchantPublicKey == null) {
             throw new IllegalStateException("merchant public key not set");
         }
         if(mPayment == null) {
@@ -53,6 +50,13 @@ public class CallForAuthorizeActivity extends MercadoPagoActivity {
         if(mPaymentMethod == null) {
             throw new IllegalStateException("payment method not set");
         }
+    }
+
+    @Override
+    protected void setContentView() {
+        MPTracker.getInstance().trackScreen("CALL_FOR_AUTHORIZE", "3", mMerchantPublicKey, "MLA", "1.0", getActivity());
+
+        setContentView(R.layout.mpsdk_activity_call_for_authorize);
     }
 
     @Override
@@ -87,16 +91,21 @@ public class CallForAuthorizeActivity extends MercadoPagoActivity {
         });
     }
 
-    private void finishWithOkResult() {
-        Intent returnIntent = new Intent();
-        setResult(RESULT_OK, returnIntent);
-        finish();
-    }
-
     @Override
     protected void onValidStart(){
         setDescription();
         setAuthorized();
+    }
+
+    @Override
+    protected void onInvalidStart(String message){
+        ErrorUtil.startErrorActivity(this, message, false);
+    }
+
+    private void finishWithOkResult() {
+        Intent returnIntent = new Intent();
+        setResult(RESULT_OK, returnIntent);
+        finish();
     }
 
     private void setAuthorized(){
@@ -144,7 +153,28 @@ public class CallForAuthorizeActivity extends MercadoPagoActivity {
     }
 
     @Override
-    protected void onInvalidStart(String message){
-        ErrorUtil.startErrorActivity(this, message, false);
+    public void onBackPressed() {
+        if(mBackPressedOnce) {
+            finishWithOkResult();
+        }
+        else {
+            Snackbar.make(mExit, getString(R.string.mpsdk_press_again_to_leave), Snackbar.LENGTH_LONG).show();
+            mBackPressedOnce = true;
+            resetBackPressedOnceIn(4000);
+        }
+    }
+
+    private void resetBackPressedOnceIn(final int mills) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(mills);
+                    mBackPressedOnce = false;
+                } catch (InterruptedException e) {
+                    //Do nothing
+                }
+            }
+        }).start();
     }
 }

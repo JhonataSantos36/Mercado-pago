@@ -1,6 +1,7 @@
 package com.mercadopago;
 
 import android.content.Intent;
+import android.support.design.widget.Snackbar;
 import android.view.View;
 
 import com.mercadopago.model.Payment;
@@ -21,29 +22,32 @@ public class PendingActivity extends MercadoPagoActivity {
     //Params
     protected Payment mPayment;
     protected PaymentMethod mPaymentMethod;
+    protected String mMerchantPublicKey;
+
+    //Local values
+    private boolean mBackPressedOnce;
 
     @Override
     protected void getActivityParameters() {
-        super.getActivityParameters();
+        mMerchantPublicKey = getIntent().getStringExtra("merchantPublicKey");
         mPayment = JsonUtil.getInstance().fromJson(getIntent().getExtras().getString("payment"), Payment.class);
     }
 
     @Override
-    protected void setContentView() {
-        MPTracker.getInstance().trackScreen("PENDING", "3", getMerchantPublicKey(), "MLA", "1.0", getActivity());
-
-        setTheme(R.style.Theme_InfoMercadoPagoTheme_NoActionbar);
-        setContentView(R.layout.mpsdk_activity_pending);
-    }
-
-    @Override
     protected void validateActivityParameters() throws IllegalStateException {
-        if(getMerchantPublicKey() == null) {
+        if(mMerchantPublicKey == null) {
             throw new IllegalStateException("merchant public key not set");
         }
         if(mPayment == null) {
             throw new IllegalStateException("payment not set");
         }
+    }
+
+    @Override
+    protected void setContentView() {
+        MPTracker.getInstance().trackScreen("PENDING", "3", mMerchantPublicKey, "MLA", "1.0", getActivity());
+
+        setContentView(R.layout.mpsdk_activity_pending);
     }
 
     @Override
@@ -73,18 +77,44 @@ public class PendingActivity extends MercadoPagoActivity {
         }
     }
 
-    private Boolean isStatusDetailValid(){
-        return !isEmpty(mPayment.getStatusDetail());
-    }
-
     @Override
     protected void onInvalidStart(String message){
         ErrorUtil.startErrorActivity(this, message, false);
+    }
+
+    private Boolean isStatusDetailValid(){
+        return !isEmpty(mPayment.getStatusDetail());
     }
 
     private void finishWithOkResult() {
         Intent returnIntent = new Intent();
         setResult(RESULT_OK, returnIntent);
         finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(mBackPressedOnce) {
+            finishWithOkResult();
+        }
+        else {
+            Snackbar.make(mExit, getString(R.string.mpsdk_press_again_to_leave), Snackbar.LENGTH_LONG).show();
+            mBackPressedOnce = true;
+            resetBackPressedOnceIn(4000);
+        }
+    }
+
+    private void resetBackPressedOnceIn(final int mills) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(mills);
+                    mBackPressedOnce = false;
+                } catch (InterruptedException e) {
+                    //Do nothing
+                }
+            }
+        }).start();
     }
 }

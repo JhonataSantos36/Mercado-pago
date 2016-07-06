@@ -1,12 +1,10 @@
 package com.mercadopago;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import com.mercadopago.core.MercadoPago;
-import com.mercadopago.model.DecorationPreference;
 import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.mptracker.MPTracker;
@@ -21,10 +19,6 @@ public class ResultActivity extends AppCompatActivity {
     protected Payment mPayment;
     protected PaymentMethod mPaymentMethod;
 
-    //TODO revisar mActivityActive
-    private boolean mActivityActive;
-    protected DecorationPreference mDecorationPreference;
-    private Activity mActivity;
     private String mMerchantPublicKey;
 
     @Override
@@ -32,8 +26,6 @@ public class ResultActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         getActivityParameters();
-        setActivity();
-        mActivityActive = true;
 
         try {
             validateActivityParameters();
@@ -47,14 +39,6 @@ public class ResultActivity extends AppCompatActivity {
         mMerchantPublicKey = getIntent().getStringExtra("merchantPublicKey");
         mPayment = JsonUtil.getInstance().fromJson(getIntent().getExtras().getString("payment"), Payment.class);
         mPaymentMethod = JsonUtil.getInstance().fromJson(getIntent().getExtras().getString("paymentMethod"), PaymentMethod.class);
-    }
-
-    private void setActivity() {
-        mActivity = this;
-    }
-
-    protected String getMerchantPublicKey() {
-        return mMerchantPublicKey;
     }
 
     protected void validateActivityParameters() throws IllegalStateException {
@@ -74,7 +58,7 @@ public class ResultActivity extends AppCompatActivity {
             startCardPaymentTypeResult();
         }
         else {
-            MPTracker.getInstance().trackPaymentId(mPaymentMethod.getId(), "3", getMerchantPublicKey(), "MLA", "1.0", this);
+            MPTracker.getInstance().trackPaymentId(mPaymentMethod.getId(), "3", mMerchantPublicKey, "MLA", "1.0", this);
             startInstructionsActivity();
         }
     }
@@ -97,8 +81,8 @@ public class ResultActivity extends AppCompatActivity {
 
     private void startInstructionsActivity(){
         new MercadoPago.StartActivityBuilder()
-                .setPublicKey(getMerchantPublicKey())
-                .setActivity(mActivity)
+                .setPublicKey(mMerchantPublicKey)
+                .setActivity(this)
                 .setPayment(mPayment)
                 .setPaymentMethod(mPaymentMethod)
                 .startInstructionsActivity();
@@ -106,8 +90,8 @@ public class ResultActivity extends AppCompatActivity {
 
     private void startCongratsActivity(){
         new MercadoPago.StartActivityBuilder()
-                .setPublicKey(getMerchantPublicKey())
-                .setActivity(mActivity)
+                .setPublicKey(mMerchantPublicKey)
+                .setActivity(this)
                 .setPayment(mPayment)
                 .setPaymentMethod(mPaymentMethod)
                 .startCongratsActivity();
@@ -115,8 +99,8 @@ public class ResultActivity extends AppCompatActivity {
 
     private void startCallForAuthorizeActivity(){
         new MercadoPago.StartActivityBuilder()
-                .setPublicKey(getMerchantPublicKey())
-                .setActivity(mActivity)
+                .setPublicKey(mMerchantPublicKey)
+                .setActivity(this)
                 .setPayment(mPayment)
                 .setPaymentMethod(mPaymentMethod)
                 .startCallForAuthorizeActivity();
@@ -124,16 +108,16 @@ public class ResultActivity extends AppCompatActivity {
 
     private void startPendingActivity(){
         new MercadoPago.StartActivityBuilder()
-                .setPublicKey(getMerchantPublicKey())
-                .setActivity(mActivity)
+                .setPublicKey(mMerchantPublicKey)
+                .setActivity(this)
                 .setPayment(mPayment)
                 .startPendingActivity();
     }
 
     private void startRejectionActivity(){
         new MercadoPago.StartActivityBuilder()
-                .setPublicKey(getMerchantPublicKey())
-                .setActivity(mActivity)
+                .setPublicKey(mMerchantPublicKey)
+                .setActivity(this)
                 .setPayment(mPayment)
                 .setPaymentMethod(mPaymentMethod)
                 .startRejectionActivity();

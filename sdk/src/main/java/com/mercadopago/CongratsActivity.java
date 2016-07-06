@@ -38,28 +38,21 @@ public class CongratsActivity extends MercadoPagoActivity {
     // Activity parameters
     protected Payment mPayment;
     protected PaymentMethod mPaymentMethod;
+    protected String mMerchantPublicKey;
 
     //Local values
     private boolean mBackPressedOnce;
 
     @Override
     protected void getActivityParameters() {
-        super.getActivityParameters();
+        mMerchantPublicKey = getIntent().getStringExtra("merchantPublicKey");
         mPayment = JsonUtil.getInstance().fromJson(getIntent().getExtras().getString("payment"), Payment.class);
         mPaymentMethod = JsonUtil.getInstance().fromJson(getIntent().getExtras().getString("paymentMethod"), PaymentMethod.class);
     }
 
     @Override
-    protected void setContentView() {
-        MPTracker.getInstance().trackScreen("CONGRATS", "3", getMerchantPublicKey(), "MLA", "1.0", getActivity());
-
-        setTheme(R.style.Theme_CongratsMercadoPagoTheme_NoActionbar);
-        setContentView(R.layout.mpsdk_activity_congrats);
-    }
-
-    @Override
     protected void validateActivityParameters() throws IllegalStateException {
-        if(getMerchantPublicKey() == null) {
+        if(mMerchantPublicKey == null) {
             throw new IllegalStateException("merchant public key not set");
         }
         if(mPayment == null) {
@@ -68,6 +61,13 @@ public class CongratsActivity extends MercadoPagoActivity {
         if(mPaymentMethod == null) {
             throw new IllegalStateException("payment method not set");
         }
+    }
+
+    @Override
+    protected void setContentView() {
+        MPTracker.getInstance().trackScreen("CONGRATS", "3", mMerchantPublicKey, "MLA", "1.0", getActivity());
+
+        setContentView(R.layout.mpsdk_activity_congrats);
     }
 
     @Override
@@ -247,6 +247,12 @@ public class CongratsActivity extends MercadoPagoActivity {
                 mPayment.getCurrencyId(), sb.toString(), true, true);
     }
 
+    private void finishWithOkResult() {
+        Intent returnIntent = new Intent();
+        setResult(RESULT_OK, returnIntent);
+        finish();
+    }
+
     @Override
     public void onBackPressed() {
         if(mBackPressedOnce) {
@@ -257,12 +263,6 @@ public class CongratsActivity extends MercadoPagoActivity {
             mBackPressedOnce = true;
             resetBackPressedOnceIn(4000);
         }
-    }
-
-    private void finishWithOkResult() {
-        Intent returnIntent = new Intent();
-        setResult(RESULT_OK, returnIntent);
-        finish();
     }
 
     private void resetBackPressedOnceIn(final int mills) {
