@@ -1,7 +1,6 @@
 package com.mercadopago;
 
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -38,80 +37,20 @@ public class InstallmentsActivity extends ShowCardActivity {
     private ProgressBar mProgressBar;
     private View mCardBackground;
 
-    private Activity mActivity;
-    protected boolean mActiveActivity;
-
     //Local vars
     private List<PayerCost> mPayerCosts;
     private PayerCost mSelectedPayerCost;
     private PaymentPreference mPaymentPreference;
-    private FailureRecovery mFailureRecovery;
     private Site mSite;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        getActivityParameters();
-        if(mDecorationPreference != null && mDecorationPreference.hasColors()) {
-            setTheme(R.style.Theme_MercadoPagoTheme_NoActionBar);
-        }
-        setContentView();
-        mActivity = this;
-        mActiveActivity = true;
-        setLayout();
-        initializeAdapter();
-        initializeToolbar();
-
-        mMercadoPago = new MercadoPago.Builder()
-                .setContext(this)
-                .setPublicKey(mPublicKey)
-                .build();
-
-        if (mCurrentPaymentMethod != null) {
-            initializeCard();
-        }
-        if(mToken != null) {
-            initializeFrontFragment();
-        }
-        else {
-            hideCardLayout();
-        }
-    }
-
-    private void hideCardLayout() {
-        mCardBackground.setVisibility(View.GONE);
-    }
-
-    @Override
-    protected void onResume() {
-        mActiveActivity = true;
-        super.onResume();
-    }
-
-    @Override
-    protected void onDestroy() {
-        mActiveActivity = false;
-        super.onDestroy();
-    }
-
-    @Override
-    protected void onPause() {
-        mActiveActivity = false;
-        super.onPause();
-    }
-
-    @Override
-    protected void onStop() {
-        mActiveActivity = false;
-        super.onStop();
-    }
-
     protected void setContentView() {
         MPTracker.getInstance().trackScreen( "CARD_INSTALLMENTS", "2", mPublicKey, "MLA", "1.0", this);
         setContentView(R.layout.mpsdk_activity_new_installments);
     }
 
-    protected void setLayout() {
+    @Override
+    protected void initializeControls() {
         mInstallmentsView = (RecyclerView) findViewById(R.id.mpsdkActivityInstallmentsView);
         mCardContainer = (FrameLayout) findViewById(R.id.mpsdkActivityNewCardContainer);
         mProgressBar = (ProgressBar) findViewById(R.id.mpsdkProgressBar);
@@ -122,6 +61,42 @@ public class InstallmentsActivity extends ShowCardActivity {
             mCardBackground.setBackgroundColor(mDecorationPreference.getLighterColor());
         }
         mProgressBar.setVisibility(View.GONE);
+    }
+
+    @Override
+    protected void initializeFragments(Bundle savedInstanceState) {
+        super.initializeFragments(savedInstanceState);
+        if(mToken != null) {
+            initializeFrontFragment();
+        } else {
+            hideCardLayout();
+        }
+    }
+
+    private void hideCardLayout() {
+        mCardBackground.setVisibility(View.GONE);
+    }
+
+    @Override
+    protected void onValidStart() {
+        initializeAdapter();
+        initializeToolbar();
+
+        mMercadoPago = new MercadoPago.Builder()
+            .setContext(this)
+            .setPublicKey(mPublicKey)
+            .build();
+
+        if (mCurrentPaymentMethod != null) {
+            initializeCard();
+        }
+    }
+
+    @Override
+    protected void onInvalidStart(String message) {
+        Intent returnIntent = new Intent();
+        setResult(RESULT_CANCELED, returnIntent);
+        finish();
     }
 
     protected void initializeAdapter() {
@@ -172,41 +147,48 @@ public class InstallmentsActivity extends ShowCardActivity {
         }
     }
 
+    @Override
+    protected void validateActivityParameters() throws IllegalStateException {
+        if (mAmount == null || mCurrentPaymentMethod == null) {
+            throw new IllegalStateException();
+        }
+    }
+
     private void getInstallmentsAsync() {
         mProgressBar.setVisibility(View.VISIBLE);
         Long issuerId = mSelectedIssuer == null ? null : mSelectedIssuer.getId();
         mMercadoPago.getInstallments(mBin, mAmount, issuerId, mCurrentPaymentMethod.getId(),
-                new Callback<List<Installment>>() {
-                    @Override
-                    public void success(List<Installment> installments) {
-                        MPTracker.getInstance().trackEvent("CARD_INSTALLMENTS", "GET_INSTALLMENTS_RESPONSE", "SUCCESS", "2",mPublicKey, "MLA", "1.0", mActivity);
-                        if (mActiveActivity) {
-                            mProgressBar.setVisibility(View.GONE);
-                            if (installments.size() == 0) {
-                                ErrorUtil.startErrorActivity(mActivity, getString(R.string.mpsdk_standard_error_message), "no installments found for an issuer at InstallmentsActivity", false);
-                            } else if (installments.size() == 1) {
-                                resolvePayerCosts(installments.get(0).getPayerCosts());
-                            } else if (installments.size() > 1) {
-                                ErrorUtil.startErrorActivity(mActivity, getString(R.string.mpsdk_standard_error_message), "multiple installments found for an issuer at InstallmentsActivity", false);
-                            }
+            new Callback<List<Installment>>() {
+                @Override
+                public void success(List<Installment> installments) {
+                    MPTracker.getInstance().trackEvent("CARD_INSTALLMENTS", "GET_INSTALLMENTS_RESPONSE", "SUCCESS", "2",mPublicKey, "MLA", "1.0", getActivity());
+                    if (isActivityActive()) {
+                        mProgressBar.setVisibility(View.GONE);
+                        if (installments.size() == 0) {
+                            ErrorUtil.startErrorActivity(getActivity(), getString(R.string.mpsdk_standard_error_message), "no installments found for an issuer at InstallmentsActivity", false);
+                        } else if (installments.size() == 1) {
+                            resolvePayerCosts(installments.get(0).getPayerCosts());
+                        } else if (installments.size() > 1) {
+                            ErrorUtil.startErrorActivity(getActivity(), getString(R.string.mpsdk_standard_error_message), "multiple installments found for an issuer at InstallmentsActivity", false);
                         }
                     }
+                }
 
-                    @Override
-                    public void failure(ApiException apiException) {
-                        MPTracker.getInstance().trackEvent("CARD_INSTALLMENTS", "GET_INSTALLMENTS_RESPONSE", "FAIL", "2",mPublicKey, "MLA", "1.0", mActivity);
-                        if (mActiveActivity) {
-                            mProgressBar.setVisibility(View.GONE);
-                            mFailureRecovery = new FailureRecovery() {
-                                @Override
-                                public void recover() {
-                                    getInstallmentsAsync();
-                                }
-                            };
-                            ApiUtil.showApiExceptionError(mActivity, apiException);
-                        }
+                @Override
+                public void failure(ApiException apiException) {
+                    MPTracker.getInstance().trackEvent("CARD_INSTALLMENTS", "GET_INSTALLMENTS_RESPONSE", "FAIL", "2",mPublicKey, "MLA", "1.0", getActivity());
+                    if (isActivityActive()) {
+                        mProgressBar.setVisibility(View.GONE);
+                        setFailureRecovery(new FailureRecovery() {
+                            @Override
+                            public void recover() {
+                                getInstallmentsAsync();
+                            }
+                        });
+                        ApiUtil.showApiExceptionError(getActivity(), apiException);
                     }
-                });
+                }
+            });
     }
 
     private void resolvePayerCosts(List<PayerCost> payerCosts) {
@@ -217,7 +199,7 @@ public class InstallmentsActivity extends ShowCardActivity {
             mSelectedPayerCost = defaultPayerCost;
             finishWithResult();
         } else if(mPayerCosts.isEmpty()) {
-            ErrorUtil.startErrorActivity(mActivity, getString(R.string.mpsdk_standard_error_message), "no payer costs found at InstallmentsActivity" ,false);
+            ErrorUtil.startErrorActivity(getActivity(), getString(R.string.mpsdk_standard_error_message), "no payer costs found at InstallmentsActivity" ,false);
         } else if (mPayerCosts.size() == 1) {
             mSelectedPayerCost = payerCosts.get(0);
             finishWithResult();
@@ -248,13 +230,13 @@ public class InstallmentsActivity extends ShowCardActivity {
         view.setAdapter(adapter);
         view.setLayoutManager(new LinearLayoutManager(this));
         view.addOnItemTouchListener(new RecyclerItemClickListener(this,
-                new RecyclerItemClickListener.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(View view, int position) {
-                        onItemSelected(view, position);
-                        finishWithResult();
-                    }
-                }));
+            new RecyclerItemClickListener.OnItemClickListener() {
+                @Override
+                public void onItemClick(View view, int position) {
+                    onItemSelected(view, position);
+                    finishWithResult();
+                }
+            }));
     }
 
     private void initializeInstallments() {
@@ -272,12 +254,6 @@ public class InstallmentsActivity extends ShowCardActivity {
                 setResult(resultCode, data);
                 finish();
             }
-        }
-    }
-
-    private void recoverFromFailure() {
-        if(mFailureRecovery != null) {
-            mFailureRecovery.recover();
         }
     }
 

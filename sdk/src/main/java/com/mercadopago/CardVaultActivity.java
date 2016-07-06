@@ -1,6 +1,5 @@
 package com.mercadopago;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -31,72 +30,48 @@ import java.util.List;
 
 public class CardVaultActivity extends ShowCardActivity {
 
-    private Activity mActivity;
-    protected boolean mActiveActivity;
-
     private View mCardBackground;
 
     private PayerCost mPayerCost;
     private PaymentPreference mPaymentPreference;
-    private FailureRecovery mFailureRecovery;
     private List<PaymentMethod> mPaymentMethodList;
     private Site mSite;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        getActivityParameters();
-        if(mDecorationPreference != null && mDecorationPreference.hasColors()) {
-            setTheme(R.style.Theme_MercadoPagoTheme_NoActionBar);
-        }
-        mActivity = this;
-        mActiveActivity = true;
-        setContentView();
-        initializeToolbar();
-        initializeActivityControls();
-        mMercadoPago = new MercadoPago.Builder()
-                .setContext(this)
-                .setPublicKey(mPublicKey)
-                .build();
-
-        if (mCurrentPaymentMethod != null) {
-            initializeCard();
-        }
-        initializeFrontFragment();
-        startGuessingCardActivity();
-    }
-
-    private void initializeActivityControls() {
+    protected void initializeControls() {
         mCardBackground = findViewById(R.id.mpsdkCardBackground);
 
         if(mDecorationPreference != null && mDecorationPreference.hasColors())
         {
             mCardBackground.setBackgroundColor(mDecorationPreference.getLighterColor());
         }
+
+        initializeToolbar();
     }
 
     @Override
-    protected void onResume() {
-        mActiveActivity = true;
-        super.onResume();
+    protected void initializeFragments(Bundle savedInstanceState) {
+        super.initializeFragments(savedInstanceState);
+        mMercadoPago = new MercadoPago.Builder()
+                .setContext(this)
+                .setPublicKey(mPublicKey)
+                .build();
+        if (mCurrentPaymentMethod != null) {
+            initializeCard();
+        }
+        initializeFrontFragment();
     }
 
     @Override
-    protected void onDestroy() {
-        mActiveActivity = false;
-        super.onDestroy();
+    protected void onValidStart() {
+        startGuessingCardActivity();
     }
 
     @Override
-    protected void onPause() {
-        mActiveActivity = false;
-        super.onPause();
-    }
-
-    @Override
-    protected void onStop() {
-        mActiveActivity = false;
-        super.onStop();
+    protected void onInvalidStart(String message) {
+        Intent returnIntent = new Intent();
+        setResult(RESULT_CANCELED, returnIntent);
+        finish();
     }
 
     @Override
@@ -118,10 +93,18 @@ public class CardVaultActivity extends ShowCardActivity {
         }
     }
 
+    @Override
+    protected void validateActivityParameters() throws IllegalStateException {
+        if (mPublicKey == null) {
+            throw new IllegalStateException();
+        }
+    }
+
     protected void initializeToolbar() {
         super.initializeToolbar("", true);
     }
 
+    @Override
     protected void setContentView() {
         setContentView(R.layout.mpsdk_activity_new_card_vault);
     }
@@ -130,13 +113,13 @@ public class CardVaultActivity extends ShowCardActivity {
         runOnUiThread(new Runnable() {
             public void run() {
                 new MercadoPago.StartActivityBuilder()
-                        .setActivity(mActivity)
-                        .setPublicKey(mPublicKey)
-                        .setAmount(new BigDecimal(100))
-                        .setPaymentPreference(mPaymentPreference)
-                        .setSupportedPaymentMethods(mPaymentMethodList)
-                        .setDecorationPreference(mDecorationPreference)
-                        .startGuessingCardActivity();
+                    .setActivity(getActivity())
+                    .setPublicKey(mPublicKey)
+                    .setAmount(new BigDecimal(100))
+                    .setPaymentPreference(mPaymentPreference)
+                    .setSupportedPaymentMethods(mPaymentMethodList)
+                    .setDecorationPreference(mDecorationPreference)
+                    .startGuessingCardActivity();
                 overridePendingTransition(R.anim.mpsdk_slide_right_to_left_in, R.anim.mpsdk_slide_right_to_left_out);
             }
         });
@@ -211,47 +194,47 @@ public class CardVaultActivity extends ShowCardActivity {
         }
         else {
             mMercadoPago.getInstallments(mBin, mAmount, mSelectedIssuer.getId(), mCurrentPaymentMethod.getId(),
-                    new Callback<List<Installment>>() {
-                        @Override
-                        public void success(List<Installment> installments) {
-                            MPTracker.getInstance().trackEvent("CARD_INSTALLMENTS", "GET_INSTALLMENTS_RESPONSE", "SUCCESS", "2", mPublicKey, "MLA", "1.0", mActivity);
-                            if (mActiveActivity) {
-                                if (installments.size() == 1) {
-                                    if (installments.get(0).getPayerCosts().size() == 1) {
-                                        mPayerCost = installments.get(0).getPayerCosts().get(0);
-                                        finishWithResult();
-                                    }
-                                    if (installments.get(0).getPayerCosts().size() > 1) {
-                                        startInstallmentsActivity(installments.get(0).getPayerCosts());
-                                    } else {
-                                        ErrorUtil.startErrorActivity(mActivity, getString(R.string.mpsdk_standard_error_message), false);
-                                    }
-                                } else {
-                                    ErrorUtil.startErrorActivity(mActivity, getString(R.string.mpsdk_standard_error_message), false);
+                new Callback<List<Installment>>() {
+                    @Override
+                    public void success(List<Installment> installments) {
+                        MPTracker.getInstance().trackEvent("CARD_INSTALLMENTS", "GET_INSTALLMENTS_RESPONSE", "SUCCESS", "2", mPublicKey, "MLA", "1.0", getActivity());
+                        if (isActivityActive()) {
+                            if (installments.size() == 1) {
+                                if (installments.get(0).getPayerCosts().size() == 1) {
+                                    mPayerCost = installments.get(0).getPayerCosts().get(0);
+                                    finishWithResult();
                                 }
+                                if (installments.get(0).getPayerCosts().size() > 1) {
+                                    startInstallmentsActivity(installments.get(0).getPayerCosts());
+                                } else {
+                                    ErrorUtil.startErrorActivity(getActivity(), getString(R.string.mpsdk_standard_error_message), false);
+                                }
+                            } else {
+                                ErrorUtil.startErrorActivity(getActivity(), getString(R.string.mpsdk_standard_error_message), false);
                             }
                         }
+                    }
 
-                        @Override
-                        public void failure(ApiException apiException) {
-                            MPTracker.getInstance().trackEvent("CARD_INSTALLMENTS", "GET_INSTALLMENTS_RESPONSE", "FAIL", "2", mPublicKey, "MLA", "1.0", mActivity);
-                            if (mActiveActivity) {
-                                mFailureRecovery = new FailureRecovery() {
-                                    @Override
-                                    public void recover() {
-                                        checkStartInstallmentsActivity();
-                                    }
-                                };
-                                ApiUtil.showApiExceptionError(mActivity, apiException);
-                            }
+                    @Override
+                    public void failure(ApiException apiException) {
+                        MPTracker.getInstance().trackEvent("CARD_INSTALLMENTS", "GET_INSTALLMENTS_RESPONSE", "FAIL", "2", mPublicKey, "MLA", "1.0", getActivity());
+                        if (isActivityActive()) {
+                            setFailureRecovery(new FailureRecovery() {
+                                @Override
+                                public void recover() {
+                                    checkStartInstallmentsActivity();
+                                }
+                            });
+                            ApiUtil.showApiExceptionError(getActivity(), apiException);
                         }
-                    });
+                    }
+                });
         }
     }
 
     public void startInstallmentsActivity(final List<PayerCost> payerCosts) {
         new MercadoPago.StartActivityBuilder()
-            .setActivity(mActivity)
+            .setActivity(getActivity())
             .setPublicKey(mPublicKey)
             .setPaymentMethod(mCurrentPaymentMethod)
             .setAmount(mAmount)
@@ -276,9 +259,4 @@ public class CardVaultActivity extends ShowCardActivity {
         finish();
     }
 
-    private void recoverFromFailure() {
-        if(mFailureRecovery != null) {
-            mFailureRecovery.recover();
-        }
-    }
 }

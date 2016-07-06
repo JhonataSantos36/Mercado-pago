@@ -1,6 +1,5 @@
 package com.mercadopago;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.PorterDuff;
@@ -41,7 +40,6 @@ import com.mercadopago.fragments.CardIdentificationFragment;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.CardToken;
 import com.mercadopago.model.Cardholder;
-import com.mercadopago.model.DecorationPreference;
 import com.mercadopago.model.Identification;
 import com.mercadopago.model.IdentificationType;
 import com.mercadopago.model.Issuer;
@@ -68,7 +66,6 @@ public class GuessingCardActivity extends FrontCardActivity {
     // Activity parameters
     private String mPublicKey;
     private List<PaymentMethod> mPaymentMethodList;
-    private DecorationPreference mDecorationPreference;
 
     // Input controls
     private MPTextView mToolbarButton;
@@ -106,8 +103,6 @@ public class GuessingCardActivity extends FrontCardActivity {
 
 
     // Local vars
-    private Activity mActivity;
-    protected boolean mActiveActivity;
     private MercadoPago mMercadoPago;
     private PaymentPreference mPaymentPreference;
     private CardToken mCardToken;
@@ -123,41 +118,11 @@ public class GuessingCardActivity extends FrontCardActivity {
     private int mCardSecurityCodeLength;
     private int mCardNumberLength;
     private String mSecurityCodeLocation;
-    private FailureRecovery mFailureRecovery;
     private boolean mIssuerFound;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        getActivityParameters();
-        if(mDecorationPreference != null && mDecorationPreference.hasColors()) {
-            setTheme(R.style.Theme_MercadoPagoTheme_NoActionBar);
-        }
-        setContentView();
-        initializeLayout(savedInstanceState);
-        setInputControls();
-        initializeToolbar();
-        verifyValidCreate();
-        setListeners();
-        openKeyboard(mCardNumberEditText);
-        mCurrentEditingEditText = CardInterface.CARD_NUMBER_INPUT;
-
-        mMercadoPago = new MercadoPago.Builder()
-                .setContext(mActivity)
-                .setPublicKey(mPublicKey)
-                .build();
-
-        if (mPaymentMethodList == null) {
-            getPaymentMethodsAsync();
-        } else {
-            startGuessingForm(mPaymentMethodList);
-        }
-    }
 
     @Override
     protected void onResume() {
         super.onResume();
-        mActiveActivity = true;
         if (mCardSideState == null) {
             mCardSideState = CARD_SIDE_FRONT;
         }
@@ -166,23 +131,10 @@ public class GuessingCardActivity extends FrontCardActivity {
 
     @Override
     protected void onDestroy() {
-        mActiveActivity = false;
         if (showingFront() && mFrontFragment != null) {
             mFrontFragment.setCardColor(CardInterface.NEUTRAL_CARD_COLOR);
         }
         super.onDestroy();
-    }
-
-    @Override
-    protected void onPause() {
-        mActiveActivity = false;
-        super.onPause();
-    }
-
-    @Override
-    protected void onStop() {
-        mActiveActivity = false;
-        super.onStop();
     }
 
     @Override
@@ -217,17 +169,17 @@ public class GuessingCardActivity extends FrontCardActivity {
             @Override
             public void onClick(View v) {
                 new MercadoPago.StartActivityBuilder()
-                        .setActivity(mActivity)
+                        .setActivity(getActivity())
                         .setPublicKey(mPublicKey)
                         .setDecorationPreference(mDecorationPreference)
                         .startBankDealsActivity();
             }
         });
 
-        if(mDecorationPreference != null) {
-            if(mDecorationPreference.hasColors()) {
-                if(toolbar != null) {
-                   decorateToolbar(toolbar);
+        if (mDecorationPreference != null) {
+            if (mDecorationPreference.hasColors()) {
+                if (toolbar != null) {
+                    decorateToolbar(toolbar);
                 }
             }
 
@@ -236,10 +188,10 @@ public class GuessingCardActivity extends FrontCardActivity {
     }
 
     private void decorateToolbar(Toolbar toolbar) {
-        if(mDecorationPreference.isDarkFontEnabled()) {
+        if (mDecorationPreference.isDarkFontEnabled()) {
             mToolbarButton.setTextColor(mDecorationPreference.getDarkFontColor(this));
             Drawable upArrow = toolbar.getNavigationIcon();
-            if(upArrow != null) {
+            if (upArrow != null) {
                 upArrow.setColorFilter(mDecorationPreference.getDarkFontColor(this), PorterDuff.Mode.SRC_ATOP);
             }
             getSupportActionBar().setHomeAsUpIndicator(upArrow);
@@ -247,13 +199,46 @@ public class GuessingCardActivity extends FrontCardActivity {
         toolbar.setBackgroundColor(mDecorationPreference.getLighterColor());
     }
 
+    @Override
     protected void setContentView() {
         setContentView(R.layout.mpsdk_activity_new_card_form);
     }
 
-    private void initializeLayout(Bundle savedInstanceState) {
-        mActivity = this;
-        mActiveActivity = true;
+    @Override
+    protected void validateActivityParameters() throws IllegalStateException {
+        if (mPublicKey == null) {
+            throw new IllegalStateException();
+        }
+    }
+
+    @Override
+    protected void onValidStart() {
+        initializeToolbar();
+        setListeners();
+        openKeyboard(mCardNumberEditText);
+        mCurrentEditingEditText = CardInterface.CARD_NUMBER_INPUT;
+
+        mMercadoPago = new MercadoPago.Builder()
+                .setContext(getActivity())
+                .setPublicKey(mPublicKey)
+                .build();
+
+        if (mPaymentMethodList == null) {
+            getPaymentMethodsAsync();
+        } else {
+            startGuessingForm(mPaymentMethodList);
+        }
+    }
+
+    @Override
+    protected void onInvalidStart(String message) {
+        Intent returnIntent = new Intent();
+        setResult(RESULT_CANCELED, returnIntent);
+        finish();
+    }
+
+    @Override
+    protected void initializeFragments(Bundle savedInstanceState) {
         mIssuerFound = true;
         mErrorState = CardInterface.NORMAL_STATE;
         mCardToken = new CardToken("", null, null, "", "", "", "");
@@ -306,7 +291,8 @@ public class GuessingCardActivity extends FrontCardActivity {
         }
     }
 
-    protected void setInputControls() {
+    @Override
+    protected void initializeControls() {
         mCardNumberEditText = (MPEditText) findViewById(R.id.mpsdkCardNumber);
         mCardHolderNameEditText = (MPEditText) findViewById(R.id.mpsdkCardholderName);
         mCardExpiryDateEditText = (MPEditText) findViewById(R.id.mpsdkCardExpiryDate);
@@ -337,8 +323,7 @@ public class GuessingCardActivity extends FrontCardActivity {
 
         mCardBackground = findViewById(R.id.mpsdkCardBackground);
 
-        if(mDecorationPreference != null && mDecorationPreference.hasColors())
-        {
+        if (mDecorationPreference != null && mDecorationPreference.hasColors()) {
             mCardBackground.setBackgroundColor(mDecorationPreference.getLighterColor());
         }
 
@@ -346,10 +331,8 @@ public class GuessingCardActivity extends FrontCardActivity {
     }
 
     private void fullScrollDown() {
-        Runnable r = new Runnable()
-        {
-            public void run()
-            {
+        Runnable r = new Runnable() {
+            public void run() {
                 mScrollView.fullScroll(View.FOCUS_DOWN);
 
             }
@@ -358,14 +341,16 @@ public class GuessingCardActivity extends FrontCardActivity {
         r.run();
     }
 
+    @Override
     protected void getActivityParameters() {
         mPublicKey = this.getIntent().getStringExtra("publicKey");
         mPaymentPreference = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("paymentPreference"), PaymentPreference.class);
         mToken = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("token"), Token.class);
 
         try {
-            Type listType = new TypeToken<List<PaymentMethod>>(){}.getType();
-            mPaymentMethodList =  JsonUtil.getInstance().getGson().fromJson(this.getIntent().getStringExtra("paymentMethodList"), listType);
+            Type listType = new TypeToken<List<PaymentMethod>>() {
+            }.getType();
+            mPaymentMethodList = JsonUtil.getInstance().getGson().fromJson(this.getIntent().getStringExtra("paymentMethodList"), listType);
         } catch (Exception ex) {
             mPaymentMethodList = null;
         }
@@ -374,17 +359,6 @@ public class GuessingCardActivity extends FrontCardActivity {
         mIdentificationNumberRequired = false;
         if (mPaymentPreference == null) {
             mPaymentPreference = new PaymentPreference();
-        }
-        if(this.getIntent().getStringExtra("decorationPreference") != null) {
-            mDecorationPreference = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("decorationPreference"), DecorationPreference.class);
-        }
-    }
-
-    protected void verifyValidCreate() {
-        if (mPublicKey == null) {
-            Intent returnIntent = new Intent();
-            setResult(RESULT_CANCELED, returnIntent);
-            finish();
         }
     }
 
@@ -450,7 +424,7 @@ public class GuessingCardActivity extends FrontCardActivity {
     private boolean validateCurrentEditText(boolean onFinish) {
         switch (mCurrentEditingEditText) {
             case CARD_NUMBER_INPUT:
-                if (validateCardNumber(true)){
+                if (validateCardNumber(true)) {
                     mCardNumberInput.setVisibility(View.GONE);
                     mCardHolderNameEditText.requestFocus();
                     mCardExpiryDateInput.setVisibility(View.VISIBLE);
@@ -553,14 +527,14 @@ public class GuessingCardActivity extends FrontCardActivity {
                 return false;
             case CARD_IDENTIFICATION_INPUT:
                 if (TextUtils.isEmpty(mCardIdentificationNumber) || validateIdentificationNumber(true)) {
-                   mCardIdNumberInput.setVisibility(View.GONE);
-                   if (isSecurityCodeRequired()) {
-                       mSecurityCodeEditView.setVisibility(View.VISIBLE);
-                       mCardSecurityCodeEditText.requestFocus();
-                   } else {
-                       mCardExpiryDateInput.setVisibility(View.VISIBLE);
-                       mCardExpiryDateEditText.requestFocus();
-                   }
+                    mCardIdNumberInput.setVisibility(View.GONE);
+                    if (isSecurityCodeRequired()) {
+                        mSecurityCodeEditView.setVisibility(View.VISIBLE);
+                        mCardSecurityCodeEditText.requestFocus();
+                    } else {
+                        mCardExpiryDateInput.setVisibility(View.VISIBLE);
+                        mCardExpiryDateEditText.requestFocus();
+                    }
                     return true;
                 }
                 return false;
@@ -587,23 +561,23 @@ public class GuessingCardActivity extends FrontCardActivity {
         mMercadoPago.getPaymentMethods(new Callback<List<PaymentMethod>>() {
             @Override
             public void success(List<PaymentMethod> paymentMethods) {
-                MPTracker.getInstance().trackEvent("PAYMENT_METHODS", "GET_PAYMENT_METHODS_RESPONSE", "SUCCESS", "2", mPublicKey, "MLA", "1.0", mActivity);
-                if (mActiveActivity) {
+                MPTracker.getInstance().trackEvent("PAYMENT_METHODS", "GET_PAYMENT_METHODS_RESPONSE", "SUCCESS", "2", mPublicKey, "MLA", "1.0", getActivity());
+                if (isActivityActive()) {
                     startGuessingForm(paymentMethods);
                 }
             }
 
             @Override
             public void failure(ApiException apiException) {
-                MPTracker.getInstance().trackEvent("PAYMENT_METHODS", "GET_PAYMENT_METHODS_RESPONSE", "FAIL", "2", mPublicKey, "MLA", "1.0", mActivity);
-                if (mActiveActivity) {
-                    mFailureRecovery = new FailureRecovery() {
+                MPTracker.getInstance().trackEvent("PAYMENT_METHODS", "GET_PAYMENT_METHODS_RESPONSE", "FAIL", "2", mPublicKey, "MLA", "1.0", getActivity());
+                if (isActivityActive()) {
+                    setFailureRecovery(new FailureRecovery() {
                         @Override
                         public void recover() {
                             getPaymentMethodsAsync();
                         }
-                    };
-                    ApiUtil.showApiExceptionError(mActivity, apiException);
+                    });
+                    ApiUtil.showApiExceptionError(getActivity(), apiException);
                 }
             }
         });
@@ -626,7 +600,7 @@ public class GuessingCardActivity extends FrontCardActivity {
         }
         if (mToken.getExpirationMonth() != null && mToken.getExpirationYear() != null) {
             mCardExpiryDateEditText.append(mToken.getExpirationMonth().toString());
-            mCardExpiryDateEditText.append(mToken.getExpirationYear().toString().substring(2,4));
+            mCardExpiryDateEditText.append(mToken.getExpirationYear().toString().substring(2, 4));
         }
         if (mToken.getCardholder() != null && mToken.getCardholder().getIdentification() != null) {
             String number = mToken.getCardholder().getIdentification().getNumber();
@@ -874,10 +848,10 @@ public class GuessingCardActivity extends FrontCardActivity {
             mMercadoPago.getIdentificationTypes(new Callback<List<IdentificationType>>() {
                 @Override
                 public void success(List<IdentificationType> identificationTypes) {
-                    if (mActiveActivity) {
+                    if (isActivityActive()) {
                         if (!identificationTypes.isEmpty()) {
                             mSelectedIdentificationType = identificationTypes.get(0);
-                            mIdentificationTypeSpinner.setAdapter(new IdentificationTypesAdapter(mActivity, identificationTypes));
+                            mIdentificationTypeSpinner.setAdapter(new IdentificationTypesAdapter(getActivity(), identificationTypes));
                             mIdentificationTypeContainer.setVisibility(View.VISIBLE);
                         }
                     }
@@ -885,14 +859,14 @@ public class GuessingCardActivity extends FrontCardActivity {
 
                 @Override
                 public void failure(ApiException apiException) {
-                    if (mActiveActivity) {
-                        mFailureRecovery = new FailureRecovery() {
+                    if (isActivityActive()) {
+                        setFailureRecovery(new FailureRecovery() {
                             @Override
                             public void recover() {
                                 manageAdditionalInfoNeeded();
                             }
-                        };
-                        ApiUtil.showApiExceptionError(mActivity, apiException);
+                        });
+                        ApiUtil.showApiExceptionError(getActivity(), apiException);
                     }
                 }
             });
@@ -1051,7 +1025,7 @@ public class GuessingCardActivity extends FrontCardActivity {
             public void onFocusChange(View v, boolean hasFocus) {
                 mFrontFragment.setFontColor();
                 if (hasFocus) {
-                    MPTracker.getInstance().trackScreen("CARD_NUMBER", "2", mPublicKey, "MLA", "1.0", mActivity);
+                    MPTracker.getInstance().trackScreen("CARD_NUMBER", "2", mPublicKey, "MLA", "1.0", getActivity());
 
                     disableBackInputButton();
                     openKeyboard(mCardNumberEditText);
@@ -1099,7 +1073,7 @@ public class GuessingCardActivity extends FrontCardActivity {
             public void onFocusChange(View v, boolean hasFocus) {
                 mFrontFragment.setFontColor();
                 if (hasFocus) {
-                    MPTracker.getInstance().trackScreen("CARD_HOLDER_NAME", "2", mPublicKey, "MLA", "1.0", mActivity);
+                    MPTracker.getInstance().trackScreen("CARD_HOLDER_NAME", "2", mPublicKey, "MLA", "1.0", getActivity());
 
                     enableBackInputButton();
                     openKeyboard(mCardHolderNameEditText);
@@ -1136,7 +1110,7 @@ public class GuessingCardActivity extends FrontCardActivity {
             public void onFocusChange(View v, boolean hasFocus) {
                 mFrontFragment.setFontColor();
                 if (hasFocus) {
-                    MPTracker.getInstance().trackScreen("CARD_EXPIRY_DATE", "2", mPublicKey, "MLA", "1.0", mActivity);
+                    MPTracker.getInstance().trackScreen("CARD_EXPIRY_DATE", "2", mPublicKey, "MLA", "1.0", getActivity());
 
                     enableBackInputButton();
                     openKeyboard(mCardExpiryDateEditText);
@@ -1173,7 +1147,7 @@ public class GuessingCardActivity extends FrontCardActivity {
             public void onFocusChange(View v, boolean hasFocus) {
                 mFrontFragment.setFontColor();
                 if (hasFocus) {
-                    MPTracker.getInstance().trackScreen("CARD_SECURITY_CODE", "2", mPublicKey, "MLA", "1.0", mActivity);
+                    MPTracker.getInstance().trackScreen("CARD_SECURITY_CODE", "2", mPublicKey, "MLA", "1.0", getActivity());
 
                     enableBackInputButton();
                     openKeyboard(mCardSecurityCodeEditText);
@@ -1397,7 +1371,7 @@ public class GuessingCardActivity extends FrontCardActivity {
         if (isSecurityCodeRequired() &&
                 !validateSecurityCode(requestFocus)) {
             result = false;
-            requestFocus= false;
+            requestFocus = false;
         }
         if (mIdentificationNumberRequired) {
             if (!validateIdentificationNumber(requestFocus)) {
@@ -1439,9 +1413,9 @@ public class GuessingCardActivity extends FrontCardActivity {
         Integer month = (mExpiryMonth == null ? null : Integer.valueOf(mExpiryMonth));
         Integer year = (mExpiryYear == null ? null : Integer.valueOf(mExpiryYear));
         String identificationTypeId = (mSelectedIdentificationType == null ? null :
-            mSelectedIdentificationType.getId());
+                mSelectedIdentificationType.getId());
         String identificationNumber = (mIdentification == null ? null :
-            mIdentification.getNumber());
+                mIdentification.getNumber());
 
         CardToken cardToken = new CardToken(getCardNumber(), month, year, getSecurityCode(),
                 getCardHolderName(), identificationTypeId, identificationNumber);
@@ -1465,7 +1439,7 @@ public class GuessingCardActivity extends FrontCardActivity {
         mMercadoPago.createToken(mCardToken, new Callback<Token>() {
             @Override
             public void success(Token token) {
-                if (mActiveActivity) {
+                if (isActivityActive()) {
                     mToken = token;
                     //TODO: solo en credit card??
                     checkStartIssuersActivity();
@@ -1474,14 +1448,14 @@ public class GuessingCardActivity extends FrontCardActivity {
 
             @Override
             public void failure(ApiException apiException) {
-                if (mActiveActivity) {
-                    mFailureRecovery = new FailureRecovery() {
+                if (isActivityActive()) {
+                    setFailureRecovery(new FailureRecovery() {
                         @Override
                         public void recover() {
                             createToken();
                         }
-                    };
-                    ApiUtil.showApiExceptionError(mActivity, apiException);
+                    });
+                    ApiUtil.showApiExceptionError(getActivity(), apiException);
                 }
             }
         });
@@ -1596,37 +1570,37 @@ public class GuessingCardActivity extends FrontCardActivity {
 
     public void checkStartIssuersActivity() {
         mMercadoPago.getIssuers(mCurrentPaymentMethod.getId(), mPaymentMethodGuessingController.getSavedBin(),
-                new Callback<List<Issuer>>() {
-                    @Override
-                    public void success(List<Issuer> issuers) {
-                        MPTracker.getInstance().trackEvent("CARD_ISSUER", "GET_ISSUERS_RESPONSE", "SUCCESS", "2", mPublicKey, "MLA", "1.0", mActivity);
-                        if (mActiveActivity) {
-                            if (issuers.isEmpty()) {
-                                //error
-                            } else if (issuers.size() == 1) {
-                                mSelectedIssuer = issuers.get(0);
-                                mIssuerFound = true;
-                                finishWithResult();
-                            } else {
-                                startIssuersActivity(issuers);
-                            }
+            new Callback<List<Issuer>>() {
+                @Override
+                public void success(List<Issuer> issuers) {
+                    MPTracker.getInstance().trackEvent("CARD_ISSUER", "GET_ISSUERS_RESPONSE", "SUCCESS", "2", mPublicKey, "MLA", "1.0", getActivity());
+                    if (isActivityActive()) {
+                        if (issuers.isEmpty()) {
+                            //error
+                        } else if (issuers.size() == 1) {
+                            mSelectedIssuer = issuers.get(0);
+                            mIssuerFound = true;
+                            finishWithResult();
+                        } else {
+                            startIssuersActivity(issuers);
                         }
                     }
+                }
 
-                    @Override
-                    public void failure(ApiException apiException) {
-                        MPTracker.getInstance().trackEvent("CARD_ISSUER", "GET_ISSUERS_RESPONSE", "FAIL", "2", mPublicKey, "MLA", "1.0", mActivity);
-                        if (mActiveActivity) {
-                            mFailureRecovery = new FailureRecovery() {
-                                @Override
-                                public void recover() {
-                                    checkStartIssuersActivity();
-                                }
-                            };
-                            ApiUtil.showApiExceptionError(mActivity, apiException);
-                        }
+                @Override
+                public void failure(ApiException apiException) {
+                    MPTracker.getInstance().trackEvent("CARD_ISSUER", "GET_ISSUERS_RESPONSE", "FAIL", "2", mPublicKey, "MLA", "1.0", getActivity());
+                    if (isActivityActive()) {
+                        setFailureRecovery(new FailureRecovery() {
+                            @Override
+                            public void recover() {
+                                checkStartIssuersActivity();
+                            }
+                        });
+                        ApiUtil.showApiExceptionError(getActivity(), apiException);
                     }
-                });
+                }
+            });
     }
 
     private void setIssuerDefaultAnimation() {
@@ -1639,7 +1613,7 @@ public class GuessingCardActivity extends FrontCardActivity {
 
     public void startIssuersActivity(final List<Issuer> issuers) {
         new MercadoPago.StartActivityBuilder()
-            .setActivity(mActivity)
+            .setActivity(getActivity())
             .setPublicKey(mPublicKey)
             .setPaymentMethod(mCurrentPaymentMethod)
             .setToken(mToken)
@@ -1662,12 +1636,10 @@ public class GuessingCardActivity extends FrontCardActivity {
             } else if (resultCode == RESULT_CANCELED) {
                 finish();
             }
-        }
-        else if(requestCode == ErrorUtil.ERROR_REQUEST_CODE) {
-            if(resultCode == RESULT_OK) {
+        } else if (requestCode == ErrorUtil.ERROR_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
                 recoverFromFailure();
-            }
-            else {
+            } else {
                 setResult(resultCode, data);
                 finish();
             }
@@ -1724,9 +1696,4 @@ public class GuessingCardActivity extends FrontCardActivity {
         }
     }
 
-    private void recoverFromFailure() {
-        if(mFailureRecovery != null) {
-            mFailureRecovery.recover();
-        }
-    }
 }

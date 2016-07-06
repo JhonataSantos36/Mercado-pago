@@ -34,6 +34,7 @@ public abstract class MercadoPagoActivity extends AppCompatActivity {
         try {
             validateActivityParameters();
             initializeControls();
+            initializeFragments(savedInstanceState);
             onValidStart();
         } catch (IllegalStateException exception) {
             onInvalidStart(exception.getMessage());
@@ -59,6 +60,10 @@ public abstract class MercadoPagoActivity extends AppCompatActivity {
     protected abstract void onValidStart();
 
     protected abstract void onInvalidStart(String message);
+
+    protected void initializeFragments(Bundle savedInstanceState) {
+
+    }
 
     private void getDecorationPreference() {
         if(getIntent().getStringExtra("decorationPreference") != null) {

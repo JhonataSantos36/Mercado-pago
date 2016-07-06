@@ -1,9 +1,7 @@
 package com.mercadopago;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -36,21 +34,48 @@ public class IssuersActivity extends ShowCardActivity {
 
     //Local vars
     private List<Issuer> mIssuers;
-    private FailureRecovery mFailureRecovery;
-    private Activity mActivity;
-    protected boolean mActiveActivity;
+
+    private void hideCardLayout() {
+        mCardBackground.setVisibility(View.GONE);
+    }
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        getActivityParameters();
-        if(mDecorationPreference != null && mDecorationPreference.hasColors()) {
-            setTheme(R.style.Theme_MercadoPagoTheme_NoActionBar);
+    protected void setContentView() {
+        MPTracker.getInstance().trackScreen("CARD_ISSUERS", "2", mPublicKey, "MLA", "1.0", this);
+        setContentView(R.layout.mpsdk_activity_new_issuers);
+    }
+
+    @Override
+    protected void validateActivityParameters() throws IllegalStateException {
+
+    }
+
+    @Override
+    protected void initializeControls() {
+        mIssuersView = (RecyclerView) findViewById(R.id.mpsdkActivityIssuersView);
+        mCardContainer = (FrameLayout) findViewById(R.id.mpsdkActivityNewCardContainer);
+        mProgressBar = (ProgressBar) findViewById(R.id.mpsdkProgressBar);
+
+        mCardBackground = findViewById(R.id.mpsdkCardBackground);
+        if(mDecorationPreference != null && mDecorationPreference.hasColors())
+        {
+            mCardBackground.setBackgroundColor(mDecorationPreference.getLighterColor());
         }
-        setContentView();
-        mActivity = this;
-        mActiveActivity = true;
-        setLayout();
+        mProgressBar.setVisibility(View.GONE);
+    }
+
+    @Override
+    protected void initializeFragments(Bundle savedInstanceState) {
+        super.initializeFragments(savedInstanceState);
+        if(mToken != null) {
+            initializeFrontFragment();
+        } else {
+            hideCardLayout();
+        }
+    }
+
+    @Override
+    protected void onValidStart() {
         initializeAdapter();
         initializeToolbar();
 
@@ -62,58 +87,13 @@ public class IssuersActivity extends ShowCardActivity {
         if (mCurrentPaymentMethod != null) {
             initializeCard();
         }
-        if(mToken != null) {
-            initializeFrontFragment();
-        }
-        else {
-            hideCardLayout();
-        }
-    }
-
-    private void hideCardLayout() {
-        mCardBackground.setVisibility(View.GONE);
     }
 
     @Override
-    protected void onResume() {
-        mActiveActivity = true;
-        super.onResume();
-    }
-
-    @Override
-    protected void onDestroy() {
-        mActiveActivity = false;
-        super.onDestroy();
-    }
-
-    @Override
-    protected void onPause() {
-        mActiveActivity = false;
-        super.onPause();
-    }
-
-    @Override
-    protected void onStop() {
-        mActiveActivity = false;
-        super.onStop();
-    }
-
-    protected void setContentView() {
-        MPTracker.getInstance().trackScreen("CARD_ISSUERS", "2", mPublicKey, "MLA", "1.0", this);
-        setContentView(R.layout.mpsdk_activity_new_issuers);
-    }
-
-    protected void setLayout() {
-        mIssuersView = (RecyclerView) findViewById(R.id.mpsdkActivityIssuersView);
-        mCardContainer = (FrameLayout) findViewById(R.id.mpsdkActivityNewCardContainer);
-        mProgressBar = (ProgressBar) findViewById(R.id.mpsdkProgressBar);
-
-        mCardBackground = findViewById(R.id.mpsdkCardBackground);
-        if(mDecorationPreference != null && mDecorationPreference.hasColors())
-        {
-            mCardBackground.setBackgroundColor(mDecorationPreference.getLighterColor());
-        }
-        mProgressBar.setVisibility(View.GONE);
+    protected void onInvalidStart(String message) {
+        Intent returnIntent = new Intent();
+        setResult(RESULT_CANCELED, returnIntent);
+        finish();
     }
 
     protected void initializeAdapter() {
@@ -159,43 +139,41 @@ public class IssuersActivity extends ShowCardActivity {
     protected void getIssuersAsync() {
         mProgressBar.setVisibility(View.VISIBLE);
         mMercadoPago.getIssuers(mCurrentPaymentMethod.getId(), mBin,
-                new Callback<List<Issuer>>() {
-                    @Override
-                    public void success(List<Issuer> issuers) {
-                        mIssuers = issuers;
-                        MPTracker.getInstance().trackEvent("CARD_ISSUERS", "GET_ISSUERS_RESPONSE", "SUCCESS", mPublicKey, "MLA", "1.0", mActivity);
-                        if (mActiveActivity) {
-                            mProgressBar.setVisibility(View.GONE);
-                            if (mIssuers.isEmpty()) {
-                                mSelectedIssuer = null;
-                                finishWithResult();
-                            } else if (mIssuers.size() == 1) {
-                                mSelectedIssuer = mIssuers.get(0);
-                                finishWithResult();
-                            } else {
-                                initializeIssuers();
-                            }
+            new Callback<List<Issuer>>() {
+                @Override
+                public void success(List<Issuer> issuers) {
+                    mIssuers = issuers;
+                    MPTracker.getInstance().trackEvent("CARD_ISSUERS", "GET_ISSUERS_RESPONSE", "SUCCESS", mPublicKey, "MLA", "1.0", getActivity());
+                    if (isActivityActive()) {
+                        mProgressBar.setVisibility(View.GONE);
+                        if (mIssuers.isEmpty()) {
+                            mSelectedIssuer = null;
+                            finishWithResult();
+                        } else if (mIssuers.size() == 1) {
+                            mSelectedIssuer = mIssuers.get(0);
+                            finishWithResult();
+                        } else {
+                            initializeIssuers();
                         }
                     }
-
-                    @Override
-                    public void failure(ApiException apiException) {
-                        MPTracker.getInstance().trackEvent("CARD_ISSUERS", "GET_ISSUERS_RESPONSE", "FAIL", mPublicKey, "MLA", "1.0", mActivity);
-                            if (mActiveActivity) {
-                                mProgressBar.setVisibility(View.GONE);
-                                mFailureRecovery = new FailureRecovery() {
-                                    @Override
-                                    public void recover() {
-                                        getIssuersAsync();
-                                    }
-                                };
-                                ApiUtil.showApiExceptionError(mActivity, apiException);
-                            }
-                        }
-                    }
-
-                    );
                 }
+
+                @Override
+                public void failure(ApiException apiException) {
+                    MPTracker.getInstance().trackEvent("CARD_ISSUERS", "GET_ISSUERS_RESPONSE", "FAIL", mPublicKey, "MLA", "1.0", getActivity());
+                        if (isActivityActive()) {
+                            mProgressBar.setVisibility(View.GONE);
+                            setFailureRecovery(new FailureRecovery() {
+                                @Override
+                                public void recover() {
+                                    getIssuersAsync();
+                                }
+                            });
+                            ApiUtil.showApiExceptionError(getActivity(), apiException);
+                        }
+                    }
+                });
+            }
 
         @Override
     protected void finishWithResult() {
@@ -213,13 +191,13 @@ public class IssuersActivity extends ShowCardActivity {
         view.setAdapter(adapter);
         view.setLayoutManager(new LinearLayoutManager(this));
         view.addOnItemTouchListener(new RecyclerItemClickListener(this,
-                new RecyclerItemClickListener.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(View view, int position) {
-                        onItemSelected(view, position);
-                        finishWithResult();
-                    }
-                }));
+            new RecyclerItemClickListener.OnItemClickListener() {
+                @Override
+                public void onItemClick(View view, int position) {
+                    onItemSelected(view, position);
+                    finishWithResult();
+                }
+            }));
     }
 
     @Override
@@ -243,11 +221,6 @@ public class IssuersActivity extends ShowCardActivity {
                 setResult(resultCode, data);
                 finish();
             }
-        }
-    }
-    private void recoverFromFailure() {
-        if(mFailureRecovery != null) {
-            mFailureRecovery.recover();
         }
     }
 }
