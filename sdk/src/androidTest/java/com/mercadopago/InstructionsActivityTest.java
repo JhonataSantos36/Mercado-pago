@@ -13,12 +13,14 @@ import com.mercadopago.model.InstructionActionInfo;
 import com.mercadopago.model.InstructionReference;
 import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentMethod;
+import com.mercadopago.test.FakeAPI;
 import com.mercadopago.test.StaticMock;
 import com.mercadopago.test.rules.MockedApiTestRule;
 import com.mercadopago.util.JsonUtil;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -57,7 +59,7 @@ public class InstructionsActivityTest {
 
 
     @Before
-    public void validStartIntent() {
+    public void createValidStartIntent() {
         mPayment = StaticMock.getPayment();
         mMerchantPublicKey = "1234";
         mPaymentMethod = getOfflinePaymentMethod();
@@ -68,12 +70,22 @@ public class InstructionsActivityTest {
         validStartIntent.putExtra("payment", JsonUtil.getInstance().toJson(mPayment));
     }
 
+    @Before
+    public void startFakeAPI() {
+        FakeAPI.getInstance().start();
+    }
+
+    @After
+    public void stopFakeAPI() {
+        FakeAPI.getInstance().shutDown();
+    }
+
     @Test
     public void getActivityParametersOnCreate() {
         Instruction instructionWithoutActions = StaticMock.getInstructionWithoutActions();
         mTestRule.addApiResponseToQueue(instructionWithoutActions, 200, "");
         InstructionsActivity activity = mTestRule.launchActivity(validStartIntent);
-        assertEquals(activity.getMerchantPublicKey(), mMerchantPublicKey);
+        assertEquals(activity.mMerchantPublicKey, mMerchantPublicKey);
         assertEquals(activity.mPayment.getId(), mPayment.getId());
         assertEquals(activity.mPaymentMethod.getId(), mPaymentMethod.getId());
     }

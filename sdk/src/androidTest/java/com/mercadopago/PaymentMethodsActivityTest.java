@@ -6,15 +6,16 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.mercadopago.adapters.PaymentMethodsAdapter;
-import com.mercadopago.model.ApiException;
+import com.mercadopago.exceptions.MPException;
 import com.mercadopago.model.PaymentMethod;
+import com.mercadopago.model.PaymentPreference;
 import com.mercadopago.test.ActivityResult;
 import com.mercadopago.test.BaseTest;
 import com.mercadopago.test.StaticMock;
+import com.mercadopago.util.JsonUtil;
 import com.mercadopago.views.MPTextView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class PaymentMethodsActivityTest extends BaseTest<PaymentMethodsActivity> {
 
@@ -24,9 +25,7 @@ public class PaymentMethodsActivityTest extends BaseTest<PaymentMethodsActivity>
 
     public void testGetPaymentMethod() {
 
-        String paymentMethodsJson = StaticMock.getCompletePaymentMethodsJson();
-
-        Activity activity = prepareActivity(StaticMock.DUMMY_MERCHANT_PUBLIC_KEY, null, null);
+        Activity activity = prepareActivity("6c0d81bc-99c1-4de8-9976-c8d1d62cd4f2", null);
 
         RecyclerView list = (RecyclerView) activity.findViewById(R.id.mpsdkPaymentMethodsList);
         if ((list != null) && (list.getAdapter() != null)) {
@@ -44,26 +43,25 @@ public class PaymentMethodsActivityTest extends BaseTest<PaymentMethodsActivity>
         getApplicationContext();
         try {
             ActivityResult activityResult = getActivityResult(activity);
-            PaymentMethod paymentMethod = (PaymentMethod) activityResult.getExtras().getSerializable("paymentMethod");
+            PaymentMethod paymentMethod = JsonUtil.getInstance().fromJson(activityResult.getExtras().getString("paymentMethod"), PaymentMethod.class);
             assertTrue(activityResult.getResultCode() == Activity.RESULT_OK);
             assertTrue(paymentMethod.getId().equals("bancomer"));
         } catch (Exception ex) {
             fail("Get payment method test failed, cause: " + ex.getMessage());
         }
-
     }
 
     public void testWrongMerchantPublicKey() {
 
-        Activity activity = prepareActivity("wrong_public_key", null, null);
+        Activity activity = prepareActivity("wrong_public_key", null);
 
         sleepThread();
 
         try {
             ActivityResult activityResult = getActivityResult(activity);
-            ApiException apiException = (ApiException) activityResult.getExtras().getSerializable("apiException");
+            MPException mpException = JsonUtil.getInstance().fromJson(activityResult.getExtras().getString("mpException"), MPException.class);
             assertTrue(activityResult.getResultCode() == Activity.RESULT_CANCELED);
-            assertTrue(apiException.getStatus() == 404);
+            assertTrue(mpException.getApiException().getStatus() == 404);
         } catch (Exception ex) {
             fail("Wrong merchant public key test failed, cause: " + ex.getMessage());
         }
@@ -71,12 +69,10 @@ public class PaymentMethodsActivityTest extends BaseTest<PaymentMethodsActivity>
 
     public void testExcludedPaymentTypesFilter() {
 
-        String paymentMethodsJson = StaticMock.getCompletePaymentMethodsJson();
+        PaymentPreference paymentPreference = new PaymentPreference();
+        paymentPreference.setExcludedPaymentTypeIds(new ArrayList<String>() {{ add("ticket"); }});
 
-        List<String> excludedPaymentTypes = new ArrayList<String>(){{
-            add("ticket");
-        }};
-        Activity activity = prepareActivity(StaticMock.DUMMY_MERCHANT_PUBLIC_KEY, excludedPaymentTypes, null);
+        Activity activity = prepareActivity(StaticMock.DUMMY_MERCHANT_PUBLIC_KEY, paymentPreference);
 
         sleepThread();
 
@@ -97,12 +93,12 @@ public class PaymentMethodsActivityTest extends BaseTest<PaymentMethodsActivity>
         }
     }
     public void testExcludedPaymentMethodIdsFilter() {
-        String paymentMethodsJson = StaticMock.getCompletePaymentMethodsJson();
 
-        List<String> excludedPaymentMethodIds = new ArrayList<String>(){{
-            add("bancomer");
-        }};
-        Activity activity = prepareActivity(StaticMock.DUMMY_MERCHANT_PUBLIC_KEY, null, excludedPaymentMethodIds);
+        PaymentPreference paymentPreference = new PaymentPreference();
+        paymentPreference.setExcludedPaymentMethodIds(new ArrayList<String>(){{
+            add("visa");
+        }});
+        Activity activity = prepareActivity(StaticMock.DUMMY_MERCHANT_PUBLIC_KEY, paymentPreference);
 
         sleepThread();
 
@@ -112,7 +108,7 @@ public class PaymentMethodsActivityTest extends BaseTest<PaymentMethodsActivity>
             assertTrue(adapter.getItemCount() > 0);
             boolean incorrectPaymentMethodIdFound = false;
             for (int i = 0; i < adapter.getItemCount(); i++) {
-                if (adapter.getItem(i).getId().equals("bancomer")) {
+                if (adapter.getItem(i).getId().equals("visa")) {
                     incorrectPaymentMethodIdFound = true;
                     break;
                 }
@@ -124,19 +120,20 @@ public class PaymentMethodsActivityTest extends BaseTest<PaymentMethodsActivity>
     }
 
     public void testBackPressed() {
-        Activity activity = prepareActivity(StaticMock.DUMMY_MERCHANT_PUBLIC_KEY, null, null);
+        Activity activity = prepareActivity(StaticMock.DUMMY_MERCHANT_PUBLIC_KEY, null);
         activity.onBackPressed();
         assertFinishCalledWithResult(activity, Activity.RESULT_CANCELED);
     }
 
-    private PaymentMethodsActivity prepareActivity(String merchantPublicKey, List<String> excludedPaymentTypes, List<String> excludedPaymentMethodIds) {
+    private PaymentMethodsActivity prepareActivity(String merchantPublicKey, PaymentPreference paymentPreference) {
 
         Intent intent = new Intent();
         if (merchantPublicKey != null) {
             intent.putExtra("merchantPublicKey", merchantPublicKey);
         }
-        putListExtra(intent, "excludedPaymentTypes", excludedPaymentTypes);
-        putListExtra(intent, "excludedPaymentMethodIds", excludedPaymentMethodIds);
+        if (paymentPreference != null) {
+            intent.putExtra("paymentPreference", JsonUtil.getInstance().toJson(paymentPreference));
+        }
 
         setActivityIntent(intent);
         return getActivity();

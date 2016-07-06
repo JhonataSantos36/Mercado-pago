@@ -672,8 +672,13 @@ public class CheckoutActivity extends MercadoPagoActivity {
     private void resolvePaymentFailure(ApiException apiException) {
         if(apiException.getStatus() != null) {
             String serverErrorFirstDigit = String.valueOf(ApiUtil.StatusCodes.INTERNAL_SERVER_ERROR).substring(0, 1);
-            if (String.valueOf(apiException.getStatus()).startsWith(serverErrorFirstDigit)
-                    && apiException.getStatus() != ApiUtil.StatusCodes.PROCESSING) {
+
+            if (apiException.getStatus() == ApiUtil.StatusCodes.PROCESSING) {
+                startPaymentInProcessActivity();
+                cleanTransactionId();
+            }
+            else if (String.valueOf(apiException.getStatus()).startsWith(serverErrorFirstDigit)) {
+
                 ApiUtil.showApiExceptionError(this, apiException);
                 setFailureRecovery(new FailureRecovery() {
                     @Override
@@ -681,11 +686,10 @@ public class CheckoutActivity extends MercadoPagoActivity {
                         createPayment();
                     }
                 });
-            } else if (apiException.getStatus() == ApiUtil.StatusCodes.PROCESSING) {
-                startPaymentInProcessActivity();
-                cleanTransactionId();
             }
+
             else if (apiException.getStatus() == ApiUtil.StatusCodes.BAD_REQUEST) {
+
                 MPException mpException = new MPException(apiException);
                 ErrorUtil.startErrorActivity(this, mpException);
             }

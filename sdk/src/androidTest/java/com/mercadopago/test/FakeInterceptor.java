@@ -17,7 +17,7 @@ public class FakeInterceptor implements Interceptor {
     public Response intercept(Chain chain) throws IOException {
         Response response = null;
         if(BuildConfig.DEBUG) {
-            FakeAPI.QueuedResponse nextResponse = FakeAPI.getNextResponse();
+            FakeAPI.QueuedResponse nextResponse = FakeAPI.getInstance().getNextResponse();
             String responseString = nextResponse.getBodyAsJson();
             response = new Response.Builder()
                     .code(nextResponse.getStatusCode())

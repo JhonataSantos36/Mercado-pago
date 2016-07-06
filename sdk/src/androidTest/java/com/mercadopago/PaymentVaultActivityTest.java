@@ -14,10 +14,14 @@ import com.mercadopago.model.PaymentMethodSearch;
 import com.mercadopago.model.PaymentMethodSearchItem;
 import com.mercadopago.model.PaymentPreference;
 import com.mercadopago.model.Token;
+import com.mercadopago.test.FakeAPI;
 import com.mercadopago.test.StaticMock;
 import com.mercadopago.test.rules.MockedApiTestRule;
 import com.mercadopago.util.JsonUtil;
 
+import junit.framework.Assert;
+
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -57,6 +61,7 @@ public class PaymentVaultActivityTest {
 
     @Before
     public void setupStartIntent() {
+
         validStartIntent = new Intent();
         validStartIntent.putExtra("merchantPublicKey", "1234");
         validStartIntent.putExtra("amount", "100");
@@ -64,10 +69,20 @@ public class PaymentVaultActivityTest {
         validStartIntent.putExtra("site", JsonUtil.getInstance().toJson(Sites.ARGENTINA));
     }
 
+    @Before
+    public void startFakeAPI() {
+        FakeAPI.getInstance().start();
+    }
+
+    @After
+    public void stopFakeAPI() {
+        FakeAPI.getInstance().shutDown();
+    }
+
     @Test
     public void setPublicKeyOnCreate() {
         mTestRule.launchActivity(validStartIntent);
-        assertTrue(mTestRule.getActivity().getMerchantPublicKey() != null);
+        assertTrue(mTestRule.getActivity().mMerchantPublicKey != null);
     }
 
     @Test
@@ -215,28 +230,38 @@ public class PaymentVaultActivityTest {
         });
     }
 
-    @Test
-    public void whenItemSelectedIsCardTypeStartGuessingNewCardActivityWithPublicKeyAndPaymentTypeId() {
-        String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
-
-        mTestRule.addApiResponseToQueue(paymentMethodSearchJson, 200, "");
-
-        mTestRule.launchActivity(validStartIntent);
-
-        onView(withId(R.id.mpsdkGroupsList)).perform(
-                actionOnItemAtPosition(0, click()));
-
-        onView(withId(R.id.mpsdkGroupsList)).perform(
-                actionOnItemAtPosition(0, click()));
-
-        PaymentMethodSearch paymentMethodSearch = JsonUtil.getInstance().fromJson(paymentMethodSearchJson, PaymentMethodSearch.class);
-        PaymentMethodSearchItem item = paymentMethodSearch.getGroups().get(0).getChildren().get(0);
-
-        //TODO cambiar por flowcard
-        /*intended(hasComponent(GuessingCardActivity.class.getName()));
-        intended(hasExtra("merchantPublicKey", "1234"));
-        intended(hasExtra("paymentTypeId", item.getId()));*/
-    }
+//    @Test
+//    public void whenItemSelectedIsCardTypeStartCardVaultActivityWithPublicKeyAndPaymentTypeId() {
+//        String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
+//
+//        mTestRule.addApiResponseToQueue(paymentMethodSearchJson, 200, "");
+//
+//
+//        mTestRule.launchActivity(validStartIntent);
+//
+//        mTestRule.initIntentsRecording();
+//
+//        onView(withId(R.id.mpsdkGroupsList)).perform(
+//                actionOnItemAtPosition(0, click()));
+//
+//        onView(withId(R.id.mpsdkGroupsList)).perform(
+//                actionOnItemAtPosition(0, click()));
+//
+//        intended(allOf(hasComponent(CardVaultActivity.class.getName()),
+//                hasExtra("publicKey", "1234")));
+//
+//        PaymentMethodSearch paymentMethodSearch = JsonUtil.getInstance().fromJson(paymentMethodSearchJson, PaymentMethodSearch.class);
+//        final PaymentMethodSearchItem item = paymentMethodSearch.getGroups().get(0).getChildren().get(0);
+//        getInstrumentation().runOnMainSync(new Runnable() {
+//            public void run() {
+//                Collection resumedActivities = ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(RESUMED);
+//                if (resumedActivities.iterator().hasNext()) {
+//                    CardVaultActivity currentActivity = (CardVaultActivity) resumedActivities.iterator().next();
+//                    assertEquals(currentActivity.mPaymentPreference.getDefaultPaymentTypeId(), item.getId());
+//                }
+//            }
+//        });
+//    }
 
     @Test
     public void whenItemSelectedIsNotCardTypeAndDoesNotHaveChildrenStartPaymentMethodsActivityWithPublicKeyAndPaymentTypeId() {
@@ -260,8 +285,7 @@ public class PaymentVaultActivityTest {
 
         intended(allOf(
                 hasComponent(PaymentMethodsActivity.class.getName()),
-                hasExtra("merchantPublicKey", "1234"),
-                hasExtra("paymentPreference", mTestRule.getActivity().mPaymentPreference)));
+                hasExtra("merchantPublicKey", "1234")));
 
         assertEquals(mTestRule.getActivity().mPaymentPreference.getDefaultPaymentTypeId(), selectedSearchItem.getId());
     }

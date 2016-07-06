@@ -462,7 +462,7 @@ public class CongratsActivity extends AppCompatActivity {
     }
 
     private Boolean isPaymentMethodIdValid(){
-        return !isEmpty(mPaymentMethod.getId()) && mPayment.getPaymentMethodId().equals(mPaymentMethod.getId());
+        return !isEmpty(mPaymentMethod.getId()) && mPaymentMethod.getId().equals(mPayment.getPaymentMethodId());
     }
 
     private Boolean isLastFourDigitsValid(){
