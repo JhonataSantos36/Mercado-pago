@@ -76,7 +76,7 @@ public class PaymentVaultActivityTest {
 
     @After
     public void stopFakeAPI() {
-        FakeAPI.getInstance().shutDown();
+        FakeAPI.getInstance().stop();
     }
 
     @Test

@@ -30,14 +30,6 @@ public class MockedApiTestRule<A extends Activity> extends ActivityTestRule<A> {
         intentsActive = false;
     }
 
-    private void startFakeAPI() {
-        FakeAPI.getInstance().start();
-    }
-
-    private void stopFakeAPI() {
-        FakeAPI.getInstance().shutDown();
-    }
-
     public <T> void addApiResponseToQueue(T response, int statusCode, String reason) {
         String jsonResponse = JsonUtil.getInstance().toJson(response);
         FakeAPI.getInstance().addResponseToQueue(jsonResponse, statusCode, reason);

@@ -58,7 +58,7 @@ public class FakeAPI {
         HttpClientUtil.setCustomClient(createClient());
     }
 
-    public void shutDown() {
+    public void stop() {
         HttpClientUtil.removeCustomClient();
         cleanQueue();
     }

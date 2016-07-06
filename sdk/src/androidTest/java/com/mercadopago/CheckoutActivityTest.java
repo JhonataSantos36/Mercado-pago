@@ -78,7 +78,7 @@ public class CheckoutActivityTest {
 
     @After
     public void stopFakeAPI() {
-        FakeAPI.getInstance().shutDown();
+        FakeAPI.getInstance().stop();
     }
 
     @Test
