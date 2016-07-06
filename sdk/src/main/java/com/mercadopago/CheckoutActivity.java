@@ -315,7 +315,7 @@ public class CheckoutActivity extends MercadoPagoActivity {
             resolvePaymentVaultRequest(resultCode, data);
         }
         else if (requestCode == MercadoPago.RESULT_REQUEST_CODE) {
-            resolveCongratsRequest(resultCode, data);
+            resolveResultRequest(resultCode, data);
         }
         else if (requestCode == MercadoPago.INSTALLMENTS_REQUEST_CODE) {
             resolveInstallmentsRequest(resultCode, data);
@@ -355,7 +355,7 @@ public class CheckoutActivity extends MercadoPagoActivity {
         }
     }
 
-    private void resolveCongratsRequest(int resultCode, Intent data) {
+    private void resolveResultRequest(int resultCode, Intent data) {
         if (resultCode == RESULT_CANCELED && data != null) {
             if (data.getBooleanExtra("selectOther", false)) {
                 MPTracker.getInstance().trackEvent("REJECTION", "SELECT_OTHER_PAYMENT_METHOD", "3", mMerchantPublicKey, "MLA", "1.0", this);
