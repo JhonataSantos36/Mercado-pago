@@ -314,11 +314,8 @@ public class CheckoutActivity extends MercadoPagoActivity {
         if(requestCode == MercadoPago.PAYMENT_VAULT_REQUEST_CODE) {
             resolvePaymentVaultRequest(resultCode, data);
         }
-        else if (requestCode == MercadoPago.INSTRUCTIONS_REQUEST_CODE) {
-            finishWithPaymentResult();
-        }
-        else if (requestCode == MercadoPago.CONGRATS_REQUEST_CODE) {
-            resolveCongratsRequest(resultCode, data);
+        else if (requestCode == MercadoPago.RESULT_REQUEST_CODE) {
+            resolveResultRequest(resultCode, data);
         }
         else if (requestCode == MercadoPago.INSTALLMENTS_REQUEST_CODE) {
             resolveInstallmentsRequest(resultCode, data);
@@ -358,7 +355,7 @@ public class CheckoutActivity extends MercadoPagoActivity {
         }
     }
 
-    private void resolveCongratsRequest(int resultCode, Intent data) {
+    private void resolveResultRequest(int resultCode, Intent data) {
         if (resultCode == RESULT_CANCELED && data != null) {
             if (data.getBooleanExtra("selectOther", false)) {
                 MPTracker.getInstance().trackEvent("REJECTION", "SELECT_OTHER_PAYMENT_METHOD", "3", mMerchantPublicKey, "MLA", "1.0", this);
@@ -548,12 +545,7 @@ public class CheckoutActivity extends MercadoPagoActivity {
                 MPTracker.getInstance().trackPayment("PAYMENT", "CREATE_PAYMENT_RESPONSE", "3", mMerchantPublicKey, mCheckoutPreference.getSiteId(), "1.0", createMPTrackerInformer(), getActivity());
                 MPTracker.getInstance().trackEvent("PAYMENT", "CREATE_PAYMENT_RESPONSE", "SUCCESS", "3", mMerchantPublicKey, mCheckoutPreference.getSiteId(), "1.0", getActivity());
 
-                if (MercadoPagoUtil.isCardPaymentType(mSelectedPaymentMethod.getPaymentTypeId())) {
-                    startCongratsActivity();
-                } else {
-                    MPTracker.getInstance().trackPaymentId(mCreatedPayment.getId().toString(), "3", mMerchantPublicKey, "MLA", "1.0", getActivity());
-                    startInstructionsActivity();
-                }
+                startResultActivity();
                 cleanTransactionId();
             }
 
@@ -599,16 +591,6 @@ public class CheckoutActivity extends MercadoPagoActivity {
         };
     }
 
-    private void startInstructionsActivity() {
-        new MercadoPago.StartActivityBuilder()
-                .setPublicKey(mMerchantPublicKey)
-                .setActivity(getActivity())
-                .setPayment(mCreatedPayment)
-                .setPaymentMethod(mSelectedPaymentMethod)
-                .startInstructionsActivity();
-    }
-
-
     private PaymentIntent createPaymentIntent() {
         PaymentIntent paymentIntent = new PaymentIntent();
         paymentIntent.setPrefId(mCheckoutPreference.getId());
@@ -633,28 +615,14 @@ public class CheckoutActivity extends MercadoPagoActivity {
         paymentIntent.setTransactionId(mTransactionId);
         return paymentIntent;
     }
-
-    private void startCongratsActivity(){
-        //TODO cuando tengamos el contexto con publicKey, site y version mover a congratsActivity
-        if (mCreatedPayment.getStatus().equals("approved")){
-            MPTracker.getInstance().trackScreen("CONGRATS", "3", mMerchantPublicKey, "MLA", "1.0", getActivity());
-        }else if (mCreatedPayment.getStatus().equals("in_process")){
-            MPTracker.getInstance().trackScreen("PENDING", "3", mMerchantPublicKey, "MLA", "1.0", getActivity());
-        }else {
-            if (mCreatedPayment.getStatusDetail().equals("cc_rejected_call_for_authorize")){
-                MPTracker.getInstance().trackScreen("CALL_FOR_AUTHORIZE", "3", mMerchantPublicKey, "MLA", "1.0", getActivity());
-            }
-            else{
-                MPTracker.getInstance().trackScreen("REJECTED", "3", mMerchantPublicKey, "MLA", "1.0", getActivity());
-            }
-        }
-
+    
+    private void startResultActivity(){
         new MercadoPago.StartActivityBuilder()
             .setPublicKey(mMerchantPublicKey)
             .setActivity(getActivity())
             .setPayment(mCreatedPayment)
             .setPaymentMethod(mSelectedPaymentMethod)
-            .startCongratsActivity();
+            .startResultActivity();
     }
 
     private Long createNewTransactionId() {
@@ -703,7 +671,7 @@ public class CheckoutActivity extends MercadoPagoActivity {
         mCreatedPayment = new Payment();
         mCreatedPayment.setStatus(Payment.StatusCodes.STATUS_IN_PROCESS);
         mCreatedPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_PENDING_CONTINGENCY);
-        startCongratsActivity();
+        startResultActivity();
     }
 
     public void onCancelClicked() {

@@ -55,10 +55,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.InfoMercadoPagoTheme.NoActionbar" />
         <activity
-            android:name=".CongratsActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.MercadoPagoTheme.NoActionBar" />
-        <activity
             android:name=".InstallmentsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.ProcessMercadoPagoTheme.NoActionbar" />
@@ -74,7 +70,24 @@
             android:name=".ErrorActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.MercadoPagoTheme.NoActionBar" />
-        <activity android:name=".MercadoPagoActivity"></activity>
+        <activity
+            android:name=".CongratsActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.CongratsMercadoPagoTheme.NoActionbar" />
+        <activity
+            android:name=".CallForAuthorizeActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.CallForAuthorizeMercadoPagoTheme.NoActionbar" />
+        <activity
+            android:name=".RejectionActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.RejectionMercadoPagoTheme.NoActionbar" />
+        <activity
+            android:name=".PendingActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.InfoMercadoPagoTheme.NoActionbar" />
+        <activity
+            android:name=".ResultActivity" />
     </application>
 
 </manifest>

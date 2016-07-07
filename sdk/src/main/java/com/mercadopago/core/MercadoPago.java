@@ -6,6 +6,7 @@ import android.content.Intent;
 
 import com.google.gson.Gson;
 import com.mercadopago.BankDealsActivity;
+import com.mercadopago.CallForAuthorizeActivity;
 import com.mercadopago.CardVaultActivity;
 import com.mercadopago.CheckoutActivity;
 import com.mercadopago.CongratsActivity;
@@ -16,6 +17,9 @@ import com.mercadopago.InstructionsActivity;
 import com.mercadopago.IssuersActivity;
 import com.mercadopago.PaymentMethodsActivity;
 import com.mercadopago.PaymentVaultActivity;
+import com.mercadopago.PendingActivity;
+import com.mercadopago.RejectionActivity;
+import com.mercadopago.ResultActivity;
 import com.mercadopago.adapters.ErrorHandlingCallAdapter;
 import com.mercadopago.callbacks.Callback;
 import com.mercadopago.model.BankDeal;
@@ -61,13 +65,17 @@ public class MercadoPago {
     public static final int INSTALLMENTS_REQUEST_CODE = 2;
     public static final int ISSUERS_REQUEST_CODE = 3;
     public static final int NEW_CARD_REQUEST_CODE = 4;
-    public static final int CONGRATS_REQUEST_CODE = 5;
-    public static final int PAYMENT_VAULT_REQUEST_CODE = 6;
-    public static final int BANK_DEALS_REQUEST_CODE = 7;
-    public static final int CHECKOUT_REQUEST_CODE = 8;
-    public static final int GUESSING_CARD_REQUEST_CODE = 10;
-    public static final int INSTRUCTIONS_REQUEST_CODE = 11;
-    public static final int CARD_VAULT_REQUEST_CODE = 12;
+    public static final int RESULT_REQUEST_CODE = 5;
+    public static final int CONGRATS_REQUEST_CODE = 6;
+    public static final int CALL_FOR_AUTHORIZE_REQUEST_CODE = 7;
+    public static final int PENDING_REQUEST_CODE = 8;
+    public static final int REJECTION_REQUEST_CODE = 9;
+    public static final int PAYMENT_VAULT_REQUEST_CODE = 10;
+    public static final int BANK_DEALS_REQUEST_CODE = 11;
+    public static final int CHECKOUT_REQUEST_CODE = 12;
+    public static final int GUESSING_CARD_REQUEST_CODE = 13;
+    public static final int INSTRUCTIONS_REQUEST_CODE = 14;
+    public static final int CARD_VAULT_REQUEST_CODE = 15;
 
     public static final int BIN_LENGTH = 6;
 
@@ -278,23 +286,63 @@ public class MercadoPago {
         activity.startActivityForResult(checkoutIntent, CHECKOUT_REQUEST_CODE);
     }
 
-    private static void startCongratsActivity(Activity activity, Payment payment, PaymentMethod paymentMethod) {
+    private static void startResultActivity(Activity activity, String merchantPublicKey, Payment payment, PaymentMethod paymentMethod) {
+
+        Intent resultIntent = new Intent(activity, ResultActivity.class);
+        resultIntent.putExtra("merchantPublicKey", merchantPublicKey);
+        resultIntent.putExtra("payment", JsonUtil.getInstance().toJson(payment));
+        resultIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
+
+        activity.startActivityForResult(resultIntent, RESULT_REQUEST_CODE);
+    }
+
+    private static void startCongratsActivity(Activity activity, String merchantPublicKey, Payment payment, PaymentMethod paymentMethod) {
 
         Intent congratsIntent = new Intent(activity, CongratsActivity.class);
+        congratsIntent.putExtra("merchantPublicKey", merchantPublicKey);
         congratsIntent.putExtra("payment", JsonUtil.getInstance().toJson(payment));
         congratsIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
 
         activity.startActivityForResult(congratsIntent, CONGRATS_REQUEST_CODE);
     }
 
+    private static void startCallForAuthorizeActivity(Activity activity, String merchantPublicKey, Payment payment, PaymentMethod paymentMethod) {
+
+        Intent callForAuthorizeIntent = new Intent(activity, CallForAuthorizeActivity.class);
+        callForAuthorizeIntent.putExtra("merchantPublicKey", merchantPublicKey);
+        callForAuthorizeIntent.putExtra("payment", JsonUtil.getInstance().toJson(payment));
+        callForAuthorizeIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
+
+        activity.startActivityForResult(callForAuthorizeIntent, CALL_FOR_AUTHORIZE_REQUEST_CODE);
+    }
+
+    private static void startPendingActivity(Activity activity, String merchantPublicKey, Payment payment) {
+
+        Intent pendingIntent = new Intent(activity, PendingActivity.class);
+        pendingIntent.putExtra("merchantPublicKey", merchantPublicKey);
+        pendingIntent.putExtra("payment", JsonUtil.getInstance().toJson(payment));
+
+        activity.startActivityForResult(pendingIntent, PENDING_REQUEST_CODE);
+    }
+
+    private static void startRejectionActivity(Activity activity, String merchantPublicKey, Payment payment, PaymentMethod paymentMethod) {
+
+        Intent rejectionIntent = new Intent(activity, RejectionActivity.class);
+        rejectionIntent.putExtra("merchantPublicKey", merchantPublicKey);
+        rejectionIntent.putExtra("payment", JsonUtil.getInstance().toJson(payment));
+        rejectionIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
+
+        activity.startActivityForResult(rejectionIntent, REJECTION_REQUEST_CODE);
+    }
+
     private static void startInstructionsActivity(Activity activity, String merchantPublicKey, Payment payment, PaymentMethod paymentMethod) {
 
-        Intent congratsIntent = new Intent(activity, InstructionsActivity.class);
-        congratsIntent.putExtra("merchantPublicKey", merchantPublicKey);
-        congratsIntent.putExtra("payment", JsonUtil.getInstance().toJson(payment));
-        congratsIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
+        Intent instructionIntent = new Intent(activity, InstructionsActivity.class);
+        instructionIntent.putExtra("merchantPublicKey", merchantPublicKey);
+        instructionIntent.putExtra("payment", JsonUtil.getInstance().toJson(payment));
+        instructionIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
 
-        activity.startActivityForResult(congratsIntent, INSTRUCTIONS_REQUEST_CODE);
+        activity.startActivityForResult(instructionIntent, INSTRUCTIONS_REQUEST_CODE);
     }
 
     private static void startCustomerCardsActivity(Activity activity, List<Card> cards) {
@@ -675,15 +723,79 @@ public class MercadoPago {
             }
         }
 
+        public void startResultActivity() {
+
+            if (this.mActivity == null) throw new IllegalStateException("activity is null");
+            if (this.mPayment == null) throw new IllegalStateException("payment is null");
+            if (this.mPaymentMethod == null) throw new IllegalStateException("payment method is null");
+            if (this.mKey == null) throw new IllegalStateException("key is null");
+            if (this.mKeyType == null) throw new IllegalStateException("key type is null");
+
+            if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {
+                MercadoPago.startResultActivity(this.mActivity, this.mKey, this.mPayment, this.mPaymentMethod);
+            } else {
+                throw new RuntimeException("Unsupported key type for this method");
+            }
+        }
+
         public void startCongratsActivity() {
 
             if (this.mActivity == null) throw new IllegalStateException("activity is null");
             if (this.mPayment == null) throw new IllegalStateException("payment is null");
             if (this.mPaymentMethod == null) throw new IllegalStateException("payment method is null");
+            if (this.mKey == null) throw new IllegalStateException("key is null");
+            if (this.mKeyType == null) throw new IllegalStateException("key type is null");
 
-            MercadoPago.startCongratsActivity(this.mActivity, this.mPayment, this.mPaymentMethod);
+            if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {
+                MercadoPago.startCongratsActivity(this.mActivity, this.mKey, this.mPayment, this.mPaymentMethod);
+            } else {
+                throw new RuntimeException("Unsupported key type for this method");
+            }
         }
 
+        public void startCallForAuthorizeActivity() {
+
+            if (this.mActivity == null) throw new IllegalStateException("activity is null");
+            if (this.mPayment == null) throw new IllegalStateException("payment is null");
+            if (this.mPaymentMethod == null) throw new IllegalStateException("payment method is null");
+            if (this.mKey == null) throw new IllegalStateException("key is null");
+            if (this.mKeyType == null) throw new IllegalStateException("key type is null");
+
+            if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {
+                MercadoPago.startCallForAuthorizeActivity(this.mActivity, this.mKey, this.mPayment, this.mPaymentMethod);
+            } else {
+                throw new RuntimeException("Unsupported key type for this method");
+            }
+        }
+
+        public void startPendingActivity() {
+
+            if (this.mActivity == null) throw new IllegalStateException("activity is null");
+            if (this.mPayment == null) throw new IllegalStateException("payment is null");
+            if (this.mKey == null) throw new IllegalStateException("key is null");
+            if (this.mKeyType == null) throw new IllegalStateException("key type is null");
+
+            if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {
+                MercadoPago.startPendingActivity(this.mActivity, this.mKey, this.mPayment);
+            } else {
+                throw new RuntimeException("Unsupported key type for this method");
+            }
+        }
+
+        public void startRejectionActivity() {
+
+            if (this.mActivity == null) throw new IllegalStateException("activity is null");
+            if (this.mPayment == null) throw new IllegalStateException("payment is null");
+            if (this.mPaymentMethod == null) throw new IllegalStateException("payment method is null");
+            if (this.mKey == null) throw new IllegalStateException("key is null");
+            if (this.mKeyType == null) throw new IllegalStateException("key type is null");
+
+            if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {
+                MercadoPago.startRejectionActivity(this.mActivity, this.mKey, this.mPayment, this.mPaymentMethod);
+            } else {
+                throw new RuntimeException("Unsupported key type for this method");
+            }
+        }
 
         public void startInstructionsActivity() {
 
