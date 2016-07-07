@@ -7,7 +7,6 @@ import com.mercadopago.model.BankDeal;
 import com.mercadopago.test.BaseTest;
 import com.mercadopago.test.StaticMock;
 
-
 import java.util.ArrayList;
 import java.util.List;
 

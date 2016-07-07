@@ -1,21 +1,10 @@
 package com.mercadopago;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.support.v7.widget.RecyclerView;
-import android.view.View;
 
-import com.mercadopago.adapters.PaymentMethodsAdapter;
-import com.mercadopago.exceptions.MPException;
-import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentPreference;
-import com.mercadopago.test.ActivityResult;
 import com.mercadopago.test.BaseTest;
-import com.mercadopago.test.StaticMock;
 import com.mercadopago.util.JsonUtil;
-import com.mercadopago.views.MPTextView;
-
-import java.util.ArrayList;
 
 public class PaymentMethodsActivityTest extends BaseTest<PaymentMethodsActivity> {
 

@@ -3,9 +3,7 @@ package com.mercadopago;
 import android.content.Intent;
 
 import com.mercadopago.core.MercadoPago;
-import com.mercadopago.model.CardToken;
 import com.mercadopago.model.PaymentMethod;
-import com.mercadopago.test.ActivityResult;
 import com.mercadopago.test.BaseTest;
 import com.mercadopago.test.StaticMock;
 import com.mercadopago.util.JsonUtil;
