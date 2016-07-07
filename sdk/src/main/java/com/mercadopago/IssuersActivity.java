@@ -47,7 +47,9 @@ public class IssuersActivity extends ShowCardActivity {
 
     @Override
     protected void validateActivityParameters() throws IllegalStateException {
-
+        if (mCurrentPaymentMethod == null || mPublicKey == null) {
+            throw new IllegalStateException();
+        }
     }
 
     @Override
@@ -57,8 +59,7 @@ public class IssuersActivity extends ShowCardActivity {
         mProgressBar = (ProgressBar) findViewById(R.id.mpsdkProgressBar);
 
         mCardBackground = findViewById(R.id.mpsdkCardBackground);
-        if(mDecorationPreference != null && mDecorationPreference.hasColors())
-        {
+        if(mDecorationPreference != null && mDecorationPreference.hasColors()) {
             mCardBackground.setBackgroundColor(mDecorationPreference.getLighterColor());
         }
         mProgressBar.setVisibility(View.GONE);
@@ -83,10 +84,7 @@ public class IssuersActivity extends ShowCardActivity {
                 .setContext(this)
                 .setPublicKey(mPublicKey)
                 .build();
-
-        if (mCurrentPaymentMethod != null) {
-            initializeCard();
-        }
+        initializeCard();
     }
 
     @Override
@@ -216,8 +214,7 @@ public class IssuersActivity extends ShowCardActivity {
         if(requestCode == ErrorUtil.ERROR_REQUEST_CODE) {
             if(resultCode == RESULT_OK) {
                 recoverFromFailure();
-            }
-            else {
+            } else {
                 setResult(resultCode, data);
                 finish();
             }
