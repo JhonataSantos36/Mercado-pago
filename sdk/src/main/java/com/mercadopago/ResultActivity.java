@@ -8,6 +8,7 @@ import com.mercadopago.core.MercadoPago;
 import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.mptracker.MPTracker;
+import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.MercadoPagoUtil;
 
@@ -42,13 +43,13 @@ public class ResultActivity extends AppCompatActivity {
     }
 
     protected void validateActivityParameters() throws IllegalStateException {
-        if(!isStatusValid()) {
-            throw new IllegalStateException("payment status not set");
+        if(mMerchantPublicKey == null) {
+            throw new IllegalStateException("merchant public key not set");
         }
-        if(!isStatusDetailValid()) {
-            throw new IllegalStateException("payment status detail not set");
+        if(mPayment == null) {
+            throw new IllegalStateException("payment not set");
         }
-        if (!isPaymentMethodValid()){
+        if(mPaymentMethod == null) {
             throw new IllegalStateException("payment method not set");
         }
     }
@@ -64,18 +65,22 @@ public class ResultActivity extends AppCompatActivity {
     }
 
     private void startCardPaymentTypeResult(){
-        if (mPayment.getStatus().equals(Payment.StatusCodes.STATUS_APPROVED)) {
-            startCongratsActivity();
-        } else if (mPayment.getStatus().equals(Payment.StatusCodes.STATUS_IN_PROCESS)) {
-            startPendingActivity();
-        } else if (mPayment.getStatus().equals(Payment.StatusCodes.STATUS_REJECTED)) {
-            if (mPayment.getStatusDetail().equals(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_CALL_FOR_AUTHORIZE)) {
-                startCallForAuthorizeActivity();
+        if (isStatusValid() && isStatusDetailValid()) {
+            if (mPayment.getStatus().equals(Payment.StatusCodes.STATUS_APPROVED)) {
+                startCongratsActivity();
+            } else if (mPayment.getStatus().equals(Payment.StatusCodes.STATUS_IN_PROCESS)) {
+                startPendingActivity();
+            } else if (mPayment.getStatus().equals(Payment.StatusCodes.STATUS_REJECTED)) {
+                if (mPayment.getStatusDetail().equals(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_CALL_FOR_AUTHORIZE)) {
+                    startCallForAuthorizeActivity();
+                } else {
+                    startRejectionActivity();
+                }
             } else {
-                startRejectionActivity();
+                ErrorUtil.startErrorActivity(this, getString(R.string.mpsdk_error_title), false);
             }
         } else {
-            throw new IllegalStateException("invalid status or status detail");
+            ErrorUtil.startErrorActivity(this, getString(R.string.mpsdk_error_title), false);
         }
     }
 
