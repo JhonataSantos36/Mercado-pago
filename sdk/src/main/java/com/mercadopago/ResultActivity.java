@@ -136,14 +136,6 @@ public class ResultActivity extends AppCompatActivity {
         return !isEmpty(mPayment.getStatusDetail());
     }
 
-    private Boolean isPaymentMethodValid(){
-        return isPaymentMethodIdValid() && !isEmpty(mPaymentMethod.getName()) && !isEmpty(mPaymentMethod.getPaymentTypeId());
-    }
-
-    private Boolean isPaymentMethodIdValid(){
-        return !isEmpty(mPaymentMethod.getId()) && mPayment.getPaymentMethodId().equals(mPaymentMethod.getId());
-    }
-
     protected void onInvalidStart(String message){
         throw new IllegalStateException(message);
     }
