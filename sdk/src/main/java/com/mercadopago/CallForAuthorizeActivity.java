@@ -136,7 +136,7 @@ public class CallForAuthorizeActivity extends MercadoPagoActivity {
     }
 
     private Boolean isPaymentMethodValid(){
-        return mPaymentMethod != null && isPaymentMethodIdValid() && !isEmpty(mPaymentMethod.getName());
+        return isPaymentMethodIdValid() && !isEmpty(mPaymentMethod.getName()) && !isEmpty(mPaymentMethod.getPaymentTypeId());
     }
 
     private Boolean isPaymentMethodIdValid(){
