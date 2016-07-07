@@ -5,10 +5,8 @@ import android.support.v7.widget.RecyclerView;
 
 import com.mercadopago.model.BankDeal;
 import com.mercadopago.test.BaseTest;
-import com.mercadopago.test.FakeAPI;
 import com.mercadopago.test.StaticMock;
 
-import org.junit.After;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,10 +45,4 @@ public class BankDealsActivityTest extends BaseTest<BankDealsActivity> {
         setActivityIntent(intent);
         return getActivity();
     }
-
-    @After
-    public void cleanMockedAPI() {
-        FakeAPI.getInstance().cleanQueue();
-    }
-
 }

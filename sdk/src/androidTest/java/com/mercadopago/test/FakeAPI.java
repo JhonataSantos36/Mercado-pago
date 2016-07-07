@@ -14,19 +14,8 @@ import okhttp3.OkHttpClient;
  */
 public class FakeAPI {
 
-    private static FakeAPI mInstance;
-
-    public static synchronized FakeAPI getInstance() {
-        if(mInstance == null) {
-            mInstance = new FakeAPI();
-        }
-        return mInstance;
-    }
-
     private List<QueuedResponse> queuedResponses;
     private FakeInterceptor fakeInterceptor;
-
-    private FakeAPI() {}
 
     public QueuedResponse getNextResponse() {
 
@@ -79,7 +68,7 @@ public class FakeAPI {
 
     private Interceptor getFakeInterceptor() {
         if(fakeInterceptor == null) {
-            fakeInterceptor = new FakeInterceptor();
+            fakeInterceptor = new FakeInterceptor(this);
         }
         return fakeInterceptor;
     }

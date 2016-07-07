@@ -3,6 +3,8 @@ package com.mercadopago;
 import android.app.Activity;
 import android.app.Instrumentation;
 import android.content.Intent;
+import android.support.test.espresso.intent.Intents;
+import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.test.runner.lifecycle.ActivityLifecycleMonitorRegistry;
 import android.test.suitebuilder.annotation.LargeTest;
@@ -16,10 +18,7 @@ import com.mercadopago.model.PaymentPreference;
 import com.mercadopago.model.Token;
 import com.mercadopago.test.FakeAPI;
 import com.mercadopago.test.StaticMock;
-import com.mercadopago.test.rules.MockedApiTestRule;
 import com.mercadopago.util.JsonUtil;
-
-import junit.framework.Assert;
 
 import org.junit.After;
 import org.junit.Before;
@@ -35,6 +34,7 @@ import java.util.List;
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.Intents.intending;
@@ -42,7 +42,9 @@ import static android.support.test.espresso.intent.matcher.IntentMatchers.hasCom
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static android.support.test.runner.lifecycle.Stage.RESUMED;
+import static com.mercadopago.utils.ActivityResultUtil.assertFinishCalledWithResult;
 import static org.hamcrest.Matchers.allOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -55,9 +57,10 @@ import static org.junit.Assert.assertTrue;
 public class PaymentVaultActivityTest {
 
     @Rule
-    public MockedApiTestRule<PaymentVaultActivity> mTestRule = new MockedApiTestRule<>(PaymentVaultActivity.class, true, false);
+    public ActivityTestRule<PaymentVaultActivity> mTestRule = new ActivityTestRule<>(PaymentVaultActivity.class, true, false);
 
     private Intent validStartIntent;
+    private FakeAPI mFakeAPI;
 
     @Before
     public void setupStartIntent() {
@@ -71,12 +74,23 @@ public class PaymentVaultActivityTest {
 
     @Before
     public void startFakeAPI() {
-        FakeAPI.getInstance().start();
+        mFakeAPI = new FakeAPI();
+        mFakeAPI.start();
+    }
+
+    @Before
+    public void initIntentsRecording() {
+        Intents.init();
     }
 
     @After
     public void stopFakeAPI() {
-        FakeAPI.getInstance().stop();
+        mFakeAPI.stop();
+    }
+
+    @After
+    public void releaseIntents() {
+        Intents.release();
     }
 
     @Test
@@ -143,7 +157,7 @@ public class PaymentVaultActivityTest {
     public void retrievePaymentMethodSearchOnCreate() {
         String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
 
-        mTestRule.addApiResponseToQueue(paymentMethodSearchJson, 200, "");
+        mFakeAPI.addResponseToQueue(paymentMethodSearchJson, 200, "");
 
         mTestRule.launchActivity(validStartIntent);
         assertTrue(mTestRule.getActivity().mPaymentMethodSearch != null);
@@ -153,9 +167,8 @@ public class PaymentVaultActivityTest {
     public void ifPaymentMethodSearchIsEmptyShowErrorActivity() {
         PaymentMethodSearch paymentMethodSearchJson = new PaymentMethodSearch();
 
-        mTestRule.addApiResponseToQueue(paymentMethodSearchJson, 200, "");
+        mFakeAPI.addResponseToQueue(paymentMethodSearchJson, 200, "");
 
-        mTestRule.initIntentsRecording();
         mTestRule.launchActivity(validStartIntent);
         intended(hasComponent(ErrorActivity.class.getName()));
     }
@@ -165,7 +178,7 @@ public class PaymentVaultActivityTest {
         //Prepare API responses
         String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
 
-        mTestRule.addApiResponseToQueue(paymentMethodSearchJson, 200, "");
+        mFakeAPI.addResponseToQueue(paymentMethodSearchJson, 200, "");
         mTestRule.launchActivity(validStartIntent);
 
         assertTrue(mTestRule.getActivity().mSearchItemsRecyclerView.getAdapter().getItemCount() != 0);
@@ -187,7 +200,7 @@ public class PaymentVaultActivityTest {
         String json = StaticMock.getCompletePaymentMethodSearchAsJson();
         PaymentMethodSearch paymentMethodSearch = JsonUtil.getInstance().fromJson(json, PaymentMethodSearch.class);
 
-        mTestRule.addApiResponseToQueue(json, 200, "");
+        mFakeAPI.addResponseToQueue(json, 200, "");
 
         validStartIntent.putExtra("selectedSearchItem", JsonUtil.getInstance().toJson(paymentMethodSearch.getGroups().get(0)));
         mTestRule.launchActivity(validStartIntent);
@@ -210,7 +223,7 @@ public class PaymentVaultActivityTest {
     public void whenItemSelectedRestartPaymentVaultWithSelectedItem() {
         String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
 
-        mTestRule.addApiResponseToQueue(paymentMethodSearchJson, 200, "");
+        mFakeAPI.addResponseToQueue(paymentMethodSearchJson, 200, "");
 
         mTestRule.launchActivity(validStartIntent);
         onView(withId(R.id.mpsdkGroupsList)).perform(
@@ -234,7 +247,7 @@ public class PaymentVaultActivityTest {
 //    public void whenItemSelectedIsCardTypeStartCardVaultActivityWithPublicKeyAndPaymentTypeId() {
 //        String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
 //
-//        mTestRule.addApiResponseToQueue(paymentMethodSearchJson, 200, "");
+//        mFakeAPI.addResponseToQueue(paymentMethodSearchJson, 200, "");
 //
 //
 //        mTestRule.launchActivity(validStartIntent);
@@ -273,9 +286,8 @@ public class PaymentVaultActivityTest {
         //remove children
         paymentMethodSearch.getGroups().get(1).getChildren().removeAll(paymentMethodSearch.getGroups().get(1).getChildren());
 
-        mTestRule.addApiResponseToQueue(paymentMethodSearch, 200, "");
+        mFakeAPI.addResponseToQueue(paymentMethodSearch, 200, "");
 
-        mTestRule.initIntentsRecording();
         mTestRule.launchActivity(validStartIntent);
 
         onView(withId(R.id.mpsdkGroupsList)).perform(
@@ -294,7 +306,7 @@ public class PaymentVaultActivityTest {
     public void ifNavigationBackClickedGoBack() {
         String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
 
-        mTestRule.addApiResponseToQueue(paymentMethodSearchJson, 200, "");
+        mFakeAPI.addResponseToQueue(paymentMethodSearchJson, 200, "");
 
         mTestRule.launchActivity(validStartIntent);
 
@@ -303,7 +315,8 @@ public class PaymentVaultActivityTest {
 
         onView(withContentDescription(R.string.abc_action_bar_up_description)).perform(click());
 
-        mTestRule.isActivityFinishedOrFinishing();
+        String title = mTestRule.getActivity().getString(R.string.mpsdk_title_activity_payment_vault);
+        onView(withId(R.id.mpsdkTitle)).check(matches(withText(title)));
     }
 
 
@@ -313,13 +326,12 @@ public class PaymentVaultActivityTest {
     public void ifAmountIsNullStartErrorActivity() {
         String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
 
-        mTestRule.addApiResponseToQueue(paymentMethodSearchJson, 200, "");
+        mFakeAPI.addResponseToQueue(paymentMethodSearchJson, 200, "");
 
         Intent invalidAmountIntent = new Intent();
         invalidAmountIntent.putExtras(validStartIntent.getExtras());
         invalidAmountIntent.removeExtra("amount");
 
-        mTestRule.initIntentsRecording();
         mTestRule.launchActivity(invalidAmountIntent);
         intended(hasComponent(ErrorActivity.class.getName()));
     }
@@ -328,13 +340,12 @@ public class PaymentVaultActivityTest {
     public void ifAmountIsNegativeStartErrorActivity() {
         String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
 
-        mTestRule.addApiResponseToQueue(paymentMethodSearchJson, 200, "");
+        mFakeAPI.addResponseToQueue(paymentMethodSearchJson, 200, "");
 
         Intent invalidAmountIntent = new Intent();
         invalidAmountIntent.putExtras(validStartIntent.getExtras());
         invalidAmountIntent.putExtra("amount", new BigDecimal(-100));
 
-        mTestRule.initIntentsRecording();
         mTestRule.launchActivity(invalidAmountIntent);
         intended(hasComponent(ErrorActivity.class.getName()));
     }
@@ -343,13 +354,12 @@ public class PaymentVaultActivityTest {
     public void ifPublicKeyIsNullShowErrorActivity() {
         String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
 
-        mTestRule.addApiResponseToQueue(paymentMethodSearchJson, 200, "");
+        mFakeAPI.addResponseToQueue(paymentMethodSearchJson, 200, "");
 
         Intent invalidAmountIntent = new Intent();
         invalidAmountIntent.putExtras(validStartIntent.getExtras());
         invalidAmountIntent.removeExtra("merchantPublicKey");
 
-        mTestRule.initIntentsRecording();
         mTestRule.launchActivity(invalidAmountIntent);
         intended(hasComponent(ErrorActivity.class.getName()));
     }
@@ -358,7 +368,7 @@ public class PaymentVaultActivityTest {
     public void ifNegativeMaxInstallmentsSetShowErrorActivity() {
         String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
 
-        mTestRule.addApiResponseToQueue(paymentMethodSearchJson, 200, "");
+        mFakeAPI.addResponseToQueue(paymentMethodSearchJson, 200, "");
 
         PaymentPreference paymentPreference = new PaymentPreference();
         paymentPreference.setMaxAcceptedInstallments(-3);
@@ -367,7 +377,6 @@ public class PaymentVaultActivityTest {
         invalidMaxInstallmentsIntent.putExtras(validStartIntent.getExtras());
         invalidMaxInstallmentsIntent.putExtra("paymentPreference", JsonUtil.getInstance().toJson(paymentPreference));
 
-        mTestRule.initIntentsRecording();
         mTestRule.launchActivity(invalidMaxInstallmentsIntent);
         intended(hasComponent(ErrorActivity.class.getName()));
     }
@@ -376,7 +385,7 @@ public class PaymentVaultActivityTest {
     public void ifMaxInstallmentsSetAsZeroShowErrorActivity() {
         String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
 
-        mTestRule.addApiResponseToQueue(paymentMethodSearchJson, 200, "");
+        mFakeAPI.addResponseToQueue(paymentMethodSearchJson, 200, "");
 
         PaymentPreference paymentPreference = new PaymentPreference();
         paymentPreference.setMaxAcceptedInstallments(0);
@@ -385,7 +394,6 @@ public class PaymentVaultActivityTest {
         invalidMaxInstallmentsIntent.putExtras(validStartIntent.getExtras());
         invalidMaxInstallmentsIntent.putExtra("paymentPreference", JsonUtil.getInstance().toJson(paymentPreference));
 
-        mTestRule.initIntentsRecording();
         mTestRule.launchActivity(invalidMaxInstallmentsIntent);
         intended(hasComponent(ErrorActivity.class.getName()));
     }
@@ -394,7 +402,7 @@ public class PaymentVaultActivityTest {
     public void ifNegativeDefaultInstallmentsSetShowErrorActivity() {
         String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
 
-        mTestRule.addApiResponseToQueue(paymentMethodSearchJson, 200, "");
+        mFakeAPI.addResponseToQueue(paymentMethodSearchJson, 200, "");
 
         PaymentPreference paymentPreference = new PaymentPreference();
         paymentPreference.setDefaultInstallments(-3);
@@ -403,7 +411,6 @@ public class PaymentVaultActivityTest {
         invalidDefaultInstallmentsIntent.putExtras(validStartIntent.getExtras());
         invalidDefaultInstallmentsIntent.putExtra("paymentPreference", JsonUtil.getInstance().toJson(paymentPreference));
 
-        mTestRule.initIntentsRecording();
         mTestRule.launchActivity(invalidDefaultInstallmentsIntent);
         intended(hasComponent(ErrorActivity.class.getName()));
     }
@@ -412,7 +419,7 @@ public class PaymentVaultActivityTest {
     public void ifDefaultInstallmentsSetAsZeroShowErrorActivity() {
         String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
 
-        mTestRule.addApiResponseToQueue(paymentMethodSearchJson, 200, "");
+        mFakeAPI.addResponseToQueue(paymentMethodSearchJson, 200, "");
         PaymentPreference paymentPreference = new PaymentPreference();
         paymentPreference.setDefaultInstallments(0);
 
@@ -420,7 +427,6 @@ public class PaymentVaultActivityTest {
         invalidDefaultInstallmentsIntent.putExtras(validStartIntent.getExtras());
         invalidDefaultInstallmentsIntent.putExtra("paymentPreference", JsonUtil.getInstance().toJson(paymentPreference));
 
-        mTestRule.initIntentsRecording();
         mTestRule.launchActivity(invalidDefaultInstallmentsIntent);
         intended(hasComponent(ErrorActivity.class.getName()));
     }
@@ -429,7 +435,7 @@ public class PaymentVaultActivityTest {
     public void ifAllPaymentTypesExcludedShowErrorActivity() {
         String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
 
-        mTestRule.addApiResponseToQueue(paymentMethodSearchJson, 200, "");
+        mFakeAPI.addResponseToQueue(paymentMethodSearchJson, 200, "");
 
         List<String> excludedPaymentTypes = new ArrayList<String>(){{
             addAll(PaymentTypes.getAllPaymentTypes());
@@ -442,7 +448,6 @@ public class PaymentVaultActivityTest {
         invalidExclusionsIntent.putExtras(validStartIntent.getExtras());
         invalidExclusionsIntent.putExtra("paymentPreference", JsonUtil.getInstance().toJson(paymentPreference));
 
-        mTestRule.initIntentsRecording();
         mTestRule.launchActivity(invalidExclusionsIntent);
         intended(hasComponent(ErrorActivity.class.getName()));
     }
@@ -452,8 +457,7 @@ public class PaymentVaultActivityTest {
     //API EXCEPTIONS TEST
     @Test
     public void ifPaymentMethodSearchAPICallFailsShowErrorActivity() {
-        mTestRule.addApiResponseToQueue("", 401, "");
-        mTestRule.initIntentsRecording();
+        mFakeAPI.addResponseToQueue("", 401, "");
         mTestRule.launchActivity(validStartIntent);
         intended(hasComponent(ErrorActivity.class.getName()));
     }
@@ -461,9 +465,8 @@ public class PaymentVaultActivityTest {
     @Test
     public void ifPaymentMethodsAPICallFailsShowErrorActivity() {
         String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
-        mTestRule.addApiResponseToQueue(paymentMethodSearchJson, 401, "");
+        mFakeAPI.addResponseToQueue(paymentMethodSearchJson, 401, "");
 
-        mTestRule.initIntentsRecording();
         mTestRule.launchActivity(validStartIntent);
         intended(hasComponent(ErrorActivity.class.getName()));
     }
@@ -472,9 +475,8 @@ public class PaymentVaultActivityTest {
     public void whenReceivedResponseFromCardVaultFinishWithResult() {
         String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
 
-        mTestRule.addApiResponseToQueue(paymentMethodSearchJson, 200, "");
+        mFakeAPI.addResponseToQueue(paymentMethodSearchJson, 200, "");
 
-        mTestRule.initIntentsRecording();
         mTestRule.launchActivity(validStartIntent);
 
         onView(withId(R.id.mpsdkGroupsList)).perform(
@@ -494,6 +496,6 @@ public class PaymentVaultActivityTest {
         onView(withId(R.id.mpsdkGroupsList)).perform(
                 actionOnItemAtPosition(0, click()));
 
-        assertTrue(mTestRule.isActivityFinishedOrFinishing());
+        assertFinishCalledWithResult(mTestRule.getActivity(), Activity.RESULT_OK);
     }
 }
