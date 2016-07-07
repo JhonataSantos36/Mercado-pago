@@ -7,51 +7,55 @@ import com.mercadopago.core.Settings;
 import java.io.File;
 import java.util.concurrent.TimeUnit;
 
-import okhttp3.Interceptor;
-import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 
 public class HttpClientUtil {
 
-    private static okhttp3.OkHttpClient client;
-    private static Interceptor mInterceptor;
-
-    public static final MediaType JSON
-            = MediaType.parse("application/json; charset=utf-8");
+    private static OkHttpClient client;
+    private static OkHttpClient customClient;
 
     public synchronized static okhttp3.OkHttpClient getClient(Context context, int connectTimeout, int readTimeout, int writeTimeout) {
 
-        if (client == null) {
-
-            // Set log info
-            HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-            interceptor.setLevel(Settings.OKHTTP_LOGGING);
-
-            // Set cache size
-            int cacheSize = 10 * 1024 * 1024; // 10 MiB
-            okhttp3.Cache cache = new okhttp3.Cache(new File(context.getCacheDir().getPath() + "okhttp"), cacheSize);
-
-            // Set client
-            okhttp3.OkHttpClient.Builder okHttpClientBuilder = new okhttp3.OkHttpClient.Builder()
-                    .connectTimeout(connectTimeout, TimeUnit.SECONDS)
-                    .writeTimeout(writeTimeout, TimeUnit.SECONDS)
-                    .readTimeout(readTimeout, TimeUnit.SECONDS)
-                    .cache(cache)
-                    .addInterceptor(interceptor);
-            if(mInterceptor != null) {
-                okHttpClientBuilder.addInterceptor(mInterceptor);
-            }
-            client = okHttpClientBuilder.build();
+        if(customClientSet()) {
+            return customClient;
         }
-
-        return client;
+        else {
+            if(client == null) {
+                createClient(context, connectTimeout, readTimeout, writeTimeout);
+            }
+            return client;
+        }
     }
 
-    public static void bindInterceptor(Interceptor interceptor) {
-        mInterceptor = interceptor;
+    private static void createClient(Context context, int connectTimeout, int readTimeout, int writeTimeout) {
+        // Set log info
+        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+        interceptor.setLevel(Settings.OKHTTP_LOGGING);
+
+        // Set cache size
+        int cacheSize = 10 * 1024 * 1024; // 10 MiB
+        okhttp3.Cache cache = new okhttp3.Cache(new File(context.getCacheDir().getPath() + "okhttp"), cacheSize);
+
+        // Set client
+        okhttp3.OkHttpClient.Builder okHttpClientBuilder = new okhttp3.OkHttpClient.Builder()
+                .connectTimeout(connectTimeout, TimeUnit.SECONDS)
+                .writeTimeout(writeTimeout, TimeUnit.SECONDS)
+                .readTimeout(readTimeout, TimeUnit.SECONDS)
+                .cache(cache)
+                .addInterceptor(interceptor);
+
+        client = okHttpClientBuilder.build();
     }
 
-    public static void unbindInterceptor() {
-        mInterceptor = null;
+    public static void setCustomClient(okhttp3.OkHttpClient client) {
+        customClient = client;
+    }
+    public static void removeCustomClient() {
+        customClient = null;
+    }
+
+    private static boolean customClientSet() {
+        return customClient != null;
     }
 }

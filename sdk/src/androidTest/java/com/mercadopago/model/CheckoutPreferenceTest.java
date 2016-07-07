@@ -569,19 +569,18 @@ public class CheckoutPreferenceTest extends TestCase {
         items.add(itemA);
         preference.setItems(items);
 
+        Payer payer = new Payer();
+        payer.setEmail("test@gmail.com");
+
+        preference.setPayer(payer);
+
         String CREDIT_CARD = "credit_card";
         String DEBIT_CARD = "debit_card";
         String PREPAID_CARD = "prepaid_card";
-        String TICKET = "ticket";
-        String ATM = "atm";
-        String DIGITAL_CURRENCY = "digital_currency";
 
         paymentTypes.add(CREDIT_CARD);
         paymentTypes.add(DEBIT_CARD);
         paymentTypes.add(PREPAID_CARD);
-        //paymentTypes.add(TICKET);
-        //paymentTypes.add(ATM);
-        //paymentTypes.add(DIGITAL_CURRENCY);
 
         Date pastDate = new Date();
         pastDate.setTime((new Date().getTime()) - 1000 * 60 * 60);
@@ -607,19 +606,7 @@ public class CheckoutPreferenceTest extends TestCase {
         items.add(itemA);
         preference.setItems(items);
 
-        String CREDIT_CARD = "credit_card";
-        String DEBIT_CARD = "debit_card";
-        String PREPAID_CARD = "prepaid_card";
-        String TICKET = "ticket";
-        String ATM = "atm";
-        String DIGITAL_CURRENCY = "digital_currency";
-
-        paymentTypes.add(CREDIT_CARD);
-        paymentTypes.add(DEBIT_CARD);
-        paymentTypes.add(PREPAID_CARD);
-        paymentTypes.add(TICKET);
-        paymentTypes.add(ATM);
-        paymentTypes.add(DIGITAL_CURRENCY);
+        paymentTypes.addAll(PaymentTypes.getAllPaymentTypes());
 
         Date pastDate = new Date();
         pastDate.setTime((new Date().getTime()) - 1000 * 60 * 60);

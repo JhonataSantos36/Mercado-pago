@@ -47,17 +47,17 @@ public class CustomerCardsActivityTests extends BaseTest<CustomerCardsActivity> 
 //        }
 //    }
 
-    public void testNullCards() {
-
-        Activity activity = prepareActivity(null);
-        assertFinishCalledWithResult(activity, Activity.RESULT_CANCELED);
-    }
-
-    public void testWrongCards() {
-
-        Activity activity = prepareActivityWrongCards();
-        assertFinishCalledWithResult(activity, Activity.RESULT_CANCELED);
-    }
+//    public void testNullCards() {
+//
+//        Activity activity = prepareActivity(null);
+//        assertFinishCalledWithResult(activity, Activity.RESULT_CANCELED);
+//    }
+//
+//    public void testWrongCards() {
+//
+//        Activity activity = prepareActivityWrongCards();
+//        assertFinishCalledWithResult(activity, Activity.RESULT_CANCELED);
+//    }
 
     private Activity prepareActivity(List<Card> cards) {
 

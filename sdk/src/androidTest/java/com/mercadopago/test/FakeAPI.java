@@ -1,18 +1,23 @@
 package com.mercadopago.test;
 
+import com.mercadopago.util.HttpClientUtil;
 import com.mercadopago.util.JsonUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import okhttp3.Interceptor;
+import okhttp3.OkHttpClient;
 
 /**
  * Created by mreverter on 1/7/16.
  */
 public class FakeAPI {
 
-    private static List<QueuedResponse> queuedResponses;
+    private List<QueuedResponse> queuedResponses;
+    private FakeInterceptor fakeInterceptor;
 
-    public static QueuedResponse getNextResponse() {
+    public QueuedResponse getNextResponse() {
 
         if(queuedResponses != null && !queuedResponses.isEmpty()) {
             return queuedResponses.remove(0);
@@ -22,7 +27,7 @@ public class FakeAPI {
         }
     }
 
-    public static <T> void addResponseToQueue(T response, int statusCode, String reason) {
+    public <T> void addResponseToQueue(T response, int statusCode, String reason) {
         if(queuedResponses == null) {
             queuedResponses = new ArrayList<>();
         }
@@ -30,7 +35,7 @@ public class FakeAPI {
         addResponseToQueue(jsonResponse, statusCode, reason);
     }
 
-    public static void addResponseToQueue(String jsonResponse, int statusCode, String reason) {
+    public void addResponseToQueue(String jsonResponse, int statusCode, String reason) {
         if(queuedResponses == null) {
             queuedResponses = new ArrayList<>();
         }
@@ -38,8 +43,38 @@ public class FakeAPI {
         queuedResponses.add(queuedResponse);
     }
 
-    public static void cleanQueue() {
-        queuedResponses.clear();
+    public void start() {
+        HttpClientUtil.setCustomClient(createClient());
+    }
+
+    public void stop() {
+        HttpClientUtil.removeCustomClient();
+        cleanQueue();
+    }
+
+    public void cleanQueue() {
+        if(this.hasQueuedResponses()) {
+            queuedResponses.clear();
+        }
+    }
+
+    private OkHttpClient createClient() {
+
+        okhttp3.OkHttpClient.Builder okHttpClientBuilder = new okhttp3.OkHttpClient.Builder()
+                .addInterceptor(getFakeInterceptor());
+
+        return okHttpClientBuilder.build();
+    }
+
+    private Interceptor getFakeInterceptor() {
+        if(fakeInterceptor == null) {
+            fakeInterceptor = new FakeInterceptor(this);
+        }
+        return fakeInterceptor;
+    }
+
+    public boolean hasQueuedResponses() {
+        return queuedResponses != null && !queuedResponses.isEmpty();
     }
 
     public static class QueuedResponse {

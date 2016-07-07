@@ -13,11 +13,17 @@ import okhttp3.ResponseBody;
  */
 public class FakeInterceptor implements Interceptor {
 
+    private final FakeAPI targetAPI;
+
+    public FakeInterceptor(FakeAPI targetAPI) {
+        this.targetAPI = targetAPI;
+    }
+
     @Override
     public Response intercept(Chain chain) throws IOException {
         Response response = null;
         if(BuildConfig.DEBUG) {
-            FakeAPI.QueuedResponse nextResponse = FakeAPI.getNextResponse();
+            FakeAPI.QueuedResponse nextResponse = targetAPI.getNextResponse();
             String responseString = nextResponse.getBodyAsJson();
             response = new Response.Builder()
                     .code(nextResponse.getStatusCode())
