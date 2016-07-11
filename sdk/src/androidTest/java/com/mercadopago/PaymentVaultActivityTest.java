@@ -36,6 +36,7 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
+import static android.support.test.espresso.intent.Intents.init;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.Intents.intending;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
@@ -243,38 +244,23 @@ public class PaymentVaultActivityTest {
         });
     }
 
-//    @Test
-//    public void whenItemSelectedIsCardTypeStartCardVaultActivityWithPublicKeyAndPaymentTypeId() {
-//        String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
-//
-//        mFakeAPI.addResponseToQueue(paymentMethodSearchJson, 200, "");
-//
-//
-//        mTestRule.launchActivity(validStartIntent);
-//
-//        mTestRule.initIntentsRecording();
-//
-//        onView(withId(R.id.mpsdkGroupsList)).perform(
-//                actionOnItemAtPosition(0, click()));
-//
-//        onView(withId(R.id.mpsdkGroupsList)).perform(
-//                actionOnItemAtPosition(0, click()));
-//
-//        intended(allOf(hasComponent(CardVaultActivity.class.getName()),
-//                hasExtra("publicKey", "1234")));
-//
-//        PaymentMethodSearch paymentMethodSearch = JsonUtil.getInstance().fromJson(paymentMethodSearchJson, PaymentMethodSearch.class);
-//        final PaymentMethodSearchItem item = paymentMethodSearch.getGroups().get(0).getChildren().get(0);
-//        getInstrumentation().runOnMainSync(new Runnable() {
-//            public void run() {
-//                Collection resumedActivities = ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(RESUMED);
-//                if (resumedActivities.iterator().hasNext()) {
-//                    CardVaultActivity currentActivity = (CardVaultActivity) resumedActivities.iterator().next();
-//                    assertEquals(currentActivity.mPaymentPreference.getDefaultPaymentTypeId(), item.getId());
-//                }
-//            }
-//        });
-//    }
+    @Test
+    public void whenItemSelectedIsCardTypeStartCardVaultActivityWithPublicKeyAndPaymentTypeId() {
+        String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
+
+        mFakeAPI.addResponseToQueue(paymentMethodSearchJson, 200, "");
+
+        mTestRule.launchActivity(validStartIntent);
+
+        onView(withId(R.id.mpsdkGroupsList)).perform(
+                actionOnItemAtPosition(0, click()));
+
+        onView(withId(R.id.mpsdkGroupsList)).perform(
+                actionOnItemAtPosition(0, click()));
+
+        intended(allOf(hasComponent(CardVaultActivity.class.getName()),
+                hasExtra("publicKey", "1234")));
+    }
 
     @Test
     public void whenItemSelectedIsNotCardTypeAndDoesNotHaveChildrenStartPaymentMethodsActivityWithPublicKeyAndPaymentTypeId() {

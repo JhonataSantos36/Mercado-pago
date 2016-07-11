@@ -260,12 +260,7 @@ public class PaymentVaultActivity extends MercadoPagoActivity {
         }
         else {
             PaymentMethodSearchItem uniqueItem = mPaymentMethodSearch.getGroups().get(0);
-            if(MercadoPagoUtil.isCardPaymentType(uniqueItem.getId())) {
-                startNextStepForPaymentType(uniqueItem);
-            }
-            else if(uniqueItem.isPaymentMethod()) {
-                resolvePaymentMethodSelection(uniqueItem);
-            }
+            selectItem(uniqueItem);
         }
     }
 
@@ -285,14 +280,20 @@ public class PaymentVaultActivity extends MercadoPagoActivity {
                 if (item.hasChildren()) {
                     restartWithSelectedItem(item);
                 }
-                else if (item.isPaymentType()) {
-                    startNextStepForPaymentType(item);
-                }
-                else if (item.isPaymentMethod()) {
-                    resolvePaymentMethodSelection(item);
+                else {
+                    selectItem(item);
                 }
             }
         };
+    }
+
+    private void selectItem(PaymentMethodSearchItem item) {
+        if (item.isPaymentType()) {
+            startNextStepForPaymentType(item);
+        }
+        else if (item.isPaymentMethod()) {
+            resolvePaymentMethodSelection(item);
+        }
     }
 
     private void resolvePaymentMethodSelection(PaymentMethodSearchItem item) {

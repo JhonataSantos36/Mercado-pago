@@ -7,6 +7,7 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.suitebuilder.annotation.LargeTest;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -37,6 +38,7 @@ import static android.support.test.espresso.intent.matcher.IntentMatchers.hasDat
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static com.mercadopago.utils.CustomMatchers.withAnyChildText;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.not;
@@ -317,31 +319,5 @@ public class InstructionsActivityTest {
         paymentMethod.setName("Oxxo");
         paymentMethod.setPaymentTypeId("ticket");
         return paymentMethod;
-    }
-
-    static Matcher<View> withAnyChildText(final String text) {
-        return new BoundedMatcher<View, LinearLayout>(LinearLayout.class) {
-            @Override
-            public boolean matchesSafely(LinearLayout view) {
-                return anyChildMatches(view, text);
-            }
-
-            private boolean anyChildMatches(LinearLayout view, String text) {
-                for(int i=0; i < view.getChildCount(); i++) {
-                    View child = view.getChildAt(i);
-                    if (child != null && child instanceof TextView) {
-                        if(((TextView) child).getText().toString().equals(text)) {
-                            return true;
-                        }
-                    }
-                }
-                return false;
-            }
-
-            @Override
-            public void describeTo(Description description) {
-                description.appendText("with child text: ");
-            }
-        };
     }
 }

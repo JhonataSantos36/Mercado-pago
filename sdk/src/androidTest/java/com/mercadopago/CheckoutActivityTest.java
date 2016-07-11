@@ -48,6 +48,7 @@ import static android.support.test.espresso.intent.Intents.times;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static com.mercadopago.utils.CustomMatchers.withAnyChildText;
 import static junit.framework.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
 
@@ -565,11 +566,12 @@ public class CheckoutActivityTest {
         Instrumentation.ActivityResult paymentMethodResult = new Instrumentation.ActivityResult(Activity.RESULT_OK, resultIntent);
 
         intending(hasComponent(PaymentVaultActivity.class.getName())).respondWith(paymentMethodResult);
+
         mTestRule.launchActivity(validStartIntent);
 
         onView(withId(R.id.mpsdkPayButton)).perform(click());
 
-        intended(hasComponent(CongratsActivity.class.getName()));
+        intended(hasComponent(ResultActivity.class.getName()));
     }
 
     @Test
@@ -617,38 +619,6 @@ public class CheckoutActivityTest {
         intended(hasComponent(ErrorActivity.class.getName()));
     }
 
-    //TODO Wait for ResultActivity
-//    @Test
-//    public void whenPaymentCreationFailsWithProcessingCodeShowCongratsActivityInProcess() {
-//        //Prepare mocked api responses
-//        CheckoutPreference preference = StaticMock.getPreferenceWithoutExclusions();
-//        mFakeAPI.addResponseToQueue(preference, 200, "");
-//
-//        String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
-//        mFakeAPI.addResponseToQueue(paymentMethodSearchJson, 200, "");
-//        mFakeAPI.addResponseToQueue("", ApiUtil.StatusCodes.PROCESSING, "");
-//
-//        //Set up intents
-//        mTestRule.initIntentsRecording();
-//
-//        PaymentMethod paymentMethod = StaticMock.getPaymentMethod(InstrumentationRegistry.getContext());
-//
-//        Intent intent = new Intent();
-//        intent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
-//
-//        Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(Activity.RESULT_OK, intent);
-//        intending(hasComponent(PaymentVaultActivity.class.getName())).respondWith(result);
-//
-//        //Launch activity
-//
-//        mTestRule.launchActivity(createValidStartIntent);
-//
-//        onView(withId(R.id.mpsdkPayButton)).perform(click());
-//
-//        intended(hasComponent(CongratsActivity.class.getName()));
-//        onView(withText(mTestRule.getActivity().getString(R.string.mpsdk_title_pending))).check(matches(isDisplayed()));
-//    }
-
     @Test
     public void ifInvalidPreferenceSetStartErrorActivity() {
         Intent invalidStartIntent = new Intent();
@@ -662,4 +632,32 @@ public class CheckoutActivityTest {
         mTestRule.launchActivity(invalidStartIntent);
         intending(hasComponent(ErrorActivity.class.getName()));
     }
+
+    //Card payment methods tests
+//    @Test
+//    public void onCardPaymentMethodSelectedShowIconAndDescription(){
+//        //prepare next activity result
+//        PaymentMethod paymentMethod = StaticMock.getPaymentMethodOn();
+//
+//        Intent paymentVaultResultIntent = new Intent();
+//        paymentVaultResultIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
+//        Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(Activity.RESULT_OK, paymentVaultResultIntent);
+//
+//        intending(hasComponent(PaymentVaultActivity.class.getName())).respondWith(result);
+//
+//        //prepare mocked api response
+//        CheckoutPreference preference = StaticMock.getPreferenceWithoutExclusions();
+//        mFakeAPI.addResponseToQueue(preference, 200, "");
+//        String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
+//        mFakeAPI.addResponseToQueue(paymentMethodSearchJson, 200, "");
+//
+//        mTestRule.launchActivity(validStartIntent);
+//
+//        onView(withId(R.id.mpsdkPaymentMethodLayout)).check(matches(withAnyChildText("")));
+//    }
+
+    //TODO Active Activity Tests
+    //TODO Results Tests
+    //TODO Decoration Tests
+    //TODO Exceptions Tests
 }
