@@ -48,6 +48,7 @@ import static android.support.test.espresso.intent.Intents.times;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static com.mercadopago.utils.CustomMatchers.withAnyChildImage;
 import static com.mercadopago.utils.CustomMatchers.withAnyChildText;
 import static junit.framework.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
@@ -634,27 +635,40 @@ public class CheckoutActivityTest {
     }
 
     //Card payment methods tests
-//    @Test
-//    public void onCardPaymentMethodSelectedShowIconAndDescription(){
-//        //prepare next activity result
-//        PaymentMethod paymentMethod = StaticMock.getPaymentMethodOn();
-//
-//        Intent paymentVaultResultIntent = new Intent();
-//        paymentVaultResultIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
-//        Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(Activity.RESULT_OK, paymentVaultResultIntent);
-//
-//        intending(hasComponent(PaymentVaultActivity.class.getName())).respondWith(result);
-//
-//        //prepare mocked api response
-//        CheckoutPreference preference = StaticMock.getPreferenceWithoutExclusions();
-//        mFakeAPI.addResponseToQueue(preference, 200, "");
-//        String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
-//        mFakeAPI.addResponseToQueue(paymentMethodSearchJson, 200, "");
-//
-//        mTestRule.launchActivity(validStartIntent);
-//
-//        onView(withId(R.id.mpsdkPaymentMethodLayout)).check(matches(withAnyChildText("")));
-//    }
+    @Test
+    public void onCardPaymentMethodSelectedShowIconAndDescription(){
+        //Prepare next activity result
+        PaymentMethod paymentMethod = StaticMock.getPaymentMethodOn();
+        Token token = StaticMock.getToken();
+
+        Intent resultIntent = new Intent();
+
+        resultIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
+        resultIntent.putExtra("token", JsonUtil.getInstance().toJson(token));
+
+        Instrumentation.ActivityResult paymentMethodResult = new Instrumentation.ActivityResult(Activity.RESULT_OK, resultIntent);
+
+        intending(hasComponent(PaymentVaultActivity.class.getName())).respondWith(paymentMethodResult);
+
+        //Mock API Calls
+        CheckoutPreference preference = StaticMock.getPreferenceWithoutExclusions();
+        mFakeAPI.addResponseToQueue(preference, 200, "");
+        String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
+        mFakeAPI.addResponseToQueue(paymentMethodSearchJson, 200, "");
+
+        //Launch Activity
+        mTestRule.launchActivity(validStartIntent);
+
+        //Assertions
+        String paymentMethodDescription = mTestRule.getActivity().getString(R.string.mpsdk_last_digits_label) + " " + token.getLastFourDigits();
+
+
+        Bitmap bitmap = ((BitmapDrawable) ContextCompat.getDrawable(mTestRule.getActivity(), R.drawable.visa)).getBitmap();
+
+        onView(withId(R.id.mpsdkRowPaymentMethodCard)).check(matches(withAnyChildText(paymentMethodDescription)));
+        onView(withId(R.id.mpsdkRowPaymentMethodCard)).check(matches(withAnyChildImage(bitmap)));
+
+    }
 
     //TODO Active Activity Tests
     //TODO Results Tests

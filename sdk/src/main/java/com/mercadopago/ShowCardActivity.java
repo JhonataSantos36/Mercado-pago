@@ -20,7 +20,7 @@ import java.math.BigDecimal;
 
 public abstract class ShowCardActivity extends FrontCardActivity {
 
-    public static Integer LAST_DIGITIS_LENGTH = 4;
+    public static Integer LAST_DIGITS_LENGTH = 4;
 
     protected MercadoPago mMercadoPago;
 
@@ -64,11 +64,12 @@ public abstract class ShowCardActivity extends FrontCardActivity {
 
         if (setting != null) {
             mCardNumberLength = setting.getCardNumber().getLength();
+            mSecurityCodeLocation = setting.getSecurityCode().getCardLocation();
         } else {
             mCardNumberLength = CARD_NUMBER_MAX_LENGTH;
+            mSecurityCodeLocation = CARD_SIDE_BACK;
         }
 
-        mSecurityCodeLocation = setting.getSecurityCode().getCardLocation();
     }
 
     protected void initializeToolbar(String title, boolean transparent) {
@@ -147,7 +148,7 @@ public abstract class ShowCardActivity extends FrontCardActivity {
     private String getCardNumberHidden() {
         StringBuilder sb = new StringBuilder();
         int length = mToken.getCardNumberLength();
-        for (int i = 0; i < length - LAST_DIGITIS_LENGTH; i++) {
+        for (int i = 0; i < length - LAST_DIGITS_LENGTH; i++) {
             sb.append("X");
         }
         sb.append(mToken.getLastFourDigits());

@@ -15,6 +15,7 @@ import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.SavedCardToken;
+import com.mercadopago.model.Token;
 import com.mercadopago.util.JsonUtil;
 
 import java.io.InputStream;
@@ -120,6 +121,16 @@ public class StaticMock {
             return null;
         }
     }
+
+    public static Token getToken() {
+
+        try {
+            return JsonUtil.getInstance().fromJson(getFile(InstrumentationRegistry.getContext(), "mocks/token.json"), Token.class);
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
     public static List<Card> getCards(Context context) {
 
         try {

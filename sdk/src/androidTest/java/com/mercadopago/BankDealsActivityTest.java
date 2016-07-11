@@ -35,13 +35,13 @@ public class BankDealsActivityTest extends BaseTest<BankDealsActivity> {
 //        }
     }
 
-    private BankDealsActivity prepareActivity(String merchantPublicKey) {
-
-        Intent intent = new Intent();
-        if (merchantPublicKey != null) {
-            intent.putExtra("merchantPublicKey", merchantPublicKey);
-        }
-        setActivityIntent(intent);
-        return getActivity();
-    }
+//    private BankDealsActivity prepareActivity(String merchantPublicKey) {
+//
+//        Intent intent = new Intent();
+//        if (merchantPublicKey != null) {
+//            intent.putExtra("merchantPublicKey", merchantPublicKey);
+//        }
+//        setActivityIntent(intent);
+//        return getActivity();
+//    }
 }
