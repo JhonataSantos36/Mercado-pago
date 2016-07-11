@@ -95,12 +95,17 @@ public class RejectionActivityTest {
         validStartIntent = new Intent();
         validStartIntent.putExtra("merchantPublicKey", mMerchantPublicKey);
         validStartIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(mPaymentMethod));
-        validStartIntent.putExtra("payment", JsonUtil.getInstance().toJson(mPayment));
     }
 
     private void createIntentWithNullPublicKey(){
         validStartIntent = new Intent();
         validStartIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(mPaymentMethod));
+        validStartIntent.putExtra("payment", JsonUtil.getInstance().toJson(mPayment));
+    }
+
+    private void createIntentWithNullPaymentMethod(){
+        validStartIntent = new Intent();
+        validStartIntent.putExtra("merchantPublicKey", mMerchantPublicKey);
         validStartIntent.putExtra("payment", JsonUtil.getInstance().toJson(mPayment));
     }
 
@@ -468,16 +473,40 @@ public class RejectionActivityTest {
         onView(withId(R.id.mpsdkExit)).check(matches(isDisplayed()));
     }
 
-    //TODO revisar
     @Test
-    public void throwExceptionWhenStartRejectionActivityWithNullPayment() {
+    public void showErrorLayoutWhenStartRejectionActivityWithNullPayment() {
         createIntentWithNullPayment();
+        mTestRule.launchActivity(validStartIntent);
 
-        try{
-            mTestRule.launchActivity(validStartIntent);
-        } catch (IllegalStateException e) {
-            assertTrue(e.getMessage().equals("payment not set"));
-        }
+        //Error message
+        onView(withId(R.id.mpsdkErrorMessage)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_standard_error_message))));
+
+        //Retry button is displayed
+        onView(withId(R.id.mpsdkExit)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void showErrorLayoutWhenStartRejectionActivityWithNullPublicKey() {
+        createIntentWithNullPublicKey();
+        mTestRule.launchActivity(validStartIntent);
+
+        //Error message
+        onView(withId(R.id.mpsdkErrorMessage)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_standard_error_message))));
+
+        //Retry button is displayed
+        onView(withId(R.id.mpsdkExit)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void showErrorLayoutWhenStartRejectionActivityWithNullPaymentMethod() {
+        createIntentWithNullPaymentMethod();
+        mTestRule.launchActivity(validStartIntent);
+
+        //Error message
+        onView(withId(R.id.mpsdkErrorMessage)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_standard_error_message))));
+
+        //Retry button is displayed
+        onView(withId(R.id.mpsdkExit)).check(matches(isDisplayed()));
     }
 }
 

@@ -104,6 +104,24 @@ public class CongratsActivityTest extends TestCase {
         validStartIntent.putExtra("payment", JsonUtil.getInstance().toJson(mPayment));
     }
 
+    private void createIntentWithNullPayment(){
+        validStartIntent = new Intent();
+        validStartIntent.putExtra("merchantPublicKey", mMerchantPublicKey);
+        validStartIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(mPaymentMethod));
+    }
+
+    private void createIntentWithNullPublicKey(){
+        validStartIntent = new Intent();
+        validStartIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(mPaymentMethod));
+        validStartIntent.putExtra("payment", JsonUtil.getInstance().toJson(mPayment));
+    }
+
+    private void createIntentWithNullPaymentMethod(){
+        validStartIntent = new Intent();
+        validStartIntent.putExtra("merchantPublicKey", mMerchantPublicKey);
+        validStartIntent.putExtra("payment", JsonUtil.getInstance().toJson(mPayment));
+    }
+
     @Test
     public void showCongratsLayoutWithZeroRateWhenApprovedPaymentHasZeroRate(){
         String paymentIdDescription, lastFourDigitsDescription;
@@ -970,5 +988,41 @@ public class CongratsActivityTest extends TestCase {
 
         //Congrats finish
         assertTrue(mTestRule.getActivity().isFinishing());
+    }
+
+    @Test
+    public void showErrorLayoutWhenStartCongratsActivityWithNullPayment() {
+        createIntentWithNullPayment();
+        mTestRule.launchActivity(validStartIntent);
+
+        //Error message
+        onView(withId(R.id.mpsdkErrorMessage)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_standard_error_message))));
+
+        //Retry button is displayed
+        onView(withId(R.id.mpsdkExit)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void showErrorLayoutWhenStartCongratsActivityWithNullPublicKey() {
+        createIntentWithNullPublicKey();
+        mTestRule.launchActivity(validStartIntent);
+
+        //Error message
+        onView(withId(R.id.mpsdkErrorMessage)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_standard_error_message))));
+
+        //Retry button is displayed
+        onView(withId(R.id.mpsdkExit)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void showErrorLayoutWhenStartCongratsActivityWithNullPaymentMethod() {
+        createIntentWithNullPaymentMethod();
+        mTestRule.launchActivity(validStartIntent);
+
+        //Error message
+        onView(withId(R.id.mpsdkErrorMessage)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_standard_error_message))));
+
+        //Retry button is displayed
+        onView(withId(R.id.mpsdkExit)).check(matches(isDisplayed()));
     }
 }

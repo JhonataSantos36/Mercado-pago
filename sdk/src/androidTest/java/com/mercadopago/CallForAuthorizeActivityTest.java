@@ -94,6 +94,24 @@ public class CallForAuthorizeActivityTest extends TestCase {
         validStartIntent.putExtra("payment", JsonUtil.getInstance().toJson(mPayment));
     }
 
+    private void createIntentWithNullPayment(){
+        validStartIntent = new Intent();
+        validStartIntent.putExtra("merchantPublicKey", mMerchantPublicKey);
+        validStartIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(mPaymentMethod));
+    }
+
+    private void createIntentWithNullPublicKey(){
+        validStartIntent = new Intent();
+        validStartIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(mPaymentMethod));
+        validStartIntent.putExtra("payment", JsonUtil.getInstance().toJson(mPayment));
+    }
+
+    private void createIntentWithNullPaymentMethod(){
+        validStartIntent = new Intent();
+        validStartIntent.putExtra("merchantPublicKey", mMerchantPublicKey);
+        validStartIntent.putExtra("payment", JsonUtil.getInstance().toJson(mPayment));
+    }
+
     @Test
     public void showCallForAuthorizeLayoutWhenPaymentIsRejectedForCallForAuthorize(){
         Spanned callForAuthorizeTitle;
@@ -323,5 +341,42 @@ public class CallForAuthorizeActivityTest extends TestCase {
 
         return CurrenciesUtil.formatCurrencyInText(mPayment.getTransactionDetails().getTotalPaidAmount(),mPayment.getCurrencyId(), callForAuthorizeTitle.toString(), true, true);
     }
+
+    @Test
+    public void showErrorLayoutWhenStartCallForAuthorizeActivityWithNullPayment() {
+        createIntentWithNullPayment();
+        mTestRule.launchActivity(validStartIntent);
+
+        //Error message
+        onView(withId(R.id.mpsdkErrorMessage)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_standard_error_message))));
+
+        //Retry button is displayed
+        onView(withId(R.id.mpsdkExit)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void showErrorLayoutWhenStartCallForAuthorizeActivityWithNullPublicKey() {
+        createIntentWithNullPublicKey();
+        mTestRule.launchActivity(validStartIntent);
+
+        //Error message
+        onView(withId(R.id.mpsdkErrorMessage)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_standard_error_message))));
+
+        //Retry button is displayed
+        onView(withId(R.id.mpsdkExit)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void showErrorLayoutWhenStartCallForAuthorizeActivityWithNullPaymentMethod() {
+        createIntentWithNullPaymentMethod();
+        mTestRule.launchActivity(validStartIntent);
+
+        //Error message
+        onView(withId(R.id.mpsdkErrorMessage)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_standard_error_message))));
+
+        //Retry button is displayed
+        onView(withId(R.id.mpsdkExit)).check(matches(isDisplayed()));
+    }
+
 
 }

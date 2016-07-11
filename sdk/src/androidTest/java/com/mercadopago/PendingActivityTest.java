@@ -81,6 +81,16 @@ public class PendingActivityTest {
         validStartIntent.putExtra("payment", JsonUtil.getInstance().toJson(mPayment));
     }
 
+    private void createIntentWithNullPayment(){
+        validStartIntent = new Intent();
+        validStartIntent.putExtra("merchantPublicKey", mMerchantPublicKey);
+    }
+
+    private void createIntentWithNullPublicKey(){
+        validStartIntent = new Intent();
+        validStartIntent.putExtra("payment", JsonUtil.getInstance().toJson(mPayment));
+    }
+
     @Test
     public void showPendingLayoutWhenPaymentStatusDetailIsNull(){
         mPayment.setStatus(Payment.StatusCodes.STATUS_IN_PROCESS);
@@ -161,5 +171,29 @@ public class PendingActivityTest {
 
         //Congrats finish
         assertTrue(mTestRule.getActivity().isFinishing());
+    }
+
+    @Test
+    public void showErrorLayoutWhenStartPendingActivityWithNullPayment() {
+        createIntentWithNullPayment();
+        mTestRule.launchActivity(validStartIntent);
+
+        //Error message
+        onView(withId(R.id.mpsdkErrorMessage)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_standard_error_message))));
+
+        //Retry button is displayed
+        onView(withId(R.id.mpsdkExit)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void showErrorLayoutWhenStartPendingActivityWithNullPublicKey() {
+        createIntentWithNullPublicKey();
+        mTestRule.launchActivity(validStartIntent);
+
+        //Error message
+        onView(withId(R.id.mpsdkErrorMessage)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_standard_error_message))));
+
+        //Retry button is displayed
+        onView(withId(R.id.mpsdkExit)).check(matches(isDisplayed()));
     }
 }
