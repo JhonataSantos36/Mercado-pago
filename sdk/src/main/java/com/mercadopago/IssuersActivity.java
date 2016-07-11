@@ -118,7 +118,7 @@ public class IssuersActivity extends ShowCardActivity {
         if (mIssuers == null) {
             getIssuersAsync();
         } else {
-            initializeIssuers();
+            resolveIssuersList();
         }
     }
 
@@ -144,15 +144,7 @@ public class IssuersActivity extends ShowCardActivity {
                     MPTracker.getInstance().trackEvent("CARD_ISSUERS", "GET_ISSUERS_RESPONSE", "SUCCESS", mPublicKey, "MLA", "1.0", getActivity());
                     if (isActivityActive()) {
                         mProgressBar.setVisibility(View.GONE);
-                        if (mIssuers.isEmpty()) {
-                            mSelectedIssuer = null;
-                            finishWithResult();
-                        } else if (mIssuers.size() == 1) {
-                            mSelectedIssuer = mIssuers.get(0);
-                            finishWithResult();
-                        } else {
-                            initializeIssuers();
-                        }
+                        resolveIssuersList();
                     }
                 }
 
@@ -171,7 +163,19 @@ public class IssuersActivity extends ShowCardActivity {
                         }
                     }
                 });
-            }
+    }
+
+    protected void resolveIssuersList() {
+        if (mIssuers.isEmpty()) {
+            mSelectedIssuer = null;
+            finishWithResult();
+        } else if (mIssuers.size() == 1) {
+            mSelectedIssuer = mIssuers.get(0);
+            finishWithResult();
+        } else {
+            initializeIssuers();
+        }
+    }
 
         @Override
     protected void finishWithResult() {
