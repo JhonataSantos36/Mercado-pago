@@ -8,7 +8,6 @@ import android.test.suitebuilder.annotation.LargeTest;
 import com.mercadopago.model.Card;
 import com.mercadopago.model.Payer;
 import com.mercadopago.model.Payment;
-import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.TransactionDetails;
 import com.mercadopago.util.JsonUtil;
 
