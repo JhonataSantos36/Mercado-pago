@@ -88,7 +88,9 @@ public abstract class ShowCardActivity extends FrontCardActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
-        mToolbarTitle.setText(title);
+        if(mToolbarTitle != null) {
+            mToolbarTitle.setText(title);
+        }
         if (toolbar != null) {
             toolbar.setNavigationOnClickListener(new View.OnClickListener() {
                 @Override

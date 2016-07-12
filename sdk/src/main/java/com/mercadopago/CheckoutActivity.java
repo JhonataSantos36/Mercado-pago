@@ -149,7 +149,7 @@ public class CheckoutActivity extends MercadoPagoActivity {
 
     @Override
     protected void onInvalidStart(String message) {
-        ErrorUtil.startErrorActivity(this, message, false);
+        ErrorUtil.startErrorActivity(this, getString(R.string.mpsdk_standard_error_message), message, false);
     }
 
     private void getCheckoutPreference() {

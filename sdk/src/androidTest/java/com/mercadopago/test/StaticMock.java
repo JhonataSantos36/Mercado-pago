@@ -107,6 +107,15 @@ public class StaticMock {
         return installment.getPayerCosts();
     }
 
+
+    public static PayerCost getPayerCostWithInterests() {
+        return JsonUtil.getInstance().fromJson(getFile(InstrumentationRegistry.getContext(), "mocks/payerCostWithInterest.json"), PayerCost.class);
+    }
+
+    public static PayerCost getPayerCostWithoutInterests() {
+        return JsonUtil.getInstance().fromJson(getFile(InstrumentationRegistry.getContext(), "mocks/payerCostWithoutInterest.json"), PayerCost.class);
+    }
+
     public static Issuer getIssuer(Context context) {
 
         return JsonUtil.getInstance().fromJson(getFile(context, "mocks/issuer.json"), Issuer.class);
