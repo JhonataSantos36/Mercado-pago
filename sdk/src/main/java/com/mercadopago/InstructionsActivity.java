@@ -86,7 +86,7 @@ public class InstructionsActivity extends MercadoPagoActivity {
         mTertiaryInfo = (MPTextView) findViewById(R.id.mpsdkTertiaryInfo);
         mAccreditationMessage = (MPTextView) findViewById(R.id.mpsdkAccreditationMessage);
         mActionButton = (MPButton) findViewById(R.id.mpsdkActionButton);
-        mExitTextView = (MPTextView) findViewById(R.id.mpsdkExitTextView);
+        mExitTextView = (MPTextView) findViewById(R.id.mpsdkExitInstructions);
         mExitTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

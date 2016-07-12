@@ -72,7 +72,7 @@ public class CallForAuthorizeActivity extends MercadoPagoActivity {
                 finish();
             }
         });
-        mSelectOtherPaymentMethod = (MPTextView) findViewById(R.id.mpsdkSelectOtherPaymentMethod);
+        mSelectOtherPaymentMethod = (MPTextView) findViewById(R.id.mpsdkSelectOtherPaymentMethodByCallForAuthorize);
         mSelectOtherPaymentMethod.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

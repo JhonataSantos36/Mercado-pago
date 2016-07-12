@@ -19,11 +19,13 @@ import org.junit.runner.RunWith;
 import java.math.BigDecimal;
 
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static junit.framework.Assert.assertFalse;
 import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.core.IsNot.not;
 
@@ -194,5 +196,16 @@ public class PendingActivityTest {
 
         //Retry button is displayed
         onView(withId(R.id.mpsdkExit)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void noFinishPendingLayoutWhenClickOnBackButton(){
+        createIntent();
+        mTestRule.launchActivity(validStartIntent);
+
+        pressBack();
+
+        //Congrats finish
+        assertFalse(mTestRule.getActivity().isFinishing());
     }
 }

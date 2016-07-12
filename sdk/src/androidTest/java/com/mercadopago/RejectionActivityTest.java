@@ -20,12 +20,15 @@ import org.junit.runner.RunWith;
 import java.math.BigDecimal;
 
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static junit.framework.Assert.assertFalse;
 import static junit.framework.TestCase.assertTrue;
+import static org.hamcrest.core.IsNot.not;
 
 /**
  * Created by mromar on 7/6/16.
@@ -55,6 +58,14 @@ public class RejectionActivityTest {
         paymentMethod.setId("master");
         paymentMethod.setName("Master");
         paymentMethod.setPaymentTypeId("credit_card");
+        return paymentMethod;
+    }
+
+    private PaymentMethod getOffLinePaymentMethod() {
+        PaymentMethod paymentMethod = new PaymentMethod();
+        paymentMethod.setId("pagofacil");
+        paymentMethod.setName("pagofacil");
+        paymentMethod.setPaymentTypeId("ticket");
         return paymentMethod;
     }
 
@@ -129,7 +140,7 @@ public class RejectionActivityTest {
     }
 
     @Test
-    public void showRejectedLayoutWhenPaymentIsRejectedForInsufficientAmount(){
+    public void showRejectedLayoutWhenCreditCardPaymentIsRejectedForInsufficientAmount(){
         String titleMessage;
 
         mPayment.setStatus(Payment.StatusCodes.STATUS_REJECTED);
@@ -142,6 +153,30 @@ public class RejectionActivityTest {
         titleMessage = mTestRule.getActivity().getString(R.string.mpsdk_text_you) + " " + mPaymentMethod.getName() + " " + mTestRule.getActivity().getString(R.string.mpsdk_text_insufficient_amount);
         onView(withId(R.id.mpsdkRejectionTitle)).check(matches(withText(titleMessage)));
         onView(withId(R.id.mpsdkRejectionSubtitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_subtitle_rejection_insufficient_amount_credit_card))));
+
+        //SelectOtherPaymentMethod button is displayed
+        onView(withId(R.id.mpsdkSelectOtherPaymentMethodByRejection)).check(matches(isDisplayed()));
+
+        //Exit button is displayed
+        onView(withId(R.id.mpsdkExitRejection)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void showRejectedLayoutWhenOffLinePaymentIsRejectedForInsufficientAmount(){
+        String titleMessage;
+        mPayment.setStatus(Payment.StatusCodes.STATUS_REJECTED);
+        mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_INSUFFICIENT_AMOUNT);
+        mPayment.setPaymentMethodId("pagofacil");
+
+        mPaymentMethod = getOffLinePaymentMethod();
+
+        createIntent();
+        mTestRule.launchActivity(validStartIntent);
+
+        //Title and subtitle
+        titleMessage = mTestRule.getActivity().getString(R.string.mpsdk_text_you) + " " + mPaymentMethod.getName() + " " + mTestRule.getActivity().getString(R.string.mpsdk_text_insufficient_amount);
+        onView(withId(R.id.mpsdkRejectionTitle)).check(matches(withText(titleMessage)));
+        onView(withId(R.id.mpsdkRejectionSubtitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_subtitle_rejection_insufficient_amount))));
 
         //SelectOtherPaymentMethod button is displayed
         onView(withId(R.id.mpsdkSelectOtherPaymentMethodByRejection)).check(matches(isDisplayed()));
@@ -318,6 +353,25 @@ public class RejectionActivityTest {
     }
 
     @Test
+    public void showRejectedLayoutWhenStatusDetailIsValidButNoExist(){
+        mPayment.setStatus(Payment.StatusCodes.STATUS_REJECTED);
+        mPayment.setStatusDetail("bad_fill_security_code");
+
+        createIntent();
+        mTestRule.launchActivity(validStartIntent);
+
+        //Title and subtitle
+        onView(withId(R.id.mpsdkRejectionTitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_title_bad_filled_other_rejection))));
+        onView(withId(R.id.mpsdkRejectionSubtitle)).check(matches(not(isDisplayed())));
+
+        //SelectOtherPaymentMethod button is displayed
+        onView(withId(R.id.mpsdkSelectOtherPaymentMethodByRejection)).check(matches(isDisplayed()));
+
+        //Exit button is displayed
+        onView(withId(R.id.mpsdkExitRejection)).check(matches(isDisplayed()));
+    }
+
+    @Test
     public void finishRejectionLayoutWhenClickOnSelectOtherPaymentMethod(){
         createIntent();
         mTestRule.launchActivity(validStartIntent);
@@ -328,7 +382,7 @@ public class RejectionActivityTest {
         //Click on exit button
         onView(withId(R.id.mpsdkSelectOtherPaymentMethodByRejection)).perform(click());
 
-        //Congrats finish
+        //Rejection finish
         assertTrue(mTestRule.getActivity().isFinishing());
     }
 
@@ -343,7 +397,7 @@ public class RejectionActivityTest {
         //Click on exit button
         onView(withId(R.id.mpsdkExitRejection)).perform(click());
 
-        //Congrats finish
+        //Rejection finish
         assertTrue(mTestRule.getActivity().isFinishing());
     }
 
@@ -508,5 +562,35 @@ public class RejectionActivityTest {
         //Retry button is displayed
         onView(withId(R.id.mpsdkExit)).check(matches(isDisplayed()));
     }
+
+    @Test
+    public void noFinishRejectionLayoutWhenClickOnBackButton(){
+        createIntent();
+        mTestRule.launchActivity(validStartIntent);
+
+        pressBack();
+
+        //Rejection finish
+        assertFalse(mTestRule.getActivity().isFinishing());
+    }
+
+    /*@Test
+    public void finishRejectionLayoutWhenClickOnBackButtonTwoTimes(){
+        createIntent();
+        mTestRule.launchActivity(validStartIntent);
+
+        pressBack();
+
+        try {
+            currentThread().wait(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        pressBack();
+
+        //Rejection finish
+        assertFalse(mTestRule.getActivity().isFinishing());
+    }*/
 }
 

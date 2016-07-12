@@ -99,7 +99,7 @@
                         android:text="@string/mpsdk_text_question_call_for_authorize" />
 
                     <com.mercadopago.views.MPTextView
-                        android:id="@+id/mpsdkSelectOtherPaymentMethod"
+                        android:id="@+id/mpsdkSelectOtherPaymentMethodByCallForAuthorize"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"

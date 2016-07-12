@@ -159,7 +159,7 @@ public class RejectionActivity extends MercadoPagoActivity {
     }
 
     private boolean isCardPaymentTypeCreditCard(){
-        return MercadoPagoUtil.isCardPaymentType(mPaymentMethod.getPaymentTypeId()) && mPaymentMethod.getPaymentTypeId().equals("credit_card");
+        return !mPaymentMethod.getPaymentTypeId().isEmpty() && mPaymentMethod.getPaymentTypeId().equals("credit_card");
     }
 
     @Override

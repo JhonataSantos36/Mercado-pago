@@ -14,8 +14,6 @@ import com.mercadopago.model.TransactionDetails;
 import com.mercadopago.util.CurrenciesUtil;
 import com.mercadopago.util.JsonUtil;
 
-import junit.framework.TestCase;
-
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -24,11 +22,15 @@ import org.junit.runner.RunWith;
 import java.math.BigDecimal;
 
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static junit.framework.Assert.assertFalse;
+import static org.hamcrest.core.IsNot.not;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by mromar on 7/7/16.
@@ -36,7 +38,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
 @RunWith(AndroidJUnit4.class)
 @LargeTest
-public class CallForAuthorizeActivityTest extends TestCase {
+public class CallForAuthorizeActivityTest {
 
     @Rule
     public ActivityTestRule<CallForAuthorizeActivity> mTestRule = new ActivityTestRule<>(CallForAuthorizeActivity.class, true, false);
@@ -134,7 +136,195 @@ public class CallForAuthorizeActivityTest extends TestCase {
         onView(withId(R.id.mpsdkPaymentNoAuthorized)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_text_question_call_for_authorize))));
 
         //SelectOtherPaymentMethod button is displayed
-        onView(withId(R.id.mpsdkSelectOtherPaymentMethod)).check(matches(isDisplayed()));
+        onView(withId(R.id.mpsdkSelectOtherPaymentMethodByCallForAuthorize)).check(matches(isDisplayed()));
+
+        //Exit button is displayed
+        onView(withId(R.id.mpsdkExitCallForAuthorize)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void showCallForAuthorizeLayoutWhenPaymentIdIsDifferenceToPaymentMethodId(){
+        mPayment.setPaymentMethodId("visa");
+        mPayment.setStatus(Payment.StatusCodes.STATUS_REJECTED);
+        mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_CALL_FOR_AUTHORIZE);
+
+        createIntent();
+        mTestRule.launchActivity(validStartIntent);
+
+        //Title and subtitle
+        onView(withId(R.id.mpsdkCallForAuthorizeTitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_error_title_activity_call_for_authorize))));
+        onView(withId(R.id.mpsdkCallForAuthorizeSubtitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_text_order_call_for_authorize))));
+
+        //Authorize button
+        onView(withId(R.id.mpsdkAuthorizedPaymentMethod)).check(matches(not(isDisplayed())));
+
+        //PaymentNoAuthorized
+        onView(withId(R.id.mpsdkPaymentNoAuthorized)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_text_question_call_for_authorize))));
+
+        //SelectOtherPaymentMethod button is displayed
+        onView(withId(R.id.mpsdkSelectOtherPaymentMethodByCallForAuthorize)).check(matches(isDisplayed()));
+
+        //Exit button is displayed
+        onView(withId(R.id.mpsdkExitCallForAuthorize)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void showCallForAuthorizeLayoutWithNullPaymentMethodId(){
+        mPaymentMethod.setId(null);
+
+        mPayment.setStatus(Payment.StatusCodes.STATUS_REJECTED);
+        mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_CALL_FOR_AUTHORIZE);
+
+        createIntent();
+        mTestRule.launchActivity(validStartIntent);
+
+        //Title and subtitle
+        onView(withId(R.id.mpsdkCallForAuthorizeTitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_error_title_activity_call_for_authorize))));
+        onView(withId(R.id.mpsdkCallForAuthorizeSubtitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_text_order_call_for_authorize))));
+
+        //Authorize button
+        onView(withId(R.id.mpsdkAuthorizedPaymentMethod)).check(matches(not(isDisplayed())));
+
+        //PaymentNoAuthorized
+        onView(withId(R.id.mpsdkPaymentNoAuthorized)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_text_question_call_for_authorize))));
+
+        //SelectOtherPaymentMethod button is displayed
+        onView(withId(R.id.mpsdkSelectOtherPaymentMethodByCallForAuthorize)).check(matches(isDisplayed()));
+
+        //Exit button is displayed
+        onView(withId(R.id.mpsdkExitCallForAuthorize)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void showCallForAuthorizeLayoutWithEmptyPaymentMethodId(){
+        mPaymentMethod.setId("");
+
+        mPayment.setStatus(Payment.StatusCodes.STATUS_REJECTED);
+        mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_CALL_FOR_AUTHORIZE);
+
+        createIntent();
+        mTestRule.launchActivity(validStartIntent);
+
+        //Title and subtitle
+        onView(withId(R.id.mpsdkCallForAuthorizeTitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_error_title_activity_call_for_authorize))));
+        onView(withId(R.id.mpsdkCallForAuthorizeSubtitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_text_order_call_for_authorize))));
+
+        //Authorize button
+        onView(withId(R.id.mpsdkAuthorizedPaymentMethod)).check(matches(not(isDisplayed())));
+
+        //PaymentNoAuthorized
+        onView(withId(R.id.mpsdkPaymentNoAuthorized)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_text_question_call_for_authorize))));
+
+        //SelectOtherPaymentMethod button is displayed
+        onView(withId(R.id.mpsdkSelectOtherPaymentMethodByCallForAuthorize)).check(matches(isDisplayed()));
+
+        //Exit button is displayed
+        onView(withId(R.id.mpsdkExitCallForAuthorize)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void showCallForAuthorizeLayoutWithNullPaymentMethodName(){
+        mPaymentMethod.setName(null);
+
+        mPayment.setStatus(Payment.StatusCodes.STATUS_REJECTED);
+        mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_CALL_FOR_AUTHORIZE);
+
+        createIntent();
+        mTestRule.launchActivity(validStartIntent);
+
+        //Title and subtitle
+        onView(withId(R.id.mpsdkCallForAuthorizeTitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_error_title_activity_call_for_authorize))));
+        onView(withId(R.id.mpsdkCallForAuthorizeSubtitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_text_order_call_for_authorize))));
+
+        //Authorize button
+        onView(withId(R.id.mpsdkAuthorizedPaymentMethod)).check(matches(not(isDisplayed())));
+
+        //PaymentNoAuthorized
+        onView(withId(R.id.mpsdkPaymentNoAuthorized)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_text_question_call_for_authorize))));
+
+        //SelectOtherPaymentMethod button is displayed
+        onView(withId(R.id.mpsdkSelectOtherPaymentMethodByCallForAuthorize)).check(matches(isDisplayed()));
+
+        //Exit button is displayed
+        onView(withId(R.id.mpsdkExitCallForAuthorize)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void showCallForAuthorizeLayoutWithEmptyPaymentMethodName(){
+        mPaymentMethod.setName("");
+
+        mPayment.setStatus(Payment.StatusCodes.STATUS_REJECTED);
+        mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_CALL_FOR_AUTHORIZE);
+
+        createIntent();
+        mTestRule.launchActivity(validStartIntent);
+
+        //Title and subtitle
+        onView(withId(R.id.mpsdkCallForAuthorizeTitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_error_title_activity_call_for_authorize))));
+        onView(withId(R.id.mpsdkCallForAuthorizeSubtitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_text_order_call_for_authorize))));
+
+        //Authorize button
+        onView(withId(R.id.mpsdkAuthorizedPaymentMethod)).check(matches(not(isDisplayed())));
+
+        //PaymentNoAuthorized
+        onView(withId(R.id.mpsdkPaymentNoAuthorized)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_text_question_call_for_authorize))));
+
+        //SelectOtherPaymentMethod button is displayed
+        onView(withId(R.id.mpsdkSelectOtherPaymentMethodByCallForAuthorize)).check(matches(isDisplayed()));
+
+        //Exit button is displayed
+        onView(withId(R.id.mpsdkExitCallForAuthorize)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void showCallForAuthorizeLayoutWithNullPaymentTypeId(){
+        mPaymentMethod.setPaymentTypeId(null);
+
+        mPayment.setStatus(Payment.StatusCodes.STATUS_REJECTED);
+        mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_CALL_FOR_AUTHORIZE);
+
+        createIntent();
+        mTestRule.launchActivity(validStartIntent);
+
+        //Title and subtitle
+        onView(withId(R.id.mpsdkCallForAuthorizeTitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_error_title_activity_call_for_authorize))));
+        onView(withId(R.id.mpsdkCallForAuthorizeSubtitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_text_order_call_for_authorize))));
+
+        //Authorize button
+        onView(withId(R.id.mpsdkAuthorizedPaymentMethod)).check(matches(not(isDisplayed())));
+
+        //PaymentNoAuthorized
+        onView(withId(R.id.mpsdkPaymentNoAuthorized)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_text_question_call_for_authorize))));
+
+        //SelectOtherPaymentMethod button is displayed
+        onView(withId(R.id.mpsdkSelectOtherPaymentMethodByCallForAuthorize)).check(matches(isDisplayed()));
+
+        //Exit button is displayed
+        onView(withId(R.id.mpsdkExitCallForAuthorize)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void showCallForAuthorizeLayoutWithEmptyPaymentTypeId(){
+        mPaymentMethod.setPaymentTypeId("");
+
+        mPayment.setStatus(Payment.StatusCodes.STATUS_REJECTED);
+        mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_CALL_FOR_AUTHORIZE);
+
+        createIntent();
+        mTestRule.launchActivity(validStartIntent);
+
+        //Title and subtitle
+        onView(withId(R.id.mpsdkCallForAuthorizeTitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_error_title_activity_call_for_authorize))));
+        onView(withId(R.id.mpsdkCallForAuthorizeSubtitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_text_order_call_for_authorize))));
+
+        //Authorize button
+        onView(withId(R.id.mpsdkAuthorizedPaymentMethod)).check(matches(not(isDisplayed())));
+
+        //PaymentNoAuthorized
+        onView(withId(R.id.mpsdkPaymentNoAuthorized)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_text_question_call_for_authorize))));
+
+        //SelectOtherPaymentMethod button is displayed
+        onView(withId(R.id.mpsdkSelectOtherPaymentMethodByCallForAuthorize)).check(matches(isDisplayed()));
 
         //Exit button is displayed
         onView(withId(R.id.mpsdkExitCallForAuthorize)).check(matches(isDisplayed()));
@@ -163,7 +353,7 @@ public class CallForAuthorizeActivityTest extends TestCase {
         onView(withId(R.id.mpsdkPaymentNoAuthorized)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_text_question_call_for_authorize))));
 
         //SelectOtherPaymentMethod button is displayed
-        onView(withId(R.id.mpsdkSelectOtherPaymentMethod)).check(matches(isDisplayed()));
+        onView(withId(R.id.mpsdkSelectOtherPaymentMethodByCallForAuthorize)).check(matches(isDisplayed()));
 
         //Exit button is displayed
         onView(withId(R.id.mpsdkExitCallForAuthorize)).check(matches(isDisplayed()));
@@ -192,7 +382,7 @@ public class CallForAuthorizeActivityTest extends TestCase {
         onView(withId(R.id.mpsdkPaymentNoAuthorized)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_text_question_call_for_authorize))));
 
         //SelectOtherPaymentMethod button is displayed
-        onView(withId(R.id.mpsdkSelectOtherPaymentMethod)).check(matches(isDisplayed()));
+        onView(withId(R.id.mpsdkSelectOtherPaymentMethodByCallForAuthorize)).check(matches(isDisplayed()));
 
         //Exit button is displayed
         onView(withId(R.id.mpsdkExitCallForAuthorize)).check(matches(isDisplayed()));
@@ -218,7 +408,7 @@ public class CallForAuthorizeActivityTest extends TestCase {
         onView(withId(R.id.mpsdkPaymentNoAuthorized)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_text_question_call_for_authorize))));
 
         //SelectOtherPaymentMethod button is displayed
-        onView(withId(R.id.mpsdkSelectOtherPaymentMethod)).check(matches(isDisplayed()));
+        onView(withId(R.id.mpsdkSelectOtherPaymentMethodByCallForAuthorize)).check(matches(isDisplayed()));
 
         //Exit button is displayed
         onView(withId(R.id.mpsdkExitCallForAuthorize)).check(matches(isDisplayed()));
@@ -244,7 +434,7 @@ public class CallForAuthorizeActivityTest extends TestCase {
         onView(withId(R.id.mpsdkPaymentNoAuthorized)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_text_question_call_for_authorize))));
 
         //SelectOtherPaymentMethod button is displayed
-        onView(withId(R.id.mpsdkSelectOtherPaymentMethod)).check(matches(isDisplayed()));
+        onView(withId(R.id.mpsdkSelectOtherPaymentMethodByCallForAuthorize)).check(matches(isDisplayed()));
 
         //Exit button is displayed
         onView(withId(R.id.mpsdkExitCallForAuthorize)).check(matches(isDisplayed()));
@@ -270,7 +460,7 @@ public class CallForAuthorizeActivityTest extends TestCase {
         onView(withId(R.id.mpsdkPaymentNoAuthorized)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_text_question_call_for_authorize))));
 
         //SelectOtherPaymentMethod button is displayed
-        onView(withId(R.id.mpsdkSelectOtherPaymentMethod)).check(matches(isDisplayed()));
+        onView(withId(R.id.mpsdkSelectOtherPaymentMethodByCallForAuthorize)).check(matches(isDisplayed()));
 
         //Exit button is displayed
         onView(withId(R.id.mpsdkExitCallForAuthorize)).check(matches(isDisplayed()));
@@ -303,10 +493,10 @@ public class CallForAuthorizeActivityTest extends TestCase {
         mTestRule.launchActivity(validStartIntent);
 
         //Exit button isDisplayed
-        onView(withId(R.id.mpsdkSelectOtherPaymentMethod)).check(matches(isDisplayed()));
+        onView(withId(R.id.mpsdkSelectOtherPaymentMethodByCallForAuthorize)).check(matches(isDisplayed()));
 
         //Click on exit button
-        onView(withId(R.id.mpsdkSelectOtherPaymentMethod)).perform(click());
+        onView(withId(R.id.mpsdkSelectOtherPaymentMethodByCallForAuthorize)).perform(click());
 
         //Congrats finish
         assertTrue(mTestRule.getActivity().isFinishing());
@@ -378,5 +568,15 @@ public class CallForAuthorizeActivityTest extends TestCase {
         onView(withId(R.id.mpsdkExit)).check(matches(isDisplayed()));
     }
 
+    @Test
+    public void noFinishCallForAuthorizeLayoutWhenClickOnBackButton(){
+        createIntent();
+        mTestRule.launchActivity(validStartIntent);
+
+        pressBack();
+
+        //Congrats finish
+        assertFalse(mTestRule.getActivity().isFinishing());
+    }
 
 }

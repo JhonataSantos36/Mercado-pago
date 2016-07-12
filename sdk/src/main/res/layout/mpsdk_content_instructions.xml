@@ -160,7 +160,7 @@
         </android.support.v7.widget.CardView>
 
         <com.mercadopago.views.MPTextView
-            android:id="@+id/mpsdkExitTextView"
+            android:id="@+id/mpsdkExitInstructions"
             android:layout_marginTop="20dp"
             android:paddingLeft="40dp"
             android:paddingRight="40dp"

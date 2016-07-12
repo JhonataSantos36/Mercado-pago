@@ -13,8 +13,6 @@ import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.TransactionDetails;
 import com.mercadopago.util.JsonUtil;
 
-import junit.framework.TestCase;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -24,12 +22,14 @@ import org.junit.runner.RunWith;
 import java.math.BigDecimal;
 
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.times;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static junit.framework.Assert.assertTrue;
 
 /**
  * Created by mromar on 7/11/16.
@@ -37,7 +37,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
 @RunWith(AndroidJUnit4.class)
 @LargeTest
-public class ResultActivityTest extends TestCase {
+public class ResultActivityTest {
 
     @Rule
     public ActivityTestRule<ResultActivity> mTestRule = new ActivityTestRule<>(ResultActivity.class, true, false);
@@ -276,5 +276,92 @@ public class ResultActivityTest extends TestCase {
         //Retry button is displayed
         onView(withId(R.id.mpsdkExit)).check(matches(isDisplayed()));
     }
+
+    @Test
+    public void finishCongratsLayoutWhenClickOnExitButton(){
+        mPayment.setStatus(Payment.StatusCodes.STATUS_APPROVED);
+        mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_ACCREDITED);
+
+        createIntent();
+        mTestRule.launchActivity(validStartIntent);
+
+        onView(withId(R.id.mpsdkExitCongrats)).perform(click());
+
+        //Result finish
+        assertTrue(mTestRule.getActivity().isFinishing());
+    }
+
+    @Test
+    public void finishCallForAuthorizeLayoutWhenClickOnExitButton(){
+        mPayment.setStatus(Payment.StatusCodes.STATUS_REJECTED);
+        mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_CALL_FOR_AUTHORIZE);
+
+        createIntent();
+        mTestRule.launchActivity(validStartIntent);
+
+        onView(withId(R.id.mpsdkExitCallForAuthorize)).perform(click());
+
+        //Result finish
+        assertTrue(mTestRule.getActivity().isFinishing());
+    }
+
+    @Test
+    public void finishRejectionLayoutWhenClickOnExitButton(){
+        mPayment.setStatus(Payment.StatusCodes.STATUS_REJECTED);
+        mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_BAD_FILLED_DATE);
+
+        createIntent();
+        mTestRule.launchActivity(validStartIntent);
+
+        onView(withId(R.id.mpsdkExitRejection)).perform(click());
+
+        //Result finish
+        assertTrue(mTestRule.getActivity().isFinishing());
+    }
+
+    @Test
+    public void finishPendingLayoutWhenClickOnExitButton(){
+        mPayment.setStatus(Payment.StatusCodes.STATUS_IN_PROCESS);
+        mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_PENDING_REVIEW_MANUAL);
+
+        createIntent();
+        mTestRule.launchActivity(validStartIntent);
+
+        onView(withId(R.id.mpsdkExitPending)).perform(click());
+
+        //Result finish
+        assertTrue(mTestRule.getActivity().isFinishing());
+    }
+
+    /* TODO sompre al ir a buscar las instrucciones
+    @Test
+    public void finishInstructionsLayoutWhenClickOnExitButton(){
+        mPaymentMethod = getOffLinePaymentMethod();
+        mPayment.setPaymentMethodId("pagofacil");
+
+        createIntent();
+        mTestRule.launchActivity(validStartIntent);
+
+        onView(withId(R.id.mpsdkExitInstructions)).perform(click());
+
+        //Result finish
+        assertTrue(mTestRule.getActivity().isFinishing());
+    }
+*/
+
+    @Test
+    public void finishCallForAuthorizeLayoutWhenClickOnSelectOtherPaymentMethodButton(){
+        mPayment.setStatus(Payment.StatusCodes.STATUS_REJECTED);
+        mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_CALL_FOR_AUTHORIZE);
+
+        createIntent();
+        mTestRule.launchActivity(validStartIntent);
+
+        onView(withId(R.id.mpsdkSelectOtherPaymentMethodByCallForAuthorize)).perform(click());
+
+        //Result finish
+        assertTrue(mTestRule.getActivity().isFinishing());
+    }
+
 
 }
