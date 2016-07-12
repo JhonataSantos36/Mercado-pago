@@ -76,8 +76,7 @@ public abstract class ShowCardActivity extends FrontCardActivity {
         Toolbar toolbar;
         if(transparent) {
             toolbar = (Toolbar) findViewById(R.id.mpsdkToolbar);
-        }
-        else {
+        } else {
             toolbar = (Toolbar) findViewById(R.id.mpsdkRegularToolbar);
             toolbar.setVisibility(View.VISIBLE);
         }
@@ -88,6 +87,7 @@ public abstract class ShowCardActivity extends FrontCardActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
+
         if(mToolbarTitle != null) {
             mToolbarTitle.setText(title);
         }
@@ -101,8 +101,10 @@ public abstract class ShowCardActivity extends FrontCardActivity {
         }
         if(mDecorationPreference != null) {
             if(mDecorationPreference.hasColors()) {
-                if(toolbar != null) {
+                if(toolbar != null && mToken != null) {
                     decorateToolbar(toolbar);
+                } else if (toolbar != null) {
+                    decorate(toolbar);
                 }
             }
         }
