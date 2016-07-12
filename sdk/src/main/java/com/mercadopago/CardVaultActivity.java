@@ -270,4 +270,8 @@ public class CardVaultActivity extends ShowCardActivity {
         finish();
     }
 
+    @Override
+    public void initializeCardByToken() {
+
+    }
 }

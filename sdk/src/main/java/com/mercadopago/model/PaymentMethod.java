@@ -63,7 +63,8 @@ public class PaymentMethod {
 
     public boolean isSecurityCodeRequired(String bin) {
         Setting setting = Setting.getSettingByBin(settings, bin);
-        if ((setting != null) && (setting.getSecurityCode().getLength() != 0)) {
+        if ((setting != null) && (setting.getSecurityCode() != null) &&
+                (setting.getSecurityCode().getLength() != 0)) {
             return true;
         } else {
             return false;

@@ -224,4 +224,9 @@ public class IssuersActivity extends ShowCardActivity {
             }
         }
     }
+
+    @Override
+    public void initializeCardByToken() {
+
+    }
 }

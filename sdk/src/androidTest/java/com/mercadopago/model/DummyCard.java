@@ -1,0 +1,41 @@
+package com.mercadopago.model;
+
+/**
+ * Created by vaserber on 7/18/16.
+ */
+public class DummyCard {
+
+    private String paymentMethod;
+    private String cardNumber;
+    private String securityCode;
+
+    public DummyCard(String paymentMethod, String cardNumber, String securityCode) {
+        this.paymentMethod = paymentMethod;
+        this.cardNumber = cardNumber;
+        this.securityCode = securityCode;
+    }
+
+    public String getPaymentMethod() {
+        return paymentMethod;
+    }
+
+    public String getCardNumber() {
+        return cardNumber;
+    }
+
+    public String getSecurityCode() {
+        return securityCode;
+    }
+
+    public void setPaymentMethod(String paymentMethod) {
+        this.paymentMethod = paymentMethod;
+    }
+
+    public void setCardNumber(String cardNumber) {
+        this.cardNumber = cardNumber;
+    }
+
+    public void setSecurityCode(String securityCode) {
+        this.securityCode = securityCode;
+    }
+}

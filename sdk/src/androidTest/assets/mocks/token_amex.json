@@ -1,0 +1,25 @@
+{
+  "card_id":null,
+  "card_number_length":15,
+  "cardholder":{
+    "identification":{
+      "number":"12312313",
+      "type":"DNI"
+    },
+    "name":"MP"
+  },
+  "creation_date":null,
+  "due_date":null,
+  "expiration_month":12,
+  "expiration_year":2019,
+  "first_six_digits":"371180",
+  "id":"b6045789b7dbc64b1b7e75148979f80d",
+  "last_four_digits":"7522",
+  "last_modified_date":null,
+  "luhn_validation":"true",
+  "public_key":"TEST-ad365c37-8012-4014-84f5-6c895b3f8e0a",
+  "security_code_length":4,
+  "status":"active",
+  "trunc_card_number":null,
+  "used_date":null
+}

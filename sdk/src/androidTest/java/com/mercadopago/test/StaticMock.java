@@ -18,6 +18,7 @@ import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentMethodSearch;
+import com.mercadopago.model.PaymentPreference;
 import com.mercadopago.model.SavedCardToken;
 import com.mercadopago.model.Token;
 import com.mercadopago.util.JsonUtil;
@@ -56,11 +57,12 @@ public class StaticMock {
     public final static String DUMMY_CARD_NUMBER_MASTER = "5444444444440008";
     public final static String DUMMY_CARDHOLDER_NAME = "john";
     public final static int DUMMY_EXPIRATION_MONTH = 11;
-    public final static int DUMMY_EXPIRATION_YEAR_SHORT = 18;
-    public final static int DUMMY_EXPIRATION_YEAR_LONG = 2018;
+    public final static int DUMMY_EXPIRATION_YEAR_SHORT = 25;
+    public final static int DUMMY_EXPIRATION_YEAR_LONG = 2025;
     public final static String DUMMY_IDENTIFICATION_NUMBER = "12345678";
     public final static String DUMMY_IDENTIFICATION_TYPE = "DNI";
     public final static String DUMMY_SECURITY_CODE = "123";
+    public final static String DUMMY_EXPIRATION_DATE = "1225";
 
     // * Identification type
     public final static String DUMMI_IDENTIFICATION_TYPE_ID = "DNI";
@@ -71,6 +73,10 @@ public class StaticMock {
 
     // * Saved cards token
     public final static String DUMMY_CARD_ID = "11";
+
+    // * Security code holder
+    public final static String SECURITY_CODE_FRONT_HOLDER = "••••";
+    public final static String SECURITY_CODE_BACK_HOLDER = "•••";
 
     public static CardToken getCardToken() {
 
@@ -106,6 +112,17 @@ public class StaticMock {
                 DUMMI_IDENTIFICATION_TYPE_MAX_LENGTH);
     }
 
+    public static String getIdentificationTypeList() {
+
+        try {
+            return getFile(InstrumentationRegistry.getContext(), "mocks/identification_types.json");
+
+        } catch (Exception ex) {
+            return null;
+        }
+
+    }
+
     public static List<PayerCost> getPayerCosts(Context context) {
 
         Installment installment = JsonUtil.getInstance().fromJson(getFile(context, "mocks/installment.json"), Installment.class);
@@ -135,6 +152,10 @@ public class StaticMock {
         }
     }
 
+    public static PaymentPreference getEmptyPaymentPreference() {
+        return new PaymentPreference();
+    }
+
     public static String getInstallmentsJson() {
 
         try {
@@ -156,6 +177,15 @@ public class StaticMock {
         }
     }
 
+    public static String getPaymentMethodList() {
+        try {
+            return getFile(InstrumentationRegistry.getContext(), "mocks/payment_method_list.json");
+
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
     public static String getInvalidPayerCostsJson() {
 
         try {
@@ -170,6 +200,15 @@ public class StaticMock {
 
         try {
             return JsonUtil.getInstance().fromJson(getFile(InstrumentationRegistry.getContext(), "mocks/token.json"), Token.class);
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+    public static Token getTokenAmex() {
+
+        try {
+            return JsonUtil.getInstance().fromJson(getFile(InstrumentationRegistry.getContext(), "mocks/token_amex.json"), Token.class);
         } catch (Exception ex) {
             return null;
         }
@@ -273,7 +312,7 @@ public class StaticMock {
         }
     }
 
-    public static CheckoutPreference getChekoutPreference() {
+    public static CheckoutPreference getCheckoutPreference() {
         try {
             String json = getFile(InstrumentationRegistry.getContext(), "mocks/preference_without_exclusions.json");
             return JsonUtil.getInstance().fromJson(json, CheckoutPreference.class);
@@ -296,6 +335,15 @@ public class StaticMock {
             String json = getFile(InstrumentationRegistry.getContext(), "mocks/preference_with_one_off_payment_method.json");
             return JsonUtil.getInstance().fromJson(json, CheckoutPreference.class);
         } catch (Exception ex) {
+            return null;
+        }
+    }
+
+    public static PaymentMethod getPaymentMethodWithIdentificationNotRequired() {
+        try {
+            return JsonUtil.getInstance().fromJson(getFile(InstrumentationRegistry.getContext(), "mocks/payment_method_identification_not_required.json"), PaymentMethod.class);
+        } catch (Exception ex) {
+
             return null;
         }
     }
@@ -450,5 +498,9 @@ public class StaticMock {
 
             return "";
         }
+    }
+
+    public static PaymentMethod getPaymentMethodOnWithoutRequiredIdentification() {
+        return null;
     }
 }

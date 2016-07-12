@@ -176,8 +176,9 @@ public abstract class ShowCardActivity extends FrontCardActivity {
     public int getSecurityCodeLength() {
         if (mToken == null) {
             return CARD_DEFAULT_SECURITY_CODE_LENGTH;
+        } else {
+            return mToken.getSecurityCodeLength();
         }
-        return mToken.getSecurityCodeLength();
     }
 
     @Override
@@ -195,8 +196,9 @@ public abstract class ShowCardActivity extends FrontCardActivity {
     public String getSecurityCodeLocation() {
         if (mCurrentPaymentMethod == null || mBin == null) {
             return CARD_SIDE_BACK;
+        } else {
+            Setting setting = Setting.getSettingByBin(mCurrentPaymentMethod.getSettings(), mBin);
+            return setting.getSecurityCode().getCardLocation();
         }
-        Setting setting = Setting.getSettingByBin(mCurrentPaymentMethod.getSettings(), mBin);
-        return setting.getSecurityCode().getCardLocation();
     }
 }

@@ -75,6 +75,8 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
         setCardInputViews();
         setEditTextListeners();
         mActivity = (CardInterface)getActivity();
+        mActivity.initializeCardByToken();
+        decorate();
     }
 
     @Override
@@ -104,7 +106,6 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
             mCardLowApiImageView = (ImageView) getView().findViewById(R.id.mpsdkCardLowApiImageView);
             mCardLollipopImageView = (ImageView) getView().findViewById(R.id.mpsdkCardLollipopImageView);
         }
-        decorate();
     }
 
     private void decorate() {
@@ -295,10 +296,14 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
         setFontColor(font, mCardExpiryYearTextView, mCardExpiryDateEditText);
         setFontColor(font, mCardDateDividerTextView, mCardExpiryDateEditText);
 
-        if (mActivity.getSecurityCodeLocation() != null &&
-                mActivity.getSecurityCodeLocation().equals(CardInterface.CARD_SIDE_FRONT)) {
+        String location = mActivity.getSecurityCodeLocation();
+        if (location != null && location.equals(CardInterface.CARD_SIDE_FRONT)) {
             setFontColor(font, mCardSecurityCodeTextView, mCardSecurityEditText);
         }
+//        if (mActivity.getSecurityCodeLocation() != null &&
+//                mActivity.getSecurityCodeLocation().equals(CardInterface.CARD_SIDE_FRONT)) {
+//            setFontColor(font, mCardSecurityCodeTextView, mCardSecurityEditText);
+//        }
     }
 
     private void setFontColor(int font, MPTextView textView, MPEditText editText) {

@@ -258,4 +258,8 @@ public class InstallmentsActivity extends ShowCardActivity {
         }
     }
 
+    @Override
+    public void initializeCardByToken() {
+
+    }
 }
