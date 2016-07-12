@@ -6,11 +6,13 @@ import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.support.test.InstrumentationRegistry;
+import android.support.test.espresso.Espresso;
 import android.support.test.espresso.intent.Intents;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.test.suitebuilder.annotation.LargeTest;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -25,6 +27,7 @@ import com.mercadopago.test.FakeAPI;
 import com.mercadopago.test.StaticMock;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.utils.ActivityResultUtil;
+import com.mercadopago.utils.ViewUtils;
 
 import org.junit.After;
 import org.junit.Before;
@@ -41,6 +44,7 @@ import java.util.List;
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.pressBack;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
 import static android.support.test.espresso.intent.Intents.intended;
@@ -304,9 +308,15 @@ public class IssuersActivityTest {
 //
 //        mTestRule.launchActivity(validStartIntent);
 //
-//        Espresso.pressBack();
+//        pressBack();
 //        ActivityResultUtil.assertFinishCalledWithResult(mTestRule.getActivity(), Activity.RESULT_CANCELED);
 //        assertTrue(mTestRule.getActivity().isFinishing());
+//
+//        try {
+//            Thread.sleep(5000);
+//        } catch (InterruptedException e) {
+//
+//        }
 //    }
 
     @Test
@@ -369,7 +379,7 @@ public class IssuersActivityTest {
     }
 
     @Test
-    public void decorationPreferencePaints() {
+    public void decorationPreferenceWithTokenPaintsBackground() {
         String issuers = StaticMock.getIssuersJson();
         Type listType = new TypeToken<List<Issuer>>(){}.getType();
         List<Issuer> issuerList = JsonUtil.getInstance().getGson().fromJson(issuers, listType);
@@ -384,31 +394,28 @@ public class IssuersActivityTest {
 
         mTestRule.launchActivity(validStartIntent);
 
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-
-        }
         FrameLayout cardBackground = (FrameLayout) mTestRule.getActivity().findViewById(R.id.mpsdkCardBackground);
-        int color = getBackgroundColor(cardBackground);
+        int color = ViewUtils.getBackgroundColor(cardBackground);
         assertEquals(color, decorationPreference.getLighterColor());
     }
 
-    public static int getBackgroundColor(View view) {
-        ColorDrawable drawable = (ColorDrawable) view.getBackground();
-        if (Build.VERSION.SDK_INT >= 11) {
-            return drawable.getColor();
-        }
-        try {
-            Field field = drawable.getClass().getDeclaredField("mState");
-            field.setAccessible(true);
-            Object object = field.get(drawable);
-            field = object.getClass().getDeclaredField("mUseColor");
-            field.setAccessible(true);
-            return field.getInt(object);
-        } catch (Exception e) {
-            // TODO: handle exception
-        }
-        return 0;
+    @Test
+    public void decorationPreferenceWithoutTokenPaintsToolbar() {
+        String issuers = StaticMock.getIssuersJson();
+        Type listType = new TypeToken<List<Issuer>>(){}.getType();
+        List<Issuer> issuerList = JsonUtil.getInstance().getGson().fromJson(issuers, listType);
+        mFakeAPI.addResponseToQueue(issuerList, 200, "");
+
+        DecorationPreference decorationPreference = new DecorationPreference();
+        decorationPreference.setBaseColor(ContextCompat.getColor(InstrumentationRegistry.getContext(), R.color.mpsdk_color_red_error));
+        validStartIntent.putExtra("decorationPreference", JsonUtil.getInstance().toJson(decorationPreference));
+
+        mTestRule.launchActivity(validStartIntent);
+
+        Toolbar toolbar = (Toolbar) mTestRule.getActivity().findViewById(R.id.mpsdkRegularToolbar);
+        int color = ViewUtils.getBackgroundColor(toolbar);
+        assertEquals(color, (int)decorationPreference.getBaseColor());
     }
+
+
 }
