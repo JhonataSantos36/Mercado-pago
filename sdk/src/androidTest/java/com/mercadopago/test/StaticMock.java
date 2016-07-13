@@ -3,6 +3,7 @@ package com.mercadopago.test;
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 
+import com.mercadopago.model.ApiException;
 import com.mercadopago.model.Card;
 import com.mercadopago.model.CardToken;
 import com.mercadopago.model.CheckoutPreference;
@@ -14,6 +15,7 @@ import com.mercadopago.model.Issuer;
 import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentMethod;
+import com.mercadopago.model.PaymentMethodSearch;
 import com.mercadopago.model.SavedCardToken;
 import com.mercadopago.model.Token;
 import com.mercadopago.util.JsonUtil;
@@ -190,6 +192,15 @@ public class StaticMock {
         }
     }
 
+    public static PaymentMethodSearch getPaymentMethodSearchWithUniqueItem() {
+        try {
+            return JsonUtil.getInstance().fromJson(getFile(InstrumentationRegistry.getContext(), "mocks/payment_method_search_unique_item.json"), PaymentMethodSearch.class);
+
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
     public static String getCompletePaymentMethodsJson() {
         try {
             return getFile(InstrumentationRegistry.getContext(), "mocks/payment_methods.json");
@@ -329,6 +340,16 @@ public class StaticMock {
         try {
             String json = getFile(InstrumentationRegistry.getContext(), "mocks/instruction_with_invalid_reference.json");
             return JsonUtil.getInstance().fromJson(json, Instruction.class);
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+    public static ApiException getApiExceptionWithoutStatus() {
+
+        try {
+            return JsonUtil.getInstance().fromJson(getFile(InstrumentationRegistry.getContext(), "mocks/api_exception_without_status.json"), ApiException.class);
+
         } catch (Exception ex) {
             return null;
         }

@@ -161,14 +161,12 @@ public class CheckoutActivity extends MercadoPagoActivity {
 
                 MPTracker.getInstance().trackEvent("PREFERENCE", "GET_PREFERENCE_RESPONSE", "SUCCESS", "3", mMerchantPublicKey, mCheckoutPreference.getSiteId(), "1.0", getActivity());
 
-                if (isActivityActive()) {
-                    try {
-                        validatePreference();
-                        initializeCheckout();
-                    } catch (CheckoutPreferenceException e) {
-                        String errorMessage = ExceptionHandler.getErrorMessage(getActivity(), e);
-                        ErrorUtil.startErrorActivity(getActivity(), errorMessage, false);
-                    }
+                try {
+                    validatePreference();
+                    initializeCheckout();
+                } catch (CheckoutPreferenceException e) {
+                    String errorMessage = ExceptionHandler.getErrorMessage(getActivity(), e);
+                    ErrorUtil.startErrorActivity(getActivity(), errorMessage, false);
                 }
             }
 
@@ -226,7 +224,7 @@ public class CheckoutActivity extends MercadoPagoActivity {
         if(itemListSize == 1) {
             purchaseTitle.append(mCheckoutPreference.getItems().get(0).getTitle());
         }
-        else if (itemListSize > 1){
+        else {
             for(Item item : mCheckoutPreference.getItems()){
                 purchaseTitle.append(item.getTitle());
                 if(!item.equals(mCheckoutPreference.getItems().get(itemListSize-1))) {
@@ -320,7 +318,7 @@ public class CheckoutActivity extends MercadoPagoActivity {
         else if (requestCode == MercadoPago.INSTALLMENTS_REQUEST_CODE) {
             resolveInstallmentsRequest(resultCode, data);
         }
-        else if (requestCode == ErrorUtil.ERROR_REQUEST_CODE) {
+        else {
             resolveErrorRequest(resultCode, data);
         }
     }
@@ -340,7 +338,7 @@ public class CheckoutActivity extends MercadoPagoActivity {
             showReviewAndConfirm();
             showRegularLayout();
         }
-        else if (resultCode == RESULT_CANCELED) {
+        else {
             if(!mPaymentMethodEditionRequested) {
                 Intent returnIntent = new Intent();
 
