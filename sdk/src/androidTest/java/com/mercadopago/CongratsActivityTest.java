@@ -1,42 +1,24 @@
 package com.mercadopago;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.support.v4.content.ContextCompat;
 import android.test.suitebuilder.annotation.LargeTest;
-import android.text.Spanned;
-import android.widget.ImageView;
 
 import com.mercadopago.model.Card;
-import com.mercadopago.model.FeeDetail;
 import com.mercadopago.model.Payer;
 import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.TransactionDetails;
-import com.mercadopago.util.CurrenciesUtil;
 import com.mercadopago.util.JsonUtil;
 
 import junit.framework.TestCase;
 
 import org.junit.Before;
 import org.junit.Rule;
-import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-
-import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static org.hamcrest.Matchers.not;
 
 /**
  * Created by mromar on 6/21/16.

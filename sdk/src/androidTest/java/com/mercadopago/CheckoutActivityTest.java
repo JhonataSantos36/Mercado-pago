@@ -38,7 +38,6 @@ import com.mercadopago.util.JsonUtil;
 import com.mercadopago.utils.ViewUtils;
 
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -47,7 +46,6 @@ import org.junit.runner.RunWith;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.pressBack;
@@ -1228,7 +1226,7 @@ public class CheckoutActivityTest {
         intended(hasComponent(PaymentVaultActivity.class.getName()), times(2));
     }
 
-    //TODO Active Activity Tests and Recovery
+    // RECOVERY TESTS
 
     @Test
     public void afterPreferenceGetFromAPIFailsWithRecoverableErrorAndRetrySelectedRetryAPICall() {

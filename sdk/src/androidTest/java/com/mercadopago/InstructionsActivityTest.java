@@ -2,14 +2,10 @@ package com.mercadopago;
 
 import android.content.Intent;
 import android.support.test.espresso.intent.Intents;
-import android.support.test.espresso.matcher.BoundedMatcher;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.suitebuilder.annotation.LargeTest;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.mercadopago.model.Instruction;
 import com.mercadopago.model.InstructionActionInfo;
@@ -20,8 +16,6 @@ import com.mercadopago.test.FakeAPI;
 import com.mercadopago.test.StaticMock;
 import com.mercadopago.util.JsonUtil;
 
-import org.hamcrest.Description;
-import org.hamcrest.Matcher;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
