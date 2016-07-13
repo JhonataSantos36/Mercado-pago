@@ -192,9 +192,18 @@ public class StaticMock {
         }
     }
 
-    public static PaymentMethodSearch getPaymentMethodSearchWithUniqueItem() {
+    public static PaymentMethodSearch getPaymentMethodSearchWithUniquePaymentMethodOff() {
         try {
-            return JsonUtil.getInstance().fromJson(getFile(InstrumentationRegistry.getContext(), "mocks/payment_method_search_unique_item.json"), PaymentMethodSearch.class);
+            return JsonUtil.getInstance().fromJson(getFile(InstrumentationRegistry.getContext(), "mocks/payment_method_search_unique_item_off.json"), PaymentMethodSearch.class);
+
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+    public static PaymentMethodSearch getPaymentMethodSearchWithUniqueItemCreditCard() {
+        try {
+            return JsonUtil.getInstance().fromJson(getFile(InstrumentationRegistry.getContext(), "mocks/payment_method_search_unique_item_credit_card.json"), PaymentMethodSearch.class);
 
         } catch (Exception ex) {
             return null;
@@ -241,6 +250,15 @@ public class StaticMock {
     public static CheckoutPreference getPreferenceWithExclusions() {
         try {
             String json = getFile(InstrumentationRegistry.getContext(), "mocks/preference_with_exclusions.json");
+            return JsonUtil.getInstance().fromJson(json, CheckoutPreference.class);
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+    public static CheckoutPreference getPreferenceWithOffUniquePaymentMethod() {
+        try {
+            String json = getFile(InstrumentationRegistry.getContext(), "mocks/preference_with_one_off_payment_method.json");
             return JsonUtil.getInstance().fromJson(json, CheckoutPreference.class);
         } catch (Exception ex) {
             return null;
