@@ -32,16 +32,16 @@ import java.util.List;
 public class InstallmentsActivity extends ShowCardActivity {
 
     //InstallmentsContainer
-    private RecyclerView mInstallmentsView;
-    private PayerCostsAdapter mPayerCostsAdapter;
-    private ProgressBar mProgressBar;
-    private View mCardBackground;
+    protected RecyclerView mInstallmentsView;
+    protected PayerCostsAdapter mPayerCostsAdapter;
+    protected ProgressBar mProgressBar;
+    protected View mCardBackground;
 
     //Local vars
-    private List<PayerCost> mPayerCosts;
-    private PayerCost mSelectedPayerCost;
-    private PaymentPreference mPaymentPreference;
-    private Site mSite;
+    protected List<PayerCost> mPayerCosts;
+    protected PayerCost mSelectedPayerCost;
+    protected PaymentPreference mPaymentPreference;
+    protected Site mSite;
 
     @Override
     protected void setContentView() {
@@ -87,9 +87,7 @@ public class InstallmentsActivity extends ShowCardActivity {
             .setPublicKey(mPublicKey)
             .build();
 
-        if (mCurrentPaymentMethod != null) {
-            initializeCard();
-        }
+        initializeCard();
     }
 
     @Override
@@ -151,6 +149,9 @@ public class InstallmentsActivity extends ShowCardActivity {
     protected void validateActivityParameters() throws IllegalStateException {
         if (mAmount == null || mCurrentPaymentMethod == null) {
             throw new IllegalStateException();
+        }
+        if(mPayerCosts == null) {
+            if (mSelectedIssuer == null) throw new IllegalStateException("issuer is null");
         }
     }
 
