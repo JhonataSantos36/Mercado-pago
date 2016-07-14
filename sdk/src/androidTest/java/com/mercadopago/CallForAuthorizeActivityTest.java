@@ -1,6 +1,7 @@
 package com.mercadopago;
 
 import android.content.Intent;
+import android.support.test.espresso.NoActivityResumedException;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.suitebuilder.annotation.LargeTest;
@@ -13,6 +14,8 @@ import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.TransactionDetails;
 import com.mercadopago.util.CurrenciesUtil;
 import com.mercadopago.util.JsonUtil;
+
+import junit.framework.Assert;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -579,4 +582,14 @@ public class CallForAuthorizeActivityTest {
         assertFalse(mTestRule.getActivity().isFinishing());
     }
 
+    @Test (expected = NoActivityResumedException.class)
+    public void finishCallForAuthorizeLayoutWhenClickOnBackButtonTwoTimes(){
+        createIntent();
+        mTestRule.launchActivity(validStartIntent);
+
+        pressBack();
+        pressBack();
+
+        Assert.assertTrue(mTestRule.getActivity().isFinishing());
+    }
 }

@@ -1,6 +1,7 @@
 package com.mercadopago;
 
 import android.content.Intent;
+import android.support.test.espresso.NoActivityResumedException;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.suitebuilder.annotation.LargeTest;
@@ -574,23 +575,15 @@ public class RejectionActivityTest {
         assertFalse(mTestRule.getActivity().isFinishing());
     }
 
-    /*@Test
+    @Test (expected = NoActivityResumedException.class)
     public void finishRejectionLayoutWhenClickOnBackButtonTwoTimes(){
         createIntent();
         mTestRule.launchActivity(validStartIntent);
 
         pressBack();
-
-        try {
-            currentThread().wait(3000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
         pressBack();
 
-        //Rejection finish
-        assertFalse(mTestRule.getActivity().isFinishing());
-    }*/
+        assertTrue(mTestRule.getActivity().isFinishing());
+    }
 }
 

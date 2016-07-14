@@ -137,7 +137,7 @@ public class CongratsActivity extends MercadoPagoActivity {
     }
 
     private void setInstallmentsDescription() {
-        if (isInstallmentQuantityValid() && isInstallmentAmountValid() && isTotalPaidAmountValid() && isCurrencyIdValid()){
+        if (isInstallmentQuantityValid() && isInstallmentAmountValid() && isTotalPaidAmountValid() && CurrenciesUtil.isValidCurrency(mPayment.getCurrencyId())){
             if (mPayment.getInstallments()>1){
                 mInstallmentsDescription.setText(getInstallmentsText());
                 setInterestAmountDescription();
@@ -187,10 +187,6 @@ public class CongratsActivity extends MercadoPagoActivity {
             mCongratulationSubtitle.setVisibility(View.GONE);
             mPayerEmailDescription.setVisibility(View.GONE);
         }
-    }
-
-    private Boolean isCurrencyIdValid(){
-        return !isEmpty(mPayment.getCurrencyId()) && CurrenciesUtil.isValidCurrency(mPayment.getCurrencyId());
     }
 
     private Boolean isPaymentIdValid(){

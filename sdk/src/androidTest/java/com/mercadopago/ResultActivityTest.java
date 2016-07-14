@@ -1,16 +1,20 @@
 package com.mercadopago;
 
+import android.app.Activity;
+import android.app.Instrumentation;
 import android.content.Intent;
 import android.support.test.espresso.intent.Intents;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.suitebuilder.annotation.LargeTest;
 
+import com.mercadopago.core.MercadoPago;
 import com.mercadopago.model.Card;
 import com.mercadopago.model.Payer;
 import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.TransactionDetails;
+import com.mercadopago.test.ActivityResult;
 import com.mercadopago.util.JsonUtil;
 
 import org.junit.After;
@@ -24,6 +28,7 @@ import java.math.BigDecimal;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.intent.Intents.intending;
 import static android.support.test.espresso.intent.Intents.times;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -250,6 +255,20 @@ public class ResultActivityTest {
     }
 
     @Test
+    public void showErrorLayoutWhenStartResultActivityWithIncorrectPaymentStatus() {
+        mPayment.setStatus("other");
+
+        createIntent();
+        mTestRule.launchActivity(validStartIntent);
+
+        //Error message
+        onView(withId(R.id.mpsdkErrorMessage)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_standard_error_message))));
+
+        //Retry button is displayed
+        onView(withId(R.id.mpsdkExit)).check(matches(isDisplayed()));
+    }
+
+    @Test
     public void showErrorLayoutWhenStartResultActivityWithNullPaymentStatusDetail() {
         mPayment.setStatusDetail(null);
 
@@ -333,21 +352,22 @@ public class ResultActivityTest {
         assertTrue(mTestRule.getActivity().isFinishing());
     }
 
-    /* TODO sompre al ir a buscar las instrucciones
     @Test
     public void finishInstructionsLayoutWhenClickOnExitButton(){
         mPaymentMethod = getOffLinePaymentMethod();
         mPayment.setPaymentMethodId("pagofacil");
 
+        Intent instructionsResultIntent = new Intent();
+        Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(Activity.RESULT_OK, instructionsResultIntent);
+
+        intending(hasComponent(InstructionsActivity.class.getName())).respondWith(result);
+
         createIntent();
         mTestRule.launchActivity(validStartIntent);
-
-        onView(withId(R.id.mpsdkExitInstructions)).perform(click());
 
         //Result finish
         assertTrue(mTestRule.getActivity().isFinishing());
     }
-*/
 
     @Test
     public void finishCallForAuthorizeLayoutWhenClickOnSelectOtherPaymentMethodButton(){

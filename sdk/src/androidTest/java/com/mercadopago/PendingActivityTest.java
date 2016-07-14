@@ -1,6 +1,10 @@
 package com.mercadopago;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.support.test.espresso.Espresso;
+import android.support.test.espresso.NoActivityResumedException;
+import android.support.test.espresso.action.ViewActions;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.suitebuilder.annotation.LargeTest;
@@ -10,6 +14,7 @@ import com.mercadopago.model.Payer;
 import com.mercadopago.model.Payment;
 import com.mercadopago.model.TransactionDetails;
 import com.mercadopago.util.JsonUtil;
+import com.mercadopago.utils.ActivityResultUtil;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -205,7 +210,17 @@ public class PendingActivityTest {
 
         pressBack();
 
-        //Congrats finish
         assertFalse(mTestRule.getActivity().isFinishing());
+    }
+
+    @Test (expected = NoActivityResumedException.class)
+    public void finishPendingLayoutWhenClickOnBackButtonTwoTimes(){
+        createIntent();
+        mTestRule.launchActivity(validStartIntent);
+
+        pressBack();
+        pressBack();
+
+        assertTrue(mTestRule.getActivity().isFinishing());
     }
 }
