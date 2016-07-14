@@ -71,22 +71,29 @@ public class PaymentMethodSearch {
     }
 
     private PaymentMethodSearchItem searchItemMatchingPaymentMethod(PaymentMethod paymentMethod) {
-        String potentialItemId = paymentMethod.getId() + "_" + paymentMethod.getPaymentTypeId();
-        String paymentMethodId = paymentMethod.getId();
-        return searchItemInList(groups, potentialItemId, paymentMethodId);
+        return searchItemInList(groups, paymentMethod);
     }
 
-    private PaymentMethodSearchItem searchItemInList(List<PaymentMethodSearchItem> list, String potentialItemId, String paymentMethodId) {
+    private PaymentMethodSearchItem searchItemInList(List<PaymentMethodSearchItem> list, PaymentMethod paymentMethod) {
         PaymentMethodSearchItem requiredItem = null;
         for(PaymentMethodSearchItem currentItem : list) {
 
-            if(currentItem.getId().equals(paymentMethodId)
-                    || currentItem.getId().equals(potentialItemId)) {
+            //Case like "pagofacil", without the payment type in the item id.
+            if(itemMatchesPaymentMethod(currentItem, paymentMethod) && currentItem.getId().equals(paymentMethod.getId())) {
                 requiredItem = currentItem;
                 break;
             }
+            //Case like "bancomer_ticker", with the payment type in the item id
+            else if(itemMatchesPaymentMethod(currentItem, paymentMethod)) {
+                //Remove payment method id from item id
+                String potentialPaymentType = currentItem.getId().replace(paymentMethod.getId(), "");
+                if(potentialPaymentType.endsWith(paymentMethod.getPaymentTypeId())) {
+                    requiredItem = currentItem;
+                    break;
+                }
+            }
             else if(currentItem.hasChildren()) {
-                requiredItem = searchItemInList(currentItem.getChildren(), potentialItemId, paymentMethodId);
+                requiredItem = searchItemInList(currentItem.getChildren(), paymentMethod);
                 if(requiredItem != null) {
                     break;
                 }
