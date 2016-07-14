@@ -20,6 +20,7 @@ public class PaymentMethodSearch {
     public List<PaymentMethod> getPaymentMethods() {
         return paymentMethods;
     }
+
     public boolean hasSearchItems() {
         return this.groups != null && !this.groups.isEmpty();
     }
@@ -28,19 +29,35 @@ public class PaymentMethodSearch {
         PaymentMethod requiredPaymentMethod = null;
         if(paymentMethods != null && item != null && item.getId() != null) {
             for (PaymentMethod currentPaymentMethod : paymentMethods) {
-                if (item.getId().contains(currentPaymentMethod.getId())) {
+                if (itemMatchesPaymentMethod(item, currentPaymentMethod)) {
                     requiredPaymentMethod = currentPaymentMethod;
-
-                    String itemPaymentType = item.getId().replace(currentPaymentMethod.getId() + "_", "");
-                    if(PaymentTypes.getAllPaymentTypes().contains(itemPaymentType)) {
-                        //MP API v1 not contemplating different payment types for a payment method. Overriding to give consistent instructions.
-                        requiredPaymentMethod.setPaymentTypeId(itemPaymentType);
-                    }
-                    break;
+                    requiredPaymentMethod.setPaymentTypeId(getPaymentTypeIdFromItem(item, currentPaymentMethod));
                 }
             }
         }
         return requiredPaymentMethod;
+    }
+
+    private String getPaymentTypeIdFromItem(PaymentMethodSearchItem item, PaymentMethod paymentMethod) {
+
+        String paymentType = "";
+
+        //Remove payment method id from item id
+        String potentialPaymentType = item.getId().replace(paymentMethod.getId(), "");
+        for(String currentPaymentType : PaymentTypes.getAllPaymentTypes()) {
+            if(potentialPaymentType.endsWith(currentPaymentType)){
+                paymentType = currentPaymentType;
+                break;
+            }
+        }
+        if(paymentType.isEmpty()) {
+            paymentType = paymentMethod.getPaymentTypeId();
+        }
+        return paymentType;
+    }
+
+    private boolean itemMatchesPaymentMethod(PaymentMethodSearchItem item, PaymentMethod paymentMethod) {
+        return item.getId().startsWith(paymentMethod.getId());
     }
 
     public PaymentMethodSearchItem getSearchItemByPaymentMethod(PaymentMethod selectedPaymentMethod) {
@@ -59,7 +76,6 @@ public class PaymentMethodSearch {
         return searchItemInList(groups, potentialItemId, paymentMethodId);
     }
 
-    //PaymentMethodSearchItem id could be the payment method id or its concatenation with the paymentTypeId
     private PaymentMethodSearchItem searchItemInList(List<PaymentMethodSearchItem> list, String potentialItemId, String paymentMethodId) {
         PaymentMethodSearchItem requiredItem = null;
         for(PaymentMethodSearchItem currentItem : list) {
