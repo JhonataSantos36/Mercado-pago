@@ -22,11 +22,11 @@ public class PaymentMethodSearchGetPaymentMethodTest {
     return Arrays.asList(new Object[][]{
                 {"oxxo", "oxxo", "ticket"},
                 {"bancomer_bank_transfer", "bancomer", "bank_transfer"},
-                {"bancomer_ticket", "bancomer", "ticket"},
-                {"banamex_bank_transfer", "banamex", "bank_transfer"},
+                {"bancomer.ticket", "bancomer", "ticket"},
+                {"banamex.bank_transfer", "banamex", "bank_transfer"},
                 {"banamex_ticket", "banamex", "ticket"},
                 {"serfin_bank_transfer", "serfin", "bank_transfer"},
-                {"serfin_ticket", "serfin", "ticket"},
+                {"serfin.ticket", "serfin", "ticket"},
                 {"invalid_item", "invalid_item", ""}
         });
     }
