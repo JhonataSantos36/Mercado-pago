@@ -20,7 +20,7 @@ import java.math.BigDecimal;
 
 public abstract class ShowCardActivity extends FrontCardActivity {
 
-    public static Integer LAST_DIGITIS_LENGTH = 4;
+    public static Integer LAST_DIGITS_LENGTH = 4;
 
     protected MercadoPago mMercadoPago;
 
@@ -64,19 +64,19 @@ public abstract class ShowCardActivity extends FrontCardActivity {
 
         if (setting != null) {
             mCardNumberLength = setting.getCardNumber().getLength();
+            mSecurityCodeLocation = setting.getSecurityCode().getCardLocation();
         } else {
             mCardNumberLength = CARD_NUMBER_MAX_LENGTH;
+            mSecurityCodeLocation = CARD_SIDE_BACK;
         }
 
-        mSecurityCodeLocation = setting.getSecurityCode().getCardLocation();
     }
 
     protected void initializeToolbar(String title, boolean transparent) {
         Toolbar toolbar;
         if(transparent) {
             toolbar = (Toolbar) findViewById(R.id.mpsdkToolbar);
-        }
-        else {
+        } else {
             toolbar = (Toolbar) findViewById(R.id.mpsdkRegularToolbar);
             toolbar.setVisibility(View.VISIBLE);
         }
@@ -87,7 +87,10 @@ public abstract class ShowCardActivity extends FrontCardActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
-        mToolbarTitle.setText(title);
+
+        if(mToolbarTitle != null) {
+            mToolbarTitle.setText(title);
+        }
         if (toolbar != null) {
             toolbar.setNavigationOnClickListener(new View.OnClickListener() {
                 @Override
@@ -98,8 +101,10 @@ public abstract class ShowCardActivity extends FrontCardActivity {
         }
         if(mDecorationPreference != null) {
             if(mDecorationPreference.hasColors()) {
-                if(toolbar != null) {
+                if(toolbar != null && mToken != null) {
                     decorateToolbar(toolbar);
+                } else if (toolbar != null) {
+                    decorate(toolbar);
                 }
             }
         }
@@ -147,7 +152,7 @@ public abstract class ShowCardActivity extends FrontCardActivity {
     private String getCardNumberHidden() {
         StringBuilder sb = new StringBuilder();
         int length = mToken.getCardNumberLength();
-        for (int i = 0; i < length - LAST_DIGITIS_LENGTH; i++) {
+        for (int i = 0; i < length - LAST_DIGITS_LENGTH; i++) {
             sb.append("X");
         }
         sb.append(mToken.getLastFourDigits());

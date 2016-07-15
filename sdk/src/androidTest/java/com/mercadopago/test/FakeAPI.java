@@ -43,6 +43,14 @@ public class FakeAPI {
         queuedResponses.add(queuedResponse);
     }
 
+    public void addResponseToQueue(String jsonResponse, int statusCode, String reason, int delayMilliseconds) {
+        if(queuedResponses == null) {
+            queuedResponses = new ArrayList<>();
+        }
+        QueuedResponse queuedResponse = new QueuedResponse(jsonResponse, statusCode, reason, delayMilliseconds);
+        queuedResponses.add(queuedResponse);
+    }
+
     public void start() {
         HttpClientUtil.setCustomClient(createClient());
     }
@@ -81,11 +89,19 @@ public class FakeAPI {
         private String jsonResponse;
         private int statusCode;
         private String reason;
+        private Integer delayMilliseconds;
 
         public QueuedResponse(String jsonResponse, int statusCode, String reason) {
             this.jsonResponse = jsonResponse;
             this.reason = reason;
             this.statusCode = statusCode;
+        }
+
+        public QueuedResponse(String jsonResponse, int statusCode, String reason, int delayMilliseconds) {
+            this.jsonResponse = jsonResponse;
+            this.reason = reason;
+            this.statusCode = statusCode;
+            this.delayMilliseconds = delayMilliseconds;
         }
 
         public String getBodyAsJson() {
@@ -94,6 +110,14 @@ public class FakeAPI {
 
         public int getStatusCode() {
             return statusCode;
+        }
+
+        public Integer getDelay() {
+            return delayMilliseconds;
+        }
+
+        public boolean hasDelay() {
+            return delayMilliseconds != null;
         }
     }
 }

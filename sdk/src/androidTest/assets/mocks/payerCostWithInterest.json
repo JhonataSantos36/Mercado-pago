@@ -1,0 +1,13 @@
+{
+  "installments":3,
+  "installment_rate":16.59,
+  "disccount_rate":null,
+  "labels":[
+
+  ],
+  "min_allowed_amount":2,
+  "max_allowed_amount":60000,
+  "recommended_message":"3 cuotas de $ 39,05 ($ 117,17)",
+  "installment_amount":39.05,
+  "total_amount":117.17
+}

@@ -1,0 +1,15 @@
+{
+  "groups": [
+    {
+      "children": null,
+      "children_header": null,
+      "comment": "Se acreditará al instante.",
+      "description": "",
+      "id": "credit_card",
+      "show_icon": true,
+      "type": "payment_type"
+    }
+  ],
+  "payment_methods": [
+  ]
+}

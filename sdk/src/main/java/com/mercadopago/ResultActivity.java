@@ -52,10 +52,16 @@ public class ResultActivity extends AppCompatActivity {
         if(mPaymentMethod == null) {
             throw new IllegalStateException("payment method not set");
         }
+        if(!isStatusValid()) {
+            throw new IllegalStateException("payment not does not have status");
+        }
     }
 
     protected void onValidStart(){
-        if (MercadoPagoUtil.isCardPaymentType(mPaymentMethod.getPaymentTypeId())) {
+        if(mPayment.getStatus().equals(Payment.StatusCodes.STATUS_IN_PROCESS)) {
+            startPendingActivity();
+        }
+        else if (MercadoPagoUtil.isCardPaymentType(mPaymentMethod.getPaymentTypeId())) {
             startCardPaymentTypeResult();
         }
         else {
@@ -65,11 +71,9 @@ public class ResultActivity extends AppCompatActivity {
     }
 
     private void startCardPaymentTypeResult(){
-        if (isStatusValid() && isStatusDetailValid()) {
+        if (isStatusDetailValid()) {
             if (mPayment.getStatus().equals(Payment.StatusCodes.STATUS_APPROVED)) {
                 startCongratsActivity();
-            } else if (mPayment.getStatus().equals(Payment.StatusCodes.STATUS_IN_PROCESS)) {
-                startPendingActivity();
             } else if (mPayment.getStatus().equals(Payment.StatusCodes.STATUS_REJECTED)) {
                 if (mPayment.getStatusDetail().equals(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_CALL_FOR_AUTHORIZE)) {
                     startCallForAuthorizeActivity();
