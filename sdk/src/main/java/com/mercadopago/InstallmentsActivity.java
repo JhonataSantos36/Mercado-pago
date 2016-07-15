@@ -147,7 +147,7 @@ public class InstallmentsActivity extends ShowCardActivity {
 
     @Override
     protected void validateActivityParameters() throws IllegalStateException {
-        if (mAmount == null || mCurrentPaymentMethod == null) {
+        if (mAmount == null || mCurrentPaymentMethod == null || mSite == null) {
             throw new IllegalStateException();
         }
         if(mPayerCosts == null) {

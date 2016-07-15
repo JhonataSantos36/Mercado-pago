@@ -86,11 +86,6 @@ public class InstallmentsActivityTest {
         validStartIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(mPaymentMethod));
         validStartIntent.putExtra("site", JsonUtil.getInstance().toJson(mSite));
         validStartIntent.putExtra("amount", mAmount);
-
-        //TODO para probar
-//        if(mPayerCosts == null) {
-//            if (this.mIssuer == null) throw new IllegalStateException("issuer is null");
-//        }
     }
 
     @Before
@@ -313,34 +308,6 @@ public class InstallmentsActivityTest {
         intended(hasComponent(ErrorActivity.class.getName()));
     }
 
-//    @Test
-//    public void showErrorOnMultipleInstallmentsAsyncResponse() {
-//        List<Installment> installmentList = new ArrayList<>();
-//        mFakeAPI.addResponseToQueue(installmentList, 200, "");
-//
-//        Issuer issuer = StaticMock.getIssuer();
-//        validStartIntent.putExtra("issuer", JsonUtil.getInstance().toJson(issuer));
-//        mTestRule.launchActivity(validStartIntent);
-//        intended(hasComponent(ErrorActivity.class.getName()));
-//    }
-
-//    @Test
-//    public void finishWhenInstallmentIsUnique() {
-//        String installments = StaticMock.getInstallmentsJson();
-//        Type listType = new TypeToken<List<Installment>>(){}.getType();
-//        List<Installment> installmentList = JsonUtil.getInstance().getGson().fromJson(installments, listType);
-//
-//        mFakeAPI.addResponseToQueue(installmentList, 200, "");
-//
-//        InstallmentsActivity activity = mTestRule.launchActivity(validStartIntent);
-//
-//        ActivityResult result = ActivityResultUtil.getActivityResult(mTestRule.getActivity());
-//        Issuer issuer = JsonUtil.getInstance().fromJson(result.getExtras().getString("issuer"), Issuer.class);
-//        assertEquals(mockedIssuer.getId(), issuer.getId());
-//
-//        ActivityResultUtil.assertFinishCalledWithResult(mTestRule.getActivity(), Activity.RESULT_OK);
-//    }
-//
     @Test
     public void initializePayerCostsWhenListSent() {
         String payerCosts = StaticMock.getPayerCostsJson();
@@ -354,23 +321,7 @@ public class InstallmentsActivityTest {
         RecyclerView referencesLayout = (RecyclerView) mTestRule.getActivity().findViewById(R.id.mpsdkActivityInstallmentsView);
         assertEquals(referencesLayout.getChildCount(), payerCostList.size());
     }
-//
-//    @Test
-//    public void finishWhenIssuerIsUniqueWhenListSent() {
-//        Issuer mockedIssuer = StaticMock.getIssuer();
-//        List<Issuer> issuerList = new ArrayList<>();
-//        issuerList.add(mockedIssuer);
-//
-//        validStartIntent.putExtra("issuers", JsonUtil.getInstance().toJson(issuerList));
-//        mTestRule.launchActivity(validStartIntent);
-//
-//        ActivityResult result = ActivityResultUtil.getActivityResult(mTestRule.getActivity());
-//        Issuer selectedIssuer = JsonUtil.getInstance().fromJson(result.getExtras().getString("issuer"), Issuer.class);
-//        assertEquals(mockedIssuer.getId(), selectedIssuer.getId());
-//
-//        ActivityResultUtil.assertFinishCalledWithResult(mTestRule.getActivity(), Activity.RESULT_OK);
-//    }
-//
+
     @Test
     public void selectPayerCostAndGetResult() {
         String installments = StaticMock.getInstallmentsJson();
@@ -392,27 +343,7 @@ public class InstallmentsActivityTest {
 
         ActivityResultUtil.assertFinishCalledWithResult(mTestRule.getActivity(), Activity.RESULT_OK);
     }
-//
-////    @Test
-////    public void onBackClickedGoBack() {
-////        String issuers = StaticMock.getIssuersJson();
-////        Type listType = new TypeToken<List<Issuer>>(){}.getType();
-////        List<Issuer> issuerList = JsonUtil.getInstance().getGson().fromJson(issuers, listType);
-////        mFakeAPI.addResponseToQueue(issuerList, 200, "");
-////
-////        mTestRule.launchActivity(validStartIntent);
-////
-////        pressBack();
-////        ActivityResultUtil.assertFinishCalledWithResult(mTestRule.getActivity(), Activity.RESULT_CANCELED);
-////        assertTrue(mTestRule.getActivity().isFinishing());
-////
-////        try {
-////            Thread.sleep(5000);
-////        } catch (InterruptedException e) {
-////
-////        }
-////    }
-//
+
     @Test
     public void ifApiFailureShowErrorActivity() {
         Issuer issuer = StaticMock.getIssuer();
@@ -422,64 +353,6 @@ public class InstallmentsActivityTest {
         mTestRule.launchActivity(validStartIntent);
         intended(hasComponent(ErrorActivity.class.getName()));
     }
-//
-//    @Test
-//    public void whenReceivedResponseFromErrorRecover() {
-//        mFakeAPI.addResponseToQueue("", 401, "");
-//
-//        String installments = StaticMock.getInstallmentsJson();
-//        Type listType = new TypeToken<List<Installment>>(){}.getType();
-//        List<Installment> installmentList = JsonUtil.getInstance().getGson().fromJson(installments, listType);
-//
-//        mFakeAPI.addResponseToQueue(installmentList, 200, "");
-//
-//        Issuer issuer = StaticMock.getIssuer();
-//        validStartIntent.putExtra("issuer", JsonUtil.getInstance().toJson(issuer));
-//
-//        mTestRule.launchActivity(validStartIntent);
-//
-//        Intent errorResultIntent = new Intent();
-//        Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(Activity.RESULT_OK, errorResultIntent);
-//        intending(hasComponent(ErrorActivity.class.getName())).respondWith(result);
-//
-//        onView(withId(R.id.mpsdkErrorRetry)).perform(click());
-//
-//        RecyclerView referencesLayout = (RecyclerView) mTestRule.getActivity().findViewById(R.id.mpsdkActivityInstallmentsView);
-//        assertEquals(referencesLayout.getChildCount(), installmentList.size());
-//    }
-
-//    @Test
-//    public void whenReceivedResponseFromErrorFinish() {
-//        mFakeAPI.addResponseToQueue("", 401, "");
-//        String installments = StaticMock.getInstallmentsJson();
-//        Type listType = new TypeToken<List<Installment>>(){}.getType();
-//        List<Installment> installmentList = JsonUtil.getInstance().getGson().fromJson(installments, listType);
-//        mFakeAPI.addResponseToQueue(installmentList, 200, "");
-//        mTestRule.launchActivity(validStartIntent);
-//
-//        Intent errorResultIntent = new Intent();
-//        Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(Activity.RESULT_CANCELED, errorResultIntent);
-//        intending(hasComponent(ErrorActivity.class.getName())).respondWith(result);
-//
-//        onView(withId(R.id.mpsdkExit)).perform(click());
-//
-//        ActivityResultUtil.assertFinishCalledWithResult(mTestRule.getActivity(), Activity.RESULT_CANCELED);
-//    }
-//
-//    @Test
-//    public void payerCostIsNullOnInvalidPayerCostList() {
-//        String invalidJsonPayerCosts = StaticMock.getInvalidPayerCostsJson();
-//
-//        String issuers = StaticMock.getIssuersJson();
-//        Type listType = new TypeToken<List<Issuer>>(){}.getType();
-//        List<Issuer> issuerList = JsonUtil.getInstance().getGson().fromJson(issuers, listType);
-//        mFakeAPI.addResponseToQueue(issuerList, 200, "");
-//
-//        validStartIntent.putExtra("issuers", invalidJsonIssuers);
-//        mTestRule.launchActivity(validStartIntent);
-//
-//        assertFalse(mFakeAPI.hasQueuedResponses());
-//    }
 
     @Test
     public void decorationPreferenceWithTokenPaintsBackground() {

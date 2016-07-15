@@ -289,26 +289,6 @@ public class IssuersActivityTest {
         ActivityResultUtil.assertFinishCalledWithResult(mTestRule.getActivity(), Activity.RESULT_OK);
     }
 
-//    @Test
-//    public void onBackClickedGoBack() {
-//        String issuers = StaticMock.getIssuersJson();
-//        Type listType = new TypeToken<List<Issuer>>(){}.getType();
-//        List<Issuer> issuerList = JsonUtil.getInstance().getGson().fromJson(issuers, listType);
-//        mFakeAPI.addResponseToQueue(issuerList, 200, "");
-//
-//        mTestRule.launchActivity(validStartIntent);
-//
-//        pressBack();
-//        ActivityResultUtil.assertFinishCalledWithResult(mTestRule.getActivity(), Activity.RESULT_CANCELED);
-//        assertTrue(mTestRule.getActivity().isFinishing());
-//
-//        try {
-//            Thread.sleep(5000);
-//        } catch (InterruptedException e) {
-//
-//        }
-//    }
-
     @Test
     public void ifApiFailureShowErrorActivity() {
         mFakeAPI.addResponseToQueue("", 401, "");
