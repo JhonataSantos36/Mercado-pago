@@ -238,7 +238,7 @@ public class StaticMock {
         }
     }
 
-    public static CheckoutPreference getPreferenceWithoutExclusions() {
+    public static CheckoutPreference getChekoutPreference() {
         try {
             String json = getFile(InstrumentationRegistry.getContext(), "mocks/preference_without_exclusions.json");
             return JsonUtil.getInstance().fromJson(json, CheckoutPreference.class);

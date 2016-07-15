@@ -116,7 +116,7 @@ public class CheckoutActivityTest {
 
     @Test
     public void setInitialParametersOnCreate() {
-        CheckoutPreference preference = StaticMock.getPreferenceWithoutExclusions();
+        CheckoutPreference preference = StaticMock.getChekoutPreference();
         mFakeAPI.addResponseToQueue(preference, 200, "");
         CheckoutActivity activity = mTestRule.launchActivity(validStartIntent);
         assertTrue(activity.mCheckoutPreference != null
@@ -133,7 +133,7 @@ public class CheckoutActivityTest {
 
     @Test
     public void getPreferenceByIdOnCreate() {
-        CheckoutPreference preference = StaticMock.getPreferenceWithoutExclusions();
+        CheckoutPreference preference = StaticMock.getChekoutPreference();
         mFakeAPI.addResponseToQueue(preference, 200, "");
         CheckoutActivity activity = mTestRule.launchActivity(validStartIntent);
         assertTrue(activity.mCheckoutPreference != null && activity.mCheckoutPreference.getId().equals(PREF_ID));
@@ -141,7 +141,7 @@ public class CheckoutActivityTest {
 
     @Test
     public void ifPreferenceIdFromAPIIsDifferentShowErrorActivity() {
-        CheckoutPreference preference = StaticMock.getPreferenceWithoutExclusions();
+        CheckoutPreference preference = StaticMock.getChekoutPreference();
         mFakeAPI.addResponseToQueue(preference, 200, "");
         validStartIntent.putExtra("checkoutPreferenceId", "1234");
 
@@ -152,7 +152,7 @@ public class CheckoutActivityTest {
 
     @Test
     public void ifPreferenceHasManyItemsAppendTitles() {
-        CheckoutPreference preferenceWithManyItems =  StaticMock.getPreferenceWithoutExclusions();
+        CheckoutPreference preferenceWithManyItems =  StaticMock.getChekoutPreference();
 
         List<Item> items = preferenceWithManyItems.getItems();
         Item firstItem = items.get(0);
@@ -184,7 +184,7 @@ public class CheckoutActivityTest {
         intending(hasComponent(PaymentVaultActivity.class.getName())).respondWith(result);
 
         //Preparing mocked api responses
-        CheckoutPreference preference = StaticMock.getPreferenceWithoutExclusions();
+        CheckoutPreference preference = StaticMock.getChekoutPreference();
         mFakeAPI.addResponseToQueue(preference, 200, "");
 
         PaymentMethodSearch paymentMethodSearch = JsonUtil.getInstance().fromJson(StaticMock.getCompletePaymentMethodSearchAsJson(), PaymentMethodSearch.class);
@@ -219,7 +219,7 @@ public class CheckoutActivityTest {
         intending(hasComponent(PaymentVaultActivity.class.getName())).respondWith(result);
 
         //Prepare mocked api responses
-        CheckoutPreference preference = StaticMock.getPreferenceWithoutExclusions();
+        CheckoutPreference preference = StaticMock.getChekoutPreference();
         mFakeAPI.addResponseToQueue(preference, 200, "");
         String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
         mFakeAPI.addResponseToQueue(paymentMethodSearchJson, 200, "");
@@ -247,7 +247,7 @@ public class CheckoutActivityTest {
         intending(hasComponent(PaymentVaultActivity.class.getName())).respondWith(result);
 
         //Prepare mocked api responses
-        CheckoutPreference preference = StaticMock.getPreferenceWithoutExclusions();
+        CheckoutPreference preference = StaticMock.getChekoutPreference();
         mFakeAPI.addResponseToQueue(preference, 200, "");
         PaymentMethodSearch paymentMethodSearch = JsonUtil.getInstance().fromJson(StaticMock.getCompletePaymentMethodSearchAsJson(), PaymentMethodSearch.class);
         mFakeAPI.addResponseToQueue(paymentMethodSearch, 200, "");
@@ -287,7 +287,7 @@ public class CheckoutActivityTest {
         intending(hasComponent(PaymentVaultActivity.class.getName())).respondWith(result);
 
         //prepare mocked api responses
-        CheckoutPreference preference = StaticMock.getPreferenceWithoutExclusions();
+        CheckoutPreference preference = StaticMock.getChekoutPreference();
         mFakeAPI.addResponseToQueue(preference, 200, "");
         mFakeAPI.addResponseToQueue(StaticMock.getCompletePaymentMethodSearchAsJson(), 200, "");
 
@@ -307,7 +307,7 @@ public class CheckoutActivityTest {
         PaymentMethod paymentMethod = StaticMock.getPaymentMethodOff();
 
         //prepare mocked api response
-        CheckoutPreference preference = StaticMock.getPreferenceWithoutExclusions();
+        CheckoutPreference preference = StaticMock.getChekoutPreference();
         mFakeAPI.addResponseToQueue(preference, 200, "");
         mFakeAPI.addResponseToQueue(StaticMock.getCompletePaymentMethodSearchAsJson(), 200, "");
 
@@ -334,7 +334,7 @@ public class CheckoutActivityTest {
     public void onBackPressedBeforePaymentMethodSearchObtainedFinishActivityWithCanceledResult() {
 
         //prepare mocked api responses
-        CheckoutPreference preference = StaticMock.getPreferenceWithoutExclusions();
+        CheckoutPreference preference = StaticMock.getChekoutPreference();
         mFakeAPI.addResponseToQueue(preference, 200, "");
         mFakeAPI.addResponseToQueue(StaticMock.getCompletePaymentMethodSearchAsJson(), 200, "", 5000);
 
@@ -356,7 +356,7 @@ public class CheckoutActivityTest {
         intending(hasComponent(PaymentVaultActivity.class.getName())).respondWith(result);
 
         //prepare mocked api response
-        CheckoutPreference preference = StaticMock.getPreferenceWithoutExclusions();
+        CheckoutPreference preference = StaticMock.getChekoutPreference();
         mFakeAPI.addResponseToQueue(preference, 200, "");
 
         CheckoutActivity activity = mTestRule.launchActivity(validStartIntent);
@@ -372,7 +372,7 @@ public class CheckoutActivityTest {
     public void ifUniquePaymentMethodInPaymentMethodSearchFinishActivityWhenBackPressed() {
 
         //Preparing mocked api responses
-        CheckoutPreference preference = StaticMock.getPreferenceWithoutExclusions();
+        CheckoutPreference preference = StaticMock.getChekoutPreference();
         mFakeAPI.addResponseToQueue(preference, 200, "");
 
         PaymentMethodSearch paymentMethodSearch = StaticMock.getPaymentMethodSearchWithUniquePaymentMethodOff();
@@ -387,12 +387,14 @@ public class CheckoutActivityTest {
     }
 
     @Test
-    public void ifPreferenceExcludesAllPaymentMethodsButOneDoNotMakeEditionAvailable() {
+    public void ifAllPaymentMethodsExcludedButOneDoNotMakeEditionAvailable() {
 
         //Preparing mocked api responses
-        CheckoutPreference preference = StaticMock.getPreferenceWithoutExclusions();
+
+        CheckoutPreference preference = StaticMock.getChekoutPreference();
         mFakeAPI.addResponseToQueue(preference, 200, "");
 
+        //Payment method options service responds with one payment method
         PaymentMethodSearch paymentMethodSearch = StaticMock.getPaymentMethodSearchWithUniquePaymentMethodOff();
         mFakeAPI.addResponseToQueue(paymentMethodSearch, 200, "");
 
@@ -405,12 +407,13 @@ public class CheckoutActivityTest {
     }
 
     @Test
-    public void ifPreferenceExcludesAllPaymentMethodsButCreditCardOneDoMakeEditionAvailable() {
+    public void ifAllPaymentMethodsExcludedButCreditCardOneDoMakeEditionAvailable() {
 
         //Preparing mocked api responses
-        CheckoutPreference preference = StaticMock.getPreferenceWithoutExclusions();
+        CheckoutPreference preference = StaticMock.getChekoutPreference();
         mFakeAPI.addResponseToQueue(preference, 200, "");
 
+        //Payment method options service responds only credit card
         PaymentMethodSearch paymentMethodSearch = StaticMock.getPaymentMethodSearchWithUniqueItemCreditCard();
         mFakeAPI.addResponseToQueue(paymentMethodSearch, 200, "");
 
@@ -483,7 +486,7 @@ public class CheckoutActivityTest {
     @Test
     public void ifTermsAndConditionsClickedStartTermAndConditionsActivity() {
         //prepare mocked api responses
-        CheckoutPreference preference = StaticMock.getPreferenceWithoutExclusions();
+        CheckoutPreference preference = StaticMock.getChekoutPreference();
         mFakeAPI.addResponseToQueue(preference, 200, "");
 
         String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
@@ -506,7 +509,7 @@ public class CheckoutActivityTest {
     @Test
     public void whenOfflinePaymentMethodSelectedSetItAsResultForCheckoutActivity() {
         //prepare mocked api responses
-        CheckoutPreference preference = StaticMock.getPreferenceWithoutExclusions();
+        CheckoutPreference preference = StaticMock.getChekoutPreference();
         mFakeAPI.addResponseToQueue(preference, 200, "");
 
         String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
@@ -532,7 +535,7 @@ public class CheckoutActivityTest {
     @Test
     public void whenResultFromGuessingNewCardFormReceivedSetItAsResultForCheckoutActivity() {
         //prepared mocked api responses
-        CheckoutPreference preference = StaticMock.getPreferenceWithoutExclusions();
+        CheckoutPreference preference = StaticMock.getChekoutPreference();
         mFakeAPI.addResponseToQueue(preference, 200, "");
 
         String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
@@ -570,7 +573,7 @@ public class CheckoutActivityTest {
     @Test
     public void setPaymentMethodResultWithIssuer() {
         //prepare mocked api responses
-        CheckoutPreference preference = StaticMock.getPreferenceWithoutExclusions();
+        CheckoutPreference preference = StaticMock.getChekoutPreference();
         mFakeAPI.addResponseToQueue(preference, 200, "");
 
         String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
@@ -611,7 +614,7 @@ public class CheckoutActivityTest {
     public void getPaymentMethodResultFromPaymentMethodsActivity() {
 
         //prepared mocked api responses
-        CheckoutPreference preference = StaticMock.getPreferenceWithoutExclusions();
+        CheckoutPreference preference = StaticMock.getChekoutPreference();
         mFakeAPI.addResponseToQueue(preference, 200, "");
 
         PaymentMethodSearch paymentMethodSearch = JsonUtil.getInstance().fromJson(StaticMock.getCompletePaymentMethodSearchAsJson(), PaymentMethodSearch.class);
@@ -646,7 +649,7 @@ public class CheckoutActivityTest {
     @Test
     public void createPaymentForOfflinePaymentMethodStartsInstructionsActivity() {
         //prepare mocked api responses
-        CheckoutPreference preference = StaticMock.getPreferenceWithoutExclusions();
+        CheckoutPreference preference = StaticMock.getChekoutPreference();
         mFakeAPI.addResponseToQueue(preference, 200, "");
 
         String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
@@ -671,7 +674,7 @@ public class CheckoutActivityTest {
     @Test
     public void createPaymentForOnlinePaymentMethodStartsCongratsActivity() {
         //prepared mocked api responses
-        CheckoutPreference preference = StaticMock.getPreferenceWithoutExclusions();
+        CheckoutPreference preference = StaticMock.getChekoutPreference();
         mFakeAPI.addResponseToQueue(preference, 200, "");
 
         String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
@@ -699,7 +702,7 @@ public class CheckoutActivityTest {
     @Test
     public void whenPaymentCreationFailsWithBadRequestShowErrorScreen() {
         //Prepare mocked api responses
-        CheckoutPreference preference = StaticMock.getPreferenceWithoutExclusions();
+        CheckoutPreference preference = StaticMock.getChekoutPreference();
         mFakeAPI.addResponseToQueue(preference, 200, "");
 
         String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
@@ -722,7 +725,7 @@ public class CheckoutActivityTest {
     @Test
     public void whenPaymentCreationFailsWithServerErrorShowErrorScreen() {
         //Prepare mocked api responses
-        CheckoutPreference preference = StaticMock.getPreferenceWithoutExclusions();
+        CheckoutPreference preference = StaticMock.getChekoutPreference();
         mFakeAPI.addResponseToQueue(preference, 200, "");
 
         String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
@@ -744,7 +747,7 @@ public class CheckoutActivityTest {
     @Test
     public void whenPaymentCreationFailsWithServerErrorAndUserPressesBackShowRegularLayout() {
         //Prepare mocked api responses
-        CheckoutPreference preference = StaticMock.getPreferenceWithoutExclusions();
+        CheckoutPreference preference = StaticMock.getChekoutPreference();
         mFakeAPI.addResponseToQueue(preference, 200, "");
 
         String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
@@ -769,7 +772,7 @@ public class CheckoutActivityTest {
     @Test
     public void whenCardPaymentCreationFailsAndErrorScreenShownAndUserPressesBackAndPayedAgainCheckSameTransactionId() {
         //Prepare mocked api responses
-        CheckoutPreference preference = StaticMock.getPreferenceWithoutExclusions();
+        CheckoutPreference preference = StaticMock.getChekoutPreference();
         mFakeAPI.addResponseToQueue(preference, 200, "");
 
         String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
@@ -804,7 +807,7 @@ public class CheckoutActivityTest {
     @Test
     public void whenPaymentCreationStatusIsProcessingStartPaymentInProcessActivity() {
         //Prepare mocked api responses
-        CheckoutPreference preference = StaticMock.getPreferenceWithoutExclusions();
+        CheckoutPreference preference = StaticMock.getChekoutPreference();
         mFakeAPI.addResponseToQueue(preference, 200, "");
 
         String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
@@ -826,7 +829,7 @@ public class CheckoutActivityTest {
     @Test
     public void ifPaymentCreationFailsButApiExceptionDoesNotHaveStatusShowErrorActivity() {
         //Prepare mocked api responses
-        CheckoutPreference preference = StaticMock.getPreferenceWithoutExclusions();
+        CheckoutPreference preference = StaticMock.getChekoutPreference();
         mFakeAPI.addResponseToQueue(preference, 200, "");
 
         String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
@@ -851,7 +854,7 @@ public class CheckoutActivityTest {
     @Test
     public void ifPaymentCreationFailsAndApiExceptionStatusIsUnknownShowErrorActivity() {
         //Prepare mocked api responses
-        CheckoutPreference preference = StaticMock.getPreferenceWithoutExclusions();
+        CheckoutPreference preference = StaticMock.getChekoutPreference();
         mFakeAPI.addResponseToQueue(preference, 200, "");
 
         String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
@@ -904,7 +907,7 @@ public class CheckoutActivityTest {
         intending(hasComponent(PaymentVaultActivity.class.getName())).respondWith(paymentVaultResult);
 
         //Mock API Calls
-        CheckoutPreference preference = StaticMock.getPreferenceWithoutExclusions();
+        CheckoutPreference preference = StaticMock.getChekoutPreference();
         mFakeAPI.addResponseToQueue(preference, 200, "");
         String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
         mFakeAPI.addResponseToQueue(paymentMethodSearchJson, 200, "");
@@ -944,7 +947,7 @@ public class CheckoutActivityTest {
         intending(hasComponent(PaymentVaultActivity.class.getName())).respondWith(paymentVaultResult);
 
         //Mock API Calls
-        CheckoutPreference preference = StaticMock.getPreferenceWithoutExclusions();
+        CheckoutPreference preference = StaticMock.getChekoutPreference();
         mFakeAPI.addResponseToQueue(preference, 200, "");
         String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
         mFakeAPI.addResponseToQueue(paymentMethodSearchJson, 200, "");
@@ -986,7 +989,7 @@ public class CheckoutActivityTest {
         intending(hasComponent(PaymentVaultActivity.class.getName())).respondWith(paymentVaultResult);
 
         //Mock API Calls
-        CheckoutPreference preference = StaticMock.getPreferenceWithoutExclusions();
+        CheckoutPreference preference = StaticMock.getChekoutPreference();
         mFakeAPI.addResponseToQueue(preference, 200, "");
         String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
         mFakeAPI.addResponseToQueue(paymentMethodSearchJson, 200, "");
@@ -1024,7 +1027,7 @@ public class CheckoutActivityTest {
         intending(hasComponent(InstallmentsActivity.class.getName())).respondWith(installmentsResult);
 
         //Mock API Calls
-        CheckoutPreference preference = StaticMock.getPreferenceWithoutExclusions();
+        CheckoutPreference preference = StaticMock.getChekoutPreference();
         mFakeAPI.addResponseToQueue(preference, 200, "");
         String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
         mFakeAPI.addResponseToQueue(paymentMethodSearchJson, 200, "");
@@ -1077,7 +1080,7 @@ public class CheckoutActivityTest {
         intending(hasComponent(PaymentVaultActivity.class.getName())).respondWith(paymentVaultResult);
 
         //Mock API Calls
-        CheckoutPreference preference = StaticMock.getPreferenceWithoutExclusions();
+        CheckoutPreference preference = StaticMock.getChekoutPreference();
         mFakeAPI.addResponseToQueue(preference, 200, "");
         String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
         mFakeAPI.addResponseToQueue(paymentMethodSearchJson, 200, "");
@@ -1127,7 +1130,7 @@ public class CheckoutActivityTest {
         intending(hasComponent(PaymentVaultActivity.class.getName())).respondWith(paymentVaultResult);
 
         //Mock API Calls
-        CheckoutPreference preference = StaticMock.getPreferenceWithoutExclusions();
+        CheckoutPreference preference = StaticMock.getChekoutPreference();
         mFakeAPI.addResponseToQueue(preference, 200, "");
         String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
         mFakeAPI.addResponseToQueue(paymentMethodSearchJson, 200, "");
@@ -1164,7 +1167,7 @@ public class CheckoutActivityTest {
         intending(hasComponent(ResultActivity.class.getName())).respondWith(resultActivityResult);
 
         //Mock API Calls
-        CheckoutPreference preference = StaticMock.getPreferenceWithoutExclusions();
+        CheckoutPreference preference = StaticMock.getChekoutPreference();
         mFakeAPI.addResponseToQueue(preference, 200, "");
         String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
         mFakeAPI.addResponseToQueue(paymentMethodSearchJson, 200, "");
@@ -1185,7 +1188,7 @@ public class CheckoutActivityTest {
     @Test
     public void onCancelResultFromPaymentVaultWithoutEditionRequested() {
         //Mock API Calls
-        CheckoutPreference preference = StaticMock.getPreferenceWithoutExclusions();
+        CheckoutPreference preference = StaticMock.getChekoutPreference();
         mFakeAPI.addResponseToQueue(preference, 200, "");
         String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
         mFakeAPI.addResponseToQueue(paymentMethodSearchJson, 200, "");
@@ -1199,7 +1202,7 @@ public class CheckoutActivityTest {
     @Test
     public void onCancelResultFromPaymentVaultAfterEditionShowPreviousSelection() {
         //Mock API Calls
-        CheckoutPreference preference = StaticMock.getPreferenceWithoutExclusions();
+        CheckoutPreference preference = StaticMock.getChekoutPreference();
         mFakeAPI.addResponseToQueue(preference, 200, "");
         String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
         mFakeAPI.addResponseToQueue(paymentMethodSearchJson, 200, "");
@@ -1212,7 +1215,7 @@ public class CheckoutActivityTest {
 
     @Test
     public void onResultRetryFromResultActivityStartPaymentMethodSelection() {
-        CheckoutPreference preference = StaticMock.getPreferenceWithoutExclusions();
+        CheckoutPreference preference = StaticMock.getChekoutPreference();
         mFakeAPI.addResponseToQueue(preference, 200, "");
 
         String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
@@ -1245,7 +1248,7 @@ public class CheckoutActivityTest {
 
     @Test
     public void onResultSelectOtherFromResultActivityStartPaymentMethodSelection() {
-        CheckoutPreference preference = StaticMock.getPreferenceWithoutExclusions();
+        CheckoutPreference preference = StaticMock.getChekoutPreference();
         mFakeAPI.addResponseToQueue(preference, 200, "");
 
         String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
@@ -1280,7 +1283,7 @@ public class CheckoutActivityTest {
 
     @Test
     public void afterPreferenceGetFromAPIFailsWithRecoverableErrorAndRetrySelectedRetryAPICall() {
-        CheckoutPreference checkoutPreference = StaticMock.getPreferenceWithoutExclusions();
+        CheckoutPreference checkoutPreference = StaticMock.getChekoutPreference();
 
         mFakeAPI.addResponseToQueue("", 400, "");
         mFakeAPI.addResponseToQueue(checkoutPreference, 200, "");
@@ -1294,7 +1297,7 @@ public class CheckoutActivityTest {
 
     @Test
     public void afterPaymentMethodSearchGetFromAPIFailsWithRecoverableErrorAndRetrySelectedRetryAPICall() {
-        CheckoutPreference checkoutPreference = StaticMock.getPreferenceWithoutExclusions();
+        CheckoutPreference checkoutPreference = StaticMock.getChekoutPreference();
         String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
 
         mFakeAPI.addResponseToQueue(checkoutPreference, 200, "");
@@ -1312,7 +1315,7 @@ public class CheckoutActivityTest {
 
     @Test
     public void whenDecorationPreferenceReceivedDecorateElements() {
-        CheckoutPreference preference = StaticMock.getPreferenceWithoutExclusions();
+        CheckoutPreference preference = StaticMock.getChekoutPreference();
         mFakeAPI.addResponseToQueue(preference, 200, "");
 
         String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
@@ -1340,7 +1343,7 @@ public class CheckoutActivityTest {
 
     @Test
     public void whenDecorationPreferenceReceivedWithDarkFontEnabledDecorateTextViews() {
-        CheckoutPreference preference = StaticMock.getPreferenceWithoutExclusions();
+        CheckoutPreference preference = StaticMock.getChekoutPreference();
         mFakeAPI.addResponseToQueue(preference, 200, "");
 
         String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
