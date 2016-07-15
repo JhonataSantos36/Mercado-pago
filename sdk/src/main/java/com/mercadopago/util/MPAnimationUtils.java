@@ -91,7 +91,23 @@ public class MPAnimationUtils {
 
             @Override
             public void run() {
-                Animation mAnimFadeIn = android.view.animation.AnimationUtils.loadAnimation(context, R.anim.mpsdk_fade_in);
+                final Animation mAnimFadeIn = android.view.animation.AnimationUtils.loadAnimation(context, R.anim.mpsdk_fade_in);
+                mAnimFadeIn.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        imageView.clearAnimation();
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
+
+                    }
+                });
                 imageView.setBackgroundColor(ContextCompat.getColor(context, color));
                 imageView.startAnimation(mAnimFadeIn);
             }
@@ -113,6 +129,7 @@ public class MPAnimationUtils {
                     @Override
                     public void onAnimationEnd(Animation animation) {
                         imageView.setBackgroundColor(ContextCompat.getColor(context, color));
+                        imageView.clearAnimation();
                     }
 
                     @Override
