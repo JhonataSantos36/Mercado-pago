@@ -54,7 +54,7 @@ public class CongratsActivityTest {
 
     @Rule
     public ActivityTestRule<CongratsActivity> mTestRule = new ActivityTestRule<>(CongratsActivity.class, true, false);
-    public Intent validStartIntent;
+    public Intent validStartIntent, nullPaymentIntent, nullPublicKeyIntent, nullPaymentMethodIntent;
 
     private Payment mPayment;
     private String mMerchantPublicKey;
@@ -109,21 +109,21 @@ public class CongratsActivityTest {
     }
 
     private void createIntentWithNullPayment(){
-        validStartIntent = new Intent();
-        validStartIntent.putExtra("merchantPublicKey", mMerchantPublicKey);
-        validStartIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(mPaymentMethod));
+        nullPaymentIntent = new Intent();
+        nullPaymentIntent.putExtra("merchantPublicKey", mMerchantPublicKey);
+        nullPaymentIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(mPaymentMethod));
     }
 
     private void createIntentWithNullPublicKey(){
-        validStartIntent = new Intent();
-        validStartIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(mPaymentMethod));
-        validStartIntent.putExtra("payment", JsonUtil.getInstance().toJson(mPayment));
+        nullPublicKeyIntent = new Intent();
+        nullPublicKeyIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(mPaymentMethod));
+        nullPublicKeyIntent.putExtra("payment", JsonUtil.getInstance().toJson(mPayment));
     }
 
     private void createIntentWithNullPaymentMethod(){
-        validStartIntent = new Intent();
-        validStartIntent.putExtra("merchantPublicKey", mMerchantPublicKey);
-        validStartIntent.putExtra("payment", JsonUtil.getInstance().toJson(mPayment));
+        nullPaymentMethodIntent = new Intent();
+        nullPaymentMethodIntent.putExtra("merchantPublicKey", mMerchantPublicKey);
+        nullPaymentMethodIntent.putExtra("payment", JsonUtil.getInstance().toJson(mPayment));
     }
 
     @Test
@@ -200,7 +200,7 @@ public class CongratsActivityTest {
     }
 
     @Test
-    public void showCongratsWithTotalAmountWhenApprovedPaymentHasRate(){
+    public void displayTotalAmountWithRateWhenApprovedPaymentHasRate(){
         String paymentIdDescription, lastFourDigitsDescription;
         Spanned installmentsDescription, totalAmountDescription;
         Bitmap bitmap, paymentBitmap;
@@ -257,7 +257,7 @@ public class CongratsActivityTest {
     }
 
     @Test
-    public void showCongratsWithTotalAmountWhenApprovedPaymentHasZeroRateButFeeDetailsSizeIsOne(){
+    public void displayWithoutInterestWhenApprovedPaymentHasZeroRateButFeeDetailsSizeIsOne(){
         String paymentIdDescription, lastFourDigitsDescription;
         Spanned installmentsDescription;
         Bitmap bitmap, paymentBitmap;
@@ -313,7 +313,7 @@ public class CongratsActivityTest {
     }
 
     @Test
-    public void showCongratsLayoutWithoutEmailWhenPaymentIsApprovedWithNullEmail(){
+    public void emailIsNotDisplayedWhenPaymentHasNullEmail(){
         String paymentIdDescription, lastFourDigitsDescription;
         Spanned installmentsDescription;
         Bitmap bitmap, paymentBitmap;
@@ -366,7 +366,7 @@ public class CongratsActivityTest {
     }
 
     @Test
-    public void showCongratsLayoutWithoutEmailWhenPaymentIsApprovedWithEmptyEmail(){
+    public void emailIsNotDisplayedWhenPaymentHasEmptyEmail(){
         String paymentIdDescription, lastFourDigitsDescription;
         Spanned installmentsDescription;
         Bitmap bitmap, paymentBitmap;
@@ -419,7 +419,7 @@ public class CongratsActivityTest {
     }
 
     @Test
-    public void showCongratsLayoutWithoutEmailWhenPaymentIsApprovedWithNullPayer(){
+    public void emailIsNotDisplayedWhenPaymentHasNullPayer(){
         String paymentIdDescription, lastFourDigitsDescription;
         Spanned installmentsDescription;
         Bitmap bitmap, paymentBitmap;
@@ -469,7 +469,7 @@ public class CongratsActivityTest {
     }
 
     @Test
-    public void showCongratsLayoutWithoutLastFourDigitsCardWhenPaymentIsApprovedWithNullCard(){
+    public void lastFourDigitsCardAreNotDisplayedWhenPaymentHasNullCard(){
         String paymentIdDescription;
         Spanned installmentsDescription;
 
@@ -512,7 +512,7 @@ public class CongratsActivityTest {
     }
 
     @Test
-    public void showCongratsLayoutWithoutLastFourDigitsCardWhenPaymentIsApprovedWithNullLastFourDigitsCard(){
+    public void lastFourDigitsCardAreNotDisplayedWhenPaymentHasNullLastFourDigitsCard(){
         String paymentIdDescription;
         Spanned installmentsDescription;
 
@@ -558,7 +558,7 @@ public class CongratsActivityTest {
     }
 
     @Test
-    public void showCongratsLayoutWithoutLastFourDigitsCardWhenPaymentIsApprovedWithEmptyLastFourDigitsCard(){
+    public void lastFourDigitsCardAreNotDisplayedWhenPaymentHasEmptyLastFourDigitsCard(){
         String paymentIdDescription;
         Spanned installmentsDescription;
 
@@ -604,7 +604,7 @@ public class CongratsActivityTest {
     }
 
     @Test
-    public void showCongratsLayoutWithoutLastFourDigitsCardWhenPaymentIsApprovedWithNullPaymentMethodId(){
+    public void lastFourDigitsCardAreNotDisplayedWhenPaymentHasNullPaymentMethodId(){
         String paymentIdDescription;
         Spanned installmentsDescription;
 
@@ -648,7 +648,7 @@ public class CongratsActivityTest {
     }
 
     @Test
-    public void showCongratsLayoutWithoutPaymentMethodImageWhenPaymentIsApprovedWithPaymentMethodIdThatNotHasImage(){
+    public void paymentMethodImageIsNotDisplayedWhenPaymentMethodIdHasNotImage(){
         String paymentIdDescription, lastFourDigitsDescription;
         Spanned installmentsDescription;
 
@@ -738,7 +738,7 @@ public class CongratsActivityTest {
     }
 
     @Test
-    public void showCongratsLayoutWithoutLastFourDigitsCardWhenPaymentIsApprovedWithPaymentPaymentMethodIdIsDifferentPaymentMethodId(){
+    public void lastFourDigitsCardAreNotDisplayedWhenPaymentPaymentMethodIdIsDifferentToPaymentMethodId(){
         String paymentIdDescription;
         Spanned installmentsDescription;
 
@@ -782,7 +782,7 @@ public class CongratsActivityTest {
     }
 
     @Test
-    public void showCongratsLayoutWithoutInstallmentsDescriptionWhenCongratsReceiveNullInstallmentsNumber(){
+    public void installmentsDescriptionIsNotDisplayedWhenPaymentInstallmentsNumberIsNull(){
         String paymentIdDescription, lastFourDigitsDescription;
         Bitmap bitmap, paymentBitmap;
 
@@ -830,7 +830,7 @@ public class CongratsActivityTest {
     }
 
     @Test
-    public void showCongratsLayoutWithoutInstallmentsDescriptionWhenCongratsReceiveNegativeInstallmentsNumber(){
+    public void installmentsDescriptionIsNotDisplayedWhenPaymentInstallmentsNumberIsNegative(){
         String paymentIdDescription, lastFourDigitsDescription;
         Bitmap bitmap, paymentBitmap;
 
@@ -878,7 +878,7 @@ public class CongratsActivityTest {
     }
 
     @Test
-    public void showCongratsLayoutWithTotalAmountAndWithoutInstallmentsDescriptionWhenCongratsReceiveZeroInstallmentNumber(){
+    public void installmentsDescriptionIsNotDisplayedAndTotalAmountIsDisplayedWhenPaymentInstallmentsNumberIsZero(){
         String paymentIdDescription, lastFourDigitsDescription;
         StringBuilder installments = new StringBuilder();
         Spanned installmentsDescription;
@@ -931,7 +931,7 @@ public class CongratsActivityTest {
     }
 
     @Test
-    public void showCongratsLayoutWithTotalAmountAndWithoutInstallmentsDescriptionWhenCongratsReceiveOneInstallmentNumber(){
+    public void installmentsDescriptionIsNotDisplayedAndTotalAmountIsDisplayedWhenPaymentInstallmentsNumberIsOne(){
         String paymentIdDescription, lastFourDigitsDescription;
         StringBuilder installments = new StringBuilder();
         Spanned installmentsDescription;
@@ -984,7 +984,7 @@ public class CongratsActivityTest {
     }
 
     @Test
-    public void showCongratsLayoutWithoutInstallmentsDescriptionWhenCongratsReceiveNullTransactionDetail(){
+    public void installmentsDescriptionIsNotDisplayedWhenPaymentTransactionDetailIsNull(){
         String paymentIdDescription, lastFourDigitsDescription;
         Bitmap bitmap, paymentBitmap;
 
@@ -1032,7 +1032,7 @@ public class CongratsActivityTest {
     }
 
     @Test
-    public void showCongratsLayoutWithoutInstallmentsDescriptionWhenCongratsReceiveNullInstallmentAmount(){
+    public void installmentsDescriptionIsNotDisplayedWhenPaymentInstallmentAmountIsNull(){
         String paymentIdDescription, lastFourDigitsDescription;
         Bitmap bitmap, paymentBitmap;
 
@@ -1084,7 +1084,7 @@ public class CongratsActivityTest {
     }
 
     @Test
-    public void showCongratsLayoutWithoutInstallmentsDescriptionWhenCongratsReceiveNegativeInstallmentAmount(){
+    public void installmentsDescriptionIsNotDisplayedWhenPaymentInstallmentAmountIsNegative(){
         String paymentIdDescription, lastFourDigitsDescription;
         Bitmap bitmap, paymentBitmap;
 
@@ -1136,7 +1136,7 @@ public class CongratsActivityTest {
     }
 
     @Test
-    public void showCongratsLayoutWithoutInstallmentsDescriptionWhenCongratsReceiveZeroInstallmentAmount(){
+    public void installmentsDescriptionIsNotDisplayedWhenPaymentInstallmentAmountIsZero(){
         String paymentIdDescription, lastFourDigitsDescription;
         Bitmap bitmap, paymentBitmap;
 
@@ -1188,7 +1188,7 @@ public class CongratsActivityTest {
     }
 
     @Test
-    public void showCongratsLayoutWithoutInstallmentsDescriptionWhenCongratsReceiveCurrencyNull(){
+    public void installmentsDescriptionIsNotDisplayedWhenPaymentCurrencyIdIsNull(){
         String paymentIdDescription, lastFourDigitsDescription;
         Bitmap bitmap, paymentBitmap;
 
@@ -1241,7 +1241,7 @@ public class CongratsActivityTest {
     }
 
     @Test
-    public void showCongratsLayoutWithoutInstallmentsDescriptionWhenCongratsReceiveCurrencyEmpty(){
+    public void installmentsDescriptionIsNotDisplayedWhenPaymentCurrencyIdIsEmpty(){
         String paymentIdDescription, lastFourDigitsDescription;
         Bitmap bitmap, paymentBitmap;
 
@@ -1294,7 +1294,7 @@ public class CongratsActivityTest {
     }
 
     @Test
-    public void showCongratsLayoutWithoutInstallmentsDescriptionWhenCongratsReceiveCurrencyInvalid(){
+    public void installmentsDescriptionIsNotDisplayedWhenPaymentCurrencyIdNotExist(){
         String paymentIdDescription, lastFourDigitsDescription;
         Bitmap bitmap, paymentBitmap;
 
@@ -1347,7 +1347,7 @@ public class CongratsActivityTest {
     }
 
     @Test
-    public void showCongratsLayoutWithoutTotalAmountDescriptionWhenCongratsReceiveNullTransactionDetail(){
+    public void totalAmountDescriptionIsNotDisplayedWhenPaymentTransactionDetailIsNull(){
         String paymentIdDescription, lastFourDigitsDescription;
         Bitmap bitmap, paymentBitmap;
 
@@ -1395,7 +1395,7 @@ public class CongratsActivityTest {
     }
 
     @Test
-    public void showCongratsLayoutWithoutTotalAmountDescriptionWhenCongratsReceiveNullTotalPaidAmount(){
+    public void totalAmountDescriptionIsNotDisplayedWhenPaymentTotalPaidAmountIsNull(){
         String paymentIdDescription, lastFourDigitsDescription;
         Bitmap bitmap, paymentBitmap;
 
@@ -1447,7 +1447,7 @@ public class CongratsActivityTest {
     }
 
     @Test
-    public void showCongratsLayoutWithoutTotalAmountDescriptionWhenCongratsReceiveNegativeTotalPaidAmount(){
+    public void totalAmountDescriptionIsNotDisplayedWhenPaymentTotalPaidAmountIsNegative(){
         String paymentIdDescription, lastFourDigitsDescription;
         Bitmap bitmap, paymentBitmap;
 
@@ -1499,7 +1499,7 @@ public class CongratsActivityTest {
     }
 
     @Test
-    public void showCongratsLayoutWithoutTotalAmountDescriptionWhenCongratsReceiveZeroTotalPaidAmount(){
+    public void totalAmountDescriptionIsNotDisplayedWhenPaymentTotalPaidAmountIsZero(){
         String paymentIdDescription, lastFourDigitsDescription;
         Bitmap bitmap, paymentBitmap;
 
@@ -1551,7 +1551,7 @@ public class CongratsActivityTest {
     }
 
     @Test
-    public void showCongratsLayoutWithoutPaymentIdWhenCongratsReceiveNullPaymentId(){
+    public void paymentIdIsNotDisplayedWhenPaymentIdIsNull(){
         String lastFourDigitsDescription;
         Spanned installmentsDescription;
         Bitmap bitmap, paymentBitmap;
@@ -1601,7 +1601,7 @@ public class CongratsActivityTest {
     }
 
     @Test
-    public void finishCongratsLayoutWhenClickOnExitCongrats(){
+    public void finishCongratsActivityWhenClickOnExitCongrats(){
         mPayment.setStatus(Payment.StatusCodes.STATUS_APPROVED);
         mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_ACCREDITED);
 
@@ -1619,9 +1619,9 @@ public class CongratsActivityTest {
     }
 
     @Test
-    public void showErrorLayoutWhenStartCongratsActivityWithNullPayment() {
+    public void showErrorWhenStartCongratsActivityWithNullPayment() {
         createIntentWithNullPayment();
-        mTestRule.launchActivity(validStartIntent);
+        mTestRule.launchActivity(nullPaymentIntent);
 
         //Error message
         onView(withId(R.id.mpsdkErrorMessage)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_standard_error_message))));
@@ -1631,9 +1631,9 @@ public class CongratsActivityTest {
     }
 
     @Test
-    public void showErrorLayoutWhenStartCongratsActivityWithNullPublicKey() {
+    public void showErrorWhenStartCongratsActivityWithNullPublicKey() {
         createIntentWithNullPublicKey();
-        mTestRule.launchActivity(validStartIntent);
+        mTestRule.launchActivity(nullPublicKeyIntent);
 
         //Error message
         onView(withId(R.id.mpsdkErrorMessage)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_standard_error_message))));
@@ -1643,9 +1643,9 @@ public class CongratsActivityTest {
     }
 
     @Test
-    public void showErrorLayoutWhenStartCongratsActivityWithNullPaymentMethod() {
+    public void showErrorWhenStartCongratsActivityWithNullPaymentMethod() {
         createIntentWithNullPaymentMethod();
-        mTestRule.launchActivity(validStartIntent);
+        mTestRule.launchActivity(nullPaymentMethodIntent);
 
         //Error message
         onView(withId(R.id.mpsdkErrorMessage)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_standard_error_message))));
@@ -1655,7 +1655,7 @@ public class CongratsActivityTest {
     }
 
     @Test
-    public void noFinishCongratsLayoutWhenClickOnBackButton(){
+    public void noFinishCongratsActivityWhenClickOnBackButton(){
         createIntent();
         mTestRule.launchActivity(validStartIntent);
 
@@ -1666,7 +1666,7 @@ public class CongratsActivityTest {
     }
 
     @Test (expected = NoActivityResumedException.class)
-    public void finishCongratsLayoutWhenClickOnBackButtonTwoTimes(){
+    public void finishCongratsActivityWhenClickOnBackButtonTwoTimes(){
         createIntent();
         mTestRule.launchActivity(validStartIntent);
 

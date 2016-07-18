@@ -45,7 +45,7 @@ public class CallForAuthorizeActivityTest {
 
     @Rule
     public ActivityTestRule<CallForAuthorizeActivity> mTestRule = new ActivityTestRule<>(CallForAuthorizeActivity.class, true, false);
-    public Intent validStartIntent;
+    public Intent validStartIntent, nullPaymentIntent, nullPublicKeyIntent, nullPaymentMethodIntent;
 
     private Payment mPayment;
     private String mMerchantPublicKey;
@@ -100,25 +100,25 @@ public class CallForAuthorizeActivityTest {
     }
 
     private void createIntentWithNullPayment(){
-        validStartIntent = new Intent();
-        validStartIntent.putExtra("merchantPublicKey", mMerchantPublicKey);
-        validStartIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(mPaymentMethod));
+        nullPaymentIntent = new Intent();
+        nullPaymentIntent.putExtra("merchantPublicKey", mMerchantPublicKey);
+        nullPaymentIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(mPaymentMethod));
     }
 
     private void createIntentWithNullPublicKey(){
-        validStartIntent = new Intent();
-        validStartIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(mPaymentMethod));
-        validStartIntent.putExtra("payment", JsonUtil.getInstance().toJson(mPayment));
+        nullPublicKeyIntent = new Intent();
+        nullPublicKeyIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(mPaymentMethod));
+        nullPublicKeyIntent.putExtra("payment", JsonUtil.getInstance().toJson(mPayment));
     }
 
     private void createIntentWithNullPaymentMethod(){
-        validStartIntent = new Intent();
-        validStartIntent.putExtra("merchantPublicKey", mMerchantPublicKey);
-        validStartIntent.putExtra("payment", JsonUtil.getInstance().toJson(mPayment));
+        nullPaymentMethodIntent = new Intent();
+        nullPaymentMethodIntent.putExtra("merchantPublicKey", mMerchantPublicKey);
+        nullPaymentMethodIntent.putExtra("payment", JsonUtil.getInstance().toJson(mPayment));
     }
 
     @Test
-    public void showCallForAuthorizeLayoutWhenPaymentIsRejectedForCallForAuthorize(){
+    public void displayCallForAuthorizeTitleAndSubtitleWhenPaymentStatusIsRejectedAndPaymentStatusDetailIsForCallForAuthorize(){
         Spanned callForAuthorizeTitle;
 
         mPayment.setStatus(Payment.StatusCodes.STATUS_REJECTED);
@@ -146,7 +146,7 @@ public class CallForAuthorizeActivityTest {
     }
 
     @Test
-    public void showCallForAuthorizeLayoutWhenPaymentIdIsDifferenceToPaymentMethodId(){
+    public void displayGenericTitleAndSubtitleWhenPaymentPaymentMethodIdIsDifferenceToPaymentMethodId(){
         mPayment.setPaymentMethodId("visa");
         mPayment.setStatus(Payment.StatusCodes.STATUS_REJECTED);
         mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_CALL_FOR_AUTHORIZE);
@@ -172,7 +172,7 @@ public class CallForAuthorizeActivityTest {
     }
 
     @Test
-    public void showCallForAuthorizeLayoutWithNullPaymentMethodId(){
+    public void displayGenericTitleAndSubtitleWhenPaymentMethodIdIsNull(){
         mPaymentMethod.setId(null);
 
         mPayment.setStatus(Payment.StatusCodes.STATUS_REJECTED);
@@ -199,7 +199,7 @@ public class CallForAuthorizeActivityTest {
     }
 
     @Test
-    public void showCallForAuthorizeLayoutWithEmptyPaymentMethodId(){
+    public void displayGenericTitleAndSubtitleWhenPaymentMethodIdIsEmpty(){
         mPaymentMethod.setId("");
 
         mPayment.setStatus(Payment.StatusCodes.STATUS_REJECTED);
@@ -226,7 +226,7 @@ public class CallForAuthorizeActivityTest {
     }
 
     @Test
-    public void showCallForAuthorizeLayoutWithNullPaymentMethodName(){
+    public void displayGenericTitleAndSubtitleWhenPaymentMethodNameIsNull(){
         mPaymentMethod.setName(null);
 
         mPayment.setStatus(Payment.StatusCodes.STATUS_REJECTED);
@@ -253,7 +253,7 @@ public class CallForAuthorizeActivityTest {
     }
 
     @Test
-    public void showCallForAuthorizeLayoutWithEmptyPaymentMethodName(){
+    public void displayGenericTitleAndSubtitleWhenPaymentMethodNameIsEmpty(){
         mPaymentMethod.setName("");
 
         mPayment.setStatus(Payment.StatusCodes.STATUS_REJECTED);
@@ -280,7 +280,7 @@ public class CallForAuthorizeActivityTest {
     }
 
     @Test
-    public void showCallForAuthorizeLayoutWithNullPaymentTypeId(){
+    public void displayGenericTitleAndSubtitleWhenPaymentMethodPaymentTypeIdIsNull(){
         mPaymentMethod.setPaymentTypeId(null);
 
         mPayment.setStatus(Payment.StatusCodes.STATUS_REJECTED);
@@ -307,7 +307,7 @@ public class CallForAuthorizeActivityTest {
     }
 
     @Test
-    public void showCallForAuthorizeLayoutWithEmptyPaymentTypeId(){
+    public void displayGenericTitleAndSubtitleWhenPaymentMethodPaymentTypeIdIsEmpty(){
         mPaymentMethod.setPaymentTypeId("");
 
         mPayment.setStatus(Payment.StatusCodes.STATUS_REJECTED);
@@ -334,7 +334,7 @@ public class CallForAuthorizeActivityTest {
     }
 
     @Test
-    public void showCallForAuthorizeLayoutWithoutTotalAmountWhenTotalAmountIsNegative(){
+    public void displayGenericTitleAndSubtitleWhenTotalAmountIsNegative(){
         TransactionDetails transactionDetails = new TransactionDetails();
         transactionDetails.setTotalPaidAmount(new BigDecimal(-1));
 
@@ -363,7 +363,7 @@ public class CallForAuthorizeActivityTest {
     }
 
     @Test
-    public void showCallForAuthorizeLayoutWithoutTotalAmountWhenTotalAmountIsZero(){
+    public void displayGenericTitleAndSubtitleWhenTotalAmountIsZero(){
         TransactionDetails transactionDetails = new TransactionDetails();
         transactionDetails.setTotalPaidAmount(new BigDecimal(0));
 
@@ -392,7 +392,7 @@ public class CallForAuthorizeActivityTest {
     }
 
     @Test
-    public void showCallForAuthorizeLayoutWithoutTotalAmountWhenCurrencyIsNull(){
+    public void displayGenericTitleAndSubtitleWhenPaymentCurrencyIdIsNull(){
         mPayment.setCurrencyId(null);
         mPayment.setStatus(Payment.StatusCodes.STATUS_REJECTED);
         mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_CALL_FOR_AUTHORIZE);
@@ -418,7 +418,7 @@ public class CallForAuthorizeActivityTest {
     }
 
     @Test
-    public void showCallForAuthorizeLayoutWithoutTotalAmountWhenCurrencyIsEmpty(){
+    public void displayGenericTitleAndSubtitleWhenPaymentCurrencyIdIsEmpty(){
         mPayment.setCurrencyId("");
         mPayment.setStatus(Payment.StatusCodes.STATUS_REJECTED);
         mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_CALL_FOR_AUTHORIZE);
@@ -444,7 +444,7 @@ public class CallForAuthorizeActivityTest {
     }
 
     @Test
-    public void showCallForAuthorizeLayoutWithoutTotalAmountWhenCurrencyIsInvalid(){
+    public void displayGenericTitleAndSubtitleWhenCurrencyIdIsInvalid(){
         mPayment.setCurrencyId("MLA");
         mPayment.setStatus(Payment.StatusCodes.STATUS_REJECTED);
         mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_CALL_FOR_AUTHORIZE);
@@ -470,7 +470,7 @@ public class CallForAuthorizeActivityTest {
     }
 
     @Test
-    public void finishCallForAuthorizeLayoutWhenClickOnAuthorizedPaymentMethod(){
+    public void finishCallForAuthorizeActivityWhenClickOnPaymentMethodAuthorize(){
         mPayment.setStatus(Payment.StatusCodes.STATUS_REJECTED);
         mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_CALL_FOR_AUTHORIZE);
 
@@ -488,7 +488,7 @@ public class CallForAuthorizeActivityTest {
     }
 
     @Test
-    public void finishCallForAuthorizeLayoutWhenClickOnSelectOtherPaymentMethod(){
+    public void finishCallForAuthorizeActivityWhenClickOnSelectOtherPaymentMethod(){
         mPayment.setStatus(Payment.StatusCodes.STATUS_REJECTED);
         mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_CALL_FOR_AUTHORIZE);
 
@@ -506,7 +506,7 @@ public class CallForAuthorizeActivityTest {
     }
 
     @Test
-    public void finishCallForAuthorizeLayoutWhenClickOnExitCallForAuthorize(){
+    public void finishCallForAuthorizeActivityWhenClickOnExitCallForAuthorize(){
         mPayment.setStatus(Payment.StatusCodes.STATUS_REJECTED);
         mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_CALL_FOR_AUTHORIZE);
 
@@ -536,9 +536,9 @@ public class CallForAuthorizeActivityTest {
     }
 
     @Test
-    public void showErrorLayoutWhenStartCallForAuthorizeActivityWithNullPayment() {
+    public void showErrorWhenStartCallForAuthorizeActivityWithNullPayment() {
         createIntentWithNullPayment();
-        mTestRule.launchActivity(validStartIntent);
+        mTestRule.launchActivity(nullPaymentIntent);
 
         //Error message
         onView(withId(R.id.mpsdkErrorMessage)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_standard_error_message))));
@@ -548,9 +548,9 @@ public class CallForAuthorizeActivityTest {
     }
 
     @Test
-    public void showErrorLayoutWhenStartCallForAuthorizeActivityWithNullPublicKey() {
+    public void showErrorWhenStartCallForAuthorizeActivityWithNullPublicKey() {
         createIntentWithNullPublicKey();
-        mTestRule.launchActivity(validStartIntent);
+        mTestRule.launchActivity(nullPublicKeyIntent);
 
         //Error message
         onView(withId(R.id.mpsdkErrorMessage)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_standard_error_message))));
@@ -560,9 +560,9 @@ public class CallForAuthorizeActivityTest {
     }
 
     @Test
-    public void showErrorLayoutWhenStartCallForAuthorizeActivityWithNullPaymentMethod() {
+    public void showErrorWhenStartCallForAuthorizeActivityWithNullPaymentMethod() {
         createIntentWithNullPaymentMethod();
-        mTestRule.launchActivity(validStartIntent);
+        mTestRule.launchActivity(nullPaymentMethodIntent);
 
         //Error message
         onView(withId(R.id.mpsdkErrorMessage)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_standard_error_message))));
@@ -572,7 +572,7 @@ public class CallForAuthorizeActivityTest {
     }
 
     @Test
-    public void noFinishCallForAuthorizeLayoutWhenClickOnBackButton(){
+    public void noFinishCallForAuthorizeActivityWhenClickOnBackButton(){
         createIntent();
         mTestRule.launchActivity(validStartIntent);
 
@@ -583,7 +583,7 @@ public class CallForAuthorizeActivityTest {
     }
 
     @Test (expected = NoActivityResumedException.class)
-    public void finishCallForAuthorizeLayoutWhenClickOnBackButtonTwoTimes(){
+    public void finishCallForAuthorizeActivityWhenClickOnBackButtonTwoTimes(){
         createIntent();
         mTestRule.launchActivity(validStartIntent);
 

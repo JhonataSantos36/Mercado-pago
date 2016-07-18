@@ -40,7 +40,7 @@ public class PendingActivityTest {
 
     @Rule
     public ActivityTestRule<PendingActivity> mTestRule = new ActivityTestRule<>(PendingActivity.class, true, false);
-    public Intent validStartIntent;
+    public Intent validStartIntent, nullPaymentIntent, nullPublicKeyIntent;
 
     private Payment mPayment;
     private String mMerchantPublicKey;
@@ -84,17 +84,17 @@ public class PendingActivityTest {
     }
 
     private void createIntentWithNullPayment(){
-        validStartIntent = new Intent();
-        validStartIntent.putExtra("merchantPublicKey", mMerchantPublicKey);
+        nullPaymentIntent = new Intent();
+        nullPaymentIntent.putExtra("merchantPublicKey", mMerchantPublicKey);
     }
 
     private void createIntentWithNullPublicKey(){
-        validStartIntent = new Intent();
-        validStartIntent.putExtra("payment", JsonUtil.getInstance().toJson(mPayment));
+        nullPublicKeyIntent = new Intent();
+        nullPublicKeyIntent.putExtra("payment", JsonUtil.getInstance().toJson(mPayment));
     }
 
     @Test
-    public void showPendingLayoutWhenPaymentStatusDetailIsNull(){
+    public void subtitleNotDisplayedWhenPaymentStatusDetailIsNull(){
         mPayment.setStatus(Payment.StatusCodes.STATUS_IN_PROCESS);
         mPayment.setStatusDetail(null);
 
@@ -110,7 +110,7 @@ public class PendingActivityTest {
     }
 
     @Test
-    public void showPendingLayoutWhenPaymentStatusDetailIsEmpty(){
+    public void subtitleNotDisplayedWhenPaymentStatusDetailIsEmpty(){
         mPayment.setStatus(Payment.StatusCodes.STATUS_IN_PROCESS);
         mPayment.setStatusDetail("");
 
@@ -126,7 +126,7 @@ public class PendingActivityTest {
     }
 
     @Test
-    public void showPendingLayoutWhenPaymentIsPendingForReviewManual(){
+    public void displayPendingContingencySubtitleWhenPaymentStatusDetailIsPendingForReviewManual(){
         mPayment.setStatus(Payment.StatusCodes.STATUS_IN_PROCESS);
         mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_PENDING_REVIEW_MANUAL);
 
@@ -142,7 +142,7 @@ public class PendingActivityTest {
     }
 
     @Test
-    public void showPendingLayoutWhenPaymentIsPendingForContingency(){
+    public void displayPendingContingencySubtitleWhenPaymentStatusDetailIsPendingForContingency(){
         mPayment.setStatus(Payment.StatusCodes.STATUS_IN_PROCESS);
         mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_PENDING_CONTINGENCY);
 
@@ -158,7 +158,7 @@ public class PendingActivityTest {
     }
 
     @Test
-    public void finishPendingLayoutWhenClickOnExitPending(){
+    public void finishActivityWhenClickOnExitPending(){
         mPayment.setStatus(Payment.StatusCodes.STATUS_IN_PROCESS);
         mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_PENDING_CONTINGENCY);
 
@@ -176,9 +176,9 @@ public class PendingActivityTest {
     }
 
     @Test
-    public void showErrorLayoutWhenStartPendingActivityWithNullPayment() {
+    public void showErrorWhenStartPendingActivityWithNullPayment() {
         createIntentWithNullPayment();
-        mTestRule.launchActivity(validStartIntent);
+        mTestRule.launchActivity(nullPaymentIntent);
 
         //Error message
         onView(withId(R.id.mpsdkErrorMessage)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_standard_error_message))));
@@ -188,9 +188,9 @@ public class PendingActivityTest {
     }
 
     @Test
-    public void showErrorLayoutWhenStartPendingActivityWithNullPublicKey() {
+    public void showErrorWhenStartPendingActivityWithNullPublicKey() {
         createIntentWithNullPublicKey();
-        mTestRule.launchActivity(validStartIntent);
+        mTestRule.launchActivity(nullPublicKeyIntent);
 
         //Error message
         onView(withId(R.id.mpsdkErrorMessage)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_standard_error_message))));
@@ -200,7 +200,7 @@ public class PendingActivityTest {
     }
 
     @Test
-    public void noFinishPendingLayoutWhenClickOnBackButton(){
+    public void noFinishPendingActivityWhenClickOnBackButton(){
         createIntent();
         mTestRule.launchActivity(validStartIntent);
 
@@ -210,7 +210,7 @@ public class PendingActivityTest {
     }
 
     @Test (expected = NoActivityResumedException.class)
-    public void finishPendingLayoutWhenClickOnBackButtonTwoTimes(){
+    public void finishPendingActivityWhenClickOnBackButtonTwoTimes(){
         createIntent();
         mTestRule.launchActivity(validStartIntent);
 

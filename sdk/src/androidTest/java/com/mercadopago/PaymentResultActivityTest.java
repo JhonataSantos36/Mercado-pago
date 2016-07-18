@@ -40,10 +40,10 @@ import static junit.framework.Assert.assertTrue;
 
 @RunWith(AndroidJUnit4.class)
 @LargeTest
-public class ResultActivityTest {
+public class PaymentResultActivityTest {
 
     @Rule
-    public ActivityTestRule<ResultActivity> mTestRule = new ActivityTestRule<>(ResultActivity.class, true, false);
+    public ActivityTestRule<PaymentResultActivity> mTestRule = new ActivityTestRule<>(PaymentResultActivity.class, true, false);
     public Intent validStartIntent;
 
     private Payment mPayment;
@@ -135,7 +135,7 @@ public class ResultActivityTest {
     }
 
     @Test
-    public void showCongratsLayoutWhenStatusPaymentIsApproved(){
+    public void startCongratsActivityWhenStatusPaymentIsApproved(){
         mPayment.setStatus(Payment.StatusCodes.STATUS_APPROVED);
         mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_ACCREDITED);
 
@@ -146,7 +146,7 @@ public class ResultActivityTest {
     }
 
     @Test
-    public void showCallForAuthorizeLayoutWhenStatusPaymentIsRejectedByCallForAuthorize(){
+    public void startCallForAuthorizeActivityWhenStatusPaymentIsRejectedForCallForAuthorize(){
         mPayment.setStatus(Payment.StatusCodes.STATUS_REJECTED);
         mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_CALL_FOR_AUTHORIZE);
 
@@ -157,7 +157,7 @@ public class ResultActivityTest {
     }
 
     @Test
-    public void showRejectionLayoutWhenStatusPaymentIsRejected(){
+    public void startRejectionActivityWhenStatusPaymentIsRejected(){
         mPayment.setStatus(Payment.StatusCodes.STATUS_REJECTED);
         mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_BAD_FILLED_DATE);
 
@@ -168,7 +168,7 @@ public class ResultActivityTest {
     }
 
     @Test
-    public void showPendingLayoutWhenStatusPaymentIsInProcess(){
+    public void startPendingActivityWhenStatusPaymentIsInProcess(){
         mPayment.setStatus(Payment.StatusCodes.STATUS_IN_PROCESS);
         mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_PENDING_REVIEW_MANUAL);
 
@@ -179,7 +179,7 @@ public class ResultActivityTest {
     }
 
     @Test
-    public void showInstructionsLayoutWhenIsOffLinePaymentType(){
+    public void startInstructionsActivityWhenIsOffLinePaymentType(){
         mPaymentMethod = getOffLinePaymentMethod();
 
         createIntent();
@@ -189,7 +189,7 @@ public class ResultActivityTest {
     }
 
     @Test
-    public void showErrorLayoutWhenStartResultActivityWithNullPayment() {
+    public void showErrorWhenStartResultActivityWithNullPayment() {
         createIntentWithNullPayment();
         mTestRule.launchActivity(validStartIntent);
 
@@ -201,7 +201,7 @@ public class ResultActivityTest {
     }
 
     @Test
-    public void showErrorLayoutWhenStartResultActivityWithNullPublicKey() {
+    public void showErrorWhenStartResultActivityWithNullPublicKey() {
         createIntentWithNullPublicKey();
         mTestRule.launchActivity(validStartIntent);
 
@@ -213,7 +213,7 @@ public class ResultActivityTest {
     }
 
     @Test
-    public void showErrorLayoutWhenStartResultActivityWithNullPaymentMethod() {
+    public void showErrorWhenStartResultActivityWithNullPaymentMethod() {
         createIntentWithNullPaymentMethod();
         mTestRule.launchActivity(validStartIntent);
 
@@ -225,7 +225,7 @@ public class ResultActivityTest {
     }
 
     @Test
-    public void showErrorLayoutWhenStartResultActivityWithNullPaymentStatus() {
+    public void showErrorWhenStartResultActivityWithNullPaymentStatus() {
         mPayment.setStatus(null);
 
         createIntent();
@@ -239,7 +239,7 @@ public class ResultActivityTest {
     }
 
     @Test
-    public void showErrorLayoutWhenStartResultActivityWithEmptyPaymentStatus() {
+    public void showErrorWhenStartResultActivityWithEmptyPaymentStatus() {
         mPayment.setStatus("");
 
         createIntent();
@@ -253,7 +253,7 @@ public class ResultActivityTest {
     }
 
     @Test
-    public void showErrorLayoutWhenStartResultActivityWithIncorrectPaymentStatus() {
+    public void showErrorWhenStartResultActivityWithIncorrectPaymentStatus() {
         mPayment.setStatus("other");
 
         createIntent();
@@ -267,7 +267,7 @@ public class ResultActivityTest {
     }
 
     @Test
-    public void showErrorLayoutWhenStartResultActivityWithNullPaymentStatusDetail() {
+    public void showErrorWhenStartResultActivityWithNullPaymentStatusDetail() {
         mPayment.setStatusDetail(null);
 
         createIntent();
@@ -281,7 +281,7 @@ public class ResultActivityTest {
     }
 
     @Test
-    public void showErrorLayoutWhenStartResultActivityWithEmptyPaymentStatusDetail() {
+    public void showErrorWhenStartResultActivityWithEmptyPaymentStatusDetail() {
         mPayment.setStatusDetail("");
 
         createIntent();
@@ -295,7 +295,7 @@ public class ResultActivityTest {
     }
 
     @Test
-    public void finishCongratsLayoutWhenClickOnExitButton(){
+    public void finishCongratsActivityWhenClickOnExitButton(){
         mPayment.setStatus(Payment.StatusCodes.STATUS_APPROVED);
         mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_ACCREDITED);
 
@@ -309,7 +309,7 @@ public class ResultActivityTest {
     }
 
     @Test
-    public void finishCallForAuthorizeLayoutWhenClickOnExitButton(){
+    public void finishCallForAuthorizeActivityWhenClickOnExitButton(){
         mPayment.setStatus(Payment.StatusCodes.STATUS_REJECTED);
         mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_CALL_FOR_AUTHORIZE);
 
@@ -323,7 +323,7 @@ public class ResultActivityTest {
     }
 
     @Test
-    public void finishRejectionLayoutWhenClickOnExitButton(){
+    public void finishRejectionActivityWhenClickOnExitButton(){
         mPayment.setStatus(Payment.StatusCodes.STATUS_REJECTED);
         mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_BAD_FILLED_DATE);
 
@@ -337,7 +337,7 @@ public class ResultActivityTest {
     }
 
     @Test
-    public void finishPendingLayoutWhenClickOnExitButton(){
+    public void finishPendingActivityWhenClickOnExitButton(){
         mPayment.setStatus(Payment.StatusCodes.STATUS_IN_PROCESS);
         mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_PENDING_REVIEW_MANUAL);
 
@@ -351,7 +351,7 @@ public class ResultActivityTest {
     }
 
     @Test
-    public void finishInstructionsLayoutWhenClickOnExitButton(){
+    public void finishInstructionsActivityWhenClickOnExitButton(){
         mPaymentMethod = getOffLinePaymentMethod();
         mPayment.setPaymentMethodId("pagofacil");
 
@@ -368,7 +368,7 @@ public class ResultActivityTest {
     }
 
     @Test
-    public void finishCallForAuthorizeLayoutWhenClickOnSelectOtherPaymentMethodButton(){
+    public void finishCallForAuthorizeActivityWhenClickOnSelectOtherPaymentMethodButton(){
         mPayment.setStatus(Payment.StatusCodes.STATUS_REJECTED);
         mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_CALL_FOR_AUTHORIZE);
 

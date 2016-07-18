@@ -41,7 +41,7 @@ public class RejectionActivityTest {
 
     @Rule
     public ActivityTestRule<RejectionActivity> mTestRule = new ActivityTestRule<>(RejectionActivity.class, true, false);
-    public Intent validStartIntent;
+    public Intent validStartIntent, nullPaymentIntent, nullPublicKeyIntent, nullPaymentMethodIntent;
 
     private Payment mPayment;
     private String mMerchantPublicKey;
@@ -104,25 +104,25 @@ public class RejectionActivityTest {
     }
 
     private void createIntentWithNullPayment(){
-        validStartIntent = new Intent();
-        validStartIntent.putExtra("merchantPublicKey", mMerchantPublicKey);
-        validStartIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(mPaymentMethod));
+        nullPaymentIntent = new Intent();
+        nullPaymentIntent.putExtra("merchantPublicKey", mMerchantPublicKey);
+        nullPaymentIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(mPaymentMethod));
     }
 
     private void createIntentWithNullPublicKey(){
-        validStartIntent = new Intent();
-        validStartIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(mPaymentMethod));
-        validStartIntent.putExtra("payment", JsonUtil.getInstance().toJson(mPayment));
+        nullPublicKeyIntent = new Intent();
+        nullPublicKeyIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(mPaymentMethod));
+        nullPublicKeyIntent.putExtra("payment", JsonUtil.getInstance().toJson(mPayment));
     }
 
     private void createIntentWithNullPaymentMethod(){
-        validStartIntent = new Intent();
-        validStartIntent.putExtra("merchantPublicKey", mMerchantPublicKey);
-        validStartIntent.putExtra("payment", JsonUtil.getInstance().toJson(mPayment));
+        nullPaymentMethodIntent = new Intent();
+        nullPaymentMethodIntent.putExtra("merchantPublicKey", mMerchantPublicKey);
+        nullPaymentMethodIntent.putExtra("payment", JsonUtil.getInstance().toJson(mPayment));
     }
 
     @Test
-    public void showRejectedLayoutWhenPaymentIsRejectedForHighRisk(){
+    public void displayRejectedHighRiskTitleAndSubtitleWhenPaymentStatusDetailIsRejectedForHighRisk(){
         mPayment.setStatus(Payment.StatusCodes.STATUS_REJECTED);
         mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_REJECTED_HIGH_RISK);
 
@@ -141,7 +141,7 @@ public class RejectionActivityTest {
     }
 
     @Test
-    public void showRejectedLayoutWhenCreditCardPaymentIsRejectedForInsufficientAmount(){
+    public void displayRejectedInsufficientAmountTitleAndSubtitleWhenCreditCardPaymentStatusDetailIsRejectedForInsufficientAmount(){
         String titleMessage;
 
         mPayment.setStatus(Payment.StatusCodes.STATUS_REJECTED);
@@ -163,7 +163,7 @@ public class RejectionActivityTest {
     }
 
     @Test
-    public void showRejectedLayoutWhenOffLinePaymentIsRejectedForInsufficientAmount(){
+    public void displayRejectedInsufficientAmountTitleAndSubtitleWhenOffLinePaymentStatusDetailIsRejectedForInsufficientAmount(){
         String titleMessage;
         mPayment.setStatus(Payment.StatusCodes.STATUS_REJECTED);
         mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_INSUFFICIENT_AMOUNT);
@@ -187,7 +187,7 @@ public class RejectionActivityTest {
     }
 
     @Test
-    public void showRejectedLayoutWhenPaymentIsRejectedForOtherReason(){
+    public void displayRejectedOtherReasonTitleAndSubtitleWhenPaymentStatusDetailIsRejectedForOtherReason(){
         String titleMessage;
 
         mPayment.setStatus(Payment.StatusCodes.STATUS_REJECTED);
@@ -209,7 +209,7 @@ public class RejectionActivityTest {
     }
 
     @Test
-    public void showRejectedLayoutWhenPaymentIsRejectedForMaxAttempts(){
+    public void displayRejectedMaxAttemptsTitleAndSubtitleWhenPaymentStatusDetailIsRejectedForMaxAttempts(){
         mPayment.setStatus(Payment.StatusCodes.STATUS_REJECTED);
         mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_MAX_ATTEMPTS);
 
@@ -228,7 +228,7 @@ public class RejectionActivityTest {
     }
 
     @Test
-    public void showRejectedLayoutWhenPaymentIsRejectedForDuplicatedPayment(){
+    public void displayRejectedDuplicatedPaymentTitleAndSubtitleWhenPaymentStatusDetailIsRejectedForDuplicatedPayment(){
         String titleMessage;
 
         mPayment.setStatus(Payment.StatusCodes.STATUS_REJECTED);
@@ -250,7 +250,7 @@ public class RejectionActivityTest {
     }
 
     @Test
-    public void showRejectedLayoutWhenPaymentIsRejectedForCardDisabled(){
+    public void displayRejectedCardDisabledTitleAndSubtitleWhenPaymentStatusDetailIsRejectedForCardDisabled(){
         String titleMessage;
 
         mPayment.setStatus(Payment.StatusCodes.STATUS_REJECTED);
@@ -272,7 +272,7 @@ public class RejectionActivityTest {
     }
 
     @Test
-    public void showRejectedLayoutWhenPaymentIsRejectedForBadFilledOther(){
+    public void displayRejectedBadFilledOtherTitleAndSubtitleWhenPaymentStatusDetailIsRejectedForBadFilledOther(){
         String subtitleMessage;
 
         mPayment.setStatus(Payment.StatusCodes.STATUS_REJECTED);
@@ -294,7 +294,7 @@ public class RejectionActivityTest {
     }
 
     @Test
-    public void showRejectedLayoutWhenPaymentIsRejectedForBadFilledCardNumber(){
+    public void displayRejectedBadFilledCardNumberTitleAndSubtitleWhenPaymentStatusDetailIsRejectedForBadFilledCardNumber(){
         String subtitleMessage;
 
         mPayment.setStatus(Payment.StatusCodes.STATUS_REJECTED);
@@ -316,7 +316,7 @@ public class RejectionActivityTest {
     }
 
     @Test
-    public void showRejectedLayoutWhenPaymentIsRejectedForBadFilledSecurityCode(){
+    public void displayRejectedBadFilledSecurityCodeTitleAndSubtitleWhenPaymentStatusDetailIsRejectedForBadFilledSecurityCode(){
         mPayment.setStatus(Payment.StatusCodes.STATUS_REJECTED);
         mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_BAD_FILLED_SECURITY_CODE);
 
@@ -335,7 +335,7 @@ public class RejectionActivityTest {
     }
 
     @Test
-    public void showRejectedLayoutWhenPaymentIsRejectedForBadFilledDate(){
+    public void displayRejectedBadFilledDateTitleAndSubtitleWhenPaymentStatusDetailIsRejectedForBadFilledDate(){
         mPayment.setStatus(Payment.StatusCodes.STATUS_REJECTED);
         mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_BAD_FILLED_DATE);
 
@@ -354,7 +354,7 @@ public class RejectionActivityTest {
     }
 
     @Test
-    public void showRejectedLayoutWhenStatusDetailIsValidButNoExist(){
+    public void displayGenericTitleAndSubtitleWhenStatusDetailNotExist(){
         mPayment.setStatus(Payment.StatusCodes.STATUS_REJECTED);
         mPayment.setStatusDetail("bad_fill_security_code");
 
@@ -373,7 +373,7 @@ public class RejectionActivityTest {
     }
 
     @Test
-    public void finishRejectionLayoutWhenClickOnSelectOtherPaymentMethod(){
+    public void finishRejectionActivityWhenClickOnSelectOtherPaymentMethod(){
         createIntent();
         mTestRule.launchActivity(validStartIntent);
 
@@ -388,7 +388,7 @@ public class RejectionActivityTest {
     }
 
     @Test
-    public void finishRejectionLayoutWhenClickOnExitRejection(){
+    public void finishRejectionActivityWhenClickOnExitRejection(){
         createIntent();
         mTestRule.launchActivity(validStartIntent);
 
@@ -403,7 +403,7 @@ public class RejectionActivityTest {
     }
 
     @Test
-    public void showErrorLayoutWhenPaymentStatusDetailIsNull(){
+    public void showErrorWhenPaymentStatusDetailIsNull(){
         mPayment.setStatusDetail(null);
 
         createIntent();
@@ -417,7 +417,7 @@ public class RejectionActivityTest {
     }
 
     @Test
-    public void showErrorLayoutWhenPaymentStatusDetailIsEmpty(){
+    public void showErrorWhenPaymentStatusDetailIsEmpty(){
         mPayment.setStatusDetail("");
 
         createIntent();
@@ -431,7 +431,7 @@ public class RejectionActivityTest {
     }
 
     @Test
-    public void showErrorLayoutWhenPaymentMethodIdIsNull(){
+    public void showErrorWhenPaymentMethodIdIsNull(){
         mPaymentMethod.setId(null);
 
         createIntent();
@@ -445,7 +445,7 @@ public class RejectionActivityTest {
     }
 
     @Test
-    public void showErrorLayoutWhenPaymentMethodIdIsEmpty(){
+    public void showErrorWhenPaymentMethodIdIsEmpty(){
         mPaymentMethod.setId("");
 
         createIntent();
@@ -459,7 +459,7 @@ public class RejectionActivityTest {
     }
 
     @Test
-    public void showErrorLayoutWhenPaymentMethodNameIsNull(){
+    public void showErrorWhenPaymentMethodNameIsNull(){
         mPaymentMethod.setName(null);
 
         createIntent();
@@ -473,7 +473,7 @@ public class RejectionActivityTest {
     }
 
     @Test
-    public void showErrorLayoutWhenPaymentMethodNameIsEmpty(){
+    public void showErrorWhenPaymentMethodNameIsEmpty(){
         mPaymentMethod.setName("");
 
         createIntent();
@@ -501,7 +501,7 @@ public class RejectionActivityTest {
     }
 
     @Test
-    public void showErrorLayoutWhenPaymentMethodTypeIdIsEmpty(){
+    public void showErrorWhenPaymentMethodTypeIdIsEmpty(){
         mPaymentMethod.setPaymentTypeId("");
 
         createIntent();
@@ -515,7 +515,7 @@ public class RejectionActivityTest {
     }
 
     @Test
-    public void showErrorLayoutWhenPaymentMethodIsDifferentToPaymentMethodOfPaymentObject(){
+    public void showErrorWhenPaymentPaymentMethodIdIsDifferentToPaymentMethodId(){
         mPaymentMethod.setId("visa");
 
         createIntent();
@@ -529,9 +529,9 @@ public class RejectionActivityTest {
     }
 
     @Test
-    public void showErrorLayoutWhenStartRejectionActivityWithNullPayment() {
+    public void showErrorWhenStartRejectionActivityWithNullPayment() {
         createIntentWithNullPayment();
-        mTestRule.launchActivity(validStartIntent);
+        mTestRule.launchActivity(nullPaymentIntent);
 
         //Error message
         onView(withId(R.id.mpsdkErrorMessage)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_standard_error_message))));
@@ -541,9 +541,9 @@ public class RejectionActivityTest {
     }
 
     @Test
-    public void showErrorLayoutWhenStartRejectionActivityWithNullPublicKey() {
+    public void showErrorWhenStartRejectionActivityWithNullPublicKey() {
         createIntentWithNullPublicKey();
-        mTestRule.launchActivity(validStartIntent);
+        mTestRule.launchActivity(nullPublicKeyIntent);
 
         //Error message
         onView(withId(R.id.mpsdkErrorMessage)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_standard_error_message))));
@@ -553,9 +553,9 @@ public class RejectionActivityTest {
     }
 
     @Test
-    public void showErrorLayoutWhenStartRejectionActivityWithNullPaymentMethod() {
+    public void showErrorWhenStartRejectionActivityWithNullPaymentMethod() {
         createIntentWithNullPaymentMethod();
-        mTestRule.launchActivity(validStartIntent);
+        mTestRule.launchActivity(nullPaymentMethodIntent);
 
         //Error message
         onView(withId(R.id.mpsdkErrorMessage)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_standard_error_message))));
@@ -565,7 +565,7 @@ public class RejectionActivityTest {
     }
 
     @Test
-    public void noFinishRejectionLayoutWhenClickOnBackButton(){
+    public void noFinishRejectionActivityWhenClickOnBackButton(){
         createIntent();
         mTestRule.launchActivity(validStartIntent);
 
@@ -576,7 +576,7 @@ public class RejectionActivityTest {
     }
 
     @Test (expected = NoActivityResumedException.class)
-    public void finishRejectionLayoutWhenClickOnBackButtonTwoTimes(){
+    public void finishRejectionActivityWhenClickOnBackButtonTwoTimes(){
         createIntent();
         mTestRule.launchActivity(validStartIntent);
 

@@ -14,7 +14,7 @@ import com.mercadopago.util.MercadoPagoUtil;
 
 import static android.text.TextUtils.isEmpty;
 
-public class ResultActivity extends AppCompatActivity {
+public class PaymentResultActivity extends AppCompatActivity {
 
     //Params
     protected Payment mPayment;
