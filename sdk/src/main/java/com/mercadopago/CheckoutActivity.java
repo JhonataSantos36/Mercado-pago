@@ -172,7 +172,8 @@ public class CheckoutActivity extends MercadoPagoActivity {
 
             @Override
             public void failure(ApiException apiException) {
-                //TODO site from context MPTracker.getInstance().trackEvent("PREFERENCE", "GET_PREFERENCE_RESPONSE", "FAIL", "3", mMerchantPublicKey, mCheckoutPreference.getSiteId(), "1.0", mActivity);
+                MPTracker.getInstance().trackEvent("PREFERENCE", "GET_PREFERENCE_RESPONSE", "FAIL", "3", mMerchantPublicKey, mCheckoutPreference.getSiteId(), "1.0", getActivity());
+
                 if (isActivityActive()) {
                     ApiUtil.showApiExceptionError(getActivity(), apiException);
                     setFailureRecovery(new FailureRecovery() {
@@ -329,10 +330,6 @@ public class CheckoutActivity extends MercadoPagoActivity {
             mSelectedPayerCost = JsonUtil.getInstance().fromJson(data.getStringExtra("payerCost"), PayerCost.class);
             mCreatedToken = JsonUtil.getInstance().fromJson(data.getStringExtra("token"), Token.class);
             mSelectedPaymentMethod = JsonUtil.getInstance().fromJson(data.getStringExtra("paymentMethod"), PaymentMethod.class);
-
-            if(mCreatedToken != null) {
-                MPTracker.getInstance().trackToken(mCreatedToken.getId(), "3", mMerchantPublicKey, mCheckoutPreference.getSiteId(), "1.0", this);
-            }
 
             MPTracker.getInstance().trackScreen("REVIEW_AND_CONFIRM", "3", mMerchantPublicKey, "MLA", "1.0", this);
             showReviewAndConfirm();
@@ -541,6 +538,7 @@ public class CheckoutActivity extends MercadoPagoActivity {
                 mCreatedPayment = payment;
 
                 MPTracker.getInstance().trackPayment("PAYMENT", "CREATE_PAYMENT_RESPONSE", "3", mMerchantPublicKey, mCheckoutPreference.getSiteId(), "1.0", createMPTrackerInformer(), getActivity());
+                MPTracker.getInstance().trackPaymentId(mCreatedPayment.getId().toString(), "3", mMerchantPublicKey, mCheckoutPreference.getSiteId(), "1.0", getActivity());
                 MPTracker.getInstance().trackEvent("PAYMENT", "CREATE_PAYMENT_RESPONSE", "SUCCESS", "3", mMerchantPublicKey, mCheckoutPreference.getSiteId(), "1.0", getActivity());
 
                 startResultActivity();

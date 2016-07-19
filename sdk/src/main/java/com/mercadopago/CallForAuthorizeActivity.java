@@ -54,7 +54,7 @@ public class CallForAuthorizeActivity extends MercadoPagoActivity {
 
     @Override
     protected void setContentView() {
-        MPTracker.getInstance().trackScreen("CALL_FOR_AUTHORIZE", "3", mMerchantPublicKey, "MLA", "1.0", getActivity());
+        MPTracker.getInstance().trackScreen("CALL_FOR_AUTHORIZE", "2", mMerchantPublicKey, "MLA", "1.0", getActivity());
 
         setContentView(R.layout.mpsdk_activity_call_for_authorize);
     }
@@ -154,6 +154,8 @@ public class CallForAuthorizeActivity extends MercadoPagoActivity {
 
     @Override
     public void onBackPressed() {
+        MPTracker.getInstance().trackEvent("CALL_FOR_AUTHORIZE", "BACK_PRESSED", "2", mMerchantPublicKey, "MLA", "1.0", this);
+
         if(mBackPressedOnce) {
             finishWithOkResult();
         }

@@ -259,11 +259,12 @@ public class InstructionsActivity extends MercadoPagoActivity {
 
     @Override
     public void onBackPressed() {
+        MPTracker.getInstance().trackEvent("INSTRUCTION", "BACK_PRESSED", "2", mMerchantPublicKey, "MLA", "1.0", this);
+
         if(mBackPressedOnce) {
             super.onBackPressed();
         }
         else {
-            MPTracker.getInstance().trackEvent("INSTRUCTION", "BACK_PRESSED", "2", mMerchantPublicKey, "MLA", "1.0", this);
             Snackbar.make(mTertiaryInfo, getString(R.string.mpsdk_press_again_to_leave), Snackbar.LENGTH_LONG).show();
             mBackPressedOnce = true;
             resetBackPressedOnceIn(4000);

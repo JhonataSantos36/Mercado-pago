@@ -133,6 +133,7 @@ public class MercadoPago {
     public void createToken(final SavedCardToken savedCardToken, final Callback<Token> callback) {
         if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {
             MPTracker.getInstance().trackEvent("NO_SCREEN","CREATE_SAVED_TOKEN","1", mKeyType, "MLA", "1.0", mContext);
+            MPTracker.getInstance().trackToken(savedCardToken.toString(), "1", mKeyType, "MLA", "1.0", mContext);
 
             savedCardToken.setDevice(mContext);
             GatewayService service = mRetrofit.create(GatewayService.class);
@@ -145,6 +146,7 @@ public class MercadoPago {
     public void createToken(final CardToken cardToken, final Callback<Token> callback) {
         if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {
             MPTracker.getInstance().trackEvent("NO_SCREEN","CREATE_CARD_TOKEN","1", mKeyType, "MLA", "1.0", mContext);
+            MPTracker.getInstance().trackToken(cardToken.toString(), "1", mKeyType, "MLA", "1.0", mContext);
 
             cardToken.setDevice(mContext);
             GatewayService service = mRetrofit.create(GatewayService.class);

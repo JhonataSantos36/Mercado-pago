@@ -242,6 +242,8 @@ public class CongratsActivity extends MercadoPagoActivity {
 
     @Override
     public void onBackPressed() {
+        MPTracker.getInstance().trackEvent("CONGRATS", "BACK_PRESSED", "2", mMerchantPublicKey, "MLA", "1.0", this);
+
         if(mBackPressedOnce) {
             finishWithOkResult();
         }

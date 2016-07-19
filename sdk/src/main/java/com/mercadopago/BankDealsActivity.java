@@ -113,13 +113,13 @@ public class BankDealsActivity extends MercadoPagoActivity {
                         startActivity(intent);
                     }
                 }));
-
                 LayoutUtil.showRegularLayout(getActivity());
             }
 
             @Override
             public void failure(ApiException apiException) {
                 MPTracker.getInstance().trackEvent("BANK_DEALS", "GET_BANK_DEALS_RESPONSE", "FAIL", "2", mMerchantPublicKey, "MLA", "1.0", getActivity());
+
                 if (isActivityActive()) {
                     setFailureRecovery(new FailureRecovery() {
                         @Override
