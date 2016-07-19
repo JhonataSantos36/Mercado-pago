@@ -604,7 +604,7 @@ public class CongratsActivityTest {
     }
 
     @Test
-    public void lastFourDigitsCardAreNotDisplayedWhenPaymentHasNullPaymentMethodId(){
+    public void lastFourDigitsCardAndPaymentMethodImageNotDisplayedWhenPaymentHasNullPaymentMethodId(){
         String paymentIdDescription;
         Spanned installmentsDescription;
 
@@ -694,7 +694,7 @@ public class CongratsActivityTest {
     }
 
     @Test
-    public void showCongratsLayoutWithoutLastFourDigitsCardWhenPaymentIsApprovedWithEmptyPaymentMethodId(){
+    public void lastFourDigitsAndPaymentMethodImageNotDisplayedWhenPaymentMethodIdIsEmpty(){
         String paymentIdDescription;
         Spanned installmentsDescription;
 
