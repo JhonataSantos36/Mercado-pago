@@ -1,5 +1,6 @@
 package com.mercadopago;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 
 import com.mercadopago.adapters.BankDealsAdapter;
 import com.mercadopago.callbacks.Callback;
+import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.decorations.DividerItemDecoration;
 import com.mercadopago.model.ApiException;
@@ -95,10 +97,6 @@ public class BankDealsActivity extends MercadoPagoActivity {
         }
     }
 
-    public void refreshLayout(View view) {
-        getBankDeals();
-    }
-
     private void getBankDeals() {
         LayoutUtil.showProgressLayout(this);
         mMercadoPago.getBankDeals(new Callback<List<BankDeal>>() {
@@ -106,27 +104,33 @@ public class BankDealsActivity extends MercadoPagoActivity {
             public void success(List<BankDeal> bankDeals) {
                 MPTracker.getInstance().trackScreen("BANK_DEALS", "2", mMerchantPublicKey, "MLA", "1.0", getActivity());
                 MPTracker.getInstance().trackEvent("BANK_DEALS", "GET_BANK_DEALS_RESPONSE", "SUCCESS", "2", mMerchantPublicKey, "MLA", "1.0", getActivity());
-                if (isActivityActive()) {
-                    mRecyclerView.setAdapter(new BankDealsAdapter(getActivity(), bankDeals, new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
+                mRecyclerView.setAdapter(new BankDealsAdapter(getActivity(), bankDeals, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        BankDeal selectedBankDeal = (BankDeal) view.getTag();
+                        Intent intent = new Intent(getActivity(), TermsAndConditionsActivity.class);
+                        intent.putExtra("termsAndConditions", selectedBankDeal.getLegals());
+                        startActivity(intent);
+                    }
+                }));
 
-                            BankDeal selectedBankDeal = (BankDeal) view.getTag();
-                            Intent intent = new Intent(getActivity(), TermsAndConditionsActivity.class);
-                            intent.putExtra("termsAndConditions", selectedBankDeal.getLegals());
-                            startActivity(intent);
-                        }
-                    }));
-
-                    LayoutUtil.showRegularLayout(getActivity());
-                }
+                LayoutUtil.showRegularLayout(getActivity());
             }
 
             @Override
             public void failure(ApiException apiException) {
                 MPTracker.getInstance().trackEvent("BANK_DEALS", "GET_BANK_DEALS_RESPONSE", "FAIL", "2", mMerchantPublicKey, "MLA", "1.0", getActivity());
                 if (isActivityActive()) {
-                    ApiUtil.finishWithApiException(getActivity(), apiException);
+                    setFailureRecovery(new FailureRecovery() {
+                        @Override
+                        public void recover() {
+                            getBankDeals();
+                        }
+                    });
+                    ApiUtil.showApiExceptionError(getActivity(), apiException);
+                }
+                else {
+                    finishWithCancelResult();
                 }
             }
         });
@@ -135,7 +139,17 @@ public class BankDealsActivity extends MercadoPagoActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == ErrorUtil.ERROR_REQUEST_CODE) {
-            finish();
+            if(resultCode == Activity.RESULT_OK) {
+                recoverFromFailure();
+            }
+            else {
+                finishWithCancelResult();
+            }
         }
+    }
+
+    private void finishWithCancelResult() {
+        setResult(RESULT_CANCELED);
+        finish();
     }
 }

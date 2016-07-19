@@ -1,5 +1,6 @@
 package com.mercadopago;
 
+import android.content.Intent;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.webkit.WebView;
@@ -120,5 +121,11 @@ public class TermsAndConditionsActivity extends MercadoPagoActivity {
     private void showBankDealsTermsAndConditions() {
         MPTextView termsAndConditions = (MPTextView) findViewById(R.id.mpsdkTermsAndConditions);
         termsAndConditions.setText(getIntent().getStringExtra("termsAndConditions"));
+    }
+
+    @Override
+    public void onBackPressed() {
+        setResult(RESULT_CANCELED);
+        finish();
     }
 }

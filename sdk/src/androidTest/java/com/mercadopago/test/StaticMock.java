@@ -3,7 +3,9 @@ package com.mercadopago.test;
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 
+import com.google.gson.reflect.TypeToken;
 import com.mercadopago.model.ApiException;
+import com.mercadopago.model.BankDeal;
 import com.mercadopago.model.Card;
 import com.mercadopago.model.CardToken;
 import com.mercadopago.model.CheckoutPreference;
@@ -21,6 +23,7 @@ import com.mercadopago.model.Token;
 import com.mercadopago.util.JsonUtil;
 
 import java.io.InputStream;
+import java.lang.reflect.Type;
 import java.util.List;
 
 public class StaticMock {
@@ -358,6 +361,24 @@ public class StaticMock {
         try {
             String json = getFile(InstrumentationRegistry.getContext(), "mocks/instruction_with_invalid_reference.json");
             return JsonUtil.getInstance().fromJson(json, Instruction.class);
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+    public static String getBankDealsJson() {
+        try {
+            return getFile(InstrumentationRegistry.getContext(), "mocks/bank_deals.json");
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+    public static List<BankDeal> getBankDeals() {
+        try {
+           String json = getFile(InstrumentationRegistry.getContext(), "mocks/bank_deals.json");
+            Type listType = new TypeToken<List<BankDeal>>(){}.getType();
+            return   JsonUtil.getInstance().getGson().fromJson(json, listType);
         } catch (Exception ex) {
             return null;
         }
