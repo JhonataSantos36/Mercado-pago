@@ -122,10 +122,4 @@ public class TermsAndConditionsActivity extends MercadoPagoActivity {
         MPTextView termsAndConditions = (MPTextView) findViewById(R.id.mpsdkTermsAndConditions);
         termsAndConditions.setText(getIntent().getStringExtra("termsAndConditions"));
     }
-
-    @Override
-    public void onBackPressed() {
-        setResult(RESULT_CANCELED);
-        finish();
-    }
 }
