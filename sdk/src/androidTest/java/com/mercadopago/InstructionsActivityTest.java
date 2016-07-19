@@ -103,6 +103,8 @@ public class InstructionsActivityTest {
         assertEquals(activity.mPaymentMethod.getId(), mPaymentMethod.getId());
     }
 
+    //Instructions data
+
     @Test
     public void showTitleOnCreate() {
         Instruction instructionWithoutActions = StaticMock.getInstructionWithoutActions();
@@ -207,7 +209,7 @@ public class InstructionsActivityTest {
     }
 
     @Test
-    public void showReferences() {
+    public void ifInstructionsReceivedShowReferences() {
         Instruction instructionWithoutActions = StaticMock.getInstructionWithoutActions();
         mFakeAPI.addResponseToQueue(instructionWithoutActions, 200, "");
 
@@ -304,12 +306,7 @@ public class InstructionsActivityTest {
                 hasData(actionInfo.getUrl())));
     }
 
-    @Test
-    public void ifApiFailureShowErrorActivity() {
-        mFakeAPI.addResponseToQueue("", 401, "");
-        mTestRule.launchActivity(validStartIntent);
-        intended(hasComponent(ErrorActivity.class.getName()));
-    }
+    //Bad start
 
     @Test
     public void ifMerchantPublicKeyNotSetStartErrorActivity() {
@@ -337,6 +334,8 @@ public class InstructionsActivityTest {
         mTestRule.launchActivity(startWithoutPayment);
         intended(hasComponent(ErrorActivity.class.getName()));
     }
+
+    //Back
 
     @Test
     public void onPressedBackOnceDoNotFinish() {
@@ -374,6 +373,15 @@ public class InstructionsActivityTest {
 
         pressBack();
         pressBack();
+    }
+
+    //API Fail (e.g timeout)
+
+    @Test
+    public void ifApiFailureShowErrorActivity() {
+        mFakeAPI.addResponseToQueue("", 401, "");
+        mTestRule.launchActivity(validStartIntent);
+        intended(hasComponent(ErrorActivity.class.getName()));
     }
 
     @Test
