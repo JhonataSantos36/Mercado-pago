@@ -1,6 +1,8 @@
 package com.mercadopago;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.support.test.espresso.NoActivityResumedException;
 import android.support.test.espresso.intent.Intents;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
@@ -15,6 +17,7 @@ import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.test.FakeAPI;
 import com.mercadopago.test.StaticMock;
 import com.mercadopago.util.JsonUtil;
+import com.mercadopago.utils.ActivityResultUtil;
 
 import org.junit.After;
 import org.junit.Before;
@@ -23,6 +26,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intended;
@@ -265,7 +269,7 @@ public class InstructionsActivityTest {
     }
 
     @Test
-    public void ifInstructionHasActionButNullUinstrlDoNotShowActionButton() {
+    public void ifInstructionHasActionButNullUrlDoNotShowActionButton() {
         Instruction instructionWithAction = StaticMock.getInstructionWithActionButNullUrl();
         mFakeAPI.addResponseToQueue(instructionWithAction, 200, "");
 
@@ -286,12 +290,12 @@ public class InstructionsActivityTest {
 
     @Test
     public void onActionButtonClickIntentToUrl() {
-        Instruction instructionWithoutActions = StaticMock.getInstructionWithAction();
-        mFakeAPI.addResponseToQueue(instructionWithoutActions, 200, "");
+        Instruction instructionWithAction = StaticMock.getInstructionWithAction();
+        mFakeAPI.addResponseToQueue(instructionWithAction, 200, "");
 
         mTestRule.launchActivity(validStartIntent);
 
-        InstructionActionInfo actionInfo = instructionWithoutActions.getActions().get(0);
+        InstructionActionInfo actionInfo = instructionWithAction.getActions().get(0);
 
         onView(withId(R.id.mpsdkActionButton)).perform(click());
 
@@ -305,6 +309,94 @@ public class InstructionsActivityTest {
         mFakeAPI.addResponseToQueue("", 401, "");
         mTestRule.launchActivity(validStartIntent);
         intended(hasComponent(ErrorActivity.class.getName()));
+    }
+
+    @Test
+    public void ifMerchantPublicKeyNotSetStartErrorActivity() {
+        mFakeAPI.addResponseToQueue("", 401, "");
+        Intent startWithoutPublicKey = new Intent(validStartIntent);
+        startWithoutPublicKey.removeExtra("merchantPublicKey");
+        mTestRule.launchActivity(startWithoutPublicKey);
+        intended(hasComponent(ErrorActivity.class.getName()));
+    }
+
+    @Test
+    public void ifPaymentMethodNotSetStartErrorActivity() {
+        mFakeAPI.addResponseToQueue("", 401, "");
+        Intent startWithoutPaymentMethod = new Intent(validStartIntent);
+        startWithoutPaymentMethod.removeExtra("paymentMethod");
+        mTestRule.launchActivity(startWithoutPaymentMethod);
+        intended(hasComponent(ErrorActivity.class.getName()));
+    }
+
+    @Test
+    public void ifPaymentNotSetStartErrorActivity() {
+        mFakeAPI.addResponseToQueue("", 401, "");
+        Intent startWithoutPayment = new Intent(validStartIntent);
+        startWithoutPayment.removeExtra("payment");
+        mTestRule.launchActivity(startWithoutPayment);
+        intended(hasComponent(ErrorActivity.class.getName()));
+    }
+
+    @Test
+    public void onPressedBackOnceDoNotFinish() {
+        Instruction instructionWithoutActions = StaticMock.getInstructionWithoutActions();
+        mFakeAPI.addResponseToQueue(instructionWithoutActions, 200, "");
+        mTestRule.launchActivity(validStartIntent);
+
+        pressBack();
+
+        onView(withId(R.id.mpsdkPrimaryInfo)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void onPressedBackTwiceButWithDelayDoNotFinish() {
+        Instruction instructionWithoutActions = StaticMock.getInstructionWithoutActions();
+        mFakeAPI.addResponseToQueue(instructionWithoutActions, 200, "");
+        mTestRule.launchActivity(validStartIntent);
+
+        pressBack();
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            //Do nothing
+        }
+        pressBack();
+
+        onView(withId(R.id.mpsdkPrimaryInfo)).check(matches(isDisplayed()));
+    }
+
+    @Test (expected = NoActivityResumedException.class)
+    public void onPressedBackTwiceFinish() {
+        Instruction instructionWithoutActions = StaticMock.getInstructionWithoutActions();
+        mFakeAPI.addResponseToQueue(instructionWithoutActions, 200, "");
+        mTestRule.launchActivity(validStartIntent);
+
+        pressBack();
+        pressBack();
+    }
+
+    @Test
+    public void ifApiFailsAndUserRetrySucceedsShowInstruction() {
+        Instruction instructionWithoutActions = StaticMock.getInstructionWithoutActions();
+        mFakeAPI.addResponseToQueue("", 401, "");
+        mFakeAPI.addResponseToQueue(instructionWithoutActions, 200, "");
+
+        mTestRule.launchActivity(validStartIntent);
+        onView(withId(R.id.mpsdkErrorRetry)).check(matches(isDisplayed()));
+        onView(withId(R.id.mpsdkErrorRetry)).perform(click());
+        onView(withId(R.id.mpsdkPrimaryInfo)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void ifApiFailsAndUserCancelsFinishWithCancelResult() {
+        mFakeAPI.addResponseToQueue("", 401, "");
+
+        mTestRule.launchActivity(validStartIntent);
+        onView(withId(R.id.mpsdkExit)).check(matches(isDisplayed()));
+        onView(withId(R.id.mpsdkExit)).perform(click());
+
+        ActivityResultUtil.assertFinishCalledWithResult(mTestRule.getActivity(), Activity.RESULT_CANCELED);
     }
 
     private PaymentMethod getOfflinePaymentMethod() {
