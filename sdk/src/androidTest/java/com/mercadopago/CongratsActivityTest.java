@@ -127,7 +127,7 @@ public class CongratsActivityTest {
     }
 
     @Test
-    public void showCongratsLayoutWithZeroRateWhenApprovedPaymentHasZeroRate(){
+    public void displayWithoutInterestWhenApprovedPaymentHasZeroRate(){
         String paymentIdDescription, lastFourDigitsDescription;
         Spanned installmentsDescription;
         Bitmap bitmap, paymentBitmap;
@@ -200,7 +200,7 @@ public class CongratsActivityTest {
     }
 
     @Test
-    public void displayTotalAmountWithRateWhenApprovedPaymentHasRate(){
+    public void displayTotalAmountWithRateWhenApprovedPaymentHasInterest(){
         String paymentIdDescription, lastFourDigitsDescription;
         Spanned installmentsDescription, totalAmountDescription;
         Bitmap bitmap, paymentBitmap;
