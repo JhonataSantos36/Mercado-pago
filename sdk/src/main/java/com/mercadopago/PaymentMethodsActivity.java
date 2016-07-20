@@ -24,17 +24,19 @@ import com.mercadopago.util.LayoutUtil;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.text.TextUtils.isEmpty;
+
 public class PaymentMethodsActivity extends MercadoPagoActivity {
 
     protected MercadoPago mMercadoPago;
-    private boolean mShowBankDeals;
+    protected boolean mShowBankDeals;
 
-    private RecyclerView mRecyclerView;
-    private Toolbar mToolbar;
-    private TextView mBankDealsTextView;
-    private TextView mTitle;
-    private String mMerchantPublicKey;
-    private PaymentPreference mPaymentPreference;
+    protected RecyclerView mRecyclerView;
+    protected Toolbar mToolbar;
+    protected TextView mBankDealsTextView;
+    protected TextView mTitle;
+    protected String mMerchantPublicKey;
+    protected PaymentPreference mPaymentPreference;
 
     @Override
     protected void getActivityParameters() {
@@ -134,10 +136,6 @@ public class PaymentMethodsActivity extends MercadoPagoActivity {
         finish();
     }
 
-    public void refreshLayout(View view) {
-        getPaymentMethodsAsync();
-    }
-
     private void getPaymentMethodsAsync() {
         LayoutUtil.showProgressLayout(getActivity());
 
@@ -192,7 +190,7 @@ public class PaymentMethodsActivity extends MercadoPagoActivity {
 
     private List<PaymentMethod> getPaymentMethodsOfType(String paymentTypeId, List<PaymentMethod> paymentMethodList) {
 
-        if(paymentMethodList != null && paymentTypeId != null && !paymentTypeId.isEmpty()) {
+        if(paymentMethodList != null && !isEmpty(paymentTypeId)) {
 
             List<PaymentMethod> validPaymentMethods = new ArrayList<>();
 

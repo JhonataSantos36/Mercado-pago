@@ -213,10 +213,11 @@ public class StaticMock {
         }
     }
 
-    public static String getCompletePaymentMethodsJson() {
+    public static List<PaymentMethod> getPaymentMethods() {
         try {
-            return getFile(InstrumentationRegistry.getContext(), "mocks/payment_methods.json");
-
+            Type listType = new TypeToken<List<PaymentMethod>>(){}.getType();
+            String json = getFile(InstrumentationRegistry.getContext(), "mocks/payment_methods.json");
+            return JsonUtil.getInstance().getGson().fromJson(json, listType);
         } catch (Exception ex) {
             return null;
         }
@@ -376,9 +377,9 @@ public class StaticMock {
 
     public static List<BankDeal> getBankDeals() {
         try {
-           String json = getFile(InstrumentationRegistry.getContext(), "mocks/bank_deals.json");
+            String json = getFile(InstrumentationRegistry.getContext(), "mocks/bank_deals.json");
             Type listType = new TypeToken<List<BankDeal>>(){}.getType();
-            return   JsonUtil.getInstance().getGson().fromJson(json, listType);
+            return JsonUtil.getInstance().getGson().fromJson(json, listType);
         } catch (Exception ex) {
             return null;
         }
