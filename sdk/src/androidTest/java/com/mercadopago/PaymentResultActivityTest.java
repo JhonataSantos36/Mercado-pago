@@ -44,7 +44,7 @@ public class PaymentResultActivityTest {
 
     @Rule
     public ActivityTestRule<PaymentResultActivity> mTestRule = new ActivityTestRule<>(PaymentResultActivity.class, true, false);
-    public Intent validStartIntent;
+    public Intent validStartIntent, nullPaymentIntent, nullPublicKeyIntent, nullPaymentMethodIntent;
 
     private Payment mPayment;
     private String mMerchantPublicKey;
@@ -117,21 +117,21 @@ public class PaymentResultActivityTest {
     }
 
     private void createIntentWithNullPayment(){
-        validStartIntent = new Intent();
-        validStartIntent.putExtra("merchantPublicKey", mMerchantPublicKey);
-        validStartIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(mPaymentMethod));
+        nullPaymentIntent = new Intent();
+        nullPaymentIntent.putExtra("merchantPublicKey", mMerchantPublicKey);
+        nullPaymentIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(mPaymentMethod));
     }
 
     private void createIntentWithNullPublicKey(){
-        validStartIntent = new Intent();
-        validStartIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(mPaymentMethod));
-        validStartIntent.putExtra("payment", JsonUtil.getInstance().toJson(mPayment));
+        nullPublicKeyIntent = new Intent();
+        nullPublicKeyIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(mPaymentMethod));
+        nullPublicKeyIntent.putExtra("payment", JsonUtil.getInstance().toJson(mPayment));
     }
 
     private void createIntentWithNullPaymentMethod(){
-        validStartIntent = new Intent();
-        validStartIntent.putExtra("merchantPublicKey", mMerchantPublicKey);
-        validStartIntent.putExtra("payment", JsonUtil.getInstance().toJson(mPayment));
+        nullPaymentMethodIntent = new Intent();
+        nullPaymentMethodIntent.putExtra("merchantPublicKey", mMerchantPublicKey);
+        nullPaymentMethodIntent.putExtra("payment", JsonUtil.getInstance().toJson(mPayment));
     }
 
     @Test
@@ -191,7 +191,7 @@ public class PaymentResultActivityTest {
     @Test
     public void showErrorWhenStartResultActivityWithNullPayment() {
         createIntentWithNullPayment();
-        mTestRule.launchActivity(validStartIntent);
+        mTestRule.launchActivity(nullPaymentIntent);
 
         //Error message
         onView(withId(R.id.mpsdkErrorMessage)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_standard_error_message))));
@@ -203,7 +203,7 @@ public class PaymentResultActivityTest {
     @Test
     public void showErrorWhenStartResultActivityWithNullPublicKey() {
         createIntentWithNullPublicKey();
-        mTestRule.launchActivity(validStartIntent);
+        mTestRule.launchActivity(nullPublicKeyIntent);
 
         //Error message
         onView(withId(R.id.mpsdkErrorMessage)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_standard_error_message))));
@@ -215,7 +215,7 @@ public class PaymentResultActivityTest {
     @Test
     public void showErrorWhenStartResultActivityWithNullPaymentMethod() {
         createIntentWithNullPaymentMethod();
-        mTestRule.launchActivity(validStartIntent);
+        mTestRule.launchActivity(nullPaymentMethodIntent);
 
         //Error message
         onView(withId(R.id.mpsdkErrorMessage)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_standard_error_message))));
