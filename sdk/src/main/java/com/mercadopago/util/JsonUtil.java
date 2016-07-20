@@ -4,6 +4,9 @@ import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import java.util.Collection;
+import java.util.List;
+
 public class JsonUtil {
 
     private static JsonUtil mInstance = null;
@@ -26,8 +29,19 @@ public class JsonUtil {
     }
 
     public String toJson(Object src) {
+        String json;
+        if(src instanceof List) {
+            json = listToJson((List)src);
+        }
+        else {
+            json = mGson.toJson(src);
+        }
+        return json;
+    }
 
-        return mGson.toJson(src);
+    private String listToJson(List src) {
+
+        return new Gson().toJson(src);
     }
 
     public Gson getGson() {

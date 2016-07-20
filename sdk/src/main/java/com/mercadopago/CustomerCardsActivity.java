@@ -24,9 +24,9 @@ import java.util.List;
 
 public class CustomerCardsActivity extends MercadoPagoActivity {
 
-    private RecyclerView mRecyclerView;
-    private Toolbar mToolbar;
-    private TextView mTitle;
+    protected RecyclerView mRecyclerView;
+    protected Toolbar mToolbar;
+    protected TextView mTitle;
 
     private List<Card> mCards;
 
