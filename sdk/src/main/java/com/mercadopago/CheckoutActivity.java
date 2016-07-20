@@ -538,7 +538,6 @@ public class CheckoutActivity extends MercadoPagoActivity {
                 mCreatedPayment = payment;
 
                 MPTracker.getInstance().trackPayment("PAYMENT", "CREATE_PAYMENT_RESPONSE", "3", mMerchantPublicKey, mCheckoutPreference.getSiteId(), "1.0", createMPTrackerInformer(), getActivity());
-                MPTracker.getInstance().trackPaymentId(mCreatedPayment.getId().toString(), "3", mMerchantPublicKey, mCheckoutPreference.getSiteId(), "1.0", getActivity());
                 MPTracker.getInstance().trackEvent("PAYMENT", "CREATE_PAYMENT_RESPONSE", "SUCCESS", "3", mMerchantPublicKey, mCheckoutPreference.getSiteId(), "1.0", getActivity());
 
                 startResultActivity();
