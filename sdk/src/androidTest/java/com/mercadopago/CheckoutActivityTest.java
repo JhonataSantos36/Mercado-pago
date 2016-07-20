@@ -696,7 +696,7 @@ public class CheckoutActivityTest {
 
         onView(withId(R.id.mpsdkPayButton)).perform(click());
 
-        intended(hasComponent(ResultActivity.class.getName()));
+        intended(hasComponent(PaymentResultActivity.class.getName()));
     }
 
     @Test
@@ -1164,7 +1164,7 @@ public class CheckoutActivityTest {
         resultActivityResultIntent.putExtra("payment", JsonUtil.getInstance().toJson(payment));
         Instrumentation.ActivityResult resultActivityResult = new Instrumentation.ActivityResult(Activity.RESULT_OK, resultActivityResultIntent);
 
-        intending(hasComponent(ResultActivity.class.getName())).respondWith(resultActivityResult);
+        intending(hasComponent(PaymentResultActivity.class.getName())).respondWith(resultActivityResult);
 
         //Mock API Calls
         CheckoutPreference preference = StaticMock.getChekoutPreference();
@@ -1237,7 +1237,7 @@ public class CheckoutActivityTest {
         resultActivityResultIntent.putExtra("retry", true);
         Instrumentation.ActivityResult resultActivityResult = new Instrumentation.ActivityResult(Activity.RESULT_CANCELED, resultActivityResultIntent);
 
-        intending(hasComponent(ResultActivity.class.getName())).respondWith(resultActivityResult);
+        intending(hasComponent(PaymentResultActivity.class.getName())).respondWith(resultActivityResult);
 
         mTestRule.launchActivity(validStartIntent);
 
@@ -1270,7 +1270,7 @@ public class CheckoutActivityTest {
         resultActivityResultIntent.putExtra("selectOther", true);
         Instrumentation.ActivityResult resultActivityResult = new Instrumentation.ActivityResult(Activity.RESULT_CANCELED, resultActivityResultIntent);
 
-        intending(hasComponent(ResultActivity.class.getName())).respondWith(resultActivityResult);
+        intending(hasComponent(PaymentResultActivity.class.getName())).respondWith(resultActivityResult);
 
         mTestRule.launchActivity(validStartIntent);
 

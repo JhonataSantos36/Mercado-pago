@@ -87,7 +87,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.InfoMercadoPagoTheme.NoActionbar" />
         <activity
-            android:name=".ResultActivity"
+            android:name=".PaymentResultActivity"
             android:theme="@style/Theme.MercadoPagoTheme"/>
     </application>
 

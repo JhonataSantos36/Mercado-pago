@@ -95,8 +95,8 @@ public class CongratsActivity extends MercadoPagoActivity {
     }
 
     @Override
-    protected void onInvalidStart(String message) {
-        ErrorUtil.startErrorActivity(this, message, false);
+    protected void onInvalidStart(String errorMessage) {
+        ErrorUtil.startErrorActivity(this, getString(R.string.mpsdk_standard_error_message), errorMessage,false);
     }
 
     private void setPaymentIdDescription() {
@@ -111,23 +111,17 @@ public class CongratsActivity extends MercadoPagoActivity {
     }
 
     private void setInterestAmountDescription() {
-        if(isTotalPaidAmountValid()){
-            if (hasInterests()) {
-                StringBuilder sb = new StringBuilder();
+        if (hasInterests()) {
+            StringBuilder sb = new StringBuilder();
 
-                sb.append("( ");
-                sb.append(CurrenciesUtil.formatNumber(mPayment.getTransactionDetails().getTotalPaidAmount(), mPayment.getCurrencyId()));
-                sb.append(" )");
-                mInterestAmountDescription.setText(CurrenciesUtil.formatCurrencyInText(mPayment.getTransactionDetails().getTotalPaidAmount(),
-                        mPayment.getCurrencyId(), sb.toString(), true, true));
-            }
-            else {
-                mInterestAmountDescription.setText(getString(R.string.mpsdk_zero_rate));
-            }
+            sb.append("( ");
+            sb.append(CurrenciesUtil.formatNumber(mPayment.getTransactionDetails().getTotalPaidAmount(), mPayment.getCurrencyId()));
+            sb.append(" )");
+            mInterestAmountDescription.setText(CurrenciesUtil.formatCurrencyInText(mPayment.getTransactionDetails().getTotalPaidAmount(),
+                    mPayment.getCurrencyId(), sb.toString(), true, true));
         }
-        else{
-            mInterestAmountDescription.setVisibility(View.GONE);
-            mInstallmentsDescription.setVisibility(View.GONE);
+        else {
+            mInterestAmountDescription.setText(getString(R.string.mpsdk_zero_rate));
         }
     }
 
@@ -143,7 +137,7 @@ public class CongratsActivity extends MercadoPagoActivity {
     }
 
     private void setInstallmentsDescription() {
-        if (isInstallmentQuantityValid() && isInstallmentAmountValid() && isTotalPaidAmountValid() && isCurrencyIdValid()){
+        if (isInstallmentQuantityValid() && isInstallmentAmountValid() && isTotalPaidAmountValid() && CurrenciesUtil.isValidCurrency(mPayment.getCurrencyId())){
             if (mPayment.getInstallments()>1){
                 mInstallmentsDescription.setText(getInstallmentsText());
                 setInterestAmountDescription();
@@ -195,10 +189,6 @@ public class CongratsActivity extends MercadoPagoActivity {
         }
     }
 
-    private Boolean isCurrencyIdValid(){
-        return !isEmpty(mPayment.getCurrencyId()) && CurrenciesUtil.isValidCurrency(mPayment.getCurrencyId());
-    }
-
     private Boolean isPaymentIdValid(){
         return mPayment.getId() != null && mPayment.getId() >= 0;
     }
@@ -222,7 +212,7 @@ public class CongratsActivity extends MercadoPagoActivity {
     }
 
     private Boolean isPaymentMethodValid(){
-        return mPaymentMethod != null && isPaymentMethodIdValid() && !isEmpty(mPaymentMethod.getName());
+        return isPaymentMethodIdValid() && !isEmpty(mPaymentMethod.getName());
     }
 
     private Boolean isPaymentMethodIdValid(){

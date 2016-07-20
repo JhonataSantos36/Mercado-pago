@@ -16,10 +16,10 @@ import com.mercadopago.InstallmentsActivity;
 import com.mercadopago.InstructionsActivity;
 import com.mercadopago.IssuersActivity;
 import com.mercadopago.PaymentMethodsActivity;
+import com.mercadopago.PaymentResultActivity;
 import com.mercadopago.PaymentVaultActivity;
 import com.mercadopago.PendingActivity;
 import com.mercadopago.RejectionActivity;
-import com.mercadopago.ResultActivity;
 import com.mercadopago.adapters.ErrorHandlingCallAdapter;
 import com.mercadopago.callbacks.Callback;
 import com.mercadopago.model.BankDeal;
@@ -177,7 +177,7 @@ public class MercadoPago {
 
     public void getInstallments(String bin, BigDecimal amount, Long issuerId, String paymentMethodId, Callback<List<Installment>> callback) {
         if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {
-            MPTracker.getInstance().trackEvent("NO_SCREEN","GET_INSTALLMENTS","1", mKeyType, "MLA", "1.0", mContext);
+            MPTracker.getInstance().trackEvent("NO_SCREEN", "GET_INSTALLMENTS", "1", mKeyType, "MLA", "1.0", mContext);
             PaymentService service = mRetrofit.create(PaymentService.class);
             service.getInstallments(this.mKey, bin, amount, issuerId, paymentMethodId,
                     mContext.getResources().getConfiguration().locale.toString()).enqueue(callback);
@@ -188,7 +188,7 @@ public class MercadoPago {
 
     public void getIssuers(String paymentMethodId, String bin, final Callback<List<Issuer>> callback) {
         if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {
-            MPTracker.getInstance().trackEvent("NO_SCREEN","GET_ISSUERS","1", mKeyType, "MLA", "1.0", mContext);
+            MPTracker.getInstance().trackEvent("NO_SCREEN", "GET_ISSUERS", "1", mKeyType, "MLA", "1.0", mContext);
             PaymentService service = mRetrofit.create(PaymentService.class);
             service.getIssuers(this.mKey, paymentMethodId, bin).enqueue(callback);
         } else {
@@ -288,7 +288,7 @@ public class MercadoPago {
 
     private static void startResultActivity(Activity activity, String merchantPublicKey, Payment payment, PaymentMethod paymentMethod) {
 
-        Intent resultIntent = new Intent(activity, ResultActivity.class);
+        Intent resultIntent = new Intent(activity, PaymentResultActivity.class);
         resultIntent.putExtra("merchantPublicKey", merchantPublicKey);
         resultIntent.putExtra("payment", JsonUtil.getInstance().toJson(payment));
         resultIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));

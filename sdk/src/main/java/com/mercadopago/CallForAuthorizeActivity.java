@@ -72,7 +72,7 @@ public class CallForAuthorizeActivity extends MercadoPagoActivity {
                 finish();
             }
         });
-        mSelectOtherPaymentMethod = (MPTextView) findViewById(R.id.mpsdkSelectOtherPaymentMethod);
+        mSelectOtherPaymentMethod = (MPTextView) findViewById(R.id.mpsdkSelectOtherPaymentMethodByCallForAuthorize);
         mSelectOtherPaymentMethod.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -98,8 +98,8 @@ public class CallForAuthorizeActivity extends MercadoPagoActivity {
     }
 
     @Override
-    protected void onInvalidStart(String message){
-        ErrorUtil.startErrorActivity(this, message, false);
+    protected void onInvalidStart(String errorMessage){
+        ErrorUtil.startErrorActivity(this, getString(R.string.mpsdk_standard_error_message), errorMessage,false);
     }
 
     private void finishWithOkResult() {
@@ -136,7 +136,7 @@ public class CallForAuthorizeActivity extends MercadoPagoActivity {
     }
 
     private Boolean isPaymentMethodValid(){
-        return mPaymentMethod != null && isPaymentMethodIdValid() && !isEmpty(mPaymentMethod.getName());
+        return isPaymentMethodIdValid() && !isEmpty(mPaymentMethod.getName()) && !isEmpty(mPaymentMethod.getPaymentTypeId());
     }
 
     private Boolean isPaymentMethodIdValid(){

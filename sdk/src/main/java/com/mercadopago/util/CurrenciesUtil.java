@@ -13,6 +13,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static android.text.TextUtils.isEmpty;
+
 public class CurrenciesUtil {
 
     public static final String CURRENCY_ARGENTINA = "ARS";
@@ -131,7 +133,7 @@ public class CurrenciesUtil {
     }
 
     public static boolean isValidCurrency(String currencyId) {
-       return currencyId != null && currenciesList.containsKey(currencyId);
+       return !isEmpty(currencyId) && currenciesList.containsKey(currencyId);
     }
 
     public static List<Currency> getAllCurrencies() {

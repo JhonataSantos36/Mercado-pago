@@ -53,7 +53,7 @@ public class RejectionActivity extends MercadoPagoActivity {
 
     @Override
     protected void setContentView() {
-        MPTracker.getInstance().trackScreen("REJECTED", "3", mMerchantPublicKey, "MLA", "1.0", getActivity());
+        MPTracker.getInstance().trackScreen("REJECTION", "3", mMerchantPublicKey, "MLA", "1.0", this);
 
         setContentView(R.layout.mpsdk_activity_rejection);
     }
@@ -131,13 +131,13 @@ public class RejectionActivity extends MercadoPagoActivity {
                 mRejectionSubtitle.setVisibility(View.GONE);
             }
         }else {
-            ErrorUtil.startErrorActivity(this, getString(R.string.mpsdk_title_bad_filled_other_rejection), false);
+            ErrorUtil.startErrorActivity(this, getString(R.string.mpsdk_standard_error_message), false);
         }
     }
 
     @Override
-    protected void onInvalidStart(String message){
-        ErrorUtil.startErrorActivity(this, message, false);
+    protected void onInvalidStart(String errorMessage){
+        ErrorUtil.startErrorActivity(this, getString(R.string.mpsdk_standard_error_message), errorMessage,false);
     }
 
     private Boolean isStatusDetailValid(){
@@ -159,7 +159,7 @@ public class RejectionActivity extends MercadoPagoActivity {
     }
 
     private boolean isCardPaymentTypeCreditCard(){
-        return MercadoPagoUtil.isCardPaymentType(mPaymentMethod.getPaymentTypeId()) && mPaymentMethod.getPaymentTypeId().equals("credit_card");
+        return !mPaymentMethod.getPaymentTypeId().isEmpty() && mPaymentMethod.getPaymentTypeId().equals("credit_card");
     }
 
     @Override

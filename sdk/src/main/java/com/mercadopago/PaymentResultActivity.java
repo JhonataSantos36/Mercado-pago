@@ -14,7 +14,7 @@ import com.mercadopago.util.MercadoPagoUtil;
 
 import static android.text.TextUtils.isEmpty;
 
-public class ResultActivity extends AppCompatActivity {
+public class PaymentResultActivity extends AppCompatActivity {
 
     //Params
     protected Payment mPayment;
@@ -81,10 +81,10 @@ public class ResultActivity extends AppCompatActivity {
                     startRejectionActivity();
                 }
             } else {
-                ErrorUtil.startErrorActivity(this, getString(R.string.mpsdk_error_title), false);
+                ErrorUtil.startErrorActivity(this, getString(R.string.mpsdk_standard_error_message),false);
             }
         } else {
-            ErrorUtil.startErrorActivity(this, getString(R.string.mpsdk_error_title), false);
+            ErrorUtil.startErrorActivity(this, getString(R.string.mpsdk_standard_error_message),false);
         }
     }
 
@@ -140,8 +140,8 @@ public class ResultActivity extends AppCompatActivity {
         return !isEmpty(mPayment.getStatusDetail());
     }
 
-    protected void onInvalidStart(String message){
-        throw new IllegalStateException(message);
+    protected void onInvalidStart(String errorMessage){
+        ErrorUtil.startErrorActivity(this, getString(R.string.mpsdk_standard_error_message), errorMessage,false);
     }
 
     @Override
