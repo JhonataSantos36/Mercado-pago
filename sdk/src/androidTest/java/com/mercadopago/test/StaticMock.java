@@ -394,6 +394,15 @@ public class StaticMock {
         }
     }
 
+
+    public static ApiException getApiExceptionNotFound() {
+        try {
+            return JsonUtil.getInstance().fromJson(getFile(InstrumentationRegistry.getContext(), "mocks/api_exception_not_found.json"), ApiException.class);
+
+        } catch (Exception ex) {
+            return null;
+        }    }
+
     private static String getFile(Context context, String fileName) {
 
         try {
