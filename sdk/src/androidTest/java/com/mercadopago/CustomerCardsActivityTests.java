@@ -90,7 +90,7 @@ public class CustomerCardsActivityTests {
     }
 
     @Test
-    public void ifDecorationColorSetAndDarFontEnabledDecorateToolbar() {
+    public void ifDecorationColorSetAndDarkFontEnabledDecorateToolbar() {
 
         DecorationPreference decorationPreference = new DecorationPreference();
         decorationPreference.enableDarkFont();
