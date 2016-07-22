@@ -11,14 +11,18 @@ import android.test.suitebuilder.annotation.LargeTest;
 
 import com.mercadopago.constants.PaymentTypes;
 import com.mercadopago.constants.Sites;
+import com.mercadopago.exceptions.MPException;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentMethodSearch;
 import com.mercadopago.model.PaymentMethodSearchItem;
 import com.mercadopago.model.PaymentPreference;
+import com.mercadopago.model.Site;
 import com.mercadopago.model.Token;
+import com.mercadopago.test.ActivityResult;
 import com.mercadopago.test.FakeAPI;
 import com.mercadopago.test.StaticMock;
 import com.mercadopago.util.JsonUtil;
+import com.mercadopago.utils.ActivityResultUtil;
 
 import org.junit.After;
 import org.junit.Before;
@@ -40,11 +44,13 @@ import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.Intents.intending;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static android.support.test.runner.lifecycle.Stage.RESUMED;
 import static com.mercadopago.utils.ActivityResultUtil.assertFinishCalledWithResult;
+import static com.mercadopago.utils.ActivityResultUtil.getActivityResult;
 import static org.hamcrest.Matchers.allOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -336,6 +342,36 @@ public class PaymentVaultActivityTest {
     }
 
     @Test
+    public void ifSiteHasNullCurrencyStartErrorActivity() {
+        String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
+
+        mFakeAPI.addResponseToQueue(paymentMethodSearchJson, 200, "");
+
+        Intent invalidAmountIntent = new Intent();
+        invalidAmountIntent.putExtras(validStartIntent.getExtras());
+        Site site = new Site("MLA", null);
+        invalidAmountIntent.putExtra("site", JsonUtil.getInstance().toJson(site));
+
+        mTestRule.launchActivity(invalidAmountIntent);
+        intended(hasComponent(ErrorActivity.class.getName()));
+    }
+
+    @Test
+    public void ifSiteHasInvalidCurrencyStartErrorActivity() {
+        String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
+
+        mFakeAPI.addResponseToQueue(paymentMethodSearchJson, 200, "");
+
+        Intent invalidAmountIntent = new Intent();
+        invalidAmountIntent.putExtras(validStartIntent.getExtras());
+        Site site = new Site("MLA", "INVALID");
+        invalidAmountIntent.putExtra("site", JsonUtil.getInstance().toJson(site));
+
+        mTestRule.launchActivity(invalidAmountIntent);
+        intended(hasComponent(ErrorActivity.class.getName()));
+    }
+
+    @Test
     public void ifPublicKeyIsNullShowErrorActivity() {
         String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
 
@@ -437,9 +473,28 @@ public class PaymentVaultActivityTest {
         intended(hasComponent(ErrorActivity.class.getName()));
     }
 
-    //TODO caso de mismatching payment method ids
+    @Test
+    public void ifItemSelectedDoesNotMatchPaymentMethodShowErrorActivity() {
+        PaymentMethodSearch paymentMethodSearch = JsonUtil.getInstance()
+                .fromJson(StaticMock.getCompletePaymentMethodSearchAsJson(), PaymentMethodSearch.class);
+
+        //Alter data
+        paymentMethodSearch.getGroups().get(1).getChildren().get(0).setId("mismatching_id");
+
+        mFakeAPI.addResponseToQueue(paymentMethodSearch, 200, "");
+        mTestRule.launchActivity(validStartIntent);
+
+        onView(withId(R.id.mpsdkGroupsList)).perform(
+                actionOnItemAtPosition(1, click()));
+
+        onView(withId(R.id.mpsdkGroupsList)).perform(
+                actionOnItemAtPosition(0, click()));
+
+        intended(hasComponent(ErrorActivity.class.getName()));
+    }
 
     //API EXCEPTIONS TEST
+
     @Test
     public void ifPaymentMethodSearchAPICallFailsShowErrorActivity() {
         mFakeAPI.addResponseToQueue("", 401, "");
@@ -456,6 +511,33 @@ public class PaymentVaultActivityTest {
         intended(hasComponent(ErrorActivity.class.getName()));
     }
 
+    // RESULTS TESTS
+
+    //From PaymentMethodsActivity
+    @Test
+    public void ifResultFromPaymentMethodsIsNotOkShowRegularPaymentMethodSelection() {
+
+        String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
+
+        PaymentMethodSearch paymentMethodSearch = JsonUtil.getInstance().fromJson(paymentMethodSearchJson, PaymentMethodSearch.class);
+
+        //remove children
+        paymentMethodSearch.getGroups().get(1).getChildren().removeAll(paymentMethodSearch.getGroups().get(1).getChildren());
+
+        mFakeAPI.addResponseToQueue(paymentMethodSearch, 200, "");
+        mFakeAPI.addResponseToQueue(new ArrayList<PaymentMethod>(), 200, "");
+
+        Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(Activity.RESULT_CANCELED, new Intent());
+        intending(hasComponent(PaymentMethodsActivity.class.getName())).respondWith(result);
+
+        mTestRule.launchActivity(validStartIntent);
+
+        onView(withId(R.id.mpsdkGroupsList)).perform(actionOnItemAtPosition(1, click()));
+
+        onView(withId(R.id.mpsdkGroupsList)).check(matches(isDisplayed()));
+    }
+
+    //From CardVaultActivity
     @Test
     public void whenReceivedResponseFromCardVaultFinishWithResult() {
         String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
@@ -483,4 +565,161 @@ public class PaymentVaultActivityTest {
 
         assertFinishCalledWithResult(mTestRule.getActivity(), Activity.RESULT_OK);
     }
+
+    @Test
+    public void whenReceivedCancelResponseFromCardVaultShowRegularLayout() {
+        String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
+
+        mFakeAPI.addResponseToQueue(paymentMethodSearchJson, 200, "");
+
+        mTestRule.launchActivity(validStartIntent);
+
+        onView(withId(R.id.mpsdkGroupsList)).perform(
+                actionOnItemAtPosition(0, click()));
+
+
+        Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(Activity.RESULT_CANCELED, new Intent());
+
+        intending(hasComponent(CardVaultActivity.class.getName())).respondWith(result);
+
+        onView(withId(R.id.mpsdkGroupsList)).perform(
+                actionOnItemAtPosition(0, click()));
+
+        onView(withId(R.id.mpsdkGroupsList)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void whenReceivedCancelResponseFromCardVaultAndOnlyCardPaymentMethodAvailableFinishSelection() {
+        PaymentMethodSearch paymentMethodSearch = StaticMock.getPaymentMethodSearchWithUniqueItemCreditCard();
+
+        mFakeAPI.addResponseToQueue(paymentMethodSearch, 200, "");
+
+        Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(Activity.RESULT_CANCELED, new Intent());
+        intending(hasComponent(CardVaultActivity.class.getName())).respondWith(result);
+
+        mTestRule.launchActivity(validStartIntent);
+
+        assertFinishCalledWithResult(mTestRule.getActivity(), Activity.RESULT_CANCELED);
+    }
+
+    @Test
+    public void whenReceivedCancelResponseWithMPExceptionFromCardVaultFinishSelection() {
+        String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
+
+        mFakeAPI.addResponseToQueue(paymentMethodSearchJson, 200, "");
+
+        MPException mpException = new MPException("Some message", false);
+        Intent intent = new Intent();
+        intent.putExtra("mpException", JsonUtil.getInstance().toJson(mpException));
+
+        Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(Activity.RESULT_CANCELED, intent);
+        intending(hasComponent(CardVaultActivity.class.getName())).respondWith(result);
+
+        mTestRule.launchActivity(validStartIntent);
+
+        onView(withId(R.id.mpsdkGroupsList)).perform(
+                actionOnItemAtPosition(0, click()));
+
+        onView(withId(R.id.mpsdkGroupsList)).perform(
+                actionOnItemAtPosition(0, click()));
+
+        ActivityResult activityResult = getActivityResult(mTestRule.getActivity());
+
+        assertTrue(activityResult.getResultCode() == Activity.RESULT_CANCELED);
+        String mpExceptionJson = JsonUtil.getInstance().toJson(mpException);
+        assertTrue(mpExceptionJson.equals(activityResult.getExtras().getString("mpException")));
+    }
+
+    //From ErrorActivity
+    @Test
+    public void ifAfterAPIFailureUserRetriesAndSucceedsShowPaymentMethodSelection() {
+        String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
+
+        mFakeAPI.addResponseToQueue("", 401, "");
+        mFakeAPI.addResponseToQueue(paymentMethodSearchJson, 200, "");
+
+        Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(Activity.RESULT_OK, new Intent());
+        intending(hasComponent(ErrorActivity.class.getName())).respondWith(result);
+
+        mTestRule.launchActivity(validStartIntent);
+
+        onView(withId(R.id.mpsdkGroupsList)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void ifErrorScreenShownBeforeUserInteractionAndUserCancelsFinishActivity() {
+        mFakeAPI.addResponseToQueue("", 401, "");
+
+        MPException mpException = new MPException("Some message", true);
+
+        Intent intent = new Intent();
+        intent.putExtra("mpException", JsonUtil.getInstance().toJson(mpException));
+        Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(Activity.RESULT_CANCELED, intent);
+        intending(hasComponent(ErrorActivity.class.getName())).respondWith(result);
+
+        mTestRule.launchActivity(validStartIntent);
+
+        String mpExceptionJson = JsonUtil.getInstance().toJson(mpException);
+        ActivityResult activityResult = ActivityResultUtil.getActivityResult(mTestRule.getActivity());
+
+        assertTrue(mpExceptionJson.equals(activityResult.getExtras().getString("mpException")));
+        assertFinishCalledWithResult(mTestRule.getActivity(), Activity.RESULT_CANCELED);
+    }
+
+    @Test
+    public void ifErrorScreenShownAfterUserInteractionAndUserCancelsShowPaymentMethodSelectionLayout() {
+        PaymentMethodSearch paymentMethodSearch = JsonUtil.getInstance()
+                .fromJson(StaticMock.getCompletePaymentMethodSearchAsJson(), PaymentMethodSearch.class);
+
+        //Alter data
+        paymentMethodSearch.getGroups().get(1).getChildren().get(0).setId("mismatching_id");
+
+        Intent intent = new Intent();
+        MPException mpException = new MPException("Some message", true);
+        intent.putExtra("mpException", JsonUtil.getInstance().toJson(mpException));
+        Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(Activity.RESULT_CANCELED, intent);
+        intending(hasComponent(ErrorActivity.class.getName())).respondWith(result);
+
+        mFakeAPI.addResponseToQueue(paymentMethodSearch, 200, "");
+        mTestRule.launchActivity(validStartIntent);
+
+        onView(withId(R.id.mpsdkGroupsList)).perform(
+                actionOnItemAtPosition(1, click()));
+
+        //Trigger error screen
+        onView(withId(R.id.mpsdkGroupsList)).perform(
+                actionOnItemAtPosition(0, click()));
+
+        onView(withId(R.id.mpsdkGroupsList)).check(matches(isDisplayed()));
+    }
+
+    //From PaymentVaultActivity (nested)
+    @Test
+    public void whenReceivedCancelResponseWithMPExceptionFromNestedSelectionFinishSelection() {
+        String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
+
+        mFakeAPI.addResponseToQueue(paymentMethodSearchJson, 200, "");
+
+        MPException mpException = new MPException("Some message", false);
+        Intent intent = new Intent();
+        intent.putExtra("mpException", JsonUtil.getInstance().toJson(mpException));
+
+        Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(Activity.RESULT_CANCELED, intent);
+
+        mTestRule.launchActivity(validStartIntent);
+
+        intending(hasComponent(PaymentVaultActivity.class.getName())).respondWith(result);
+
+        onView(withId(R.id.mpsdkGroupsList)).perform(
+                actionOnItemAtPosition(0, click()));
+
+        ActivityResult activityResult = getActivityResult(mTestRule.getActivity());
+
+        assertTrue(activityResult.getResultCode() == Activity.RESULT_CANCELED);
+        String mpExceptionJson = JsonUtil.getInstance().toJson(mpException);
+        assertTrue(mpExceptionJson.equals(activityResult.getExtras().getString("mpException")));
+    }
+
+    //Recover from api failure (e.g. timeout)
+
 }

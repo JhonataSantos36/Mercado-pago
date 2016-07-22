@@ -411,17 +411,16 @@ public class PaymentVaultActivity extends MercadoPagoActivity {
             mSelectedPayerCost = JsonUtil.getInstance().fromJson(data.getStringExtra("payerCost"), PayerCost.class);
             finishWithCardResult();
 
-        } else if (isUniqueSelectionAvailable()||
-                ((data != null) && (data.getStringExtra("mpException") != null))){
-
+        } else {
             //TODO validate
-            MPTracker.getInstance().trackEvent("PAYMENT_VAULT","CANCELED","2", mMerchantPublicKey, mSite.getId(), "1.0",this);
-
-            setResult(Activity.RESULT_CANCELED, data);
-            this.finish();
-        }
-        else {
-            overridePendingTransition(R.anim.mpsdk_slide_left_to_right_in, R.anim.mpsdk_slide_left_to_right_out);
+            MPTracker.getInstance().trackEvent("PAYMENT_VAULT", "CANCELED", "2", mMerchantPublicKey, mSite.getId(), "1.0", this);
+            if (isUniqueSelectionAvailable() || ((data != null) && (data.getStringExtra("mpException") != null))) {
+                setResult(Activity.RESULT_CANCELED, data);
+                this.finish();
+            }
+            else {
+                overridePendingTransition(R.anim.mpsdk_slide_left_to_right_in, R.anim.mpsdk_slide_left_to_right_out);
+            }
         }
     }
 
@@ -429,15 +428,6 @@ public class PaymentVaultActivity extends MercadoPagoActivity {
         if(resultCode == RESULT_OK) {
             PaymentMethod paymentMethod = JsonUtil.getInstance().fromJson(data.getStringExtra("paymentMethod"), PaymentMethod.class);
             finishWithPaymentMethodResult(paymentMethod);
-        }
-        else {
-            if ((data != null) && (data.getStringExtra("apiException") != null)) {
-                //TODO validate
-                MPTracker.getInstance().trackEvent("PAYMENT_VAULT","CANCELED","2", mMerchantPublicKey, mSite.getId(), "1.0",this);
-
-                setResult(Activity.RESULT_CANCELED, data);
-                this.finish();
-            }
         }
     }
 
