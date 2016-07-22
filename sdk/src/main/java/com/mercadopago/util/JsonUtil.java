@@ -29,19 +29,8 @@ public class JsonUtil {
     }
 
     public String toJson(Object src) {
-        String json;
-        if(src instanceof List) {
-            json = listToJson((List)src);
-        }
-        else {
-            json = mGson.toJson(src);
-        }
-        return json;
-    }
 
-    private String listToJson(List src) {
-
-        return new Gson().toJson(src);
+        return mGson.toJson(src);
     }
 
     public Gson getGson() {

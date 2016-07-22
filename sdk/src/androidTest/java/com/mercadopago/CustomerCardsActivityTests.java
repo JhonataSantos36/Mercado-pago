@@ -11,6 +11,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.test.suitebuilder.annotation.LargeTest;
 
+import com.google.gson.Gson;
 import com.mercadopago.model.Card;
 import com.mercadopago.model.DecorationPreference;
 import com.mercadopago.test.ActivityResult;
@@ -114,7 +115,8 @@ public class CustomerCardsActivityTests {
         assert cards != null;
 
         Intent intent = new Intent();
-        intent.putExtra("cards", JsonUtil.getInstance().toJson(cards));
+        Gson gson = new Gson();
+        intent.putExtra("cards", gson.toJson(cards));
 
         mTestRule.launchActivity(intent);
 
