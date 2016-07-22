@@ -61,7 +61,7 @@ public class CustomerCardsActivityTests {
         List<Card> cards = StaticMock.getCards();
 
         Intent intent = new Intent();
-        intent.putExtra("cards", JsonUtil.getInstance().toJson(cards));
+        intent.putExtra("cards", new Gson().toJson(cards));
 
         mTestRule.launchActivity(intent);
 
@@ -84,7 +84,7 @@ public class CustomerCardsActivityTests {
     public void onBackPressedFinishActivity() {
         List<Card> cards = StaticMock.getCards();
         Intent intent = new Intent();
-        intent.putExtra("cards", JsonUtil.getInstance().toJson(cards));
+        intent.putExtra("cards", new Gson().toJson(cards));
         mTestRule.launchActivity(intent);
 
         pressBack();
@@ -100,7 +100,7 @@ public class CustomerCardsActivityTests {
         List<Card> cards = StaticMock.getCards();
 
         Intent intent = new Intent();
-        intent.putExtra("cards", JsonUtil.getInstance().toJson(cards));
+        intent.putExtra("cards", new Gson().toJson(cards));
         intent.putExtra("decorationPreference", JsonUtil.getInstance().toJson(decorationPreference));
 
         mTestRule.launchActivity(intent);
