@@ -351,7 +351,8 @@ public class MercadoPago {
             throw new RuntimeException("Invalid parameters");
         }
         Intent paymentMethodsIntent = new Intent(activity, CustomerCardsActivity.class);
-        paymentMethodsIntent.putExtra("cards", JsonUtil.getInstance().toJson(cards));
+        Gson gson = new Gson();
+        paymentMethodsIntent.putExtra("cards", gson.toJson(cards));
         activity.startActivityForResult(paymentMethodsIntent, CUSTOMER_CARDS_REQUEST_CODE);
     }
 
