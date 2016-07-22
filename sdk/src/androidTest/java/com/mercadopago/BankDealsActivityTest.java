@@ -105,7 +105,7 @@ public class BankDealsActivityTest {
 
         String legals = bankDeals.get(0).getLegals();
 
-        intended(allOf(hasComponent(TermsAndConditionsActivity.class.getName()), hasExtra("termsAndConditions", legals)));
+        intended(allOf(hasComponent(TermsAndConditionsActivity.class.getName()), hasExtra("bankDealLegals", legals)));
     }
 
     //Initial validations

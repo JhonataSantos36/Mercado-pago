@@ -20,20 +20,24 @@ public class TermsAndConditionsActivity extends MercadoPagoActivity {
     protected View mBankDealsTermsAndConditionsView;
     protected WebView mTermsAndConditionsWebView;
     protected ProgressBar mProgressbar;
+    protected MPTextView mBankDealsLegalsTextView;
+    protected Toolbar mToolbar;
+    protected TextView mTitle;
+
     protected DecorationPreference mDecorationPreference;
     protected String mBankDealsTermsAndConditions;
     protected String mSiteId;
 
     @Override
     protected void getActivityParameters() {
-        mBankDealsTermsAndConditions = getIntent().getStringExtra("termsAndConditions");
+        mBankDealsTermsAndConditions = getIntent().getStringExtra("bankDealLegals");
         mSiteId = getIntent().getStringExtra("siteId");
     }
 
     @Override
     protected void validateActivityParameters() throws IllegalStateException {
-        if(getIntent().getStringExtra("termsAndConditions") == null
-                && getIntent().getStringExtra("siteId") == null) {
+        if(mBankDealsTermsAndConditions == null
+                && mSiteId == null) {
             throw new IllegalStateException("bank deal terms or site id required");
         }
     }
@@ -50,6 +54,7 @@ public class TermsAndConditionsActivity extends MercadoPagoActivity {
         mProgressbar = (ProgressBar) findViewById(R.id.mpsdkProgressBar);
         mMPTermsAndConditionsView = findViewById(R.id.mpsdkMPTermsAndConditions);
         mTermsAndConditionsWebView = (WebView) findViewById(R.id.mpsdkTermsAndConditionsWebView);
+        mBankDealsLegalsTextView = (MPTextView) findViewById(R.id.mpsdkTermsAndConditions);
         mTermsAndConditionsWebView.setVerticalScrollBarEnabled(true);
         mTermsAndConditionsWebView.setHorizontalScrollBarEnabled(true);
         initializeToolbar();
@@ -57,22 +62,22 @@ public class TermsAndConditionsActivity extends MercadoPagoActivity {
 
 
     private void initializeToolbar() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.mpsdkToolbar);
-        setSupportActionBar(toolbar);
-        TextView title = (TextView) findViewById(R.id.mpsdkTitle);
+        mToolbar = (Toolbar) findViewById(R.id.mpsdkToolbar);
+        setSupportActionBar(mToolbar);
+        mTitle = (TextView) findViewById(R.id.mpsdkTitle);
 
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onBackPressed();
             }
         });
 
-        decorate(toolbar);
-        decorate(title);
+        decorate(mToolbar);
+        decorate(mTitle);
     }
 
     @Override
@@ -89,36 +94,29 @@ public class TermsAndConditionsActivity extends MercadoPagoActivity {
 
     @Override
     protected void onInvalidStart(String message) {
-        ErrorUtil.startErrorActivity(this, message, false);
+        ErrorUtil.startErrorActivity(this, getString(R.string.mpsdk_standard_error_message), message, false);
     }
 
     private void showMPTermsAndConditions() {
-        if (mProgressbar != null) {
-            mProgressbar.setVisibility(View.VISIBLE);
+        mProgressbar.setVisibility(View.VISIBLE);
+        mTermsAndConditionsWebView.setWebViewClient(new WebViewClient() {
+            public void onPageFinished(WebView view, String url) {
+                mProgressbar.setVisibility(View.GONE);
+                mMPTermsAndConditionsView.setVisibility(View.VISIBLE);
+            }
+        });
+        if(mSiteId.equals("MLA")) {
+            mTermsAndConditionsWebView.loadUrl("https://www.mercadopago.com.ar/ayuda/terminos-y-condiciones_299");
         }
-        if(mSiteId != null) {
-            mTermsAndConditionsWebView.setWebViewClient(new WebViewClient() {
-                public void onPageFinished(WebView view, String url) {
-                    mProgressbar.setVisibility(View.GONE);
-                    mMPTermsAndConditionsView.setVisibility(View.VISIBLE);
-                }
-            });
-            if(mSiteId.equals("MLA")) {
-                mTermsAndConditionsWebView.loadUrl("https://www.mercadopago.com.ar/ayuda/terminos-y-condiciones_299");
-            }
-            else if (mSiteId.equals("MLM")){
-                mTermsAndConditionsWebView.loadUrl("https://www.mercadopago.com.mx/ayuda/terminos-y-condiciones_715");
-            }
-            else {
-                finish();
-            }
-        } else {
+        else if (mSiteId.equals("MLM")){
+            mTermsAndConditionsWebView.loadUrl("https://www.mercadopago.com.mx/ayuda/terminos-y-condiciones_715");
+        }
+        else {
             finish();
         }
     }
 
     private void showBankDealsTermsAndConditions() {
-        MPTextView termsAndConditions = (MPTextView) findViewById(R.id.mpsdkTermsAndConditions);
-        termsAndConditions.setText(getIntent().getStringExtra("termsAndConditions"));
+        mBankDealsLegalsTextView.setText(mBankDealsTermsAndConditions);
     }
 }
