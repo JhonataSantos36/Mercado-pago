@@ -31,7 +31,7 @@ public class AllModelTest extends BaseTest<CheckoutActivity> {
         payment.setBinaryMode(true);
         payment.setCallForAuthorizeId("123");
         payment.setCaptured(false);
-        payment.setCard(StaticMock.getCard(getApplicationContext()));
+        payment.setCard(StaticMock.getCard());
         payment.setCollectorId("1234567");
         payment.setCouponAmount(new BigDecimal("19"));
         payment.setCurrencyId("ARS");

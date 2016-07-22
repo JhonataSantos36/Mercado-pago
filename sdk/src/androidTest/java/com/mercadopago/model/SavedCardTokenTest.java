@@ -78,7 +78,7 @@ public class SavedCardTokenTest extends BaseTest<CheckoutActivity> {
     public void testSecurityCodeLengthZero() {
 
         SavedCardToken savedCardToken = StaticMock.getSavedCardToken();
-        Card card = StaticMock.getCard(getApplicationContext());
+        Card card = StaticMock.getCard();
 
         savedCardToken.setSecurityCode(null);
 

@@ -175,10 +175,10 @@ public class StaticMock {
         }
     }
 
-    public static List<Card> getCards(Context context) {
+    public static List<Card> getCards() {
 
         try {
-            Customer customer = JsonUtil.getInstance().fromJson(getFile(context, "mocks/customer.json"), Customer.class);
+            Customer customer = JsonUtil.getInstance().fromJson(getFile(InstrumentationRegistry.getContext(), "mocks/customer.json"), Customer.class);
             return customer.getCards();
 
         } catch (Exception ex) {
@@ -186,10 +186,10 @@ public class StaticMock {
         }
     }
 
-    public static Card getCard(Context context) {
+    public static Card getCard() {
 
         try {
-            List<Card> cards = getCards(context);
+            List<Card> cards = getCards();
             return cards.get(0);
 
         } catch (Exception ex) {

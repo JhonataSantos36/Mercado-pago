@@ -1,1 +1,58 @@
-{"phone":{"area_code":null,"number":null},"date_created":"2015-02-27T12:45:47.752-04:00","date_last_updated":"2015-02-27T12:45:47.876-04:00","date_registered":null,"id":"178101336","first_name":null,"email":"test_user_61065665@testuser.com","address":{"zip_code":null,"street_name":null,"street_number":null},"identification":{"number":null,"type":null},"description":null,"default_card":149024476,"last_name":null,"livemode":true,"cards":[{"id":"149024476","first_six_digits":"503175","expiration_month":4,"issuer":{"id":3,"name":"Mastercard"},"cardholder":{"identification":{"subtype":null,"number":"12345678","type":"DNI"},"name":"APRO"},"expiration_year":2089,"date_created":null,"date_last_updated":null,"security_code":{"length":3,"card_location":"back"},"payment_method":{"id":"master","thumbnail":"http://img.mlstatic.com/org-img/MP3/API/logos/master.gif","secure_thumbnail":"https://www.mercadopago.com/org-img/MP3/API/logos/master.gif","name":"Mastercard","payment_type_id":"credit_card"},"customer_id":"178101336","last_four_digits":"0604"}],"metadata":{}}
+{
+  "address":{
+    "street_name":null,
+    "street_number":null,
+    "zip_code":null
+  },
+  "cards":[
+    {
+      "card_holder":null,
+      "customer_id":"178101336",
+      "date_created":null,
+      "date_last_updated":null,
+      "expiration_month":11,
+      "expiration_year":2019,
+      "first_six_digits":"503175",
+      "id":"149024476",
+      "issuer":{
+        "id":3,
+        "name":"Mastercard"
+      },
+      "last_four_digits":"0604",
+      "payment_method":{
+        "accreditation_time":null,
+        "additional_info_needed":null,
+        "id":"master",
+        "name":"Mastercard",
+        "payment_type_id":"credit_card",
+        "settings":null
+      },
+      "security_code":{
+        "card_location":"back",
+        "length":3,
+        "mode":null
+      }
+    }
+  ],
+  "date_created":"2015-02-27T16:45:47.000+0000",
+  "date_last_updated":"2015-05-05T21:04:08.814+0000",
+  "default_card":149024476,
+  "description":null,
+  "email":"test_user_61065665@testuser.com",
+  "first_name":"test user",
+  "id":"178101336",
+  "identification":{
+    "number":null,
+    "type":null
+  },
+  "last_name":null,
+  "registration_date":null,
+  "metadata":{
+
+  },
+  "phone":{
+    "area_code":null,
+    "number":null
+  },
+  "live_mode":true
+}
