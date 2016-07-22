@@ -6,6 +6,8 @@ import android.support.annotation.NonNull;
 
 import com.google.gson.reflect.TypeToken;
 import com.mercadopago.callbacks.Callback;
+import com.mercadopago.model.Payment;
+import com.mercadopago.mptracker.MPTracker;
 import com.mercadopago.util.ApiUtil;
 
 import java.lang.annotation.Annotation;
@@ -71,8 +73,21 @@ public class ErrorHandlingCallAdapter {
                         public void run() {
                             int code = r.code();
                             if (code >= 200 && code < 300) {
+                                //track success
+                                T body = r.body();
+                                if (body instanceof Payment){
+
+                                }
+                                //T body = r.body();
+                                //if(body instanceof Payment) {
+                                //  Track payment
+                                //}
+                                //else if(body instanceof Token) {
+                                //  Track payment
+                                //}
                                 callback.success(r.body());
                             } else {
+                                //track failure
                                 callback.failure(ApiUtil.getApiException(r));
                             }
                         }
@@ -81,16 +96,15 @@ public class ErrorHandlingCallAdapter {
 
                 @Override
                 public void onFailure(final Call<T> call, Throwable t) {
-                    final Throwable th  = t;
-                    if(callback.attempts++ == 3) {
+                    final Throwable th = t;
+                    if (callback.attempts++ == 3) {
                         executeOnMainThread(new Runnable() {
                             @Override
                             public void run() {
                                 callback.failure(ApiUtil.getApiException(th));
                             }
                         });
-                    }
-                    else {
+                    } else {
                         call.clone().enqueue(this);
                     }
                 }
