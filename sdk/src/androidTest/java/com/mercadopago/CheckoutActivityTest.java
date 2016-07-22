@@ -974,7 +974,7 @@ public class CheckoutActivityTest {
         //Prepare next activity result
         PaymentMethod paymentMethod = StaticMock.getPaymentMethodOn();
         Token token = StaticMock.getToken();
-        Issuer issuer = StaticMock.getIssuer(/**/);
+        Issuer issuer = StaticMock.getIssuer();
         PayerCost payerCost = StaticMock.getPayerCostWithoutInterests();
 
         Intent resultIntent = new Intent();

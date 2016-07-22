@@ -135,6 +135,37 @@ public class StaticMock {
         }
     }
 
+    public static String getInstallmentsJson() {
+
+        try {
+            return getFile(InstrumentationRegistry.getContext(), "mocks/installments.json");
+
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+
+    public static String getPayerCostsJson() {
+
+        try {
+            return getFile(InstrumentationRegistry.getContext(), "mocks/payerCosts.json");
+
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+    public static String getInvalidPayerCostsJson() {
+
+        try {
+            return getFile(InstrumentationRegistry.getContext(), "mocks/payerCostsInvalid.json");
+
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
     public static Token getToken() {
 
         try {
