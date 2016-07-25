@@ -61,7 +61,7 @@ public class PaymentResultActivity extends AppCompatActivity {
         if(mPayment.getStatus().equals(Payment.StatusCodes.STATUS_IN_PROCESS)) {
             startPendingActivity();
         }
-        else if (MercadoPagoUtil.isCardPaymentType(mPaymentMethod.getPaymentTypeId())) {
+        else if (MercadoPagoUtil.isCard(mPaymentMethod.getPaymentTypeId())) {
             startCardPaymentTypeResult();
         }
         else {

@@ -1,5 +1,6 @@
 package com.mercadopago.fragments;
 
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -131,6 +132,10 @@ public class ShoppingCartFragment extends Fragment {
             Picasso.with(getContext()).load(mPictureUrl).placeholder(R.drawable.progress).into(mItemImageView);
         }
         else {
+            if(mDecorationPreference!= null && mDecorationPreference.isDarkFontEnabled()) {
+                mItemImageView.getBackground().setColorFilter(mDecorationPreference.getDarkFontColor(getContext()), PorterDuff.Mode.SRC_ATOP);
+                mItemImageView.setColorFilter(mDecorationPreference.getDarkFontColor(getContext()), PorterDuff.Mode.SRC_ATOP);
+            }
             int dpAsPixels = ScaleUtil.getPxFromDp(24, getContext());
             mItemImageView.setPadding(dpAsPixels, dpAsPixels, dpAsPixels, dpAsPixels);
         }

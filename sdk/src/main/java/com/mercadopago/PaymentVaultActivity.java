@@ -44,6 +44,7 @@ public class PaymentVaultActivity extends MercadoPagoActivity {
     protected Issuer mSelectedIssuer;
     protected PayerCost mSelectedPayerCost;
     protected Site mSite;
+    protected Boolean mInstallmentsEnabled;
 
     // Controls
     protected RecyclerView mSearchItemsRecyclerView;
@@ -87,6 +88,8 @@ public class PaymentVaultActivity extends MercadoPagoActivity {
         mSite = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("site"), Site.class);
 
         mCardGuessingEnabled = this.getIntent().getBooleanExtra("cardGuessingEnabled", false);
+
+        mInstallmentsEnabled = this.getIntent().getBooleanExtra("installmentsEnabled", true);
 
         mShowBankDeals = this.getIntent().getBooleanExtra("showBankDeals", true);
 
@@ -334,9 +337,10 @@ public class PaymentVaultActivity extends MercadoPagoActivity {
                 .setPaymentPreference(mPaymentPreference)
                 .setDecorationPreference(mDecorationPreference);
 
-        if(MercadoPagoUtil.isCardPaymentType(item.getId())){
+        if(MercadoPagoUtil.isCard(item.getId())){
             builder.setAmount(mAmount);
             builder.setSite(mSite);
+            builder.setInstallmentsEnabled(mInstallmentsEnabled);
             builder.setSupportedPaymentMethods(mPaymentMethodSearch.getPaymentMethods());
             builder.startCardVaultActivity();
             animatePaymentMethodSelection();

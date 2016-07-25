@@ -36,6 +36,7 @@ public class CardVaultActivity extends ShowCardActivity {
     private PaymentPreference mPaymentPreference;
     private List<PaymentMethod> mPaymentMethodList;
     private Site mSite;
+    private Boolean mInstallmentsEnabled;
 
     @Override
     protected void initializeControls() {
@@ -77,10 +78,15 @@ public class CardVaultActivity extends ShowCardActivity {
     @Override
     protected void getActivityParameters() {
         super.getActivityParameters();
+        mInstallmentsEnabled = getIntent().getBooleanExtra("installmentsEnabled", false);
         mPublicKey = getIntent().getStringExtra("publicKey");
         mSite = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("site"), Site.class);
         mSecurityCodeLocation = CardInterface.CARD_SIDE_BACK;
-        mAmount = new BigDecimal(getIntent().getStringExtra("amount"));
+
+        String amount = getIntent().getStringExtra("amount");
+        if(amount != null) {
+            mAmount = new BigDecimal(amount);
+        }
         try {
             Type listType = new TypeToken<List<PaymentMethod>>(){}.getType();
             mPaymentMethodList =  JsonUtil.getInstance().getGson().fromJson(this.getIntent().getStringExtra("paymentMethodList"), listType);
@@ -178,7 +184,12 @@ public class CardVaultActivity extends ShowCardActivity {
                 int color = getCardColor(mCurrentPaymentMethod);
                 mFrontFragment.setCardColor(color);
             }
-            checkStartInstallmentsActivity();
+
+            if(mInstallmentsEnabled) {
+                checkStartInstallmentsActivity();
+            } else {
+                finishWithResult();
+            }
 
         } else if (resultCode == RESULT_CANCELED){
             MPTracker.getInstance().trackEvent( "GUESSING_CARD", "CANCELED", "2", mPublicKey, "MLA", "1.0", this);

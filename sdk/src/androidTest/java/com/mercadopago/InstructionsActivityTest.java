@@ -310,7 +310,8 @@ public class InstructionsActivityTest {
 
     @Test
     public void ifMerchantPublicKeyNotSetStartErrorActivity() {
-        mFakeAPI.addResponseToQueue("", 401, "");
+        Instruction instructionWithoutActions = StaticMock.getInstructionWithoutActions();
+        mFakeAPI.addResponseToQueue(instructionWithoutActions, 200, "");
         Intent startWithoutPublicKey = new Intent(validStartIntent);
         startWithoutPublicKey.removeExtra("merchantPublicKey");
         mTestRule.launchActivity(startWithoutPublicKey);
@@ -319,7 +320,8 @@ public class InstructionsActivityTest {
 
     @Test
     public void ifPaymentMethodNotSetStartErrorActivity() {
-        mFakeAPI.addResponseToQueue("", 401, "");
+        Instruction instructionWithoutActions = StaticMock.getInstructionWithoutActions();
+        mFakeAPI.addResponseToQueue(instructionWithoutActions, 200, "");
         Intent startWithoutPaymentMethod = new Intent(validStartIntent);
         startWithoutPaymentMethod.removeExtra("paymentMethod");
         mTestRule.launchActivity(startWithoutPaymentMethod);
@@ -328,10 +330,24 @@ public class InstructionsActivityTest {
 
     @Test
     public void ifPaymentNotSetStartErrorActivity() {
-        mFakeAPI.addResponseToQueue("", 401, "");
+        Instruction instructionWithoutActions = StaticMock.getInstructionWithoutActions();
+        mFakeAPI.addResponseToQueue(instructionWithoutActions, 200, "");
         Intent startWithoutPayment = new Intent(validStartIntent);
         startWithoutPayment.removeExtra("payment");
         mTestRule.launchActivity(startWithoutPayment);
+        intended(hasComponent(ErrorActivity.class.getName()));
+    }
+
+    @Test
+    public void ifCardPaymentMethodSetStartErrorActivity() {
+        Instruction instructionWithoutActions = StaticMock.getInstructionWithoutActions();
+        mFakeAPI.addResponseToQueue(instructionWithoutActions, 200, "");
+        mPaymentMethod.setPaymentTypeId("credit_card");
+
+        Intent startWithCardPaymentMethod = new Intent(validStartIntent);
+        startWithCardPaymentMethod.putExtra("paymentMethod", JsonUtil.getInstance().toJson(mPaymentMethod));
+
+        mTestRule.launchActivity(startWithCardPaymentMethod);
         intended(hasComponent(ErrorActivity.class.getName()));
     }
 
