@@ -13,6 +13,7 @@ import com.mercadopago.model.Issuer;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.Setting;
 import com.mercadopago.model.Token;
+import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.views.MPTextView;
 
@@ -198,6 +199,9 @@ public abstract class ShowCardActivity extends FrontCardActivity {
             return CARD_SIDE_BACK;
         } else {
             Setting setting = Setting.getSettingByBin(mCurrentPaymentMethod.getSettings(), mBin);
+            if (setting == null)  {
+                ErrorUtil.startErrorActivity(getActivity(), getString(R.string.mpsdk_standard_error_message), "setting is null at ShowCardActivity, can't guess payment method", false);
+            }
             return setting.getSecurityCode().getCardLocation();
         }
     }

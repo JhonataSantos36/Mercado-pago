@@ -31,6 +31,7 @@ public class StaticMock {
 
     // * Merchant public key
     public static final String DUMMY_MERCHANT_PUBLIC_KEY = "444a9ef5-8a6b-429f-abdf-587639155d88";
+    public static final String DUMMY_TEST_PUBLIC_KEY = "TEST-ad365c37-8012-4014-84f5-6c895b3f8e0a";
     public static final String DUMMY_MX_MERCHANT_PUBLIC_KEY = "6c0d81bc-99c1-4de8-9976-c8d1d62cd4f2";
 
     // DUMMY_MERCHANT_PUBLIC_KEY_AR = "444a9ef5-8a6b-429f-abdf-587639155d88";
@@ -63,6 +64,10 @@ public class StaticMock {
     public final static String DUMMY_IDENTIFICATION_TYPE = "DNI";
     public final static String DUMMY_SECURITY_CODE = "123";
     public final static String DUMMY_EXPIRATION_DATE = "1225";
+    public final static String DUMMY_CI_NUMBER = "123456789";
+    public final static String DUMMY_LC_NUMBER = "1234567";
+    public final static String DUMMY_LE_NUMBER = "1234567";
+    public final static String DUMMY_OTHER_NUMBER = "1234567890";
 
     // * Identification type
     public final static String DUMMI_IDENTIFICATION_TYPE_ID = "DNI";
@@ -214,6 +219,15 @@ public class StaticMock {
         }
     }
 
+    public static Token getTokenMasterIssuers() {
+
+        try {
+            return JsonUtil.getInstance().fromJson(getFile(InstrumentationRegistry.getContext(), "mocks/token_master_issuers.json"), Token.class);
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
     public static List<Card> getCards() {
 
         try {
@@ -342,6 +356,15 @@ public class StaticMock {
     public static PaymentMethod getPaymentMethodWithIdentificationNotRequired() {
         try {
             return JsonUtil.getInstance().fromJson(getFile(InstrumentationRegistry.getContext(), "mocks/payment_method_identification_not_required.json"), PaymentMethod.class);
+        } catch (Exception ex) {
+
+            return null;
+        }
+    }
+
+    public static PaymentMethod getPaymentMethodWithIdentificationAndCVVNotRequired() {
+        try {
+            return JsonUtil.getInstance().fromJson(getFile(InstrumentationRegistry.getContext(), "mocks/payment_method_id_number_sec_code_not_required.json"), PaymentMethod.class);
         } catch (Exception ex) {
 
             return null;

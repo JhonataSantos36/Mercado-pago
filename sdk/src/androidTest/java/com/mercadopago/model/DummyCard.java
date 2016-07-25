@@ -8,11 +8,13 @@ public class DummyCard {
     private String paymentMethod;
     private String cardNumber;
     private String securityCode;
+    private String numberWithMask;
 
-    public DummyCard(String paymentMethod, String cardNumber, String securityCode) {
+    public DummyCard(String paymentMethod, String cardNumber, String securityCode, String numberWithMask) {
         this.paymentMethod = paymentMethod;
         this.cardNumber = cardNumber;
         this.securityCode = securityCode;
+        this.numberWithMask = numberWithMask;
     }
 
     public String getPaymentMethod() {
@@ -27,6 +29,10 @@ public class DummyCard {
         return securityCode;
     }
 
+    public String getNumberWithMask() {
+        return numberWithMask;
+    }
+
     public void setPaymentMethod(String paymentMethod) {
         this.paymentMethod = paymentMethod;
     }
@@ -37,5 +43,9 @@ public class DummyCard {
 
     public void setSecurityCode(String securityCode) {
         this.securityCode = securityCode;
+    }
+
+    public void setNumberWithMask(String numberWithMask) {
+        this.numberWithMask = numberWithMask;
     }
 }

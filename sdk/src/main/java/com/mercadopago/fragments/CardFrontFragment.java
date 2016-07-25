@@ -300,10 +300,6 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
         if (location != null && location.equals(CardInterface.CARD_SIDE_FRONT)) {
             setFontColor(font, mCardSecurityCodeTextView, mCardSecurityEditText);
         }
-//        if (mActivity.getSecurityCodeLocation() != null &&
-//                mActivity.getSecurityCodeLocation().equals(CardInterface.CARD_SIDE_FRONT)) {
-//            setFontColor(font, mCardSecurityCodeTextView, mCardSecurityEditText);
-//        }
     }
 
     private void setFontColor(int font, MPTextView textView, MPEditText editText) {
