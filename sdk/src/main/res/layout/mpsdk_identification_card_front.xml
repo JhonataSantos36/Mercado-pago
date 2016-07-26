@@ -78,8 +78,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
-                    android:paddingEnd="10dp"
-                    android:paddingRight="10dp"
+                    android:paddingEnd="2dp"
+                    android:paddingRight="2dp"
                     android:layout_marginTop="10dp">
 
                     <com.mercadopago.views.MPTextView

@@ -160,7 +160,7 @@ public abstract class FrontCardActivity extends MercadoPagoActivity implements C
             return s.toString();
         }
         try {
-            Integer value = Integer.valueOf(s.toString());
+            Long value = Long.valueOf(s.toString());
             Locale.setDefault(Locale.GERMAN);
             return String.format("%,d", value);
         } catch (NumberFormatException e) {
