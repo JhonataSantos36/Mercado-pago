@@ -20,6 +20,7 @@ import com.mercadopago.model.Installment;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.PaymentMethod;
+import com.mercadopago.model.PaymentPreference;
 import com.mercadopago.model.Site;
 import com.mercadopago.model.Token;
 import com.mercadopago.test.ActivityResult;
@@ -50,6 +51,7 @@ import static android.support.test.espresso.intent.matcher.IntentMatchers.hasCom
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static com.mercadopago.utils.ActivityResultUtil.getActivityResult;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertEquals;
@@ -309,6 +311,20 @@ public class InstallmentsActivityTest {
     }
 
     @Test
+    public void showErrorOnMultipleInstallmentsAsyncResponse() {
+        List<Installment> installmentList = new ArrayList<Installment>();
+        installmentList.add(new Installment());
+        installmentList.add(new Installment());
+
+        mFakeAPI.addResponseToQueue(installmentList, 200, "");
+
+        Issuer issuer = StaticMock.getIssuer();
+        validStartIntent.putExtra("issuer", JsonUtil.getInstance().toJson(issuer));
+        mTestRule.launchActivity(validStartIntent);
+        intended(hasComponent(ErrorActivity.class.getName()));
+    }
+
+    @Test
     public void initializePayerCostsWhenListSent() {
         String payerCosts = StaticMock.getPayerCostsJson();
         Type listType = new TypeToken<List<PayerCost>>(){}.getType();
@@ -337,7 +353,7 @@ public class InstallmentsActivityTest {
 
         onView(withId(R.id.mpsdkActivityInstallmentsView)).perform(actionOnItemAtPosition(0, click()));
 
-        ActivityResult result = ActivityResultUtil.getActivityResult(mTestRule.getActivity());
+        ActivityResult result = getActivityResult(mTestRule.getActivity());
         PayerCost selectedPayerCost = JsonUtil.getInstance().fromJson(result.getExtras().getString("payerCost"), PayerCost.class);
         assertEquals(mockedPayerCostFirst.getRecommendedMessage(), selectedPayerCost.getRecommendedMessage());
 
@@ -352,6 +368,28 @@ public class InstallmentsActivityTest {
         mFakeAPI.addResponseToQueue("", 401, "");
         mTestRule.launchActivity(validStartIntent);
         intended(hasComponent(ErrorActivity.class.getName()));
+    }
+
+    @Test
+    public void ifAfterApiFailureUserRetriesAndSucceedsShowPayerCosts() {
+        Issuer issuer = StaticMock.getIssuer();
+        validStartIntent.putExtra("issuer", JsonUtil.getInstance().toJson(issuer));
+
+        mFakeAPI.addResponseToQueue("", 401, "");
+        String installmentsJson = StaticMock.getInstallmentsJson();
+        mFakeAPI.addResponseToQueue(installmentsJson, 200, "");
+
+        mTestRule.launchActivity(validStartIntent);
+
+        onView(withId(R.id.mpsdkErrorRetry)).perform(click());
+
+        //Prepare assertion data
+        Type listType = new TypeToken<List<Installment>>(){}.getType();
+        List<Installment> installmentsList = JsonUtil.getInstance().getGson().fromJson(installmentsJson, listType);
+
+
+        RecyclerView referencesLayout = (RecyclerView) mTestRule.getActivity().findViewById(R.id.mpsdkActivityInstallmentsView);
+        assertEquals(referencesLayout.getChildCount(), installmentsList.get(0).getPayerCosts().size());
     }
 
     @Test
@@ -393,4 +431,96 @@ public class InstallmentsActivityTest {
         assertEquals(color, (int)decorationPreference.getBaseColor());
     }
 
+    @Test
+    public void whenDefaultPayerCostFoundSetItAsResult() {
+        //Add API response
+        String installmentsJson = StaticMock.getInstallmentsJson();
+        mFakeAPI.addResponseToQueue(installmentsJson, 200, "");
+
+        //Set default installment
+        PaymentPreference paymentPreference = new PaymentPreference();
+        paymentPreference.setDefaultInstallments(3);
+
+        //Prepare start intent
+        Issuer issuer = StaticMock.getIssuer();
+        validStartIntent.putExtra("issuer", JsonUtil.getInstance().toJson(issuer));
+        validStartIntent.putExtra("paymentPreference", JsonUtil.getInstance().toJson(paymentPreference));
+
+        mTestRule.launchActivity(validStartIntent);
+
+        //Prepare assertion data
+        Type listType = new TypeToken<List<Installment>>(){}.getType();
+        List<Installment> installmentsList = JsonUtil.getInstance().getGson().fromJson(installmentsJson, listType);
+
+        ActivityResult activityResult = getActivityResult(mTestRule.getActivity());
+        String payerCostJson = JsonUtil.getInstance().toJson(installmentsList.get(0).getPayerCosts().get(1));
+
+        //Assertions
+        assertTrue(activityResult.getResultCode() == Activity.RESULT_OK);
+        assertEquals(payerCostJson, activityResult.getExtras().getString("payerCost"));
+    }
+
+    @Test
+    public void whenEmptyInstallmentsReceivedStartErrorActivity() {
+        //Add API response
+        List<Installment> installments = new ArrayList<>();
+        mFakeAPI.addResponseToQueue(installments, 200, "");
+
+        //Prepare start intent
+        Issuer issuer = StaticMock.getIssuer();
+        validStartIntent.putExtra("issuer", JsonUtil.getInstance().toJson(issuer));
+
+        mTestRule.launchActivity(validStartIntent);
+
+        intended(hasComponent(ErrorActivity.class.getName()));
+    }
+
+    @Test
+    public void whenEmptyPayerCostsReceivedStartErrorActivity() {
+        //Add API response
+        List<Installment> installments = new ArrayList<>();
+        installments.add(new Installment());
+        List<PayerCost> payerCosts = new ArrayList<>();
+        installments.get(0).setPayerCosts(payerCosts);
+        mFakeAPI.addResponseToQueue(installments, 200, "");
+
+        //Prepare start intent
+        Issuer issuer = StaticMock.getIssuer();
+        validStartIntent.putExtra("issuer", JsonUtil.getInstance().toJson(issuer));
+
+        mTestRule.launchActivity(validStartIntent);
+
+        intended(hasComponent(ErrorActivity.class.getName()));
+    }
+
+    @Test
+    public void whenOnlyOnePayerCostAvailableFinishWithItAsResult() {
+        //Prepare API response
+        List<Installment> installments = new ArrayList<>();
+        installments.add(new Installment());
+
+        final PayerCost payerCost = StaticMock.getPayerCostWithInterests();
+        List<PayerCost> payerCosts = new ArrayList<>();
+        payerCosts.add(payerCost);
+
+        installments.get(0).setPayerCosts(payerCosts);
+
+        //Add API response
+        mFakeAPI.addResponseToQueue(installments, 200, "");
+
+        //Prepare start intent
+        Issuer issuer = StaticMock.getIssuer();
+        validStartIntent.putExtra("issuer", JsonUtil.getInstance().toJson(issuer));
+
+        mTestRule.launchActivity(validStartIntent);
+
+        //Prepare assertion data
+
+        ActivityResult activityResult = getActivityResult(mTestRule.getActivity());
+        String payerCostJson = JsonUtil.getInstance().toJson(installments.get(0).getPayerCosts().get(0));
+
+        //Assertions
+        assertTrue(activityResult.getResultCode() == Activity.RESULT_OK);
+        assertEquals(payerCostJson, activityResult.getExtras().getString("payerCost"));
+    }
 }

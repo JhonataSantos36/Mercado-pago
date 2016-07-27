@@ -56,7 +56,7 @@ public class InstallmentsActivity extends ShowCardActivity {
         mProgressBar = (ProgressBar) findViewById(R.id.mpsdkProgressBar);
         mCardBackground = findViewById(R.id.mpsdkCardBackground);
 
-        if(mDecorationPreference != null && mDecorationPreference.hasColors())
+        if(isCustomColorSet())
         {
             mCardBackground.setBackgroundColor(mDecorationPreference.getLighterColor());
         }
@@ -169,7 +169,7 @@ public class InstallmentsActivity extends ShowCardActivity {
                             ErrorUtil.startErrorActivity(getActivity(), getString(R.string.mpsdk_standard_error_message), "no installments found for an issuer at InstallmentsActivity", false);
                         } else if (installments.size() == 1) {
                             resolvePayerCosts(installments.get(0).getPayerCosts());
-                        } else if (installments.size() > 1) {
+                        } else {
                             ErrorUtil.startErrorActivity(getActivity(), getString(R.string.mpsdk_standard_error_message), "multiple installments found for an issuer at InstallmentsActivity", false);
                         }
                     }
@@ -204,7 +204,7 @@ public class InstallmentsActivity extends ShowCardActivity {
         } else if (mPayerCosts.size() == 1) {
             mSelectedPayerCost = payerCosts.get(0);
             finishWithResult();
-        } else if (payerCosts.size() > 1) {
+        } else {
             initializeInstallments();
         }
     }
