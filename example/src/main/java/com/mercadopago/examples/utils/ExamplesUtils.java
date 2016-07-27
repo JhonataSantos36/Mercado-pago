@@ -146,7 +146,7 @@ public class ExamplesUtils {
                 @Override
                 public void success(Payment payment) {
 
-                    if(MercadoPagoUtil.isCardPaymentType(payment.getPaymentTypeId())) {
+                    if(MercadoPagoUtil.isCard(payment.getPaymentTypeId())) {
                         new MercadoPago.StartActivityBuilder()
                                 .setActivity(activity)
                                 .setPayment(payment)

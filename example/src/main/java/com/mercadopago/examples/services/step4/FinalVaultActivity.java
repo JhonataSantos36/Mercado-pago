@@ -42,7 +42,7 @@ public class FinalVaultActivity extends AdvancedVaultActivity {
             mTempIssuer = null;
             mTempPaymentMethod = JsonUtil.getInstance().fromJson(data.getStringExtra("paymentMethod"), PaymentMethod.class);
 
-            if (MercadoPagoUtil.isCardPaymentType(mTempPaymentMethod.getPaymentTypeId())) {  // Card-like methods
+            if (MercadoPagoUtil.isCard(mTempPaymentMethod.getPaymentTypeId())) {  // Card-like methods
 
                 if (mTempPaymentMethod.isIssuerRequired()) {
 

@@ -25,6 +25,7 @@ import com.mercadopago.util.CurrenciesUtil;
 import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;
+import com.mercadopago.util.MercadoPagoUtil;
 import com.mercadopago.util.ScaleUtil;
 import com.mercadopago.views.MPButton;
 import com.mercadopago.views.MPTextView;
@@ -69,6 +70,9 @@ public class InstructionsActivity extends MercadoPagoActivity {
         }
         if(mPaymentMethod == null) {
             throw new IllegalStateException("payment method not set");
+        }
+        if(MercadoPagoUtil.isCard(mPaymentMethod.getPaymentTypeId())) {
+            throw new IllegalStateException("payment method cannot be card");
         }
     }
 

@@ -435,7 +435,7 @@ public class CheckoutActivity extends MercadoPagoActivity {
     }
 
     private void setPaymentMethodRowController() {
-        if(MercadoPagoUtil.isCardPaymentType(mSelectedPaymentMethod.getPaymentTypeId())) {
+        if(MercadoPagoUtil.isCard(mSelectedPaymentMethod.getPaymentTypeId())) {
             mPaymentMethodRow = ViewControllerFactory.getPaymentMethodOnEditionViewController(this, mSelectedPaymentMethod, mCreatedToken);
         }
         else {
@@ -606,7 +606,7 @@ public class CheckoutActivity extends MercadoPagoActivity {
             paymentIntent.setIssuerId(mSelectedIssuer.getId());
         }
 
-        if(!existsTransactionId() || !MercadoPagoUtil.isCardPaymentType(mSelectedPaymentMethod.getPaymentTypeId())) {
+        if(!existsTransactionId() || !MercadoPagoUtil.isCard(mSelectedPaymentMethod.getPaymentTypeId())) {
             mTransactionId = createNewTransactionId();
         }
 

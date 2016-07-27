@@ -84,7 +84,7 @@ public class MercadoPagoUtil {
         return result;
     }
 
-    public static boolean isCardPaymentType(String paymentTypeId) {
+    public static boolean isCard(String paymentTypeId) {
 
         if ((paymentTypeId != null) && (paymentTypeId.equals("credit_card") || paymentTypeId.equals("debit_card") || paymentTypeId.equals("prepaid_card"))) {
             return true;

@@ -87,10 +87,10 @@ public class ComponentsExampleActivity extends AppCompatActivity {
     }
 
     public void onCardWithInstallmentsClicked(View view) {
-       startCardVaultActivity();
+       startCardVaultWithInstallments();
     }
 
-    private void startCardVaultActivity() {
+    private void startCardVaultWithInstallments() {
         PaymentPreference paymentPreference = getCurrentPaymentPreference();
         DecorationPreference decorationPreference = getCurrentDecorationPreference();
 
@@ -99,6 +99,7 @@ public class ComponentsExampleActivity extends AppCompatActivity {
                 .setPublicKey(mPublicKey)
                 .setAmount(mAmount)
                 .setSite(Sites.ARGENTINA)
+                .setInstallmentsEnabled(true)
                 .setPaymentPreference(paymentPreference) //Optional
                 .setDecorationPreference(decorationPreference) //Optional
                 .startCardVaultActivity();
@@ -113,7 +114,7 @@ public class ComponentsExampleActivity extends AppCompatActivity {
                 .setPublicKey(mPublicKey)
                 .setPaymentPreference(paymentPreference) //Optional
                 .setDecorationPreference(decorationPreference) //Optional
-                .startGuessingCardActivity();
+                .startCardVaultActivity();
     }
 
     public void onPaymentMethodsSelectionClicked(View view) {
@@ -305,7 +306,7 @@ public class ComponentsExampleActivity extends AppCompatActivity {
 
     public void onPayButtonClicked(View view) {
         mCreatePaymentExampleSelected = true;
-        startCardVaultActivity();
+        startCardVaultWithInstallments();
     }
 
     private void createPayment(Token token, PayerCost payerCost, Issuer issuer, final PaymentMethod paymentMethod, Discount discount) {
