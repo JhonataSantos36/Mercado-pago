@@ -122,7 +122,11 @@ public class InstructionsActivity extends MercadoPagoActivity {
             @Override
             public void success(List<Instruction> instructions) {
                 MPTracker.getInstance().trackEvent("INSTRUCTIONS", "GET_INSTRUCTION_RESPONSE", "SUCCESS", "2", mMerchantPublicKey, "MLA", "1.0", getActivity());
-                resolveInstructionsFound(instructions);
+                if(!instructions.isEmpty()) {
+                    resolveInstructionsFound(instructions);
+                } else {
+                    ErrorUtil.startErrorActivity(getActivity(), getActivity().getString(R.string.mpsdk_standard_error_message), "instruction not found for type " + mPaymentMethod.getPaymentTypeId(), false);
+                }
             }
 
             @Override
@@ -141,13 +145,23 @@ public class InstructionsActivity extends MercadoPagoActivity {
     }
 
     private void resolveInstructionsFound(List<Instruction> instructions) {
-        Instruction instruction = getInstructionForType(instructions, mPaymentMethod.getPaymentTypeId());
+        Instruction instruction = getInstruction(instructions);
         if(instruction != null) {
             showInstructions(instruction);
         } else {
             ErrorUtil.startErrorActivity(this, this.getString(R.string.mpsdk_standard_error_message), "instruction not found for type " + mPaymentMethod.getPaymentTypeId(), false);
         }
         LayoutUtil.showRegularLayout(this);
+    }
+
+    private Instruction getInstruction(List<Instruction> instructions) {
+        Instruction instruction;
+        if(instructions.size() == 1) {
+            instruction = instructions.get(0);
+        } else {
+            instruction = getInstructionForType(instructions, mPaymentMethod.getPaymentTypeId());
+        }
+        return instruction;
     }
 
     private Instruction getInstructionForType(List<Instruction> instructions, String paymentTypeId) {
@@ -179,16 +193,18 @@ public class InstructionsActivity extends MercadoPagoActivity {
     protected void setActions(Instruction instruction) {
         if(instruction.getActions() != null && !instruction.getActions().isEmpty()) {
             final InstructionActionInfo actionInfo = instruction.getActions().get(0);
-            if(actionInfo.getUrl() != null && !actionInfo.getUrl().isEmpty()) {
-                mActionButton.setVisibility(View.VISIBLE);
-                mActionButton.setText(actionInfo.getLabel());
-                mActionButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(actionInfo.getUrl()));
-                        startActivity(browserIntent);
-                    }
-                });
+            if(actionInfo.getTag().equals(InstructionActionInfo.Tags.LINK)) {
+                if(actionInfo.getUrl() != null && !actionInfo.getUrl().isEmpty()) {
+                    mActionButton.setVisibility(View.VISIBLE);
+                    mActionButton.setText(actionInfo.getLabel());
+                    mActionButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(actionInfo.getUrl()));
+                            startActivity(browserIntent);
+                        }
+                    });
+                }
             }
         }
     }
@@ -230,20 +246,19 @@ public class InstructionsActivity extends MercadoPagoActivity {
     private void setInformationMessages(Instruction instruction) {
         if(instruction.getInfo() != null && !instruction.getInfo().isEmpty()) {
             mPrimaryInfo.setText(Html.fromHtml(getInfoHtmlText(instruction.getInfo())));
-        }
-        else {
+        } else {
             mPrimaryInfo.setVisibility(View.GONE);
         }
+
         if(instruction.getSecondaryInfo() != null && !instruction.getSecondaryInfo().isEmpty()) {
             mSecondaryInfo.setText(Html.fromHtml(getInfoHtmlText(instruction.getSecondaryInfo())));
-        }
-        else {
+        } else {
             mSecondaryInfo.setVisibility(View.GONE);
         }
+
         if(instruction.getTertiaryInfo() != null && !instruction.getTertiaryInfo().isEmpty()) {
             mTertiaryInfo.setText(Html.fromHtml(getInfoHtmlText(instruction.getTertiaryInfo())));
-        }
-        else {
+        } else {
             mTertiaryInfo.setVisibility(View.GONE);
         }
     }
@@ -264,8 +279,7 @@ public class InstructionsActivity extends MercadoPagoActivity {
         if(requestCode == ErrorUtil.ERROR_REQUEST_CODE) {
             if(resultCode == RESULT_OK) {
                 recoverFromFailure();
-            }
-            else {
+            } else {
                 setResult(RESULT_CANCELED, data);
                 finish();
             }
@@ -278,12 +292,11 @@ public class InstructionsActivity extends MercadoPagoActivity {
 
     @Override
     public void onBackPressed() {
-        MPTracker.getInstance().trackEvent("INSTRUCTION", "BACK_PRESSED", 2, mMerchantPublicKey, BuildConfig.VERSION_NAME, this);
 
         if(mBackPressedOnce) {
             super.onBackPressed();
-        }
-        else {
+        } else {
+            MPTracker.getInstance().trackEvent("INSTRUCTION", "BACK_PRESSED", "2", mMerchantPublicKey, "MLA", "1.0", this);
             Snackbar.make(mTertiaryInfo, getString(R.string.mpsdk_press_again_to_leave), Snackbar.LENGTH_LONG).show();
             mBackPressedOnce = true;
             resetBackPressedOnceIn(4000);

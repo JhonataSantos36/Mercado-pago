@@ -21,24 +21,13 @@
       }
     ],
     "info": [
-        "Info",
-        "Info second phrase"
     ],
     "secondary_info": [
-      "Secondary info",
-      "Secondary second phrase"
     ],
     "tertiary_info": [
       "Tertiary info",
       "Tertiary second phrase"
     ],
-    "accreditation_message":"accreditation time",
-    "actions": [
-      {
-        "label":"Action",
-        "url":null,
-        "tag":"tag"
-      }
-    ]
+    "accreditation_message":"accreditation time"
   }
 ]

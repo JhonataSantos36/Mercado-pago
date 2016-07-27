@@ -4,25 +4,25 @@
     "references":
     [
       {
-          "label":"Reference1",
-          "field_value": [
-            "123",
-            "456"
-          ],
-          "separator":"-"
+        "label":"Reference1",
+        "field_value": [
+          "123",
+          "456"
+        ],
+        "separator":"-"
       },
       {
-          "label":"Reference2",
-          "field_value": [
-            "654",
-            "321"
-          ],
-          "separator":" "
+        "label":"Reference2",
+        "field_value": [
+          "654",
+          "321"
+        ],
+        "separator":" "
       }
     ],
     "info": [
-        "Info",
-        "Info second phrase"
+      "Info",
+      "Info second phrase"
     ],
     "secondary_info": [
       "Secondary info",
@@ -36,8 +36,8 @@
     "actions": [
       {
         "label":"Action",
-        "url":null,
-        "tag":"tag"
+        "url":"http://www.mercadopago.com",
+        "tag":"invalid_tag"
       }
     ]
   }

@@ -1,22 +1,22 @@
-{
+[{
   "title":"Pay $100.00 in your closest store",
   "references":
   [
     {
-        "label":"InvalidReference1",
-        "field_value": null,
-        "separator":"-"
+      "label":"InvalidReference1",
+      "field_value": null,
+      "separator":"-"
     },
     {
-        "label":"InvalidReference2",
-        "field_value": [
-        ],
-        "separator":" "
+      "label":"InvalidReference2",
+      "field_value": [
+      ],
+      "separator":" "
     }
   ],
   "info": [
-      "Info",
-      "Info second phrase"
+    "Info",
+    "Info second phrase"
   ],
   "secondary_info": [
     "Secondary info",
@@ -27,4 +27,4 @@
     "Tertiary second phrase"
   ],
   "accreditation_message":"accreditation time"
-}
+}]

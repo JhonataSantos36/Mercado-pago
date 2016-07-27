@@ -32,13 +32,6 @@
       "Tertiary info",
       "Tertiary second phrase"
     ],
-    "accreditation_message":"accreditation time",
-    "actions": [
-      {
-        "label":"Action",
-        "url":null,
-        "tag":"tag"
-      }
-    ]
+    "accreditation_message":"accreditation time"
   }
 ]

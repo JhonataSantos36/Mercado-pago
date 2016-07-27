@@ -36,8 +36,8 @@
     "actions": [
       {
         "label":"Action",
-        "url":null,
-        "tag":"tag"
+        "url":"http://www.mercadopago.com",
+        "tag":"link"
       }
     ]
   }

@@ -1,0 +1,26 @@
+[{
+  "title":"Pay $100.00 in your closest store",
+  "references":
+  [
+    {
+      "label":"Reference1",
+      "field_value": [
+        "123",
+        "456"
+      ],
+      "separator":"-"
+    },
+    {
+      "label":"Reference2",
+      "field_value": [
+        "654",
+        "321"
+      ],
+      "separator":" "
+    }
+  ],
+  "info": null,
+  "secondary_info": null,
+  "tertiary_info": null,
+  "accreditation_message":"accreditation time"
+}]

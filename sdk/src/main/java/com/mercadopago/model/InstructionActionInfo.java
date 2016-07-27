@@ -19,4 +19,8 @@ public class InstructionActionInfo {
     public String getTag() {
         return tag;
     }
+
+    public static class Tags {
+        public static final String LINK = "link";
+    }
 }
