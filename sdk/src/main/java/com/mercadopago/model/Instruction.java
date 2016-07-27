@@ -13,6 +13,7 @@ public class Instruction {
     private List<String> tertiaryInfo;
     private String accreditationMessage;
     private List<InstructionActionInfo> actions;
+    private String type;
 
     public List<InstructionReference> getReferences() {
         return references;
@@ -40,5 +41,9 @@ public class Instruction {
 
     public List<InstructionActionInfo> getActions() {
         return actions;
+    }
+
+    public String getType() {
+        return type;
     }
 }

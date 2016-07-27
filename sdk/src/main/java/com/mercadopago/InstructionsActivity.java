@@ -118,11 +118,11 @@ public class InstructionsActivity extends MercadoPagoActivity {
     protected void getInstructionsAsync() {
 
         LayoutUtil.showProgressLayout(this);
-        mMercadoPago.getInstructions(mPayment.getId(), mPaymentMethod.getPaymentTypeId(), new Callback<Instruction>() {
+        mMercadoPago.getInstructions(mPayment.getId(), new Callback<List<Instruction>>() {
             @Override
-            public void success(Instruction instruction) {
-                showInstructions(instruction);
-                LayoutUtil.showRegularLayout(getActivity());
+            public void success(List<Instruction> instructions) {
+                MPTracker.getInstance().trackEvent("INSTRUCTIONS", "GET_INSTRUCTION_RESPONSE", "SUCCESS", "2", mMerchantPublicKey, "MLA", "1.0", getActivity());
+                resolveInstructionsFound(instructions);
             }
 
             @Override
@@ -138,6 +138,27 @@ public class InstructionsActivity extends MercadoPagoActivity {
                 }
             }
         });
+    }
+
+    private void resolveInstructionsFound(List<Instruction> instructions) {
+        Instruction instruction = getInstructionForType(instructions, mPaymentMethod.getPaymentTypeId());
+        if(instruction != null) {
+            showInstructions(instruction);
+        } else {
+            ErrorUtil.startErrorActivity(this, this.getString(R.string.mpsdk_standard_error_message), "instruction not found for type " + mPaymentMethod.getPaymentTypeId(), false);
+        }
+        LayoutUtil.showRegularLayout(this);
+    }
+
+    private Instruction getInstructionForType(List<Instruction> instructions, String paymentTypeId) {
+        Instruction instructionForType = null;
+        for(Instruction instruction : instructions) {
+            if(instruction.getType().equals(paymentTypeId)) {
+                instructionForType = instruction;
+                break;
+            }
+        }
+        return instructionForType;
     }
 
     protected void showInstructions(Instruction instruction) {

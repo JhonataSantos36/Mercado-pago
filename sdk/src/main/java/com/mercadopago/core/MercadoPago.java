@@ -247,12 +247,12 @@ public class MercadoPago {
         }
     }
 
-    public void getInstructions(Long paymentId, String paymentTypeId, final Callback<Instruction> callback) {
+    public void getInstructions(Long paymentId, final Callback<List<Instruction>> callback) {
         if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {
             MPTracker.getInstance().trackEvent("NO_SCREEN","GET_INSTRUCTIONS", 1, mKey, BuildConfig.VERSION_NAME, mContext);
 
             PaymentService service = mRetrofit.create(PaymentService.class);
-            service.getInstruction(paymentId, this.mKey, paymentTypeId).enqueue(callback);
+            service.getInstructions(paymentId, this.mKey).enqueue(callback);
         } else {
             throw new RuntimeException("Unsupported key type for this method");
         }
