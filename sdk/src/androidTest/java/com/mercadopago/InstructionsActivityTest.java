@@ -1,7 +1,6 @@
 package com.mercadopago;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.support.test.espresso.NoActivityResumedException;
 import android.support.test.espresso.intent.Intents;
