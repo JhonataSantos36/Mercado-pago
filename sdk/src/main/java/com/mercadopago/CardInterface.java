@@ -73,4 +73,6 @@ public interface CardInterface {
 
     int getSecurityCodeLength();
 
+    void initializeCardByToken();
+
 }

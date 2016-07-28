@@ -38,6 +38,7 @@ import com.mercadopago.fragments.CardBackFragment;
 import com.mercadopago.fragments.CardFrontFragment;
 import com.mercadopago.fragments.CardIdentificationFragment;
 import com.mercadopago.model.ApiException;
+import com.mercadopago.model.CardNumber;
 import com.mercadopago.model.CardToken;
 import com.mercadopago.model.Cardholder;
 import com.mercadopago.model.Identification;
@@ -64,8 +65,8 @@ public class GuessingCardActivity extends FrontCardActivity {
 
 
     // Activity parameters
-    private String mPublicKey;
-    private List<PaymentMethod> mPaymentMethodList;
+    protected String mPublicKey;
+    protected List<PaymentMethod> mPaymentMethodList;
 
     // Input controls
     private MPTextView mToolbarButton;
@@ -226,7 +227,7 @@ public class GuessingCardActivity extends FrontCardActivity {
         if (mPaymentMethodList == null) {
             getPaymentMethodsAsync();
         } else {
-            startGuessingForm(mPaymentMethodList);
+            startGuessingForm();
         }
     }
 
@@ -385,7 +386,7 @@ public class GuessingCardActivity extends FrontCardActivity {
         mNextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                validateCurrentEditText(true);
+                validateCurrentEditText();
             }
         });
         mBackButton.setOnClickListener(new View.OnClickListener() {
@@ -421,7 +422,7 @@ public class GuessingCardActivity extends FrontCardActivity {
         }
     }
 
-    private boolean validateCurrentEditText(boolean onFinish) {
+    private boolean validateCurrentEditText() {
         switch (mCurrentEditingEditText) {
             case CARD_NUMBER_INPUT:
                 if (validateCardNumber(true)) {
@@ -455,10 +456,7 @@ public class GuessingCardActivity extends FrontCardActivity {
                         mCardIdentificationNumberEditText.requestFocus();
                         mCardIdNumberInput.setVisibility(View.VISIBLE);
                     } else {
-                        mCurrentEditingEditText = CARD_INPUT_FINISH;
-                        if (onFinish) {
-                            submitForm();
-                        }
+                        createToken();
                     }
                     return true;
                 }
@@ -470,28 +468,17 @@ public class GuessingCardActivity extends FrontCardActivity {
                         mCardIdentificationNumberEditText.requestFocus();
                         mCardIdNumberInput.setVisibility(View.VISIBLE);
                     } else {
-                        mCurrentEditingEditText = CARD_INPUT_FINISH;
-                        if (onFinish) {
-                            submitForm();
-                        }
+                        createToken();
                     }
                     return true;
                 }
                 return false;
             case CARD_IDENTIFICATION_INPUT:
                 if (validateIdentificationNumber(true)) {
-                    mCurrentEditingEditText = CARD_INPUT_FINISH;
-                    if (onFinish) {
-                        submitForm();
-                    }
+                    createToken();
                     return true;
                 }
                 return false;
-            case CARD_INPUT_FINISH:
-                if (onFinish) {
-                    submitForm();
-                }
-                return true;
         }
         return false;
     }
@@ -538,23 +525,8 @@ public class GuessingCardActivity extends FrontCardActivity {
                     return true;
                 }
                 return false;
-            case CARD_INPUT_FINISH:
-                if (mIdentificationNumberRequired) {
-                    mCardSecurityCodeEditText.requestFocus();
-                } else if (isSecurityCodeRequired()) {
-                    mCardExpiryDateEditText.requestFocus();
-                } else {
-                    mCardHolderNameEditText.requestFocus();
-                }
-                return true;
         }
         return false;
-    }
-
-    private void submitForm() {
-        if (canCreateCardToken()) {
-            createCardToken();
-        }
     }
 
     protected void getPaymentMethodsAsync() {
@@ -563,7 +535,8 @@ public class GuessingCardActivity extends FrontCardActivity {
             public void success(List<PaymentMethod> paymentMethods) {
                 MPTracker.getInstance().trackEvent("PAYMENT_METHODS", "GET_PAYMENT_METHODS_RESPONSE", "SUCCESS", "2", mPublicKey, "MLA", "1.0", getActivity());
                 if (isActivityActive()) {
-                    startGuessingForm(paymentMethods);
+                    mPaymentMethodList = paymentMethods;
+                    startGuessingForm();
                 }
             }
 
@@ -583,15 +556,16 @@ public class GuessingCardActivity extends FrontCardActivity {
         });
     }
 
-    protected void startGuessingForm(List<PaymentMethod> paymentMethods) {
-        initializeGuessingCardNumberController(paymentMethods);
+    protected void startGuessingForm() {
+        initializeGuessingCardNumberController();
         setCardNumberListener();
-        if (mToken != null) {
-            initializeCardByToken();
-        }
     }
 
-    protected void initializeCardByToken() {
+    @Override
+    public void initializeCardByToken() {
+        if (mToken == null) {
+            return;
+        }
         if (mToken.getFirstSixDigits() != null) {
             mCardNumberEditText.setText(mToken.getFirstSixDigits());
         }
@@ -612,9 +586,9 @@ public class GuessingCardActivity extends FrontCardActivity {
         mCardNumberEditText.requestFocus();
     }
 
-    protected void initializeGuessingCardNumberController(List<PaymentMethod> paymentMethods) {
+    protected void initializeGuessingCardNumberController() {
         List<PaymentMethod> supportedPaymentMethods = mPaymentPreference
-                .getSupportedPaymentMethods(paymentMethods);
+                .getSupportedPaymentMethods(mPaymentMethodList);
         mPaymentMethodGuessingController = new PaymentMethodGuessingController(
                 supportedPaymentMethods, mPaymentPreference.getDefaultPaymentTypeId(),
                 mPaymentPreference.getExcludedPaymentTypes());
@@ -682,6 +656,11 @@ public class GuessingCardActivity extends FrontCardActivity {
                         if (mCurrentPaymentMethod == null) return;
                         mCurrentPaymentMethod = null;
                         setSecurityCodeLocation(null);
+                        setSecurityCodeRequired(true);
+                        mSecurityCode = "";
+                        mCardSecurityCodeEditText.getText().clear();
+                        mCardToken = new CardToken("", null, null, "", "", "", "");
+                        mIdentificationNumberRequired = true;
                         fadeOutColor();
                         clearCardImage();
                         clearSecurityCodeFront();
@@ -826,7 +805,16 @@ public class GuessingCardActivity extends FrontCardActivity {
         String bin = mPaymentMethodGuessingController.getSavedBin();
         List<Setting> settings = mCurrentPaymentMethod.getSettings();
         Setting setting = Setting.getSettingByBin(settings, bin);
-        setCardNumberLength(setting.getCardNumber().getLength());
+        if (setting == null) {
+            ApiUtil.showApiExceptionError(getActivity(), null);
+            return;
+        }
+        CardNumber cardNumber = setting.getCardNumber();
+        Integer length = CardInterface.CARD_NUMBER_MAX_LENGTH;
+        if (cardNumber != null && cardNumber.getLength() != null) {
+            length = cardNumber.getLength();
+        }
+        setCardNumberLength(length);
 
         if (mCurrentPaymentMethod.isSecurityCodeRequired(bin)) {
             SecurityCode securityCode = setting.getSecurityCode();
@@ -834,7 +822,7 @@ public class GuessingCardActivity extends FrontCardActivity {
             setSecurityCodeViewRestrictions(securityCode);
             showSecurityCodeView();
         } else {
-            mSecurityCode = null;
+            mSecurityCode = "";
             setSecurityCodeRestrictions(false, null);
             hideSecurityCodeView();
         }
@@ -849,7 +837,10 @@ public class GuessingCardActivity extends FrontCardActivity {
                 @Override
                 public void success(List<IdentificationType> identificationTypes) {
                     if (isActivityActive()) {
-                        if (!identificationTypes.isEmpty()) {
+                        if (identificationTypes.isEmpty()) {
+                            ErrorUtil.startErrorActivity(getActivity(), getString(R.string.mpsdk_standard_error_message), "identification types call is empty at GuessingCardActivity", false);
+
+                        } else {
                             mSelectedIdentificationType = identificationTypes.get(0);
                             mIdentificationTypeSpinner.setAdapter(new IdentificationTypesAdapter(getActivity(), identificationTypes));
                             mIdentificationTypeContainer.setVisibility(View.VISIBLE);
@@ -930,18 +921,10 @@ public class GuessingCardActivity extends FrontCardActivity {
     }
 
     private void setCardSecurityCodeErrorView(String message, boolean requestFocus) {
-        setErrorView(message);
-        if (mSecurityCodeLocation != null) {
-            if (mSecurityCodeLocation.equals(CardInterface.CARD_SIDE_BACK)) {
-                if (showingBack() && mBackFragment != null) {
-                    checkFlipCardToBack(true);
-                }
-            } else if (mSecurityCodeLocation.equals(CardInterface.CARD_SIDE_FRONT)) {
-                if (showingFront() && mFrontFragment != null) {
-                    checkFlipCardToFront(true);
-                }
-            }
+        if (!isSecurityCodeRequired()) {
+            return;
         }
+        setErrorView(message);
         if (requestFocus) {
             mCardSecurityCodeEditText.toggleLineColorOnError(true);
             mCardSecurityCodeEditText.requestFocus();
@@ -962,8 +945,9 @@ public class GuessingCardActivity extends FrontCardActivity {
     public String getSecurityCodeLocation() {
         if (mSecurityCodeLocation == null) {
             return CardInterface.CARD_SIDE_BACK;
+        } else {
+            return mSecurityCodeLocation;
         }
-        return mSecurityCodeLocation;
     }
 
     private void setCardIdentificationErrorView(String message, boolean requestFocus) {
@@ -1004,7 +988,7 @@ public class GuessingCardActivity extends FrontCardActivity {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_NEXT) {
-                    validateCurrentEditText(true);
+                    validateCurrentEditText();
                     return true;
                 }
                 return false;
@@ -1052,7 +1036,7 @@ public class GuessingCardActivity extends FrontCardActivity {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_NEXT) {
-                    validateCurrentEditText(true);
+                    validateCurrentEditText();
                     return true;
                 }
                 return false;
@@ -1089,7 +1073,7 @@ public class GuessingCardActivity extends FrontCardActivity {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_NEXT) {
-                    validateCurrentEditText(true);
+                    validateCurrentEditText();
                     return true;
                 }
                 return false;
@@ -1126,7 +1110,7 @@ public class GuessingCardActivity extends FrontCardActivity {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_NEXT) {
-                    validateCurrentEditText(true);
+                    validateCurrentEditText();
                     return true;
                 }
                 return false;
@@ -1164,9 +1148,7 @@ public class GuessingCardActivity extends FrontCardActivity {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    if (canCreateCardToken()) {
-                        createCardToken();
-                    }
+                    createToken();
                     return true;
                 }
                 return false;
@@ -1215,7 +1197,7 @@ public class GuessingCardActivity extends FrontCardActivity {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_NEXT) {
-                    validateCurrentEditText(true);
+                    validateCurrentEditText();
                     return true;
                 }
                 return false;
@@ -1353,34 +1335,6 @@ public class GuessingCardActivity extends FrontCardActivity {
         });
     }
 
-    public boolean canCreateCardToken() {
-        boolean result = true;
-        boolean requestFocus = true;
-        if (!validateCardNumber(requestFocus)) {
-            result = false;
-            requestFocus = false;
-        }
-        if (!validateCardName(requestFocus)) {
-            result = false;
-            requestFocus = false;
-        }
-        if (!validateExpiryDate(requestFocus)) {
-            result = false;
-            requestFocus = false;
-        }
-        if (isSecurityCodeRequired() &&
-                !validateSecurityCode(requestFocus)) {
-            result = false;
-            requestFocus = false;
-        }
-        if (mIdentificationNumberRequired) {
-            if (!validateIdentificationNumber(requestFocus)) {
-                result = false;
-            }
-        }
-        return result;
-    }
-
     @Override
     public boolean isSecurityCodeRequired() {
         return mIsSecurityCodeRequired;
@@ -1407,27 +1361,6 @@ public class GuessingCardActivity extends FrontCardActivity {
         }
         setSecurityCodeLocation(securityCode.getCardLocation());
         setSecurityCodeLength(securityCode.getLength());
-    }
-
-    private void createCardToken() {
-        Integer month = (mExpiryMonth == null ? null : Integer.valueOf(mExpiryMonth));
-        Integer year = (mExpiryYear == null ? null : Integer.valueOf(mExpiryYear));
-        String identificationTypeId = (mSelectedIdentificationType == null ? null :
-                mSelectedIdentificationType.getId());
-        String identificationNumber = (mIdentification == null ? null :
-                mIdentification.getNumber());
-
-        CardToken cardToken = new CardToken(getCardNumber(), month, year, getSecurityCode(),
-                getCardHolderName(), identificationTypeId, identificationNumber);
-        if (isSecurityCodeRequired()) {
-            try {
-                cardToken.validateSecurityCode(this, mCurrentPaymentMethod);
-                clearErrorView();
-                createToken();
-            } catch (Exception e) {
-                setCardSecurityCodeErrorView(e.getMessage(), true);
-            }
-        }
     }
 
     private void createToken() {
@@ -1576,7 +1509,7 @@ public class GuessingCardActivity extends FrontCardActivity {
                     MPTracker.getInstance().trackEvent("CARD_ISSUER", "GET_ISSUERS_RESPONSE", "SUCCESS", "2", mPublicKey, "MLA", "1.0", getActivity());
                     if (isActivityActive()) {
                         if (issuers.isEmpty()) {
-                            //error
+                            ErrorUtil.startErrorActivity(getActivity(), getString(R.string.mpsdk_standard_error_message), "issuers call is empty at GuessingCardActivity", false);
                         } else if (issuers.size() == 1) {
                             mSelectedIssuer = issuers.get(0);
                             mIssuerFound = true;

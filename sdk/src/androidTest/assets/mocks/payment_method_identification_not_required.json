@@ -1,0 +1,27 @@
+{
+  "accreditation_time":2880,
+  "additional_info_needed":[
+    "cardholder_name"
+  ],
+  "id":"cordial",
+  "name":"Cordial",
+  "payment_type_id":"credit_card",
+  "settings":[
+    {
+      "bin":{
+        "exclusion_pattern":"",
+        "installments_pattern":"^(522135|522137|527555)",
+        "pattern":"^(522135|522137|527555)"
+      },
+      "card_number":{
+        "length":16,
+        "validation":"standard"
+      },
+      "security_code":{
+        "card_location":"back",
+        "length":3,
+        "mode":"optional"
+      }
+    }
+  ]
+}
