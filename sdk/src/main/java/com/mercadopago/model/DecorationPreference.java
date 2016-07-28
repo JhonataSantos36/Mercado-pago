@@ -1,6 +1,7 @@
 package com.mercadopago.model;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v4.content.ContextCompat;
 
 import com.mercadopago.R;
@@ -17,6 +18,11 @@ public class DecorationPreference {
 
     public void setBaseColor(int color) {
         this.baseColor = color;
+        this.lighterColor = ColorsUtil.lighter(baseColor);
+    }
+
+    public void setBaseColor(String hexColor) {
+        this.baseColor = Color.parseColor(hexColor);
         this.lighterColor = ColorsUtil.lighter(baseColor);
     }
 
