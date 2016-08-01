@@ -1,0 +1,26 @@
+[
+    {
+    "payment_method_id": "master",
+    "payment_type_id": "credit_card",
+    "issuer": {
+    "id": "159",
+    "name": "Banamex",
+    "secure_thumbnail": "https://www.mercadopago.com/org-img/MP3/API/logos/159.gif",
+    "thumbnail": "http://img.mlstatic.com/org-img/MP3/API/logos/159.gif"
+    },
+    "payer_costs": [
+    {
+    "installments": 1,
+    "installment_rate": 0,
+    "discount_rate": 0,
+    "labels": [
+    ],
+    "min_allowed_amount": 5,
+    "max_allowed_amount": 200000,
+    "recommended_message": "1 mensualidad de $ 1,000.00 ($ 1,000.00)",
+    "installment_amount": 1000,
+    "total_amount": 1000
+    }
+    ]
+    }
+    ]
