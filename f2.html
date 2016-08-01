@@ -169,17 +169,16 @@ protected void onActivityResult(int requestCode, int resultCode,
 Intent data) {
   if(requestCode == MercadoPago.PAYMENT_VAULT_REQUEST_CODE) {
     if(resultCode == RESULT_OK) {
-      PaymentMethod paymentMethod = (PaymentMethod) data.getSerializableExtra("paymentMethod");
-      Issuer issuer = (Issuer) data.getSerializableExtra("issuer");
-      Token token = (Token) data.getSerializableExtra("token");
-      PayerCost payerCost = (PayerCost) data.getSerializableExtra("payerCost");
+      PaymentMethod paymentMethod = JsonUtil.getInstance().fromJson(data.getStringExtra("paymentMethod"), PaymentMethod.class);
+      Issuer issuer = JsonUtil.getInstance().fromJson(data.getStringExtra("issuer"), Issuer.class);
+      Token token = JsonUtil.getInstance().fromJson(data.getStringExtra("token"), Token.class);
+      PayerCost payerCost = JsonUtil.getInstance().fromJson(data.getStringExtra("payerCost"), PayerCost.class);
 
       createPayment(paymentMethod, issuer, payerCost, token);
     } else {
-      if ((data != null) &&
-        (data.getSerializableExtra("mpException") != null)) {
-          MPException exception
-            = (MPException) data.getSerializableExtra("mpException");
+      if ((data != null) && (data.hasExtra("mpException"))) {
+        MPException exception = JsonUtil.getInstance()
+          .fromJson(data.getStringExtra("mpException"), MPException.class);
       }
     }
   }
@@ -207,7 +206,7 @@ Intent data) {
 public void onCardStartButtonClicked(View view) {
   new MercadoPago.StartActivityBuilder()
     .setActivity(this)
-    .setPublicKey(mPublicKey)
+    .setPublicKey(TU_PUBLIC_KEY)
     .startCardVaultActivity();
 }
 
@@ -215,19 +214,18 @@ public void onCardStartButtonClicked(View view) {
 protected void onActivityResult(int requestCode, int resultCode,
 Intent data) {
 
-  if(requestCode == MercadoPago.GUESSING_CARD_REQUEST_CODE) {
+  if(requestCode == MercadoPago.CARD_VAULT_REQUEST_CODE) {
     if(resultCode == RESULT_OK) {
-      PaymentMethod paymentMethod = (PaymentMethod) data.getSerializableExtra("paymentMethod");
-      Issuer issuer = (Issuer) data.getSerializableExtra("issuer");
-      Token token = (Token) data.getSerializableExtra("token");
+      PaymentMethod paymentMethod = JsonUtil.getInstance().fromJson(data.getStringExtra("paymentMethod"), PaymentMethod.class);
+      Issuer issuer = JsonUtil.getInstance().fromJson(data.getStringExtra("issuer"), Issuer.class);
+      Token token = JsonUtil.getInstance().fromJson(data.getStringExtra("token"), Token.class);
 
       // Listo! Envía los datos a tu servidor!
 
     } else {
-      if ((data != null) &&
-        (data.getSerializableExtra("mpException") != null)) {
-          MPException exception
-            = (MPException) data.getSerializableExtra("mpException");
+      if ((data != null) && (data.hasExtra("mpException"))) {
+        MPException exception = JsonUtil.getInstance()
+          .fromJson(data.getStringExtra("mpException"), MPException.class);
       }
     }
   }
@@ -272,17 +270,16 @@ Intent data) {
 
   if(requestCode == MercadoPago.CARD_VAULT_REQUEST_CODE) {
       if(resultCode == RESULT_OK) {
-          PaymentMethod paymentMethod = (PaymentMethod) data.getSerializableExtra("paymentMethod");
-          Issuer issuer = (Issuer) data.getSerializableExtra("issuer");
-          Token token = (Token) data.getSerializableExtra("token");
-          PayerCost payerCost = (PayerCost) data.getSerializableExtra("payerCost");
+          PaymentMethod paymentMethod = JsonUtil.getInstance().fromJson(data.getStringExtra("paymentMethod"), PaymentMethod.class);
+          Issuer issuer = JsonUtil.getInstance().fromJson(data.getStringExtra("issuer"), Issuer.class);
+          Token token = JsonUtil.getInstance().fromJson(data.getStringExtra("token"), Token.class);
+          PayerCost payerCost = JsonUtil.getInstance().fromJson(data.getStringExtra("payerCost"), PayerCost.class);
 
           // Listo! Envía los datos a tu servidor!
       } else {
-        if ((data != null) &&
-          (data.getSerializableExtra("mpException") != null)) {
-            MPException exception
-              = (MPException) data.getSerializableExtra("mpException");
+        if ((data != null) && (data.hasExtra("mpException"))) {
+          MPException exception = JsonUtil.getInstance()
+            .fromJson(data.getStringExtra("mpException"), MPException.class);
         }
       }
   }
@@ -310,7 +307,7 @@ Intent data) {
 public void onPaymentMethodsButtonClicked(View view) {
   new MercadoPago.StartActivityBuilder()
     .setActivity(this)
-    .setPublicKey(mMyPublicKey)
+    .setPublicKey(TU_PUBLIC_KEY)
     .startPaymentMethodsActivity();
 }
 
@@ -320,14 +317,13 @@ Intent data) {
 
     if(requestCode == MercadoPago.PAYMENT_METHODS_REQUEST_CODE) {
         if(resultCode == RESULT_OK) {
-            PaymentMethod paymentMethod = (PaymentMethod) data.getSerializableExtra("paymentMethod");
+            PaymentMethod paymentMethod = JsonUtil.getInstance().fromJson(data.getStringExtra("paymentMethod"), PaymentMethod.class);
             // Ahora puedes continuar con tu flujo.
             // Recuerda verificar si el medio de pago es offline!
         } else {
-          if ((data != null) &&
-            (data.getSerializableExtra("mpException") != null)) {
-              MPException exception
-                = (MPException) data.getSerializableExtra("mpException");
+          if ((data != null) && (data.hasExtra("mpException"))) {
+            MPException exception = JsonUtil.getInstance()
+              .fromJson(data.getStringExtra("mpException"), MPException.class);
           }
         }
     }
@@ -354,7 +350,7 @@ Intent data) {
                      <pre class="snippet">
                         <code class="line-numbers language-java">
 public void onIssuersButtonClicked(View view) {
-  PaymentMethod paymentMethod = (PaymentMethod) data.getSerializableExtra("paymentMethod");
+  PaymentMethod paymentMethod = JsonUtil.getInstance().fromJson(data.getStringExtra("paymentMethod"), PaymentMethod.class);  
 
   new MercadoPago.StartActivityBuilder()
     .setActivity(this)
@@ -369,13 +365,12 @@ Intent data) {
 
     if(requestCode == MercadoPago.ISSUERS_REQUEST_CODE) {
         if(resultCode == RESULT_OK) {
-            Issuer issuer = (Issuer) data.getSerializableExtra("issuer");
+            Issuer issuer = JsonUtil.getInstance().fromJson(data.getStringExtra("issuer"), Issuer.class);
             // Ahora puedes continuar con tu flujo.
         } else {
-          if ((data != null) &&
-            (data.getSerializableExtra("mpException") != null)) {
-              MPException exception
-                = (MPException) data.getSerializableExtra("mpException");
+          if ((data != null) && (data.hasExtra("mpException"))) {
+            MPException exception = JsonUtil.getInstance()
+              .fromJson(data.getStringExtra("mpException"), MPException.class);
           }
         }
     }
@@ -401,8 +396,8 @@ Intent data) {
                      <pre class="snippet">
                         <code class="line-numbers language-java">
 public void startInstallmentsActivity(View view) {
-  PaymentMethod paymentMethod = (PaymentMethod) data.getSerializableExtra("paymentMethod");
-  Issuer issuer = (Issuer) data.getSerializableExtra("issuer");
+  PaymentMethod paymentMethod = JsonUtil.getInstance().fromJson(data.getStringExtra("paymentMethod"), PaymentMethod.class);  
+  Issuer issuer = JsonUtil.getInstance().fromJson(data.getStringExtra("issuer"), Issuer.class);
 
   new MercadoPago.StartActivityBuilder()
     .setActivity(this)
@@ -420,13 +415,12 @@ Intent data) {
 
     if(requestCode == MercadoPago.INSTALLMENTS_REQUEST_CODE) {
       if(resultCode == RESULT_OK) {
-        PayerCost payerCost = (PayerCost) data.getSerializableExtra("payerCost");
+        PayerCost payerCost = JsonUtil.getInstance().fromJson(data.getStringExtra("payerCost"), PayerCost.class);
         // Ahora puedes continuar con tu flujo.
       } else {
-          if ((data != null) &&
-            (data.getSerializableExtra("mpException") != null)) {
-              MPException exception
-                = (MPException) data.getSerializableExtra("mpException");
+          if ((data != null) && (data.hasExtra("mpException"))) {
+            MPException exception = JsonUtil.getInstance()
+              .fromJson(data.getStringExtra("mpException"), MPException.class);
           }
       }
     }
@@ -486,8 +480,8 @@ public void onBankDealsButtonClicked(View view) {
                         <code class="line-numbers language-java">
 import com.mercadopago.callbacks.Callback;
 
-public void createPayment(final Activity activity, String token,
-Integer installments, Long cardIssuerId, final PaymentMethod paymentMethod) {
+public void createPayment(final Activity activity, final PaymentMethod paymentMethod, 
+Issuer issuer, PayerCost payerCost, Token token) {
 
    if (paymentMethod != null) {
 
@@ -498,13 +492,23 @@ Integer installments, Long cardIssuerId, final PaymentMethod paymentMethod) {
       // Obtener el ID del medio de pago
       String paymentMethodId = paymentMethod.getId();
 
+      // Obtener el ID del banco que emite la tarjeta
+      Long cardIssuerId = issuer.getId();
+
+      // Obtener la cantidad de cuotas
+      Integer installments = payerCost.getInstallments();
+
+      // Obtener el ID del token
+      String tokenId = token.getId();
+
+
       /*    Crear el body del request que va a llegar a tu servidor.
       *  Debes indicar el item, la cantidad de cuotas, el banco,
       *  el token de la tarjeta, el medio de pago y cómo identificas
       *  a tu usuario para que puedas asignarle a éste el movimiento
       */
       MerchantPayment payment = new MerchantPayment(item, installments,
-      cardIssuerId, token, paymentMethodId, DUMMY_CAMPAIGN_ID, DUMMY_MERCHANT_ACCESS_TOKEN);
+      cardIssuerId, tokenId, paymentMethodId, DUMMY_CAMPAIGN_ID, DUMMY_MERCHANT_ACCESS_TOKEN);
 
       // Enviar los datos a tu servidor
       MerchantServer.createPayment(activity, TU_BASE_URL, TU_CREATE_PAYMENT_URI,
