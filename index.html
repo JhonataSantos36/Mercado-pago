@@ -256,7 +256,8 @@ Intent data) {
     if (resultCode == RESULT_OK && data != null) {
 
       // Listo! El pago ya fue procesado por MP.
-      Payment payment = (Payment) data.getSerializableExtra("payment");
+      Payment payment = JsonUtil.getInstance()
+        .fromJson(data.getStringExtra("payment"), Payment.class);
       TextView results = (TextView) findViewById(R.id.mp_results);
 
       if (payment != null) {
@@ -267,10 +268,9 @@ Intent data) {
       }
 
     } else {
-      if ((data != null) &&
-        (data.getSerializableExtra("mpException") != null)) {
-          MPException mpException
-            = (MPException) data.getSerializableExtra("mpException");
+      if ((data != null) && (data.hasExtra("mpException"))) {
+          MPException mpException = JsonUtil.getInstance()
+            .fromJson(data.getStringExtra("mpException"), MPException.class);
           // Manejá tus errores.
       }
     }
