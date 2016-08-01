@@ -42,7 +42,7 @@
             <h3>MercadoPago Android SDK</h3>
             <h4>La manera más rápida de cobrar en una app con la mejor experiencia.</h4>
          </div>
-         
+
       </div>
       <div id="mati_header" style="height: 500px;margin: 0 auto;padding: 0;position: relative;width: 100%;top: -276px;overflow-x: hidden;OVERFLOW-Y: hidden;z-index: -100;background: url('./img/landing_f2.jpg');background-size: cover;background-position-x: 0px;background-position-y: -100px;">
          <div style="background: rgba(0,0,0,0.5);height: 500px;"></div>
@@ -76,13 +76,8 @@
                                  <li><a href="f2.html#f2_card_issuers">Bancos</a></li>
                                  <li><a href="f2.html#f2_payer_costs">Cuotas</a></li>
                                  <li><a href="f2.html#f2_bank_deals">Promociones</a></li>
-                                 <li>
-                                    <a href="f2.html#f2_payment_result">Resultados de pago</a>
-                                    <ul>
-                                       <li><a href="f2.html#f2_payment_results_cards">Pagos con tarjeta</a></li>
-                                       <li><a href="f2.html#f2_instructions">Pagos en efectivo</a></li>
-                                    </ul>
-                                 </li>
+                                 <li><a href="f2.html#f2_create_payment">Creación de pago</a></li>
+                                 <li><a href="f2.html#f2_payment_result">Resultado de pagos</a></li>
                               </ul>
                            </li>
                            <li>
@@ -129,7 +124,7 @@
                <section class="docs-section" id="f1_payment_methods">
                   <h3 class="title">Medios de pago</h3>
                   <p>
-                     Es la entidad participante del pago en sí misma. Desde la marca de la tarjeta, pasando por la entidad de cobro en efectivo hasta el lugar dónde se encuentra el cajero automático para que el usuario realice el pago. 
+                     Es la entidad participante del pago en sí misma. Desde la marca de la tarjeta, pasando por la entidad de cobro en efectivo hasta el lugar dónde se encuentra el cajero automático para que el usuario realice el pago.
                      <br />
                      Si el medio de pago pertenece a una <b>tarjeta</b> te brindamos la información necesaria para armar tu formulario de tarjeta y sus validaciones, por ejemplo la longitud del número de tarjeta, si el código de seguridad está al frente o al dorso de la tarjeta, su longitud, entre otros. Pero también, el medio de pago puede ser <b>offline</b>. En este caso te indicamos, entre otros, el tiempo de acreditación ya que el pago quedará en un estado pendiente que cambiará cuando el usuario se acerque a la entidad correspondiente a finalizar el pago en efectivo.
                      <br />
@@ -141,7 +136,7 @@
                   <p>
                      <pre class="snippet">
                         <code class="line-numbers language-java">
-// Cuidado! Es el callback de MercadoPago. 
+// Cuidado! Es el callback de MercadoPago.
 import com.mercadopago.callbacks.Callback;
 
 MercadoPago mercadoPago = new MercadoPago.Builder()
@@ -167,7 +162,7 @@ mercadoPago.getPaymentMethods(new Callback &lt;List&lt;PaymentMethod&gt;&gt;() {
                      </pre>
                   </p>
                   <!--<script src="https://gist.github.com/matiasgualino/f29687dcc2d45b977476c4c7d27a8105.js"></script>-->
-                  
+
                </section>
                <section class="docs-section" id="f1_card_issuers">
                   <h3 class="title">Bancos</h3>
@@ -181,13 +176,13 @@ mercadoPago.getPaymentMethods(new Callback &lt;List&lt;PaymentMethod&gt;&gt;() {
                   <p>
                      <pre class="snippet">
                         <code class="line-numbers language-java">
-// Cuidado! Es el callback de MercadoPago. 
+// Cuidado! Es el callback de MercadoPago.
 import com.mercadopago.callbacks.Callback;
 
 String paymentMethodId = "master";
 
 // Primeros seis dígitos de la tarjeta (nullable).
-String bin = "503175"; 
+String bin = "503175";
 
 MercadoPago mercadoPago = new MercadoPago.Builder()
    .setContext(this)
@@ -231,7 +226,7 @@ mercadoPago.getIssuers(paymentMethodId, bin, new Callback &lt;List&lt;Issuer&gt;
                   <p>
                      <pre class="snippet">
                         <code class="line-numbers language-java">
-// Cuidado! Es el callback de MercadoPago. 
+// Cuidado! Es el callback de MercadoPago.
 import com.mercadopago.callbacks.Callback;
 
 // Medio de pago seleccionado
@@ -241,7 +236,7 @@ String paymentMethodId = "master";
 Long issuerId = 326L;
 
 // Primeros seis dígitos de la tarjeta
-String bin = "503175"; 
+String bin = "503175";
 
 // Monto que vas a cobrar
 BigDecimal amount = new BigDecimal(100);
@@ -283,20 +278,20 @@ mercadoPago.getInstallments(bin, amount, issuerId,
                   <p>
                      <pre class="snippet">
                         <code class="line-numbers language-java">
-// Cuidado! Es el callback de MercadoPago. 
+// Cuidado! Es el callback de MercadoPago.
 import com.mercadopago.callbacks.Callback;
 
 MercadoPago mercadoPago = new MercadoPago.Builder()
    .setContext(this)
    .setPublicKey("TEST-ad365c37-8012-4014-84f5-6c895b3f8e0a")
    .build();
-      
+
 mercadoPago.getIdentificationTypes(new Callback&lt;List&lt;IdentificationType&gt;&gt;() {
    @Override
    public void success(List&lt;IdentificationType&gt; identificationTypes) {
       // Listo, armá tu UI para el listado de tipos de documento
    }
-  
+
    @Override
    public void failure(ApiException error) {
       // Ups, ha ocurrido un error.
@@ -319,13 +314,13 @@ mercadoPago.getIdentificationTypes(new Callback&lt;List&lt;IdentificationType&gt
                   <p>
                      <pre class="snippet">
                         <code class="line-numbers language-java">
-/* Medio de pago seleccionado por el usuario. 
+/* Medio de pago seleccionado por el usuario.
 *  Va a serte útil para las validaciones de datos. */
 PaymentMethod paymentMethod = (PaymentMethod) this.getIntent().getSerializableExtra("paymentMethod");
 
 /* Crea un CardToken con los datos ingresados por tu usuario.
 *  Este es un ejemplo con datos de prueba */
-CardToken cardToken = new CardToken("5031755734530604", 11, 19, 
+CardToken cardToken = new CardToken("5031755734530604", 11, 19,
    "123", "APROJuan Perez", "DNI", "12345678");
 
 // Valida los datos ingresados por tu usuario
@@ -347,13 +342,13 @@ if (validateCardToken(cardToken, paymentMethod)) {
 private boolean validateCardToken(CardToken cardToken, PaymentMethod paymentMethod) {
 
    /* En esta función puedes setear el error para cada campo
-   *  Es recomendable que hagas requestFocus en el primer campo 
+   *  Es recomendable que hagas requestFocus en el primer campo
    *  en el que detectes un error. */
 
    boolean result = true;
 
-   /* Los dos siguientes métodos validan que el número 
-   *  de tarjeta y el código de seguridad cumplan con las 
+   /* Los dos siguientes métodos validan que el número
+   *  de tarjeta y el código de seguridad cumplan con las
    *  particularidades del medio de pago. */
 
    try {
@@ -376,9 +371,9 @@ private boolean validateCardToken(CardToken cardToken, PaymentMethod paymentMeth
    // Validamos que el nombre no sea vacío
    if (!cardToken.validateCardholderName()) {
       result = false;
-   } 
+   }
 
-   /* Si se seleccionó un tipo de documento, 
+   /* Si se seleccionó un tipo de documento,
    *  validamos que cumpla con sus configuraciones */
    if (getIdentificationType() != null &&
       !cardToken.validateIdentificationNumber(getIdentificationType())) {
@@ -398,7 +393,7 @@ private boolean validateCardToken(CardToken cardToken, PaymentMethod paymentMeth
                   <p>
                      <pre class="snippet">
                         <code class="line-numbers language-java">
-// Cuidado! Es el callback de MercadoPago. 
+// Cuidado! Es el callback de MercadoPago.
 import com.mercadopago.callbacks.Callback;
 
 // Si los datos son válidos, envíanos para que los guardemos de forma segura
@@ -410,7 +405,7 @@ MercadoPago mercadoPago = new MercadoPago.Builder()
 mercadoPago.createToken(cardToken, new Callback&lt;Token&gt;() {
    @Override
    public void success(Token token) {
-      // ¡Listo! ¡Ya puedes enviar la información a tus servidores! 
+      // ¡Listo! ¡Ya puedes enviar la información a tus servidores!
    }
 
    @Override
@@ -437,20 +432,20 @@ mercadoPago.createToken(cardToken, new Callback&lt;Token&gt;() {
                   <p>
                      <pre class="snippet">
                         <code class="line-numbers language-java">
-// Cuidado! Es el callback de MercadoPago. 
+// Cuidado! Es el callback de MercadoPago.
 import com.mercadopago.callbacks.Callback;
 
 MercadoPago mercadoPago = new MercadoPago.Builder()
    .setContext(this)
    .setPublicKey("TEST-ad365c37-8012-4014-84f5-6c895b3f8e0a")
    .build();
-      
+
 mercadoPago.getBankDeals(new Callback&lt;List&lt;BankDeal&gt;&gt;() {
    @Override
    public void success(List&lt;BankDeal&gt; bankDeals) {
       // Listo, arma tu UI para el listado de promociones
    }
-  
+
    @Override
    public void failure(ApiException error) {
       // Ups, ha ocurrido un error.
@@ -471,7 +466,7 @@ mercadoPago.getBankDeals(new Callback&lt;List&lt;BankDeal&gt;&gt;() {
                   <p>
                      <pre class="snippet">
                         <code class="line-numbers language-java">
-// Cuidado! Es el callback de MercadoPago. 
+// Cuidado! Es el callback de MercadoPago.
 import com.mercadopago.callbacks.Callback;
 
 Long paymentId = 1234567L;
@@ -518,7 +513,7 @@ mercadoPago.getInstructions(paymentId, paymentMethodId, paymentTypeId, new Callb
                      <br />
                      Junto con el token creado necesitas enviar también el medio de pago, cuotas y banco seleccionados por el usuario, además de un identificador del artículo o servicio que se está pagando y del usuario que está presente en tu aplicación.
                      <br />
-                     En este caso, el método <b>createPayment</b> hace un POST y envía como cuerpo del mensaje el objeto <a href="https://github.com/mercadopago/px-android/blob/master/sdk/src/main/java/com/mercadopago/core/MerchantPayment.java">MerchantPayment</a> que agrupa toda la información que precisas tener en tu servidor para conectarte con el nuestro. Por eso debes indicarnos tu URL base (https://api.tunombre.com) y la uri (/create_payment) donde esperas los datos para crear el pago. 
+                     En este caso, el método <b>createPayment</b> hace un POST y envía como cuerpo del mensaje el objeto <a href="https://github.com/mercadopago/px-android/blob/master/sdk/src/main/java/com/mercadopago/core/MerchantPayment.java">MerchantPayment</a> que agrupa toda la información que precisas tener en tu servidor para conectarte con el nuestro. Por eso debes indicarnos tu URL base (https://api.tunombre.com) y la uri (/create_payment) donde esperas los datos para crear el pago.
                      <a href="https://github.com/mercadopago/px-android/blob/master/sdk/src/main/java/com/mercadopago/core/MerchantServer.java" target="_blank">MerchantServer</a> transformará la respuesta de tu servicio (la misma que los servicios de MercadoPago) en un objeto <a href="https://github.com/mercadopago/px-android/blob/master/sdk/src/main/java/com/mercadopago/model/Payment.java" target="_blank">Payment</a>.
                   </p>
                   <p>
@@ -532,30 +527,26 @@ mercadoPago.getInstructions(paymentId, paymentMethodId, paymentTypeId, new Callb
 private void createPayment(final PaymentMethod paymentMethod, Issuer issuer, PayerCost payerCost, Token token) {
    Item item = new Item("id", 5);
    MerchantPayment payment = new MerchantPayment(item, payerCost.getInstallments(), issuer.getId(), token.getId(), paymentMethod.getId(), null, "mla-at");
-   
-   MerchantServer.createPayment(this, "mauro.com", "createPayment", payment, new Callback<Payment>() {
+
+   MerchantServer.createPayment(activity, TU_BASE_URL, TU_CREATE_PAYMENT_URI,
+   payment, new Callback&lt;Payment&gt;() {
       @Override
       public void success(Payment payment) {
-         if(MercadoPagoUtil.isCardPaymentType(paymentMethod.getPaymentTypeId())) {
-            new MercadoPago.StartActivityBuilder()
-            .setPublicKey(mMyPublicKey)
-            .setActivity(mActivity)
-            .setPayment(payment)
-            .setPaymentMethod(paymentMethod)
-            .startCongratsActivity();
-         }
-         else {
-            new MercadoPago.StartActivityBuilder()
-            .setPublicKey(mMyPublicKey)
-            .setActivity(mActivity)
-            .setPayment(payment)
-            .setPaymentMethod(paymentMethod)
-            .startInstructionsActivity();
+             // Ya se realizó el pago.
+             // Inicio de componente de resultado.
+             new MercadoPago.StartActivityBuilder()
+               .setPublicKey(TU_PUBLIC_KEY)
+               .setActivity(this)
+               .setPayment(payment)
+               .setPaymentMethod(paymentMethod)
+               .startPaymentResultActivity();
          }
       }
 
       @Override
       public void failure(ApiException apiException) {
+
+         // Ups, ha ocurrido un error.
 
       }
    });
@@ -589,7 +580,7 @@ private void createPayment(final PaymentMethod paymentMethod, Issuer issuer, Pay
                      </ul>
                   </p>
                   <p>
-                     En este caso, el método <b>createPreference</b> hace un POST y envía como cuerpo del mensaje el mapa que hayas definido (preferenceMap). Por eso debes indicarnos tu URL base (https://api.tunombre.com) y la uri (/create_preference) donde esperas los datos para crear la preferencia. 
+                     En este caso, el método <b>createPreference</b> hace un POST y envía como cuerpo del mensaje el mapa que hayas definido (preferenceMap). Por eso debes indicarnos tu URL base (https://api.tunombre.com) y la uri (/create_preference) donde esperas los datos para crear la preferencia.
                      <a href="https://github.com/mercadopago/px-android/blob/master/sdk/src/main/java/com/mercadopago/core/MerchantServer.java" target="_blank">MerchantServer</a> transformará la respuesta de tu servicio (la misma que los servicios de MercadoPago) en un objeto <a href="https://github.com/mercadopago/px-android/blob/master/sdk/src/main/java/com/mercadopago/model/CheckoutPreference.java" target="_blank">CheckoutPreference</a> cuyo ID es el punto de entrada a nuestro checkout.
                   </p>
                   <p>
@@ -598,7 +589,7 @@ private void createPayment(final PaymentMethod paymentMethod, Issuer issuer, Pay
                   <p>
                      <pre class="snippet">
                         <code class="line-numbers language-java">
-// Cuidado! Es el callback de MercadoPago. 
+// Cuidado! Es el callback de MercadoPago.
 import com.mercadopago.callbacks.Callback;
 
 // Crea un mapa con los datos de la compra y el mail de tu cliente.
@@ -609,9 +600,9 @@ preferenceMap.put("currency_id", "ARS");
 preferenceMap.put("payer_email", "mail_de_tu_cliente@gmail.com");
 
 // Envía la información a tu servidor
-MerchantServer.createPreference(this, "https://api.tunombre.com", 
+MerchantServer.createPreference(this, "https://api.tunombre.com",
  "/create_preference", preferenceMap, new Callback&lt;CheckoutPreference&gt;() {
- 
+
    @Override
    public void success(CheckoutPreference checkoutPreference) {
        // La preferencia se creó correctamente.
@@ -641,7 +632,7 @@ MerchantServer.createPreference(this, "https://api.tunombre.com",
             </div>
          </div>
       </div>
-      
+
       <footer class="footer">
          <div class="copy">
             <div class="copy-container">
