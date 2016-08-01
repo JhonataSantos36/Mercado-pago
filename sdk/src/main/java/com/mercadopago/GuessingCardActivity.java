@@ -427,20 +427,20 @@ public class GuessingCardActivity extends FrontCardActivity {
             case CARD_NUMBER_INPUT:
                 if (validateCardNumber(true)) {
                     mCardNumberInput.setVisibility(View.GONE);
-                    mCardHolderNameEditText.requestFocus();
                     mCardExpiryDateInput.setVisibility(View.VISIBLE);
+                    mCardHolderNameEditText.requestFocus();
                     return true;
                 }
                 return false;
             case CARDHOLDER_NAME_INPUT:
                 if (validateCardName(true)) {
                     mCardholderNameInput.setVisibility(View.GONE);
-                    mCardExpiryDateEditText.requestFocus();
                     if (isSecurityCodeRequired()) {
                         mSecurityCodeEditView.setVisibility(View.VISIBLE);
                     } else if (mIdentificationNumberRequired) {
                         mIdentificationTypeContainer.setVisibility(View.VISIBLE);
                     }
+                    mCardExpiryDateEditText.requestFocus();
                     return true;
                 }
                 return false;
@@ -1130,7 +1130,9 @@ public class GuessingCardActivity extends FrontCardActivity {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 mFrontFragment.setFontColor();
-                if (hasFocus) {
+                if (hasFocus && (mCurrentEditingEditText.equals(CARD_EXPIRYDATE_INPUT) ||
+                    mCurrentEditingEditText.equals(CARD_IDENTIFICATION_INPUT) ||
+                    mCurrentEditingEditText.equals(CARD_SECURITYCODE_INPUT))) {
                     MPTracker.getInstance().trackScreen("CARD_SECURITY_CODE", "2", mPublicKey, "MLA", "1.0", getActivity());
 
                     enableBackInputButton();

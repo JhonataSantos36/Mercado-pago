@@ -1617,6 +1617,51 @@ public class GuessingCardActivityTest {
         onView(withId(R.id.mpsdkCardNumberTextView)).check(matches(withText(containsString(card.getNumberWithMask()))));
     }
 
+    @Test
+    public void ignoreOnSecurityCodeNotRequiredThenTryOneWithRequired() {
+        addPaymentMethodsCall();
+        addIdentificationTypesCall();
+        addIdentificationTypesCall();
+
+        mTestRule.launchActivity(validStartIntent);
+        DummyCard card = CardTestUtils.getPaymentMethodOnWithoutRequiredSecurityCode();
+
+        onView(withId(R.id.mpsdkCardNumber)).perform(typeText(card.getCardNumber()));
+        onView(withId(R.id.mpsdkNextButton)).perform(click());
+        onView(withId(R.id.mpsdkCardholderName)).perform(typeText(StaticMock.DUMMY_CARDHOLDER_NAME));
+        onView(withId(R.id.mpsdkNextButton)).perform(click());
+        onView(withId(R.id.mpsdkCardExpiryDate)).perform(typeText(StaticMock.DUMMY_EXPIRATION_DATE));
+        onView(withId(R.id.mpsdkNextButton)).perform(click());
+        identificationNumberIsCurrentEditText();
+        onView(withId(R.id.mpsdkCardIdentificationNumber)).perform(typeText(StaticMock.DUMMY_IDENTIFICATION_NUMBER));
+
+        onView(withId(R.id.mpsdkBackButton)).perform(click());
+        onView(withId(R.id.mpsdkCardExpiryDate)).check(matches(isDisplayed()));
+        onView(withId(R.id.mpsdkCardExpiryDate)).check(matches(hasFocus()));
+
+        onView(withId(R.id.mpsdkBackButton)).perform(click());
+        cardholderNameIsCurrentEditText();
+
+        onView(withId(R.id.mpsdkBackButton)).perform(click());
+        cardNumberIsCurrentEditText();
+
+        onView(withId(R.id.mpsdkCardNumber)).perform(clearText());
+
+        card = CardTestUtils.getPaymentMethodOnWithBackSecurityCode();
+        onView(withId(R.id.mpsdkCardNumber)).perform(typeText(card.getCardNumber()));
+
+        onView(withId(R.id.mpsdkNextButton)).perform(click());
+        cardholderNameIsCurrentEditText();
+        onView(withId(R.id.mpsdkNextButton)).perform(click());
+        expiryDateIsCurrentEditText();
+        onView(withId(R.id.mpsdkNextButton)).perform(click());
+        securityCodeIsCurrentEditText();
+        onView(withId(R.id.mpsdkCardSecurityCode)).perform(typeText(card.getSecurityCode()));
+        onView(withId(R.id.mpsdkNextButton)).perform(click());
+        identificationNumberIsCurrentEditText();
+    }
+
+
     private void addIdentificationTypesCall() {
         String identificationTypes = StaticMock.getIdentificationTypeList();
         mFakeAPI.addResponseToQueue(identificationTypes, 200, "");
