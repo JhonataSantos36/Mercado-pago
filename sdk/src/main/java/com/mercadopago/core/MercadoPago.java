@@ -286,7 +286,7 @@ public class MercadoPago {
         activity.startActivityForResult(checkoutIntent, CHECKOUT_REQUEST_CODE);
     }
 
-    private static void startResultActivity(Activity activity, String merchantPublicKey, Payment payment, PaymentMethod paymentMethod) {
+    private static void startPaymentResultActivity(Activity activity, String merchantPublicKey, Payment payment, PaymentMethod paymentMethod) {
 
         Intent resultIntent = new Intent(activity, PaymentResultActivity.class);
         resultIntent.putExtra("merchantPublicKey", merchantPublicKey);
@@ -736,7 +736,7 @@ public class MercadoPago {
             if (this.mKeyType == null) throw new IllegalStateException("key type is null");
 
             if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {
-                MercadoPago.startResultActivity(this.mActivity, this.mKey, this.mPayment, this.mPaymentMethod);
+                MercadoPago.startPaymentResultActivity(this.mActivity, this.mKey, this.mPayment, this.mPaymentMethod);
             } else {
                 throw new RuntimeException("Unsupported key type for this method");
             }
