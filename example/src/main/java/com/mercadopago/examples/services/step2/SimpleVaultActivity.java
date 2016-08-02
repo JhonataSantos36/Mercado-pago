@@ -114,14 +114,14 @@ public class SimpleVaultActivity extends AppCompatActivity {
     }
 
     private void initializeControls() {
-        mSecurityCodeCard = findViewById(R.id.mpsdkSecurityCodeCard);
-        mCVVImage = (ImageView) findViewById(R.id.mpsdkCVVImage);
-        mCVVDescriptor = (MPTextView) findViewById(R.id.mpsdkCVVDescriptor);
+        mSecurityCodeCard = findViewById(R.id.securityCodeCard);
+        mCVVImage = (ImageView) findViewById(R.id.cVVImage);
+        mCVVDescriptor = (MPTextView) findViewById(R.id.cVVDescriptor);
         mSubmitButton = (MPButton) findViewById(R.id.submitButton);
-        mCustomerMethodsLayout = (LinearLayout) findViewById(R.id.mpsdkCustomerMethodLayout);
+        mCustomerMethodsLayout = (LinearLayout) findViewById(R.id.customerMethodLayout);
         mPaymentMethodImage = (ImageView) findViewById(R.id.pmImage);
-        mCustomerMethodsText = (MPTextView) findViewById(R.id.mpsdkCustomerMethodLabel);
-        mSecurityCodeText = (MPEditText) findViewById(R.id.mpsdkSecurityCode);
+        mCustomerMethodsText = (MPTextView) findViewById(R.id.customerMethodLabel);
+        mSecurityCodeText = (MPEditText) findViewById(R.id.securityCode);
     }
 
     private void getActivityParameters() {

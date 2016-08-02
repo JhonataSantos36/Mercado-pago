@@ -51,9 +51,9 @@ public class AdvancedVaultActivity extends SimpleVaultActivity {
 
         if (mAmount != null) {
 
-            mInstallmentsCard = findViewById(R.id.mpsdkInstallmentsCard);
-            mInstallmentsLayout = (FrameLayout) findViewById(R.id.mpsdkInstallmentsLayout);
-            mInstallmentsText = (MPTextView) findViewById(R.id.mpsdkInstallmentsLabel);
+            mInstallmentsCard = findViewById(R.id.installmentsCard);
+            mInstallmentsLayout = (FrameLayout) findViewById(R.id.installmentsLayout);
+            mInstallmentsText = (MPTextView) findViewById(R.id.installmentsLabel);
             mInstallmentsCard.setVisibility(View.GONE);
 
         } else {
