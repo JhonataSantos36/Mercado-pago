@@ -55,8 +55,6 @@ public class ErrorHandlingCallAdapter {
     /** Adapts a {@link Call} to {@link MPCall}. */
     static class MPCallAdapter<T> implements MPCall<T> {
         private final Call<T> call;
-        private Payment mPayment;
-        private Token mToken;
 
         MPCallAdapter(Call<T> call) {
             this.call = call;
@@ -79,10 +77,10 @@ public class ErrorHandlingCallAdapter {
                                 //Get body
                                 T body = r.body();
                                 if (body instanceof Payment) {
-                                    mPayment = (Payment) body;
+                                    Payment mPayment = (Payment) body;
                                     MPTracker.getInstance().trackPayment("NO_SCREEN", "CREATE_PAYMENT_RESPONSE", mPayment.getId(), mPayment.getPaymentMethodId(), mPayment.getStatus(), mPayment.getStatusDetail(), mPayment.getPaymentTypeId(), mPayment.getInstallments(), mPayment.getIssuerId());
                                 } else if (body instanceof Token) {
-                                    mToken = (Token) body;
+                                    Token mToken = (Token) body;
                                     MPTracker.getInstance().trackToken(mToken.getId());
                                 }
                                 callback.success(r.body());
