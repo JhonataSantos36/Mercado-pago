@@ -141,7 +141,7 @@ public class GuessingCardActivity extends FrontCardActivity {
     @Override
     public void onBackPressed() {
         checkFlipCardToFront(true);
-        MPTracker.getInstance().trackEvent("GUESSING_CARD", "BACK_PRESSED", "2", mPublicKey, "MLA", "1.0", this);
+        MPTracker.getInstance().trackEvent("GUESSING_CARD", "BACK_PRESSED", 2, mPublicKey, BuildConfig.VERSION_NAME, this);
         Intent returnIntent = new Intent();
         returnIntent.putExtra("backButtonPressed", true);
         setResult(RESULT_CANCELED, returnIntent);
@@ -533,7 +533,6 @@ public class GuessingCardActivity extends FrontCardActivity {
         mMercadoPago.getPaymentMethods(new Callback<List<PaymentMethod>>() {
             @Override
             public void success(List<PaymentMethod> paymentMethods) {
-                MPTracker.getInstance().trackEvent("PAYMENT_METHODS", "GET_PAYMENT_METHODS_RESPONSE", "SUCCESS", "2", mPublicKey, "MLA", "1.0", getActivity());
                 if (isActivityActive()) {
                     mPaymentMethodList = paymentMethods;
                     startGuessingForm();
@@ -542,7 +541,6 @@ public class GuessingCardActivity extends FrontCardActivity {
 
             @Override
             public void failure(ApiException apiException) {
-                MPTracker.getInstance().trackEvent("PAYMENT_METHODS", "GET_PAYMENT_METHODS_RESPONSE", "FAIL", "2", mPublicKey, "MLA", "1.0", getActivity());
                 if (isActivityActive()) {
                     setFailureRecovery(new FailureRecovery() {
                         @Override
@@ -1009,7 +1007,7 @@ public class GuessingCardActivity extends FrontCardActivity {
             public void onFocusChange(View v, boolean hasFocus) {
                 mFrontFragment.setFontColor();
                 if (hasFocus) {
-                    MPTracker.getInstance().trackScreen("CARD_NUMBER", "2", mPublicKey, "MLA", "1.0", getActivity());
+                    MPTracker.getInstance().trackScreen("CARD_NUMBER", 2, mPublicKey, BuildConfig.VERSION_NAME, getActivity());
 
                     disableBackInputButton();
                     openKeyboard(mCardNumberEditText);
@@ -1057,7 +1055,7 @@ public class GuessingCardActivity extends FrontCardActivity {
             public void onFocusChange(View v, boolean hasFocus) {
                 mFrontFragment.setFontColor();
                 if (hasFocus) {
-                    MPTracker.getInstance().trackScreen("CARD_HOLDER_NAME", "2", mPublicKey, "MLA", "1.0", getActivity());
+                    MPTracker.getInstance().trackScreen("CARD_HOLDER_NAME", 2, mPublicKey, BuildConfig.VERSION_NAME, getActivity());
 
                     enableBackInputButton();
                     openKeyboard(mCardHolderNameEditText);
@@ -1094,7 +1092,7 @@ public class GuessingCardActivity extends FrontCardActivity {
             public void onFocusChange(View v, boolean hasFocus) {
                 mFrontFragment.setFontColor();
                 if (hasFocus) {
-                    MPTracker.getInstance().trackScreen("CARD_EXPIRY_DATE", "2", mPublicKey, "MLA", "1.0", getActivity());
+                    MPTracker.getInstance().trackScreen("CARD_EXPIRY_DATE", 2, mPublicKey, BuildConfig.VERSION_NAME, getActivity());
 
                     enableBackInputButton();
                     openKeyboard(mCardExpiryDateEditText);
@@ -1133,8 +1131,7 @@ public class GuessingCardActivity extends FrontCardActivity {
                 if (hasFocus && (mCurrentEditingEditText.equals(CARD_EXPIRYDATE_INPUT) ||
                     mCurrentEditingEditText.equals(CARD_IDENTIFICATION_INPUT) ||
                     mCurrentEditingEditText.equals(CARD_SECURITYCODE_INPUT))) {
-                    MPTracker.getInstance().trackScreen("CARD_SECURITY_CODE", "2", mPublicKey, "MLA", "1.0", getActivity());
-
+                    MPTracker.getInstance().trackScreen("CARD_SECURITY_CODE", 2, mPublicKey, BuildConfig.VERSION_NAME, getActivity());
                     enableBackInputButton();
                     openKeyboard(mCardSecurityCodeEditText);
                     mCurrentEditingEditText = CARD_SECURITYCODE_INPUT;
@@ -1159,8 +1156,6 @@ public class GuessingCardActivity extends FrontCardActivity {
     }
 
     public void setCardIdentificationFocusListener() {
-        MPTracker.getInstance().trackScreen("IDENTIFICATION_NUMBER", "2", mPublicKey, "MLA", "1.0", this);
-
         mIdentificationTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -1220,6 +1215,7 @@ public class GuessingCardActivity extends FrontCardActivity {
             public void onFocusChange(View v, boolean hasFocus) {
                 mFrontFragment.setFontColor();
                 if (hasFocus) {
+                    MPTracker.getInstance().trackScreen("IDENTIFICATION_NUMBER", 2, mPublicKey, BuildConfig.VERSION_NAME, getActivity());
                     enableBackInputButton();
                     openKeyboard(mCardIdentificationNumberEditText);
                     checkTransitionCardToId();
@@ -1508,7 +1504,6 @@ public class GuessingCardActivity extends FrontCardActivity {
             new Callback<List<Issuer>>() {
                 @Override
                 public void success(List<Issuer> issuers) {
-                    MPTracker.getInstance().trackEvent("CARD_ISSUER", "GET_ISSUERS_RESPONSE", "SUCCESS", "2", mPublicKey, "MLA", "1.0", getActivity());
                     if (isActivityActive()) {
                         if (issuers.isEmpty()) {
                             ErrorUtil.startErrorActivity(getActivity(), getString(R.string.mpsdk_standard_error_message), "issuers call is empty at GuessingCardActivity", false);
@@ -1524,7 +1519,6 @@ public class GuessingCardActivity extends FrontCardActivity {
 
                 @Override
                 public void failure(ApiException apiException) {
-                    MPTracker.getInstance().trackEvent("CARD_ISSUER", "GET_ISSUERS_RESPONSE", "FAIL", "2", mPublicKey, "MLA", "1.0", getActivity());
                     if (isActivityActive()) {
                         setFailureRecovery(new FailureRecovery() {
                             @Override

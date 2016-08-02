@@ -102,8 +102,7 @@ public class BankDealsActivity extends MercadoPagoActivity {
         mMercadoPago.getBankDeals(new Callback<List<BankDeal>>() {
             @Override
             public void success(List<BankDeal> bankDeals) {
-                MPTracker.getInstance().trackScreen("BANK_DEALS", "2", mMerchantPublicKey, "MLA", "1.0", getActivity());
-                MPTracker.getInstance().trackEvent("BANK_DEALS", "GET_BANK_DEALS_RESPONSE", "SUCCESS", "2", mMerchantPublicKey, "MLA", "1.0", getActivity());
+                MPTracker.getInstance().trackScreen("BANK_DEALS", 2, mMerchantPublicKey, BuildConfig.VERSION_NAME, getActivity());
                 mRecyclerView.setAdapter(new BankDealsAdapter(getActivity(), bankDeals, new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -118,8 +117,6 @@ public class BankDealsActivity extends MercadoPagoActivity {
 
             @Override
             public void failure(ApiException apiException) {
-                MPTracker.getInstance().trackEvent("BANK_DEALS", "GET_BANK_DEALS_RESPONSE", "FAIL", "2", mMerchantPublicKey, "MLA", "1.0", getActivity());
-
                 if (isActivityActive()) {
                     setFailureRecovery(new FailureRecovery() {
                         @Override

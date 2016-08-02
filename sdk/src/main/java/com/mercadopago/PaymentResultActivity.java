@@ -7,7 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentMethod;
-import com.mercadopago.mptracker.MPTracker;
 import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.MercadoPagoUtil;
@@ -65,7 +64,6 @@ public class PaymentResultActivity extends AppCompatActivity {
             startCardPaymentTypeResult();
         }
         else {
-            MPTracker.getInstance().trackPaymentId(mPaymentMethod.getId(), "3", mMerchantPublicKey, "MLA", "1.0", this);
             startInstructionsActivity();
         }
     }

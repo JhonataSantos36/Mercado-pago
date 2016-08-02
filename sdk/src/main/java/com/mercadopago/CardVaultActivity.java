@@ -162,7 +162,7 @@ public class CardVaultActivity extends ShowCardActivity {
             mPayerCost = JsonUtil.getInstance().fromJson(bundle.getString("payerCost"), PayerCost.class);
             finishWithResult();
         } else if (resultCode == RESULT_CANCELED) {
-            MPTracker.getInstance().trackEvent( "INSTALLMENTS", "CANCELED", "2", mPublicKey, "MLA", "1.0", this);
+            MPTracker.getInstance().trackEvent( "INSTALLMENTS", "CANCELED", 2, mPublicKey, mSite.getId(), BuildConfig.VERSION_NAME, this);
 
             setResult(RESULT_CANCELED, data);
             finish();
@@ -195,7 +195,7 @@ public class CardVaultActivity extends ShowCardActivity {
             }
 
         } else if (resultCode == RESULT_CANCELED){
-            MPTracker.getInstance().trackEvent( "GUESSING_CARD", "CANCELED", "2", mPublicKey, "MLA", "1.0", this);
+            MPTracker.getInstance().trackEvent( "GUESSING_CARD", "CANCELED", 2, mPublicKey, mSite.getId(), BuildConfig.VERSION_NAME, this);
 
             setResult(RESULT_CANCELED, data);
             finish();
@@ -211,8 +211,6 @@ public class CardVaultActivity extends ShowCardActivity {
                 new Callback<List<Installment>>() {
                     @Override
                     public void success(List<Installment> installments) {
-                        MPTracker.getInstance().trackEvent("CARD_INSTALLMENTS", "GET_INSTALLMENTS_RESPONSE", "SUCCESS", "2", mPublicKey, "MLA", "1.0", getActivity());
-
                         if (isActivityActive()) {
                             if (installments.size() == 1) {
                                 if (installments.get(0).getPayerCosts().size() == 1) {
@@ -232,7 +230,6 @@ public class CardVaultActivity extends ShowCardActivity {
 
                     @Override
                     public void failure(ApiException apiException) {
-                        MPTracker.getInstance().trackEvent("CARD_INSTALLMENTS", "GET_INSTALLMENTS_RESPONSE", "FAIL", "2", mPublicKey, "MLA", "1.0", getActivity());
                         if (isActivityActive()) {
                             setFailureRecovery(new FailureRecovery() {
                                 @Override

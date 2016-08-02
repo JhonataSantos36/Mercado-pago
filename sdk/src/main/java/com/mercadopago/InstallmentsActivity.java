@@ -45,7 +45,7 @@ public class InstallmentsActivity extends ShowCardActivity {
 
     @Override
     protected void setContentView() {
-        MPTracker.getInstance().trackScreen( "CARD_INSTALLMENTS", "2", mPublicKey, "MLA", "1.0", this);
+        MPTracker.getInstance().trackScreen( "CARD_INSTALLMENTS", 2, mPublicKey, mSite.getId(), BuildConfig.VERSION_NAME, this);
         setContentView(R.layout.mpsdk_activity_new_installments);
     }
 
@@ -162,7 +162,6 @@ public class InstallmentsActivity extends ShowCardActivity {
             new Callback<List<Installment>>() {
                 @Override
                 public void success(List<Installment> installments) {
-                    MPTracker.getInstance().trackEvent("CARD_INSTALLMENTS", "GET_INSTALLMENTS_RESPONSE", "SUCCESS", "2",mPublicKey, "MLA", "1.0", getActivity());
                     if (isActivityActive()) {
                         mProgressBar.setVisibility(View.GONE);
                         if (installments.size() == 0) {
@@ -177,7 +176,6 @@ public class InstallmentsActivity extends ShowCardActivity {
 
                 @Override
                 public void failure(ApiException apiException) {
-                    MPTracker.getInstance().trackEvent("CARD_INSTALLMENTS", "GET_INSTALLMENTS_RESPONSE", "FAIL", "2",mPublicKey, "MLA", "1.0", getActivity());
                     if (isActivityActive()) {
                         mProgressBar.setVisibility(View.GONE);
                         setFailureRecovery(new FailureRecovery() {
@@ -219,7 +217,7 @@ public class InstallmentsActivity extends ShowCardActivity {
 
     @Override
     public void onBackPressed() {
-        MPTracker.getInstance().trackEvent("CARD_INSTALLMENTS", "BACK_PRESSED", "2", mPublicKey, "MLA", "1.0", this);
+        MPTracker.getInstance().trackEvent("CARD_INSTALLMENTS", "BACK_PRESSED", 2, mPublicKey, mSite.getId(), BuildConfig.VERSION_NAME, this);
 
         Intent returnIntent = new Intent();
         returnIntent.putExtra("backButtonPressed", true);

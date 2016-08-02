@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import com.google.gson.reflect.TypeToken;
 import com.mercadopago.callbacks.Callback;
 import com.mercadopago.model.Payment;
+import com.mercadopago.model.Token;
 import com.mercadopago.mptracker.MPTracker;
 import com.mercadopago.util.ApiUtil;
 
@@ -73,18 +74,14 @@ public class ErrorHandlingCallAdapter {
                         public void run() {
                             int code = r.code();
                             if (code >= 200 && code < 300) {
-                                //track success
-                                T body = r.body();
-                                if (body instanceof Payment){
 
+                                //Get body
+                                T body = r.body();
+                                if (body instanceof Payment) {
+                                    MPTracker.getInstance().trackPayment("NO_SCREEN", "CREATE_PAYMENT_RESPONSE", ((Payment) body).getId(), ((Payment) body).getPaymentMethodId(), ((Payment) body).getStatus(), ((Payment) body).getStatusDetail(), ((Payment) body).getPaymentTypeId(), ((Payment) body).getInstallments(), ((Payment) body).getIssuerId());
+                                } else if (body instanceof Token) {
+                                    MPTracker.getInstance().trackToken(((Token) body).getId());
                                 }
-                                //T body = r.body();
-                                //if(body instanceof Payment) {
-                                //  Track payment
-                                //}
-                                //else if(body instanceof Token) {
-                                //  Track payment
-                                //}
                                 callback.success(r.body());
                             } else {
                                 //track failure

@@ -45,7 +45,7 @@ public class PendingActivity extends MercadoPagoActivity {
 
     @Override
     protected void setContentView() {
-        MPTracker.getInstance().trackScreen("PENDING", "2", mMerchantPublicKey, "MLA", "1.0", getActivity());
+        MPTracker.getInstance().trackScreen("PENDING", 2, mMerchantPublicKey, BuildConfig.VERSION_NAME, getActivity());
 
         setContentView(R.layout.mpsdk_activity_pending);
     }
@@ -94,7 +94,7 @@ public class PendingActivity extends MercadoPagoActivity {
 
     @Override
     public void onBackPressed() {
-        MPTracker.getInstance().trackEvent("PENDING", "BACK_PRESSED", "2", mMerchantPublicKey, "MLA", "1.0", this);
+        MPTracker.getInstance().trackEvent("PENDING", "BACK_PRESSED", 2, mMerchantPublicKey, BuildConfig.VERSION_NAME, this);
 
         if(mBackPressedOnce) {
             finishWithOkResult();

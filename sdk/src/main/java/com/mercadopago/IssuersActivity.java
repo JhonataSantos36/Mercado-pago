@@ -41,7 +41,7 @@ public class IssuersActivity extends ShowCardActivity {
 
     @Override
     protected void setContentView() {
-        MPTracker.getInstance().trackScreen("CARD_ISSUERS", "2", mPublicKey, "MLA", "1.0", this);
+        MPTracker.getInstance().trackScreen("CARD_ISSUERS", 2, mPublicKey, BuildConfig.VERSION_NAME, this);
         setContentView(R.layout.mpsdk_activity_new_issuers);
     }
 
@@ -141,7 +141,6 @@ public class IssuersActivity extends ShowCardActivity {
                 @Override
                 public void success(List<Issuer> issuers) {
                     mIssuers = issuers;
-                    MPTracker.getInstance().trackEvent("CARD_ISSUERS", "GET_ISSUERS_RESPONSE", "SUCCESS", mPublicKey, "MLA", "1.0", getActivity());
                     if (isActivityActive()) {
                         mProgressBar.setVisibility(View.GONE);
                         resolveIssuersList();
@@ -150,7 +149,6 @@ public class IssuersActivity extends ShowCardActivity {
 
                 @Override
                 public void failure(ApiException apiException) {
-                    MPTracker.getInstance().trackEvent("CARD_ISSUERS", "GET_ISSUERS_RESPONSE", "FAIL", mPublicKey, "MLA", "1.0", getActivity());
                         if (isActivityActive()) {
                             mProgressBar.setVisibility(View.GONE);
                             setFailureRecovery(new FailureRecovery() {
@@ -204,7 +202,7 @@ public class IssuersActivity extends ShowCardActivity {
 
     @Override
     public void onBackPressed() {
-        MPTracker.getInstance().trackEvent("CARD_ISSUERS", "BACK_PRESSED", "2", mPublicKey, "MLA", "1.0", this);
+        MPTracker.getInstance().trackEvent("CARD_ISSUERS", "BACK_PRESSED", 2, mPublicKey, BuildConfig.VERSION_NAME, this);
 
         Intent returnIntent = new Intent();
         returnIntent.putExtra("backButtonPressed", true);

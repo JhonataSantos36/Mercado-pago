@@ -136,14 +136,12 @@ public class PaymentVaultActivity extends MercadoPagoActivity {
 
     @Override
     protected void onValidStart() {
+        MPTracker.getInstance().trackScreen("PAYMENT_METHOD_SEARCH", 2, mMerchantPublicKey, mSite.getId(), BuildConfig.VERSION_NAME, this);
 
         mMercadoPago = new MercadoPago.Builder()
                 .setPublicKey(mMerchantPublicKey)
                 .setContext(this)
                 .build();
-
-        MPTracker.getInstance().trackScreen("PAYMENT_VAULT", "2", mMerchantPublicKey, mSite.getId(), "1.0", this);
-        MPTracker.getInstance().trackEvent("PAYMENT_VAULT", "INIT_PAYMENT_VAULT", "2", mMerchantPublicKey, mSite.getId(), "1.0", this);
 
         if (isItemSelected()) {
             showSelectedItemChildren();
@@ -229,7 +227,6 @@ public class PaymentVaultActivity extends MercadoPagoActivity {
 
             @Override
             public void success(PaymentMethodSearch paymentMethodSearch) {
-                MPTracker.getInstance().trackEvent("PAYMENT_VAULT","GET_PAYMENT_METHOD_SEARCH_RESPONSE", "SUCCESS","2", mMerchantPublicKey, mSite.getId(), "1.0", getActivity());
                 if(isActivityActive()) {
                     if (!paymentMethodSearch.hasSearchItems()) {
                         showEmptyPaymentMethodsError();
@@ -242,7 +239,6 @@ public class PaymentVaultActivity extends MercadoPagoActivity {
 
             @Override
             public void failure(ApiException apiException) {
-                MPTracker.getInstance().trackEvent("PAYMENT_VAULT","GET_PAYMENT_METHOD_SEARCH_RESPONSE", "FAIL","2", mMerchantPublicKey, mSite.getId(), "1.0", getActivity());
                 if (isActivityActive()) {
                     ApiUtil.showApiExceptionError(getActivity(), apiException);
                     setFailureRecovery(new FailureRecovery() {
@@ -400,7 +396,7 @@ public class PaymentVaultActivity extends MercadoPagoActivity {
             finish();
         }
         else if(resultCode == RESULT_CANCELED && data != null && data.hasExtra("mpException")) {
-            MPTracker.getInstance().trackEvent("PAYMENT_VAULT","CANCELED","2", mMerchantPublicKey, mSite.getId(), "1.0",this);
+            MPTracker.getInstance().trackEvent("PAYMENT_VAULT","CANCELED", 2, mMerchantPublicKey, mSite.getId(), BuildConfig.VERSION_NAME,this);
 
             setResult(Activity.RESULT_CANCELED, data);
             this.finish();
@@ -415,8 +411,7 @@ public class PaymentVaultActivity extends MercadoPagoActivity {
             mSelectedPayerCost = JsonUtil.getInstance().fromJson(data.getStringExtra("payerCost"), PayerCost.class);
             finishWithCardResult();
         } else {
-            //TODO validate
-            MPTracker.getInstance().trackEvent("PAYMENT_VAULT", "CANCELED", "2", mMerchantPublicKey, mSite.getId(), "1.0", this);
+            MPTracker.getInstance().trackEvent("PAYMENT_VAULT","CANCELED", 2, mMerchantPublicKey, mSite.getId(), BuildConfig.VERSION_NAME,this);
             if (isUniqueSelectionAvailable() || ((data != null) && (data.getStringExtra("mpException") != null))) {
                 setResult(Activity.RESULT_CANCELED, data);
                 this.finish();
@@ -434,7 +429,7 @@ public class PaymentVaultActivity extends MercadoPagoActivity {
         }
         else {
             if ((data != null) && (data.getStringExtra("apiException") != null)) {
-                MPTracker.getInstance().trackEvent("PAYMENT_VAULT","CANCELED","2", mMerchantPublicKey, mSite.getId(), "1.0",this);
+                MPTracker.getInstance().trackEvent("PAYMENT_VAULT","CANCELED", 2, mMerchantPublicKey, mSite.getId(), BuildConfig.VERSION_NAME,this);
 
                 setResult(Activity.RESULT_CANCELED, data);
                 this.finish();
@@ -469,7 +464,7 @@ public class PaymentVaultActivity extends MercadoPagoActivity {
 
     @Override
     public void onBackPressed() {
-        MPTracker.getInstance().trackEvent("PAYMENT_VAULT","BACK_PRESSED","2", mMerchantPublicKey, mSite.getId(), "1.0",this);
+        MPTracker.getInstance().trackEvent("PAYMENT_VAULT","BACK_PRESSED", 2, mMerchantPublicKey, mSite.getId(), BuildConfig.VERSION_NAME,this);
 
         setResult(Activity.RESULT_CANCELED);
         finish();

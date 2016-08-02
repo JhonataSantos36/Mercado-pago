@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.mercadopago.exceptions.MPException;
-import com.mercadopago.mptracker.MPTracker;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.JsonUtil;
 
@@ -23,8 +22,6 @@ public class ErrorActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         animateErrorScreenLaunch();
         setContentView(R.layout.mpsdk_activity_error);
-
-        MPTracker.getInstance().trackScreen("ERROR", "2", "pubicKey", "MLA", "1.0", this);
 
         getActivityParameters();
         if(validParameters()) {
@@ -90,7 +87,6 @@ public class ErrorActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        MPTracker.getInstance().trackEvent("ERROR", "BACK_PRESSED", "2", "publicKey", "MLA", "1.0", this);
 
         Intent intent = new Intent();
         intent.putExtra("mpException", JsonUtil.getInstance().toJson(mMPException));
