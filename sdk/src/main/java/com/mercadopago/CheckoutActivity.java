@@ -620,7 +620,7 @@ public class CheckoutActivity extends MercadoPagoActivity {
             .setActivity(getActivity())
             .setPayment(mCreatedPayment)
             .setPaymentMethod(mSelectedPaymentMethod)
-            .startResultActivity();
+            .startPaymentResultActivity();
     }
 
     private Long createNewTransactionId() {
