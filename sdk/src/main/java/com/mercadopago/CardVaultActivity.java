@@ -104,6 +104,9 @@ public class CardVaultActivity extends ShowCardActivity {
         if (mPublicKey == null) {
             throw new IllegalStateException();
         }
+        if (mInstallmentsEnabled && (mSite == null || mAmount == null)) {
+            throw new IllegalStateException();
+        }
     }
 
     protected void initializeToolbar() {
