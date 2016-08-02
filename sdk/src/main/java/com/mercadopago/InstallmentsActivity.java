@@ -123,10 +123,10 @@ public class InstallmentsActivity extends ShowCardActivity {
     protected void initializeCard() {
         super.initializeCard();
 
-        if (!werePayerCostsSet()) {
-            getInstallmentsAsync();
-        } else {
+        if (werePayerCostsSet()) {
             resolvePayerCosts(mPayerCosts);
+        } else {
+            getInstallmentsAsync();
         }
     }
 
@@ -165,7 +165,7 @@ public class InstallmentsActivity extends ShowCardActivity {
     private void getInstallmentsAsync() {
         mProgressBar.setVisibility(View.VISIBLE);
         Long issuerId = mSelectedIssuer == null ? null : mSelectedIssuer.getId();
-        String bin = mBin != null ? mBin : "";
+        String bin = mBin == null ? "" : mBin;
         mMercadoPago.getInstallments(bin, mAmount, issuerId, mCurrentPaymentMethod.getId(),
             new Callback<List<Installment>>() {
                 @Override
