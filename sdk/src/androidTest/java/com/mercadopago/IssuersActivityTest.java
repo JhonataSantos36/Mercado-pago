@@ -396,7 +396,7 @@ public class IssuersActivityTest {
 
     @Test
     public void decorationPreferenceWithDarkFontAndTokenPaintsBackground() {
-        String issuers = StaticMock.getIssuersJson();s
+        String issuers = StaticMock.getIssuersJson();
         Type listType = new TypeToken<List<Issuer>>(){}.getType();
         List<Issuer> issuerList = JsonUtil.getInstance().getGson().fromJson(issuers, listType);
         mFakeAPI.addResponseToQueue(issuerList, 200, "");

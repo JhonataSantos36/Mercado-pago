@@ -98,21 +98,24 @@ public abstract class ShowCardActivity extends FrontCardActivity {
                 }
             });
         }
-        if(mDecorationPreference != null) {
-            if(mDecorationPreference.hasColors()) {
-                if(toolbar != null && mToken != null) {
-                    decorateToolbar(toolbar);
-                } else if (toolbar != null) {
-                    decorate(toolbar);
-                    decorate(mToolbarTitle);
-                }
+        if(mDecorationPreference != null && mDecorationPreference.hasColors() && toolbar != null) {
+            if (mToken == null) {
+                decorateWithoutToken(toolbar);
+            } else {
+                decorateWithToken(toolbar);
             }
         }
     }
 
-    private void decorateToolbar(Toolbar toolbar) {
+    protected void decorateWithToken(Toolbar toolbar) {
         super.decorate(toolbar);
         toolbar.setBackgroundColor(mDecorationPreference.getLighterColor());
+        super.decorateFont(mToolbarTitle);
+    }
+
+    protected void decorateWithoutToken(Toolbar toolbar) {
+        super.decorate(toolbar);
+        super.decorateFont(mToolbarTitle);
     }
 
     protected void initializeCard() {
