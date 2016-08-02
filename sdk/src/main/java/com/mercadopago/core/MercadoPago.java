@@ -727,7 +727,7 @@ public class MercadoPago {
             }
         }
 
-        public void startResultActivity() {
+        public void startPaymentResultActivity() {
 
             if (this.mActivity == null) throw new IllegalStateException("activity is null");
             if (this.mPayment == null) throw new IllegalStateException("payment is null");
