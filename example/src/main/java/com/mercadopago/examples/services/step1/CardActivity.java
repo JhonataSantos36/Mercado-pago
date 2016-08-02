@@ -70,7 +70,7 @@ public class CardActivity extends AppCompatActivity {
 
         // Set input controls
         mCardNumber = (MPEditText) findViewById(R.id.cardNumber);
-        mSecurityCode = (MPEditText) findViewById(R.id.securityCode);
+        mSecurityCode = (MPEditText) findViewById(R.id.mpsdkSecurityCode);
         mCardHolderName = (MPEditText) findViewById(R.id.cardholderName);
         mIdentificationNumber = (MPEditText) findViewById(R.id.identificationNumber);
         mIdentificationType = (Spinner) findViewById(R.id.identificationType);

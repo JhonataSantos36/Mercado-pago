@@ -17,26 +17,6 @@ public class CustomerCardsAdapter extends  RecyclerView.Adapter<CustomerCardsAda
     private List<Card> mData;
     private OnSelectedCallback<Card> mSelectionCallback;
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-
-        public Card mCard;
-        public PaymentMethodCardSelectionRow mPaymentMethodCardRow;
-
-        public ViewHolder(PaymentMethodCardSelectionRow paymentMethodCardRow, Card card) {
-            super(paymentMethodCardRow.getView());
-            mCard = card;
-            mPaymentMethodCardRow = paymentMethodCardRow;
-
-            mPaymentMethodCardRow.initializeControls();
-            mPaymentMethodCardRow.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mSelectionCallback.onSelected(mCard);
-                }
-            });
-        }
-    }
-
     public CustomerCardsAdapter(Context context, List<Card> data, OnSelectedCallback<Card> callback) {
         mContext = context;
         mData = data;
@@ -64,10 +44,32 @@ public class CustomerCardsAdapter extends  RecyclerView.Adapter<CustomerCardsAda
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.mPaymentMethodCardRow.drawPaymentMethod();
+        holder.mPaymentMethodCardRow.showSeparator();
     }
 
     @Override
     public int getItemCount() {
         return mData.size();
     }
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
+
+        public Card mCard;
+        public PaymentMethodCardSelectionRow mPaymentMethodCardRow;
+
+        public ViewHolder(PaymentMethodCardSelectionRow paymentMethodCardRow, Card card) {
+            super(paymentMethodCardRow.getView());
+            mCard = card;
+            mPaymentMethodCardRow = paymentMethodCardRow;
+
+            mPaymentMethodCardRow.initializeControls();
+            mPaymentMethodCardRow.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mSelectionCallback.onSelected(mCard);
+                }
+            });
+        }
+    }
+
 }

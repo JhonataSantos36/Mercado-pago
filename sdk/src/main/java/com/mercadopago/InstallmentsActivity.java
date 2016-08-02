@@ -82,11 +82,12 @@ public class InstallmentsActivity extends ShowCardActivity {
         initializeAdapter();
         initializeToolbar();
 
-        mMercadoPago = new MercadoPago.Builder()
-            .setContext(this)
-            .setPublicKey(mPublicKey)
-            .build();
-
+        if(mPayerCosts == null) {
+            mMercadoPago = new MercadoPago.Builder()
+                    .setContext(this)
+                    .setPublicKey(mPublicKey)
+                    .build();
+        }
         initializeCard();
     }
 
@@ -147,7 +148,7 @@ public class InstallmentsActivity extends ShowCardActivity {
 
     @Override
     protected void validateActivityParameters() throws IllegalStateException {
-        if (mAmount == null || mCurrentPaymentMethod == null || mSite == null) {
+        if (mAmount == null || mSite == null) {
             throw new IllegalStateException();
         }
         if(mPayerCosts == null) {

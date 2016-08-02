@@ -1,8 +1,8 @@
 package com.mercadopago;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.model.Payment;
@@ -14,7 +14,7 @@ import com.mercadopago.util.MercadoPagoUtil;
 
 import static android.text.TextUtils.isEmpty;
 
-public class PaymentResultActivity extends AppCompatActivity {
+public class PaymentResultActivity extends Activity {
 
     //Params
     protected Payment mPayment;
