@@ -53,8 +53,7 @@ public class RejectionActivity extends MercadoPagoActivity {
 
     @Override
     protected void setContentView() {
-        MPTracker.getInstance().trackScreen("REJECTION", "3", mMerchantPublicKey, "MLA", "1.0", this);
-
+        MPTracker.getInstance().trackScreen("REJECTED", 2, mMerchantPublicKey, BuildConfig.VERSION_NAME, getActivity());
         setContentView(R.layout.mpsdk_activity_rejection);
     }
 
@@ -164,6 +163,8 @@ public class RejectionActivity extends MercadoPagoActivity {
 
     @Override
     public void onBackPressed() {
+        MPTracker.getInstance().trackEvent("REJECTION", "BACK_PRESSED", 2, mMerchantPublicKey, BuildConfig.VERSION_NAME, this);
+
         if(mBackPressedOnce) {
             finishWithOkResult();
         }

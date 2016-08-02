@@ -15,7 +15,6 @@ import com.mercadopago.adapters.CustomerCardsAdapter;
 import com.mercadopago.callbacks.OnSelectedCallback;
 import com.mercadopago.decorations.DividerItemDecoration;
 import com.mercadopago.model.Card;
-import com.mercadopago.mptracker.MPTracker;
 import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
 
@@ -50,8 +49,6 @@ public class CustomerCardsActivity extends MercadoPagoActivity {
 
     @Override
     protected void setContentView() {
-        //TODO validate AGREGAR PUBLIC KEY
-        MPTracker.getInstance().trackScreen("CUSTOMER_CARDS", "2", "publicKey", "MLA", "1.0", this);
         setContentView(R.layout.mpsdk_activity_customer_cards);
     }
 
@@ -119,7 +116,6 @@ public class CustomerCardsActivity extends MercadoPagoActivity {
 
     @Override
     public void onBackPressed() {
-        MPTracker.getInstance().trackEvent("CUSTOMER_CARDS", "BACK_PRESSED", "2", "publicKey", "MLA", "1.0", this);
         Intent returnIntent = new Intent();
         setResult(RESULT_CANCELED, returnIntent);
         finish();

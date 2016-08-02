@@ -6,6 +6,9 @@ import android.support.annotation.NonNull;
 
 import com.google.gson.reflect.TypeToken;
 import com.mercadopago.callbacks.Callback;
+import com.mercadopago.model.Payment;
+import com.mercadopago.model.Token;
+import com.mercadopago.mptracker.MPTracker;
 import com.mercadopago.util.ApiUtil;
 
 import java.lang.annotation.Annotation;
@@ -71,6 +74,15 @@ public class ErrorHandlingCallAdapter {
                         public void run() {
                             int code = r.code();
                             if (code >= 200 && code < 300) {
+                                //Get body
+                                T body = r.body();
+                                if (body instanceof Payment) {
+                                    Payment mPayment = (Payment) body;
+                                    MPTracker.getInstance().trackPayment("NO_SCREEN", "CREATE_PAYMENT_RESPONSE", mPayment.getId(), mPayment.getPaymentMethodId(), mPayment.getStatus(), mPayment.getStatusDetail(), mPayment.getPaymentTypeId(), mPayment.getInstallments(), mPayment.getIssuerId());
+                                } else if (body instanceof Token) {
+                                    Token mToken = (Token) body;
+                                    MPTracker.getInstance().trackToken(mToken.getId());
+                                }
                                 callback.success(r.body());
                             } else {
                                 callback.failure(ApiUtil.getApiException(r));
@@ -81,16 +93,15 @@ public class ErrorHandlingCallAdapter {
 
                 @Override
                 public void onFailure(final Call<T> call, Throwable t) {
-                    final Throwable th  = t;
-                    if(callback.attempts++ == 3) {
+                    final Throwable th = t;
+                    if (callback.attempts++ == 3) {
                         executeOnMainThread(new Runnable() {
                             @Override
                             public void run() {
                                 callback.failure(ApiUtil.getApiException(th));
                             }
                         });
-                    }
-                    else {
+                    } else {
                         call.clone().enqueue(this);
                     }
                 }

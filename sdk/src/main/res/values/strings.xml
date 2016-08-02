@@ -6,7 +6,6 @@
     <string name="mpsdk_last_digits_label">terminada en</string>
     <string name="mpsdk_other_pm_label">Otro medio de pago…</string>
     <string name="mpsdk_invalid_pm_for_current_amount">El medio de pago que elegiste no se puede usar para pagar ese monto. Por favor selecciona otro</string>
-    <string name="mpsdk_transition_view_name">transitionView</string>
     <string name="mpsdk_title_activity_customer_pms">¿Con qué tarjeta?</string>
     <string name="mpsdk_title_activity_payment_methods">¿Cómo quieres pagar?</string>
     <string name="mpsdk_payment_method">Medio de pago</string>
@@ -79,7 +78,6 @@
     <string name="mpsdk_title_activity_install_app">Pagar</string>
     <string name="mpsdk_install_app_label">Para pagar, instala la aplicación de MercadoPago</string>
     <string name="mpsdk_install_app_button">Instalar la aplicación</string>
-    <string name="mpsdk_submit_button">&gt;</string>
 
     <string name="mpsdk_title_activity_guessing_card">Ingresa los datos de tu tarjeta</string>
     <string name="mpsdk_issuer_label">Banco</string>

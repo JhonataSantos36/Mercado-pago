@@ -22,6 +22,7 @@ public class ErrorActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         animateErrorScreenLaunch();
         setContentView(R.layout.mpsdk_activity_error);
+
         getActivityParameters();
         if(validParameters()) {
             initializeControls();
@@ -86,6 +87,7 @@ public class ErrorActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+
         Intent intent = new Intent();
         intent.putExtra("mpException", JsonUtil.getInstance().toJson(mMPException));
         setResult(RESULT_CANCELED, intent);

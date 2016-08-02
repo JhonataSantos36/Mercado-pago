@@ -56,7 +56,7 @@ public class PaymentMethodsActivity extends MercadoPagoActivity {
 
     @Override
     protected void setContentView() {
-        MPTracker.getInstance().trackScreen("PAYMENT_METHODS", "2", mMerchantPublicKey, "MLA", "1.0", this);
+        MPTracker.getInstance().trackScreen("PAYMENT_METHODS", 2, mMerchantPublicKey, BuildConfig.VERSION_NAME, this);
         setContentView(R.layout.mpsdk_activity_payment_methods);
     }
 
@@ -128,7 +128,7 @@ public class PaymentMethodsActivity extends MercadoPagoActivity {
     }
 
     public void onBackPressed() {
-        MPTracker.getInstance().trackEvent("PAYMENT_METHODS", "BACK_PRESSED", "2", mMerchantPublicKey, "MLA", "1.0", this);
+        MPTracker.getInstance().trackEvent("PAYMENT_METHODS", "BACK_PRESSED", 2, mMerchantPublicKey, BuildConfig.VERSION_NAME, this);
 
         Intent returnIntent = new Intent();
         returnIntent.putExtra("backButtonPressed", true);
@@ -143,7 +143,6 @@ public class PaymentMethodsActivity extends MercadoPagoActivity {
             @Override
             public void success(List<PaymentMethod> paymentMethods) {
                 if (isActivityActive()) {
-                    MPTracker.getInstance().trackEvent("PAYMENT_METHODS", "GET_PAYMENT_METHODS_RESPONSE", "SUCCESS", "2", mMerchantPublicKey, "MLA", "1.0", getActivity());
                     mRecyclerView.setAdapter(new PaymentMethodsAdapter(getActivity(), getSupportedPaymentMethods(paymentMethods), new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -161,7 +160,6 @@ public class PaymentMethodsActivity extends MercadoPagoActivity {
 
             @Override
             public void failure(ApiException apiException) {
-                MPTracker.getInstance().trackEvent("PAYMENT_METHODS", "GET_PAYMENT_METHODS_RESPONSE", "FAIL", "2", mMerchantPublicKey, "MLA", "1.0", getActivity());
                 if (isActivityActive()) {
                     setFailureRecovery(new FailureRecovery() {
                         @Override
