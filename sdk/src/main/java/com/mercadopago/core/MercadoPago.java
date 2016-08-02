@@ -686,7 +686,6 @@ public class MercadoPago {
             return this;
         }
 
-        @Deprecated
         public StartActivityBuilder setSupportedPaymentMethods(List<PaymentMethod> paymentMethodList) {
 
             this.mPaymentMethodList = paymentMethodList;
@@ -740,6 +739,7 @@ public class MercadoPago {
             return this;
         }
 
+        @Deprecated
         public StartActivityBuilder setSupportedPaymentTypes(List<String> supportedPaymentTypes) {
             this.mSupportedPaymentTypes = supportedPaymentTypes;
             return this;
