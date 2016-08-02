@@ -427,14 +427,6 @@ public class PaymentVaultActivity extends MercadoPagoActivity {
             PaymentMethod paymentMethod = JsonUtil.getInstance().fromJson(data.getStringExtra("paymentMethod"), PaymentMethod.class);
             finishWithPaymentMethodResult(paymentMethod);
         }
-        else {
-            if ((data != null) && (data.getStringExtra("apiException") != null)) {
-                MPTracker.getInstance().trackEvent("PAYMENT_VAULT","CANCELED", 2, mMerchantPublicKey, mSite.getId(), BuildConfig.VERSION_NAME,this);
-
-                setResult(Activity.RESULT_CANCELED, data);
-                this.finish();
-            }
-        }
     }
 
     protected void finishWithPaymentMethodResult(PaymentMethod paymentMethod) {

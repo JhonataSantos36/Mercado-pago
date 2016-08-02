@@ -55,6 +55,8 @@ public class ErrorHandlingCallAdapter {
     /** Adapts a {@link Call} to {@link MPCall}. */
     static class MPCallAdapter<T> implements MPCall<T> {
         private final Call<T> call;
+        private Payment mPayment;
+        private Token mToken;
 
         MPCallAdapter(Call<T> call) {
             this.call = call;
@@ -74,17 +76,17 @@ public class ErrorHandlingCallAdapter {
                         public void run() {
                             int code = r.code();
                             if (code >= 200 && code < 300) {
-
                                 //Get body
                                 T body = r.body();
                                 if (body instanceof Payment) {
-                                    MPTracker.getInstance().trackPayment("NO_SCREEN", "CREATE_PAYMENT_RESPONSE", ((Payment) body).getId(), ((Payment) body).getPaymentMethodId(), ((Payment) body).getStatus(), ((Payment) body).getStatusDetail(), ((Payment) body).getPaymentTypeId(), ((Payment) body).getInstallments(), ((Payment) body).getIssuerId());
+                                    mPayment = (Payment) body;
+                                    MPTracker.getInstance().trackPayment("NO_SCREEN", "CREATE_PAYMENT_RESPONSE", mPayment.getId(), mPayment.getPaymentMethodId(), mPayment.getStatus(), mPayment.getStatusDetail(), mPayment.getPaymentTypeId(), mPayment.getInstallments(), mPayment.getIssuerId());
                                 } else if (body instanceof Token) {
-                                    MPTracker.getInstance().trackToken(((Token) body).getId());
+                                    mToken = (Token) body;
+                                    MPTracker.getInstance().trackToken(mToken.getId());
                                 }
                                 callback.success(r.body());
                             } else {
-                                //track failure
                                 callback.failure(ApiUtil.getApiException(r));
                             }
                         }
