@@ -22,7 +22,6 @@ import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;
-import com.mercadopago.util.MercadoPagoUtil;
 
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
@@ -146,21 +145,12 @@ public class ExamplesUtils {
                 @Override
                 public void success(Payment payment) {
 
-                    if(MercadoPagoUtil.isCard(payment.getPaymentTypeId())) {
-                        new MercadoPago.StartActivityBuilder()
-                                .setActivity(activity)
-                                .setPayment(payment)
-                                .setPaymentMethod(paymentMethod)
-                                .startCongratsActivity();
-                    }
-                    else {
-                        new MercadoPago.StartActivityBuilder()
-                                .setPublicKey(ExamplesUtils.DUMMY_MERCHANT_PUBLIC_KEY)
-                                .setActivity(activity)
-                                .setPayment(payment)
-                                .setPaymentMethod(paymentMethod)
-                                .startInstructionsActivity();
-                    }
+                    new MercadoPago.StartActivityBuilder()
+                            .setPublicKey(DUMMY_MERCHANT_PUBLIC_KEY)
+                            .setActivity(activity)
+                            .setPayment(payment)
+                            .setPaymentMethod(paymentMethod)
+                            .startResultActivity();
                 }
 
                 @Override

@@ -19,7 +19,6 @@ import com.mercadopago.model.Token;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -89,7 +88,7 @@ public class Step1Activity extends ExampleActivity {
                     }
                 }
             }
-        } else if (requestCode == MercadoPago.CONGRATS_REQUEST_CODE) {
+        } else if (requestCode == MercadoPago.RESULT_REQUEST_CODE) {
             LayoutUtil.showRegularLayout(this);
         }
     }
