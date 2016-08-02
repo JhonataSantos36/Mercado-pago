@@ -162,8 +162,10 @@ public class CheckoutActivity extends MercadoPagoActivity {
                 MPTracker.getInstance().trackEvent("PREFERENCE", "GET_PREFERENCE_RESPONSE", "SUCCESS", "3", mMerchantPublicKey, mCheckoutPreference.getSiteId(), "1.0", getActivity());
 
                 try {
-                    validatePreference();
-                    initializeCheckout();
+                    if(isActivityActive()) {
+                        validatePreference();
+                        initializeCheckout();
+                    }
                 } catch (CheckoutPreferenceException e) {
                     String errorMessage = ExceptionHandler.getErrorMessage(getActivity(), e);
                     ErrorUtil.startErrorActivity(getActivity(), errorMessage, false);
