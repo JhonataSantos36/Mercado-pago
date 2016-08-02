@@ -1,16 +1,13 @@
 package com.mercadopago;
 
 import android.app.Activity;
-import android.app.Instrumentation;
 import android.content.Intent;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.intent.Intents;
 import android.support.test.rule.ActivityTestRule;
-import android.support.test.runner.AndroidJUnit4;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.test.suitebuilder.annotation.LargeTest;
 import android.widget.FrameLayout;
 
 import com.google.gson.reflect.TypeToken;
@@ -29,6 +26,7 @@ import com.mercadopago.test.StaticMock;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.utils.ActivityResultUtil;
 import com.mercadopago.utils.ViewUtils;
+import com.mercadopago.views.MPTextView;
 
 import org.junit.After;
 import org.junit.Before;
@@ -429,6 +427,12 @@ public class InstallmentsActivityTest {
         Toolbar toolbar = (Toolbar) mTestRule.getActivity().findViewById(R.id.mpsdkRegularToolbar);
         int color = ViewUtils.getBackgroundColor(toolbar);
         assertEquals(color, (int)decorationPreference.getBaseColor());
+
+
+        MPTextView toolbarTitle = (MPTextView) mTestRule.getActivity().findViewById(R.id.mpsdkTitle);
+        int fontColor = toolbarTitle.getCurrentTextColor();
+        int expectedColor = ContextCompat.getColor(InstrumentationRegistry.getContext(), R.color.mpsdk_white);
+        assertEquals(fontColor, expectedColor);
     }
 
     @Test
@@ -523,4 +527,53 @@ public class InstallmentsActivityTest {
         assertTrue(activityResult.getResultCode() == Activity.RESULT_OK);
         assertEquals(payerCostJson, activityResult.getExtras().getString("payerCost"));
     }
+
+    @Test
+    public void decorationPreferenceWithDarkFontAndTokenPaintsBackground() {
+        String payerCosts = StaticMock.getPayerCostsJson();
+        Type listType = new TypeToken<List<PayerCost>>(){}.getType();
+        List<PayerCost> payerCostList = JsonUtil.getInstance().getGson().fromJson(payerCosts, listType);
+        validStartIntent.putExtra("payerCosts", JsonUtil.getInstance().toJson(payerCostList));
+
+        Token token = StaticMock.getToken();
+        validStartIntent.putExtra("token", JsonUtil.getInstance().toJson(token));
+
+        DecorationPreference decorationPreference = new DecorationPreference();
+        decorationPreference.setBaseColor(ContextCompat.getColor(InstrumentationRegistry.getContext(), R.color.mpsdk_color_red_error));
+        decorationPreference.enableDarkFont();
+        validStartIntent.putExtra("decorationPreference", JsonUtil.getInstance().toJson(decorationPreference));
+
+        mTestRule.launchActivity(validStartIntent);
+
+        FrameLayout cardBackground = (FrameLayout) mTestRule.getActivity().findViewById(R.id.mpsdkCardBackground);
+        int color = ViewUtils.getBackgroundColor(cardBackground);
+        assertEquals(color, decorationPreference.getLighterColor());
+
+    }
+
+    @Test
+    public void decorationPreferenceWithDarkFontAndWithoutTokenPaintsToolbarAndTitle() {
+        String payerCosts = StaticMock.getPayerCostsJson();
+        Type listType = new TypeToken<List<PayerCost>>(){}.getType();
+        List<PayerCost> payerCostList = JsonUtil.getInstance().getGson().fromJson(payerCosts, listType);
+        validStartIntent.putExtra("payerCosts", JsonUtil.getInstance().toJson(payerCostList));
+
+        DecorationPreference decorationPreference = new DecorationPreference();
+        decorationPreference.setBaseColor(ContextCompat.getColor(InstrumentationRegistry.getContext(), R.color.mpsdk_color_red_error));
+        decorationPreference.enableDarkFont();
+        validStartIntent.putExtra("decorationPreference", JsonUtil.getInstance().toJson(decorationPreference));
+
+        mTestRule.launchActivity(validStartIntent);
+
+        Toolbar toolbar = (Toolbar) mTestRule.getActivity().findViewById(R.id.mpsdkRegularToolbar);
+        int color = ViewUtils.getBackgroundColor(toolbar);
+        assertEquals(color, (int)decorationPreference.getBaseColor());
+
+        MPTextView toolbarTitle = (MPTextView) mTestRule.getActivity().findViewById(R.id.mpsdkTitle);
+        int fontColor = toolbarTitle.getCurrentTextColor();
+        int expectedColor = ContextCompat.getColor(InstrumentationRegistry.getContext(), R.color.mpsdk_dark_font_color);
+        assertEquals(fontColor, expectedColor);
+
+    }
+
 }
