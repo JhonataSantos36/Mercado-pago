@@ -150,7 +150,7 @@ public class ExamplesUtils {
                             .setActivity(activity)
                             .setPayment(payment)
                             .setPaymentMethod(paymentMethod)
-                            .startResultActivity();
+                            .startPaymentResultActivity();
                 }
 
                 @Override
