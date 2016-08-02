@@ -878,6 +878,7 @@ public class MercadoPago {
             if(mPayerCosts == null) {
                 if (this.mKey == null) throw new IllegalStateException("key is null");
                 if (this.mIssuer == null) throw new IllegalStateException("issuer is null");
+                if (this.mPaymentMethod == null) throw new IllegalStateException("payment method is null");
             }
 
             MercadoPago.startInstallmentsActivity(mActivity, mAmount, mSite, mToken,

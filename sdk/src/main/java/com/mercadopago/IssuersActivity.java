@@ -68,7 +68,7 @@ public class IssuersActivity extends ShowCardActivity {
     @Override
     protected void initializeFragments(Bundle savedInstanceState) {
         super.initializeFragments(savedInstanceState);
-        if(mToken != null) {
+        if(isCardInfoAvailable()) {
             initializeFrontFragment();
         } else {
             hideCardLayout();
@@ -104,7 +104,7 @@ public class IssuersActivity extends ShowCardActivity {
     }
 
     protected void initializeToolbar() {
-        if(mToken != null) {
+        if(isCardInfoAvailable()) {
             super.initializeToolbar("", true);
         } else {
             super.initializeToolbar(getString(R.string.mpsdk_card_issuers_title), false);

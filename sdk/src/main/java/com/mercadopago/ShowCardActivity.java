@@ -57,7 +57,7 @@ public abstract class ShowCardActivity extends FrontCardActivity {
         }
     }
 
-    private Boolean isCardInfoAvailable() {
+    protected Boolean isCardInfoAvailable() {
         return mToken != null && mCurrentPaymentMethod != null;
     }
 

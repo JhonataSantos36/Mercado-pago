@@ -66,7 +66,7 @@ public class InstallmentsActivity extends ShowCardActivity {
     @Override
     protected void initializeFragments(Bundle savedInstanceState) {
         super.initializeFragments(savedInstanceState);
-        if(mToken != null) {
+        if(isCardInfoAvailable()) {
             initializeFrontFragment();
         } else {
             hideCardLayout();
@@ -82,13 +82,17 @@ public class InstallmentsActivity extends ShowCardActivity {
         initializeAdapter();
         initializeToolbar();
 
-        if(mPayerCosts == null) {
+        if(!werePayerCostsSet()) {
             mMercadoPago = new MercadoPago.Builder()
                     .setContext(this)
                     .setPublicKey(mPublicKey)
                     .build();
         }
         initializeCard();
+    }
+
+    private boolean werePayerCostsSet() {
+        return mPayerCosts != null;
     }
 
     @Override
@@ -108,7 +112,7 @@ public class InstallmentsActivity extends ShowCardActivity {
     }
 
     protected void initializeToolbar() {
-        if(mToken != null) {
+        if(isCardInfoAvailable()) {
             super.initializeToolbar("", true);
         } else {
             super.initializeToolbar(getString(R.string.mpsdk_card_installments_title), false);
@@ -119,7 +123,7 @@ public class InstallmentsActivity extends ShowCardActivity {
     protected void initializeCard() {
         super.initializeCard();
 
-        if (mPayerCosts == null) {
+        if (!werePayerCostsSet()) {
             getInstallmentsAsync();
         } else {
             resolvePayerCosts(mPayerCosts);
@@ -153,13 +157,16 @@ public class InstallmentsActivity extends ShowCardActivity {
         }
         if(mPayerCosts == null) {
             if (mSelectedIssuer == null) throw new IllegalStateException("issuer is null");
+            if (mPublicKey == null) throw new IllegalStateException("public key not set");
+            if (mCurrentPaymentMethod == null) throw new IllegalStateException("payment method is null");
         }
     }
 
     private void getInstallmentsAsync() {
         mProgressBar.setVisibility(View.VISIBLE);
         Long issuerId = mSelectedIssuer == null ? null : mSelectedIssuer.getId();
-        mMercadoPago.getInstallments(mBin, mAmount, issuerId, mCurrentPaymentMethod.getId(),
+        String bin = mBin != null ? mBin : "";
+        mMercadoPago.getInstallments(bin, mAmount, issuerId, mCurrentPaymentMethod.getId(),
             new Callback<List<Installment>>() {
                 @Override
                 public void success(List<Installment> installments) {
