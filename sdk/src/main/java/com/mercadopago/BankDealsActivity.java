@@ -87,7 +87,7 @@ public class BankDealsActivity extends MercadoPagoActivity {
         });
 
         decorate(mToolbar);
-        decorate(title);
+        decorateFont(title);
     }
 
     @Override

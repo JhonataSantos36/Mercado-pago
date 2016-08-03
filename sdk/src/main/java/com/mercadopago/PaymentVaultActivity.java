@@ -188,7 +188,7 @@ public class PaymentVaultActivity extends MercadoPagoActivity {
         TextView toolbarTitle = (TextView) findViewById(R.id.mpsdkTitle);
 
         decorate(toolbar);
-        decorate(toolbarTitle);
+        decorateFont(toolbarTitle);
     }
 
     protected void initializeGroupRecyclerView() {

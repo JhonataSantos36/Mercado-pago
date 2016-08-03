@@ -24,6 +24,7 @@ import com.mercadopago.test.StaticMock;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.utils.ActivityResultUtil;
 import com.mercadopago.utils.ViewUtils;
+import com.mercadopago.views.MPTextView;
 
 import org.junit.After;
 import org.junit.Before;
@@ -385,6 +386,60 @@ public class IssuersActivityTest {
         Toolbar toolbar = (Toolbar) mTestRule.getActivity().findViewById(R.id.mpsdkRegularToolbar);
         int color = ViewUtils.getBackgroundColor(toolbar);
         assertEquals(color, (int)decorationPreference.getBaseColor());
+
+
+        MPTextView toolbarTitle = (MPTextView) mTestRule.getActivity().findViewById(R.id.mpsdkTitle);
+        int fontColor = toolbarTitle.getCurrentTextColor();
+        int expectedColor = ContextCompat.getColor(InstrumentationRegistry.getContext(), R.color.mpsdk_white);
+        assertEquals(fontColor, expectedColor);
+    }
+
+    @Test
+    public void decorationPreferenceWithDarkFontAndTokenPaintsBackground() {
+        String issuers = StaticMock.getIssuersJson();
+        Type listType = new TypeToken<List<Issuer>>(){}.getType();
+        List<Issuer> issuerList = JsonUtil.getInstance().getGson().fromJson(issuers, listType);
+        mFakeAPI.addResponseToQueue(issuerList, 200, "");
+
+        Token token = StaticMock.getToken();
+        validStartIntent.putExtra("token", JsonUtil.getInstance().toJson(token));
+
+        DecorationPreference decorationPreference = new DecorationPreference();
+        decorationPreference.setBaseColor(ContextCompat.getColor(InstrumentationRegistry.getContext(), R.color.mpsdk_color_red_error));
+        decorationPreference.enableDarkFont();
+        validStartIntent.putExtra("decorationPreference", JsonUtil.getInstance().toJson(decorationPreference));
+
+        mTestRule.launchActivity(validStartIntent);
+
+        FrameLayout cardBackground = (FrameLayout) mTestRule.getActivity().findViewById(R.id.mpsdkCardBackground);
+        int color = ViewUtils.getBackgroundColor(cardBackground);
+        assertEquals(color, decorationPreference.getLighterColor());
+
+    }
+
+    @Test
+    public void decorationPreferenceWithDarkFontAndWithoutTokenPaintsToolbarAndTitle() {
+        String issuers = StaticMock.getIssuersJson();
+        Type listType = new TypeToken<List<Issuer>>(){}.getType();
+        List<Issuer> issuerList = JsonUtil.getInstance().getGson().fromJson(issuers, listType);
+        mFakeAPI.addResponseToQueue(issuerList, 200, "");
+
+        DecorationPreference decorationPreference = new DecorationPreference();
+        decorationPreference.setBaseColor(ContextCompat.getColor(InstrumentationRegistry.getContext(), R.color.mpsdk_color_red_error));
+        decorationPreference.enableDarkFont();
+        validStartIntent.putExtra("decorationPreference", JsonUtil.getInstance().toJson(decorationPreference));
+
+        mTestRule.launchActivity(validStartIntent);
+
+        Toolbar toolbar = (Toolbar) mTestRule.getActivity().findViewById(R.id.mpsdkRegularToolbar);
+        int color = ViewUtils.getBackgroundColor(toolbar);
+        assertEquals(color, (int)decorationPreference.getBaseColor());
+
+        MPTextView toolbarTitle = (MPTextView) mTestRule.getActivity().findViewById(R.id.mpsdkTitle);
+        int fontColor = toolbarTitle.getCurrentTextColor();
+        int expectedColor = ContextCompat.getColor(InstrumentationRegistry.getContext(), R.color.mpsdk_dark_font_color);
+        assertEquals(fontColor, expectedColor);
+
     }
 
 

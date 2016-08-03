@@ -114,9 +114,9 @@ public class PaymentMethodsActivity extends MercadoPagoActivity {
         }
 
         decorate(mToolbar);
-        decorate(mTitle);
+        decorateFont(mTitle);
         if(mShowBankDeals) {
-            decorate(mBankDealsTextView);
+            decorateFont(mBankDealsTextView);
         }
     }
 

@@ -140,24 +140,25 @@ public abstract class MercadoPagoActivity extends AppCompatActivity {
             if (isCustomColorSet()) {
                 toolbar.setBackgroundColor(getCustomBaseColor());
             }
+            decorateUpArrow(toolbar);
+        }
+    }
 
+    protected void decorateFont(TextView textView) {
+        if(textView != null) {
             if (isDarkFontEnabled()) {
-                int darkFont = getDarkFontColor();
-                Drawable upArrow = toolbar.getNavigationIcon();
-                if (upArrow != null) {
-                    upArrow.setColorFilter(darkFont, PorterDuff.Mode.SRC_ATOP);
-                    if (getSupportActionBar() != null) {
-                        getSupportActionBar().setHomeAsUpIndicator(upArrow);
-                    }
-                }
+                textView.setTextColor(getDarkFontColor());
             }
         }
     }
 
-    protected void decorate(TextView textView) {
-        if(textView != null) {
-            if (isDarkFontEnabled()) {
-                textView.setTextColor(getDarkFontColor());
+    protected void decorateUpArrow(Toolbar toolbar) {
+        if (isDarkFontEnabled()) {
+            int darkFont = getDarkFontColor();
+            Drawable upArrow = toolbar.getNavigationIcon();
+            if (upArrow != null && getSupportActionBar() != null) {
+                upArrow.setColorFilter(darkFont, PorterDuff.Mode.SRC_ATOP);
+                getSupportActionBar().setHomeAsUpIndicator(upArrow);
             }
         }
     }

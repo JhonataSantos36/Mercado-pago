@@ -2,6 +2,7 @@ package com.mercadopago;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.google.gson.reflect.TypeToken;
@@ -111,6 +112,22 @@ public class CardVaultActivity extends ShowCardActivity {
 
     protected void initializeToolbar() {
         super.initializeToolbar("", true);
+    }
+
+    @Override
+    protected void decorateWithToken(Toolbar toolbar) {
+        decorateBackground(toolbar);
+    }
+
+    @Override
+    protected void decorateWithoutToken(Toolbar toolbar) {
+        decorateBackground(toolbar);
+    }
+
+    private void decorateBackground(Toolbar toolbar) {
+        super.decorateUpArrow(toolbar);
+        super.decorateFont(mToolbarTitle);
+        toolbar.setBackgroundColor(mDecorationPreference.getLighterColor());
     }
 
     @Override

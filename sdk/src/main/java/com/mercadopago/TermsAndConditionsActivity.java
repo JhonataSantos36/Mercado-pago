@@ -75,7 +75,7 @@ public class TermsAndConditionsActivity extends MercadoPagoActivity {
         });
 
         decorate(mToolbar);
-        decorate(mTitle);
+        decorateFont(mTitle);
     }
 
     @Override

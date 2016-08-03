@@ -1,7 +1,5 @@
 package com.mercadopago;
 
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -100,27 +98,24 @@ public abstract class ShowCardActivity extends FrontCardActivity {
                 }
             });
         }
-        if(mDecorationPreference != null) {
-            if(mDecorationPreference.hasColors()) {
-                if(toolbar != null && mToken != null) {
-                    decorateToolbar(toolbar);
-                } else if (toolbar != null) {
-                    decorate(toolbar);
-                }
+        if(mDecorationPreference != null && mDecorationPreference.hasColors() && toolbar != null) {
+            if (mToken == null) {
+                decorateWithoutToken(toolbar);
+            } else {
+                decorateWithToken(toolbar);
             }
         }
     }
 
-    private void decorateToolbar(Toolbar toolbar) {
-        if(mDecorationPreference.isDarkFontEnabled()) {
-            Drawable upArrow = toolbar.getNavigationIcon();
-            if(upArrow != null) {
-                upArrow.setColorFilter(mDecorationPreference.getDarkFontColor(this), PorterDuff.Mode.SRC_ATOP);
-            }
-            getSupportActionBar().setHomeAsUpIndicator(upArrow);
-            mToolbarTitle.setTextColor(mDecorationPreference.getDarkFontColor(this));
-        }
+    protected void decorateWithToken(Toolbar toolbar) {
+        super.decorate(toolbar);
         toolbar.setBackgroundColor(mDecorationPreference.getLighterColor());
+        super.decorateFont(mToolbarTitle);
+    }
+
+    protected void decorateWithoutToken(Toolbar toolbar) {
+        super.decorate(toolbar);
+        super.decorateFont(mToolbarTitle);
     }
 
     protected void initializeCard() {
