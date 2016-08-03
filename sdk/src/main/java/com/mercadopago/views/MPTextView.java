@@ -11,23 +11,27 @@ import com.mercadopago.R;
 public class MPTextView extends TextView {
 
     public static final String BLACK = "black";
+    public static final String BLACK_IT = "black_it";
     public static final String BOLD = "bold";
     public static final String BOLD_IT = "bold_it";
-    public static final String EXTRA_BOLD = "extra_bold";
-    public static final String DEFAULT_LIGHT = "default_light";
+    public static final String LIGHT = "default_light";
     public static final String ITALIC = "italic";
-    public static final String REGULAR_ITALIC = "reg_italic";
+    public static final String LIGHT_ITALIC = "light_italic";
+    public static final String MEDIUM = "medium";
+    public static final String MEDIUM_ITALIC = "medium_italic";
     public static final String REGULAR = "regular";
-    public static final String SEMI_BOLD = "semi_bold";
-    public static final String SEMI_BOLD_ITALIC = "semi_bold_italic";
+    public static final String THIN = "thin";
+    public static final String THIN_ITALIC = "thin_italic";
+    public static final String COND_BOLD = "cond_bold";
+    public static final String COND_BOLD_ITALIC = "cond_bold_italic";
+    public static final String COND_ITALIC = "cond_italic";
     public static final String COND_LIGHT = "cond_light";
     public static final String COND_LIGHT_ITALIC = "cond_light_italic";
     public static final String COND_REGULAR = "cond_regular";
-    public static final String COND_REGULAR_ITALIC = "cond_regular_italic";
-    public static final String COND_SEMI_BOLD = "cond_semi_bold";
-    public static final String COND_SEMI_BOLD_ITALIC = "cond_semi_bold_italic";
-    public static final String ROBOTO_REGULAR = "roboto_regular";
-    public static final String ROBOTO_BOLD = "roboto_bold";
+    public static final String MONO_REGULAR = "roboto_regular";
+    public static final String MONO_BOLD = "roboto_bold";
+
+    public static final String DEFAULT_FONT = "fonts/Roboto-Light.ttf";
 
     private String mTypeName;
 
@@ -51,7 +55,7 @@ public class MPTextView extends TextView {
     private void init() {
         if (!isInEditMode()) {
             if (mTypeName == null) {
-                mTypeName = "fonts/ProximaNova-Light.otf";
+                mTypeName = DEFAULT_FONT;
             }
             Typeface tf = Typeface.createFromAsset(getContext().getAssets(), mTypeName);
             setTypeface(tf);
@@ -64,61 +68,67 @@ public class MPTextView extends TextView {
         if (fontStyle != null) {
             switch (fontStyle) {
                 case BLACK:
-                    mTypeName = "fonts/ProximaNova-Black.otf";
+                    mTypeName = "fonts/Roboto-Black.ttf";
+                    break;
+                case BLACK_IT:
+                    mTypeName = "fonts/Roboto-BlackItalic.ttf";
                     break;
                 case BOLD:
-                    mTypeName = "fonts/ProximaNova-Bold.otf";
+                    mTypeName = "fonts/Roboto-Bold.ttf";
                     break;
                 case BOLD_IT:
-                    mTypeName = "fonts/ProximaNova-BoldIt.otf";
-                    break;
-                case EXTRA_BOLD:
-                    mTypeName = "fonts/ProximaNova-Extrabold.otf";
-                    break;
-                case DEFAULT_LIGHT:
-                    mTypeName = "fonts/ProximaNova-Light.otf";
+                    mTypeName = "fonts/Roboto-BoldItalic.ttf";
                     break;
                 case ITALIC:
-                    mTypeName = "fonts/ProximaNova-LightItalic.otf";
+                    mTypeName = "fonts/Roboto-Italic.ttf";
                     break;
-                case REGULAR_ITALIC:
-                    mTypeName = "fonts/ProximaNova-RegItalic.otf";
+                case LIGHT:
+                    mTypeName = DEFAULT_FONT;
+                    break;
+                case LIGHT_ITALIC:
+                    mTypeName = "fonts/Roboto-LightItalic.ttf";
+                    break;
+                case MEDIUM:
+                    mTypeName = "fonts/Roboto-Medium.ttf";
+                    break;
+                case MEDIUM_ITALIC:
+                    mTypeName = "fonts/Roboto-MediumItalic.ttf";
                     break;
                 case REGULAR:
-                    mTypeName = "fonts/ProximaNova-Regular.otf";
+                    mTypeName = "fonts/Roboto-Regular.ttf";
                     break;
-                case SEMI_BOLD:
-                    mTypeName = "fonts/ProximaNova-Semibold.otf";
+                case THIN:
+                    mTypeName = "fonts/Roboto-Thin.ttf";
                     break;
-                case SEMI_BOLD_ITALIC:
-                    mTypeName = "fonts/ProximaNova-SemiboldItalic.otf";
+                case THIN_ITALIC:
+                    mTypeName = "fonts/Roboto-ThinItalic.ttf";
+                    break;
+                case COND_BOLD:
+                    mTypeName = "fonts/RobotoCondensed-Bold.ttf";
+                    break;
+                case COND_BOLD_ITALIC:
+                    mTypeName = "fonts/RobotoCondensed-BoldItalic.ttf";
+                    break;
+                case COND_ITALIC:
+                    mTypeName = "fonts/RobotoCondensed-Italic.ttf";
                     break;
                 case COND_LIGHT:
-                    mTypeName = "fonts/ProximaNovaCond-Light.otf";
+                    mTypeName = "fonts/RobotoCondensed-Light.ttf";
                     break;
                 case COND_LIGHT_ITALIC:
-                    mTypeName = "fonts/ProximaNovaCond-LightIt.otf";
+                    mTypeName = "fonts/RobotoCondensed-LightItalic.ttf";
                     break;
                 case COND_REGULAR:
-                    mTypeName = "fonts/ProximaNovaCond-Regular.otf";
+                    mTypeName = "fonts/RobotoCondensed-Regular.ttf";
                     break;
-                case COND_REGULAR_ITALIC:
-                    mTypeName = "fonts/ProximaNovaCond-RegularIt.otf";
-                    break;
-                case COND_SEMI_BOLD:
-                    mTypeName = "fonts/ProximaNovaCond-Semibold.otf";
-                    break;
-                case COND_SEMI_BOLD_ITALIC:
-                    mTypeName = "fonts/ProximaNovaCond-SemiboldIt.otf";
-                    break;
-                case ROBOTO_REGULAR:
+                case MONO_REGULAR:
                     mTypeName = "fonts/RobotoMono-Regular.ttf";
                     break;
-                case ROBOTO_BOLD:
+                case MONO_BOLD:
                     mTypeName = "fonts/RobotoMono-Bold.ttf";
                     break;
                 default:
-                    mTypeName = "fonts/ProximaNova-Light.otf";
+                    mTypeName = DEFAULT_FONT;
             }
         }
         a.recycle();

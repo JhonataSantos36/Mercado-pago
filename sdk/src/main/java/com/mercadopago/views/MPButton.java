@@ -27,7 +27,7 @@ public class MPButton extends Button {
     private void init() {
         if (!isInEditMode()) {
             if (mTypeName == null) {
-                mTypeName = "fonts/ProximaNova-Regular.otf";
+                mTypeName = "fonts/Roboto-Regular.ttf";
             }
             Typeface tf = Typeface.createFromAsset(getContext().getAssets(), mTypeName);
             setTypeface(tf);

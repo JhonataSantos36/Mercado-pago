@@ -35,7 +35,7 @@ public class MPEditText extends EditText {
     private void init() {
         if (!isInEditMode()) {
             if (mTypeName == null) {
-                mTypeName = "fonts/ProximaNova-Light.otf";
+                mTypeName = "fonts/Roboto-Light.ttf";
             }
             Typeface tf = Typeface.createFromAsset(getContext().getAssets(), mTypeName);
             setTypeface(tf);
