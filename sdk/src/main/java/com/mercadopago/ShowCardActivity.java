@@ -50,9 +50,13 @@ public abstract class ShowCardActivity extends FrontCardActivity {
                 this.getIntent().getStringExtra("token"), Token.class);
         mSelectedIssuer = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("issuer"), Issuer.class);
 
-        if(mToken != null) {
+        if(isCardInfoAvailable()) {
             setCardInfo();
         }
+    }
+
+    protected Boolean isCardInfoAvailable() {
+        return mToken != null && mCurrentPaymentMethod != null;
     }
 
     private void setCardInfo() {

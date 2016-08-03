@@ -157,8 +157,10 @@ public class CheckoutActivity extends MercadoPagoActivity {
                 mCheckoutPreference = checkoutPreference;
 
                 try {
-                    validatePreference();
-                    initializeCheckout();
+                    if(isActivityActive()) {
+                        validatePreference();
+                        initializeCheckout();
+                    }
                 } catch (CheckoutPreferenceException e) {
                     String errorMessage = ExceptionHandler.getErrorMessage(getActivity(), e);
                     ErrorUtil.startErrorActivity(getActivity(), errorMessage, false);

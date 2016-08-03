@@ -7,9 +7,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.mercadopago.adapters.PaymentMethodsAdapter;
 import com.mercadopago.callbacks.Callback;
 import com.mercadopago.callbacks.FailureRecovery;
+import com.mercadopago.constants.PaymentTypes;
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.decorations.DividerItemDecoration;
 import com.mercadopago.model.ApiException;
@@ -21,6 +24,7 @@ import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,6 +41,7 @@ public class PaymentMethodsActivity extends MercadoPagoActivity {
     protected TextView mTitle;
     protected String mMerchantPublicKey;
     protected PaymentPreference mPaymentPreference;
+    protected List<String> mSupportedPaymentTypes;
 
     @Override
     protected void getActivityParameters() {
@@ -45,6 +50,31 @@ public class PaymentMethodsActivity extends MercadoPagoActivity {
         if(getIntent().getStringExtra("paymentPreference") != null) {
             mPaymentPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("paymentPreference"), PaymentPreference.class);
         }
+        if (this.getIntent().getStringExtra("supportedPaymentTypes") != null) {
+            Gson gson = new Gson();
+            Type listType = new TypeToken<List<String>>(){}.getType();
+            mSupportedPaymentTypes = gson.fromJson(this.getIntent().getStringExtra("supportedPaymentTypes"), listType);
+        }
+
+        //Give priority to PaymentPreference over supported payment types
+        if(!isPaymentPreferenceSet() && supportedPaymentTypesSet()) {
+            List<String> excludedPaymentTypes = new ArrayList<>();
+            for (String type : PaymentTypes.getAllPaymentTypes()) {
+                if (!mSupportedPaymentTypes.contains(type)) {
+                    excludedPaymentTypes.add(type);
+                }
+            }
+            mPaymentPreference = new PaymentPreference();
+            mPaymentPreference.setExcludedPaymentTypeIds(excludedPaymentTypes);
+        }
+    }
+
+    private boolean supportedPaymentTypesSet() {
+        return mSupportedPaymentTypes != null;
+    }
+
+    private boolean isPaymentPreferenceSet() {
+        return mPaymentPreference != null;
     }
 
     @Override

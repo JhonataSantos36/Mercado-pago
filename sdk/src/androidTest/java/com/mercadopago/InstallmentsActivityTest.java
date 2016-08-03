@@ -156,6 +156,7 @@ public class InstallmentsActivityTest {
         Type listType = new TypeToken<List<PayerCost>>(){}.getType();
         List<PayerCost> payerCostList = JsonUtil.getInstance().getGson().fromJson(payerCosts, listType);
 
+        validStartIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(mPaymentMethod));
         validStartIntent.putExtra("payerCosts", JsonUtil.getInstance().toJson(payerCostList));
         mTestRule.launchActivity(validStartIntent);
         try {
@@ -168,13 +169,35 @@ public class InstallmentsActivityTest {
     }
 
     @Test
-    public void showCardWhenToken() {
+    public void hideCardWhenNoPaymentMethod() {
+        String payerCosts = StaticMock.getPayerCostsJson();
+        Type listType = new TypeToken<List<PayerCost>>(){}.getType();
+        List<PayerCost> payerCostList = JsonUtil.getInstance().getGson().fromJson(payerCosts, listType);
+
+        Token token = StaticMock.getToken();
+        validStartIntent.putExtra("payerCosts", JsonUtil.getInstance().toJson(payerCostList));
+        validStartIntent.putExtra("token", JsonUtil.getInstance().toJson(token));
+        validStartIntent.removeExtra("paymentMethod");
+
+        mTestRule.launchActivity(validStartIntent);
+        try {
+            Thread.sleep(5000);
+        } catch (Exception e) {
+
+        }
+
+        onView(withId(R.id.mpsdkCardBackground)).check(matches(not(isDisplayed())));
+    }
+
+    @Test
+    public void showCardWhenTokenAndPaymentMethod() {
         String payerCosts = StaticMock.getPayerCostsJson();
         Type listType = new TypeToken<List<PayerCost>>(){}.getType();
         List<PayerCost> payerCostList = JsonUtil.getInstance().getGson().fromJson(payerCosts, listType);
         Token token = StaticMock.getToken();
 
         validStartIntent.putExtra("payerCosts", JsonUtil.getInstance().toJson(payerCostList));
+        validStartIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(mPaymentMethod));
         validStartIntent.putExtra("token", JsonUtil.getInstance().toJson(token));
 
         mTestRule.launchActivity(validStartIntent);
@@ -230,34 +253,107 @@ public class InstallmentsActivityTest {
     }
 
     @Test
-    public void finishOnInvalidParameterPaymentMethod() {
+    public void ifPayerCostsSetAllowStartWithoutPaymentMethod() {
         String payerCosts = StaticMock.getPayerCostsJson();
         Type listType = new TypeToken<List<PayerCost>>(){}.getType();
         List<PayerCost> payerCostList = JsonUtil.getInstance().getGson().fromJson(payerCosts, listType);
 
+        Issuer issuer = StaticMock.getIssuer();
+
+        Intent intent = new Intent();
+        intent.putExtra("issuer", JsonUtil.getInstance().toJson(issuer));
+        intent.putExtra("publicKey", mMerchantPublicKey);
+        intent.putExtra("site", JsonUtil.getInstance().toJson(mSite));
+        intent.putExtra("amount", mAmount);
+        intent.putExtra("payerCosts", JsonUtil.getInstance().toJson(payerCostList));
+
+        mTestRule.launchActivity(intent);
+        assertFalse(mTestRule.getActivity().isFinishing());
+    }
+
+    @Test
+    public void ifPayerCostListSetAllowStartWithoutPublicKey() {
+        String payerCosts = StaticMock.getPayerCostsJson();
+        Type listType = new TypeToken<List<PayerCost>>(){}.getType();
+        List<PayerCost> payerCostList = JsonUtil.getInstance().getGson().fromJson(payerCosts, listType);
+
+        Issuer issuer = StaticMock.getIssuer();
+
+        Intent intent = new Intent();
+        intent.putExtra("issuer", JsonUtil.getInstance().toJson(issuer));
+        intent.putExtra("site", JsonUtil.getInstance().toJson(mSite));
+        intent.putExtra("amount", mAmount);
+        intent.putExtra("payerCosts", JsonUtil.getInstance().toJson(payerCostList));
+        intent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(mPaymentMethod));
+
+        mTestRule.launchActivity(intent);
+        assertFalse(mTestRule.getActivity().isFinishing());
+    }
+
+    @Test
+    public void ifPayerCostListSetAllowStartWithoutIssuer() {
+        String payerCosts = StaticMock.getPayerCostsJson();
+        Type listType = new TypeToken<List<PayerCost>>(){}.getType();
+        List<PayerCost> payerCostList = JsonUtil.getInstance().getGson().fromJson(payerCosts, listType);
+
+        Issuer issuer = StaticMock.getIssuer();
+
+        Intent intent = new Intent();
+        intent.putExtra("issuer", JsonUtil.getInstance().toJson(issuer));
+        intent.putExtra("site", JsonUtil.getInstance().toJson(mSite));
+        intent.putExtra("amount", mAmount);
+        intent.putExtra("payerCosts", JsonUtil.getInstance().toJson(payerCostList));
+
+        mTestRule.launchActivity(intent);
+        assertFalse(mTestRule.getActivity().isFinishing());
+    }
+
+    @Test
+    public void ifPayerCostListNotSetFinishOnInvalidParameterPublicKey() {
+
+        Issuer issuer = StaticMock.getIssuer();
+
         Intent invalidIntent = new Intent();
-        invalidIntent.putExtra("publicKey", mMerchantPublicKey);
+        invalidIntent.putExtra("issuer", JsonUtil.getInstance().toJson(issuer));
         invalidIntent.putExtra("site", JsonUtil.getInstance().toJson(mSite));
         invalidIntent.putExtra("amount", mAmount);
-        invalidIntent.putExtra("payerCosts", JsonUtil.getInstance().toJson(payerCostList));
+        invalidIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(mPaymentMethod));
 
         mTestRule.launchActivity(invalidIntent);
         assertTrue(mTestRule.getActivity().isFinishing());
     }
 
     @Test
-    public void finishOnInvalidParameterPublicKey() {
-        String payerCosts = StaticMock.getPayerCostsJson();
-        Type listType = new TypeToken<List<PayerCost>>(){}.getType();
-        List<PayerCost> payerCostList = JsonUtil.getInstance().getGson().fromJson(payerCosts, listType);
+    public void ifPayerCostsNotSetFinishOnInvalidParameterPaymentMethod() {
+
+        Issuer issuer = StaticMock.getIssuer();
 
         Intent invalidIntent = new Intent();
+        invalidIntent.putExtra("issuer", JsonUtil.getInstance().toJson(issuer));
+        invalidIntent.putExtra("publicKey", mMerchantPublicKey);
         invalidIntent.putExtra("site", JsonUtil.getInstance().toJson(mSite));
         invalidIntent.putExtra("amount", mAmount);
-        invalidIntent.putExtra("payerCosts", JsonUtil.getInstance().toJson(payerCostList));
-        invalidIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(mPaymentMethod));
 
         mTestRule.launchActivity(invalidIntent);
+        assertTrue(mTestRule.getActivity().isFinishing());
+    }
+
+    @Test
+    public void ifPayerCostsNotSetFinishOnInvalidParameterIssuer() {
+        String installments = StaticMock.getInstallmentsJson();
+        Type listType = new TypeToken<List<Installment>>(){}.getType();
+        List<Installment> installmentList = JsonUtil.getInstance().getGson().fromJson(installments, listType);
+
+        mFakeAPI.addResponseToQueue(installmentList, 200, "");
+
+        InstallmentsActivity activity = mTestRule.launchActivity(validStartIntent);
+
+        assertEquals(activity.mPublicKey, mMerchantPublicKey);
+        assertEquals(activity.mCurrentPaymentMethod.getId(), mPaymentMethod.getId());
+        assertEquals(activity.mSite.getId(), mSite.getId());
+        assertEquals(activity.mAmount, new BigDecimal(mAmount));
+        assertNull(activity.mSelectedIssuer);
+        assertNull(activity.mPayerCosts);
         assertTrue(mTestRule.getActivity().isFinishing());
     }
 
@@ -276,26 +372,6 @@ public class InstallmentsActivityTest {
         mTestRule.launchActivity(invalidIntent);
         assertTrue(mTestRule.getActivity().isFinishing());
     }
-
-    @Test
-    public void finishOnInvalidParameterWithoutPayerCostsAndWithoutIssuer() {
-        String installments = StaticMock.getInstallmentsJson();
-        Type listType = new TypeToken<List<Installment>>(){}.getType();
-        List<Installment> installmentList = JsonUtil.getInstance().getGson().fromJson(installments, listType);
-
-        mFakeAPI.addResponseToQueue(installmentList, 200, "");
-
-        InstallmentsActivity activity = mTestRule.launchActivity(validStartIntent);
-
-        assertEquals(activity.mPublicKey, mMerchantPublicKey);
-        assertEquals(activity.mCurrentPaymentMethod.getId(), mPaymentMethod.getId());
-        assertEquals(activity.mSite.getId(), mSite.getId());
-        assertEquals(activity.mAmount, new BigDecimal(mAmount));
-        assertNull(activity.mSelectedIssuer);
-        assertNull(activity.mPayerCosts);
-        assertTrue(mTestRule.getActivity().isFinishing());
-    }
-
 
     @Test
     public void showErrorOnEmptyInstallmentsAsyncResponse() {

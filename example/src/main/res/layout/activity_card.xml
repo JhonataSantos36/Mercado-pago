@@ -53,13 +53,15 @@
 
                                 <ImageView
                                     android:id="@+id/pmImage"
+                                    android:adjustViewBounds= "true"
+                                    android:maxHeight="20dp"
+                                    android:maxWidth="40dp"
                                     android:layout_width="wrap_content"
-                                    android:layout_height="fill_parent"
-                                    android:layout_gravity="left"
-                                    tools:src="@drawable/visa"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    tools:src="@drawable/amex"
                                     android:layout_marginLeft="5dp"
-                                    android:paddingTop="10dp"
-                                    android:layout_marginBottom="10dp"/>
+                                    android:layout_marginStart="5dp"/>
 
                             </LinearLayout>
 

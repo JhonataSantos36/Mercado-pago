@@ -88,7 +88,9 @@
             android:theme="@style/Theme.InfoMercadoPagoTheme.NoActionbar" />
         <activity
             android:name=".PaymentResultActivity"
-            android:theme="@style/Theme.MercadoPagoTheme"/>
+            android:theme="@style/Theme.MercadoPagoTheme.NoActionBar"/>
+        <activity android:name=".VaultActivity"
+            android:theme="@style/Theme.MercadoPagoTheme" />
     </application>
 
 </manifest>

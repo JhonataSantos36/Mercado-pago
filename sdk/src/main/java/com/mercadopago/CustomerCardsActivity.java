@@ -107,11 +107,19 @@ public class CustomerCardsActivity extends MercadoPagoActivity {
             public void onSelected(Card card) {
                 // Return to parent
                 Intent returnIntent = new Intent();
-                returnIntent.putExtra("card", JsonUtil.getInstance().toJson(card));
+                if(card != null) {
+                    returnIntent.putExtra("card", JsonUtil.getInstance().toJson(card));
+                }
                 setResult(RESULT_OK, returnIntent);
                 finish();
             }
         }));
+    }
+
+    public void onOtherPaymentMethodClicked(View view) {
+        Intent returnIntent = new Intent();
+        setResult(RESULT_OK, returnIntent);
+        finish();
     }
 
     @Override
@@ -120,4 +128,5 @@ public class CustomerCardsActivity extends MercadoPagoActivity {
         setResult(RESULT_CANCELED, returnIntent);
         finish();
     }
+
 }

@@ -190,5 +190,6 @@
     <string name="mpsdk_invalid_card_expiration_month">Mes de expiración de la tarjeta inválido</string>
     <string name="mpsdk_invalid_card_expiration_year">Año de expiración de la tarjeta inválido</string>
     <string name="mpsdk_invalid_payer_email">Email del cliente inválido</string>
+    <string name="other_payment_method">Otro medio de pago…</string>
 
 </resources>
