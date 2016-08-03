@@ -128,6 +128,28 @@ public class StaticMock {
 
     }
 
+    public static String getIdentificationTypeCPF() {
+
+        try {
+            return getFile(InstrumentationRegistry.getContext(), "mocks/identification_type_cpf.json");
+
+        } catch (Exception ex) {
+            return null;
+        }
+
+    }
+
+    public static String getIdentificationTypeCNPJ() {
+
+        try {
+            return getFile(InstrumentationRegistry.getContext(), "mocks/identification_type_cnpj.json");
+
+        } catch (Exception ex) {
+            return null;
+        }
+
+    }
+
     public static List<PayerCost> getPayerCosts(Context context) {
 
         Installment installment = JsonUtil.getInstance().fromJson(getFile(context, "mocks/installment.json"), Installment.class);

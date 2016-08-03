@@ -12,7 +12,7 @@ import com.mercadopago.CardInterface;
 import com.mercadopago.GuessingCardActivity;
 import com.mercadopago.R;
 import com.mercadopago.model.IdentificationType;
-import com.mercadopago.util.MPMaskUtil;
+import com.mercadopago.util.MPCardMaskUtil;
 import com.mercadopago.views.MPEditText;
 import com.mercadopago.views.MPTextView;
 
@@ -86,7 +86,7 @@ public class CardIdentificationFragment extends android.support.v4.app.Fragment 
             mBaseIdNumberView.setVisibility(View.INVISIBLE);
             mCardIdentificationNumberView.setVisibility(View.VISIBLE);
             int color = CardInterface.NORMAL_TEXT_VIEW_COLOR;
-            String number = MPMaskUtil.buildIdentificationNumberWithMask(identificationNumber, identificationType);
+            String number = MPCardMaskUtil.buildIdentificationNumberWithMask(identificationNumber, identificationType);
             setText(mCardIdentificationNumberView, number, color);
         }
     }
@@ -103,7 +103,7 @@ public class CardIdentificationFragment extends android.support.v4.app.Fragment 
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                     mBaseIdNumberView.setVisibility(View.INVISIBLE);
                     mCardIdentificationNumberView.setVisibility(View.VISIBLE);
-                    String number = MPMaskUtil.buildIdentificationNumberWithMask(s, mActivity.getCardIdentificationType());
+                    String number = MPCardMaskUtil.buildIdentificationNumberWithMask(s, mActivity.getCardIdentificationType());
                     mCardIdentificationNumberView.setText(number);
                 }
 

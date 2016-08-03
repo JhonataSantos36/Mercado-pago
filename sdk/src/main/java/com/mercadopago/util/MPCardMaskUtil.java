@@ -8,10 +8,14 @@ import java.util.Locale;
 /**
  * Created by vaserber on 8/3/16.
  */
-public class MPMaskUtil {
+public class MPCardMaskUtil {
 
     public static final int CPF_SEPARATOR_AMOUNT = 3;
     public static final int CNPJ_SEPARATOR_AMOUNT = 4;
+
+    protected MPCardMaskUtil() {
+
+    }
 
     public static String buildNumberWithMask(int cardLength, String number) {
         String result = "";
@@ -67,13 +71,12 @@ public class MPMaskUtil {
     public static char getCharOfCard(String number, int i) {
         if (i < number.length()) {
             return number.charAt(i);
-        } else {
-            return "•".charAt(0);
         }
+        return "•".charAt(0);
     }
 
     public static String buildIdentificationNumberWithMask(CharSequence number, IdentificationType identificationType) {
-        if (identificationType != null) {
+        if (identificationType != null && identificationType.getId() != null) {
             String type = identificationType.getId();
             if (type.equals("CPF")) {
                 return buildIdentificationNumberOfTypeCPF(number, identificationType.getMaxLength());
