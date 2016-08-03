@@ -123,7 +123,6 @@ public class InstructionsActivity extends MercadoPagoActivity {
         mMercadoPago.getPaymentResult(mPayment.getId(), mPaymentMethod.getPaymentTypeId(), new Callback<PaymentResult>() {
             @Override
             public void success(PaymentResult paymentResult) {
-                MPTracker.getInstance().trackEvent("INSTRUCTIONS", "GET_INSTRUCTION_RESPONSE", "SUCCESS", "2", mMerchantPublicKey, "MLA", "1.0", getActivity());
                 List<Instruction> instructions
                         = paymentResult.getInstructions() == null ? new ArrayList<Instruction>() : paymentResult.getInstructions();
                 if(instructions.isEmpty()) {
@@ -296,11 +295,11 @@ public class InstructionsActivity extends MercadoPagoActivity {
 
     @Override
     public void onBackPressed() {
+        MPTracker.getInstance().trackScreen( "INSTRUCTIONS", 2, mMerchantPublicKey, BuildConfig.VERSION_NAME, this);
 
         if(mBackPressedOnce) {
             super.onBackPressed();
         } else {
-            MPTracker.getInstance().trackEvent("INSTRUCTION", "BACK_PRESSED", "2", mMerchantPublicKey, "MLA", "1.0", this);
             Snackbar.make(mTertiaryInfo, getString(R.string.mpsdk_press_again_to_leave), Snackbar.LENGTH_LONG).show();
             mBackPressedOnce = true;
             resetBackPressedOnceIn(4000);
