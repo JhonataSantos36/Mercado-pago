@@ -94,6 +94,22 @@ public class BankDealsActivityTest {
     }
 
     @Test
+    public void ifBankDealsReceivedInIntentShowThemInRecyclerView() {
+        String bankDealsJson = StaticMock.getBankDealsJson();
+        validStartIntent.putExtra("bankDeals", bankDealsJson);
+
+        mTestRule.launchActivity(validStartIntent);
+
+        // Validate view
+        RecyclerView list = (RecyclerView) mTestRule.getActivity().findViewById(R.id.mpsdkBankDealsList);
+        if ((list != null) && (list.getAdapter() != null)) {
+            assertTrue(list.getAdapter().getItemCount() > 0);
+        } else {
+            fail("Bank Deals test failed, no items found");
+        }
+    }
+
+    @Test
     public void onBankDealSelectedStartTermsAndConditionsActivityWithBankDealLegals() {
         List<BankDeal> bankDeals = StaticMock.getBankDeals();
         mFakeAPI.addResponseToQueue(bankDeals, 200, "");

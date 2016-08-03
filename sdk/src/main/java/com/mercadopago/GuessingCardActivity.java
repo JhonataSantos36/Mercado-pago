@@ -38,6 +38,7 @@ import com.mercadopago.fragments.CardBackFragment;
 import com.mercadopago.fragments.CardFrontFragment;
 import com.mercadopago.fragments.CardIdentificationFragment;
 import com.mercadopago.model.ApiException;
+import com.mercadopago.model.BankDeal;
 import com.mercadopago.model.CardNumber;
 import com.mercadopago.model.CardToken;
 import com.mercadopago.model.Cardholder;
@@ -165,17 +166,6 @@ public class GuessingCardActivity extends FrontCardActivity {
                 }
             });
         }
-        mToolbarButton.setText(getString(R.string.mpsdk_bank_deals_action));
-        mToolbarButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new MercadoPago.StartActivityBuilder()
-                        .setActivity(getActivity())
-                        .setPublicKey(mPublicKey)
-                        .setDecorationPreference(mDecorationPreference)
-                        .startBankDealsActivity();
-            }
-        });
 
         if (mDecorationPreference != null) {
             if (mDecorationPreference.hasColors()) {
@@ -223,6 +213,8 @@ public class GuessingCardActivity extends FrontCardActivity {
                 .setContext(getActivity())
                 .setPublicKey(mPublicKey)
                 .build();
+
+        getBankDealsAsync();
 
         if (mPaymentMethodList == null) {
             getPaymentMethodsAsync();
@@ -546,6 +538,41 @@ public class GuessingCardActivity extends FrontCardActivity {
                         @Override
                         public void recover() {
                             getPaymentMethodsAsync();
+                        }
+                    });
+                    ApiUtil.showApiExceptionError(getActivity(), apiException);
+                }
+            }
+        });
+    }
+
+    protected void getBankDealsAsync() {
+        mMercadoPago.getBankDeals(new Callback<List<BankDeal>>() {
+            @Override
+            public void success(final List<BankDeal> bankDeals) {
+                if (bankDeals != null && bankDeals.size() >= 1) {
+                    mToolbarButton.setText(getString(R.string.mpsdk_bank_deals_action));
+                    mToolbarButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            new MercadoPago.StartActivityBuilder()
+                                    .setActivity(getActivity())
+                                    .setPublicKey(mPublicKey)
+                                    .setDecorationPreference(mDecorationPreference)
+                                    .setBankDeals(bankDeals)
+                                    .startBankDealsActivity();
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void failure(ApiException apiException) {
+                if (isActivityActive()) {
+                    setFailureRecovery(new FailureRecovery() {
+                        @Override
+                        public void recover() {
+                            getBankDealsAsync();
                         }
                     });
                     ApiUtil.showApiExceptionError(getActivity(), apiException);

@@ -13,6 +13,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.google.gson.reflect.TypeToken;
+import com.mercadopago.model.BankDeal;
 import com.mercadopago.model.DecorationPreference;
 import com.mercadopago.model.DummyCard;
 import com.mercadopago.model.IdentificationType;
@@ -115,6 +116,7 @@ public class GuessingCardActivityTest {
 
     @Test
     public void getActivityParametersOnCreateIsValid() {
+        addBankDealsCall();
         String paymentMethods = StaticMock.getPaymentMethodList();
         Type listType = new TypeToken<List<PaymentMethod>>(){}.getType();
         List<PaymentMethod> paymentMethodList = JsonUtil.getInstance().getGson().fromJson(paymentMethods, listType);
@@ -129,6 +131,7 @@ public class GuessingCardActivityTest {
 
     @Test
     public void initializeWithPaymentMethodListIsValid() {
+        addBankDealsCall();
         String paymentMethods = StaticMock.getPaymentMethodList();
         Type listType = new TypeToken<List<PaymentMethod>>(){}.getType();
         List<PaymentMethod> paymentMethodList = JsonUtil.getInstance().getGson().fromJson(paymentMethods, listType);
@@ -144,6 +147,7 @@ public class GuessingCardActivityTest {
 
     @Test
     public void initializeWithTokenIsValid() {
+        addBankDealsCall();
         String paymentMethods = StaticMock.getPaymentMethodList();
         Type listType = new TypeToken<List<PaymentMethod>>(){}.getType();
         List<PaymentMethod> paymentMethodList = JsonUtil.getInstance().getGson().fromJson(paymentMethods, listType);
@@ -174,6 +178,7 @@ public class GuessingCardActivityTest {
 
     @Test
     public void initializeWithDecorationPreference() {
+        addBankDealsCall();
         addPaymentMethodsCall();
 
         DecorationPreference decorationPreference = new DecorationPreference();
@@ -195,6 +200,7 @@ public class GuessingCardActivityTest {
 
     @Test
     public void initializeWithDecorationPreferenceDarkFont() {
+        addBankDealsCall();
         addPaymentMethodsCall();
 
         DecorationPreference decorationPreference = new DecorationPreference();
@@ -213,6 +219,7 @@ public class GuessingCardActivityTest {
 
     @Test
     public void initializeWithEmptyPaymentPreferenceIsValid() {
+        addBankDealsCall();
         addPaymentMethodsCall();
 
         validStartIntent.putExtra("paymentPreference", JsonUtil.getInstance().toJson(StaticMock.getEmptyPaymentPreference()));
@@ -228,6 +235,7 @@ public class GuessingCardActivityTest {
 
     @Test
     public void initializeWithPaymentMethodExclusionNotSupported() {
+        addBankDealsCall();
         addPaymentMethodsCall();
 
         PaymentPreference paymentPreference = StaticMock.getEmptyPaymentPreference();
@@ -247,6 +255,7 @@ public class GuessingCardActivityTest {
     @Test
     public void initializeWithoutPublicKeyIsInvalid() {
         Intent invalidStartIntent = new Intent();
+        addBankDealsCall();
         addPaymentMethodsCall();
 
         mTestRule.launchActivity(invalidStartIntent);
@@ -255,8 +264,7 @@ public class GuessingCardActivityTest {
 
     @Test
     public void initializeWithPaymentMethodExclusionSupported() {
-        addPaymentMethodsCall();
-        addIdentificationTypesCall();
+        addInitCalls();
 
         PaymentPreference paymentPreference = StaticMock.getEmptyPaymentPreference();
         List<String> excludedPaymentMethods = new ArrayList<>();
@@ -274,6 +282,7 @@ public class GuessingCardActivityTest {
 
     @Test
     public void initializeWithPaymentTypeExclusionNotSupported() {
+        addBankDealsCall();
         addPaymentMethodsCall();
 
         PaymentPreference paymentPreference = StaticMock.getEmptyPaymentPreference();
@@ -292,8 +301,7 @@ public class GuessingCardActivityTest {
 
     @Test
     public void initializeWithPaymentTypeExclusionSupported() {
-        addPaymentMethodsCall();
-        addIdentificationTypesCall();
+        addInitCalls();
 
         PaymentPreference paymentPreference = StaticMock.getEmptyPaymentPreference();
         List<String> excludedPaymentTypes = new ArrayList<>();
@@ -312,6 +320,8 @@ public class GuessingCardActivityTest {
     public void showBankDealsOnlyCardSteps() {
         List<DummyCard> dummyCards = CardTestUtils.getSomeCards();
 
+        List<BankDeal> bankDeals = StaticMock.getBankDeals();
+
         String paymentMethods = StaticMock.getPaymentMethodList();
         Type listType = new TypeToken<List<PaymentMethod>>(){}.getType();
         List<PaymentMethod> paymentMethodList = JsonUtil.getInstance().getGson().fromJson(paymentMethods, listType);
@@ -321,6 +331,7 @@ public class GuessingCardActivityTest {
         List<IdentificationType> identificationTypeList = JsonUtil.getInstance().getGson().fromJson(identificationTypes, listType2);
 
         for (DummyCard card: dummyCards) {
+            mFakeAPI.addResponseToQueue(bankDeals, 200, "");
             mFakeAPI.addResponseToQueue(paymentMethodList, 200, "");
             mFakeAPI.addResponseToQueue(identificationTypeList, 200, "");
             Activity activity = mTestRule.launchActivity(validStartIntent);
@@ -344,9 +355,46 @@ public class GuessingCardActivityTest {
     }
 
     @Test
+    public void onBankDealsEmptyDontShowBankDealsOnToolbar() {
+        List<DummyCard> dummyCards = CardTestUtils.getSomeCards();
+
+        List<BankDeal> bankDeals = new ArrayList<>();
+
+        String paymentMethods = StaticMock.getPaymentMethodList();
+        Type listType = new TypeToken<List<PaymentMethod>>(){}.getType();
+        List<PaymentMethod> paymentMethodList = JsonUtil.getInstance().getGson().fromJson(paymentMethods, listType);
+
+        String identificationTypes = StaticMock.getIdentificationTypeList();
+        Type listType2 = new TypeToken<List<IdentificationType>>(){}.getType();
+        List<IdentificationType> identificationTypeList = JsonUtil.getInstance().getGson().fromJson(identificationTypes, listType2);
+
+        for (DummyCard card: dummyCards) {
+            mFakeAPI.addResponseToQueue(bankDeals, 200, "");
+            mFakeAPI.addResponseToQueue(paymentMethodList, 200, "");
+            mFakeAPI.addResponseToQueue(identificationTypeList, 200, "");
+            Activity activity = mTestRule.launchActivity(validStartIntent);
+
+            onView(withId(R.id.mpsdkCardNumber)).perform(typeText(card.getCardNumber()));
+            onView(withId(R.id.mpsdkNextButton)).perform(click());
+            onView(withId(R.id.mpsdkCardholderName)).perform(typeText(StaticMock.DUMMY_CARDHOLDER_NAME));
+            onView(withId(R.id.mpsdkNextButton)).perform(click());
+            onView(withId(R.id.mpsdkCardExpiryDate)).perform(typeText(StaticMock.DUMMY_EXPIRATION_DATE));
+            onView(withId(R.id.mpsdkButtonText)).check(matches(not(isDisplayed())));
+
+            onView(withId(R.id.mpsdkNextButton)).perform(click());
+            onView(withId(R.id.mpsdkCardSecurityCode)).perform(typeText(card.getSecurityCode()));
+            onView(withId(R.id.mpsdkButtonText)).check(matches(not(isDisplayed())));
+
+            onView(withId(R.id.mpsdkNextButton)).perform(click());
+            onView(withId(R.id.mpsdkButtonText)).check(matches(not(isDisplayed())));
+
+            activity.finish();
+        }
+    }
+
+    @Test
     public void showNextAndBackButtonsOnStart() {
-        addPaymentMethodsCall();
-        addIdentificationTypesCall();
+        addInitCalls();
 
         mTestRule.launchActivity(validStartIntent);
         onView(withId(R.id.mpsdkNextButton)).check(matches(isDisplayingAtLeast(100)));
@@ -361,8 +409,7 @@ public class GuessingCardActivityTest {
 
     @Test
     public void checkEditTextNavigationWithValidData() {
-        addPaymentMethodsCall();
-        addIdentificationTypesCall();
+        addInitCalls();
 
         mTestRule.launchActivity(validStartIntent);
 
@@ -449,8 +496,7 @@ public class GuessingCardActivityTest {
 
     @Test
     public void checkCardNumberNavigationWithInvalidData() {
-        addPaymentMethodsCall();
-        addIdentificationTypesCall();
+        addInitCalls();
         addIdentificationTypesCall();
 
         mTestRule.launchActivity(validStartIntent);
@@ -470,8 +516,7 @@ public class GuessingCardActivityTest {
 
     @Test
     public void checkCardholderNameNavigationWithInvalidData() {
-        addPaymentMethodsCall();
-        addIdentificationTypesCall();
+        addInitCalls();
 
         mTestRule.launchActivity(validStartIntent);
 
@@ -488,8 +533,7 @@ public class GuessingCardActivityTest {
 
     @Test
     public void checkExpiryDateNavigationWithInvalidData() {
-        addPaymentMethodsCall();
-        addIdentificationTypesCall();
+        addInitCalls();
 
         mTestRule.launchActivity(validStartIntent);
 
@@ -517,8 +561,7 @@ public class GuessingCardActivityTest {
 
     @Test
     public void checkSecurityCodeNavigationWithInvalidData() {
-        addPaymentMethodsCall();
-        addIdentificationTypesCall();
+        addInitCalls();
 
         mTestRule.launchActivity(validStartIntent);
 
@@ -548,8 +591,7 @@ public class GuessingCardActivityTest {
 
     @Test
     public void checkIdentificationNumberNavigationWithInvalidData() {
-        addPaymentMethodsCall();
-        addIdentificationTypesCall();
+        addInitCalls();
 
         mTestRule.launchActivity(validStartIntent);
 
@@ -581,8 +623,7 @@ public class GuessingCardActivityTest {
 
     @Test
     public void onEmptyCardholderNameNavigateToBackButNotToNextField() {
-        addPaymentMethodsCall();
-        addIdentificationTypesCall();
+        addInitCalls();
 
         mTestRule.launchActivity(validStartIntent);
 
@@ -604,8 +645,7 @@ public class GuessingCardActivityTest {
 
     @Test
     public void onEmptyExpiryDateNavigateToBackButNotToNextField() {
-        addPaymentMethodsCall();
-        addIdentificationTypesCall();
+        addInitCalls();
 
         mTestRule.launchActivity(validStartIntent);
 
@@ -624,8 +664,7 @@ public class GuessingCardActivityTest {
 
     @Test
     public void onEmptySecurityCodeNavigateToBackButNotToNextField() {
-        addPaymentMethodsCall();
-        addIdentificationTypesCall();
+        addInitCalls();
 
         mTestRule.launchActivity(validStartIntent);
 
@@ -646,8 +685,7 @@ public class GuessingCardActivityTest {
 
     @Test
     public void onEmptyIdentificationNumberNavigateToBackButNotToNextField() {
-        addPaymentMethodsCall();
-        addIdentificationTypesCall();
+        addInitCalls();
 
         mTestRule.launchActivity(validStartIntent);
 
@@ -670,8 +708,7 @@ public class GuessingCardActivityTest {
 
     @Test
     public void checkGoingToFrontSecurityCode() {
-        addPaymentMethodsCall();
-        addIdentificationTypesCall();
+        addInitCalls();
         mTestRule.launchActivity(validStartIntent);
         DummyCard card = CardTestUtils.getPaymentMethodOnWithFrontSecurityCode();
 
@@ -697,8 +734,7 @@ public class GuessingCardActivityTest {
 
     @Test
     public void checkGoingToBackSecurityCode() {
-        addPaymentMethodsCall();
-        addIdentificationTypesCall();
+        addInitCalls();
         mTestRule.launchActivity(validStartIntent);
         DummyCard card = CardTestUtils.getPaymentMethodOnWithBackSecurityCode();
 
@@ -724,8 +760,7 @@ public class GuessingCardActivityTest {
 
     @Test
     public void checkGoingBackToFrontCardFromSecurityCode() {
-        addPaymentMethodsCall();
-        addIdentificationTypesCall();
+        addInitCalls();
         mTestRule.launchActivity(validStartIntent);
         DummyCard card = CardTestUtils.getPaymentMethodOnWithBackSecurityCode();
 
@@ -752,8 +787,7 @@ public class GuessingCardActivityTest {
 
     @Test
     public void checkStayingInFrontCardFromSecurityCode() {
-        addPaymentMethodsCall();
-        addIdentificationTypesCall();
+        addInitCalls();
         mTestRule.launchActivity(validStartIntent);
         DummyCard card = CardTestUtils.getPaymentMethodOnWithFrontSecurityCode();
 
@@ -780,8 +814,7 @@ public class GuessingCardActivityTest {
 
     @Test
     public void checkGoingBackToBackCardFromIdentification() {
-        addPaymentMethodsCall();
-        addIdentificationTypesCall();
+        addInitCalls();
         mTestRule.launchActivity(validStartIntent);
         DummyCard card = CardTestUtils.getPaymentMethodOnWithBackSecurityCode();
 
@@ -803,8 +836,7 @@ public class GuessingCardActivityTest {
 
     @Test
     public void checkGoingBackToFrontCardFromIdentification() {
-        addPaymentMethodsCall();
-        addIdentificationTypesCall();
+        addInitCalls();
         mTestRule.launchActivity(validStartIntent);
         DummyCard card = CardTestUtils.getPaymentMethodOnWithFrontSecurityCode();
 
@@ -826,8 +858,7 @@ public class GuessingCardActivityTest {
 
     @Test
     public void ignoreOnSecurityCodeNotRequired() {
-        addPaymentMethodsCall();
-        addIdentificationTypesCall();
+        addInitCalls();
 
         mTestRule.launchActivity(validStartIntent);
         DummyCard card = CardTestUtils.getPaymentMethodOnWithoutRequiredSecurityCode();
@@ -854,6 +885,7 @@ public class GuessingCardActivityTest {
 
     @Test
     public void ignoreOnIdentificationNotRequired() {
+        addBankDealsCall();
         PaymentMethod pm = StaticMock.getPaymentMethodWithIdentificationNotRequired();
         List<PaymentMethod> paymentMethods = new ArrayList<>();
         paymentMethods.add(pm);
@@ -883,8 +915,7 @@ public class GuessingCardActivityTest {
 
     @Test
     public void createTokenOnSecurityCodeNotRequired() {
-        addPaymentMethodsCall();
-        addIdentificationTypesCall();
+        addInitCalls();
         Token mockedToken = StaticMock.getToken();
         mFakeAPI.addResponseToQueue(JsonUtil.getInstance().toJson(mockedToken), 200, "");
         Issuer mockedIssuer = StaticMock.getIssuer();
@@ -918,6 +949,7 @@ public class GuessingCardActivityTest {
 
     @Test
     public void createTokenOnIdentificationNumberNotRequired() {
+        addBankDealsCall();
         PaymentMethod pm = StaticMock.getPaymentMethodWithIdentificationNotRequired();
         List<PaymentMethod> paymentMethods = new ArrayList<>();
         paymentMethods.add(pm);
@@ -955,8 +987,7 @@ public class GuessingCardActivityTest {
 
     @Test
     public void setTokenPMAndIssuerOnResult() {
-        addPaymentMethodsCall();
-        addIdentificationTypesCall();
+        addInitCalls();
         Token mockedToken = StaticMock.getToken();
         mFakeAPI.addResponseToQueue(JsonUtil.getInstance().toJson(mockedToken), 200, "");
         Issuer mockedIssuer = StaticMock.getIssuer();
@@ -990,8 +1021,7 @@ public class GuessingCardActivityTest {
 
     @Test
     public void openIssuerSelection() {
-        addPaymentMethodsCall();
-        addIdentificationTypesCall();
+        addInitCalls();
 
         Token mockedToken = StaticMock.getTokenMasterIssuers();
         mFakeAPI.addResponseToQueue(JsonUtil.getInstance().toJson(mockedToken), 200, "");
@@ -1033,8 +1063,7 @@ public class GuessingCardActivityTest {
 
     @Test
     public void onIssuerApiFailOpenErrorActivity() {
-        addPaymentMethodsCall();
-        addIdentificationTypesCall();
+        addInitCalls();
 
         Token mockedToken = StaticMock.getTokenMasterIssuers();
         mFakeAPI.addResponseToQueue(JsonUtil.getInstance().toJson(mockedToken), 200, "");
@@ -1062,8 +1091,7 @@ public class GuessingCardActivityTest {
 
     @Test
     public void onEmptyIssuerListOpenErrorActivity() {
-        addPaymentMethodsCall();
-        addIdentificationTypesCall();
+        addInitCalls();
         Token mockedToken = StaticMock.getToken();
         mFakeAPI.addResponseToQueue(JsonUtil.getInstance().toJson(mockedToken), 200, "");
         List<Issuer> issuerList = new ArrayList<>();
@@ -1087,8 +1115,7 @@ public class GuessingCardActivityTest {
 
     @Test
     public void onTokenApiFailOpenErrorActivity() {
-        addPaymentMethodsCall();
-        addIdentificationTypesCall();
+        addInitCalls();
 
         //Token call
         mFakeAPI.addResponseToQueue("", 401, "");
@@ -1116,6 +1143,7 @@ public class GuessingCardActivityTest {
 
     @Test
     public void onIdentificationTypesApiFailRecover() {
+        addBankDealsCall();
         addPaymentMethodsCall();
         //Identification types call
         mFakeAPI.addResponseToQueue("", 401, "");
@@ -1146,6 +1174,7 @@ public class GuessingCardActivityTest {
 
     @Test
     public void onIdentificationTypesApiFailCancel() {
+        addBankDealsCall();
         addPaymentMethodsCall();
         //Identification types call
         mFakeAPI.addResponseToQueue("", 401, "");
@@ -1167,6 +1196,7 @@ public class GuessingCardActivityTest {
 
     @Test
     public void onEmptyIdentificationTypesOpenErrorActivity() {
+        addBankDealsCall();
         addPaymentMethodsCall();
 
         List<IdentificationType> list = new ArrayList<>();
@@ -1182,18 +1212,37 @@ public class GuessingCardActivityTest {
     }
 
     @Test
-    public void startBankDealsActivity() {
+    public void onBankDealsApiFailCancel() {
+        //Bank deals call
+        mFakeAPI.addResponseToQueue("", 401, "");
+
         addPaymentMethodsCall();
         addIdentificationTypesCall();
+
+        DummyCard card = CardTestUtils.getPaymentMethodOnWithBackSecurityCode();
+
+        mTestRule.launchActivity(validStartIntent);
+
+        Intent errorResultIntent = new Intent();
+        Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(Activity.RESULT_OK, errorResultIntent);
+        intending(hasComponent(ErrorActivity.class.getName())).respondWith(result);
+
+        onView(withId(R.id.mpsdkExit)).perform(click());
+        assertTrue(mTestRule.getActivity().isFinishing());
+    }
+
+    @Test
+    public void startBankDealsActivity() {
+        addInitCalls();
         mTestRule.launchActivity(validStartIntent);
 
         onView(withId(R.id.mpsdkButtonText)).perform(click());
         intended(hasComponent(BankDealsActivity.class.getName()));
     }
 
-
     @Test
     public void ifApiFailurePaymentMethodsShowErrorActivity() {
+        addBankDealsCall();
         mFakeAPI.addResponseToQueue("", 401, "");
         addIdentificationTypesCall();
         mTestRule.launchActivity(validStartIntent);
@@ -1202,6 +1251,7 @@ public class GuessingCardActivityTest {
 
     @Test
     public void ifApiFailureIdentificationTypesShowErrorActivity() {
+        addBankDealsCall();
         addPaymentMethodsCall();
         mFakeAPI.addResponseToQueue("", 401, "");
         mTestRule.launchActivity(validStartIntent);
@@ -1212,6 +1262,7 @@ public class GuessingCardActivityTest {
 
     @Test
     public void ifApiFailurePaymentMethodsRecover() {
+        addBankDealsCall();
         //Payment methods call
         mFakeAPI.addResponseToQueue("", 401, "");
         addPaymentMethodsCall();
@@ -1241,8 +1292,7 @@ public class GuessingCardActivityTest {
 
     @Test
     public void decorationPreferencePaintsBackground() {
-        addPaymentMethodsCall();
-        addIdentificationTypesCall();
+        addInitCalls();
 
         DecorationPreference decorationPreference = new DecorationPreference();
         decorationPreference.setBaseColor(ContextCompat.getColor(InstrumentationRegistry.getContext(), R.color.mpsdk_color_red_error));
@@ -1257,6 +1307,7 @@ public class GuessingCardActivityTest {
 
     @Test
     public void navigateWithoutSecurityCodeAndWithoutIdentificationNumber() {
+        addBankDealsCall();
         List<PaymentMethod> paymentMethods = new ArrayList<>();
         PaymentMethod pm = StaticMock.getPaymentMethodWithIdentificationAndCVVNotRequired();
         paymentMethods.add(pm);
@@ -1292,8 +1343,7 @@ public class GuessingCardActivityTest {
 
     @Test
     public void ifApiFailureIssuersRecover() {
-        addPaymentMethodsCall();
-        addIdentificationTypesCall();
+        addInitCalls();
 
         Token mockedToken = StaticMock.getToken();
         mFakeAPI.addResponseToQueue(JsonUtil.getInstance().toJson(mockedToken), 200, "");
@@ -1329,8 +1379,7 @@ public class GuessingCardActivityTest {
 
     @Test
     public void validateCardColorMaster() {
-        addPaymentMethodsCall();
-        addIdentificationTypesCall();
+        addInitCalls();
         mTestRule.launchActivity(validStartIntent);
 
         DummyCard card = CardTestUtils.getDummyCard("master");
@@ -1342,8 +1391,7 @@ public class GuessingCardActivityTest {
 
     @Test
     public void validateCardColorVisa() {
-        addPaymentMethodsCall();
-        addIdentificationTypesCall();
+        addInitCalls();
         mTestRule.launchActivity(validStartIntent);
 
         DummyCard card = CardTestUtils.getDummyCard("visa");
@@ -1355,8 +1403,7 @@ public class GuessingCardActivityTest {
 
     @Test
     public void validateCardColorAmex() {
-        addPaymentMethodsCall();
-        addIdentificationTypesCall();
+        addInitCalls();
         mTestRule.launchActivity(validStartIntent);
 
         DummyCard card = CardTestUtils.getDummyCard("amex");
@@ -1368,8 +1415,7 @@ public class GuessingCardActivityTest {
 
     @Test
     public void validateCardColorTarshop() {
-        addPaymentMethodsCall();
-        addIdentificationTypesCall();
+        addInitCalls();
         mTestRule.launchActivity(validStartIntent);
 
         DummyCard card = CardTestUtils.getDummyCard("tarshop");
@@ -1381,8 +1427,7 @@ public class GuessingCardActivityTest {
 
     @Test
     public void validateCardColorCordial() {
-        addPaymentMethodsCall();
-        addIdentificationTypesCall();
+        addInitCalls();
         mTestRule.launchActivity(validStartIntent);
 
         DummyCard card = CardTestUtils.getDummyCard("cordial");
@@ -1394,8 +1439,7 @@ public class GuessingCardActivityTest {
 
     @Test
     public void validateCardColorCencosud() {
-        addPaymentMethodsCall();
-        addIdentificationTypesCall();
+        addInitCalls();
         mTestRule.launchActivity(validStartIntent);
 
         DummyCard card = CardTestUtils.getDummyCard("cencosud");
@@ -1407,8 +1451,7 @@ public class GuessingCardActivityTest {
 
     @Test
     public void validateCardColorArgencard() {
-        addPaymentMethodsCall();
-        addIdentificationTypesCall();
+        addInitCalls();
         mTestRule.launchActivity(validStartIntent);
 
         DummyCard card = CardTestUtils.getDummyCard("argencard");
@@ -1420,8 +1463,7 @@ public class GuessingCardActivityTest {
 
     @Test
     public void validateCardColorCabal() {
-        addPaymentMethodsCall();
-        addIdentificationTypesCall();
+        addInitCalls();
         mTestRule.launchActivity(validStartIntent);
 
         DummyCard card = CardTestUtils.getDummyCard("cabal");
@@ -1433,8 +1475,7 @@ public class GuessingCardActivityTest {
 
     @Test
     public void validateCardColorNativa() {
-        addPaymentMethodsCall();
-        addIdentificationTypesCall();
+        addInitCalls();
         mTestRule.launchActivity(validStartIntent);
 
         DummyCard card = CardTestUtils.getDummyCard("nativa");
@@ -1446,8 +1487,7 @@ public class GuessingCardActivityTest {
 
     @Test
     public void validateCardColorDiners() {
-        addPaymentMethodsCall();
-        addIdentificationTypesCall();
+        addInitCalls();
         mTestRule.launchActivity(validStartIntent);
 
         DummyCard card = CardTestUtils.getDummyCard("diners");
@@ -1459,8 +1499,7 @@ public class GuessingCardActivityTest {
 
     @Test
     public void validateCardColorCordobesa() {
-        addPaymentMethodsCall();
-        addIdentificationTypesCall();
+        addInitCalls();
         mTestRule.launchActivity(validStartIntent);
 
         DummyCard card = CardTestUtils.getDummyCard("cordobesa");
@@ -1472,8 +1511,7 @@ public class GuessingCardActivityTest {
 
     @Test
     public void validateCardColorCMR() {
-        addPaymentMethodsCall();
-        addIdentificationTypesCall();
+        addInitCalls();
         mTestRule.launchActivity(validStartIntent);
 
         DummyCard card = CardTestUtils.getDummyCard("cmr");
@@ -1493,8 +1531,7 @@ public class GuessingCardActivityTest {
 
     @Test
     public void validateMaskMaster() {
-        addPaymentMethodsCall();
-        addIdentificationTypesCall();
+        addInitCalls();
         mTestRule.launchActivity(validStartIntent);
 
         DummyCard card = CardTestUtils.getDummyCard("master");
@@ -1503,8 +1540,7 @@ public class GuessingCardActivityTest {
 
     @Test
     public void validateMaskVisa() {
-        addPaymentMethodsCall();
-        addIdentificationTypesCall();
+        addInitCalls();
         mTestRule.launchActivity(validStartIntent);
 
         DummyCard card = CardTestUtils.getDummyCard("visa");
@@ -1513,8 +1549,7 @@ public class GuessingCardActivityTest {
 
     @Test
     public void validateMaskAmex() {
-        addPaymentMethodsCall();
-        addIdentificationTypesCall();
+        addInitCalls();
         mTestRule.launchActivity(validStartIntent);
 
         DummyCard card = CardTestUtils.getDummyCard("amex");
@@ -1523,8 +1558,7 @@ public class GuessingCardActivityTest {
 
     @Test
     public void validateMaskTarshop() {
-        addPaymentMethodsCall();
-        addIdentificationTypesCall();
+        addInitCalls();
         mTestRule.launchActivity(validStartIntent);
 
         DummyCard card = CardTestUtils.getDummyCard("tarshop");
@@ -1533,8 +1567,7 @@ public class GuessingCardActivityTest {
 
     @Test
     public void validateMaskCordial() {
-        addPaymentMethodsCall();
-        addIdentificationTypesCall();
+        addInitCalls();
         mTestRule.launchActivity(validStartIntent);
 
         DummyCard card = CardTestUtils.getDummyCard("cordial");
@@ -1543,8 +1576,7 @@ public class GuessingCardActivityTest {
 
     @Test
     public void validateMaskCencosud() {
-        addPaymentMethodsCall();
-        addIdentificationTypesCall();
+        addInitCalls();
         mTestRule.launchActivity(validStartIntent);
 
         DummyCard card = CardTestUtils.getDummyCard("cencosud");
@@ -1553,8 +1585,7 @@ public class GuessingCardActivityTest {
 
     @Test
     public void validateMaskArgencard() {
-        addPaymentMethodsCall();
-        addIdentificationTypesCall();
+        addInitCalls();
         mTestRule.launchActivity(validStartIntent);
 
         DummyCard card = CardTestUtils.getDummyCard("argencard");
@@ -1563,8 +1594,7 @@ public class GuessingCardActivityTest {
 
     @Test
     public void validateMaskCabal() {
-        addPaymentMethodsCall();
-        addIdentificationTypesCall();
+        addInitCalls();
         mTestRule.launchActivity(validStartIntent);
 
         DummyCard card = CardTestUtils.getDummyCard("cabal");
@@ -1573,8 +1603,7 @@ public class GuessingCardActivityTest {
 
     @Test
     public void validateMaskNativa() {
-        addPaymentMethodsCall();
-        addIdentificationTypesCall();
+        addInitCalls();
         mTestRule.launchActivity(validStartIntent);
 
         DummyCard card = CardTestUtils.getDummyCard("nativa");
@@ -1583,8 +1612,7 @@ public class GuessingCardActivityTest {
 
     @Test
     public void validateMaskDiners() {
-        addPaymentMethodsCall();
-        addIdentificationTypesCall();
+        addInitCalls();
         mTestRule.launchActivity(validStartIntent);
 
         DummyCard card = CardTestUtils.getDummyCard("diners");
@@ -1593,8 +1621,7 @@ public class GuessingCardActivityTest {
 
     @Test
     public void validateMaskCordobesa() {
-        addPaymentMethodsCall();
-        addIdentificationTypesCall();
+        addInitCalls();
         mTestRule.launchActivity(validStartIntent);
 
         DummyCard card = CardTestUtils.getDummyCard("cordobesa");
@@ -1603,8 +1630,7 @@ public class GuessingCardActivityTest {
 
     @Test
     public void validateMaskCMR() {
-        addPaymentMethodsCall();
-        addIdentificationTypesCall();
+        addInitCalls();
         mTestRule.launchActivity(validStartIntent);
 
         DummyCard card = CardTestUtils.getDummyCard("cmr");
@@ -1619,8 +1645,7 @@ public class GuessingCardActivityTest {
 
     @Test
     public void ignoreOnSecurityCodeNotRequiredThenTryOneWithRequired() {
-        addPaymentMethodsCall();
-        addIdentificationTypesCall();
+        addInitCalls();
         addIdentificationTypesCall();
 
         mTestRule.launchActivity(validStartIntent);
@@ -1670,5 +1695,16 @@ public class GuessingCardActivityTest {
     private void addPaymentMethodsCall() {
         String paymentMethods = StaticMock.getPaymentMethodList();
         mFakeAPI.addResponseToQueue(paymentMethods, 200, "");
+    }
+
+    private void addBankDealsCall() {
+        List<BankDeal> bankDeals = StaticMock.getBankDeals();
+        mFakeAPI.addResponseToQueue(bankDeals, 200, "");
+    }
+
+    private void addInitCalls() {
+        addBankDealsCall();
+        addPaymentMethodsCall();
+        addIdentificationTypesCall();
     }
 }
