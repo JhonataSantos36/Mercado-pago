@@ -21,6 +21,7 @@ import com.mercadopago.core.MercadoPago;
 import com.mercadopago.model.DecorationPreference;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.util.MPAnimationUtils;
+import com.mercadopago.util.MPMaskUtil;
 import com.mercadopago.util.ScaleUtil;
 import com.mercadopago.views.MPEditText;
 import com.mercadopago.views.MPTextView;
@@ -340,10 +341,10 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
         } else if ((s.length() < MercadoPago.BIN_LENGTH)
                 || (s.length() == MercadoPago.BIN_LENGTH && mActivity.getCurrentPaymentMethod() == null)
                 || (mActivity.getCurrentPaymentMethod() == null) ) {
-            number = mActivity.buildNumberWithMask(CardInterface.CARD_NUMBER_MAX_LENGTH, s.toString());
+            number = MPMaskUtil.buildNumberWithMask(CardInterface.CARD_NUMBER_MAX_LENGTH, s.toString());
         } else {
             int length = mActivity.getCardNumberLength();
-            number = mActivity.buildNumberWithMask(length, s.toString());
+            number = MPMaskUtil.buildNumberWithMask(length, s.toString());
         }
         mCardNumberTextView.setText(number);
     }

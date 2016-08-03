@@ -16,6 +16,7 @@ import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.listeners.RecyclerItemClickListener;
 import com.mercadopago.model.ApiException;
+import com.mercadopago.model.IdentificationType;
 import com.mercadopago.model.Installment;
 import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.PaymentPreference;
@@ -267,5 +268,10 @@ public class InstallmentsActivity extends ShowCardActivity {
     @Override
     public void initializeCardByToken() {
 
+    }
+
+    @Override
+    public IdentificationType getCardIdentificationType() {
+        return null;
     }
 }
