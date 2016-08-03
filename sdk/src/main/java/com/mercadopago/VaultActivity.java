@@ -148,24 +148,35 @@ public class VaultActivity extends AppCompatActivity {
         mShowBankDeals = this.getIntent().getBooleanExtra("showBankDeals", true);
         mSite = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("site"), Site.class);
 
+        if(getIntent().getStringExtra("paymentPreference") != null) {
+            mPaymentPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("paymentPreference"), PaymentPreference.class);
+        }
+
         if (this.getIntent().getStringExtra("supportedPaymentTypes") != null) {
             Gson gson = new Gson();
             Type listType = new TypeToken<List<String>>(){}.getType();
             mSupportedPaymentTypes = gson.fromJson(this.getIntent().getStringExtra("supportedPaymentTypes"), listType);
         }
 
-        List<String> excludedPaymentTypes = new ArrayList<>();
-        if(mSupportedPaymentTypes != null) {
+        //Give priority to PaymentPreference over supported payment types
+        if(!isPaymentPreferenceSet() && supportedPaymentTypesSet()) {
+            List<String> excludedPaymentTypes = new ArrayList<>();
             for (String type : PaymentTypes.getAllPaymentTypes()) {
                 if (!mSupportedPaymentTypes.contains(type)) {
                     excludedPaymentTypes.add(type);
                 }
             }
+            mPaymentPreference = new PaymentPreference();
+            mPaymentPreference.setExcludedPaymentTypeIds(excludedPaymentTypes);
         }
-        mPaymentPreference = new PaymentPreference();
-        mPaymentPreference.setExcludedPaymentTypeIds(excludedPaymentTypes);
+    }
 
+    private boolean supportedPaymentTypesSet() {
+        return mSupportedPaymentTypes != null;
+    }
 
+    private boolean isPaymentPreferenceSet() {
+        return mPaymentPreference != null;
     }
 
     protected void setContentView() {
@@ -308,11 +319,8 @@ public class VaultActivity extends AppCompatActivity {
             } else {
                 startPaymentMethodsActivity();
             }
-        } else {
-
-            if ((data != null) && (data.getStringExtra("apiException") != null)) {
-                finishWithApiException(data);
-            }
+        } else if ((data != null) && (data.getStringExtra("mpException") != null)) {
+            finishWithMpException(data);
         }
     }
 
@@ -372,7 +380,7 @@ public class VaultActivity extends AppCompatActivity {
         } else {
 
             if ((data != null) && (data.getStringExtra("apiException") != null)) {
-                finishWithApiException(data);
+                finishWithMpException(data);
             } else if ((mSelectedCard == null) && (mCardToken == null)) {
                 // if nothing is selected
                 finish();
@@ -402,7 +410,7 @@ public class VaultActivity extends AppCompatActivity {
         } else {
 
             if ((data != null) && (data.getStringExtra("apiException") != null)) {
-                finishWithApiException(data);
+                finishWithMpException(data);
             }
         }
     }
@@ -422,7 +430,7 @@ public class VaultActivity extends AppCompatActivity {
             if (data != null) {
                 if (data.getStringExtra("apiException") != null) {
 
-                    finishWithApiException(data);
+                    finishWithMpException(data);
 
                 } else if (data.getBooleanExtra("backButtonPressed", false)) {
 
@@ -451,7 +459,7 @@ public class VaultActivity extends AppCompatActivity {
             if (data != null) {
                 if (data.getStringExtra("apiException") != null) {
 
-                    finishWithApiException(data);
+                    finishWithMpException(data);
 
                 } else if (data.getBooleanExtra("backButtonPressed", false)) {
 
@@ -752,7 +760,7 @@ public class VaultActivity extends AppCompatActivity {
         finish();
     }
 
-    protected void finishWithApiException(Intent data) {
+    protected void finishWithMpException(Intent data) {
 
         setResult(RESULT_CANCELED, data);
         finish();
