@@ -36,6 +36,9 @@ import java.util.List;
 
 public class InstructionsActivity extends MercadoPagoActivity {
 
+    //Const
+    private static final String INSTRUCTIONS_NOT_FOUND_FOR_TYPE = "instruction not found for type";
+
     //Values
     protected MercadoPago mMercadoPago;
     protected Boolean mBackPressedOnce;
@@ -126,7 +129,7 @@ public class InstructionsActivity extends MercadoPagoActivity {
                 List<Instruction> instructions
                         = paymentResult.getInstructions() == null ? new ArrayList<Instruction>() : paymentResult.getInstructions();
                 if(instructions.isEmpty()) {
-                    ErrorUtil.startErrorActivity(getActivity(), getActivity().getString(R.string.mpsdk_standard_error_message), "instruction not found for type " + mPaymentMethod.getPaymentTypeId(), false);
+                    ErrorUtil.startErrorActivity(getActivity(), getActivity().getString(R.string.mpsdk_standard_error_message), INSTRUCTIONS_NOT_FOUND_FOR_TYPE + mPaymentMethod.getPaymentTypeId(), false);
                 } else {
                     resolveInstructionsFound(instructions);
                 }
@@ -196,21 +199,21 @@ public class InstructionsActivity extends MercadoPagoActivity {
     protected void setActions(Instruction instruction) {
         if(instruction.getActions() != null && !instruction.getActions().isEmpty()) {
             final InstructionActionInfo actionInfo = instruction.getActions().get(0);
-            if(actionInfo.getTag().equals(InstructionActionInfo.Tags.LINK)) {
-                if(actionInfo.getUrl() != null && !actionInfo.getUrl().isEmpty()) {
-                    mActionButton.setVisibility(View.VISIBLE);
-                    mActionButton.setText(actionInfo.getLabel());
-                    mActionButton.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(actionInfo.getUrl()));
-                            startActivity(browserIntent);
-                        }
-                    });
-                }
+            if(actionInfo.getTag().equals(InstructionActionInfo.Tags.LINK)
+                && actionInfo.getUrl() != null && !actionInfo.getUrl().isEmpty()) {
+                mActionButton.setVisibility(View.VISIBLE);
+                mActionButton.setText(actionInfo.getLabel());
+                mActionButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                    public void onClick(View v) {
+                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(actionInfo.getUrl()));
+                        startActivity(browserIntent);
+                    }
+                });
             }
         }
     }
+
 
     protected void setReferencesInformation(Instruction instruction) {
         LinearLayout.LayoutParams marginParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
