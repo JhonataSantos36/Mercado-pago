@@ -19,6 +19,7 @@ import com.mercadopago.model.InstructionActionInfo;
 import com.mercadopago.model.InstructionReference;
 import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentMethod;
+import com.mercadopago.model.PaymentResult;
 import com.mercadopago.mptracker.MPTracker;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.CurrenciesUtil;
@@ -30,6 +31,7 @@ import com.mercadopago.util.ScaleUtil;
 import com.mercadopago.views.MPButton;
 import com.mercadopago.views.MPTextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class InstructionsActivity extends MercadoPagoActivity {
@@ -118,14 +120,16 @@ public class InstructionsActivity extends MercadoPagoActivity {
     protected void getInstructionsAsync() {
 
         LayoutUtil.showProgressLayout(this);
-        mMercadoPago.getInstructions(mPayment.getId(), new Callback<List<Instruction>>() {
+        mMercadoPago.getPaymentResult(mPayment.getId(), mPaymentMethod.getPaymentTypeId(), new Callback<PaymentResult>() {
             @Override
-            public void success(List<Instruction> instructions) {
+            public void success(PaymentResult paymentResult) {
                 MPTracker.getInstance().trackEvent("INSTRUCTIONS", "GET_INSTRUCTION_RESPONSE", "SUCCESS", "2", mMerchantPublicKey, "MLA", "1.0", getActivity());
-                if(!instructions.isEmpty()) {
-                    resolveInstructionsFound(instructions);
-                } else {
+                List<Instruction> instructions
+                        = paymentResult.getInstructions() == null ? new ArrayList<Instruction>() : paymentResult.getInstructions();
+                if(instructions.isEmpty()) {
                     ErrorUtil.startErrorActivity(getActivity(), getActivity().getString(R.string.mpsdk_standard_error_message), "instruction not found for type " + mPaymentMethod.getPaymentTypeId(), false);
+                } else {
+                    resolveInstructionsFound(instructions);
                 }
             }
 
@@ -146,10 +150,10 @@ public class InstructionsActivity extends MercadoPagoActivity {
 
     private void resolveInstructionsFound(List<Instruction> instructions) {
         Instruction instruction = getInstruction(instructions);
-        if(instruction != null) {
-            showInstructions(instruction);
-        } else {
+        if(instruction == null) {
             ErrorUtil.startErrorActivity(this, this.getString(R.string.mpsdk_standard_error_message), "instruction not found for type " + mPaymentMethod.getPaymentTypeId(), false);
+        } else {
+            showInstructions(instruction);
         }
         LayoutUtil.showRegularLayout(this);
     }

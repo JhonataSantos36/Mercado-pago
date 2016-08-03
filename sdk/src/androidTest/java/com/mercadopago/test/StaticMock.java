@@ -12,13 +12,13 @@ import com.mercadopago.model.CheckoutPreference;
 import com.mercadopago.model.Customer;
 import com.mercadopago.model.IdentificationType;
 import com.mercadopago.model.Installment;
-import com.mercadopago.model.Instruction;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentMethodSearch;
 import com.mercadopago.model.PaymentPreference;
+import com.mercadopago.model.PaymentResult;
 import com.mercadopago.model.SavedCardToken;
 import com.mercadopago.model.Token;
 import com.mercadopago.util.JsonUtil;
@@ -380,121 +380,109 @@ public class StaticMock {
         }
     }
 
-    public static List<Instruction> getInstructions() {
+    public static PaymentResult getInstructions() {
         try {
             String json = getFile(InstrumentationRegistry.getContext(), "mocks/instructions_many.json");
-            Type listType = new TypeToken<List<Instruction>>(){}.getType();
-            return JsonUtil.getInstance().getGson().fromJson(json, listType);
+            return JsonUtil.getInstance().fromJson(json, PaymentResult.class);
         } catch (Exception ex) {
             return null;
         }
     }
 
-    public static List<Instruction> getInstructionWithoutActions() {
+    public static PaymentResult getInstructionWithoutActions() {
         try {
             String json = getFile(InstrumentationRegistry.getContext(), "mocks/instructions_cash.json");
-            Type listType = new TypeToken<List<Instruction>>(){}.getType();
-            return JsonUtil.getInstance().getGson().fromJson(json, listType);
+            return JsonUtil.getInstance().fromJson(json, PaymentResult.class);
         } catch (Exception ex) {
             return null;
         }
     }
 
-    public static List<Instruction> getInstructionWithAction() {
+    public static PaymentResult getInstructionWithAction() {
         try {
             String json = getFile(InstrumentationRegistry.getContext(), "mocks/instructions_actions.json");
-            Type listType = new TypeToken<List<Instruction>>(){}.getType();
-            return JsonUtil.getInstance().getGson().fromJson(json, listType);
+            return JsonUtil.getInstance().fromJson(json, PaymentResult.class);
         } catch (Exception ex) {
             return null;
         }
     }
 
-    public static List<Instruction> getInstructionWithInvalidAction() {
+    public static PaymentResult getInstructionWithInvalidAction() {
         try {
             String json = getFile(InstrumentationRegistry.getContext(), "mocks/instructions_actions_invalid_tag.json");
-            Type listType = new TypeToken<List<Instruction>>(){}.getType();
-            return JsonUtil.getInstance().getGson().fromJson(json, listType);
+            return JsonUtil.getInstance().fromJson(json, PaymentResult.class);
         } catch (Exception ex) {
             return null;
         }
     }
 
-    public static List<Instruction> getInstructionWithActionButNullUrl() {
+    public static PaymentResult getInstructionWithActionButNullUrl() {
         try {
-            String json = getFile(InstrumentationRegistry.getContext(), "mocks/action_instructions_without_url.json");
-            Type listType = new TypeToken<List<Instruction>>(){}.getType();
-            return JsonUtil.getInstance().getGson().fromJson(json, listType);
+            String json = getFile(InstrumentationRegistry.getContext(), "mocks/instructions_action_without_url.json");
+            return JsonUtil.getInstance().fromJson(json, PaymentResult.class);
         } catch (Exception ex) {
             return null;
         }
     }
 
-    public static List<Instruction> getInstructionWithActionButEmptyUrl() {
+    public static PaymentResult getInstructionWithActionButEmptyUrl() {
         try {
             String json = getFile(InstrumentationRegistry.getContext(), "mocks/instructions_action_with_empty_url.json");
-            Type listType = new TypeToken<List<Instruction>>(){}.getType();
-            return JsonUtil.getInstance().getGson().fromJson(json, listType);
+            return JsonUtil.getInstance().fromJson(json, PaymentResult.class);
         } catch (Exception ex) {
             return null;
         }
     }
 
-    public static List<Instruction> getInstructionWithoutLabels() {
+    public static PaymentResult getInstructionWithoutLabels() {
         try {
             String json = getFile(InstrumentationRegistry.getContext(), "mocks/instructions_cash_without_labels.json");
-            Type listType = new TypeToken<List<Instruction>>(){}.getType();
-            return JsonUtil.getInstance().getGson().fromJson(json, listType);
+            return JsonUtil.getInstance().fromJson(json, PaymentResult.class);
         } catch (Exception ex) {
             return null;
         }
     }
 
-    public static List<Instruction> getInstructionWithoutPrimaryInfo() {
+    public static PaymentResult getInstructionWithoutPrimaryInfo() {
         try {
             String json = getFile(InstrumentationRegistry.getContext(), "mocks/instructions_cash_no_primary_info.json");
-            Type listType = new TypeToken<List<Instruction>>(){}.getType();
-            return JsonUtil.getInstance().getGson().fromJson(json, listType);
+            return JsonUtil.getInstance().fromJson(json, PaymentResult.class);
         } catch (Exception ex) {
             return null;
         }
     }
 
-    public static List<Instruction> getInstructionWithNullInfo() {
+    public static PaymentResult getInstructionWithNullInfo() {
         try {
             String json = getFile(InstrumentationRegistry.getContext(), "mocks/instructions_cash_null_info.json");
-            Type listType = new TypeToken<List<Instruction>>(){}.getType();
-            return JsonUtil.getInstance().getGson().fromJson(json, listType);
+            return JsonUtil.getInstance().fromJson(json, PaymentResult.class);
         } catch (Exception ex) {
             return null;
         }
     }
 
-    public static List<Instruction> getInstructionWithoutSecondaryInfo() {
+    public static PaymentResult getInstructionWithoutSecondaryInfo() {
         try {
             String json = getFile(InstrumentationRegistry.getContext(), "mocks/instructions_cash_no_secondary_info.json");
-            Type listType = new TypeToken<List<Instruction>>(){}.getType();
-            return JsonUtil.getInstance().getGson().fromJson(json, listType);
+            return JsonUtil.getInstance().fromJson(json, PaymentResult.class);
         } catch (Exception ex) {
             return null;
         }
     }
 
-    public static List<Instruction> getInstructionWithoutTertiaryInfo() {
+    public static PaymentResult getInstructionWithoutTertiaryInfo() {
         try {
             String json = getFile(InstrumentationRegistry.getContext(), "mocks/instructions_cash_no_tertiary_info.json");
-            Type listType = new TypeToken<List<Instruction>>(){}.getType();
-            return JsonUtil.getInstance().getGson().fromJson(json, listType);
+            return JsonUtil.getInstance().fromJson(json, PaymentResult.class);
         } catch (Exception ex) {
             return null;
         }
     }
 
-    public static List<Instruction> getInstructionWithInvalidReference() {
+    public static PaymentResult getInstructionWithInvalidReference() {
         try {
             String json = getFile(InstrumentationRegistry.getContext(), "mocks/instruction_with_invalid_reference.json");
-            Type listType = new TypeToken<List<Instruction>>(){}.getType();
-            return JsonUtil.getInstance().getGson().fromJson(json, listType);
+            return JsonUtil.getInstance().fromJson(json, PaymentResult.class);
         } catch (Exception ex) {
             return null;
         }

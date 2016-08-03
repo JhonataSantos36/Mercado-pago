@@ -1,33 +1,43 @@
-[{
-  "title":"Pay $100.00 in your closest store",
-  "references":
-  [
+{
+  "amount_info": {
+    "thousands_separator": ".",
+    "decimal_separator": ",",
+    "symbol": "$",
+    "decimal_places": 2,
+    "amount": 10000
+  },
+  "instructions": [
     {
-      "label":"Reference1",
-      "field_value": [
-        "123",
-        "456"
+      "title": "Pay $100.00 in your closest store",
+      "references": [
+        {
+          "label": "Reference1",
+          "field_value": [
+            "123",
+            "456"
+          ],
+          "separator": "-"
+        },
+        {
+          "label": "Reference2",
+          "field_value": [
+            "654",
+            "321"
+          ],
+          "separator": " "
+        }
       ],
-      "separator":"-"
-    },
-    {
-      "label":"Reference2",
-      "field_value": [
-        "654",
-        "321"
+      "info": [
+        "Info",
+        "Info second phrase"
       ],
-      "separator":" "
+      "secondary_info": [
+        "Secondary info",
+        "Secondary second phrase"
+      ],
+      "tertiary_info": [
+      ],
+      "accreditation_message": "accreditation time"
     }
-  ],
-  "info": [
-    "Info",
-    "Info second phrase"
-  ],
-  "secondary_info": [
-    "Secondary info",
-    "Secondary second phrase"
-  ],
-  "tertiary_info": [
-  ],
-  "accreditation_message":"accreditation time"
-}]
+  ]
+}

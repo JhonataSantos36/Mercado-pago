@@ -32,7 +32,6 @@ import com.mercadopago.model.CheckoutPreference;
 import com.mercadopago.model.DecorationPreference;
 import com.mercadopago.model.IdentificationType;
 import com.mercadopago.model.Installment;
-import com.mercadopago.model.Instruction;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.Payment;
@@ -40,6 +39,7 @@ import com.mercadopago.model.PaymentIntent;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentMethodSearch;
 import com.mercadopago.model.PaymentPreference;
+import com.mercadopago.model.PaymentResult;
 import com.mercadopago.model.SavedCardToken;
 import com.mercadopago.model.Site;
 import com.mercadopago.model.Token;
@@ -247,12 +247,12 @@ public class MercadoPago {
         }
     }
 
-    public void getInstructions(Long paymentId, final Callback<List<Instruction>> callback) {
+    public void getPaymentResult(Long paymentId, String paymentTypeId, final Callback<PaymentResult> callback) {
         if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {
             MPTracker.getInstance().trackEvent("NO_SCREEN","GET_INSTRUCTIONS", 1, mKey, BuildConfig.VERSION_NAME, mContext);
 
             PaymentService service = mRetrofit.create(PaymentService.class);
-            service.getInstructions(paymentId, this.mKey).enqueue(callback);
+            service.getPaymentResult(paymentId, this.mKey, paymentTypeId).enqueue(callback);
         } else {
             throw new RuntimeException("Unsupported key type for this method");
         }
