@@ -587,6 +587,11 @@ public class GuessingCardActivity extends FrontCardActivity {
     }
 
     @Override
+    public IdentificationType getCardIdentificationType() {
+        return mSelectedIdentificationType;
+    }
+
+    @Override
     public void initializeCardByToken() {
         if (mToken == null) {
             return;

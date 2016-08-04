@@ -1,5 +1,6 @@
 package com.mercadopago;
 
+import com.mercadopago.model.IdentificationType;
 import com.mercadopago.model.PaymentMethod;
 
 public interface CardInterface {
@@ -43,10 +44,6 @@ public interface CardInterface {
 
     void saveCardNumber(String cardNumber);
 
-    String buildNumberWithMask(int cardLength, String s);
-
-    String buildIdentificationNumberWithMask(CharSequence s);
-
     String getCardHolderName();
 
     String getExpiryMonth();
@@ -54,6 +51,8 @@ public interface CardInterface {
     String getExpiryYear();
 
     String getCardIdentificationNumber();
+
+    IdentificationType getCardIdentificationType();
 
     void saveCardExpiryYear(String year);
 

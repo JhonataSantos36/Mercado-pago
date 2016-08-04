@@ -11,6 +11,8 @@ import android.view.ViewGroup;
 import com.mercadopago.CardInterface;
 import com.mercadopago.GuessingCardActivity;
 import com.mercadopago.R;
+import com.mercadopago.model.IdentificationType;
+import com.mercadopago.util.MPCardMaskUtil;
 import com.mercadopago.views.MPEditText;
 import com.mercadopago.views.MPTextView;
 
@@ -76,6 +78,7 @@ public class CardIdentificationFragment extends android.support.v4.app.Fragment 
 
     public void populateIdentificationNumber() {
         String identificationNumber = mActivity.getCardIdentificationNumber();
+        IdentificationType identificationType = mActivity.getCardIdentificationType();
         if (identificationNumber == null) {
             mCardIdentificationNumberView.setVisibility(View.INVISIBLE);
             mBaseIdNumberView.setVisibility(View.VISIBLE);
@@ -83,7 +86,7 @@ public class CardIdentificationFragment extends android.support.v4.app.Fragment 
             mBaseIdNumberView.setVisibility(View.INVISIBLE);
             mCardIdentificationNumberView.setVisibility(View.VISIBLE);
             int color = CardInterface.NORMAL_TEXT_VIEW_COLOR;
-            String number = mActivity.buildIdentificationNumberWithMask(identificationNumber);
+            String number = MPCardMaskUtil.buildIdentificationNumberWithMask(identificationNumber, identificationType);
             setText(mCardIdentificationNumberView, number, color);
         }
     }
@@ -100,7 +103,7 @@ public class CardIdentificationFragment extends android.support.v4.app.Fragment 
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                     mBaseIdNumberView.setVisibility(View.INVISIBLE);
                     mCardIdentificationNumberView.setVisibility(View.VISIBLE);
-                    String number = mActivity.buildIdentificationNumberWithMask(s);
+                    String number = MPCardMaskUtil.buildIdentificationNumberWithMask(s, mActivity.getCardIdentificationType());
                     mCardIdentificationNumberView.setText(number);
                 }
 

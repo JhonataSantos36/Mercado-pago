@@ -16,6 +16,7 @@ import com.google.gson.reflect.TypeToken;
 import com.mercadopago.model.BankDeal;
 import com.mercadopago.model.DecorationPreference;
 import com.mercadopago.model.DummyCard;
+import com.mercadopago.model.DummyIdentificationType;
 import com.mercadopago.model.IdentificationType;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.PaymentMethod;
@@ -27,6 +28,7 @@ import com.mercadopago.test.StaticMock;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.utils.ActivityResultUtil;
 import com.mercadopago.utils.CardTestUtils;
+import com.mercadopago.utils.IdentificationTestUtils;
 import com.mercadopago.utils.ViewUtils;
 import com.mercadopago.views.MPTextView;
 
@@ -1641,6 +1643,80 @@ public class GuessingCardActivityTest {
         onView(withId(R.id.mpsdkCardNumber)).perform(typeText(card.getCardNumber()));
         onView(withId(R.id.mpsdkCardNumber)).check(matches(withText(card.getNumberWithMask())));
         onView(withId(R.id.mpsdkCardNumberTextView)).check(matches(withText(containsString(card.getNumberWithMask()))));
+    }
+
+    @Test
+    public void validateDniMask() {
+        addPaymentMethodsCall();
+        addIdentificationTypesCall();
+        mTestRule.launchActivity(validStartIntent);
+
+        DummyCard card = CardTestUtils.getDummyCard("master");
+        DummyIdentificationType identificationType = IdentificationTestUtils.getDummyIdentificationType("DNI");
+
+        onView(withId(R.id.mpsdkCardNumber)).perform(typeText(card.getCardNumber()));
+        onView(withId(R.id.mpsdkNextButton)).perform(click());
+        onView(withId(R.id.mpsdkCardholderName)).perform(typeText(StaticMock.DUMMY_CARDHOLDER_NAME));
+        onView(withId(R.id.mpsdkNextButton)).perform(click());
+        onView(withId(R.id.mpsdkCardExpiryDate)).perform(typeText(StaticMock.DUMMY_EXPIRATION_DATE));
+        onView(withId(R.id.mpsdkNextButton)).perform(click());
+        onView(withId(R.id.mpsdkCardSecurityCode)).perform(typeText(card.getSecurityCode()));
+        onView(withId(R.id.mpsdkNextButton)).perform(click());
+
+        validateMask(identificationType);
+    }
+
+    @Test
+    public void validateCPFMask() {
+        addPaymentMethodsCall();
+
+        String identificationTypes = StaticMock.getIdentificationTypeCPF();
+        mFakeAPI.addResponseToQueue(identificationTypes, 200, "");
+
+        mTestRule.launchActivity(validStartIntent);
+
+        DummyCard card = CardTestUtils.getDummyCard("master");
+        DummyIdentificationType identificationType = IdentificationTestUtils.getDummyIdentificationType("CPF");
+
+        onView(withId(R.id.mpsdkCardNumber)).perform(typeText(card.getCardNumber()));
+        onView(withId(R.id.mpsdkNextButton)).perform(click());
+        onView(withId(R.id.mpsdkCardholderName)).perform(typeText(StaticMock.DUMMY_CARDHOLDER_NAME));
+        onView(withId(R.id.mpsdkNextButton)).perform(click());
+        onView(withId(R.id.mpsdkCardExpiryDate)).perform(typeText(StaticMock.DUMMY_EXPIRATION_DATE));
+        onView(withId(R.id.mpsdkNextButton)).perform(click());
+        onView(withId(R.id.mpsdkCardSecurityCode)).perform(typeText(card.getSecurityCode()));
+        onView(withId(R.id.mpsdkNextButton)).perform(click());
+
+        validateMask(identificationType);
+    }
+
+    @Test
+    public void validateCNPJMask() {
+        addPaymentMethodsCall();
+
+        String identificationTypes = StaticMock.getIdentificationTypeCNPJ();
+        mFakeAPI.addResponseToQueue(identificationTypes, 200, "");
+
+        mTestRule.launchActivity(validStartIntent);
+
+        DummyCard card = CardTestUtils.getDummyCard("master");
+        DummyIdentificationType identificationType = IdentificationTestUtils.getDummyIdentificationType("CNPJ");
+
+        onView(withId(R.id.mpsdkCardNumber)).perform(typeText(card.getCardNumber()));
+        onView(withId(R.id.mpsdkNextButton)).perform(click());
+        onView(withId(R.id.mpsdkCardholderName)).perform(typeText(StaticMock.DUMMY_CARDHOLDER_NAME));
+        onView(withId(R.id.mpsdkNextButton)).perform(click());
+        onView(withId(R.id.mpsdkCardExpiryDate)).perform(typeText(StaticMock.DUMMY_EXPIRATION_DATE));
+        onView(withId(R.id.mpsdkNextButton)).perform(click());
+        onView(withId(R.id.mpsdkCardSecurityCode)).perform(typeText(card.getSecurityCode()));
+        onView(withId(R.id.mpsdkNextButton)).perform(click());
+
+        validateMask(identificationType);
+    }
+
+    public void validateMask(DummyIdentificationType identificationType) {
+        onView(withId(R.id.mpsdkCardIdentificationNumber)).perform(typeText(identificationType.getIdentificationNumber()));
+        onView(withId(R.id.mpsdkIdNumberView)).check(matches(withText(identificationType.getGetIdentificationNumberWithMask())));
     }
 
     @Test

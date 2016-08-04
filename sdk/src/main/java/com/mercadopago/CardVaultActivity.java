@@ -11,6 +11,7 @@ import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.constants.PaymentTypes;
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.model.ApiException;
+import com.mercadopago.model.IdentificationType;
 import com.mercadopago.model.Installment;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.PayerCost;
@@ -291,5 +292,10 @@ public class CardVaultActivity extends ShowCardActivity {
     @Override
     public void initializeCardByToken() {
 
+    }
+
+    @Override
+    public IdentificationType getCardIdentificationType() {
+        return null;
     }
 }
