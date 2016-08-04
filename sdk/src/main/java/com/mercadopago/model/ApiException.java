@@ -80,7 +80,7 @@ public class ApiException {
         public static final String INVALID_PAYMENT_METHOD_ID = "3029";
         public static final String INVALID_CARD_EXPIRATION_MONTH = "3030";
         public static final String INVALID_CARD_EXPIRATION_YEAR = "4000";
-        public static final String INVALID_PAYER_EMAIL = "4051";
+        public static final String INVALID_PAYER_EMAIL = "4050";
     }
 }
 
