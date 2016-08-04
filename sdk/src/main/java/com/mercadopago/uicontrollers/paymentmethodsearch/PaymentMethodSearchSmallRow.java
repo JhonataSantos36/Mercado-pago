@@ -1,6 +1,7 @@
 package com.mercadopago.uicontrollers.paymentmethodsearch;
 
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,12 +57,12 @@ public class PaymentMethodSearchSmallRow extends PaymentMethodSearchRow {
         return mView;
     }
 
-    private void setTintColor(Context mContext, ImageView mIcon) {
+    private void setTintColor(Context context, ImageView mIcon) {
         if(mDecorationPreference != null && mDecorationPreference.hasColors()) {
             mIcon.setColorFilter(mDecorationPreference.getBaseColor());
         }
         else {
-            mIcon.setColorFilter(mContext.getResources().getColor(R.color.mpsdk_icon_image_color));
+            mIcon.setColorFilter(ContextCompat.getColor(context, R.color.mpsdk_icon_image_color));
         }
     }
 
