@@ -8,6 +8,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
 
+import com.google.gson.reflect.TypeToken;
 import com.mercadopago.adapters.BankDealsAdapter;
 import com.mercadopago.callbacks.Callback;
 import com.mercadopago.callbacks.FailureRecovery;
@@ -19,8 +20,10 @@ import com.mercadopago.model.DecorationPreference;
 import com.mercadopago.mptracker.MPTracker;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.ErrorUtil;
+import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;
 
+import java.lang.reflect.Type;
 import java.util.List;
 
 
@@ -34,6 +37,8 @@ public class BankDealsActivity extends MercadoPagoActivity {
     protected RecyclerView mRecyclerView;
     protected DecorationPreference mDecorationPreference;
     protected Toolbar mToolbar;
+
+    protected List<BankDeal> mBankDeals;
 
     @Override
     protected void onValidStart() {
@@ -68,6 +73,12 @@ public class BankDealsActivity extends MercadoPagoActivity {
     @Override
     protected void getActivityParameters() {
         mMerchantPublicKey = getIntent().getStringExtra("merchantPublicKey");
+        try {
+            Type listType = new TypeToken<List<BankDeal>>() {}.getType();
+            mBankDeals = JsonUtil.getInstance().getGson().fromJson(this.getIntent().getStringExtra("bankDeals"), listType);
+        } catch (Exception ex) {
+            mBankDeals = null;
+        }
     }
 
     private void initializeToolbar() {
@@ -98,39 +109,32 @@ public class BankDealsActivity extends MercadoPagoActivity {
     }
 
     private void getBankDeals() {
-        LayoutUtil.showProgressLayout(this);
-        mMercadoPago.getBankDeals(new Callback<List<BankDeal>>() {
-            @Override
-            public void success(List<BankDeal> bankDeals) {
-                MPTracker.getInstance().trackScreen("BANK_DEALS", 2, mMerchantPublicKey, BuildConfig.VERSION_NAME, getActivity());
-                mRecyclerView.setAdapter(new BankDealsAdapter(getActivity(), bankDeals, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        BankDeal selectedBankDeal = (BankDeal) view.getTag();
-                        Intent intent = new Intent(getActivity(), TermsAndConditionsActivity.class);
-                        intent.putExtra("bankDealLegals", selectedBankDeal.getLegals());
-                        startActivity(intent);
-                    }
-                }));
-                LayoutUtil.showRegularLayout(getActivity());
-            }
+        if (mBankDeals != null) {
+            solveBankDeals(mBankDeals);
+        } else {
+            LayoutUtil.showProgressLayout(this);
+            mMercadoPago.getBankDeals(new Callback<List<BankDeal>>() {
+                @Override
+                public void success(List<BankDeal> bankDeals) {
+                    solveBankDeals(bankDeals);
+                }
 
-            @Override
-            public void failure(ApiException apiException) {
-                if (isActivityActive()) {
-                    setFailureRecovery(new FailureRecovery() {
-                        @Override
-                        public void recover() {
-                            getBankDeals();
-                        }
-                    });
-                    ApiUtil.showApiExceptionError(getActivity(), apiException);
+                @Override
+                public void failure(ApiException apiException) {
+                    if (isActivityActive()) {
+                        setFailureRecovery(new FailureRecovery() {
+                            @Override
+                            public void recover() {
+                                getBankDeals();
+                            }
+                        });
+                        ApiUtil.showApiExceptionError(getActivity(), apiException);
+                    } else {
+                        finishWithCancelResult();
+                    }
                 }
-                else {
-                    finishWithCancelResult();
-                }
-            }
-        });
+            });
+        }
     }
 
     @Override
@@ -148,5 +152,20 @@ public class BankDealsActivity extends MercadoPagoActivity {
     private void finishWithCancelResult() {
         setResult(RESULT_CANCELED);
         finish();
+    }
+
+    protected void solveBankDeals(List<BankDeal> bankDeals) {
+        MPTracker.getInstance().trackScreen("BANK_DEALS", 2, mMerchantPublicKey, BuildConfig.VERSION_NAME, getActivity());
+        mRecyclerView.setAdapter(new BankDealsAdapter(getActivity(), bankDeals, new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                BankDeal selectedBankDeal = (BankDeal) view.getTag();
+                Intent intent = new Intent(getActivity(), TermsAndConditionsActivity.class);
+                intent.putExtra("bankDealLegals", selectedBankDeal.getLegals());
+                startActivity(intent);
+            }
+        }));
+
+        LayoutUtil.showRegularLayout(getActivity());
     }
 }

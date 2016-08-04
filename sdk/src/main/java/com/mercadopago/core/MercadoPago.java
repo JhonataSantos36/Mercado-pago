@@ -274,11 +274,14 @@ public class MercadoPago {
 
     // * Static methods for StartActivityBuilder implementation
 
-    private static void startBankDealsActivity(Activity activity, String publicKey, DecorationPreference decorationPreference) {
+    private static void startBankDealsActivity(Activity activity, String publicKey, List<BankDeal> bankDeals, DecorationPreference decorationPreference) {
 
         Intent bankDealsIntent = new Intent(activity, BankDealsActivity.class);
         bankDealsIntent.putExtra("merchantPublicKey", publicKey);
         bankDealsIntent.putExtra("decorationPreference", JsonUtil.getInstance().toJson(decorationPreference));
+        if (bankDeals != null) {
+            bankDealsIntent.putExtra("bankDeals", JsonUtil.getInstance().toJson(bankDeals));
+        }
         activity.startActivityForResult(bankDealsIntent, BANK_DEALS_REQUEST_CODE);
     }
 
@@ -600,6 +603,7 @@ public class MercadoPago {
         private DecorationPreference mDecorationPreference;
         private Boolean mInstallmentsEnabled;
         private List<String> mSupportedPaymentTypes;
+        private List<BankDeal> mBankDeals;
 
         public StartActivityBuilder() {
 
@@ -642,6 +646,11 @@ public class MercadoPago {
 
             this.mKey = key;
             this.mKeyType = MercadoPago.KEY_TYPE_PUBLIC;
+            return this;
+        }
+
+        public StartActivityBuilder setBankDeals(List<BankDeal> bankDeals) {
+            this.mBankDeals = bankDeals;
             return this;
         }
 
@@ -753,7 +762,7 @@ public class MercadoPago {
             if (this.mKeyType == null) throw new IllegalStateException("key type is null");
 
             if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {
-                MercadoPago.startBankDealsActivity(this.mActivity, this.mKey, this.mDecorationPreference);
+                MercadoPago.startBankDealsActivity(this.mActivity, this.mKey, this.mBankDeals, this.mDecorationPreference);
             } else {
                 throw new RuntimeException("Unsupported key type for this method");
             }
