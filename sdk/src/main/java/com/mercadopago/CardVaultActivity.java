@@ -212,8 +212,13 @@ public class CardVaultActivity extends ShowCardActivity {
                 finishWithResult();
             }
 
-        } else if (resultCode == RESULT_CANCELED){
-            MPTracker.getInstance().trackEvent( "GUESSING_CARD", "CANCELED", 2, mPublicKey, mSite.getId(), BuildConfig.VERSION_NAME, this);
+        } else if (resultCode == RESULT_CANCELED ) {
+
+            if(mSite == null) {
+                MPTracker.getInstance().trackEvent("GUESSING_CARD", "CANCELED", 2, mPublicKey, BuildConfig.VERSION_NAME, this);
+            } else {
+                MPTracker.getInstance().trackEvent("GUESSING_CARD", "CANCELED", 2, mPublicKey, mSite.getId(), BuildConfig.VERSION_NAME, this);
+            }
 
             setResult(RESULT_CANCELED, data);
             finish();
