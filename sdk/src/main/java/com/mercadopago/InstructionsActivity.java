@@ -204,7 +204,7 @@ public class InstructionsActivity extends MercadoPagoActivity {
                 mActionButton.setVisibility(View.VISIBLE);
                 mActionButton.setText(actionInfo.getLabel());
                 mActionButton.setOnClickListener(new View.OnClickListener() {
-                @Override
+                    @Override
                     public void onClick(View v) {
                         Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(actionInfo.getUrl()));
                         startActivity(browserIntent);
