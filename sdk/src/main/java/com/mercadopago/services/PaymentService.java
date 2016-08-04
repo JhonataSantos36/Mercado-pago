@@ -37,7 +37,7 @@ public interface PaymentService {
     @POST("/v1/checkout/payments")
     MPCall<Payment> createPayment(@Header("X-Idempotency-Key") String transactionId, @Body PaymentIntent body);
 
-    @GET("/beta/checkout/payments/{payment_id}/results")
+    @GET("/v1/checkout/payments/{payment_id}/results")
     MPCall<PaymentResult> getPaymentResult(@Path(value = "payment_id", encoded = true) Long paymentId, @Query("public_key") String mKey, @Query("payment_type") String paymentTypeId);
 
     @GET("/v1/checkout/preferences/{preference_id}")
