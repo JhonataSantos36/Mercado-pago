@@ -6,18 +6,23 @@
     "decimal_places": 2,
     "amount": 10000
   },
-  "instructions":[
+  "instructions": [
     {
       "title": "Pay $100.00 in your closest store",
       "references": [
         {
-          "label": "InvalidReference1",
-          "field_value": null,
+          "label": "Reference1",
+          "field_value": [
+            "123",
+            "456"
+          ],
           "separator": "-"
         },
         {
-          "label": "InvalidReference2",
+          "label": "Reference2",
           "field_value": [
+            "654",
+            "321"
           ],
           "separator": " "
         }

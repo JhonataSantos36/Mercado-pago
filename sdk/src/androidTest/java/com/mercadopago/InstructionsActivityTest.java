@@ -14,6 +14,7 @@ import com.mercadopago.model.InstructionActionInfo;
 import com.mercadopago.model.InstructionReference;
 import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentMethod;
+import com.mercadopago.model.PaymentResult;
 import com.mercadopago.test.FakeAPI;
 import com.mercadopago.test.StaticMock;
 import com.mercadopago.util.JsonUtil;
@@ -24,6 +25,9 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.pressBack;
@@ -95,7 +99,7 @@ public class InstructionsActivityTest {
 
     @Test
     public void getActivityParametersOnCreate() {
-        Instruction instructionWithoutActions = StaticMock.getInstructionWithoutActions();
+        PaymentResult instructionWithoutActions = StaticMock.getInstructionWithoutActions();
         mFakeAPI.addResponseToQueue(instructionWithoutActions, 200, "");
         InstructionsActivity activity = mTestRule.launchActivity(validStartIntent);
         assertEquals(activity.mMerchantPublicKey, mMerchantPublicKey);
@@ -107,59 +111,72 @@ public class InstructionsActivityTest {
 
     @Test
     public void showTitleOnCreate() {
-        Instruction instructionWithoutActions = StaticMock.getInstructionWithoutActions();
-        mFakeAPI.addResponseToQueue(instructionWithoutActions, 200, "");
+        PaymentResult paymentResult = StaticMock.getInstructionWithoutActions();
+        mFakeAPI.addResponseToQueue(paymentResult, 200, "");
         mTestRule.launchActivity(validStartIntent);
-        onView(withId(R.id.mpsdkTitle)).check(matches(withText(instructionWithoutActions.getTitle())));
+        onView(withId(R.id.mpsdkTitle)).check(matches(withText(paymentResult.getInstructions().get(0).getTitle())));
     }
 
     @Test
     public void showAccreditationDateOnCreate() {
-        Instruction instructionWithoutActions = StaticMock.getInstructionWithoutActions();
-        mFakeAPI.addResponseToQueue(instructionWithoutActions, 200, "");
+        PaymentResult paymentResult = StaticMock.getInstructionWithoutActions();
+        mFakeAPI.addResponseToQueue(paymentResult, 200, "");
         mTestRule.launchActivity(validStartIntent);
-        onView(withId(R.id.mpsdkAccreditationMessage)).check(matches(withText(instructionWithoutActions.getAcreditationMessage())));
+        onView(withId(R.id.mpsdkAccreditationMessage)).check(matches(withText(paymentResult.getInstructions().get(0).getAcreditationMessage())));
     }
 
     @Test
     public void showInfoOnCreate() {
-        Instruction instructionWithoutActions = StaticMock.getInstructionWithoutActions();
-        mFakeAPI.addResponseToQueue(instructionWithoutActions, 200, "");
+        PaymentResult paymentResult = StaticMock.getInstructionWithoutActions();
+        mFakeAPI.addResponseToQueue(paymentResult, 200, "");
         mTestRule.launchActivity(validStartIntent);
 
-        String infoFirstPhrase = instructionWithoutActions.getInfo().get(0);
-        String infoSecondPhrase = instructionWithoutActions.getInfo().get(1);
+        String infoFirstPhrase = paymentResult.getInstructions().get(0).getInfo().get(0);
+        String infoSecondPhrase = paymentResult.getInstructions().get(0).getInfo().get(1);
         onView(withId(R.id.mpsdkPrimaryInfo)).check(matches(withText(containsString(infoFirstPhrase))));
         onView(withId(R.id.mpsdkPrimaryInfo)).check(matches(withText(containsString(infoSecondPhrase))));
     }
 
     @Test
     public void showSecondaryInfoOnCreate() {
-        Instruction instructionWithoutActions = StaticMock.getInstructionWithoutActions();
-        mFakeAPI.addResponseToQueue(instructionWithoutActions, 200, "");
+        PaymentResult paymentResult = StaticMock.getInstructionWithoutActions();
+        mFakeAPI.addResponseToQueue(paymentResult, 200, "");
         mTestRule.launchActivity(validStartIntent);
 
-        String infoFirstPhrase = instructionWithoutActions.getSecondaryInfo().get(0);
-        String infoSecondPhrase = instructionWithoutActions.getSecondaryInfo().get(1);
+        String infoFirstPhrase = paymentResult.getInstructions().get(0).getSecondaryInfo().get(0);
+        String infoSecondPhrase = paymentResult.getInstructions().get(0).getSecondaryInfo().get(1);
         onView(withId(R.id.mpsdkSecondaryInfo)).check(matches(withText(containsString(infoFirstPhrase))));
         onView(withId(R.id.mpsdkSecondaryInfo)).check(matches(withText(containsString(infoSecondPhrase))));
     }
 
     @Test
     public void showTertiaryInfoOnCreate() {
-        Instruction instructionWithoutActions = StaticMock.getInstructionWithoutActions();
-        mFakeAPI.addResponseToQueue(instructionWithoutActions, 200, "");
+        PaymentResult paymentResult = StaticMock.getInstructionWithoutActions();
+        mFakeAPI.addResponseToQueue(paymentResult, 200, "");
         mTestRule.launchActivity(validStartIntent);
 
-        String infoFirstPhrase = instructionWithoutActions.getTertiaryInfo().get(0);
-        String infoSecondPhrase = instructionWithoutActions.getTertiaryInfo().get(1);
+        String infoFirstPhrase = paymentResult.getInstructions().get(0).getTertiaryInfo().get(0);
+        String infoSecondPhrase = paymentResult.getInstructions().get(0).getTertiaryInfo().get(1);
         onView(withId(R.id.mpsdkTertiaryInfo)).check(matches(withText(containsString(infoFirstPhrase))));
         onView(withId(R.id.mpsdkTertiaryInfo)).check(matches(withText(containsString(infoSecondPhrase))));
     }
 
     @Test
+    public void ifManyInstructionsFromServiceChooseByTypeAndShowIt() {
+        PaymentResult paymentResult = StaticMock.getInstructions();
+        mFakeAPI.addResponseToQueue(paymentResult, 200, "");
+        mTestRule.launchActivity(validStartIntent);
+
+        // Instruction for type "ticket" in position 0.
+        String infoFirstPhrase = paymentResult.getInstructions().get(0).getInfo().get(0);
+        String infoSecondPhrase = paymentResult.getInstructions().get(0).getInfo().get(1);
+        onView(withId(R.id.mpsdkPrimaryInfo)).check(matches(withText(containsString(infoFirstPhrase))));
+        onView(withId(R.id.mpsdkPrimaryInfo)).check(matches(withText(containsString(infoSecondPhrase))));
+    }
+
+    @Test
     public void ifNoPrimaryInfoDoNotDisplayInfoTextView() {
-        Instruction instruction = StaticMock.getInstructionWithoutPrimaryInfo();
+        PaymentResult instruction = StaticMock.getInstructionWithoutPrimaryInfo();
         mFakeAPI.addResponseToQueue(instruction, 200, "");
         mTestRule.launchActivity(validStartIntent);
 
@@ -168,7 +185,7 @@ public class InstructionsActivityTest {
 
     @Test
     public void ifPrimaryInfoDoNotDisplayInfoTextView() {
-        Instruction instruction = StaticMock.getInstructionWithNullInfo();
+        PaymentResult instruction = StaticMock.getInstructionWithNullInfo();
 
         mFakeAPI.addResponseToQueue(instruction, 200, "");
         mTestRule.launchActivity(validStartIntent);
@@ -180,7 +197,7 @@ public class InstructionsActivityTest {
 
     @Test
     public void ifNoSecondaryInfoDoNotDisplayInfoTextView() {
-        Instruction instruction = StaticMock.getInstructionWithoutSecondaryInfo();
+        PaymentResult instruction = StaticMock.getInstructionWithoutSecondaryInfo();
         mFakeAPI.addResponseToQueue(instruction, 200, "");
         mTestRule.launchActivity(validStartIntent);
 
@@ -189,7 +206,7 @@ public class InstructionsActivityTest {
 
     @Test
     public void ifNoTertiaryInfoDoNotDisplayInfoTextView() {
-        Instruction instruction = StaticMock.getInstructionWithoutTertiaryInfo();
+        PaymentResult instruction = StaticMock.getInstructionWithoutTertiaryInfo();
         mFakeAPI.addResponseToQueue(instruction, 200, "");
         mTestRule.launchActivity(validStartIntent);
 
@@ -197,12 +214,12 @@ public class InstructionsActivityTest {
     }
 
     @Test public void ifReferenceDoesNotHaveValueDoNotShowIt() {
-        Instruction instruction = StaticMock.getInstructionWithInvalidReference();
-        mFakeAPI.addResponseToQueue(instruction, 200, "");
+        PaymentResult paymentResult = StaticMock.getInstructionWithInvalidReference();
+        mFakeAPI.addResponseToQueue(paymentResult, 200, "");
         mTestRule.launchActivity(validStartIntent);
 
-        InstructionReference firstReference = instruction.getReferences().get(0);
-        InstructionReference secondReference = instruction.getReferences().get(1);
+        InstructionReference firstReference = paymentResult.getInstructions().get(0).getReferences().get(0);
+        InstructionReference secondReference = paymentResult.getInstructions().get(0).getReferences().get(1);
 
         onView(withId(R.id.mpsdkReferencesLayout)).check(matches(not(withAnyChildText(firstReference.getLabel()))));
         onView(withId(R.id.mpsdkReferencesLayout)).check(matches(not(withAnyChildText(secondReference.getLabel()))));
@@ -210,13 +227,13 @@ public class InstructionsActivityTest {
 
     @Test
     public void ifInstructionsReceivedShowReferences() {
-        Instruction instructionWithoutActions = StaticMock.getInstructionWithoutActions();
-        mFakeAPI.addResponseToQueue(instructionWithoutActions, 200, "");
+        PaymentResult paymentResult = StaticMock.getInstructionWithoutActions();
+        mFakeAPI.addResponseToQueue(paymentResult, 200, "");
 
         mTestRule.launchActivity(validStartIntent);
 
-        InstructionReference firstReference = instructionWithoutActions.getReferences().get(0);
-        InstructionReference secondReference = instructionWithoutActions.getReferences().get(1);
+        InstructionReference firstReference = paymentResult.getInstructions().get(0).getReferences().get(0);
+        InstructionReference secondReference = paymentResult.getInstructions().get(0).getReferences().get(1);
 
         onView(withId(R.id.mpsdkReferencesLayout)).check(matches(withAnyChildText(firstReference.getFormattedReference())));
         onView(withId(R.id.mpsdkReferencesLayout)).check(matches(withAnyChildText(secondReference.getFormattedReference())));
@@ -224,13 +241,13 @@ public class InstructionsActivityTest {
 
     @Test
     public void showLabelsInUpperCase() {
-        Instruction instructionWithoutActions = StaticMock.getInstructionWithoutActions();
-        mFakeAPI.addResponseToQueue(instructionWithoutActions, 200, "");
+        PaymentResult paymentResult = StaticMock.getInstructionWithoutActions();
+        mFakeAPI.addResponseToQueue(paymentResult, 200, "");
 
         mTestRule.launchActivity(validStartIntent);
 
-        InstructionReference firstReference = instructionWithoutActions.getReferences().get(0);
-        InstructionReference secondReference = instructionWithoutActions.getReferences().get(1);
+        InstructionReference firstReference = paymentResult.getInstructions().get(0).getReferences().get(0);
+        InstructionReference secondReference = paymentResult.getInstructions().get(0).getReferences().get(1);
 
         onView(withId(R.id.mpsdkReferencesLayout)).check(matches(withAnyChildText(firstReference.getLabel().toUpperCase())));
         onView(withId(R.id.mpsdkReferencesLayout)).check(matches(withAnyChildText(secondReference.getLabel().toUpperCase())));
@@ -238,7 +255,7 @@ public class InstructionsActivityTest {
 
     @Test
     public void ifReferenceDoesNotHaveLabelDoNotShowLabel() {
-        Instruction instructionWithoutActions = StaticMock.getInstructionWithoutLabels();
+        PaymentResult instructionWithoutActions = StaticMock.getInstructionWithoutLabels();
         mFakeAPI.addResponseToQueue(instructionWithoutActions, 200, "");
         mTestRule.launchActivity(validStartIntent);
 
@@ -250,7 +267,7 @@ public class InstructionsActivityTest {
 
     @Test
     public void ifInstructionDoesNotHaveActionDoNotShowActionButton() {
-        Instruction instructionWithoutActions = StaticMock.getInstructionWithoutActions();
+        PaymentResult instructionWithoutActions = StaticMock.getInstructionWithoutActions();
         mFakeAPI.addResponseToQueue(instructionWithoutActions, 200, "");
 
         mTestRule.launchActivity(validStartIntent);
@@ -260,19 +277,19 @@ public class InstructionsActivityTest {
 
     @Test
     public void ifInstructionHasActionShowActionButton() {
-        Instruction instructionWithAction = StaticMock.getInstructionWithAction();
-        mFakeAPI.addResponseToQueue(instructionWithAction, 200, "");
+        PaymentResult paymentResult = StaticMock.getInstructionWithAction();
+        mFakeAPI.addResponseToQueue(paymentResult, 200, "");
 
         mTestRule.launchActivity(validStartIntent);
 
-        InstructionActionInfo actionInfo = instructionWithAction.getActions().get(0);
+        InstructionActionInfo actionInfo = paymentResult.getInstructions().get(0).getActions().get(0);
 
         onView(withId(R.id.mpsdkActionButton)).check(matches(withText(actionInfo.getLabel())));
     }
 
     @Test
     public void ifInstructionHasActionButNullUrlDoNotShowActionButton() {
-        Instruction instructionWithAction = StaticMock.getInstructionWithActionButNullUrl();
+        PaymentResult instructionWithAction = StaticMock.getInstructionWithActionButNullUrl();
         mFakeAPI.addResponseToQueue(instructionWithAction, 200, "");
 
         mTestRule.launchActivity(validStartIntent);
@@ -282,7 +299,7 @@ public class InstructionsActivityTest {
 
     @Test
     public void ifInstructionHasActionButEmptyUrlDoNotShowActionButton() {
-        Instruction instructionWithAction = StaticMock.getInstructionWithActionButEmptyUrl();
+        PaymentResult instructionWithAction = StaticMock.getInstructionWithActionButEmptyUrl();
         mFakeAPI.addResponseToQueue(instructionWithAction, 200, "");
 
         mTestRule.launchActivity(validStartIntent);
@@ -292,12 +309,12 @@ public class InstructionsActivityTest {
 
     @Test
     public void onActionButtonClickIntentToUrl() {
-        Instruction instructionWithAction = StaticMock.getInstructionWithAction();
-        mFakeAPI.addResponseToQueue(instructionWithAction, 200, "");
+        PaymentResult paymentResult = StaticMock.getInstructionWithAction();
+        mFakeAPI.addResponseToQueue(paymentResult, 200, "");
 
         mTestRule.launchActivity(validStartIntent);
 
-        InstructionActionInfo actionInfo = instructionWithAction.getActions().get(0);
+        InstructionActionInfo actionInfo = paymentResult.getInstructions().get(0).getActions().get(0);
 
         onView(withId(R.id.mpsdkActionButton)).perform(click());
 
@@ -306,11 +323,19 @@ public class InstructionsActivityTest {
                 hasData(actionInfo.getUrl())));
     }
 
+    @Test
+    public void ifActionIsNotLinkDoNotShowIt() {
+        PaymentResult instruction = StaticMock.getInstructionWithInvalidAction();
+        mFakeAPI.addResponseToQueue(instruction, 200, "");
+        mTestRule.launchActivity(validStartIntent);
+        onView(withId(R.id.mpsdkActionButton)).check(matches(not(isDisplayed())));
+    }
+
     //Bad start
 
     @Test
     public void ifMerchantPublicKeyNotSetStartErrorActivity() {
-        Instruction instructionWithoutActions = StaticMock.getInstructionWithoutActions();
+        PaymentResult instructionWithoutActions = StaticMock.getInstructionWithoutActions();
         mFakeAPI.addResponseToQueue(instructionWithoutActions, 200, "");
         Intent startWithoutPublicKey = new Intent(validStartIntent);
         startWithoutPublicKey.removeExtra("merchantPublicKey");
@@ -320,7 +345,7 @@ public class InstructionsActivityTest {
 
     @Test
     public void ifPaymentMethodNotSetStartErrorActivity() {
-        Instruction instructionWithoutActions = StaticMock.getInstructionWithoutActions();
+        PaymentResult instructionWithoutActions = StaticMock.getInstructionWithoutActions();
         mFakeAPI.addResponseToQueue(instructionWithoutActions, 200, "");
         Intent startWithoutPaymentMethod = new Intent(validStartIntent);
         startWithoutPaymentMethod.removeExtra("paymentMethod");
@@ -330,7 +355,7 @@ public class InstructionsActivityTest {
 
     @Test
     public void ifPaymentNotSetStartErrorActivity() {
-        Instruction instructionWithoutActions = StaticMock.getInstructionWithoutActions();
+        PaymentResult instructionWithoutActions = StaticMock.getInstructionWithoutActions();
         mFakeAPI.addResponseToQueue(instructionWithoutActions, 200, "");
         Intent startWithoutPayment = new Intent(validStartIntent);
         startWithoutPayment.removeExtra("payment");
@@ -340,7 +365,7 @@ public class InstructionsActivityTest {
 
     @Test
     public void ifCardPaymentMethodSetStartErrorActivity() {
-        Instruction instructionWithoutActions = StaticMock.getInstructionWithoutActions();
+        PaymentResult instructionWithoutActions = StaticMock.getInstructionWithoutActions();
         mFakeAPI.addResponseToQueue(instructionWithoutActions, 200, "");
         mPaymentMethod.setPaymentTypeId("credit_card");
 
@@ -355,7 +380,7 @@ public class InstructionsActivityTest {
 
     @Test
     public void onPressedBackOnceDoNotFinish() {
-        Instruction instructionWithoutActions = StaticMock.getInstructionWithoutActions();
+        PaymentResult instructionWithoutActions = StaticMock.getInstructionWithoutActions();
         mFakeAPI.addResponseToQueue(instructionWithoutActions, 200, "");
         mTestRule.launchActivity(validStartIntent);
 
@@ -366,7 +391,7 @@ public class InstructionsActivityTest {
 
     @Test
     public void onPressedBackTwiceButWithDelayDoNotFinish() {
-        Instruction instructionWithoutActions = StaticMock.getInstructionWithoutActions();
+        PaymentResult instructionWithoutActions = StaticMock.getInstructionWithoutActions();
         mFakeAPI.addResponseToQueue(instructionWithoutActions, 200, "");
         mTestRule.launchActivity(validStartIntent);
 
@@ -383,7 +408,7 @@ public class InstructionsActivityTest {
 
     @Test (expected = NoActivityResumedException.class)
     public void onPressedBackTwiceFinish() {
-        Instruction instructionWithoutActions = StaticMock.getInstructionWithoutActions();
+        PaymentResult instructionWithoutActions = StaticMock.getInstructionWithoutActions();
         mFakeAPI.addResponseToQueue(instructionWithoutActions, 200, "");
         mTestRule.launchActivity(validStartIntent);
 
@@ -402,7 +427,7 @@ public class InstructionsActivityTest {
 
     @Test
     public void ifApiFailsAndUserRetrySucceedsShowInstruction() {
-        Instruction instructionWithoutActions = StaticMock.getInstructionWithoutActions();
+        PaymentResult instructionWithoutActions = StaticMock.getInstructionWithoutActions();
         mFakeAPI.addResponseToQueue("", 401, "");
         mFakeAPI.addResponseToQueue(instructionWithoutActions, 200, "");
 
@@ -421,6 +446,28 @@ public class InstructionsActivityTest {
         onView(withId(R.id.mpsdkExit)).perform(click());
 
         ActivityResultUtil.assertFinishCalledWithResult(mTestRule.getActivity(), Activity.RESULT_CANCELED);
+    }
+
+    @Test
+    public void ifNoInstructionsFromServiceShowErrorScreen() {
+        PaymentResult emptyInstructionList = new PaymentResult();
+        mFakeAPI.addResponseToQueue(emptyInstructionList, 200, "");
+        mTestRule.launchActivity(validStartIntent);
+
+        intended(hasComponent(ErrorActivity.class.getName()));
+    }
+
+
+    @Test
+    public void ifManyInstructionsFromServiceAndNoneMatchesTypeShowErrorScreen() {
+        PaymentResult manyInstructions = StaticMock.getInstructions();
+        mFakeAPI.addResponseToQueue(manyInstructions, 200, "");
+        PaymentMethod paymentMethod = getOfflinePaymentMethod();
+        paymentMethod.setPaymentTypeId("crazy_type");
+        validStartIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
+        mTestRule.launchActivity(validStartIntent);
+
+        intended(hasComponent(ErrorActivity.class.getName()));
     }
 
     private PaymentMethod getOfflinePaymentMethod() {

@@ -19,6 +19,7 @@ import com.mercadopago.model.InstructionActionInfo;
 import com.mercadopago.model.InstructionReference;
 import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentMethod;
+import com.mercadopago.model.PaymentResult;
 import com.mercadopago.mptracker.MPTracker;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.CurrenciesUtil;
@@ -30,9 +31,13 @@ import com.mercadopago.util.ScaleUtil;
 import com.mercadopago.views.MPButton;
 import com.mercadopago.views.MPTextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class InstructionsActivity extends MercadoPagoActivity {
+
+    //Const
+    private static final String INSTRUCTIONS_NOT_FOUND_FOR_TYPE = "instruction not found for type";
 
     //Values
     protected MercadoPago mMercadoPago;
@@ -118,11 +123,16 @@ public class InstructionsActivity extends MercadoPagoActivity {
     protected void getInstructionsAsync() {
 
         LayoutUtil.showProgressLayout(this);
-        mMercadoPago.getInstructions(mPayment.getId(), mPaymentMethod.getPaymentTypeId(), new Callback<Instruction>() {
+        mMercadoPago.getPaymentResult(mPayment.getId(), mPaymentMethod.getPaymentTypeId(), new Callback<PaymentResult>() {
             @Override
-            public void success(Instruction instruction) {
-                showInstructions(instruction);
-                LayoutUtil.showRegularLayout(getActivity());
+            public void success(PaymentResult paymentResult) {
+                List<Instruction> instructions
+                        = paymentResult.getInstructions() == null ? new ArrayList<Instruction>() : paymentResult.getInstructions();
+                if(instructions.isEmpty()) {
+                    ErrorUtil.startErrorActivity(getActivity(), getActivity().getString(R.string.mpsdk_standard_error_message), INSTRUCTIONS_NOT_FOUND_FOR_TYPE + mPaymentMethod.getPaymentTypeId(), false);
+                } else {
+                    resolveInstructionsFound(instructions);
+                }
             }
 
             @Override
@@ -138,6 +148,37 @@ public class InstructionsActivity extends MercadoPagoActivity {
                 }
             }
         });
+    }
+
+    private void resolveInstructionsFound(List<Instruction> instructions) {
+        Instruction instruction = getInstruction(instructions);
+        if(instruction == null) {
+            ErrorUtil.startErrorActivity(this, this.getString(R.string.mpsdk_standard_error_message), "instruction not found for type " + mPaymentMethod.getPaymentTypeId(), false);
+        } else {
+            showInstructions(instruction);
+        }
+        LayoutUtil.showRegularLayout(this);
+    }
+
+    private Instruction getInstruction(List<Instruction> instructions) {
+        Instruction instruction;
+        if(instructions.size() == 1) {
+            instruction = instructions.get(0);
+        } else {
+            instruction = getInstructionForType(instructions, mPaymentMethod.getPaymentTypeId());
+        }
+        return instruction;
+    }
+
+    private Instruction getInstructionForType(List<Instruction> instructions, String paymentTypeId) {
+        Instruction instructionForType = null;
+        for(Instruction instruction : instructions) {
+            if(instruction.getType().equals(paymentTypeId)) {
+                instructionForType = instruction;
+                break;
+            }
+        }
+        return instructionForType;
     }
 
     protected void showInstructions(Instruction instruction) {
@@ -158,7 +199,8 @@ public class InstructionsActivity extends MercadoPagoActivity {
     protected void setActions(Instruction instruction) {
         if(instruction.getActions() != null && !instruction.getActions().isEmpty()) {
             final InstructionActionInfo actionInfo = instruction.getActions().get(0);
-            if(actionInfo.getUrl() != null && !actionInfo.getUrl().isEmpty()) {
+            if(actionInfo.getTag().equals(InstructionActionInfo.Tags.LINK)
+                && actionInfo.getUrl() != null && !actionInfo.getUrl().isEmpty()) {
                 mActionButton.setVisibility(View.VISIBLE);
                 mActionButton.setText(actionInfo.getLabel());
                 mActionButton.setOnClickListener(new View.OnClickListener() {
@@ -171,6 +213,7 @@ public class InstructionsActivity extends MercadoPagoActivity {
             }
         }
     }
+
 
     protected void setReferencesInformation(Instruction instruction) {
         LinearLayout.LayoutParams marginParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
@@ -209,20 +252,19 @@ public class InstructionsActivity extends MercadoPagoActivity {
     private void setInformationMessages(Instruction instruction) {
         if(instruction.getInfo() != null && !instruction.getInfo().isEmpty()) {
             mPrimaryInfo.setText(Html.fromHtml(getInfoHtmlText(instruction.getInfo())));
-        }
-        else {
+        } else {
             mPrimaryInfo.setVisibility(View.GONE);
         }
+
         if(instruction.getSecondaryInfo() != null && !instruction.getSecondaryInfo().isEmpty()) {
             mSecondaryInfo.setText(Html.fromHtml(getInfoHtmlText(instruction.getSecondaryInfo())));
-        }
-        else {
+        } else {
             mSecondaryInfo.setVisibility(View.GONE);
         }
+
         if(instruction.getTertiaryInfo() != null && !instruction.getTertiaryInfo().isEmpty()) {
             mTertiaryInfo.setText(Html.fromHtml(getInfoHtmlText(instruction.getTertiaryInfo())));
-        }
-        else {
+        } else {
             mTertiaryInfo.setVisibility(View.GONE);
         }
     }
@@ -243,8 +285,7 @@ public class InstructionsActivity extends MercadoPagoActivity {
         if(requestCode == ErrorUtil.ERROR_REQUEST_CODE) {
             if(resultCode == RESULT_OK) {
                 recoverFromFailure();
-            }
-            else {
+            } else {
                 setResult(RESULT_CANCELED, data);
                 finish();
             }
@@ -257,12 +298,11 @@ public class InstructionsActivity extends MercadoPagoActivity {
 
     @Override
     public void onBackPressed() {
-        MPTracker.getInstance().trackEvent("INSTRUCTION", "BACK_PRESSED", 2, mMerchantPublicKey, BuildConfig.VERSION_NAME, this);
+        MPTracker.getInstance().trackScreen( "INSTRUCTIONS", 2, mMerchantPublicKey, BuildConfig.VERSION_NAME, this);
 
         if(mBackPressedOnce) {
             super.onBackPressed();
-        }
-        else {
+        } else {
             Snackbar.make(mTertiaryInfo, getString(R.string.mpsdk_press_again_to_leave), Snackbar.LENGTH_LONG).show();
             mBackPressedOnce = true;
             resetBackPressedOnceIn(4000);

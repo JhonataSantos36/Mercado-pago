@@ -6,34 +6,30 @@
     "decimal_places": 2,
     "amount": 10000
   },
-  "instructions":[
+  "instructions": [
     {
       "title": "Pay $100.00 in your closest store",
       "references": [
         {
-          "label": "InvalidReference1",
-          "field_value": null,
+          "label": "",
+          "field_value": [
+            "123",
+            "456"
+          ],
           "separator": "-"
         },
         {
-          "label": "InvalidReference2",
+          "label": null,
           "field_value": [
+            "654",
+            "321"
           ],
           "separator": " "
         }
       ],
-      "info": [
-        "Info",
-        "Info second phrase"
-      ],
-      "secondary_info": [
-        "Secondary info",
-        "Secondary second phrase"
-      ],
-      "tertiary_info": [
-        "Tertiary info",
-        "Tertiary second phrase"
-      ],
+      "info": null,
+      "secondary_info": null,
+      "tertiary_info": null,
       "accreditation_message": "accreditation time"
     }
   ]
