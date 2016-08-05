@@ -2,9 +2,9 @@
 <resources xmlns:xliff="rn:oasis:names:tc:xliff:document:1.2">
     <string name="mpsdk_app_name">Mercado Pago Android SDK</string>
     <string name="mpsdk_continue_label">Continuar</string>
-    <string name="mpsdk_select_pm_label">Escolha o meio de pagamento...</string>
+    <string name="mpsdk_select_pm_label">Escolha o meio de pagamento…</string>
     <string name="mpsdk_last_digits_label">terminado em</string>
-    <string name="mpsdk_other_pm_label">Outro meio de pagamento...</string>
+    <string name="mpsdk_other_pm_label">Outro meio de pagamento…</string>
     <string name="mpsdk_invalid_pm_for_current_amount">O meio de pagamento que escolheu não pode ser usado para pagar esse valor. Por favor, escolha outro</string>
     <string name="mpsdk_title_activity_customer_pms">Com o cartão?</string>
     <string name="mpsdk_title_activity_payment_methods">Como você prefere pagar?</string>
@@ -141,7 +141,7 @@
     <string name="mpsdk_error_message_invalid_preference">Preferência inválida</string>
     <string name="mpsdk_error_message_invalid_installments">Número do parcelas inválido</string>
     <string name="mpsdk_payment_amount_to_pay">Total a pagar</string>
-    <string name="mpsdk_processed_by_mercado_pago">© 1999-2016 Processado pelo Mercado Pago</string>
+    <string name="mpsdk_processed_by_mercado_pago">© 1999–2016 Processado pelo Mercado Pago</string>
     <string name="mpsdk_exit_label">Sair</string>
 
     <string name="mpsdk_standard_error_message">Estamos trabalhando para solucionar o problema. Por favor, tente mais tarde.</string>
@@ -187,6 +187,6 @@
     <string name="mpsdk_invalid_card_expiration_month">Mês de expiração do cartão inválido</string>
     <string name="mpsdk_invalid_card_expiration_year">Ano de expiração do cartão inválido</string>
     <string name="mpsdk_invalid_payer_email">E-mail de cliente inválido</string>
-    <string name="other_payment_method">Outro meio de pagamento...</string>
+    <string name="other_payment_method">Outro meio de pagamento…</string>
 
 </resources>
