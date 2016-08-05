@@ -49,8 +49,8 @@
                 android:layout_gravity="center_vertical"
                 android:paddingLeft="8dp"
                 android:paddingStart="8dp"
-                android:paddingRight="16dp"
-                android:paddingEnd="16dp"
+                android:paddingRight="8dp"
+                android:paddingEnd="8dp"
                 android:orientation="vertical">
 
                 <com.mercadopago.views.MPTextView
@@ -99,7 +99,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="start"
                         android:textColor="@color/mpsdk_base_text"
-                        android:textSize="20dp"
+                        android:textSize="19dp"
                         android:visibility="invisible"/>
 
                 </FrameLayout>

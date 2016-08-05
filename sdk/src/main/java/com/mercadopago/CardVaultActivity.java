@@ -239,8 +239,7 @@ public class CardVaultActivity extends ShowCardActivity {
                                 if (installments.get(0).getPayerCosts().size() == 1) {
                                     mPayerCost = installments.get(0).getPayerCosts().get(0);
                                     finishWithResult();
-                                }
-                                if (installments.get(0).getPayerCosts().size() > 1) {
+                                } else if (installments.get(0).getPayerCosts().size() > 1) {
                                     startInstallmentsActivity(installments.get(0).getPayerCosts());
                                 } else {
                                     ErrorUtil.startErrorActivity(getActivity(), getString(R.string.mpsdk_standard_error_message), false);

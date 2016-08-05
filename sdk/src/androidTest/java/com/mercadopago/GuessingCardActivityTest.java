@@ -1647,6 +1647,7 @@ public class GuessingCardActivityTest {
 
     @Test
     public void validateDniMask() {
+        addBankDealsCall();
         addPaymentMethodsCall();
         addIdentificationTypesCall();
         mTestRule.launchActivity(validStartIntent);
@@ -1668,6 +1669,7 @@ public class GuessingCardActivityTest {
 
     @Test
     public void validateCPFMask() {
+        addBankDealsCall();
         addPaymentMethodsCall();
 
         String identificationTypes = StaticMock.getIdentificationTypeCPF();
@@ -1692,6 +1694,7 @@ public class GuessingCardActivityTest {
 
     @Test
     public void validateCNPJMask() {
+        addBankDealsCall();
         addPaymentMethodsCall();
 
         String identificationTypes = StaticMock.getIdentificationTypeCNPJ();
