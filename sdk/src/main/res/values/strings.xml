@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="rn:oasis:names:tc:xliff:document:1.2">
-    <string name="mpsdk_app_name">MercadoPago Android SDK</string>
+    <string name="mpsdk_app_name">Mercado Pago Android SDK</string>
     <string name="mpsdk_continue_label">Continuar</string>
     <string name="mpsdk_select_pm_label">Selecciona un medio de pago…</string>
     <string name="mpsdk_last_digits_label">terminada en</string>
@@ -46,7 +46,7 @@
     <string name="mpsdk_invalid_empty_name">Ingresa el nombre y apellido impreso en la tarjeta</string>
     <string name="mpsdk_invalid_expiry_date">La fecha que ingresaste es inválida</string>
     <string name="mpsdk_invalid_identification_number">Ingresa todos los números</string>
-    <string name="mpsdk_invalid_payment_method">Método de pago no soportado</string>
+    <string name="mpsdk_invalid_payment_method">No puedes pagar con éste medio de pago</string>
     <string name="mpsdk_title_activity_congrats">¡Felicitaciones!</string>
     <string name="mpsdk_total_amount">Total</string>
     <string name="mpsdk_payment_method_detail">Medio de pago</string>
@@ -78,7 +78,6 @@
     <string name="mpsdk_title_activity_install_app">Pagar</string>
     <string name="mpsdk_install_app_label">Para pagar, instala la aplicación de MercadoPago</string>
     <string name="mpsdk_install_app_button">Instalar la aplicación</string>
-
     <string name="mpsdk_title_activity_guessing_card">Ingresa los datos de tu tarjeta</string>
     <string name="mpsdk_issuer_label">Banco</string>
     <string name="mpsdk_select_issuer_label">Selecciona un banco…</string>
@@ -129,7 +128,7 @@
     <string name="mpsdk_text_call_to">Llama a</string>
     <string name="mpsdk_text_the_payment">el pago de</string>
     <string name="mpsdk_text_and_he_authorized">y me autorizó</string>
-    <string name="mpsdk_error_title_activity_call_for_authorize">"Debes autorizar el pago ante tu tarjeta"</string>
+    <string name="mpsdk_error_title_activity_call_for_authorize">Debes autorizar el pago ante tu tarjeta</string>
 
     <string name="mpsdk_error_message_invalid_amount">Monto inválido</string>
     <string name="mpsdk_error_message_invalid_item">Item inválido</string>
@@ -191,5 +190,4 @@
     <string name="mpsdk_invalid_card_expiration_year">Año de expiración de la tarjeta inválido</string>
     <string name="mpsdk_invalid_payer_email">Email del cliente inválido</string>
     <string name="other_payment_method">Otro medio de pago…</string>
-
 </resources>
