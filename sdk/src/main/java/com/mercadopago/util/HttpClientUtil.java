@@ -17,11 +17,10 @@ public class HttpClientUtil {
 
     public synchronized static okhttp3.OkHttpClient getClient(Context context, int connectTimeout, int readTimeout, int writeTimeout) {
 
-        if(customClientSet()) {
+        if (customClientSet()) {
             return customClient;
-        }
-        else {
-            if(client == null) {
+        } else {
+            if (client == null) {
                 createClient(context, connectTimeout, readTimeout, writeTimeout);
             }
             return client;
@@ -51,6 +50,7 @@ public class HttpClientUtil {
     public static void setCustomClient(okhttp3.OkHttpClient client) {
         customClient = client;
     }
+
     public static void removeCustomClient() {
         customClient = null;
     }

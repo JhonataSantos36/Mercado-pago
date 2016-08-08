@@ -49,13 +49,13 @@ public class CongratsActivity extends MercadoPagoActivity {
 
     @Override
     protected void validateActivityParameters() throws IllegalStateException {
-        if(mMerchantPublicKey == null) {
+        if (mMerchantPublicKey == null) {
             throw new IllegalStateException("merchant public key not set");
         }
-        if(mPayment == null) {
+        if (mPayment == null) {
             throw new IllegalStateException("payment not set");
         }
-        if(mPaymentMethod == null) {
+        if (mPaymentMethod == null) {
             throw new IllegalStateException("payment method not set");
         }
     }
@@ -68,7 +68,7 @@ public class CongratsActivity extends MercadoPagoActivity {
     }
 
     @Override
-    protected void initializeControls(){
+    protected void initializeControls() {
         mPayerEmailDescription = (MPTextView) findViewById(R.id.mpsdkPayerEmailDescription);
         mLastFourDigitsDescription = (MPTextView) findViewById(R.id.mpsdkLastFourDigitsDescription);
         mInstallmentsDescription = (MPTextView) findViewById(R.id.mpsdkInstallmentsDescription);
@@ -87,7 +87,7 @@ public class CongratsActivity extends MercadoPagoActivity {
     }
 
     @Override
-    protected void onValidStart(){
+    protected void onValidStart() {
         setPaymentEmailDescription();
         setLastFourDigitsCard();
         setInstallmentsDescription();
@@ -96,15 +96,14 @@ public class CongratsActivity extends MercadoPagoActivity {
 
     @Override
     protected void onInvalidStart(String errorMessage) {
-        ErrorUtil.startErrorActivity(this, getString(R.string.mpsdk_standard_error_message), errorMessage,false);
+        ErrorUtil.startErrorActivity(this, getString(R.string.mpsdk_standard_error_message), errorMessage, false);
     }
 
     private void setPaymentIdDescription() {
-        if(isPaymentIdValid()){
+        if (isPaymentIdValid()) {
             String message = getString(R.string.mpsdk_payment_id_description) + " " + mPayment.getId();
             mPaymentIdDescription.setText(message);
-        }
-        else{
+        } else {
             mPaymentIdDescription.setVisibility(View.GONE);
             mPaymentIdSeparator.setVisibility(View.GONE);
         }
@@ -119,8 +118,7 @@ public class CongratsActivity extends MercadoPagoActivity {
             sb.append(" )");
             mInterestAmountDescription.setText(CurrenciesUtil.formatCurrencyInText(mPayment.getTransactionDetails().getTotalPaidAmount(),
                     mPayment.getCurrencyId(), sb.toString(), true, true));
-        }
-        else {
+        } else {
             mInterestAmountDescription.setText(getString(R.string.mpsdk_zero_rate));
         }
     }
@@ -137,12 +135,11 @@ public class CongratsActivity extends MercadoPagoActivity {
     }
 
     private void setInstallmentsDescription() {
-        if (isInstallmentQuantityValid() && isInstallmentAmountValid() && isTotalPaidAmountValid() && CurrenciesUtil.isValidCurrency(mPayment.getCurrencyId())){
-            if (mPayment.getInstallments()>1){
+        if (isInstallmentQuantityValid() && isInstallmentAmountValid() && isTotalPaidAmountValid() && CurrenciesUtil.isValidCurrency(mPayment.getCurrencyId())) {
+            if (mPayment.getInstallments() > 1) {
                 mInstallmentsDescription.setText(getInstallmentsText());
                 setInterestAmountDescription();
-            }
-            else {
+            } else {
                 //Installments quantity 0 or 1
                 StringBuilder sb = new StringBuilder();
                 sb.append(CurrenciesUtil.formatNumber(mPayment.getTransactionDetails().getTotalPaidAmount(), mPayment.getCurrencyId()));
@@ -152,20 +149,18 @@ public class CongratsActivity extends MercadoPagoActivity {
 
                 mInterestAmountDescription.setVisibility(View.GONE);
             }
-        }
-        else {
+        } else {
             mInstallmentsDescription.setVisibility(View.GONE);
             mInterestAmountDescription.setVisibility(View.GONE);
         }
     }
 
     private void setLastFourDigitsCard() {
-        if (isLastFourDigitsValid() && isPaymentMethodValid()){
+        if (isLastFourDigitsValid() && isPaymentMethodValid()) {
             setPaymentMethodImage();
             String message = getString(R.string.mpsdk_last_digits_label) + " " + mPayment.getCard().getLastFourDigits();
             mLastFourDigitsDescription.setText(message);
-        }
-        else{
+        } else {
             mLastFourDigitsDescription.setVisibility(View.GONE);
             mPaymentMethodImage.setVisibility(View.GONE);
         }
@@ -173,7 +168,7 @@ public class CongratsActivity extends MercadoPagoActivity {
 
     private void setPaymentMethodImage() {
         int resourceId = MercadoPagoUtil.getPaymentMethodIcon(this, mPaymentMethod.getId());
-        if(resourceId != 0) {
+        if (resourceId != 0) {
             mPaymentMethodImage.setImageResource(resourceId);
         } else {
             mPaymentMethodImage.setVisibility(View.GONE);
@@ -181,7 +176,7 @@ public class CongratsActivity extends MercadoPagoActivity {
     }
 
     private void setPaymentEmailDescription() {
-        if(isPayerEmailValid()) {
+        if (isPayerEmailValid()) {
             mPayerEmailDescription.setText(mPayment.getPayer().getEmail());
         } else {
             mCongratulationSubtitle.setVisibility(View.GONE);
@@ -189,37 +184,37 @@ public class CongratsActivity extends MercadoPagoActivity {
         }
     }
 
-    private Boolean isPaymentIdValid(){
+    private Boolean isPaymentIdValid() {
         return mPayment.getId() != null && mPayment.getId() >= 0;
     }
 
-    private Boolean isTotalPaidAmountValid(){
+    private Boolean isTotalPaidAmountValid() {
         return mPayment.getTransactionDetails() != null && mPayment.getTransactionDetails().getTotalPaidAmount() != null
-                && (mPayment.getTransactionDetails().getTotalPaidAmount().compareTo(BigDecimal.ZERO))>0;
+                && (mPayment.getTransactionDetails().getTotalPaidAmount().compareTo(BigDecimal.ZERO)) > 0;
     }
 
-    private Boolean isInstallmentAmountValid(){
+    private Boolean isInstallmentAmountValid() {
         return mPayment.getTransactionDetails() != null && mPayment.getTransactionDetails().getInstallmentAmount() != null &&
-                    mPayment.getTransactionDetails().getInstallmentAmount().compareTo(BigDecimal.ZERO) > 0;
+                mPayment.getTransactionDetails().getInstallmentAmount().compareTo(BigDecimal.ZERO) > 0;
     }
 
-    private Boolean isInstallmentQuantityValid(){
+    private Boolean isInstallmentQuantityValid() {
         return mPayment.getInstallments() != null && mPayment.getInstallments() >= 0;
     }
 
-    private Boolean isPayerEmailValid(){
+    private Boolean isPayerEmailValid() {
         return mPayment.getPayer() != null && !isEmpty(mPayment.getPayer().getEmail());
     }
 
-    private Boolean isPaymentMethodValid(){
+    private Boolean isPaymentMethodValid() {
         return isPaymentMethodIdValid() && !isEmpty(mPaymentMethod.getName());
     }
 
-    private Boolean isPaymentMethodIdValid(){
+    private Boolean isPaymentMethodIdValid() {
         return !isEmpty(mPaymentMethod.getId()) && mPaymentMethod.getId().equals(mPayment.getPaymentMethodId());
     }
 
-    private Boolean isLastFourDigitsValid(){
+    private Boolean isLastFourDigitsValid() {
         return mPayment.getCard() != null && !isEmpty(mPayment.getCard().getLastFourDigits());
     }
 
@@ -244,10 +239,9 @@ public class CongratsActivity extends MercadoPagoActivity {
     public void onBackPressed() {
         MPTracker.getInstance().trackEvent("CONGRATS", "BACK_PRESSED", 2, mMerchantPublicKey, BuildConfig.VERSION_NAME, this);
 
-        if(mBackPressedOnce) {
+        if (mBackPressedOnce) {
             finishWithOkResult();
-        }
-        else {
+        } else {
             Snackbar.make(mExit, getString(R.string.mpsdk_press_again_to_leave), Snackbar.LENGTH_LONG).show();
             mBackPressedOnce = true;
             resetBackPressedOnceIn(4000);

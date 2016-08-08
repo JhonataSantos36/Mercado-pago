@@ -11,7 +11,7 @@ import com.mercadopago.uicontrollers.paymentmethods.card.PaymentMethodCardSelect
 
 import java.util.List;
 
-public class CustomerCardsAdapter extends  RecyclerView.Adapter<CustomerCardsAdapter.ViewHolder> {
+public class CustomerCardsAdapter extends RecyclerView.Adapter<CustomerCardsAdapter.ViewHolder> {
 
     private Context mContext;
     private List<Card> mData;
@@ -25,7 +25,7 @@ public class CustomerCardsAdapter extends  RecyclerView.Adapter<CustomerCardsAda
 
     @Override
     public CustomerCardsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
-                                                   int position) {
+                                                              int position) {
 
         Card card = mData.get(position);
 

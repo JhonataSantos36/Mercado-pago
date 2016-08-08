@@ -26,7 +26,7 @@ public class PaymentMethodCardEditableRow extends PaymentMethodCard {
     @Override
     protected String getLastFourDigits() {
         String lastFourDigits = "";
-        if(mToken != null) {
+        if (mToken != null) {
             lastFourDigits = mToken.getLastFourDigits();
         }
         return lastFourDigits;

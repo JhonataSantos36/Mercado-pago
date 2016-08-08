@@ -27,11 +27,11 @@ public abstract class PaymentMethodCard implements PaymentMethodViewController {
     @Override
     public void drawPaymentMethod() {
 
-        if(getLastFourDigits() != null) {
+        if (getLastFourDigits() != null) {
             mDescription.setText(mContext.getString(R.string.mpsdk_last_digits_label) + " " + getLastFourDigits());
         }
         int resourceId = MercadoPagoUtil.getPaymentMethodIcon(mContext, mPaymentMethod.getId());
-        if(resourceId != 0) {
+        if (resourceId != 0) {
             mIcon.setImageResource(resourceId);
         } else {
             mIcon.setVisibility(View.GONE);

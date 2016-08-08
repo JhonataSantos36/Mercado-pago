@@ -14,6 +14,7 @@ package com.mercadopago.examples.utils;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -78,8 +79,10 @@ public class ColorPicker extends View {
 
     private Matrix gradientRotationMatrix;
 
-    /** Currently selected color */
-    private float[] colorHSV = new float[] { 0f, 0f, 1f };
+    /**
+     * Currently selected color
+     */
+    private float[] colorHSV = new float[]{0f, 0f, 1f};
 
     public ColorPicker(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -157,9 +160,9 @@ public class ColorPicker extends View {
 
         // drawing value slider
 
-        float[] hsv = new float[] { colorHSV[0], colorHSV[1], 1f };
+        float[] hsv = new float[]{colorHSV[0], colorHSV[1], 1f};
 
-        SweepGradient sweepGradient = new SweepGradient(centerX, centerY, new int[] { Color.BLACK, Color.HSVToColor(hsv), Color.WHITE }, null);
+        SweepGradient sweepGradient = new SweepGradient(centerX, centerY, new int[]{Color.BLACK, Color.HSVToColor(hsv), Color.WHITE}, null);
         sweepGradient.setLocalMatrix(gradientRotationMatrix);
         valueSliderPaint.setShader(sweepGradient);
 
@@ -180,7 +183,7 @@ public class ColorPicker extends View {
 
         // drawing value pointer
 
-        valuePointerPaint.setColor(Color.HSVToColor(new float[] { 0f, 0f, 1f - colorHSV[2] }));
+        valuePointerPaint.setColor(Color.HSVToColor(new float[]{0f, 0f, 1f - colorHSV[2]}));
 
         double valueAngle = (colorHSV[2] - 0.5f) * Math.PI;
         float valueAngleX = (float) Math.cos(valueAngle);
@@ -268,7 +271,7 @@ public class ColorPicker extends View {
         int colorCount = 12;
         int colorAngleStep = 360 / 12;
         int colors[] = new int[colorCount + 1];
-        float hsv[] = new float[] { 0f, 1f, 1f };
+        float hsv[] = new float[]{0f, 1f, 1f};
         for (int i = 0; i < colors.length; i++) {
             hsv[0] = (i * colorAngleStep + 180) % 360;
             colors[i] = Color.HSVToColor(hsv);

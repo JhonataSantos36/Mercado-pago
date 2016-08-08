@@ -24,7 +24,7 @@ public class PaymentMethodCardSelectionRow extends PaymentMethodCard {
     @Override
     protected String getLastFourDigits() {
         String lastFourDigits = "";
-        if(mCard != null) {
+        if (mCard != null) {
             lastFourDigits = mCard.getLastFourDigits();
         }
         return lastFourDigits;

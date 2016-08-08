@@ -234,7 +234,7 @@ public class AdvancedVaultActivity extends SimpleVaultActivity {
             mSelectedPaymentMethod = mTempPaymentMethod;
             mSelectedIssuer = mTempIssuer;
 
-           this.refreshCardData();
+            this.refreshCardData();
 
         } else {
 

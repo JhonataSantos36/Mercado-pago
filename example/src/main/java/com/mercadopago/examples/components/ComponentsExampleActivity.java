@@ -87,7 +87,7 @@ public class ComponentsExampleActivity extends AppCompatActivity {
     }
 
     public void onCardWithInstallmentsClicked(View view) {
-       startCardVaultWithInstallments();
+        startCardVaultWithInstallments();
     }
 
     private void startCardVaultWithInstallments() {
@@ -173,23 +173,17 @@ public class ComponentsExampleActivity extends AppCompatActivity {
 
         if (requestCode == MercadoPago.PAYMENT_VAULT_REQUEST_CODE) {
             resolvePaymentVaultRequest(resultCode, data);
-        }
-        else if(requestCode == MercadoPago.CARD_VAULT_REQUEST_CODE) {
+        } else if (requestCode == MercadoPago.CARD_VAULT_REQUEST_CODE) {
             resolveCardVaultRequest(resultCode, data);
-        }
-        else if(requestCode == MercadoPago.GUESSING_CARD_REQUEST_CODE) {
+        } else if (requestCode == MercadoPago.GUESSING_CARD_REQUEST_CODE) {
             resolveGuessingCardRequest(resultCode, data);
-        }
-        else if(requestCode == MercadoPago.PAYMENT_METHODS_REQUEST_CODE) {
+        } else if (requestCode == MercadoPago.PAYMENT_METHODS_REQUEST_CODE) {
             resolvePaymentMethodsRequest(resultCode, data);
-        }
-        else if(requestCode == MercadoPago.ISSUERS_REQUEST_CODE) {
+        } else if (requestCode == MercadoPago.ISSUERS_REQUEST_CODE) {
             resolveIssuerRequest(resultCode, data);
-        }
-        else if(requestCode == MercadoPago.INSTALLMENTS_REQUEST_CODE) {
+        } else if (requestCode == MercadoPago.INSTALLMENTS_REQUEST_CODE) {
             resolveInstallmentsRequest(resultCode, data);
-        }
-        else {
+        } else {
             showRegularLayout();
         }
     }
@@ -213,24 +207,23 @@ public class ComponentsExampleActivity extends AppCompatActivity {
     }
 
     private void resolveCardVaultRequest(int resultCode, Intent data) {
-        if(resultCode == RESULT_OK) {
+        if (resultCode == RESULT_OK) {
             PaymentMethod paymentMethod = JsonUtil.getInstance().fromJson(data.getStringExtra("paymentMethod"), PaymentMethod.class);
             Issuer issuer = JsonUtil.getInstance().fromJson(data.getStringExtra("issuer"), Issuer.class);
             PayerCost payerCost = JsonUtil.getInstance().fromJson(data.getStringExtra("payerCost"), PayerCost.class);
             Token token = JsonUtil.getInstance().fromJson(data.getStringExtra("token"), Token.class);
 
-            if(mCreatePaymentExampleSelected) {
+            if (mCreatePaymentExampleSelected) {
                 createPayment(token, payerCost, issuer, paymentMethod, null);
                 mCreatePaymentExampleSelected = false;
-            }
-            else {
+            } else {
                 showResult(paymentMethod, issuer, payerCost, token);
             }
         }
     }
 
     private void resolveGuessingCardRequest(int resultCode, Intent data) {
-        if(resultCode == RESULT_OK) {
+        if (resultCode == RESULT_OK) {
             PaymentMethod paymentMethod = JsonUtil.getInstance().fromJson(data.getStringExtra("paymentMethod"), PaymentMethod.class);
             Issuer issuer = JsonUtil.getInstance().fromJson(data.getStringExtra("issuer"), Issuer.class);
             Token token = JsonUtil.getInstance().fromJson(data.getStringExtra("token"), Token.class);
@@ -240,7 +233,7 @@ public class ComponentsExampleActivity extends AppCompatActivity {
     }
 
     private void resolvePaymentMethodsRequest(int resultCode, Intent data) {
-        if(resultCode == RESULT_OK) {
+        if (resultCode == RESULT_OK) {
             PaymentMethod paymentMethod = JsonUtil.getInstance().fromJson(data.getStringExtra("paymentMethod"), PaymentMethod.class);
             showResult(paymentMethod, null, null, null);
         } else {
@@ -253,14 +246,14 @@ public class ComponentsExampleActivity extends AppCompatActivity {
     }
 
     private void resolveInstallmentsRequest(int resultCode, Intent data) {
-        if(resultCode == RESULT_OK) {
+        if (resultCode == RESULT_OK) {
             PayerCost payerCost = JsonUtil.getInstance().fromJson(data.getStringExtra("payerCost"), PayerCost.class);
             showText("Se seleccionó: " + payerCost.getRecommendedMessage());
         }
     }
 
     private void resolveIssuerRequest(int resultCode, Intent data) {
-        if(resultCode == RESULT_OK) {
+        if (resultCode == RESULT_OK) {
             Issuer issuer = JsonUtil.getInstance().fromJson(data.getStringExtra("issuer"), Issuer.class);
             showText("Banco " + issuer.getName() + " seleccionado");
         }
@@ -279,9 +272,9 @@ public class ComponentsExampleActivity extends AppCompatActivity {
 
     private DecorationPreference getCurrentDecorationPreference() {
         DecorationPreference decorationPreference = new DecorationPreference();
-        if(mSelectedColor != null) {
+        if (mSelectedColor != null) {
             decorationPreference.setBaseColor(mSelectedColor);
-            if(mDarkFontEnabled.isChecked()) {
+            if (mDarkFontEnabled.isChecked()) {
                 decorationPreference.enableDarkFont();
             }
         }
@@ -291,12 +284,12 @@ public class ComponentsExampleActivity extends AppCompatActivity {
 
     private PaymentPreference getCurrentPaymentPreference() {
         PaymentPreference paymentPreference = new PaymentPreference();
-        if(mCashExcluded.isChecked()) {
+        if (mCashExcluded.isChecked()) {
             paymentPreference.setExcludedPaymentTypeIds(new ArrayList<String>() {{
                 add(PaymentTypes.TICKET);
             }});
         }
-        if(mVisaExcluded.isChecked()) {
+        if (mVisaExcluded.isChecked()) {
             paymentPreference.setExcludedPaymentMethodIds(new ArrayList<String>() {{
                 add(PaymentMethods.ARGENTINA.VISA);
             }});
@@ -351,13 +344,13 @@ public class ComponentsExampleActivity extends AppCompatActivity {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(getString(R.string.result_message_was_selected));
         stringBuilder.append(paymentMethod.getName());
-        if(issuer != null) {
+        if (issuer != null) {
             stringBuilder.append(getString(R.string.result_message_issued_by) + issuer.getName());
         }
-        if(payerCost != null) {
+        if (payerCost != null) {
             stringBuilder.append(getString(R.string.result_message_with) + payerCost.getRecommendedMessage());
         }
-        if(token != null) {
+        if (token != null) {
             stringBuilder.append(getString(R.string.result_message_and_token) + token.getId());
         }
         showText(stringBuilder.toString());

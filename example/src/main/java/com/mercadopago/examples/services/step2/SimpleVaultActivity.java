@@ -104,8 +104,7 @@ public class SimpleVaultActivity extends AppCompatActivity {
                 getCustomerCardsAsync();
             }
             createPaymentPreference();
-        }
-        else {
+        } else {
             Intent returnIntent = new Intent();
             setResult(RESULT_CANCELED, returnIntent);
             returnIntent.putExtra("message", "Invalid parameters");
@@ -131,12 +130,14 @@ public class SimpleVaultActivity extends AppCompatActivity {
         mMerchantAccessToken = this.getIntent().getStringExtra("merchantAccessToken");
         if (this.getIntent().getStringExtra("excludedPaymentTypes") != null) {
             Gson gson = new Gson();
-            Type listType = new TypeToken<List<String>>(){}.getType();
+            Type listType = new TypeToken<List<String>>() {
+            }.getType();
             mExcludedPaymentTypes = gson.fromJson(this.getIntent().getStringExtra("excludedPaymentTypes"), listType);
         }
         if (this.getIntent().getStringExtra("excludedPaymentMethodIds") != null) {
             Gson gson = new Gson();
-            Type listType = new TypeToken<List<String>>(){}.getType();
+            Type listType = new TypeToken<List<String>>() {
+            }.getType();
             mExcludedPaymentMethodIds = gson.fromJson(this.getIntent().getStringExtra("excludedPaymentMethodIds"), listType);
         }
     }
@@ -401,8 +402,7 @@ public class SimpleVaultActivity extends AppCompatActivity {
         // Create token
         if (mSelectedCard != null) {
             createSavedCardToken();
-        }
-        else if(mToken != null){
+        } else if (mToken != null) {
             finishWithTokenResult(mToken);
         }
     }
@@ -416,8 +416,7 @@ public class SimpleVaultActivity extends AppCompatActivity {
         try {
             savedCardToken.validateSecurityCode(this, mSelectedCard);
             mSecurityCodeText.setError(null);
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             mSecurityCodeText.setError(ex.getMessage());
             mSecurityCodeText.requestFocus();
             return;
@@ -475,14 +474,13 @@ public class SimpleVaultActivity extends AppCompatActivity {
 
     private List<Card> getSupportedCustomerCards(List<Card> cards) {
         List<Card> supportedCards = new ArrayList<>();
-        if(mPaymentPreference != null) {
+        if (mPaymentPreference != null) {
             for (Card card : cards) {
                 if (mPaymentPreference.isPaymentMethodSupported(card.getPaymentMethod()))
                     supportedCards.add(card);
             }
             return supportedCards;
-        }
-        else
+        } else
             return cards;
     }
 }

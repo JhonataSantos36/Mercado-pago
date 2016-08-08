@@ -75,7 +75,7 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
         super.onViewCreated(view, savedInstanceState);
         setCardInputViews();
         setEditTextListeners();
-        mActivity = (CardInterface)getActivity();
+        mActivity = (CardInterface) getActivity();
         mActivity.initializeCardByToken();
         decorate();
     }
@@ -111,7 +111,7 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
 
     private void decorate() {
         int cardShadowColor = ContextCompat.getColor(getContext(), R.color.mpsdk_color_new_card_form_background);
-        if(mDecorationPreference != null && mDecorationPreference.hasColors()) {
+        if (mDecorationPreference != null && mDecorationPreference.hasColors()) {
             cardShadowColor = mDecorationPreference.getLighterColor();
         }
         GradientDrawable cardShadowRounded = (GradientDrawable) ContextCompat.getDrawable(getActivity(), R.drawable.mpsdk_card_shadow_rounded);
@@ -340,7 +340,7 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
             number = BASE_NUMBER_CARDHOLDER;
         } else if ((s.length() < MercadoPago.BIN_LENGTH)
                 || (s.length() == MercadoPago.BIN_LENGTH && mActivity.getCurrentPaymentMethod() == null)
-                || (mActivity.getCurrentPaymentMethod() == null) ) {
+                || (mActivity.getCurrentPaymentMethod() == null)) {
             number = MPCardMaskUtil.buildNumberWithMask(CardInterface.CARD_NUMBER_MAX_LENGTH, s.toString());
         } else {
             int length = mActivity.getCardNumberLength();
@@ -386,7 +386,7 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
             transitionImage(image);
         }
     }
-    
+
     private void populateCardColor() {
         decorate();
         int color = CardInterface.NEUTRAL_CARD_COLOR;
@@ -413,7 +413,7 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
         if (s == null || s.length() == 0) {
             return BASE_FRONT_SECURITY_CODE;
         }
-        for (int i = 0; i < cardLength ; i++) {
+        for (int i = 0; i < cardLength; i++) {
             char c = getCharOfCard(s, i);
             sb.append(c);
         }

@@ -7,33 +7,33 @@ import android.graphics.Color;
  */
 public class ColorsUtil {
 
-    public static int darker (int color) {
+    public static int darker(int color) {
 
         double factor = 0.75;
 
         int a = Color.alpha(color);
-        int r = Color.red( color );
-        int g = Color.green( color );
-        int b = Color.blue( color );
+        int r = Color.red(color);
+        int g = Color.green(color);
+        int b = Color.blue(color);
 
-        return Color.argb( a,
-                Math.max( (int)(r * factor), 0 ),
-                Math.max( (int)(g * factor), 0 ),
-                Math.max( (int)(b * factor), 0 ) );
+        return Color.argb(a,
+                Math.max((int) (r * factor), 0),
+                Math.max((int) (g * factor), 0),
+                Math.max((int) (b * factor), 0));
     }
 
-    public static int lighter (int color) {
+    public static int lighter(int color) {
 
         double factor = 0.25;
 
         int a = Color.alpha(color);
-        int r = Color.red( color );
-        int g = Color.green( color );
-        int b = Color.blue( color );
+        int r = Color.red(color);
+        int g = Color.green(color);
+        int b = Color.blue(color);
 
-        return Color.argb( a,
-                Math.max( (int)(r + ((255 - r) * factor)), 0 ),
-                Math.max( (int)(g + ((255 - g) * factor)), 0 ),
-                Math.max( (int)(b + ((255 - b) * factor)), 0 ));
+        return Color.argb(a,
+                Math.max((int) (r + ((255 - r) * factor)), 0),
+                Math.max((int) (g + ((255 - g) * factor)), 0),
+                Math.max((int) (b + ((255 - b) * factor)), 0));
     }
 }

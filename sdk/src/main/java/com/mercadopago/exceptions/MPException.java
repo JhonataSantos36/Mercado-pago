@@ -41,7 +41,7 @@ public class MPException {
     }
 
     public String getErrorDetail() {
-        if(errorDetail == null) {
+        if (errorDetail == null) {
             errorDetail = "";
         }
         return errorDetail;

@@ -169,7 +169,8 @@ public class ExamplesUtils {
 
         if (list != null) {
             Gson gson = new Gson();
-            Type listType = new TypeToken<List<String>>(){}.getType();
+            Type listType = new TypeToken<List<String>>() {
+            }.getType();
             intent.putExtra(listName, gson.toJson(list, listType));
         }
     }

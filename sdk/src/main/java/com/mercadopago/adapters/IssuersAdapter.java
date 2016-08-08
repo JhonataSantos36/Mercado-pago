@@ -13,7 +13,7 @@ import com.mercadopago.views.MPTextView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class IssuersAdapter extends  RecyclerView.Adapter<IssuersAdapter.ViewHolder> {
+public class IssuersAdapter extends RecyclerView.Adapter<IssuersAdapter.ViewHolder> {
 
     private Context mContext;
     private List<Issuer> mIssuers;

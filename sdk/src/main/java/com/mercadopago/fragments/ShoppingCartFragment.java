@@ -35,7 +35,8 @@ public class ShoppingCartFragment extends Fragment {
     private View mShoppingCartLayout;
     private DecorationPreference mDecorationPreference;
 
-    public ShoppingCartFragment() {}
+    public ShoppingCartFragment() {
+    }
 
     public static ShoppingCartFragment newInstance(String pictureUrl, String purchaseTitle, BigDecimal amount, String currrencyId) {
 
@@ -72,7 +73,7 @@ public class ShoppingCartFragment extends Fragment {
             mPurchaseTitle = getArguments().getString("purchaseTitle");
             mCurrencyId = getArguments().getString("currencyId");
             String amountParameter = getArguments().getString("amount");
-            if(amountParameter != null) {
+            if (amountParameter != null) {
                 mAmount = new BigDecimal(amountParameter);
             }
             mDecorationPreference = JsonUtil.getInstance().fromJson(getArguments().getString("decorationPreference"), DecorationPreference.class);
@@ -93,7 +94,7 @@ public class ShoppingCartFragment extends Fragment {
     }
 
     private void initializeControls() {
-        if(getView() != null) {
+        if (getView() != null) {
             mItemImageView = (ImageView) getView().findViewById(R.id.mpsdkItemImage);
             mItemDescriptionTextView = (MPTextView) getView().findViewById(R.id.mpsdkItemTitle);
             mItemAmountTextView = (MPTextView) getView().findViewById(R.id.mpsdkItemAmount);
@@ -107,9 +108,9 @@ public class ShoppingCartFragment extends Fragment {
         mItemAmountTextView.setText(getAmountLabel(mAmount, mCurrencyId));
         setItemImage();
 
-        if(mDecorationPreference != null) {
+        if (mDecorationPreference != null) {
             mShoppingCartLayout.setBackgroundColor(mDecorationPreference.getLighterColor());
-            if(mDecorationPreference.isDarkFontEnabled()) {
+            if (mDecorationPreference.isDarkFontEnabled()) {
                 mItemAmountTextView.setTextColor(mDecorationPreference.getDarkFontColor(getActivity()));
                 mItemDescriptionTextView.setTextColor(mDecorationPreference.getDarkFontColor(getActivity()));
             }
@@ -117,7 +118,7 @@ public class ShoppingCartFragment extends Fragment {
     }
 
     protected String getFormattedPurchaseTitle() {
-        if(mPurchaseTitle != null) {
+        if (mPurchaseTitle != null) {
             if (mPurchaseTitle.length() > PURCHASE_TITLE_MAX_LENGTH) {
                 mPurchaseTitle = mPurchaseTitle.substring(0, PURCHASE_TITLE_MAX_LENGTH - 1);
                 mPurchaseTitle = mPurchaseTitle + "…";
@@ -127,12 +128,11 @@ public class ShoppingCartFragment extends Fragment {
     }
 
     private void setItemImage() {
-        if(mPictureUrl != null && !mPictureUrl.isEmpty()) {
+        if (mPictureUrl != null && !mPictureUrl.isEmpty()) {
             mItemImageView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.mpsdk_white));
             Picasso.with(getContext()).load(mPictureUrl).placeholder(R.drawable.progress).into(mItemImageView);
-        }
-        else {
-            if(mDecorationPreference!= null && mDecorationPreference.isDarkFontEnabled()) {
+        } else {
+            if (mDecorationPreference != null && mDecorationPreference.isDarkFontEnabled()) {
                 mItemImageView.getBackground().setColorFilter(mDecorationPreference.getDarkFontColor(getContext()), PorterDuff.Mode.SRC_ATOP);
                 mItemImageView.setColorFilter(mDecorationPreference.getDarkFontColor(getContext()), PorterDuff.Mode.SRC_ATOP);
             }

@@ -39,9 +39,9 @@ public class PaymentMethodOffEditableRow implements PaymentMethodViewController 
 
     @Override
     public void drawPaymentMethod() {
-        if(mItem != null) {
+        if (mItem != null) {
             drawWithSearchItem();
-        } else if(mPaymentMethod != null) {
+        } else if (mPaymentMethod != null) {
             drawWithPaymentMethod();
         }
     }
@@ -51,7 +51,7 @@ public class PaymentMethodOffEditableRow implements PaymentMethodViewController 
         mComment.setText(MercadoPagoUtil.getAccreditationTimeMessage(mContext, mPaymentMethod.getAccreditationTime()));
         int resourceId = MercadoPagoUtil.getPaymentMethodIcon(mContext, mPaymentMethod.getId());
 
-        if(resourceId != 0) {
+        if (resourceId != 0) {
             mIcon.setImageResource(resourceId);
         } else {
             mIcon.setVisibility(View.GONE);
@@ -59,19 +59,19 @@ public class PaymentMethodOffEditableRow implements PaymentMethodViewController 
     }
 
     private void drawWithSearchItem() {
-        if(mItem.hasDescription()) {
+        if (mItem.hasDescription()) {
             mDescription.setText(mItem.getDescription());
         }
-        if(mItem.hasComment()) {
+        if (mItem.hasComment()) {
             mComment.setText(mItem.getComment());
         }
         int resourceId = 0;
 
-        if(mItem.isIconRecommended()) {
+        if (mItem.isIconRecommended()) {
             resourceId = MercadoPagoUtil.getPaymentMethodSearchItemIcon(mContext, mItem.getId());
         }
 
-        if(resourceId != 0) {
+        if (resourceId != 0) {
             mIcon.setImageResource(resourceId);
         } else {
             mIcon.setVisibility(View.GONE);

@@ -202,7 +202,7 @@ public class CardToken {
                                 !TextUtils.isEmpty(cardholder.getIdentification().getNumber());
     }
 
-    public boolean validateIdentificationNumber(IdentificationType identificationType){
+    public boolean validateIdentificationNumber(IdentificationType identificationType) {
         if (identificationType != null) {
             if ((cardholder != null) &&
                     (cardholder.getIdentification() != null) &&
@@ -223,7 +223,7 @@ public class CardToken {
         }
     }
 
-    public boolean validateCardholderName(){
+    public boolean validateCardholderName() {
         return (cardholder == null) ? false :
                 !TextUtils.isEmpty(cardholder.getName());
     }
@@ -235,14 +235,11 @@ public class CardToken {
         if ((cardNumber == null) || (cardNumber.length() == 0)) {
             return false;
         }
-        for (int i = cardNumber.length() - 1; i >= 0; i--)
-        {
+        for (int i = cardNumber.length() - 1; i >= 0; i--) {
             int n = Integer.parseInt(cardNumber.substring(i, i + 1));
-            if (alternate)
-            {
+            if (alternate) {
                 n *= 2;
-                if (n > 9)
-                {
+                if (n > 9) {
                     n = (n % 10) + 1;
                 }
             }
@@ -261,7 +258,7 @@ public class CardToken {
         return hasYearPassed(year) || normalizeYear(year) == now.get(Calendar.YEAR) && month < (now.get(Calendar.MONTH) + 1);
     }
 
-    private static Integer normalizeYear(Integer year)  {
+    private static Integer normalizeYear(Integer year) {
         if ((year != null) && (year < 100 && year >= 0)) {
             String currentYear = String.valueOf(now.get(Calendar.YEAR));
             String prefix = currentYear.substring(0, currentYear.length() - 2);

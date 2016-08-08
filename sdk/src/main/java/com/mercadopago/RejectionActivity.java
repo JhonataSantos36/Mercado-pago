@@ -40,13 +40,13 @@ public class RejectionActivity extends MercadoPagoActivity {
 
     @Override
     protected void validateActivityParameters() throws IllegalStateException {
-        if(mMerchantPublicKey == null) {
+        if (mMerchantPublicKey == null) {
             throw new IllegalStateException("merchant public key not set");
         }
-        if(mPayment == null) {
+        if (mPayment == null) {
             throw new IllegalStateException("payment not set");
         }
-        if(mPaymentMethod == null) {
+        if (mPaymentMethod == null) {
             throw new IllegalStateException("payment method not set");
         }
     }
@@ -58,7 +58,7 @@ public class RejectionActivity extends MercadoPagoActivity {
     }
 
     @Override
-    protected void initializeControls(){
+    protected void initializeControls() {
         mRejectionTitle = (MPTextView) findViewById(R.id.mpsdkRejectionTitle);
         mRejectionSubtitle = (MPTextView) findViewById(R.id.mpsdkRejectionSubtitle);
         mSelectOtherPaymentMethodByRejection = (FrameLayout) findViewById(R.id.mpsdkSelectOtherPaymentMethodByRejection);
@@ -82,7 +82,7 @@ public class RejectionActivity extends MercadoPagoActivity {
     }
 
     @Override
-    protected void onValidStart(){
+    protected void onValidStart() {
         if (isStatusDetailValid() && isPaymentMethodValid()) {
             if (mPayment.getStatusDetail().equals(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_OTHER_REASON)) {
                 String titleMessage = mPaymentMethod.getName() + " " + getString(R.string.mpsdk_title_other_reason_rejection);
@@ -129,25 +129,25 @@ public class RejectionActivity extends MercadoPagoActivity {
                 mRejectionTitle.setText(R.string.mpsdk_title_bad_filled_other_rejection);
                 mRejectionSubtitle.setVisibility(View.GONE);
             }
-        }else {
+        } else {
             ErrorUtil.startErrorActivity(this, getString(R.string.mpsdk_standard_error_message), false);
         }
     }
 
     @Override
-    protected void onInvalidStart(String errorMessage){
-        ErrorUtil.startErrorActivity(this, getString(R.string.mpsdk_standard_error_message), errorMessage,false);
+    protected void onInvalidStart(String errorMessage) {
+        ErrorUtil.startErrorActivity(this, getString(R.string.mpsdk_standard_error_message), errorMessage, false);
     }
 
-    private Boolean isStatusDetailValid(){
+    private Boolean isStatusDetailValid() {
         return !isEmpty(mPayment.getStatusDetail());
     }
 
-    private Boolean isPaymentMethodValid(){
+    private Boolean isPaymentMethodValid() {
         return isPaymentMethodIdValid() && !isEmpty(mPaymentMethod.getName()) && !isEmpty(mPaymentMethod.getPaymentTypeId());
     }
 
-    private Boolean isPaymentMethodIdValid(){
+    private Boolean isPaymentMethodIdValid() {
         return !isEmpty(mPaymentMethod.getId()) && mPayment.getPaymentMethodId().equals(mPaymentMethod.getId());
     }
 
@@ -157,7 +157,7 @@ public class RejectionActivity extends MercadoPagoActivity {
         finish();
     }
 
-    private boolean isCardPaymentTypeCreditCard(){
+    private boolean isCardPaymentTypeCreditCard() {
         return !mPaymentMethod.getPaymentTypeId().isEmpty() && mPaymentMethod.getPaymentTypeId().equals("credit_card");
     }
 
@@ -165,10 +165,9 @@ public class RejectionActivity extends MercadoPagoActivity {
     public void onBackPressed() {
         MPTracker.getInstance().trackEvent("REJECTION", "BACK_PRESSED", 2, mMerchantPublicKey, BuildConfig.VERSION_NAME, this);
 
-        if(mBackPressedOnce) {
+        if (mBackPressedOnce) {
             finishWithOkResult();
-        }
-        else {
+        } else {
             Snackbar.make(mExit, getString(R.string.mpsdk_press_again_to_leave), Snackbar.LENGTH_LONG).show();
             mBackPressedOnce = true;
             resetBackPressedOnceIn(4000);

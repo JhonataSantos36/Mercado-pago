@@ -103,9 +103,9 @@ public class CheckoutExampleActivity extends AppCompatActivity {
 
     private DecorationPreference getCurrentDecorationPreference() {
         DecorationPreference decorationPreference = new DecorationPreference();
-        if(mSelectedColor != null) {
+        if (mSelectedColor != null) {
             decorationPreference.setBaseColor(mSelectedColor);
-            if(mDarkFontEnabled.isChecked()) {
+            if (mDarkFontEnabled.isChecked()) {
                 decorationPreference.enableDarkFont();
             }
         }

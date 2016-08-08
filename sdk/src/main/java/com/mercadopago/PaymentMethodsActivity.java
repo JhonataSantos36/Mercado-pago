@@ -47,17 +47,18 @@ public class PaymentMethodsActivity extends MercadoPagoActivity {
     protected void getActivityParameters() {
         mMerchantPublicKey = this.getIntent().getStringExtra("merchantPublicKey");
         mShowBankDeals = this.getIntent().getBooleanExtra("showBankDeals", true);
-        if(getIntent().getStringExtra("paymentPreference") != null) {
+        if (getIntent().getStringExtra("paymentPreference") != null) {
             mPaymentPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("paymentPreference"), PaymentPreference.class);
         }
         if (this.getIntent().getStringExtra("supportedPaymentTypes") != null) {
             Gson gson = new Gson();
-            Type listType = new TypeToken<List<String>>(){}.getType();
+            Type listType = new TypeToken<List<String>>() {
+            }.getType();
             mSupportedPaymentTypes = gson.fromJson(this.getIntent().getStringExtra("supportedPaymentTypes"), listType);
         }
 
         //Give priority to PaymentPreference over supported payment types
-        if(!isPaymentPreferenceSet() && supportedPaymentTypesSet()) {
+        if (!isPaymentPreferenceSet() && supportedPaymentTypesSet()) {
             List<String> excludedPaymentTypes = new ArrayList<>();
             for (String type : PaymentTypes.getAllPaymentTypes()) {
                 if (!mSupportedPaymentTypes.contains(type)) {
@@ -79,7 +80,7 @@ public class PaymentMethodsActivity extends MercadoPagoActivity {
 
     @Override
     protected void validateActivityParameters() throws IllegalStateException {
-        if(mMerchantPublicKey == null) {
+        if (mMerchantPublicKey == null) {
             throw new IllegalStateException("public key not set");
         }
     }
@@ -129,7 +130,7 @@ public class PaymentMethodsActivity extends MercadoPagoActivity {
             }
         });
 
-        if(mShowBankDeals) {
+        if (mShowBankDeals) {
             mBankDealsTextView.setVisibility(View.VISIBLE);
             mBankDealsTextView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -145,7 +146,7 @@ public class PaymentMethodsActivity extends MercadoPagoActivity {
 
         decorate(mToolbar);
         decorateFont(mTitle);
-        if(mShowBankDeals) {
+        if (mShowBankDeals) {
             decorateFont(mBankDealsTextView);
         }
     }
@@ -206,11 +207,10 @@ public class PaymentMethodsActivity extends MercadoPagoActivity {
     private List<PaymentMethod> getSupportedPaymentMethods(List<PaymentMethod> paymentMethods) {
 
         List<PaymentMethod> supportedPaymentMethods;
-        if(mPaymentPreference != null) {
+        if (mPaymentPreference != null) {
             supportedPaymentMethods = mPaymentPreference.getSupportedPaymentMethods(paymentMethods);
             supportedPaymentMethods = getPaymentMethodsOfType(mPaymentPreference.getDefaultPaymentTypeId(), supportedPaymentMethods);
-        }
-        else {
+        } else {
             supportedPaymentMethods = paymentMethods;
         }
         return supportedPaymentMethods;
@@ -218,12 +218,12 @@ public class PaymentMethodsActivity extends MercadoPagoActivity {
 
     private List<PaymentMethod> getPaymentMethodsOfType(String paymentTypeId, List<PaymentMethod> paymentMethodList) {
 
-        if(paymentMethodList != null && !isEmpty(paymentTypeId)) {
+        if (paymentMethodList != null && !isEmpty(paymentTypeId)) {
 
             List<PaymentMethod> validPaymentMethods = new ArrayList<>();
 
             for (PaymentMethod currentPaymentMethod : paymentMethodList) {
-                if(currentPaymentMethod.getPaymentTypeId().equals(paymentTypeId)) {
+                if (currentPaymentMethod.getPaymentTypeId().equals(paymentTypeId)) {
                     validPaymentMethods.add(currentPaymentMethod);
                 }
             }
@@ -236,11 +236,10 @@ public class PaymentMethodsActivity extends MercadoPagoActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == ErrorUtil.ERROR_REQUEST_CODE) {
-            if(resultCode == RESULT_OK) {
+        if (requestCode == ErrorUtil.ERROR_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
                 recoverFromFailure();
-            }
-            else {
+            } else {
                 setResult(resultCode, data);
                 finish();
             }

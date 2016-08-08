@@ -25,7 +25,7 @@ public abstract class MercadoPagoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         getDecorationPreference();
         getActivityParameters();
-        if(mDecorationPreference != null && mDecorationPreference.hasColors()) {
+        if (mDecorationPreference != null && mDecorationPreference.hasColors()) {
             setTheme(R.style.Theme_MercadoPagoTheme_NoActionBar);
         }
         setActivity();
@@ -46,7 +46,7 @@ public abstract class MercadoPagoActivity extends AppCompatActivity {
     }
 
     protected Activity getActivity() {
-       return mActivity;
+        return mActivity;
     }
 
     protected abstract void getActivityParameters();
@@ -66,7 +66,7 @@ public abstract class MercadoPagoActivity extends AppCompatActivity {
     }
 
     private void getDecorationPreference() {
-        if(getIntent().getStringExtra("decorationPreference") != null) {
+        if (getIntent().getStringExtra("decorationPreference") != null) {
             mDecorationPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("decorationPreference"), DecorationPreference.class);
         }
     }
@@ -126,17 +126,17 @@ public abstract class MercadoPagoActivity extends AppCompatActivity {
     }
 
     protected void decorate(Button button) {
-        if(isCustomColorSet()) {
+        if (isCustomColorSet()) {
             button.setBackgroundColor(getCustomBaseColor());
         }
 
-        if(isDarkFontEnabled()) {
+        if (isDarkFontEnabled()) {
             button.setTextColor(getDarkFontColor());
         }
     }
 
     protected void decorate(Toolbar toolbar) {
-        if(toolbar != null) {
+        if (toolbar != null) {
             if (isCustomColorSet()) {
                 toolbar.setBackgroundColor(getCustomBaseColor());
             }
@@ -145,7 +145,7 @@ public abstract class MercadoPagoActivity extends AppCompatActivity {
     }
 
     protected void decorateFont(TextView textView) {
-        if(textView != null) {
+        if (textView != null) {
             if (isDarkFontEnabled()) {
                 textView.setTextColor(getDarkFontColor());
             }

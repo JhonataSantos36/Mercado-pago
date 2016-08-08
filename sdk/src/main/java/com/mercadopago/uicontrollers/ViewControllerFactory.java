@@ -23,7 +23,7 @@ public class ViewControllerFactory {
     public static PaymentMethodSearchViewController getPaymentMethodSelectionViewController(PaymentMethodSearchItem item, DecorationPreference mDecorationPreference, Context context) {
 
         PaymentMethodSearchViewController row;
-        if(item.hasComment() && !item.isPaymentType()) {
+        if (item.hasComment() && !item.isPaymentType()) {
             row = new PaymentMethodSearchRow(context);
         } else {
             row = new PaymentMethodSearchSmallRow(context, mDecorationPreference);

@@ -9,7 +9,7 @@ public class Instruction {
     private List<InstructionReference> references;
     private String title;
     private List<String> info;
-    private  List<String> secondaryInfo;
+    private List<String> secondaryInfo;
     private List<String> tertiaryInfo;
     private String accreditationMessage;
     private List<InstructionActionInfo> actions;

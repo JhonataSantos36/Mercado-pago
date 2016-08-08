@@ -54,7 +54,7 @@ public abstract class FrontCardActivity extends MercadoPagoActivity implements C
         mExpiryMonth = month;
     }
 
-    public void saveCardExpiryYear(String year)  {
+    public void saveCardExpiryYear(String year) {
         mExpiryYear = year;
     }
 

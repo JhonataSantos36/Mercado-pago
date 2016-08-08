@@ -60,7 +60,7 @@ public class IssuersActivity extends ShowCardActivity {
         mProgressBar = (ProgressBar) findViewById(R.id.mpsdkProgressBar);
 
         mCardBackground = findViewById(R.id.mpsdkCardBackground);
-        if(mDecorationPreference != null && mDecorationPreference.hasColors()) {
+        if (mDecorationPreference != null && mDecorationPreference.hasColors()) {
             mCardBackground.setBackgroundColor(mDecorationPreference.getLighterColor());
         }
         mProgressBar.setVisibility(View.GONE);
@@ -69,7 +69,7 @@ public class IssuersActivity extends ShowCardActivity {
     @Override
     protected void initializeFragments(Bundle savedInstanceState) {
         super.initializeFragments(savedInstanceState);
-        if(isCardInfoAvailable()) {
+        if (isCardInfoAvailable()) {
             initializeFrontFragment();
         } else {
             hideCardLayout();
@@ -105,7 +105,7 @@ public class IssuersActivity extends ShowCardActivity {
     }
 
     protected void initializeToolbar() {
-        if(isCardInfoAvailable()) {
+        if (isCardInfoAvailable()) {
             super.initializeToolbar("", true);
         } else {
             super.initializeToolbar(getString(R.string.mpsdk_card_issuers_title), false);
@@ -128,8 +128,9 @@ public class IssuersActivity extends ShowCardActivity {
     protected void getActivityParameters() {
         super.getActivityParameters();
         try {
-            Type listType = new TypeToken<List<Issuer>>(){}.getType();
-            mIssuers =  JsonUtil.getInstance().getGson().fromJson(this.getIntent().getStringExtra("issuers"), listType);
+            Type listType = new TypeToken<List<Issuer>>() {
+            }.getType();
+            mIssuers = JsonUtil.getInstance().getGson().fromJson(this.getIntent().getStringExtra("issuers"), listType);
         } catch (Exception ex) {
             mIssuers = null;
         }
@@ -138,18 +139,18 @@ public class IssuersActivity extends ShowCardActivity {
     protected void getIssuersAsync() {
         mProgressBar.setVisibility(View.VISIBLE);
         mMercadoPago.getIssuers(mCurrentPaymentMethod.getId(), mBin,
-            new Callback<List<Issuer>>() {
-                @Override
-                public void success(List<Issuer> issuers) {
-                    mIssuers = issuers;
-                    if (isActivityActive()) {
-                        mProgressBar.setVisibility(View.GONE);
-                        resolveIssuersList();
+                new Callback<List<Issuer>>() {
+                    @Override
+                    public void success(List<Issuer> issuers) {
+                        mIssuers = issuers;
+                        if (isActivityActive()) {
+                            mProgressBar.setVisibility(View.GONE);
+                            resolveIssuersList();
+                        }
                     }
-                }
 
-                @Override
-                public void failure(ApiException apiException) {
+                    @Override
+                    public void failure(ApiException apiException) {
                         if (isActivityActive()) {
                             mProgressBar.setVisibility(View.GONE);
                             setFailureRecovery(new FailureRecovery() {
@@ -176,7 +177,7 @@ public class IssuersActivity extends ShowCardActivity {
         }
     }
 
-        @Override
+    @Override
     protected void finishWithResult() {
         Intent returnIntent = new Intent();
         returnIntent.putExtra("issuer", JsonUtil.getInstance().toJson(mSelectedIssuer));
@@ -192,13 +193,13 @@ public class IssuersActivity extends ShowCardActivity {
         view.setAdapter(adapter);
         view.setLayoutManager(new LinearLayoutManager(this));
         view.addOnItemTouchListener(new RecyclerItemClickListener(this,
-            new RecyclerItemClickListener.OnItemClickListener() {
-                @Override
-                public void onItemClick(View view, int position) {
-                    onItemSelected(view, position);
-                    finishWithResult();
-                }
-            }));
+                new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        onItemSelected(view, position);
+                        finishWithResult();
+                    }
+                }));
     }
 
     @Override
@@ -214,8 +215,8 @@ public class IssuersActivity extends ShowCardActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == ErrorUtil.ERROR_REQUEST_CODE) {
-            if(resultCode == RESULT_OK) {
+        if (requestCode == ErrorUtil.ERROR_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
                 recoverFromFailure();
             } else {
                 setResult(resultCode, data);

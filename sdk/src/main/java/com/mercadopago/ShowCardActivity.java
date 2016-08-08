@@ -50,7 +50,7 @@ public abstract class ShowCardActivity extends FrontCardActivity {
                 this.getIntent().getStringExtra("token"), Token.class);
         mSelectedIssuer = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("issuer"), Issuer.class);
 
-        if(isCardInfoAvailable()) {
+        if (isCardInfoAvailable()) {
             setCardInfo();
         }
     }
@@ -77,7 +77,7 @@ public abstract class ShowCardActivity extends FrontCardActivity {
 
     protected void initializeToolbar(String title, boolean transparent) {
         Toolbar toolbar;
-        if(transparent) {
+        if (transparent) {
             toolbar = (Toolbar) findViewById(R.id.mpsdkToolbar);
         } else {
             toolbar = (Toolbar) findViewById(R.id.mpsdkRegularToolbar);
@@ -91,7 +91,7 @@ public abstract class ShowCardActivity extends FrontCardActivity {
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
 
-        if(mToolbarTitle != null) {
+        if (mToolbarTitle != null) {
             mToolbarTitle.setText(title);
         }
         if (toolbar != null) {
@@ -102,7 +102,7 @@ public abstract class ShowCardActivity extends FrontCardActivity {
                 }
             });
         }
-        if(mDecorationPreference != null && mDecorationPreference.hasColors() && toolbar != null) {
+        if (mDecorationPreference != null && mDecorationPreference.hasColors() && toolbar != null) {
             if (mToken == null) {
                 decorateWithoutToken(toolbar);
             } else {
@@ -129,7 +129,7 @@ public abstract class ShowCardActivity extends FrontCardActivity {
         saveCardNumber(getCardNumberHidden());
         saveCardName(mCardholder.getName());
         saveCardExpiryMonth(String.valueOf(mToken.getExpirationMonth()));
-        saveCardExpiryYear(String.valueOf(mToken.getExpirationYear()).substring(2,4));
+        saveCardExpiryYear(String.valueOf(mToken.getExpirationYear()).substring(2, 4));
         if (mCurrentPaymentMethod.isSecurityCodeRequired(mBin)
                 && mSecurityCodeLocation.equals(CARD_SIDE_FRONT)) {
             saveCardSecurityCode(getSecurityCodeHidden());
@@ -198,7 +198,7 @@ public abstract class ShowCardActivity extends FrontCardActivity {
             return CARD_SIDE_BACK;
         } else {
             Setting setting = Setting.getSettingByBin(mCurrentPaymentMethod.getSettings(), mBin);
-            if (setting == null)  {
+            if (setting == null) {
                 ErrorUtil.startErrorActivity(getActivity(), getString(R.string.mpsdk_standard_error_message), "setting is null at ShowCardActivity, can't guess payment method", false);
             }
             return setting.getSecurityCode().getCardLocation();

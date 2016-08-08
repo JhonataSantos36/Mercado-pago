@@ -24,11 +24,10 @@ public class ErrorActivity extends AppCompatActivity {
         setContentView(R.layout.mpsdk_activity_error);
 
         getActivityParameters();
-        if(validParameters()) {
+        if (validParameters()) {
             initializeControls();
             fillData();
-        }
-        else {
+        } else {
             Intent intent = new Intent();
             setResult(RESULT_CANCELED, intent);
             finish();
@@ -61,10 +60,9 @@ public class ErrorActivity extends AppCompatActivity {
 
     private void fillData() {
         String message;
-        if(mMPException.getApiException() != null) {
+        if (mMPException.getApiException() != null) {
             message = ApiUtil.getApiExceptionMessage(this, mMPException.getApiException());
-        }
-        else {
+        } else {
             message = mMPException.getMessage();
         }
 
@@ -79,8 +77,7 @@ public class ErrorActivity extends AppCompatActivity {
                     finish();
                 }
             });
-        }
-        else {
+        } else {
             mRetryTextView.setVisibility(View.GONE);
         }
     }

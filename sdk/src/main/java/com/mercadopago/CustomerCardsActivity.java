@@ -33,7 +33,8 @@ public class CustomerCardsActivity extends MercadoPagoActivity {
     protected void getActivityParameters() {
         try {
             Gson gson = new Gson();
-            Type listType = new TypeToken<List<Card>>(){}.getType();
+            Type listType = new TypeToken<List<Card>>() {
+            }.getType();
             mCards = gson.fromJson(this.getIntent().getStringExtra("cards"), listType);
         } catch (Exception ex) {
             mCards = null;
@@ -42,7 +43,7 @@ public class CustomerCardsActivity extends MercadoPagoActivity {
 
     @Override
     protected void validateActivityParameters() throws IllegalStateException {
-        if(mCards == null) {
+        if (mCards == null) {
             throw new IllegalStateException("cards not set");
         }
     }
@@ -83,10 +84,10 @@ public class CustomerCardsActivity extends MercadoPagoActivity {
             }
         });
 
-        if(isCustomColorSet()) {
+        if (isCustomColorSet()) {
             mToolbar.setBackgroundColor(getCustomBaseColor());
         }
-        if(isDarkFontEnabled()) {
+        if (isDarkFontEnabled()) {
             mTitle.setTextColor(getDarkFontColor());
             Drawable upArrow = mToolbar.getNavigationIcon();
             upArrow.setColorFilter(getDarkFontColor(), PorterDuff.Mode.SRC_ATOP);
@@ -107,7 +108,7 @@ public class CustomerCardsActivity extends MercadoPagoActivity {
             public void onSelected(Card card) {
                 // Return to parent
                 Intent returnIntent = new Intent();
-                if(card != null) {
+                if (card != null) {
                     returnIntent.putExtra("card", JsonUtil.getInstance().toJson(card));
                 }
                 setResult(RESULT_OK, returnIntent);

@@ -16,15 +16,14 @@ import java.util.List;
 /**
  * Created by mreverter on 18/1/16.
  */
-public class PaymentMethodSearchItemAdapter extends RecyclerView.Adapter<PaymentMethodSearchItemAdapter.ViewHolder>{
+public class PaymentMethodSearchItemAdapter extends RecyclerView.Adapter<PaymentMethodSearchItemAdapter.ViewHolder> {
 
     private DecorationPreference mDecorationPreference;
     private Context mContext;
     private List<PaymentMethodSearchItem> mItems;
     private OnSelectedCallback<PaymentMethodSearchItem> mCallback;
 
-    public PaymentMethodSearchItemAdapter(Context context, List<PaymentMethodSearchItem> items, OnSelectedCallback<PaymentMethodSearchItem> callback, DecorationPreference decorationPreference)
-    {
+    public PaymentMethodSearchItemAdapter(Context context, List<PaymentMethodSearchItem> items, OnSelectedCallback<PaymentMethodSearchItem> callback, DecorationPreference decorationPreference) {
         this.mDecorationPreference = decorationPreference;
         this.mContext = context;
         this.mItems = items;
@@ -44,8 +43,7 @@ public class PaymentMethodSearchItemAdapter extends RecyclerView.Adapter<Payment
     }
 
     @Override
-    public int getItemViewType(int position)
-    {
+    public int getItemViewType(int position) {
         return position;
     }
 
@@ -56,7 +54,7 @@ public class PaymentMethodSearchItemAdapter extends RecyclerView.Adapter<Payment
         holder.mPaymentMethodSearchViewController.drawPaymentMethod(paymentMethodSearchItem);
 
         holder.mItem = mItems.get(position);
-        if(position != mItems.size()-1) {
+        if (position != mItems.size() - 1) {
             holder.mPaymentMethodSearchViewController.showSeparator();
         }
     }

@@ -30,7 +30,7 @@
                     tools:src="@drawable/visa"
                     android:adjustViewBounds="true"
                     android:maxHeight="20dp"
-                    android:maxWidth="40dp"/>
+                    android:maxWidth="50dp"/>
                 <com.mercadopago.views.MPTextView
                     android:id="@+id/mpsdkDescription"
                     android:layout_marginLeft="10dp"

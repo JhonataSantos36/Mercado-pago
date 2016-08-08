@@ -34,7 +34,7 @@ public class ExceptionHandler {
             case CheckoutPreferenceException.NO_EMAIL_FOUND:
                 errorMessage = context.getString(R.string.mpsdk_error_message_email_required);
                 break;
-            }
+        }
         return errorMessage;
     }
 }

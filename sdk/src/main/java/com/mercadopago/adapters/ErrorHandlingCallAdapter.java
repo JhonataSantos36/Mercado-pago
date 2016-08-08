@@ -39,11 +39,13 @@ public class ErrorHandlingCallAdapter {
             }
             final Type responseType = ((ParameterizedType) returnType).getActualTypeArguments()[0];
             return new CallAdapter<MPCall<?>>() {
-                @Override public Type responseType() {
+                @Override
+                public Type responseType() {
                     return responseType;
                 }
 
-                @Override public <R> MPCall<R> adapt(Call<R> call) {
+                @Override
+                public <R> MPCall<R> adapt(Call<R> call) {
                     return new MPCallAdapter<>(call);
                 }
             };
@@ -52,7 +54,10 @@ public class ErrorHandlingCallAdapter {
 
     // This adapter runs its callbacks on the main thread always
     // TODO: customize executor
-    /** Adapts a {@link Call} to {@link MPCall}. */
+
+    /**
+     * Adapts a {@link Call} to {@link MPCall}.
+     */
     static class MPCallAdapter<T> implements MPCall<T> {
         private final Call<T> call;
 
@@ -60,11 +65,13 @@ public class ErrorHandlingCallAdapter {
             this.call = call;
         }
 
-        @Override public void cancel() {
+        @Override
+        public void cancel() {
             call.cancel();
         }
 
-        @Override public void enqueue(final Callback<T> callback) {
+        @Override
+        public void enqueue(final Callback<T> callback) {
             call.enqueue(new retrofit2.Callback<T>() {
                 @Override
                 public void onResponse(Call<T> call, Response<T> response) {
@@ -108,7 +115,8 @@ public class ErrorHandlingCallAdapter {
             });
         }
 
-        @Override public MPCall<T> clone() {
+        @Override
+        public MPCall<T> clone() {
             return new MPCallAdapter<>(call.clone());
         }
     }

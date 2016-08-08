@@ -38,7 +38,7 @@ public class CardIdentificationFragment extends android.support.v4.app.Fragment 
         super.onViewCreated(view, savedInstanceState);
         setCardInputViews();
         setEditTextListeners();
-        mActivity = (CardInterface)getActivity();
+        mActivity = (CardInterface) getActivity();
     }
 
     @Override

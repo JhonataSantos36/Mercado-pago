@@ -27,7 +27,7 @@ public class PaymentMethodSearch {
 
     public PaymentMethod getPaymentMethodBySearchItem(PaymentMethodSearchItem item) {
         PaymentMethod requiredPaymentMethod = null;
-        if(paymentMethods != null && item != null && item.getId() != null) {
+        if (paymentMethods != null && item != null && item.getId() != null) {
             for (PaymentMethod currentPaymentMethod : paymentMethods) {
                 if (itemMatchesPaymentMethod(item, currentPaymentMethod)) {
                     requiredPaymentMethod = currentPaymentMethod;
@@ -44,13 +44,13 @@ public class PaymentMethodSearch {
 
         //Remove payment method id from item id
         String potentialPaymentType = item.getId().replace(paymentMethod.getId(), "");
-        for(String currentPaymentType : PaymentTypes.getAllPaymentTypes()) {
-            if(potentialPaymentType.endsWith(currentPaymentType)){
+        for (String currentPaymentType : PaymentTypes.getAllPaymentTypes()) {
+            if (potentialPaymentType.endsWith(currentPaymentType)) {
                 paymentType = currentPaymentType;
                 break;
             }
         }
-        if(paymentType.isEmpty()) {
+        if (paymentType.isEmpty()) {
             paymentType = paymentMethod.getPaymentTypeId();
         }
         return paymentType;
@@ -62,7 +62,7 @@ public class PaymentMethodSearch {
 
     public PaymentMethodSearchItem getSearchItemByPaymentMethod(PaymentMethod selectedPaymentMethod) {
         PaymentMethodSearchItem requiredItem = null;
-        if(selectedPaymentMethod != null) {
+        if (selectedPaymentMethod != null) {
 
             requiredItem = searchItemMatchingPaymentMethod(selectedPaymentMethod);
 
@@ -76,25 +76,24 @@ public class PaymentMethodSearch {
 
     private PaymentMethodSearchItem searchItemInList(List<PaymentMethodSearchItem> list, PaymentMethod paymentMethod) {
         PaymentMethodSearchItem requiredItem = null;
-        for(PaymentMethodSearchItem currentItem : list) {
+        for (PaymentMethodSearchItem currentItem : list) {
 
             //Case like "pagofacil", without the payment type in the item id.
-            if(itemMatchesPaymentMethod(currentItem, paymentMethod) && currentItem.getId().equals(paymentMethod.getId())) {
+            if (itemMatchesPaymentMethod(currentItem, paymentMethod) && currentItem.getId().equals(paymentMethod.getId())) {
                 requiredItem = currentItem;
                 break;
             }
             //Case like "bancomer_ticker", with the payment type in the item id
-            else if(itemMatchesPaymentMethod(currentItem, paymentMethod)) {
+            else if (itemMatchesPaymentMethod(currentItem, paymentMethod)) {
                 //Remove payment method id from item id
                 String potentialPaymentType = currentItem.getId().replace(paymentMethod.getId(), "");
-                if(potentialPaymentType.endsWith(paymentMethod.getPaymentTypeId())) {
+                if (potentialPaymentType.endsWith(paymentMethod.getPaymentTypeId())) {
                     requiredItem = currentItem;
                     break;
                 }
-            }
-            else if(currentItem.hasChildren()) {
+            } else if (currentItem.hasChildren()) {
                 requiredItem = searchItemInList(currentItem.getChildren(), paymentMethod);
-                if(requiredItem != null) {
+                if (requiredItem != null) {
                     break;
                 }
             }

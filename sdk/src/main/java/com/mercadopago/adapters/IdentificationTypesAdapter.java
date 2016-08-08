@@ -30,8 +30,7 @@ public class IdentificationTypesAdapter extends BaseAdapter {
     public Object getItem(int position) {
         try {
             return mData.get(position);
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             return null;
         }
     }
@@ -48,7 +47,7 @@ public class IdentificationTypesAdapter extends BaseAdapter {
 
         View row = convertView;
 
-        if(convertView == null)
+        if (convertView == null)
             row = mInflater.inflate(R.layout.mpsdk_row_simple_spinner, parent, false);
 
         IdentificationType identificationType = mData.get(position);
