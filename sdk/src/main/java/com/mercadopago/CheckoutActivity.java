@@ -532,6 +532,12 @@ public class CheckoutActivity extends MercadoPagoActivity {
 
             @Override
             public void failure(ApiException apiException) {
+                setFailureRecovery(new FailureRecovery() {
+                    @Override
+                    public void recover() {
+                        createPayment();
+                    }
+                });
                 resolvePaymentFailure(apiException);
             }
         });

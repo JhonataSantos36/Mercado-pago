@@ -39,6 +39,8 @@
                 android:layout_marginRight="10dp"
                 android:layout_marginEnd="10dp"
                 android:text="@string/mpsdk_bank_deals"
+                android:maxLines="1"
+                android:ellipsize="end"
                 style="@style/mpsdk_small_white_text"/>
         </android.support.v7.widget.Toolbar>
         <FrameLayout

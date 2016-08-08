@@ -23,6 +23,7 @@
 
         <com.mercadopago.views.MPTextView
             android:layout_width="wrap_content"
+            android:gravity="center"
             android:layout_gravity="center_horizontal"
             android:layout_height="wrap_content"
             android:text="@string/mpsdk_error_title"
@@ -33,9 +34,9 @@
         <com.mercadopago.views.MPTextView
             android:id="@+id/mpsdkErrorMessage"
             android:layout_width="wrap_content"
-            android:gravity="bottom|center"
             android:layout_height="wrap_content"
             tools:text="@string/mpsdk_standard_error_message"
+            android:gravity="center"
             android:layout_gravity="center_horizontal|top"
             android:textColor="@color/mpsdk_dark_font_color"
             android:textSize="16dp"/>
@@ -43,9 +44,9 @@
         <com.mercadopago.views.MPTextView
             android:id="@+id/mpsdkErrorRetry"
             android:layout_width="wrap_content"
-            android:gravity="bottom|center"
             android:layout_height="wrap_content"
             android:text="@string/mpsdk_refresh_message"
+            android:gravity="center"
             android:layout_gravity="center_horizontal|top"
             android:textSize="25dp"
             android:padding="15dp"

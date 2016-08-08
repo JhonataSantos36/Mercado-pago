@@ -64,7 +64,7 @@
                         android:layout_marginBottom="18dp"
                         android:gravity="bottom|center"
                         android:textSize="15dp"
-                        android:text="@string/mpsdk_text_email_activity_congrat"/>
+                        tools:text="email@gmail.com"/>
 
                     <View
                         android:id="@+id/mpsdkTitleSeparator"
