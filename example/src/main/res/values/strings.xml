@@ -29,7 +29,7 @@
     <string name="simple_card_flow_label">Distintas pantallas</string>
     <string name="guessing_card_flow_label">Formulario con guessing</string>
     <string name="payment_received_congrats">"Felicitaciones, has recibido un pago. Su ID es "</string>
-    <string name="preference_creation_failed">Preference creation failed</string>
+    <string name="preference_creation_failed">Falló la creación de la preferencia</string>
     <string name="checkout_title">Integración rapidísima</string>
     <string name="checkout_description">¡Son solo 5 minutos! En ese tiempo, estarás probando Nuestro Checkout en tu aplicación.</string>
     <string name="pick_color">¡Elije un color!</string>

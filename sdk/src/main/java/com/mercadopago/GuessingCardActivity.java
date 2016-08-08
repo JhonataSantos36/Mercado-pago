@@ -1161,8 +1161,8 @@ public class GuessingCardActivity extends FrontCardActivity {
             public void onFocusChange(View v, boolean hasFocus) {
                 mFrontFragment.setFontColor();
                 if (hasFocus && (mCurrentEditingEditText.equals(CARD_EXPIRYDATE_INPUT) ||
-                    mCurrentEditingEditText.equals(CARD_IDENTIFICATION_INPUT) ||
-                    mCurrentEditingEditText.equals(CARD_SECURITYCODE_INPUT))) {
+                        mCurrentEditingEditText.equals(CARD_IDENTIFICATION_INPUT) ||
+                        mCurrentEditingEditText.equals(CARD_SECURITYCODE_INPUT))) {
                     MPTracker.getInstance().trackScreen("CARD_SECURITY_CODE", 2, mPublicKey, BuildConfig.VERSION_NAME, getActivity());
                     enableBackInputButton();
                     openKeyboard(mCardSecurityCodeEditText);
@@ -1533,35 +1533,35 @@ public class GuessingCardActivity extends FrontCardActivity {
 
     public void checkStartIssuersActivity() {
         mMercadoPago.getIssuers(mCurrentPaymentMethod.getId(), mPaymentMethodGuessingController.getSavedBin(),
-            new Callback<List<Issuer>>() {
-                @Override
-                public void success(List<Issuer> issuers) {
-                    if (isActivityActive()) {
-                        if (issuers.isEmpty()) {
-                            ErrorUtil.startErrorActivity(getActivity(), getString(R.string.mpsdk_standard_error_message), "issuers call is empty at GuessingCardActivity", false);
-                        } else if (issuers.size() == 1) {
-                            mSelectedIssuer = issuers.get(0);
-                            mIssuerFound = true;
-                            finishWithResult();
-                        } else {
-                            startIssuersActivity(issuers);
+                new Callback<List<Issuer>>() {
+                    @Override
+                    public void success(List<Issuer> issuers) {
+                        if (isActivityActive()) {
+                            if (issuers.isEmpty()) {
+                                ErrorUtil.startErrorActivity(getActivity(), getString(R.string.mpsdk_standard_error_message), "issuers call is empty at GuessingCardActivity", false);
+                            } else if (issuers.size() == 1) {
+                                mSelectedIssuer = issuers.get(0);
+                                mIssuerFound = true;
+                                finishWithResult();
+                            } else {
+                                startIssuersActivity(issuers);
+                            }
                         }
                     }
-                }
 
-                @Override
-                public void failure(ApiException apiException) {
-                    if (isActivityActive()) {
-                        setFailureRecovery(new FailureRecovery() {
-                            @Override
-                            public void recover() {
-                                checkStartIssuersActivity();
-                            }
-                        });
-                        ApiUtil.showApiExceptionError(getActivity(), apiException);
+                    @Override
+                    public void failure(ApiException apiException) {
+                        if (isActivityActive()) {
+                            setFailureRecovery(new FailureRecovery() {
+                                @Override
+                                public void recover() {
+                                    checkStartIssuersActivity();
+                                }
+                            });
+                            ApiUtil.showApiExceptionError(getActivity(), apiException);
+                        }
                     }
-                }
-            });
+                });
     }
 
     private void setIssuerDefaultAnimation() {
@@ -1574,13 +1574,13 @@ public class GuessingCardActivity extends FrontCardActivity {
 
     public void startIssuersActivity(final List<Issuer> issuers) {
         new MercadoPago.StartActivityBuilder()
-            .setActivity(getActivity())
-            .setPublicKey(mPublicKey)
-            .setPaymentMethod(mCurrentPaymentMethod)
-            .setToken(mToken)
-            .setIssuers(issuers)
-            .setDecorationPreference(mDecorationPreference)
-            .startIssuersActivity();
+                .setActivity(getActivity())
+                .setPublicKey(mPublicKey)
+                .setPaymentMethod(mCurrentPaymentMethod)
+                .setToken(mToken)
+                .setIssuers(issuers)
+                .setDecorationPreference(mDecorationPreference)
+                .startIssuersActivity();
         overridePendingTransition(R.anim.mpsdk_slide_right_to_left_in, R.anim.mpsdk_slide_right_to_left_out);
     }
 

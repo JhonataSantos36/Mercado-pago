@@ -129,11 +129,10 @@ public class VaultActivity extends AppCompatActivity {
 
             setFormGoButton(mSecurityCodeText);
 
-            MPTracker.getInstance().trackScreen("VAULT", 2, mMerchantPublicKey, BuildConfig.VERSION_NAME, this );
+            MPTracker.getInstance().trackScreen("VAULT", 2, mMerchantPublicKey, BuildConfig.VERSION_NAME, this);
 
             initPaymentFlow();
-        }
-        else {
+        } else {
             Intent returnIntent = new Intent();
             returnIntent.putExtra("message", "Invalid parameters");
             setResult(RESULT_CANCELED, returnIntent);
@@ -141,8 +140,7 @@ public class VaultActivity extends AppCompatActivity {
         }
     }
 
-    public void getActivityParameters()
-    {
+    public void getActivityParameters() {
         setAmount();
         mMerchantPublicKey = this.getIntent().getStringExtra("merchantPublicKey");
         mMerchantBaseUrl = this.getIntent().getStringExtra("merchantBaseUrl");
@@ -151,18 +149,19 @@ public class VaultActivity extends AppCompatActivity {
         mShowBankDeals = this.getIntent().getBooleanExtra("showBankDeals", true);
         mSite = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("site"), Site.class);
 
-        if(getIntent().getStringExtra("paymentPreference") != null) {
+        if (getIntent().getStringExtra("paymentPreference") != null) {
             mPaymentPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("paymentPreference"), PaymentPreference.class);
         }
 
         if (this.getIntent().getStringExtra("supportedPaymentTypes") != null) {
             Gson gson = new Gson();
-            Type listType = new TypeToken<List<String>>(){}.getType();
+            Type listType = new TypeToken<List<String>>() {
+            }.getType();
             mSupportedPaymentTypes = gson.fromJson(this.getIntent().getStringExtra("supportedPaymentTypes"), listType);
         }
 
         //Give priority to PaymentPreference over supported payment types
-        if(!isPaymentPreferenceSet() && supportedPaymentTypesSet()) {
+        if (!isPaymentPreferenceSet() && supportedPaymentTypesSet()) {
             List<String> excludedPaymentTypes = new ArrayList<>();
             for (String type : PaymentTypes.getAllPaymentTypes()) {
                 if (!mSupportedPaymentTypes.contains(type)) {
@@ -353,12 +352,9 @@ public class VaultActivity extends AppCompatActivity {
                     startNewCardActivity();
                 }
 
-            }
-            else if (mTempPaymentMethod.getId().equals(getResources().getString(R.string.mpsdk_mp_app_id))) {
+            } else if (mTempPaymentMethod.getId().equals(getResources().getString(R.string.mpsdk_mp_app_id))) {
                 resolveMPAppNeeded();
-            }
-
-            else {  // Off-line methods
+            } else {  // Off-line methods
 
                 // Set selection status
                 mPayerCosts = null;
@@ -701,8 +697,7 @@ public class VaultActivity extends AppCompatActivity {
             mCardToken.setSecurityCode(mSecurityCodeText.getText().toString());
             mCardToken.validateSecurityCode(this, mSelectedPaymentMethod);
             mSecurityCodeText.setError(null);
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             mSecurityCodeText.setError(ex.getMessage());
             mSecurityCodeText.requestFocus();
             return;
@@ -721,8 +716,7 @@ public class VaultActivity extends AppCompatActivity {
         try {
             savedCardToken.validateSecurityCode(this, mSelectedCard);
             mSecurityCodeText.setError(null);
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             mSecurityCodeText.setError(ex.getMessage());
             mSecurityCodeText.requestFocus();
             return;

@@ -25,7 +25,7 @@ public class ApiUtil {
         } catch (Exception ex) {
             //Do nothing
         } finally {
-            if(apiException == null) {
+            if (apiException == null) {
                 apiException = new ApiException();
                 apiException.setStatus(response.code());
             }
@@ -68,11 +68,10 @@ public class ApiUtil {
         MPException mpException;
         String errorMessage;
 
-        if(!ApiUtil.checkConnection(activity)){
+        if (!ApiUtil.checkConnection(activity)) {
             errorMessage = activity.getString(R.string.mpsdk_no_connection_message);
             mpException = new MPException(errorMessage, true);
-        }
-        else {
+        } else {
             mpException = new MPException(apiException);
         }
         ErrorUtil.startErrorActivity(activity, mpException);
@@ -84,10 +83,9 @@ public class ApiUtil {
             try {
                 boolean HaveConnectedWifi = false;
                 boolean HaveConnectedMobile = false;
-                ConnectivityManager cm = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+                ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
                 NetworkInfo ni = cm.getActiveNetworkInfo();
-                if ( ni != null && ni.isConnected())
-                {
+                if (ni != null && ni.isConnected()) {
                     if (ni.getType() == ConnectivityManager.TYPE_WIFI)
                         if (ni.isConnectedOrConnecting())
                             HaveConnectedWifi = true;
@@ -97,12 +95,10 @@ public class ApiUtil {
                 }
 
                 return HaveConnectedWifi || HaveConnectedMobile;
-            }
-            catch (Exception ex) {
+            } catch (Exception ex) {
                 return false;
             }
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -110,7 +106,7 @@ public class ApiUtil {
     public static String getApiExceptionMessage(Context context, ApiException apiException) {
         String message;
 
-        if(apiException.getCause() != null && !apiException.getCause().isEmpty()) {
+        if (apiException.getCause() != null && !apiException.getCause().isEmpty()) {
             Cause cause = apiException.getCause().get(0);
             String errorCode = cause.getCode();
             switch (errorCode) {
@@ -181,8 +177,7 @@ public class ApiUtil {
                     message = context.getString(R.string.mpsdk_standard_error_message);
                     break;
             }
-        }
-        else {
+        } else {
             message = context.getString(R.string.mpsdk_standard_error_message);
         }
         return message;

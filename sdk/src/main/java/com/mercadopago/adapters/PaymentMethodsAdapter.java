@@ -14,7 +14,7 @@ import com.mercadopago.util.MercadoPagoUtil;
 
 import java.util.List;
 
-public class PaymentMethodsAdapter extends  RecyclerView.Adapter<PaymentMethodsAdapter.ViewHolder> {
+public class PaymentMethodsAdapter extends RecyclerView.Adapter<PaymentMethodsAdapter.ViewHolder> {
 
     private Activity mActivity;
     private List<PaymentMethod> mData;
@@ -45,7 +45,7 @@ public class PaymentMethodsAdapter extends  RecyclerView.Adapter<PaymentMethodsA
 
     @Override
     public PaymentMethodsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
-                                                            int viewType) {
+                                                               int viewType) {
 
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.mpsdk_row_simple_list, parent, false);
@@ -73,5 +73,7 @@ public class PaymentMethodsAdapter extends  RecyclerView.Adapter<PaymentMethodsA
         return mData.get(position);
     }
 
-    public View.OnClickListener getListener() { return mListener; }
+    public View.OnClickListener getListener() {
+        return mListener;
+    }
 }

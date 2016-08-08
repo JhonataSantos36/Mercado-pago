@@ -22,27 +22,29 @@ public class PaymentMethodSearchSmallRow extends PaymentMethodSearchRow {
     public PaymentMethodSearchSmallRow(Context context) {
         super(context);
     }
+
     public PaymentMethodSearchSmallRow(Context context, DecorationPreference decorationPreference) {
         super(context);
         mDecorationPreference = decorationPreference;
     }
+
     @Override
     public void drawPaymentMethod(PaymentMethodSearchItem item) {
-        if(item.hasDescription()) {
+        if (item.hasDescription()) {
             mDescription.setText(item.getDescription());
         }
-        if(item.hasComment()) {
+        if (item.hasComment()) {
             mComment.setText(item.getComment());
         }
         int resourceId = 0;
 
-        if(item.isIconRecommended()) {
+        if (item.isIconRecommended()) {
             resourceId = MercadoPagoUtil.getPaymentMethodSearchItemIcon(mContext, item.getId());
         }
 
-        if(resourceId != 0) {
+        if (resourceId != 0) {
             mIcon.setImageResource(resourceId);
-            if(itemNeedsTint(item)) {
+            if (itemNeedsTint(item)) {
                 setTintColor(mContext, mIcon);
             }
         } else {
@@ -58,10 +60,9 @@ public class PaymentMethodSearchSmallRow extends PaymentMethodSearchRow {
     }
 
     private void setTintColor(Context context, ImageView mIcon) {
-        if(mDecorationPreference != null && mDecorationPreference.hasColors()) {
+        if (mDecorationPreference != null && mDecorationPreference.hasColors()) {
             mIcon.setColorFilter(mDecorationPreference.getBaseColor());
-        }
-        else {
+        } else {
             mIcon.setColorFilter(ContextCompat.getColor(context, R.color.mpsdk_icon_image_color));
         }
     }

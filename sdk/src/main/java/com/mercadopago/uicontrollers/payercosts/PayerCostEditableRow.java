@@ -33,20 +33,19 @@ public class PayerCostEditableRow implements PayerCostViewController {
         this.mContext = context;
         this.mCurrencyId = currencyId;
 
-    } 
-    
+    }
+
     @Override
     public void drawPayerCost(PayerCost payerCost) {
         mPayerCost = payerCost;
         setInstallmentsText();
 
-        if(payerCost.getInstallmentRate().compareTo(BigDecimal.ZERO) == 0) {
+        if (payerCost.getInstallmentRate().compareTo(BigDecimal.ZERO) == 0) {
             mRateText.setVisibility(View.GONE);
-            if(payerCost.getInstallments() > 1) {
+            if (payerCost.getInstallments() > 1) {
                 mZeroRateText.setVisibility(View.VISIBLE);
             }
-        }
-        else {
+        } else {
             setAmountWithRateText();
         }
     }

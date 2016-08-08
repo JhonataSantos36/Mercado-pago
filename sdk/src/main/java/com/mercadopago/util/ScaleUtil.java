@@ -8,7 +8,7 @@ import android.content.Context;
 public class ScaleUtil {
     public static int getPxFromDp(int dpValue, Context context) {
         float scale = context.getResources().getDisplayMetrics().density;
-        int dpAsPixels = (int) (dpValue*scale + 0.5f);
+        int dpAsPixels = (int) (dpValue * scale + 0.5f);
         return dpAsPixels;
     }
 }

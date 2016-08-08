@@ -21,7 +21,7 @@ public class MPCardMaskUtil {
         String result = "";
         if (cardLength == CardInterface.CARD_NUMBER_AMEX_LENGTH) {
             StringBuffer sb = new StringBuffer();
-            for (int i = 0; i < 4 ; i++) {
+            for (int i = 0; i < 4; i++) {
                 char c = getCharOfCard(number, i);
                 sb.append(c);
             }
@@ -38,7 +38,7 @@ public class MPCardMaskUtil {
             result = sb.toString();
         } else if (cardLength == CardInterface.CARD_NUMBER_DINERS_LENGTH) {
             StringBuffer sb = new StringBuffer();
-            for (int i = 0; i < 4 ; i++) {
+            for (int i = 0; i < 4; i++) {
                 char c = getCharOfCard(number, i);
                 sb.append(c);
             }
@@ -56,7 +56,7 @@ public class MPCardMaskUtil {
         } else {
             StringBuffer sb = new StringBuffer();
             for (int i = 1; i <= cardLength; i++) {
-                sb.append(getCharOfCard(number, i-1));
+                sb.append(getCharOfCard(number, i - 1));
                 if (i % 4 == 0) {
                     sb.append(" ");
                 }
@@ -65,7 +65,6 @@ public class MPCardMaskUtil {
         }
         return result;
     }
-
 
 
     public static char getCharOfCard(String number, int i) {
@@ -103,8 +102,8 @@ public class MPCardMaskUtil {
     public static String buildIdentificationNumberOfTypeCPF(CharSequence number, int maxLength) {
         String result = "";
         StringBuffer sb = new StringBuffer();
-        for ( int i = 0; i < (maxLength + CPF_SEPARATOR_AMOUNT) && i < number.length(); i++) {
-            if (i == 3 || i  == 6) {
+        for (int i = 0; i < (maxLength + CPF_SEPARATOR_AMOUNT) && i < number.length(); i++) {
+            if (i == 3 || i == 6) {
                 sb.append(".");
             } else if (i == 9) {
                 sb.append("-");
@@ -118,7 +117,7 @@ public class MPCardMaskUtil {
     public static String buildIdentificationNumberOfTypeCNPJ(CharSequence number, int maxLength) {
         String result = "";
         StringBuffer sb = new StringBuffer();
-        for ( int i = 0; i < (maxLength + CNPJ_SEPARATOR_AMOUNT) && i < number.length(); i++) {
+        for (int i = 0; i < (maxLength + CNPJ_SEPARATOR_AMOUNT) && i < number.length(); i++) {
             if (i == 2 || i == 5) {
                 sb.append(".");
             } else if (i == 8) {

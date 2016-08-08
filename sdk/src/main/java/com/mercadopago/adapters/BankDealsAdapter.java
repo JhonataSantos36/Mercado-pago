@@ -15,7 +15,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-public class BankDealsAdapter extends  RecyclerView.Adapter<BankDealsAdapter.ViewHolder> {
+public class BankDealsAdapter extends RecyclerView.Adapter<BankDealsAdapter.ViewHolder> {
 
     private Activity mActivity;
     private List<BankDeal> mData;
@@ -93,9 +93,9 @@ public class BankDealsAdapter extends  RecyclerView.Adapter<BankDealsAdapter.Vie
 
         if (bankDeal.getPaymentMethods() != null) {
             String desc = "";
-            for (int i = 0; i < bankDeal.getPaymentMethods().size(); i++){
+            for (int i = 0; i < bankDeal.getPaymentMethods().size(); i++) {
                 desc += bankDeal.getPaymentMethods().get(i).getName();
-                desc +=" ";
+                desc += " ";
                 if (bankDeal.getPaymentMethods().size() > i + 2) {
                     desc += mActivity.getString(R.string.mpsdk_comma_separator) + " ";
                 } else if (bankDeal.getPaymentMethods().size() > i + 1) {

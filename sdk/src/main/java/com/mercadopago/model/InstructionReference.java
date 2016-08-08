@@ -36,7 +36,7 @@ public class InstructionReference {
 
     public String getFormattedReference() {
         StringBuilder stringBuilder = new StringBuilder();
-        if(fieldValue != null) {
+        if (fieldValue != null) {
             for (String string : fieldValue) {
                 stringBuilder.append(string);
                 if (fieldValue.indexOf(string) != fieldValue.size() - 1) {

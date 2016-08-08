@@ -35,10 +35,10 @@ public class PendingActivity extends MercadoPagoActivity {
 
     @Override
     protected void validateActivityParameters() throws IllegalStateException {
-        if(mMerchantPublicKey == null) {
+        if (mMerchantPublicKey == null) {
             throw new IllegalStateException("merchant public key not set");
         }
-        if(mPayment == null) {
+        if (mPayment == null) {
             throw new IllegalStateException("payment not set");
         }
     }
@@ -51,7 +51,7 @@ public class PendingActivity extends MercadoPagoActivity {
     }
 
     @Override
-    protected void initializeControls(){
+    protected void initializeControls() {
         mPendingSubtitle = (MPTextView) findViewById(R.id.mpsdkPendingSubtitle);
         mExit = (MPTextView) findViewById(R.id.mpsdkExitPending);
         mExit.setOnClickListener(new View.OnClickListener() {
@@ -63,12 +63,11 @@ public class PendingActivity extends MercadoPagoActivity {
     }
 
     @Override
-    protected void onValidStart(){
+    protected void onValidStart() {
         if (isStatusDetailValid()) {
             if (mPayment.getStatusDetail().equals(Payment.StatusCodes.STATUS_DETAIL_PENDING_CONTINGENCY)) {
                 mPendingSubtitle.setText(getString(R.string.mpsdk_subtitle_pending_contingency));
-            }
-            else if (mPayment.getStatusDetail().equals(Payment.StatusCodes.STATUS_DETAIL_PENDING_REVIEW_MANUAL)) {
+            } else if (mPayment.getStatusDetail().equals(Payment.StatusCodes.STATUS_DETAIL_PENDING_REVIEW_MANUAL)) {
                 //TODO review subtitle
                 mPendingSubtitle.setText(getString(R.string.mpsdk_subtitle_pending_contingency));
             }
@@ -78,11 +77,11 @@ public class PendingActivity extends MercadoPagoActivity {
     }
 
     @Override
-    protected void onInvalidStart(String errorMessage){
-        ErrorUtil.startErrorActivity(this, getString(R.string.mpsdk_standard_error_message), errorMessage,false);
+    protected void onInvalidStart(String errorMessage) {
+        ErrorUtil.startErrorActivity(this, getString(R.string.mpsdk_standard_error_message), errorMessage, false);
     }
 
-    private Boolean isStatusDetailValid(){
+    private Boolean isStatusDetailValid() {
         return !isEmpty(mPayment.getStatusDetail());
     }
 
@@ -96,10 +95,9 @@ public class PendingActivity extends MercadoPagoActivity {
     public void onBackPressed() {
         MPTracker.getInstance().trackEvent("PENDING", "BACK_PRESSED", 2, mMerchantPublicKey, BuildConfig.VERSION_NAME, this);
 
-        if(mBackPressedOnce) {
+        if (mBackPressedOnce) {
             finishWithOkResult();
-        }
-        else {
+        } else {
             Snackbar.make(mExit, getString(R.string.mpsdk_press_again_to_leave), Snackbar.LENGTH_LONG).show();
             mBackPressedOnce = true;
             resetBackPressedOnceIn(4000);

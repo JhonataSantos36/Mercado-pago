@@ -35,7 +35,7 @@ public class CardBackFragment extends android.support.v4.app.Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mActivity = (CardInterface)getActivity();
+        mActivity = (CardInterface) getActivity();
     }
 
     @Override
@@ -67,7 +67,7 @@ public class CardBackFragment extends android.support.v4.app.Fragment {
 
     private void decorate() {
         int cardShadowColor = ContextCompat.getColor(getContext(), R.color.mpsdk_color_new_card_form_background);
-        if(mDecorationPreference != null && mDecorationPreference.hasColors()) {
+        if (mDecorationPreference != null && mDecorationPreference.hasColors()) {
             cardShadowColor = mDecorationPreference.getLighterColor();
         }
         GradientDrawable cardShadowRounded = (GradientDrawable) ContextCompat.getDrawable(getActivity(), R.drawable.mpsdk_card_shadow_rounded);
@@ -79,7 +79,7 @@ public class CardBackFragment extends android.support.v4.app.Fragment {
         populateCardColor();
         populateCardSecurityCode();
     }
-    
+
     public void onSecurityTextChanged(CharSequence s) {
         mCardSecurityCodeTextView.setText(buildSecurityCode(mActivity.getSecurityCodeLength(), s));
     }
@@ -115,7 +115,7 @@ public class CardBackFragment extends android.support.v4.app.Fragment {
         if (s == null || s.length() == 0) {
             return BASE_BACK_SECURITY_CODE;
         }
-        for (int i = 0; i < cardLength ; i++) {
+        for (int i = 0; i < cardLength; i++) {
             char c = getCharOfCard(s, i);
             sb.append(c);
         }

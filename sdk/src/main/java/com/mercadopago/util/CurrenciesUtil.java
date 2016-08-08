@@ -26,7 +26,7 @@ public class CurrenciesUtil {
     public static final String CURRENCY_USA = "USD";
 
 
-    private static Map<String, Currency> currenciesList = new HashMap<String, Currency>(){{
+    private static Map<String, Currency> currenciesList = new HashMap<String, Currency>() {{
         put(CURRENCY_ARGENTINA, new Currency(CURRENCY_ARGENTINA, "Peso argentino", "$", 2, ",".charAt(0), ".".charAt(0)));
         put(CURRENCY_BRAZIL, new Currency(CURRENCY_BRAZIL, "Real", "R$", 2, ",".charAt(0), ".".charAt(0)));
         put(CURRENCY_CHILE, new Currency(CURRENCY_CHILE, "Peso chileno", "$", 0, ",".charAt(0), ".".charAt(0)));
@@ -87,24 +87,24 @@ public class CurrenciesUtil {
 
     private static String getSpannedString(Currency currency, String formattedAmount, boolean symbolUp, boolean decimalsUp) {
 
-        if(formattedAmount.contains(currency.getSymbol())) {
+        if (formattedAmount.contains(currency.getSymbol())) {
             formattedAmount = formattedAmount.replace(currency.getSymbol(), "");
         }
 
         int decimalDivisionIndex = formattedAmount.indexOf(currency.getDecimalSeparator());
         String wholeNumber = formattedAmount.substring(0, decimalDivisionIndex);
-        String decimals = formattedAmount.substring(decimalDivisionIndex+1, formattedAmount.length());
+        String decimals = formattedAmount.substring(decimalDivisionIndex + 1, formattedAmount.length());
 
         StringBuilder htmlFormatBuilder = new StringBuilder();
 
-        if(symbolUp) {
+        if (symbolUp) {
             htmlFormatBuilder.append("<sup><small><small>" + currency.getSymbol() + " </small></small></sup>");
         } else {
             htmlFormatBuilder.append(currency.getSymbol());
         }
         htmlFormatBuilder.append(wholeNumber);
 
-        if(decimalsUp) {
+        if (decimalsUp) {
             htmlFormatBuilder.append("<sup><small><small> " + decimals + "</small></small></sup>");
         } else {
             htmlFormatBuilder.append(decimals);
@@ -117,23 +117,22 @@ public class CurrenciesUtil {
         Spanned spannedAmount;
         Currency currency = currenciesList.get(currencyId);
         String formattedAmount = formatNumber(amount, currencyId);
-        if(formattedAmount != null) {
+        if (formattedAmount != null) {
             String spannedString = getSpannedString(currency, formattedAmount, true, true);
 
             String formattedText = originalText;
-            if(originalText.contains(formattedAmount)) {
+            if (originalText.contains(formattedAmount)) {
                 formattedText = originalText.replace(formattedAmount, spannedString);
             }
             spannedAmount = Html.fromHtml(formattedText);
-        }
-        else {
+        } else {
             spannedAmount = Html.fromHtml(originalText);
         }
         return spannedAmount;
     }
 
     public static boolean isValidCurrency(String currencyId) {
-       return !isEmpty(currencyId) && currenciesList.containsKey(currencyId);
+        return !isEmpty(currencyId) && currenciesList.containsKey(currencyId);
     }
 
     public static List<Currency> getAllCurrencies() {

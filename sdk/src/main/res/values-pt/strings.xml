@@ -89,7 +89,6 @@
     <string name="mpsdk_text_terms_and_conditions_end">do Mercado Pago</string>
     <string name="mpsdk_title_activity_congrat">Pronto, seu pagamento foi creditado!</string>
     <string name="mpsdk_subtitle_action_activity_congrat">Enviaremos os dados para</string>
-    <string name="mpsdk_text_email_activity_congrat">juan-carlos@email.com</string>
     <string name="mpsdk_text_state_acount_activity_congrat">Em sua declaração, você verá a posse como MERCADO PAGO</string>
     <string name="mpsdk_text_to_mercado_pago">para o MercadoPago</string>
     <string name="mpsdk_title_activity_call_for_authorize">Você deve autorizar junto ao</string>

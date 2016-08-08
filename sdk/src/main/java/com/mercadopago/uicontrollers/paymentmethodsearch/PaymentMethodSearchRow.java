@@ -48,19 +48,19 @@ public class PaymentMethodSearchRow implements PaymentMethodSearchViewController
     }
 
     public void drawPaymentMethod(PaymentMethodSearchItem item) {
-        if(item.hasDescription()) {
+        if (item.hasDescription()) {
             mDescription.setText(item.getDescription());
         }
-        if(item.hasComment()) {
+        if (item.hasComment()) {
             mComment.setText(item.getComment());
         }
         int resourceId = 0;
 
-        if(item.isIconRecommended()) {
+        if (item.isIconRecommended()) {
             resourceId = MercadoPagoUtil.getPaymentMethodSearchItemIcon(mContext, item.getId());
         }
 
-        if(resourceId != 0) {
+        if (resourceId != 0) {
             mIcon.setImageResource(resourceId);
         } else {
             mIcon.setVisibility(View.GONE);

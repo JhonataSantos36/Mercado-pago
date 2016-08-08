@@ -35,7 +35,7 @@ public class TermsAndConditionsActivity extends MercadoPagoActivity {
 
     @Override
     protected void validateActivityParameters() throws IllegalStateException {
-        if(mBankDealsTermsAndConditions == null
+        if (mBankDealsTermsAndConditions == null
                 && mSiteId == null) {
             throw new IllegalStateException("bank deal terms or site id required");
         }
@@ -83,8 +83,7 @@ public class TermsAndConditionsActivity extends MercadoPagoActivity {
         if (!isEmpty(mBankDealsTermsAndConditions)) {
             mMPTermsAndConditionsView.setVisibility(View.GONE);
             showBankDealsTermsAndConditions();
-        }
-        else if(!isEmpty(mSiteId)){
+        } else if (!isEmpty(mSiteId)) {
             mBankDealsTermsAndConditionsView.setVisibility(View.GONE);
             showMPTermsAndConditions();
         }
@@ -103,13 +102,11 @@ public class TermsAndConditionsActivity extends MercadoPagoActivity {
                 mMPTermsAndConditionsView.setVisibility(View.VISIBLE);
             }
         });
-        if(mSiteId.equals("MLA")) {
+        if (mSiteId.equals("MLA")) {
             mTermsAndConditionsWebView.loadUrl("https://www.mercadopago.com.ar/ayuda/terminos-y-condiciones_299");
-        }
-        else if (mSiteId.equals("MLM")){
+        } else if (mSiteId.equals("MLM")) {
             mTermsAndConditionsWebView.loadUrl("https://www.mercadopago.com.mx/ayuda/terminos-y-condiciones_715");
-        }
-        else {
+        } else {
             finish();
         }
     }

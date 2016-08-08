@@ -42,33 +42,31 @@ public class PaymentResultActivity extends Activity {
     }
 
     protected void validateActivityParameters() throws IllegalStateException {
-        if(mMerchantPublicKey == null) {
+        if (mMerchantPublicKey == null) {
             throw new IllegalStateException("merchant public key not set");
         }
-        if(mPayment == null) {
+        if (mPayment == null) {
             throw new IllegalStateException("payment not set");
         }
-        if(mPaymentMethod == null) {
+        if (mPaymentMethod == null) {
             throw new IllegalStateException("payment method not set");
         }
-        if(!isStatusValid()) {
+        if (!isStatusValid()) {
             throw new IllegalStateException("payment not does not have status");
         }
     }
 
-    protected void onValidStart(){
-        if(mPayment.getStatus().equals(Payment.StatusCodes.STATUS_IN_PROCESS)) {
+    protected void onValidStart() {
+        if (mPayment.getStatus().equals(Payment.StatusCodes.STATUS_IN_PROCESS)) {
             startPendingActivity();
-        }
-        else if (MercadoPagoUtil.isCard(mPaymentMethod.getPaymentTypeId())) {
+        } else if (MercadoPagoUtil.isCard(mPaymentMethod.getPaymentTypeId())) {
             startCardPaymentTypeResult();
-        }
-        else {
+        } else {
             startInstructionsActivity();
         }
     }
 
-    private void startCardPaymentTypeResult(){
+    private void startCardPaymentTypeResult() {
         if (isStatusDetailValid()) {
             if (mPayment.getStatus().equals(Payment.StatusCodes.STATUS_APPROVED)) {
                 startCongratsActivity();
@@ -79,14 +77,14 @@ public class PaymentResultActivity extends Activity {
                     startRejectionActivity();
                 }
             } else {
-                ErrorUtil.startErrorActivity(this, getString(R.string.mpsdk_standard_error_message),false);
+                ErrorUtil.startErrorActivity(this, getString(R.string.mpsdk_standard_error_message), false);
             }
         } else {
-            ErrorUtil.startErrorActivity(this, getString(R.string.mpsdk_standard_error_message),false);
+            ErrorUtil.startErrorActivity(this, getString(R.string.mpsdk_standard_error_message), false);
         }
     }
 
-    private void startInstructionsActivity(){
+    private void startInstructionsActivity() {
         new MercadoPago.StartActivityBuilder()
                 .setPublicKey(mMerchantPublicKey)
                 .setActivity(this)
@@ -95,7 +93,7 @@ public class PaymentResultActivity extends Activity {
                 .startInstructionsActivity();
     }
 
-    private void startCongratsActivity(){
+    private void startCongratsActivity() {
         new MercadoPago.StartActivityBuilder()
                 .setPublicKey(mMerchantPublicKey)
                 .setActivity(this)
@@ -104,7 +102,7 @@ public class PaymentResultActivity extends Activity {
                 .startCongratsActivity();
     }
 
-    private void startCallForAuthorizeActivity(){
+    private void startCallForAuthorizeActivity() {
         new MercadoPago.StartActivityBuilder()
                 .setPublicKey(mMerchantPublicKey)
                 .setActivity(this)
@@ -113,7 +111,7 @@ public class PaymentResultActivity extends Activity {
                 .startCallForAuthorizeActivity();
     }
 
-    private void startPendingActivity(){
+    private void startPendingActivity() {
         new MercadoPago.StartActivityBuilder()
                 .setPublicKey(mMerchantPublicKey)
                 .setActivity(this)
@@ -121,7 +119,7 @@ public class PaymentResultActivity extends Activity {
                 .startPendingActivity();
     }
 
-    private void startRejectionActivity(){
+    private void startRejectionActivity() {
         new MercadoPago.StartActivityBuilder()
                 .setPublicKey(mMerchantPublicKey)
                 .setActivity(this)
@@ -130,38 +128,34 @@ public class PaymentResultActivity extends Activity {
                 .startRejectionActivity();
     }
 
-    private Boolean isStatusValid(){
+    private Boolean isStatusValid() {
         return !isEmpty(mPayment.getStatus());
     }
 
-    private Boolean isStatusDetailValid(){
+    private Boolean isStatusDetailValid() {
         return !isEmpty(mPayment.getStatusDetail());
     }
 
-    protected void onInvalidStart(String errorMessage){
-        ErrorUtil.startErrorActivity(this, getString(R.string.mpsdk_standard_error_message), errorMessage,false);
+    protected void onInvalidStart(String errorMessage) {
+        ErrorUtil.startErrorActivity(this, getString(R.string.mpsdk_standard_error_message), errorMessage, false);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == MercadoPago.CONGRATS_REQUEST_CODE) {
+        if (requestCode == MercadoPago.CONGRATS_REQUEST_CODE) {
             finishWithOkResult();
-        }
-        else if (requestCode == MercadoPago.PENDING_REQUEST_CODE) {
+        } else if (requestCode == MercadoPago.PENDING_REQUEST_CODE) {
             finishWithOkResult();
-        }
-        else if (requestCode == MercadoPago.REJECTION_REQUEST_CODE) {
+        } else if (requestCode == MercadoPago.REJECTION_REQUEST_CODE) {
             resolveRequest(resultCode, data);
-        }
-        else if (requestCode == MercadoPago.CALL_FOR_AUTHORIZE_REQUEST_CODE) {
+        } else if (requestCode == MercadoPago.CALL_FOR_AUTHORIZE_REQUEST_CODE) {
             resolveRequest(resultCode, data);
-        }
-        else if (requestCode == MercadoPago.INSTRUCTIONS_REQUEST_CODE) {
+        } else if (requestCode == MercadoPago.INSTRUCTIONS_REQUEST_CODE) {
             finishWithOkResult();
         }
     }
 
-    private void resolveRequest(int resultCode, Intent data){
+    private void resolveRequest(int resultCode, Intent data) {
         if (resultCode == RESULT_CANCELED && data != null) {
             finishWithCancelResult(data);
         } else {

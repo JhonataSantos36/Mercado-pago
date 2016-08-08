@@ -24,12 +24,12 @@ import java.util.List;
 
 public class Step1Activity extends ExampleActivity {
 
-    protected List<String> mExcludedPaymentTypeIds = new ArrayList<String>(){{
+    protected List<String> mExcludedPaymentTypeIds = new ArrayList<String>() {{
         add(PaymentTypes.TICKET);
         add(PaymentTypes.DIGITAL_CURRENCY);
     }};
 
-    protected List<String> mExcludedPaymentMethodIds = new ArrayList<String>(){{
+    protected List<String> mExcludedPaymentMethodIds = new ArrayList<String>() {{
         add(PaymentMethods.ARGENTINA.VISA);
     }};
     protected Activity mActivity;

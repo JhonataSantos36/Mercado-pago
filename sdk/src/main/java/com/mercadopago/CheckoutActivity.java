@@ -157,7 +157,7 @@ public class CheckoutActivity extends MercadoPagoActivity {
                 mCheckoutPreference = checkoutPreference;
 
                 try {
-                    if(isActivityActive()) {
+                    if (isActivityActive()) {
                         validatePreference();
                         initializeCheckout();
                     }
@@ -184,7 +184,7 @@ public class CheckoutActivity extends MercadoPagoActivity {
 
     private void validatePreference() throws CheckoutPreferenceException {
         mCheckoutPreference.validate();
-        if(!mCheckoutPreference.getId().equals(mCheckoutPreferenceId)) {
+        if (!mCheckoutPreference.getId().equals(mCheckoutPreferenceId)) {
             throw new CheckoutPreferenceException(CheckoutPreferenceException.PREF_ID_NOT_MATCHING_REQUESTED);
         }
     }
@@ -200,10 +200,9 @@ public class CheckoutActivity extends MercadoPagoActivity {
         String currencyId = mCheckoutPreference.getItems().get(0).getCurrencyId();
         String pictureUrl = mCheckoutPreference.getItems().get(0).getPictureUrl();
 
-        if(isCustomColorSet()) {
+        if (isCustomColorSet()) {
             mShoppingCartFragment = ShoppingCartFragment.newInstance(pictureUrl, mPurchaseTitle, mCheckoutPreference.getAmount(), currencyId, mDecorationPreference);
-        }
-        else {
+        } else {
             mShoppingCartFragment = ShoppingCartFragment.newInstance(pictureUrl, mPurchaseTitle, mCheckoutPreference.getAmount(), currencyId);
         }
         getSupportFragmentManager()
@@ -212,18 +211,17 @@ public class CheckoutActivity extends MercadoPagoActivity {
                 .show(mShoppingCartFragment)
                 .commitAllowingStateLoss();
     }
-    
+
     private String getPurchaseTitleFromPreference() {
         StringBuilder purchaseTitle = new StringBuilder();
         int itemListSize = mCheckoutPreference.getItems().size();
 
-        if(itemListSize == 1) {
+        if (itemListSize == 1) {
             purchaseTitle.append(mCheckoutPreference.getItems().get(0).getTitle());
-        }
-        else {
-            for(Item item : mCheckoutPreference.getItems()){
+        } else {
+            for (Item item : mCheckoutPreference.getItems()) {
                 purchaseTitle.append(item.getTitle());
-                if(!item.equals(mCheckoutPreference.getItems().get(itemListSize-1))) {
+                if (!item.equals(mCheckoutPreference.getItems().get(itemListSize - 1))) {
                     purchaseTitle.append(", ");
                 }
             }
@@ -233,10 +231,9 @@ public class CheckoutActivity extends MercadoPagoActivity {
 
     @Override
     protected void validateActivityParameters() throws IllegalStateException {
-        if(isEmpty(mMerchantPublicKey)) {
+        if (isEmpty(mMerchantPublicKey)) {
             throw new IllegalStateException("public key not set");
-        }
-        else if (isEmpty(mCheckoutPreferenceId)) {
+        } else if (isEmpty(mCheckoutPreferenceId)) {
             throw new IllegalStateException("preference id not set");
         }
     }
@@ -246,10 +243,10 @@ public class CheckoutActivity extends MercadoPagoActivity {
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        if(isCustomColorSet()) {
+        if (isCustomColorSet()) {
             mToolbar.setBackgroundColor(getCustomBaseColor());
         }
-        if(isDarkFontEnabled()) {
+        if (isDarkFontEnabled()) {
             TextView title = (TextView) findViewById(R.id.mpsdkTitle);
             title.setTextColor(getDarkFontColor());
         }
@@ -302,22 +299,19 @@ public class CheckoutActivity extends MercadoPagoActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == MercadoPago.PAYMENT_VAULT_REQUEST_CODE) {
+        if (requestCode == MercadoPago.PAYMENT_VAULT_REQUEST_CODE) {
             resolvePaymentVaultRequest(resultCode, data);
-        }
-        else if (requestCode == MercadoPago.RESULT_REQUEST_CODE) {
+        } else if (requestCode == MercadoPago.RESULT_REQUEST_CODE) {
             resolveResultRequest(resultCode, data);
-        }
-        else if (requestCode == MercadoPago.INSTALLMENTS_REQUEST_CODE) {
+        } else if (requestCode == MercadoPago.INSTALLMENTS_REQUEST_CODE) {
             resolveInstallmentsRequest(resultCode, data);
-        }
-        else {
+        } else {
             resolveErrorRequest(resultCode, data);
         }
     }
 
     private void resolvePaymentVaultRequest(int resultCode, Intent data) {
-        if(resultCode == RESULT_OK) {
+        if (resultCode == RESULT_OK) {
             mSelectedIssuer = JsonUtil.getInstance().fromJson(data.getStringExtra("issuer"), Issuer.class);
             mSelectedPayerCost = JsonUtil.getInstance().fromJson(data.getStringExtra("payerCost"), PayerCost.class);
             mCreatedToken = JsonUtil.getInstance().fromJson(data.getStringExtra("token"), Token.class);
@@ -327,16 +321,14 @@ public class CheckoutActivity extends MercadoPagoActivity {
 
             showReviewAndConfirm();
             showRegularLayout();
-        }
-        else {
-            if(!mPaymentMethodEditionRequested) {
+        } else {
+            if (!mPaymentMethodEditionRequested) {
                 Intent returnIntent = new Intent();
-                MPTracker.getInstance().trackEvent("PAYMENT_VAULT","CANCELED", 3,mMerchantPublicKey, mCheckoutPreference.getSiteId(), BuildConfig.VERSION_NAME,this);
+                MPTracker.getInstance().trackEvent("PAYMENT_VAULT", "CANCELED", 3, mMerchantPublicKey, mCheckoutPreference.getSiteId(), BuildConfig.VERSION_NAME, this);
 
                 setResult(RESULT_CANCELED, returnIntent);
                 finish();
-            }
-            else {
+            } else {
                 animateBackFromPaymentEdition();
             }
         }
@@ -354,21 +346,18 @@ public class CheckoutActivity extends MercadoPagoActivity {
                 //TODO mandar a ingrese de nuevo el código de seguridad
                 startPaymentVaultActivity();
             }
-        }
-        else {
+        } else {
             finishWithPaymentResult();
         }
     }
 
     private void resolveErrorRequest(int resultCode, Intent data) {
-        if(resultCode == RESULT_OK) {
+        if (resultCode == RESULT_OK) {
             recoverFromFailure();
-        }
-        else if(noUserInteractionReached()) {
+        } else if (noUserInteractionReached()) {
             setResult(RESULT_CANCELED, data);
             finish();
-        }
-        else {
+        } else {
             showRegularLayout();
         }
     }
@@ -409,7 +398,7 @@ public class CheckoutActivity extends MercadoPagoActivity {
         mPaymentMethodRow.initializeControls();
         mPaymentMethodRow.drawPaymentMethod();
 
-        if(!isUniquePaymentMethod()) {
+        if (!isUniquePaymentMethod()) {
             mPaymentMethodRow.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -422,15 +411,13 @@ public class CheckoutActivity extends MercadoPagoActivity {
     }
 
     private void setPaymentMethodRowController() {
-        if(MercadoPagoUtil.isCard(mSelectedPaymentMethod.getPaymentTypeId())) {
+        if (MercadoPagoUtil.isCard(mSelectedPaymentMethod.getPaymentTypeId())) {
             mPaymentMethodRow = ViewControllerFactory.getPaymentMethodOnEditionViewController(this, mSelectedPaymentMethod, mCreatedToken);
-        }
-        else {
+        } else {
             PaymentMethodSearchItem item = mPaymentMethodSearch.getSearchItemByPaymentMethod(mSelectedPaymentMethod);
-            if(item != null) {
+            if (item != null) {
                 mPaymentMethodRow = ViewControllerFactory.getPaymentMethodOffEditionViewController(this, item);
-            }
-            else {
+            } else {
                 mPaymentMethodRow = ViewControllerFactory.getPaymentMethodOffEditionViewController(this, mSelectedPaymentMethod);
             }
         }
@@ -440,7 +427,7 @@ public class CheckoutActivity extends MercadoPagoActivity {
 
         mPayerCostLayout.removeAllViews();
 
-        if(mSelectedPayerCost != null && mCheckoutPreference != null) {
+        if (mSelectedPayerCost != null && mCheckoutPreference != null) {
             mPaymentMethodRow.showSeparator();
 
             mPayerCostRow = ViewControllerFactory.getPayerCostEditionViewController(this, mCheckoutPreference.getItems().get(0).getCurrencyId());
@@ -490,11 +477,9 @@ public class CheckoutActivity extends MercadoPagoActivity {
 
     private BigDecimal getTotalAmount() {
         BigDecimal amount = new BigDecimal(0);
-        if(mSelectedPayerCost != null)
-        {
+        if (mSelectedPayerCost != null) {
             amount = amount.add(mSelectedPayerCost.getTotalAmount());
-        }
-        else {
+        } else {
             amount = mCheckoutPreference.getAmount();
         }
         return amount;
@@ -532,6 +517,12 @@ public class CheckoutActivity extends MercadoPagoActivity {
 
             @Override
             public void failure(ApiException apiException) {
+                setFailureRecovery(new FailureRecovery() {
+                    @Override
+                    public void recover() {
+                        createPayment();
+                    }
+                });
                 resolvePaymentFailure(apiException);
             }
         });
@@ -544,31 +535,31 @@ public class CheckoutActivity extends MercadoPagoActivity {
         paymentIntent.setPaymentMethodId(mSelectedPaymentMethod.getId());
         paymentIntent.setEmail(mCheckoutPreference.getPayer().getEmail());
 
-        if(mCreatedToken != null) {
+        if (mCreatedToken != null) {
             paymentIntent.setTokenId(mCreatedToken.getId());
         }
-        if(mSelectedPayerCost != null)  {
+        if (mSelectedPayerCost != null) {
             paymentIntent.setInstallments(mSelectedPayerCost.getInstallments());
         }
-        if(mSelectedIssuer != null) {
+        if (mSelectedIssuer != null) {
             paymentIntent.setIssuerId(mSelectedIssuer.getId());
         }
 
-        if(!existsTransactionId() || !MercadoPagoUtil.isCard(mSelectedPaymentMethod.getPaymentTypeId())) {
+        if (!existsTransactionId() || !MercadoPagoUtil.isCard(mSelectedPaymentMethod.getPaymentTypeId())) {
             mTransactionId = createNewTransactionId();
         }
 
         paymentIntent.setTransactionId(mTransactionId);
         return paymentIntent;
     }
-    
-    private void startResultActivity(){
+
+    private void startResultActivity() {
         new MercadoPago.StartActivityBuilder()
-            .setPublicKey(mMerchantPublicKey)
-            .setActivity(getActivity())
-            .setPayment(mCreatedPayment)
-            .setPaymentMethod(mSelectedPaymentMethod)
-            .startPaymentResultActivity();
+                .setPublicKey(mMerchantPublicKey)
+                .setActivity(getActivity())
+                .setPayment(mCreatedPayment)
+                .setPaymentMethod(mSelectedPaymentMethod)
+                .startPaymentResultActivity();
     }
 
     private Long createNewTransactionId() {
@@ -584,14 +575,13 @@ public class CheckoutActivity extends MercadoPagoActivity {
     }
 
     private void resolvePaymentFailure(ApiException apiException) {
-        if(apiException.getStatus() != null) {
+        if (apiException.getStatus() != null) {
             String serverErrorFirstDigit = String.valueOf(ApiUtil.StatusCodes.INTERNAL_SERVER_ERROR).substring(0, 1);
 
             if (apiException.getStatus() == ApiUtil.StatusCodes.PROCESSING) {
                 startPaymentInProcessActivity();
                 cleanTransactionId();
-            }
-            else if (String.valueOf(apiException.getStatus()).startsWith(serverErrorFirstDigit)) {
+            } else if (String.valueOf(apiException.getStatus()).startsWith(serverErrorFirstDigit)) {
 
                 ApiUtil.showApiExceptionError(this, apiException);
                 setFailureRecovery(new FailureRecovery() {
@@ -600,18 +590,14 @@ public class CheckoutActivity extends MercadoPagoActivity {
                         createPayment();
                     }
                 });
-            }
-
-            else if (apiException.getStatus() == ApiUtil.StatusCodes.BAD_REQUEST) {
+            } else if (apiException.getStatus() == ApiUtil.StatusCodes.BAD_REQUEST) {
 
                 MPException mpException = new MPException(apiException);
                 ErrorUtil.startErrorActivity(this, mpException);
-            }
-            else {
+            } else {
                 ApiUtil.showApiExceptionError(this, apiException);
             }
-        }
-        else {
+        } else {
             ApiUtil.showApiExceptionError(this, apiException);
         }
         showRegularLayout();
@@ -632,18 +618,16 @@ public class CheckoutActivity extends MercadoPagoActivity {
 
     @Override
     public void onBackPressed() {
-        if(mPaymentMethodSearch == null || isUniquePaymentMethod()) {
+        if (mPaymentMethodSearch == null || isUniquePaymentMethod()) {
             onCancelClicked();
-        }
-        else if(mBackPressedOnce) {
-            MPTracker.getInstance().trackEvent("CHECKOUT","BACK_PRESSED", 3, mMerchantPublicKey, mCheckoutPreference.getSiteId(), BuildConfig.VERSION_NAME,this);
+        } else if (mBackPressedOnce) {
+            MPTracker.getInstance().trackEvent("CHECKOUT", "BACK_PRESSED", 3, mMerchantPublicKey, mCheckoutPreference.getSiteId(), BuildConfig.VERSION_NAME, this);
 
             mSnackbar.dismiss();
             mPaymentMethodEditionRequested = false;
             startPaymentVaultActivity();
             animateBackToPaymentVault();
-        }
-        else {
+        } else {
             mSnackbar = Snackbar.make(mPaymentMethodLayout, getString(R.string.mpsdk_press_again_confirm), Snackbar.LENGTH_LONG);
             mSnackbar.show();
             mBackPressedOnce = true;
@@ -656,14 +640,14 @@ public class CheckoutActivity extends MercadoPagoActivity {
     }
 
     private void showProgress() {
-        if(getSupportActionBar() != null) {
+        if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
         LayoutUtil.showProgressLayout(this);
     }
 
     private void showRegularLayout() {
-        if(getSupportActionBar() != null) {
+        if (getSupportActionBar() != null) {
             getSupportActionBar().show();
         }
         LayoutUtil.showRegularLayout(this);

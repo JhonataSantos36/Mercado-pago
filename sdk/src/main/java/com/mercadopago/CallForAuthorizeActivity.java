@@ -41,13 +41,13 @@ public class CallForAuthorizeActivity extends MercadoPagoActivity {
 
     @Override
     protected void validateActivityParameters() throws IllegalStateException {
-        if(mMerchantPublicKey == null) {
+        if (mMerchantPublicKey == null) {
             throw new IllegalStateException("merchant public key not set");
         }
-        if(mPayment == null) {
+        if (mPayment == null) {
             throw new IllegalStateException("payment not set");
         }
-        if(mPaymentMethod == null) {
+        if (mPaymentMethod == null) {
             throw new IllegalStateException("payment method not set");
         }
     }
@@ -60,7 +60,7 @@ public class CallForAuthorizeActivity extends MercadoPagoActivity {
     }
 
     @Override
-    protected void initializeControls(){
+    protected void initializeControls() {
         mCallForAuthTitle = (MPTextView) findViewById(R.id.mpsdkCallForAuthorizeTitle);
         mAuthorizedPaymentMethod = (MPTextView) findViewById(R.id.mpsdkAuthorizedPaymentMethod);
         mAuthorizedPaymentMethod.setOnClickListener(new View.OnClickListener() {
@@ -92,14 +92,14 @@ public class CallForAuthorizeActivity extends MercadoPagoActivity {
     }
 
     @Override
-    protected void onValidStart(){
+    protected void onValidStart() {
         setDescription();
         setAuthorized();
     }
 
     @Override
-    protected void onInvalidStart(String errorMessage){
-        ErrorUtil.startErrorActivity(this, getString(R.string.mpsdk_standard_error_message), errorMessage,false);
+    protected void onInvalidStart(String errorMessage) {
+        ErrorUtil.startErrorActivity(this, getString(R.string.mpsdk_standard_error_message), errorMessage, false);
     }
 
     private void finishWithOkResult() {
@@ -108,18 +108,17 @@ public class CallForAuthorizeActivity extends MercadoPagoActivity {
         finish();
     }
 
-    private void setAuthorized(){
-        if (isPaymentMethodValid()){
+    private void setAuthorized() {
+        if (isPaymentMethodValid()) {
             String message = getString(R.string.mpsdk_text_authorized_call_for_authorize) + " " + mPaymentMethod.getName() + " " + getString(R.string.mpsdk_text_and_he_authorized);
             mAuthorizedPaymentMethod.setText(message);
-        }
-        else{
+        } else {
             mAuthorizedPaymentMethod.setVisibility(View.GONE);
         }
     }
 
     private void setDescription() {
-        if (isPaymentMethodValid() && isCurrencyIdValid() && isTotalPaidAmountValid()){
+        if (isPaymentMethodValid() && isCurrencyIdValid() && isTotalPaidAmountValid()) {
             StringBuilder sb = new StringBuilder();
             sb.append(getString(R.string.mpsdk_title_activity_call_for_authorize));
             sb.append(" " + mPaymentMethod.getName() + " ");
@@ -129,37 +128,35 @@ public class CallForAuthorizeActivity extends MercadoPagoActivity {
 
             mCallForAuthTitle.setText(CurrenciesUtil.formatCurrencyInText(mPayment.getTransactionDetails().getTotalPaidAmount(),
                     mPayment.getCurrencyId(), sb.toString(), true, true));
-        }
-        else {
+        } else {
             mCallForAuthTitle.setText(getString(R.string.mpsdk_error_title_activity_call_for_authorize));
         }
     }
 
-    private Boolean isPaymentMethodValid(){
+    private Boolean isPaymentMethodValid() {
         return isPaymentMethodIdValid() && !isEmpty(mPaymentMethod.getName()) && !isEmpty(mPaymentMethod.getPaymentTypeId());
     }
 
-    private Boolean isPaymentMethodIdValid(){
+    private Boolean isPaymentMethodIdValid() {
         return !isEmpty(mPaymentMethod.getId()) && mPayment.getPaymentMethodId().equals(mPaymentMethod.getId());
     }
 
-    private Boolean isCurrencyIdValid(){
+    private Boolean isCurrencyIdValid() {
         return !isEmpty(mPayment.getCurrencyId()) && CurrenciesUtil.isValidCurrency(mPayment.getCurrencyId());
     }
 
-    private Boolean isTotalPaidAmountValid(){
+    private Boolean isTotalPaidAmountValid() {
         return mPayment.getTransactionDetails() != null && mPayment.getTransactionDetails().getTotalPaidAmount() != null
-                && (mPayment.getTransactionDetails().getTotalPaidAmount().compareTo(BigDecimal.ZERO))>0;
+                && (mPayment.getTransactionDetails().getTotalPaidAmount().compareTo(BigDecimal.ZERO)) > 0;
     }
 
     @Override
     public void onBackPressed() {
         MPTracker.getInstance().trackEvent("CALL_FOR_AUTHORIZE", "BACK_PRESSED", 2, mMerchantPublicKey, BuildConfig.VERSION_NAME, this);
 
-        if(mBackPressedOnce) {
+        if (mBackPressedOnce) {
             finishWithOkResult();
-        }
-        else {
+        } else {
             Snackbar.make(mExit, getString(R.string.mpsdk_press_again_to_leave), Snackbar.LENGTH_LONG).show();
             mBackPressedOnce = true;
             resetBackPressedOnceIn(4000);

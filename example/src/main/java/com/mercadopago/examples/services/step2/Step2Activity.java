@@ -20,7 +20,7 @@ import java.util.List;
 
 public class Step2Activity extends ExampleActivity {
 
-    protected List<String> mExcludedPaymentTypes = new ArrayList<String>(){{
+    protected List<String> mExcludedPaymentTypes = new ArrayList<String>() {{
         add(PaymentTypes.TICKET);
         add(PaymentTypes.ATM);
     }};
@@ -41,7 +41,7 @@ public class Step2Activity extends ExampleActivity {
                 ExamplesUtils.createPayment(this, data.getStringExtra("token"),
                         1, null, JsonUtil.getInstance().fromJson(data.getStringExtra("paymentMethod"), PaymentMethod.class), null);
 
-            } else if(data != null){
+            } else if (data != null) {
 
                 if (data.getStringExtra("apiException") != null) {
                     ApiException apiException = JsonUtil.getInstance().fromJson(data.getStringExtra("apiException"), ApiException.class);

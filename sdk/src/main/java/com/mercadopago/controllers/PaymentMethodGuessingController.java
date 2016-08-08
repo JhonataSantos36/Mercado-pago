@@ -15,7 +15,7 @@ public class PaymentMethodGuessingController {
     private String mPaymentTypeId;
 
     public PaymentMethodGuessingController(List<PaymentMethod> paymentMethods,
-                                           String paymentTypeId, List<String> excludedPaymentTypes){
+                                           String paymentTypeId, List<String> excludedPaymentTypes) {
         this.mAllPaymentMethods = paymentMethods;
         this.mExcludedPaymentTypes = excludedPaymentTypes;
         this.mPaymentTypeId = paymentTypeId;
@@ -40,20 +40,18 @@ public class PaymentMethodGuessingController {
         return mGuessedPaymentMethods;
     }
 
-    public String getSavedBin(){
+    public String getSavedBin() {
         return mSavedBin;
     }
 
     private List<PaymentMethod> getValidPaymentMethodForType(String paymentTypeId,
                                                              List<PaymentMethod> paymentMethods) {
-        if(paymentTypeId == null) {
+        if (paymentTypeId == null) {
             return paymentMethods;
-        }
-        else {
+        } else {
             List<PaymentMethod> validPaymentMethodsForType = new ArrayList<>();
-            for(PaymentMethod pm : paymentMethods)
-            {
-                if(pm.getPaymentTypeId().equals(paymentTypeId))
+            for (PaymentMethod pm : paymentMethods) {
+                if (pm.getPaymentTypeId().equals(paymentTypeId))
                     validPaymentMethodsForType.add(pm);
             }
             return validPaymentMethodsForType;

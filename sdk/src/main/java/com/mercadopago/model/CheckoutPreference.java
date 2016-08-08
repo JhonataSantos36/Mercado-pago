@@ -24,23 +24,17 @@ public class CheckoutPreference {
     private String siteId;
 
     public void validate() throws CheckoutPreferenceException {
-        if (!this.itemsValid())
-        {
+        if (!this.itemsValid()) {
             throw new CheckoutPreferenceException(CheckoutPreferenceException.INVALID_ITEM);
-        }
-        else if(this.isExpired()){
+        } else if (this.isExpired()) {
             throw new CheckoutPreferenceException(CheckoutPreferenceException.EXPIRED_PREFERENCE);
-        }
-        else if (!this.isActive()){
+        } else if (!this.isActive()) {
             throw new CheckoutPreferenceException(CheckoutPreferenceException.INACTIVE_PREFERENCE);
-        }
-        else if (!this.validInstallmentsPreference()){
+        } else if (!this.validInstallmentsPreference()) {
             throw new CheckoutPreferenceException(CheckoutPreferenceException.INVALID_INSTALLMENTS);
-        }
-        else if (!this.validPaymentTypeExclusion()){
+        } else if (!this.validPaymentTypeExclusion()) {
             throw new CheckoutPreferenceException(CheckoutPreferenceException.EXCLUDED_ALL_PAYMENT_TYPES);
-        }
-        else if (!this.hasEmail()){
+        } else if (!this.hasEmail()) {
             throw new CheckoutPreferenceException(CheckoutPreferenceException.NO_EMAIL_FOUND);
         }
     }
@@ -61,20 +55,17 @@ public class CheckoutPreference {
 
         boolean valid = true;
 
-        if(this.items == null || this.items.isEmpty() || items.get(0) == null)
-        {
+        if (this.items == null || this.items.isEmpty() || items.get(0) == null) {
             valid = false;
-        }
-        else if (isEmpty(items.get(0).getCurrencyId())) {
+        } else if (isEmpty(items.get(0).getCurrencyId())) {
             valid = false;
-        }
-        else {
+        } else {
             String firstCurrencyId = items.get(0).getCurrencyId();
             String currentCurrencyId;
 
-            for(Item item : items) {
+            for (Item item : items) {
                 currentCurrencyId = item.getCurrencyId();
-                if(!isItemValid(item) || !currentCurrencyId.equals(firstCurrencyId)) {
+                if (!isItemValid(item) || !currentCurrencyId.equals(firstCurrencyId)) {
                     valid = false;
                     break;
                 }
@@ -87,23 +78,17 @@ public class CheckoutPreference {
     private boolean isItemValid(Item item) {
         Boolean valid = true;
 
-        if(item == null) {
+        if (item == null) {
             valid = false;
-        }
-        else if(item.getId() == null) {
+        } else if (item.getId() == null) {
             valid = false;
-        }
-        else if(item.getQuantity() == null || item.getQuantity() < 1)
-        {
+        } else if (item.getQuantity() == null || item.getQuantity() < 1) {
             valid = false;
-        }
-        else if(item.getUnitPrice() == null || item.getUnitPrice().compareTo(BigDecimal.ZERO) < 0) {
+        } else if (item.getUnitPrice() == null || item.getUnitPrice().compareTo(BigDecimal.ZERO) < 0) {
             valid = false;
-        }
-        else if(item.getCurrencyId() == null) {
+        } else if (item.getCurrencyId() == null) {
             valid = false;
-        }
-        else if((!CurrenciesUtil.isValidCurrency(item.getCurrencyId()))){
+        } else if ((!CurrenciesUtil.isValidCurrency(item.getCurrencyId()))) {
             valid = false;
         }
         return valid;
@@ -129,14 +114,14 @@ public class CheckoutPreference {
         this.expirationDateFrom = date;
     }
 
-    public void setPaymentPreference(PaymentPreference paymentPreference){
+    public void setPaymentPreference(PaymentPreference paymentPreference) {
         this.paymentPreference = paymentPreference;
     }
 
     public BigDecimal getAmount() {
 
         BigDecimal totalAmount = BigDecimal.ZERO;
-        if(items != null) {
+        if (items != null) {
             for (Item item : items) {
                 if ((item != null) && (item.getUnitPrice() != null) && (item.getQuantity() != null)) {
                     totalAmount = totalAmount.add(item.getUnitPrice().multiply(new BigDecimal(item.getQuantity())));
@@ -173,35 +158,35 @@ public class CheckoutPreference {
     }
 
     public Integer getMaxInstallments() {
-        if(paymentPreference != null)
+        if (paymentPreference != null)
             return paymentPreference.getMaxInstallments();
         else
             return null;
     }
 
     public Integer getDefaultInstallments() {
-        if(paymentPreference != null)
+        if (paymentPreference != null)
             return paymentPreference.getDefaultInstallments();
         else
             return null;
     }
 
     public List<String> getExcludedPaymentMethods() {
-        if(paymentPreference != null)
+        if (paymentPreference != null)
             return paymentPreference.getExcludedPaymentMethodIds();
         else
             return null;
     }
 
     public List<String> getExcludedPaymentTypes() {
-        if(paymentPreference != null)
+        if (paymentPreference != null)
             return paymentPreference.getExcludedPaymentTypes();
         else
             return null;
     }
 
     public String getDefaultPaymentMethodId() {
-        if(paymentPreference != null)
+        if (paymentPreference != null)
             return paymentPreference.getDefaultPaymentMethodId();
         else
             return null;

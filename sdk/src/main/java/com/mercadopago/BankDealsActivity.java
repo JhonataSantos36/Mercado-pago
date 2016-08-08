@@ -74,7 +74,8 @@ public class BankDealsActivity extends MercadoPagoActivity {
     protected void getActivityParameters() {
         mMerchantPublicKey = getIntent().getStringExtra("merchantPublicKey");
         try {
-            Type listType = new TypeToken<List<BankDeal>>() {}.getType();
+            Type listType = new TypeToken<List<BankDeal>>() {
+            }.getType();
             mBankDeals = JsonUtil.getInstance().getGson().fromJson(this.getIntent().getStringExtra("bankDeals"), listType);
         } catch (Exception ex) {
             mBankDeals = null;
@@ -103,7 +104,7 @@ public class BankDealsActivity extends MercadoPagoActivity {
 
     @Override
     protected void validateActivityParameters() throws IllegalStateException {
-        if(mMerchantPublicKey == null) {
+        if (mMerchantPublicKey == null) {
             throw new IllegalStateException("public key not set");
         }
     }
@@ -139,11 +140,10 @@ public class BankDealsActivity extends MercadoPagoActivity {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == ErrorUtil.ERROR_REQUEST_CODE) {
-            if(resultCode == Activity.RESULT_OK) {
+        if (requestCode == ErrorUtil.ERROR_REQUEST_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
                 recoverFromFailure();
-            }
-            else {
+            } else {
                 finishWithCancelResult();
             }
         }

@@ -21,7 +21,7 @@ import java.util.List;
 
 public class Step3Activity extends ExampleActivity {
 
-    protected List<String> mExcludedPaymentTypes = new ArrayList<String>(){{
+    protected List<String> mExcludedPaymentTypes = new ArrayList<String>() {{
         add(PaymentTypes.TICKET);
         add(PaymentTypes.ATM);
     }};

@@ -155,7 +155,7 @@ public class NewCardActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        MPTracker.getInstance().trackEvent("NEW_CARD", "BACK_PRESSED", 2,mKey, BuildConfig.VERSION_NAME, this);
+        MPTracker.getInstance().trackEvent("NEW_CARD", "BACK_PRESSED", 2, mKey, BuildConfig.VERSION_NAME, this);
 
         Intent returnIntent = new Intent();
         returnIntent.putExtra("backButtonPressed", true);
@@ -190,7 +190,7 @@ public class NewCardActivity extends AppCompatActivity {
         boolean result = true;
         boolean requestFocus = true;
 
-        if(!validateCardNumber(cardToken, requestFocus)) {
+        if (!validateCardNumber(cardToken, requestFocus)) {
             result = false;
             requestFocus = false;
         }
@@ -210,7 +210,7 @@ public class NewCardActivity extends AppCompatActivity {
             requestFocus = false;
         }
 
-        if(!validateIdentificationNumber(cardToken, requestFocus)) {
+        if (!validateIdentificationNumber(cardToken, requestFocus)) {
             result = false;
         }
 
@@ -224,7 +224,7 @@ public class NewCardActivity extends AppCompatActivity {
             mCardNumber.setError(null);
         } catch (Exception ex) {
             mCardNumber.setError(ex.getMessage());
-            if(requestFocus)
+            if (requestFocus)
                 mCardNumber.requestFocus();
             return false;
         }
