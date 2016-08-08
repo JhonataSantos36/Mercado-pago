@@ -193,6 +193,26 @@ public class StaticMock {
         }
     }
 
+    public static String getInstallmentsWithUniquePayerCostJson() {
+
+        try {
+            return getFile(InstrumentationRegistry.getContext(), "mocks/installments_unique.json");
+
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+    public static String getMultipleInstallmentsJson() {
+
+        try {
+            return getFile(InstrumentationRegistry.getContext(), "mocks/installments_multiple.json");
+
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
 
     public static String getPayerCostsJson() {
 

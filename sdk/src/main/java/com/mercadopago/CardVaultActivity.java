@@ -34,11 +34,11 @@ public class CardVaultActivity extends ShowCardActivity {
 
     private View mCardBackground;
 
-    private PayerCost mPayerCost;
-    private PaymentPreference mPaymentPreference;
-    private List<PaymentMethod> mPaymentMethodList;
-    private Site mSite;
-    private Boolean mInstallmentsEnabled;
+    protected PayerCost mPayerCost;
+    protected PaymentPreference mPaymentPreference;
+    protected List<PaymentMethod> mPaymentMethodList;
+    protected Site mSite;
+    protected Boolean mInstallmentsEnabled;
 
     @Override
     protected void initializeControls() {

@@ -41,33 +41,22 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.clearText;
 import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
-import static android.support.test.espresso.action.ViewActions.pressImeActionButton;
-import static android.support.test.espresso.action.ViewActions.pressKey;
-import static android.support.test.espresso.action.ViewActions.typeTextIntoFocusedView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.Intents.intending;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static android.support.test.espresso.matcher.ViewMatchers.hasFocus;
-import static android.support.test.espresso.matcher.ViewMatchers.hasImeAction;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayingAtLeast;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static android.support.test.espresso.matcher.ViewMatchers.withSpinnerText;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static com.mercadopago.utils.ActivityResultUtil.assertFinishCalledWithResult;
-import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -120,7 +109,8 @@ public class GuessingCardActivityTest {
     public void getActivityParametersOnCreateIsValid() {
         addBankDealsCall();
         String paymentMethods = StaticMock.getPaymentMethodList();
-        Type listType = new TypeToken<List<PaymentMethod>>(){}.getType();
+        Type listType = new TypeToken<List<PaymentMethod>>() {
+        }.getType();
         List<PaymentMethod> paymentMethodList = JsonUtil.getInstance().getGson().fromJson(paymentMethods, listType);
         mFakeAPI.addResponseToQueue(paymentMethods, 200, "");
 
@@ -135,7 +125,8 @@ public class GuessingCardActivityTest {
     public void initializeWithPaymentMethodListIsValid() {
         addBankDealsCall();
         String paymentMethods = StaticMock.getPaymentMethodList();
-        Type listType = new TypeToken<List<PaymentMethod>>(){}.getType();
+        Type listType = new TypeToken<List<PaymentMethod>>() {
+        }.getType();
         List<PaymentMethod> paymentMethodList = JsonUtil.getInstance().getGson().fromJson(paymentMethods, listType);
 
         validStartIntent.putExtra("paymentMethodList", JsonUtil.getInstance().toJson(paymentMethodList));
@@ -151,7 +142,8 @@ public class GuessingCardActivityTest {
     public void initializeWithTokenIsValid() {
         addBankDealsCall();
         String paymentMethods = StaticMock.getPaymentMethodList();
-        Type listType = new TypeToken<List<PaymentMethod>>(){}.getType();
+        Type listType = new TypeToken<List<PaymentMethod>>() {
+        }.getType();
         List<PaymentMethod> paymentMethodList = JsonUtil.getInstance().getGson().fromJson(paymentMethods, listType);
         validStartIntent.putExtra("paymentMethodList", JsonUtil.getInstance().toJson(paymentMethodList));
         Token token = StaticMock.getTokenAmex();
@@ -165,7 +157,7 @@ public class GuessingCardActivityTest {
 
         onView(withId(R.id.mpsdkCardNumberTextView)).check(matches(withText(containsString(contained))));
         onView(withId(R.id.mpsdkCardholderNameView)).check(matches(withText(token.getCardholder().getName().toUpperCase())));
-        onView(withId(R.id.mpsdkCardHolderExpiryYear)).check(matches(withText(token.getExpirationYear().toString().substring(2,4))));
+        onView(withId(R.id.mpsdkCardHolderExpiryYear)).check(matches(withText(token.getExpirationYear().toString().substring(2, 4))));
         onView(withId(R.id.mpsdkCardHolderExpiryMonth)).check(matches(withText(token.getExpirationMonth().toString())));
         try {
             Thread.sleep(5000);
@@ -188,7 +180,7 @@ public class GuessingCardActivityTest {
         validStartIntent.putExtra("decorationPreference", JsonUtil.getInstance().toJson(decorationPreference));
 
         mTestRule.launchActivity(validStartIntent);
-                try {
+        try {
             Thread.sleep(5000);
         } catch (InterruptedException e) {
 
@@ -325,14 +317,16 @@ public class GuessingCardActivityTest {
         List<BankDeal> bankDeals = StaticMock.getBankDeals();
 
         String paymentMethods = StaticMock.getPaymentMethodList();
-        Type listType = new TypeToken<List<PaymentMethod>>(){}.getType();
+        Type listType = new TypeToken<List<PaymentMethod>>() {
+        }.getType();
         List<PaymentMethod> paymentMethodList = JsonUtil.getInstance().getGson().fromJson(paymentMethods, listType);
 
         String identificationTypes = StaticMock.getIdentificationTypeList();
-        Type listType2 = new TypeToken<List<IdentificationType>>(){}.getType();
+        Type listType2 = new TypeToken<List<IdentificationType>>() {
+        }.getType();
         List<IdentificationType> identificationTypeList = JsonUtil.getInstance().getGson().fromJson(identificationTypes, listType2);
 
-        for (DummyCard card: dummyCards) {
+        for (DummyCard card : dummyCards) {
             mFakeAPI.addResponseToQueue(bankDeals, 200, "");
             mFakeAPI.addResponseToQueue(paymentMethodList, 200, "");
             mFakeAPI.addResponseToQueue(identificationTypeList, 200, "");
@@ -363,14 +357,16 @@ public class GuessingCardActivityTest {
         List<BankDeal> bankDeals = new ArrayList<>();
 
         String paymentMethods = StaticMock.getPaymentMethodList();
-        Type listType = new TypeToken<List<PaymentMethod>>(){}.getType();
+        Type listType = new TypeToken<List<PaymentMethod>>() {
+        }.getType();
         List<PaymentMethod> paymentMethodList = JsonUtil.getInstance().getGson().fromJson(paymentMethods, listType);
 
         String identificationTypes = StaticMock.getIdentificationTypeList();
-        Type listType2 = new TypeToken<List<IdentificationType>>(){}.getType();
+        Type listType2 = new TypeToken<List<IdentificationType>>() {
+        }.getType();
         List<IdentificationType> identificationTypeList = JsonUtil.getInstance().getGson().fromJson(identificationTypes, listType2);
 
-        for (DummyCard card: dummyCards) {
+        for (DummyCard card : dummyCards) {
             mFakeAPI.addResponseToQueue(bankDeals, 200, "");
             mFakeAPI.addResponseToQueue(paymentMethodList, 200, "");
             mFakeAPI.addResponseToQueue(identificationTypeList, 200, "");
@@ -504,7 +500,7 @@ public class GuessingCardActivityTest {
         mTestRule.launchActivity(validStartIntent);
 
         cardNumberIsCurrentEditText();
-        for (String invalidNumber: CardTestUtils.getInvalidCardNumbers()) {
+        for (String invalidNumber : CardTestUtils.getInvalidCardNumbers()) {
             checkCardNumber(invalidNumber);
             cardNumberIsCurrentEditText();
         }
@@ -544,7 +540,7 @@ public class GuessingCardActivityTest {
         onView(withId(R.id.mpsdkCardholderName)).perform(typeText(StaticMock.DUMMY_CARDHOLDER_NAME));
         onView(withId(R.id.mpsdkNextButton)).perform(click());
         expiryDateIsCurrentEditText();
-        for (String invalidDate: CardTestUtils.getInvalidExpiryDates()) {
+        for (String invalidDate : CardTestUtils.getInvalidExpiryDates()) {
             checkExpiryDateIsInvalid(invalidDate, onView(withId(R.id.mpsdkNextButton)));
             checkExpiryDateIsInvalid(invalidDate, onView(withId(R.id.mpsdkBackButton)));
         }
@@ -574,7 +570,7 @@ public class GuessingCardActivityTest {
         onView(withId(R.id.mpsdkCardExpiryDate)).perform(typeText(StaticMock.DUMMY_EXPIRATION_DATE));
         onView(withId(R.id.mpsdkNextButton)).perform(click());
         securityCodeIsCurrentEditText();
-        for (String invalidSecurityCode: CardTestUtils.getInvalidSecurityCodes()) {
+        for (String invalidSecurityCode : CardTestUtils.getInvalidSecurityCodes()) {
             checkSecurityCodeIsInvalid(invalidSecurityCode, onView(withId(R.id.mpsdkNextButton)));
             checkSecurityCodeIsInvalid(invalidSecurityCode, onView(withId(R.id.mpsdkBackButton)));
         }
@@ -606,7 +602,7 @@ public class GuessingCardActivityTest {
         onView(withId(R.id.mpsdkCardSecurityCode)).perform(typeText(StaticMock.DUMMY_SECURITY_CODE));
         onView(withId(R.id.mpsdkNextButton)).perform(click());
         identificationNumberIsCurrentEditText();
-        for (String invalidIdentificationNumber: CardTestUtils.getInvalidIdentificationNumber()) {
+        for (String invalidIdentificationNumber : CardTestUtils.getInvalidIdentificationNumber()) {
             checkIdentificationNumberIsInvalid(invalidIdentificationNumber, onView(withId(R.id.mpsdkNextButton)));
             checkIdentificationNumberIsInvalid(invalidIdentificationNumber, onView(withId(R.id.mpsdkBackButton)));
         }
@@ -1050,7 +1046,8 @@ public class GuessingCardActivityTest {
 
         onView(withId(R.id.mpsdkActivityIssuersView)).perform(actionOnItemAtPosition(0, click()));
 
-        Type listType = new TypeToken<List<Issuer>>(){}.getType();
+        Type listType = new TypeToken<List<Issuer>>() {
+        }.getType();
         List<Issuer> issuerList = JsonUtil.getInstance().getGson().fromJson(issuers, listType);
 
 
@@ -1155,7 +1152,7 @@ public class GuessingCardActivityTest {
 
         mTestRule.launchActivity(validStartIntent);
 
-        onView(withId(R.id.mpsdkCardNumber)).perform(typeText(card.getCardNumber().substring(0,6)));
+        onView(withId(R.id.mpsdkCardNumber)).perform(typeText(card.getCardNumber().substring(0, 6)));
 
         Intent errorResultIntent = new Intent();
         Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(Activity.RESULT_OK, errorResultIntent);
@@ -1163,7 +1160,7 @@ public class GuessingCardActivityTest {
 
         onView(withId(R.id.mpsdkErrorRetry)).perform(click());
 
-        onView(withId(R.id.mpsdkCardNumber)).perform(typeText(card.getCardNumber().substring(6,16)));
+        onView(withId(R.id.mpsdkCardNumber)).perform(typeText(card.getCardNumber().substring(6, 16)));
         onView(withId(R.id.mpsdkNextButton)).perform(click());
         onView(withId(R.id.mpsdkCardholderName)).perform(typeText(StaticMock.DUMMY_CARDHOLDER_NAME));
         onView(withId(R.id.mpsdkNextButton)).perform(click());
@@ -1186,7 +1183,7 @@ public class GuessingCardActivityTest {
 
         mTestRule.launchActivity(validStartIntent);
 
-        onView(withId(R.id.mpsdkCardNumber)).perform(typeText(card.getCardNumber().substring(0,6)));
+        onView(withId(R.id.mpsdkCardNumber)).perform(typeText(card.getCardNumber().substring(0, 6)));
 
         Intent errorResultIntent = new Intent();
         Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(Activity.RESULT_OK, errorResultIntent);
@@ -1380,6 +1377,19 @@ public class GuessingCardActivityTest {
     }
 
     @Test
+    public void validateCardColorNaranja() {
+        addInitCalls();
+        mTestRule.launchActivity(validStartIntent);
+
+        DummyCard card = CardTestUtils.getDummyCard("naranja");
+        onView(withId(R.id.mpsdkCardNumber)).perform(typeText(card.getCardNumber()));
+
+        int expectedColor = ContextCompat.getColor(InstrumentationRegistry.getContext(), R.color.mpsdk_naranja);
+        validateCardColor(expectedColor);
+    }
+
+
+    @Test
     public void validateCardColorMaster() {
         addInitCalls();
         mTestRule.launchActivity(validStartIntent);
@@ -1525,10 +1535,19 @@ public class GuessingCardActivityTest {
 
     public void validateCardColor(int expectedColor) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            ImageView cardViewLow =  (ImageView) mTestRule.getActivity().findViewById(R.id.mpsdkCardLowApiImageView);
+            ImageView cardViewLow = (ImageView) mTestRule.getActivity().findViewById(R.id.mpsdkCardLowApiImageView);
             int color = ViewUtils.getBackgroundColor(cardViewLow);
             assertEquals(color, expectedColor);
         }
+    }
+
+    @Test
+    public void validateMaskNaranja() {
+        addInitCalls();
+        mTestRule.launchActivity(validStartIntent);
+
+        DummyCard card = CardTestUtils.getDummyCard("naranja");
+        validateMask(card);
     }
 
     @Test
