@@ -59,17 +59,8 @@
                     android:paddingRight="14dp"
                     android:paddingEnd="14dp"
                     android:textColor="@color/mpsdk_base_text_alpha"
-                    android:text="@string/mpsdk_card_identification_label_part1"
-                    android:textSize="13dp"
-                    app:fontStyle="regular"/>
-                <com.mercadopago.views.MPTextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="3dp"
-                    android:paddingRight="14dp"
-                    android:paddingEnd="14dp"
-                    android:textColor="@color/mpsdk_base_text_alpha"
-                    android:text="@string/mpsdk_card_identification_label_part2"
+                    android:text="@string/mpsdk_card_identification_label"
+                    android:lineSpacingExtra="5dp"
                     android:textSize="13dp"
                     app:fontStyle="regular"/>
 
@@ -92,7 +83,7 @@
                         android:visibility="visible"
                         android:text="•• ••• •••"
                         app:fontStyle="roboto_regular"/>
-
+8
                     <com.mercadopago.views.MPTextView
                         android:id="@+id/mpsdkIdNumberView"
                         android:layout_width="match_parent"

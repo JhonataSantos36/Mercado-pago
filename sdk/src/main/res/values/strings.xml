@@ -26,8 +26,7 @@
     <string name="mpsdk_card_expiry_month_hint">MM</string>
     <string name="mpsdk_card_expiry_divider_hint">/</string>
     <string name="mpsdk_card_expiry_year_hint">AA</string>
-    <string name="mpsdk_card_identification_label_part1">DOCUMENTO DEL TITULAR</string>
-    <string name="mpsdk_card_identification_label_part2">DE LA TARJETA</string>
+    <string name="mpsdk_card_identification_label">DOCUMENTO DEL TITULAR \nDE LA TARJETA</string>
     <string name="mpsdk_card_identification_number">Número</string>
     <string name="mpsdk_card_identification_type">Tipo</string>
     <string name="mpsdk_cardholder_name">Nombre y apellido</string>
@@ -73,10 +72,10 @@
     <string name="mpsdk_title_activity_terms_and_conditions">Términos y condiciones</string>
     <string name="mpsdk_bank_deals_action">Ver promociones</string>
     <string name="mpsdk_bank_deals">Promociones</string>
-    <string name="mpsdk_mp_app_name">MercadoPago</string>
+    <string name="mpsdk_mp_app_name">Mercado Pago</string>
     <string name="mpsdk_title_activity_checkout">Revisa si está todo bien…</string>
     <string name="mpsdk_title_activity_install_app">Pagar</string>
-    <string name="mpsdk_install_app_label">Para pagar, instala la aplicación de MercadoPago</string>
+    <string name="mpsdk_install_app_label">Para pagar, instala la aplicación de Mercado Pago</string>
     <string name="mpsdk_install_app_button">Instalar la aplicación</string>
     <string name="mpsdk_title_activity_guessing_card">Ingresa los datos de tu tarjeta</string>
     <string name="mpsdk_issuer_label">Banco</string>
@@ -87,13 +86,14 @@
     <string name="mpsdk_pay_button_text">Pagar</string>
     <string name="mpsdk_text_terms_and_conditions_start">Al pagar, afirmo que soy mayor de edad y acepto los</string>
     <string name="mpsdk_text_terms_and_conditions_linked">Términos y Condiciones</string>
-    <string name="mpsdk_text_terms_and_conditions_end">de MercadoPago</string>
+    <string name="mpsdk_text_terms_and_conditions_end">de Mercado Pago</string>
 
     <string name="mpsdk_title_activity_congrat">¡Listo, se acreditó tu pago!</string>
     <string name="mpsdk_subtitle_action_activity_congrat">Te enviaremos los datos a</string>
     <string name="mpsdk_text_state_acount_activity_congrat">En tu estado de cuenta verás el cargo como MERCADOPAGO</string>
-    <string name="mpsdk_text_to_mercado_pago">a MercadoPago</string>
+    <string name="mpsdk_text_to_mercado_pago">a Mercado Pago</string>
     <string name="mpsdk_title_activity_call_for_authorize">Debes autorizar ante</string>
+
     <string name="mpsdk_text_order_call_for_authorize">El teléfono está al dorso de tu tarjeta.</string>
     <string name="mpsdk_text_authorized_call_for_authorize">Ya hablé con</string>
     <string name="mpsdk_text_question_call_for_authorize">¿No pudiste autorizarlo?</string>
@@ -116,7 +116,7 @@
     <string name="mpsdk_title_pending">Estamos procesando el pago</string>
     <string name="mpsdk_subtitle_pending_contingency">En menos de 1 hora te enviaremos por e-mail el resultado.</string>
     <string name="mpsdk_title_rejection_high_risk">Por seguridad, tuvimos que rechazar tu pago</string>
-    <string name="mpsdk_subtitle_rejection_high_risk">Si quieres pagar con el dinero de tu cuenta, contactate con Atención al Cliente de MercadoPago. O si prefieres, puedes elegir otro medio de pago.</string>
+    <string name="mpsdk_subtitle_rejection_high_risk">Si quieres pagar con el dinero de tu cuenta, contactate con Atención al Cliente de Mercado Pago. O si prefieres, puedes elegir otro medio de pago.</string>
     <string name="mpsdk_subtitle_rejection_insufficient_amount">¡No te desanimes! Recárgala en cualquier banco o desde tu banca electrónica e inténtalo de nuevo. O si prefieres, puedes elegir otro medio de pago.</string>
     <string name="mpsdk_subtitle_rejection_insufficient_amount_credit_card">¡No te desanimes! Puedes elegir otro medio de pago.</string>
     <string name="mpsdk_title_rejection_max_attempts">Llegaste al límite de intentos permitidos</string>
