@@ -657,13 +657,11 @@ public class GuessingCardActivity extends FrontCardActivity {
                 new PaymentMethodSelectionCallback() {
                     @Override
                     public void onPaymentMethodListSet(List<PaymentMethod> paymentMethodList) {
-                        if (paymentMethodList.size() == 0) {
+                        if (paymentMethodList.size() == 0 || paymentMethodList.size() > 1) {
                             blockCardNumbersInput(mCardNumberEditText);
                             setErrorView(getString(R.string.mpsdk_invalid_payment_method));
-                        } else if (paymentMethodList.size() == 1) {
-                            onPaymentMethodSet(paymentMethodList.get(0));
                         } else {
-                            //TODO many payment methods possible, or payment type not set
+                            onPaymentMethodSet(paymentMethodList.get(0));
                         }
                     }
 

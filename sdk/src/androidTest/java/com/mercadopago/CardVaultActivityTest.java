@@ -3,7 +3,6 @@ package com.mercadopago;
 import android.app.Activity;
 import android.app.Instrumentation;
 import android.content.Intent;
-import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.intent.Intents;
 import android.support.test.rule.ActivityTestRule;
 
@@ -34,9 +33,7 @@ import static android.support.test.espresso.intent.Intents.intending;
 import static android.support.test.espresso.intent.Intents.times;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static com.mercadopago.utils.ActivityResultUtil.assertFinishCalledWithResult;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -82,40 +79,12 @@ public class CardVaultActivityTest {
         Intents.release();
     }
 
-
-    @Test
-    public void getActivityParametersOnCreateIsValid() {
-
-        CardVaultActivity activity = mTestRule.launchActivity(validStartIntent);
-
-        assertEquals(activity.mPublicKey, mMerchantPublicKey);
-        assertFalse(mTestRule.getActivity().isFinishing());
-    }
-
-    @Test
-    public void getActivityParametersOnCreateIsInvalid() {
-        Intent invalidIntent = new Intent();
-        mTestRule.launchActivity(invalidIntent);
-        assertFinishCalledWithResult(mTestRule.getActivity(), Activity.RESULT_CANCELED);
-    }
-
     @Test
     public void onInstallmentsEnabledMissingAmountAndSiteFinishActivity() {
         validStartIntent.putExtra("installmentsEnabled", true);
-        mTestRule.launchActivity(validStartIntent);
+        CardVaultActivity activity = mTestRule.launchActivity(validStartIntent);
 
-        assertTrue(mTestRule.getActivity().isFinishing());
-    }
-
-    @Test
-    public void onInstallmentsEnabledWithSiteAndAmountIsValid() {
-        validStartIntent.putExtra("installmentsEnabled", true);
-        validStartIntent.putExtra("amount", "1000");
-        validStartIntent.putExtra("site",  JsonUtil.getInstance().toJson(Sites.ARGENTINA));
-
-        mTestRule.launchActivity(validStartIntent);
-
-        assertFalse(mTestRule.getActivity().isFinishing());
+        assertTrue(activity.isFinishing());
     }
 
     @Test
@@ -136,7 +105,8 @@ public class CardVaultActivityTest {
         intending(hasComponent(GuessingCardActivity.class.getName())).respondWith(result);
 
         String installments = StaticMock.getInstallmentsJson();
-        Type listType = new TypeToken<List<Installment>>(){}.getType();
+        Type listType = new TypeToken<List<Installment>>() {
+        }.getType();
         List<Installment> installmentList = JsonUtil.getInstance().getGson().fromJson(installments, listType);
         mFakeAPI.addResponseToQueue(installmentList, 200, "");
 
@@ -166,7 +136,8 @@ public class CardVaultActivityTest {
         intending(hasComponent(GuessingCardActivity.class.getName())).respondWith(result);
 
         String installments = StaticMock.getInstallmentsJson();
-        Type listType = new TypeToken<List<Installment>>(){}.getType();
+        Type listType = new TypeToken<List<Installment>>() {
+        }.getType();
         List<Installment> installmentList = JsonUtil.getInstance().getGson().fromJson(installments, listType);
         mFakeAPI.addResponseToQueue(installmentList, 200, "");
 
@@ -195,7 +166,8 @@ public class CardVaultActivityTest {
         intending(hasComponent(GuessingCardActivity.class.getName())).respondWith(result);
 
         String installments = StaticMock.getInstallmentsJson();
-        Type listType = new TypeToken<List<Installment>>(){}.getType();
+        Type listType = new TypeToken<List<Installment>>() {
+        }.getType();
         List<Installment> installmentList = JsonUtil.getInstance().getGson().fromJson(installments, listType);
         mFakeAPI.addResponseToQueue(installmentList, 200, "");
 
@@ -226,7 +198,8 @@ public class CardVaultActivityTest {
         intending(hasComponent(GuessingCardActivity.class.getName())).respondWith(result);
 
         String installments = StaticMock.getInstallmentsJson();
-        Type listType = new TypeToken<List<Installment>>(){}.getType();
+        Type listType = new TypeToken<List<Installment>>() {
+        }.getType();
         List<Installment> installmentList = JsonUtil.getInstance().getGson().fromJson(installments, listType);
         mFakeAPI.addResponseToQueue(installmentList, 200, "");
 
@@ -235,9 +208,9 @@ public class CardVaultActivityTest {
         Instrumentation.ActivityResult installmentsResult = new Instrumentation.ActivityResult(Activity.RESULT_OK, installmentsIntent);
         intending(hasComponent(InstallmentsActivity.class.getName())).respondWith(installmentsResult);
 
-        mTestRule.launchActivity(validStartIntent);
+        CardVaultActivity activity = mTestRule.launchActivity(validStartIntent);
 
-        assertTrue(mTestRule.getActivity().isFinishing());
+        assertTrue(activity.isFinishing());
     }
 
     @Test
@@ -271,15 +244,15 @@ public class CardVaultActivityTest {
         Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(Activity.RESULT_CANCELED, guessingResultIntent);
         intending(hasComponent(GuessingCardActivity.class.getName())).respondWith(result);
 
-        mTestRule.launchActivity(validStartIntent);
+        CardVaultActivity activity = mTestRule.launchActivity(validStartIntent);
 
         intended(hasComponent(GuessingCardActivity.class.getName()));
 
-        assertEquals(null, mTestRule.getActivity().mPayerCost);
-        assertEquals(null, mTestRule.getActivity().mSelectedIssuer);
-        assertEquals(null, mTestRule.getActivity().mToken);
-        assertEquals(null, mTestRule.getActivity().mCurrentPaymentMethod);
-        assertTrue(mTestRule.getActivity().isFinishing());
+        assertEquals(null, activity.mPayerCost);
+        assertEquals(null, activity.mSelectedIssuer);
+        assertEquals(null, activity.mToken);
+        assertEquals(null, activity.mCurrentPaymentMethod);
+        assertTrue(activity.isFinishing());
     }
 
     @Test
@@ -300,7 +273,8 @@ public class CardVaultActivityTest {
         intending(hasComponent(GuessingCardActivity.class.getName())).respondWith(result);
 
         String installments = StaticMock.getInstallmentsJson();
-        Type listType = new TypeToken<List<Installment>>(){}.getType();
+        Type listType = new TypeToken<List<Installment>>() {
+        }.getType();
         List<Installment> installmentList = JsonUtil.getInstance().getGson().fromJson(installments, listType);
         mFakeAPI.addResponseToQueue(installmentList, 200, "");
 
@@ -309,12 +283,12 @@ public class CardVaultActivityTest {
         Instrumentation.ActivityResult installmentsResult = new Instrumentation.ActivityResult(Activity.RESULT_OK, installmentsIntent);
         intending(hasComponent(InstallmentsActivity.class.getName())).respondWith(installmentsResult);
 
-        mTestRule.launchActivity(validStartIntent);
+        CardVaultActivity activity = mTestRule.launchActivity(validStartIntent);
 
         intended(hasComponent(InstallmentsActivity.class.getName()));
 
-        assertEquals(installmentList.get(0).getPayerCosts().get(0).getInstallments(), mTestRule.getActivity().mPayerCost.getInstallments());
-        assertTrue(mTestRule.getActivity().isFinishing());
+        assertEquals(installmentList.get(0).getPayerCosts().get(0).getInstallments(), activity.mPayerCost.getInstallments());
+        assertTrue(activity.isFinishing());
     }
 
     @Test
@@ -335,7 +309,8 @@ public class CardVaultActivityTest {
         intending(hasComponent(GuessingCardActivity.class.getName())).respondWith(result);
 
         String installments = StaticMock.getMultipleInstallmentsJson();
-        Type listType = new TypeToken<List<Installment>>(){}.getType();
+        Type listType = new TypeToken<List<Installment>>() {
+        }.getType();
         List<Installment> installmentList = JsonUtil.getInstance().getGson().fromJson(installments, listType);
         mFakeAPI.addResponseToQueue(installmentList, 200, "");
 
@@ -362,14 +337,15 @@ public class CardVaultActivityTest {
         intending(hasComponent(GuessingCardActivity.class.getName())).respondWith(result);
 
         String installments = StaticMock.getInstallmentsWithUniquePayerCostJson();
-        Type listType = new TypeToken<List<Installment>>(){}.getType();
+        Type listType = new TypeToken<List<Installment>>() {
+        }.getType();
         List<Installment> installmentList = JsonUtil.getInstance().getGson().fromJson(installments, listType);
         mFakeAPI.addResponseToQueue(installmentList, 200, "");
 
-        mTestRule.launchActivity(validStartIntent);
+        CardVaultActivity activity = mTestRule.launchActivity(validStartIntent);
 
-        assertEquals(installmentList.get(0).getPayerCosts().get(0).getInstallments(), mTestRule.getActivity().mPayerCost.getInstallments());
-        assertTrue(mTestRule.getActivity().isFinishing());
+        assertEquals(installmentList.get(0).getPayerCosts().get(0).getInstallments(), activity.mPayerCost.getInstallments());
+        assertTrue(activity.isFinishing());
     }
 
     @Test
@@ -440,7 +416,8 @@ public class CardVaultActivityTest {
         intending(hasComponent(GuessingCardActivity.class.getName())).respondWith(result);
 
         String installments = StaticMock.getInstallmentsJson();
-        Type listType = new TypeToken<List<Installment>>(){}.getType();
+        Type listType = new TypeToken<List<Installment>>() {
+        }.getType();
         List<Installment> installmentList = JsonUtil.getInstance().getGson().fromJson(installments, listType);
         mFakeAPI.addResponseToQueue(installmentList, 200, "");
 
@@ -449,12 +426,12 @@ public class CardVaultActivityTest {
         Instrumentation.ActivityResult installmentsResult = new Instrumentation.ActivityResult(Activity.RESULT_CANCELED, installmentsIntent);
         intending(hasComponent(InstallmentsActivity.class.getName())).respondWith(installmentsResult);
 
-        mTestRule.launchActivity(validStartIntent);
+        CardVaultActivity activity = mTestRule.launchActivity(validStartIntent);
 
         intended(hasComponent(InstallmentsActivity.class.getName()));
 
-        assertEquals(null, mTestRule.getActivity().mPayerCost);
-        assertTrue(mTestRule.getActivity().isFinishing());
+        assertEquals(null, activity.mPayerCost);
+        assertTrue(activity.isFinishing());
     }
 
     @Test
@@ -480,7 +457,8 @@ public class CardVaultActivityTest {
 
         //Second installments call
         String installments = StaticMock.getInstallmentsJson();
-        Type listType = new TypeToken<List<Installment>>(){}.getType();
+        Type listType = new TypeToken<List<Installment>>() {
+        }.getType();
         List<Installment> installmentList = JsonUtil.getInstance().getGson().fromJson(installments, listType);
         mFakeAPI.addResponseToQueue(installmentList, 200, "");
 
