@@ -18,15 +18,14 @@
     <string name="mpsdk_card_expiry_divider_hint">/</string>
     <string name="mpsdk_card_expiry_month_hint">MM</string>
     <string name="mpsdk_card_expiry_year_hint">YY</string>
-    <string name="mpsdk_card_identification_label_part1">DOCUMENT HOLDER</string>
-    <string name="mpsdk_card_identification_label_part2">OF CARD</string>
+    <string name="mpsdk_card_identification_label">CARD HOLDER DOCUMENT</string>
     <string name="mpsdk_card_identification_number">Number</string>
     <string name="mpsdk_card_identification_type">Type</string>
     <string name="mpsdk_card_installments_title">How many installments?</string>
     <string name="mpsdk_card_issuers_title">Which is your bank?</string>
     <string name="mpsdk_card_number_label">Card number</string>
-    <string name="mpsdk_cardholder_name">Name and lastname</string>
-    <string name="mpsdk_cardholder_name_short">FIRST NAME LAST NAME</string>
+    <string name="mpsdk_cardholder_name">Name and surname</string>
+    <string name="mpsdk_cardholder_name_short">NAME SURNAME</string>
     <string name="mpsdk_cod_seg_desc">Last <ns1:g example="4" id="numeros">%1$d</ns1:g> digits code on the back of the card</string>
     <string name="mpsdk_cod_seg_desc_amex"><ns1:g example="4" id="numeros">%1$d</ns1:g> digits code on the front of the card</string>
     <string name="mpsdk_collector_not_allowed_to_operate">The seller is not allowed to operate</string>
