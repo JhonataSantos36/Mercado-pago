@@ -89,7 +89,7 @@
     <string name="mpsdk_title_activity_congrat">Pronto, seu pagamento foi creditado!</string>
     <string name="mpsdk_subtitle_action_activity_congrat">Enviaremos os dados para</string>
     <string name="mpsdk_text_state_acount_activity_congrat">Em sua declaração, você verá a posse como MERCADO PAGO</string>
-    <string name="mpsdk_text_to_mercado_pago">para o MercadoPago</string>
+    <string name="mpsdk_text_to_mercado_pago">para o Mercado Pago</string>
     <string name="mpsdk_title_activity_call_for_authorize">Você deve autorizar junto ao</string>
     <string name="mpsdk_text_order_call_for_authorize">O telefone do banco está no verso do seu cartão.</string>
     <string name="mpsdk_text_authorized_call_for_authorize">Já falei com</string>
@@ -139,7 +139,7 @@
     <string name="mpsdk_error_message_invalid_preference">Preferência inválida</string>
     <string name="mpsdk_error_message_invalid_installments">Número do parcelas inválido</string>
     <string name="mpsdk_payment_amount_to_pay">Total a pagar</string>
-    <string name="mpsdk_processed_by_mercado_pago">© 1999–2016 Processado pelo Mercado Pago</string>
+    <string name="mpsdk_processed_by_mercado_pago">© 1999–2016 Processado pelo MercadoPago</string>
     <string name="mpsdk_exit_label">Sair</string>
 
     <string name="mpsdk_standard_error_message">Estamos trabalhando para solucionar o problema. Por favor, tente mais tarde.</string>
