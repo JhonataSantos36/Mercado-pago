@@ -27,6 +27,7 @@ import com.mercadopago.model.PaymentIntent;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentMethodSearch;
 import com.mercadopago.model.PaymentMethodSearchItem;
+import com.mercadopago.model.PaymentPreference;
 import com.mercadopago.model.Site;
 import com.mercadopago.model.Token;
 import com.mercadopago.mptracker.MPTracker;
@@ -288,7 +289,7 @@ public class CheckoutActivity extends MercadoPagoActivity {
     protected void startPaymentVaultActivity() {
         new MercadoPago.StartActivityBuilder()
                 .setActivity(this)
-                .setPublicKey(mMerchantPublicKey)
+                .setPublicKey("APP_USR-5a399d42-6015-4f6a-8ff8-dd7d368068f8")
                 .setSite(mSite)
                 .setAmount(mCheckoutPreference.getAmount())
                 .setPaymentMethodSearch(mPaymentMethodSearch)
@@ -342,8 +343,6 @@ public class CheckoutActivity extends MercadoPagoActivity {
                 startPaymentVaultActivity();
             } else if (data.getBooleanExtra("retry", false)) {
                 MPTracker.getInstance().trackEvent("REJECTION", "RETRY", 3, mMerchantPublicKey, mCheckoutPreference.getSiteId(), BuildConfig.VERSION_NAME, this);
-
-                //TODO mandar a ingrese de nuevo el código de seguridad
                 startPaymentVaultActivity();
             }
         } else {
@@ -444,6 +443,9 @@ public class CheckoutActivity extends MercadoPagoActivity {
     }
 
     public void startInstallmentsActivity() {
+        PaymentPreference paymentPreference = new PaymentPreference();
+        paymentPreference.setMaxAcceptedInstallments(mCheckoutPreference.getMaxInstallments());
+
         new MercadoPago.StartActivityBuilder()
                 .setActivity(getActivity())
                 .setPublicKey(mMerchantPublicKey)
@@ -452,6 +454,7 @@ public class CheckoutActivity extends MercadoPagoActivity {
                 .setToken(mCreatedToken)
                 .setIssuer(mSelectedIssuer)
                 .setSite(mSite)
+                .setPaymentPreference(paymentPreference)
                 .setDecorationPreference(mDecorationPreference)
                 .startInstallmentsActivity();
 

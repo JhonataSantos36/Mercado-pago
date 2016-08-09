@@ -52,9 +52,6 @@ public class ErrorHandlingCallAdapter {
         }
     }
 
-    // This adapter runs its callbacks on the main thread always
-    // TODO: customize executor
-
     /**
      * Adapts a {@link Call} to {@link MPCall}.
      */

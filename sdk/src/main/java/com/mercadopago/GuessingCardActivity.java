@@ -1402,7 +1402,6 @@ public class GuessingCardActivity extends FrontCardActivity {
             public void success(Token token) {
                 if (isActivityActive()) {
                     mToken = token;
-                    //TODO: solo en credit card??
                     checkStartIssuersActivity();
                 }
             }
