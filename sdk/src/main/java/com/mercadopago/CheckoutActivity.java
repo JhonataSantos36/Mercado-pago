@@ -289,7 +289,7 @@ public class CheckoutActivity extends MercadoPagoActivity {
     protected void startPaymentVaultActivity() {
         new MercadoPago.StartActivityBuilder()
                 .setActivity(this)
-                .setPublicKey("APP_USR-5a399d42-6015-4f6a-8ff8-dd7d368068f8")
+                .setPublicKey(mMerchantPublicKey)
                 .setSite(mSite)
                 .setAmount(mCheckoutPreference.getAmount())
                 .setPaymentMethodSearch(mPaymentMethodSearch)
