@@ -524,15 +524,10 @@ public class CallForAuthorizeActivityTest {
     }
 
     private Spanned setCallForAuthorizeTitle() {
-        StringBuilder callForAuthorizeTitle = new StringBuilder();
+        String totalPaidAmount = CurrenciesUtil.formatNumber(mPayment.getTransactionDetails().getTotalPaidAmount(), mPayment.getCurrencyId());
+        String titleFormated = String.format(mTestRule.getActivity().getString(R.string.mpsdk_title_activity_call_for_authorize), mPaymentMethod.getName(), totalPaidAmount);
 
-        callForAuthorizeTitle.append(mTestRule.getActivity().getString(R.string.mpsdk_title_activity_call_for_authorize));
-        callForAuthorizeTitle.append(" " + mPaymentMethod.getName() + " ");
-        callForAuthorizeTitle.append(mTestRule.getActivity().getString(R.string.mpsdk_text_the_payment) + " ");
-        callForAuthorizeTitle.append(CurrenciesUtil.formatNumber(mPayment.getTransactionDetails().getTotalPaidAmount(), mPayment.getCurrencyId()));
-        callForAuthorizeTitle.append(" " + mTestRule.getActivity().getString(R.string.mpsdk_text_to_mercado_pago));
-
-        return CurrenciesUtil.formatCurrencyInText(mPayment.getTransactionDetails().getTotalPaidAmount(),mPayment.getCurrencyId(), callForAuthorizeTitle.toString(), true, true);
+        return CurrenciesUtil.formatCurrencyInText(mPayment.getTransactionDetails().getTotalPaidAmount(), mPayment.getCurrencyId(), titleFormated, true, true);
     }
 
     @Test

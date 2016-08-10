@@ -85,19 +85,19 @@ public class RejectionActivity extends MercadoPagoActivity {
     protected void onValidStart() {
         if (isStatusDetailValid() && isPaymentMethodValid()) {
             if (mPayment.getStatusDetail().equals(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_OTHER_REASON)) {
-                String titleMessage = mPaymentMethod.getName() + " " + getString(R.string.mpsdk_title_other_reason_rejection);
+                String titleMessage = String.format(getString(R.string.mpsdk_title_other_reason_rejection), mPaymentMethod.getName());
                 mRejectionTitle.setText(titleMessage);
                 mRejectionSubtitle.setText(getString(R.string.mpsdk_text_select_other_rejection));
             } else if (mPayment.getStatusDetail().equals(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_BAD_FILLED_OTHER)) {
                 mRejectionTitle.setText(getString(R.string.mpsdk_title_bad_filled_other_rejection));
-                String subtitleMessage = getString(R.string.mpsdk_text_some_number) + " " + mPaymentMethod.getName() + " " + getString(R.string.mpsdk_text_is_incorrect);
+                String subtitleMessage = String.format(getString(R.string.mpsdk_text_some_number), mPaymentMethod.getName());
                 mRejectionSubtitle.setText(subtitleMessage);
             } else if (mPayment.getStatusDetail().equals(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_BAD_FILLED_CARD_NUMBER)) {
                 mRejectionTitle.setText(getString(R.string.mpsdk_title_bad_filled_other_rejection));
-                String subtitleMessage = getString(R.string.mpsdk_text_some_number) + " " + mPaymentMethod.getName() + " " + getString(R.string.mpsdk_text_is_incorrect);
+                String subtitleMessage = String.format(getString(R.string.mpsdk_text_some_number), mPaymentMethod.getName());
                 mRejectionSubtitle.setText(subtitleMessage);
             } else if (mPayment.getStatusDetail().equals(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_INSUFFICIENT_AMOUNT)) {
-                String titleMessage = getString(R.string.mpsdk_text_you) + " " + mPaymentMethod.getName() + " " + getString(R.string.mpsdk_text_insufficient_amount);
+                String titleMessage = String.format(getString(R.string.mpsdk_text_insufficient_amount), mPaymentMethod.getName());
                 mRejectionTitle.setText(titleMessage);
 
                 if (isCardPaymentTypeCreditCard()) {
@@ -106,11 +106,11 @@ public class RejectionActivity extends MercadoPagoActivity {
                     mRejectionSubtitle.setText(getString(R.string.mpsdk_subtitle_rejection_insufficient_amount));
                 }
             } else if (mPayment.getStatusDetail().equals(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_DUPLICATED_PAYMENT)) {
-                String titleMessage = mPaymentMethod.getName() + " " + getString(R.string.mpsdk_title_other_reason_rejection);
+                String titleMessage = String.format(getString(R.string.mpsdk_title_other_reason_rejection), mPaymentMethod.getName());
                 mRejectionTitle.setText(titleMessage);
                 mRejectionSubtitle.setText(getString(R.string.mpsdk_subtitle_rejection_duplicated_payment));
             } else if (mPayment.getStatusDetail().equals(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_CARD_DISABLED)) {
-                String titleMessage = getString(R.string.mpsdk_text_call_to) + " " + mPaymentMethod.getName() + " " + getString(R.string.mpsdk_text_active_card);
+                String titleMessage = String.format(getString(R.string.mpsdk_text_active_card), mPaymentMethod.getName());
                 mRejectionTitle.setText(titleMessage);
                 mRejectionSubtitle.setText(getString(R.string.mpsdk_subtitle_rejection_card_disabled));
             } else if (mPayment.getStatusDetail().equals(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_BAD_FILLED_SECURITY_CODE)) {

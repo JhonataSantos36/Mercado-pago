@@ -151,7 +151,7 @@ public class RejectionActivityTest {
         mTestRule.launchActivity(validStartIntent);
 
         //Title and subtitle
-        titleMessage = mTestRule.getActivity().getString(R.string.mpsdk_text_you) + " " + mPaymentMethod.getName() + " " + mTestRule.getActivity().getString(R.string.mpsdk_text_insufficient_amount);
+        titleMessage = String.format(mTestRule.getActivity().getString(R.string.mpsdk_text_insufficient_amount), mPaymentMethod.getName());
         onView(withId(R.id.mpsdkRejectionTitle)).check(matches(withText(titleMessage)));
         onView(withId(R.id.mpsdkRejectionSubtitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_subtitle_rejection_insufficient_amount_credit_card))));
 
@@ -175,7 +175,7 @@ public class RejectionActivityTest {
         mTestRule.launchActivity(validStartIntent);
 
         //Title and subtitle
-        titleMessage = mTestRule.getActivity().getString(R.string.mpsdk_text_you) + " " + mPaymentMethod.getName() + " " + mTestRule.getActivity().getString(R.string.mpsdk_text_insufficient_amount);
+        titleMessage = String.format(mTestRule.getActivity().getString(R.string.mpsdk_text_insufficient_amount), mPaymentMethod.getName());
         onView(withId(R.id.mpsdkRejectionTitle)).check(matches(withText(titleMessage)));
         onView(withId(R.id.mpsdkRejectionSubtitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_subtitle_rejection_insufficient_amount))));
 
@@ -197,7 +197,7 @@ public class RejectionActivityTest {
         mTestRule.launchActivity(validStartIntent);
 
         //Title and subtitle
-        titleMessage = mPaymentMethod.getName() + " " + mTestRule.getActivity().getString(R.string.mpsdk_title_other_reason_rejection);
+        titleMessage = String.format(mTestRule.getActivity().getString(R.string.mpsdk_title_other_reason_rejection), mPaymentMethod.getName());
         onView(withId(R.id.mpsdkRejectionTitle)).check(matches(withText(titleMessage)));
         onView(withId(R.id.mpsdkRejectionSubtitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_text_select_other_rejection))));
 
@@ -238,7 +238,7 @@ public class RejectionActivityTest {
         mTestRule.launchActivity(validStartIntent);
 
         //Title and subtitle
-        titleMessage = mPaymentMethod.getName() + " " + mTestRule.getActivity().getString(R.string.mpsdk_title_other_reason_rejection);
+        titleMessage = String.format(mTestRule.getActivity().getString(R.string.mpsdk_title_other_reason_rejection), mPaymentMethod.getName());
         onView(withId(R.id.mpsdkRejectionTitle)).check(matches(withText(titleMessage)));
         onView(withId(R.id.mpsdkRejectionSubtitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_subtitle_rejection_duplicated_payment))));
 
@@ -260,7 +260,7 @@ public class RejectionActivityTest {
         mTestRule.launchActivity(validStartIntent);
 
         //Title and subtitle
-        titleMessage = mTestRule.getActivity().getString(R.string.mpsdk_text_call_to) + " " + mPaymentMethod.getName() + " " + mTestRule.getActivity().getString(R.string.mpsdk_text_active_card);
+        titleMessage = String.format(mTestRule.getActivity().getString(R.string.mpsdk_text_active_card), mPaymentMethod.getName());
         onView(withId(R.id.mpsdkRejectionTitle)).check(matches(withText(titleMessage)));
         onView(withId(R.id.mpsdkRejectionSubtitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_subtitle_rejection_card_disabled))));
 
@@ -283,7 +283,7 @@ public class RejectionActivityTest {
 
         //Title and subtitle
         onView(withId(R.id.mpsdkRejectionTitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_title_bad_filled_other_rejection))));
-        subtitleMessage = mTestRule.getActivity().getString(R.string.mpsdk_text_some_number) + " " + mPaymentMethod.getName() + " " + mTestRule.getActivity().getString(R.string.mpsdk_text_is_incorrect);
+        subtitleMessage = String.format(mTestRule.getActivity().getString(R.string.mpsdk_text_some_number), mPaymentMethod.getName());
         onView(withId(R.id.mpsdkRejectionSubtitle)).check(matches(withText(subtitleMessage)));
 
         //SelectOtherPaymentMethod button is displayed
@@ -305,7 +305,7 @@ public class RejectionActivityTest {
 
         //Title and subtitle
         onView(withId(R.id.mpsdkRejectionTitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_title_bad_filled_other_rejection))));
-        subtitleMessage = mTestRule.getActivity().getString(R.string.mpsdk_text_some_number) + " " + mPaymentMethod.getName() + " " + mTestRule.getActivity().getString(R.string.mpsdk_text_is_incorrect);
+        subtitleMessage = String.format(mTestRule.getActivity().getString(R.string.mpsdk_text_some_number), mPaymentMethod.getName());
         onView(withId(R.id.mpsdkRejectionSubtitle)).check(matches(withText(subtitleMessage)));
 
         //SelectOtherPaymentMethod button is displayed
