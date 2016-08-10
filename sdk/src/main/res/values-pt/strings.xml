@@ -37,11 +37,11 @@
     <!-- Checkout -->
     <string name="mpsdk_text_terms_and_conditions_start">Ao pagar, afirmo que eu sou maior de idade e concordar com os </string>
     <string name="mpsdk_text_terms_and_conditions_linked">Termos e Condições</string>
-    <string name="mpsdk_text_terms_and_conditions_end">de Mercado Pago</string>
+    <string name="mpsdk_text_terms_and_conditions_end">do Mercado Pago</string>
     <string name="mpsdk_payment_amount_to_pay">Total a pagar</string>
     <string name="mpsdk_pay_button_text">Pagar</string>
     <string name="mpsdk_press_again_confirm">Se você pressionar novamente reinicialização a selecção</string>
-    <string name="mpsdk_title_activity_checkout">Verifique para ver se está tudo bem …</string>
+    <string name="mpsdk_title_activity_checkout">Verifique para ver se está tudo bem…</string>
 
     <!-- Card token and guessing -->
     <string name="mpsdk_invalid_card_number_incomplete">Digite todos os números do cartão</string>
