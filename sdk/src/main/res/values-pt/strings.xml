@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="rn:oasis:names:tc:xliff:document:1.2">
 
-
     <!-- Banks deals -->
     <string name="mpsdk_empty_bank_deals">Você não tem nenhuma promoção disponível</string>
     <string name="mpsdk_bank">banco</string>
@@ -77,24 +76,6 @@
     <string name="mpsdk_cardholder_name_short">NOME SOBRENOME</string>
     <string name="mpsdk_title_activity_new_card">Digite os dados do seu cartão</string>
 
-    <!-- Utils -->
-    <string name="mpsdk_text_keep_buying">Continuar comprando</string>
-    <string name="mpsdk_zero_rate">Sem juros</string>
-    <string name="mpsdk_exit_label">Sair</string>
-    <string name="mpsdk_cancel_payment">Cancelar pagamento</string>
-    <string name="mpsdk_input_button_back">Anterior</string>
-    <string name="mpsdk_input_button_next">Continuar</string>
-    <string name="mpsdk_hour">hora</string>
-    <string name="mpsdk_working_day">dia útil</string>
-    <string name="mpsdk_press_again_to_leave">Pressione novamente para sair</string>
-    <string name="mpsdk_working_days">dias úteis</string>
-    <string name="mpsdk_refresh_message">Tentar novamente</string>
-    <string name="mpsdk_title_activity_terms_and_conditions">Termos e condições</string>
-    <string name="mpsdk_format_date"><![CDATA[ %1$s/%2$s/%3$s - %4$s]]></string>
-    <string name="mpsdk_no_connection_message">Sem conexão</string>
-    <string name="mpsdk_instant_accreditation_time">Será aprovado instantaneamente</string>
-    <string name="mpsdk_accreditation_time">Será creditado no prazo de</string>
-
     <!-- Congrats -->
     <string name="mpsdk_title_activity_congrat">Pronto, seu pagamento foi creditado!</string>
     <string name="mpsdk_subtitle_action_activity_congrat">Enviaremos os dados para\n%1$s</string>
@@ -169,4 +150,22 @@
     <string name="mpsdk_invalid_security_code">Código de segurança inválido</string>
     <string name="mpsdk_security_code_required">Código de segurança obrigatório</string>
     <string name="mpsdk_invalid_card_number">O número do cartão é inválido</string>
+
+    <!-- Utils -->
+    <string name="mpsdk_text_keep_buying">Continuar comprando</string>
+    <string name="mpsdk_zero_rate">Sem juros</string>
+    <string name="mpsdk_exit_label">Sair</string>
+    <string name="mpsdk_cancel_payment">Cancelar pagamento</string>
+    <string name="mpsdk_input_button_back">Anterior</string>
+    <string name="mpsdk_input_button_next">Continuar</string>
+    <string name="mpsdk_hour">hora</string>
+    <string name="mpsdk_working_day">dia útil</string>
+    <string name="mpsdk_press_again_to_leave">Pressione novamente para sair</string>
+    <string name="mpsdk_working_days">dias úteis</string>
+    <string name="mpsdk_refresh_message">Tentar novamente</string>
+    <string name="mpsdk_title_activity_terms_and_conditions">Termos e condições</string>
+    <string name="mpsdk_format_date"><![CDATA[ %1$s/%2$s/%3$s - %4$s]]></string>
+    <string name="mpsdk_no_connection_message">Sem conexão</string>
+    <string name="mpsdk_instant_accreditation_time">Será aprovado instantaneamente</string>
+    <string name="mpsdk_accreditation_time">Será creditado no prazo de</string>
 </resources>

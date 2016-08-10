@@ -76,24 +76,6 @@
     <string name="mpsdk_cardholder_name_short">NAME SURNAME</string>
     <string name="mpsdk_title_activity_new_card">Enter your card\'s information</string>
 
-    <!-- Utils -->
-    <string name="mpsdk_text_keep_buying">Keep buying</string>
-    <string name="mpsdk_zero_rate">Interest free</string>
-    <string name="mpsdk_exit_label">Exit</string>
-    <string name="mpsdk_cancel_payment">Cancel payment</string>
-    <string name="mpsdk_input_button_back">Previous</string>
-    <string name="mpsdk_input_button_next">Continue</string>
-    <string name="mpsdk_hour">hour</string>
-    <string name="mpsdk_working_day">business day</string>
-    <string name="mpsdk_press_again_to_leave">Press again to exit</string>
-    <string name="mpsdk_working_days">business days</string>
-    <string name="mpsdk_refresh_message">Retry</string>
-    <string name="mpsdk_title_activity_terms_and_conditions">Terms and conditions</string>
-    <string name="mpsdk_format_date">%1$s/%2$s/%3$s - %4$s</string>
-    <string name="mpsdk_no_connection_message">No connection</string>
-    <string name="mpsdk_instant_accreditation_time">Will it be credited instantly</string>
-    <string name="mpsdk_accreditation_time">Will be credited in</string>
-
     <!-- Congrats -->
     <string name="mpsdk_title_activity_congrat">Done, your payment was accredited!</string>
     <string name="mpsdk_subtitle_action_activity_congrat">We will send you the data to\n%1$s</string>
@@ -168,4 +150,22 @@
     <string name="mpsdk_invalid_security_code">Invalid security code</string>
     <string name="mpsdk_security_code_required">Required security code</string>
     <string name="mpsdk_invalid_card_number">Invalid card number</string>
+
+    <!-- Utils -->
+    <string name="mpsdk_text_keep_buying">Keep buying</string>
+    <string name="mpsdk_zero_rate">Interest free</string>
+    <string name="mpsdk_exit_label">Exit</string>
+    <string name="mpsdk_cancel_payment">Cancel payment</string>
+    <string name="mpsdk_input_button_back">Previous</string>
+    <string name="mpsdk_input_button_next">Continue</string>
+    <string name="mpsdk_hour">hour</string>
+    <string name="mpsdk_working_day">business day</string>
+    <string name="mpsdk_press_again_to_leave">Press again to exit</string>
+    <string name="mpsdk_working_days">business days</string>
+    <string name="mpsdk_refresh_message">Retry</string>
+    <string name="mpsdk_title_activity_terms_and_conditions">Terms and conditions</string>
+    <string name="mpsdk_format_date">%1$s/%2$s/%3$s - %4$s</string>
+    <string name="mpsdk_no_connection_message">No connection</string>
+    <string name="mpsdk_instant_accreditation_time">Will it be credited instantly</string>
+    <string name="mpsdk_accreditation_time">Will be credited in</string>
 </resources>
