@@ -24,6 +24,7 @@ import com.mercadopago.mptracker.MPTracker;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
+import com.mercadopago.views.MPTextView;
 
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
@@ -112,23 +113,18 @@ public class CardVaultActivity extends ShowCardActivity {
     }
 
     protected void initializeToolbar() {
-        super.initializeToolbar("", true);
-    }
-
-    @Override
-    protected void decorateWithToken(Toolbar toolbar) {
-        decorateBackground(toolbar);
-    }
-
-    @Override
-    protected void decorateWithoutToken(Toolbar toolbar) {
-        decorateBackground(toolbar);
-    }
-
-    private void decorateBackground(Toolbar toolbar) {
-        super.decorateUpArrow(toolbar);
-        super.decorateFont(mToolbarTitle);
-        toolbar.setBackgroundColor(mDecorationPreference.getLighterColor());
+        Toolbar toolbar;
+        toolbar = (Toolbar) findViewById(R.id.mpsdkToolbar);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
+        if (mDecorationPreference != null && mDecorationPreference.hasColors() && toolbar != null) {
+            toolbar.setBackgroundColor(mDecorationPreference.getLighterColor());
+            decorateUpArrow(toolbar);
+        }
     }
 
     @Override
