@@ -8,6 +8,7 @@ group = "com.mercadopago"
 archivesBaseName = "android-sdk"
 
 android {
+    publishNonDefault true
     compileSdkVersion 23
     buildToolsVersion "23.0.2"
     defaultConfig {
@@ -37,7 +38,6 @@ android {
         debug {
             versionNameSuffix " Debug"
             debuggable true
-            testCoverageEnabled true
         }
     }
     dexOptions {
@@ -46,6 +46,15 @@ android {
     }
     lintOptions {
         abortOnError false
+    }
+
+    productFlavors {
+        dev {
+            buildConfigField "String", "API_VERSION", "\"beta\""
+        }
+        prod {
+            buildConfigField "String", "API_VERSION", "\"v1\""
+        }
     }
 }
 dependencies {
