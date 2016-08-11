@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="description" content="MercadoPago developers site.">
+      <meta name="keywords" content="mercadopago,sdk,payment,pagos,braintree,paypal,html5,javascript,mobile,drifty,ionic,hybrid,phonegap,cordova,native,ios,android,angularjs">
+      <title>Payment solutions for your bussiness - MercadoPago</title>
+      <link href="./css/site.css" rel="stylesheet">
+      <link href="./css/prism.css" rel="stylesheet" />
+      <script src="./js/jquery.min.js"></script>
+      <link rel="stylesheet" type="text/css" href="./css/lato.css" />
+
+   </head>
+   <body class="getting-started-page">
+         <nav class="navbar navbar-default" role="navigation">
+         <div class="container">
+            <div class="navbar-header">
+               <button type="button" class="navbar-toggle button ionic" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+               <i class="icon ion-navicon"></i>
+               </button>
+               <a class="navbar-brand" href="http://mercadopago.com/">
+               <img src="img/iso-mercadopago.png" width="60" height="41" alt="MercadoPago SDK">
+               </a>
+            </div>
+            <div class="collapse navbar-collapse navbar-ex1-collapse">
+               <ul class="nav navbar-nav navbar-right" style="color: white;">
+                  <li><a class="getting-started-nav nav-link" href="index.html">Our checkout</a></li>
+                  <li><a class="docs-nav nav-link" href="checkout_custom.html">Your checkout</a></li>
+                  <li><a class="nav-link" href="https://www.mercadopago.com.ar/developers/es/community/forum/">Developers forum</a></li>
+               </ul>
+            </div>
+         </div>
+      </nav>
+      <div class="header">
+         <div class="container" style="padding-top: 110px;">
+            <h3>MercadoPago Android SDK</h3>
+            <h4>The quickest way to receive in-app payments with the best experience.</h4>
+         </div>
+
+      </div>
+      <div id="mati_header" style="height: 450px; margin: 0 auto; padding: 0;position: relative;width: 100%;top: -276px;overflow-x: hidden;OVERFLOW-Y: hidden;z-index: -100;background: url('./img/landing.jpg');background-size: cover;">
+         <div style="background: rgba(0,0,0,0.5); height: 500px;" ></div>
+      </div>
+      <div class="container content-container" style="margin-top: -300px;">
+         <div id="getting-started">
+            <div class="text-center">
+               <h2>Integrate in 6 steps of less than 1 minute each</h2>
+               <p class="sub-heading">
+                  Too fast? Our solution is so complete than we dare to make that statement.
+                  <br />
+                  Also, we did the math. Each step takes 50 seconds.
+                  <br />
+                  Some friend developers already accomplished it. Amazing! Just tell us what you want to sell and we'll take care of the rest.
+                  <br />
+                  <a href="" target="_blank">Step to step video</a>.
+               </p>
+               <br />
+            </div>
+
+    <!--      <div class="row" id="template-images">
+    <div class="template">
+      <div class="template-image" style="background: url('./img/android/index_card_form.gif') no-repeat transparent;"></div>
+      <b>Nuevo formulario de tarjeta</b>
+    </div>
+    <div class="template">
+      <div class="template-image" id="start-template-tabs-image"></div>
+      <code>$ ionic start myApp tabs</code>
+    </div>
+    <div class="template">
+      <div class="template-image" id="start-template-sidemenu-image"></div>
+      <code>$ ionic start myApp sidemenu</code>
+    </div>
+  </div>   -->
+
+            <div class="row" id="step-one">
+               <div class="col-md-6 step-desc">
+                  <div class="desc">
+                     <h3>1.   Add our dependency to your project</h3>
+                     <p>Using gradle? Add it in the build.gradle file of the module where you will integrate us.</p>
+                     <p>Otherwise <a href="https://github.com/mercadopago/px-android/releases" target="_blank">download MercadoPago SDK</a></p>
+                  </div>
+               </div>
+               <div class="col-md-6 code">
+                  <pre class="snippet">
+                     <code id="flavor_3_step_1" class="line-numbers language-java">dependencies {
+   compile ('com.mercadopago:sdk:2.0.0@aar') { transitive = true }
+}
+                     </code>
+         <button class="copy-button" alt="Copiar código">
+                        <img src="./img/clippy.svg" width="13">
+                    </button>
+                  </pre>
+
+               </div>
+            </div>
+            <div class="row" id="step-two">
+               <div class="col-md-6 step-desc">
+                  <div class="desc">
+                     <h3>2.   Create a payment button</h3>
+                     <p>
+                        Start MercadoPago <i>checkout</i> from a button:
+                     </p>
+                     <p>
+                        Create the activity where the button will be added (eg.: MainActivity).
+                     </p>
+                     <p>
+                      Add the text field where the result of the payment will be shown.
+                    </p>
+                     <p>
+                        Paste this example code in <b>res/layout/activity_main.xml</b>.
+                     </p>
+                  </div>
+               </div>
+               <div class="col-md-6 code">
+                  <pre class="snippet">
+                     <code id="flavor_3_step_2" class="line-numbers language-xml">
+                     </code>
+
+                     <button class="copy-button">
+                        <img src="./img/clippy.svg" width="13" alt="Copy to clipboard">
+                    </button>
+                  </pre>
+               </div>
+            </div>
+            <div class="row" id="step-three">
+               <div class="col-md-6 step-desc">
+                  <div class="desc">
+                     <h3>3.   Start the <i>checkout</i> from your app</h3>
+
+                      <p class="advanced-panel">
+                        <b>Try it out with our data: </b>
+                        <br />
+                        Use this code with our data to make a quick trial of the full experience.
+                        <br />
+                        When you want to go into <a href="#step-six">production</a>, you'll just have to change the data and use yours.
+                      </p>
+                      <p>
+                        To start our checkout you just need:
+                        <ul>
+                          <li style="list-style-type: decimal;"><b>Public key:</b> it's an identifier that groups your account, app and its configurations.
+                            <ul>
+                              <li><a href="https://www.mercadopago.com/mla/account/credentials" target="_blank">Create your credentials</a>.</li>
+                              <li><a href="https://applications.mercadopago.com/" target="_blank">Configure your app</a>.</li>
+                            </ul>
+                          </li>
+                          <li style="list-style-type: decimal;"><b>Payment preference identifier:</b> it's a representation of what you want to be paid for. It includes this attributes:
+                            <ul>
+                             <li>Data and amount.</li>
+                             <li>Accepted payment methods.</li>
+                             <li>Payer information (the <b>email is mandatory</b> for security reasons).</li>
+                            </ul>
+                          </li>
+                          <li><b>Optional:</b> you can change our checkout colors using the DecorationPreference class:
+                            <ul>
+                              <li>Create an instance: DecorationPreference decorationPreference = new DecorationPreference();</li>
+                              <li>Configure a base color: decorationPreference.setBaseColor(color);</li>
+                              <li>You can enable a dark font: decorationPreference.enableDarkFont();</li>
+                              <li>Add it to the checkout's setters!</li>
+                            </ul>
+                          </li>
+                        </ul>
+                    </p>
+                  </div>
+               </div>
+               <div class="col-md-6 code">
+                  <pre class="snippet">
+                     <code class="line-numbers language-java">
+// Executed method when clicking the button
+public void submit(View view) {
+
+  // Iniciar el checkout de MercadoPago
+  new MercadoPago.StartActivityBuilder()
+    .setActivity(this)
+    .setPublicKey("TEST-ad365c37-8012-4014-84f5-6c895b3f8e0a")
+    .setCheckoutPreferenceId("150216849-ceed1ee4-8ab9-4449-869f-f4a8565d386f")
+    .startCheckoutActivity();
+
+}
+                     </code>
+                     <button class="copy-button">
+                        <img src="./img/clippy.svg" width="13" alt="Copy to clipboard">
+                    </button>
+                  </pre>
+                  <p class="advanced-panel" style="font-weight: 300; font-size: 15px;">
+                        <em>*</em> For the trial, we are using a preference for a $100 bass guitar, with all the payment methods available in MercadoPago.
+                  </p>
+               </div>
+               <div class="col-md-6 code">
+                  <pre class="snippet">
+                     <code class="line-numbers language-java">
+// Executed method when clicking the button
+public void submit(View view) {
+  //You can change the colors
+  DecorationPreference decorationPreference = new DecorationPreference();
+  //Get the color from your colors.xml file
+  decorationPreference.setBaseColor(ContextCompat.getColor(context, R.color.your_color));
+  //Or add an hexadecilam color code
+  decorationPreference.setBaseColor("#77B2D2");
+  //Enable the dark font if desired
+  decorationPreference.enableDarkFont();
+
+  // Initialize the MercadoPago checkout
+  new MercadoPago.StartActivityBuilder()
+    .setActivity(this)
+    .setPublicKey("TEST-ad365c37-8012-4014-84f5-6c895b3f8e0a")
+    .setCheckoutPreferenceId("150216849-ceed1ee4-8ab9-4449-869f-f4a8565d386f")
+    .setDecorationPreference(decorationPreference)
+    .startCheckoutActivity();
+
+}
+                     </code>
+                     <button class="copy-button">
+                        <img src="./img/clippy.svg" width="13" alt="Copy to clipboard">
+                    </button>
+                  </pre>
+               </div>
+            </div>
+            <div class="row" id="step-four">
+               <div class="col-md-6 step-desc">
+                  <div class="desc">
+                     <h3>4.   Wait for the payment result</h3>
+                     <p>
+                        The SDK will always return a payment result
+                      </p>
+                      <p>
+                        If an insurmountable error occurs or the user cancels the operation, it will return an exception so you know what happened.
+                      </p>
+                      <p>
+                        These are the most important attributes of the payment object:
+                        <ul>
+                          <li><i>id</i>: payment identifier.</li>
+                          <li><i>status</i>: <a href="https://www.mercadopago.com.ar/developers/es/api-docs/custom-checkout/webhooks/payment-status/">payment status</a>.</li>
+                          <li><i>payment_method_id</i>: an identifier of the payment method that your user selected.</li>
+                          <li><i>payment_type_id</i>: selected payment method type.</li>
+                          <li><i>card</i>: object that identifies your user's card.</li>
+                          <li><i>issuer_id</i>: an identifier of your user's selected card issuer.</li>
+                          <li><i>installments</i>: amount of installments selected.</li>
+                        </ul>
+                      </p>
+                      <p>
+                        Get to know more about the Payment object <a href="https://www.mercadopago.com.ar/developers/es/api-docs/account/payments/" target="_blank">here</a>.
+                     </p>
+                  </div>
+               </div>
+               <div class="col-md-6 code">
+                  <pre class="snippet">
+                     <code class="line-numbers language-java">
+// Wait for the checkout result
+@Override
+protected void onActivityResult(int requestCode, int resultCode,
+Intent data) {
+
+  if (requestCode == MercadoPago.CHECKOUT_REQUEST_CODE) {
+    if (resultCode == RESULT_OK && data != null) {
+
+      // Done! The payment was already processed by MercadoPago
+      Payment payment = JsonUtil.getInstance()
+        .fromJson(data.getStringExtra("payment"), Payment.class);
+      TextView results = (TextView) findViewById(R.id.mp_results);
+
+      if (payment != null) {
+          results.setText("PaymentID: " + payment.getId() +
+          " - PaymentStatus: " + payment.getStatus());
+      } else {
+          results.setText("The user did not complete the payment.");
+      }
+
+    } else {
+      if ((data != null) && (data.hasExtra("mpException"))) {
+          MPException mpException = JsonUtil.getInstance()
+            .fromJson(data.getStringExtra("mpException"), MPException.class);
+          // Handle errors.
+      }
+    }
+  }
+}
+                     </code>
+                     <button class="copy-button">
+                        <img src="./img/clippy.svg" width="13" alt="Copy to clipboard">
+                    </button>
+                  </pre>
+               </div>
+            </div>
+            <div class="row" id="step-five">
+               <div class="col-md-6 step-desc">
+                  <div class="desc">
+                     <h3>5.   Try our Checkout</h3>
+                     <p>
+                        Use these test cards to try different payment results.
+                      </p>
+                      <p>
+                        Then, you can use our <a href="" target="_blank">payment preference tool</a> to work with different configurations:
+                        <ul>
+                          <li>Exclude payment methods.</li>
+                          <li>Exclude payment types (eg.: just cards).</li>
+                          <li>Add a default payment method (your user's most frequently used card).</li>
+                          <li>Restrict the amount of installments or chose a default amount. </li>
+                        </ul>
+                      </p>
+                  </div>
+               </div>
+               <div class="col-md-6 code" style="font-weight: 300;font-size: 15px;line-height: 30px;">
+                  <p>
+                    Test cards for our checkout:
+                    <ul>
+                      <li>Visa:             4509 9535 6623 3704</li>
+                      <li>Mastercard:       5031 7557 3453 0604</li>
+                      <li>American Express: 3711 803032 57522</li>
+                    </ul>
+                  </p>
+                  <p>
+                    Cardholder name prefixes.
+                    <ul>
+                      <li>APRO: Approved payment</li>
+                      <li>CONT: Pending payment</li>
+                      <li>CALL: Call for authorize rejection</li>
+                      <li>FUND: Insufficient amount rejection</li>
+                      <li>SECU: Wrong security code rejection</li>
+                      <li>EXPI: Expiration date rejection</li>
+                      <li>FORM: Rejection for an error in the form</li>
+                      <li>OTHE: General rejection</li>
+                    </ul>
+                    <p class="advanced-panel">
+                      <b>APROJhon Smith</b> will result in an approved payment.
+                    </p>
+                  </p>
+               </div>
+            </div>
+            <div class="row" id="step-six">
+               <div class="col-md-6 step-desc">
+                  <div class="desc">
+                     <h3>6.  Go into production</h3>
+                        <p>
+                          <b>First:</b>
+                        </p>
+                        <p>
+                          <ul>
+                           <li style="list-style-type: decimal;"><a href="https://registration.mercadopago.com.ar/registration-mp?mode=mp" target="_blank">Register a MercadoPago account</a> to receive money.</li>
+                           <li style="list-style-type: decimal;"><a href="https://applications.mercadopago.com.ar" target="_blank">Create an application</a>.</li>
+                           <li style="list-style-type: decimal;"><a href="https://www.mercadopago.com/mla/account/credentials?type=basic" target="_blank">Configure your credentials</a>.</li>
+                          </ul>
+                        </p>
+                      <p><b>From your server:</b>
+                        <br />
+                        Just <a href="https://www.mercadopago.com.ar/developers/es/api-docs/basic-checkout/checkout-preferences/" target="_blank">create a payment preference</a> and return our services response.
+                        <b>Do it from your server, because you will have to sign it with your private key</b>. By doing this we protect the payer and also your own seller user. <a href="https://www.mercadopago.com.ar/developers/es/solutions/payments/basic-checkout/receive-payments/" target="_blank">How to create a preference in your server</a>.
+                        <br />
+                        <p class="advanced-panel">
+                          <a href="https://www.mercadopago.com.ar/developers/es/solutions/payments/basic-checkout/receive-payments/additional-info/" target="_blank">Complete preferences</a> perform much better.
+                          <br />
+                          Send us all the information you can, and you will offer such an amazing experience for your buyers that your accredited payments will raise!
+                        </p>
+                      </p>
+                      <p><b>From your app:</b>
+                        <br />
+                        We offer you a class called <a href="https://github.com/mercadopago/px-android/blob/master/sdk/src/main/java/com/mercadopago/core/MerchantServer.java" target="_blank">MerchantServer</a> that connects with your server. The <b>createPreference</b> method makes a POST and sends as the message's body the map you've defined (preferenceMap). Set your base URL (https://api.tunombre.com) and URI (/create_preference) where you expect to receive the information in order to create a preference.
+                        <br />
+                        <a href="https://github.com/mercadopago/px-android/blob/master/sdk/src/main/java/com/mercadopago/core/MerchantServer.java" target="_blank">MerchantServer</a> will turn your service's response (the same from MercadoPago services) into a <a href="https://github.com/mercadopago/px-android/blob/master/sdk/src/main/java/com/mercadopago/model/CheckoutPreference.java" target="_blank">CheckoutPreference</a> object, which ID is the entry point to our checkout.
+                      </p>
+                  </div>
+               </div>
+               <div class="col-md-6 code">
+                  <pre class="snippet">
+                     <code class="line-numbers language-java">
+// Heads up! It's a MercadoPago callback
+import com.mercadopago.callbacks.Callback;
+
+public void submit(View view) {
+
+  // Create a map with the purchase data and your client's email.
+  Map&lt;String, Object&gt; preferenceMap = new HashMap&lt;&gt;();
+  preferenceMap.put("item_id", "1");
+  preferenceMap.put("amount", new BigDecimal(10));
+  preferenceMap.put("currency_id", "ARS");
+  preferenceMap.put("payer_email", "client_email@gmail.com");
+
+  // Send the information to your server
+  MerchantServer.createPreference(this, "https://api.yourname.com",
+    "/create_preference", preferenceMap, new Callback&lt;CheckoutPreference&gt;() {
+
+      @Override
+      public void success(CheckoutPreference checkoutPreference) {
+          // Preference correctly created
+          // Start MercadoPago Checkout.
+          new MercadoPago.StartActivityBuilder()
+            .setActivity(mActivity)
+            .setPublicKey("TEST-ad365c37-8012-4014-84f5-6c895b3f8e0a")
+            .setCheckoutPreferenceId(checkoutPreference.getId())
+            .startCheckoutActivity();
+      }
+
+      @Override
+      public void failure(ApiException error) {
+        // Oops, something went wrong
+      }
+  });
+}
+                     </code>
+                     <button class="copy-button">
+                        <img src="./img/clippy.svg" width="13" alt="Copy to clipboard">
+                    </button>
+                  </pre>
+               </div>
+            </div>
+         </div>
+      </div>
+      <footer class="footer">
+
+         <div class="copy">
+            <div class="copy-container">
+               <p class="authors">
+                  © 2016 MercadoLibre S.R.L.
+               </p>
+            </div>
+         </div>
+      </footer>
+      <script src="./js/bootstrap.min.js"></script>
+      <script src="./js/site.js"></script>
+      <script src="./js/cookies.min.js"></script>
+      <script src="./js/prism.js"></script>
+      <script src="./js/clipboard.js"></script>
+   <script>
+
+   (function() {
+
+    new Clipboard('.copy-button');
+    var pre = document.getElementsByTagName('pre');
+    for (var i = 0; i < pre.length; i++) {
+      var isLanguage = pre[i].children[0].className.indexOf('language-');
+      if ( isLanguage === 0 ) {
+        var button = document.createElement('button');
+        button.className = 'copy-button';
+        pre[i].appendChild(button);
+      }
+    }
+
+var copyCode = new Clipboard('.copy-button', {
+    target: function(trigger) {
+        return trigger.previousElementSibling;
+    }
+});
+
+
+    $("#flavor_3_step_2").html("&lt;LinearLayout xmlns:android='http://schemas.android.com/apk/res/android'");
+    $("#flavor_3_step_2").append("\n\txmlns:tools='http://schemas.android.com/tools'");
+    $("#flavor_3_step_2").append("\n\tandroid:layout_width='match_parent'");
+    $("#flavor_3_step_2").append("\n\tandroid:layout_height='match_parent'");
+    $("#flavor_3_step_2").append("\n\tandroid:paddingLeft='@dimen/activity_horizontal_margin'");
+    $("#flavor_3_step_2").append("\n\tandroid:paddingRight='@dimen/activity_horizontal_margin'");
+    $("#flavor_3_step_2").append("\n\tandroid:paddingTop='@dimen/activity_vertical_margin'");
+    $("#flavor_3_step_2").append("\n\tandroid:paddingBottom='@dimen/activity_vertical_margin'");
+    $("#flavor_3_step_2").append("\n\tandroid:orientation='vertical'");
+    $("#flavor_3_step_2").append("\n\ttools:context='.MainActivity'&gt;");
+    $("#flavor_3_step_2").append("\n");
+    $("#flavor_3_step_2").append("\n");
+    $("#flavor_3_step_2").append("\t&lt;Button");
+        $("#flavor_3_step_2").append("\n\t\tandroid:layout_width='match_parent'");
+        $("#flavor_3_step_2").append("\n\t\tandroid:layout_height='@dimen/mpsdk_button_height'");
+        $("#flavor_3_step_2").append("\n\t\tandroid:layout_marginTop='25dp'");
+        $("#flavor_3_step_2").append("\n\t\tandroid:gravity='center'");
+        $("#flavor_3_step_2").append("\n\t\tandroid:text='Pagar $100'");
+        $("#flavor_3_step_2").append("\n\t\tandroid:onClick='submit'");
+        $("#flavor_3_step_2").append("\n\t\tstyle='@style/mpsdk_button_normal'/&gt;");
+        $("#flavor_3_step_2").append("\n");
+    $("#flavor_3_step_2").append("\n\t&lt;TextView");
+        $("#flavor_3_step_2").append("\n\t\tandroid:layout_width='match_parent'");
+        $("#flavor_3_step_2").append("\n\t\tandroid:layout_height='wrap_content'");
+        $("#flavor_3_step_2").append("\n\t\tandroid:id='@+id/mp_results'");
+        $("#flavor_3_step_2").append("\n\t\tandroid:paddingTop='50dp'/&gt;");
+   $("#flavor_3_step_2").append("\n&lt;/LinearLayout&gt;");
+})();
+</script>
+
+
+
+</body>
+</html>
