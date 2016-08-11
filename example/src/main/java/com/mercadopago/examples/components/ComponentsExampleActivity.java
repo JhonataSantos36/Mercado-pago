@@ -326,10 +326,11 @@ public class ComponentsExampleActivity extends AppCompatActivity {
             @Override
             public void success(Payment payment) {
                 new MercadoPago.StartActivityBuilder()
+                        .setPublicKey(mPublicKey)
                         .setActivity(mActivity)
                         .setPayment(payment)
                         .setPaymentMethod(paymentMethod)
-                        .startCongratsActivity();
+                        .startPaymentResultActivity();
             }
 
             @Override
