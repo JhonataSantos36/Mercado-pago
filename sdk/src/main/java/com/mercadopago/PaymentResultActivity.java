@@ -152,6 +152,9 @@ public class PaymentResultActivity extends Activity {
             resolveRequest(resultCode, data);
         } else if (requestCode == MercadoPago.INSTRUCTIONS_REQUEST_CODE) {
             finishWithOkResult();
+        } else if (resultCode == RESULT_CANCELED && data != null && data.hasExtra("mpException")) {
+            setResult(resultCode, data);
+            finish();
         }
     }
 
