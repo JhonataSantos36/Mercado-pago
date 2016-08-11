@@ -128,7 +128,7 @@ public class CongratsActivityTest {
 
     @Test
     public void displayWithoutInterestWhenApprovedPaymentHasZeroRate(){
-        String paymentIdDescription, lastFourDigitsDescription;
+        String subtitle, paymentIdDescription, lastFourDigitsDescription;
         Spanned installmentsDescription;
         Bitmap bitmap, paymentBitmap;
 
@@ -140,10 +140,8 @@ public class CongratsActivityTest {
 
         //Title and subtitle
         onView(withId(R.id.mpsdkCongratulationsTitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_title_activity_congrat))));
-        onView(withId(R.id.mpsdkCongratulationSubtitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_subtitle_action_activity_congrat))));
-
-        //Email description
-        onView(withId(R.id.mpsdkPayerEmailDescription)).check(matches(withText(mPayment.getPayer().getEmail())));
+        subtitle = String.format(mTestRule.getActivity().getString(R.string.mpsdk_subtitle_action_activity_congrat), mPayment.getPayer().getEmail());
+        onView(withId(R.id.mpsdkCongratulationSubtitle)).check(matches(withText(subtitle)));
 
         //LastFourDigits Card
         lastFourDigitsDescription = mTestRule.getActivity().getString(R.string.mpsdk_last_digits_label) + " " + mPayment.getCard().getLastFourDigits();
@@ -201,7 +199,7 @@ public class CongratsActivityTest {
 
     @Test
     public void displayTotalAmountWithRateWhenApprovedPaymentHasInterest(){
-        String paymentIdDescription, lastFourDigitsDescription;
+        String subtitle, paymentIdDescription, lastFourDigitsDescription;
         Spanned installmentsDescription, totalAmountDescription;
         Bitmap bitmap, paymentBitmap;
 
@@ -220,10 +218,8 @@ public class CongratsActivityTest {
 
         //Title and subtitle
         onView(withId(R.id.mpsdkCongratulationsTitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_title_activity_congrat))));
-        onView(withId(R.id.mpsdkCongratulationSubtitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_subtitle_action_activity_congrat))));
-
-        //Email description
-        onView(withId(R.id.mpsdkPayerEmailDescription)).check(matches(withText(mPayment.getPayer().getEmail())));
+        subtitle = String.format(mTestRule.getActivity().getString(R.string.mpsdk_subtitle_action_activity_congrat), mPayment.getPayer().getEmail());
+        onView(withId(R.id.mpsdkCongratulationSubtitle)).check(matches(withText(subtitle)));
 
         //LastFourDigits Card
         lastFourDigitsDescription = mTestRule.getActivity().getString(R.string.mpsdk_last_digits_label) + " " + mPayment.getCard().getLastFourDigits();
@@ -258,7 +254,7 @@ public class CongratsActivityTest {
 
     @Test
     public void displayWithoutInterestWhenApprovedPaymentHasZeroRateButFeeDetailsSizeIsOne(){
-        String paymentIdDescription, lastFourDigitsDescription;
+        String subtitle, paymentIdDescription, lastFourDigitsDescription;
         Spanned installmentsDescription;
         Bitmap bitmap, paymentBitmap;
 
@@ -277,10 +273,8 @@ public class CongratsActivityTest {
 
         //Title and subtitle
         onView(withId(R.id.mpsdkCongratulationsTitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_title_activity_congrat))));
-        onView(withId(R.id.mpsdkCongratulationSubtitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_subtitle_action_activity_congrat))));
-
-        //Email description
-        onView(withId(R.id.mpsdkPayerEmailDescription)).check(matches(withText(mPayment.getPayer().getEmail())));
+        subtitle = String.format(mTestRule.getActivity().getString(R.string.mpsdk_subtitle_action_activity_congrat), mPayment.getPayer().getEmail());
+        onView(withId(R.id.mpsdkCongratulationSubtitle)).check(matches(withText(subtitle)));
 
         //LastFourDigits Card
         lastFourDigitsDescription = mTestRule.getActivity().getString(R.string.mpsdk_last_digits_label) + " " + mPayment.getCard().getLastFourDigits();
@@ -332,9 +326,6 @@ public class CongratsActivityTest {
         onView(withId(R.id.mpsdkCongratulationsTitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_title_activity_congrat))));
         onView(withId(R.id.mpsdkCongratulationSubtitle)).check(matches(not(isDisplayed())));
 
-        //Email description
-        onView(withId(R.id.mpsdkPayerEmailDescription)).check(matches(not(isDisplayed())));
-
         //LastFourDigits Card
         lastFourDigitsDescription = mTestRule.getActivity().getString(R.string.mpsdk_last_digits_label) + " " + mPayment.getCard().getLastFourDigits();
         onView(withId(R.id.mpsdkLastFourDigitsDescription)).check(matches(withText(lastFourDigitsDescription)));
@@ -385,9 +376,6 @@ public class CongratsActivityTest {
         onView(withId(R.id.mpsdkCongratulationsTitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_title_activity_congrat))));
         onView(withId(R.id.mpsdkCongratulationSubtitle)).check(matches(not(isDisplayed())));
 
-        //Email description
-        onView(withId(R.id.mpsdkPayerEmailDescription)).check(matches(not(isDisplayed())));
-
         //LastFourDigits Card
         lastFourDigitsDescription = mTestRule.getActivity().getString(R.string.mpsdk_last_digits_label) + " " + mPayment.getCard().getLastFourDigits();
         onView(withId(R.id.mpsdkLastFourDigitsDescription)).check(matches(withText(lastFourDigitsDescription)));
@@ -435,9 +423,6 @@ public class CongratsActivityTest {
         onView(withId(R.id.mpsdkCongratulationsTitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_title_activity_congrat))));
         onView(withId(R.id.mpsdkCongratulationSubtitle)).check(matches(not(isDisplayed())));
 
-        //Email description
-        onView(withId(R.id.mpsdkPayerEmailDescription)).check(matches(not(isDisplayed())));
-
         //LastFourDigits Card
         lastFourDigitsDescription = mTestRule.getActivity().getString(R.string.mpsdk_last_digits_label) + " " + mPayment.getCard().getLastFourDigits();
         onView(withId(R.id.mpsdkLastFourDigitsDescription)).check(matches(withText(lastFourDigitsDescription)));
@@ -470,7 +455,7 @@ public class CongratsActivityTest {
 
     @Test
     public void lastFourDigitsCardAreNotDisplayedWhenPaymentHasNullCard(){
-        String paymentIdDescription;
+        String subtitle, paymentIdDescription;
         Spanned installmentsDescription;
 
         mPayment.setCard(null);
@@ -482,10 +467,8 @@ public class CongratsActivityTest {
 
         //Title and subtitle
         onView(withId(R.id.mpsdkCongratulationsTitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_title_activity_congrat))));
-        onView(withId(R.id.mpsdkCongratulationSubtitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_subtitle_action_activity_congrat))));
-
-        //Email description
-        onView(withId(R.id.mpsdkPayerEmailDescription)).check(matches(withText(mPayment.getPayer().getEmail())));
+        subtitle = String.format(mTestRule.getActivity().getString(R.string.mpsdk_subtitle_action_activity_congrat), mPayment.getPayer().getEmail());
+        onView(withId(R.id.mpsdkCongratulationSubtitle)).check(matches(withText(subtitle)));
 
         //LastFourDigits Card
         onView(withId(R.id.mpsdkLastFourDigitsDescription)).check(matches(not(isDisplayed())));
@@ -513,7 +496,7 @@ public class CongratsActivityTest {
 
     @Test
     public void lastFourDigitsCardAreNotDisplayedWhenPaymentHasNullLastFourDigitsCard(){
-        String paymentIdDescription;
+        String subtitle, paymentIdDescription;
         Spanned installmentsDescription;
 
         Card card = new Card();
@@ -528,10 +511,8 @@ public class CongratsActivityTest {
 
         //Title and subtitle
         onView(withId(R.id.mpsdkCongratulationsTitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_title_activity_congrat))));
-        onView(withId(R.id.mpsdkCongratulationSubtitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_subtitle_action_activity_congrat))));
-
-        //Email description
-        onView(withId(R.id.mpsdkPayerEmailDescription)).check(matches(withText(mPayment.getPayer().getEmail())));
+        subtitle = String.format(mTestRule.getActivity().getString(R.string.mpsdk_subtitle_action_activity_congrat), mPayment.getPayer().getEmail());
+        onView(withId(R.id.mpsdkCongratulationSubtitle)).check(matches(withText(subtitle)));
 
         //LastFourDigits Card
         onView(withId(R.id.mpsdkLastFourDigitsDescription)).check(matches(not(isDisplayed())));
@@ -559,7 +540,7 @@ public class CongratsActivityTest {
 
     @Test
     public void lastFourDigitsCardAreNotDisplayedWhenPaymentHasEmptyLastFourDigitsCard(){
-        String paymentIdDescription;
+        String subtitle, paymentIdDescription;
         Spanned installmentsDescription;
 
         Card card = new Card();
@@ -574,10 +555,8 @@ public class CongratsActivityTest {
 
         //Title and subtitle
         onView(withId(R.id.mpsdkCongratulationsTitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_title_activity_congrat))));
-        onView(withId(R.id.mpsdkCongratulationSubtitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_subtitle_action_activity_congrat))));
-
-        //Email description
-        onView(withId(R.id.mpsdkPayerEmailDescription)).check(matches(withText(mPayment.getPayer().getEmail())));
+        subtitle = String.format(mTestRule.getActivity().getString(R.string.mpsdk_subtitle_action_activity_congrat), mPayment.getPayer().getEmail());
+        onView(withId(R.id.mpsdkCongratulationSubtitle)).check(matches(withText(subtitle)));
 
         //LastFourDigits Card
         onView(withId(R.id.mpsdkLastFourDigitsDescription)).check(matches(not(isDisplayed())));
@@ -605,7 +584,7 @@ public class CongratsActivityTest {
 
     @Test
     public void lastFourDigitsCardAndPaymentMethodImageNotDisplayedWhenPaymentHasNullPaymentMethodId(){
-        String paymentIdDescription;
+        String subtitle, paymentIdDescription;
         Spanned installmentsDescription;
 
         mPaymentMethod.setId(null);
@@ -618,10 +597,8 @@ public class CongratsActivityTest {
 
         //Title and subtitle
         onView(withId(R.id.mpsdkCongratulationsTitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_title_activity_congrat))));
-        onView(withId(R.id.mpsdkCongratulationSubtitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_subtitle_action_activity_congrat))));
-
-        //Email description
-        onView(withId(R.id.mpsdkPayerEmailDescription)).check(matches(withText(mPayment.getPayer().getEmail())));
+        subtitle = String.format(mTestRule.getActivity().getString(R.string.mpsdk_subtitle_action_activity_congrat), mPayment.getPayer().getEmail());
+        onView(withId(R.id.mpsdkCongratulationSubtitle)).check(matches(withText(subtitle)));
 
         //LastFourDigits Card
         onView(withId(R.id.mpsdkLastFourDigitsDescription)).check(matches(not(isDisplayed())));
@@ -649,7 +626,7 @@ public class CongratsActivityTest {
 
     @Test
     public void paymentMethodImageIsNotDisplayedWhenPaymentMethodIdHasNotImage(){
-        String paymentIdDescription, lastFourDigitsDescription;
+        String subtitle, paymentIdDescription, lastFourDigitsDescription;
         Spanned installmentsDescription;
 
         mPaymentMethod.setId("test");
@@ -663,10 +640,8 @@ public class CongratsActivityTest {
 
         //Title and subtitle
         onView(withId(R.id.mpsdkCongratulationsTitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_title_activity_congrat))));
-        onView(withId(R.id.mpsdkCongratulationSubtitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_subtitle_action_activity_congrat))));
-
-        //Email description
-        onView(withId(R.id.mpsdkPayerEmailDescription)).check(matches(withText(mPayment.getPayer().getEmail())));
+        subtitle = String.format(mTestRule.getActivity().getString(R.string.mpsdk_subtitle_action_activity_congrat), mPayment.getPayer().getEmail());
+        onView(withId(R.id.mpsdkCongratulationSubtitle)).check(matches(withText(subtitle)));
 
         //LastFourDigits Card
         lastFourDigitsDescription = mTestRule.getActivity().getString(R.string.mpsdk_last_digits_label) + " " + mPayment.getCard().getLastFourDigits();
@@ -695,7 +670,7 @@ public class CongratsActivityTest {
 
     @Test
     public void lastFourDigitsAndPaymentMethodImageNotDisplayedWhenPaymentMethodIdIsEmpty(){
-        String paymentIdDescription;
+        String subtitle, paymentIdDescription;
         Spanned installmentsDescription;
 
         mPaymentMethod.setId("");
@@ -708,10 +683,8 @@ public class CongratsActivityTest {
 
         //Title and subtitle
         onView(withId(R.id.mpsdkCongratulationsTitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_title_activity_congrat))));
-        onView(withId(R.id.mpsdkCongratulationSubtitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_subtitle_action_activity_congrat))));
-
-        //Email description
-        onView(withId(R.id.mpsdkPayerEmailDescription)).check(matches(withText(mPayment.getPayer().getEmail())));
+        subtitle = String.format(mTestRule.getActivity().getString(R.string.mpsdk_subtitle_action_activity_congrat), mPayment.getPayer().getEmail());
+        onView(withId(R.id.mpsdkCongratulationSubtitle)).check(matches(withText(subtitle)));
 
         //LastFourDigits Card
         onView(withId(R.id.mpsdkLastFourDigitsDescription)).check(matches(not(isDisplayed())));
@@ -739,7 +712,7 @@ public class CongratsActivityTest {
 
     @Test
     public void lastFourDigitsCardAreNotDisplayedWhenPaymentPaymentMethodIdIsDifferentToPaymentMethodId(){
-        String paymentIdDescription;
+        String subtitle, paymentIdDescription;
         Spanned installmentsDescription;
 
         mPaymentMethod.setId("visa");
@@ -752,10 +725,8 @@ public class CongratsActivityTest {
 
         //Title and subtitle
         onView(withId(R.id.mpsdkCongratulationsTitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_title_activity_congrat))));
-        onView(withId(R.id.mpsdkCongratulationSubtitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_subtitle_action_activity_congrat))));
-
-        //Email description
-        onView(withId(R.id.mpsdkPayerEmailDescription)).check(matches(withText(mPayment.getPayer().getEmail())));
+        subtitle = String.format(mTestRule.getActivity().getString(R.string.mpsdk_subtitle_action_activity_congrat), mPayment.getPayer().getEmail());
+        onView(withId(R.id.mpsdkCongratulationSubtitle)).check(matches(withText(subtitle)));
 
         //LastFourDigits Card
         onView(withId(R.id.mpsdkLastFourDigitsDescription)).check(matches(not(isDisplayed())));
@@ -783,7 +754,7 @@ public class CongratsActivityTest {
 
     @Test
     public void installmentsDescriptionIsNotDisplayedWhenPaymentInstallmentsNumberIsNull(){
-        String paymentIdDescription, lastFourDigitsDescription;
+        String subtitle, paymentIdDescription, lastFourDigitsDescription;
         Bitmap bitmap, paymentBitmap;
 
         mPayment.setInstallments(null);
@@ -795,10 +766,8 @@ public class CongratsActivityTest {
 
         //Title and subtitle
         onView(withId(R.id.mpsdkCongratulationsTitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_title_activity_congrat))));
-        onView(withId(R.id.mpsdkCongratulationSubtitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_subtitle_action_activity_congrat))));
-
-        //Email description
-        onView(withId(R.id.mpsdkPayerEmailDescription)).check(matches(withText(mPayment.getPayer().getEmail())));
+        subtitle = String.format(mTestRule.getActivity().getString(R.string.mpsdk_subtitle_action_activity_congrat), mPayment.getPayer().getEmail());
+        onView(withId(R.id.mpsdkCongratulationSubtitle)).check(matches(withText(subtitle)));
 
         //LastFourDigits Card
         lastFourDigitsDescription = mTestRule.getActivity().getString(R.string.mpsdk_last_digits_label) + " " + mPayment.getCard().getLastFourDigits();
@@ -831,7 +800,7 @@ public class CongratsActivityTest {
 
     @Test
     public void installmentsDescriptionIsNotDisplayedWhenPaymentInstallmentsNumberIsNegative(){
-        String paymentIdDescription, lastFourDigitsDescription;
+        String subtitle, paymentIdDescription, lastFourDigitsDescription;
         Bitmap bitmap, paymentBitmap;
 
         mPayment.setInstallments(-1);
@@ -843,10 +812,8 @@ public class CongratsActivityTest {
 
         //Title and subtitle
         onView(withId(R.id.mpsdkCongratulationsTitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_title_activity_congrat))));
-        onView(withId(R.id.mpsdkCongratulationSubtitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_subtitle_action_activity_congrat))));
-
-        //Email description
-        onView(withId(R.id.mpsdkPayerEmailDescription)).check(matches(withText(mPayment.getPayer().getEmail())));
+        subtitle = String.format(mTestRule.getActivity().getString(R.string.mpsdk_subtitle_action_activity_congrat), mPayment.getPayer().getEmail());
+        onView(withId(R.id.mpsdkCongratulationSubtitle)).check(matches(withText(subtitle)));
 
         //LastFourDigits Card
         lastFourDigitsDescription = mTestRule.getActivity().getString(R.string.mpsdk_last_digits_label) + " " + mPayment.getCard().getLastFourDigits();
@@ -879,7 +846,7 @@ public class CongratsActivityTest {
 
     @Test
     public void installmentsDescriptionIsNotDisplayedAndTotalAmountIsDisplayedWhenPaymentInstallmentsNumberIsZero(){
-        String paymentIdDescription, lastFourDigitsDescription;
+        String subtitle, paymentIdDescription, lastFourDigitsDescription;
         StringBuilder installments = new StringBuilder();
         Spanned installmentsDescription;
         Bitmap bitmap, paymentBitmap;
@@ -893,10 +860,8 @@ public class CongratsActivityTest {
 
         //Title and subtitle
         onView(withId(R.id.mpsdkCongratulationsTitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_title_activity_congrat))));
-        onView(withId(R.id.mpsdkCongratulationSubtitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_subtitle_action_activity_congrat))));
-
-        //Email description
-        onView(withId(R.id.mpsdkPayerEmailDescription)).check(matches(withText(mPayment.getPayer().getEmail())));
+        subtitle = String.format(mTestRule.getActivity().getString(R.string.mpsdk_subtitle_action_activity_congrat), mPayment.getPayer().getEmail());
+        onView(withId(R.id.mpsdkCongratulationSubtitle)).check(matches(withText(subtitle)));
 
         //LastFourDigits Card
         lastFourDigitsDescription = mTestRule.getActivity().getString(R.string.mpsdk_last_digits_label) + " " + mPayment.getCard().getLastFourDigits();
@@ -932,7 +897,7 @@ public class CongratsActivityTest {
 
     @Test
     public void installmentsDescriptionIsNotDisplayedAndTotalAmountIsDisplayedWhenPaymentInstallmentsNumberIsOne(){
-        String paymentIdDescription, lastFourDigitsDescription;
+        String subtitle, paymentIdDescription, lastFourDigitsDescription;
         StringBuilder installments = new StringBuilder();
         Spanned installmentsDescription;
         Bitmap bitmap, paymentBitmap;
@@ -946,10 +911,8 @@ public class CongratsActivityTest {
 
         //Title and subtitle
         onView(withId(R.id.mpsdkCongratulationsTitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_title_activity_congrat))));
-        onView(withId(R.id.mpsdkCongratulationSubtitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_subtitle_action_activity_congrat))));
-
-        //Email description
-        onView(withId(R.id.mpsdkPayerEmailDescription)).check(matches(withText(mPayment.getPayer().getEmail())));
+        subtitle = String.format(mTestRule.getActivity().getString(R.string.mpsdk_subtitle_action_activity_congrat), mPayment.getPayer().getEmail());
+        onView(withId(R.id.mpsdkCongratulationSubtitle)).check(matches(withText(subtitle)));
 
         //LastFourDigits Card
         lastFourDigitsDescription = mTestRule.getActivity().getString(R.string.mpsdk_last_digits_label) + " " + mPayment.getCard().getLastFourDigits();
@@ -985,7 +948,7 @@ public class CongratsActivityTest {
 
     @Test
     public void installmentsDescriptionIsNotDisplayedWhenPaymentTransactionDetailIsNull(){
-        String paymentIdDescription, lastFourDigitsDescription;
+        String subtitle, paymentIdDescription, lastFourDigitsDescription;
         Bitmap bitmap, paymentBitmap;
 
         mPayment.setTransactionDetails(null);
@@ -997,10 +960,8 @@ public class CongratsActivityTest {
 
         //Title and subtitle
         onView(withId(R.id.mpsdkCongratulationsTitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_title_activity_congrat))));
-        onView(withId(R.id.mpsdkCongratulationSubtitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_subtitle_action_activity_congrat))));
-
-        //Email description
-        onView(withId(R.id.mpsdkPayerEmailDescription)).check(matches(withText(mPayment.getPayer().getEmail())));
+        subtitle = String.format(mTestRule.getActivity().getString(R.string.mpsdk_subtitle_action_activity_congrat), mPayment.getPayer().getEmail());
+        onView(withId(R.id.mpsdkCongratulationSubtitle)).check(matches(withText(subtitle)));
 
         //LastFourDigits Card
         lastFourDigitsDescription = mTestRule.getActivity().getString(R.string.mpsdk_last_digits_label) + " " + mPayment.getCard().getLastFourDigits();
@@ -1033,7 +994,7 @@ public class CongratsActivityTest {
 
     @Test
     public void installmentsDescriptionIsNotDisplayedWhenPaymentInstallmentAmountIsNull(){
-        String paymentIdDescription, lastFourDigitsDescription;
+        String subtitle, paymentIdDescription, lastFourDigitsDescription;
         Bitmap bitmap, paymentBitmap;
 
         TransactionDetails transactionDetails = new TransactionDetails();
@@ -1049,10 +1010,8 @@ public class CongratsActivityTest {
 
         //Title and subtitle
         onView(withId(R.id.mpsdkCongratulationsTitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_title_activity_congrat))));
-        onView(withId(R.id.mpsdkCongratulationSubtitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_subtitle_action_activity_congrat))));
-
-        //Email description
-        onView(withId(R.id.mpsdkPayerEmailDescription)).check(matches(withText(mPayment.getPayer().getEmail())));
+        subtitle = String.format(mTestRule.getActivity().getString(R.string.mpsdk_subtitle_action_activity_congrat), mPayment.getPayer().getEmail());
+        onView(withId(R.id.mpsdkCongratulationSubtitle)).check(matches(withText(subtitle)));
 
         //LastFourDigits Card
         lastFourDigitsDescription = mTestRule.getActivity().getString(R.string.mpsdk_last_digits_label) + " " + mPayment.getCard().getLastFourDigits();
@@ -1085,7 +1044,7 @@ public class CongratsActivityTest {
 
     @Test
     public void installmentsDescriptionIsNotDisplayedWhenPaymentInstallmentAmountIsNegative(){
-        String paymentIdDescription, lastFourDigitsDescription;
+        String subtitle, paymentIdDescription, lastFourDigitsDescription;
         Bitmap bitmap, paymentBitmap;
 
         TransactionDetails transactionDetails = new TransactionDetails();
@@ -1101,10 +1060,8 @@ public class CongratsActivityTest {
 
         //Title and subtitle
         onView(withId(R.id.mpsdkCongratulationsTitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_title_activity_congrat))));
-        onView(withId(R.id.mpsdkCongratulationSubtitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_subtitle_action_activity_congrat))));
-
-        //Email description
-        onView(withId(R.id.mpsdkPayerEmailDescription)).check(matches(withText(mPayment.getPayer().getEmail())));
+        subtitle = String.format(mTestRule.getActivity().getString(R.string.mpsdk_subtitle_action_activity_congrat), mPayment.getPayer().getEmail());
+        onView(withId(R.id.mpsdkCongratulationSubtitle)).check(matches(withText(subtitle)));
 
         //LastFourDigits Card
         lastFourDigitsDescription = mTestRule.getActivity().getString(R.string.mpsdk_last_digits_label) + " " + mPayment.getCard().getLastFourDigits();
@@ -1137,7 +1094,7 @@ public class CongratsActivityTest {
 
     @Test
     public void installmentsDescriptionIsNotDisplayedWhenPaymentInstallmentAmountIsZero(){
-        String paymentIdDescription, lastFourDigitsDescription;
+        String subtitle, paymentIdDescription, lastFourDigitsDescription;
         Bitmap bitmap, paymentBitmap;
 
         TransactionDetails transactionDetails = new TransactionDetails();
@@ -1153,10 +1110,8 @@ public class CongratsActivityTest {
 
         //Title and subtitle
         onView(withId(R.id.mpsdkCongratulationsTitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_title_activity_congrat))));
-        onView(withId(R.id.mpsdkCongratulationSubtitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_subtitle_action_activity_congrat))));
-
-        //Email description
-        onView(withId(R.id.mpsdkPayerEmailDescription)).check(matches(withText(mPayment.getPayer().getEmail())));
+        subtitle = String.format(mTestRule.getActivity().getString(R.string.mpsdk_subtitle_action_activity_congrat), mPayment.getPayer().getEmail());
+        onView(withId(R.id.mpsdkCongratulationSubtitle)).check(matches(withText(subtitle)));
 
         //LastFourDigits Card
         lastFourDigitsDescription = mTestRule.getActivity().getString(R.string.mpsdk_last_digits_label) + " " + mPayment.getCard().getLastFourDigits();
@@ -1189,7 +1144,7 @@ public class CongratsActivityTest {
 
     @Test
     public void installmentsDescriptionIsNotDisplayedWhenPaymentCurrencyIdIsNull(){
-        String paymentIdDescription, lastFourDigitsDescription;
+        String subtitle, paymentIdDescription, lastFourDigitsDescription;
         Bitmap bitmap, paymentBitmap;
 
         TransactionDetails transactionDetails = new TransactionDetails();
@@ -1206,10 +1161,8 @@ public class CongratsActivityTest {
 
         //Title and subtitle
         onView(withId(R.id.mpsdkCongratulationsTitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_title_activity_congrat))));
-        onView(withId(R.id.mpsdkCongratulationSubtitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_subtitle_action_activity_congrat))));
-
-        //Email description
-        onView(withId(R.id.mpsdkPayerEmailDescription)).check(matches(withText(mPayment.getPayer().getEmail())));
+        subtitle = String.format(mTestRule.getActivity().getString(R.string.mpsdk_subtitle_action_activity_congrat), mPayment.getPayer().getEmail());
+        onView(withId(R.id.mpsdkCongratulationSubtitle)).check(matches(withText(subtitle)));
 
         //LastFourDigits Card
         lastFourDigitsDescription = mTestRule.getActivity().getString(R.string.mpsdk_last_digits_label) + " " + mPayment.getCard().getLastFourDigits();
@@ -1242,7 +1195,7 @@ public class CongratsActivityTest {
 
     @Test
     public void installmentsDescriptionIsNotDisplayedWhenPaymentCurrencyIdIsEmpty(){
-        String paymentIdDescription, lastFourDigitsDescription;
+        String subtitle, paymentIdDescription, lastFourDigitsDescription;
         Bitmap bitmap, paymentBitmap;
 
         TransactionDetails transactionDetails = new TransactionDetails();
@@ -1259,10 +1212,8 @@ public class CongratsActivityTest {
 
         //Title and subtitle
         onView(withId(R.id.mpsdkCongratulationsTitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_title_activity_congrat))));
-        onView(withId(R.id.mpsdkCongratulationSubtitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_subtitle_action_activity_congrat))));
-
-        //Email description
-        onView(withId(R.id.mpsdkPayerEmailDescription)).check(matches(withText(mPayment.getPayer().getEmail())));
+        subtitle = String.format(mTestRule.getActivity().getString(R.string.mpsdk_subtitle_action_activity_congrat), mPayment.getPayer().getEmail());
+        onView(withId(R.id.mpsdkCongratulationSubtitle)).check(matches(withText(subtitle)));
 
         //LastFourDigits Card
         lastFourDigitsDescription = mTestRule.getActivity().getString(R.string.mpsdk_last_digits_label) + " " + mPayment.getCard().getLastFourDigits();
@@ -1295,7 +1246,7 @@ public class CongratsActivityTest {
 
     @Test
     public void installmentsDescriptionIsNotDisplayedWhenPaymentCurrencyIdNotExist(){
-        String paymentIdDescription, lastFourDigitsDescription;
+        String subtitle, paymentIdDescription, lastFourDigitsDescription;
         Bitmap bitmap, paymentBitmap;
 
         TransactionDetails transactionDetails = new TransactionDetails();
@@ -1312,10 +1263,8 @@ public class CongratsActivityTest {
 
         //Title and subtitle
         onView(withId(R.id.mpsdkCongratulationsTitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_title_activity_congrat))));
-        onView(withId(R.id.mpsdkCongratulationSubtitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_subtitle_action_activity_congrat))));
-
-        //Email description
-        onView(withId(R.id.mpsdkPayerEmailDescription)).check(matches(withText(mPayment.getPayer().getEmail())));
+        subtitle = String.format(mTestRule.getActivity().getString(R.string.mpsdk_subtitle_action_activity_congrat), mPayment.getPayer().getEmail());
+        onView(withId(R.id.mpsdkCongratulationSubtitle)).check(matches(withText(subtitle)));
 
         //LastFourDigits Card
         lastFourDigitsDescription = mTestRule.getActivity().getString(R.string.mpsdk_last_digits_label) + " " + mPayment.getCard().getLastFourDigits();
@@ -1348,7 +1297,7 @@ public class CongratsActivityTest {
 
     @Test
     public void totalAmountDescriptionIsNotDisplayedWhenPaymentTransactionDetailIsNull(){
-        String paymentIdDescription, lastFourDigitsDescription;
+        String subtitle, paymentIdDescription, lastFourDigitsDescription;
         Bitmap bitmap, paymentBitmap;
 
         mPayment.setTransactionDetails(null);
@@ -1360,10 +1309,8 @@ public class CongratsActivityTest {
 
         //Title and subtitle
         onView(withId(R.id.mpsdkCongratulationsTitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_title_activity_congrat))));
-        onView(withId(R.id.mpsdkCongratulationSubtitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_subtitle_action_activity_congrat))));
-
-        //Email description
-        onView(withId(R.id.mpsdkPayerEmailDescription)).check(matches(withText(mPayment.getPayer().getEmail())));
+        subtitle = String.format(mTestRule.getActivity().getString(R.string.mpsdk_subtitle_action_activity_congrat), mPayment.getPayer().getEmail());
+        onView(withId(R.id.mpsdkCongratulationSubtitle)).check(matches(withText(subtitle)));
 
         //LastFourDigits Card
         lastFourDigitsDescription = mTestRule.getActivity().getString(R.string.mpsdk_last_digits_label) + " " + mPayment.getCard().getLastFourDigits();
@@ -1396,7 +1343,7 @@ public class CongratsActivityTest {
 
     @Test
     public void totalAmountDescriptionIsNotDisplayedWhenPaymentTotalPaidAmountIsNull(){
-        String paymentIdDescription, lastFourDigitsDescription;
+        String subtitle, paymentIdDescription, lastFourDigitsDescription;
         Bitmap bitmap, paymentBitmap;
 
         TransactionDetails transactionDetails = new TransactionDetails();
@@ -1412,10 +1359,8 @@ public class CongratsActivityTest {
 
         //Title and subtitle
         onView(withId(R.id.mpsdkCongratulationsTitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_title_activity_congrat))));
-        onView(withId(R.id.mpsdkCongratulationSubtitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_subtitle_action_activity_congrat))));
-
-        //Email description
-        onView(withId(R.id.mpsdkPayerEmailDescription)).check(matches(withText(mPayment.getPayer().getEmail())));
+        subtitle = String.format(mTestRule.getActivity().getString(R.string.mpsdk_subtitle_action_activity_congrat), mPayment.getPayer().getEmail());
+        onView(withId(R.id.mpsdkCongratulationSubtitle)).check(matches(withText(subtitle)));
 
         //LastFourDigits Card
         lastFourDigitsDescription = mTestRule.getActivity().getString(R.string.mpsdk_last_digits_label) + " " + mPayment.getCard().getLastFourDigits();
@@ -1448,7 +1393,7 @@ public class CongratsActivityTest {
 
     @Test
     public void totalAmountDescriptionIsNotDisplayedWhenPaymentTotalPaidAmountIsNegative(){
-        String paymentIdDescription, lastFourDigitsDescription;
+        String subtitle, paymentIdDescription, lastFourDigitsDescription;
         Bitmap bitmap, paymentBitmap;
 
         TransactionDetails transactionDetails = new TransactionDetails();
@@ -1464,10 +1409,8 @@ public class CongratsActivityTest {
 
         //Title and subtitle
         onView(withId(R.id.mpsdkCongratulationsTitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_title_activity_congrat))));
-        onView(withId(R.id.mpsdkCongratulationSubtitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_subtitle_action_activity_congrat))));
-
-        //Email description
-        onView(withId(R.id.mpsdkPayerEmailDescription)).check(matches(withText(mPayment.getPayer().getEmail())));
+        subtitle = String.format(mTestRule.getActivity().getString(R.string.mpsdk_subtitle_action_activity_congrat), mPayment.getPayer().getEmail());
+        onView(withId(R.id.mpsdkCongratulationSubtitle)).check(matches(withText(subtitle)));
 
         //LastFourDigits Card
         lastFourDigitsDescription = mTestRule.getActivity().getString(R.string.mpsdk_last_digits_label) + " " + mPayment.getCard().getLastFourDigits();
@@ -1500,7 +1443,7 @@ public class CongratsActivityTest {
 
     @Test
     public void totalAmountDescriptionIsNotDisplayedWhenPaymentTotalPaidAmountIsZero(){
-        String paymentIdDescription, lastFourDigitsDescription;
+        String subtitle, paymentIdDescription, lastFourDigitsDescription;
         Bitmap bitmap, paymentBitmap;
 
         TransactionDetails transactionDetails = new TransactionDetails();
@@ -1516,10 +1459,8 @@ public class CongratsActivityTest {
 
         //Title and subtitle
         onView(withId(R.id.mpsdkCongratulationsTitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_title_activity_congrat))));
-        onView(withId(R.id.mpsdkCongratulationSubtitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_subtitle_action_activity_congrat))));
-
-        //Email description
-        onView(withId(R.id.mpsdkPayerEmailDescription)).check(matches(withText(mPayment.getPayer().getEmail())));
+        subtitle = String.format(mTestRule.getActivity().getString(R.string.mpsdk_subtitle_action_activity_congrat), mPayment.getPayer().getEmail());
+        onView(withId(R.id.mpsdkCongratulationSubtitle)).check(matches(withText(subtitle)));
 
         //LastFourDigits Card
         lastFourDigitsDescription = mTestRule.getActivity().getString(R.string.mpsdk_last_digits_label) + " " + mPayment.getCard().getLastFourDigits();
@@ -1552,7 +1493,7 @@ public class CongratsActivityTest {
 
     @Test
     public void paymentIdIsNotDisplayedWhenPaymentIdIsNull(){
-        String lastFourDigitsDescription;
+        String subtitle, lastFourDigitsDescription;
         Spanned installmentsDescription;
         Bitmap bitmap, paymentBitmap;
 
@@ -1565,10 +1506,8 @@ public class CongratsActivityTest {
 
         //Title and subtitle
         onView(withId(R.id.mpsdkCongratulationsTitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_title_activity_congrat))));
-        onView(withId(R.id.mpsdkCongratulationSubtitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_subtitle_action_activity_congrat))));
-
-        //Email description
-        onView(withId(R.id.mpsdkPayerEmailDescription)).check(matches(withText(mPayment.getPayer().getEmail())));
+        subtitle = String.format(mTestRule.getActivity().getString(R.string.mpsdk_subtitle_action_activity_congrat), mPayment.getPayer().getEmail());
+        onView(withId(R.id.mpsdkCongratulationSubtitle)).check(matches(withText(subtitle)));
 
         //LastFourDigits Card
         lastFourDigitsDescription = mTestRule.getActivity().getString(R.string.mpsdk_last_digits_label) + " " + mPayment.getCard().getLastFourDigits();

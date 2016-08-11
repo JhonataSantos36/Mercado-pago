@@ -2,6 +2,7 @@ package com.mercadopago;
 
 import android.content.Intent;
 import android.support.design.widget.Snackbar;
+import android.text.Spanned;
 import android.view.View;
 
 import com.mercadopago.model.Payment;
@@ -110,7 +111,7 @@ public class CallForAuthorizeActivity extends MercadoPagoActivity {
 
     private void setAuthorized() {
         if (isPaymentMethodValid()) {
-            String message = getString(R.string.mpsdk_text_authorized_call_for_authorize) + " " + mPaymentMethod.getName() + " " + getString(R.string.mpsdk_text_and_he_authorized);
+            String message = String.format(getString(R.string.mpsdk_text_authorized_call_for_authorize), mPaymentMethod.getName());
             mAuthorizedPaymentMethod.setText(message);
         } else {
             mAuthorizedPaymentMethod.setVisibility(View.GONE);
@@ -119,15 +120,11 @@ public class CallForAuthorizeActivity extends MercadoPagoActivity {
 
     private void setDescription() {
         if (isPaymentMethodValid() && isCurrencyIdValid() && isTotalPaidAmountValid()) {
-            StringBuilder sb = new StringBuilder();
-            sb.append(getString(R.string.mpsdk_title_activity_call_for_authorize));
-            sb.append(" " + mPaymentMethod.getName() + " ");
-            sb.append(getString(R.string.mpsdk_text_the_payment) + " ");
-            sb.append(CurrenciesUtil.formatNumber(mPayment.getTransactionDetails().getTotalPaidAmount(), mPayment.getCurrencyId()));
-            sb.append(" " + getString(R.string.mpsdk_text_to_mercado_pago));
+            String totalPaidAmount = CurrenciesUtil.formatNumber(mPayment.getTransactionDetails().getTotalPaidAmount(), mPayment.getCurrencyId());
+            String titleWithFormat = String.format(getString(R.string.mpsdk_title_activity_call_for_authorize), mPaymentMethod.getName(), totalPaidAmount);
 
             mCallForAuthTitle.setText(CurrenciesUtil.formatCurrencyInText(mPayment.getTransactionDetails().getTotalPaidAmount(),
-                    mPayment.getCurrencyId(), sb.toString(), true, true));
+                    mPayment.getCurrencyId(), titleWithFormat, true, true));
         } else {
             mCallForAuthTitle.setText(getString(R.string.mpsdk_error_title_activity_call_for_authorize));
         }

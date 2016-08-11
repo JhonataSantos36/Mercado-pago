@@ -22,7 +22,6 @@ import static android.text.TextUtils.isEmpty;
 public class CongratsActivity extends MercadoPagoActivity {
 
     // Controls
-    protected MPTextView mPayerEmailDescription;
     protected MPTextView mLastFourDigitsDescription;
     protected MPTextView mInstallmentsDescription;
     protected MPTextView mInterestAmountDescription;
@@ -69,12 +68,11 @@ public class CongratsActivity extends MercadoPagoActivity {
 
     @Override
     protected void initializeControls() {
-        mPayerEmailDescription = (MPTextView) findViewById(R.id.mpsdkPayerEmailDescription);
+        mCongratulationSubtitle = (MPTextView) findViewById(R.id.mpsdkCongratulationSubtitle);
         mLastFourDigitsDescription = (MPTextView) findViewById(R.id.mpsdkLastFourDigitsDescription);
         mInstallmentsDescription = (MPTextView) findViewById(R.id.mpsdkInstallmentsDescription);
         mInterestAmountDescription = (MPTextView) findViewById(R.id.mpsdkInterestAmountDescription);
         mPaymentIdDescription = (MPTextView) findViewById(R.id.mpsdkPaymentIdDescription);
-        mCongratulationSubtitle = (MPTextView) findViewById(R.id.mpsdkCongratulationSubtitle);
         mPaymentIdSeparator = findViewById(R.id.mpsdkPaymentIdSeparator);
         mPaymentMethodImage = (ImageView) findViewById(R.id.mpsdkPaymentMethodImage);
         mExit = (MPTextView) findViewById(R.id.mpsdkExitCongrats);
@@ -177,10 +175,10 @@ public class CongratsActivity extends MercadoPagoActivity {
 
     private void setPaymentEmailDescription() {
         if (isPayerEmailValid()) {
-            mPayerEmailDescription.setText(mPayment.getPayer().getEmail());
+            String subtitle = String.format(getString(R.string.mpsdk_subtitle_action_activity_congrat), mPayment.getPayer().getEmail());
+            mCongratulationSubtitle.setText(subtitle);
         } else {
             mCongratulationSubtitle.setVisibility(View.GONE);
-            mPayerEmailDescription.setVisibility(View.GONE);
         }
     }
 
