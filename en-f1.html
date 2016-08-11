@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="description" content="MercadoPago developers site">
+      <meta name="keywords" content="mercadopago,sdk,payment,pagos,braintree,paypal,html5,javascript,mobile,drifty,ionic,hybrid,phonegap,cordova,native,ios,android,angularjs">
+      <title>Payment solutions for your bussiness - MercadoPago</title>
+      <link href="./css/site.css" rel="stylesheet">
+      <link href="./css/font-awesome.css" rel="stylesheet">
+      <link href="./css/prism.css" rel="stylesheet" />
+      <script src="./js/jquery.min.js"></script>
+      <script src="./js/prism.js"></script>
+      <link rel="stylesheet" type="text/css" href="./css/lato.css" />
+
+   </head>
+   <body class="docs docs-page docs-css">
+      <nav class="navbar navbar-default" role="navigation">
+         <div class="container">
+            <div class="navbar-header">
+               <button type="button" class="navbar-toggle button ionic" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+               <i class="icon ion-navicon"></i>
+               </button>
+               <a class="navbar-brand" href="http://mercadopago.com/">
+               <img src="img/iso-mercadopago.png" width="60" height="41" alt="MercadoPago SDK">
+               </a>
+            </div>
+            <div class="collapse navbar-collapse navbar-ex1-collapse">
+               <ul class="nav navbar-nav navbar-right" style="color: white;">
+                  <li><a class="getting-started-nav nav-link" href="en-index.html">Our checkout</a></li>
+                  <li><a class="docs-nav nav-link" href="en-checkout_custom.html">Your checkout</a></li>
+                  <li><a class="nav-link" href="https://www.mercadopago.com.ar/developers/es/community/forum/">Developers forum</a></li>
+               </ul>
+            </div>
+         </div>
+      </nav>
+      <div class="header">
+         <div class="container" style="
+    padding-top: 120px;
+">
+            <h3>MercadoPago Android SDK</h3>
+            <h4>The quickest way to receive in-app payments with the best experience.</h4>
+         </div>
+
+      </div>
+      <div id="mati_header" style="height: 500px;margin: 0 auto;padding: 0;position: relative;width: 100%;top: -276px;overflow-x: hidden;OVERFLOW-Y: hidden;z-index: -100;background: url('./img/landing_f2.jpg');background-size: cover;background-position-x: 0px;background-position-y: -100px;">
+         <div style="background: rgba(0,0,0,0.5);height: 500px;"></div>
+      </div>
+      <div class="container content-container" style="margin-top: -250px;">
+         <div class="row">
+            <div class="col-md-3 col-sm-4 aside-menu">
+               <div class="docked-menu" style="top: 20px;">
+                  <ul class="nav left-menu">
+                     <li class="menu-title">
+                        <a href="en-index.html">OUR CHECKOUT</a>
+                     </li>
+                  </ul>
+                  <ul class="nav left-menu active-menu">
+                     <li>
+                        <a href="en-checkout_custom.html">YOUR CHECKOUT</a>
+                        <ul>
+                           <li><a href="en-checkout_custom.html#our_proposal">What do we offer?</a></li>
+                           <li><a href="en-checkout_custom.html#payment_info">Mandatory information to receive payments</a></li>
+                           <li><a href="en-checkout_custom.html#what_you_need">What do you need?</a></li>
+                           <li><a href="en-checkout_custom.html#modes">Sandbox and productive modes</a></li>
+                           <li><a href="en-checkout_custom.html#your_credentials">Use your credentials</a></li>
+                           <li><a href="en-checkout_custom.html#notifications">Receive payment notifications</a></li>
+                           <li>
+                              <a href="en-f2.html">UI components</a>
+                              <ul>
+                                 <li><a href="en-f2.html#f2_payment_vault">Full component</a></li>
+                                 <li><a href="en-f2.html#f2_card_form">Charging cards</a></li>
+                                 <li><a href="en-f2.html#f2_card_form_installments">Charging cards in installments</a></li>
+                                 <li><a href="en-f2.html#f2_payment_methods">Payment methods</a></li>
+                                 <li><a href="en-f2.html#f2_card_issuers">Banks</a></li>
+                                 <li><a href="en-f2.html#f2_payer_costs">Installments</a></li>
+                                 <li><a href="en-f2.html#f2_bank_deals">Bank deals</a></li>
+                                 <li><a href="en-f2.html#f2_create_payment">Payment creation</a></li>
+                                 <li><a href="en-f2.html#f2_payment_result">Payment result</a></li>
+                              </ul>
+                           </li>
+                           <li>
+                              <a href="en-f1.html">Personalize your experience</a>
+                              <ul>
+                                 <li><a href="en-f1.html#f1_payment_methods">Payment methods</a></li>
+                                 <li><a href="en-f1.html#f1_card_issuers">Banks</a></li>
+                                 <li><a href="en-f1.html#f1_payer_costs">Intallments</a></li>
+                                 <li><a href="en-f1.html#f1_identification_types">Identification types</a></li>
+                                 <li><a href="en-f1.html#f1_card_tokens">Card data tokenization</a></li>
+                                 <li><a href="en-f1.html#f1_bank_deals">Bank deals</a></li>
+                                 <li><a href="en-f1.html#f1_instructions">Instructions</a></li>
+                                 <li>
+                                    <a href="en-f1.html#f1_merchant_server">MerchantServer</a>
+                                    <ul>
+                                       <li><a href="en-f1.html#f1_create_payment">Payments</a></li>
+                                       <li><a href="en-f1.html#f1_create_preference">Preferences</a></li>
+                                    </ul>
+                                 </li>
+                              </ul>
+                           </li>
+                        </ul>
+                     </li>
+                  </ul>
+               </div>
+            </div>
+            <div class="col-md-9 col-sm-8 main-content">
+               <section class="docs-section">
+                  <h3 class="title">Personalize your checkout</h3>
+                  <p>Using gradle? Add it in the build.gradle file of the module where you will integrate us.</p>
+                  <p>Otherwise <a href="https://github.com/mercadopago/px-android/releases" target="_blank">download MercadoPago SDK</a></p>
+                  <p>
+                     <pre class="snippet">
+                        <code class="line-numbers language-java">dependencies {
+   compile ('com.mercadopago:sdk:2.0.0@aar') { transitive = true }
+}
+                        </code>
+                        <button class="copy-button" alt="Copiar código">
+                           <img src="./img/clippy.svg" width="13">
+                        </button>
+                     </pre>
+                  </p>
+               </section>
+               <section class="docs-section" id="f1_payment_methods">
+                  <h3 class="title">Payment methods</h3>
+                  <p>
+                     It's the entity participating in the payment. Could be a card brand, an entity that receives payments in cash or even a place where an user can find an ATM to make the payment.
+                     <br />
+                     If the payment method is a <b>card</b> we will give you the information you need to build a card form and validate the inputs. For example, the card number length, whether the security code belongs to the front or the back of the card, its length, and more. Also, the payment method can be <b>offline</b>. In this case we provide, among others, the accreditation time, since the payment will be in a "pending" state until the user finishes the payment in the corresponding entity.
+                     <br />
+                     <p class="advanced-panel">
+                        <em>*</em>Try a <a href="http://api.mercadopago.com/v1/payment_methods?public_key=444a9ef5-8a6b-429f-abdf-587639155d88" target="_blank">response example</a> from the payment methods API (/v1/payment_methods).
+                     </p>
+                     The following code makes the API call and turns its response to a list of <a href="https://github.com/mercadopago/px-android/blob/master/sdk/src/main/java/com/mercadopago/model/PaymentMethod.java" target="_blank">PaymentMethod</a>.
+                  </p>
+                  <p>
+                     <pre class="snippet">
+                        <code class="line-numbers language-java">
+// Heads up! MercadoPago's Callback.
+import com.mercadopago.callbacks.Callback;
+
+MercadoPago mercadoPago = new MercadoPago.Builder()
+  .setContext(this)
+  .setPublicKey("TEST-ad365c37-8012-4014-84f5-6c895b3f8e0a")
+  .build();
+
+mercadoPago.getPaymentMethods(new Callback &lt;List&lt;PaymentMethod&gt;&gt;() {
+   @Override
+   public void success(List&lt;PaymentMethod&gt; paymentMethods) {
+      // Done! Build your UI for the payment methods
+   }
+
+  @Override
+  public void failure(ApiException error) {
+    // Oops! Something went wrong
+  }
+});
+                        </code>
+                        <button class="copy-button">
+                           <img src="./img/clippy.svg" width="13" alt="Copy to clipboard">
+                        </button>
+                     </pre>
+                  </p>
+                  <!--<script src="https://gist.github.com/matiasgualino/f29687dcc2d45b977476c4c7d27a8105.js"></script>-->
+
+               </section>
+               <section class="docs-section" id="f1_card_issuers">
+                  <h3 class="title">Banks</h3>
+                  <p>
+                     The bank is the entity that issues cards. As payments processors, we arrange promotions with the banks so that your customers get more flexibility when buying. Your users card brand can be issued by more than one bank. In order to offer the correct installments, we need to ask them the bank that issued their card. If the bank is not selected or it's a wrong selection, <b>the payment will not be processed</b>.
+                     <p class="advanced-panel">
+                        <em>*</em>Try a <a href="https://api.mercadopago.com/v1/payment_methods/card_issuers?public_key=444a9ef5-8a6b-429f-abdf-587639155d88&payment_method_id=master" target="_blank">response example</a> from the banks API for a selected payment method (/v1/payment_methods/card_issuers).
+                     </p>
+                     The following code shows how to make the API call to get the <a href="https://github.com/mercadopago/px-android/blob/master/sdk/src/main/java/com/mercadopago/model/Issuer.java" target="_blank">Issuer</a> given a payment method of our SDK.
+                  </p>
+                  <p>
+                     <pre class="snippet">
+                        <code class="line-numbers language-java">
+// Heads up! Its MercadoPago Callback.
+import com.mercadopago.callbacks.Callback;
+
+String paymentMethodId = "master";
+
+// First six digits of the card (nullable).
+String bin = "503175";
+
+MercadoPago mercadoPago = new MercadoPago.Builder()
+   .setContext(this)
+   .setPublicKey("TEST-ad365c37-8012-4014-84f5-6c895b3f8e0a")
+   .build();
+
+mercadoPago.getIssuers(paymentMethodId, bin, new Callback &lt;List&lt;Issuer&gt;&gt;() {
+   @Override
+   public void success(List&lt;Issuer&gt; issuers) {
+      // Done! Build your UI for the banks list
+   }
+
+  @Override
+  public void failure(ApiException error) {
+    // Oops! Something went wrong
+  }
+});
+                        </code>
+                        <button class="copy-button">
+                           <img src="./img/clippy.svg" width="13" alt="Copy to clipboard">
+                        </button>
+                     </pre>
+                  </p>
+                  <!--<script src="https://gist.github.com/matiasgualino/18e8d71a45a6d5f157843bbeacb10b8c.js"></script>-->
+               </section>
+               <section class="docs-section" id="f1_payer_costs">
+                  <h3 class="title">Installments</h3>
+                  <p>
+                     Once your user has selected the payment method and the bank that issued the card, in order to offer a flexible way to make the payment it's important that you make available the installments in which the payment will be made.
+                     <br />
+                     Just give us your users' selections (payment method and bank). The amount is optional, but it allows us to create a recommended message for the installments, which is useful in case you want a quick way of listing the available installments.
+                  </p>
+                  <p>
+                     <p class="advanced-panel">
+                        <em>*</em>Try a <a href="https://api.mercadopago.com/v1/payment_methods/installments?public_key=444a9ef5-8a6b-429f-abdf-587639155d88&bin=503175&amount=100&issuer.id=326" target="_blank">response example</a> from the installments API for the amount, bank and payment method selected (/v1/payment_methods/installments).
+                     </p>
+                     If, according to how you've thought your app's experience, you could send us the card's BIN (first six digits of the card number) we could use it to guess the payment method and, in some cases, the bank that issued it.
+                     <br />
+                     The following code makes the API call sending the mentioned information and turns the response into a list of <a href="https://github.com/mercadopago/px-android/blob/master/sdk/src/main/java/com/mercadopago/model/Installment.java" target="_blank">Installment</a>.
+                  </p>
+                  <p>
+                     <pre class="snippet">
+                        <code class="line-numbers language-java">
+// Heads up! It's MercadoPago Callback
+import com.mercadopago.callbacks.Callback;
+
+// Selected payment method
+String paymentMethodId = "master";
+
+// Selected bank
+Long issuerId = 326L;
+
+// First six digits of the card
+String bin = "503175";
+
+// Amount to receive
+BigDecimal amount = new BigDecimal(100);
+
+MercadoPago mercadoPago = new MercadoPago.Builder()
+   .setContext(this)
+   .setPublicKey("TEST-ad365c37-8012-4014-84f5-6c895b3f8e0a")
+   .build();
+
+mercadoPago.getInstallments(bin, amount, issuerId,
+   paymentMethodId, new Callback &lt;List&lt;Installment&gt;&gt;() {
+      @Override
+      public void success(List&lt;Installment&gt; installments) {
+         // Done! build your UI for the installments list
+      }
+
+      @Override
+      public void failure(ApiException error) {
+         // Oops! Something went wrong
+      }
+});
+                        </code>
+                        <button class="copy-button">
+                           <img src="./img/clippy.svg" width="13" alt="Copy to clipboard">
+                        </button>
+                     </pre>
+                  </p>
+                  <!--<script src="https://gist.github.com/matiasgualino/7cf5b99ead0edb02a91b3c71c9e23118.js"></script>-->
+               </section>
+               <section class="docs-section" id="f1_identification_types">
+                  <h3 class="title">Identification types</h3>
+                  <p>
+                     You must collect the identification type and number of the card holder. According to the regulations of each country in which we process, the banks and card brands ask us for these information. We have a service that, depending on the country in which you operate, provides you with the list of identification types with their corresponding configurations such as name, data type (numeric or alphanumeric), maximum and minimum length, etcetera.
+                     <p class="advanced-panel">
+                        <em>*</em>Try a <a href="https://api.mercadopago.com/v1/identification_types?public_key=444a9ef5-8a6b-429f-abdf-587639155d88" target="_blank">response example</a> from the identification types API (/v1/identification_types).
+                     </p>
+                     The following code shows how to use the service of <a href="https://github.com/mercadopago/px-android/blob/master/sdk/src/main/java/com/mercadopago/model/IdentificationType.java" target="_blank">IdentificationTypes</a>.
+                  </p>
+                  <p>
+                     <pre class="snippet">
+                        <code class="line-numbers language-java">
+// Heads up! It's MercadoPago Callback
+import com.mercadopago.callbacks.Callback;
+
+MercadoPago mercadoPago = new MercadoPago.Builder()
+   .setContext(this)
+   .setPublicKey("TEST-ad365c37-8012-4014-84f5-6c895b3f8e0a")
+   .build();
+
+mercadoPago.getIdentificationTypes(new Callback&lt;List&lt;IdentificationType&gt;&gt;() {
+   @Override
+   public void success(List&lt;IdentificationType&gt; identificationTypes) {
+      // Done! Build your UI to show the identification types
+   }
+
+   @Override
+   public void failure(ApiException error) {
+      // Oops! Something went wrong
+   }
+});
+                        </code>
+                        <button class="copy-button">
+                           <img src="./img/clippy.svg" width="13" alt="Copy to clipboard">
+                        </button>
+                     </pre>
+                  </p>
+               </section>
+               <section class="docs-section" id="f1_card_tokens">
+                  <h3 class="title">Data tokenization</h3>
+                  <p>
+                     It's very important to avoid sending cards' information to your servers, and send it directly from the device to MercadoPago. If you do so, you won't have to worry about PCI compliance. With our SDK, you can achieve this in a simple and secure way.
+                     <br />
+                     Before creating a token for the credit card information, we recommend you to validate the information that your users inputs. Most validations are simple, like verifying that the data types are correct or that the mandatory fields were completed. In the cases of the card number and the security code, another validations can be made according to the selected payment method: Eg.: If it's a Mastercard, validate that it starts with 5 and its security code has 3 digits. Don't worry, MercadoPago SDK will help you to deal with this details.
+                  </p>
+                  <p>
+                     <pre class="snippet">
+                        <code class="line-numbers language-java">
+/* Payment method selected by the user.
+*  These information will be useful. */
+PaymentMethod paymentMethod = JsonUtil.getInstance().fromJson(data.getStringExtra("paymentMethod"), PaymentMethod.class);
+
+/* Create a CardToken with the data provided by your user.
+*  This is an example with testing-purposes information */
+CardToken cardToken = new CardToken("5031755734530604", 11, 19,
+   "123", "APROJhon Smith", "DNI", "12345678");
+
+// Validate the information provided by your user
+if (validateCardToken(cardToken, paymentMethod)) {
+   // Get a one-use token for the card
+}
+                        </code>
+                        <button class="copy-button">
+                           <img src="./img/clippy.svg" width="13" alt="Copy to clipboard">
+                        </button>
+                     </pre>
+                  </p>
+                  <p>
+                     Validation functions are methods of the class CardToken, and here we'll show you how to use them.
+                  </p>
+                  <p>
+                     <pre class="snippet">
+                        <code class="line-numbers language-java">
+private boolean validateCardToken(CardToken cardToken, PaymentMethod paymentMethod) {
+
+   /* In this function you can set the error for each field.
+   *  We recommend you to give focus to the first field in
+   *  which an error was found. */
+
+   boolean result = true;
+
+   /* The two following methods validate that the card
+   *  number and the security code satisfy
+   *  the particularities of the payment method. */
+
+   try {
+      cardToken.validateCardNumber(this, paymentMethod);
+   } catch (Exception ex) {
+      result = false;
+   }
+
+   try {
+      cardToken.validateSecurityCode(this, paymentMethod);
+   } catch (Exception ex) {
+      result = false;
+   }
+
+   // Validate that the expiration date is after today's
+   if (!cardToken.validateExpiryDate()) {
+      result = false;
+   }
+
+   // Validate that the card holder name is not empty
+   if (!cardToken.validateCardholderName()) {
+      result = false;
+   }
+
+   /* If an identification type was selected,
+   *  we validate that its configurations are satisfied */
+   if (getIdentificationType() != null &&
+      !cardToken.validateIdentificationNumber(getIdentificationType())) {
+        result = false;
+   }
+   return result;
+}
+                        </code>
+                        <button class="copy-button">
+                           <img src="./img/clippy.svg" width="13" alt="Copy to clipboard">
+                        </button>
+                     </pre>
+                  </p>
+                  <p>
+                     The following code shows how to exchange the information you got for a secure token, directly from MercadoPago.
+                  </p>
+                  <p>
+                     <pre class="snippet">
+                        <code class="line-numbers language-java">
+// Heads up! It's MercadoPago Callback
+import com.mercadopago.callbacks.Callback;
+
+// If the information is valid, send it to us in order to save them in a secure way
+MercadoPago mercadoPago = new MercadoPago.Builder()
+   .setContext(this)
+   .setPublicKey("TEST-ad365c37-8012-4014-84f5-6c895b3f8e0a")
+   .build();
+
+mercadoPago.createToken(cardToken, new Callback&lt;Token&gt;() {
+   @Override
+   public void success(Token token) {
+      // Done! You can send the information to your servers!
+   }
+
+   @Override
+   public void failure(ApiException error) {
+      // Oops! Something went wrong
+   }
+});
+                        </code>
+                        <button class="copy-button">
+                           <img src="./img/clippy.svg" width="13" alt="Copy to clipboard">
+                        </button>
+                     </pre>
+                  </p>
+               </section>
+               <section class="docs-section" id="f1_bank_deals">
+                  <h3 class="title">Bank Deals</h3>
+                  <p>
+                     We arrange deals with the card brands and the issuers in order to give the best promotions to your users at the moment of paying. We think it's very important that you tell your users about this benefits while it's navigating your app, because it's more likely to choose a convenient payment method and make the payment.
+                     <p class="advanced-panel">
+                        <em>*</em>Try a <a href="https://api.mercadopago.com/v1/payment_methods/deals?public_key=444a9ef5-8a6b-429f-abdf-587639155d88" target="_blank">response example</a> from the promotions API (/v1/payment_methods/deals).
+                     </p>
+                     The following code makes the API call and turns the response into a list of <a href="https://github.com/mercadopago/px-android/blob/master/sdk/src/main/java/com/mercadopago/model/BankDeal.java" target="_blank">BankDeal</a>.
+                  </p>
+                  <p>
+                     <pre class="snippet">
+                        <code class="line-numbers language-java">
+// Heads up! It's MercadoPago Callback
+import com.mercadopago.callbacks.Callback;
+
+MercadoPago mercadoPago = new MercadoPago.Builder()
+   .setContext(this)
+   .setPublicKey("TEST-ad365c37-8012-4014-84f5-6c895b3f8e0a")
+   .build();
+
+mercadoPago.getBankDeals(new Callback&lt;List&lt;BankDeal&gt;&gt;() {
+   @Override
+   public void success(List&lt;BankDeal&gt; bankDeals) {
+      // Done! build your UI for the list of bank deals
+   }
+
+   @Override
+   public void failure(ApiException error) {
+      // Oops! Something went wrong
+   }
+});
+                        </code>
+                        <button class="copy-button">
+                           <img src="./img/clippy.svg" width="13" alt="Copy to clipboard">
+                        </button>
+                     </pre>
+                  </p>
+               </section>
+               <section class="docs-section" id="f1_instructions">
+                  <h3 class="title">Offline payment methods - Instructions</h3>
+                  <p>
+                     When the user selects an offline payment method, we advise to communicate instructions that help with the paying process. We offer you a service that, given the payment id and the payment method selected, returns the step to step for your user to follow and end up making the payment.
+                  </p>
+                  <p>
+                     <pre class="snippet">
+                        <code class="line-numbers language-java">
+// Heads up! It's MercadoPago Callback
+import com.mercadopago.callbacks.Callback;
+
+Long paymentId = 1234567L;
+String paymentTypeId = "ticket";
+
+MercadoPago mercadoPago = new MercadoPago.Builder()
+   .setContext(this)
+   .setPublicKey("TEST-ad365c37-8012-4014-84f5-6c895b3f8e0a")
+   .build();
+
+mercadoPago.getPaymentResult(paymentId, paymentTypeId, new Callback&lt;PaymentResult&gt;() {
+   @Override
+   public void success(PaymentResult paymentResult) {
+      Instruction instruction = paymentResult.getInstructions().get(0);
+      // Done! here you already got the instructions to
+      // tell your users how to end the payment.
+      showInstructions(instruction);
+   }
+
+   @Override
+   public void failure(ApiException error) {
+      // Oops! Something went wrong
+   }
+});
+                        </code>
+                        <button class="copy-button">
+                           <img src="./img/clippy.svg" width="13" alt="Copy to clipboard">
+                        </button>
+                     </pre>
+                  </p>
+               </section>
+               <section class="docs-section" id="f1_merchant_server">
+                  <h3 class="title">MerchantServer</h3>
+                  <p>
+                     It's a class available in our SDK, that helps you to send the information to your servers and wait for the appropriate response. We are going to show you two methods that help with payments and preferences creation.
+                     </br>
+                     We ask you to specify your base URL (<b>http://api.yourname.com</b>) and the URI that will expect our call (<b>/uri</b>). then we need a map that we'll turn into a JSON in order to sent it to <b>http://api.yourname.com/uri</b> where you will process that information and, using <a href="https://www.mercadopago.com.ar/developers/es/tools/" target="_blank">our server-side backend</a> along with your <b><a href="https://www.mercadopago.com/mla/account/credentials?type=personalized" target="_blank">private key</a></b>, you will connect with our services in order to perform the corresponding action. Your service's answer must be the same that you received from MercadoPago, because <a href="https://github.com/mercadopago/px-android/blob/master/sdk/src/main/java/com/mercadopago/core/MerchantServer.java" target="_blank">MerchantServer</a> will turn that answer into the expected object (<a href="https://github.com/mercadopago/px-android/blob/master/sdk/src/main/java/com/mercadopago/model/Payment.java" target="_blank">Payment</a> or <a href="https://github.com/mercadopago/px-android/blob/master/sdk/src/main/java/com/mercadopago/model/CheckoutPreference.java" target="_blank">CheckoutPreference</a>).
+                  </p>
+               </section>
+               <section class="docs-section" id="f1_create_payment">
+                  <h3 class="title">Create payments</h3>
+                  <p>
+                     Before creating a payment, we recommend you to make all the necessary validations to verify if the transaction attempted is legal: you can verify the item's price, the product, check the stock if necessary and whether your user is able to make the payment or not.
+                     <br />
+                     Together with the created token, you can also sent the selected payment method, installments and bank, in addition of an identifier of the article or service that is being paid, and the user that is using your app.
+                     <br />
+                     In this case, the <b>createPayment</b> method makes a POST and sends as the message's body the object <a href="https://github.com/mercadopago/px-android/blob/master/sdk/src/main/java/com/mercadopago/core/MerchantPayment.java">MerchantPayment</a> that groups all the information needed in your server to connect with our's. That's why you must specify your base URL (https://api.yourname.com) and URI (/create_payment) where the payment information is expected to be received.
+                     <a href="https://github.com/mercadopago/px-android/blob/master/sdk/src/main/java/com/mercadopago/core/MerchantServer.java" target="_blank">MerchantServer</a> transformará la respuesta de tu servicio (la misma que los servicios de MercadoPago) en un objeto <a href="https://github.com/mercadopago/px-android/blob/master/sdk/src/main/java/com/mercadopago/model/Payment.java" target="_blank">Payment</a>.
+                  </p>
+                  <p>
+                     Once you have the information in your server, you can create a payment using one of the MercadoPago SDKs. In <a href="https://github.com/mercadopago/code-examples/tree/master/customized-checkout/payment/basic" target="_blank">this link</a> you can see usage examples of our SDKs. Examples available for PHP, cURL, ASP.NET, Java, Node.js, Phyton and Ruby.
+                     <br />
+                     <b>Remember that you must use your private key in this case.</b>
+                  </p>
+                  <p>
+                     <pre class="snippet">
+                        <code class="line-numbers language-java">
+private void createPayment(final PaymentMethod paymentMethod, Issuer issuer, PayerCost payerCost, Token token) {
+   Item item = new Item("id", 5);
+   MerchantPayment payment = new MerchantPayment(item, payerCost.getInstallments(), issuer.getId(), token.getId(), paymentMethod.getId(), null, "mla-at");
+
+   MerchantServer.createPayment(activity, YOUR_BASE_URL, YOUR_CREATE_PAYMENT_URI,
+   payment, new Callback&lt;Payment&gt;() {
+      @Override
+      public void success(Payment payment) {
+             // The payment has been made!
+             // Start our payment result component.
+             new MercadoPago.StartActivityBuilder()
+               .setPublicKey(TU_PUBLIC_KEY)
+               .setActivity(this)
+               .setPayment(payment)
+               .setPaymentMethod(paymentMethod)
+               .startPaymentResultActivity();
+         }
+      }
+
+      @Override
+      public void failure(ApiException apiException) {
+
+         // Oops! Something went wrong
+
+      }
+   });
+}
+                        </code>
+                        <button class="copy-button">
+                           <img src="./img/clippy.svg" width="13" alt="Copy to clipboard">
+                        </button>
+                     </pre>
+                  </p>
+                  <p class="advanced-panel">
+                        <em>*</em> <a href="https://www.mercadopago.com.ar/developers/es/related/custom-additional-info/" target="_blank">Envía tantos datos del pago como puedas</a>. Mientras más información nos envíes, mejor será tu experiencia y la de tus usuarios.
+                  </p>
+               </section>
+               <section class="docs-section" id="f1_create_preference">
+                  <h3 class="title">Create preferences</h3>
+                  <p>
+                     A payment preference is a representation of what you are getting paid for. It includes, among others, these attributes:
+                     <ul>
+                        <li>Information and price of the product you are selling.</li>
+                        <li>Accepted payment methods.</li>
+                        <li>Buyer information (For security reasons, the <b>email is required</b>).</li>
+                     </ul>
+                     Besides, the preferences allow you to customize the behaviour of the checkout. Allowed configurations are:
+                     <ul>
+                        <li>Exclude payment methods.</li>
+                        <li>Exclude payment types (eg.: cards only).</li>
+                        <li>Set a default payment method (eg.: your user's most used card).</li>
+                        <li>Restrict the amount of installments.</li>
+                        <li>Set a default amount of installments.</li>
+                     </ul>
+                  </p>
+                  <p>
+                     In this case, the <b>createPreference</b> method makes a POST and sends as the message's body the map you've defined (preferenceMap). That's why you must specify your base URL (https://api.yourname.com) and URI (/create_preference) where this information is expected in order to create a preference.
+                     <a href="https://github.com/mercadopago/px-android/blob/master/sdk/src/main/java/com/mercadopago/core/MerchantServer.java" target="_blank">MerchantServer</a> will turn the response you get (the same you got from MercadoPago) into an object <a href="https://github.com/mercadopago/px-android/blob/master/sdk/src/main/java/com/mercadopago/model/CheckoutPreference.java" target="_blank">CheckoutPreference</a>. This object's id is the input data to our checkout.
+                  </p>
+                  <p>
+                     <a href="https://www.mercadopago.com.ar/developers/es/solutions/payments/basic-checkout/receive-payments/" target="_blank">How to create preference in your server</a>.
+                  </p>
+                  <p>
+                     <pre class="snippet">
+                        <code class="line-numbers language-java">
+// Heads up! It's MercadoPago Callback
+import com.mercadopago.callbacks.Callback;
+
+// Create a map with purchase data and your client's email.
+Map&lt;String, Object&gt; preferenceMap = new HashMap&lt;&gt;();
+preferenceMap.put("item_id", "1");
+preferenceMap.put("amount", new BigDecimal(10));
+preferenceMap.put("currency_id", "ARS");
+preferenceMap.put("payer_email", "client_email@gmail.com");
+
+// Send the information to your server
+MerchantServer.createPreference(this, "https://api.yourname.com",
+ "/create_preference", preferenceMap, new Callback&lt;CheckoutPreference&gt;() {
+
+   @Override
+   public void success(CheckoutPreference checkoutPreference) {
+       // The preference was created!
+       // Here you can start MercadoPago Checkout
+       new MercadoPago.StartActivityBuilder()
+         .setActivity(activity)
+         .setPublicKey("TEST-ad365c37-8012-4014-84f5-6c895b3f8e0a")
+         .setCheckoutPreferenceId(checkoutPreference.getId())
+         .startCheckoutActivity();
+   }
+
+   @Override
+   public void failure(ApiException error) {
+     // Oops! Something went wrong
+   }
+});
+                        </code>
+                        <button class="copy-button">
+                           <img src="./img/clippy.svg" width="13" alt="Copy to clipboard">
+                        </button>
+                     </pre>
+                  </p>
+                  <p class="advanced-panel">
+                     <em>*</em>Create a preference as <a href="https://www.mercadopago.com.ar/developers/es/solutions/payments/basic-checkout/receive-payments/additional-info/"  target="_blank"><b>complete</b></a> as you can. The more information you send, the better experience you and your users get.
+                  </p>
+               </section>
+            </div>
+         </div>
+      </div>
+
+      <footer class="footer">
+         <div class="copy">
+            <div class="copy-container">
+               <p class="authors">
+                  © 2016 MercadoLibre S.R.L.
+               </p>
+            </div>
+         </div>
+      </footer>
+      <script src="./js/bootstrap.min.js"></script>
+      <script src="./js/site.js"></script>
+      <script src="./js/cookies.min.js"></script>
+      <script src="./js/clipboard.js"></script>
+   <script>
+
+   (function() {
+
+    new Clipboard('.copy-button');
+    var pre = document.getElementsByTagName('pre');
+    for (var i = 0; i < pre.length; i++) {
+      var isLanguage = pre[i].children[0].className.indexOf('language-');
+      if ( isLanguage === 0 ) {
+        var button = document.createElement('button');
+        button.className = 'copy-button';
+        pre[i].appendChild(button);
+      }
+    }
+
+var copyCode = new Clipboard('.copy-button', {
+    target: function(trigger) {
+        return trigger.previousElementSibling;
+    }
+});
+
+}
+</script>
+   </body>
+</html>

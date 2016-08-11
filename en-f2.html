@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="description" content="MercadoPago developers site.">
+      <meta name="keywords" content="mercadopago,sdk,payment,pagos,braintree,paypal,html5,javascript,mobile,drifty,ionic,hybrid,phonegap,cordova,native,ios,android,angularjs">
+      <title>Payment solutions for your bussiness - MercadoPago</title>
+      <link href="./css/site.css" rel="stylesheet">
+      <link href="./css/prism.css" rel="stylesheet" />
+      <script src="./js/jquery.min.js"></script>
+      <script src="./js/prism.js"></script>
+      <link rel="stylesheet" type="text/css" href="./css/lato.css" />
+   </head>
+   <body class="docs docs-page docs-css">
+      <nav class="navbar navbar-default" role="navigation">
+         <div class="container">
+            <div class="navbar-header">
+               <button type="button" class="navbar-toggle button ionic" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+               <i class="icon ion-navicon"></i>
+               </button>
+               <a class="navbar-brand" href="http://mercadopago.com/">
+               <img src="img/iso-mercadopago.png" width="60" height="41" alt="MercadoPago SDK">
+               </a>
+            </div>
+            <div class="collapse navbar-collapse navbar-ex1-collapse">
+               <ul class="nav navbar-nav navbar-right" style="color: white;">
+                  <li><a class="getting-started-nav nav-link" href="en-index.html">Our checkout</a></li>
+                  <li><a class="docs-nav nav-link" href="en-checkout_custom.html">Your checkout</a></li>
+                  <li><a class="nav-link" href="https://www.mercadopago.com.ar/developers/es/community/forum/">Developers forum</a></li>
+               </ul>
+            </div>
+         </div>
+      </nav>
+      <div class="header">
+         <div class="container" style="
+    padding-top: 120px;
+">
+            <h3>MercadoPago Android SDK</h3>
+            <h4>The quickest way to receive in-app payments with the best experience.</h4>
+         </div>
+
+      </div>
+      <div id="mati_header" style="height: 500px;margin: 0 auto;padding: 0;position: relative;width: 100%;top: -276px;overflow-x: hidden;OVERFLOW-Y: hidden;z-index: -100;background: url('./img/landing_f2.jpg');background-size: cover;background-position-x: 0px;background-position-y: -100px;">
+         <div style="background: rgba(0,0,0,0.5);height: 500px;"></div>
+      </div>
+      <div class="container content-container" style="margin-top: -250px;">
+         <div class="row">
+            <div class="col-md-2 col-sm-3 aside-menu">
+               <div class="docked-menu" style="top: 20px;">
+                  <ul class="nav left-menu">
+                     <li class="menu-title">
+                        <a href="en-index.html">OUR CHECKOUT</a>
+                     </li>
+                  </ul>
+                  <ul class="nav left-menu active-menu">
+                     <li>
+                        <a href="en-checkout_custom.html">YOUR CHECKOUT</a>
+                        <ul>
+                           <li><a href="en-checkout_custom.html#our_proposal">What do we offer?</a></li>
+                           <li><a href="en-checkout_custom.html#payment_info">Mandatory information to receive payments</a></li>
+                           <li><a href="en-checkout_custom.html#what_you_need">What do you need?</a></li>
+                           <li><a href="en-checkout_custom.html#modes">Sandbox and productive modes</a></li>
+                           <li><a href="en-checkout_custom.html#your_credentials">Use your credentials</a></li>
+                           <li><a href="en-checkout_custom.html#notifications">Receive payment notifications</a></li>
+                           <li>
+                              <a href="en-f2.html">UI components</a>
+                              <ul>
+                                 <li><a href="en-f2.html#f2_payment_vault">Full component</a></li>
+                                 <li><a href="en-f2.html#f2_card_form">Charging cards</a></li>
+                                 <li><a href="en-f2.html#f2_card_form_installments">Charging cards in installments</a></li>
+                                 <li><a href="en-f2.html#f2_payment_methods">Payment methods</a></li>
+                                 <li><a href="en-f2.html#f2_card_issuers">Banks</a></li>
+                                 <li><a href="en-f2.html#f2_payer_costs">Installments</a></li>
+                                 <li><a href="en-f2.html#f2_bank_deals">Bank deals</a></li>
+                                 <li><a href="en-f2.html#f2_create_payment">Payment creation</a></li>
+                                 <li><a href="en-f2.html#f2_payment_result">Payment result</a></li>
+                              </ul>
+                           </li>
+                           <li>
+                              <a href="en-f1.html">Personalize your experience</a>
+                              <ul>
+                                 <li><a href="en-f1.html#f1_payment_methods">Payment methods</a></li>
+                                 <li><a href="en-f1.html#f1_card_issuers">Banks</a></li>
+                                 <li><a href="en-f1.html#f1_payer_costs">Intallments</a></li>
+                                 <li><a href="en-f1.html#f1_identification_types">Identification types</a></li>
+                                 <li><a href="en-f1.html#f1_card_tokens">Card data tokenization</a></li>
+                                 <li><a href="en-f1.html#f1_bank_deals">Bank deals</a></li>
+                                 <li><a href="en-f1.html#f1_instructions">Instructions</a></li>
+                                 <li>
+                                    <a href="en-f1.html#f1_merchant_server">MerchantServer</a>
+                                    <ul>
+                                       <li><a href="en-f1.html#f1_create_payment">Payments</a></li>
+                                       <li><a href="en-f1.html#f1_create_preference">Preferences</a></li>
+                                    </ul>
+                                 </li>
+                              </ul>
+                           </li>
+                        </ul>
+                     </li>
+                  </ul>
+               </div>
+            </div>
+            <div class="col-md-10 col-sm-9 main-content device-preview-page">
+               <div class="device-preview ionic" style="background: url('./img/phone-case.png') no-repeat right top;">
+                  <div class="screen-bg"></div>
+                  <div class="default-screen ionic-body">
+                     <div class="content-wrapper">
+                        <div class="content padding has-header"></div>
+                     </div>
+                  </div>
+               </div>
+                  <section class="docs-section" id="f2_payment_vault">
+                  <h3 class="title">Our visual components in your checkout</h3>
+                  <p>Using gradle? Add it in the build.gradle file of the module where you will integrate us.</p>
+                  <p>Otherwise <a href="https://github.com/mercadopago/px-android/releases" target="_blank">download MercadoPago SDK</a></p>
+                  <p>
+                     <pre class="snippet">
+                        <code class="line-numbers language-java">dependencies {
+   compile ('com.mercadopago:sdk:2.0.0@aar') { transitive = true }
+}
+                        </code>
+                        <button class="copy-button" alt="Copiar código">
+                           <img src="./img/clippy.svg" width="13">
+                        </button>
+                     </pre>
+                  </p>
+                  <div class="doc-example ionic">
+                     <img src="./img/phone/payment_vault.gif" class="img-phone-case"></img>
+                  </div>
+               </section>
+                  <section class="docs-section" id="f2_payment_vault">
+                  <h3 class="title">Data collection UI</h3>
+                  <p>
+                     Our most complete visual component is <b>PaymentVault</b>. By using it, you will get all the information that needs to be sent to your server: the selected payment method (<a href="https://github.com/mercadopago/px-android/blob/master/sdk/src/main/java/com/mercadopago/model/PaymentMethod.java" target="_blank">PaymentMethod</a>) and if your user chose a card payment method, the issuer (<a href="https://github.com/mercadopago/px-android/blob/master/sdk/src/main/java/com/mercadopago/model/Issuer.java" target="_blank">Issuer</a>), installments (<a href="https://github.com/mercadopago/px-android/blob/master/sdk/src/main/java/com/mercadopago/model/PayerCost.java" target="_blank">PayerCost</a>) and the encrypted card information (<a href="https://github.com/mercadopago/px-android/blob/master/sdk/src/main/java/com/mercadopago/model/Token.java" target="_blank">Token</a>).
+                     <br />
+                     To use it, add a button:
+                  </p>
+                  <p>
+                     <pre class="snippet">
+                        <code id="flavor_3_step_2" class="line-numbers language-xml">
+                        </code>
+
+                        <button class="copy-button">
+                           <img src="./img/clippy.svg" width="13" alt="Copy to clipboard">
+                        </button>
+                     </pre>
+                  </p>
+                  <p>
+                     Then, when the button is pressed, invoke <b>PaymentVault</b> through our SDK and wait for the result to know what your user selected.
+                  </p>
+                  <p>
+                     <pre class="snippet">
+                        <code class="line-numbers language-java">
+public void onPaymentVaultButtonClicked(View view) {
+  new MercadoPago.StartActivityBuilder()
+    .setActivity(this)
+    .setPublicKey(YOUR_PUBLIC_KEY)
+    .setAmount(AMOUNT)
+    .setSite(Sites.ARGENTINA)
+    .startPaymentVaultActivity();
+}
+
+// Espera los resultados
+@Override
+protected void onActivityResult(int requestCode, int resultCode,
+Intent data) {
+  if(requestCode == MercadoPago.PAYMENT_VAULT_REQUEST_CODE) {
+    if(resultCode == RESULT_OK) {
+      PaymentMethod paymentMethod = JsonUtil.getInstance().fromJson(data.getStringExtra("paymentMethod"), PaymentMethod.class);
+      Issuer issuer = JsonUtil.getInstance().fromJson(data.getStringExtra("issuer"), Issuer.class);
+      Token token = JsonUtil.getInstance().fromJson(data.getStringExtra("token"), Token.class);
+      PayerCost payerCost = JsonUtil.getInstance().fromJson(data.getStringExtra("payerCost"), PayerCost.class);
+
+      createPayment(paymentMethod, issuer, payerCost, token);
+    } else {
+      if ((data != null) && (data.hasExtra("mpException"))) {
+        MPException exception = JsonUtil.getInstance()
+          .fromJson(data.getStringExtra("mpException"), MPException.class);
+      }
+    }
+  }
+}
+                        </code>
+                        <button class="copy-button">
+                           <img src="./img/clippy.svg" width="13" alt="Copy to clipboard">
+                        </button>
+                     </pre>
+                  </p>
+                  <div class="doc-example ionic">
+                     <img src="./img/phone/payment_vault.gif" class="img-phone-case"></img>
+                  </div>
+               </section>
+               <section class="docs-section" id="f2_card_form">
+                  <h3 class="title">Charging cards</h3>
+                  <p>
+                     To collect only cards data from your user, we offer a component that solves the interaction intuitively and in a secure way. Just start our component and wait for its response: <a href="https://github.com/mercadopago/px-android/blob/master/sdk/src/main/java/com/mercadopago/model/PaymentMethod.java" target="_blank">PaymentMethod</a> (card brand), <a href="https://github.com/mercadopago/px-android/blob/master/sdk/src/main/java/com/mercadopago/model/Issuer.java" target="_blank">Issuer</a> (card issuer) y <a href="https://github.com/mercadopago/px-android/blob/master/sdk/src/main/java/com/mercadopago/model/Token.java" target="_blank">Token</a> (card encrypted data).
+                     <br />
+                     <b>Keep navigating to know how to offer payments in installments.</b>
+                  </p>
+                  <p>
+                     <pre class="snippet">
+                        <code class="line-numbers language-java">
+public void onCardStartButtonClicked(View view) {
+  new MercadoPago.StartActivityBuilder()
+    .setActivity(this)
+    .setPublicKey(YOUR_PUBLIC_KEY)
+    .startCardVaultActivity();
+}
+
+@Override
+protected void onActivityResult(int requestCode, int resultCode,
+Intent data) {
+
+  if(requestCode == MercadoPago.CARD_VAULT_REQUEST_CODE) {
+    if(resultCode == RESULT_OK) {
+      PaymentMethod paymentMethod = JsonUtil.getInstance().fromJson(data.getStringExtra("paymentMethod"), PaymentMethod.class);
+      Issuer issuer = JsonUtil.getInstance().fromJson(data.getStringExtra("issuer"), Issuer.class);
+      Token token = JsonUtil.getInstance().fromJson(data.getStringExtra("token"), Token.class);
+
+      // Done! Send the information to your server!
+
+    } else {
+      if ((data != null) && (data.hasExtra("mpException"))) {
+        MPException exception = JsonUtil.getInstance()
+          .fromJson(data.getStringExtra("mpException"), MPException.class);
+      }
+    }
+  }
+}
+                        </code>
+                        <button class="copy-button">
+                           <img src="./img/clippy.svg" width="13" alt="Copy to clipboard">
+                        </button>
+                     </pre>
+                  </p>
+                  <p>
+                     <b>How do we guess the card's brand?</b>
+                     <br />
+                     Given the card's BIN (first six digits of the card number), we can determine the payment method (Visa, Mastercard, Amex, etc) and using regular expressions, we usually determine the issuer. In case that the issuer is not guessed, we ask your user to select it.
+                  </p>
+                  <div class="doc-example ionic">
+                     <img src="./img/phone/card_form.gif" class="img-phone-case"></img>
+                  </div>
+               </section>
+               <section class="docs-section" id="f2_card_form_installments">
+                  <h3 class="title">Charging cards in installments</h3>
+                  <p>
+                     If you want to offer installments, we have a flow that collects the card data and also takes care of the <b>installments selection</b>. Apart from the results mentioned in the previous section, you will have to receive a <a href="https://github.com/mercadopago/px-android/blob/master/sdk/src/main/java/com/mercadopago/model/PayerCost.java" target="_blank">PayerCost</a> (installments selected by the user).
+                  </p>
+                  <p>
+                     <pre class="snippet">
+                        <code class="line-numbers language-java">
+public void onStartCardWithInstallmentsButtonClicked(View view) {
+
+  new MercadoPago.StartActivityBuilder()
+    .setActivity(this)
+    .setPublicKey(YOUR_PUBLIC_KEY)
+    .setAmount(AMOUNT)
+    .setSite(Sites.ARGENTINA)
+    .setInstallmentsEnabled(true)
+    .startCardVaultActivity();
+}
+
+@Override
+protected void onActivityResult(int requestCode, int resultCode,
+Intent data) {
+
+  if(requestCode == MercadoPago.CARD_VAULT_REQUEST_CODE) {
+      if(resultCode == RESULT_OK) {
+          PaymentMethod paymentMethod = JsonUtil.getInstance().fromJson(data.getStringExtra("paymentMethod"), PaymentMethod.class);
+          Issuer issuer = JsonUtil.getInstance().fromJson(data.getStringExtra("issuer"), Issuer.class);
+          Token token = JsonUtil.getInstance().fromJson(data.getStringExtra("token"), Token.class);
+          PayerCost payerCost = JsonUtil.getInstance().fromJson(data.getStringExtra("payerCost"), PayerCost.class);
+
+          // Done! Send this information to your server!
+      } else {
+        if ((data != null) && (data.hasExtra("mpException"))) {
+          MPException exception = JsonUtil.getInstance()
+            .fromJson(data.getStringExtra("mpException"), MPException.class);
+        }
+      }
+  }
+}
+                        </code>
+                        <button class="copy-button">
+                           <img src="./img/clippy.svg" width="13" alt="Copy to clipboard">
+                        </button>
+                     </pre>
+                  </p>
+                  <div class="doc-example ionic">
+                     <img src="./img/phone/card_form_installments.gif" class="img-phone-case"></img>
+                  </div>
+               </section>
+               <section class="docs-section" id="f2_payment_methods">
+                  <h3 class="title">Payment methods</h3>
+                  <p>
+                    It's the entity participating in the payment. Could be a card brand, an entity that receives payments in cash or even a place where an user can find an ATM to make the payment.
+                     <br />
+                     If the payment method is a <b>card</b> we will give you the information you need to build a card form and validate the inputs. For example, the card number length, whether the security code belongs to the front or the back of the card, its length, and more. Also, the payment method can be <b>offline</b>. In this case we provide, among others, the accreditation time, since the payment will be in a "pending" state until the user finishes the payment in the corresponding entity.
+                  </p>
+                  <p>
+                     <pre class="snippet">
+                        <code class="line-numbers language-java">
+public void onPaymentMethodsButtonClicked(View view) {
+  new MercadoPago.StartActivityBuilder()
+    .setActivity(this)
+    .setPublicKey(YOUR_PUBLIC_KEY)
+    .startPaymentMethodsActivity();
+}
+
+@Override
+protected void onActivityResult(int requestCode, int resultCode,
+Intent data) {
+
+    if(requestCode == MercadoPago.PAYMENT_METHODS_REQUEST_CODE) {
+        if(resultCode == RESULT_OK) {
+            PaymentMethod paymentMethod = JsonUtil.getInstance().fromJson(data.getStringExtra("paymentMethod"), PaymentMethod.class);
+            // Now you can continue with your flow
+            // Remember to verify if it's an offline payment method
+        } else {
+          if ((data != null) && (data.hasExtra("mpException"))) {
+            MPException exception = JsonUtil.getInstance()
+              .fromJson(data.getStringExtra("mpException"), MPException.class);
+          }
+        }
+    }
+}
+                        </code>
+                        <button class="copy-button">
+                           <img src="./img/clippy.svg" width="13" alt="Copy to clipboard">
+                        </button>
+                     </pre>
+                  </p>
+                  <div class="doc-example ionic">
+                     <img src="./img/phone/f2_payment_methods.png" class="img-phone-case"></img>
+                  </div>
+               </section>
+               <section class="docs-section" id="f2_card_issuers">
+                  <h3 class="title">Bank</h3>
+                  <p>
+                     The bank is the entity that issues cards. As payments processors, we arrange promotions with the banks so that your customers get more flexibility when buying. Your users card brand can be issued by more than one bank. In order to offer the correct installments, we need to ask them the bank that issued their card.
+                  </p>
+                  <p>
+                     That's why we have an issuer selection component. It's just a screen that lists available issuers for a given BIN and card payment method.
+                  </p>
+                  <p>
+                     <pre class="snippet">
+                        <code class="line-numbers language-java">
+public void onIssuersButtonClicked(View view) {
+  PaymentMethod paymentMethod = JsonUtil.getInstance().fromJson(data.getStringExtra("paymentMethod"), PaymentMethod.class);
+
+  new MercadoPago.StartActivityBuilder()
+    .setActivity(this)
+    .setPublicKey(YOUR_PUBLIC_KEY)
+    .setPaymentMethod(paymentMethod)
+    .startIssuersActivity();
+}
+
+@Override
+protected void onActivityResult(int requestCode, int resultCode,
+Intent data) {
+
+    if(requestCode == MercadoPago.ISSUERS_REQUEST_CODE) {
+        if(resultCode == RESULT_OK) {
+            Issuer issuer = JsonUtil.getInstance().fromJson(data.getStringExtra("issuer"), Issuer.class);
+            // Now you can continue with your flow
+        } else {
+          if ((data != null) && (data.hasExtra("mpException"))) {
+            MPException exception = JsonUtil.getInstance()
+              .fromJson(data.getStringExtra("mpException"), MPException.class);
+          }
+        }
+    }
+}
+                        </code>
+                        <button class="copy-button">
+                           <img src="./img/clippy.svg" width="13" alt="Copy to clipboard">
+                        </button>
+                     </pre>
+                  </p>
+                  <div class="doc-example ionic">
+                     <img src="./img/phone/f2_card_issuers.png" class="img-phone-case"></img>
+                  </div>
+               </section>
+               <section class="docs-section" id="f2_payer_costs">
+                  <h3 class="title">Installments</h3>
+                  <p>
+                     Once your user has selected the payment method and the bank that issued the card, in order to offer a flexible way to make the payment it's important that you make available the installments in which the payment will be made.
+                     <br />
+                     Just give us your users' selections (payment method and bank). We need the amount to create a message for the installments, that informs the amount of installments, each installment amount to pay and the total price.
+                  </p>
+                  <p>
+                     <pre class="snippet">
+                        <code class="line-numbers language-java">
+public void startInstallmentsActivity(View view) {
+  PaymentMethod paymentMethod = JsonUtil.getInstance().fromJson(data.getStringExtra("paymentMethod"), PaymentMethod.class);
+  Issuer issuer = JsonUtil.getInstance().fromJson(data.getStringExtra("issuer"), Issuer.class);
+
+  new MercadoPago.StartActivityBuilder()
+    .setActivity(this)
+    .setPublicKey(YOUR_PUBLIC_KEY)
+    .setSite(Sites.ARGENTINA)
+    .setAmount(AMOUNT)
+    .setIssuer(issuer)
+    .setPaymentMethod(paymentMethod)
+    .startInstallmentsActivity();
+}
+
+@Override
+protected void onActivityResult(int requestCode, int resultCode,
+Intent data) {
+
+    if(requestCode == MercadoPago.INSTALLMENTS_REQUEST_CODE) {
+      if(resultCode == RESULT_OK) {
+        PayerCost payerCost = JsonUtil.getInstance().fromJson(data.getStringExtra("payerCost"), PayerCost.class);
+        // Now you can continue with your flow
+      } else {
+          if ((data != null) && (data.hasExtra("mpException"))) {
+            MPException exception = JsonUtil.getInstance()
+              .fromJson(data.getStringExtra("mpException"), MPException.class);
+          }
+      }
+    }
+}
+                        </code>
+                        <button class="copy-button">
+                           <img src="./img/clippy.svg" width="13" alt="Copy to clipboard">
+                        </button>
+                     </pre>
+                  </p>
+                  <div class="doc-example ionic">
+                     <img src="./img/phone/f2_payer_costs.png" class="img-phone-case"></img>
+                  </div>
+               </section>
+               <section class="docs-section" id="f2_bank_deals">
+                  <h3 class="title">Bank deals</h3>
+                  <p>
+                     We arrange deals with the card brands and the issuers in order to give the best promotions to your users at the moment of paying. We think it's very important that you tell your users about this benefits while it's navigating your app, because it's more likely to choose a convenient payment method and make the payment.
+                  </p>
+                  <p>
+                     <pre class="snippet">
+                        <code class="line-numbers language-java">
+public void onBankDealsButtonClicked(View view) {
+  new MercadoPago.StartActivityBuilder()
+    .setActivity(this)
+    .setPublicKey(YOUR_PUBLIC_KEY)
+    .startBankDealsActivity();
+}
+                        </code>
+                        <button class="copy-button">
+                           <img src="./img/clippy.svg" width="13" alt="Copy to clipboard">
+                        </button>
+                     </pre>
+                  </p>
+                  <div class="doc-example ionic">
+                     <img src="./img/phone/bank_deals.png" class="img-phone-case"></img>
+                  </div>
+               </section>
+               <section class="docs-section" id="f2_create_payment">
+                  <h3 class="title">Payments creation</h3>
+                  <p>
+                     Before creating a payment, we recommend you to make all the necessary validations to verify if the transaction attempted is legal: you can verify the item's price, the product, check the stock if necessary and whether your user is able to make the payment or not.
+                     <br />
+                     Together with the created token, you can also sent the selected payment method, installments and bank, in addition of an identifier of the article or service that is being paid, and the user that is using your app.
+                     <br />
+                     In this case, the <b>createPayment</b> method makes a POST and sends as the message's body the object <a href="https://github.com/mercadopago/px-android/blob/master/sdk/src/main/java/com/mercadopago/core/MerchantPayment.java">MerchantPayment</a> that groups all the information needed in your server to connect with our's. That's why you must specify your base URL (https://api.yourname.com) and URI (/create_payment) where the payment information is expected to be received.
+                     <a href="https://github.com/mercadopago/px-android/blob/master/sdk/src/main/java/com/mercadopago/core/MerchantServer.java" target="_blank">MerchantServer</a> transformará la respuesta de tu servicio (la misma que los servicios de MercadoPago) en un objeto <a href="https://github.com/mercadopago/px-android/blob/master/sdk/src/main/java/com/mercadopago/model/Payment.java" target="_blank">Payment</a>.
+                  </p>
+                  <p>
+                    Once you have the information in your server, you can create a payment using one of the MercadoPago SDKs. In <a href="https://github.com/mercadopago/code-examples/tree/master/customized-checkout/payment/basic" target="_blank">this link</a> you can see usage examples of our SDKs. Examples available for PHP, cURL, ASP.NET, Java, Node.js, Phyton and Ruby.
+                  </p>
+                  <p>
+                     Here's an example of how to connect your app with your server at the moment of making a payment:
+                  </p>
+                  <p>
+                     <pre class="snippet">
+                        <code class="line-numbers language-java">
+import com.mercadopago.callbacks.Callback;
+
+public void createPayment(final Activity activity, final PaymentMethod paymentMethod,
+Issuer issuer, PayerCost payerCost, Token token) {
+
+   if (paymentMethod != null) {
+
+      // Create the item being paid
+      Item item = new Item(DUMMY_ITEM_ID, DUMMY_ITEM_QUANTITY,
+      DUMMY_ITEM_UNIT_PRICE);
+
+      // Get the payment method id
+      String paymentMethodId = paymentMethod.getId();
+
+      // Get the issuer id
+      Long cardIssuerId = issuer.getId();
+
+      // Get the amount of installments
+      Integer installments = payerCost.getInstallments();
+
+      // Get the token id
+      String tokenId = token.getId();
+
+
+      /*    Create the body of the request that will be sent to your server
+      *  You must specify the item, installments, bank,
+      *  card token, payment method and how you're going to identify
+      *  your user in order to assign the payment
+      */
+      MerchantPayment payment = new MerchantPayment(item, installments,
+      cardIssuerId, tokenId, paymentMethodId, DUMMY_CAMPAIGN_ID, DUMMY_MERCHANT_ACCESS_TOKEN);
+
+      // Send information to your server
+      MerchantServer.createPayment(activity, YOUR_BASE_URL, YOUR_CREATE_PAYMENT_URI,
+      payment, new Callback&lt;Payment&gt;() {
+         @Override
+         public void success(Payment payment) {
+                // Done! The payment has been made
+                // Start our results component
+                new MercadoPago.StartActivityBuilder()
+                  .setPublicKey(YOUR_PUBLIC_KEY)
+                  .setActivity(this)
+                  .setPayment(payment)
+                  .setPaymentMethod(paymentMethod)
+                  .startPaymentResultActivity();
+            }
+         }
+
+         @Override
+         public void failure(ApiException apiException) {
+
+            // Oops, something went wrong.
+
+         }
+      });
+   } else {
+      Toast.makeText(activity, "Invalid payment method", Toast.LENGTH_LONG).show();
+   }
+}
+                        </code>
+                        <button class="copy-button">
+                           <img src="./img/clippy.svg" width="13" alt="Copy to clipboard">
+                        </button>
+                     </pre>
+                  </p>
+                  <div class="doc-example ionic">
+                     <img src="./img/phone/payment_results.gif" class="img-phone-case" usemap="#revamp_review_confirm_map"></img>
+                  </div>
+                  <p class="advanced-panel">
+                        <em>*</em> <a href="https://www.mercadopago.com.ar/developers/es/related/custom-additional-info/" target="_blank">Send as much information as you can</a>. The more information you send, the better experience you and your clients get.
+                  </p>
+               </section>
+               <section class="docs-section" id="f2_payment_result">
+                  <h3 class="title">Payment results</h3>
+                  <p>
+                     When the user chooses to pay with a card, different scenarios can come up while processing the payment. It can be approved, but there are also several motives that led to a rejection. These cases can be caused by a wrong card number input, or an error in the security code, expiry date, the lack of funds to complete the payment, the need of an authorization from the card issuer to complete the payment, etc.
+                  </p>
+                  <p>
+                     Also, when your user chooses another payment type, it will stay in a pending state.
+                  </p>
+                  <p>
+                     We offer a method that, depending on the payment type and state, shows a result screen with all the necessary information for your user to understand if the payment was approved, or why it's been rejected, or even what to do if it remains "pending".
+                  </p>
+                  <p>
+                     <pre class="snippet">
+                        <code class="line-numbers language-java">
+public void startPaymentResultActivity(Payment payment, PaymentMethod paymentMethod) {
+
+   new MercadoPago.StartActivityBuilder()
+      .setPublicKey(YOUR_PUBLIC_KEY)
+      .setActivity(this)
+      .setPayment(payment)
+      .setPaymentMethod(paymentMethod)
+      .startPaymentResultActivity();
+}
+                        </code>
+                        <button class="copy-button">
+                           <img src="./img/clippy.svg" width="13" alt="Copy to clipboard">
+                        </button>
+                     </pre>
+                  </p>
+                  <div class="doc-example ionic">
+                     <img src="./img/phone/payment_results_cards.gif" class="img-phone-case"></img>
+                  </div>
+               </section>
+               <section class="docs-section" id="f2_component_customization">
+                  <h3 class="title">Customize our components according to your needs</h3>
+                  <p>
+                     You can exclude payment methods, payment types, choose a maximum accepted installments amount or a default one.
+                  </p>
+                  <p>
+                     You can change our components color, and choose between light and dark font color.
+                  </p>
+                  <p><b>Payment methods configuration</b></p>
+                  <p>
+                    Our SDK has a "PaymentPreference" object, which can be sent to any of our components. This object represents your configuration of how you'd like to customize the payment flow. Examples:
+                  </p>
+                  <p>
+                     <pre class="snippet">
+                        <code class="line-numbers language-java">
+PaymentPreference paymentPreference = new PaymentPreference();
+
+//You can add a list of excluded payment types
+List&lt;String&gt; excludedPaymentTypes = new ArrayList();
+excludedPaymentTypes.add(PaymentTypes.TICKET);
+
+paymentPreference.setExcludedPaymentTypeIds(excludedPaymentTypes);
+
+//You can add a list of excluded payment methods
+List&lt;String&gt; excludedPaymentMethods = new ArrayList();
+excludedPaymentMethods.add(PaymentMethods.ARGENTINA.VISA);
+
+paymentPreference.setExcludedPaymentMethodIds(excludedPaymentMethods);
+
+//You can add a max installments amount
+paymentPreference.setMaxAcceptedInstallments(6);
+
+//You can add a default installments amount
+paymentPreference.setDefaultInstallments(3);
+
+new MercadoPago.StartActivityBuilder().
+    // Add any other setting needed by the component
+    .setPaymentPreference(paymentPreference) //Optional
+    // Start the component
+
+                        </code>
+                        <button class="copy-button">
+                           <img src="./img/clippy.svg" width="13" alt="Copy to clipboard">
+                        </button>
+                     </pre>
+                  </p>
+                  <p><b>Decoration</b></p>
+                  <p>
+                    Our SDK has a "DecorationPreference" object which can be sent to our components. Choose a base color, and from that choise we will adapt the component's sections. Besides, if your base color is light, you can enable a dark font.
+                  </p>
+                  <p>
+                     <pre class="snippet">
+                        <code class="line-numbers language-java">
+
+DecorationPreference decorationPreference = new DecorationPreference();
+
+// Get a base color from your colors.xml file
+decorationPreference.setBaseColor(ContextCompat.getColor(context, R.color.your_color));
+
+// Or set it from an hexadecimal color code
+decorationPreference.setBaseColor("#77B2D2");
+
+// Enable dark font if desired
+decorationPreference.enableDarkFont();
+
+new MercadoPago.StartActivityBuilder().
+    // Add any other setting needed by the component
+    .setDecorationPreference(decorationPreference) //Optional
+    // Start the component
+
+                        </code>
+                        <button class="copy-button">
+                           <img src="./img/clippy.svg" width="13" alt="Copy to clipboard">
+                        </button>
+                     </pre>
+                  </p>
+                  <div class="doc-example ionic">
+                     <img src="./img/phone/payment_results_cards.gif" class="img-phone-case"></img>
+                  </div>
+               </section>
+            </div>
+         </div>
+      </div>
+
+      <footer class="footer">
+
+         <div class="copy">
+            <div class="copy-container">
+               <p class="authors">
+                  © 2016 MercadoLibre S.R.L.
+               </p>
+            </div>
+         </div>
+      </footer>
+      <script src="./js/bootstrap.min.js"></script>
+      <script src="./js/site.js"></script>
+      <script src="./js/cookies.min.js"></script>
+          <script src="./js/clipboard.js"></script>
+   <script>
+
+   (function() {
+
+    new Clipboard('.copy-button');
+    var pre = document.getElementsByTagName('pre');
+    for (var i = 0; i < pre.length; i++) {
+      var isLanguage = pre[i].children[0].className.indexOf('language-');
+      if ( isLanguage === 0 ) {
+        var button = document.createElement('button');
+        button.className = 'copy-button';
+        pre[i].appendChild(button);
+      }
+    }
+
+var copyCode = new Clipboard('.copy-button', {
+    target: function(trigger) {
+        return trigger.previousElementSibling;
+    }
+});
+
+
+    $("#flavor_3_step_2").html("&lt;LinearLayout");
+    $("#flavor_3_step_2").append("\n\txmlns:android='http://schemas.android.com/apk/res/android'");
+    $("#flavor_3_step_2").append("\n\txmlns:tools='http://schemas.android.com/tools'");
+    $("#flavor_3_step_2").append("\n\tandroid:layout_width='match_parent'");
+    $("#flavor_3_step_2").append("\n\tandroid:layout_height='match_parent'");
+    $("#flavor_3_step_2").append("\n\tandroid:paddingLeft='@dimen/activity_horizontal_margin'");
+    $("#flavor_3_step_2").append("\n\tandroid:paddingRight='@dimen/activity_horizontal_margin'");
+    $("#flavor_3_step_2").append("\n\tandroid:paddingTop='@dimen/activity_vertical_margin'");
+    $("#flavor_3_step_2").append("\n\tandroid:paddingBottom='@dimen/activity_vertical_margin'");
+    $("#flavor_3_step_2").append("\n\tandroid:orientation='vertical'");
+    $("#flavor_3_step_2").append("\n\ttools:context='.MainActivity'&gt;");
+    $("#flavor_3_step_2").append("\n");
+    $("#flavor_3_step_2").append("\n");
+    $("#flavor_3_step_2").append("\t&lt;Button");
+        $("#flavor_3_step_2").append("\n\t\tandroid:layout_width='match_parent'");
+        $("#flavor_3_step_2").append("\n\t\tandroid:layout_height='@dimen/mpsdk_button_height'");
+        $("#flavor_3_step_2").append("\n\t\tandroid:layout_marginTop='25dp'");
+        $("#flavor_3_step_2").append("\n\t\tandroid:gravity='center'");
+        $("#flavor_3_step_2").append("\n\t\tandroid:text='Pagar $100'");
+        $("#flavor_3_step_2").append("\n\t\tandroid:onClick='submit'");
+        $("#flavor_3_step_2").append("\n\t\tstyle='@style/mpsdk_button_normal'/&gt;");
+        $("#flavor_3_step_2").append("\n");
+   $("#flavor_3_step_2").append("\n&lt;/LinearLayout&gt;");
+})();
+</script>
+   </body>
+</html>
