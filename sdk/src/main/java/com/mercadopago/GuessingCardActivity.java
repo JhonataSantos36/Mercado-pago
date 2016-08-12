@@ -1141,6 +1141,10 @@ public class GuessingCardActivity extends FrontCardActivity {
                     validateCurrentEditText();
                     return true;
                 }
+                else if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    createToken();
+                    return true;
+                }
                 return false;
             }
         });
@@ -1171,16 +1175,6 @@ public class GuessingCardActivity extends FrontCardActivity {
                         checkFlipCardToFront(true);
                     }
                 }
-            }
-        });
-        mCardSecurityCodeEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    createToken();
-                    return true;
-                }
-                return false;
             }
         });
     }
