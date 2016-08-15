@@ -144,14 +144,18 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
     }
 
     public void onSecurityTextChanged(CharSequence s) {
-        mCardSecurityCodeTextView.setText(buildSecurityCode(mActivity.getSecurityCodeLength(), s));
+        if(mCardSecurityCodeTextView != null) {
+            mCardSecurityCodeTextView.setText(buildSecurityCode(mActivity.getSecurityCodeLength(), s));
+        }
     }
 
     public void afterSecurityTextChanged(Editable s) {
-        mActivity.saveCardSecurityCode(s.toString());
-        if (s.length() == 0) {
-            mCardSecurityCodeTextView.setText(buildSecurityCode(mActivity.getSecurityCodeLength(), s));
-            mActivity.saveCardSecurityCode(null);
+        if(mActivity != null) {
+            mActivity.saveCardSecurityCode(s.toString());
+            if (s.length() == 0) {
+                mCardSecurityCodeTextView.setText(buildSecurityCode(mActivity.getSecurityCodeLength(), s));
+                mActivity.saveCardSecurityCode(null);
+            }
         }
     }
 
@@ -283,34 +287,39 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
     }
 
     public void setFontColor() {
-        PaymentMethod currentPaymentMethod = mActivity.getCurrentPaymentMethod();
-        int font = 0;
-        if (currentPaymentMethod != null) {
-            font = mActivity.getCardFontColor(currentPaymentMethod);
-        }
-        if (font == 0) {
-            font = CardInterface.FULL_TEXT_VIEW_COLOR;
-        }
-        setFontColor(font, mCardNumberTextView, mCardNumberEditText);
-        setFontColor(font, mCardholderNameTextView, mCardHolderNameEditText);
-        setFontColor(font, mCardExpiryMonthTextView, mCardExpiryDateEditText);
-        setFontColor(font, mCardExpiryYearTextView, mCardExpiryDateEditText);
-        setFontColor(font, mCardDateDividerTextView, mCardExpiryDateEditText);
+        if(mActivity != null) {
+            PaymentMethod currentPaymentMethod = mActivity.getCurrentPaymentMethod();
+            int font = 0;
+            if (currentPaymentMethod != null) {
+                font = mActivity.getCardFontColor(currentPaymentMethod);
+            }
+            if (font == 0) {
+                font = CardInterface.FULL_TEXT_VIEW_COLOR;
+            }
 
-        String location = mActivity.getSecurityCodeLocation();
-        if (location != null && location.equals(CardInterface.CARD_SIDE_FRONT)) {
-            setFontColor(font, mCardSecurityCodeTextView, mCardSecurityEditText);
+            setFontColor(font, mCardNumberTextView, mCardNumberEditText);
+            setFontColor(font, mCardholderNameTextView, mCardHolderNameEditText);
+            setFontColor(font, mCardExpiryMonthTextView, mCardExpiryDateEditText);
+            setFontColor(font, mCardExpiryYearTextView, mCardExpiryDateEditText);
+            setFontColor(font, mCardDateDividerTextView, mCardExpiryDateEditText);
+
+            String location = mActivity.getSecurityCodeLocation();
+            if (location != null && location.equals(CardInterface.CARD_SIDE_FRONT)) {
+                setFontColor(font, mCardSecurityCodeTextView, mCardSecurityEditText);
+            }
         }
     }
 
     private void setFontColor(int font, MPTextView textView, MPEditText editText) {
-        int alpha = NORMAL_TEXT_VIEW_ALPHA;
-        if (editText != null && editText.hasFocus()) {
-            alpha = EDITING_TEXT_VIEW_ALPHA;
+        if(textView != null) {
+            int alpha = NORMAL_TEXT_VIEW_ALPHA;
+            if (editText != null && editText.hasFocus()) {
+                alpha = EDITING_TEXT_VIEW_ALPHA;
+            }
+            int color = ContextCompat.getColor(getContext(), font);
+            int newColor = Color.argb(alpha, Color.red(color), Color.green(color), Color.blue(color));
+            textView.setTextColor(newColor);
         }
-        int color = ContextCompat.getColor(getContext(), font);
-        int newColor = Color.argb(alpha, Color.red(color), Color.green(color), Color.blue(color));
-        textView.setTextColor(newColor);
     }
 
     public void transitionImage(int image) {

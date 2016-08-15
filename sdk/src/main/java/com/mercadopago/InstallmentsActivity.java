@@ -2,6 +2,7 @@ package com.mercadopago;
 
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -75,6 +76,15 @@ public class InstallmentsActivity extends ShowCardActivity {
 
     private void hideCardLayout() {
         mCardBackground.setVisibility(View.GONE);
+    }
+
+    @Override
+    protected void onBeforeCreation() {
+        if(getResources().getBoolean(R.bool.only_landscape)){
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        } else {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        }
     }
 
     @Override
