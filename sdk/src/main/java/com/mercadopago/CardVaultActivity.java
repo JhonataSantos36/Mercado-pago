@@ -1,6 +1,7 @@
 package com.mercadopago;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -24,7 +25,6 @@ import com.mercadopago.mptracker.MPTracker;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
-import com.mercadopago.views.MPTextView;
 
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
@@ -63,6 +63,16 @@ public class CardVaultActivity extends ShowCardActivity {
             initializeCard();
         }
         initializeFrontFragment();
+    }
+
+    @Override
+    protected void onBeforeCreation() {
+        if (getResources().getBoolean(R.bool.only_portrait)) {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+        } else {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        }
     }
 
     @Override

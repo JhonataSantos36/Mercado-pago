@@ -10,7 +10,6 @@ import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.mptracker.MPTracker;
 import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
-import com.mercadopago.util.MercadoPagoUtil;
 import com.mercadopago.views.MPTextView;
 
 import static android.text.TextUtils.isEmpty;

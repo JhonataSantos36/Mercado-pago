@@ -23,6 +23,7 @@ public abstract class MercadoPagoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        onBeforeCreation();
         getDecorationPreference();
         getActivityParameters();
         if (mDecorationPreference != null && mDecorationPreference.hasColors()) {
@@ -39,6 +40,9 @@ public abstract class MercadoPagoActivity extends AppCompatActivity {
         } catch (IllegalStateException exception) {
             onInvalidStart(exception.getMessage());
         }
+    }
+
+    protected void onBeforeCreation() {
     }
 
     private void setActivity() {

@@ -43,7 +43,7 @@
     <string name="dark_font">Dark font</string>
     <string name="title_activity_checkout_example">Our Checkout</string>
     <string name="components_title">Build your own checkout</string>
-    <string name="components_description">Utiliza los componentes que te provee nuestra librería para armar un checkout a tu gusto.</string>
+    <string name="components_description">Use the components provided by our library to build your own checkout.</string>
     <string name="components_comment">Each component is independent and you can combine it with your own screens.</string>
     <string name="title_activity_customized_example">Personalized checkout</string>
     <string name="payment_creation_failed">Payment creation failed</string>
@@ -52,7 +52,7 @@
     <string name="reset">Reset</string>
     <string name="complete_payment_method_selection">Complete payment method selection</string>
     <string name="card_with_installments">Charge with installments</string>
-    <string name="card_without_installments">Charge con tarjeta sin cuotas</string>
+    <string name="card_without_installments">Charge a card without installments</string>
     <string name="simple_payment_method_selection">Simple payment method selection</string>
     <string name="issuer_selection">Bank selection</string>
     <string name="installments_selection">Installments selection</string>
@@ -60,7 +60,7 @@
     <string name="pay">Pay!</string>
     <string name="cutomization_description">You can customize the components!</string>
     <string name="exclude_visa">Exclude Visa</string>
-    <string name="exclude_cash">Exclude efectivo</string>
+    <string name="exclude_cash">Exclude cash</string>
     <string name="checkout_button">Our Checkout</string>
     <string name="components_button">UI Components</string>
     <string name="services_button">Services</string>
