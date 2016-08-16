@@ -135,7 +135,6 @@
                     android:layout_gravity="center"
                     android:visibility="gone"/>
             </FrameLayout>
-
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

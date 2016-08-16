@@ -2,6 +2,7 @@ package com.mercadopago;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -39,6 +40,16 @@ public class BankDealsActivity extends MercadoPagoActivity {
     protected Toolbar mToolbar;
 
     protected List<BankDeal> mBankDeals;
+
+    @Override
+    protected void onBeforeCreation() {
+        if (getResources().getBoolean(R.bool.only_portrait)) {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+        } else {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        }
+    }
 
     @Override
     protected void onValidStart() {
