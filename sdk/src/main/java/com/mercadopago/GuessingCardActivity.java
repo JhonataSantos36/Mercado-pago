@@ -204,16 +204,16 @@ public class GuessingCardActivity extends FrontCardActivity {
 
     @Override
     protected void onBeforeCreation() {
-        if(onlyLandscapeMode()){
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        } else {
+        if(onlyPortrait()){
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        } else {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         }
     }
 
     @Override
     protected void onValidStart() {
-        if(onlyLandscapeMode()) {
+        if(!onlyPortrait()) {
             setLandscapeModeInitialLayout();
         }
         initializeToolbar();
@@ -235,8 +235,8 @@ public class GuessingCardActivity extends FrontCardActivity {
         }
     }
 
-    private boolean onlyLandscapeMode() {
-        return getResources().getBoolean(R.bool.only_landscape);
+    private boolean onlyPortrait() {
+        return getResources().getBoolean(R.bool.only_portrait);
     }
 
     private void setLandscapeModeInitialLayout() {
@@ -499,7 +499,7 @@ public class GuessingCardActivity extends FrontCardActivity {
         switch (mCurrentEditingEditText) {
             case CARDHOLDER_NAME_INPUT:
                 if (TextUtils.isEmpty(mCardHolderName) || validateCardName(true)) {
-                    if(!onlyLandscapeMode()) {
+                    if(onlyPortrait()) {
                         mCardExpiryDateInput.setVisibility(View.GONE);
                     }
                     mCardNumberInput.setVisibility(View.VISIBLE);
@@ -509,7 +509,7 @@ public class GuessingCardActivity extends FrontCardActivity {
                 return false;
             case CARD_EXPIRYDATE_INPUT:
                 if (mExpiryMonth == null || validateExpiryDate(true)) {
-                    if(!onlyLandscapeMode()) {
+                    if(onlyPortrait()) {
                         mIdentificationTypeContainer.setVisibility(View.GONE);
                         mSecurityCodeEditView.setVisibility(View.GONE);
                         mCardIdNumberInput.setVisibility(View.GONE);
@@ -521,7 +521,7 @@ public class GuessingCardActivity extends FrontCardActivity {
                 return false;
             case CARD_SECURITYCODE_INPUT:
                 if (TextUtils.isEmpty(mSecurityCode) || validateSecurityCode(true)) {
-                    if(!onlyLandscapeMode()) {
+                    if(onlyPortrait()) {
                         mIdentificationTypeContainer.setVisibility(View.GONE);
                         mCardIdNumberInput.setVisibility(View.GONE);
                     }
@@ -532,7 +532,7 @@ public class GuessingCardActivity extends FrontCardActivity {
                 return false;
             case CARD_IDENTIFICATION_INPUT:
                 if (TextUtils.isEmpty(mCardIdentificationNumber) || validateIdentificationNumber(true)) {
-                    if(!onlyLandscapeMode()) {
+                    if(onlyPortrait()) {
                         mCardIdNumberInput.setVisibility(View.GONE);
                     }
                     if (isSecurityCodeRequired()) {
@@ -900,6 +900,9 @@ public class GuessingCardActivity extends FrontCardActivity {
                             mSelectedIdentificationType = identificationTypes.get(0);
                             mIdentificationTypeSpinner.setAdapter(new IdentificationTypesAdapter(getActivity(), identificationTypes));
                             mIdentificationTypeContainer.setVisibility(View.VISIBLE);
+                            if(!onlyPortrait()) {
+                                mCardIdNumberInput.setVisibility(View.VISIBLE);
+                            }
                         }
                     }
                 }
