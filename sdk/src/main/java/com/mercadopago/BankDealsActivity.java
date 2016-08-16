@@ -43,7 +43,7 @@ public class BankDealsActivity extends MercadoPagoActivity {
 
     @Override
     protected void onBeforeCreation() {
-        if(getResources().getBoolean(R.bool.only_portrait)){
+        if (getResources().getBoolean(R.bool.only_portrait)) {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         } else {

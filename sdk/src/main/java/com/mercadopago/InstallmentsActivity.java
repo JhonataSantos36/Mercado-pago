@@ -80,7 +80,7 @@ public class InstallmentsActivity extends ShowCardActivity {
 
     @Override
     protected void onBeforeCreation() {
-        if(getResources().getBoolean(R.bool.only_portrait)){
+        if (getResources().getBoolean(R.bool.only_portrait)) {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         } else {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
