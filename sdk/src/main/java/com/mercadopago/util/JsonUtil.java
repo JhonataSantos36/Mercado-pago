@@ -4,9 +4,6 @@ import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import java.util.Collection;
-import java.util.List;
-
 public class JsonUtil {
 
     private static JsonUtil mInstance = null;

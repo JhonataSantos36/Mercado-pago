@@ -1,7 +1,6 @@
 package com.mercadopago;
 
 import android.app.Activity;
-import android.content.pm.ActivityInfo;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;

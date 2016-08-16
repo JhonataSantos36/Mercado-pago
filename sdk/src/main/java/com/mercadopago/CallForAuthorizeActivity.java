@@ -2,7 +2,6 @@ package com.mercadopago;
 
 import android.content.Intent;
 import android.support.design.widget.Snackbar;
-import android.text.Spanned;
 import android.view.View;
 
 import com.mercadopago.model.Payment;

@@ -25,7 +25,6 @@ import com.mercadopago.mptracker.MPTracker;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
-import com.mercadopago.views.MPTextView;
 
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
@@ -65,7 +64,7 @@ public class CardVaultActivity extends ShowCardActivity {
         }
         initializeFrontFragment();
     }
-    
+
     @Override
     protected void onBeforeCreation() {
         if (getResources().getBoolean(R.bool.only_portrait)) {

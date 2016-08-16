@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:ns1="rn:oasis:names:tc:xliff:document:1.2" xmlns:xliff="http://schemas.android.com/tools">
+<resources xmlns:ns1="rn:oasis:names:tc:xliff:document:1.2">
 
     <!-- Banks deals -->
     <string name="mpsdk_empty_bank_deals">No promotions available for you</string>
