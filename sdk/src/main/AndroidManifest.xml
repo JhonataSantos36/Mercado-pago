@@ -29,7 +29,7 @@
         <activity
             android:name=".BankDealsActivity"
             android:label="@string/mpsdk_title_activity_bank_deals"
-            android:screenOrientation="unspecified"
+            android:screenOrientation="behind"
             android:theme="@style/Theme.MercadoPagoTheme.NoActionBar" />
         <activity
             android:name=".TermsAndConditionsActivity"
@@ -42,7 +42,7 @@
             android:theme="@style/Theme.ProcessMercadoPagoTheme.NoActionbar" />
         <activity
             android:name=".GuessingCardActivity"
-            android:screenOrientation="unspecified"
+            android:screenOrientation="behind"
             android:theme="@style/Theme.ProcessMercadoPagoTheme.NoActionbar"
             android:windowSoftInputMode="adjustResize" />
         <activity
@@ -56,19 +56,19 @@
             android:theme="@style/Theme.InfoMercadoPagoTheme.NoActionbar" />
         <activity
             android:name=".InstallmentsActivity"
-            android:screenOrientation="unspecified"
+            android:screenOrientation="behind"
             android:theme="@style/Theme.ProcessMercadoPagoTheme.NoActionbar" />
         <activity
             android:name=".IssuersActivity"
-            android:screenOrientation="unspecified"
+            android:screenOrientation="behind"
             android:theme="@style/Theme.ProcessMercadoPagoTheme.NoActionbar" />
         <activity
             android:name=".CardVaultActivity"
-            android:screenOrientation="unspecified"
+            android:screenOrientation="behind"
             android:theme="@style/Theme.ProcessMercadoPagoTheme.NoActionbar" />
         <activity
             android:name=".ErrorActivity"
-            android:screenOrientation="unspecified"
+            android:screenOrientation="behind"
             android:theme="@style/Theme.MercadoPagoTheme.NoActionBar" />
         <activity
             android:name=".CongratsActivity"
