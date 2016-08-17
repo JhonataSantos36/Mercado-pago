@@ -56,7 +56,7 @@ public class InstructionsActivityTest {
 
     private Payment mPayment;
     private String mMerchantPublicKey;
-    private PaymentMethod mPaymentMethod;
+    private String mPaymentTypeId;
     private FakeAPI mFakeAPI;
 
 
@@ -64,11 +64,11 @@ public class InstructionsActivityTest {
     public void createValidStartIntent() {
         mPayment = StaticMock.getPayment();
         mMerchantPublicKey = "1234";
-        mPaymentMethod = getOfflinePaymentMethod();
+        mPaymentTypeId = "ticket";
 
         validStartIntent = new Intent();
         validStartIntent.putExtra("merchantPublicKey", mMerchantPublicKey);
-        validStartIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(mPaymentMethod));
+        validStartIntent.putExtra("paymentTypeId", mPaymentTypeId);
         validStartIntent.putExtra("payment", JsonUtil.getInstance().toJson(mPayment));
     }
 
@@ -100,7 +100,7 @@ public class InstructionsActivityTest {
         InstructionsActivity activity = mTestRule.launchActivity(validStartIntent);
         assertEquals(activity.mMerchantPublicKey, mMerchantPublicKey);
         assertEquals(activity.mPayment.getId(), mPayment.getId());
-        assertEquals(activity.mPaymentMethod.getId(), mPaymentMethod.getId());
+        assertEquals(activity.mPaymentTypeId, "ticket");
     }
 
     //Instructions data
@@ -340,12 +340,12 @@ public class InstructionsActivityTest {
     }
 
     @Test
-    public void ifPaymentMethodNotSetStartErrorActivity() {
+    public void ifPaymentTypeIdNotSetStartErrorActivity() {
         PaymentResult instructionWithoutActions = StaticMock.getInstructionWithoutActions();
         mFakeAPI.addResponseToQueue(instructionWithoutActions, 200, "");
-        Intent startWithoutPaymentMethod = new Intent(validStartIntent);
-        startWithoutPaymentMethod.removeExtra("paymentMethod");
-        mTestRule.launchActivity(startWithoutPaymentMethod);
+        Intent startWithoutPaymentTypeId = new Intent(validStartIntent);
+        startWithoutPaymentTypeId.removeExtra("paymentTypeId");
+        mTestRule.launchActivity(startWithoutPaymentTypeId);
         intended(hasComponent(ErrorActivity.class.getName()));
     }
 
@@ -360,13 +360,13 @@ public class InstructionsActivityTest {
     }
 
     @Test
-    public void ifCardPaymentMethodSetStartErrorActivity() {
+    public void ifCardPaymentTypeIdSetStartErrorActivity() {
         PaymentResult instructionWithoutActions = StaticMock.getInstructionWithoutActions();
         mFakeAPI.addResponseToQueue(instructionWithoutActions, 200, "");
-        mPaymentMethod.setPaymentTypeId("credit_card");
+        mPaymentTypeId = "credit_card";
 
         Intent startWithCardPaymentMethod = new Intent(validStartIntent);
-        startWithCardPaymentMethod.putExtra("paymentMethod", JsonUtil.getInstance().toJson(mPaymentMethod));
+        startWithCardPaymentMethod.putExtra("paymentTypeId", mPaymentTypeId);
 
         mTestRule.launchActivity(startWithCardPaymentMethod);
         intended(hasComponent(ErrorActivity.class.getName()));
@@ -456,21 +456,12 @@ public class InstructionsActivityTest {
 
     @Test
     public void ifManyInstructionsFromServiceAndNoneMatchesTypeShowErrorScreen() {
+        String paymentTypeId = "crazy_type";
         PaymentResult manyInstructions = StaticMock.getInstructions();
         mFakeAPI.addResponseToQueue(manyInstructions, 200, "");
-        PaymentMethod paymentMethod = getOfflinePaymentMethod();
-        paymentMethod.setPaymentTypeId("crazy_type");
-        validStartIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
+        validStartIntent.putExtra("paymentTypeId", paymentTypeId);
         mTestRule.launchActivity(validStartIntent);
 
         intended(hasComponent(ErrorActivity.class.getName()));
-    }
-
-    private PaymentMethod getOfflinePaymentMethod() {
-        PaymentMethod paymentMethod = new PaymentMethod();
-        paymentMethod.setId("oxxo");
-        paymentMethod.setName("Oxxo");
-        paymentMethod.setPaymentTypeId("ticket");
-        return paymentMethod;
     }
 }
