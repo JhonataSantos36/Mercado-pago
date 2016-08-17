@@ -20,6 +20,7 @@ import com.mercadopago.model.InstructionReference;
 import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentResult;
+import com.mercadopago.model.PaymentType;
 import com.mercadopago.mptracker.MPTracker;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.CurrenciesUtil;
@@ -55,14 +56,14 @@ public class InstructionsActivity extends MercadoPagoActivity {
 
     //Params
     protected Payment mPayment;
-    protected PaymentMethod mPaymentMethod;
+    protected String mPaymentTypeId;
     protected String mMerchantPublicKey;
 
     @Override
     protected void getActivityParameters() {
         mMerchantPublicKey = getIntent().getStringExtra("merchantPublicKey");
+        mPaymentTypeId = getIntent().getStringExtra("paymentTypeId");
         mPayment = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("payment"), Payment.class);
-        mPaymentMethod = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("paymentMethod"), PaymentMethod.class);
     }
 
     @Override
@@ -73,10 +74,10 @@ public class InstructionsActivity extends MercadoPagoActivity {
         if (mPayment == null) {
             throw new IllegalStateException("payment not set");
         }
-        if (mPaymentMethod == null) {
-            throw new IllegalStateException("payment method not set");
+        if (mPaymentTypeId == null) {
+            throw new IllegalStateException("payment type id not set");
         }
-        if (MercadoPagoUtil.isCard(mPaymentMethod.getPaymentTypeId())) {
+        if (MercadoPagoUtil.isCard(mPaymentTypeId)) {
             throw new IllegalStateException("payment method cannot be card");
         }
     }
@@ -123,13 +124,13 @@ public class InstructionsActivity extends MercadoPagoActivity {
     protected void getInstructionsAsync() {
 
         LayoutUtil.showProgressLayout(this);
-        mMercadoPago.getPaymentResult(mPayment.getId(), mPaymentMethod.getPaymentTypeId(), new Callback<PaymentResult>() {
+        mMercadoPago.getPaymentResult(mPayment.getId(), mPaymentTypeId, new Callback<PaymentResult>() {
             @Override
             public void success(PaymentResult paymentResult) {
                 List<Instruction> instructions
                         = paymentResult.getInstructions() == null ? new ArrayList<Instruction>() : paymentResult.getInstructions();
                 if (instructions.isEmpty()) {
-                    ErrorUtil.startErrorActivity(getActivity(), getActivity().getString(R.string.mpsdk_standard_error_message), INSTRUCTIONS_NOT_FOUND_FOR_TYPE + mPaymentMethod.getPaymentTypeId(), false);
+                    ErrorUtil.startErrorActivity(getActivity(), getActivity().getString(R.string.mpsdk_standard_error_message), INSTRUCTIONS_NOT_FOUND_FOR_TYPE + mPaymentTypeId, false);
                 } else {
                     resolveInstructionsFound(instructions);
                 }
@@ -153,7 +154,7 @@ public class InstructionsActivity extends MercadoPagoActivity {
     private void resolveInstructionsFound(List<Instruction> instructions) {
         Instruction instruction = getInstruction(instructions);
         if (instruction == null) {
-            ErrorUtil.startErrorActivity(this, this.getString(R.string.mpsdk_standard_error_message), "instruction not found for type " + mPaymentMethod.getPaymentTypeId(), false);
+            ErrorUtil.startErrorActivity(this, this.getString(R.string.mpsdk_standard_error_message), "instruction not found for type " + mPaymentTypeId, false);
         } else {
             showInstructions(instruction);
         }
@@ -165,7 +166,7 @@ public class InstructionsActivity extends MercadoPagoActivity {
         if (instructions.size() == 1) {
             instruction = instructions.get(0);
         } else {
-            instruction = getInstructionForType(instructions, mPaymentMethod.getPaymentTypeId());
+            instruction = getInstructionForType(instructions, mPaymentTypeId);
         }
         return instruction;
     }

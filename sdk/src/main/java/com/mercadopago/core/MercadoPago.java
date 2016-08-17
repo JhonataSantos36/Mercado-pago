@@ -343,12 +343,12 @@ public class MercadoPago {
         activity.startActivityForResult(rejectionIntent, REJECTION_REQUEST_CODE);
     }
 
-    private static void startInstructionsActivity(Activity activity, String merchantPublicKey, Payment payment, PaymentMethod paymentMethod) {
+    private static void startInstructionsActivity(Activity activity, String merchantPublicKey, Payment payment, String paymentTypeId) {
 
         Intent instructionIntent = new Intent(activity, InstructionsActivity.class);
         instructionIntent.putExtra("merchantPublicKey", merchantPublicKey);
+        instructionIntent.putExtra("paymentTypeId", paymentTypeId);
         instructionIntent.putExtra("payment", JsonUtil.getInstance().toJson(payment));
-        instructionIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
 
         activity.startActivityForResult(instructionIntent, INSTRUCTIONS_REQUEST_CODE);
     }
@@ -589,6 +589,7 @@ public class MercadoPago {
         private String mMerchantAccessToken;
         private String mMerchantBaseUrl;
         private String mMerchantGetCustomerUri;
+        private String mPaymentTypeId;
         private List<PayerCost> mPayerCosts;
         private List<Issuer> mIssuers;
         private Payment mPayment;
@@ -697,6 +698,13 @@ public class MercadoPago {
             this.mPaymentMethod = paymentMethod;
             return this;
         }
+
+        public StartActivityBuilder setPaymentTypeId(String paymentTypeId) {
+
+            this.mPaymentTypeId = paymentTypeId;
+            return this;
+        }
+
 
         public StartActivityBuilder setSupportedPaymentMethods(List<PaymentMethod> paymentMethodList) {
 
@@ -868,13 +876,12 @@ public class MercadoPago {
 
             if (this.mActivity == null) throw new IllegalStateException("activity is null");
             if (this.mPayment == null) throw new IllegalStateException("payment is null");
-            if (this.mPaymentMethod == null)
-                throw new IllegalStateException("payment method is null");
+            if (this.mPaymentTypeId == null) throw new IllegalStateException("payment type id is null");
             if (this.mKey == null) throw new IllegalStateException("key is null");
             if (this.mKeyType == null) throw new IllegalStateException("key type is null");
 
             if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {
-                MercadoPago.startInstructionsActivity(this.mActivity, this.mKey, this.mPayment, this.mPaymentMethod);
+                MercadoPago.startInstructionsActivity(this.mActivity, this.mKey, this.mPayment, this.mPaymentTypeId);
             } else {
                 throw new RuntimeException("Unsupported key type for this method");
             }
