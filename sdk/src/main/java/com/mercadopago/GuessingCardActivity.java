@@ -1050,6 +1050,10 @@ public class GuessingCardActivity extends FrontCardActivity {
                     validateCurrentEditText();
                     return true;
                 }
+                else if ((event.getAction() == KeyEvent.ACTION_DOWN) && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
+                    validateCurrentEditText();
+                    return true;
+                }
                 return false;
             }
         });
@@ -1098,6 +1102,10 @@ public class GuessingCardActivity extends FrontCardActivity {
                     validateCurrentEditText();
                     return true;
                 }
+                else if ((event.getAction() == KeyEvent.ACTION_DOWN) && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
+                    validateCurrentEditText();
+                    return true;
+                }
                 return false;
             }
         });
@@ -1132,6 +1140,9 @@ public class GuessingCardActivity extends FrontCardActivity {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_NEXT) {
+                    validateCurrentEditText();
+                    return true;
+                } else if ((event.getAction() == KeyEvent.ACTION_DOWN) && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
                     validateCurrentEditText();
                     return true;
                 }
@@ -1169,6 +1180,9 @@ public class GuessingCardActivity extends FrontCardActivity {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_NEXT) {
+                    validateCurrentEditText();
+                    return true;
+                }  else if ((event.getAction() == KeyEvent.ACTION_DOWN) && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
                     validateCurrentEditText();
                     return true;
                 } else if (actionId == EditorInfo.IME_ACTION_DONE) {
@@ -1248,6 +1262,9 @@ public class GuessingCardActivity extends FrontCardActivity {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_NEXT) {
+                    validateCurrentEditText();
+                    return true;
+                } else if ((event.getAction() == KeyEvent.ACTION_DOWN) && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
                     validateCurrentEditText();
                     return true;
                 }
