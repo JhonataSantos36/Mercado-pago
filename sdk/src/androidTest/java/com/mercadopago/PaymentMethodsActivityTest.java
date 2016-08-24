@@ -308,7 +308,7 @@ public class PaymentMethodsActivityTest {
         validStartIntent.putExtra("showBankDeals", true);
         mTestRule.launchActivity(validStartIntent);
 
-        String promotionsText = mTestRule.getActivity().getString(R.string.mpsdk_bank_deals);
+        String promotionsText = mTestRule.getActivity().getString(R.string.mpsdk_title_activity_bank_deals);
         onView(withText(promotionsText)).perform(click());
 
         intended(hasComponent(BankDealsActivity.class.getName()));

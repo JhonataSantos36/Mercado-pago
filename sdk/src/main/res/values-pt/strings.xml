@@ -9,15 +9,14 @@
 
     <!-- Payment Methods -->
     <string name="mpsdk_title_activity_payment_methods">Como você prefere pagar?</string>
-    <string name="mpsdk_bank_deals">Promoções</string>
 
     <!-- Customer cards -->
-    <string name="mpsdk_title_activity_customer_pms">Com o cartão?</string>
+    <string name="mpsdk_title_activity_customer_pms">Com qual cartão?</string>
     <string name="other_payment_method">Outro meio de pagamento…</string>
 
     <!-- Vault -->
-    <string name="mpsdk_cod_seg_desc">Últimos <xliff:g id="numeros" example="4">%1$d</xliff:g> dígitos do verso do cartão de crédito</string>
-    <string name="mpsdk_cod_seg_desc_amex"><xliff:g id="numeros" example="4">%1$d</xliff:g> dígitos da frente do cartão de crédito</string>
+    <string name="mpsdk_cod_seg_desc">Últimos <xliff:g id="numeros" example="4">%1$d</xliff:g> números do verso do cartão</string>
+    <string name="mpsdk_cod_seg_desc_amex"><xliff:g id="numeros" example="4">%1$d</xliff:g> dígitos da frente do cartão</string>
     <string name="mpsdk_title_activity_vault">Pagar</string>
     <string name="mpsdk_select_pm_label">Escolha o meio de pagamento…</string>
     <string name="mpsdk_last_digits_label">terminado em</string>
@@ -28,43 +27,43 @@
     <string name="mpsdk_payment_method_groups_label">Outros</string>
 
     <!-- Issuers -->
-    <string name="mpsdk_card_issuers_title">Escolha o seu banco</string>
+    <string name="mpsdk_card_issuers_title">Qual é o seu banco?</string>
 
     <!-- Installments -->
     <string name="mpsdk_card_installments_title">Em quantas parcelas?</string>
     <string name="mpsdk_installments_of">de</string>
 
     <!-- Checkout -->
-    <string name="mpsdk_text_terms_and_conditions_start">Ao pagar, afirmo que eu sou maior de idade e concordar com os </string>
-    <string name="mpsdk_text_terms_and_conditions_linked">Termos e Condições</string>
+    <string name="mpsdk_text_terms_and_conditions_start">Ao pagar, afirmo que eu sou maior de idade e aceito os</string>
+    <string name="mpsdk_text_terms_and_conditions_linked">Termos e condições</string>
     <string name="mpsdk_text_terms_and_conditions_end">do Mercado Pago</string>
     <string name="mpsdk_payment_amount_to_pay">Total a pagar</string>
     <string name="mpsdk_pay_button_text">Pagar</string>
     <string name="mpsdk_press_again_confirm">Se você pressionar novamente reinicialização a selecção</string>
-    <string name="mpsdk_title_activity_checkout">Verifique para ver se está tudo bem…</string>
+    <string name="mpsdk_title_activity_checkout">Revise se está tudo correto…</string>
 
     <!-- Card token and guessing -->
     <string name="mpsdk_invalid_card_number_incomplete">Digite todos os números do cartão</string>
-    <string name="mpsdk_invalid_empty_name">Digite o nome e sobrenome impresso no cartão</string>
+    <string name="mpsdk_invalid_empty_name">Digite o nome e o sobrenome impresso no cartão</string>
     <string name="mpsdk_invalid_expiry_date">A data que você inseriu não é válida</string>
     <string name="mpsdk_invalid_identification_number">Digite todos os números</string>
-    <string name="mpsdk_invalid_payment_method">Você não pode pagar com este método de pagamento</string>
+    <string name="mpsdk_invalid_payment_method">Você não pode pagar com este meio de pagamento</string>
     <string name="mpsdk_card_number_label">Número do cartão</string>
-    <string name="mpsdk_card_expire_date_label">Data de expiração</string>
+    <string name="mpsdk_card_expire_date_label">Data de validade</string>
     <string name="mpsdk_cardholder_name">Nome e sobrenome</string>
     <string name="mpsdk_doc_type_label">Tipo</string>
     <string name="mpsdk_doc_number_label">Documento</string>
-    <string name="mpsdk_bank_deals_action">Veja as promoções</string>
+    <string name="mpsdk_bank_deals_action">Ver promoções</string>
     <string name="mpsdk_security_code">Código de segurança</string>
     <string name="mpsdk_continue_label">Continuar</string>
     <string name="mpsdk_payment_method">Meio de pagamento</string>
     <string name="mpsdk_issuer_label">Banco</string>
 
-    <string name="mpsdk_invalid_card_bin">O número do cartão de crédito digitado não coincide com o tipo de cartão</string>
-    <string name="mpsdk_invalid_card_luhn">O número do cartão de crédito digitado está incorreto</string>
-    <string name="mpsdk_invalid_card_length">Digite os %1$s números do cartão de crédito</string>
+    <string name="mpsdk_invalid_card_bin">O número do cartão que você digitou não coincide com o tipo de cartão</string>
+    <string name="mpsdk_invalid_card_luhn">O número do cartão que você digitou está incorreto</string>
+    <string name="mpsdk_invalid_card_length">Digite os %1$s números do cartão</string>
     <string name="mpsdk_invalid_cvv_length">Digite os %1$s números do código de segurança</string>
-    <string name="mpsdk_invalid_field">Verifique este dado</string>
+    <string name="mpsdk_invalid_field">Revise este dado</string>
     <string name="mpsdk_invalid_empty_card">Digite o número do cartão de crédito</string>
     <string name="mpsdk_card_expiry_date_hint">Mês / Ano</string>
     <string name="mpsdk_card_expiry_month_hint">MM</string>
@@ -77,82 +76,88 @@
     <string name="mpsdk_title_activity_new_card">Digite os dados do seu cartão</string>
 
     <!-- Congrats -->
-    <string name="mpsdk_title_activity_congrat">Pronto, seu pagamento foi creditado!</string>
+    <string name="mpsdk_title_activity_congrat">Pronto! O seu pagamento foi aprovado!</string>
     <string name="mpsdk_subtitle_action_activity_congrat">Enviaremos os dados para\n%1$s</string>
-    <string name="mpsdk_text_state_acount_activity_congrat">Em sua declaração, você verá a posse como MERCADOPAGO</string>
+    <string name="mpsdk_text_state_acount_activity_congrat">Você verá o pagamento na fatura do seu cartão de crédito como MERCADO PAGO</string>
     <string name="mpsdk_payment_id_description">Comprovante:</string>
 
     <!-- CallForAuthorize -->
-    <string name="mpsdk_title_activity_call_for_authorize">Você deve autorizar junto ao %1$s o pagamento do %2$s o Mercado Pago</string>
+    <string name="mpsdk_title_activity_call_for_authorize">Você deve autorizar com %1$s o pagamento de %2$s ao Mercado Pago</string>
     <string name="mpsdk_text_order_call_for_authorize">O telefone do banco está no verso do seu cartão.</string>
-    <string name="mpsdk_error_title_activity_call_for_authorize">"Você deve autorizar o pagamento de seu cartão"</string>
-    <string name="mpsdk_text_authorized_call_for_authorize">Já falei com %1$s e me autoriza</string>
+    <string name="mpsdk_error_title_activity_call_for_authorize">"Você precisa autorizar o pagamento com a administradora do seu cartão"</string>
+    <string name="mpsdk_text_authorized_call_for_authorize">Já falei com %1$s e autorizei</string>
     <string name="mpsdk_text_question_call_for_authorize">Não conseguiu autorizá-lo?</string>
     <string name="mpsdk_text_select_other_payment_method">Escolha outro meio de pagamento</string>
 
     <!-- Pending -->
     <string name="mpsdk_title_pending">Estamos processando o pagamento</string>
-    <string name="mpsdk_subtitle_pending_contingency">Em menos de 1 hora, nós enviaremos o resultado por e-mail.</string>
+    <string name="mpsdk_subtitle_pending_contingency">Enviaremos o resultado por e-mail em menos de 1 hora.</string>
 
     <!-- Rejection -->
     <string name="mpsdk_text_other_payment_method_button_rejection">Usar outro meio de pagamento</string>
-    <string name="mpsdk_subtitle_rejection_insufficient_amount_credit_card">Não desanime! Você pode escolher outros meios de pagamento.</string>
+    <string name="mpsdk_text_pay_with_other_method">Pagar com outro meio</string>
+    <string name="mpsdk_text_enter_again">Digite novamente</string>
+    <string name="mpsdk_subtitle_rejection_insufficient_amount_credit_card">Não se preocupe! Você pode escolher outros meios de pagamento.</string>
     <string name="mpsdk_title_other_reason_rejection">%1$s não processou o pagamento</string>
     <string name="mpsdk_text_select_other_rejection">Use outro cartão ou outro meio de pagamento</string>
-    <string name="mpsdk_title_bad_filled_other_rejection">Ops, não foi possível processar o seu pagamento</string>
-    <string name="mpsdk_text_some_number">Qualquer número de seu %1$s é incorreto.</string>
-    <string name="mpsdk_text_insufficient_amount">Seu %1$s não tem saldo suficiente</string>
-    <string name="mpsdk_subtitle_rejection_insufficient_amount">Não desanime! Recarregar em qualquer banco ou de sua banca electrónica e tente novamente. Ou se preferir, você pode escolher outro meio de pagamento.</string>
-    <string name="mpsdk_subtitle_rejection_duplicated_payment">Se você precisa pagar novamente use outro cartão ou outro meio de pagamento.</string>
-    <string name="mpsdk_text_active_card">Chama a %1$s para ativar o seu cartão</string>
+    <string name="mpsdk_title_bad_filled_other">Ops! Não foi possível processar o seu pagamento</string>
+    <string name="mpsdk_text_some_card_data_is_incorrect">Qualquer dado de seu %1$s é incorreto.</string>
+    <string name="mpsdk_text_card_number_is_incorrect">O número de seu %1$s é incorreto.</string>
+    <string name="mpsdk_text_insufficient_amount">O seu %1$s não possui saldo suficiente</string>
+    <string name="mpsdk_subtitle_rejection_insufficient_amount">Não se preocupe! Recarregue-o em qualquer banco ou pelo Internet Banking e tente novamente. Se preferir, você pode escolher outro meio de pagamento.</string>
+    <string name="mpsdk_subtitle_rejection_duplicated_payment">Se você precisar pagar novamente, use outro cartão ou outro meio de pagamento.</string>
+    <string name="mpsdk_text_active_card">Ligue para %1$s e desbloqueie o seu cartão</string>
     <string name="mpsdk_subtitle_rejection_card_disabled">O telefone do banco está no verso do seu cartão.</string>
-    <string name="mpsdk_title_bad_filled_security_code_rejection">O código de segurança não está correto.</string>
-    <string name="mpsdk_title_bad_filled_date_rejection">A data de validade não está correta.</string>
+    <string name="mpsdk_title_bad_filled_security_code">O código de segurança não está correto.</string>
+    <string name="mpsdk_title_bad_filled_date">A data de validade não está correta.</string>
     <string name="mpsdk_title_rejection_high_risk">Por segurança, foi necessário recusar o seu pagamento</string>
-    <string name="mpsdk_subtitle_rejection_high_risk">Se você quer pagar com o dinheiro da sua conta, entrar em contato com Atenção ao Cliente de Mercado Pago. Ou se preferir, você pode escolher outros meios de pagamento.</string>
+    <string name="mpsdk_subtitle_rejection_high_risk">Se você quiser pagar com o dinheiro da sua conta, entre em contato com Atenção ao Cliente do Mercado Pago. Ou, se preferir, escolha outro meio de pagamento.</string>
     <string name="mpsdk_title_rejection_max_attempts">Você chegou ao limite de tentativas permitidas com este cartão</string>
     <string name="mpsdk_subtitle_rejection_max_attempts">Use outro cartão ou outro meio de pagamento.</string>
+    <string name="mpsdk_rejection_title">Algo deu errado…</string>
+    <string name="mpsdk_what_can_do_title">Que posso fazer?</string>
 
     <!-- Error messages -->
-    <string name="mpsdk_error_message_invalid_amount">Montante inválido</string>
+    <string name="mpsdk_error_message_invalid_amount">Valor inválido</string>
     <string name="mpsdk_error_message_invalid_item">Item inválido</string>
-    <string name="mpsdk_error_message_expired_preference">Preferência expirou</string>
+    <string name="mpsdk_error_message_expired_preference">Preferência expirada</string>
     <string name="mpsdk_error_message_inactive_preference">Preferência inativa</string>
     <string name="mpsdk_error_message_invalid_default_installments">Número de parcelas padrão inválido</string>
     <string name="mpsdk_error_message_invalid_max_installments">Número máximo do parcelas inválido</string>
-    <string name="mpsdk_error_message_excluded_all_payment_type">Todos os tipos de pagamentos excluídos</string>
+    <string name="mpsdk_error_message_excluded_all_payment_type">Todos os tipos de pagamentos foram excluídos</string>
     <string name="mpsdk_error_message_invalid_currency">Moeda inválida</string>
     <string name="mpsdk_error_message_invalid_title">Título inválido</string>
     <string name="mpsdk_error_message_invalid_merchant">Comércio inválido</string>
     <string name="mpsdk_error_message_invalid_preference">Preferência inválida</string>
     <string name="mpsdk_error_message_invalid_installments">Número do parcelas inválido</string>
     <string name="mpsdk_error_title">Ops! Algo deu errado</string>
-    <string name="mpsdk_standard_error_message">Estamos trabalhando para solucionar o problema. Por favor, tente mais tarde.</string>
-    <string name="mpsdk_error_message_email_required">E-mail é obrigatório</string>
+    <string name="mpsdk_standard_error_message">Estamos trabalhando para solucionar o problema. Por favor, tente novamente mais tarde.</string>
+    <string name="mpsdk_error_message_email_required">O e-mail é obrigatório</string>
 
     <!-- API exception messages -->
-    <string name="mpsdk_empty_card_expiration_month">O mês da data de expiração do cartão não foi inserido</string>
-    <string name="mpsdk_empty_card_expiration_year">O ano da data de expiração do cartão não foi inserido</string>
-    <string name="mpsdk_empty_card_holder_name">O nome do titular do cartão não foi inserido</string>
-    <string name="mpsdk_empty_document_number">O número do documento do titular do cartão não for inserido</string>
-    <string name="mpsdk_empty_document_type">O tipo do documento do titular do cartão não for inserido</string>
-    <string name="mpsdk_invalid_payment_type_id">Tipo de meio de pagamento inválido</string>
-    <string name="mpsdk_invalid_card_expiration_month">Mês de expiração do cartão inválido</string>
-    <string name="mpsdk_invalid_card_expiration_year">Ano de expiração do cartão inválido</string>
-    <string name="mpsdk_invalid_payer_email">E-mail de cliente inválido</string>
+    <string name="mpsdk_empty_card_expiration_month">O mês da data de validade do cartão não foi digitado</string>
+    <string name="mpsdk_empty_card_expiration_year">O ano da data de validade do cartão não foi digitado</string>
+    <string name="mpsdk_empty_card_holder_name">O nome do titular do cartão não foi digitado</string>
+    <string name="mpsdk_empty_document_number">O número do documento do titular do cartão não foi digitado</string>
+    <string name="mpsdk_empty_document_type">O tipo de documento do titular do cartão não foi digitado</string>
+    <string name="mpsdk_invalid_payment_type_id">Tipo do meio de pagamento inválido</string>
+    <string name="mpsdk_invalid_card_expiration_month">Mês de validade do cartão inválido</string>
+    <string name="mpsdk_invalid_card_expiration_year">Ano de validade do cartão inválido</string>
+    <string name="mpsdk_invalid_payer_email">E-mail do cliente inválido</string>
     <string name="mpsdk_customer_not_allowed_to_operate">Você não tem permissão para operar</string>
     <string name="mpsdk_collector_not_allowed_to_operate">O vendedor não tem permissão para operar</string>
-    <string name="mpsdk_invalid_users_involved">Usuários envolvidos inválidos</string>
+    <string name="mpsdk_invalid_users_involved">Os usuários envolvidos não são válidos</string>
     <string name="mpsdk_customer_equal_to_collector">Mesmo usuário cliente e vendedor</string>
-    <string name="mpsdk_invalid_card_holder_name">O nome do titular do cartão é incorreto</string>
+    <string name="mpsdk_invalid_card_holder_name">O nome do titular do cartão está incorreto</string>
     <string name="mpsdk_unauthorized_client">Cliente não autorizado</string>
     <string name="mpsdk_payment_method_not_found">Não encontramos o meio de pagamento selecionado</string>
     <string name="mpsdk_invalid_security_code">Código de segurança inválido</string>
     <string name="mpsdk_security_code_required">Código de segurança obrigatório</string>
-    <string name="mpsdk_invalid_card_number">O número do cartão é inválido</string>
+    <string name="mpsdk_invalid_card_number">Número do cartão inválido</string>
 
     <!-- Utils -->
     <string name="mpsdk_text_keep_buying">Continuar comprando</string>
+    <string name="mpsdk_text_cancel_payment_and_keep_buying">Cancelar pagamento e continuar comprando</string>
     <string name="mpsdk_zero_rate">Sem juros</string>
     <string name="mpsdk_exit_label">Sair</string>
     <string name="mpsdk_cancel_payment">Cancelar pagamento</string>
@@ -166,6 +171,6 @@
     <string name="mpsdk_title_activity_terms_and_conditions">Termos e condições</string>
     <string name="mpsdk_format_date"><![CDATA[ %1$s/%2$s/%3$s - %4$s]]></string>
     <string name="mpsdk_no_connection_message">Sem conexão</string>
-    <string name="mpsdk_instant_accreditation_time">Será aprovado instantaneamente</string>
-    <string name="mpsdk_accreditation_time">Será creditado no prazo de</string>
+    <string name="mpsdk_instant_accreditation_time">É aprovado imediatamente</string>
+    <string name="mpsdk_accreditation_time">Será aprovado em</string>
 </resources>
