@@ -3,6 +3,7 @@ package com.mercadopago;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -202,20 +203,30 @@ public class GuessingCardActivity extends FrontCardActivity {
         }
     }
 
+//    @Override
+//    protected void onBeforeCreation() {
+//        if (onlyPortrait()) {
+//            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+//        } else {
+//            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+//        }
+//    }
+
+
     @Override
     protected void onBeforeCreation() {
-        if (onlyPortrait()) {
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        } else {
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        super.onBeforeCreation();
+        int currentOrientation = getResources().getConfiguration().orientation;
+        if (currentOrientation == Configuration.ORIENTATION_PORTRAIT) {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT);
         }
     }
 
     @Override
     protected void onValidStart() {
-        if (!onlyPortrait()) {
-            setLandscapeModeInitialLayout();
-        }
+//        if (!onlyPortrait()) {
+//            setLandscapeModeInitialLayout();
+//        }
         initializeToolbar();
         setListeners();
         openKeyboard(mCardNumberEditText);
@@ -235,14 +246,14 @@ public class GuessingCardActivity extends FrontCardActivity {
         }
     }
 
-    private boolean onlyPortrait() {
-        return getResources().getBoolean(R.bool.only_portrait);
-    }
+//    private boolean onlyPortrait() {
+//        return getResources().getBoolean(R.bool.only_portrait);
+//    }
 
-    private void setLandscapeModeInitialLayout() {
-        mCardExpiryDateInput.setVisibility(View.VISIBLE);
-        mSecurityCodeEditView.setVisibility(View.VISIBLE);
-    }
+//    private void setLandscapeModeInitialLayout() {
+//        mCardExpiryDateInput.setVisibility(View.VISIBLE);
+//        mSecurityCodeEditView.setVisibility(View.VISIBLE);
+//    }
 
     @Override
     protected void onInvalidStart(String message) {
@@ -409,6 +420,30 @@ public class GuessingCardActivity extends FrontCardActivity {
                 }
             }
         });
+        mNextButton.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    int c = 0;
+                }
+            }
+        });
+        mBackButton.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    int c = 0;
+                }
+            }
+        });
+        mErrorContainer.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    int c = 0;
+                }
+            }
+        });
     }
 
     private void openKeyboard() {
@@ -499,9 +534,9 @@ public class GuessingCardActivity extends FrontCardActivity {
         switch (mCurrentEditingEditText) {
             case CARDHOLDER_NAME_INPUT:
                 if (TextUtils.isEmpty(mCardHolderName) || validateCardName(true)) {
-                    if (onlyPortrait()) {
-                        mCardExpiryDateInput.setVisibility(View.GONE);
-                    }
+//                    if (onlyPortrait()) {
+//                        mCardExpiryDateInput.setVisibility(View.GONE);
+//                    }
                     mCardNumberInput.setVisibility(View.VISIBLE);
                     mCardNumberEditText.requestFocus();
                     return true;
@@ -509,11 +544,11 @@ public class GuessingCardActivity extends FrontCardActivity {
                 return false;
             case CARD_EXPIRYDATE_INPUT:
                 if (mExpiryMonth == null || validateExpiryDate(true)) {
-                    if (onlyPortrait()) {
-                        mIdentificationTypeContainer.setVisibility(View.GONE);
-                        mSecurityCodeEditView.setVisibility(View.GONE);
-                        mCardIdNumberInput.setVisibility(View.GONE);
-                    }
+//                    if (onlyPortrait()) {
+//                        mIdentificationTypeContainer.setVisibility(View.GONE);
+//                        mSecurityCodeEditView.setVisibility(View.GONE);
+//                        mCardIdNumberInput.setVisibility(View.GONE);
+//                    }
                     mCardholderNameInput.setVisibility(View.VISIBLE);
                     mCardHolderNameEditText.requestFocus();
                     return true;
@@ -521,10 +556,10 @@ public class GuessingCardActivity extends FrontCardActivity {
                 return false;
             case CARD_SECURITYCODE_INPUT:
                 if (TextUtils.isEmpty(mSecurityCode) || validateSecurityCode(true)) {
-                    if (onlyPortrait()) {
-                        mIdentificationTypeContainer.setVisibility(View.GONE);
-                        mCardIdNumberInput.setVisibility(View.GONE);
-                    }
+//                    if (onlyPortrait()) {
+//                        mIdentificationTypeContainer.setVisibility(View.GONE);
+//                        mCardIdNumberInput.setVisibility(View.GONE);
+//                    }
                     mCardExpiryDateInput.setVisibility(View.VISIBLE);
                     mCardExpiryDateEditText.requestFocus();
                     return true;
@@ -532,9 +567,9 @@ public class GuessingCardActivity extends FrontCardActivity {
                 return false;
             case CARD_IDENTIFICATION_INPUT:
                 if (TextUtils.isEmpty(mCardIdentificationNumber) || validateIdentificationNumber(true)) {
-                    if (onlyPortrait()) {
-                        mCardIdNumberInput.setVisibility(View.GONE);
-                    }
+//                    if (onlyPortrait()) {
+//                        mCardIdNumberInput.setVisibility(View.GONE);
+//                    }
                     if (isSecurityCodeRequired()) {
                         mSecurityCodeEditView.setVisibility(View.VISIBLE);
                         mCardSecurityCodeEditText.requestFocus();
@@ -661,9 +696,9 @@ public class GuessingCardActivity extends FrontCardActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.length() == 1) {
+//                if (s.length() == 1) {
                     openKeyboard(mCardNumberEditText);
-                }
+//                }
                 if (before == 0 && needsMask(s)) {
                     mCardNumberEditText.append(" ");
                 }
@@ -900,9 +935,9 @@ public class GuessingCardActivity extends FrontCardActivity {
                             mSelectedIdentificationType = identificationTypes.get(0);
                             mIdentificationTypeSpinner.setAdapter(new IdentificationTypesAdapter(getActivity(), identificationTypes));
                             mIdentificationTypeContainer.setVisibility(View.VISIBLE);
-                            if (!onlyPortrait()) {
-                                mCardIdNumberInput.setVisibility(View.VISIBLE);
-                            }
+//                            if (!onlyPortrait()) {
+//                                mCardIdNumberInput.setVisibility(View.VISIBLE);
+//                            }
                         }
                     }
                 }
@@ -1046,11 +1081,17 @@ public class GuessingCardActivity extends FrontCardActivity {
         mCardNumberEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_NEXT) {
+                if ((actionId == EditorInfo.IME_ACTION_NEXT) ||
+                        (event != null && event.getAction() == KeyEvent.ACTION_DOWN
+                                && event.getKeyCode() == KeyEvent.KEYCODE_ENTER)
+//                        ||
+//                        (event != null && event.getAction() == KeyEvent.ACTION_DOWN
+//                                && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_RIGHT)
+                        ) {
                     validateCurrentEditText();
                     return true;
-                }
-                else if ((event.getAction() == KeyEvent.ACTION_DOWN) && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
+                } if (event != null && event.getAction() == KeyEvent.ACTION_DOWN
+                        && event.getKeyCode() == KeyEvent.KEYCODE_SOFT_RIGHT) {
                     validateCurrentEditText();
                     return true;
                 }
@@ -1098,12 +1139,26 @@ public class GuessingCardActivity extends FrontCardActivity {
         mCardHolderNameEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_NEXT) {
+                if ((actionId == EditorInfo.IME_ACTION_NEXT) ||
+                        (event != null && event.getAction() == KeyEvent.ACTION_DOWN
+                                && event.getKeyCode() == KeyEvent.KEYCODE_ENTER)
+//                        ||
+//                        (event != null && event.getAction() == KeyEvent.ACTION_DOWN
+//                                && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_RIGHT)
+                        ) {
                     validateCurrentEditText();
                     return true;
-                }
-                else if ((event.getAction() == KeyEvent.ACTION_DOWN) && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
+//                } else if (event != null && event.getAction() == KeyEvent.ACTION_DOWN
+//                        && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_LEFT) {
+//                    checkIsEmptyOrValid();
+//                    return true;
+                } if (event != null && event.getAction() == KeyEvent.ACTION_DOWN
+                        && event.getKeyCode() == KeyEvent.KEYCODE_SOFT_RIGHT) {
                     validateCurrentEditText();
+                    return true;
+                }if (event != null && event.getAction() == KeyEvent.ACTION_DOWN
+                        && event.getKeyCode() == KeyEvent.KEYCODE_SOFT_LEFT) {
+                    checkIsEmptyOrValid();
                     return true;
                 }
                 return false;
@@ -1123,7 +1178,9 @@ public class GuessingCardActivity extends FrontCardActivity {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 mFrontFragment.setFontColor();
-                if (hasFocus) {
+                if (!validateCardNumber(true)) {
+                    return;
+                } else if (hasFocus) {
                     MPTracker.getInstance().trackScreen("CARD_HOLDER_NAME", 2, mPublicKey, BuildConfig.VERSION_NAME, getActivity());
 
                     enableBackInputButton();
@@ -1139,12 +1196,19 @@ public class GuessingCardActivity extends FrontCardActivity {
         mCardExpiryDateEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_NEXT) {
+                if ((actionId == EditorInfo.IME_ACTION_NEXT) ||
+                        (event != null && event.getAction() == KeyEvent.ACTION_DOWN
+                                && event.getKeyCode() == KeyEvent.KEYCODE_ENTER)
+//                        ||
+//                        (event != null && event.getAction() == KeyEvent.ACTION_DOWN
+//                                && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_RIGHT)
+                        ) {
                     validateCurrentEditText();
                     return true;
-                } else if ((event.getAction() == KeyEvent.ACTION_DOWN) && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
-                    validateCurrentEditText();
-                    return true;
+//                } else if (event != null && event.getAction() == KeyEvent.ACTION_DOWN
+//                        && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_LEFT) {
+//                    checkIsEmptyOrValid();
+//                    return true;
                 }
                 return false;
             }
@@ -1162,6 +1226,9 @@ public class GuessingCardActivity extends FrontCardActivity {
         mCardExpiryDateEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
+                if (!validateCardName(true)) {
+                    return;
+                }
                 mFrontFragment.setFontColor();
                 if (hasFocus) {
                     MPTracker.getInstance().trackScreen("CARD_EXPIRY_DATE", 2, mPublicKey, BuildConfig.VERSION_NAME, getActivity());
@@ -1179,12 +1246,19 @@ public class GuessingCardActivity extends FrontCardActivity {
         mCardSecurityCodeEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_NEXT) {
+                if ((actionId == EditorInfo.IME_ACTION_NEXT) ||
+                        (event != null && event.getAction() == KeyEvent.ACTION_DOWN
+                                && event.getKeyCode() == KeyEvent.KEYCODE_ENTER)
+//                        ||
+//                        (event != null && event.getAction() == KeyEvent.ACTION_DOWN
+//                                && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_RIGHT)
+                ) {
                     validateCurrentEditText();
                     return true;
-                }  else if ((event.getAction() == KeyEvent.ACTION_DOWN) && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
-                    validateCurrentEditText();
-                    return true;
+//                }  else if (event != null && event.getAction() == KeyEvent.ACTION_DOWN
+//                        && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_LEFT) {
+//                    checkIsEmptyOrValid();
+//                    return true;
                 } else if (actionId == EditorInfo.IME_ACTION_DONE) {
                     createToken();
                     return true;
@@ -1205,6 +1279,9 @@ public class GuessingCardActivity extends FrontCardActivity {
         mCardSecurityCodeEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
+                if (!validateExpiryDate(true)) {
+                    return;
+                }
                 mFrontFragment.setFontColor();
                 if (hasFocus && (mCurrentEditingEditText.equals(CARD_EXPIRYDATE_INPUT) ||
                         mCurrentEditingEditText.equals(CARD_IDENTIFICATION_INPUT) ||
@@ -1261,10 +1338,9 @@ public class GuessingCardActivity extends FrontCardActivity {
         mCardIdentificationNumberEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_NEXT) {
-                    validateCurrentEditText();
-                    return true;
-                } else if ((event.getAction() == KeyEvent.ACTION_DOWN) && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
+                if ((actionId == EditorInfo.IME_ACTION_NEXT) ||
+                        (event != null && event.getAction() == KeyEvent.ACTION_DOWN
+                                && event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
                     validateCurrentEditText();
                     return true;
                 }
@@ -1284,6 +1360,10 @@ public class GuessingCardActivity extends FrontCardActivity {
         mCardIdentificationNumberEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
+                if ((isSecurityCodeRequired() && !validateSecurityCode(true)) ||
+                        (!isSecurityCodeRequired() && !validateExpiryDate(true))) {
+                    return;
+                }
                 mFrontFragment.setFontColor();
                 if (hasFocus) {
                     MPTracker.getInstance().trackScreen("IDENTIFICATION_NUMBER", 2, mPublicKey, BuildConfig.VERSION_NAME, getActivity());
@@ -1305,6 +1385,7 @@ public class GuessingCardActivity extends FrontCardActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                openKeyboard(mCardSecurityCodeEditText);
                 if (showingBack() && mBackFragment != null) {
                     mBackFragment.onSecurityTextChanged(s);
                 } else if (mFrontFragment != null) {
@@ -1338,6 +1419,7 @@ public class GuessingCardActivity extends FrontCardActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                openKeyboard(mCardIdentificationNumberEditText);
                 if (showingIdentification() && mCardIdentificationFragment != null) {
                     mCardIdentificationFragment.onNumberTextChanged(s, start, before, count);
                 }
@@ -1369,6 +1451,7 @@ public class GuessingCardActivity extends FrontCardActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                openKeyboard(mCardHolderNameEditText);
             }
 
             @Override
@@ -1388,6 +1471,7 @@ public class GuessingCardActivity extends FrontCardActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                openKeyboard(mCardExpiryDateEditText);
                 if (s.length() == 2 && before == 0) {
                     mCardExpiryDateEditText.append("/");
                 }
@@ -1560,6 +1644,7 @@ public class GuessingCardActivity extends FrontCardActivity {
         mErrorContainer.setVisibility(View.VISIBLE);
         mErrorTextView.setText(message);
         mErrorState = CardInterface.ERROR_STATE;
+        openKeyboard();
     }
 
     public void clearErrorView() {

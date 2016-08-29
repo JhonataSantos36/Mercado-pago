@@ -41,15 +41,15 @@ public class BankDealsActivity extends MercadoPagoActivity {
 
     protected List<BankDeal> mBankDeals;
 
-    @Override
-    protected void onBeforeCreation() {
-        if (getResources().getBoolean(R.bool.only_portrait)) {
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
-        } else {
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        }
-    }
+//    @Override
+//    protected void onBeforeCreation() {
+//        if (getResources().getBoolean(R.bool.only_portrait)) {
+//            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+//
+//        } else {
+//            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+//        }
+//    }
 
     @Override
     protected void onValidStart() {

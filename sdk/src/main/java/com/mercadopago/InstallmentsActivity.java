@@ -78,14 +78,14 @@ public class InstallmentsActivity extends ShowCardActivity {
         mCardBackground.setVisibility(View.GONE);
     }
 
-    @Override
-    protected void onBeforeCreation() {
-        if (getResources().getBoolean(R.bool.only_portrait)) {
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        } else {
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        }
-    }
+//    @Override
+//    protected void onBeforeCreation() {
+//        if (getResources().getBoolean(R.bool.only_portrait)) {
+//            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+//        } else {
+//            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+//        }
+//    }
 
     @Override
     protected void onValidStart() {
