@@ -2,7 +2,6 @@ package com.mercadopago;
 
 
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,6 +13,7 @@ import com.google.gson.reflect.TypeToken;
 import com.mercadopago.adapters.PayerCostsAdapter;
 import com.mercadopago.callbacks.Callback;
 import com.mercadopago.callbacks.FailureRecovery;
+import com.mercadopago.callbacks.OnSelectedCallback;
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.listeners.RecyclerItemClickListener;
 import com.mercadopago.model.ApiException;
@@ -78,15 +78,6 @@ public class InstallmentsActivity extends ShowCardActivity {
         mCardBackground.setVisibility(View.GONE);
     }
 
-//    @Override
-//    protected void onBeforeCreation() {
-//        if (getResources().getBoolean(R.bool.only_portrait)) {
-//            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-//        } else {
-//            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-//        }
-//    }
-
     @Override
     protected void onValidStart() {
         initializeAdapter();
@@ -112,13 +103,23 @@ public class InstallmentsActivity extends ShowCardActivity {
         finish();
     }
 
+    protected OnSelectedCallback<Integer> getDpadSelectionCallback() {
+        return new OnSelectedCallback<Integer>() {
+            @Override
+            public void onSelected(Integer position) {
+                onItemSelected(position);
+            }
+        };
+    }
+
     protected void initializeAdapter() {
-        mPayerCostsAdapter = new PayerCostsAdapter(this, mSite.getCurrencyId());
+        mPayerCostsAdapter = new PayerCostsAdapter(this, mSite.getCurrencyId(), getDpadSelectionCallback());
         initializeAdapterListener(mPayerCostsAdapter, mInstallmentsView);
     }
 
-    protected void onItemSelected(View view, int position) {
+    protected void onItemSelected(int position) {
         mSelectedPayerCost = mPayerCosts.get(position);
+        finishWithResult();
     }
 
     protected void initializeToolbar() {
@@ -252,8 +253,7 @@ public class InstallmentsActivity extends ShowCardActivity {
                 new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
-                        onItemSelected(view, position);
-                        finishWithResult();
+                        onItemSelected(position);
                     }
                 }));
     }

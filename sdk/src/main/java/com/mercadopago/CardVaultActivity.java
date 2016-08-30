@@ -66,17 +66,6 @@ public class CardVaultActivity extends ShowCardActivity {
         initializeFrontFragment();
     }
 
-//    @Override
-//    protected void onBeforeCreation() {
-//        if (getResources().getBoolean(R.bool.only_portrait)) {
-//            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-//
-//        } else {
-//            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-//        }
-//    }
-
-
     @Override
     protected void onBeforeCreation() {
         super.onBeforeCreation();
@@ -86,12 +75,6 @@ public class CardVaultActivity extends ShowCardActivity {
         } else {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
         }
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-//        super.onConfigurationChanged(newConfig);
-        return;
     }
 
     @Override

@@ -2,11 +2,13 @@ package com.mercadopago.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.mercadopago.R;
+import com.mercadopago.callbacks.OnSelectedCallback;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.views.MPTextView;
 
@@ -17,10 +19,12 @@ public class IssuersAdapter extends RecyclerView.Adapter<IssuersAdapter.ViewHold
 
     private Context mContext;
     private List<Issuer> mIssuers;
+    private OnSelectedCallback<Integer> mCallback;
 
-    public IssuersAdapter(Context context) {
+    public IssuersAdapter(Context context, OnSelectedCallback<Integer> callback) {
         this.mContext = context;
         this.mIssuers = new ArrayList<>();
+        this.mCallback = callback;
     }
 
     public void addResults(List<Issuer> list) {
@@ -58,13 +62,25 @@ public class IssuersAdapter extends RecyclerView.Adapter<IssuersAdapter.ViewHold
         return mIssuers.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder {
 
         public MPTextView mIssuersTextView;
 
         public ViewHolder(View itemView) {
             super(itemView);
             mIssuersTextView = (MPTextView) itemView.findViewById(R.id.mpsdkAdapterIssuersText);
+
+            itemView.setOnKeyListener(new View.OnKeyListener() {
+                @Override
+                public boolean onKey(View v, int keyCode, KeyEvent event) {
+                    if (event != null && event.getAction() == KeyEvent.ACTION_DOWN
+                            && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_CENTER) {
+                        mCallback.onSelected(getLayoutPosition());
+                        return true;
+                    }
+                    return false;
+                }
+            });
         }
     }
 

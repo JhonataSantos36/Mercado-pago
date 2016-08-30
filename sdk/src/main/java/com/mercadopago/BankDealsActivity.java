@@ -2,7 +2,6 @@ package com.mercadopago;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -13,6 +12,7 @@ import com.google.gson.reflect.TypeToken;
 import com.mercadopago.adapters.BankDealsAdapter;
 import com.mercadopago.callbacks.Callback;
 import com.mercadopago.callbacks.FailureRecovery;
+import com.mercadopago.callbacks.OnSelectedCallback;
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.decorations.DividerItemDecoration;
 import com.mercadopago.model.ApiException;
@@ -40,16 +40,6 @@ public class BankDealsActivity extends MercadoPagoActivity {
     protected Toolbar mToolbar;
 
     protected List<BankDeal> mBankDeals;
-
-//    @Override
-//    protected void onBeforeCreation() {
-//        if (getResources().getBoolean(R.bool.only_portrait)) {
-//            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-//
-//        } else {
-//            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-//        }
-//    }
 
     @Override
     protected void onValidStart() {
@@ -165,15 +155,28 @@ public class BankDealsActivity extends MercadoPagoActivity {
         finish();
     }
 
+    protected OnSelectedCallback<View> getDpadSelectionCallback() {
+        return new OnSelectedCallback<View>() {
+            @Override
+            public void onSelected(View view) {
+                showSelectedBankDealTerms(view);
+            }
+        };
+    }
+
+    private void showSelectedBankDealTerms(View view) {
+        BankDeal selectedBankDeal = (BankDeal) view.getTag();
+        Intent intent = new Intent(getActivity(), TermsAndConditionsActivity.class);
+        intent.putExtra("bankDealLegals", selectedBankDeal.getLegals());
+        startActivity(intent);
+    }
+
     protected void solveBankDeals(List<BankDeal> bankDeals) {
         MPTracker.getInstance().trackScreen("BANK_DEALS", 2, mMerchantPublicKey, BuildConfig.VERSION_NAME, getActivity());
-        mRecyclerView.setAdapter(new BankDealsAdapter(getActivity(), bankDeals, new View.OnClickListener() {
+        mRecyclerView.setAdapter(new BankDealsAdapter(getActivity(), bankDeals, getDpadSelectionCallback(), new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                BankDeal selectedBankDeal = (BankDeal) view.getTag();
-                Intent intent = new Intent(getActivity(), TermsAndConditionsActivity.class);
-                intent.putExtra("bankDealLegals", selectedBankDeal.getLegals());
-                startActivity(intent);
+                showSelectedBankDealTerms(view);
             }
         }));
 

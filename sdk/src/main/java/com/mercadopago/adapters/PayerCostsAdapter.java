@@ -3,11 +3,13 @@ package com.mercadopago.adapters;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spanned;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.mercadopago.R;
+import com.mercadopago.callbacks.OnSelectedCallback;
 import com.mercadopago.model.PayerCost;
 import com.mercadopago.util.CurrenciesUtil;
 import com.mercadopago.views.MPTextView;
@@ -18,15 +20,16 @@ import java.util.List;
 
 public class PayerCostsAdapter extends  RecyclerView.Adapter<PayerCostsAdapter.ViewHolder> {
 
-
     private Context mContext;
     private List<PayerCost> mInstallmentsList;
     private String mCurrencyId;
+    private OnSelectedCallback<Integer> mCallback;
 
-    public PayerCostsAdapter(Context context, String currency) {
+    public PayerCostsAdapter(Context context, String currency, OnSelectedCallback<Integer> callback) {
         this.mContext = context;
         this.mCurrencyId = currency;
         this.mInstallmentsList = new ArrayList<>();
+        this.mCallback = callback;
     }
 
     public void addResults(List<PayerCost> list) {
@@ -99,7 +102,7 @@ public class PayerCostsAdapter extends  RecyclerView.Adapter<PayerCostsAdapter.V
         return mInstallmentsList.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder {
 
         public MPTextView mInstallmentsTextView;
         public MPTextView mZeroRateTextView;
@@ -110,6 +113,18 @@ public class PayerCostsAdapter extends  RecyclerView.Adapter<PayerCostsAdapter.V
             mInstallmentsTextView = (MPTextView) itemView.findViewById(R.id.mpsdkInstallmentsText);
             mZeroRateTextView = (MPTextView) itemView.findViewById(R.id.mpsdkInstallmentsZeroRate);
             mRateTextView = (MPTextView) itemView.findViewById(R.id.mpsdkInstallmentsWithRate);
+
+            itemView.setOnKeyListener(new View.OnKeyListener() {
+                @Override
+                public boolean onKey(View v, int keyCode, KeyEvent event) {
+                    if (event != null && event.getAction() == KeyEvent.ACTION_DOWN
+                            && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_CENTER) {
+                        mCallback.onSelected(getLayoutPosition());
+                        return true;
+                    }
+                    return false;
+                }
+            });
         }
     }
 

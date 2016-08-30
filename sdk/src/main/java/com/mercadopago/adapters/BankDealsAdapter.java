@@ -3,12 +3,14 @@ package com.mercadopago.adapters;
 import android.app.Activity;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.mercadopago.R;
+import com.mercadopago.callbacks.OnSelectedCallback;
 import com.mercadopago.model.BankDeal;
 import com.mercadopago.views.MPTextView;
 import com.squareup.picasso.Picasso;
@@ -19,9 +21,10 @@ public class BankDealsAdapter extends RecyclerView.Adapter<BankDealsAdapter.View
 
     private Activity mActivity;
     private List<BankDeal> mData;
+    private OnSelectedCallback<View> mCallback;
     private View.OnClickListener mListener = null;
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder {
 
         public MPTextView mBankDescView;
         public ImageView mBankImageView;
@@ -36,13 +39,24 @@ public class BankDealsAdapter extends RecyclerView.Adapter<BankDealsAdapter.View
             if (listener != null) {
                 v.setOnClickListener(listener);
             }
+            v.setOnKeyListener(new View.OnKeyListener() {
+                @Override
+                public boolean onKey(View v, int keyCode, KeyEvent event) {
+                    if (event != null && event.getAction() == KeyEvent.ACTION_DOWN
+                            && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_CENTER) {
+                        mCallback.onSelected(v);
+                        return true;
+                    }
+                    return false;
+                }
+            });
         }
     }
 
-    public BankDealsAdapter(Activity activity, List<BankDeal> data, View.OnClickListener listener) {
-
+    public BankDealsAdapter(Activity activity, List<BankDeal> data, OnSelectedCallback<View> callback, View.OnClickListener listener) {
         mActivity = activity;
         mData = data;
+        mCallback = callback;
         mListener = listener;
     }
 

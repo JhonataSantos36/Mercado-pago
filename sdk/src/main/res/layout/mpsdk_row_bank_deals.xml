@@ -2,9 +2,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:layout_margin="20dp"
+    android:padding="20dp"
     android:gravity="center_vertical"
-    android:background="@color/mpsdk_white"
+    android:focusable="true"
+    android:background="@drawable/mpsdk_item_focusable_list"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
