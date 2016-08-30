@@ -8,7 +8,8 @@
     <color name="mpsdk_form_text">#666666</color>
     <color name="mpsdk_separator">#DEDEDE</color>
     <color name="mpsdk_light_gray">#EEEEEE</color>
-    <color name="mpsdk_gray">#d6d6d6</color>
+    <color name="mpsdk_gray">#D6D6D6</color>
+    <color name="mpsdk_darker_gray">#ABABAB</color>
     <color name="mpsdk_info_color_light">#FBF8E1</color>
     <color name="mpsdk_info_color_dark">#F5F1D3</color>
     <color name="mpsdk_congrats_color_light">#EAFFE1</color>
@@ -49,6 +50,8 @@
     <color name="mpsdk_color_pending_background">#FBF8E1</color>
     <color name="mpsdk_color_pending_image">#EFC701</color>
     <color name="mpsdk_color_new_card_form_background">#59C0ED</color>
+    <color name="mpsdk_color_new_card_form_background_light_alpha">#4DFFFFFF</color>
+    <color name="mpsdk_color_new_card_form_background_dark_alpha">#B3FFFFFF</color>
     <color name="mpsdk_color_new_card_text">#999999</color>
     <color name="mpsdk_color_new_card_image">#D8D8D8</color>
     <color name="mpsdk_color_red_error">#F04449</color>

@@ -212,15 +212,23 @@ public class GuessingCardActivity extends FrontCardActivity {
 //        }
 //    }
 
-
     @Override
     protected void onBeforeCreation() {
         super.onBeforeCreation();
         int currentOrientation = getResources().getConfiguration().orientation;
         if (currentOrientation == Configuration.ORIENTATION_PORTRAIT) {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT);
+        } else {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
         }
     }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+//        super.onConfigurationChanged(newConfig);
+        return;
+    }
+
 
     @Override
     protected void onValidStart() {
@@ -424,7 +432,7 @@ public class GuessingCardActivity extends FrontCardActivity {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
-                    int c = 0;
+                    setNavigationNextFocus();
                 }
             }
         });
@@ -432,7 +440,7 @@ public class GuessingCardActivity extends FrontCardActivity {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
-                    int c = 0;
+                    setNavigationBackFocus();
                 }
             }
         });
@@ -444,6 +452,52 @@ public class GuessingCardActivity extends FrontCardActivity {
                 }
             }
         });
+    }
+
+    private void setNavigationNextFocus() {
+        if (mCurrentEditingEditText == null) {
+            mCurrentEditingEditText = CARD_NUMBER_INPUT;
+        }
+        switch (mCurrentEditingEditText) {
+            case CARD_NUMBER_INPUT:
+                mNextButton.setNextFocusUpId(R.id.mpsdkCardNumber);
+                break;
+            case CARDHOLDER_NAME_INPUT:
+                mNextButton.setNextFocusUpId(R.id.mpsdkCardholderName);
+                break;
+            case CARD_EXPIRYDATE_INPUT:
+                mNextButton.setNextFocusUpId(R.id.mpsdkCardExpiryDate);
+                break;
+            case CARD_SECURITYCODE_INPUT:
+                mNextButton.setNextFocusUpId(R.id.mpsdkCardSecurityCode);
+                break;
+            case CARD_IDENTIFICATION_INPUT:
+                mNextButton.setNextFocusUpId(R.id.mpsdkCardIdentificationNumber);
+                break;
+        }
+    }
+
+    private void setNavigationBackFocus() {
+        if (mCurrentEditingEditText == null) {
+            mCurrentEditingEditText = CARD_NUMBER_INPUT;
+        }
+        switch (mCurrentEditingEditText) {
+            case CARD_NUMBER_INPUT:
+                mBackButton.setNextFocusUpId(R.id.mpsdkCardNumber);
+                break;
+            case CARDHOLDER_NAME_INPUT:
+                mBackButton.setNextFocusUpId(R.id.mpsdkCardholderName);
+                break;
+            case CARD_EXPIRYDATE_INPUT:
+                mBackButton.setNextFocusUpId(R.id.mpsdkCardExpiryDate);
+                break;
+            case CARD_SECURITYCODE_INPUT:
+                mBackButton.setNextFocusUpId(R.id.mpsdkCardSecurityCode);
+                break;
+            case CARD_IDENTIFICATION_INPUT:
+                mBackButton.setNextFocusUpId(R.id.mpsdkCardIdentificationNumber);
+                break;
+        }
     }
 
     private void openKeyboard() {
