@@ -1158,8 +1158,11 @@ public class GuessingCardActivity extends FrontCardActivity {
         mCardHolderNameEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
+                if (!validateCardNumber(true)) {
+                    return;
+                }
                 mFrontFragment.setFontColor();
-                if (validateCardNumber(true) && hasFocus) {
+                if (hasFocus) {
                     MPTracker.getInstance().trackScreen("CARD_HOLDER_NAME", 2, mPublicKey, BuildConfig.VERSION_NAME, getActivity());
 
                     enableBackInputButton();
@@ -1195,8 +1198,11 @@ public class GuessingCardActivity extends FrontCardActivity {
         mCardExpiryDateEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
+                if (!validateCardName(true)) {
+                    return;
+                }
                 mFrontFragment.setFontColor();
-                if (validateCardName(true) && hasFocus) {
+                if (hasFocus) {
                     MPTracker.getInstance().trackScreen("CARD_EXPIRY_DATE", 2, mPublicKey, BuildConfig.VERSION_NAME, getActivity());
 
                     enableBackInputButton();
@@ -1232,8 +1238,11 @@ public class GuessingCardActivity extends FrontCardActivity {
         mCardSecurityCodeEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
+                if (!validateExpiryDate(true)) {
+                    return;
+                }
                 mFrontFragment.setFontColor();
-                if (validateExpiryDate(true) && hasFocus &&
+                if (hasFocus &&
                         (mCurrentEditingEditText.equals(CARD_EXPIRYDATE_INPUT) ||
                         mCurrentEditingEditText.equals(CARD_IDENTIFICATION_INPUT) ||
                         mCurrentEditingEditText.equals(CARD_SECURITYCODE_INPUT))) {
@@ -1309,10 +1318,12 @@ public class GuessingCardActivity extends FrontCardActivity {
         mCardIdentificationNumberEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
+                if ((isSecurityCodeRequired() && !validateSecurityCode(true)) ||
+                        (!isSecurityCodeRequired() && !validateExpiryDate(true))) {
+                   return;
+                }
                 mFrontFragment.setFontColor();
-                if (((isSecurityCodeRequired() && !validateSecurityCode(true)) ||
-                        (!isSecurityCodeRequired() && !validateExpiryDate(true)))
-                        && hasFocus) {
+                if (hasFocus) {
                     MPTracker.getInstance().trackScreen("IDENTIFICATION_NUMBER", 2, mPublicKey, BuildConfig.VERSION_NAME, getActivity());
                     enableBackInputButton();
                     openKeyboard(mCardIdentificationNumberEditText);
