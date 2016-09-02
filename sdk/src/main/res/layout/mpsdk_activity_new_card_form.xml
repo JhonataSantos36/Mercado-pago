@@ -75,6 +75,7 @@
                             android:id="@+id/mpsdkBackButton"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
+                            android:focusable="true"
                             android:background="@drawable/mpsdk_form_input_button">
                             <com.mercadopago.views.MPTextView
                                 android:id="@+id/mpsdkBackButtonText"
@@ -104,6 +105,7 @@
                         android:layout_width="0dp"
                         android:layout_height="40dp"
                         android:layout_weight="0.5"
+                        android:focusable="true"
                         android:background="@drawable/mpsdk_form_input_button">
                         <com.mercadopago.views.MPTextView
                             android:layout_width="wrap_content"

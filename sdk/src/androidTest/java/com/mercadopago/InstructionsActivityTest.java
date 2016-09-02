@@ -12,7 +12,6 @@ import android.widget.LinearLayout;
 import com.mercadopago.model.InstructionActionInfo;
 import com.mercadopago.model.InstructionReference;
 import com.mercadopago.model.Payment;
-import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentResult;
 import com.mercadopago.test.FakeAPI;
 import com.mercadopago.test.StaticMock;

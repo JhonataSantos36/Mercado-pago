@@ -1,7 +1,6 @@
 package com.mercadopago;
 
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,6 +12,7 @@ import com.google.gson.reflect.TypeToken;
 import com.mercadopago.adapters.IssuersAdapter;
 import com.mercadopago.callbacks.Callback;
 import com.mercadopago.callbacks.FailureRecovery;
+import com.mercadopago.callbacks.OnSelectedCallback;
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.listeners.RecyclerItemClickListener;
 import com.mercadopago.model.ApiException;
@@ -57,6 +57,7 @@ public class IssuersActivity extends ShowCardActivity {
     @Override
     protected void initializeControls() {
         mIssuersView = (RecyclerView) findViewById(R.id.mpsdkActivityIssuersView);
+        mIssuersView = (RecyclerView) findViewById(R.id.mpsdkActivityIssuersView);
         mCardContainer = (FrameLayout) findViewById(R.id.mpsdkActivityNewCardContainer);
         mProgressBar = (ProgressBar) findViewById(R.id.mpsdkProgressBar);
 
@@ -74,16 +75,6 @@ public class IssuersActivity extends ShowCardActivity {
             initializeFrontFragment();
         } else {
             hideCardLayout();
-        }
-    }
-
-    @Override
-    protected void onBeforeCreation() {
-        if (getResources().getBoolean(R.bool.only_portrait)) {
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
-        } else {
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         }
     }
 
@@ -106,13 +97,23 @@ public class IssuersActivity extends ShowCardActivity {
         finish();
     }
 
+    protected OnSelectedCallback<Integer> getDpadSelectionCallback() {
+        return new OnSelectedCallback<Integer>() {
+            @Override
+            public void onSelected(Integer position) {
+                onItemSelected(position);
+            }
+        };
+    }
+
     protected void initializeAdapter() {
-        mIssuersAdapter = new IssuersAdapter(this);
+        mIssuersAdapter = new IssuersAdapter(this, getDpadSelectionCallback());
         initializeAdapterListener(mIssuersAdapter, mIssuersView);
     }
 
-    protected void onItemSelected(View view, int position) {
+    protected void onItemSelected(int position) {
         mSelectedIssuer = mIssuers.get(position);
+        finishWithResult();
     }
 
     protected void initializeToolbar() {
@@ -207,8 +208,7 @@ public class IssuersActivity extends ShowCardActivity {
                 new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
-                        onItemSelected(view, position);
-                        finishWithResult();
+                        onItemSelected(position);
                     }
                 }));
     }
