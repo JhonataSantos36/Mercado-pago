@@ -181,7 +181,7 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                     if (start <= 2) {
                         CharSequence month = s;
-                        if (s.length() == 3) {
+                        if (s.length() >= 3) {
                             month = s.subSequence(0, 2);
                         }
                         mCardExpiryMonthTextView.setText(month);
