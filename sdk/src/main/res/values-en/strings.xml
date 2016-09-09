@@ -47,7 +47,7 @@
     <string name="mpsdk_invalid_empty_name">Enter the name and last name printed on the card</string>
     <string name="mpsdk_invalid_expiry_date">The date you entered is not valid</string>
     <string name="mpsdk_invalid_identification_number">Enter all numbers</string>
-    <string name="mpsdk_invalid_payment_method">You could not pay with this payment method</string>
+    <string name="mpsdk_invalid_payment_method">You can\'t pay with this payment method</string>
     <string name="mpsdk_card_number_label">Card number</string>
     <string name="mpsdk_card_expire_date_label">Expiration date</string>
     <string name="mpsdk_cardholder_name">Name and surname</string>
