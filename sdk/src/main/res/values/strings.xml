@@ -35,7 +35,7 @@
 
     <!-- Checkout -->
     <string name="mpsdk_text_terms_and_conditions_start">Al pagar, afirmo que soy mayor de edad y acepto los</string>
-    <string name="mpsdk_text_terms_and_conditions_linked">Términos y Condiciones</string>
+    <string name="mpsdk_text_terms_and_conditions_linked">Términos y condiciones</string>
     <string name="mpsdk_text_terms_and_conditions_end">de Mercado Pago</string>
     <string name="mpsdk_payment_amount_to_pay">Total a pagar</string>
     <string name="mpsdk_pay_button_text">Pagar</string>
