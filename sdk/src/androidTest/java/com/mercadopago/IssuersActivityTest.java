@@ -252,7 +252,16 @@ public class IssuersActivityTest {
         mTestRule.launchActivity(validStartIntent);
 
         RecyclerView referencesLayout = (RecyclerView) mTestRule.getActivity().findViewById(R.id.mpsdkActivityIssuersView);
-        assertEquals(referencesLayout.getChildCount(), issuerList.size());
+        sleep();
+        assertEquals(referencesLayout.getAdapter().getItemCount(), issuerList.size());
+    }
+
+    private void sleep() {
+        try {
+            Thread.sleep(9000);
+        } catch (InterruptedException e) {
+
+        }
     }
 
     @Test
@@ -313,7 +322,7 @@ public class IssuersActivityTest {
         onView(withId(R.id.mpsdkErrorRetry)).perform(click());
 
         RecyclerView referencesLayout = (RecyclerView) mTestRule.getActivity().findViewById(R.id.mpsdkActivityIssuersView);
-        assertEquals(referencesLayout.getChildCount(), issuerList.size());
+        assertEquals(referencesLayout.getAdapter().getItemCount(), issuerList.size());
     }
 
     @Test
