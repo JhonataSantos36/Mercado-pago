@@ -8,6 +8,7 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
@@ -66,6 +67,21 @@ import java.util.List;
 
 public class GuessingCardActivity extends FrontCardActivity {
 
+    public static final String FRONT_FRAGMENT_TAG = "FRONT_FRAGMENT";
+    public static final String BACK_FRAGMENT_TAG = "BACK_FRAGMENT";
+    public static final String IDENTIFICATION_FRAGMENT_TAG = "IDENTIFICATION_FRAGMENT";
+    public static final String FRONT_FRAGMENT_BUNDLE = "mFrontFragment";
+    public static final String BACK_FRAGMENT_BUNDLE = "mBackFragment";
+    public static final String IDENTIFICATION_FRAGMENT_BUNDLE = "mIdentificationFragment";
+    public static final String CARD_SIDE_STATE_BUNDLE = "mCardSideState";
+    public static final String PAYMENT_METHOD_BUNDLE = "mPaymentMethod";
+    public static final String ID_REQUIRED_BUNDLE = "mIdentificationNumberRequired";
+    public static final String SEC_CODE_REQUIRED_BUNDLE = "mIsSecurityCodeRequired";
+    public static final String SEC_CODE_LENGTH_BUNDLE = "mCardSecurityCodeLength";
+    public static final String CARD_NUMBER_LENGTH_BUNDLE = "mCardNumberLength";
+    public static final String SEC_CODE_LOCATION_BUNDLE = "mSecurityCodeLocation";
+    public static final String ISSUER_FOUND_BUNDLE = "mIssuerFound";
+    public static final String CARD_TOKEN_BUNDLE = "mCardToken";
 
     // Activity parameters
     protected String mPublicKey;
@@ -126,10 +142,56 @@ public class GuessingCardActivity extends FrontCardActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
         if (mCardSideState == null) {
             mCardSideState = CARD_SIDE_FRONT;
         }
         openKeyboard();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        Fragment frontFragment = getSupportFragmentManager().findFragmentByTag(FRONT_FRAGMENT_TAG);
+        if (frontFragment != null) {
+            getSupportFragmentManager().putFragment(outState, FRONT_FRAGMENT_BUNDLE, frontFragment);
+        }
+        Fragment backFragment = getSupportFragmentManager().findFragmentByTag(BACK_FRAGMENT_TAG);
+        if (backFragment != null) {
+            getSupportFragmentManager().putFragment(outState, BACK_FRAGMENT_BUNDLE, backFragment);
+        }
+        Fragment identificationFragment  = getSupportFragmentManager().findFragmentByTag(IDENTIFICATION_FRAGMENT_TAG);
+        if (identificationFragment != null) {
+            getSupportFragmentManager().putFragment(outState, IDENTIFICATION_FRAGMENT_BUNDLE, identificationFragment);
+        }
+        outState.putString(CARD_SIDE_STATE_BUNDLE, mCardSideState);
+        outState.putString(PAYMENT_METHOD_BUNDLE, JsonUtil.getInstance().toJson(mCurrentPaymentMethod));
+        outState.putBoolean(ID_REQUIRED_BUNDLE, mIdentificationNumberRequired);
+        outState.putBoolean(SEC_CODE_REQUIRED_BUNDLE, mIsSecurityCodeRequired);
+        outState.putInt(SEC_CODE_LENGTH_BUNDLE, mCardSecurityCodeLength);
+        outState.putInt(CARD_NUMBER_LENGTH_BUNDLE, mCardNumberLength);
+        outState.putString(SEC_CODE_LOCATION_BUNDLE, mSecurityCodeLocation);
+        outState.putBoolean(ISSUER_FOUND_BUNDLE, mIssuerFound);
+        outState.putString(CARD_TOKEN_BUNDLE, JsonUtil.getInstance().toJson(mCardToken));
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        if (savedInstanceState != null) {
+            mCurrentPaymentMethod = JsonUtil.getInstance().fromJson(savedInstanceState.getString(PAYMENT_METHOD_BUNDLE), PaymentMethod.class);
+            mIdentificationNumberRequired = savedInstanceState.getBoolean(ID_REQUIRED_BUNDLE);
+            mIsSecurityCodeRequired = savedInstanceState.getBoolean(SEC_CODE_REQUIRED_BUNDLE);
+            mCardSecurityCodeLength = savedInstanceState.getInt(SEC_CODE_LENGTH_BUNDLE);
+            mCardNumberLength = savedInstanceState.getInt(CARD_NUMBER_LENGTH_BUNDLE);
+            mSecurityCodeLocation = savedInstanceState.getString(SEC_CODE_LOCATION_BUNDLE);
+            mIssuerFound = savedInstanceState.getBoolean(ISSUER_FOUND_BUNDLE);
+            mCardToken = JsonUtil.getInstance().fromJson(savedInstanceState.getString(CARD_TOKEN_BUNDLE), CardToken.class);
+
+            setEditTextMaxLength(mCardSecurityCodeEditText, mCardSecurityCodeLength);
+            manageAdditionalInfoNeeded();
+        }
+        super.onRestoreInstanceState(savedInstanceState);
     }
 
     @Override
@@ -251,20 +313,62 @@ public class GuessingCardActivity extends FrontCardActivity {
         mCardSecurityCodeLength = CARD_DEFAULT_SECURITY_CODE_LENGTH;
         mCardNumberLength = CARD_NUMBER_MAX_LENGTH;
         mSecurityCodeLocation = null;
+        if (savedInstanceState == null) {
+            createFrontFragment();
+            createBackFragment();
+            createIdentificationFragment();
+            initializeFrontFragment();
+            initializeBackFragment();
+        } else {
+            recoverFragmentsState(savedInstanceState);
+        }
+    }
+
+    private void recoverFragmentsState(Bundle savedInstanceState) {
+        mFrontFragment = (CardFrontFragment) getSupportFragmentManager().getFragment(savedInstanceState, FRONT_FRAGMENT_BUNDLE);
+        mBackFragment = (CardBackFragment) getSupportFragmentManager().getFragment(savedInstanceState, BACK_FRAGMENT_BUNDLE);
+        mCardIdentificationFragment = (CardIdentificationFragment) getSupportFragmentManager().getFragment(savedInstanceState, IDENTIFICATION_FRAGMENT_BUNDLE);
+        createBackFragment();
+        createIdentificationFragment();
+
+        mCardSideState = savedInstanceState.getString(CARD_SIDE_STATE_BUNDLE);
+        mFrontView = findViewById(R.id.mpsdkActivityNewCardContainerFront);
+        mBackView = findViewById(R.id.mpsdkActivityNewCardContainerBack);
+
+        if (mCardSideState.equals(CARD_IDENTIFICATION)) {
+            mCardSideState = CARD_SIDE_FRONT;
+            getSupportFragmentManager().popBackStack();
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB_MR1) {
+                getSupportFragmentManager().popBackStack();
+            }
+        }
+        if (mCardSideState.equals(CARD_SIDE_BACK) && Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB_MR1) {
+            getSupportFragmentManager().popBackStack();
+            mCardSideState = CARD_SIDE_FRONT;
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR1 && mCardSideState.equals(CARD_SIDE_FRONT)) {
+            mFrontView.setAlpha(1.0f);
+            mBackView.setAlpha(0);
+        }
+    }
+
+    private void createFrontFragment() {
         if (mFrontFragment == null) {
             mFrontFragment = new CardFrontFragment();
             mFrontFragment.setDecorationPreference(mDecorationPreference);
         }
+    }
+
+    private void createBackFragment() {
         if (mBackFragment == null) {
             mBackFragment = new CardBackFragment();
             mBackFragment.setDecorationPreference(mDecorationPreference);
         }
+    }
+
+    private void createIdentificationFragment() {
         if (mCardIdentificationFragment == null) {
             mCardIdentificationFragment = new CardIdentificationFragment();
-        }
-        if (savedInstanceState == null) {
-            initializeFrontFragment();
-            initializeBackFragment();
         }
     }
 
@@ -274,7 +378,7 @@ public class GuessingCardActivity extends FrontCardActivity {
         mCardSideState = CARD_SIDE_FRONT;
         getSupportFragmentManager()
                 .beginTransaction()
-                .add(R.id.mpsdkActivityNewCardContainerFront, mFrontFragment)
+                .add(R.id.mpsdkActivityNewCardContainerFront, mFrontFragment, FRONT_FRAGMENT_TAG)
                 .commit();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR1) {
@@ -289,7 +393,7 @@ public class GuessingCardActivity extends FrontCardActivity {
 
             getSupportFragmentManager()
                     .beginTransaction()
-                    .add(R.id.mpsdkActivityNewCardContainerBack, mBackFragment)
+                    .add(R.id.mpsdkActivityNewCardContainerBack, mBackFragment, BACK_FRAGMENT_TAG)
                     .commit();
 
             mBackView.setAlpha(0);
@@ -865,8 +969,8 @@ public class GuessingCardActivity extends FrontCardActivity {
                 .beginTransaction()
                 .setCustomAnimations(R.anim.mpsdk_appear_from_right, R.anim.mpsdk_dissapear_to_left,
                         R.anim.mpsdk_appear_from_left, R.anim.mpsdk_dissapear_to_right)
-                .replace(container, mCardIdentificationFragment)
-                .addToBackStack("IDENTIFICATION_FRAGMENT")
+                .replace(container, mCardIdentificationFragment, IDENTIFICATION_FRAGMENT_TAG)
+                .addToBackStack(null)
                 .commit();
     }
 
@@ -892,7 +996,7 @@ public class GuessingCardActivity extends FrontCardActivity {
                     .beginTransaction()
                     .setCustomAnimations(R.anim.mpsdk_from_middle_left, R.anim.mpsdk_to_middle_left,
                             R.anim.mpsdk_from_middle_left, R.anim.mpsdk_to_middle_left)
-                    .replace(R.id.mpsdkActivityNewCardContainerFront, mBackFragment, "BACK_FRAGMENT")
+                    .replace(R.id.mpsdkActivityNewCardContainerFront, mBackFragment, BACK_FRAGMENT_TAG)
                     .addToBackStack(null)
                     .commit();
         }
@@ -1319,7 +1423,9 @@ public class GuessingCardActivity extends FrontCardActivity {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if ((isSecurityCodeRequired() && !validateSecurityCode(true)) ||
-                        (!isSecurityCodeRequired() && !validateExpiryDate(true))) {
+                        (!isSecurityCodeRequired() && !validateExpiryDate(true)) ||
+                        (isSecurityCodeRequired() && !mCurrentEditingEditText.equals(CARD_SECURITYCODE_INPUT)) ||
+                        (!isSecurityCodeRequired() && !mCurrentEditingEditText.equals(CARD_EXPIRYDATE_INPUT)) ) {
                    return;
                 }
                 mFrontFragment.setFontColor();

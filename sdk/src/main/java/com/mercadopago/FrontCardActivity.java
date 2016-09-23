@@ -1,9 +1,17 @@
 package com.mercadopago;
 
 
+import android.os.Bundle;
+
 import com.mercadopago.model.PaymentMethod;
 
 public abstract class FrontCardActivity extends MercadoPagoActivity implements CardInterface {
+
+    public static final String EXPIRY_MONTH = "mExpiryMonth";
+    public static final String EXPIRY_YEAR = "mExpiryYear";
+    public static final String CARD_IMAGE_PREFIX = "ico_card_";
+    public static final String CARD_COLOR_PREFIX = "mpsdk_";
+    public static final String CARD_FONT_PREFIX = "mpsdk_font_";
 
     protected String mCardNumber;
     protected String mCardHolderName;
@@ -13,6 +21,20 @@ public abstract class FrontCardActivity extends MercadoPagoActivity implements C
     protected String mErrorState;
     protected String mSecurityCode = "";
     protected PaymentMethod mCurrentPaymentMethod;
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(EXPIRY_MONTH, mExpiryMonth);
+        outState.putString(EXPIRY_YEAR, mExpiryYear);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        mExpiryMonth = savedInstanceState.getString(EXPIRY_MONTH);
+        mExpiryYear = savedInstanceState.getString(EXPIRY_YEAR);
+        super.onRestoreInstanceState(savedInstanceState);
+    }
 
     public String getCardNumber() {
         return mCardNumber;
@@ -76,13 +98,13 @@ public abstract class FrontCardActivity extends MercadoPagoActivity implements C
 
     @Override
     public int getCardImage(PaymentMethod paymentMethod) {
-        String imageName = "ico_card_" + paymentMethod.getId().toLowerCase();
+        String imageName = CARD_IMAGE_PREFIX + paymentMethod.getId().toLowerCase();
         return getResources().getIdentifier(imageName, "drawable", getPackageName());
     }
 
     @Override
     public int getCardColor(PaymentMethod paymentMethod) {
-        String colorName = "mpsdk_" + paymentMethod.getId().toLowerCase();
+        String colorName = CARD_COLOR_PREFIX + paymentMethod.getId().toLowerCase();
         return getResources().getIdentifier(colorName, "color", getPackageName());
     }
 
@@ -91,7 +113,7 @@ public abstract class FrontCardActivity extends MercadoPagoActivity implements C
         if (paymentMethod == null) {
             return getResources().getColor(CardInterface.FULL_TEXT_VIEW_COLOR);
         }
-        String colorName = "mpsdk_font_" + paymentMethod.getId().toLowerCase();
+        String colorName = CARD_FONT_PREFIX + paymentMethod.getId().toLowerCase();
         return getResources().getIdentifier(colorName, "color", getPackageName());
     }
 

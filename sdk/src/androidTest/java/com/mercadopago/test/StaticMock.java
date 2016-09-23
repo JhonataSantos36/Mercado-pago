@@ -61,9 +61,11 @@ public class StaticMock {
     public final static int DUMMY_EXPIRATION_YEAR_SHORT = 25;
     public final static int DUMMY_EXPIRATION_YEAR_LONG = 2025;
     public final static String DUMMY_IDENTIFICATION_NUMBER = "12345678";
+    public final static String DUMMY_IDENTIFICATION_NUMBER_WITH_MASK = "12.345.678";
     public final static String DUMMY_IDENTIFICATION_TYPE = "DNI";
     public final static String DUMMY_SECURITY_CODE = "123";
     public final static String DUMMY_EXPIRATION_DATE = "1225";
+    public final static String DUMMY_EXPIRATION_DATE_WITH_MASK = "12/25";
     public final static String DUMMY_CI_NUMBER = "123456789";
     public final static String DUMMY_LC_NUMBER = "1234567";
     public final static String DUMMY_LE_NUMBER = "1234567";

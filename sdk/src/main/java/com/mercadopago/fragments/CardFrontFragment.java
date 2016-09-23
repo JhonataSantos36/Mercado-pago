@@ -28,8 +28,10 @@ import com.mercadopago.views.MPTextView;
 
 public class CardFrontFragment extends android.support.v4.app.Fragment {
 
-    int EDITING_TEXT_VIEW_ALPHA = 255;
-    int NORMAL_TEXT_VIEW_ALPHA = 179;
+    private static final int EDITING_TEXT_VIEW_ALPHA = 255;
+    private static final int NORMAL_TEXT_VIEW_ALPHA = 179;
+    private static final int MONTH_LENGTH = 2;
+    private static final int YEAR_START_INDEX = 3;
 
     //Card input views
     private MPTextView mCardNumberTextView;
@@ -57,8 +59,8 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
 
     private CardInterface mActivity;
 
-    public static String BASE_NUMBER_CARDHOLDER = "•••• •••• •••• ••••";
-    public static String BASE_FRONT_SECURITY_CODE = "••••";
+    public static final String BASE_NUMBER_CARDHOLDER = "•••• •••• •••• ••••";
+    public static final String BASE_FRONT_SECURITY_CODE = "••••";
 
     public CardFrontFragment() {
         this.mAnimate = true;
@@ -179,15 +181,15 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
 
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    if (start <= 2) {
+                    if (start <= MONTH_LENGTH) {
                         CharSequence month = s;
-                        if (s.length() == 3) {
-                            month = s.subSequence(0, 2);
+                        if (s.length() >= YEAR_START_INDEX) {
+                            month = s.subSequence(0, MONTH_LENGTH);
                         }
                         mCardExpiryMonthTextView.setText(month);
                         mActivity.saveCardExpiryMonth(month.toString());
                     } else {
-                        CharSequence year = s.subSequence(3, s.length());
+                        CharSequence year = s.subSequence(YEAR_START_INDEX, s.length());
                         mCardExpiryYearTextView.setText(year);
                         mActivity.saveCardExpiryYear(year.toString());
                     }
@@ -195,7 +197,7 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
 
                 @Override
                 public void afterTextChanged(Editable s) {
-                    if (s.length() == 3) {
+                    if (s.length() == YEAR_START_INDEX) {
                         mCardExpiryYearTextView.setText(getResources().getString(R.string.mpsdk_card_expiry_year_hint));
                         mActivity.saveCardExpiryYear(null);
                     } else if (s.length() == 0) {
