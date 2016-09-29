@@ -11,10 +11,10 @@ import android.view.ViewGroup;
 import com.mercadopago.CardInterface;
 import com.mercadopago.GuessingCardActivity;
 import com.mercadopago.R;
+import com.mercadopago.customviews.MPEditText;
+import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.model.IdentificationType;
 import com.mercadopago.util.MPCardMaskUtil;
-import com.mercadopago.views.MPEditText;
-import com.mercadopago.views.MPTextView;
 
 public class CardIdentificationFragment extends android.support.v4.app.Fragment {
 

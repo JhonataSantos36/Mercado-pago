@@ -11,11 +11,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.mercadopago.R;
+import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.model.DecorationPreference;
 import com.mercadopago.util.CurrenciesUtil;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.ScaleUtil;
-import com.mercadopago.views.MPTextView;
 import com.squareup.picasso.Picasso;
 
 import java.math.BigDecimal;

@@ -272,6 +272,14 @@ public class StaticMock {
         }
     }
 
+    public static Customer getCustomer() {
+        try {
+            return JsonUtil.getInstance().fromJson(getFile(InstrumentationRegistry.getContext(), "mocks/customer.json"), Customer.class);
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
     public static List<Card> getCards() {
 
         try {

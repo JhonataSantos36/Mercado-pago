@@ -13,6 +13,8 @@ import android.widget.LinearLayout;
 import com.mercadopago.callbacks.Callback;
 import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.core.MercadoPago;
+import com.mercadopago.customviews.MPButton;
+import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.Instruction;
 import com.mercadopago.model.InstructionActionInfo;
@@ -27,8 +29,6 @@ import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;
 import com.mercadopago.util.MercadoPagoUtil;
 import com.mercadopago.util.ScaleUtil;
-import com.mercadopago.views.MPButton;
-import com.mercadopago.views.MPTextView;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -11,8 +11,8 @@ import android.widget.ImageView;
 
 import com.mercadopago.R;
 import com.mercadopago.callbacks.OnSelectedCallback;
+import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.model.BankDeal;
-import com.mercadopago.views.MPTextView;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;

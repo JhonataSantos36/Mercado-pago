@@ -22,6 +22,8 @@ import com.mercadopago.examples.utils.ColorPickerDialog;
 import com.mercadopago.examples.utils.ExamplesUtils;
 import com.mercadopago.exceptions.MPException;
 import com.mercadopago.model.ApiException;
+import com.mercadopago.model.Card;
+import com.mercadopago.model.Customer;
 import com.mercadopago.model.DecorationPreference;
 import com.mercadopago.model.Discount;
 import com.mercadopago.model.Issuer;
@@ -167,6 +169,33 @@ public class ComponentsExampleActivity extends AppCompatActivity {
                 .startInstallmentsActivity();
     }
 
+    public void onCustomerCardSelectionClicked(View view) {
+        final PaymentPreference paymentPreference = getCurrentPaymentPreference();
+        final DecorationPreference decorationPreference = getCurrentDecorationPreference();
+
+        MerchantServer.getCustomer(this, ExamplesUtils.DUMMY_MERCHANT_BASE_URL,
+                ExamplesUtils.DUMMY_MERCHANT_GET_CUSTOMER_URI, ExamplesUtils.DUMMY_MERCHANT_ACCESS_TOKEN,
+                new Callback<Customer>() {
+                    @Override
+                    public void success(Customer customer) {
+                        new MercadoPago.StartActivityBuilder()
+                                .setActivity(mActivity)
+                                .setPaymentPreference(paymentPreference)
+                                .setDecorationPreference(decorationPreference)
+                                .setCards(customer.getCards())
+                                .startCustomerCardsActivity();
+                        mProgressBar.setVisibility(View.GONE);
+                    }
+
+                    @Override
+                    public void failure(ApiException apiException) {
+                        showText("Something failed...");
+                        mProgressBar.setVisibility(View.GONE);
+                    }
+                });
+        mProgressBar.setVisibility(View.VISIBLE);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         LayoutUtil.showRegularLayout(this);
@@ -183,8 +212,26 @@ public class ComponentsExampleActivity extends AppCompatActivity {
             resolveIssuerRequest(resultCode, data);
         } else if (requestCode == MercadoPago.INSTALLMENTS_REQUEST_CODE) {
             resolveInstallmentsRequest(resultCode, data);
+        } else if (requestCode == MercadoPago.CUSTOMER_CARDS_REQUEST_CODE) {
+            resolveCustomerCardsRequest(resultCode, data);
         } else {
             showRegularLayout();
+        }
+    }
+
+    private void resolveCustomerCardsRequest(int resultCode, Intent data) {
+        if (resultCode == RESULT_OK && data != null) {
+            // Set message
+            Card card = JsonUtil.getInstance().fromJson(data.getStringExtra("card"), Card.class);
+            if (card != null) {
+                showResult(card);
+            }
+
+        } else {
+            if ((data != null) && (data.getStringExtra("mpException") != null)) {
+                MPException mpException = JsonUtil.getInstance().fromJson(data.getStringExtra("mpException"), MPException.class);
+                Toast.makeText(mActivity, mpException.getMessage(), Toast.LENGTH_LONG).show();
+            }
         }
     }
 
@@ -354,6 +401,13 @@ public class ComponentsExampleActivity extends AppCompatActivity {
         if (token != null) {
             stringBuilder.append(getString(R.string.result_message_and_token) + token.getId());
         }
+        showText(stringBuilder.toString());
+    }
+
+    private void showResult(Card card) {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(getString(R.string.result_message_was_selected));
+        stringBuilder.append(card.getPaymentMethod().getName()).append(" ").append(getString(R.string.mpsdk_last_digits_label)).append(" ").append(card.getLastFourDigits());
         showText(stringBuilder.toString());
     }
 

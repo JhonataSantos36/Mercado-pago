@@ -10,7 +10,7 @@ import com.mercadopago.uicontrollers.payercosts.PayerCostEditableRow;
 import com.mercadopago.uicontrollers.payercosts.PayerCostViewController;
 import com.mercadopago.uicontrollers.paymentmethods.PaymentMethodOffEditableRow;
 import com.mercadopago.uicontrollers.paymentmethods.PaymentMethodViewController;
-import com.mercadopago.uicontrollers.paymentmethods.card.PaymentMethodCardEditableRow;
+import com.mercadopago.uicontrollers.paymentmethods.card.PaymentMethodOnEditableRow;
 import com.mercadopago.uicontrollers.paymentmethodsearch.PaymentMethodSearchRow;
 import com.mercadopago.uicontrollers.paymentmethodsearch.PaymentMethodSearchSmallRow;
 import com.mercadopago.uicontrollers.paymentmethodsearch.PaymentMethodSearchViewController;
@@ -32,7 +32,7 @@ public class ViewControllerFactory {
     }
 
     public static PaymentMethodViewController getPaymentMethodOnEditionViewController(Context context, PaymentMethod paymentMethod, Token token) {
-        return new PaymentMethodCardEditableRow(context, paymentMethod, token);
+        return new PaymentMethodOnEditableRow(context, paymentMethod, token);
     }
 
     public static PaymentMethodViewController getPaymentMethodOffEditionViewController(Context context, PaymentMethod paymentMethod) {

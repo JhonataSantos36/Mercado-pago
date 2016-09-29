@@ -11,11 +11,11 @@ import com.mercadopago.model.Card;
 /**
  * Created by mreverter on 28/6/16.
  */
-public class PaymentMethodCardSelectionRow extends PaymentMethodCard {
+public class PaymentMethodOnSelectionRow extends PaymentMethodOnView {
 
     protected Card mCard;
 
-    public PaymentMethodCardSelectionRow(Context context, Card card) {
+    public PaymentMethodOnSelectionRow(Context context, Card card) {
         mContext = context;
         mPaymentMethod = card.getPaymentMethod();
         mCard = card;

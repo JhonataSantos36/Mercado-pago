@@ -86,7 +86,7 @@
                 android:layout_gravity="end"
                 android:visibility="invisible">
 
-                <com.mercadopago.views.MPTextView
+                <com.mercadopago.customviews.MPTextView
                     android:id="@+id/mpsdkCardSecurityView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -110,7 +110,7 @@
                         android:paddingLeft="15dp"
                         android:paddingRight="15dp"
                         android:paddingEnd="15dp">
-                        <com.mercadopago.views.MPTextView
+                        <com.mercadopago.customviews.MPTextView
                             android:id="@+id/mpsdkCardNumberTextView"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -132,7 +132,7 @@
                 android:orientation="horizontal"
                 android:weightSum="1">
 
-                <com.mercadopago.views.MPTextView
+                <com.mercadopago.customviews.MPTextView
                     android:id="@+id/mpsdkCardholderNameView"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -146,6 +146,7 @@
                     android:textSize="14dp" />
 
                 <LinearLayout
+                    android:id="@+id/mpsdkExpirationDateContainer"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.4"
@@ -153,7 +154,7 @@
                     android:paddingEnd="15dp"
                     android:gravity="end">
 
-                    <com.mercadopago.views.MPTextView
+                    <com.mercadopago.customviews.MPTextView
                         android:id="@+id/mpsdkCardHolderExpiryMonth"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -161,7 +162,7 @@
                         android:textColor="@color/mpsdk_base_text"
                         android:textSize="14dp" />
 
-                    <com.mercadopago.views.MPTextView
+                    <com.mercadopago.customviews.MPTextView
                         android:id="@+id/mpsdkCardHolderDateDivider"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -169,7 +170,7 @@
                         android:textColor="@color/mpsdk_base_text"
                         android:textSize="14dp" />
 
-                    <com.mercadopago.views.MPTextView
+                    <com.mercadopago.customviews.MPTextView
                         android:id="@+id/mpsdkCardHolderExpiryYear"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

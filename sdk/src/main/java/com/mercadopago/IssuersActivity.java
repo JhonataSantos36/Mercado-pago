@@ -16,8 +16,12 @@ import com.mercadopago.callbacks.OnSelectedCallback;
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.listeners.RecyclerItemClickListener;
 import com.mercadopago.model.ApiException;
+import com.mercadopago.model.Card;
+import com.mercadopago.model.CardInformation;
 import com.mercadopago.model.IdentificationType;
 import com.mercadopago.model.Issuer;
+import com.mercadopago.model.PaymentMethod;
+import com.mercadopago.model.Token;
 import com.mercadopago.mptracker.MPTracker;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.ErrorUtil;
@@ -28,16 +32,24 @@ import java.util.List;
 
 public class IssuersActivity extends ShowCardActivity {
 
+    //Local vars
+    protected List<Issuer> mIssuers;
+    protected PaymentMethod mCurrentPaymentMethod;
+    protected MercadoPago mMercadoPago;
+    protected CardInformation mCardInfo;
+    protected String mPublicKey;
+    protected Issuer mSelectedIssuer;
+
     //IssuersContainer
     private RecyclerView mIssuersView;
     private IssuersAdapter mIssuersAdapter;
     private ProgressBar mProgressBar;
     private View mCardBackground;
+    protected Card mCard;
+    protected Token mToken;
 
-    //Local vars
-    private List<Issuer> mIssuers;
-
-    private void hideCardLayout() {
+    @Override
+    protected void hideCardLayout() {
         mCardBackground.setVisibility(View.GONE);
     }
 
@@ -71,23 +83,29 @@ public class IssuersActivity extends ShowCardActivity {
     @Override
     protected void initializeFragments(Bundle savedInstanceState) {
         super.initializeFragments(savedInstanceState);
-        if (isCardInfoAvailable()) {
-            initializeFrontFragment();
-        } else {
-            hideCardLayout();
-        }
     }
 
     @Override
     protected void onValidStart() {
+        setCardInformation();
+        setPaymentMethod(mCurrentPaymentMethod);
+        if (isCardInfoAvailable()) {
+            initializeFrontFragment();
+            super.initializeCard();
+        } else {
+            hideCardLayout();
+        }
         initializeAdapter();
         initializeToolbar();
+        showIssuers();
+    }
 
-        mMercadoPago = new MercadoPago.Builder()
-                .setContext(this)
-                .setPublicKey(mPublicKey)
-                .build();
-        initializeCard();
+    private void setCardInformation() {
+        if(mCard == null && mToken != null) {
+            setCardInformation(mToken);
+        } else if (mCard != null) {
+            setCardInformation(mCard);
+        }
     }
 
     @Override
@@ -124,10 +142,7 @@ public class IssuersActivity extends ShowCardActivity {
         }
     }
 
-    @Override
-    protected void initializeCard() {
-        super.initializeCard();
-
+    protected void showIssuers() {
         if (mIssuers == null) {
             getIssuersAsync();
         } else {
@@ -138,7 +153,7 @@ public class IssuersActivity extends ShowCardActivity {
     @SuppressWarnings("unchecked")
     @Override
     protected void getActivityParameters() {
-        super.getActivityParameters();
+        mPublicKey = this.getIntent().getStringExtra("publicKey");
         try {
             Type listType = new TypeToken<List<Issuer>>() {
             }.getType();
@@ -146,11 +161,23 @@ public class IssuersActivity extends ShowCardActivity {
         } catch (Exception ex) {
             mIssuers = null;
         }
-    }
+        mCurrentPaymentMethod = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("paymentMethod"), PaymentMethod.class);
 
+        mCard = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("card"), Card.class);
+        mToken = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("token"), Token.class);
+    }
     protected void getIssuersAsync() {
+        mMercadoPago = new MercadoPago.Builder()
+                .setContext(this)
+                .setPublicKey(mPublicKey)
+                .build();
+
         mProgressBar.setVisibility(View.VISIBLE);
-        mMercadoPago.getIssuers(mCurrentPaymentMethod.getId(), mBin,
+        String bin = "";
+        if(mCardInfo != null) {
+            bin = mCardInfo.getFirstSixDigits() == null ? "" : mCardInfo.getFirstSixDigits();
+        }
+        mMercadoPago.getIssuers(mCurrentPaymentMethod.getId(), bin,
                 new Callback<List<Issuer>>() {
                     @Override
                     public void success(List<Issuer> issuers) {
@@ -244,5 +271,10 @@ public class IssuersActivity extends ShowCardActivity {
     @Override
     public IdentificationType getCardIdentificationType() {
         return null;
+    }
+
+    @Override
+    public PaymentMethod getCurrentPaymentMethod() {
+        return mCurrentPaymentMethod;
     }
 }

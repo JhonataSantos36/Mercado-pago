@@ -46,7 +46,7 @@
                         android:maxWidth="40dp"
                         android:layout_gravity="center_vertical"/>
 
-                    <com.mercadopago.views.MPTextView
+                    <com.mercadopago.customviews.MPTextView
                         android:layout_marginLeft="10dp"
                         android:layout_marginStart="10dp"
                         android:id="@+id/customerMethodLabel"
@@ -79,14 +79,14 @@
                     android:layout_width="match_parent"
                     android:layout_margin="@dimen/mpsdk_margin_std">
 
-                    <com.mercadopago.views.MPTextView
+                    <com.mercadopago.customviews.MPTextView
                         xmlns:android="http://schemas.android.com/apk/res/android"
                         android:id="@+id/text_cod_seg"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/mpsdk_security_code"
                         style="@style/mpsdk_form_label" />
-                    <com.mercadopago.views.MPEditText
+                    <com.mercadopago.customviews.MPEditText
                         android:id="@+id/securityCode"
                         android:layout_width="120dp"
                         android:layout_height="wrap_content"
@@ -111,7 +111,7 @@
                             android:layout_marginBottom="10dp"
                             tools:src="@drawable/bank" />
 
-                        <com.mercadopago.views.MPTextView
+                        <com.mercadopago.customviews.MPTextView
                             android:id="@+id/cVVDescriptor"
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
@@ -124,7 +124,7 @@
 
             </android.support.v7.widget.CardView>
 
-            <com.mercadopago.views.MPButton
+            <com.mercadopago.customviews.MPButton
                 android:id="@+id/submitButton"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/mpsdk_button_height"

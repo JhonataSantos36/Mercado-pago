@@ -27,9 +27,9 @@ import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;
 import com.mercadopago.util.MercadoPagoUtil;
-import com.mercadopago.views.MPButton;
-import com.mercadopago.views.MPEditText;
-import com.mercadopago.views.MPTextView;
+import com.mercadopago.customviews.MPButton;
+import com.mercadopago.customviews.MPEditText;
+import com.mercadopago.customviews.MPTextView;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;

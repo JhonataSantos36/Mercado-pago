@@ -18,7 +18,7 @@
             android:layout_height="match_parent"
             android:layout_weight="0.98"
             android:orientation="horizontal">
-            <RelativeLayout
+            <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
                     <ImageView
@@ -26,40 +26,33 @@
                         android:layout_width="30dp"
                         android:layout_height="25dp"
                         android:layout_gravity="center_vertical"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentStart="true"
-                        android:layout_alignParentBottom="true"
-                        android:layout_alignParentTop="true"
                         android:src="@drawable/cards"
                         android:adjustViewBounds="true" />
-
-                    <com.mercadopago.views.MPTextView
-                        android:id="@+id/mpsdkDescription"
+                    <LinearLayout
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_toRightOf="@+id/mpsdkImage"
-                        android:layout_toEndOf="@+id/mpsdkImage"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
                         android:layout_marginLeft="10dp"
                         android:layout_marginStart="10dp"
-                        android:singleLine="true"
-                        tools:text="Tarjetas"
-                        style="@style/mpsdk_list_label"/>
+                        android:orientation="vertical">
+                        <com.mercadopago.customviews.MPTextView
+                            android:id="@+id/mpsdkDescription"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:singleLine="true"
+                            tools:text="Tarjetas"
+                            style="@style/mpsdk_list_label"/>
 
-                    <com.mercadopago.views.MPTextView
-                        android:id="@+id/mpsdkComment"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignLeft="@+id/mpsdkDescription"
-                        android:layout_alignStart="@+id/mpsdkDescription"
-                        android:layout_marginLeft="1dp"
-                        android:layout_marginStart="1dp"
-                        android:layout_below="@+id/mpsdkDescription"
-                        android:layout_alignParentBottom="true"
-                        tools:text="Hola, soy un comentario"
-                        style="@style/mpsdk_list_label_comment"/>
-
-            </RelativeLayout>
+                        <com.mercadopago.customviews.MPTextView
+                            android:id="@+id/mpsdkComment"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="1dp"
+                            android:layout_marginStart="1dp"
+                            tools:text="Hola, soy un comentario"
+                            style="@style/mpsdk_list_label_comment"/>
+                    </LinearLayout>
+            </LinearLayout>
         </LinearLayout>
         <ImageView
             android:layout_width="15dp"

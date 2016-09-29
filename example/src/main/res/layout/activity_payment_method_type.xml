@@ -13,7 +13,7 @@
         android:orientation="vertical"
         android:visibility="gone">
 
-        <com.mercadopago.views.MPButton
+        <com.mercadopago.customviews.MPButton
             android:layout_width="match_parent"
             android:layout_height="@dimen/mpsdk_button_height"
             android:layout_marginTop="25dp"
@@ -22,7 +22,7 @@
             android:onClick="submitCredit"
             style="@style/mpsdk_button_normal"/>
 
-        <com.mercadopago.views.MPButton
+        <com.mercadopago.customviews.MPButton
             android:layout_width="match_parent"
             android:layout_height="@dimen/mpsdk_button_height"
             android:layout_marginTop="25dp"
@@ -31,7 +31,7 @@
             android:onClick="submitDebit"
             style="@style/mpsdk_button_normal"/>
 
-        <com.mercadopago.views.MPButton
+        <com.mercadopago.customviews.MPButton
             android:layout_width="match_parent"
             android:layout_height="@dimen/mpsdk_button_height"
             android:layout_marginTop="25dp"

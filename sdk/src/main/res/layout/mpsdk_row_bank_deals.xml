@@ -18,7 +18,7 @@
         android:scaleType="fitCenter"
         android:adjustViewBounds="true"/>
 
-    <com.mercadopago.views.MPTextView
+    <com.mercadopago.customviews.MPTextView
         android:id="@+id/mpsdkInstallments"
         android:layout_marginTop="3dp"
         android:layout_width="wrap_content"
@@ -27,7 +27,7 @@
         tools:text="6 cuotas sin interes"
         style="@style/mpsdk_form_input"/>
 
-    <com.mercadopago.views.MPTextView
+    <com.mercadopago.customviews.MPTextView
         android:id="@+id/mpsdkBankDesc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

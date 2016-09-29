@@ -6,6 +6,7 @@ import android.text.Spanned;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.mptracker.MPTracker;
@@ -13,7 +14,6 @@ import com.mercadopago.util.CurrenciesUtil;
 import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.MercadoPagoUtil;
-import com.mercadopago.views.MPTextView;
 
 import java.math.BigDecimal;
 

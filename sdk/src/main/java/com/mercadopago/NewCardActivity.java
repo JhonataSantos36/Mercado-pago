@@ -18,6 +18,8 @@ import android.widget.Spinner;
 import com.mercadopago.adapters.IdentificationTypesAdapter;
 import com.mercadopago.callbacks.Callback;
 import com.mercadopago.core.MercadoPago;
+import com.mercadopago.customviews.MPEditText;
+import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.CardToken;
 import com.mercadopago.model.IdentificationType;
@@ -27,8 +29,6 @@ import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;
 import com.mercadopago.util.MercadoPagoUtil;
-import com.mercadopago.views.MPEditText;
-import com.mercadopago.views.MPTextView;
 
 import java.util.List;
 

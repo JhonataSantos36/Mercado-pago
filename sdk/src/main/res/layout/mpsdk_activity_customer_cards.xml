@@ -19,7 +19,7 @@
             android:background="?attr/colorPrimary"
             android:theme="@style/ToolbarTheme"
             app:popupTheme="@style/Theme.MercadoPagoTheme.NoActionBar">
-            <com.mercadopago.views.MPTextView
+            <com.mercadopago.customviews.MPTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/mpsdkToolbarTitle"
@@ -55,14 +55,14 @@
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
                 android:gravity="center_vertical">
-                <com.mercadopago.views.MPTextView
+                <com.mercadopago.customviews.MPTextView
                     android:id="@+id/mpsdkDescription"
                     android:layout_marginLeft="10dp"
                     android:layout_marginStart="10dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/other_payment_method"
-                    android:textSize="18dp"
+                    style="@style/mpsdk_list_label"
                     android:textColor="@color/mpsdk_base_text"/>
             </LinearLayout>
             <ImageView

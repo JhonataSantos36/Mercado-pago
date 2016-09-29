@@ -12,11 +12,11 @@ import com.mercadopago.model.Token;
 /**
  * Created by mreverter on 12/5/16.
  */
-public class PaymentMethodCardEditableRow extends PaymentMethodCard {
+public class PaymentMethodOnEditableRow extends PaymentMethodOnView {
 
     protected Token mToken;
 
-    public PaymentMethodCardEditableRow(Context context, PaymentMethod paymentMethod, Token token) {
+    public PaymentMethodOnEditableRow(Context context, PaymentMethod paymentMethod, Token token) {
         mContext = context;
         mPaymentMethod = paymentMethod;
         mToken = token;

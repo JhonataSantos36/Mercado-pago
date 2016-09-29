@@ -1,5 +1,6 @@
 package com.mercadopago.model;
 
+import com.google.gson.annotations.SerializedName;
 import com.mercadopago.constants.PaymentTypes;
 
 import java.util.List;
@@ -11,7 +12,14 @@ public class PaymentMethodSearch {
 
     private List<PaymentMethodSearchItem> groups;
 
+    @SerializedName("custom_options")
+    private List<CustomSearchItem> customSearchItems;
+
     private List<PaymentMethod> paymentMethods;
+
+    private List<Card> cards;
+
+    private AccountMoney accountMoney;
 
     public List<PaymentMethodSearchItem> getGroups() {
         return groups;
@@ -99,5 +107,47 @@ public class PaymentMethodSearch {
             }
         }
         return requiredItem;
+    }
+
+    public PaymentMethod getPaymentMethodById(String paymentMethodId) {
+        PaymentMethod foundPaymentMethod = null;
+        if(paymentMethods != null) {
+            for (PaymentMethod paymentMethod : paymentMethods) {
+                if (paymentMethod.getId().equals(paymentMethodId)) {
+                    foundPaymentMethod = paymentMethod;
+                    break;
+                }
+            }
+        }
+        return foundPaymentMethod;
+    }
+
+    public Card getCardById(String cardId) {
+        Card foundCard= null;
+        if(cards != null) {
+            for (Card card: cards) {
+                if (card.getId().equals(cardId)) {
+                    foundCard = card;
+                    break;
+                }
+            }
+        }
+        return foundCard;
+    }
+
+    public List<CustomSearchItem> getCustomSearchItems() {
+        return customSearchItems;
+    }
+
+    public boolean hasCustomSearchItems() {
+        return customSearchItems != null && !customSearchItems.isEmpty();
+    }
+
+    public List<Card> getCards() {
+        return cards;
+    }
+
+    public AccountMoney getAccountMoney() {
+        return accountMoney;
     }
 }

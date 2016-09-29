@@ -32,7 +32,7 @@
                 android:src="@drawable/cargavirtual"
                 android:adjustViewBounds="true"/>
 
-            <com.mercadopago.views.MPTextView
+            <com.mercadopago.customviews.MPTextView
                 android:id="@+id/mpsdkComment"
                 android:layout_marginBottom="12dp"
                 android:layout_width="wrap_content"
@@ -43,7 +43,7 @@
                 tools:text="Hola, soy un comentario"
                 style="@style/mpsdk_list_label_comment"/>
 
-            <com.mercadopago.views.MPTextView
+            <com.mercadopago.customviews.MPTextView
                 android:id="@+id/mpsdkDescription"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

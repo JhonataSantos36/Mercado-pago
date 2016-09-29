@@ -1,6 +1,7 @@
 package com.mercadopago;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.AppBarLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,12 +10,17 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.mercadopago.adapters.CustomPaymentMethodOptionsAdapter;
 import com.mercadopago.adapters.PaymentMethodSearchItemAdapter;
-import com.mercadopago.callbacks.Callback;
-import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.callbacks.OnSelectedCallback;
 import com.mercadopago.core.MercadoPago;
+import com.mercadopago.customviews.MPTextView;
+import com.mercadopago.exceptions.MPException;
 import com.mercadopago.model.ApiException;
+import com.mercadopago.model.Card;
+import com.mercadopago.model.CustomSearchItem;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.PaymentMethod;
@@ -24,18 +30,19 @@ import com.mercadopago.model.PaymentPreference;
 import com.mercadopago.model.Site;
 import com.mercadopago.model.Token;
 import com.mercadopago.mptracker.MPTracker;
+import com.mercadopago.presenters.PaymentVaultPresenter;
 import com.mercadopago.util.ApiUtil;
-import com.mercadopago.util.CurrenciesUtil;
 import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;
-import com.mercadopago.util.MercadoPagoUtil;
-import com.mercadopago.views.MPTextView;
+import com.mercadopago.views.PaymentVaultView;
 
+import java.lang.reflect.Type;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
-public class PaymentVaultActivity extends MercadoPagoActivity {
+public class PaymentVaultActivity extends MercadoPagoActivity implements PaymentVaultView {
 
     // Local vars
     protected MercadoPago mMercadoPago;
@@ -43,24 +50,18 @@ public class PaymentVaultActivity extends MercadoPagoActivity {
     protected Token mToken;
     protected Issuer mSelectedIssuer;
     protected PayerCost mSelectedPayerCost;
-    protected Site mSite;
+
     protected Boolean mInstallmentsEnabled;
 
     // Controls
-    protected RecyclerView mSearchItemsRecyclerView;
-    protected AppBarLayout mAppBar;
     protected MPTextView mActivityTitle;
+    protected View mSearchItemsContainer;
+    protected RecyclerView mSearchItemsRecyclerView;
+    protected View mSavedCardsContainer;
+    protected RecyclerView mSavedCardsRecyclerView;
+    protected AppBarLayout mAppBar;
 
-    // Current values
-    protected PaymentMethodSearch mPaymentMethodSearch;
-
-    // Activity parameters
-    protected String mMerchantPublicKey;
-    protected BigDecimal mAmount;
-    protected boolean mShowBankDeals;
-    protected boolean mCardGuessingEnabled;
-    protected PaymentMethodSearchItem mSelectedSearchItem;
-    protected PaymentPreference mPaymentPreference;
+    protected PaymentVaultPresenter mPaymentVaultPresenter;
 
     @Override
     protected void setContentView() {
@@ -68,60 +69,61 @@ public class PaymentVaultActivity extends MercadoPagoActivity {
     }
 
     @Override
+    protected void onBeforeCreation() {
+        mPaymentVaultPresenter = new PaymentVaultPresenter();
+        mPaymentVaultPresenter.attachView(this);
+    }
+
+    @Override
     protected void getActivityParameters() {
-        mMerchantPublicKey = getIntent().getStringExtra("merchantPublicKey");
+        mPaymentVaultPresenter.setDecorationPreference(mDecorationPreference);
+        mPaymentVaultPresenter.setMerchantPublicKey(getIntent().getStringExtra("merchantPublicKey"));
+        mPaymentVaultPresenter.setMerchantBaseUrl(this.getIntent().getStringExtra("merchantBaseUrl"));
+        mPaymentVaultPresenter.setMerchantGetCustomerUri(this.getIntent().getStringExtra("merchantGetCustomerUri"));
+        mPaymentVaultPresenter.setMerchantAccessToken(this.getIntent().getStringExtra("merchantAccessToken"));
 
         if (getIntent().getStringExtra("paymentPreference") != null) {
-            mPaymentPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("paymentPreference"), PaymentPreference.class);
+            mPaymentVaultPresenter.setPaymentPreference(JsonUtil.getInstance().fromJson(getIntent().getStringExtra("paymentPreference"), PaymentPreference.class));
         }
 
         if (this.getIntent().getStringExtra("selectedSearchItem") != null) {
-            mSelectedSearchItem = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("selectedSearchItem"), PaymentMethodSearchItem.class);
+            mPaymentVaultPresenter.setSelectedSearchItem(JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("selectedSearchItem"), PaymentMethodSearchItem.class));
         }
 
         try {
-            mAmount = new BigDecimal(this.getIntent().getStringExtra("amount"));
+            mPaymentVaultPresenter.setAmount(new BigDecimal(this.getIntent().getStringExtra("amount")));
         } catch (Exception ex) {
-            mAmount = null;
+            mPaymentVaultPresenter.setAmount(null);
         }
 
-        mSite = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("site"), Site.class);
-
-        mCardGuessingEnabled = this.getIntent().getBooleanExtra("cardGuessingEnabled", false);
+        mPaymentVaultPresenter.setSite(JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("site"), Site.class));
 
         mInstallmentsEnabled = this.getIntent().getBooleanExtra("installmentsEnabled", true);
 
-        mShowBankDeals = this.getIntent().getBooleanExtra("showBankDeals", true);
-
         if (this.getIntent().getStringExtra("paymentMethodSearch") != null) {
-            mPaymentMethodSearch = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("paymentMethodSearch"), PaymentMethodSearch.class);
+            mPaymentVaultPresenter.setPaymentMethodSearch(JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("paymentMethodSearch"), PaymentMethodSearch.class));
+        }
+        try {
+            Gson gson = new Gson();
+            Type listType = new TypeToken<List<Card>>() {
+            }.getType();
+            mPaymentVaultPresenter.setSavedCards(gson.<List<Card>>fromJson(this.getIntent().getStringExtra("cards"), listType));
+        } catch (Exception ex) {
+            mPaymentVaultPresenter.setSavedCards(new ArrayList<Card>());
         }
     }
 
     @Override
     protected void validateActivityParameters() {
-
-        if (mPaymentPreference != null) {
-            if (!mPaymentPreference.validMaxInstallments()) {
-                throw new IllegalStateException(getString(R.string.mpsdk_error_message_invalid_max_installments));
-            } else if (!mPaymentPreference.validDefaultInstallments()) {
-                throw new IllegalStateException(getString(R.string.mpsdk_error_message_invalid_default_installments));
-            } else if (!mPaymentPreference.excludedPaymentTypesValid()) {
-                throw new IllegalStateException(getString(R.string.mpsdk_error_message_excluded_all_payment_type));
-            }
-        }
-        if (!isAmountValid()) {
-            throw new IllegalStateException(getString(R.string.mpsdk_error_message_invalid_amount));
-        } else if (!isCurrencyIdValid()) {
-            throw new IllegalStateException(getString(R.string.mpsdk_error_message_invalid_currency));
-        } else if (!isMerchantPublicKeyValid()) {
-            throw new IllegalStateException(getString(R.string.mpsdk_error_message_invalid_merchant));
-        }
+        mPaymentVaultPresenter.validateParameters();
     }
 
     @Override
     protected void initializeControls() {
         initializeGroupRecyclerView();
+        initializeSavedCardsRecyclerView();
+        mSearchItemsContainer = findViewById(R.id.mpsdkSearchItemsContainer);
+        mSavedCardsContainer = findViewById(R.id.mpsdkSavedCardsContainer);
         mActivityTitle = (MPTextView) findViewById(R.id.mpsdkTitle);
         mAppBar = (AppBarLayout) findViewById(R.id.mpsdkAppBar);
         initializeToolbar();
@@ -134,37 +136,8 @@ public class PaymentVaultActivity extends MercadoPagoActivity {
 
     @Override
     protected void onValidStart() {
-        MPTracker.getInstance().trackScreen("PAYMENT_METHOD_SEARCH", 2, mMerchantPublicKey, mSite.getId(), BuildConfig.VERSION_NAME, this);
-
-        mMercadoPago = new MercadoPago.Builder()
-                .setPublicKey(mMerchantPublicKey)
-                .setContext(this)
-                .build();
-
-        if (isItemSelected()) {
-            showSelectedItemChildren();
-        } else {
-            initPaymentMethodSearch();
-        }
-    }
-
-    private boolean isAmountValid() {
-        return mAmount != null && mAmount.compareTo(BigDecimal.ZERO) >= 0;
-    }
-
-    private boolean isMerchantPublicKeyValid() {
-        return mMerchantPublicKey != null;
-    }
-
-    private boolean isCurrencyIdValid() {
-        boolean isValid = true;
-
-        if (mSite.getCurrencyId() == null) {
-            isValid = false;
-        } else if (!CurrenciesUtil.isValidCurrency(mSite.getCurrencyId())) {
-            isValid = false;
-        }
-        return isValid;
+        MPTracker.getInstance().trackScreen("PAYMENT_METHOD_SEARCH", 2, mPaymentVaultPresenter.getMerchantPublicKey(), mPaymentVaultPresenter.getSite().getId(), BuildConfig.VERSION_NAME, this);
+        mPaymentVaultPresenter.initialize(mPaymentVaultPresenter.getMerchantPublicKey(), MercadoPago.KEY_TYPE_PUBLIC);
     }
 
     private void initializeToolbar() {
@@ -194,157 +167,45 @@ public class PaymentVaultActivity extends MercadoPagoActivity {
         mSearchItemsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
-    private void initPaymentMethodSearch() {
-        String initialTitle = getString(R.string.mpsdk_title_activity_payment_vault);
-        setActivityTitle(initialTitle);
-
-        if (mPaymentMethodSearch != null) {
-            setSearchLayout();
-        } else {
-            getPaymentMethodSearch();
-        }
+    protected void initializeSavedCardsRecyclerView() {
+        mSavedCardsRecyclerView = (RecyclerView) findViewById(R.id.mpsdkSavedCards);
+        mSavedCardsRecyclerView.setHasFixedSize(true);
+        mSavedCardsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
-    protected void setActivityTitle(String title) {
-        mActivityTitle.setText(title);
-    }
-
-    protected boolean isItemSelected() {
-        return mSelectedSearchItem != null;
-    }
-
-    protected void getPaymentMethodSearch() {
-
-        List<String> excludedPaymentTypes = mPaymentPreference != null ? mPaymentPreference.getExcludedPaymentTypes() : null;
-        List<String> excludedPaymentMethodIds = mPaymentPreference != null ? mPaymentPreference.getExcludedPaymentMethodIds() : null;
-
-        showProgress();
-        mMercadoPago.getPaymentMethodSearch(mAmount, excludedPaymentTypes, excludedPaymentMethodIds, new Callback<PaymentMethodSearch>() {
-
-            @Override
-            public void success(PaymentMethodSearch paymentMethodSearch) {
-                if (isActivityActive()) {
-                    if (!paymentMethodSearch.hasSearchItems()) {
-                        showEmptyPaymentMethodsError();
-                    } else {
-                        mPaymentMethodSearch = paymentMethodSearch;
-                        setSearchLayout();
-                    }
-                }
-            }
-
-            @Override
-            public void failure(ApiException apiException) {
-                if (isActivityActive()) {
-                    ApiUtil.showApiExceptionError(getActivity(), apiException);
-                    setFailureRecovery(new FailureRecovery() {
-                        @Override
-                        public void recover() {
-                            getPaymentMethodSearch();
-                        }
-                    });
-                }
-            }
-        });
-    }
-
-    protected void setSearchLayout() {
-        if (!isUniqueSelectionAvailable()) {
-            populateSearchList(mPaymentMethodSearch.getGroups());
-            showRegularLayout();
-        } else {
-            PaymentMethodSearchItem uniqueItem = mPaymentMethodSearch.getGroups().get(0);
-            selectItem(uniqueItem);
-        }
-    }
-
-    private boolean isUniqueSelectionAvailable() {
-        return mPaymentMethodSearch.getGroups().size() == 1;
-    }
-
-    protected void populateSearchList(List<PaymentMethodSearchItem> items) {
-        PaymentMethodSearchItemAdapter groupsAdapter = new PaymentMethodSearchItemAdapter(this, items, getPaymentMethodSearchItemSelectionCallback(), mDecorationPreference);
+    protected void populateSearchList(List<PaymentMethodSearchItem> items, OnSelectedCallback<PaymentMethodSearchItem> onSelectedCallback) {
+        PaymentMethodSearchItemAdapter groupsAdapter = new PaymentMethodSearchItemAdapter(this, items, onSelectedCallback, mDecorationPreference);
         mSearchItemsRecyclerView.setAdapter(groupsAdapter);
     }
 
-    protected OnSelectedCallback<PaymentMethodSearchItem> getPaymentMethodSearchItemSelectionCallback() {
-        return new OnSelectedCallback<PaymentMethodSearchItem>() {
-            @Override
-            public void onSelected(PaymentMethodSearchItem item) {
-                if (item.hasChildren()) {
-                    restartWithSelectedItem(item);
-                } else {
-                    selectItem(item);
-                }
-            }
-        };
+    private void populateCustomOptionsList(List<CustomSearchItem> customSearchItems, OnSelectedCallback<CustomSearchItem> onSelectedCallback) {
+        CustomPaymentMethodOptionsAdapter customPaymentMethodOptionsAdapter = new CustomPaymentMethodOptionsAdapter(this, customSearchItems, onSelectedCallback);
+        mSavedCardsRecyclerView.setAdapter(customPaymentMethodOptionsAdapter);
     }
 
-    private void selectItem(PaymentMethodSearchItem item) {
-        if (item.isPaymentType()) {
-            startNextStepForPaymentType(item);
-        } else if (item.isPaymentMethod()) {
-            resolvePaymentMethodSelection(item);
-        }
+    @Override
+    public void startSavedCardFlow(Card card) {
+        new MercadoPago.StartActivityBuilder()
+                .setActivity(this)
+                .setPublicKey(mPaymentVaultPresenter.getMerchantPublicKey())
+                .setAmount(mPaymentVaultPresenter.getAmount())
+                .setSite(mPaymentVaultPresenter.getSite())
+                .setCard(card)
+                .setDecorationPreference(mPaymentVaultPresenter.getDecorationPreference())
+                .setPaymentPreference(mPaymentVaultPresenter.getPaymentPreference())
+                .setInstallmentsEnabled(mInstallmentsEnabled)
+                .startCardVaultActivity();
     }
 
-    private void resolvePaymentMethodSelection(PaymentMethodSearchItem item) {
-        PaymentMethod selectedPaymentMethod = mPaymentMethodSearch.getPaymentMethodBySearchItem(item);
-        if (selectedPaymentMethod == null) {
-            showMismatchingPaymentMethodError();
-        } else {
-            finishWithPaymentMethodResult(selectedPaymentMethod);
-        }
-    }
-
-    private void restartWithSelectedItem(PaymentMethodSearchItem groupIem) {
+    @Override
+    public void restartWithSelectedItem(PaymentMethodSearchItem groupIem) {
         Intent intent = new Intent(this, PaymentVaultActivity.class);
         intent.putExtras(this.getIntent());
         intent.putExtra("selectedSearchItem", JsonUtil.getInstance().toJson(groupIem));
-        intent.putExtra("paymentMethodSearch", JsonUtil.getInstance().toJson(mPaymentMethodSearch));
+        intent.putExtra("paymentMethodSearch", JsonUtil.getInstance().toJson(mPaymentVaultPresenter.getPaymentMethodSearch()));
 
         startActivityForResult(intent, MercadoPago.PAYMENT_VAULT_REQUEST_CODE);
         overridePendingTransition(R.anim.mpsdk_slide_right_to_left_in, R.anim.mpsdk_slide_right_to_left_out);
-    }
-
-    protected void showSelectedItemChildren() {
-        setActivityTitle(mSelectedSearchItem.getChildrenHeader());
-        populateSearchList(mSelectedSearchItem.getChildren());
-    }
-
-    protected void startNextStepForPaymentType(PaymentMethodSearchItem item) {
-
-        if (mPaymentPreference == null) {
-            mPaymentPreference = new PaymentPreference();
-        }
-        mPaymentPreference.setDefaultPaymentTypeId(item.getId());
-
-        MercadoPago.StartActivityBuilder builder = new MercadoPago.StartActivityBuilder()
-                .setActivity(this)
-                .setPublicKey(mMerchantPublicKey)
-                .setPaymentPreference(mPaymentPreference)
-                .setDecorationPreference(mDecorationPreference);
-
-        if (MercadoPagoUtil.isCard(item.getId())) {
-            builder.setAmount(mAmount);
-            builder.setSite(mSite);
-            builder.setInstallmentsEnabled(mInstallmentsEnabled);
-            builder.setSupportedPaymentMethods(mPaymentMethodSearch.getPaymentMethods());
-            builder.startCardVaultActivity();
-            animatePaymentMethodSelection();
-        } else {
-            builder.startPaymentMethodsActivity();
-        }
-    }
-
-    private void showProgress() {
-        mAppBar.setVisibility(View.INVISIBLE);
-        LayoutUtil.showProgressLayout(this);
-    }
-
-    private void showRegularLayout() {
-        mAppBar.setVisibility(View.VISIBLE);
-        LayoutUtil.showRegularLayout(this);
     }
 
     @Override
@@ -364,16 +225,12 @@ public class PaymentVaultActivity extends MercadoPagoActivity {
     private void resolveErrorRequest(int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
             recoverFromFailure();
-        } else if (noUserInteraction()) {
+        } else if (mPaymentVaultPresenter.isItemSelected()) {
+            hideProgress();
+        } else {
             setResult(resultCode, data);
             finish();
-        } else {
-            showRegularLayout();
         }
-    }
-
-    private boolean noUserInteraction() {
-        return mSelectedSearchItem == null;
     }
 
     private void resolvePaymentVaultRequest(int resultCode, Intent data) {
@@ -381,7 +238,7 @@ public class PaymentVaultActivity extends MercadoPagoActivity {
             setResult(RESULT_OK, data);
             finish();
         } else if (resultCode == RESULT_CANCELED && data != null && data.hasExtra("mpException")) {
-            MPTracker.getInstance().trackEvent("PAYMENT_VAULT", "CANCELED", 2, mMerchantPublicKey, mSite.getId(), BuildConfig.VERSION_NAME, this);
+            MPTracker.getInstance().trackEvent("PAYMENT_VAULT", "CANCELED", 2, mPaymentVaultPresenter.getMerchantPublicKey(), mPaymentVaultPresenter.getSite().getId(), BuildConfig.VERSION_NAME, this);
 
             setResult(Activity.RESULT_CANCELED, data);
             this.finish();
@@ -396,8 +253,10 @@ public class PaymentVaultActivity extends MercadoPagoActivity {
             mSelectedPayerCost = JsonUtil.getInstance().fromJson(data.getStringExtra("payerCost"), PayerCost.class);
             finishWithCardResult();
         } else {
-            MPTracker.getInstance().trackEvent("PAYMENT_VAULT", "CANCELED", 2, mMerchantPublicKey, mSite.getId(), BuildConfig.VERSION_NAME, this);
-            if (isUniqueSelectionAvailable() || ((data != null) && (data.getStringExtra("mpException") != null))) {
+            MPTracker.getInstance().trackEvent("PAYMENT_VAULT", "CANCELED", 2, mPaymentVaultPresenter.getMerchantPublicKey(), mPaymentVaultPresenter.getSite().getId(), BuildConfig.VERSION_NAME, this);
+            if (mPaymentVaultPresenter.isOnlyUniqueSearchSelectionAvailable()
+                    || mPaymentVaultPresenter.isOnlyUniqueSavedCardAvailable()
+                    || (data != null) && (data.getStringExtra("mpException") != null)) {
                 setResult(Activity.RESULT_CANCELED, data);
                 this.finish();
             } else {
@@ -409,11 +268,12 @@ public class PaymentVaultActivity extends MercadoPagoActivity {
     protected void resolvePaymentMethodsRequest(int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
             PaymentMethod paymentMethod = JsonUtil.getInstance().fromJson(data.getStringExtra("paymentMethod"), PaymentMethod.class);
-            finishWithPaymentMethodResult(paymentMethod);
+            selectPaymentMethod(paymentMethod);
         }
     }
 
-    protected void finishWithPaymentMethodResult(PaymentMethod paymentMethod) {
+    @Override
+    public void selectPaymentMethod(PaymentMethod paymentMethod) {
         Intent returnIntent = new Intent();
         returnIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
         this.setResult(Activity.RESULT_OK, returnIntent);
@@ -439,22 +299,85 @@ public class PaymentVaultActivity extends MercadoPagoActivity {
     }
 
     @Override
+    public Context getContext() {
+        return this;
+    }
+
+    @Override
+    public void showProgress() {
+        mAppBar.setVisibility(View.INVISIBLE);
+        LayoutUtil.showProgressLayout(this);
+    }
+
+    @Override
+    public void hideProgress() {
+        mAppBar.setVisibility(View.VISIBLE);
+        LayoutUtil.showRegularLayout(this);
+    }
+
+    @Override
+    public void setTitle(String title) {
+        mActivityTitle.setText(title);
+    }
+
+    @Override
+    public void startCardFlow() {
+        new MercadoPago.StartActivityBuilder()
+                .setActivity(this)
+                .setPublicKey(mPaymentVaultPresenter.getMerchantPublicKey())
+                .setPaymentPreference(mPaymentVaultPresenter.getPaymentPreference())
+                .setDecorationPreference(mPaymentVaultPresenter.getDecorationPreference())
+                .setAmount(mPaymentVaultPresenter.getAmount())
+                .setSite(mPaymentVaultPresenter.getSite())
+                .setInstallmentsEnabled(mInstallmentsEnabled)
+                .setSupportedPaymentMethods(mPaymentVaultPresenter.getPaymentMethodSearch().getPaymentMethods())
+                .startCardVaultActivity();
+        animatePaymentMethodSelection();
+    }
+
+    @Override
+    public void startPaymentMethodsActivity() {
+        new MercadoPago.StartActivityBuilder()
+                .setActivity(this)
+                .setPublicKey(mPaymentVaultPresenter.getMerchantPublicKey())
+                .setPaymentPreference(mPaymentVaultPresenter.getPaymentPreference())
+                .setDecorationPreference(mPaymentVaultPresenter.getDecorationPreference())
+                .startPaymentMethodsActivity();
+    }
+
+    @Override
+    public void showApiException(ApiException apiException) {
+        if (isActivityActive()) {
+            ApiUtil.showApiExceptionError(getActivity(), apiException);
+        }
+    }
+
+    @Override
+    public void showCustomOptions(List<CustomSearchItem> customSearchItems, OnSelectedCallback<CustomSearchItem> customSearchItemOnSelectedCallback) {
+        mSavedCardsContainer.setVisibility(View.VISIBLE);
+        populateCustomOptionsList(customSearchItems, customSearchItemOnSelectedCallback);
+    }
+
+    @Override
+    public void showSearchItems(List<PaymentMethodSearchItem> searchItems, OnSelectedCallback<PaymentMethodSearchItem> paymentMethodSearchItemSelectionCallback) {
+        mSearchItemsContainer.setVisibility(View.VISIBLE);
+        populateSearchList(searchItems, paymentMethodSearchItemSelectionCallback);
+    }
+
+    @Override
+    public void showError(MPException mpException) {
+        ErrorUtil.startErrorActivity(this, mpException);
+    }
+
+    @Override
     public void onBackPressed() {
-        MPTracker.getInstance().trackEvent("PAYMENT_VAULT", "BACK_PRESSED", 2, mMerchantPublicKey, mSite.getId(), BuildConfig.VERSION_NAME, this);
+        MPTracker.getInstance().trackEvent("PAYMENT_VAULT", "BACK_PRESSED", 2, mPaymentVaultPresenter.getMerchantPublicKey(), mPaymentVaultPresenter.getSite().getId(), BuildConfig.VERSION_NAME, this);
 
         setResult(Activity.RESULT_CANCELED);
         finish();
 
-        if (isItemSelected()) {
+        if (mPaymentVaultPresenter.isItemSelected()) {
             overridePendingTransition(R.anim.mpsdk_slide_left_to_right_in, R.anim.mpsdk_slide_left_to_right_out);
         }
-    }
-
-    private void showMismatchingPaymentMethodError() {
-        ErrorUtil.startErrorActivity(this, getString(R.string.mpsdk_standard_error_message), "Payment method in search not found", false);
-    }
-
-    private void showEmptyPaymentMethodsError() {
-        ErrorUtil.startErrorActivity(this, getString(R.string.mpsdk_no_payment_methods_found), false);
     }
 }

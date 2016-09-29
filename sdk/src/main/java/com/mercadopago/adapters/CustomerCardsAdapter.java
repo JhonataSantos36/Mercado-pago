@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 
 import com.mercadopago.callbacks.OnSelectedCallback;
 import com.mercadopago.model.Card;
-import com.mercadopago.uicontrollers.paymentmethods.card.PaymentMethodCardSelectionRow;
+import com.mercadopago.uicontrollers.paymentmethods.card.PaymentMethodOnSelectionRow;
 
 import java.util.List;
 
@@ -29,7 +29,7 @@ public class CustomerCardsAdapter extends RecyclerView.Adapter<CustomerCardsAdap
 
         Card card = mData.get(position);
 
-        PaymentMethodCardSelectionRow paymentMethodCardSelectionRow = new PaymentMethodCardSelectionRow(mContext, card);
+        PaymentMethodOnSelectionRow paymentMethodCardSelectionRow = new PaymentMethodOnSelectionRow(mContext, card);
 
         paymentMethodCardSelectionRow.inflateInParent(parent, false);
 
@@ -44,7 +44,9 @@ public class CustomerCardsAdapter extends RecyclerView.Adapter<CustomerCardsAdap
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.mPaymentMethodCardRow.drawPaymentMethod();
-        holder.mPaymentMethodCardRow.showSeparator();
+        if (position != mData.size() - 1) {
+            holder.mPaymentMethodCardRow.showSeparator();
+        }
     }
 
     @Override
@@ -55,9 +57,9 @@ public class CustomerCardsAdapter extends RecyclerView.Adapter<CustomerCardsAdap
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         public Card mCard;
-        public PaymentMethodCardSelectionRow mPaymentMethodCardRow;
+        public PaymentMethodOnSelectionRow mPaymentMethodCardRow;
 
-        public ViewHolder(PaymentMethodCardSelectionRow paymentMethodCardRow, Card card) {
+        public ViewHolder(PaymentMethodOnSelectionRow paymentMethodCardRow, Card card) {
             super(paymentMethodCardRow.getView());
             mCard = card;
             mPaymentMethodCardRow = paymentMethodCardRow;
@@ -71,5 +73,4 @@ public class CustomerCardsAdapter extends RecyclerView.Adapter<CustomerCardsAdap
             });
         }
     }
-
 }

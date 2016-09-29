@@ -36,7 +36,7 @@
                 android:paddingEnd="10dp"
                 android:background="@color/mpsdk_color_light_grey"
                 android:minHeight="45dp">
-                <com.mercadopago.views.MPTextView
+                <com.mercadopago.customviews.MPTextView
                     android:id="@+id/mpsdkTotalAmountText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -49,7 +49,7 @@
                 android:layout_height="3dp"
                 android:background="@drawable/mpsdk_drop_shadow">
             </View>
-            <com.mercadopago.views.MPTextView
+            <com.mercadopago.customviews.MPTextView
                 android:id="@+id/mpsdkTermsAndConditions"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="5dp"
@@ -64,7 +64,7 @@
                 tools:text="Al pagar, afirmo que soy mayor de edad y acepto los terminos y condiciones de MercadoPago"
                 style="@style/small_comment"/>
 
-            <com.mercadopago.views.MPButton
+            <com.mercadopago.customviews.MPButton
                 android:id="@+id/mpsdkPayButton"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/mpsdk_button_height"
@@ -72,7 +72,7 @@
                 android:layout_margin="@dimen/mpsdk_margin_std"
                 style="@style/mpsdk_button_normal"/>
 
-            <com.mercadopago.views.MPTextView
+            <com.mercadopago.customviews.MPTextView
                 android:id="@+id/mpsdkCancelTextView"
                 android:layout_marginTop="20dp"
                 android:paddingLeft="40dp"

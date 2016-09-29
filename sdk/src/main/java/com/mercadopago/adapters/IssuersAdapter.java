@@ -9,8 +9,8 @@ import android.view.ViewGroup;
 
 import com.mercadopago.R;
 import com.mercadopago.callbacks.OnSelectedCallback;
+import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.model.Issuer;
-import com.mercadopago.views.MPTextView;
 
 import java.util.ArrayList;
 import java.util.List;

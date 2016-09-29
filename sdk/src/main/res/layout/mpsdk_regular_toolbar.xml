@@ -12,14 +12,14 @@
     android:minHeight="?attr/actionBarSize">
 
 
-    <com.mercadopago.views.MPTextView
+    <com.mercadopago.customviews.MPTextView
         android:id="@+id/mpsdkTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         style="@style/mpsdk_title_text"/>
 
-    <com.mercadopago.views.MPTextView
+    <com.mercadopago.customviews.MPTextView
         android:id="@+id/mpsdkButtonText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

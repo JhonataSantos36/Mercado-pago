@@ -12,6 +12,8 @@ import android.widget.FrameLayout;
 
 import com.google.gson.reflect.TypeToken;
 import com.mercadopago.constants.Sites;
+import com.mercadopago.customviews.MPTextView;
+import com.mercadopago.model.Card;
 import com.mercadopago.model.DecorationPreference;
 import com.mercadopago.model.Installment;
 import com.mercadopago.model.Issuer;
@@ -26,7 +28,6 @@ import com.mercadopago.test.StaticMock;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.utils.ActivityResultUtil;
 import com.mercadopago.utils.ViewUtils;
-import com.mercadopago.views.MPTextView;
 
 import org.junit.After;
 import org.junit.Before;
@@ -118,7 +119,7 @@ public class InstallmentsActivityTest {
         InstallmentsActivity activity = mTestRule.launchActivity(validStartIntent);
 
         assertEquals(activity.mPublicKey, mMerchantPublicKey);
-        assertEquals(activity.mCurrentPaymentMethod.getId(), mPaymentMethod.getId());
+        assertEquals(activity.getCurrentPaymentMethod().getId(), mPaymentMethod.getId());
         assertEquals(activity.mSite.getId(), mSite.getId());
         assertEquals(activity.mAmount, new BigDecimal(mAmount));
         assertNotNull(activity.mPayerCosts);
@@ -141,7 +142,7 @@ public class InstallmentsActivityTest {
         InstallmentsActivity activity = mTestRule.launchActivity(validStartIntent);
 
         assertEquals(activity.mPublicKey, mMerchantPublicKey);
-        assertEquals(activity.mCurrentPaymentMethod.getId(), mPaymentMethod.getId());
+        assertEquals(activity.getCurrentPaymentMethod().getId(), mPaymentMethod.getId());
         assertEquals(activity.mSite.getId(), mSite.getId());
         assertEquals(activity.mAmount, new BigDecimal(mAmount));
         assertEquals(activity.mSelectedIssuer.getId(), issuer.getId());
@@ -149,7 +150,7 @@ public class InstallmentsActivityTest {
     }
 
     @Test
-    public void hideCardWhenNoToken() {
+    public void hideCardWhenNoTokenOrCard() {
         String payerCosts = StaticMock.getPayerCostsJson();
         Type listType = new TypeToken<List<PayerCost>>(){}.getType();
         List<PayerCost> payerCostList = JsonUtil.getInstance().getGson().fromJson(payerCosts, listType);
@@ -203,7 +204,7 @@ public class InstallmentsActivityTest {
     }
 
     @Test
-    public void showToolbarWithTitleWhenNoToken() {
+    public void showToolbarWithTitleWhenNoTokenOrCard() {
         String payerCosts = StaticMock.getPayerCostsJson();
         Type listType = new TypeToken<List<PayerCost>>(){}.getType();
         List<PayerCost> payerCostList = JsonUtil.getInstance().getGson().fromJson(payerCosts, listType);
@@ -245,9 +246,23 @@ public class InstallmentsActivityTest {
         mTestRule.launchActivity(validStartIntent);
 
         onView(withId(R.id.mpsdkCardNumberTextView)).check(matches(withText(containsString(token.getLastFourDigits()))));
-        onView(withId(R.id.mpsdkCardholderNameView)).check(matches(withText(token.getCardholder().getName().toUpperCase())));
-        onView(withId(R.id.mpsdkCardHolderExpiryYear)).check(matches(withText(token.getExpirationYear().toString().substring(2,4))));
-        onView(withId(R.id.mpsdkCardHolderExpiryMonth)).check(matches(withText(token.getExpirationMonth().toString())));
+        onView(withId(R.id.mpsdkCardholderNameView)).check(matches(withText(token.getCardHolder().getName().toUpperCase())));
+    }
+
+    @Test
+    public void initializeCardWhenCardSet() {
+        String payerCosts = StaticMock.getPayerCostsJson();
+        Type listType = new TypeToken<List<PayerCost>>(){}.getType();
+        List<PayerCost> payerCostList = JsonUtil.getInstance().getGson().fromJson(payerCosts, listType);
+        //Visa
+        Card card = StaticMock.getCards().get(1);
+
+        validStartIntent.putExtra("payerCosts", JsonUtil.getInstance().toJson(payerCostList));
+        validStartIntent.putExtra("card", JsonUtil.getInstance().toJson(card));
+
+        mTestRule.launchActivity(validStartIntent);
+
+        onView(withId(R.id.mpsdkCardNumberTextView)).check(matches(withText(containsString(card.getLastFourDigits()))));
     }
 
     @Test
@@ -347,7 +362,7 @@ public class InstallmentsActivityTest {
         InstallmentsActivity activity = mTestRule.launchActivity(validStartIntent);
 
         assertEquals(activity.mPublicKey, mMerchantPublicKey);
-        assertEquals(activity.mCurrentPaymentMethod.getId(), mPaymentMethod.getId());
+        assertEquals(activity.getCurrentPaymentMethod().getId(), mPaymentMethod.getId());
         assertEquals(activity.mSite.getId(), mSite.getId());
         assertEquals(activity.mAmount, new BigDecimal(mAmount));
         assertNull(activity.mSelectedIssuer);

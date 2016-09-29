@@ -4,13 +4,13 @@ import android.content.Intent;
 import android.support.design.widget.Snackbar;
 import android.view.View;
 
+import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.mptracker.MPTracker;
 import com.mercadopago.util.CurrenciesUtil;
 import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
-import com.mercadopago.views.MPTextView;
 
 import java.math.BigDecimal;
 

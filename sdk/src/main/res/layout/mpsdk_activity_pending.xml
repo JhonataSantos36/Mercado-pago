@@ -37,7 +37,7 @@
                         android:src="@drawable/icon_pending"
                         android:layout_gravity="center_horizontal" />
 
-                    <com.mercadopago.views.MPTextView
+                    <com.mercadopago.customviews.MPTextView
                         android:id="@+id/mpsdkPendingTitle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -48,7 +48,7 @@
                         android:textSize="22dp"
                         android:text="@string/mpsdk_title_pending" />
 
-                    <com.mercadopago.views.MPTextView
+                    <com.mercadopago.customviews.MPTextView
                         android:id="@+id/mpsdkPendingSubtitle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -67,7 +67,7 @@
                         android:background="@color/mpsdk_separator"
                         android:layout_gravity="center_horizontal|bottom" />
                 </LinearLayout>
-                    <com.mercadopago.views.MPTextView
+                    <com.mercadopago.customviews.MPTextView
                         android:id="@+id/mpsdkExitPending"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

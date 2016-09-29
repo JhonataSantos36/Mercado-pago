@@ -14,17 +14,18 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.mercadopago.CardInterface;
 import com.mercadopago.R;
 import com.mercadopago.core.MercadoPago;
+import com.mercadopago.customviews.MPEditText;
+import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.model.DecorationPreference;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.util.MPAnimationUtils;
 import com.mercadopago.util.MPCardMaskUtil;
 import com.mercadopago.util.ScaleUtil;
-import com.mercadopago.views.MPEditText;
-import com.mercadopago.views.MPTextView;
 
 public class CardFrontFragment extends android.support.v4.app.Fragment {
 
@@ -36,6 +37,7 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
     //Card input views
     private MPTextView mCardNumberTextView;
     private MPTextView mCardholderNameTextView;
+    private LinearLayout mExpirationDateContainer;
     private MPTextView mCardExpiryMonthTextView;
     private MPTextView mCardExpiryYearTextView;
     private MPTextView mCardDateDividerTextView;
@@ -56,6 +58,7 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
     private Animation mAnimFadeIn;
     private boolean mAnimate;
     private DecorationPreference mDecorationPreference;
+    private int mExpirationDateVisibility = View.VISIBLE;
 
     private CardInterface mActivity;
 
@@ -108,6 +111,7 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
             mCardBorder = (ImageView) getView().findViewById(R.id.mpsdkCardShadowBorder);
             mCardLowApiImageView = (ImageView) getView().findViewById(R.id.mpsdkCardLowApiImageView);
             mCardLollipopImageView = (ImageView) getView().findViewById(R.id.mpsdkCardLollipopImageView);
+            mExpirationDateContainer = (LinearLayout) getView().findViewById(R.id.mpsdkExpirationDateContainer);
         }
     }
 
@@ -129,6 +133,11 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
         populateCardImage();
         populateCardColor();
         setCardSecurityView();
+        setExpirationDateVisibility();
+    }
+
+    private void setExpirationDateVisibility() {
+        mExpirationDateContainer.setVisibility(mExpirationDateVisibility);
     }
 
     public void disableAnimate() {
@@ -146,13 +155,13 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
     }
 
     public void onSecurityTextChanged(CharSequence s) {
-        if(mCardSecurityCodeTextView != null) {
+        if (mCardSecurityCodeTextView != null) {
             mCardSecurityCodeTextView.setText(buildSecurityCode(mActivity.getSecurityCodeLength(), s));
         }
     }
 
     public void afterSecurityTextChanged(Editable s) {
-        if(mActivity != null) {
+        if (mActivity != null) {
             mActivity.saveCardSecurityCode(s.toString());
             if (s.length() == 0) {
                 mCardSecurityCodeTextView.setText(buildSecurityCode(mActivity.getSecurityCodeLength(), s));
@@ -252,10 +261,10 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
 
                 @Override
                 public void afterTextChanged(Editable s) {
-                    mActivity.saveCardName(s.toString());
+                    mActivity.saveCardHolderName(s.toString());
                     if (s.length() == 0) {
                         mCardholderNameTextView.setText(getResources().getString(R.string.mpsdk_cardholder_name_short));
-                        mActivity.saveCardName(null);
+                        mActivity.saveCardHolderName(null);
                     }
                 }
             });
@@ -289,7 +298,7 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
     }
 
     public void setFontColor() {
-        if(mActivity != null) {
+        if (mActivity != null) {
             PaymentMethod currentPaymentMethod = mActivity.getCurrentPaymentMethod();
             int font = 0;
             if (currentPaymentMethod != null) {
@@ -313,7 +322,7 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
     }
 
     private void setFontColor(int font, MPTextView textView, MPEditText editText) {
-        if(textView != null) {
+        if (textView != null) {
             int alpha = NORMAL_TEXT_VIEW_ALPHA;
             if (editText != null && editText.hasFocus()) {
                 alpha = EDITING_TEXT_VIEW_ALPHA;
@@ -449,5 +458,9 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
 
     public void setDecorationPreference(DecorationPreference decorationPreference) {
         mDecorationPreference = decorationPreference;
+    }
+
+    public void hideExpirationDate() {
+        mExpirationDateVisibility = View.GONE;
     }
 }

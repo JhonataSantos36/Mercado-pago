@@ -35,6 +35,8 @@ public class PaymentMethodSearchSmallRow extends PaymentMethodSearchRow {
         }
         if (item.hasComment()) {
             mComment.setText(item.getComment());
+        } else {
+            mComment.setVisibility(View.GONE);
         }
         int resourceId = 0;
 

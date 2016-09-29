@@ -17,7 +17,6 @@ android {
         versionCode 1
         versionName '1.0.0'
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        multiDexEnabled true
     }
     packagingOptions {
         exclude 'META-INF/services/com.fasterxml.jackson.core.JsonFactory'
@@ -36,9 +35,10 @@ android {
     }
     buildTypes {
         debug {
+            //testCoverageEnabled true
+            multiDexEnabled true
             versionNameSuffix " Debug"
             debuggable true
-//            testCoverageEnabled true
         }
     }
     dexOptions {
@@ -57,12 +57,14 @@ android {
             buildConfigField "String", "API_VERSION", "\"v1\""
         }
     }
-//    project.gradle.taskGraph.whenReady {
-//        connectedDevDebugAndroidTest {
-//            ignoreFailures = true
-//        }
-//    }
 }
+
+project.gradle.taskGraph.whenReady {
+    connectedDevDebugAndroidTest {
+        ignoreFailures = true
+    }
+}
+
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.1'

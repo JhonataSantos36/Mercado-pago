@@ -38,7 +38,7 @@ public interface CardInterface {
 
     void saveCardExpiryMonth(String expiryMonth);
 
-    void saveCardName(String cardName);
+    void saveCardHolderName(String cardName);
 
     String getCardNumber();
 

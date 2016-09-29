@@ -11,11 +11,11 @@ import android.widget.ImageView;
 
 import com.mercadopago.CardInterface;
 import com.mercadopago.R;
+import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.model.DecorationPreference;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.util.MPAnimationUtils;
 import com.mercadopago.util.ScaleUtil;
-import com.mercadopago.views.MPTextView;
 
 public class CardBackFragment extends android.support.v4.app.Fragment {
 

@@ -33,7 +33,7 @@
                     android:src="@drawable/icon_call"
                     android:layout_gravity="center_horizontal" />
 
-                <com.mercadopago.views.MPTextView
+                <com.mercadopago.customviews.MPTextView
                     android:id="@+id/mpsdkCallForAuthorizeTitle"
                     android:paddingLeft="17dp"
                     android:paddingRight="17dp"
@@ -43,7 +43,7 @@
                     android:gravity="bottom|center"
                     tools:text="Debes autorizar ante Visa el pago de $ 6000 a MercadoPago"/>
 
-                <com.mercadopago.views.MPTextView
+                <com.mercadopago.customviews.MPTextView
                     android:id="@+id/mpsdkCallForAuthorizeSubtitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -68,7 +68,7 @@
                 android:background="@color/mpsdk_color_light_grey"
                 android:orientation="vertical">
 
-                <com.mercadopago.views.MPTextView
+                <com.mercadopago.customviews.MPTextView
                     android:id="@+id/mpsdkAuthorizedPaymentMethod"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -89,7 +89,7 @@
                     android:background="@color/mpsdk_color_light_grey"
                     android:orientation="vertical">
 
-                    <com.mercadopago.views.MPTextView
+                    <com.mercadopago.customviews.MPTextView
                         android:id="@+id/mpsdkPaymentNoAuthorized"
                         android:layout_width="fill_parent"
                         android:gravity="bottom|center"
@@ -98,7 +98,7 @@
                         android:textSize="@dimen/mpsdk_small_text"
                         android:text="@string/mpsdk_text_question_call_for_authorize" />
 
-                    <com.mercadopago.views.MPTextView
+                    <com.mercadopago.customviews.MPTextView
                         android:id="@+id/mpsdkSelectOtherPaymentMethodByCallForAuthorize"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -121,7 +121,7 @@
 
                 </LinearLayout>
 
-                <com.mercadopago.views.MPTextView
+                <com.mercadopago.customviews.MPTextView
                     android:id="@+id/mpsdkExitCallForAuthorize"
                     android:layout_marginTop="10dp"
                     android:paddingLeft="40dp"

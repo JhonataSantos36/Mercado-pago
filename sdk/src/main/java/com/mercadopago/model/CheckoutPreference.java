@@ -48,7 +48,7 @@ public class CheckoutPreference {
     }
 
     public boolean validInstallmentsPreference() {
-        return paymentPreference.installmentPreferencesValid();
+        return paymentPreference == null || paymentPreference.installmentPreferencesValid();
     }
 
     public Boolean itemsValid() {

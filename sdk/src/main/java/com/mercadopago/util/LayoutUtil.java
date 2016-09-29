@@ -6,7 +6,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
 import com.mercadopago.R;
-import com.mercadopago.views.MPEditText;
+import com.mercadopago.customviews.MPEditText;
 
 public class LayoutUtil {
 

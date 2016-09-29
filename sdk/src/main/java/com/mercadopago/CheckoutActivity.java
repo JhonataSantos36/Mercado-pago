@@ -10,15 +10,22 @@ import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.mercadopago.callbacks.Callback;
 import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.core.MercadoPago;
+import com.mercadopago.core.MerchantServer;
+import com.mercadopago.customviews.MPButton;
+import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.exceptions.CheckoutPreferenceException;
 import com.mercadopago.exceptions.ExceptionHandler;
 import com.mercadopago.exceptions.MPException;
 import com.mercadopago.fragments.ShoppingCartFragment;
 import com.mercadopago.model.ApiException;
+import com.mercadopago.model.Card;
 import com.mercadopago.model.CheckoutPreference;
+import com.mercadopago.model.Customer;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.Item;
 import com.mercadopago.model.PayerCost;
@@ -40,21 +47,26 @@ import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;
 import com.mercadopago.util.MercadoPagoUtil;
-import com.mercadopago.views.MPButton;
-import com.mercadopago.views.MPTextView;
 
+import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.util.Calendar;
+import java.util.List;
 
 import static android.text.TextUtils.isEmpty;
 
 public class CheckoutActivity extends MercadoPagoActivity {
 
+    private static final String CHECKOUT_PREFERENCE_BUNDLE = "mCheckoutPreference";
+    private static final String PAYMENT_METHOD_SEARCH_BUNDLE = "mPaymentMethodSearch";
+    private static final String SAVED_CARDS_BUNDLE = "mSavedCards";
     //Parameters
     protected String mCheckoutPreferenceId;
     protected CheckoutPreference mCheckoutPreference;
-    protected Boolean mShowBankDeals;
     protected String mMerchantPublicKey;
+    protected String mMerchantBaseUrl;
+    protected String mMerchantGetCustomerUri;
+    protected String mMerchantAccessToken;
 
     //Local vars
     protected MercadoPago mMercadoPago;
@@ -87,6 +99,7 @@ public class CheckoutActivity extends MercadoPagoActivity {
     protected RelativeLayout mPayerCostLayout;
     protected Boolean mBackPressedOnce;
     protected Snackbar mSnackbar;
+    protected List<Card> mSavedCards;
 
     @Override
     protected void setContentView() {
@@ -96,8 +109,10 @@ public class CheckoutActivity extends MercadoPagoActivity {
     @Override
     protected void getActivityParameters() {
         mMerchantPublicKey = getIntent().getStringExtra("merchantPublicKey");
+        mMerchantBaseUrl = this.getIntent().getStringExtra("merchantBaseUrl");
+        mMerchantGetCustomerUri = this.getIntent().getStringExtra("merchantGetCustomerUri");
+        mMerchantAccessToken = this.getIntent().getStringExtra("merchantAccessToken");
         mCheckoutPreferenceId = this.getIntent().getStringExtra("checkoutPreferenceId");
-        mShowBankDeals = this.getIntent().getBooleanExtra("showBankDeals", true);
     }
 
     @Override
@@ -266,7 +281,9 @@ public class CheckoutActivity extends MercadoPagoActivity {
             @Override
             public void success(PaymentMethodSearch paymentMethodSearch) {
                 mPaymentMethodSearch = paymentMethodSearch;
-                if (isActivityActive()) {
+                if (isMerchantServerInfoAvailable()) {
+                    getCustomerAsync();
+                } else if (isActivityActive()) {
                     startPaymentVaultActivity();
                 }
             }
@@ -286,6 +303,26 @@ public class CheckoutActivity extends MercadoPagoActivity {
         });
     }
 
+    private boolean isMerchantServerInfoAvailable() {
+        return !isEmpty(mMerchantBaseUrl) && !isEmpty(mMerchantGetCustomerUri) && !isEmpty(mMerchantAccessToken);
+    }
+
+    private void getCustomerAsync() {
+        showProgress();
+        MerchantServer.getCustomer(this, mMerchantBaseUrl, mMerchantGetCustomerUri, mMerchantAccessToken, new Callback<Customer>() {
+            @Override
+            public void success(Customer customer) {
+                mSavedCards = mCheckoutPreference.getPaymentPreference() == null ? customer.getCards() : mCheckoutPreference.getPaymentPreference().getValidCards(customer.getCards());
+                startPaymentVaultActivity();
+            }
+
+            @Override
+            public void failure(ApiException apiException) {
+                startPaymentVaultActivity();
+            }
+        });
+    }
+
     protected void startPaymentVaultActivity() {
         new MercadoPago.StartActivityBuilder()
                 .setActivity(this)
@@ -295,7 +332,33 @@ public class CheckoutActivity extends MercadoPagoActivity {
                 .setPaymentMethodSearch(mPaymentMethodSearch)
                 .setPaymentPreference(mCheckoutPreference.getPaymentPreference())
                 .setDecorationPreference(mDecorationPreference)
+                .setCards(mSavedCards)
                 .startPaymentVaultActivity();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(CHECKOUT_PREFERENCE_BUNDLE, JsonUtil.getInstance().toJson(mCheckoutPreference));
+        outState.putString(PAYMENT_METHOD_SEARCH_BUNDLE, JsonUtil.getInstance().toJson(mPaymentMethodSearch));
+        outState.putString(SAVED_CARDS_BUNDLE, JsonUtil.getInstance().toJson(mSavedCards));
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        if (savedInstanceState != null) {
+            mCheckoutPreference = JsonUtil.getInstance().fromJson(savedInstanceState.getString(CHECKOUT_PREFERENCE_BUNDLE), CheckoutPreference.class);
+            mPaymentMethodSearch = JsonUtil.getInstance().fromJson(savedInstanceState.getString(PAYMENT_METHOD_SEARCH_BUNDLE), PaymentMethodSearch.class);
+            try {
+                Gson gson = new Gson();
+                Type listType = new TypeToken<List<Card>>() {
+                }.getType();
+                mSavedCards = gson.fromJson(savedInstanceState.getString(SAVED_CARDS_BUNDLE), listType);
+            } catch (Exception ex) {
+                mSavedCards = null;
+            }
+        }
+        super.onRestoreInstanceState(savedInstanceState);
     }
 
     @Override
@@ -317,9 +380,7 @@ public class CheckoutActivity extends MercadoPagoActivity {
             mSelectedPayerCost = JsonUtil.getInstance().fromJson(data.getStringExtra("payerCost"), PayerCost.class);
             mCreatedToken = JsonUtil.getInstance().fromJson(data.getStringExtra("token"), Token.class);
             mSelectedPaymentMethod = JsonUtil.getInstance().fromJson(data.getStringExtra("paymentMethod"), PaymentMethod.class);
-
             MPTracker.getInstance().trackScreen("REVIEW_AND_CONFIRM", 3, mMerchantPublicKey, mCheckoutPreference.getSiteId(), BuildConfig.VERSION_NAME, this);
-
             showReviewAndConfirm();
             showRegularLayout();
         } else {
@@ -339,10 +400,6 @@ public class CheckoutActivity extends MercadoPagoActivity {
         if (resultCode == RESULT_CANCELED && data != null) {
             if (data.getBooleanExtra("selectOther", false)) {
                 MPTracker.getInstance().trackEvent("REJECTION", "SELECT_OTHER_PAYMENT_METHOD", 3, mMerchantPublicKey, mCheckoutPreference.getSiteId(), BuildConfig.VERSION_NAME, this);
-
-                startPaymentVaultActivity();
-            } else if (data.getBooleanExtra("retry", false)) {
-                MPTracker.getInstance().trackEvent("REJECTION", "RETRY", 3, mMerchantPublicKey, mCheckoutPreference.getSiteId(), BuildConfig.VERSION_NAME, this);
                 startPaymentVaultActivity();
             }
         } else {
@@ -490,9 +547,9 @@ public class CheckoutActivity extends MercadoPagoActivity {
 
     private void drawTermsAndConditionsText() {
         StringBuilder termsAndConditionsText = new StringBuilder();
-        termsAndConditionsText.append(getString(R.string.mpsdk_text_terms_and_conditions_start) + " ");
-        termsAndConditionsText.append("<font color='#0066CC'>" + getString(R.string.mpsdk_text_terms_and_conditions_linked) + "</font>");
-        termsAndConditionsText.append(" " + getString(R.string.mpsdk_text_terms_and_conditions_end));
+        termsAndConditionsText.append(getString(R.string.mpsdk_text_terms_and_conditions_start)).append(" ");
+        termsAndConditionsText.append("<font color='#0066CC'>").append(getString(R.string.mpsdk_text_terms_and_conditions_linked)).append("</font>");
+        termsAndConditionsText.append(" ").append(getString(R.string.mpsdk_text_terms_and_conditions_end));
         mTermsAndConditionsTextView.setText(Html.fromHtml(termsAndConditionsText.toString()));
     }
 
@@ -502,7 +559,8 @@ public class CheckoutActivity extends MercadoPagoActivity {
 
     private boolean isUniquePaymentMethod() {
         return mPaymentMethodSearch != null && mPaymentMethodSearch.getGroups().size() == 1
-                && mPaymentMethodSearch.getGroups().get(0).isPaymentMethod();
+                && mPaymentMethodSearch.getGroups().get(0).isPaymentMethod()
+                && (mSavedCards == null || mSavedCards.isEmpty());
     }
 
     protected void createPayment() {

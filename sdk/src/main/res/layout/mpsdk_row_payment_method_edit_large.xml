@@ -37,7 +37,7 @@
                     android:src="@drawable/cargavirtual"
                     android:adjustViewBounds="true"/>
 
-                <com.mercadopago.views.MPTextView
+                <com.mercadopago.customviews.MPTextView
                     android:id="@+id/mpsdkDescription"
                     android:layout_marginLeft="10dp"
                     android:layout_marginStart="10dp"
@@ -51,7 +51,7 @@
                     android:gravity="center_vertical"
                     style="@style/mpsdk_list_label"/>
 
-                <com.mercadopago.views.MPTextView
+                <com.mercadopago.customviews.MPTextView
                     android:id="@+id/mpsdkComment"
                     android:layout_marginBottom="12dp"
                     android:layout_width="wrap_content"

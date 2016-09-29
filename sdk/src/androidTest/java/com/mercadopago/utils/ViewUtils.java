@@ -2,6 +2,7 @@ package com.mercadopago.utils;
 
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import java.lang.reflect.Field;
@@ -26,5 +27,12 @@ public class ViewUtils {
         } catch (Exception e) {
         }
         return 0;
+    }
+
+    public static boolean hasItems(RecyclerView recyclerView) {
+        return recyclerView.getAdapter().getItemCount() != 0;
+    }
+    public static boolean hasItems(RecyclerView recyclerView, int count) {
+        return recyclerView.getAdapter().getItemCount() == count;
     }
 }

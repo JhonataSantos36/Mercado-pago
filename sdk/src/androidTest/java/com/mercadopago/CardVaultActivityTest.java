@@ -250,7 +250,7 @@ public class CardVaultActivityTest {
         assertEquals(null, activity.mPayerCost);
         assertEquals(null, activity.mSelectedIssuer);
         assertEquals(null, activity.mToken);
-        assertEquals(null, activity.mCurrentPaymentMethod);
+        assertEquals(null, activity.getCurrentPaymentMethod());
         assertTrue(activity.isFinishing());
     }
 

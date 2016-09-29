@@ -18,9 +18,11 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.mercadopago.exceptions.MPException;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.CheckoutPreference;
+import com.mercadopago.model.Customer;
 import com.mercadopago.model.DecorationPreference;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.Item;
@@ -29,6 +31,7 @@ import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentMethodSearch;
 import com.mercadopago.model.PaymentMethodSearchItem;
+import com.mercadopago.model.PaymentPreference;
 import com.mercadopago.model.Token;
 import com.mercadopago.test.ActivityResult;
 import com.mercadopago.test.FakeAPI;
@@ -55,6 +58,7 @@ import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.Intents.intending;
 import static android.support.test.espresso.intent.Intents.times;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
+import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
@@ -63,6 +67,8 @@ import static com.mercadopago.utils.ActivityResultUtil.getActivityResult;
 import static com.mercadopago.utils.CustomMatchers.withAnyChildImage;
 import static com.mercadopago.utils.CustomMatchers.withAnyChildText;
 import static junit.framework.Assert.assertTrue;
+import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.core.IsNot.not;
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -152,7 +158,7 @@ public class CheckoutActivityTest {
 
     @Test
     public void ifPreferenceHasManyItemsAppendTitles() {
-        CheckoutPreference preferenceWithManyItems =  StaticMock.getCheckoutPreference();
+        CheckoutPreference preferenceWithManyItems = StaticMock.getCheckoutPreference();
 
         List<Item> items = preferenceWithManyItems.getItems();
         Item firstItem = items.get(0);
@@ -301,7 +307,7 @@ public class CheckoutActivityTest {
         intended(hasComponent(PaymentVaultActivity.class.getName()), times(2));
     }
 
-    @Test (expected = NoActivityResumedException.class)
+    @Test(expected = NoActivityResumedException.class)
     public void onBackPressedThreeTimesAfterPaymentMethodSelectionFinishActivity() {
         //prepare next activity result
         PaymentMethod paymentMethod = StaticMock.getPaymentMethodOff();
@@ -330,7 +336,7 @@ public class CheckoutActivityTest {
         pressBack();
     }
 
-    @Test (expected = NoActivityResumedException.class)
+    @Test(expected = NoActivityResumedException.class)
     public void onBackPressedBeforePaymentMethodSearchObtainedFinishActivityWithCanceledResult() {
 
         //prepare mocked api responses
@@ -368,7 +374,7 @@ public class CheckoutActivityTest {
 
     // EXCLUSIONS TESTS
 
-    @Test (expected = NoActivityResumedException.class)
+    @Test(expected = NoActivityResumedException.class)
     public void ifUniquePaymentMethodInPaymentMethodSearchFinishActivityWhenBackPressed() {
 
         //Preparing mocked api responses
@@ -890,7 +896,7 @@ public class CheckoutActivityTest {
     //CARD PAYMENT METHOD TESTS
 
     @Test
-    public void onCardPaymentMethodSelectedShowPaymentMethodAndInstallmentsWithRate(){
+    public void onCardPaymentMethodSelectedShowPaymentMethodAndInstallmentsWithRate() {
         //Prepare next activity result
         PaymentMethod paymentMethod = StaticMock.getPaymentMethodOn();
         Token token = StaticMock.getToken();
@@ -930,7 +936,7 @@ public class CheckoutActivityTest {
     }
 
     @Test
-    public void onCardPaymentMethodSelectedShowPaymentMethodAndInstallmentsWithoutRate(){
+    public void onCardPaymentMethodSelectedShowPaymentMethodAndInstallmentsWithoutRate() {
         //Prepare next activity result
         PaymentMethod paymentMethod = StaticMock.getPaymentMethodOn();
         Token token = StaticMock.getToken();
@@ -970,7 +976,7 @@ public class CheckoutActivityTest {
     }
 
     @Test
-    public void ifInstallmentsRowTouchedStartInstallmentsActivity(){
+    public void ifInstallmentsRowTouchedStartInstallmentsActivity() {
         //Prepare next activity result
         PaymentMethod paymentMethod = StaticMock.getPaymentMethodOn();
         Token token = StaticMock.getToken();
@@ -1002,7 +1008,7 @@ public class CheckoutActivityTest {
     }
 
     @Test
-    public void ifInstallmentsChangedUpdateRowActivity(){
+    public void ifInstallmentsChangedUpdateRowActivity() {
         //Prepare PaymentVaultActivity result
         PaymentMethod paymentMethod = StaticMock.getPaymentMethodOn();
         Token token = StaticMock.getToken();
@@ -1063,7 +1069,7 @@ public class CheckoutActivityTest {
     }
 
     @Test
-    public void ifInstallmentsActivityStartedAndBackPressedDoNotChangePayerCostRow(){
+    public void ifInstallmentsActivityStartedAndBackPressedDoNotChangePayerCostRow() {
         //Prepare PaymentVaultActivity result
         PaymentMethod paymentMethod = StaticMock.getPaymentMethodOn();
         Token token = StaticMock.getToken();
@@ -1113,7 +1119,7 @@ public class CheckoutActivityTest {
     }
 
     @Test
-    public void ifPayerCostIsNullDoNotDrawPayerCostRow(){
+    public void ifPayerCostIsNullDoNotDrawPayerCostRow() {
         //Prepare PaymentVaultActivity result
         PaymentMethod paymentMethod = StaticMock.getPaymentMethodOn();
         Token token = StaticMock.getToken();
@@ -1143,7 +1149,7 @@ public class CheckoutActivityTest {
     // RESULTS TESTS
 
     @Test
-    public void onResultActivityResponseFinishWithPaymentResult(){
+    public void onResultActivityResponseFinishWithPaymentResult() {
         //Prepare PaymentVaultActivity result
         PaymentMethod paymentMethod = StaticMock.getPaymentMethodOn();
         Token token = StaticMock.getToken();
@@ -1214,39 +1220,6 @@ public class CheckoutActivityTest {
     }
 
     @Test
-    public void onResultRetryFromResultActivityStartPaymentMethodSelection() {
-        CheckoutPreference preference = StaticMock.getCheckoutPreference();
-        mFakeAPI.addResponseToQueue(preference, 200, "");
-
-        String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
-        mFakeAPI.addResponseToQueue(paymentMethodSearchJson, 200, "");
-
-        Payment payment = StaticMock.getPayment(InstrumentationRegistry.getContext());
-        mFakeAPI.addResponseToQueue(payment, 200, "");
-
-        //prepare next activity result
-        Intent paymentVaultResultIntent = new Intent();
-        final PaymentMethod paymentMethod = StaticMock.getPaymentMethod(InstrumentationRegistry.getContext());
-
-        paymentVaultResultIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
-        Instrumentation.ActivityResult paymentMethodResult = new Instrumentation.ActivityResult(Activity.RESULT_OK, paymentVaultResultIntent);
-
-        intending(hasComponent(PaymentVaultActivity.class.getName())).respondWith(paymentMethodResult);
-
-        Intent resultActivityResultIntent = new Intent();
-        resultActivityResultIntent.putExtra("retry", true);
-        Instrumentation.ActivityResult resultActivityResult = new Instrumentation.ActivityResult(Activity.RESULT_CANCELED, resultActivityResultIntent);
-
-        intending(hasComponent(PaymentResultActivity.class.getName())).respondWith(resultActivityResult);
-
-        mTestRule.launchActivity(validStartIntent);
-
-        onView(withId(R.id.mpsdkPayButton)).perform(click());
-
-        intended(hasComponent(PaymentVaultActivity.class.getName()), times(2));
-    }
-
-    @Test
     public void onResultSelectOtherFromResultActivityStartPaymentMethodSelection() {
         CheckoutPreference preference = StaticMock.getCheckoutPreference();
         mFakeAPI.addResponseToQueue(preference, 200, "");
@@ -1279,6 +1252,118 @@ public class CheckoutActivityTest {
         intended(hasComponent(PaymentVaultActivity.class.getName()), times(2));
     }
 
+    // CUSTOMER CARDS
+
+    @Test
+    public void ifMerchantServerInfoAddedGetCustomerCards() {
+        CheckoutPreference preference = StaticMock.getCheckoutPreference();
+        preference.setPaymentPreference(null);
+        mFakeAPI.addResponseToQueue(preference, 200, "");
+
+        String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
+        mFakeAPI.addResponseToQueue(paymentMethodSearchJson, 200, "");
+
+        Customer customer = StaticMock.getCustomer();
+        mFakeAPI.addResponseToQueue(customer, 200, "");
+
+        validStartIntent.putExtra("merchantBaseUrl", "http://www.api.merchant.com");
+        validStartIntent.putExtra("merchantGetCustomerUri", "/get_customer");
+        validStartIntent.putExtra("merchantAccessToken", "mla-cards");
+
+        mTestRule.launchActivity(validStartIntent);
+
+        Gson gson = new Gson();
+        String cardsJson = gson.toJson(mTestRule.getActivity().mSavedCards);
+        intended(allOf(hasComponent(PaymentVaultActivity.class.getName()), hasExtra("cards", cardsJson)));
+    }
+
+    @Test
+    public void ifPaymentPreferenceSetAndCustomerCardsAvailableFilterThem() {
+        CheckoutPreference preference = StaticMock.getCheckoutPreference();
+        PaymentPreference paymentPreference = new PaymentPreference();
+        paymentPreference.setExcludedPaymentMethodIds(new ArrayList<String>() {{
+            add("visa");
+        }});
+
+        preference.setPaymentPreference(paymentPreference);
+        mFakeAPI.addResponseToQueue(preference, 200, "");
+
+        String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
+        mFakeAPI.addResponseToQueue(paymentMethodSearchJson, 200, "");
+
+        Customer customer = StaticMock.getCustomer();
+        mFakeAPI.addResponseToQueue(customer, 200, "");
+
+        validStartIntent.putExtra("merchantBaseUrl", "http://www.api.merchant.com");
+        validStartIntent.putExtra("merchantGetCustomerUri", "/get_customer");
+        validStartIntent.putExtra("merchantAccessToken", "mla-cards");
+
+        mTestRule.launchActivity(validStartIntent);
+
+        assertTrue(mTestRule.getActivity().mSavedCards.size() == 1);
+    }
+
+    @Test
+    public void ifCardsAvailableMakePaymentMethodEditionAvailable() {
+        CheckoutPreference preference = StaticMock.getCheckoutPreference();
+
+        mFakeAPI.addResponseToQueue(preference, 200, "");
+
+        String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
+        mFakeAPI.addResponseToQueue(paymentMethodSearchJson, 200, "");
+
+        Customer customer = StaticMock.getCustomer();
+        mFakeAPI.addResponseToQueue(customer, 200, "");
+
+        validStartIntent.putExtra("merchantBaseUrl", "http://www.api.merchant.com");
+        validStartIntent.putExtra("merchantGetCustomerUri", "/get_customer");
+        validStartIntent.putExtra("merchantAccessToken", "mla-cards");
+
+        PaymentMethodSearch paymentMethodSearch = JsonUtil.getInstance()
+                .fromJson(StaticMock.getCompletePaymentMethodSearchAsJson(), PaymentMethodSearch.class);
+
+        paymentMethodSearch.getGroups().removeAll(paymentMethodSearch.getGroups());
+
+        mFakeAPI.addResponseToQueue(paymentMethodSearch, 200, "");
+        mFakeAPI.addResponseToQueue(customer, 200, "");
+
+        Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(Activity.RESULT_CANCELED, new Intent());
+        intending(hasComponent(CardVaultActivity.class.getName())).respondWith(result);
+
+        Intent paymentVaultResultIntent = new Intent();
+        final PaymentMethod paymentMethod = StaticMock.getPaymentMethod(InstrumentationRegistry.getContext());
+        paymentVaultResultIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
+        Instrumentation.ActivityResult paymentMethodResult = new Instrumentation.ActivityResult(Activity.RESULT_OK, paymentVaultResultIntent);
+
+        intending(hasComponent(PaymentVaultActivity.class.getName())).respondWith(paymentMethodResult);
+
+        mTestRule.launchActivity(validStartIntent);
+
+        onView(withId(R.id.mpsdkPaymentMethodLayout)).perform(click());
+
+        intended(hasComponent(PaymentVaultActivity.class.getName()), times(2));
+    }
+
+    @Test
+    public void ifPaymentPreferenceIsNullDoNotFilterCards() {
+        CheckoutPreference preference = StaticMock.getCheckoutPreference();
+        preference.setPaymentPreference(null);
+        mFakeAPI.addResponseToQueue(preference, 200, "");
+
+        String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
+        mFakeAPI.addResponseToQueue(paymentMethodSearchJson, 200, "");
+
+        Customer customer = StaticMock.getCustomer();
+        mFakeAPI.addResponseToQueue(customer, 200, "");
+
+        validStartIntent.putExtra("merchantBaseUrl", "http://www.api.merchant.com");
+        validStartIntent.putExtra("merchantGetCustomerUri", "/get_customer");
+        validStartIntent.putExtra("merchantAccessToken", "mla-cards");
+
+        mTestRule.launchActivity(validStartIntent);
+
+        assertTrue(mTestRule.getActivity().mSavedCards.size() == 2);
+    }
     // RECOVERY TESTS
 
     @Test
@@ -1309,6 +1394,27 @@ public class CheckoutActivityTest {
         onView(withId(R.id.mpsdkErrorRetry)).perform(click());
 
         assertTrue(mTestRule.getActivity().mPaymentMethodSearch != null);
+    }
+
+    @Test
+    public void ifSavedCardsGetFromAPIFailsStartPaymentVaultWithoutSavedCards() {
+        CheckoutPreference checkoutPreference = StaticMock.getCheckoutPreference();
+        String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
+        Customer customer = StaticMock.getCustomer();
+
+        validStartIntent.putExtra("merchantBaseUrl", "http://www.api.merchant.com");
+        validStartIntent.putExtra("merchantGetCustomerUri", "/get_customer");
+        validStartIntent.putExtra("merchantAccessToken", "mla-cards");
+
+        mFakeAPI.addResponseToQueue(checkoutPreference, 200, "");
+        mFakeAPI.addResponseToQueue(paymentMethodSearchJson, 200, "");
+        mFakeAPI.addResponseToQueue("", 400, "");
+        mFakeAPI.addResponseToQueue(customer, 200, "");
+
+        mTestRule.launchActivity(validStartIntent);
+
+        intended(hasComponent(PaymentVaultActivity.class.getName()));
+        onView(withId(R.id.mpsdkSavedCardsContainer)).check(matches(not(isDisplayed())));
     }
 
     // DECORATION TESTS

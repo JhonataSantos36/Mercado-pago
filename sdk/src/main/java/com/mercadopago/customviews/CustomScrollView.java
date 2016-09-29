@@ -1,4 +1,4 @@
-package com.mercadopago.views;
+package com.mercadopago.customviews;
 
 import android.content.Context;
 import android.util.AttributeSet;

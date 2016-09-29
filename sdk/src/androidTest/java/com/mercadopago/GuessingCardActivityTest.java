@@ -15,7 +15,9 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.google.gson.reflect.TypeToken;
+import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.model.BankDeal;
+import com.mercadopago.model.Card;
 import com.mercadopago.model.DecorationPreference;
 import com.mercadopago.model.DummyCard;
 import com.mercadopago.model.DummyIdentificationType;
@@ -27,13 +29,11 @@ import com.mercadopago.model.Token;
 import com.mercadopago.test.ActivityResult;
 import com.mercadopago.test.FakeAPI;
 import com.mercadopago.test.StaticMock;
-import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.utils.ActivityResultUtil;
 import com.mercadopago.utils.CardTestUtils;
 import com.mercadopago.utils.IdentificationTestUtils;
 import com.mercadopago.utils.ViewUtils;
-import com.mercadopago.views.MPTextView;
 
 import org.junit.After;
 import org.junit.Before;
@@ -159,7 +159,7 @@ public class GuessingCardActivityTest {
         String contained = CardTestUtils.getMockedBinInFront(token.getFirstSixDigits());
 
         onView(withId(R.id.mpsdkCardNumberTextView)).check(matches(withText(containsString(contained))));
-        onView(withId(R.id.mpsdkCardholderNameView)).check(matches(withText(token.getCardholder().getName().toUpperCase())));
+        onView(withId(R.id.mpsdkCardholderNameView)).check(matches(withText(token.getCardHolder().getName().toUpperCase())));
         onView(withId(R.id.mpsdkCardHolderExpiryYear)).check(matches(withText(token.getExpirationYear().toString().substring(2, 4))));
         onView(withId(R.id.mpsdkCardHolderExpiryMonth)).check(matches(withText(token.getExpirationMonth().toString())));
         try {
@@ -1998,6 +1998,68 @@ public class GuessingCardActivityTest {
         //Identification
         onView(withId(R.id.mpsdkCardIdentificationNumber)).check(matches(withText(identificationType.getIdentificationNumber())));
         sleep();
+    }
+    //CUSTOMER CARDS
+
+    @Test
+    public void ifCardReceivedShowOnlySecurityCode() {
+        Card card = StaticMock.getCard();
+        validStartIntent.putExtra("card", JsonUtil.getInstance().toJson(card));
+        mTestRule.launchActivity(validStartIntent);
+
+        onView(withId(R.id.mpsdkCardSecurityCodeContainer)).check(matches(isDisplayed()));
+
+        onView(withId(R.id.mpsdkCardNumberInput)).check(matches(not(isDisplayed())));
+        onView(withId(R.id.mpsdkCardholderNameInput)).check(matches(not(isDisplayed())));
+        onView(withId(R.id.mpsdkExpiryDateInput)).check(matches(not(isDisplayed())));
+        onView(withId(R.id.mpsdkCardPaymentMethodSelectionContainer)).check(matches(not(isDisplayed())));
+        onView(withId(R.id.mpsdkCardIdentificationTypeContainer)).check(matches(not(isDisplayed())));
+    }
+
+    @Test
+    public void ifSecurityCodeInputIsValidCreateTokenAndFinishActivity() {
+        Card card = StaticMock.getCard();
+        validStartIntent.putExtra("card", JsonUtil.getInstance().toJson(card));
+
+        Token mockedToken = StaticMock.getToken();
+        mFakeAPI.addResponseToQueue(JsonUtil.getInstance().toJson(mockedToken), 200, "");
+
+        mTestRule.launchActivity(validStartIntent);
+
+        onView(withId(R.id.mpsdkCardSecurityCodeContainer)).check(matches(isDisplayed()));
+        onView(withId(R.id.mpsdkCardSecurityCode)).perform(typeText(StaticMock.DUMMY_SECURITY_CODE));
+        onView(withId(R.id.mpsdkNextButton)).perform(click());
+
+        ActivityResult result = ActivityResultUtil.getActivityResult(mTestRule.getActivity());
+        String tokenJson = JsonUtil.getInstance().toJson(mockedToken);
+        assertTrue(tokenJson.equals(result.getExtras().getString("token")));
+    }
+
+    @Test
+    public void ifSecurityCodeInputIsNotValidShowError() {
+        Card card = StaticMock.getCard();
+        validStartIntent.putExtra("card", JsonUtil.getInstance().toJson(card));
+
+        mTestRule.launchActivity(validStartIntent);
+
+        onView(withId(R.id.mpsdkCardSecurityCodeContainer)).check(matches(isDisplayed()));
+        onView(withId(R.id.mpsdkCardSecurityCode)).perform(typeText(StaticMock.DUMMY_SECURITY_CODE.substring(0, 1)));
+        onView(withId(R.id.mpsdkNextButton)).perform(click());
+
+        checkSecurityCodeIsInvalid("11", onView(withId(R.id.mpsdkNextButton)));
+    }
+
+    @Test
+    public void ifCardSetAndUserPressesBackButtonFinishActivityWithCancelResult() {
+        Card card = StaticMock.getCard();
+        validStartIntent.putExtra("card", JsonUtil.getInstance().toJson(card));
+
+        mTestRule.launchActivity(validStartIntent);
+
+        onView(withId(R.id.mpsdkBackButton)).perform(click());
+
+        ActivityResultUtil.assertFinishCalledWithResult(mTestRule.getActivity(), Activity.RESULT_CANCELED);
+
     }
 
     private void addIdentificationTypesCall() {

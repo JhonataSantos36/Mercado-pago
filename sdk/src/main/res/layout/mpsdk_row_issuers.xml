@@ -22,7 +22,7 @@
             android:layout_marginStart="8dp"
             android:layout_gravity="center_vertical"
             android:orientation="horizontal">
-            <com.mercadopago.views.MPTextView
+            <com.mercadopago.customviews.MPTextView
                 android:id="@+id/mpsdkAdapterIssuersText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

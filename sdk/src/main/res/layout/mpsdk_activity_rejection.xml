@@ -38,7 +38,7 @@
                             android:src="@drawable/icon_error"
                             android:layout_gravity="center_horizontal" />
 
-                        <com.mercadopago.views.MPTextView
+                        <com.mercadopago.customviews.MPTextView
                             android:id="@+id/mpsdkRejectionTitle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -47,7 +47,7 @@
                             android:textColor="@color/mpsdk_color_rejection_result_text"
                             android:text="@string/mpsdk_title_other_reason_rejection" />
 
-                        <com.mercadopago.views.MPTextView
+                        <com.mercadopago.customviews.MPTextView
                             android:id="@+id/mpsdkRejectionSubtitle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -83,7 +83,7 @@
                             android:layout_marginTop="24dp"
                             android:layout_marginBottom="24dp"
                             android:background="@drawable/mpsdk_button_bg_stroke" >
-                                <com.mercadopago.views.MPTextView
+                                <com.mercadopago.customviews.MPTextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
@@ -104,7 +104,7 @@
                             android:background="@color/mpsdk_separator"
                             android:layout_gravity="center_horizontal|bottom" />
 
-                        <com.mercadopago.views.MPTextView
+                        <com.mercadopago.customviews.MPTextView
                             android:id="@+id/mpsdkExitRejection"
                             android:layout_marginTop="10dp"
                             android:paddingLeft="40dp"

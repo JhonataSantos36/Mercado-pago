@@ -1,78 +1,49 @@
 package com.mercadopago;
 
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.FrameLayout;
 
-import com.mercadopago.core.MercadoPago;
+import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.fragments.CardFrontFragment;
-import com.mercadopago.model.Cardholder;
-import com.mercadopago.model.Issuer;
+import com.mercadopago.model.CardInformation;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.Setting;
-import com.mercadopago.model.Token;
 import com.mercadopago.util.ErrorUtil;
-import com.mercadopago.util.JsonUtil;
-import com.mercadopago.views.MPTextView;
-
-import java.math.BigDecimal;
 
 public abstract class ShowCardActivity extends FrontCardActivity {
 
     public static Integer LAST_DIGITS_LENGTH = 4;
-
-    protected MercadoPago mMercadoPago;
-
+    public static char HIDDEN_CHAR = '•';
     //Card container
     protected FrameLayout mCardContainer;
     protected CardFrontFragment mFrontFragment;
 
     //Card data
-    protected String mBin;
-    protected BigDecimal mAmount;
-    protected String mPublicKey;
-    protected Token mToken;
     protected String mSecurityCodeLocation;
-    protected Cardholder mCardholder;
     protected int mCardNumberLength;
 
     //Local vars
-    protected Issuer mSelectedIssuer;
     protected MPTextView mToolbarTitle;
+
+    private CardInformation mCardInfo;
+    private PaymentMethod mCurrentPaymentMethod;
 
     protected abstract void finishWithResult();
 
-    protected void getActivityParameters() {
-        mCurrentPaymentMethod = JsonUtil.getInstance().fromJson(
-                this.getIntent().getStringExtra("paymentMethod"), PaymentMethod.class);
-        mPublicKey = getIntent().getStringExtra("publicKey");
-        mToken = JsonUtil.getInstance().fromJson(
-                this.getIntent().getStringExtra("token"), Token.class);
-        mSelectedIssuer = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("issuer"), Issuer.class);
+    protected abstract void getActivityParameters();
 
-        if (isCardInfoAvailable()) {
-            setCardInfo();
-        }
+    protected void setCardInformation(CardInformation cardInformation) {
+        mCardInfo = cardInformation;
+    }
+
+    protected void setPaymentMethod(PaymentMethod paymentMethod) {
+        mCurrentPaymentMethod = paymentMethod;
     }
 
     protected Boolean isCardInfoAvailable() {
-        return mToken != null && mCurrentPaymentMethod != null;
-    }
-
-    private void setCardInfo() {
-        mBin = mToken.getFirstSixDigits();
-        mCardholder = mToken.getCardholder();
-        Setting setting = Setting.getSettingByBin(mCurrentPaymentMethod.getSettings(),
-                mToken.getFirstSixDigits());
-
-        if (setting != null) {
-            mCardNumberLength = setting.getCardNumber().getLength();
-            mSecurityCodeLocation = setting.getSecurityCode().getCardLocation();
-        } else {
-            mCardNumberLength = CARD_NUMBER_MAX_LENGTH;
-            mSecurityCodeLocation = CARD_SIDE_BACK;
-        }
-
+        return mCardInfo != null && mCurrentPaymentMethod != null;
     }
 
     protected void initializeToolbar(String title, boolean transparent) {
@@ -103,8 +74,8 @@ public abstract class ShowCardActivity extends FrontCardActivity {
             });
         }
         if (mDecorationPreference != null && mDecorationPreference.hasColors() && toolbar != null) {
-            if (mToken == null) {
-                decorateWithoutToken(toolbar);
+            if (mCardInfo == null) {
+                decorateWithoutCardImage(toolbar);
             } else {
                 decorateWithToken(toolbar);
             }
@@ -117,24 +88,51 @@ public abstract class ShowCardActivity extends FrontCardActivity {
         super.decorateFont(mToolbarTitle);
     }
 
-    protected void decorateWithoutToken(Toolbar toolbar) {
+    protected void decorateWithoutCardImage(Toolbar toolbar) {
         super.decorate(toolbar);
         super.decorateFont(mToolbarTitle);
     }
 
     protected void initializeCard() {
-        if (mCurrentPaymentMethod == null || mToken == null || mCardholder == null) {
+        if (mCurrentPaymentMethod == null || mCardInfo == null) {
+            hideCardLayout();
             return;
         }
+
+        setCardInfo();
         saveCardNumber(getCardNumberHidden());
-        saveCardName(mCardholder.getName());
-        saveCardExpiryMonth(String.valueOf(mToken.getExpirationMonth()));
-        saveCardExpiryYear(String.valueOf(mToken.getExpirationYear()).substring(2, 4));
-        if (mCurrentPaymentMethod.isSecurityCodeRequired(mBin)
+
+        if (mCardInfo.getCardHolder() == null
+                || mCardInfo.getExpirationYear() == null
+                || mCardInfo.getExpirationMonth() == null) {
+            saveCardHolderName("");
+            mFrontFragment.hideExpirationDate();
+        } else {
+            saveCardHolderName(mCardInfo.getCardHolder().getName());
+            saveCardExpiryMonth(String.valueOf(mCardInfo.getExpirationMonth()));
+            saveCardExpiryYear(String.valueOf(mCardInfo.getExpirationYear()).substring(0, 2));
+        }
+
+        if (mCardInfo.getFirstSixDigits() != null && mCurrentPaymentMethod.isSecurityCodeRequired(mCardInfo.getFirstSixDigits())
                 && mSecurityCodeLocation.equals(CARD_SIDE_FRONT)) {
             saveCardSecurityCode(getSecurityCodeHidden());
         }
     }
+
+    private void setCardInfo() {
+        if (mCardInfo.getFirstSixDigits() == null) {
+            mCardNumberLength = CARD_NUMBER_MAX_LENGTH;
+            mSecurityCodeLocation = CARD_SIDE_BACK;
+        } else {
+            Setting setting = Setting.getSettingByBin(mCurrentPaymentMethod.getSettings(),
+                    mCardInfo.getFirstSixDigits());
+
+            mCardNumberLength = setting.getCardNumber().getLength();
+            mSecurityCodeLocation = setting.getSecurityCode().getCardLocation();
+        }
+    }
+
+    protected abstract void hideCardLayout();
 
     protected void initializeFrontFragment() {
         saveErrorState(NORMAL_STATE);
@@ -147,22 +145,28 @@ public abstract class ShowCardActivity extends FrontCardActivity {
                 .beginTransaction()
                 .add(R.id.mpsdkActivityNewCardContainer, mFrontFragment)
                 .commit();
+
     }
 
     private String getCardNumberHidden() {
         StringBuilder sb = new StringBuilder();
-        int length = mToken.getCardNumberLength();
-        for (int i = 0; i < length - LAST_DIGITS_LENGTH; i++) {
-            sb.append("X");
+        for (int i = 0; i < mCardNumberLength - LAST_DIGITS_LENGTH; i++) {
+            sb.append(HIDDEN_CHAR);
         }
-        sb.append(mToken.getLastFourDigits());
+        if (TextUtils.isEmpty(mCardInfo.getLastFourDigits())) {
+            sb.append(HIDDEN_CHAR).append(HIDDEN_CHAR).append(HIDDEN_CHAR).append(HIDDEN_CHAR);
+        } else {
+            sb.append(mCardInfo.getLastFourDigits());
+        }
+
         return sb.toString();
     }
 
     private String getSecurityCodeHidden() {
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < mToken.getSecurityCodeLength(); i++) {
-            sb.append("X");
+        int securityCodeLength = getSecurityCodeLength();
+        for (int i = 0; i < securityCodeLength; i++) {
+            sb.append(HIDDEN_CHAR);
         }
         return sb.toString();
     }
@@ -174,11 +178,17 @@ public abstract class ShowCardActivity extends FrontCardActivity {
 
     @Override
     public int getSecurityCodeLength() {
-        if (mToken == null) {
-            return CARD_DEFAULT_SECURITY_CODE_LENGTH;
+        int length;
+        if (mCardInfo == null || mCardInfo.getSecurityCodeLength() == null) {
+            length = CARD_DEFAULT_SECURITY_CODE_LENGTH;
         } else {
-            return mToken.getSecurityCodeLength();
+            length = mCardInfo.getSecurityCodeLength();
         }
+        return length;
+    }
+
+    protected CardInformation getCardInformation() {
+        return mCardInfo;
     }
 
     @Override
@@ -189,15 +199,15 @@ public abstract class ShowCardActivity extends FrontCardActivity {
 
     @Override
     public boolean isSecurityCodeRequired() {
-        return mCurrentPaymentMethod == null || mCurrentPaymentMethod.isSecurityCodeRequired(mBin);
+        return mCurrentPaymentMethod == null || (mCardInfo.getFirstSixDigits() != null && mCurrentPaymentMethod.isSecurityCodeRequired(mCardInfo.getFirstSixDigits()));
     }
 
     @Override
     public String getSecurityCodeLocation() {
-        if (mCurrentPaymentMethod == null || mBin == null) {
+        if (mCurrentPaymentMethod == null || mCardInfo.getFirstSixDigits() == null) {
             return CARD_SIDE_BACK;
         } else {
-            Setting setting = Setting.getSettingByBin(mCurrentPaymentMethod.getSettings(), mBin);
+            Setting setting = Setting.getSettingByBin(mCurrentPaymentMethod.getSettings(), mCardInfo.getFirstSixDigits());
             if (setting == null) {
                 ErrorUtil.startErrorActivity(getActivity(), getString(R.string.mpsdk_standard_error_message), "setting is null at ShowCardActivity, can't guess payment method", false);
             }

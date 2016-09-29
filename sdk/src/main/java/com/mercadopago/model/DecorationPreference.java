@@ -2,6 +2,7 @@ package com.mercadopago.model;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.support.annotation.ColorInt;
 import android.support.v4.content.ContextCompat;
 
 import com.mercadopago.R;
@@ -16,7 +17,7 @@ public class DecorationPreference {
     private Integer baseColor;
     private boolean darkFontEnabled;
 
-    public void setBaseColor(int color) {
+    public void setBaseColor(@ColorInt int color) {
         this.baseColor = color;
         this.lighterColor = ColorsUtil.lighter(baseColor);
     }

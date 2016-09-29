@@ -13,6 +13,7 @@ import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.constants.PaymentTypes;
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.model.ApiException;
+import com.mercadopago.model.Card;
 import com.mercadopago.model.IdentificationType;
 import com.mercadopago.model.Installment;
 import com.mercadopago.model.Issuer;
@@ -34,13 +35,20 @@ import java.util.List;
 
 public class CardVaultActivity extends ShowCardActivity {
 
-    private View mCardBackground;
-
     protected PayerCost mPayerCost;
     protected PaymentPreference mPaymentPreference;
     protected List<PaymentMethod> mPaymentMethodList;
     protected Site mSite;
     protected Boolean mInstallmentsEnabled;
+    protected Card mCard;
+    protected Token mToken;
+    protected View mCardBackground;
+    protected PaymentMethod mPaymentMethod;
+    protected String mPublicKey;
+    protected BigDecimal mAmount;
+    protected MercadoPago mMercadoPago;
+    protected Issuer mSelectedIssuer;
+
 
     @Override
     protected void initializeControls() {
@@ -56,13 +64,6 @@ public class CardVaultActivity extends ShowCardActivity {
     @Override
     protected void initializeFragments(Bundle savedInstanceState) {
         super.initializeFragments(savedInstanceState);
-        mMercadoPago = new MercadoPago.Builder()
-                .setContext(this)
-                .setPublicKey(mPublicKey)
-                .build();
-        if (mCurrentPaymentMethod != null) {
-            initializeCard();
-        }
         initializeFrontFragment();
     }
 
@@ -79,6 +80,10 @@ public class CardVaultActivity extends ShowCardActivity {
 
     @Override
     protected void onValidStart() {
+        mMercadoPago = new MercadoPago.Builder()
+                .setContext(this)
+                .setPublicKey(mPublicKey)
+                .build();
         startGuessingCardActivity();
     }
 
@@ -91,10 +96,10 @@ public class CardVaultActivity extends ShowCardActivity {
 
     @Override
     protected void getActivityParameters() {
-        super.getActivityParameters();
         mInstallmentsEnabled = getIntent().getBooleanExtra("installmentsEnabled", false);
         mPublicKey = getIntent().getStringExtra("publicKey");
         mSite = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("site"), Site.class);
+        mCard = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("card"), Card.class);
         mSecurityCodeLocation = CardInterface.CARD_SIDE_BACK;
 
         String amount = getIntent().getStringExtra("amount");
@@ -112,6 +117,11 @@ public class CardVaultActivity extends ShowCardActivity {
         if (mPaymentPreference == null) {
             mPaymentPreference = new PaymentPreference();
         }
+    }
+
+    @Override
+    protected void hideCardLayout() {
+        mCardBackground.setVisibility(View.GONE);
     }
 
     @Override
@@ -154,6 +164,7 @@ public class CardVaultActivity extends ShowCardActivity {
                         .setPaymentPreference(mPaymentPreference)
                         .setSupportedPaymentMethods(mPaymentMethodList)
                         .setDecorationPreference(mDecorationPreference)
+                        .setCard(mCard)
                         .startGuessingCardActivity();
                 overridePendingTransition(R.anim.mpsdk_slide_right_to_left_in, R.anim.mpsdk_slide_right_to_left_out);
             }
@@ -195,20 +206,33 @@ public class CardVaultActivity extends ShowCardActivity {
 
     protected void resolveGuessingCardRequest(int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
-            mCurrentPaymentMethod = JsonUtil.getInstance().fromJson(data.getStringExtra("paymentMethod"), PaymentMethod.class);
+            mPaymentMethod = JsonUtil.getInstance().fromJson(data.getStringExtra("paymentMethod"), PaymentMethod.class);
             mToken = JsonUtil.getInstance().fromJson(data.getStringExtra("token"), Token.class);
             mSelectedIssuer = JsonUtil.getInstance().fromJson(data.getStringExtra("issuer"), Issuer.class);
-            if (mToken != null && mCurrentPaymentMethod != null) {
-                mBin = mToken.getFirstSixDigits();
-                mCardholder = mToken.getCardholder();
-                List<Setting> settings = mCurrentPaymentMethod.getSettings();
-                Setting setting = Setting.getSettingByBin(settings, mBin);
-                mSecurityCodeLocation = setting.getSecurityCode().getCardLocation();
-                mCardNumberLength = setting.getCardNumber().getLength();
+
+            if (mToken != null && mPaymentMethod != null) {
+                String bin = mToken.getFirstSixDigits();
+                if (bin != null) {
+                    List<Setting> settings = mPaymentMethod.getSettings();
+                    Setting setting = Setting.getSettingByBin(settings, bin);
+
+                    mSecurityCodeLocation = mCard == null ? setting.getSecurityCode().getCardLocation() : mCard.getSecurityCode().getCardLocation();
+                    mCardNumberLength = mCard == null ? setting.getCardNumber().getLength() : CARD_NUMBER_MAX_LENGTH;
+                }
             }
+
+            if (mCard == null) {
+                setCardInformation(mToken);
+            } else {
+                //Token from saved card does not have last four digits.
+                mToken.setLastFourDigits(mCard.getLastFourDigits());
+                setCardInformation(mCard);
+            }
+            setPaymentMethod(mPaymentMethod);
+
             initializeCard();
-            if (mCurrentPaymentMethod != null) {
-                int color = getCardColor(mCurrentPaymentMethod);
+            if (mPaymentMethod != null) {
+                int color = getCardColor(mPaymentMethod);
                 mFrontFragment.setCardColor(color);
             }
 
@@ -232,42 +256,49 @@ public class CardVaultActivity extends ShowCardActivity {
     }
 
     public void checkStartInstallmentsActivity() {
-        if (!mCurrentPaymentMethod.getPaymentTypeId().equals(PaymentTypes.CREDIT_CARD)) {
-            finishWithResult();
-        } else {
-            mMercadoPago.getInstallments(mBin, mAmount, mSelectedIssuer.getId(), mCurrentPaymentMethod.getId(),
+        if (mPaymentMethod.getPaymentTypeId().equals(PaymentTypes.CREDIT_CARD)) {
+            mMercadoPago.getInstallments(mToken.getFirstSixDigits(), mAmount, mSelectedIssuer.getId(), mPaymentMethod.getId(),
                     new Callback<List<Installment>>() {
                         @Override
                         public void success(List<Installment> installments) {
-                            if (isActivityActive()) {
-                                if (installments.size() == 1) {
-                                    if (installments.get(0).getPayerCosts().size() == 1) {
-                                        mPayerCost = installments.get(0).getPayerCosts().get(0);
-                                        finishWithResult();
-                                    } else if (installments.get(0).getPayerCosts().size() > 1) {
-                                        startInstallmentsActivity(installments.get(0).getPayerCosts());
-                                    } else {
-                                        ErrorUtil.startErrorActivity(getActivity(), getString(R.string.mpsdk_standard_error_message), false);
-                                    }
-                                } else {
-                                    ErrorUtil.startErrorActivity(getActivity(), getString(R.string.mpsdk_standard_error_message), false);
-                                }
+                            if (installments.size() == 1) {
+                                resolvePayerCosts(installments.get(0).getPayerCosts());
+                            } else {
+                                ErrorUtil.startErrorActivity(getActivity(), getString(R.string.mpsdk_standard_error_message), false);
                             }
                         }
 
                         @Override
                         public void failure(ApiException apiException) {
-                            if (isActivityActive()) {
-                                setFailureRecovery(new FailureRecovery() {
-                                    @Override
-                                    public void recover() {
-                                        checkStartInstallmentsActivity();
-                                    }
-                                });
-                                ApiUtil.showApiExceptionError(getActivity(), apiException);
-                            }
+                            setFailureRecovery(new FailureRecovery() {
+                                @Override
+                                public void recover() {
+                                    checkStartInstallmentsActivity();
+                                }
+                            });
+                            ApiUtil.showApiExceptionError(getActivity(), apiException);
                         }
                     });
+        } else {
+            finishWithResult();
+        }
+    }
+
+    private void resolvePayerCosts(List<PayerCost> payerCosts) {
+        PayerCost defaultPayerCost = mPaymentPreference.getDefaultInstallments(payerCosts);
+
+        if (defaultPayerCost == null) {
+            if (payerCosts.isEmpty()) {
+                ErrorUtil.startErrorActivity(getActivity(), getString(R.string.mpsdk_standard_error_message), "no payer costs found at InstallmentsActivity", false);
+            } else if (payerCosts.size() == 1) {
+                mPayerCost = payerCosts.get(0);
+                finishWithResult();
+            } else {
+                startInstallmentsActivity(payerCosts);
+            }
+        } else {
+            mPayerCost = defaultPayerCost;
+            finishWithResult();
         }
     }
 
@@ -275,9 +306,10 @@ public class CardVaultActivity extends ShowCardActivity {
         new MercadoPago.StartActivityBuilder()
                 .setActivity(getActivity())
                 .setPublicKey(mPublicKey)
-                .setPaymentMethod(mCurrentPaymentMethod)
+                .setPaymentMethod(mPaymentMethod)
                 .setAmount(mAmount)
                 .setToken(mToken)
+                .setCard(mCard)
                 .setPayerCosts(payerCosts)
                 .setIssuer(mSelectedIssuer)
                 .setPaymentPreference(mPaymentPreference)
@@ -291,7 +323,7 @@ public class CardVaultActivity extends ShowCardActivity {
     protected void finishWithResult() {
         Intent returnIntent = new Intent();
         returnIntent.putExtra("payerCost", JsonUtil.getInstance().toJson(mPayerCost));
-        returnIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(mCurrentPaymentMethod));
+        returnIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(mPaymentMethod));
         returnIntent.putExtra("token", JsonUtil.getInstance().toJson(mToken));
         returnIntent.putExtra("issuer", JsonUtil.getInstance().toJson(mSelectedIssuer));
         setResult(RESULT_OK, returnIntent);
@@ -306,5 +338,10 @@ public class CardVaultActivity extends ShowCardActivity {
     @Override
     public IdentificationType getCardIdentificationType() {
         return null;
+    }
+
+    @Override
+    public PaymentMethod getCurrentPaymentMethod() {
+        return mPaymentMethod;
     }
 }

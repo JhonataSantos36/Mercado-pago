@@ -29,7 +29,7 @@
                 android:src="@drawable/plugandplay"
                 android:layout_gravity="center_horizontal" />
 
-                <com.mercadopago.views.MPTextView
+                <com.mercadopago.customviews.MPTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/checkout_title"
@@ -40,7 +40,7 @@
                     android:layout_gravity="center"
                     style="@style/big_label"/>
 
-                <com.mercadopago.views.MPTextView
+                <com.mercadopago.customviews.MPTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/checkout_description"
@@ -51,7 +51,7 @@
                     android:gravity="center_horizontal"
                     style="@style/form_label"/>
 
-                <com.mercadopago.views.MPButton
+                <com.mercadopago.customviews.MPButton
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/mpsdk_button_height"
                     android:layout_marginTop="25dp"
@@ -79,7 +79,7 @@
                             android:background="@color/colorPrimary"
                             android:id="@+id/colorSample"/>
 
-                        <com.mercadopago.views.MPTextView
+                        <com.mercadopago.customviews.MPTextView
                             android:layout_marginLeft="5dp"
                             android:layout_marginStart="5dp"
                             android:layout_width="wrap_content"
@@ -99,7 +99,7 @@
                         android:text="@string/dark_font"
                         android:textSize="14dp"/>
                 </LinearLayout>
-                <com.mercadopago.views.MPTextView
+                <com.mercadopago.customviews.MPTextView
                     android:layout_marginTop="15dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

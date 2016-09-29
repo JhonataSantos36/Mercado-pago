@@ -13,14 +13,13 @@ public abstract class FrontCardActivity extends MercadoPagoActivity implements C
     public static final String CARD_COLOR_PREFIX = "mpsdk_";
     public static final String CARD_FONT_PREFIX = "mpsdk_font_";
 
-    protected String mCardNumber;
-    protected String mCardHolderName;
-    protected String mExpiryMonth;
-    protected String mExpiryYear;
-    protected String mCardIdentificationNumber;
-    protected String mErrorState;
-    protected String mSecurityCode = "";
-    protected PaymentMethod mCurrentPaymentMethod;
+    private String mCardNumber;
+    private String mCardHolderName;
+    private String mExpiryMonth;
+    private String mExpiryYear;
+    private String mCardIdentificationNumber;
+    private String mErrorState;
+    private String mSecurityCode = "";
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -60,15 +59,11 @@ public abstract class FrontCardActivity extends MercadoPagoActivity implements C
         return mSecurityCode;
     }
 
-    public PaymentMethod getCurrentPaymentMethod() {
-        return mCurrentPaymentMethod;
-    }
-
     public void saveCardNumber(String number) {
         mCardNumber = number;
     }
 
-    public void saveCardName(String name) {
+    public void saveCardHolderName(String name) {
         mCardHolderName = name;
     }
 
@@ -86,10 +81,6 @@ public abstract class FrontCardActivity extends MercadoPagoActivity implements C
 
     public void saveCardIdentificationNumber(String number) {
         this.mCardIdentificationNumber = number;
-    }
-
-    public String getErrorState() {
-        return mErrorState;
     }
 
     public void saveErrorState(String state) {
@@ -117,4 +108,11 @@ public abstract class FrontCardActivity extends MercadoPagoActivity implements C
         return getResources().getIdentifier(colorName, "color", getPackageName());
     }
 
+    public String getErrorState() {
+        return mErrorState;
+    }
+
+    public void setErrorState(String mErrorState) {
+        this.mErrorState = mErrorState;
+    }
 }

@@ -47,7 +47,7 @@
                     android:layout_height="48dp"
                     android:layout_gravity="end"
                     android:background="@drawable/card_back_ccv">
-                    <com.mercadopago.views.MPTextView
+                    <com.mercadopago.customviews.MPTextView
                         android:id="@+id/mpsdkCardSecurityCodeView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

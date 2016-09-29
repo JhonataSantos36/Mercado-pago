@@ -6,15 +6,15 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.mercadopago.R;
+import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.uicontrollers.paymentmethods.PaymentMethodViewController;
 import com.mercadopago.util.MercadoPagoUtil;
-import com.mercadopago.views.MPTextView;
 
 /**
  * Created by mreverter on 28/6/16.
  */
-public abstract class PaymentMethodCard implements PaymentMethodViewController {
+public abstract class PaymentMethodOnView implements PaymentMethodViewController {
 
     protected PaymentMethod mPaymentMethod;
     protected Context mContext;
@@ -27,8 +27,11 @@ public abstract class PaymentMethodCard implements PaymentMethodViewController {
     @Override
     public void drawPaymentMethod() {
 
-        if (getLastFourDigits() != null) {
-            mDescription.setText(mContext.getString(R.string.mpsdk_last_digits_label) + " " + getLastFourDigits());
+        if (getLastFourDigits() == null || getLastFourDigits().isEmpty()) {
+            mDescription.setText(mPaymentMethod.getName());
+        }
+        else {
+            mDescription.setText(new StringBuilder().append(mContext.getString(R.string.mpsdk_last_digits_label)).append(" ").append(getLastFourDigits()).toString());
         }
         int resourceId = MercadoPagoUtil.getPaymentMethodIcon(mContext, mPaymentMethod.getId());
         if (resourceId != 0) {

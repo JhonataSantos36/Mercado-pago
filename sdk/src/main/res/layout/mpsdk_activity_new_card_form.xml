@@ -77,7 +77,7 @@
                             android:layout_height="match_parent"
                             android:focusable="true"
                             android:background="@drawable/mpsdk_form_input_button">
-                            <com.mercadopago.views.MPTextView
+                            <com.mercadopago.customviews.MPTextView
                                 android:id="@+id/mpsdkBackButtonText"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -91,7 +91,7 @@
                            android:layout_height="match_parent"
                            android:background="@color/mpsdk_light_gray"
                            android:visibility="gone">
-                           <com.mercadopago.views.MPTextView
+                           <com.mercadopago.customviews.MPTextView
                                android:layout_width="wrap_content"
                                android:layout_height="wrap_content"
                                android:layout_gravity="center"
@@ -107,7 +107,7 @@
                         android:layout_weight="0.5"
                         android:focusable="true"
                         android:background="@drawable/mpsdk_form_input_button">
-                        <com.mercadopago.views.MPTextView
+                        <com.mercadopago.customviews.MPTextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
@@ -122,7 +122,7 @@
                     android:layout_gravity="bottom"
                     android:background="@color/mpsdk_light_gray"
                     android:visibility="gone">
-                    <com.mercadopago.views.MPTextView
+                    <com.mercadopago.customviews.MPTextView
                         android:id="@+id/mpsdkErrorTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
