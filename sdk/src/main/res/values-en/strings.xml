@@ -95,22 +95,26 @@
 
     <!-- Rejection -->
     <string name="mpsdk_text_other_payment_method_button_rejection">Use another payment method</string>
-    <string name="mpsdk_subtitle_rejection_insufficient_amount_credit_card">Don\'t worry! You can choose another payment method.</string>
+    <string name="mpsdk_text_pay_with_other_method">Pay with other method</string>
+    <string name="mpsdk_text_enter_again">Enter again</string>
+    <string name="mpsdk_subtitle_rejection_insufficient_amount_credit_card">Don\'t worry! You can choose other payment method.</string>
     <string name="mpsdk_title_other_reason_rejection">%1$s did not process the payment</string>
     <string name="mpsdk_text_select_other_rejection">Use another card or another payment method</string>
-    <string name="mpsdk_title_bad_filled_other_rejection">Oops, we could not process your payment</string>
-    <string name="mpsdk_text_some_number">Some number of your %1$s is incorrect.</string>
+    <string name="mpsdk_title_bad_filled_other">Oops, we could not process your payment</string>
+    <string name="mpsdk_text_some_card_data_is_incorrect">Any datum of your %1$s is incorrect.</string>
+    <string name="mpsdk_text_card_number_is_incorrect">The number of your %1$s is incorrect.</string>
     <string name="mpsdk_text_insufficient_amount">Yours %1$s has insufficient funds</string>
     <string name="mpsdk_subtitle_rejection_insufficient_amount">Don\'t worry! Recharge at any bank or from your electronic banking and try again. Or if you prefer, you can choose another payment method.</string>
     <string name="mpsdk_subtitle_rejection_duplicated_payment">If you need to repay, use another card or other payment method.</string>
     <string name="mpsdk_text_active_card">Calls to %1$s for activate your card</string>
     <string name="mpsdk_subtitle_rejection_card_disabled">The phone number is on the back of your card.</string>
-    <string name="mpsdk_title_bad_filled_security_code_rejection">The security code is not correct</string>
-    <string name="mpsdk_title_bad_filled_date_rejection">The expiration date is not correct.</string>
+    <string name="mpsdk_title_bad_filled_security_code">The security code is not correct</string>
+    <string name="mpsdk_title_bad_filled_date">The expiration date is not correct.</string>
     <string name="mpsdk_title_rejection_high_risk">For security reasons, we had to reject your payment</string>
     <string name="mpsdk_subtitle_rejection_high_risk">If you want to pay with the money from your account, contact Mercado Pago customer service. Or if you prefer, you can choose other payment method.</string>
     <string name="mpsdk_title_rejection_max_attempts">You reached the limit of attempts allowed</string>
     <string name="mpsdk_subtitle_rejection_max_attempts">Choose another card or another payment method.</string>
+    <string name="mpsdk_rejection_title">Something went wrong…</string>
 
     <!-- Error messages -->
     <string name="mpsdk_error_message_invalid_amount">Invalid amount</string>
@@ -152,7 +156,8 @@
 
     <!-- Utils -->
     <string name="mpsdk_text_keep_buying">Keep buying</string>
-    <string name="mpsdk_zero_rate">Free interest</string>
+    <string name="mpsdk_text_cancel_payment_and_keep_buying">Cancel payment and keep buying</string>
+    <string name="mpsdk_zero_rate">Interest free</string>
     <string name="mpsdk_exit_label">Exit</string>
     <string name="mpsdk_cancel_payment">Cancel payment</string>
     <string name="mpsdk_input_button_back">Previous</string>
@@ -165,6 +170,7 @@
     <string name="mpsdk_title_activity_terms_and_conditions">Terms and conditions</string>
     <string name="mpsdk_format_date">%1$s/%2$s/%3$s - %4$s</string>
     <string name="mpsdk_no_connection_message">No connection</string>
-    <string name="mpsdk_instant_accreditation_time">Will be accredited instantly</string>
-    <string name="mpsdk_accreditation_time">Will be accredited in</string>
+    <string name="mpsdk_instant_accreditation_time">Will it be credited instantly</string>
+    <string name="mpsdk_accreditation_time">Will be credited in</string>
+    <string name="mpsdk_what_can_do">What can I do?</string>
 </resources>

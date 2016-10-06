@@ -7,6 +7,7 @@ import android.view.View;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentMethod;
+import com.mercadopago.model.PaymentResultAction;
 import com.mercadopago.mptracker.MPTracker;
 import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
@@ -46,7 +47,6 @@ public class PendingActivity extends MercadoPagoActivity {
     @Override
     protected void setContentView() {
         MPTracker.getInstance().trackScreen("PENDING", 2, mMerchantPublicKey, BuildConfig.VERSION_NAME, getActivity());
-
         setContentView(R.layout.mpsdk_activity_pending);
     }
 
@@ -115,5 +115,15 @@ public class PendingActivity extends MercadoPagoActivity {
                 }
             }
         }).start();
+    }
+
+    public void onClickPendingOptionButton(View view){
+        String nextAction;
+
+        Intent returnIntent = new Intent();
+        nextAction = PaymentResultAction.SELECT_OTHER_PAYMENT_METHOD;
+        returnIntent.putExtra("nextAction", nextAction);
+        setResult(RESULT_CANCELED, returnIntent);
+        finish();
     }
 }

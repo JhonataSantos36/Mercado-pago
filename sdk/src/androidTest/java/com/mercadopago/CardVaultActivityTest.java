@@ -453,7 +453,6 @@ public class CardVaultActivityTest {
         //First installments call
         mFakeAPI.addResponseToQueue("", 401, "");
 
-
         //Second installments call
         String installments = StaticMock.getInstallmentsJson();
         Type listType = new TypeToken<List<Installment>>() {
@@ -471,5 +470,6 @@ public class CardVaultActivityTest {
 
         intended(hasComponent(InstallmentsActivity.class.getName()));
     }
+
 
 }

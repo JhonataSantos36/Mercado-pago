@@ -139,7 +139,7 @@ public class CallForAuthorizeActivityTest {
         onView(withId(R.id.mpsdkPaymentNoAuthorized)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_text_question_call_for_authorize))));
 
         //SelectOtherPaymentMethod button is displayed
-        onView(withId(R.id.mpsdkSelectOtherPaymentMethodByCallForAuthorize)).check(matches(isDisplayed()));
+        onView(withId(R.id.mpsdkCallForAuthorizeOptionButton)).check(matches(isDisplayed()));
 
         //Exit button is displayed
         onView(withId(R.id.mpsdkExitCallForAuthorize)).check(matches(isDisplayed()));
@@ -165,7 +165,7 @@ public class CallForAuthorizeActivityTest {
         onView(withId(R.id.mpsdkPaymentNoAuthorized)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_text_question_call_for_authorize))));
 
         //SelectOtherPaymentMethod button is displayed
-        onView(withId(R.id.mpsdkSelectOtherPaymentMethodByCallForAuthorize)).check(matches(isDisplayed()));
+        onView(withId(R.id.mpsdkCallForAuthorizeOptionButton)).check(matches(isDisplayed()));
 
         //Exit button is displayed
         onView(withId(R.id.mpsdkExitCallForAuthorize)).check(matches(isDisplayed()));
@@ -192,7 +192,7 @@ public class CallForAuthorizeActivityTest {
         onView(withId(R.id.mpsdkPaymentNoAuthorized)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_text_question_call_for_authorize))));
 
         //SelectOtherPaymentMethod button is displayed
-        onView(withId(R.id.mpsdkSelectOtherPaymentMethodByCallForAuthorize)).check(matches(isDisplayed()));
+        onView(withId(R.id.mpsdkCallForAuthorizeOptionButton)).check(matches(isDisplayed()));
 
         //Exit button is displayed
         onView(withId(R.id.mpsdkExitCallForAuthorize)).check(matches(isDisplayed()));
@@ -219,7 +219,7 @@ public class CallForAuthorizeActivityTest {
         onView(withId(R.id.mpsdkPaymentNoAuthorized)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_text_question_call_for_authorize))));
 
         //SelectOtherPaymentMethod button is displayed
-        onView(withId(R.id.mpsdkSelectOtherPaymentMethodByCallForAuthorize)).check(matches(isDisplayed()));
+        onView(withId(R.id.mpsdkCallForAuthorizeOptionButton)).check(matches(isDisplayed()));
 
         //Exit button is displayed
         onView(withId(R.id.mpsdkExitCallForAuthorize)).check(matches(isDisplayed()));
@@ -246,7 +246,7 @@ public class CallForAuthorizeActivityTest {
         onView(withId(R.id.mpsdkPaymentNoAuthorized)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_text_question_call_for_authorize))));
 
         //SelectOtherPaymentMethod button is displayed
-        onView(withId(R.id.mpsdkSelectOtherPaymentMethodByCallForAuthorize)).check(matches(isDisplayed()));
+        onView(withId(R.id.mpsdkCallForAuthorizeOptionButton)).check(matches(isDisplayed()));
 
         //Exit button is displayed
         onView(withId(R.id.mpsdkExitCallForAuthorize)).check(matches(isDisplayed()));
@@ -273,7 +273,7 @@ public class CallForAuthorizeActivityTest {
         onView(withId(R.id.mpsdkPaymentNoAuthorized)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_text_question_call_for_authorize))));
 
         //SelectOtherPaymentMethod button is displayed
-        onView(withId(R.id.mpsdkSelectOtherPaymentMethodByCallForAuthorize)).check(matches(isDisplayed()));
+        onView(withId(R.id.mpsdkCallForAuthorizeOptionButton)).check(matches(isDisplayed()));
 
         //Exit button is displayed
         onView(withId(R.id.mpsdkExitCallForAuthorize)).check(matches(isDisplayed()));
@@ -300,7 +300,7 @@ public class CallForAuthorizeActivityTest {
         onView(withId(R.id.mpsdkPaymentNoAuthorized)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_text_question_call_for_authorize))));
 
         //SelectOtherPaymentMethod button is displayed
-        onView(withId(R.id.mpsdkSelectOtherPaymentMethodByCallForAuthorize)).check(matches(isDisplayed()));
+        onView(withId(R.id.mpsdkCallForAuthorizeOptionButton)).check(matches(isDisplayed()));
 
         //Exit button is displayed
         onView(withId(R.id.mpsdkExitCallForAuthorize)).check(matches(isDisplayed()));
@@ -327,7 +327,7 @@ public class CallForAuthorizeActivityTest {
         onView(withId(R.id.mpsdkPaymentNoAuthorized)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_text_question_call_for_authorize))));
 
         //SelectOtherPaymentMethod button is displayed
-        onView(withId(R.id.mpsdkSelectOtherPaymentMethodByCallForAuthorize)).check(matches(isDisplayed()));
+        onView(withId(R.id.mpsdkCallForAuthorizeOptionButton)).check(matches(isDisplayed()));
 
         //Exit button is displayed
         onView(withId(R.id.mpsdkExitCallForAuthorize)).check(matches(isDisplayed()));
@@ -356,7 +356,7 @@ public class CallForAuthorizeActivityTest {
         onView(withId(R.id.mpsdkPaymentNoAuthorized)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_text_question_call_for_authorize))));
 
         //SelectOtherPaymentMethod button is displayed
-        onView(withId(R.id.mpsdkSelectOtherPaymentMethodByCallForAuthorize)).check(matches(isDisplayed()));
+        onView(withId(R.id.mpsdkCallForAuthorizeOptionButton)).check(matches(isDisplayed()));
 
         //Exit button is displayed
         onView(withId(R.id.mpsdkExitCallForAuthorize)).check(matches(isDisplayed()));
@@ -385,7 +385,7 @@ public class CallForAuthorizeActivityTest {
         onView(withId(R.id.mpsdkPaymentNoAuthorized)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_text_question_call_for_authorize))));
 
         //SelectOtherPaymentMethod button is displayed
-        onView(withId(R.id.mpsdkSelectOtherPaymentMethodByCallForAuthorize)).check(matches(isDisplayed()));
+        onView(withId(R.id.mpsdkCallForAuthorizeOptionButton)).check(matches(isDisplayed()));
 
         //Exit button is displayed
         onView(withId(R.id.mpsdkExitCallForAuthorize)).check(matches(isDisplayed()));
@@ -411,7 +411,7 @@ public class CallForAuthorizeActivityTest {
         onView(withId(R.id.mpsdkPaymentNoAuthorized)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_text_question_call_for_authorize))));
 
         //SelectOtherPaymentMethod button is displayed
-        onView(withId(R.id.mpsdkSelectOtherPaymentMethodByCallForAuthorize)).check(matches(isDisplayed()));
+        onView(withId(R.id.mpsdkCallForAuthorizeOptionButton)).check(matches(isDisplayed()));
 
         //Exit button is displayed
         onView(withId(R.id.mpsdkExitCallForAuthorize)).check(matches(isDisplayed()));
@@ -437,7 +437,7 @@ public class CallForAuthorizeActivityTest {
         onView(withId(R.id.mpsdkPaymentNoAuthorized)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_text_question_call_for_authorize))));
 
         //SelectOtherPaymentMethod button is displayed
-        onView(withId(R.id.mpsdkSelectOtherPaymentMethodByCallForAuthorize)).check(matches(isDisplayed()));
+        onView(withId(R.id.mpsdkCallForAuthorizeOptionButton)).check(matches(isDisplayed()));
 
         //Exit button is displayed
         onView(withId(R.id.mpsdkExitCallForAuthorize)).check(matches(isDisplayed()));
@@ -463,7 +463,7 @@ public class CallForAuthorizeActivityTest {
         onView(withId(R.id.mpsdkPaymentNoAuthorized)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_text_question_call_for_authorize))));
 
         //SelectOtherPaymentMethod button is displayed
-        onView(withId(R.id.mpsdkSelectOtherPaymentMethodByCallForAuthorize)).check(matches(isDisplayed()));
+        onView(withId(R.id.mpsdkCallForAuthorizeOptionButton)).check(matches(isDisplayed()));
 
         //Exit button is displayed
         onView(withId(R.id.mpsdkExitCallForAuthorize)).check(matches(isDisplayed()));
@@ -495,11 +495,11 @@ public class CallForAuthorizeActivityTest {
         createIntent();
         mTestRule.launchActivity(validStartIntent);
 
-        //Exit button isDisplayed
-        onView(withId(R.id.mpsdkSelectOtherPaymentMethodByCallForAuthorize)).check(matches(isDisplayed()));
+        //Select other payment method button isDisplayed
+        onView(withId(R.id.mpsdkCallForAuthorizeOptionButton)).check(matches(isDisplayed()));
 
-        //Click on exit button
-        onView(withId(R.id.mpsdkSelectOtherPaymentMethodByCallForAuthorize)).perform(click());
+        //Click on select other payment method button
+        onView(withId(R.id.mpsdkCallForAuthorizeOptionButton)).perform(click());
 
         //Congrats finish
         assertTrue(mTestRule.getActivity().isFinishing());

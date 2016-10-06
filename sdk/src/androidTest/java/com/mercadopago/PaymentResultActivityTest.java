@@ -3,6 +3,7 @@ package com.mercadopago;
 import android.app.Activity;
 import android.app.Instrumentation;
 import android.content.Intent;
+import android.support.test.espresso.action.ViewActions;
 import android.support.test.espresso.intent.Intents;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
@@ -316,7 +317,7 @@ public class PaymentResultActivityTest {
         createIntent();
         mTestRule.launchActivity(validStartIntent);
 
-        onView(withId(R.id.mpsdkExitCallForAuthorize)).perform(click());
+        onView(withId(R.id.mpsdkExitCallForAuthorize)).perform(ViewActions.scrollTo(),click());
 
         //Result finish
         assertTrue(mTestRule.getActivity().isFinishing());
@@ -375,11 +376,9 @@ public class PaymentResultActivityTest {
         createIntent();
         mTestRule.launchActivity(validStartIntent);
 
-        onView(withId(R.id.mpsdkSelectOtherPaymentMethodByCallForAuthorize)).perform(click());
+        onView(withId(R.id.mpsdkCallForAuthorizeOptionButton)).perform(click());
 
         //Result finish
         assertTrue(mTestRule.getActivity().isFinishing());
     }
-
-
 }

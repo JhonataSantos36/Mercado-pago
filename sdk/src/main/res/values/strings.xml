@@ -95,22 +95,26 @@
 
     <!-- Rejection -->
     <string name="mpsdk_text_other_payment_method_button_rejection">Usar otro medio de pago</string>
+    <string name="mpsdk_text_pay_with_other_method">Pagar con otro medio</string>
+    <string name="mpsdk_text_enter_again">Ingrésalo nuevamente</string>
     <string name="mpsdk_subtitle_rejection_insufficient_amount_credit_card">¡No te desanimes! Puedes elegir otro medio de pago.</string>
     <string name="mpsdk_title_other_reason_rejection">%1$s no procesó el pago</string>
     <string name="mpsdk_text_select_other_rejection">Usa otra tarjeta u otro medio de pago</string>
-    <string name="mpsdk_text_some_number">Algún número de tu %1$s es incorrecto.</string>
-    <string name="mpsdk_title_bad_filled_other_rejection">Uy, no pudimos procesar el pago</string>
+    <string name="mpsdk_text_some_card_data_is_incorrect">Algún dato de tu %1$s es incorrecto.</string>
+    <string name="mpsdk_text_card_number_is_incorrect">El número de tu %1$s es incorrecto.</string>
+    <string name="mpsdk_title_bad_filled_other">Uy, no pudimos procesar el pago</string>
     <string name="mpsdk_text_insufficient_amount">Tu %1$s no tiene fondos suficientes</string>
     <string name="mpsdk_subtitle_rejection_insufficient_amount">¡No te desanimes! Recárgala en cualquier banco o desde tu banca electrónica e inténtalo de nuevo. O si prefieres, puedes elegir otro medio de pago.</string>
     <string name="mpsdk_subtitle_rejection_duplicated_payment">Si necesitas volver a pagar usa otra tarjeta u otro medio de pago.</string>
     <string name="mpsdk_text_active_card">Llama a %1$s para que active tu tarjeta</string>
     <string name="mpsdk_subtitle_rejection_card_disabled">El teléfono está al dorso de tu tarjeta.</string>
-    <string name="mpsdk_title_bad_filled_security_code_rejection">El código de seguridad no es el correcto.</string>
-    <string name="mpsdk_title_bad_filled_date_rejection">La fecha de vencimiento no es la correcta.</string>
+    <string name="mpsdk_title_bad_filled_security_code">El código de seguridad no es el correcto.</string>
+    <string name="mpsdk_title_bad_filled_date">La fecha de vencimiento no es la correcta.</string>
     <string name="mpsdk_title_rejection_high_risk">Por seguridad, tuvimos que rechazar tu pago</string>
     <string name="mpsdk_subtitle_rejection_high_risk">Si quieres pagar con el dinero de tu cuenta, contactate con Atención al Cliente de Mercado Pago. O si prefieres, puedes elegir otro medio de pago.</string>
     <string name="mpsdk_title_rejection_max_attempts">Llegaste al límite de intentos permitidos</string>
     <string name="mpsdk_subtitle_rejection_max_attempts">Elige otra tarjeta u otro medio de pago.</string>
+    <string name="mpsdk_rejection_title">Algo salió mal…</string>
 
     <!-- Error messages -->
     <string name="mpsdk_error_message_invalid_amount">Monto inválido</string>
@@ -152,6 +156,7 @@
 
     <!-- Utils -->
     <string name="mpsdk_text_keep_buying">Seguir comprando</string>
+    <string name="mpsdk_text_cancel_payment_and_keep_buying">Cancelar pago y seguir comprando</string>
     <string name="mpsdk_zero_rate">Sin interés</string>
     <string name="mpsdk_exit_label">Salir</string>
     <string name="mpsdk_cancel_payment">Cancelar pago</string>
@@ -167,4 +172,5 @@
     <string name="mpsdk_no_connection_message">Sin conexión</string>
     <string name="mpsdk_instant_accreditation_time">Se acreditará instantáneamente</string>
     <string name="mpsdk_accreditation_time">Se acreditará en</string>
+    <string name="mpsdk_what_can_do">¿Que puedo hacer?</string>
 </resources>

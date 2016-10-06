@@ -144,16 +144,15 @@ public class PaymentResultActivity extends Activity {
         if (requestCode == MercadoPago.CONGRATS_REQUEST_CODE) {
             finishWithOkResult();
         } else if (requestCode == MercadoPago.PENDING_REQUEST_CODE) {
-            finishWithOkResult();
+            resolveRequest(resultCode, data);
         } else if (requestCode == MercadoPago.REJECTION_REQUEST_CODE) {
             resolveRequest(resultCode, data);
         } else if (requestCode == MercadoPago.CALL_FOR_AUTHORIZE_REQUEST_CODE) {
             resolveRequest(resultCode, data);
         } else if (requestCode == MercadoPago.INSTRUCTIONS_REQUEST_CODE) {
             finishWithOkResult();
-        } else if (resultCode == RESULT_CANCELED && data != null && data.hasExtra("mpException")) {
-            setResult(resultCode, data);
-            finish();
+        } else {
+            finishWithCancelResult(data);
         }
     }
 

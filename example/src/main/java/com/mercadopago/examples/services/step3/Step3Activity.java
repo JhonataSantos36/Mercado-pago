@@ -53,7 +53,7 @@ public class Step3Activity extends ExampleActivity {
                     Toast.makeText(getApplicationContext(), apiException.getMessage(), Toast.LENGTH_LONG).show();
                 }
             }
-        } else if (requestCode == MercadoPago.RESULT_REQUEST_CODE) {
+        } else if (requestCode == MercadoPago.PAYMENT_RESULT_REQUEST_CODE) {
             LayoutUtil.showRegularLayout(this);
         }
     }

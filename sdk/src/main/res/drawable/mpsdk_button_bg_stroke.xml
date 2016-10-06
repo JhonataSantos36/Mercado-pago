@@ -9,7 +9,7 @@
             <corners
                 android:radius="4dp">
             </corners>
-            <solid android:color="@color/mpsdk_white"/>
+            <solid android:color="@color/mpsdk_white_background"/>
         </shape>
     </item>
 </selector>

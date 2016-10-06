@@ -20,6 +20,7 @@ import com.mercadopago.model.Issuer;
 import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentPreference;
+import com.mercadopago.model.PaymentRecovery;
 import com.mercadopago.model.Setting;
 import com.mercadopago.model.Site;
 import com.mercadopago.model.Token;
@@ -32,9 +33,9 @@ import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.util.List;
 
-
 public class CardVaultActivity extends ShowCardActivity {
 
+    protected PaymentRecovery mPaymentRecovery;
     protected PayerCost mPayerCost;
     protected PaymentPreference mPaymentPreference;
     protected List<PaymentMethod> mPaymentMethodList;
@@ -49,7 +50,6 @@ public class CardVaultActivity extends ShowCardActivity {
     protected MercadoPago mMercadoPago;
     protected Issuer mSelectedIssuer;
 
-
     @Override
     protected void initializeControls() {
         mCardBackground = findViewById(R.id.mpsdkCardBackground);
@@ -57,7 +57,6 @@ public class CardVaultActivity extends ShowCardActivity {
         if (mDecorationPreference != null && mDecorationPreference.hasColors()) {
             mCardBackground.setBackgroundColor(mDecorationPreference.getLighterColor());
         }
-
         initializeToolbar();
     }
 
@@ -101,6 +100,8 @@ public class CardVaultActivity extends ShowCardActivity {
         mSite = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("site"), Site.class);
         mCard = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("card"), Card.class);
         mSecurityCodeLocation = CardInterface.CARD_SIDE_BACK;
+
+        mPaymentRecovery = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("paymentRecovery"), PaymentRecovery.class);
 
         String amount = getIntent().getStringExtra("amount");
         if (amount != null) {
@@ -158,14 +159,15 @@ public class CardVaultActivity extends ShowCardActivity {
         runOnUiThread(new Runnable() {
             public void run() {
                 new MercadoPago.StartActivityBuilder()
-                        .setActivity(getActivity())
-                        .setPublicKey(mPublicKey)
-                        .setAmount(new BigDecimal(100))
-                        .setPaymentPreference(mPaymentPreference)
-                        .setSupportedPaymentMethods(mPaymentMethodList)
-                        .setDecorationPreference(mDecorationPreference)
-                        .setCard(mCard)
-                        .startGuessingCardActivity();
+                    .setActivity(getActivity())
+                    .setPublicKey(mPublicKey)
+                    .setAmount(new BigDecimal(100))
+                    .setPaymentPreference(mPaymentPreference)
+                    .setSupportedPaymentMethods(mPaymentMethodList)
+                    .setDecorationPreference(mDecorationPreference)
+                    .setPaymentRecovery(mPaymentRecovery)
+                    .setCard(mCard)
+                    .startGuessingCardActivity();
                 overridePendingTransition(R.anim.mpsdk_slide_right_to_left_in, R.anim.mpsdk_slide_right_to_left_out);
             }
         });
@@ -236,7 +238,7 @@ public class CardVaultActivity extends ShowCardActivity {
                 mFrontFragment.setCardColor(color);
             }
 
-            if (mInstallmentsEnabled) {
+            if (installmentsRequired()) {
                 checkStartInstallmentsActivity();
             } else {
                 finishWithResult();
@@ -253,6 +255,10 @@ public class CardVaultActivity extends ShowCardActivity {
             setResult(RESULT_CANCELED, data);
             finish();
         }
+    }
+
+    private boolean installmentsRequired() {
+        return mInstallmentsEnabled && (mPaymentRecovery == null || !mPaymentRecovery.isTokenRecoverable());
     }
 
     public void checkStartInstallmentsActivity() {
@@ -321,6 +327,10 @@ public class CardVaultActivity extends ShowCardActivity {
 
     @Override
     protected void finishWithResult() {
+        if (mPaymentRecovery != null && mPaymentRecovery.isTokenRecoverable()){
+            mPayerCost = mPaymentRecovery.getPayerCost();
+        }
+
         Intent returnIntent = new Intent();
         returnIntent.putExtra("payerCost", JsonUtil.getInstance().toJson(mPayerCost));
         returnIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(mPaymentMethod));
@@ -328,6 +338,7 @@ public class CardVaultActivity extends ShowCardActivity {
         returnIntent.putExtra("issuer", JsonUtil.getInstance().toJson(mSelectedIssuer));
         setResult(RESULT_OK, returnIntent);
         finish();
+        overridePendingTransition(R.anim.mpsdk_slide_right_to_left_in, R.anim.mpsdk_slide_right_to_left_out);
     }
 
     @Override

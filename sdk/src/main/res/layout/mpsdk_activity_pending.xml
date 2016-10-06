@@ -67,19 +67,19 @@
                         android:background="@color/mpsdk_separator"
                         android:layout_gravity="center_horizontal|bottom" />
                 </LinearLayout>
-                    <com.mercadopago.customviews.MPTextView
-                        android:id="@+id/mpsdkExitPending"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="10dp"
-                        android:paddingLeft="40dp"
-                        android:paddingRight="40dp"
-                        android:paddingTop="20dp"
-                        android:paddingBottom="20dp"
-                        android:text="@string/mpsdk_text_keep_buying"
-                        android:textColor="@color/mpsdk_color_link"
-                        android:textSize="@dimen/mpsdk_small_text" />
+                <com.mercadopago.customviews.MPTextView
+                    android:id="@+id/mpsdkExitPending"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:paddingLeft="40dp"
+                    android:paddingRight="40dp"
+                    android:paddingTop="20dp"
+                    android:paddingBottom="20dp"
+                    android:text="@string/mpsdk_text_keep_buying"
+                    android:textColor="@color/mpsdk_color_link"
+                    android:textSize="@dimen/mpsdk_small_text" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

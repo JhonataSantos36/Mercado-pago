@@ -115,7 +115,6 @@
     <string name="mpsdk_title_rejection_max_attempts">Você chegou ao limite de tentativas permitidas com este cartão</string>
     <string name="mpsdk_subtitle_rejection_max_attempts">Use outro cartão ou outro meio de pagamento.</string>
     <string name="mpsdk_rejection_title">Algo deu errado…</string>
-    <string name="mpsdk_what_can_do_title">Que posso fazer?</string>
 
     <!-- Error messages -->
     <string name="mpsdk_error_message_invalid_amount">Valor inválido</string>
@@ -173,4 +172,5 @@
     <string name="mpsdk_no_connection_message">Sem conexão</string>
     <string name="mpsdk_instant_accreditation_time">É aprovado imediatamente</string>
     <string name="mpsdk_accreditation_time">Será aprovado em</string>
+    <string name="mpsdk_what_can_do">Que posso fazer?</string>
 </resources>

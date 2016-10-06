@@ -44,8 +44,8 @@
 
     <color name="mpsdk_installments_text">#009FDE</color>
     <color name="mpsdk_installments_zero_rate">#43B000</color>
-    <color name="mpsdk_color_call_for_authorize_image">#3188AA</color>
-    <color name="mpsdk_color_call_for_authorize_background">#E3F2F8</color>
+    <color name="mpsdk_color_call_for_authorize_background">#E4F2F9</color>
+    <color name="mpsdk_color_call_for_authorize_image">#3987AD</color>
     
     <color name="mpsdk_color_pending_background">#FBF8E1</color>
     <color name="mpsdk_color_pending_image">#EFC701</color>

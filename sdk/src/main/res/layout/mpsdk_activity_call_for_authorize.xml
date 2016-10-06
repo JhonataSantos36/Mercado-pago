@@ -79,7 +79,8 @@
                     android:paddingBottom="15dp"
                     android:textSize="@dimen/mpsdk_small_text"
                     android:text="@string/mpsdk_text_authorized_call_for_authorize"
-                    android:textColor="@color/mpsdk_color_link" />
+                    android:textColor="@color/mpsdk_color_link"
+                    tools:text="Ya hablé con Visa y me autorizó"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -99,7 +100,7 @@
                         android:text="@string/mpsdk_text_question_call_for_authorize" />
 
                     <com.mercadopago.customviews.MPTextView
-                        android:id="@+id/mpsdkSelectOtherPaymentMethodByCallForAuthorize"
+                        android:id="@+id/mpsdkCallForAuthorizeOptionButton"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -118,7 +119,6 @@
                         android:layout_marginTop="23dp"
                         android:background="@color/mpsdk_separator"
                         android:layout_gravity="center_horizontal|bottom" />
-
                 </LinearLayout>
 
                 <com.mercadopago.customviews.MPTextView

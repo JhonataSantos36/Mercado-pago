@@ -23,8 +23,11 @@ import com.mercadopago.model.DummyCard;
 import com.mercadopago.model.DummyIdentificationType;
 import com.mercadopago.model.IdentificationType;
 import com.mercadopago.model.Issuer;
+import com.mercadopago.model.PayerCost;
+import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentPreference;
+import com.mercadopago.model.PaymentRecovery;
 import com.mercadopago.model.Token;
 import com.mercadopago.test.ActivityResult;
 import com.mercadopago.test.FakeAPI;
@@ -138,38 +141,6 @@ public class GuessingCardActivityTest {
         assertEquals(activity.mPublicKey, mMerchantPublicKey);
         assertNotNull(activity.mPaymentMethodList);
         assertEquals(activity.mPaymentMethodList.size(), paymentMethodList.size());
-        assertFalse(mTestRule.getActivity().isFinishing());
-    }
-
-    @Test
-    public void initializeWithTokenIsValid() {
-        addBankDealsCall();
-        String paymentMethods = StaticMock.getPaymentMethodList();
-        Type listType = new TypeToken<List<PaymentMethod>>() {
-        }.getType();
-        List<PaymentMethod> paymentMethodList = JsonUtil.getInstance().getGson().fromJson(paymentMethods, listType);
-        validStartIntent.putExtra("paymentMethodList", JsonUtil.getInstance().toJson(paymentMethodList));
-        Token token = StaticMock.getTokenAmex();
-        validStartIntent.putExtra("token", JsonUtil.getInstance().toJson(token));
-
-        addIdentificationTypesCall();
-
-        mTestRule.launchActivity(validStartIntent);
-
-        String contained = CardTestUtils.getMockedBinInFront(token.getFirstSixDigits());
-
-        onView(withId(R.id.mpsdkCardNumberTextView)).check(matches(withText(containsString(contained))));
-        onView(withId(R.id.mpsdkCardholderNameView)).check(matches(withText(token.getCardHolder().getName().toUpperCase())));
-        onView(withId(R.id.mpsdkCardHolderExpiryYear)).check(matches(withText(token.getExpirationYear().toString().substring(2, 4))));
-        onView(withId(R.id.mpsdkCardHolderExpiryMonth)).check(matches(withText(token.getExpirationMonth().toString())));
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-
-        }
-        if (onView(withId(R.id.mpsdkCardSecurityView)).check(matches(isDisplayed())).equals(true)) {
-            onView(withId(R.id.mpsdkCardSecurityView)).check(matches(withText(StaticMock.SECURITY_CODE_FRONT_HOLDER)));
-        }
         assertFalse(mTestRule.getActivity().isFinishing());
     }
 
@@ -356,7 +327,6 @@ public class GuessingCardActivityTest {
     @Test
     public void onBankDealsEmptyDontShowBankDealsOnToolbar() {
         List<DummyCard> dummyCards = CardTestUtils.getSomeCards();
-
         List<BankDeal> bankDeals = new ArrayList<>();
 
         String paymentMethods = StaticMock.getPaymentMethodList();
@@ -2081,6 +2051,243 @@ public class GuessingCardActivityTest {
         addBankDealsCall();
         addPaymentMethodsCall();
         addIdentificationTypesCall();
+    }
+
+    //Recoverable Token
+    @Test
+    public void ifPaymentRecoveryReceivedWithPaymentStatusDetailCallForAuthorizeShowOnlySecurityCode() {
+        Token token = StaticMock.getToken();
+        Payment payment = StaticMock.getPaymentRejectedCallForAuthorize();
+        PaymentMethod paymentMethod = StaticMock.getPaymentMethodOn();
+        PayerCost payerCost = StaticMock.getPayerCostWithInterests();
+        Issuer issuer  = StaticMock.getIssuer();
+
+        PaymentRecovery paymentRecovery = new PaymentRecovery(token, payment, paymentMethod, payerCost, issuer);
+        validStartIntent.putExtra("paymentRecovery", JsonUtil.getInstance().toJson(paymentRecovery));
+
+        mTestRule.launchActivity(validStartIntent);
+
+        onView(withId(R.id.mpsdkCardSecurityCodeContainer)).check(matches(isDisplayed()));
+        onView(withId(R.id.mpsdkCardNumberInput)).check(matches(not(isDisplayed())));
+        onView(withId(R.id.mpsdkCardholderNameInput)).check(matches(not(isDisplayed())));
+        onView(withId(R.id.mpsdkExpiryDateInput)).check(matches(not(isDisplayed())));
+        onView(withId(R.id.mpsdkCardPaymentMethodSelectionContainer)).check(matches(not(isDisplayed())));
+        onView(withId(R.id.mpsdkCardIdentificationTypeContainer)).check(matches(not(isDisplayed())));
+    }
+
+    @Test
+    public void ifSecurityCodeInputIsValidCloneTokenAndFinishActivity() {
+        Token token = StaticMock.getToken();
+        Payment payment = StaticMock.getPaymentRejectedCallForAuthorize();
+        PaymentMethod paymentMethod = StaticMock.getPaymentMethodOn();
+        PayerCost payerCost = StaticMock.getPayerCostWithInterests();
+        Issuer issuer  = StaticMock.getIssuer();
+
+        PaymentRecovery paymentRecovery = new PaymentRecovery(token, payment, paymentMethod, payerCost, issuer);
+        validStartIntent.putExtra("paymentRecovery", JsonUtil.getInstance().toJson(paymentRecovery));
+
+        Token mockedToken = StaticMock.getToken();
+        mFakeAPI.addResponseToQueue(JsonUtil.getInstance().toJson(mockedToken), 200, "");
+        mFakeAPI.addResponseToQueue(JsonUtil.getInstance().toJson(mockedToken), 200, "");
+
+        mTestRule.launchActivity(validStartIntent);
+
+        onView(withId(R.id.mpsdkCardSecurityCodeContainer)).check(matches(isDisplayed()));
+        onView(withId(R.id.mpsdkCardSecurityCode)).perform(typeText(StaticMock.DUMMY_SECURITY_CODE));
+        onView(withId(R.id.mpsdkNextButton)).perform(click());
+
+        ActivityResult result = ActivityResultUtil.getActivityResult(mTestRule.getActivity());
+        String tokenJson = JsonUtil.getInstance().toJson(mockedToken);
+        assertTrue(tokenJson.equals(result.getExtras().getString("token")));
+    }
+
+    @Test
+    public void ifSecurityCodeInputForPaymentRecoveryIsNotValidShowError() {
+        Token token = StaticMock.getToken();
+        Payment payment = StaticMock.getPaymentRejectedCallForAuthorize();
+        PaymentMethod paymentMethod = StaticMock.getPaymentMethodOn();
+        PayerCost payerCost = StaticMock.getPayerCostWithInterests();
+        Issuer issuer  = StaticMock.getIssuer();
+
+        PaymentRecovery paymentRecovery = new PaymentRecovery(token, payment, paymentMethod, payerCost, issuer);
+        validStartIntent.putExtra("paymentRecovery", JsonUtil.getInstance().toJson(paymentRecovery));
+
+        mTestRule.launchActivity(validStartIntent);
+
+        onView(withId(R.id.mpsdkCardSecurityCodeContainer)).check(matches(isDisplayed()));
+        onView(withId(R.id.mpsdkCardSecurityCode)).perform(typeText(StaticMock.DUMMY_SECURITY_CODE.substring(0, 1)));
+        onView(withId(R.id.mpsdkNextButton)).perform(click());
+
+        checkSecurityCodeIsInvalid("11", onView(withId(R.id.mpsdkNextButton)));
+    }
+
+    @Test
+    public void ifAskSecurityCodeAndPressesBackButtonFinishActivityWithCancelResult() {
+        Token token = StaticMock.getToken();
+        Payment payment = StaticMock.getPaymentRejectedCallForAuthorize();
+        PaymentMethod paymentMethod = StaticMock.getPaymentMethodOn();
+        PayerCost payerCost = StaticMock.getPayerCostWithInterests();
+        Issuer issuer  = StaticMock.getIssuer();
+
+        PaymentRecovery paymentRecovery = new PaymentRecovery(token, payment, paymentMethod, payerCost, issuer);
+        validStartIntent.putExtra("paymentRecovery", JsonUtil.getInstance().toJson(paymentRecovery));
+
+        mTestRule.launchActivity(validStartIntent);
+        onView(withId(R.id.mpsdkBackButton)).perform(click());
+
+        ActivityResultUtil.assertFinishCalledWithResult(mTestRule.getActivity(), Activity.RESULT_CANCELED);
+
+    }
+
+    //Recoverable Payment
+    @Test
+    public void ifPaymentRecoveryReceivedWithPaymentStatusDetailBadFilledStartGuessing() {
+        addBankDealsCall();
+        String paymentMethods = StaticMock.getPaymentMethodList();
+        Type listType = new TypeToken<List<PaymentMethod>>() {}.getType();
+        List<PaymentMethod> paymentMethodList = JsonUtil.getInstance().getGson().fromJson(paymentMethods, listType);
+        validStartIntent.putExtra("paymentMethodList", JsonUtil.getInstance().toJson(paymentMethodList));
+
+        Token token = StaticMock.getToken();
+        Payment payment = StaticMock.getPaymentRejectedBadFilledSecurityCode();
+        PaymentMethod paymentMethod = StaticMock.getPaymentMethodOn();
+        PayerCost payerCost = StaticMock.getPayerCostWithInterests();
+        Issuer issuer  = StaticMock.getIssuer();
+
+        PaymentRecovery paymentRecovery = new PaymentRecovery(token, payment, paymentMethod, payerCost, issuer);
+        validStartIntent.putExtra("paymentRecovery", JsonUtil.getInstance().toJson(paymentRecovery));
+
+        addIdentificationTypesCall();
+
+        mTestRule.launchActivity(validStartIntent);
+
+        onView(withId(R.id.mpsdkCardholderNameView)).check(matches(withText(paymentRecovery.getToken().getCardHolder().getName().toUpperCase())));
+    }
+
+    @Test
+    public void ifPaymentRecoveryReceivedWithPaymentStatusDetailBadFilledShowCardHolderNameTyped() {
+        addBankDealsCall();
+        String paymentMethods = StaticMock.getPaymentMethodList();
+        Type listType = new TypeToken<List<PaymentMethod>>() {
+        }.getType();
+        List<PaymentMethod> paymentMethodList = JsonUtil.getInstance().getGson().fromJson(paymentMethods, listType);
+        validStartIntent.putExtra("paymentMethodList", JsonUtil.getInstance().toJson(paymentMethodList));
+
+        Token token = StaticMock.getToken();
+        Payment payment = StaticMock.getPaymentRejectedBadFilledSecurityCode();
+        PaymentMethod paymentMethod = StaticMock.getPaymentMethodOn();
+        PayerCost payerCost = StaticMock.getPayerCostWithInterests();
+        Issuer issuer  = StaticMock.getIssuer();
+
+        PaymentRecovery paymentRecovery = new PaymentRecovery(token, payment, paymentMethod, payerCost, issuer);
+        validStartIntent.putExtra("paymentRecovery", JsonUtil.getInstance().toJson(paymentRecovery));
+
+        addIdentificationTypesCall();
+
+        mTestRule.launchActivity(validStartIntent);
+
+        onView(withId(R.id.mpsdkCardNumberTextView)).check(matches(isDisplayed()));
+        onView(withId(R.id.mpsdkCardNumber)).perform(typeText(StaticMock.DUMMY_CARD_NUMBER));
+        onView(withId(R.id.mpsdkNextButton)).perform(click());
+        onView(withId(R.id.mpsdkCardholderName)).check(matches(withText(paymentRecovery.getToken().getCardHolder().getName().toUpperCase())));
+    }
+
+    @Test
+    public void ifPaymentRecoveryReceivedWithPaymentStatusDetailBadFilledShowCardHolderIdentificationTyped() {
+        addBankDealsCall();
+        String paymentMethods = StaticMock.getPaymentMethodList();
+        Type listType = new TypeToken<List<PaymentMethod>>() {
+        }.getType();
+        List<PaymentMethod> paymentMethodList = JsonUtil.getInstance().getGson().fromJson(paymentMethods, listType);
+        validStartIntent.putExtra("paymentMethodList", JsonUtil.getInstance().toJson(paymentMethodList));
+
+        Token token = StaticMock.getToken();
+        Payment payment = StaticMock.getPaymentRejectedBadFilledSecurityCode();
+        PaymentMethod paymentMethod = StaticMock.getPaymentMethodOn();
+        PayerCost payerCost = StaticMock.getPayerCostWithInterests();
+        Issuer issuer  = StaticMock.getIssuer();
+
+        PaymentRecovery paymentRecovery = new PaymentRecovery(token, payment, paymentMethod, payerCost, issuer);
+        validStartIntent.putExtra("paymentRecovery", JsonUtil.getInstance().toJson(paymentRecovery));
+
+        addIdentificationTypesCall();
+
+        mTestRule.launchActivity(validStartIntent);
+
+        onView(withId(R.id.mpsdkCardNumberTextView)).check(matches(isDisplayed()));
+        onView(withId(R.id.mpsdkCardNumber)).perform(typeText(StaticMock.DUMMY_CARD_NUMBER));
+        onView(withId(R.id.mpsdkNextButton)).perform(click());
+        onView(withId(R.id.mpsdkCardholderName)).check(matches(withText(paymentRecovery.getToken().getCardHolder().getName().toUpperCase())));
+        onView(withId(R.id.mpsdkNextButton)).perform(click());
+        onView(withId(R.id.mpsdkCardExpiryDate)).perform(typeText(StaticMock.DUMMY_EXPIRATION_DATE));
+        onView(withId(R.id.mpsdkNextButton)).perform(click());
+        onView(withId(R.id.mpsdkCardSecurityCode)).perform(typeText(StaticMock.DUMMY_SECURITY_CODE));
+        onView(withId(R.id.mpsdkNextButton)).perform(click());
+        onView(withId(R.id.mpsdkCardIdentificationNumber)).check(matches(withText(paymentRecovery.getToken().getCardHolder().getIdentification().getNumber())));
+        onView(withId(R.id.mpsdkCardIdentificationType)).check(matches((isDisplayed())));
+    }
+
+    @Test
+    public void ifPaymentRecoveryWithAmexPaymentStatusDetailBadFilledReceivedShowCardHolderNameTyped() {
+        addBankDealsCall();
+        String paymentMethods = StaticMock.getPaymentMethodList();
+        Type listType = new TypeToken<List<PaymentMethod>>() {
+        }.getType();
+        List<PaymentMethod> paymentMethodList = JsonUtil.getInstance().getGson().fromJson(paymentMethods, listType);
+        validStartIntent.putExtra("paymentMethodList", JsonUtil.getInstance().toJson(paymentMethodList));
+
+        Token token = StaticMock.getTokenAmex();
+        Payment payment = StaticMock.getAmexPaymentRejectedBadFilledSecurityCode();
+        PaymentMethod paymentMethod = StaticMock.getAmexPaymentMethodOn();
+        PayerCost payerCost = StaticMock.getPayerCostWithInterests();
+        Issuer issuer  = StaticMock.getIssuer();
+
+        PaymentRecovery paymentRecovery = new PaymentRecovery(token, payment, paymentMethod, payerCost, issuer);
+        validStartIntent.putExtra("paymentRecovery", JsonUtil.getInstance().toJson(paymentRecovery));
+
+        addIdentificationTypesCall();
+
+        mTestRule.launchActivity(validStartIntent);
+
+        onView(withId(R.id.mpsdkCardNumberTextView)).check(matches(isDisplayed()));
+        onView(withId(R.id.mpsdkCardNumber)).perform(typeText(StaticMock.DUMMY_CARD_NUMBER_AMEX));
+        onView(withId(R.id.mpsdkNextButton)).perform(click());
+        onView(withId(R.id.mpsdkCardholderName)).check(matches(withText(paymentRecovery.getToken().getCardHolder().getName().toUpperCase())));
+    }
+
+    @Test
+    public void ifPaymentRecoveryWithAmexPaymentStatusDetailBadFilledReceivedShowCardHolderIdentificationTyped() {
+        addBankDealsCall();
+        String paymentMethods = StaticMock.getPaymentMethodList();
+        Type listType = new TypeToken<List<PaymentMethod>>() {
+        }.getType();
+        List<PaymentMethod> paymentMethodList = JsonUtil.getInstance().getGson().fromJson(paymentMethods, listType);
+        validStartIntent.putExtra("paymentMethodList", JsonUtil.getInstance().toJson(paymentMethodList));
+
+        Token token = StaticMock.getTokenAmex();
+        Payment payment = StaticMock.getAmexPaymentRejectedBadFilledSecurityCode();
+        PaymentMethod paymentMethod = StaticMock.getAmexPaymentMethodOn();
+        PayerCost payerCost = StaticMock.getPayerCostWithInterests();
+        Issuer issuer = StaticMock.getIssuer();
+
+        PaymentRecovery paymentRecovery = new PaymentRecovery(token, payment, paymentMethod, payerCost, issuer);
+        validStartIntent.putExtra("paymentRecovery", JsonUtil.getInstance().toJson(paymentRecovery));
+
+        addIdentificationTypesCall();
+
+        mTestRule.launchActivity(validStartIntent);
+
+        onView(withId(R.id.mpsdkCardNumberTextView)).check(matches(isDisplayed()));
+        onView(withId(R.id.mpsdkCardNumber)).perform(typeText(StaticMock.DUMMY_CARD_NUMBER_AMEX));
+        onView(withId(R.id.mpsdkNextButton)).perform(click());
+        onView(withId(R.id.mpsdkCardholderName)).check(matches(withText(token.getCardHolder().getName().toUpperCase())));
+        onView(withId(R.id.mpsdkNextButton)).perform(click());
+        onView(withId(R.id.mpsdkCardExpiryDate)).perform(typeText(StaticMock.DUMMY_EXPIRATION_DATE));
+        onView(withId(R.id.mpsdkNextButton)).perform(click());
+        onView(withId(R.id.mpsdkCardSecurityCode)).perform(typeText(StaticMock.DUMMY_SECURITY_CODE_FOUR_DIGITS));
+        onView(withId(R.id.mpsdkNextButton)).perform(click());
+        onView(withId(R.id.mpsdkCardIdentificationNumber)).check(matches(withText(token.getCardHolder().getIdentification().getNumber())));
+        onView(withId(R.id.mpsdkCardIdentificationType)).check(matches((isDisplayed())));
     }
 
     private void sleep() {
