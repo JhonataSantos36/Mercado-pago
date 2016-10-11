@@ -527,7 +527,7 @@ public class CheckoutActivity extends MercadoPagoActivity {
 
         mPaymentMethodRow.inflateInParent(mPaymentMethodLayout, true);
         mPaymentMethodRow.initializeControls();
-        mPaymentMethodRow.drawPaymentMethod();
+        mPaymentMethodRow.draw();
 
         if (!isUniquePaymentMethod()) {
             mPaymentMethodRow.setOnClickListener(new View.OnClickListener() {

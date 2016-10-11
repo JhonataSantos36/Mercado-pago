@@ -33,46 +33,5 @@
         android:id="@+id/mpsdkRegularLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/mpsdk_color_light_grey">
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/mpsdkCustomerCardsList"
-            android:scrollbars="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:paddingLeft="10dp"
-            android:paddingStart="10dp"
-            android:layout_height="@dimen/mpsdk_list_item_height"
-            android:weightSum="1"
-            android:orientation="horizontal"
-            android:clickable="true"
-            android:background="@color/mpsdk_white_background"
-            android:onClick="onOtherPaymentMethodClicked">
-            <LinearLayout
-                android:layout_weight="0.98"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
-                <com.mercadopago.customviews.MPTextView
-                    android:id="@+id/mpsdkDescription"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginStart="10dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/other_payment_method"
-                    style="@style/mpsdk_list_label"
-                    android:textColor="@color/mpsdk_base_text"/>
-            </LinearLayout>
-            <ImageView
-                android:id="@+id/mpsdkEditHint"
-                android:layout_width="15dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:src="@drawable/arrow_right"
-                android:adjustViewBounds="true"/>
-        </LinearLayout>
-    </LinearLayout>
-
+        android:background="@color/mpsdk_color_light_grey"/>
 </LinearLayout>

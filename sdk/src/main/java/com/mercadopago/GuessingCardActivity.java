@@ -489,6 +489,7 @@ public class GuessingCardActivity extends FrontCardActivity {
     }
 
     private void setSecurityCodeFormSettings(Card card) {
+        //User card, comes from PaymentVault, has settings.
         if(card.getSecurityCode() == null) {
             card.setSecurityCode(mCurrentPaymentMethod.getSettings().get(0).getSecurityCode());
         }
@@ -744,7 +745,7 @@ public class GuessingCardActivity extends FrontCardActivity {
 
     @Override
     protected void getActivityParameters() {
-        mPublicKey = this.getIntent().getStringExtra("publicKey");
+        mPublicKey = this.getIntent().getStringExtra("merchantPublicKey");
         mPaymentPreference = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("paymentPreference"), PaymentPreference.class);
         mPaymentRecovery = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("paymentRecovery"), PaymentRecovery.class);
 

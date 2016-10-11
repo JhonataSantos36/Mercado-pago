@@ -54,7 +54,7 @@ public class CardVaultActivityTest {
         mMerchantPublicKey = StaticMock.DUMMY_MERCHANT_PUBLIC_KEY;
 
         validStartIntent = new Intent();
-        validStartIntent.putExtra("publicKey", mMerchantPublicKey);
+        validStartIntent.putExtra("merchantPublicKey", mMerchantPublicKey);
     }
 
     @Before

@@ -159,7 +159,7 @@ public class InstallmentsActivity extends ShowCardActivity {
     @SuppressWarnings("unchecked")
     @Override
     protected void getActivityParameters() {
-        mPublicKey = this.getIntent().getStringExtra("publicKey");
+        mPublicKey = this.getIntent().getStringExtra("merchantPublicKey");
         if (this.getIntent().getStringExtra("amount") != null) {
             mAmount = new BigDecimal(this.getIntent().getStringExtra("amount"));
         }

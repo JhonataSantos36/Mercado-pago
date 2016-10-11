@@ -16,6 +16,7 @@ import com.mercadopago.constants.PaymentMethods;
 import com.mercadopago.constants.PaymentTypes;
 import com.mercadopago.constants.Sites;
 import com.mercadopago.core.MercadoPago;
+import com.mercadopago.core.MercadoPagoUI;
 import com.mercadopago.core.MerchantServer;
 import com.mercadopago.examples.R;
 import com.mercadopago.examples.utils.ColorPickerDialog;
@@ -178,12 +179,12 @@ public class ComponentsExampleActivity extends AppCompatActivity {
                 new Callback<Customer>() {
                     @Override
                     public void success(Customer customer) {
-                        new MercadoPago.StartActivityBuilder()
+                        new MercadoPagoUI.Activities.SavedCardsActivityBuilder()
                                 .setActivity(mActivity)
                                 .setPaymentPreference(paymentPreference)
                                 .setDecorationPreference(decorationPreference)
                                 .setCards(customer.getCards())
-                                .startCustomerCardsActivity();
+                                .startActivity();
                         mProgressBar.setVisibility(View.GONE);
                     }
 

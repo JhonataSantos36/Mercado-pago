@@ -127,8 +127,13 @@ public abstract class ShowCardActivity extends FrontCardActivity {
             Setting setting = Setting.getSettingByBin(mCurrentPaymentMethod.getSettings(),
                     mCardInfo.getFirstSixDigits());
 
-            mCardNumberLength = setting.getCardNumber().getLength();
-            mSecurityCodeLocation = setting.getSecurityCode().getCardLocation();
+            if(setting == null) {
+                mCardNumberLength = CARD_NUMBER_MAX_LENGTH;
+                mSecurityCodeLocation = CardInterface.CARD_SIDE_BACK;
+            } else {
+                mCardNumberLength = setting.getCardNumber().getLength();
+                mSecurityCodeLocation = setting.getSecurityCode().getCardLocation();
+            }
         }
     }
 

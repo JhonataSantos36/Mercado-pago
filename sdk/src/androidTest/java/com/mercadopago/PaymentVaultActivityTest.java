@@ -258,7 +258,7 @@ public class PaymentVaultActivityTest {
                 actionOnItemAtPosition(0, click()));
 
         intended(allOf(hasComponent(CardVaultActivity.class.getName()),
-                hasExtra("publicKey", "1234")));
+                hasExtra("merchantPublicKey", "1234")));
     }
 
     @Test

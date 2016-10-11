@@ -38,7 +38,7 @@ public class PaymentMethodOffEditableRow implements PaymentMethodViewController 
     }
 
     @Override
-    public void drawPaymentMethod() {
+    public void draw() {
         if (mItem != null) {
             drawWithSearchItem();
         } else if (mPaymentMethod != null) {

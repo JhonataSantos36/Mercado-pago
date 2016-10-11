@@ -38,4 +38,10 @@ public class PaymentMethodOnEditableRow extends PaymentMethodOnView {
                 .inflate(R.layout.mpsdk_row_payment_method_card, parent, attachToRoot);
         return mView;
     }
+
+    @Override
+    public void draw() {
+        super.draw();
+        mEditHint.setImageResource(R.drawable.arrow_right);
+    }
 }

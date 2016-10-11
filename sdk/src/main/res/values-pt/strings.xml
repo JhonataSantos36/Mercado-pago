@@ -173,4 +173,6 @@
     <string name="mpsdk_instant_accreditation_time">É aprovado imediatamente</string>
     <string name="mpsdk_accreditation_time">Será aprovado em</string>
     <string name="mpsdk_what_can_do">Que posso fazer?</string>
+    <string name="mpsdk_confirm_prompt_yes">Sim</string>
+    <string name="mpsdk_confirm_prompt_no">Não</string>
 </resources>

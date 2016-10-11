@@ -380,7 +380,7 @@ public class MercadoPago {
         intent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
         intent.putExtra("token", JsonUtil.getInstance().toJson(token));
         intent.putExtra("card", JsonUtil.getInstance().toJson(card));
-        intent.putExtra("publicKey", publicKey);
+        intent.putExtra("merchantPublicKey", publicKey);
         intent.putExtra("issuer", JsonUtil.getInstance().toJson(issuer));
         intent.putExtra("site", JsonUtil.getInstance().toJson(site));
         intent.putExtra("payerCosts", JsonUtil.getInstance().toJson(payerCosts));
@@ -398,7 +398,7 @@ public class MercadoPago {
         intent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
         intent.putExtra("token", JsonUtil.getInstance().toJson(token));
         intent.putExtra("card", JsonUtil.getInstance().toJson(card));
-        intent.putExtra("publicKey", publicKey);
+        intent.putExtra("merchantPublicKey", publicKey);
         intent.putExtra("issuers", JsonUtil.getInstance().toJson(issuers));
         intent.putExtra("decorationPreference", JsonUtil.getInstance().toJson(decorationPreference));
         activity.startActivityForResult(intent, ISSUERS_REQUEST_CODE);
@@ -411,7 +411,7 @@ public class MercadoPago {
                                                   PaymentRecovery paymentRecovery, Card card) {
 
         Intent guessingCardIntent = new Intent(activity, GuessingCardActivity.class);
-        guessingCardIntent.putExtra("publicKey", key);
+        guessingCardIntent.putExtra("merchantPublicKey", key);
 
         if (requireSecurityCode != null) {
             guessingCardIntent.putExtra("requireSecurityCode", requireSecurityCode);
@@ -443,7 +443,7 @@ public class MercadoPago {
                                                 List<PaymentMethod> paymentMethodList, PaymentRecovery paymentRecovery, Card card) {
 
         Intent cardVaultIntent = new Intent(activity, CardVaultActivity.class);
-        cardVaultIntent.putExtra("publicKey", key);
+        cardVaultIntent.putExtra("merchantPublicKey", key);
 
         if (amount != null) {
             cardVaultIntent.putExtra("amount", amount.toString());

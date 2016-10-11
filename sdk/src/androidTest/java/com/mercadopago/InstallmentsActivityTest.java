@@ -81,7 +81,7 @@ public class InstallmentsActivityTest {
         mAmount = "1000";
 
         validStartIntent = new Intent();
-        validStartIntent.putExtra("publicKey", mMerchantPublicKey);
+        validStartIntent.putExtra("merchantPublicKey", mMerchantPublicKey);
         validStartIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(mPaymentMethod));
         validStartIntent.putExtra("site", JsonUtil.getInstance().toJson(mSite));
         validStartIntent.putExtra("amount", mAmount);
@@ -275,7 +275,7 @@ public class InstallmentsActivityTest {
 
         Intent intent = new Intent();
         intent.putExtra("issuer", JsonUtil.getInstance().toJson(issuer));
-        intent.putExtra("publicKey", mMerchantPublicKey);
+        intent.putExtra("merchantPublicKey", mMerchantPublicKey);
         intent.putExtra("site", JsonUtil.getInstance().toJson(mSite));
         intent.putExtra("amount", mAmount);
         intent.putExtra("payerCosts", JsonUtil.getInstance().toJson(payerCostList));
@@ -343,7 +343,7 @@ public class InstallmentsActivityTest {
 
         Intent invalidIntent = new Intent();
         invalidIntent.putExtra("issuer", JsonUtil.getInstance().toJson(issuer));
-        invalidIntent.putExtra("publicKey", mMerchantPublicKey);
+        invalidIntent.putExtra("merchantPublicKey", mMerchantPublicKey);
         invalidIntent.putExtra("site", JsonUtil.getInstance().toJson(mSite));
         invalidIntent.putExtra("amount", mAmount);
 
@@ -377,7 +377,7 @@ public class InstallmentsActivityTest {
         List<PayerCost> payerCostList = JsonUtil.getInstance().getGson().fromJson(payerCosts, listType);
 
         Intent invalidIntent = new Intent();
-        invalidIntent.putExtra("publicKey", mMerchantPublicKey);
+        invalidIntent.putExtra("merchantPublicKey", mMerchantPublicKey);
         invalidIntent.putExtra("site", JsonUtil.getInstance().toJson(mSite));
         invalidIntent.putExtra("payerCosts", JsonUtil.getInstance().toJson(payerCostList));
         invalidIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(mPaymentMethod));

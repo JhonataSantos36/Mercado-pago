@@ -87,7 +87,7 @@ public class GuessingCardActivityTest {
         mMerchantPublicKey = StaticMock.DUMMY_TEST_PUBLIC_KEY;
 
         validStartIntent = new Intent();
-        validStartIntent.putExtra("publicKey", mMerchantPublicKey);
+        validStartIntent.putExtra("merchantPublicKey", mMerchantPublicKey);
     }
 
     @Before

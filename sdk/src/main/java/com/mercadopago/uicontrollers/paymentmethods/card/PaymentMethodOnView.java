@@ -22,11 +22,10 @@ public abstract class PaymentMethodOnView implements PaymentMethodViewController
     protected View mView;
     protected MPTextView mDescription;
     protected ImageView mIcon;
-    protected View mEditHint;
+    protected ImageView mEditHint;
 
     @Override
-    public void drawPaymentMethod() {
-
+    public void draw() {
         if (getLastFourDigits() == null || getLastFourDigits().isEmpty()) {
             mDescription.setText(mPaymentMethod.getName());
         }
@@ -53,7 +52,7 @@ public abstract class PaymentMethodOnView implements PaymentMethodViewController
     public void initializeControls() {
         mDescription = (MPTextView) mView.findViewById(R.id.mpsdkDescription);
         mIcon = (ImageView) mView.findViewById(R.id.mpsdkImage);
-        mEditHint = mView.findViewById(R.id.mpsdkEditHint);
+        mEditHint = (ImageView) mView.findViewById(R.id.mpsdkEditHint);
         mSeparator = mView.findViewById(R.id.mpsdkSeparator);
     }
 

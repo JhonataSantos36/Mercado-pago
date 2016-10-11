@@ -1,33 +1,41 @@
 package com.mercadopago;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.mercadopago.adapters.CustomerCardsAdapter;
 import com.mercadopago.callbacks.OnSelectedCallback;
-import com.mercadopago.decorations.DividerItemDecoration;
+import com.mercadopago.core.MercadoPagoUI;
 import com.mercadopago.model.Card;
+import com.mercadopago.uicontrollers.savedcards.SavedCardsListView;
 import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
+import com.mercadopago.util.MercadoPagoUtil;
 
 import java.lang.reflect.Type;
 import java.util.List;
 
 public class CustomerCardsActivity extends MercadoPagoActivity {
 
-    protected RecyclerView mRecyclerView;
+
     protected Toolbar mToolbar;
     protected TextView mTitle;
+    protected ViewGroup mSavedCardsContainer;
 
     private List<Card> mCards;
+    private String mCustomTitle;
+    private String mSelectionConfirmPromptText;
+    private String mCustomFooterMessage;
+    private Integer mSelectionImageDrawableResId;
 
     @Override
     protected void getActivityParameters() {
@@ -38,6 +46,15 @@ public class CustomerCardsActivity extends MercadoPagoActivity {
             mCards = gson.fromJson(this.getIntent().getStringExtra("cards"), listType);
         } catch (Exception ex) {
             mCards = null;
+        }
+        mCustomTitle = this.getIntent().getStringExtra("title");
+        mSelectionConfirmPromptText = this.getIntent().getStringExtra("selectionConfirmPromptText");
+        mSelectionImageDrawableResId = this.getIntent().getIntExtra("selectionImageResId", 0);
+        mCustomFooterMessage = this.getIntent().getStringExtra("footerText");
+
+        if (mDecorationPreference != null) {
+            super.decorate(mToolbar);
+            super.decorateFont(mTitle);
         }
     }
 
@@ -56,7 +73,7 @@ public class CustomerCardsActivity extends MercadoPagoActivity {
     @Override
     protected void initializeControls() {
         initializeToolbar();
-        mRecyclerView = (RecyclerView) findViewById(R.id.mpsdkCustomerCardsList);
+        mSavedCardsContainer = (ViewGroup) findViewById(R.id.mpsdkRegularLayout);
     }
 
     @Override
@@ -72,7 +89,9 @@ public class CustomerCardsActivity extends MercadoPagoActivity {
     private void initializeToolbar() {
         mToolbar = (Toolbar) findViewById(R.id.mpsdkToolbar);
         mTitle = (TextView) findViewById(R.id.mpsdkToolbarTitle);
-
+        if (!TextUtils.isEmpty(mCustomTitle)) {
+            mTitle.setText(mCustomTitle);
+        }
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -96,25 +115,75 @@ public class CustomerCardsActivity extends MercadoPagoActivity {
     }
 
     private void fillData() {
-        mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
 
-        // Set a linear layout manager
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        SavedCardsListView savedCardsView = new MercadoPagoUI.Views.SavedCardsListViewBuilder()
+                .setContext(this)
+                .setCards(mCards)
+                .setFooter(mCustomFooterMessage)
+                .setOnSelectedCallback(getOnSelectedCallback())
+                .setSelectionImage(mSelectionImageDrawableResId)
+                .build();
 
-        // Load cards
-        mRecyclerView.setAdapter(new CustomerCardsAdapter(this, mCards, new OnSelectedCallback<Card>() {
+        savedCardsView.drawInParent(mSavedCardsContainer);
+
+    }
+
+    private OnSelectedCallback<Card> getOnSelectedCallback() {
+        return new OnSelectedCallback<Card>() {
             @Override
             public void onSelected(Card card) {
                 // Return to parent
-                Intent returnIntent = new Intent();
                 if (card != null) {
-                    returnIntent.putExtra("card", JsonUtil.getInstance().toJson(card));
+                    resolveCardResponse(card);
                 }
-                setResult(RESULT_OK, returnIntent);
-                finish();
             }
-        }));
+        };
+    }
+
+    private void resolveCardResponse(final Card card) {
+
+        if (isConfirmPromptEnabled()) {
+
+            String dialogTitle = new StringBuilder().append(getString(R.string.mpsdk_last_digits_label)).append(" ").append(card.getLastFourDigits()).toString();
+
+            int resourceId = MercadoPagoUtil.getPaymentMethodIcon(this, card.getPaymentMethod().getId());
+            if (resourceId == 0) {
+                resourceId = android.R.drawable.ic_dialog_alert;
+            }
+
+            new AlertDialog.Builder(this)
+                    .setIcon(resourceId)
+                    .setTitle(dialogTitle)
+                    .setMessage(mSelectionConfirmPromptText)
+                    .setPositiveButton(getString(R.string.mpsdk_confirm_prompt_yes), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            finishWithCardResult(card);
+                        }
+
+                    })
+                    .setNegativeButton(getString(R.string.mpsdk_confirm_prompt_no), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+
+                    })
+                    .show();
+        } else {
+            finishWithCardResult(card);
+        }
+    }
+
+    private boolean isConfirmPromptEnabled() {
+        return !TextUtils.isEmpty(mSelectionConfirmPromptText);
+    }
+
+    private void finishWithCardResult(Card card) {
+        Intent returnIntent = new Intent();
+        setResult(RESULT_OK, returnIntent);
+        returnIntent.putExtra("card", JsonUtil.getInstance().toJson(card));
+        finish();
     }
 
     public void onOtherPaymentMethodClicked(View view) {

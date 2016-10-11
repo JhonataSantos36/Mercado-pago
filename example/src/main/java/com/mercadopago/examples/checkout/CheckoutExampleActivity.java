@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.mercadopago.callbacks.Callback;
 import com.mercadopago.core.MercadoPago;
+import com.mercadopago.core.MercadoPagoUI;
 import com.mercadopago.core.MerchantServer;
 import com.mercadopago.examples.R;
 import com.mercadopago.examples.utils.ColorPickerDialog;
@@ -93,15 +94,15 @@ public class CheckoutExampleActivity extends AppCompatActivity {
 
         DecorationPreference decorationPreference = getCurrentDecorationPreference();
 
-        new MercadoPago.StartActivityBuilder()
+        new MercadoPagoUI.Activities.CheckoutActivityBuilder()
                 .setActivity(this)
-                .setPublicKey(mPublicKey)
+                .setMerchantPublicKey(mPublicKey)
                 .setCheckoutPreferenceId(mCheckoutPreference.getId())
                 .setDecorationPreference(decorationPreference) //Optional
                 .setMerchantBaseUrl(ExamplesUtils.DUMMY_MERCHANT_BASE_URL) //Optional
                 .setMerchantGetCustomerUri(ExamplesUtils.DUMMY_MERCHANT_GET_CUSTOMER_URI) //Optional
                 .setMerchantAccessToken(ExamplesUtils.DUMMY_MERCHANT_ACCESS_TOKEN) //Optional
-                .startCheckoutActivity();
+                .startActivity();
     }
 
     private DecorationPreference getCurrentDecorationPreference() {

@@ -173,4 +173,6 @@
     <string name="mpsdk_instant_accreditation_time">Will it be credited instantly</string>
     <string name="mpsdk_accreditation_time">Will be credited in</string>
     <string name="mpsdk_what_can_do">What can I do?</string>
+    <string name="mpsdk_confirm_prompt_yes">Yes</string>
+    <string name="mpsdk_confirm_prompt_no">No</string>
 </resources>

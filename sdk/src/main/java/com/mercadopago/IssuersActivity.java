@@ -153,7 +153,7 @@ public class IssuersActivity extends ShowCardActivity {
     @SuppressWarnings("unchecked")
     @Override
     protected void getActivityParameters() {
-        mPublicKey = this.getIntent().getStringExtra("publicKey");
+        mPublicKey = this.getIntent().getStringExtra("merchantPublicKey");
         try {
             Type listType = new TypeToken<List<Issuer>>() {
             }.getType();

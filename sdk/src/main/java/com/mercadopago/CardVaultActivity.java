@@ -96,7 +96,7 @@ public class CardVaultActivity extends ShowCardActivity {
     @Override
     protected void getActivityParameters() {
         mInstallmentsEnabled = getIntent().getBooleanExtra("installmentsEnabled", false);
-        mPublicKey = getIntent().getStringExtra("publicKey");
+        mPublicKey = getIntent().getStringExtra("merchantPublicKey");
         mSite = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("site"), Site.class);
         mCard = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("card"), Card.class);
         mSecurityCodeLocation = CardInterface.CARD_SIDE_BACK;
