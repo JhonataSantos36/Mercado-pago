@@ -56,7 +56,7 @@ public class CallForAuthorizeActivity extends MercadoPagoActivity {
 
     @Override
     protected void setContentView() {
-        MPTracker.getInstance().trackScreen("CALL_FOR_AUTHORIZE", 2, mMerchantPublicKey, BuildConfig.VERSION_NAME, this);
+        MPTracker.getInstance().trackScreen("CALL_FOR_AUTHORIZE", "2", mMerchantPublicKey, BuildConfig.VERSION_NAME, this);
         setContentView(R.layout.mpsdk_activity_call_for_authorize);
     }
 
@@ -67,7 +67,7 @@ public class CallForAuthorizeActivity extends MercadoPagoActivity {
         mAuthorizedPaymentMethod.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MPTracker.getInstance().trackEvent("CALL_FOR_AUTHORIZE", "RECOVER_TOKEN", 2, mMerchantPublicKey, BuildConfig.VERSION_NAME, getActivity());
+                MPTracker.getInstance().trackEvent("CALL_FOR_AUTHORIZE", "RECOVER_TOKEN", "2", mMerchantPublicKey, BuildConfig.VERSION_NAME, getActivity());
 
                 Intent returnIntent = new Intent();
                 mNextAction = PaymentResultAction.RECOVER_PAYMENT;
@@ -80,7 +80,7 @@ public class CallForAuthorizeActivity extends MercadoPagoActivity {
         mPayWithOtherPaymentMethodButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                MPTracker.getInstance().trackEvent("CALL_FOR_AUTHORIZE", "SELECT_OTHER_PAYMENT_METHOD", 2, mMerchantPublicKey, BuildConfig.VERSION_NAME, getActivity());
+                MPTracker.getInstance().trackEvent("CALL_FOR_AUTHORIZE", "SELECT_OTHER_PAYMENT_METHOD", "2", mMerchantPublicKey, BuildConfig.VERSION_NAME, getActivity());
 
                 Intent returnIntent = new Intent();
                 mNextAction = PaymentResultAction.SELECT_OTHER_PAYMENT_METHOD;
@@ -156,7 +156,7 @@ public class CallForAuthorizeActivity extends MercadoPagoActivity {
 
     @Override
     public void onBackPressed() {
-        MPTracker.getInstance().trackEvent("CALL_FOR_AUTHORIZE", "BACK_PRESSED", 2, mMerchantPublicKey, BuildConfig.VERSION_NAME, this);
+        MPTracker.getInstance().trackEvent("CALL_FOR_AUTHORIZE", "BACK_PRESSED", "2", mMerchantPublicKey, BuildConfig.VERSION_NAME, this);
 
         if (mBackPressedOnce) {
             finishWithOkResult();

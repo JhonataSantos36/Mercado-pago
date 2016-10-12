@@ -55,7 +55,7 @@ public class RejectionActivity extends MercadoPagoActivity {
 
     @Override
     protected void setContentView() {
-        MPTracker.getInstance().trackScreen("REJECTED", 2, mMerchantPublicKey, BuildConfig.VERSION_NAME, getActivity());
+        MPTracker.getInstance().trackScreen("REJECTED", "2", mMerchantPublicKey, BuildConfig.VERSION_NAME, getActivity());
         setContentView(R.layout.mpsdk_activity_rejection);
     }
 
@@ -149,7 +149,7 @@ public class RejectionActivity extends MercadoPagoActivity {
 
     @Override
     public void onBackPressed() {
-        MPTracker.getInstance().trackEvent("REJECTION", "BACK_PRESSED", 2, mMerchantPublicKey, BuildConfig.VERSION_NAME, this);
+        MPTracker.getInstance().trackEvent("REJECTION", "BACK_PRESSED", "2", mMerchantPublicKey, BuildConfig.VERSION_NAME, this);
 
         if (mBackPressedOnce) {
             finishWithOkResult();
@@ -182,7 +182,7 @@ public class RejectionActivity extends MercadoPagoActivity {
 
     public void onClickRejectionOptionButton(View view){
         if (isPaymentStatusDetailRecoverable()){
-            MPTracker.getInstance().trackEvent("REJECTION", "RECOVER_PAYMENT", 2, mMerchantPublicKey, BuildConfig.VERSION_NAME, this);
+            MPTracker.getInstance().trackEvent("REJECTION", "RECOVER_PAYMENT", "2", mMerchantPublicKey, BuildConfig.VERSION_NAME, this);
 
             Intent returnIntent = new Intent();
             mNextAction = PaymentResultAction.RECOVER_PAYMENT;
@@ -191,7 +191,7 @@ public class RejectionActivity extends MercadoPagoActivity {
             finish();
         }
         else {
-            MPTracker.getInstance().trackEvent("REJECTION", "SELECT_OTHER_PAYMENT_METHOD", 2, mMerchantPublicKey, BuildConfig.VERSION_NAME, this);
+            MPTracker.getInstance().trackEvent("REJECTION", "SELECT_OTHER_PAYMENT_METHOD", "2", mMerchantPublicKey, BuildConfig.VERSION_NAME, this);
 
             Intent returnIntent = new Intent();
             mNextAction = PaymentResultAction.SELECT_OTHER_PAYMENT_METHOD;

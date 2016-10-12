@@ -199,7 +199,7 @@ public class CardVaultActivity extends ShowCardActivity {
             mPayerCost = JsonUtil.getInstance().fromJson(bundle.getString("payerCost"), PayerCost.class);
             finishWithResult();
         } else if (resultCode == RESULT_CANCELED) {
-            MPTracker.getInstance().trackEvent("INSTALLMENTS", "CANCELED", 2, mPublicKey, mSite.getId(), BuildConfig.VERSION_NAME, this);
+            MPTracker.getInstance().trackEvent("INSTALLMENTS", "CANCELED", "2", mPublicKey, mSite.getId(), BuildConfig.VERSION_NAME, this);
 
             setResult(RESULT_CANCELED, data);
             finish();
@@ -247,9 +247,9 @@ public class CardVaultActivity extends ShowCardActivity {
         } else if (resultCode == RESULT_CANCELED) {
 
             if (mSite == null) {
-                MPTracker.getInstance().trackEvent("GUESSING_CARD", "CANCELED", 2, mPublicKey, BuildConfig.VERSION_NAME, this);
+                MPTracker.getInstance().trackEvent("GUESSING_CARD", "CANCELED", "2", mPublicKey, BuildConfig.VERSION_NAME, this);
             } else {
-                MPTracker.getInstance().trackEvent("GUESSING_CARD", "CANCELED", 2, mPublicKey, mSite.getId(), BuildConfig.VERSION_NAME, this);
+                MPTracker.getInstance().trackEvent("GUESSING_CARD", "CANCELED", "2", mPublicKey, mSite.getId(), BuildConfig.VERSION_NAME, this);
             }
 
             setResult(RESULT_CANCELED, data);

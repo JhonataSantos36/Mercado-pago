@@ -217,7 +217,7 @@ public class GuessingCardActivity extends FrontCardActivity {
     @Override
     public void onBackPressed() {
         checkFlipCardToFront(true);
-        MPTracker.getInstance().trackEvent("GUESSING_CARD", "BACK_PRESSED", 2, mPublicKey, BuildConfig.VERSION_NAME, this);
+        MPTracker.getInstance().trackEvent("GUESSING_CARD", "BACK_PRESSED", "2", mPublicKey, BuildConfig.VERSION_NAME, this);
         Intent returnIntent = new Intent();
         returnIntent.putExtra("backButtonPressed", true);
         setResult(RESULT_CANCELED, returnIntent);
@@ -1522,7 +1522,7 @@ public class GuessingCardActivity extends FrontCardActivity {
             public void onFocusChange(View v, boolean hasFocus) {
                 mFrontFragment.setFontColor();
                 if (hasFocus) {
-                    MPTracker.getInstance().trackScreen("CARD_NUMBER", 2, mPublicKey, BuildConfig.VERSION_NAME, getActivity());
+                    MPTracker.getInstance().trackScreen("CARD_NUMBER", "2", mPublicKey, BuildConfig.VERSION_NAME, getActivity());
 
                     disableBackInputButton();
                     openKeyboard(mCardNumberEditText);
@@ -1573,7 +1573,7 @@ public class GuessingCardActivity extends FrontCardActivity {
                 }
                 mFrontFragment.setFontColor();
                 if (hasFocus) {
-                    MPTracker.getInstance().trackScreen("CARD_HOLDER_NAME", 2, mPublicKey, BuildConfig.VERSION_NAME, getActivity());
+                    MPTracker.getInstance().trackScreen("CARD_HOLDER_NAME", "2", mPublicKey, BuildConfig.VERSION_NAME, getActivity());
 
                     enableBackInputButton();
                     openKeyboard(mCardHolderNameEditText);
@@ -1613,7 +1613,7 @@ public class GuessingCardActivity extends FrontCardActivity {
                 }
                 mFrontFragment.setFontColor();
                 if (hasFocus) {
-                    MPTracker.getInstance().trackScreen("CARD_EXPIRY_DATE", 2, mPublicKey, BuildConfig.VERSION_NAME, getActivity());
+                    MPTracker.getInstance().trackScreen("CARD_EXPIRY_DATE", "2", mPublicKey, BuildConfig.VERSION_NAME, getActivity());
 
                     enableBackInputButton();
                     openKeyboard(mCardExpiryDateEditText);
@@ -1646,7 +1646,7 @@ public class GuessingCardActivity extends FrontCardActivity {
                         (mCurrentEditingEditText.equals(CARD_EXPIRYDATE_INPUT) ||
                                 mCurrentEditingEditText.equals(CARD_IDENTIFICATION_INPUT) ||
                                 mCurrentEditingEditText.equals(CARD_SECURITYCODE_INPUT))) {
-                    MPTracker.getInstance().trackScreen("CARD_SECURITY_CODE", 2, mPublicKey, BuildConfig.VERSION_NAME, getActivity());
+                    MPTracker.getInstance().trackScreen("CARD_SECURITY_CODE", "2", mPublicKey, BuildConfig.VERSION_NAME, getActivity());
                     enableBackInputButton();
                     openKeyboard(mCardSecurityCodeEditText);
                     mCurrentEditingEditText = CARD_SECURITYCODE_INPUT;
@@ -1726,7 +1726,7 @@ public class GuessingCardActivity extends FrontCardActivity {
                 }
                 mFrontFragment.setFontColor();
                 if (hasFocus) {
-                    MPTracker.getInstance().trackScreen("IDENTIFICATION_NUMBER", 2, mPublicKey, BuildConfig.VERSION_NAME, getActivity());
+                    MPTracker.getInstance().trackScreen("IDENTIFICATION_NUMBER", "2", mPublicKey, BuildConfig.VERSION_NAME, getActivity());
                     enableBackInputButton();
                     openKeyboard(mCardIdentificationNumberEditText);
                     checkTransitionCardToId();

@@ -87,7 +87,7 @@ public class PaymentMethodsActivity extends MercadoPagoActivity {
 
     @Override
     protected void setContentView() {
-        MPTracker.getInstance().trackScreen("PAYMENT_METHODS", 2, mMerchantPublicKey, BuildConfig.VERSION_NAME, this);
+        MPTracker.getInstance().trackScreen("PAYMENT_METHODS", "2", mMerchantPublicKey, BuildConfig.VERSION_NAME, this);
         setContentView(R.layout.mpsdk_activity_payment_methods);
     }
 
@@ -159,7 +159,7 @@ public class PaymentMethodsActivity extends MercadoPagoActivity {
     }
 
     public void onBackPressed() {
-        MPTracker.getInstance().trackEvent("PAYMENT_METHODS", "BACK_PRESSED", 2, mMerchantPublicKey, BuildConfig.VERSION_NAME, this);
+        MPTracker.getInstance().trackEvent("PAYMENT_METHODS", "BACK_PRESSED", "2", mMerchantPublicKey, BuildConfig.VERSION_NAME, this);
 
         Intent returnIntent = new Intent();
         returnIntent.putExtra("backButtonPressed", true);

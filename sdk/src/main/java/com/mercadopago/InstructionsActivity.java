@@ -181,7 +181,7 @@ public class InstructionsActivity extends MercadoPagoActivity {
     }
 
     protected void showInstructions(Instruction instruction) {
-        MPTracker.getInstance().trackScreen("INSTRUCTIONS", 2, mMerchantPublicKey, BuildConfig.VERSION_NAME, this);
+        MPTracker.getInstance().trackScreen("INSTRUCTIONS", "2", mMerchantPublicKey, BuildConfig.VERSION_NAME, this);
 
         setTitle(instruction.getTitle());
         setInformationMessages(instruction);
@@ -297,7 +297,7 @@ public class InstructionsActivity extends MercadoPagoActivity {
 
     @Override
     public void onBackPressed() {
-        MPTracker.getInstance().trackScreen("INSTRUCTIONS", 2, mMerchantPublicKey, BuildConfig.VERSION_NAME, this);
+        MPTracker.getInstance().trackScreen("INSTRUCTIONS", "2", mMerchantPublicKey, BuildConfig.VERSION_NAME, this);
 
         if (mBackPressedOnce) {
             super.onBackPressed();

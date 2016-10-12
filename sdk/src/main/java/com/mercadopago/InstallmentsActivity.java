@@ -59,7 +59,7 @@ public class InstallmentsActivity extends ShowCardActivity {
 
     @Override
     protected void setContentView() {
-        MPTracker.getInstance().trackScreen("CARD_INSTALLMENTS", 2, mPublicKey, mSite.getId(), BuildConfig.VERSION_NAME, this);
+        MPTracker.getInstance().trackScreen("CARD_INSTALLMENTS", "2", mPublicKey, mSite.getId(), BuildConfig.VERSION_NAME, this);
         setContentView(R.layout.mpsdk_activity_new_installments);
     }
 
@@ -271,7 +271,7 @@ public class InstallmentsActivity extends ShowCardActivity {
 
     @Override
     public void onBackPressed() {
-        MPTracker.getInstance().trackEvent("CARD_INSTALLMENTS", "BACK_PRESSED", 2, mPublicKey, mSite.getId(), BuildConfig.VERSION_NAME, this);
+        MPTracker.getInstance().trackEvent("CARD_INSTALLMENTS", "BACK_PRESSED", "2", mPublicKey, mSite.getId(), BuildConfig.VERSION_NAME, this);
 
         Intent returnIntent = new Intent();
         returnIntent.putExtra("backButtonPressed", true);
