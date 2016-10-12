@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.DrawableRes;
+import android.text.TextUtils;
 
 import com.google.gson.Gson;
 import com.mercadopago.BankDealsActivity;
@@ -301,6 +302,9 @@ public class MercadoPagoUI {
             private PaymentPreference paymentPreference;
             private Integer selectionImageResId;
             private String selectionConfirmPromptText;
+            private String merchantBaseUrl;
+            private String merchantGetCustomerUri;
+            private String merchantAccessToken;
 
             public SavedCardsActivityBuilder setActivity(Activity activity) {
                 this.activity = activity;
@@ -337,6 +341,21 @@ public class MercadoPagoUI {
                 return this;
             }
 
+            public SavedCardsActivityBuilder setMerchantBaseUrl(String merchantBaseUrl) {
+                this.merchantBaseUrl = merchantBaseUrl;
+                return this;
+            }
+
+            public SavedCardsActivityBuilder setMerchantGetCustomerUri(String merchantGetCustomerUri) {
+                this.merchantGetCustomerUri = merchantGetCustomerUri;
+                return this;
+            }
+
+            public SavedCardsActivityBuilder setMerchantAccessToken(String merchantAccessToken) {
+                this.merchantAccessToken = merchantAccessToken;
+                return this;
+            }
+
             public SavedCardsActivityBuilder setFooter(String footerText) {
                 this.footerText = footerText;
                 return this;
@@ -345,13 +364,20 @@ public class MercadoPagoUI {
             public void startActivity() {
 
                 if (this.activity == null) throw new IllegalStateException("activity is null");
-                if (this.cards == null) throw new IllegalStateException("cards is null");
+                if (this.cards == null && (TextUtils.isEmpty(merchantBaseUrl)
+                                || TextUtils.isEmpty(merchantGetCustomerUri)
+                                || TextUtils.isEmpty(merchantAccessToken))) {
+                    throw new IllegalStateException("cards or merchant server info required");
+                }
                 startCustomerCardsActivity();
             }
 
             private void startCustomerCardsActivity() {
                 Intent customerCardsIntent = new Intent(activity, CustomerCardsActivity.class);
                 Gson gson = new Gson();
+                customerCardsIntent.putExtra("merchantBaseUrl", merchantBaseUrl);
+                customerCardsIntent.putExtra("merchantGetCustomerUri", merchantGetCustomerUri);
+                customerCardsIntent.putExtra("merchantAccessToken", merchantAccessToken);
                 customerCardsIntent.putExtra("cards", gson.toJson(cards));
                 customerCardsIntent.putExtra("title", title);
                 customerCardsIntent.putExtra("selectionConfirmPromptText", selectionConfirmPromptText);

@@ -174,6 +174,7 @@ public class ComponentsExampleActivity extends AppCompatActivity {
         final PaymentPreference paymentPreference = getCurrentPaymentPreference();
         final DecorationPreference decorationPreference = getCurrentDecorationPreference();
 
+        mProgressBar.setVisibility(View.VISIBLE);
         MerchantServer.getCustomer(this, ExamplesUtils.DUMMY_MERCHANT_BASE_URL,
                 ExamplesUtils.DUMMY_MERCHANT_GET_CUSTOMER_URI, ExamplesUtils.DUMMY_MERCHANT_ACCESS_TOKEN,
                 new Callback<Customer>() {
@@ -194,7 +195,6 @@ public class ComponentsExampleActivity extends AppCompatActivity {
                         mProgressBar.setVisibility(View.GONE);
                     }
                 });
-        mProgressBar.setVisibility(View.VISIBLE);
     }
 
     @Override
