@@ -70,6 +70,7 @@
                                  <li><a href="f2.html#f2_payment_vault">Componente completo</a></li>
                                  <li><a href="f2.html#f2_card_form">Cobra con tarjeta</a></li>
                                  <li><a href="f2.html#f2_card_form_installments">Cobra con tarjeta en cuotas</a></li>
+                                 <li><a href="f2.html#f2_customer_cards">Tarjetas guardadas</a></li>
                                  <li><a href="f2.html#f2_payment_methods">Medios de pago</a></li>
                                  <li><a href="f2.html#f2_card_issuers">Bancos</a></li>
                                  <li><a href="f2.html#f2_payer_costs">Cuotas</a></li>
@@ -294,6 +295,35 @@ Intent data) {
                      <img src="./img/phone/card_form_installments.gif" class="img-phone-case"></img>
                   </div>
                </section>
+               <section class="docs-section" id="f2_customer_cards">
+               <h3 class="title">Tarjetas guardadas del cliente</h3>
+               <p>
+                  Puedes darle la opción a tu cliente de pagar con sus tarjetas guardadas. Para esto, puedes utilizar el <a href="f2.html#f2_payment_vault">componente de selección completa</a> y además de los datos mencionados especificar tu URL, la URI del recurso de tu servidor a la cual solicitarle un Customer, y un "merchantAccessToken", con el cual debes poder identificar a tu usuario en tu servidor con el cual para así obtener el Customer correspondiente de las APIs de Mercado Pago.
+                  <br />
+                  Ejemplo:
+               </p>
+               <p>
+                  <pre class="snippet">
+                     <code class="line-numbers language-java">
+public void onPaymentVaultButtonClicked(View view) {
+new MercadoPago.StartActivityBuilder()
+ .setActivity(this)
+ .setMerchantBaseUrl("https://api.tunombre.com")
+ .setMerchantGetCustomerUri("/getCustomer")
+ .setMerchantAccessToken("USER_IDENTIFICATION")
+ .setPublicKey(TU_PUBLIC_KEY)
+ .setAmount(MONTO_A_COBRAR)
+ .setSite(Sites.ARGENTINA)
+ .startPaymentVaultActivity();
+}
+
+                     </code>
+                     <button class="copy-button">
+                        <img src="./img/clippy.svg" width="13" alt="Copy to clipboard">
+                     </button>
+                  </pre>
+               </p>
+             </section>
                <section class="docs-section" id="f2_payment_methods">
                   <h3 class="title">Medios de pago</h3>
                   <p>
@@ -350,7 +380,7 @@ Intent data) {
                      <pre class="snippet">
                         <code class="line-numbers language-java">
 public void onIssuersButtonClicked(View view) {
-  PaymentMethod paymentMethod = JsonUtil.getInstance().fromJson(data.getStringExtra("paymentMethod"), PaymentMethod.class);  
+  PaymentMethod paymentMethod = JsonUtil.getInstance().fromJson(data.getStringExtra("paymentMethod"), PaymentMethod.class);
 
   new MercadoPago.StartActivityBuilder()
     .setActivity(this)
@@ -396,7 +426,7 @@ Intent data) {
                      <pre class="snippet">
                         <code class="line-numbers language-java">
 public void startInstallmentsActivity(View view) {
-  PaymentMethod paymentMethod = JsonUtil.getInstance().fromJson(data.getStringExtra("paymentMethod"), PaymentMethod.class);  
+  PaymentMethod paymentMethod = JsonUtil.getInstance().fromJson(data.getStringExtra("paymentMethod"), PaymentMethod.class);
   Issuer issuer = JsonUtil.getInstance().fromJson(data.getStringExtra("issuer"), Issuer.class);
 
   new MercadoPago.StartActivityBuilder()
@@ -480,7 +510,7 @@ public void onBankDealsButtonClicked(View view) {
                         <code class="line-numbers language-java">
 import com.mercadopago.callbacks.Callback;
 
-public void createPayment(final Activity activity, final PaymentMethod paymentMethod, 
+public void createPayment(final Activity activity, final PaymentMethod paymentMethod,
 Issuer issuer, PayerCost payerCost, Token token) {
 
    if (paymentMethod != null) {

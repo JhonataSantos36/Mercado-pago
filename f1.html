@@ -72,6 +72,7 @@
                                  <li><a href="f2.html#f2_payment_vault">Componente completo</a></li>
                                  <li><a href="f2.html#f2_card_form">Cobra con tarjeta</a></li>
                                  <li><a href="f2.html#f2_card_form_installments">Cobra con tarjeta en cuotas</a></li>
+                                 <li><a href="f2.html#f2_customer_cards">Tarjetas guardadas</a></li>
                                  <li><a href="f2.html#f2_payment_methods">Medios de pago</a></li>
                                  <li><a href="f2.html#f2_card_issuers">Bancos</a></li>
                                  <li><a href="f2.html#f2_payer_costs">Cuotas</a></li>
@@ -316,7 +317,7 @@ mercadoPago.getIdentificationTypes(new Callback&lt;List&lt;IdentificationType&gt
                         <code class="line-numbers language-java">
 /* Medio de pago seleccionado por el usuario.
 *  Va a serte útil para las validaciones de datos. */
-PaymentMethod paymentMethod = JsonUtil.getInstance().fromJson(data.getStringExtra("paymentMethod"), PaymentMethod.class);   
+PaymentMethod paymentMethod = JsonUtil.getInstance().fromJson(data.getStringExtra("paymentMethod"), PaymentMethod.class);
 
 /* Crea un CardToken con los datos ingresados por tu usuario.
 *  Este es un ejemplo con datos de prueba */

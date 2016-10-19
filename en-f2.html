@@ -70,6 +70,7 @@
                                  <li><a href="en-f2.html#f2_payment_vault">Full component</a></li>
                                  <li><a href="en-f2.html#f2_card_form">Charging cards</a></li>
                                  <li><a href="en-f2.html#f2_card_form_installments">Charging cards in installments</a></li>
+                                 <li><a href="en-f2.html#f2_customer_cards">Customer cards</a></li>
                                  <li><a href="en-f2.html#f2_payment_methods">Payment methods</a></li>
                                  <li><a href="en-f2.html#f2_card_issuers">Banks</a></li>
                                  <li><a href="en-f2.html#f2_payer_costs">Installments</a></li>
@@ -293,6 +294,35 @@ Intent data) {
                      <img src="./img/phone/card_form_installments.gif" class="img-phone-case"></img>
                   </div>
                </section>
+               <section class="docs-section" id="f2_customer_cards">
+               <h3 class="title">Customer cards</h3>
+               <p>
+                  You can offer to your clients to pay with their previous used saved cards. Use the <a href="en-f2.html#f2_payment_vault">complete payment method selection component</a> and add to the already mentioned parameters your base URL, URI to get a customer from your server, and a "merchantAccessToken", that must be used to identify the user in your servers in order to get the associated Customer from Mercado Pago's API.
+                  <br />
+                  Example:
+               </p>
+               <p>
+                  <pre class="snippet">
+                     <code class="line-numbers language-java">
+public void onPaymentVaultButtonClicked(View view) {
+new MercadoPago.StartActivityBuilder()
+ .setActivity(this)
+ .setMerchantBaseUrl("https://api.yourname.com")
+ .setMerchantGetCustomerUri("/getCustomer")
+ .setMerchantAccessToken("USER_IDENTIFICATION")
+ .setPublicKey(YOUR_PUBLIC_KEY)
+ .setAmount(AMOUNT)
+ .setSite(Sites.ARGENTINA)
+ .startPaymentVaultActivity();
+}
+
+                     </code>
+                     <button class="copy-button">
+                        <img src="./img/clippy.svg" width="13" alt="Copy to clipboard">
+                     </button>
+                  </pre>
+               </p>
+             </section>
                <section class="docs-section" id="f2_payment_methods">
                   <h3 class="title">Payment methods</h3>
                   <p>
