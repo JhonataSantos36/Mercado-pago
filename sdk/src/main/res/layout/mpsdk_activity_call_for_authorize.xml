@@ -131,7 +131,7 @@
                     android:layout_gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/mpsdk_text_keep_buying"
+                    android:text="@string/mpsdk_text_continue"
                     android:textColor="@color/mpsdk_color_link"
                     android:textSize="@dimen/mpsdk_small_text"/>
             </LinearLayout>

@@ -288,7 +288,7 @@ public class RejectionActivityTest {
 
         //Exit button is displayed
         onView(withId(R.id.mpsdkExitRejection)).check(matches(isDisplayed()));
-        onView(withId(R.id.mpsdkExitRejection)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_text_cancel_payment_and_keep_buying))));
+        onView(withId(R.id.mpsdkExitRejection)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_text_cancel_payment_and_continue))));
     }
 
     @Test
@@ -311,7 +311,7 @@ public class RejectionActivityTest {
 
         //Exit button is displayed
         onView(withId(R.id.mpsdkExitRejection)).check(matches(isDisplayed()));
-        onView(withId(R.id.mpsdkExitRejection)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_text_cancel_payment_and_keep_buying))));
+        onView(withId(R.id.mpsdkExitRejection)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_text_cancel_payment_and_continue))));
     }
 
     @Test
@@ -334,7 +334,7 @@ public class RejectionActivityTest {
 
         //Exit button is displayed
         onView(withId(R.id.mpsdkExitRejection)).check(matches(isDisplayed()));
-        onView(withId(R.id.mpsdkExitRejection)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_text_cancel_payment_and_keep_buying))));
+        onView(withId(R.id.mpsdkExitRejection)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_text_cancel_payment_and_continue))));
     }
 
     @Test
@@ -357,7 +357,7 @@ public class RejectionActivityTest {
 
         //Exit button is displayed
         onView(withId(R.id.mpsdkExitRejection)).check(matches(isDisplayed()));
-        onView(withId(R.id.mpsdkExitRejection)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_text_cancel_payment_and_keep_buying))));
+        onView(withId(R.id.mpsdkExitRejection)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_text_cancel_payment_and_continue))));
     }
 
     @Test

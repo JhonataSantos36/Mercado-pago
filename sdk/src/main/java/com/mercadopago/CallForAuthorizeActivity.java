@@ -155,6 +155,14 @@ public class CallForAuthorizeActivity extends MercadoPagoActivity {
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == ErrorUtil.ERROR_REQUEST_CODE) {
+            setResult(RESULT_CANCELED, data);
+            finish();
+        }
+    }
+
+    @Override
     public void onBackPressed() {
         MPTracker.getInstance().trackEvent("CALL_FOR_AUTHORIZE", "BACK_PRESSED", "2", mMerchantPublicKey, BuildConfig.VERSION_NAME, this);
 

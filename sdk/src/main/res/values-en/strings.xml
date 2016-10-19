@@ -155,8 +155,8 @@
     <string name="mpsdk_invalid_card_number">Invalid card number</string>
 
     <!-- Utils -->
-    <string name="mpsdk_text_keep_buying">Keep buying</string>
-    <string name="mpsdk_text_cancel_payment_and_keep_buying">Cancel payment and keep buying</string>
+    <string name="mpsdk_text_continue">Continue</string>
+    <string name="mpsdk_text_cancel_payment_and_continue">Cancel payment and continue</string>
     <string name="mpsdk_zero_rate">Interest free</string>
     <string name="mpsdk_exit_label">Exit</string>
     <string name="mpsdk_cancel_payment">Cancel payment</string>

@@ -12,7 +12,7 @@ public class PaymentRecovery {
     private Boolean mIsTokenRecoverable = false;
 
     public PaymentRecovery(Token token, Payment payment, PaymentMethod paymentMethod, PayerCost payerCost, Issuer issuer){
-        if (areNullParameters(token, payment, paymentMethod, payerCost, issuer)){
+        if (areNullParameters(token, payment, paymentMethod, issuer)){
             throw new IllegalStateException("parameter can not be null");
         }
 
@@ -30,8 +30,8 @@ public class PaymentRecovery {
         setIssuer(issuer);
     }
 
-    private boolean areNullParameters(Token token, Payment payment, PaymentMethod paymentMethod, PayerCost payerCost, Issuer issuer){
-        return token == null || payment == null || paymentMethod == null || payerCost == null || issuer == null;
+    private boolean areNullParameters(Token token, Payment payment, PaymentMethod paymentMethod, Issuer issuer){
+        return token == null || payment == null || paymentMethod == null || issuer == null;
     }
 
     private boolean areValidParameters(Payment payment, PaymentMethod paymentMethod){

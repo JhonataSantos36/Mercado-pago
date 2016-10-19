@@ -117,13 +117,11 @@ public class PendingActivity extends MercadoPagoActivity {
         }).start();
     }
 
-    public void onClickPendingOptionButton(View view){
-        String nextAction;
-
-        Intent returnIntent = new Intent();
-        nextAction = PaymentResultAction.SELECT_OTHER_PAYMENT_METHOD;
-        returnIntent.putExtra("nextAction", nextAction);
-        setResult(RESULT_CANCELED, returnIntent);
-        finish();
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == ErrorUtil.ERROR_REQUEST_CODE) {
+            setResult(RESULT_CANCELED, data);
+            finish();
+        }
     }
 }

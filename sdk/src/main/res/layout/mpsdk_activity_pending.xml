@@ -77,7 +77,7 @@
                     android:paddingRight="40dp"
                     android:paddingTop="20dp"
                     android:paddingBottom="20dp"
-                    android:text="@string/mpsdk_text_keep_buying"
+                    android:text="@string/mpsdk_text_continue"
                     android:textColor="@color/mpsdk_color_link"
                     android:textSize="@dimen/mpsdk_small_text" />
             </LinearLayout>

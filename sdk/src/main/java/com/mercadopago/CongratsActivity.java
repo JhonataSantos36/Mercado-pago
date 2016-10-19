@@ -227,6 +227,14 @@ public class CongratsActivity extends MercadoPagoActivity {
                 mPayment.getCurrencyId(), sb.toString(), true, true);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == ErrorUtil.ERROR_REQUEST_CODE) {
+            setResult(RESULT_CANCELED, data);
+            finish();
+        }
+    }
+
     private void finishWithOkResult() {
         Intent returnIntent = new Intent();
         setResult(RESULT_OK, returnIntent);

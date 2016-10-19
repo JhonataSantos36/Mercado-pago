@@ -177,7 +177,7 @@ public class RejectionActivity extends MercadoPagoActivity {
     private void setBadFillTextButtons(){
         mRejectionSubtitle.setVisibility(View.GONE);
         mRejectionOptionButtonText.setText(getString(R.string.mpsdk_text_enter_again));
-        mExit.setText(getString(R.string.mpsdk_text_cancel_payment_and_keep_buying));
+        mExit.setText(getString(R.string.mpsdk_text_cancel_payment_and_continue));
     }
 
     public void onClickRejectionOptionButton(View view){
@@ -206,5 +206,13 @@ public class RejectionActivity extends MercadoPagoActivity {
                 mPayment.getStatusDetail().equals(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_BAD_FILLED_CARD_NUMBER) ||
                 mPayment.getStatusDetail().equals(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_BAD_FILLED_SECURITY_CODE) ||
                 mPayment.getStatusDetail().equals(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_BAD_FILLED_DATE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == ErrorUtil.ERROR_REQUEST_CODE) {
+            setResult(RESULT_CANCELED, data);
+            finish();
+        }
     }
 }
