@@ -141,10 +141,15 @@ public class MercadoPago {
     public void createToken(final SavedCardToken savedCardToken, final Callback<Token> callback) {
         if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {
             MPTracker.getInstance().trackEvent("NO_SCREEN", "CREATE_SAVED_CARD_TOKEN", "1", mKey, BuildConfig.VERSION_NAME, mContext);
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    savedCardToken.setDevice(mContext);
+                    GatewayService service = mRetrofit.create(GatewayService.class);
+                    service.getToken(mKey, savedCardToken).enqueue(callback);
+                }
+            }).start();
 
-            savedCardToken.setDevice(mContext);
-            GatewayService service = mRetrofit.create(GatewayService.class);
-            service.getToken(this.mKey, savedCardToken).enqueue(callback);
         } else {
             throw new RuntimeException("Unsupported key type for this method");
         }
@@ -153,10 +158,14 @@ public class MercadoPago {
     public void createToken(final CardToken cardToken, final Callback<Token> callback) {
         if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {
             MPTracker.getInstance().trackEvent("NO_SCREEN", "CREATE_CARD_TOKEN", "1", mKey, BuildConfig.VERSION_NAME, mContext);
-
-            cardToken.setDevice(mContext);
-            GatewayService service = mRetrofit.create(GatewayService.class);
-            service.getToken(this.mKey, cardToken).enqueue(callback);
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    cardToken.setDevice(mContext);
+                    GatewayService service = mRetrofit.create(GatewayService.class);
+                    service.getToken(mKey, cardToken).enqueue(callback);
+                }
+            }).start();
         } else {
             throw new RuntimeException("Unsupported key type for this method");
         }
