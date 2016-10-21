@@ -112,7 +112,7 @@
                   <p>
                      <pre class="snippet">
                         <code class="line-numbers language-java">dependencies {
-   compile ('com.mercadopago:sdk:WORKSHOP@aar') { transitive = true }
+   compile ('com.mercadopago:sdk:2.0.0@aar') { transitive = true }
 }
                         </code>
                         <button class="copy-button" alt="Copiar código">
@@ -316,7 +316,7 @@ mercadoPago.getIdentificationTypes(new Callback&lt;List&lt;IdentificationType&gt
                         <code class="line-numbers language-java">
 /* Medio de pago seleccionado por el usuario.
 *  Va a serte útil para las validaciones de datos. */
-PaymentMethod paymentMethod = JsonUtil.getInstance().fromJson(data.getStringExtra("paymentMethod"), PaymentMethod.class);   
+PaymentMethod paymentMethod = JsonUtil.getInstance().fromJson(data.getStringExtra("paymentMethod"), PaymentMethod.class);
 
 /* Crea un CardToken con los datos ingresados por tu usuario.
 *  Este es un ejemplo con datos de prueba */
