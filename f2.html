@@ -299,7 +299,9 @@ Intent data) {
                <section class="docs-section" id="f2_customer_cards">
                <h3 class="title">Tarjetas guardadas del cliente</h3>
                <p>
-                  Puedes darle la opción a tu cliente de pagar con sus tarjetas guardadas. Para esto, puedes utilizar el <a href="f2.html#f2_payment_vault">componente de selección completa</a> y además de los datos mencionados especificar tu URL, la URI del recurso de tu servidor a la cual solicitarle un Customer, y un "merchantAccessToken", con el cual debes poder identificar a tu usuario en tu servidor con el cual para así obtener el Customer correspondiente de las APIs de Mercado Pago.
+                  Puedes darle la opción a tu cliente de pagar con sus tarjetas guardadas. Para esto, puedes utilizar el <a href="f2.html#f2_payment_vault">componente de selección completa</a> y además de los datos mencionados especificar tu URL, la URI del recurso de tu servidor a la cual solicitarle un Customer, y un "merchantAccessToken", con el cual debes poder identificar a tu usuario en tu servidor para así obtener el Customer correspondiente para realizar el pago.
+                  <br />
+                  Para realizar pagos con tarjetas guardadas en tu servidor,<a href="https://www.mercadopago.com.ar/developers/en/solutions/payments/custom-checkout/one-click-charges"> mira la documentación. </a>
                   <br />
                   Ejemplo:
                </p>
@@ -324,6 +326,9 @@ new MercadoPago.StartActivityBuilder()
                      </button>
                   </pre>
                </p>
+               <div class="doc-example ionic">
+                  <img src="./img/phone/saved_cards.png" class="img-phone-case"></img>
+               </div>
              </section>
                <section class="docs-section" id="f2_payment_methods">
                   <h3 class="title">Medios de pago</h3>
@@ -618,13 +623,13 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     if (resultCode == RESULT_CANCELED && data != null) {
       if (data.getStringExtra("nextAction").equals(PaymentResultAction.SELECT_OTHER_PAYMENT_METHOD)){
         // Muestra otros medios de pagos disponibles
-      } 
+      }
       if (data.getStringExtra("nextAction").equals(PaymentResultAction.RECOVER_PAYMENT)){
         // Ve a la siguiente sección para ver como recuperar un pago
       }
     }
   }
-} 
+}
                         </code>
                         <button class="copy-button">
                            <img src="./img/clippy.svg" width="13" alt="Copy to clipboard">
@@ -638,16 +643,16 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
                <section class="docs-section" id="f2_payment_recovery">
                   <h3 class="title">Recupero de pagos</h3>
                   <p>
-                  Este componente es el que utilizamos para realizar cobros con tarjeta de crédito, que además, nos permite recuperar pagos que fueron rechazados porque el usuario ingresó mal los datos de su tarjeta o porque el usuario debe realizar un llamado al emisor de la tarjeta para habilitar el pago. 
+                  Este componente es el que utilizamos para realizar cobros con tarjeta de crédito, que además, nos permite recuperar pagos que fueron rechazados porque el usuario ingresó mal los datos de su tarjeta o porque el usuario debe realizar un llamado al emisor de la tarjeta para habilitar el pago.
                   </p>
                   <p>
-                  En los casos en los cuales se rechazó el pago por la carga errónea de los datos de la tarjeta este componente permite solicitar solo el ingreso de los datos de la tarjeta sin que el usuario deba ingresarlos todos nuevamente. 
+                  En los casos en los cuales se rechazó el pago por la carga errónea de los datos de la tarjeta este componente permite solicitar solo el ingreso de los datos de la tarjeta sin que el usuario deba ingresarlos todos nuevamente.
                   </p>
                   <p>
                   En los casos en los cuales el emisor de la tarjeta frena el pago, el usuario debe llamar y autorizar el mismo. Una vez obtenida la autorización, este componente permite que solicites solo el código de seguridad para regenerar el pago. De esta manera, otorgamos una mejor experiencia, dado que no pedimos al usuario que ingrese nuevamente todos los datos de la tarjeta.
                   </p>
                   <p>
-                  En las dos situaciones descriptas, debes iniciar el componente de la siguiente manera: 
+                  En las dos situaciones descriptas, debes iniciar el componente de la siguiente manera:
                   </p>
                   <p>
                      <pre class="snippet">
@@ -681,7 +686,7 @@ protected void onActivityResult(int resultCode, Intent data){
         setResult(RESULT_CANCELED, returnIntent);
         finish();
       }
-    }  
+    }
   }
 }
                         </code>

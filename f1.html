@@ -96,6 +96,7 @@
                                     <ul>
                                        <li><a href="f1.html#f1_create_payment">Pagos</a></li>
                                        <li><a href="f1.html#f1_create_preference">Preferencias</a></li>
+                                       <li><a href="f1.html#f1_get_customer">Clientes</a></li>
                                     </ul>
                                  </li>
                               </ul>
@@ -627,6 +628,41 @@ MerchantServer.createPreference(this, "https://api.tunombre.com",
                   </p>
                   <p class="advanced-panel">
                      <em>*</em>Creá una preferencia de pago tan <a href="https://www.mercadopago.com.ar/developers/es/solutions/payments/basic-checkout/receive-payments/additional-info/"  target="_blank"><b>completa</b></a> como puedas. Mientras más información nos envíes, mejor será tu experiencia y la de tus usuarios.
+                  </p>
+               </section>
+               <section class="docs-section" id="f1_get_customer">
+                  <h3 class="title">Obtener cliente</h3>
+                  <p>
+                     Puedes obtener tus clientes creados y así ofrecerles pagar con sus tarjetas guardadas.
+                  </p>
+                  <p>
+                     Puedes utilizar el método <b>getCustomer</b> que realiza un GET a tu servidor. Debes indicarnos tu URL base (https://api.tunombre.com) y la uri (/get_customer) del recurso para obtener el cliente. Además, puedes envíar por el parámetro "merchant_access_token" un token que identifique a tu usuario en tu servidor.
+                     <a href="https://github.com/mercadopago/px-android/blob/master/sdk/src/main/java/com/mercadopago/core/MerchantServer.java" target="_blank">MerchantServer</a> transformará la respuesta de tu servicio (la misma que los servicios de MercadoPago) en un objeto <a href="https://github.com/mercadopago/px-android/blob/master/sdk/src/main/java/com/mercadopago/model/Customer.java" target="_blank">Customer</a> que contiene las tarjetas guardadas, entre otras cosas.
+                  </p>
+                  <p>
+                     <pre class="snippet">
+                        <code class="line-numbers language-java">
+// Cuidado! Es el callback de MercadoPago.
+import com.mercadopago.callbacks.Callback;
+
+MerchantServer.getCustomer(this, TU_BASE_URL, GET_CUSTOMER_URI, TOKEN_IDENTIFICADOR,
+            new Callback&lt;Customer&gt;() {
+                @Override
+                public void success(Customer customer) {
+                    // Ya puedes usar el cliente
+                }
+
+                @Override
+                public void failure(ApiException apiException) {
+                    // Ups, ocurrió un error
+                }
+            });
+}
+                        </code>
+                        <button class="copy-button">
+                           <img src="./img/clippy.svg" width="13" alt="Copy to clipboard">
+                        </button>
+                     </pre>
                   </p>
                </section>
             </div>

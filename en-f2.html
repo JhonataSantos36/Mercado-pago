@@ -298,7 +298,9 @@ Intent data) {
                <section class="docs-section" id="f2_customer_cards">
                <h3 class="title">Customer cards</h3>
                <p>
-                  You can offer to your clients to pay with their previous used saved cards. Use the <a href="en-f2.html#f2_payment_vault">complete payment method selection component</a> and add to the already mentioned parameters your base URL, URI to get a customer from your server, and a "merchantAccessToken", that must be used to identify the user in your servers in order to get the associated Customer from Mercado Pago's API.
+                  You can offer to your clients to pay with their previous used saved cards. Use the <a href="en-f2.html#f2_payment_vault">complete payment method selection component</a> and add to the already mentioned parameters your base URL, URI to get a customer from your server, and a "merchantAccessToken", that must be used to identify the user in your servers in order to get the associated Customer.
+                  <br />
+                  In order to create payments in your server with stored cards,<a href="https://www.mercadopago.com.ar/developers/en/solutions/payments/custom-checkout/one-click-charges"> see the docs. </a>
                   <br />
                   Example:
                </p>
@@ -323,6 +325,9 @@ new MercadoPago.StartActivityBuilder()
                      </button>
                   </pre>
                </p>
+             <div class="doc-example ionic">
+                <img src="./img/phone/saved_cards.png" class="img-phone-case"></img>
+             </div>
              </section>
                <section class="docs-section" id="f2_payment_methods">
                   <h3 class="title">Payment methods</h3>
@@ -617,13 +622,13 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     if (resultCode == RESULT_CANCELED && data != null) {
       if (data.getStringExtra("nextAction").equals(PaymentResultAction.SELECT_OTHER_PAYMENT_METHOD)){
         // Show others payment methods
-      } 
+      }
       if (data.getStringExtra("nextAction").equals(PaymentResultAction.RECOVER_PAYMENT)){
         // Go to next section to see how to recover a payment
       }
     }
   }
-} 
+}
 
                         </code>
                         <button class="copy-button">
@@ -680,7 +685,7 @@ protected void onActivityResult(int resultCode, Intent data){
         setResult(RESULT_CANCELED, returnIntent);
         finish();
       }
-    }  
+    }
   }
 }
                         </code>
