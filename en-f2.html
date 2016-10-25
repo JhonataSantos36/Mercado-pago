@@ -673,17 +673,15 @@ public void startCardVaultActivity(PaymentRecovery paymentRecovery) {
 protected void onActivityResult(int resultCode, Intent data){
   if(requestCode == MercadoPago.CARD_VAULT_REQUEST_CODE) {
     if (resultCode == RESULT_OK) {
-      mSelectedIssuer = JsonUtil.getInstance().fromJson(data.getStringExtra("issuer"), Issuer.class);
-      mSelectedPayerCost = JsonUtil.getInstance().fromJson(data.getStringExtra("payerCost"), PayerCost.class);
-      mCreatedToken = JsonUtil.getInstance().fromJson(data.getStringExtra("token"), Token.class);
-      mSelectedPaymentMethod = JsonUtil.getInstance().fromJson(data.getStringExtra("paymentMethod"), PaymentMethod.class);
+      Issuer issuer = JsonUtil.getInstance().fromJson(data.getStringExtra("issuer"), Issuer.class);
+      PayerCost payerCost = JsonUtil.getInstance().fromJson(data.getStringExtra("payerCost"), PayerCost.class);
+      Token token = JsonUtil.getInstance().fromJson(data.getStringExtra("token"), Token.class);
+      PaymentMethod paymentMethod = JsonUtil.getInstance().fromJson(data.getStringExtra("paymentMethod"), PaymentMethod.class);
 
       // Done! Send this information to your server!
     } else {
       if (data != null && data.getStringExtra("mpException") != null) {
-        Intent returnIntent = new Intent();
-        setResult(RESULT_CANCELED, returnIntent);
-        finish();
+        //Handle failure
       }
     }
   }
