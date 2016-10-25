@@ -70,12 +70,14 @@
                                  <li><a href="en-f2.html#f2_payment_vault">Full component</a></li>
                                  <li><a href="en-f2.html#f2_card_form">Charging cards</a></li>
                                  <li><a href="en-f2.html#f2_card_form_installments">Charging cards in installments</a></li>
+                                 <li><a href="en-f2.html#f2_customer_cards">Customer cards</a></li>
                                  <li><a href="en-f2.html#f2_payment_methods">Payment methods</a></li>
                                  <li><a href="en-f2.html#f2_card_issuers">Banks</a></li>
                                  <li><a href="en-f2.html#f2_payer_costs">Installments</a></li>
                                  <li><a href="en-f2.html#f2_bank_deals">Bank deals</a></li>
                                  <li><a href="en-f2.html#f2_create_payment">Payment creation</a></li>
                                  <li><a href="en-f2.html#f2_payment_result">Payment result</a></li>
+                                 <li><a href="en-f2.html#f2_payment_recovery">Payment recovery</a></li>
                               </ul>
                            </li>
                            <li>
@@ -118,7 +120,7 @@
                   <p>
                      <pre class="snippet">
                         <code class="line-numbers language-java">dependencies {
-   compile ('com.mercadopago:sdk:2.0.0@aar') { transitive = true }
+   compile ('com.mercadopago:sdk:2.1.0-rc5@aar') { transitive = true }
 }
                         </code>
                         <button class="copy-button" alt="Copiar código">
@@ -293,6 +295,40 @@ Intent data) {
                      <img src="./img/phone/card_form_installments.gif" class="img-phone-case"></img>
                   </div>
                </section>
+               <section class="docs-section" id="f2_customer_cards">
+               <h3 class="title">Customer cards</h3>
+               <p>
+                  You can offer to your clients to pay with their previous used saved cards. Use the <a href="en-f2.html#f2_payment_vault">complete payment method selection component</a> and add to the already mentioned parameters your base URL, URI to get a customer from your server, and a "merchantAccessToken", that must be used to identify the user in your servers in order to get the associated Customer.
+                  <br />
+                  In order to create payments in your server with stored cards,<a href="https://www.mercadopago.com.ar/developers/en/solutions/payments/custom-checkout/one-click-charges"> see the docs. </a>
+                  <br />
+                  Example:
+               </p>
+               <p>
+                  <pre class="snippet">
+                     <code class="line-numbers language-java">
+public void onPaymentVaultButtonClicked(View view) {
+new MercadoPago.StartActivityBuilder()
+ .setActivity(this)
+ .setMerchantBaseUrl("https://api.yourname.com")
+ .setMerchantGetCustomerUri("/getCustomer")
+ .setMerchantAccessToken("USER_IDENTIFICATION")
+ .setPublicKey(YOUR_PUBLIC_KEY)
+ .setAmount(AMOUNT)
+ .setSite(Sites.ARGENTINA)
+ .startPaymentVaultActivity();
+}
+
+                     </code>
+                     <button class="copy-button">
+                        <img src="./img/clippy.svg" width="13" alt="Copy to clipboard">
+                     </button>
+                  </pre>
+               </p>
+             <div class="doc-example ionic">
+                <img src="./img/phone/saved_cards.png" class="img-phone-case"></img>
+             </div>
+             </section>
                <section class="docs-section" id="f2_payment_methods">
                   <h3 class="title">Payment methods</h3>
                   <p>
@@ -552,25 +588,105 @@ Issuer issuer, PayerCost payerCost, Token token) {
                <section class="docs-section" id="f2_payment_result">
                   <h3 class="title">Payment results</h3>
                   <p>
-                     When the user chooses to pay with a card, different scenarios can come up while processing the payment. It can be approved, but there are also several motives that led to a rejection. These cases can be caused by a wrong card number input, or an error in the security code, expiry date, the lack of funds to complete the payment, the need of an authorization from the card issuer to complete the payment, etc.
+                     When the user chooses to pay with a card, different scenarios can come up while processing the payment. It can be approved, but there are also several reasons that lead up to a rejection. These cases can be caused by a wrong card number input, or an error in the security code, or in the expiry date, the lack of funds to complete the payment, the need of an authorization from the card issuer to complete the payment, and some others.
                   </p>
                   <p>
-                     Also, when your user chooses another payment type, it will stay in a pending state.
+                     We offer a component in our SDK that, depending on the payment type and state, shows a result screen with all the necessary information for the user to understand if the payment was approved, or why it's been rejected, or even what to do if it remains "pending".
                   </p>
                   <p>
-                     We offer a method that, depending on the payment type and state, shows a result screen with all the necessary information for your user to understand if the payment was approved, or why it's been rejected, or even what to do if it remains "pending".
+                     Among the rejection cases, there are payments that can be recovered and reach its approval. This rejections happend because the user entered wrong card data or because the user needed authorization from the card issuer to complete the payment. For more information about the payment recovery go to the next section.
+                  </p>
+                  <p>
+                     Also, when the user chooses another payment type, it will stay in a pending state. For these cases we offer in our component a screen with the steps that the user must complete to conclude the payment.
+                  </p>
+                  <p>
+                     You can use this component in this way:
                   </p>
                   <p>
                      <pre class="snippet">
                         <code class="line-numbers language-java">
 public void startPaymentResultActivity(Payment payment, PaymentMethod paymentMethod) {
 
-   new MercadoPago.StartActivityBuilder()
-      .setPublicKey(YOUR_PUBLIC_KEY)
-      .setActivity(this)
-      .setPayment(payment)
-      .setPaymentMethod(paymentMethod)
-      .startPaymentResultActivity();
+  new MercadoPago.StartActivityBuilder()
+    .setPublicKey(TU_PUBLIC_KEY)
+    .setActivity(this)
+    .setPayment(payment)
+    .setPaymentMethod(paymentMethod)
+    .startPaymentResultActivity();
+}
+
+// Wait the result
+@Override
+protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+  if (requestCode == MercadoPago.PAYMENT_RESULT_REQUEST_CODE) {
+    if (resultCode == RESULT_CANCELED && data != null) {
+      if (data.getStringExtra("nextAction").equals(PaymentResultAction.SELECT_OTHER_PAYMENT_METHOD)){
+        // Show others payment methods
+      }
+      if (data.getStringExtra("nextAction").equals(PaymentResultAction.RECOVER_PAYMENT)){
+        // Go to next section to see how to recover a payment
+      }
+    }
+  }
+}
+
+                        </code>
+                        <button class="copy-button">
+                           <img src="./img/clippy.svg" width="13" alt="Copy to clipboard">
+                        </button>
+                     </pre>
+                  </p>
+                  <div class="doc-example ionic">
+                     <img src="./img/phone/payment_results_cards.gif" class="img-phone-case"></img>
+                  </div>
+               </section>
+               <section class="docs-section" id="f2_payment_recovery">
+                  <h3 class="title">Payment recovery</h3>
+                  <p>
+                     This component is used to charge with credit cards and it also lets us recover payments that were rejected because the user entered wrong card data or because the user needs authorization from the card issuer to complete the payment.
+                  </p>
+                  <p>
+                     In case the payment was rejected because of wrong card data input, this component lets you request only the sensitive data of the card without the user having to enter all information again.
+                  </p>
+                  <p>
+                     In case the card issuer has to authorize the payment, the user needs to call the card issuer. Once the user gets the authorization, this component lets you request only the security code to complete the payment. This way, we offer a better experience because we don't ask for all the information again.
+                  </p>
+                  <p>
+                     In both situations, you have to start the component this way:
+                  </p>
+                     <pre class="snippet">
+                        <code class="line-numbers language-java">
+public void startCardVaultActivity(PaymentRecovery paymentRecovery) {
+  PaymentRecovery paymentRecovery = new PaymentRecovery(token, payment, paymentMethod, payerCost, issuer);
+
+  new MercadoPago.StartActivityBuilder()
+    .setActivity(this)
+    .setPublicKey(TU_PUBLIC_KEY)
+    .setAmount(MONTO_A_COBRAR)
+    .setSite(Sites.ARGENTINA)
+    .setInstallmentsEnabled(true)
+    .setPaymentRecovery(paymentRecovery);
+    .startCardVaultActivity();
+}
+
+// Wait the result
+protected void onActivityResult(int resultCode, Intent data){
+  if(requestCode == MercadoPago.CARD_VAULT_REQUEST_CODE) {
+    if (resultCode == RESULT_OK) {
+      mSelectedIssuer = JsonUtil.getInstance().fromJson(data.getStringExtra("issuer"), Issuer.class);
+      mSelectedPayerCost = JsonUtil.getInstance().fromJson(data.getStringExtra("payerCost"), PayerCost.class);
+      mCreatedToken = JsonUtil.getInstance().fromJson(data.getStringExtra("token"), Token.class);
+      mSelectedPaymentMethod = JsonUtil.getInstance().fromJson(data.getStringExtra("paymentMethod"), PaymentMethod.class);
+
+      // Done! Send this information to your server!
+    } else {
+      if (data != null && data.getStringExtra("mpException") != null) {
+        Intent returnIntent = new Intent();
+        setResult(RESULT_CANCELED, returnIntent);
+        finish();
+      }
+    }
+  }
 }
                         </code>
                         <button class="copy-button">

@@ -72,6 +72,7 @@
                                  <li><a href="en-f2.html#f2_payment_vault">Full component</a></li>
                                  <li><a href="en-f2.html#f2_card_form">Charging cards</a></li>
                                  <li><a href="en-f2.html#f2_card_form_installments">Charging cards in installments</a></li>
+                                 <li><a href="en-f2.html#f2_customer_cards">Customer cards</a></li>
                                  <li><a href="en-f2.html#f2_payment_methods">Payment methods</a></li>
                                  <li><a href="en-f2.html#f2_card_issuers">Banks</a></li>
                                  <li><a href="en-f2.html#f2_payer_costs">Installments</a></li>
@@ -95,6 +96,7 @@
                                     <ul>
                                        <li><a href="en-f1.html#f1_create_payment">Payments</a></li>
                                        <li><a href="en-f1.html#f1_create_preference">Preferences</a></li>
+                                       <li><a href="en-f1.html#f1_get_customer">Customer</a></li>
                                     </ul>
                                  </li>
                               </ul>
@@ -112,7 +114,7 @@
                   <p>
                      <pre class="snippet">
                         <code class="line-numbers language-java">dependencies {
-   compile ('com.mercadopago:sdk:2.0.0@aar') { transitive = true }
+   compile ('com.mercadopago:sdk:2.1.0-rc5@aar') { transitive = true }
 }
                         </code>
                         <button class="copy-button" alt="Copiar código">
@@ -627,6 +629,41 @@ MerchantServer.createPreference(this, "https://api.yourname.com",
                   </p>
                   <p class="advanced-panel">
                      <em>*</em>Create a preference as <a href="https://www.mercadopago.com.ar/developers/es/solutions/payments/basic-checkout/receive-payments/additional-info/"  target="_blank"><b>complete</b></a> as you can. The more information you send, the better experience you and your users get.
+                  </p>
+               </section>
+               <section class="docs-section" id="f1_get_customer">
+                  <h3 class="title">Get customer</h3>
+                  <p>
+                     Get your created customers and offer them their saved cards.
+                  </p>
+                  <p>
+                     Use the <b>getCustomer</b> method, that makes a GET to your server. Set your base URL (https://api.yourname.com) and URI (/get_customer) of the resource made to get a Customer. Also, send the parameter "merchant_access_token" with an identifier of your client.
+                     <a href="https://github.com/mercadopago/px-android/blob/master/sdk/src/main/java/com/mercadopago/core/MerchantServer.java" target="_blank">MerchantServer</a> will turn your service's response into a <a href="https://github.com/mercadopago/px-android/blob/master/sdk/src/main/java/com/mercadopago/model/Customer.java" target="_blank">Customer</a> object which has your client's saved cards, among others.
+                  </p>
+                  <p>
+                     <pre class="snippet">
+                        <code class="line-numbers language-java">
+// Heads up! MercadoPago's callback.
+import com.mercadopago.callbacks.Callback;
+
+MerchantServer.getCustomer(this, YOUR_BASE_URL, YOUR_GET_CUSTOMER_URI, USER_IDENTIFIER_TOKEN,
+            new Callback&lt;Customer&gt;() {
+                @Override
+                public void success(Customer customer) {
+                    // Done! Use your client
+                }
+
+                @Override
+                public void failure(ApiException apiException) {
+                    // Oops, something went wrong
+                }
+            });
+}
+                        </code>
+                        <button class="copy-button">
+                           <img src="./img/clippy.svg" width="13" alt="Copy to clipboard">
+                        </button>
+                     </pre>
                   </p>
                </section>
             </div>
