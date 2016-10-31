@@ -3,6 +3,7 @@ package com.mercadopago;
 import android.content.Intent;
 import android.support.design.widget.Snackbar;
 import android.view.View;
+import android.widget.FrameLayout;
 
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.model.Payment;
@@ -22,8 +23,8 @@ public class CallForAuthorizeActivity extends MercadoPagoActivity {
     //Controls
     protected MPTextView mCallForAuthTitle;
     protected MPTextView mAuthorizedPaymentMethod;
-    protected MPTextView mExit;
-    protected MPTextView mPayWithOtherPaymentMethodButton;
+    protected MPTextView mKeepBuyingButton;
+    protected FrameLayout mPayWithOtherPaymentMethodButton;
 
     //Params
     protected Payment mPayment;
@@ -76,7 +77,7 @@ public class CallForAuthorizeActivity extends MercadoPagoActivity {
                 finish();
             }
         });
-        mPayWithOtherPaymentMethodButton = (MPTextView) findViewById(R.id.mpsdkCallForAuthorizeOptionButton);
+        mPayWithOtherPaymentMethodButton = (FrameLayout) findViewById(R.id.mpsdkCallForAuthorizeOptionButton);
         mPayWithOtherPaymentMethodButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
@@ -89,9 +90,8 @@ public class CallForAuthorizeActivity extends MercadoPagoActivity {
                 finish();
             }
         });
-
-        mExit = (MPTextView) findViewById(R.id.mpsdkExitCallForAuthorize);
-        mExit.setOnClickListener(new View.OnClickListener() {
+        mKeepBuyingButton = (MPTextView) findViewById(R.id.mpsdkKeepBuyingCallForAuthorize);
+        mKeepBuyingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finishWithOkResult();
@@ -169,7 +169,7 @@ public class CallForAuthorizeActivity extends MercadoPagoActivity {
         if (mBackPressedOnce) {
             finishWithOkResult();
         } else {
-            Snackbar.make(mExit, getString(R.string.mpsdk_press_again_to_leave), Snackbar.LENGTH_LONG).show();
+            Snackbar.make(mKeepBuyingButton, getString(R.string.mpsdk_press_again_to_leave), Snackbar.LENGTH_LONG).show();
             mBackPressedOnce = true;
             resetBackPressedOnceIn(4000);
         }

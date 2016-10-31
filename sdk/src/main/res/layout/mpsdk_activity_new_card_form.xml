@@ -22,7 +22,7 @@
                 android:id="@+id/mpsdkCardBackground"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/mpsdk_card_background_height"
-                android:background="@color/mpsdk_color_new_card_form_background">
+                android:background="@color/mpsdk_background_blue">
                 <include layout="@layout/mpsdk_transparent_toolbar"/>
                 <FrameLayout
                     android:id="@+id/mpsdkActivityNewCardContainerFront"

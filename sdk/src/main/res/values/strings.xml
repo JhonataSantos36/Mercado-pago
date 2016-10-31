@@ -19,7 +19,7 @@
     <string name="mpsdk_cod_seg_desc_amex"><xliff:g example="4" id="numeros">%1$d</xliff:g> números al frente de la tarjeta</string>
     <string name="mpsdk_title_activity_vault">Pagar</string>
     <string name="mpsdk_select_pm_label">Selecciona un medio de pago…</string>
-    <string name="mpsdk_last_digits_label">terminada en</string>
+    <string name="mpsdk_last_digits_label">Terminada en</string>
     <string name="mpsdk_confirm">Confirmar</string>
     <string name="mpsdk_title_activity_payment_vault">¿Cómo quieres pagar?</string>
     <string name="mpsdk_invalid_pm_for_current_amount">El medio de pago que elegiste no se puede usar para pagar ese monto. Por favor selecciona otro</string>
@@ -27,11 +27,12 @@
     <string name="mpsdk_payment_method_groups_label">Otros</string>
 
     <!-- Issuers -->
-    <string name="mpsdk_card_issuers_title">¿Cuál es tu banco?</string>
+    <string name="mpsdk_card_issuers_title">¿Quién emitió tu tarjeta?</string>
 
     <!-- Installments -->
     <string name="mpsdk_card_installments_title">¿En cuántas cuotas?</string>
     <string name="mpsdk_installments_of">de</string>
+    <string name="mpsdk_installments_by">x</string>
 
     <!-- Checkout -->
     <string name="mpsdk_text_terms_and_conditions_start">Al pagar, afirmo que soy mayor de edad y acepto los</string>
@@ -78,8 +79,9 @@
     <!-- Congrats -->
     <string name="mpsdk_title_activity_congrat">¡Listo, se acreditó tu pago!</string>
     <string name="mpsdk_subtitle_action_activity_congrat">Te enviaremos los datos a\n%1$s</string>
-    <string name="mpsdk_text_state_acount_activity_congrat">En tu estado de cuenta verás el cargo como MERCADOPAGO</string>
-    <string name="mpsdk_payment_id_description">Comprobante: </string>
+    <string name="mpsdk_text_state_acount_activity_congrat">En tu estado de cuenta verás el cargo como\n MERCADOPAGO</string>
+    <string name="mpsdk_payment_id_description">Comprobante</string>
+    <string name="mpsdk_payment_id_description_number">Nº %1$s</string>
 
     <!-- CallForAuthorize -->
     <string name="mpsdk_title_activity_call_for_authorize">Debes autorizar ante %1$s el pago de %2$s a Mercado Pago</string>
@@ -90,7 +92,7 @@
     <string name="mpsdk_text_select_other_payment_method">Elige otro medio de pago</string>
 
     <!-- Pending -->
-    <string name="mpsdk_title_pending">Estamos procesando el pago</string>
+    <string name="mpsdk_title_pending">Estamos procesando\n el pago</string>
     <string name="mpsdk_subtitle_pending_contingency">En menos de 1 hora te enviaremos por e-mail el resultado.</string>
 
     <!-- Rejection -->
@@ -101,8 +103,8 @@
     <string name="mpsdk_title_other_reason_rejection">%1$s no procesó el pago</string>
     <string name="mpsdk_text_select_other_rejection">Usa otra tarjeta u otro medio de pago</string>
     <string name="mpsdk_text_some_card_data_is_incorrect">Algún dato de tu %1$s es incorrecto.</string>
-    <string name="mpsdk_text_card_number_is_incorrect">El número de tu %1$s es incorrecto.</string>
     <string name="mpsdk_title_bad_filled_other">Uy, no pudimos procesar el pago</string>
+    <string name="mpsdk_text_some_number">Algún número de tu %1$s es incorrecto.</string>
     <string name="mpsdk_text_insufficient_amount">Tu %1$s no tiene fondos suficientes</string>
     <string name="mpsdk_subtitle_rejection_insufficient_amount">¡No te desanimes! Recárgala en cualquier banco o desde tu banca electrónica e inténtalo de nuevo. O si prefieres, puedes elegir otro medio de pago.</string>
     <string name="mpsdk_subtitle_rejection_duplicated_payment">Si necesitas volver a pagar usa otra tarjeta u otro medio de pago.</string>
@@ -173,6 +175,7 @@
     <string name="mpsdk_instant_accreditation_time">Se acreditará instantáneamente</string>
     <string name="mpsdk_accreditation_time">Se acreditará en</string>
     <string name="mpsdk_what_can_do">¿Que puedo hacer?</string>
+    <string name="mpsdk_form_card_title">Tarjeta de %1$s</string>
 
     <string name="mpsdk_confirm_prompt_yes">Sí</string>
     <string name="mpsdk_confirm_prompt_no">No</string>

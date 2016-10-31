@@ -19,7 +19,7 @@
     <string name="mpsdk_cod_seg_desc_amex"><xliff:g id="numeros" example="4">%1$d</xliff:g> dígitos da frente do cartão</string>
     <string name="mpsdk_title_activity_vault">Pagar</string>
     <string name="mpsdk_select_pm_label">Escolha o meio de pagamento…</string>
-    <string name="mpsdk_last_digits_label">terminado em</string>
+    <string name="mpsdk_last_digits_label">Terminado em</string>
     <string name="mpsdk_confirm">Confirmar</string>
     <string name="mpsdk_title_activity_payment_vault">Como você prefere pagar?</string>
     <string name="mpsdk_invalid_pm_for_current_amount">O meio de pagamento que escolheu não pode ser usado para pagar esse valor. Por favor, escolha outro</string>
@@ -78,8 +78,8 @@
     <!-- Congrats -->
     <string name="mpsdk_title_activity_congrat">Pronto! O seu pagamento foi aprovado!</string>
     <string name="mpsdk_subtitle_action_activity_congrat">Enviaremos os dados para\n%1$s</string>
-    <string name="mpsdk_text_state_acount_activity_congrat">Você verá o pagamento na fatura do seu cartão de crédito como MERCADO PAGO</string>
-    <string name="mpsdk_payment_id_description">Comprovante:</string>
+    <string name="mpsdk_text_state_acount_activity_congrat">Você verá o pagamento na fatura do seu cartão de crédito como\n MERCADO PAGO</string>
+    <string name="mpsdk_payment_id_description">Comprovante</string>
 
     <!-- CallForAuthorize -->
     <string name="mpsdk_title_activity_call_for_authorize">Você deve autorizar com %1$s o pagamento de %2$s ao Mercado Pago</string>
@@ -90,7 +90,7 @@
     <string name="mpsdk_text_select_other_payment_method">Escolha outro meio de pagamento</string>
 
     <!-- Pending -->
-    <string name="mpsdk_title_pending">Estamos processando o pagamento</string>
+    <string name="mpsdk_title_pending">Estamos processando\n o pagamento</string>
     <string name="mpsdk_subtitle_pending_contingency">Enviaremos o resultado por e-mail em menos de 1 hora.</string>
 
     <!-- Rejection -->

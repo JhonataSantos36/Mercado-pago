@@ -1,25 +1,26 @@
 package com.mercadopago;
 
-
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 
 import com.google.gson.reflect.TypeToken;
 import com.mercadopago.adapters.PayerCostsAdapter;
-import com.mercadopago.callbacks.Callback;
-import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.callbacks.OnSelectedCallback;
-import com.mercadopago.core.MercadoPago;
+import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.listeners.RecyclerItemClickListener;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.Card;
-import com.mercadopago.model.IdentificationType;
-import com.mercadopago.model.Installment;
+import com.mercadopago.model.DecorationPreference;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.PaymentMethod;
@@ -27,272 +28,318 @@ import com.mercadopago.model.PaymentPreference;
 import com.mercadopago.model.Site;
 import com.mercadopago.model.Token;
 import com.mercadopago.mptracker.MPTracker;
+import com.mercadopago.presenters.InstallmentsPresenter;
+import com.mercadopago.uicontrollers.card.CardRepresentationModes;
+import com.mercadopago.uicontrollers.card.FrontCardView;
 import com.mercadopago.util.ApiUtil;
+import com.mercadopago.util.ColorsUtil;
 import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
+import com.mercadopago.util.ScaleUtil;
+import com.mercadopago.views.InstallmentsActivityView;
 
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.util.List;
 
-public class InstallmentsActivity extends ShowCardActivity {
+/**
+ * Created by vaserber on 9/29/16.
+ */
 
-    //InstallmentsContainer
-    protected RecyclerView mInstallmentsView;
+public class InstallmentsActivity extends AppCompatActivity implements InstallmentsActivityView {
+
+    protected InstallmentsPresenter mPresenter;
+    protected Activity mActivity;
+
+    //View controls
     protected PayerCostsAdapter mPayerCostsAdapter;
+    protected RecyclerView mInstallmentsRecyclerView;
     protected ProgressBar mProgressBar;
-    protected View mCardBackground;
-
-    //Local vars
-    protected List<PayerCost> mPayerCosts;
-    protected PayerCost mSelectedPayerCost;
-    protected PaymentMethod mPaymentMethod;
-    protected PaymentPreference mPaymentPreference;
-    protected Site mSite;
-    protected MercadoPago mMercadoPago;
-    protected String mPublicKey;
-    protected BigDecimal mAmount;
-    protected Issuer mSelectedIssuer;
-    protected Card mCard;
-    protected Token mToken;
-
+    protected DecorationPreference mDecorationPreference;
+    //ViewMode
+    protected boolean mLowResActive;
+    //Low Res View
+    protected Toolbar mLowResToolbar;
+    protected MPTextView mLowResTitleToolbar;
+    //Normal View
+    protected CollapsingToolbarLayout mCollapsingToolbar;
+    protected AppBarLayout mAppBar;
+    protected FrameLayout mCardContainer;
+    protected Toolbar mNormalToolbar;
+    protected FrontCardView mFrontCardView;
 
     @Override
-    protected void setContentView() {
-        MPTracker.getInstance().trackScreen("CARD_INSTALLMENTS", "2", mPublicKey, mSite.getId(), BuildConfig.VERSION_NAME, this);
-        setContentView(R.layout.mpsdk_activity_new_installments);
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (mPresenter == null) {
+            mPresenter = new InstallmentsPresenter(getBaseContext());
+        }
+        mPresenter.setView(this);
+        mActivity = this;
+        getActivityParameters();
+        analyzeLowRes();
+        setContentView();
+        mPresenter.validateActivityParameters();
+    }
+    
+    private void getActivityParameters() {
+        PaymentMethod paymentMethod = JsonUtil.getInstance().fromJson(
+                this.getIntent().getStringExtra("paymentMethod"), PaymentMethod.class);
+        String publicKey = getIntent().getStringExtra("merchantPublicKey");
+        Token token = JsonUtil.getInstance().fromJson(
+                this.getIntent().getStringExtra("token"), Token.class);
+        Card card = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("card"), Card.class);
+        Issuer issuer = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("issuer"), Issuer.class);
+        BigDecimal amount = null;
+        if (this.getIntent().getStringExtra("amount") != null) {
+            amount = new BigDecimal(this.getIntent().getStringExtra("amount"));
+        }
+
+        Site site = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("site"), Site.class);
+        List<PayerCost> payerCosts;
+        try {
+            Type listType = new TypeToken<List<PayerCost>>() {
+            }.getType();
+            payerCosts = JsonUtil.getInstance().getGson().fromJson(this.getIntent().getStringExtra("payerCosts"), listType);
+        } catch (Exception ex) {
+            payerCosts = null;
+        }
+        PaymentPreference paymentPreference = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("paymentPreference"), PaymentPreference.class);
+        if (paymentPreference == null) {
+            paymentPreference = new PaymentPreference();
+        }
+        mDecorationPreference = null;
+        if (getIntent().getStringExtra("decorationPreference") != null) {
+            mDecorationPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("decorationPreference"), DecorationPreference.class);
+        }
+
+        mPresenter.setPaymentMethod(paymentMethod);
+        mPresenter.setPublicKey(publicKey);
+        mPresenter.setToken(token);
+        mPresenter.setCard(card);
+        mPresenter.setIssuer(issuer);
+        mPresenter.setAmount(amount);
+        mPresenter.setSite(site);
+        mPresenter.setPayerCosts(payerCosts);
+        mPresenter.setPaymentPreference(paymentPreference);
+        mPresenter.setCardInformation();
+    }
+
+    private boolean isDecorationEnabled() {
+        return mDecorationPreference != null && mDecorationPreference.hasColors();
+    }
+
+    public void analyzeLowRes() {
+        if (mPresenter.isCardInfoAvailable()) {
+            this.mLowResActive = ScaleUtil.isLowRes(this);
+        } else {
+            this.mLowResActive = true;
+        }
+    }
+
+    public void loadViews() {
+        if (mLowResActive) {
+            loadLowResViews();
+        } else {
+            loadNormalViews();
+        }
+    }
+
+    public void setContentView() {
+        MPTracker.getInstance().trackScreen("CARD_INSTALLMENTS", "2", mPresenter.getPublicKey(),
+                mPresenter.getSite().getId(), BuildConfig.VERSION_NAME, this);
+        if (mLowResActive) {
+            setContentViewLowRes();
+        } else {
+            setContentViewNormal();
+        }
+    }
+
+    public void setContentViewLowRes() {
+        setContentView(R.layout.mpsdk_activity_installments_lowres);
+    }
+
+    public void setContentViewNormal() {
+        setContentView(R.layout.mpsdk_activity_installments_normal);
     }
 
     @Override
-    protected void initializeControls() {
-        mInstallmentsView = (RecyclerView) findViewById(R.id.mpsdkActivityInstallmentsView);
-        mCardContainer = (FrameLayout) findViewById(R.id.mpsdkActivityNewCardContainer);
-        mProgressBar = (ProgressBar) findViewById(R.id.mpsdkProgressBar);
-        mCardBackground = findViewById(R.id.mpsdkCardBackground);
+    public void onValidStart() {
+        mPresenter.initializeMercadoPago();
+        initializeViews();
+        loadViews();
+        hideHeader();
+        decorate();
+        initializeAdapter();
+        mPresenter.loadPayerCosts();
+    }
 
-        if (isCustomColorSet()) {
-            mCardBackground.setBackgroundColor(mDecorationPreference.getLighterColor());
+    @Override
+    public void onInvalidStart(String message) {
+        Intent returnIntent = new Intent();
+        setResult(RESULT_CANCELED, returnIntent);
+        finish();
+    }
+
+    private void initializeViews() {
+        mInstallmentsRecyclerView = (RecyclerView) findViewById(R.id.mpsdkActivityInstallmentsView);
+        mProgressBar = (ProgressBar) findViewById(R.id.mpsdkProgressBar);
+        if (mLowResActive) {
+            mLowResToolbar = (Toolbar) findViewById(R.id.mpsdkRegularToolbar);
+            mLowResTitleToolbar = (MPTextView) findViewById(R.id.mpsdkTitle);
+            mLowResToolbar.setVisibility(View.VISIBLE);
+        } else {
+            mCollapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.mpsdkCollapsingToolbar);
+            mAppBar = (AppBarLayout) findViewById(R.id.mpsdkInstallmentesAppBar);
+            mCardContainer = (FrameLayout) findViewById(R.id.mpsdkActivityCardContainer);
+            mNormalToolbar = (Toolbar) findViewById(R.id.mpsdkRegularToolbar);
+            mNormalToolbar.setVisibility(View.VISIBLE);
         }
         mProgressBar.setVisibility(View.GONE);
     }
 
-    @Override
-    protected void initializeFragments(Bundle savedInstanceState) {
-        super.initializeFragments(savedInstanceState);
+    public void loadLowResViews() {
+        loadToolbarArrow(mLowResToolbar);
+        mLowResTitleToolbar.setText(getString(R.string.mpsdk_card_installments_title));
     }
 
-    @Override
-    protected void hideCardLayout() {
-        mCardBackground.setVisibility(View.GONE);
+    public void loadNormalViews() {
+        loadToolbarArrow(mNormalToolbar);
+        mNormalToolbar.setTitle(getString(R.string.mpsdk_card_installments_title));
+        mFrontCardView = new FrontCardView(mActivity, CardRepresentationModes.SHOW_FULL_FRONT_ONLY);
+        mFrontCardView.setSize(CardRepresentationModes.MEDIUM_SIZE);
+        mFrontCardView.setPaymentMethod(mPresenter.getPaymentMethod());
+        if (mPresenter.getCardInformation() != null) {
+            mFrontCardView.setCardNumberLength(mPresenter.getCardNumberLength());
+            mFrontCardView.setLastFourDigits(mPresenter.getCardInformation().getLastFourDigits());
+        }
+        mFrontCardView.inflateInParent(mCardContainer, true);
+        mFrontCardView.initializeControls();
+        mFrontCardView.draw();
     }
 
-    @Override
-    protected void onValidStart() {
-        setCardInformation();
-        setPaymentMethod(mPaymentMethod);
-        if (isCardInfoAvailable()) {
-            initializeFrontFragment();
-            super.initializeCard();
+    private void loadToolbarArrow(Toolbar toolbar) {
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
+        if (toolbar != null) {
+            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    finish();
+                }
+            });
+        }
+    }
+
+    private void hideHeader() {
+        if (mLowResActive) {
+            mLowResToolbar.setVisibility(View.GONE);
         } else {
-            hideCardLayout();
+            mNormalToolbar.setTitle("");
         }
-        initializeAdapter();
-        initializeToolbar();
-        showPayerCosts();
-    }
-
-    private void setCardInformation() {
-        if(mCard == null && mToken != null) {
-            setCardInformation(mToken);
-        } else if (mCard != null) {
-            setCardInformation(mCard);
-        }
-    }
-
-    private boolean werePayerCostsSet() {
-        return mPayerCosts != null;
     }
 
     @Override
-    protected void onInvalidStart(String message) {
-        Intent returnIntent = new Intent();
-        setResult(RESULT_CANCELED, returnIntent);
-        finish();
+    public void showHeader() {
+        if (mLowResActive) {
+            mLowResToolbar.setVisibility(View.VISIBLE);
+        } else {
+            mNormalToolbar.setTitle(getString(R.string.mpsdk_card_installments_title));
+        }
+    }
+
+    private void decorate() {
+        if (isDecorationEnabled()) {
+            if (mLowResActive) {
+                decorateLowRes();
+            } else {
+                decorateNormal();
+            }
+        }
+    }
+
+    private void decorateLowRes() {
+        ColorsUtil.decorateLowResToolbar(mLowResToolbar, mLowResTitleToolbar, mDecorationPreference,
+                getSupportActionBar(), this);
+    }
+
+    private void decorateNormal() {
+        ColorsUtil.decorateNormalToolbar(mNormalToolbar, mDecorationPreference, mAppBar,
+                mCollapsingToolbar, getSupportActionBar(), this);
+        mFrontCardView.decorateCardBorder(mDecorationPreference.getLighterColor());
+    }
+
+    private void initializeAdapter() {
+        mPayerCostsAdapter = new PayerCostsAdapter(this, mPresenter.getSite().getCurrencyId(), getDpadSelectionCallback());
+        initializeAdapterListener(mPayerCostsAdapter, mInstallmentsRecyclerView);
+    }
+
+    private void initializeAdapterListener(RecyclerView.Adapter adapter, RecyclerView view) {
+        view.setAdapter(adapter);
+        view.setLayoutManager(new LinearLayoutManager(this));
+        view.addOnItemTouchListener(new RecyclerItemClickListener(this,
+            new RecyclerItemClickListener.OnItemClickListener() {
+                @Override
+                public void onItemClick(View view, int position) {
+                    mPresenter.onItemSelected(position);
+                }
+            }));
     }
 
     protected OnSelectedCallback<Integer> getDpadSelectionCallback() {
         return new OnSelectedCallback<Integer>() {
             @Override
             public void onSelected(Integer position) {
-                onItemSelected(position);
+                mPresenter.onItemSelected(position);
             }
         };
     }
 
-    protected void initializeAdapter() {
-        mPayerCostsAdapter = new PayerCostsAdapter(this, mSite.getCurrencyId(), getDpadSelectionCallback());
-        initializeAdapterListener(mPayerCostsAdapter, mInstallmentsView);
-    }
-
-    protected void onItemSelected(int position) {
-        mSelectedPayerCost = mPayerCosts.get(position);
-        finishWithResult();
-    }
-
-    protected void initializeToolbar() {
-        if (isCardInfoAvailable()) {
-            super.initializeToolbar("", true);
-        } else {
-            super.initializeToolbar(getString(R.string.mpsdk_card_installments_title), false);
-        }
-    }
-
-    protected void showPayerCosts() {
-
-        if (werePayerCostsSet()) {
-            resolvePayerCosts(mPayerCosts);
-        } else {
-            getInstallmentsAsync();
-        }
-    }
-
-    @SuppressWarnings("unchecked")
     @Override
-    protected void getActivityParameters() {
-        mPublicKey = this.getIntent().getStringExtra("merchantPublicKey");
-        if (this.getIntent().getStringExtra("amount") != null) {
-            mAmount = new BigDecimal(this.getIntent().getStringExtra("amount"));
-        }
-        mPaymentMethod = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("paymentMethod"), PaymentMethod.class);
-        mSelectedIssuer = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("issuer"), Issuer.class);
-        mSite = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("site"), Site.class);
-        try {
-            Type listType = new TypeToken<List<PayerCost>>() {
-            }.getType();
-            mPayerCosts = JsonUtil.getInstance().getGson().fromJson(this.getIntent().getStringExtra("payerCosts"), listType);
-        } catch (Exception ex) {
-            mPayerCosts = null;
-        }
-        mPaymentPreference = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("paymentPreference"), PaymentPreference.class);
-        if (mPaymentPreference == null) {
-            mPaymentPreference = new PaymentPreference();
-        }
-        mCard = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("card"), Card.class);
-        mToken = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("token"), Token.class);
+    public void initializeInstallments(List<PayerCost> payerCostList) {
+        mPayerCostsAdapter.addResults(payerCostList);
     }
 
     @Override
-    protected void validateActivityParameters() throws IllegalStateException {
-        if (mAmount == null || mSite == null) {
-            throw new IllegalStateException();
-        }
-        if (mPayerCosts == null) {
-            if (mSelectedIssuer == null) {
-                throw new IllegalStateException("issuer is null");
-            }
-            if (mPublicKey == null) {
-                throw new IllegalStateException("public key not set");
-            }
-            if (mPaymentMethod == null) {
-                throw new IllegalStateException("payment method is null");
-            }
-        }
-    }
-
-    private void getInstallmentsAsync() {
-
-        mMercadoPago = new MercadoPago.Builder()
-                .setContext(this)
-                .setPublicKey(mPublicKey)
-                .build();
-
+    public void showLoadingView() {
         mProgressBar.setVisibility(View.VISIBLE);
-        Long issuerId = mSelectedIssuer == null ? null : mSelectedIssuer.getId();
-        String bin = "";
-        if (getCardInformation() != null) {
-            bin = getCardInformation().getFirstSixDigits() == null ? "" : getCardInformation().getFirstSixDigits();
-        }
-        mMercadoPago.getInstallments(bin, mAmount, issuerId, mPaymentMethod.getId(),
-                new Callback<List<Installment>>() {
-                    @Override
-                    public void success(List<Installment> installments) {
-                        if (isActivityActive()) {
-                            mProgressBar.setVisibility(View.GONE);
-                            if (installments.size() == 0) {
-                                ErrorUtil.startErrorActivity(getActivity(), getString(R.string.mpsdk_standard_error_message), "no installments found for an issuer at InstallmentsActivity", false);
-                            } else if (installments.size() == 1) {
-                                resolvePayerCosts(installments.get(0).getPayerCosts());
-                            } else {
-                                ErrorUtil.startErrorActivity(getActivity(), getString(R.string.mpsdk_standard_error_message), "multiple installments found for an issuer at InstallmentsActivity", false);
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void failure(ApiException apiException) {
-                        if (isActivityActive()) {
-                            mProgressBar.setVisibility(View.GONE);
-                            setFailureRecovery(new FailureRecovery() {
-                                @Override
-                                public void recover() {
-                                    getInstallmentsAsync();
-                                }
-                            });
-                            ApiUtil.showApiExceptionError(getActivity(), apiException);
-                        }
-                    }
-                });
-    }
-
-    private void resolvePayerCosts(List<PayerCost> payerCosts) {
-        PayerCost defaultPayerCost = mPaymentPreference.getDefaultInstallments(payerCosts);
-        mPayerCosts = mPaymentPreference.getInstallmentsBelowMax(payerCosts);
-
-        if (defaultPayerCost != null) {
-            mSelectedPayerCost = defaultPayerCost;
-            finishWithResult();
-        } else if (mPayerCosts.isEmpty()) {
-            ErrorUtil.startErrorActivity(getActivity(), getString(R.string.mpsdk_standard_error_message), "no payer costs found at InstallmentsActivity", false);
-        } else if (mPayerCosts.size() == 1) {
-            mSelectedPayerCost = payerCosts.get(0);
-            finishWithResult();
-        } else {
-            initializeInstallments();
-        }
     }
 
     @Override
-    protected void finishWithResult() {
+    public void stopLoadingView() {
+        mProgressBar.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void startErrorView(String message, String errorDetail) {
+        ErrorUtil.startErrorActivity(mActivity, message, errorDetail, false);
+    }
+
+    @Override
+    public void showApiExceptionError(ApiException exception) {
+        ApiUtil.showApiExceptionError(mActivity, exception);
+    }
+
+    @Override
+    public void finishWithResult(PayerCost payerCost) {
         Intent returnIntent = new Intent();
-        returnIntent.putExtra("payerCost", JsonUtil.getInstance().toJson(mSelectedPayerCost));
+        returnIntent.putExtra("payerCost", JsonUtil.getInstance().toJson(payerCost));
         setResult(RESULT_OK, returnIntent);
         finish();
     }
 
     @Override
     public void onBackPressed() {
-        MPTracker.getInstance().trackEvent("CARD_INSTALLMENTS", "BACK_PRESSED", "2", mPublicKey, mSite.getId(), BuildConfig.VERSION_NAME, this);
-
+        MPTracker.getInstance().trackEvent("CARD_INSTALLMENTS", "BACK_PRESSED", "2",
+                mPresenter.getPublicKey(), mPresenter.getSite().getId(), BuildConfig.VERSION_NAME, this);
         Intent returnIntent = new Intent();
         returnIntent.putExtra("backButtonPressed", true);
         setResult(RESULT_CANCELED, returnIntent);
         finish();
-    }
-
-    protected void initializeAdapterListener(RecyclerView.Adapter adapter, RecyclerView view) {
-        view.setAdapter(adapter);
-        view.setLayoutManager(new LinearLayoutManager(this));
-        view.addOnItemTouchListener(new RecyclerItemClickListener(this,
-                new RecyclerItemClickListener.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(View view, int position) {
-                        onItemSelected(position);
-                    }
-                }));
-    }
-
-    private void initializeInstallments() {
-        mPayerCostsAdapter.addResults(mPayerCosts);
     }
 
     @Override
@@ -300,26 +347,11 @@ public class InstallmentsActivity extends ShowCardActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == ErrorUtil.ERROR_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
-                recoverFromFailure();
+                mPresenter.recoverFromFailure();
             } else {
                 setResult(resultCode, data);
                 finish();
             }
         }
-    }
-
-    @Override
-    public void initializeCardByToken() {
-
-    }
-
-    @Override
-    public IdentificationType getCardIdentificationType() {
-        return null;
-    }
-
-    @Override
-    public PaymentMethod getCurrentPaymentMethod() {
-        return mPaymentMethod;
     }
 }

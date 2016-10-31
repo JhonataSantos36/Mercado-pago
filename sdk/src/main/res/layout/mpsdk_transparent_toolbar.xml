@@ -5,8 +5,8 @@
     android:id="@+id/mpsdkToolbar"
     app:theme="@style/MPTransparentActionBar"
     android:layout_width="match_parent"
-    android:layout_height="45dp"
-    android:minHeight="?attr/actionBarSize"
+    android:layout_height="@dimen/mpsdk_toolbar_height"
+    android:minHeight="@dimen/mpsdk_toolbar_height"
     android:background="@android:color/transparent">
 
     <com.mercadopago.customviews.MPTextView

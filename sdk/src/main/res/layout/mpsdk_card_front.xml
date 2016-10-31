@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    android:id="@+id/mpsdkCardFrontContainer"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="@dimen/mpsdk_card_size_extra_big_height"
+    android:layout_width="@dimen/mpsdk_card_size_extra_big_width">
+
+    <FrameLayout
+        android:id="@+id/mpsdkCardFrontFragment"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:layout_gravity="center_horizontal">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="5dp"
+            android:layout_gravity="center">
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="@drawable/mpsdk_new_card_layout">
+                <ImageView
+                    android:id="@+id/mpsdkCardLowApiImageView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/mpsdk_white"/>
+
+                <ImageView
+                    android:id="@+id/mpsdkCardLollipopImageView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@color/mpsdk_white" />
+
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:weightSum="1">
+                <FrameLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.6">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/card_back_shadow"/>
+
+                </FrameLayout>
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/mpsdk_transparent"
+                android:orientation="vertical"
+                android:visibility="visible"
+                android:weightSum="1">
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="0.4"
+                    android:layout_gravity="start"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginLeft="16dp">
+                    <FrameLayout
+                        android:id="@+id/mpsdkBaseImageCard"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="visible">
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="start"
+                            android:src="@drawable/base_card_image"/>
+                    </FrameLayout>
+                    <ImageView
+                        android:id="@+id/mpsdkImageCardContainer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start"/>
+                </FrameLayout>
+
+                <FrameLayout
+                    android:layout_width="64dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="0.2"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginEnd="15dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="-10dp"
+                    android:layout_gravity="end"
+                    android:visibility="visible">
+
+                    <com.mercadopago.customviews.MPTextView
+                        android:id="@+id/mpsdkCardSecurityView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/mpsdk_base_text"
+                        android:textSize="18dp"
+                        android:gravity="end"
+                        tools:text="1234"
+                        app:fontStyle="roboto_regular"/>
+
+                </FrameLayout>
+
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="0.2"
+                    android:layout_marginTop="10dp">
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:paddingStart="15dp"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="15dp"
+                        android:paddingEnd="15dp">
+                        <com.mercadopago.customviews.MPTextView
+                            android:id="@+id/mpsdkCardNumberTextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:gravity="start"
+                            android:singleLine="true"
+                            android:ellipsize="none"
+                            android:textColor="@color/mpsdk_base_text"
+                            android:textSize="19dp"
+                            app:fontStyle="roboto_regular"
+                            tools:text="1234 1234 1234 1234"
+                            android:visibility="visible" />
+                    </FrameLayout>
+                </FrameLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="0.2"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="15dp"
+                    android:orientation="horizontal"
+                    android:weightSum="1">
+
+                    <com.mercadopago.customviews.MPTextView
+                        android:id="@+id/mpsdkCardholderNameView"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.6"
+                        android:singleLine="true"
+                        android:paddingStart="15dp"
+                        android:paddingLeft="15dp"
+                        android:gravity="start"
+                        android:text="@string/mpsdk_cardholder_name_short"
+                        android:textColor="@color/mpsdk_base_text"
+                        android:textSize="14dp" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.4"
+                        android:paddingRight="15dp"
+                        android:paddingEnd="15dp"
+                        android:gravity="end">
+
+                        <com.mercadopago.customviews.MPTextView
+                            android:id="@+id/mpsdkCardHolderExpiryMonth"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/mpsdk_card_expiry_month_hint"
+                            android:textColor="@color/mpsdk_base_text"
+                            android:textSize="14dp" />
+
+                        <com.mercadopago.customviews.MPTextView
+                            android:id="@+id/mpsdkCardHolderDateDivider"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/mpsdk_card_expiry_divider_hint"
+                            android:textColor="@color/mpsdk_base_text"
+                            android:textSize="14dp" />
+
+                        <com.mercadopago.customviews.MPTextView
+                            android:id="@+id/mpsdkCardHolderExpiryYear"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/mpsdk_card_expiry_year_hint"
+                            android:textColor="@color/mpsdk_base_text"
+                            android:textSize="14dp" />
+                    </LinearLayout>
+
+                </LinearLayout>
+            </LinearLayout>
+        </FrameLayout>
+
+        <ImageView
+            android:id="@+id/mpsdkCardShadowBorder"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:src="@drawable/mpsdk_card_shadow_rounded"/>
+
+    </FrameLayout>
+</FrameLayout>

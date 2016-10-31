@@ -3,6 +3,7 @@ package com.mercadopago.util;
 import android.app.Activity;
 import android.content.Context;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 
 import com.mercadopago.R;
@@ -51,5 +52,12 @@ public class LayoutUtil {
         if (refresh != null) {
             refresh.setVisibility(showRefresh ? View.VISIBLE : View.GONE);
         }
+    }
+
+    public static void resizeViewGroupLayoutParams(ViewGroup viewGroup, int height, int width, Context context) {
+        ViewGroup.LayoutParams params = viewGroup.getLayoutParams();
+        params.height = (int) context.getResources().getDimension(height);
+        params.width = (int) context.getResources().getDimension(width);
+        viewGroup.setLayoutParams(params);
     }
 }

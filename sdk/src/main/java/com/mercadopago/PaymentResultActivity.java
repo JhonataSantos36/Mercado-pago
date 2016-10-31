@@ -18,6 +18,7 @@ public class PaymentResultActivity extends Activity {
     //Params
     protected Payment mPayment;
     protected PaymentMethod mPaymentMethod;
+
     private String mMerchantPublicKey;
 
     @Override

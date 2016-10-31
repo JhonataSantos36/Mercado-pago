@@ -19,7 +19,6 @@
     <color name="mpsdk_rejection_color_light">#F8E9E9</color>
     <color name="mpsdk_rejection_color_dark">#F8DADA</color>
     <color name="mpsdk_process_color_dark">#30AFE2</color>
-    <color name="mpsdk_colorPrimary">#5ABEE7</color>
     <color name="mpsdk_icon_image_color">#1D9FDE</color>
     <color name="mpsdk_warm_grey">#b7999999</color>
     <color name="mpsdk_shopping_cart_background">#ce76cdf1</color>
@@ -32,22 +31,25 @@
     <color name="mpsdk_active_button">#3383FA</color>
     <color name="mpsdk_inactive_button">#84b4fc</color>
 
-    <color name="mpsdk_color_congrats_image">#2FB000</color>
-    <color name="mpsdk_color_congrats_background">#E9FFE4</color>
+    <color name="mpsdk_color_congrats_background">#3BC280</color>
+    <color name="mpsdk_color_congrats_status_bar">#35AE73</color>
     <color name="mpsdk_color_congrats_installments">#009FDE</color>
     <color name="mpsdk_color_congrats_interest">#43B000</color>
 
     <color name="mpsdk_color_rejection_background">#D9D9D9</color>
     <color name="mpsdk_color_rejection_image">#990601</color>
     <color name="mpsdk_color_rejection_result_text">#BD494A</color>
-    <color name="mpsdk_color_rejection_title_background">#F8E9E9</color>
+    <color name="mpsdk_color_rejection_title_background">#FF5959</color>
+    <color name="mpsdk_color_rejection_status_bar">#e55050</color>
 
     <color name="mpsdk_installments_text">#009FDE</color>
     <color name="mpsdk_installments_zero_rate">#43B000</color>
-    <color name="mpsdk_color_call_for_authorize_background">#E4F2F9</color>
-    <color name="mpsdk_color_call_for_authorize_image">#3987AD</color>
-    
-    <color name="mpsdk_color_pending_background">#FBF8E1</color>
+    <color name="mpsdk_color_call_for_authorize_image">#3188AA</color>
+    <color name="mpsdk_color_call_for_authorize_background">#3AB8EF</color>
+    <color name="mpsdk_color_call_for_authorize_status_bar">#34a5d7</color>
+
+    <color name="mpsdk_color_pending_background">#FFA15A</color>
+    <color name="mpsdk_color_pending_status_bar">#E59051</color>
     <color name="mpsdk_color_pending_image">#EFC701</color>
     <color name="mpsdk_color_new_card_form_background">#59C0ED</color>
     <color name="mpsdk_color_new_card_form_background_light_alpha">#4DFFFFFF</color>
@@ -117,5 +119,13 @@
     <color name="mpsdk_font_redlink">#B3333333</color>
     <color name="mpsdk_font_bapropagos">#B3333333</color>
     <color name="mpsdk_font_cargavirtual">#B3333333</color>
+
+    <!-- Revamp 2.0 -->
+
+    <color name="mpsdk_background_blue">#009EE3</color>
+    <color name="mpsdk_colorPrimary">#009EE3</color>
+    <color name="mpsdk_color_payer_costs">#999999</color>
+    <color name="mpsdk_color_payer_costs_no_rate">#3BC280</color>
+    <color name="mpsdk_issuers_background_gray">#F0F0F0</color>
 
 </resources>

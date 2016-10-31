@@ -1,7 +1,11 @@
 package com.mercadopago.controllers;
 
 import com.mercadopago.core.MercadoPago;
+import com.mercadopago.model.CardInformation;
+import com.mercadopago.model.CardNumber;
 import com.mercadopago.model.PaymentMethod;
+import com.mercadopago.model.Setting;
+import com.mercadopago.util.ApiUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,6 +77,30 @@ public class PaymentMethodGuessingController {
             }
         }
         return ans;
+    }
+
+    public Setting getSettingByPaymentMethod(PaymentMethod paymentMethod) {
+        List<Setting> settings = paymentMethod.getSettings();
+        Setting setting = Setting.getSettingByBin(settings, mSavedBin);
+        return setting;
+    }
+
+    public static Setting getSettingByPaymentMethodAndBin(PaymentMethod paymentMethod, String bin) {
+        List<Setting> settings = paymentMethod.getSettings();
+        Setting setting = Setting.getSettingByBin(settings, bin);
+        return setting;
+    }
+
+    public static Integer getCardNumberLength(PaymentMethod paymentMethod, String bin) {
+        if (paymentMethod == null) {
+            return CardInformation.CARD_NUMBER_MAX_LENGTH;
+        }
+        Setting setting = PaymentMethodGuessingController.getSettingByPaymentMethodAndBin(paymentMethod, bin);
+        int cardNumberLength = CardInformation.CARD_NUMBER_MAX_LENGTH;
+        if (setting != null) {
+            cardNumberLength = setting.getCardNumber().getLength();
+        }
+        return cardNumberLength;
     }
 
 }

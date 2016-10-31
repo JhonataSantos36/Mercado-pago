@@ -184,6 +184,7 @@ public class BankDealsActivityTest {
         mTestRule.launchActivity(validStartIntent);
         pressBack();
     }
+
 /*
     @Test
     public void ifUserPressesBackInTermAndConditionsShowBankDeals() {

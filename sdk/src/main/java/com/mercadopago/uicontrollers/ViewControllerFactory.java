@@ -6,7 +6,7 @@ import com.mercadopago.model.DecorationPreference;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentMethodSearchItem;
 import com.mercadopago.model.Token;
-import com.mercadopago.uicontrollers.payercosts.PayerCostEditableRow;
+import com.mercadopago.uicontrollers.payercosts.PayerCostRow;
 import com.mercadopago.uicontrollers.payercosts.PayerCostViewController;
 import com.mercadopago.uicontrollers.paymentmethods.PaymentMethodOffEditableRow;
 import com.mercadopago.uicontrollers.paymentmethods.PaymentMethodViewController;
@@ -44,7 +44,7 @@ public class ViewControllerFactory {
     }
 
     public static PayerCostViewController getPayerCostEditionViewController(Context context, String currencyId) {
-        return new PayerCostEditableRow(context, currencyId);
+        return new PayerCostRow(context, currencyId);
     }
 
 }

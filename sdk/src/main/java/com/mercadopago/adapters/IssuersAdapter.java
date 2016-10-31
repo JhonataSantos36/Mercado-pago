@@ -6,11 +6,12 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
 import com.mercadopago.R;
 import com.mercadopago.callbacks.OnSelectedCallback;
-import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.model.Issuer;
+import com.mercadopago.uicontrollers.issuers.IssuersView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +42,7 @@ public class IssuersAdapter extends RecyclerView.Adapter<IssuersAdapter.ViewHold
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         LayoutInflater inflater = LayoutInflater.from(mContext);
-        View adapterView = inflater.inflate(R.layout.mpsdk_row_issuers, parent, false);
+        View adapterView = inflater.inflate(R.layout.mpsdk_adapter_issuer, parent, false);
         ViewHolder viewHolder = new ViewHolder(adapterView);
         return viewHolder;
     }
@@ -49,7 +50,7 @@ public class IssuersAdapter extends RecyclerView.Adapter<IssuersAdapter.ViewHold
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Issuer issuer = mIssuers.get(position);
-        holder.mIssuersTextView.setText(issuer.getName());
+        holder.mIssuersView.drawIssuer(issuer);
     }
 
 
@@ -64,11 +65,15 @@ public class IssuersAdapter extends RecyclerView.Adapter<IssuersAdapter.ViewHold
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        public MPTextView mIssuersTextView;
+        public FrameLayout mIssuerContainer;
+        public IssuersView mIssuersView;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            mIssuersTextView = (MPTextView) itemView.findViewById(R.id.mpsdkAdapterIssuersText);
+            mIssuerContainer = (FrameLayout) itemView.findViewById(R.id.mpsdkIssuerAdapterContainer);
+            mIssuersView = new IssuersView(mContext);
+            mIssuersView.inflateInParent(mIssuerContainer, true);
+            mIssuersView.initializeControls();
 
             itemView.setOnKeyListener(new View.OnKeyListener() {
                 @Override

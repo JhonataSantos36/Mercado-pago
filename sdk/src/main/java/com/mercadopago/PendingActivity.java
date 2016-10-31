@@ -18,7 +18,7 @@ public class PendingActivity extends MercadoPagoActivity {
 
     //Controls
     protected MPTextView mPendingSubtitle;
-    protected MPTextView mExit;
+    protected MPTextView mKeepBuying;
 
     //Params
     protected Payment mPayment;
@@ -53,8 +53,8 @@ public class PendingActivity extends MercadoPagoActivity {
     @Override
     protected void initializeControls() {
         mPendingSubtitle = (MPTextView) findViewById(R.id.mpsdkPendingSubtitle);
-        mExit = (MPTextView) findViewById(R.id.mpsdkExitPending);
-        mExit.setOnClickListener(new View.OnClickListener() {
+        mKeepBuying = (MPTextView) findViewById(R.id.mpsdkKeepBuyingPending);
+        mKeepBuying.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finishWithOkResult();
@@ -97,11 +97,21 @@ public class PendingActivity extends MercadoPagoActivity {
         if (mBackPressedOnce) {
             finishWithOkResult();
         } else {
-            Snackbar.make(mExit, getString(R.string.mpsdk_press_again_to_leave), Snackbar.LENGTH_LONG).show();
+            Snackbar.make(mKeepBuying, getString(R.string.mpsdk_press_again_to_leave), Snackbar.LENGTH_LONG).show();
             mBackPressedOnce = true;
             resetBackPressedOnceIn(4000);
         }
     }
+
+    public void onClickPendingOptionButton(View view){
+        MPTracker.getInstance().trackEvent("PENDING", "SELECT_OTHER_PAYMENT_METHOD", "2", mMerchantPublicKey, BuildConfig.VERSION_NAME, this);
+
+        Intent returnIntent = new Intent();
+        returnIntent.putExtra("nextAction", PaymentResultAction.SELECT_OTHER_PAYMENT_METHOD);
+        setResult(RESULT_CANCELED, returnIntent);
+        finish();
+    }
+
 
     private void resetBackPressedOnceIn(final int mills) {
         new Thread(new Runnable() {

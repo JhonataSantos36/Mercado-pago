@@ -85,7 +85,7 @@
         <activity
             android:name=".PendingActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.InfoMercadoPagoTheme.NoActionbar" />
+            android:theme="@style/Theme.PendingMercadoPagoTheme.NoActionbar" />
         <activity
             android:name=".PaymentResultActivity"
             android:theme="@style/Theme.MercadoPagoTheme.NoActionBar"/>

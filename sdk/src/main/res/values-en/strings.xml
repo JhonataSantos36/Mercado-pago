@@ -19,7 +19,7 @@
     <string name="mpsdk_cod_seg_desc_amex"><ns1:g example="4" id="numeros">%1$d</ns1:g> digits code on the front of the card</string>
     <string name="mpsdk_title_activity_vault">Pay</string>
     <string name="mpsdk_select_pm_label">Choose a payment method…</string>
-    <string name="mpsdk_last_digits_label">ending in</string>
+    <string name="mpsdk_last_digits_label">Ending in</string>
     <string name="mpsdk_confirm">Confirm</string>
     <string name="mpsdk_title_activity_payment_vault">How do you want to pay?</string>
     <string name="mpsdk_invalid_pm_for_current_amount">The selected payment method can\'t be used to pay this amount. Please select another method</string>
@@ -78,8 +78,8 @@
     <!-- Congrats -->
     <string name="mpsdk_title_activity_congrat">Done, your payment was accredited!</string>
     <string name="mpsdk_subtitle_action_activity_congrat">We will send you the data to\n%1$s</string>
-    <string name="mpsdk_text_state_acount_activity_congrat">On your statement you will see the charge as MERCADOPAGO</string>
-    <string name="mpsdk_payment_id_description">Ticket:</string>
+    <string name="mpsdk_text_state_acount_activity_congrat">On your statement you will see the charge as\n MERCADOPAGO</string>
+    <string name="mpsdk_payment_id_description">Ticket</string>
 
     <!-- CallForAuthorize -->
     <string name="mpsdk_title_activity_call_for_authorize">You must authorize with %1$s the payment of %2$s to Mercado Pago</string>
@@ -90,19 +90,19 @@
     <string name="mpsdk_text_select_other_payment_method">Choose another payment method</string>
 
     <!-- Pending -->
-    <string name="mpsdk_title_pending">We are processing the payment</string>
+    <string name="mpsdk_title_pending">We are processing\n the payment</string>
     <string name="mpsdk_subtitle_pending_contingency">In less than an hour we will send you the result by e-mail.</string>
 
     <!-- Rejection -->
     <string name="mpsdk_text_other_payment_method_button_rejection">Use another payment method</string>
     <string name="mpsdk_text_pay_with_other_method">Pay with other method</string>
     <string name="mpsdk_text_enter_again">Enter again</string>
-    <string name="mpsdk_subtitle_rejection_insufficient_amount_credit_card">Don\'t worry! You can choose other payment method.</string>
+    <string name="mpsdk_subtitle_rejection_insufficient_amount_credit_card">Don\'t worry! You can choose another payment method.</string>
     <string name="mpsdk_title_other_reason_rejection">%1$s did not process the payment</string>
     <string name="mpsdk_text_select_other_rejection">Use another card or another payment method</string>
     <string name="mpsdk_title_bad_filled_other">Oops, we could not process your payment</string>
     <string name="mpsdk_text_some_card_data_is_incorrect">Any datum of your %1$s is incorrect.</string>
-    <string name="mpsdk_text_card_number_is_incorrect">The number of your %1$s is incorrect.</string>
+    <string name="mpsdk_text_some_number">Some number of your %1$s is incorrect.</string>
     <string name="mpsdk_text_insufficient_amount">Yours %1$s has insufficient funds</string>
     <string name="mpsdk_subtitle_rejection_insufficient_amount">Don\'t worry! Recharge at any bank or from your electronic banking and try again. Or if you prefer, you can choose another payment method.</string>
     <string name="mpsdk_subtitle_rejection_duplicated_payment">If you need to repay, use another card or other payment method.</string>
@@ -170,8 +170,8 @@
     <string name="mpsdk_title_activity_terms_and_conditions">Terms and conditions</string>
     <string name="mpsdk_format_date">%1$s/%2$s/%3$s - %4$s</string>
     <string name="mpsdk_no_connection_message">No connection</string>
-    <string name="mpsdk_instant_accreditation_time">Will it be credited instantly</string>
-    <string name="mpsdk_accreditation_time">Will be credited in</string>
+    <string name="mpsdk_instant_accreditation_time">Will be accredited instantly</string>
+    <string name="mpsdk_accreditation_time">Will be accredited in</string>
     <string name="mpsdk_what_can_do">What can I do?</string>
     <string name="mpsdk_confirm_prompt_yes">Yes</string>
     <string name="mpsdk_confirm_prompt_no">No</string>

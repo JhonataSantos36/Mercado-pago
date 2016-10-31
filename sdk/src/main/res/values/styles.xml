@@ -168,26 +168,29 @@
 
     <style name="Theme.InfoMercadoPagoTheme.NoActionbar" parent="Theme.MercadoPagoTheme.NoActionBar">
         <item name="android:statusBarColor">@color/mpsdk_info_color_dark</item>
-        <item name="android:windowLightStatusBar">true</item>
     </style>
 
     <style name="Theme.CongratsMercadoPagoTheme.NoActionbar" parent="Theme.MercadoPagoTheme.NoActionBar">
-        <item name="android:statusBarColor">@color/mpsdk_congrats_color_dark</item>
-        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:statusBarColor">@color/mpsdk_color_congrats_status_bar</item>
     </style>
 
     <style name="Theme.CallForAuthorizeMercadoPagoTheme.NoActionbar" parent="Theme.MercadoPagoTheme.NoActionBar">
-        <item name="android:statusBarColor">@color/mpsdk_call_for_authorize_color_dark</item>
-        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:statusBarColor">@color/mpsdk_color_call_for_authorize_status_bar</item>
     </style>
 
     <style name="Theme.RejectionMercadoPagoTheme.NoActionbar" parent="Theme.MercadoPagoTheme.NoActionBar">
-        <item name="android:statusBarColor">@color/mpsdk_rejection_color_dark</item>
-        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:statusBarColor">@color/mpsdk_color_rejection_status_bar</item>
+    </style>
+
+    <style name="Theme.PendingMercadoPagoTheme.NoActionbar" parent="Theme.MercadoPagoTheme.NoActionBar">
+        <item name="android:statusBarColor">@color/mpsdk_color_pending_status_bar</item>
     </style>
 
     <style name="Theme.MercadoPagoTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.MercadoPagoTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="CollapsedAppBar" parent="@android:style/TextAppearance.Medium">
+        <item name="android:textSize">19dp</item>
+    </style>
 </resources>

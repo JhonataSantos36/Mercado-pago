@@ -116,7 +116,7 @@ public class CardFrontFragment extends android.support.v4.app.Fragment {
     }
 
     private void decorate() {
-        int cardShadowColor = ContextCompat.getColor(getContext(), R.color.mpsdk_color_new_card_form_background);
+        int cardShadowColor = ContextCompat.getColor(getContext(), R.color.mpsdk_background_blue);
         if (mDecorationPreference != null && mDecorationPreference.hasColors()) {
             cardShadowColor = mDecorationPreference.getLighterColor();
         }

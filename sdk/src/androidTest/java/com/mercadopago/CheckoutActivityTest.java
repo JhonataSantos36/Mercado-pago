@@ -895,7 +895,6 @@ public class CheckoutActivityTest {
     }
 
     //CARD PAYMENT METHOD TESTS
-
     @Test
     public void onCardPaymentMethodSelectedShowPaymentMethodAndInstallmentsWithRate() {
         //Prepare next activity result
@@ -925,8 +924,8 @@ public class CheckoutActivityTest {
         //Data to assert
         String paymentMethodDescription = mTestRule.getActivity().getString(R.string.mpsdk_last_digits_label) + " " + token.getLastFourDigits();
         Bitmap bitmap = ((BitmapDrawable) ContextCompat.getDrawable(mTestRule.getActivity(), R.drawable.visa)).getBitmap();
-        String payerCostDescription = "3 " + mTestRule.getActivity().getString(R.string.mpsdk_installments_of) + " $ 39 05";
-        String totalAmountText = "( $ 117 17 )";
+        String payerCostDescription = "3 " + mTestRule.getActivity().getString(R.string.mpsdk_installments_by) + " $ 39 05";
+        String totalAmountText = "($ 117 17)";
 
         //Assertions
 
@@ -965,7 +964,7 @@ public class CheckoutActivityTest {
         //Data to assert
         String paymentMethodDescription = mTestRule.getActivity().getString(R.string.mpsdk_last_digits_label) + " " + token.getLastFourDigits();
         Bitmap bitmap = ((BitmapDrawable) ContextCompat.getDrawable(mTestRule.getActivity(), R.drawable.visa)).getBitmap();
-        String payerCostDescription = "3 " + mTestRule.getActivity().getString(R.string.mpsdk_installments_of) + " $ 333 33";
+        String payerCostDescription = "3 " + mTestRule.getActivity().getString(R.string.mpsdk_installments_by) + " $ 333 33";
         String noInterestText = mTestRule.getActivity().getString(R.string.mpsdk_zero_rate);
 
         //Assertions
@@ -1045,7 +1044,7 @@ public class CheckoutActivityTest {
         //Before payer cost change
         String paymentMethodDescription = mTestRule.getActivity().getString(R.string.mpsdk_last_digits_label) + " " + token.getLastFourDigits();
         Bitmap bitmap = ((BitmapDrawable) ContextCompat.getDrawable(mTestRule.getActivity(), R.drawable.visa)).getBitmap();
-        String payerCostDescription = "3 " + mTestRule.getActivity().getString(R.string.mpsdk_installments_of) + " $ 333 33";
+        String payerCostDescription = "3 " + mTestRule.getActivity().getString(R.string.mpsdk_installments_by) + " $ 333 33";
         String noInterestText = mTestRule.getActivity().getString(R.string.mpsdk_zero_rate);
 
         onView(withId(R.id.mpsdkPaymentMethodLayout)).check(matches(withAnyChildText(paymentMethodDescription)));
@@ -1059,8 +1058,8 @@ public class CheckoutActivityTest {
         //After payer cost change
         paymentMethodDescription = mTestRule.getActivity().getString(R.string.mpsdk_last_digits_label) + " " + token.getLastFourDigits();
         bitmap = ((BitmapDrawable) ContextCompat.getDrawable(mTestRule.getActivity(), R.drawable.visa)).getBitmap();
-        payerCostDescription = "3 " + mTestRule.getActivity().getString(R.string.mpsdk_installments_of) + " $ 39 05";
-        String totalAmountText = "( $ 117 17 )";
+        payerCostDescription = "3 " + mTestRule.getActivity().getString(R.string.mpsdk_installments_by) + " $ 39 05";
+        String totalAmountText = "($ 117 17)";
 
         onView(withId(R.id.mpsdkPaymentMethodLayout)).check(matches(withAnyChildText(paymentMethodDescription)));
         onView(withId(R.id.mpsdkPaymentMethodLayout)).check(matches(withAnyChildImage(bitmap)));
@@ -1098,7 +1097,7 @@ public class CheckoutActivityTest {
         //Before installment screen started
         String paymentMethodDescription = mTestRule.getActivity().getString(R.string.mpsdk_last_digits_label) + " " + token.getLastFourDigits();
         Bitmap bitmap = ((BitmapDrawable) ContextCompat.getDrawable(mTestRule.getActivity(), R.drawable.visa)).getBitmap();
-        String payerCostDescription = "3 " + mTestRule.getActivity().getString(R.string.mpsdk_installments_of) + " $ 333 33";
+        String payerCostDescription = "3 " + mTestRule.getActivity().getString(R.string.mpsdk_installments_by) + " $ 333 33";
         String noInterestText = mTestRule.getActivity().getString(R.string.mpsdk_zero_rate);
 
         onView(withId(R.id.mpsdkPaymentMethodLayout)).check(matches(withAnyChildText(paymentMethodDescription)));

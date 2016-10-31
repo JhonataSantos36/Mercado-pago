@@ -21,7 +21,7 @@ public class RejectionActivity extends MercadoPagoActivity {
     protected MPTextView mRejectionTitle;
     protected MPTextView mRejectionSubtitle;
     protected FrameLayout mRejectionOptionButton;
-    protected MPTextView mExit;
+    protected MPTextView mKeepBuyingButton;
     protected MPTextView mRejectionOptionButtonText;
 
     //Params
@@ -65,8 +65,8 @@ public class RejectionActivity extends MercadoPagoActivity {
         mRejectionSubtitle = (MPTextView) findViewById(R.id.mpsdkRejectionSubtitle);
         mRejectionOptionButtonText = (MPTextView) findViewById(R.id.mpsdkRejectionOptionButtonText);
         mRejectionOptionButton = (FrameLayout) findViewById(R.id.mpsdkRejectionOptionButton);
-        mExit = (MPTextView) findViewById(R.id.mpsdkExitRejection);
-        mExit.setOnClickListener(new View.OnClickListener() {
+        mKeepBuyingButton = (MPTextView) findViewById(R.id.mpsdkKeepBuyingRejection);
+        mKeepBuyingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finishWithOkResult();
@@ -154,7 +154,7 @@ public class RejectionActivity extends MercadoPagoActivity {
         if (mBackPressedOnce) {
             finishWithOkResult();
         } else {
-            Snackbar.make(mExit, getString(R.string.mpsdk_press_again_to_leave), Snackbar.LENGTH_LONG).show();
+            Snackbar.make(mKeepBuyingButton, getString(R.string.mpsdk_press_again_to_leave), Snackbar.LENGTH_LONG).show();
             mBackPressedOnce = true;
             resetBackPressedOnceIn(4000);
         }
@@ -177,7 +177,7 @@ public class RejectionActivity extends MercadoPagoActivity {
     private void setBadFillTextButtons(){
         mRejectionSubtitle.setVisibility(View.GONE);
         mRejectionOptionButtonText.setText(getString(R.string.mpsdk_text_enter_again));
-        mExit.setText(getString(R.string.mpsdk_text_cancel_payment_and_continue));
+        mKeepBuyingButton.setText(getString(R.string.mpsdk_text_cancel_payment_and_continue));
     }
 
     public void onClickRejectionOptionButton(View view){

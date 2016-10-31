@@ -645,7 +645,6 @@ public class CheckoutActivity extends MercadoPagoActivity {
             @Override
             public void success(Payment payment) {
                 mCreatedPayment = payment;
-
                 startPaymentResultActivity();
                 cleanTransactionId();
             }

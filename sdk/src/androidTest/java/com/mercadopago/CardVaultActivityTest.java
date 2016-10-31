@@ -247,10 +247,10 @@ public class CardVaultActivityTest {
 
         intended(hasComponent(GuessingCardActivity.class.getName()));
 
-        assertEquals(null, activity.mPayerCost);
-        assertEquals(null, activity.mSelectedIssuer);
-        assertEquals(null, activity.mToken);
-        assertEquals(null, activity.getCurrentPaymentMethod());
+        assertEquals(null, activity.mPresenter.getPayerCost());
+        assertEquals(null, activity.mPresenter.getIssuer());
+        assertEquals(null, activity.mPresenter.getToken());
+        assertEquals(null, activity.mPresenter.getPaymentMethod());
         assertTrue(activity.isFinishing());
     }
 
@@ -286,7 +286,7 @@ public class CardVaultActivityTest {
 
         intended(hasComponent(InstallmentsActivity.class.getName()));
 
-        assertEquals(installmentList.get(0).getPayerCosts().get(0).getInstallments(), activity.mPayerCost.getInstallments());
+        assertEquals(installmentList.get(0).getPayerCosts().get(0).getInstallments(), activity.mPresenter.getPayerCost().getInstallments());
         assertTrue(activity.isFinishing());
     }
 
@@ -343,7 +343,7 @@ public class CardVaultActivityTest {
 
         CardVaultActivity activity = mTestRule.launchActivity(validStartIntent);
 
-        assertEquals(installmentList.get(0).getPayerCosts().get(0).getInstallments(), activity.mPayerCost.getInstallments());
+        assertEquals(installmentList.get(0).getPayerCosts().get(0).getInstallments(), activity.mPresenter.getPayerCost().getInstallments());
         assertTrue(activity.isFinishing());
     }
 
@@ -429,7 +429,7 @@ public class CardVaultActivityTest {
 
         intended(hasComponent(InstallmentsActivity.class.getName()));
 
-        assertEquals(null, activity.mPayerCost);
+        assertEquals(null, activity.mPresenter.getPayerCost());
         assertTrue(activity.isFinishing());
     }
 
@@ -470,6 +470,5 @@ public class CardVaultActivityTest {
 
         intended(hasComponent(InstallmentsActivity.class.getName()));
     }
-
 
 }

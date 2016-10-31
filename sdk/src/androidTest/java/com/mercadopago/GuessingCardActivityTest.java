@@ -10,7 +10,9 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.intent.Intents;
 import android.support.test.rule.ActivityTestRule;
+import android.support.test.runner.AndroidJUnit4;
 import android.support.v4.content.ContextCompat;
+import android.test.suitebuilder.annotation.LargeTest;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
@@ -42,6 +44,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -72,6 +75,8 @@ import static org.junit.Assert.assertTrue;
 /**
  * Created by vaserber on 7/15/16.
  */
+@RunWith(AndroidJUnit4.class)
+@LargeTest
 public class GuessingCardActivityTest {
 
     @Rule

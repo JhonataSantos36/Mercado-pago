@@ -9,7 +9,7 @@
     app:popupTheme="@style/Theme.MercadoPagoTheme.NoActionBar"
     android:layout_width="match_parent"
     android:layout_height="@dimen/mpsdk_toolbar_height"
-    android:minHeight="?attr/actionBarSize">
+    android:minHeight="@dimen/mpsdk_toolbar_height">
 
 
     <com.mercadopago.customviews.MPTextView
@@ -17,6 +17,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        app:fontStyle="regular"
         style="@style/mpsdk_title_text"/>
 
     <com.mercadopago.customviews.MPTextView
@@ -28,6 +29,7 @@
         android:layout_marginEnd="16dp"
         android:paddingTop="10dp"
         android:textSize="16dp"
+        app:fontStyle="regular"
         style="@style/mpsdk_title_text"/>
 
 </android.support.v7.widget.Toolbar>

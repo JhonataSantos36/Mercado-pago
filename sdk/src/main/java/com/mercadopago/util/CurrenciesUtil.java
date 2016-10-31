@@ -118,7 +118,7 @@ public class CurrenciesUtil {
         Currency currency = currenciesList.get(currencyId);
         String formattedAmount = formatNumber(amount, currencyId);
         if (formattedAmount != null) {
-            String spannedString = getSpannedString(currency, formattedAmount, true, true);
+            String spannedString = getSpannedString(currency, formattedAmount, symbolUp, decimalsUp);
 
             String formattedText = originalText;
             if (originalText.contains(formattedAmount)) {

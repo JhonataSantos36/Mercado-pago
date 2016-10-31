@@ -626,7 +626,8 @@ public class StaticMock {
 
         } catch (Exception ex) {
             return null;
-        }    }
+        }
+    }
 
     private static String getFile(Context context, String fileName) {
 
