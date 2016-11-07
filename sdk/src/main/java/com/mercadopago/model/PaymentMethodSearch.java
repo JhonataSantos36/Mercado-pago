@@ -1,7 +1,6 @@
 package com.mercadopago.model;
 
 import com.google.gson.annotations.SerializedName;
-import com.mercadopago.constants.PaymentTypes;
 
 import java.util.List;
 
@@ -47,19 +46,13 @@ public class PaymentMethodSearch {
     }
 
     private String getPaymentTypeIdFromItem(PaymentMethodSearchItem item, PaymentMethod paymentMethod) {
-
-        String paymentType = "";
-
-        //Remove payment method id from item id
-        String potentialPaymentType = item.getId().replace(paymentMethod.getId(), "");
-        for (String currentPaymentType : PaymentTypes.getAllPaymentTypes()) {
-            if (potentialPaymentType.endsWith(currentPaymentType)) {
-                paymentType = currentPaymentType;
-                break;
-            }
-        }
-        if (paymentType.isEmpty()) {
+        //Remove payment method id from item id and the splitter
+        String paymentType;
+        String itemIdWithoutPaymentMethod = item.getId().replace(paymentMethod.getId(), "");
+        if (itemIdWithoutPaymentMethod.isEmpty()) {
             paymentType = paymentMethod.getPaymentTypeId();
+        } else {
+            paymentType = itemIdWithoutPaymentMethod.substring(1);
         }
         return paymentType;
     }
@@ -91,7 +84,7 @@ public class PaymentMethodSearch {
                 requiredItem = currentItem;
                 break;
             }
-            //Case like "bancomer_ticker", with the payment type in the item id
+            //Case like "bancomer_ticket", with the payment type in the item id
             else if (itemMatchesPaymentMethod(currentItem, paymentMethod)) {
                 //Remove payment method id from item id
                 String potentialPaymentType = currentItem.getId().replace(paymentMethod.getId(), "");
@@ -111,7 +104,7 @@ public class PaymentMethodSearch {
 
     public PaymentMethod getPaymentMethodById(String paymentMethodId) {
         PaymentMethod foundPaymentMethod = null;
-        if(paymentMethods != null) {
+        if (paymentMethods != null) {
             for (PaymentMethod paymentMethod : paymentMethods) {
                 if (paymentMethod.getId().equals(paymentMethodId)) {
                     foundPaymentMethod = paymentMethod;
@@ -123,9 +116,9 @@ public class PaymentMethodSearch {
     }
 
     public Card getCardById(String cardId) {
-        Card foundCard= null;
-        if(cards != null) {
-            for (Card card: cards) {
+        Card foundCard = null;
+        if (cards != null) {
+            for (Card card : cards) {
                 if (card.getId().equals(cardId)) {
                     foundCard = card;
                     break;
@@ -149,5 +142,9 @@ public class PaymentMethodSearch {
 
     public AccountMoney getAccountMoney() {
         return accountMoney;
+    }
+
+    public boolean hasSavedCards() {
+        return cards != null && !cards.isEmpty();
     }
 }

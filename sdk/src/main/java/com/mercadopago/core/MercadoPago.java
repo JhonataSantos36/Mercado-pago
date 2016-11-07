@@ -248,6 +248,7 @@ public class MercadoPago {
     public void getPaymentMethodSearch(BigDecimal amount, List<String> excludedPaymentTypes, List<String> excludedPaymentMethods, final Callback<PaymentMethodSearch> callback) {
         if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {
             MPTracker.getInstance().trackEvent("NO_SCREEN", "GET_PAYMENT_METHOD_SEARCH", "1", mKey, BuildConfig.VERSION_NAME, mContext);
+
             PaymentService service = mRetrofit.create(PaymentService.class);
             String excludedPaymentTypesAppended = getListAsString(excludedPaymentTypes, ",");
             String excludedPaymentMethodsAppended = getListAsString(excludedPaymentMethods, ",");
@@ -448,8 +449,8 @@ public class MercadoPago {
     }
 
     private static void startCardVaultActivity(Activity activity, String key, BigDecimal amount, Site site, Boolean installmentsEnabled,
-                                                PaymentPreference paymentPreference, DecorationPreference decorationPreference,
-                                                List<PaymentMethod> paymentMethodList, PaymentRecovery paymentRecovery, Card card) {
+                                               PaymentPreference paymentPreference, DecorationPreference decorationPreference,
+                                               List<PaymentMethod> paymentMethodList, PaymentRecovery paymentRecovery, Card card) {
 
         Intent cardVaultIntent = new Intent(activity, CardVaultActivity.class);
         cardVaultIntent.putExtra("merchantPublicKey", key);

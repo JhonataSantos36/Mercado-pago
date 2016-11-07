@@ -364,9 +364,19 @@ public class StaticMock {
         }
     }
 
-    public static String getCompletePaymentMethodSearchAsJson() {
+    public static String getPaymentMethodSearchWithoutCustomOptionsAsJson() {
         try {
             return getFile(InstrumentationRegistry.getContext(), "mocks/payment_method_search_all.json");
+
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+
+    public static String getPaymentMethodSearchWithCardsAsJson() {
+        try {
+            return getFile(InstrumentationRegistry.getContext(), "mocks/payment_method_search_with_cards");
 
         } catch (Exception ex) {
             return null;

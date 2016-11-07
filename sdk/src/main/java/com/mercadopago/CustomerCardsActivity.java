@@ -16,7 +16,6 @@ import com.google.gson.reflect.TypeToken;
 import com.mercadopago.callbacks.Callback;
 import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.callbacks.OnSelectedCallback;
-import com.mercadopago.core.MercadoPago;
 import com.mercadopago.core.MercadoPagoUI;
 import com.mercadopago.core.MerchantServer;
 import com.mercadopago.model.ApiException;

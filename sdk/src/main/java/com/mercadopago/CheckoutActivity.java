@@ -284,7 +284,7 @@ public class CheckoutActivity extends MercadoPagoActivity {
             @Override
             public void success(PaymentMethodSearch paymentMethodSearch) {
                 mPaymentMethodSearch = paymentMethodSearch;
-                if (isMerchantServerInfoAvailable()) {
+                if (!mPaymentMethodSearch.hasSavedCards() && isMerchantServerInfoAvailable()) {
                     getCustomerAsync();
                 } else if (isActivityActive()) {
                     startPaymentVaultActivity();
@@ -327,6 +327,8 @@ public class CheckoutActivity extends MercadoPagoActivity {
     }
 
     protected void startPaymentVaultActivity() {
+
+
         new MercadoPago.StartActivityBuilder()
                 .setActivity(this)
                 .setPublicKey(mMerchantPublicKey)

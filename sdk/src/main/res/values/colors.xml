@@ -127,5 +127,4 @@
     <color name="mpsdk_color_payer_costs">#999999</color>
     <color name="mpsdk_color_payer_costs_no_rate">#3BC280</color>
     <color name="mpsdk_issuers_background_gray">#F0F0F0</color>
-
 </resources>

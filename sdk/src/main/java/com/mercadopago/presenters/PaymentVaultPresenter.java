@@ -11,7 +11,6 @@ import com.mercadopago.model.ApiException;
 import com.mercadopago.model.Card;
 import com.mercadopago.model.CustomSearchItem;
 import com.mercadopago.model.Customer;
-import com.mercadopago.model.DecorationPreference;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentMethodSearch;
 import com.mercadopago.model.PaymentMethodSearchItem;
@@ -47,17 +46,16 @@ public class PaymentVaultPresenter {
     private String mMerchantGetCustomerUri;
     private String mMerchantAccessToken;
     private PaymentPreference mPaymentPreference;
-    private DecorationPreference mDecorationPreference;
     private BigDecimal mAmount;
 
     public void attachView(PaymentVaultView paymentVaultView) {
         this.mPaymentVaultView = paymentVaultView;
     }
 
-    public void initialize(String key, String keyType) {
+    public void initialize(String key) {
         mCustomSearchItems = new ArrayList<>();
         mMercadoPago = new MercadoPago.Builder()
-                .setKey(key, keyType)
+                .setPublicKey(key)
                 .setContext(mPaymentVaultView.getContext())
                 .build();
 
@@ -140,15 +138,21 @@ public class PaymentVaultPresenter {
 
             @Override
             public void failure(ApiException apiException) {
-                mPaymentVaultView.showApiException(apiException);
-                mPaymentVaultView.setFailureRecovery(new FailureRecovery() {
-                    @Override
-                    public void recover() {
-                        getPaymentMethodSearchAsync();
-                    }
-                });
+                if (viewAttached()) {
+                    mPaymentVaultView.showApiException(apiException);
+                    mPaymentVaultView.setFailureRecovery(new FailureRecovery() {
+                        @Override
+                        public void recover() {
+                            getPaymentMethodSearchAsync();
+                        }
+                    });
+                }
             }
         });
+    }
+
+    private boolean viewAttached() {
+        return mPaymentVaultView != null;
     }
 
     private void showSelectedItemChildren() {
@@ -158,14 +162,16 @@ public class PaymentVaultPresenter {
 
     private void resolveAvailablePaymentMethods() {
 
-        if (noPaymentMethodsAvailable()) {
-            showEmptyPaymentMethodsError();
-        } else if (isOnlyUniqueSearchSelectionAvailable()) {
-            selectItem(mPaymentMethodSearch.getGroups().get(0));
-        } else if (isOnlyUniqueSavedCardAvailable()) {
-            selectCard(mSavedCards.get(0));
-        } else {
-            showAvailableOptions();
+        if (viewAttached()) {
+
+            if (noPaymentMethodsAvailable()) {
+                showEmptyPaymentMethodsError();
+            } else if (isOnlyUniqueSearchSelectionAvailable()) {
+                selectItem(mPaymentMethodSearch.getGroups().get(0));
+            } else {
+                showAvailableOptions();
+                mPaymentVaultView.hideProgress();
+            }
         }
     }
 
@@ -180,38 +186,55 @@ public class PaymentVaultPresenter {
     }
 
     private void selectCard(Card card) {
-        PaymentMethod paymentMethod = mPaymentMethodSearch.getPaymentMethodById(card.getPaymentMethod().getId());
-        if (paymentMethod != null) {
-            card.setPaymentMethod(paymentMethod);
-        }
         mPaymentVaultView.startSavedCardFlow(card);
     }
 
     private void showAvailableOptions() {
-        if (searchItemsAvailable()) {
-            mPaymentVaultView.showSearchItems(mPaymentMethodSearch.getGroups(), getPaymentMethodSearchItemSelectionCallback());
+
+        if (!mPaymentMethodSearch.hasSavedCards() && savedCardsAvailable()) {
+            mCustomSearchItems.addAll(createCustomSearchItemsFromCards(mSavedCards));
+        }
+
+        if (mSavedCards != null && mSavedCards.size() > MAX_SAVED_CARDS) {
+            mCustomSearchItems = getLimitedCustomOptions(mCustomSearchItems, MAX_SAVED_CARDS);
         }
 
         if (customSearchItemsAvailable()) {
             mPaymentVaultView.showCustomOptions(mCustomSearchItems, getCustomOptionCallback());
         }
-        mPaymentVaultView.hideProgress();
+
+        if (searchItemsAvailable()) {
+            mPaymentVaultView.showSearchItems(mPaymentMethodSearch.getGroups(), getPaymentMethodSearchItemSelectionCallback());
+        }
     }
 
-    private void addSavedCardsOptions() {
-        if (mSavedCards != null) {
-            if (mSavedCards.size() > MAX_SAVED_CARDS) {
-                mSavedCards = mSavedCards.subList(0, MAX_SAVED_CARDS);
+    private List<CustomSearchItem> getLimitedCustomOptions(List<CustomSearchItem> customSearchItems, int maxSavedCards) {
+        List<CustomSearchItem> limitedItems = new ArrayList<>();
+        int cardsAdded = 0;
+        for (CustomSearchItem customSearchItem : customSearchItems) {
+            if (MercadoPagoUtil.isCard(customSearchItem.getType()) && cardsAdded < maxSavedCards) {
+                limitedItems.add(customSearchItem);
+                cardsAdded++;
+            } else if (!MercadoPagoUtil.isCard(customSearchItem.getType())) {
+                limitedItems.add(customSearchItem);
             }
-            for (Card card : mSavedCards) {
+        }
+        return limitedItems;
+    }
+
+    private List<CustomSearchItem> createCustomSearchItemsFromCards(List<Card> cards) {
+        List<CustomSearchItem> customSearchItems = new ArrayList<>();
+        if (cards != null) {
+            for (Card card : cards) {
                 CustomSearchItem searchItem = new CustomSearchItem();
                 searchItem.setDescription(mPaymentVaultView.getContext().getString(R.string.mpsdk_last_digits_label) + " " + card.getLastFourDigits());
                 searchItem.setType(card.getPaymentMethod().getPaymentTypeId());
                 searchItem.setId(card.getId());
                 searchItem.setPaymentMethodId(card.getPaymentMethod().getId());
-                mCustomSearchItems.add(searchItem);
+                customSearchItems.add(searchItem);
             }
         }
+        return customSearchItems;
     }
 
     private boolean customSearchItemsAvailable() {
@@ -232,10 +255,20 @@ public class PaymentVaultPresenter {
             @Override
             public void onSelected(CustomSearchItem searchItem) {
                 if (MercadoPagoUtil.isCard(searchItem.getType())) {
-                    selectCard(getCardById(mSavedCards, searchItem.getId()));
+                    Card card = getCardWithPaymentMethod(searchItem);
+                    selectCard(card);
                 }
             }
         };
+    }
+
+    private Card getCardWithPaymentMethod(CustomSearchItem searchItem) {
+        PaymentMethod paymentMethod = mPaymentMethodSearch.getPaymentMethodById(searchItem.getPaymentMethodId());
+        Card selectedCard = getCardById(mSavedCards, searchItem.getId());
+        if (paymentMethod != null) {
+            selectedCard.setPaymentMethod(paymentMethod);
+        }
+        return selectedCard;
     }
 
     private Card getCardById(List<Card> savedCards, String cardId) {
@@ -273,10 +306,17 @@ public class PaymentVaultPresenter {
     }
 
     private void onPaymentMethodSearchSet() {
+
+        if (mPaymentMethodSearch.hasSavedCards()) {
+            mSavedCards = mPaymentMethodSearch.getCards();
+        }
+        if (mPaymentMethodSearch.hasCustomSearchItems()) {
+            mCustomSearchItems.addAll(mPaymentMethodSearch.getCustomSearchItems());
+        }
+
         if (!savedCardsAvailable() && isMerchantServerInfoAvailable()) {
             getCustomerAsync();
         } else {
-            addSavedCardsOptions();
             resolveAvailablePaymentMethods();
         }
     }
@@ -287,7 +327,6 @@ public class PaymentVaultPresenter {
             @Override
             public void success(Customer customer) {
                 mSavedCards = mPaymentPreference == null ? customer.getCards() : mPaymentPreference.getValidCards(customer.getCards());
-                addSavedCardsOptions();
                 resolveAvailablePaymentMethods();
             }
 
@@ -300,10 +339,6 @@ public class PaymentVaultPresenter {
 
     public boolean isOnlyUniqueSearchSelectionAvailable() {
         return searchItemsAvailable() && mPaymentMethodSearch.getGroups().size() == 1 && !savedCardsAvailable();
-    }
-
-    public boolean isOnlyUniqueSavedCardAvailable() {
-        return savedCardsAvailable() && mSavedCards.size() == 1 && !searchItemsAvailable();
     }
 
     private boolean savedCardsAvailable() {
@@ -391,19 +426,15 @@ public class PaymentVaultPresenter {
         this.mPaymentPreference = mPaymentPreference;
     }
 
-    public DecorationPreference getDecorationPreference() {
-        return mDecorationPreference;
-    }
-
-    public void setDecorationPreference(DecorationPreference mDecorationPreference) {
-        this.mDecorationPreference = mDecorationPreference;
-    }
-
     public BigDecimal getAmount() {
         return mAmount;
     }
 
     public void setAmount(BigDecimal mAmount) {
         this.mAmount = mAmount;
+    }
+
+    public void detach() {
+        mPaymentVaultView = null;
     }
 }

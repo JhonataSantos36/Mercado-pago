@@ -1,6 +1,7 @@
 package com.mercadopago.uicontrollers.paymentmethodsearch;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,28 +9,33 @@ import android.widget.ImageView;
 
 import com.mercadopago.R;
 import com.mercadopago.customviews.MPTextView;
-import com.mercadopago.model.PaymentMethodSearchItem;
+import com.mercadopago.model.CustomSearchItem;
 import com.mercadopago.util.MercadoPagoUtil;
 
 /**
- * Created by mreverter on 29/4/16.
+ * Created by mreverter on 10/25/16.
  */
-public class PaymentMethodSearchRow implements PaymentMethodSearchViewController {
 
+public class PaymentMethodSearchCustomOption implements PaymentMethodSearchViewController {
+    protected CustomSearchItem mItem;
     protected Context mContext;
     protected View mView;
-    protected View mSeparator;
     protected MPTextView mDescription;
     protected MPTextView mComment;
     protected ImageView mIcon;
+    protected View.OnClickListener mListener;
 
-    public PaymentMethodSearchRow(Context context) {
+    public PaymentMethodSearchCustomOption(Context context, CustomSearchItem item) {
         mContext = context;
+        mItem = item;
     }
 
     public View inflateInParent(ViewGroup parent, boolean attachToRoot) {
         mView = LayoutInflater.from(mContext)
-                .inflate(R.layout.mpsdk_row_pm_search_item_large, parent, attachToRoot);
+                .inflate(R.layout.mpsdk_row_pm_search_item, parent, attachToRoot);
+        if (mListener != null) {
+            mView.setOnClickListener(mListener);
+        }
         return mView;
     }
 
@@ -42,22 +48,16 @@ public class PaymentMethodSearchRow implements PaymentMethodSearchViewController
         mDescription = (MPTextView) mView.findViewById(R.id.mpsdkDescription);
         mComment = (MPTextView) mView.findViewById(R.id.mpsdkComment);
         mIcon = (ImageView) mView.findViewById(R.id.mpsdkImage);
-        mSeparator = mView.findViewById(R.id.mpsdkSeparator);
-
-        mSeparator.setVisibility(View.GONE);
     }
 
-    public void drawPaymentMethod(PaymentMethodSearchItem item) {
-        if (item.hasDescription()) {
-            mDescription.setText(item.getDescription());
-        }
-        if (item.hasComment()) {
-            mComment.setText(item.getComment());
-        }
+    public void draw() {
+
+        mDescription.setText(mItem.getDescription());
+
         int resourceId = 0;
 
-        if (item.isIconRecommended()) {
-            resourceId = MercadoPagoUtil.getPaymentMethodSearchItemIcon(mContext, item.getId());
+        if (!TextUtils.isEmpty(mItem.getPaymentMethodId())) {
+            resourceId = MercadoPagoUtil.getPaymentMethodSearchItemIcon(mContext, mItem.getPaymentMethodId());
         }
 
         if (resourceId != 0) {
@@ -65,15 +65,15 @@ public class PaymentMethodSearchRow implements PaymentMethodSearchViewController
         } else {
             mIcon.setVisibility(View.GONE);
         }
-    }
 
-    @Override
-    public void showSeparator() {
-        mSeparator.setVisibility(View.VISIBLE);
+        mComment.setVisibility(View.GONE);
     }
 
     @Override
     public void setOnClickListener(View.OnClickListener listener) {
-        mView.setOnClickListener(listener);
+        mListener = listener;
+        if (mView != null) {
+            mView.setOnClickListener(listener);
+        }
     }
 }

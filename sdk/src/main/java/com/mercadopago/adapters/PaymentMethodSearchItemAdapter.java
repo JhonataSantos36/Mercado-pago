@@ -1,16 +1,12 @@
 package com.mercadopago.adapters;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
 import android.view.ViewGroup;
 
-import com.mercadopago.callbacks.OnSelectedCallback;
-import com.mercadopago.model.DecorationPreference;
-import com.mercadopago.model.PaymentMethodSearchItem;
-import com.mercadopago.uicontrollers.ViewControllerFactory;
+import com.mercadopago.uicontrollers.CustomViewController;
 import com.mercadopago.uicontrollers.paymentmethodsearch.PaymentMethodSearchViewController;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,28 +14,20 @@ import java.util.List;
  */
 public class PaymentMethodSearchItemAdapter extends RecyclerView.Adapter<PaymentMethodSearchItemAdapter.ViewHolder> {
 
-    private DecorationPreference mDecorationPreference;
-    private Context mContext;
-    private List<PaymentMethodSearchItem> mItems;
-    private OnSelectedCallback<PaymentMethodSearchItem> mCallback;
+    private List<PaymentMethodSearchViewController> mItems;
 
-    public PaymentMethodSearchItemAdapter(Context context, List<PaymentMethodSearchItem> items, OnSelectedCallback<PaymentMethodSearchItem> callback, DecorationPreference decorationPreference) {
-        this.mDecorationPreference = decorationPreference;
-        this.mContext = context;
-        this.mItems = items;
-        this.mCallback = callback;
+    public PaymentMethodSearchItemAdapter() {
+        mItems = new ArrayList<>();
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int position) {
 
-        PaymentMethodSearchItem item = mItems.get(position);
+        CustomViewController item = mItems.get(position);
 
-        PaymentMethodSearchViewController paymentMethodSearchRow = ViewControllerFactory.getPaymentMethodSelectionViewController(item, mDecorationPreference, mContext);
+        item.inflateInParent(parent, false);
 
-        paymentMethodSearchRow.inflateInParent(parent, false);
-
-        return new ViewHolder(paymentMethodSearchRow);
+        return new ViewHolder(item);
     }
 
     @Override
@@ -49,14 +37,8 @@ public class PaymentMethodSearchItemAdapter extends RecyclerView.Adapter<Payment
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        PaymentMethodSearchItem paymentMethodSearchItem = mItems.get(position);
-
-        holder.mPaymentMethodSearchViewController.drawPaymentMethod(paymentMethodSearchItem);
-
-        holder.mItem = mItems.get(position);
-        if (position != mItems.size() - 1) {
-            holder.mPaymentMethodSearchViewController.showSeparator();
-        }
+        PaymentMethodSearchViewController viewController = mItems.get(position);
+        viewController.draw();
     }
 
     @Override
@@ -64,22 +46,22 @@ public class PaymentMethodSearchItemAdapter extends RecyclerView.Adapter<Payment
         return mItems.size();
     }
 
+    public void addItems(List<PaymentMethodSearchViewController> items) {
+        mItems.addAll(items);
+    }
+
+    public void notifyItemInserted() {
+        notifyItemInserted(mItems.size() - 1);
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        private PaymentMethodSearchItem mItem;
-        private PaymentMethodSearchViewController mPaymentMethodSearchViewController;
+        private CustomViewController mViewController;
 
-        public ViewHolder(PaymentMethodSearchViewController paymentMethodViewController) {
-            super(paymentMethodViewController.getView());
-            mPaymentMethodSearchViewController = paymentMethodViewController;
-
-            mPaymentMethodSearchViewController.initializeControls();
-            mPaymentMethodSearchViewController.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mCallback.onSelected(mItem);
-                }
-            });
+        public ViewHolder(CustomViewController viewController) {
+            super(viewController.getView());
+            mViewController = viewController;
+            mViewController.initializeControls();
         }
     }
 }

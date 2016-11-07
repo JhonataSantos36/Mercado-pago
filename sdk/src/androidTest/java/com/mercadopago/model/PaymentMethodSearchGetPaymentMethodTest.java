@@ -63,7 +63,7 @@ public class PaymentMethodSearchGetPaymentMethodTest {
     }
 
     private PaymentMethodSearch getPaymentMethodSearch() {
-        String paymentMethodSearchJson = StaticMock.getCompletePaymentMethodSearchAsJson();
+        String paymentMethodSearchJson = StaticMock.getPaymentMethodSearchWithoutCustomOptionsAsJson();
         return JsonUtil.getInstance().fromJson(paymentMethodSearchJson, PaymentMethodSearch.class);
     }
 }
