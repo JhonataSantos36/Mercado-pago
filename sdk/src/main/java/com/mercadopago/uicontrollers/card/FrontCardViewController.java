@@ -1,7 +1,6 @@
 package com.mercadopago.uicontrollers.card;
 
 import com.mercadopago.model.PaymentMethod;
-import com.mercadopago.model.Token;
 import com.mercadopago.uicontrollers.CustomViewController;
 
 /**

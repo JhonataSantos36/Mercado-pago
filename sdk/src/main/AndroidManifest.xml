@@ -45,6 +45,10 @@
             android:screenOrientation="behind"
             android:theme="@style/Theme.ProcessMercadoPagoTheme.NoActionbar"
             android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".FormCardActivity"
+            android:screenOrientation="behind"
+            android:theme="@style/Theme.ProcessMercadoPagoTheme.NoActionbar"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".PaymentVaultActivity"
             android:screenOrientation="portrait"
@@ -53,7 +57,7 @@
             android:name=".InstructionsActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.InfoMercadoPagoTheme.NoActionbar" />
+            android:theme="@style/Theme.InstructionsMercadoPagoTheme.NoActionbar" />
         <activity
             android:name=".InstallmentsActivity"
             android:screenOrientation="behind"

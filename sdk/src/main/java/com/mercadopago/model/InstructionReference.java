@@ -1,6 +1,9 @@
 package com.mercadopago.model;
 
+import android.text.TextUtils;
+
 import java.util.List;
+
 
 /**
  * Created by mreverter on 16/2/16.
@@ -53,5 +56,17 @@ public class InstructionReference {
 
     public boolean hasValue() {
         return this.getFieldValue() != null && this.getFieldValue().size() != 0;
+    }
+
+    public boolean isNumericReference(){
+        for (String text : fieldValue){
+            text = text.replace(":","");
+            text = text.replace("-","");
+
+            if (!TextUtils.isDigitsOnly(text)){
+                return false;
+            }
+        }
+        return true;
     }
 }

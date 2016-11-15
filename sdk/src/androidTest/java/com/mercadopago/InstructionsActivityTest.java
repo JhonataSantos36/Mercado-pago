@@ -3,6 +3,7 @@ package com.mercadopago;
 import android.app.Activity;
 import android.content.Intent;
 import android.support.test.espresso.NoActivityResumedException;
+import android.support.test.espresso.action.ViewActions;
 import android.support.test.espresso.intent.Intents;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
@@ -235,7 +236,7 @@ public class InstructionsActivityTest {
     }
 
     @Test
-    public void showLabelsInUpperCase() {
+    public void showLabelsInLowerCase() {
         PaymentResult paymentResult = StaticMock.getInstructionWithoutActions();
         mFakeAPI.addResponseToQueue(paymentResult, 200, "");
 
@@ -244,8 +245,8 @@ public class InstructionsActivityTest {
         InstructionReference firstReference = paymentResult.getInstructions().get(0).getReferences().get(0);
         InstructionReference secondReference = paymentResult.getInstructions().get(0).getReferences().get(1);
 
-        onView(withId(R.id.mpsdkReferencesLayout)).check(matches(withAnyChildText(firstReference.getLabel().toUpperCase())));
-        onView(withId(R.id.mpsdkReferencesLayout)).check(matches(withAnyChildText(secondReference.getLabel().toUpperCase())));
+        onView(withId(R.id.mpsdkReferencesLayout)).check(matches(withAnyChildText(firstReference.getLabel())));
+        onView(withId(R.id.mpsdkReferencesLayout)).check(matches(withAnyChildText(secondReference.getLabel())));
     }
 
     @Test
@@ -311,7 +312,7 @@ public class InstructionsActivityTest {
 
         InstructionActionInfo actionInfo = paymentResult.getInstructions().get(0).getActions().get(0);
 
-        onView(withId(R.id.mpsdkActionButton)).perform(click());
+        onView(withId(R.id.mpsdkActionButton)).perform(ViewActions.scrollTo(), click());
 
         intended(allOf(
                 hasAction(Intent.ACTION_VIEW),

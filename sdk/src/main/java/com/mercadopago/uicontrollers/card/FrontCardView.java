@@ -255,6 +255,7 @@ public class FrontCardView implements FrontCardViewController {
         if (mSize.equals(CardRepresentationModes.MEDIUM_SIZE)) {
             resizeCard(mCardContainer, R.dimen.mpsdk_card_size_medium_height, R.dimen.mpsdk_card_size_medium_width,
                     CardRepresentationModes.CARD_NUMBER_SIZE_MEDIUM, CardRepresentationModes.CARD_HOLDER_NAME_SIZE_MEDIUM,
+
                     CardRepresentationModes.CARD_EXPIRY_DATE_SIZE_MEDIUM);
         } else if (mSize.equals(CardRepresentationModes.BIG_SIZE)) {
             resizeCard(mCardContainer, R.dimen.mpsdk_card_size_big_height, R.dimen.mpsdk_card_size_big_width,
@@ -297,7 +298,7 @@ public class FrontCardView implements FrontCardViewController {
         mCardNumberTextView.setText(MPCardMaskUtil.buildNumberWithMask(mCardNumberLength, cardNumber));
     }
 
-    private void drawEditingCardHolderName(String cardholderName) {
+    public void drawEditingCardHolderName(String cardholderName) {
         if (cardholderName == null) {
             mCardholderNameTextView.setText(mContext.getResources().getString(R.string.mpsdk_cardholder_name_short));
         } else {
@@ -311,7 +312,7 @@ public class FrontCardView implements FrontCardViewController {
         disableEditingFontColor(mCardSecurityCodeTextView);
     }
 
-    private void drawEditingExpiryMonth(String cardMonth) {
+    public void drawEditingExpiryMonth(String cardMonth) {
         if (cardMonth == null) {
             mCardExpiryMonthTextView.setText(mContext.getResources()
                     .getString(R.string.mpsdk_card_expiry_month_hint));
@@ -326,7 +327,7 @@ public class FrontCardView implements FrontCardViewController {
         disableEditingFontColor(mCardSecurityCodeTextView);
     }
 
-    private void drawEditingExpiryYear(String cardYear) {
+    public void drawEditingExpiryYear(String cardYear) {
         if (cardYear == null) {
             mCardExpiryYearTextView.setText(mContext.getResources().getString(R.string.mpsdk_card_expiry_year_hint));
         } else {

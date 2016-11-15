@@ -23,4 +23,10 @@ public class CardRepresentationModes {
     public static final int CARD_EXPIRY_DATE_SIZE_MEDIUM = 10;
     public static final int CARD_EXPIRY_DATE_SIZE_BIG = 12;
     public static final int CARD_EXPIRY_DATE_SIZE_EXTRA_BIG = 14;
+    public static final int CARD_SECURITY_CODE_FRONT_SIZE_MEDIUM = 14;
+    public static final int CARD_SECURITY_CODE_FRONT_SIZE_BIG = 16;
+    public static final int CARD_SECURITY_CODE_FRONT_SIZE_EXTRA_BIG = 18;
+    public static final int CARD_SECURITY_CODE_BACK_SIZE_MEDIUM = 12;
+    public static final int CARD_SECURITY_CODE_BACK_SIZE_BIG = 14;
+    public static final int CARD_SECURITY_CODE_BACK_SIZE_EXTRA_BIG = 16;
 }

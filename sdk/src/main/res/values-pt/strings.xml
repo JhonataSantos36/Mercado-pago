@@ -26,6 +26,9 @@
     <string name="mpsdk_no_payment_methods_found">Não há meios de pagamento disponíveis</string>
     <string name="mpsdk_payment_method_groups_label">Outros</string>
 
+    <!-- Instruction -->
+    <string name="mpsdk_pay_with_this_data">Paga com esses dados</string>
+
     <!-- Issuers -->
     <string name="mpsdk_card_issuers_title">Qual é o seu banco?</string>
 

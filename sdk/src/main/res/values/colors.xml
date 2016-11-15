@@ -31,8 +31,12 @@
     <color name="mpsdk_active_button">#3383FA</color>
     <color name="mpsdk_inactive_button">#84b4fc</color>
 
+    <color name="mpsdk_color_instructions_background_title">#FFA15A</color>
+    <color name="mpsdk_color_instructions_status_bar">#E69150</color>
+
     <color name="mpsdk_color_congrats_background">#3BC280</color>
     <color name="mpsdk_color_congrats_status_bar">#35AE73</color>
+
     <color name="mpsdk_color_congrats_installments">#009FDE</color>
     <color name="mpsdk_color_congrats_interest">#43B000</color>
 
@@ -46,10 +50,12 @@
     <color name="mpsdk_installments_zero_rate">#43B000</color>
     <color name="mpsdk_color_call_for_authorize_image">#3188AA</color>
     <color name="mpsdk_color_call_for_authorize_background">#3AB8EF</color>
-    <color name="mpsdk_color_call_for_authorize_status_bar">#34a5d7</color>
 
     <color name="mpsdk_color_pending_background">#FFA15A</color>
+    <color name="mpsdk_color_call_for_authorize_status_bar">#34a5d7</color>
+
     <color name="mpsdk_color_pending_status_bar">#E59051</color>
+
     <color name="mpsdk_color_pending_image">#EFC701</color>
     <color name="mpsdk_color_new_card_form_background">#59C0ED</color>
     <color name="mpsdk_color_new_card_form_background_light_alpha">#4DFFFFFF</color>

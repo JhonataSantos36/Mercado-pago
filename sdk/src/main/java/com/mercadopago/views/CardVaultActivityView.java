@@ -1,9 +1,6 @@
 package com.mercadopago.views;
 
 import com.mercadopago.model.ApiException;
-import com.mercadopago.model.PayerCost;
-
-import java.util.List;
 
 /**
  * Created by vaserber on 10/12/16.

@@ -2,15 +2,15 @@ package com.mercadopago.presenters;
 
 import android.content.Context;
 
-import com.mercadopago.controllers.PaymentMethodGuessingController;
-import com.mercadopago.model.Card;
-import com.mercadopago.model.CardInformation;
-import com.mercadopago.views.InstallmentsActivityView;
 import com.mercadopago.R;
 import com.mercadopago.callbacks.Callback;
 import com.mercadopago.callbacks.FailureRecovery;
+import com.mercadopago.controllers.PaymentMethodGuessingController;
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.model.ApiException;
+import com.mercadopago.model.Card;
+import com.mercadopago.model.CardInformation;
+import com.mercadopago.views.InstallmentsActivityView;
 import com.mercadopago.model.Installment;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.PayerCost;
