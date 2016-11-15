@@ -45,7 +45,7 @@
                 <FrameLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="0.6">
+                    android:layout_weight="0.65">
 
                     <ImageView
                         android:layout_width="match_parent"
@@ -99,7 +99,7 @@
                     android:layout_marginEnd="15dp"
                     android:layout_marginLeft="15dp"
                     android:layout_marginStart="15dp"
-                    android:layout_marginTop="-10dp"
+                    android:layout_marginTop="-20dp"
                     android:layout_gravity="end"
                     android:visibility="visible">
 
@@ -112,15 +112,12 @@
                         android:gravity="end"
                         tools:text="1234"
                         app:fontStyle="roboto_regular"/>
-
                 </FrameLayout>
-
-
                 <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="0.2"
-                    android:layout_marginTop="10dp">
+                    android:layout_marginTop="17dp">
 
                     <FrameLayout
                         android:layout_width="match_parent"
@@ -149,7 +146,7 @@
                     android:layout_height="0dp"
                     android:layout_weight="0.2"
                     android:layout_gravity="center"
-                    android:layout_marginTop="15dp"
+                    android:layout_marginTop="10dp"
                     android:orientation="horizontal"
                     android:weightSum="1">
 

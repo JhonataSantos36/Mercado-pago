@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".FormCardActivity">
+    tools:context=".GuessingCardActivity">
 
     <ScrollView
         android:id="@+id/mpsdkScrollViewContainer"
@@ -27,7 +27,15 @@
                 <include layout="@layout/mpsdk_form_card_normal_toolbar"/>
 
                 <FrameLayout
-                    android:id="@+id/mpsdkActivityCardContainer"
+                    android:id="@+id/mpsdkCardViewContainer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal|top"
+                    android:gravity="center_horizontal"
+                    android:layout_marginTop="45dp" />
+
+                <FrameLayout
+                    android:id="@+id/mpsdkIdentificationCardContainer"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal|top"

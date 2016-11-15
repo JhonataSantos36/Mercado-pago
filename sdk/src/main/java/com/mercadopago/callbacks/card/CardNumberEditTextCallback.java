@@ -5,10 +5,10 @@ package com.mercadopago.callbacks.card;
  */
 
 public interface CardNumberEditTextCallback {
-    void openKeyboard();
+    void checkOpenKeyboard();
     void appendSpace(CharSequence s);
     void deleteChar(CharSequence s);
     void saveCardNumber(CharSequence s);
-    void checkChangeErrorView();
+    void changeErrorView();
     void toggleLineColorOnError(boolean toggle);
 }

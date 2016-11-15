@@ -1,8 +1,6 @@
 package com.mercadopago.util;
 
-import com.mercadopago.CardInterface;
 import com.mercadopago.model.IdentificationType;
-import com.mercadopago.model.Token;
 
 import java.util.Locale;
 
@@ -20,9 +18,6 @@ public class MPCardMaskUtil {
     public static final int CARD_NUMBER_MAX_LENGTH = 16;
     public static final int CARD_NUMBER_AMEX_LENGTH = 15;
     public static final int CARD_NUMBER_DINERS_LENGTH = 14;
-    public static final int CARD_DEFAULT_SECURITY_CODE_LENGTH = 4;
-    public static final int CARD_DEFAULT_AMOUNT_SPACES = 3;
-    public static final int CARD_AMEX_DINERS_AMOUNT_SPACES = 2;
 
     protected MPCardMaskUtil() {
 
@@ -39,7 +34,7 @@ public class MPCardMaskUtil {
 
     public static String buildNumberWithMask(int cardLength, String number) {
         String result = "";
-        if (cardLength == CardInterface.CARD_NUMBER_AMEX_LENGTH) {
+        if (cardLength == CARD_NUMBER_AMEX_LENGTH) {
             StringBuffer sb = new StringBuffer();
             for (int i = 0; i < 4; i++) {
                 char c = getCharOfCard(number, i);
@@ -51,12 +46,12 @@ public class MPCardMaskUtil {
                 sb.append(c);
             }
             sb.append(" ");
-            for (int i = 10; i < CardInterface.CARD_NUMBER_AMEX_LENGTH; i++) {
+            for (int i = 10; i < CARD_NUMBER_AMEX_LENGTH; i++) {
                 char c = getCharOfCard(number, i);
                 sb.append(c);
             }
             result = sb.toString();
-        } else if (cardLength == CardInterface.CARD_NUMBER_DINERS_LENGTH) {
+        } else if (cardLength == CARD_NUMBER_DINERS_LENGTH) {
             StringBuffer sb = new StringBuffer();
             for (int i = 0; i < 4; i++) {
                 char c = getCharOfCard(number, i);
@@ -68,7 +63,7 @@ public class MPCardMaskUtil {
                 sb.append(c);
             }
             sb.append(" ");
-            for (int i = 10; i < CardInterface.CARD_NUMBER_DINERS_LENGTH; i++) {
+            for (int i = 10; i < CARD_NUMBER_DINERS_LENGTH; i++) {
                 char c = getCharOfCard(number, i);
                 sb.append(c);
             }
@@ -161,14 +156,6 @@ public class MPCardMaskUtil {
             sb.append(c);
         }
         return sb.toString();
-    }
-
-    public static String buildSecurityCode(int securityCodeLength, CharSequence s) {
-        if (s == null) {
-            return BASE_FRONT_SECURITY_CODE;
-        } else {
-            return buildSecurityCode(securityCodeLength, s.toString());
-        }
     }
 
     public static boolean needsMask(CharSequence s, int cardNumberLength) {

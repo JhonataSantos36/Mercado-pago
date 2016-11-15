@@ -8,11 +8,10 @@ import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.controllers.PaymentMethodGuessingController;
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.model.ApiException;
-import com.mercadopago.model.CardInformation;
+import com.mercadopago.model.CardInfo;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentPreference;
-import com.mercadopago.model.Token;
 import com.mercadopago.views.IssuersActivityView;
 
 import java.util.ArrayList;
@@ -33,15 +32,13 @@ public class IssuersPresenter {
 
     //Card Info
     private String mBin;
-    private Long mIssuerId;
 
     //Activity parameters
     private String mPublicKey;
     private PaymentMethod mPaymentMethod;
-    private Token mToken;
     private List<Issuer> mIssuers;
     private PaymentPreference mPaymentPreference;
-    protected CardInformation mCardInfo;
+    protected CardInfo mCardInfo;
 
     public IssuersPresenter(Context context) {
         this.mContext = context;
@@ -59,21 +56,17 @@ public class IssuersPresenter {
         this.mPublicKey = publicKey;
     }
 
-    public void setToken(Token token) {
-        this.mToken = token;
-    }
-
-    public void setCardInformation() {
-        setCardInformation(mToken);
-    }
-
-    private void setCardInformation(CardInformation cardInformation) {
-        this.mCardInfo = cardInformation;
+    public void setCardInfo(CardInfo cardInfo) {
+        this.mCardInfo = cardInfo;
         if (mCardInfo == null) {
             mBin = "";
         } else {
             mBin = mCardInfo.getFirstSixDigits();
         }
+    }
+
+    public CardInfo getCardInfo() {
+        return mCardInfo;
     }
 
     public void setIssuers(List<Issuer> issuers) {
@@ -98,14 +91,6 @@ public class IssuersPresenter {
 
     public PaymentMethod getPaymentMethod() {
         return this.mPaymentMethod;
-    }
-
-    public Token getToken() {
-        return this.mToken;
-    }
-
-    public CardInformation getCardInformation() {
-        return this.mCardInfo;
     }
 
     public Integer getCardNumberLength() {
@@ -163,13 +148,13 @@ public class IssuersPresenter {
                 @Override
                 public void failure(ApiException apiException) {
                     mView.stopLoadingView();
-                    mView.showApiExceptionError(apiException);
                     setFailureRecovery(new FailureRecovery() {
                         @Override
                         public void recover() {
                             getIssuersAsync();
                         }
                     });
+                    mView.showApiExceptionError(apiException);
                 }
             });
     }
@@ -182,6 +167,7 @@ public class IssuersPresenter {
         } else if (mIssuers.size() == 1) {
             mView.finishWithResult(issuers.get(0));
         } else {
+            mView.showHeader();
             mView.initializeIssuers(issuers);
         }
     }

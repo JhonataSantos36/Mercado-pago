@@ -18,4 +18,5 @@ public interface IssuersActivityView {
     void stopLoadingView();
     void showApiExceptionError(ApiException exception);
     void initializeIssuers(List<Issuer> issuersList);
+    void showHeader();
 }

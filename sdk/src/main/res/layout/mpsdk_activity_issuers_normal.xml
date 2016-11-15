@@ -18,8 +18,6 @@
 
         <include layout="@layout/mpsdk_scrolling_toolbar"/>
 
-
-
     </android.support.design.widget.AppBarLayout>
 
     <FrameLayout

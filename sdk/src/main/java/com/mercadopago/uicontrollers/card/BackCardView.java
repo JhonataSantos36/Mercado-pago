@@ -21,7 +21,7 @@ import com.mercadopago.util.ScaleUtil;
  * Created by vaserber on 10/19/16.
  */
 
-public class BackCardView implements BackCardViewController {
+public class BackCardView {
 
     public static final int CARD_SECURITY_CODE_DEFAULT_LENGTH = 3;
 
@@ -48,17 +48,14 @@ public class BackCardView implements BackCardViewController {
         this.mSecurityCodeLength = CARD_SECURITY_CODE_DEFAULT_LENGTH;
     }
 
-    @Override
     public void setPaymentMethod(PaymentMethod paymentMethod) {
         this.mPaymentMethod = paymentMethod;
     }
 
-    @Override
     public void setSize(String size) {
         this.mSize = size;
     }
 
-    @Override
     public void setSecurityCodeLength(int securityCodeLength) {
         this.mSecurityCodeLength = securityCodeLength;
     }
@@ -108,29 +105,27 @@ public class BackCardView implements BackCardViewController {
         mCardBorder.setImageDrawable(cardShadowRounded);
     }
 
-    @Override
     public void draw() {
         showEmptySecurityCode();
         if (mPaymentMethod == null) return;
         onPaymentMethodSet();
     }
 
-    @Override
     public void hide() {
         mCardContainer.setVisibility(View.GONE);
     }
 
-    @Override
     public void show() {
         mCardContainer.setVisibility(View.VISIBLE);
     }
 
-    private void onPaymentMethodSet() {
-        mCardImageView.setBackgroundColor(ContextCompat.getColor(mContext, getCardColor(mPaymentMethod)));
-    }
-
     public void clearPaymentMethod() {
         mCardImageView.setBackgroundColor(ContextCompat.getColor(mContext, NEUTRAL_CARD_COLOR));
+        drawEditingSecurityCode(null);
+    }
+
+    private void onPaymentMethodSet() {
+        mCardImageView.setBackgroundColor(ContextCompat.getColor(mContext, getCardColor(mPaymentMethod)));
     }
 
     private int getCardColor(PaymentMethod paymentMethod) {

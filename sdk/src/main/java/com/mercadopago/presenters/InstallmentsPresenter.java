@@ -8,16 +8,14 @@ import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.controllers.PaymentMethodGuessingController;
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.model.ApiException;
-import com.mercadopago.model.Card;
-import com.mercadopago.model.CardInformation;
-import com.mercadopago.views.InstallmentsActivityView;
+import com.mercadopago.model.CardInfo;
 import com.mercadopago.model.Installment;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentPreference;
 import com.mercadopago.model.Site;
-import com.mercadopago.model.Token;
+import com.mercadopago.views.InstallmentsActivityView;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -47,9 +45,7 @@ public class InstallmentsPresenter {
     private Site mSite;
     private List<PayerCost> mPayerCosts;
     private PaymentPreference mPaymentPreference;
-    private CardInformation mCardInfo;
-    private Card mCard;
-    private Token mToken;
+    private CardInfo mCardInfo;
 
     public InstallmentsPresenter(Context context) {
         this.mContext = context;
@@ -67,16 +63,8 @@ public class InstallmentsPresenter {
         this.mPaymentMethod = paymentMethod;
     }
 
-    public void setCardInformation() {
-        if(mCard == null && mToken != null) {
-            setCardInformation(mToken);
-        } else if (mCard != null) {
-            setCardInformation(mCard);
-        }
-    }
-
-    private void setCardInformation(CardInformation cardInformation) {
-        this.mCardInfo = cardInformation;
+    public void setCardInfo(CardInfo cardInfo) {
+        this.mCardInfo = cardInfo;
         if (mCardInfo == null) {
             mBin = "";
         } else {
@@ -84,12 +72,8 @@ public class InstallmentsPresenter {
         }
     }
 
-    public void setToken(Token token) {
-        this.mToken = token;
-    }
-
-    public void setCard(Card card) {
-        this.mCard = card;
+    public CardInfo getCardInfo() {
+        return mCardInfo;
     }
 
     public void setIssuer(Issuer issuer) {
@@ -127,10 +111,6 @@ public class InstallmentsPresenter {
         return this.mPaymentMethod;
     }
 
-    public Token getToken() {
-        return this.mToken;
-    }
-
     public Site getSite() {
         return mSite;
     }
@@ -149,10 +129,6 @@ public class InstallmentsPresenter {
 
     public Issuer getIssuer() {
         return mIssuer;
-    }
-
-    public CardInformation getCardInformation() {
-        return mCardInfo;
     }
 
     public void validateActivityParameters() throws IllegalStateException {
@@ -225,13 +201,13 @@ public class InstallmentsPresenter {
                 @Override
                 public void failure(ApiException apiException) {
                     mView.stopLoadingView();
-                    mView.showApiExceptionError(apiException);
                     setFailureRecovery(new FailureRecovery() {
                         @Override
                         public void recover() {
                             getInstallmentsAsync();
                         }
                     });
+                    mView.showApiExceptionError(apiException);
                 }
             });
     }

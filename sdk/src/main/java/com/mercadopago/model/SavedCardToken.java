@@ -44,11 +44,11 @@ public class SavedCardToken {
         return validateCardId() && validateSecurityCode();
     }
 
-    public boolean validateCardId(){
+    public boolean validateCardId() {
         return !TextUtils.isEmpty(cardId) && TextUtils.isDigitsOnly(cardId);
     }
 
-    public boolean validateSecurityCode(){
+    public boolean validateSecurityCode() {
 
         return CardToken.validateSecurityCode(securityCode);
     }
@@ -62,7 +62,7 @@ public class SavedCardToken {
                 throw new Exception(context.getString(R.string.mpsdk_invalid_cvv_length, cvvLength));
             }
         } else {
-            throw new Exception("Security code is null");
+            throw new Exception(context.getString(R.string.mpsdk_invalid_field));
         }
     }
 }

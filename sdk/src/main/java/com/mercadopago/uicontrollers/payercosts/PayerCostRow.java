@@ -48,6 +48,19 @@ public class PayerCostRow implements PayerCostViewController {
         }
     }
 
+    @Override
+    public void drawPayerCostWithoutTotal(PayerCost payerCost) {
+        mPayerCost = payerCost;
+        setInstallmentsText();
+
+        if (payerCost.getInstallmentRate().compareTo(BigDecimal.ZERO) == 0) {
+            mRateText.setVisibility(View.GONE);
+            if (payerCost.getInstallments() > 1) {
+                mZeroRateText.setVisibility(View.VISIBLE);
+            }
+        }
+    }
+
     private void setAmountWithRateText() {
         mRateText.setVisibility(View.VISIBLE);
         StringBuilder sb = new StringBuilder();

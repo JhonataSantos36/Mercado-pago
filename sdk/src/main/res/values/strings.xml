@@ -164,7 +164,7 @@
     <string name="mpsdk_text_cancel_payment_and_continue">Cancelar pago y continuar</string>
     <string name="mpsdk_zero_rate">Sin interés</string>
     <string name="mpsdk_exit_label">Salir</string>
-    <string name="mpsdk_cancel_payment">Cancelar pago</string>
+    <string name="mpsdk_cancel_payment">Cancelar Pago</string>
     <string name="mpsdk_input_button_back">Anterior</string>
     <string name="mpsdk_input_button_next">Continuar</string>
     <string name="mpsdk_hour">hora</string>
@@ -177,9 +177,41 @@
     <string name="mpsdk_no_connection_message">Sin conexión</string>
     <string name="mpsdk_instant_accreditation_time">Se acreditará instantáneamente</string>
     <string name="mpsdk_accreditation_time">Se acreditará en</string>
-    <string name="mpsdk_what_can_do">¿Que puedo hacer?</string>
-    <string name="mpsdk_form_card_title">Tarjeta de %1$s</string>
+    <string name="mpsdk_what_can_do">¿Qué puedo hacer?</string>
+
+    <!-- Low Res -->
+    <string name="mpsdk_form_card_title_payment_type">Tarjeta de %1$s</string>
+    <string name="mpsdk_form_card_title">Tarjeta</string>
+    <string name="mpsdk_form_identification_title">Documento del titular</string>
+    <string name="mpsdk_bank_deals_lowres">Promociones</string>
+
+    <!-- PaymentTypes -->
+    <string name="mpsdk_credit_payment_type">Crédito</string>
+    <string name="mpsdk_debit_payment_type">Débito</string>
+    <string name="mpsdk_form_card_title_payment_type_prepaid">Tarjeta prepaga</string>
+    <string name="mpsdk_payment_types_title">¿Qué tipo de tarjeta es?</string>
+
 
     <string name="mpsdk_confirm_prompt_yes">Sí</string>
     <string name="mpsdk_confirm_prompt_no">No</string>
+
+    <!-- Review and Confirm -->
+    <string name="mpsdk_change_payment">Cambiar pago</string>
+    <string name="mpsdk_review_description_card">%1$s terminada en: %2$s</string>
+    <string name="mpsdk_review_off_text_default">Pagarás %1$s\n%2$s</string>
+    <string name="mpsdk_review_off_text">Pagarás %1$s en un\n%2$s</string>
+    <string name="mpsdk_review_off_text_2">Pagarás %1$s en\n%2$s</string>
+    <string name="mpsdk_review_off_text_3">Pagarás %1$s en tu\n%2$s</string>
+    <string name="mpsdk_review_off_text_4">Pagarás %1$s con\n%2$s</string>
+    <string name="mpsdk_homebanking">Home Banking de</string>
+    <string name="mpsdk_your_atm">cajero automático de</string>
+    <string name="mpsdk_review_product_quantity">Cantidad: %1$s</string>
+    <string name="mpsdk_review_product_price">Precio unitario: %1$s</string>
+    <string name="mpsdk_activity_checkout_title">Confirma tu compra</string>
+    <string name="mpsdk_review_summary_products">Productos</string>
+    <string name="mpsdk_review_symmary_discount">Descuentos</string>
+    <string name="mpsdk_review_summary_discounts">Descuento %1$s</string>
+    <string name="mpsdk_review_summary_subtotal">Subtotal</string>
+    <string name="mpsdk_review_summary_pay">Pagas</string>
+    <string name="mpsdk_review_summary_total">Total</string>
 </resources>

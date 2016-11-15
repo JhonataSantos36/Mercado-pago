@@ -14,6 +14,8 @@ import com.google.gson.reflect.TypeToken;
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.Card;
+import com.mercadopago.model.CardInfo;
+import com.mercadopago.model.CardToken;
 import com.mercadopago.model.DecorationPreference;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.PayerCost;
@@ -95,11 +97,10 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultAct
         if (getIntent().getStringExtra("decorationPreference") != null) {
             mDecorationPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("decorationPreference"), DecorationPreference.class);
         }
-
+        mPresenter.setCard(card);
         mPresenter.setInstallmentsEnabled(installmentsEnabled);
         mPresenter.setPublicKey(publicKey);
         mPresenter.setSite(site);
-        mPresenter.setCard(card);
         mPresenter.setPaymentRecovery(paymentRecovery);
         mPresenter.setAmount(amountValue);
         mPresenter.setPaymentMethodList(paymentMethods);
@@ -114,7 +115,30 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultAct
     public void onValidStart() {
         mPresenter.initializeMercadoPago();
         initializeViews();
-        startGuessingCardActivity();
+        if (tokenRecoveryAvailable()) {
+            mPresenter.setCardInfo(new CardInfo(mPresenter.getPaymentRecovery().getToken()));
+            mPresenter.setPaymentMethod(mPresenter.getPaymentRecovery().getPaymentMethod());
+            mPresenter.setToken(mPresenter.getPaymentRecovery().getToken());
+            startSecurityCodeActivity();
+
+        } else if (savedCardAvailable()) {
+            mPresenter.setCardInfo(new CardInfo(mPresenter.getCard()));
+            mPresenter.setPaymentMethod(mPresenter.getCard().getPaymentMethod());
+            mPresenter.setIssuer(mPresenter.getCard().getIssuer());
+            startInstallmentsActivity();
+            overrideTransitionSlideOutIn();
+
+        } else {
+            startGuessingCardActivity();
+        }
+    }
+
+    private boolean tokenRecoveryAvailable() {
+        return mPresenter.getPaymentRecovery() != null && mPresenter.getPaymentRecovery().isTokenRecoverable();
+    }
+
+    private boolean savedCardAvailable() {
+        return mPresenter.getCard() != null;
     }
 
     @Override
@@ -129,6 +153,19 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultAct
         mProgressBar.setVisibility(View.VISIBLE);
     }
 
+    private void startSecurityCodeActivity() {
+        new MercadoPago.StartActivityBuilder()
+                .setActivity(mActivity)
+                .setPublicKey(mPresenter.getPublicKey())
+                .setPaymentMethod(mPresenter.getPaymentMethod())
+                .setCardInfo(mPresenter.getCardInfo())
+                .setToken(mPresenter.getToken())
+                .setCard(mPresenter.getCard())
+                .setDecorationPreference(mDecorationPreference)
+                .startSecurityCodeActivity();
+        overridePendingTransition(R.anim.mpsdk_slide_right_to_left_in, R.anim.mpsdk_slide_right_to_left_out);
+    }
+
     private void startGuessingCardActivity() {
         runOnUiThread(new Runnable() {
             public void run() {
@@ -140,7 +177,6 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultAct
                     .setSupportedPaymentMethods(mPresenter.getPaymentMethodList())
                     .setDecorationPreference(mDecorationPreference)
                     .setPaymentRecovery(mPresenter.getPaymentRecovery())
-                    .setCard(mPresenter.getCard())
                     .startGuessingCardActivity();
                 overridePendingTransition(R.anim.mpsdk_slide_right_to_left_in, R.anim.mpsdk_slide_right_to_left_out);
             }
@@ -151,8 +187,12 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultAct
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == MercadoPago.GUESSING_CARD_REQUEST_CODE) {
             resolveGuessingCardRequest(resultCode, data);
+        } else if (requestCode == MercadoPago.ISSUERS_REQUEST_CODE) {
+            resolveIssuersRequest(resultCode, data);
         } else if (requestCode == MercadoPago.INSTALLMENTS_REQUEST_CODE) {
             resolveInstallmentsRequest(resultCode, data);
+        } else if (requestCode == MercadoPago.SECURITY_CODE_REQUEST_CODE) {
+            resolveSecurityCodeRequest(resultCode, data);
         } else if (requestCode == ErrorUtil.ERROR_REQUEST_CODE) {
             resolveErrorRequest(resultCode, data);
         }
@@ -167,12 +207,30 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultAct
         }
     }
 
+    protected void resolveIssuersRequest(int resultCode, Intent data) {
+        if (resultCode == RESULT_OK) {
+            Bundle bundle = data.getExtras();
+            Issuer issuer = JsonUtil.getInstance().fromJson(bundle.getString("issuer"), Issuer.class);
+            mPresenter.setIssuer(issuer);
+            mPresenter.checkStartInstallmentsActivity();
+        } else if (resultCode == RESULT_CANCELED) {
+            MPTracker.getInstance().trackEvent("INSTALLMENTS", "CANCELED", "2", mPresenter.getPublicKey(),
+                    mPresenter.getSite().getId(), BuildConfig.VERSION_NAME, this);
+            setResult(RESULT_CANCELED, data);
+            finish();
+        }
+    }
+
     protected void resolveInstallmentsRequest(int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
             Bundle bundle = data.getExtras();
             PayerCost payerCost = JsonUtil.getInstance().fromJson(bundle.getString("payerCost"), PayerCost.class);
             mPresenter.setPayerCost(payerCost);
-            finishWithResult();
+            if (savedCardAvailable()) {
+                startSecurityCodeActivity();
+            } else {
+                mPresenter.createToken();
+            }
         } else if (resultCode == RESULT_CANCELED) {
             MPTracker.getInstance().trackEvent("INSTALLMENTS", "CANCELED", "2", mPresenter.getPublicKey(),
                     mPresenter.getSite().getId(), BuildConfig.VERSION_NAME, this);
@@ -184,13 +242,13 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultAct
     protected void resolveGuessingCardRequest(int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
             PaymentMethod paymentMethod = JsonUtil.getInstance().fromJson(data.getStringExtra("paymentMethod"), PaymentMethod.class);
-            Token token = JsonUtil.getInstance().fromJson(data.getStringExtra("token"), Token.class);
+            CardToken cardToken = JsonUtil.getInstance().fromJson(data.getStringExtra("cardToken"), CardToken.class);
             Issuer issuer = JsonUtil.getInstance().fromJson(data.getStringExtra("issuer"), Issuer.class);
             mPresenter.setPaymentMethod(paymentMethod);
-            mPresenter.setToken(token);
+            mPresenter.setCardToken(cardToken);
             mPresenter.setIssuer(issuer);
-            mPresenter.setCardInformation();
-            mPresenter.checkStartInstallmentsActivity();
+            mPresenter.setCardInfo(new CardInfo(cardToken));
+            mPresenter.checkStartIssuersActivity();
         } else if (resultCode == RESULT_CANCELED) {
             if (mPresenter.getSite() == null) {
                 MPTracker.getInstance().trackEvent("GUESSING_CARD", "CANCELED", "2", mPresenter.getPublicKey(),
@@ -204,6 +262,36 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultAct
         }
     }
 
+    protected void resolveSecurityCodeRequest(int resultCode, Intent data) {
+        if (resultCode == RESULT_OK) {
+            Token token = JsonUtil.getInstance().fromJson(data.getStringExtra("token"), Token.class);
+            mPresenter.setToken(token);
+            finishWithResult();
+        } else if (resultCode == RESULT_CANCELED) {
+            if (mPresenter.getSite() == null) {
+                MPTracker.getInstance().trackEvent("SECURITY_CODE_CARD", "CANCELED", "2", mPresenter.getPublicKey(),
+                        BuildConfig.VERSION_NAME, this);
+            } else {
+                MPTracker.getInstance().trackEvent("SECURITY_CODE_CARD", "CANCELED", "2", mPresenter.getPublicKey(),
+                        mPresenter.getSite().getId(), BuildConfig.VERSION_NAME, this);
+            }
+            setResult(RESULT_CANCELED, data);
+            finish();
+        }
+    }
+
+    @Override
+    public void startIssuersActivity() {
+        new MercadoPago.StartActivityBuilder()
+                .setActivity(mActivity)
+                .setPublicKey(mPresenter.getPublicKey())
+                .setPaymentMethod(mPresenter.getPaymentMethod())
+                .setCardInfo(mPresenter.getCardInfo())
+                .setDecorationPreference(mDecorationPreference)
+                .startIssuersActivity();
+        overridePendingTransition(R.anim.mpsdk_slide_right_to_left_in, R.anim.mpsdk_slide_right_to_left_out);
+    }
+
     @Override
     public void startInstallmentsActivity() {
         new MercadoPago.StartActivityBuilder()
@@ -211,14 +299,22 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultAct
                 .setPublicKey(mPresenter.getPublicKey())
                 .setPaymentMethod(mPresenter.getPaymentMethod())
                 .setAmount(mPresenter.getAmount())
-                .setToken(mPresenter.getToken())
-                .setCard(mPresenter.getCard())
                 .setIssuer(mPresenter.getIssuer())
                 .setPaymentPreference(mPresenter.getPaymentPreference())
                 .setSite(mPresenter.getSite())
                 .setDecorationPreference(mDecorationPreference)
+                .setCardInfo(mPresenter.getCardInfo())
                 .startInstallmentsActivity();
+    }
+
+    @Override
+    public void overrideTranstitionHold() {
         overridePendingTransition(R.anim.mpsdk_hold, R.anim.mpsdk_hold);
+    }
+
+    @Override
+    public void overrideTransitionSlideOutIn() {
+        overridePendingTransition(R.anim.mpsdk_slide_right_to_left_in, R.anim.mpsdk_slide_right_to_left_out);
     }
 
     @Override

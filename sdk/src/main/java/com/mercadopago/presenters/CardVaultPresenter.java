@@ -2,16 +2,20 @@ package com.mercadopago.presenters;
 
 import android.content.Context;
 
+import com.mercadopago.callbacks.Callback;
 import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.controllers.PaymentMethodGuessingController;
 import com.mercadopago.core.MercadoPago;
+import com.mercadopago.model.ApiException;
 import com.mercadopago.model.Card;
-import com.mercadopago.model.CardInformation;
+import com.mercadopago.model.CardInfo;
+import com.mercadopago.model.CardToken;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentPreference;
 import com.mercadopago.model.PaymentRecovery;
+import com.mercadopago.model.SavedCardToken;
 import com.mercadopago.model.Site;
 import com.mercadopago.model.Token;
 import com.mercadopago.views.CardVaultActivityView;
@@ -37,16 +41,19 @@ public class CardVaultPresenter {
     protected List<PaymentMethod> mPaymentMethodList;
     protected Site mSite;
     protected Boolean mInstallmentsEnabled;
-    protected Card mCard;
     protected String mPublicKey;
     protected BigDecimal mAmount;
-    protected CardInformation mCardInfo;
 
     //Activity result
-    protected Token mToken;
     protected PaymentMethod mPaymentMethod;
     protected PayerCost mPayerCost;
     protected Issuer mIssuer;
+
+    //Card Info
+    protected CardInfo mCardInfo;
+    protected Token mToken;
+    protected CardToken mCardToken;
+    protected Card mCard;
 
     public CardVaultPresenter(Context context) {
         this.mContext = context;
@@ -152,16 +159,16 @@ public class CardVaultPresenter {
         return mPublicKey;
     }
 
-    public void setCardInformation() {
-        if(mCard == null && mToken != null) {
-            setCardInformation(mToken);
-        } else if (mCard != null) {
-            setCardInformation(mCard);
-        }
+    public CardToken getCardToken() {
+        return mCardToken;
     }
 
-    private void setCardInformation(CardInformation cardInformation) {
-        this.mCardInfo = cardInformation;
+    public void setCardToken(CardToken mCardToken) {
+        this.mCardToken = mCardToken;
+    }
+
+    public void setCardInfo(CardInfo cardInfo) {
+        this.mCardInfo = cardInfo;
         if (mCardInfo == null) {
             mBin = "";
         } else {
@@ -169,7 +176,7 @@ public class CardVaultPresenter {
         }
     }
 
-    public CardInformation getCardInformation() {
+    public CardInfo getCardInfo() {
         return mCardInfo;
     }
 
@@ -180,13 +187,22 @@ public class CardVaultPresenter {
     public void checkStartInstallmentsActivity() {
         if (installmentsRequired()) {
             mView.startInstallmentsActivity();
+            mView.overrideTranstitionHold();
         } else {
-            mView.finishWithResult();
+            createToken();
+        }
+    }
+
+    public void checkStartIssuersActivity() {
+        if (mIssuer == null) {
+            mView.startIssuersActivity();
+        } else {
+            checkStartInstallmentsActivity();
         }
     }
 
     private boolean installmentsRequired() {
-        return mInstallmentsEnabled && (mPaymentRecovery == null || !mPaymentRecovery.isTokenRecoverable());
+        return mInstallmentsEnabled;
     }
 
     public void validateActivityParameters() {
@@ -211,6 +227,47 @@ public class CardVaultPresenter {
         if (mFailureRecovery != null) {
             mFailureRecovery.recover();
         }
+    }
+
+    public void createToken() {
+        mMercadoPago.createToken(mCardToken, new Callback<Token>() {
+            @Override
+            public void success(Token token) {
+                mToken = token;
+                mView.finishWithResult();
+            }
+
+            @Override
+            public void failure(ApiException apiException) {
+                setFailureRecovery(new FailureRecovery() {
+                    @Override
+                    public void recover() {
+                        createToken();
+                    }
+                });
+                mView.showApiExceptionError(apiException);
+            }
+        });
+    }
+
+    public void createToken(final SavedCardToken savedCardToken) {
+        mMercadoPago.createToken(savedCardToken, new Callback<Token>() {
+            @Override
+            public void success(Token token) {
+                mToken = token;
+            }
+
+            @Override
+            public void failure(ApiException apiException) {
+                setFailureRecovery(new FailureRecovery() {
+                    @Override
+                    public void recover() {
+                        createToken(savedCardToken);
+                    }
+                });
+                mView.showApiExceptionError(apiException);
+            }
+        });
     }
 
 }

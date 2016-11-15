@@ -2,9 +2,11 @@ package com.mercadopago.uicontrollers.payercosts;
 
 import android.content.Context;
 import android.text.Spanned;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.mercadopago.R;
 import com.mercadopago.customviews.MPTextView;
@@ -35,6 +37,19 @@ public class PayerCostColumn implements PayerCostViewController {
 
     @Override
     public void drawPayerCost(PayerCost payerCost) {
+        drawBasicPayerCost(payerCost);
+        setAmountWithRateText();
+        alignCenter();
+    }
+
+    @Override
+    public void drawPayerCostWithoutTotal(PayerCost payerCost) {
+        drawBasicPayerCost(payerCost);
+        hideTotalAmount();
+        alignRight();
+    }
+
+    private void drawBasicPayerCost(PayerCost payerCost) {
         mPayerCost = payerCost;
         setInstallmentsText();
 
@@ -45,7 +60,6 @@ public class PayerCostColumn implements PayerCostViewController {
                 mZeroRateText.setVisibility(View.GONE);
             }
         }
-        setAmountWithRateText();
     }
 
     private void setAmountWithRateText() {
@@ -87,12 +101,30 @@ public class PayerCostColumn implements PayerCostViewController {
     @Override
     public View inflateInParent(ViewGroup parent, boolean attachToRoot) {
         mView = LayoutInflater.from(mContext)
-                .inflate(R.layout.mpsdk_row_payer_cost_list, parent, attachToRoot);
+                .inflate(R.layout.mpsdk_column_payer_cost, parent, attachToRoot);
         return mView;
     }
 
     @Override
     public View getView() {
         return mView;
+    }
+
+    private void hideTotalAmount() {
+        mTotalText.setVisibility(View.GONE);
+    }
+
+    private void alignRight() {
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        params.gravity = Gravity.END;
+        mZeroRateText.setLayoutParams(params);
+    }
+
+    private void alignCenter() {
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        params.gravity = Gravity.CENTER;
+        mZeroRateText.setLayoutParams(params);
     }
 }

@@ -5,8 +5,8 @@ package com.mercadopago.callbacks.card;
  */
 
 public interface CardholderNameEditTextCallback {
-    void openKeyboard();
+    void checkOpenKeyboard();
     void saveCardholderName(CharSequence s);
-    void checkChangeErrorView();
+    void changeErrorView();
     void toggleLineColorOnError(boolean toggle);
 }

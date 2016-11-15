@@ -37,7 +37,7 @@ public class CardNumberTextWatcher implements TextWatcher {
 
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
-        mEditTextCallback.openKeyboard();
+        mEditTextCallback.checkOpenKeyboard();
         mEditTextCallback.saveCardNumber(s.toString().replaceAll("\\s", ""));
         if (before == 0) {
             mEditTextCallback.appendSpace(s);
@@ -49,13 +49,13 @@ public class CardNumberTextWatcher implements TextWatcher {
 
     @Override
     public void afterTextChanged(Editable s) {
-        mEditTextCallback.checkChangeErrorView();
+        mEditTextCallback.changeErrorView();
         mEditTextCallback.toggleLineColorOnError(false);
         if (mController == null) return;
         String number = s.toString().replaceAll("\\s", "");
         if (number.length() == MercadoPago.BIN_LENGTH - 1) {
             mPaymentSelectionCallback.onPaymentMethodCleared();
-        } else if (number.length() >= MercadoPago.BIN_LENGTH) {
+        } else if (number.length() == MercadoPago.BIN_LENGTH) {
             mBin = number.subSequence(0, MercadoPago.BIN_LENGTH).toString();
             List<PaymentMethod> list = mController.guessPaymentMethodsByBin(mBin);
             mPaymentSelectionCallback.onPaymentMethodListSet(list);

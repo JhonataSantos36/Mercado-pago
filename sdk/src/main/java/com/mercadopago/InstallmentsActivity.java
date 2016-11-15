@@ -19,14 +19,13 @@ import com.mercadopago.callbacks.OnSelectedCallback;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.listeners.RecyclerItemClickListener;
 import com.mercadopago.model.ApiException;
-import com.mercadopago.model.Card;
+import com.mercadopago.model.CardInfo;
 import com.mercadopago.model.DecorationPreference;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentPreference;
 import com.mercadopago.model.Site;
-import com.mercadopago.model.Token;
 import com.mercadopago.mptracker.MPTracker;
 import com.mercadopago.presenters.InstallmentsPresenter;
 import com.mercadopago.uicontrollers.card.CardRepresentationModes;
@@ -77,18 +76,23 @@ public class InstallmentsActivity extends AppCompatActivity implements Installme
         mPresenter.setView(this);
         mActivity = this;
         getActivityParameters();
+        if (isCustomColorSet()) {
+            setTheme(R.style.Theme_MercadoPagoTheme_NoActionBar);
+        }
         analyzeLowRes();
         setContentView();
         mPresenter.validateActivityParameters();
+    }
+
+    private boolean isCustomColorSet() {
+        return mDecorationPreference != null && mDecorationPreference.hasColors();
     }
     
     private void getActivityParameters() {
         PaymentMethod paymentMethod = JsonUtil.getInstance().fromJson(
                 this.getIntent().getStringExtra("paymentMethod"), PaymentMethod.class);
+        CardInfo cardInfo = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("cardInfo"), CardInfo.class);
         String publicKey = getIntent().getStringExtra("merchantPublicKey");
-        Token token = JsonUtil.getInstance().fromJson(
-                this.getIntent().getStringExtra("token"), Token.class);
-        Card card = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("card"), Card.class);
         Issuer issuer = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("issuer"), Issuer.class);
         BigDecimal amount = null;
         if (this.getIntent().getStringExtra("amount") != null) {
@@ -115,14 +119,12 @@ public class InstallmentsActivity extends AppCompatActivity implements Installme
 
         mPresenter.setPaymentMethod(paymentMethod);
         mPresenter.setPublicKey(publicKey);
-        mPresenter.setToken(token);
-        mPresenter.setCard(card);
         mPresenter.setIssuer(issuer);
         mPresenter.setAmount(amount);
         mPresenter.setSite(site);
         mPresenter.setPayerCosts(payerCosts);
         mPresenter.setPaymentPreference(paymentPreference);
-        mPresenter.setCardInformation();
+        mPresenter.setCardInfo(cardInfo);
     }
 
     private boolean isDecorationEnabled() {
@@ -209,9 +211,9 @@ public class InstallmentsActivity extends AppCompatActivity implements Installme
         mFrontCardView = new FrontCardView(mActivity, CardRepresentationModes.SHOW_FULL_FRONT_ONLY);
         mFrontCardView.setSize(CardRepresentationModes.MEDIUM_SIZE);
         mFrontCardView.setPaymentMethod(mPresenter.getPaymentMethod());
-        if (mPresenter.getCardInformation() != null) {
+        if (mPresenter.getCardInfo() != null) {
             mFrontCardView.setCardNumberLength(mPresenter.getCardNumberLength());
-            mFrontCardView.setLastFourDigits(mPresenter.getCardInformation().getLastFourDigits());
+            mFrontCardView.setLastFourDigits(mPresenter.getCardInfo().getLastFourDigits());
         }
         mFrontCardView.inflateInParent(mCardContainer, true);
         mFrontCardView.initializeControls();

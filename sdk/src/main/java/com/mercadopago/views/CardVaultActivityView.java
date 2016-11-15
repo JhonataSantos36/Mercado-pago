@@ -14,4 +14,7 @@ public interface CardVaultActivityView {
     void startErrorView(String message);
     void showApiExceptionError(ApiException exception);
     void startInstallmentsActivity();
+    void startIssuersActivity();
+    void overrideTranstitionHold();
+    void overrideTransitionSlideOutIn();
 }

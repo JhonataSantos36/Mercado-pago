@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.Toolbar
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<android.support.v7.widget.Toolbar xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:visibility="gone"
     android:id="@+id/mpsdkLowResToolbar"
     android:background="?attr/colorPrimary"
@@ -19,6 +19,9 @@
         android:layout_gravity="start|center_vertical"
         android:layout_marginLeft="20dp"
         android:layout_marginStart="20dp"
+        android:textSize="18dp"
+        app:fontStyle="regular"
+        tools:text="Tarjeta de crédito"
         style="@style/mpsdk_title_text"/>
 
     <com.mercadopago.customviews.MPTextView
@@ -28,8 +31,9 @@
         android:layout_gravity="end|center_vertical"
         android:layout_marginRight="16dp"
         android:layout_marginEnd="16dp"
-        android:paddingTop="10dp"
-        android:textSize="16dp"
+        android:textSize="12dp"
+        app:fontStyle="regular"
+        tools:text="Ver Promociones"
         style="@style/mpsdk_title_text"/>
 
 </android.support.v7.widget.Toolbar>

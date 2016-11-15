@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:custom="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/tools"
     android:id="@+id/mpsdkCardSecurityCodeContainer"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
@@ -13,6 +14,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginStart="16dp"
         android:lines="1"
+        app:fontStyle="regular"
         android:text="@string/mpsdk_security_code"
         android:textColor="@color/mpsdk_color_new_card_text"
         android:textSize="14dp" />
@@ -27,6 +29,7 @@
         android:imeOptions="actionNext"
         android:inputType="number"
         android:maxLength="4"
+        app:fontStyle="regular"
         android:singleLine="true"
         android:textColor="@color/abc_search_url_text_selected"
         android:textSize="19dp"

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="300dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/mpsdk_review_gray_background">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:gravity="center_vertical"
+        android:orientation="vertical">
+        <ImageView
+            android:id="@+id/mpsdkAdapterReviewPaymentImage"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center_horizontal"/>
+        <FrameLayout
+            android:id="@+id/mpsdkAdapterReviewPayerCostContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:paddingLeft="25dp"
+            android:paddingStart="25dp"
+            android:paddingEnd="25dp"
+            android:paddingRight="25dp"
+            android:layout_gravity="center_horizontal"/>
+        <com.mercadopago.customviews.MPTextView
+            android:id="@+id/mpsdkAdapterReviewPaymentText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"
+            android:gravity="center_horizontal"
+            android:paddingLeft="25dp"
+            android:paddingStart="25dp"
+            android:paddingEnd="25dp"
+            android:paddingRight="25dp"
+            app:fontStyle="regular"
+            android:textColor="@color/mpsdk_review_payment_text"
+            android:textSize="24dp"
+            tools:text="pagaras con blah sdasd asdasda sdasd"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_horizontal"
+            android:paddingLeft="25dp"
+            android:paddingStart="25dp"
+            android:paddingEnd="25dp"
+            android:paddingRight="25dp">
+
+            <ImageView
+                android:id="@+id/mpsdkIconTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:paddingRight="6dp"
+                android:paddingEnd="6dp"
+                android:paddingStart="6dp"
+                android:paddingLeft="6dp"
+                android:src="@drawable/mpsdk_icon_time"/>
+
+            <com.mercadopago.customviews.MPTextView
+                android:id="@+id/mpsdkAdapterReviewPaymentDescription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:fontStyle="regular"
+                android:textSize="18dp"
+                android:textColor="@color/mpsdk_review_description_text"
+                tools:text="Se acreditara en tantos dias"/>
+        </LinearLayout>
+
+
+        <FrameLayout
+            android:id="@+id/mpsdkAdapterReviewPaymentChangeButton"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginStart="25dp"
+            android:layout_marginRight="25dp"
+            android:layout_marginEnd="25dp">
+            <com.mercadopago.customviews.MPTextView
+                android:id="@+id/mpsdkReviewChangePaymentText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                app:fontStyle="regular"
+                android:textSize="18dp"
+                android:textColor="@color/mpsdk_background_blue"
+                android:text="@string/mpsdk_change_payment" />
+
+        </FrameLayout>
+
+
+    </LinearLayout>
+    <View
+        android:id="@+id/mpsdkSeparator"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_gravity="bottom"
+        android:background="@color/mpsdk_separator"/>
+
+</FrameLayout>

@@ -5,10 +5,10 @@ package com.mercadopago.callbacks.card;
  */
 
 public interface CardExpiryDateEditTextCallback {
-    void openKeyboard();
+    void checkOpenKeyboard();
     void saveExpiryMonth(CharSequence s);
     void saveExpiryYear(CharSequence s);
-    void checkChangeErrorView();
+    void changeErrorView();
     void toggleLineColorOnError(boolean toggle);
     void appendDivider();
     void deleteChar(CharSequence s);

@@ -62,7 +62,7 @@
     <color name="mpsdk_color_new_card_form_background_dark_alpha">#B3FFFFFF</color>
     <color name="mpsdk_color_new_card_text">#999999</color>
     <color name="mpsdk_color_new_card_image">#D8D8D8</color>
-    <color name="mpsdk_color_red_error">#F04449</color>
+    <color name="mpsdk_color_red_error">#FF2B2B</color>
 
     <color name="mpsdk_dark_font_color">#212121</color>
 
@@ -133,4 +133,11 @@
     <color name="mpsdk_color_payer_costs">#999999</color>
     <color name="mpsdk_color_payer_costs_no_rate">#3BC280</color>
     <color name="mpsdk_issuers_background_gray">#F0F0F0</color>
+    <color name="mpsdk_blue_button">#009FDE</color>
+    <color name="mpsdk_blue_button_focused">#007FB1</color>
+    <color name="mpsdk_blue_button_pressed">#005F85</color>
+    <color name="mpsdk_review_gray_background">#F5F5F5</color>
+    <color name="mpsdk_review_payment_text">#333333</color>
+    <color name="mpsdk_review_description_text">#666666</color>
+
 </resources>

@@ -10,5 +10,6 @@ import com.mercadopago.uicontrollers.CustomViewController;
  */
 public interface PayerCostViewController extends CustomViewController {
     void drawPayerCost(PayerCost payerCost);
+    void drawPayerCostWithoutTotal(PayerCost payerCost);
     void setOnClickListener(View.OnClickListener listener);
 }
