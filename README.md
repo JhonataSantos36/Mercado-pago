@@ -17,7 +17,7 @@ Add this line to your app's `build.gradle` inside the `dependencies` section:
 ###Eclipse
 
 1. Clone the repository.
-2. Be sure you've installed the Android SDK with API Level 21 and _android-support-v7_
+2. Be sure you've installed the Android SDK with API Level 25 and _android-support-v7_
 3. Import the _sdk_ folder into Android Studio
 4. Add the folder as library.
 
