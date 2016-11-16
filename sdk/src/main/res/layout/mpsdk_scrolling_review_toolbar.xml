@@ -9,7 +9,7 @@
     app:contentScrim="?attr/colorPrimary"
     android:minHeight="@dimen/mpsdk_toolbar_height"
     app:expandedTitleTextAppearance="@style/CollapsedWhiteAppBar"
-    app:expandedTitleMarginTop="65dp"
+    app:expandedTitleMarginTop="45dp"
     app:expandedTitleMarginBottom="25dp"
     app:expandedTitleGravity="center_horizontal"
     app:collapsedTitleGravity="start"

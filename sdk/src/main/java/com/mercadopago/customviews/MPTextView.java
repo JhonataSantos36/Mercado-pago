@@ -31,7 +31,7 @@ public class MPTextView extends TextView {
     public static final String MONO_REGULAR = "roboto_regular";
     public static final String MONO_BOLD = "roboto_bold";
 
-    public static final String DEFAULT_FONT = "fonts/Roboto-Light.ttf";
+    public static final String DEFAULT_FONT = "fonts/Roboto-Regular.ttf";
 
     private String mTypeName;
 
@@ -83,7 +83,7 @@ public class MPTextView extends TextView {
                     mTypeName = "fonts/Roboto-Italic.ttf";
                     break;
                 case LIGHT:
-                    mTypeName = DEFAULT_FONT;
+                    mTypeName = "fonts/Roboto-Light.ttf";
                     break;
                 case LIGHT_ITALIC:
                     mTypeName = "fonts/Roboto-LightItalic.ttf";
@@ -95,7 +95,7 @@ public class MPTextView extends TextView {
                     mTypeName = "fonts/Roboto-MediumItalic.ttf";
                     break;
                 case REGULAR:
-                    mTypeName = "fonts/Roboto-Regular.ttf";
+                    mTypeName = DEFAULT_FONT;
                     break;
                 case THIN:
                     mTypeName = "fonts/Roboto-Thin.ttf";

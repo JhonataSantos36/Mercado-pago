@@ -257,7 +257,7 @@ public class InstructionsActivity extends MercadoPagoActivity {
 
                 currentValueTextView.setGravity(Gravity.CENTER_HORIZONTAL);
                 currentValueTextView.setTextColor(Color.BLACK);
-                currentValueTextView.setTypeface(currentTitleTextView.getTypeface(), Typeface.BOLD);
+                currentValueTextView.setTypeface(currentTitleTextView.getTypeface(), Typeface.NORMAL);
 
                 mReferencesLayout.addView(currentValueTextView);
             }

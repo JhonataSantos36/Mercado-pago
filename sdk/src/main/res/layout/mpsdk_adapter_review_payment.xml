@@ -40,14 +40,13 @@
             app:fontStyle="regular"
             android:textColor="@color/mpsdk_review_payment_text"
             android:textSize="24dp"
-            tools:text="pagaras con blah sdasd asdasda sdasd"/>
+            tools:text="Pagaras con Rapipago"/>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:layout_gravity="center_horizontal"
-            android:gravity="center_horizontal"
             android:paddingLeft="25dp"
             android:paddingStart="25dp"
             android:paddingEnd="25dp"
@@ -58,16 +57,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:paddingRight="6dp"
-                android:paddingEnd="6dp"
-                android:paddingStart="6dp"
-                android:paddingLeft="6dp"
                 android:src="@drawable/mpsdk_icon_time"/>
 
             <com.mercadopago.customviews.MPTextView
                 android:id="@+id/mpsdkAdapterReviewPaymentDescription"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:layout_marginLeft="6dp"
+                android:gravity="center_horizontal"
                 app:fontStyle="regular"
                 android:textSize="18dp"
                 android:textColor="@color/mpsdk_review_description_text"

@@ -558,7 +558,7 @@ public class CheckoutActivity extends MercadoPagoActivity {
             drawPayerCostRow();
             setAmountLabel();
         }
-        overridePendingTransition(R.anim.mpsdk_slide_left_to_right_in, R.anim.mpsdk_slide_left_to_right_out);
+        overridePendingTransition(R.anim.mpsdk_slide_right_to_left_in, R.anim.mpsdk_slide_right_to_left_out);
     }
 
     private void finishWithPaymentResult() {

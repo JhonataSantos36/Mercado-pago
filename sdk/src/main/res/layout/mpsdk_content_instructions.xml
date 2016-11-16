@@ -140,7 +140,6 @@
                 android:layout_gravity="center_horizontal"
                 android:gravity="center"
                 tools:text="Info terciaria"
-                android:textStyle="bold"
                 app:fontStyle="regular"
                 android:layout_marginBottom="25dp" />
 
