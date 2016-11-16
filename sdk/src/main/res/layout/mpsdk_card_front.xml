@@ -50,7 +50,7 @@
                     <ImageView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="@drawable/card_back_shadow"/>
+                        android:background="@drawable/mpsdk_card_back_shadow"/>
 
                 </FrameLayout>
 
@@ -82,7 +82,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:layout_gravity="start"
-                            android:src="@drawable/base_card_image"/>
+                            android:src="@drawable/mpsdk_base_card_image"/>
                     </FrameLayout>
                     <ImageView
                         android:id="@+id/mpsdkImageCardContainer"

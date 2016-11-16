@@ -30,7 +30,7 @@
                 android:layout_marginTop="60dp"
                 android:layout_marginBottom="18dp"
                 android:layout_gravity="center"
-                android:src="@drawable/icon_cash"
+                android:src="@drawable/mpsdk_icon_cash"
                 android:tint="@color/mpsdk_white" />
 
             <com.mercadopago.customviews.MPTextView
@@ -156,7 +156,7 @@
                     android:layout_marginEnd="5dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/time"
+                    android:src="@drawable/mpsdk_time"
                     android:maxWidth="16dp"
                     android:maxHeight="16dp"
                     android:adjustViewBounds="true"

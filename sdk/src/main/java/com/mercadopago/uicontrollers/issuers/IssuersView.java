@@ -16,7 +16,7 @@ import com.mercadopago.model.Issuer;
 
 public class IssuersView implements IssuersViewController {
 
-    public static final String CARD_IMAGE_PREFIX = "issuer_";
+    public static final String CARD_IMAGE_PREFIX = "mpsdk_issuer_";
 
     private Issuer mIssuer;
 

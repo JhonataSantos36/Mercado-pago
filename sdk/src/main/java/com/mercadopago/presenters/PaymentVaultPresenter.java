@@ -11,6 +11,7 @@ import com.mercadopago.model.ApiException;
 import com.mercadopago.model.Card;
 import com.mercadopago.model.CustomSearchItem;
 import com.mercadopago.model.Customer;
+import com.mercadopago.model.Payer;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentMethodSearch;
 import com.mercadopago.model.PaymentMethodSearchItem;
@@ -32,6 +33,7 @@ import static android.text.TextUtils.isEmpty;
 public class PaymentVaultPresenter {
 
     private static final int MAX_SAVED_CARDS = 3;
+    private static final String ACCOUNT_MONEY_ID = "account_money";
 
     private PaymentVaultView mPaymentVaultView;
 
@@ -47,6 +49,8 @@ public class PaymentVaultPresenter {
     private String mMerchantAccessToken;
     private PaymentPreference mPaymentPreference;
     private BigDecimal mAmount;
+    private String mPayerAccessToken;
+    private Boolean mAccountMoneyEnabled;
 
     public void attachView(PaymentVaultView paymentVaultView) {
         this.mPaymentVaultView = paymentVaultView;
@@ -127,8 +131,11 @@ public class PaymentVaultPresenter {
         List<String> excludedPaymentTypes = mPaymentPreference == null ? null : mPaymentPreference.getExcludedPaymentTypes();
         List<String> excludedPaymentMethodIds = mPaymentPreference == null ? null : mPaymentPreference.getExcludedPaymentMethodIds();
 
+        Payer payer = new Payer();
+        payer.setAccessToken(mPayerAccessToken);
+
         mPaymentVaultView.showProgress();
-        mMercadoPago.getPaymentMethodSearch(mAmount, excludedPaymentTypes, excludedPaymentMethodIds, new Callback<PaymentMethodSearch>() {
+        mMercadoPago.getPaymentMethodSearch(mAmount, excludedPaymentTypes, excludedPaymentMethodIds, payer, mAccountMoneyEnabled, new Callback<PaymentMethodSearch>() {
 
             @Override
             public void success(PaymentMethodSearch paymentMethodSearch) {
@@ -257,6 +264,12 @@ public class PaymentVaultPresenter {
                 if (MercadoPagoUtil.isCard(searchItem.getType())) {
                     Card card = getCardWithPaymentMethod(searchItem);
                     selectCard(card);
+                } else if (ACCOUNT_MONEY_ID.equals(searchItem.getPaymentMethodId())) {
+                    PaymentMethod paymentMethod = new PaymentMethod();
+                    paymentMethod.setId(ACCOUNT_MONEY_ID);
+                    paymentMethod.setName(searchItem.getDescription());
+                    paymentMethod.setPaymentTypeId(searchItem.getType());
+                    mPaymentVaultView.selectPaymentMethod(paymentMethod);
                 }
             }
         };
@@ -436,5 +449,13 @@ public class PaymentVaultPresenter {
 
     public void detach() {
         mPaymentVaultView = null;
+    }
+
+    public void setPayerAccessToken(String payerAccessToken) {
+        this.mPayerAccessToken = payerAccessToken;
+    }
+
+    public void setAccountMoneyEnabled(boolean accountMoneyEnabled) {
+        this.mAccountMoneyEnabled = accountMoneyEnabled;
     }
 }

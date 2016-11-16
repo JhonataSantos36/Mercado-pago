@@ -352,7 +352,7 @@ public class FrontCardView {
     }
 
     private int getCardImage(PaymentMethod paymentMethod) {
-        String imageName = "ico_card_" + paymentMethod.getId().toLowerCase();
+        String imageName = "mpsdk_ico_card_" + paymentMethod.getId().toLowerCase();
         return mContext.getResources().getIdentifier(imageName, "drawable", mContext.getPackageName());
     }
 

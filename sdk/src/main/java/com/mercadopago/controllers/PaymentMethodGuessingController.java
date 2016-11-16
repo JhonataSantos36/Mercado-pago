@@ -88,13 +88,20 @@ public class PaymentMethodGuessingController {
     }
 
     public static Setting getSettingByPaymentMethodAndBin(PaymentMethod paymentMethod, String bin) {
-        List<Setting> settings = paymentMethod.getSettings();
-        Setting setting = Setting.getSettingByBin(settings, bin);
+        Setting setting = null;
+        if(bin == null) {
+            if(paymentMethod.getSettings() != null && !paymentMethod.getSettings().isEmpty()) {
+                setting = paymentMethod.getSettings().get(0);
+            }
+        } else {
+            List<Setting> settings = paymentMethod.getSettings();
+            setting = Setting.getSettingByBin(settings, bin);
+        }
         return setting;
     }
 
     public static Integer getCardNumberLength(PaymentMethod paymentMethod, String bin) {
-        if (paymentMethod == null) {
+        if (paymentMethod == null || bin == null) {
             return CardInformation.CARD_NUMBER_MAX_LENGTH;
         }
         Setting setting = PaymentMethodGuessingController.getSettingByPaymentMethodAndBin(paymentMethod, bin);
@@ -104,5 +111,4 @@ public class PaymentMethodGuessingController {
         }
         return cardNumberLength;
     }
-
 }

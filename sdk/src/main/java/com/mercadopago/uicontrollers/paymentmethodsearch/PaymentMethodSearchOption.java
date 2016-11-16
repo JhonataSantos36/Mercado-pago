@@ -16,6 +16,7 @@ import com.mercadopago.util.MercadoPagoUtil;
  */
 public class PaymentMethodSearchOption implements PaymentMethodSearchViewController {
 
+    private static final int COMMENT_MAX_LENGTH = 75;
     protected PaymentMethodSearchItem mItem;
     protected Context mContext;
     protected View mView;
@@ -57,7 +58,7 @@ public class PaymentMethodSearchOption implements PaymentMethodSearchViewControl
         } else {
             mDescription.setVisibility(View.GONE);
         }
-        if (mItem.hasComment()) {
+        if (mItem.hasComment() && mItem.getComment().length() < COMMENT_MAX_LENGTH) {
             mComment.setText(mItem.getComment());
         }
         int resourceId = 0;

@@ -28,7 +28,7 @@
                     android:layout_marginTop="34dp"
                     android:layout_marginBottom="24dp"
                     android:tint="@color/mpsdk_white"
-                    android:src="@drawable/icon_call"
+                    android:src="@drawable/mpsdk_icon_call"
                     android:layout_gravity="center_horizontal" />
 
                 <com.mercadopago.customviews.MPTextView

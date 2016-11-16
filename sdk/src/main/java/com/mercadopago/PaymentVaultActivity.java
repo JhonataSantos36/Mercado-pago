@@ -105,6 +105,8 @@ public class PaymentVaultActivity extends AppCompatActivity implements PaymentVa
         mPaymentVaultPresenter.setMerchantBaseUrl(this.getIntent().getStringExtra("merchantBaseUrl"));
         mPaymentVaultPresenter.setMerchantGetCustomerUri(this.getIntent().getStringExtra("merchantGetCustomerUri"));
         mPaymentVaultPresenter.setMerchantAccessToken(this.getIntent().getStringExtra("merchantAccessToken"));
+        mPaymentVaultPresenter.setPayerAccessToken(this.getIntent().getStringExtra("payerAccessToken"));
+        mPaymentVaultPresenter.setAccountMoneyEnabled(this.getIntent().getBooleanExtra("accountMoneyEnabled", false));
 
         if (getIntent().getStringExtra("paymentPreference") != null) {
             mPaymentVaultPresenter.setPaymentPreference(JsonUtil.getInstance().fromJson(getIntent().getStringExtra("paymentPreference"), PaymentPreference.class));

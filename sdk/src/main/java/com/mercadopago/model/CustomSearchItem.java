@@ -1,11 +1,15 @@
 package com.mercadopago.model;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by mreverter on 6/9/16.
  */
 public class CustomSearchItem {
     private String description;
     private String id;
+
+    @SerializedName("payment_type_id")
     private String type;
     private String paymentMethodId;
 

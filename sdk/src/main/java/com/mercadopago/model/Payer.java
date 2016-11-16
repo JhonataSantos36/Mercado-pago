@@ -4,6 +4,7 @@ public class Payer {
 
     private String email;
     private String id;
+    private String accessToken;
     private Identification identification;
     private String type;
 
@@ -37,5 +38,9 @@ public class Payer {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public void setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
     }
 }

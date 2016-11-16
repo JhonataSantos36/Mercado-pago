@@ -99,12 +99,12 @@ public class ReviewPaymentOffView implements ReviewPaymentViewController {
     public void drawPaymentMethod() {
         decorateText();
 
-        mPaymentImage.setImageResource(R.drawable.review_payment_off);
+        mPaymentImage.setImageResource(R.drawable.mpsdk_review_payment_off);
         if (mSite != null && mSite.getId().equals(Sites.BRASIL.getId())) {
             Picasso.with(mContext)
                     .load(R.drawable.mpsdk_boleto_off)
                     .transform(new CircleTransform())
-                    .placeholder(R.drawable.review_payment_off)
+                    .placeholder(R.drawable.mpsdk_review_payment_off)
                     .into(mPaymentImage);
         }
 

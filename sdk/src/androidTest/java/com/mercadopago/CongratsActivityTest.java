@@ -159,7 +159,7 @@ public class CongratsActivityTest {
         ImageView paymentMethodImage = (ImageView) mTestRule.getActivity().findViewById(R.id.mpsdkPaymentMethodImage);
         if (paymentMethodImage != null && paymentMethodImage.getDrawable() != null) {
             bitmap = ((BitmapDrawable) paymentMethodImage.getDrawable()).getBitmap();
-            paymentBitmap = ((BitmapDrawable) ContextCompat.getDrawable(mTestRule.getActivity(), R.drawable.master)).getBitmap();
+            paymentBitmap = ((BitmapDrawable) ContextCompat.getDrawable(mTestRule.getActivity(), R.drawable.mpsdk_master)).getBitmap();
             assertTrue(bitmap == paymentBitmap);
         }
 
@@ -249,7 +249,7 @@ public class CongratsActivityTest {
         ImageView paymentMethodImage = (ImageView) mTestRule.getActivity().findViewById(R.id.mpsdkPaymentMethodImage);
         if (paymentMethodImage != null && paymentMethodImage.getDrawable() != null) {
             bitmap = ((BitmapDrawable) paymentMethodImage.getDrawable()).getBitmap();
-            paymentBitmap = ((BitmapDrawable) ContextCompat.getDrawable(mTestRule.getActivity(), R.drawable.master)).getBitmap();
+            paymentBitmap = ((BitmapDrawable) ContextCompat.getDrawable(mTestRule.getActivity(), R.drawable.mpsdk_master)).getBitmap();
             assertTrue(bitmap == paymentBitmap);
         }
 
@@ -314,7 +314,7 @@ public class CongratsActivityTest {
         ImageView paymentMethodImage = (ImageView) mTestRule.getActivity().findViewById(R.id.mpsdkPaymentMethodImage);
         if (paymentMethodImage != null && paymentMethodImage.getDrawable() != null) {
             bitmap = ((BitmapDrawable) paymentMethodImage.getDrawable()).getBitmap();
-            paymentBitmap = ((BitmapDrawable) ContextCompat.getDrawable(mTestRule.getActivity(), R.drawable.master)).getBitmap();
+            paymentBitmap = ((BitmapDrawable) ContextCompat.getDrawable(mTestRule.getActivity(), R.drawable.mpsdk_master)).getBitmap();
             assertTrue(bitmap == paymentBitmap);
         }
 
@@ -376,7 +376,7 @@ public class CongratsActivityTest {
         ImageView paymentMethodImage = (ImageView) mTestRule.getActivity().findViewById(R.id.mpsdkPaymentMethodImage);
         if (paymentMethodImage != null && paymentMethodImage.getDrawable() != null) {
             bitmap = ((BitmapDrawable) paymentMethodImage.getDrawable()).getBitmap();
-            paymentBitmap = ((BitmapDrawable) ContextCompat.getDrawable(mTestRule.getActivity(), R.drawable.master)).getBitmap();
+            paymentBitmap = ((BitmapDrawable) ContextCompat.getDrawable(mTestRule.getActivity(), R.drawable.mpsdk_master)).getBitmap();
             assertTrue(bitmap == paymentBitmap);
         }
 
@@ -434,7 +434,7 @@ public class CongratsActivityTest {
         ImageView paymentMethodImage = (ImageView) mTestRule.getActivity().findViewById(R.id.mpsdkPaymentMethodImage);
         if (paymentMethodImage != null && paymentMethodImage.getDrawable() != null) {
             bitmap = ((BitmapDrawable) paymentMethodImage.getDrawable()).getBitmap();
-            paymentBitmap = ((BitmapDrawable) ContextCompat.getDrawable(mTestRule.getActivity(), R.drawable.master)).getBitmap();
+            paymentBitmap = ((BitmapDrawable) ContextCompat.getDrawable(mTestRule.getActivity(), R.drawable.mpsdk_master)).getBitmap();
             assertTrue(bitmap == paymentBitmap);
         }
 
@@ -489,7 +489,7 @@ public class CongratsActivityTest {
         ImageView paymentMethodImage = (ImageView) mTestRule.getActivity().findViewById(R.id.mpsdkPaymentMethodImage);
         if (paymentMethodImage != null && paymentMethodImage.getDrawable() != null) {
             bitmap = ((BitmapDrawable) paymentMethodImage.getDrawable()).getBitmap();
-            paymentBitmap = ((BitmapDrawable) ContextCompat.getDrawable(mTestRule.getActivity(), R.drawable.master)).getBitmap();
+            paymentBitmap = ((BitmapDrawable) ContextCompat.getDrawable(mTestRule.getActivity(), R.drawable.mpsdk_master)).getBitmap();
             assertTrue(bitmap == paymentBitmap);
         }
 
@@ -918,7 +918,7 @@ public class CongratsActivityTest {
         ImageView paymentMethodImage = (ImageView) mTestRule.getActivity().findViewById(R.id.mpsdkPaymentMethodImage);
         if (paymentMethodImage != null && paymentMethodImage.getDrawable() != null) {
             bitmap = ((BitmapDrawable) paymentMethodImage.getDrawable()).getBitmap();
-            paymentBitmap = ((BitmapDrawable) ContextCompat.getDrawable(mTestRule.getActivity(), R.drawable.master)).getBitmap();
+            paymentBitmap = ((BitmapDrawable) ContextCompat.getDrawable(mTestRule.getActivity(), R.drawable.mpsdk_master)).getBitmap();
             assertTrue(bitmap == paymentBitmap);
         }
 
@@ -975,7 +975,7 @@ public class CongratsActivityTest {
         ImageView paymentMethodImage = (ImageView) mTestRule.getActivity().findViewById(R.id.mpsdkPaymentMethodImage);
         if (paymentMethodImage != null && paymentMethodImage.getDrawable() != null) {
             bitmap = ((BitmapDrawable) paymentMethodImage.getDrawable()).getBitmap();
-            paymentBitmap = ((BitmapDrawable) ContextCompat.getDrawable(mTestRule.getActivity(), R.drawable.master)).getBitmap();
+            paymentBitmap = ((BitmapDrawable) ContextCompat.getDrawable(mTestRule.getActivity(), R.drawable.mpsdk_master)).getBitmap();
             assertTrue(bitmap == paymentBitmap);
         }
 
@@ -1037,7 +1037,7 @@ public class CongratsActivityTest {
         ImageView paymentMethodImage = (ImageView) mTestRule.getActivity().findViewById(R.id.mpsdkPaymentMethodImage);
         if (paymentMethodImage != null && paymentMethodImage.getDrawable() != null) {
             bitmap = ((BitmapDrawable) paymentMethodImage.getDrawable()).getBitmap();
-            paymentBitmap = ((BitmapDrawable) ContextCompat.getDrawable(mTestRule.getActivity(), R.drawable.master)).getBitmap();
+            paymentBitmap = ((BitmapDrawable) ContextCompat.getDrawable(mTestRule.getActivity(), R.drawable.mpsdk_master)).getBitmap();
             assertTrue(bitmap == paymentBitmap);
         }
 
@@ -1099,7 +1099,7 @@ public class CongratsActivityTest {
         ImageView paymentMethodImage = (ImageView) mTestRule.getActivity().findViewById(R.id.mpsdkPaymentMethodImage);
         if (paymentMethodImage != null && paymentMethodImage.getDrawable() != null) {
             bitmap = ((BitmapDrawable) paymentMethodImage.getDrawable()).getBitmap();
-            paymentBitmap = ((BitmapDrawable) ContextCompat.getDrawable(mTestRule.getActivity(), R.drawable.master)).getBitmap();
+            paymentBitmap = ((BitmapDrawable) ContextCompat.getDrawable(mTestRule.getActivity(), R.drawable.mpsdk_master)).getBitmap();
             assertTrue(bitmap == paymentBitmap);
         }
 
@@ -1156,7 +1156,7 @@ public class CongratsActivityTest {
         ImageView paymentMethodImage = (ImageView) mTestRule.getActivity().findViewById(R.id.mpsdkPaymentMethodImage);
         if (paymentMethodImage != null && paymentMethodImage.getDrawable() != null) {
             bitmap = ((BitmapDrawable) paymentMethodImage.getDrawable()).getBitmap();
-            paymentBitmap = ((BitmapDrawable) ContextCompat.getDrawable(mTestRule.getActivity(), R.drawable.master)).getBitmap();
+            paymentBitmap = ((BitmapDrawable) ContextCompat.getDrawable(mTestRule.getActivity(), R.drawable.mpsdk_master)).getBitmap();
             assertTrue(bitmap == paymentBitmap);
         }
 
@@ -1217,7 +1217,7 @@ public class CongratsActivityTest {
         ImageView paymentMethodImage = (ImageView) mTestRule.getActivity().findViewById(R.id.mpsdkPaymentMethodImage);
         if (paymentMethodImage != null && paymentMethodImage.getDrawable() != null) {
             bitmap = ((BitmapDrawable) paymentMethodImage.getDrawable()).getBitmap();
-            paymentBitmap = ((BitmapDrawable) ContextCompat.getDrawable(mTestRule.getActivity(), R.drawable.master)).getBitmap();
+            paymentBitmap = ((BitmapDrawable) ContextCompat.getDrawable(mTestRule.getActivity(), R.drawable.mpsdk_master)).getBitmap();
             assertTrue(bitmap == paymentBitmap);
         }
 
@@ -1278,7 +1278,7 @@ public class CongratsActivityTest {
         ImageView paymentMethodImage = (ImageView) mTestRule.getActivity().findViewById(R.id.mpsdkPaymentMethodImage);
         if (paymentMethodImage != null && paymentMethodImage.getDrawable() != null) {
             bitmap = ((BitmapDrawable) paymentMethodImage.getDrawable()).getBitmap();
-            paymentBitmap = ((BitmapDrawable) ContextCompat.getDrawable(mTestRule.getActivity(), R.drawable.master)).getBitmap();
+            paymentBitmap = ((BitmapDrawable) ContextCompat.getDrawable(mTestRule.getActivity(), R.drawable.mpsdk_master)).getBitmap();
             assertTrue(bitmap == paymentBitmap);
         }
 
@@ -1339,7 +1339,7 @@ public class CongratsActivityTest {
         ImageView paymentMethodImage = (ImageView) mTestRule.getActivity().findViewById(R.id.mpsdkPaymentMethodImage);
         if (paymentMethodImage != null && paymentMethodImage.getDrawable() != null) {
             bitmap = ((BitmapDrawable) paymentMethodImage.getDrawable()).getBitmap();
-            paymentBitmap = ((BitmapDrawable) ContextCompat.getDrawable(mTestRule.getActivity(), R.drawable.master)).getBitmap();
+            paymentBitmap = ((BitmapDrawable) ContextCompat.getDrawable(mTestRule.getActivity(), R.drawable.mpsdk_master)).getBitmap();
             assertTrue(bitmap == paymentBitmap);
         }
 
@@ -1401,7 +1401,7 @@ public class CongratsActivityTest {
         ImageView paymentMethodImage = (ImageView) mTestRule.getActivity().findViewById(R.id.mpsdkPaymentMethodImage);
         if (paymentMethodImage != null && paymentMethodImage.getDrawable() != null) {
             bitmap = ((BitmapDrawable) paymentMethodImage.getDrawable()).getBitmap();
-            paymentBitmap = ((BitmapDrawable) ContextCompat.getDrawable(mTestRule.getActivity(), R.drawable.master)).getBitmap();
+            paymentBitmap = ((BitmapDrawable) ContextCompat.getDrawable(mTestRule.getActivity(), R.drawable.mpsdk_master)).getBitmap();
             assertTrue(bitmap == paymentBitmap);
         }
 
@@ -1463,7 +1463,7 @@ public class CongratsActivityTest {
         ImageView paymentMethodImage = (ImageView) mTestRule.getActivity().findViewById(R.id.mpsdkPaymentMethodImage);
         if (paymentMethodImage != null && paymentMethodImage.getDrawable() != null) {
             bitmap = ((BitmapDrawable) paymentMethodImage.getDrawable()).getBitmap();
-            paymentBitmap = ((BitmapDrawable) ContextCompat.getDrawable(mTestRule.getActivity(), R.drawable.master)).getBitmap();
+            paymentBitmap = ((BitmapDrawable) ContextCompat.getDrawable(mTestRule.getActivity(), R.drawable.mpsdk_master)).getBitmap();
             assertTrue(bitmap == paymentBitmap);
         }
 
@@ -1525,7 +1525,7 @@ public class CongratsActivityTest {
         ImageView paymentMethodImage = (ImageView) mTestRule.getActivity().findViewById(R.id.mpsdkPaymentMethodImage);
         if (paymentMethodImage != null && paymentMethodImage.getDrawable() != null) {
             bitmap = ((BitmapDrawable) paymentMethodImage.getDrawable()).getBitmap();
-            paymentBitmap = ((BitmapDrawable) ContextCompat.getDrawable(mTestRule.getActivity(), R.drawable.master)).getBitmap();
+            paymentBitmap = ((BitmapDrawable) ContextCompat.getDrawable(mTestRule.getActivity(), R.drawable.mpsdk_master)).getBitmap();
             assertTrue(bitmap == paymentBitmap);
         }
 
@@ -1582,7 +1582,7 @@ public class CongratsActivityTest {
         ImageView paymentMethodImage = (ImageView) mTestRule.getActivity().findViewById(R.id.mpsdkPaymentMethodImage);
         if (paymentMethodImage != null && paymentMethodImage.getDrawable() != null) {
             bitmap = ((BitmapDrawable) paymentMethodImage.getDrawable()).getBitmap();
-            paymentBitmap = ((BitmapDrawable) ContextCompat.getDrawable(mTestRule.getActivity(), R.drawable.master)).getBitmap();
+            paymentBitmap = ((BitmapDrawable) ContextCompat.getDrawable(mTestRule.getActivity(), R.drawable.mpsdk_master)).getBitmap();
             assertTrue(bitmap == paymentBitmap);
         }
 
@@ -1643,7 +1643,7 @@ public class CongratsActivityTest {
         ImageView paymentMethodImage = (ImageView) mTestRule.getActivity().findViewById(R.id.mpsdkPaymentMethodImage);
         if (paymentMethodImage != null && paymentMethodImage.getDrawable() != null) {
             bitmap = ((BitmapDrawable) paymentMethodImage.getDrawable()).getBitmap();
-            paymentBitmap = ((BitmapDrawable) ContextCompat.getDrawable(mTestRule.getActivity(), R.drawable.master)).getBitmap();
+            paymentBitmap = ((BitmapDrawable) ContextCompat.getDrawable(mTestRule.getActivity(), R.drawable.mpsdk_master)).getBitmap();
             assertTrue(bitmap == paymentBitmap);
         }
 
@@ -1704,7 +1704,7 @@ public class CongratsActivityTest {
         ImageView paymentMethodImage = (ImageView) mTestRule.getActivity().findViewById(R.id.mpsdkPaymentMethodImage);
         if (paymentMethodImage != null && paymentMethodImage.getDrawable() != null) {
             bitmap = ((BitmapDrawable) paymentMethodImage.getDrawable()).getBitmap();
-            paymentBitmap = ((BitmapDrawable) ContextCompat.getDrawable(mTestRule.getActivity(), R.drawable.master)).getBitmap();
+            paymentBitmap = ((BitmapDrawable) ContextCompat.getDrawable(mTestRule.getActivity(), R.drawable.mpsdk_master)).getBitmap();
             assertTrue(bitmap == paymentBitmap);
         }
 
@@ -1765,7 +1765,7 @@ public class CongratsActivityTest {
         ImageView paymentMethodImage = (ImageView) mTestRule.getActivity().findViewById(R.id.mpsdkPaymentMethodImage);
         if (paymentMethodImage != null && paymentMethodImage.getDrawable() != null) {
             bitmap = ((BitmapDrawable) paymentMethodImage.getDrawable()).getBitmap();
-            paymentBitmap = ((BitmapDrawable) ContextCompat.getDrawable(mTestRule.getActivity(), R.drawable.master)).getBitmap();
+            paymentBitmap = ((BitmapDrawable) ContextCompat.getDrawable(mTestRule.getActivity(), R.drawable.mpsdk_master)).getBitmap();
             assertTrue(bitmap == paymentBitmap);
         }
 
@@ -1823,7 +1823,7 @@ public class CongratsActivityTest {
         ImageView paymentMethodImage = (ImageView) mTestRule.getActivity().findViewById(R.id.mpsdkPaymentMethodImage);
         if (paymentMethodImage != null && paymentMethodImage.getDrawable() != null) {
             bitmap = ((BitmapDrawable) paymentMethodImage.getDrawable()).getBitmap();
-            paymentBitmap = ((BitmapDrawable) ContextCompat.getDrawable(mTestRule.getActivity(), R.drawable.master)).getBitmap();
+            paymentBitmap = ((BitmapDrawable) ContextCompat.getDrawable(mTestRule.getActivity(), R.drawable.mpsdk_master)).getBitmap();
             assertTrue(bitmap == paymentBitmap);
         }
 

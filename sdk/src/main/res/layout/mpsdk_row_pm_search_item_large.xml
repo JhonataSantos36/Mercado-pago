@@ -29,7 +29,7 @@
                 android:layout_above="@+id/mpsdkComment"
                 android:maxWidth="100dp"
                 android:maxHeight="25dp"
-                android:src="@drawable/cargavirtual"
+                android:src="@drawable/mpsdk_cargavirtual"
                 android:adjustViewBounds="true"/>
 
             <com.mercadopago.customviews.MPTextView
@@ -63,7 +63,7 @@
             android:layout_width="15dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:src="@drawable/arrow_right"
+            android:src="@drawable/mpsdk_arrow_right"
             android:adjustViewBounds="true"/>
     </LinearLayout>
     <View

@@ -17,7 +17,7 @@
             android:layout_marginTop="100dp"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:src="@drawable/icon_error"
+            android:src="@drawable/mpsdk_icon_error"
             android:layout_gravity="center_horizontal|top"
             android:layout_marginBottom="20dp" />
 

@@ -90,7 +90,7 @@ public class ReviewPaymentOnView implements ReviewPaymentViewController {
     @Override
     public void drawPaymentMethod() {
         decorateText();
-        mPaymentImage.setImageResource(R.drawable.review_payment_on);
+        mPaymentImage.setImageResource(R.drawable.mpsdk_review_payment_on);
         mPaymentText.setVisibility(View.GONE);
 
         payerCostViewController = ReviewPaymentViewFactory.getReviewPayerCostController(mContext, mCurrencyId);

@@ -13,6 +13,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Spanned;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -40,6 +41,7 @@ import com.mercadopago.model.CardInfo;
 import com.mercadopago.model.CheckoutPreference;
 import com.mercadopago.model.Customer;
 import com.mercadopago.model.Issuer;
+import com.mercadopago.model.Payer;
 import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentIntent;
@@ -142,6 +144,7 @@ public class CheckoutActivity extends MercadoPagoActivity {
     protected ProgressBar mProgressBar;
     protected FrameLayout mReviewSummaryContainer;
     protected NestedScrollView mScrollView;
+    protected String mCustomerId;
 
     @Override
     protected void setContentView() {
@@ -316,8 +319,9 @@ public class CheckoutActivity extends MercadoPagoActivity {
     }
 
     protected void getPaymentMethodSearch() {
+
         showProgressBar();
-        mMercadoPago.getPaymentMethodSearch(mCheckoutPreference.getAmount(), mCheckoutPreference.getExcludedPaymentTypes(), mCheckoutPreference.getExcludedPaymentMethods(), new Callback<PaymentMethodSearch>() {
+        mMercadoPago.getPaymentMethodSearch(mCheckoutPreference.getAmount(), mCheckoutPreference.getExcludedPaymentTypes(), mCheckoutPreference.getExcludedPaymentMethods(), mCheckoutPreference.getPayer(), false, new Callback<PaymentMethodSearch>() {
             @Override
             public void success(PaymentMethodSearch paymentMethodSearch) {
                 mPaymentMethodSearch = paymentMethodSearch;
@@ -352,7 +356,10 @@ public class CheckoutActivity extends MercadoPagoActivity {
         MerchantServer.getCustomer(this, mMerchantBaseUrl, mMerchantGetCustomerUri, mMerchantAccessToken, new Callback<Customer>() {
             @Override
             public void success(Customer customer) {
-                mSavedCards = mCheckoutPreference.getPaymentPreference() == null ? customer.getCards() : mCheckoutPreference.getPaymentPreference().getValidCards(customer.getCards());
+                if(customer != null) {
+                    mCustomerId = customer.getId();
+                    mSavedCards = mCheckoutPreference.getPaymentPreference() == null ? customer.getCards() : mCheckoutPreference.getPaymentPreference().getValidCards(customer.getCards());
+                }
                 startPaymentVaultActivity();
             }
 
@@ -808,7 +815,13 @@ public class CheckoutActivity extends MercadoPagoActivity {
         paymentIntent.setPrefId(mCheckoutPreference.getId());
         paymentIntent.setPublicKey(mMerchantPublicKey);
         paymentIntent.setPaymentMethodId(mSelectedPaymentMethod.getId());
-        paymentIntent.setEmail(mCheckoutPreference.getPayer().getEmail());
+        Payer payer = new Payer();
+        payer.setEmail(mCheckoutPreference.getPayer().getEmail());
+        if(TextUtils.isEmpty(mCustomerId)) {
+            payer.setId(mCustomerId);
+        }
+
+        paymentIntent.setPayer(payer);
 
         if (mCreatedToken != null) {
             paymentIntent.setTokenId(mCreatedToken.getId());
