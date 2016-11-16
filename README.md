@@ -30,7 +30,7 @@ If you're planning on optimizing your app with ProGuard, make sure that you excl
 ## Documentation
 
 + [Read more about this integration.](https://github.com/mercadopago/px-android)
-+ [See our Github Page!](http://mercadopago.github.io/px-android/)
++ [See our Github Page's Documentation!](http://mercadopago.github.io/px-android/)
 + [Check out MercadoPago Developers Site!](http://www.mercadopago.com.ar/developers)
 
 ## Feedback
