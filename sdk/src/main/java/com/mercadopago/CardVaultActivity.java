@@ -113,6 +113,8 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultAct
 
     @Override
     public void onValidStart() {
+        MPTracker.getInstance().trackScreen("CARD_VAULT", "2", mPresenter.getPublicKey(), BuildConfig.VERSION_NAME, this);
+
         mPresenter.initializeMercadoPago();
         initializeViews();
         if (tokenRecoveryAvailable()) {

@@ -1,0 +1,158 @@
+package com.mercadopago.controllers;
+
+import android.os.CountDownTimer;
+import com.mercadopago.observers.TimerObserver;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Created by mromar on 11/10/16.
+ */
+
+public class CheckoutTimer {
+
+    private CountDownTimer mCountDownTimer;
+    private static CheckoutTimer mCountDownTimerInstance;
+
+    //Time vars
+    private long mHours = 0;
+    private long mMinutes = 0;
+    private long mSeconds = 0;
+    private boolean mShowHours = false;
+    private Long mMilliSeconds = 0L;
+    private Boolean isCountDownTimerOn = false;
+    private String mCurrentTime = "";
+
+    //Observer var
+    private List<TimerObserver> timerObservers = new ArrayList<TimerObserver>();
+
+    private com.mercadopago.controllers.CheckoutTimer.FinishListener mFinishListener;
+
+    private CheckoutTimer(){}
+
+    synchronized public static com.mercadopago.controllers.CheckoutTimer getInstance(){
+        if(mCountDownTimerInstance == null) {
+            mCountDownTimerInstance = new com.mercadopago.controllers.CheckoutTimer();
+        }
+        return mCountDownTimerInstance;
+    }
+
+    //If timer is counting down, this method reset the count down
+    public void start(long seconds){
+        if (isCountDownTimerOn){
+            mCountDownTimer.cancel();
+        }
+
+        setTime(seconds);
+
+        isCountDownTimerOn = true;
+        if (mCountDownTimer != null) {
+            mCountDownTimer.start();
+        }
+    }
+
+    public void stop(){
+        isCountDownTimerOn = false;
+        if (mCountDownTimer != null) {
+            mCountDownTimer.cancel();
+        }
+    }
+
+    private void setTime(long seconds){
+        if (seconds >= 3600L){
+            mShowHours = true;
+        }
+
+        this.mMilliSeconds = convertToMilliSeconds(seconds);
+        createCountDownTimer();
+    }
+
+    public void addObserver(TimerObserver timerObserver){
+        timerObservers.add(timerObserver);
+    }
+
+    private void notifyOnTimeChangeAllObservers(String timeToShow){
+        for (TimerObserver timerObserver : timerObservers){
+            timerObserver.onTimeChanged(timeToShow);
+        }
+    }
+
+    public void finishCheckout(){
+        for (TimerObserver timerObserver : timerObservers){
+            timerObserver.onFinish();
+        }
+    }
+
+    private void createCountDownTimer() {
+        mCountDownTimer = new CountDownTimer(mMilliSeconds, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                String timeToShow = calculateTime(millisUntilFinished);
+                mCurrentTime = timeToShow;
+                notifyOnTimeChangeAllObservers(timeToShow);
+            }
+
+            @Override
+            public void onFinish() {
+                String timeToShow = calculateTime(0);
+                notifyOnTimeChangeAllObservers(timeToShow);
+                stop();
+                mFinishListener.onFinish();
+            }
+        };
+    }
+
+    private long convertToMilliSeconds(long seconds) {
+        return seconds * 1000L;
+    }
+
+    public interface FinishListener {
+        void onFinish();
+    }
+
+    private String calculateTime(long milliSeconds) {
+        mSeconds = (milliSeconds / 1000);
+        mMinutes = mSeconds / 60;
+        mSeconds = mSeconds % 60;
+
+        mHours = mMinutes / 60;
+        mMinutes = mMinutes % 60;
+
+        return getFormattedTime();
+    }
+
+    private String getFormattedTime() {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        if (mShowHours){
+            stringBuilder.append(getTwoDigitNumber(mHours));
+            stringBuilder.append(":");
+        }
+
+        stringBuilder.append(getTwoDigitNumber(mMinutes));
+        stringBuilder.append(":");
+        stringBuilder.append(getTwoDigitNumber(mSeconds));
+
+        return stringBuilder.toString();
+    }
+
+    private String getTwoDigitNumber(long number) {
+        if (number >= 0 && number < 10) {
+            return "0" + number;
+        }
+        return String.valueOf(number);
+    }
+
+    public void setOnFinishListener(com.mercadopago.controllers.CheckoutTimer.FinishListener finishListener){
+        mFinishListener = finishListener;
+    }
+
+    public Boolean isTimerEnabled(){
+        return this.isCountDownTimerOn;
+    }
+
+    public String getCurrentTime (){
+        return mCurrentTime;
+    }
+}

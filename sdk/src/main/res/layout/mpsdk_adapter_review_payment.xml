@@ -82,7 +82,6 @@
                 app:fontStyle="regular"/>
         </RelativeLayout>
 
-
         <FrameLayout
             android:id="@+id/mpsdkAdapterReviewPaymentChangeButton"
             android:layout_width="match_parent"
@@ -101,9 +100,7 @@
                 android:textSize="18dp"
                 android:textColor="@color/mpsdk_background_blue"
                 android:text="@string/mpsdk_change_payment" />
-
         </FrameLayout>
-
 
     </LinearLayout>
     <View

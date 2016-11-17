@@ -37,6 +37,7 @@ public class ReviewPaymentOnView implements ReviewPaymentViewController {
     private String mCurrencyId;
     private PayerCost mPayerCost;
     private PayerCostViewController payerCostViewController;
+
     private OnChangePaymentMethodCallback mCallback;
     private boolean isUniquePaymentMethod;
     private DecorationPreference mDecorationPreference;
@@ -44,6 +45,7 @@ public class ReviewPaymentOnView implements ReviewPaymentViewController {
     public ReviewPaymentOnView(Context context, PaymentMethod paymentMethod, CardInfo cardInfo,
                                String currencyId, PayerCost payerCost, OnChangePaymentMethodCallback callback,
                                boolean uniquePaymentMethod, DecorationPreference decorationPreference) {
+
         this.mContext = context;
         this.mPaymentMethod = paymentMethod;
         this.mCardInfo = cardInfo;

@@ -14,6 +14,7 @@ import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 
 import com.mercadopago.callbacks.card.CardSecurityCodeEditTextCallback;
+import com.mercadopago.controllers.CheckoutTimer;
 import com.mercadopago.customviews.MPEditText;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.listeners.card.CardSecurityCodeTextWatcher;
@@ -24,6 +25,7 @@ import com.mercadopago.model.DecorationPreference;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.Token;
 import com.mercadopago.mptracker.MPTracker;
+import com.mercadopago.observers.TimerObserver;
 import com.mercadopago.presenters.SecurityCodePresenter;
 import com.mercadopago.uicontrollers.card.CardRepresentationModes;
 import com.mercadopago.uicontrollers.card.CardView;
@@ -37,7 +39,7 @@ import com.mercadopago.views.SecurityCodeActivityView;
  * Created by vaserber on 10/26/16.
  */
 
-public class SecurityCodeActivity extends AppCompatActivity implements SecurityCodeActivityView {
+public class SecurityCodeActivity extends AppCompatActivity implements SecurityCodeActivityView, TimerObserver {
 
     protected SecurityCodePresenter mPresenter;
     private Activity mActivity;
@@ -54,6 +56,7 @@ public class SecurityCodeActivity extends AppCompatActivity implements SecurityC
     //Normal View
     protected FrameLayout mCardContainer;
     protected CardView mCardView;
+    private MPTextView mTimerTextView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -115,6 +118,7 @@ public class SecurityCodeActivity extends AppCompatActivity implements SecurityC
         mErrorText = (MPTextView) findViewById(R.id.mpsdkSecurityCodeErrorText);
         mBackground = (FrameLayout) findViewById(R.id.mpsdkSecurityCodeActivityBackground);
         mCardContainer = (FrameLayout) findViewById(R.id.mpsdkCardViewContainer);
+        mTimerTextView = (MPTextView) findViewById(R.id.mpsdkTimerTextView);
         if (mLowResActive) {
             //TODO
             //aca le cambio la altura al background
@@ -169,6 +173,7 @@ public class SecurityCodeActivity extends AppCompatActivity implements SecurityC
     private void decorate() {
         if (isDecorationEnabled()) {
             mBackground.setBackgroundColor(mDecorationPreference.getLighterColor());
+            mTimerTextView.setTextColor(mDecorationPreference.getDarkFontColor(this));
         }
     }
 
@@ -183,8 +188,17 @@ public class SecurityCodeActivity extends AppCompatActivity implements SecurityC
         mPresenter.initializeSecurityCodeSettings();
         loadViews();
         decorate();
+        showTimer();
         setSecurityCodeListeners();
         setContinueButtonListeners();
+    }
+
+    private void showTimer() {
+        if (CheckoutTimer.getInstance().isTimerEnabled()){
+            CheckoutTimer.getInstance().addObserver(this);
+            mTimerTextView.setVisibility(View.VISIBLE);
+            mTimerTextView.setText(CheckoutTimer.getInstance().getCurrentTime());
+        }
     }
 
     @Override
@@ -284,5 +298,15 @@ public class SecurityCodeActivity extends AppCompatActivity implements SecurityC
         returnIntent.putExtra("token", JsonUtil.getInstance().toJson(mPresenter.getToken()));
         setResult(RESULT_OK, returnIntent);
         finish();
+    }
+
+    @Override
+    public void onTimeChanged(String timeToShow) {
+        mTimerTextView.setText(timeToShow);
+    }
+
+    @Override
+    public void onFinish() {
+        this.finish();
     }
 }

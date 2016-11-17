@@ -1,75 +1,17 @@
 package com.mercadopago;
 
-import android.app.Activity;
-import android.app.Instrumentation;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.support.test.InstrumentationRegistry;
-import android.support.test.espresso.NoActivityResumedException;
-import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.espresso.intent.Intents;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.support.v4.content.ContextCompat;
 import android.test.suitebuilder.annotation.LargeTest;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
 
-import com.google.gson.Gson;
-import com.mercadopago.exceptions.MPException;
-import com.mercadopago.model.ApiException;
-import com.mercadopago.model.CheckoutPreference;
-import com.mercadopago.model.Customer;
-import com.mercadopago.model.DecorationPreference;
-import com.mercadopago.model.Issuer;
-import com.mercadopago.model.Item;
-import com.mercadopago.model.PayerCost;
-import com.mercadopago.model.Payment;
-import com.mercadopago.model.PaymentMethod;
-import com.mercadopago.model.PaymentMethodSearch;
-import com.mercadopago.model.PaymentMethodSearchItem;
-import com.mercadopago.model.PaymentPreference;
-import com.mercadopago.model.PaymentResultAction;
-import com.mercadopago.model.Token;
-import com.mercadopago.test.ActivityResult;
 import com.mercadopago.test.FakeAPI;
-import com.mercadopago.test.StaticMock;
-import com.mercadopago.util.ApiUtil;
-import com.mercadopago.util.JsonUtil;
-import com.mercadopago.utils.ViewUtils;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
-import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-
-import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.Espresso.pressBack;
-import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.intent.Intents.intended;
-import static android.support.test.espresso.intent.Intents.intending;
-import static android.support.test.espresso.intent.Intents.times;
-import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
-import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra;
-import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.mercadopago.utils.ActivityResultUtil.assertFinishCalledWithResult;
-import static com.mercadopago.utils.ActivityResultUtil.getActivityResult;
-import static com.mercadopago.utils.CustomMatchers.withAnyChildImage;
-import static com.mercadopago.utils.CustomMatchers.withAnyChildText;
-import static junit.framework.Assert.assertTrue;
-import static junit.framework.TestCase.assertEquals;
-import static org.hamcrest.Matchers.allOf;
 
 /**
  * Created by mreverter on 29/2/16.

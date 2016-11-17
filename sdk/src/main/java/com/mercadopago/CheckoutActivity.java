@@ -19,6 +19,7 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -28,6 +29,7 @@ import com.mercadopago.callbacks.Callback;
 import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.callbacks.OnChangePaymentMethodCallback;
 import com.mercadopago.callbacks.OnConfirmPaymentCallback;
+import com.mercadopago.controllers.CheckoutTimer;
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.core.MerchantServer;
 import com.mercadopago.customviews.MPButton;
@@ -153,15 +155,10 @@ public class CheckoutActivity extends MercadoPagoActivity {
 
     @Override
     protected void getActivityParameters() {
-        //TODO modified
-        //mMerchantPublicKey = "TEST-9eb0be69-329a-417f-9dd5-aad772a4d50b";//getIntent().getStringExtra("merchantPublicKey");
         mMerchantPublicKey = getIntent().getStringExtra("merchantPublicKey");
-
         mMerchantBaseUrl = this.getIntent().getStringExtra("merchantBaseUrl");
         mMerchantGetCustomerUri = this.getIntent().getStringExtra("merchantGetCustomerUri");
         mMerchantAccessToken = this.getIntent().getStringExtra("merchantAccessToken");
-        //TODO modified
-        //mCheckoutPreferenceId = "137787120-2853c5cb-388b-49f1-824c-759366965aef";//this.getIntent().getStringExtra("checkoutPreferenceId");
         mCheckoutPreferenceId = this.getIntent().getStringExtra("checkoutPreferenceId");
     }
 
@@ -371,6 +368,19 @@ public class CheckoutActivity extends MercadoPagoActivity {
     }
 
     protected void startPaymentVaultActivity() {
+
+        //TODO delete y borrar imports
+        CheckoutTimer.getInstance().start(40);
+        CheckoutTimer.getInstance().setOnFinishListener(new CheckoutTimer.FinishListener() {
+            @Override
+            public void onFinish() {
+                // DO SOMETHING
+                //CheckoutTimer.getInstance().finishCheckout();
+                Toast.makeText(CheckoutActivity.this, "the end", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
         new MercadoPago.StartActivityBuilder()
                 .setActivity(this)
                 .setPublicKey(mMerchantPublicKey)

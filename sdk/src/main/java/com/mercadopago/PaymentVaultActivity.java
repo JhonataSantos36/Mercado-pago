@@ -19,7 +19,9 @@ import com.google.gson.reflect.TypeToken;
 import com.mercadopago.adapters.PaymentMethodSearchItemAdapter;
 import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.callbacks.OnSelectedCallback;
+import com.mercadopago.controllers.CheckoutTimer;
 import com.mercadopago.core.MercadoPago;
+import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.decorations.GridSpacingItemDecoration;
 import com.mercadopago.exceptions.MPException;
 import com.mercadopago.model.ApiException;
@@ -35,6 +37,7 @@ import com.mercadopago.model.PaymentPreference;
 import com.mercadopago.model.Site;
 import com.mercadopago.model.Token;
 import com.mercadopago.mptracker.MPTracker;
+import com.mercadopago.observers.TimerObserver;
 import com.mercadopago.presenters.PaymentVaultPresenter;
 import com.mercadopago.uicontrollers.paymentmethodsearch.PaymentMethodSearchCustomOption;
 import com.mercadopago.uicontrollers.paymentmethodsearch.PaymentMethodSearchOption;
@@ -51,7 +54,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PaymentVaultActivity extends AppCompatActivity implements PaymentVaultView {
+public class PaymentVaultActivity extends AppCompatActivity implements PaymentVaultView, TimerObserver {
 
     // Local vars
     protected DecorationPreference mDecorationPreference;
@@ -70,6 +73,7 @@ public class PaymentVaultActivity extends AppCompatActivity implements PaymentVa
 
     protected PaymentVaultPresenter mPaymentVaultPresenter;
     protected CollapsingToolbarLayout mAppBarLayout;
+    protected MPTextView mTimerTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -144,6 +148,8 @@ public class PaymentVaultActivity extends AppCompatActivity implements PaymentVa
     }
 
     protected void initializeControls() {
+        mTimerTextView = (MPTextView) findViewById(R.id.mpsdkTimerTextView);
+
         initializePaymentOptionsRecyclerView();
         mAppBar = (AppBarLayout) findViewById(R.id.mpsdkAppBar);
         mAppBarLayout = (CollapsingToolbarLayout) this.findViewById(R.id.mpsdkCollapsingToolbar);
@@ -156,7 +162,16 @@ public class PaymentVaultActivity extends AppCompatActivity implements PaymentVa
 
     protected void onValidStart() {
         MPTracker.getInstance().trackScreen("PAYMENT_METHOD_SEARCH", "2", mPaymentVaultPresenter.getMerchantPublicKey(), mPaymentVaultPresenter.getSite().getId(), BuildConfig.VERSION_NAME, this);
+        showTimer();
         mPaymentVaultPresenter.initialize(mPaymentVaultPresenter.getMerchantPublicKey());
+    }
+
+    private void showTimer() {
+        if (CheckoutTimer.getInstance().isTimerEnabled()){
+            CheckoutTimer.getInstance().addObserver(this);
+            mTimerTextView.setVisibility(View.VISIBLE);
+            mTimerTextView.setText(CheckoutTimer.getInstance().getCurrentTime());
+        }
     }
 
     private void initializeToolbar() {
@@ -181,6 +196,7 @@ public class PaymentVaultActivity extends AppCompatActivity implements PaymentVa
             if (mDecorationPreference.isDarkFontEnabled()) {
                 mAppBarLayout.setExpandedTitleColor(mDecorationPreference.getDarkFontColor(this));
                 mAppBarLayout.setCollapsedTitleTextColor(mDecorationPreference.getDarkFontColor(this));
+                mTimerTextView.setTextColor(mDecorationPreference.getDarkFontColor(this));
             }
         }
     }
@@ -491,5 +507,15 @@ public class PaymentVaultActivity extends AppCompatActivity implements PaymentVa
     protected void onStop() {
         mActivityActive = false;
         super.onStop();
+    }
+
+    @Override
+    public void onTimeChanged(String timeToShow) {
+        mTimerTextView.setText(timeToShow);
+    }
+
+    @Override
+    public void onFinish() {
+        this.finish();
     }
 }

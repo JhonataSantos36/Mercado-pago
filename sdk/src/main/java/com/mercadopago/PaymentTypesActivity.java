@@ -16,6 +16,7 @@ import android.widget.ProgressBar;
 import com.google.gson.reflect.TypeToken;
 import com.mercadopago.adapters.PaymentTypesAdapter;
 import com.mercadopago.callbacks.OnSelectedCallback;
+import com.mercadopago.controllers.CheckoutTimer;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.listeners.RecyclerItemClickListener;
 import com.mercadopago.model.ApiException;
@@ -24,6 +25,7 @@ import com.mercadopago.model.DecorationPreference;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentType;
 import com.mercadopago.mptracker.MPTracker;
+import com.mercadopago.observers.TimerObserver;
 import com.mercadopago.presenters.PaymentTypesPresenter;
 import com.mercadopago.uicontrollers.card.CardRepresentationModes;
 import com.mercadopago.uicontrollers.card.FrontCardView;
@@ -41,7 +43,7 @@ import java.util.List;
  * Created by vaserber on 10/25/16.
  */
 
-public class PaymentTypesActivity extends AppCompatActivity implements PaymentTypesActivityView {
+public class PaymentTypesActivity extends AppCompatActivity implements PaymentTypesActivityView, TimerObserver {
 
     protected PaymentTypesPresenter mPresenter;
     private Activity mActivity;
@@ -56,6 +58,7 @@ public class PaymentTypesActivity extends AppCompatActivity implements PaymentTy
     //Low Res View
     protected Toolbar mLowResToolbar;
     private MPTextView mLowResTitleToolbar;
+    protected MPTextView mTimerTextView;
     //Normal View
     protected CollapsingToolbarLayout mCollapsingToolbar;
     protected AppBarLayout mAppBar;
@@ -138,8 +141,17 @@ public class PaymentTypesActivity extends AppCompatActivity implements PaymentTy
         initializeViews();
         loadViews();
         decorate();
+        showTimer();
         initializeAdapter();
         mPresenter.loadPaymentTypes();
+    }
+
+    private void showTimer() {
+        if (CheckoutTimer.getInstance().isTimerEnabled()){
+            CheckoutTimer.getInstance().addObserver(this);
+            mTimerTextView.setVisibility(View.VISIBLE);
+            mTimerTextView.setText(CheckoutTimer.getInstance().getCurrentTime());
+        }
     }
 
     @Override
@@ -277,11 +289,14 @@ public class PaymentTypesActivity extends AppCompatActivity implements PaymentTy
     private void decorateLowRes() {
         ColorsUtil.decorateLowResToolbar(mLowResToolbar, mLowResTitleToolbar, mDecorationPreference,
                 getSupportActionBar(), this);
+        ColorsUtil.decorateLowResToolbar(mLowResToolbar, mTimerTextView, mDecorationPreference,
+                getSupportActionBar(), this);
     }
 
     private void decorateNormal() {
         ColorsUtil.decorateNormalToolbar(mNormalToolbar, mDecorationPreference, mAppBar,
                 mCollapsingToolbar, getSupportActionBar(), this);
+        mTimerTextView.setTextColor(mDecorationPreference.getDarkFontColor(this));
         mFrontCardView.decorateCardBorder(mDecorationPreference.getLighterColor());
     }
 
@@ -325,5 +340,15 @@ public class PaymentTypesActivity extends AppCompatActivity implements PaymentTy
                 finish();
             }
         }
+    }
+
+    @Override
+    public void onTimeChanged(String timeToShow) {
+        mTimerTextView.setText(timeToShow);
+    }
+
+    @Override
+    public void onFinish() {
+        this.finish();
     }
 }

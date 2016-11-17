@@ -33,9 +33,25 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-                app:layout_collapseMode="pin" />
+                app:layout_collapseMode="pin" >
+
+            <com.mercadopago.customviews.MPTextView
+                android:id="@+id/mpsdkTimerTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_marginRight="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="14dp"
+                android:textSize="17dp"
+                android:background="@drawable/mpsdk_title_toolbar"
+                android:visibility="visible"
+                app:fontStyle="roboto_regular"
+                style="@style/mpsdk_title_text"/>
+            </android.support.v7.widget.Toolbar>
 
         </android.support.design.widget.CollapsingToolbarLayout>
+
     </android.support.design.widget.AppBarLayout>
 
     <android.support.v7.widget.RecyclerView

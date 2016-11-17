@@ -31,6 +31,7 @@ import com.mercadopago.callbacks.card.CardNumberEditTextCallback;
 import com.mercadopago.callbacks.card.CardSecurityCodeEditTextCallback;
 import com.mercadopago.callbacks.card.CardholderNameEditTextCallback;
 import com.mercadopago.constants.PaymentTypes;
+import com.mercadopago.controllers.CheckoutTimer;
 import com.mercadopago.controllers.PaymentMethodGuessingController;
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.customviews.MPEditText;
@@ -51,6 +52,7 @@ import com.mercadopago.model.PaymentRecovery;
 import com.mercadopago.model.PaymentType;
 import com.mercadopago.model.Token;
 import com.mercadopago.mptracker.MPTracker;
+import com.mercadopago.observers.TimerObserver;
 import com.mercadopago.presenters.GuessingCardPresenter;
 import com.mercadopago.uicontrollers.card.CardView;
 import com.mercadopago.uicontrollers.card.IdentificationCardView;
@@ -70,7 +72,7 @@ import java.util.List;
  * Created by vaserber on 10/13/16.
  */
 
-public class GuessingCardActivity extends AppCompatActivity implements GuessingCardActivityView {
+public class GuessingCardActivity extends AppCompatActivity implements GuessingCardActivityView, TimerObserver {
 
     public static final String CARD_NUMBER_INPUT = "cardNumber";
     public static final String CARDHOLDER_NAME_INPUT = "cardHolderName";
@@ -102,6 +104,7 @@ public class GuessingCardActivity extends AppCompatActivity implements GuessingC
     private FrameLayout mIdentificationCardContainer;
     private CardView mCardView;
     private IdentificationCardView mIdentificationCardView;
+    private MPTextView mTimerTextView;
 
     //Input Views
     private ProgressBar mProgressBar;
@@ -219,12 +222,22 @@ public class GuessingCardActivity extends AppCompatActivity implements GuessingC
         initializeViews();
         loadViews();
         decorate();
+
+        if (CheckoutTimer.getInstance().isTimerEnabled()){
+            CheckoutTimer.getInstance().addObserver(this);
+            mTimerTextView.setVisibility(View.VISIBLE);
+            mTimerTextView.setText(CheckoutTimer.getInstance().getCurrentTime());
+        } else {
+            mPresenter.loadBankDeals();
+        }
+
         mErrorState = NORMAL_STATE;
         mPresenter.loadPaymentMethods();
-        mPresenter.loadBankDeals();
     }
 
     private void initializeViews() {
+        mTimerTextView = (MPTextView) findViewById(R.id.mpsdkTimerTextView);
+
         if (mLowResActive) {
             mLowResToolbar = (Toolbar) findViewById(R.id.mpsdkLowResToolbar);
             mLowResTitleToolbar = (MPTextView) findViewById(R.id.mpsdkTitle);
@@ -257,7 +270,6 @@ public class GuessingCardActivity extends AppCompatActivity implements GuessingC
         mErrorContainer = (FrameLayout) findViewById(R.id.mpsdkErrorContainer);
         mErrorTextView = (MPTextView) findViewById(R.id.mpsdkErrorTextView);
         mScrollView = (ScrollView) findViewById(R.id.mpsdkScrollViewContainer);
-        mBankDealsTextView.setVisibility(View.GONE);
         mInputContainer.setVisibility(View.GONE);
         mProgressBar.setVisibility(View.VISIBLE);
         fullScrollDown();
@@ -338,10 +350,13 @@ public class GuessingCardActivity extends AppCompatActivity implements GuessingC
         ColorsUtil.decorateLowResToolbar(mLowResToolbar, mLowResTitleToolbar, mDecorationPreference,
                 getSupportActionBar(), this);
         ColorsUtil.decorateTextView(mDecorationPreference, mBankDealsTextView, this);
+        ColorsUtil.decorateTextView(mDecorationPreference, mTimerTextView, this);
     }
 
     private void decorateNormal() {
         ColorsUtil.decorateTransparentToolbar(mNormalToolbar, mBankDealsTextView, mDecorationPreference,
+                getSupportActionBar(), this);
+        ColorsUtil.decorateTransparentToolbar(mNormalToolbar, mTimerTextView, mDecorationPreference,
                 getSupportActionBar(), this);
         mCardView.decorateCardBorder(mDecorationPreference.getLighterColor());
         mIdentificationCardView.decorateCardBorder(mDecorationPreference.getLighterColor());
@@ -1264,5 +1279,15 @@ public class GuessingCardActivity extends AppCompatActivity implements GuessingC
         returnIntent.putExtra("backButtonPressed", true);
         setResult(RESULT_CANCELED, returnIntent);
         finish();
+    }
+
+    @Override
+    public void onTimeChanged(String timeToShow) {
+        mTimerTextView.setText(timeToShow);
+    }
+
+    @Override
+    public void onFinish() {
+        this.finish();
     }
 }

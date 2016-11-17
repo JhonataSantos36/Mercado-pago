@@ -9,14 +9,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 
 import com.google.gson.reflect.TypeToken;
 import com.mercadopago.adapters.PayerCostsAdapter;
 import com.mercadopago.callbacks.OnSelectedCallback;
+import com.mercadopago.controllers.CheckoutTimer;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.listeners.RecyclerItemClickListener;
 import com.mercadopago.model.ApiException;
@@ -28,6 +29,7 @@ import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentPreference;
 import com.mercadopago.model.Site;
 import com.mercadopago.mptracker.MPTracker;
+import com.mercadopago.observers.TimerObserver;
 import com.mercadopago.presenters.InstallmentsPresenter;
 import com.mercadopago.uicontrollers.card.CardRepresentationModes;
 import com.mercadopago.uicontrollers.card.FrontCardView;
@@ -46,7 +48,7 @@ import java.util.List;
  * Created by vaserber on 9/29/16.
  */
 
-public class InstallmentsActivity extends AppCompatActivity implements InstallmentsActivityView {
+public class InstallmentsActivity extends AppCompatActivity implements InstallmentsActivityView, TimerObserver {
 
     protected InstallmentsPresenter mPresenter;
     protected Activity mActivity;
@@ -67,6 +69,7 @@ public class InstallmentsActivity extends AppCompatActivity implements Installme
     protected FrameLayout mCardContainer;
     protected Toolbar mNormalToolbar;
     protected FrontCardView mFrontCardView;
+    protected MPTextView mTimerTextView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -173,8 +176,17 @@ public class InstallmentsActivity extends AppCompatActivity implements Installme
         loadViews();
         hideHeader();
         decorate();
+        showTimer();
         initializeAdapter();
         mPresenter.loadPayerCosts();
+    }
+
+    private void showTimer() {
+        if (CheckoutTimer.getInstance().isTimerEnabled()){
+            CheckoutTimer.getInstance().addObserver(this);
+            mTimerTextView.setVisibility(View.VISIBLE);
+            mTimerTextView.setText(CheckoutTimer.getInstance().getCurrentTime());
+        }
     }
 
     @Override
@@ -187,9 +199,20 @@ public class InstallmentsActivity extends AppCompatActivity implements Installme
     private void initializeViews() {
         mInstallmentsRecyclerView = (RecyclerView) findViewById(R.id.mpsdkActivityInstallmentsView);
         mProgressBar = (ProgressBar) findViewById(R.id.mpsdkProgressBar);
+        mTimerTextView = (MPTextView) findViewById(R.id.mpsdkTimerTextView);
+
         if (mLowResActive) {
             mLowResToolbar = (Toolbar) findViewById(R.id.mpsdkRegularToolbar);
             mLowResTitleToolbar = (MPTextView) findViewById(R.id.mpsdkTitle);
+
+            if (CheckoutTimer.getInstance().isTimerEnabled()){
+                Toolbar.LayoutParams marginParams = new Toolbar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                marginParams.setMargins(0,0,0,6);
+                mLowResTitleToolbar.setLayoutParams(marginParams);
+                mLowResTitleToolbar.setTextSize(19);
+                mTimerTextView.setTextSize(17);
+            }
+
             mLowResToolbar.setVisibility(View.VISIBLE);
         } else {
             mCollapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.mpsdkCollapsingToolbar);
@@ -209,6 +232,7 @@ public class InstallmentsActivity extends AppCompatActivity implements Installme
     public void loadNormalViews() {
         loadToolbarArrow(mNormalToolbar);
         mNormalToolbar.setTitle(getString(R.string.mpsdk_card_installments_title));
+
         mFrontCardView = new FrontCardView(mActivity, CardRepresentationModes.SHOW_FULL_FRONT_ONLY);
         mFrontCardView.setSize(CardRepresentationModes.MEDIUM_SIZE);
         mFrontCardView.setPaymentMethod(mPresenter.getPaymentMethod());
@@ -268,12 +292,16 @@ public class InstallmentsActivity extends AppCompatActivity implements Installme
     private void decorateLowRes() {
         ColorsUtil.decorateLowResToolbar(mLowResToolbar, mLowResTitleToolbar, mDecorationPreference,
                 getSupportActionBar(), this);
+        ColorsUtil.decorateLowResToolbar(mLowResToolbar, mTimerTextView, mDecorationPreference,
+                getSupportActionBar(), this);
     }
 
     private void decorateNormal() {
         ColorsUtil.decorateNormalToolbar(mNormalToolbar, mDecorationPreference, mAppBar,
                 mCollapsingToolbar, getSupportActionBar(), this);
         mFrontCardView.decorateCardBorder(mDecorationPreference.getLighterColor());
+
+        ColorsUtil.decorateTextView(mDecorationPreference, mTimerTextView, this);
     }
 
     private void initializeAdapter() {
@@ -356,5 +384,15 @@ public class InstallmentsActivity extends AppCompatActivity implements Installme
                 finish();
             }
         }
+    }
+
+    @Override
+    public void onTimeChanged(String timeToShow) {
+        mTimerTextView.setText(timeToShow);
+    }
+
+    @Override
+    public void onFinish() {
+        this.finish();
     }
 }
