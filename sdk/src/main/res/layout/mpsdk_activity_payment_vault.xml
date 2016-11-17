@@ -48,5 +48,6 @@
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
         android:paddingStart="10dp"
+        android:background="@color/mpsdk_white"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 </android.support.design.widget.CoordinatorLayout>

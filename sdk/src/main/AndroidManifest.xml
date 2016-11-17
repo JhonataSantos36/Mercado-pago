@@ -44,10 +44,6 @@
             android:screenOrientation="behind"
             android:theme="@style/Theme.ProcessMercadoPagoTheme.NoActionbar"
             android:windowSoftInputMode="adjustResize" />
-        <activity android:name=".FormCardActivity"
-            android:screenOrientation="behind"
-            android:theme="@style/Theme.ProcessMercadoPagoTheme.NoActionbar"
-            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".PaymentVaultActivity"
             android:screenOrientation="portrait"

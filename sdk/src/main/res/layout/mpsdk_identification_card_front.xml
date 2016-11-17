@@ -83,7 +83,7 @@
                         android:visibility="visible"
                         android:text="•• ••• •••"
                         app:fontStyle="roboto_regular"/>
-8
+
                     <com.mercadopago.customviews.MPTextView
                         android:id="@+id/mpsdkIdNumberView"
                         android:layout_width="match_parent"
