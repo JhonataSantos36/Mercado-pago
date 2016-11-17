@@ -19,7 +19,6 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -29,7 +28,6 @@ import com.mercadopago.callbacks.Callback;
 import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.callbacks.OnChangePaymentMethodCallback;
 import com.mercadopago.callbacks.OnConfirmPaymentCallback;
-import com.mercadopago.controllers.CheckoutTimer;
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.core.MerchantServer;
 import com.mercadopago.customviews.MPButton;
@@ -368,19 +366,6 @@ public class CheckoutActivity extends MercadoPagoActivity {
     }
 
     protected void startPaymentVaultActivity() {
-
-        //TODO delete y borrar imports
-        CheckoutTimer.getInstance().start(40);
-        CheckoutTimer.getInstance().setOnFinishListener(new CheckoutTimer.FinishListener() {
-            @Override
-            public void onFinish() {
-                // DO SOMETHING
-                //CheckoutTimer.getInstance().finishCheckout();
-                Toast.makeText(CheckoutActivity.this, "the end", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-
         new MercadoPago.StartActivityBuilder()
                 .setActivity(this)
                 .setPublicKey(mMerchantPublicKey)
