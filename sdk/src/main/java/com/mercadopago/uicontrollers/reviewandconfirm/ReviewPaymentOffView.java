@@ -2,6 +2,7 @@ package com.mercadopago.uicontrollers.reviewandconfirm;
 
 import android.content.Context;
 import android.text.Spanned;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -97,6 +98,7 @@ public class ReviewPaymentOffView implements ReviewPaymentViewController {
 
     @Override
     public void drawPaymentMethod() {
+        setSmallTextSize();
         decorateText();
 
         mPaymentImage.setImageResource(R.drawable.mpsdk_review_payment_off);
@@ -122,6 +124,11 @@ public class ReviewPaymentOffView implements ReviewPaymentViewController {
 
         mPaymentText.setText(amountText);
         mPaymentDescription.setText(mItem.getComment());
+    }
+
+    private void setSmallTextSize() {
+        mPaymentText.setTextSize(TypedValue.COMPLEX_UNIT_PX, mContext.getResources().getDimension(R.dimen.mpsdk_payment_text_small_text));
+        mPaymentDescription.setTextSize(TypedValue.COMPLEX_UNIT_PX, mContext.getResources().getDimension(R.dimen.mpsdk_payment_description_small_text));
     }
 
     private void decorateText() {

@@ -243,6 +243,7 @@ public class InstallmentsActivity extends AppCompatActivity implements Installme
         mFrontCardView.inflateInParent(mCardContainer, true);
         mFrontCardView.initializeControls();
         mFrontCardView.draw();
+        mFrontCardView.enableEditingCardNumber();
     }
 
     private void loadToolbarArrow(Toolbar toolbar) {
@@ -337,11 +338,13 @@ public class InstallmentsActivity extends AppCompatActivity implements Installme
 
     @Override
     public void showLoadingView() {
+        mInstallmentsRecyclerView.setVisibility(View.GONE);
         mProgressBar.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void stopLoadingView() {
+        mInstallmentsRecyclerView.setVisibility(View.VISIBLE);
         mProgressBar.setVisibility(View.GONE);
     }
 

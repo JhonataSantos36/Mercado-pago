@@ -178,4 +178,36 @@
     <string name="mpsdk_what_can_do">Que posso fazer?</string>
     <string name="mpsdk_confirm_prompt_yes">Sim</string>
     <string name="mpsdk_confirm_prompt_no">Não</string>
+
+    <!-- Low Res -->
+    <string name="mpsdk_form_card_title_payment_type">Cartão de %1$s</string>
+    <string name="mpsdk_form_card_title">Cartão</string>
+    <string name="mpsdk_form_identification_title">Documento do titular</string>
+    <string name="mpsdk_bank_deals_lowres">Promoções</string>
+
+    <!-- PaymentTypes -->
+    <string name="mpsdk_credit_payment_type">Crédito</string>
+    <string name="mpsdk_debit_payment_type">Débito</string>
+    <string name="mpsdk_form_card_title_payment_type_prepaid">Cartão pré-pago</string>
+    <string name="mpsdk_payment_types_title">Qual é o tipo do cartão?</string>
+
+    <!-- Review and Confirm -->
+    <string name="mpsdk_change_payment">Alterar pagamento</string>
+    <string name="mpsdk_review_description_card">%1$s terminado em: %2$s</string>
+    <string name="mpsdk_review_off_text_default">Você pagará %1$s\n%2$s</string>
+    <string name="mpsdk_review_off_text">Você pagará %1$s com\n%2$s</string>
+    <string name="mpsdk_review_off_text_2">Você pagará %1$s no\n%2$s</string>
+    <string name="mpsdk_review_off_text_3">Você pagará %1$s no\n%2$s</string>
+    <string name="mpsdk_review_off_text_4">Você pagará %1$s com\n%2$s</string>
+    <string name="mpsdk_homebanking">Internet Banking de</string>
+    <string name="mpsdk_your_atm">caixa eletrônico de</string>
+    <string name="mpsdk_review_product_quantity">Quantidade: %1$s</string>
+    <string name="mpsdk_review_product_price">Preço unitário: %1$s</string>
+    <string name="mpsdk_activity_checkout_title">Confirme a sua compra</string>
+    <string name="mpsdk_review_summary_products">Produtos</string>
+    <string name="mpsdk_review_symmary_discount">Descontos</string>
+    <string name="mpsdk_review_summary_discounts">Desconto %1$s</string>
+    <string name="mpsdk_review_summary_subtotal">Subtotal</string>
+    <string name="mpsdk_review_summary_pay">Você paga</string>
+    <string name="mpsdk_review_summary_total">Total</string>
 </resources>

@@ -115,16 +115,14 @@
                         android:layout_marginBottom="10dp"
                         android:adjustViewBounds="true"
                         android:gravity="center"
-                        tools:src="@drawable/visa"
+                        tools:src="@drawable/mpsdk_visa"
                         android:layout_gravity="center_horizontal" />
 
                     <com.mercadopago.customviews.MPTextView
                         android:id="@+id/mpsdkLastFourDigitsDescription"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginStart="10dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:singleLine="true"
+                        android:lines="1"
                         android:textSize="16dp"
                         android:gravity="center"
                         android:text="@string/mpsdk_last_digits_label"

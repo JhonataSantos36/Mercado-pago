@@ -4,20 +4,20 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/mpsdkIdentificationCardContainer"
-    android:layout_width="300dp"
-    android:layout_height="171dp"
+    android:layout_width="@dimen/mpsdk_card_size_big_width"
+    android:layout_height="@dimen/mpsdk_card_size_big_height"
     android:layout_gravity="center_horizontal">
 
 
     <FrameLayout
-        android:layout_width="290dp"
-        android:layout_height="161dp"
+        android:layout_width="@dimen/mpsdk_card_size_big_width_no_border"
+        android:layout_height="@dimen/mpsdk_card_size_medium_height_no_border"
         android:layout_gravity="center"
         android:background="@drawable/mpsdk_new_identification_layout">
 
         <FrameLayout
-            android:layout_width="192dp"
-            android:layout_height="161dp"
+            android:layout_width="@dimen/mpsdk_card_size_big_shadow_width"
+            android:layout_height="@dimen/mpsdk_card_size_medium_height_no_border"
             android:background="@drawable/mpsdk_card_back_shadow">
         </FrameLayout>
 
@@ -61,7 +61,7 @@
                     android:textColor="@color/mpsdk_base_text_alpha"
                     android:text="@string/mpsdk_card_identification_label"
                     android:lineSpacingExtra="5dp"
-                    android:textSize="13dp"
+                    android:textSize="10dp"
                     app:fontStyle="regular"/>
 
                 <FrameLayout
@@ -90,7 +90,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="start"
                         android:textColor="@color/mpsdk_base_text"
-                        android:textSize="19dp"
+                        android:textSize="18dp"
                         android:visibility="invisible"/>
 
                 </FrameLayout>
@@ -102,9 +102,9 @@
 
     <ImageView
         android:id="@+id/mpsdkCardShadowBorder"
-        android:src="@drawable/mpsdk_card_shadow_rounded"
-        android:layout_width="300dp"
-        android:layout_height="171dp"
+        android:src="@drawable/mpsdk_id_card_shadow_rounded"
+        android:layout_width="@dimen/mpsdk_card_size_big_width"
+        android:layout_height="@dimen/mpsdk_card_size_big_height"
         android:layout_gravity="center"/>
 </FrameLayout>
 

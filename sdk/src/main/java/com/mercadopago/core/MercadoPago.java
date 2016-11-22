@@ -97,8 +97,8 @@ public class MercadoPago {
 
     private static final String MP_API_BASE_URL = "https://api.mercadopago.com";
 
-    private static final String PAYMENT_RESULT_API_VERSION = "1.3.0";
-    private static final String PAYMENT_METHODS_OPTIONS_API_VERSION = "1.3.0";
+    private static final String PAYMENT_RESULT_API_VERSION = "1.3.1-beta";
+    private static final String PAYMENT_METHODS_OPTIONS_API_VERSION = "1.3.1-beta";
 
     private String mKey = null;
     private String mKeyType = null;

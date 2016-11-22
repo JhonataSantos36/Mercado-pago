@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout android:layout_width="match_parent"
-    android:layout_height="match_parent"
+<LinearLayout
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/mpsdk_white"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <FrameLayout
         android:id="@+id/mpsdkSecurityCodeActivityBackground"
         android:layout_width="match_parent"
-        android:layout_height="160dp"
+        android:layout_height="145dp"
         android:background="@color/mpsdk_background_blue">
 
         <com.mercadopago.customviews.MPTextView
@@ -43,8 +46,44 @@
         android:paddingStart="25dp"
         android:paddingEnd="25dp"
         android:paddingTop="20dp"
+        android:background="@color/mpsdk_white"
         android:orientation="vertical">
-        <include layout="@layout/mpsdk_form_cardsecuritycode_input"/>
+        <LinearLayout
+            android:id="@+id/mpsdkCardSecurityCodeContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:paddingStart="10dp"
+            android:paddingRight="10dp"
+            android:paddingEnd="10dp"
+            android:orientation="vertical"
+            android:visibility="visible">
+
+            <com.mercadopago.customviews.MPTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:lines="1"
+                app:fontStyle="regular"
+                android:text="@string/mpsdk_security_code"
+                android:textColor="@color/mpsdk_color_new_card_text"
+                android:textSize="14dp" />
+
+            <com.mercadopago.customviews.MPEditText
+                android:id="@+id/mpsdkCardSecurityCode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:imeOptions="actionNext"
+                android:inputType="number"
+                android:maxLength="4"
+                app:fontStyle="regular"
+                android:singleLine="true"
+                android:textColor="@color/abc_search_url_text_selected"
+                android:textSize="19dp"
+                custom:errorColor="@color/mpsdk_color_red_error" />
+
+        </LinearLayout>
+
         <com.mercadopago.customviews.MPTextView
             android:id="@+id/mpsdkSecurityCodeErrorText"
             android:layout_width="wrap_content"
@@ -73,7 +112,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 app:fontStyle="regular"
-                android:textSize="18dp"
+                android:textSize="16dp"
                 android:textColor="@color/mpsdk_white_background"
                 android:text="@string/mpsdk_input_button_next"/>
         </FrameLayout>

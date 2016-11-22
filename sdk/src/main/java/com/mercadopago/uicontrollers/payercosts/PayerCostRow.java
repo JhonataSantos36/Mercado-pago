@@ -2,6 +2,7 @@ package com.mercadopago.uicontrollers.payercosts;
 
 import android.content.Context;
 import android.text.Spanned;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +26,7 @@ public class PayerCostRow implements PayerCostViewController {
     private View mView;
     private MPTextView mInstallmentsTextView;
     private MPTextView mZeroRateText;
-    private MPTextView mRateText;
+    private MPTextView mTotalText;
 
     public PayerCostRow(Context context, String currencyId) {
         this.mContext = context;
@@ -39,7 +40,7 @@ public class PayerCostRow implements PayerCostViewController {
         setInstallmentsText();
 
         if (payerCost.getInstallmentRate().compareTo(BigDecimal.ZERO) == 0) {
-            mRateText.setVisibility(View.GONE);
+            mTotalText.setVisibility(View.GONE);
             if (payerCost.getInstallments() > 1) {
                 mZeroRateText.setVisibility(View.VISIBLE);
             }
@@ -54,22 +55,29 @@ public class PayerCostRow implements PayerCostViewController {
         setInstallmentsText();
 
         if (payerCost.getInstallmentRate().compareTo(BigDecimal.ZERO) == 0) {
-            mRateText.setVisibility(View.GONE);
+            mTotalText.setVisibility(View.GONE);
             if (payerCost.getInstallments() > 1) {
                 mZeroRateText.setVisibility(View.VISIBLE);
             }
         }
     }
 
+    @Override
+    public void setSmallTextSize() {
+        mInstallmentsTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, mContext.getResources().getDimension(R.dimen.mpsdk_payer_cost_small_text));
+        mZeroRateText.setTextSize(TypedValue.COMPLEX_UNIT_PX, mContext.getResources().getDimension(R.dimen.mpsdk_payer_cost_total_small_text));
+        mTotalText.setTextSize(TypedValue.COMPLEX_UNIT_PX, mContext.getResources().getDimension(R.dimen.mpsdk_payer_cost_total_small_text));
+    }
+
     private void setAmountWithRateText() {
-        mRateText.setVisibility(View.VISIBLE);
+        mTotalText.setVisibility(View.VISIBLE);
         StringBuilder sb = new StringBuilder();
         sb.append("(");
         sb.append(CurrenciesUtil.formatNumber(mPayerCost.getTotalAmount(), mCurrencyId));
         sb.append(")");
         Spanned spannedFullAmountText = CurrenciesUtil.formatCurrencyInText(mPayerCost.getTotalAmount(),
                 mCurrencyId, sb.toString(), false, true);
-        mRateText.setText(spannedFullAmountText);
+        mTotalText.setText(spannedFullAmountText);
     }
 
     private void setInstallmentsText() {
@@ -94,7 +102,7 @@ public class PayerCostRow implements PayerCostViewController {
     public void initializeControls() {
         mInstallmentsTextView = (MPTextView) mView.findViewById(R.id.mpsdkInstallmentsText);
         mZeroRateText = (MPTextView) mView.findViewById(R.id.mpsdkInstallmentsZeroRate);
-        mRateText = (MPTextView) mView.findViewById(R.id.mpsdkInstallmentsWithRate);
+        mTotalText = (MPTextView) mView.findViewById(R.id.mpsdkInstallmentsWithRate);
     }
 
     @Override

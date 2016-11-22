@@ -122,9 +122,6 @@ public class SecurityCodeActivity extends AppCompatActivity implements SecurityC
         if (mLowResActive) {
             //TODO
             //aca le cambio la altura al background
-        } else {
-            //TODO
-            //aca le cambio la altura al background
         }
         mProgressBar.setVisibility(View.GONE);
     }
@@ -150,9 +147,9 @@ public class SecurityCodeActivity extends AppCompatActivity implements SecurityC
         mCardView = new CardView(mActivity);
         if (mLowResActive) {
             //TODO cambiar
-            mCardView.setSize(CardRepresentationModes.EXTRA_BIG_SIZE);
+            mCardView.setSize(CardRepresentationModes.BIG_SIZE);
         } else {
-            mCardView.setSize(CardRepresentationModes.EXTRA_BIG_SIZE);
+            mCardView.setSize(CardRepresentationModes.BIG_SIZE);
         }
         mCardView.inflateInParent(mCardContainer, true);
         mCardView.initializeControls();

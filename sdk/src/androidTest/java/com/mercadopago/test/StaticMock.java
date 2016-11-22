@@ -154,6 +154,15 @@ public class StaticMock {
 
     }
 
+    public static String getPaymentMethodListMLM() {
+        try {
+            return getFile(InstrumentationRegistry.getContext(), "mocks/payment_method_list_mlm.json");
+
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
     public static List<PayerCost> getPayerCosts(Context context) {
 
         Installment installment = JsonUtil.getInstance().fromJson(getFile(context, "mocks/installment.json"), Installment.class);

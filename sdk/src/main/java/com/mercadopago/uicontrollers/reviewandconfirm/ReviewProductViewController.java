@@ -7,5 +7,5 @@ import com.mercadopago.uicontrollers.CustomViewController;
  */
 
 public interface ReviewProductViewController extends CustomViewController {
-    void drawProduct();
+    void drawProduct(int position);
 }

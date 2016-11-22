@@ -253,6 +253,7 @@ public class PaymentTypesActivity extends AppCompatActivity implements PaymentTy
         mFrontCardView.inflateInParent(mCardContainer, true);
         mFrontCardView.initializeControls();
         mFrontCardView.draw();
+        mFrontCardView.enableEditingCardNumber();
     }
 
     private void loadToolbarArrow(Toolbar toolbar) {
@@ -302,11 +303,13 @@ public class PaymentTypesActivity extends AppCompatActivity implements PaymentTy
 
     @Override
     public void showLoadingView() {
+        mPaymentTypesRecyclerView.setVisibility(View.GONE);
         mProgressBar.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void stopLoadingView() {
+        mPaymentTypesRecyclerView.setVisibility(View.VISIBLE);
         mProgressBar.setVisibility(View.GONE);
     }
 

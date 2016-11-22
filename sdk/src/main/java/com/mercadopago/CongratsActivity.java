@@ -114,11 +114,12 @@ public class CongratsActivity extends MercadoPagoActivity {
     private void setInterestAmountDescription() {
         StringBuilder sb = new StringBuilder();
 
-        sb.append("( ");
+        sb.append("(");
         sb.append(CurrenciesUtil.formatNumber(mPayment.getTransactionDetails().getTotalPaidAmount(), mPayment.getCurrencyId()));
-        sb.append(" )");
-        mTotalAmountDescription.setText(CurrenciesUtil.formatCurrencyInText(mPayment.getTransactionDetails().getTotalPaidAmount(),
-                mPayment.getCurrencyId(), sb.toString(), true, true));
+        sb.append(")");
+        Spanned spannedFullAmountText = CurrenciesUtil.formatCurrencyInText(mPayment.getTransactionDetails().getTotalPaidAmount(),
+                mPayment.getCurrencyId(), sb.toString(), false, true);
+        mTotalAmountDescription.setText(spannedFullAmountText);
 
         if (hasInterests()) {
             mInterestAmountDescription.setVisibility(View.GONE);
@@ -149,8 +150,10 @@ public class CongratsActivity extends MercadoPagoActivity {
                 StringBuilder sb = new StringBuilder();
                 sb.append(CurrenciesUtil.formatNumber(mPayment.getTransactionDetails().getTotalPaidAmount(), mPayment.getCurrencyId()));
 
-                mInstallmentsDescription.setText(CurrenciesUtil.formatCurrencyInText(mPayment.getTransactionDetails().getTotalPaidAmount(),
-                        mPayment.getCurrencyId(), sb.toString(), true, true));
+                Spanned spannedInstallmentsText = CurrenciesUtil.formatCurrencyInText(mPayment.getTransactionDetails().getTotalPaidAmount(),
+                        mPayment.getCurrencyId(), sb.toString(), false, true);
+
+                mInstallmentsDescription.setText(spannedInstallmentsText);
 
                 mInterestAmountDescription.setVisibility(View.GONE);
             }
@@ -228,11 +231,11 @@ public class CongratsActivity extends MercadoPagoActivity {
         StringBuffer sb = new StringBuffer();
         sb.append(mPayment.getInstallments());
         sb.append(" ");
-        sb.append(getString(R.string.mpsdk_installments_of));
+        sb.append(getString(R.string.mpsdk_installments_by));
         sb.append(" ");
         sb.append(CurrenciesUtil.formatNumber(mPayment.getTransactionDetails().getInstallmentAmount(), mPayment.getCurrencyId()));
         return CurrenciesUtil.formatCurrencyInText(mPayment.getTransactionDetails().getInstallmentAmount(),
-                mPayment.getCurrencyId(), sb.toString(), true, true);
+                mPayment.getCurrencyId(), sb.toString(), false, true);
     }
 
     @Override

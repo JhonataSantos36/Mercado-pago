@@ -266,6 +266,7 @@ public class IssuersActivity extends AppCompatActivity implements IssuersActivit
         mFrontCardView.inflateInParent(mCardContainer, true);
         mFrontCardView.initializeControls();
         mFrontCardView.draw();
+        mFrontCardView.enableEditingCardNumber();
     }
 
     private void loadToolbarArrow(Toolbar toolbar) {
@@ -332,11 +333,13 @@ public class IssuersActivity extends AppCompatActivity implements IssuersActivit
 
     @Override
     public void showLoadingView() {
+        mIssuersRecyclerView.setVisibility(View.GONE);
         mProgressBar.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void stopLoadingView() {
+        mIssuersRecyclerView.setVisibility(View.VISIBLE);
         mProgressBar.setVisibility(View.GONE);
     }
 

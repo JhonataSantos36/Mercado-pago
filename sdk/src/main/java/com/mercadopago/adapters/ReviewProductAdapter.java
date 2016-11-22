@@ -42,7 +42,7 @@ public class ReviewProductAdapter extends RecyclerView.Adapter<ReviewProductAdap
 
     @Override
     public void onBindViewHolder(ReviewProductAdapter.ViewHolder holder, int position) {
-        holder.mReviewProductViewController.drawProduct();
+        holder.mReviewProductViewController.drawProduct(position);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

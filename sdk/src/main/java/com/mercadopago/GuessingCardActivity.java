@@ -54,6 +54,7 @@ import com.mercadopago.model.Token;
 import com.mercadopago.mptracker.MPTracker;
 import com.mercadopago.observers.TimerObserver;
 import com.mercadopago.presenters.GuessingCardPresenter;
+import com.mercadopago.uicontrollers.card.CardRepresentationModes;
 import com.mercadopago.uicontrollers.card.CardView;
 import com.mercadopago.uicontrollers.card.IdentificationCardView;
 import com.mercadopago.util.ApiUtil;
@@ -303,6 +304,7 @@ public class GuessingCardActivity extends AppCompatActivity implements GuessingC
         loadToolbarArrow(mNormalToolbar);
 
         mCardView = new CardView(mActivity);
+        mCardView.setSize(CardRepresentationModes.BIG_SIZE);
         mCardView.inflateInParent(mCardViewContainer, true);
         mCardView.initializeControls();
         mCardView.draw(CardView.CARD_SIDE_FRONT);
@@ -312,7 +314,6 @@ public class GuessingCardActivity extends AppCompatActivity implements GuessingC
         mIdentificationCardView.inflateInParent(mIdentificationCardContainer, true);
         mIdentificationCardView.initializeControls();
         mIdentificationCardView.hide();
-
     }
 
     private void loadToolbarArrow(Toolbar toolbar) {

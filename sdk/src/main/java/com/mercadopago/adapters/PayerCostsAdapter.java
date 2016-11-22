@@ -52,7 +52,8 @@ public class PayerCostsAdapter extends  RecyclerView.Adapter<PayerCostsAdapter.V
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         PayerCost payerCost = mInstallmentsList.get(position);
-        holder.mPayerCostEditableRow.drawPayerCost(payerCost);
+        holder.mPayerCostRow.setSmallTextSize();
+        holder.mPayerCostRow.drawPayerCost(payerCost);
     }
 
     public PayerCost getItem(int position) {
@@ -67,14 +68,14 @@ public class PayerCostsAdapter extends  RecyclerView.Adapter<PayerCostsAdapter.V
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         public FrameLayout mPayerCostContainer;
-        public PayerCostRow mPayerCostEditableRow;
+        public PayerCostRow mPayerCostRow;
 
         public ViewHolder(View itemView) {
             super(itemView);
             mPayerCostContainer = (FrameLayout) itemView.findViewById(R.id.mpsdkPayerCostAdapterContainer);
-            mPayerCostEditableRow = new PayerCostRow(mContext, mCurrencyId);
-            mPayerCostEditableRow.inflateInParent(mPayerCostContainer, true);
-            mPayerCostEditableRow.initializeControls();
+            mPayerCostRow = new PayerCostRow(mContext, mCurrencyId);
+            mPayerCostRow.inflateInParent(mPayerCostContainer, true);
+            mPayerCostRow.initializeControls();
 
             itemView.setOnKeyListener(new View.OnKeyListener() {
                 @Override

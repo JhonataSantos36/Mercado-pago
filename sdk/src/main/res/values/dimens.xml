@@ -17,7 +17,7 @@
     <dimen name="mpsdk_button_height">55dp</dimen>
     <dimen name="mpsdk_card_corner_radius">0dp</dimen>
     <dimen name="mpsdk_card_margin">0dp</dimen>
-    <dimen name="mpsdk_card_background_height">228dp</dimen>
+    <dimen name="mpsdk_card_background_height">208dp</dimen>
     <dimen name="mpsdk_fab_margin">16dp</dimen>
     <dimen name="mpsdk_toolbar_height">55dp</dimen>
     <dimen name="mpsdk_list_item_height">55dp</dimen>
@@ -32,5 +32,12 @@
     <dimen name="mpsdk_card_size_medium_width">186dp</dimen>
     <dimen name="mpsdk_card_size_medium_number_height">17dp</dimen>
     <dimen name="mpsdk_card_size_medium_number_width">120dp</dimen>
+    <dimen name="mpsdk_card_size_big_width_no_border">224dp</dimen>
+    <dimen name="mpsdk_card_size_big_shadow_width">146dp</dimen>
+    <dimen name="mpsdk_card_size_medium_height_no_border">141dp</dimen>
     <dimen name="mpsdk_list_row_height">82dp</dimen>
+    <dimen name="mpsdk_payer_cost_small_text">20dp</dimen>
+    <dimen name="mpsdk_payer_cost_total_small_text">14dp</dimen>
+    <dimen name="mpsdk_payment_text_small_text">20dp</dimen>
+    <dimen name="mpsdk_payment_description_small_text">14dp</dimen>
 </resources>

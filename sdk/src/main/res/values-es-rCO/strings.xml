@@ -3,4 +3,7 @@
     <string name="mpsdk_installments">Mensualidades</string>
     <string name="mpsdk_title_activity_installments">Elige las mensualidades</string>
     <string name="mpsdk_doc_number_label">Cédula de ciudadanía</string>
+    <string name="mpsdk_homebanking">Banca en línea de</string>
+    <string name="mpsdk_card_installments_title">¿En cuántas mensualidades?</string>
+    <string name="mpsdk_error_message_invalid_installments">Número de mensualidades inválido</string>
 </resources>

@@ -4,6 +4,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/main_content"
+    android:background="@color/mpsdk_white"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
@@ -13,7 +14,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:gravity="center"
         android:visibility="gone"/>
 
     <android.support.design.widget.AppBarLayout
@@ -37,6 +37,8 @@
             android:id="@+id/mpsdkActivityInstallmentsView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:visibility="visible"
+            android:background="@color/mpsdk_white"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             android:descendantFocusability="afterDescendants"/>
     </FrameLayout>

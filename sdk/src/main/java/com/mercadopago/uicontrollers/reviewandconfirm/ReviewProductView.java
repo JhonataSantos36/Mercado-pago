@@ -28,6 +28,7 @@ public class ReviewProductView implements ReviewProductViewController {
     protected MPTextView mProductDescription;
     protected MPTextView mProductQuantity;
     protected MPTextView mProductPrice;
+    protected View mFirstSeparator;
 
     private Context mContext;
     private Item mItem;
@@ -53,6 +54,7 @@ public class ReviewProductView implements ReviewProductViewController {
         mProductDescription = (MPTextView) mView.findViewById(R.id.mpsdkAdapterReviewProductDescription);
         mProductQuantity = (MPTextView) mView.findViewById(R.id.mpsdkAdapterReviewProductQuantity);
         mProductPrice = (MPTextView) mView.findViewById(R.id.mpsdkAdapterReviewProductPrice);
+        mFirstSeparator = mView.findViewById(R.id.mpsdkFirstSeparator);
     }
 
     @Override
@@ -61,7 +63,10 @@ public class ReviewProductView implements ReviewProductViewController {
     }
 
     @Override
-    public void drawProduct() {
+    public void drawProduct(int position) {
+        if (position != 0) {
+            mFirstSeparator.setVisibility(View.GONE);
+        }
         String pictureUrl = mItem.getPictureUrl();
         if (pictureUrl == null || pictureUrl.isEmpty()) {
             mProductImage.setImageResource(R.drawable.review_product_placeholder);
@@ -78,7 +83,7 @@ public class ReviewProductView implements ReviewProductViewController {
         } else {
             mProductName.setText(mItem.getTitle());
         }
-        if (mItem.getDescription() == null) {
+        if (mItem.getDescription() == null || mItem.getDescription().isEmpty()) {
             mProductDescription.setVisibility(View.GONE);
         } else {
             mProductDescription.setText(mItem.getDescription());

@@ -17,10 +17,11 @@
             android:background="@drawable/mpsdk_light_grey_circle">
             <ImageView
                 android:id="@+id/mpsdkImage"
-                android:layout_width="55dp"
-                android:layout_height="35dp"
+                android:padding="16dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                tools:src="@drawable/cards"
+                tools:src="@drawable/mpsdk_cards"
                 android:adjustViewBounds="true" />
         </FrameLayout>
         <LinearLayout
@@ -34,15 +35,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:maxLines="2"
+                android:maxLines="3"
                 tools:text="Transferencia por Red Link"
-                android:textSize="18dp"
+                android:textSize="16dp"
                 android:textColor="@color/mpsdk_form_text"/>
 
             <com.mercadopago.customviews.MPTextView
                 android:id="@+id/mpsdkComment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textSize="14dp"
                 tools:text="Hola, soy un comentario"
                 android:gravity="center"
                 style="@style/mpsdk_list_label_comment"/>

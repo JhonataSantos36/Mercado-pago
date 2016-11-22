@@ -2,6 +2,7 @@ package com.mercadopago.uicontrollers.payercosts;
 
 import android.content.Context;
 import android.text.Spanned;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -60,6 +61,13 @@ public class PayerCostColumn implements PayerCostViewController {
                 mZeroRateText.setVisibility(View.GONE);
             }
         }
+    }
+
+    @Override
+    public void setSmallTextSize() {
+        mInstallmentsTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, mContext.getResources().getDimension(R.dimen.mpsdk_payer_cost_small_text));
+        mZeroRateText.setTextSize(TypedValue.COMPLEX_UNIT_PX, mContext.getResources().getDimension(R.dimen.mpsdk_payer_cost_total_small_text));
+        mTotalText.setTextSize(TypedValue.COMPLEX_UNIT_PX, mContext.getResources().getDimension(R.dimen.mpsdk_payer_cost_total_small_text));
     }
 
     private void setAmountWithRateText() {

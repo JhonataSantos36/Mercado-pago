@@ -43,10 +43,17 @@ public class CardView {
 
     public CardView(Context context) {
         this.mContext = context;
+        this.mFrontCardView = new FrontCardView(mContext, CardRepresentationModes.EDIT_FRONT);
+        this.mBackCardView = new BackCardView(mContext);
     }
 
     public void setSize(String size) {
         this.mSize = size;
+        if (mSize == null) {
+            mSize = CardRepresentationModes.EXTRA_BIG_SIZE;
+        }
+        mFrontCardView.setSize(mSize);
+        mBackCardView.setSize(mSize);
     }
 
     public View inflateInParent(ViewGroup parent, boolean attachToRoot) {
@@ -56,19 +63,15 @@ public class CardView {
     }
 
     public void initializeControls() {
-        mCardFrontContainer = (FrameLayout) mView.findViewById(R.id.mpsdkCardFrontContainer);
-        mCardBackContainer = (FrameLayout) mView.findViewById(R.id.mpsdkCardBackContainer);
+        mCardFrontContainer = (FrameLayout) mView.findViewById(R.id.mpsdkCardFrontContainerView);
+        mCardBackContainer = (FrameLayout) mView.findViewById(R.id.mpsdkCardBackContainerView);
         if (mSize == null) {
             mSize = CardRepresentationModes.EXTRA_BIG_SIZE;
         }
 
-        mFrontCardView = new FrontCardView(mContext, CardRepresentationModes.EDIT_FRONT);
-        mFrontCardView.setSize(mSize);
         mFrontCardView.inflateInParent(mCardFrontContainer, true);
         mFrontCardView.initializeControls();
 
-        mBackCardView = new BackCardView(mContext);
-        mBackCardView.setSize(mSize);
         mBackCardView.inflateInParent(mCardBackContainer, true);
         mBackCardView.initializeControls();
     }

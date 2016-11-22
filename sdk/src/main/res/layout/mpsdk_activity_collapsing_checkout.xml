@@ -6,6 +6,7 @@
     android:id="@+id/main_content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/mpsdk_white"
     android:overScrollMode="never"
     android:fitsSystemWindows="true">
 
@@ -131,7 +132,7 @@
                 </FrameLayout>
                 <FrameLayout
                     android:id="@+id/mpsdkReviewCancelButton"
-                    android:layout_width="140dp"
+                    android:layout_width="match_parent"
                     android:layout_height="48dp"
                     android:layout_marginTop="20dp"
                     android:layout_marginBottom="18dp"

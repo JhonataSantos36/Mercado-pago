@@ -405,6 +405,10 @@ public class FrontCardView {
         mCardSecurityCodeTextView.setText("");
     }
 
+    public void enableEditingCardNumber() {
+        enableEditingFontColor(mCardNumberTextView);
+    }
+
     private void enableEditingFontColor(MPTextView textView) {
         int alpha = EDITING_TEXT_VIEW_ALPHA;
         int fontColor = getCardFontColor(mPaymentMethod);

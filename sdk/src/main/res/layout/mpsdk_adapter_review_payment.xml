@@ -10,6 +10,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:gravity="center_vertical"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp"
         android:orientation="vertical">
         <ImageView
             android:id="@+id/mpsdkAdapterReviewPaymentImage"
@@ -79,7 +81,7 @@
                 android:layout_centerVertical="true"
                 android:layout_alignTop="@id/mpsdkIconTime"
                 android:layout_toRightOf="@+id/mpsdkIconTime"
-                app:fontStyle="regular"/>
+                app:fontStyle="default_light"/>
         </RelativeLayout>
 
         <FrameLayout
