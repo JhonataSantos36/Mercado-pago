@@ -37,16 +37,17 @@
                 android:id="@+id/mpsdkTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingRight="40dp"
-                android:paddingLeft="40dp"
+                android:paddingRight="50dp"
+                android:paddingLeft="50dp"
                 android:gravity="center"
+                android:layout_gravity="center"
                 android:textSize="20dp"
                 android:textColor="@color/mpsdk_white"
                 android:layout_marginBottom="50dp"
                 android:layout_centerHorizontal="true"
                 android:layout_below="@+id/mpsdkImageCashSign"
                 app:fontStyle="regular"
-                tools:text="Listo, solo te falta pagar $ 1.550 en tu Home Banking adherido a Red Link"/>
+                tools:text="Listo, solo te falta pagar $ 2579.00 en un Provincia Pagos"/>
         </LinearLayout>
 
         <LinearLayout
@@ -86,7 +87,7 @@
                 android:layout_gravity="center_horizontal"
                 android:gravity="center"
                 android:layout_marginBottom="15dp"
-                android:textSize="14dp"
+                android:textSize="16dp"
                 tools:text="Info primaria"
                 app:fontStyle="regular" />
 
@@ -97,7 +98,7 @@
                 android:layout_gravity="center_horizontal"
                 android:gravity="center"
                 android:layout_marginBottom="15dp"
-                android:textSize="14dp"
+                android:textSize="12dp"
                 android:visibility="gone"
                 tools:text="Info primaria"
                 app:fontStyle="regular" />

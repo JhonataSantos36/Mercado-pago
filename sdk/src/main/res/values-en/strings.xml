@@ -83,6 +83,7 @@
     <string name="mpsdk_subtitle_action_activity_congrat">We will send you the data to\n%1$s</string>
     <string name="mpsdk_text_state_acount_activity_congrat">On your statement you will see the charge as\n MERCADOPAGO</string>
     <string name="mpsdk_payment_id_description">Ticket</string>
+    <string name="mpsdk_payment_id_description_number">Nº %1$s</string>
 
     <!-- CallForAuthorize -->
     <string name="mpsdk_title_activity_call_for_authorize">You must authorize with %1$s the payment of %2$s to Mercado Pago</string>
@@ -125,7 +126,7 @@
     <string name="mpsdk_error_message_expired_preference">Expired preference</string>
     <string name="mpsdk_error_message_inactive_preference">Inactive preference</string>
     <string name="mpsdk_error_message_invalid_default_installments">Invalid installments number by default</string>
-    <string name="mpsdk_error_message_invalid_max_installments">Invalid max intallments number</string>
+    <string name="mpsdk_error_message_invalid_max_installments">Invalid max installments number</string>
     <string name="mpsdk_error_message_excluded_all_payment_type">All payments types excluded</string>
     <string name="mpsdk_error_message_invalid_currency">Invalid currency</string>
     <string name="mpsdk_error_message_invalid_title">Invalid title</string>
@@ -157,6 +158,18 @@
     <string name="mpsdk_security_code_required">Required security code</string>
     <string name="mpsdk_invalid_card_number">Invalid card number</string>
 
+    <!-- Low Res -->
+    <string name="mpsdk_form_card_title">Card</string>
+    <string name="mpsdk_form_identification_title">Card holder document</string>
+    <string name="mpsdk_bank_deals_lowres">Promotions</string>
+
+    <!-- PaymentTypes -->
+    <string name="mpsdk_form_card_title_payment_type">Card of %1$s</string>
+    <string name="mpsdk_credit_payment_type">Credit</string>
+    <string name="mpsdk_form_card_title_payment_type_prepaid">Prepaid card</string>
+    <string name="mpsdk_payment_types_title">Which type of card is it?</string>
+    <string name="mpsdk_debit_payment_type">Debit</string>
+
     <!-- Utils -->
     <string name="mpsdk_text_continue">Continue</string>
     <string name="mpsdk_text_cancel_payment_and_continue">Cancel payment and continue</string>
@@ -178,4 +191,24 @@
     <string name="mpsdk_what_can_do">What can I do?</string>
     <string name="mpsdk_confirm_prompt_yes">Yes</string>
     <string name="mpsdk_confirm_prompt_no">No</string>
+
+    <!-- Review and Confirm -->
+    <string name="mpsdk_change_payment">Change payment</string>
+    <string name="mpsdk_review_description_card">%1$s ending in: %2$s</string>
+    <string name="mpsdk_your_atm">ATM of</string>
+    <string name="mpsdk_review_summary_discount">Discounts</string>
+    <string name="mpsdk_review_summary_discounts">Discount of %1$s</string>
+    <string name="mpsdk_review_off_text_default">You will pay %1$s\n%2$s</string>
+    <string name="mpsdk_review_off_text">You will pay %1$s in a\n%2$s</string>
+    <string name="mpsdk_review_off_text_2">You will pay %1$s in\n%2$s</string>
+    <string name="mpsdk_review_off_text_3">You will pay %1$s in your\n%2$s</string>
+    <string name="mpsdk_review_off_text_4">You will pay %1$s with\n%2$s</string>
+    <string name="mpsdk_homebanking">Home Banking of</string>
+    <string name="mpsdk_review_summary_total">Total</string>
+    <string name="mpsdk_review_product_quantity">Quantity: %1$s</string>
+    <string name="mpsdk_review_summary_subtotal">Subtotal</string>
+    <string name="mpsdk_review_summary_pay">You will pay</string>
+    <string name="mpsdk_review_product_price">Unit price: %1$s</string>
+    <string name="mpsdk_activity_checkout_title">Confirm your purchase</string>
+    <string name="mpsdk_review_summary_products">Products</string>
 </resources>

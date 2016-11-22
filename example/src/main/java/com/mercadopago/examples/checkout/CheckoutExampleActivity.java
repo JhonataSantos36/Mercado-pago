@@ -68,7 +68,6 @@ public class CheckoutExampleActivity extends AppCompatActivity {
 
 
     public void onContinueClicked(View view) {
-
         showProgressLayout();
         Map<String, Object> map = new HashMap<>();
         map.put("item_id", "1");
@@ -90,7 +89,6 @@ public class CheckoutExampleActivity extends AppCompatActivity {
     }
 
     private void startMercadoPagoCheckout() {
-
         DecorationPreference decorationPreference = getCurrentDecorationPreference();
 
         new MercadoPago.StartActivityBuilder()

@@ -21,6 +21,7 @@ import com.mercadopago.constants.PaymentTypes;
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.model.ApiException;
+import com.mercadopago.model.Currency;
 import com.mercadopago.model.Instruction;
 import com.mercadopago.model.InstructionActionInfo;
 import com.mercadopago.model.InstructionReference;
@@ -216,7 +217,9 @@ public class InstructionsActivity extends MercadoPagoActivity {
     }
 
     protected void setTitle(String title) {
-        Spanned formattedTitle = CurrenciesUtil.formatCurrencyInText(mPayment.getTransactionAmount(), mPayment.getCurrencyId(), title, false, true);
+        Spanned formattedTitle = CurrenciesUtil.formatCurrencyInText("<br>", mPayment.getTransactionAmount(), mPayment.getCurrencyId(), title, false, true);
+        List<Currency> currencies = CurrenciesUtil.getAllCurrencies();
+
         mTitle.setText(formattedTitle);
     }
 
@@ -238,12 +241,10 @@ public class InstructionsActivity extends MercadoPagoActivity {
         }
     }
 
-
     protected void setReferencesInformation(Instruction instruction) {
         LinearLayout.LayoutParams marginParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT);
-        int marginTop = ScaleUtil.getPxFromDp(3, this);
-        int marginBottom = ScaleUtil.getPxFromDp(15, this);
+        int marginBottom = ScaleUtil.getPxFromDp(13, this);
         for (InstructionReference reference : instruction.getReferences()) {
             MPTextView currentTitleTextView = new MPTextView(this);
             MPTextView currentValueTextView = new MPTextView(this);
@@ -263,9 +264,9 @@ public class InstructionsActivity extends MercadoPagoActivity {
                 currentValueTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, referenceSize);
 
                 if (reference.isNumericReference()){
-                    marginParams.setMargins(175, marginTop, 175, marginBottom);
+                    marginParams.setMargins(150, 0, 150, marginBottom);
                 } else {
-                    marginParams.setMargins(0, marginTop, 0, marginBottom);
+                    marginParams.setMargins(0, 0, 0, marginBottom);
                 }
 
                 currentValueTextView.setLayoutParams(marginParams);
@@ -280,7 +281,7 @@ public class InstructionsActivity extends MercadoPagoActivity {
     }
 
     private int getTextSizeForReference() {
-        return getResources().getDimensionPixelSize(R.dimen.mpsdk_large_text);
+        return getResources().getDimensionPixelSize(R.dimen.mpsdk_title_text);
     }
 
     private void setInformationMessages(Instruction instruction) {

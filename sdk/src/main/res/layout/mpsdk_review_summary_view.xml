@@ -51,7 +51,7 @@
             android:textSize="18dp"
             android:textColor="@color/mpsdk_color_payer_costs_no_rate"
             app:fontStyle="regular"
-            android:text="@string/mpsdk_review_symmary_discount" />
+            android:text="@string/mpsdk_review_summary_discount" />
         <com.mercadopago.customviews.MPTextView
             android:id="@+id/mpsdkReviewSummaryDiscountsText"
             android:layout_width="0dp"
