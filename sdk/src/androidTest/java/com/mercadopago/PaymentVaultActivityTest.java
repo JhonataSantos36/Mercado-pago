@@ -3,6 +3,7 @@ package com.mercadopago;
 import android.app.Activity;
 import android.app.Instrumentation;
 import android.content.Intent;
+import android.os.Looper;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.intent.Intents;
 import android.support.test.rule.ActivityTestRule;
@@ -10,10 +11,12 @@ import android.support.test.runner.AndroidJUnit4;
 import android.support.test.runner.lifecycle.ActivityLifecycleMonitorRegistry;
 import android.support.v4.content.ContextCompat;
 import android.test.suitebuilder.annotation.LargeTest;
+import android.view.View;
 
 import com.google.gson.Gson;
 import com.mercadopago.constants.PaymentTypes;
 import com.mercadopago.constants.Sites;
+import com.mercadopago.controllers.CheckoutTimer;
 import com.mercadopago.exceptions.MPException;
 import com.mercadopago.model.Card;
 import com.mercadopago.model.Customer;
@@ -908,4 +911,40 @@ public class PaymentVaultActivityTest {
 
         Assert.assertTrue(ViewUtils.getBackgroundColor(mTestRule.getActivity().mAppBarLayout) == decorationPreference.getBaseColor());
     }
+
+    //Timer
+    @Test
+    public void showCountDownTimerWhenItIsInitialized(){
+        String paymentMethodSearchJson = StaticMock.getPaymentMethodSearchWithoutCustomOptionsAsJson();
+        mFakeAPI.addResponseToQueue(paymentMethodSearchJson, 200, "");
+
+        Looper.prepare();
+
+        CheckoutTimer.getInstance().start(60);
+
+        mTestRule.launchActivity(validStartIntent);
+
+        Assert.assertTrue(mTestRule.getActivity().findViewById(R.id.mpsdkTimerTextView).getVisibility() == View.VISIBLE);
+        Assert.assertTrue(CheckoutTimer.getInstance().isTimerEnabled());
+    }
+
+    @Test
+    public void finishActivityWhenSetOnFinishCheckoutListener(){
+        String paymentMethodSearchJson = StaticMock.getPaymentMethodSearchWithoutCustomOptionsAsJson();
+        mFakeAPI.addResponseToQueue(paymentMethodSearchJson, 200, "");
+
+        Looper.prepare();
+
+        CheckoutTimer.getInstance().start(10);
+        CheckoutTimer.getInstance().setOnFinishListener(new CheckoutTimer.FinishListener() {
+            @Override
+            public void onFinish() {
+                CheckoutTimer.getInstance().finishCheckout();
+                Assert.assertTrue(mTestRule.getActivity().isFinishing());
+            }
+        });
+
+        mTestRule.launchActivity(validStartIntent);
+    }
+
 }

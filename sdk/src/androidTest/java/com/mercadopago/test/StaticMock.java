@@ -57,6 +57,7 @@ public class StaticMock {
     public final static String DUMMY_CARD_NUMBER = "4444444444440008";
     public final static String DUMMY_CARD_NUMBER_MASTER = "5444444444440008";
     public final static String DUMMY_CARD_NUMBER_AMEX = "371180303257522";
+    public final static String DUMMY_CARD_NUMBER_VISA = "4509953566233704";
     public final static String DUMMY_CARDHOLDER_NAME = "john";
     public final static int DUMMY_EXPIRATION_MONTH = 11;
     public final static int DUMMY_EXPIRATION_YEAR_SHORT = 25;
@@ -267,10 +268,28 @@ public class StaticMock {
         }
     }
 
+    public static Token getClonedToken() {
+
+        try {
+            return JsonUtil.getInstance().fromJson(getFile(InstrumentationRegistry.getContext(), "mocks/cloned_token.json"), Token.class);
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
     public static Token getTokenAmex() {
 
         try {
             return JsonUtil.getInstance().fromJson(getFile(InstrumentationRegistry.getContext(), "mocks/token_amex.json"), Token.class);
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+    public static Token getClonedTokenAmex() {
+
+        try {
+            return JsonUtil.getInstance().fromJson(getFile(InstrumentationRegistry.getContext(), "mocks/cloned_token_amex.json"), Token.class);
         } catch (Exception ex) {
             return null;
         }

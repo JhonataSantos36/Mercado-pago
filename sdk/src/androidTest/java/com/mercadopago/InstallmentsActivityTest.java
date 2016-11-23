@@ -3,6 +3,7 @@ package com.mercadopago;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
+import android.os.Looper;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.intent.Intents;
 import android.support.test.rule.ActivityTestRule;
@@ -10,9 +11,11 @@ import android.support.test.runner.AndroidJUnit4;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.test.suitebuilder.annotation.LargeTest;
+import android.view.View;
 
 import com.google.gson.reflect.TypeToken;
 import com.mercadopago.constants.Sites;
+import com.mercadopago.controllers.CheckoutTimer;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.model.Card;
 import com.mercadopago.model.DecorationPreference;
@@ -29,6 +32,8 @@ import com.mercadopago.test.StaticMock;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.utils.ActivityResultUtil;
 import com.mercadopago.utils.ViewUtils;
+
+import junit.framework.Assert;
 
 import org.junit.After;
 import org.junit.Before;
@@ -678,6 +683,45 @@ public class InstallmentsActivityTest {
         int fontColor = toolbarTitle.getCurrentTextColor();
         int expectedColor = ContextCompat.getColor(InstrumentationRegistry.getContext(), R.color.mpsdk_dark_font_color);
         assertEquals(fontColor, expectedColor);
+    }
+
+    //Timer
+    @Test
+    public void showCountDownTimerWhenItIsInitialized(){
+        String payerCosts = StaticMock.getPayerCostsJson();
+        Type listType = new TypeToken<List<PayerCost>>(){}.getType();
+        List<PayerCost> payerCostList = JsonUtil.getInstance().getGson().fromJson(payerCosts, listType);
+        validStartIntent.putExtra("payerCosts", JsonUtil.getInstance().toJson(payerCostList));
+
+        Looper.prepare();
+
+        CheckoutTimer.getInstance().start(60);
+
+        mTestRule.launchActivity(validStartIntent);
+
+        Assert.assertTrue(mTestRule.getActivity().findViewById(R.id.mpsdkTimerTextView).getVisibility() == View.VISIBLE);
+        Assert.assertTrue(CheckoutTimer.getInstance().isTimerEnabled());
+    }
+
+    @Test
+    public void finishActivityWhenSetOnFinishCheckoutListener(){
+        String payerCosts = StaticMock.getPayerCostsJson();
+        Type listType = new TypeToken<List<PayerCost>>(){}.getType();
+        List<PayerCost> payerCostList = JsonUtil.getInstance().getGson().fromJson(payerCosts, listType);
+        validStartIntent.putExtra("payerCosts", JsonUtil.getInstance().toJson(payerCostList));
+
+        Looper.prepare();
+
+        CheckoutTimer.getInstance().start(10);
+        CheckoutTimer.getInstance().setOnFinishListener(new CheckoutTimer.FinishListener() {
+            @Override
+            public void onFinish() {
+                CheckoutTimer.getInstance().finishCheckout();
+                Assert.assertTrue(mTestRule.getActivity().isFinishing());
+            }
+        });
+
+        mTestRule.launchActivity(validStartIntent);
     }
 
 }

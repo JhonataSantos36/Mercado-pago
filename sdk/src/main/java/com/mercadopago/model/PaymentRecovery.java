@@ -54,7 +54,7 @@ public class PaymentRecovery {
         return mToken;
     }
 
-    public void setToken(Token token) {
+    private void setToken(Token token) {
         this.mToken = token;
     }
 
@@ -62,7 +62,7 @@ public class PaymentRecovery {
         return mPayment;
     }
 
-    public void setPayment(Payment payment) {
+    private void setPayment(Payment payment) {
         this.mPayment = payment;
 
         if (isStatusDetailCallForAuthorize())
@@ -75,7 +75,7 @@ public class PaymentRecovery {
         return mPaymentMethod;
     }
 
-    public void setPaymentMethod(PaymentMethod paymentMethod) {
+    private void setPaymentMethod(PaymentMethod paymentMethod) {
         this.mPaymentMethod = paymentMethod;
     }
 
@@ -83,7 +83,7 @@ public class PaymentRecovery {
         return mPayerCost;
     }
 
-    public void setPayerCost(PayerCost payerCost) {
+    private void setPayerCost(PayerCost payerCost) {
         this.mPayerCost = payerCost;
     }
 
@@ -91,7 +91,7 @@ public class PaymentRecovery {
         return mIssuer;
     }
 
-    public void setIssuer(Issuer issuer){
+    private void setIssuer(Issuer issuer){
         this.mIssuer = issuer;
     }
 

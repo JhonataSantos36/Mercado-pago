@@ -87,7 +87,9 @@
                 android:layout_gravity="center_horizontal"
                 android:gravity="center"
                 android:layout_marginBottom="15dp"
-                android:textSize="16dp"
+                android:paddingRight="15dp"
+                android:paddingLeft="15dp"
+                android:textSize="14dp"
                 tools:text="Info primaria"
                 app:fontStyle="regular" />
 

@@ -153,7 +153,6 @@ public class CheckoutActivity extends MercadoPagoActivity {
 
     @Override
     protected void getActivityParameters() {
-
         mMerchantPublicKey = getIntent().getStringExtra("merchantPublicKey");
         mMerchantBaseUrl = this.getIntent().getStringExtra("merchantBaseUrl");
         mMerchantGetCustomerUri = this.getIntent().getStringExtra("merchantGetCustomerUri");
