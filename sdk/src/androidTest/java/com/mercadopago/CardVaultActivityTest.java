@@ -8,13 +8,17 @@ import android.support.test.rule.ActivityTestRule;
 
 import com.google.gson.reflect.TypeToken;
 import com.mercadopago.constants.Sites;
+import com.mercadopago.model.DummyCard;
 import com.mercadopago.model.Installment;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.Token;
+import com.mercadopago.test.ActivityResult;
 import com.mercadopago.test.FakeAPI;
 import com.mercadopago.test.StaticMock;
 import com.mercadopago.util.JsonUtil;
+import com.mercadopago.utils.ActivityResultUtil;
+import com.mercadopago.utils.CardTestUtils;
 
 import org.junit.After;
 import org.junit.Before;
@@ -27,12 +31,17 @@ import java.util.List;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.typeText;
+import static android.support.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.Intents.intending;
 import static android.support.test.espresso.intent.Intents.times;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static com.mercadopago.utils.ActivityResultUtil.assertFinishCalledWithResult;
+import static com.mercadopago.utils.CardTestUtils.getDummyCard;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -471,4 +480,277 @@ public class CardVaultActivityTest {
         intended(hasComponent(InstallmentsActivity.class.getName()));
     }
 
+    //TODO viene de guessing card activity test, arreglar
+//    @Test
+//    public void createTokenOnSecurityCodeNotRequired() {
+////        addInitCalls();
+//        Token mockedToken = StaticMock.getToken();
+//        mFakeAPI.addResponseToQueue(JsonUtil.getInstance().toJson(mockedToken), 200, "");
+//        Issuer mockedIssuer = StaticMock.getIssuer();
+//        List<Issuer> issuerList = new ArrayList<>();
+//        issuerList.add(mockedIssuer);
+//        mFakeAPI.addResponseToQueue(issuerList, 200, "");
+//
+//        mTestRule.launchActivity(validStartIntent);
+//        DummyCard card = CardTestUtils.getPaymentMethodOnWithoutRequiredSecurityCode();
+//
+//        onView(withId(R.id.mpsdkCardNumber)).perform(typeText(card.getCardNumber()));
+//        onView(withId(R.id.mpsdkNextButton)).perform(click());
+//        onView(withId(R.id.mpsdkCardholderName)).perform(typeText(StaticMock.DUMMY_CARDHOLDER_NAME));
+//        onView(withId(R.id.mpsdkNextButton)).perform(click());
+//        onView(withId(R.id.mpsdkCardExpiryDate)).perform(typeText(StaticMock.DUMMY_EXPIRATION_DATE));
+//        onView(withId(R.id.mpsdkNextButton)).perform(click());
+////        identificationNumberIsCurrentEditText();
+//        onView(withId(R.id.mpsdkCardIdentificationNumber)).perform(typeText(StaticMock.DUMMY_IDENTIFICATION_NUMBER));
+//        onView(withId(R.id.mpsdkNextButton)).perform(click());
+//
+//        ActivityResult result = ActivityResultUtil.getActivityResult(mTestRule.getActivity());
+//        Issuer selectedIssuer = JsonUtil.getInstance().fromJson(result.getExtras().getString("issuer"), Issuer.class);
+//        assertEquals(mockedIssuer.getId(), selectedIssuer.getId());
+//        Token tokenResult = JsonUtil.getInstance().fromJson(result.getExtras().getString("token"), Token.class);
+//        assertEquals(mockedToken.getId(), tokenResult.getId());
+//        PaymentMethod pmResult = JsonUtil.getInstance().fromJson(result.getExtras().getString("paymentMethod"), PaymentMethod.class);
+//        assertEquals("tarshop", pmResult.getId());
+//
+//        ActivityResultUtil.assertFinishCalledWithResult(mTestRule.getActivity(), Activity.RESULT_OK);
+//    }
+
+    //TODO viene de guessing card activity test, arreglar
+//    @Test
+//    public void createTokenOnIdentificationNumberNotRequired() {
+////        addBankDealsCall();
+//        PaymentMethod pm = StaticMock.getPaymentMethodWithIdentificationNotRequired();
+//        List<PaymentMethod> paymentMethods = new ArrayList<>();
+//        paymentMethods.add(pm);
+//        mFakeAPI.addResponseToQueue(paymentMethods, 200, "");
+//
+//        Token mockedToken = StaticMock.getToken();
+//        mFakeAPI.addResponseToQueue(JsonUtil.getInstance().toJson(mockedToken), 200, "");
+//
+//        Issuer mockedIssuer = StaticMock.getIssuer();
+//        List<Issuer> issuerList = new ArrayList<>();
+//        issuerList.add(mockedIssuer);
+//        mFakeAPI.addResponseToQueue(issuerList, 200, "");
+//
+//        mTestRule.launchActivity(validStartIntent);
+//
+//        onView(withId(R.id.mpsdkCardNumber)).perform(typeText(CardTestUtils.getDummyCard("cordial").getCardNumber()));
+////        sleep();
+//        onView(withId(R.id.mpsdkNextButton)).perform(click());
+//        onView(withId(R.id.mpsdkCardholderName)).perform(typeText(StaticMock.DUMMY_CARDHOLDER_NAME));
+////        sleep();
+//        onView(withId(R.id.mpsdkNextButton)).perform(click());
+//        onView(withId(R.id.mpsdkCardExpiryDate)).perform(typeText(StaticMock.DUMMY_EXPIRATION_DATE));
+////        sleep();
+//        onView(withId(R.id.mpsdkNextButton)).perform(click());
+//        onView(withId(R.id.mpsdkCardSecurityCode)).perform(typeText(StaticMock.DUMMY_SECURITY_CODE));
+////        sleep();
+//        onView(withId(R.id.mpsdkNextButton)).perform(click());
+//
+//        ActivityResult result = ActivityResultUtil.getActivityResult(mTestRule.getActivity());
+//        Issuer selectedIssuer = JsonUtil.getInstance().fromJson(result.getExtras().getString("issuer"), Issuer.class);
+//        assertEquals(mockedIssuer.getId(), selectedIssuer.getId());
+//        Token tokenResult = JsonUtil.getInstance().fromJson(result.getExtras().getString("token"), Token.class);
+//        assertEquals(mockedToken.getId(), tokenResult.getId());
+//        PaymentMethod pmResult = JsonUtil.getInstance().fromJson(result.getExtras().getString("paymentMethod"), PaymentMethod.class);
+//        assertEquals(pm.getId(), pmResult.getId());
+//
+//        ActivityResultUtil.assertFinishCalledWithResult(mTestRule.getActivity(), Activity.RESULT_OK);
+//    }
+
+    //TODO lo mismo
+//    @Test
+//    public void setTokenPMAndIssuerOnResult() {
+////        addInitCalls();
+//        Token mockedToken = StaticMock.getToken();
+//        mFakeAPI.addResponseToQueue(JsonUtil.getInstance().toJson(mockedToken), 200, "");
+//        Issuer mockedIssuer = StaticMock.getIssuer();
+//        List<Issuer> issuerList = new ArrayList<>();
+//        issuerList.add(mockedIssuer);
+//        mFakeAPI.addResponseToQueue(issuerList, 200, "");
+//
+//        mTestRule.launchActivity(validStartIntent);
+//
+//        onView(withId(R.id.mpsdkCardNumber)).perform(typeText(CardTestUtils.getDummyCard("master").getCardNumber()));
+//        onView(withId(R.id.mpsdkNextButton)).perform(click());
+//        onView(withId(R.id.mpsdkCardholderName)).perform(typeText(StaticMock.DUMMY_CARDHOLDER_NAME));
+//        onView(withId(R.id.mpsdkNextButton)).perform(click());
+//        onView(withId(R.id.mpsdkCardExpiryDate)).perform(typeText(StaticMock.DUMMY_EXPIRATION_DATE));
+//        onView(withId(R.id.mpsdkNextButton)).perform(click());
+//        onView(withId(R.id.mpsdkCardSecurityCode)).perform(typeText(StaticMock.DUMMY_SECURITY_CODE));
+//        onView(withId(R.id.mpsdkNextButton)).perform(click());
+//        onView(withId(R.id.mpsdkCardIdentificationNumber)).perform(typeText(StaticMock.DUMMY_IDENTIFICATION_NUMBER));
+//        onView(withId(R.id.mpsdkNextButton)).perform(click());
+//
+//        ActivityResult result = ActivityResultUtil.getActivityResult(mTestRule.getActivity());
+//        Issuer selectedIssuer = JsonUtil.getInstance().fromJson(result.getExtras().getString("issuer"), Issuer.class);
+//        assertEquals(mockedIssuer.getId(), selectedIssuer.getId());
+//        Token tokenResult = JsonUtil.getInstance().fromJson(result.getExtras().getString("token"), Token.class);
+//        assertEquals(mockedToken.getId(), tokenResult.getId());
+//        PaymentMethod pmResult = JsonUtil.getInstance().fromJson(result.getExtras().getString("paymentMethod"), PaymentMethod.class);
+//        assertEquals("master", pmResult.getId());
+//
+//        ActivityResultUtil.assertFinishCalledWithResult(mTestRule.getActivity(), Activity.RESULT_OK);
+//    }
+    //TODO lo mismo
+//    @Test
+//    public void openIssuerSelection() {
+////        addInitCalls();
+//
+//        Token mockedToken = StaticMock.getTokenMasterIssuers();
+//        mFakeAPI.addResponseToQueue(JsonUtil.getInstance().toJson(mockedToken), 200, "");
+//
+//        String issuers = StaticMock.getIssuersJson();
+//        mFakeAPI.addResponseToQueue(issuers, 200, "");
+//
+//        DummyCard card = CardTestUtils.getPaymentMethodWithMultipleIssuers();
+//
+//        mTestRule.launchActivity(validStartIntent);
+//
+//        onView(withId(R.id.mpsdkCardNumber)).perform(typeText(card.getCardNumber()));
+//        onView(withId(R.id.mpsdkNextButton)).perform(click());
+//        onView(withId(R.id.mpsdkCardholderName)).perform(typeText(StaticMock.DUMMY_CARDHOLDER_NAME));
+//        onView(withId(R.id.mpsdkNextButton)).perform(click());
+//        onView(withId(R.id.mpsdkCardExpiryDate)).perform(typeText(StaticMock.DUMMY_EXPIRATION_DATE));
+//        onView(withId(R.id.mpsdkNextButton)).perform(click());
+//        onView(withId(R.id.mpsdkCardSecurityCode)).perform(typeText(card.getSecurityCode()));
+//        onView(withId(R.id.mpsdkNextButton)).perform(click());
+//        onView(withId(R.id.mpsdkCardIdentificationNumber)).perform(typeText(StaticMock.DUMMY_IDENTIFICATION_NUMBER));
+//        onView(withId(R.id.mpsdkNextButton)).perform(click());
+//
+//        intended(hasComponent(IssuersActivity.class.getName()));
+//
+//        onView(withId(R.id.mpsdkActivityIssuersView)).perform(actionOnItemAtPosition(0, click()));
+//
+//        Type listType = new TypeToken<List<Issuer>>() {
+//        }.getType();
+//        List<Issuer> issuerList = JsonUtil.getInstance().getGson().fromJson(issuers, listType);
+//
+//
+//        ActivityResult result = ActivityResultUtil.getActivityResult(mTestRule.getActivity());
+//        Issuer selectedIssuer = JsonUtil.getInstance().fromJson(result.getExtras().getString("issuer"), Issuer.class);
+//        assertNotNull(selectedIssuer);
+//        assertEquals(issuerList.get(0).getId(), selectedIssuer.getId());
+//
+//        assertFinishCalledWithResult(mTestRule.getActivity(), Activity.RESULT_OK);
+//
+//    }
+    //TODO lo mismo
+//    @Test
+//    public void onIssuerApiFailOpenErrorActivity() {
+//        addInitCalls();
+//
+//        Token mockedToken = StaticMock.getTokenMasterIssuers();
+//        mFakeAPI.addResponseToQueue(JsonUtil.getInstance().toJson(mockedToken), 200, "");
+//
+//        //Issuers call
+//        mFakeAPI.addResponseToQueue("", 401, "");
+//
+//        DummyCard card = CardTestUtils.getPaymentMethodWithMultipleIssuers();
+//
+//        mTestRule.launchActivity(validStartIntent);
+//
+//        onView(withId(R.id.mpsdkCardNumber)).perform(typeText(card.getCardNumber()));
+//        onView(withId(R.id.mpsdkNextButton)).perform(click());
+//        onView(withId(R.id.mpsdkCardholderName)).perform(typeText(StaticMock.DUMMY_CARDHOLDER_NAME));
+//        onView(withId(R.id.mpsdkNextButton)).perform(click());
+//        onView(withId(R.id.mpsdkCardExpiryDate)).perform(typeText(StaticMock.DUMMY_EXPIRATION_DATE));
+//        onView(withId(R.id.mpsdkNextButton)).perform(click());
+//        onView(withId(R.id.mpsdkCardSecurityCode)).perform(typeText(card.getSecurityCode()));
+//        onView(withId(R.id.mpsdkNextButton)).perform(click());
+//        onView(withId(R.id.mpsdkCardIdentificationNumber)).perform(typeText(StaticMock.DUMMY_IDENTIFICATION_NUMBER));
+//        onView(withId(R.id.mpsdkNextButton)).perform(click());
+//
+//        intended(hasComponent(ErrorActivity.class.getName()));
+//    }
+
+    //TODO lo mismo
+//    @Test
+//    public void onEmptyIssuerListOpenErrorActivity() {
+////        addInitCalls();
+//        Token mockedToken = StaticMock.getToken();
+//        mFakeAPI.addResponseToQueue(JsonUtil.getInstance().toJson(mockedToken), 200, "");
+//        List<Issuer> issuerList = new ArrayList<>();
+//        mFakeAPI.addResponseToQueue(issuerList, 200, "");
+//
+//        mTestRule.launchActivity(validStartIntent);
+//
+//        onView(withId(R.id.mpsdkCardNumber)).perform(typeText(getDummyCard("master").getCardNumber()));
+//        onView(withId(R.id.mpsdkNextButton)).perform(click());
+//        onView(withId(R.id.mpsdkCardholderName)).perform(typeText(StaticMock.DUMMY_CARDHOLDER_NAME));
+//        onView(withId(R.id.mpsdkNextButton)).perform(click());
+//        onView(withId(R.id.mpsdkCardExpiryDate)).perform(typeText(StaticMock.DUMMY_EXPIRATION_DATE));
+//        onView(withId(R.id.mpsdkNextButton)).perform(click());
+//        onView(withId(R.id.mpsdkCardSecurityCode)).perform(typeText(StaticMock.DUMMY_SECURITY_CODE));
+//        onView(withId(R.id.mpsdkNextButton)).perform(click());
+//        onView(withId(R.id.mpsdkCardIdentificationNumber)).perform(typeText(StaticMock.DUMMY_IDENTIFICATION_NUMBER));
+//        onView(withId(R.id.mpsdkNextButton)).perform(click());
+//
+//        intended(hasComponent(ErrorActivity.class.getName()));
+//    }
+//TODO Arreglar
+//    @Test
+//    public void onTokenApiFailOpenErrorActivity() {
+//        addInitCalls();
+
+        //Token call
+//        mFakeAPI.addResponseToQueue("", 401, "");
+//
+//        String issuers = StaticMock.getIssuersJson();
+//        mFakeAPI.addResponseToQueue(issuers, 200, "");
+//
+//        DummyCard card = CardTestUtils.getPaymentMethodWithMultipleIssuers();
+//
+//        mTestRule.launchActivity(validStartIntent);
+//
+//        onView(withId(R.id.mpsdkCardNumber)).perform(typeText(card.getCardNumber()));
+//        onView(withId(R.id.mpsdkNextButton)).perform(click());
+//        onView(withId(R.id.mpsdkCardholderName)).perform(typeText(StaticMock.DUMMY_CARDHOLDER_NAME));
+//        onView(withId(R.id.mpsdkNextButton)).perform(click());
+//        onView(withId(R.id.mpsdkCardExpiryDate)).perform(typeText(StaticMock.DUMMY_EXPIRATION_DATE));
+//        onView(withId(R.id.mpsdkNextButton)).perform(click());
+//        onView(withId(R.id.mpsdkCardSecurityCode)).perform(typeText(card.getSecurityCode()));
+//        onView(withId(R.id.mpsdkNextButton)).perform(click());
+//        onView(withId(R.id.mpsdkCardIdentificationNumber)).perform(typeText(StaticMock.DUMMY_IDENTIFICATION_NUMBER));
+//        onView(withId(R.id.mpsdkNextButton)).perform(click());
+//
+//        intended(hasComponent(ErrorActivity.class.getName()));
+//    }
+
+    //TODO arreglar
+//    @Test
+//    public void ifApiFailureIssuersRecover() {
+//        addInitCalls();
+//
+//        Token mockedToken = StaticMock.getToken();
+//        mFakeAPI.addResponseToQueue(JsonUtil.getInstance().toJson(mockedToken), 200, "");
+//
+//        //Issuers Call
+//        mFakeAPI.addResponseToQueue("", 401, "");
+//        String issuers = StaticMock.getIssuersJson();
+//        mFakeAPI.addResponseToQueue(issuers, 200, "");
+//
+//        DummyCard card = CardTestUtils.getPaymentMethodOnWithBackSecurityCode();
+//
+//        mTestRule.launchActivity(validStartIntent);
+//
+//        onView(withId(R.id.mpsdkCardNumber)).perform(typeText(card.getCardNumber()));
+//        onView(withId(R.id.mpsdkNextButton)).perform(click());
+//        onView(withId(R.id.mpsdkCardholderName)).perform(typeText(StaticMock.DUMMY_CARDHOLDER_NAME));
+//        onView(withId(R.id.mpsdkNextButton)).perform(click());
+//        onView(withId(R.id.mpsdkCardExpiryDate)).perform(typeText(StaticMock.DUMMY_EXPIRATION_DATE));
+//        onView(withId(R.id.mpsdkNextButton)).perform(click());
+//        onView(withId(R.id.mpsdkCardSecurityCode)).perform(typeText(card.getSecurityCode()));
+//        onView(withId(R.id.mpsdkNextButton)).perform(click());
+//        onView(withId(R.id.mpsdkCardIdentificationNumber)).perform(typeText(StaticMock.DUMMY_IDENTIFICATION_NUMBER));
+//        onView(withId(R.id.mpsdkNextButton)).perform(click());
+//
+//        Intent errorResultIntent = new Intent();
+//        Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(Activity.RESULT_OK, errorResultIntent);
+//        intending(hasComponent(ErrorActivity.class.getName())).respondWith(result);
+//
+//        onView(withId(R.id.mpsdkErrorRetry)).perform(click());
+//
+//        intended(hasComponent(IssuersActivity.class.getName()));
+//    }
 }

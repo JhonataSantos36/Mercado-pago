@@ -63,7 +63,7 @@ public class BackCardView {
     public void initializeControls() {
         mCardContainer = (FrameLayout) mView.findViewById(R.id.mpsdkCardBackContainer);
         mCardBorder = (ImageView) mView.findViewById(R.id.mpsdkCardShadowBorder);
-        mCardSecurityCodeTextView = (MPTextView) mView.findViewById(R.id.mpsdkCardSecurityView);
+        mCardSecurityCodeTextView = (MPTextView) mView.findViewById(R.id.mpsdkCardSecurityCodeViewBack);
         mCardImageView = (ImageView) mView.findViewById(R.id.mpsdkCardImageView);
         if (mSize != null) {
             resize();

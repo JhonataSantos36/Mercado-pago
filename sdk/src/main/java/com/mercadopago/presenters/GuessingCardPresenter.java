@@ -40,6 +40,7 @@ public class GuessingCardPresenter {
 
     //Card controller
     protected PaymentMethodGuessingController mPaymentMethodGuessingController;
+    protected List<IdentificationType> mIdentificationTypes;
 
     private GuessingCardActivityView mView;
     private Context mContext;
@@ -133,6 +134,10 @@ public class GuessingCardPresenter {
         return mPaymentMethod;
     }
 
+    public List<IdentificationType> getIdentificationTypes() {
+        return this.mIdentificationTypes;
+    }
+
     public void setPaymentMethod(PaymentMethod paymentMethod) {
         this.mPaymentMethod = paymentMethod;
         if (paymentMethod == null) {
@@ -153,6 +158,10 @@ public class GuessingCardPresenter {
         if (required) {
             mView.showSecurityCodeInput();
         }
+    }
+
+    public void setSecurityCodeLength(int securityCodeLength) {
+        this.mSecurityCodeLength = securityCodeLength;
     }
 
     private void clearCardSettings() {
@@ -180,6 +189,10 @@ public class GuessingCardPresenter {
 
     public CardToken getCardToken() {
         return mCardToken;
+    }
+
+    public void setCardToken(CardToken cardToken) {
+        this.mCardToken = cardToken;
     }
 
     public List<PaymentMethod> getPaymentMethodList() {
@@ -286,7 +299,12 @@ public class GuessingCardPresenter {
     }
 
     public void loadPaymentMethods() {
-        getPaymentMethodsAsync();
+        if (mPaymentMethodList == null || mPaymentMethodList.isEmpty()) {
+            getPaymentMethodsAsync();
+        } else {
+            mView.showInputContainer();
+            startGuessingForm();
+        }
     }
 
     public void loadBankDeals() {
@@ -378,6 +396,7 @@ public class GuessingCardPresenter {
                 } else {
                     mIdentificationType = identificationTypes.get(0);
                     mView.initializeIdentificationTypes(identificationTypes);
+                    mIdentificationTypes = identificationTypes;
                 }
             }
 
@@ -389,6 +408,7 @@ public class GuessingCardPresenter {
                         getIdentificationTypesAsync();
                     }
                 });
+                mView.showApiExceptionError(apiException);
             }
         });
     }
@@ -413,12 +433,7 @@ public class GuessingCardPresenter {
 
             @Override
             public void failure(ApiException apiException) {
-                setFailureRecovery(new FailureRecovery() {
-                    @Override
-                    public void recover() {
-                        getBankDealsAsync();
-                    }
-                });
+                //do nothing
             }
         });
     }
@@ -558,8 +573,10 @@ public class GuessingCardPresenter {
     }
 
     public boolean validateExpiryDate() {
-        Integer month = getExpiryMonth() == null ? null : Integer.valueOf(getExpiryMonth());
-        Integer year = getExpiryYear() == null ? null : Integer.valueOf(getExpiryYear());
+        String monthString = getExpiryMonth();
+        String yearString = getExpiryYear();
+        Integer month = (monthString == null || monthString.isEmpty()) ? null : Integer.valueOf(monthString);
+        Integer year = (yearString == null || yearString.isEmpty()) ? null : Integer.valueOf(yearString);
         mCardToken.setExpirationMonth(month);
         mCardToken.setExpirationYear(year);
         if (mCardToken.validateExpiryDate()) {

@@ -119,7 +119,7 @@ public class FrontCardView {
         mCardExpiryMonthTextView = (MPTextView) mView.findViewById(R.id.mpsdkCardHolderExpiryMonth);
         mCardExpiryYearTextView = (MPTextView) mView.findViewById(R.id.mpsdkCardHolderExpiryYear);
         mCardDateDividerTextView = (MPTextView) mView.findViewById(R.id.mpsdkCardHolderDateDivider);
-        mCardSecurityCodeTextView = (MPTextView) mView.findViewById(R.id.mpsdkCardSecurityView);
+        mCardSecurityCodeTextView = (MPTextView) mView.findViewById(R.id.mpsdkCardSecurityCodeViewFront);
         mBaseImageCard = (FrameLayout) mView.findViewById(R.id.mpsdkBaseImageCard);
         mImageCardContainer = (ImageView) mView.findViewById(R.id.mpsdkImageCardContainer);
         mCardLowApiImageView = (ImageView) mView.findViewById(R.id.mpsdkCardLowApiImageView);

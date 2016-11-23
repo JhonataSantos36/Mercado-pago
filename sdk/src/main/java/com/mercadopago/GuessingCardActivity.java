@@ -799,6 +799,7 @@ public class GuessingCardActivity extends AppCompatActivity implements GuessingC
     public void initializeIdentificationTypes(List<IdentificationType> identificationTypes) {
         mIdentificationTypeSpinner.setAdapter(new IdentificationTypesAdapter(this, identificationTypes));
         mIdentificationTypeContainer.setVisibility(View.VISIBLE);
+        mIdentificationCardView.setIdentificationType(identificationTypes.get(0));
     }
 
     @Override

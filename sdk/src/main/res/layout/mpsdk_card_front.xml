@@ -104,7 +104,7 @@
                     android:visibility="visible">
 
                     <com.mercadopago.customviews.MPTextView
-                        android:id="@+id/mpsdkCardSecurityView"
+                        android:id="@+id/mpsdkCardSecurityCodeViewFront"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textColor="@color/mpsdk_base_text"
