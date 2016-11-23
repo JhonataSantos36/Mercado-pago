@@ -621,6 +621,7 @@ public class CheckoutActivity extends MercadoPagoActivity {
         drawSummary();
         drawProductList();
         drawPaymentMethodList();
+        mScrollView.scrollTo(0, 0);
     }
 
     private void showScrollView() {

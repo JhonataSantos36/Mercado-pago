@@ -32,12 +32,12 @@
                 android:layout_height="match_parent"
                 android:background="@color/mpsdk_white">
                 <ProgressBar
+                    style="?android:attr/progressBarStyleLarge"
                     android:id="@+id/mpsdkProgressLayout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"/>
             </FrameLayout>
-
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

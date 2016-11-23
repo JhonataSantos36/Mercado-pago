@@ -36,7 +36,7 @@ public class ReviewUtil {
             case "bancomer_atm":
                 string = R.string.mpsdk_review_off_text;
                 break;
-            case "serfin_telecomm":
+            case "banamex_telecomm":
                 string = R.string.mpsdk_review_off_text;
                 break;
             case "serfin_atm":
@@ -97,7 +97,7 @@ public class ReviewUtil {
             case "bancomer_atm":
                 string = context.getResources().getString(R.string.mpsdk_your_atm) + " " + paymentMethod.getName();
                 break;
-            case "serfin_telecomm":
+            case "banamex_telecomm":
                 string = "Telecomm";
                 break;
             case "serfin_atm":

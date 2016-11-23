@@ -97,8 +97,8 @@ public class MercadoPago {
 
     private static final String MP_API_BASE_URL = "https://api.mercadopago.com";
 
-    private static final String PAYMENT_RESULT_API_VERSION = "1.3.1-beta";
-    private static final String PAYMENT_METHODS_OPTIONS_API_VERSION = "1.3.1-beta";
+    private static final String PAYMENT_RESULT_API_VERSION = "1.3.x";
+    private static final String PAYMENT_METHODS_OPTIONS_API_VERSION = "1.3.x";
 
     private String mKey = null;
     private String mKeyType = null;
@@ -262,12 +262,12 @@ public class MercadoPago {
             MPTracker.getInstance().trackEvent("NO_SCREEN", "GET_PAYMENT_METHOD_SEARCH", "1", mKey, BuildConfig.VERSION_NAME, mContext);
             PayerIntent payerIntent = new PayerIntent(payer);
             PaymentService service = mRetrofit.create(PaymentService.class);
+            if(!accountMoneyEnabled) {
+                excludedPaymentTypes.add(PaymentTypes.ACCOUNT_MONEY);
+            }
             String separator = ",";
             String excludedPaymentTypesAppended = getListAsString(excludedPaymentTypes, separator);
             String excludedPaymentMethodsAppended = getListAsString(excludedPaymentMethods, separator);
-            if(!accountMoneyEnabled) {
-                excludedPaymentTypesAppended += separator + PaymentTypes.ACCOUNT_MONEY;
-            }
             service.getPaymentMethodSearch(this.mKey, amount, excludedPaymentTypesAppended, excludedPaymentMethodsAppended, payerIntent,  PAYMENT_METHODS_OPTIONS_API_VERSION).enqueue(callback);
         } else {
             throw new RuntimeException("Unsupported key type for this method");
@@ -603,7 +603,6 @@ public class MercadoPago {
     private String getListAsString(List<String> list, String separator) {
         StringBuilder stringBuilder = new StringBuilder();
         if (list != null) {
-
             for (String typeId : list) {
                 stringBuilder.append(typeId);
                 if (!typeId.equals(list.get(list.size() - 1))) {

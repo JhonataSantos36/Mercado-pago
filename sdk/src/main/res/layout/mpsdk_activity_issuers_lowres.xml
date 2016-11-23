@@ -26,6 +26,7 @@
                 <include layout="@layout/mpsdk_new_card_issuers"/>
             </LinearLayout>
             <ProgressBar
+                style="?android:attr/progressBarStyleLarge"
                 android:id="@+id/mpsdkProgressBar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
