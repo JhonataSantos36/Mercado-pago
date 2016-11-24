@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Instrumentation;
 import android.content.Intent;
+import android.graphics.MaskFilter;
 import android.os.Build;
 import android.os.CountDownTimer;
 import android.os.Handler;
@@ -40,6 +41,7 @@ import com.mercadopago.test.ActivityResult;
 import com.mercadopago.test.FakeAPI;
 import com.mercadopago.test.StaticMock;
 import com.mercadopago.util.JsonUtil;
+import com.mercadopago.util.MPCardMaskUtil;
 import com.mercadopago.utils.ActivityResultUtil;
 import com.mercadopago.utils.CardTestUtils;
 import com.mercadopago.utils.IdentificationTestUtils;
@@ -959,6 +961,13 @@ public class GuessingCardActivityTest {
 
         onView(withId(R.id.mpsdkCardNumber)).perform(typeText(card.getCardNumber().substring(0, 6)));
         sleep();
+
+        Intent errorResultIntent = new Intent();
+        Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(Activity.RESULT_OK, errorResultIntent);
+        intending(hasComponent(ErrorActivity.class.getName())).respondWith(result);
+
+        onView(withId(R.id.mpsdkErrorRetry)).perform(click());
+
         onView(withId(R.id.mpsdkCardNumber)).perform(typeText(card.getCardNumber().substring(6, 16)));
         onView(withId(R.id.mpsdkNextButton)).perform(click());
         onView(withId(R.id.mpsdkCardholderName)).perform(typeText(StaticMock.DUMMY_CARDHOLDER_NAME));
@@ -994,7 +1003,7 @@ public class GuessingCardActivityTest {
     }
 
     @Test
-    public void onBankDealsApiFailRecover() {
+    public void onBankDealsApiFailDoNothing() {
         //Bank deals call
         mFakeAPI.addResponseToQueue("", 401, "");
         addBankDealsCall();
@@ -1004,7 +1013,7 @@ public class GuessingCardActivityTest {
 
         mTestRule.launchActivity(validStartIntent);
 
-        onView(withId(R.id.mpsdkBankDealsText)).check(matches(isDisplayed()));
+        onView(withId(R.id.mpsdkBankDealsText)).check(matches(not(isDisplayed())));
     }
 
     @Test
@@ -1091,7 +1100,6 @@ public class GuessingCardActivityTest {
         CardToken mockedCardToken = new CardToken(card.getCardNumber(), StaticMock.DUMMY_EXPIRATION_DATE_ONLY_MONTH,
                 StaticMock.DUMMY_EXPIRATION_DATE_ONLY_YEAR, StaticMock.DUMMY_SECURITY_CODE, StaticMock.DUMMY_CARDHOLDER_NAME,
                 StaticMock.DUMMY_IDENTIFICATION_TYPE, StaticMock.DUMMY_IDENTIFICATION_NUMBER);
-
 
         ActivityResult result = ActivityResultUtil.getActivityResult(mTestRule.getActivity());
 
@@ -1516,208 +1524,206 @@ public class GuessingCardActivityTest {
         identificationNumberIsCurrentEditText();
     }
 
-//    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-//    @Test
-//    public void onRestoreInstanceRestoreVariablesFrontCard() {
-//        addInitCalls();
-//        addInitCalls();
-//        final GuessingCardActivity activity = mTestRule.launchActivity(validStartIntent);
-//        final DummyCard card = getDummyCard("amex");
-//
-//        onView(withId(R.id.mpsdkCardNumber)).perform(typeText(card.getCardNumber()));
-//        sleep();
-//        onView(withId(R.id.mpsdkNextButton)).perform(click());
-//        onView(withId(R.id.mpsdkCardholderName)).perform(typeText(StaticMock.DUMMY_CARDHOLDER_NAME));
-//        sleep();
-//        onView(withId(R.id.mpsdkNextButton)).perform(click());
-//        onView(withId(R.id.mpsdkCardExpiryDate)).perform(typeText(StaticMock.DUMMY_EXPIRATION_DATE));
-//        sleep();
-//        onView(withId(R.id.mpsdkNextButton)).perform(click());
-//        onView(withId(R.id.mpsdkCardSecurityCode)).perform(typeText(card.getSecurityCode()));
-//
-//        new Handler(activity.getMainLooper()).post(new Runnable() {
-//            @Override
-//            public void run() {
-//                activity.recreate();
-//
-//            }
-//        });
-//        onView(withId(R.id.mpsdkCardNumber)).check(matches(withText(card.getNumberWithMask())));
-//        sleep();
-//        onView(withId(R.id.mpsdkCardNumberTextView)).check(matches(withText(containsString(card.getNumberWithMask()))));
-//        sleep();
-//        onView(withId(R.id.mpsdkNextButton)).perform(click());
-//        onView(withId(R.id.mpsdkCardholderName)).check(matches(withText(StaticMock.DUMMY_CARDHOLDER_NAME.toUpperCase())));
-//        onView(withId(R.id.mpsdkCardholderNameView)).check(matches(withText(StaticMock.DUMMY_CARDHOLDER_NAME.toUpperCase())));
-//        sleep();
-//        onView(withId(R.id.mpsdkNextButton)).perform(click());
-//        onView(withId(R.id.mpsdkCardExpiryDate)).check(matches(withText(StaticMock.DUMMY_EXPIRATION_DATE_WITH_MASK)));
-//        onView(withId(R.id.mpsdkCardHolderExpiryYear)).check(matches(withText(StaticMock.DUMMY_EXPIRATION_DATE.substring(2, 4))));
-//        onView(withId(R.id.mpsdkCardHolderExpiryMonth)).check(matches(withText(StaticMock.DUMMY_EXPIRATION_DATE.substring(0, 2))));
-//        sleep();
-//        onView(withId(R.id.mpsdkNextButton)).perform(click());
-//        //Front
-//        onView(withId(R.id.mpsdkCardSecurityCode)).check(matches(withText(card.getSecurityCode())));
-//        onView(withId(R.id.mpsdkCardSecurityCodeView)).check(matches((withText(card.getSecurityCode()))));
-//        sleep();
-//    }
-//
-//    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-//    @Test
-//    public void onRestoreInstanceRestoreVariablesBackCard() {
-//        addInitCalls();
-//        addInitCalls();
-//        final GuessingCardActivity activity = mTestRule.launchActivity(validStartIntent);
-//        final DummyCard card = getDummyCard("visa");
-//
-//        onView(withId(R.id.mpsdkCardNumber)).perform(typeText(card.getCardNumber()));
-//        sleep();
-//        onView(withId(R.id.mpsdkNextButton)).perform(click());
-//        onView(withId(R.id.mpsdkCardholderName)).perform(typeText(StaticMock.DUMMY_CARDHOLDER_NAME));
-//        sleep();
-//        onView(withId(R.id.mpsdkNextButton)).perform(click());
-//        onView(withId(R.id.mpsdkCardExpiryDate)).perform(typeText(StaticMock.DUMMY_EXPIRATION_DATE));
-//        sleep();
-//        onView(withId(R.id.mpsdkNextButton)).perform(click());
-//        onView(withId(R.id.mpsdkCardSecurityCode)).perform(typeText(card.getSecurityCode()));
-//
-//        new Handler(activity.getMainLooper()).post(new Runnable() {
-//            @Override
-//            public void run() {
-//                activity.recreate();
-//
-//            }
-//        });
-//        onView(withId(R.id.mpsdkCardNumber)).check(matches(withText(card.getNumberWithMask())));
-//        onView(withId(R.id.mpsdkCardNumberTextView)).check(matches(withText(containsString(card.getNumberWithMask()))));
-//        sleep();
-//        onView(withId(R.id.mpsdkNextButton)).perform(click());
-//        onView(withId(R.id.mpsdkCardholderName)).check(matches(withText(StaticMock.DUMMY_CARDHOLDER_NAME.toUpperCase())));
-//        onView(withId(R.id.mpsdkCardholderNameView)).check(matches(withText(StaticMock.DUMMY_CARDHOLDER_NAME.toUpperCase())));
-//        sleep();
-//        onView(withId(R.id.mpsdkNextButton)).perform(click());
-//        onView(withId(R.id.mpsdkCardExpiryDate)).check(matches(withText(StaticMock.DUMMY_EXPIRATION_DATE_WITH_MASK)));
-//        onView(withId(R.id.mpsdkCardHolderExpiryYear)).check(matches(withText(StaticMock.DUMMY_EXPIRATION_DATE.substring(2, 4))));
-//        onView(withId(R.id.mpsdkCardHolderExpiryMonth)).check(matches(withText(StaticMock.DUMMY_EXPIRATION_DATE.substring(0, 2))));
-//        sleep();
-//        onView(withId(R.id.mpsdkNextButton)).perform(click());
-//        //Back
-//        onView(withId(R.id.mpsdkCardSecurityCode)).check(matches(withText(card.getSecurityCode())));
-//        onView(withId(R.id.mpsdkCardSecurityCodeView)).check(matches((withText(card.getSecurityCode()))));
-//        sleep();
-//    }
-//
-//    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-//    @Test
-//    public void onRestoreInstanceRestoreVariablesIdentificationCard() {
-//        addInitCalls();
-//        addInitCalls();
-//        sleep();
-//        final GuessingCardActivity activity = mTestRule.launchActivity(validStartIntent);
-//        final DummyCard card = getDummyCard("amex");
-//        final DummyIdentificationType identificationType = IdentificationTestUtils.getDummyIdentificationType("DNI");
-//
-//        onView(withId(R.id.mpsdkCardNumber)).perform(typeText(card.getCardNumber()));
-//        sleep();
-//        onView(withId(R.id.mpsdkNextButton)).perform(click());
-//        onView(withId(R.id.mpsdkCardholderName)).perform(typeText(StaticMock.DUMMY_CARDHOLDER_NAME));
-//        sleep();
-//        onView(withId(R.id.mpsdkNextButton)).perform(click());
-//        onView(withId(R.id.mpsdkCardExpiryDate)).perform(typeText(StaticMock.DUMMY_EXPIRATION_DATE));
-//        sleep();
-//        onView(withId(R.id.mpsdkNextButton)).perform(click());
-//        onView(withId(R.id.mpsdkCardSecurityCode)).perform(typeText(card.getSecurityCode()));
-//        sleep();
-//        onView(withId(R.id.mpsdkNextButton)).perform(click());
-//        onView(withId(R.id.mpsdkCardIdentificationNumber)).perform(typeText(identificationType.getIdentificationNumber()));
-//        sleep();
-//
-//        new Handler(activity.getMainLooper()).post(new Runnable() {
-//            @Override
-//            public void run() {
-//                activity.recreate();
-//
-//            }
-//        });
-//        onView(withId(R.id.mpsdkCardNumber)).check(matches(withText(card.getNumberWithMask())));
-//        onView(withId(R.id.mpsdkCardNumberTextView)).check(matches(withText(containsString(card.getNumberWithMask()))));
-//        sleep();
-//        onView(withId(R.id.mpsdkNextButton)).perform(click());
-//        onView(withId(R.id.mpsdkCardholderName)).check(matches(withText(StaticMock.DUMMY_CARDHOLDER_NAME.toUpperCase())));
-//        onView(withId(R.id.mpsdkCardholderNameView)).check(matches(withText(StaticMock.DUMMY_CARDHOLDER_NAME.toUpperCase())));
-//        sleep();
-//        onView(withId(R.id.mpsdkNextButton)).perform(click());
-//        onView(withId(R.id.mpsdkCardExpiryDate)).check(matches(withText(StaticMock.DUMMY_EXPIRATION_DATE_WITH_MASK)));
-//        onView(withId(R.id.mpsdkCardHolderExpiryYear)).check(matches(withText(StaticMock.DUMMY_EXPIRATION_DATE.substring(2, 4))));
-//        onView(withId(R.id.mpsdkCardHolderExpiryMonth)).check(matches(withText(StaticMock.DUMMY_EXPIRATION_DATE.substring(0, 2))));
-//        sleep();
-//        onView(withId(R.id.mpsdkNextButton)).perform(click());
-//        //Front
-//        onView(withId(R.id.mpsdkCardSecurityCode)).check(matches(withText(card.getSecurityCode())));
-//        onView(withId(R.id.mpsdkCardSecurityCodeView)).check(matches((withText(card.getSecurityCode()))));
-//        sleep();
-//        onView(withId(R.id.mpsdkNextButton)).perform(click());
-//        sleep();
-//        //Identification
-//        onView(withId(R.id.mpsdkCardIdentificationNumber)).check(matches(withText(identificationType.getIdentificationNumber())));
-//        sleep();
-//    }
-//
-//    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-//    @Test
-//    public void onRestoreInstanceRestoreVariablesIdentificationCardAndBack() {
-//        addInitCalls();
-//        addInitCalls();
-//        sleep();
-//        final GuessingCardActivity activity = mTestRule.launchActivity(validStartIntent);
-//        final DummyCard card = getDummyCard("visa");
-//        final DummyIdentificationType identificationType = IdentificationTestUtils.getDummyIdentificationType("DNI");
-//
-//        onView(withId(R.id.mpsdkCardNumber)).perform(typeText(card.getCardNumber()));
-//        sleep();
-//        onView(withId(R.id.mpsdkNextButton)).perform(click());
-//        onView(withId(R.id.mpsdkCardholderName)).perform(typeText(StaticMock.DUMMY_CARDHOLDER_NAME));
-//        sleep();
-//        onView(withId(R.id.mpsdkNextButton)).perform(click());
-//        onView(withId(R.id.mpsdkCardExpiryDate)).perform(typeText(StaticMock.DUMMY_EXPIRATION_DATE));
-//        sleep();
-//        onView(withId(R.id.mpsdkNextButton)).perform(click());
-//        onView(withId(R.id.mpsdkCardSecurityCode)).perform(typeText(card.getSecurityCode()));
-//        sleep();
-//        onView(withId(R.id.mpsdkNextButton)).perform(click());
-//        onView(withId(R.id.mpsdkCardIdentificationNumber)).perform(typeText(identificationType.getIdentificationNumber()));
-//        sleep();
-//
-//        new Handler(activity.getMainLooper()).post(new Runnable() {
-//            @Override
-//            public void run() {
-//                activity.recreate();
-//
-//            }
-//        });
-//        onView(withId(R.id.mpsdkCardNumber)).check(matches(withText(card.getNumberWithMask())));
-//        onView(withId(R.id.mpsdkCardNumberTextView)).check(matches(withText(containsString(card.getNumberWithMask()))));
-//        sleep();
-//        onView(withId(R.id.mpsdkNextButton)).perform(click());
-//        onView(withId(R.id.mpsdkCardholderName)).check(matches(withText(StaticMock.DUMMY_CARDHOLDER_NAME.toUpperCase())));
-//        onView(withId(R.id.mpsdkCardholderNameView)).check(matches(withText(StaticMock.DUMMY_CARDHOLDER_NAME.toUpperCase())));
-//        sleep();
-//        onView(withId(R.id.mpsdkNextButton)).perform(click());
-//        onView(withId(R.id.mpsdkCardExpiryDate)).check(matches(withText(StaticMock.DUMMY_EXPIRATION_DATE_WITH_MASK)));
-//        onView(withId(R.id.mpsdkCardHolderExpiryYear)).check(matches(withText(StaticMock.DUMMY_EXPIRATION_DATE.substring(2, 4))));
-//        onView(withId(R.id.mpsdkCardHolderExpiryMonth)).check(matches(withText(StaticMock.DUMMY_EXPIRATION_DATE.substring(0, 2))));
-//        sleep();
-//        onView(withId(R.id.mpsdkNextButton)).perform(click());
-//        //Back
-//        onView(withId(R.id.mpsdkCardSecurityCode)).check(matches(withText(card.getSecurityCode())));
-//        onView(withId(R.id.mpsdkCardSecurityCodeView)).check(matches((withText(card.getSecurityCode()))));
-//        sleep();
-//        onView(withId(R.id.mpsdkNextButton)).perform(click());
-//        sleep();
-//        //Identification
-//        onView(withId(R.id.mpsdkCardIdentificationNumber)).check(matches(withText(identificationType.getIdentificationNumber())));
-//        sleep();
-//    }
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    @Test
+    public void onRestoreInstanceRestoreVariablesFrontCard() {
+        addInitCalls();
+        addInitCalls();
+        final GuessingCardActivity activity = mTestRule.launchActivity(validStartIntent);
+        final DummyCard card = getDummyCard("amex");
+
+        onView(withId(R.id.mpsdkCardNumber)).perform(typeText(card.getCardNumber()));
+        sleep();
+        onView(withId(R.id.mpsdkNextButton)).perform(click());
+        onView(withId(R.id.mpsdkCardholderName)).perform(typeText(StaticMock.DUMMY_CARDHOLDER_NAME));
+        sleep();
+        onView(withId(R.id.mpsdkNextButton)).perform(click());
+        onView(withId(R.id.mpsdkCardExpiryDate)).perform(typeText(StaticMock.DUMMY_EXPIRATION_DATE));
+        sleep();
+        onView(withId(R.id.mpsdkNextButton)).perform(click());
+        onView(withId(R.id.mpsdkCardSecurityCode)).perform(typeText(card.getSecurityCode()));
+
+        new Handler(activity.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                activity.recreate();
+
+            }
+        });
+        sleep();
+        onView(withId(R.id.mpsdkCardNumber)).check(matches(withText(card.getNumberWithMask())));
+        sleep();
+        onView(withId(R.id.mpsdkCardNumberTextView)).check(matches(withText(containsString(card.getNumberWithMask()))));
+        sleep();
+        onView(withId(R.id.mpsdkNextButton)).perform(click());
+        onView(withId(R.id.mpsdkCardholderName)).check(matches(withText(StaticMock.DUMMY_CARDHOLDER_NAME.toUpperCase())));
+        onView(withId(R.id.mpsdkCardholderNameView)).check(matches(withText(StaticMock.DUMMY_CARDHOLDER_NAME.toUpperCase())));
+        sleep();
+        onView(withId(R.id.mpsdkNextButton)).perform(click());
+        onView(withId(R.id.mpsdkCardExpiryDate)).check(matches(withText(StaticMock.DUMMY_EXPIRATION_DATE_WITH_MASK)));
+        onView(withId(R.id.mpsdkCardHolderExpiryYear)).check(matches(withText(StaticMock.DUMMY_EXPIRATION_DATE.substring(2, 4))));
+        onView(withId(R.id.mpsdkCardHolderExpiryMonth)).check(matches(withText(StaticMock.DUMMY_EXPIRATION_DATE.substring(0, 2))));
+        sleep();
+        onView(withId(R.id.mpsdkNextButton)).perform(click());
+        //Front
+        sleep();
+    }
+
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    @Test
+    public void onRestoreInstanceRestoreVariablesBackCard() {
+        addInitCalls();
+        addInitCalls();
+        final GuessingCardActivity activity = mTestRule.launchActivity(validStartIntent);
+        final DummyCard card = getDummyCard("visa");
+
+        onView(withId(R.id.mpsdkCardNumber)).perform(typeText(card.getCardNumber()));
+        sleep();
+        onView(withId(R.id.mpsdkNextButton)).perform(click());
+        onView(withId(R.id.mpsdkCardholderName)).perform(typeText(StaticMock.DUMMY_CARDHOLDER_NAME));
+        sleep();
+        onView(withId(R.id.mpsdkNextButton)).perform(click());
+        onView(withId(R.id.mpsdkCardExpiryDate)).perform(typeText(StaticMock.DUMMY_EXPIRATION_DATE));
+        sleep();
+        onView(withId(R.id.mpsdkNextButton)).perform(click());
+        onView(withId(R.id.mpsdkCardSecurityCode)).perform(typeText(card.getSecurityCode()));
+
+        new Handler(activity.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                activity.recreate();
+
+            }
+        });
+        onView(withId(R.id.mpsdkCardNumber)).check(matches(withText(card.getNumberWithMask())));
+        onView(withId(R.id.mpsdkCardNumberTextView)).check(matches(withText(containsString(card.getNumberWithMask()))));
+        sleep();
+        onView(withId(R.id.mpsdkNextButton)).perform(click());
+        onView(withId(R.id.mpsdkCardholderName)).check(matches(withText(StaticMock.DUMMY_CARDHOLDER_NAME.toUpperCase())));
+        onView(withId(R.id.mpsdkCardholderNameView)).check(matches(withText(StaticMock.DUMMY_CARDHOLDER_NAME.toUpperCase())));
+        sleep();
+        onView(withId(R.id.mpsdkNextButton)).perform(click());
+        onView(withId(R.id.mpsdkCardExpiryDate)).check(matches(withText(StaticMock.DUMMY_EXPIRATION_DATE_WITH_MASK)));
+        onView(withId(R.id.mpsdkCardHolderExpiryYear)).check(matches(withText(StaticMock.DUMMY_EXPIRATION_DATE.substring(2, 4))));
+        onView(withId(R.id.mpsdkCardHolderExpiryMonth)).check(matches(withText(StaticMock.DUMMY_EXPIRATION_DATE.substring(0, 2))));
+        sleep();
+        onView(withId(R.id.mpsdkNextButton)).perform(click());
+        //Back
+        sleep();
+    }
+
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    @Test
+    public void onRestoreInstanceRestoreVariablesIdentificationCard() {
+        addInitCalls();
+        addInitCalls();
+        sleep();
+        final GuessingCardActivity activity = mTestRule.launchActivity(validStartIntent);
+        final DummyCard card = getDummyCard("amex");
+        final DummyIdentificationType identificationType = IdentificationTestUtils.getDummyIdentificationType("DNI");
+
+        onView(withId(R.id.mpsdkCardNumber)).perform(typeText(card.getCardNumber()));
+        sleep();
+        onView(withId(R.id.mpsdkNextButton)).perform(click());
+        onView(withId(R.id.mpsdkCardholderName)).perform(typeText(StaticMock.DUMMY_CARDHOLDER_NAME));
+        sleep();
+        onView(withId(R.id.mpsdkNextButton)).perform(click());
+        onView(withId(R.id.mpsdkCardExpiryDate)).perform(typeText(StaticMock.DUMMY_EXPIRATION_DATE));
+        sleep();
+        onView(withId(R.id.mpsdkNextButton)).perform(click());
+        onView(withId(R.id.mpsdkCardSecurityCode)).perform(typeText(card.getSecurityCode()));
+        sleep();
+        onView(withId(R.id.mpsdkNextButton)).perform(click());
+        onView(withId(R.id.mpsdkCardIdentificationNumber)).perform(typeText(identificationType.getIdentificationNumber()));
+        sleep();
+
+        new Handler(activity.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                activity.recreate();
+
+            }
+        });
+        onView(withId(R.id.mpsdkCardNumber)).check(matches(withText(card.getNumberWithMask())));
+        onView(withId(R.id.mpsdkCardNumberTextView)).check(matches(withText(containsString(card.getNumberWithMask()))));
+        sleep();
+        onView(withId(R.id.mpsdkNextButton)).perform(click());
+        onView(withId(R.id.mpsdkCardholderName)).check(matches(withText(StaticMock.DUMMY_CARDHOLDER_NAME.toUpperCase())));
+        onView(withId(R.id.mpsdkCardholderNameView)).check(matches(withText(StaticMock.DUMMY_CARDHOLDER_NAME.toUpperCase())));
+        sleep();
+        onView(withId(R.id.mpsdkNextButton)).perform(click());
+        onView(withId(R.id.mpsdkCardExpiryDate)).check(matches(withText(StaticMock.DUMMY_EXPIRATION_DATE_WITH_MASK)));
+        onView(withId(R.id.mpsdkCardHolderExpiryYear)).check(matches(withText(StaticMock.DUMMY_EXPIRATION_DATE.substring(2, 4))));
+        onView(withId(R.id.mpsdkCardHolderExpiryMonth)).check(matches(withText(StaticMock.DUMMY_EXPIRATION_DATE.substring(0, 2))));
+        sleep();
+        onView(withId(R.id.mpsdkNextButton)).perform(click());
+        //Front
+        sleep();
+        onView(withId(R.id.mpsdkCardSecurityCode)).perform(typeText(card.getSecurityCode()));
+        sleep();
+        onView(withId(R.id.mpsdkNextButton)).perform(click());
+        sleep();
+        //Identification
+        onView(withId(R.id.mpsdkCardIdentificationNumber)).check(matches(withText(identificationType.getIdentificationNumber())));
+        onView(withId(R.id.mpsdkIdNumberView)).check(matches(withText(MPCardMaskUtil.buildIdentificationNumberWithDecimalSeparator(
+                        identificationType.getIdentificationNumber()))));
+        sleep();
+    }
+
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    @Test
+    public void onRestoreInstanceRestoreVariablesIdentificationCardAndBack() {
+        addInitCalls();
+        addInitCalls();
+        sleep();
+        final GuessingCardActivity activity = mTestRule.launchActivity(validStartIntent);
+        final DummyCard card = getDummyCard("visa");
+        final DummyIdentificationType identificationType = IdentificationTestUtils.getDummyIdentificationType("DNI");
+
+        onView(withId(R.id.mpsdkCardNumber)).perform(typeText(card.getCardNumber()));
+        sleep();
+        onView(withId(R.id.mpsdkNextButton)).perform(click());
+        onView(withId(R.id.mpsdkCardholderName)).perform(typeText(StaticMock.DUMMY_CARDHOLDER_NAME));
+        sleep();
+        onView(withId(R.id.mpsdkNextButton)).perform(click());
+        onView(withId(R.id.mpsdkCardExpiryDate)).perform(typeText(StaticMock.DUMMY_EXPIRATION_DATE));
+        sleep();
+        onView(withId(R.id.mpsdkNextButton)).perform(click());
+        onView(withId(R.id.mpsdkCardSecurityCode)).perform(typeText(card.getSecurityCode()));
+        sleep();
+        onView(withId(R.id.mpsdkNextButton)).perform(click());
+        onView(withId(R.id.mpsdkCardIdentificationNumber)).perform(typeText(identificationType.getIdentificationNumber()));
+        sleep();
+
+        new Handler(activity.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                activity.recreate();
+
+            }
+        });
+        onView(withId(R.id.mpsdkCardNumber)).check(matches(withText(card.getNumberWithMask())));
+        onView(withId(R.id.mpsdkCardNumberTextView)).check(matches(withText(containsString(card.getNumberWithMask()))));
+        sleep();
+        onView(withId(R.id.mpsdkNextButton)).perform(click());
+        onView(withId(R.id.mpsdkCardholderName)).check(matches(withText(StaticMock.DUMMY_CARDHOLDER_NAME.toUpperCase())));
+        onView(withId(R.id.mpsdkCardholderNameView)).check(matches(withText(StaticMock.DUMMY_CARDHOLDER_NAME.toUpperCase())));
+        sleep();
+        onView(withId(R.id.mpsdkNextButton)).perform(click());
+        onView(withId(R.id.mpsdkCardExpiryDate)).check(matches(withText(StaticMock.DUMMY_EXPIRATION_DATE_WITH_MASK)));
+        onView(withId(R.id.mpsdkCardHolderExpiryYear)).check(matches(withText(StaticMock.DUMMY_EXPIRATION_DATE.substring(2, 4))));
+        onView(withId(R.id.mpsdkCardHolderExpiryMonth)).check(matches(withText(StaticMock.DUMMY_EXPIRATION_DATE.substring(0, 2))));
+        sleep();
+        onView(withId(R.id.mpsdkNextButton)).perform(click());
+        //Back
+        onView(withId(R.id.mpsdkCardSecurityCode)).perform(typeText(card.getSecurityCode()));
+        sleep();
+        onView(withId(R.id.mpsdkNextButton)).perform(click());
+        sleep();
+        //Identification
+        onView(withId(R.id.mpsdkCardIdentificationNumber)).check(matches(withText(identificationType.getIdentificationNumber())));
+        sleep();
+    }
     //CUSTOMER CARDS
 
 //    @Test
@@ -1800,6 +1806,60 @@ public class GuessingCardActivityTest {
         addBankDealsCall();
         addPaymentMethodsCall();
         addIdentificationTypesCall();
+    }
+
+    //Recoverable Payment
+    @Test
+    public void showCardHolderInformationTypedWhenPaymentRecoveryReceived() {
+        addBankDealsCall();
+        addPaymentMethodsCall();
+        addIdentificationTypesCall();
+
+        Token token = StaticMock.getToken();
+        Payment payment = StaticMock.getPaymentRejectedBadFilledSecurityCode();
+        PaymentMethod paymentMethod = StaticMock.getPaymentMethodOn();
+        PayerCost payerCost = StaticMock.getPayerCostWithInterests();
+        Issuer issuer = StaticMock.getIssuer();
+
+        PaymentRecovery paymentRecovery = new PaymentRecovery(token, payment, paymentMethod, payerCost, issuer);
+        validStartIntent.putExtra("paymentRecovery", JsonUtil.getInstance().toJson(paymentRecovery));
+
+        mTestRule.launchActivity(validStartIntent);
+
+        onView(withId(R.id.mpsdkCardNumber)).perform(typeText(StaticMock.DUMMY_CARD_NUMBER_VISA));
+        onView(withId(R.id.mpsdkNextButton)).perform(click());
+        onView(withId(R.id.mpsdkCardholderName)).check(matches(withText(paymentRecovery.getToken().getCardHolder().getName())));
+        onView(withId(R.id.mpsdkNextButton)).perform(click());
+        onView(withId(R.id.mpsdkCardExpiryDate)).perform(typeText(StaticMock.DUMMY_EXPIRATION_DATE));
+        onView(withId(R.id.mpsdkNextButton)).perform(click());
+        onView(withId(R.id.mpsdkCardSecurityCode)).perform(typeText(StaticMock.DUMMY_SECURITY_CODE));
+        onView(withId(R.id.mpsdkNextButton)).perform(click());
+        onView(withId(R.id.mpsdkCardIdentificationNumber)).check(matches(withText(paymentRecovery.getToken().getCardHolder().getIdentification().getNumber())));
+        onView(withId(R.id.mpsdkCardIdentificationType)).check(matches((isDisplayed())));
+    }
+
+    //MLM
+    @Test
+    public void showPaymentTypeSelectionWhenGuessingDoesntResolvePaymentType() {
+        addBankDealsCall();
+        addPaymentMethodsCallMLM();
+        addIdentificationTypesCall();
+
+        mTestRule.launchActivity(validStartIntent);
+        DummyCard card = CardTestUtils.getDummyCard("master_mlm");
+
+        onView(withId(R.id.mpsdkCardNumber)).perform(typeText(card.getCardNumber()));
+        onView(withId(R.id.mpsdkNextButton)).perform(click());
+        onView(withId(R.id.mpsdkCardholderName)).perform(typeText(StaticMock.DUMMY_CARDHOLDER_NAME));
+        onView(withId(R.id.mpsdkNextButton)).perform(click());
+        onView(withId(R.id.mpsdkCardExpiryDate)).perform(typeText(StaticMock.DUMMY_EXPIRATION_DATE));
+        onView(withId(R.id.mpsdkNextButton)).perform(click());
+        onView(withId(R.id.mpsdkCardSecurityCode)).perform(typeText(card.getSecurityCode()));
+        onView(withId(R.id.mpsdkNextButton)).perform(click());
+
+        Intent paymentTypeResultIntent = new Intent();
+        Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(Activity.RESULT_OK, paymentTypeResultIntent);
+        intending(hasComponent(PaymentTypesActivity.class.getName())).respondWith(result);
     }
 
     //Recoverable Token
@@ -1887,36 +1947,159 @@ public class GuessingCardActivityTest {
 //        ActivityResultUtil.assertFinishCalledWithResult(mTestRule.getActivity(), Activity.RESULT_CANCELED);
 //
 //    }
+//
+//    //Recoverable Payment
+//    @Test
+//    public void ifPaymentRecoveryReceivedWithPaymentStatusDetailBadFilledStartGuessing() {
+//        addBankDealsCall();
+//        String paymentMethods = StaticMock.getPaymentMethodList();
+//        Type listType = new TypeToken<List<PaymentMethod>>() {}.getType();
+//        List<PaymentMethod> paymentMethodList = JsonUtil.getInstance().getGson().fromJson(paymentMethods, listType);
+//        validStartIntent.putExtra("paymentMethodList", JsonUtil.getInstance().toJson(paymentMethodList));
+//
+//        Token token = StaticMock.getToken();
+//        Payment payment = StaticMock.getPaymentRejectedBadFilledSecurityCode();
+//        PaymentMethod paymentMethod = StaticMock.getPaymentMethodOn();
+//        PayerCost payerCost = StaticMock.getPayerCostWithInterests();
+//        Issuer issuer  = StaticMock.getIssuer();
+//
+//        PaymentRecovery paymentRecovery = new PaymentRecovery(token, payment, paymentMethod, payerCost, issuer);
+//        validStartIntent.putExtra("paymentRecovery", JsonUtil.getInstance().toJson(paymentRecovery));
+//
+//        addIdentificationTypesCall();
+//
+//        mTestRule.launchActivity(validStartIntent);
+//
+//        onView(withId(R.id.mpsdkCardholderNameView)).check(matches(withText(paymentRecovery.getToken().getCardHolder().getName().toUpperCase())));
+//    }
+//
+//    @Test
+//    public void ifPaymentRecoveryReceivedWithPaymentStatusDetailBadFilledShowCardHolderNameTyped() {
+//        addBankDealsCall();
+//        String paymentMethods = StaticMock.getPaymentMethodList();
+//        Type listType = new TypeToken<List<PaymentMethod>>() {
+//        }.getType();
+//        List<PaymentMethod> paymentMethodList = JsonUtil.getInstance().getGson().fromJson(paymentMethods, listType);
+//        validStartIntent.putExtra("paymentMethodList", JsonUtil.getInstance().toJson(paymentMethodList));
+//
+//        Token token = StaticMock.getToken();
+//        Payment payment = StaticMock.getPaymentRejectedBadFilledSecurityCode();
+//        PaymentMethod paymentMethod = StaticMock.getPaymentMethodOn();
+//        PayerCost payerCost = StaticMock.getPayerCostWithInterests();
+//        Issuer issuer  = StaticMock.getIssuer();
+//
+//        PaymentRecovery paymentRecovery = new PaymentRecovery(token, payment, paymentMethod, payerCost, issuer);
+//        validStartIntent.putExtra("paymentRecovery", JsonUtil.getInstance().toJson(paymentRecovery));
+//
+//        addIdentificationTypesCall();
+//
+//        mTestRule.launchActivity(validStartIntent);
+//
+//        onView(withId(R.id.mpsdkCardNumberTextView)).check(matches(isDisplayed()));
+//        onView(withId(R.id.mpsdkCardNumber)).perform(typeText(StaticMock.DUMMY_CARD_NUMBER));
+//        onView(withId(R.id.mpsdkNextButton)).perform(click());
+//        onView(withId(R.id.mpsdkCardholderName)).check(matches(withText(paymentRecovery.getToken().getCardHolder().getName().toUpperCase())));
+//    }
+//
+//    @Test
+//    public void ifPaymentRecoveryReceivedWithPaymentStatusDetailBadFilledShowCardHolderIdentificationTyped() {
+//        addBankDealsCall();
+//        String paymentMethods = StaticMock.getPaymentMethodList();
+//        Type listType = new TypeToken<List<PaymentMethod>>() {
+//        }.getType();
+//        List<PaymentMethod> paymentMethodList = JsonUtil.getInstance().getGson().fromJson(paymentMethods, listType);
+//        validStartIntent.putExtra("paymentMethodList", JsonUtil.getInstance().toJson(paymentMethodList));
+//
+//        Token token = StaticMock.getToken();
+//        Payment payment = StaticMock.getPaymentRejectedBadFilledSecurityCode();
+//        PaymentMethod paymentMethod = StaticMock.getPaymentMethodOn();
+//        PayerCost payerCost = StaticMock.getPayerCostWithInterests();
+//        Issuer issuer  = StaticMock.getIssuer();
+//
+//        PaymentRecovery paymentRecovery = new PaymentRecovery(token, payment, paymentMethod, payerCost, issuer);
+//        validStartIntent.putExtra("paymentRecovery", JsonUtil.getInstance().toJson(paymentRecovery));
+//
+//        addIdentificationTypesCall();
+//
+//        mTestRule.launchActivity(validStartIntent);
+//
+//        onView(withId(R.id.mpsdkCardNumberTextView)).check(matches(isDisplayed()));
+//        onView(withId(R.id.mpsdkCardNumber)).perform(typeText(StaticMock.DUMMY_CARD_NUMBER));
+//        onView(withId(R.id.mpsdkNextButton)).perform(click());
+//        onView(withId(R.id.mpsdkCardholderName)).check(matches(withText(paymentRecovery.getToken().getCardHolder().getName().toUpperCase())));
+//        onView(withId(R.id.mpsdkNextButton)).perform(click());
+//        onView(withId(R.id.mpsdkCardExpiryDate)).perform(typeText(StaticMock.DUMMY_EXPIRATION_DATE));
+//        onView(withId(R.id.mpsdkNextButton)).perform(click());
+//        onView(withId(R.id.mpsdkCardSecurityCode)).perform(typeText(StaticMock.DUMMY_SECURITY_CODE));
+//        onView(withId(R.id.mpsdkNextButton)).perform(click());
+//        onView(withId(R.id.mpsdkCardIdentificationNumber)).check(matches(withText(paymentRecovery.getToken().getCardHolder().getIdentification().getNumber())));
+//        onView(withId(R.id.mpsdkCardIdentificationType)).check(matches((isDisplayed())));
+//    }
+//
+//    @Test
+//    public void ifPaymentRecoveryWithAmexPaymentStatusDetailBadFilledReceivedShowCardHolderNameTyped() {
+//        addBankDealsCall();
+//        String paymentMethods = StaticMock.getPaymentMethodList();
+//        Type listType = new TypeToken<List<PaymentMethod>>() {
+//        }.getType();
+//        List<PaymentMethod> paymentMethodList = JsonUtil.getInstance().getGson().fromJson(paymentMethods, listType);
+//        validStartIntent.putExtra("paymentMethodList", JsonUtil.getInstance().toJson(paymentMethodList));
+//
+//        Token token = StaticMock.getTokenAmex();
+//        Payment payment = StaticMock.getAmexPaymentRejectedBadFilledSecurityCode();
+//        PaymentMethod paymentMethod = StaticMock.getAmexPaymentMethodOn();
+//        PayerCost payerCost = StaticMock.getPayerCostWithInterests();
+//        Issuer issuer  = StaticMock.getIssuer();
+//
+//        PaymentRecovery paymentRecovery = new PaymentRecovery(token, payment, paymentMethod, payerCost, issuer);
+//        validStartIntent.putExtra("paymentRecovery", JsonUtil.getInstance().toJson(paymentRecovery));
+//
+//        addIdentificationTypesCall();
+//
+//        mTestRule.launchActivity(validStartIntent);
+//
+//        onView(withId(R.id.mpsdkCardNumberTextView)).check(matches(isDisplayed()));
+//        onView(withId(R.id.mpsdkCardNumber)).perform(typeText(StaticMock.DUMMY_CARD_NUMBER_AMEX));
+//        onView(withId(R.id.mpsdkNextButton)).perform(click());
+//        onView(withId(R.id.mpsdkCardholderName)).check(matches(withText(paymentRecovery.getToken().getCardHolder().getName().toUpperCase())));
+//    }
+//
+//    @Test
+//    public void ifPaymentRecoveryWithAmexPaymentStatusDetailBadFilledReceivedShowCardHolderIdentificationTyped() {
+//        addBankDealsCall();
+//        String paymentMethods = StaticMock.getPaymentMethodList();
+//        Type listType = new TypeToken<List<PaymentMethod>>() {
+//        }.getType();
+//        List<PaymentMethod> paymentMethodList = JsonUtil.getInstance().getGson().fromJson(paymentMethods, listType);
+//        validStartIntent.putExtra("paymentMethodList", JsonUtil.getInstance().toJson(paymentMethodList));
+//
+//        Token token = StaticMock.getTokenAmex();
+//        Payment payment = StaticMock.getAmexPaymentRejectedBadFilledSecurityCode();
+//        PaymentMethod paymentMethod = StaticMock.getAmexPaymentMethodOn();
+//        PayerCost payerCost = StaticMock.getPayerCostWithInterests();
+//        Issuer issuer = StaticMock.getIssuer();
+//
+//        PaymentRecovery paymentRecovery = new PaymentRecovery(token, payment, paymentMethod, payerCost, issuer);
+//        validStartIntent.putExtra("paymentRecovery", JsonUtil.getInstance().toJson(paymentRecovery));
+//
+//        addIdentificationTypesCall();
+//
+//        mTestRule.launchActivity(validStartIntent);
+//
+//        onView(withId(R.id.mpsdkCardNumberTextView)).check(matches(isDisplayed()));
+//        onView(withId(R.id.mpsdkCardNumber)).perform(typeText(StaticMock.DUMMY_CARD_NUMBER_AMEX));
+//        onView(withId(R.id.mpsdkNextButton)).perform(click());
+//        onView(withId(R.id.mpsdkCardholderName)).check(matches(withText(token.getCardHolder().getName().toUpperCase())));
+//        onView(withId(R.id.mpsdkNextButton)).perform(click());
+//        onView(withId(R.id.mpsdkCardExpiryDate)).perform(typeText(StaticMock.DUMMY_EXPIRATION_DATE));
+//        onView(withId(R.id.mpsdkNextButton)).perform(click());
+//        onView(withId(R.id.mpsdkCardSecurityCode)).perform(typeText(StaticMock.DUMMY_SECURITY_CODE_FOUR_DIGITS));
+//        onView(withId(R.id.mpsdkNextButton)).perform(click());
+//        onView(withId(R.id.mpsdkCardIdentificationNumber)).check(matches(withText(token.getCardHolder().getIdentification().getNumber())));
+//        onView(withId(R.id.mpsdkCardIdentificationType)).check(matches((isDisplayed())));
+//    }
 
-    //Recoverable Payment
-    @Test
-    public void showCardHolderInformationTypedWhenPaymentRecoveryReceived() {
-        addBankDealsCall();
-        addPaymentMethodsCall();
-        addIdentificationTypesCall();
 
-        Token token = StaticMock.getToken();
-        Payment payment = StaticMock.getPaymentRejectedBadFilledSecurityCode();
-        PaymentMethod paymentMethod = StaticMock.getPaymentMethodOn();
-        PayerCost payerCost = StaticMock.getPayerCostWithInterests();
-        Issuer issuer  = StaticMock.getIssuer();
-
-        PaymentRecovery paymentRecovery = new PaymentRecovery(token, payment, paymentMethod, payerCost, issuer);
-        validStartIntent.putExtra("paymentRecovery", JsonUtil.getInstance().toJson(paymentRecovery));
-
-        mTestRule.launchActivity(validStartIntent);
-
-        onView(withId(R.id.mpsdkCardNumber)).perform(typeText(StaticMock.DUMMY_CARD_NUMBER_VISA));
-        onView(withId(R.id.mpsdkNextButton)).perform(click());
-        onView(withId(R.id.mpsdkCardholderName)).check(matches(withText(paymentRecovery.getToken().getCardHolder().getName())));
-        onView(withId(R.id.mpsdkNextButton)).perform(click());
-        onView(withId(R.id.mpsdkCardExpiryDate)).perform(typeText(StaticMock.DUMMY_EXPIRATION_DATE));
-        onView(withId(R.id.mpsdkNextButton)).perform(click());
-        onView(withId(R.id.mpsdkCardSecurityCode)).perform(typeText(StaticMock.DUMMY_SECURITY_CODE));
-        onView(withId(R.id.mpsdkNextButton)).perform(click());
-        onView(withId(R.id.mpsdkCardIdentificationNumber)).check(matches(withText(paymentRecovery.getToken().getCardHolder().getIdentification().getNumber())));
-        onView(withId(R.id.mpsdkCardIdentificationType)).check(matches((isDisplayed())));
-    }
 
     //Timer
     @Test

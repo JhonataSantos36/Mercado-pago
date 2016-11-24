@@ -44,6 +44,8 @@ public class CardTestUtils {
                 return new DummyCard("cmr", "5570390633007137", DUMMY_SECURITY_CODE, "5570 3906 3300 7137");
             case "mercadopago_cc":
                 return new DummyCard("mercadopago_cc", "5150730431208304", DUMMY_SECURITY_CODE, "5150 7304 3120 8304");
+            case "master_mlm":
+                return new DummyCard("master", "5031755734530604", DUMMY_SECURITY_CODE, "5031 7557 3453 0604");
         }
         return null;
     }

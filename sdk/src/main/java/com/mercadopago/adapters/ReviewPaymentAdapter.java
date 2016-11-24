@@ -57,11 +57,17 @@ public class ReviewPaymentAdapter extends RecyclerView.Adapter<ReviewPaymentAdap
     @Override
     public ReviewPaymentAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int position) {
         PaymentMethod paymentMethod = mPaymentMethodList.get(position);
-        CardInfo cardInfo = mCardInfoList.get(position);
+        CardInfo cardInfo = null;
+        if (!mCardInfoList.isEmpty()) {
+            cardInfo = mCardInfoList.get(position);
+        }
         BigDecimal amount = mTotalAmountList.get(position);
         PaymentMethodSearchItem item = mPaymentMethodSearchItemList.get(position);
         String currencyId = mCurrenciesList.get(position);
-        PayerCost payerCost = mPayerCostList.get(position);
+        PayerCost payerCost = null;
+        if (!mPayerCostList.isEmpty()) {
+            payerCost = mPayerCostList.get(position);
+        }
         ReviewPaymentViewController paymentViewController = null;
         if (MercadoPagoUtil.isCard(paymentMethod.getPaymentTypeId())) {
             paymentViewController = ReviewPaymentViewFactory.getReviewPaymentMethodOnViewController(mContext,

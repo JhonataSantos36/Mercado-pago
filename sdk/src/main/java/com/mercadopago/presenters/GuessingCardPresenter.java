@@ -203,6 +203,18 @@ public class GuessingCardPresenter {
         this.mPaymentMethodList = paymentMethodList;
     }
 
+    public void setPaymentTypesList(List<PaymentType> paymentTypesList) {
+        this.mPaymentTypesList = paymentTypesList;
+    }
+
+    public void setIdentificationTypesList(List<IdentificationType> identificationTypesList) {
+        this.mIdentificationTypes = identificationTypesList;
+    }
+
+    public void setBankDealsList(List<BankDeal> bankDealsList) {
+        this.mBankDealsList = bankDealsList;
+    }
+
     public Identification getIdentification() {
         return mIdentification;
     }
@@ -269,7 +281,7 @@ public class GuessingCardPresenter {
         return PaymentMethodGuessingController.getCardNumberLength(mPaymentMethod, mBin);
     }
 
-    protected void initializeGuessingCardNumberController() {
+    public void initializeGuessingCardNumberController() {
         List<PaymentMethod> supportedPaymentMethods = mPaymentPreference
                 .getSupportedPaymentMethods(mPaymentMethodList);
         mPaymentMethodGuessingController = new PaymentMethodGuessingController(
@@ -344,16 +356,25 @@ public class GuessingCardPresenter {
         }
     }
 
+    public String getSavedBin() {
+        return mBin;
+    }
+
+    public void saveBin(String bin) {
+        mBin = bin;
+        mPaymentMethodGuessingController.saveBin(bin);
+    }
+
     public void configureWithSettings() {
         if (mPaymentMethod == null) return;
-        mBin = mPaymentMethodGuessingController.getSavedBin();
+
         mIsSecurityCodeRequired = mPaymentMethod.isSecurityCodeRequired(mBin);
         if (!mIsSecurityCodeRequired) {
             mView.hideSecurityCodeInput();
         }
         Setting setting = PaymentMethodGuessingController.getSettingByPaymentMethodAndBin(mPaymentMethod, mBin);
         if (setting == null) {
-            mView.showApiExceptionError(null);
+            mView.startErrorView("", "Setting not found for BIN");
         } else {
             int cardNumberLength = getCardNumberLength();
             int spaces = FrontCardView.CARD_DEFAULT_AMOUNT_SPACES;
@@ -498,7 +519,12 @@ public class GuessingCardPresenter {
         }
     }
 
+    public IdentificationType getIdentificationType() {
+        return this.mIdentificationType;
+    }
+
     public void setIdentificationNumber(String number) {
+        mIdentificationNumber = number;
         mIdentification.setNumber(number);
     }
 
@@ -506,8 +532,16 @@ public class GuessingCardPresenter {
         return mCardNumber;
     }
 
+    public void setCardNumber(String cardNumber) {
+        this.mCardNumber = cardNumber;
+    }
+
     public String getCardholderName() {
         return mCardholderName;
+    }
+
+    public void setCardholderName(String name) {
+        this.mCardholderName = name;
     }
 
     public String getExpiryMonth() {
@@ -516,6 +550,14 @@ public class GuessingCardPresenter {
 
     public String getExpiryYear() {
         return mExpiryYear;
+    }
+
+    public void setExpiryMonth(String expiryMonth) {
+        this.mExpiryMonth = expiryMonth;
+    }
+
+    public void setExpiryYear(String expiryYear) {
+        this.mExpiryYear = expiryYear;
     }
 
     public String getSecurityCode() {

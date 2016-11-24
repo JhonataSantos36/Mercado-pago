@@ -36,7 +36,7 @@ public class PaymentMethodGuessingController {
         if (mSavedBin.equals(bin) && mGuessedPaymentMethods != null) {
             return mGuessedPaymentMethods;
         }
-        mSavedBin = bin;
+        saveBin(bin);
         mGuessedPaymentMethods = MercadoPago
                 .getValidPaymentMethodsForBin(mSavedBin, this.mAllPaymentMethods);
         mGuessedPaymentMethods = getValidPaymentMethodForType(mPaymentTypeId, mGuessedPaymentMethods);
@@ -44,6 +44,10 @@ public class PaymentMethodGuessingController {
             mGuessedPaymentMethods = filterByPaymentType(mExcludedPaymentTypes, mGuessedPaymentMethods);
         }
         return mGuessedPaymentMethods;
+    }
+
+    public void saveBin(String bin) {
+        mSavedBin = bin;
     }
 
     public String getSavedBin() {
