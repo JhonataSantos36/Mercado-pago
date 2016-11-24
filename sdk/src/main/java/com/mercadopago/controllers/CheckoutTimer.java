@@ -27,19 +27,18 @@ public class CheckoutTimer {
 
     //Observer var
     private List<TimerObserver> timerObservers = new ArrayList<TimerObserver>();
-
-    private com.mercadopago.controllers.CheckoutTimer.FinishListener mFinishListener;
+    private CheckoutTimer.FinishListener mFinishListener;
 
     private CheckoutTimer(){}
 
-    synchronized public static com.mercadopago.controllers.CheckoutTimer getInstance(){
+    synchronized public static CheckoutTimer getInstance(){
         if(mCountDownTimerInstance == null) {
             mCountDownTimerInstance = new com.mercadopago.controllers.CheckoutTimer();
         }
         return mCountDownTimerInstance;
     }
 
-    //If timer is counting down, this method reset the count down
+    //If timer is counting down, this method reset the countdown
     public void start(long seconds){
         if (isCountDownTimerOn){
             mCountDownTimer.cancel();

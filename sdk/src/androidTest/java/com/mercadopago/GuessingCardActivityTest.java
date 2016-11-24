@@ -1,13 +1,9 @@
 package com.mercadopago;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Instrumentation;
 import android.content.Intent;
-import android.graphics.MaskFilter;
 import android.os.Build;
-import android.os.CountDownTimer;
-import android.os.Handler;
 import android.os.Looper;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.ViewInteraction;
@@ -24,7 +20,6 @@ import com.google.gson.reflect.TypeToken;
 import com.mercadopago.controllers.CheckoutTimer;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.model.BankDeal;
-import com.mercadopago.model.Card;
 import com.mercadopago.model.CardToken;
 import com.mercadopago.model.DecorationPreference;
 import com.mercadopago.model.DummyCard;
@@ -51,6 +46,7 @@ import junit.framework.Assert;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -64,7 +60,6 @@ import static android.support.test.espresso.action.ViewActions.clearText;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.Intents.intending;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
@@ -73,14 +68,12 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayingAtLeast;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.mercadopago.utils.ActivityResultUtil.assertFinishCalledWithResult;
 import static com.mercadopago.utils.CardTestUtils.getDummyCard;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -97,6 +90,11 @@ public class GuessingCardActivityTest {
     private String mMerchantPublicKey;
 
     private FakeAPI mFakeAPI;
+
+    @BeforeClass
+    static public void initialize(){
+        Looper.prepare();
+    }
 
     @Before
     public void createValidStartIntent() {
@@ -2108,8 +2106,6 @@ public class GuessingCardActivityTest {
         addPaymentMethodsCall();
         addIdentificationTypesCall();
 
-        Looper.prepare();
-
         CheckoutTimer.getInstance().start(60);
 
         mTestRule.launchActivity(validStartIntent);
@@ -2123,8 +2119,6 @@ public class GuessingCardActivityTest {
         addBankDealsCall();
         addPaymentMethodsCall();
         addIdentificationTypesCall();
-
-        Looper.prepare();
 
         CheckoutTimer.getInstance().start(10);
         CheckoutTimer.getInstance().setOnFinishListener(new CheckoutTimer.FinishListener() {

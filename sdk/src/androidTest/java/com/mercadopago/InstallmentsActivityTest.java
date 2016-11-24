@@ -37,6 +37,7 @@ import junit.framework.Assert;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -80,6 +81,11 @@ public class InstallmentsActivityTest {
     private String mAmount;
 
     private FakeAPI mFakeAPI;
+
+    @BeforeClass
+    static public void initialize(){
+        Looper.prepare();
+    }
 
     @Before
     public void createValidStartIntent() {
@@ -693,8 +699,6 @@ public class InstallmentsActivityTest {
         List<PayerCost> payerCostList = JsonUtil.getInstance().getGson().fromJson(payerCosts, listType);
         validStartIntent.putExtra("payerCosts", JsonUtil.getInstance().toJson(payerCostList));
 
-        Looper.prepare();
-
         CheckoutTimer.getInstance().start(60);
 
         mTestRule.launchActivity(validStartIntent);
@@ -709,8 +713,6 @@ public class InstallmentsActivityTest {
         Type listType = new TypeToken<List<PayerCost>>(){}.getType();
         List<PayerCost> payerCostList = JsonUtil.getInstance().getGson().fromJson(payerCosts, listType);
         validStartIntent.putExtra("payerCosts", JsonUtil.getInstance().toJson(payerCostList));
-
-        Looper.prepare();
 
         CheckoutTimer.getInstance().start(10);
         CheckoutTimer.getInstance().setOnFinishListener(new CheckoutTimer.FinishListener() {

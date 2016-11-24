@@ -1,10 +1,7 @@
 package com.mercadopago;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.os.CountDownTimer;
 import android.os.Looper;
-import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.intent.Intents;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
@@ -12,11 +9,7 @@ import android.test.suitebuilder.annotation.LargeTest;
 import android.view.View;
 
 import com.mercadopago.controllers.CheckoutTimer;
-import com.mercadopago.model.Issuer;
-import com.mercadopago.model.PayerCost;
-import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentMethod;
-import com.mercadopago.model.PaymentRecovery;
 import com.mercadopago.model.Token;
 import com.mercadopago.test.ActivityResult;
 import com.mercadopago.test.FakeAPI;
@@ -26,21 +19,20 @@ import com.mercadopago.utils.ActivityResultUtil;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.action.ViewActions.clearText;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.ViewMatchers.hasFocus;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
-import static org.hamcrest.Matchers.not;
+
 
 /**
  * Created by mromar on 11/21/16.
@@ -56,6 +48,11 @@ public class SecurityCodeActivityTest {
     private String mMerchantPublicKey;
 
     private FakeAPI mFakeAPI;
+
+    @BeforeClass
+    static public void initialize(){
+        Looper.prepare();
+    }
 
     @Before
     public void createValidStartIntent() {
@@ -84,51 +81,6 @@ public class SecurityCodeActivityTest {
     @After
     public void releaseIntents() {
         Intents.release();
-    }
-
-
-    //Timer
-    @Test
-    public void showCountDownTimerWhenItIsInitialized(){
-
-        Token token = StaticMock.getToken();
-        PaymentMethod paymentMethod = StaticMock.getPaymentMethodOn();
-
-        validStartIntent.putExtra("token", JsonUtil.getInstance().toJson(token));
-        validStartIntent.putExtra("cardInfo", JsonUtil.getInstance().toJson(token));
-        validStartIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
-
-        Looper.prepare();
-
-        CheckoutTimer.getInstance().start(60);
-
-        mTestRule.launchActivity(validStartIntent);
-
-        assertTrue(mTestRule.getActivity().findViewById(R.id.mpsdkTimerTextView).getVisibility() == View.VISIBLE);
-        assertTrue(CheckoutTimer.getInstance().isTimerEnabled());
-    }
-
-    @Test
-    public void finishActivityWhenSetOnFinishCheckoutListener(){
-        Token token = StaticMock.getToken();
-        PaymentMethod paymentMethod = StaticMock.getPaymentMethodOn();
-
-        validStartIntent.putExtra("token", JsonUtil.getInstance().toJson(token));
-        validStartIntent.putExtra("cardInfo", JsonUtil.getInstance().toJson(token));
-        validStartIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
-
-        Looper.prepare();
-
-        CheckoutTimer.getInstance().start(10);
-        CheckoutTimer.getInstance().setOnFinishListener(new CheckoutTimer.FinishListener() {
-            @Override
-            public void onFinish() {
-                CheckoutTimer.getInstance().finishCheckout();
-                assertTrue(mTestRule.getActivity().isFinishing());
-            }
-        });
-
-        mTestRule.launchActivity(validStartIntent);
     }
 
     //Recoverable Token
@@ -220,19 +172,43 @@ public class SecurityCodeActivityTest {
         onView(withId(R.id.mpsdkSecurityCodeErrorText)).check(matches(isDisplayed()));
     }
 
+    //Timer
     @Test
-    public void finishActivityWithCancelResultWhenPressesBackButton() {
+    public void showCountDownTimerWhenItIsInitialized(){
+
         Token token = StaticMock.getToken();
         PaymentMethod paymentMethod = StaticMock.getPaymentMethodOn();
 
+        validStartIntent.putExtra("token", JsonUtil.getInstance().toJson(token));
         validStartIntent.putExtra("cardInfo", JsonUtil.getInstance().toJson(token));
         validStartIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
-        validStartIntent.putExtra("token", JsonUtil.getInstance().toJson(token));
+
+        CheckoutTimer.getInstance().start(60);
 
         mTestRule.launchActivity(validStartIntent);
 
-        onView(withId(R.id.mpsdkBackButton)).perform(click());
+        assertTrue(mTestRule.getActivity().findViewById(R.id.mpsdkTimerTextView).getVisibility() == View.VISIBLE);
+        assertTrue(CheckoutTimer.getInstance().isTimerEnabled());
+    }
 
-        ActivityResultUtil.assertFinishCalledWithResult(mTestRule.getActivity(), Activity.RESULT_CANCELED);
+    @Test
+    public void finishActivityWhenSetOnFinishCheckoutListener(){
+        Token token = StaticMock.getToken();
+        PaymentMethod paymentMethod = StaticMock.getPaymentMethodOn();
+
+        validStartIntent.putExtra("token", JsonUtil.getInstance().toJson(token));
+        validStartIntent.putExtra("cardInfo", JsonUtil.getInstance().toJson(token));
+        validStartIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
+
+        CheckoutTimer.getInstance().start(10);
+        CheckoutTimer.getInstance().setOnFinishListener(new CheckoutTimer.FinishListener() {
+            @Override
+            public void onFinish() {
+                CheckoutTimer.getInstance().finishCheckout();
+                assertTrue(mTestRule.getActivity().isFinishing());
+            }
+        });
+
+        mTestRule.launchActivity(validStartIntent);
     }
 }
