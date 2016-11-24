@@ -102,7 +102,7 @@ public class ReviewPaymentOffView implements ReviewPaymentViewController {
         decorateText();
 
         mPaymentImage.setImageResource(R.drawable.mpsdk_review_payment_off);
-        if (mSite != null && mSite.getId().equals(Sites.BRASIL.getId())) {
+        if (mSite != null && Sites.BRASIL.getId().equals(mSite.getId())) {
             Picasso.with(mContext)
                     .load(R.drawable.mpsdk_boleto_off)
                     .transform(new CircleTransform())
