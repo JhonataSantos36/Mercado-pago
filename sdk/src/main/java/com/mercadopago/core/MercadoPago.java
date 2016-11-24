@@ -262,13 +262,16 @@ public class MercadoPago {
             MPTracker.getInstance().trackEvent("NO_SCREEN", "GET_PAYMENT_METHOD_SEARCH", "1", mKey, BuildConfig.VERSION_NAME, mContext);
             PayerIntent payerIntent = new PayerIntent(payer);
             PaymentService service = mRetrofit.create(PaymentService.class);
-            if(!accountMoneyEnabled) {
+            if (!accountMoneyEnabled) {
+                if (excludedPaymentTypes == null) {
+                    excludedPaymentTypes = new ArrayList<>();
+                }
                 excludedPaymentTypes.add(PaymentTypes.ACCOUNT_MONEY);
             }
             String separator = ",";
             String excludedPaymentTypesAppended = getListAsString(excludedPaymentTypes, separator);
             String excludedPaymentMethodsAppended = getListAsString(excludedPaymentMethods, separator);
-            service.getPaymentMethodSearch(this.mKey, amount, excludedPaymentTypesAppended, excludedPaymentMethodsAppended, payerIntent,  PAYMENT_METHODS_OPTIONS_API_VERSION).enqueue(callback);
+            service.getPaymentMethodSearch(this.mKey, amount, excludedPaymentTypesAppended, excludedPaymentMethodsAppended, payerIntent, PAYMENT_METHODS_OPTIONS_API_VERSION).enqueue(callback);
         } else {
             throw new RuntimeException("Unsupported key type for this method");
         }
@@ -434,7 +437,7 @@ public class MercadoPago {
     private static void startSecurityCodeActivity(Activity activity, String publicKey,
                                                   CardInfo cardInfo, Card card, Token token,
                                                   PaymentMethod paymentMethod,
-                                                DecorationPreference decorationPreference) {
+                                                  DecorationPreference decorationPreference) {
 
         Intent intent = new Intent(activity, SecurityCodeActivity.class);
         intent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
@@ -1053,9 +1056,12 @@ public class MercadoPago {
             if (this.mActivity == null) throw new IllegalStateException("activity is null");
             if (this.mKey == null) throw new IllegalStateException("key is null");
             if (this.mCardInfo == null) throw new IllegalStateException("card info is null");
-            if (this.mPaymentMethod == null) throw new IllegalStateException("payment method is null");
-            if (this.mCard != null && this.mToken != null) throw new IllegalStateException("can't start with card and token at the same time");
-            if (this.mCard == null && this.mToken == null) throw new IllegalStateException("card and token can't both be null");
+            if (this.mPaymentMethod == null)
+                throw new IllegalStateException("payment method is null");
+            if (this.mCard != null && this.mToken != null)
+                throw new IllegalStateException("can't start with card and token at the same time");
+            if (this.mCard == null && this.mToken == null)
+                throw new IllegalStateException("card and token can't both be null");
 
             MercadoPago.startSecurityCodeActivity(this.mActivity, this.mKey, this.mCardInfo,
                     this.mCard, this.mToken, this.mPaymentMethod, this.mDecorationPreference);
@@ -1065,8 +1071,10 @@ public class MercadoPago {
         public void startPaymentTypesActivity() {
             if (this.mActivity == null) throw new IllegalStateException("activity is null");
             if (this.mKey == null) throw new IllegalStateException("key is null");
-            if (this.mPaymentMethodList == null) throw new IllegalStateException("payment method list is null");
-            if (this.mPaymentTypesList == null) throw new IllegalStateException("payment types list is null");
+            if (this.mPaymentMethodList == null)
+                throw new IllegalStateException("payment method list is null");
+            if (this.mPaymentTypesList == null)
+                throw new IllegalStateException("payment types list is null");
 
             MercadoPago.startPaymentTypesActivity(mActivity, mKey, mPaymentMethodList, mPaymentTypesList,
                     mCardInfo, mDecorationPreference);

@@ -94,6 +94,7 @@
                             android:background="@color/mpsdk_light_gray"
                             android:visibility="gone">
                             <com.mercadopago.customviews.MPTextView
+                                android:id="@+id/mpsdkBackInactiveButtonText"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
@@ -110,6 +111,7 @@
                         android:focusable="true"
                         android:background="@drawable/mpsdk_form_input_button">
                         <com.mercadopago.customviews.MPTextView
+                            android:id="@+id/mpsdkNextButtonText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"

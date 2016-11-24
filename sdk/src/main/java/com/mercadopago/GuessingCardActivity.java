@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -129,6 +130,9 @@ public class GuessingCardActivity extends AppCompatActivity implements GuessingC
     private FrameLayout mErrorContainer;
     private MPTextView mErrorTextView;
     private String mErrorState;
+    private TextView mNextButtonText;
+    private TextView mBackButtonText;
+    private TextView mBackInactiveButtonText;
 
     //Input Controls
     private String mCurrentEditingEditText;
@@ -224,7 +228,7 @@ public class GuessingCardActivity extends AppCompatActivity implements GuessingC
         loadViews();
         decorate();
 
-        if (CheckoutTimer.getInstance().isTimerEnabled()){
+        if (CheckoutTimer.getInstance().isTimerEnabled()) {
             CheckoutTimer.getInstance().addObserver(this);
             mTimerTextView.setVisibility(View.VISIBLE);
             mTimerTextView.setText(CheckoutTimer.getInstance().getCurrentTime());
@@ -262,6 +266,9 @@ public class GuessingCardActivity extends AppCompatActivity implements GuessingC
         mNextButton = (FrameLayout) findViewById(R.id.mpsdkNextButton);
         mBackButton = (FrameLayout) findViewById(R.id.mpsdkBackButton);
         mBackInactiveButton = (FrameLayout) findViewById(R.id.mpsdkBackInactiveButton);
+        mBackInactiveButtonText = (TextView) findViewById(R.id.mpsdkBackInactiveButtonText);
+        mNextButtonText = (TextView) findViewById(R.id.mpsdkNextButtonText);
+        mBackButtonText = (TextView) findViewById(R.id.mpsdkBackButtonText);
         mButtonContainer = (LinearLayout) findViewById(R.id.mpsdkButtonContainer);
         mCardNumberInput = (LinearLayout) findViewById(R.id.mpsdkCardNumberInput);
         mCardholderNameInput = (LinearLayout) findViewById(R.id.mpsdkCardholderNameInput);
@@ -352,6 +359,9 @@ public class GuessingCardActivity extends AppCompatActivity implements GuessingC
                 getSupportActionBar(), this);
         ColorsUtil.decorateTextView(mDecorationPreference, mBankDealsTextView, this);
         ColorsUtil.decorateTextView(mDecorationPreference, mTimerTextView, this);
+        mNextButtonText.setTextColor(mDecorationPreference.getDarkFontColor(this));
+        mBackButtonText.setTextColor(mDecorationPreference.getDarkFontColor(this));
+        mBackInactiveButtonText.setTextColor(ContextCompat.getColor(this, R.color.mpsdk_warm_grey));
     }
 
     private void decorateNormal() {
@@ -362,6 +372,9 @@ public class GuessingCardActivity extends AppCompatActivity implements GuessingC
         mCardView.decorateCardBorder(mDecorationPreference.getLighterColor());
         mIdentificationCardView.decorateCardBorder(mDecorationPreference.getLighterColor());
         mCardBackground.setBackgroundColor(mDecorationPreference.getLighterColor());
+        mNextButtonText.setTextColor(mDecorationPreference.getDarkFontColor(this));
+        mBackButtonText.setTextColor(mDecorationPreference.getDarkFontColor(this));
+        mBackInactiveButtonText.setTextColor(ContextCompat.getColor(this, R.color.mpsdk_warm_grey));
     }
 
     private String getCardNumberTextTrimmed() {
@@ -433,82 +446,82 @@ public class GuessingCardActivity extends AppCompatActivity implements GuessingC
             }
         });
         mCardNumberEditText.addTextChangedListener(new CardNumberTextWatcher(
-            controller,
-            new PaymentMethodSelectionCallback() {
-                @Override
-                public void onPaymentMethodListSet(List<PaymentMethod> paymentMethodList) {
-                    if (paymentMethodList.size() == 0) {
-                        setInputMaxLength(mCardNumberEditText, MercadoPago.BIN_LENGTH);
-                        setErrorView(getString(R.string.mpsdk_invalid_payment_method));
-                    } else if (paymentMethodList.size() == 1){
-                        onPaymentMethodSet(paymentMethodList.get(0));
-                    } else {
-                        mPresenter.enablePaymentTypeSelection(paymentMethodList);
-                        setPaymentMethod(paymentMethodList.get(0));
+                controller,
+                new PaymentMethodSelectionCallback() {
+                    @Override
+                    public void onPaymentMethodListSet(List<PaymentMethod> paymentMethodList) {
+                        if (paymentMethodList.size() == 0) {
+                            setInputMaxLength(mCardNumberEditText, MercadoPago.BIN_LENGTH);
+                            setErrorView(getString(R.string.mpsdk_invalid_payment_method));
+                        } else if (paymentMethodList.size() == 1) {
+                            onPaymentMethodSet(paymentMethodList.get(0));
+                        } else {
+                            mPresenter.enablePaymentTypeSelection(paymentMethodList);
+                            setPaymentMethod(paymentMethodList.get(0));
+                        }
                     }
-                }
 
-                @Override
-                public void onPaymentMethodSet(PaymentMethod paymentMethod) {
-                    setPaymentMethod(paymentMethod);
-                }
-
-                @Override
-                public void onPaymentMethodCleared() {
-                    clearErrorView();
-                    clearCardNumberInputLength();
-                    if (mPresenter.getPaymentMethod() == null) {
-                        return;
+                    @Override
+                    public void onPaymentMethodSet(PaymentMethod paymentMethod) {
+                        setPaymentMethod(paymentMethod);
                     }
-                    mPresenter.setPaymentMethod(null);
-                    mSecurityCodeEditText.getText().clear();
-                    mPresenter.initializeCardToken();
-                    mPresenter.setIdentificationNumberRequired(true);
-                    mPresenter.setSecurityCodeRequired(true);
-                    mPresenter.disablePaymentTypeSelection();
-                    if (cardViewsActive()) {
-                        mCardView.clearPaymentMethod();
+
+                    @Override
+                    public void onPaymentMethodCleared() {
+                        clearErrorView();
+                        clearCardNumberInputLength();
+                        if (mPresenter.getPaymentMethod() == null) {
+                            return;
+                        }
+                        mPresenter.setPaymentMethod(null);
+                        mSecurityCodeEditText.getText().clear();
+                        mPresenter.initializeCardToken();
+                        mPresenter.setIdentificationNumberRequired(true);
+                        mPresenter.setSecurityCodeRequired(true);
+                        mPresenter.disablePaymentTypeSelection();
+                        if (cardViewsActive()) {
+                            mCardView.clearPaymentMethod();
+                        }
                     }
-                }
-            },
-            new CardNumberEditTextCallback() {
-                @Override
-                public void checkOpenKeyboard() {
-                    openKeyboard(mCardNumberEditText);
-                }
-
-                @Override
-                public void saveCardNumber(CharSequence string) {
-                    mPresenter.saveCardNumber(string.toString());
-                    if (cardViewsActive()) {
-                        mCardView.drawEditingCardNumber(string.toString());
+                },
+                new CardNumberEditTextCallback() {
+                    @Override
+                    public void checkOpenKeyboard() {
+                        openKeyboard(mCardNumberEditText);
                     }
-                }
 
-                @Override
-                public void appendSpace(CharSequence string) {
-                    if (MPCardMaskUtil.needsMask(string, mPresenter.getCardNumberLength())) {
-                        mCardNumberEditText.append(" ");
+                    @Override
+                    public void saveCardNumber(CharSequence string) {
+                        mPresenter.saveCardNumber(string.toString());
+                        if (cardViewsActive()) {
+                            mCardView.drawEditingCardNumber(string.toString());
+                        }
                     }
-                }
 
-                @Override
-                public void deleteChar(CharSequence s) {
-                    if (MPCardMaskUtil.needsMask(s, mPresenter.getCardNumberLength())) {
-                        mCardNumberEditText.getText().delete(s.length() - 1, s.length());
+                    @Override
+                    public void appendSpace(CharSequence string) {
+                        if (MPCardMaskUtil.needsMask(string, mPresenter.getCardNumberLength())) {
+                            mCardNumberEditText.append(" ");
+                        }
                     }
-                }
 
-                @Override
-                public void changeErrorView() {
-                    checkChangeErrorView();
-                }
+                    @Override
+                    public void deleteChar(CharSequence s) {
+                        if (MPCardMaskUtil.needsMask(s, mPresenter.getCardNumberLength())) {
+                            mCardNumberEditText.getText().delete(s.length() - 1, s.length());
+                        }
+                    }
 
-                @Override
-                public void toggleLineColorOnError(boolean toggle) {
-                    mCardNumberEditText.toggleLineColorOnError(toggle);
-                }
-            }));
+                    @Override
+                    public void changeErrorView() {
+                        checkChangeErrorView();
+                    }
+
+                    @Override
+                    public void toggleLineColorOnError(boolean toggle) {
+                        mCardNumberEditText.toggleLineColorOnError(toggle);
+                    }
+                }));
     }
 
     private void setPaymentMethod(PaymentMethod paymentMethod) {

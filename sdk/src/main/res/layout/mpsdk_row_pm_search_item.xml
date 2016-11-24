@@ -16,13 +16,14 @@
             android:layout_height="80dp"
             android:background="@drawable/mpsdk_light_grey_circle">
             <ImageView
+                android:adjustViewBounds= "true"
                 android:id="@+id/mpsdkImage"
                 android:padding="16dp"
+                android:maxWidth="80dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                tools:src="@drawable/mpsdk_bank_transfer"
-                android:adjustViewBounds="true" />
+                tools:src="@drawable/mpsdk_bapropagos"/>
         </FrameLayout>
         <LinearLayout
             android:layout_width="wrap_content"
