@@ -293,16 +293,18 @@ public class InstallmentsActivity extends AppCompatActivity implements Installme
     private void decorateLowRes() {
         ColorsUtil.decorateLowResToolbar(mLowResToolbar, mLowResTitleToolbar, mDecorationPreference,
                 getSupportActionBar(), this);
-        ColorsUtil.decorateLowResToolbar(mLowResToolbar, mTimerTextView, mDecorationPreference,
-                getSupportActionBar(), this);
+        if(mTimerTextView != null) {
+            ColorsUtil.decorateTextView(mDecorationPreference, mTimerTextView, this);
+        }
     }
 
     private void decorateNormal() {
         ColorsUtil.decorateNormalToolbar(mNormalToolbar, mDecorationPreference, mAppBar,
                 mCollapsingToolbar, getSupportActionBar(), this);
         mFrontCardView.decorateCardBorder(mDecorationPreference.getLighterColor());
-
-        ColorsUtil.decorateTextView(mDecorationPreference, mTimerTextView, this);
+        if(mTimerTextView != null) {
+            ColorsUtil.decorateTextView(mDecorationPreference, mTimerTextView, this);
+        }
     }
 
     private void initializeAdapter() {

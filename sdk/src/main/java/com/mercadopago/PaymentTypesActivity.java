@@ -183,6 +183,7 @@ public class PaymentTypesActivity extends AppCompatActivity implements PaymentTy
             mNormalToolbar = (Toolbar) findViewById(R.id.mpsdkRegularToolbar);
             mNormalToolbar.setVisibility(View.VISIBLE);
         }
+        mTimerTextView = (MPTextView) findViewById(R.id.mpsdkTimerTextView);
         mProgressBar.setVisibility(View.GONE);
     }
 
@@ -290,14 +291,17 @@ public class PaymentTypesActivity extends AppCompatActivity implements PaymentTy
     private void decorateLowRes() {
         ColorsUtil.decorateLowResToolbar(mLowResToolbar, mLowResTitleToolbar, mDecorationPreference,
                 getSupportActionBar(), this);
-        ColorsUtil.decorateLowResToolbar(mLowResToolbar, mTimerTextView, mDecorationPreference,
-                getSupportActionBar(), this);
+        if(mTimerTextView != null) {
+            ColorsUtil.decorateTextView(mDecorationPreference, mTimerTextView, this);
+        }
     }
 
     private void decorateNormal() {
         ColorsUtil.decorateNormalToolbar(mNormalToolbar, mDecorationPreference, mAppBar,
                 mCollapsingToolbar, getSupportActionBar(), this);
-        mTimerTextView.setTextColor(mDecorationPreference.getDarkFontColor(this));
+        if(mTimerTextView != null) {
+            ColorsUtil.decorateTextView(mDecorationPreference, mTimerTextView, this);
+        }
         mFrontCardView.decorateCardBorder(mDecorationPreference.getLighterColor());
     }
 

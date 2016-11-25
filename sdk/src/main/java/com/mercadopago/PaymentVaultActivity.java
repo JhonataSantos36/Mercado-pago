@@ -196,7 +196,9 @@ public class PaymentVaultActivity extends AppCompatActivity implements PaymentVa
             if (mDecorationPreference.isDarkFontEnabled()) {
                 mAppBarLayout.setExpandedTitleColor(mDecorationPreference.getDarkFontColor(this));
                 mAppBarLayout.setCollapsedTitleTextColor(mDecorationPreference.getDarkFontColor(this));
-                mTimerTextView.setTextColor(mDecorationPreference.getDarkFontColor(this));
+                if(mTimerTextView != null) {
+                    mTimerTextView.setTextColor(mDecorationPreference.getDarkFontColor(this));
+                }
             }
         }
     }

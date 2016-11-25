@@ -501,7 +501,9 @@ public class GuessingCardActivity extends AppCompatActivity implements GuessingC
         ColorsUtil.decorateLowResToolbar(mLowResToolbar, mLowResTitleToolbar, mDecorationPreference,
                 getSupportActionBar(), this);
         ColorsUtil.decorateTextView(mDecorationPreference, mBankDealsTextView, this);
-        ColorsUtil.decorateTextView(mDecorationPreference, mTimerTextView, this);
+        if(mTimerTextView != null) {
+            ColorsUtil.decorateTextView(mDecorationPreference, mTimerTextView, this);
+        }
         mNextButtonText.setTextColor(mDecorationPreference.getDarkFontColor(this));
         mBackButtonText.setTextColor(mDecorationPreference.getDarkFontColor(this));
         mBackInactiveButtonText.setTextColor(ContextCompat.getColor(this, R.color.mpsdk_warm_grey));
@@ -510,8 +512,9 @@ public class GuessingCardActivity extends AppCompatActivity implements GuessingC
     private void decorateNormal() {
         ColorsUtil.decorateTransparentToolbar(mNormalToolbar, mBankDealsTextView, mDecorationPreference,
                 getSupportActionBar(), this);
-        ColorsUtil.decorateTransparentToolbar(mNormalToolbar, mTimerTextView, mDecorationPreference,
-                getSupportActionBar(), this);
+        if(mTimerTextView != null) {
+            ColorsUtil.decorateTextView(mDecorationPreference, mTimerTextView, this);
+        }
         mCardView.decorateCardBorder(mDecorationPreference.getLighterColor());
         mIdentificationCardView.decorateCardBorder(mDecorationPreference.getLighterColor());
         mCardBackground.setBackgroundColor(mDecorationPreference.getLighterColor());

@@ -4,6 +4,7 @@ import com.mercadopago.R;
 import com.mercadopago.callbacks.Callback;
 import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.callbacks.OnSelectedCallback;
+import com.mercadopago.constants.PaymentTypes;
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.core.MerchantServer;
 import com.mercadopago.exceptions.MPException;
@@ -175,11 +176,20 @@ public class PaymentVaultPresenter {
                 showEmptyPaymentMethodsError();
             } else if (isOnlyUniqueSearchSelectionAvailable()) {
                 selectItem(mPaymentMethodSearch.getGroups().get(0));
+            } else if(isOnlyAccountMoneyEnabled()) {
+                selectAccountMoney(mCustomSearchItems.get(0));
             } else {
                 showAvailableOptions();
                 mPaymentVaultView.hideProgress();
             }
         }
+    }
+
+    private boolean isOnlyAccountMoneyEnabled() {
+        return mAccountMoneyEnabled
+                && mCustomSearchItems.size() == 1
+                && mCustomSearchItems.get(0).getId().equals(ACCOUNT_MONEY_ID)
+                && (mPaymentMethodSearch.getGroups() == null || mPaymentMethodSearch.getGroups().isEmpty());
     }
 
     private void selectItem(PaymentMethodSearchItem item) {
@@ -265,15 +275,20 @@ public class PaymentVaultPresenter {
                     Card card = getCardWithPaymentMethod(searchItem);
                     selectCard(card);
                 } else if (ACCOUNT_MONEY_ID.equals(searchItem.getPaymentMethodId())) {
-                    PaymentMethod paymentMethod = new PaymentMethod();
-                    paymentMethod.setId(ACCOUNT_MONEY_ID);
-                    paymentMethod.setName(searchItem.getDescription());
-                    paymentMethod.setPaymentTypeId(searchItem.getType());
-                    mPaymentVaultView.selectPaymentMethod(paymentMethod);
+                    selectAccountMoney(searchItem);
                 }
             }
         };
     }
+
+    private void selectAccountMoney(CustomSearchItem searchItem) {
+        PaymentMethod paymentMethod = new PaymentMethod();
+        paymentMethod.setId(ACCOUNT_MONEY_ID);
+        paymentMethod.setName(searchItem.getDescription());
+        paymentMethod.setPaymentTypeId(searchItem.getType());
+        mPaymentVaultView.selectPaymentMethod(paymentMethod);
+    }
+
 
     private Card getCardWithPaymentMethod(CustomSearchItem searchItem) {
         PaymentMethod paymentMethod = mPaymentMethodSearch.getPaymentMethodById(searchItem.getPaymentMethodId());
@@ -367,7 +382,8 @@ public class PaymentVaultPresenter {
     }
 
     private boolean noPaymentMethodsAvailable() {
-        return (mSavedCards == null || mSavedCards.isEmpty())
+        return !mAccountMoneyEnabled
+                && (mSavedCards == null || mSavedCards.isEmpty())
                 && (mPaymentMethodSearch.getGroups() == null || mPaymentMethodSearch.getGroups().isEmpty());
     }
 

@@ -30,6 +30,7 @@ import com.mercadopago.presenters.SecurityCodePresenter;
 import com.mercadopago.uicontrollers.card.CardRepresentationModes;
 import com.mercadopago.uicontrollers.card.CardView;
 import com.mercadopago.util.ApiUtil;
+import com.mercadopago.util.ColorsUtil;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.ScaleUtil;
 import com.mercadopago.views.SecurityCodeActivityView;
@@ -170,7 +171,9 @@ public class SecurityCodeActivity extends AppCompatActivity implements SecurityC
     private void decorate() {
         if (isDecorationEnabled()) {
             mBackground.setBackgroundColor(mDecorationPreference.getLighterColor());
-            mTimerTextView.setTextColor(mDecorationPreference.getDarkFontColor(this));
+            if(mTimerTextView != null) {
+                ColorsUtil.decorateTextView(mDecorationPreference, mTimerTextView, this);
+            }
         }
     }
 

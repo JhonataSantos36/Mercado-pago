@@ -28,6 +28,7 @@ public class PaymentTypes {
             add(ATM);
             add(DIGITAL_CURRENCY);
             add(BANK_TRANSFER);
+            add(ACCOUNT_MONEY);
         }};
     }
 }
