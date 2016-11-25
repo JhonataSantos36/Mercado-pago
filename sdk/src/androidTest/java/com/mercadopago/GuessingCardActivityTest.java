@@ -1,5 +1,6 @@
 package com.mercadopago;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Instrumentation;
 import android.content.Intent;
@@ -54,6 +55,7 @@ import org.junit.runner.RunWith;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Handler;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.clearText;
@@ -1521,7 +1523,7 @@ public class GuessingCardActivityTest {
         onView(withId(R.id.mpsdkNextButton)).perform(click());
         identificationNumberIsCurrentEditText();
     }
-
+/*
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Test
     public void onRestoreInstanceRestoreVariablesFrontCard() {
@@ -1722,6 +1724,7 @@ public class GuessingCardActivityTest {
         onView(withId(R.id.mpsdkCardIdentificationNumber)).check(matches(withText(identificationType.getIdentificationNumber())));
         sleep();
     }
+    */
     //CUSTOMER CARDS
 
 //    @Test

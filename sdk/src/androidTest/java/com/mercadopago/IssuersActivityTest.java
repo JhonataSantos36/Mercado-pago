@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Instrumentation;
 import android.content.Intent;
 import android.os.Build;
+import android.os.Looper;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.intent.Intents;
 import android.support.test.rule.ActivityTestRule;
@@ -11,11 +12,14 @@ import android.support.test.runner.AndroidJUnit4;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.test.suitebuilder.annotation.LargeTest;
+import android.view.View;
 
 import com.google.gson.reflect.TypeToken;
+import com.mercadopago.controllers.CheckoutTimer;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.model.DecorationPreference;
 import com.mercadopago.model.Issuer;
+import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.Token;
 import com.mercadopago.test.ActivityResult;
@@ -25,8 +29,11 @@ import com.mercadopago.util.JsonUtil;
 import com.mercadopago.utils.ActivityResultUtil;
 import com.mercadopago.utils.ViewUtils;
 
+import junit.framework.Assert;
+
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -66,6 +73,11 @@ public class IssuersActivityTest {
     private String mMerchantPublicKey;
     private PaymentMethod mPaymentMethod;
     private FakeAPI mFakeAPI;
+
+    @BeforeClass
+    static public void initialize(){
+        Looper.prepare();
+    }
 
     @Before
     public void createValidStartIntent() {
@@ -456,5 +468,40 @@ public class IssuersActivityTest {
         int fontColor = toolbarTitle.getCurrentTextColor();
         int expectedColor = ContextCompat.getColor(InstrumentationRegistry.getContext(), R.color.mpsdk_dark_font_color);
         assertEquals(fontColor, expectedColor);
+    }
+
+    //Timer
+    @Test
+    public void showCountDownTimerWhenItIsInitialized(){
+        String issuers = StaticMock.getIssuersJson();
+        Type listType = new TypeToken<List<Issuer>>(){}.getType();
+        List<Issuer> issuerList = JsonUtil.getInstance().getGson().fromJson(issuers, listType);
+        mFakeAPI.addResponseToQueue(issuerList, 200, "");
+
+        CheckoutTimer.getInstance().start(60);
+
+        mTestRule.launchActivity(validStartIntent);
+
+        Assert.assertTrue(mTestRule.getActivity().findViewById(R.id.mpsdkTimerTextView).getVisibility() == View.VISIBLE);
+        Assert.assertTrue(CheckoutTimer.getInstance().isTimerEnabled());
+    }
+
+    @Test
+    public void finishActivityWhenSetOnFinishCheckoutListener(){
+        String issuers = StaticMock.getIssuersJson();
+        Type listType = new TypeToken<List<Issuer>>(){}.getType();
+        List<Issuer> issuerList = JsonUtil.getInstance().getGson().fromJson(issuers, listType);
+        mFakeAPI.addResponseToQueue(issuerList, 200, "");
+
+        CheckoutTimer.getInstance().start(10);
+        CheckoutTimer.getInstance().setOnFinishListener(new CheckoutTimer.FinishListener() {
+            @Override
+            public void onFinish() {
+                CheckoutTimer.getInstance().finishCheckout();
+                Assert.assertTrue(mTestRule.getActivity().isFinishing());
+            }
+        });
+
+        mTestRule.launchActivity(validStartIntent);
     }
 }
