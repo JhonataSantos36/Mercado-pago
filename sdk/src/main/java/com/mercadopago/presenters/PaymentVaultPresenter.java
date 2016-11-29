@@ -4,7 +4,6 @@ import com.mercadopago.R;
 import com.mercadopago.callbacks.Callback;
 import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.callbacks.OnSelectedCallback;
-import com.mercadopago.constants.PaymentTypes;
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.core.MerchantServer;
 import com.mercadopago.exceptions.MPException;
@@ -33,7 +32,6 @@ import static android.text.TextUtils.isEmpty;
  */
 public class PaymentVaultPresenter {
 
-    private static final int MAX_SAVED_CARDS = 3;
     private static final String ACCOUNT_MONEY_ID = "account_money";
 
     private PaymentVaultView mPaymentVaultView;
@@ -52,6 +50,7 @@ public class PaymentVaultPresenter {
     private BigDecimal mAmount;
     private String mPayerAccessToken;
     private Boolean mAccountMoneyEnabled;
+    private Integer mMaxSavedCards;
 
     public void attachView(PaymentVaultView paymentVaultView) {
         this.mPaymentVaultView = paymentVaultView;
@@ -176,7 +175,7 @@ public class PaymentVaultPresenter {
                 showEmptyPaymentMethodsError();
             } else if (isOnlyUniqueSearchSelectionAvailable()) {
                 selectItem(mPaymentMethodSearch.getGroups().get(0));
-            } else if(isOnlyAccountMoneyEnabled()) {
+            } else if (isOnlyAccountMoneyEnabled()) {
                 selectAccountMoney(mCustomSearchItems.get(0));
             } else {
                 showAvailableOptions();
@@ -212,8 +211,8 @@ public class PaymentVaultPresenter {
             mCustomSearchItems.addAll(createCustomSearchItemsFromCards(mSavedCards));
         }
 
-        if (mSavedCards != null && mSavedCards.size() > MAX_SAVED_CARDS) {
-            mCustomSearchItems = getLimitedCustomOptions(mCustomSearchItems, MAX_SAVED_CARDS);
+        if (mSavedCards != null && mMaxSavedCards != null && mMaxSavedCards > 0) {
+            mCustomSearchItems = getLimitedCustomOptions(mCustomSearchItems, mMaxSavedCards);
         }
 
         if (customSearchItemsAvailable()) {
@@ -258,7 +257,7 @@ public class PaymentVaultPresenter {
         return mCustomSearchItems != null && !mCustomSearchItems.isEmpty();
     }
 
-    protected OnSelectedCallback<PaymentMethodSearchItem> getPaymentMethodSearchItemSelectionCallback() {
+    private OnSelectedCallback<PaymentMethodSearchItem> getPaymentMethodSearchItemSelectionCallback() {
         return new OnSelectedCallback<PaymentMethodSearchItem>() {
             @Override
             public void onSelected(PaymentMethodSearchItem item) {
@@ -473,5 +472,9 @@ public class PaymentVaultPresenter {
 
     public void setAccountMoneyEnabled(boolean accountMoneyEnabled) {
         this.mAccountMoneyEnabled = accountMoneyEnabled;
+    }
+
+    public void setMaxSavedCards(int maxSavedCards) {
+        this.mMaxSavedCards = maxSavedCards;
     }
 }

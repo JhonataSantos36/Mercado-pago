@@ -542,7 +542,7 @@ public class MercadoPago {
                                                   String merchantGetCustomerUri, String merchantAccessToken, BigDecimal amount,
                                                   Site site, Boolean installmentsEnabled, Boolean showBankDeals, PaymentPreference paymentPreference,
                                                   DecorationPreference decorationPreference, PaymentMethodSearch paymentMethodSearch, List<Card> cards,
-                                                  String payerAccessToken, Boolean accountMoneyEnabled) {
+                                                  String payerAccessToken, Boolean accountMoneyEnabled, Integer maxSavedCards) {
 
         Intent vaultIntent = new Intent(activity, PaymentVaultActivity.class);
         vaultIntent.putExtra("merchantPublicKey", merchantPublicKey);
@@ -563,6 +563,7 @@ public class MercadoPago {
         vaultIntent.putExtra("decorationPreference", JsonUtil.getInstance().toJson(decorationPreference));
         vaultIntent.putExtra("payerAccessToken", payerAccessToken);
         vaultIntent.putExtra("accountMoneyEnabled", accountMoneyEnabled);
+        vaultIntent.putExtra("maxSavedCards", maxSavedCards);
 
         activity.startActivityForResult(vaultIntent, PAYMENT_VAULT_REQUEST_CODE);
     }
@@ -705,6 +706,7 @@ public class MercadoPago {
         private Boolean mAccountMoneyEnabled;
         private List<PaymentType> mPaymentTypesList;
         private CardInfo mCardInfo;
+        private Integer mMaxSavedCards;
 
         public StartActivityBuilder() {
 
@@ -884,6 +886,11 @@ public class MercadoPago {
 
         public StartActivityBuilder setAccountMoneyEnabled(boolean accountMoneyEnabled) {
             this.mAccountMoneyEnabled = accountMoneyEnabled;
+            return this;
+        }
+
+        public StartActivityBuilder setMaxSavedCards(Integer maxSavedCards) {
+            this.mMaxSavedCards = maxSavedCards;
             return this;
         }
 
@@ -1130,7 +1137,7 @@ public class MercadoPago {
                         this.mMerchantGetCustomerUri, this.mMerchantAccessToken,
                         this.mAmount, this.mSite, this.mInstallmentsEnabled, this.mShowBankDeals,
                         this.mPaymentPreference, this.mDecorationPreference, this.mPaymentMethodSearch,
-                        this.mCards, this.mPayerAccessToken, this.mAccountMoneyEnabled);
+                        this.mCards, this.mPayerAccessToken, this.mAccountMoneyEnabled, this.mMaxSavedCards);
             } else {
                 throw new RuntimeException("Unsupported key type for this method");
             }

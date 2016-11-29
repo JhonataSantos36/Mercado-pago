@@ -111,6 +111,7 @@ public class PaymentVaultActivity extends AppCompatActivity implements PaymentVa
         mPaymentVaultPresenter.setMerchantAccessToken(this.getIntent().getStringExtra("merchantAccessToken"));
         mPaymentVaultPresenter.setPayerAccessToken(this.getIntent().getStringExtra("payerAccessToken"));
         mPaymentVaultPresenter.setAccountMoneyEnabled(this.getIntent().getBooleanExtra("accountMoneyEnabled", false));
+        mPaymentVaultPresenter.setMaxSavedCards(this.getIntent().getIntExtra("maxSavedCards", 0));
 
         if (getIntent().getStringExtra("paymentPreference") != null) {
             mPaymentVaultPresenter.setPaymentPreference(JsonUtil.getInstance().fromJson(getIntent().getStringExtra("paymentPreference"), PaymentPreference.class));
@@ -167,7 +168,7 @@ public class PaymentVaultActivity extends AppCompatActivity implements PaymentVa
     }
 
     private void showTimer() {
-        if (CheckoutTimer.getInstance().isTimerEnabled()){
+        if (CheckoutTimer.getInstance().isTimerEnabled()) {
             CheckoutTimer.getInstance().addObserver(this);
             mTimerTextView.setVisibility(View.VISIBLE);
             mTimerTextView.setText(CheckoutTimer.getInstance().getCurrentTime());
@@ -196,7 +197,7 @@ public class PaymentVaultActivity extends AppCompatActivity implements PaymentVa
             if (mDecorationPreference.isDarkFontEnabled()) {
                 mAppBarLayout.setExpandedTitleColor(mDecorationPreference.getDarkFontColor(this));
                 mAppBarLayout.setCollapsedTitleTextColor(mDecorationPreference.getDarkFontColor(this));
-                if(mTimerTextView != null) {
+                if (mTimerTextView != null) {
                     mTimerTextView.setTextColor(mDecorationPreference.getDarkFontColor(this));
                 }
             }

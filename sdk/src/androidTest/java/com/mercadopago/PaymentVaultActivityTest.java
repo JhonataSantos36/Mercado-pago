@@ -83,7 +83,7 @@ public class PaymentVaultActivityTest {
     private FakeAPI mFakeAPI;
 
     @BeforeClass
-    static public void initialize(){
+    static public void initialize() {
         Looper.prepare();
     }
 
@@ -524,11 +524,11 @@ public class PaymentVaultActivityTest {
 
         onView(withId(R.id.mpsdkGroupsList)).check(matches(isDisplayed()));
         onView(withId(R.id.mpsdkGroupsList))
-                .check(matches(atPosition(0, CustomMatchers.withAnyChildText("terminada en 0604"))));
+                .check(matches(atPosition(0, CustomMatchers.withAnyChildText(mTestRule.getActivity().getString(R.string.mpsdk_last_digits_label) + " 0604"))));
     }
 
     @Test
-    public void ifMaxAmountToShowExceededShowMaxAmountOfCards() {
+    public void ifNoMaxSavedCardsSetShowAllSavedCards() {
         PaymentMethodSearch paymentMethodSearch = JsonUtil.getInstance()
                 .fromJson(StaticMock.getPaymentMethodSearchWithoutCustomOptionsAsJson(), PaymentMethodSearch.class);
 
@@ -548,6 +548,31 @@ public class PaymentVaultActivityTest {
         mTestRule.launchActivity(validStartIntent);
 
         onView(withId(R.id.mpsdkGroupsList)).check(matches(isDisplayed()));
+        assertTrue(ViewUtils.hasItems(mTestRule.getActivity().mSearchItemsRecyclerView, 8));
+    }
+
+    @Test
+    public void ifMaxAmountToShowExceededShowMaxAmountOfCards() {
+        PaymentMethodSearch paymentMethodSearch = JsonUtil.getInstance()
+                .fromJson(StaticMock.getPaymentMethodSearchWithoutCustomOptionsAsJson(), PaymentMethodSearch.class);
+
+        Customer customer = StaticMock.getCustomer();
+        Card card = customer.getCards().get(0);
+        customer.getCards().add(card);
+        customer.getCards().add(card);
+        customer.getCards().add(card);
+
+        mFakeAPI.addResponseToQueue(paymentMethodSearch, 200, "");
+        mFakeAPI.addResponseToQueue(customer, 200, "");
+
+        validStartIntent.putExtra("maxSavedCards", 3);
+        validStartIntent.putExtra("merchantBaseUrl", "http://www.api.merchant.com");
+        validStartIntent.putExtra("merchantGetCustomerUri", "/get_customer");
+        validStartIntent.putExtra("merchantAccessToken", "mla-cards");
+
+        mTestRule.launchActivity(validStartIntent);
+
+        onView(withId(R.id.mpsdkGroupsList)).check(matches(isDisplayed()));
         assertTrue(ViewUtils.hasItems(mTestRule.getActivity().mSearchItemsRecyclerView, 6));
     }
 
@@ -557,10 +582,24 @@ public class PaymentVaultActivityTest {
                 .fromJson(StaticMock.getPaymentMethodSearchWithCardsAsJson(), PaymentMethodSearch.class);
         mFakeAPI.addResponseToQueue(paymentMethodSearch, 200, "");
 
+        validStartIntent.putExtra("maxSavedCards", 3);
+
         mTestRule.launchActivity(validStartIntent);
 
         onView(withId(R.id.mpsdkGroupsList)).check(matches(isDisplayed()));
         assertTrue(ViewUtils.hasItems(mTestRule.getActivity().mSearchItemsRecyclerView, 6));
+    }
+
+    @Test
+    public void ifMaxSavedCardsNotSetShowAllCustomOptions() {
+        PaymentMethodSearch paymentMethodSearch = JsonUtil.getInstance()
+                .fromJson(StaticMock.getPaymentMethodSearchWithCardsAsJson(), PaymentMethodSearch.class);
+        mFakeAPI.addResponseToQueue(paymentMethodSearch, 200, "");
+
+        mTestRule.launchActivity(validStartIntent);
+
+        onView(withId(R.id.mpsdkGroupsList)).check(matches(isDisplayed()));
+        assertTrue(ViewUtils.hasItems(mTestRule.getActivity().mSearchItemsRecyclerView, 10));
     }
 
     @Test
@@ -579,7 +618,7 @@ public class PaymentVaultActivityTest {
 
         onView(withId(R.id.mpsdkGroupsList)).check(matches(isDisplayed()));
         onView(withId(R.id.mpsdkGroupsList))
-                .check(matches(atPosition(0, CustomMatchers.withAnyChildText("terminada en 0604"))));
+                .check(matches(atPosition(0, CustomMatchers.withAnyChildText(mTestRule.getActivity().getString(R.string.mpsdk_last_digits_label) + " 0604"))));
     }
 
     @Test
@@ -919,7 +958,7 @@ public class PaymentVaultActivityTest {
 
     //Timer
     @Test
-    public void showCountDownTimerWhenItIsInitialized(){
+    public void showCountDownTimerWhenItIsInitialized() {
         String paymentMethodSearchJson = StaticMock.getPaymentMethodSearchWithoutCustomOptionsAsJson();
         mFakeAPI.addResponseToQueue(paymentMethodSearchJson, 200, "");
 
@@ -939,7 +978,7 @@ public class PaymentVaultActivityTest {
     }
 
     @Test
-    public void finishActivityWhenSetOnFinishCheckoutListener(){
+    public void finishActivityWhenSetOnFinishCheckoutListener() {
         String paymentMethodSearchJson = StaticMock.getPaymentMethodSearchWithoutCustomOptionsAsJson();
         mFakeAPI.addResponseToQueue(paymentMethodSearchJson, 200, "");
 
