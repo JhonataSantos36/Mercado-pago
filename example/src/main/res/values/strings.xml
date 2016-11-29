@@ -61,5 +61,6 @@
     <string name="result_message_issued_by">" emitida por "</string>
     <string name="result_message_with">" con  "</string>
     <string name="result_message_and_token">" y token id: "</string>
+    <string name="customer_selection">Selección de tarjeta guardada</string>
 
 </resources>

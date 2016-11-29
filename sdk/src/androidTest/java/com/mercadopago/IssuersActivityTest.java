@@ -3,19 +3,23 @@ package com.mercadopago;
 import android.app.Activity;
 import android.app.Instrumentation;
 import android.content.Intent;
+import android.os.Build;
+import android.os.Looper;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.intent.Intents;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.test.suitebuilder.annotation.LargeTest;
-import android.widget.FrameLayout;
+import android.view.View;
 
 import com.google.gson.reflect.TypeToken;
+import com.mercadopago.controllers.CheckoutTimer;
+import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.model.DecorationPreference;
 import com.mercadopago.model.Issuer;
+import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.Token;
 import com.mercadopago.test.ActivityResult;
@@ -24,10 +28,12 @@ import com.mercadopago.test.StaticMock;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.utils.ActivityResultUtil;
 import com.mercadopago.utils.ViewUtils;
-import com.mercadopago.views.MPTextView;
+
+import junit.framework.Assert;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -47,9 +53,9 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
@@ -68,13 +74,18 @@ public class IssuersActivityTest {
     private PaymentMethod mPaymentMethod;
     private FakeAPI mFakeAPI;
 
+    @BeforeClass
+    static public void initialize(){
+        Looper.prepare();
+    }
+
     @Before
     public void createValidStartIntent() {
         mMerchantPublicKey = StaticMock.DUMMY_MERCHANT_PUBLIC_KEY;
         mPaymentMethod = StaticMock.getPaymentMethodOn();
 
         validStartIntent = new Intent();
-        validStartIntent.putExtra("publicKey", mMerchantPublicKey);
+        validStartIntent.putExtra("merchantPublicKey", mMerchantPublicKey);
         validStartIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(mPaymentMethod));
     }
 
@@ -106,18 +117,23 @@ public class IssuersActivityTest {
         List<Issuer> issuerList = JsonUtil.getInstance().getGson().fromJson(issuers, listType);
         mFakeAPI.addResponseToQueue(issuerList, 200, "");
         IssuersActivity activity = mTestRule.launchActivity(validStartIntent);
-        assertEquals(activity.mPublicKey, mMerchantPublicKey);
-        assertEquals(activity.mCurrentPaymentMethod.getId(), mPaymentMethod.getId());
+        assertEquals(activity.mPresenter.getPublicKey(), mMerchantPublicKey);
+        assertEquals(activity.mPresenter.getPaymentMethod().getId(), mPaymentMethod.getId());
     }
 
     @Test
-    public void hideCardWhenNoToken() {
+    public void hideCardWhenNoTokenOrCard() {
         String issuers = StaticMock.getIssuersJson();
         Type listType = new TypeToken<List<Issuer>>(){}.getType();
         List<Issuer> issuerList = JsonUtil.getInstance().getGson().fromJson(issuers, listType);
+
         mFakeAPI.addResponseToQueue(issuerList, 200, "");
         mTestRule.launchActivity(validStartIntent);
-        onView(withId(R.id.mpsdkCardBackground)).check(matches(not(isDisplayed())));
+
+        assertTrue(mTestRule.getActivity().mLowResActive);
+        assertNotNull(mTestRule.getActivity().mLowResToolbar);
+        assertNull(mTestRule.getActivity().mNormalToolbar);
+        assertNull(mTestRule.getActivity().mCardContainer);
     }
 
     @Test
@@ -131,11 +147,15 @@ public class IssuersActivityTest {
         validStartIntent.putExtra("token", JsonUtil.getInstance().toJson(token));
 
         mTestRule.launchActivity(validStartIntent);
-        onView(withId(R.id.mpsdkCardBackground)).check(matches(isDisplayed()));
+
+        assertNotNull(mTestRule.getActivity().mCardContainer);
+        assertNotNull(mTestRule.getActivity().mNormalToolbar);
+        assertNotNull(mTestRule.getActivity().mFrontCardView);
+        onView(withId(R.id.mpsdkCardFrontContainer)).check(matches(isDisplayed()));
     }
 
     @Test
-    public void showToolbarWithTitleWhenNoToken() {
+    public void showToolbarWithTitleWhenNoTokenOrCard() {
         String issuers = StaticMock.getIssuersJson();
         Type listType = new TypeToken<List<Issuer>>(){}.getType();
         List<Issuer> issuerList = JsonUtil.getInstance().getGson().fromJson(issuers, listType);
@@ -143,14 +163,14 @@ public class IssuersActivityTest {
 
         mTestRule.launchActivity(validStartIntent);
 
+        assertNotNull(mTestRule.getActivity().mLowResToolbar);
         onView(withId(R.id.mpsdkRegularToolbar)).check(matches(isDisplayed()));
-        onView(withId(R.id.mpsdkToolbar)).check(matches(not(isDisplayed())));
+        onView(withId(R.id.mpsdkTitle)).check(matches(isDisplayed()));
         onView(withId(R.id.mpsdkTitle)).check(matches(withText(R.string.mpsdk_card_issuers_title)));
-
     }
 
     @Test
-    public void showTransparentToolbarWhenToken() {
+    public void showCollapsingToolbarWhenToken() {
         String issuers = StaticMock.getIssuersJson();
         Type listType = new TypeToken<List<Issuer>>(){}.getType();
         List<Issuer> issuerList = JsonUtil.getInstance().getGson().fromJson(issuers, listType);
@@ -161,8 +181,12 @@ public class IssuersActivityTest {
 
         mTestRule.launchActivity(validStartIntent);
 
-        onView(withId(R.id.mpsdkRegularToolbar)).check(matches(not(isDisplayed())));
-        onView(withId(R.id.mpsdkToolbar)).check(matches(isDisplayed()));
+        assertNull(mTestRule.getActivity().mLowResToolbar);
+        assertNotNull(mTestRule.getActivity().mNormalToolbar);
+        onView(withId(R.id.mpsdkRegularToolbar)).check(matches(isDisplayed()));
+        onView(withId(R.id.mpsdkCollapsingToolbar)).check(matches(isDisplayed()));
+        String expected = mTestRule.getActivity().getApplicationContext().getResources().getString(R.string.mpsdk_card_issuers_title);
+        assertEquals(mTestRule.getActivity().mNormalToolbar.getTitle().toString(), expected);
     }
 
     @Test
@@ -178,9 +202,11 @@ public class IssuersActivityTest {
         mTestRule.launchActivity(validStartIntent);
 
         onView(withId(R.id.mpsdkCardNumberTextView)).check(matches(withText(containsString(token.getLastFourDigits()))));
-        onView(withId(R.id.mpsdkCardholderNameView)).check(matches(withText(token.getCardholder().getName().toUpperCase())));
-        onView(withId(R.id.mpsdkCardHolderExpiryYear)).check(matches(withText(token.getExpirationYear().toString().substring(2,4))));
-        onView(withId(R.id.mpsdkCardHolderExpiryMonth)).check(matches(withText(token.getExpirationMonth().toString())));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            onView(withId(R.id.mpsdkCardLollipopImageView)).check(matches(isDisplayed()));
+        } else {
+            onView(withId(R.id.mpsdkCardLowApiImageView)).check(matches(isDisplayed()));
+        }
     }
 
     @Test
@@ -188,7 +214,7 @@ public class IssuersActivityTest {
         mMerchantPublicKey = StaticMock.DUMMY_MERCHANT_PUBLIC_KEY;
 
         Intent invalidIntent = new Intent();
-        invalidIntent.putExtra("publicKey", mMerchantPublicKey);
+        invalidIntent.putExtra("merchantPublicKey", mMerchantPublicKey);
 
         String issuers = StaticMock.getIssuersJson();
         Type listType = new TypeToken<List<Issuer>>(){}.getType();
@@ -219,11 +245,7 @@ public class IssuersActivityTest {
         List<Issuer> issuerList = new ArrayList<>();
         mFakeAPI.addResponseToQueue(issuerList, 200, "");
         mTestRule.launchActivity(validStartIntent);
-
-        ActivityResult result = ActivityResultUtil.getActivityResult(mTestRule.getActivity());
-        Issuer issuer = JsonUtil.getInstance().fromJson(result.getExtras().getString("issuer"), Issuer.class);
-        assertNull(issuer);
-        ActivityResultUtil.assertFinishCalledWithResult(mTestRule.getActivity(), Activity.RESULT_OK);
+        intended(hasComponent(ErrorActivity.class.getName()));
     }
 
     @Test
@@ -252,7 +274,16 @@ public class IssuersActivityTest {
         mTestRule.launchActivity(validStartIntent);
 
         RecyclerView referencesLayout = (RecyclerView) mTestRule.getActivity().findViewById(R.id.mpsdkActivityIssuersView);
-        assertEquals(referencesLayout.getChildCount(), issuerList.size());
+        sleep();
+        assertEquals(referencesLayout.getAdapter().getItemCount(), issuerList.size());
+    }
+
+    private void sleep() {
+        try {
+            Thread.sleep(9000);
+        } catch (InterruptedException e) {
+
+        }
     }
 
     @Test
@@ -313,7 +344,7 @@ public class IssuersActivityTest {
         onView(withId(R.id.mpsdkErrorRetry)).perform(click());
 
         RecyclerView referencesLayout = (RecyclerView) mTestRule.getActivity().findViewById(R.id.mpsdkActivityIssuersView);
-        assertEquals(referencesLayout.getChildCount(), issuerList.size());
+        assertEquals(referencesLayout.getAdapter().getItemCount(), issuerList.size());
     }
 
     @Test
@@ -365,9 +396,10 @@ public class IssuersActivityTest {
 
         mTestRule.launchActivity(validStartIntent);
 
-        FrameLayout cardBackground = (FrameLayout) mTestRule.getActivity().findViewById(R.id.mpsdkCardBackground);
-        int color = ViewUtils.getBackgroundColor(cardBackground);
-        assertEquals(color, decorationPreference.getLighterColor());
+        int appBarColor = ViewUtils.getBackgroundColor(mTestRule.getActivity().mAppBar);
+        assertEquals(appBarColor, decorationPreference.getLighterColor());
+        int toolbarColor = ViewUtils.getBackgroundColor(mTestRule.getActivity().mNormalToolbar);
+        assertEquals(toolbarColor, decorationPreference.getLighterColor());
     }
 
     @Test
@@ -383,10 +415,8 @@ public class IssuersActivityTest {
 
         mTestRule.launchActivity(validStartIntent);
 
-        Toolbar toolbar = (Toolbar) mTestRule.getActivity().findViewById(R.id.mpsdkRegularToolbar);
-        int color = ViewUtils.getBackgroundColor(toolbar);
+        int color = ViewUtils.getBackgroundColor(mTestRule.getActivity().mLowResToolbar);
         assertEquals(color, (int)decorationPreference.getBaseColor());
-
 
         MPTextView toolbarTitle = (MPTextView) mTestRule.getActivity().findViewById(R.id.mpsdkTitle);
         int fontColor = toolbarTitle.getCurrentTextColor();
@@ -411,10 +441,10 @@ public class IssuersActivityTest {
 
         mTestRule.launchActivity(validStartIntent);
 
-        FrameLayout cardBackground = (FrameLayout) mTestRule.getActivity().findViewById(R.id.mpsdkCardBackground);
-        int color = ViewUtils.getBackgroundColor(cardBackground);
-        assertEquals(color, decorationPreference.getLighterColor());
-
+        int appBarColor = ViewUtils.getBackgroundColor(mTestRule.getActivity().mAppBar);
+        assertEquals(appBarColor, decorationPreference.getLighterColor());
+        int toolbarColor = ViewUtils.getBackgroundColor(mTestRule.getActivity().mNormalToolbar);
+        assertEquals(toolbarColor, decorationPreference.getLighterColor());
     }
 
     @Test
@@ -431,16 +461,47 @@ public class IssuersActivityTest {
 
         mTestRule.launchActivity(validStartIntent);
 
-        Toolbar toolbar = (Toolbar) mTestRule.getActivity().findViewById(R.id.mpsdkRegularToolbar);
-        int color = ViewUtils.getBackgroundColor(toolbar);
+        int color = ViewUtils.getBackgroundColor(mTestRule.getActivity().mLowResToolbar);
         assertEquals(color, (int)decorationPreference.getBaseColor());
 
         MPTextView toolbarTitle = (MPTextView) mTestRule.getActivity().findViewById(R.id.mpsdkTitle);
         int fontColor = toolbarTitle.getCurrentTextColor();
         int expectedColor = ContextCompat.getColor(InstrumentationRegistry.getContext(), R.color.mpsdk_dark_font_color);
         assertEquals(fontColor, expectedColor);
-
     }
 
+    //Timer
+    @Test
+    public void showCountDownTimerWhenItIsInitialized(){
+        String issuers = StaticMock.getIssuersJson();
+        Type listType = new TypeToken<List<Issuer>>(){}.getType();
+        List<Issuer> issuerList = JsonUtil.getInstance().getGson().fromJson(issuers, listType);
+        mFakeAPI.addResponseToQueue(issuerList, 200, "");
 
+        CheckoutTimer.getInstance().start(60);
+
+        mTestRule.launchActivity(validStartIntent);
+
+        Assert.assertTrue(mTestRule.getActivity().findViewById(R.id.mpsdkTimerTextView).getVisibility() == View.VISIBLE);
+        Assert.assertTrue(CheckoutTimer.getInstance().isTimerEnabled());
+    }
+
+    @Test
+    public void finishActivityWhenSetOnFinishCheckoutListener(){
+        String issuers = StaticMock.getIssuersJson();
+        Type listType = new TypeToken<List<Issuer>>(){}.getType();
+        List<Issuer> issuerList = JsonUtil.getInstance().getGson().fromJson(issuers, listType);
+        mFakeAPI.addResponseToQueue(issuerList, 200, "");
+
+        CheckoutTimer.getInstance().start(10);
+        CheckoutTimer.getInstance().setOnFinishListener(new CheckoutTimer.FinishListener() {
+            @Override
+            public void onFinish() {
+                CheckoutTimer.getInstance().finishCheckout();
+                Assert.assertTrue(mTestRule.getActivity().isFinishing());
+            }
+        });
+
+        mTestRule.launchActivity(validStartIntent);
+    }
 }

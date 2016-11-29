@@ -56,14 +56,21 @@ public class StaticMock {
     // * Card token
     public final static String DUMMY_CARD_NUMBER = "4444444444440008";
     public final static String DUMMY_CARD_NUMBER_MASTER = "5444444444440008";
+    public final static String DUMMY_CARD_NUMBER_AMEX = "371180303257522";
+    public final static String DUMMY_CARD_NUMBER_VISA = "4509953566233704";
     public final static String DUMMY_CARDHOLDER_NAME = "john";
     public final static int DUMMY_EXPIRATION_MONTH = 11;
     public final static int DUMMY_EXPIRATION_YEAR_SHORT = 25;
     public final static int DUMMY_EXPIRATION_YEAR_LONG = 2025;
     public final static String DUMMY_IDENTIFICATION_NUMBER = "12345678";
+    public final static String DUMMY_IDENTIFICATION_NUMBER_WITH_MASK = "12.345.678";
     public final static String DUMMY_IDENTIFICATION_TYPE = "DNI";
     public final static String DUMMY_SECURITY_CODE = "123";
+    public final static String DUMMY_SECURITY_CODE_FOUR_DIGITS = "1234";
     public final static String DUMMY_EXPIRATION_DATE = "1225";
+    public final static int DUMMY_EXPIRATION_DATE_ONLY_MONTH = 12;
+    public final static int DUMMY_EXPIRATION_DATE_ONLY_YEAR = 25;
+    public final static String DUMMY_EXPIRATION_DATE_WITH_MASK = "12/25";
     public final static String DUMMY_CI_NUMBER = "123456789";
     public final static String DUMMY_LC_NUMBER = "1234567";
     public final static String DUMMY_LE_NUMBER = "1234567";
@@ -148,6 +155,15 @@ public class StaticMock {
             return null;
         }
 
+    }
+
+    public static String getPaymentMethodListMLM() {
+        try {
+            return getFile(InstrumentationRegistry.getContext(), "mocks/payment_method_list_mlm.json");
+
+        } catch (Exception ex) {
+            return null;
+        }
     }
 
     public static List<PayerCost> getPayerCosts(Context context) {
@@ -252,6 +268,15 @@ public class StaticMock {
         }
     }
 
+    public static Token getClonedToken() {
+
+        try {
+            return JsonUtil.getInstance().fromJson(getFile(InstrumentationRegistry.getContext(), "mocks/cloned_token.json"), Token.class);
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
     public static Token getTokenAmex() {
 
         try {
@@ -261,10 +286,27 @@ public class StaticMock {
         }
     }
 
+    public static Token getClonedTokenAmex() {
+
+        try {
+            return JsonUtil.getInstance().fromJson(getFile(InstrumentationRegistry.getContext(), "mocks/cloned_token_amex.json"), Token.class);
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
     public static Token getTokenMasterIssuers() {
 
         try {
             return JsonUtil.getInstance().fromJson(getFile(InstrumentationRegistry.getContext(), "mocks/token_master_issuers.json"), Token.class);
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+    public static Customer getCustomer() {
+        try {
+            return JsonUtil.getInstance().fromJson(getFile(InstrumentationRegistry.getContext(), "mocks/customer.json"), Customer.class);
         } catch (Exception ex) {
             return null;
         }
@@ -312,9 +354,59 @@ public class StaticMock {
         }
     }
 
-    public static String getCompletePaymentMethodSearchAsJson() {
+    public static Payment getPaymentApprovedVisa() {
+
+        try {
+            return JsonUtil.getInstance().fromJson(getFile(InstrumentationRegistry.getContext(), "mocks/payment_approved_visa.json"), Payment.class);
+
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+    public static Payment getPaymentRejectedCallForAuthorize() {
+
+        try {
+            return JsonUtil.getInstance().fromJson(getFile(InstrumentationRegistry.getContext(), "mocks/payment_rejected_call_for_authorize.json"), Payment.class);
+
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+    public static Payment getPaymentRejectedBadFilledSecurityCode() {
+
+        try {
+            return JsonUtil.getInstance().fromJson(getFile(InstrumentationRegistry.getContext(), "mocks/payment_rejected_bad_filled_security_code.json"), Payment.class);
+
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+    public static Payment getAmexPaymentRejectedBadFilledSecurityCode() {
+
+        try {
+            return JsonUtil.getInstance().fromJson(getFile(InstrumentationRegistry.getContext(), "mocks/payment_rejected_bad_filled_security_code_amex.json"), Payment.class);
+
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+    public static String getPaymentMethodSearchWithoutCustomOptionsAsJson() {
         try {
             return getFile(InstrumentationRegistry.getContext(), "mocks/payment_method_search_all.json");
+
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+
+    public static String getPaymentMethodSearchWithCardsAsJson() {
+        try {
+            return getFile(InstrumentationRegistry.getContext(), "mocks/payment_method_search_with_cards");
 
         } catch (Exception ex) {
             return null;
@@ -362,6 +454,15 @@ public class StaticMock {
     public static PaymentMethod getPaymentMethodOn() {
         try {
             return JsonUtil.getInstance().fromJson(getFile(InstrumentationRegistry.getContext(), "mocks/payment_method_on.json"), PaymentMethod.class);
+        } catch (Exception ex) {
+
+            return null;
+        }
+    }
+
+    public static PaymentMethod getAmexPaymentMethodOn() {
+        try {
+            return JsonUtil.getInstance().fromJson(getFile(InstrumentationRegistry.getContext(), "mocks/payment_method_on_amex.json"), PaymentMethod.class);
         } catch (Exception ex) {
 
             return null;
@@ -565,7 +666,8 @@ public class StaticMock {
 
         } catch (Exception ex) {
             return null;
-        }    }
+        }
+    }
 
     private static String getFile(Context context, String fileName) {
 

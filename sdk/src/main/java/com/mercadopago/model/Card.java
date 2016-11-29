@@ -2,7 +2,7 @@ package com.mercadopago.model;
 
 import java.util.Date;
 
-public class Card {
+public class Card implements CardInformation {
 
     private Cardholder cardHolder;
     private String customerId;
@@ -67,6 +67,11 @@ public class Card {
 
     public String getFirstSixDigits() {
         return firstSixDigits;
+    }
+
+    @Override
+    public Integer getSecurityCodeLength() {
+        return securityCode == null ? null : securityCode.getLength();
     }
 
     public void setFirstSixDigits(String firstSixDigits) {

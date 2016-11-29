@@ -13,12 +13,13 @@
         android:layout_height="@dimen/mpsdk_toolbar_height"
         android:theme="@style/ToolbarTheme"
         app:popupTheme="@style/Theme.MercadoPagoTheme.NoActionBar">
-        <com.mercadopago.views.MPTextView
+        <com.mercadopago.customviews.MPTextView
             android:id="@+id/mpsdkTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             style="@style/mpsdk_title_text"/>
+
     </android.support.v7.widget.Toolbar>
 
 </android.support.design.widget.AppBarLayout>

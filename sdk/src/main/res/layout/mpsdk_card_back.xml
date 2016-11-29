@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mpsdkCardBackContainer"
+    android:layout_height="@dimen/mpsdk_card_size_extra_big_height"
+    android:layout_width="@dimen/mpsdk_card_size_extra_big_width">
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:padding="6dp">
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:background="@drawable/mpsdk_new_card_layout">
+            <ImageView
+                android:id="@+id/mpsdkCardImageView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/mpsdk_white"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:weightSum="1">
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="0.45"
+                    android:layout_marginTop="22dp"
+                    android:background="@drawable/mpsdk_card_back_band">
+                </FrameLayout>
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_gravity="center_horizontal">
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center_vertical"
+                        android:background="@drawable/mpsdk_card_ccv_bakg">
+                    </FrameLayout>
+                    <FrameLayout
+                        android:layout_width="42dp"
+                        android:layout_height="42dp"
+                        android:layout_gravity="end"
+                        android:background="@drawable/mpsdk_card_back_ccv">
+                        <com.mercadopago.customviews.MPTextView
+                            android:id="@+id/mpsdkCardSecurityCodeViewBack"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:maxLines="1"
+                            android:gravity="start"
+                            android:textColor="@color/mpsdk_base_text"
+                            android:textSize="16dp"
+                            tools:text="123"
+                            app:fontStyle="roboto_regular"/>
+                    </FrameLayout>
+
+                </FrameLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:weightSum="1">
+                <FrameLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.65">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/mpsdk_card_back_shadow"/>
+                </FrameLayout>
+            </LinearLayout>
+        </FrameLayout>
+    </FrameLayout>
+
+    <ImageView
+        android:id="@+id/mpsdkCardShadowBorder"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:src="@drawable/mpsdk_card_shadow_rounded"/>
+</FrameLayout>
+
+
+
+
+
+

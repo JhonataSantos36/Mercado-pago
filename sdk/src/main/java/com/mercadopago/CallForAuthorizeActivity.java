@@ -3,14 +3,16 @@ package com.mercadopago;
 import android.content.Intent;
 import android.support.design.widget.Snackbar;
 import android.view.View;
+import android.widget.FrameLayout;
 
+import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentMethod;
+import com.mercadopago.model.PaymentResultAction;
 import com.mercadopago.mptracker.MPTracker;
 import com.mercadopago.util.CurrenciesUtil;
 import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
-import com.mercadopago.views.MPTextView;
 
 import java.math.BigDecimal;
 
@@ -21,8 +23,8 @@ public class CallForAuthorizeActivity extends MercadoPagoActivity {
     //Controls
     protected MPTextView mCallForAuthTitle;
     protected MPTextView mAuthorizedPaymentMethod;
-    protected MPTextView mSelectOtherPaymentMethod;
-    protected MPTextView mExit;
+    protected MPTextView mKeepBuyingButton;
+    protected FrameLayout mPayWithOtherPaymentMethodButton;
 
     //Params
     protected Payment mPayment;
@@ -31,6 +33,7 @@ public class CallForAuthorizeActivity extends MercadoPagoActivity {
 
     //Local values
     private boolean mBackPressedOnce;
+    private String mNextAction;
 
     @Override
     protected void getActivityParameters() {
@@ -54,8 +57,7 @@ public class CallForAuthorizeActivity extends MercadoPagoActivity {
 
     @Override
     protected void setContentView() {
-        MPTracker.getInstance().trackScreen("CALL_FOR_AUTHORIZE", 2, mMerchantPublicKey, BuildConfig.VERSION_NAME, getActivity());
-
+        MPTracker.getInstance().trackScreen("CALL_FOR_AUTHORIZE", "2", mMerchantPublicKey, BuildConfig.VERSION_NAME, this);
         setContentView(R.layout.mpsdk_activity_call_for_authorize);
     }
 
@@ -66,24 +68,30 @@ public class CallForAuthorizeActivity extends MercadoPagoActivity {
         mAuthorizedPaymentMethod.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                MPTracker.getInstance().trackEvent("CALL_FOR_AUTHORIZE", "RECOVER_TOKEN", "2", mMerchantPublicKey, BuildConfig.VERSION_NAME, getActivity());
+
                 Intent returnIntent = new Intent();
-                returnIntent.putExtra("retry", true);
+                mNextAction = PaymentResultAction.RECOVER_PAYMENT;
+                returnIntent.putExtra("nextAction", mNextAction);
                 setResult(RESULT_CANCELED, returnIntent);
                 finish();
             }
         });
-        mSelectOtherPaymentMethod = (MPTextView) findViewById(R.id.mpsdkSelectOtherPaymentMethodByCallForAuthorize);
-        mSelectOtherPaymentMethod.setOnClickListener(new View.OnClickListener() {
+        mPayWithOtherPaymentMethodButton = (FrameLayout) findViewById(R.id.mpsdkCallForAuthorizeOptionButton);
+        mPayWithOtherPaymentMethodButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
+                MPTracker.getInstance().trackEvent("CALL_FOR_AUTHORIZE", "SELECT_OTHER_PAYMENT_METHOD", "2", mMerchantPublicKey, BuildConfig.VERSION_NAME, getActivity());
+
                 Intent returnIntent = new Intent();
-                returnIntent.putExtra("selectOther", true);
+                mNextAction = PaymentResultAction.SELECT_OTHER_PAYMENT_METHOD;
+                returnIntent.putExtra("nextAction", mNextAction);
                 setResult(RESULT_CANCELED, returnIntent);
                 finish();
             }
         });
-        mExit = (MPTextView) findViewById(R.id.mpsdkExitCallForAuthorize);
-        mExit.setOnClickListener(new View.OnClickListener() {
+        mKeepBuyingButton = (MPTextView) findViewById(R.id.mpsdkKeepBuyingCallForAuthorize);
+        mKeepBuyingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finishWithOkResult();
@@ -147,13 +155,21 @@ public class CallForAuthorizeActivity extends MercadoPagoActivity {
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == ErrorUtil.ERROR_REQUEST_CODE) {
+            setResult(RESULT_CANCELED, data);
+            finish();
+        }
+    }
+
+    @Override
     public void onBackPressed() {
-        MPTracker.getInstance().trackEvent("CALL_FOR_AUTHORIZE", "BACK_PRESSED", 2, mMerchantPublicKey, BuildConfig.VERSION_NAME, this);
+        MPTracker.getInstance().trackEvent("CALL_FOR_AUTHORIZE", "BACK_PRESSED", "2", mMerchantPublicKey, BuildConfig.VERSION_NAME, this);
 
         if (mBackPressedOnce) {
             finishWithOkResult();
         } else {
-            Snackbar.make(mExit, getString(R.string.mpsdk_press_again_to_leave), Snackbar.LENGTH_LONG).show();
+            Snackbar.make(mKeepBuyingButton, getString(R.string.mpsdk_press_again_to_leave), Snackbar.LENGTH_LONG).show();
             mBackPressedOnce = true;
             resetBackPressedOnceIn(4000);
         }

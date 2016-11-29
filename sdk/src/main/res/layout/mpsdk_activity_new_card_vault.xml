@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".InstallmentsActivity"
-    android:background="@color/mpsdk_color_new_card_form_background">
+    android:background="@color/mpsdk_background_blue">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -35,12 +32,12 @@
                 android:layout_height="match_parent"
                 android:background="@color/mpsdk_white">
                 <ProgressBar
+                    style="?android:attr/progressBarStyleLarge"
                     android:id="@+id/mpsdkProgressLayout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"/>
             </FrameLayout>
-
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

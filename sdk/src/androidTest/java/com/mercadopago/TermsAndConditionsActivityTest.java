@@ -36,7 +36,7 @@ import static org.junit.Assert.assertTrue;
  */
 @RunWith(AndroidJUnit4.class)
 @LargeTest
-public class TermsAndConditionsActivityTest  {
+public class TermsAndConditionsActivityTest {
 
     @Rule
     public ActivityTestRule<TermsAndConditionsActivity> mTestRule = new ActivityTestRule<>(TermsAndConditionsActivity.class, true, false);
@@ -55,7 +55,7 @@ public class TermsAndConditionsActivityTest  {
 
     @Test
     public void ifNeitherLegalsNorSiteReceivedStartErrorActivity() {
-        Intent invalidStartIntent =  new Intent();
+        Intent invalidStartIntent = new Intent();
         mTestRule.launchActivity(invalidStartIntent);
 
         intended(hasComponent(ErrorActivity.class.getName()));
@@ -67,7 +67,7 @@ public class TermsAndConditionsActivityTest  {
     public void ifBankDealsLegalsReceivedShowThem() {
         String legals = StaticMock.getBankDeals().get(0).getLegals();
 
-        Intent legalsIntent =  new Intent();
+        Intent legalsIntent = new Intent();
         legalsIntent.putExtra("bankDealLegals", legals);
 
         mTestRule.launchActivity(legalsIntent);
@@ -98,9 +98,19 @@ public class TermsAndConditionsActivityTest  {
     }
 
     @Test
-    public void ifNeitherMLANorMLMSiteReceivedFinishActivity() {
+    public void ifMLBSiteReceivedShowMercadoPagoTermsAndConditions() {
+        Intent mlaIntent = new Intent();
+        mlaIntent.putExtra("siteId", Sites.BRASIL.getId());
+
+        mTestRule.launchActivity(mlaIntent);
+
+        assertTrue(mTestRule.getActivity().mTermsAndConditionsWebView.getVisibility() == View.VISIBLE);
+    }
+
+    @Test
+    public void ifNeitherMLANorMLMNorMLBSiteReceivedFinishActivity() {
         Intent mlmIntent = new Intent();
-        mlmIntent.putExtra("siteId", Sites.BRASIL.getId());
+        mlmIntent.putExtra("siteId", Sites.CHILE.getId());
 
         mTestRule.launchActivity(mlmIntent);
 
@@ -109,11 +119,11 @@ public class TermsAndConditionsActivityTest  {
 
     //On back pressed finish activity
 
-    @Test (expected = NoActivityResumedException.class)
-    public void onBackPressedFinishActivity () {
+    @Test(expected = NoActivityResumedException.class)
+    public void onBackPressedFinishActivity() {
         String legals = StaticMock.getBankDeals().get(0).getLegals();
 
-        Intent legalsIntent =  new Intent();
+        Intent legalsIntent = new Intent();
         legalsIntent.putExtra("bankDealLegals", legals);
 
         mTestRule.launchActivity(legalsIntent);
@@ -122,10 +132,10 @@ public class TermsAndConditionsActivityTest  {
     }
 
     @Test
-    public void onNavigationArrowPressedFinishActivity () {
+    public void onNavigationArrowPressedFinishActivity() {
         String legals = StaticMock.getBankDeals().get(0).getLegals();
 
-        Intent legalsIntent =  new Intent();
+        Intent legalsIntent = new Intent();
         legalsIntent.putExtra("bankDealLegals", legals);
 
         mTestRule.launchActivity(legalsIntent);
@@ -145,7 +155,7 @@ public class TermsAndConditionsActivityTest  {
 
         String legals = StaticMock.getBankDeals().get(0).getLegals();
 
-        Intent legalsIntent =  new Intent();
+        Intent legalsIntent = new Intent();
         legalsIntent.putExtra("bankDealLegals", legals);
         legalsIntent.putExtra("decorationPreference", JsonUtil.getInstance().toJson(decorationPreference));
 

@@ -18,10 +18,10 @@
         <ImageView
             android:layout_width="96dp"
             android:layout_height="96dp"
-            android:src="@drawable/ic_refresh"
+            android:src="@drawable/mpsdk_ic_refresh"
             android:layout_gravity="center_horizontal|top"/>
 
-        <com.mercadopago.views.MPTextView
+        <com.mercadopago.customviews.MPTextView
             android:layout_width="wrap_content"
             android:layout_marginTop="25dp"
             android:gravity="bottom|center"

@@ -6,7 +6,7 @@
         android:top="6dp"
         android:right="6dp"
         android:bottom="6dp" />
-    <corners android:radius="15dp" />
+    <corners android:radius="11dp" />
     <stroke android:width="6dp"
-        android:color="@color/mpsdk_color_new_card_form_background" />
+        android:color="@color/mpsdk_background_blue" />
 </shape>

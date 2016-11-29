@@ -32,6 +32,34 @@
         "length":3,
         "mode":null
       }
+    },
+    {
+      "card_holder":null,
+      "customer_id":"178101336",
+      "date_created":null,
+      "date_last_updated":null,
+      "expiration_month":11,
+      "expiration_year":2019,
+      "first_six_digits":"417006",
+      "id":"149024476",
+      "issuer":{
+        "id":1,
+        "name":"Visa"
+      },
+      "last_four_digits":"1234",
+      "payment_method":{
+        "accreditation_time":null,
+        "additional_info_needed":null,
+        "id":"visa",
+        "name":"Visa",
+        "payment_type_id":"credit_card",
+        "settings":null
+      },
+      "security_code":{
+        "card_location":"back",
+        "length":3,
+        "mode":null
+      }
     }
   ],
   "date_created":"2015-02-27T16:45:47.000+0000",

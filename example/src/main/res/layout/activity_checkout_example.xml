@@ -17,99 +17,99 @@
         android:layout_height="match_parent"
         android:id="@+id/regularLayout"
         android:visibility="visible">
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="10dp">
-                <ImageView
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="10dp">
+            <ImageView
                 android:layout_width="150dp"
                 android:layout_height="100dp"
                 android:layout_marginTop="20dp"
                 android:src="@drawable/plugandplay"
                 android:layout_gravity="center_horizontal" />
 
-                <com.mercadopago.views.MPTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/checkout_title"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
-                    android:singleLine="false"
-                    android:layout_gravity="center"
-                    style="@style/big_label"/>
+            <com.mercadopago.customviews.MPTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/checkout_title"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:singleLine="false"
+                android:layout_gravity="center"
+                style="@style/big_label"/>
 
-                <com.mercadopago.views.MPTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/checkout_description"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
-                    android:singleLine="false"
-                    android:gravity="center_horizontal"
-                    style="@style/form_label"/>
+            <com.mercadopago.customviews.MPTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/checkout_description"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:singleLine="false"
+                android:gravity="center_horizontal"
+                style="@style/form_label"/>
 
-                <com.mercadopago.views.MPButton
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/mpsdk_button_height"
-                    android:layout_marginTop="25dp"
-                    android:text="@string/mpsdk_continue_label"
-                    android:onClick="onContinueClicked"
-                    style="@style/mpsdk_button_normal"/>
+            <com.mercadopago.customviews.MPButton
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/mpsdk_button_height"
+                android:layout_marginTop="25dp"
+                android:text="@string/mpsdk_continue_label"
+                android:onClick="onContinueClicked"
+                style="@style/mpsdk_button_normal"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="center"
+                android:layout_marginTop="25dp">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="25dp">
+                    android:onClick="changeColor"
+                    android:layout_gravity="center">
 
-                    <LinearLayout
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:background="@color/colorPrimary"
+                        android:id="@+id/colorSample"/>
+
+                    <com.mercadopago.customviews.MPTextView
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginStart="5dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:onClick="changeColor"
-                        android:layout_gravity="center">
-
-                        <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:background="@color/colorPrimary"
-                            android:id="@+id/colorSample"/>
-
-                        <com.mercadopago.views.MPTextView
-                            android:layout_marginLeft="5dp"
-                            android:layout_marginStart="5dp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/pick_color"
-                            style="@style/form_label"/>
-                    </LinearLayout>
-
-                    <CheckBox
-                        android:enabled="false"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginLeft="10dp"
-                        android:id="@+id/darkFontEnabled"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text="@string/dark_font"
-                        android:textSize="14dp"/>
+                        android:text="@string/pick_color"
+                        style="@style/form_label"/>
                 </LinearLayout>
-                <com.mercadopago.views.MPTextView
-                    android:layout_marginTop="15dp"
+
+                <CheckBox
+                    android:enabled="false"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:id="@+id/darkFontEnabled"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="10dp"
                     android:layout_gravity="center"
-                    android:textColor="@color/mpsdk_color_link"
-                    android:textSize="15dp"
-                    android:clickable="true"
-                    android:onClick="resetSelection"
-                    android:text="@string/reset"/>
+                    android:text="@string/dark_font"
+                    android:textSize="14dp"/>
             </LinearLayout>
+            <com.mercadopago.customviews.MPTextView
+                android:layout_marginTop="15dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:layout_gravity="center"
+                android:textColor="@color/mpsdk_color_link"
+                android:textSize="15dp"
+                android:clickable="true"
+                android:onClick="resetSelection"
+                android:text="@string/reset"/>
+        </LinearLayout>
     </ScrollView>
 </LinearLayout>

@@ -3,12 +3,12 @@ package com.mercadopago;
 import android.content.Intent;
 
 import com.mercadopago.core.MercadoPago;
+import com.mercadopago.customviews.MPEditText;
+import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.test.BaseTest;
 import com.mercadopago.test.StaticMock;
 import com.mercadopago.util.JsonUtil;
-import com.mercadopago.views.MPEditText;
-import com.mercadopago.views.MPTextView;
 
 public class NewCardActivityTest extends BaseTest<NewCardActivity> {
 
@@ -59,9 +59,9 @@ public class NewCardActivityTest extends BaseTest<NewCardActivity> {
 //            assertTrue(cardToken.getCardNumber().equals(StaticMock.DUMMY_CARD_NUMBER));
 //            assertTrue(cardToken.getExpirationMonth() == StaticMock.DUMMY_EXPIRATION_MONTH);
 //            assertTrue(cardToken.getExpirationYear() == StaticMock.DUMMY_EXPIRATION_YEAR_LONG);
-//            assertTrue(cardToken.getCardholder().getName().equals(StaticMock.DUMMY_CARDHOLDER_NAME));
-//            assertTrue(cardToken.getCardholder().getIdentification().getType().equals(StaticMock.DUMMI_IDENTIFICATION_TYPE_NAME));
-//            assertTrue(cardToken.getCardholder().getIdentification().getNumber().equals(StaticMock.DUMMY_IDENTIFICATION_NUMBER));
+//            assertTrue(cardToken.getCardHolder().getName().equals(StaticMock.DUMMY_CARDHOLDER_NAME));
+//            assertTrue(cardToken.getCardHolder().getIdentification().getType().equals(StaticMock.DUMMI_IDENTIFICATION_TYPE_NAME));
+//            assertTrue(cardToken.getCardHolder().getIdentification().getNumber().equals(StaticMock.DUMMY_IDENTIFICATION_NUMBER));
 //        } catch (Exception ex) {
 //            fail("Get card token test failed, cause: " + ex.getMessage());
 //        }
@@ -239,9 +239,9 @@ public class NewCardActivityTest extends BaseTest<NewCardActivity> {
 //            assertTrue(cardToken.getCardNumber().equals(StaticMock.DUMMY_CARD_NUMBER));
 //            assertTrue(cardToken.getExpirationMonth() == StaticMock.DUMMY_EXPIRATION_MONTH);
 //            assertTrue(cardToken.getExpirationYear() == StaticMock.DUMMY_EXPIRATION_YEAR_LONG);
-//            assertTrue(cardToken.getCardholder().getName().equals(StaticMock.DUMMY_CARDHOLDER_NAME));
-//            assertTrue(cardToken.getCardholder().getIdentification().getType().equals(StaticMock.DUMMI_IDENTIFICATION_TYPE_NAME));
-//            assertTrue(cardToken.getCardholder().getIdentification().getNumber().equals(StaticMock.DUMMY_IDENTIFICATION_NUMBER));
+//            assertTrue(cardToken.getCardHolder().getName().equals(StaticMock.DUMMY_CARDHOLDER_NAME));
+//            assertTrue(cardToken.getCardHolder().getIdentification().getType().equals(StaticMock.DUMMI_IDENTIFICATION_TYPE_NAME));
+//            assertTrue(cardToken.getCardHolder().getIdentification().getNumber().equals(StaticMock.DUMMY_IDENTIFICATION_NUMBER));
 //            assertTrue(cardToken.getSecurityCode().equals(StaticMock.DUMMY_SECURITY_CODE));
 //        } catch (Exception ex) {
 //            fail("Get card token with security code test failed, cause: " + ex.getMessage());

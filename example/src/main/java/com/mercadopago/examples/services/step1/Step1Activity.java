@@ -88,7 +88,7 @@ public class Step1Activity extends ExampleActivity {
                     }
                 }
             }
-        } else if (requestCode == MercadoPago.RESULT_REQUEST_CODE) {
+        } else if (requestCode == MercadoPago.PAYMENT_RESULT_REQUEST_CODE) {
             LayoutUtil.showRegularLayout(this);
         }
     }

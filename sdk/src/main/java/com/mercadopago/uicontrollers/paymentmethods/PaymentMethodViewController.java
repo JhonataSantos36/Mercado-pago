@@ -8,7 +8,7 @@ import com.mercadopago.uicontrollers.CustomViewController;
  * Created by mreverter on 12/5/16.
  */
 public interface PaymentMethodViewController extends CustomViewController{
-    void drawPaymentMethod();
+    void draw();
     void showSeparator();
     void setOnClickListener(View.OnClickListener listener);
 }

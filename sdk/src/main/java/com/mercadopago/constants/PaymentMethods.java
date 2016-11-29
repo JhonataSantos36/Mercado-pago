@@ -22,6 +22,7 @@ public class PaymentMethods {
         public static final String CORDOBESA = "cordobesa";
         public static final String CMR = "cmr";
         public static final String MERCADOPAGO_CC = "mercadopago_cc";
+        public static final String REDLINK = "redlink";
     }
 
     public class BRASIL {

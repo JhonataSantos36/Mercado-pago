@@ -3,7 +3,9 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="5dp">
+    android:paddingTop="5dp"
+    android:focusable="true"
+    android:background="@drawable/mpsdk_item_focusable_list">
 
     <LinearLayout
         android:id="@+id/mpsdkIssuersItem"
@@ -20,7 +22,7 @@
             android:layout_marginStart="8dp"
             android:layout_gravity="center_vertical"
             android:orientation="horizontal">
-            <com.mercadopago.views.MPTextView
+            <com.mercadopago.customviews.MPTextView
                 android:id="@+id/mpsdkAdapterIssuersText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -37,7 +39,7 @@
             android:layout_width="15dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:src="@drawable/arrow_right"
+            android:src="@drawable/mpsdk_arrow_right"
             android:adjustViewBounds="true"/>
 
 

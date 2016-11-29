@@ -13,9 +13,14 @@ import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 
 import com.mercadopago.R;
+import com.mercadopago.uicontrollers.card.BackCardView;
+import com.mercadopago.uicontrollers.card.CardView;
+import com.mercadopago.uicontrollers.card.FrontCardView;
+import com.mercadopago.uicontrollers.card.IdentificationCardView;
 
 /**
  * Created by vaserber on 6/22/16.
@@ -153,7 +158,8 @@ public class MPAnimationUtils {
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR1)
-    public static void flipToBack(Context context, float cameraDistance, final View frontView, final View backView) {
+    public static void flipToBack(Context context, float cameraDistance, final View frontView, final View backView,
+                                  final BackCardView backCardView) {
 
         AnimatorSet animFront = (AnimatorSet) AnimatorInflater.loadAnimator(context, R.animator.mpsdk_card_flip_left_out);
         AnimatorSet animBack = (AnimatorSet) AnimatorInflater.loadAnimator(context, R.animator.mpsdk_card_flip_right_in);
@@ -197,11 +203,18 @@ public class MPAnimationUtils {
 
         animBack.addListener(new AnimatorListenerAdapter() {
             @Override
+            public void onAnimationStart(Animator animation) {
+                super.onAnimationStart(animation);
+                if (backCardView != null) {
+                    backCardView.show();
+                }
+            }
+
+            @Override
             public void onAnimationEnd(Animator animation) {
                 backView.setLayerType(View.LAYER_TYPE_NONE, null);
             }
         });
-
         backView.setAlpha(1.0f);
         animFront.start();
         animBack.start();
@@ -261,4 +274,115 @@ public class MPAnimationUtils {
         animBack.start();
         animFront.start();
     }
+
+    public static void flipToBack(Context context, final FrontCardView frontCardView, BackCardView backCardView) {
+        Animation animBack = AnimationUtils.loadAnimation(context, R.anim.mpsdk_from_middle_left);
+        Animation animFront = AnimationUtils.loadAnimation(context, R.anim.mpsdk_to_middle_left);
+
+        frontCardView.getView().startAnimation(animFront);
+
+        animFront.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                frontCardView.hide();
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+
+        backCardView.getView().startAnimation(animBack);
+        backCardView.show();
+    }
+
+    public static void flipToFront(Context context, final FrontCardView frontCardView, final BackCardView backCardView) {
+        Animation animFront = AnimationUtils.loadAnimation(context, R.anim.mpsdk_from_middle_left);
+        Animation animBack = AnimationUtils.loadAnimation(context, R.anim.mpsdk_to_middle_left);
+
+        backCardView.getView().startAnimation(animBack);
+
+        animBack.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                backCardView.hide();
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+
+        frontCardView.getView().startAnimation(animFront);
+        frontCardView.show();
+    }
+
+    public static void transitionCardAppear(Context context, final CardView cardView, IdentificationCardView identificationCardView) {
+
+        Animation animAppear = AnimationUtils.loadAnimation(context, R.anim.mpsdk_appear_from_right);
+        Animation animDisappear = AnimationUtils.loadAnimation(context, R.anim.mpsdk_dissapear_to_left);
+
+        cardView.getView().startAnimation(animDisappear);
+
+        animAppear.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                cardView.hide();
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+
+        identificationCardView.getView().startAnimation(animAppear);
+        identificationCardView.show();
+    }
+
+    public static void transitionCardDissappear(Context context, final CardView cardView, final IdentificationCardView identificationCardView) {
+
+        Animation animAppear = AnimationUtils.loadAnimation(context, R.anim.mpsdk_appear_from_left);
+        Animation animDisappear = AnimationUtils.loadAnimation(context, R.anim.mpsdk_dissapear_to_right);
+
+        identificationCardView.getView().startAnimation(animDisappear);
+
+        animAppear.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                identificationCardView.hide();
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+
+        cardView.getView().startAnimation(animAppear);
+        cardView.show();
+    }
+
 }

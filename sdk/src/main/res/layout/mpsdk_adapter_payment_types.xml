@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:id="@+id/mpsdkIssuerAdapterContainer"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    android:orientation="vertical"
+    android:focusable="true"
+    android:background="@drawable/mpsdk_item_focusable_list"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+        <com.mercadopago.customviews.MPTextView
+            android:id="@+id/mpsdkPaymentTypeTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textSize="22dp"
+            app:fontStyle="regular"
+            tools:text="payment type"/>
+    </FrameLayout>
+
+    <include layout="@layout/mpsdk_view_dashed_line_separator"/>
+
+</LinearLayout>

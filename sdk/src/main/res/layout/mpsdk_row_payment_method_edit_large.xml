@@ -34,10 +34,10 @@
                     android:layout_above="@+id/mpsdkComment"
                     android:maxWidth="100dp"
                     android:maxHeight="30dp"
-                    android:src="@drawable/cargavirtual"
+                    android:src="@drawable/mpsdk_cargavirtual"
                     android:adjustViewBounds="true"/>
 
-                <com.mercadopago.views.MPTextView
+                <com.mercadopago.customviews.MPTextView
                     android:id="@+id/mpsdkDescription"
                     android:layout_marginLeft="10dp"
                     android:layout_marginStart="10dp"
@@ -51,7 +51,7 @@
                     android:gravity="center_vertical"
                     style="@style/mpsdk_list_label"/>
 
-                <com.mercadopago.views.MPTextView
+                <com.mercadopago.customviews.MPTextView
                     android:id="@+id/mpsdkComment"
                     android:layout_marginBottom="12dp"
                     android:layout_width="wrap_content"
@@ -69,7 +69,7 @@
             android:layout_width="15dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:src="@drawable/arrow_right"
+            android:src="@drawable/mpsdk_arrow_right"
             android:adjustViewBounds="true"/>
     </LinearLayout>
     <View

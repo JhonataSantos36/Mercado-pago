@@ -43,6 +43,7 @@ public abstract class MercadoPagoActivity extends AppCompatActivity {
     }
 
     protected void onBeforeCreation() {
+        //Perform actions
     }
 
     private void setActivity() {
@@ -103,7 +104,7 @@ public abstract class MercadoPagoActivity extends AppCompatActivity {
         return mActivityActive;
     }
 
-    protected void setFailureRecovery(FailureRecovery failureRecovery) {
+    public void setFailureRecovery(FailureRecovery failureRecovery) {
         this.mFailureRecovery = failureRecovery;
     }
 

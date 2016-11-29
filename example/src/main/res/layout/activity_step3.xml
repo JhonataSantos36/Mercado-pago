@@ -21,7 +21,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-        <com.mercadopago.views.MPTextView
+        <com.mercadopago.customviews.MPTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/step3_description"
@@ -29,7 +29,7 @@
             android:layout_marginTop="15dp"
             style="@style/mpsdk_form_label" />
 
-        <com.mercadopago.views.MPButton
+        <com.mercadopago.customviews.MPButton
             android:id="@+id/btnSimpleFlow"
             android:layout_width="match_parent"
             android:layout_height="@dimen/mpsdk_button_height"

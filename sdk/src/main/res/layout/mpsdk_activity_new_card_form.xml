@@ -22,7 +22,7 @@
                 android:id="@+id/mpsdkCardBackground"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/mpsdk_card_background_height"
-                android:background="@color/mpsdk_color_new_card_form_background">
+                android:background="@color/mpsdk_background_blue">
                 <include layout="@layout/mpsdk_transparent_toolbar"/>
                 <FrameLayout
                     android:id="@+id/mpsdkActivityNewCardContainerFront"
@@ -75,8 +75,9 @@
                             android:id="@+id/mpsdkBackButton"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
+                            android:focusable="true"
                             android:background="@drawable/mpsdk_form_input_button">
-                            <com.mercadopago.views.MPTextView
+                            <com.mercadopago.customviews.MPTextView
                                 android:id="@+id/mpsdkBackButtonText"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -90,7 +91,7 @@
                            android:layout_height="match_parent"
                            android:background="@color/mpsdk_light_gray"
                            android:visibility="gone">
-                           <com.mercadopago.views.MPTextView
+                           <com.mercadopago.customviews.MPTextView
                                android:layout_width="wrap_content"
                                android:layout_height="wrap_content"
                                android:layout_gravity="center"
@@ -104,8 +105,9 @@
                         android:layout_width="0dp"
                         android:layout_height="40dp"
                         android:layout_weight="0.5"
+                        android:focusable="true"
                         android:background="@drawable/mpsdk_form_input_button">
-                        <com.mercadopago.views.MPTextView
+                        <com.mercadopago.customviews.MPTextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
@@ -120,7 +122,7 @@
                     android:layout_gravity="bottom"
                     android:background="@color/mpsdk_light_gray"
                     android:visibility="gone">
-                    <com.mercadopago.views.MPTextView
+                    <com.mercadopago.customviews.MPTextView
                         android:id="@+id/mpsdkErrorTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

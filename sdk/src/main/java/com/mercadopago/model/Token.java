@@ -6,7 +6,7 @@ import com.google.gson.GsonBuilder;
 
 import java.util.Date;
 
-public class Token {
+public class Token implements CardInformation {
 
     private String id;
     private String publicKey;
@@ -154,7 +154,7 @@ public class Token {
         this.lastFourDigits = lastFourDigits;
     }
 
-    public Cardholder getCardholder() {
+    public Cardholder getCardHolder() {
         return cardholder;
     }
 

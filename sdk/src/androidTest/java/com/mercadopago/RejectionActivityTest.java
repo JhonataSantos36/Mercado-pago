@@ -129,37 +129,62 @@ public class RejectionActivityTest {
         createIntent();
         mTestRule.launchActivity(validStartIntent);
 
-        //Title and subtitle
+        //Image
+        onView(withId(R.id.mpsdkIcon)).check(matches(isDisplayed()));
+
+        //SomethingWentWrong text
+        onView(withId(R.id.mpsdkSomethingWentWrong)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_rejection_title))));
+
+        //Title
         onView(withId(R.id.mpsdkRejectionTitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_title_rejection_high_risk))));
+
+        //WhatCanIdo text
+        onView(withId(R.id.mpsdkWhatCanIdo)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_what_can_do))));
+
+        //Subtitle
         onView(withId(R.id.mpsdkRejectionSubtitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_subtitle_rejection_high_risk))));
 
-        //SelectOtherPaymentMethod button is displayed
-        onView(withId(R.id.mpsdkSelectOtherPaymentMethodByRejection)).check(matches(isDisplayed()));
+        //SelectOtherPaymentMethod button
+        onView(withId(R.id.mpsdkRejectionOptionButton)).check(matches(isDisplayed()));
+        onView(withId(R.id.mpsdkRejectionOptionButtonText)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_text_pay_with_other_method))));
 
-        //Exit button is displayed
-        onView(withId(R.id.mpsdkExitRejection)).check(matches(isDisplayed()));
+        //Keep buying button
+        onView(withId(R.id.mpsdkKeepBuyingRejection)).check(matches(isDisplayed()));
+        onView(withId(R.id.mpsdkKeepBuyingRejection)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_text_continue))));
     }
 
     @Test
     public void displayRejectedInsufficientAmountTitleAndSubtitleWhenCreditCardPaymentStatusDetailIsRejectedForInsufficientAmount(){
         String titleMessage;
-
         mPayment.setStatus(Payment.StatusCodes.STATUS_REJECTED);
         mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_INSUFFICIENT_AMOUNT);
 
         createIntent();
         mTestRule.launchActivity(validStartIntent);
 
-        //Title and subtitle
+        //Image
+        onView(withId(R.id.mpsdkIcon)).check(matches(isDisplayed()));
+
+        //SomethingWentWrong text
+        onView(withId(R.id.mpsdkSomethingWentWrong)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_rejection_title))));
+
+        //Title
         titleMessage = String.format(mTestRule.getActivity().getString(R.string.mpsdk_text_insufficient_amount), mPaymentMethod.getName());
         onView(withId(R.id.mpsdkRejectionTitle)).check(matches(withText(titleMessage)));
+
+        //WhatCanIdo text
+        onView(withId(R.id.mpsdkWhatCanIdo)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_what_can_do))));
+
+        //Subtitle
         onView(withId(R.id.mpsdkRejectionSubtitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_subtitle_rejection_insufficient_amount_credit_card))));
 
-        //SelectOtherPaymentMethod button is displayed
-        onView(withId(R.id.mpsdkSelectOtherPaymentMethodByRejection)).check(matches(isDisplayed()));
+        //SelectOtherPaymentMethod button
+        onView(withId(R.id.mpsdkRejectionOptionButton)).check(matches(isDisplayed()));
+        onView(withId(R.id.mpsdkRejectionOptionButtonText)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_text_pay_with_other_method))));
 
-        //Exit button is displayed
-        onView(withId(R.id.mpsdkExitRejection)).check(matches(isDisplayed()));
+        //Keep buying button
+        onView(withId(R.id.mpsdkKeepBuyingRejection)).check(matches(isDisplayed()));
+        onView(withId(R.id.mpsdkKeepBuyingRejection)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_text_continue))));
     }
 
     @Test
@@ -174,38 +199,63 @@ public class RejectionActivityTest {
         createIntent();
         mTestRule.launchActivity(validStartIntent);
 
-        //Title and subtitle
+        //Image
+        onView(withId(R.id.mpsdkIcon)).check(matches(isDisplayed()));
+
+        //SomethingWentWrong text
+        onView(withId(R.id.mpsdkSomethingWentWrong)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_rejection_title))));
+
+        //Title
         titleMessage = String.format(mTestRule.getActivity().getString(R.string.mpsdk_text_insufficient_amount), mPaymentMethod.getName());
         onView(withId(R.id.mpsdkRejectionTitle)).check(matches(withText(titleMessage)));
+
+        //WhatCanIdo text
+        onView(withId(R.id.mpsdkWhatCanIdo)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_what_can_do))));
+
+        //Subtitle
         onView(withId(R.id.mpsdkRejectionSubtitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_subtitle_rejection_insufficient_amount))));
 
-        //SelectOtherPaymentMethod button is displayed
-        onView(withId(R.id.mpsdkSelectOtherPaymentMethodByRejection)).check(matches(isDisplayed()));
+        //SelectOtherPaymentMethod button
+        onView(withId(R.id.mpsdkRejectionOptionButton)).check(matches(isDisplayed()));
+        onView(withId(R.id.mpsdkRejectionOptionButtonText)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_text_pay_with_other_method))));
 
-        //Exit button is displayed
-        onView(withId(R.id.mpsdkExitRejection)).check(matches(isDisplayed()));
+        //Keep buying button
+        onView(withId(R.id.mpsdkKeepBuyingRejection)).check(matches(isDisplayed()));
+        onView(withId(R.id.mpsdkKeepBuyingRejection)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_text_continue))));
     }
 
     @Test
     public void displayRejectedOtherReasonTitleAndSubtitleWhenPaymentStatusDetailIsRejectedForOtherReason(){
         String titleMessage;
-
         mPayment.setStatus(Payment.StatusCodes.STATUS_REJECTED);
         mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_OTHER_REASON);
 
         createIntent();
         mTestRule.launchActivity(validStartIntent);
 
-        //Title and subtitle
+        //Image
+        onView(withId(R.id.mpsdkIcon)).check(matches(isDisplayed()));
+
+        //SomethingWentWrong text
+        onView(withId(R.id.mpsdkSomethingWentWrong)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_rejection_title))));
+
+        //Title
         titleMessage = String.format(mTestRule.getActivity().getString(R.string.mpsdk_title_other_reason_rejection), mPaymentMethod.getName());
         onView(withId(R.id.mpsdkRejectionTitle)).check(matches(withText(titleMessage)));
+
+        //WhatCanIdo text
+        onView(withId(R.id.mpsdkWhatCanIdo)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_what_can_do))));
+
+        //Subtitle
         onView(withId(R.id.mpsdkRejectionSubtitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_text_select_other_rejection))));
 
-        //SelectOtherPaymentMethod button is displayed
-        onView(withId(R.id.mpsdkSelectOtherPaymentMethodByRejection)).check(matches(isDisplayed()));
+        //SelectOtherPaymentMethod button
+        onView(withId(R.id.mpsdkRejectionOptionButton)).check(matches(isDisplayed()));
+        onView(withId(R.id.mpsdkRejectionOptionButtonText)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_text_pay_with_other_method))));
 
-        //Exit button is displayed
-        onView(withId(R.id.mpsdkExitRejection)).check(matches(isDisplayed()));
+        //Keep buying button
+        onView(withId(R.id.mpsdkKeepBuyingRejection)).check(matches(isDisplayed()));
+        onView(withId(R.id.mpsdkKeepBuyingRejection)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_text_continue))));
     }
 
     @Test
@@ -216,15 +266,28 @@ public class RejectionActivityTest {
         createIntent();
         mTestRule.launchActivity(validStartIntent);
 
-        //Title and subtitle
+        //Image
+        onView(withId(R.id.mpsdkIcon)).check(matches(isDisplayed()));
+
+        //SomethingWentWrong text
+        onView(withId(R.id.mpsdkSomethingWentWrong)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_rejection_title))));
+
+        //Title
         onView(withId(R.id.mpsdkRejectionTitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_title_rejection_max_attempts))));
+
+        //WhatCanIdo text
+        onView(withId(R.id.mpsdkWhatCanIdo)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_what_can_do))));
+
+        //Subtitle
         onView(withId(R.id.mpsdkRejectionSubtitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_subtitle_rejection_max_attempts))));
 
-        //SelectOtherPaymentMethod button is displayed
-        onView(withId(R.id.mpsdkSelectOtherPaymentMethodByRejection)).check(matches(isDisplayed()));
+        //SelectOtherPaymentMethod button
+        onView(withId(R.id.mpsdkRejectionOptionButton)).check(matches(isDisplayed()));
+        onView(withId(R.id.mpsdkRejectionOptionButtonText)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_text_pay_with_other_method))));
 
-        //Exit button is displayed
-        onView(withId(R.id.mpsdkExitRejection)).check(matches(isDisplayed()));
+        //Keep buying button
+        onView(withId(R.id.mpsdkKeepBuyingRejection)).check(matches(isDisplayed()));
+        onView(withId(R.id.mpsdkKeepBuyingRejection)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_text_continue))));
     }
 
     @Test
@@ -237,120 +300,199 @@ public class RejectionActivityTest {
         createIntent();
         mTestRule.launchActivity(validStartIntent);
 
-        //Title and subtitle
+        //Image
+        onView(withId(R.id.mpsdkIcon)).check(matches(isDisplayed()));
+
+        //SomethingWentWrong text
+        onView(withId(R.id.mpsdkSomethingWentWrong)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_rejection_title))));
+
+        //Title
         titleMessage = String.format(mTestRule.getActivity().getString(R.string.mpsdk_title_other_reason_rejection), mPaymentMethod.getName());
         onView(withId(R.id.mpsdkRejectionTitle)).check(matches(withText(titleMessage)));
+
+        //WhatCanIdo text
+        onView(withId(R.id.mpsdkWhatCanIdo)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_what_can_do))));
+
+        //Subtitle
         onView(withId(R.id.mpsdkRejectionSubtitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_subtitle_rejection_duplicated_payment))));
+        //SelectOtherPaymentMethod button
+        onView(withId(R.id.mpsdkRejectionOptionButton)).check(matches(isDisplayed()));
+        onView(withId(R.id.mpsdkRejectionOptionButtonText)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_text_pay_with_other_method))));
 
-        //SelectOtherPaymentMethod button is displayed
-        onView(withId(R.id.mpsdkSelectOtherPaymentMethodByRejection)).check(matches(isDisplayed()));
-
-        //Exit button is displayed
-        onView(withId(R.id.mpsdkExitRejection)).check(matches(isDisplayed()));
+        //Keep buying button
+        onView(withId(R.id.mpsdkKeepBuyingRejection)).check(matches(isDisplayed()));
+        onView(withId(R.id.mpsdkKeepBuyingRejection)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_text_continue))));
     }
 
     @Test
     public void displayRejectedCardDisabledTitleAndSubtitleWhenPaymentStatusDetailIsRejectedForCardDisabled(){
         String titleMessage;
-
         mPayment.setStatus(Payment.StatusCodes.STATUS_REJECTED);
         mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_CARD_DISABLED);
 
         createIntent();
         mTestRule.launchActivity(validStartIntent);
 
-        //Title and subtitle
+        //Image
+        onView(withId(R.id.mpsdkIcon)).check(matches(isDisplayed()));
+
+        //SomethingWentWrong text
+        onView(withId(R.id.mpsdkSomethingWentWrong)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_rejection_title))));
+
+        //Title
         titleMessage = String.format(mTestRule.getActivity().getString(R.string.mpsdk_text_active_card), mPaymentMethod.getName());
         onView(withId(R.id.mpsdkRejectionTitle)).check(matches(withText(titleMessage)));
+
+        //WhatCanIdo text
+        onView(withId(R.id.mpsdkWhatCanIdo)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_what_can_do))));
+
+        //Subtitle
         onView(withId(R.id.mpsdkRejectionSubtitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_subtitle_rejection_card_disabled))));
 
-        //SelectOtherPaymentMethod button is displayed
-        onView(withId(R.id.mpsdkSelectOtherPaymentMethodByRejection)).check(matches(isDisplayed()));
+        //SelectOtherPaymentMethod button
+        onView(withId(R.id.mpsdkRejectionOptionButton)).check(matches(isDisplayed()));
+        onView(withId(R.id.mpsdkRejectionOptionButtonText)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_text_pay_with_other_method))));
 
-        //Exit button is displayed
-        onView(withId(R.id.mpsdkExitRejection)).check(matches(isDisplayed()));
+        //Keep buying button
+        onView(withId(R.id.mpsdkKeepBuyingRejection)).check(matches(isDisplayed()));
+        onView(withId(R.id.mpsdkKeepBuyingRejection)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_text_continue))));
     }
 
     @Test
     public void displayRejectedBadFilledOtherTitleAndSubtitleWhenPaymentStatusDetailIsRejectedForBadFilledOther(){
-        String subtitleMessage;
-
+        String titleMessage;
         mPayment.setStatus(Payment.StatusCodes.STATUS_REJECTED);
         mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_BAD_FILLED_OTHER);
 
         createIntent();
         mTestRule.launchActivity(validStartIntent);
 
-        //Title and subtitle
-        onView(withId(R.id.mpsdkRejectionTitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_title_bad_filled_other_rejection))));
-        subtitleMessage = String.format(mTestRule.getActivity().getString(R.string.mpsdk_text_some_number), mPaymentMethod.getName());
-        onView(withId(R.id.mpsdkRejectionSubtitle)).check(matches(withText(subtitleMessage)));
+        //Image
+        onView(withId(R.id.mpsdkIcon)).check(matches(isDisplayed()));
 
-        //SelectOtherPaymentMethod button is displayed
-        onView(withId(R.id.mpsdkSelectOtherPaymentMethodByRejection)).check(matches(isDisplayed()));
+        //SomethingWentWrong text
+        onView(withId(R.id.mpsdkSomethingWentWrong)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_rejection_title))));
 
-        //Exit button is displayed
-        onView(withId(R.id.mpsdkExitRejection)).check(matches(isDisplayed()));
+        //Title
+        titleMessage = String.format(mTestRule.getActivity().getString(R.string.mpsdk_text_some_card_data_is_incorrect), mPaymentMethod.getName());
+        onView(withId(R.id.mpsdkRejectionTitle)).check(matches(withText(titleMessage)));
+
+        //WhatCanIdo text
+        onView(withId(R.id.mpsdkWhatCanIdo)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_what_can_do))));
+
+        //Subtitle
+        onView(withId(R.id.mpsdkRejectionSubtitle)).check(matches(not(isDisplayed())));
+
+        //SelectOtherPaymentMethod button
+        onView(withId(R.id.mpsdkRejectionOptionButton)).check(matches(isDisplayed()));
+        onView(withId(R.id.mpsdkRejectionOptionButtonText)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_text_enter_again))));
+
+        //Keep buying button
+        onView(withId(R.id.mpsdkKeepBuyingRejection)).check(matches(isDisplayed()));
+        onView(withId(R.id.mpsdkKeepBuyingRejection)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_text_cancel_payment_and_continue))));
     }
 
     @Test
     public void displayRejectedBadFilledCardNumberTitleAndSubtitleWhenPaymentStatusDetailIsRejectedForBadFilledCardNumber(){
-        String subtitleMessage;
-
+        String titleMessage;
         mPayment.setStatus(Payment.StatusCodes.STATUS_REJECTED);
         mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_BAD_FILLED_CARD_NUMBER);
 
         createIntent();
         mTestRule.launchActivity(validStartIntent);
 
-        //Title and subtitle
-        onView(withId(R.id.mpsdkRejectionTitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_title_bad_filled_other_rejection))));
-        subtitleMessage = String.format(mTestRule.getActivity().getString(R.string.mpsdk_text_some_number), mPaymentMethod.getName());
-        onView(withId(R.id.mpsdkRejectionSubtitle)).check(matches(withText(subtitleMessage)));
+        //Image
+        onView(withId(R.id.mpsdkIcon)).check(matches(isDisplayed()));
 
-        //SelectOtherPaymentMethod button is displayed
-        onView(withId(R.id.mpsdkSelectOtherPaymentMethodByRejection)).check(matches(isDisplayed()));
+        //SomethingWentWrong text
+        onView(withId(R.id.mpsdkSomethingWentWrong)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_rejection_title))));
 
-        //Exit button is displayed
-        onView(withId(R.id.mpsdkExitRejection)).check(matches(isDisplayed()));
+        //Title
+        titleMessage = String.format(mTestRule.getActivity().getString(R.string.mpsdk_text_some_card_data_is_incorrect), mPaymentMethod.getName());
+        onView(withId(R.id.mpsdkRejectionTitle)).check(matches(withText(titleMessage)));
+
+        //WhatCanIdo text
+        onView(withId(R.id.mpsdkWhatCanIdo)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_what_can_do))));
+
+        //Subtitle
+        onView(withId(R.id.mpsdkRejectionSubtitle)).check(matches(not(isDisplayed())));
+
+        //SelectOtherPaymentMethod button
+        onView(withId(R.id.mpsdkRejectionOptionButton)).check(matches(isDisplayed()));
+        onView(withId(R.id.mpsdkRejectionOptionButtonText)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_text_enter_again))));
+
+        //Keep buying button
+        onView(withId(R.id.mpsdkKeepBuyingRejection)).check(matches(isDisplayed()));
+        onView(withId(R.id.mpsdkKeepBuyingRejection)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_text_cancel_payment_and_continue))));
     }
 
     @Test
     public void displayRejectedBadFilledSecurityCodeTitleAndSubtitleWhenPaymentStatusDetailIsRejectedForBadFilledSecurityCode(){
+        String titleMessage;
+
         mPayment.setStatus(Payment.StatusCodes.STATUS_REJECTED);
         mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_BAD_FILLED_SECURITY_CODE);
 
         createIntent();
         mTestRule.launchActivity(validStartIntent);
 
-        //Title and subtitle
-        onView(withId(R.id.mpsdkRejectionTitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_title_bad_filled_other_rejection))));
-        onView(withId(R.id.mpsdkRejectionSubtitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_title_bad_filled_security_code_rejection))));
+        //Image
+        onView(withId(R.id.mpsdkIcon)).check(matches(isDisplayed()));
 
-        //SelectOtherPaymentMethod button is displayed
-        onView(withId(R.id.mpsdkSelectOtherPaymentMethodByRejection)).check(matches(isDisplayed()));
+        //SomethingWentWrong text
+        onView(withId(R.id.mpsdkSomethingWentWrong)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_rejection_title))));
 
-        //Exit button is displayed
-        onView(withId(R.id.mpsdkExitRejection)).check(matches(isDisplayed()));
+        //Title
+        titleMessage = String.format(mTestRule.getActivity().getString(R.string.mpsdk_text_some_card_data_is_incorrect), mPaymentMethod.getName());
+        onView(withId(R.id.mpsdkRejectionTitle)).check(matches(withText(titleMessage)));
+
+        //WhatCanIdo text
+        onView(withId(R.id.mpsdkWhatCanIdo)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_what_can_do))));
+
+        //Subtitle
+        onView(withId(R.id.mpsdkRejectionSubtitle)).check(matches(not(isDisplayed())));
+
+        //SelectOtherPaymentMethod button
+        onView(withId(R.id.mpsdkRejectionOptionButton)).check(matches(isDisplayed()));
+        onView(withId(R.id.mpsdkRejectionOptionButtonText)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_text_enter_again))));
+
+        //Keep buying button
+        onView(withId(R.id.mpsdkKeepBuyingRejection)).check(matches(isDisplayed()));
+        onView(withId(R.id.mpsdkKeepBuyingRejection)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_text_cancel_payment_and_continue))));
     }
 
     @Test
     public void displayRejectedBadFilledDateTitleAndSubtitleWhenPaymentStatusDetailIsRejectedForBadFilledDate(){
+        String titleMessage;
         mPayment.setStatus(Payment.StatusCodes.STATUS_REJECTED);
         mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_BAD_FILLED_DATE);
 
         createIntent();
         mTestRule.launchActivity(validStartIntent);
 
-        //Title and subtitle
-        onView(withId(R.id.mpsdkRejectionTitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_title_bad_filled_other_rejection))));
-        onView(withId(R.id.mpsdkRejectionSubtitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_title_bad_filled_date_rejection))));
+        //Image
+        onView(withId(R.id.mpsdkIcon)).check(matches(isDisplayed()));
 
-        //SelectOtherPaymentMethod button is displayed
-        onView(withId(R.id.mpsdkSelectOtherPaymentMethodByRejection)).check(matches(isDisplayed()));
+        //SomethingWentWrong text
+        onView(withId(R.id.mpsdkSomethingWentWrong)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_rejection_title))));
 
-        //Exit button is displayed
-        onView(withId(R.id.mpsdkExitRejection)).check(matches(isDisplayed()));
+        //Title
+        titleMessage = String.format(mTestRule.getActivity().getString(R.string.mpsdk_text_some_card_data_is_incorrect), mPaymentMethod.getName());
+        onView(withId(R.id.mpsdkRejectionTitle)).check(matches(withText(titleMessage)));
+
+        //WhatCanIdo text
+        onView(withId(R.id.mpsdkWhatCanIdo)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_what_can_do))));
+
+        //Subtitle
+        onView(withId(R.id.mpsdkRejectionSubtitle)).check(matches(not(isDisplayed())));
+
+        //SelectOtherPaymentMethod button
+        onView(withId(R.id.mpsdkRejectionOptionButton)).check(matches(isDisplayed()));
+        onView(withId(R.id.mpsdkRejectionOptionButtonText)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_text_enter_again))));
+
+        //Keep buying button
+        onView(withId(R.id.mpsdkKeepBuyingRejection)).check(matches(isDisplayed()));
+        onView(withId(R.id.mpsdkKeepBuyingRejection)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_text_cancel_payment_and_continue))));
     }
 
     @Test
@@ -361,15 +503,28 @@ public class RejectionActivityTest {
         createIntent();
         mTestRule.launchActivity(validStartIntent);
 
-        //Title and subtitle
-        onView(withId(R.id.mpsdkRejectionTitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_title_bad_filled_other_rejection))));
+        //Image
+        onView(withId(R.id.mpsdkIcon)).check(matches(isDisplayed()));
+
+        //SomethingWentWrong text
+        onView(withId(R.id.mpsdkSomethingWentWrong)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_rejection_title))));
+
+        //Title
+        onView(withId(R.id.mpsdkRejectionTitle)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_title_bad_filled_other))));
+
+        //WhatCanIdo text
+        onView(withId(R.id.mpsdkWhatCanIdo)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_what_can_do))));
+
+        //Subtitle
         onView(withId(R.id.mpsdkRejectionSubtitle)).check(matches(not(isDisplayed())));
 
-        //SelectOtherPaymentMethod button is displayed
-        onView(withId(R.id.mpsdkSelectOtherPaymentMethodByRejection)).check(matches(isDisplayed()));
+        //SelectOtherPaymentMethod button
+        onView(withId(R.id.mpsdkRejectionOptionButton)).check(matches(isDisplayed()));
+        onView(withId(R.id.mpsdkRejectionOptionButtonText)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_text_pay_with_other_method))));
 
-        //Exit button is displayed
-        onView(withId(R.id.mpsdkExitRejection)).check(matches(isDisplayed()));
+        //Keep buying button
+        onView(withId(R.id.mpsdkKeepBuyingRejection)).check(matches(isDisplayed()));
+        onView(withId(R.id.mpsdkKeepBuyingRejection)).check(matches(withText(mTestRule.getActivity().getString(R.string.mpsdk_text_continue))));
     }
 
     @Test
@@ -377,26 +532,26 @@ public class RejectionActivityTest {
         createIntent();
         mTestRule.launchActivity(validStartIntent);
 
-        //Exit button isDisplayed
-        onView(withId(R.id.mpsdkSelectOtherPaymentMethodByRejection)).check(matches(isDisplayed()));
+        //SelectOtherPaymentMethod button isDisplayed
+        onView(withId(R.id.mpsdkRejectionOptionButton)).check(matches(isDisplayed()));
 
-        //Click on exit button
-        onView(withId(R.id.mpsdkSelectOtherPaymentMethodByRejection)).perform(click());
+        //Click on selectOtherPaymentMethod button
+        onView(withId(R.id.mpsdkRejectionOptionButton)).perform(click());
 
         //Rejection finish
         assertTrue(mTestRule.getActivity().isFinishing());
     }
 
     @Test
-    public void finishRejectionActivityWhenClickOnExitRejection(){
+    public void finishRejectionActivityWhenClickOnKeepBuyingRejection(){
         createIntent();
         mTestRule.launchActivity(validStartIntent);
 
-        //Exit button isDisplayed
-        onView(withId(R.id.mpsdkExitRejection)).check(matches(isDisplayed()));
+        //Keep buying button isDisplayed
+        onView(withId(R.id.mpsdkKeepBuyingRejection)).check(matches(isDisplayed()));
 
-        //Click on exit button
-        onView(withId(R.id.mpsdkExitRejection)).perform(click());
+        //Click on keep buying button
+        onView(withId(R.id.mpsdkKeepBuyingRejection)).perform(click());
 
         //Rejection finish
         assertTrue(mTestRule.getActivity().isFinishing());
@@ -586,4 +741,3 @@ public class RejectionActivityTest {
         assertTrue(mTestRule.getActivity().isFinishing());
     }
 }
-

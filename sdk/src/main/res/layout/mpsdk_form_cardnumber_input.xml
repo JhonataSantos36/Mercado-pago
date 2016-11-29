@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/mpsdkCardNumberInput"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:visibility="visible">
+
+    <com.mercadopago.customviews.MPTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        android:text="@string/mpsdk_card_number_label"
+        android:textColor="@color/mpsdk_color_new_card_text"
+        android:textSize="14dp" />
+
+    <com.mercadopago.customviews.MPEditText
+        android:id="@+id/mpsdkCardNumber"
+        custom:errorColor="@color/mpsdk_color_red_error"
+        android:layout_width="293dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="2dp"
+        android:digits="0123456789 "
+        android:imeOptions="actionNext"
+        android:inputType="number"
+        android:maxLength="19"
+        android:singleLine="true"
+        android:textColor="@color/abc_search_url_text_selected"
+        android:textSize="19dp" />
+
+</LinearLayout>

@@ -1,40 +1,72 @@
-<?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    android:background="@color/mpsdk_color_light_grey"
-    tools:context="com.mercadopago.PaymentVaultActivity">
-    <include layout="@layout/mpsdk_view_progress_bar"/>
-    <android.support.design.widget.AppBarLayout
-        app:elevation="0dp"
-        android:id="@+id/mpsdkAppBar"
-        android:background="@null"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/Theme.MercadoPagoTheme.NoActionBar">
+    tools:context=".PaymentVaultActivity"
+    tools:ignore="MergeRootFrame">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/mpsdkToolbar"
+    <include layout="@layout/mpsdk_view_progress_bar"/>
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/mpsdkAppBar"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:fitsSystemWindows="true"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/mpsdkCollapsingToolbar"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/mpsdk_toolbar_height"
-            android:background="?attr/colorPrimary"
-            android:theme="@style/ToolbarTheme"
-            app:popupTheme="@style/Theme.MercadoPagoTheme.NoActionBar">
-            <com.mercadopago.views.MPTextView
-                android:id="@+id/mpsdkTitle"
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true"
+            app:contentScrim="?attr/colorPrimary"
+            app:expandedTitleGravity="center_horizontal"
+            app:expandedTitleTextAppearance="@style/Base.TextAppearance.AppCompat.Large"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:toolbarId="@+id/mpsdkToolbar">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/mpsdkToolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                app:layout_collapseMode="pin" >
+
+            <com.mercadopago.customviews.MPTextView
+                android:id="@+id/mpsdkTimerTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
+                android:layout_gravity="right"
+                android:layout_marginRight="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="14dp"
+                android:textSize="17dp"
+                android:background="@drawable/mpsdk_title_toolbar"
+                android:visibility="visible"
+                app:fontStyle="roboto_regular"
                 style="@style/mpsdk_title_text"/>
-        </android.support.v7.widget.Toolbar>
-        <FrameLayout
-            android:id="@+id/mpsdkShoppingCartFragment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            </android.support.v7.widget.Toolbar>
+
+        </android.support.design.widget.CollapsingToolbarLayout>
+
     </android.support.design.widget.AppBarLayout>
-    <include layout="@layout/mpsdk_content_payment_vault"/>
+    <FrameLayout
+        android:id="@+id/mpsdkRegularLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" >
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/mpsdkGroupsList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="@null"
+            android:listSelector="@android:color/transparent"
+            android:paddingEnd="10dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingStart="10dp"
+            android:background="@color/mpsdk_white"/>
+    </FrameLayout>
 </android.support.design.widget.CoordinatorLayout>

@@ -30,7 +30,7 @@
                 android:layout_width="256dp"
                 android:layout_height="33dp"
                 android:layout_marginTop="33dp"
-                android:background="@drawable/card_back_band">
+                android:background="@drawable/mpsdk_card_back_band">
             </FrameLayout>
             <FrameLayout
                 android:layout_width="wrap_content"
@@ -40,14 +40,14 @@
                     android:layout_width="216dp"
                     android:layout_height="24dp"
                     android:layout_gravity="center_vertical"
-                    android:background="@drawable/card_ccv_bakg">
+                    android:background="@drawable/mpsdk_card_ccv_bakg">
                 </FrameLayout>
                 <FrameLayout
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:layout_gravity="end"
-                    android:background="@drawable/card_back_ccv">
-                    <com.mercadopago.views.MPTextView
+                    android:background="@drawable/mpsdk_card_back_ccv">
+                    <com.mercadopago.customviews.MPTextView
                         android:id="@+id/mpsdkCardSecurityCodeView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -66,7 +66,7 @@
         <FrameLayout
             android:layout_width="177dp"
             android:layout_height="161dp"
-            android:background="@drawable/card_back_shadow">
+            android:background="@drawable/mpsdk_card_back_shadow">
         </FrameLayout>
     </FrameLayout>
 

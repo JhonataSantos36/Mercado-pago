@@ -12,7 +12,7 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/mpsdk_color_new_card_form_background">
+        android:background="@color/mpsdk_background_blue">
 
         <include layout="@layout/mpsdk_regular_toolbar"/>
 

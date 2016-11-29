@@ -6,6 +6,7 @@ import android.text.Spanned;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.mptracker.MPTracker;
@@ -13,7 +14,6 @@ import com.mercadopago.util.CurrenciesUtil;
 import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.MercadoPagoUtil;
-import com.mercadopago.views.MPTextView;
 
 import java.math.BigDecimal;
 
@@ -25,11 +25,13 @@ public class CongratsActivity extends MercadoPagoActivity {
     protected MPTextView mLastFourDigitsDescription;
     protected MPTextView mInstallmentsDescription;
     protected MPTextView mInterestAmountDescription;
+    protected MPTextView mTotalAmountDescription;
     protected MPTextView mPaymentIdDescription;
-    protected MPTextView mCongratulationSubtitle;
-    protected View mPaymentIdSeparator;
+    protected MPTextView mPaymentIdDescriptionNumber;
+    protected MPTextView mPayerEmail;
+    protected View mTopEmailSeparator;
     protected ImageView mPaymentMethodImage;
-    protected MPTextView mExit;
+    protected MPTextView mKeepBuyingButton;
 
     // Activity parameters
     protected Payment mPayment;
@@ -61,22 +63,24 @@ public class CongratsActivity extends MercadoPagoActivity {
 
     @Override
     protected void setContentView() {
-        MPTracker.getInstance().trackScreen("CONGRATS", 2, mMerchantPublicKey, BuildConfig.VERSION_NAME, getActivity());
+        MPTracker.getInstance().trackScreen("CONGRATS", "2", mMerchantPublicKey, BuildConfig.VERSION_NAME, getActivity());
 
         setContentView(R.layout.mpsdk_activity_congrats);
     }
 
     @Override
     protected void initializeControls() {
-        mCongratulationSubtitle = (MPTextView) findViewById(R.id.mpsdkCongratulationSubtitle);
+        mPayerEmail = (MPTextView) findViewById(R.id.mpsdkPayerEmail);
         mLastFourDigitsDescription = (MPTextView) findViewById(R.id.mpsdkLastFourDigitsDescription);
         mInstallmentsDescription = (MPTextView) findViewById(R.id.mpsdkInstallmentsDescription);
         mInterestAmountDescription = (MPTextView) findViewById(R.id.mpsdkInterestAmountDescription);
+        mTotalAmountDescription = (MPTextView) findViewById(R.id.mpsdkTotalAmountDescription);
         mPaymentIdDescription = (MPTextView) findViewById(R.id.mpsdkPaymentIdDescription);
-        mPaymentIdSeparator = findViewById(R.id.mpsdkPaymentIdSeparator);
+        mPaymentIdDescriptionNumber = (MPTextView) findViewById(R.id.mpsdkPaymentIdDescriptionNumber);
+        mTopEmailSeparator = findViewById(R.id.mpsdkTopEmailSeparator);
         mPaymentMethodImage = (ImageView) findViewById(R.id.mpsdkPaymentMethodImage);
-        mExit = (MPTextView) findViewById(R.id.mpsdkExitCongrats);
-        mExit.setOnClickListener(new View.OnClickListener() {
+        mKeepBuyingButton = (MPTextView) findViewById(R.id.mpsdkKeepBuyingCongrats);
+        mKeepBuyingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finishWithOkResult();
@@ -99,25 +103,29 @@ public class CongratsActivity extends MercadoPagoActivity {
 
     private void setPaymentIdDescription() {
         if (isPaymentIdValid()) {
-            String message = getString(R.string.mpsdk_payment_id_description) + " " + mPayment.getId();
-            mPaymentIdDescription.setText(message);
+            String message = getString(R.string.mpsdk_payment_id_description_number, String.valueOf(mPayment.getId()));
+            mPaymentIdDescriptionNumber.setText(message);
         } else {
             mPaymentIdDescription.setVisibility(View.GONE);
-            mPaymentIdSeparator.setVisibility(View.GONE);
+            mPaymentIdDescriptionNumber.setVisibility(View.GONE);
         }
     }
 
     private void setInterestAmountDescription() {
-        if (hasInterests()) {
-            StringBuilder sb = new StringBuilder();
+        StringBuilder sb = new StringBuilder();
 
-            sb.append("( ");
-            sb.append(CurrenciesUtil.formatNumber(mPayment.getTransactionDetails().getTotalPaidAmount(), mPayment.getCurrencyId()));
-            sb.append(" )");
-            mInterestAmountDescription.setText(CurrenciesUtil.formatCurrencyInText(mPayment.getTransactionDetails().getTotalPaidAmount(),
-                    mPayment.getCurrencyId(), sb.toString(), true, true));
+        sb.append("(");
+        sb.append(CurrenciesUtil.formatNumber(mPayment.getTransactionDetails().getTotalPaidAmount(), mPayment.getCurrencyId()));
+        sb.append(")");
+        Spanned spannedFullAmountText = CurrenciesUtil.formatCurrencyInText(mPayment.getTransactionDetails().getTotalPaidAmount(),
+                mPayment.getCurrencyId(), sb.toString(), false, true);
+        mTotalAmountDescription.setText(spannedFullAmountText);
+
+        if (hasInterests()) {
+            mInterestAmountDescription.setVisibility(View.GONE);
         } else {
             mInterestAmountDescription.setText(getString(R.string.mpsdk_zero_rate));
+            mInstallmentsDescription.setVisibility(View.VISIBLE);
         }
     }
 
@@ -142,8 +150,10 @@ public class CongratsActivity extends MercadoPagoActivity {
                 StringBuilder sb = new StringBuilder();
                 sb.append(CurrenciesUtil.formatNumber(mPayment.getTransactionDetails().getTotalPaidAmount(), mPayment.getCurrencyId()));
 
-                mInstallmentsDescription.setText(CurrenciesUtil.formatCurrencyInText(mPayment.getTransactionDetails().getTotalPaidAmount(),
-                        mPayment.getCurrencyId(), sb.toString(), true, true));
+                Spanned spannedInstallmentsText = CurrenciesUtil.formatCurrencyInText(mPayment.getTransactionDetails().getTotalPaidAmount(),
+                        mPayment.getCurrencyId(), sb.toString(), false, true);
+
+                mInstallmentsDescription.setText(spannedInstallmentsText);
 
                 mInterestAmountDescription.setVisibility(View.GONE);
             }
@@ -176,9 +186,10 @@ public class CongratsActivity extends MercadoPagoActivity {
     private void setPaymentEmailDescription() {
         if (isPayerEmailValid()) {
             String subtitle = String.format(getString(R.string.mpsdk_subtitle_action_activity_congrat), mPayment.getPayer().getEmail());
-            mCongratulationSubtitle.setText(subtitle);
+            mPayerEmail.setText(subtitle);
         } else {
-            mCongratulationSubtitle.setVisibility(View.GONE);
+            mPayerEmail.setVisibility(View.GONE);
+            mTopEmailSeparator.setVisibility(View.GONE);
         }
     }
 
@@ -220,11 +231,19 @@ public class CongratsActivity extends MercadoPagoActivity {
         StringBuffer sb = new StringBuffer();
         sb.append(mPayment.getInstallments());
         sb.append(" ");
-        sb.append(getString(R.string.mpsdk_installments_of));
+        sb.append(getString(R.string.mpsdk_installments_by));
         sb.append(" ");
         sb.append(CurrenciesUtil.formatNumber(mPayment.getTransactionDetails().getInstallmentAmount(), mPayment.getCurrencyId()));
         return CurrenciesUtil.formatCurrencyInText(mPayment.getTransactionDetails().getInstallmentAmount(),
-                mPayment.getCurrencyId(), sb.toString(), true, true);
+                mPayment.getCurrencyId(), sb.toString(), false, true);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == ErrorUtil.ERROR_REQUEST_CODE) {
+            setResult(RESULT_CANCELED, data);
+            finish();
+        }
     }
 
     private void finishWithOkResult() {
@@ -235,12 +254,12 @@ public class CongratsActivity extends MercadoPagoActivity {
 
     @Override
     public void onBackPressed() {
-        MPTracker.getInstance().trackEvent("CONGRATS", "BACK_PRESSED", 2, mMerchantPublicKey, BuildConfig.VERSION_NAME, this);
+        MPTracker.getInstance().trackEvent("CONGRATS", "BACK_PRESSED", "2", mMerchantPublicKey, BuildConfig.VERSION_NAME, this);
 
         if (mBackPressedOnce) {
             finishWithOkResult();
         } else {
-            Snackbar.make(mExit, getString(R.string.mpsdk_press_again_to_leave), Snackbar.LENGTH_LONG).show();
+            Snackbar.make(mKeepBuyingButton, getString(R.string.mpsdk_press_again_to_leave), Snackbar.LENGTH_LONG).show();
             mBackPressedOnce = true;
             resetBackPressedOnceIn(4000);
         }

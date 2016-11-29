@@ -3,6 +3,7 @@ package com.mercadopago;
 import android.app.Activity;
 import android.app.Instrumentation;
 import android.content.Intent;
+import android.support.test.espresso.action.ViewActions;
 import android.support.test.espresso.intent.Intents;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
@@ -295,56 +296,56 @@ public class PaymentResultActivityTest {
     }
 
     @Test
-    public void finishCongratsActivityWhenClickOnExitButton(){
+    public void finishCongratsActivityWhenClickOnKeepBuyingButton(){
         mPayment.setStatus(Payment.StatusCodes.STATUS_APPROVED);
         mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_ACCREDITED);
 
         createIntent();
         mTestRule.launchActivity(validStartIntent);
 
-        onView(withId(R.id.mpsdkExitCongrats)).perform(click());
+        onView(withId(R.id.mpsdkKeepBuyingCongrats)).perform(ViewActions.scrollTo(),click());
 
         //Result finish
         assertTrue(mTestRule.getActivity().isFinishing());
     }
 
     @Test
-    public void finishCallForAuthorizeActivityWhenClickOnExitButton(){
+    public void finishCallForAuthorizeActivityWhenClickOnKeepBuyingButton(){
         mPayment.setStatus(Payment.StatusCodes.STATUS_REJECTED);
         mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_CALL_FOR_AUTHORIZE);
 
         createIntent();
         mTestRule.launchActivity(validStartIntent);
 
-        onView(withId(R.id.mpsdkExitCallForAuthorize)).perform(click());
+        onView(withId(R.id.mpsdkKeepBuyingCallForAuthorize)).perform(ViewActions.scrollTo(),click());
 
         //Result finish
         assertTrue(mTestRule.getActivity().isFinishing());
     }
 
     @Test
-    public void finishRejectionActivityWhenClickOnExitButton(){
+    public void finishRejectionActivityWhenClickOnKeepBuyingButton(){
         mPayment.setStatus(Payment.StatusCodes.STATUS_REJECTED);
         mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_BAD_FILLED_DATE);
 
         createIntent();
         mTestRule.launchActivity(validStartIntent);
 
-        onView(withId(R.id.mpsdkExitRejection)).perform(click());
+        onView(withId(R.id.mpsdkKeepBuyingRejection)).perform(click());
 
         //Result finish
         assertTrue(mTestRule.getActivity().isFinishing());
     }
 
     @Test
-    public void finishPendingActivityWhenClickOnExitButton(){
+    public void finishPendingActivityWhenClickOnKeepBuyingButton(){
         mPayment.setStatus(Payment.StatusCodes.STATUS_IN_PROCESS);
         mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_PENDING_REVIEW_MANUAL);
 
         createIntent();
         mTestRule.launchActivity(validStartIntent);
 
-        onView(withId(R.id.mpsdkExitPending)).perform(click());
+        onView(withId(R.id.mpsdkKeepBuyingPending)).perform(click());
 
         //Result finish
         assertTrue(mTestRule.getActivity().isFinishing());
@@ -375,11 +376,9 @@ public class PaymentResultActivityTest {
         createIntent();
         mTestRule.launchActivity(validStartIntent);
 
-        onView(withId(R.id.mpsdkSelectOtherPaymentMethodByCallForAuthorize)).perform(click());
+        onView(withId(R.id.mpsdkCallForAuthorizeOptionButton)).perform(click());
 
         //Result finish
         assertTrue(mTestRule.getActivity().isFinishing());
     }
-
-
 }

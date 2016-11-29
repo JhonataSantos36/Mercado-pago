@@ -1,7 +1,9 @@
 package com.mercadopago.controllers;
 
 import com.mercadopago.core.MercadoPago;
+import com.mercadopago.model.CardInformation;
 import com.mercadopago.model.PaymentMethod;
+import com.mercadopago.model.Setting;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,11 +28,15 @@ public class PaymentMethodGuessingController {
         return mPaymentTypeId;
     }
 
+    public List<PaymentMethod> getGuessedPaymentMethods() {
+        return mGuessedPaymentMethods;
+    }
+
     public List<PaymentMethod> guessPaymentMethodsByBin(String bin) {
         if (mSavedBin.equals(bin) && mGuessedPaymentMethods != null) {
             return mGuessedPaymentMethods;
         }
-        mSavedBin = bin;
+        saveBin(bin);
         mGuessedPaymentMethods = MercadoPago
                 .getValidPaymentMethodsForBin(mSavedBin, this.mAllPaymentMethods);
         mGuessedPaymentMethods = getValidPaymentMethodForType(mPaymentTypeId, mGuessedPaymentMethods);
@@ -38,6 +44,10 @@ public class PaymentMethodGuessingController {
             mGuessedPaymentMethods = filterByPaymentType(mExcludedPaymentTypes, mGuessedPaymentMethods);
         }
         return mGuessedPaymentMethods;
+    }
+
+    public void saveBin(String bin) {
+        mSavedBin = bin;
     }
 
     public String getSavedBin() {
@@ -75,4 +85,34 @@ public class PaymentMethodGuessingController {
         return ans;
     }
 
+    public Setting getSettingByPaymentMethod(PaymentMethod paymentMethod) {
+        List<Setting> settings = paymentMethod.getSettings();
+        Setting setting = Setting.getSettingByBin(settings, mSavedBin);
+        return setting;
+    }
+
+    public static Setting getSettingByPaymentMethodAndBin(PaymentMethod paymentMethod, String bin) {
+        Setting setting = null;
+        if(bin == null) {
+            if(paymentMethod.getSettings() != null && !paymentMethod.getSettings().isEmpty()) {
+                setting = paymentMethod.getSettings().get(0);
+            }
+        } else {
+            List<Setting> settings = paymentMethod.getSettings();
+            setting = Setting.getSettingByBin(settings, bin);
+        }
+        return setting;
+    }
+
+    public static Integer getCardNumberLength(PaymentMethod paymentMethod, String bin) {
+        if (paymentMethod == null || bin == null) {
+            return CardInformation.CARD_NUMBER_MAX_LENGTH;
+        }
+        Setting setting = PaymentMethodGuessingController.getSettingByPaymentMethodAndBin(paymentMethod, bin);
+        int cardNumberLength = CardInformation.CARD_NUMBER_MAX_LENGTH;
+        if (setting != null) {
+            cardNumberLength = setting.getCardNumber().getLength();
+        }
+        return cardNumberLength;
+    }
 }

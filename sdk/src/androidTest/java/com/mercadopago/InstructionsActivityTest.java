@@ -3,6 +3,7 @@ package com.mercadopago;
 import android.app.Activity;
 import android.content.Intent;
 import android.support.test.espresso.NoActivityResumedException;
+import android.support.test.espresso.action.ViewActions;
 import android.support.test.espresso.intent.Intents;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
@@ -12,7 +13,6 @@ import android.widget.LinearLayout;
 import com.mercadopago.model.InstructionActionInfo;
 import com.mercadopago.model.InstructionReference;
 import com.mercadopago.model.Payment;
-import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentResult;
 import com.mercadopago.test.FakeAPI;
 import com.mercadopago.test.StaticMock;
@@ -56,7 +56,7 @@ public class InstructionsActivityTest {
 
     private Payment mPayment;
     private String mMerchantPublicKey;
-    private PaymentMethod mPaymentMethod;
+    private String mPaymentTypeId;
     private FakeAPI mFakeAPI;
 
 
@@ -64,11 +64,11 @@ public class InstructionsActivityTest {
     public void createValidStartIntent() {
         mPayment = StaticMock.getPayment();
         mMerchantPublicKey = "1234";
-        mPaymentMethod = getOfflinePaymentMethod();
+        mPaymentTypeId = "ticket";
 
         validStartIntent = new Intent();
         validStartIntent.putExtra("merchantPublicKey", mMerchantPublicKey);
-        validStartIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(mPaymentMethod));
+        validStartIntent.putExtra("paymentTypeId", mPaymentTypeId);
         validStartIntent.putExtra("payment", JsonUtil.getInstance().toJson(mPayment));
     }
 
@@ -100,7 +100,7 @@ public class InstructionsActivityTest {
         InstructionsActivity activity = mTestRule.launchActivity(validStartIntent);
         assertEquals(activity.mMerchantPublicKey, mMerchantPublicKey);
         assertEquals(activity.mPayment.getId(), mPayment.getId());
-        assertEquals(activity.mPaymentMethod.getId(), mPaymentMethod.getId());
+        assertEquals(activity.mPaymentTypeId, "ticket");
     }
 
     //Instructions data
@@ -236,7 +236,7 @@ public class InstructionsActivityTest {
     }
 
     @Test
-    public void showLabelsInUpperCase() {
+    public void showLabelsInLowerCase() {
         PaymentResult paymentResult = StaticMock.getInstructionWithoutActions();
         mFakeAPI.addResponseToQueue(paymentResult, 200, "");
 
@@ -245,8 +245,8 @@ public class InstructionsActivityTest {
         InstructionReference firstReference = paymentResult.getInstructions().get(0).getReferences().get(0);
         InstructionReference secondReference = paymentResult.getInstructions().get(0).getReferences().get(1);
 
-        onView(withId(R.id.mpsdkReferencesLayout)).check(matches(withAnyChildText(firstReference.getLabel().toUpperCase())));
-        onView(withId(R.id.mpsdkReferencesLayout)).check(matches(withAnyChildText(secondReference.getLabel().toUpperCase())));
+        onView(withId(R.id.mpsdkReferencesLayout)).check(matches(withAnyChildText(firstReference.getLabel())));
+        onView(withId(R.id.mpsdkReferencesLayout)).check(matches(withAnyChildText(secondReference.getLabel())));
     }
 
     @Test
@@ -312,7 +312,7 @@ public class InstructionsActivityTest {
 
         InstructionActionInfo actionInfo = paymentResult.getInstructions().get(0).getActions().get(0);
 
-        onView(withId(R.id.mpsdkActionButton)).perform(click());
+        onView(withId(R.id.mpsdkActionButton)).perform(ViewActions.scrollTo(), click());
 
         intended(allOf(
                 hasAction(Intent.ACTION_VIEW),
@@ -340,12 +340,12 @@ public class InstructionsActivityTest {
     }
 
     @Test
-    public void ifPaymentMethodNotSetStartErrorActivity() {
+    public void ifPaymentTypeIdNotSetStartErrorActivity() {
         PaymentResult instructionWithoutActions = StaticMock.getInstructionWithoutActions();
         mFakeAPI.addResponseToQueue(instructionWithoutActions, 200, "");
-        Intent startWithoutPaymentMethod = new Intent(validStartIntent);
-        startWithoutPaymentMethod.removeExtra("paymentMethod");
-        mTestRule.launchActivity(startWithoutPaymentMethod);
+        Intent startWithoutPaymentTypeId = new Intent(validStartIntent);
+        startWithoutPaymentTypeId.removeExtra("paymentTypeId");
+        mTestRule.launchActivity(startWithoutPaymentTypeId);
         intended(hasComponent(ErrorActivity.class.getName()));
     }
 
@@ -360,13 +360,13 @@ public class InstructionsActivityTest {
     }
 
     @Test
-    public void ifCardPaymentMethodSetStartErrorActivity() {
+    public void ifCardPaymentTypeIdSetStartErrorActivity() {
         PaymentResult instructionWithoutActions = StaticMock.getInstructionWithoutActions();
         mFakeAPI.addResponseToQueue(instructionWithoutActions, 200, "");
-        mPaymentMethod.setPaymentTypeId("credit_card");
+        mPaymentTypeId = "credit_card";
 
         Intent startWithCardPaymentMethod = new Intent(validStartIntent);
-        startWithCardPaymentMethod.putExtra("paymentMethod", JsonUtil.getInstance().toJson(mPaymentMethod));
+        startWithCardPaymentMethod.putExtra("paymentTypeId", mPaymentTypeId);
 
         mTestRule.launchActivity(startWithCardPaymentMethod);
         intended(hasComponent(ErrorActivity.class.getName()));
@@ -456,21 +456,12 @@ public class InstructionsActivityTest {
 
     @Test
     public void ifManyInstructionsFromServiceAndNoneMatchesTypeShowErrorScreen() {
+        String paymentTypeId = "crazy_type";
         PaymentResult manyInstructions = StaticMock.getInstructions();
         mFakeAPI.addResponseToQueue(manyInstructions, 200, "");
-        PaymentMethod paymentMethod = getOfflinePaymentMethod();
-        paymentMethod.setPaymentTypeId("crazy_type");
-        validStartIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
+        validStartIntent.putExtra("paymentTypeId", paymentTypeId);
         mTestRule.launchActivity(validStartIntent);
 
         intended(hasComponent(ErrorActivity.class.getName()));
-    }
-
-    private PaymentMethod getOfflinePaymentMethod() {
-        PaymentMethod paymentMethod = new PaymentMethod();
-        paymentMethod.setId("oxxo");
-        paymentMethod.setName("Oxxo");
-        paymentMethod.setPaymentTypeId("ticket");
-        return paymentMethod;
     }
 }

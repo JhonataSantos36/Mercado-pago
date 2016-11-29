@@ -25,6 +25,9 @@ public class CurrenciesUtil {
     public static final String CURRENCY_VENEZUELA = "VEF";
     public static final String CURRENCY_USA = "USD";
 
+    protected CurrenciesUtil() {
+        
+    }
 
     private static Map<String, Currency> currenciesList = new HashMap<String, Currency>() {{
         put(CURRENCY_ARGENTINA, new Currency(CURRENCY_ARGENTINA, "Peso argentino", "$", 2, ",".charAt(0), ".".charAt(0)));
@@ -112,17 +115,22 @@ public class CurrenciesUtil {
         return htmlFormatBuilder.toString();
     }
 
-    public static Spanned formatCurrencyInText(BigDecimal amount, String currencyId, String originalText, boolean symbolUp, boolean decimalsUp) {
+    public static Spanned formatCurrencyInText(BigDecimal amount, String currencyId, String originalText,
+                                               boolean symbolUp, boolean decimalsUp) {
+        return formatCurrencyInText("", amount, currencyId, originalText, symbolUp, decimalsUp);
+    }
 
+    public static Spanned formatCurrencyInText(String amountPrefix, BigDecimal amount, String currencyId, String originalText,
+                                               boolean symbolUp, boolean decimalsUp) {
         Spanned spannedAmount;
         Currency currency = currenciesList.get(currencyId);
         String formattedAmount = formatNumber(amount, currencyId);
         if (formattedAmount != null) {
-            String spannedString = getSpannedString(currency, formattedAmount, true, true);
+            String spannedString = getSpannedString(currency, formattedAmount, symbolUp, decimalsUp);
 
             String formattedText = originalText;
             if (originalText.contains(formattedAmount)) {
-                formattedText = originalText.replace(formattedAmount, spannedString);
+                formattedText = originalText.replace(formattedAmount, amountPrefix + spannedString);
             }
             spannedAmount = Html.fromHtml(formattedText);
         } else {

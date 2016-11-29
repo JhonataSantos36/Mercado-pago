@@ -2,13 +2,16 @@ package com.mercadopago.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
 import com.mercadopago.R;
+import com.mercadopago.callbacks.OnSelectedCallback;
 import com.mercadopago.model.Issuer;
-import com.mercadopago.views.MPTextView;
+import com.mercadopago.uicontrollers.issuers.IssuersView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,10 +20,12 @@ public class IssuersAdapter extends RecyclerView.Adapter<IssuersAdapter.ViewHold
 
     private Context mContext;
     private List<Issuer> mIssuers;
+    private OnSelectedCallback<Integer> mCallback;
 
-    public IssuersAdapter(Context context) {
+    public IssuersAdapter(Context context, OnSelectedCallback<Integer> callback) {
         this.mContext = context;
         this.mIssuers = new ArrayList<>();
+        this.mCallback = callback;
     }
 
     public void addResults(List<Issuer> list) {
@@ -37,7 +42,7 @@ public class IssuersAdapter extends RecyclerView.Adapter<IssuersAdapter.ViewHold
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         LayoutInflater inflater = LayoutInflater.from(mContext);
-        View adapterView = inflater.inflate(R.layout.mpsdk_row_issuers, parent, false);
+        View adapterView = inflater.inflate(R.layout.mpsdk_adapter_issuer, parent, false);
         ViewHolder viewHolder = new ViewHolder(adapterView);
         return viewHolder;
     }
@@ -45,7 +50,7 @@ public class IssuersAdapter extends RecyclerView.Adapter<IssuersAdapter.ViewHold
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Issuer issuer = mIssuers.get(position);
-        holder.mIssuersTextView.setText(issuer.getName());
+        holder.mIssuersView.drawIssuer(issuer);
     }
 
 
@@ -58,13 +63,29 @@ public class IssuersAdapter extends RecyclerView.Adapter<IssuersAdapter.ViewHold
         return mIssuers.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder {
 
-        public MPTextView mIssuersTextView;
+        public FrameLayout mIssuerContainer;
+        public IssuersView mIssuersView;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            mIssuersTextView = (MPTextView) itemView.findViewById(R.id.mpsdkAdapterIssuersText);
+            mIssuerContainer = (FrameLayout) itemView.findViewById(R.id.mpsdkIssuerAdapterContainer);
+            mIssuersView = new IssuersView(mContext);
+            mIssuersView.inflateInParent(mIssuerContainer, true);
+            mIssuersView.initializeControls();
+
+            itemView.setOnKeyListener(new View.OnKeyListener() {
+                @Override
+                public boolean onKey(View v, int keyCode, KeyEvent event) {
+                    if (event != null && event.getAction() == KeyEvent.ACTION_DOWN
+                            && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_CENTER) {
+                        mCallback.onSelected(getLayoutPosition());
+                        return true;
+                    }
+                    return false;
+                }
+            });
         }
     }
 

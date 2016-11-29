@@ -10,14 +10,16 @@ import java.util.Date;
 
 public class MercadoPagoUtil {
 
+    private static final String SDK_PREFIX = "mpsdk_";
+
     public static int getPaymentMethodIcon(Context context, String paymentMethodId) {
 
-        return getPaymentMethodPicture(context, "", paymentMethodId);
+        return getPaymentMethodPicture(context, SDK_PREFIX, paymentMethodId);
     }
 
     public static int getPaymentMethodImage(Context context, String paymentMethodId) {
 
-        return getPaymentMethodPicture(context, "img_tc_", paymentMethodId);
+        return getPaymentMethodPicture(context, SDK_PREFIX + "img_tc_", paymentMethodId);
     }
 
     private static int getPaymentMethodPicture(Context context, String type, String paymentMethodId) {
@@ -28,7 +30,7 @@ public class MercadoPagoUtil {
             resource = context.getResources().getIdentifier(paymentMethodId, "drawable", context.getPackageName());
         } catch (Exception e) {
             try {
-                resource = context.getResources().getIdentifier("bank", "drawable", context.getPackageName());
+                resource = context.getResources().getIdentifier(SDK_PREFIX + "bank", "drawable", context.getPackageName());
             } catch (Exception ex) {
                 resource = 0;
             }
@@ -39,11 +41,8 @@ public class MercadoPagoUtil {
     public static int getPaymentMethodSearchItemIcon(Context context, String itemId) {
         int resource;
         if (itemId != null && context != null) {
-            if (itemId.equals("7eleven")) {
-                itemId = "seven_eleven";
-            }
             try {
-                resource = context.getResources().getIdentifier(itemId, "drawable", context.getPackageName());
+                resource = context.getResources().getIdentifier(SDK_PREFIX + itemId, "drawable", context.getPackageName());
             } catch (Exception e) {
                 resource = 0;
             }
@@ -125,5 +124,4 @@ public class MercadoPagoUtil {
         return accreditationMessage;
     }
 
-    ;
 }

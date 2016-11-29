@@ -1,35 +1,39 @@
 package com.mercadopago;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.support.design.widget.Snackbar;
 import android.text.Html;
 import android.text.Spanned;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 
 import com.mercadopago.callbacks.Callback;
 import com.mercadopago.callbacks.FailureRecovery;
+import com.mercadopago.constants.PaymentMethods;
+import com.mercadopago.constants.PaymentTypes;
 import com.mercadopago.core.MercadoPago;
+import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.model.ApiException;
+import com.mercadopago.model.Currency;
 import com.mercadopago.model.Instruction;
 import com.mercadopago.model.InstructionActionInfo;
 import com.mercadopago.model.InstructionReference;
 import com.mercadopago.model.Payment;
-import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentResult;
 import com.mercadopago.mptracker.MPTracker;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.CurrenciesUtil;
 import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
-import com.mercadopago.util.LayoutUtil;
 import com.mercadopago.util.MercadoPagoUtil;
 import com.mercadopago.util.ScaleUtil;
-import com.mercadopago.views.MPButton;
-import com.mercadopago.views.MPTextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,19 +54,24 @@ public class InstructionsActivity extends MercadoPagoActivity {
     protected MPTextView mSecondaryInfo;
     protected MPTextView mTertiaryInfo;
     protected MPTextView mAccreditationMessage;
-    protected MPButton mActionButton;
+    protected MPTextView mActionButton;
     protected MPTextView mExitTextView;
+    protected MPTextView mReferencePrimaryInfo;
+    protected MPTextView mPrimaryInfoInstructions;
+    protected View mPrimaryInfoSeparator;
+    protected ProgressBar mProgressBar;
+    protected LinearLayout mContentLayout;
 
     //Params
     protected Payment mPayment;
-    protected PaymentMethod mPaymentMethod;
+    protected String mPaymentTypeId;
     protected String mMerchantPublicKey;
 
     @Override
     protected void getActivityParameters() {
         mMerchantPublicKey = getIntent().getStringExtra("merchantPublicKey");
+        mPaymentTypeId = getIntent().getStringExtra("paymentTypeId");
         mPayment = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("payment"), Payment.class);
-        mPaymentMethod = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("paymentMethod"), PaymentMethod.class);
     }
 
     @Override
@@ -73,10 +82,10 @@ public class InstructionsActivity extends MercadoPagoActivity {
         if (mPayment == null) {
             throw new IllegalStateException("payment not set");
         }
-        if (mPaymentMethod == null) {
-            throw new IllegalStateException("payment method not set");
+        if (mPaymentTypeId == null) {
+            throw new IllegalStateException("payment type id not set");
         }
-        if (MercadoPagoUtil.isCard(mPaymentMethod.getPaymentTypeId())) {
+        if (MercadoPagoUtil.isCard(mPaymentTypeId)) {
             throw new IllegalStateException("payment method cannot be card");
         }
     }
@@ -94,8 +103,13 @@ public class InstructionsActivity extends MercadoPagoActivity {
         mSecondaryInfo = (MPTextView) findViewById(R.id.mpsdkSecondaryInfo);
         mTertiaryInfo = (MPTextView) findViewById(R.id.mpsdkTertiaryInfo);
         mAccreditationMessage = (MPTextView) findViewById(R.id.mpsdkAccreditationMessage);
-        mActionButton = (MPButton) findViewById(R.id.mpsdkActionButton);
+        mActionButton = (MPTextView) findViewById(R.id.mpsdkActionButton);
+        mReferencePrimaryInfo = (MPTextView) findViewById(R.id.mpsdkReferencePrimaryInfo);
+        mPrimaryInfoInstructions = (MPTextView) findViewById(R.id.mpsdkPrimaryInfoInstructions);
+        mPrimaryInfoSeparator = findViewById(R.id.mpsdkPrimaryInfoSeparator);
         mExitTextView = (MPTextView) findViewById(R.id.mpsdkExitInstructions);
+        mProgressBar = (ProgressBar) findViewById(R.id.mpsdkProgressBar);
+        mContentLayout = (LinearLayout) findViewById(R.id.mpsdkInstructionsContent);
         mExitTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -122,14 +136,14 @@ public class InstructionsActivity extends MercadoPagoActivity {
 
     protected void getInstructionsAsync() {
 
-        LayoutUtil.showProgressLayout(this);
-        mMercadoPago.getPaymentResult(mPayment.getId(), mPaymentMethod.getPaymentTypeId(), new Callback<PaymentResult>() {
+        showLoading();
+        mMercadoPago.getPaymentResult(mPayment.getId(), mPaymentTypeId, new Callback<PaymentResult>() {
             @Override
             public void success(PaymentResult paymentResult) {
                 List<Instruction> instructions
                         = paymentResult.getInstructions() == null ? new ArrayList<Instruction>() : paymentResult.getInstructions();
                 if (instructions.isEmpty()) {
-                    ErrorUtil.startErrorActivity(getActivity(), getActivity().getString(R.string.mpsdk_standard_error_message), INSTRUCTIONS_NOT_FOUND_FOR_TYPE + mPaymentMethod.getPaymentTypeId(), false);
+                    ErrorUtil.startErrorActivity(getActivity(), getActivity().getString(R.string.mpsdk_standard_error_message), INSTRUCTIONS_NOT_FOUND_FOR_TYPE + mPaymentTypeId, false);
                 } else {
                     resolveInstructionsFound(instructions);
                 }
@@ -153,11 +167,21 @@ public class InstructionsActivity extends MercadoPagoActivity {
     private void resolveInstructionsFound(List<Instruction> instructions) {
         Instruction instruction = getInstruction(instructions);
         if (instruction == null) {
-            ErrorUtil.startErrorActivity(this, this.getString(R.string.mpsdk_standard_error_message), "instruction not found for type " + mPaymentMethod.getPaymentTypeId(), false);
+            ErrorUtil.startErrorActivity(this, this.getString(R.string.mpsdk_standard_error_message), "instruction not found for type " + mPaymentTypeId, false);
         } else {
             showInstructions(instruction);
         }
-        LayoutUtil.showRegularLayout(this);
+        stopLoading();
+    }
+
+    private void showLoading() {
+        mProgressBar.setVisibility(View.VISIBLE);
+        mContentLayout.setVisibility(View.GONE);
+    }
+
+    private void stopLoading() {
+        mProgressBar.setVisibility(View.GONE);
+        mContentLayout.setVisibility(View.VISIBLE);
     }
 
     private Instruction getInstruction(List<Instruction> instructions) {
@@ -165,7 +189,7 @@ public class InstructionsActivity extends MercadoPagoActivity {
         if (instructions.size() == 1) {
             instruction = instructions.get(0);
         } else {
-            instruction = getInstructionForType(instructions, mPaymentMethod.getPaymentTypeId());
+            instruction = getInstructionForType(instructions, mPaymentTypeId);
         }
         return instruction;
     }
@@ -182,17 +206,19 @@ public class InstructionsActivity extends MercadoPagoActivity {
     }
 
     protected void showInstructions(Instruction instruction) {
-        MPTracker.getInstance().trackScreen("INSTRUCTIONS", 2, mMerchantPublicKey, BuildConfig.VERSION_NAME, this);
+        MPTracker.getInstance().trackScreen("INSTRUCTIONS", "2", mMerchantPublicKey, BuildConfig.VERSION_NAME, this);
 
         setTitle(instruction.getTitle());
-        setInformationMessages(instruction);
         setReferencesInformation(instruction);
+        setInformationMessages(instruction);
         mAccreditationMessage.setText(instruction.getAcreditationMessage());
         setActions(instruction);
     }
 
     protected void setTitle(String title) {
-        Spanned formattedTitle = CurrenciesUtil.formatCurrencyInText(mPayment.getTransactionAmount(), mPayment.getCurrencyId(), title, true, true);
+        Spanned formattedTitle = CurrenciesUtil.formatCurrencyInText("<br>", mPayment.getTransactionAmount(), mPayment.getCurrencyId(), title, false, true);
+        List<Currency> currencies = CurrenciesUtil.getAllCurrencies();
+
         mTitle.setText(formattedTitle);
     }
 
@@ -214,21 +240,19 @@ public class InstructionsActivity extends MercadoPagoActivity {
         }
     }
 
-
     protected void setReferencesInformation(Instruction instruction) {
         LinearLayout.LayoutParams marginParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT);
-        int marginTop = ScaleUtil.getPxFromDp(3, this);
-        int marginBottom = ScaleUtil.getPxFromDp(15, this);
+        int marginBottom = ScaleUtil.getPxFromDp(13, this);
         for (InstructionReference reference : instruction.getReferences()) {
             MPTextView currentTitleTextView = new MPTextView(this);
             MPTextView currentValueTextView = new MPTextView(this);
 
             if (reference.hasValue()) {
-
                 if (reference.hasLabel()) {
-                    currentTitleTextView.setText(reference.getLabel().toUpperCase());
+                    currentTitleTextView.setText(reference.getLabel());
                     currentTitleTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimensionPixelSize(R.dimen.mpsdk_smaller_text));
+                    currentTitleTextView.setGravity(Gravity.CENTER_HORIZONTAL);
                     mReferencesLayout.addView(currentTitleTextView);
                 }
 
@@ -238,20 +262,40 @@ public class InstructionsActivity extends MercadoPagoActivity {
                 currentValueTextView.setText(formattedReference);
                 currentValueTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, referenceSize);
 
-                marginParams.setMargins(0, marginTop, 0, marginBottom);
+                if (reference.isNumericReference()){
+                    marginParams.setMargins(150, 0, 150, marginBottom);
+                } else {
+                    marginParams.setMargins(0, 0, 0, marginBottom);
+                }
+
                 currentValueTextView.setLayoutParams(marginParams);
+
+                currentValueTextView.setGravity(Gravity.CENTER_HORIZONTAL);
+                currentValueTextView.setTextColor(Color.BLACK);
+                currentValueTextView.setTypeface(currentTitleTextView.getTypeface(), Typeface.NORMAL);
+
                 mReferencesLayout.addView(currentValueTextView);
             }
         }
     }
 
     private int getTextSizeForReference() {
-        return getResources().getDimensionPixelSize(R.dimen.mpsdk_large_text);
+        return getResources().getDimensionPixelSize(R.dimen.mpsdk_title_text);
     }
 
     private void setInformationMessages(Instruction instruction) {
         if (instruction.getInfo() != null && !instruction.getInfo().isEmpty()) {
-            mPrimaryInfo.setText(Html.fromHtml(getInfoHtmlText(instruction.getInfo())));
+            if (isRedLinkAtm()){
+                mPrimaryInfoSeparator.setVisibility(View.VISIBLE);
+                mReferencePrimaryInfo.setVisibility(View.VISIBLE);
+                mPrimaryInfoInstructions.setVisibility(View.VISIBLE);
+
+                mPrimaryInfo.setText(instruction.getInfo().get(0));
+                mReferencePrimaryInfo.setText(instruction.getInfo().get(6));
+                mPrimaryInfoInstructions.setText(getTitleReferences(instruction.getInfo()));
+            } else {
+                mPrimaryInfo.setText(Html.fromHtml(getInfoHtmlText(instruction.getInfo())));
+            }
         } else {
             mPrimaryInfo.setVisibility(View.GONE);
         }
@@ -267,6 +311,20 @@ public class InstructionsActivity extends MercadoPagoActivity {
         } else {
             mTertiaryInfo.setVisibility(View.GONE);
         }
+    }
+
+    protected Boolean isRedLinkAtm() {
+        return mPayment.getPaymentMethodId().equals(PaymentMethods.ARGENTINA.REDLINK) && mPaymentTypeId.equals(PaymentTypes.ATM);
+    }
+
+    protected String getTitleReferences(List<String> info) {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        stringBuilder.append(info.get(2) + "\n");
+        stringBuilder.append(info.get(3) + "\n");
+        stringBuilder.append(info.get(4) + "\n");
+
+        return stringBuilder.toString();
     }
 
     protected String getInfoHtmlText(List<String> info) {
@@ -298,7 +356,7 @@ public class InstructionsActivity extends MercadoPagoActivity {
 
     @Override
     public void onBackPressed() {
-        MPTracker.getInstance().trackScreen("INSTRUCTIONS", 2, mMerchantPublicKey, BuildConfig.VERSION_NAME, this);
+        MPTracker.getInstance().trackScreen("INSTRUCTIONS", "2", mMerchantPublicKey, BuildConfig.VERSION_NAME, this);
 
         if (mBackPressedOnce) {
             super.onBackPressed();

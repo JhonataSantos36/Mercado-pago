@@ -7,10 +7,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.mercadopago.R;
+import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentMethodSearchItem;
 import com.mercadopago.util.MercadoPagoUtil;
-import com.mercadopago.views.MPTextView;
 
 /**
  * Created by mreverter on 29/4/16.
@@ -38,7 +38,7 @@ public class PaymentMethodOffEditableRow implements PaymentMethodViewController 
     }
 
     @Override
-    public void drawPaymentMethod() {
+    public void draw() {
         if (mItem != null) {
             drawWithSearchItem();
         } else if (mPaymentMethod != null) {
@@ -48,7 +48,12 @@ public class PaymentMethodOffEditableRow implements PaymentMethodViewController 
 
     private void drawWithPaymentMethod() {
 
-        mComment.setText(MercadoPagoUtil.getAccreditationTimeMessage(mContext, mPaymentMethod.getAccreditationTime()));
+        if(mPaymentMethod.getAccreditationTime() == null) {
+            mComment.setVisibility(View.GONE);
+        } else {
+            mComment.setText(MercadoPagoUtil.getAccreditationTimeMessage(mContext, mPaymentMethod.getAccreditationTime()));
+        }
+
         int resourceId = MercadoPagoUtil.getPaymentMethodIcon(mContext, mPaymentMethod.getId());
 
         if (resourceId != 0) {

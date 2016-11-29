@@ -2,16 +2,22 @@ package com.mercadopago;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Build;
+import android.os.Looper;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.intent.Intents;
 import android.support.test.rule.ActivityTestRule;
+import android.support.test.runner.AndroidJUnit4;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
-import android.widget.FrameLayout;
+import android.test.suitebuilder.annotation.LargeTest;
+import android.view.View;
 
 import com.google.gson.reflect.TypeToken;
 import com.mercadopago.constants.Sites;
+import com.mercadopago.controllers.CheckoutTimer;
+import com.mercadopago.customviews.MPTextView;
+import com.mercadopago.model.Card;
 import com.mercadopago.model.DecorationPreference;
 import com.mercadopago.model.Installment;
 import com.mercadopago.model.Issuer;
@@ -26,12 +32,15 @@ import com.mercadopago.test.StaticMock;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.utils.ActivityResultUtil;
 import com.mercadopago.utils.ViewUtils;
-import com.mercadopago.views.MPTextView;
+
+import junit.framework.Assert;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
@@ -49,7 +58,6 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.mercadopago.utils.ActivityResultUtil.getActivityResult;
 import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -59,6 +67,8 @@ import static org.junit.Assert.assertTrue;
 /**
  * Created by vaserber on 7/12/16.
  */
+@RunWith(AndroidJUnit4.class)
+@LargeTest
 public class InstallmentsActivityTest {
 
     @Rule
@@ -72,6 +82,11 @@ public class InstallmentsActivityTest {
 
     private FakeAPI mFakeAPI;
 
+    @BeforeClass
+    static public void initialize(){
+        Looper.prepare();
+    }
+
     @Before
     public void createValidStartIntent() {
         mMerchantPublicKey = StaticMock.DUMMY_MERCHANT_PUBLIC_KEY;
@@ -80,7 +95,7 @@ public class InstallmentsActivityTest {
         mAmount = "1000";
 
         validStartIntent = new Intent();
-        validStartIntent.putExtra("publicKey", mMerchantPublicKey);
+        validStartIntent.putExtra("merchantPublicKey", mMerchantPublicKey);
         validStartIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(mPaymentMethod));
         validStartIntent.putExtra("site", JsonUtil.getInstance().toJson(mSite));
         validStartIntent.putExtra("amount", mAmount);
@@ -117,13 +132,13 @@ public class InstallmentsActivityTest {
 
         InstallmentsActivity activity = mTestRule.launchActivity(validStartIntent);
 
-        assertEquals(activity.mPublicKey, mMerchantPublicKey);
-        assertEquals(activity.mCurrentPaymentMethod.getId(), mPaymentMethod.getId());
-        assertEquals(activity.mSite.getId(), mSite.getId());
-        assertEquals(activity.mAmount, new BigDecimal(mAmount));
-        assertNotNull(activity.mPayerCosts);
-        assertEquals(activity.mPayerCosts.size(), payerCostList.size());
-        assertNull(activity.mSelectedIssuer);
+        assertEquals(activity.mPresenter.getPublicKey(), mMerchantPublicKey);
+        assertEquals(activity.mPresenter.getPaymentMethod().getId(), mPaymentMethod.getId());
+        assertEquals(activity.mPresenter.getSite().getId(), mSite.getId());
+        assertEquals(activity.mPresenter.getAmount(), new BigDecimal(mAmount));
+        assertNotNull(activity.mPresenter.getPayerCosts());
+        assertEquals(activity.mPresenter.getPayerCosts().size(), payerCostList.size());
+        assertNull(activity.mPresenter.getIssuer());
         assertFalse(mTestRule.getActivity().isFinishing());
     }
 
@@ -140,16 +155,16 @@ public class InstallmentsActivityTest {
 
         InstallmentsActivity activity = mTestRule.launchActivity(validStartIntent);
 
-        assertEquals(activity.mPublicKey, mMerchantPublicKey);
-        assertEquals(activity.mCurrentPaymentMethod.getId(), mPaymentMethod.getId());
-        assertEquals(activity.mSite.getId(), mSite.getId());
-        assertEquals(activity.mAmount, new BigDecimal(mAmount));
-        assertEquals(activity.mSelectedIssuer.getId(), issuer.getId());
+        assertEquals(activity.mPresenter.getPublicKey(), mMerchantPublicKey);
+        assertEquals(activity.mPresenter.getPaymentMethod().getId(), mPaymentMethod.getId());
+        assertEquals(activity.mPresenter.getSite().getId(), mSite.getId());
+        assertEquals(activity.mPresenter.getAmount(), new BigDecimal(mAmount));
+        assertEquals(activity.mPresenter.getIssuer().getId(), issuer.getId());
         assertFalse(mTestRule.getActivity().isFinishing());
     }
 
     @Test
-    public void hideCardWhenNoToken() {
+    public void hideCardWhenNoTokenOrCard() {
         String payerCosts = StaticMock.getPayerCostsJson();
         Type listType = new TypeToken<List<PayerCost>>(){}.getType();
         List<PayerCost> payerCostList = JsonUtil.getInstance().getGson().fromJson(payerCosts, listType);
@@ -157,13 +172,11 @@ public class InstallmentsActivityTest {
         validStartIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(mPaymentMethod));
         validStartIntent.putExtra("payerCosts", JsonUtil.getInstance().toJson(payerCostList));
         mTestRule.launchActivity(validStartIntent);
-        try {
-            Thread.sleep(5000);
-        } catch (Exception e) {
 
-        }
-
-        onView(withId(R.id.mpsdkCardBackground)).check(matches(not(isDisplayed())));
+        assertTrue(mTestRule.getActivity().mLowResActive);
+        assertNotNull(mTestRule.getActivity().mLowResToolbar);
+        assertNull(mTestRule.getActivity().mNormalToolbar);
+        assertNull(mTestRule.getActivity().mCardContainer);
     }
 
     @Test
@@ -178,13 +191,11 @@ public class InstallmentsActivityTest {
         validStartIntent.removeExtra("paymentMethod");
 
         mTestRule.launchActivity(validStartIntent);
-        try {
-            Thread.sleep(5000);
-        } catch (Exception e) {
 
-        }
-
-        onView(withId(R.id.mpsdkCardBackground)).check(matches(not(isDisplayed())));
+        assertTrue(mTestRule.getActivity().mLowResActive);
+        assertNotNull(mTestRule.getActivity().mLowResToolbar);
+        assertNull(mTestRule.getActivity().mNormalToolbar);
+        assertNull(mTestRule.getActivity().mCardContainer);
     }
 
     @Test
@@ -199,11 +210,14 @@ public class InstallmentsActivityTest {
         validStartIntent.putExtra("token", JsonUtil.getInstance().toJson(token));
 
         mTestRule.launchActivity(validStartIntent);
-        onView(withId(R.id.mpsdkCardBackground)).check(matches(isDisplayed()));
+        assertNotNull(mTestRule.getActivity().mCardContainer);
+        assertNotNull(mTestRule.getActivity().mNormalToolbar);
+        assertNotNull(mTestRule.getActivity().mFrontCardView);
+        onView(withId(R.id.mpsdkCardFrontContainer)).check(matches(isDisplayed()));
     }
 
     @Test
-    public void showToolbarWithTitleWhenNoToken() {
+    public void showToolbarWithTitleWhenNoTokenOrCard() {
         String payerCosts = StaticMock.getPayerCostsJson();
         Type listType = new TypeToken<List<PayerCost>>(){}.getType();
         List<PayerCost> payerCostList = JsonUtil.getInstance().getGson().fromJson(payerCosts, listType);
@@ -211,13 +225,14 @@ public class InstallmentsActivityTest {
         validStartIntent.putExtra("payerCosts", JsonUtil.getInstance().toJson(payerCostList));
         mTestRule.launchActivity(validStartIntent);
 
+        assertNotNull(mTestRule.getActivity().mLowResToolbar);
         onView(withId(R.id.mpsdkRegularToolbar)).check(matches(isDisplayed()));
-        onView(withId(R.id.mpsdkToolbar)).check(matches(not(isDisplayed())));
+        onView(withId(R.id.mpsdkTitle)).check(matches(isDisplayed()));
         onView(withId(R.id.mpsdkTitle)).check(matches(withText(R.string.mpsdk_card_installments_title)));
     }
 
     @Test
-    public void showTransparentToolbarWhenToken() {
+    public void showCollapsingToolbarWhenToken() {
         String payerCosts = StaticMock.getPayerCostsJson();
         Type listType = new TypeToken<List<PayerCost>>(){}.getType();
         List<PayerCost> payerCostList = JsonUtil.getInstance().getGson().fromJson(payerCosts, listType);
@@ -228,8 +243,34 @@ public class InstallmentsActivityTest {
 
         mTestRule.launchActivity(validStartIntent);
 
-        onView(withId(R.id.mpsdkRegularToolbar)).check(matches(not(isDisplayed())));
-        onView(withId(R.id.mpsdkToolbar)).check(matches(isDisplayed()));
+        assertNull(mTestRule.getActivity().mLowResToolbar);
+        assertNotNull(mTestRule.getActivity().mNormalToolbar);
+        onView(withId(R.id.mpsdkRegularToolbar)).check(matches(isDisplayed()));
+        onView(withId(R.id.mpsdkCollapsingToolbar)).check(matches(isDisplayed()));
+        String expected = mTestRule.getActivity().getApplicationContext().getResources().getString(R.string.mpsdk_card_installments_title);
+        assertEquals(mTestRule.getActivity().mNormalToolbar.getTitle().toString(), expected);
+    }
+
+    @Test
+    public void initializeCardWhenCardSet() {
+        String payerCosts = StaticMock.getPayerCostsJson();
+        Type listType = new TypeToken<List<PayerCost>>(){}.getType();
+        List<PayerCost> payerCostList = JsonUtil.getInstance().getGson().fromJson(payerCosts, listType);
+        //Visa
+        Card card = StaticMock.getCards().get(1);
+
+        validStartIntent.putExtra("payerCosts", JsonUtil.getInstance().toJson(payerCostList));
+        validStartIntent.putExtra("card", JsonUtil.getInstance().toJson(card));
+
+        mTestRule.launchActivity(validStartIntent);
+
+        onView(withId(R.id.mpsdkCardNumberTextView)).check(matches(withText(containsString(card.getLastFourDigits()))));
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            onView(withId(R.id.mpsdkCardLollipopImageView)).check(matches(isDisplayed()));
+        } else {
+            onView(withId(R.id.mpsdkCardLowApiImageView)).check(matches(isDisplayed()));
+        }
     }
 
     @Test
@@ -245,9 +286,11 @@ public class InstallmentsActivityTest {
         mTestRule.launchActivity(validStartIntent);
 
         onView(withId(R.id.mpsdkCardNumberTextView)).check(matches(withText(containsString(token.getLastFourDigits()))));
-        onView(withId(R.id.mpsdkCardholderNameView)).check(matches(withText(token.getCardholder().getName().toUpperCase())));
-        onView(withId(R.id.mpsdkCardHolderExpiryYear)).check(matches(withText(token.getExpirationYear().toString().substring(2,4))));
-        onView(withId(R.id.mpsdkCardHolderExpiryMonth)).check(matches(withText(token.getExpirationMonth().toString())));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            onView(withId(R.id.mpsdkCardLollipopImageView)).check(matches(isDisplayed()));
+        } else {
+            onView(withId(R.id.mpsdkCardLowApiImageView)).check(matches(isDisplayed()));
+        }
     }
 
     @Test
@@ -260,7 +303,7 @@ public class InstallmentsActivityTest {
 
         Intent intent = new Intent();
         intent.putExtra("issuer", JsonUtil.getInstance().toJson(issuer));
-        intent.putExtra("publicKey", mMerchantPublicKey);
+        intent.putExtra("merchantPublicKey", mMerchantPublicKey);
         intent.putExtra("site", JsonUtil.getInstance().toJson(mSite));
         intent.putExtra("amount", mAmount);
         intent.putExtra("payerCosts", JsonUtil.getInstance().toJson(payerCostList));
@@ -328,7 +371,7 @@ public class InstallmentsActivityTest {
 
         Intent invalidIntent = new Intent();
         invalidIntent.putExtra("issuer", JsonUtil.getInstance().toJson(issuer));
-        invalidIntent.putExtra("publicKey", mMerchantPublicKey);
+        invalidIntent.putExtra("merchantPublicKey", mMerchantPublicKey);
         invalidIntent.putExtra("site", JsonUtil.getInstance().toJson(mSite));
         invalidIntent.putExtra("amount", mAmount);
 
@@ -346,12 +389,12 @@ public class InstallmentsActivityTest {
 
         InstallmentsActivity activity = mTestRule.launchActivity(validStartIntent);
 
-        assertEquals(activity.mPublicKey, mMerchantPublicKey);
-        assertEquals(activity.mCurrentPaymentMethod.getId(), mPaymentMethod.getId());
-        assertEquals(activity.mSite.getId(), mSite.getId());
-        assertEquals(activity.mAmount, new BigDecimal(mAmount));
-        assertNull(activity.mSelectedIssuer);
-        assertNull(activity.mPayerCosts);
+        assertEquals(activity.mPresenter.getPublicKey(), mMerchantPublicKey);
+        assertEquals(activity.mPresenter.getPaymentMethod().getId(), mPaymentMethod.getId());
+        assertEquals(activity.mPresenter.getSite().getId(), mSite.getId());
+        assertEquals(activity.mPresenter.getAmount(), new BigDecimal(mAmount));
+        assertNull(activity.mPresenter.getIssuer());
+        assertNull(activity.mPresenter.getPayerCosts());
         assertTrue(mTestRule.getActivity().isFinishing());
     }
 
@@ -362,7 +405,7 @@ public class InstallmentsActivityTest {
         List<PayerCost> payerCostList = JsonUtil.getInstance().getGson().fromJson(payerCosts, listType);
 
         Intent invalidIntent = new Intent();
-        invalidIntent.putExtra("publicKey", mMerchantPublicKey);
+        invalidIntent.putExtra("merchantPublicKey", mMerchantPublicKey);
         invalidIntent.putExtra("site", JsonUtil.getInstance().toJson(mSite));
         invalidIntent.putExtra("payerCosts", JsonUtil.getInstance().toJson(payerCostList));
         invalidIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(mPaymentMethod));
@@ -480,9 +523,10 @@ public class InstallmentsActivityTest {
 
         mTestRule.launchActivity(validStartIntent);
 
-        FrameLayout cardBackground = (FrameLayout) mTestRule.getActivity().findViewById(R.id.mpsdkCardBackground);
-        int color = ViewUtils.getBackgroundColor(cardBackground);
-        assertEquals(color, decorationPreference.getLighterColor());
+        int appBarColor = ViewUtils.getBackgroundColor(mTestRule.getActivity().mAppBar);
+        assertEquals(appBarColor, decorationPreference.getLighterColor());
+        int toolbarColor = ViewUtils.getBackgroundColor(mTestRule.getActivity().mNormalToolbar);
+        assertEquals(toolbarColor, decorationPreference.getLighterColor());
     }
 
     @Test
@@ -498,8 +542,7 @@ public class InstallmentsActivityTest {
 
         mTestRule.launchActivity(validStartIntent);
 
-        Toolbar toolbar = (Toolbar) mTestRule.getActivity().findViewById(R.id.mpsdkRegularToolbar);
-        int color = ViewUtils.getBackgroundColor(toolbar);
+        int color = ViewUtils.getBackgroundColor(mTestRule.getActivity().mLowResToolbar);
         assertEquals(color, (int)decorationPreference.getBaseColor());
 
 
@@ -619,10 +662,10 @@ public class InstallmentsActivityTest {
 
         mTestRule.launchActivity(validStartIntent);
 
-        FrameLayout cardBackground = (FrameLayout) mTestRule.getActivity().findViewById(R.id.mpsdkCardBackground);
-        int color = ViewUtils.getBackgroundColor(cardBackground);
-        assertEquals(color, decorationPreference.getLighterColor());
-
+        int appBarColor = ViewUtils.getBackgroundColor(mTestRule.getActivity().mAppBar);
+        assertEquals(appBarColor, decorationPreference.getLighterColor());
+        int toolbarColor = ViewUtils.getBackgroundColor(mTestRule.getActivity().mNormalToolbar);
+        assertEquals(toolbarColor, decorationPreference.getLighterColor());
     }
 
     @Test
@@ -639,15 +682,48 @@ public class InstallmentsActivityTest {
 
         mTestRule.launchActivity(validStartIntent);
 
-        Toolbar toolbar = (Toolbar) mTestRule.getActivity().findViewById(R.id.mpsdkRegularToolbar);
-        int color = ViewUtils.getBackgroundColor(toolbar);
+        int color = ViewUtils.getBackgroundColor(mTestRule.getActivity().mLowResToolbar);
         assertEquals(color, (int)decorationPreference.getBaseColor());
 
         MPTextView toolbarTitle = (MPTextView) mTestRule.getActivity().findViewById(R.id.mpsdkTitle);
         int fontColor = toolbarTitle.getCurrentTextColor();
         int expectedColor = ContextCompat.getColor(InstrumentationRegistry.getContext(), R.color.mpsdk_dark_font_color);
         assertEquals(fontColor, expectedColor);
+    }
 
+    //Timer
+    @Test
+    public void showCountDownTimerWhenItIsInitialized(){
+        String payerCosts = StaticMock.getPayerCostsJson();
+        Type listType = new TypeToken<List<PayerCost>>(){}.getType();
+        List<PayerCost> payerCostList = JsonUtil.getInstance().getGson().fromJson(payerCosts, listType);
+        validStartIntent.putExtra("payerCosts", JsonUtil.getInstance().toJson(payerCostList));
+
+        CheckoutTimer.getInstance().start(60);
+
+        mTestRule.launchActivity(validStartIntent);
+
+        Assert.assertTrue(mTestRule.getActivity().findViewById(R.id.mpsdkTimerTextView).getVisibility() == View.VISIBLE);
+        Assert.assertTrue(CheckoutTimer.getInstance().isTimerEnabled());
+    }
+
+    @Test
+    public void finishActivityWhenSetOnFinishCheckoutListener(){
+        String payerCosts = StaticMock.getPayerCostsJson();
+        Type listType = new TypeToken<List<PayerCost>>(){}.getType();
+        List<PayerCost> payerCostList = JsonUtil.getInstance().getGson().fromJson(payerCosts, listType);
+        validStartIntent.putExtra("payerCosts", JsonUtil.getInstance().toJson(payerCostList));
+
+        CheckoutTimer.getInstance().start(10);
+        CheckoutTimer.getInstance().setOnFinishListener(new CheckoutTimer.FinishListener() {
+            @Override
+            public void onFinish() {
+                CheckoutTimer.getInstance().finishCheckout();
+                Assert.assertTrue(mTestRule.getActivity().isFinishing());
+            }
+        });
+
+        mTestRule.launchActivity(validStartIntent);
     }
 
 }

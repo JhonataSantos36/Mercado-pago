@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_pressed="true" android:drawable="@color/mpsdk_color_new_card_form_background_dark_alpha" />
+    <item android:state_focused="true" android:drawable="@color/mpsdk_color_new_card_form_background_light_alpha" />
+    <item android:drawable="@color/mpsdk_transparent" />
+</selector>

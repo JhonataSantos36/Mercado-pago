@@ -19,7 +19,7 @@
             android:src="@drawable/ninja"
             android:layout_gravity="center_horizontal" />
 
-        <com.mercadopago.views.MPTextView
+        <com.mercadopago.customviews.MPTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/services_example_title"
@@ -31,7 +31,7 @@
             android:gravity="center_horizontal"
             style="@style/big_label"/>
 
-        <com.mercadopago.views.MPTextView
+        <com.mercadopago.customviews.MPTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/services_example_description"
@@ -42,7 +42,7 @@
             android:gravity="center_horizontal"
             style="@style/form_label"/>
 
-        <com.mercadopago.views.MPButton
+        <com.mercadopago.customviews.MPButton
             android:layout_width="match_parent"
             android:layout_height="@dimen/mpsdk_button_height"
             android:layout_marginTop="25dp"
@@ -51,7 +51,7 @@
             android:onClick="runStep1"
             style="@style/mpsdk_button_normal"/>
 
-        <com.mercadopago.views.MPButton
+        <com.mercadopago.customviews.MPButton
             android:layout_width="match_parent"
             android:layout_height="@dimen/mpsdk_button_height"
             android:layout_marginTop="10dp"
@@ -60,7 +60,7 @@
             android:onClick="runStep2"
             style="@style/mpsdk_button_normal" />
 
-        <com.mercadopago.views.MPButton
+        <com.mercadopago.customviews.MPButton
             android:layout_width="match_parent"
             android:layout_height="@dimen/mpsdk_button_height"
             android:layout_marginTop="10dp"
@@ -68,7 +68,7 @@
             android:text="@string/title_activity_step3"
             android:onClick="runStep3"
             style="@style/mpsdk_button_normal"/>
-        <com.mercadopago.views.MPButton
+        <com.mercadopago.customviews.MPButton
             android:layout_width="match_parent"
             android:layout_height="@dimen/mpsdk_button_height"
             android:layout_marginTop="10dp"

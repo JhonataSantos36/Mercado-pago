@@ -35,7 +35,7 @@ public class PaymentPreference {
     }
 
     public void setExcludedPaymentMethodIds(List<String> excludedPaymentMethodIds) {
-        if(excludedPaymentMethodIds != null) {
+        if (excludedPaymentMethodIds != null) {
             this.excludedPaymentMethods = new ArrayList<>();
             for (String paymentMethodId : excludedPaymentMethodIds) {
                 PaymentMethod excludedPaymentMethod = new PaymentMethod();
@@ -46,7 +46,7 @@ public class PaymentPreference {
     }
 
     public void setExcludedPaymentTypeIds(List<String> excludedPaymentTypeIds) {
-        if(excludedPaymentTypeIds != null) {
+        if (excludedPaymentTypeIds != null) {
             this.excludedPaymentTypes = new ArrayList<>();
             for (String paymentTypeId : excludedPaymentTypeIds) {
                 PaymentType excludedPaymentType = new PaymentType();
@@ -73,26 +73,24 @@ public class PaymentPreference {
     }
 
     public List<String> getExcludedPaymentMethodIds() {
-        if(this.excludedPaymentMethods != null) {
+        if (this.excludedPaymentMethods != null) {
             List<String> excludedPaymentMethodIds = new ArrayList<>();
             for (PaymentMethod paymentMethod : this.excludedPaymentMethods) {
                 excludedPaymentMethodIds.add(paymentMethod.getId());
             }
             return excludedPaymentMethodIds;
-        }
-        else
+        } else
             return null;
     }
 
     public List<String> getExcludedPaymentTypes() {
-        if(this.excludedPaymentTypes != null) {
+        if (this.excludedPaymentTypes != null) {
             List<String> excludedPaymentTypeIds = new ArrayList<>();
             for (PaymentType paymentType : this.excludedPaymentTypes) {
                 excludedPaymentTypeIds.add(paymentType.getId());
             }
             return excludedPaymentTypeIds;
-        }
-        else
+        } else
             return null;
     }
 
@@ -104,30 +102,28 @@ public class PaymentPreference {
         return defaultPaymentTypeId;
     }
 
-    public List<PayerCost> getInstallmentsBelowMax(List<PayerCost> payerCosts){
+    public List<PayerCost> getInstallmentsBelowMax(List<PayerCost> payerCosts) {
 
         List<PayerCost> validPayerCosts = new ArrayList<>();
 
-        if(this.maxInstallments != null) {
+        if (this.maxInstallments != null) {
             for (PayerCost currentPayerCost : payerCosts) {
                 if (currentPayerCost.getInstallments() <= this.maxInstallments) {
                     validPayerCosts.add(currentPayerCost);
                 }
             }
             return validPayerCosts;
-        }
-        else {
+        } else {
             return payerCosts;
         }
 
     }
 
-    public PayerCost getDefaultInstallments(List<PayerCost> payerCosts){
+    public PayerCost getDefaultInstallments(List<PayerCost> payerCosts) {
         PayerCost defaultPayerCost = null;
 
-        for(PayerCost currentPayerCost : payerCosts)
-        {
-            if(currentPayerCost.getInstallments().equals(this.defaultInstallments)) {
+        for (PayerCost currentPayerCost : payerCosts) {
+            if (currentPayerCost.getInstallments().equals(this.defaultInstallments)) {
                 defaultPayerCost = currentPayerCost;
                 break;
             }
@@ -138,7 +134,7 @@ public class PaymentPreference {
 
     public List<PaymentMethod> getSupportedPaymentMethods(List<PaymentMethod> paymentMethods) {
         List<PaymentMethod> supportedPaymentMethods = new ArrayList<>();
-        if(paymentMethods != null) {
+        if (paymentMethods != null) {
             for (PaymentMethod paymentMethod : paymentMethods) {
                 if (this.isPaymentMethodSupported(paymentMethod)) {
                     supportedPaymentMethods.add(paymentMethod);
@@ -150,10 +146,9 @@ public class PaymentPreference {
 
     public boolean isPaymentMethodSupported(PaymentMethod paymentMethod) {
         boolean isSupported = true;
-        if(paymentMethod == null) {
+        if (paymentMethod == null) {
             isSupported = false;
-        }
-        else {
+        } else {
             List<String> excludedPaymentMethodIds = this.getExcludedPaymentMethodIds();
             List<String> excludedPaymentTypes = this.getExcludedPaymentTypes();
 
@@ -167,7 +162,7 @@ public class PaymentPreference {
 
     public PaymentMethod getDefaultPaymentMethod(List<PaymentMethod> paymentMethods) {
         PaymentMethod defaultPaymentMethod = null;
-        if(this.defaultPaymentMethodId != null && paymentMethods != null) {
+        if (this.defaultPaymentMethodId != null && paymentMethods != null) {
             for (PaymentMethod pm : paymentMethods) {
                 if (pm.getId().equals(this.defaultPaymentMethodId)) {
                     defaultPaymentMethod = pm;
@@ -193,5 +188,17 @@ public class PaymentPreference {
 
     public boolean validMaxInstallments() {
         return maxInstallments == null || maxInstallments > 0;
+    }
+
+    public List<Card> getValidCards(List<Card> cards) {
+        List<Card> supportedCards = new ArrayList<>();
+        if(cards != null) {
+            for(Card card : cards) {
+                if(isPaymentMethodSupported(card.getPaymentMethod())) {
+                    supportedCards.add(card);
+                }
+            }
+        }
+        return supportedCards;
     }
 }

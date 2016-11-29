@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
 
+import com.mercadopago.controllers.CheckoutErrorHandler;
 import com.mercadopago.exceptions.MPException;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.JsonUtil;
@@ -14,14 +15,19 @@ public class ErrorActivity extends AppCompatActivity {
 
     private MPException mMPException;
     private TextView mErrorMessageTextView;
-    private TextView mRetryTextView;
-    private TextView mExit;
+    private View mRetryView;
+    private View mExit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         animateErrorScreenLaunch();
-        setContentView(R.layout.mpsdk_activity_error);
+
+        if(CheckoutErrorHandler.getInstance().hasCustomErrorLayout()) {
+            setContentView(CheckoutErrorHandler.getInstance().getCustomErrorLayout());
+        } else {
+            setContentView(R.layout.mpsdk_activity_error);
+        }
 
         getActivityParameters();
         if (validParameters()) {
@@ -48,8 +54,8 @@ public class ErrorActivity extends AppCompatActivity {
 
     private void initializeControls() {
         this.mErrorMessageTextView = (TextView) findViewById(R.id.mpsdkErrorMessage);
-        this.mRetryTextView = (TextView) findViewById(R.id.mpsdkErrorRetry);
-        this.mExit = (TextView) findViewById(R.id.mpsdkExit);
+        this.mRetryView = findViewById(R.id.mpsdkErrorRetry);
+        this.mExit = findViewById(R.id.mpsdkExit);
         this.mExit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -69,7 +75,7 @@ public class ErrorActivity extends AppCompatActivity {
         this.mErrorMessageTextView.setText(message);
 
         if (mMPException.isRecoverable()) {
-            mRetryTextView.setOnClickListener(new View.OnClickListener() {
+            mRetryView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent();
@@ -78,7 +84,7 @@ public class ErrorActivity extends AppCompatActivity {
                 }
             });
         } else {
-            mRetryTextView.setVisibility(View.GONE);
+            mRetryView.setVisibility(View.GONE);
         }
     }
 

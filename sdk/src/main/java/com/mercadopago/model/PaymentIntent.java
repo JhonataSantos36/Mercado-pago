@@ -14,6 +14,7 @@ public class PaymentIntent {
     private String tokenId;
     private String publicKey;
     private String email;
+    private Payer payer;
 
     public Integer getInstallments() {
         return installments;
@@ -69,5 +70,9 @@ public class PaymentIntent {
 
     public void setTransactionId(Long transactionId) {
         this.transactionId = transactionId;
+    }
+
+    public void setPayer(Payer payer) {
+        this.payer = payer;
     }
 }

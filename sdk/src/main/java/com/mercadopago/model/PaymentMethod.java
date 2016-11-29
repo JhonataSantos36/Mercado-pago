@@ -96,7 +96,7 @@ public class PaymentMethod {
         return (Setting.getSettingByBin(this.getSettings(), bin) != null);
     }
 
-    public int getAccreditationTime() {
+    public Integer getAccreditationTime() {
         return accreditationTime;
     }
 }
