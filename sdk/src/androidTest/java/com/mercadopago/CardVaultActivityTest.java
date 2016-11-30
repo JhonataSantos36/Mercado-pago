@@ -9,6 +9,7 @@ import android.support.test.rule.ActivityTestRule;
 import com.google.gson.reflect.TypeToken;
 import com.mercadopago.constants.Sites;
 import com.mercadopago.model.BankDeal;
+import com.mercadopago.model.Card;
 import com.mercadopago.model.Installment;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.PayerCost;
@@ -26,6 +27,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import java.lang.reflect.Type;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -153,6 +155,53 @@ public class CardVaultActivityTest {
         mTestRule.launchActivity(validStartIntent);
 
         intended((hasComponent(InstallmentsActivity.class.getName())), times(0));
+    }
+
+    @Test
+    public void onInstallmentsNotEnabledDontStartInstallmentsForSavedCardsForm() {
+        Card card = StaticMock.getCard();
+        Token token = StaticMock.getToken();
+
+        validStartIntent.putExtra("installmentsEnabled", false);
+        validStartIntent.putExtra("card", JsonUtil.getInstance().toJson(card));
+
+        Intent securityCodeIntent = new Intent();
+        securityCodeIntent.putExtra("token", JsonUtil.getInstance().toJson(token));
+        Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(Activity.RESULT_OK, securityCodeIntent);
+        intending(hasComponent(SecurityCodeActivity.class.getName())).respondWith(result);
+
+        mTestRule.launchActivity(validStartIntent);
+
+        intended((hasComponent(InstallmentsActivity.class.getName())), times(0));
+        intended((hasComponent(SecurityCodeActivity.class.getName())), times(1));
+    }
+
+    @Test
+    public void onInstallmentsEnabledInSavedCardFlowStartInstallmentsActivity() {
+        Card card = StaticMock.getCard();
+        PayerCost payerCost = StaticMock.getPayerCostWithInterests();
+        Token token = StaticMock.getToken();
+
+        BigDecimal amount = new BigDecimal(100.50);
+
+        validStartIntent.putExtra("site", JsonUtil.getInstance().toJson(Sites.ARGENTINA));
+        validStartIntent.putExtra("amount", amount.toString());
+        validStartIntent.putExtra("installmentsEnabled", true);
+        validStartIntent.putExtra("card", JsonUtil.getInstance().toJson(card));
+
+        Intent installmentsIntent = new Intent();
+        installmentsIntent.putExtra("payerCost", JsonUtil.getInstance().toJson(payerCost));
+        Instrumentation.ActivityResult installmentsResult = new Instrumentation.ActivityResult(Activity.RESULT_OK, installmentsIntent);
+        intending(hasComponent(InstallmentsActivity.class.getName())).respondWith(installmentsResult);
+
+        Intent securityCodeIntent = new Intent();
+        securityCodeIntent.putExtra("token", JsonUtil.getInstance().toJson(token));
+        Instrumentation.ActivityResult securityCodeResult = new Instrumentation.ActivityResult(Activity.RESULT_OK, securityCodeIntent);
+        intending(hasComponent(SecurityCodeActivity.class.getName())).respondWith(securityCodeResult);
+
+        mTestRule.launchActivity(validStartIntent);
+
+        intended((hasComponent(InstallmentsActivity.class.getName())), times(1));
     }
 
     @Test

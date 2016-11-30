@@ -201,7 +201,7 @@ public class CardVaultPresenter {
         }
     }
 
-    private boolean installmentsRequired() {
+    public boolean installmentsRequired() {
         return mInstallmentsEnabled;
     }
 
@@ -269,5 +269,4 @@ public class CardVaultPresenter {
             }
         });
     }
-
 }

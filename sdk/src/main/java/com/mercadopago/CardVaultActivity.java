@@ -127,7 +127,11 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultAct
             mPresenter.setCardInfo(new CardInfo(mPresenter.getCard()));
             mPresenter.setPaymentMethod(mPresenter.getCard().getPaymentMethod());
             mPresenter.setIssuer(mPresenter.getCard().getIssuer());
-            startInstallmentsActivity();
+            if(mPresenter.installmentsRequired()) {
+                startInstallmentsActivity();
+            } else {
+                startSecurityCodeActivity();
+            }
             overrideTransitionSlideOutIn();
 
         } else {
