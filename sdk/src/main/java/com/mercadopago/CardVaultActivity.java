@@ -328,6 +328,8 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultAct
         if (mPresenter.getPaymentRecovery() != null && mPresenter.getPaymentRecovery().isTokenRecoverable()){
             PayerCost payerCost = mPresenter.getPaymentRecovery().getPayerCost();
             mPresenter.setPayerCost(payerCost);
+            Issuer issuer = mPresenter.getPaymentRecovery().getIssuer();
+            mPresenter.setIssuer(issuer);
         }
         Intent returnIntent = new Intent();
         returnIntent.putExtra("payerCost", JsonUtil.getInstance().toJson(mPresenter.getPayerCost()));

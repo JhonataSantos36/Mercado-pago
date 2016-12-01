@@ -96,11 +96,6 @@
             android:screenOrientation="behind"
             android:theme="@style/Theme.ProcessMercadoPagoTheme.NoActionbar" />
         <activity android:name=".VaultActivity"
-            android:theme="@style/Theme.MercadoPagoTheme" /><!-- ATTENTION: This was auto-generated to add Google Play services to your project for
-     App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
-        <meta-data
-            android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
+            android:theme="@style/Theme.MercadoPagoTheme" />
     </application>
-
 </manifest>
