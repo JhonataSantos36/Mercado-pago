@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="description" content="Sitio para desarrolladores de MercadoPago.">
+      <meta name="keywords" content="mercadopago,sdk,payment,pagos,braintree,paypal,html5,javascript,mobile,drifty,ionic,hybrid,phonegap,cordova,native,ios,android,angularjs">
+      <title>Soluciones de pago para el negocio que quieras - MercadoPago</title>
+      <link href="./css/site.css" rel="stylesheet">
+      <link href="./css/prism.css" rel="stylesheet" />
+      <script src="./js/jquery.min.js"></script>
+      <link rel="stylesheet" type="text/css" href="./css/lato.css" />
+
+   </head>
+   <body class="getting-started-page">
+         <nav class="navbar navbar-default" role="navigation">
+         <div class="container">
+            <div class="navbar-header">
+               <button type="button" class="navbar-toggle button ionic" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+               <i class="icon ion-navicon"></i>
+               </button>
+               <a class="navbar-brand" href="http://mercadopago.com/">
+               <img src="img/iso-mercadopago.png" width="60" height="41" alt="MercadoPago SDK">
+               </a>
+            </div>
+            <div class="collapse navbar-collapse navbar-ex1-collapse">
+               <ul class="nav navbar-nav navbar-right" style="color: white;">
+                  <li><a class="getting-started-nav nav-link" href="migration-doc.html">Upgrade from 0.9.x</a></li>
+                  <li><a class="docs-nav nav-link" href="index.html">Nuestro Checkout</a></li>
+                  <li><a class="docs-nav nav-link" href="checkout_custom.html">Tu checkout</a></li>
+                  <li><a class="nav-link" href="https://www.mercadopago.com.ar/developers/es/community/forum/">Foro de desarrolladores</a></li>
+               </ul>
+            </div>
+         </div>
+      </nav>
+      <div class="header"/>
+
+      </div>
+      <div id="mati_header" style="height: 80px; margin: 0 auto; padding: 0;position: relative;width: 100%;top: -276px;overflow-x: hidden;OVERFLOW-Y: hidden;z-index: -100;background: url('./img/landing.jpg');background-size: cover;">
+         <div style="background: rgba(0,0,0,0.5); height: 500px;" ></div>
+      </div>
+      <div class="container content-container" style="margin-top: -300px;">
+         <div id="getting-started">
+            <div class="text-center">
+               <h2>2.x MercadoPago SDK upgrade</h2>
+               <p class="sub-heading">
+                  ¿Already using our SDK's?
+                  <br />
+                  If you update to 2.x, you'll need to make some changes to mantain your 0.9.x integration.
+                  <br />
+                  Please, if you have any problems or find any not-listed incompatibility, <a href = "https://github.com/mercadopago/px-android/issues">open an issue in our Github repository</a>
+                  <br />
+               </p>
+               <br />
+            </div>
+
+            <div class="row" id="step-one">
+               <div class="col-md-6 step-desc">
+                  <div class="desc">
+                     <h2>Changes in...</h2>
+                     <ul>
+                       <li>
+                         <a href="upgrade-v1.html#vault">VaultActivity</a>
+                       </li>
+                       <li>
+                         <a href="upgrade-v1.html#payment-methods">PaymentMethodsActivity</a>
+                       </li>
+                       <li>
+                         <a href="upgrade-v1.html#issuers">IssuersActivity</a>
+                       </li>
+                       <li>
+                         <a href="upgrade-v1.html#installments">InstallmentsActivity</a>
+                       </li>
+                       <li>
+                         <a href="upgrade-v1.html#new-card">NewCardActivity</a>
+                       </li>
+                       <li>
+                         <a href="upgrade-v1.html#congrats">CongratsActivity</a>
+                       </li>
+                       <li>
+                         <a href="upgrade-v1.html#customer-cards">CustomerCardsActivity</a>
+                       </li>
+                       <li>
+                         <a href="upgrade-v1.html#api-calls">MercadoPago API Calls</a>
+                       </li>
+                       <li>
+                         <a href="upgrade-v1.html#util">MercadoPagoUtil</a>
+                       </li>
+                     </ul>
+
+                  </div>
+               </div>
+            </div>
+            <div class="row" id="vault">
+              <div class="desc">
+                   <h3>VaultActivity</h3>
+                   <p>
+                      The only change: now it requires Site.
+                   </p>
+              </div>
+            <pre class="snippet">
+              <code id="migration_vault" class="line-numbers language-java">
+new MercadoPago.StartActivityBuilder()
+        .setActivity(this)
+        .setPublicKey(ExamplesUtils.DUMMY_MERCHANT_PUBLIC_KEY)
+        .setAmount(ExamplesUtils.DUMMY_ITEM_UNIT_PRICE)
+        .setSupportedPaymentTypes(mSupportedPaymentTypes)
+        .setSite(Sites.ARGENTINA) //Heads up!
+        .setShowBankDeals(true)
+        .startVaultActivity();
+                 </code>
+
+                 <button class="copy-button">
+                    <img src="./img/clippy.svg" width="13" alt="Copy to clipboard">
+                </button>
+              </pre>
+              <b>Note:</b> <i>setSupportedPaymentTypes</i> method is deprecated. Replace it for <i>setPaymentPreference</i>. See the docs: <a href="f2.html#f2_component_customization">customize your components</a>.
+            </div>
+            <div class="row" id="payment-methods">
+                  <div class="desc">
+                     <h3>PaymentMethodsActivity</h3>
+                     <p>
+                       In 2.x when an error occurs, its result is a MPException (Which may include an ApiException instance).
+                     </p>
+                  </div>
+               <div>
+                  <pre class="snippet">
+                     <code id="migration_vault" class="line-numbers language-java">
+@Override
+protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+     if (requestCode == MercadoPago.PAYMENT_METHODS_REQUEST_CODE) {
+         if (resultCode == RESULT_OK) {
+             // Set message
+             PaymentMethod paymentMethod = JsonUtil.getInstance().fromJson(data.getStringExtra("paymentMethod"), PaymentMethod.class);
+
+         } else {
+             if ((data != null) && (data.getStringExtra("mpException") != null)) {
+                 MPException mpException = JsonUtil.getInstance().fromJson(data.getStringExtra("mpException"), MPException.class);
+             }
+         }
+     }
+ }
+                    </code>
+
+                     <button class="copy-button">
+                        <img src="./img/clippy.svg" width="13" alt="Copy to clipboard">
+                    </button>
+                  </pre>
+               </div>
+            </div>
+            <div class="row" id="issuers">
+                  <div class="desc">
+                     <h3>IssuersActivity</h3>
+                     <p>
+                       When an error occurs its result is a MPException (Which may include an ApiException instance).
+                     </p>
+                     <div>
+                        <pre class="snippet">
+                          <code id="migration_vault" class="line-numbers language-java">
+      @Override
+      protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+          if (requestCode == MercadoPago.ISSUERS_REQUEST_CODE) {
+              if (resultCode == RESULT_OK) {
+                  // Set message
+                  Issuer issuer = JsonUtil.getInstance().fromJson(data.getStringExtra("issuer"), Issuer.class);
+
+              } else {
+                  if ((data != null) && (data.getStringExtra("mpException") != null)) {
+                      MPException mpException = JsonUtil.getInstance().fromJson(data.getStringExtra("mpException"), MPException.class);
+                  }
+              }
+          }
+      }
+                         </code>
+
+                         <button class="copy-button">
+                            <img src="./img/clippy.svg" width="13" alt="Copy to clipboard">
+                        </button>
+                      </pre>
+                    </div>
+                  </div>
+                </div>
+            <div class="row" id="installments">
+                  <div class="desc">
+                     <h3>InstallmentsActivity</h3>
+                     <p>
+                       In addition to the list of payer costs, it needs the Amount and the Site.
+                     </p>
+                  </div>
+               <div>
+                  <pre class="snippet">
+                     <code id="migration_installments" class="line-numbers language-java">
+new MercadoPago.StartActivityBuilder()
+        .setActivity(activity)
+        .setPayerCosts(payerCosts)
+        .setSite(Sites.ARGENTINA)
+        .setAmount(amount)
+        .startInstallmentsActivity();
+                     </code>
+
+                     <button class="copy-button">
+                        <img src="./img/clippy.svg" width="13" alt="Copy to clipboard">
+                    </button>
+                  </pre>
+               </div>
+               <br>
+               <p>
+                 Also, when an error occurs its result is a MPException (Which may include an ApiException instance).
+               </p>
+               <div>
+                  <pre class="snippet">
+                     <code id="migration_vault" class="line-numbers language-java">
+@Override
+protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    if (requestCode == MercadoPago.INSTALLMENTS_REQUEST_CODE) {
+        if (resultCode == RESULT_OK) {
+            // Set message
+            PayerCost payerCost = JsonUtil.getInstance().fromJson(data.getStringExtra("payerCost"), PayerCost.class);
+
+        } else {
+            if ((data != null) && (data.getStringExtra("mpException") != null)) {
+                MPException mpException = JsonUtil.getInstance().fromJson(data.getStringExtra("mpException"), MPException.class);
+            }
+        }
+    }
+}
+                     </code>
+
+                     <button class="copy-button">
+                        <img src="./img/clippy.svg" width="13" alt="Copy to clipboard">
+                    </button>
+                  </pre>
+               </div>
+            </div>
+            <div class="row" id="new-card">
+              <div class="desc">
+                 <h3>NewCardActivity</h3>
+                 <p>
+                   Deprecated. Usage of CardVaultActivity is recommended. See the docs: <a href="f2.html#f2_card_form">get card payments</a>.
+                 </p>
+              </div>
+            </div>
+            <div class="row" id="congrats">
+              <div class="desc">
+                   <h3>CongratsActivity</h3>
+                   <p>
+                      CongratsActivity now resolves approved payments only. Change it for PaymentResultActivity:
+                   </p>
+              </div>
+            <pre class="snippet">
+              <code id="migration_vault" class="line-numbers language-java">
+new MercadoPago.StartActivityBuilder()
+            .setPublicKey(publicKey)
+            .setActivity(activity)
+            .setPayment(payment)
+            .setPaymentMethod(paymentMethod)
+            .startPaymentResultActivity();
+                 </code>
+
+                 <button class="copy-button">
+                    <img src="./img/clippy.svg" width="13" alt="Copy to clipboard">
+                </button>
+              </pre>
+            </div>
+            <div class="row" id="customer-cards">
+              <div class="desc">
+                   <h3>CustomerCardsActivity</h3>
+                   <p>
+                      In 2.x, it returns a "Card" object:
+                   </p>
+              </div>
+            <pre class="snippet">
+              <code id="migration_vault" class="line-numbers language-java">
+@Override
+protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    if (requestCode == MercadoPago.CUSTOMER_CARDS_REQUEST_CODE) {
+        if (resultCode == RESULT_OK) {
+            Card selectedCard = JsonUtil.getInstance().fromJson(data.getStringExtra("card"), Card.class);
+            //Do something...
+        } else if ((data != null) && (data.getStringExtra("mpException") != null)) {
+            MPException mpException = JsonUtil.getInstance().fromJson(data.getStringExtra("mpException"), MPException.class);
+            //Handle error.
+        }
+    }
+}
+                 </code>
+
+                 <button class="copy-button">
+                    <img src="./img/clippy.svg" width="13" alt="Copy to clipboard">
+                </button>
+              </pre>
+            </div>
+            <div class="row" id="api-calls">
+              <div class="desc">
+                   <h3>MercadoPago API calls</h3>
+                   <p>
+                      2.x introduces a custom Callback from MercadoPago instead of returning the Retrofit "Call" object.
+                   </p>
+                   <br>
+                    A generic example:
+              </div>
+              <br>
+              <p> 0.9.x: </p>
+            <pre class="snippet">
+              <code id="migration_vault" class="line-numbers language-java">
+callback = new ErrorHandlingCallAdapter.MyCallback&lt;T&gt;() {
+            @Override
+            public void success(Response&lt;T&gt; response) {
+                //Do something...
+             }
+
+            @Override
+            public void failure(ApiException apiException) {
+              //Handle failure.
+            }
+        }
+
+ErrorHandlingCallAdapter.MyCall&lt;T&gt; call = mercadoPago.getT(parameters);
+call.enqueue(callback);
+                 </code>
+
+                 <button class="copy-button">
+                    <img src="./img/clippy.svg" width="13" alt="Copy to clipboard">
+                </button>
+              </pre>
+              <br>
+              <p> 2.x: </p>
+              <pre class="snippet">
+                <code id="migration_vault" class="line-numbers language-java">
+//Heads up! Callback from package com.mercadopago.callbacks
+callback = new Callback&lt;T&gt;() {
+	          @Override
+            public void success(T t) {
+                //Do something...
+             }
+
+            @Override
+            public void failure(ApiException apiException) {
+              //Handle failure.
+            }
+}
+mercadoPago.getT(parameters, callback);
+                   </code>
+
+                   <button class="copy-button">
+                      <img src="./img/clippy.svg" width="13" alt="Copy to clipboard">
+                  </button>
+                </pre>
+              <br>
+              <p> Example: </p>
+              <pre class="snippet">
+                <code id="migration_vault" class="line-numbers language-java">
+mercadoPago.getPaymentMethods(new Callback&lt;List&lt;PaymentMethod&gt;&gt;() {
+          @Override
+          public void success(List&lt;PaymentMethod&gt; paymentMethods) {
+              //Do something...
+          }
+
+          @Override
+          public void failure(ApiException apiException) {
+              //Handle failure.
+          }
+      });
+                   </code>
+
+                   <button class="copy-button">
+                      <img src="./img/clippy.svg" width="13" alt="Copy to clipboard">
+                  </button>
+                </pre>
+            </div>
+            <div class="row" id="util">
+              <div class="desc">
+                 <h3>MercadoPagoUtil</h3>
+                  <p>Minor changes:</p>
+                   0.9.x:
+                   <pre class="snippet">
+                      <code id="migration_installments" class="line-numbers language-java">
+ MercadoPagoUtil.isCardPaymentType(String paymentType);
+                      </code>
+
+                      <button class="copy-button">
+                         <img src="./img/clippy.svg" width="13" alt="Copy to clipboard">
+                     </button>
+                   </pre>
+                   <br>
+                   2.x:
+                   <pre class="snippet">
+                      <code id="migration_installments" class="line-numbers language-java">
+MercadoPagoUtil.isCard(String paymentType);
+                      </code>
+
+                      <button class="copy-button">
+                         <img src="./img/clippy.svg" width="13" alt="Copy to clipboard">
+                     </button>
+                   </pre>
+              </div>
+            </div>
+         </div>
+      </div>
+      <footer class="footer">
+
+         <div class="copy">
+            <div class="copy-container">
+               <p class="authors">
+                  © 2016 MercadoLibre S.R.L.
+               </p>
+            </div>
+         </div>
+      </footer>
+      <script src="./js/bootstrap.min.js"></script>
+      <script src="./js/site.js"></script>
+      <script src="./js/cookies.min.js"></script>
+      <script src="./js/prism.js"></script>
+      <script src="./js/clipboard.js"></script>
+   <script>
+
+   (function() {
+
+    new Clipboard('.copy-button');
+    var pre = document.getElementsByTagName('pre');
+    for (var i = 0; i < pre.length; i++) {
+      var isLanguage = pre[i].children[0].className.indexOf('language-');
+      if ( isLanguage === 0 ) {
+        var button = document.createElement('button');
+        button.className = 'copy-button';
+        pre[i].appendChild(button);
+      }
+    }
+
+var copyCode = new Clipboard('.copy-button', {
+    target: function(trigger) {
+        return trigger.previousElementSibling;
+    }
+});
+
+
+    $("#flavor_3_step_2").html("&lt;LinearLayout xmlns:android='http://schemas.android.com/apk/res/android'");
+    $("#flavor_3_step_2").append("\n\txmlns:tools='http://schemas.android.com/tools'");
+    $("#flavor_3_step_2").append("\n\tandroid:layout_width='match_parent'");
+    $("#flavor_3_step_2").append("\n\tandroid:layout_height='match_parent'");
+    $("#flavor_3_step_2").append("\n\tandroid:paddingLeft='@dimen/activity_horizontal_margin'");
+    $("#flavor_3_step_2").append("\n\tandroid:paddingRight='@dimen/activity_horizontal_margin'");
+    $("#flavor_3_step_2").append("\n\tandroid:paddingTop='@dimen/activity_vertical_margin'");
+    $("#flavor_3_step_2").append("\n\tandroid:paddingBottom='@dimen/activity_vertical_margin'");
+    $("#flavor_3_step_2").append("\n\tandroid:orientation='vertical'");
+    $("#flavor_3_step_2").append("\n\ttools:context='.MainActivity'&gt;");
+    $("#flavor_3_step_2").append("\n");
+    $("#flavor_3_step_2").append("\n");
+    $("#flavor_3_step_2").append("\t&lt;Button");
+        $("#flavor_3_step_2").append("\n\t\tandroid:layout_width='match_parent'");
+        $("#flavor_3_step_2").append("\n\t\tandroid:layout_height='@dimen/mpsdk_button_height'");
+        $("#flavor_3_step_2").append("\n\t\tandroid:layout_marginTop='25dp'");
+        $("#flavor_3_step_2").append("\n\t\tandroid:gravity='center'");
+        $("#flavor_3_step_2").append("\n\t\tandroid:text='Pagar $100'");
+        $("#flavor_3_step_2").append("\n\t\tandroid:onClick='submit'");
+        $("#flavor_3_step_2").append("\n\t\tstyle='@style/mpsdk_button_normal'/&gt;");
+        $("#flavor_3_step_2").append("\n");
+    $("#flavor_3_step_2").append("\n\t&lt;TextView");
+        $("#flavor_3_step_2").append("\n\t\tandroid:layout_width='match_parent'");
+        $("#flavor_3_step_2").append("\n\t\tandroid:layout_height='wrap_content'");
+        $("#flavor_3_step_2").append("\n\t\tandroid:id='@+id/mp_results'");
+        $("#flavor_3_step_2").append("\n\t\tandroid:paddingTop='50dp'/&gt;");
+   $("#flavor_3_step_2").append("\n&lt;/LinearLayout&gt;");
+})();
+</script>
+
+
+
+</body>
+</html>
