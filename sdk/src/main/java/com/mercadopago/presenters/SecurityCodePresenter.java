@@ -258,6 +258,7 @@ public class SecurityCodePresenter {
             @Override
             public void success(Token token) {
                 mToken = token;
+                mToken.setLastFourDigits(mCardInfo.getLastFourDigits());
                 mView.finishWithResult();
             }
 

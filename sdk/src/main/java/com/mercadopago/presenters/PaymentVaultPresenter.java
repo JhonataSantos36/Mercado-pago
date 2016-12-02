@@ -294,6 +294,9 @@ public class PaymentVaultPresenter {
         Card selectedCard = getCardById(mSavedCards, searchItem.getId());
         if (paymentMethod != null) {
             selectedCard.setPaymentMethod(paymentMethod);
+            if(selectedCard.getSecurityCode() == null && paymentMethod.getSettings() != null && paymentMethod.getSettings().get(0) != null) {
+                selectedCard.setSecurityCode(paymentMethod.getSettings().get(0).getSecurityCode());
+            }
         }
         return selectedCard;
     }
