@@ -76,44 +76,14 @@ public class ComponentsExampleActivity extends AppCompatActivity {
     }
 
     public void onCompletePaymentMethodSelectionClicked(View view) {
-        PaymentPreference paymentPreference = new PaymentPreference();
+        PaymentPreference paymentPreference = getCurrentPaymentPreference();
         DecorationPreference decorationPreference = getCurrentDecorationPreference();
-
-//        paymentPreference.setExcludedPaymentMethodIds(new ArrayList<String>() {{
-//            add(PaymentMethods.ARGENTINA.VISA);
-//            add(PaymentMethods.ARGENTINA.MASTER);
-//            add(PaymentMethods.ARGENTINA.AMEX);
-//            add(PaymentMethods.ARGENTINA.NARANJA);
-//            add(PaymentMethods.ARGENTINA.NATIVA);
-//            add(PaymentMethods.ARGENTINA.TARSHOP);
-//            add(PaymentMethods.ARGENTINA.CENCOSUD);
-//            add(PaymentMethods.ARGENTINA.CABAL);
-//            add(PaymentMethods.ARGENTINA.DINERS);
-//            add(PaymentMethods.ARGENTINA.ARGENCARD);
-//            add(PaymentMethods.ARGENTINA.PAGOFAIL);
-//            add(PaymentMethods.ARGENTINA.RAPIPAGO);
-//            add(PaymentMethods.ARGENTINA.REDLINK);
-//            add(PaymentMethods.ARGENTINA.BAPROPAGOS);
-//            add(PaymentMethods.ARGENTINA.CARGA_VIRTUAL);
-//            add(PaymentMethods.ARGENTINA.CORDIAL);
-//            add(PaymentMethods.ARGENTINA.CORDOBESA);
-//            add(PaymentMethods.ARGENTINA.CMR);
-//        }});
-
-        paymentPreference.setExcludedPaymentTypeIds(new ArrayList<String>() {{
-
-            add(PaymentTypes.ATM);
-            add(PaymentTypes.BANK_TRANSFER);
-            add(PaymentTypes.DIGITAL_CURRENCY);
-        }});
 
         new MercadoPago.StartActivityBuilder()
                 .setActivity(this)
                 .setPublicKey(mPublicKey)
                 .setSite(Sites.ARGENTINA)
-                .setAmount(new BigDecimal(50))
-                .setAccountMoneyEnabled(true)
-                .setPayerAccessToken("TEST-7176766875549918-111008-fa5660d2d0aa37532716eb2bf2f9089b__LB_LC__-192992930")
+                .setAmount(mAmount)
                 .setPaymentPreference(paymentPreference) //Optional
                 .setDecorationPreference(decorationPreference) //Optional
                 .startPaymentVaultActivity();
