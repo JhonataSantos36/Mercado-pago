@@ -384,9 +384,8 @@ public class PaymentVaultPresenter {
     }
 
     private boolean noPaymentMethodsAvailable() {
-        return !mAccountMoneyEnabled
-                && (mSavedCards == null || mSavedCards.isEmpty())
-                && (mPaymentMethodSearch.getGroups() == null || mPaymentMethodSearch.getGroups().isEmpty());
+        return (mPaymentMethodSearch.getGroups() == null || mPaymentMethodSearch.getGroups().isEmpty())
+                && (mPaymentMethodSearch.getCustomSearchItems() == null || mPaymentMethodSearch.getCustomSearchItems().isEmpty());
     }
 
     private void showEmptyPaymentMethodsError() {
