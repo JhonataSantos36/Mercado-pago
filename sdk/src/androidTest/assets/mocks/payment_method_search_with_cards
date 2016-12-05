@@ -5,43 +5,43 @@
       "description": "terminada en 1730",
       "id": "190913639",
       "payment_method_id": "visa",
-      "type": "credit_card"
+      "payment_type_id": "credit_card"
     },
     {
       "description": "terminada en 3211",
       "id": "190913639",
       "payment_method_id": "master",
-      "type": "credit_card"
+      "payment_type_id": "credit_card"
     },
     {
       "description": "terminada en 1234",
       "id": "190913639",
       "payment_method_id": "amex",
-      "type": "credit_card"
+      "payment_type_id": "credit_card"
     },
     {
       "description": "terminada en 1234",
       "id": "190913639",
       "payment_method_id": "tarshop",
-      "type": "credit_card"
+      "payment_type_id": "credit_card"
     },
     {
       "description": "terminada en 1134",
       "id": "190913639",
       "payment_method_id": "naranja",
-      "type": "credit_card"
+      "payment_type_id": "credit_card"
     },
     {
       "description": "terminada en 1111",
       "id": "190913639",
       "payment_method_id": "nativa",
-      "type": "credit_card"
+      "payment_type_id": "credit_card"
     },
     {
       "description": "terminada en 1221",
       "id": "190913639",
       "payment_method_id": "cencosud",
-      "type": "credit_card"
+      "payment_type_id": "credit_card"
     }
   ],
   "groups": [

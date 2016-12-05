@@ -31,10 +31,6 @@ public class CheckoutErrorHandler {
         this.customErrorLayout = layout;
     }
 
-    public void setGeneric(@LayoutRes int layout) {
-        this.customErrorLayout = layout;
-    }
-
     public boolean hasCustomErrorLayout() {
         return customErrorLayout != null;
     }

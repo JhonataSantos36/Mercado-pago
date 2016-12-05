@@ -217,8 +217,6 @@ public class InstructionsActivity extends MercadoPagoActivity {
 
     protected void setTitle(String title) {
         Spanned formattedTitle = CurrenciesUtil.formatCurrencyInText("<br>", mPayment.getTransactionAmount(), mPayment.getCurrencyId(), title, false, true);
-        List<Currency> currencies = CurrenciesUtil.getAllCurrencies();
-
         mTitle.setText(formattedTitle);
     }
 

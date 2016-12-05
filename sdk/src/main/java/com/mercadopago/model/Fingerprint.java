@@ -184,12 +184,12 @@ public class Fingerprint {
         try {
             RandomAccessFile reader = new RandomAccessFile("/proc/meminfo", "r");
             String load = reader.readLine();
-
             Pattern pattern = Pattern.compile("(\\d+)");
             Matcher matcher = pattern.matcher(load);
             if (matcher.find()) {
                 ram = Long.valueOf(matcher.group(0));
             }
+            reader.close();
         } catch (Exception ex) {}
 
         return ram;
@@ -456,7 +456,11 @@ public class Fingerprint {
         @Override
         public void onLocationChanged(android.location.Location location) {
             setLocation(new Location(location.getLatitude(), location.getLongitude()));
-            mLocationManager.removeUpdates(mLocationListener);
+            try {
+                mLocationManager.removeUpdates(mLocationListener);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         @Override
