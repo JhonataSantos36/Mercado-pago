@@ -207,9 +207,11 @@ public class GuessingCardActivity extends AppCompatActivity implements GuessingC
         if (getIntent().getStringExtra("decorationPreference") != null) {
             mDecorationPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("decorationPreference"), DecorationPreference.class);
         }
+        Boolean showBankDeals = this.getIntent().getBooleanExtra("showBankDeals", true);
 
         mPresenter.setPublicKey(publicKey);
         mPresenter.setToken(token);
+        mPresenter.setShowBankDeals(showBankDeals);
         mPresenter.setPaymentMethod(paymentMethod);
         mPresenter.setPaymentMethodList(paymentMethodList);
         mPresenter.setIdentification(identification);
@@ -376,7 +378,7 @@ public class GuessingCardActivity extends AppCompatActivity implements GuessingC
             mTimerTextView.setVisibility(View.VISIBLE);
             mTimerTextView.setText(CheckoutTimer.getInstance().getCurrentTime());
         } else {
-            mPresenter.loadBankDeals();
+            mPresenter.resolveBankDeals();
         }
 
         mErrorState = NORMAL_STATE;

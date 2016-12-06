@@ -368,7 +368,7 @@ public class PaymentVaultPresenter {
     }
 
     public boolean isOnlyUniqueSearchSelectionAvailable() {
-        return searchItemsAvailable() && mPaymentMethodSearch.getGroups().size() == 1 && !savedCardsAvailable();
+        return searchItemsAvailable() && mPaymentMethodSearch.getGroups().size() == 1 && !customSearchItemsAvailable();
     }
 
     private boolean savedCardsAvailable() {

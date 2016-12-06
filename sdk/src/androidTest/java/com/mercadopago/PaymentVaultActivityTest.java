@@ -52,12 +52,14 @@ import java.util.List;
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.Intents.intending;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra;
+import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtraWithKey;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
@@ -66,6 +68,7 @@ import static com.mercadopago.utils.ActivityResultUtil.assertFinishCalledWithRes
 import static com.mercadopago.utils.ActivityResultUtil.getActivityResult;
 import static com.mercadopago.utils.CustomMatchers.atPosition;
 import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -504,6 +507,33 @@ public class PaymentVaultActivityTest {
         intended(hasComponent(ErrorActivity.class.getName()));
     }
 
+    //ACCOUNT MONEY TESTS
+
+    @Test
+    public void ifOneCustomOptionAndAtLeastOneSearchItemAvailableShowThem() {
+        PaymentMethodSearch paymentMethodSearch = JsonUtil.getInstance()
+                .fromJson(StaticMock.getPaymentMethodSearchWithOnlyAccountMoneyAndNewCard(), PaymentMethodSearch.class);
+
+        mFakeAPI.addResponseToQueue(paymentMethodSearch, 200, "");
+
+        mTestRule.launchActivity(validStartIntent);
+
+        onView(withId(R.id.mpsdkGroupsList)).check(matches(isDisplayed()));
+        assertTrue(ViewUtils.hasItems(mTestRule.getActivity().mSearchItemsRecyclerView, 2));
+    }
+
+    @Test
+    public void ifOnlyAccountMoneyAvailableSelectIt() {
+        PaymentMethodSearch paymentMethodSearch = JsonUtil.getInstance()
+                .fromJson(StaticMock.getPaymentMethodSearchWithOnlyAccountMoney(), PaymentMethodSearch.class);
+
+        mFakeAPI.addResponseToQueue(paymentMethodSearch, 200, "");
+
+        validStartIntent.putExtra("accountMoneyEnabled", true);
+        mTestRule.launchActivity(validStartIntent);
+        ActivityResultUtil.assertFinishCalledWithResult(mTestRule.getActivity(), Activity.RESULT_OK);
+    }
+
     //CUSTOMER CARDS TESTS
 
     @Test
@@ -548,7 +578,7 @@ public class PaymentVaultActivityTest {
         mTestRule.launchActivity(validStartIntent);
 
         onView(withId(R.id.mpsdkGroupsList)).check(matches(isDisplayed()));
-        assertTrue(ViewUtils.hasItems(mTestRule.getActivity().mSearchItemsRecyclerView, 8));
+        assertTrue(ViewUtils.hasItems(mTestRule.getActivity().mSearchItemsRecyclerView, 9));
     }
 
     @Test
@@ -587,6 +617,7 @@ public class PaymentVaultActivityTest {
         mTestRule.launchActivity(validStartIntent);
 
         onView(withId(R.id.mpsdkGroupsList)).check(matches(isDisplayed()));
+
         assertTrue(ViewUtils.hasItems(mTestRule.getActivity().mSearchItemsRecyclerView, 6));
     }
 
@@ -645,7 +676,7 @@ public class PaymentVaultActivityTest {
         mTestRule.launchActivity(validStartIntent);
 
         //Validate that only the cards set by intent are shown.
-        assertTrue(ViewUtils.hasItems(mTestRule.getActivity().mSearchItemsRecyclerView, 5));
+        assertTrue(ViewUtils.hasItems(mTestRule.getActivity().mSearchItemsRecyclerView, customer.getCards().size()));
     }
 
     @Test
@@ -681,6 +712,7 @@ public class PaymentVaultActivityTest {
         paymentPreference.setExcludedPaymentMethodIds(new ArrayList<String>() {{
             add(customer.getCards().get(0).getPaymentMethod().getId());
             add(customer.getCards().get(1).getPaymentMethod().getId());
+            add(customer.getCards().get(2).getPaymentMethod().getId());
         }});
 
         validStartIntent.putExtra("paymentPreference", JsonUtil.getInstance().toJson(paymentPreference));
@@ -997,8 +1029,20 @@ public class PaymentVaultActivityTest {
                 Assert.assertTrue(mTestRule.getActivity().isFinishing());
             }
         });
+        mTestRule.launchActivity(validStartIntent);
+    }
+
+    //BANK DEALS
+    @Test
+    public void ifShowBankDealsSetAsFalseStartCardVaultWithoutBankDeals() {
+        PaymentMethodSearch paymentMethodSearch = StaticMock.getPaymentMethodSearchWithUniqueItemCreditCard();
+        mFakeAPI.addResponseToQueue(paymentMethodSearch, 200, "");
+
+        validStartIntent.putExtra("showBankDeals", false);
 
         mTestRule.launchActivity(validStartIntent);
+
+        intended(allOf(hasComponent(CardVaultActivity.class.getName()), hasExtra("showBankDeals", false)));
     }
 
 }

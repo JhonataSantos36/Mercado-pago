@@ -499,7 +499,7 @@ public class MercadoPago {
     }
 
     private static void startCardVaultActivity(Activity activity, String key, BigDecimal amount, Site site, Boolean installmentsEnabled,
-                                               PaymentPreference paymentPreference, DecorationPreference decorationPreference,
+                                               Boolean showBankDeals, PaymentPreference paymentPreference, DecorationPreference decorationPreference,
                                                List<PaymentMethod> paymentMethodList, PaymentRecovery paymentRecovery, Card card) {
 
         Intent cardVaultIntent = new Intent(activity, CardVaultActivity.class);
@@ -512,6 +512,8 @@ public class MercadoPago {
         cardVaultIntent.putExtra("site", JsonUtil.getInstance().toJson(site));
 
         cardVaultIntent.putExtra("installmentsEnabled", installmentsEnabled);
+
+        cardVaultIntent.putExtra("showBankDeals", showBankDeals);
 
         cardVaultIntent.putExtra("paymentPreference", JsonUtil.getInstance().toJson(paymentPreference));
 
@@ -1106,7 +1108,7 @@ public class MercadoPago {
                 if (this.mSite == null) throw new IllegalStateException("site is null");
             }
 
-            MercadoPago.startCardVaultActivity(this.mActivity, this.mKey, this.mAmount, this.mSite, this.mInstallmentsEnabled,
+            MercadoPago.startCardVaultActivity(this.mActivity, this.mKey, this.mAmount, this.mSite, this.mInstallmentsEnabled, this.mShowBankDeals,
                     this.mPaymentPreference, this.mDecorationPreference, this.mPaymentMethodList, this.mPaymentRecovery, this.mCard);
         }
 

@@ -403,6 +403,23 @@ public class StaticMock {
         }
     }
 
+    public static String getPaymentMethodSearchWithOnlyAccountMoneyAndNewCard() {
+        try {
+            return getFile(InstrumentationRegistry.getContext(), "mocks/payment_method_search_account_money_and_new_card.json");
+
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+    public static String getPaymentMethodSearchWithOnlyAccountMoney() {
+        try {
+            return getFile(InstrumentationRegistry.getContext(), "mocks/payment_method_search_only_account_money.json");
+
+        } catch (Exception ex) {
+            return null;
+        }
+    }
 
     public static String getPaymentMethodSearchWithCardsAsJson() {
         try {

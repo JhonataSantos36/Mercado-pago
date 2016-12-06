@@ -81,6 +81,7 @@ public class GuessingCardPresenter {
     private List<BankDeal> mBankDealsList;
     private boolean showPaymentTypes;
     private List<PaymentType> mPaymentTypesList;
+    private Boolean mShowBankDeals;
 
     public GuessingCardPresenter(Context context) {
         this.mContext = context;
@@ -319,8 +320,12 @@ public class GuessingCardPresenter {
         }
     }
 
-    public void loadBankDeals() {
-        getBankDealsAsync();
+    public void resolveBankDeals() {
+        if(mShowBankDeals) {
+            getBankDealsAsync();
+        } else {
+            mView.hideBankDeals();
+        }
     }
 
     protected void getPaymentMethodsAsync() {
@@ -691,4 +696,7 @@ public class GuessingCardPresenter {
         }
     }
 
+    public void setShowBankDeals(Boolean showBankDeals) {
+        this.mShowBankDeals = showBankDeals;
+    }
 }

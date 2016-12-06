@@ -74,6 +74,7 @@ public class PaymentVaultActivity extends AppCompatActivity implements PaymentVa
     protected PaymentVaultPresenter mPaymentVaultPresenter;
     protected CollapsingToolbarLayout mAppBarLayout;
     protected MPTextView mTimerTextView;
+    private Boolean mShowBankDeals;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,6 +113,7 @@ public class PaymentVaultActivity extends AppCompatActivity implements PaymentVa
         mPaymentVaultPresenter.setPayerAccessToken(this.getIntent().getStringExtra("payerAccessToken"));
         mPaymentVaultPresenter.setAccountMoneyEnabled(this.getIntent().getBooleanExtra("accountMoneyEnabled", false));
         mPaymentVaultPresenter.setMaxSavedCards(this.getIntent().getIntExtra("maxSavedCards", 0));
+        mShowBankDeals = getIntent().getBooleanExtra("showBankDeals", true);
 
         if (getIntent().getStringExtra("paymentPreference") != null) {
             mPaymentVaultPresenter.setPaymentPreference(JsonUtil.getInstance().fromJson(getIntent().getStringExtra("paymentPreference"), PaymentPreference.class));
@@ -292,6 +294,7 @@ public class PaymentVaultActivity extends AppCompatActivity implements PaymentVa
                 .setDecorationPreference(mDecorationPreference)
                 .setPaymentPreference(mPaymentVaultPresenter.getPaymentPreference())
                 .setInstallmentsEnabled(mInstallmentsEnabled)
+                .setShowBankDeals(mShowBankDeals)
                 .startCardVaultActivity();
     }
 
@@ -438,6 +441,7 @@ public class PaymentVaultActivity extends AppCompatActivity implements PaymentVa
                 .setAmount(mPaymentVaultPresenter.getAmount())
                 .setSite(mPaymentVaultPresenter.getSite())
                 .setInstallmentsEnabled(mInstallmentsEnabled)
+                .setShowBankDeals(mShowBankDeals)
                 .setSupportedPaymentMethods(mPaymentVaultPresenter.getPaymentMethodSearch().getPaymentMethods())
                 .startCardVaultActivity();
         animatePaymentMethodSelection();

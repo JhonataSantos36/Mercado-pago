@@ -47,6 +47,7 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultAct
 
     //View controls
     private ProgressBar mProgressBar;
+    private Boolean mShowBankDeals;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -97,6 +98,7 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultAct
         if (getIntent().getStringExtra("decorationPreference") != null) {
             mDecorationPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("decorationPreference"), DecorationPreference.class);
         }
+        mShowBankDeals = getIntent().getBooleanExtra("showBankDeals", true);
         mPresenter.setCard(card);
         mPresenter.setInstallmentsEnabled(installmentsEnabled);
         mPresenter.setPublicKey(publicKey);
@@ -176,14 +178,15 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultAct
         runOnUiThread(new Runnable() {
             public void run() {
                 new MercadoPago.StartActivityBuilder()
-                    .setActivity(mActivity)
-                    .setPublicKey(mPresenter.getPublicKey())
-                    .setAmount(mPresenter.getAmount())
-                    .setPaymentPreference(mPresenter.getPaymentPreference())
-                    .setSupportedPaymentMethods(mPresenter.getPaymentMethodList())
-                    .setDecorationPreference(mDecorationPreference)
-                    .setPaymentRecovery(mPresenter.getPaymentRecovery())
-                    .startGuessingCardActivity();
+                        .setActivity(mActivity)
+                        .setPublicKey(mPresenter.getPublicKey())
+                        .setAmount(mPresenter.getAmount())
+                        .setShowBankDeals(mShowBankDeals)
+                        .setPaymentPreference(mPresenter.getPaymentPreference())
+                        .setSupportedPaymentMethods(mPresenter.getPaymentMethodList())
+                        .setDecorationPreference(mDecorationPreference)
+                        .setPaymentRecovery(mPresenter.getPaymentRecovery())
+                        .startGuessingCardActivity();
                 overridePendingTransition(R.anim.mpsdk_slide_right_to_left_in, R.anim.mpsdk_slide_right_to_left_out);
             }
         });
