@@ -105,7 +105,6 @@
     <string name="mpsdk_text_select_other_rejection">Use outro cartão ou outro meio de pagamento</string>
     <string name="mpsdk_title_bad_filled_other">Ops! Não foi possível processar o seu pagamento</string>
     <string name="mpsdk_text_some_card_data_is_incorrect">Qualquer dado de seu %1$s é incorreto.</string>
-    <string name="mpsdk_text_card_number_is_incorrect">O número de seu %1$s é incorreto.</string>
     <string name="mpsdk_text_insufficient_amount">O seu %1$s não possui saldo suficiente</string>
     <string name="mpsdk_subtitle_rejection_insufficient_amount">Não se preocupe! Recarregue-o em qualquer banco ou pelo Internet Banking e tente novamente. Se preferir, você pode escolher outro meio de pagamento.</string>
     <string name="mpsdk_subtitle_rejection_duplicated_payment">Se você precisar pagar novamente, use outro cartão ou outro meio de pagamento.</string>
@@ -205,7 +204,6 @@
     <string name="mpsdk_review_product_price">Preço unitário: %1$s</string>
     <string name="mpsdk_activity_checkout_title">Confirme a sua compra</string>
     <string name="mpsdk_review_summary_products">Produtos</string>
-    <string name="mpsdk_review_symmary_discount">Descontos</string>
     <string name="mpsdk_review_summary_discounts">Desconto %1$s</string>
     <string name="mpsdk_review_summary_subtotal">Subtotal</string>
     <string name="mpsdk_review_summary_pay">Você paga</string>
