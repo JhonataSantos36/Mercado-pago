@@ -102,6 +102,7 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultAct
             paymentPreference = new PaymentPreference();
         }
 
+
         mPresenter.setPaymentPreference(paymentPreference);
         mPresenter.setPaymentRecovery(JsonUtil.getInstance().fromJson(savedInstanceState.getString("paymentRecovery"), PaymentRecovery.class));
         mPresenter.setCard(JsonUtil.getInstance().fromJson(savedInstanceState.getString("card"), Card.class));
