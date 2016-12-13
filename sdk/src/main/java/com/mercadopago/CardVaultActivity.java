@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.ProgressBar;
 
 import com.google.gson.reflect.TypeToken;
+
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.Card;
@@ -52,24 +53,71 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultAct
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        onBeforeCreation();
+        onBeforeCreation(savedInstanceState);
         if (mPresenter == null) {
             mPresenter = new CardVaultPresenter(getBaseContext());
         }
         mPresenter.setView(this);
         mActivity = this;
-        getActivityParameters();
         setContentView();
-        mPresenter.validateActivityParameters();
+        if (savedInstanceState == null) {
+            getActivityParameters();
+            mPresenter.validateActivityParameters();
+        }
     }
 
-    private void onBeforeCreation() {
+    private void onBeforeCreation(Bundle savedInstanceState) {
         int currentOrientation = getResources().getConfiguration().orientation;
         if (currentOrientation == Configuration.ORIENTATION_PORTRAIT) {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT);
         } else {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
         }
+        if (savedInstanceState != null) {
+            restoreInstanceState(savedInstanceState);
+        }
+    }
+
+    private void restoreInstanceState(Bundle savedInstanceState) {
+        mPresenter = new CardVaultPresenter(getBaseContext());
+
+        BigDecimal amountValue = null;
+        String amount = savedInstanceState.getString("amount");
+        if (amount != null) {
+            amountValue = new BigDecimal(amount);
+        }
+        mPresenter.setAmount(amountValue);
+
+        List<PaymentMethod> paymentMethods;
+        try {
+            Type listType = new TypeToken<List<PaymentMethod>>() {
+            }.getType();
+            paymentMethods = JsonUtil.getInstance().getGson().fromJson(savedInstanceState.getString("paymentMethodList"), listType);
+        } catch (Exception ex) {
+            paymentMethods = null;
+        }
+        mPresenter.setPaymentMethodList(paymentMethods);
+        PaymentPreference paymentPreference = JsonUtil.getInstance().fromJson(savedInstanceState.getString("paymentPreference"), PaymentPreference.class);
+        if (paymentPreference == null) {
+            paymentPreference = new PaymentPreference();
+        }
+
+        mPresenter.setPaymentPreference(paymentPreference);
+        mPresenter.setPaymentRecovery(JsonUtil.getInstance().fromJson(savedInstanceState.getString("paymentRecovery"), PaymentRecovery.class));
+        mPresenter.setCard(JsonUtil.getInstance().fromJson(savedInstanceState.getString("card"), Card.class));
+        mPresenter.setPublicKey(savedInstanceState.getString("merchantPublicKey"));
+        mPresenter.setSite(JsonUtil.getInstance().fromJson(savedInstanceState.getString("site"), Site.class));
+        mPresenter.setPaymentMethod(JsonUtil.getInstance().fromJson(savedInstanceState.getString("paymentMethod"), PaymentMethod.class));
+        mPresenter.setIssuer(JsonUtil.getInstance().fromJson(savedInstanceState.getString("issuer"), Issuer.class));
+        mPresenter.setPayerCost(JsonUtil.getInstance().fromJson(savedInstanceState.getString("payerCost"), PayerCost.class));
+        mPresenter.setCardToken(JsonUtil.getInstance().fromJson(savedInstanceState.getString("cardToken"), CardToken.class));
+        mPresenter.setCardInfo(JsonUtil.getInstance().fromJson(savedInstanceState.getString("cardInfo"), CardInfo.class));
+        mPresenter.setInstallmentsEnabled(savedInstanceState.getBoolean("installmentsEnabled", false));
+
+        mShowBankDeals = savedInstanceState.getBoolean("showBankDeals", true);
+        mDecorationPreference = JsonUtil.getInstance().fromJson(savedInstanceState.getString("decorationPreference"), DecorationPreference.class);
+
+        mPresenter.initializeMercadoPago();
     }
 
     private void getActivityParameters() {
@@ -129,7 +177,7 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultAct
             mPresenter.setCardInfo(new CardInfo(mPresenter.getCard()));
             mPresenter.setPaymentMethod(mPresenter.getCard().getPaymentMethod());
             mPresenter.setIssuer(mPresenter.getCard().getIssuer());
-            if(mPresenter.installmentsRequired()) {
+            if (mPresenter.installmentsRequired()) {
                 startInstallmentsActivity();
             } else {
                 startSecurityCodeActivity();
@@ -204,6 +252,55 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultAct
             resolveSecurityCodeRequest(resultCode, data);
         } else if (requestCode == ErrorUtil.ERROR_REQUEST_CODE) {
             resolveErrorRequest(resultCode, data);
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (mPresenter != null) {
+            outState.putBoolean("installmentsEnabled", mPresenter.installmentsRequired());
+            outState.putString("merchantPublicKey", mPresenter.getPublicKey());
+            outState.putString("site", JsonUtil.getInstance().toJson(mPresenter.getSite()));
+            outState.putString("card", JsonUtil.getInstance().toJson(mPresenter.getCard()));
+            outState.putString("paymentRecovery", JsonUtil.getInstance().toJson(mPresenter.getPaymentRecovery()));
+            outState.putBoolean("showBankDeals", mShowBankDeals);
+
+            if (mPresenter.getAmount() != null) {
+                outState.putString("amount", mPresenter.getAmount().toString());
+            }
+
+            if (mPresenter.getPaymentMethodList() != null) {
+                outState.putString("paymentMethodList", JsonUtil.getInstance().toJson(mPresenter.getPaymentMethodList()));
+            }
+
+            if (mPresenter.getPaymentPreference() != null) {
+                outState.putString("paymentPreference", JsonUtil.getInstance().toJson(mPresenter.getPaymentPreference()));
+            }
+
+            if (mPresenter.getPaymentMethod() != null) {
+                outState.putString("paymentMethod", JsonUtil.getInstance().toJson(mPresenter.getPaymentMethod()));
+            }
+
+            if (mPresenter.getIssuer() != null) {
+                outState.putString("issuer", JsonUtil.getInstance().toJson(mPresenter.getIssuer()));
+            }
+
+            if (mPresenter.getPayerCost() != null) {
+                outState.putString("payerCost", JsonUtil.getInstance().toJson(mPresenter.getPayerCost()));
+            }
+
+            if (mPresenter.getCardToken() != null) {
+                outState.putString("cardToken", JsonUtil.getInstance().toJson(mPresenter.getCardToken()));
+            }
+
+            if (mPresenter.getCardInfo() != null) {
+                outState.putString("cardInfo", JsonUtil.getInstance().toJson(mPresenter.getCardInfo()));
+            }
+
+            if (mDecorationPreference != null) {
+                outState.putString("decorationPreference", JsonUtil.getInstance().toJson(mDecorationPreference));
+            }
         }
     }
 
@@ -317,7 +414,7 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultAct
     }
 
     @Override
-    public void overrideTranstitionHold() {
+    public void overrideTransitionHold() {
         overridePendingTransition(R.anim.mpsdk_hold, R.anim.mpsdk_hold);
     }
 
@@ -328,7 +425,7 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultAct
 
     @Override
     public void finishWithResult() {
-        if (mPresenter.getPaymentRecovery() != null && mPresenter.getPaymentRecovery().isTokenRecoverable()){
+        if (mPresenter.getPaymentRecovery() != null && mPresenter.getPaymentRecovery().isTokenRecoverable()) {
             PayerCost payerCost = mPresenter.getPaymentRecovery().getPayerCost();
             mPresenter.setPayerCost(payerCost);
             Issuer issuer = mPresenter.getPaymentRecovery().getIssuer();

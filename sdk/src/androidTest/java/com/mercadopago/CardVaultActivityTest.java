@@ -1,8 +1,11 @@
 package com.mercadopago;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Instrumentation;
 import android.content.Intent;
+import android.os.Build;
+import android.os.Handler;
 import android.support.test.espresso.intent.Intents;
 import android.support.test.rule.ActivityTestRule;
 
@@ -559,6 +562,28 @@ public class CardVaultActivityTest {
         mTestRule.launchActivity(validStartIntent);
 
         Intents.intended(hasComponent(GuessingCardActivity.class.getName()), times(1));
+    }
+
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    @Test
+    public void onSaveInstanceAndBringUpRestoreState() {
+        validStartIntent.putExtra("amount", "1000");
+        validStartIntent.putExtra("site", JsonUtil.getInstance().toJson(Sites.ARGENTINA));
+        validStartIntent.putExtra("installmentsEnabled", true);
+
+        mTestRule.launchActivity(validStartIntent);
+
+        new Handler(mTestRule.getActivity().getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                mTestRule.getActivity().recreate();
+
+            }
+        });
+        assertEquals(mTestRule.getActivity().mPresenter.getPublicKey(), mMerchantPublicKey);
+        assertEquals(mTestRule.getActivity().mPresenter.getAmount().toString(), "1000");
+        assertEquals(mTestRule.getActivity().mPresenter.getSite().getId(), Sites.ARGENTINA.getId());
+        assertEquals(mTestRule.getActivity().mPresenter.installmentsRequired(), true);
     }
 
     private void addBankDealsCall() {
