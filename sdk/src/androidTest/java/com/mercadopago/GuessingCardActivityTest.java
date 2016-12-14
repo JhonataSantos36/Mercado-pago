@@ -1,9 +1,11 @@
 package com.mercadopago;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Instrumentation;
 import android.content.Intent;
 import android.os.Build;
+import android.os.Handler;
 import android.os.Looper;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.ViewInteraction;
@@ -20,6 +22,7 @@ import com.google.gson.reflect.TypeToken;
 import com.mercadopago.controllers.CheckoutTimer;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.model.BankDeal;
+import com.mercadopago.model.Card;
 import com.mercadopago.model.CardToken;
 import com.mercadopago.model.DecorationPreference;
 import com.mercadopago.model.DummyCard;
@@ -36,6 +39,7 @@ import com.mercadopago.test.ActivityResult;
 import com.mercadopago.test.FakeAPI;
 import com.mercadopago.test.StaticMock;
 import com.mercadopago.util.JsonUtil;
+import com.mercadopago.util.MPCardMaskUtil;
 import com.mercadopago.utils.ActivityResultUtil;
 import com.mercadopago.utils.CardTestUtils;
 import com.mercadopago.utils.IdentificationTestUtils;
@@ -53,7 +57,6 @@ import org.junit.runner.RunWith;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Handler;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.clearText;
@@ -90,11 +93,6 @@ public class GuessingCardActivityTest {
     private String mMerchantPublicKey;
 
     private FakeAPI mFakeAPI;
-
-    @BeforeClass
-    static public void initialize(){
-        Looper.prepare();
-    }
 
     @Before
     public void createValidStartIntent() {
@@ -1246,13 +1244,14 @@ public class GuessingCardActivityTest {
     @Test
     public void validateCardColorCordobesa() {
         addInitCalls();
-        mTestRule.launchActivity(validStartIntent);
+        GuessingCardActivity activity = mTestRule.launchActivity(validStartIntent);
 
         DummyCard card = getDummyCard("cordobesa");
         onView(withId(R.id.mpsdkCardNumber)).perform(typeText(card.getCardNumber()));
 
         int expectedColor = ContextCompat.getColor(InstrumentationRegistry.getContext(), R.color.mpsdk_cordobesa);
         validateCardColor(expectedColor);
+        activity.finish();
     }
 
     @Test
@@ -1521,10 +1520,67 @@ public class GuessingCardActivityTest {
         onView(withId(R.id.mpsdkNextButton)).perform(click());
         identificationNumberIsCurrentEditText();
     }
-/*
+
+    @Test
+    public void finishWithResultOnSecurityCodeNotRequired() {
+        addInitCalls();
+
+        mTestRule.launchActivity(validStartIntent);
+        DummyCard card = CardTestUtils.getPaymentMethodOnWithoutRequiredSecurityCode();
+
+        onView(withId(R.id.mpsdkCardNumber)).perform(typeText(card.getCardNumber()));
+        onView(withId(R.id.mpsdkNextButton)).perform(click());
+        onView(withId(R.id.mpsdkCardholderName)).perform(typeText(StaticMock.DUMMY_CARDHOLDER_NAME));
+        onView(withId(R.id.mpsdkNextButton)).perform(click());
+        onView(withId(R.id.mpsdkCardExpiryDate)).perform(typeText(StaticMock.DUMMY_EXPIRATION_DATE));
+        onView(withId(R.id.mpsdkNextButton)).perform(click());
+        onView(withId(R.id.mpsdkCardIdentificationNumber)).perform(typeText(StaticMock.DUMMY_IDENTIFICATION_NUMBER));
+        onView(withId(R.id.mpsdkNextButton)).perform(click());
+
+        ActivityResult result = ActivityResultUtil.getActivityResult(mTestRule.getActivity());
+        PaymentMethod pmResult = JsonUtil.getInstance().fromJson(result.getExtras().getString("paymentMethod"), PaymentMethod.class);
+        assertEquals("tarshop", pmResult.getId());
+        CardToken cardToken = new CardToken(card.getCardNumber(), StaticMock.DUMMY_EXPIRATION_DATE_ONLY_MONTH, StaticMock.DUMMY_EXPIRATION_DATE_ONLY_YEAR,
+                "", StaticMock.DUMMY_CARDHOLDER_NAME, StaticMock.DUMMY_IDENTIFICATION_TYPE, StaticMock.DUMMY_IDENTIFICATION_NUMBER);
+        CardToken resultCardToken = JsonUtil.getInstance().fromJson(result.getExtras().getString("cardToken"), CardToken.class);
+        assertEquals(JsonUtil.getInstance().toJson(cardToken), JsonUtil.getInstance().toJson(resultCardToken));
+        ActivityResultUtil.assertFinishCalledWithResult(mTestRule.getActivity(), Activity.RESULT_OK);
+    }
+
+    @Test
+    public void createCardTokenOnIdentificationNumberNotRequired() {
+        addBankDealsCall();
+        PaymentMethod pm = StaticMock.getPaymentMethodWithIdentificationNotRequired();
+        List<PaymentMethod> paymentMethods = new ArrayList<>();
+        paymentMethods.add(pm);
+        mFakeAPI.addResponseToQueue(paymentMethods, 200, "");
+
+        mTestRule.launchActivity(validStartIntent);
+
+        onView(withId(R.id.mpsdkCardNumber)).perform(typeText(CardTestUtils.getDummyCard("cordial").getCardNumber()));
+        onView(withId(R.id.mpsdkNextButton)).perform(click());
+        onView(withId(R.id.mpsdkCardholderName)).perform(typeText(StaticMock.DUMMY_CARDHOLDER_NAME));
+        onView(withId(R.id.mpsdkNextButton)).perform(click());
+        onView(withId(R.id.mpsdkCardExpiryDate)).perform(typeText(StaticMock.DUMMY_EXPIRATION_DATE));
+        onView(withId(R.id.mpsdkNextButton)).perform(click());
+        onView(withId(R.id.mpsdkCardSecurityCode)).perform(typeText(StaticMock.DUMMY_SECURITY_CODE));
+        onView(withId(R.id.mpsdkNextButton)).perform(click());
+
+        ActivityResult result = ActivityResultUtil.getActivityResult(mTestRule.getActivity());
+        PaymentMethod pmResult = JsonUtil.getInstance().fromJson(result.getExtras().getString("paymentMethod"), PaymentMethod.class);
+        assertEquals(pm.getId(), pmResult.getId());
+        CardToken cardToken = new CardToken(CardTestUtils.getDummyCard("cordial").getCardNumber(), StaticMock.DUMMY_EXPIRATION_DATE_ONLY_MONTH,
+                StaticMock.DUMMY_EXPIRATION_DATE_ONLY_YEAR, StaticMock.DUMMY_SECURITY_CODE, StaticMock.DUMMY_CARDHOLDER_NAME,
+                null, null);
+        CardToken resultCardToken = JsonUtil.getInstance().fromJson(result.getExtras().getString("cardToken"), CardToken.class);
+        assertEquals(JsonUtil.getInstance().toJson(cardToken), JsonUtil.getInstance().toJson(resultCardToken));
+
+        ActivityResultUtil.assertFinishCalledWithResult(mTestRule.getActivity(), Activity.RESULT_OK);
+    }
+
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Test
-    public void onRestoreInstanceRestoreVariablesFrontCard() {
+    public void onRestoreInstanceRestoreVariablesFrontCard() throws Throwable {
         addInitCalls();
         addInitCalls();
         final GuessingCardActivity activity = mTestRule.launchActivity(validStartIntent);
@@ -1541,13 +1597,13 @@ public class GuessingCardActivityTest {
         onView(withId(R.id.mpsdkNextButton)).perform(click());
         onView(withId(R.id.mpsdkCardSecurityCode)).perform(typeText(card.getSecurityCode()));
 
-        new Handler(activity.getMainLooper()).post(new Runnable() {
+        mTestRule.runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 activity.recreate();
-
             }
         });
+
         sleep();
         onView(withId(R.id.mpsdkCardNumber)).check(matches(withText(card.getNumberWithMask())));
         sleep();
@@ -1569,7 +1625,7 @@ public class GuessingCardActivityTest {
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Test
-    public void onRestoreInstanceRestoreVariablesBackCard() {
+    public void onRestoreInstanceRestoreVariablesBackCard() throws Throwable {
         addInitCalls();
         addInitCalls();
         final GuessingCardActivity activity = mTestRule.launchActivity(validStartIntent);
@@ -1586,13 +1642,13 @@ public class GuessingCardActivityTest {
         onView(withId(R.id.mpsdkNextButton)).perform(click());
         onView(withId(R.id.mpsdkCardSecurityCode)).perform(typeText(card.getSecurityCode()));
 
-        new Handler(activity.getMainLooper()).post(new Runnable() {
+        mTestRule.runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 activity.recreate();
-
             }
         });
+
         onView(withId(R.id.mpsdkCardNumber)).check(matches(withText(card.getNumberWithMask())));
         onView(withId(R.id.mpsdkCardNumberTextView)).check(matches(withText(containsString(card.getNumberWithMask()))));
         sleep();
@@ -1612,7 +1668,7 @@ public class GuessingCardActivityTest {
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Test
-    public void onRestoreInstanceRestoreVariablesIdentificationCard() {
+    public void onRestoreInstanceRestoreVariablesIdentificationCard() throws Throwable {
         addInitCalls();
         addInitCalls();
         sleep();
@@ -1635,13 +1691,13 @@ public class GuessingCardActivityTest {
         onView(withId(R.id.mpsdkCardIdentificationNumber)).perform(typeText(identificationType.getIdentificationNumber()));
         sleep();
 
-        new Handler(activity.getMainLooper()).post(new Runnable() {
+        mTestRule.runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 activity.recreate();
-
             }
         });
+
         onView(withId(R.id.mpsdkCardNumber)).check(matches(withText(card.getNumberWithMask())));
         onView(withId(R.id.mpsdkCardNumberTextView)).check(matches(withText(containsString(card.getNumberWithMask()))));
         sleep();
@@ -1670,7 +1726,7 @@ public class GuessingCardActivityTest {
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Test
-    public void onRestoreInstanceRestoreVariablesIdentificationCardAndBack() {
+    public void onRestoreInstanceRestoreVariablesIdentificationCardAndBack() throws Throwable {
         addInitCalls();
         addInitCalls();
         sleep();
@@ -1693,13 +1749,13 @@ public class GuessingCardActivityTest {
         onView(withId(R.id.mpsdkCardIdentificationNumber)).perform(typeText(identificationType.getIdentificationNumber()));
         sleep();
 
-        new Handler(activity.getMainLooper()).post(new Runnable() {
+        mTestRule.runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 activity.recreate();
-
             }
         });
+
         onView(withId(R.id.mpsdkCardNumber)).check(matches(withText(card.getNumberWithMask())));
         onView(withId(R.id.mpsdkCardNumberTextView)).check(matches(withText(containsString(card.getNumberWithMask()))));
         sleep();
@@ -1722,7 +1778,6 @@ public class GuessingCardActivityTest {
         onView(withId(R.id.mpsdkCardIdentificationNumber)).check(matches(withText(identificationType.getIdentificationNumber())));
         sleep();
     }
-    */
 
     //CUSTOMER CARDS
 
@@ -1860,7 +1915,29 @@ public class GuessingCardActivityTest {
         Intent paymentTypeResultIntent = new Intent();
         Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(Activity.RESULT_OK, paymentTypeResultIntent);
         intending(hasComponent(PaymentTypesActivity.class.getName())).respondWith(result);
+        sleep();
     }
+//
+//   @Test
+//   public void resolvePaymentMethodOnPaymentTypeSelection() {
+//       addBankDealsCall();
+//       addPaymentMethodsCallMLM();
+//       addIdentificationTypesCall();
+//
+//       mTestRule.launchActivity(validStartIntent);
+//       DummyCard card = CardTestUtils.getDummyCard("master_mlm");
+//
+//       onView(withId(R.id.mpsdkCardNumber)).perform(typeText(card.getCardNumber()));
+//       onView(withId(R.id.mpsdkNextButton)).perform(click());
+//       onView(withId(R.id.mpsdkCardholderName)).perform(typeText(StaticMock.DUMMY_CARDHOLDER_NAME));
+//       onView(withId(R.id.mpsdkNextButton)).perform(click());
+//       onView(withId(R.id.mpsdkCardExpiryDate)).perform(typeText(StaticMock.DUMMY_EXPIRATION_DATE));
+//       onView(withId(R.id.mpsdkNextButton)).perform(click());
+//       onView(withId(R.id.mpsdkCardSecurityCode)).perform(typeText(card.getSecurityCode()));
+//       onView(withId(R.id.mpsdkNextButton)).perform(click());
+//
+//
+//   }
 
     //Recoverable Token
 //    @Test
@@ -2104,6 +2181,7 @@ public class GuessingCardActivityTest {
     //Timer
     @Test
     public void showCountDownTimerWhenItIsInitialized(){
+        Looper.prepare();
         addBankDealsCall();
         addPaymentMethodsCall();
         addIdentificationTypesCall();
@@ -2114,10 +2192,13 @@ public class GuessingCardActivityTest {
 
         Assert.assertTrue(mTestRule.getActivity().findViewById(R.id.mpsdkTimerTextView).getVisibility() == View.VISIBLE);
         Assert.assertTrue(CheckoutTimer.getInstance().isTimerEnabled());
+        Looper.getMainLooper().quit();
     }
 
+    //TODO fix, it needs looper, but quit is not working
     @Test
     public void finishActivityWhenSetOnFinishCheckoutListener(){
+//        Looper.prepare();
         addBankDealsCall();
         addPaymentMethodsCall();
         addIdentificationTypesCall();
@@ -2128,6 +2209,7 @@ public class GuessingCardActivityTest {
             public void onFinish() {
                 CheckoutTimer.getInstance().finishCheckout();
                 Assert.assertTrue(mTestRule.getActivity().isFinishing());
+//                Looper.myLooper().quit();
             }
         });
 

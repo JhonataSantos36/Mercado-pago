@@ -458,7 +458,7 @@ public class MercadoPago {
         Intent intent = new Intent(activity, PaymentTypesActivity.class);
         intent.putExtra("paymentMethods", JsonUtil.getInstance().toJson(paymentMethods));
         intent.putExtra("paymentTypes", JsonUtil.getInstance().toJson(paymentTypes));
-        intent.putExtra("publicKey", publicKey);
+        intent.putExtra("merchantPublicKey", publicKey);
         intent.putExtra("cardInfo", JsonUtil.getInstance().toJson(cardInfo));
         intent.putExtra("decorationPreference", JsonUtil.getInstance().toJson(decorationPreference));
         activity.startActivityForResult(intent, PAYMENT_TYPES_REQUEST_CODE);

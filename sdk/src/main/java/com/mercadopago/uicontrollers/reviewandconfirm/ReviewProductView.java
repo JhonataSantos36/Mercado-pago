@@ -31,13 +31,9 @@ public class ReviewProductView implements ReviewProductViewController {
     protected View mFirstSeparator;
 
     private Context mContext;
-    private Item mItem;
-    private String mCurrencyId;
 
-    public ReviewProductView(Context context, Item item, String currencyId) {
+    public ReviewProductView(Context context) {
         this.mContext = context;
-        this.mItem = item;
-        this.mCurrencyId = currencyId;
     }
 
     @Override
@@ -63,11 +59,11 @@ public class ReviewProductView implements ReviewProductViewController {
     }
 
     @Override
-    public void drawProduct(int position) {
+    public void drawProduct(int position, Item item, String currencyId) {
         if (position != 0) {
             mFirstSeparator.setVisibility(View.GONE);
         }
-        String pictureUrl = mItem.getPictureUrl();
+        String pictureUrl = item.getPictureUrl();
         if (pictureUrl == null || pictureUrl.isEmpty()) {
             mProductImage.setImageResource(R.drawable.review_product_placeholder);
         } else {
@@ -78,27 +74,27 @@ public class ReviewProductView implements ReviewProductViewController {
                     .placeholder(R.drawable.review_product_placeholder)
                     .into(mProductImage);
         }
-        if (mItem.getTitle() == null) {
+        if (item.getTitle() == null) {
             mProductName.setVisibility(View.GONE);
         } else {
-            mProductName.setText(mItem.getTitle());
+            mProductName.setText(item.getTitle());
         }
-        if (mItem.getDescription() == null || mItem.getDescription().isEmpty()) {
+        if (item.getDescription() == null || item.getDescription().isEmpty()) {
             mProductDescription.setVisibility(View.GONE);
         } else {
-            mProductDescription.setText(mItem.getDescription());
+            mProductDescription.setText(item.getDescription());
         }
-        Integer quantity = mItem.getQuantity();
+        Integer quantity = item.getQuantity();
         if (quantity == null) {
             quantity = 1;
         }
         mProductQuantity.setText(mContext.getResources().getString(R.string.mpsdk_review_product_quantity, String.valueOf(quantity)));
-        BigDecimal price = mItem.getUnitPrice();
-        String originalNumber = CurrenciesUtil.formatNumber(price, mCurrencyId);
+        BigDecimal price = item.getUnitPrice();
+        String originalNumber = CurrenciesUtil.formatNumber(price, currencyId);
         String string = mContext.getString(R.string.mpsdk_review_product_price, originalNumber);
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(string);
-        Spanned priceText = CurrenciesUtil.formatCurrencyInText(price, mCurrencyId, stringBuilder.toString(), false, true);
+        Spanned priceText = CurrenciesUtil.formatCurrencyInText(price, currencyId, stringBuilder.toString(), false, true);
         mProductPrice.setText(priceText);
     }
 }

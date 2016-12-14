@@ -2,8 +2,11 @@ package com.mercadopago.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
+import com.mercadopago.R;
 import com.mercadopago.model.Item;
 import com.mercadopago.uicontrollers.reviewandconfirm.ReviewProductView;
 import com.mercadopago.uicontrollers.reviewandconfirm.ReviewProductViewController;
@@ -17,20 +20,18 @@ import java.util.List;
 public class ReviewProductAdapter extends RecyclerView.Adapter<ReviewProductAdapter.ViewHolder> {
 
     private List<Item> mItemList;
-    private List<String> mCurrenciesList;
+    private String mCurrency;
     private Context mContext;
 
-    public ReviewProductAdapter(Context context, List<Item> items, List<String> currencies) {
+    public ReviewProductAdapter(Context context, List<Item> items, String currency) {
         this.mContext = context;
         this.mItemList = items;
-        this.mCurrenciesList = currencies;
+        this.mCurrency = currency;
     }
 
     @Override
-    public ReviewProductAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int position) {
-        Item item = mItemList.get(position);
-        String currencyId = mCurrenciesList.get(position);
-        ReviewProductViewController productViewController = new ReviewProductView(mContext, item, currencyId);
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        ReviewProductViewController productViewController = new ReviewProductView(mContext);
         productViewController.inflateInParent(parent, false);
         return new ReviewProductAdapter.ViewHolder(productViewController);
     }
@@ -42,7 +43,8 @@ public class ReviewProductAdapter extends RecyclerView.Adapter<ReviewProductAdap
 
     @Override
     public void onBindViewHolder(ReviewProductAdapter.ViewHolder holder, int position) {
-        holder.mReviewProductViewController.drawProduct(position);
+        Item item = mItemList.get(position);
+        holder.mReviewProductViewController.drawProduct(position, item, mCurrency);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

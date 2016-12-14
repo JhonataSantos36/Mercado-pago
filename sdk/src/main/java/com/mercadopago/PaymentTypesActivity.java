@@ -105,7 +105,7 @@ public class PaymentTypesActivity extends AppCompatActivity implements PaymentTy
         } catch (Exception ex) {
             paymentTypes = null;
         }
-        String publicKey = getIntent().getStringExtra("publicKey");
+        String publicKey = getIntent().getStringExtra("merchantPublicKey");
         CardInfo cardInfo = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("cardInfo"), CardInfo.class);
         mDecorationPreference = null;
         if (getIntent().getStringExtra("decorationPreference") != null) {

@@ -45,11 +45,15 @@ public class BankDealsActivityTest {
     private Intent validStartIntent;
     private FakeAPI mFakeAPI;
     private boolean mIntentsActive;
+    private String mMerchantPublicKey;
+
 
     @Before
     public void setValidStartIntent() {
+        mMerchantPublicKey = StaticMock.DUMMY_TEST_PUBLIC_KEY;
+
         validStartIntent = new Intent();
-        validStartIntent.putExtra("merchantPublicKey", "1234");
+        validStartIntent.putExtra("merchantPublicKey", mMerchantPublicKey);
     }
 
     @Before
