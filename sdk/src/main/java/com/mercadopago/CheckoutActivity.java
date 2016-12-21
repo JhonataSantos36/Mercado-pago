@@ -23,6 +23,7 @@ import android.widget.RelativeLayout;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+
 import com.mercadopago.adapters.ReviewPaymentOffAdapter;
 import com.mercadopago.adapters.ReviewPaymentOnAdapter;
 import com.mercadopago.adapters.ReviewProductAdapter;
@@ -151,6 +152,7 @@ public class CheckoutActivity extends MercadoPagoActivity {
     protected FrameLayout mReviewSummaryContainer;
     protected NestedScrollView mScrollView;
     protected String mCustomerId;
+    protected Boolean mBinaryModeEnabled;
 
     @Override
     protected void setContentView() {
@@ -164,6 +166,7 @@ public class CheckoutActivity extends MercadoPagoActivity {
         mMerchantGetCustomerUri = this.getIntent().getStringExtra("merchantGetCustomerUri");
         mMerchantAccessToken = this.getIntent().getStringExtra("merchantAccessToken");
         mCheckoutPreferenceId = this.getIntent().getStringExtra("checkoutPreferenceId");
+        mBinaryModeEnabled = this.getIntent().getBooleanExtra("binaryModeEnabled", false);
     }
 
     @Override
@@ -831,6 +834,7 @@ public class CheckoutActivity extends MercadoPagoActivity {
         paymentIntent.setPrefId(mCheckoutPreference.getId());
         paymentIntent.setPublicKey(mMerchantPublicKey);
         paymentIntent.setPaymentMethodId(mSelectedPaymentMethod.getId());
+        paymentIntent.setBinaryMode(mBinaryModeEnabled);
         Payer payer = mCheckoutPreference.getPayer();
         if (!TextUtils.isEmpty(mCustomerId) && MercadoPagoUtil.isCard(mSelectedPaymentMethod.getPaymentTypeId())) {
             payer.setId(mCustomerId);

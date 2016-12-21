@@ -6,6 +6,7 @@ import android.content.Intent;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+
 import com.mercadopago.BankDealsActivity;
 import com.mercadopago.BuildConfig;
 import com.mercadopago.CallForAuthorizeActivity;
@@ -316,7 +317,7 @@ public class MercadoPago {
         activity.startActivityForResult(bankDealsIntent, BANK_DEALS_REQUEST_CODE);
     }
 
-    private static void startCheckoutActivity(Activity activity, String merchantPublicKey, String merchantBaseUrl, String merchantGetCustomerUri, String merchantAccessToken, String checkoutPreferenceId, Boolean showBankDeals, DecorationPreference decorationPreference) {
+    private static void startCheckoutActivity(Activity activity, String merchantPublicKey, String merchantBaseUrl, String merchantGetCustomerUri, String merchantAccessToken, String checkoutPreferenceId, Boolean showBankDeals, Boolean binaryModeEnabled, DecorationPreference decorationPreference) {
 
         Intent checkoutIntent = new Intent(activity, CheckoutActivity.class);
         checkoutIntent.putExtra("merchantPublicKey", merchantPublicKey);
@@ -326,6 +327,7 @@ public class MercadoPago {
         checkoutIntent.putExtra("merchantGetCustomerUri", merchantGetCustomerUri);
         checkoutIntent.putExtra("merchantAccessToken", merchantAccessToken);
         checkoutIntent.putExtra("decorationPreference", JsonUtil.getInstance().toJson(decorationPreference));
+        checkoutIntent.putExtra("binaryModeEnabled", binaryModeEnabled);
         activity.startActivityForResult(checkoutIntent, CHECKOUT_REQUEST_CODE);
     }
 
@@ -711,6 +713,7 @@ public class MercadoPago {
         private List<PaymentType> mPaymentTypesList;
         private CardInfo mCardInfo;
         private Integer mMaxSavedCards;
+        private Boolean mBinaryModeEnabled;
 
         public StartActivityBuilder() {
 
@@ -898,6 +901,11 @@ public class MercadoPago {
             return this;
         }
 
+        public StartActivityBuilder setBinaryModeEnabled(Boolean binaryModeEnabled) {
+            this.mBinaryModeEnabled = binaryModeEnabled;
+            return this;
+        }
+
         @Deprecated
         public StartActivityBuilder setSupportedPaymentTypes(List<String> supportedPaymentTypes) {
             this.mSupportedPaymentTypes = supportedPaymentTypes;
@@ -927,7 +935,7 @@ public class MercadoPago {
 
             if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {
                 MercadoPago.startCheckoutActivity(this.mActivity, this.mKey, this.mMerchantBaseUrl, this.mMerchantGetCustomerUri, this.mMerchantAccessToken,
-                        this.mCheckoutPreferenceId, this.mShowBankDeals, this.mDecorationPreference);
+                        this.mCheckoutPreferenceId, this.mShowBankDeals, this.mBinaryModeEnabled, this.mDecorationPreference);
             } else {
                 throw new RuntimeException("Unsupported key type for this method");
             }

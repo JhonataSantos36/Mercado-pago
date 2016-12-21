@@ -582,7 +582,8 @@ public class CheckoutActivityTest {
         sleep();
         intended(hasComponent(CardVaultActivity.class.getName()), times(2));
     }
-//
+
+    //
 //    // VALIDATIONS TESTS
 //    @Test
 //    public void ifPublicKeyNotSetStartErrorActivityAndFinishWithMPExceptionOnResponse() {
@@ -1483,7 +1484,7 @@ public class CheckoutActivityTest {
         assertTrue(mTestRule.getActivity().mCheckoutPreference.getPayer().getId() == null);
     }
 
-//    // CUSTOMER CARDS
+    //    // CUSTOMER CARDS
 //
 //    @Test
 //    public void ifMerchantServerInfoAddedGetCustomerCards() {
@@ -1832,4 +1833,17 @@ public class CheckoutActivityTest {
 //
 //        intended(hasComponent(PaymentResultActivity.class.getName()), times(2));
 //    }
+    //BINARY MODE TESTS
+    @Test
+    public void ifBinaryModeSetTrueSetActivityFlagTrue() {
+        validStartIntent.putExtra("binaryModeEnabled", true);
+        CheckoutActivity activity = mTestRule.launchActivity(validStartIntent);
+        assertTrue(activity.mBinaryModeEnabled);
+    }
+
+    @Test
+    public void ifBinaryModeNotSetSetFalseAsDefault() {
+        CheckoutActivity activity = mTestRule.launchActivity(validStartIntent);
+        assertTrue(!activity.mBinaryModeEnabled);
+    }
 }

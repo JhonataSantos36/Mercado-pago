@@ -12,6 +12,7 @@ public class PaymentIntent {
     private String prefId;
     @SerializedName("token")
     private String tokenId;
+    private Boolean binaryMode;
     private String publicKey;
     private String email;
     private Payer payer;
@@ -74,5 +75,9 @@ public class PaymentIntent {
 
     public void setPayer(Payer payer) {
         this.payer = payer;
+    }
+
+    public void setBinaryMode(Boolean binaryMode) {
+        this.binaryMode = binaryMode;
     }
 }
