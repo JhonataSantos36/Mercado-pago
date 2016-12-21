@@ -1,5 +1,6 @@
 package com.mercadopago.model;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public class PaymentMethod {
@@ -8,7 +9,13 @@ public class PaymentMethod {
     private String id;
     private String name;
     private String paymentTypeId;
+    private String status;
+    private String secureThumbnail;
+    private String thumbnail;
+    private String deferredCapture;
     private List<Setting> settings;
+    private BigDecimal minAllowedAmount;
+    private BigDecimal maxAllowedAmount;
     private Integer accreditationTime;
 
     public List<String> getAdditionalInfoNeeded() {
@@ -94,6 +101,58 @@ public class PaymentMethod {
     public boolean isValidForBin(String bin) {
 
         return (Setting.getSettingByBin(this.getSettings(), bin) != null);
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getSecureThumbnail() {
+        return secureThumbnail;
+    }
+
+    public void setSecureThumbnail(String secureThumbnail) {
+        this.secureThumbnail = secureThumbnail;
+    }
+
+    public String getThumbnail() {
+        return thumbnail;
+    }
+
+    public void setThumbnail(String thumbnail) {
+        this.thumbnail = thumbnail;
+    }
+
+    public String getDeferredCapture() {
+        return deferredCapture;
+    }
+
+    public void setDeferredCapture(String deferredCapture) {
+        this.deferredCapture = deferredCapture;
+    }
+
+    public BigDecimal getMinAllowedAmount() {
+        return minAllowedAmount;
+    }
+
+    public void setMinAllowedAmount(BigDecimal minAllowedAmount) {
+        this.minAllowedAmount = minAllowedAmount;
+    }
+
+    public BigDecimal getMaxAllowedAmount() {
+        return maxAllowedAmount;
+    }
+
+    public void setMaxAllowedAmount(BigDecimal maxAllowedAmount) {
+        this.maxAllowedAmount = maxAllowedAmount;
+    }
+
+    public void setAccreditationTime(Integer accreditationTime) {
+        this.accreditationTime = accreditationTime;
     }
 
     public Integer getAccreditationTime() {
