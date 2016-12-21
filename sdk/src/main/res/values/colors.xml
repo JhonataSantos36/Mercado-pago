@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="colorAccent">#009EE3</color>
     <color name="mpsdk_comment_color">#999</color>
     <color name="mpsdk_white">#FFFFFF</color>
     <color name="mpsdk_white_background">#FFFFFF</color>
@@ -130,6 +131,7 @@
 
     <color name="mpsdk_background_blue">#009EE3</color>
     <color name="mpsdk_colorPrimary">#009EE3</color>
+    <color name="mpsdk_colorPrimaryDark">#004f71</color>
     <color name="mpsdk_color_payer_costs">#999999</color>
     <color name="mpsdk_color_payer_costs_no_rate">#3BC280</color>
     <color name="mpsdk_issuers_background_gray">#F0F0F0</color>
