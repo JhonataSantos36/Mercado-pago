@@ -1,6 +1,5 @@
 package com.mercadopago;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
@@ -33,7 +32,6 @@ import com.mercadopago.callbacks.OnChangePaymentMethodCallback;
 import com.mercadopago.callbacks.OnConfirmPaymentCallback;
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.core.MerchantServer;
-import com.mercadopago.customviews.MPButton;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.exceptions.CheckoutPreferenceException;
 import com.mercadopago.exceptions.ExceptionHandler;
@@ -43,9 +41,7 @@ import com.mercadopago.model.Card;
 import com.mercadopago.model.CardInfo;
 import com.mercadopago.model.CheckoutPreference;
 import com.mercadopago.model.Customer;
-import com.mercadopago.model.DecorationPreference;
 import com.mercadopago.model.Issuer;
-import com.mercadopago.model.Item;
 import com.mercadopago.model.Payer;
 import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.Payment;
@@ -56,7 +52,6 @@ import com.mercadopago.model.PaymentMethodSearchItem;
 import com.mercadopago.model.PaymentPreference;
 import com.mercadopago.model.PaymentRecovery;
 import com.mercadopago.model.PaymentResultAction;
-import com.mercadopago.model.Setting;
 import com.mercadopago.model.Site;
 import com.mercadopago.model.Token;
 import com.mercadopago.mptracker.MPTracker;
@@ -90,6 +85,7 @@ public class CheckoutActivity extends MercadoPagoActivity {
     protected String mMerchantBaseUrl;
     protected String mMerchantGetCustomerUri;
     protected String mMerchantAccessToken;
+    protected Boolean mSkipCongratsEnabled;
 
     //Local vars
     protected MercadoPago mMercadoPago;
@@ -118,7 +114,6 @@ public class CheckoutActivity extends MercadoPagoActivity {
     protected MPTextView mTermsAndConditionsTextView;
     protected MPTextView mCancelTextView;
     protected MPTextView mTotalAmountTextView;
-    protected MPButton mPayButton;
     protected RelativeLayout mPayerCostLayout;
     protected Boolean mBackPressedOnce;
     protected Snackbar mSnackbar;
@@ -166,6 +161,7 @@ public class CheckoutActivity extends MercadoPagoActivity {
         mMerchantGetCustomerUri = this.getIntent().getStringExtra("merchantGetCustomerUri");
         mMerchantAccessToken = this.getIntent().getStringExtra("merchantAccessToken");
         mCheckoutPreferenceId = this.getIntent().getStringExtra("checkoutPreferenceId");
+        mSkipCongratsEnabled = this.getIntent().getBooleanExtra("skipCongratsEnabled", false);
         mBinaryModeEnabled = this.getIntent().getBooleanExtra("binaryModeEnabled", false);
     }
 
@@ -179,7 +175,7 @@ public class CheckoutActivity extends MercadoPagoActivity {
         mReviewPaymentOffRecyclerView.setNestedScrollingEnabled(false);
         mReviewProductRecyclerView.setNestedScrollingEnabled(false);
         mReviewSummaryContainer = (FrameLayout) findViewById(R.id.mpsdkReviewSummaryContainer);
-        mConfirmButton = (FrameLayout) findViewById(R.id.mpsdkReviewSummaryConfirmButton);
+        mConfirmButton = (FrameLayout) findViewById(R.id.mpsdkCheckoutConfirmButton);
         mConfirmTextButton = (MPTextView) findViewById(R.id.mpsdkConfirmText);
         mCancelButton = (FrameLayout) findViewById(R.id.mpsdkReviewCancelButton);
         mCancelTextView = (MPTextView) findViewById(R.id.mpsdkCancelText);
@@ -812,7 +808,7 @@ public class CheckoutActivity extends MercadoPagoActivity {
             @Override
             public void success(Payment payment) {
                 mCreatedPayment = payment;
-                startPaymentResultActivity();
+                checkStartPaymentResultActivity(payment);
                 cleanTransactionId();
             }
 
@@ -858,6 +854,19 @@ public class CheckoutActivity extends MercadoPagoActivity {
 
         paymentIntent.setTransactionId(mTransactionId);
         return paymentIntent;
+    }
+
+    private void checkStartPaymentResultActivity(Payment payment) {
+        if (hasToSkipPaymentResultActivity(payment)) {
+            finishWithPaymentResult();
+        } else {
+            startPaymentResultActivity();
+        }
+    }
+
+    private boolean hasToSkipPaymentResultActivity(Payment payment) {
+        return mSkipCongratsEnabled && (payment != null) && (!isEmpty(payment.getStatus())) &&
+                (payment.getStatus().equals(Payment.StatusCodes.STATUS_APPROVED));
     }
 
     private void startPaymentResultActivity() {

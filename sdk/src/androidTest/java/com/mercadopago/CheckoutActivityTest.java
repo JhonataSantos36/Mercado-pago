@@ -54,6 +54,7 @@ import static android.support.test.espresso.intent.matcher.IntentMatchers.hasCom
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsString;
@@ -1833,6 +1834,161 @@ public class CheckoutActivityTest {
 //
 //        intended(hasComponent(PaymentResultActivity.class.getName()), times(2));
 //    }
+
+    //SKIP CONGRATS MODE TESTS
+    @Test
+    public void ifSkipCongratsSetTrueSetActivityFlagTrue() {
+        validStartIntent.putExtra("skipCongratsEnabled", true);
+        CheckoutActivity activity = mTestRule.launchActivity(validStartIntent);
+        assertTrue(activity.mSkipCongratsEnabled);
+    }
+
+    @Test
+    public void ifSkipCongratsNotSetSetFalseAsDefault() {
+        CheckoutActivity activity = mTestRule.launchActivity(validStartIntent);
+        assertFalse(activity.mSkipCongratsEnabled);
+    }
+
+    @Test
+    public void ifSkipCongratsSetTrueAndAcceptedPaymentDontStartPaymentResultActivity() {
+        validStartIntent.putExtra("skipCongratsEnabled", true);
+        CheckoutActivity activity = mTestRule.launchActivity(validStartIntent);
+
+        CheckoutPreference preference = StaticMock.getCheckoutPreference();
+        mFakeAPI.addResponseToQueue(preference, 200, "");
+
+        String paymentMethodSearchJson = StaticMock.getPaymentMethodSearchWithoutCustomOptionsAsJson();
+        mFakeAPI.addResponseToQueue(paymentMethodSearchJson, 200, "");
+
+        Payment payment = StaticMock.getPayment(InstrumentationRegistry.getContext());
+        mFakeAPI.addResponseToQueue(payment, 200, "");
+
+        //prepare next activity result
+
+        PaymentMethod paymentMethod = StaticMock.getPaymentMethodOn();
+        PayerCost payerCost = StaticMock.getPayerCostWithInterests();
+        Token token = StaticMock.getToken();
+        Issuer issuer = StaticMock.getIssuer();
+        Intent paymentMethodResult = new Intent();
+        paymentMethodResult.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
+        paymentMethodResult.putExtra("payerCost", JsonUtil.getInstance().toJson(payerCost));
+        paymentMethodResult.putExtra("token", JsonUtil.getInstance().toJson(token));
+        paymentMethodResult.putExtra("issuer", JsonUtil.getInstance().toJson(issuer));
+        Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(Activity.RESULT_OK, paymentMethodResult);
+        intending(hasComponent(PaymentVaultActivity.class.getName())).respondWith(result);
+
+        mTestRule.launchActivity(validStartIntent);
+
+        onView(withId(R.id.mpsdkCheckoutConfirmButton)).perform(NestedScrollViewScrollToAction.scrollTo(), click());
+
+        intended(hasComponent(PaymentResultActivity.class.getName()), times(0));
+    }
+
+    @Test
+    public void ifSkipCongratsSetTrueAndRejectedPaymentDoStartPaymentResultActivity() {
+        validStartIntent.putExtra("skipCongratsEnabled", true);
+        CheckoutActivity activity = mTestRule.launchActivity(validStartIntent);
+
+        CheckoutPreference preference = StaticMock.getCheckoutPreference();
+        mFakeAPI.addResponseToQueue(preference, 200, "");
+
+        String paymentMethodSearchJson = StaticMock.getPaymentMethodSearchWithoutCustomOptionsAsJson();
+        mFakeAPI.addResponseToQueue(paymentMethodSearchJson, 200, "");
+
+        Payment payment = StaticMock.getPaymentRejectedBadFilledSecurityCode();
+        mFakeAPI.addResponseToQueue(payment, 200, "");
+
+        //prepare next activity result
+
+        PaymentMethod paymentMethod = StaticMock.getPaymentMethodOn();
+        PayerCost payerCost = StaticMock.getPayerCostWithInterests();
+        Token token = StaticMock.getToken();
+        Issuer issuer = StaticMock.getIssuer();
+        Intent paymentMethodResult = new Intent();
+        paymentMethodResult.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
+        paymentMethodResult.putExtra("payerCost", JsonUtil.getInstance().toJson(payerCost));
+        paymentMethodResult.putExtra("token", JsonUtil.getInstance().toJson(token));
+        paymentMethodResult.putExtra("issuer", JsonUtil.getInstance().toJson(issuer));
+        Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(Activity.RESULT_OK, paymentMethodResult);
+        intending(hasComponent(PaymentVaultActivity.class.getName())).respondWith(result);
+
+        mTestRule.launchActivity(validStartIntent);
+
+        onView(withId(R.id.mpsdkCheckoutConfirmButton)).perform(NestedScrollViewScrollToAction.scrollTo(), click());
+
+        intended(hasComponent(PaymentResultActivity.class.getName()), times(1));
+    }
+
+    @Test
+    public void ifSkipCongratsSetFalseAndAcceptedPaymentDoStartPaymentResultActivity() {
+        validStartIntent.putExtra("skipCongratsEnabled", false);
+        CheckoutActivity activity = mTestRule.launchActivity(validStartIntent);
+
+        CheckoutPreference preference = StaticMock.getCheckoutPreference();
+        mFakeAPI.addResponseToQueue(preference, 200, "");
+
+        String paymentMethodSearchJson = StaticMock.getPaymentMethodSearchWithoutCustomOptionsAsJson();
+        mFakeAPI.addResponseToQueue(paymentMethodSearchJson, 200, "");
+
+        Payment payment = StaticMock.getPayment(InstrumentationRegistry.getContext());
+        mFakeAPI.addResponseToQueue(payment, 200, "");
+
+        //prepare next activity result
+
+        PaymentMethod paymentMethod = StaticMock.getPaymentMethodOn();
+        PayerCost payerCost = StaticMock.getPayerCostWithInterests();
+        Token token = StaticMock.getToken();
+        Issuer issuer = StaticMock.getIssuer();
+        Intent paymentMethodResult = new Intent();
+        paymentMethodResult.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
+        paymentMethodResult.putExtra("payerCost", JsonUtil.getInstance().toJson(payerCost));
+        paymentMethodResult.putExtra("token", JsonUtil.getInstance().toJson(token));
+        paymentMethodResult.putExtra("issuer", JsonUtil.getInstance().toJson(issuer));
+        Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(Activity.RESULT_OK, paymentMethodResult);
+        intending(hasComponent(PaymentVaultActivity.class.getName())).respondWith(result);
+
+        mTestRule.launchActivity(validStartIntent);
+
+        onView(withId(R.id.mpsdkCheckoutConfirmButton)).perform(NestedScrollViewScrollToAction.scrollTo(), click());
+
+        intended(hasComponent(PaymentResultActivity.class.getName()), times(1));
+    }
+
+    @Test
+    public void ifSkipCongratsSetFalseAndRejectedPaymentDoStartPaymentResultActivity() {
+        validStartIntent.putExtra("skipCongratsEnabled", false);
+        CheckoutActivity activity = mTestRule.launchActivity(validStartIntent);
+
+        CheckoutPreference preference = StaticMock.getCheckoutPreference();
+        mFakeAPI.addResponseToQueue(preference, 200, "");
+
+        String paymentMethodSearchJson = StaticMock.getPaymentMethodSearchWithoutCustomOptionsAsJson();
+        mFakeAPI.addResponseToQueue(paymentMethodSearchJson, 200, "");
+
+        Payment payment = StaticMock.getPaymentRejectedBadFilledSecurityCode();
+        mFakeAPI.addResponseToQueue(payment, 200, "");
+
+        //prepare next activity result
+
+        PaymentMethod paymentMethod = StaticMock.getPaymentMethodOn();
+        PayerCost payerCost = StaticMock.getPayerCostWithInterests();
+        Token token = StaticMock.getToken();
+        Issuer issuer = StaticMock.getIssuer();
+        Intent paymentMethodResult = new Intent();
+        paymentMethodResult.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
+        paymentMethodResult.putExtra("payerCost", JsonUtil.getInstance().toJson(payerCost));
+        paymentMethodResult.putExtra("token", JsonUtil.getInstance().toJson(token));
+        paymentMethodResult.putExtra("issuer", JsonUtil.getInstance().toJson(issuer));
+        Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(Activity.RESULT_OK, paymentMethodResult);
+        intending(hasComponent(PaymentVaultActivity.class.getName())).respondWith(result);
+
+        mTestRule.launchActivity(validStartIntent);
+
+        onView(withId(R.id.mpsdkCheckoutConfirmButton)).perform(NestedScrollViewScrollToAction.scrollTo(), click());
+
+        intended(hasComponent(PaymentResultActivity.class.getName()), times(1));
+    }
+
     //BINARY MODE TESTS
     @Test
     public void ifBinaryModeSetTrueSetActivityFlagTrue() {
