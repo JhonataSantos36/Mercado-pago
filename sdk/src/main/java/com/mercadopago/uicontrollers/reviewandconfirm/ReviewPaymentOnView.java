@@ -20,7 +20,7 @@ import com.mercadopago.uicontrollers.payercosts.PayerCostViewController;
  * Created by vaserber on 11/7/16.
  */
 
-public class ReviewPaymentOnView implements ReviewPaymentViewController {
+public class ReviewPaymentOnView implements ReviewPaymentViewOnController {
 
     protected View mView;
     protected ImageView mPaymentImage;
@@ -32,25 +32,16 @@ public class ReviewPaymentOnView implements ReviewPaymentViewController {
     protected MPTextView mChangePaymentTextView;
 
     private Context mContext;
-    private PaymentMethod mPaymentMethod;
-    private CardInfo mCardInfo;
-    private String mCurrencyId;
-    private PayerCost mPayerCost;
     private PayerCostViewController payerCostViewController;
 
     private OnChangePaymentMethodCallback mCallback;
     private boolean isUniquePaymentMethod;
     private DecorationPreference mDecorationPreference;
 
-    public ReviewPaymentOnView(Context context, PaymentMethod paymentMethod, CardInfo cardInfo,
-                               String currencyId, PayerCost payerCost, OnChangePaymentMethodCallback callback,
+    public ReviewPaymentOnView(Context context, OnChangePaymentMethodCallback callback,
                                boolean uniquePaymentMethod, DecorationPreference decorationPreference) {
 
         this.mContext = context;
-        this.mPaymentMethod = paymentMethod;
-        this.mCardInfo = cardInfo;
-        this.mCurrencyId = currencyId;
-        this.mPayerCost = payerCost;
         this.mCallback = callback;
         this.isUniquePaymentMethod = uniquePaymentMethod;
         this.mDecorationPreference = decorationPreference;
@@ -90,18 +81,19 @@ public class ReviewPaymentOnView implements ReviewPaymentViewController {
     }
 
     @Override
-    public void drawPaymentMethod() {
+    public void drawPaymentMethod(PaymentMethod paymentMethod, CardInfo cardInfo, PayerCost payerCost,
+                                  String currencyId) {
         decorateText();
         mPaymentImage.setImageResource(R.drawable.mpsdk_review_payment_on);
         mPaymentText.setVisibility(View.GONE);
 
-        payerCostViewController = ReviewPaymentViewFactory.getReviewPayerCostController(mContext, mCurrencyId);
+        payerCostViewController = ReviewPaymentViewFactory.getReviewPayerCostController(mContext, currencyId);
         payerCostViewController.inflateInParent(mPayerCostContainer, true);
         payerCostViewController.initializeControls();
-        payerCostViewController.drawPayerCost(mPayerCost);
+        payerCostViewController.drawPayerCost(payerCost);
 
-        String description = mContext.getString(R.string.mpsdk_review_description_card, mPaymentMethod.getName(),
-                mCardInfo.getLastFourDigits());
+        String description = mContext.getString(R.string.mpsdk_review_description_card, paymentMethod.getName(),
+                cardInfo.getLastFourDigits());
         mPaymentDescription.setText(description);
     }
 

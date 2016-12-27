@@ -28,7 +28,7 @@ import java.math.BigDecimal;
  * Created by vaserber on 11/7/16.
  */
 
-public class ReviewPaymentOffView implements ReviewPaymentViewController {
+public class ReviewPaymentOffView implements ReviewPaymentViewOffController {
 
     protected View mView;
     protected ImageView mPaymentImage;
@@ -40,24 +40,15 @@ public class ReviewPaymentOffView implements ReviewPaymentViewController {
     protected MPTextView mChangePaymentTextView;
 
     private Context mContext;
-    private PaymentMethod mPaymentMethod;
-    private BigDecimal mAmount;
-    private PaymentMethodSearchItem mItem;
-    private String mCurrencyId;
     private Site mSite;
     private OnChangePaymentMethodCallback mCallback;
     private boolean isUniquePaymentMethod;
     private DecorationPreference mDecorationPreference;
 
-    public ReviewPaymentOffView(Context context, PaymentMethod paymentMethod,
-                                BigDecimal amount, PaymentMethodSearchItem item, String currencyId,
-                                Site site, OnChangePaymentMethodCallback callback, boolean uniquePaymentMethod,
+    public ReviewPaymentOffView(Context context, Site site, OnChangePaymentMethodCallback callback,
+                                boolean uniquePaymentMethod,
                                 DecorationPreference decorationPreference) {
         this.mContext = context;
-        this.mPaymentMethod = paymentMethod;
-        this.mAmount = amount;
-        this.mItem = item;
-        this.mCurrencyId = currencyId;
         this.mSite = site;
         this.mCallback = callback;
         this.isUniquePaymentMethod = uniquePaymentMethod;
@@ -97,7 +88,7 @@ public class ReviewPaymentOffView implements ReviewPaymentViewController {
     }
 
     @Override
-    public void drawPaymentMethod() {
+    public void drawPaymentMethod(PaymentMethod paymentMethod, BigDecimal amount, PaymentMethodSearchItem item, String currencyId) {
         setSmallTextSize();
         decorateText();
 
@@ -112,18 +103,18 @@ public class ReviewPaymentOffView implements ReviewPaymentViewController {
 
         mPayerCostContainer.setVisibility(View.GONE);
 
-        int paymentText = ReviewUtil.getPaymentInfoStringForItem(mItem);
-        String originalNumber = CurrenciesUtil.formatNumber(mAmount, mCurrencyId);
-        String itemName = ReviewUtil.getPaymentNameForItem(mItem, mPaymentMethod, mContext);
+        int paymentText = ReviewUtil.getPaymentInfoStringForItem(item);
+        String originalNumber = CurrenciesUtil.formatNumber(amount, currencyId);
+        String itemName = ReviewUtil.getPaymentNameForItem(item, paymentMethod, mContext);
 
         String string = mContext.getString(paymentText, originalNumber, itemName);
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(string);
 
-        Spanned amountText = CurrenciesUtil.formatCurrencyInText(mAmount, mCurrencyId, stringBuilder.toString(), false, true);
+        Spanned amountText = CurrenciesUtil.formatCurrencyInText(amount, currencyId, stringBuilder.toString(), false, true);
 
         mPaymentText.setText(amountText);
-        mPaymentDescription.setText(mItem.getComment());
+        mPaymentDescription.setText(item.getComment());
     }
 
     private void setSmallTextSize() {

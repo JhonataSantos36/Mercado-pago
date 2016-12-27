@@ -15,7 +15,6 @@ import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentPreference;
 import com.mercadopago.model.PaymentRecovery;
-import com.mercadopago.model.SavedCardToken;
 import com.mercadopago.model.Site;
 import com.mercadopago.model.Token;
 import com.mercadopago.views.CardVaultActivityView;
@@ -187,7 +186,7 @@ public class CardVaultPresenter {
     public void checkStartInstallmentsActivity() {
         if (installmentsRequired()) {
             mView.startInstallmentsActivity();
-            mView.overrideTranstitionHold();
+            mView.overrideTransitionHold();
         } else {
             createToken();
         }

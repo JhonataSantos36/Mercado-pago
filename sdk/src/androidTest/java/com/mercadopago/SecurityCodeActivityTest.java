@@ -9,6 +9,9 @@ import android.test.suitebuilder.annotation.LargeTest;
 import android.view.View;
 
 import com.mercadopago.controllers.CheckoutTimer;
+import com.mercadopago.model.Card;
+import com.mercadopago.model.CardInfo;
+import com.mercadopago.model.Issuer;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.Token;
 import com.mercadopago.test.ActivityResult;
@@ -23,6 +26,8 @@ import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import java.util.List;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -81,6 +86,65 @@ public class SecurityCodeActivityTest {
     @After
     public void releaseIntents() {
         Intents.release();
+    }
+
+    //Saved card
+    @Test
+    public void askThreeDigitsWhenReceivedSavedCardAndIsNotAmex() {
+        List<Card> cards = StaticMock.getCards();
+        Card card = cards.get(1);
+
+        CardInfo cardInfo = new CardInfo(card);
+        PaymentMethod paymentMethod = StaticMock.getPaymentMethodOn();
+        Issuer issuer = card.getIssuer();
+
+        validStartIntent.putExtra("cardInfo", JsonUtil.getInstance().toJson(cardInfo));
+        validStartIntent.putExtra("card", JsonUtil.getInstance().toJson(card));
+        validStartIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
+        validStartIntent.putExtra("issuer", JsonUtil.getInstance().toJson(issuer));
+
+        Token mockedToken = StaticMock.getToken();
+        mFakeAPI.addResponseToQueue(JsonUtil.getInstance().toJson(mockedToken), 200, "");
+
+        mTestRule.launchActivity(validStartIntent);
+
+        onView(withId(R.id.mpsdkCardSecurityCode)).check(matches(isDisplayed()));
+        onView(withId(R.id.mpsdkCardSecurityCode)).perform(typeText(StaticMock.DUMMY_SECURITY_CODE));
+        onView(withId(R.id.mpsdkSecurityCodeNextButton)).perform(click());
+
+        ActivityResult result = ActivityResultUtil.getActivityResult(mTestRule.getActivity());
+        Token tokenResult = JsonUtil.getInstance().fromJson(result.getExtras().getString("token"), Token.class);
+
+        assertTrue(tokenResult.getId().equals(mockedToken.getId()));
+    }
+
+    @Test
+    public void askFourDigitsWhenReceivedSavedCardAndIsAmex() {
+        List<Card> cards = StaticMock.getCards();
+        Card card = cards.get(2);
+
+        CardInfo cardInfo = new CardInfo(card);
+        PaymentMethod paymentMethod = StaticMock.getAmexPaymentMethodOn();
+        Issuer issuer = card.getIssuer();
+
+        validStartIntent.putExtra("cardInfo", JsonUtil.getInstance().toJson(cardInfo));
+        validStartIntent.putExtra("card", JsonUtil.getInstance().toJson(card));
+        validStartIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
+        validStartIntent.putExtra("issuer", JsonUtil.getInstance().toJson(issuer));
+
+        Token mockedToken = StaticMock.getTokenAmex();
+        mFakeAPI.addResponseToQueue(JsonUtil.getInstance().toJson(mockedToken), 200, "");
+
+        mTestRule.launchActivity(validStartIntent);
+
+        onView(withId(R.id.mpsdkCardSecurityCode)).check(matches(isDisplayed()));
+        onView(withId(R.id.mpsdkCardSecurityCode)).perform(typeText(StaticMock.DUMMY_SECURITY_CODE_FOUR_DIGITS));
+        onView(withId(R.id.mpsdkSecurityCodeNextButton)).perform(click());
+
+        ActivityResult result = ActivityResultUtil.getActivityResult(mTestRule.getActivity());
+        Token tokenResult = JsonUtil.getInstance().fromJson(result.getExtras().getString("token"), Token.class);
+
+        assertTrue(tokenResult.getId().equals(mockedToken.getId()));
     }
 
     //Recoverable Token

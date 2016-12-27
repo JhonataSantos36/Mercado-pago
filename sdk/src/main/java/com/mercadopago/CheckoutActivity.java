@@ -1,5 +1,6 @@
 package com.mercadopago;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
@@ -22,7 +23,8 @@ import android.widget.RelativeLayout;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.mercadopago.adapters.ReviewPaymentAdapter;
+import com.mercadopago.adapters.ReviewPaymentOffAdapter;
+import com.mercadopago.adapters.ReviewPaymentOnAdapter;
 import com.mercadopago.adapters.ReviewProductAdapter;
 import com.mercadopago.callbacks.Callback;
 import com.mercadopago.callbacks.FailureRecovery;
@@ -40,7 +42,9 @@ import com.mercadopago.model.Card;
 import com.mercadopago.model.CardInfo;
 import com.mercadopago.model.CheckoutPreference;
 import com.mercadopago.model.Customer;
+import com.mercadopago.model.DecorationPreference;
 import com.mercadopago.model.Issuer;
+import com.mercadopago.model.Item;
 import com.mercadopago.model.Payer;
 import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.Payment;
@@ -51,6 +55,7 @@ import com.mercadopago.model.PaymentMethodSearchItem;
 import com.mercadopago.model.PaymentPreference;
 import com.mercadopago.model.PaymentRecovery;
 import com.mercadopago.model.PaymentResultAction;
+import com.mercadopago.model.Setting;
 import com.mercadopago.model.Site;
 import com.mercadopago.model.Token;
 import com.mercadopago.mptracker.MPTracker;
@@ -97,8 +102,6 @@ public class CheckoutActivity extends MercadoPagoActivity {
     protected Payment mCreatedPayment;
     protected Site mSite;
 
-    protected String mPurchaseTitle;
-
     protected boolean mPaymentMethodEditionRequested;
 
     protected PaymentMethodViewController mPaymentMethodRow;
@@ -127,16 +130,19 @@ public class CheckoutActivity extends MercadoPagoActivity {
     protected FrameLayout mSnackbarContainer;
 
     //Payments list (for many payment methods)
-    protected List<PaymentMethod> mPaymentMethodList;
+    protected List<PaymentMethod> mPaymentMethodOffList;
+    protected List<PaymentMethod> mPaymentMethodOnList;
     protected List<CardInfo> mCardInfoList;
-    protected List<String> mCurrencies;
     protected List<PayerCost> mPayerCostList;
     protected List<BigDecimal> mTotalAmountList;
     protected List<PaymentMethodSearchItem> mPaymentMethodSearchList;
+    protected String mCurrency;
 
     //View
-    protected ReviewPaymentAdapter mReviewPaymentAdapter;
-    protected RecyclerView mReviewPaymentRecyclerView;
+    protected ReviewPaymentOnAdapter mReviewPaymentOnAdapter;
+    protected ReviewPaymentOffAdapter mReviewPaymentOffAdapter;
+    protected RecyclerView mReviewPaymentOnRecyclerView;
+    protected RecyclerView mReviewPaymentOffRecyclerView;
     protected ReviewProductAdapter mReviewProductAdapter;
     protected RecyclerView mReviewProductRecyclerView;
     protected CollapsingToolbarLayout mCollapsingToolbar;
@@ -163,9 +169,11 @@ public class CheckoutActivity extends MercadoPagoActivity {
     @Override
     protected void initializeControls() {
         //Review views
-        mReviewPaymentRecyclerView = (RecyclerView) findViewById(R.id.mpsdkReviewPaymentRecyclerView);
+        mReviewPaymentOnRecyclerView = (RecyclerView) findViewById(R.id.mpsdkReviewPaymentOnRecyclerView);
+        mReviewPaymentOffRecyclerView = (RecyclerView) findViewById(R.id.mpsdkReviewPaymentOffRecyclerView);
         mReviewProductRecyclerView = (RecyclerView) findViewById(R.id.mpsdkReviewProductRecyclerView);
-        mReviewPaymentRecyclerView.setNestedScrollingEnabled(false);
+        mReviewPaymentOnRecyclerView.setNestedScrollingEnabled(false);
+        mReviewPaymentOffRecyclerView.setNestedScrollingEnabled(false);
         mReviewProductRecyclerView.setNestedScrollingEnabled(false);
         mReviewSummaryContainer = (FrameLayout) findViewById(R.id.mpsdkReviewSummaryContainer);
         mConfirmButton = (FrameLayout) findViewById(R.id.mpsdkReviewSummaryConfirmButton);
@@ -563,8 +571,13 @@ public class CheckoutActivity extends MercadoPagoActivity {
 
     private void createPaymentMethodList() {
         //TODO for the future, for many payment methods
-        mPaymentMethodList = new ArrayList<>();
-        mPaymentMethodList.add(mSelectedPaymentMethod);
+        mPaymentMethodOnList = new ArrayList<>();
+        mPaymentMethodOffList = new ArrayList<>();
+        if (MercadoPagoUtil.isCard(mSelectedPaymentMethod.getPaymentTypeId())) {
+            mPaymentMethodOnList.add(mSelectedPaymentMethod);
+        } else {
+            mPaymentMethodOffList.add(mSelectedPaymentMethod);
+        }
     }
 
     private void createCardInfoList() {
@@ -579,9 +592,8 @@ public class CheckoutActivity extends MercadoPagoActivity {
         }
     }
 
-    private void createCurrenciesList() {
-        mCurrencies = new ArrayList<>();
-        mCurrencies.add(mCheckoutPreference.getItems().get(0).getCurrencyId());
+    private void initializeCurrency() {
+        mCurrency = mCheckoutPreference.getItems().get(0).getCurrencyId();
     }
 
     private void createPayerCostsList() {
@@ -598,7 +610,7 @@ public class CheckoutActivity extends MercadoPagoActivity {
 
     private void createPaymentMethodSearchList() {
         mPaymentMethodSearchList = new ArrayList<>();
-        for (PaymentMethod pm : mPaymentMethodList) {
+        for (PaymentMethod pm : mPaymentMethodOffList) {
             PaymentMethodSearchItem item = mPaymentMethodSearch.getSearchItemByPaymentMethod(pm);
             mPaymentMethodSearchList.add(item);
         }
@@ -607,7 +619,7 @@ public class CheckoutActivity extends MercadoPagoActivity {
     private void showReviewAndConfirm() {
         createPaymentMethodList();
         createCardInfoList();
-        createCurrenciesList();
+        initializeCurrency();
         createPayerCostsList();
         createTotalAmountList();
         createPaymentMethodSearchList();
@@ -674,19 +686,29 @@ public class CheckoutActivity extends MercadoPagoActivity {
     }
 
     private void drawPaymentMethodList() {
-        initializeReviewPaymentAdapter();
+        initializeReviewPaymentOnAdapter();
+        initializeReviewPaymentOffAdapter();
     }
 
     private void drawProductList() {
         initializeReviewProductAdapter();
     }
 
-    private void initializeReviewPaymentAdapter() {
-        mReviewPaymentAdapter = new ReviewPaymentAdapter(this, mPaymentMethodList, mCardInfoList,
-                mPayerCostList, mCurrencies, mTotalAmountList, mPaymentMethodSearchList, mSite, mChangePaymentMethodCallback,
+    private void initializeReviewPaymentOnAdapter() {
+        mReviewPaymentOnAdapter = new ReviewPaymentOnAdapter(this, mPaymentMethodOnList, mCardInfoList,
+                mPayerCostList, mCurrency, mChangePaymentMethodCallback, isUniquePaymentMethod(),
+                mDecorationPreference);
+        mReviewPaymentOnRecyclerView.setAdapter(mReviewPaymentOnAdapter);
+        mReviewPaymentOnRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+    }
+
+    private void initializeReviewPaymentOffAdapter() {
+        mReviewPaymentOffAdapter = new ReviewPaymentOffAdapter(this, mPaymentMethodOffList, mCurrency,
+                mTotalAmountList, mPaymentMethodSearchList, mSite, mChangePaymentMethodCallback,
                 isUniquePaymentMethod(), mDecorationPreference);
-        mReviewPaymentRecyclerView.setAdapter(mReviewPaymentAdapter);
-        mReviewPaymentRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        mReviewPaymentOffRecyclerView.setAdapter(mReviewPaymentOffAdapter);
+        mReviewPaymentOffRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
     private void changePaymentMethod() {
@@ -698,7 +720,7 @@ public class CheckoutActivity extends MercadoPagoActivity {
     }
 
     private void initializeReviewProductAdapter() {
-        mReviewProductAdapter = new ReviewProductAdapter(this, mCheckoutPreference.getItems(), mCurrencies);
+        mReviewProductAdapter = new ReviewProductAdapter(this, mCheckoutPreference.getItems(), mCurrency);
         mReviewProductRecyclerView.setAdapter(mReviewProductAdapter);
         mReviewProductRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }

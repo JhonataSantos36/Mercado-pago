@@ -58,7 +58,13 @@
                     android:overScrollMode="never" />
 
                 <android.support.v7.widget.RecyclerView
-                    android:id="@+id/mpsdkReviewPaymentRecyclerView"
+                    android:id="@+id/mpsdkReviewPaymentOnRecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:overScrollMode="never" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/mpsdkReviewPaymentOffRecyclerView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:overScrollMode="never" />

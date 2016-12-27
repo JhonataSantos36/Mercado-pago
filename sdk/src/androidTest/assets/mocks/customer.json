@@ -60,6 +60,34 @@
         "length":3,
         "mode":null
       }
+    },
+    {
+      "card_holder":null,
+      "customer_id":"178101336",
+      "date_created":null,
+      "date_last_updated":null,
+      "expiration_month":12,
+      "expiration_year":2019,
+      "first_six_digits":"371180",
+      "id":"149024476",
+      "issuer":{
+        "id":1,
+        "name":"American Express"
+      },
+      "last_four_digits":"7522",
+      "payment_method":{
+        "accreditation_time":null,
+        "additional_info_needed":null,
+        "id":"amex",
+        "name":"American Express",
+        "payment_type_id":"credit_card",
+        "settings":null
+      },
+      "security_code":{
+        "card_location":"front",
+        "length":4,
+        "mode":"mandatory"
+      }
     }
   ],
   "date_created":"2015-02-27T16:45:47.000+0000",
