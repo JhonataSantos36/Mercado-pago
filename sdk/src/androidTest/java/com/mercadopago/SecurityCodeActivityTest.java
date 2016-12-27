@@ -54,11 +54,6 @@ public class SecurityCodeActivityTest {
 
     private FakeAPI mFakeAPI;
 
-    @BeforeClass
-    static public void initialize(){
-        Looper.prepare();
-    }
-
     @Before
     public void createValidStartIntent() {
         mMerchantPublicKey = StaticMock.DUMMY_TEST_PUBLIC_KEY;
@@ -239,7 +234,9 @@ public class SecurityCodeActivityTest {
     //Timer
     @Test
     public void showCountDownTimerWhenItIsInitialized(){
-
+        if (Looper.myLooper() == null) {
+            Looper.prepare();
+        }
         Token token = StaticMock.getToken();
         PaymentMethod paymentMethod = StaticMock.getPaymentMethodOn();
 
@@ -253,10 +250,12 @@ public class SecurityCodeActivityTest {
 
         assertTrue(mTestRule.getActivity().findViewById(R.id.mpsdkTimerTextView).getVisibility() == View.VISIBLE);
         assertTrue(CheckoutTimer.getInstance().isTimerEnabled());
+        Looper.myLooper().quit();
     }
 
     @Test
     public void finishActivityWhenSetOnFinishCheckoutListener(){
+        Looper.prepare();
         Token token = StaticMock.getToken();
         PaymentMethod paymentMethod = StaticMock.getPaymentMethodOn();
 
@@ -270,6 +269,7 @@ public class SecurityCodeActivityTest {
             public void onFinish() {
                 CheckoutTimer.getInstance().finishCheckout();
                 assertTrue(mTestRule.getActivity().isFinishing());
+                Looper.myLooper().quit();
             }
         });
 

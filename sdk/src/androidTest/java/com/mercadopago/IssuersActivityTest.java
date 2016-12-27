@@ -73,11 +73,6 @@ public class IssuersActivityTest {
     private PaymentMethod mPaymentMethod;
     private FakeAPI mFakeAPI;
 
-    @BeforeClass
-    static public void initialize(){
-        Looper.prepare();
-    }
-
     @Before
     public void createValidStartIntent() {
         mMerchantPublicKey = StaticMock.DUMMY_MERCHANT_PUBLIC_KEY;
@@ -472,6 +467,9 @@ public class IssuersActivityTest {
     //Timer
     @Test
     public void showCountDownTimerWhenItIsInitialized(){
+        if (Looper.myLooper() == null) {
+            Looper.prepare();
+        }
         String issuers = StaticMock.getIssuersJson();
         Type listType = new TypeToken<List<Issuer>>(){}.getType();
         List<Issuer> issuerList = JsonUtil.getInstance().getGson().fromJson(issuers, listType);
@@ -483,10 +481,12 @@ public class IssuersActivityTest {
 
         Assert.assertTrue(mTestRule.getActivity().findViewById(R.id.mpsdkTimerTextView).getVisibility() == View.VISIBLE);
         Assert.assertTrue(CheckoutTimer.getInstance().isTimerEnabled());
+        Looper.myLooper().quit();
     }
 
     @Test
     public void finishActivityWhenSetOnFinishCheckoutListener(){
+        Looper.prepare();
         String issuers = StaticMock.getIssuersJson();
         Type listType = new TypeToken<List<Issuer>>(){}.getType();
         List<Issuer> issuerList = JsonUtil.getInstance().getGson().fromJson(issuers, listType);
@@ -498,6 +498,7 @@ public class IssuersActivityTest {
             public void onFinish() {
                 CheckoutTimer.getInstance().finishCheckout();
                 Assert.assertTrue(mTestRule.getActivity().isFinishing());
+                Looper.myLooper().quit();
             }
         });
 

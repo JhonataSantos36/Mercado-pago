@@ -85,11 +85,6 @@ public class PaymentVaultActivityTest {
     private Intent validStartIntent;
     private FakeAPI mFakeAPI;
 
-    @BeforeClass
-    static public void initialize() {
-        Looper.prepare();
-    }
-
     @Before
     public void setupStartIntent() {
 
@@ -541,7 +536,7 @@ public class PaymentVaultActivityTest {
         PaymentMethodSearch paymentMethodSearch = JsonUtil.getInstance()
                 .fromJson(StaticMock.getPaymentMethodSearchWithoutCustomOptionsAsJson(), PaymentMethodSearch.class);
 
-        Customer customer = StaticMock.getCustomer();
+        Customer customer = StaticMock.getCustomer(3);
 
         mFakeAPI.addResponseToQueue(paymentMethodSearch, 200, "");
         mFakeAPI.addResponseToQueue(customer, 200, "");
@@ -562,7 +557,7 @@ public class PaymentVaultActivityTest {
         PaymentMethodSearch paymentMethodSearch = JsonUtil.getInstance()
                 .fromJson(StaticMock.getPaymentMethodSearchWithoutCustomOptionsAsJson(), PaymentMethodSearch.class);
 
-        Customer customer = StaticMock.getCustomer();
+        Customer customer = StaticMock.getCustomer(3);
         Card card = customer.getCards().get(0);
         customer.getCards().add(card);
         customer.getCards().add(card);
@@ -586,7 +581,7 @@ public class PaymentVaultActivityTest {
         PaymentMethodSearch paymentMethodSearch = JsonUtil.getInstance()
                 .fromJson(StaticMock.getPaymentMethodSearchWithoutCustomOptionsAsJson(), PaymentMethodSearch.class);
 
-        Customer customer = StaticMock.getCustomer();
+        Customer customer = StaticMock.getCustomer(3);
         Card card = customer.getCards().get(0);
         customer.getCards().add(card);
         customer.getCards().add(card);
@@ -638,7 +633,7 @@ public class PaymentVaultActivityTest {
         PaymentMethodSearch paymentMethodSearch = JsonUtil.getInstance()
                 .fromJson(StaticMock.getPaymentMethodSearchWithoutCustomOptionsAsJson(), PaymentMethodSearch.class);
 
-        Customer customer = StaticMock.getCustomer();
+        Customer customer = StaticMock.getCustomer(3);
 
         mFakeAPI.addResponseToQueue(paymentMethodSearch, 200, "");
 
@@ -656,7 +651,7 @@ public class PaymentVaultActivityTest {
     public void ifBothSavedCardsListAndMerchantServerInfoSetDoNotMakeApiCall() {
         PaymentMethodSearch paymentMethodSearch = JsonUtil.getInstance()
                 .fromJson(StaticMock.getPaymentMethodSearchWithoutCustomOptionsAsJson(), PaymentMethodSearch.class);
-        Customer customer = StaticMock.getCustomer();
+        Customer customer = StaticMock.getCustomer(3);
 
         Gson gson = new Gson();
         validStartIntent.putExtra("cards", gson.toJson(customer.getCards()));
@@ -684,7 +679,7 @@ public class PaymentVaultActivityTest {
         PaymentMethodSearch paymentMethodSearch = JsonUtil.getInstance()
                 .fromJson(StaticMock.getPaymentMethodSearchWithoutCustomOptionsAsJson(), PaymentMethodSearch.class);
 
-        Customer customer = StaticMock.getCustomer();
+        Customer customer = StaticMock.getCustomer(3);
 
         mFakeAPI.addResponseToQueue(paymentMethodSearch, 200, "");
 
@@ -703,7 +698,7 @@ public class PaymentVaultActivityTest {
         PaymentMethodSearch paymentMethodSearch = JsonUtil.getInstance()
                 .fromJson(StaticMock.getPaymentMethodSearchWithoutCustomOptionsAsJson(), PaymentMethodSearch.class);
 
-        final Customer customer = StaticMock.getCustomer();
+        final Customer customer = StaticMock.getCustomer(3);
 
         mFakeAPI.addResponseToQueue(paymentMethodSearch, 200, "");
         mFakeAPI.addResponseToQueue(customer, 200, "");
@@ -991,6 +986,9 @@ public class PaymentVaultActivityTest {
     //Timer
     @Test
     public void showCountDownTimerWhenItIsInitialized() {
+        if(Looper.myLooper() == null) {
+            Looper.prepare();
+        }
         String paymentMethodSearchJson = StaticMock.getPaymentMethodSearchWithoutCustomOptionsAsJson();
         mFakeAPI.addResponseToQueue(paymentMethodSearchJson, 200, "");
 
@@ -1007,10 +1005,12 @@ public class PaymentVaultActivityTest {
 
         Assert.assertTrue(mTestRule.getActivity().findViewById(R.id.mpsdkTimerTextView).getVisibility() == View.VISIBLE);
         Assert.assertTrue(CheckoutTimer.getInstance().isTimerEnabled());
+        Looper.myLooper().quit();
     }
 
     @Test
     public void finishActivityWhenSetOnFinishCheckoutListener() {
+        Looper.prepare();
         String paymentMethodSearchJson = StaticMock.getPaymentMethodSearchWithoutCustomOptionsAsJson();
         mFakeAPI.addResponseToQueue(paymentMethodSearchJson, 200, "");
 
@@ -1027,6 +1027,7 @@ public class PaymentVaultActivityTest {
             public void onFinish() {
                 CheckoutTimer.getInstance().finishCheckout();
                 Assert.assertTrue(mTestRule.getActivity().isFinishing());
+                Looper.myLooper().quit();
             }
         });
         mTestRule.launchActivity(validStartIntent);

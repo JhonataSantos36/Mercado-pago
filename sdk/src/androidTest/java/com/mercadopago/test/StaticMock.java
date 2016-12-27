@@ -321,18 +321,25 @@ public class StaticMock {
         }
     }
 
-    public static Customer getCustomer() {
+    public static Customer getCustomer(int cardsAmount) {
         try {
-            return JsonUtil.getInstance().fromJson(getFile(InstrumentationRegistry.getContext(), "mocks/customer.json"), Customer.class);
+            if (cardsAmount == 1) {
+                return JsonUtil.getInstance().fromJson(getFile(InstrumentationRegistry.getContext(), "mocks/customer_one_card.json"), Customer.class);
+            } else if (cardsAmount == 2) {
+                return JsonUtil.getInstance().fromJson(getFile(InstrumentationRegistry.getContext(), "mocks/customer_two_cards.json"), Customer.class);
+            } else if (cardsAmount == 3) {
+                return JsonUtil.getInstance().fromJson(getFile(InstrumentationRegistry.getContext(), "mocks/customer_three_cards.json"), Customer.class);
+            }
         } catch (Exception ex) {
             return null;
         }
+        return null;
     }
 
     public static List<Card> getCards() {
 
         try {
-            Customer customer = JsonUtil.getInstance().fromJson(getFile(InstrumentationRegistry.getContext(), "mocks/customer.json"), Customer.class);
+            Customer customer = JsonUtil.getInstance().fromJson(getFile(InstrumentationRegistry.getContext(), "mocks/customer_three_cards.json"), Customer.class);
             return customer.getCards();
 
         } catch (Exception ex) {

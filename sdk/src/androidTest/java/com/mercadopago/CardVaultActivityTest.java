@@ -8,14 +8,12 @@ import android.os.Build;
 import android.os.Handler;
 import android.support.test.espresso.intent.Intents;
 import android.support.test.rule.ActivityTestRule;
-import android.util.Log;
 
 import com.google.gson.reflect.TypeToken;
 import com.mercadopago.constants.Sites;
 import com.mercadopago.model.BankDeal;
 import com.mercadopago.model.CardToken;
 import com.mercadopago.model.Card;
-import com.mercadopago.model.DummyCard;
 import com.mercadopago.model.Installment;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.PayerCost;
@@ -28,7 +26,6 @@ import com.mercadopago.test.FakeAPI;
 import com.mercadopago.test.StaticMock;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.utils.ActivityResultUtil;
-import com.mercadopago.utils.CardTestUtils;
 
 import org.junit.After;
 import org.junit.Before;
@@ -675,7 +672,6 @@ public class CardVaultActivityTest {
 
         intended((hasComponent(InstallmentsActivity.class.getName())), times(1));
         intended((hasComponent(SecurityCodeActivity.class.getName())), times(1));
-
         assertTrue(activity.isFinishing());
     }
 

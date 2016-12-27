@@ -82,11 +82,6 @@ public class InstallmentsActivityTest {
 
     private FakeAPI mFakeAPI;
 
-    @BeforeClass
-    static public void initialize(){
-        Looper.prepare();
-    }
-
     @Before
     public void createValidStartIntent() {
         mMerchantPublicKey = StaticMock.DUMMY_MERCHANT_PUBLIC_KEY;
@@ -694,6 +689,9 @@ public class InstallmentsActivityTest {
     //Timer
     @Test
     public void showCountDownTimerWhenItIsInitialized(){
+        if (Looper.myLooper() == null) {
+            Looper.prepare();
+        }
         String payerCosts = StaticMock.getPayerCostsJson();
         Type listType = new TypeToken<List<PayerCost>>(){}.getType();
         List<PayerCost> payerCostList = JsonUtil.getInstance().getGson().fromJson(payerCosts, listType);
@@ -705,10 +703,12 @@ public class InstallmentsActivityTest {
 
         Assert.assertTrue(mTestRule.getActivity().findViewById(R.id.mpsdkTimerTextView).getVisibility() == View.VISIBLE);
         Assert.assertTrue(CheckoutTimer.getInstance().isTimerEnabled());
+        Looper.myLooper().quit();
     }
 
     @Test
     public void finishActivityWhenSetOnFinishCheckoutListener(){
+        Looper.prepare();
         String payerCosts = StaticMock.getPayerCostsJson();
         Type listType = new TypeToken<List<PayerCost>>(){}.getType();
         List<PayerCost> payerCostList = JsonUtil.getInstance().getGson().fromJson(payerCosts, listType);
@@ -720,6 +720,7 @@ public class InstallmentsActivityTest {
             public void onFinish() {
                 CheckoutTimer.getInstance().finishCheckout();
                 Assert.assertTrue(mTestRule.getActivity().isFinishing());
+                Looper.myLooper().quit();
             }
         });
 

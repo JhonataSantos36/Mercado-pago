@@ -12,7 +12,6 @@ import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.Spanned;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -55,12 +54,10 @@ import com.mercadopago.model.PaymentResultAction;
 import com.mercadopago.model.Site;
 import com.mercadopago.model.Token;
 import com.mercadopago.mptracker.MPTracker;
-import com.mercadopago.uicontrollers.ViewControllerFactory;
 import com.mercadopago.uicontrollers.payercosts.PayerCostViewController;
 import com.mercadopago.uicontrollers.paymentmethods.PaymentMethodViewController;
 import com.mercadopago.uicontrollers.reviewandconfirm.ReviewSummaryView;
 import com.mercadopago.util.ApiUtil;
-import com.mercadopago.util.CurrenciesUtil;
 import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.MercadoPagoUtil;
@@ -426,8 +423,6 @@ public class CheckoutActivity extends MercadoPagoActivity {
             resolvePaymentVaultRequest(resultCode, data);
         } else if (requestCode == MercadoPago.PAYMENT_RESULT_REQUEST_CODE) {
             resolvePaymentResultRequest(resultCode, data);
-        } else if (requestCode == MercadoPago.INSTALLMENTS_REQUEST_CODE) {
-            resolveInstallmentsRequest(resultCode, data);
         } else if (requestCode == MercadoPago.CARD_VAULT_REQUEST_CODE) {
             resolveCardVaultRequest(resultCode, data);
         } else {
@@ -549,16 +544,6 @@ public class CheckoutActivity extends MercadoPagoActivity {
 
     private boolean noUserInteractionReached() {
         return mSelectedPaymentMethod == null;
-    }
-
-    protected void resolveInstallmentsRequest(int resultCode, Intent data) {
-        if (resultCode == RESULT_OK) {
-            Bundle bundle = data.getExtras();
-            mSelectedPayerCost = JsonUtil.getInstance().fromJson(bundle.getString("payerCost"), PayerCost.class);
-            drawPayerCostRow();
-            setAmountLabel();
-        }
-        overridePendingTransition(R.anim.mpsdk_slide_right_to_left_in, R.anim.mpsdk_slide_right_to_left_out);
     }
 
     private void finishWithPaymentResult() {
@@ -722,71 +707,6 @@ public class CheckoutActivity extends MercadoPagoActivity {
         mReviewProductAdapter = new ReviewProductAdapter(this, mCheckoutPreference.getItems(), mCurrency);
         mReviewProductRecyclerView.setAdapter(mReviewProductAdapter);
         mReviewProductRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-    }
-
-    private void drawPayerCostRow() {
-        mPayerCostLayout.removeAllViews();
-
-        if (mSelectedPayerCost != null && mCheckoutPreference != null) {
-            mPaymentMethodRow.showSeparator();
-
-            mPayerCostRow = ViewControllerFactory.getPayerCostEditionViewController(this, mCheckoutPreference.getItems().get(0).getCurrencyId());
-            mPayerCostRow.inflateInParent(mPayerCostLayout, true);
-            mPayerCostRow.initializeControls();
-            mPayerCostRow.drawPayerCost(mSelectedPayerCost);
-            mPayerCostRow.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    startInstallmentsActivity();
-                }
-            });
-        }
-    }
-
-    public void startInstallmentsActivity() {
-        PaymentPreference paymentPreference = new PaymentPreference();
-        paymentPreference.setMaxAcceptedInstallments(mCheckoutPreference.getMaxInstallments());
-
-        new MercadoPago.StartActivityBuilder()
-                .setActivity(getActivity())
-                .setPublicKey(mMerchantPublicKey)
-                .setPaymentMethod(mSelectedPaymentMethod)
-                .setAmount(mCheckoutPreference.getAmount())
-                .setToken(mCreatedToken)
-                .setIssuer(mSelectedIssuer)
-                .setSite(mSite)
-                .setPaymentPreference(paymentPreference)
-                .setDecorationPreference(mDecorationPreference)
-                .startInstallmentsActivity();
-
-        overridePendingTransition(R.anim.mpsdk_slide_right_to_left_in, R.anim.mpsdk_slide_right_to_left_out);
-    }
-
-    private void setAmountLabel() {
-        mTotalAmountTextView.setText(getAmountLabel());
-    }
-
-    private Spanned getAmountLabel() {
-        BigDecimal totalAmount = getTotalAmount();
-        String currencyId = mCheckoutPreference.getItems().get(0).getCurrencyId();
-        String amountText = CurrenciesUtil.formatNumber(totalAmount, currencyId);
-
-        StringBuilder totalAmountTextBuilder = new StringBuilder();
-        totalAmountTextBuilder.append(getString(R.string.mpsdk_payment_amount_to_pay));
-        totalAmountTextBuilder.append(" ");
-        totalAmountTextBuilder.append(amountText);
-
-        return CurrenciesUtil.formatCurrencyInText(totalAmount, currencyId, totalAmountTextBuilder.toString(), true, true);
-    }
-
-    private BigDecimal getTotalAmount() {
-        BigDecimal amount = new BigDecimal(0);
-        if (mSelectedPayerCost != null) {
-            amount = amount.add(mSelectedPayerCost.getTotalAmount());
-        } else {
-            amount = mCheckoutPreference.getAmount();
-        }
-        return amount;
     }
 
     private void animateBackFromPaymentEdition() {

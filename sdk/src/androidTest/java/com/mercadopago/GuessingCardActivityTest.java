@@ -2192,7 +2192,7 @@ public class GuessingCardActivityTest {
 
         Assert.assertTrue(mTestRule.getActivity().findViewById(R.id.mpsdkTimerTextView).getVisibility() == View.VISIBLE);
         Assert.assertTrue(CheckoutTimer.getInstance().isTimerEnabled());
-        Looper.getMainLooper().quit();
+        Looper.myLooper().quit();
     }
 
     //TODO fix, it needs looper, but quit is not working
