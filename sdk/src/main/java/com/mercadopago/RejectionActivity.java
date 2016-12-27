@@ -5,24 +5,27 @@ import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.widget.FrameLayout;
 
+import com.mercadopago.controllers.CheckoutTimer;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentResultAction;
 import com.mercadopago.mptracker.MPTracker;
+import com.mercadopago.observers.TimerObserver;
 import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
 
 import static android.text.TextUtils.isEmpty;
 
-public class RejectionActivity extends MercadoPagoActivity {
+public class RejectionActivity extends MercadoPagoActivity implements TimerObserver {
 
     //Controls
+    protected MPTextView mTimerTextView;
     protected MPTextView mRejectionTitle;
     protected MPTextView mRejectionSubtitle;
-    protected FrameLayout mRejectionOptionButton;
     protected MPTextView mKeepBuyingButton;
     protected MPTextView mRejectionOptionButtonText;
+    protected FrameLayout mRejectionOptionButton;
 
     //Params
     protected Payment mPayment;
@@ -72,10 +75,17 @@ public class RejectionActivity extends MercadoPagoActivity {
                 finishWithOkResult();
             }
         });
+
+        mTimerTextView = (MPTextView) findViewById(R.id.mpsdkTimerTextView);
     }
 
     @Override
     protected void onValidStart() {
+        showTimer();
+        loadTitles();
+    }
+
+    private void loadTitles() {
         if (isStatusDetailValid() && isPaymentMethodValid()) {
             if (mPayment.getStatusDetail().equals(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_OTHER_REASON)) {
                 String titleMessage = String.format(getString(R.string.mpsdk_title_other_reason_rejection), mPaymentMethod.getName());
@@ -104,7 +114,7 @@ public class RejectionActivity extends MercadoPagoActivity {
             } else if (mPayment.getStatusDetail().equals(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_MAX_ATTEMPTS)) {
                 mRejectionTitle.setText(getString(R.string.mpsdk_title_rejection_max_attempts));
                 mRejectionSubtitle.setText(getString(R.string.mpsdk_subtitle_rejection_max_attempts));
-            } else if (isPaymentStatusDetailRecoverable()){
+            } else if (isPaymentStatusDetailRecoverable()) {
                 mRejectionTitle.setText(getBadFillTitle());
                 setBadFillTextButtons();
             } else {
@@ -116,7 +126,15 @@ public class RejectionActivity extends MercadoPagoActivity {
         }
     }
 
-    private String getBadFillTitle(){
+    private void showTimer() {
+        if (CheckoutTimer.getInstance().isTimerEnabled()) {
+            CheckoutTimer.getInstance().addObserver(this);
+            mTimerTextView.setVisibility(View.VISIBLE);
+            mTimerTextView.setText(CheckoutTimer.getInstance().getCurrentTime());
+        }
+    }
+
+    private String getBadFillTitle() {
         return String.format(getString(R.string.mpsdk_text_some_card_data_is_incorrect), mPaymentMethod.getName());
     }
 
@@ -174,14 +192,14 @@ public class RejectionActivity extends MercadoPagoActivity {
         }).start();
     }
 
-    private void setBadFillTextButtons(){
+    private void setBadFillTextButtons() {
         mRejectionSubtitle.setVisibility(View.GONE);
         mRejectionOptionButtonText.setText(getString(R.string.mpsdk_text_enter_again));
         mKeepBuyingButton.setText(getString(R.string.mpsdk_text_cancel_payment_and_continue));
     }
 
-    public void onClickRejectionOptionButton(View view){
-        if (isPaymentStatusDetailRecoverable()){
+    public void onClickRejectionOptionButton(View view) {
+        if (isPaymentStatusDetailRecoverable()) {
             MPTracker.getInstance().trackEvent("REJECTION", "RECOVER_PAYMENT", "2", mMerchantPublicKey, BuildConfig.VERSION_NAME, this);
 
             Intent returnIntent = new Intent();
@@ -189,8 +207,7 @@ public class RejectionActivity extends MercadoPagoActivity {
             returnIntent.putExtra("nextAction", mNextAction);
             setResult(RESULT_CANCELED, returnIntent);
             finish();
-        }
-        else {
+        } else {
             MPTracker.getInstance().trackEvent("REJECTION", "SELECT_OTHER_PAYMENT_METHOD", "2", mMerchantPublicKey, BuildConfig.VERSION_NAME, this);
 
             Intent returnIntent = new Intent();
@@ -201,7 +218,7 @@ public class RejectionActivity extends MercadoPagoActivity {
         }
     }
 
-    private Boolean isPaymentStatusDetailRecoverable(){
+    private Boolean isPaymentStatusDetailRecoverable() {
         return mPayment.getStatusDetail().equals(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_BAD_FILLED_OTHER) ||
                 mPayment.getStatusDetail().equals(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_BAD_FILLED_CARD_NUMBER) ||
                 mPayment.getStatusDetail().equals(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_BAD_FILLED_SECURITY_CODE) ||
@@ -214,5 +231,15 @@ public class RejectionActivity extends MercadoPagoActivity {
             setResult(RESULT_CANCELED, data);
             finish();
         }
+    }
+
+    @Override
+    public void onTimeChanged(String timeToShow) {
+        mTimerTextView.setText(timeToShow);
+    }
+
+    @Override
+    public void onFinish() {
+        this.finish();
     }
 }

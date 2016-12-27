@@ -11,7 +11,6 @@ import android.view.View;
 import android.widget.ProgressBar;
 
 import com.google.gson.reflect.TypeToken;
-
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.Card;

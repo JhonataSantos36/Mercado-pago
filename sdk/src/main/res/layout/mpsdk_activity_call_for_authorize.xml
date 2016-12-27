@@ -21,6 +21,21 @@
                 android:background="@color/mpsdk_color_call_for_authorize_background"
                 android:orientation="vertical">
 
+                <com.mercadopago.customviews.MPTextView
+                    android:id="@+id/mpsdkTimerTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:layout_gravity="end|center_vertical"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginTop="14dp"
+                    android:textSize="17dp"
+                    android:background="@drawable/mpsdk_title_toolbar"
+                    android:visibility="gone"
+                    app:fontStyle="roboto_regular"
+                    style="@style/mpsdk_title_text"/>
+
                 <ImageView
                     android:id="@+id/mpsdkIcon"
                     android:layout_width="70dp"

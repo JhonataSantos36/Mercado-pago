@@ -5,11 +5,13 @@ import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.widget.FrameLayout;
 
+import com.mercadopago.controllers.CheckoutTimer;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentResultAction;
 import com.mercadopago.mptracker.MPTracker;
+import com.mercadopago.observers.TimerObserver;
 import com.mercadopago.util.CurrenciesUtil;
 import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
@@ -18,9 +20,10 @@ import java.math.BigDecimal;
 
 import static android.text.TextUtils.isEmpty;
 
-public class CallForAuthorizeActivity extends MercadoPagoActivity {
+public class CallForAuthorizeActivity extends MercadoPagoActivity implements TimerObserver {
 
     //Controls
+    protected MPTextView mTimerTextView;
     protected MPTextView mCallForAuthTitle;
     protected MPTextView mAuthorizedPaymentMethod;
     protected MPTextView mKeepBuyingButton;
@@ -78,7 +81,7 @@ public class CallForAuthorizeActivity extends MercadoPagoActivity {
             }
         });
         mPayWithOtherPaymentMethodButton = (FrameLayout) findViewById(R.id.mpsdkCallForAuthorizeOptionButton);
-        mPayWithOtherPaymentMethodButton.setOnClickListener(new View.OnClickListener(){
+        mPayWithOtherPaymentMethodButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 MPTracker.getInstance().trackEvent("CALL_FOR_AUTHORIZE", "SELECT_OTHER_PAYMENT_METHOD", "2", mMerchantPublicKey, BuildConfig.VERSION_NAME, getActivity());
@@ -97,12 +100,23 @@ public class CallForAuthorizeActivity extends MercadoPagoActivity {
                 finishWithOkResult();
             }
         });
+
+        mTimerTextView = (MPTextView) findViewById(R.id.mpsdkTimerTextView);
     }
 
     @Override
     protected void onValidStart() {
+        showTimer();
         setDescription();
         setAuthorized();
+    }
+
+    private void showTimer() {
+        if (CheckoutTimer.getInstance().isTimerEnabled()) {
+            CheckoutTimer.getInstance().addObserver(this);
+            mTimerTextView.setVisibility(View.VISIBLE);
+            mTimerTextView.setText(CheckoutTimer.getInstance().getCurrentTime());
+        }
     }
 
     @Override
@@ -128,7 +142,7 @@ public class CallForAuthorizeActivity extends MercadoPagoActivity {
     private void setDescription() {
         if (isPaymentMethodValid() && isCurrencyIdValid() && isTotalPaidAmountValid()) {
             String totalPaidAmount = CurrenciesUtil.formatNumber(mPayment.getTransactionDetails().getTotalPaidAmount(), mPayment.getCurrencyId());
-            String titleWithFormat = String.format(getString(R.string.mpsdk_title_activity_call_for_authorize),"<br>" + mPaymentMethod.getName(), "<br>" + totalPaidAmount);
+            String titleWithFormat = String.format(getString(R.string.mpsdk_title_activity_call_for_authorize), "<br>" + mPaymentMethod.getName(), "<br>" + totalPaidAmount);
 
             mCallForAuthTitle.setText(CurrenciesUtil.formatCurrencyInText(mPayment.getTransactionDetails().getTotalPaidAmount(),
                     mPayment.getCurrencyId(), titleWithFormat, true, true));
@@ -187,5 +201,15 @@ public class CallForAuthorizeActivity extends MercadoPagoActivity {
                 }
             }
         }).start();
+    }
+
+    @Override
+    public void onTimeChanged(String timeToShow) {
+        mTimerTextView.setText(timeToShow);
+    }
+
+    @Override
+    public void onFinish() {
+        this.finish();
     }
 }

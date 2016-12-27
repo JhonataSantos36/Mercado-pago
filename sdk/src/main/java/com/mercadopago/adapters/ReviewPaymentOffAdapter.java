@@ -9,8 +9,8 @@ import com.mercadopago.model.DecorationPreference;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentMethodSearchItem;
 import com.mercadopago.model.Site;
-import com.mercadopago.uicontrollers.reviewandconfirm.ReviewPaymentViewOffController;
 import com.mercadopago.uicontrollers.reviewandconfirm.ReviewPaymentViewFactory;
+import com.mercadopago.uicontrollers.reviewandconfirm.ReviewPaymentViewOffController;
 
 import java.math.BigDecimal;
 import java.util.List;

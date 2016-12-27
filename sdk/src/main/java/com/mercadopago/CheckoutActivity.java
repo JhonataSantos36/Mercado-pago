@@ -21,7 +21,6 @@ import android.widget.RelativeLayout;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-
 import com.mercadopago.adapters.ReviewPaymentOffAdapter;
 import com.mercadopago.adapters.ReviewPaymentOnAdapter;
 import com.mercadopago.adapters.ReviewProductAdapter;
@@ -29,6 +28,7 @@ import com.mercadopago.callbacks.Callback;
 import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.callbacks.OnChangePaymentMethodCallback;
 import com.mercadopago.callbacks.OnConfirmPaymentCallback;
+import com.mercadopago.controllers.CheckoutTimer;
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.core.MerchantServer;
 import com.mercadopago.customviews.MPTextView;
@@ -54,6 +54,7 @@ import com.mercadopago.model.PaymentResultAction;
 import com.mercadopago.model.Site;
 import com.mercadopago.model.Token;
 import com.mercadopago.mptracker.MPTracker;
+import com.mercadopago.observers.TimerObserver;
 import com.mercadopago.uicontrollers.payercosts.PayerCostViewController;
 import com.mercadopago.uicontrollers.paymentmethods.PaymentMethodViewController;
 import com.mercadopago.uicontrollers.reviewandconfirm.ReviewSummaryView;
@@ -70,7 +71,7 @@ import java.util.List;
 
 import static android.text.TextUtils.isEmpty;
 
-public class CheckoutActivity extends MercadoPagoActivity {
+public class CheckoutActivity extends MercadoPagoActivity implements TimerObserver {
 
     private static final String CHECKOUT_PREFERENCE_BUNDLE = "mCheckoutPreference";
     private static final String PAYMENT_METHOD_SEARCH_BUNDLE = "mPaymentMethodSearch";
@@ -111,6 +112,7 @@ public class CheckoutActivity extends MercadoPagoActivity {
     protected MPTextView mTermsAndConditionsTextView;
     protected MPTextView mCancelTextView;
     protected MPTextView mTotalAmountTextView;
+    protected MPTextView mTimerTextView;
     protected RelativeLayout mPayerCostLayout;
     protected Boolean mBackPressedOnce;
     protected Snackbar mSnackbar;
@@ -191,6 +193,8 @@ public class CheckoutActivity extends MercadoPagoActivity {
         mProgressBar.setVisibility(View.VISIBLE);
         mToolbar.setVisibility(View.VISIBLE);
 
+        mTimerTextView = (MPTextView) findViewById(R.id.mpsdkTimerTextView);
+
         mChangePaymentMethodCallback = new OnChangePaymentMethodCallback() {
             @Override
             public void onChangePaymentMethodSelected() {
@@ -225,6 +229,8 @@ public class CheckoutActivity extends MercadoPagoActivity {
                 startTermsAndConditionsActivity();
             }
         });
+
+        mTimerTextView = (MPTextView) findViewById(R.id.mpsdkTimerTextView);
 
         decorateButtons();
     }
@@ -370,6 +376,7 @@ public class CheckoutActivity extends MercadoPagoActivity {
     }
 
     protected void startPaymentVaultActivity() {
+
         new MercadoPago.StartActivityBuilder()
                 .setActivity(this)
                 .setPublicKey(mMerchantPublicKey)
@@ -446,8 +453,8 @@ public class CheckoutActivity extends MercadoPagoActivity {
             }
         } else {
             if (data != null && data.getStringExtra("mpException") != null) {
-                Intent returnIntent = new Intent();
                 MPTracker.getInstance().trackEvent("CARD_VAULT", "CANCELED", "3", mMerchantPublicKey, mCheckoutPreference.getSiteId(), BuildConfig.VERSION_NAME, this);
+                Intent returnIntent = new Intent();
                 setResult(RESULT_CANCELED, returnIntent);
                 finish();
             } else {
@@ -608,6 +615,7 @@ public class CheckoutActivity extends MercadoPagoActivity {
         createTotalAmountList();
         createPaymentMethodSearchList();
 
+        showTimer();
         initializeToolbar();
         setToolbarTitle();
         showScrollView();
@@ -615,6 +623,14 @@ public class CheckoutActivity extends MercadoPagoActivity {
         drawProductList();
         drawPaymentMethodList();
         mScrollView.scrollTo(0, 0);
+    }
+
+    private void showTimer() {
+        if (CheckoutTimer.getInstance().isTimerEnabled()) {
+            CheckoutTimer.getInstance().addObserver(this);
+            mTimerTextView.setVisibility(View.VISIBLE);
+            mTimerTextView.setText(CheckoutTimer.getInstance().getCurrentTime());
+        }
     }
 
     private void showScrollView() {
@@ -654,6 +670,7 @@ public class CheckoutActivity extends MercadoPagoActivity {
         Drawable upArrow = mToolbar.getNavigationIcon();
         if (upArrow != null && getSupportActionBar() != null) {
             if (mDecorationPreference != null && mDecorationPreference.hasColors()) {
+                setTimerColor();
                 upArrow.setColorFilter(mDecorationPreference.getBaseColor(), PorterDuff.Mode.SRC_ATOP);
             } else {
                 upArrow.setColorFilter(ContextCompat.getColor(this, R.color.mpsdk_background_blue), PorterDuff.Mode.SRC_ATOP);
@@ -667,6 +684,12 @@ public class CheckoutActivity extends MercadoPagoActivity {
                 onBackPressed();
             }
         });
+    }
+
+    private void setTimerColor() {
+        if (mTimerTextView != null) {
+            mTimerTextView.setTextColor(mDecorationPreference.getBaseColor());
+        }
     }
 
     private void drawPaymentMethodList() {
@@ -887,5 +910,21 @@ public class CheckoutActivity extends MercadoPagoActivity {
                 }
             }
         }).start();
+    }
+
+    @Override
+    public void onTimeChanged(String timeToShow) {
+        mTimerTextView.setText(timeToShow);
+    }
+
+    @Override
+    public void onFinish() {
+        if(mCreatedPayment == null) {
+            Intent intent = new Intent();
+            setResult(RESULT_CANCELED, intent);
+            this.finish();
+        } else {
+            this.finishWithPaymentResult();
+        }
     }
 }

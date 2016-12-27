@@ -29,6 +29,21 @@
         app:layout_collapseMode="pin"
         app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
+        <com.mercadopago.customviews.MPTextView
+            android:id="@+id/mpsdkTimerTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:layout_gravity="end|center_vertical"
+            android:layout_marginRight="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="14dp"
+            android:textSize="17dp"
+            android:textColor="@color/mpsdk_background_blue"
+            android:background="@drawable/mpsdk_title_toolbar"
+            android:visibility="gone"
+            app:fontStyle="roboto_regular"
+            style="@style/mpsdk_title_text"/>
     </android.support.v7.widget.Toolbar>
 
 </android.support.design.widget.CollapsingToolbarLayout>

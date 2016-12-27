@@ -9,6 +9,7 @@ import android.widget.Toast;
 import com.mercadopago.callbacks.Callback;
 import com.mercadopago.constants.Sites;
 import com.mercadopago.core.MercadoPago;
+import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.examples.R;
 import com.mercadopago.examples.services.step2.SimpleVaultActivity;
 import com.mercadopago.model.ApiException;
@@ -22,7 +23,6 @@ import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;
 import com.mercadopago.util.MercadoPagoUtil;
-import com.mercadopago.customviews.MPTextView;
 
 import java.math.BigDecimal;
 import java.util.List;
