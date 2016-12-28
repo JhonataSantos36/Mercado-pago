@@ -109,7 +109,7 @@ public class GuessingCardActivity extends AppCompatActivity implements GuessingC
     public static final String BANK_DEALS_LIST_BUNDLE = "mBankDealsList";
     public static final String IDENTIFICATION_TYPES_LIST_BUNDLE = "mIdTypesList";
     public static final String PAYMENT_RECOVERY_BUNDLE = "mPaymentRecovery";
-    public static final String LOW_RES_BUNLE = "mLowRes";
+    public static final String LOW_RES_BUNDLE = "mLowRes";
 
     //ViewMode
     protected boolean mLowResActive;
@@ -246,7 +246,7 @@ public class GuessingCardActivity extends AppCompatActivity implements GuessingC
             outState.putString(BANK_DEALS_LIST_BUNDLE, JsonUtil.getInstance().toJson(mPresenter.getBankDealsList()));
             outState.putString(IDENTIFICATION_TYPES_LIST_BUNDLE, JsonUtil.getInstance().toJson(mPresenter.getIdentificationTypes()));
             outState.putString(PAYMENT_RECOVERY_BUNDLE, JsonUtil.getInstance().toJson(mPresenter.getPaymentRecovery()));
-            outState.putBoolean(LOW_RES_BUNLE, mLowResActive);
+            outState.putBoolean(LOW_RES_BUNDLE, mLowResActive);
             mSecurityCodeEditText.getText().clear();
         }
     }
@@ -316,7 +316,10 @@ public class GuessingCardActivity extends AppCompatActivity implements GuessingC
                     IdentificationType identificationType = JsonUtil.getInstance().fromJson(savedInstanceState.getString(IDENTIFICATION_TYPE_BUNDLE), IdentificationType.class);
                     mPresenter.setCardToken(cardToken);
                     mPresenter.setPaymentRecovery(JsonUtil.getInstance().fromJson(savedInstanceState.getString(PAYMENT_RECOVERY_BUNDLE), PaymentRecovery.class));
-                    mLowResActive = savedInstanceState.getBoolean(LOW_RES_BUNLE);
+                    mLowResActive = savedInstanceState.getBoolean(LOW_RES_BUNDLE);
+                    if (mCardView == null) {
+                        loadViews();
+                    }
                     if (cardViewsActive()) {
                         mCardView.drawEditingCardNumber(mPresenter.getCardNumber());
                         mCardView.drawEditingCardHolderName(mPresenter.getCardholderName());
