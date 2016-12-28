@@ -316,7 +316,7 @@ public class MercadoPago {
         activity.startActivityForResult(bankDealsIntent, BANK_DEALS_REQUEST_CODE);
     }
 
-    private static void startCheckoutActivity(Activity activity, String merchantPublicKey, String merchantBaseUrl, String merchantGetCustomerUri, String merchantAccessToken, String checkoutPreferenceId, Boolean showBankDeals, Boolean binaryModeEnabled, Boolean skipCongratsEnabled, DecorationPreference decorationPreference) {
+    private static void startCheckoutActivity(Activity activity, String merchantPublicKey, String merchantBaseUrl, String merchantGetCustomerUri, String merchantAccessToken, String checkoutPreferenceId, Boolean showBankDeals, Boolean binaryModeEnabled, Integer congratsDisplay, DecorationPreference decorationPreference) {
 
         Intent checkoutIntent = new Intent(activity, CheckoutActivity.class);
         checkoutIntent.putExtra("merchantPublicKey", merchantPublicKey);
@@ -325,28 +325,30 @@ public class MercadoPago {
         checkoutIntent.putExtra("merchantBaseUrl", merchantBaseUrl);
         checkoutIntent.putExtra("merchantGetCustomerUri", merchantGetCustomerUri);
         checkoutIntent.putExtra("merchantAccessToken", merchantAccessToken);
-        checkoutIntent.putExtra("skipCongratsEnabled", skipCongratsEnabled);
+        checkoutIntent.putExtra("congratsDisplay", congratsDisplay);
         checkoutIntent.putExtra("decorationPreference", JsonUtil.getInstance().toJson(decorationPreference));
         checkoutIntent.putExtra("binaryModeEnabled", binaryModeEnabled);
         activity.startActivityForResult(checkoutIntent, CHECKOUT_REQUEST_CODE);
     }
 
-    private static void startPaymentResultActivity(Activity activity, String merchantPublicKey, Payment payment, PaymentMethod paymentMethod) {
+    private static void startPaymentResultActivity(Activity activity, String merchantPublicKey, Payment payment, PaymentMethod paymentMethod, Integer congratsDisplay) {
 
         Intent resultIntent = new Intent(activity, PaymentResultActivity.class);
         resultIntent.putExtra("merchantPublicKey", merchantPublicKey);
         resultIntent.putExtra("payment", JsonUtil.getInstance().toJson(payment));
         resultIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
+        resultIntent.putExtra("congratsDisplay", congratsDisplay);
 
         activity.startActivityForResult(resultIntent, PAYMENT_RESULT_REQUEST_CODE);
     }
 
-    private static void startCongratsActivity(Activity activity, String merchantPublicKey, Payment payment, PaymentMethod paymentMethod) {
+    private static void startCongratsActivity(Activity activity, String merchantPublicKey, Payment payment, PaymentMethod paymentMethod, Integer congratsDisplay) {
 
         Intent congratsIntent = new Intent(activity, CongratsActivity.class);
         congratsIntent.putExtra("merchantPublicKey", merchantPublicKey);
         congratsIntent.putExtra("payment", JsonUtil.getInstance().toJson(payment));
         congratsIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
+        congratsIntent.putExtra("congratsDisplay", congratsDisplay);
 
         activity.startActivityForResult(congratsIntent, CONGRATS_REQUEST_CODE);
     }
@@ -696,7 +698,7 @@ public class MercadoPago {
         private Boolean mRequireIssuer;
         private Boolean mRequireSecurityCode;
         private Boolean mShowBankDeals;
-        private Boolean mSkipCongratsEnabled;
+        private Integer mCongratsDisplay;
         private PaymentMethodSearch mPaymentMethodSearch;
         private PaymentPreference mPaymentPreference;
         private PaymentRecovery mPaymentRecovery;
@@ -857,8 +859,8 @@ public class MercadoPago {
             return this;
         }
 
-        public StartActivityBuilder setSkipCongratsEnabled(Boolean skipCongratsEnabled) {
-            this.mSkipCongratsEnabled = skipCongratsEnabled;
+        public StartActivityBuilder setCongratsDisplay(int seconds) {
+            this.mCongratsDisplay = seconds;
             return this;
         }
 
@@ -941,7 +943,7 @@ public class MercadoPago {
 
             if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {
                 MercadoPago.startCheckoutActivity(this.mActivity, this.mKey, this.mMerchantBaseUrl, this.mMerchantGetCustomerUri, this.mMerchantAccessToken,
-                        this.mCheckoutPreferenceId, this.mShowBankDeals, this.mBinaryModeEnabled, this.mSkipCongratsEnabled, this.mDecorationPreference);
+                        this.mCheckoutPreferenceId, this.mShowBankDeals, this.mBinaryModeEnabled, this.mCongratsDisplay, this.mDecorationPreference);
             } else {
                 throw new RuntimeException("Unsupported key type for this method");
             }
@@ -957,7 +959,7 @@ public class MercadoPago {
             if (this.mKeyType == null) throw new IllegalStateException("key type is null");
 
             if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {
-                MercadoPago.startPaymentResultActivity(this.mActivity, this.mKey, this.mPayment, this.mPaymentMethod);
+                MercadoPago.startPaymentResultActivity(this.mActivity, this.mKey, this.mPayment, this.mPaymentMethod, this.mCongratsDisplay);
             } else {
                 throw new RuntimeException("Unsupported key type for this method");
             }
@@ -973,7 +975,7 @@ public class MercadoPago {
             if (this.mKeyType == null) throw new IllegalStateException("key type is null");
 
             if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {
-                MercadoPago.startCongratsActivity(this.mActivity, this.mKey, this.mPayment, this.mPaymentMethod);
+                MercadoPago.startCongratsActivity(this.mActivity, this.mKey, this.mPayment, this.mPaymentMethod, this.mCongratsDisplay);
             } else {
                 throw new RuntimeException("Unsupported key type for this method");
             }

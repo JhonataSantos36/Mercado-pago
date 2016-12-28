@@ -83,7 +83,7 @@ public class CheckoutActivity extends MercadoPagoActivity implements TimerObserv
     protected String mMerchantBaseUrl;
     protected String mMerchantGetCustomerUri;
     protected String mMerchantAccessToken;
-    protected Boolean mSkipCongratsEnabled;
+    protected Integer mCongratsDisplay;
 
     //Local vars
     protected MercadoPago mMercadoPago;
@@ -160,7 +160,7 @@ public class CheckoutActivity extends MercadoPagoActivity implements TimerObserv
         mMerchantGetCustomerUri = this.getIntent().getStringExtra("merchantGetCustomerUri");
         mMerchantAccessToken = this.getIntent().getStringExtra("merchantAccessToken");
         mCheckoutPreferenceId = this.getIntent().getStringExtra("checkoutPreferenceId");
-        mSkipCongratsEnabled = this.getIntent().getBooleanExtra("skipCongratsEnabled", false);
+        mCongratsDisplay = this.getIntent().getIntExtra("congratsDisplay", -1);
         mBinaryModeEnabled = this.getIntent().getBooleanExtra("binaryModeEnabled", false);
     }
 
@@ -808,7 +808,7 @@ public class CheckoutActivity extends MercadoPagoActivity implements TimerObserv
     }
 
     private boolean hasToSkipPaymentResultActivity(Payment payment) {
-        return mSkipCongratsEnabled && (payment != null) && (!isEmpty(payment.getStatus())) &&
+        return mCongratsDisplay == 0 && (payment != null) && (!isEmpty(payment.getStatus())) &&
                 (payment.getStatus().equals(Payment.StatusCodes.STATUS_APPROVED));
     }
 
@@ -818,6 +818,7 @@ public class CheckoutActivity extends MercadoPagoActivity implements TimerObserv
                 .setActivity(getActivity())
                 .setPayment(mCreatedPayment)
                 .setPaymentMethod(mSelectedPaymentMethod)
+                .setCongratsDisplay(mCongratsDisplay)
                 .startPaymentResultActivity();
     }
 

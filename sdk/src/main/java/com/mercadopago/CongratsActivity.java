@@ -1,6 +1,10 @@
 package com.mercadopago;
 
+import android.app.Activity;
 import android.content.Intent;
+
+import java.util.Timer;
+
 import android.support.design.widget.Snackbar;
 import android.text.Spanned;
 import android.view.View;
@@ -16,6 +20,7 @@ import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.MercadoPagoUtil;
 
 import java.math.BigDecimal;
+import java.util.TimerTask;
 
 import static android.text.TextUtils.isEmpty;
 
@@ -32,6 +37,7 @@ public class CongratsActivity extends MercadoPagoActivity {
     protected View mTopEmailSeparator;
     protected ImageView mPaymentMethodImage;
     protected MPTextView mKeepBuyingButton;
+    protected Activity mActivity;
 
     // Activity parameters
     protected Payment mPayment;
@@ -40,10 +46,12 @@ public class CongratsActivity extends MercadoPagoActivity {
 
     //Local values
     private boolean mBackPressedOnce;
+    private Integer mCongratsDisplay;
 
     @Override
     protected void getActivityParameters() {
         mMerchantPublicKey = getIntent().getStringExtra("merchantPublicKey");
+        mCongratsDisplay = getIntent().getIntExtra("congratsDisplay", -1);
         mPayment = JsonUtil.getInstance().fromJson(getIntent().getExtras().getString("payment"), Payment.class);
         mPaymentMethod = JsonUtil.getInstance().fromJson(getIntent().getExtras().getString("paymentMethod"), PaymentMethod.class);
     }
@@ -64,7 +72,6 @@ public class CongratsActivity extends MercadoPagoActivity {
     @Override
     protected void setContentView() {
         MPTracker.getInstance().trackScreen("CONGRATS", "2", mMerchantPublicKey, BuildConfig.VERSION_NAME, getActivity());
-
         setContentView(R.layout.mpsdk_activity_congrats);
     }
 
@@ -94,6 +101,7 @@ public class CongratsActivity extends MercadoPagoActivity {
         setLastFourDigitsCard();
         setInstallmentsDescription();
         setPaymentIdDescription();
+        setDisplayTime();
     }
 
     @Override
@@ -161,6 +169,22 @@ public class CongratsActivity extends MercadoPagoActivity {
             mInstallmentsDescription.setVisibility(View.GONE);
             mInterestAmountDescription.setVisibility(View.GONE);
         }
+    }
+
+    private void setDisplayTime() {
+        if (mCongratsDisplay > 0) {
+            startCountdown(mCongratsDisplay);
+        }
+    }
+
+    private void startCountdown(Integer seconds) {
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                finishWithOkResult();
+            }
+        }, seconds * 1000);
     }
 
     private void setLastFourDigitsCard() {

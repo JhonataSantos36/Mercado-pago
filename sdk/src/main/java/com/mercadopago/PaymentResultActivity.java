@@ -20,6 +20,7 @@ public class PaymentResultActivity extends Activity {
     protected PaymentMethod mPaymentMethod;
 
     private String mMerchantPublicKey;
+    private Integer mCongratsDisplay;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +38,7 @@ public class PaymentResultActivity extends Activity {
 
     protected void getActivityParameters() {
         mMerchantPublicKey = getIntent().getStringExtra("merchantPublicKey");
+        mCongratsDisplay = getIntent().getIntExtra("congratsDisplay", -1);
         mPayment = JsonUtil.getInstance().fromJson(getIntent().getExtras().getString("payment"), Payment.class);
         mPaymentMethod = JsonUtil.getInstance().fromJson(getIntent().getExtras().getString("paymentMethod"), PaymentMethod.class);
     }
@@ -99,6 +101,7 @@ public class PaymentResultActivity extends Activity {
                 .setActivity(this)
                 .setPayment(mPayment)
                 .setPaymentMethod(mPaymentMethod)
+                .setCongratsDisplay(mCongratsDisplay)
                 .startCongratsActivity();
     }
 

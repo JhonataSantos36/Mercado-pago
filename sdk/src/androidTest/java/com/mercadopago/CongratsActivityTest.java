@@ -1,8 +1,10 @@
 package com.mercadopago;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.support.test.espresso.Espresso;
 import android.support.test.espresso.NoActivityResumedException;
 import android.support.test.espresso.action.ViewActions;
 import android.support.test.rule.ActivityTestRule;
@@ -20,6 +22,7 @@ import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.TransactionDetails;
 import com.mercadopago.util.CurrenciesUtil;
 import com.mercadopago.util.JsonUtil;
+import com.mercadopago.utils.ActivityResultUtil;
 
 import junit.framework.Assert;
 
@@ -1925,5 +1928,33 @@ public class CongratsActivityTest {
         pressBack();
 
         Assert.assertTrue(mTestRule.getActivity().isFinishing());
+    }
+
+    //CONGRATS DISPLAY TIME TESTS
+    @Test
+    public void ifCongratsDisplaySetFinishActivityWhenTimeRunsUp() {
+        createIntent();
+        validStartIntent.putExtra("congratsDisplay", 5);
+        mTestRule.launchActivity(validStartIntent);
+        try {
+            Thread.sleep(6000);
+        } catch (InterruptedException e) {
+            //Do nothing...
+        }
+        ActivityResultUtil.assertFinishCalledWithResult(mTestRule.getActivity(), Activity.RESULT_OK);
+    }
+
+    @Test
+    public void ifCongratsDisplayNotSetDoNotFinishActivity() {
+        createIntent();
+        mTestRule.launchActivity(validStartIntent);
+
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            //Do nothing...
+        }
+
+        Assert.assertFalse(mTestRule.getActivity().isFinishing());
     }
 }
