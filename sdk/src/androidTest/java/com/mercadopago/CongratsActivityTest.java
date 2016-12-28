@@ -190,9 +190,9 @@ public class CongratsActivityTest {
     private Spanned setTotalAmountDescription() {
         StringBuilder totalAmountDescription = new StringBuilder();
 
-        totalAmountDescription.append("( ");
+        totalAmountDescription.append("(");
         totalAmountDescription.append(CurrenciesUtil.formatNumber(mPayment.getTransactionDetails().getTotalPaidAmount(), mPayment.getCurrencyId()));
-        totalAmountDescription.append(" )");
+        totalAmountDescription.append(")");
 
         return CurrenciesUtil.formatCurrencyInText(mPayment.getTransactionDetails().getTotalPaidAmount(),
                 mPayment.getCurrencyId(), totalAmountDescription.toString(), true, true);
@@ -203,7 +203,7 @@ public class CongratsActivityTest {
 
         installmentsDescription.append(mPayment.getInstallments());
         installmentsDescription.append(" ");
-        installmentsDescription.append(mTestRule.getActivity().getString(R.string.mpsdk_installments_of));
+        installmentsDescription.append(mTestRule.getActivity().getString(R.string.mpsdk_installments_by));
         installmentsDescription.append(" ");
         installmentsDescription.append(CurrenciesUtil.formatNumber(mPayment.getTransactionDetails().getInstallmentAmount(), mPayment.getCurrencyId()));
 

@@ -43,21 +43,21 @@ import com.mercadopago.views.SecurityCodeActivityView;
 public class SecurityCodeActivity extends AppCompatActivity implements SecurityCodeActivityView, TimerObserver {
 
     protected SecurityCodePresenter mPresenter;
-    private Activity mActivity;
+    protected Activity mActivity;
 
     //View controls
-    private ProgressBar mProgressBar;
-    private DecorationPreference mDecorationPreference;
-    private MPEditText mSecurityCodeEditText;
-    private FrameLayout mContinueButton;
-    private MPTextView mErrorText;
-    private FrameLayout mBackground;
+    protected ProgressBar mProgressBar;
+    protected DecorationPreference mDecorationPreference;
+    protected MPEditText mSecurityCodeEditText;
+    protected FrameLayout mContinueButton;
+    protected MPTextView mErrorText;
+    protected FrameLayout mBackground;
     //ViewMode
     protected boolean mLowResActive;
     //Normal View
     protected FrameLayout mCardContainer;
     protected CardView mCardView;
-    private MPTextView mTimerTextView;
+    protected MPTextView mTimerTextView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -120,10 +120,6 @@ public class SecurityCodeActivity extends AppCompatActivity implements SecurityC
         mBackground = (FrameLayout) findViewById(R.id.mpsdkSecurityCodeActivityBackground);
         mCardContainer = (FrameLayout) findViewById(R.id.mpsdkCardViewContainer);
         mTimerTextView = (MPTextView) findViewById(R.id.mpsdkTimerTextView);
-        if (mLowResActive) {
-            //TODO
-            //aca le cambio la altura al background
-        }
         mProgressBar.setVisibility(View.GONE);
     }
 
@@ -146,12 +142,7 @@ public class SecurityCodeActivity extends AppCompatActivity implements SecurityC
 
     private void loadNormalViews() {
         mCardView = new CardView(mActivity);
-        if (mLowResActive) {
-            //TODO cambiar
-            mCardView.setSize(CardRepresentationModes.BIG_SIZE);
-        } else {
-            mCardView.setSize(CardRepresentationModes.BIG_SIZE);
-        }
+        mCardView.setSize(CardRepresentationModes.BIG_SIZE);
         mCardView.inflateInParent(mCardContainer, true);
         mCardView.initializeControls();
         mCardView.setPaymentMethod(mPresenter.getPaymentMethod());
@@ -203,7 +194,9 @@ public class SecurityCodeActivity extends AppCompatActivity implements SecurityC
 
     @Override
     public void onInvalidStart(String message) {
-
+        Intent returnIntent = new Intent();
+        setResult(RESULT_CANCELED, returnIntent);
+        finish();
     }
 
     @Override

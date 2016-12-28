@@ -662,7 +662,7 @@ public class InstallmentsActivityTest {
         int toolbarColor = ViewUtils.getBackgroundColor(mTestRule.getActivity().mNormalToolbar);
         assertEquals(toolbarColor, decorationPreference.getLighterColor());
     }
-
+    
     @Test
     public void decorationPreferenceWithDarkFontAndWithoutTokenPaintsToolbarAndTitle() {
         String payerCosts = StaticMock.getPayerCostsJson();
