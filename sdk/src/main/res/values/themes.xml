@@ -3,7 +3,7 @@
 
     <style name="Theme.MercadoPagoTheme" parent="Theme.AppCompat.Light">
         <item name="colorPrimary">@color/mpsdk_colorPrimary</item>
-        <item name="colorPrimaryDark">@color/mpsdk_colorPrimaryDark</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:textColorPrimary">@color/mpsdk_white</item>
         <item name="colorControlNormal">@color/mpsdk_color_new_card_text</item>
