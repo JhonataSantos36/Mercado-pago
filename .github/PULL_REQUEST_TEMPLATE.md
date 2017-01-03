@@ -23,6 +23,10 @@ _Note:_
 
 _Note:_
 
+- [ ] Tested with "Don't keep Activities" configuration.
+
+_Note:_
+
 
 If impacts documentation (new components, inputs or outputs?)
  - [ ] PR to develop-docs
