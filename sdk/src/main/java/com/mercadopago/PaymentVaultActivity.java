@@ -256,7 +256,7 @@ public class PaymentVaultActivity extends AppCompatActivity implements PaymentVa
     private List<PaymentMethodSearchViewController> createSearchItemsViewControllers(List<PaymentMethodSearchItem> items, final OnSelectedCallback<PaymentMethodSearchItem> onSelectedCallback) {
         List<PaymentMethodSearchViewController> customViewControllers = new ArrayList<>();
         for (final PaymentMethodSearchItem item : items) {
-            PaymentMethodSearchViewController viewController = new PaymentMethodSearchOption(this, item);
+            PaymentMethodSearchViewController viewController = new PaymentMethodSearchOption(this, item, mDecorationPreference);
             viewController.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
