@@ -1,12 +1,13 @@
 package com.mercadopago.core;
 
+import com.google.gson.Gson;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.DrawableRes;
 import android.text.TextUtils;
 
-import com.google.gson.Gson;
 import com.mercadopago.CustomerCardsActivity;
 import com.mercadopago.callbacks.OnSelectedCallback;
 import com.mercadopago.model.Card;

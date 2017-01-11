@@ -1,5 +1,7 @@
 package com.mercadopago;
 
+import com.google.gson.reflect.TypeToken;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,9 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.ProgressBar;
 
-import com.google.gson.reflect.TypeToken;
 import com.mercadopago.adapters.PayerCostsAdapter;
 import com.mercadopago.callbacks.OnSelectedCallback;
 import com.mercadopago.controllers.CheckoutTimer;
@@ -37,6 +37,7 @@ import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.ColorsUtil;
 import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
+import com.mercadopago.util.LayoutUtil;
 import com.mercadopago.util.ScaleUtil;
 import com.mercadopago.views.InstallmentsActivityView;
 
@@ -56,7 +57,6 @@ public class InstallmentsActivity extends AppCompatActivity implements Installme
     //View controls
     protected PayerCostsAdapter mPayerCostsAdapter;
     protected RecyclerView mInstallmentsRecyclerView;
-    protected ProgressBar mProgressBar;
     protected DecorationPreference mDecorationPreference;
     //ViewMode
     protected boolean mLowResActive;
@@ -91,7 +91,7 @@ public class InstallmentsActivity extends AppCompatActivity implements Installme
     private boolean isCustomColorSet() {
         return mDecorationPreference != null && mDecorationPreference.hasColors();
     }
-    
+
     private void getActivityParameters() {
         PaymentMethod paymentMethod = JsonUtil.getInstance().fromJson(
                 this.getIntent().getStringExtra("paymentMethod"), PaymentMethod.class);
@@ -182,7 +182,7 @@ public class InstallmentsActivity extends AppCompatActivity implements Installme
     }
 
     private void showTimer() {
-        if (CheckoutTimer.getInstance().isTimerEnabled()){
+        if (CheckoutTimer.getInstance().isTimerEnabled()) {
             CheckoutTimer.getInstance().addObserver(this);
             mTimerTextView.setVisibility(View.VISIBLE);
             mTimerTextView.setText(CheckoutTimer.getInstance().getCurrentTime());
@@ -198,16 +198,15 @@ public class InstallmentsActivity extends AppCompatActivity implements Installme
 
     private void initializeViews() {
         mInstallmentsRecyclerView = (RecyclerView) findViewById(R.id.mpsdkActivityInstallmentsView);
-        mProgressBar = (ProgressBar) findViewById(R.id.mpsdkProgressBar);
         mTimerTextView = (MPTextView) findViewById(R.id.mpsdkTimerTextView);
 
         if (mLowResActive) {
             mLowResToolbar = (Toolbar) findViewById(R.id.mpsdkRegularToolbar);
             mLowResTitleToolbar = (MPTextView) findViewById(R.id.mpsdkTitle);
 
-            if (CheckoutTimer.getInstance().isTimerEnabled()){
+            if (CheckoutTimer.getInstance().isTimerEnabled()) {
                 Toolbar.LayoutParams marginParams = new Toolbar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                marginParams.setMargins(0,0,0,6);
+                marginParams.setMargins(0, 0, 0, 6);
                 mLowResTitleToolbar.setLayoutParams(marginParams);
                 mLowResTitleToolbar.setTextSize(19);
                 mTimerTextView.setTextSize(17);
@@ -221,7 +220,6 @@ public class InstallmentsActivity extends AppCompatActivity implements Installme
             mNormalToolbar = (Toolbar) findViewById(R.id.mpsdkRegularToolbar);
             mNormalToolbar.setVisibility(View.VISIBLE);
         }
-        mProgressBar.setVisibility(View.GONE);
     }
 
     public void loadLowResViews() {
@@ -293,7 +291,7 @@ public class InstallmentsActivity extends AppCompatActivity implements Installme
     private void decorateLowRes() {
         ColorsUtil.decorateLowResToolbar(mLowResToolbar, mLowResTitleToolbar, mDecorationPreference,
                 getSupportActionBar(), this);
-        if(mTimerTextView != null) {
+        if (mTimerTextView != null) {
             ColorsUtil.decorateTextView(mDecorationPreference, mTimerTextView, this);
         }
     }
@@ -302,7 +300,7 @@ public class InstallmentsActivity extends AppCompatActivity implements Installme
         ColorsUtil.decorateNormalToolbar(mNormalToolbar, mDecorationPreference, mAppBar,
                 mCollapsingToolbar, getSupportActionBar(), this);
         mFrontCardView.decorateCardBorder(mDecorationPreference.getLighterColor());
-        if(mTimerTextView != null) {
+        if (mTimerTextView != null) {
             ColorsUtil.decorateTextView(mDecorationPreference, mTimerTextView, this);
         }
     }
@@ -316,12 +314,12 @@ public class InstallmentsActivity extends AppCompatActivity implements Installme
         view.setAdapter(adapter);
         view.setLayoutManager(new LinearLayoutManager(this));
         view.addOnItemTouchListener(new RecyclerItemClickListener(this,
-            new RecyclerItemClickListener.OnItemClickListener() {
-                @Override
-                public void onItemClick(View view, int position) {
-                    mPresenter.onItemSelected(position);
-                }
-            }));
+                new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        mPresenter.onItemSelected(position);
+                    }
+                }));
     }
 
     protected OnSelectedCallback<Integer> getDpadSelectionCallback() {
@@ -341,13 +339,13 @@ public class InstallmentsActivity extends AppCompatActivity implements Installme
     @Override
     public void showLoadingView() {
         mInstallmentsRecyclerView.setVisibility(View.GONE);
-        mProgressBar.setVisibility(View.VISIBLE);
+        LayoutUtil.showProgressLayout(this);
     }
 
     @Override
     public void stopLoadingView() {
         mInstallmentsRecyclerView.setVisibility(View.VISIBLE);
-        mProgressBar.setVisibility(View.GONE);
+        LayoutUtil.showRegularLayout(this);
     }
 
     @Override

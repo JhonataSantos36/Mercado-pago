@@ -7,16 +7,9 @@
     android:fitsSystemWindows="true"
     android:background="@color/mpsdk_white"
     tools:context="com.mercadopago.InstructionsActivity">
-    <ProgressBar
-        android:id="@+id/mpsdkProgressBar"
-        style="?android:attr/progressBarStyleLarge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginBottom="8dp"
-        android:visibility="gone"/>
+    <include layout="@layout/mpsdk_view_progress_bar"/>
     <LinearLayout
-        android:id="@+id/mpsdkInstructionsContent"
+        android:id="@+id/mpsdkRegularLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"

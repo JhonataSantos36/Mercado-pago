@@ -1,5 +1,7 @@
 package com.mercadopago;
 
+import com.google.gson.Gson;
+
 import android.app.Activity;
 import android.app.Instrumentation;
 import android.content.Intent;
@@ -13,7 +15,6 @@ import android.support.v4.content.ContextCompat;
 import android.test.suitebuilder.annotation.LargeTest;
 import android.view.View;
 
-import com.google.gson.Gson;
 import com.mercadopago.constants.PaymentTypes;
 import com.mercadopago.constants.Sites;
 import com.mercadopago.controllers.CheckoutTimer;
@@ -39,7 +40,6 @@ import junit.framework.Assert;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;

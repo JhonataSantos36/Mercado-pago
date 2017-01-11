@@ -1,5 +1,8 @@
 package com.mercadopago;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
@@ -16,11 +19,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.mercadopago.adapters.ReviewPaymentOffAdapter;
 import com.mercadopago.adapters.ReviewPaymentOnAdapter;
 import com.mercadopago.adapters.ReviewProductAdapter;
@@ -55,12 +54,11 @@ import com.mercadopago.model.Site;
 import com.mercadopago.model.Token;
 import com.mercadopago.mptracker.MPTracker;
 import com.mercadopago.observers.TimerObserver;
-import com.mercadopago.uicontrollers.payercosts.PayerCostViewController;
-import com.mercadopago.uicontrollers.paymentmethods.PaymentMethodViewController;
 import com.mercadopago.uicontrollers.reviewandconfirm.ReviewSummaryView;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
+import com.mercadopago.util.LayoutUtil;
 import com.mercadopago.util.MercadoPagoUtil;
 
 import java.lang.reflect.Type;
@@ -99,9 +97,6 @@ public class CheckoutActivity extends MercadoPagoActivity implements TimerObserv
 
     protected boolean mPaymentMethodEditionRequested;
 
-    protected PaymentMethodViewController mPaymentMethodRow;
-    protected PayerCostViewController mPayerCostRow;
-
     protected PaymentRecovery mPaymentRecovery;
 
     protected OnChangePaymentMethodCallback mChangePaymentMethodCallback;
@@ -111,9 +106,7 @@ public class CheckoutActivity extends MercadoPagoActivity implements TimerObserv
     protected Toolbar mToolbar;
     protected MPTextView mTermsAndConditionsTextView;
     protected MPTextView mCancelTextView;
-    protected MPTextView mTotalAmountTextView;
     protected MPTextView mTimerTextView;
-    protected RelativeLayout mPayerCostLayout;
     protected Boolean mBackPressedOnce;
     protected Snackbar mSnackbar;
     protected FrameLayout mConfirmButton;
@@ -142,7 +135,7 @@ public class CheckoutActivity extends MercadoPagoActivity implements TimerObserv
     protected RecyclerView mReviewProductRecyclerView;
     protected CollapsingToolbarLayout mCollapsingToolbar;
     protected AppBarLayout mAppBar;
-    protected ProgressBar mProgressBar;
+
     protected FrameLayout mReviewSummaryContainer;
     protected NestedScrollView mScrollView;
     protected String mCustomerId;
@@ -182,7 +175,6 @@ public class CheckoutActivity extends MercadoPagoActivity implements TimerObserv
         mTermsAndConditionsTextView = (MPTextView) findViewById(R.id.mpsdkReviewTermsAndConditions);
 
         mSnackbarContainer = (FrameLayout) findViewById(R.id.mpsdkSnackBarContainer);
-        mProgressBar = (ProgressBar) findViewById(R.id.mpsdkProgressBar);
         mScrollView = (NestedScrollView) findViewById(R.id.mpsdkReviewScrollView);
 
         mCollapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.mpsdkCollapsingToolbar);
@@ -190,7 +182,6 @@ public class CheckoutActivity extends MercadoPagoActivity implements TimerObserv
         mToolbar = (Toolbar) findViewById(R.id.mpsdkRegularToolbar);
         mAppBar.setVisibility(View.GONE);
         mScrollView.setVisibility(View.GONE);
-        mProgressBar.setVisibility(View.VISIBLE);
         mToolbar.setVisibility(View.VISIBLE);
 
         mTimerTextView = (MPTextView) findViewById(R.id.mpsdkTimerTextView);
@@ -243,6 +234,7 @@ public class CheckoutActivity extends MercadoPagoActivity implements TimerObserv
                 .setPublicKey(mMerchantPublicKey)
                 .build();
 
+        showProgressBar();
         getCheckoutPreference();
     }
 
@@ -415,13 +407,13 @@ public class CheckoutActivity extends MercadoPagoActivity implements TimerObserv
     }
 
     private void showProgressBar() {
-        mScrollView.setVisibility(View.GONE);
-        mProgressBar.setVisibility(View.VISIBLE);
+        mAppBar.setVisibility(View.GONE);
+        LayoutUtil.showProgressLayout(this);
     }
 
     private void stopProgressBar() {
-        mScrollView.setVisibility(View.VISIBLE);
-        mProgressBar.setVisibility(View.GONE);
+        mAppBar.setVisibility(View.VISIBLE);
+        LayoutUtil.showRegularLayout(this);
     }
 
     @Override
@@ -648,7 +640,7 @@ public class CheckoutActivity extends MercadoPagoActivity implements TimerObserv
     }
 
     private void setToolbarTitle() {
-        mProgressBar.setVisibility(View.GONE);
+        LayoutUtil.showRegularLayout(this);
         mAppBar.setVisibility(View.VISIBLE);
         mCollapsingToolbar.setTitle(getString(R.string.mpsdk_activity_checkout_title));
         if (mDecorationPreference != null && mDecorationPreference.hasColors()) {
@@ -744,7 +736,7 @@ public class CheckoutActivity extends MercadoPagoActivity implements TimerObserv
 
     protected void createPayment() {
         mScrollView.setVisibility(View.GONE);
-        mProgressBar.setVisibility(View.VISIBLE);
+        LayoutUtil.showProgressLayout(this);
         PaymentIntent paymentIntent = createPaymentIntent();
 
         mMercadoPago.createPayment(paymentIntent, new Callback<Payment>() {
@@ -920,7 +912,7 @@ public class CheckoutActivity extends MercadoPagoActivity implements TimerObserv
 
     @Override
     public void onFinish() {
-        if(mCreatedPayment == null) {
+        if (mCreatedPayment == null) {
             Intent intent = new Intent();
             setResult(RESULT_CANCELED, intent);
             this.finish();

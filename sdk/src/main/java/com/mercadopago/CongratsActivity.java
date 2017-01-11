@@ -2,9 +2,6 @@ package com.mercadopago;
 
 import android.app.Activity;
 import android.content.Intent;
-
-import java.util.Timer;
-
 import android.support.design.widget.Snackbar;
 import android.text.Spanned;
 import android.view.View;
@@ -20,6 +17,7 @@ import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.MercadoPagoUtil;
 
 import java.math.BigDecimal;
+import java.util.Timer;
 import java.util.TimerTask;
 
 import static android.text.TextUtils.isEmpty;

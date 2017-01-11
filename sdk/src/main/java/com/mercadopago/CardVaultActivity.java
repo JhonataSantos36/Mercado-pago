@@ -1,5 +1,7 @@
 package com.mercadopago;
 
+import com.google.gson.reflect.TypeToken;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -7,10 +9,7 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-import android.widget.ProgressBar;
 
-import com.google.gson.reflect.TypeToken;
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.Card;
@@ -29,6 +28,7 @@ import com.mercadopago.presenters.CardVaultPresenter;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
+import com.mercadopago.util.LayoutUtil;
 import com.mercadopago.views.CardVaultActivityView;
 
 import java.lang.reflect.Type;
@@ -46,7 +46,6 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultAct
     protected DecorationPreference mDecorationPreference;
 
     //View controls
-    private ProgressBar mProgressBar;
     private Boolean mShowBankDeals;
 
     @Override
@@ -205,8 +204,7 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultAct
     }
 
     private void initializeViews() {
-        mProgressBar = (ProgressBar) findViewById(R.id.mpsdkProgressLayout);
-        mProgressBar.setVisibility(View.VISIBLE);
+        LayoutUtil.showProgressLayout(this);
     }
 
     private void startSecurityCodeActivity() {

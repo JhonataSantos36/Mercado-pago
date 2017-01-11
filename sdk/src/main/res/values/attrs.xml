@@ -6,4 +6,20 @@
     <declare-styleable name="MPEditText">
         <attr name="errorColor" format="reference" />
     </declare-styleable>
+
+    <!-- Custom Progress Bar styles -->
+
+    <declare-styleable name="MPLoadingSpinner">
+        <attr name="mpsdk_ui_primaryColor" format="color" />
+        <attr name="mpsdk_ui_secondaryColor" format="color" />
+        <attr name="mpsdk_ui_stroke" format="dimension|reference" />
+        <attr name="mpsdk_ui_size" format="dimension|reference" />
+    </declare-styleable>
+
+    <declare-styleable name="MPProgressBar">
+        <attr name="mpsdk_autostart" format="boolean" />
+        <attr name="mpsdk_size" format="dimension|reference"/>
+        <attr name="mpsdk_primaryColor" format="color"/>
+        <attr name="mpsdk_secondaryColor" format="color"/>
+    </declare-styleable>
 </resources>

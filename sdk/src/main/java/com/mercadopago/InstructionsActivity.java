@@ -12,7 +12,6 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 
 import com.mercadopago.callbacks.Callback;
 import com.mercadopago.callbacks.FailureRecovery;
@@ -31,6 +30,7 @@ import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.CurrenciesUtil;
 import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
+import com.mercadopago.util.LayoutUtil;
 import com.mercadopago.util.MercadoPagoUtil;
 import com.mercadopago.util.ScaleUtil;
 
@@ -58,8 +58,6 @@ public class InstructionsActivity extends MercadoPagoActivity {
     protected MPTextView mReferencePrimaryInfo;
     protected MPTextView mPrimaryInfoInstructions;
     protected View mPrimaryInfoSeparator;
-    protected ProgressBar mProgressBar;
-    protected LinearLayout mContentLayout;
 
     //Params
     protected Payment mPayment;
@@ -107,8 +105,6 @@ public class InstructionsActivity extends MercadoPagoActivity {
         mPrimaryInfoInstructions = (MPTextView) findViewById(R.id.mpsdkPrimaryInfoInstructions);
         mPrimaryInfoSeparator = findViewById(R.id.mpsdkPrimaryInfoSeparator);
         mExitTextView = (MPTextView) findViewById(R.id.mpsdkExitInstructions);
-        mProgressBar = (ProgressBar) findViewById(R.id.mpsdkProgressBar);
-        mContentLayout = (LinearLayout) findViewById(R.id.mpsdkInstructionsContent);
         mExitTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -174,13 +170,11 @@ public class InstructionsActivity extends MercadoPagoActivity {
     }
 
     private void showLoading() {
-        mProgressBar.setVisibility(View.VISIBLE);
-        mContentLayout.setVisibility(View.GONE);
+        LayoutUtil.showProgressLayout(this);
     }
 
     private void stopLoading() {
-        mProgressBar.setVisibility(View.GONE);
-        mContentLayout.setVisibility(View.VISIBLE);
+        LayoutUtil.showRegularLayout(this);
     }
 
     private Instruction getInstruction(List<Instruction> instructions) {
@@ -259,7 +253,7 @@ public class InstructionsActivity extends MercadoPagoActivity {
                 currentValueTextView.setText(formattedReference);
                 currentValueTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, referenceSize);
 
-                if (reference.isNumericReference()){
+                if (reference.isNumericReference()) {
                     marginParams.setMargins(150, 0, 150, marginBottom);
                 } else {
                     marginParams.setMargins(0, 0, 0, marginBottom);
@@ -282,7 +276,7 @@ public class InstructionsActivity extends MercadoPagoActivity {
 
     private void setInformationMessages(Instruction instruction) {
         if (instruction.getInfo() != null && !instruction.getInfo().isEmpty()) {
-            if (isRedLinkAtm()){
+            if (isRedLinkAtm()) {
                 mPrimaryInfoSeparator.setVisibility(View.VISIBLE);
                 mReferencePrimaryInfo.setVisibility(View.VISIBLE);
                 mPrimaryInfoInstructions.setVisibility(View.VISIBLE);

@@ -4,6 +4,8 @@ package com.mercadopago;
  * Created by vaserber on 11/25/16.
  */
 
+import com.google.gson.reflect.TypeToken;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.support.test.espresso.intent.Intents;
@@ -12,7 +14,6 @@ import android.support.test.runner.AndroidJUnit4;
 import android.support.v7.widget.RecyclerView;
 import android.test.suitebuilder.annotation.LargeTest;
 
-import com.google.gson.reflect.TypeToken;
 import com.mercadopago.model.CardInfo;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentType;

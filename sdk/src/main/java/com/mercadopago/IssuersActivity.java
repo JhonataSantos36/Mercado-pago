@@ -1,5 +1,7 @@
 package com.mercadopago;
 
+import com.google.gson.reflect.TypeToken;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,9 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.ProgressBar;
 
-import com.google.gson.reflect.TypeToken;
 import com.mercadopago.adapters.IssuersAdapter;
 import com.mercadopago.callbacks.OnSelectedCallback;
 import com.mercadopago.controllers.CheckoutTimer;
@@ -35,6 +35,7 @@ import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.ColorsUtil;
 import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
+import com.mercadopago.util.LayoutUtil;
 import com.mercadopago.util.ScaleUtil;
 import com.mercadopago.views.IssuersActivityView;
 
@@ -53,7 +54,6 @@ public class IssuersActivity extends AppCompatActivity implements IssuersActivit
     //View controls
     protected IssuersAdapter mIssuersAdapter;
     protected RecyclerView mIssuersRecyclerView;
-    protected ProgressBar mProgressBar;
     protected DecorationPreference mDecorationPreference;
     //ViewMode
     protected boolean mLowResActive;
@@ -149,7 +149,7 @@ public class IssuersActivity extends AppCompatActivity implements IssuersActivit
     }
 
     private void showTimer() {
-        if (CheckoutTimer.getInstance().isTimerEnabled()){
+        if (CheckoutTimer.getInstance().isTimerEnabled()) {
             CheckoutTimer.getInstance().addObserver(this);
             mTimerTextView.setVisibility(View.VISIBLE);
             mTimerTextView.setText(CheckoutTimer.getInstance().getCurrentTime());
@@ -173,16 +173,15 @@ public class IssuersActivity extends AppCompatActivity implements IssuersActivit
 
     private void initializeViews() {
         mIssuersRecyclerView = (RecyclerView) findViewById(R.id.mpsdkActivityIssuersView);
-        mProgressBar = (ProgressBar) findViewById(R.id.mpsdkProgressBar);
         mTimerTextView = (MPTextView) findViewById(R.id.mpsdkTimerTextView);
 
         if (mLowResActive) {
             mLowResToolbar = (Toolbar) findViewById(R.id.mpsdkRegularToolbar);
             mLowResTitleToolbar = (MPTextView) findViewById(R.id.mpsdkTitle);
 
-            if (CheckoutTimer.getInstance().isTimerEnabled()){
+            if (CheckoutTimer.getInstance().isTimerEnabled()) {
                 Toolbar.LayoutParams marginParams = new Toolbar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                marginParams.setMargins(0,0,0,0);
+                marginParams.setMargins(0, 0, 0, 0);
                 mLowResTitleToolbar.setLayoutParams(marginParams);
                 mLowResTitleToolbar.setTextSize(17);
                 mTimerTextView.setTextSize(15);
@@ -196,7 +195,6 @@ public class IssuersActivity extends AppCompatActivity implements IssuersActivit
             mNormalToolbar = (Toolbar) findViewById(R.id.mpsdkRegularToolbar);
             mNormalToolbar.setVisibility(View.VISIBLE);
         }
-        mProgressBar.setVisibility(View.GONE);
     }
 
     private void loadViews() {
@@ -303,7 +301,7 @@ public class IssuersActivity extends AppCompatActivity implements IssuersActivit
     private void decorateLowRes() {
         ColorsUtil.decorateLowResToolbar(mLowResToolbar, mLowResTitleToolbar, mDecorationPreference,
                 getSupportActionBar(), this);
-        if(mTimerTextView != null) {
+        if (mTimerTextView != null) {
             ColorsUtil.decorateTextView(mDecorationPreference, mTimerTextView, this);
         }
     }
@@ -311,7 +309,7 @@ public class IssuersActivity extends AppCompatActivity implements IssuersActivit
     private void decorateNormal() {
         ColorsUtil.decorateNormalToolbar(mNormalToolbar, mDecorationPreference, mAppBar,
                 mCollapsingToolbar, getSupportActionBar(), this);
-        if(mTimerTextView != null) {
+        if (mTimerTextView != null) {
             ColorsUtil.decorateTextView(mDecorationPreference, mTimerTextView, this);
         }
         mFrontCardView.decorateCardBorder(mDecorationPreference.getLighterColor());
@@ -337,13 +335,13 @@ public class IssuersActivity extends AppCompatActivity implements IssuersActivit
     @Override
     public void showLoadingView() {
         mIssuersRecyclerView.setVisibility(View.GONE);
-        mProgressBar.setVisibility(View.VISIBLE);
+        LayoutUtil.showProgressLayout(this);
     }
 
     @Override
     public void stopLoadingView() {
         mIssuersRecyclerView.setVisibility(View.VISIBLE);
-        mProgressBar.setVisibility(View.GONE);
+        LayoutUtil.showRegularLayout(this);
     }
 
     @Override

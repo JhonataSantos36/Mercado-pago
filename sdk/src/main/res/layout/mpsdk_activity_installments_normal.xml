@@ -9,12 +9,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
 
-    <ProgressBar
-        android:id="@+id/mpsdkProgressBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:visibility="gone"/>
+    <include layout="@layout/mpsdk_view_progress_bar_small"/>
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/mpsdkInstallmentesAppBar"
@@ -29,6 +24,7 @@
     </android.support.design.widget.AppBarLayout>
 
     <FrameLayout
+        android:id="@+id/mpsdkRegularLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">

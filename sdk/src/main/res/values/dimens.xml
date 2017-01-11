@@ -40,4 +40,10 @@
     <dimen name="mpsdk_payer_cost_total_small_text">14dp</dimen>
     <dimen name="mpsdk_payment_text_small_text">20dp</dimen>
     <dimen name="mpsdk_payment_description_small_text">14dp</dimen>
+
+    <!-- Spinner -->
+    <dimen name="mpsdk_progress_stroke">3dp</dimen>
+    <dimen name="mpsdk_progress_size">72dp</dimen>
+    <dimen name="mpsdk_progress_small_size">40dp</dimen>
+    <dimen name="mpsdk_progress_text_margin">24dp</dimen>
 </resources>

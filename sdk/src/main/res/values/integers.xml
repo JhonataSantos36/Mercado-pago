@@ -5,4 +5,8 @@
     <integer name="mpsdk_default_animation_time">300</integer>
     <integer name="mpsdk_document_anim_time">400</integer>
     <integer name="mpsdk_default_animation_offset">100</integer>
+
+    <integer name="mpsdk_ui_spinner_rotation_time">2000</integer>
+    <integer name="mpsdk_ui_spinner_spinning_time">750</integer>
+
 </resources>

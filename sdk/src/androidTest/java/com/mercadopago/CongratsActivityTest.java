@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
-import android.support.test.espresso.Espresso;
 import android.support.test.espresso.NoActivityResumedException;
 import android.support.test.espresso.action.ViewActions;
 import android.support.test.rule.ActivityTestRule;
