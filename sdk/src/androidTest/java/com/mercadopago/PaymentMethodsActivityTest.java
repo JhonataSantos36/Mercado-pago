@@ -12,9 +12,12 @@ import android.support.v7.widget.RecyclerView;
 import android.test.suitebuilder.annotation.LargeTest;
 
 import com.mercadopago.adapters.PaymentMethodsAdapter;
+import com.mercadopago.constants.PaymentMethods;
+import com.mercadopago.constants.PaymentTypes;
 import com.mercadopago.model.DecorationPreference;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentPreference;
+import com.mercadopago.model.PaymentType;
 import com.mercadopago.test.ActivityResult;
 import com.mercadopago.test.FakeAPI;
 import com.mercadopago.test.StaticMock;
@@ -127,7 +130,7 @@ public class PaymentMethodsActivityTest {
 
         PaymentPreference paymentPreference = new PaymentPreference();
         paymentPreference.setExcludedPaymentTypeIds(new ArrayList<String>() {{
-            add("ticket");
+            add(PaymentTypes.TICKET);
         }});
 
         validStartIntent.putExtra("paymentPreference", JsonUtil.getInstance().toJson(paymentPreference));
@@ -139,7 +142,7 @@ public class PaymentMethodsActivityTest {
             assertTrue(adapter.getItemCount() > 0);
             boolean incorrectPaymentTypeFound = false;
             for (int i = 0; i < adapter.getItemCount(); i++) {
-                if (adapter.getItem(i).getPaymentTypeId().equals("ticket")) {
+                if (adapter.getItem(i).getPaymentTypeId().equals(PaymentTypes.TICKET)) {
                     incorrectPaymentTypeFound = true;
                     break;
                 }
@@ -156,7 +159,7 @@ public class PaymentMethodsActivityTest {
         mFakeAPI.addResponseToQueue(paymentMethods, 200, "");
 
         PaymentPreference paymentPreference = new PaymentPreference();
-        paymentPreference.setDefaultPaymentTypeId("ticket");
+        paymentPreference.setDefaultPaymentTypeId(PaymentTypes.TICKET);
 
         validStartIntent.putExtra("paymentPreference", JsonUtil.getInstance().toJson(paymentPreference));
         mTestRule.launchActivity(validStartIntent);
@@ -167,7 +170,7 @@ public class PaymentMethodsActivityTest {
             assertTrue(adapter.getItemCount() > 0);
             boolean incorrectPaymentTypeFound = false;
             for (int i = 0; i < adapter.getItemCount(); i++) {
-                if (!adapter.getItem(i).getPaymentTypeId().equals("ticket")) {
+                if (!adapter.getItem(i).getPaymentTypeId().equals(PaymentTypes.TICKET)) {
                     incorrectPaymentTypeFound = true;
                     break;
                 }
@@ -185,8 +188,8 @@ public class PaymentMethodsActivityTest {
 
         PaymentPreference paymentPreference = new PaymentPreference();
         paymentPreference.setExcludedPaymentMethodIds(new ArrayList<String>() {{
-            add("visa");
-            add("master");
+            add(PaymentMethods.ARGENTINA.VISA);
+            add(PaymentMethods.ARGENTINA.MASTER);
         }});
 
         validStartIntent.putExtra("paymentPreference", JsonUtil.getInstance().toJson(paymentPreference));
@@ -198,8 +201,8 @@ public class PaymentMethodsActivityTest {
             assertTrue(adapter.getItemCount() > 0);
             boolean incorrectPaymentTypeFound = false;
             for (int i = 0; i < adapter.getItemCount(); i++) {
-                if (adapter.getItem(i).getPaymentTypeId().equals("visa")
-                        || adapter.getItem(i).getPaymentTypeId().equals("master")) {
+                if (adapter.getItem(i).getPaymentTypeId().equals(PaymentMethods.ARGENTINA.VISA)
+                        || adapter.getItem(i).getPaymentTypeId().equals(PaymentMethods.ARGENTINA.MASTER)) {
                     incorrectPaymentTypeFound = true;
                     break;
                 }

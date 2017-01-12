@@ -1,98 +1,96 @@
 package com.mercadopago;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
+import android.app.Activity;
 import android.content.Intent;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import com.mercadopago.adapters.PaymentMethodsAdapter;
-import com.mercadopago.callbacks.Callback;
-import com.mercadopago.callbacks.FailureRecovery;
-import com.mercadopago.constants.PaymentTypes;
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.decorations.DividerItemDecoration;
-import com.mercadopago.model.ApiException;
+import com.mercadopago.exceptions.MPException;
+import com.mercadopago.model.DecorationPreference;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentPreference;
 import com.mercadopago.mptracker.MPTracker;
-import com.mercadopago.util.ApiUtil;
+import com.mercadopago.presenters.PaymentMethodsPresenter;
+import com.mercadopago.providers.PaymentMethodsProvider;
+import com.mercadopago.providers.PaymentMethodsProviderImpl;
 import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;
+import com.mercadopago.views.PaymentMethodsView;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.List;
 
-import static android.text.TextUtils.isEmpty;
 
-public class PaymentMethodsActivity extends MercadoPagoActivity {
+public class PaymentMethodsActivity extends AppCompatActivity implements PaymentMethodsView {
 
-    protected MercadoPago mMercadoPago;
-    protected boolean mShowBankDeals;
-
+    protected DecorationPreference mDecorationPreference;
+    protected String mMerchantPublicKey;
     protected RecyclerView mRecyclerView;
     protected Toolbar mToolbar;
     protected TextView mBankDealsTextView;
     protected TextView mTitle;
-    protected String mMerchantPublicKey;
-    protected PaymentPreference mPaymentPreference;
-    protected List<String> mSupportedPaymentTypes;
+
+    private Activity mActivity;
+    private PaymentMethodsPresenter mPresenter;
+    private PaymentMethodsProvider mResourcesProvider;
 
     @Override
-    protected void getActivityParameters() {
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        mPresenter = new PaymentMethodsPresenter();
         mMerchantPublicKey = this.getIntent().getStringExtra("merchantPublicKey");
-        mShowBankDeals = this.getIntent().getBooleanExtra("showBankDeals", true);
+
+        try {
+            mResourcesProvider = new PaymentMethodsProviderImpl(this, mMerchantPublicKey);
+            onValidStart();
+        } catch (IllegalStateException exception) {
+            onInvalidStart(exception.getMessage());
+        }
+    }
+
+    protected void getActivityParameters() {
+
+        Boolean showBankDeals = this.getIntent().getBooleanExtra("showBankDeals", true);
+        mPresenter.setShowBankDeals(showBankDeals);
+
         if (getIntent().getStringExtra("paymentPreference") != null) {
-            mPaymentPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("paymentPreference"), PaymentPreference.class);
+            PaymentPreference paymentPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("paymentPreference"), PaymentPreference.class);
+            mPresenter.setPaymentPreference(paymentPreference);
         }
         if (this.getIntent().getStringExtra("supportedPaymentTypes") != null) {
             Gson gson = new Gson();
             Type listType = new TypeToken<List<String>>() {
             }.getType();
-            mSupportedPaymentTypes = gson.fromJson(this.getIntent().getStringExtra("supportedPaymentTypes"), listType);
+
+            List<String> supportedPaymentTypes = gson.fromJson(this.getIntent().getStringExtra("supportedPaymentTypes"), listType);
+            mPresenter.setSupportedPaymentTypes(supportedPaymentTypes);
         }
 
-        //Give priority to PaymentPreference over supported payment types
-        if (!isPaymentPreferenceSet() && supportedPaymentTypesSet()) {
-            List<String> excludedPaymentTypes = new ArrayList<>();
-            for (String type : PaymentTypes.getAllPaymentTypes()) {
-                if (!mSupportedPaymentTypes.contains(type)) {
-                    excludedPaymentTypes.add(type);
-                }
-            }
-            mPaymentPreference = new PaymentPreference();
-            mPaymentPreference.setExcludedPaymentTypeIds(excludedPaymentTypes);
+        if (getIntent().getStringExtra("decorationPreference") != null) {
+            mDecorationPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("decorationPreference"), DecorationPreference.class);
         }
     }
 
-    private boolean supportedPaymentTypesSet() {
-        return mSupportedPaymentTypes != null;
-    }
-
-    private boolean isPaymentPreferenceSet() {
-        return mPaymentPreference != null;
-    }
-
-    @Override
-    protected void validateActivityParameters() throws IllegalStateException {
-        if (mMerchantPublicKey == null) {
-            throw new IllegalStateException("public key not set");
-        }
-    }
-
-    @Override
     protected void setContentView() {
         MPTracker.getInstance().trackScreen("PAYMENT_METHODS", "2", mMerchantPublicKey, BuildConfig.VERSION_NAME, this);
         setContentView(R.layout.mpsdk_activity_payment_methods);
     }
 
-    @Override
     protected void initializeControls() {
         mRecyclerView = (RecyclerView) findViewById(R.id.mpsdkPaymentMethodsList);
         mRecyclerView.setHasFixedSize(true);
@@ -103,13 +101,25 @@ public class PaymentMethodsActivity extends MercadoPagoActivity {
         initializeToolbar();
     }
 
-    @Override
     protected void onValidStart() {
-        mMercadoPago = createMercadoPago(mMerchantPublicKey);
-        getPaymentMethodsAsync();
+
+        mPresenter.attachView(this);
+        mPresenter.attachResourcesProvider(mResourcesProvider);
+
+        getActivityParameters();
+
+        if (mDecorationPreference != null && mDecorationPreference.hasColors()) {
+            setTheme(R.style.Theme_MercadoPagoTheme_NoActionBar);
+        }
+
+        setContentView();
+        initializeControls();
+
+        mActivity = this;
+
+        mPresenter.start();
     }
 
-    @Override
     protected void onInvalidStart(String message) {
         ErrorUtil.startErrorActivity(this, message, false);
     }
@@ -131,32 +141,8 @@ public class PaymentMethodsActivity extends MercadoPagoActivity {
             }
         });
 
-        if (mShowBankDeals) {
-            mBankDealsTextView.setVisibility(View.VISIBLE);
-            mBankDealsTextView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    new MercadoPago.StartActivityBuilder()
-                            .setActivity(getActivity())
-                            .setPublicKey(mMerchantPublicKey)
-                            .setDecorationPreference(mDecorationPreference)
-                            .startBankDealsActivity();
-                }
-            });
-        }
-
         decorate(mToolbar);
         decorateFont(mTitle);
-        if (mShowBankDeals) {
-            decorateFont(mBankDealsTextView);
-        }
-    }
-
-    protected MercadoPago createMercadoPago(String publicKey) {
-        return new MercadoPago.Builder()
-                .setContext(this)
-                .setPublicKey(publicKey)
-                .build();
     }
 
     public void onBackPressed() {
@@ -166,72 +152,6 @@ public class PaymentMethodsActivity extends MercadoPagoActivity {
         returnIntent.putExtra("backButtonPressed", true);
         setResult(RESULT_CANCELED, returnIntent);
         finish();
-    }
-
-    private void getPaymentMethodsAsync() {
-        LayoutUtil.showProgressLayout(getActivity());
-
-        mMercadoPago.getPaymentMethods(new Callback<List<PaymentMethod>>() {
-            @Override
-            public void success(List<PaymentMethod> paymentMethods) {
-                if (isActivityActive()) {
-                    mRecyclerView.setAdapter(new PaymentMethodsAdapter(getActivity(), getSupportedPaymentMethods(paymentMethods), new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            // Return to parent
-                            Intent returnIntent = new Intent();
-                            PaymentMethod selectedPaymentMethod = (PaymentMethod) view.getTag();
-                            returnIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(selectedPaymentMethod));
-                            setResult(RESULT_OK, returnIntent);
-                            finish();
-                        }
-                    }));
-                    LayoutUtil.showRegularLayout(getActivity());
-                }
-            }
-
-            @Override
-            public void failure(ApiException apiException) {
-                if (isActivityActive()) {
-                    setFailureRecovery(new FailureRecovery() {
-                        @Override
-                        public void recover() {
-                            getPaymentMethodsAsync();
-                        }
-                    });
-                    ApiUtil.showApiExceptionError(getActivity(), apiException);
-                }
-            }
-        });
-    }
-
-    private List<PaymentMethod> getSupportedPaymentMethods(List<PaymentMethod> paymentMethods) {
-
-        List<PaymentMethod> supportedPaymentMethods;
-        if (mPaymentPreference != null) {
-            supportedPaymentMethods = mPaymentPreference.getSupportedPaymentMethods(paymentMethods);
-            supportedPaymentMethods = getPaymentMethodsOfType(mPaymentPreference.getDefaultPaymentTypeId(), supportedPaymentMethods);
-        } else {
-            supportedPaymentMethods = paymentMethods;
-        }
-        return supportedPaymentMethods;
-    }
-
-    private List<PaymentMethod> getPaymentMethodsOfType(String paymentTypeId, List<PaymentMethod> paymentMethodList) {
-
-        if (paymentMethodList != null && !isEmpty(paymentTypeId)) {
-
-            List<PaymentMethod> validPaymentMethods = new ArrayList<>();
-
-            for (PaymentMethod currentPaymentMethod : paymentMethodList) {
-                if (currentPaymentMethod.getPaymentTypeId().equals(paymentTypeId)) {
-                    validPaymentMethods.add(currentPaymentMethod);
-                }
-            }
-            return validPaymentMethods;
-        } else {
-            return paymentMethodList;
-        }
     }
 
     @Override
@@ -246,5 +166,98 @@ public class PaymentMethodsActivity extends MercadoPagoActivity {
             }
         }
     }
+
+    protected void recoverFromFailure() {
+        mPresenter.recoverFromFailure();
+    }
+
+    protected boolean isCustomColorSet() {
+        return mDecorationPreference != null && mDecorationPreference.hasColors();
+    }
+
+    protected int getCustomBaseColor() {
+        return mDecorationPreference.getBaseColor();
+    }
+
+    protected boolean isDarkFontEnabled() {
+        return mDecorationPreference != null && mDecorationPreference.isDarkFontEnabled();
+    }
+
+    protected int getDarkFontColor() {
+        return mDecorationPreference.getDarkFontColor(this);
+    }
+
+    protected void decorateFont(TextView textView) {
+        if (textView != null && isDarkFontEnabled()) {
+            textView.setTextColor(getDarkFontColor());
+        }
+    }
+
+    @Override
+    public void showPaymentMethods(List<PaymentMethod> paymentMethods) {
+        mRecyclerView.setAdapter(new PaymentMethodsAdapter(mActivity, paymentMethods, new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Return to parent
+                Intent returnIntent = new Intent();
+                PaymentMethod selectedPaymentMethod = (PaymentMethod) view.getTag();
+                returnIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(selectedPaymentMethod));
+                setResult(RESULT_OK, returnIntent);
+                finish();
+            }
+        }));
+    }
+
+    @Override
+    public void showProgress() {
+        LayoutUtil.showProgressLayout(mActivity);
+    }
+
+    @Override
+    public void hideProgress() {
+        LayoutUtil.showRegularLayout(mActivity);
+    }
+
+    @Override
+    public void showError(MPException exception) {
+        ErrorUtil.startErrorActivity(this, exception);
+    }
+
+    @Override
+    public void showBankDeals() {
+        decorateFont(mBankDealsTextView);
+        mBankDealsTextView.setVisibility(View.VISIBLE);
+        mBankDealsTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new MercadoPago.StartActivityBuilder()
+                        .setActivity(mActivity)
+                        .setPublicKey(mMerchantPublicKey)
+                        .setDecorationPreference(mDecorationPreference)
+                        .startBankDealsActivity();
+            }
+        });
+    }
+
+    protected void decorate(Toolbar toolbar) {
+        if (toolbar != null) {
+            if (isCustomColorSet()) {
+                toolbar.setBackgroundColor(getCustomBaseColor());
+            }
+            decorateUpArrow(toolbar);
+        }
+    }
+
+    protected void decorateUpArrow(Toolbar toolbar) {
+        if (isDarkFontEnabled()) {
+            int darkFont = getDarkFontColor();
+            Drawable upArrow = toolbar.getNavigationIcon();
+            if (upArrow != null && getSupportActionBar() != null) {
+                upArrow.setColorFilter(darkFont, PorterDuff.Mode.SRC_ATOP);
+                getSupportActionBar().setHomeAsUpIndicator(upArrow);
+            }
+        }
+    }
+
 }
 
