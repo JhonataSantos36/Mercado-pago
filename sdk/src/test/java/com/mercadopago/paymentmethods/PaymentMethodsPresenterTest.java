@@ -36,8 +36,8 @@ public class PaymentMethodsPresenterTest {
         presenter.start();
 
         Assert.assertTrue(mockedView.paymentMethods.size() == 2);
-        Assert.assertTrue(mockedView.progressVisible);
-        Assert.assertTrue(mockedView.bankDealsShown);
+        Assert.assertTrue(!mockedView.progressVisible);
+        Assert.assertTrue(!mockedView.bankDealsShown);
         Assert.assertTrue(mockedView.error == null);
     }
 
@@ -62,8 +62,8 @@ public class PaymentMethodsPresenterTest {
         presenter.start();
 
         Assert.assertTrue(mockedView.paymentMethods.size() == 1);
-        Assert.assertTrue(mockedView.progressVisible);
-        Assert.assertTrue(mockedView.bankDealsShown);
+        Assert.assertTrue(!mockedView.progressVisible);
+        Assert.assertTrue(!mockedView.bankDealsShown);
         Assert.assertTrue(mockedView.error == null);
 
     }
