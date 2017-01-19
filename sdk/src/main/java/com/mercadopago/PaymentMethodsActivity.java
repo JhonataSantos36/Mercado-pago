@@ -18,10 +18,10 @@ import com.google.gson.reflect.TypeToken;
 import com.mercadopago.adapters.PaymentMethodsAdapter;
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.decorations.DividerItemDecoration;
-import com.mercadopago.exceptions.MPException;
-import com.mercadopago.model.DecorationPreference;
+import com.mercadopago.exceptions.MercadoPagoError;
+import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.model.PaymentMethod;
-import com.mercadopago.model.PaymentPreference;
+import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.mptracker.MPTracker;
 import com.mercadopago.presenters.PaymentMethodsPresenter;
 import com.mercadopago.providers.PaymentMethodsProvider;
@@ -219,7 +219,7 @@ public class PaymentMethodsActivity extends AppCompatActivity implements Payment
     }
 
     @Override
-    public void showError(MPException exception) {
+    public void showError(MercadoPagoError exception) {
         ErrorUtil.startErrorActivity(this, exception);
     }
 

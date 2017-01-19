@@ -2,7 +2,7 @@ package com.mercadopago.services;
 
 import com.mercadopago.BuildConfig;
 import com.mercadopago.adapters.MPCall;
-import com.mercadopago.model.CheckoutPreference;
+import com.mercadopago.preferences.CheckoutPreference;
 import com.mercadopago.model.Installment;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.PayerIntent;

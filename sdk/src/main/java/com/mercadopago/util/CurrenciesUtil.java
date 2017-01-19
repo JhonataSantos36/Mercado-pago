@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static android.text.TextUtils.isEmpty;
+import static com.mercadopago.util.TextUtils.isEmpty;
 
 public class CurrenciesUtil {
 

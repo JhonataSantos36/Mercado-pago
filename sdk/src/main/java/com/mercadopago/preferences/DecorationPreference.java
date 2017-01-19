@@ -1,4 +1,4 @@
-package com.mercadopago.model;
+package com.mercadopago.preferences;
 
 import android.content.Context;
 import android.graphics.Color;

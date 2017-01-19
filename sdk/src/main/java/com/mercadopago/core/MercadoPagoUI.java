@@ -11,8 +11,8 @@ import android.text.TextUtils;
 import com.mercadopago.CustomerCardsActivity;
 import com.mercadopago.callbacks.OnSelectedCallback;
 import com.mercadopago.model.Card;
-import com.mercadopago.model.DecorationPreference;
-import com.mercadopago.model.PaymentPreference;
+import com.mercadopago.preferences.DecorationPreference;
+import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.uicontrollers.savedcards.SavedCardRowView;
 import com.mercadopago.uicontrollers.savedcards.SavedCardView;
 import com.mercadopago.uicontrollers.savedcards.SavedCardsListView;
@@ -23,6 +23,7 @@ import java.util.List;
 /**
  * Created by mreverter on 6/10/16.
  */
+@Deprecated
 public class MercadoPagoUI {
 
     public static class Activities {

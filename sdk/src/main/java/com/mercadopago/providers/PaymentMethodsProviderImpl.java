@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.mercadopago.callbacks.Callback;
 import com.mercadopago.core.MercadoPago;
-import com.mercadopago.exceptions.MPException;
+import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.mvp.OnResourcesRetrievedCallback;
@@ -38,7 +38,7 @@ public class PaymentMethodsProviderImpl implements PaymentMethodsProvider {
 
             @Override
             public void failure(ApiException apiException) {
-                MPException exception = new MPException(apiException);
+                MercadoPagoError exception = new MercadoPagoError(apiException);
                 resourcesRetrievedCallback.onFailure(exception);
             }
         });

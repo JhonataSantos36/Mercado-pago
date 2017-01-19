@@ -22,7 +22,7 @@ import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.listeners.RecyclerItemClickListener;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.CardInfo;
-import com.mercadopago.model.DecorationPreference;
+import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentType;
 import com.mercadopago.mptracker.MPTracker;

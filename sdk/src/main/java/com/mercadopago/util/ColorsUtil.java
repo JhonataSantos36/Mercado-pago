@@ -10,7 +10,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 
 import com.mercadopago.customviews.MPTextView;
-import com.mercadopago.model.DecorationPreference;
+import com.mercadopago.preferences.DecorationPreference;
 
 /**
  * Created by mreverter on 2/6/16.

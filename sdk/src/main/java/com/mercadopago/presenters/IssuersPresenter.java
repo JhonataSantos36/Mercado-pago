@@ -11,7 +11,7 @@ import com.mercadopago.model.ApiException;
 import com.mercadopago.model.CardInfo;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.PaymentMethod;
-import com.mercadopago.model.PaymentPreference;
+import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.views.IssuersActivityView;
 
 import java.util.ArrayList;

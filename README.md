@@ -1,4 +1,5 @@
-[![License](https://img.shields.io/badge/license-MIT-lightgrey.svg?style=flat)](https://github.com/mercadopago/px-android)
+[![Build Status](https://travis-ci.org/mercadopago/px-android.png)](https://travis-ci.org/mercadopago/px-android)
+[![Codecov branch](https://img.shields.io/codecov/c/github/mercadopago/px-android/develop.svg)](https://codecov.io/gh/mercadopago/px-android/)
 
 #MercadoPago - Android SDK
 
@@ -12,7 +13,7 @@ The MercadoPago Android SDK makes it easy to collect your user's credit card det
 
 Add this line to your app's `build.gradle` inside the `dependencies` section:
 
-    compile ('com.mercadopago:sdk:2.3.5@aar') { transitive = true }
+    compile ('com.mercadopago:sdk:2.3.6@aar') { transitive = true }
 
 ###Eclipse
 

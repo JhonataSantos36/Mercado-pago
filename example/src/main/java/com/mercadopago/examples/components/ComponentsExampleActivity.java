@@ -21,11 +21,11 @@ import com.mercadopago.core.MerchantServer;
 import com.mercadopago.examples.R;
 import com.mercadopago.examples.utils.ColorPickerDialog;
 import com.mercadopago.examples.utils.ExamplesUtils;
-import com.mercadopago.exceptions.MPException;
+import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.Card;
 import com.mercadopago.model.Customer;
-import com.mercadopago.model.DecorationPreference;
+import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.model.Discount;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.Item;
@@ -33,7 +33,7 @@ import com.mercadopago.model.MerchantPayment;
 import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentMethod;
-import com.mercadopago.model.PaymentPreference;
+import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.model.Token;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;
@@ -230,8 +230,8 @@ public class ComponentsExampleActivity extends AppCompatActivity {
 
         } else {
             if ((data != null) && (data.getStringExtra("mpException") != null)) {
-                MPException mpException = JsonUtil.getInstance().fromJson(data.getStringExtra("mpException"), MPException.class);
-                Toast.makeText(mActivity, mpException.getMessage(), Toast.LENGTH_LONG).show();
+                MercadoPagoError mercadoPagoError = JsonUtil.getInstance().fromJson(data.getStringExtra("mercadoPagoError"), MercadoPagoError.class);
+                Toast.makeText(mActivity, mercadoPagoError.getMessage(), Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -248,8 +248,8 @@ public class ComponentsExampleActivity extends AppCompatActivity {
 
         } else {
             if ((data != null) && (data.getStringExtra("mpException") != null)) {
-                MPException mpException = JsonUtil.getInstance().fromJson(data.getStringExtra("mpException"), MPException.class);
-                Toast.makeText(mActivity, mpException.getMessage(), Toast.LENGTH_LONG).show();
+                MercadoPagoError mercadoPagoError = JsonUtil.getInstance().fromJson(data.getStringExtra("mercadoPagoError"), MercadoPagoError.class);
+                Toast.makeText(mActivity, mercadoPagoError.getMessage(), Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -287,7 +287,7 @@ public class ComponentsExampleActivity extends AppCompatActivity {
         } else {
             if ((data != null) &&
                     (data.getStringExtra("mpException") != null)) {
-                MPException mpException = JsonUtil.getInstance().fromJson(data.getStringExtra("mpException"), MPException.class);
+                MercadoPagoError mercadoPagoError = JsonUtil.getInstance().fromJson(data.getStringExtra("mercadoPagoError"), MercadoPagoError.class);
 
             }
         }

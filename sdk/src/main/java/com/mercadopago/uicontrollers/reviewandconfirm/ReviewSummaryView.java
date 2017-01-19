@@ -11,7 +11,7 @@ import android.widget.LinearLayout;
 import com.mercadopago.R;
 import com.mercadopago.callbacks.OnConfirmPaymentCallback;
 import com.mercadopago.customviews.MPTextView;
-import com.mercadopago.model.DecorationPreference;
+import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.uicontrollers.payercosts.PayerCostColumn;

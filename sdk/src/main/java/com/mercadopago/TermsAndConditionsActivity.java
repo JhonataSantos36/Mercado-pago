@@ -8,7 +8,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.mercadopago.customviews.MPTextView;
-import com.mercadopago.model.DecorationPreference;
+import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.util.ErrorUtil;
 
 import static android.text.TextUtils.isEmpty;

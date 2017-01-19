@@ -1,7 +1,7 @@
 package com.mercadopago.services;
 
 import com.mercadopago.adapters.MPCall;
-import com.mercadopago.model.CheckoutPreference;
+import com.mercadopago.preferences.CheckoutPreference;
 import com.mercadopago.model.Customer;
 import com.mercadopago.model.MerchantPayment;
 import com.mercadopago.model.Payment;

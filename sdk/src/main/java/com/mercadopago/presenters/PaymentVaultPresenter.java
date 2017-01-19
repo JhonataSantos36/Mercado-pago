@@ -6,7 +6,7 @@ import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.callbacks.OnSelectedCallback;
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.core.MerchantServer;
-import com.mercadopago.exceptions.MPException;
+import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.Card;
 import com.mercadopago.model.CustomSearchItem;
@@ -15,7 +15,7 @@ import com.mercadopago.model.Payer;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentMethodSearch;
 import com.mercadopago.model.PaymentMethodSearchItem;
-import com.mercadopago.model.PaymentPreference;
+import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.model.Site;
 import com.mercadopago.util.CurrenciesUtil;
 import com.mercadopago.util.MercadoPagoUtil;
@@ -389,11 +389,11 @@ public class PaymentVaultPresenter {
     }
 
     private void showEmptyPaymentMethodsError() {
-        mPaymentVaultView.showError(new MPException(getString(R.string.mpsdk_no_payment_methods_found), false));
+        mPaymentVaultView.showError(new MercadoPagoError(getString(R.string.mpsdk_no_payment_methods_found), false));
     }
 
     private void showMismatchingPaymentMethodError() {
-        mPaymentVaultView.showError(new MPException(getString(R.string.mpsdk_standard_error_message), "Payment method in search not found", false));
+        mPaymentVaultView.showError(new MercadoPagoError(getString(R.string.mpsdk_standard_error_message), "Payment method in search not found", false));
     }
 
     private String getString(int resId) {

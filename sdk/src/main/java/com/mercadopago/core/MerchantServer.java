@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.mercadopago.adapters.ErrorHandlingCallAdapter;
 import com.mercadopago.callbacks.Callback;
-import com.mercadopago.model.CheckoutPreference;
+import com.mercadopago.preferences.CheckoutPreference;
 import com.mercadopago.model.Customer;
 import com.mercadopago.model.MerchantPayment;
 import com.mercadopago.model.Payment;

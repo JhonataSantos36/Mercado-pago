@@ -1,15 +1,17 @@
-package com.mercadopago.model;
+package com.mercadopago.preferences;
 
 import com.google.gson.annotations.SerializedName;
 
 import com.mercadopago.exceptions.CheckoutPreferenceException;
+import com.mercadopago.model.Item;
+import com.mercadopago.model.Payer;
 import com.mercadopago.util.CurrenciesUtil;
 
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
-import static android.text.TextUtils.isEmpty;
+import static com.mercadopago.util.TextUtils.isEmpty;
 
 public class CheckoutPreference {
 
@@ -74,7 +76,6 @@ public class CheckoutPreference {
         }
         return valid;
     }
-
 
     private boolean isItemValid(Item item) {
         Boolean valid = true;

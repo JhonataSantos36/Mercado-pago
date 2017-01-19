@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.callbacks.OnSelectedCallback;
-import com.mercadopago.exceptions.MPException;
+import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.Card;
 import com.mercadopago.model.CustomSearchItem;
@@ -34,7 +34,7 @@ public interface PaymentVaultView {
 
     void showSearchItems(List<PaymentMethodSearchItem> searchItems, OnSelectedCallback<PaymentMethodSearchItem> paymentMethodSearchItemSelectionCallback);
 
-    void showError(MPException mpException);
+    void showError(MercadoPagoError mercadoPagoError);
 
     void setTitle(String title);
 

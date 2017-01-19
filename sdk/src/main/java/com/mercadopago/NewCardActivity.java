@@ -32,6 +32,7 @@ import com.mercadopago.util.MercadoPagoUtil;
 
 import java.util.List;
 
+@Deprecated
 public class NewCardActivity extends AppCompatActivity {
 
     // Activity parameters

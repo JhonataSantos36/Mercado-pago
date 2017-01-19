@@ -1,5 +1,7 @@
 package com.mercadopago.model;
 
+import com.mercadopago.preferences.PaymentPreference;
+
 import junit.framework.Assert;
 import junit.framework.TestCase;
 
@@ -9,7 +11,7 @@ import java.util.List;
 /**
  * Created by mreverter on 29/12/15.
  */
-public class PaymentPreferenceTest extends TestCase {
+public class PaymentPreferenceTest {
 
     public void testIfDefaultInstallmentsSetAndExistsInListReturnIt()
     {

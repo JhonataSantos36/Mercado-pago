@@ -13,15 +13,17 @@ import android.widget.Toast;
 
 import com.mercadopago.callbacks.Callback;
 import com.mercadopago.core.MercadoPago;
+import com.mercadopago.core.MercadoPagoCheckout;
 import com.mercadopago.core.MerchantServer;
 import com.mercadopago.examples.R;
 import com.mercadopago.examples.utils.ColorPickerDialog;
 import com.mercadopago.examples.utils.ExamplesUtils;
-import com.mercadopago.exceptions.MPException;
+import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.model.ApiException;
-import com.mercadopago.model.CheckoutPreference;
-import com.mercadopago.model.DecorationPreference;
+import com.mercadopago.preferences.CheckoutPreference;
+import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.model.Payment;
+import com.mercadopago.callbacks.PaymentCallback;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;
 
@@ -89,13 +91,29 @@ public class CheckoutExampleActivity extends AppCompatActivity {
     }
 
     private void startMercadoPagoCheckout() {
+
         DecorationPreference decorationPreference = getCurrentDecorationPreference();
-        new MercadoPago.StartActivityBuilder()
-                .setActivity(this)
+
+        new MercadoPagoCheckout.Builder()
+                .setContext(this)
                 .setPublicKey(mPublicKey)
-                .setCheckoutPreferenceId(mCheckoutPreference.getId())
-                .setDecorationPreference(decorationPreference) //Optional
-                .startCheckoutActivity();
+                .setCheckoutPreference(mCheckoutPreference)
+                .start(new PaymentCallback() {
+                    @Override
+                    public void onSuccess(Payment payment) {
+                        //Done!
+                    }
+
+                    @Override
+                    public void onCancel() {
+                        //User canceled
+                    }
+
+                    @Override
+                    public void onFailure(MercadoPagoError exception) {
+                        //Failure in checkout
+                    }
+                });
     }
 
     private DecorationPreference getCurrentDecorationPreference() {
@@ -123,8 +141,8 @@ public class CheckoutExampleActivity extends AppCompatActivity {
 
             } else {
                 if ((data != null) && (data.getStringExtra("mpException") != null)) {
-                    MPException mpException = JsonUtil.getInstance().fromJson(data.getStringExtra("mpException"), MPException.class);
-                    Toast.makeText(mActivity, mpException.getMessage(), Toast.LENGTH_LONG).show();
+                    MercadoPagoError mercadoPagoError = JsonUtil.getInstance().fromJson(data.getStringExtra("mercadoPagoError"), MercadoPagoError.class);
+                    Toast.makeText(mActivity, mercadoPagoError.getMessage(), Toast.LENGTH_LONG).show();
                 }
             }
         }

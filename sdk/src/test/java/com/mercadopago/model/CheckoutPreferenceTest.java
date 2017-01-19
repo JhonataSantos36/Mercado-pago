@@ -2,9 +2,13 @@ package com.mercadopago.model;
 
 import com.mercadopago.constants.PaymentTypes;
 import com.mercadopago.exceptions.CheckoutPreferenceException;
+import com.mercadopago.preferences.CheckoutPreference;
+import com.mercadopago.preferences.PaymentPreference;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
+
+import org.junit.Test;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -12,27 +16,33 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import static junit.framework.Assert.assertTrue;
+
 /**
  * Created by mromar on 2/24/16.
  */
-public class CheckoutPreferenceTest extends TestCase {
+public class CheckoutPreferenceTest {
 
     ///////////////////CURRENCY tests///////////////////
+    @Test
     public void testWhenValidatePreferenceWithTwoItemsWithSameCurrencyIdReturnTrue() {
         CheckoutPreference preference = getPreferenceWithTwoItemsWithSameCurrencyId();
-        Assert.assertTrue(preference.itemsValid());
+        assertTrue(preference.itemsValid());
     }
 
+    @Test
     public void testWhenValidatePreferenceWithTwoItemsWithDifferentCurrencyIdReturnFalse() {
         CheckoutPreference preference = getPreferenceWithTwoItemsWithDifferentCurrencyId();
         Assert.assertFalse(preference.itemsValid());
     }
 
+    @Test
     public void testWhenValidatePreferenceWithTwoItemsIfOneHasCurrencyNullReturnFalse() {
         CheckoutPreference preference = getPreferenceWithTwoItemsOneHasCurrencyNull();
         Assert.assertFalse(preference.itemsValid());
     }
 
+    @Test
     public void testWhenValidatePreferenceWithTwoItemsWithIncorrectCurrencyReturnFalse() {
         CheckoutPreference preference = getPreferenceWithTwoItemsWithIncorrectCurrencyId();
         Assert.assertFalse(preference.itemsValid());
@@ -44,33 +54,40 @@ public class CheckoutPreferenceTest extends TestCase {
         Assert.assertFalse(preference.validPaymentTypeExclusion());
     }
 
+    @Test
     public void testWhenValidatePreferenceWithSomePaymentsTypesExcludedReturnTrue() {
         CheckoutPreference preference = getPreferenceWithSomePaymentTypesExcluded();
-        Assert.assertTrue(preference.validPaymentTypeExclusion());
+        assertTrue(preference.validPaymentTypeExclusion());
     }
 
     ///////////////////INSTALLMENTS tests///////////////////
+    @Test
     public void testWhenValidatePreferenceWithPositiveDefaultInstallmentsNumberAndNegativeMaxInstallmentsNumberReturnFalse() {
         CheckoutPreference preference = getPreferenceWithPositiveDefaultInstallmentsNumberAndNegativeMaxInstallmentsNumber();
         Assert.assertFalse(preference.validInstallmentsPreference());
     }
 
+    @Test
     public void testWhenValidatePreferenceWithPositiveMaxInstallmentsNumberAndNegativeDefaultInstallmentsNumberReturnFalse() {
         CheckoutPreference preference = getPreferenceWithPositiveMaxInstallmentsNumberAndNegativeDefaultInstallmentsNumber();
         Assert.assertFalse(preference.validInstallmentsPreference());
     }
 
+    @Test
     public void testWhenValidatePreferenceWithMaxInstallmentsNumberPositiveReturnTrue() {
         CheckoutPreference preference = getPreferenceWithPositiveInstallmentsNumber();
-        Assert.assertTrue(preference.validInstallmentsPreference());
+        assertTrue(preference.validInstallmentsPreference());
     }
 
+    @Test
     public void testWhenValidatePreferenceWithNegativeMaxInstallmentsNumberReturnFalse() {
         CheckoutPreference preference = getPreferenceWithNegativeInstallmentsNumbers();
         Assert.assertFalse(preference.validInstallmentsPreference());
     }
 
     ///////////////////EXCEPTIONS tests///////////////////
+
+    @Test
     public void testWhenValidatePreferenceValidNoThrowExceptionReturnTrue() {
         CheckoutPreference preference = getPreferenceWithOneItemValidActiveAndSomePaymentTypesExcluded();
         Boolean valid = true;
@@ -85,6 +102,7 @@ public class CheckoutPreferenceTest extends TestCase {
         }
     }
 
+    @Test
     public void testWhenValidatePreferenceWithAllPaymentTypesExcludedThrowExceptionReturnTrue() {
         CheckoutPreference preference = getPreferenceWithOneItemValidActiveButAllPaymentTypesExcluded();
 
@@ -95,6 +113,7 @@ public class CheckoutPreferenceTest extends TestCase {
         }
     }
 
+    @Test
     public void testWhenValidatePreferenceWithInstallmentsDefaultNumberAndInstallmentsNumberNegativeThrowExceptionReturnTrue() {
         CheckoutPreference preference = getPreferenceWithOneItemValidButInstallmenstsDefaultNumberAndInstallmentsNumberNegative();
 
@@ -105,6 +124,7 @@ public class CheckoutPreferenceTest extends TestCase {
         }
     }
 
+    @Test
     public void testWhenValidatePreferenceWithPreferenceExpiredThrowExceptionReturnTrue() {
         CheckoutPreference preference = getPreferenceWithOneItemValidButPreferenceExpired();
 
@@ -115,7 +135,7 @@ public class CheckoutPreferenceTest extends TestCase {
         }
     }
 
-
+    @Test
     public void testWhenValidatePreferenceWithItemsInvalidThrowExceptionReturnTrue() {
         CheckoutPreference preference = getPreferenceWithEmptyItems();
 
@@ -128,78 +148,93 @@ public class CheckoutPreferenceTest extends TestCase {
 
 
     ///////////////////ITEMS tests///////////////////
+    @Test
     public void testWhenValidatePreferenceWithTwoItemsReturnTrue() {
         CheckoutPreference preference = getPreferenceWithTwoItems();
-        Assert.assertTrue(preference.itemsValid());
+        assertTrue(preference.itemsValid());
     }
 
+    @Test
     public void testWhenValidatePreferenceWithTwoItemsWithoutUnitPriceReturnFalse() {
         CheckoutPreference preference = getPreferenceWithTwoItemsWithoutUnitPrice();
         Assert.assertFalse(preference.itemsValid());
     }
 
+    @Test
     public void testWhenValidatePreferenceWithNegativeUnitPriceItemReturnFalse() {
         CheckoutPreference preference = getPreferenceWithNegativeUnitPriceItem();
         Assert.assertFalse(preference.itemsValid());
     }
 
+    @Test
     public void testWhenValidatePreferenceWithNullUnitPriceItemReturnFalse() {
         CheckoutPreference preference = getPreferenceWithNullUnitPriceItem();
         Assert.assertFalse(preference.itemsValid());
     }
 
+    @Test
     public void testWhenValidatePreferenceWithZeroItemQuantityReturnFalse() {
         CheckoutPreference preference = getPreferenceWithZeroItemQuantity();
         Assert.assertFalse(preference.itemsValid());
     }
 
+    @Test
     public void testWhenValidatePreferenceWithNegativeItemQuantityReturnFalse() {
         CheckoutPreference preference = getPreferenceWithNegativeItemQuantity();
         Assert.assertFalse(preference.itemsValid());
     }
 
+    @Test
     public void testWhenValidatePreferenceWithNullItemQuantityReturnFalse() {
         CheckoutPreference preference = getPreferenceWithNullItemQuantity();
         Assert.assertFalse(preference.itemsValid());
     }
 
+    @Test
     public void testWhenValidatePreferenceWithNullItemIdReturnFalse() {
         CheckoutPreference preference = getPreferenceWithNullItemId();
         Assert.assertFalse(preference.itemsValid());
     }
 
+    @Test
     public void testWenValidatePreferenceWithNullItemsListReturnFalse() {
         CheckoutPreference preference = getPreferenceWithNullItems();
         Assert.assertFalse(preference.itemsValid());
     }
 
+    @Test
     public void testWhenValidatePreferenceWithEmptyItemsListReturnFalse() {
         CheckoutPreference preference = getPreferenceWithEmptyItems();
         Assert.assertFalse(preference.itemsValid());
     }
 
     ///////////////////DATES tests///////////////////
+    @Test
     public void testWhenPreferenceIsActiveReturnTrue() {
         CheckoutPreference preference = getActivePreference();
-        Assert.assertTrue(preference.isActive());
+        assertTrue(preference.isActive());
     }
 
+    @Test
     public void testWhenPreferenceIsNotActiveReturnFalse() {
         CheckoutPreference preference = getInactivePreference();
         Assert.assertFalse(preference.isActive());
     }
 
+    @Test
     public void testWhenPreferenceIsNotExpiredReturnFalse() {
         CheckoutPreference preference = getNotExpiredPreference();
         Assert.assertFalse(preference.isExpired());
     }
 
+    @Test
     public void testWhenPreferenceIsExpiredReturnTrue() {
         CheckoutPreference preference = getExpiredPreference();
 
-        Assert.assertTrue(preference.isExpired());
+        assertTrue(preference.isExpired());
     }
 
+    @Test
     public void testWhenValidatePreferenceWithNullExpirationDateToReturnFalse() {
         CheckoutPreference preference = getPreferenceWithNullExpirationDateTo();
         Assert.assertFalse(preference.isExpired());

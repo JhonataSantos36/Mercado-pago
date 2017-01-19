@@ -1,6 +1,6 @@
 package com.mercadopago.mvp;
 
-import com.mercadopago.exceptions.MPException;
+import com.mercadopago.exceptions.MercadoPagoError;
 
 /**
  * All ResourcesProvider implementations' methods containing api calls
@@ -11,6 +11,6 @@ import com.mercadopago.exceptions.MPException;
 
 public interface OnResourcesRetrievedCallback<T> {
     void  onSuccess(T t);
-    void onFailure(MPException exception);
+    void onFailure(MercadoPagoError exception);
 }
 

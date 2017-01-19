@@ -24,17 +24,17 @@ import com.mercadopago.controllers.CheckoutTimer;
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.decorations.GridSpacingItemDecoration;
-import com.mercadopago.exceptions.MPException;
+import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.Card;
 import com.mercadopago.model.CustomSearchItem;
-import com.mercadopago.model.DecorationPreference;
+import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentMethodSearch;
 import com.mercadopago.model.PaymentMethodSearchItem;
-import com.mercadopago.model.PaymentPreference;
+import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.model.Site;
 import com.mercadopago.model.Token;
 import com.mercadopago.mptracker.MPTracker;
@@ -476,8 +476,8 @@ public class PaymentVaultActivity extends AppCompatActivity implements PaymentVa
     }
 
     @Override
-    public void showError(MPException mpException) {
-        ErrorUtil.startErrorActivity(this, mpException);
+    public void showError(MercadoPagoError mercadoPagoError) {
+        ErrorUtil.startErrorActivity(this, mercadoPagoError);
     }
 
     @Override

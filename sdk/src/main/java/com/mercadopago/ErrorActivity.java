@@ -7,13 +7,13 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.mercadopago.controllers.CheckoutErrorHandler;
-import com.mercadopago.exceptions.MPException;
+import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.JsonUtil;
 
 public class ErrorActivity extends AppCompatActivity {
 
-    private MPException mMPException;
+    private MercadoPagoError mMercadoPagoError;
     private TextView mErrorMessageTextView;
     private View mRetryView;
     private View mExit;
@@ -45,11 +45,11 @@ public class ErrorActivity extends AppCompatActivity {
     }
 
     private boolean validParameters() {
-        return mMPException != null;
+        return mMercadoPagoError != null;
     }
 
     private void getActivityParameters() {
-        this.mMPException = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("mpException"), MPException.class);
+        this.mMercadoPagoError = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("mpException"), MercadoPagoError.class);
     }
 
     private void initializeControls() {
@@ -66,15 +66,15 @@ public class ErrorActivity extends AppCompatActivity {
 
     private void fillData() {
         String message;
-        if (mMPException.getApiException() != null) {
-            message = ApiUtil.getApiExceptionMessage(this, mMPException.getApiException());
+        if (mMercadoPagoError.getApiException() != null) {
+            message = ApiUtil.getApiExceptionMessage(this, mMercadoPagoError.getApiException());
         } else {
-            message = mMPException.getMessage();
+            message = mMercadoPagoError.getMessage();
         }
 
         this.mErrorMessageTextView.setText(message);
 
-        if (mMPException.isRecoverable()) {
+        if (mMercadoPagoError.isRecoverable()) {
             mRetryView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -92,7 +92,7 @@ public class ErrorActivity extends AppCompatActivity {
     public void onBackPressed() {
 
         Intent intent = new Intent();
-        intent.putExtra("mpException", JsonUtil.getInstance().toJson(mMPException));
+        intent.putExtra("mpException", JsonUtil.getInstance().toJson(mMercadoPagoError));
         setResult(RESULT_CANCELED, intent);
         finish();
     }

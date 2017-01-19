@@ -13,7 +13,7 @@ import com.mercadopago.R;
 import com.mercadopago.callbacks.OnChangePaymentMethodCallback;
 import com.mercadopago.constants.Sites;
 import com.mercadopago.customviews.MPTextView;
-import com.mercadopago.model.DecorationPreference;
+import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentMethodSearchItem;
 import com.mercadopago.model.Site;

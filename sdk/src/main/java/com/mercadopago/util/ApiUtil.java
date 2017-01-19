@@ -8,7 +8,7 @@ import android.net.NetworkInfo;
 import android.widget.Toast;
 
 import com.mercadopago.R;
-import com.mercadopago.exceptions.MPException;
+import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.Cause;
 
@@ -65,16 +65,16 @@ public class ApiUtil {
     }
 
     public static void showApiExceptionError(Activity activity, ApiException apiException) {
-        MPException mpException;
+        MercadoPagoError mercadoPagoError;
         String errorMessage;
 
         if (!ApiUtil.checkConnection(activity)) {
             errorMessage = activity.getString(R.string.mpsdk_no_connection_message);
-            mpException = new MPException(errorMessage, true);
+            mercadoPagoError = new MercadoPagoError(errorMessage, true);
         } else {
-            mpException = new MPException(apiException);
+            mercadoPagoError = new MercadoPagoError(apiException);
         }
-        ErrorUtil.startErrorActivity(activity, mpException);
+        ErrorUtil.startErrorActivity(activity, mercadoPagoError);
     }
 
     public static boolean checkConnection(Context context) {

@@ -3,7 +3,7 @@ package com.mercadopago.uicontrollers.reviewandconfirm;
 import android.content.Context;
 
 import com.mercadopago.callbacks.OnChangePaymentMethodCallback;
-import com.mercadopago.model.DecorationPreference;
+import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.model.Site;
 import com.mercadopago.uicontrollers.payercosts.PayerCostColumn;
 import com.mercadopago.uicontrollers.payercosts.PayerCostViewController;

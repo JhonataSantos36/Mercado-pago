@@ -10,7 +10,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.mercadopago.callbacks.FailureRecovery;
-import com.mercadopago.model.DecorationPreference;
+import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.util.JsonUtil;
 
 public abstract class MercadoPagoActivity extends AppCompatActivity {

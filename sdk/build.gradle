@@ -7,6 +7,24 @@ version = "2.3.8"
 group = "com.mercadopago"
 archivesBaseName = "sdk"
 
+task jacocoFullTestReport(type: JacocoReport, dependsOn: ['jacocoTestReport', 'createDevDebugCoverageReport']) {
+
+    reports {
+        xml.enabled = true
+        html.enabled = true
+    }
+
+    def fileFilter = ['**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*', '**/*Test*.*', 'android/**/*.*']
+    def debugTree = fileTree(dir: "${buildDir}/intermediates/classes/debug", excludes: fileFilter)
+    def mainSrc = "${project.projectDir}/src/main/java"
+
+    sourceDirectories = files([mainSrc])
+    classDirectories = files([debugTree])
+    executionData = fileTree(dir: "$buildDir", includes: [
+            "jacoco/testDevDebugUnitTest.exec", "outputs/code-coverage/connected/flavors/DEV/*coverage.ec"
+    ])
+}
+
 android {
     publishNonDefault true
     compileSdkVersion 25
@@ -35,7 +53,7 @@ android {
     }
     buildTypes {
         debug {
-//            testCoverageEnabled true
+            testCoverageEnabled true
             multiDexEnabled true
             versionNameSuffix " Debug"
             debuggable true
@@ -82,7 +100,8 @@ dependencies {
         exclude group: 'com.android.support', module: 'design'
         exclude group: 'com.android.support', module: 'recyclerview-v7'
     }
-    testCompile('junit:junit:4.12')
+    testCompile 'junit:junit:4.12'
+    testCompile 'org.mockito:mockito-core:2.+'
 
     compile 'com.android.support:cardview-v7:25.0.1'
     compile 'com.android.support:recyclerview-v7:25.0.1'

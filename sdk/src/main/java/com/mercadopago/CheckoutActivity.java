@@ -33,11 +33,11 @@ import com.mercadopago.core.MerchantServer;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.exceptions.CheckoutPreferenceException;
 import com.mercadopago.exceptions.ExceptionHandler;
-import com.mercadopago.exceptions.MPException;
+import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.Card;
 import com.mercadopago.model.CardInfo;
-import com.mercadopago.model.CheckoutPreference;
+import com.mercadopago.preferences.CheckoutPreference;
 import com.mercadopago.model.Customer;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.Payer;
@@ -47,7 +47,7 @@ import com.mercadopago.model.PaymentIntent;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentMethodSearch;
 import com.mercadopago.model.PaymentMethodSearchItem;
-import com.mercadopago.model.PaymentPreference;
+import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.model.PaymentRecovery;
 import com.mercadopago.model.PaymentResultAction;
 import com.mercadopago.model.Site;
@@ -844,8 +844,8 @@ public class CheckoutActivity extends MercadoPagoActivity implements TimerObserv
                 });
             } else if (apiException.getStatus() == ApiUtil.StatusCodes.BAD_REQUEST) {
 
-                MPException mpException = new MPException(apiException);
-                ErrorUtil.startErrorActivity(this, mpException);
+                MercadoPagoError mercadoPagoError = new MercadoPagoError(apiException);
+                ErrorUtil.startErrorActivity(this, mercadoPagoError);
             } else {
                 ApiUtil.showApiExceptionError(this, apiException);
             }

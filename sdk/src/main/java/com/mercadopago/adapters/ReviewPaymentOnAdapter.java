@@ -6,7 +6,7 @@ import android.view.ViewGroup;
 
 import com.mercadopago.callbacks.OnChangePaymentMethodCallback;
 import com.mercadopago.model.CardInfo;
-import com.mercadopago.model.DecorationPreference;
+import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.uicontrollers.reviewandconfirm.ReviewPaymentViewFactory;

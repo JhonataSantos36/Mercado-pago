@@ -11,7 +11,7 @@ import com.mercadopago.model.Card;
 import com.mercadopago.model.CardInfo;
 import com.mercadopago.model.CardToken;
 import com.mercadopago.model.PaymentMethod;
-import com.mercadopago.model.PaymentPreference;
+import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.model.SavedCardToken;
 import com.mercadopago.model.SecurityCode;
 import com.mercadopago.model.SecurityCodeIntent;

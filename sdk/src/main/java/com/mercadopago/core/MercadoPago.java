@@ -33,8 +33,8 @@ import com.mercadopago.model.BankDeal;
 import com.mercadopago.model.Card;
 import com.mercadopago.model.CardInfo;
 import com.mercadopago.model.CardToken;
-import com.mercadopago.model.CheckoutPreference;
-import com.mercadopago.model.DecorationPreference;
+import com.mercadopago.preferences.CheckoutPreference;
+import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.model.IdentificationType;
 import com.mercadopago.model.Installment;
 import com.mercadopago.model.Issuer;
@@ -45,7 +45,7 @@ import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentIntent;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentMethodSearch;
-import com.mercadopago.model.PaymentPreference;
+import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.model.PaymentRecovery;
 import com.mercadopago.model.PaymentResult;
 import com.mercadopago.model.PaymentType;
@@ -70,6 +70,7 @@ import java.util.Locale;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+@Deprecated
 public class MercadoPago {
 
     public static final String KEY_TYPE_PUBLIC = "public_key";
