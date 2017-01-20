@@ -28,6 +28,7 @@ import com.mercadopago.model.PaymentType;
 import com.mercadopago.mptracker.MPTracker;
 import com.mercadopago.observers.TimerObserver;
 import com.mercadopago.presenters.PaymentTypesPresenter;
+import com.mercadopago.uicontrollers.FontCache;
 import com.mercadopago.uicontrollers.card.CardRepresentationModes;
 import com.mercadopago.uicontrollers.card.FrontCardView;
 import com.mercadopago.util.ApiUtil;
@@ -148,7 +149,7 @@ public class PaymentTypesActivity extends AppCompatActivity implements PaymentTy
     }
 
     private void showTimer() {
-        if (CheckoutTimer.getInstance().isTimerEnabled()){
+        if (CheckoutTimer.getInstance().isTimerEnabled()) {
             CheckoutTimer.getInstance().addObserver(this);
             mTimerTextView.setVisibility(View.VISIBLE);
             mTimerTextView.setText(CheckoutTimer.getInstance().getCurrentTime());
@@ -240,11 +241,15 @@ public class PaymentTypesActivity extends AppCompatActivity implements PaymentTy
     private void loadLowResViews() {
         loadToolbarArrow(mLowResToolbar);
         mLowResTitleToolbar.setText(getString(R.string.mpsdk_payment_types_title));
+        if (FontCache.hasTypeface(FontCache.CUSTOM_FONT)) {
+            mLowResTitleToolbar.setTypeface(FontCache.getTypeface(FontCache.CUSTOM_FONT));
+        }
     }
 
     private void loadNormalViews() {
         loadToolbarArrow(mNormalToolbar);
         mNormalToolbar.setTitle(getString(R.string.mpsdk_payment_types_title));
+        setCustomFontNormal();
         mFrontCardView = new FrontCardView(mActivity, CardRepresentationModes.SHOW_FULL_FRONT_ONLY);
         mFrontCardView.setSize(CardRepresentationModes.MEDIUM_SIZE);
         mFrontCardView.setPaymentMethod(mPresenter.getPaymentMethod());
@@ -256,6 +261,13 @@ public class PaymentTypesActivity extends AppCompatActivity implements PaymentTy
         mFrontCardView.initializeControls();
         mFrontCardView.draw();
         mFrontCardView.enableEditingCardNumber();
+    }
+
+    private void setCustomFontNormal() {
+        if (FontCache.hasTypeface(FontCache.CUSTOM_FONT)) {
+            mCollapsingToolbar.setCollapsedTitleTypeface(FontCache.getTypeface(FontCache.CUSTOM_FONT));
+            mCollapsingToolbar.setExpandedTitleTypeface(FontCache.getTypeface(FontCache.CUSTOM_FONT));
+        }
     }
 
     private void loadToolbarArrow(Toolbar toolbar) {
@@ -292,7 +304,7 @@ public class PaymentTypesActivity extends AppCompatActivity implements PaymentTy
     private void decorateLowRes() {
         ColorsUtil.decorateLowResToolbar(mLowResToolbar, mLowResTitleToolbar, mDecorationPreference,
                 getSupportActionBar(), this);
-        if(mTimerTextView != null) {
+        if (mTimerTextView != null) {
             ColorsUtil.decorateTextView(mDecorationPreference, mTimerTextView, this);
         }
     }
@@ -300,7 +312,7 @@ public class PaymentTypesActivity extends AppCompatActivity implements PaymentTy
     private void decorateNormal() {
         ColorsUtil.decorateNormalToolbar(mNormalToolbar, mDecorationPreference, mAppBar,
                 mCollapsingToolbar, getSupportActionBar(), this);
-        if(mTimerTextView != null) {
+        if (mTimerTextView != null) {
             ColorsUtil.decorateTextView(mDecorationPreference, mTimerTextView, this);
         }
         mFrontCardView.decorateCardBorder(mDecorationPreference.getLighterColor());

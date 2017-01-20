@@ -62,7 +62,7 @@
                     android:text="@string/mpsdk_card_identification_label"
                     android:lineSpacingExtra="5dp"
                     android:textSize="10dp"
-                    app:fontStyle="regular"/>
+                    app:allowCustomFont="false"/>
 
                 <FrameLayout
                     android:id="@+id/mpsdkIdNumberClickableZone"
@@ -82,7 +82,8 @@
                         android:textSize="20dp"
                         android:visibility="visible"
                         android:text="•• ••• •••"
-                        app:fontStyle="roboto_regular"/>
+                        app:allowCustomFont="false"
+                        app:fontStyle="mono_regular"/>
 
                     <com.mercadopago.customviews.MPTextView
                         android:id="@+id/mpsdkIdNumberView"
@@ -91,6 +92,7 @@
                         android:layout_gravity="start"
                         android:textColor="@color/mpsdk_base_text"
                         android:textSize="18dp"
+                        app:allowCustomFont="false"
                         android:visibility="invisible"/>
 
                 </FrameLayout>

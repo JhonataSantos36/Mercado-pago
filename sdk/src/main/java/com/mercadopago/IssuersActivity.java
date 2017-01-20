@@ -29,6 +29,7 @@ import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.mptracker.MPTracker;
 import com.mercadopago.observers.TimerObserver;
 import com.mercadopago.presenters.IssuersPresenter;
+import com.mercadopago.uicontrollers.FontCache;
 import com.mercadopago.uicontrollers.card.CardRepresentationModes;
 import com.mercadopago.uicontrollers.card.FrontCardView;
 import com.mercadopago.util.ApiUtil;
@@ -249,11 +250,15 @@ public class IssuersActivity extends AppCompatActivity implements IssuersActivit
     private void loadLowResViews() {
         loadToolbarArrow(mLowResToolbar);
         mLowResTitleToolbar.setText(getString(R.string.mpsdk_card_issuers_title));
+        if (FontCache.hasTypeface(FontCache.CUSTOM_FONT)) {
+            mLowResTitleToolbar.setTypeface(FontCache.getTypeface(FontCache.CUSTOM_FONT));
+        }
     }
 
     private void loadNormalViews() {
         loadToolbarArrow(mNormalToolbar);
         mNormalToolbar.setTitle(getString(R.string.mpsdk_card_issuers_title));
+        setCustomFontNormal();
         mFrontCardView = new FrontCardView(mActivity, CardRepresentationModes.SHOW_FULL_FRONT_ONLY);
         mFrontCardView.setSize(CardRepresentationModes.MEDIUM_SIZE);
         mFrontCardView.setPaymentMethod(mPresenter.getPaymentMethod());
@@ -281,6 +286,13 @@ public class IssuersActivity extends AppCompatActivity implements IssuersActivit
                     finish();
                 }
             });
+        }
+    }
+
+    private void setCustomFontNormal() {
+        if (FontCache.hasTypeface(FontCache.CUSTOM_FONT)) {
+            mCollapsingToolbar.setCollapsedTitleTypeface(FontCache.getTypeface(FontCache.CUSTOM_FONT));
+            mCollapsingToolbar.setExpandedTitleTypeface(FontCache.getTypeface(FontCache.CUSTOM_FONT));
         }
     }
 
@@ -321,6 +333,7 @@ public class IssuersActivity extends AppCompatActivity implements IssuersActivit
             mLowResToolbar.setVisibility(View.VISIBLE);
         } else {
             mNormalToolbar.setTitle(getString(R.string.mpsdk_card_issuers_title));
+            setCustomFontNormal();
         }
     }
 

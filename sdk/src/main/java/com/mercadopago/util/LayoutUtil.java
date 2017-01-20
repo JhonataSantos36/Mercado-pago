@@ -60,4 +60,5 @@ public class LayoutUtil {
         params.width = (int) context.getResources().getDimension(width);
         viewGroup.setLayoutParams(params);
     }
+
 }

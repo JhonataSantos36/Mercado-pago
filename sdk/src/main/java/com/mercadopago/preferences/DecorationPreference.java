@@ -2,10 +2,12 @@ package com.mercadopago.preferences;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.support.annotation.ColorInt;
 import android.support.v4.content.ContextCompat;
 
 import com.mercadopago.R;
+import com.mercadopago.uicontrollers.FontCache;
 import com.mercadopago.util.ColorsUtil;
 
 /**
@@ -25,6 +27,14 @@ public class DecorationPreference {
     public void setBaseColor(String hexColor) {
         this.baseColor = Color.parseColor(hexColor);
         this.lighterColor = ColorsUtil.lighter(baseColor);
+    }
+
+    public void setCustomFont(Context context, String fontPath) {
+        Typeface typeFace = null;
+        if (!FontCache.hasTypeface(FontCache.CUSTOM_FONT)) {
+            typeFace = Typeface.createFromAsset(context.getAssets(), fontPath);
+            FontCache.setTypeface(FontCache.CUSTOM_FONT, typeFace);
+        }
     }
 
     public boolean hasColors() {
@@ -50,4 +60,5 @@ public class DecorationPreference {
     public int getDarkFontColor(Context context) {
         return ContextCompat.getColor(context, R.color.mpsdk_dark_font_color);
     }
+
 }

@@ -9,6 +9,9 @@ import android.util.AttributeSet;
 import android.widget.EditText;
 
 import com.mercadopago.R;
+import com.mercadopago.uicontrollers.FontCache;
+
+import java.lang.reflect.Type;
 
 public class MPEditText extends EditText {
 
@@ -22,9 +25,7 @@ public class MPEditText extends EditText {
     }
 
     public MPEditText(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        init();
-        setErrorColor(context, attrs, 0);
+        this(context, attrs, android.R.attr.editTextStyle);
     }
 
     public MPEditText(Context context) {
@@ -37,7 +38,7 @@ public class MPEditText extends EditText {
             if (mTypeName == null) {
                 mTypeName = "fonts/Roboto-Regular.ttf";
             }
-            Typeface tf = Typeface.createFromAsset(getContext().getAssets(), mTypeName);
+            Typeface tf = FontCache.createTypeface(mTypeName, getContext());
             setTypeface(tf);
         }
 
@@ -52,7 +53,7 @@ public class MPEditText extends EditText {
     }
 
     public void toggleLineColorOnError(boolean error) {
-        if (mErrorColor == 0 ) return;
+        if (mErrorColor == 0) return;
         if (error) {
             getBackground().setColorFilter(mErrorColor, PorterDuff.Mode.SRC_ATOP);
         } else {

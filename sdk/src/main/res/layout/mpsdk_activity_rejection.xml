@@ -42,7 +42,8 @@
                         android:textSize="17dp"
                         android:background="@drawable/mpsdk_title_toolbar"
                         android:visibility="gone"
-                        app:fontStyle="roboto_regular"
+                        app:fontStyle="mono_regular"
+                        app:allowCustomFont="false"
                         style="@style/mpsdk_title_text"/>
 
                     <ImageView
@@ -60,7 +61,6 @@
                         android:layout_height="wrap_content"
                         android:gravity="bottom|center"
                         android:textSize="16dp"
-                        app:fontStyle="regular"
                         android:textColor="@color/mpsdk_white"
                         android:text="@string/mpsdk_rejection_title" />
 
@@ -77,7 +77,6 @@
                         android:gravity="bottom|center"
                         android:textColor="@color/mpsdk_white"
                         android:textSize="22dp"
-                        app:fontStyle="regular"
                         android:text="@string/mpsdk_text_select_other_rejection"
                         tools:text="Algún dato de tu Mastercard\nes incorrecto" />
                 </LinearLayout>
@@ -97,7 +96,6 @@
                         android:layout_marginRight="10dp"
                         android:gravity="bottom|center"
                         android:textSize="22dp"
-                        app:fontStyle="regular"
                         android:text="@string/mpsdk_what_can_do" />
 
                     <com.mercadopago.customviews.MPTextView
@@ -111,7 +109,6 @@
                         android:layout_marginStart="25dp"
                         android:gravity="bottom|center"
                         android:textSize="18dp"
-                        app:fontStyle="regular"
                         android:text="Usa otra tarjeta u otro medio de pago." />
 
                     <FrameLayout
@@ -133,7 +130,6 @@
                             android:layout_gravity="center"
                             android:textAllCaps="false"
                             android:textSize="16dp"
-                            app:fontStyle="regular"
                             android:textColor="@color/mpsdk_white_background"
                             android:text="@string/mpsdk_text_pay_with_other_method"/>
                     </FrameLayout>
@@ -150,7 +146,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/mpsdk_text_continue"
-                        app:fontStyle="regular"
                         android:textColor="@color/mpsdk_background_blue" />
                 </LinearLayout>
             </LinearLayout>

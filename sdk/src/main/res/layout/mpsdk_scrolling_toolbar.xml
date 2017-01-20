@@ -40,7 +40,6 @@
             android:id="@+id/mpsdkTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:fontStyle="regular"
             style="@style/mpsdk_title_text"/>
 
         <com.mercadopago.customviews.MPTextView
@@ -54,7 +53,8 @@
             android:textSize="17dp"
             android:background="@drawable/mpsdk_title_toolbar"
             android:visibility="gone"
-            app:fontStyle="roboto_regular"
+            app:fontStyle="mono_regular"
+            app:allowCustomFont="false"
             style="@style/mpsdk_title_text"/>
 
     </android.support.v7.widget.Toolbar>

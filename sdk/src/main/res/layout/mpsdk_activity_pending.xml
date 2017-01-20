@@ -39,7 +39,8 @@
                         android:textSize="17dp"
                         android:background="@drawable/mpsdk_title_toolbar"
                         android:visibility="gone"
-                        app:fontStyle="roboto_regular"
+                        app:fontStyle="mono_regular"
+                        app:allowCustomFont="false"
                         style="@style/mpsdk_title_text"/>
 
                     <ImageView
@@ -65,7 +66,6 @@
                         android:gravity="bottom|center"
                         android:textSize="22dp"
                         android:textColor="@color/mpsdk_white"
-                        app:fontStyle="regular"
                         android:text="@string/mpsdk_title_pending" />
                 </LinearLayout>
 
@@ -82,7 +82,6 @@
                     android:layout_marginLeft="25dp"
                     android:gravity="bottom|center"
                     android:textSize="22dp"
-                    app:fontStyle="regular"
                     android:text="@string/mpsdk_what_can_do" />
 
                 <com.mercadopago.customviews.MPTextView
@@ -97,7 +96,6 @@
                     android:layout_marginLeft="25dp"
                     android:gravity="bottom|center"
                     android:textSize="20dp"
-                    app:fontStyle="regular"
                     android:text="@string/mpsdk_subtitle_pending_contingency" />
 
                 <FrameLayout
@@ -117,7 +115,6 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:textSize="18dp"
-                        app:fontStyle="regular"
                         android:textColor="@color/mpsdk_white_background"
                         android:text="@string/mpsdk_text_pay_with_other_method"/>
                 </FrameLayout>
@@ -132,7 +129,6 @@
                     android:paddingRight="40dp"
                     android:paddingTop="20dp"
                     android:paddingBottom="20dp"
-                    app:fontStyle="regular"
                     android:text="@string/mpsdk_text_continue"
                     android:textColor="@color/mpsdk_background_blue"
                     android:textSize="16dp" />

@@ -36,7 +36,6 @@
             android:paddingStart="25dp"
             android:paddingEnd="25dp"
             android:paddingRight="25dp"
-            app:fontStyle="regular"
             android:textColor="@color/mpsdk_review_payment_text"
             android:textSize="18dp"
             tools:text="nombre del producto asdasdasdasdasds"/>
@@ -53,7 +52,6 @@
             android:paddingEnd="25dp"
             android:paddingRight="25dp"
             android:visibility="visible"
-            app:fontStyle="regular"
             android:textSize="14dp"
             android:textColor="@color/mpsdk_review_description_text"
             tools:text="descripcion del producto"/>
@@ -68,7 +66,6 @@
             android:paddingStart="25dp"
             android:paddingEnd="25dp"
             android:paddingRight="25dp"
-            app:fontStyle="regular"
             android:textSize="18dp"
             android:textColor="@color/mpsdk_review_description_text"
             tools:text="Cantidad"/>
@@ -83,7 +80,6 @@
             android:paddingStart="25dp"
             android:paddingEnd="25dp"
             android:paddingRight="25dp"
-            app:fontStyle="regular"
             android:textSize="18dp"
             android:textColor="@color/mpsdk_review_description_text"
             tools:text="Precio"/>

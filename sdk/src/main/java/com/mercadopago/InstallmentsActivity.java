@@ -31,6 +31,7 @@ import com.mercadopago.model.Site;
 import com.mercadopago.mptracker.MPTracker;
 import com.mercadopago.observers.TimerObserver;
 import com.mercadopago.presenters.InstallmentsPresenter;
+import com.mercadopago.uicontrollers.FontCache;
 import com.mercadopago.uicontrollers.card.CardRepresentationModes;
 import com.mercadopago.uicontrollers.card.FrontCardView;
 import com.mercadopago.util.ApiUtil;
@@ -225,12 +226,15 @@ public class InstallmentsActivity extends AppCompatActivity implements Installme
     public void loadLowResViews() {
         loadToolbarArrow(mLowResToolbar);
         mLowResTitleToolbar.setText(getString(R.string.mpsdk_card_installments_title));
+        if (FontCache.hasTypeface(FontCache.CUSTOM_FONT)) {
+            mLowResTitleToolbar.setTypeface(FontCache.getTypeface(FontCache.CUSTOM_FONT));
+        }
     }
 
     public void loadNormalViews() {
         loadToolbarArrow(mNormalToolbar);
         mNormalToolbar.setTitle(getString(R.string.mpsdk_card_installments_title));
-
+        setCustomFontNormal();
         mFrontCardView = new FrontCardView(mActivity, CardRepresentationModes.SHOW_FULL_FRONT_ONLY);
         mFrontCardView.setSize(CardRepresentationModes.MEDIUM_SIZE);
         mFrontCardView.setPaymentMethod(mPresenter.getPaymentMethod());
@@ -275,6 +279,14 @@ public class InstallmentsActivity extends AppCompatActivity implements Installme
             mLowResToolbar.setVisibility(View.VISIBLE);
         } else {
             mNormalToolbar.setTitle(getString(R.string.mpsdk_card_installments_title));
+            setCustomFontNormal();
+        }
+    }
+
+    private void setCustomFontNormal() {
+        if (FontCache.hasTypeface(FontCache.CUSTOM_FONT)) {
+            mCollapsingToolbar.setCollapsedTitleTypeface(FontCache.getTypeface(FontCache.CUSTOM_FONT));
+            mCollapsingToolbar.setExpandedTitleTypeface(FontCache.getTypeface(FontCache.CUSTOM_FONT));
         }
     }
 

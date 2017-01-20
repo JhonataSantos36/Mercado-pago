@@ -62,7 +62,7 @@ public class ExamplesUtils {
     // * Payment item
     public static final String DUMMY_ITEM_ID = "id1";
     public static final Integer DUMMY_ITEM_QUANTITY = 1;
-    public static final BigDecimal DUMMY_ITEM_UNIT_PRICE = new BigDecimal("100");
+    public static final BigDecimal DUMMY_ITEM_UNIT_PRICE = new BigDecimal("1000");
 
     public static PaymentMethod getDummyPaymentMethod() {
         PaymentMethod paymentMethod = new PaymentMethod();

@@ -44,7 +44,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="25dp"
             android:layout_marginLeft="25dp"
-            app:fontStyle="regular"
             style="@style/mpsdk_title_text"/>
 
     </android.support.v7.widget.Toolbar>

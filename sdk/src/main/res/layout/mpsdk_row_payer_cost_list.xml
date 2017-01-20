@@ -27,8 +27,7 @@
             android:layout_gravity="start|center_vertical"
             android:textColor="@color/mpsdk_base_text"
             android:textSize="24dp"
-            tools:text="3x $ 173"
-            app:fontStyle="regular" />
+            tools:text="3x $ 173"/>
 
         <FrameLayout
             android:layout_width="0dp"
@@ -43,8 +42,7 @@
                 android:textColor="@color/mpsdk_color_payer_costs_no_rate"
                 android:text="@string/mpsdk_zero_rate"
                 android:textSize="16dp"
-                android:visibility="gone"
-                app:fontStyle="regular" />
+                android:visibility="gone"/>
             <com.mercadopago.customviews.MPTextView
                 android:id="@+id/mpsdkInstallmentsWithRate"
                 android:layout_width="wrap_content"
@@ -53,8 +51,7 @@
                 android:textColor="@color/mpsdk_color_payer_costs"
                 android:textSize="16dp"
                 android:visibility="gone"
-                tools:text="1040"
-                app:fontStyle="regular" />
+                tools:text="1040"/>
         </FrameLayout>
 
     </LinearLayout>

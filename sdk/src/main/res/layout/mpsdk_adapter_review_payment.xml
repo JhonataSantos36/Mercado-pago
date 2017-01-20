@@ -39,7 +39,6 @@
             android:paddingStart="25dp"
             android:paddingEnd="25dp"
             android:paddingRight="25dp"
-            app:fontStyle="regular"
             android:textColor="@color/mpsdk_review_payment_text"
             android:textSize="24dp"
             tools:text="Pagaras con Rapipago"/>
@@ -81,7 +80,7 @@
                 android:layout_centerVertical="true"
                 android:layout_alignTop="@id/mpsdkIconTime"
                 android:layout_toRightOf="@+id/mpsdkIconTime"
-                app:fontStyle="default_light"/>
+                app:fontStyle="light"/>
         </RelativeLayout>
 
         <FrameLayout
@@ -98,7 +97,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                app:fontStyle="regular"
                 android:textSize="18dp"
                 android:textColor="@color/mpsdk_background_blue"
                 android:text="@string/mpsdk_change_payment" />

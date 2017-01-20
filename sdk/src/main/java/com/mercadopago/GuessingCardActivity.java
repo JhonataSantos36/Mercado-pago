@@ -1322,7 +1322,7 @@ public class GuessingCardActivity extends AppCompatActivity implements GuessingC
             flipCardToBack();
         } else if (showingIdentification()) {
             if (cardViewsActive()) {
-                MPAnimationUtils.transitionCardDissappear(this, mCardView, mIdentificationCardView);
+                MPAnimationUtils.transitionCardDisappear(this, mCardView, mIdentificationCardView);
             }
             mCardSideState = CardView.CARD_SIDE_BACK;
             showBankDeals();
@@ -1335,7 +1335,7 @@ public class GuessingCardActivity extends AppCompatActivity implements GuessingC
                 flipCardToFrontFromBack();
             } else if (showingIdentification()) {
                 if (cardViewsActive()) {
-                    MPAnimationUtils.transitionCardDissappear(this, mCardView, mIdentificationCardView);
+                    MPAnimationUtils.transitionCardDisappear(this, mCardView, mIdentificationCardView);
                 }
                 mCardSideState = CardView.CARD_SIDE_FRONT;
             }

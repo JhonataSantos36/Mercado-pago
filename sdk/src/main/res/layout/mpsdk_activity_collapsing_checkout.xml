@@ -74,7 +74,6 @@
                         android:layout_gravity="center_horizontal"
                         android:textColor="@color/mpsdk_color_payer_costs"
                         android:textSize="12dp"
-                        app:fontStyle="regular"
                         android:text="@string/mpsdk_text_terms_and_conditions_start"/>
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -87,7 +86,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="12dp"
-                            app:fontStyle="regular"
                             android:textColor="@color/mpsdk_background_blue"
                             android:text="@string/mpsdk_text_terms_and_conditions_linked"/>
                         <com.mercadopago.customviews.MPTextView
@@ -96,7 +94,6 @@
                             android:layout_marginLeft="3dp"
                             android:layout_marginStart="3dp"
                             android:textSize="12dp"
-                            app:fontStyle="regular"
                             android:textColor="@color/mpsdk_color_payer_costs"
                             android:text="@string/mpsdk_text_terms_and_conditions_end"/>
 
@@ -125,7 +122,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        app:fontStyle="regular"
                         android:textSize="18dp"
                         android:textColor="@color/mpsdk_white_background"
                         android:text="@string/mpsdk_confirm"/>
@@ -144,7 +140,6 @@
                         android:layout_gravity="center"
                         android:text="@string/mpsdk_cancel_payment"
                         android:textSize="16dp"
-                        app:fontStyle="regular"
                         android:textColor="@color/mpsdk_background_blue" />
                 </FrameLayout>
 

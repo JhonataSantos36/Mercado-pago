@@ -46,7 +46,6 @@
                 android:layout_marginBottom="50dp"
                 android:layout_centerHorizontal="true"
                 android:layout_below="@+id/mpsdkImageCashSign"
-                app:fontStyle="regular"
                 tools:text="Listo, solo te falta pagar $ 2579.00 en un Provincia Pagos"/>
         </LinearLayout>
 
@@ -64,8 +63,7 @@
                 android:layout_marginTop="35dp"
                 android:layout_marginBottom="35dp"
                 android:textSize="23dp"
-                android:text="@string/mpsdk_pay_with_this_data"
-                app:fontStyle="regular"/>
+                android:text="@string/mpsdk_pay_with_this_data"/>
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -90,8 +88,7 @@
                 android:paddingRight="15dp"
                 android:paddingLeft="15dp"
                 android:textSize="14dp"
-                tools:text="Info primaria"
-                app:fontStyle="regular" />
+                tools:text="Info primaria"/>
 
             <com.mercadopago.customviews.MPTextView
                 android:id="@+id/mpsdkPrimaryInfoInstructions"
@@ -102,8 +99,7 @@
                 android:layout_marginBottom="15dp"
                 android:textSize="12dp"
                 android:visibility="gone"
-                tools:text="Info primaria"
-                app:fontStyle="regular" />
+                tools:text="Info primaria"/>
 
             <View
                 android:id="@+id/mpsdkPrimaryInfoSeparator"
@@ -123,8 +119,7 @@
                 android:layout_marginBottom="25dp"
                 android:textSize="14dp"
                 android:visibility="gone"
-                tools:text="Info primaria"
-                app:fontStyle="regular" />
+                tools:text="Info primaria"/>
 
             <LinearLayout
                 android:id="@+id/mpsdkReferencesLayout"
@@ -143,7 +138,6 @@
                 android:layout_gravity="center_horizontal"
                 android:gravity="center"
                 tools:text="Info terciaria"
-                app:fontStyle="regular"
                 android:layout_marginBottom="25dp" />
 
             <RelativeLayout
@@ -175,8 +169,7 @@
                     android:textSize="12dp"
                     android:layout_centerVertical="true"
                     android:layout_alignTop="@id/mpsdkAccreditationImage"
-                    android:layout_toRightOf="@+id/mpsdkAccreditationImage"
-                    app:fontStyle="regular"/>
+                    android:layout_toRightOf="@+id/mpsdkAccreditationImage"/>
             </RelativeLayout>
 
             <com.mercadopago.customviews.MPTextView
@@ -190,8 +183,7 @@
                 android:paddingRight="10dp"
                 android:textColor="@color/mpsdk_color_link"
                 android:visibility="gone"
-                tools:text="Ir a banca en línea"
-                app:fontStyle="regular"/>
+                tools:text="Ir a banca en línea"/>
 
             <View
                 android:layout_width="match_parent"
@@ -211,8 +203,7 @@
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
             android:textSize="12dp"
-            tools:text="Info secundaria"
-            app:fontStyle="regular"/>
+            tools:text="Info secundaria"/>
 
         <View
             android:layout_width="match_parent"
@@ -231,8 +222,7 @@
             android:layout_height="wrap_content"
             android:text="@string/mpsdk_text_continue"
             android:textColor="@color/mpsdk_color_link"
-            android:textSize="14dp"
-            app:fontStyle="regular"/>
+            android:textSize="14dp"/>
 
     </LinearLayout>
 </ScrollView>

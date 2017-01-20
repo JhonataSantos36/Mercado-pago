@@ -17,7 +17,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:gravity="center_vertical"
-        app:fontStyle="regular"
         style="@style/mpsdk_title_text"/>
 
     <com.mercadopago.customviews.MPTextView
@@ -30,7 +29,6 @@
         android:paddingTop="10dp"
         android:textSize="16dp"
         android:visibility="gone"
-        app:fontStyle="regular"
         style="@style/mpsdk_title_text"/>
 
     <com.mercadopago.customviews.MPTextView
@@ -45,7 +43,8 @@
         android:textSize="17dp"
         android:background="@drawable/mpsdk_title_toolbar"
         android:visibility="gone"
-        app:fontStyle="roboto_regular"
+        app:fontStyle="mono_regular"
+        app:allowCustomFont="false"
         style="@style/mpsdk_title_text"/>
 
 </android.support.v7.widget.Toolbar>

@@ -27,7 +27,8 @@
             android:textSize="17dp"
             android:background="@drawable/mpsdk_title_toolbar"
             android:visibility="gone"
-            app:fontStyle="roboto_regular"
+            app:fontStyle="mono_regular"
+            app:allowCustomFont="false"
             style="@style/mpsdk_title_text"/>
 
         <FrameLayout
@@ -63,7 +64,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:lines="1"
-                app:fontStyle="regular"
                 android:text="@string/mpsdk_security_code"
                 android:textColor="@color/mpsdk_color_new_card_text"
                 android:textSize="14dp" />
@@ -76,7 +76,6 @@
                 android:imeOptions="actionNext"
                 android:inputType="number"
                 android:maxLength="4"
-                app:fontStyle="regular"
                 android:singleLine="true"
                 android:textColor="@color/abc_search_url_text_selected"
                 android:textSize="19dp"
@@ -96,7 +95,6 @@
             android:layout_marginTop="5dp"
             android:textSize="16dp"
             android:textColor="@color/mpsdk_color_red_error"
-            app:fontStyle="regular"
             android:visibility="invisible"
             tools:text="Revisa este dato"/>
         <FrameLayout
@@ -111,7 +109,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                app:fontStyle="regular"
                 android:textSize="16dp"
                 android:textColor="@color/mpsdk_white_background"
                 android:text="@string/mpsdk_input_button_next"/>

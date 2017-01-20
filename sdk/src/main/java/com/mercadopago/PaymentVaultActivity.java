@@ -40,6 +40,7 @@ import com.mercadopago.model.Token;
 import com.mercadopago.mptracker.MPTracker;
 import com.mercadopago.observers.TimerObserver;
 import com.mercadopago.presenters.PaymentVaultPresenter;
+import com.mercadopago.uicontrollers.FontCache;
 import com.mercadopago.uicontrollers.paymentmethodsearch.PaymentMethodSearchCustomOption;
 import com.mercadopago.uicontrollers.paymentmethodsearch.PaymentMethodSearchOption;
 import com.mercadopago.uicontrollers.paymentmethodsearch.PaymentMethodSearchViewController;
@@ -204,6 +205,10 @@ public class PaymentVaultActivity extends AppCompatActivity implements PaymentVa
                     mTimerTextView.setTextColor(mDecorationPreference.getDarkFontColor(this));
                 }
             }
+        }
+        if (FontCache.hasTypeface(FontCache.CUSTOM_FONT)) {
+            mAppBarLayout.setCollapsedTitleTypeface(FontCache.getTypeface(FontCache.CUSTOM_FONT));
+            mAppBarLayout.setExpandedTitleTypeface(FontCache.getTypeface(FontCache.CUSTOM_FONT));
         }
     }
 
