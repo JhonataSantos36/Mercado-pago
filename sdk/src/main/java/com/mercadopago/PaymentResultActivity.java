@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.mercadopago.core.MercadoPago;
+import com.mercadopago.core.MercadoPagoContext;
 import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.util.ErrorUtil;
@@ -37,7 +38,8 @@ public class PaymentResultActivity extends Activity {
     }
 
     protected void getActivityParameters() {
-        mMerchantPublicKey = getIntent().getStringExtra("merchantPublicKey");
+        mMerchantPublicKey = MercadoPagoContext.getInstance().getPublicKey();
+
         mCongratsDisplay = getIntent().getIntExtra("congratsDisplay", -1);
         mPayment = JsonUtil.getInstance().fromJson(getIntent().getExtras().getString("payment"), Payment.class);
         mPaymentMethod = JsonUtil.getInstance().fromJson(getIntent().getExtras().getString("paymentMethod"), PaymentMethod.class);

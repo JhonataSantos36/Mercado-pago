@@ -35,7 +35,7 @@ public class MercadoPagoCheckout {
         validate();
     }
 
-    private void validate() throws IllegalStateException{
+    private void validate() throws IllegalStateException {
         // TODO Implement
     }
 
@@ -59,10 +59,6 @@ public class MercadoPagoCheckout {
 
     private void startCheckoutActivity() {
         Intent checkoutIntent = new Intent(context, CheckoutActivity.class);
-        checkoutIntent.putExtra("merchantPublicKey", publicKey);
-        checkoutIntent.putExtra("checkoutPreference", JsonUtil.getInstance().toJson(checkoutPreference));
-        checkoutIntent.putExtra("decorationPreference", JsonUtil.getInstance().toJson(decorationPreference));
-        checkoutIntent.putExtra("servicePreference", JsonUtil.getInstance().toJson(servicePreference));
         checkoutIntent.putExtra("flowPreference", JsonUtil.getInstance().toJson(flowPreference));
         context.startActivity(checkoutIntent);
     }
@@ -108,6 +104,7 @@ public class MercadoPagoCheckout {
         public void start(PaymentCallback paymentCallback) {
             MercadoPagoCheckout mercadoPagoCheckout = new MercadoPagoCheckout(this);
             mercadoPagoCheckout.start(paymentCallback);
+
         }
 
         public void start(PaymentDataCallback paymentDataCallback) {

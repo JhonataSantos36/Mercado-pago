@@ -18,6 +18,7 @@ import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.constants.PaymentMethods;
 import com.mercadopago.constants.PaymentTypes;
 import com.mercadopago.core.MercadoPago;
+import com.mercadopago.core.MercadoPagoContext;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.Instruction;
@@ -66,7 +67,7 @@ public class InstructionsActivity extends MercadoPagoActivity {
 
     @Override
     protected void getActivityParameters() {
-        mMerchantPublicKey = getIntent().getStringExtra("merchantPublicKey");
+        mMerchantPublicKey = MercadoPagoContext.getInstance().getPublicKey();
         mPaymentTypeId = getIntent().getStringExtra("paymentTypeId");
         mPayment = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("payment"), Payment.class);
     }

@@ -36,6 +36,7 @@ import com.mercadopago.constants.PaymentTypes;
 import com.mercadopago.controllers.CheckoutTimer;
 import com.mercadopago.controllers.PaymentMethodGuessingController;
 import com.mercadopago.core.MercadoPago;
+import com.mercadopago.core.MercadoPagoContext;
 import com.mercadopago.customviews.MPEditText;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.listeners.card.CardExpiryDateTextWatcher;
@@ -186,7 +187,11 @@ public class GuessingCardActivity extends AppCompatActivity implements GuessingC
     }
 
     private void getActivityParameters() {
-        String publicKey = this.getIntent().getStringExtra("merchantPublicKey");
+
+        String publicKey = MercadoPagoContext.getInstance().getPublicKey();
+        PaymentPreference paymentPreference = MercadoPagoContext.getInstance().getCheckoutPreference().getPaymentPreference();
+        mDecorationPreference = MercadoPagoContext.getInstance().getDecorationPreference();
+
         PaymentRecovery paymentRecovery = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("paymentRecovery"), PaymentRecovery.class);
         Token token = null;
         PaymentMethod paymentMethod = null;
@@ -201,13 +206,7 @@ public class GuessingCardActivity extends AppCompatActivity implements GuessingC
         }
         Identification identification = new Identification();
         boolean identificationNumberRequired = false;
-        PaymentPreference paymentPreference = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("paymentPreference"), PaymentPreference.class);
-        if (paymentPreference == null) {
-            paymentPreference = new PaymentPreference();
-        }
-        if (getIntent().getStringExtra("decorationPreference") != null) {
-            mDecorationPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("decorationPreference"), DecorationPreference.class);
-        }
+
         Boolean showBankDeals = this.getIntent().getBooleanExtra("showBankDeals", true);
 
         mPresenter.setPublicKey(publicKey);

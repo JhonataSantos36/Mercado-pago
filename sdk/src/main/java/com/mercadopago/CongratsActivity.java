@@ -7,6 +7,7 @@ import android.text.Spanned;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.mercadopago.core.MercadoPagoContext;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentMethod;
@@ -48,7 +49,7 @@ public class CongratsActivity extends MercadoPagoActivity {
 
     @Override
     protected void getActivityParameters() {
-        mMerchantPublicKey = getIntent().getStringExtra("merchantPublicKey");
+        mMerchantPublicKey = MercadoPagoContext.getInstance().getPublicKey();
         mCongratsDisplay = getIntent().getIntExtra("congratsDisplay", -1);
         mPayment = JsonUtil.getInstance().fromJson(getIntent().getExtras().getString("payment"), Payment.class);
         mPaymentMethod = JsonUtil.getInstance().fromJson(getIntent().getExtras().getString("paymentMethod"), PaymentMethod.class);

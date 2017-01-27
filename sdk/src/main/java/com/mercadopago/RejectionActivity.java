@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 import com.mercadopago.controllers.CheckoutTimer;
+import com.mercadopago.core.MercadoPagoContext;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentMethod;
@@ -38,7 +39,7 @@ public class RejectionActivity extends MercadoPagoActivity implements TimerObser
 
     @Override
     protected void getActivityParameters() {
-        mMerchantPublicKey = getIntent().getStringExtra("merchantPublicKey");
+        mMerchantPublicKey = MercadoPagoContext.getInstance().getPublicKey();
         mPayment = JsonUtil.getInstance().fromJson(getIntent().getExtras().getString("payment"), Payment.class);
         mPaymentMethod = JsonUtil.getInstance().fromJson(getIntent().getExtras().getString("paymentMethod"), PaymentMethod.class);
     }

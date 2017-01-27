@@ -22,6 +22,7 @@ import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.callbacks.OnSelectedCallback;
 import com.mercadopago.controllers.CheckoutTimer;
 import com.mercadopago.core.MercadoPago;
+import com.mercadopago.core.MercadoPagoContext;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.decorations.GridSpacingItemDecoration;
 import com.mercadopago.exceptions.MercadoPagoError;
@@ -107,8 +108,10 @@ public class PaymentVaultActivity extends AppCompatActivity implements PaymentVa
     }
 
     protected void getActivityParameters() {
-        mDecorationPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("decorationPreference"), DecorationPreference.class);
-        mPaymentVaultPresenter.setMerchantPublicKey(getIntent().getStringExtra("merchantPublicKey"));
+        mDecorationPreference = MercadoPagoContext.getInstance().getDecorationPreference();
+        mPaymentVaultPresenter.setMerchantPublicKey(MercadoPagoContext.getInstance().getPublicKey());
+        mPaymentVaultPresenter.setPaymentPreference(MercadoPagoContext.getInstance().getCheckoutPreference().getPaymentPreference());
+
         mPaymentVaultPresenter.setMerchantBaseUrl(this.getIntent().getStringExtra("merchantBaseUrl"));
         mPaymentVaultPresenter.setMerchantGetCustomerUri(this.getIntent().getStringExtra("merchantGetCustomerUri"));
         mPaymentVaultPresenter.setMerchantAccessToken(this.getIntent().getStringExtra("merchantAccessToken"));
@@ -116,10 +119,6 @@ public class PaymentVaultActivity extends AppCompatActivity implements PaymentVa
         mPaymentVaultPresenter.setAccountMoneyEnabled(this.getIntent().getBooleanExtra("accountMoneyEnabled", false));
         mPaymentVaultPresenter.setMaxSavedCards(this.getIntent().getIntExtra("maxSavedCards", 0));
         mShowBankDeals = getIntent().getBooleanExtra("showBankDeals", true);
-
-        if (getIntent().getStringExtra("paymentPreference") != null) {
-            mPaymentVaultPresenter.setPaymentPreference(JsonUtil.getInstance().fromJson(getIntent().getStringExtra("paymentPreference"), PaymentPreference.class));
-        }
 
         if (this.getIntent().getStringExtra("selectedSearchItem") != null) {
             mPaymentVaultPresenter.setSelectedSearchItem(JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("selectedSearchItem"), PaymentMethodSearchItem.class));

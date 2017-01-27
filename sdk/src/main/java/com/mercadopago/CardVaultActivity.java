@@ -11,6 +11,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
 import com.mercadopago.core.MercadoPago;
+import com.mercadopago.core.MercadoPagoContext;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.Card;
 import com.mercadopago.model.CardInfo;
@@ -120,8 +121,11 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultAct
     }
 
     private void getActivityParameters() {
+        String publicKey = MercadoPagoContext.getInstance().getPublicKey();
+        PaymentPreference paymentPreference = MercadoPagoContext.getInstance().getCheckoutPreference().getPaymentPreference();
+        mDecorationPreference = MercadoPagoContext.getInstance().getDecorationPreference();
+
         Boolean installmentsEnabled = getIntent().getBooleanExtra("installmentsEnabled", false);
-        String publicKey = getIntent().getStringExtra("merchantPublicKey");
         Site site = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("site"), Site.class);
         Card card = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("card"), Card.class);
         PaymentRecovery paymentRecovery = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("paymentRecovery"), PaymentRecovery.class);
@@ -138,14 +142,8 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultAct
         } catch (Exception ex) {
             paymentMethods = null;
         }
-        PaymentPreference paymentPreference = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("paymentPreference"), PaymentPreference.class);
-        if (paymentPreference == null) {
-            paymentPreference = new PaymentPreference();
-        }
-        if (getIntent().getStringExtra("decorationPreference") != null) {
-            mDecorationPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("decorationPreference"), DecorationPreference.class);
-        }
         mShowBankDeals = getIntent().getBooleanExtra("showBankDeals", true);
+
         mPresenter.setCard(card);
         mPresenter.setInstallmentsEnabled(installmentsEnabled);
         mPresenter.setPublicKey(publicKey);

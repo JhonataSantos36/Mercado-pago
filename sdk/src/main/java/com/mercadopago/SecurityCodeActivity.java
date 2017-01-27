@@ -15,6 +15,7 @@ import android.widget.ProgressBar;
 
 import com.mercadopago.callbacks.card.CardSecurityCodeEditTextCallback;
 import com.mercadopago.controllers.CheckoutTimer;
+import com.mercadopago.core.MercadoPagoContext;
 import com.mercadopago.customviews.MPEditText;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.listeners.card.CardSecurityCodeTextWatcher;
@@ -81,15 +82,13 @@ public class SecurityCodeActivity extends AppCompatActivity implements SecurityC
     }
 
     private void getActivityParameters() {
-        String publicKey = getIntent().getStringExtra("merchantPublicKey");
+        String publicKey = MercadoPagoContext.getInstance().getPublicKey();
+        mDecorationPreference = MercadoPagoContext.getInstance().getDecorationPreference();
+
         CardInfo cardInfo = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("cardInfo"), CardInfo.class);
         Card card = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("card"), Card.class);
         Token token = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("token"), Token.class);
         PaymentMethod paymentMethod = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("paymentMethod"), PaymentMethod.class);
-        mDecorationPreference = null;
-        if (getIntent().getStringExtra("decorationPreference") != null) {
-            mDecorationPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("decorationPreference"), DecorationPreference.class);
-        }
 
         mPresenter.setPublicKey(publicKey);
         mPresenter.setToken(token);

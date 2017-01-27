@@ -18,6 +18,7 @@ import android.widget.ProgressBar;
 import com.mercadopago.adapters.PaymentTypesAdapter;
 import com.mercadopago.callbacks.OnSelectedCallback;
 import com.mercadopago.controllers.CheckoutTimer;
+import com.mercadopago.core.MercadoPagoContext;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.listeners.RecyclerItemClickListener;
 import com.mercadopago.model.ApiException;
@@ -90,6 +91,10 @@ public class PaymentTypesActivity extends AppCompatActivity implements PaymentTy
     }
 
     private void getActivityParameters() {
+
+        String publicKey = MercadoPagoContext.getInstance().getPublicKey();
+        mDecorationPreference = MercadoPagoContext.getInstance().getDecorationPreference();
+
         List<PaymentMethod> paymentMethods;
         try {
             Type listType = new TypeToken<List<PaymentMethod>>() {
@@ -107,12 +112,7 @@ public class PaymentTypesActivity extends AppCompatActivity implements PaymentTy
         } catch (Exception ex) {
             paymentTypes = null;
         }
-        String publicKey = getIntent().getStringExtra("merchantPublicKey");
         CardInfo cardInfo = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("cardInfo"), CardInfo.class);
-        mDecorationPreference = null;
-        if (getIntent().getStringExtra("decorationPreference") != null) {
-            mDecorationPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("decorationPreference"), DecorationPreference.class);
-        }
         mPresenter.setPaymentMethodList(paymentMethods);
         mPresenter.setPaymentTypesList(paymentTypes);
         mPresenter.setPublicKey(publicKey);

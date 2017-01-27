@@ -18,6 +18,8 @@ import android.widget.FrameLayout;
 import com.mercadopago.adapters.PayerCostsAdapter;
 import com.mercadopago.callbacks.OnSelectedCallback;
 import com.mercadopago.controllers.CheckoutTimer;
+import com.mercadopago.core.MercadoPago;
+import com.mercadopago.core.MercadoPagoContext;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.listeners.RecyclerItemClickListener;
 import com.mercadopago.model.ApiException;
@@ -94,10 +96,14 @@ public class InstallmentsActivity extends AppCompatActivity implements Installme
     }
 
     private void getActivityParameters() {
+
+        String publicKey = MercadoPagoContext.getInstance().getPublicKey();
+        PaymentPreference paymentPreference = MercadoPagoContext.getInstance().getCheckoutPreference().getPaymentPreference();
+        mDecorationPreference = MercadoPagoContext.getInstance().getDecorationPreference();
+
         PaymentMethod paymentMethod = JsonUtil.getInstance().fromJson(
                 this.getIntent().getStringExtra("paymentMethod"), PaymentMethod.class);
         CardInfo cardInfo = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("cardInfo"), CardInfo.class);
-        String publicKey = getIntent().getStringExtra("merchantPublicKey");
         Issuer issuer = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("issuer"), Issuer.class);
         BigDecimal amount = null;
         if (this.getIntent().getStringExtra("amount") != null) {
@@ -112,14 +118,6 @@ public class InstallmentsActivity extends AppCompatActivity implements Installme
             payerCosts = JsonUtil.getInstance().getGson().fromJson(this.getIntent().getStringExtra("payerCosts"), listType);
         } catch (Exception ex) {
             payerCosts = null;
-        }
-        PaymentPreference paymentPreference = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("paymentPreference"), PaymentPreference.class);
-        if (paymentPreference == null) {
-            paymentPreference = new PaymentPreference();
-        }
-        mDecorationPreference = null;
-        if (getIntent().getStringExtra("decorationPreference") != null) {
-            mDecorationPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("decorationPreference"), DecorationPreference.class);
         }
 
         mPresenter.setPaymentMethod(paymentMethod);

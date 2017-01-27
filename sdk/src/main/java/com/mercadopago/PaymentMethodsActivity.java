@@ -17,6 +17,7 @@ import com.google.gson.reflect.TypeToken;
 
 import com.mercadopago.adapters.PaymentMethodsAdapter;
 import com.mercadopago.core.MercadoPago;
+import com.mercadopago.core.MercadoPagoContext;
 import com.mercadopago.decorations.DividerItemDecoration;
 import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.preferences.DecorationPreference;
@@ -53,9 +54,9 @@ public class PaymentMethodsActivity extends AppCompatActivity implements Payment
         super.onCreate(savedInstanceState);
 
         mPresenter = new PaymentMethodsPresenter();
-        mMerchantPublicKey = this.getIntent().getStringExtra("merchantPublicKey");
 
         try {
+            getActivityParameters();
             mResourcesProvider = new PaymentMethodsProviderImpl(this, mMerchantPublicKey);
             onValidStart();
         } catch (IllegalStateException exception) {
@@ -65,13 +66,15 @@ public class PaymentMethodsActivity extends AppCompatActivity implements Payment
 
     protected void getActivityParameters() {
 
+        mMerchantPublicKey = MercadoPagoContext.getInstance().getPublicKey();
+        mDecorationPreference = MercadoPagoContext.getInstance().getDecorationPreference();
+
+        PaymentPreference paymentPreference = MercadoPagoContext.getInstance().getCheckoutPreference().getPaymentPreference();
+        mPresenter.setPaymentPreference(paymentPreference);
+
         Boolean showBankDeals = this.getIntent().getBooleanExtra("showBankDeals", true);
         mPresenter.setShowBankDeals(showBankDeals);
 
-        if (getIntent().getStringExtra("paymentPreference") != null) {
-            PaymentPreference paymentPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("paymentPreference"), PaymentPreference.class);
-            mPresenter.setPaymentPreference(paymentPreference);
-        }
         if (this.getIntent().getStringExtra("supportedPaymentTypes") != null) {
             Gson gson = new Gson();
             Type listType = new TypeToken<List<String>>() {
@@ -79,10 +82,6 @@ public class PaymentMethodsActivity extends AppCompatActivity implements Payment
 
             List<String> supportedPaymentTypes = gson.fromJson(this.getIntent().getStringExtra("supportedPaymentTypes"), listType);
             mPresenter.setSupportedPaymentTypes(supportedPaymentTypes);
-        }
-
-        if (getIntent().getStringExtra("decorationPreference") != null) {
-            mDecorationPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("decorationPreference"), DecorationPreference.class);
         }
     }
 
@@ -105,8 +104,6 @@ public class PaymentMethodsActivity extends AppCompatActivity implements Payment
 
         mPresenter.attachView(this);
         mPresenter.attachResourcesProvider(mResourcesProvider);
-
-        getActivityParameters();
 
         if (mDecorationPreference != null && mDecorationPreference.hasColors()) {
             setTheme(R.style.Theme_MercadoPagoTheme_NoActionBar);

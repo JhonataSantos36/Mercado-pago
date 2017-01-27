@@ -10,9 +10,11 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.mercadopago.callbacks.FailureRecovery;
+import com.mercadopago.core.MercadoPagoContext;
 import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.util.JsonUtil;
 
+@Deprecated
 public abstract class MercadoPagoActivity extends AppCompatActivity {
 
     private boolean mActivityActive;
@@ -71,9 +73,7 @@ public abstract class MercadoPagoActivity extends AppCompatActivity {
     }
 
     private void getDecorationPreference() {
-        if (getIntent().getStringExtra("decorationPreference") != null) {
-            mDecorationPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("decorationPreference"), DecorationPreference.class);
-        }
+        mDecorationPreference = MercadoPagoContext.getInstance().getDecorationPreference();
     }
 
     @Override

@@ -30,6 +30,7 @@ import com.mercadopago.callbacks.OnChangePaymentMethodCallback;
 import com.mercadopago.callbacks.OnConfirmPaymentCallback;
 import com.mercadopago.controllers.CheckoutTimer;
 import com.mercadopago.core.MercadoPago;
+import com.mercadopago.core.MercadoPagoContext;
 import com.mercadopago.core.MerchantServer;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.exceptions.CheckoutPreferenceException;
@@ -150,7 +151,7 @@ public class CheckoutActivity extends MercadoPagoActivity implements TimerObserv
 
     @Override
     protected void getActivityParameters() {
-        mMerchantPublicKey = getIntent().getStringExtra("merchantPublicKey");
+        mMerchantPublicKey = MercadoPagoContext.getInstance().getPublicKey();
         mMerchantBaseUrl = this.getIntent().getStringExtra("merchantBaseUrl");
         mMerchantGetCustomerUri = this.getIntent().getStringExtra("merchantGetCustomerUri");
         mMerchantAccessToken = this.getIntent().getStringExtra("merchantAccessToken");

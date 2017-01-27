@@ -98,6 +98,7 @@ public class CheckoutExampleActivity extends AppCompatActivity {
                 .setContext(this)
                 .setPublicKey(mPublicKey)
                 .setCheckoutPreference(mCheckoutPreference)
+                .setDecorationPreference(decorationPreference)
                 .start(new PaymentCallback() {
                     @Override
                     public void onSuccess(Payment payment) {

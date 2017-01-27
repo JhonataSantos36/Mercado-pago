@@ -5,6 +5,7 @@ import android.support.design.widget.Snackbar;
 import android.view.View;
 
 import com.mercadopago.controllers.CheckoutTimer;
+import com.mercadopago.core.MercadoPagoContext;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentMethod;
@@ -33,7 +34,7 @@ public class PendingActivity extends MercadoPagoActivity implements TimerObserve
 
     @Override
     protected void getActivityParameters() {
-        mMerchantPublicKey = getIntent().getStringExtra("merchantPublicKey");
+        mMerchantPublicKey = MercadoPagoContext.getInstance().getPublicKey();
         mPayment = JsonUtil.getInstance().fromJson(getIntent().getExtras().getString("payment"), Payment.class);
     }
 
