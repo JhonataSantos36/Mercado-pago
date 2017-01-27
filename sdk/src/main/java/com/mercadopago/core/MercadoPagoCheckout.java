@@ -61,8 +61,6 @@ public class MercadoPagoCheckout {
     private void startCheckoutActivity() {
         Intent checkoutIntent = new Intent(context, CheckoutActivity.class);
         checkoutIntent.putExtra("flowPreference", JsonUtil.getInstance().toJson(flowPreference));
-        //TODO remove
-        checkoutIntent.putExtra("checkoutPreferenceId", checkoutPreference.getId());
         context.startActivity(checkoutIntent);
     }
 

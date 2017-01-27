@@ -1,5 +1,7 @@
-package com.mercadopago.model;
+package com.mercadopago.preferences;
 
+import com.mercadopago.model.PayerCost;
+import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.preferences.PaymentPreference;
 
 import junit.framework.Assert;

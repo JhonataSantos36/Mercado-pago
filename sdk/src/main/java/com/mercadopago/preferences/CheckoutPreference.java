@@ -5,9 +5,11 @@ import com.google.gson.annotations.SerializedName;
 import com.mercadopago.exceptions.CheckoutPreferenceException;
 import com.mercadopago.model.Item;
 import com.mercadopago.model.Payer;
+import com.mercadopago.model.Site;
 import com.mercadopago.util.CurrenciesUtil;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -25,6 +27,24 @@ public class CheckoutPreference {
     private Date expirationDateTo;
     private Date expirationDateFrom;
     private String siteId;
+
+    public CheckoutPreference(Builder builder) {
+        this.items = builder.items;
+        this.siteId = builder.siteId;
+        this.expirationDateFrom = builder.expirationDateFrom;
+        this.expirationDateTo = builder.expirationDateTo;
+
+        Payer payer = new Payer();
+        payer.setEmail(builder.payerEmail);
+        this.payer = payer;
+
+        PaymentPreference paymentPreference = new PaymentPreference();
+        paymentPreference.setExcludedPaymentTypeIds(builder.excludedPaymentTypes);
+        paymentPreference.setExcludedPaymentMethodIds(builder.excludedPaymentMethods);
+        paymentPreference.setMaxAcceptedInstallments(builder.maxInstallments);
+        paymentPreference.setDefaultInstallments(builder.defaultInstallments);
+        this.paymentPreference = paymentPreference;
+    }
 
     public void validate() throws CheckoutPreferenceException {
         if (!this.itemsValid()) {
@@ -200,5 +220,87 @@ public class CheckoutPreference {
 
     public String getSiteId() {
         return siteId;
+    }
+
+    public static class Builder {
+        private List<Item> items;
+        private List<String> excludedPaymentMethods;
+        private List<String> excludedPaymentTypes;
+        private Integer maxInstallments;
+        private Integer defaultInstallments;
+        private String payerEmail;
+        private String siteId;
+        private Date expirationDateTo;
+        private Date expirationDateFrom;
+
+        public Builder() {
+            items = new ArrayList<>();
+            excludedPaymentMethods = new ArrayList<>();
+            excludedPaymentTypes = new ArrayList<>();
+        }
+
+        public Builder addItem(Item item) {
+            this.items.add(item);
+            return this;
+        }
+
+        public Builder addItems(List<Item> items) {
+            this.items.addAll(items);
+            return this;
+        }
+
+        public Builder addExcludedPaymentMethod(String paymentMethodId) {
+            this.excludedPaymentMethods.add(paymentMethodId);
+            return this;
+        }
+
+        public Builder addExcludedPaymentMethods(List<String> paymentMethodIds) {
+            this.excludedPaymentMethods.addAll(paymentMethodIds);
+            return this;
+        }
+
+        public Builder addExcludedPaymentType(String paymentTypeId) {
+            this.excludedPaymentTypes.add(paymentTypeId);
+            return this;
+        }
+
+        public Builder addExcludedPaymentTypes(List<String> paymentTypeIds) {
+            this.excludedPaymentTypes.addAll(paymentTypeIds);
+            return this;
+        }
+
+        public Builder setMaxInstallments(Integer maxInstallments) {
+            this.maxInstallments = maxInstallments;
+            return this;
+        }
+
+        public Builder setDefaultInstallments(Integer defaultInstallments) {
+            this.defaultInstallments = defaultInstallments;
+            return this;
+        }
+
+        public Builder setPayerEmail(String payerEmail) {
+            this.payerEmail = payerEmail;
+            return this;
+        }
+
+        public Builder setSite(Site site) {
+            this.siteId = site == null ? null : site.getId();
+            return this;
+        }
+
+        public Builder setExpirationDate(Date date) {
+            this.expirationDateTo = date;
+            return this;
+        }
+
+        public Builder setActiveFrom(Date date) {
+            this.expirationDateFrom = date;
+            return this;
+        }
+
+        public CheckoutPreference build() {
+            return new CheckoutPreference(this);
+        }
     }
 }
