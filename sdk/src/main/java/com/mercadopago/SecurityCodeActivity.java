@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.MotionEventCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.text.InputFilter;
 import android.view.MotionEvent;
 import android.view.View;
@@ -40,7 +39,7 @@ import com.mercadopago.views.SecurityCodeActivityView;
  * Created by vaserber on 10/26/16.
  */
 
-public class SecurityCodeActivity extends AppCompatActivity implements SecurityCodeActivityView, TimerObserver {
+public class SecurityCodeActivity extends MercadoPagoBaseActivity implements SecurityCodeActivityView, TimerObserver {
 
     protected SecurityCodePresenter mPresenter;
     protected Activity mActivity;

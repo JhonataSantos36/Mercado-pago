@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -43,7 +42,7 @@ import java.util.List;
  * Created by vaserber on 10/25/16.
  */
 
-public class PaymentTypesActivity extends AppCompatActivity implements PaymentTypesActivityView, TimerObserver {
+public class PaymentTypesActivity extends MercadoPagoBaseActivity implements PaymentTypesActivityView, TimerObserver {
 
     protected PaymentTypesPresenter mPresenter;
     private Activity mActivity;

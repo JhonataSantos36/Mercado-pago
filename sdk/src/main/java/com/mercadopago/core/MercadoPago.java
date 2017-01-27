@@ -67,7 +67,6 @@ import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -299,7 +298,7 @@ public class MercadoPago {
             String excludedPaymentTypesAppended = getListAsString(excludedPaymentTypes, separator);
             String excludedPaymentMethodsAppended = getListAsString(excludedPaymentMethods, separator);
 
-            service.getPaymentMethodSearch(Locale.getDefault().getLanguage(), this.mKey, amount, excludedPaymentTypesAppended, excludedPaymentMethodsAppended, payerIntent, PAYMENT_METHODS_OPTIONS_API_VERSION).enqueue(callback);
+            service.getPaymentMethodSearch(mContext.getResources().getConfiguration().locale.getLanguage(), this.mKey, amount, excludedPaymentTypesAppended, excludedPaymentMethodsAppended, payerIntent, PAYMENT_METHODS_OPTIONS_API_VERSION).enqueue(callback);
         } else {
             throw new RuntimeException("Unsupported key type for this method");
         }
@@ -310,7 +309,7 @@ public class MercadoPago {
             MPTracker.getInstance().trackEvent("NO_SCREEN", "GET_INSTRUCTIONS", "1", mKey, BuildConfig.VERSION_NAME, mContext);
 
             PaymentService service = mRetrofit.create(PaymentService.class);
-            service.getPaymentResult(Locale.getDefault().getLanguage(), paymentId, this.mKey, paymentTypeId, PAYMENT_RESULT_API_VERSION).enqueue(callback);
+            service.getPaymentResult(mContext.getResources().getConfiguration().locale.getLanguage(), paymentId, this.mKey, paymentTypeId, PAYMENT_RESULT_API_VERSION).enqueue(callback);
         } else {
             throw new RuntimeException("Unsupported key type for this method");
         }

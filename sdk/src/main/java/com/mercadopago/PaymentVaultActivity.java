@@ -8,7 +8,6 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -58,7 +57,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PaymentVaultActivity extends AppCompatActivity implements PaymentVaultView, TimerObserver {
+public class PaymentVaultActivity extends MercadoPagoBaseActivity implements PaymentVaultView, TimerObserver {
 
     // Local vars
     protected DecorationPreference mDecorationPreference;

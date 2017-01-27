@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -45,7 +44,7 @@ import java.util.List;
  * Created by vaserber on 10/11/16.
  */
 
-public class IssuersActivity extends AppCompatActivity implements IssuersActivityView, TimerObserver {
+public class IssuersActivity extends MercadoPagoBaseActivity implements IssuersActivityView, TimerObserver {
 
     protected IssuersPresenter mPresenter;
     protected Activity mActivity;

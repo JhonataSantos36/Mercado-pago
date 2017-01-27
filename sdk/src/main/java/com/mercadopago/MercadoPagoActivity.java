@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.Button;
 import android.widget.TextView;
@@ -13,7 +12,7 @@ import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.model.DecorationPreference;
 import com.mercadopago.util.JsonUtil;
 
-public abstract class MercadoPagoActivity extends AppCompatActivity {
+public abstract class MercadoPagoActivity extends MercadoPagoBaseActivity {
 
     private boolean mActivityActive;
     protected DecorationPreference mDecorationPreference;
