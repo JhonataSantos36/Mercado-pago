@@ -36,6 +36,7 @@ public interface PaymentService {
     @POST("/" + BuildConfig.API_VERSION + "/checkout/payment_methods/search/options")
     MPCall<PaymentMethodSearch> getPaymentMethodSearch(@Header("Accept-Language") String locale, @Query("public_key") String publicKey, @Query("amount") BigDecimal amount, @Query("excluded_payment_types") String excludedPaymentTypes, @Query("excluded_payment_methods") String excludedPaymentMethods, @Body PayerIntent payerIntent, @Query("api_version") String apiVersion);
 
+    //TODO sacar
     @POST("/" + BuildConfig.API_VERSION + "/checkout/payments")
     MPCall<Payment> createPayment(@Header("X-Idempotency-Key") String transactionId, @Body PaymentIntent body);
 

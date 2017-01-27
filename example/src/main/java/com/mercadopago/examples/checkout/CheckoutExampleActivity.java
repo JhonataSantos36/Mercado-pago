@@ -96,7 +96,7 @@ public class CheckoutExampleActivity extends AppCompatActivity {
         DecorationPreference.Builder decorationPreferenceBuilder = getCurrentDecorationPreferenceBuilder();
         decorationPreferenceBuilder.setCustomFont("fonts/ArimaMadurai-Light.ttf");
         DecorationPreference decorationPreference = decorationPreferenceBuilder.build();
-        
+
         new MercadoPagoCheckout.Builder()
                 .setContext(this)
                 .setPublicKey(mPublicKey)
