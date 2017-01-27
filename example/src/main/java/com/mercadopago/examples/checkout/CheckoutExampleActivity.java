@@ -25,6 +25,7 @@ import com.mercadopago.preferences.CheckoutPreference;
 import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.model.Payment;
 import com.mercadopago.callbacks.PaymentCallback;
+import com.mercadopago.preferences.FlowPreference;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;
 

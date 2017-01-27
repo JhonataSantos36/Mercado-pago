@@ -12,7 +12,6 @@ import android.widget.TextView;
 import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.core.MercadoPagoContext;
 import com.mercadopago.preferences.DecorationPreference;
-import com.mercadopago.util.JsonUtil;
 
 @Deprecated
 public abstract class MercadoPagoActivity extends AppCompatActivity {
