@@ -1,7 +1,5 @@
 package com.mercadopago;
 
-import com.google.gson.reflect.TypeToken;
-
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Instrumentation;
@@ -19,11 +17,14 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
+import com.google.gson.reflect.TypeToken;
 import com.mercadopago.controllers.CheckoutTimer;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.model.BankDeal;
 import com.mercadopago.model.CardToken;
+import com.mercadopago.model.Currency;
 import com.mercadopago.model.DecorationPreference;
+import com.mercadopago.model.Discount;
 import com.mercadopago.model.DummyCard;
 import com.mercadopago.model.DummyIdentificationType;
 import com.mercadopago.model.IdentificationType;
@@ -37,6 +38,7 @@ import com.mercadopago.model.Token;
 import com.mercadopago.test.ActivityResult;
 import com.mercadopago.test.FakeAPI;
 import com.mercadopago.test.StaticMock;
+import com.mercadopago.util.CurrenciesUtil;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.MPCardMaskUtil;
 import com.mercadopago.utils.ActivityResultUtil;
@@ -53,6 +55,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.lang.reflect.Type;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,6 +66,7 @@ import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.Intents.intending;
+import static android.support.test.espresso.intent.Intents.times;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static android.support.test.espresso.matcher.ViewMatchers.hasFocus;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -71,7 +75,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.mercadopago.utils.CardTestUtils.getDummyCard;
 import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.not;
+import static org.hamcrest.core.IsNot.not;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -89,8 +93,9 @@ public class GuessingCardActivityTest {
     public Intent validStartIntent;
 
     private String mMerchantPublicKey;
-
     private FakeAPI mFakeAPI;
+
+    private BigDecimal transactionAmount = new BigDecimal(100);
 
     @Before
     public void createValidStartIntent() {
@@ -98,6 +103,7 @@ public class GuessingCardActivityTest {
 
         validStartIntent = new Intent();
         validStartIntent.putExtra("merchantPublicKey", mMerchantPublicKey);
+        validStartIntent.putExtra("transactionAmount", JsonUtil.getInstance().toJson(transactionAmount));
     }
 
     @Before
@@ -2339,6 +2345,122 @@ public class GuessingCardActivityTest {
 //        onView(withId(R.id.mpsdkCardIdentificationNumber)).check(matches(withText(token.getCardHolder().getIdentification().getNumber())));
 //        onView(withId(R.id.mpsdkCardIdentificationType)).check(matches((isDisplayed())));
 //    }
+
+    //Discounts
+    @Test
+    public void showDirectDiscountWithPercentOffWhenStartActivityWithoutDiscount() {
+        Discount discount = StaticMock.getPercentOffDiscount();
+
+        addBankDealsCall();
+        String paymentMethods = StaticMock.getPaymentMethodList();
+
+        mFakeAPI.addResponseToQueue(discount, 200, "");
+        mFakeAPI.addResponseToQueue(paymentMethods, 200, "");
+
+        mTestRule.launchActivity(validStartIntent);
+
+        onView(withId(R.id.mpsdkDiscountDetail)).check(matches(isDisplayed()));
+        onView(withId(R.id.mpsdkDiscountOff)).check(matches(isDisplayed()));
+        onView(withId(R.id.mpsdkDiscountOff)).check(matches(withText(getDiscountOff(discount))));
+    }
+
+    @Test
+    public void showDirectDiscountWithAmountOffWhenStartActivityWithoutDiscount() {
+        Discount discount = StaticMock.getAmountOffDiscount();
+
+        addBankDealsCall();
+        String paymentMethods = StaticMock.getPaymentMethodList();
+
+        mFakeAPI.addResponseToQueue(discount, 200, "");
+        mFakeAPI.addResponseToQueue(paymentMethods, 200, "");
+
+        mTestRule.launchActivity(validStartIntent);
+
+        onView(withId(R.id.mpsdkDiscountDetail)).check(matches(isDisplayed()));
+        onView(withId(R.id.mpsdkDiscountOff)).check(matches(isDisplayed()));
+        onView(withId(R.id.mpsdkDiscountOff)).check(matches(withText(getDiscountOff(discount))));
+    }
+
+    @Test
+    public void showHasADiscountWhenStartActivityWithoutDiscountAndNotHasDirectDiscount() {
+        addBankDealsCall();
+        String paymentMethods = StaticMock.getPaymentMethodList();
+
+        mFakeAPI.addResponseToQueue("", 404, "");
+        mFakeAPI.addResponseToQueue(paymentMethods, 200, "");
+
+        mTestRule.launchActivity(validStartIntent);
+
+        onView(withId(R.id.mpsdkHasDiscount)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void startDiscountActivityWhenNotHasDirectDiscountAndPressOnHasDiscountRow() {
+        addBankDealsCall();
+        String paymentMethods = StaticMock.getPaymentMethodList();
+
+        mFakeAPI.addResponseToQueue("", 404, "");
+        mFakeAPI.addResponseToQueue(paymentMethods, 200, "");
+
+        mTestRule.launchActivity(validStartIntent);
+
+        onView(withId(R.id.mpsdkHasDiscount)).check(matches(isDisplayed()));
+        onView(withId(R.id.mpsdkHasDiscount)).perform(click());
+
+        Intents.intended(hasComponent(DiscountsActivity.class.getName()), times(1));
+    }
+
+    @Test
+    public void notShowDiscountDetailWhenStartActivityWithDiscount() {
+        Discount discount = StaticMock.getPercentOffDiscount();
+        validStartIntent.putExtra("discount", JsonUtil.getInstance().toJson(discount));
+
+        addBankDealsCall();
+        String paymentMethods = StaticMock.getPaymentMethodList();
+
+        mFakeAPI.addResponseToQueue(paymentMethods, 200, "");
+
+        mTestRule.launchActivity(validStartIntent);
+
+        onView(withId(R.id.mpsdkDiscountRow)).check(matches(not(isDisplayed())));
+    }
+
+    @Test
+    public void showDiscountDetailWhenFinishDiscountActivity() {
+        Discount discount = StaticMock.getAmountOffDiscount();
+
+        addBankDealsCall();
+        String paymentMethods = StaticMock.getPaymentMethodList();
+
+        Intent discountResultIntent = new Intent();
+        discountResultIntent.putExtra("discount", JsonUtil.getInstance().toJson(discount));
+        Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(Activity.RESULT_OK, discountResultIntent);
+        intending(hasComponent(DiscountsActivity.class.getName())).respondWith(result);
+
+        mFakeAPI.addResponseToQueue("", 404, "");
+        mFakeAPI.addResponseToQueue(paymentMethods, 200, "");
+
+        mTestRule.launchActivity(validStartIntent);
+
+        onView(withId(R.id.mpsdkHasDiscount)).check(matches(isDisplayed()));
+        onView(withId(R.id.mpsdkHasDiscount)).perform(click());
+
+        onView(withId(R.id.mpsdkDiscountDetail)).check(matches(isDisplayed()));
+        onView(withId(R.id.mpsdkDiscountOff)).check(matches(isDisplayed()));
+        onView(withId(R.id.mpsdkDiscountOff)).check(matches(withText(getDiscountOff(discount))));
+    }
+
+    private String getDiscountOff(Discount discount) {
+        if (discount.getAmountOff() != null && discount.getAmountOff().compareTo(BigDecimal.ZERO)>0) {
+            Currency currency = CurrenciesUtil.getCurrency(discount.getCurrencyId());
+            String amount = currency.getSymbol() + " " + discount.getAmountOff();
+            return amount;
+        } else {
+            String discountOff = mTestRule.getActivity().getResources().getString(R.string.mpsdk_discount_percent_off,
+                    String.valueOf(discount.getPercentOff()));
+            return discountOff;
+        }
+    }
 
     private void addPaymentMethodsCallMLM() {
         String paymentMethods = StaticMock.getPaymentMethodListMLM();

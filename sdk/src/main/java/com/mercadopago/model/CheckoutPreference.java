@@ -1,7 +1,6 @@
 package com.mercadopago.model;
 
 import com.google.gson.annotations.SerializedName;
-
 import com.mercadopago.exceptions.CheckoutPreferenceException;
 import com.mercadopago.util.CurrenciesUtil;
 

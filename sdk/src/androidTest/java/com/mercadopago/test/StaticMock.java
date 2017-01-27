@@ -1,16 +1,16 @@
 package com.mercadopago.test;
 
-import com.google.gson.reflect.TypeToken;
-
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 
+import com.google.gson.reflect.TypeToken;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.BankDeal;
 import com.mercadopago.model.Card;
 import com.mercadopago.model.CardToken;
 import com.mercadopago.model.CheckoutPreference;
 import com.mercadopago.model.Customer;
+import com.mercadopago.model.Discount;
 import com.mercadopago.model.IdentificationType;
 import com.mercadopago.model.Installment;
 import com.mercadopago.model.Issuer;
@@ -91,6 +91,9 @@ public class StaticMock {
     // * Security code holder
     public final static String SECURITY_CODE_FRONT_HOLDER = "••••";
     public final static String SECURITY_CODE_BACK_HOLDER = "•••";
+
+    // * Discount
+    public final static String DUMMY_DISCOUNT_CODE = "PRUEBA";
 
     public static CardToken getCardToken() {
 
@@ -686,6 +689,33 @@ public class StaticMock {
             String json = getFile(InstrumentationRegistry.getContext(), "mocks/bank_deals.json");
             Type listType = new TypeToken<List<BankDeal>>(){}.getType();
             return JsonUtil.getInstance().getGson().fromJson(json, listType);
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+    public static Discount getPercentOffDiscount() {
+        try {
+            String json = getFile(InstrumentationRegistry.getContext(), "mocks/discount_percent_off.json");
+            return JsonUtil.getInstance().fromJson(json, Discount.class);
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+    public static Discount getAmountOffDiscount() {
+        try {
+            String json = getFile(InstrumentationRegistry.getContext(), "mocks/discount_amount_off.json");
+            return JsonUtil.getInstance().fromJson(json, Discount.class);
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+    public static ApiException getApiExceptionDiscountCodeNotMatch() {
+        try {
+            String json = getFile(InstrumentationRegistry.getContext(), "mocks/discount_error_campaign_code_does_not_match.json");
+            return JsonUtil.getInstance().fromJson(json, ApiException.class);
         } catch (Exception ex) {
             return null;
         }

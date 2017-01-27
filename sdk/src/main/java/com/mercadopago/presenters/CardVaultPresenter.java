@@ -10,6 +10,7 @@ import com.mercadopago.model.ApiException;
 import com.mercadopago.model.Card;
 import com.mercadopago.model.CardInfo;
 import com.mercadopago.model.CardToken;
+import com.mercadopago.model.Discount;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.PaymentMethod;
@@ -28,11 +29,11 @@ import java.util.List;
 
 public class CardVaultPresenter {
 
-    private Context mContext;
-    private CardVaultActivityView mView;
-    private FailureRecovery mFailureRecovery;
+    protected Context mContext;
+    protected CardVaultActivityView mView;
+    protected FailureRecovery mFailureRecovery;
+    protected String mBin;
     protected MercadoPago mMercadoPago;
-    private String mBin;
 
     //Activity parameters
     protected PaymentRecovery mPaymentRecovery;
@@ -53,6 +54,10 @@ public class CardVaultPresenter {
     protected Token mToken;
     protected CardToken mCardToken;
     protected Card mCard;
+
+    //Discount
+    protected Discount mDiscount;
+    protected String mPayerEmail;
 
     public CardVaultPresenter(Context context) {
         this.mContext = context;
@@ -80,6 +85,10 @@ public class CardVaultPresenter {
 
     public void setInstallmentsEnabled(Boolean installmentsEnabled) {
         this.mInstallmentsEnabled = installmentsEnabled;
+    }
+
+    public Boolean getInstallmentsEnabled() {
+        return mInstallmentsEnabled;
     }
 
     public void setCard(Card card) {
@@ -173,6 +182,22 @@ public class CardVaultPresenter {
         } else {
             mBin = mCardInfo.getFirstSixDigits();
         }
+    }
+
+    public void setPayerEmail(String payerEmail) {
+        this.mPayerEmail = payerEmail;
+    }
+
+    public String getPayerEmail() {
+        return this.mPayerEmail;
+    }
+
+    public void setDiscount(Discount discount) {
+        this.mDiscount = discount;
+    }
+
+    public Discount getDiscount() {
+        return mDiscount;
     }
 
     public CardInfo getCardInfo() {

@@ -3,6 +3,7 @@ package com.mercadopago.views;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.PayerCost;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -19,4 +20,6 @@ public interface InstallmentsActivityView {
     void showHeader();
     void showApiExceptionError(ApiException exception);
     void initializeInstallments(List<PayerCost> payerCostList);
+    void showDiscountRow(BigDecimal transactionAmount);
+    void startDiscountActivity(BigDecimal transactionAmount);
 }

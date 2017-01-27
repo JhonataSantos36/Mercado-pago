@@ -196,8 +196,6 @@
     <string name="mpsdk_change_payment">Change payment</string>
     <string name="mpsdk_review_description_card">%1$s ending in: %2$s</string>
     <string name="mpsdk_your_atm">ATM of</string>
-    <string name="mpsdk_review_summary_discount">Discounts</string>
-    <string name="mpsdk_review_summary_discounts">Discount of %1$s</string>
     <string name="mpsdk_review_off_text_default">You will pay %1$s\n%2$s</string>
     <string name="mpsdk_review_off_text">You will pay %1$s in a\n%2$s</string>
     <string name="mpsdk_review_off_text_2">You will pay %1$s in\n%2$s</string>
@@ -211,4 +209,22 @@
     <string name="mpsdk_review_product_price">Unit price: %1$s</string>
     <string name="mpsdk_activity_checkout_title">Confirm your purchase</string>
     <string name="mpsdk_review_summary_products">Products</string>
+    <string name="mpsdk_review_summary_discount">Discount</string>
+    <string name="mpsdk_review_summary_discount_with_percent_off">Discount %1$s%%</string>
+    <string name="mpsdk_review_summary_discount_with_amount_off">Discount</string>
+
+    <!-- Discount -->
+    <string name="mpsdk_discount">Discount</string>
+    <string name="mpsdk_input_button_exchange">Exchange</string>
+    <string name="mpsdk_discount_code">Discount code</string>
+    <string name="mpsdk_has_a_discount">I have a discount</string>
+    <string name="mpsdk_of_discount">of discount</string>
+    <string name="mpsdk_percent_of_discount">% of discount</string>
+    <string name="mpsdk_do_not_enter_code">You did not enter code</string>
+    <string name="mpsdk_invalid_code">Invalid code</string>
+    <string name="mpsdk_merchant_without_discount_available">Merchant without discount available</string>
+    <string name="mpsdk_ran_out_of_quantity_uses_quantity">Ran out of quantity uses of discount </string>
+    <string name="mpsdk_amount_doesnt_match">Amount out of reach</string>
+    <string name="mpsdk_campaign_expired">Campaign expired</string>
+    <string name="mpsdk_discount_percent_off">%1$s %%</string>
 </resources>

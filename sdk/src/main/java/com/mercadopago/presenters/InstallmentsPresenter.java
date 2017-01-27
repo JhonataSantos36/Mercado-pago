@@ -9,6 +9,7 @@ import com.mercadopago.controllers.PaymentMethodGuessingController;
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.CardInfo;
+import com.mercadopago.model.Discount;
 import com.mercadopago.model.Installment;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.PayerCost;
@@ -39,6 +40,7 @@ public class InstallmentsPresenter {
 
     //Activity parameters
     private String mPublicKey;
+    private String mPayerEmail;
     private PaymentMethod mPaymentMethod;
     private Issuer mIssuer;
     private BigDecimal mAmount;
@@ -46,6 +48,7 @@ public class InstallmentsPresenter {
     private List<PayerCost> mPayerCosts;
     private PaymentPreference mPaymentPreference;
     private CardInfo mCardInfo;
+    private Discount mDiscount;
 
     public InstallmentsPresenter(Context context) {
         this.mContext = context;
@@ -120,7 +123,15 @@ public class InstallmentsPresenter {
     }
 
     public BigDecimal getAmount() {
-        return mAmount;
+        BigDecimal amount;
+
+        if (mDiscount == null) {
+            amount = mAmount;
+        } else {
+            amount = mDiscount.getAmountWithDiscount(mAmount);
+        }
+
+        return amount;
     }
 
     public List<PayerCost> getPayerCosts() {
@@ -165,6 +176,70 @@ public class InstallmentsPresenter {
         return mPayerCosts != null;
     }
 
+    public void initialize() {
+        if (mDiscount == null) {
+            if (isAmountValid()) {
+                getDirectDiscount();
+            } else {
+                loadPayerCosts();
+            }
+        } else {
+            initializeDiscountRow();
+            loadPayerCosts();
+        }
+    }
+
+    public Boolean isAmountValid() {
+        return mAmount != null && mAmount.compareTo(BigDecimal.ZERO) > 0;
+    }
+
+    public void initializeDiscountActivity() {
+        mView.startDiscountActivity(mAmount);
+    }
+
+    public void initializeDiscountRow() {
+        mView.showDiscountRow(mAmount);
+    }
+
+    private void getDirectDiscount() {
+        mMercadoPago.getDirectDiscount(mAmount.toString(), mPayerEmail, new Callback<Discount>() {
+            @Override
+            public void success(Discount discount) {
+                mDiscount = discount;
+                getInstallmentsAsync();
+                initializeDiscountRow();
+            }
+
+            @Override
+            public void failure(ApiException apiException) {
+                initializeDiscountRow();
+                loadPayerCosts();
+            }
+        });
+    }
+
+    public void onDiscountReceived(Discount discount) {
+        setDiscount(discount);
+        initializeDiscountRow();
+        getInstallmentsAsync();
+    }
+
+    public void setPayerEmail(String payerEmail) {
+        this.mPayerEmail = payerEmail;
+    }
+
+    public Discount getDiscount() {
+        return this.mDiscount;
+    }
+
+    public void setDiscount(Discount discount) {
+        this.mDiscount = discount;
+    }
+
+    public String getPayerEmail() {
+        return mPayerEmail;
+    }
+
     public void loadPayerCosts() {
         if (werePayerCostsSet()) {
             resolvePayerCosts(mPayerCosts);
@@ -179,37 +254,37 @@ public class InstallmentsPresenter {
         }
     }
 
-    private void getInstallmentsAsync() {
+    public void getInstallmentsAsync() {
         if (mMercadoPago == null) return;
         mView.showLoadingView();
-        mMercadoPago.getInstallments(mBin, mAmount, mIssuerId, mPaymentMethod.getId(),
-            new Callback<List<Installment>>() {
-                @Override
-                public void success(List<Installment> installments) {
-                    mView.stopLoadingView();
-                    if (installments.size() == 0) {
-                        mView.startErrorView(mContext.getString(R.string.mpsdk_standard_error_message),
-                                "no installments found for an issuer at InstallmentsActivity");
-                    } else if (installments.size() == 1) {
-                        resolvePayerCosts(installments.get(0).getPayerCosts());
-                    } else {
-                        mView.startErrorView(mContext.getString(R.string.mpsdk_standard_error_message),
-                                "multiple installments found for an issuer at InstallmentsActivity");
-                    }
-                }
-
-                @Override
-                public void failure(ApiException apiException) {
-                    mView.stopLoadingView();
-                    setFailureRecovery(new FailureRecovery() {
-                        @Override
-                        public void recover() {
-                            getInstallmentsAsync();
+        mMercadoPago.getInstallments(mBin, getAmount(), mIssuerId, mPaymentMethod.getId(),
+                new Callback<List<Installment>>() {
+                    @Override
+                    public void success(List<Installment> installments) {
+                        mView.stopLoadingView();
+                        if (installments.size() == 0) {
+                            mView.startErrorView(mContext.getString(R.string.mpsdk_standard_error_message),
+                                    "no installments found for an issuer at InstallmentsActivity");
+                        } else if (installments.size() == 1) {
+                            resolvePayerCosts(installments.get(0).getPayerCosts());
+                        } else {
+                            mView.startErrorView(mContext.getString(R.string.mpsdk_standard_error_message),
+                                    "multiple installments found for an issuer at InstallmentsActivity");
                         }
-                    });
-                    mView.showApiExceptionError(apiException);
-                }
-            });
+                    }
+
+                    @Override
+                    public void failure(ApiException apiException) {
+                        mView.stopLoadingView();
+                        setFailureRecovery(new FailureRecovery() {
+                            @Override
+                            public void recover() {
+                                getInstallmentsAsync();
+                            }
+                        });
+                        mView.showApiExceptionError(apiException);
+                    }
+                });
     }
 
     private void resolvePayerCosts(List<PayerCost> payerCosts) {

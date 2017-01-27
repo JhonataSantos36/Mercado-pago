@@ -1,7 +1,5 @@
 package com.mercadopago;
 
-import com.google.gson.Gson;
-
 import android.app.Activity;
 import android.app.Instrumentation;
 import android.content.Intent;
@@ -18,6 +16,7 @@ import android.support.v7.widget.RecyclerView;
 import android.test.suitebuilder.annotation.LargeTest;
 import android.widget.ImageView;
 
+import com.google.gson.Gson;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.exceptions.MPException;
 import com.mercadopago.model.ApiException;
@@ -69,7 +68,7 @@ import static com.mercadopago.utils.ActivityResultUtil.getActivityResult;
 import static junit.framework.Assert.assertTrue;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.not;
+import static org.hamcrest.core.IsNot.not;
 import static org.junit.Assert.assertEquals;
 
 /**

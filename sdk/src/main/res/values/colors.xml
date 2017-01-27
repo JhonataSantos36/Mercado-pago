@@ -142,5 +142,6 @@
     <color name="mpsdk_review_gray_background">#F5F5F5</color>
     <color name="mpsdk_review_payment_text">#333333</color>
     <color name="mpsdk_review_description_text">#666666</color>
+    <color name="mpsdk_discount_row">#F5F5F5</color>
 
 </resources>

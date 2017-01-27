@@ -14,11 +14,14 @@ import android.text.Spanned;
 import android.widget.ImageView;
 
 import com.mercadopago.model.Card;
+import com.mercadopago.model.Currency;
+import com.mercadopago.model.Discount;
 import com.mercadopago.model.FeeDetail;
 import com.mercadopago.model.Payer;
 import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.TransactionDetails;
+import com.mercadopago.test.StaticMock;
 import com.mercadopago.util.CurrenciesUtil;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.utils.ActivityResultUtil;
@@ -42,7 +45,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static junit.framework.Assert.assertFalse;
-import static org.hamcrest.Matchers.not;
+import static org.hamcrest.core.IsNot.not;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -99,6 +102,7 @@ public class CongratsActivityTest {
         payment.setInstallments(6);
         payment.setTransactionDetails(transactionDetails);
         payment.setCurrencyId("ARS");
+        payment.setTransactionAmount(new BigDecimal(1000));
 
         return payment;
     }
@@ -1955,5 +1959,80 @@ public class CongratsActivityTest {
         }
 
         Assert.assertFalse(mTestRule.getActivity().isFinishing());
+    }
+
+    //Discount
+    @Test
+    public void showDiscountDetailWithPercentOffWhenStartActivityWithoutDiscount() {
+        Spanned amountWithDiscount, totalAmount;
+
+        Discount discount = StaticMock.getPercentOffDiscount();
+
+        mPayment.setStatus(Payment.StatusCodes.STATUS_APPROVED);
+        mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_ACCREDITED);
+
+        BigDecimal totalAmountWithDiscount = mPayment.getTransactionAmount().subtract(discount.getCouponAmount());
+        mPayment.getTransactionDetails().setTotalPaidAmount(totalAmountWithDiscount);
+
+        createIntent();
+        validStartIntent.putExtra("discount", JsonUtil.getInstance().toJson(discount));
+        mTestRule.launchActivity(validStartIntent);
+
+        amountWithDiscount = getFormattedAmount(mTestRule.getActivity().getDiscount().getAmountWithDiscount(mPayment.getTransactionAmount()), mTestRule.getActivity().getDiscount().getCurrencyId());
+        totalAmount = getFormattedAmount(mPayment.getTransactionAmount(), mTestRule.getActivity().getDiscount().getCurrencyId());
+
+        onView(withId(R.id.mpsdkDiscountArrow)).check(matches(not(isDisplayed())));
+        onView(withId(R.id.mpsdkDiscountSeparator)).check(matches(not(isDisplayed())));
+        onView(withId(R.id.mpsdkHasDirectDiscount)).check(matches(isDisplayed()));
+        onView(withId(R.id.mpsdkDiscountOff)).check(matches(isDisplayed()));
+        onView(withId(R.id.mpsdkDiscountOff)).check(matches(withText(getDiscountOff(discount))));
+        onView(withId(R.id.mpsdkDiscountAmount)).check(matches(withText(amountWithDiscount.toString())));
+        onView(withId(R.id.mpsdkTotalAmount)).check(matches(withText(totalAmount.toString())));
+    }
+
+    @Test
+    public void showDiscountDetailWithAmountOffWhenStartActivityWithoutDiscount() {
+        Spanned amountWithDiscount, totalAmount;
+
+        Discount discount = StaticMock.getPercentOffDiscount();
+
+        mPayment.setStatus(Payment.StatusCodes.STATUS_APPROVED);
+        mPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_ACCREDITED);
+
+        BigDecimal totalAmountWithDiscount = mPayment.getTransactionAmount().subtract(discount.getCouponAmount());
+        mPayment.getTransactionDetails().setTotalPaidAmount(totalAmountWithDiscount);
+
+        createIntent();
+        validStartIntent.putExtra("discount", JsonUtil.getInstance().toJson(discount));
+        mTestRule.launchActivity(validStartIntent);
+
+        amountWithDiscount = getFormattedAmount(mTestRule.getActivity().getDiscount().getAmountWithDiscount(mPayment.getTransactionAmount()), mTestRule.getActivity().getDiscount().getCurrencyId());
+        totalAmount = getFormattedAmount(mPayment.getTransactionAmount(), mTestRule.getActivity().getDiscount().getCurrencyId());
+
+        onView(withId(R.id.mpsdkDiscountArrow)).check(matches(not(isDisplayed())));
+        onView(withId(R.id.mpsdkDiscountSeparator)).check(matches(not(isDisplayed())));
+        onView(withId(R.id.mpsdkHasDirectDiscount)).check(matches(isDisplayed()));
+        onView(withId(R.id.mpsdkDiscountOff)).check(matches(isDisplayed()));
+        onView(withId(R.id.mpsdkDiscountOff)).check(matches(withText(getDiscountOff(discount))));
+        onView(withId(R.id.mpsdkDiscountAmount)).check(matches(withText(amountWithDiscount.toString())));
+        onView(withId(R.id.mpsdkTotalAmount)).check(matches(withText(totalAmount.toString())));
+    }
+
+    private String getDiscountOff(Discount discount) {
+        if (discount.getAmountOff() != null && discount.getAmountOff().compareTo(BigDecimal.ZERO)>0) {
+            Currency currency = CurrenciesUtil.getCurrency(discount.getCurrencyId());
+            String amount = currency.getSymbol() + " " + discount.getAmountOff();
+            return amount;
+        } else {
+            String discountOff = mTestRule.getActivity().getResources().getString(R.string.mpsdk_discount_percent_off,
+                    String.valueOf(discount.getPercentOff()));
+            return discountOff;
+        }
+    }
+
+    private Spanned getFormattedAmount(BigDecimal amount, String currencyId) {
+        String originalNumber = CurrenciesUtil.formatNumber(amount, currencyId);
+        Spanned amountText = CurrenciesUtil.formatCurrencyInText(amount, currencyId, originalNumber, false, true);
+        return amountText;
     }
 }

@@ -107,9 +107,9 @@ public class ReviewSummaryView implements ReviewSummaryViewController {
     @Override
     public void drawSummary() {
         decorateButton();
-        //Productos
+        //Products
         mProductsText.setText(getFormattedAmount(mAmount));
-        //Descuentos
+        //Discounts
         if (hasDiscount()) {
             showDiscountRow();
         } else {
@@ -121,14 +121,15 @@ public class ReviewSummaryView implements ReviewSummaryViewController {
         } else {
             mSubtotalRow.setVisibility(View.GONE);
         }
-        if (MercadoPagoUtil.isCard(mPaymentMethod.getPaymentTypeId())) {
+        if (mPaymentMethod != null && MercadoPagoUtil.isCard(mPaymentMethod.getPaymentTypeId())) {
             //Pagas
             showPayerCostRow();
             showTotal(mPayerCost.getTotalAmount());
         } else {
             mPayerCostRow.setVisibility(View.GONE);
             mFirstSeparator.setVisibility(View.GONE);
-            showTotal(mAmount);
+            mSubtotalRow.setVisibility(View.GONE);
+            mTotalText.setText(getFormattedAmount(getSubtotal()));
         }
     }
 
@@ -142,10 +143,25 @@ public class ReviewSummaryView implements ReviewSummaryViewController {
     }
 
     private void showDiscountRow() {
-        String discountText = mContext.getResources().getString(R.string.mpsdk_review_summary_discounts,
-                String.valueOf(mDiscountPercentage));
+        StringBuilder formattedAmountBuilder = new StringBuilder();
+        Spanned amountText;
+        String discountText;
+
+        if (mDiscountPercentage == null) {
+            discountText = mContext.getResources().getString(R.string.mpsdk_review_summary_discount_with_amount_off);
+        } else {
+            discountText = mContext.getResources().getString(R.string.mpsdk_review_summary_discount_with_percent_off,
+                    String.valueOf(mDiscountPercentage));
+        }
+
         mDiscountPercentageText.setText(discountText);
-        mDiscountsText.setText(getFormattedAmount(mDiscountAmount));
+
+        formattedAmountBuilder.append("-");
+        formattedAmountBuilder.append(CurrenciesUtil.formatNumber(mDiscountAmount, mCurrencyId));
+
+        amountText = CurrenciesUtil.formatCurrencyInText(mDiscountAmount, mCurrencyId, formattedAmountBuilder.toString(), false, true);
+
+        mDiscountsText.setText(amountText);
     }
 
     private void showPayerCostRow() {
@@ -160,7 +176,7 @@ public class ReviewSummaryView implements ReviewSummaryViewController {
     }
 
     private boolean hasDiscount() {
-        return mDiscountPercentage != null && mDiscountAmount != null && mCurrencyId != null;
+        return (mDiscountPercentage != null || mDiscountAmount != null) && mCurrencyId != null;
     }
 
     private Spanned getFormattedAmount(BigDecimal amount) {
@@ -182,4 +198,6 @@ public class ReviewSummaryView implements ReviewSummaryViewController {
         }
         return ans;
     }
+
+
 }

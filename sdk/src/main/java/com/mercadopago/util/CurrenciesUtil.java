@@ -146,4 +146,8 @@ public class CurrenciesUtil {
     public static List<Currency> getAllCurrencies() {
         return new ArrayList<>(currenciesList.values());
     }
+
+    public static Currency getCurrency(String currencyKey) {
+        return currenciesList.get(currencyKey);
+    }
 }

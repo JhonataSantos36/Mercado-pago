@@ -32,7 +32,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal|top"
                     android:gravity="center_horizontal"
-                    android:layout_marginTop="45dp" />
+                    android:layout_marginTop="45dp" >
+                    </FrameLayout>
 
                 <FrameLayout
                     android:id="@+id/mpsdkIdentificationCardContainer"
@@ -41,6 +42,11 @@
                     android:layout_gravity="center_horizontal|top"
                     android:gravity="center_horizontal"
                     android:layout_marginTop="45dp" />
+                    <FrameLayout
+                        android:id="@+id/mpsdkDiscount"
+                        android:layout_gravity="bottom"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
             </FrameLayout>
 
             <FrameLayout
@@ -54,7 +60,6 @@
                     android:background="@color/mpsdk_white">
                     <include layout="@layout/mpsdk_form_card_input"/>
                 </LinearLayout>
-
             </FrameLayout>
 
             <FrameLayout

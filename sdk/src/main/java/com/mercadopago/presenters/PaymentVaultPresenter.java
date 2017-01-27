@@ -1,5 +1,6 @@
 package com.mercadopago.presenters;
 
+
 import com.mercadopago.R;
 import com.mercadopago.callbacks.Callback;
 import com.mercadopago.callbacks.FailureRecovery;
@@ -11,6 +12,7 @@ import com.mercadopago.model.ApiException;
 import com.mercadopago.model.Card;
 import com.mercadopago.model.CustomSearchItem;
 import com.mercadopago.model.Customer;
+import com.mercadopago.model.Discount;
 import com.mercadopago.model.Payer;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentMethodSearch;
@@ -36,19 +38,21 @@ public class PaymentVaultPresenter {
 
     private PaymentVaultView mPaymentVaultView;
 
-    private String mMerchantPublicKey;
     private Site mSite;
     private MercadoPago mMercadoPago;
+    private Discount mDiscount;
     private PaymentMethodSearchItem mSelectedSearchItem;
     private PaymentMethodSearch mPaymentMethodSearch;
     private List<CustomSearchItem> mCustomSearchItems;
     private List<Card> mSavedCards;
+    private String mMerchantPublicKey;
+    private String mPayerAccessToken;
     private String mMerchantBaseUrl;
     private String mMerchantGetCustomerUri;
     private String mMerchantAccessToken;
+    private String mPayerEmail;
     private PaymentPreference mPaymentPreference;
     private BigDecimal mAmount;
-    private String mPayerAccessToken;
     private Boolean mAccountMoneyEnabled;
     private Integer mMaxSavedCards;
 
@@ -64,10 +68,63 @@ public class PaymentVaultPresenter {
                 .build();
 
         if (isItemSelected()) {
+            initializeDiscountRow();
+            showSelectedItemChildren();
+        } else {
+            loadDiscount();
+        }
+    }
+
+    private void initPaymentVaultFlow() {
+        if (isItemSelected()) {
             showSelectedItemChildren();
         } else {
             initPaymentMethodSearch();
         }
+    }
+
+    private void loadDiscount() {
+        if (mDiscount == null) {
+            getDirectDiscount();
+        } else {
+            initializeDiscountRow();
+            initPaymentVaultFlow();
+        }
+    }
+
+    public void initializeDiscountActivity() {
+        mPaymentVaultView.startDiscountActivity(mAmount);
+    }
+
+    public void initializeDiscountRow() {
+        mPaymentVaultView.showDiscountRow(mAmount);
+    }
+
+    private void getDirectDiscount() {
+        mPaymentVaultView.showProgress();
+        mMercadoPago.getDirectDiscount(mAmount.toString(), mPayerEmail, new Callback<Discount>() {
+            @Override
+            public void success(Discount discount) {
+                mDiscount = discount;
+                initializeDiscountRow();
+                initPaymentVaultFlow();
+            }
+
+            @Override
+            public void failure(ApiException apiException) {
+                initializeDiscountRow();
+                initPaymentVaultFlow();
+            }
+        });
+    }
+
+    public void onDiscountReceived(Discount discount) {
+        setDiscount(discount);
+
+        mPaymentVaultView.cleanPaymentMethodOptions();
+
+        initializeDiscountRow();
+        initPaymentVaultFlow();
     }
 
     public void validateParameters() throws IllegalStateException {
@@ -116,7 +173,7 @@ public class PaymentVaultPresenter {
         return mSelectedSearchItem != null;
     }
 
-    private void initPaymentMethodSearch() {
+    public void initPaymentMethodSearch() {
         mPaymentVaultView.setTitle(getString(R.string.mpsdk_title_activity_payment_vault));
 
         if (mPaymentMethodSearch == null) {
@@ -134,7 +191,6 @@ public class PaymentVaultPresenter {
         Payer payer = new Payer();
         payer.setAccessToken(mPayerAccessToken);
 
-        mPaymentVaultView.showProgress();
         mMercadoPago.getPaymentMethodSearch(mAmount, excludedPaymentTypes, excludedPaymentMethodIds, payer, mAccountMoneyEnabled, new Callback<PaymentMethodSearch>() {
 
             @Override
@@ -202,7 +258,7 @@ public class PaymentVaultPresenter {
     }
 
     private void selectCard(Card card) {
-        mPaymentVaultView.startSavedCardFlow(card);
+        mPaymentVaultView.startSavedCardFlow(card, mAmount);
     }
 
     private void showAvailableOptions() {
@@ -294,7 +350,7 @@ public class PaymentVaultPresenter {
         Card selectedCard = getCardById(mSavedCards, searchItem.getId());
         if (paymentMethod != null) {
             selectedCard.setPaymentMethod(paymentMethod);
-            if(selectedCard.getSecurityCode() == null && paymentMethod.getSettings() != null && paymentMethod.getSettings().get(0) != null) {
+            if (selectedCard.getSecurityCode() == null && paymentMethod.getSettings() != null && paymentMethod.getSettings().get(0) != null) {
                 selectedCard.setSecurityCode(paymentMethod.getSettings().get(0).getSecurityCode());
             }
         }
@@ -320,7 +376,7 @@ public class PaymentVaultPresenter {
         mPaymentPreference.setDefaultPaymentTypeId(item.getId());
 
         if (MercadoPagoUtil.isCard(item.getId())) {
-            mPaymentVaultView.startCardFlow();
+            mPaymentVaultView.startCardFlow(mAmount);
         } else {
             mPaymentVaultView.startPaymentMethodsActivity();
         }
@@ -352,7 +408,6 @@ public class PaymentVaultPresenter {
     }
 
     private void getCustomerAsync() {
-        mPaymentVaultView.showProgress();
         MerchantServer.getCustomer(mPaymentVaultView.getContext(), mMerchantBaseUrl, mMerchantGetCustomerUri, mMerchantAccessToken, new Callback<Customer>() {
             @Override
             public void success(Customer customer) {
@@ -456,10 +511,6 @@ public class PaymentVaultPresenter {
         this.mPaymentPreference = mPaymentPreference;
     }
 
-    public BigDecimal getAmount() {
-        return mAmount;
-    }
-
     public void setAmount(BigDecimal mAmount) {
         this.mAmount = mAmount;
     }
@@ -476,7 +527,35 @@ public class PaymentVaultPresenter {
         this.mAccountMoneyEnabled = accountMoneyEnabled;
     }
 
+    public void setDiscount(Discount discount) {
+        this.mDiscount = discount;
+    }
+
+    public Discount getDiscount() {
+        return mDiscount;
+    }
+
+    public void setPayerEmail(String payerEmail) {
+        this.mPayerEmail = payerEmail;
+    }
+
+    public String getPayerEmail() {
+        return mPayerEmail;
+    }
+
     public void setMaxSavedCards(int maxSavedCards) {
         this.mMaxSavedCards = maxSavedCards;
+    }
+
+    public BigDecimal getAmount() {
+        BigDecimal amount;
+
+        if (mDiscount == null) {
+            amount = mAmount;
+        } else {
+            amount = mDiscount.getAmountWithDiscount(mAmount);
+        }
+
+        return amount;
     }
 }

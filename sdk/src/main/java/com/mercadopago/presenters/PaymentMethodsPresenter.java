@@ -1,6 +1,5 @@
 package com.mercadopago.presenters;
 
-import com.mercadopago.views.PaymentMethodsView;
 import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.constants.PaymentTypes;
 import com.mercadopago.exceptions.MPException;
@@ -9,6 +8,7 @@ import com.mercadopago.model.PaymentPreference;
 import com.mercadopago.mvp.MvpPresenter;
 import com.mercadopago.mvp.OnResourcesRetrievedCallback;
 import com.mercadopago.providers.PaymentMethodsProvider;
+import com.mercadopago.views.PaymentMethodsView;
 
 import java.util.ArrayList;
 import java.util.List;

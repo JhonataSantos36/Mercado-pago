@@ -1,23 +1,29 @@
 package com.mercadopago.core;
 
-import com.google.gson.Gson;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.DrawableRes;
 import android.text.TextUtils;
 
+import com.google.gson.Gson;
 import com.mercadopago.CustomerCardsActivity;
+import com.mercadopago.callbacks.OnConfirmPaymentCallback;
 import com.mercadopago.callbacks.OnSelectedCallback;
 import com.mercadopago.model.Card;
 import com.mercadopago.model.DecorationPreference;
+import com.mercadopago.model.Discount;
+import com.mercadopago.model.PayerCost;
+import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentPreference;
+import com.mercadopago.uicontrollers.discounts.DiscountRowView;
+import com.mercadopago.uicontrollers.reviewandconfirm.ReviewSummaryView;
 import com.mercadopago.uicontrollers.savedcards.SavedCardRowView;
 import com.mercadopago.uicontrollers.savedcards.SavedCardView;
 import com.mercadopago.uicontrollers.savedcards.SavedCardsListView;
 import com.mercadopago.util.JsonUtil;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -203,6 +209,118 @@ public class MercadoPagoUI {
 
             public SavedCardView build() {
                 return new SavedCardRowView(context, card, selectionImageResId);
+            }
+        }
+
+        public static class DiscountRowViewBuilder {
+            private Context context;
+            private Discount discount;
+            private BigDecimal transactionAmount;
+            private String currencyId;
+            private Boolean shortRowEnabled;
+            private Boolean showArrow;
+            private Boolean showSeparator;
+
+            public DiscountRowViewBuilder setContext(Context context) {
+                this.context = context;
+                return this;
+            }
+
+            public DiscountRowViewBuilder setDiscount(Discount discount) {
+                this.discount = discount;
+                return this;
+            }
+
+            public DiscountRowViewBuilder setTransactionAmount(BigDecimal transactionAmount) {
+                this.transactionAmount = transactionAmount;
+                return this;
+            }
+
+            public DiscountRowViewBuilder setCurrencyId(String currencyId) {
+                this.currencyId = currencyId;
+                return this;
+            }
+
+            public DiscountRowViewBuilder setShortRowEnabled(Boolean shortRowEnabled) {
+                this.shortRowEnabled = shortRowEnabled;
+                return this;
+            }
+
+            public DiscountRowViewBuilder setShowArrow(Boolean showArrow) {
+                this.showArrow = showArrow;
+                return this;
+            }
+
+            public DiscountRowViewBuilder setShowSeparator(Boolean showSeparator) {
+                this.showSeparator = showSeparator;
+                return this;
+            }
+
+            public DiscountRowView build() {
+                return new DiscountRowView(context, discount, transactionAmount, currencyId, shortRowEnabled, showArrow, showSeparator);
+            }
+        }
+
+        public static class SummaryViewBuilder {
+            private Context context;
+            private String currencyId;
+            private BigDecimal amount;
+            private BigDecimal discountPercentage;
+            private BigDecimal discountAmount;
+            private PayerCost payerCost;
+            private PaymentMethod paymentMethod;
+            private DecorationPreference decorationPreference;
+            private OnConfirmPaymentCallback callback;
+
+
+            public SummaryViewBuilder setContext(Context context) {
+                this.context = context;
+                return this;
+            }
+
+            public SummaryViewBuilder setCurrencyId(String currencyId) {
+                this.currencyId = currencyId;
+                return this;
+            }
+
+            public SummaryViewBuilder setAmount(BigDecimal amount) {
+                this.amount = amount;
+                return this;
+            }
+
+            public SummaryViewBuilder setDiscountPercentage(BigDecimal discountPercentage) {
+                this.discountPercentage = discountPercentage;
+                return this;
+            }
+
+            public SummaryViewBuilder setDiscountAmount(BigDecimal discountAmount) {
+                this.discountAmount = discountAmount;
+                return this;
+            }
+
+            public SummaryViewBuilder setPayerCost(PayerCost payerCost) {
+                this.payerCost = payerCost;
+                return this;
+            }
+
+            public SummaryViewBuilder setPaymentMethod(PaymentMethod paymentMethod) {
+                this.paymentMethod = paymentMethod;
+                return this;
+            }
+
+            public SummaryViewBuilder setDecorationPreference(DecorationPreference decorationPreference) {
+                this.decorationPreference = decorationPreference;
+                return this;
+            }
+
+            public SummaryViewBuilder setCallback(OnConfirmPaymentCallback callback) {
+                this.callback = callback;
+                return this;
+            }
+
+            public ReviewSummaryView build() {
+                return new ReviewSummaryView(context, currencyId, amount, payerCost, paymentMethod,
+                        discountPercentage, discountAmount, callback, decorationPreference);
             }
         }
     }

@@ -191,7 +191,6 @@
     <string name="mpsdk_form_card_title_payment_type_prepaid">Tarjeta prepaga</string>
     <string name="mpsdk_payment_types_title">¿Qué tipo de tarjeta es?</string>
 
-
     <string name="mpsdk_confirm_prompt_yes">Sí</string>
     <string name="mpsdk_confirm_prompt_no">No</string>
 
@@ -209,9 +208,25 @@
     <string name="mpsdk_review_product_price">Precio unitario: %1$s</string>
     <string name="mpsdk_activity_checkout_title">Confirma tu compra</string>
     <string name="mpsdk_review_summary_products">Productos</string>
-    <string name="mpsdk_review_summary_discount">Descuentos</string>
-    <string name="mpsdk_review_summary_discounts">Descuento %1$s</string>
     <string name="mpsdk_review_summary_subtotal">Subtotal</string>
     <string name="mpsdk_review_summary_pay">Pagas</string>
     <string name="mpsdk_review_summary_total">Total</string>
+    <string name="mpsdk_review_summary_discount">Descuento</string>
+    <string name="mpsdk_review_summary_discount_with_percent_off">Descuento %1$s%%</string>
+    <string name="mpsdk_review_summary_discount_with_amount_off">Descuento</string>
+
+    <!-- Discount -->
+    <string name="mpsdk_discount">Descuento</string>
+    <string name="mpsdk_input_button_exchange">Canjear</string>
+    <string name="mpsdk_discount_code">Código de descuento</string>
+    <string name="mpsdk_has_a_discount">Tengo un descuento</string>
+    <string name="mpsdk_of_discount">de descuento</string>
+    <string name="mpsdk_percent_of_discount">% de descuento</string>
+    <string name="mpsdk_do_not_enter_code">No se ingresó código</string>
+    <string name="mpsdk_invalid_code">Código inválido</string>
+    <string name="mpsdk_merchant_without_discount_available">Vendedor sin descuento disponible</string>
+    <string name="mpsdk_ran_out_of_quantity_uses_quantity">Se agotó la cantidad de usos</string>
+    <string name="mpsdk_amount_doesnt_match">Importe fuera del alcance</string>
+    <string name="mpsdk_campaign_expired">La campaña expiró</string>
+    <string name="mpsdk_discount_percent_off">%1$s %%</string>
 </resources>

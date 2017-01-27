@@ -314,9 +314,7 @@ public class InstructionsActivityTest {
 
         onView(withId(R.id.mpsdkActionButton)).perform(ViewActions.scrollTo(), click());
 
-        intended(allOf(
-                hasAction(Intent.ACTION_VIEW),
-                hasData(actionInfo.getUrl())));
+        intended(allOf(hasAction(Intent.ACTION_VIEW),hasData(actionInfo.getUrl())));
     }
 
     @Test

@@ -11,6 +11,7 @@ import com.mercadopago.model.CustomSearchItem;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentMethodSearchItem;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -18,7 +19,7 @@ import java.util.List;
  */
 public interface PaymentVaultView {
 
-    void startSavedCardFlow(Card card);
+    void startSavedCardFlow(Card card, BigDecimal transactionAmount);
 
     void restartWithSelectedItem(PaymentMethodSearchItem groupIem);
 
@@ -40,9 +41,15 @@ public interface PaymentVaultView {
 
     void setFailureRecovery(FailureRecovery failureRecovery);
 
-    void startCardFlow();
+    void startCardFlow(BigDecimal transactionAmount);
 
     void startPaymentMethodsActivity();
 
     void selectPaymentMethod(PaymentMethod selectedPaymentMethod);
+
+    void showDiscountRow(BigDecimal transactionAmount);
+
+    void startDiscountActivity(BigDecimal transactionAmount);
+
+    void cleanPaymentMethodOptions();
 }

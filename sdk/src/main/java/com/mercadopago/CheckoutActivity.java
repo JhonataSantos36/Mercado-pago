@@ -1,8 +1,5 @@
 package com.mercadopago;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
@@ -20,6 +17,8 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.mercadopago.adapters.ReviewPaymentOffAdapter;
 import com.mercadopago.adapters.ReviewPaymentOnAdapter;
 import com.mercadopago.adapters.ReviewProductAdapter;
@@ -29,6 +28,7 @@ import com.mercadopago.callbacks.OnChangePaymentMethodCallback;
 import com.mercadopago.callbacks.OnConfirmPaymentCallback;
 import com.mercadopago.controllers.CheckoutTimer;
 import com.mercadopago.core.MercadoPago;
+import com.mercadopago.core.MercadoPagoUI;
 import com.mercadopago.core.MerchantServer;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.exceptions.CheckoutPreferenceException;
@@ -39,6 +39,7 @@ import com.mercadopago.model.Card;
 import com.mercadopago.model.CardInfo;
 import com.mercadopago.model.CheckoutPreference;
 import com.mercadopago.model.Customer;
+import com.mercadopago.model.Discount;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.Payer;
 import com.mercadopago.model.PayerCost;
@@ -54,6 +55,7 @@ import com.mercadopago.model.Site;
 import com.mercadopago.model.Token;
 import com.mercadopago.mptracker.MPTracker;
 import com.mercadopago.observers.TimerObserver;
+import com.mercadopago.uicontrollers.discounts.DiscountRowView;
 import com.mercadopago.uicontrollers.reviewandconfirm.ReviewSummaryView;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.ErrorUtil;
@@ -101,6 +103,8 @@ public class CheckoutActivity extends MercadoPagoActivity implements TimerObserv
 
     protected OnChangePaymentMethodCallback mChangePaymentMethodCallback;
     protected OnConfirmPaymentCallback mConfirmCallback;
+
+    protected Discount mDiscount;
 
     //Controls
     protected Toolbar mToolbar;
@@ -316,7 +320,6 @@ public class CheckoutActivity extends MercadoPagoActivity implements TimerObserv
     }
 
     protected void getPaymentMethodSearch() {
-
         showProgressBar();
         mMercadoPago.getPaymentMethodSearch(mCheckoutPreference.getAmount(), mCheckoutPreference.getExcludedPaymentTypes(), mCheckoutPreference.getExcludedPaymentMethods(), mCheckoutPreference.getPayer(), false, new Callback<PaymentMethodSearch>() {
             @Override
@@ -372,9 +375,11 @@ public class CheckoutActivity extends MercadoPagoActivity implements TimerObserv
         new MercadoPago.StartActivityBuilder()
                 .setActivity(this)
                 .setPublicKey(mMerchantPublicKey)
+                .setPayerEmail(mCheckoutPreference.getPayer().getEmail())
                 .setSite(mSite)
                 .setAmount(mCheckoutPreference.getAmount())
                 .setPaymentMethodSearch(mPaymentMethodSearch)
+                .setDiscount(mDiscount)
                 .setPaymentPreference(mCheckoutPreference.getPaymentPreference())
                 .setDecorationPreference(mDecorationPreference)
                 .setCards(mSavedCards)
@@ -457,6 +462,7 @@ public class CheckoutActivity extends MercadoPagoActivity implements TimerObserv
 
     private void resolvePaymentVaultRequest(int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
+            mDiscount = JsonUtil.getInstance().fromJson(data.getStringExtra("discount"), Discount.class);
 
             mSelectedIssuer = JsonUtil.getInstance().fromJson(data.getStringExtra("issuer"), Issuer.class);
             mSelectedPayerCost = JsonUtil.getInstance().fromJson(data.getStringExtra("payerCost"), PayerCost.class);
@@ -502,7 +508,6 @@ public class CheckoutActivity extends MercadoPagoActivity implements TimerObserv
     }
 
     private void startCardVaultActivity() {
-
         PaymentPreference paymentPreference = mCheckoutPreference.getPaymentPreference();
 
         if (paymentPreference == null) {
@@ -588,7 +593,19 @@ public class CheckoutActivity extends MercadoPagoActivity implements TimerObserv
     private void createTotalAmountList() {
         //info for off payment methods
         mTotalAmountList = new ArrayList<>();
-        mTotalAmountList.add(mCheckoutPreference.getAmount());
+        mTotalAmountList.add(getAmount());
+    }
+
+    private BigDecimal getAmount() {
+        BigDecimal amount;
+
+        if (mDiscount == null) {
+            amount = mCheckoutPreference.getAmount();
+        } else {
+            amount = mDiscount.getAmountWithDiscount(mCheckoutPreference.getAmount());
+        }
+
+        return amount;
     }
 
     private void createPaymentMethodSearchList() {
@@ -630,10 +647,26 @@ public class CheckoutActivity extends MercadoPagoActivity implements TimerObserv
     }
 
     private void drawSummary() {
+        ReviewSummaryView summaryView;
+        MercadoPagoUI.Views.SummaryViewBuilder summaryViewBuilder = new MercadoPagoUI.Views.SummaryViewBuilder();
         mReviewSummaryContainer.removeAllViews();
-        ReviewSummaryView summaryView = new ReviewSummaryView(this, mCheckoutPreference.getItems().get(0).getCurrencyId(),
-                mCheckoutPreference.getAmount(), mSelectedPayerCost, mSelectedPaymentMethod, null, null,
-                mConfirmCallback, mDecorationPreference);
+
+        summaryViewBuilder.setContext(this)
+                .setCurrencyId(mCheckoutPreference.getItems().get(0).getCurrencyId())
+                .setAmount(mCheckoutPreference.getAmount())
+                .setPayerCost(mSelectedPayerCost)
+                .setPaymentMethod(mSelectedPaymentMethod)
+                .setCallback(mConfirmCallback)
+                .setDecorationPreference(mDecorationPreference);
+
+        if (mDiscount != null) {
+            if (mDiscount.hasPercentOff()) {
+                summaryViewBuilder.setDiscountPercentage(mDiscount.getPercentOff());
+            }
+            summaryViewBuilder.setDiscountAmount(mDiscount.getCouponAmount());
+        }
+
+        summaryView = summaryViewBuilder.build();
         summaryView.inflateInParent(mReviewSummaryContainer, true);
         summaryView.initializeControls();
         summaryView.drawSummary();
@@ -737,8 +770,8 @@ public class CheckoutActivity extends MercadoPagoActivity implements TimerObserv
     protected void createPayment() {
         mScrollView.setVisibility(View.GONE);
         LayoutUtil.showProgressLayout(this);
-        PaymentIntent paymentIntent = createPaymentIntent();
 
+        PaymentIntent paymentIntent = createPaymentIntent();
         mMercadoPago.createPayment(paymentIntent, new Callback<Payment>() {
             @Override
             public void success(Payment payment) {
@@ -787,6 +820,15 @@ public class CheckoutActivity extends MercadoPagoActivity implements TimerObserv
             mTransactionId = createNewTransactionId();
         }
 
+        if (mDiscount != null) {
+            paymentIntent.setCampaignId(mDiscount.getId().intValue());
+            paymentIntent.setCouponAmount(mDiscount.getCouponAmount().floatValue());
+
+            if (!isEmpty(mDiscount.getCouponCode())) {
+                paymentIntent.setCouponCode(mDiscount.getCouponCode());
+            }
+        }
+
         paymentIntent.setTransactionId(mTransactionId);
         return paymentIntent;
     }
@@ -809,6 +851,7 @@ public class CheckoutActivity extends MercadoPagoActivity implements TimerObserv
                 .setPublicKey(mMerchantPublicKey)
                 .setActivity(getActivity())
                 .setPayment(mCreatedPayment)
+                .setDiscount(mDiscount)
                 .setPaymentMethod(mSelectedPaymentMethod)
                 .setCongratsDisplay(mCongratsDisplay)
                 .startPaymentResultActivity();
