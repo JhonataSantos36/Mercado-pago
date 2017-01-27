@@ -93,8 +93,10 @@ public class CheckoutExampleActivity extends AppCompatActivity {
 
     private void startMercadoPagoCheckout() {
 
-        DecorationPreference decorationPreference = getCurrentDecorationPreference();
-
+        DecorationPreference.Builder decorationPreferenceBuilder = getCurrentDecorationPreferenceBuilder();
+        decorationPreferenceBuilder.setCustomFont("fonts/ArimaMadurai-Light.ttf");
+        DecorationPreference decorationPreference = decorationPreferenceBuilder.build();
+        
         new MercadoPagoCheckout.Builder()
                 .setContext(this)
                 .setPublicKey(mPublicKey)
@@ -118,15 +120,15 @@ public class CheckoutExampleActivity extends AppCompatActivity {
                 });
     }
 
-    private DecorationPreference getCurrentDecorationPreference() {
-        DecorationPreference decorationPreference = new DecorationPreference();
+    private DecorationPreference.Builder getCurrentDecorationPreferenceBuilder() {
+        DecorationPreference.Builder builder = new DecorationPreference.Builder();
         if (mSelectedColor != null) {
-            decorationPreference.setBaseColor(mSelectedColor);
+            builder.setBaseColor(mSelectedColor);
             if (mDarkFontEnabled.isChecked()) {
-                decorationPreference.enableDarkFont();
+                builder.enableDarkFont();
             }
         }
-        return decorationPreference;
+        return builder;
     }
 
     @Override

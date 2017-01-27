@@ -18,23 +18,13 @@ public class DecorationPreference {
     private Integer lighterColor;
     private Integer baseColor;
     private boolean darkFontEnabled;
+    private String fontPath;
 
-    public void setBaseColor(@ColorInt int color) {
-        this.baseColor = color;
-        this.lighterColor = ColorsUtil.lighter(baseColor);
-    }
-
-    public void setBaseColor(String hexColor) {
-        this.baseColor = Color.parseColor(hexColor);
-        this.lighterColor = ColorsUtil.lighter(baseColor);
-    }
-
-    public void setCustomFont(Context context, String fontPath) {
-        Typeface typeFace = null;
-        if (!FontCache.hasTypeface(FontCache.CUSTOM_FONT)) {
-            typeFace = Typeface.createFromAsset(context.getAssets(), fontPath);
-            FontCache.setTypeface(FontCache.CUSTOM_FONT, typeFace);
-        }
+    private DecorationPreference(Builder builder) {
+        this.lighterColor = builder.lighterColor;
+        this.baseColor = builder.baseColor;
+        this.darkFontEnabled = builder.darkFontEnabled;
+        this.fontPath = builder.fontPath;
     }
 
     public boolean hasColors() {
@@ -43,10 +33,6 @@ public class DecorationPreference {
 
     public Integer getBaseColor() {
         return baseColor;
-    }
-
-    public void enableDarkFont() {
-        this.darkFontEnabled = true;
     }
 
     public boolean isDarkFontEnabled() {
@@ -61,4 +47,46 @@ public class DecorationPreference {
         return ContextCompat.getColor(context, R.color.mpsdk_dark_font_color);
     }
 
+    public void activateFont(Context context) {
+        if (fontPath != null) {
+            Typeface typeFace = null;
+            if (!FontCache.hasTypeface(FontCache.CUSTOM_FONT)) {
+                typeFace = Typeface.createFromAsset(context.getAssets(), fontPath);
+                FontCache.setTypeface(FontCache.CUSTOM_FONT, typeFace);
+            }
+        }
+    }
+
+    public static class Builder {
+        private Integer lighterColor;
+        private Integer baseColor;
+        private boolean darkFontEnabled;
+        private String fontPath;
+
+        public Builder setBaseColor(@ColorInt int color) {
+            this.baseColor = color;
+            this.lighterColor = ColorsUtil.lighter(baseColor);
+            return this;
+        }
+
+        public Builder setBaseColor(String hexColor) {
+            this.baseColor = Color.parseColor(hexColor);
+            this.lighterColor = ColorsUtil.lighter(baseColor);
+            return this;
+        }
+
+        public Builder setCustomFont(String fontPath) {
+            this.fontPath = fontPath;
+            return this;
+        }
+
+        public Builder enableDarkFont() {
+            this.darkFontEnabled = true;
+            return this;
+        }
+
+        public DecorationPreference build() {
+            return new DecorationPreference(this);
+        }
+    }
 }

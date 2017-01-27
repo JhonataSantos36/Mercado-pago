@@ -73,7 +73,16 @@ public abstract class MercadoPagoActivity extends AppCompatActivity {
     }
 
     private void getDecorationPreference() {
+<<<<<<< HEAD
+        if (getIntent().getStringExtra("decorationPreference") != null) {
+            mDecorationPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("decorationPreference"), DecorationPreference.class);
+            if (mDecorationPreference != null) {
+                mDecorationPreference.activateFont(this);
+            }
+        }
+=======
         mDecorationPreference = MercadoPagoContext.getInstance().getDecorationPreference();
+>>>>>>> release/3.0.0
     }
 
     @Override

@@ -319,14 +319,14 @@ public class ComponentsExampleActivity extends AppCompatActivity {
     }
 
     private DecorationPreference getCurrentDecorationPreference() {
-        DecorationPreference decorationPreference = new DecorationPreference();
+        DecorationPreference.Builder decorationPreferenceBuilder = new DecorationPreference.Builder();
         if (mSelectedColor != null) {
-            decorationPreference.setBaseColor(mSelectedColor);
+            decorationPreferenceBuilder.setBaseColor(mSelectedColor);
             if (mDarkFontEnabled.isChecked()) {
-                decorationPreference.enableDarkFont();
+                decorationPreferenceBuilder.enableDarkFont();
             }
         }
-        return decorationPreference;
+        return decorationPreferenceBuilder.build();
     }
 
 
