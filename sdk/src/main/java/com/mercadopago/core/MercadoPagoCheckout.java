@@ -4,11 +4,12 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.mercadopago.CheckoutActivity;
+import com.mercadopago.callbacks.CallbackHolder;
+import com.mercadopago.callbacks.PaymentCallback;
+import com.mercadopago.callbacks.PaymentDataCallback;
 import com.mercadopago.preferences.CheckoutPreference;
 import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.preferences.FlowPreference;
-import com.mercadopago.callbacks.PaymentCallback;
-import com.mercadopago.callbacks.PaymentDataCallback;
 import com.mercadopago.preferences.ServicePreference;
 import com.mercadopago.util.JsonUtil;
 
@@ -50,16 +51,18 @@ public class MercadoPagoCheckout {
     }
 
     private void attachCheckoutCallback(PaymentCallback paymentCallback) {
-        // TODO Implement
+        CallbackHolder.getInstance().setPaymentCallback(paymentCallback);
     }
 
     private void attachCheckoutCallback(PaymentDataCallback paymentDataCallback) {
-        // TODO Implement
+        CallbackHolder.getInstance().setPaymentDataCallback(paymentDataCallback);
     }
 
     private void startCheckoutActivity() {
         Intent checkoutIntent = new Intent(context, CheckoutActivity.class);
         checkoutIntent.putExtra("flowPreference", JsonUtil.getInstance().toJson(flowPreference));
+        //TODO remove
+        checkoutIntent.putExtra("checkoutPreferenceId", checkoutPreference.getId());
         context.startActivity(checkoutIntent);
     }
 

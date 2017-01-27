@@ -1,13 +1,11 @@
 package com.mercadopago.callbacks;
 
-import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.model.Payment;
 
 /**
- * Created by mreverter on 1/17/17.
+ * Created by vaserber on 1/19/17.
  */
-public interface PaymentCallback {
+
+public interface PaymentCallback extends ReturnCallback {
     void onSuccess(Payment payment);
-    void onCancel();
-    void onFailure(MercadoPagoError exception);
 }

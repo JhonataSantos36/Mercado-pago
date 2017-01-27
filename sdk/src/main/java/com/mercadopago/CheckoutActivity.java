@@ -25,6 +25,7 @@ import com.mercadopago.adapters.ReviewPaymentOffAdapter;
 import com.mercadopago.adapters.ReviewPaymentOnAdapter;
 import com.mercadopago.adapters.ReviewProductAdapter;
 import com.mercadopago.callbacks.Callback;
+import com.mercadopago.callbacks.CallbackHolder;
 import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.callbacks.OnChangePaymentMethodCallback;
 import com.mercadopago.callbacks.OnConfirmPaymentCallback;
@@ -449,8 +450,12 @@ public class CheckoutActivity extends MercadoPagoActivity implements TimerObserv
         } else {
             if (data != null && data.getStringExtra("mpException") != null) {
                 MPTracker.getInstance().trackEvent("CARD_VAULT", "CANCELED", "3", mMerchantPublicKey, mCheckoutPreference.getSiteId(), BuildConfig.VERSION_NAME, this);
-                Intent returnIntent = new Intent();
-                setResult(RESULT_CANCELED, returnIntent);
+//                Intent returnIntent = new Intent();
+//                setResult(RESULT_CANCELED, returnIntent);
+                //TODO remove: callback example
+                if (CallbackHolder.getInstance().hasPaymentCallback()) {
+                    CallbackHolder.getInstance().getPaymentCallback().onCancel();
+                }
                 finish();
             } else {
                 startPaymentVaultActivity();
@@ -549,9 +554,13 @@ public class CheckoutActivity extends MercadoPagoActivity implements TimerObserv
     }
 
     private void finishWithPaymentResult() {
-        Intent paymentResultIntent = new Intent();
-        paymentResultIntent.putExtra("payment", JsonUtil.getInstance().toJson(mCreatedPayment));
-        setResult(RESULT_OK, paymentResultIntent);
+//        Intent paymentResultIntent = new Intent();
+//        paymentResultIntent.putExtra("payment", JsonUtil.getInstance().toJson(mCreatedPayment));
+//        setResult(RESULT_OK, paymentResultIntent);
+        //TODO remove: callback example
+        if (CallbackHolder.getInstance().hasPaymentCallback()) {
+            CallbackHolder.getInstance().getPaymentCallback().onSuccess(mCreatedPayment);
+        }
         finish();
     }
 

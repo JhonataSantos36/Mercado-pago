@@ -12,6 +12,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.mercadopago.callbacks.Callback;
+import com.mercadopago.callbacks.PaymentCallback;
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.core.MercadoPagoCheckout;
 import com.mercadopago.core.MerchantServer;
