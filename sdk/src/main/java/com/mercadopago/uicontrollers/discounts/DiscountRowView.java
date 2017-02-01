@@ -17,8 +17,6 @@ import com.mercadopago.util.CurrenciesUtil;
 
 import java.math.BigDecimal;
 
-import static android.text.TextUtils.isEmpty;
-
 /**
  * Created by mromar on 1/19/17.
  */
@@ -31,9 +29,9 @@ public class DiscountRowView implements DiscountView {
     private Context mContext;
     private Discount mDiscount;
     private Boolean mShortRowEnabled;
+    private Boolean mDiscountEnabled;
     private Boolean mShowArrow;
     private Boolean mShowSeparator;
-
 
     //Views
     private View mView;
@@ -48,22 +46,41 @@ public class DiscountRowView implements DiscountView {
     private View mDiscountSeparator;
 
     public DiscountRowView(Context context, Discount discount, BigDecimal transactionAmount, String currencyId, Boolean shortRowEnabled,
-                           Boolean showArrow, Boolean showSeparator) {
+                           Boolean discountEnabled, Boolean showArrow, Boolean showSeparator) {
         mContext = context;
         mDiscount = discount;
         mTransactionAmount = transactionAmount;
         mCurrencyId = currencyId;
         mShortRowEnabled = shortRowEnabled;
+        mDiscountEnabled = discountEnabled;
         mShowArrow = showArrow;
         mShowSeparator = showSeparator;
     }
 
     @Override
     public void draw() {
-        if (mDiscount == null) {
-            showHasDiscountRow();
+        if (isDiscountEnabled()) {
+            if (mDiscount == null) {
+                showHasDiscountRow();
+            } else {
+                showDiscountDetailRow();
+            }
         } else {
-            showDiscountDetailRow();
+            showDefaultRow();
+        }
+    }
+
+    private void showDefaultRow() {
+        if (!isShortRowEnabled()) {
+            showHighDefaultRow();
+        }
+    }
+
+    private void showHighDefaultRow() {
+        if (isAmountValid(mTransactionAmount) && CurrenciesUtil.isValidCurrency(mCurrencyId)) {
+            mTotalAmountTextView.setText(getFormattedAmount(mTransactionAmount, mCurrencyId));
+        } else {
+            mHighDiscountRow.setVisibility(View.GONE);
         }
     }
 
@@ -97,7 +114,6 @@ public class DiscountRowView implements DiscountView {
 
         setArrowVisibility();
         setSeparatorVisibility();
-        showHighDiscountRow();
         setDiscountOff();
         setTotalAmountWithDiscount();
         setTotalAmount();
@@ -109,11 +125,11 @@ public class DiscountRowView implements DiscountView {
     }
 
     private void drawHighHasDiscountRow() {
-        if (mTransactionAmount != null && !isEmpty(mCurrencyId)) {
+        if (isAmountValid(mTransactionAmount) && CurrenciesUtil.isValidCurrency(mCurrencyId)) {
             mHasDiscountLinearLayout.setVisibility(View.VISIBLE);
             mTotalAmountTextView.setText(getFormattedAmount(mTransactionAmount, mCurrencyId));
-
-            showHighDiscountRow();
+        } else {
+            mHighDiscountRow.setVisibility(View.GONE);
         }
     }
 
@@ -130,11 +146,11 @@ public class DiscountRowView implements DiscountView {
     }
 
     private void setDiscountOff() {
-        if (mDiscount.getAmountOff() != null && mDiscount.getAmountOff().compareTo(BigDecimal.ZERO) > 0) {
+        if (isAmountOffValid()) {
             Currency currency = CurrenciesUtil.getCurrency(mDiscount.getCurrencyId());
             String amount = currency.getSymbol() + " " + mDiscount.getAmountOff();
             mDiscountOffTextView.setText(amount);
-        } else {
+        } else if (isPercentOffValid()){
             String discountOff = mContext.getResources().getString(R.string.mpsdk_discount_percent_off,
                     String.valueOf(mDiscount.getPercentOff()));
             mDiscountOffTextView.setText(discountOff);
@@ -142,12 +158,16 @@ public class DiscountRowView implements DiscountView {
     }
 
     private void setTotalAmountWithDiscount() {
-        mDiscountAmountTextView.setText(getFormattedAmount(mDiscount.getAmountWithDiscount(mTransactionAmount), mDiscount.getCurrencyId()));
+        if (isAmountValid(mTransactionAmount) && isDiscountCurrencyIdValid()) {
+            mDiscountAmountTextView.setText(getFormattedAmount(mDiscount.getAmountWithDiscount(mTransactionAmount), mDiscount.getCurrencyId()));
+        }
     }
 
     private void setTotalAmount() {
-        mTotalAmountTextView.setText(getFormattedAmount(mTransactionAmount, mDiscount.getCurrencyId()));
-        mTotalAmountTextView.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
+        if (isAmountValid(mTransactionAmount) && isDiscountCurrencyIdValid()) {
+            mTotalAmountTextView.setText(getFormattedAmount(mTransactionAmount, mDiscount.getCurrencyId()));
+            mTotalAmountTextView.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
+        }
     }
 
     @Override
@@ -189,13 +209,29 @@ public class DiscountRowView implements DiscountView {
         return mShortRowEnabled != null && mShortRowEnabled;
     }
 
+    private Boolean isDiscountEnabled() {
+        return  mDiscountEnabled == null || mDiscountEnabled;
+    }
+
     private Spanned getFormattedAmount(BigDecimal amount, String currencyId) {
         String originalNumber = CurrenciesUtil.formatNumber(amount, currencyId);
         Spanned amountText = CurrenciesUtil.formatCurrencyInText(amount, currencyId, originalNumber, false, true);
         return amountText;
     }
 
-    private void showHighDiscountRow() {
-        mHighDiscountRow.setVisibility(View.VISIBLE);
+    private Boolean isAmountValid(BigDecimal amount) {
+        return amount != null && amount.compareTo(BigDecimal.ZERO) >= 0;
+    }
+
+    private Boolean isAmountOffValid() {
+        return mDiscount != null && mDiscount.getAmountOff() != null && mDiscount.getAmountOff().compareTo(BigDecimal.ZERO) > 0;
+    }
+
+    private Boolean isPercentOffValid() {
+        return mDiscount != null && mDiscount.getPercentOff() != null && mDiscount.getPercentOff().compareTo(BigDecimal.ZERO) > 0;
+    }
+
+    private Boolean isDiscountCurrencyIdValid() {
+        return mDiscount != null && mDiscount.getCurrencyId() != null && CurrenciesUtil.isValidCurrency(mDiscount.getCurrencyId());
     }
 }

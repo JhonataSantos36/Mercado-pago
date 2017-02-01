@@ -56,6 +56,7 @@ public class CardVaultPresenter {
     protected Card mCard;
 
     //Discount
+    protected Boolean mDiscountEnabled;
     protected Discount mDiscount;
     protected String mPayerEmail;
 
@@ -198,6 +199,14 @@ public class CardVaultPresenter {
 
     public Discount getDiscount() {
         return mDiscount;
+    }
+
+    public void setDiscountEnabled(Boolean discountEnabled) {
+        this.mDiscountEnabled = discountEnabled;
+    }
+
+    public Boolean getDiscountEnabled() {
+        return this.mDiscountEnabled;
     }
 
     public CardInfo getCardInfo() {

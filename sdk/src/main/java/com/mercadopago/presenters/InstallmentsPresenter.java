@@ -49,6 +49,7 @@ public class InstallmentsPresenter {
     private PaymentPreference mPaymentPreference;
     private CardInfo mCardInfo;
     private Discount mDiscount;
+    private Boolean mDiscountEnabled;
 
     public InstallmentsPresenter(Context context) {
         this.mContext = context;
@@ -177,6 +178,15 @@ public class InstallmentsPresenter {
     }
 
     public void initialize() {
+        if (mDiscountEnabled) {
+            loadDiscount();
+        } else {
+            initializeDiscountRow();
+            loadPayerCosts();
+        }
+    }
+
+    private void loadDiscount() {
         if (mDiscount == null) {
             if (isAmountValid()) {
                 getDirectDiscount();
@@ -189,7 +199,7 @@ public class InstallmentsPresenter {
         }
     }
 
-    public Boolean isAmountValid() {
+    private Boolean isAmountValid() {
         return mAmount != null && mAmount.compareTo(BigDecimal.ZERO) > 0;
     }
 
@@ -240,7 +250,15 @@ public class InstallmentsPresenter {
         return mPayerEmail;
     }
 
-    public void loadPayerCosts() {
+    public void setDiscountEnabled(Boolean discountEnabled) {
+        this.mDiscountEnabled = discountEnabled;
+    }
+
+    public Boolean getDiscountEnabled() {
+        return this.mDiscountEnabled;
+    }
+
+    private void loadPayerCosts() {
         if (werePayerCostsSet()) {
             resolvePayerCosts(mPayerCosts);
         } else {
@@ -254,7 +272,7 @@ public class InstallmentsPresenter {
         }
     }
 
-    public void getInstallmentsAsync() {
+    private void getInstallmentsAsync() {
         if (mMercadoPago == null) return;
         mView.showLoadingView();
         mMercadoPago.getInstallments(mBin, getAmount(), mIssuerId, mPaymentMethod.getId(),

@@ -39,14 +39,14 @@ public class DiscountsPresenter extends MvpPresenter<DiscountsView, DiscountsPro
     }
 
     private void initDiscountFlow() {
-        if (mDirectDiscountEnabled && isAmountValid()) {
+        if (mDirectDiscountEnabled && isTransactionAmountValid()) {
             getDirectDiscount();
         } else {
             mDiscountsView.requestDiscountCode();
         }
     }
 
-    private Boolean isAmountValid() {
+    private Boolean isTransactionAmountValid() {
         return mTransactionAmount != null && mTransactionAmount.compareTo(BigDecimal.ZERO) > 0;
     }
 
@@ -71,7 +71,6 @@ public class DiscountsPresenter extends MvpPresenter<DiscountsView, DiscountsPro
         mDiscountsView.showProgressBar();
 
         getResourcesProvider().getCodeDiscount(mTransactionAmount.toString(), mPayerEmail, discountCode, new OnResourcesRetrievedCallback<Discount>() {
-
             @Override
             public void onSuccess(Discount discount) {
                 mDiscountsView.setSoftInputModeSummary();
@@ -97,7 +96,7 @@ public class DiscountsPresenter extends MvpPresenter<DiscountsView, DiscountsPro
     }
 
     public void validateDiscountCodeInput(String discountCode) {
-        if (isAmountValid()) {
+        if (isTransactionAmountValid()) {
             if (isEmpty(discountCode)) {
                 mDiscountsView.showEmptyDiscountCodeError();
             } else {
@@ -151,5 +150,4 @@ public class DiscountsPresenter extends MvpPresenter<DiscountsView, DiscountsPro
     private boolean isEmpty(String discountCode) {
         return discountCode == null || discountCode.isEmpty();
     }
-
 }

@@ -218,6 +218,7 @@ public class MercadoPagoUI {
             private BigDecimal transactionAmount;
             private String currencyId;
             private Boolean shortRowEnabled;
+            private Boolean discountEnabled;
             private Boolean showArrow;
             private Boolean showSeparator;
 
@@ -246,6 +247,11 @@ public class MercadoPagoUI {
                 return this;
             }
 
+            public DiscountRowViewBuilder setDiscountEnabled(Boolean discountEnabled) {
+                this.discountEnabled = discountEnabled;
+                return this;
+            }
+
             public DiscountRowViewBuilder setShowArrow(Boolean showArrow) {
                 this.showArrow = showArrow;
                 return this;
@@ -257,7 +263,8 @@ public class MercadoPagoUI {
             }
 
             public DiscountRowView build() {
-                return new DiscountRowView(context, discount, transactionAmount, currencyId, shortRowEnabled, showArrow, showSeparator);
+                return new DiscountRowView(context, discount, transactionAmount, currencyId, shortRowEnabled,
+                                            discountEnabled, showArrow, showSeparator);
             }
         }
 

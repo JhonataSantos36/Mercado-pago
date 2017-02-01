@@ -227,4 +227,5 @@
     <string name="mpsdk_amount_doesnt_match">Amount out of reach</string>
     <string name="mpsdk_campaign_expired">Campaign expired</string>
     <string name="mpsdk_discount_percent_off">%1$s %%</string>
+    <string name="mpsdk_total">Total:</string>
 </resources>

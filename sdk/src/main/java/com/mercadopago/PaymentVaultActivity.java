@@ -119,6 +119,7 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
         mPaymentVaultPresenter.setAccountMoneyEnabled(this.getIntent().getBooleanExtra("accountMoneyEnabled", false));
         mPaymentVaultPresenter.setPayerEmail(this.getIntent().getStringExtra("payerEmail"));
         mPaymentVaultPresenter.setDiscount(JsonUtil.getInstance().fromJson(getIntent().getStringExtra("discount"), Discount.class));
+        mPaymentVaultPresenter.setDiscountEnabled(this.getIntent().getBooleanExtra("discountEnabled", true));
         mPaymentVaultPresenter.setMaxSavedCards(this.getIntent().getIntExtra("maxSavedCards", 0));
         mShowBankDeals = getIntent().getBooleanExtra("showBankDeals", true);
 
@@ -305,6 +306,7 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
                 .setInstallmentsEnabled(mInstallmentsEnabled)
                 .setPayerEmail(mPaymentVaultPresenter.getPayerEmail())
                 .setDiscount(mPaymentVaultPresenter.getDiscount())
+                .setDiscountEnabled(mPaymentVaultPresenter.getDiscountEnabled())
                 .setShowBankDeals(mShowBankDeals)
                 .startCardVaultActivity();
     }
@@ -495,6 +497,7 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
                 .setInstallmentsEnabled(mInstallmentsEnabled)
                 .setPayerEmail(mPaymentVaultPresenter.getPayerEmail())
                 .setDiscount(mPaymentVaultPresenter.getDiscount())
+                .setDiscountEnabled(mPaymentVaultPresenter.getDiscountEnabled())
                 .setShowBankDeals(mShowBankDeals)
                 .setSupportedPaymentMethods(mPaymentVaultPresenter.getPaymentMethodSearch().getPaymentMethods())
                 .startCardVaultActivity();
@@ -608,6 +611,7 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
                 .setDiscount(mPaymentVaultPresenter.getDiscount())
                 .setTransactionAmount(transactionAmount)
                 .setCurrencyId(mPaymentVaultPresenter.getSite().getCurrencyId())
+                .setDiscountEnabled(mPaymentVaultPresenter.getDiscountEnabled())
                 .build();
 
         discountRowView.inflateInParent(mDiscountFrameLayout, true);
@@ -616,7 +620,9 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
         discountRowView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mPaymentVaultPresenter.initializeDiscountActivity();
+                if (mPaymentVaultPresenter.getDiscountEnabled()) {
+                    mPaymentVaultPresenter.initializeDiscountActivity();
+                }
             }
         });
     }

@@ -54,6 +54,7 @@ public class PaymentVaultPresenter {
     private PaymentPreference mPaymentPreference;
     private BigDecimal mAmount;
     private Boolean mAccountMoneyEnabled;
+    private Boolean mDiscountEnabled;
     private Integer mMaxSavedCards;
 
     public void attachView(PaymentVaultView paymentVaultView) {
@@ -67,6 +68,14 @@ public class PaymentVaultPresenter {
                 .setContext(mPaymentVaultView.getContext())
                 .build();
 
+        if (mDiscountEnabled) {
+            initPaymentVaultDiscountFlow();
+        } else {
+            initPaymentVaultFlow();
+        }
+    }
+
+    private void initPaymentVaultDiscountFlow() {
         if (isItemSelected()) {
             initializeDiscountRow();
             showSelectedItemChildren();
@@ -76,6 +85,8 @@ public class PaymentVaultPresenter {
     }
 
     private void initPaymentVaultFlow() {
+        initializeDiscountRow();
+
         if (isItemSelected()) {
             showSelectedItemChildren();
         } else {
@@ -184,6 +195,7 @@ public class PaymentVaultPresenter {
     }
 
     private void getPaymentMethodSearchAsync() {
+        mPaymentVaultView.showProgress();
 
         List<String> excludedPaymentTypes = mPaymentPreference == null ? null : mPaymentPreference.getExcludedPaymentTypes();
         List<String> excludedPaymentMethodIds = mPaymentPreference == null ? null : mPaymentPreference.getExcludedPaymentMethodIds();
@@ -541,6 +553,14 @@ public class PaymentVaultPresenter {
 
     public String getPayerEmail() {
         return mPayerEmail;
+    }
+
+    public void setDiscountEnabled(Boolean discountEnabled) {
+        this.mDiscountEnabled = discountEnabled;
+    }
+
+    public Boolean getDiscountEnabled() {
+        return this.mDiscountEnabled;
     }
 
     public void setMaxSavedCards(int maxSavedCards) {

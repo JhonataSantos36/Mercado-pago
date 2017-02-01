@@ -121,6 +121,7 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultAct
 
     private void getActivityParameters() {
         Boolean installmentsEnabled = getIntent().getBooleanExtra("installmentsEnabled", false);
+        Boolean discountEnabled = getIntent().getBooleanExtra("discountEnabled", true);
         String publicKey = getIntent().getStringExtra("merchantPublicKey");
         Site site = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("site"), Site.class);
         Card card = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("card"), Card.class);
@@ -159,6 +160,7 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultAct
         mPresenter.setPaymentPreference(paymentPreference);
         mPresenter.setPayerEmail(payerEmail);
         mPresenter.setDiscount(discount);
+        mPresenter.setDiscountEnabled(discountEnabled);
     }
 
     private void setContentView() {
@@ -236,6 +238,7 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultAct
                         .setPayerEmail(mPresenter.getPayerEmail())
                         .setInstallmentsEnabled(mPresenter.getInstallmentsEnabled())
                         .setDiscount(mPresenter.getDiscount())
+                        .setDiscountEnabled(mPresenter.getDiscountEnabled())
                         .setShowBankDeals(mShowBankDeals)
                         .setPaymentPreference(mPresenter.getPaymentPreference())
                         .setSupportedPaymentMethods(mPresenter.getPaymentMethodList())
@@ -424,6 +427,7 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultAct
                 .setAmount(mPresenter.getAmount())
                 .setPayerEmail(mPresenter.getPayerEmail())
                 .setDiscount(mPresenter.getDiscount())
+                .setDiscountEnabled(mPresenter.getDiscountEnabled())
                 .setIssuer(mPresenter.getIssuer())
                 .setPaymentPreference(mPresenter.getPaymentPreference())
                 .setSite(mPresenter.getSite())

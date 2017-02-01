@@ -19,12 +19,49 @@ import static org.junit.Assert.assertTrue;
 public class DiscountsPresenterTest {
 
     @Test
-    public void showDiscountSummaryWhenStartActivityWithoutDiscount() {
+    public void showDiscountSummaryWhenGetDirectDiscount() {
         MockedView mockedView = new MockedView();
         DiscountMockedResourcesProvider provider = new DiscountMockedResourcesProvider();
 
         DiscountsPresenter presenter = new DiscountsPresenter();
         presenter.setDirectDiscountEnabled(true);
+        presenter.setTransactionAmount(new BigDecimal(100));
+
+        presenter.attachResourcesProvider(provider);
+        presenter.attachView(mockedView);
+
+        presenter.initialize();
+
+        assertTrue(mockedView.drawedSummary);
+    }
+
+    @Test
+    public void showDiscountCodeRequestWhenDirectDiscountIsNotEnabled() {
+        MockedView mockedView = new MockedView();
+        DiscountMockedResourcesProvider provider = new DiscountMockedResourcesProvider();
+
+        DiscountsPresenter presenter = new DiscountsPresenter();
+        presenter.setDirectDiscountEnabled(false);
+        presenter.setTransactionAmount(new BigDecimal(100));
+
+        presenter.attachResourcesProvider(provider);
+        presenter.attachView(mockedView);
+
+        presenter.initialize();
+
+        assertTrue(mockedView.requestedDiscountCode);
+    }
+
+    @Test
+    public void showDiscountSummaryWhenInitializePresenterWithDiscount() {
+        MockedView mockedView = new MockedView();
+        DiscountMockedResourcesProvider provider = new DiscountMockedResourcesProvider();
+
+        DiscountsPresenter presenter = new DiscountsPresenter();
+        Discount discount = new Discount();
+
+        presenter.setDiscount(discount);
+        presenter.setDirectDiscountEnabled(false);
         presenter.setTransactionAmount(new BigDecimal(100));
 
         presenter.attachResourcesProvider(provider);

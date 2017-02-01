@@ -194,6 +194,7 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
         PaymentRecovery paymentRecovery = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("paymentRecovery"), PaymentRecovery.class);
 
         BigDecimal transactionAmount = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("transactionAmount"), BigDecimal.class);
+        Boolean discountEnabled = this.getIntent().getBooleanExtra("discountEnabled", true);
         Discount discount = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("discount"), Discount.class);
         String payerEmail = this.getIntent().getStringExtra("payerEmail");
 
@@ -231,6 +232,7 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
         mPresenter.setPayerEmail(payerEmail);
         mPresenter.setDiscount(discount);
         mPresenter.setTransactionAmount(transactionAmount);
+        mPresenter.setDiscountEnabled(discountEnabled);
     }
 
     @Override
@@ -1523,7 +1525,8 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
         discountRowBuilder.setContext(this)
                 .setDiscount(mPresenter.getDiscount())
                 .setTransactionAmount(transactionAmount)
-                .setShortRowEnabled(true);
+                .setShortRowEnabled(true)
+                .setDiscountEnabled(mPresenter.getDiscountEnabled());
 
         if (mPresenter.getDiscount() != null) {
             discountRowBuilder.setCurrencyId(mPresenter.getDiscount().getCurrencyId());

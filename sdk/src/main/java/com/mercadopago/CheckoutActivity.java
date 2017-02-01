@@ -55,7 +55,6 @@ import com.mercadopago.model.Site;
 import com.mercadopago.model.Token;
 import com.mercadopago.mptracker.MPTracker;
 import com.mercadopago.observers.TimerObserver;
-import com.mercadopago.uicontrollers.discounts.DiscountRowView;
 import com.mercadopago.uicontrollers.reviewandconfirm.ReviewSummaryView;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.ErrorUtil;
@@ -144,6 +143,7 @@ public class CheckoutActivity extends MercadoPagoActivity implements TimerObserv
     protected NestedScrollView mScrollView;
     protected String mCustomerId;
     protected Boolean mBinaryModeEnabled;
+    protected Boolean mDiscountEnabled;
 
     @Override
     protected void setContentView() {
@@ -159,6 +159,8 @@ public class CheckoutActivity extends MercadoPagoActivity implements TimerObserv
         mCheckoutPreferenceId = this.getIntent().getStringExtra("checkoutPreferenceId");
         mCongratsDisplay = this.getIntent().getIntExtra("congratsDisplay", -1);
         mBinaryModeEnabled = this.getIntent().getBooleanExtra("binaryModeEnabled", false);
+        mDiscount = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("discount"), Discount.class);
+        mDiscountEnabled = this.getIntent().getBooleanExtra("discountEnabled", true);
     }
 
     @Override
@@ -380,6 +382,7 @@ public class CheckoutActivity extends MercadoPagoActivity implements TimerObserv
                 .setAmount(mCheckoutPreference.getAmount())
                 .setPaymentMethodSearch(mPaymentMethodSearch)
                 .setDiscount(mDiscount)
+                .setDiscountEnabled(mDiscountEnabled)
                 .setPaymentPreference(mCheckoutPreference.getPaymentPreference())
                 .setDecorationPreference(mDecorationPreference)
                 .setCards(mSavedCards)
@@ -524,6 +527,8 @@ public class CheckoutActivity extends MercadoPagoActivity implements TimerObserv
                 .setAmount(mCheckoutPreference.getAmount())
                 .setSite(mSite)
                 .setInstallmentsEnabled(true)
+                .setDiscount(mDiscount)
+                .setDiscountEnabled(mDiscountEnabled)
                 .setSupportedPaymentMethods(mPaymentMethodSearch.getPaymentMethods())
                 .setPaymentRecovery(mPaymentRecovery)
                 .startCardVaultActivity();

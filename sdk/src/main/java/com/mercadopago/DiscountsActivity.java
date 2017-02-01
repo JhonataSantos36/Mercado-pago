@@ -258,6 +258,7 @@ public class DiscountsActivity extends AppCompatActivity implements DiscountsVie
     @Override
     public void drawSummary() {
         MPTracker.getInstance().trackScreen("DISCOUNT_SUMMARY", "2", mDiscountsPresenter.getPublicKey(), BuildConfig.VERSION_NAME, this);
+
         mDiscountCodeContainer.setVisibility(View.GONE);
         mReviewDiscountSummaryContainer.setVisibility(View.VISIBLE);
 
@@ -278,28 +279,40 @@ public class DiscountsActivity extends AppCompatActivity implements DiscountsVie
     }
 
     private void showTotalRow() {
-        mReviewSummaryTotalAmount.setText(getFormattedAmount(mDiscountsPresenter.getDiscount().getAmountWithDiscount(mDiscountsPresenter.getTransactionAmount()), mDiscountsPresenter.getDiscount().getCurrencyId()));
+        if (isAmountValid(mDiscountsPresenter.getTransactionAmount()) && isDiscountCurrencyIdValid()) {
+            mReviewSummaryTotalAmount.setText(getFormattedAmount(mDiscountsPresenter.getDiscount().getAmountWithDiscount(mDiscountsPresenter.getTransactionAmount()), mDiscountsPresenter.getDiscount().getCurrencyId()));
+        } else {
+            finishWithCancelResult();
+        }
     }
 
     private void showDiscountRow() {
         StringBuilder discountAmountBuilder = new StringBuilder();
         Spanned discountAmount;
 
-        discountAmountBuilder.append("-");
-        discountAmountBuilder.append(CurrenciesUtil.formatNumber(mDiscountsPresenter.getCouponAmount(), mDiscountsPresenter.getCurrencyId()));
-        discountAmount = CurrenciesUtil.formatCurrencyInText(mDiscountsPresenter.getCouponAmount(), mDiscountsPresenter.getCurrencyId(), discountAmountBuilder.toString(), false, true);
-        mReviewSummaryDiscountAmount.setText(discountAmount);
+        if (isAmountValid(mDiscountsPresenter.getCouponAmount()) && isDiscountCurrencyIdValid()) {
+            discountAmountBuilder.append("-");
+            discountAmountBuilder.append(CurrenciesUtil.formatNumber(mDiscountsPresenter.getCouponAmount(), mDiscountsPresenter.getCurrencyId()));
+            discountAmount = CurrenciesUtil.formatCurrencyInText(mDiscountsPresenter.getCouponAmount(), mDiscountsPresenter.getCurrencyId(), discountAmountBuilder.toString(), false, true);
+            mReviewSummaryDiscountAmount.setText(discountAmount);
+        } else {
+            finishWithCancelResult();
+        }
     }
 
     private void showTransactionRow() {
-        mReviewSummaryProductAmount.setText(getFormattedAmount(mDiscountsPresenter.getTransactionAmount(), mDiscountsPresenter.getDiscount().getCurrencyId()));
+        if (isAmountValid(mDiscountsPresenter.getTransactionAmount()) && isDiscountCurrencyIdValid()) {
+            mReviewSummaryProductAmount.setText(getFormattedAmount(mDiscountsPresenter.getTransactionAmount(), mDiscountsPresenter.getDiscount().getCurrencyId()));
+        } else {
+            finishWithCancelResult();
+        }
     }
 
     private void showSummaryTitle() {
-        if (mDiscountsPresenter.getDiscount().hasPercentOff()) {
+        if (isPercentOffValid()) {
             String title = mDiscountsPresenter.getDiscount().getPercentOff() + getString(R.string.mpsdk_percent_of_discount);
             mReviewSummaryTitle.setText(title);
-        } else {
+        } else if (isAmountOffValid()){
             Currency currency = CurrenciesUtil.getCurrency(mDiscountsPresenter.getDiscount().getCurrencyId());
             String amount = currency.getSymbol() + mDiscountsPresenter.getDiscount().getAmountOff();
 
@@ -408,5 +421,21 @@ public class DiscountsActivity extends AppCompatActivity implements DiscountsVie
     @Override
     public void onFinish() {
         this.finish();
+    }
+
+    private Boolean isAmountOffValid() {
+        return mDiscountsPresenter.getDiscount() != null && mDiscountsPresenter.getDiscount().getAmountOff() != null && mDiscountsPresenter.getDiscount().getAmountOff().compareTo(BigDecimal.ZERO) > 0;
+    }
+
+    private Boolean isPercentOffValid() {
+        return mDiscountsPresenter.getDiscount() != null && mDiscountsPresenter.getDiscount().getPercentOff() != null && mDiscountsPresenter.getDiscount().getPercentOff().compareTo(BigDecimal.ZERO) > 0;
+    }
+
+    private Boolean isAmountValid(BigDecimal amount) {
+        return amount != null && amount.compareTo(BigDecimal.ZERO) >= 0;
+    }
+
+    private Boolean isDiscountCurrencyIdValid() {
+        return mDiscountsPresenter.getDiscount() != null && mDiscountsPresenter.getDiscount().getCurrencyId() != null && CurrenciesUtil.isValidCurrency(mDiscountsPresenter.getDiscount().getCurrencyId());
     }
 }
