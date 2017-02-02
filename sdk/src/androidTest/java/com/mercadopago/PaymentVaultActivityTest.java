@@ -1,5 +1,7 @@
 package com.mercadopago;
 
+import com.google.gson.Gson;
+
 import android.app.Activity;
 import android.app.Instrumentation;
 import android.content.Intent;
@@ -14,7 +16,6 @@ import android.test.suitebuilder.annotation.LargeTest;
 import android.text.Spanned;
 import android.view.View;
 
-import com.google.gson.Gson;
 import com.mercadopago.constants.PaymentTypes;
 import com.mercadopago.constants.Sites;
 import com.mercadopago.controllers.CheckoutTimer;
@@ -122,7 +123,7 @@ public class PaymentVaultActivityTest {
     @Test
     public void setPublicKeyOnCreate() {
         mTestRule.launchActivity(validStartIntent);
-        assertTrue(mTestRule.getActivity().mPaymentVaultPresenter.getMerchantPublicKey() != null);
+        assertTrue(mTestRule.getActivity().mPublicKey != null);
     }
 
     @Test

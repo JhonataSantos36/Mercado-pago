@@ -1,5 +1,7 @@
 package com.mercadopago;
 
+import com.google.gson.Gson;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.support.test.InstrumentationRegistry;
@@ -11,7 +13,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.test.suitebuilder.annotation.LargeTest;
 
-import com.google.gson.Gson;
 import com.mercadopago.model.Card;
 import com.mercadopago.model.DecorationPreference;
 import com.mercadopago.test.ActivityResult;

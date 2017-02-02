@@ -91,6 +91,7 @@
         <activity
             android:name=".SecurityCodeActivity"
             android:screenOrientation="behind"
+            android:windowSoftInputMode="stateVisible"
             android:theme="@style/Theme.ProcessMercadoPagoTheme.NoActionbar" />
         <activity
             android:name=".PaymentTypesActivity"

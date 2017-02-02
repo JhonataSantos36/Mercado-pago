@@ -1,6 +1,7 @@
 package com.mercadopago.model;
 
 import com.google.gson.annotations.SerializedName;
+
 import com.mercadopago.constants.PaymentTypes;
 
 import java.util.ArrayList;

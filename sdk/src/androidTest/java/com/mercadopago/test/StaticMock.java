@@ -1,9 +1,10 @@
 package com.mercadopago.test;
 
+import com.google.gson.reflect.TypeToken;
+
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 
-import com.google.gson.reflect.TypeToken;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.BankDeal;
 import com.mercadopago.model.Card;

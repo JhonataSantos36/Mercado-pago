@@ -23,7 +23,7 @@ import java.util.List;
 public class PaymentMethodsPresenterTest {
 
     @Test
-    public void whenPaymentMethodsPresenterStartsShowPaymentMethods() throws Exception {
+    public void whenPaymentMethodsPresenterStartsShowPaymentMethods() {
 
 
         MockedView mockedView = new MockedView();
@@ -43,7 +43,7 @@ public class PaymentMethodsPresenterTest {
     }
 
     @Test
-    public void whenPaymentTypeExcludedDoNotShowIt() throws Exception {
+    public void whenPaymentTypeExcludedDoNotShowIt() {
 
         MockedView mockedView = new MockedView();
         MockedResourcesProvider resourcesProvider = new MockedResourcesProvider();

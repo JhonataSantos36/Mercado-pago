@@ -1,5 +1,7 @@
 package com.mercadopago;
 
+import com.google.gson.Gson;
+
 import android.app.Activity;
 import android.app.Instrumentation;
 import android.content.Intent;
@@ -16,7 +18,6 @@ import android.support.v7.widget.RecyclerView;
 import android.test.suitebuilder.annotation.LargeTest;
 import android.widget.ImageView;
 
-import com.google.gson.Gson;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.exceptions.MPException;
 import com.mercadopago.model.ApiException;

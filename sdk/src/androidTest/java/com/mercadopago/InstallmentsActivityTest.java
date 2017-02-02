@@ -1,5 +1,7 @@
 package com.mercadopago;
 
+import com.google.gson.reflect.TypeToken;
+
 import android.app.Activity;
 import android.app.Instrumentation;
 import android.content.Intent;
@@ -15,7 +17,6 @@ import android.test.suitebuilder.annotation.LargeTest;
 import android.text.Spanned;
 import android.view.View;
 
-import com.google.gson.reflect.TypeToken;
 import com.mercadopago.constants.Sites;
 import com.mercadopago.controllers.CheckoutTimer;
 import com.mercadopago.customviews.MPTextView;

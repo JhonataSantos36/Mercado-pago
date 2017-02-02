@@ -1,5 +1,8 @@
 package com.mercadopago;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
@@ -17,8 +20,6 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.mercadopago.adapters.ReviewPaymentOffAdapter;
 import com.mercadopago.adapters.ReviewPaymentOnAdapter;
 import com.mercadopago.adapters.ReviewProductAdapter;
@@ -362,6 +363,21 @@ public class CheckoutActivity extends MercadoPagoActivity implements TimerObserv
                     mCustomerId = customer.getId();
                     mSavedCards = mCheckoutPreference.getPaymentPreference() == null ? customer.getCards() : mCheckoutPreference.getPaymentPreference().getValidCards(customer.getCards());
                 }
+                getDiscountAsync();
+            }
+
+            @Override
+            public void failure(ApiException apiException) {
+                getDiscountAsync();
+            }
+        });
+    }
+
+    private void getDiscountAsync() {
+        mMercadoPago.getDirectDiscount(mCheckoutPreference.getAmount().toString(), mCheckoutPreference.getPayer().getEmail(), new Callback<Discount>() {
+            @Override
+            public void success(Discount discount) {
+                mDiscount = discount;
                 startPaymentVaultActivity();
             }
 
