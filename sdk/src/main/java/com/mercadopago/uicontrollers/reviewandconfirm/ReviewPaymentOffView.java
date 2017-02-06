@@ -10,12 +10,12 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.mercadopago.R;
-import com.mercadopago.callbacks.OnChangePaymentMethodCallback;
+import com.mercadopago.callbacks.OnReviewChange;
 import com.mercadopago.constants.Sites;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.model.DecorationPreference;
 import com.mercadopago.model.PaymentMethod;
-import com.mercadopago.model.PaymentMethodSearchItem;
+import com.mercadopago.model.Reviewable;
 import com.mercadopago.model.Site;
 import com.mercadopago.util.CircleTransform;
 import com.mercadopago.util.CurrenciesUtil;
@@ -28,7 +28,7 @@ import java.math.BigDecimal;
  * Created by vaserber on 11/7/16.
  */
 
-public class ReviewPaymentOffView implements ReviewPaymentViewOffController {
+public class ReviewPaymentOffView extends Reviewable {
 
     protected View mView;
     protected ImageView mPaymentImage;
@@ -40,18 +40,24 @@ public class ReviewPaymentOffView implements ReviewPaymentViewOffController {
     protected MPTextView mChangePaymentTextView;
 
     private Context mContext;
+    private PaymentMethod mPaymentMethod;
+    private String mExtraInfo;
+    private BigDecimal mAmount;
     private Site mSite;
-    private OnChangePaymentMethodCallback mCallback;
-    private boolean isUniquePaymentMethod;
+    private OnReviewChange mOnReviewChange;
+    private Boolean mIsUniquePaymentMethod;
     private DecorationPreference mDecorationPreference;
 
-    public ReviewPaymentOffView(Context context, Site site, OnChangePaymentMethodCallback callback,
-                                boolean uniquePaymentMethod,
+    public ReviewPaymentOffView(Context context, PaymentMethod paymentMethod, String extraInfo, BigDecimal amount, Site site, OnReviewChange onReviewChange,
+                                Boolean uniquePaymentMethod,
                                 DecorationPreference decorationPreference) {
         this.mContext = context;
+        this.mPaymentMethod = paymentMethod;
+        this.mExtraInfo = extraInfo;
+        this.mAmount = amount;
         this.mSite = site;
-        this.mCallback = callback;
-        this.isUniquePaymentMethod = uniquePaymentMethod;
+        this.mOnReviewChange = onReviewChange;
+        this.mIsUniquePaymentMethod = uniquePaymentMethod == null ? false : mIsUniquePaymentMethod;
         this.mDecorationPreference = decorationPreference;
     }
 
@@ -79,16 +85,16 @@ public class ReviewPaymentOffView implements ReviewPaymentViewOffController {
         mChangePaymentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mCallback.onChangePaymentMethodSelected();
+                mOnReviewChange.onChangeSelected();
             }
         });
-        if (isUniquePaymentMethod) {
+        if (mIsUniquePaymentMethod) {
             mChangePaymentButton.setVisibility(View.GONE);
         }
     }
 
     @Override
-    public void drawPaymentMethod(PaymentMethod paymentMethod, BigDecimal amount, PaymentMethodSearchItem item, String currencyId) {
+    public void draw() {
         setSmallTextSize();
         decorateText();
 
@@ -103,18 +109,17 @@ public class ReviewPaymentOffView implements ReviewPaymentViewOffController {
 
         mPayerCostContainer.setVisibility(View.GONE);
 
-        int paymentText = ReviewUtil.getPaymentInfoStringForItem(item);
-        String originalNumber = CurrenciesUtil.formatNumber(amount, currencyId);
-        String itemName = ReviewUtil.getPaymentNameForItem(item, paymentMethod, mContext);
+        int paymentInstructionsTemplate = ReviewUtil.getPaymentInstructionTemplate(mPaymentMethod);
 
-        String string = mContext.getString(paymentText, originalNumber, itemName);
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(string);
+        String originalNumber = CurrenciesUtil.formatNumber(mAmount, mSite.getCurrencyId());
+        String itemName;
+        itemName = ReviewUtil.getPaymentMethodDescription(mPaymentMethod, mContext);
+        String completeDescription = mContext.getString(paymentInstructionsTemplate, originalNumber, itemName);
 
-        Spanned amountText = CurrenciesUtil.formatCurrencyInText(amount, currencyId, stringBuilder.toString(), false, true);
+        Spanned amountText = CurrenciesUtil.formatCurrencyInText(mAmount, mSite.getCurrencyId(), completeDescription, false, true);
 
         mPaymentText.setText(amountText);
-        mPaymentDescription.setText(item.getComment());
+        mPaymentDescription.setText(mExtraInfo);
     }
 
     private void setSmallTextSize() {

@@ -39,8 +39,8 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
     private String mPayerEmail;
     private PaymentPreference mPaymentPreference;
     private BigDecimal mAmount;
-    private Boolean mAccountMoneyEnabled;
-    private Boolean mDiscountEnabled;
+    private Boolean mAccountMoneyEnabled = false;
+    private Boolean mDiscountEnabled = true;
     private Integer mMaxSavedCards;
 
     public void initialize() {

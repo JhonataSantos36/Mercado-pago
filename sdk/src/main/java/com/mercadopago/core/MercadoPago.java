@@ -30,6 +30,7 @@ import com.mercadopago.VaultActivity;
 import com.mercadopago.adapters.ErrorHandlingCallAdapter;
 import com.mercadopago.callbacks.Callback;
 import com.mercadopago.constants.PaymentTypes;
+import com.mercadopago.controllers.CustomReviewablesHandler;
 import com.mercadopago.model.BankDeal;
 import com.mercadopago.model.Card;
 import com.mercadopago.model.CardInfo;
@@ -51,6 +52,7 @@ import com.mercadopago.model.PaymentPreference;
 import com.mercadopago.model.PaymentRecovery;
 import com.mercadopago.model.PaymentResult;
 import com.mercadopago.model.PaymentType;
+import com.mercadopago.model.Reviewable;
 import com.mercadopago.model.SavedCardToken;
 import com.mercadopago.model.SecurityCodeIntent;
 import com.mercadopago.model.Site;
@@ -97,7 +99,7 @@ public class MercadoPago {
     public static final int PAYMENT_TYPES_REQUEST_CODE = 17;
     public static final int SECURITY_CODE_REQUEST_CODE = 18;
     public static final int DISCOUNTS_REQUEST_CODE = 19;
-
+    public static final int REVIEW_AND_CONFIRM_REQUEST_CODE = 20;
 
     public static final int BIN_LENGTH = 6;
 
@@ -1001,6 +1003,11 @@ public class MercadoPago {
 
         public StartActivityBuilder setBinaryModeEnabled(Boolean binaryModeEnabled) {
             this.mBinaryModeEnabled = binaryModeEnabled;
+            return this;
+        }
+
+        public StartActivityBuilder addReviewable(Reviewable customReviewable) {
+            CustomReviewablesHandler.getInstance().add(customReviewable);
             return this;
         }
 

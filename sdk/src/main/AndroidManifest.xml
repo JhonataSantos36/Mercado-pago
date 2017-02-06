@@ -101,6 +101,10 @@
             android:name=".DiscountsActivity"
             android:theme="@style/Theme.ProcessMercadoPagoTheme.NoActionbar" />
         <activity
+            android:name=".ReviewAndConfirmActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.ProcessMercadoPagoTheme.NoActionbar" />
+        <activity
             android:name=".VaultActivity"
             android:theme="@style/Theme.MercadoPagoTheme" />
     </application>

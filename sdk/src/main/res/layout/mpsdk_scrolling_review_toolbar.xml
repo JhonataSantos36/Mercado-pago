@@ -18,7 +18,6 @@
     android:background="@color/mpsdk_transparent">
 
     <android.support.v7.widget.Toolbar
-        android:visibility="gone"
         android:id="@+id/mpsdkRegularToolbar"
         android:background="@color/mpsdk_white"
         android:theme="@style/ToolbarTheme"
@@ -41,7 +40,6 @@
             android:textSize="17dp"
             android:textColor="@color/mpsdk_background_blue"
             android:background="@drawable/mpsdk_title_toolbar"
-            android:visibility="gone"
             app:fontStyle="roboto_regular"
             style="@style/mpsdk_title_text"/>
     </android.support.v7.widget.Toolbar>
