@@ -128,8 +128,6 @@ public class CheckoutExampleActivity extends AppCompatActivity {
 
         CheckoutPreference localCheckoutPreference = new CheckoutPreference.Builder()
                 .setSite(Sites.ARGENTINA)
-                .setPayerAccessToken("TEST-7176766875549918-111008-fa5660d2d0aa37532716eb2bf2f9089b__LB_LC__-192992930")
-                .enableAccountMoney()
                 .addItem(new Item("Recarga Movistar", BigDecimal.ONE))
                 .build();
 
