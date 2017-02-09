@@ -47,6 +47,7 @@ public class CongratsActivity extends MercadoPagoActivity {
     protected PaymentMethod mPaymentMethod;
     protected String mMerchantPublicKey;
     protected Discount mDiscount;
+    protected Boolean mDiscountEnabled;
 
     //Local values
     private boolean mBackPressedOnce;
@@ -59,6 +60,7 @@ public class CongratsActivity extends MercadoPagoActivity {
         mPayment = JsonUtil.getInstance().fromJson(getIntent().getExtras().getString("payment"), Payment.class);
         mPaymentMethod = JsonUtil.getInstance().fromJson(getIntent().getExtras().getString("paymentMethod"), PaymentMethod.class);
         mDiscount = JsonUtil.getInstance().fromJson(getIntent().getExtras().getString("discount"), Discount.class);
+        mDiscountEnabled = getIntent().getExtras().getBoolean("discountEnabled", true);
     }
 
     @Override
@@ -140,7 +142,7 @@ public class CongratsActivity extends MercadoPagoActivity {
     }
 
     private void setDiscountRow() {
-        if (mDiscount != null) {
+        if (mDiscountEnabled && mDiscount != null) {
             showDiscountRow(mPayment.getTransactionAmount());
         }
     }

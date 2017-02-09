@@ -5,6 +5,7 @@ import com.mercadopago.callbacks.OnSelectedCallback;
 import com.mercadopago.constants.PaymentTypes;
 import com.mercadopago.constants.Sites;
 import com.mercadopago.exceptions.MPException;
+import com.mercadopago.model.ApiException;
 import com.mercadopago.model.Card;
 import com.mercadopago.model.CustomSearchItem;
 import com.mercadopago.model.Discount;
@@ -17,6 +18,7 @@ import com.mercadopago.model.Site;
 import com.mercadopago.mvp.OnResourcesRetrievedCallback;
 import com.mercadopago.presenters.PaymentVaultPresenter;
 import com.mercadopago.providers.PaymentVaultProvider;
+import com.mercadopago.utils.Discounts;
 import com.mercadopago.utils.PaymentMethodSearchs;
 import com.mercadopago.views.PaymentVaultView;
 
@@ -41,7 +43,7 @@ public class PaymentVaultPresenterTest {
         MockedProvider provider = new MockedProvider();
 
         PaymentMethodSearch paymentMethodSearch = PaymentMethodSearchs.getPaymentMethodWithoutCustomOptionsMLA();
-        provider.setResponse(paymentMethodSearch);
+        provider.setPaymentMethodSearchResponse(paymentMethodSearch);
 
         PaymentVaultPresenter presenter = new PaymentVaultPresenter();
         presenter.attachView(mockedView);
@@ -60,7 +62,7 @@ public class PaymentVaultPresenterTest {
         MockedProvider provider = new MockedProvider();
 
         PaymentMethodSearch paymentMethodSearch = PaymentMethodSearchs.getPaymentMethodWithoutCustomOptionsMLA();
-        provider.setResponse(paymentMethodSearch);
+        provider.setPaymentMethodSearchResponse(paymentMethodSearch);
 
         PaymentVaultPresenter presenter = new PaymentVaultPresenter();
         presenter.attachView(mockedView);
@@ -80,7 +82,7 @@ public class PaymentVaultPresenterTest {
         MockedProvider provider = new MockedProvider();
 
         PaymentMethodSearch paymentMethodSearch = PaymentMethodSearchs.getPaymentMethodWithoutCustomOptionsMLA();
-        provider.setResponse(paymentMethodSearch);
+        provider.setPaymentMethodSearchResponse(paymentMethodSearch);
 
         PaymentVaultPresenter presenter = new PaymentVaultPresenter();
         presenter.attachView(mockedView);
@@ -99,7 +101,7 @@ public class PaymentVaultPresenterTest {
         MockedProvider provider = new MockedProvider();
 
         PaymentMethodSearch paymentMethodSearch = PaymentMethodSearchs.getPaymentMethodWithoutCustomOptionsMLA();
-        provider.setResponse(paymentMethodSearch);
+        provider.setPaymentMethodSearchResponse(paymentMethodSearch);
 
         PaymentVaultPresenter presenter = new PaymentVaultPresenter();
         presenter.attachView(mockedView);
@@ -119,7 +121,7 @@ public class PaymentVaultPresenterTest {
         MockedProvider provider = new MockedProvider();
 
         PaymentMethodSearch paymentMethodSearch = PaymentMethodSearchs.getPaymentMethodWithoutCustomOptionsMLA();
-        provider.setResponse(paymentMethodSearch);
+        provider.setPaymentMethodSearchResponse(paymentMethodSearch);
 
         PaymentVaultPresenter presenter = new PaymentVaultPresenter();
         presenter.attachView(mockedView);
@@ -139,7 +141,7 @@ public class PaymentVaultPresenterTest {
         MockedProvider provider = new MockedProvider();
 
         PaymentMethodSearch paymentMethodSearch = PaymentMethodSearchs.getCompletePaymentMethodSearchMLA();
-        provider.setResponse(paymentMethodSearch);
+        provider.setPaymentMethodSearchResponse(paymentMethodSearch);
 
         PaymentVaultPresenter presenter = new PaymentVaultPresenter();
         presenter.attachView(mockedView);
@@ -162,7 +164,7 @@ public class PaymentVaultPresenterTest {
         MockedProvider provider = new MockedProvider();
 
         PaymentMethodSearch paymentMethodSearch = PaymentMethodSearchs.getPaymentMethodSearchWithOnlyTicketMLA();
-        provider.setResponse(paymentMethodSearch);
+        provider.setPaymentMethodSearchResponse(paymentMethodSearch);
 
         PaymentVaultPresenter presenter = new PaymentVaultPresenter();
         presenter.attachView(mockedView);
@@ -184,7 +186,7 @@ public class PaymentVaultPresenterTest {
         MockedProvider provider = new MockedProvider();
 
         PaymentMethodSearch paymentMethodSearch = PaymentMethodSearchs.getPaymentMethodSearchWithOnlyCreditCardMLA();
-        provider.setResponse(paymentMethodSearch);
+        provider.setPaymentMethodSearchResponse(paymentMethodSearch);
 
         PaymentVaultPresenter presenter = new PaymentVaultPresenter();
         presenter.attachView(mockedView);
@@ -209,7 +211,7 @@ public class PaymentVaultPresenterTest {
         MockedProvider provider = new MockedProvider();
 
         PaymentMethodSearch paymentMethodSearch = PaymentMethodSearchs.getPaymentMethodSearchWithOnlyCreditCardAndOneCardMLA();
-        provider.setResponse(paymentMethodSearch);
+        provider.setPaymentMethodSearchResponse(paymentMethodSearch);
 
         PaymentVaultPresenter presenter = new PaymentVaultPresenter();
         presenter.attachView(mockedView);
@@ -233,7 +235,7 @@ public class PaymentVaultPresenterTest {
         MockedProvider provider = new MockedProvider();
 
         PaymentMethodSearch paymentMethodSearch = PaymentMethodSearchs.getPaymentMethodSearchWithOnlyCreditCardAndAccountMoneyMLA();
-        provider.setResponse(paymentMethodSearch);
+        provider.setPaymentMethodSearchResponse(paymentMethodSearch);
 
         PaymentVaultPresenter presenter = new PaymentVaultPresenter();
         presenter.attachView(mockedView);
@@ -258,7 +260,7 @@ public class PaymentVaultPresenterTest {
         MockedProvider provider = new MockedProvider();
 
         PaymentMethodSearch paymentMethodSearch = PaymentMethodSearchs.getPaymentMethodSearchWithOnlyOneOffTypeAndAccountMoneyMLA();
-        provider.setResponse(paymentMethodSearch);
+        provider.setPaymentMethodSearchResponse(paymentMethodSearch);
 
         PaymentVaultPresenter presenter = new PaymentVaultPresenter();
         presenter.attachView(mockedView);
@@ -283,7 +285,7 @@ public class PaymentVaultPresenterTest {
         MockedProvider provider = new MockedProvider();
 
         PaymentMethodSearch paymentMethodSearch = PaymentMethodSearchs.getPaymentMethodSearchWithOnlyAccountMoneyMLA();
-        provider.setResponse(paymentMethodSearch);
+        provider.setPaymentMethodSearchResponse(paymentMethodSearch);
 
         PaymentVaultPresenter presenter = new PaymentVaultPresenter();
         presenter.attachView(mockedView);
@@ -307,7 +309,7 @@ public class PaymentVaultPresenterTest {
         MockedProvider provider = new MockedProvider();
 
         PaymentMethodSearch paymentMethodSearch = PaymentMethodSearchs.getCompletePaymentMethodSearchMLA();
-        provider.setResponse(paymentMethodSearch);
+        provider.setPaymentMethodSearchResponse(paymentMethodSearch);
 
         PaymentVaultPresenter presenter = new PaymentVaultPresenter();
         presenter.attachView(mockedView);
@@ -330,7 +332,7 @@ public class PaymentVaultPresenterTest {
         MockedProvider provider = new MockedProvider();
 
         PaymentMethodSearch paymentMethodSearch = PaymentMethodSearchs.getCompletePaymentMethodSearchMLA();
-        provider.setResponse(paymentMethodSearch);
+        provider.setPaymentMethodSearchResponse(paymentMethodSearch);
 
         PaymentVaultPresenter presenter = new PaymentVaultPresenter();
         presenter.attachView(mockedView);
@@ -353,7 +355,7 @@ public class PaymentVaultPresenterTest {
         MockedProvider provider = new MockedProvider();
 
         PaymentMethodSearch paymentMethodSearch = PaymentMethodSearchs.getCompletePaymentMethodSearchMLA();
-        provider.setResponse(paymentMethodSearch);
+        provider.setPaymentMethodSearchResponse(paymentMethodSearch);
 
         PaymentVaultPresenter presenter = new PaymentVaultPresenter();
         presenter.attachView(mockedView);
@@ -376,7 +378,7 @@ public class PaymentVaultPresenterTest {
         MockedProvider provider = new MockedProvider();
 
         PaymentMethodSearch paymentMethodSearch = PaymentMethodSearchs.getCompletePaymentMethodSearchMLA();
-        provider.setResponse(paymentMethodSearch);
+        provider.setPaymentMethodSearchResponse(paymentMethodSearch);
 
         PaymentVaultPresenter presenter = new PaymentVaultPresenter();
         presenter.attachView(mockedView);
@@ -403,7 +405,7 @@ public class PaymentVaultPresenterTest {
         MockedProvider provider = new MockedProvider();
 
         PaymentMethodSearch paymentMethodSearch = PaymentMethodSearchs.getPaymentMethodWithoutCustomOptionsMLA();
-        provider.setResponse(paymentMethodSearch);
+        provider.setPaymentMethodSearchResponse(paymentMethodSearch);
 
         PaymentVaultPresenter presenter = new PaymentVaultPresenter();
         presenter.attachView(mockedView);
@@ -428,7 +430,7 @@ public class PaymentVaultPresenterTest {
         MockedProvider provider = new MockedProvider();
 
         PaymentMethodSearch paymentMethodSearch = PaymentMethodSearchs.getPaymentMethodWithoutCustomOptionsMLA();
-        provider.setResponse(paymentMethodSearch);
+        provider.setPaymentMethodSearchResponse(paymentMethodSearch);
 
         PaymentVaultPresenter presenter = new PaymentVaultPresenter();
         presenter.attachView(mockedView);
@@ -453,7 +455,7 @@ public class PaymentVaultPresenterTest {
         MockedProvider provider = new MockedProvider();
 
         PaymentMethodSearch paymentMethodSearch = PaymentMethodSearchs.getPaymentMethodWithoutCustomOptionsMLA();
-        provider.setResponse(paymentMethodSearch);
+        provider.setPaymentMethodSearchResponse(paymentMethodSearch);
 
         PaymentVaultPresenter presenter = new PaymentVaultPresenter();
         presenter.attachView(mockedView);
@@ -468,6 +470,83 @@ public class PaymentVaultPresenterTest {
         assertEquals(MockedProvider.INVALID_MAX_INSTALLMENTS, mockedView.errorShown.getMessage());
     }
 
+    //Discounts
+    @Test
+    public void ifDiscountsAreNotEnabledNotShowDiscountRow() {
+        MockedView mockedView = new MockedView();
+        MockedProvider provider = new MockedProvider();
+
+        PaymentMethodSearch paymentMethodSearch = PaymentMethodSearchs.getCompletePaymentMethodSearchMLA();
+        provider.setPaymentMethodSearchResponse(paymentMethodSearch);
+
+        PaymentVaultPresenter presenter = new PaymentVaultPresenter();
+        presenter.attachView(mockedView);
+        presenter.attachResourcesProvider(provider);
+
+        presenter.setAmount(BigDecimal.TEN);
+        presenter.setSite(Sites.ARGENTINA);
+        presenter.setDiscountEnabled(false);
+
+        presenter.initialize();
+
+        mockedView.simulateItemSelection(0);
+
+        assertTrue(mockedView.showedDiscountRow);
+        assertTrue(presenter.getDiscount() == null);
+    }
+
+    @Test
+    public void ifDiscountsAreEnabledGetDirectDiscount() {
+        MockedView mockedView = new MockedView();
+        MockedProvider provider = new MockedProvider();
+
+        PaymentMethodSearch paymentMethodSearch = PaymentMethodSearchs.getCompletePaymentMethodSearchMLA();
+        provider.setPaymentMethodSearchResponse(paymentMethodSearch);
+
+        Discount discount = Discounts.getDiscountWithAmountOffMLA();
+        provider.setDiscountResponse(discount);
+
+        PaymentVaultPresenter presenter = new PaymentVaultPresenter();
+        presenter.attachView(mockedView);
+        presenter.attachResourcesProvider(provider);
+
+        presenter.setAmount(BigDecimal.TEN);
+        presenter.setSite(Sites.ARGENTINA);
+
+        presenter.initialize();
+
+        mockedView.simulateItemSelection(0);
+
+        assertEquals(discount.getId(), presenter.getDiscount().getId());
+    }
+
+    @Test
+    public void ifHasNotDirectDiscountsShowDiscountRow() {
+        MockedView mockedView = new MockedView();
+        MockedProvider provider = new MockedProvider();
+
+        PaymentMethodSearch paymentMethodSearch = PaymentMethodSearchs.getCompletePaymentMethodSearchMLA();
+        provider.setPaymentMethodSearchResponse(paymentMethodSearch);
+
+        ApiException apiException = Discounts.getDoNotFindCampaignApiException();
+        MPException mpException = new MPException(apiException);
+        provider.setDiscountResponse(mpException);
+
+        PaymentVaultPresenter presenter = new PaymentVaultPresenter();
+        presenter.attachView(mockedView);
+        presenter.attachResourcesProvider(provider);
+
+        presenter.setAmount(BigDecimal.TEN);
+        presenter.setSite(Sites.ARGENTINA);
+
+        presenter.initialize();
+
+        mockedView.simulateItemSelection(0);
+
+        assertTrue(provider.failedResponse.getApiException().getError().equals(provider.CAMPAIGN_DOES_NOT_MATCH_ERROR));
+        assertTrue(mockedView.showedDiscountRow);
+    }
+
     private class MockedProvider implements PaymentVaultProvider {
 
         private static final String INVALID_SITE = "invalid site";
@@ -477,18 +556,31 @@ public class PaymentVaultPresenterTest {
         private static final String INVALID_MAX_INSTALLMENTS = "invalid max installments";
         private static final String STANDARD_ERROR_MESSAGE = "standard error";
         private static final String EMPTY_PAYMENT_METHODS = "empty payment methods";
+        private static final String CAMPAIGN_DOES_NOT_MATCH_ERROR = "campaign-doesnt-match";
 
         private boolean shouldFail;
+        private boolean shouldDiscountFail;
         private PaymentMethodSearch successfulResponse;
+        private Discount successfulDiscountResponse;
         private MPException failedResponse;
 
-        public void setResponse(PaymentMethodSearch paymentMethodSearch) {
+        public void setPaymentMethodSearchResponse(PaymentMethodSearch paymentMethodSearch) {
             shouldFail = false;
             successfulResponse = paymentMethodSearch;
         }
 
-        public void setResponse(MPException exception) {
+        public void setPaymentMethodSearchResponse(MPException exception) {
             shouldFail = true;
+            failedResponse = exception;
+        }
+
+        public void setDiscountResponse(Discount discount) {
+            shouldDiscountFail = false;
+            successfulDiscountResponse = discount;
+        }
+
+        public void setDiscountResponse(MPException exception) {
+            shouldDiscountFail = true;
             failedResponse = exception;
         }
 
@@ -506,10 +598,13 @@ public class PaymentVaultPresenterTest {
             }
         }
 
-
         @Override
         public void getDirectDiscount(String amount, String payerEmail, OnResourcesRetrievedCallback<Discount> onResourcesRetrievedCallback) {
-            onResourcesRetrievedCallback.onFailure(new MPException("Not yet implemented", false));
+            if (shouldDiscountFail) {
+                onResourcesRetrievedCallback.onFailure(failedResponse);
+            } else {
+                onResourcesRetrievedCallback.onSuccess(successfulDiscountResponse);
+            }
         }
 
         @Override
@@ -564,6 +659,7 @@ public class PaymentVaultPresenterTest {
         private boolean savedCardFlowStarted;
         private Card savedCardSelected;
         private String selectedPaymentType;
+        private Boolean showedDiscountRow;
 
         @Override
         public void startSavedCardFlow(Card card, BigDecimal transactionAmount) {
@@ -634,7 +730,7 @@ public class PaymentVaultPresenterTest {
 
         @Override
         public void showDiscountRow(BigDecimal transactionAmount) {
-            //Not yet tested
+            this.showedDiscountRow = true;
         }
 
         @Override

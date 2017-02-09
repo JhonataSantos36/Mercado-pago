@@ -1,13 +1,12 @@
 package com.mercadopago.core;
 
-import com.google.gson.Gson;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.DrawableRes;
 import android.text.TextUtils;
 
+import com.google.gson.Gson;
 import com.mercadopago.CustomerCardsActivity;
 import com.mercadopago.ReviewAndConfirmActivity;
 import com.mercadopago.callbacks.OnConfirmPaymentCallback;
@@ -24,6 +23,7 @@ import com.mercadopago.model.PaymentPreference;
 import com.mercadopago.model.Reviewable;
 import com.mercadopago.model.Site;
 import com.mercadopago.uicontrollers.discounts.DiscountRowView;
+import com.mercadopago.uicontrollers.installments.InstallmentsReviewView;
 import com.mercadopago.uicontrollers.reviewandconfirm.ReviewItemsView;
 import com.mercadopago.uicontrollers.reviewandconfirm.ReviewPaymentOffView;
 import com.mercadopago.uicontrollers.reviewandconfirm.ReviewPaymentOnView;
@@ -577,6 +577,37 @@ public class MercadoPagoUI {
                 return new ReviewPaymentOffView(context, paymentMethod, paymentMethodInfo, amount, site, reviewChangeCallback, editionEnabled, decorationPreference);
             }
 
+        }
+
+        public static class InstallmentsReviewViewBuilder {
+            private Context context;
+            private PayerCost payerCost;
+            private String currencyId;
+            private DecorationPreference decorationPreference;
+
+            public InstallmentsReviewViewBuilder setContext(Context context) {
+                this.context = context;
+                return this;
+            }
+
+            public InstallmentsReviewViewBuilder setPayerCost(PayerCost payerCost) {
+                this.payerCost = payerCost;
+                return this;
+            }
+
+            public InstallmentsReviewViewBuilder setCurrencyId(String currencyId) {
+                this.currencyId = currencyId;
+                return this;
+            }
+
+            public InstallmentsReviewViewBuilder setDecorationPreference(DecorationPreference decorationPreference) {
+                this.decorationPreference = decorationPreference;
+                return this;
+            }
+
+            public InstallmentsReviewView build() {
+                return new InstallmentsReviewView(context, payerCost, currencyId, decorationPreference);
+            }
         }
     }
 }

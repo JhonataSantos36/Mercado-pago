@@ -1,7 +1,5 @@
 package com.mercadopago;
 
-import com.google.gson.reflect.TypeToken;
-
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Instrumentation;
@@ -11,6 +9,7 @@ import android.os.Handler;
 import android.support.test.espresso.intent.Intents;
 import android.support.test.rule.ActivityTestRule;
 
+import com.google.gson.reflect.TypeToken;
 import com.mercadopago.constants.Sites;
 import com.mercadopago.model.BankDeal;
 import com.mercadopago.model.Card;

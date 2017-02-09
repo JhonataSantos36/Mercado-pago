@@ -101,22 +101,33 @@ public class DiscountRowView implements DiscountView {
     }
 
     private void drawShortDiscountDetailRow() {
-        mDiscountDetail.setVisibility(View.VISIBLE);
-        mHasDiscountLinearLayout.setVisibility(View.GONE);
+        if (isAmountOffValid() && isPercentOffValid()) {
+            mDiscountDetail.setVisibility(View.VISIBLE);
+            mHasDiscountLinearLayout.setVisibility(View.GONE);
 
-        setDiscountOff();
+            setDiscountOff();
+        }
     }
 
     private void drawHighDiscountDetailRow() {
-        mHasDirectDiscountLinearLayout.setVisibility(View.VISIBLE);
-        mDiscountAmountTextView.setVisibility(View.VISIBLE);
-        mHasDiscountLinearLayout.setVisibility(View.GONE);
+        if (areValidParameters()) {
+            mHasDirectDiscountLinearLayout.setVisibility(View.VISIBLE);
+            mDiscountAmountTextView.setVisibility(View.VISIBLE);
+            mHasDiscountLinearLayout.setVisibility(View.GONE);
 
-        setArrowVisibility();
-        setSeparatorVisibility();
-        setDiscountOff();
-        setTotalAmountWithDiscount();
-        setTotalAmount();
+            setArrowVisibility();
+            setSeparatorVisibility();
+            setDiscountOff();
+            setTotalAmountWithDiscount();
+            setTotalAmount();
+        } else {
+            mHasDirectDiscountLinearLayout.setVisibility(View.GONE);
+            mHighDiscountRow.setVisibility(View.GONE);
+        }
+    }
+
+    private Boolean areValidParameters() {
+        return isAmountOffValid() && isPercentOffValid() && isDiscountCurrencyIdValid() && isAmountValid(mTransactionAmount) && isAmountValid(mDiscount.getCouponAmount());
     }
 
     private void drawShortHasDiscountRow() {
@@ -146,11 +157,11 @@ public class DiscountRowView implements DiscountView {
     }
 
     private void setDiscountOff() {
-        if (isAmountOffValid()) {
+        if (mDiscount.getAmountOff().compareTo(BigDecimal.ZERO) > 0) {
             Currency currency = CurrenciesUtil.getCurrency(mDiscount.getCurrencyId());
             String amount = currency.getSymbol() + " " + mDiscount.getAmountOff();
             mDiscountOffTextView.setText(amount);
-        } else if (isPercentOffValid()){
+        } else if (mDiscount.getPercentOff().compareTo(BigDecimal.ZERO) > 0) {
             String discountOff = mContext.getResources().getString(R.string.mpsdk_discount_percent_off,
                     String.valueOf(mDiscount.getPercentOff()));
             mDiscountOffTextView.setText(discountOff);
@@ -158,16 +169,12 @@ public class DiscountRowView implements DiscountView {
     }
 
     private void setTotalAmountWithDiscount() {
-        if (isAmountValid(mTransactionAmount) && isDiscountCurrencyIdValid()) {
-            mDiscountAmountTextView.setText(getFormattedAmount(mDiscount.getAmountWithDiscount(mTransactionAmount), mDiscount.getCurrencyId()));
-        }
+        mDiscountAmountTextView.setText(getFormattedAmount(mDiscount.getAmountWithDiscount(mTransactionAmount), mDiscount.getCurrencyId()));
     }
 
     private void setTotalAmount() {
-        if (isAmountValid(mTransactionAmount) && isDiscountCurrencyIdValid()) {
-            mTotalAmountTextView.setText(getFormattedAmount(mTransactionAmount, mDiscount.getCurrencyId()));
-            mTotalAmountTextView.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
-        }
+        mTotalAmountTextView.setText(getFormattedAmount(mTransactionAmount, mDiscount.getCurrencyId()));
+        mTotalAmountTextView.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
     }
 
     @Override
@@ -210,7 +217,7 @@ public class DiscountRowView implements DiscountView {
     }
 
     private Boolean isDiscountEnabled() {
-        return  mDiscountEnabled == null || mDiscountEnabled;
+        return mDiscountEnabled == null || mDiscountEnabled;
     }
 
     private Spanned getFormattedAmount(BigDecimal amount, String currencyId) {
@@ -224,11 +231,11 @@ public class DiscountRowView implements DiscountView {
     }
 
     private Boolean isAmountOffValid() {
-        return mDiscount != null && mDiscount.getAmountOff() != null && mDiscount.getAmountOff().compareTo(BigDecimal.ZERO) > 0;
+        return mDiscount != null && mDiscount.getAmountOff() != null && isAmountValid(mDiscount.getAmountOff());
     }
 
     private Boolean isPercentOffValid() {
-        return mDiscount != null && mDiscount.getPercentOff() != null && mDiscount.getPercentOff().compareTo(BigDecimal.ZERO) > 0;
+        return mDiscount != null && mDiscount.getPercentOff() != null && mDiscount.getPercentOff().compareTo(BigDecimal.ZERO) >= 0;
     }
 
     private Boolean isDiscountCurrencyIdValid() {

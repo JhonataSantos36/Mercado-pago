@@ -1,14 +1,13 @@
 package com.mercadopago;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.mercadopago.callbacks.Callback;
 import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.core.MercadoPago;
@@ -44,6 +43,7 @@ import com.mercadopago.util.LayoutUtil;
 import com.mercadopago.util.MercadoPagoUtil;
 
 import java.lang.reflect.Type;
+import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.List;
 
@@ -84,6 +84,7 @@ public class CheckoutActivity extends AppCompatActivity {
     protected String mCustomerId;
     protected Boolean mBinaryModeEnabled;
     protected Boolean mDiscountEnabled;
+    protected Boolean mInstallmentsReviewEnabled;
     protected List<Card> mSavedCards;
     protected DecorationPreference mDecorationPreference;
     protected FailureRecovery mFailureRecovery;
@@ -116,6 +117,7 @@ public class CheckoutActivity extends AppCompatActivity {
         mDiscount = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("discount"), Discount.class);
         mDecorationPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("decorationPreference"), DecorationPreference.class);
         mDiscountEnabled = this.getIntent().getBooleanExtra("discountEnabled", true);
+        mInstallmentsReviewEnabled = this.getIntent().getBooleanExtra("installmentsReviewEnabled", false);
     }
 
     protected void onValidStart() {
@@ -260,7 +262,9 @@ public class CheckoutActivity extends AppCompatActivity {
                 .setAmount(mCheckoutPreference.getAmount())
                 .setPaymentMethodSearch(mPaymentMethodSearch)
                 .setDiscount(mDiscount)
+                .setInstallmentsEnabled(true)
                 .setDiscountEnabled(mDiscountEnabled)
+                .setInstallmentsReviewEnabled(mInstallmentsReviewEnabled)
                 .setPaymentPreference(mCheckoutPreference.getPaymentPreference())
                 .setDecorationPreference(mDecorationPreference)
                 .setCards(mSavedCards)
@@ -368,7 +372,6 @@ public class CheckoutActivity extends AppCompatActivity {
     }
 
     private void showReviewAndConfirm() {
-
         mPaymentMethodEditionRequested = false;
 
         MercadoPagoUI.Activities.ReviewAndConfirmBuilder builder = new MercadoPagoUI.Activities.ReviewAndConfirmBuilder()
@@ -379,8 +382,11 @@ public class CheckoutActivity extends AppCompatActivity {
                 .setSite(mSite)
                 .setDecorationPreference(mDecorationPreference)
                 .setEditionEnabled(!isUniquePaymentMethod())
-                .setDiscount(mDiscount)
                 .setItems(mCheckoutPreference.getItems());
+
+        if (mDiscountEnabled && isDiscountValid()) {
+            builder.setDiscount(mDiscount);
+        }
 
         if (MercadoPagoUtil.isCard(mSelectedPaymentMethod.getPaymentTypeId())) {
             builder.setCardInfo(new CardInfo(mCreatedToken));
@@ -433,6 +439,7 @@ public class CheckoutActivity extends AppCompatActivity {
                 .setAmount(mCheckoutPreference.getAmount())
                 .setSite(mSite)
                 .setInstallmentsEnabled(true)
+                .setInstallmentsReviewEnabled(mInstallmentsReviewEnabled)
                 .setDiscount(mDiscount)
                 .setDiscountEnabled(mDiscountEnabled)
                 .setSupportedPaymentMethods(mPaymentMethodSearch.getPaymentMethods())
@@ -541,7 +548,7 @@ public class CheckoutActivity extends AppCompatActivity {
             mTransactionId = createNewTransactionId();
         }
 
-        if (mDiscount != null) {
+        if (mDiscountEnabled && isDiscountValid()) {
             paymentIntent.setCampaignId(mDiscount.getId().intValue());
             paymentIntent.setCouponAmount(mDiscount.getCouponAmount().floatValue());
 
@@ -552,6 +559,18 @@ public class CheckoutActivity extends AppCompatActivity {
 
         paymentIntent.setTransactionId(mTransactionId);
         return paymentIntent;
+    }
+
+    private Boolean isDiscountValid() {
+        return mDiscount != null && isCampaignIdValid() && isCouponAmountValid();
+    }
+
+    private Boolean isCampaignIdValid() {
+        return mDiscount.getId() != null;
+    }
+
+    private Boolean isCouponAmountValid() {
+        return mDiscount.getCouponAmount() != null && mDiscount.getCouponAmount().compareTo(BigDecimal.ZERO) >= 0;
     }
 
     private void checkStartPaymentResultActivity(Payment payment) {
@@ -573,6 +592,7 @@ public class CheckoutActivity extends AppCompatActivity {
                 .setActivity(mActivity)
                 .setPayment(mCreatedPayment)
                 .setDiscount(mDiscount)
+                .setDiscountEnabled(mDiscountEnabled)
                 .setPaymentMethod(mSelectedPaymentMethod)
                 .setCongratsDisplay(mCongratsDisplay)
                 .startPaymentResultActivity();

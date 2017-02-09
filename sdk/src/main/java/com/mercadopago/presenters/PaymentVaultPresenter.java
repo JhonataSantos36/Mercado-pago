@@ -39,6 +39,7 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
     private String mPayerEmail;
     private PaymentPreference mPaymentPreference;
     private BigDecimal mAmount;
+    private Boolean mInstallmentsReviewEnabled;
     private Boolean mAccountMoneyEnabled = false;
     private Boolean mDiscountEnabled = true;
     private Integer mMaxSavedCards;
@@ -426,6 +427,14 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
 
     public String getPayerEmail() {
         return mPayerEmail;
+    }
+
+    public void setInstallmentsReviewEnabled(Boolean installmentReviewEnabled) {
+        this.mInstallmentsReviewEnabled = installmentReviewEnabled;
+    }
+
+    public Boolean getInstallmentsReviewEnabled() {
+        return this.mInstallmentsReviewEnabled;
     }
 
     public void setDiscountEnabled(Boolean discountEnabled) {

@@ -1,8 +1,5 @@
 package com.mercadopago;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -17,6 +14,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.FrameLayout;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.mercadopago.adapters.PaymentMethodSearchItemAdapter;
 import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.callbacks.OnSelectedCallback;
@@ -85,6 +84,7 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
     protected MPTextView mTimerTextView;
     protected Boolean mShowBankDeals;
     protected FrameLayout mDiscountFrameLayout;
+
     protected String mPublicKey;
     protected String mMerchantBaseUrl;
     protected String mMerchantGetCustomerUri;
@@ -128,6 +128,7 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
         mPaymentVaultPresenter.setPayerEmail(this.getIntent().getStringExtra("payerEmail"));
         mPaymentVaultPresenter.setDiscount(JsonUtil.getInstance().fromJson(getIntent().getStringExtra("discount"), Discount.class));
         mPaymentVaultPresenter.setDiscountEnabled(this.getIntent().getBooleanExtra("discountEnabled", true));
+        mPaymentVaultPresenter.setInstallmentsReviewEnabled(this.getIntent().getBooleanExtra("installmentsReviewEnabled", true));
         mPaymentVaultPresenter.setMaxSavedCards(this.getIntent().getIntExtra("maxSavedCards", 0));
         mShowBankDeals = getIntent().getBooleanExtra("showBankDeals", true);
 
@@ -309,6 +310,7 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
                 .setPayerEmail(mPaymentVaultPresenter.getPayerEmail())
                 .setDiscount(mPaymentVaultPresenter.getDiscount())
                 .setDiscountEnabled(mPaymentVaultPresenter.getDiscountEnabled())
+                .setInstallmentsReviewEnabled(mPaymentVaultPresenter.getInstallmentsReviewEnabled())
                 .setShowBankDeals(mShowBankDeals)
                 .startCardVaultActivity();
     }
@@ -499,6 +501,7 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
                 .setPayerEmail(mPaymentVaultPresenter.getPayerEmail())
                 .setDiscount(mPaymentVaultPresenter.getDiscount())
                 .setDiscountEnabled(mPaymentVaultPresenter.getDiscountEnabled())
+                .setInstallmentsReviewEnabled(mPaymentVaultPresenter.getInstallmentsReviewEnabled())
                 .setShowBankDeals(mShowBankDeals)
                 .setSupportedPaymentMethods(mPaymentVaultPresenter.getPaymentMethodSearch().getPaymentMethods())
                 .startCardVaultActivity();
@@ -607,6 +610,7 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
 
         mercadoPagoBuilder.startDiscountsActivity();
     }
+
 
     @Override
     public void showDiscountRow(BigDecimal transactionAmount) {

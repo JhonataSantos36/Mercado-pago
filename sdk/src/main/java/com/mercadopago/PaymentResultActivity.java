@@ -20,6 +20,7 @@ public class PaymentResultActivity extends Activity {
     protected Payment mPayment;
     protected PaymentMethod mPaymentMethod;
     protected Discount mDiscount;
+    protected Boolean mDiscountEnabled;
     private String mMerchantPublicKey;
     private Integer mCongratsDisplay;
 
@@ -43,6 +44,7 @@ public class PaymentResultActivity extends Activity {
         mPayment = JsonUtil.getInstance().fromJson(getIntent().getExtras().getString("payment"), Payment.class);
         mPaymentMethod = JsonUtil.getInstance().fromJson(getIntent().getExtras().getString("paymentMethod"), PaymentMethod.class);
         mDiscount = JsonUtil.getInstance().fromJson(getIntent().getExtras().getString("discount"), Discount.class);
+        mDiscountEnabled = getIntent().getExtras().getBoolean("discountEnabled", true);
     }
 
     protected void validateActivityParameters() throws IllegalStateException {
@@ -103,6 +105,7 @@ public class PaymentResultActivity extends Activity {
                 .setActivity(this)
                 .setPayment(mPayment)
                 .setDiscount(mDiscount)
+                .setDiscountEnabled(mDiscountEnabled)
                 .setPaymentMethod(mPaymentMethod)
                 .setCongratsDisplay(mCongratsDisplay)
                 .startCongratsActivity();

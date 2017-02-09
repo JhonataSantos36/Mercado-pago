@@ -28,19 +28,32 @@
         android:orientation="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <FrameLayout
-            android:id="@+id/mpsdkDiscount"
+        <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+            android:layout_height="match_parent">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+                <FrameLayout
+                    android:id="@+id/mpsdkDiscount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/mpsdkActivityInstallmentsView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="visible"
-            android:background="@color/mpsdk_white"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            android:descendantFocusability="afterDescendants"/>
+                <FrameLayout
+                    android:id="@+id/mpsdkInstallmentsReview"
+                    android:visibility="gone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/mpsdkActivityInstallmentsView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="visible"
+                    android:background="@color/mpsdk_white"
+                    android:descendantFocusability="afterDescendants" />
+            </LinearLayout>
+        </android.support.v4.widget.NestedScrollView>
     </LinearLayout>
 </android.support.design.widget.CoordinatorLayout>

@@ -1,7 +1,5 @@
 package com.mercadopago;
 
-import com.google.gson.reflect.TypeToken;
-
 import android.app.Activity;
 import android.app.Instrumentation;
 import android.content.Intent;
@@ -17,6 +15,7 @@ import android.test.suitebuilder.annotation.LargeTest;
 import android.text.Spanned;
 import android.view.View;
 
+import com.google.gson.reflect.TypeToken;
 import com.mercadopago.constants.Sites;
 import com.mercadopago.controllers.CheckoutTimer;
 import com.mercadopago.customviews.MPTextView;
@@ -26,6 +25,7 @@ import com.mercadopago.model.DecorationPreference;
 import com.mercadopago.model.Discount;
 import com.mercadopago.model.Installment;
 import com.mercadopago.model.Issuer;
+import com.mercadopago.model.Payer;
 import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentPreference;
@@ -86,6 +86,7 @@ public class InstallmentsActivityTest {
     private PaymentMethod mPaymentMethod;
     private Site mSite;
     private BigDecimal mAmount;
+    private String mCurrencyId;
 
     private FakeAPI mFakeAPI;
 
@@ -95,6 +96,7 @@ public class InstallmentsActivityTest {
         mPaymentMethod = StaticMock.getPaymentMethodOn();
         mSite = Sites.ARGENTINA;
         mAmount = new BigDecimal(1000);
+        mCurrencyId = mSite.getCurrencyId();
 
         validStartIntent = new Intent();
         validStartIntent.putExtra("merchantPublicKey", mMerchantPublicKey);
@@ -927,6 +929,188 @@ public class InstallmentsActivityTest {
         onView(withId(R.id.mpsdkDiscountOff)).check(matches(withText(getDiscountOff(discount))));
         onView(withId(R.id.mpsdkDiscountAmount)).check(matches(withText(amountWithDiscount.toString())));
         onView(withId(R.id.mpsdkTotalAmount)).check(matches(withText(totalAmount.toString())));
+    }
+
+    @Test
+    public void showTotalAmountWhenDiscountsAreNotEnabled() {
+        Discount discount = StaticMock.getPercentOffDiscount();
+
+        PaymentPreference paymentPreference = new PaymentPreference();
+
+        String installments = StaticMock.getInstallmentsJson();
+
+        Type listType = new TypeToken<List<Installment>>(){}.getType();
+        List<Installment> installmentList = JsonUtil.getInstance().getGson().fromJson(installments, listType);
+
+        Issuer issuer = StaticMock.getIssuer();
+
+        validStartIntent.putExtra("issuer", JsonUtil.getInstance().toJson(issuer));
+        validStartIntent.putExtra("paymentPreference", JsonUtil.getInstance().toJson(paymentPreference));
+        validStartIntent.putExtra("discountEnabled",false);
+
+        mFakeAPI.addResponseToQueue(discount, 200, "");
+        mFakeAPI.addResponseToQueue(installmentList, 200, "");
+
+        mTestRule.launchActivity(validStartIntent);
+
+        onView(withId(R.id.mpsdkTotalAmount)).check(matches(withText(getFormattedAmount(mAmount, mCurrencyId).toString())));
+    }
+
+    //Installments review
+    @Test
+    public void showInstallmentsReviewWithDiscountDetailWhenClickOnInstallmentRow() {
+        Spanned amountWithDiscount, totalAmount;
+        Discount discount = StaticMock.getPercentOffDiscount();
+        PayerCost selectedPayerCost;
+
+        PaymentPreference paymentPreference = new PaymentPreference();
+
+        String installments = StaticMock.getInstallmentsJson();
+
+        Type listType = new TypeToken<List<Installment>>(){}.getType();
+        List<Installment> installmentList = JsonUtil.getInstance().getGson().fromJson(installments, listType);
+
+        Issuer issuer = StaticMock.getIssuer();
+
+        validStartIntent.putExtra("issuer", JsonUtil.getInstance().toJson(issuer));
+        validStartIntent.putExtra("paymentPreference", JsonUtil.getInstance().toJson(paymentPreference));
+
+        mFakeAPI.addResponseToQueue(discount, 200, "");
+        mFakeAPI.addResponseToQueue(installmentList, 200, "");
+
+        mTestRule.launchActivity(validStartIntent);
+
+        amountWithDiscount = getFormattedAmount(mTestRule.getActivity().getPresenter().getDiscount().getAmountWithDiscount(mAmount), mTestRule.getActivity().getPresenter().getDiscount().getCurrencyId());
+        totalAmount = getFormattedAmount(mAmount, mTestRule.getActivity().getPresenter().getDiscount().getCurrencyId());
+        selectedPayerCost = installmentList.get(0).getPayerCosts().get(0);
+
+        onView(withId(R.id.mpsdkHasDirectDiscount)).check(matches(isDisplayed()));
+        onView(withId(R.id.mpsdkDiscountOff)).check(matches(isDisplayed()));
+        onView(withId(R.id.mpsdkDiscountOff)).check(matches(withText(getDiscountOff(discount))));
+        onView(withId(R.id.mpsdkDiscountAmount)).check(matches(withText(amountWithDiscount.toString())));
+        onView(withId(R.id.mpsdkTotalAmount)).check(matches(withText(totalAmount.toString())));
+
+        onView(withId(R.id.mpsdkActivityInstallmentsView)).perform(actionOnItemAtPosition(0, click()));
+
+        onView(withId(R.id.mpsdkHasDirectDiscount)).check(matches(isDisplayed()));
+        onView(withId(R.id.mpsdkDiscountOff)).check(matches(isDisplayed()));
+        onView(withId(R.id.mpsdkDiscountOff)).check(matches(withText(getDiscountOff(discount))));
+        onView(withId(R.id.mpsdkDiscountAmount)).check(matches(withText(amountWithDiscount.toString())));
+        onView(withId(R.id.mpsdkTotalAmount)).check(matches(withText(totalAmount.toString())));
+
+        onView(withId(R.id.mpsdkInstallmentsAmount)).check(matches(withText(formatInstallmentAmountText(selectedPayerCost, mCurrencyId).toString())));
+        onView(withId(R.id.mpsdkReviewTotalAmount)).check(matches(withText(formatTotalAmountWithRateText(selectedPayerCost, mCurrencyId).toString())));
+        onView(withId(R.id.mpsdkTeaPercent)).check(matches(withText(formatTEAPercentText(selectedPayerCost))));
+        onView(withId(R.id.mpsdkCftpercent)).check(matches(withText(formatCFTPercentText(selectedPayerCost))));
+    }
+
+    @Test
+    public void showTotalAmountInInstallmentsReviewWhenClickOnInstallmentRowWithoutDiscount() {
+        PayerCost selectedPayerCost;
+
+        PaymentPreference paymentPreference = new PaymentPreference();
+
+        String installments = StaticMock.getInstallmentsJson();
+
+        Type listType = new TypeToken<List<Installment>>(){}.getType();
+        List<Installment> installmentList = JsonUtil.getInstance().getGson().fromJson(installments, listType);
+
+        Issuer issuer = StaticMock.getIssuer();
+
+        validStartIntent.putExtra("issuer", JsonUtil.getInstance().toJson(issuer));
+        validStartIntent.putExtra("paymentPreference", JsonUtil.getInstance().toJson(paymentPreference));
+
+        mFakeAPI.addResponseToQueue("", 404, "");
+        mFakeAPI.addResponseToQueue(installmentList, 200, "");
+
+        mTestRule.launchActivity(validStartIntent);
+
+        selectedPayerCost = installmentList.get(0).getPayerCosts().get(0);
+
+        onView(withId(R.id.mpsdkDiscountRow)).check(matches(isDisplayed()));
+
+        onView(withId(R.id.mpsdkActivityInstallmentsView)).perform(actionOnItemAtPosition(0, click()));
+
+        onView(withId(R.id.mpsdkTotalAmount)).check(matches(withText(getFormattedAmount(mAmount, mCurrencyId).toString())));
+        onView(withId(R.id.mpsdkInstallmentsAmount)).check(matches(withText(formatInstallmentAmountText(selectedPayerCost, mCurrencyId).toString())));
+        onView(withId(R.id.mpsdkReviewTotalAmount)).check(matches(withText(formatTotalAmountWithRateText(selectedPayerCost, mCurrencyId).toString())));
+        onView(withId(R.id.mpsdkTeaPercent)).check(matches(withText(formatTEAPercentText(selectedPayerCost))));
+        onView(withId(R.id.mpsdkCftpercent)).check(matches(withText(formatCFTPercentText(selectedPayerCost))));
+    }
+
+    @Test
+    public void hideInstallmentsReviewWhenInstallmentsReviewIsNotEnabled() {
+        Spanned amountWithDiscount, totalAmount;
+        Discount discount = StaticMock.getPercentOffDiscount();
+
+        PaymentPreference paymentPreference = new PaymentPreference();
+
+        String installments = StaticMock.getInstallmentsJson();
+
+        Type listType = new TypeToken<List<Installment>>(){}.getType();
+        List<Installment> installmentList = JsonUtil.getInstance().getGson().fromJson(installments, listType);
+
+        Issuer issuer = StaticMock.getIssuer();
+
+        validStartIntent.putExtra("issuer", JsonUtil.getInstance().toJson(issuer));
+        validStartIntent.putExtra("paymentPreference", JsonUtil.getInstance().toJson(paymentPreference));
+        validStartIntent.putExtra("installmentsReviewEnabled", false);
+
+        mFakeAPI.addResponseToQueue(discount, 200, "");
+        mFakeAPI.addResponseToQueue(installmentList, 200, "");
+
+        mTestRule.launchActivity(validStartIntent);
+
+        amountWithDiscount = getFormattedAmount(mTestRule.getActivity().getPresenter().getDiscount().getAmountWithDiscount(mAmount), mTestRule.getActivity().getPresenter().getDiscount().getCurrencyId());
+        totalAmount = getFormattedAmount(mAmount, mTestRule.getActivity().getPresenter().getDiscount().getCurrencyId());
+
+        onView(withId(R.id.mpsdkHasDirectDiscount)).check(matches(isDisplayed()));
+        onView(withId(R.id.mpsdkDiscountOff)).check(matches(isDisplayed()));
+        onView(withId(R.id.mpsdkDiscountOff)).check(matches(withText(getDiscountOff(discount))));
+        onView(withId(R.id.mpsdkDiscountAmount)).check(matches(withText(amountWithDiscount.toString())));
+        onView(withId(R.id.mpsdkTotalAmount)).check(matches(withText(totalAmount.toString())));
+
+        onView(withId(R.id.mpsdkActivityInstallmentsView)).perform(actionOnItemAtPosition(0, click()));
+
+        Assert.assertTrue(mTestRule.getActivity().isFinishing());
+    }
+
+    private Spanned formatInstallmentAmountText(PayerCost payerCost, String currencyId) {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        stringBuilder.append(payerCost.getInstallments());
+        stringBuilder.append(" ");
+        stringBuilder.append(mTestRule.getActivity().getString(R.string.mpsdk_installments_by));
+        stringBuilder.append(" ");
+        stringBuilder.append(CurrenciesUtil.formatNumber(payerCost.getInstallmentAmount(), currencyId));
+
+        Spanned spannedInstallmentsText = CurrenciesUtil.formatCurrencyInText(payerCost.getInstallmentAmount(),
+                currencyId, stringBuilder.toString(), false, true);
+
+        return spannedInstallmentsText;
+    }
+
+    private Spanned formatTotalAmountWithRateText(PayerCost payerCost, String currencyId) {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("(");
+        stringBuilder.append(CurrenciesUtil.formatNumber(payerCost.getTotalAmount(), currencyId));
+        stringBuilder.append(")");
+
+        Spanned spannedFullAmountText = CurrenciesUtil.formatCurrencyInText(payerCost.getTotalAmount(),
+                currencyId, stringBuilder.toString(), false, true);
+
+        return spannedFullAmountText;
+    }
+
+    private String formatTEAPercentText(PayerCost payerCost) {
+        String teaPercent = mTestRule.getActivity().getString(R.string.mpsdk_installments_tea) + " " + payerCost.getTEAPercent();
+
+        return teaPercent;
+    }
+
+    private String formatCFTPercentText(PayerCost payerCost) {
+        String cftPercent = mTestRule.getActivity().getString(R.string.mpsdk_installments_cft) + " " + payerCost.getCFTPercent();
+        return cftPercent;
     }
 
     private String getDiscountOff(Discount discount) {

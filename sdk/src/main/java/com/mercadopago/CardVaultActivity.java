@@ -1,7 +1,5 @@
 package com.mercadopago;
 
-import com.google.gson.reflect.TypeToken;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -10,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
+import com.google.gson.reflect.TypeToken;
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.Card;
@@ -123,6 +122,7 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultAct
     private void getActivityParameters() {
         Boolean installmentsEnabled = getIntent().getBooleanExtra("installmentsEnabled", false);
         Boolean discountEnabled = getIntent().getBooleanExtra("discountEnabled", true);
+        Boolean installmentsReviewEnabled = getIntent().getBooleanExtra("installmentsReviewEnabled", true);
         String publicKey = getIntent().getStringExtra("merchantPublicKey");
         Site site = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("site"), Site.class);
         Card card = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("card"), Card.class);
@@ -162,6 +162,7 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultAct
         mPresenter.setPayerEmail(payerEmail);
         mPresenter.setDiscount(discount);
         mPresenter.setDiscountEnabled(discountEnabled);
+        mPresenter.setInstallmentsReviewEnabled(installmentsReviewEnabled);
     }
 
     private void setContentView() {
@@ -433,6 +434,8 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultAct
                 .setPaymentPreference(mPresenter.getPaymentPreference())
                 .setSite(mPresenter.getSite())
                 .setDecorationPreference(mDecorationPreference)
+                .setInstallmentsEnabled(mPresenter.getInstallmentsEnabled())
+                .setInstallmentsReviewEnabled(mPresenter.getInstallmentsReviewEnabled())
                 .setCardInfo(mPresenter.getCardInfo())
                 .startInstallmentsActivity();
     }

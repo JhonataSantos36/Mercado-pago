@@ -6,7 +6,7 @@ import com.mercadopago.mvp.MvpView;
  * Created by mromar on 11/29/16.
  */
 
-public interface DiscountsView extends MvpView {
+public interface DiscountsActivityView extends MvpView {
 
     void drawSummary();
 

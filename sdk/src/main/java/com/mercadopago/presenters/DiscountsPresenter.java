@@ -5,7 +5,7 @@ import com.mercadopago.model.Discount;
 import com.mercadopago.mvp.MvpPresenter;
 import com.mercadopago.mvp.OnResourcesRetrievedCallback;
 import com.mercadopago.providers.DiscountsProvider;
-import com.mercadopago.views.DiscountsView;
+import com.mercadopago.views.DiscountsActivityView;
 
 import java.math.BigDecimal;
 
@@ -13,9 +13,9 @@ import java.math.BigDecimal;
  * Created by mromar on 11/29/16.
  */
 
-public class DiscountsPresenter extends MvpPresenter<DiscountsView, DiscountsProvider> {
+public class DiscountsPresenter extends MvpPresenter<DiscountsActivityView, DiscountsProvider> {
 
-    private DiscountsView mDiscountsView;
+    private DiscountsActivityView mDiscountsView;
 
     //Activity parameters
     private String mPublicKey;
@@ -26,7 +26,7 @@ public class DiscountsPresenter extends MvpPresenter<DiscountsView, DiscountsPro
     private Boolean mDirectDiscountEnabled;
 
     @Override
-    public void attachView(DiscountsView discountsView) {
+    public void attachView(DiscountsActivityView discountsView) {
         this.mDiscountsView = discountsView;
     }
 

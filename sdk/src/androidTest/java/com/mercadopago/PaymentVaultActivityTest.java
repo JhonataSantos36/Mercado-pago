@@ -1,7 +1,5 @@
 package com.mercadopago;
 
-import com.google.gson.Gson;
-
 import android.app.Activity;
 import android.app.Instrumentation;
 import android.content.Intent;
@@ -16,6 +14,7 @@ import android.test.suitebuilder.annotation.LargeTest;
 import android.text.Spanned;
 import android.view.View;
 
+import com.google.gson.Gson;
 import com.mercadopago.constants.PaymentTypes;
 import com.mercadopago.constants.Sites;
 import com.mercadopago.controllers.CheckoutTimer;
@@ -72,6 +71,7 @@ import static com.mercadopago.utils.ActivityResultUtil.assertFinishCalledWithRes
 import static com.mercadopago.utils.ActivityResultUtil.getActivityResult;
 import static com.mercadopago.utils.CustomMatchers.atPosition;
 import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.core.IsNot.not;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -990,7 +990,7 @@ public class PaymentVaultActivityTest {
     //Timer
     @Test
     public void showCountDownTimerWhenItIsInitialized() {
-        if(Looper.myLooper() == null) {
+        if (Looper.myLooper() == null) {
             Looper.prepare();
         }
         String paymentMethodSearchJson = StaticMock.getPaymentMethodSearchWithoutCustomOptionsAsJson();
@@ -1224,7 +1224,7 @@ public class PaymentVaultActivityTest {
     }
 
     private String getDiscountOff(Discount discount) {
-        if (discount.getAmountOff() != null && discount.getAmountOff().compareTo(BigDecimal.ZERO)>0) {
+        if (discount.getAmountOff() != null && discount.getAmountOff().compareTo(BigDecimal.ZERO) > 0) {
             Currency currency = CurrenciesUtil.getCurrency(discount.getCurrencyId());
             String amount = currency.getSymbol() + " " + discount.getAmountOff();
             return amount;

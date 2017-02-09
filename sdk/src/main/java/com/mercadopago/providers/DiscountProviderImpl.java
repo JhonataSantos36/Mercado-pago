@@ -23,7 +23,6 @@ public class DiscountProviderImpl implements DiscountsProvider {
     private static final String DISCOUNT_ERROR_CAMPAIGN_EXPIRED = "campaign-expired";
 
     private final MercadoPago mercadoPago;
-
     private Context context;
 
     public DiscountProviderImpl(Context context, String publicKey) {

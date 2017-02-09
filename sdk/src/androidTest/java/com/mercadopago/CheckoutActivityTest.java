@@ -1,7 +1,5 @@
 package com.mercadopago;
 
-import com.google.gson.Gson;
-
 import android.app.Activity;
 import android.app.Instrumentation;
 import android.content.Intent;
@@ -18,6 +16,7 @@ import android.support.v7.widget.RecyclerView;
 import android.test.suitebuilder.annotation.LargeTest;
 import android.widget.ImageView;
 
+import com.google.gson.Gson;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.exceptions.MPException;
 import com.mercadopago.model.ApiException;
@@ -1382,95 +1381,6 @@ public class CheckoutActivityTest {
         onView(withId(R.id.mpsdkErrorRetry)).perform(click());
 
         assertTrue(mTestRule.getActivity().mPaymentMethodSearch != null);
-    }
-
-    // DECORATION TESTS
-
-    @Test
-    public void whenDecorationPreferenceReceivedDecorateElements() {
-        CheckoutPreference preference = StaticMock.getCheckoutPreference();
-        mFakeAPI.addResponseToQueue(preference, 200, "");
-
-        String paymentMethodSearchJson = StaticMock.getPaymentMethodSearchWithoutCustomOptionsAsJson();
-        mFakeAPI.addResponseToQueue(paymentMethodSearchJson, 200, "");
-
-        //prepare next activity result
-        final PaymentMethod paymentMethod = StaticMock.getPaymentMethod(InstrumentationRegistry.getContext());
-        final PayerCost payerCost = StaticMock.getPayerCostWithInterests();
-        final Token token = StaticMock.getToken();
-        final Issuer issuer = StaticMock.getIssuer();
-
-        Intent paymentVaultResultIntent = new Intent();
-        paymentVaultResultIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
-        paymentVaultResultIntent.putExtra("token", JsonUtil.getInstance().toJson(token));
-        paymentVaultResultIntent.putExtra("payerCost", JsonUtil.getInstance().toJson(payerCost));
-        paymentVaultResultIntent.putExtra("issuer", JsonUtil.getInstance().toJson(issuer));
-
-        Instrumentation.ActivityResult paymentMethodResult = new Instrumentation.ActivityResult(Activity.RESULT_OK, paymentVaultResultIntent);
-
-        intending(hasComponent(PaymentVaultActivity.class.getName())).respondWith(paymentMethodResult);
-
-        DecorationPreference decorationPreference = new DecorationPreference();
-        decorationPreference.setBaseColor(ContextCompat.getColor(InstrumentationRegistry.getContext(), R.color.mpsdk_color_light_grey));
-        validStartIntent.putExtra("decorationPreference", JsonUtil.getInstance().toJson(decorationPreference));
-
-        mTestRule.launchActivity(validStartIntent);
-        assertTrue(ViewUtils.getBackgroundColor(mTestRule.getActivity().mConfirmButton) == decorationPreference.getBaseColor());
-
-        MPTextView cancelTextView = (MPTextView) mTestRule.getActivity().findViewById(R.id.mpsdkCancelText);
-        MPTextView termsAndConditionsTextView = (MPTextView) mTestRule.getActivity().findViewById(R.id.mpsdkReviewTermsAndConditions);
-        int cancelFontColor = cancelTextView.getCurrentTextColor();
-        int termsFontColor = termsAndConditionsTextView.getCurrentTextColor();
-        int expectedColor = decorationPreference.getBaseColor();
-        assertEquals(cancelFontColor, expectedColor);
-        assertEquals(termsFontColor, expectedColor);
-    }
-
-    @Test
-    public void whenDecorationPreferenceReceivedWithDarkFontEnabledDecorateTextViews() {
-        CheckoutPreference preference = StaticMock.getCheckoutPreference();
-        mFakeAPI.addResponseToQueue(preference, 200, "");
-
-        String paymentMethodSearchJson = StaticMock.getPaymentMethodSearchWithoutCustomOptionsAsJson();
-        mFakeAPI.addResponseToQueue(paymentMethodSearchJson, 200, "");
-
-        //prepare next activity result
-        final PaymentMethod paymentMethod = StaticMock.getPaymentMethod(InstrumentationRegistry.getContext());
-        final PayerCost payerCost = StaticMock.getPayerCostWithInterests();
-        final Token token = StaticMock.getToken();
-        final Issuer issuer = StaticMock.getIssuer();
-
-        Intent paymentVaultResultIntent = new Intent();
-        paymentVaultResultIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
-        paymentVaultResultIntent.putExtra("token", JsonUtil.getInstance().toJson(token));
-        paymentVaultResultIntent.putExtra("payerCost", JsonUtil.getInstance().toJson(payerCost));
-        paymentVaultResultIntent.putExtra("issuer", JsonUtil.getInstance().toJson(issuer));
-
-        Instrumentation.ActivityResult paymentMethodResult = new Instrumentation.ActivityResult(Activity.RESULT_OK, paymentVaultResultIntent);
-
-        intending(hasComponent(PaymentVaultActivity.class.getName())).respondWith(paymentMethodResult);
-
-        DecorationPreference decorationPreference = new DecorationPreference();
-        decorationPreference.setBaseColor(ContextCompat.getColor(InstrumentationRegistry.getContext(), R.color.mpsdk_color_light_grey));
-        decorationPreference.enableDarkFont();
-        validStartIntent.putExtra("decorationPreference", JsonUtil.getInstance().toJson(decorationPreference));
-
-        mTestRule.launchActivity(validStartIntent);
-
-        sleep();
-        assertTrue(ViewUtils.getBackgroundColor(mTestRule.getActivity().mConfirmButton) == decorationPreference.getBaseColor());
-
-        MPTextView confirmTextView = (MPTextView) mTestRule.getActivity().findViewById(R.id.mpsdkConfirmText);
-        MPTextView cancelTextView = (MPTextView) mTestRule.getActivity().findViewById(R.id.mpsdkCancelText);
-        MPTextView termsAndConditionsTextView = (MPTextView) mTestRule.getActivity().findViewById(R.id.mpsdkReviewTermsAndConditions);
-        int confirmFontColor = confirmTextView.getCurrentTextColor();
-        int cancelFontColor = cancelTextView.getCurrentTextColor();
-        int termsFontColor = termsAndConditionsTextView.getCurrentTextColor();
-        int expectedColor = decorationPreference.getBaseColor();
-        int darkColor = decorationPreference.getDarkFontColor(mTestRule.getActivity());
-        assertEquals(confirmFontColor, darkColor);
-        assertEquals(cancelFontColor, expectedColor);
-        assertEquals(termsFontColor, expectedColor);
     }
 
     // PAYMENT RECOVERY

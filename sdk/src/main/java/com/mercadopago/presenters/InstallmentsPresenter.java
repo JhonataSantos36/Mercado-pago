@@ -50,6 +50,7 @@ public class InstallmentsPresenter {
     private CardInfo mCardInfo;
     private Discount mDiscount;
     private Boolean mDiscountEnabled;
+    private Boolean mInstallmentsReviewEnabled;
 
     public InstallmentsPresenter(Context context) {
         this.mContext = context;
@@ -126,12 +127,11 @@ public class InstallmentsPresenter {
     public BigDecimal getAmount() {
         BigDecimal amount;
 
-        if (mDiscount == null) {
+        if (!mDiscountEnabled || mDiscount == null || mDiscount.getCouponAmount() == null) {
             amount = mAmount;
         } else {
             amount = mDiscount.getAmountWithDiscount(mAmount);
         }
-
         return amount;
     }
 
@@ -212,6 +212,8 @@ public class InstallmentsPresenter {
     }
 
     private void getDirectDiscount() {
+        mView.showLoadingView();
+
         mMercadoPago.getDirectDiscount(mAmount.toString(), mPayerEmail, new Callback<Discount>() {
             @Override
             public void success(Discount discount) {
@@ -256,6 +258,14 @@ public class InstallmentsPresenter {
 
     public Boolean getDiscountEnabled() {
         return this.mDiscountEnabled;
+    }
+
+    public void setInstallmentsReviewEnabled(Boolean installmentReviewEnabled) {
+        this.mInstallmentsReviewEnabled = installmentReviewEnabled;
+    }
+
+    public Boolean getInstallmentReviewEnabled() {
+        return this.mInstallmentsReviewEnabled;
     }
 
     private void loadPayerCosts() {
@@ -323,7 +333,19 @@ public class InstallmentsPresenter {
     }
 
     public void onItemSelected(int position) {
-        mView.finishWithResult(mPayerCosts.get(position));
+        if (isInstallmentsReviewEnabled()) {
+            mView.hideInstallmentsRecyclerView();
+            mView.showInstallmentsReviewView();
+
+            initializeDiscountRow();
+            mView.initInstallmentsReviewView(mPayerCosts.get(position));
+        } else {
+            mView.finishWithResult(mPayerCosts.get(position));
+        }
+    }
+
+    private Boolean isInstallmentsReviewEnabled() {
+        return mInstallmentsReviewEnabled != null && mInstallmentsReviewEnabled;
     }
 
 }

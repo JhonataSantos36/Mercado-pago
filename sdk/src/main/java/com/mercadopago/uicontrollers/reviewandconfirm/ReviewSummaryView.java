@@ -141,11 +141,11 @@ public class ReviewSummaryView extends Reviewable {
     }
 
     private void showFinance() {
-        if(mPayerCost.hasTEA()) {
+        if (mPayerCost.hasTEA()) {
             mTEATextView.setVisibility(View.VISIBLE);
             mTEATextView.setText(TEA + mPayerCost.getTEAPercent());
         }
-        if(mPayerCost.hasCFT()) {
+        if (mPayerCost.hasCFT()) {
             mCFTTextView.setVisibility(View.VISIBLE);
             mCFTTextView.setText(CFT + mPayerCost.getCFTPercent());
         }

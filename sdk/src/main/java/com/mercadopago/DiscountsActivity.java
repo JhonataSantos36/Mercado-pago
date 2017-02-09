@@ -33,11 +33,11 @@ import com.mercadopago.util.CurrenciesUtil;
 import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;
-import com.mercadopago.views.DiscountsView;
+import com.mercadopago.views.DiscountsActivityView;
 
 import java.math.BigDecimal;
 
-public class DiscountsActivity extends AppCompatActivity implements DiscountsView, TimerObserver {
+public class DiscountsActivity extends AppCompatActivity implements DiscountsActivityView, TimerObserver {
 
     // Local vars
     protected DecorationPreference mDecorationPreference;

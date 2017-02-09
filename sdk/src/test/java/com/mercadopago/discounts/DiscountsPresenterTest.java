@@ -4,7 +4,7 @@ import com.mercadopago.model.Discount;
 import com.mercadopago.mvp.OnResourcesRetrievedCallback;
 import com.mercadopago.presenters.DiscountsPresenter;
 import com.mercadopago.providers.DiscountsProvider;
-import com.mercadopago.views.DiscountsView;
+import com.mercadopago.views.DiscountsActivityView;
 
 import org.junit.Test;
 
@@ -72,7 +72,7 @@ public class DiscountsPresenterTest {
         assertTrue(mockedView.drawedSummary);
     }
 
-    private class MockedView implements DiscountsView {
+    private class MockedView implements DiscountsActivityView {
 
         private Boolean drawedSummary;
         private Boolean requestedDiscountCode;
