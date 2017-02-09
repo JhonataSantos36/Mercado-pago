@@ -324,7 +324,7 @@ public class VaultActivity extends AppCompatActivity {
             } else {
                 startPaymentMethodsActivity();
             }
-        } else if ((data != null) && (data.getStringExtra("mpException") != null)) {
+        } else if ((data != null) && (data.getStringExtra("mercadoPagoError") != null)) {
             finishWithMpException(data);
         }
     }

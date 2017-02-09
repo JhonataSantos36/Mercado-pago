@@ -46,4 +46,8 @@ public class MercadoPagoError {
         }
         return errorDetail;
     }
+
+    public boolean isApiException() {
+        return apiException != null;
+    }
 }

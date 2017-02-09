@@ -2,6 +2,8 @@ package com.mercadopago.preferences;
 
 import com.google.gson.annotations.SerializedName;
 
+import com.mercadopago.constants.PaymentTypes;
+import com.mercadopago.constants.Sites;
 import com.mercadopago.exceptions.CheckoutPreferenceException;
 import com.mercadopago.model.Item;
 import com.mercadopago.model.Payer;
@@ -28,14 +30,17 @@ public class CheckoutPreference {
     private Date expirationDateFrom;
     private String siteId;
 
+    private Site localPreferenceSite;
+
     public CheckoutPreference(Builder builder) {
         this.items = builder.items;
-        this.siteId = builder.siteId;
         this.expirationDateFrom = builder.expirationDateFrom;
         this.expirationDateTo = builder.expirationDateTo;
+        this.localPreferenceSite = builder.localPreferenceSite;
 
         Payer payer = new Payer();
         payer.setEmail(builder.payerEmail);
+        payer.setAccessToken(builder.payerAccessToken);
         this.payer = payer;
 
         PaymentPreference paymentPreference = new PaymentPreference();
@@ -47,8 +52,10 @@ public class CheckoutPreference {
     }
 
     public void validate() throws CheckoutPreferenceException {
-        if (!this.itemsValid()) {
+        if (this.hasId() && !this.itemsValid()) {
             throw new CheckoutPreferenceException(CheckoutPreferenceException.INVALID_ITEM);
+        } else if (this.hasId() && !this.hasEmail()) {
+            throw new CheckoutPreferenceException(CheckoutPreferenceException.NO_EMAIL_FOUND);
         } else if (this.isExpired()) {
             throw new CheckoutPreferenceException(CheckoutPreferenceException.EXPIRED_PREFERENCE);
         } else if (!this.isActive()) {
@@ -57,8 +64,6 @@ public class CheckoutPreference {
             throw new CheckoutPreferenceException(CheckoutPreferenceException.INVALID_INSTALLMENTS);
         } else if (!this.validPaymentTypeExclusion()) {
             throw new CheckoutPreferenceException(CheckoutPreferenceException.EXCLUDED_ALL_PAYMENT_TYPES);
-        } else if (!this.hasEmail()) {
-            throw new CheckoutPreferenceException(CheckoutPreferenceException.NO_EMAIL_FOUND);
         }
     }
 
@@ -218,8 +223,16 @@ public class CheckoutPreference {
         return paymentPreference;
     }
 
-    public String getSiteId() {
-        return siteId;
+    public Site getSite() {
+        if (localPreferenceSite == null) {
+            return Sites.getById(siteId);
+        } else {
+            return localPreferenceSite;
+        }
+    }
+
+    public boolean hasId() {
+        return getId() != null;
     }
 
     public static class Builder {
@@ -229,9 +242,11 @@ public class CheckoutPreference {
         private Integer maxInstallments;
         private Integer defaultInstallments;
         private String payerEmail;
-        private String siteId;
         private Date expirationDateTo;
         private Date expirationDateFrom;
+        private Site localPreferenceSite;
+        private String payerAccessToken;
+        private boolean excludeAccountMoney = true;
 
         public Builder() {
             items = new ArrayList<>();
@@ -285,7 +300,7 @@ public class CheckoutPreference {
         }
 
         public Builder setSite(Site site) {
-            this.siteId = site == null ? null : site.getId();
+            this.localPreferenceSite = site;
             return this;
         }
 
@@ -299,7 +314,24 @@ public class CheckoutPreference {
             return this;
         }
 
+        public Builder setPayerAccessToken(String payerAccessToken) {
+            this.payerAccessToken = payerAccessToken;
+            return this;
+        }
+
+        public Builder enableAccountMoney() {
+            this.excludeAccountMoney = false;
+            return this;
+        }
+
         public CheckoutPreference build() {
+            if (items == null || items.isEmpty()) throw new IllegalStateException("Items required");
+            if (localPreferenceSite == null) throw new IllegalStateException("Site is required");
+
+            if(excludeAccountMoney) {
+                addExcludedPaymentType(PaymentTypes.ACCOUNT_MONEY);
+            }
+
             return new CheckoutPreference(this);
         }
     }

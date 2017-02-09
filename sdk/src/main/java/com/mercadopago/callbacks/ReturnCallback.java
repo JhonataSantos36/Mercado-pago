@@ -8,5 +8,5 @@ import com.mercadopago.exceptions.MercadoPagoError;
 
 public interface ReturnCallback {
     void onCancel();
-    void onFailure(MercadoPagoError exception);
+    void onFailure(MercadoPagoError error);
 }

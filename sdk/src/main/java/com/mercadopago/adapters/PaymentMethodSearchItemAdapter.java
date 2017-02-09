@@ -50,6 +50,12 @@ public class PaymentMethodSearchItemAdapter extends RecyclerView.Adapter<Payment
         mItems.addAll(items);
     }
 
+    public void clear() {
+        int size = this.mItems.size();
+        this.mItems.clear();
+        notifyItemRangeRemoved(0, size);
+    }
+
     public void notifyItemInserted() {
         notifyItemInserted(mItems.size() - 1);
     }

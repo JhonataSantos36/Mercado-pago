@@ -1,9 +1,11 @@
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
+    android:background="@color/mpsdk_white"
     tools:context=".PaymentVaultActivity"
     tools:ignore="MergeRootFrame">
 
@@ -49,15 +51,22 @@
                 app:allowCustomFont="false"
                 style="@style/mpsdk_title_text"/>
             </android.support.v7.widget.Toolbar>
-
         </android.support.design.widget.CollapsingToolbarLayout>
-
     </android.support.design.widget.AppBarLayout>
-    <FrameLayout
+
+    <LinearLayout
         android:id="@+id/mpsdkRegularLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="613dp"
+        android:background="@color/mpsdk_white"
+        android:orientation="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" >
+
+        <FrameLayout
+            android:id="@+id/mpsdkDiscount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/mpsdkGroupsList"
             android:layout_width="match_parent"
@@ -69,5 +78,5 @@
             android:paddingRight="10dp"
             android:paddingStart="10dp"
             android:background="@color/mpsdk_white"/>
-    </FrameLayout>
+    </LinearLayout>
 </android.support.design.widget.CoordinatorLayout>

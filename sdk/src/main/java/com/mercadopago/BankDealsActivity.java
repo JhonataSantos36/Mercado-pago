@@ -15,7 +15,6 @@ import com.mercadopago.callbacks.Callback;
 import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.callbacks.OnSelectedCallback;
 import com.mercadopago.core.MercadoPago;
-import com.mercadopago.core.MercadoPagoContext;
 import com.mercadopago.decorations.DividerItemDecoration;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.BankDeal;
@@ -75,7 +74,7 @@ public class BankDealsActivity extends MercadoPagoActivity {
 
     @Override
     protected void getActivityParameters() {
-        mMerchantPublicKey = MercadoPagoContext.getInstance().getPublicKey();
+        mMerchantPublicKey = getIntent().getStringExtra("merchantPublicKey");
         try {
             Type listType = new TypeToken<List<BankDeal>>() {
             }.getType();

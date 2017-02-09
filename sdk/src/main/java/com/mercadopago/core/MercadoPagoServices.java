@@ -8,6 +8,7 @@ import com.mercadopago.callbacks.Callback;
 import com.mercadopago.constants.PaymentTypes;
 import com.mercadopago.model.BankDeal;
 import com.mercadopago.model.CardToken;
+import com.mercadopago.model.Discount;
 import com.mercadopago.preferences.CheckoutPreference;
 import com.mercadopago.model.IdentificationType;
 import com.mercadopago.model.Installment;
@@ -15,7 +16,7 @@ import com.mercadopago.model.Issuer;
 import com.mercadopago.model.Payer;
 import com.mercadopago.model.PayerIntent;
 import com.mercadopago.model.Payment;
-import com.mercadopago.model.PaymentIntent;
+import com.mercadopago.model.PaymentBody;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentMethodSearch;
 import com.mercadopago.model.PaymentResult;
@@ -24,6 +25,7 @@ import com.mercadopago.model.SecurityCodeIntent;
 import com.mercadopago.model.Token;
 import com.mercadopago.mptracker.MPTracker;
 import com.mercadopago.services.BankDealService;
+import com.mercadopago.services.DiscountService;
 import com.mercadopago.services.GatewayService;
 import com.mercadopago.services.IdentificationService;
 import com.mercadopago.services.PaymentService;
@@ -45,26 +47,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class MercadoPagoServices {
     public static final String KEY_TYPE_PUBLIC = "public_key";
     public static final String KEY_TYPE_PRIVATE = "private_key";
-
-    public static final int CUSTOMER_CARDS_REQUEST_CODE = 0;
-    public static final int PAYMENT_METHODS_REQUEST_CODE = 1;
-    public static final int INSTALLMENTS_REQUEST_CODE = 2;
-    public static final int ISSUERS_REQUEST_CODE = 3;
-    public static final int NEW_CARD_REQUEST_CODE = 4;
-    public static final int PAYMENT_RESULT_REQUEST_CODE = 5;
-    public static final int VAULT_REQUEST_CODE = 6;
-    public static final int CALL_FOR_AUTHORIZE_REQUEST_CODE = 7;
-    public static final int PENDING_REQUEST_CODE = 8;
-    public static final int REJECTION_REQUEST_CODE = 9;
-    public static final int PAYMENT_VAULT_REQUEST_CODE = 10;
-    public static final int BANK_DEALS_REQUEST_CODE = 11;
-    public static final int CHECKOUT_REQUEST_CODE = 12;
-    public static final int GUESSING_CARD_REQUEST_CODE = 13;
-    public static final int INSTRUCTIONS_REQUEST_CODE = 14;
-    public static final int CARD_VAULT_REQUEST_CODE = 15;
-    public static final int CONGRATS_REQUEST_CODE = 16;
-    public static final int PAYMENT_TYPES_REQUEST_CODE = 17;
-    public static final int SECURITY_CODE_REQUEST_CODE = 18;
 
     public static final int BIN_LENGTH = 6;
 
@@ -105,7 +87,7 @@ public class MercadoPagoServices {
         }
     }
 
-    public void createPayment(final PaymentIntent paymentIntent, final Callback<Payment> callback) {
+    public void createPayment(final PaymentBody paymentBody, final Callback<Payment> callback) {
         if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {
             MPTracker.getInstance().trackEvent("NO_SCREEN", "CREATE_PAYMENT", "1", mKey, BuildConfig.VERSION_NAME, mContext);
             Retrofit paymentsRetrofitAdapter = new Retrofit.Builder()
@@ -116,7 +98,7 @@ public class MercadoPagoServices {
                     .build();
 
             PaymentService service = paymentsRetrofitAdapter.create(PaymentService.class);
-            service.createPayment(String.valueOf(paymentIntent.getTransactionId()), paymentIntent).enqueue(callback);
+            service.createPayment(paymentBody.getTransactionId(), paymentBody).enqueue(callback);
 
         } else {
             throw new RuntimeException("Unsupported key type for this method");
@@ -230,22 +212,27 @@ public class MercadoPagoServices {
         }
     }
 
-    public void getPaymentMethodSearch(BigDecimal amount, List<String> excludedPaymentTypes, List<String> excludedPaymentMethods, Payer payer, boolean accountMoneyEnabled, final Callback<PaymentMethodSearch> callback) {
+    public void getPaymentMethodSearch(BigDecimal amount, List<String> excludedPaymentTypes, List<String> excludedPaymentMethods, Payer payer, final Callback<PaymentMethodSearch> callback) {
         if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {
             MPTracker.getInstance().trackEvent("NO_SCREEN", "GET_PAYMENT_METHOD_SEARCH", "1", mKey, BuildConfig.VERSION_NAME, mContext);
             PayerIntent payerIntent = new PayerIntent(payer);
             PaymentService service = mRetrofit.create(PaymentService.class);
-            if (!accountMoneyEnabled) {
-                if (excludedPaymentTypes == null) {
-                    excludedPaymentTypes = new ArrayList<>();
-                }
-                excludedPaymentTypes.add(PaymentTypes.ACCOUNT_MONEY);
-            }
             String separator = ",";
             String excludedPaymentTypesAppended = getListAsString(excludedPaymentTypes, separator);
             String excludedPaymentMethodsAppended = getListAsString(excludedPaymentMethods, separator);
 
             service.getPaymentMethodSearch(Locale.getDefault().getLanguage(), this.mKey, amount, excludedPaymentTypesAppended, excludedPaymentMethodsAppended, payerIntent, PAYMENT_METHODS_OPTIONS_API_VERSION).enqueue(callback);
+        } else {
+            throw new RuntimeException("Unsupported key type for this method");
+        }
+    }
+
+    public void getDirectDiscount(String amount, String payerEmail, final Callback<Discount> callback) {
+        if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {
+            MPTracker.getInstance().trackEvent("NO_SCREEN", "GET_DIRECT_DISCOUNT", "1", mKey, BuildConfig.VERSION_NAME, mContext);
+
+            DiscountService service = mRetrofit.create(DiscountService.class);
+            service.getDirectDiscount(this.mKey, amount, payerEmail).enqueue(callback);
         } else {
             throw new RuntimeException("Unsupported key type for this method");
         }

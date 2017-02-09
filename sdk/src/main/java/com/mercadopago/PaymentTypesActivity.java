@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -18,7 +17,6 @@ import android.widget.ProgressBar;
 import com.mercadopago.adapters.PaymentTypesAdapter;
 import com.mercadopago.callbacks.OnSelectedCallback;
 import com.mercadopago.controllers.CheckoutTimer;
-import com.mercadopago.core.MercadoPagoContext;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.listeners.RecyclerItemClickListener;
 import com.mercadopago.model.ApiException;
@@ -46,7 +44,7 @@ import java.util.List;
  * Created by vaserber on 10/25/16.
  */
 
-public class PaymentTypesActivity extends AppCompatActivity implements PaymentTypesActivityView, TimerObserver {
+public class PaymentTypesActivity extends MercadoPagoBaseActivity implements PaymentTypesActivityView, TimerObserver {
 
     protected PaymentTypesPresenter mPresenter;
     private Activity mActivity;
@@ -92,8 +90,8 @@ public class PaymentTypesActivity extends AppCompatActivity implements PaymentTy
 
     private void getActivityParameters() {
 
-        String publicKey = MercadoPagoContext.getInstance().getPublicKey();
-        mDecorationPreference = MercadoPagoContext.getInstance().getDecorationPreference();
+        String publicKey = getIntent().getStringExtra("merchantPublicKey");
+        mDecorationPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("decorationPreference"), DecorationPreference.class);
 
         List<PaymentMethod> paymentMethods;
         try {

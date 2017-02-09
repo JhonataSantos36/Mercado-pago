@@ -6,7 +6,7 @@ package com.mercadopago.callbacks;
 
 public class CallbackHolder {
 
-    public static CallbackHolder callbackHolder = null;
+    protected static CallbackHolder callbackHolder = null;
 
     private PaymentCallback paymentCallback;
     private PaymentDataCallback paymentDataCallback;

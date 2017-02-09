@@ -39,8 +39,7 @@ public final class NestedScrollViewScrollToAction implements ViewAction {
     @SuppressWarnings("unchecked")
     @Override
     public Matcher<View> getConstraints() {
-        return allOf(withEffectiveVisibility(Visibility.VISIBLE), isDescendantOfA(anyOf(
-                isAssignableFrom(NestedScrollView.class))));
+        return allOf(withEffectiveVisibility(Visibility.VISIBLE), isDescendantOfA(anyOf(isAssignableFrom(NestedScrollView.class))));
     }
 
     @Override

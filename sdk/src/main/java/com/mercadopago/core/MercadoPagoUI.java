@@ -9,15 +9,33 @@ import android.support.annotation.DrawableRes;
 import android.text.TextUtils;
 
 import com.mercadopago.CustomerCardsActivity;
+import com.mercadopago.ReviewAndConfirmActivity;
+import com.mercadopago.callbacks.OnConfirmPaymentCallback;
+import com.mercadopago.callbacks.OnReviewChange;
 import com.mercadopago.callbacks.OnSelectedCallback;
 import com.mercadopago.model.Card;
 import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.preferences.PaymentPreference;
+import com.mercadopago.model.CardInfo;
+import com.mercadopago.model.Discount;
+import com.mercadopago.model.Item;
+import com.mercadopago.model.PayerCost;
+import com.mercadopago.model.PaymentMethod;
+import com.mercadopago.model.Reviewable;
+import com.mercadopago.model.Site;
+import com.mercadopago.uicontrollers.discounts.DiscountRowView;
+import com.mercadopago.uicontrollers.reviewandconfirm.ReviewItemsView;
+import com.mercadopago.uicontrollers.reviewandconfirm.ReviewPaymentOffView;
+import com.mercadopago.uicontrollers.reviewandconfirm.ReviewPaymentOnView;
+import com.mercadopago.uicontrollers.reviewandconfirm.ReviewSummaryView;
 import com.mercadopago.uicontrollers.savedcards.SavedCardRowView;
 import com.mercadopago.uicontrollers.savedcards.SavedCardView;
 import com.mercadopago.uicontrollers.savedcards.SavedCardsListView;
 import com.mercadopago.util.JsonUtil;
+import com.mercadopago.util.MercadoPagoUtil;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -140,9 +158,162 @@ public class MercadoPagoUI {
                 activity.startActivityForResult(customerCardsIntent, CUSTOMER_CARDS_REQUEST_CODE);
             }
         }
+
+        public static class ReviewAndConfirmBuilder {
+            private Activity activity;
+            private PaymentMethod paymentMethod;
+            private PayerCost payerCost;
+            private BigDecimal amount;
+            private Site site;
+            private CardInfo cardInfo;
+            private Boolean editionEnabled;
+            private String extraPaymentMethodInfo;
+            private List<Item> items;
+            private DecorationPreference decorationPreference;
+            private Discount discount;
+
+            public ReviewAndConfirmBuilder setActivity(Activity activity) {
+                this.activity = activity;
+                return this;
+            }
+
+            public ReviewAndConfirmBuilder setPaymentMethod(PaymentMethod paymentMehtod) {
+                this.paymentMethod = paymentMehtod;
+                return this;
+            }
+
+            public ReviewAndConfirmBuilder setPayerCost(PayerCost payerCost) {
+                this.payerCost = payerCost;
+                return this;
+            }
+
+            public ReviewAndConfirmBuilder setAmount(BigDecimal amount) {
+                this.amount = amount;
+                return this;
+            }
+
+            public ReviewAndConfirmBuilder setSite(Site site) {
+                this.site = site;
+                return this;
+            }
+
+            public ReviewAndConfirmBuilder setCardInfo(CardInfo cardInfo) {
+                this.cardInfo = cardInfo;
+                return this;
+            }
+
+            public ReviewAndConfirmBuilder setEditionEnabled(Boolean editionEnabled) {
+                this.editionEnabled = editionEnabled;
+                return this;
+            }
+
+            public ReviewAndConfirmBuilder setExtraPaymentMethodInfo(String extraPaymentMethodInfo) {
+                this.extraPaymentMethodInfo = extraPaymentMethodInfo;
+                return this;
+            }
+
+            public ReviewAndConfirmBuilder setItems(List<Item> items) {
+                this.items = items;
+                return this;
+            }
+
+            public ReviewAndConfirmBuilder setDecorationPreference(DecorationPreference decorationPreference) {
+                this.decorationPreference = decorationPreference;
+                return this;
+            }
+
+            public ReviewAndConfirmBuilder setDiscount(Discount discount) {
+                this.discount = discount;
+                return this;
+            }
+
+            public void startActivity() {
+
+                if (this.activity == null) throw new IllegalStateException("activity is null");
+                if (this.paymentMethod == null) throw new IllegalStateException("payment method is null");
+                if (this.items == null) throw new IllegalStateException("items not set");
+                if (MercadoPagoUtil.isCard(paymentMethod.getPaymentTypeId())) {
+                    if (this.payerCost == null) throw new IllegalStateException("payer cost is null");
+                    if (this.cardInfo == null) throw new IllegalStateException("card info is null");
+                }
+                startReviewAndConfirmActivity();
+            }
+
+            private void startReviewAndConfirmActivity() {
+                Intent intent = new Intent(activity, ReviewAndConfirmActivity.class);
+                intent.putExtra("editionEnabled", editionEnabled);
+                intent.putExtra("amount", amount.toString());
+                intent.putExtra("site", JsonUtil.getInstance().toJson(site));
+                intent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
+                intent.putExtra("payerCost", JsonUtil.getInstance().toJson(payerCost));
+                intent.putExtra("decorationPreference", JsonUtil.getInstance().toJson(decorationPreference));
+                intent.putExtra("cardInfo", JsonUtil.getInstance().toJson(cardInfo));
+                intent.putExtra("extraPaymentMethodInfo", extraPaymentMethodInfo);
+                intent.putExtra("discount", JsonUtil.getInstance().toJson(discount));
+                intent.putExtra("items", new Gson().toJson(items));
+
+                activity.startActivityForResult(intent, MercadoPago.REVIEW_AND_CONFIRM_REQUEST_CODE);
+            }
+        }
     }
 
     public static class Views {
+
+        public static class ReviewPaymentMethodOnBuilder {
+
+            private Context context;
+            private String currencyId;
+            private PaymentMethod paymentMethod;
+            private PayerCost payerCost;
+            private CardInfo cardInfo;
+            private DecorationPreference decorationPreference;
+            private OnReviewChange reviewChangeCallback;
+            private Boolean editionEnabled;
+
+            public ReviewPaymentMethodOnBuilder setContext(Context context) {
+                this.context = context;
+                return this;
+            }
+
+            public ReviewPaymentMethodOnBuilder setCurrencyId(String currencyId) {
+                this.currencyId = currencyId;
+                return this;
+            }
+
+            public ReviewPaymentMethodOnBuilder setPaymentMethod(PaymentMethod paymentMethod) {
+                this.paymentMethod = paymentMethod;
+                return this;
+            }
+
+            public ReviewPaymentMethodOnBuilder setPayerCost(PayerCost payerCost) {
+                this.payerCost = payerCost;
+                return this;
+            }
+
+            public ReviewPaymentMethodOnBuilder setCardInfo(CardInfo cardInfo) {
+                this.cardInfo = cardInfo;
+                return this;
+            }
+
+            public ReviewPaymentMethodOnBuilder setDecorationPreference(DecorationPreference decorationPreference) {
+                this.decorationPreference = decorationPreference;
+                return this;
+            }
+
+            public ReviewPaymentMethodOnBuilder setReviewChangeCallback(OnReviewChange reviewChangeCallback) {
+                this.reviewChangeCallback = reviewChangeCallback;
+                return this;
+            }
+
+            public ReviewPaymentMethodOnBuilder setEditionEnabled(Boolean editionEnabled) {
+                this.editionEnabled = editionEnabled;
+                return this;
+            }
+
+            public Reviewable build() {
+                return new ReviewPaymentOnView(context, paymentMethod, cardInfo, payerCost, currencyId, reviewChangeCallback, editionEnabled, decorationPreference);
+            }
+        }
 
         public static class SavedCardsListViewBuilder {
 
@@ -205,6 +376,208 @@ public class MercadoPagoUI {
             public SavedCardView build() {
                 return new SavedCardRowView(context, card, selectionImageResId);
             }
+        }
+
+        public static class DiscountRowViewBuilder {
+            private Context context;
+            private Discount discount;
+            private BigDecimal transactionAmount;
+            private String currencyId;
+            private Boolean shortRowEnabled;
+            private Boolean discountEnabled;
+            private Boolean showArrow;
+            private Boolean showSeparator;
+
+            public DiscountRowViewBuilder setContext(Context context) {
+                this.context = context;
+                return this;
+            }
+
+            public DiscountRowViewBuilder setDiscount(Discount discount) {
+                this.discount = discount;
+                return this;
+            }
+
+            public DiscountRowViewBuilder setTransactionAmount(BigDecimal transactionAmount) {
+                this.transactionAmount = transactionAmount;
+                return this;
+            }
+
+            public DiscountRowViewBuilder setCurrencyId(String currencyId) {
+                this.currencyId = currencyId;
+                return this;
+            }
+
+            public DiscountRowViewBuilder setShortRowEnabled(Boolean shortRowEnabled) {
+                this.shortRowEnabled = shortRowEnabled;
+                return this;
+            }
+
+            public DiscountRowViewBuilder setDiscountEnabled(Boolean discountEnabled) {
+                this.discountEnabled = discountEnabled;
+                return this;
+            }
+
+            public DiscountRowViewBuilder setShowArrow(Boolean showArrow) {
+                this.showArrow = showArrow;
+                return this;
+            }
+
+            public DiscountRowViewBuilder setShowSeparator(Boolean showSeparator) {
+                this.showSeparator = showSeparator;
+                return this;
+            }
+
+            public DiscountRowView build() {
+                return new DiscountRowView(context, discount, transactionAmount, currencyId, shortRowEnabled,
+                                            discountEnabled, showArrow, showSeparator);
+            }
+        }
+
+        public static class SummaryViewBuilder {
+            private Context context;
+            private String currencyId;
+            private BigDecimal amount;
+            private PayerCost payerCost;
+            private PaymentMethod paymentMethod;
+            private DecorationPreference decorationPreference;
+            private OnConfirmPaymentCallback callback;
+            private Discount discount;
+
+
+            public SummaryViewBuilder setContext(Context context) {
+                this.context = context;
+                return this;
+            }
+
+            public SummaryViewBuilder setCurrencyId(String currencyId) {
+                this.currencyId = currencyId;
+                return this;
+            }
+
+            public SummaryViewBuilder setAmount(BigDecimal amount) {
+                this.amount = amount;
+                return this;
+            }
+
+            public SummaryViewBuilder setPayerCost(PayerCost payerCost) {
+                this.payerCost = payerCost;
+                return this;
+            }
+
+            public SummaryViewBuilder setPaymentMethod(PaymentMethod paymentMethod) {
+                this.paymentMethod = paymentMethod;
+                return this;
+            }
+
+            public SummaryViewBuilder setDiscount(Discount discount) {
+                this.discount = discount;
+                return this;
+            }
+
+            public SummaryViewBuilder setDecorationPreference(DecorationPreference decorationPreference) {
+                this.decorationPreference = decorationPreference;
+                return this;
+            }
+
+            public SummaryViewBuilder setConfirmPaymentCallback(OnConfirmPaymentCallback callback) {
+                this.callback = callback;
+                return this;
+            }
+
+            public ReviewSummaryView build() {
+                return new ReviewSummaryView(context, paymentMethod, payerCost, amount, discount, currencyId, decorationPreference, callback);
+            }
+        }
+        public static class ReviewItemsViewBuilder {
+            private Context context;
+            private String currencyId;
+            private List<Item> items;
+
+            public ReviewItemsViewBuilder() {
+                items = new ArrayList<>();
+            }
+
+            public ReviewItemsViewBuilder setContext(Context context) {
+                this.context = context;
+                return this;
+            }
+
+            public ReviewItemsViewBuilder setCurrencyId(String currencyId) {
+                this.currencyId = currencyId;
+                return this;
+            }
+
+            public ReviewItemsViewBuilder addItem(Item item) {
+                this.items.add(item);
+                return this;
+            }
+
+            public ReviewItemsViewBuilder addItems(List<Item> items) {
+                this.items.addAll(items);
+                return this;
+            }
+
+            public ReviewItemsView build() {
+                return new ReviewItemsView(context, items, currencyId);
+            }
+        }
+
+        public static class ReviewPaymentMethodOffBuilder {
+
+            private Context context;
+            private PaymentMethod paymentMethod;
+            private String paymentMethodInfo;
+            private BigDecimal amount;
+            private Site site;
+            private DecorationPreference decorationPreference;
+            private OnReviewChange reviewChangeCallback;
+            private Boolean editionEnabled;
+
+            public ReviewPaymentMethodOffBuilder setContext(Context context) {
+                this.context = context;
+                return this;
+            }
+
+            public ReviewPaymentMethodOffBuilder setPaymentMethod(PaymentMethod paymentMethod) {
+                this.paymentMethod = paymentMethod;
+                return this;
+            }
+
+            public ReviewPaymentMethodOffBuilder setExtraPaymentMethodInfo(String paymentMethodInfo) {
+                this.paymentMethodInfo = paymentMethodInfo;
+                return this;
+            }
+
+            public ReviewPaymentMethodOffBuilder setAmount(BigDecimal amount) {
+                this.amount = amount;
+                return this;
+            }
+
+            public ReviewPaymentMethodOffBuilder setSite(Site site) {
+                this.site = site;
+                return this;
+            }
+
+            public ReviewPaymentMethodOffBuilder setDecorationPreference(DecorationPreference decorationPreference) {
+                this.decorationPreference = decorationPreference;
+                return this;
+            }
+
+            public ReviewPaymentMethodOffBuilder setReviewChangeCallback(OnReviewChange reviewChangeCallback) {
+                this.reviewChangeCallback = reviewChangeCallback;
+                return this;
+            }
+
+            public ReviewPaymentMethodOffBuilder setEditionEnabled(Boolean editionEnabled) {
+                this.editionEnabled = editionEnabled;
+                return this;
+            }
+
+            public ReviewPaymentOffView build() {
+                return new ReviewPaymentOffView(context, paymentMethod, paymentMethodInfo, amount, site, reviewChangeCallback, editionEnabled, decorationPreference);
+            }
+
         }
     }
 }

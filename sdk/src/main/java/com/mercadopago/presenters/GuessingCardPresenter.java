@@ -13,6 +13,7 @@ import com.mercadopago.model.BankDeal;
 import com.mercadopago.model.CardInformation;
 import com.mercadopago.model.CardToken;
 import com.mercadopago.model.Cardholder;
+import com.mercadopago.model.Discount;
 import com.mercadopago.model.Identification;
 import com.mercadopago.model.IdentificationType;
 import com.mercadopago.model.PaymentMethod;
@@ -26,6 +27,7 @@ import com.mercadopago.uicontrollers.card.CardView;
 import com.mercadopago.uicontrollers.card.FrontCardView;
 import com.mercadopago.views.GuessingCardActivityView;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -82,6 +84,12 @@ public class GuessingCardPresenter {
     private boolean showPaymentTypes;
     private List<PaymentType> mPaymentTypesList;
     private Boolean mShowBankDeals;
+
+    //Discount
+    private Boolean mDiscountEnabled;
+    private String mPayerEmail;
+    private BigDecimal mTransactionAmount;
+    private Discount mDiscount;
 
     public GuessingCardPresenter(Context context) {
         this.mContext = context;
@@ -311,6 +319,84 @@ public class GuessingCardPresenter {
         }
     }
 
+    public void initialize() {
+        if (showDiscount()) {
+            getDirectDiscount();
+        } else {
+            loadPaymentMethods();
+        }
+    }
+
+    private Boolean isAmountValid() {
+        return mTransactionAmount != null && mTransactionAmount.compareTo(BigDecimal.ZERO) > 0;
+    }
+
+    public void initializeDiscountActivity() {
+        mView.startDiscountActivity(mTransactionAmount);
+    }
+
+    public void initializeDiscountRow() {
+        mView.showDiscountRow(mTransactionAmount);
+    }
+
+    private void getDirectDiscount() {
+        mMercadoPago.getDirectDiscount(mTransactionAmount.toString(), mPayerEmail, new Callback<Discount>() {
+            @Override
+            public void success(Discount discount) {
+                mDiscount = discount;
+                initializeDiscountRow();
+                loadPaymentMethods();
+            }
+
+            @Override
+            public void failure(ApiException apiException) {
+                initializeDiscountRow();
+                loadPaymentMethods();
+            }
+        });
+    }
+
+    public void onDiscountReceived(Discount discount) {
+        setDiscount(discount);
+        initializeDiscountRow();
+    }
+
+    public Discount getDiscount() {
+        return mDiscount;
+    }
+
+    public void setDiscount(Discount discount) {
+        this.mDiscount = discount;
+    }
+
+    public void setPayerEmail(String payerEmail) {
+        this.mPayerEmail = payerEmail;
+    }
+
+    public String getPayerEmail() {
+        return mPayerEmail;
+    }
+
+    public void setDiscountEnabled(Boolean discountEnabled) {
+        this.mDiscountEnabled = discountEnabled;
+    }
+
+    public Boolean getDiscountEnabled() {
+        return this.mDiscountEnabled;
+    }
+
+    public BigDecimal getTransactionAmount() {
+        BigDecimal amount;
+
+        if (mDiscount == null) {
+            amount = mTransactionAmount;
+        } else {
+            amount = mDiscount.getAmountWithDiscount(mTransactionAmount);
+        }
+
+        return amount;
+    }
+
     public void loadPaymentMethods() {
         if (mPaymentMethodList == null || mPaymentMethodList.isEmpty()) {
             getPaymentMethodsAsync();
@@ -321,7 +407,7 @@ public class GuessingCardPresenter {
     }
 
     public void resolveBankDeals() {
-        if(mShowBankDeals) {
+        if (mShowBankDeals) {
             getBankDealsAsync();
         } else {
             mView.hideBankDeals();
@@ -354,7 +440,7 @@ public class GuessingCardPresenter {
         if (mPaymentMethodGuessingController == null) {
             return;
         }
-        for (PaymentMethod paymentMethod: mPaymentMethodGuessingController.getGuessedPaymentMethods()) {
+        for (PaymentMethod paymentMethod : mPaymentMethodGuessingController.getGuessedPaymentMethods()) {
             if (paymentMethod.getPaymentTypeId().equals(paymentType.getId())) {
                 setPaymentMethod(paymentMethod);
             }
@@ -466,7 +552,7 @@ public class GuessingCardPresenter {
 
     public void enablePaymentTypeSelection(List<PaymentMethod> paymentMethodList) {
         List<PaymentType> paymentTypesList = new ArrayList<>();
-        for (PaymentMethod pm: paymentMethodList) {
+        for (PaymentMethod pm : paymentMethodList) {
             PaymentType type = new PaymentType(pm.getPaymentTypeId());
             paymentTypesList.add(type);
         }
@@ -696,7 +782,15 @@ public class GuessingCardPresenter {
         }
     }
 
+    public Boolean showDiscount() {
+        return mDiscountEnabled && mDiscount == null && isAmountValid();
+    }
+
     public void setShowBankDeals(Boolean showBankDeals) {
         this.mShowBankDeals = showBankDeals;
+    }
+
+    public void setTransactionAmount(BigDecimal transactionAmount) {
+        this.mTransactionAmount = transactionAmount;
     }
 }

@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -18,7 +17,6 @@ import android.widget.FrameLayout;
 import com.mercadopago.adapters.IssuersAdapter;
 import com.mercadopago.callbacks.OnSelectedCallback;
 import com.mercadopago.controllers.CheckoutTimer;
-import com.mercadopago.core.MercadoPagoContext;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.listeners.RecyclerItemClickListener;
 import com.mercadopago.model.ApiException;
@@ -48,7 +46,7 @@ import java.util.List;
  * Created by vaserber on 10/11/16.
  */
 
-public class IssuersActivity extends AppCompatActivity implements IssuersActivityView, TimerObserver {
+public class IssuersActivity extends MercadoPagoBaseActivity implements IssuersActivityView, TimerObserver {
 
     protected IssuersPresenter mPresenter;
     protected Activity mActivity;
@@ -93,9 +91,9 @@ public class IssuersActivity extends AppCompatActivity implements IssuersActivit
 
     private void getActivityParameters() {
 
-        String publicKey = MercadoPagoContext.getInstance().getPublicKey();
-        PaymentPreference paymentPreference = MercadoPagoContext.getInstance().getCheckoutPreference().getPaymentPreference();
-        mDecorationPreference = MercadoPagoContext.getInstance().getDecorationPreference();
+        String publicKey = getIntent().getStringExtra("merchantPublicKey");
+        PaymentPreference paymentPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("paymentPreference"), PaymentPreference.class);
+        mDecorationPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("decorationPreference"), DecorationPreference.class);
 
         PaymentMethod paymentMethod = JsonUtil.getInstance().fromJson(
                 this.getIntent().getStringExtra("paymentMethod"), PaymentMethod.class);

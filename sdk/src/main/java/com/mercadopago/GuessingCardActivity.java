@@ -8,13 +8,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MotionEventCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -36,7 +36,7 @@ import com.mercadopago.constants.PaymentTypes;
 import com.mercadopago.controllers.CheckoutTimer;
 import com.mercadopago.controllers.PaymentMethodGuessingController;
 import com.mercadopago.core.MercadoPago;
-import com.mercadopago.core.MercadoPagoContext;
+import com.mercadopago.core.MercadoPagoUI;
 import com.mercadopago.customviews.MPEditText;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.listeners.card.CardExpiryDateTextWatcher;
@@ -49,6 +49,7 @@ import com.mercadopago.model.BankDeal;
 import com.mercadopago.model.CardInfo;
 import com.mercadopago.model.CardToken;
 import com.mercadopago.preferences.DecorationPreference;
+import com.mercadopago.model.Discount;
 import com.mercadopago.model.Identification;
 import com.mercadopago.model.IdentificationType;
 import com.mercadopago.model.PaymentMethod;
@@ -62,6 +63,7 @@ import com.mercadopago.presenters.GuessingCardPresenter;
 import com.mercadopago.uicontrollers.card.CardRepresentationModes;
 import com.mercadopago.uicontrollers.card.CardView;
 import com.mercadopago.uicontrollers.card.IdentificationCardView;
+import com.mercadopago.uicontrollers.discounts.DiscountRowView;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.ColorsUtil;
 import com.mercadopago.util.ErrorUtil;
@@ -72,13 +74,14 @@ import com.mercadopago.util.ScaleUtil;
 import com.mercadopago.views.GuessingCardActivityView;
 
 import java.lang.reflect.Type;
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
  * Created by vaserber on 10/13/16.
  */
 
-public class GuessingCardActivity extends AppCompatActivity implements GuessingCardActivityView, TimerObserver {
+public class GuessingCardActivity extends MercadoPagoBaseActivity implements GuessingCardActivityView, TimerObserver {
 
     public static final String CARD_NUMBER_INPUT = "cardNumber";
     public static final String CARDHOLDER_NAME_INPUT = "cardHolderName";
@@ -143,6 +146,7 @@ public class GuessingCardActivity extends AppCompatActivity implements GuessingC
     private FrameLayout mNextButton;
     private FrameLayout mBackButton;
     private FrameLayout mBackInactiveButton;
+    private FrameLayout mDiscountFrameLayout;
     private LinearLayout mButtonContainer;
     private MPEditText mCardNumberEditText;
     private MPEditText mCardHolderNameEditText;
@@ -188,11 +192,17 @@ public class GuessingCardActivity extends AppCompatActivity implements GuessingC
 
     private void getActivityParameters() {
 
-        String publicKey = MercadoPagoContext.getInstance().getPublicKey();
-        PaymentPreference paymentPreference = MercadoPagoContext.getInstance().getCheckoutPreference().getPaymentPreference();
-        mDecorationPreference = MercadoPagoContext.getInstance().getDecorationPreference();
+        String publicKey = getIntent().getStringExtra("merchantPublicKey");
+        PaymentPreference paymentPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("paymentPreference"), PaymentPreference.class);
+        mDecorationPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("decorationPreference"), DecorationPreference.class);
 
         PaymentRecovery paymentRecovery = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("paymentRecovery"), PaymentRecovery.class);
+
+        BigDecimal transactionAmount = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("transactionAmount"), BigDecimal.class);
+        Boolean discountEnabled = this.getIntent().getBooleanExtra("discountEnabled", true);
+        Discount discount = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("discount"), Discount.class);
+        String payerEmail = this.getIntent().getStringExtra("payerEmail");
+
         Token token = null;
         PaymentMethod paymentMethod = null;
 
@@ -218,6 +228,10 @@ public class GuessingCardActivity extends AppCompatActivity implements GuessingC
         mPresenter.setIdentificationNumberRequired(identificationNumberRequired);
         mPresenter.setPaymentPreference(paymentPreference);
         mPresenter.setPaymentRecovery(paymentRecovery);
+        mPresenter.setPayerEmail(payerEmail);
+        mPresenter.setDiscount(discount);
+        mPresenter.setTransactionAmount(transactionAmount);
+        mPresenter.setDiscountEnabled(discountEnabled);
     }
 
     @Override
@@ -338,7 +352,6 @@ public class GuessingCardActivity extends AppCompatActivity implements GuessingC
                 }
             }
         }
-
     }
 
     private void analizeLowRes() {
@@ -363,8 +376,6 @@ public class GuessingCardActivity extends AppCompatActivity implements GuessingC
 
     @Override
     public void onInvalidStart(String message) {
-        Intent returnIntent = new Intent();
-        setResult(RESULT_CANCELED, returnIntent);
         finish();
     }
 
@@ -385,7 +396,7 @@ public class GuessingCardActivity extends AppCompatActivity implements GuessingC
         }
 
         mErrorState = NORMAL_STATE;
-        mPresenter.loadPaymentMethods();
+        mPresenter.initialize();
     }
 
     private void initializeViews() {
@@ -426,8 +437,10 @@ public class GuessingCardActivity extends AppCompatActivity implements GuessingC
         mErrorContainer = (FrameLayout) findViewById(R.id.mpsdkErrorContainer);
         mErrorTextView = (MPTextView) findViewById(R.id.mpsdkErrorTextView);
         mScrollView = (ScrollView) findViewById(R.id.mpsdkScrollViewContainer);
+        mDiscountFrameLayout = (FrameLayout) findViewById(R.id.mpsdkDiscount);
         mInputContainer.setVisibility(View.GONE);
         mProgressBar.setVisibility(View.VISIBLE);
+
         fullScrollDown();
     }
 
@@ -482,6 +495,9 @@ public class GuessingCardActivity extends AppCompatActivity implements GuessingC
             toolbar.setNavigationOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    Intent returnIntent = new Intent();
+                    returnIntent.putExtra("discount", JsonUtil.getInstance().toJson(mPresenter.getDiscount()));
+                    setResult(RESULT_CANCELED, returnIntent);
                     finish();
                 }
             });
@@ -506,7 +522,7 @@ public class GuessingCardActivity extends AppCompatActivity implements GuessingC
         ColorsUtil.decorateLowResToolbar(mLowResToolbar, mLowResTitleToolbar, mDecorationPreference,
                 getSupportActionBar(), this);
         ColorsUtil.decorateTextView(mDecorationPreference, mBankDealsTextView, this);
-        if(mTimerTextView != null) {
+        if (mTimerTextView != null) {
             ColorsUtil.decorateTextView(mDecorationPreference, mTimerTextView, this);
         }
         mNextButtonText.setTextColor(mDecorationPreference.getDarkFontColor(this));
@@ -517,7 +533,7 @@ public class GuessingCardActivity extends AppCompatActivity implements GuessingC
     private void decorateNormal() {
         ColorsUtil.decorateTransparentToolbar(mNormalToolbar, mBankDealsTextView, mDecorationPreference,
                 getSupportActionBar(), this);
-        if(mTimerTextView != null) {
+        if (mTimerTextView != null) {
             ColorsUtil.decorateTextView(mDecorationPreference, mTimerTextView, this);
         }
         mCardView.decorateCardBorder(mDecorationPreference.getLighterColor());
@@ -560,7 +576,9 @@ public class GuessingCardActivity extends AppCompatActivity implements GuessingC
             } else {
                 mBankDealsTextView.setText(getString(R.string.mpsdk_bank_deals_action));
             }
+
             mBankDealsTextView.setVisibility(View.VISIBLE);
+
             mBankDealsTextView.setFocusable(true);
             mBankDealsTextView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -964,7 +982,7 @@ public class GuessingCardActivity extends AppCompatActivity implements GuessingC
     public void initializeIdentificationTypes(List<IdentificationType> identificationTypes) {
         mIdentificationTypeSpinner.setAdapter(new IdentificationTypesAdapter(this, identificationTypes));
         mIdentificationTypeContainer.setVisibility(View.VISIBLE);
-        if(cardViewsActive()) {
+        if (cardViewsActive()) {
             mIdentificationCardView.setIdentificationType(identificationTypes.get(0));
         }
     }
@@ -1420,6 +1438,8 @@ public class GuessingCardActivity extends AppCompatActivity implements GuessingC
             } else if (resultCode == RESULT_CANCELED) {
                 finish();
             }
+        } else if (requestCode == MercadoPago.DISCOUNTS_REQUEST_CODE) {
+            resolveDiscountRequest(resultCode, data);
         } else if (requestCode == ErrorUtil.ERROR_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 mPresenter.recoverFromFailure();
@@ -1430,10 +1450,20 @@ public class GuessingCardActivity extends AppCompatActivity implements GuessingC
         }
     }
 
+    private void resolveDiscountRequest(int resultCode, Intent data) {
+        if (resultCode == RESULT_OK) {
+            if (mPresenter.getDiscount() == null) {
+                Discount discount = JsonUtil.getInstance().fromJson(data.getStringExtra("discount"), Discount.class);
+                mPresenter.onDiscountReceived(discount);
+            }
+        }
+    }
+
     private void finishWithCardToken() {
         Intent returnIntent = new Intent();
         returnIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(mPresenter.getPaymentMethod()));
         returnIntent.putExtra("cardToken", JsonUtil.getInstance().toJson(mPresenter.getCardToken()));
+        returnIntent.putExtra("discount", JsonUtil.getInstance().toJson(mPresenter.getDiscount()));
         setResult(RESULT_OK, returnIntent);
         finish();
         overridePendingTransition(R.anim.mpsdk_slide_right_to_left_in, R.anim.mpsdk_slide_right_to_left_out);
@@ -1445,6 +1475,7 @@ public class GuessingCardActivity extends AppCompatActivity implements GuessingC
         MPTracker.getInstance().trackEvent("GUESSING_CARD", "BACK_PRESSED", "2", mPresenter.getPublicKey(),
                 BuildConfig.VERSION_NAME, this);
         Intent returnIntent = new Intent();
+        returnIntent.putExtra("discount", JsonUtil.getInstance().toJson(mPresenter.getDiscount()));
         returnIntent.putExtra("backButtonPressed", true);
         setResult(RESULT_CANCELED, returnIntent);
         finish();
@@ -1459,4 +1490,67 @@ public class GuessingCardActivity extends AppCompatActivity implements GuessingC
     public void onFinish() {
         this.finish();
     }
+
+    public void initializeDiscountActivity(View view) {
+        mPresenter.initializeDiscountActivity();
+    }
+
+    @Override
+    public void startDiscountActivity(BigDecimal transactionAmount) {
+        setSoftInputMode();
+
+        MercadoPago.StartActivityBuilder mercadoPagoBuilder = new MercadoPago.StartActivityBuilder();
+
+        mercadoPagoBuilder.setActivity(this)
+                .setPublicKey(mPresenter.getPublicKey())
+                .setPayerEmail(mPresenter.getPayerEmail())
+                .setAmount(transactionAmount)
+                .setDiscount(mPresenter.getDiscount())
+                .setDecorationPreference(mDecorationPreference);
+
+        if (mPresenter.getDiscount() == null) {
+            mercadoPagoBuilder.setDirectDiscountEnabled(false);
+        } else {
+            mercadoPagoBuilder.setDiscount(mPresenter.getDiscount());
+        }
+
+        mercadoPagoBuilder.startDiscountsActivity();
+    }
+
+    @Override
+    public void showDiscountRow(BigDecimal transactionAmount) {
+        MercadoPagoUI.Views.DiscountRowViewBuilder discountRowBuilder = new MercadoPagoUI.Views.DiscountRowViewBuilder();
+
+        discountRowBuilder.setContext(this)
+                .setDiscount(mPresenter.getDiscount())
+                .setTransactionAmount(transactionAmount)
+                .setShortRowEnabled(true)
+                .setDiscountEnabled(mPresenter.getDiscountEnabled());
+
+        if (mPresenter.getDiscount() != null) {
+            discountRowBuilder.setCurrencyId(mPresenter.getDiscount().getCurrencyId());
+        }
+
+        DiscountRowView discountRowView = discountRowBuilder.build();
+
+        discountRowView.inflateInParent(mDiscountFrameLayout, true);
+        discountRowView.initializeControls();
+        discountRowView.draw();
+        discountRowView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                initializeDiscountActivity(view);
+            }
+        });
+    }
+
+    @Override
+    public void setSoftInputMode() {
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+    }
+
+    public GuessingCardPresenter getPresenter() {
+        return mPresenter;
+    }
 }
+

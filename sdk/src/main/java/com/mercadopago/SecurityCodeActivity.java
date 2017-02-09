@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.MotionEventCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.text.InputFilter;
 import android.view.MotionEvent;
 import android.view.View;
@@ -15,7 +14,6 @@ import android.widget.ProgressBar;
 
 import com.mercadopago.callbacks.card.CardSecurityCodeEditTextCallback;
 import com.mercadopago.controllers.CheckoutTimer;
-import com.mercadopago.core.MercadoPagoContext;
 import com.mercadopago.customviews.MPEditText;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.listeners.card.CardSecurityCodeTextWatcher;
@@ -41,7 +39,7 @@ import com.mercadopago.views.SecurityCodeActivityView;
  * Created by vaserber on 10/26/16.
  */
 
-public class SecurityCodeActivity extends AppCompatActivity implements SecurityCodeActivityView, TimerObserver {
+public class SecurityCodeActivity extends MercadoPagoBaseActivity implements SecurityCodeActivityView, TimerObserver {
 
     protected SecurityCodePresenter mPresenter;
     protected Activity mActivity;
@@ -82,8 +80,8 @@ public class SecurityCodeActivity extends AppCompatActivity implements SecurityC
     }
 
     private void getActivityParameters() {
-        String publicKey = MercadoPagoContext.getInstance().getPublicKey();
-        mDecorationPreference = MercadoPagoContext.getInstance().getDecorationPreference();
+        String publicKey = getIntent().getStringExtra("merchantPublicKey");
+        mDecorationPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("decorationPreference"), DecorationPreference.class);
 
         CardInfo cardInfo = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("cardInfo"), CardInfo.class);
         Card card = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("card"), Card.class);
@@ -161,7 +159,7 @@ public class SecurityCodeActivity extends AppCompatActivity implements SecurityC
     private void decorate() {
         if (isDecorationEnabled()) {
             mBackground.setBackgroundColor(mDecorationPreference.getLighterColor());
-            if(mTimerTextView != null) {
+            if (mTimerTextView != null) {
                 ColorsUtil.decorateTextView(mDecorationPreference, mTimerTextView, this);
             }
         }
@@ -184,7 +182,7 @@ public class SecurityCodeActivity extends AppCompatActivity implements SecurityC
     }
 
     private void showTimer() {
-        if (CheckoutTimer.getInstance().isTimerEnabled()){
+        if (CheckoutTimer.getInstance().isTimerEnabled()) {
             CheckoutTimer.getInstance().addObserver(this);
             mTimerTextView.setVisibility(View.VISIBLE);
             mTimerTextView.setText(CheckoutTimer.getInstance().getCurrentTime());

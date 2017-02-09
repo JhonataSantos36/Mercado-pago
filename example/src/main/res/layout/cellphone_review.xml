@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/mpsdk_review_gray_background">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        android:paddingBottom="20dp"
+        android:paddingTop="20dp">
+
+        <ImageView
+            android:id="@+id/phoneImage"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center_horizontal"
+            android:src="@android:drawable/stat_sys_phone_call"
+            android:tint="@color/mpsdk_background_blue" />
+
+        <com.mercadopago.customviews.MPTextView
+            android:id="@+id/titleText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"
+            android:gravity="center_horizontal"
+            android:paddingEnd="25dp"
+            android:paddingLeft="25dp"
+            android:paddingRight="25dp"
+            android:paddingStart="25dp"
+            android:text="Número de teléfono:"
+            android:textColor="@color/mpsdk_review_payment_text"
+            android:textSize="24dp"/>
+
+
+        <com.mercadopago.customviews.MPTextView
+            android:id="@+id/phoneNumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:includeFontPadding="false"
+            android:textSize="28dp"
+            app:fontStyle="default_light"
+            tools:text="1522333333" />
+
+        <com.mercadopago.customviews.MPTextView
+            android:id="@+id/phoneNumberEdition"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginEnd="25dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:background="@color/mpsdk_review_gray_background"
+            android:textColor="@color/mpsdk_background_blue"
+            android:textAllCaps="false"
+            android:text="Cambiar"
+            android:textSize="18dp" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/mpsdkSeparator"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_gravity="bottom"
+        android:background="@color/mpsdk_separator" />
+
+</FrameLayout>

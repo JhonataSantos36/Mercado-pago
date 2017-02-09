@@ -7,11 +7,18 @@ import com.mercadopago.CheckoutActivity;
 import com.mercadopago.callbacks.CallbackHolder;
 import com.mercadopago.callbacks.PaymentCallback;
 import com.mercadopago.callbacks.PaymentDataCallback;
+import com.mercadopago.controllers.CustomReviewablesHandler;
+import com.mercadopago.model.PaymentData;
+import com.mercadopago.model.Reviewable;
 import com.mercadopago.preferences.CheckoutPreference;
 import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.preferences.FlowPreference;
 import com.mercadopago.preferences.ServicePreference;
 import com.mercadopago.util.JsonUtil;
+import com.mercadopago.util.TextUtil;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by mreverter on 1/17/17.
@@ -25,6 +32,7 @@ public class MercadoPagoCheckout {
     private DecorationPreference decorationPreference;
     private ServicePreference servicePreference;
     private FlowPreference flowPreference;
+    private PaymentData paymentData;
 
     private MercadoPagoCheckout(Builder builder) {
         this.context = builder.context;
@@ -33,11 +41,30 @@ public class MercadoPagoCheckout {
         this.decorationPreference = builder.decorationPreference;
         this.servicePreference = builder.servicePreference;
         this.flowPreference = builder.flowPreference;
-        validate();
+        this.paymentData = builder.paymentData;
+        CustomReviewablesHandler.getInstance().clear();
+        CustomReviewablesHandler.getInstance().add(builder.reviewables);
     }
 
     private void validate() throws IllegalStateException {
-        // TODO Implement
+        if(context == null) {
+            throw new IllegalStateException("context not set");
+        }
+        if(TextUtil.isEmpty(publicKey)) {
+            throw new IllegalStateException("public key not set");
+        }
+        if(checkoutPreference == null) {
+            throw new IllegalStateException("Checkout preference required");
+        }
+        if(CallbackHolder.getInstance().hasPaymentCallback()
+                && !this.checkoutPreference.hasId()
+                && !this.servicePreference.hasCreatePaymentURL()) {
+            throw new IllegalStateException("Payment service or preference created with private key required to create a payment");
+        }
+        if(!CallbackHolder.getInstance().hasPaymentCallback()
+                && !CallbackHolder.getInstance().hasPaymentDataCallback()) {
+            throw new IllegalStateException("Callback is null");
+        }
     }
 
     private void start(PaymentCallback paymentCallback) {
@@ -59,10 +86,14 @@ public class MercadoPagoCheckout {
     }
 
     private void startCheckoutActivity() {
+        validate();
         Intent checkoutIntent = new Intent(context, CheckoutActivity.class);
+        checkoutIntent.putExtra("merchantPublicKey", publicKey);
+        checkoutIntent.putExtra("checkoutPreference", JsonUtil.getInstance().toJson(checkoutPreference));
+        checkoutIntent.putExtra("decorationPreference", JsonUtil.getInstance().toJson(decorationPreference));
+        checkoutIntent.putExtra("servicePreference", JsonUtil.getInstance().toJson(servicePreference));
         checkoutIntent.putExtra("flowPreference", JsonUtil.getInstance().toJson(flowPreference));
-        //TODO remove
-        checkoutIntent.putExtra("checkoutPreferenceId", checkoutPreference.getId());
+        checkoutIntent.putExtra("paymentData", JsonUtil.getInstance().toJson(paymentData));
         context.startActivity(checkoutIntent);
     }
 
@@ -73,14 +104,17 @@ public class MercadoPagoCheckout {
         private DecorationPreference decorationPreference;
         private ServicePreference servicePreference;
         private FlowPreference flowPreference;
+        private List<Reviewable> reviewables;
+        private PaymentData paymentData;
 
         public Builder setContext(Context context) {
+            this.reviewables = new ArrayList<>();
             this.context = context;
             return this;
         }
 
         public Builder setPublicKey(String publicKey) {
-            this.publicKey = publicKey;
+            this.publicKey = publicKey.trim();
             return this;
         }
 
@@ -101,6 +135,16 @@ public class MercadoPagoCheckout {
 
         public Builder setFlowPreference(FlowPreference flowPreference) {
             this.flowPreference = flowPreference;
+            return this;
+        }
+
+        public Builder addReviewable(Reviewable customReviewable) {
+            this.reviewables.add(customReviewable);
+            return this;
+        }
+
+        public Builder setPaymentData(PaymentData paymentData) {
+            this.paymentData = paymentData;
             return this;
         }
 

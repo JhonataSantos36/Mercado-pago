@@ -2,10 +2,13 @@ package com.mercadopago.core;
 
 import android.content.Context;
 
+import com.google.gson.annotations.SerializedName;
 import com.mercadopago.adapters.ErrorHandlingCallAdapter;
 import com.mercadopago.callbacks.Callback;
 import com.mercadopago.model.Customer;
+import com.mercadopago.model.Payer;
 import com.mercadopago.model.Payment;
+import com.mercadopago.model.PaymentBody;
 import com.mercadopago.preferences.CheckoutPreference;
 import com.mercadopago.preferences.ServicePreference;
 import com.mercadopago.services.CustomService;
@@ -25,52 +28,28 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class CustomServiceHandler {
 
-    public static void createCheckoutPreference(Context context, Callback<CheckoutPreference> callback) {
-        //TODO pedir al contexto la ServicePreference
-        Map<String, Object> map = new HashMap<>();
-        map.put("item_id", "1");
-        map.put("amount", new BigDecimal(300));
-        ServicePreference servicePreference = new ServicePreference.Builder()
-                .setCreateCheckoutPreferenceURL("http://private-4d9654-mercadopagoexamples.apiary-mock.com",
-                        "/merchantUri/create_preference", map)
-                .build();
-
-        String checkoutPreferenceURL = servicePreference.getCreateCheckoutPreferenceURL();
-        String checkoutPreferenceURI = servicePreference.getCreateCheckoutPreferenceURI();
-        Map<String, Object> additionalInfo = servicePreference.getCreateCheckoutPreferenceAdditionalInfo();
-
-        CustomService service = getService(context, checkoutPreferenceURL);
-        service.createPreference(checkoutPreferenceURI, additionalInfo).enqueue(callback);
+    public static void createCheckoutPreference(Context context, String url, String uri, Callback<CheckoutPreference> callback) {
+        CustomService service = getService(context, url);
+        service.createPreference(uri, null).enqueue(callback);
     }
 
-    public static void getCustomer(Context context, Callback<Customer> callback) {
-        //TODO pedir al contexto la ServicePreference
-        ServicePreference servicePreference = new ServicePreference.Builder()
-                .setCreateCheckoutPreferenceURL("/baseUrl", "/Uri")
-                .build();
-
-        String getCustomerURL = servicePreference.getGetCustomerURL();
-        String getCustomerURI = servicePreference.getGetCustomerURI();
-        Map<String, String> additionalInfo = servicePreference.getGetCustomerAdditionalInfo();
-
-        CustomService service = getService(context, getCustomerURL);
-        service.getCustomer(getCustomerURI, additionalInfo).enqueue(callback);
+    public static void createCheckoutPreference(Context context, String url, String uri, Map<String, Object> bodyInfo, Callback<CheckoutPreference> callback) {
+        CustomService service = getService(context, url);
+        service.createPreference(uri, bodyInfo).enqueue(callback);
     }
 
-    public static void createPayment(Context context, String transactionId, Callback<Payment> callback) {
-        //TODO pedir al contexto la ServicePreference
-        ServicePreference servicePreference = new ServicePreference.Builder()
-                .setCreateCheckoutPreferenceURL("/baseUrl", "/Uri")
-                .build();
-
-        String createPaymentURL = servicePreference.getCreatePaymentURL();
-        String createPaymentURI = servicePreference.getCreatePaymentURI();
-        Map<String, Object> additionalInfo = servicePreference.getCreatePaymentAdditionalInfo();
-
-        createPayment(context, transactionId, createPaymentURL, createPaymentURI, additionalInfo, callback);
+    public static void getCustomer(Context context, String url, String uri, Callback<Customer> callback) {
+        CustomService service = getService(context, url);
+        service.getCustomer(uri, null).enqueue(callback);
     }
 
-    public static void createPayment(Context context, String transactionId, String baseUrl, String uri, Map<String, Object> paymentData, Callback<Payment> callback) {
+    public static void getCustomer(Context context, String url, String uri, Map<String, String> additionalInfo, Callback<Customer> callback) {
+        CustomService service = getService(context, url);
+        service.getCustomer(uri, additionalInfo).enqueue(callback);
+    }
+
+    public static void createPayment(Context context, String transactionId, String baseUrl, String uri,
+                                     Map<String, Object> paymentData, Callback<Payment> callback) {
         CustomService service = getService(context, baseUrl);
         service.createPayment(transactionId, ripFirstSlash(uri), paymentData).enqueue(callback);
     }
@@ -94,4 +73,5 @@ public class CustomServiceHandler {
     private static String ripFirstSlash(String uri) {
         return uri.startsWith("/") ? uri.substring(1) : uri;
     }
+
 }

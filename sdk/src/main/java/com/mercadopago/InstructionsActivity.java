@@ -18,7 +18,6 @@ import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.constants.PaymentMethods;
 import com.mercadopago.constants.PaymentTypes;
 import com.mercadopago.core.MercadoPago;
-import com.mercadopago.core.MercadoPagoContext;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.Instruction;
@@ -67,7 +66,7 @@ public class InstructionsActivity extends MercadoPagoActivity {
 
     @Override
     protected void getActivityParameters() {
-        mMerchantPublicKey = MercadoPagoContext.getInstance().getPublicKey();
+        mMerchantPublicKey = getIntent().getStringExtra("merchantPublicKey");
         mPaymentTypeId = getIntent().getStringExtra("paymentTypeId");
         mPayment = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("payment"), Payment.class);
     }
@@ -210,7 +209,7 @@ public class InstructionsActivity extends MercadoPagoActivity {
     }
 
     protected void setTitle(String title) {
-        Spanned formattedTitle = CurrenciesUtil.formatCurrencyInText("<br>", mPayment.getTransactionAmount(), mPayment.getCurrencyId(), title, false, true);
+        Spanned formattedTitle = CurrenciesUtil.formatCurrencyInText("<br>",mPayment.getTransactionDetails().getTotalPaidAmount(), mPayment.getCurrencyId(), title, false, true);
         mTitle.setText(formattedTitle);
     }
 

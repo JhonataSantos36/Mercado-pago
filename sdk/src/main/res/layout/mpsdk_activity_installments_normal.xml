@@ -20,14 +20,19 @@
         android:fitsSystemWindows="true">
 
         <include layout="@layout/mpsdk_scrolling_toolbar"/>
-
     </android.support.design.widget.AppBarLayout>
 
-    <FrameLayout
-        android:id="@+id/mpsdkRegularLayout"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <FrameLayout
+            android:id="@+id/mpsdkDiscount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/mpsdkActivityInstallmentsView"
@@ -37,6 +42,5 @@
             android:background="@color/mpsdk_white"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             android:descendantFocusability="afterDescendants"/>
-    </FrameLayout>
-
+    </LinearLayout>
 </android.support.design.widget.CoordinatorLayout>

@@ -8,6 +8,7 @@ public class PaymentData {
     private Issuer issuer;
     private PayerCost payerCost;
     private Token token;
+    private Discount discount;
 
     public PaymentMethod getPaymentMethod() {
         return paymentMethod;
@@ -39,5 +40,13 @@ public class PaymentData {
 
     public void setToken(Token token) {
         this.token = token;
+    }
+
+    public void setDiscount(Discount discount) {
+        this.discount = discount;
+    }
+
+    public Discount getDiscount() {
+        return discount;
     }
 }

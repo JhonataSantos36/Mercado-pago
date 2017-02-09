@@ -2,12 +2,18 @@ package com.mercadopago.preferences;
 
 import android.net.Uri;
 
+import com.mercadopago.BuildConfig;
+
+import java.util.HashMap;
 import java.util.Map;
 
 /**
  * Created by mreverter on 1/17/17.
  */
 public class ServicePreference {
+
+    public static final String DEFAULT_CREATE_PAYMENT_URI = "/" + BuildConfig.API_VERSION + "/checkout/payments";
+    public static final String DEFAULT_CREATE_PAYMENT_URL = "https://api.mercadopago.com";
 
     private String getCustomerURL;
     private String createPaymentURL;
@@ -56,15 +62,32 @@ public class ServicePreference {
     }
 
     public Map<String, String> getGetCustomerAdditionalInfo() {
+        if (this.getCustomerAdditionalInfo == null) {
+            this.getCustomerAdditionalInfo = new HashMap<>();
+        }
         return this.getCustomerAdditionalInfo;
     }
 
     public Map<String, Object> getCreatePaymentAdditionalInfo() {
+        if (this.createPaymentAdditionalInfo == null) {
+          this.createPaymentAdditionalInfo = new HashMap<>();
+        }
         return this.createPaymentAdditionalInfo;
     }
 
     public Map<String, Object> getCreateCheckoutPreferenceAdditionalInfo() {
+        if (this.createCheckoutPreferenceAdditionalInfo == null) {
+            this.createCheckoutPreferenceAdditionalInfo = new HashMap<>();
+        }
         return this.createCheckoutPreferenceAdditionalInfo;
+    }
+
+    public boolean hasGetCustomerURL() {
+        return getCustomerURL != null && getCustomerURI != null;
+    }
+
+    public boolean hasCreatePaymentURL() {
+        return createPaymentURL != null && createPaymentURI != null;
     }
 
     public static class Builder {

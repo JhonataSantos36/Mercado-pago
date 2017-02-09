@@ -21,10 +21,15 @@ import com.mercadopago.PaymentResultActivity;
 import com.mercadopago.PaymentVaultActivity;
 import com.mercadopago.PendingActivity;
 import com.mercadopago.RejectionActivity;
+import com.mercadopago.ReviewAndConfirmActivity;
 import com.mercadopago.callbacks.OnSelectedCallback;
 import com.mercadopago.model.BankDeal;
 import com.mercadopago.model.Card;
+import com.mercadopago.model.CardInfo;
 import com.mercadopago.model.CardInformation;
+import com.mercadopago.model.Discount;
+import com.mercadopago.model.Item;
+import com.mercadopago.model.Token;
 import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.PayerCost;
@@ -38,6 +43,7 @@ import com.mercadopago.uicontrollers.savedcards.SavedCardRowView;
 import com.mercadopago.uicontrollers.savedcards.SavedCardView;
 import com.mercadopago.uicontrollers.savedcards.SavedCardsListView;
 import com.mercadopago.util.JsonUtil;
+import com.mercadopago.util.MercadoPagoUtil;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -48,7 +54,11 @@ import java.util.List;
 
 public class MercadoPagoComponents {
 
+    private MercadoPagoComponents() {}
+
     public static class Activities {
+
+        private Activities() {}
 
         public static final int CUSTOMER_CARDS_REQUEST_CODE = 0;
         public static final int PAYMENT_METHODS_REQUEST_CODE = 1;
@@ -60,10 +70,15 @@ public class MercadoPagoComponents {
         public static final int REJECTION_REQUEST_CODE = 9;
         public static final int PAYMENT_VAULT_REQUEST_CODE = 10;
         public static final int BANK_DEALS_REQUEST_CODE = 11;
+        public static final int CHECKOUT_REQUEST_CODE = 12;
         public static final int GUESSING_CARD_REQUEST_CODE = 13;
         public static final int INSTRUCTIONS_REQUEST_CODE = 14;
         public static final int CARD_VAULT_REQUEST_CODE = 15;
         public static final int CONGRATS_REQUEST_CODE = 16;
+        public static final int PAYMENT_TYPES_REQUEST_CODE = 17;
+        public static final int SECURITY_CODE_REQUEST_CODE = 18;
+        public static final int DISCOUNTS_REQUEST_CODE = 19;
+        public static final int REVIEW_AND_CONFIRM_REQUEST_CODE = 20;
 
         public static class PaymentVaultActivityBuilder {
 
@@ -83,6 +98,10 @@ public class MercadoPagoComponents {
             private String payerAccessToken;
             private Boolean accountMoneyEnabled;
             private String maxSavedCards;
+            private String payerEmail;
+            private boolean discountEnabled;
+            private Discount discount;
+
 
             public PaymentVaultActivityBuilder setActivity(Activity activity) {
                 this.activity = activity;
@@ -164,14 +183,24 @@ public class MercadoPagoComponents {
                 return this;
             }
 
+            public PaymentVaultActivityBuilder setPayerEmail(String payerEmail) {
+                this.payerEmail = payerEmail;
+                return this;
+            }
+
+            public PaymentVaultActivityBuilder setDiscountEnabled(boolean discountEnabled) {
+                this.discountEnabled = discountEnabled;
+                return this;
+            }
+
+            public PaymentVaultActivityBuilder setDiscount(Discount discount) {
+                this.discount = discount;
+                return this;
+            }
+
             public void startActivity() {
-
                 if (this.activity == null) throw new IllegalStateException("activity is null");
-                if (this.amount == null) throw new IllegalStateException("amount is null");
-                if (this.site == null) throw new IllegalStateException("site is null");
-                if (this.merchantPublicKey == null)
-                    throw new IllegalStateException("public key is null");
-
+                if (this.merchantPublicKey == null) throw new IllegalStateException("public key is null");
                 startPaymentVaultActivity();
             }
 
@@ -197,7 +226,109 @@ public class MercadoPagoComponents {
                 paymentVaultIntent.putExtra("accountMoneyEnabled", accountMoneyEnabled);
                 paymentVaultIntent.putExtra("maxSavedCards", maxSavedCards);
 
+                //Discounts
+                paymentVaultIntent.putExtra("payerEmail", payerEmail);
+                paymentVaultIntent.putExtra("discount", JsonUtil.getInstance().toJson(discount));
+                paymentVaultIntent.putExtra("discountEnabled", discountEnabled);
+
                 activity.startActivityForResult(paymentVaultIntent, PAYMENT_VAULT_REQUEST_CODE);
+            }
+        }
+
+        public static class ReviewAndConfirmBuilder {
+            private Activity activity;
+            private PaymentMethod paymentMethod;
+            private PayerCost payerCost;
+            private BigDecimal amount;
+            private Site site;
+            private Boolean editionEnabled;
+            private String extraPaymentMethodInfo;
+            private List<Item> items;
+            private DecorationPreference decorationPreference;
+            private Discount discount;
+            private Token token;
+
+            public ReviewAndConfirmBuilder setActivity(Activity activity) {
+                this.activity = activity;
+                return this;
+            }
+
+            public ReviewAndConfirmBuilder setPaymentMethod(PaymentMethod paymentMehtod) {
+                this.paymentMethod = paymentMehtod;
+                return this;
+            }
+
+            public ReviewAndConfirmBuilder setPayerCost(PayerCost payerCost) {
+                this.payerCost = payerCost;
+                return this;
+            }
+
+            public ReviewAndConfirmBuilder setAmount(BigDecimal amount) {
+                this.amount = amount;
+                return this;
+            }
+
+            public ReviewAndConfirmBuilder setSite(Site site) {
+                this.site = site;
+                return this;
+            }
+
+            public ReviewAndConfirmBuilder setToken(Token token) {
+                this.token = token;
+                return this;
+            }
+
+            public ReviewAndConfirmBuilder setEditionEnabled(Boolean editionEnabled) {
+                this.editionEnabled = editionEnabled;
+                return this;
+            }
+
+            public ReviewAndConfirmBuilder setExtraPaymentMethodInfo(String extraPaymentMethodInfo) {
+                this.extraPaymentMethodInfo = extraPaymentMethodInfo;
+                return this;
+            }
+
+            public ReviewAndConfirmBuilder setItems(List<Item> items) {
+                this.items = items;
+                return this;
+            }
+
+            public ReviewAndConfirmBuilder setDecorationPreference(DecorationPreference decorationPreference) {
+                this.decorationPreference = decorationPreference;
+                return this;
+            }
+
+            public ReviewAndConfirmBuilder setDiscount(Discount discount) {
+                this.discount = discount;
+                return this;
+            }
+
+            public void startActivity() {
+
+                if (this.activity == null) throw new IllegalStateException("activity is null");
+                if (this.paymentMethod == null) throw new IllegalStateException("payment method is null");
+                if (this.items == null) throw new IllegalStateException("items not set");
+                if (MercadoPagoUtil.isCard(paymentMethod.getPaymentTypeId())) {
+                    if (this.payerCost == null) throw new IllegalStateException("payer cost is null");
+                    if (this.token == null) throw new IllegalStateException("token is null");
+                }
+                startReviewAndConfirmActivity();
+            }
+
+            private void startReviewAndConfirmActivity() {
+                Intent intent = new Intent(activity, ReviewAndConfirmActivity.class);
+                intent.putExtra("editionEnabled", editionEnabled);
+                intent.putExtra("amount", amount.toString());
+                intent.putExtra("site", JsonUtil.getInstance().toJson(site));
+                intent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
+                intent.putExtra("payerCost", JsonUtil.getInstance().toJson(payerCost));
+                intent.putExtra("decorationPreference", JsonUtil.getInstance().toJson(decorationPreference));
+                intent.putExtra("token", JsonUtil.getInstance().toJson(token));
+                intent.putExtra("extraPaymentMethodInfo", extraPaymentMethodInfo);
+                intent.putExtra("discount", JsonUtil.getInstance().toJson(discount));
+                intent.putExtra("items", new Gson().toJson(items));
+
+                activity.startActivityForResult(intent, MercadoPagoComponents.Activities.REVIEW_AND_CONFIRM_REQUEST_CODE);
             }
         }
 
@@ -285,6 +416,8 @@ public class MercadoPagoComponents {
             private List<PaymentMethod> paymentMethodList;
             private Card card;
             private PaymentRecovery paymentRecovery;
+            private boolean discountEnabled;
+            private Discount discount;
 
             public CardVaultActivityBuilder setActivity(Activity activity) {
                 this.activity = activity;
@@ -319,6 +452,16 @@ public class MercadoPagoComponents {
 
             public CardVaultActivityBuilder setInstallmentsEnabled(Boolean installmentsEnabled) {
                 this.installmentsEnabled = installmentsEnabled;
+                return this;
+            }
+
+            public CardVaultActivityBuilder setDiscountEnabled(boolean discountEnabled) {
+                this.discountEnabled = discountEnabled;
+                return this;
+            }
+
+            public CardVaultActivityBuilder setDiscount(Discount discount) {
+                this.discount = discount;
                 return this;
             }
 
@@ -377,6 +520,10 @@ public class MercadoPagoComponents {
                 cardVaultIntent.putExtra("decorationPreference", JsonUtil.getInstance().toJson(decorationPreference));
 
                 cardVaultIntent.putExtra("card", JsonUtil.getInstance().toJson(card));
+
+                cardVaultIntent.putExtra("discount", JsonUtil.getInstance().toJson(discount));
+
+                cardVaultIntent.putExtra("discountEnabled", JsonUtil.getInstance().toJson(discountEnabled));
 
                 activity.startActivityForResult(cardVaultIntent, CARD_VAULT_REQUEST_CODE);
             }
@@ -694,6 +841,7 @@ public class MercadoPagoComponents {
             private String merchantPublicKey;
             private PaymentMethod paymentMethod;
             private Integer congratsDisplay;
+            private Discount discount;
 
             public PaymentResultActivityBuilder setActivity(Activity activity) {
                 this.activity = activity;
@@ -707,6 +855,11 @@ public class MercadoPagoComponents {
 
             public PaymentResultActivityBuilder setPaymentMethod(PaymentMethod paymentMethod) {
                 this.paymentMethod = paymentMethod;
+                return this;
+            }
+
+            public PaymentResultActivityBuilder setDiscount(Discount discount) {
+                this.discount = discount;
                 return this;
             }
 
@@ -736,6 +889,7 @@ public class MercadoPagoComponents {
                 resultIntent.putExtra("merchantPublicKey", merchantPublicKey);
                 resultIntent.putExtra("payment", JsonUtil.getInstance().toJson(payment));
                 resultIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
+                resultIntent.putExtra("discount", JsonUtil.getInstance().toJson(discount));
                 resultIntent.putExtra("congratsDisplay", congratsDisplay);
 
                 activity.startActivityForResult(resultIntent, PAYMENT_RESULT_REQUEST_CODE);
@@ -1030,6 +1184,8 @@ public class MercadoPagoComponents {
     }
 
     public static class Views {
+
+        private Views() {}
 
         public static class SavedCardsListViewBuilder {
 

@@ -86,7 +86,7 @@ public class SavedCardTokenTest extends BaseTest<CheckoutActivity> {
             savedCardToken.validateSecurityCode(getApplicationContext(), card);
             fail("Should have failed on security code length zero test");
         } catch (Exception ex) {
-            assertTrue(ex.getMessage().equals("Security code is null"));
+            assertTrue(ex.getMessage().equals(getApplicationContext().getString(R.string.mpsdk_invalid_field)));
         }
 
         savedCardToken.setSecurityCode("4444");

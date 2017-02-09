@@ -6,6 +6,7 @@ import com.mercadopago.adapters.ErrorHandlingCallAdapter;
 import com.mercadopago.callbacks.Callback;
 import com.mercadopago.preferences.CheckoutPreference;
 import com.mercadopago.model.Customer;
+import com.mercadopago.model.Discount;
 import com.mercadopago.model.MerchantPayment;
 import com.mercadopago.model.Payment;
 import com.mercadopago.services.MerchantService;
@@ -36,6 +37,20 @@ public class MerchantServer {
 
         MerchantService service = getService(context, merchantBaseUrl);
         service.createPayment(ripFirstSlash(merchantCreatePaymentUri), payment).enqueue(callback);
+    }
+
+    public static void getDirectDiscount(String transactionAmount, String payerEmail, Context context, String merchantBaseUrl, String merchantGetDirectDiscountUri, String merchantAccessToken, Callback<Discount> callback) {
+
+        MerchantService service = getService(context, merchantBaseUrl);
+
+        service.getDirectDiscount( ripFirstSlash(merchantGetDirectDiscountUri), merchantAccessToken, transactionAmount, payerEmail).enqueue(callback);
+    }
+
+    public static void getCodeDiscount(String discountCode, String transactionAmount, String payerEmail, Context context, String merchantBaseUrl, String merchantGetCodeDiscountUri, String merchantAccessToken, Callback<Discount> callback) {
+
+        MerchantService service = getService(context, merchantBaseUrl);
+
+        service.getCodeDiscount( ripFirstSlash(merchantGetCodeDiscountUri), merchantAccessToken, discountCode, transactionAmount, payerEmail).enqueue(callback);
     }
 
     private static String ripFirstSlash(String uri) {

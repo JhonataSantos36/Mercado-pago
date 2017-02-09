@@ -1,6 +1,7 @@
 package com.mercadopago.preferences;
 
 import com.mercadopago.constants.PaymentTypes;
+import com.mercadopago.constants.Sites;
 import com.mercadopago.exceptions.CheckoutPreferenceException;
 import com.mercadopago.model.Item;
 import com.mercadopago.preferences.CheckoutPreference;
@@ -21,13 +22,6 @@ import static junit.framework.Assert.assertTrue;
  * Created by mromar on 2/24/16.
  */
 public class CheckoutPreferenceTest {
-
-    ///////////////////CURRENCY tests///////////////////
-    @Test
-    public void testWhenValidatePreferenceWithTwoItemsWithSameCurrencyIdReturnTrue() {
-        CheckoutPreference preference = getPreferenceWithTwoItemsWithSameCurrencyId();
-        assertTrue(preference.itemsValid());
-    }
 
     @Test
     public void testWhenValidatePreferenceWithTwoItemsWithDifferentCurrencyIdReturnFalse() {
@@ -134,34 +128,19 @@ public class CheckoutPreferenceTest {
         }
     }
 
-    @Test
-    public void testWhenValidatePreferenceWithItemsInvalidThrowExceptionReturnTrue() {
-        CheckoutPreference preference = getPreferenceWithEmptyItems();
-
-        try {
-            preference.validate();
-        } catch (CheckoutPreferenceException e) {
-            assertTrue(e.getErrorCode() == CheckoutPreferenceException.INVALID_ITEM);
-        }
+    @Test (expected = IllegalStateException.class)
+    public void testWhenValidatePreferenceWithNoItemsThrowException() {
+        new CheckoutPreference.Builder()
+                .setPayerEmail("test@gmail.com")
+                .setSite(Sites.ARGENTINA)
+                .build();
     }
 
 
     ///////////////////ITEMS tests///////////////////
     @Test
-    public void testWhenValidatePreferenceWithTwoItemsReturnTrue() {
-        CheckoutPreference preference = getPreferenceWithTwoItems();
-        assertTrue(preference.itemsValid());
-    }
-
-    @Test
     public void testWhenValidatePreferenceWithTwoItemsWithoutUnitPriceReturnFalse() {
         CheckoutPreference preference = getPreferenceWithTwoItemsWithoutUnitPrice();
-        Assert.assertFalse(preference.itemsValid());
-    }
-
-    @Test
-    public void testWhenValidatePreferenceWithNegativeUnitPriceItemReturnFalse() {
-        CheckoutPreference preference = getPreferenceWithNegativeUnitPriceItem();
         Assert.assertFalse(preference.itemsValid());
     }
 
@@ -201,9 +180,13 @@ public class CheckoutPreferenceTest {
         Assert.assertFalse(preference.itemsValid());
     }
 
-    @Test
-    public void testWhenValidatePreferenceWithEmptyItemsListReturnFalse() {
-        CheckoutPreference preference = getPreferenceWithEmptyItems();
+    @Test (expected = IllegalStateException.class)
+    public void testWhenValidatePreferenceWithEmptyItemsListThrowException() {
+        CheckoutPreference preference = new CheckoutPreference.Builder()
+                .addItems(new ArrayList<Item>())
+                .setPayerEmail("test@gmail.com")
+                .setSite(Sites.ARGENTINA)
+                .build();
         Assert.assertFalse(preference.itemsValid());
     }
 
@@ -245,6 +228,9 @@ public class CheckoutPreferenceTest {
         pastDate.setTime((new Date().getTime()) - 1000 * 60 * 60);
 
         CheckoutPreference preference = new CheckoutPreference.Builder()
+                .addItem(new Item("item", 1, BigDecimal.ONE))
+                .setPayerEmail("test@gmail.com")
+                .setSite(Sites.ARGENTINA)
                 .setActiveFrom(pastDate)
                 .build();
 
@@ -255,6 +241,9 @@ public class CheckoutPreferenceTest {
         GregorianCalendar calendar = new GregorianCalendar(2100, 3, 3); //Date should be after that today
         Date date = calendar.getTime();
         CheckoutPreference preference = new CheckoutPreference.Builder()
+                .addItem(new Item("item", 1, BigDecimal.ONE))
+                .setPayerEmail("test@gmail.com")
+                .setSite(Sites.ARGENTINA)
                 .setActiveFrom(date)
                 .build();
         return preference;
@@ -264,6 +253,9 @@ public class CheckoutPreferenceTest {
         GregorianCalendar calendar = new GregorianCalendar(2100, 7, 3); //Date should be after that today
         Date date = calendar.getTime();
         CheckoutPreference preference = new CheckoutPreference.Builder()
+                .addItem(new Item("item", 1, BigDecimal.ONE))
+                .setPayerEmail("test@gmail.com")
+                .setSite(Sites.ARGENTINA)
                 .setActiveFrom(date)
                 .build();
         return preference;
@@ -273,6 +265,9 @@ public class CheckoutPreferenceTest {
         GregorianCalendar calendar = new GregorianCalendar(2015, 3, 3); //Date should be before that today
         Date date = calendar.getTime();
         CheckoutPreference preference = new CheckoutPreference.Builder()
+                .setPayerEmail("test@gmail.com")
+                .addItem(new Item("item", 1, BigDecimal.ONE))
+                .setSite(Sites.ARGENTINA)
                 .setExpirationDate(date)
                 .build();
         return preference;
@@ -280,28 +275,32 @@ public class CheckoutPreferenceTest {
 
     private CheckoutPreference getPreferenceWithNullExpirationDateFrom() {
         CheckoutPreference preference = new CheckoutPreference.Builder()
+                .setPayerEmail("test@gmail.com")
+                .setSite(Sites.ARGENTINA)
                 .build();
         return preference;
     }
 
     private CheckoutPreference getPreferenceWithNullExpirationDateTo() {
         CheckoutPreference preference = new CheckoutPreference.Builder()
+                .setPayerEmail("test@gmail.com")
+                .addItem(new Item("item", 1, BigDecimal.ONE))
+                .setSite(Sites.ARGENTINA)
                 .build();
         return preference;
     }
 
     ///////////////////Getters preferences with different CURRENCY///////////////////
     private CheckoutPreference getPreferenceWithTwoItemsWithSameCurrencyId() {
-        Item itemA = new Item("123", 1);
-        Item itemB = new Item("456", 1);
-
-        itemA.setUnitPrice(new BigDecimal(2));
-        itemB.setUnitPrice(new BigDecimal(5));
+        Item itemA = new Item("123", BigDecimal.TEN);
+        Item itemB = new Item("456", BigDecimal.TEN);
 
         itemA.setCurrencyId("ARS");
         itemB.setCurrencyId("ARS");
 
         CheckoutPreference preference = new CheckoutPreference.Builder()
+                .setPayerEmail("test@gmail.com")
+                .setSite(Sites.ARGENTINA)
                 .addItem(itemA)
                 .addItem(itemB)
                 .build();
@@ -310,16 +309,15 @@ public class CheckoutPreferenceTest {
     }
 
     private CheckoutPreference getPreferenceWithTwoItemsWithDifferentCurrencyId() {
-        Item itemA = new Item("123", 1);
-        Item itemB = new Item("456", 1);
-
-        itemA.setUnitPrice(new BigDecimal(2));
-        itemB.setUnitPrice(new BigDecimal(5));
+        Item itemA = new Item("123", BigDecimal.TEN);
+        Item itemB = new Item("456", BigDecimal.TEN);
 
         itemA.setCurrencyId("US$");
         itemB.setCurrencyId("ARS");
 
         CheckoutPreference preference = new CheckoutPreference.Builder()
+                .setPayerEmail("test@gmail.com")
+                .setSite(Sites.ARGENTINA)
                 .addItem(itemA)
                 .addItem(itemB)
                 .build();
@@ -328,15 +326,14 @@ public class CheckoutPreferenceTest {
     }
 
     private CheckoutPreference getPreferenceWithTwoItemsOneHasCurrencyNull() {
-        Item itemA = new Item("123", 1);
-        Item itemB = new Item("456", 1);
-
-        itemA.setUnitPrice(new BigDecimal(2));
-        itemB.setUnitPrice(new BigDecimal(5));
+        Item itemA = new Item("123", BigDecimal.ONE);
+        Item itemB = new Item("123", BigDecimal.TEN);
 
         itemA.setCurrencyId("USD");
 
         CheckoutPreference preference = new CheckoutPreference.Builder()
+                .setPayerEmail("test@gmail.com")
+                .setSite(Sites.ARGENTINA)
                 .addItem(itemA)
                 .addItem(itemB)
                 .build();
@@ -345,16 +342,15 @@ public class CheckoutPreferenceTest {
     }
 
     private CheckoutPreference getPreferenceWithTwoItemsWithIncorrectCurrencyId() {
-        Item itemA = new Item("123", 1);
-        Item itemB = new Item("456", 1);
-
-        itemA.setUnitPrice(new BigDecimal(2));
-        itemB.setUnitPrice(new BigDecimal(5));
+        Item itemA = new Item("123", BigDecimal.TEN);
+        Item itemB = new Item("456", BigDecimal.TEN);
 
         itemA.setCurrencyId("USD");
         itemB.setCurrencyId("PesoARG");
 
         CheckoutPreference preference = new CheckoutPreference.Builder()
+                .setPayerEmail("test@gmail.com")
+                .setSite(Sites.ARGENTINA)
                 .addItem(itemA)
                 .addItem(itemB)
                 .build();
@@ -364,16 +360,15 @@ public class CheckoutPreferenceTest {
 
     ///////////////////Getters preferences with different ITEMS///////////////////
     private CheckoutPreference getPreferenceWithTwoItems() {
-        Item itemA = new Item("123", 1);
-        Item itemB = new Item("456", 1);
-
-        itemA.setUnitPrice(new BigDecimal(2));
-        itemB.setUnitPrice(new BigDecimal(5));
+        Item itemA = new Item("123", BigDecimal.TEN);
+        Item itemB = new Item("456", BigDecimal.TEN);
 
         itemA.setCurrencyId("USD");
         itemB.setCurrencyId("USD");
 
         CheckoutPreference preference = new CheckoutPreference.Builder()
+                .setPayerEmail("test@gmail.com")
+                .setSite(Sites.ARGENTINA)
                 .addItem(itemA)
                 .addItem(itemB)
                 .build();
@@ -382,10 +377,12 @@ public class CheckoutPreferenceTest {
     }
 
     private CheckoutPreference getPreferenceWithTwoItemsWithoutUnitPrice() {
-        Item itemA = new Item("123", 1);
-        Item itemB = new Item("456", 1);
+        Item itemA = new Item("123", BigDecimal.TEN);
+        Item itemB = new Item("456", BigDecimal.TEN);
 
         CheckoutPreference preference = new CheckoutPreference.Builder()
+                .setPayerEmail("test@gmail.com")
+                .setSite(Sites.ARGENTINA)
                 .addItem(itemA)
                 .addItem(itemB)
                 .build();
@@ -394,12 +391,14 @@ public class CheckoutPreferenceTest {
     }
 
     private CheckoutPreference getPreferenceWithNegativeUnitPriceItem() {
-        Item item = new Item("123", 1);
+        Item item = new Item("123", BigDecimal.TEN);
 
         item.setUnitPrice(new BigDecimal(-1));
 
         CheckoutPreference preference = new CheckoutPreference.Builder()
                 .addItem(item)
+                .setPayerEmail("test@gmail.com")
+                .setSite(Sites.ARGENTINA)
                 .build();
 
         return preference;
@@ -407,32 +406,36 @@ public class CheckoutPreferenceTest {
 
     private CheckoutPreference getPreferenceWithNullUnitPriceItem() {
 
-        Item item = new Item("123", 1);
-
-        item.setUnitPrice(null);
+        Item item = new Item("123", null);
 
         CheckoutPreference preference = new CheckoutPreference.Builder()
                 .addItem(item)
+                .setPayerEmail("test@gmail.com")
+                .setSite(Sites.ARGENTINA)
                 .build();
 
         return preference;
     }
 
     private CheckoutPreference getPreferenceWithZeroItemQuantity() {
-        Item item = new Item("123", 0);
+        Item item = new Item("123", BigDecimal.ZERO);
 
         CheckoutPreference preference = new CheckoutPreference.Builder()
                 .addItem(item)
+                .setPayerEmail("test@gmail.com")
+                .setSite(Sites.ARGENTINA)
                 .build();
 
         return preference;
     }
 
     private CheckoutPreference getPreferenceWithNegativeItemQuantity() {
-        Item item = new Item("123", -1);
+        Item item = new Item("123", BigDecimal.ONE.negate());
 
         CheckoutPreference preference = new CheckoutPreference.Builder()
                 .addItem(item)
+                .setPayerEmail("test@gmail.com")
+                .setSite(Sites.ARGENTINA)
                 .build();
 
         return preference;
@@ -443,16 +446,20 @@ public class CheckoutPreferenceTest {
 
         CheckoutPreference preference = new CheckoutPreference.Builder()
                 .addItem(item)
+                .setPayerEmail("test@gmail.com")
+                .setSite(Sites.ARGENTINA)
                 .build();
 
         return preference;
     }
 
     private CheckoutPreference getPreferenceWithNullItemId() {
-        Item item = new Item(null, 1);
+        Item item = new Item("123", BigDecimal.ONE.negate());
 
         CheckoutPreference preference = new CheckoutPreference.Builder()
                 .addItem(item)
+                .setPayerEmail("test@gmail.com")
+                .setSite(Sites.ARGENTINA)
                 .build();
 
         return preference;
@@ -460,6 +467,9 @@ public class CheckoutPreferenceTest {
 
     private CheckoutPreference getPreferenceWithNullItems() {
         CheckoutPreference preference = new CheckoutPreference.Builder()
+                .addItem(new Item("item", 1, BigDecimal.ONE))
+                .setPayerEmail("test@gmail.com")
+                .setSite(Sites.ARGENTINA)
                 .build();
 
         preference.setItems(null);
@@ -468,6 +478,8 @@ public class CheckoutPreferenceTest {
 
     private CheckoutPreference getPreferenceWithEmptyItems() {
         CheckoutPreference preference = new CheckoutPreference.Builder()
+                .setPayerEmail("test@gmail.com")
+                .setSite(Sites.ARGENTINA)
                 .build();
         return preference;
     }
@@ -476,15 +488,16 @@ public class CheckoutPreferenceTest {
     private CheckoutPreference getPreferenceWithAllPaymentTypesExcluded() {
 
         ArrayList<String> paymentTypes= new ArrayList<>();
-        Item itemA = new Item("123", 1);
+        Item item = new Item("123", BigDecimal.ONE);
 
         paymentTypes.addAll(PaymentTypes.getAllPaymentTypes());
 
-        itemA.setUnitPrice(new BigDecimal(2));
-        itemA.setCurrencyId("USD");
+        item.setUnitPrice(new BigDecimal(2));
 
         CheckoutPreference preference = new CheckoutPreference.Builder()
-                .addItem(itemA)
+                .addItem(item)
+                .setPayerEmail("test@gmail.com")
+                .setSite(Sites.ARGENTINA)
                 .addExcludedPaymentTypes(paymentTypes)
                 .build();
 
@@ -493,14 +506,14 @@ public class CheckoutPreferenceTest {
 
     private CheckoutPreference getPreferenceWithSomePaymentTypesExcluded() {
 
-        Item itemA = new Item("123", 1);
-
-        itemA.setUnitPrice(new BigDecimal(2));
+        Item itemA = new Item("123", BigDecimal.ONE);
         itemA.setCurrencyId("USD");
 
 
         CheckoutPreference preference = new CheckoutPreference.Builder()
                 .addItem(itemA)
+                .setPayerEmail("test@gmail.com")
+                .setSite(Sites.ARGENTINA)
                 .addExcludedPaymentType(PaymentTypes.CREDIT_CARD)
                 .addExcludedPaymentType(PaymentTypes.DEBIT_CARD)
                 .addExcludedPaymentType(PaymentTypes.PREPAID_CARD)
@@ -511,13 +524,15 @@ public class CheckoutPreferenceTest {
 
     ///////////////////Getters preferences with different INSTALLMENT///////////////////
     private CheckoutPreference getPreferenceWithPositiveMaxInstallmentsNumberAndNegativeDefaultInstallmentsNumber() {
-        Item itemA = new Item("123", 1);
+        Item itemA = new Item("123", BigDecimal.ONE);
 
         itemA.setUnitPrice(new BigDecimal(2));
         itemA.setCurrencyId("USD");
 
         CheckoutPreference preference = new CheckoutPreference.Builder()
                 .addItem(itemA)
+                .setPayerEmail("test@gmail.com")
+                .setSite(Sites.ARGENTINA)
                 .setMaxInstallments(1)
                 .setDefaultInstallments(-3)
                 .build();
@@ -527,13 +542,13 @@ public class CheckoutPreferenceTest {
 
     private CheckoutPreference getPreferenceWithPositiveDefaultInstallmentsNumberAndNegativeMaxInstallmentsNumber() {
 
-        Item itemA = new Item("123", 1);
-
-        itemA.setUnitPrice(new BigDecimal(2));
+        Item itemA = new Item("123", BigDecimal.ONE);
         itemA.setCurrencyId("USD");
 
         CheckoutPreference preference = new CheckoutPreference.Builder()
                 .addItem(itemA)
+                .setPayerEmail("email@gmail.com")
+                .setSite(Sites.ARGENTINA)
                 .setMaxInstallments(-1)
                 .setDefaultInstallments(3)
                 .build();
@@ -542,13 +557,15 @@ public class CheckoutPreferenceTest {
     }
 
     private CheckoutPreference getPreferenceWithPositiveInstallmentsNumber() {
-        Item itemA = new Item("123", 1);
 
+        Item itemA = new Item("123", BigDecimal.ONE);
         itemA.setUnitPrice(new BigDecimal(2));
         itemA.setCurrencyId("USD");
 
         CheckoutPreference preference = new CheckoutPreference.Builder()
                 .addItem(itemA)
+                .setPayerEmail("test@gmail.com")
+                .setSite(Sites.ARGENTINA)
                 .setMaxInstallments(1)
                 .setDefaultInstallments(3)
                 .build();
@@ -557,13 +574,14 @@ public class CheckoutPreferenceTest {
     }
 
     private CheckoutPreference getPreferenceWithNegativeInstallmentsNumbers() {
-        Item itemA = new Item("123", 1);
-
+        Item itemA = new Item("123", BigDecimal.ONE);
         itemA.setUnitPrice(new BigDecimal(2));
         itemA.setCurrencyId("USD");
 
         CheckoutPreference preference = new CheckoutPreference.Builder()
                 .addItem(itemA)
+                .setPayerEmail("test@gmail.com")
+                .setSite(Sites.ARGENTINA)
                 .setMaxInstallments(-1)
                 .setDefaultInstallments(-1)
                 .build();
@@ -575,7 +593,7 @@ public class CheckoutPreferenceTest {
     private CheckoutPreference getPreferenceWithOneItemValidActiveAndSomePaymentTypesExcluded() {
 
         ArrayList<String> paymentTypes= new ArrayList<>();
-        Item itemA = new Item("123", 1);
+        Item itemA = new Item("123", BigDecimal.ONE);
 
         itemA.setUnitPrice(new BigDecimal(2));
         itemA.setCurrencyId("USD");
@@ -586,6 +604,7 @@ public class CheckoutPreferenceTest {
         CheckoutPreference preference = new CheckoutPreference.Builder()
                 .addItem(itemA)
                 .setPayerEmail("test@gmail.com")
+                .setSite(Sites.ARGENTINA)
                 .addExcludedPaymentType(PaymentTypes.CREDIT_CARD)
                 .addExcludedPaymentType(PaymentTypes.DEBIT_CARD)
                 .addExcludedPaymentType(PaymentTypes.PREPAID_CARD)
@@ -600,7 +619,7 @@ public class CheckoutPreferenceTest {
     private CheckoutPreference getPreferenceWithOneItemValidActiveButAllPaymentTypesExcluded() {
 
         ArrayList<String> paymentTypes= new ArrayList<>();
-        Item itemA = new Item("123", 1);
+        Item itemA = new Item("123", BigDecimal.ONE);
 
         itemA.setUnitPrice(new BigDecimal(2));
         itemA.setCurrencyId("USD");
@@ -610,6 +629,8 @@ public class CheckoutPreferenceTest {
 
         CheckoutPreference preference = new CheckoutPreference.Builder()
                 .addItem(itemA)
+                .setPayerEmail("test@gmail.com")
+                .setSite(Sites.ARGENTINA)
                 .addExcludedPaymentTypes(PaymentTypes.getAllPaymentTypes())
                 .setActiveFrom(pastDate)
                 .build();
@@ -620,7 +641,7 @@ public class CheckoutPreferenceTest {
 
     private CheckoutPreference getPreferenceWithOneItemValidButInstallmenstsDefaultNumberAndInstallmentsNumberNegative() {
 
-        Item itemA = new Item("123", 1);
+        Item itemA = new Item("123", BigDecimal.ONE);
 
         itemA.setUnitPrice(new BigDecimal(2));
         itemA.setCurrencyId("USD");
@@ -630,6 +651,8 @@ public class CheckoutPreferenceTest {
 
         CheckoutPreference preference = new CheckoutPreference.Builder()
                 .addItem(itemA)
+                .setPayerEmail("test@gmail.com")
+                .setSite(Sites.ARGENTINA)
                 .setMaxInstallments(-1)
                 .setDefaultInstallments(-3)
                 .setActiveFrom(pastDate)
@@ -639,7 +662,7 @@ public class CheckoutPreferenceTest {
     }
 
     private CheckoutPreference getPreferenceWithOneItemValidButPreferenceExpired() {
-        Item itemA = new Item("123", 1);
+        Item itemA = new Item("123", BigDecimal.ONE);
 
         itemA.setUnitPrice(new BigDecimal(2));
         itemA.setCurrencyId("USD");
@@ -649,6 +672,8 @@ public class CheckoutPreferenceTest {
 
         CheckoutPreference preference = new CheckoutPreference.Builder()
                 .addItem(itemA)
+                .setPayerEmail("test@gmail.com")
+                .setSite(Sites.ARGENTINA)
                 .setExpirationDate(date)
                 .build();
 
@@ -657,13 +682,15 @@ public class CheckoutPreferenceTest {
 
     private CheckoutPreference getPreferenceWithOneItemValidButPreferenceInactive() {
 
-        Item itemA = new Item("123", 1);
+        Item itemA = new Item("123", BigDecimal.ONE);
 
         itemA.setUnitPrice(new BigDecimal(2));
         itemA.setCurrencyId("USD");
 
         CheckoutPreference preference = new CheckoutPreference.Builder()
                 .addItem(itemA)
+                .setPayerEmail("test@gmail.com")
+                .setSite(Sites.ARGENTINA)
                 .build();
 
         return preference;

@@ -2,6 +2,7 @@ package com.mercadopago.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -146,5 +147,25 @@ public class PaymentMethodSearch {
 
     public boolean hasSavedCards() {
         return cards != null && !cards.isEmpty();
+    }
+
+    public void addCards(List<Card> cards, String lastFourDigitsText) {
+        if (cards != null) {
+            if (this.customSearchItems == null) {
+                this.customSearchItems = new ArrayList<>();
+            }
+            if (this.cards == null) {
+                this.cards = new ArrayList<>();
+            }
+            for (Card card : cards) {
+                CustomSearchItem searchItem = new CustomSearchItem();
+                searchItem.setDescription(lastFourDigitsText + " " + card.getLastFourDigits());
+                searchItem.setType(card.getPaymentMethod().getPaymentTypeId());
+                searchItem.setId(card.getId());
+                searchItem.setPaymentMethodId(card.getPaymentMethod().getId());
+                this.customSearchItems.add(searchItem);
+                this.cards.add(card);
+            }
+        }
     }
 }
