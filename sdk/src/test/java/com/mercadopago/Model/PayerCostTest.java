@@ -1,6 +1,4 @@
-package com.mercadopago.Model;
-
-import com.mercadopago.model.PayerCost;
+package com.mercadopago.model;
 
 import org.junit.Test;
 

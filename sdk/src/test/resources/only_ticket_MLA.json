@@ -1,0 +1,168 @@
+{
+    "groups":[
+        {
+            "id":"ticket",
+            "type":"group",
+            "description":"Cash payment",
+            "comment":null,
+            "children":[
+                {
+                    "id":"pagofacil",
+                    "type":"payment_method",
+                    "description":"Pago Fácil",
+                    "comment":"It will be accredited instantly",
+                    "children":null,
+                    "children_header":null,
+                    "show_icon":true
+                },
+                {
+                    "id":"rapipago",
+                    "type":"payment_method",
+                    "description":"Rapipago",
+                    "comment":"It will be accredited instantly",
+                    "children":null,
+                    "children_header":null,
+                    "show_icon":true
+                },
+                {
+                    "id":"cargavirtual",
+                    "type":"payment_method",
+                    "description":"Kioscos y comercios cercanos",
+                    "comment":"It will be accredited instantly",
+                    "children":null,
+                    "children_header":null,
+                    "show_icon":true
+                }
+            ],
+            "children_header":"Where do you want to pay?",
+            "show_icon":true
+        }
+    ],
+    "payment_methods":[
+        {
+            "additional_info_needed":[
+
+            ],
+            "id":"pagofacil",
+            "name":"Pago Fácil",
+            "payment_type_id":"ticket",
+            "status":"active",
+            "secure_thumbnail":"https://www.mercadopago.com/org-img/MP3/API/logos/pagofacil.gif",
+            "thumbnail":"http://img.mlstatic.com/org-img/MP3/API/logos/pagofacil.gif",
+            "deferred_capture":"does_not_apply",
+            "settings":[
+
+            ],
+            "min_allowed_amount":10,
+            "max_allowed_amount":5000,
+            "accreditation_time":0
+        },
+        {
+            "additional_info_needed":[
+
+            ],
+            "id":"rapipago",
+            "name":"Rapipago",
+            "payment_type_id":"ticket",
+            "status":"active",
+            "secure_thumbnail":"https://www.mercadopago.com/org-img/MP3/API/logos/rapipago.gif",
+            "thumbnail":"http://img.mlstatic.com/org-img/MP3/API/logos/rapipago.gif",
+            "deferred_capture":"does_not_apply",
+            "settings":[
+
+            ],
+            "min_allowed_amount":0.01,
+            "max_allowed_amount":60000,
+            "accreditation_time":0
+        },
+        {
+            "additional_info_needed":[
+
+            ],
+            "id":"cargavirtual",
+            "name":"Kioscos y comercios cercanos",
+            "payment_type_id":"ticket",
+            "status":"active",
+            "secure_thumbnail":"https://www.mercadopago.com/org-img/MP3/API/logos/cargavirtual.gif",
+            "thumbnail":"http://img.mlstatic.com/org-img/MP3/API/logos/cargavirtual.gif",
+            "deferred_capture":"does_not_apply",
+            "settings":[
+
+            ],
+            "min_allowed_amount":0.01,
+            "max_allowed_amount":5000,
+            "accreditation_time":0
+        },
+        {
+            "additional_info_needed":[
+                "cardholder_name",
+                "cardholder_identification_type",
+                "cardholder_identification_number"
+            ],
+            "id":"cordobesa",
+            "name":"Cordobesa",
+            "payment_type_id":"credit_card",
+            "status":"active",
+            "secure_thumbnail":"https://www.mercadopago.com/org-img/MP3/API/logos/cordobesa.gif",
+            "thumbnail":"http://img.mlstatic.com/org-img/MP3/API/logos/cordobesa.gif",
+            "deferred_capture":"supported",
+            "settings":[
+                {
+                    "bin":{
+                        "exclusion_pattern":null,
+                        "installments_pattern":"^((542702)|(544764)|(550073))",
+                        "pattern":"^((542702)|(544764)|(550073)|(528824))"
+                    },
+                    "card_number":{
+                        "length":16,
+                        "validation":"standard"
+                    },
+                    "security_code":{
+                        "card_location":"back",
+                        "length":3,
+                        "mode":"mandatory"
+                    }
+                }
+            ],
+            "min_allowed_amount":0,
+            "max_allowed_amount":250000,
+            "accreditation_time":2880
+        },
+        {
+            "additional_info_needed":[
+                "cardholder_name",
+                "cardholder_identification_type",
+                "cardholder_identification_number"
+            ],
+            "id":"cmr",
+            "name":"CMR",
+            "payment_type_id":"credit_card",
+            "status":"active",
+            "secure_thumbnail":"https://www.mercadopago.com/org-img/MP3/API/logos/cmr.gif",
+            "thumbnail":"http://img.mlstatic.com/org-img/MP3/API/logos/cmr.gif",
+            "deferred_capture":"supported",
+            "settings":[
+                {
+                    "bin":{
+                        "exclusion_pattern":null,
+                        "installments_pattern":"^(557039)",
+                        "pattern":"^(557039)"
+                    },
+                    "card_number":{
+                        "length":16,
+                        "validation":"standard"
+                    },
+                    "security_code":{
+                        "card_location":"back",
+                        "length":3,
+                        "mode":"mandatory"
+                    }
+                }
+            ],
+            "min_allowed_amount":0,
+            "max_allowed_amount":250000,
+            "accreditation_time":2880
+        }
+    ],
+    "account_money":null
+}

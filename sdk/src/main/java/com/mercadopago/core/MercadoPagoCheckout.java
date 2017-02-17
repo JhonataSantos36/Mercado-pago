@@ -8,6 +8,7 @@ import com.mercadopago.callbacks.CallbackHolder;
 import com.mercadopago.callbacks.PaymentCallback;
 import com.mercadopago.callbacks.PaymentDataCallback;
 import com.mercadopago.controllers.CustomReviewablesHandler;
+import com.mercadopago.model.Discount;
 import com.mercadopago.model.PaymentData;
 import com.mercadopago.model.Reviewable;
 import com.mercadopago.preferences.CheckoutPreference;
@@ -32,7 +33,10 @@ public class MercadoPagoCheckout {
     private DecorationPreference decorationPreference;
     private ServicePreference servicePreference;
     private FlowPreference flowPreference;
+    private Boolean binaryMode;
+    private Integer maxSavedCards;
     private PaymentData paymentData;
+    private Discount discount;
 
     private MercadoPagoCheckout(Builder builder) {
         this.context = builder.context;
@@ -42,6 +46,8 @@ public class MercadoPagoCheckout {
         this.servicePreference = builder.servicePreference;
         this.flowPreference = builder.flowPreference;
         this.paymentData = builder.paymentData;
+        this.binaryMode = builder.binaryMode;
+        this.maxSavedCards = builder.maxSavedCards;
         CustomReviewablesHandler.getInstance().clear();
         CustomReviewablesHandler.getInstance().add(builder.reviewables);
     }
@@ -58,7 +64,7 @@ public class MercadoPagoCheckout {
         }
         if(CallbackHolder.getInstance().hasPaymentCallback()
                 && !this.checkoutPreference.hasId()
-                && !this.servicePreference.hasCreatePaymentURL()) {
+                && (this.servicePreference == null || !this.servicePreference.hasCreatePaymentURL())) {
             throw new IllegalStateException("Payment service or preference created with private key required to create a payment");
         }
         if(!CallbackHolder.getInstance().hasPaymentCallback()
@@ -94,12 +100,17 @@ public class MercadoPagoCheckout {
         checkoutIntent.putExtra("servicePreference", JsonUtil.getInstance().toJson(servicePreference));
         checkoutIntent.putExtra("flowPreference", JsonUtil.getInstance().toJson(flowPreference));
         checkoutIntent.putExtra("paymentData", JsonUtil.getInstance().toJson(paymentData));
+        checkoutIntent.putExtra("discount", JsonUtil.getInstance().toJson(discount));
+        checkoutIntent.putExtra("binaryMode", binaryMode);
+        checkoutIntent.putExtra("maxSavedCards", maxSavedCards);
         context.startActivity(checkoutIntent);
     }
 
     public static class Builder {
         private Context context;
         private String publicKey;
+        private Boolean binaryMode = false;
+        private Integer maxSavedCards;
         private CheckoutPreference checkoutPreference;
         private DecorationPreference decorationPreference;
         private ServicePreference servicePreference;
@@ -135,6 +146,16 @@ public class MercadoPagoCheckout {
 
         public Builder setFlowPreference(FlowPreference flowPreference) {
             this.flowPreference = flowPreference;
+            return this;
+        }
+
+        public Builder setMaxSavedCards(Integer maxSavedCards) {
+            this.maxSavedCards = maxSavedCards;
+            return this;
+        }
+
+        public Builder enableBinaryMode() {
+            this.binaryMode = true;
             return this;
         }
 

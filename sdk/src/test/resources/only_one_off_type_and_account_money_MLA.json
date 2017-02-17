@@ -1,0 +1,115 @@
+{
+    "groups":[
+        {
+            "id":"ticket",
+            "type":"group",
+            "description":"Cash payment",
+            "comment":null,
+            "children":[
+                {
+                    "id":"pagofacil",
+                    "type":"payment_method",
+                    "description":"Pago Fácil",
+                    "comment":"It will be accredited instantly",
+                    "children":null,
+                    "children_header":null,
+                    "show_icon":true
+                },
+                {
+                    "id":"rapipago",
+                    "type":"payment_method",
+                    "description":"Rapipago",
+                    "comment":"It will be accredited instantly",
+                    "children":null,
+                    "children_header":null,
+                    "show_icon":true
+                },
+                {
+                    "id":"cargavirtual",
+                    "type":"payment_method",
+                    "description":"Kioscos y comercios cercanos",
+                    "comment":"It will be accredited instantly",
+                    "children":null,
+                    "children_header":null,
+                    "show_icon":true
+                }
+            ],
+            "children_header":"Where do you want to pay?",
+            "show_icon":true
+        }
+    ],
+    "custom_options":[
+        {
+            "description":"Dinero en cuenta de Mercado Pago",
+            "id":"account_money",
+            "payment_type_id":"account_money",
+            "payment_method_id":"account_money"
+        }
+    ],
+    "payment_methods":[
+        {
+            "id":"bapropagos",
+            "name":"Provincia Pagos",
+            "payment_type_id":"ticket",
+            "status":"active",
+            "secure_thumbnail":"https://www.mercadopago.com/org-img/MP3/API/logos/bapropagos.gif",
+            "thumbnail":"http://img.mlstatic.com/org-img/MP3/API/logos/bapropagos.gif",
+            "deferred_capture":"does_not_apply",
+            "settings":[
+
+            ],
+            "additional_info_needed":[
+
+            ],
+            "min_allowed_amount":0.01,
+            "max_allowed_amount":60000,
+            "accreditation_time":10080,
+            "financial_institutions":[
+
+            ]
+        },
+        {
+            "id":"pagofacil",
+            "name":"Pago Fácil",
+            "payment_type_id":"ticket",
+            "status":"active",
+            "secure_thumbnail":"https://www.mercadopago.com/org-img/MP3/API/logos/pagofacil.gif",
+            "thumbnail":"http://img.mlstatic.com/org-img/MP3/API/logos/pagofacil.gif",
+            "deferred_capture":"does_not_apply",
+            "settings":[
+
+            ],
+            "additional_info_needed":[
+
+            ],
+            "min_allowed_amount":2,
+            "max_allowed_amount":5000,
+            "accreditation_time":10080,
+            "financial_institutions":[
+
+            ]
+        },
+        {
+            "id":"rapipago",
+            "name":"Rapipago",
+            "payment_type_id":"ticket",
+            "status":"active",
+            "secure_thumbnail":"https://www.mercadopago.com/org-img/MP3/API/logos/rapipago.gif",
+            "thumbnail":"http://img.mlstatic.com/org-img/MP3/API/logos/rapipago.gif",
+            "deferred_capture":"does_not_apply",
+            "settings":[
+
+            ],
+            "additional_info_needed":[
+
+            ],
+            "min_allowed_amount":0.01,
+            "max_allowed_amount":60000,
+            "accreditation_time":10080,
+            "financial_institutions":[
+
+            ]
+        }
+    ],
+    "account_money":null
+}

@@ -97,7 +97,7 @@ public class MercadoPagoComponents {
             private PaymentMethodSearch paymentMethodSearch;
             private String payerAccessToken;
             private Boolean accountMoneyEnabled;
-            private String maxSavedCards;
+            private Integer maxSavedCards;
             private String payerEmail;
             private boolean discountEnabled;
             private Discount discount;
@@ -178,7 +178,7 @@ public class MercadoPagoComponents {
                 return this;
             }
 
-            public PaymentVaultActivityBuilder setMaxSavedCards(String maxSavedCards) {
+            public PaymentVaultActivityBuilder setMaxSavedCards(Integer maxSavedCards) {
                 this.maxSavedCards = maxSavedCards;
                 return this;
             }

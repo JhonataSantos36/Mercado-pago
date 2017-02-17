@@ -100,6 +100,7 @@ public class CheckoutActivity extends MercadoPagoBaseActivity {
     protected PaymentDataCallback mPaymentDataCallback;
     protected PaymentData mPaymentDataInput;
     protected FailureRecovery mFailureRecovery;
+    protected Integer mMaxSavedCards;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,7 +127,8 @@ public class CheckoutActivity extends MercadoPagoBaseActivity {
         mServicePreference = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("servicePreference"), ServicePreference.class);
         mCheckoutPreference = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("checkoutPreference"), CheckoutPreference.class);
         mCongratsDisplay = this.getIntent().getIntExtra("congratsDisplay", -1);
-        mBinaryModeEnabled = this.getIntent().getBooleanExtra("binaryModeEnabled", false);
+        mBinaryModeEnabled = this.getIntent().getBooleanExtra("binaryMode", false);
+        mMaxSavedCards = this.getIntent().getIntExtra("maxSavedCards", 0);
         mDiscount = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("discount"), Discount.class);
         mDecorationPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("decorationPreference"), DecorationPreference.class);
         mDiscountEnabled = this.getIntent().getBooleanExtra("discountEnabled", true);
@@ -327,6 +329,7 @@ public class CheckoutActivity extends MercadoPagoBaseActivity {
                 .setPaymentPreference(mCheckoutPreference.getPaymentPreference())
                 .setDecorationPreference(mDecorationPreference)
                 .setCards(mSavedCards)
+                .setMaxSavedCards(mMaxSavedCards)
                 .setPayerAccessToken(mCheckoutPreference.getPayer().getAccessToken())
                 .startActivity();
     }

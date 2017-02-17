@@ -17,8 +17,10 @@ import com.mercadopago.model.Site;
 import com.mercadopago.mvp.OnResourcesRetrievedCallback;
 import com.mercadopago.presenters.PaymentVaultPresenter;
 import com.mercadopago.providers.PaymentVaultProvider;
-import com.mercadopago.utils.PaymentMethodSearchs;
+import com.mercadopago.mocks.PaymentMethodSearchs;
 import com.mercadopago.views.PaymentVaultView;
+
+import junit.framework.Assert;
 
 import org.junit.Test;
 
@@ -466,6 +468,48 @@ public class PaymentVaultPresenterTest {
         presenter.initialize();
 
         assertEquals(MockedProvider.INVALID_MAX_INSTALLMENTS, mockedView.errorShown.getMessage());
+    }
+
+    @Test
+    public void ifMaxSavedCardNotSetDoNotLimitCardsShown() {
+        MockedView mockedView = new MockedView();
+        MockedProvider provider = new MockedProvider();
+
+        PaymentMethodSearch paymentMethodSearch = PaymentMethodSearchs.getCompletePaymentMethodSearchMLA();
+        provider.setResponse(paymentMethodSearch);
+
+        PaymentVaultPresenter presenter = new PaymentVaultPresenter();
+        presenter.attachView(mockedView);
+        presenter.attachResourcesProvider(provider);
+
+        presenter.setAmount(BigDecimal.TEN);
+        presenter.setSite(Sites.ARGENTINA);
+
+        presenter.initialize();
+
+        Assert.assertEquals(paymentMethodSearch.getCustomSearchItems().size(), mockedView.customOptionsShown.size());
+    }
+
+    @Test
+    public void ifMaxSavedCardLimitCardsShown() {
+        MockedView mockedView = new MockedView();
+        MockedProvider provider = new MockedProvider();
+
+        PaymentMethodSearch paymentMethodSearch = PaymentMethodSearchs.getCompletePaymentMethodSearchMLA();
+        provider.setResponse(paymentMethodSearch);
+
+        PaymentVaultPresenter presenter = new PaymentVaultPresenter();
+        presenter.attachView(mockedView);
+        presenter.attachResourcesProvider(provider);
+
+        presenter.setAmount(BigDecimal.TEN);
+        presenter.setSite(Sites.ARGENTINA);
+        presenter.setMaxSavedCards(1);
+
+        presenter.initialize();
+
+        //Account money + 1 card
+        Assert.assertEquals(2, mockedView.customOptionsShown.size());
     }
 
     private class MockedProvider implements PaymentVaultProvider {
