@@ -11,6 +11,7 @@ import java.util.List;
 public class CustomReviewablesHandler {
     private static CustomReviewablesHandler mInstance;
     private List<Reviewable> reviewables;
+    private Reviewable itemsReview;
 
     private CustomReviewablesHandler(){
         reviewables = new ArrayList<>();
@@ -36,6 +37,19 @@ public class CustomReviewablesHandler {
     }
 
     public void clear() {
+        itemsReview = null;
         reviewables = new ArrayList<>();
+    }
+
+    public void setItemsReview(Reviewable itemsReview) {
+        this.itemsReview = itemsReview;
+    }
+
+    public boolean hasCustomItemsReviewable() {
+        return itemsReview != null;
+    }
+
+    public Reviewable getItemsReviewable() {
+        return itemsReview;
     }
 }

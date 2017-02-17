@@ -11,12 +11,13 @@ import android.widget.ImageView;
 
 import com.mercadopago.R;
 import com.mercadopago.callbacks.OnReviewChange;
+import com.mercadopago.constants.ReviewKeys;
 import com.mercadopago.constants.Sites;
 import com.mercadopago.customviews.MPTextView;
-import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.Reviewable;
 import com.mercadopago.model.Site;
+import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.util.CircleTransform;
 import com.mercadopago.util.CurrenciesUtil;
 import com.mercadopago.util.ReviewUtil;
@@ -46,12 +47,12 @@ public class ReviewPaymentOffView extends Reviewable {
     private BigDecimal mAmount;
     private Site mSite;
     private OnReviewChange mOnReviewChange;
-    private Boolean mIsUniquePaymentMethod;
+    private Boolean mEditionEnabled;
     private DecorationPreference mDecorationPreference;
     private ViewGroup mPaymentMethodExtraInfo;
 
     public ReviewPaymentOffView(Context context, PaymentMethod paymentMethod, String extraInfo, BigDecimal amount, Site site, OnReviewChange onReviewChange,
-                                Boolean uniquePaymentMethod,
+                                Boolean editionEnabled,
                                 DecorationPreference decorationPreference) {
         this.mContext = context;
         this.mPaymentMethod = paymentMethod;
@@ -59,7 +60,7 @@ public class ReviewPaymentOffView extends Reviewable {
         this.mAmount = amount;
         this.mSite = site;
         this.mOnReviewChange = onReviewChange;
-        this.mIsUniquePaymentMethod = uniquePaymentMethod == null ? false : mIsUniquePaymentMethod;
+        this.mEditionEnabled = editionEnabled == null ? true : editionEnabled;
         this.mDecorationPreference = decorationPreference;
     }
 
@@ -91,8 +92,8 @@ public class ReviewPaymentOffView extends Reviewable {
                 mOnReviewChange.onChangeSelected();
             }
         });
-        if (mIsUniquePaymentMethod) {
-            mChangePaymentButton.setVisibility(View.GONE);
+        if (mEditionEnabled) {
+            mChangePaymentButton.setVisibility(View.VISIBLE);
         }
     }
 
@@ -140,4 +141,8 @@ public class ReviewPaymentOffView extends Reviewable {
         }
     }
 
+    @Override
+    public String getKey() {
+        return ReviewKeys.PAYMENT_METHODS;
+    }
 }

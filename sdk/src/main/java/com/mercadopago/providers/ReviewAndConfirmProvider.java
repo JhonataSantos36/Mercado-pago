@@ -23,7 +23,13 @@ public interface ReviewAndConfirmProvider extends ResourcesProvider {
 
     Reviewable getItemsReviewable(String currency, List<Item> items);
 
-    Reviewable getPaymentMethodOnReviewable(PaymentMethod paymentMethod, PayerCost payerCost, CardInfo cardInfo, Site site, DecorationPreference decorationPreference, OnReviewChange reviewChange);
+    Reviewable getPaymentMethodOnReviewable(PaymentMethod paymentMethod, PayerCost payerCost, CardInfo cardInfo, Site site, DecorationPreference decorationPreference, Boolean editionEnabled, OnReviewChange reviewChange);
 
-    Reviewable getPaymentMethodOffReviewable(PaymentMethod paymentMethod, String extraPaymentMethodInfo, BigDecimal amount, Site site, DecorationPreference decorationPreference, OnReviewChange reviewChange);
+    Reviewable getPaymentMethodOffReviewable(PaymentMethod paymentMethod, String extraPaymentMethodInfo, BigDecimal amount, Site site, DecorationPreference decorationPreference, Boolean editionEnabled, OnReviewChange reviewChange);
+
+    String getReviewTitle();
+
+    String getConfirmationMessage();
+
+    String getCancelMessage();
 }

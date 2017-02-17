@@ -10,12 +10,13 @@ import android.widget.LinearLayout;
 
 import com.mercadopago.R;
 import com.mercadopago.callbacks.OnConfirmPaymentCallback;
+import com.mercadopago.constants.ReviewKeys;
 import com.mercadopago.customviews.MPTextView;
-import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.model.Discount;
 import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.Reviewable;
+import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.uicontrollers.payercosts.PayerCostColumn;
 import com.mercadopago.util.CurrenciesUtil;
 import com.mercadopago.util.MercadoPagoUtil;
@@ -30,6 +31,7 @@ public class ReviewSummaryView extends Reviewable {
 
     public static final String TEA = "TEA ";
     public static final String CFT = "CFT ";
+
     protected View mView;
     protected LinearLayout mProductsRow;
     protected LinearLayout mDiscountsRow;
@@ -51,17 +53,23 @@ public class ReviewSummaryView extends Reviewable {
     protected OnConfirmPaymentCallback mCallback;
 
     protected Context mContext;
+    protected String mProductDetailText;
+    protected String mDiscountDetailText;
+    protected String mConfirmationMessage;
     protected String mCurrencyId;
     protected BigDecimal mAmount;
-
     protected PayerCost mPayerCost;
     protected PaymentMethod mPaymentMethod;
     protected DecorationPreference mDecorationPreference;
     protected Discount mDiscount;
+    protected MPTextView mProductsLabelText;
 
-    public ReviewSummaryView(Context context, PaymentMethod paymentMethod, PayerCost payerCost, BigDecimal amount, Discount discount, String currency, DecorationPreference decorationPreference, OnConfirmPaymentCallback callback) {
+    public ReviewSummaryView(Context context, String confirmationMessage, String productDetailText, String discountDetailText, PaymentMethod paymentMethod, PayerCost payerCost, BigDecimal amount, Discount discount, String currencyId, DecorationPreference decorationPreference, OnConfirmPaymentCallback callback) {
         this.mContext = context;
-        this.mCurrencyId = currency;
+        this.mConfirmationMessage = confirmationMessage;
+        this.mProductDetailText = productDetailText;
+        this.mDiscountDetailText = discountDetailText;
+        this.mCurrencyId = currencyId;
         this.mAmount = amount;
         this.mPayerCost = payerCost;
         this.mPaymentMethod = paymentMethod;
@@ -78,6 +86,7 @@ public class ReviewSummaryView extends Reviewable {
         mPayerCostRow = (LinearLayout) mView.findViewById(R.id.mpsdkReviewSummaryPay);
         mTotalRow = (LinearLayout) mView.findViewById(R.id.mpsdkReviewSummaryTotal);
         mProductsText = (MPTextView) mView.findViewById(R.id.mpsdkReviewSummaryProductsText);
+        mProductsLabelText = (MPTextView) mView.findViewById(R.id.mpsdkReviewSummaryProductsLabelText);
         mDiscountPercentageText = (MPTextView) mView.findViewById(R.id.mpsdkReviewSummaryDiscountPercentage);
         mDiscountsText = (MPTextView) mView.findViewById(R.id.mpsdkReviewSummaryDiscountsText);
         mSubtotalText = (MPTextView) mView.findViewById(R.id.mpsdkReviewSummarySubtotalText);
@@ -114,7 +123,9 @@ public class ReviewSummaryView extends Reviewable {
     public void draw() {
         decorateButton();
         //Products
+        mConfirmTextView.setText(mConfirmationMessage);
         mProductsText.setText(getFormattedAmount(mAmount));
+        mProductsLabelText.setText(mProductDetailText);
         //Discounts
         if (hasDiscount()) {
             showDiscountRow();
@@ -163,16 +174,8 @@ public class ReviewSummaryView extends Reviewable {
     private void showDiscountRow() {
         StringBuilder formattedAmountBuilder = new StringBuilder();
         Spanned amountText;
-        String discountText;
 
-        if (mDiscount.hasPercentOff()) {
-            discountText = mContext.getResources().getString(R.string.mpsdk_review_summary_discount_with_percent_off,
-                    String.valueOf(mDiscount.getPercentOff()));
-        } else {
-            discountText = mContext.getResources().getString(R.string.mpsdk_review_summary_discount_with_amount_off);
-        }
-
-        mDiscountPercentageText.setText(discountText);
+        mDiscountPercentageText.setText(mDiscountDetailText);
 
         formattedAmountBuilder.append("-");
         formattedAmountBuilder.append(CurrenciesUtil.formatNumber(mDiscount.getCouponAmount(), mCurrencyId));
@@ -214,5 +217,10 @@ public class ReviewSummaryView extends Reviewable {
             ans = mAmount.subtract(mDiscount.getCouponAmount());
         }
         return ans;
+    }
+
+    @Override
+    public String getKey() {
+        return ReviewKeys.SUMMARY;
     }
 }

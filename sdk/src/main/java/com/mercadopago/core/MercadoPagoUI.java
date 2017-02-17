@@ -434,61 +434,7 @@ public class MercadoPagoUI {
             }
         }
 
-        public static class SummaryViewBuilder {
-            private Context context;
-            private String currencyId;
-            private BigDecimal amount;
-            private PayerCost payerCost;
-            private PaymentMethod paymentMethod;
-            private DecorationPreference decorationPreference;
-            private OnConfirmPaymentCallback callback;
-            private Discount discount;
 
-
-            public SummaryViewBuilder setContext(Context context) {
-                this.context = context;
-                return this;
-            }
-
-            public SummaryViewBuilder setCurrencyId(String currencyId) {
-                this.currencyId = currencyId;
-                return this;
-            }
-
-            public SummaryViewBuilder setAmount(BigDecimal amount) {
-                this.amount = amount;
-                return this;
-            }
-
-            public SummaryViewBuilder setPayerCost(PayerCost payerCost) {
-                this.payerCost = payerCost;
-                return this;
-            }
-
-            public SummaryViewBuilder setPaymentMethod(PaymentMethod paymentMethod) {
-                this.paymentMethod = paymentMethod;
-                return this;
-            }
-
-            public SummaryViewBuilder setDiscount(Discount discount) {
-                this.discount = discount;
-                return this;
-            }
-
-            public SummaryViewBuilder setDecorationPreference(DecorationPreference decorationPreference) {
-                this.decorationPreference = decorationPreference;
-                return this;
-            }
-
-            public SummaryViewBuilder setConfirmPaymentCallback(OnConfirmPaymentCallback callback) {
-                this.callback = callback;
-                return this;
-            }
-
-            public ReviewSummaryView build() {
-                return new ReviewSummaryView(context, paymentMethod, payerCost, amount, discount, currencyId, decorationPreference, callback);
-            }
-        }
         public static class ReviewItemsViewBuilder {
             private Context context;
             private String currencyId;

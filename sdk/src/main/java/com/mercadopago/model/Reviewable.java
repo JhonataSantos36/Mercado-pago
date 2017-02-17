@@ -1,6 +1,7 @@
 package com.mercadopago.model;
 
 import com.mercadopago.callbacks.ReviewableCallback;
+import com.mercadopago.constants.ReviewKeys;
 import com.mercadopago.uicontrollers.CustomViewController;
 
 /**
@@ -10,6 +11,7 @@ public abstract class Reviewable implements CustomViewController {
 
     public ReviewSubscriber reviewSubscriber;
     public ReviewableCallback reviewableCallback;
+    private String key;
 
     public abstract void draw();
 
@@ -25,9 +27,17 @@ public abstract class Reviewable implements CustomViewController {
         this.reviewSubscriber = subscriber;
     }
 
+    public String getKey() {
+        return ReviewKeys.DEFAULT;
+    }
+
     public void notifyChangeRequired() {
         if(this.reviewSubscriber != null) {
             reviewSubscriber.changeRequired(this);
         }
+    }
+
+    public void setKey(String key) {
+        this.key = key;
     }
 }

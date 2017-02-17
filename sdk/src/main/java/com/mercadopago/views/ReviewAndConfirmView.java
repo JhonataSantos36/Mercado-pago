@@ -18,4 +18,12 @@ public interface ReviewAndConfirmView extends MvpView {
     void confirmPayment();
 
     void cancelPayment();
+
+    void showTitle(String title);
+
+    void showConfirmationMessage(String message);
+
+    void showCancelMessage(String message);
+
+    void showTermsAndConditions();
 }

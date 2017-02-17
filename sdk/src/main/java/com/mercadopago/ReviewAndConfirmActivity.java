@@ -11,7 +11,6 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.NestedScrollView;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -21,29 +20,30 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 import com.mercadopago.adapters.ReviewablesAdapter;
+import com.mercadopago.constants.ReviewKeys;
 import com.mercadopago.constants.Sites;
 import com.mercadopago.controllers.CheckoutTimer;
 import com.mercadopago.customviews.MPTextView;
-import com.mercadopago.model.CardInfo;
-import com.mercadopago.model.Token;
-import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.model.Discount;
 import com.mercadopago.model.Item;
 import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.Reviewable;
 import com.mercadopago.model.Site;
+import com.mercadopago.model.Token;
 import com.mercadopago.observers.TimerObserver;
+import com.mercadopago.preferences.DecorationPreference;
+import com.mercadopago.preferences.ReviewScreenPreference;
 import com.mercadopago.presenters.ReviewAndConfirmPresenter;
 import com.mercadopago.providers.ReviewAndConfirmProviderImpl;
 import com.mercadopago.uicontrollers.FontCache;
 import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
-import com.mercadopago.util.LayoutUtil;
 import com.mercadopago.views.ReviewAndConfirmView;
 
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -75,15 +75,16 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
 
     protected ReviewAndConfirmPresenter mPresenter;
     protected DecorationPreference mDecorationPreference;
+    protected ReviewScreenPreference mReviewScreenPreference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getDecorationPreference();
+        getUIPreferences();
         createPresenter();
         getActivityParameters();
         mPresenter.attachView(this);
-        mPresenter.attachResourcesProvider(new ReviewAndConfirmProviderImpl(this));
+        mPresenter.attachResourcesProvider(new ReviewAndConfirmProviderImpl(this, mReviewScreenPreference));
 
         if (mDecorationPreference != null && mDecorationPreference.hasColors()) {
             setTheme(R.style.Theme_MercadoPagoTheme_NoActionBar);
@@ -124,6 +125,8 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
 
     private void getActivityParameters() {
 
+        Boolean termsAndConditionsEnabled = getIntent().getBooleanExtra("termsAndConditionsEnabled", true);
+        Boolean editionEnabled = getIntent().getBooleanExtra("editionEnabled", true);
         BigDecimal amount = new BigDecimal(getIntent().getStringExtra("amount"));
         Discount discount = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("discount"), Discount.class);
         PayerCost payerCost = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("payerCost"), PayerCost.class);
@@ -149,8 +152,15 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
         mPresenter.setToken(token);
         mPresenter.setPaymentMethod(paymentMethod);
         mPresenter.setExtraPaymentMethodInfo(extraPaymentMethodInfo);
-
+        mPresenter.setEditionEnabled(editionEnabled);
         mPresenter.setDecorationPreference(mDecorationPreference);
+        mPresenter.setTermsAndConditionsEnabled(termsAndConditionsEnabled);
+
+        if (mReviewScreenPreference == null || !mReviewScreenPreference.hasReviewOrder()) {
+            mPresenter.setReviewOrder(getDefaultOrder());
+        } else {
+            mPresenter.setReviewOrder(mReviewScreenPreference.getReviewOrder());
+        }
     }
 
     private void initializeControls() {
@@ -168,7 +178,6 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
         mReviewables = (RecyclerView) findViewById(R.id.mpsdkReviewablesRecyclerView);
 
         initializeToolbar();
-        setToolbarTitle();
         decorateButtons();
     }
 
@@ -176,7 +185,6 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
         mReviewables = (RecyclerView) findViewById(R.id.mpsdkReviewablesRecyclerView);
         mReviewables.setNestedScrollingEnabled(false);
         mReviewables.setLayoutManager(new LinearLayoutManager(this));
-        mReviewables.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.HORIZONTAL));
     }
 
     private void setTimerColor() {
@@ -214,18 +222,6 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
         });
     }
 
-    private void setToolbarTitle() {
-        LayoutUtil.showRegularLayout(this);
-        mCollapsingToolbar.setTitle(getString(R.string.mpsdk_activity_checkout_title));
-        if (mDecorationPreference != null && mDecorationPreference.hasColors()) {
-            mCollapsingToolbar.setExpandedTitleColor(mDecorationPreference.getBaseColor());
-            mCollapsingToolbar.setCollapsedTitleTextColor(mDecorationPreference.getBaseColor());
-        } else {
-            mCollapsingToolbar.setExpandedTitleColor(ContextCompat.getColor(this, R.color.mpsdk_background_blue));
-            mCollapsingToolbar.setCollapsedTitleTextColor(ContextCompat.getColor(this, R.color.mpsdk_background_blue));
-        }
-    }
-
     private void showTimer() {
         if (CheckoutTimer.getInstance().isTimerEnabled()) {
             CheckoutTimer.getInstance().addObserver(this);
@@ -241,10 +237,12 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
         startActivity(termsAndConditionsIntent);
     }
 
-    private void getDecorationPreference() {
+    private void getUIPreferences() {
         if (getIntent().getStringExtra("decorationPreference") != null) {
             mDecorationPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("decorationPreference"), DecorationPreference.class);
         }
+        mReviewScreenPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("reviewScreenPreference"), ReviewScreenPreference.class);
+
     }
 
     protected boolean isCustomColorSet() {
@@ -305,6 +303,33 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
     }
 
     @Override
+    public void showTitle(String title) {
+        mCollapsingToolbar.setTitle(title);
+        if (mDecorationPreference != null && mDecorationPreference.hasColors()) {
+            mCollapsingToolbar.setExpandedTitleColor(mDecorationPreference.getBaseColor());
+            mCollapsingToolbar.setCollapsedTitleTextColor(mDecorationPreference.getBaseColor());
+        } else {
+            mCollapsingToolbar.setExpandedTitleColor(ContextCompat.getColor(this, R.color.mpsdk_background_blue));
+            mCollapsingToolbar.setCollapsedTitleTextColor(ContextCompat.getColor(this, R.color.mpsdk_background_blue));
+        }
+    }
+
+    @Override
+    public void showConfirmationMessage(String message) {
+        mConfirmTextButton.setText(message);
+    }
+
+    @Override
+    public void showCancelMessage(String message) {
+        mCancelTextView.setText(message);
+    }
+
+    @Override
+    public void showTermsAndConditions() {
+        mTermsAndConditionsButton.setVisibility(View.VISIBLE);
+    }
+
+    @Override
     public void onTimeChanged(String timeToShow) {
         mTimerTextView.setText(timeToShow);
     }
@@ -345,4 +370,12 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
         finish();
     }
 
+    private List<String> getDefaultOrder() {
+        return new ArrayList<String>() {{
+            add(ReviewKeys.SUMMARY);
+            add(ReviewKeys.ITEMS);
+            add(ReviewKeys.PAYMENT_METHODS);
+            add(ReviewKeys.DEFAULT);
+        }};
+    }
 }

@@ -185,24 +185,27 @@ public class CheckoutPreference {
     }
 
     public Integer getMaxInstallments() {
-        if (paymentPreference != null)
+        if (paymentPreference != null) {
             return paymentPreference.getMaxInstallments();
-        else
+        } else {
             return null;
+        }
     }
 
     public Integer getDefaultInstallments() {
-        if (paymentPreference != null)
+        if (paymentPreference != null) {
             return paymentPreference.getDefaultInstallments();
-        else
+        } else {
             return null;
+        }
     }
 
     public List<String> getExcludedPaymentMethods() {
-        if (paymentPreference != null)
+        if (paymentPreference != null) {
             return paymentPreference.getExcludedPaymentMethodIds();
-        else
+        } else {
             return null;
+        }
     }
 
     public List<String> getExcludedPaymentTypes() {
@@ -213,10 +216,11 @@ public class CheckoutPreference {
     }
 
     public String getDefaultPaymentMethodId() {
-        if (paymentPreference != null)
+        if (paymentPreference != null) {
             return paymentPreference.getDefaultPaymentMethodId();
-        else
+        } else {
             return null;
+        }
     }
 
     public PaymentPreference getPaymentPreference() {
@@ -255,32 +259,44 @@ public class CheckoutPreference {
         }
 
         public Builder addItem(Item item) {
-            this.items.add(item);
+            if (item != null) {
+                this.items.add(item);
+            }
             return this;
         }
 
         public Builder addItems(List<Item> items) {
-            this.items.addAll(items);
+            if (items != null) {
+                this.items.addAll(items);
+            }
             return this;
         }
 
         public Builder addExcludedPaymentMethod(String paymentMethodId) {
-            this.excludedPaymentMethods.add(paymentMethodId);
+            if (paymentMethodId != null) {
+                this.excludedPaymentMethods.add(paymentMethodId);
+            }
             return this;
         }
 
         public Builder addExcludedPaymentMethods(List<String> paymentMethodIds) {
-            this.excludedPaymentMethods.addAll(paymentMethodIds);
+            if (paymentMethodIds != null) {
+                this.excludedPaymentMethods.addAll(paymentMethodIds);
+            }
             return this;
         }
 
         public Builder addExcludedPaymentType(String paymentTypeId) {
-            this.excludedPaymentTypes.add(paymentTypeId);
+            if (paymentTypeId != null) {
+                this.excludedPaymentTypes.add(paymentTypeId);
+            }
             return this;
         }
 
         public Builder addExcludedPaymentTypes(List<String> paymentTypeIds) {
-            this.excludedPaymentTypes.addAll(paymentTypeIds);
+            if (paymentTypeIds != null) {
+                this.excludedPaymentTypes.addAll(paymentTypeIds);
+            }
             return this;
         }
 
@@ -328,7 +344,7 @@ public class CheckoutPreference {
             if (items == null || items.isEmpty()) throw new IllegalStateException("Items required");
             if (localPreferenceSite == null) throw new IllegalStateException("Site is required");
 
-            if(excludeAccountMoney) {
+            if (excludeAccountMoney) {
                 addExcludedPaymentType(PaymentTypes.ACCOUNT_MONEY);
             }
 

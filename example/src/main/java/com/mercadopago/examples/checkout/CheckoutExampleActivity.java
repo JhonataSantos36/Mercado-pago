@@ -14,8 +14,8 @@ import android.widget.Toast;
 
 import com.mercadopago.callbacks.Callback;
 import com.mercadopago.callbacks.PaymentCallback;
+import com.mercadopago.callbacks.PaymentDataCallback;
 import com.mercadopago.callbacks.ReviewableCallback;
-import com.mercadopago.constants.Sites;
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.core.MercadoPagoCheckout;
 import com.mercadopago.core.MerchantServer;
@@ -25,12 +25,11 @@ import com.mercadopago.examples.utils.ColorPickerDialog;
 import com.mercadopago.examples.utils.ExamplesUtils;
 import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.model.ApiException;
-import com.mercadopago.model.Item;
 import com.mercadopago.model.PaymentData;
 import com.mercadopago.preferences.CheckoutPreference;
 import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.model.Payment;
-import com.mercadopago.preferences.FlowPreference;
+import com.mercadopago.preferences.ReviewScreenPreference;
 import com.mercadopago.preferences.ServicePreference;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;
@@ -106,10 +105,6 @@ public class CheckoutExampleActivity extends AppCompatActivity {
         additionalInfo.put("company_id", "movistar");
         additionalInfo.put("phone_number", "111111");
 
-        ServicePreference servicePreference = new ServicePreference.Builder()
-                .setCreatePaymentURL("http://private-4d9654-mercadopagoexamples.apiary-mock.com", "create_payment", additionalInfo)
-                .build();
-
         CellphoneReview cellphoneReview = new CellphoneReview(this, "15111111");
         cellphoneReview.setReviewableCallback(new ReviewableCallback() {
             @Override
@@ -120,43 +115,32 @@ public class CheckoutExampleActivity extends AppCompatActivity {
             }
         });
 
+        ReviewScreenPreference reviewScreenPreference = new ReviewScreenPreference.Builder()
+                .setTitle("Confirma tu recarga")
+                .setConfirmText("Recargar")
+                .setCancelText("Ir a Actividad")
+                .setProductDetail("Recarga")
+                .addReviewable(cellphoneReview)
+                .build();
 
         DecorationPreference decorationPreference = new DecorationPreference.Builder()
                 .setCustomFont("fonts/Merriweather-Light.ttf")
                 .build();
 
-
-        CheckoutPreference localCheckoutPreference = new CheckoutPreference.Builder()
-                .setSite(Sites.ARGENTINA)
-                .addItem(new Item("Recarga Movistar", BigDecimal.ONE))
-                .build();
-
         new MercadoPagoCheckout.Builder()
                 .setContext(this)
                 .setPublicKey(mPublicKey)
-                .setDecorationPreference(decorationPreference)
-                .setCheckoutPreference(localCheckoutPreference)
-                .setServicePreference(servicePreference)
-                .addReviewable(cellphoneReview)
-                .start(new PaymentCallback() {
+                .setCheckoutPreference(mCheckoutPreference)
+                .setReviewScreenPreference(reviewScreenPreference)
+                .start(new PaymentDataCallback() {
                     @Override
-                    public void onSuccess(Payment payment) {
-                        //Done!
-                        Log.d("log", "success");
-                        Log.d("log", payment.getStatus());
-                    }
+                    public void onSuccess(PaymentData paymentData) {}
 
                     @Override
-                    public void onCancel() {
-                        //User canceled
-                        Log.d("log", "cancel");
-                    }
+                    public void onCancel() {}
 
                     @Override
-                    public void onFailure(MercadoPagoError exception) {
-                        //Failure in checkout
-                        Log.d("log", "failure");
-                    }
+                    public void onFailure(MercadoPagoError exception) {}
                 });
     }
 
@@ -187,13 +171,6 @@ public class CheckoutExampleActivity extends AppCompatActivity {
                 .setCustomFont("fonts/Merriweather-Light.ttf")
                 .build();
 
-        CheckoutPreference checkoutPreference = new CheckoutPreference.Builder()
-                .setSite(Sites.ARGENTINA)
-                .setPayerAccessToken("TEST-7176766875549918-111008-fa5660d2d0aa37532716eb2bf2f9089b__LB_LC__-192992930")
-                .addItem(new Item("Recarga Movistar", BigDecimal.TEN))
-                .enableAccountMoney()
-                .build();
-
         ServicePreference servicePreference = new ServicePreference.Builder()
                 .setCreatePaymentURL("http://private-4d9654-mercadopagoexamples.apiary-mock.com", "create_payment", additionalInfo)
                 .build();
@@ -208,14 +185,21 @@ public class CheckoutExampleActivity extends AppCompatActivity {
             }
         });
 
+        ReviewScreenPreference reviewScreenPreference = new ReviewScreenPreference.Builder()
+                .setTitle("Confirma tu recarga")
+                .setConfirmText("Recargar")
+                .setCancelText("Ir a Actividad")
+                .setProductDetail("Recarga")
+                .addReviewable(cellphoneReview)
+                .build();
+
         new MercadoPagoCheckout.Builder()
                 .setContext(this)
                 .setPublicKey(mPublicKey)
-                .setCheckoutPreference(checkoutPreference)
-                .setServicePreference(servicePreference)
-                .setPaymentData(mPaymentData)
+                .setCheckoutPreference(mCheckoutPreference)
                 .setDecorationPreference(decorationPreference)
-                .addReviewable(cellphoneReview)
+                .setReviewScreenPreference(reviewScreenPreference)
+                .setPaymentData(mPaymentData)
                 .start(new PaymentCallback() {
                     @Override
                     public void onSuccess(Payment payment) {

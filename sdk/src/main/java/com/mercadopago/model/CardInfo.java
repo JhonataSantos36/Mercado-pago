@@ -6,7 +6,7 @@ package com.mercadopago.model;
 
 public class CardInfo {
 
-    private int cardNumberLength;
+    private Integer cardNumberLength;
     private String lastFourDigits;
     private String firstSixDigits;
 
@@ -23,8 +23,6 @@ public class CardInfo {
     }
 
     public CardInfo(Card card) {
-        //TODO completar
-        this.cardNumberLength = 0;
         this.lastFourDigits = card.getLastFourDigits();
         this.firstSixDigits = card.getFirstSixDigits();
     }
@@ -34,7 +32,7 @@ public class CardInfo {
                 && token.getFirstSixDigits() != null;
     }
 
-    public int getCardNumberLength() {
+    public Integer getCardNumberLength() {
         return cardNumberLength;
     }
 
