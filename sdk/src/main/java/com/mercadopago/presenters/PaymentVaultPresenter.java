@@ -39,7 +39,6 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
     private String mPayerEmail;
     private PaymentPreference mPaymentPreference;
     private BigDecimal mAmount;
-    private Boolean mAccountMoneyEnabled = false;
     private Boolean mDiscountEnabled = true;
     private Integer mMaxSavedCards;
 
@@ -231,7 +230,7 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
     }
 
     private boolean isOnlyAccountMoneyEnabled() {
-        return mAccountMoneyEnabled
+        return mPaymentMethodSearch.hasCustomSearchItems()
                 && mPaymentMethodSearch.getCustomSearchItems().size() == 1
                 && mPaymentMethodSearch.getCustomSearchItems().get(0).getId().equals(ACCOUNT_MONEY_ID)
                 && (mPaymentMethodSearch.getGroups() == null || mPaymentMethodSearch.getGroups().isEmpty());
@@ -406,10 +405,6 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
 
     public void setPayerAccessToken(String payerAccessToken) {
         this.mPayerAccessToken = payerAccessToken;
-    }
-
-    public void setAccountMoneyEnabled(boolean accountMoneyEnabled) {
-        this.mAccountMoneyEnabled = accountMoneyEnabled;
     }
 
     public void setDiscount(Discount discount) {

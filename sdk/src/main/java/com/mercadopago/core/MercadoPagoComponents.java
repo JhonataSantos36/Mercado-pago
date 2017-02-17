@@ -106,7 +106,6 @@ public class MercadoPagoComponents {
             private Boolean showBankDeals;
             private PaymentMethodSearch paymentMethodSearch;
             private String payerAccessToken;
-            private Boolean accountMoneyEnabled;
             private Integer maxSavedCards;
             private String payerEmail;
             private boolean discountEnabled;
@@ -183,11 +182,6 @@ public class MercadoPagoComponents {
                 return this;
             }
 
-            public PaymentVaultActivityBuilder setAccountMoneyEnabled(Boolean accountMoneyEnabled) {
-                this.accountMoneyEnabled = accountMoneyEnabled;
-                return this;
-            }
-
             public PaymentVaultActivityBuilder setMaxSavedCards(Integer maxSavedCards) {
                 this.maxSavedCards = maxSavedCards;
                 return this;
@@ -233,7 +227,6 @@ public class MercadoPagoComponents {
                 paymentVaultIntent.putExtra("cards", gson.toJson(cards));
                 paymentVaultIntent.putExtra("decorationPreference", JsonUtil.getInstance().toJson(decorationPreference));
                 paymentVaultIntent.putExtra("payerAccessToken", payerAccessToken);
-                paymentVaultIntent.putExtra("accountMoneyEnabled", accountMoneyEnabled);
                 paymentVaultIntent.putExtra("maxSavedCards", maxSavedCards);
 
                 //Discounts

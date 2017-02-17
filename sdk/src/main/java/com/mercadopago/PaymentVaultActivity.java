@@ -128,7 +128,6 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
         mMerchantGetCustomerAdditionalInfo = (HashMap<String, String>) this.getIntent().getSerializableExtra("merchantGetCustomerAdditionalInfo");
 
         mPaymentVaultPresenter.setPayerAccessToken(this.getIntent().getStringExtra("payerAccessToken"));
-        mPaymentVaultPresenter.setAccountMoneyEnabled(this.getIntent().getBooleanExtra("accountMoneyEnabled", false));
         mPaymentVaultPresenter.setPayerEmail(this.getIntent().getStringExtra("payerEmail"));
         mPaymentVaultPresenter.setDiscount(JsonUtil.getInstance().fromJson(getIntent().getStringExtra("discount"), Discount.class));
         mPaymentVaultPresenter.setDiscountEnabled(this.getIntent().getBooleanExtra("discountEnabled", true));

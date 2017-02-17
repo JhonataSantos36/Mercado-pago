@@ -242,7 +242,6 @@ public class PaymentVaultPresenterTest {
         presenter.attachResourcesProvider(provider);
 
         BigDecimal amount = BigDecimal.TEN;
-        presenter.setAccountMoneyEnabled(true);
         presenter.setAmount(amount);
         presenter.setSite(Sites.ARGENTINA);
 
@@ -267,7 +266,6 @@ public class PaymentVaultPresenterTest {
         presenter.attachResourcesProvider(provider);
 
         BigDecimal amount = BigDecimal.TEN;
-        presenter.setAccountMoneyEnabled(true);
         presenter.setAmount(amount);
         presenter.setSite(Sites.ARGENTINA);
 
@@ -292,7 +290,6 @@ public class PaymentVaultPresenterTest {
         presenter.attachResourcesProvider(provider);
 
         BigDecimal amount = BigDecimal.TEN;
-        presenter.setAccountMoneyEnabled(true);
         presenter.setAmount(amount);
         presenter.setSite(Sites.ARGENTINA);
 

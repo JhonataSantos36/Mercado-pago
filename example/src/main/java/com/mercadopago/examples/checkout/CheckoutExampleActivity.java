@@ -16,6 +16,8 @@ import com.mercadopago.callbacks.Callback;
 import com.mercadopago.callbacks.PaymentCallback;
 import com.mercadopago.callbacks.PaymentDataCallback;
 import com.mercadopago.callbacks.ReviewableCallback;
+import com.mercadopago.constants.PaymentTypes;
+import com.mercadopago.constants.Sites;
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.core.MercadoPagoCheckout;
 import com.mercadopago.core.MerchantServer;
@@ -25,6 +27,7 @@ import com.mercadopago.examples.utils.ColorPickerDialog;
 import com.mercadopago.examples.utils.ExamplesUtils;
 import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.model.ApiException;
+import com.mercadopago.model.Item;
 import com.mercadopago.model.PaymentData;
 import com.mercadopago.preferences.CheckoutPreference;
 import com.mercadopago.preferences.DecorationPreference;
@@ -142,6 +145,7 @@ public class CheckoutExampleActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(MercadoPagoError exception) {}
                 });
+
     }
 
     private DecorationPreference.Builder getCurrentDecorationPreferenceBuilder() {
