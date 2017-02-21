@@ -12,7 +12,7 @@ public class JsonUtil {
     private Gson mGson;
 
     protected JsonUtil() {
-        mGson = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).serializeNulls().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").excludeFieldsWithModifiers(Modifier.TRANSIENT).create();
+        mGson = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).serializeNulls().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").create();
     }
 
     public static JsonUtil getInstance() {
