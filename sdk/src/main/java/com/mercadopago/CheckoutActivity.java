@@ -46,6 +46,7 @@ import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Map;
 
 import static android.text.TextUtils.isEmpty;
 
@@ -54,14 +55,18 @@ public class CheckoutActivity extends AppCompatActivity {
     private static final String CHECKOUT_PREFERENCE_BUNDLE = "mCheckoutPreference";
     private static final String PAYMENT_METHOD_SEARCH_BUNDLE = "mPaymentMethodSearch";
     private static final String SAVED_CARDS_BUNDLE = "mSavedCards";
+
     //Parameters
     protected String mCheckoutPreferenceId;
     protected CheckoutPreference mCheckoutPreference;
     protected String mMerchantPublicKey;
     protected String mMerchantBaseUrl;
+    protected String mMerchantDiscountBaseUrl;
     protected String mMerchantGetCustomerUri;
+    protected String mMerchantGetDiscountUri;
     protected String mMerchantAccessToken;
     protected Integer mCongratsDisplay;
+    protected Map<String, String> mDiscountAdditionalInfo;
 
     //Local vars
     protected MercadoPago mMercadoPago;
@@ -84,6 +89,7 @@ public class CheckoutActivity extends AppCompatActivity {
     protected String mCustomerId;
     protected Boolean mBinaryModeEnabled;
     protected Boolean mDiscountEnabled;
+    protected Boolean mDirectDiscountEnabled;
     protected Boolean mInstallmentsReviewEnabled;
     protected List<Card> mSavedCards;
     protected DecorationPreference mDecorationPreference;
@@ -110,6 +116,8 @@ public class CheckoutActivity extends AppCompatActivity {
         mMerchantPublicKey = getIntent().getStringExtra("merchantPublicKey");
         mMerchantBaseUrl = this.getIntent().getStringExtra("merchantBaseUrl");
         mMerchantGetCustomerUri = this.getIntent().getStringExtra("merchantGetCustomerUri");
+        mMerchantDiscountBaseUrl = this.getIntent().getStringExtra("merchantDiscountBaseUrl");
+        mMerchantGetDiscountUri = this.getIntent().getStringExtra("merchantGetDiscountUri");
         mMerchantAccessToken = this.getIntent().getStringExtra("merchantAccessToken");
         mCheckoutPreferenceId = this.getIntent().getStringExtra("checkoutPreferenceId");
         mCongratsDisplay = this.getIntent().getIntExtra("congratsDisplay", -1);
@@ -117,7 +125,13 @@ public class CheckoutActivity extends AppCompatActivity {
         mDiscount = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("discount"), Discount.class);
         mDecorationPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("decorationPreference"), DecorationPreference.class);
         mDiscountEnabled = this.getIntent().getBooleanExtra("discountEnabled", true);
+        mDirectDiscountEnabled = this.getIntent().getBooleanExtra("directDiscountEnabled", true);
         mInstallmentsReviewEnabled = this.getIntent().getBooleanExtra("installmentsReviewEnabled", false);
+
+        String discountAdditionalInfo = getIntent().getStringExtra("discountAdditionalInfo");
+        Type type = new TypeToken<Map<String, String>>() {
+        }.getType();
+        mDiscountAdditionalInfo = JsonUtil.getInstance().getGson().fromJson(discountAdditionalInfo, type);
     }
 
     protected void onValidStart() {
@@ -264,7 +278,12 @@ public class CheckoutActivity extends AppCompatActivity {
                 .setDiscount(mDiscount)
                 .setInstallmentsEnabled(true)
                 .setDiscountEnabled(mDiscountEnabled)
+                .setDirectDiscountEnabled(mDirectDiscountEnabled)
                 .setInstallmentsReviewEnabled(mInstallmentsReviewEnabled)
+                .setMerchantBaseUrl(mMerchantBaseUrl)
+                .setMerchantDiscountBaseUrl(mMerchantDiscountBaseUrl)
+                .setMerchantGetDiscountUri(mMerchantGetDiscountUri)
+                .setDiscountAdditionalInfo(mDiscountAdditionalInfo)
                 .setPaymentPreference(mCheckoutPreference.getPaymentPreference())
                 .setDecorationPreference(mDecorationPreference)
                 .setCards(mSavedCards)
@@ -442,6 +461,10 @@ public class CheckoutActivity extends AppCompatActivity {
                 .setInstallmentsReviewEnabled(mInstallmentsReviewEnabled)
                 .setDiscount(mDiscount)
                 .setDiscountEnabled(mDiscountEnabled)
+                .setDirectDiscountEnabled(mDirectDiscountEnabled)
+                .setMerchantDiscountBaseUrl(mMerchantDiscountBaseUrl)
+                .setMerchantGetDiscountUri(mMerchantGetDiscountUri)
+                .setDiscountAdditionalInfo(mDiscountAdditionalInfo)
                 .setSupportedPaymentMethods(mPaymentMethodSearch.getPaymentMethods())
                 .setPaymentRecovery(mPaymentRecovery)
                 .startCardVaultActivity();

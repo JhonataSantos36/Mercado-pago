@@ -82,6 +82,7 @@ public class DiscountsPresenterTest {
         private Boolean showedEmptyDiscountCodeError;
         private Boolean hidedKeyboard;
         private Boolean setedSoftInputModeSummary;
+        private Boolean hidedDiscountSummary;
         private String error;
 
         @Override
@@ -137,6 +138,11 @@ public class DiscountsPresenterTest {
         @Override
         public void setSoftInputModeSummary() {
             this.setedSoftInputModeSummary = true;
+        }
+
+        @Override
+        public void hideDiscountSummary() {
+            this.hidedDiscountSummary = true;
         }
     }
 

@@ -22,6 +22,7 @@ import com.mercadopago.views.CardVaultActivityView;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by vaserber on 10/12/16.
@@ -44,6 +45,10 @@ public class CardVaultPresenter {
     protected Boolean mInstallmentsReviewEnabled;
     protected String mPublicKey;
     protected BigDecimal mAmount;
+    protected String mMerchantBaseUrl;
+    protected String mMerchantDiscountUrl;
+    protected String mMerchantGetDiscountUri;
+    protected Map<String, String> mDiscountAdditionalInfo;
 
     //Activity result
     protected PaymentMethod mPaymentMethod;
@@ -58,6 +63,7 @@ public class CardVaultPresenter {
 
     //Discount
     protected Boolean mDiscountEnabled;
+    protected Boolean mDirectDiscountEnabled;
     protected Discount mDiscount;
     protected String mPayerEmail;
 
@@ -210,6 +216,14 @@ public class CardVaultPresenter {
         return this.mDiscountEnabled;
     }
 
+    public void setDiscountAdditionalInfo(Map<String, String> discountAdditionalInfo) {
+        this.mDiscountAdditionalInfo = discountAdditionalInfo;
+    }
+
+    public Map<String, String> getDiscountAdditionalInfo() {
+        return this.mDiscountAdditionalInfo;
+    }
+
     public void setInstallmentsReviewEnabled(Boolean installmentReviewEnabled) {
         this.mInstallmentsReviewEnabled = installmentReviewEnabled;
     }
@@ -224,6 +238,38 @@ public class CardVaultPresenter {
 
     public Integer getCardNumberLength() {
         return PaymentMethodGuessingController.getCardNumberLength(mPaymentMethod, mBin);
+    }
+
+    public void setMerchantBaseUrl(String merchantBaseUrl) {
+        this.mMerchantBaseUrl = merchantBaseUrl;
+    }
+
+    public String getMerchantBaseUrl() {
+        return this.mMerchantBaseUrl;
+    }
+
+    public void setMerchantDiscountBaseUrl(String merchantDiscountUrl) {
+        this.mMerchantDiscountUrl = merchantDiscountUrl;
+    }
+
+    public String getMerchantDiscountBaseUrl() {
+        return this.mMerchantDiscountUrl;
+    }
+
+    public void setMerchantGetDiscountUri(String merchantGetDiscountUri) {
+        this.mMerchantGetDiscountUri = merchantGetDiscountUri;
+    }
+
+    public String getMerchantGetDiscountUri() {
+        return mMerchantGetDiscountUri;
+    }
+
+    public void setDirectDiscountEnabled(Boolean directDiscountEnabled) {
+        this.mDirectDiscountEnabled = directDiscountEnabled;
+    }
+
+    public Boolean getDirectDiscountEnabled() {
+        return this.mDirectDiscountEnabled;
     }
 
     public void checkStartInstallmentsActivity() {

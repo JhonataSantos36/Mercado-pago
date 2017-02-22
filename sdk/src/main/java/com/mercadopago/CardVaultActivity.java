@@ -34,6 +34,7 @@ import com.mercadopago.views.CardVaultActivityView;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by vaserber on 10/12/16.
@@ -100,7 +101,6 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultAct
             paymentPreference = new PaymentPreference();
         }
 
-
         mPresenter.setPaymentPreference(paymentPreference);
         mPresenter.setPaymentRecovery(JsonUtil.getInstance().fromJson(savedInstanceState.getString("paymentRecovery"), PaymentRecovery.class));
         mPresenter.setCard(JsonUtil.getInstance().fromJson(savedInstanceState.getString("card"), Card.class));
@@ -122,6 +122,7 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultAct
     private void getActivityParameters() {
         Boolean installmentsEnabled = getIntent().getBooleanExtra("installmentsEnabled", false);
         Boolean discountEnabled = getIntent().getBooleanExtra("discountEnabled", true);
+        Boolean directDiscountEnabled = getIntent().getBooleanExtra("directDiscountEnabled", true);
         Boolean installmentsReviewEnabled = getIntent().getBooleanExtra("installmentsReviewEnabled", true);
         String publicKey = getIntent().getStringExtra("merchantPublicKey");
         Site site = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("site"), Site.class);
@@ -131,6 +132,14 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultAct
         String amount = getIntent().getStringExtra("amount");
         String payerEmail = getIntent().getStringExtra("payerEmail");
         Discount discount = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("discount"), Discount.class);
+        String merchantBaseUrl = getIntent().getStringExtra("merchantBaseUrl");
+        String merchantDiscountBaseUrl = getIntent().getStringExtra("merchantDiscountBaseUrl");
+        String merchantGetDiscountUri = getIntent().getStringExtra("merchantGetDiscountUri");
+
+        String discountAdditionalInfo = getIntent().getStringExtra("discountAdditionalInfo");
+        Type type = new TypeToken<Map<String, String>>() {
+        }.getType();
+        Map<String, String> discountAdditionalInfoMap = JsonUtil.getInstance().getGson().fromJson(discountAdditionalInfo, type);
 
         if (amount != null) {
             amountValue = new BigDecimal(amount);
@@ -162,6 +171,11 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultAct
         mPresenter.setPayerEmail(payerEmail);
         mPresenter.setDiscount(discount);
         mPresenter.setDiscountEnabled(discountEnabled);
+        mPresenter.setDirectDiscountEnabled(directDiscountEnabled);
+        mPresenter.setMerchantBaseUrl(merchantBaseUrl);
+        mPresenter.setMerchantDiscountBaseUrl(merchantDiscountBaseUrl);
+        mPresenter.setMerchantGetDiscountUri(merchantGetDiscountUri);
+        mPresenter.setDiscountAdditionalInfo(discountAdditionalInfoMap);
         mPresenter.setInstallmentsReviewEnabled(installmentsReviewEnabled);
     }
 
@@ -241,6 +255,11 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultAct
                         .setInstallmentsEnabled(mPresenter.getInstallmentsEnabled())
                         .setDiscount(mPresenter.getDiscount())
                         .setDiscountEnabled(mPresenter.getDiscountEnabled())
+                        .setDirectDiscountEnabled(mPresenter.getDirectDiscountEnabled())
+                        .setMerchantBaseUrl(mPresenter.getMerchantBaseUrl())
+                        .setMerchantDiscountBaseUrl(mPresenter.getMerchantDiscountBaseUrl())
+                        .setMerchantGetDiscountUri(mPresenter.getMerchantGetDiscountUri())
+                        .setDiscountAdditionalInfo(mPresenter.getDiscountAdditionalInfo())
                         .setShowBankDeals(mShowBankDeals)
                         .setPaymentPreference(mPresenter.getPaymentPreference())
                         .setSupportedPaymentMethods(mPresenter.getPaymentMethodList())
@@ -368,11 +387,13 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultAct
             CardToken cardToken = JsonUtil.getInstance().fromJson(data.getStringExtra("cardToken"), CardToken.class);
             Issuer issuer = JsonUtil.getInstance().fromJson(data.getStringExtra("issuer"), Issuer.class);
             Discount discount = JsonUtil.getInstance().fromJson(data.getStringExtra("discount"), Discount.class);
+            Boolean directDiscountEnabled = data.getBooleanExtra("directDiscountEnabled", true);
             mPresenter.setPaymentMethod(paymentMethod);
             mPresenter.setCardToken(cardToken);
             mPresenter.setIssuer(issuer);
             mPresenter.setCardInfo(new CardInfo(cardToken));
             mPresenter.checkStartIssuersActivity();
+            mPresenter.setDirectDiscountEnabled(directDiscountEnabled);
 
             if (discount != null) {
                 mPresenter.setDiscount(discount);
@@ -430,6 +451,11 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultAct
                 .setPayerEmail(mPresenter.getPayerEmail())
                 .setDiscount(mPresenter.getDiscount())
                 .setDiscountEnabled(mPresenter.getDiscountEnabled())
+                .setDirectDiscountEnabled(mPresenter.getDirectDiscountEnabled())
+                .setMerchantBaseUrl(mPresenter.getMerchantBaseUrl())
+                .setMerchantDiscountBaseUrl(mPresenter.getMerchantDiscountBaseUrl())
+                .setMerchantGetDiscountUri(mPresenter.getMerchantGetDiscountUri())
+                .setDiscountAdditionalInfo(mPresenter.getDiscountAdditionalInfo())
                 .setIssuer(mPresenter.getIssuer())
                 .setPaymentPreference(mPresenter.getPaymentPreference())
                 .setSite(mPresenter.getSite())

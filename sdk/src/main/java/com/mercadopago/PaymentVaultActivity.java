@@ -57,6 +57,7 @@ import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class PaymentVaultActivity extends MercadoPagoBaseActivity implements PaymentVaultView, TimerObserver {
 
@@ -72,6 +73,7 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
     protected Issuer mSelectedIssuer;
     protected PayerCost mSelectedPayerCost;
     protected Context mContext;
+    protected Map<String, String> mDiscountAdditionalInfo;
 
     protected Boolean mInstallmentsEnabled;
 
@@ -88,6 +90,8 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
     protected String mPublicKey;
     protected String mMerchantBaseUrl;
     protected String mMerchantGetCustomerUri;
+    protected String mMerchantDiscountBaseUrl;
+    protected String mMerchantGetDiscountUri;
     protected String mMerchantAccessToken;
 
     @Override
@@ -97,11 +101,13 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
         getActivityParameters();
 
         mPaymentVaultPresenter.attachView(this);
-        mPaymentVaultPresenter.attachResourcesProvider(new PaymentVaultProviderImpl(this, mPublicKey, mMerchantBaseUrl, mMerchantGetCustomerUri, mMerchantAccessToken));
+        mPaymentVaultPresenter.attachResourcesProvider(new PaymentVaultProviderImpl(this, mPublicKey, mMerchantBaseUrl, mMerchantDiscountBaseUrl,
+                mMerchantGetCustomerUri, mMerchantGetDiscountUri, mMerchantAccessToken, mDiscountAdditionalInfo));
 
         if (isCustomColorSet()) {
             setTheme(R.style.Theme_MercadoPagoTheme_NoActionBar);
         }
+
         mActivityActive = true;
         setContentView();
         initializeControls();
@@ -122,12 +128,20 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
         mMerchantBaseUrl = this.getIntent().getStringExtra("merchantBaseUrl");
         mMerchantGetCustomerUri = this.getIntent().getStringExtra("merchantGetCustomerUri");
         mMerchantAccessToken = this.getIntent().getStringExtra("merchantAccessToken");
+        mMerchantDiscountBaseUrl = this.getIntent().getStringExtra("merchantDiscountBaseUrl");
+        mMerchantGetDiscountUri = this.getIntent().getStringExtra("merchantGetDiscountUri");
+
+        String discountAdditionalInfo = getIntent().getStringExtra("discountAdditionalInfo");
+        Type type = new TypeToken<Map<String, String>>() {
+        }.getType();
+        mDiscountAdditionalInfo = JsonUtil.getInstance().getGson().fromJson(discountAdditionalInfo, type);
 
         mPaymentVaultPresenter.setPayerAccessToken(this.getIntent().getStringExtra("payerAccessToken"));
         mPaymentVaultPresenter.setAccountMoneyEnabled(this.getIntent().getBooleanExtra("accountMoneyEnabled", false));
         mPaymentVaultPresenter.setPayerEmail(this.getIntent().getStringExtra("payerEmail"));
         mPaymentVaultPresenter.setDiscount(JsonUtil.getInstance().fromJson(getIntent().getStringExtra("discount"), Discount.class));
         mPaymentVaultPresenter.setDiscountEnabled(this.getIntent().getBooleanExtra("discountEnabled", true));
+        mPaymentVaultPresenter.setDirectDiscountEnabled(this.getIntent().getBooleanExtra("directDiscountEnabled", true));
         mPaymentVaultPresenter.setInstallmentsReviewEnabled(this.getIntent().getBooleanExtra("installmentsReviewEnabled", true));
         mPaymentVaultPresenter.setMaxSavedCards(this.getIntent().getIntExtra("maxSavedCards", 0));
         mShowBankDeals = getIntent().getBooleanExtra("showBankDeals", true);
@@ -310,6 +324,11 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
                 .setPayerEmail(mPaymentVaultPresenter.getPayerEmail())
                 .setDiscount(mPaymentVaultPresenter.getDiscount())
                 .setDiscountEnabled(mPaymentVaultPresenter.getDiscountEnabled())
+                .setDirectDiscountEnabled(mPaymentVaultPresenter.getDirectDiscountEnabled())
+                .setMerchantBaseUrl(mMerchantBaseUrl)
+                .setMerchantDiscountBaseUrl(mMerchantDiscountBaseUrl)
+                .setMerchantGetDiscountUri(mMerchantGetDiscountUri)
+                .setDiscountAdditionalInfo(mDiscountAdditionalInfo)
                 .setInstallmentsReviewEnabled(mPaymentVaultPresenter.getInstallmentsReviewEnabled())
                 .setShowBankDeals(mShowBankDeals)
                 .startCardVaultActivity();
@@ -322,6 +341,12 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
         intent.putExtra("selectedSearchItem", JsonUtil.getInstance().toJson(item));
         intent.putExtra("discount", JsonUtil.getInstance().toJson(mPaymentVaultPresenter.getDiscount()));
         intent.putExtra("paymentMethodSearch", JsonUtil.getInstance().toJson(mPaymentVaultPresenter.getPaymentMethodSearch()));
+        intent.putExtra("discountEnabled", mPaymentVaultPresenter.getDiscountEnabled());
+        intent.putExtra("directDiscountEnabled", mPaymentVaultPresenter.getDirectDiscountEnabled());
+        intent.putExtra("merchantDiscountBaseUrl", mMerchantDiscountBaseUrl);
+        intent.putExtra("merchantGetDiscountUri", mMerchantGetDiscountUri);
+        intent.putExtra("discountAdditionalInfo", JsonUtil.getInstance().toJson(mDiscountAdditionalInfo));
+
         startActivityForResult(intent, MercadoPago.PAYMENT_VAULT_REQUEST_CODE);
         overridePendingTransition(R.anim.mpsdk_slide_right_to_left_in, R.anim.mpsdk_slide_right_to_left_out);
     }
@@ -486,7 +511,6 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
 
     @Override
     public void startCardFlow(String paymentType, BigDecimal amount) {
-
         PaymentPreference paymentPreference = mPaymentVaultPresenter.getPaymentPreference();
         paymentPreference.setDefaultPaymentTypeId(paymentType);
 
@@ -501,6 +525,11 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
                 .setPayerEmail(mPaymentVaultPresenter.getPayerEmail())
                 .setDiscount(mPaymentVaultPresenter.getDiscount())
                 .setDiscountEnabled(mPaymentVaultPresenter.getDiscountEnabled())
+                .setDirectDiscountEnabled(mPaymentVaultPresenter.getDirectDiscountEnabled())
+                .setMerchantBaseUrl(mMerchantBaseUrl)
+                .setMerchantDiscountBaseUrl(mMerchantDiscountBaseUrl)
+                .setMerchantGetDiscountUri(mMerchantGetDiscountUri)
+                .setDiscountAdditionalInfo(mDiscountAdditionalInfo)
                 .setInstallmentsReviewEnabled(mPaymentVaultPresenter.getInstallmentsReviewEnabled())
                 .setShowBankDeals(mShowBankDeals)
                 .setSupportedPaymentMethods(mPaymentVaultPresenter.getPaymentMethodSearch().getPaymentMethods())
@@ -600,6 +629,11 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
                 .setPayerEmail(mPaymentVaultPresenter.getPayerEmail())
                 .setAmount(transactionAmount)
                 .setDiscount(mPaymentVaultPresenter.getDiscount())
+                .setDirectDiscountEnabled(mPaymentVaultPresenter.getDirectDiscountEnabled())
+                .setMerchantBaseUrl(mMerchantBaseUrl)
+                .setMerchantDiscountBaseUrl(mMerchantDiscountBaseUrl)
+                .setMerchantGetDiscountUri(mMerchantGetDiscountUri)
+                .setDiscountAdditionalInfo(mDiscountAdditionalInfo)
                 .setDecorationPreference(mDecorationPreference);
 
         if (mPaymentVaultPresenter.getDiscount() == null) {
@@ -610,7 +644,6 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
 
         mercadoPagoBuilder.startDiscountsActivity();
     }
-
 
     @Override
     public void showDiscountRow(BigDecimal transactionAmount) {

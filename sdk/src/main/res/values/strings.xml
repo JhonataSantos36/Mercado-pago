@@ -232,4 +232,5 @@
     <string name="mpsdk_campaign_expired">La campaña expiró</string>
     <string name="mpsdk_discount_percent_off">%1$s %%</string>
     <string name="mpsdk_total">Total:</string>
+    <string name="mpsdk_something_went_wrong">¡Uy! Algo salió mal…</string>
 </resources>

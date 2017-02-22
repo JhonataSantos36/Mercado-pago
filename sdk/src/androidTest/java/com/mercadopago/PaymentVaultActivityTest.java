@@ -71,7 +71,6 @@ import static com.mercadopago.utils.ActivityResultUtil.assertFinishCalledWithRes
 import static com.mercadopago.utils.ActivityResultUtil.getActivityResult;
 import static com.mercadopago.utils.CustomMatchers.atPosition;
 import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.core.IsNot.not;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 

@@ -29,4 +29,6 @@ public interface DiscountsActivityView extends MvpView {
     void hideKeyboard();
 
     void setSoftInputModeSummary();
+
+    void hideDiscountSummary();
 }

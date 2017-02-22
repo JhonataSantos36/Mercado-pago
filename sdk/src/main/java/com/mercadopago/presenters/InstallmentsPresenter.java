@@ -7,6 +7,7 @@ import com.mercadopago.callbacks.Callback;
 import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.controllers.PaymentMethodGuessingController;
 import com.mercadopago.core.MercadoPago;
+import com.mercadopago.core.MerchantServer;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.CardInfo;
 import com.mercadopago.model.Discount;
@@ -16,10 +17,12 @@ import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentPreference;
 import com.mercadopago.model.Site;
+import com.mercadopago.util.TextUtil;
 import com.mercadopago.views.InstallmentsActivityView;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by vaserber on 9/29/16.
@@ -50,6 +53,11 @@ public class InstallmentsPresenter {
     private CardInfo mCardInfo;
     private Discount mDiscount;
     private Boolean mDiscountEnabled;
+    private Boolean mDirectDiscountEnabled;
+    private String mMerchantBaseUrl;
+    private String mMerchantDiscountUrl;
+    private String mMerchantGetDiscountUri;
+    private Map<String, String> mDiscountAdditionalInfo;
     private Boolean mInstallmentsReviewEnabled;
 
     public InstallmentsPresenter(Context context) {
@@ -187,7 +195,9 @@ public class InstallmentsPresenter {
     }
 
     private void loadDiscount() {
-        if (mDiscount == null) {
+        mView.showLoadingView();
+
+        if (mDirectDiscountEnabled && mDiscount == null) {
             if (isAmountValid()) {
                 getDirectDiscount();
             } else {
@@ -212,8 +222,14 @@ public class InstallmentsPresenter {
     }
 
     private void getDirectDiscount() {
-        mView.showLoadingView();
+        if (isMerchantServerDiscountsAvailable()) {
+            getMerchantDirectDiscount();
+        } else {
+            getMPDirectDiscount();
+        }
+    }
 
+    private void getMPDirectDiscount() {
         mMercadoPago.getDirectDiscount(mAmount.toString(), mPayerEmail, new Callback<Discount>() {
             @Override
             public void success(Discount discount) {
@@ -224,6 +240,27 @@ public class InstallmentsPresenter {
 
             @Override
             public void failure(ApiException apiException) {
+                mDirectDiscountEnabled = false;
+                initializeDiscountRow();
+                loadPayerCosts();
+            }
+        });
+    }
+
+    private void getMerchantDirectDiscount() {
+        String merchantDiscountUrl = getMerchantServerDiscountUrl();
+
+        MerchantServer.getDirectDiscount(mAmount.toString(), mPayerEmail, mContext, merchantDiscountUrl, mMerchantGetDiscountUri, mDiscountAdditionalInfo, new Callback<Discount>() {
+            @Override
+            public void success(Discount discount) {
+                mDiscount = discount;
+                getInstallmentsAsync();
+                initializeDiscountRow();
+            }
+
+            @Override
+            public void failure(ApiException apiException) {
+                mDirectDiscountEnabled = false;
                 initializeDiscountRow();
                 loadPayerCosts();
             }
@@ -256,8 +293,40 @@ public class InstallmentsPresenter {
         this.mDiscountEnabled = discountEnabled;
     }
 
+    public void setMerchantDiscountBaseUrl(String merchantDiscountUrl) {
+        this.mMerchantDiscountUrl = merchantDiscountUrl;
+    }
+
+    public String getMerchantDiscountBaseUrl() {
+        return this.mMerchantDiscountUrl;
+    }
+
+    public void setMerchantGetDiscountUri(String merchantGetDiscountUri) {
+        this.mMerchantGetDiscountUri = merchantGetDiscountUri;
+    }
+
+    public String getMerchantGetDiscountUri() {
+        return mMerchantGetDiscountUri;
+    }
+
     public Boolean getDiscountEnabled() {
         return this.mDiscountEnabled;
+    }
+
+    public void setMerchantBaseUrl(String merchantBaseUrl) {
+        this.mMerchantBaseUrl = merchantBaseUrl;
+    }
+
+    public String getMerchantBaseUrl() {
+        return this.mMerchantBaseUrl;
+    }
+
+    public void setDiscountAdditionalInfo(Map<String, String> discountAdditionalInfo) {
+        this.mDiscountAdditionalInfo = discountAdditionalInfo;
+    }
+
+    public Map<String, String> getDiscountAdditionalInfo() {
+        return this.mDiscountAdditionalInfo;
     }
 
     public void setInstallmentsReviewEnabled(Boolean installmentReviewEnabled) {
@@ -266,6 +335,14 @@ public class InstallmentsPresenter {
 
     public Boolean getInstallmentReviewEnabled() {
         return this.mInstallmentsReviewEnabled;
+    }
+
+    public void setDirectDiscountEnabled(Boolean directDiscountEnabled) {
+        this.mDirectDiscountEnabled = directDiscountEnabled;
+    }
+
+    public Boolean getDirectDiscountEnabled() {
+        return mDirectDiscountEnabled;
     }
 
     private void loadPayerCosts() {
@@ -348,4 +425,19 @@ public class InstallmentsPresenter {
         return mInstallmentsReviewEnabled != null && mInstallmentsReviewEnabled;
     }
 
+    private boolean isMerchantServerDiscountsAvailable() {
+        return !TextUtil.isEmpty(getMerchantServerDiscountUrl()) && !TextUtil.isEmpty(mMerchantGetDiscountUri);
+    }
+
+    private String getMerchantServerDiscountUrl() {
+        String merchantBaseUrl;
+
+        if (TextUtil.isEmpty(mMerchantDiscountUrl)) {
+            merchantBaseUrl = this.mMerchantBaseUrl;
+        } else {
+            merchantBaseUrl = this.mMerchantDiscountUrl;
+        }
+
+        return merchantBaseUrl;
+    }
 }

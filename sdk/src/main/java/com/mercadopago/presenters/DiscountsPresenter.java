@@ -8,6 +8,7 @@ import com.mercadopago.providers.DiscountsProvider;
 import com.mercadopago.views.DiscountsActivityView;
 
 import java.math.BigDecimal;
+import java.util.Map;
 
 /**
  * Created by mromar on 11/29/16.
@@ -22,7 +23,6 @@ public class DiscountsPresenter extends MvpPresenter<DiscountsActivityView, Disc
     private String mPayerEmail;
     private BigDecimal mTransactionAmount;
     private Discount mDiscount;
-
     private Boolean mDirectDiscountEnabled;
 
     @Override
@@ -40,6 +40,7 @@ public class DiscountsPresenter extends MvpPresenter<DiscountsActivityView, Disc
 
     private void initDiscountFlow() {
         if (mDirectDiscountEnabled && isTransactionAmountValid()) {
+            mDiscountsView.hideDiscountSummary();
             getDirectDiscount();
         } else {
             mDiscountsView.requestDiscountCode();
@@ -52,7 +53,6 @@ public class DiscountsPresenter extends MvpPresenter<DiscountsActivityView, Disc
 
     private void getDirectDiscount() {
         getResourcesProvider().getDirectDiscount(mTransactionAmount.toString(), mPayerEmail, new OnResourcesRetrievedCallback<Discount>() {
-
             @Override
             public void onSuccess(Discount discount) {
                 mDiscount = discount;
@@ -85,7 +85,7 @@ public class DiscountsPresenter extends MvpPresenter<DiscountsActivityView, Disc
             @Override
             public void onFailure(MPException exception) {
                 mDiscountsView.hideProgressBar();
-                if(exception.isApiException()) {
+                if (exception.isApiException()) {
                     String errorMessage = getResourcesProvider().getApiErrorMessage(exception.getApiException().getError());
                     mDiscountsView.showCodeInputError(errorMessage);
                 } else {
@@ -129,6 +129,10 @@ public class DiscountsPresenter extends MvpPresenter<DiscountsActivityView, Disc
 
     public void setDirectDiscountEnabled(Boolean directDiscountEnabled) {
         this.mDirectDiscountEnabled = directDiscountEnabled;
+    }
+
+    public Boolean getDirectDiscountEnabled() {
+        return this.mDirectDiscountEnabled;
     }
 
     public String getCurrencyId() {

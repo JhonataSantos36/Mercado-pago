@@ -101,7 +101,7 @@ public class DiscountRowView implements DiscountView {
     }
 
     private void drawShortDiscountDetailRow() {
-        if (isAmountOffValid() && isPercentOffValid()) {
+        if (isAmountValid(mDiscount.getCouponAmount())) {
             mDiscountDetail.setVisibility(View.VISIBLE);
             mHasDiscountLinearLayout.setVisibility(View.GONE);
 
@@ -127,7 +127,7 @@ public class DiscountRowView implements DiscountView {
     }
 
     private Boolean areValidParameters() {
-        return isAmountOffValid() && isPercentOffValid() && isDiscountCurrencyIdValid() && isAmountValid(mTransactionAmount) && isAmountValid(mDiscount.getCouponAmount());
+        return isDiscountCurrencyIdValid() && isAmountValid(mTransactionAmount) && isAmountValid(mDiscount.getCouponAmount());
     }
 
     private void drawShortHasDiscountRow() {
@@ -157,14 +157,21 @@ public class DiscountRowView implements DiscountView {
     }
 
     private void setDiscountOff() {
-        if (mDiscount.getAmountOff().compareTo(BigDecimal.ZERO) > 0) {
+        if (isAmountOffValid() && mDiscount.getAmountOff().compareTo(BigDecimal.ZERO) > 0) {
             Currency currency = CurrenciesUtil.getCurrency(mDiscount.getCurrencyId());
             String amount = currency.getSymbol() + " " + mDiscount.getAmountOff();
+
             mDiscountOffTextView.setText(amount);
-        } else if (mDiscount.getPercentOff().compareTo(BigDecimal.ZERO) > 0) {
+        } else if (isPercentOffValid() && mDiscount.getPercentOff().compareTo(BigDecimal.ZERO) > 0) {
             String discountOff = mContext.getResources().getString(R.string.mpsdk_discount_percent_off,
                     String.valueOf(mDiscount.getPercentOff()));
+
             mDiscountOffTextView.setText(discountOff);
+        } else {
+            Currency currency = CurrenciesUtil.getCurrency(mDiscount.getCurrencyId());
+            String amount = currency.getSymbol() + " " + mDiscount.getCouponAmount();
+
+            mDiscountOffTextView.setText(amount);
         }
     }
 

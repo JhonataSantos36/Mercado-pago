@@ -47,6 +47,7 @@ import com.mercadopago.views.InstallmentsActivityView;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by vaserber on 9/29/16.
@@ -98,8 +99,7 @@ public class InstallmentsActivity extends MercadoPagoBaseActivity implements Ins
     }
 
     private void getActivityParameters() {
-        PaymentMethod paymentMethod = JsonUtil.getInstance().fromJson(
-                this.getIntent().getStringExtra("paymentMethod"), PaymentMethod.class);
+        PaymentMethod paymentMethod = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("paymentMethod"), PaymentMethod.class);
         CardInfo cardInfo = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("cardInfo"), CardInfo.class);
         String publicKey = getIntent().getStringExtra("merchantPublicKey");
         Issuer issuer = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("issuer"), Issuer.class);
@@ -126,8 +126,17 @@ public class InstallmentsActivity extends MercadoPagoBaseActivity implements Ins
         }
 
         Discount discount = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("discount"), Discount.class);
-        String payerEmail = this.getIntent().getStringExtra("payerEmail");
         Boolean discountEnabled = this.getIntent().getBooleanExtra("discountEnabled", true);
+        Boolean directDiscountEnabled = this.getIntent().getBooleanExtra("directDiscountEnabled", true);
+        String payerEmail = this.getIntent().getStringExtra("payerEmail");
+        String merchantBaseUrl = getIntent().getStringExtra("merchantBaseUrl");
+        String merchantDiscountBaseUrl = getIntent().getStringExtra("merchantDiscountBaseUrl");
+        String merchantGetDiscountUri = getIntent().getStringExtra("merchantGetDiscountUri");
+
+        String discountAdditionalInfo = getIntent().getStringExtra("discountAdditionalInfo");
+        Type type = new TypeToken<Map<String, String>>() {
+        }.getType();
+        Map<String, String> discountAdditionalInfoMap = JsonUtil.getInstance().getGson().fromJson(discountAdditionalInfo, type);
         Boolean installmentsReviewEnabled = this.getIntent().getBooleanExtra("installmentsReviewEnabled", true);
 
         mPresenter.setPaymentMethod(paymentMethod);
@@ -137,10 +146,15 @@ public class InstallmentsActivity extends MercadoPagoBaseActivity implements Ins
         mPresenter.setPayerEmail(payerEmail);
         mPresenter.setDiscount(discount);
         mPresenter.setDiscountEnabled(discountEnabled);
+        mPresenter.setDirectDiscountEnabled(directDiscountEnabled);
         mPresenter.setSite(site);
         mPresenter.setPayerCosts(payerCosts);
         mPresenter.setPaymentPreference(paymentPreference);
         mPresenter.setCardInfo(cardInfo);
+        mPresenter.setMerchantBaseUrl(merchantBaseUrl);
+        mPresenter.setMerchantDiscountBaseUrl(merchantDiscountBaseUrl);
+        mPresenter.setMerchantGetDiscountUri(merchantGetDiscountUri);
+        mPresenter.setDiscountAdditionalInfo(discountAdditionalInfoMap);
         mPresenter.setInstallmentsReviewEnabled(installmentsReviewEnabled);
     }
 
@@ -284,6 +298,7 @@ public class InstallmentsActivity extends MercadoPagoBaseActivity implements Ins
                         Intent returnIntent = new Intent();
                         returnIntent.putExtra("discount", JsonUtil.getInstance().toJson(mPresenter.getDiscount()));
                         returnIntent.putExtra("discountEnabled", JsonUtil.getInstance().toJson(mPresenter.getDiscountEnabled()));
+                        returnIntent.putExtra("directDiscountEnabled", mPresenter.getDirectDiscountEnabled());
                         setResult(RESULT_CANCELED, returnIntent);
                         finish();
                     }
@@ -399,6 +414,7 @@ public class InstallmentsActivity extends MercadoPagoBaseActivity implements Ins
         returnIntent.putExtra("payerCost", JsonUtil.getInstance().toJson(payerCost));
         returnIntent.putExtra("discount", JsonUtil.getInstance().toJson(mPresenter.getDiscount()));
         returnIntent.putExtra("discountEnabled", JsonUtil.getInstance().toJson(mPresenter.getDiscountEnabled()));
+        returnIntent.putExtra("directDiscountEnabled", mPresenter.getDirectDiscountEnabled());
         setResult(RESULT_OK, returnIntent);
         finish();
     }
@@ -417,6 +433,7 @@ public class InstallmentsActivity extends MercadoPagoBaseActivity implements Ins
             returnIntent.putExtra("backButtonPressed", true);
             returnIntent.putExtra("discount", JsonUtil.getInstance().toJson(mPresenter.getDiscount()));
             returnIntent.putExtra("discountEnabled", JsonUtil.getInstance().toJson(mPresenter.getDiscountEnabled()));
+            returnIntent.putExtra("directDiscountEnabled", mPresenter.getDirectDiscountEnabled());
             setResult(RESULT_CANCELED, returnIntent);
             finish();
         }
@@ -465,6 +482,11 @@ public class InstallmentsActivity extends MercadoPagoBaseActivity implements Ins
                 .setPayerEmail(mPresenter.getPayerEmail())
                 .setAmount(transactionAmount)
                 .setDiscount(mPresenter.getDiscount())
+                .setDirectDiscountEnabled(mPresenter.getDirectDiscountEnabled())
+                .setMerchantBaseUrl(mPresenter.getMerchantBaseUrl())
+                .setMerchantDiscountBaseUrl(mPresenter.getMerchantDiscountBaseUrl())
+                .setMerchantGetDiscountUri(mPresenter.getMerchantGetDiscountUri())
+                .setDiscountAdditionalInfo(mPresenter.getDiscountAdditionalInfo())
                 .setDecorationPreference(mDecorationPreference);
 
         if (mPresenter.getDiscount() == null) {

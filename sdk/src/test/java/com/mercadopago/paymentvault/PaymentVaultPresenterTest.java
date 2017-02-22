@@ -547,6 +547,56 @@ public class PaymentVaultPresenterTest {
         assertTrue(mockedView.showedDiscountRow);
     }
 
+    @Test
+    public void ifIsDirectDiscountNotEnabledNotGetDirectDiscount() {
+        MockedView mockedView = new MockedView();
+        MockedProvider provider = new MockedProvider();
+
+        PaymentMethodSearch paymentMethodSearch = PaymentMethodSearchs.getCompletePaymentMethodSearchMLA();
+        provider.setPaymentMethodSearchResponse(paymentMethodSearch);
+
+        PaymentVaultPresenter presenter = new PaymentVaultPresenter();
+        presenter.attachView(mockedView);
+        presenter.attachResourcesProvider(provider);
+
+        presenter.setAmount(BigDecimal.TEN);
+        presenter.setSite(Sites.ARGENTINA);
+        presenter.setDirectDiscountEnabled(false);
+
+        presenter.initialize();
+
+        mockedView.simulateItemSelection(0);
+
+        assertTrue(mockedView.showedDiscountRow);
+    }
+
+    @Test
+    public void ifHasNotDirectDiscountSetFalseDirectDiscountEnabled() {
+        MockedView mockedView = new MockedView();
+        MockedProvider provider = new MockedProvider();
+
+        PaymentMethodSearch paymentMethodSearch = PaymentMethodSearchs.getCompletePaymentMethodSearchMLA();
+        provider.setPaymentMethodSearchResponse(paymentMethodSearch);
+
+        ApiException apiException = Discounts.getDoNotFindCampaignApiException();
+        MPException mpException = new MPException(apiException);
+        provider.setDiscountResponse(mpException);
+
+        PaymentVaultPresenter presenter = new PaymentVaultPresenter();
+        presenter.attachView(mockedView);
+        presenter.attachResourcesProvider(provider);
+
+        presenter.setAmount(BigDecimal.TEN);
+        presenter.setSite(Sites.ARGENTINA);
+
+        presenter.initialize();
+
+        mockedView.simulateItemSelection(0);
+
+        assertFalse(presenter.getDirectDiscountEnabled());
+        assertTrue(mockedView.showedDiscountRow);
+    }
+
     private class MockedProvider implements PaymentVaultProvider {
 
         private static final String INVALID_SITE = "invalid site";

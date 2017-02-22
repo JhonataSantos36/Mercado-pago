@@ -15,9 +15,11 @@ import com.mercadopago.model.Payer;
 import com.mercadopago.model.PaymentMethodSearch;
 import com.mercadopago.model.PaymentPreference;
 import com.mercadopago.mvp.OnResourcesRetrievedCallback;
+import com.mercadopago.util.TextUtil;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by mreverter on 1/30/17.
@@ -27,14 +29,22 @@ public class PaymentVaultProviderImpl implements PaymentVaultProvider {
     private final Context context;
     private final MercadoPago mercadoPago;
     private final String merchantBaseUrl;
+    private final String merchantDiscountUrl;
     private final String merchantGetCustomerUri;
+    private final String merchantGetDiscountUri;
+    private final Map<String, String> mDiscountAdditionalInfo;
     private final String merchantAccessToken;
 
-    public PaymentVaultProviderImpl(Context context, String publicKey, String merchantBaseUrl, String merchantGetCustomerUri, String merchantAccessToken) {
+    public PaymentVaultProviderImpl(Context context, String publicKey, String merchantBaseUrl, String merchantDiscountUrl, String merchantGetCustomerUri, String merchantGetDiscountUri,
+                                    String merchantAccessToken, Map<String, String> discountAdditionalInfo) {
         this.context = context;
         this.merchantBaseUrl = merchantBaseUrl;
+        this.merchantDiscountUrl = merchantDiscountUrl;
         this.merchantGetCustomerUri = merchantGetCustomerUri;
+        this.merchantGetDiscountUri = merchantGetDiscountUri;
+        this.mDiscountAdditionalInfo = discountAdditionalInfo;
         this.merchantAccessToken = merchantAccessToken;
+
         this.mercadoPago = new MercadoPago.Builder()
                 .setContext(context)
                 .setPublicKey(publicKey)
@@ -43,7 +53,31 @@ public class PaymentVaultProviderImpl implements PaymentVaultProvider {
 
     @Override
     public void getDirectDiscount(String amount, String payerEmail, final OnResourcesRetrievedCallback<Discount> onResourcesRetrievedCallback) {
+        if (isMerchantServerDiscountsAvailable()) {
+            getMerchantDirectDiscount(amount, payerEmail, onResourcesRetrievedCallback);
+        } else {
+            getMPDirectDiscount(amount, payerEmail, onResourcesRetrievedCallback);
+        }
+    }
+
+    private void getMPDirectDiscount(String amount, String payerEmail, final OnResourcesRetrievedCallback<Discount> onResourcesRetrievedCallback) {
         mercadoPago.getDirectDiscount(amount, payerEmail, new Callback<Discount>() {
+            @Override
+            public void success(Discount discount) {
+                onResourcesRetrievedCallback.onSuccess(discount);
+            }
+
+            @Override
+            public void failure(ApiException apiException) {
+                onResourcesRetrievedCallback.onFailure(new MPException(apiException));
+            }
+        });
+    }
+
+    private void getMerchantDirectDiscount(String amount, String payerEmail, final OnResourcesRetrievedCallback<Discount> onResourcesRetrievedCallback) {
+        String merchantDiscountUrl = getMerchantServerDiscountUrl();
+
+        MerchantServer.getDirectDiscount(amount, payerEmail, context, merchantDiscountUrl, merchantGetDiscountUri, mDiscountAdditionalInfo, new Callback<Discount>() {
             @Override
             public void success(Discount discount) {
                 onResourcesRetrievedCallback.onSuccess(discount);
@@ -65,7 +99,7 @@ public class PaymentVaultProviderImpl implements PaymentVaultProvider {
 
             @Override
             public void success(final PaymentMethodSearch paymentMethodSearch) {
-                if (!paymentMethodSearch.hasSavedCards() && isMerchantServerInfoAvailable()) {
+                if (!paymentMethodSearch.hasSavedCards() && isMerchantServerCustomerAvailable()) {
                     addCustomerCardsFromMerchantServer(paymentMethodSearch, paymentPreference, onResourcesRetrievedCallback);
                 } else {
                     onResourcesRetrievedCallback.onSuccess(paymentMethodSearch);
@@ -136,7 +170,23 @@ public class PaymentVaultProviderImpl implements PaymentVaultProvider {
         return context.getString(R.string.mpsdk_no_payment_methods_found);
     }
 
-    private boolean isMerchantServerInfoAvailable() {
-        return merchantBaseUrl != null && !merchantBaseUrl.isEmpty() && merchantGetCustomerUri != null && !merchantGetCustomerUri.isEmpty();
+    private boolean isMerchantServerCustomerAvailable() {
+        return !TextUtil.isEmpty(merchantBaseUrl) && !TextUtil.isEmpty(merchantGetCustomerUri);
+    }
+
+    private boolean isMerchantServerDiscountsAvailable() {
+        return !TextUtil.isEmpty(getMerchantServerDiscountUrl()) && !TextUtil.isEmpty(merchantGetDiscountUri);
+    }
+
+    private String getMerchantServerDiscountUrl() {
+        String merchantBaseUrl;
+
+        if (TextUtil.isEmpty(merchantDiscountUrl)) {
+            merchantBaseUrl = this.merchantBaseUrl;
+        } else {
+            merchantBaseUrl = this.merchantDiscountUrl;
+        }
+
+        return merchantBaseUrl;
     }
 }

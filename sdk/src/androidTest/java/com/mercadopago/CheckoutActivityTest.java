@@ -17,12 +17,10 @@ import android.test.suitebuilder.annotation.LargeTest;
 import android.widget.ImageView;
 
 import com.google.gson.Gson;
-import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.exceptions.MPException;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.CheckoutPreference;
 import com.mercadopago.model.Customer;
-import com.mercadopago.model.DecorationPreference;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.Item;
 import com.mercadopago.model.PayerCost;
@@ -39,7 +37,6 @@ import com.mercadopago.test.NestedScrollViewScrollToAction;
 import com.mercadopago.test.StaticMock;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.JsonUtil;
-import com.mercadopago.utils.ViewUtils;
 
 import org.junit.After;
 import org.junit.Before;

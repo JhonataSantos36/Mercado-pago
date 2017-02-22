@@ -42,6 +42,7 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
     private Boolean mInstallmentsReviewEnabled;
     private Boolean mAccountMoneyEnabled = false;
     private Boolean mDiscountEnabled = true;
+    private Boolean mDirectDiscountEnabled = true;
     private Integer mMaxSavedCards;
 
     public void initialize() {
@@ -83,7 +84,8 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
     }
 
     private void loadDiscount() {
-        if (mDiscount == null) {
+        if (mDirectDiscountEnabled && mDiscount == null) {
+            getView().showProgress();
             getDirectDiscount();
         } else {
             initializeDiscountRow();
@@ -100,7 +102,6 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
     }
 
     private void getDirectDiscount() {
-        getView().showProgress();
         getResourcesProvider().getDirectDiscount(mAmount.toString(), mPayerEmail, new OnResourcesRetrievedCallback<Discount>() {
             @Override
             public void onSuccess(Discount discount) {
@@ -111,6 +112,7 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
 
             @Override
             public void onFailure(MPException mpException) {
+                mDirectDiscountEnabled = false;
                 initializeDiscountRow();
                 initPaymentVaultFlow();
             }
@@ -126,7 +128,7 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
         initPaymentVaultFlow();
     }
 
-    public void validateParameters() throws IllegalStateException {
+    private void validateParameters() throws IllegalStateException {
         if (mPaymentPreference != null) {
             if (!mPaymentPreference.validMaxInstallments()) {
                 throw new IllegalStateException(getResourcesProvider().getInvalidMaxInstallmentsErrorMessage());
@@ -439,6 +441,14 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
 
     public void setDiscountEnabled(Boolean discountEnabled) {
         this.mDiscountEnabled = discountEnabled;
+    }
+
+    public void setDirectDiscountEnabled(Boolean directDiscountEnabled) {
+        this.mDirectDiscountEnabled = directDiscountEnabled;
+    }
+
+    public Boolean getDirectDiscountEnabled() {
+        return this.mDirectDiscountEnabled;
     }
 
     public Boolean getDiscountEnabled() {
