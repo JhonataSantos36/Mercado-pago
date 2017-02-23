@@ -83,11 +83,13 @@ public class MercadoPagoCheckout {
     }
 
     private void start(PaymentCallback paymentCallback) {
+        CallbackHolder.getInstance().clean();
         attachCheckoutCallback(paymentCallback);
         startCheckoutActivity();
     }
 
     private void start(PaymentDataCallback paymentDataCallback) {
+        CallbackHolder.getInstance().clean();
         attachCheckoutCallback(paymentDataCallback);
         startCheckoutActivity();
     }

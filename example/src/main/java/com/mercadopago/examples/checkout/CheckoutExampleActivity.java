@@ -32,6 +32,7 @@ import com.mercadopago.model.PaymentData;
 import com.mercadopago.preferences.CheckoutPreference;
 import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.model.Payment;
+import com.mercadopago.preferences.FlowPreference;
 import com.mercadopago.preferences.ReviewScreenPreference;
 import com.mercadopago.preferences.ServicePreference;
 import com.mercadopago.util.JsonUtil;
@@ -130,14 +131,23 @@ public class CheckoutExampleActivity extends AppCompatActivity {
                 .setCustomFont("fonts/Merriweather-Light.ttf")
                 .build();
 
+        FlowPreference flowPreference = new FlowPreference.Builder()
+                .disableReviewAndConfirmScreen()
+                .build();
+
         new MercadoPagoCheckout.Builder()
                 .setContext(this)
                 .setPublicKey(mPublicKey)
                 .setCheckoutPreference(mCheckoutPreference)
                 .setReviewScreenPreference(reviewScreenPreference)
+                .setFlowPreference(flowPreference)
                 .start(new PaymentDataCallback() {
                     @Override
-                    public void onSuccess(PaymentData paymentData) {}
+                    public void onSuccess(PaymentData paymentData) {
+                        startAgain(paymentData);
+                        Log.d("log", "en paymentdata callback");
+                        Log.d("log", paymentData.getPaymentMethod().getId());
+                    }
 
                     @Override
                     public void onCancel() {}
@@ -145,7 +155,76 @@ public class CheckoutExampleActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(MercadoPagoError exception) {}
                 });
+//        new MercadoPagoCheckout.Builder()
+//                .setContext(this)
+//                .setPublicKey(mPublicKey)
+//                .setCheckoutPreference(mCheckoutPreference)
+//                .setReviewScreenPreference(reviewScreenPreference)
+//                .setFlowPreference(flowPreference)
+//                .start(new PaymentCallback() {
+//                    @Override
+//                    public void onSuccess(Payment payment) {
+//                        Log.d("log", "en el success del payment callback");
+//                        Log.d("log", payment.getStatus());
+//                    }
+//
+//                    @Override
+//                    public void onCancel() {}
+//
+//                    @Override
+//                    public void onFailure(MercadoPagoError exception) {}
+//                });
 
+    }
+
+    private void startAgain(PaymentData paymentData) {
+        Map<String, Object> additionalInfo = new HashMap<>();
+        additionalInfo.put("company_id", "movistar");
+        additionalInfo.put("phone_number", "111111");
+
+
+        FlowPreference flowPreference = new FlowPreference.Builder()
+                .disableReviewAndConfirmScreen()
+                .build();
+
+        new MercadoPagoCheckout.Builder()
+                .setContext(this)
+                .setPublicKey(mPublicKey)
+                .setCheckoutPreference(mCheckoutPreference)
+                .setPaymentData(paymentData)
+                .setFlowPreference(flowPreference)
+                .start(new PaymentDataCallback() {
+                    @Override
+                    public void onSuccess(PaymentData paymentData) {
+                        Log.d("log", "en el success del start again");
+                        Log.d("log", paymentData.getPaymentMethod().getId());
+                    }
+
+                    @Override
+                    public void onCancel() {}
+
+                    @Override
+                    public void onFailure(MercadoPagoError exception) {}
+                });
+//        new MercadoPagoCheckout.Builder()
+//                .setContext(this)
+//                .setPublicKey(mPublicKey)
+//                .setCheckoutPreference(mCheckoutPreference)
+//                .setPaymentData(paymentData)
+//                .setFlowPreference(flowPreference)
+//                .start(new PaymentCallback() {
+//                    @Override
+//                    public void onSuccess(Payment payment) {
+//                        Log.d("log", "en el success del start again");
+//                        Log.d("log", payment.getStatus());
+//                    }
+//
+//                    @Override
+//                    public void onCancel() {}
+//
+//                    @Override
+//                    public void onFailure(MercadoPagoError exception) {}
+//                });
     }
 
     private DecorationPreference.Builder getCurrentDecorationPreferenceBuilder() {

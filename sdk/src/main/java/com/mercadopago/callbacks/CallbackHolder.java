@@ -22,6 +22,11 @@ public class CallbackHolder {
         return callbackHolder;
     }
 
+    public void clean() {
+        paymentCallback = null;
+        paymentDataCallback = null;
+    }
+
     public void setPaymentCallback(PaymentCallback paymentCallback) {
         this.paymentCallback = paymentCallback;
     }
