@@ -51,7 +51,7 @@ public class PaymentVaultPresenterTest {
 
         presenter.setAmount(BigDecimal.TEN);
 
-        presenter.initialize();
+        presenter.initialize(true);
 
         assertEquals(MockedProvider.INVALID_SITE, mockedView.errorShown.getMessage());
     }
@@ -71,7 +71,7 @@ public class PaymentVaultPresenterTest {
         presenter.setSite(new Site("invalid_id", "invalid_currency"));
         presenter.setAmount(BigDecimal.TEN);
 
-        presenter.initialize();
+        presenter.initialize(true);
 
         assertEquals(MockedProvider.INVALID_SITE, mockedView.errorShown.getMessage());
     }
@@ -90,7 +90,7 @@ public class PaymentVaultPresenterTest {
 
         presenter.setSite(Sites.ARGENTINA);
 
-        presenter.initialize();
+        presenter.initialize(true);
 
         assertEquals(MockedProvider.INVALID_AMOUNT, mockedView.errorShown.getMessage());
     }
@@ -110,7 +110,7 @@ public class PaymentVaultPresenterTest {
         presenter.setSite(Sites.ARGENTINA);
         presenter.setAmount(BigDecimal.TEN.negate());
 
-        presenter.initialize();
+        presenter.initialize(true);
 
         assertEquals(MockedProvider.INVALID_AMOUNT, mockedView.errorShown.getMessage());
     }
@@ -130,7 +130,7 @@ public class PaymentVaultPresenterTest {
         presenter.setAmount(BigDecimal.TEN);
         presenter.setSite(Sites.ARGENTINA);
 
-        presenter.initialize();
+        presenter.initialize(true);
 
         assertEquals(paymentMethodSearch.getGroups(), mockedView.searchItemsShown);
     }
@@ -150,7 +150,7 @@ public class PaymentVaultPresenterTest {
         presenter.setAmount(BigDecimal.TEN);
         presenter.setSite(Sites.ARGENTINA);
 
-        presenter.initialize();
+        presenter.initialize(true);
 
         assertEquals(paymentMethodSearch.getCustomSearchItems(), mockedView.customOptionsShown);
     }
@@ -173,7 +173,7 @@ public class PaymentVaultPresenterTest {
         presenter.setAmount(BigDecimal.TEN);
         presenter.setSite(Sites.ARGENTINA);
 
-        presenter.initialize();
+        presenter.initialize(true);
 
         assertEquals(paymentMethodSearch.getGroups().get(0), mockedView.itemShown);
 
@@ -196,7 +196,7 @@ public class PaymentVaultPresenterTest {
         presenter.setAmount(amount);
         presenter.setSite(Sites.ARGENTINA);
 
-        presenter.initialize();
+        presenter.initialize(true);
 
         assertTrue(mockedView.cardFlowStarted);
         assertEquals(paymentMethodSearch.getGroups().get(0).getId(), mockedView.selectedPaymentType);
@@ -221,7 +221,7 @@ public class PaymentVaultPresenterTest {
         presenter.setAmount(amount);
         presenter.setSite(Sites.ARGENTINA);
 
-        presenter.initialize();
+        presenter.initialize(true);
 
         assertTrue(mockedView.customOptionsShown != null);
         assertFalse(mockedView.cardFlowStarted);
@@ -245,7 +245,7 @@ public class PaymentVaultPresenterTest {
         presenter.setAmount(amount);
         presenter.setSite(Sites.ARGENTINA);
 
-        presenter.initialize();
+        presenter.initialize(true);
 
         assertTrue(mockedView.customOptionsShown != null);
         assertFalse(mockedView.cardFlowStarted);
@@ -269,7 +269,7 @@ public class PaymentVaultPresenterTest {
         presenter.setAmount(amount);
         presenter.setSite(Sites.ARGENTINA);
 
-        presenter.initialize();
+        presenter.initialize(true);
 
         assertTrue(mockedView.customOptionsShown != null);
         assertFalse(mockedView.cardFlowStarted);
@@ -293,7 +293,7 @@ public class PaymentVaultPresenterTest {
         presenter.setAmount(amount);
         presenter.setSite(Sites.ARGENTINA);
 
-        presenter.initialize();
+        presenter.initialize(true);
 
         assertEquals(paymentMethodSearch.getCustomSearchItems().get(0).getPaymentMethodId(), mockedView.selectedPaymentMethod.getId());
     }
@@ -315,7 +315,7 @@ public class PaymentVaultPresenterTest {
         presenter.setAmount(BigDecimal.TEN);
         presenter.setSite(Sites.ARGENTINA);
 
-        presenter.initialize();
+        presenter.initialize(true);
 
         mockedView.simulateItemSelection(1);
 
@@ -338,7 +338,7 @@ public class PaymentVaultPresenterTest {
         presenter.setAmount(BigDecimal.TEN);
         presenter.setSite(Sites.ARGENTINA);
 
-        presenter.initialize();
+        presenter.initialize(true);
 
         mockedView.simulateItemSelection(0);
 
@@ -361,7 +361,7 @@ public class PaymentVaultPresenterTest {
         presenter.setAmount(BigDecimal.TEN);
         presenter.setSite(Sites.ARGENTINA);
 
-        presenter.initialize();
+        presenter.initialize(true);
 
         mockedView.simulateCustomItemSelection(1);
 
@@ -384,7 +384,7 @@ public class PaymentVaultPresenterTest {
         presenter.setAmount(BigDecimal.TEN);
         presenter.setSite(Sites.ARGENTINA);
 
-        presenter.initialize();
+        presenter.initialize(true);
 
         mockedView.simulateCustomItemSelection(0);
 
@@ -412,7 +412,7 @@ public class PaymentVaultPresenterTest {
         presenter.setAmount(BigDecimal.TEN);
         presenter.setPaymentPreference(paymentPreference);
 
-        presenter.initialize();
+        presenter.initialize(true);
 
         assertEquals(MockedProvider.ALL_TYPES_EXCLUDED, mockedView.errorShown.getMessage());
     }
@@ -437,7 +437,7 @@ public class PaymentVaultPresenterTest {
         presenter.setAmount(BigDecimal.TEN);
         presenter.setPaymentPreference(paymentPreference);
 
-        presenter.initialize();
+        presenter.initialize(true);
 
         assertEquals(MockedProvider.INVALID_DEFAULT_INSTALLMENTS, mockedView.errorShown.getMessage());
     }
@@ -462,7 +462,7 @@ public class PaymentVaultPresenterTest {
         presenter.setAmount(BigDecimal.TEN);
         presenter.setPaymentPreference(paymentPreference);
 
-        presenter.initialize();
+        presenter.initialize(true);
 
         assertEquals(MockedProvider.INVALID_MAX_INSTALLMENTS, mockedView.errorShown.getMessage());
     }
@@ -482,7 +482,7 @@ public class PaymentVaultPresenterTest {
         presenter.setAmount(BigDecimal.TEN);
         presenter.setSite(Sites.ARGENTINA);
 
-        presenter.initialize();
+        presenter.initialize(true);
 
         Assert.assertEquals(paymentMethodSearch.getCustomSearchItems().size(), mockedView.customOptionsShown.size());
     }
@@ -503,7 +503,7 @@ public class PaymentVaultPresenterTest {
         presenter.setSite(Sites.ARGENTINA);
         presenter.setMaxSavedCards(1);
 
-        presenter.initialize();
+        presenter.initialize(true);
 
         //Account money + 1 card
         Assert.assertEquals(2, mockedView.customOptionsShown.size());

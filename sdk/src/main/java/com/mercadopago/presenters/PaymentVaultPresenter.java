@@ -42,8 +42,11 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
     private Boolean mDiscountEnabled = true;
     private Integer mMaxSavedCards;
 
-    public void initialize() {
+    private boolean mSelectAutomatically;
+
+    public void initialize(boolean selectAutomatically) {
         try {
+            mSelectAutomatically = selectAutomatically;
             validateParameters();
             onValidStart();
         } catch (IllegalStateException exception) {
@@ -94,7 +97,9 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
     }
 
     public void initializeDiscountRow() {
-        getView().showDiscountRow(mAmount);
+        if(viewAttached()) {
+            getView().showDiscountRow(mAmount);
+        }
     }
 
     private void getDirectDiscount() {
@@ -111,6 +116,7 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
             public void onFailure(MercadoPagoError error) {
                 initializeDiscountRow();
                 initPaymentVaultFlow();
+                mDiscountEnabled = false;
             }
         });
     }
@@ -218,9 +224,9 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
 
             if (noPaymentMethodsAvailable()) {
                 showEmptyPaymentMethodsError();
-            } else if (isOnlyUniqueSearchSelectionAvailable()) {
+            } else if (isOnlyUniqueSearchSelectionAvailable() && mSelectAutomatically) {
                 selectItem(mPaymentMethodSearch.getGroups().get(0));
-            } else if (isOnlyAccountMoneyEnabled()) {
+            } else if (isOnlyAccountMoneyEnabled() && mSelectAutomatically) {
                 selectAccountMoney(mPaymentMethodSearch.getCustomSearchItems().get(0));
             } else {
                 showAvailableOptions();

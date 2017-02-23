@@ -395,7 +395,7 @@ public class ReviewAndConfirmPresenterTest {
 
         presenter.initialize();
 
-        view.cancelPayment();
+        view.cancelPayment(false);
 
         assertTrue(view.paymentCanceled);
     }
@@ -614,6 +614,7 @@ public class ReviewAndConfirmPresenterTest {
         private String confirmationMessage;
         private String cancelMessage;
         private boolean termsAndConditionsShown = false;
+        private boolean paymentCanceledNotified;
 
         @Override
         public void showError(String message) {
@@ -636,7 +637,8 @@ public class ReviewAndConfirmPresenterTest {
         }
 
         @Override
-        public void cancelPayment() {
+        public void cancelPayment(boolean notifyCancel) {
+            this.paymentCanceledNotified = notifyCancel;
             this.paymentCanceled = true;
         }
 

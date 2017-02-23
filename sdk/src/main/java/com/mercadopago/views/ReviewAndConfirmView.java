@@ -17,7 +17,7 @@ public interface ReviewAndConfirmView extends MvpView {
 
     void confirmPayment();
 
-    void cancelPayment();
+    void cancelPayment(boolean notifyCancel);
 
     void showTitle(String title);
 

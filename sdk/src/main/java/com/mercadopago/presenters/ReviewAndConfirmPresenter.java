@@ -24,9 +24,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by mreverter on 2/2/17.
- */
 public class ReviewAndConfirmPresenter extends MvpPresenter<ReviewAndConfirmView, ReviewAndConfirmProvider> implements ReviewSubscriber {
     private PaymentMethod mPaymentMethod;
     private PayerCost mPayerCost;
@@ -264,7 +261,7 @@ public class ReviewAndConfirmPresenter extends MvpPresenter<ReviewAndConfirmView
 
             reviewable.getReviewableCallback().onChangeRequired(paymentData);
         }
-        getView().cancelPayment();
+        getView().cancelPayment(false);
     }
 
     public List<String> getReviewOrder() {

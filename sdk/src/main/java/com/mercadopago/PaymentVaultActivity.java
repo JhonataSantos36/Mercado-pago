@@ -65,9 +65,18 @@ import java.util.Map;
 
 public class PaymentVaultActivity extends MercadoPagoBaseActivity implements PaymentVaultView, TimerObserver {
 
+    private static final String PUBLIC_KEY_BUNDLE = "mPublicKey";
+    private static final String MERCHANT_BASE_URL_BUNDLE = "mMerchantBaseUrl";
+    private static final String MERCHANT_GET_CUSTOMER_URI_BUNDLE = "mMerchantGetCustomerUri";
+    private static final String MERCHANT_GET_CUSTOMER_ADDITIONAL_INFO = "mMerchantGetCustomerAdditionalInfo";
+    private static final String SHOW_BANK_DEALS_BUNDLE = "mShowBankDeals";
+
     public static final String PAYMENT_VAULT_SCREEN_NAME = "PAYMENT_VAULT";
     public static final int COLUMN_SPACING_DP_VALUE = 20;
     public static final int COLUMNS = 2;
+
+    private static PaymentVaultPresenter savedPresenter;
+
     // Local vars
     protected DecorationPreference mDecorationPreference;
     protected FailureRecovery mFailureRecovery;
@@ -111,7 +120,10 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
         mActivityActive = true;
         setContentView();
         initializeControls();
-        initialize();
+
+        //Avoid automatic selection if activity restored on back pressed from next step
+        boolean selectAutomatically = savedInstanceState == null;
+        initialize(selectAutomatically);
     }
 
     protected void setContentView() {
@@ -183,10 +195,10 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
         initializeToolbar();
     }
 
-    protected void initialize() {
+    protected void initialize(boolean selectAutomatically) {
         MPTracker.getInstance().trackScreen("PAYMENT_METHOD_SEARCH", "2", mPublicKey, mPaymentVaultPresenter.getSite().getId(), BuildConfig.VERSION_NAME, this);
         showTimer();
-        mPaymentVaultPresenter.initialize();
+        mPaymentVaultPresenter.initialize(selectAutomatically);
     }
 
     private void showTimer() {
@@ -564,6 +576,34 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
         if (mPaymentVaultPresenter.isItemSelected()) {
             overridePendingTransition(R.anim.mpsdk_slide_left_to_right_in, R.anim.mpsdk_slide_left_to_right_out);
         }
+    }
+
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(PUBLIC_KEY_BUNDLE, mPublicKey);
+        outState.putString(MERCHANT_GET_CUSTOMER_URI_BUNDLE, mMerchantGetCustomerUri);
+        outState.putString(MERCHANT_BASE_URL_BUNDLE, mMerchantBaseUrl);
+        outState.putString(MERCHANT_GET_CUSTOMER_ADDITIONAL_INFO, JsonUtil.getInstance().toJson(mMerchantGetCustomerAdditionalInfo));
+        outState.putBoolean(SHOW_BANK_DEALS_BUNDLE, mShowBankDeals);
+        PaymentVaultActivity.savedPresenter = mPaymentVaultPresenter;
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        mPaymentVaultPresenter = PaymentVaultActivity.savedPresenter;
+
+        mPublicKey = savedInstanceState.getString(PUBLIC_KEY_BUNDLE);
+        String merchantGetCustomerAdditionalInfo = savedInstanceState.getString(MERCHANT_GET_CUSTOMER_ADDITIONAL_INFO);
+        Type type = new TypeToken<Map<String, String>>() {
+        }.getType();
+        mMerchantGetCustomerAdditionalInfo = new Gson().fromJson(merchantGetCustomerAdditionalInfo, type);
+        mMerchantGetCustomerUri = savedInstanceState.getString(MERCHANT_GET_CUSTOMER_URI_BUNDLE);
+        mMerchantBaseUrl = savedInstanceState.getString(MERCHANT_BASE_URL_BUNDLE);
+        mShowBankDeals = savedInstanceState.getBoolean(SHOW_BANK_DEALS_BUNDLE, true);
+
+        super.onRestoreInstanceState(savedInstanceState);
     }
 
     @Override

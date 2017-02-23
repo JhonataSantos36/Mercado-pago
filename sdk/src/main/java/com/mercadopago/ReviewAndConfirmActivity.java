@@ -46,14 +46,11 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by mreverter on 2/1/17.
- */
-
 public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements TimerObserver, ReviewAndConfirmView {
 
     public static final int RESULT_CHANGE_PAYMENT_METHOD = 3;
     public static final int RESULT_CANCEL_PAYMENT = 4;
+    public static final int RESULT_SILENT_CANCEL_PAYMENT = 5;
 
     //Controls
 
@@ -107,7 +104,7 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
         mCancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                cancelPayment();
+                cancelPayment(true);
             }
         });
         mTermsAndConditionsButton.setOnClickListener(new View.OnClickListener() {
@@ -364,8 +361,10 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
     }
 
     @Override
-    public void cancelPayment() {
-        setResult(RESULT_CANCEL_PAYMENT);
+    public void cancelPayment(boolean notifyCancel) {
+
+        int resultCode = notifyCancel ? RESULT_CANCEL_PAYMENT : RESULT_SILENT_CANCEL_PAYMENT;
+        setResult(resultCode);
         finish();
     }
 
