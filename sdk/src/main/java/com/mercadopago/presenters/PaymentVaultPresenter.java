@@ -56,10 +56,12 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
 
 
     private void onValidStart() {
-        if (mDiscountEnabled) {
-            initPaymentVaultDiscountFlow();
-        } else {
-            initPaymentVaultFlow();
+        if(viewAttached()) {
+            if (mDiscountEnabled) {
+                initPaymentVaultDiscountFlow();
+            } else {
+                initPaymentVaultFlow();
+            }
         }
     }
 
@@ -105,16 +107,20 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
         getResourcesProvider().getDirectDiscount(mAmount.toString(), mPayerEmail, new OnResourcesRetrievedCallback<Discount>() {
             @Override
             public void onSuccess(Discount discount) {
-                mDiscount = discount;
-                initializeDiscountRow();
-                initPaymentVaultFlow();
+                if(viewAttached()) {
+                    mDiscount = discount;
+                    initializeDiscountRow();
+                    initPaymentVaultFlow();
+                }
             }
 
             @Override
             public void onFailure(MPException mpException) {
-                mDirectDiscountEnabled = false;
-                initializeDiscountRow();
-                initPaymentVaultFlow();
+                if (viewAttached()) {
+                    mDirectDiscountEnabled = false;
+                    initializeDiscountRow();
+                    initPaymentVaultFlow();
+                }
             }
         });
     }

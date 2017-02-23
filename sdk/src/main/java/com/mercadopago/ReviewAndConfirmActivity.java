@@ -305,7 +305,7 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
     @Override
     public void onFinish() {
         Intent intent = new Intent();
-        setResult(RESULT_CANCELED, intent);
+        setResult(RESULT_CANCEL_PAYMENT, intent);
         this.finish();
     }
 

@@ -161,6 +161,7 @@ public class SecurityCodeActivity extends MercadoPagoBaseActivity implements Sec
     private void decorate() {
         if (isDecorationEnabled()) {
             mBackground.setBackgroundColor(mDecorationPreference.getLighterColor());
+            mCardView.decorateCardBorder(mDecorationPreference.getLighterColor());
             if (mTimerTextView != null) {
                 ColorsUtil.decorateTextView(mDecorationPreference, mTimerTextView, this);
             }
