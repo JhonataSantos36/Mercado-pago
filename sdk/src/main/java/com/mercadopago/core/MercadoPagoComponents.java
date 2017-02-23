@@ -31,6 +31,7 @@ import com.mercadopago.model.CardInfo;
 import com.mercadopago.model.CardInformation;
 import com.mercadopago.model.Discount;
 import com.mercadopago.model.Item;
+import com.mercadopago.model.PaymentResult;
 import com.mercadopago.model.Reviewable;
 import com.mercadopago.model.Token;
 import com.mercadopago.preferences.DecorationPreference;
@@ -42,6 +43,7 @@ import com.mercadopago.model.PaymentMethodSearch;
 import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.model.PaymentRecovery;
 import com.mercadopago.model.Site;
+import com.mercadopago.preferences.PaymentResultScreenPreference;
 import com.mercadopago.preferences.ReviewScreenPreference;
 import com.mercadopago.uicontrollers.discounts.DiscountRowView;
 import com.mercadopago.uicontrollers.reviewandconfirm.ReviewItemsView;
@@ -854,11 +856,13 @@ public class MercadoPagoComponents {
 
         public static class PaymentResultActivityBuilder {
             private Activity activity;
-            private Payment payment;
             private String merchantPublicKey;
-            private PaymentMethod paymentMethod;
             private Integer congratsDisplay;
             private Discount discount;
+            private PaymentResult paymentResult;
+            private Site site;
+            private BigDecimal amount;
+            private PaymentResultScreenPreference paymentResultScreenPreference;
 
             public PaymentResultActivityBuilder setActivity(Activity activity) {
                 this.activity = activity;
@@ -867,11 +871,6 @@ public class MercadoPagoComponents {
 
             public PaymentResultActivityBuilder setMerchantPublicKey(String merchantPublicKey) {
                 this.merchantPublicKey = merchantPublicKey;
-                return this;
-            }
-
-            public PaymentResultActivityBuilder setPaymentMethod(PaymentMethod paymentMethod) {
-                this.paymentMethod = paymentMethod;
                 return this;
             }
 
@@ -885,16 +884,29 @@ public class MercadoPagoComponents {
                 return this;
             }
 
-            public PaymentResultActivityBuilder setPayment(Payment payment) {
-                this.payment = payment;
+            public PaymentResultActivityBuilder setSite(Site site) {
+                this.site = site;
+                return this;
+            }
+
+            public PaymentResultActivityBuilder setAmount(BigDecimal amount) {
+                this.amount = amount;
+                return this;
+            }
+
+            public PaymentResultActivityBuilder setPaymentResultScreenPreference(PaymentResultScreenPreference preference) {
+                this.paymentResultScreenPreference = preference;
+                return this;
+            }
+
+            public PaymentResultActivityBuilder setPaymentResult(PaymentResult paymentResult) {
+                this.paymentResult = paymentResult;
                 return this;
             }
 
             public void startActivity() {
                 if (this.activity == null) throw new IllegalStateException("activity is null");
-                if (this.payment == null) throw new IllegalStateException("payment is null");
-                if (this.paymentMethod == null)
-                    throw new IllegalStateException("payment method is null");
+                if (this.paymentResult == null) throw new IllegalStateException("payment result is null");
                 if (this.merchantPublicKey == null)
                     throw new IllegalStateException("public key is null");
 
@@ -904,10 +916,14 @@ public class MercadoPagoComponents {
             private void startPaymentResultActivity() {
                 Intent resultIntent = new Intent(activity, PaymentResultActivity.class);
                 resultIntent.putExtra("merchantPublicKey", merchantPublicKey);
-                resultIntent.putExtra("payment", JsonUtil.getInstance().toJson(payment));
-                resultIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
                 resultIntent.putExtra("discount", JsonUtil.getInstance().toJson(discount));
                 resultIntent.putExtra("congratsDisplay", congratsDisplay);
+                resultIntent.putExtra("paymentResult", JsonUtil.getInstance().toJson(paymentResult));
+                resultIntent.putExtra("site", JsonUtil.getInstance().toJson(site));
+                resultIntent.putExtra("paymentResultScreenPreference", JsonUtil.getInstance().toJson(paymentResultScreenPreference));
+                if (amount != null) {
+                    resultIntent.putExtra("amount", amount.toString());
+                }
 
                 activity.startActivityForResult(resultIntent, PAYMENT_RESULT_REQUEST_CODE);
             }
@@ -915,9 +931,10 @@ public class MercadoPagoComponents {
 
         public static class InstructionsActivityBuilder {
             private Activity activity;
-            private Payment payment;
             private String merchantPublicKey;
-            private String paymentTypeId;
+            private PaymentResult paymentResult;
+            private Site site;
+            private BigDecimal amount;
 
             public InstructionsActivityBuilder setActivity(Activity activity) {
                 this.activity = activity;
@@ -929,23 +946,29 @@ public class MercadoPagoComponents {
                 return this;
             }
 
-            public InstructionsActivityBuilder setPaymentTypeId(String paymentTypeId) {
-                this.paymentTypeId = paymentTypeId;
+            public InstructionsActivityBuilder setPaymentResult(PaymentResult paymentResult) {
+                this.paymentResult = paymentResult;
                 return this;
             }
 
-            public InstructionsActivityBuilder setPayment(Payment payment) {
-                this.payment = payment;
+            public InstructionsActivityBuilder setSite(Site site) {
+                this.site = site;
+                return this;
+            }
+
+            public InstructionsActivityBuilder setAmount(BigDecimal amount) {
+                this.amount = amount;
                 return this;
             }
 
             public void startActivity() {
                 if (this.activity == null) throw new IllegalStateException("activity is null");
-                if (this.payment == null) throw new IllegalStateException("payment is null");
-                if (this.paymentTypeId == null)
-                    throw new IllegalStateException("payment type id is null");
+                if (this.amount == null) throw new IllegalStateException("amount is null");
+                if (this.paymentResult == null) throw new IllegalStateException("payment result is null");
                 if (this.merchantPublicKey == null)
                     throw new IllegalStateException("public key is null");
+                if (this.site == null)
+                    throw new IllegalStateException("site is null");
 
                 startPaymentResultActivity();
             }
@@ -953,8 +976,9 @@ public class MercadoPagoComponents {
             private void startPaymentResultActivity() {
                 Intent instructionIntent = new Intent(activity, InstructionsActivity.class);
                 instructionIntent.putExtra("merchantPublicKey", merchantPublicKey);
-                instructionIntent.putExtra("paymentTypeId", paymentTypeId);
-                instructionIntent.putExtra("payment", JsonUtil.getInstance().toJson(payment));
+                instructionIntent.putExtra("paymentResult", JsonUtil.getInstance().toJson(paymentResult));
+                instructionIntent.putExtra("site", JsonUtil.getInstance().toJson(site));
+                instructionIntent.putExtra("amount", amount.toString());
 
                 activity.startActivityForResult(instructionIntent, INSTRUCTIONS_REQUEST_CODE);
             }
@@ -962,10 +986,13 @@ public class MercadoPagoComponents {
 
         public static class CongratsActivityBuilder {
             private Activity activity;
-            private Payment payment;
             private String merchantPublicKey;
-            private PaymentMethod paymentMethod;
             private Integer congratsDisplay;
+            private Discount discount;
+            private PaymentResult paymentResult;
+            private Site site;
+            private BigDecimal amount;
+            private PaymentResultScreenPreference paymentResultScreenPreference;
 
             public CongratsActivityBuilder setActivity(Activity activity) {
                 this.activity = activity;
@@ -977,26 +1004,39 @@ public class MercadoPagoComponents {
                 return this;
             }
 
-            public CongratsActivityBuilder setPaymentTypeId(PaymentMethod paymentMethod) {
-                this.paymentMethod = paymentMethod;
-                return this;
-            }
-
             public CongratsActivityBuilder setCongratsDisplay(Integer congratsDisplay) {
                 this.congratsDisplay = congratsDisplay;
                 return this;
             }
 
-            public CongratsActivityBuilder setPayment(Payment payment) {
-                this.payment = payment;
+            public CongratsActivityBuilder setPaymentResult(PaymentResult paymentResult) {
+                this.paymentResult = paymentResult;
+                return this;
+            }
+
+            public CongratsActivityBuilder setPaymentResultScreenPreference(PaymentResultScreenPreference preference) {
+                this.paymentResultScreenPreference = preference;
+                return this;
+            }
+
+            public CongratsActivityBuilder setSite(Site site) {
+                this.site = site;
+                return this;
+            }
+
+            public CongratsActivityBuilder setAmount(BigDecimal amount) {
+                this.amount = amount;
+                return this;
+            }
+
+            public CongratsActivityBuilder setDiscount(Discount discount) {
+                this.discount = discount;
                 return this;
             }
 
             public void startActivity() {
                 if (this.activity == null) throw new IllegalStateException("activity is null");
-                if (this.payment == null) throw new IllegalStateException("payment is null");
-                if (this.paymentMethod == null)
-                    throw new IllegalStateException("payment method is null");
+                if (this.paymentResult == null) throw new IllegalStateException("payment result is null");
                 if (this.merchantPublicKey == null)
                     throw new IllegalStateException("public key is null");
 
@@ -1006,9 +1046,14 @@ public class MercadoPagoComponents {
             private void startCongratsActivity() {
                 Intent congratsIntent = new Intent(activity, CongratsActivity.class);
                 congratsIntent.putExtra("merchantPublicKey", merchantPublicKey);
-                congratsIntent.putExtra("payment", JsonUtil.getInstance().toJson(payment));
-                congratsIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
                 congratsIntent.putExtra("congratsDisplay", congratsDisplay);
+                congratsIntent.putExtra("discount", JsonUtil.getInstance().toJson(discount));
+                congratsIntent.putExtra("paymentResult", JsonUtil.getInstance().toJson(paymentResult));
+                congratsIntent.putExtra("site", JsonUtil.getInstance().toJson(site));
+                congratsIntent.putExtra("paymentResultScreenPreference", JsonUtil.getInstance().toJson(paymentResultScreenPreference));
+                if (amount != null) {
+                    congratsIntent.putExtra("amount", amount.toString());
+                }
 
                 activity.startActivityForResult(congratsIntent, CONGRATS_REQUEST_CODE);
             }
@@ -1016,9 +1061,9 @@ public class MercadoPagoComponents {
 
         public static class RejectionActivityBuilder {
             private Activity activity;
-            private Payment payment;
             private String merchantPublicKey;
-            private PaymentMethod paymentMethod;
+            private PaymentResult paymentResult;
+            private PaymentResultScreenPreference paymentResultScreenPreference;
 
             public RejectionActivityBuilder setActivity(Activity activity) {
                 this.activity = activity;
@@ -1030,21 +1075,19 @@ public class MercadoPagoComponents {
                 return this;
             }
 
-            public RejectionActivityBuilder setPaymentTypeId(PaymentMethod paymentMethod) {
-                this.paymentMethod = paymentMethod;
+            public RejectionActivityBuilder setPaymentResult(PaymentResult paymentResult) {
+                this.paymentResult = paymentResult;
                 return this;
             }
 
-            public RejectionActivityBuilder setPayment(Payment payment) {
-                this.payment = payment;
+            public RejectionActivityBuilder setPaymentResultScreenPreference(PaymentResultScreenPreference paymentResultScreenPreference) {
+                this.paymentResultScreenPreference = paymentResultScreenPreference;
                 return this;
             }
 
             public void startActivity() {
                 if (this.activity == null) throw new IllegalStateException("activity is null");
-                if (this.payment == null) throw new IllegalStateException("payment is null");
-                if (this.paymentMethod == null)
-                    throw new IllegalStateException("payment method is null");
+                if (this.paymentResult == null) throw new IllegalStateException("payment result is null");
                 if (this.merchantPublicKey == null)
                     throw new IllegalStateException("public key is null");
 
@@ -1054,8 +1097,8 @@ public class MercadoPagoComponents {
             private void startRejectionActivity() {
                 Intent rejectionIntent = new Intent(activity, RejectionActivity.class);
                 rejectionIntent.putExtra("merchantPublicKey", merchantPublicKey);
-                rejectionIntent.putExtra("payment", JsonUtil.getInstance().toJson(payment));
-                rejectionIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
+                rejectionIntent.putExtra("paymentResult", JsonUtil.getInstance().toJson(paymentResult));
+                rejectionIntent.putExtra("paymentResultScreenPreference", JsonUtil.getInstance().toJson(paymentResultScreenPreference));
 
                 activity.startActivityForResult(rejectionIntent, REJECTION_REQUEST_CODE);
             }
@@ -1063,12 +1106,17 @@ public class MercadoPagoComponents {
 
         public static class CallForAuthorizeActivityBuilder {
             private Activity activity;
-            private Payment payment;
             private String merchantPublicKey;
-            private PaymentMethod paymentMethod;
+            private PaymentResult paymentResult;
+            private Site site;
 
             public CallForAuthorizeActivityBuilder setActivity(Activity activity) {
                 this.activity = activity;
+                return this;
+            }
+
+            public CallForAuthorizeActivityBuilder setPaymentResult(PaymentResult paymentResult) {
+                this.paymentResult = paymentResult;
                 return this;
             }
 
@@ -1077,23 +1125,19 @@ public class MercadoPagoComponents {
                 return this;
             }
 
-            public CallForAuthorizeActivityBuilder setPaymentTypeId(PaymentMethod paymentMethod) {
-                this.paymentMethod = paymentMethod;
-                return this;
-            }
-
-            public CallForAuthorizeActivityBuilder setPayment(Payment payment) {
-                this.payment = payment;
+            public CallForAuthorizeActivityBuilder setSite(Site site) {
+                this.site = site;
                 return this;
             }
 
             public void startActivity() {
                 if (this.activity == null) throw new IllegalStateException("activity is null");
-                if (this.payment == null) throw new IllegalStateException("payment is null");
-                if (this.paymentMethod == null)
-                    throw new IllegalStateException("payment method is null");
+                if (this.paymentResult == null)
+                    throw new IllegalStateException("payment result is null");
                 if (this.merchantPublicKey == null)
                     throw new IllegalStateException("public key is null");
+                if (this.site == null)
+                    throw new IllegalStateException("site is null");
 
                 startCallForAuthorizeActivity();
             }
@@ -1101,8 +1145,8 @@ public class MercadoPagoComponents {
             private void startCallForAuthorizeActivity() {
                 Intent callForAuthorizeIntent = new Intent(activity, CallForAuthorizeActivity.class);
                 callForAuthorizeIntent.putExtra("merchantPublicKey", merchantPublicKey);
-                callForAuthorizeIntent.putExtra("payment", JsonUtil.getInstance().toJson(payment));
-                callForAuthorizeIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
+                callForAuthorizeIntent.putExtra("paymentResult", JsonUtil.getInstance().toJson(paymentResult));
+                callForAuthorizeIntent.putExtra("site", JsonUtil.getInstance().toJson(site));
 
                 activity.startActivityForResult(callForAuthorizeIntent, CALL_FOR_AUTHORIZE_REQUEST_CODE);
             }
@@ -1110,9 +1154,9 @@ public class MercadoPagoComponents {
 
         public static class PendingActivityBuilder {
             private Activity activity;
-            private Payment payment;
             private String merchantPublicKey;
-            private PaymentMethod paymentMethod;
+            private PaymentResult paymentResult;
+            private PaymentResultScreenPreference paymentResultScreenPreference;
 
             public PendingActivityBuilder setActivity(Activity activity) {
                 this.activity = activity;
@@ -1124,21 +1168,20 @@ public class MercadoPagoComponents {
                 return this;
             }
 
-            public PendingActivityBuilder setPaymentTypeId(PaymentMethod paymentMethod) {
-                this.paymentMethod = paymentMethod;
+            public PendingActivityBuilder setPaymentResult(PaymentResult paymentResult) {
+                this.paymentResult = paymentResult;
                 return this;
             }
 
-            public PendingActivityBuilder setPayment(Payment payment) {
-                this.payment = payment;
+            public PendingActivityBuilder setPaymentResultScreenPreference(PaymentResultScreenPreference preference) {
+                this.paymentResultScreenPreference = preference;
                 return this;
             }
 
             public void startActivity() {
                 if (this.activity == null) throw new IllegalStateException("activity is null");
-                if (this.payment == null) throw new IllegalStateException("payment is null");
-                if (this.paymentMethod == null)
-                    throw new IllegalStateException("payment method is null");
+                if (this.paymentResult == null)
+                    throw new IllegalStateException("payment result is null");
                 if (this.merchantPublicKey == null)
                     throw new IllegalStateException("public key is null");
 
@@ -1148,7 +1191,8 @@ public class MercadoPagoComponents {
             private void startPendingActivity() {
                 Intent pendingIntent = new Intent(activity, PendingActivity.class);
                 pendingIntent.putExtra("merchantPublicKey", merchantPublicKey);
-                pendingIntent.putExtra("payment", JsonUtil.getInstance().toJson(payment));
+                pendingIntent.putExtra("paymentResult", JsonUtil.getInstance().toJson(paymentResult));
+                pendingIntent.putExtra("paymentResultScreenPreference", JsonUtil.getInstance().toJson(paymentResultScreenPreference));
 
                 activity.startActivityForResult(pendingIntent, PENDING_REQUEST_CODE);
             }

@@ -309,11 +309,13 @@ public class Payment {
         public static final String STATUS_APPROVED = "approved";
         public static final String STATUS_IN_PROCESS = "in_process";
         public static final String STATUS_REJECTED = "rejected";
+        public static final String STATUS_PENDING = "pending";
 
         public static final String STATUS_DETAIL_ACCREDITED = "accredited";
         public static final String STATUS_DETAIL_CC_REJECTED_CALL_FOR_AUTHORIZE = "cc_rejected_call_for_authorize";
         public static final String STATUS_DETAIL_PENDING_CONTINGENCY = "pending_contingency";
         public static final String STATUS_DETAIL_PENDING_REVIEW_MANUAL = "pending_review_manual";
+        public static final String STATUS_DETAIL_PENDING_WAITING_PAYMENT = "pending_waiting_payment";
         public static final String STATUS_DETAIL_CC_REJECTED_OTHER_REASON = "cc_rejected_other_reason";
         public static final String STATUS_DETAIL_CC_REJECTED_BAD_FILLED_OTHER = "cc_rejected_bad_filled_other";
         public static final String STATUS_DETAIL_CC_REJECTED_BAD_FILLED_CARD_NUMBER = "cc_rejected_bad_filled_card_number";

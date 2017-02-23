@@ -20,6 +20,7 @@
     <string name="mpsdk_title_activity_vault">Pagar</string>
     <string name="mpsdk_select_pm_label">Selecciona un medio de pago…</string>
     <string name="mpsdk_last_digits_label">Terminada en</string>
+    <string name="mpsdk_account_money_description">Dinero en cuenta \nde Mercado Pago</string>
     <string name="mpsdk_confirm">Confirmar</string>
     <string name="mpsdk_title_activity_payment_vault">¿Cómo quieres pagar?</string>
     <string name="mpsdk_invalid_pm_for_current_amount">El medio de pago que elegiste no se puede usar para pagar ese monto. Por favor selecciona otro</string>
@@ -80,11 +81,12 @@
     <string name="mpsdk_title_activity_new_card">Ingresa los datos de tu tarjeta</string>
 
     <!-- Congrats -->
-    <string name="mpsdk_title_activity_congrat">¡Listo, se acreditó tu pago!</string>
-    <string name="mpsdk_subtitle_action_activity_congrat">Te enviaremos los datos a\n%1$s</string>
-    <string name="mpsdk_text_state_acount_activity_congrat">En tu estado de cuenta verás el cargo como\n MERCADOPAGO</string>
+    <string name="mpsdk_title_activity_congrats">¡Listo, se acreditó tu pago!</string>
+    <string name="mpsdk_subtitle_action_activity_congrats">Te enviaremos los datos a\n%1$s</string>
+    <string name="mpsdk_text_state_acount_activity_congrat">En tu estado de cuenta verás el cargo como\n %1$s</string>
     <string name="mpsdk_payment_id_description">Comprobante</string>
     <string name="mpsdk_payment_id_description_number">Nº %1$s</string>
+    <string name="mpsdk_statement_default">MERCADO PAGO</string>
 
     <!-- CallForAuthorize -->
     <string name="mpsdk_title_activity_call_for_authorize">Debes autorizar ante %1$s el pago de %2$s a Mercado Pago</string>
@@ -97,6 +99,7 @@
     <!-- Pending -->
     <string name="mpsdk_title_pending">Estamos procesando\n el pago</string>
     <string name="mpsdk_subtitle_pending_contingency">En menos de 1 hora te enviaremos por e-mail el resultado.</string>
+    <string name="mpsdk_subtitle_pending_review_manual">En menos de 2 días hábiles te diremos por e-mail si se acreditó o si necesitamos más información.</string>
 
     <!-- Rejection -->
     <string name="mpsdk_text_other_payment_method_button_rejection">Usar otro medio de pago</string>

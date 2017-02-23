@@ -1,6 +1,8 @@
 package com.mercadopago;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -8,8 +10,11 @@ import android.widget.FrameLayout;
 import com.mercadopago.controllers.CheckoutTimer;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.model.Payment;
+import com.mercadopago.model.PaymentData;
 import com.mercadopago.model.PaymentMethod;
+import com.mercadopago.model.PaymentResult;
 import com.mercadopago.model.PaymentResultAction;
+import com.mercadopago.model.Site;
 import com.mercadopago.mptracker.MPTracker;
 import com.mercadopago.observers.TimerObserver;
 import com.mercadopago.util.CurrenciesUtil;
@@ -20,7 +25,7 @@ import java.math.BigDecimal;
 
 import static android.text.TextUtils.isEmpty;
 
-public class CallForAuthorizeActivity extends MercadoPagoActivity implements TimerObserver {
+public class CallForAuthorizeActivity extends MercadoPagoBaseActivity implements TimerObserver {
 
     //Controls
     protected MPTextView mTimerTextView;
@@ -30,48 +35,63 @@ public class CallForAuthorizeActivity extends MercadoPagoActivity implements Tim
     protected FrameLayout mPayWithOtherPaymentMethodButton;
 
     //Params
-    protected Payment mPayment;
-    protected PaymentMethod mPaymentMethod;
     protected String mMerchantPublicKey;
+    protected PaymentResult mPaymentResult;
+    protected Site mSite;
+    protected Activity mActivity;
 
     //Local values
     private boolean mBackPressedOnce;
     private String mNextAction;
+    private String mPaymentMethodName;
+    private String mCurrencyId;
+    private BigDecimal mTotalAmount;
+    private String mPaymentTypeId;
+    private String mPaymentMethodId;
+
 
     @Override
-    protected void getActivityParameters() {
-        mMerchantPublicKey = getIntent().getStringExtra("merchantPublicKey");
-        mPayment = JsonUtil.getInstance().fromJson(getIntent().getExtras().getString("payment"), Payment.class);
-        mPaymentMethod = JsonUtil.getInstance().fromJson(getIntent().getExtras().getString("paymentMethod"), PaymentMethod.class);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        getActivityParameters();
+        setContentView();
+        initializeControls();
+        mActivity = this;
+        try {
+            validateActivityParameters();
+            onValidStart();
+        } catch (IllegalStateException exception) {
+            onInvalidStart(exception.getMessage());
+        }
     }
 
-    @Override
+    protected void getActivityParameters() {
+        mMerchantPublicKey = getIntent().getStringExtra("merchantPublicKey");
+        mPaymentResult = JsonUtil.getInstance().fromJson(getIntent().getExtras().getString("paymentResult"), PaymentResult.class);
+        mSite = JsonUtil.getInstance().fromJson(getIntent().getExtras().getString("site"), Site.class);
+    }
+
     protected void validateActivityParameters() throws IllegalStateException {
         if (mMerchantPublicKey == null) {
             throw new IllegalStateException("merchant public key not set");
         }
-        if (mPayment == null) {
-            throw new IllegalStateException("payment not set");
-        }
-        if (mPaymentMethod == null) {
-            throw new IllegalStateException("payment method not set");
+        if (mPaymentResult == null) {
+            throw new IllegalStateException("payment result not set");
         }
     }
 
-    @Override
     protected void setContentView() {
         MPTracker.getInstance().trackScreen("CALL_FOR_AUTHORIZE", "2", mMerchantPublicKey, BuildConfig.VERSION_NAME, this);
         setContentView(R.layout.mpsdk_activity_call_for_authorize);
     }
 
-    @Override
     protected void initializeControls() {
         mCallForAuthTitle = (MPTextView) findViewById(R.id.mpsdkCallForAuthorizeTitle);
         mAuthorizedPaymentMethod = (MPTextView) findViewById(R.id.mpsdkAuthorizedPaymentMethod);
         mAuthorizedPaymentMethod.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MPTracker.getInstance().trackEvent("CALL_FOR_AUTHORIZE", "RECOVER_TOKEN", "2", mMerchantPublicKey, BuildConfig.VERSION_NAME, getActivity());
+                MPTracker.getInstance().trackEvent("CALL_FOR_AUTHORIZE", "RECOVER_TOKEN", "2", mMerchantPublicKey, BuildConfig.VERSION_NAME, mActivity);
 
                 Intent returnIntent = new Intent();
                 mNextAction = PaymentResultAction.RECOVER_PAYMENT;
@@ -84,7 +104,7 @@ public class CallForAuthorizeActivity extends MercadoPagoActivity implements Tim
         mPayWithOtherPaymentMethodButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MPTracker.getInstance().trackEvent("CALL_FOR_AUTHORIZE", "SELECT_OTHER_PAYMENT_METHOD", "2", mMerchantPublicKey, BuildConfig.VERSION_NAME, getActivity());
+                MPTracker.getInstance().trackEvent("CALL_FOR_AUTHORIZE", "SELECT_OTHER_PAYMENT_METHOD", "2", mMerchantPublicKey, BuildConfig.VERSION_NAME, mActivity);
 
                 Intent returnIntent = new Intent();
                 mNextAction = PaymentResultAction.SELECT_OTHER_PAYMENT_METHOD;
@@ -104,11 +124,28 @@ public class CallForAuthorizeActivity extends MercadoPagoActivity implements Tim
         mTimerTextView = (MPTextView) findViewById(R.id.mpsdkTimerTextView);
     }
 
-    @Override
     protected void onValidStart() {
+        initializePaymentData();
         showTimer();
         setDescription();
         setAuthorized();
+    }
+
+    private void initializePaymentData() {
+        PaymentData paymentData = mPaymentResult.getPaymentData();
+        if (paymentData != null) {
+            if (paymentData.getPaymentMethod() != null) {
+                mPaymentMethodName = paymentData.getPaymentMethod().getName();
+                mPaymentTypeId = paymentData.getPaymentMethod().getPaymentTypeId();
+                mPaymentMethodId = paymentData.getPaymentMethod().getId();
+            }
+            if (paymentData.getPayerCost() != null) {
+                mTotalAmount = paymentData.getPayerCost().getTotalAmount();
+            }
+        }
+        if (mSite != null) {
+            mCurrencyId = mSite.getCurrencyId();
+        }
     }
 
     private void showTimer() {
@@ -119,7 +156,6 @@ public class CallForAuthorizeActivity extends MercadoPagoActivity implements Tim
         }
     }
 
-    @Override
     protected void onInvalidStart(String errorMessage) {
         ErrorUtil.startErrorActivity(this, getString(R.string.mpsdk_standard_error_message), errorMessage, false);
     }
@@ -132,7 +168,7 @@ public class CallForAuthorizeActivity extends MercadoPagoActivity implements Tim
 
     private void setAuthorized() {
         if (isPaymentMethodValid()) {
-            String message = String.format(getString(R.string.mpsdk_text_authorized_call_for_authorize), mPaymentMethod.getName());
+            String message = String.format(getString(R.string.mpsdk_text_authorized_call_for_authorize), mPaymentMethodName);
             mAuthorizedPaymentMethod.setText(message);
         } else {
             mAuthorizedPaymentMethod.setVisibility(View.GONE);
@@ -141,31 +177,30 @@ public class CallForAuthorizeActivity extends MercadoPagoActivity implements Tim
 
     private void setDescription() {
         if (isPaymentMethodValid() && isCurrencyIdValid() && isTotalPaidAmountValid()) {
-            String totalPaidAmount = CurrenciesUtil.formatNumber(mPayment.getTransactionDetails().getTotalPaidAmount(), mPayment.getCurrencyId());
-            String titleWithFormat = String.format(getString(R.string.mpsdk_title_activity_call_for_authorize), "<br>" + mPaymentMethod.getName(), "<br>" + totalPaidAmount);
+            String totalPaidAmount = CurrenciesUtil.formatNumber(mTotalAmount, mCurrencyId);
+            String titleWithFormat = String.format(getString(R.string.mpsdk_title_activity_call_for_authorize), "<br>" + mPaymentMethodName, "<br>" + totalPaidAmount);
 
-            mCallForAuthTitle.setText(CurrenciesUtil.formatCurrencyInText(mPayment.getTransactionDetails().getTotalPaidAmount(),
-                    mPayment.getCurrencyId(), titleWithFormat, true, true));
+            mCallForAuthTitle.setText(CurrenciesUtil.formatCurrencyInText(mTotalAmount, mCurrencyId, titleWithFormat, true, true));
         } else {
             mCallForAuthTitle.setText(getString(R.string.mpsdk_error_title_activity_call_for_authorize));
         }
     }
 
     private Boolean isPaymentMethodValid() {
-        return isPaymentMethodIdValid() && !isEmpty(mPaymentMethod.getName()) && !isEmpty(mPaymentMethod.getPaymentTypeId());
+        return isPaymentMethodIdValid() && !isEmpty(mPaymentMethodName) && !isEmpty(mPaymentTypeId);
     }
 
     private Boolean isPaymentMethodIdValid() {
-        return !isEmpty(mPaymentMethod.getId()) && mPayment.getPaymentMethodId().equals(mPaymentMethod.getId());
+        return !isEmpty(mPaymentMethodId);
     }
 
     private Boolean isCurrencyIdValid() {
-        return !isEmpty(mPayment.getCurrencyId()) && CurrenciesUtil.isValidCurrency(mPayment.getCurrencyId());
+        return !isEmpty(mCurrencyId) && CurrenciesUtil.isValidCurrency(mCurrencyId);
     }
 
     private Boolean isTotalPaidAmountValid() {
-        return mPayment.getTransactionDetails() != null && mPayment.getTransactionDetails().getTotalPaidAmount() != null
-                && (mPayment.getTransactionDetails().getTotalPaidAmount().compareTo(BigDecimal.ZERO)) > 0;
+        return mTotalAmount != null
+                && (mTotalAmount.compareTo(BigDecimal.ZERO)) > 0;
     }
 
     @Override

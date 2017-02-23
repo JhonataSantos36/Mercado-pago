@@ -10,14 +10,16 @@ import com.mercadopago.callbacks.PaymentDataCallback;
 import com.mercadopago.controllers.CustomReviewablesHandler;
 import com.mercadopago.model.Discount;
 import com.mercadopago.model.PaymentData;
-import com.mercadopago.model.Reviewable;
+import com.mercadopago.model.PaymentResult;
 import com.mercadopago.preferences.CheckoutPreference;
 import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.preferences.FlowPreference;
+import com.mercadopago.preferences.PaymentResultScreenPreference;
 import com.mercadopago.preferences.ReviewScreenPreference;
 import com.mercadopago.preferences.ServicePreference;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.TextUtil;
+
 
 /**
  * Created by mreverter on 1/17/17.
@@ -32,9 +34,11 @@ public class MercadoPagoCheckout {
     private DecorationPreference decorationPreference;
     private ServicePreference servicePreference;
     private FlowPreference flowPreference;
+    private PaymentResultScreenPreference paymentResultScreenPreference;
+    private PaymentData paymentData;
+    private PaymentResult paymentResult;
     private Boolean binaryMode;
     private Integer maxSavedCards;
-    private PaymentData paymentData;
     private Discount discount;
 
     private MercadoPagoCheckout(Builder builder) {
@@ -45,19 +49,30 @@ public class MercadoPagoCheckout {
         this.decorationPreference = builder.decorationPreference;
         this.servicePreference = builder.servicePreference;
         this.flowPreference = builder.flowPreference;
+        this.paymentResultScreenPreference = builder.paymentResultScreenPreference;
+        this.paymentResult = builder.paymentResult;
         this.reviewScreenPreference = builder.reviewScreenPreference;
-        this.paymentData = builder.paymentData;
         this.binaryMode = builder.binaryMode;
         this.maxSavedCards = builder.maxSavedCards;
 
+        CustomReviewablesHandler.getInstance().clear();
         customizeCheckoutReview(reviewScreenPreference);
+        customizePaymentResultReview(paymentResultScreenPreference);
     }
 
     private void customizeCheckoutReview(ReviewScreenPreference reviewScreenPreference) {
-        CustomReviewablesHandler.getInstance().clear();
         if (reviewScreenPreference != null && reviewScreenPreference.hasCustomReviewables()) {
             CustomReviewablesHandler.getInstance().setItemsReview(reviewScreenPreference.getItemsReviewable());
             CustomReviewablesHandler.getInstance().add(reviewScreenPreference.getCustomReviewables());
+        }
+    }
+
+    private void customizePaymentResultReview(PaymentResultScreenPreference paymentResultScreenPreference) {
+        if (paymentResultScreenPreference != null && paymentResultScreenPreference.hasCustomCongratsReviewables()) {
+            CustomReviewablesHandler.getInstance().addCongratsReviewables(paymentResultScreenPreference.getCongratsReviewables());
+        }
+        if (paymentResultScreenPreference != null && paymentResultScreenPreference.hasCustomPendingReviewables()) {
+            CustomReviewablesHandler.getInstance().addPendingReviewables(paymentResultScreenPreference.getPendingReviewables());
         }
     }
 
@@ -111,6 +126,8 @@ public class MercadoPagoCheckout {
         checkoutIntent.putExtra("decorationPreference", JsonUtil.getInstance().toJson(decorationPreference));
         checkoutIntent.putExtra("servicePreference", JsonUtil.getInstance().toJson(servicePreference));
         checkoutIntent.putExtra("flowPreference", JsonUtil.getInstance().toJson(flowPreference));
+        checkoutIntent.putExtra("paymentResultScreenPreference", JsonUtil.getInstance().toJson(paymentResultScreenPreference));
+        checkoutIntent.putExtra("paymentResult", JsonUtil.getInstance().toJson(paymentResult));
         checkoutIntent.putExtra("reviewScreenPreference", JsonUtil.getInstance().toJson(reviewScreenPreference));
         checkoutIntent.putExtra("discount", JsonUtil.getInstance().toJson(discount));
         checkoutIntent.putExtra("binaryMode", binaryMode);
@@ -127,8 +144,10 @@ public class MercadoPagoCheckout {
         private DecorationPreference decorationPreference;
         private ServicePreference servicePreference;
         private FlowPreference flowPreference;
+        private PaymentResultScreenPreference paymentResultScreenPreference;
         private ReviewScreenPreference reviewScreenPreference;
         private PaymentData paymentData;
+        private PaymentResult paymentResult;
 
         public Builder setContext(Context context) {
             this.context = context;
@@ -160,6 +179,11 @@ public class MercadoPagoCheckout {
             return this;
         }
 
+        public Builder setPaymentResultScreenPreference(PaymentResultScreenPreference paymentResultScreenPreference) {
+            this.paymentResultScreenPreference = paymentResultScreenPreference;
+            return this;
+        }
+
         public Builder setPaymentData(PaymentData paymentData) {
             this.paymentData = paymentData;
             return this;
@@ -177,6 +201,11 @@ public class MercadoPagoCheckout {
 
         public Builder setReviewScreenPreference(ReviewScreenPreference reviewScreenPreference) {
             this.reviewScreenPreference = reviewScreenPreference;
+            return this;
+        }
+
+        public Builder setPaymentResult(PaymentResult paymentResult) {
+            this.paymentResult = paymentResult;
             return this;
         }
 

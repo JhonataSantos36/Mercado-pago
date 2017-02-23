@@ -28,6 +28,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
+                    android:paddingBottom="34dp"
                     android:background="@color/mpsdk_color_rejection_title_background">
 
                     <com.mercadopago.customviews.MPTextView
@@ -56,7 +57,7 @@
                         android:layout_gravity="center_horizontal" />
 
                     <com.mercadopago.customviews.MPTextView
-                        android:id="@+id/mpsdkSomethingWentWrong"
+                        android:id="@+id/mpsdkIconSubtext"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="bottom|center"
@@ -69,7 +70,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="25dp"
-                        android:layout_marginBottom="25dp"
                         android:layout_marginLeft="25dp"
                         android:layout_marginRight="25dp"
                         android:layout_marginEnd="25dp"
@@ -79,6 +79,22 @@
                         android:textSize="22dp"
                         android:text="@string/mpsdk_text_select_other_rejection"
                         tools:text="Algún dato de tu Mastercard\nes incorrecto" />
+
+                    <com.mercadopago.customviews.MPTextView
+                        android:id="@+id/mpsdkRejectionSubtitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginRight="25dp"
+                        android:layout_marginEnd="25dp"
+                        android:layout_marginStart="25dp"
+                        android:layout_marginLeft="25dp"
+                        android:gravity="bottom|center"
+                        android:textSize="18dp"
+                        android:visibility="visible"
+                        android:textColor="@color/mpsdk_white"
+                        tools:text="Subtitulo"/>
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -87,7 +103,7 @@
                     android:background="@color/mpsdk_white_background">
 
                     <com.mercadopago.customviews.MPTextView
-                        android:id="@+id/mpsdkWhatCanIdo"
+                        android:id="@+id/mpsdkContentTitle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="50dp"
@@ -99,7 +115,7 @@
                         android:text="@string/mpsdk_what_can_do" />
 
                     <com.mercadopago.customviews.MPTextView
-                        android:id="@+id/mpsdkRejectionSubtitle"
+                        android:id="@+id/mpsdkContentText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="18dp"
@@ -112,7 +128,7 @@
                         android:text="Usa otra tarjeta u otro medio de pago." />
 
                     <FrameLayout
-                        android:id="@+id/mpsdkRejectionOptionButton"
+                        android:id="@+id/mpsdkChangePaymentMethodButton"
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
                         android:layout_marginLeft="25dp"
@@ -134,8 +150,30 @@
                             android:text="@string/mpsdk_text_pay_with_other_method"/>
                     </FrameLayout>
 
+                    <FrameLayout
+                        android:id="@+id/mpsdkRejectedSecondaryExitButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginRight="25dp"
+                        android:layout_marginEnd="25dp"
+                        android:layout_marginStart="25dp"
+                        android:layout_marginLeft="25dp"
+                        android:layout_marginTop="14dp"
+                        android:visibility="gone"
+                        android:background="@drawable/mpsdk_button_bg_stroke">
+
+                        <com.mercadopago.customviews.MPTextView
+                            android:id="@+id/mpsdkRejectedSecondaryExitButtonText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:textSize="18dp"
+                            android:textColor="@color/mpsdk_white_background"
+                            android:text="@string/mpsdk_text_pay_with_other_method"/>
+                    </FrameLayout>
+
                     <com.mercadopago.customviews.MPTextView
-                        android:id="@+id/mpsdkKeepBuyingRejection"
+                        android:id="@+id/mpsdkExitButtonRejection"
                         android:layout_marginTop="10dp"
                         android:paddingLeft="30dp"
                         android:paddingRight="30dp"

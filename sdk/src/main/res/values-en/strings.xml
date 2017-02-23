@@ -79,9 +79,9 @@
     <string name="mpsdk_title_activity_new_card">Enter your card\'s information</string>
 
     <!-- Congrats -->
-    <string name="mpsdk_title_activity_congrat">Done, your payment was accredited!</string>
-    <string name="mpsdk_subtitle_action_activity_congrat">We will send you the data to\n%1$s</string>
-    <string name="mpsdk_text_state_acount_activity_congrat">On your statement you will see the charge as\n MERCADOPAGO</string>
+    <string name="mpsdk_title_activity_congrats">Done, your payment was accredited!</string>
+    <string name="mpsdk_subtitle_action_activity_congrats">We will send you the data to\n%1$s</string>
+    <string name="mpsdk_text_state_acount_activity_congrat">On your statement you will see the charge as\n  %1$s</string>
     <string name="mpsdk_payment_id_description">Ticket</string>
     <string name="mpsdk_payment_id_description_number">Nº %1$s</string>
 

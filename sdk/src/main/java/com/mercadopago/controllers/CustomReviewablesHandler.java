@@ -11,10 +11,14 @@ import java.util.List;
 public class CustomReviewablesHandler {
     private static CustomReviewablesHandler mInstance;
     private List<Reviewable> reviewables;
+    private List<Reviewable> congratsReviewables;
+    private List<Reviewable> pendingReviewables;
     private Reviewable itemsReview;
 
     private CustomReviewablesHandler(){
         reviewables = new ArrayList<>();
+        congratsReviewables = new ArrayList<>();
+        pendingReviewables = new ArrayList<>();
     }
 
     public static CustomReviewablesHandler getInstance() {
@@ -28,18 +32,46 @@ public class CustomReviewablesHandler {
         this.reviewables.addAll(reviewables);
     }
 
+    public void addCongratsReviewables(List<Reviewable> reviewables) {
+        this.congratsReviewables.addAll(reviewables);
+    }
+
+    public void addPendingReviewables(List<Reviewable> reviewables) {
+        this.pendingReviewables.addAll(reviewables);
+    }
+
     public boolean hasReviewables() {
         return !reviewables.isEmpty();
+    }
+
+    public boolean hasCongratsReviewables() {
+        return !congratsReviewables.isEmpty();
+    }
+
+    public boolean hasPendingReviewables() {
+        return !pendingReviewables.isEmpty();
     }
 
     public List<Reviewable> getReviewables() {
         return reviewables;
     }
 
+    public List<Reviewable> getCongratsReviewables() {
+        return congratsReviewables;
+    }
+
+    public List<Reviewable> getPendingReviewables() {
+        return pendingReviewables;
+    }
+
     public void clear() {
         itemsReview = null;
         reviewables = new ArrayList<>();
+        congratsReviewables = new ArrayList<>();
+        pendingReviewables = new ArrayList<>();
     }
+
+
 
     public void setItemsReview(Reviewable itemsReview) {
         this.itemsReview = itemsReview;

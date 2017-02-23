@@ -1,5 +1,6 @@
 package com.mercadopago.model;
 
+import com.mercadopago.callbacks.PaymentResultReviewableCallback;
 import com.mercadopago.callbacks.ReviewableCallback;
 import com.mercadopago.constants.ReviewKeys;
 import com.mercadopago.uicontrollers.CustomViewController;
@@ -11,6 +12,7 @@ public abstract class Reviewable implements CustomViewController {
 
     public ReviewSubscriber reviewSubscriber;
     public ReviewableCallback reviewableCallback;
+    public PaymentResultReviewableCallback paymentResultReviewableCallback;
     private String key;
 
     public abstract void draw();
@@ -19,8 +21,16 @@ public abstract class Reviewable implements CustomViewController {
         this.reviewableCallback = callback;
     }
 
+    public void setReviewableCallback(PaymentResultReviewableCallback callback) {
+        this.paymentResultReviewableCallback = callback;
+    }
+
     public ReviewableCallback getReviewableCallback() {
         return reviewableCallback;
+    }
+
+    public PaymentResultReviewableCallback getPaymentResultReviewableCallback() {
+        return paymentResultReviewableCallback;
     }
 
     public void setReviewSubscriber(ReviewSubscriber subscriber) {

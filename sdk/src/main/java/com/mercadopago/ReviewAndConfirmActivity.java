@@ -116,7 +116,6 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
                 startTermsAndConditionsActivity();
             }
         });
-
     }
 
     private void createPresenter() {

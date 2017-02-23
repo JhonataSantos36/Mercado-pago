@@ -29,7 +29,6 @@ import com.mercadopago.SecurityCodeActivity;
 import com.mercadopago.VaultActivity;
 import com.mercadopago.adapters.ErrorHandlingCallAdapter;
 import com.mercadopago.callbacks.Callback;
-import com.mercadopago.constants.PaymentTypes;
 import com.mercadopago.model.BankDeal;
 import com.mercadopago.model.Card;
 import com.mercadopago.model.CardInfo;
@@ -49,7 +48,7 @@ import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentMethodSearch;
 import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.model.PaymentRecovery;
-import com.mercadopago.model.PaymentResult;
+import com.mercadopago.model.Instructions;
 import com.mercadopago.model.PaymentType;
 import com.mercadopago.model.SavedCardToken;
 import com.mercadopago.model.SecurityCodeIntent;
@@ -300,12 +299,12 @@ public class MercadoPago {
         }
     }
 
-    public void getPaymentResult(Long paymentId, String paymentTypeId, final Callback<PaymentResult> callback) {
+    public void getPaymentResult(Long paymentId, String paymentTypeId, final Callback<Instructions> callback) {
         if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {
             MPTracker.getInstance().trackEvent("NO_SCREEN", "GET_INSTRUCTIONS", "1", mKey, BuildConfig.VERSION_NAME, mContext);
 
             PaymentService service = mRetrofit.create(PaymentService.class);
-            service.getPaymentResult(mContext.getResources().getConfiguration().locale.getLanguage(), paymentId, this.mKey, paymentTypeId, PAYMENT_RESULT_API_VERSION).enqueue(callback);
+            service.getInstructions(mContext.getResources().getConfiguration().locale.getLanguage(), paymentId, this.mKey, paymentTypeId, PAYMENT_RESULT_API_VERSION).enqueue(callback);
         } else {
             throw new RuntimeException("Unsupported key type for this method");
         }
