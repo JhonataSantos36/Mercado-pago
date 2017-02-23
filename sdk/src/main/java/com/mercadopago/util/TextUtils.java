@@ -6,6 +6,6 @@ package com.mercadopago.util;
 
 public class TextUtils {
     public static boolean isEmpty(String text) {
-        return text != null && text.isEmpty();
+        return text == null || text.isEmpty();
     }
 }

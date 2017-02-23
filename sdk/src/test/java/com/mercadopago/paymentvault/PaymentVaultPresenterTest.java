@@ -12,9 +12,9 @@ import com.mercadopago.model.Payer;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentMethodSearch;
 import com.mercadopago.model.PaymentMethodSearchItem;
-import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.model.Site;
 import com.mercadopago.mvp.OnResourcesRetrievedCallback;
+import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.presenters.PaymentVaultPresenter;
 import com.mercadopago.providers.PaymentVaultProvider;
 import com.mercadopago.mocks.PaymentMethodSearchs;
@@ -539,7 +539,7 @@ public class PaymentVaultPresenterTest {
         }
 
         @Override
-        public void getPaymentMethodSearch(BigDecimal amount, PaymentPreference paymentPreference, Payer payer, OnResourcesRetrievedCallback<PaymentMethodSearch> onResourcesRetrievedCallback) {
+        public void getPaymentMethodSearch(BigDecimal amount, PaymentPreference paymentPreference, Payer payer, Site site, OnResourcesRetrievedCallback<PaymentMethodSearch> onResourcesRetrievedCallback) {
             if (shouldFail) {
                 onResourcesRetrievedCallback.onFailure(failedResponse);
             } else {

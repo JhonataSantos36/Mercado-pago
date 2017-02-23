@@ -1,9 +1,9 @@
 package com.mercadopago.controllers;
 
-import com.mercadopago.core.MercadoPago;
 import com.mercadopago.model.CardInformation;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.Setting;
+import com.mercadopago.util.MercadoPagoUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +37,7 @@ public class PaymentMethodGuessingController {
             return mGuessedPaymentMethods;
         }
         saveBin(bin);
-        mGuessedPaymentMethods = MercadoPago
+        mGuessedPaymentMethods = MercadoPagoUtil
                 .getValidPaymentMethodsForBin(mSavedBin, this.mAllPaymentMethods);
         mGuessedPaymentMethods = getValidPaymentMethodForType(mPaymentTypeId, mGuessedPaymentMethods);
         if (mGuessedPaymentMethods.size() > 1) {

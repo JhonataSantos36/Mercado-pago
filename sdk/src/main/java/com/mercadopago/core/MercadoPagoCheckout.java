@@ -8,6 +8,7 @@ import com.mercadopago.callbacks.CallbackHolder;
 import com.mercadopago.callbacks.PaymentCallback;
 import com.mercadopago.callbacks.PaymentDataCallback;
 import com.mercadopago.controllers.CustomReviewablesHandler;
+import com.mercadopago.controllers.CustomServicesHandler;
 import com.mercadopago.model.Discount;
 import com.mercadopago.model.PaymentData;
 import com.mercadopago.model.PaymentResult;
@@ -17,6 +18,7 @@ import com.mercadopago.preferences.FlowPreference;
 import com.mercadopago.preferences.PaymentResultScreenPreference;
 import com.mercadopago.preferences.ReviewScreenPreference;
 import com.mercadopago.preferences.ServicePreference;
+import com.mercadopago.services.CustomService;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.TextUtil;
 
@@ -55,12 +57,21 @@ public class MercadoPagoCheckout {
         this.binaryMode = builder.binaryMode;
         this.maxSavedCards = builder.maxSavedCards;
 
+        customizeServices(servicePreference);
+
         CustomReviewablesHandler.getInstance().clear();
         customizeCheckoutReview(reviewScreenPreference);
         customizePaymentResultReview(paymentResultScreenPreference);
     }
 
+    private void customizeServices(ServicePreference servicePreference) {
+        CustomServicesHandler.getInstance().clear();
+        CustomServicesHandler.getInstance().setServices(servicePreference);
+    }
+
     private void customizeCheckoutReview(ReviewScreenPreference reviewScreenPreference) {
+
+        CustomReviewablesHandler.getInstance().clear();
         if (reviewScreenPreference != null && reviewScreenPreference.hasCustomReviewables()) {
             CustomReviewablesHandler.getInstance().setItemsReview(reviewScreenPreference.getItemsReviewable());
             CustomReviewablesHandler.getInstance().add(reviewScreenPreference.getCustomReviewables());

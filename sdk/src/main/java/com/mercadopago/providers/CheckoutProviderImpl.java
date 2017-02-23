@@ -55,7 +55,7 @@ public class CheckoutProviderImpl {
 //        String getCustomerURI = servicePreference.getGetCustomerURI();
 //        Map<String, String> additionalInfo = servicePreference.getGetCustomerAdditionalInfo();
 //
-//        CustomServiceHandler.getCustomer(mContext, getCustomerURL, getCustomerURI, additionalInfo, new Callback<Customer>() {
+//        CustomServer.getCustomer(mContext, getCustomerURL, getCustomerURI, additionalInfo, new Callback<Customer>() {
 //            @Override
 //            public void success(Customer customer) {
 //                resourcesRetrievedCallback.onSuccess(customer);

@@ -1,19 +1,12 @@
 package com.mercadopago.preferences;
 
-import android.net.Uri;
-
-import com.mercadopago.BuildConfig;
-
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by mreverter on 1/17/17.
- */
 public class ServicePreference {
 
-    public static final String DEFAULT_CREATE_PAYMENT_URI = "/" + BuildConfig.API_VERSION + "/checkout/payments";
-    public static final String DEFAULT_CREATE_PAYMENT_URL = "https://api.mercadopago.com";
+    private String defaultBaseURL;
+    private String gatewayBaseURL;
 
     private String getCustomerURL;
     private String createPaymentURL;
@@ -26,6 +19,10 @@ public class ServicePreference {
     private Map<String, Object> createCheckoutPreferenceAdditionalInfo;
 
     private ServicePreference(Builder builder) {
+
+        this.defaultBaseURL = builder.defaultBaseURL;
+        this.gatewayBaseURL = builder.gatewayBaseURL;
+
         this.getCustomerURL = builder.getCustomerURL;
         this.createPaymentURL = builder.createPaymentURL;
         this.createCheckoutPreferenceURL = builder.createCheckoutPreferenceURL;
@@ -35,6 +32,14 @@ public class ServicePreference {
         this.getCustomerAdditionalInfo = builder.getCustomerAdditionalInfo;
         this.createPaymentAdditionalInfo = builder.createPaymentAdditionalInfo;
         this.createCheckoutPreferenceAdditionalInfo = builder.createCheckoutPreferenceAdditionalInfo;
+    }
+
+    public String getDefaultBaseURL() {
+        return defaultBaseURL;
+    }
+
+    public String getGatewayBaseURL() {
+        return gatewayBaseURL;
     }
 
     public String getGetCustomerURL() {
@@ -92,6 +97,9 @@ public class ServicePreference {
 
     public static class Builder {
 
+        private String defaultBaseURL;
+        private String gatewayBaseURL;
+
         private String getCustomerURL;
         private String createPaymentURL;
         private String createCheckoutPreferenceURL;
@@ -141,25 +149,22 @@ public class ServicePreference {
             return this;
         }
 
+        public Builder setDefaultBaseURL(String defaultBaseURL) {
+            this.defaultBaseURL = defaultBaseURL;
+            return this;
+        }
+
+        public Builder setGatewayURL(String gatewayBaseURL) {
+            this.gatewayBaseURL = gatewayBaseURL;
+            return this;
+        }
+
         public ServicePreference build() {
             return new ServicePreference(this);
         }
-
-        //TODO validar
-//        private String getBaseURL(String url) {
-//            String base = Uri.parse(url).getAuthority();
-//            String protocol = Uri.parse(url).getScheme();
-//            return protocol + "://" + base;
-//        }
-
-//        private String getURI(String url) {
-//            String uri = Uri.parse(url).getPath();
-//            return uri.startsWith("/") ? uri.substring(1) : uri;
-//        }
 
         private String getURI(String uri) {
             return uri.startsWith("/") ? uri.substring(1) : uri;
         }
     }
-
 }

@@ -11,8 +11,6 @@ import android.widget.EditText;
 import com.mercadopago.R;
 import com.mercadopago.uicontrollers.FontCache;
 
-import java.lang.reflect.Type;
-
 public class MPEditText extends EditText {
 
     private String mTypeName;

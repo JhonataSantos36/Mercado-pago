@@ -17,21 +17,21 @@ import android.widget.FrameLayout;
 import com.mercadopago.adapters.PayerCostsAdapter;
 import com.mercadopago.callbacks.OnSelectedCallback;
 import com.mercadopago.controllers.CheckoutTimer;
-import com.mercadopago.core.MercadoPago;
+import com.mercadopago.core.MercadoPagoComponents;
 import com.mercadopago.core.MercadoPagoUI;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.listeners.RecyclerItemClickListener;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.CardInfo;
-import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.model.Discount;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.PaymentMethod;
-import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.model.Site;
 import com.mercadopago.mptracker.MPTracker;
 import com.mercadopago.observers.TimerObserver;
+import com.mercadopago.preferences.DecorationPreference;
+import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.presenters.InstallmentsPresenter;
 import com.mercadopago.uicontrollers.FontCache;
 import com.mercadopago.uicontrollers.card.CardRepresentationModes;
@@ -100,6 +100,7 @@ public class InstallmentsActivity extends MercadoPagoBaseActivity implements Ins
     private void getActivityParameters() {
 
         String publicKey = getIntent().getStringExtra("merchantPublicKey");
+        String payerAccessToken = getIntent().getStringExtra("payerAccessToken");
         PaymentPreference paymentPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("paymentPreference"), PaymentPreference.class);
         mDecorationPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("decorationPreference"), DecorationPreference.class);
 
@@ -127,6 +128,7 @@ public class InstallmentsActivity extends MercadoPagoBaseActivity implements Ins
 
         mPresenter.setPaymentMethod(paymentMethod);
         mPresenter.setPublicKey(publicKey);
+        mPresenter.setPrivateKey(payerAccessToken);
         mPresenter.setIssuer(issuer);
         mPresenter.setAmount(amount);
         mPresenter.setPayerEmail(payerEmail);
@@ -414,7 +416,7 @@ public class InstallmentsActivity extends MercadoPagoBaseActivity implements Ins
             if (resultCode == RESULT_OK) {
                 mPresenter.recoverFromFailure();
             }
-        } else if (requestCode == MercadoPago.DISCOUNTS_REQUEST_CODE) {
+        } else if (requestCode == MercadoPagoComponents.Activities.DISCOUNTS_REQUEST_CODE) {
             resolveDiscountRequest(resultCode, data);
         } else {
             setResult(resultCode, data);
@@ -443,10 +445,11 @@ public class InstallmentsActivity extends MercadoPagoBaseActivity implements Ins
 
     @Override
     public void startDiscountActivity(BigDecimal transactionAmount) {
-        MercadoPago.StartActivityBuilder mercadoPagoBuilder = new MercadoPago.StartActivityBuilder();
+        MercadoPagoComponents.Activities.DiscountsActivityBuilder mercadoPagoBuilder
+                = new MercadoPagoComponents.Activities.DiscountsActivityBuilder();
 
         mercadoPagoBuilder.setActivity(this)
-                .setPublicKey(mPresenter.getPublicKey())
+                .setMerchantPublicKey(mPresenter.getPublicKey())
                 .setPayerEmail(mPresenter.getPayerEmail())
                 .setAmount(transactionAmount)
                 .setDiscount(mPresenter.getDiscount())
@@ -458,7 +461,7 @@ public class InstallmentsActivity extends MercadoPagoBaseActivity implements Ins
             mercadoPagoBuilder.setDiscount(mPresenter.getDiscount());
         }
 
-        mercadoPagoBuilder.startDiscountsActivity();
+        mercadoPagoBuilder.startActivity();
     }
 
     @Override

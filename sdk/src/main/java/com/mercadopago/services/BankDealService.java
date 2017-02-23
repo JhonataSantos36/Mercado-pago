@@ -11,5 +11,5 @@ import retrofit2.http.Query;
 public interface BankDealService {
 
     @GET("/v1/payment_methods/deals")
-    MPCall<List<BankDeal>> getBankDeals(@Query("public_key") String publicKey, @Query("locale") String locale);
+    MPCall<List<BankDeal>> getBankDeals(@Query("public_key") String publicKey, @Query("access_token") String privateKey, @Query("locale") String locale);
 }

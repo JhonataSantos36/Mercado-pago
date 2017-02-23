@@ -21,12 +21,12 @@ import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.listeners.RecyclerItemClickListener;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.CardInfo;
-import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.PaymentMethod;
-import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.mptracker.MPTracker;
 import com.mercadopago.observers.TimerObserver;
+import com.mercadopago.preferences.DecorationPreference;
+import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.presenters.IssuersPresenter;
 import com.mercadopago.uicontrollers.FontCache;
 import com.mercadopago.uicontrollers.card.CardRepresentationModes;
@@ -92,6 +92,7 @@ public class IssuersActivity extends MercadoPagoBaseActivity implements IssuersA
     private void getActivityParameters() {
 
         String publicKey = getIntent().getStringExtra("merchantPublicKey");
+        String payerAccessToken = getIntent().getStringExtra("payerAccessToken");
         PaymentPreference paymentPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("paymentPreference"), PaymentPreference.class);
         mDecorationPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("decorationPreference"), DecorationPreference.class);
 
@@ -109,6 +110,7 @@ public class IssuersActivity extends MercadoPagoBaseActivity implements IssuersA
 
         mPresenter.setPaymentMethod(paymentMethod);
         mPresenter.setPublicKey(publicKey);
+        mPresenter.setPrivateKey(payerAccessToken);
         mPresenter.setCardInfo(cardInfo);
         mPresenter.setIssuers(issuers);
         mPresenter.setPaymentPreference(paymentPreference);

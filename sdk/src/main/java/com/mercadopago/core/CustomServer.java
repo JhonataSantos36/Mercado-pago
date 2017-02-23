@@ -2,21 +2,15 @@ package com.mercadopago.core;
 
 import android.content.Context;
 
-import com.google.gson.annotations.SerializedName;
 import com.mercadopago.adapters.ErrorHandlingCallAdapter;
 import com.mercadopago.callbacks.Callback;
 import com.mercadopago.model.Customer;
-import com.mercadopago.model.Payer;
 import com.mercadopago.model.Payment;
-import com.mercadopago.model.PaymentBody;
 import com.mercadopago.preferences.CheckoutPreference;
-import com.mercadopago.preferences.ServicePreference;
 import com.mercadopago.services.CustomService;
 import com.mercadopago.util.HttpClientUtil;
 import com.mercadopago.util.JsonUtil;
 
-import java.math.BigDecimal;
-import java.util.HashMap;
 import java.util.Map;
 
 import retrofit2.Retrofit;
@@ -26,7 +20,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * Created by vaserber on 1/25/17.
  */
 
-public class CustomServiceHandler {
+public class CustomServer {
 
     public static void createCheckoutPreference(Context context, String url, String uri, Callback<CheckoutPreference> callback) {
         CustomService service = getService(context, url);

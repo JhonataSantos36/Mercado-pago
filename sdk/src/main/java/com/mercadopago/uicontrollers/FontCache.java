@@ -3,9 +3,7 @@ package com.mercadopago.uicontrollers;
 import android.content.Context;
 import android.graphics.Typeface;
 
-import java.lang.reflect.Type;
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by vaserber on 1/9/17.

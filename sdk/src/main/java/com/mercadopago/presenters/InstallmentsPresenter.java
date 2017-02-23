@@ -6,7 +6,7 @@ import com.mercadopago.R;
 import com.mercadopago.callbacks.Callback;
 import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.controllers.PaymentMethodGuessingController;
-import com.mercadopago.core.MercadoPago;
+import com.mercadopago.core.MercadoPagoServices;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.CardInfo;
 import com.mercadopago.model.Discount;
@@ -14,8 +14,8 @@ import com.mercadopago.model.Installment;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.PaymentMethod;
-import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.model.Site;
+import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.views.InstallmentsActivityView;
 
 import java.math.BigDecimal;
@@ -32,7 +32,7 @@ public class InstallmentsPresenter {
     private FailureRecovery mFailureRecovery;
 
     //Mercado Pago instance
-    private MercadoPago mMercadoPago;
+    private MercadoPagoServices mMercadoPago;
 
     //Card Info
     private String mBin;
@@ -50,6 +50,7 @@ public class InstallmentsPresenter {
     private CardInfo mCardInfo;
     private Discount mDiscount;
     private Boolean mDiscountEnabled;
+    private String mPrivateKey;
 
     public InstallmentsPresenter(Context context) {
         this.mContext = context;
@@ -166,10 +167,10 @@ public class InstallmentsPresenter {
     }
 
     public void initializeMercadoPago() {
-        if (mPublicKey == null) return;
-        mMercadoPago = new MercadoPago.Builder()
+        mMercadoPago = new MercadoPagoServices.Builder()
                 .setContext(mContext)
-                .setKey(mPublicKey, MercadoPago.KEY_TYPE_PUBLIC)
+                .setPublicKey(mPublicKey)
+                .setPrivateKey(mPrivateKey)
                 .build();
     }
 
@@ -250,6 +251,10 @@ public class InstallmentsPresenter {
         return mPayerEmail;
     }
 
+    public void setPrivateKey(String privateKey) {
+        this.mPrivateKey = privateKey;
+    }
+
     public void setDiscountEnabled(Boolean discountEnabled) {
         this.mDiscountEnabled = discountEnabled;
     }
@@ -325,5 +330,4 @@ public class InstallmentsPresenter {
     public void onItemSelected(int position) {
         mView.finishWithResult(mPayerCosts.get(position));
     }
-
 }

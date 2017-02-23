@@ -20,6 +20,8 @@ import android.widget.Toast;
 import com.mercadopago.callbacks.Callback;
 import com.mercadopago.constants.PaymentTypes;
 import com.mercadopago.core.MercadoPago;
+import com.mercadopago.core.MercadoPagoComponents;
+import com.mercadopago.core.MercadoPagoServices;
 import com.mercadopago.core.MerchantServer;
 import com.mercadopago.customviews.MPButton;
 import com.mercadopago.customviews.MPEditText;
@@ -32,11 +34,11 @@ import com.mercadopago.model.Installment;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.PaymentMethod;
-import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.model.SavedCardToken;
 import com.mercadopago.model.Site;
 import com.mercadopago.model.Token;
 import com.mercadopago.mptracker.MPTracker;
+import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;
@@ -87,7 +89,7 @@ public class VaultActivity extends AppCompatActivity {
     // Local vars
     protected Activity mActivity;
     protected String mExceptionOnMethod;
-    protected MercadoPago mMercadoPago;
+    protected MercadoPagoServices mMercadoPago;
     protected PaymentPreference mPaymentPreference;
 
     @Override
@@ -117,7 +119,7 @@ public class VaultActivity extends AppCompatActivity {
             mSecurityCodeText = (MPEditText) findViewById(R.id.mpsdkSecurityCode);
 
             // Init MercadoPago object with public key
-            mMercadoPago = new MercadoPago.Builder()
+            mMercadoPago = new MercadoPagoServices.Builder()
                     .setContext(mActivity)
                     .setPublicKey(mMerchantPublicKey)
                     .build();
@@ -274,19 +276,19 @@ public class VaultActivity extends AppCompatActivity {
 
     protected boolean onVaultActivityResult(int requestCode, int resultCode, Intent data) {
 
-        if (requestCode == MercadoPago.CUSTOMER_CARDS_REQUEST_CODE) {
+        if (requestCode == MercadoPagoComponents.Activities.CUSTOMER_CARDS_REQUEST_CODE) {
 
             resolveCustomerCardsRequest(resultCode, data);
 
-        } else if (requestCode == MercadoPago.PAYMENT_METHODS_REQUEST_CODE) {
+        } else if (requestCode == MercadoPagoComponents.Activities.PAYMENT_METHODS_REQUEST_CODE) {
 
             resolvePaymentMethodsRequest(resultCode, data);
 
-        } else if (requestCode == MercadoPago.INSTALLMENTS_REQUEST_CODE) {
+        } else if (requestCode == MercadoPagoComponents.Activities.INSTALLMENTS_REQUEST_CODE) {
 
             resolveInstallmentsRequest(resultCode, data);
 
-        } else if (requestCode == MercadoPago.ISSUERS_REQUEST_CODE) {
+        } else if (requestCode == MercadoPagoComponents.Activities.ISSUERS_REQUEST_CODE) {
 
             resolveIssuersRequest(resultCode, data);
 
@@ -296,10 +298,10 @@ public class VaultActivity extends AppCompatActivity {
 
         }
 
-        return (requestCode == MercadoPago.CUSTOMER_CARDS_REQUEST_CODE) ||
-                (requestCode == MercadoPago.PAYMENT_METHODS_REQUEST_CODE) ||
-                (requestCode == MercadoPago.INSTALLMENTS_REQUEST_CODE) ||
-                (requestCode == MercadoPago.ISSUERS_REQUEST_CODE) ||
+        return (requestCode == MercadoPagoComponents.Activities.CUSTOMER_CARDS_REQUEST_CODE) ||
+                (requestCode == MercadoPagoComponents.Activities.PAYMENT_METHODS_REQUEST_CODE) ||
+                (requestCode == MercadoPagoComponents.Activities.INSTALLMENTS_REQUEST_CODE) ||
+                (requestCode == MercadoPagoComponents.Activities.ISSUERS_REQUEST_CODE) ||
                 (requestCode == MercadoPago.NEW_CARD_REQUEST_CODE);
 
     }
@@ -534,7 +536,7 @@ public class VaultActivity extends AppCompatActivity {
         Long issuerId = (mSelectedIssuer != null) ? mSelectedIssuer.getId() : null;
         String paymentMethodId = mSelectedPaymentMethod.getId();
 
-        if (bin.length() == MercadoPago.BIN_LENGTH) {
+        if (bin.length() == MercadoPagoUtil.BIN_LENGTH) {
             LayoutUtil.showProgressLayout(mActivity);
             mMercadoPago.getInstallments(bin, amount, issuerId, paymentMethodId, new Callback<List<Installment>>() {
                 @Override
@@ -627,7 +629,7 @@ public class VaultActivity extends AppCompatActivity {
         if (mSelectedCard != null) {
             return mSelectedCard.getFirstSixDigits();
         } else {
-            return mCardToken.getCardNumber().substring(0, MercadoPago.BIN_LENGTH);
+            return mCardToken.getCardNumber().substring(0, MercadoPagoUtil.BIN_LENGTH);
         }
     }
 

@@ -15,7 +15,7 @@ import com.mercadopago.callbacks.PaymentCallback;
 import com.mercadopago.callbacks.PaymentDataCallback;
 import com.mercadopago.constants.PaymentMethods;
 import com.mercadopago.constants.PaymentTypes;
-import com.mercadopago.core.CustomServiceHandler;
+import com.mercadopago.core.CustomServer;
 import com.mercadopago.core.MercadoPagoComponents;
 import com.mercadopago.core.MercadoPagoServices;
 import com.mercadopago.exceptions.CheckoutPreferenceException;
@@ -172,6 +172,8 @@ public class CheckoutActivity extends MercadoPagoBaseActivity {
         mMercadoPagoServices = new MercadoPagoServices.Builder()
                 .setContext(this)
                 .setPublicKey(mMerchantPublicKey)
+                .setPrivateKey(mCheckoutPreference.getPayer().getAccessToken())
+                .setServicePreference(mServicePreference)
                 .build();
 
         showProgressBar();
@@ -243,7 +245,7 @@ public class CheckoutActivity extends MercadoPagoBaseActivity {
 
     protected void getPaymentMethodSearch() {
         showProgressBar();
-        mMercadoPagoServices.getPaymentMethodSearch(mCheckoutPreference.getAmount(), mCheckoutPreference.getExcludedPaymentTypes(), mCheckoutPreference.getExcludedPaymentMethods(), mCheckoutPreference.getPayer(), new Callback<PaymentMethodSearch>() {
+        mMercadoPagoServices.getPaymentMethodSearch(mCheckoutPreference.getAmount(), mCheckoutPreference.getExcludedPaymentTypes(), mCheckoutPreference.getExcludedPaymentMethods(), mCheckoutPreference.getPayer(), mSite, new Callback<PaymentMethodSearch>() {
             @Override
             public void success(PaymentMethodSearch paymentMethodSearch) {
                 mPaymentMethodSearch = paymentMethodSearch;
@@ -274,7 +276,7 @@ public class CheckoutActivity extends MercadoPagoBaseActivity {
 
     private void getCustomerAsync() {
         showProgressBar();
-        CustomServiceHandler.getCustomer(this, mServicePreference.getGetCustomerURL(), mServicePreference.getGetCustomerURI(), mServicePreference.getGetCustomerAdditionalInfo(), new Callback<Customer>() {
+        CustomServer.getCustomer(this, mServicePreference.getGetCustomerURL(), mServicePreference.getGetCustomerURI(), mServicePreference.getGetCustomerAdditionalInfo(), new Callback<Customer>() {
             @Override
             public void success(Customer customer) {
                 if (customer != null) {
@@ -332,6 +334,7 @@ public class CheckoutActivity extends MercadoPagoBaseActivity {
         new MercadoPagoComponents.Activities.PaymentVaultActivityBuilder()
                 .setActivity(this)
                 .setMerchantPublicKey(mMerchantPublicKey)
+                .setPayerAccessToken(mCheckoutPreference.getPayer().getAccessToken())
                 .setPayerEmail(mCheckoutPreference.getPayer().getEmail())
                 .setSite(mSite)
                 .setAmount(mCheckoutPreference.getAmount())
@@ -342,7 +345,6 @@ public class CheckoutActivity extends MercadoPagoBaseActivity {
                 .setDecorationPreference(mDecorationPreference)
                 .setCards(mSavedCards)
                 .setMaxSavedCards(mMaxSavedCards)
-                .setPayerAccessToken(mCheckoutPreference.getPayer().getAccessToken())
                 .startActivity();
     }
 
@@ -541,6 +543,7 @@ public class CheckoutActivity extends MercadoPagoBaseActivity {
         new MercadoPagoComponents.Activities.CardVaultActivityBuilder()
                 .setActivity(this)
                 .setMerchantPublicKey(mMerchantPublicKey)
+                .setPayerAccessToken(mCheckoutPreference.getPayer().getAccessToken())
                 .setPaymentPreference(paymentPreference)
                 .setDecorationPreference(mDecorationPreference)
                 .setAmount(mCheckoutPreference.getAmount())
@@ -637,7 +640,7 @@ public class CheckoutActivity extends MercadoPagoBaseActivity {
 
             paymentInfoMap.putAll(paymentDataMap);
 
-            CustomServiceHandler.createPayment(this, getTransactionID(), mServicePreference.getCreatePaymentURL(), mServicePreference.getCreatePaymentURI(), paymentInfoMap, new Callback<Payment>() {
+            CustomServer.createPayment(this, getTransactionID(), mServicePreference.getCreatePaymentURL(), mServicePreference.getCreatePaymentURI(), paymentInfoMap, new Callback<Payment>() {
                 @Override
                 public void success(Payment payment) {
                     mCreatedPayment = payment;

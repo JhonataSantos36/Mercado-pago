@@ -14,11 +14,36 @@ public class MercadoPagoServicesTest extends BaseTest<CheckoutActivity> {
         super(CheckoutActivity.class);
     }
 
-    public void testStartOk() {
+    public void testStartOkWithPublicKey() {
 
         try {
             new MercadoPagoServices.Builder()
                     .setContext(getApplicationContext())
+                    .setPublicKey(StaticMock.DUMMY_MERCHANT_PUBLIC_KEY)
+                    .build();
+        } catch (Exception ex) {
+            fail("Failed on regular start:" + ex.getMessage());
+        }
+    }
+
+    public void testStartOkWithPrivateKey() {
+
+        try {
+            new MercadoPagoServices.Builder()
+                    .setContext(getApplicationContext())
+                    .setPrivateKey(StaticMock.DUMMY_PRIVATE_KEY)
+                    .build();
+        } catch (Exception ex) {
+            fail("Failed on regular start:" + ex.getMessage());
+        }
+    }
+
+    public void testStartOkWithPublicAndPrivateKey() {
+
+        try {
+            new MercadoPagoServices.Builder()
+                    .setContext(getApplicationContext())
+                    .setPrivateKey(StaticMock.DUMMY_PRIVATE_KEY)
                     .setPublicKey(StaticMock.DUMMY_MERCHANT_PUBLIC_KEY)
                     .build();
         } catch (Exception ex) {
@@ -41,26 +66,13 @@ public class MercadoPagoServicesTest extends BaseTest<CheckoutActivity> {
     public void testNullKeyType() {
 
         try {
-            new MercadoPago.Builder()
+            new MercadoPagoServices.Builder()
                     .setContext(getApplicationContext())
-                    .setKey(StaticMock.DUMMY_MERCHANT_PUBLIC_KEY, null)
+                    .setPublicKey(StaticMock.DUMMY_MERCHANT_PUBLIC_KEY)
                     .build();
             fail("Start should have failed on key type null");
         } catch (Exception ex) {
             assertTrue(ex.getMessage().equals("key type is null"));
-        }
-    }
-
-    public void testInvalidKeyType() {
-
-        try {
-            new MercadoPagoServices.Builder()
-                    .setContext(getApplicationContext())
-                    .setKey(StaticMock.DUMMY_MERCHANT_PUBLIC_KEY, "wrong type")
-                    .build();
-            fail("Start should have failed on invalid key type");
-        } catch (Exception ex) {
-            assertTrue(ex.getMessage().equals("invalid key type"));
         }
     }
 
@@ -69,7 +81,6 @@ public class MercadoPagoServicesTest extends BaseTest<CheckoutActivity> {
         try {
             new MercadoPagoServices.Builder()
                     .setContext(getApplicationContext())
-                    .setKey(null, MercadoPagoServices.KEY_TYPE_PUBLIC)
                     .build();
             fail("Start should have failed on key null");
         } catch (Exception ex) {

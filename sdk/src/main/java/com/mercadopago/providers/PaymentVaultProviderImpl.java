@@ -4,9 +4,8 @@ import android.content.Context;
 
 import com.mercadopago.R;
 import com.mercadopago.callbacks.Callback;
-import com.mercadopago.core.CustomServiceHandler;
-import com.mercadopago.core.MercadoPago;
-import com.mercadopago.core.MerchantServer;
+import com.mercadopago.core.CustomServer;
+import com.mercadopago.core.MercadoPagoServices;
 import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.Card;
@@ -14,8 +13,9 @@ import com.mercadopago.model.Customer;
 import com.mercadopago.model.Discount;
 import com.mercadopago.model.Payer;
 import com.mercadopago.model.PaymentMethodSearch;
-import com.mercadopago.preferences.PaymentPreference;
+import com.mercadopago.model.Site;
 import com.mercadopago.mvp.OnResourcesRetrievedCallback;
+import com.mercadopago.preferences.PaymentPreference;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -27,19 +27,20 @@ import java.util.Map;
 
 public class PaymentVaultProviderImpl implements PaymentVaultProvider {
     private final Context context;
-    private final MercadoPago mercadoPago;
+    private final MercadoPagoServices mercadoPago;
     private final String merchantBaseUrl;
     private final String merchantGetCustomerUri;
     private final Map<String, String> merchantGetCustomerAdditionalInfo;
 
-    public PaymentVaultProviderImpl(Context context, String publicKey, String merchantBaseUrl, String merchantGetCustomerUri, Map<String, String> merchantGetCustomerAdditionalInfo) {
+    public PaymentVaultProviderImpl(Context context, String publicKey, String privateKey, String merchantBaseUrl, String merchantGetCustomerUri, Map<String, String> merchantGetCustomerAdditionalInfo) {
         this.context = context;
         this.merchantBaseUrl = merchantBaseUrl;
         this.merchantGetCustomerUri = merchantGetCustomerUri;
         this.merchantGetCustomerAdditionalInfo = merchantGetCustomerAdditionalInfo;
-        this.mercadoPago = new MercadoPago.Builder()
+        this.mercadoPago = new MercadoPagoServices.Builder()
                 .setContext(context)
                 .setPublicKey(publicKey)
+                .setPrivateKey(privateKey)
                 .build();
     }
 
@@ -59,11 +60,11 @@ public class PaymentVaultProviderImpl implements PaymentVaultProvider {
     }
 
     @Override
-    public void getPaymentMethodSearch(BigDecimal amount, final PaymentPreference paymentPreference, Payer payer, final OnResourcesRetrievedCallback<PaymentMethodSearch> onResourcesRetrievedCallback) {
+    public void getPaymentMethodSearch(BigDecimal amount, final PaymentPreference paymentPreference, Payer payer, Site site, final OnResourcesRetrievedCallback<PaymentMethodSearch> onResourcesRetrievedCallback) {
 
         List<String> excludedPaymentTypes = paymentPreference == null ? null : paymentPreference.getExcludedPaymentTypes();
         List<String> excludedPaymentMethodIds = paymentPreference == null ? null : paymentPreference.getExcludedPaymentMethodIds();
-        mercadoPago.getPaymentMethodSearch(amount, excludedPaymentTypes, excludedPaymentMethodIds, payer, new Callback<PaymentMethodSearch>() {
+        mercadoPago.getPaymentMethodSearch(amount, excludedPaymentTypes, excludedPaymentMethodIds, payer, site, new Callback<PaymentMethodSearch>() {
 
             @Override
             public void success(final PaymentMethodSearch paymentMethodSearch) {
@@ -82,7 +83,7 @@ public class PaymentVaultProviderImpl implements PaymentVaultProvider {
     }
 
     private void addCustomerCardsFromMerchantServer(final PaymentMethodSearch paymentMethodSearch, final PaymentPreference paymentPreference, final OnResourcesRetrievedCallback<PaymentMethodSearch> onResourcesRetrievedCallback) {
-        CustomServiceHandler.getCustomer(context, merchantBaseUrl, merchantGetCustomerUri, merchantGetCustomerAdditionalInfo, new Callback<Customer>() {
+        CustomServer.getCustomer(context, merchantBaseUrl, merchantGetCustomerUri, merchantGetCustomerAdditionalInfo, new Callback<Customer>() {
             @Override
             public void success(Customer customer) {
                 List<Card> savedCards = paymentPreference == null ? customer.getCards() : paymentPreference.getValidCards(customer.getCards());

@@ -10,10 +10,10 @@ import com.mercadopago.model.Payer;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentMethodSearch;
 import com.mercadopago.model.PaymentMethodSearchItem;
-import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.model.Site;
 import com.mercadopago.mvp.MvpPresenter;
 import com.mercadopago.mvp.OnResourcesRetrievedCallback;
+import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.providers.PaymentVaultProvider;
 import com.mercadopago.util.CurrenciesUtil;
 import com.mercadopago.util.MercadoPagoUtil;
@@ -180,7 +180,7 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
         Payer payer = new Payer();
         payer.setAccessToken(mPayerAccessToken);
 
-        getResourcesProvider().getPaymentMethodSearch(mAmount, mPaymentPreference, payer, new OnResourcesRetrievedCallback<PaymentMethodSearch>() {
+        getResourcesProvider().getPaymentMethodSearch(mAmount, mPaymentPreference, payer, mSite, new OnResourcesRetrievedCallback<PaymentMethodSearch>() {
 
             @Override
             public void onSuccess(PaymentMethodSearch paymentMethodSearch) {

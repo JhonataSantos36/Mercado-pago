@@ -33,8 +33,6 @@ import com.mercadopago.model.BankDeal;
 import com.mercadopago.model.Card;
 import com.mercadopago.model.CardInfo;
 import com.mercadopago.model.CardToken;
-import com.mercadopago.preferences.CheckoutPreference;
-import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.model.Discount;
 import com.mercadopago.model.IdentificationType;
 import com.mercadopago.model.Installment;
@@ -46,7 +44,6 @@ import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentBody;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentMethodSearch;
-import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.model.PaymentRecovery;
 import com.mercadopago.model.Instructions;
 import com.mercadopago.model.PaymentType;
@@ -55,7 +52,11 @@ import com.mercadopago.model.SecurityCodeIntent;
 import com.mercadopago.model.Site;
 import com.mercadopago.model.Token;
 import com.mercadopago.mptracker.MPTracker;
+import com.mercadopago.preferences.CheckoutPreference;
+import com.mercadopago.preferences.DecorationPreference;
+import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.services.BankDealService;
+import com.mercadopago.services.CheckoutService;
 import com.mercadopago.services.DiscountService;
 import com.mercadopago.services.GatewayService;
 import com.mercadopago.services.IdentificationService;
@@ -131,7 +132,7 @@ public class MercadoPago {
     public void getPreference(String checkoutPreferenceId, Callback<CheckoutPreference> callback) {
         if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {
             MPTracker.getInstance().trackEvent("NO_SCREEN", "GET_PREFERENCE", "3", mKey, BuildConfig.VERSION_NAME, mContext);
-            PaymentService service = mRetrofit.create(PaymentService.class);
+            CheckoutService service = mRetrofit.create(CheckoutService.class);
             service.getPreference(checkoutPreferenceId, this.mKey).enqueue(callback);
         } else {
             throw new RuntimeException("Unsupported key type for this method");
@@ -148,7 +149,7 @@ public class MercadoPago {
                     .addCallAdapterFactory(new ErrorHandlingCallAdapter.ErrorHandlingCallAdapterFactory())
                     .build();
 
-            PaymentService service = paymentsRetrofitAdapter.create(PaymentService.class);
+            CheckoutService service = paymentsRetrofitAdapter.create(CheckoutService.class);
             service.createPayment(paymentBody.getTransactionId(), paymentBody).enqueue(callback);
 
         } else {
@@ -164,7 +165,7 @@ public class MercadoPago {
                 public void run() {
                     savedCardToken.setDevice(mContext);
                     GatewayService service = mRetrofit.create(GatewayService.class);
-                    service.getToken(mKey, savedCardToken).enqueue(callback);
+                    service.getToken(mKey,"", savedCardToken).enqueue(callback);
                 }
             }).start();
 
@@ -181,7 +182,7 @@ public class MercadoPago {
                 public void run() {
                     cardToken.setDevice(mContext);
                     GatewayService service = mRetrofit.create(GatewayService.class);
-                    service.getToken(mKey, cardToken).enqueue(callback);
+                    service.getToken(mKey, "", cardToken).enqueue(callback);
                 }
             }).start();
         } else {
@@ -194,7 +195,7 @@ public class MercadoPago {
             MPTracker.getInstance().trackEvent("NO_SCREEN", "CLONE_TOKEN", "1", mKey, BuildConfig.VERSION_NAME, mContext);
 
             GatewayService service = mRetrofit.create(GatewayService.class);
-            service.getToken(tokenId, this.mKey).enqueue(callback);
+            service.getToken(tokenId, "", this.mKey).enqueue(callback);
         } else {
             throw new RuntimeException("Unsupported key type for this method");
         }
@@ -205,7 +206,7 @@ public class MercadoPago {
             MPTracker.getInstance().trackEvent("NO_SCREEN", "CLONE_TOKEN", "1", mKey, BuildConfig.VERSION_NAME, mContext);
 
             GatewayService service = mRetrofit.create(GatewayService.class);
-            service.getToken(tokenId, this.mKey, securityCodeIntent).enqueue(callback);
+            service.getToken(tokenId, this.mKey,"",  securityCodeIntent).enqueue(callback);
         } else {
             throw new RuntimeException("Unsupported key type for this method");
         }
@@ -215,7 +216,7 @@ public class MercadoPago {
         if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {
             MPTracker.getInstance().trackEvent("NO_SCREEN", "GET_BANK_DEALS", "1", mKey, BuildConfig.VERSION_NAME, mContext);
             BankDealService service = mRetrofit.create(BankDealService.class);
-            service.getBankDeals(this.mKey, mContext.getResources().getConfiguration().locale.toString()).enqueue(callback);
+            service.getBankDeals(this.mKey, "", mContext.getResources().getConfiguration().locale.toString()).enqueue(callback);
         } else {
             throw new RuntimeException("Unsupported key type for this method");
         }
@@ -257,7 +258,7 @@ public class MercadoPago {
         if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {
             MPTracker.getInstance().trackEvent("NO_SCREEN", "GET_INSTALLMENTS", "1", mKey, BuildConfig.VERSION_NAME, mContext);
             PaymentService service = mRetrofit.create(PaymentService.class);
-            service.getInstallments(this.mKey, bin, amount, issuerId, paymentMethodId,
+            service.getInstallments(this.mKey,"",  bin, amount, issuerId, paymentMethodId,
                     mContext.getResources().getConfiguration().locale.toString()).enqueue(callback);
         } else {
             throw new RuntimeException("Unsupported key type for this method");
@@ -268,7 +269,7 @@ public class MercadoPago {
         if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {
             MPTracker.getInstance().trackEvent("NO_SCREEN", "GET_ISSUERS", "1", mKey, BuildConfig.VERSION_NAME, mContext);
             PaymentService service = mRetrofit.create(PaymentService.class);
-            service.getIssuers(this.mKey, paymentMethodId, bin).enqueue(callback);
+            service.getIssuers(this.mKey, "", paymentMethodId, bin).enqueue(callback);
         } else {
             throw new RuntimeException("Unsupported key type for this method");
         }
@@ -278,7 +279,7 @@ public class MercadoPago {
         if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {
             MPTracker.getInstance().trackEvent("NO_SCREEN", "GET_PAYMENT_METHODS", "1", mKey, BuildConfig.VERSION_NAME, mContext);
             PaymentService service = mRetrofit.create(PaymentService.class);
-            service.getPaymentMethods(this.mKey).enqueue(callback);
+            service.getPaymentMethods(this.mKey, "").enqueue(callback);
         } else {
             throw new RuntimeException("Unsupported key type for this method");
         }
@@ -288,12 +289,12 @@ public class MercadoPago {
         if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {
             MPTracker.getInstance().trackEvent("NO_SCREEN", "GET_PAYMENT_METHOD_SEARCH", "1", mKey, BuildConfig.VERSION_NAME, mContext);
             PayerIntent payerIntent = new PayerIntent(payer);
-            PaymentService service = mRetrofit.create(PaymentService.class);
+            CheckoutService service = mRetrofit.create(CheckoutService.class);
             String separator = ",";
             String excludedPaymentTypesAppended = getListAsString(excludedPaymentTypes, separator);
             String excludedPaymentMethodsAppended = getListAsString(excludedPaymentMethods, separator);
 
-            service.getPaymentMethodSearch(mContext.getResources().getConfiguration().locale.getLanguage(), this.mKey, amount, excludedPaymentTypesAppended, excludedPaymentMethodsAppended, payerIntent, PAYMENT_METHODS_OPTIONS_API_VERSION).enqueue(callback);
+            service.getPaymentMethodSearch(mContext.getResources().getConfiguration().locale.getLanguage(), this.mKey, amount, excludedPaymentTypesAppended, excludedPaymentMethodsAppended, payerIntent, "", PAYMENT_METHODS_OPTIONS_API_VERSION).enqueue(callback);
         } else {
             throw new RuntimeException("Unsupported key type for this method");
         }
@@ -303,8 +304,8 @@ public class MercadoPago {
         if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {
             MPTracker.getInstance().trackEvent("NO_SCREEN", "GET_INSTRUCTIONS", "1", mKey, BuildConfig.VERSION_NAME, mContext);
 
-            PaymentService service = mRetrofit.create(PaymentService.class);
-            service.getInstructions(mContext.getResources().getConfiguration().locale.getLanguage(), paymentId, this.mKey, paymentTypeId, PAYMENT_RESULT_API_VERSION).enqueue(callback);
+            CheckoutService service = mRetrofit.create(CheckoutService.class);
+            service.getPaymentResult(mContext.getResources().getConfiguration().locale.getLanguage(), paymentId, this.mKey, paymentTypeId, PAYMENT_RESULT_API_VERSION).enqueue(callback);
         } else {
             throw new RuntimeException("Unsupported key type for this method");
         }

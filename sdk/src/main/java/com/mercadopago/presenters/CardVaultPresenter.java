@@ -5,7 +5,7 @@ import android.content.Context;
 import com.mercadopago.callbacks.Callback;
 import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.controllers.PaymentMethodGuessingController;
-import com.mercadopago.core.MercadoPago;
+import com.mercadopago.core.MercadoPagoServices;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.Card;
 import com.mercadopago.model.CardInfo;
@@ -14,10 +14,10 @@ import com.mercadopago.model.Discount;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.PaymentMethod;
-import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.model.PaymentRecovery;
 import com.mercadopago.model.Site;
 import com.mercadopago.model.Token;
+import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.views.CardVaultActivityView;
 
 import java.math.BigDecimal;
@@ -33,7 +33,7 @@ public class CardVaultPresenter {
     protected CardVaultActivityView mView;
     protected FailureRecovery mFailureRecovery;
     protected String mBin;
-    protected MercadoPago mMercadoPago;
+    protected MercadoPagoServices mMercadoPago;
 
     //Activity parameters
     protected PaymentRecovery mPaymentRecovery;
@@ -59,6 +59,7 @@ public class CardVaultPresenter {
     protected Boolean mDiscountEnabled;
     protected Discount mDiscount;
     protected String mPayerEmail;
+    private String mPrivateKey;
 
     public CardVaultPresenter(Context context) {
         this.mContext = context;
@@ -209,6 +210,14 @@ public class CardVaultPresenter {
         return this.mDiscountEnabled;
     }
 
+    public void setPrivateKey(String privateKey) {
+        this.mPrivateKey = privateKey;
+    }
+
+    public String getPrivateKey() {
+        return mPrivateKey;
+    }
+
     public CardInfo getCardInfo() {
         return mCardInfo;
     }
@@ -249,10 +258,10 @@ public class CardVaultPresenter {
     }
 
     public void initializeMercadoPago() {
-        if (mPublicKey == null) return;
-        mMercadoPago = new MercadoPago.Builder()
+        mMercadoPago = new MercadoPagoServices.Builder()
                 .setContext(mContext)
-                .setKey(mPublicKey, MercadoPago.KEY_TYPE_PUBLIC)
+                .setPublicKey(mPublicKey)
+                .setPrivateKey(mPrivateKey)
                 .build();
     }
 

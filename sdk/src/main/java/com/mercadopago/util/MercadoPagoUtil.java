@@ -6,9 +6,13 @@ import com.mercadopago.R;
 import com.mercadopago.model.PaymentMethod;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class MercadoPagoUtil {
+
+    public static final int BIN_LENGTH = 6;
 
     private static final String SDK_PREFIX = "mpsdk_";
 
@@ -124,4 +128,16 @@ public class MercadoPagoUtil {
         return accreditationMessage;
     }
 
+    public static List<PaymentMethod> getValidPaymentMethodsForBin(String bin, List<PaymentMethod> paymentMethods) {
+        if (bin.length() == BIN_LENGTH) {
+            List<PaymentMethod> validPaymentMethods = new ArrayList<>();
+            for (PaymentMethod pm : paymentMethods) {
+                if (pm.isValidForBin(bin)) {
+                    validPaymentMethods.add(pm);
+                }
+            }
+            return validPaymentMethods;
+        } else
+            throw new RuntimeException("Invalid bin: " + BIN_LENGTH + " digits needed, " + bin.length() + " found");
+    }
 }

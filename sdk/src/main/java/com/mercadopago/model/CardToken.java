@@ -4,7 +4,7 @@ import android.content.Context;
 import android.text.TextUtils;
 
 import com.mercadopago.R;
-import com.mercadopago.core.MercadoPago;
+import com.mercadopago.util.MercadoPagoUtil;
 
 import java.util.Calendar;
 import java.util.Locale;
@@ -104,7 +104,7 @@ public class CardToken {
         }
 
         Setting setting = Setting.getSettingByBin(paymentMethod.getSettings(), (cardNumber.length()
-                >= MercadoPago.BIN_LENGTH ? cardNumber.substring(0, MercadoPago.BIN_LENGTH) : ""));
+                >= MercadoPagoUtil.BIN_LENGTH ? cardNumber.substring(0, MercadoPagoUtil.BIN_LENGTH) : ""));
 
         if (setting == null) {
 
@@ -139,7 +139,7 @@ public class CardToken {
 
     public void validateSecurityCode(Context context, PaymentMethod paymentMethod) throws Exception {
 
-        validateSecurityCode(context, securityCode, paymentMethod, (((cardNumber != null) ? cardNumber.length() : 0) >= MercadoPago.BIN_LENGTH ? cardNumber.substring(0, MercadoPago.BIN_LENGTH) : ""));
+        validateSecurityCode(context, securityCode, paymentMethod, (((cardNumber != null) ? cardNumber.length() : 0) >= MercadoPagoUtil.BIN_LENGTH ? cardNumber.substring(0, MercadoPagoUtil.BIN_LENGTH) : ""));
     }
 
     public static void validateSecurityCode(Context context, String securityCode, PaymentMethod paymentMethod, String bin) throws Exception {

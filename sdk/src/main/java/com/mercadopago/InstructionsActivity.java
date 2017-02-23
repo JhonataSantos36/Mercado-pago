@@ -50,7 +50,6 @@ public class InstructionsActivity extends MercadoPagoBaseActivity {
     //Const
     private static final String INSTRUCTIONS_NOT_FOUND_FOR_TYPE = "instruction not found for type";
 
-    //Values
     protected MercadoPagoServices mMercadoPagoServices;
     protected Boolean mBackPressedOnce;
     protected Activity mActivity;

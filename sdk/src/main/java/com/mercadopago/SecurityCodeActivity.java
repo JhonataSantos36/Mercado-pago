@@ -20,11 +20,11 @@ import com.mercadopago.listeners.card.CardSecurityCodeTextWatcher;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.Card;
 import com.mercadopago.model.CardInfo;
-import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.Token;
 import com.mercadopago.mptracker.MPTracker;
 import com.mercadopago.observers.TimerObserver;
+import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.presenters.SecurityCodePresenter;
 import com.mercadopago.uicontrollers.card.CardRepresentationModes;
 import com.mercadopago.uicontrollers.card.CardView;
@@ -81,6 +81,7 @@ public class SecurityCodeActivity extends MercadoPagoBaseActivity implements Sec
 
     private void getActivityParameters() {
         String publicKey = getIntent().getStringExtra("merchantPublicKey");
+        String payerAccessToken = getIntent().getStringExtra("payerAccessToken");
         mDecorationPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("decorationPreference"), DecorationPreference.class);
 
         CardInfo cardInfo = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("cardInfo"), CardInfo.class);
@@ -89,6 +90,7 @@ public class SecurityCodeActivity extends MercadoPagoBaseActivity implements Sec
         PaymentMethod paymentMethod = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("paymentMethod"), PaymentMethod.class);
 
         mPresenter.setPublicKey(publicKey);
+        mPresenter.setPrivateKey(payerAccessToken);
         mPresenter.setToken(token);
         mPresenter.setCard(card);
         mPresenter.setPaymentMethod(paymentMethod);

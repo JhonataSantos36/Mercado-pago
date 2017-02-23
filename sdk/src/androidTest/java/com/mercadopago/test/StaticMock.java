@@ -9,7 +9,6 @@ import com.mercadopago.model.ApiException;
 import com.mercadopago.model.BankDeal;
 import com.mercadopago.model.Card;
 import com.mercadopago.model.CardToken;
-import com.mercadopago.preferences.CheckoutPreference;
 import com.mercadopago.model.Customer;
 import com.mercadopago.model.Discount;
 import com.mercadopago.model.IdentificationType;
@@ -23,6 +22,8 @@ import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.model.Instructions;
 import com.mercadopago.model.SavedCardToken;
 import com.mercadopago.model.Token;
+import com.mercadopago.preferences.CheckoutPreference;
+
 import com.mercadopago.util.JsonUtil;
 
 import java.io.InputStream;
@@ -32,6 +33,7 @@ import java.util.List;
 public class StaticMock {
 
     // * Merchant public key
+    public static final String DUMMY_PRIVATE_KEY = "MOCKED_AT";
     public static final String DUMMY_MERCHANT_PUBLIC_KEY = "444a9ef5-8a6b-429f-abdf-587639155d88";
     public static final String DUMMY_TEST_PUBLIC_KEY = "TEST-ad365c37-8012-4014-84f5-6c895b3f8e0a";
     public static final String DUMMY_TEST_MX_PUBLIC_KEY = "TEST-9eb0be69-329a-417f-9dd5-aad772a4d50b";

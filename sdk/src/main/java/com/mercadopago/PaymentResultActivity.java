@@ -115,7 +115,6 @@ public class PaymentResultActivity extends Activity {
         new MercadoPagoComponents.Activities.CongratsActivityBuilder()
                 .setMerchantPublicKey(mMerchantPublicKey)
                 .setActivity(this)
-                .setDiscount(mDiscount)
                 .setCongratsDisplay(mCongratsDisplay)
                 .setPaymentResult(mPaymentResult)
                 .setPaymentResultScreenPreference(mPaymentResultScreenPreference)
@@ -165,7 +164,8 @@ public class PaymentResultActivity extends Activity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == CONGRATS_REQUEST_CODE) {
+
+        if (requestCode == MercadoPagoComponents.Activities.CONGRATS_REQUEST_CODE) {
             finishWithOkResult(resultCode);
         } else if (requestCode == MercadoPagoComponents.Activities.PENDING_REQUEST_CODE) {
             resolveRequest(resultCode, data);

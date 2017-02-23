@@ -12,23 +12,25 @@ import com.mercadopago.CallForAuthorizeActivity;
 import com.mercadopago.CardVaultActivity;
 import com.mercadopago.CongratsActivity;
 import com.mercadopago.CustomerCardsActivity;
+import com.mercadopago.DiscountsActivity;
 import com.mercadopago.GuessingCardActivity;
 import com.mercadopago.InstallmentsActivity;
 import com.mercadopago.InstructionsActivity;
 import com.mercadopago.IssuersActivity;
 import com.mercadopago.PaymentMethodsActivity;
 import com.mercadopago.PaymentResultActivity;
+import com.mercadopago.PaymentTypesActivity;
 import com.mercadopago.PaymentVaultActivity;
 import com.mercadopago.PendingActivity;
 import com.mercadopago.RejectionActivity;
 import com.mercadopago.ReviewAndConfirmActivity;
 import com.mercadopago.callbacks.OnConfirmPaymentCallback;
 import com.mercadopago.callbacks.OnReviewChange;
+import com.mercadopago.SecurityCodeActivity;
 import com.mercadopago.callbacks.OnSelectedCallback;
 import com.mercadopago.model.BankDeal;
 import com.mercadopago.model.Card;
 import com.mercadopago.model.CardInfo;
-import com.mercadopago.model.CardInformation;
 import com.mercadopago.model.Discount;
 import com.mercadopago.model.Item;
 import com.mercadopago.model.PaymentResult;
@@ -40,8 +42,8 @@ import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentMethodSearch;
-import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.model.PaymentRecovery;
+import com.mercadopago.model.PaymentType;
 import com.mercadopago.model.Site;
 import com.mercadopago.preferences.PaymentResultScreenPreference;
 import com.mercadopago.preferences.ReviewScreenPreference;
@@ -50,6 +52,7 @@ import com.mercadopago.uicontrollers.reviewandconfirm.ReviewItemsView;
 import com.mercadopago.uicontrollers.reviewandconfirm.ReviewPaymentOffView;
 import com.mercadopago.uicontrollers.reviewandconfirm.ReviewPaymentOnView;
 import com.mercadopago.uicontrollers.reviewandconfirm.ReviewSummaryView;
+import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.uicontrollers.savedcards.SavedCardRowView;
 import com.mercadopago.uicontrollers.savedcards.SavedCardView;
 import com.mercadopago.uicontrollers.savedcards.SavedCardsListView;
@@ -206,7 +209,7 @@ public class MercadoPagoComponents {
 
             public void startActivity() {
                 if (this.activity == null) throw new IllegalStateException("activity is null");
-                if (this.merchantPublicKey == null) throw new IllegalStateException("public key is null");
+                if (this.merchantPublicKey == null && this.payerAccessToken == null) throw new IllegalStateException("key is null");
                 startPaymentVaultActivity();
             }
 
@@ -225,6 +228,7 @@ public class MercadoPagoComponents {
                 paymentVaultIntent.putExtra("merchantAccessToken", merchantAccessToken);
                 paymentVaultIntent.putExtra("paymentMethodSearch", JsonUtil.getInstance().toJson(paymentMethodSearch));
                 paymentVaultIntent.putExtra("paymentPreference", JsonUtil.getInstance().toJson(paymentPreference));
+
                 Gson gson = new Gson();
                 paymentVaultIntent.putExtra("cards", gson.toJson(cards));
                 paymentVaultIntent.putExtra("decorationPreference", JsonUtil.getInstance().toJson(decorationPreference));
@@ -437,6 +441,8 @@ public class MercadoPagoComponents {
             private PaymentRecovery paymentRecovery;
             private boolean discountEnabled;
             private Discount discount;
+            private String payerEmail;
+            private String payerAccessToken;
 
             public CardVaultActivityBuilder setActivity(Activity activity) {
                 this.activity = activity;
@@ -504,11 +510,21 @@ public class MercadoPagoComponents {
                 return this;
             }
 
+            public CardVaultActivityBuilder setPayerEmail(String payerEmail) {
+                this.payerEmail = payerEmail;
+                return this;
+            }
+
+            public CardVaultActivityBuilder setPayerAccessToken(String accessToken) {
+                this.payerAccessToken = accessToken;
+                return this;
+            }
+
             public void startActivity() {
 
                 if (this.activity == null) throw new IllegalStateException("activity is null");
-                if (this.merchantPublicKey == null)
-                    throw new IllegalStateException("public key is null");
+                if (this.merchantPublicKey == null && this.payerAccessToken == null)
+                    throw new IllegalStateException("key is null");
                 if (this.installmentsEnabled != null && this.installmentsEnabled) {
                     if (this.amount == null) throw new IllegalStateException("amount is null");
                     if (this.site == null) throw new IllegalStateException("site is null");
@@ -529,6 +545,10 @@ public class MercadoPagoComponents {
                 cardVaultIntent.putExtra("installmentsEnabled", installmentsEnabled);
 
                 cardVaultIntent.putExtra("showBankDeals", showBankDeals);
+
+                cardVaultIntent.putExtra("payerEmail", payerEmail);
+
+                cardVaultIntent.putExtra("payerAccessToken", payerAccessToken);
 
                 cardVaultIntent.putExtra("paymentPreference", JsonUtil.getInstance().toJson(paymentPreference));
 
@@ -559,6 +579,11 @@ public class MercadoPagoComponents {
             private PaymentRecovery paymentRecovery;
             private Boolean requireSecurityCode;
             private Boolean requireIssuer;
+            private BigDecimal amount;
+            private String payerEmail;
+            private Discount discount;
+            private Boolean discountEnabled;
+            private String payerAccessToken;
 
             public GuessingCardActivityBuilder setActivity(Activity activity) {
                 this.activity = activity;
@@ -567,6 +592,11 @@ public class MercadoPagoComponents {
 
             public GuessingCardActivityBuilder setMerchantPublicKey(String merchantPublicKey) {
                 this.merchantPublicKey = merchantPublicKey;
+                return this;
+            }
+
+            public GuessingCardActivityBuilder setPayerAccessToken(String payerAccessToken) {
+                this.payerAccessToken = payerAccessToken;
                 return this;
             }
 
@@ -610,11 +640,31 @@ public class MercadoPagoComponents {
                 return this;
             }
 
+            public GuessingCardActivityBuilder setAmount(BigDecimal amount) {
+                this.amount = amount;
+                return this;
+            }
+
+            public GuessingCardActivityBuilder setPayerEmail(String payerEmail) {
+                this.payerEmail = payerEmail;
+                return this;
+            }
+
+            public GuessingCardActivityBuilder setDiscount(Discount discount) {
+                this.discount = discount;
+                return this;
+            }
+
+            public GuessingCardActivityBuilder setDiscountEnabled(Boolean discountEnabled) {
+                this.discountEnabled = discountEnabled;
+                return this;
+            }
+
             public void startActivity() {
 
                 if (this.activity == null) throw new IllegalStateException("activity is null");
-                if (this.merchantPublicKey == null)
-                    throw new IllegalStateException("public key is null");
+                if (this.merchantPublicKey == null && this.payerAccessToken == null)
+                    throw new IllegalStateException("key is null");
 
                 startGuessingCardActivity();
             }
@@ -644,6 +694,18 @@ public class MercadoPagoComponents {
                 guessingCardIntent.putExtra("paymentRecovery", JsonUtil.getInstance().toJson(paymentRecovery));
 
                 guessingCardIntent.putExtra("card", JsonUtil.getInstance().toJson(card));
+
+                if(amount != null) {
+                    guessingCardIntent.putExtra("amount", amount.toString());
+                }
+
+                guessingCardIntent.putExtra("payerEmail", payerEmail);
+
+                guessingCardIntent.putExtra("payerAccessToken", payerAccessToken);
+
+                guessingCardIntent.putExtra("discount", JsonUtil.getInstance().toJson(discount));
+
+                guessingCardIntent.putExtra("discountEnabled", discountEnabled);
 
                 activity.startActivityForResult(guessingCardIntent, GUESSING_CARD_REQUEST_CODE);
             }
@@ -702,18 +764,19 @@ public class MercadoPagoComponents {
 
         public static class IssuersActivityBuilder {
             private Activity activity;
-            private CardInformation cardInformation;
+            private CardInfo cardInformation;
             private String merchantPublicKey;
             private PaymentMethod paymentMethod;
             private List<Issuer> issuers;
             private DecorationPreference decorationPreference;
+            private String payerAccessToken;
 
             public IssuersActivityBuilder setActivity(Activity activity) {
                 this.activity = activity;
                 return this;
             }
 
-            public IssuersActivityBuilder setCardInformation(CardInformation cardInformation) {
+            public IssuersActivityBuilder setCardInfo(CardInfo cardInformation) {
                 this.cardInformation = cardInformation;
                 return this;
             }
@@ -738,10 +801,15 @@ public class MercadoPagoComponents {
                 return this;
             }
 
+            public IssuersActivityBuilder setPayerAccessToken(String payerAccessToken) {
+                this.payerAccessToken = payerAccessToken;
+                return this;
+            }
+
             public void startActivity() {
                 if (this.activity == null) throw new IllegalStateException("activity is null");
-                if (this.merchantPublicKey == null)
-                    throw new IllegalStateException("public key is null");
+                if (this.merchantPublicKey == null && this.payerAccessToken == null)
+                    throw new IllegalStateException("key is null");
                 if (this.paymentMethod == null)
                     throw new IllegalStateException("payment method is null");
                 startIssuersActivity();
@@ -751,6 +819,7 @@ public class MercadoPagoComponents {
                 Intent intent = new Intent(activity, IssuersActivity.class);
                 intent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
                 intent.putExtra("merchantPublicKey", merchantPublicKey);
+                intent.putExtra("payerAccessToken", payerAccessToken);
                 intent.putExtra("issuers", JsonUtil.getInstance().toJson(issuers));
                 intent.putExtra("decorationPreference", JsonUtil.getInstance().toJson(decorationPreference));
                 intent.putExtra("cardInfo", JsonUtil.getInstance().toJson(cardInformation));
@@ -763,13 +832,17 @@ public class MercadoPagoComponents {
             private Activity activity;
             private BigDecimal amount;
             private Site site;
-            private CardInformation cardInformation;
+            private CardInfo cardInfo;
             private String merchantPublicKey;
             private List<PayerCost> payerCosts;
             private Issuer issuer;
             private PaymentMethod paymentMethod;
             private PaymentPreference paymentPreference;
             private DecorationPreference decorationPreference;
+            private String payerEmail;
+            private Discount discount;
+            private Boolean discountEnabled;
+            private String payerAccessToken;
 
             public InstallmentsActivityBuilder setActivity(Activity activity) {
                 this.activity = activity;
@@ -786,8 +859,8 @@ public class MercadoPagoComponents {
                 return this;
             }
 
-            public InstallmentsActivityBuilder setCardInformation(CardInformation cardInformation) {
-                this.cardInformation = cardInformation;
+            public InstallmentsActivityBuilder setCardInfo(CardInfo cardInformation) {
+                this.cardInfo = cardInformation;
                 return this;
             }
 
@@ -798,6 +871,11 @@ public class MercadoPagoComponents {
 
             public InstallmentsActivityBuilder setMerchantPublicKey(String merchantPublicKey) {
                 this.merchantPublicKey = merchantPublicKey;
+                return this;
+            }
+
+            public InstallmentsActivityBuilder setPayerAccessToken(String payerAccessToken) {
+                this.payerAccessToken = payerAccessToken;
                 return this;
             }
 
@@ -821,12 +899,27 @@ public class MercadoPagoComponents {
                 return this;
             }
 
+            public InstallmentsActivityBuilder setPayerEmail(String payerEmail) {
+                this.payerEmail = payerEmail;
+                return this;
+            }
+
+            public InstallmentsActivityBuilder setDiscount(Discount discount) {
+                this.discount = discount;
+                return this;
+            }
+
+            public InstallmentsActivityBuilder setDiscountEnabled(Boolean discountEnabled) {
+                this.discountEnabled = discountEnabled;
+                return this;
+            }
+
             public void startActivity() {
                 if (this.activity == null) throw new IllegalStateException("activity is null");
                 if (this.site == null) throw new IllegalStateException("site is null");
                 if (this.amount == null) throw new IllegalStateException("amount is null");
                 if (payerCosts == null) {
-                    if (this.merchantPublicKey == null)
+                    if (this.merchantPublicKey == null && this.payerAccessToken == null)
                         throw new IllegalStateException("key is null");
                     if (this.issuer == null) throw new IllegalStateException("issuer is null");
                     if (this.paymentMethod == null)
@@ -843,14 +936,227 @@ public class MercadoPagoComponents {
                 }
                 intent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
                 intent.putExtra("merchantPublicKey", merchantPublicKey);
+                intent.putExtra("payerAccessToken", payerAccessToken);
                 intent.putExtra("issuer", JsonUtil.getInstance().toJson(issuer));
                 intent.putExtra("site", JsonUtil.getInstance().toJson(site));
                 intent.putExtra("payerCosts", JsonUtil.getInstance().toJson(payerCosts));
                 intent.putExtra("paymentPreference", JsonUtil.getInstance().toJson(paymentPreference));
                 intent.putExtra("decorationPreference", JsonUtil.getInstance().toJson(decorationPreference));
-                intent.putExtra("cardInfo", JsonUtil.getInstance().toJson(cardInformation));
+                intent.putExtra("cardInfo", JsonUtil.getInstance().toJson(cardInfo));
+                intent.putExtra("payerEmail", payerEmail);
+                intent.putExtra("discount", JsonUtil.getInstance().toJson(discount));
+                intent.putExtra("discountEnabled", discountEnabled);
 
                 activity.startActivityForResult(intent, INSTALLMENTS_REQUEST_CODE);
+            }
+        }
+
+        public static class SecurityCodeActivityBuilder {
+            private Activity activity;
+            private CardInfo cardInformation;
+            private String merchantPublicKey;
+            private String payerAccessToken;
+            private PaymentMethod paymentMethod;
+            private List<Issuer> issuers;
+            private DecorationPreference decorationPreference;
+            private Card card;
+            private Token token;
+
+            public SecurityCodeActivityBuilder setActivity(Activity activity) {
+                this.activity = activity;
+                return this;
+            }
+
+            public SecurityCodeActivityBuilder setCardInfo(CardInfo cardInformation) {
+                this.cardInformation = cardInformation;
+                return this;
+            }
+
+            public SecurityCodeActivityBuilder setMerchantPublicKey(String merchantPublicKey) {
+                this.merchantPublicKey = merchantPublicKey;
+                return this;
+            }
+
+            public SecurityCodeActivityBuilder setPayerAccessToken(String payerAccessToken) {
+                this.payerAccessToken = payerAccessToken;
+                return this;
+            }
+
+            public SecurityCodeActivityBuilder setPaymentMethod(PaymentMethod paymentMethod) {
+                this.paymentMethod = paymentMethod;
+                return this;
+            }
+
+            public SecurityCodeActivityBuilder setCard(Card card) {
+                this.card = card;
+                return this;
+            }
+
+            public SecurityCodeActivityBuilder setToken(Token token) {
+                this.token = token;
+                return this;
+            }
+
+            public SecurityCodeActivityBuilder setIssuers(List<Issuer> issuers) {
+                this.issuers = issuers;
+                return this;
+            }
+
+            public SecurityCodeActivityBuilder setDecorationPreference(DecorationPreference decorationPreference) {
+                this.decorationPreference = decorationPreference;
+                return this;
+            }
+
+            public void startActivity() {
+                if (this.activity == null) throw new IllegalStateException("activity is null");
+                if (this.merchantPublicKey == null) throw new IllegalStateException("key is null");
+                if (this.cardInformation == null) throw new IllegalStateException("card info is null");
+                if (this.paymentMethod == null)
+                    throw new IllegalStateException("payment method is null");
+                if (this.card != null && this.token != null)
+                    throw new IllegalStateException("can't start with card and token at the same time");
+                if (this.card == null && this.token == null)
+                    throw new IllegalStateException("card and token can't both be null");
+
+                startSecurityCodeActivity();
+            }
+
+            private void startSecurityCodeActivity() {
+                Intent intent = new Intent(activity, SecurityCodeActivity.class);
+                intent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
+                intent.putExtra("token", JsonUtil.getInstance().toJson(token));
+                intent.putExtra("card", JsonUtil.getInstance().toJson(card));
+                intent.putExtra("merchantPublicKey", merchantPublicKey);
+                intent.putExtra("payerAccessToken", payerAccessToken);
+                intent.putExtra("decorationPreference", JsonUtil.getInstance().toJson(decorationPreference));
+                intent.putExtra("cardInfo", JsonUtil.getInstance().toJson(cardInformation));
+                activity.startActivityForResult(intent, SECURITY_CODE_REQUEST_CODE);
+            }
+        }
+
+        public static class PaymentTypesActivityBuilder {
+            private Activity activity;
+            private CardInfo cardInformation;
+            private String merchantPublicKey;
+            private DecorationPreference decorationPreference;
+            private List<PaymentMethod> paymentMethods;
+            private List<PaymentType> paymentTypes;
+
+            public PaymentTypesActivityBuilder setActivity(Activity activity) {
+                this.activity = activity;
+                return this;
+            }
+
+            public PaymentTypesActivityBuilder setCardInfo(CardInfo cardInformation) {
+                this.cardInformation = cardInformation;
+                return this;
+            }
+
+            public PaymentTypesActivityBuilder setMerchantPublicKey(String merchantPublicKey) {
+                this.merchantPublicKey = merchantPublicKey;
+                return this;
+            }
+
+            public PaymentTypesActivityBuilder setPaymentMethods(List<PaymentMethod> paymentMethods) {
+                this.paymentMethods = paymentMethods;
+                return this;
+            }
+
+            public PaymentTypesActivityBuilder setPaymentTypes(List<PaymentType> paymentTypes) {
+                this.paymentTypes = paymentTypes;
+                return this;
+            }
+
+            public PaymentTypesActivityBuilder setDecorationPreference(DecorationPreference decorationPreference) {
+                this.decorationPreference = decorationPreference;
+                return this;
+            }
+
+            public void startActivity() {
+                if (this.activity == null) throw new IllegalStateException("activity is null");
+                if (this.merchantPublicKey == null) throw new IllegalStateException("key is null");
+                if (this.paymentMethods == null)
+                    throw new IllegalStateException("payment method list is null");
+                if (this.paymentTypes == null)
+                    throw new IllegalStateException("payment types list is null");
+
+                startSecurityCodeActivity();
+            }
+
+            private void startSecurityCodeActivity() {
+                Intent intent = new Intent(activity, PaymentTypesActivity.class);
+                intent.putExtra("paymentMethods", JsonUtil.getInstance().toJson(paymentMethods));
+                intent.putExtra("paymentTypes", JsonUtil.getInstance().toJson(paymentTypes));
+                intent.putExtra("merchantPublicKey", merchantPublicKey);
+                intent.putExtra("cardInfo", JsonUtil.getInstance().toJson(cardInformation));
+                intent.putExtra("decorationPreference", JsonUtil.getInstance().toJson(decorationPreference));
+                activity.startActivityForResult(intent, PAYMENT_TYPES_REQUEST_CODE);
+            }
+        }
+
+        public static class DiscountsActivityBuilder {
+            private Activity activity;
+            private String merchantPublicKey;
+            private DecorationPreference decorationPreference;
+
+            private BigDecimal amount;
+            private Boolean directDiscountEnabled;
+            private Discount discount;
+            private String payerEmail;
+
+            public DiscountsActivityBuilder setActivity(Activity activity) {
+                this.activity = activity;
+                return this;
+            }
+
+            public DiscountsActivityBuilder setMerchantPublicKey(String merchantPublicKey) {
+                this.merchantPublicKey = merchantPublicKey;
+                return this;
+            }
+
+            public DiscountsActivityBuilder setDecorationPreference(DecorationPreference decorationPreference) {
+                this.decorationPreference = decorationPreference;
+                return this;
+            }
+
+            public DiscountsActivityBuilder setDirectDiscountEnabled(Boolean directDiscountEnabled) {
+                this.directDiscountEnabled = directDiscountEnabled;
+                return this;
+            }
+
+            public DiscountsActivityBuilder setAmount(BigDecimal amount) {
+                this.amount = amount;
+                return this;
+            }
+
+            public DiscountsActivityBuilder setDiscount(Discount discount) {
+                this.discount = discount;
+                return this;
+            }
+
+            public DiscountsActivityBuilder setPayerEmail(String payerEmail) {
+                this.payerEmail = payerEmail;
+                return this;
+            }
+
+            public void startActivity() {
+                if (this.activity == null) throw new IllegalStateException("activity is null");
+                if (this.merchantPublicKey == null) throw new IllegalStateException("key is null");
+                if (this.amount == null) throw new IllegalStateException("amount is null");
+
+                startDiscountsActivity();
+            }
+
+            private void startDiscountsActivity() {
+                Intent discountsIntent = new Intent(activity, DiscountsActivity.class);
+                discountsIntent.putExtra("merchantPublicKey", merchantPublicKey);
+                discountsIntent.putExtra("amount", amount.toString());
+                discountsIntent.putExtra("directDiscountEnabled", directDiscountEnabled);
+                discountsIntent.putExtra("discount", JsonUtil.getInstance().toJson(discount));
+                discountsIntent.putExtra("decorationPreference", JsonUtil.getInstance().toJson(decorationPreference));
+                discountsIntent.putExtra("payerEmail", payerEmail);
+
+                activity.startActivityForResult(discountsIntent, DISCOUNTS_REQUEST_CODE);
             }
         }
 
@@ -988,7 +1294,6 @@ public class MercadoPagoComponents {
             private Activity activity;
             private String merchantPublicKey;
             private Integer congratsDisplay;
-            private Discount discount;
             private PaymentResult paymentResult;
             private Site site;
             private BigDecimal amount;
@@ -1029,11 +1334,6 @@ public class MercadoPagoComponents {
                 return this;
             }
 
-            public CongratsActivityBuilder setDiscount(Discount discount) {
-                this.discount = discount;
-                return this;
-            }
-
             public void startActivity() {
                 if (this.activity == null) throw new IllegalStateException("activity is null");
                 if (this.paymentResult == null) throw new IllegalStateException("payment result is null");
@@ -1047,7 +1347,6 @@ public class MercadoPagoComponents {
                 Intent congratsIntent = new Intent(activity, CongratsActivity.class);
                 congratsIntent.putExtra("merchantPublicKey", merchantPublicKey);
                 congratsIntent.putExtra("congratsDisplay", congratsDisplay);
-                congratsIntent.putExtra("discount", JsonUtil.getInstance().toJson(discount));
                 congratsIntent.putExtra("paymentResult", JsonUtil.getInstance().toJson(paymentResult));
                 congratsIntent.putExtra("site", JsonUtil.getInstance().toJson(site));
                 congratsIntent.putExtra("paymentResultScreenPreference", JsonUtil.getInstance().toJson(paymentResultScreenPreference));
@@ -1204,6 +1503,7 @@ public class MercadoPagoComponents {
             private String merchantPublicKey;
             private DecorationPreference decorationPreference;
             private List<BankDeal> bankDeals;
+            private String payerAccessToken;
 
             public BankDealsActivityBuilder setActivity(Activity activity) {
                 this.activity = activity;
@@ -1225,6 +1525,11 @@ public class MercadoPagoComponents {
                 return this;
             }
 
+            public BankDealsActivityBuilder setPayerAccessToken(String payerAccessToken) {
+                this.payerAccessToken = payerAccessToken;
+                return this;
+            }
+
             public void startActivity() {
                 if (this.activity == null) throw new IllegalStateException("activity is null");
                 if (this.merchantPublicKey == null)
@@ -1235,6 +1540,7 @@ public class MercadoPagoComponents {
             private void startBankDealsActivity() {
                 Intent bankDealsIntent = new Intent(activity, BankDealsActivity.class);
                 bankDealsIntent.putExtra("merchantPublicKey", merchantPublicKey);
+                bankDealsIntent.putExtra("payerAccessToken", payerAccessToken);
                 bankDealsIntent.putExtra("decorationPreference", JsonUtil.getInstance().toJson(decorationPreference));
                 if (bankDeals != null) {
                     bankDealsIntent.putExtra("bankDeals", JsonUtil.getInstance().toJson(bankDeals));

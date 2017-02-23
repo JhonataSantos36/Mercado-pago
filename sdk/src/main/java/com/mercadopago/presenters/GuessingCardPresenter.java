@@ -7,7 +7,7 @@ import com.mercadopago.R;
 import com.mercadopago.callbacks.Callback;
 import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.controllers.PaymentMethodGuessingController;
-import com.mercadopago.core.MercadoPago;
+import com.mercadopago.core.MercadoPagoServices;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.BankDeal;
 import com.mercadopago.model.CardInformation;
@@ -17,14 +17,15 @@ import com.mercadopago.model.Discount;
 import com.mercadopago.model.Identification;
 import com.mercadopago.model.IdentificationType;
 import com.mercadopago.model.PaymentMethod;
-import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.model.PaymentRecovery;
 import com.mercadopago.model.PaymentType;
 import com.mercadopago.model.SecurityCode;
 import com.mercadopago.model.Setting;
 import com.mercadopago.model.Token;
+import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.uicontrollers.card.CardView;
 import com.mercadopago.uicontrollers.card.FrontCardView;
+import com.mercadopago.util.MercadoPagoUtil;
 import com.mercadopago.views.GuessingCardActivityView;
 
 import java.math.BigDecimal;
@@ -49,7 +50,7 @@ public class GuessingCardPresenter {
     private FailureRecovery mFailureRecovery;
 
     //Mercado Pago instance
-    private MercadoPago mMercadoPago;
+    private MercadoPagoServices mMercadoPago;
 
     //Activity parameters
     private String mPublicKey;
@@ -90,6 +91,7 @@ public class GuessingCardPresenter {
     private String mPayerEmail;
     private BigDecimal mTransactionAmount;
     private Discount mDiscount;
+    private String mPrivateKey;
 
     public GuessingCardPresenter(Context context) {
         this.mContext = context;
@@ -276,9 +278,10 @@ public class GuessingCardPresenter {
         if (mPublicKey == null) {
             return;
         }
-        mMercadoPago = new MercadoPago.Builder()
+        mMercadoPago = new MercadoPagoServices.Builder()
                 .setContext(mContext)
-                .setKey(mPublicKey, MercadoPago.KEY_TYPE_PUBLIC)
+                .setPublicKey(mPublicKey)
+                .setPrivateKey(mPrivateKey)
                 .build();
     }
 
@@ -667,14 +670,13 @@ public class GuessingCardPresenter {
         return maxLength;
     }
 
-    //TODO
     public boolean validateCardNumber() {
         mCardToken.setCardNumber(getCardNumber());
         try {
             if (mPaymentMethod == null) {
-                if (getCardNumber() == null || getCardNumber().length() < MercadoPago.BIN_LENGTH) {
+                if (getCardNumber() == null || getCardNumber().length() < MercadoPagoUtil.BIN_LENGTH) {
                     throw new RuntimeException(mContext.getString(R.string.mpsdk_invalid_card_number_incomplete));
-                } else if (getCardNumber().length() == MercadoPago.BIN_LENGTH) {
+                } else if (getCardNumber().length() == MercadoPagoUtil.BIN_LENGTH) {
                     throw new RuntimeException(mContext.getString(R.string.mpsdk_invalid_payment_method));
                 } else {
                     throw new RuntimeException(mContext.getString(R.string.mpsdk_invalid_payment_method));
@@ -792,5 +794,13 @@ public class GuessingCardPresenter {
 
     public void setTransactionAmount(BigDecimal transactionAmount) {
         this.mTransactionAmount = transactionAmount;
+    }
+
+    public void setPrivateKey(String privateKey) {
+        this.mPrivateKey = privateKey;
+    }
+
+    public String getPrivateKey() {
+        return mPrivateKey;
     }
 }

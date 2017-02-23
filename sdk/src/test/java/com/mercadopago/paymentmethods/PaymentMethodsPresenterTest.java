@@ -1,13 +1,13 @@
 package com.mercadopago.paymentmethods;
 
 import com.mercadopago.constants.PaymentTypes;
-import com.mercadopago.views.PaymentMethodsView;
 import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.model.PaymentMethod;
-import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.mvp.OnResourcesRetrievedCallback;
+import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.presenters.PaymentMethodsPresenter;
 import com.mercadopago.providers.PaymentMethodsProvider;
+import com.mercadopago.views.PaymentMethodsView;
 
 import junit.framework.Assert;
 

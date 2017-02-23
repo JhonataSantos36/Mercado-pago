@@ -14,12 +14,12 @@ import com.mercadopago.adapters.BankDealsAdapter;
 import com.mercadopago.callbacks.Callback;
 import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.callbacks.OnSelectedCallback;
-import com.mercadopago.core.MercadoPago;
+import com.mercadopago.core.MercadoPagoServices;
 import com.mercadopago.decorations.DividerItemDecoration;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.BankDeal;
-import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.mptracker.MPTracker;
+import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
@@ -35,19 +35,21 @@ public class BankDealsActivity extends MercadoPagoActivity {
     protected String mMerchantPublicKey;
 
     // Local vars
-    protected MercadoPago mMercadoPago;
+    protected MercadoPagoServices mMercadoPago;
     protected RecyclerView mRecyclerView;
     protected DecorationPreference mDecorationPreference;
     protected Toolbar mToolbar;
 
     protected List<BankDeal> mBankDeals;
+    protected String mPayerAccessToken;
 
     @Override
     protected void onValidStart() {
 
-        mMercadoPago = new MercadoPago.Builder()
+        mMercadoPago = new MercadoPagoServices.Builder()
                 .setContext(getActivity())
                 .setPublicKey(mMerchantPublicKey)
+                .setPrivateKey(mPayerAccessToken)
                 .build();
 
         getBankDeals();
@@ -75,6 +77,7 @@ public class BankDealsActivity extends MercadoPagoActivity {
     @Override
     protected void getActivityParameters() {
         mMerchantPublicKey = getIntent().getStringExtra("merchantPublicKey");
+        mPayerAccessToken = getIntent().getStringExtra("payerAccessToken");
         try {
             Type listType = new TypeToken<List<BankDeal>>() {
             }.getType();
