@@ -11,7 +11,8 @@ import java.util.HashMap;
 
 public class FontCache {
 
-    public static final String CUSTOM_FONT = "custom";
+    public static final String CUSTOM_REGULAR_FONT = "custom_regular";
+    public static final String CUSTOM_LIGHT_FONT = "custom_light";
 
     private static HashMap<String, Typeface> fontCache = new HashMap<>();
 

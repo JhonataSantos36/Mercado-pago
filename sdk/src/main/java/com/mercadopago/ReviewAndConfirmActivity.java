@@ -206,9 +206,9 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
             }
             getSupportActionBar().setHomeAsUpIndicator(upArrow);
         }
-        if (FontCache.hasTypeface(FontCache.CUSTOM_FONT)) {
-            mCollapsingToolbar.setCollapsedTitleTypeface(FontCache.getTypeface(FontCache.CUSTOM_FONT));
-            mCollapsingToolbar.setExpandedTitleTypeface(FontCache.getTypeface(FontCache.CUSTOM_FONT));
+        if (FontCache.hasTypeface(FontCache.CUSTOM_REGULAR_FONT)) {
+            mCollapsingToolbar.setCollapsedTitleTypeface(FontCache.getTypeface(FontCache.CUSTOM_REGULAR_FONT));
+            mCollapsingToolbar.setExpandedTitleTypeface(FontCache.getTypeface(FontCache.CUSTOM_REGULAR_FONT));
         }
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override

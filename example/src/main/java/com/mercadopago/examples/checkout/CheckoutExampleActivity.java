@@ -16,8 +16,6 @@ import com.mercadopago.callbacks.Callback;
 import com.mercadopago.callbacks.PaymentCallback;
 import com.mercadopago.callbacks.PaymentDataCallback;
 import com.mercadopago.callbacks.ReviewableCallback;
-import com.mercadopago.constants.PaymentTypes;
-import com.mercadopago.constants.Sites;
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.core.MercadoPagoCheckout;
 import com.mercadopago.core.MerchantServer;
@@ -27,7 +25,6 @@ import com.mercadopago.examples.utils.ColorPickerDialog;
 import com.mercadopago.examples.utils.ExamplesUtils;
 import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.model.ApiException;
-import com.mercadopago.model.Item;
 import com.mercadopago.model.PaymentData;
 import com.mercadopago.preferences.CheckoutPreference;
 import com.mercadopago.preferences.DecorationPreference;
@@ -128,7 +125,8 @@ public class CheckoutExampleActivity extends AppCompatActivity {
                 .build();
 
         DecorationPreference decorationPreference = new DecorationPreference.Builder()
-                .setCustomFont("fonts/Merriweather-Light.ttf")
+                .setCustomLightFont("fonts/Pacifico-Light.ttf")
+                .setCustomRegularFont("fonts/Merriweather-Light.ttf")
                 .build();
 
         FlowPreference flowPreference = new FlowPreference.Builder()
@@ -140,6 +138,7 @@ public class CheckoutExampleActivity extends AppCompatActivity {
                 .setPublicKey(mPublicKey)
                 .setCheckoutPreference(mCheckoutPreference)
                 .setReviewScreenPreference(reviewScreenPreference)
+                .setDecorationPreference(decorationPreference)
                 .setFlowPreference(flowPreference)
                 .start(new PaymentDataCallback() {
                     @Override
@@ -251,7 +250,8 @@ public class CheckoutExampleActivity extends AppCompatActivity {
         additionalInfo.put("phone_number", "111111");
 
         DecorationPreference decorationPreference = new DecorationPreference.Builder()
-                .setCustomFont("fonts/Merriweather-Light.ttf")
+                .setCustomLightFont("fonts/Pacifico-Light.ttf")
+                .setCustomRegularFont("fonts/Merriweather-Light.ttf")
                 .build();
 
         ServicePreference servicePreference = new ServicePreference.Builder()

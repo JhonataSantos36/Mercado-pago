@@ -159,7 +159,7 @@
             android:visibility="gone"
             android:textSize="28dp"
             android:gravity="center"
-            app:fontStyle="default_light"
+            app:fontStyle="light"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             tools:text="CFT 0,00%"/>

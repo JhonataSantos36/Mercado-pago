@@ -238,8 +238,8 @@ public class InstallmentsActivity extends MercadoPagoBaseActivity implements Ins
     public void loadLowResViews() {
         loadToolbarArrow(mLowResToolbar);
         mLowResTitleToolbar.setText(getString(R.string.mpsdk_card_installments_title));
-        if (FontCache.hasTypeface(FontCache.CUSTOM_FONT)) {
-            mLowResTitleToolbar.setTypeface(FontCache.getTypeface(FontCache.CUSTOM_FONT));
+        if (FontCache.hasTypeface(FontCache.CUSTOM_REGULAR_FONT)) {
+            mLowResTitleToolbar.setTypeface(FontCache.getTypeface(FontCache.CUSTOM_REGULAR_FONT));
         }
     }
 
@@ -299,9 +299,9 @@ public class InstallmentsActivity extends MercadoPagoBaseActivity implements Ins
     }
 
     private void setCustomFontNormal() {
-        if (FontCache.hasTypeface(FontCache.CUSTOM_FONT)) {
-            mCollapsingToolbar.setCollapsedTitleTypeface(FontCache.getTypeface(FontCache.CUSTOM_FONT));
-            mCollapsingToolbar.setExpandedTitleTypeface(FontCache.getTypeface(FontCache.CUSTOM_FONT));
+        if (FontCache.hasTypeface(FontCache.CUSTOM_REGULAR_FONT)) {
+            mCollapsingToolbar.setCollapsedTitleTypeface(FontCache.getTypeface(FontCache.CUSTOM_REGULAR_FONT));
+            mCollapsingToolbar.setExpandedTitleTypeface(FontCache.getTypeface(FontCache.CUSTOM_REGULAR_FONT));
         }
     }
 

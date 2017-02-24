@@ -18,13 +18,15 @@ public class DecorationPreference {
     private Integer lighterColor;
     private Integer baseColor;
     private boolean darkFontEnabled;
-    private String fontPath;
+    private String mRegularFontPath;
+    private String mLightFontPath;
 
     private DecorationPreference(Builder builder) {
         this.lighterColor = builder.lighterColor;
         this.baseColor = builder.baseColor;
         this.darkFontEnabled = builder.darkFontEnabled;
-        this.fontPath = builder.fontPath;
+        this.mRegularFontPath = builder.regularFontPath;
+        this.mLightFontPath = builder.lightFontPath;
     }
 
     public boolean hasColors() {
@@ -48,12 +50,20 @@ public class DecorationPreference {
     }
 
     public void activateFont(Context context) {
-        if (fontPath != null) {
-            Typeface typeFace = null;
-            if (!FontCache.hasTypeface(FontCache.CUSTOM_FONT)) {
-                typeFace = Typeface.createFromAsset(context.getAssets(), fontPath);
-                FontCache.setTypeface(FontCache.CUSTOM_FONT, typeFace);
-            }
+        if (mRegularFontPath != null) {
+            setCustomFont(context, FontCache.CUSTOM_REGULAR_FONT, mRegularFontPath);
+        }
+        if (mLightFontPath != null) {
+            setCustomFont(context, FontCache.CUSTOM_LIGHT_FONT, mLightFontPath);
+        }
+
+    }
+
+    private void setCustomFont(Context context, String fontType, String fontPath) {
+        Typeface typeFace = null;
+        if (!FontCache.hasTypeface(fontType)) {
+            typeFace = Typeface.createFromAsset(context.getAssets(), fontPath);
+            FontCache.setTypeface(fontType, typeFace);
         }
     }
 
@@ -61,7 +71,8 @@ public class DecorationPreference {
         private Integer lighterColor;
         private Integer baseColor;
         private boolean darkFontEnabled;
-        private String fontPath;
+        private String regularFontPath;
+        private String lightFontPath;
 
         public Builder setBaseColor(@ColorInt int color) {
             this.baseColor = color;
@@ -75,8 +86,13 @@ public class DecorationPreference {
             return this;
         }
 
-        public Builder setCustomFont(String fontPath) {
-            this.fontPath = fontPath;
+        public Builder setCustomLightFont(String lightFontPath) {
+            this.lightFontPath = lightFontPath;
+            return this;
+        }
+
+        public Builder setCustomRegularFont(String regularFontPath) {
+            this.regularFontPath = regularFontPath;
             return this;
         }
 
@@ -88,5 +104,7 @@ public class DecorationPreference {
         public DecorationPreference build() {
             return new DecorationPreference(this);
         }
+
+
     }
 }
