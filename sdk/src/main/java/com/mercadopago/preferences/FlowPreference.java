@@ -13,6 +13,7 @@ public class FlowPreference {
     private boolean paymentApprovedScreenEnabled;
     private boolean paymentRejectedScreenEnabled;
     private boolean paymentPendingScreenEnabled;
+    private boolean bankDealsEnabled;
     private boolean installmentsReviewScreenEnabled;
     private boolean discountEnabled;
     private int congratsDisplayTime;
@@ -26,6 +27,7 @@ public class FlowPreference {
         this.paymentApprovedScreenEnabled = builder.paymentApprovedScreenEnabled;
         this.paymentRejectedScreenEnabled = builder.paymentRejectedScreenEnabled;
         this.paymentPendingScreenEnabled = builder.paymentPendingScreenEnabled;
+        this.bankDealsEnabled = builder.bankDealsEnabled;
         this.installmentsReviewScreenEnabled = builder.installmentsReviewScreenEnabled;
         this.discountEnabled = builder.discountEnabled;
         this.congratsDisplayTime = builder.congratsDisplayTime;
@@ -69,6 +71,10 @@ public class FlowPreference {
         return this.paymentPendingScreenEnabled;
     }
 
+    public boolean isBankDealsEnabled() {
+        return this.bankDealsEnabled;
+    }
+
     public boolean isInstallmentsReviewScreenEnabled() {
         return this.installmentsReviewScreenEnabled;
     }
@@ -83,6 +89,7 @@ public class FlowPreference {
 
     public static class Builder {
 
+        private boolean bankDealsEnabled = true;
         private boolean paymentSearchScreenEnabled = false;
         private boolean reviewAndConfirmScreenEnabled = true;
         private boolean paymentResultScreenEnabled = true;
@@ -122,6 +129,11 @@ public class FlowPreference {
 
         public Builder disablePaymentPendingScreen() {
             this.paymentPendingScreenEnabled = false;
+            return this;
+        }
+
+        public Builder disableBankDeals() {
+            this.bankDealsEnabled = false;
             return this;
         }
 

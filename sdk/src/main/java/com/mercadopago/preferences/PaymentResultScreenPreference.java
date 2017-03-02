@@ -36,14 +36,18 @@ public class PaymentResultScreenPreference {
     private boolean enableCongratsSecondaryExitButton = true;
     private boolean enablePendingSecondaryExitButton = true;
     private boolean enableRejectedSecondaryExitButton = true;
-    private boolean enablePendingContentText;
-    private boolean enableRejectedContentText;
-    private boolean enableRejectedContentTitle;
-    private boolean enableApprovedReceipt;
-    private boolean enableApprovedAmount;
-    private boolean enableApprovedPaymentMethodInfo;
+    private boolean enablePendingContentText = true;
+    private boolean enableRejectedContentText = true;
+    private boolean enableRejectedContentTitle = true;
+    private boolean enableApprovedReceipt = true;
+    private boolean enableApprovedAmount = true;
+    private boolean enableApprovedPaymentMethodInfo = true;
     private transient List<Reviewable> congratsReviewables;
     private transient List<Reviewable> pendingReviewables;
+
+    private Integer secondaryRejectedExitResultCode;
+    private Integer secondaryCongratsExitResultCode;
+    private Integer secondaryPendingExitResultCode;
 
     private PaymentResultScreenPreference(Builder builder) {
         this.approvedTitle = builder.approvedTitle;
@@ -55,8 +59,11 @@ public class PaymentResultScreenPreference {
         this.pendingIconName = builder.pendingIcon;
         this.exitButtonTitle = builder.exitButtonTitle;
         this.secondaryPendingExitButtonTitle = builder.secondaryPendingExitButtonTitle;
+        this.secondaryPendingExitResultCode = builder.secondaryPendingExitResultCode;
         this.secondaryCongratsExitButtonTitle = builder.secondaryCongratsExitButtonTitle;
+        this.secondaryCongratsExitResultCode = builder.secondaryCongratsExitResultCode;
         this.secondaryRejectedExitButtonTitle = builder.secondaryRejectedExitButtonTitle;
+        this.secondaryRejectedExitResultCode = builder.secondaryRejectedExitResultCode;
         this.rejectedTitle = builder.rejectedTitle;
         this.rejectedSubtitle = builder.rejectedSubtitle;
         this.rejectedIconName = builder.rejectedIcon;
@@ -69,6 +76,7 @@ public class PaymentResultScreenPreference {
         this.enableRejectedSecondaryExitButton = builder.enableRejectedSecondaryExitButton;
         this.enablePendingContentText = builder.enablePendingContentText;
         this.enableRejectedContentText = builder.enableRejectedContentText;
+        this.enableRejectedContentTitle = builder.enableRejectedContentTitle;
         this.enableApprovedReceipt = builder.enableApprovedReceipt;
         this.enableApprovedAmount = builder.enableApprovedAmount;
         this.enableApprovedPaymentMethodInfo = builder.enableApprovedPaymentMethodInfo;
@@ -126,6 +134,10 @@ public class PaymentResultScreenPreference {
 
     public String getSecondaryCongratsExitButtonTitle() {
         return this.secondaryCongratsExitButtonTitle;
+    }
+
+    public Integer getSecondaryCongratsExitResultCode() {
+        return secondaryCongratsExitResultCode;
     }
 
     public String getSecondaryRejectedExitButtonTitle() {
@@ -197,17 +209,25 @@ public class PaymentResultScreenPreference {
     }
 
     public void addCongratsReviewable(@NonNull Reviewable reviewable) {
-        if(this.congratsReviewables == null) {
+        if (this.congratsReviewables == null) {
             this.congratsReviewables = new ArrayList<>();
         }
         this.congratsReviewables.add(reviewable);
     }
 
     public void addPendingReviewable(@NonNull Reviewable reviewable) {
-        if(this.pendingReviewables == null) {
+        if (this.pendingReviewables == null) {
             this.pendingReviewables = new ArrayList<>();
         }
         this.pendingReviewables.add(reviewable);
+    }
+
+    public Integer getSecondaryRejectedExitResultCode() {
+        return secondaryRejectedExitResultCode;
+    }
+
+    public Integer getSecondaryPendingExitResultCode() {
+        return secondaryPendingExitResultCode;
     }
 
     public static class Builder {
@@ -241,6 +261,10 @@ public class PaymentResultScreenPreference {
         private List<Reviewable> congratsReviewables;
         private List<Reviewable> pendingReviewables;
 
+        private Integer secondaryCongratsExitResultCode;
+        private Integer secondaryPendingExitResultCode;
+        private Integer secondaryRejectedExitResultCode;
+
         public Builder() {
             this.congratsReviewables = new ArrayList<>();
             this.pendingReviewables = new ArrayList<>();
@@ -262,7 +286,7 @@ public class PaymentResultScreenPreference {
         }
 
         public Builder setPendingSubtitle(String subtitle) {
-            this.pendingSubtitle  = subtitle;
+            this.pendingSubtitle = subtitle;
             return this;
         }
 
@@ -281,21 +305,42 @@ public class PaymentResultScreenPreference {
             return this;
         }
 
+        @Deprecated
         public Builder setApprovedSecondaryExitButton(String title, PaymentResultCallback paymentResultCallback) {
-           this.secondaryCongratsExitButtonTitle = title;
+            this.secondaryCongratsExitButtonTitle = title;
             CallbackHolder.getInstance().addPaymentResultCallback(CallbackHolder.CONGRATS_PAYMENT_RESULT_CALLBACK, paymentResultCallback);
             return this;
         }
 
+        public Builder setApprovedSecondaryExitButton(String title, @NonNull Integer resultCode) {
+            this.secondaryCongratsExitButtonTitle = title;
+            this.secondaryCongratsExitResultCode = resultCode;
+            return this;
+        }
+
+        @Deprecated
         public Builder setPendingSecondaryExitButton(String title, PaymentResultCallback paymentResultCallback) {
             this.secondaryPendingExitButtonTitle = title;
             CallbackHolder.getInstance().addPaymentResultCallback(CallbackHolder.PENDING_PAYMENT_RESULT_CALLBACK, paymentResultCallback);
             return this;
         }
 
+        public Builder setPendingSecondaryExitButton(String title, @NonNull Integer resultCode) {
+            this.secondaryPendingExitButtonTitle = title;
+            this.secondaryPendingExitResultCode = resultCode;
+            return this;
+        }
+
+        @Deprecated
         public Builder setRejectedSecondaryExitButton(String title, PaymentResultCallback paymentResultCallback) {
             this.secondaryRejectedExitButtonTitle = title;
             CallbackHolder.getInstance().addPaymentResultCallback(CallbackHolder.REJECTED_PAYMENT_RESULT_CALLBACK, paymentResultCallback);
+            return this;
+        }
+
+        public Builder setRejectedSecondaryExitButton(String title, @NonNull Integer resultCode) {
+            this.secondaryRejectedExitButtonTitle = title;
+            this.secondaryRejectedExitResultCode = resultCode;
             return this;
         }
 

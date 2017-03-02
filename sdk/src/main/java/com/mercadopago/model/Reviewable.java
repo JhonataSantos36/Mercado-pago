@@ -1,5 +1,7 @@
 package com.mercadopago.model;
 
+import android.support.annotation.NonNull;
+
 import com.mercadopago.callbacks.PaymentResultReviewableCallback;
 import com.mercadopago.callbacks.ReviewableCallback;
 import com.mercadopago.constants.ReviewKeys;
@@ -13,12 +15,19 @@ public abstract class Reviewable implements CustomViewController {
     public ReviewSubscriber reviewSubscriber;
     public ReviewableCallback reviewableCallback;
     public PaymentResultReviewableCallback paymentResultReviewableCallback;
+
     private String key;
+    private Integer resultCode;
 
     public abstract void draw();
 
+    @Deprecated
     public void setReviewableCallback(ReviewableCallback callback) {
         this.reviewableCallback = callback;
+    }
+
+    public void setResultCode(@NonNull Integer resultCode) {
+        this.resultCode = resultCode;
     }
 
     public void setReviewableCallback(PaymentResultReviewableCallback callback) {
@@ -41,13 +50,24 @@ public abstract class Reviewable implements CustomViewController {
         return ReviewKeys.DEFAULT;
     }
 
+    @Deprecated
     public void notifyChangeRequired() {
         if(this.reviewSubscriber != null) {
             reviewSubscriber.changeRequired(this);
         }
     }
 
+    public void notifyChangeRequired(@NonNull Integer resultCode) {
+        if(this.reviewSubscriber != null) {
+            reviewSubscriber.changeRequired(resultCode);
+        }
+    }
+
     public void setKey(String key) {
         this.key = key;
+    }
+
+    public Integer getResultCode() {
+        return resultCode;
     }
 }

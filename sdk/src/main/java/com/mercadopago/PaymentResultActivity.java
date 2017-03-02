@@ -168,7 +168,7 @@ public class PaymentResultActivity extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         if (requestCode == MercadoPagoComponents.Activities.CONGRATS_REQUEST_CODE) {
-            finishWithOkResult(resultCode);
+            finishWithOkResult(resultCode, data);
         } else if (requestCode == MercadoPagoComponents.Activities.PENDING_REQUEST_CODE) {
             resolveRequest(resultCode, data);
         } else if (requestCode == MercadoPagoComponents.Activities.REJECTION_REQUEST_CODE) {
@@ -176,7 +176,7 @@ public class PaymentResultActivity extends Activity {
         } else if (requestCode == MercadoPagoComponents.Activities.CALL_FOR_AUTHORIZE_REQUEST_CODE) {
             resolveRequest(resultCode, data);
         } else if (requestCode == MercadoPagoComponents.Activities.INSTRUCTIONS_REQUEST_CODE) {
-            finishWithOkResult(resultCode);
+            finishWithOkResult(resultCode, data);
         } else {
             finishWithCancelResult(data);
         }
@@ -186,7 +186,7 @@ public class PaymentResultActivity extends Activity {
         if (resultCode == RESULT_CANCELED && data != null) {
             finishWithCancelResult(data);
         } else {
-            finishWithOkResult(resultCode);
+            finishWithOkResult(resultCode, data);
         }
     }
 
@@ -195,9 +195,8 @@ public class PaymentResultActivity extends Activity {
         finish();
     }
 
-    private void finishWithOkResult(int resultCode) {
-        Intent paymentResultIntent = new Intent();
-        setResult(resultCode, paymentResultIntent);
+    private void finishWithOkResult(int resultCode, Intent data) {
+        setResult(resultCode, data);
         finish();
     }
 }

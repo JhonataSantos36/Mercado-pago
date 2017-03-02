@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.mercadopago.callbacks.Callback;
 import com.mercadopago.callbacks.PaymentCallback;
 import com.mercadopago.callbacks.PaymentDataCallback;
+import com.mercadopago.callbacks.PaymentResultCallback;
 import com.mercadopago.callbacks.ReviewableCallback;
 import com.mercadopago.constants.PaymentTypes;
 import com.mercadopago.constants.Sites;
@@ -24,6 +25,7 @@ import com.mercadopago.core.MercadoPagoCheckout;
 import com.mercadopago.core.MerchantServer;
 import com.mercadopago.examples.R;
 import com.mercadopago.examples.reviewables.CellphoneReview;
+import com.mercadopago.examples.reviewables.CongratsReview;
 import com.mercadopago.examples.utils.ColorPickerDialog;
 import com.mercadopago.examples.utils.ExamplesUtils;
 import com.mercadopago.exceptions.MercadoPagoError;
@@ -31,10 +33,13 @@ import com.mercadopago.model.ApiException;
 import com.mercadopago.model.Discount;
 import com.mercadopago.model.Item;
 import com.mercadopago.model.PaymentData;
+import com.mercadopago.model.PaymentResult;
+import com.mercadopago.model.Site;
 import com.mercadopago.preferences.CheckoutPreference;
 import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.model.Payment;
 import com.mercadopago.preferences.FlowPreference;
+import com.mercadopago.preferences.PaymentResultScreenPreference;
 import com.mercadopago.preferences.ReviewScreenPreference;
 import com.mercadopago.preferences.ServicePreference;
 import com.mercadopago.util.JsonUtil;
@@ -46,6 +51,7 @@ import java.util.Map;
 
 public class CheckoutExampleActivity extends AppCompatActivity {
 
+    private static final int RESULT_CUSTOM_EXIT = 1321;
     private Activity mActivity;
     private ImageView mColorSample;
     private CheckBox mDarkFontEnabled;
@@ -59,6 +65,7 @@ public class CheckoutExampleActivity extends AppCompatActivity {
 
     //Result
     private PaymentData mPaymentData;
+    private boolean mAlreadyStartedRyC = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,14 +119,6 @@ public class CheckoutExampleActivity extends AppCompatActivity {
         additionalInfo.put("phone_number", "111111");
 
         CellphoneReview cellphoneReview = new CellphoneReview(this, "15111111");
-        cellphoneReview.setReviewableCallback(new ReviewableCallback() {
-            @Override
-            public void onChangeRequired(PaymentData paymentData) {
-                Toast.makeText(getBaseContext(), "Change button clicked!", Toast.LENGTH_SHORT).show();
-                mPaymentData = paymentData;
-                doSomething();
-            }
-        });
 
         ReviewScreenPreference reviewScreenPreference = new ReviewScreenPreference.Builder()
                 .setTitle("Confirma tu recarga")
@@ -129,111 +128,173 @@ public class CheckoutExampleActivity extends AppCompatActivity {
                 .addReviewable(cellphoneReview)
                 .build();
 
+        CongratsReview congratsReview = new CongratsReview(this, "Hola!");
+
         DecorationPreference decorationPreference = new DecorationPreference.Builder()
-                .setCustomLightFont("fonts/Pacifico-Light.ttf")
-                .setCustomRegularFont("fonts/Merriweather-Light.ttf")
+//                .setCustomLightFont("fonts/Pacifico-Light.ttf")
+//                .setCustomRegularFont("fonts/Merriweather-Light.ttf")
+                .build();
+
+        PaymentResultScreenPreference paymentResultScreenPreference = new PaymentResultScreenPreference.Builder()
+                //.addCongratsReviewable(congratsReview)
                 .build();
 
         FlowPreference flowPreference = new FlowPreference.Builder()
                 .disableReviewAndConfirmScreen()
+                .disableDiscount()
+                .disableBankDeals()
+                .build();
+
+        mCheckoutPreference = new CheckoutPreference.Builder()
+                .addItem(new Item("Item", BigDecimal.ONE))
+                .setSite(Sites.ARGENTINA)
+                .addExcludedPaymentType(PaymentTypes.ATM)
+                .addExcludedPaymentType(PaymentTypes.BANK_TRANSFER)
+//                .addExcludedPaymentType(PaymentTypes.CREDIT_CARD)
+                .addExcludedPaymentType(PaymentTypes.DEBIT_CARD)
+                .addExcludedPaymentType(PaymentTypes.TICKET)
+                .enableAccountMoney()
+                .setPayerAccessToken("TEST-7176766875549918-111008-fa5660d2d0aa37532716eb2bf2f9089b__LB_LC__-192992930")
                 .build();
 
         new MercadoPagoCheckout.Builder()
-                .setContext(this)
+                .setActivity(this)
                 .setPublicKey(mPublicKey)
                 .setCheckoutPreference(mCheckoutPreference)
                 .setReviewScreenPreference(reviewScreenPreference)
                 .setDecorationPreference(decorationPreference)
                 .setFlowPreference(flowPreference)
-                .start(new PaymentCallback() {
+                .setPaymentResultScreenPreference(paymentResultScreenPreference)
+                .setReviewScreenPreference(reviewScreenPreference)
+                .start(new PaymentDataCallback() {
                     @Override
-                    public void onSuccess(Payment payment) {
-//                        startAgain(payment);
-                        Log.d("log", "en paymentdata callback");
-//                        Log.d("log", paymentData.getPaymentMethod().getId());
+                    public void onSuccess(PaymentData paymentData, boolean paymentMethodChanged) {
+                        Log.d("log", "success");
+                        Log.d("log", paymentData.getPaymentMethod().getId());
+                        Log.d("log", "payment method changed: " + paymentMethodChanged);
+                        startAgain(paymentData);
                     }
 
                     @Override
                     public void onCancel() {
+                        Log.d("log", "cancel");
                     }
 
                     @Override
-                    public void onFailure(MercadoPagoError exception) {
+                    public void onFailure(MercadoPagoError error) {
+                        Log.d("log", "failure");
                     }
                 });
-
-//        new MercadoPagoCheckout.Builder()
-//                .setContext(this)
-//                .setPublicKey(mPublicKey)
-//                .setCheckoutPreference(mCheckoutPreference)
-//                .setReviewScreenPreference(reviewScreenPreference)
-//                .setFlowPreference(flowPreference)
-//                .start(new PaymentCallback() {
-//                    @Override
-//                    public void onSuccess(Payment payment) {
-//                        Log.d("log", "en el success del payment callback");
-//                        Log.d("log", payment.getStatus());
-//                    }
+//                .startForPaymentData();
+//        .start(new PaymentCallback() {
+//            @Override
+//            public void onSuccess(Payment payment) {
+//                Log.d("log", "success");
+//            }
 //
-//                    @Override
-//                    public void onCancel() {}
+//            @Override
+//            public void onCancel() {
+//                Log.d("log", "cancel");
+//            }
 //
-//                    @Override
-//                    public void onFailure(MercadoPagoError exception) {}
-//                });
-
+//            @Override
+//            public void onFailure(MercadoPagoError error) {
+//
+//            }
+//        });
     }
 
     private void startAgain(PaymentData paymentData) {
-        Map<String, Object> additionalInfo = new HashMap<>();
-        additionalInfo.put("company_id", "movistar");
-        additionalInfo.put("phone_number", "111111");
 
+        CellphoneReview cellphoneReview = new CellphoneReview(this, "15111111");
+
+        ReviewScreenPreference reviewScreenPreference = new ReviewScreenPreference.Builder()
+                .setTitle("Confirma tu recarga")
+                .setConfirmText("Recargar")
+                .setCancelText("Ir a Actividad")
+                .setProductDetail("Recarga")
+                .addReviewable(cellphoneReview)
+                .build();
 
         FlowPreference flowPreference = new FlowPreference.Builder()
                 .disableReviewAndConfirmScreen()
+                .disableBankDeals()
+                .disableDiscount()
                 .build();
 
         new MercadoPagoCheckout.Builder()
-                .setContext(this)
+                .setActivity(this)
+                .setReviewScreenPreference(reviewScreenPreference)
                 .setPublicKey(mPublicKey)
                 .setCheckoutPreference(mCheckoutPreference)
-                .setPaymentData(paymentData)
                 .setFlowPreference(flowPreference)
+                .setPaymentData(paymentData)
                 .start(new PaymentDataCallback() {
                     @Override
-                    public void onSuccess(PaymentData paymentData) {
-                        Log.d("log", "en el success del start again");
+                    public void onSuccess(PaymentData paymentData, boolean paymentMethodChanged) {
+                        Log.d("log", "en success 2");
                         Log.d("log", paymentData.getPaymentMethod().getId());
+                        Log.d("log", "payment method changed: " + paymentMethodChanged);
+                        if (paymentMethodChanged) {
+                            startAgain(paymentData);
+                        } else {
+                            startWithPaymentResult(paymentData);
+                        }
                     }
 
                     @Override
                     public void onCancel() {
+                        Log.d("log", "en cancel 2");
                     }
 
                     @Override
-                    public void onFailure(MercadoPagoError exception) {
+                    public void onFailure(MercadoPagoError error) {
+                        Log.d("log", "en failure 2");
                     }
                 });
-//        new MercadoPagoCheckout.Builder()
-//                .setContext(this)
-//                .setPublicKey(mPublicKey)
-//                .setCheckoutPreference(mCheckoutPreference)
-//                .setPaymentData(paymentData)
-//                .setFlowPreference(flowPreference)
-//                .start(new PaymentCallback() {
-//                    @Override
-//                    public void onSuccess(Payment payment) {
-//                        Log.d("log", "en el success del start again");
-//                        Log.d("log", payment.getStatus());
-//                    }
-//
-//                    @Override
-//                    public void onCancel() {}
-//
-//                    @Override
-//                    public void onFailure(MercadoPagoError exception) {}
-//                });
+//                .startForPaymentData();
+    }
+
+    private void startWithPaymentResult(PaymentData paymentData) {
+
+        CongratsReview congratsReview = new CongratsReview(this, "Hola!");
+
+        PaymentResult paymentResult = new PaymentResult.Builder()
+                .setPaymentData(paymentData)
+                .setPaymentStatus(Payment.StatusCodes.STATUS_APPROVED)
+                .build();
+
+        PaymentResultScreenPreference paymentResultScreenPreference = new PaymentResultScreenPreference.Builder()
+                .setApprovedTitle("Recargaste!")
+                .setApprovedSecondaryExitButton("Secondary", RESULT_CUSTOM_EXIT)
+                .setExitButtonTitle("Ir a Actividad")
+                .build();
+
+
+        new MercadoPagoCheckout.Builder()
+                .setActivity(this)
+                .setPublicKey(mPublicKey)
+                .setCheckoutPreference(mCheckoutPreference)
+                .setPaymentResult(paymentResult)
+                .setPaymentResultScreenPreference(paymentResultScreenPreference)
+                .start(new PaymentDataCallback() {
+                    @Override
+                    public void onSuccess(PaymentData paymentData, boolean paymentMethodChanged) {
+                        Log.d("log", "en success 3");
+                        Log.d("log", "payment method changed: " + paymentMethodChanged);
+                    }
+
+                    @Override
+                    public void onCancel() {
+
+                    }
+
+                    @Override
+                    public void onFailure(MercadoPagoError error) {
+
+                    }
+                });
+//                .startForPaymentData();
     }
 
     private DecorationPreference.Builder getCurrentDecorationPreferenceBuilder() {
@@ -260,8 +321,8 @@ public class CheckoutExampleActivity extends AppCompatActivity {
         additionalInfo.put("phone_number", "111111");
 
         DecorationPreference decorationPreference = new DecorationPreference.Builder()
-                .setCustomLightFont("fonts/Pacifico-Light.ttf")
-                .setCustomRegularFont("fonts/Merriweather-Light.ttf")
+//                .setCustomLightFont("fonts/Pacifico-Light.ttf")
+//                .setCustomRegularFont("fonts/Merriweather-Light.ttf")
                 .build();
 
         ServicePreference servicePreference = new ServicePreference.Builder()
@@ -319,19 +380,35 @@ public class CheckoutExampleActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         LayoutUtil.showRegularLayout(this);
 
-        if (requestCode == MercadoPago.CHECKOUT_REQUEST_CODE) {
-            showRegularLayout();
-            if (resultCode == RESULT_OK && data != null) {
-
-                // Set message
-                Payment payment = JsonUtil.getInstance().fromJson(data.getStringExtra("payment"), Payment.class);
-                Toast.makeText(mActivity, getString(R.string.payment_received_congrats) + payment.getId(), Toast.LENGTH_LONG).show();
-
-            } else {
-                if ((data != null) && (data.getStringExtra("mpException") != null)) {
-                    MercadoPagoError mercadoPagoError = JsonUtil.getInstance().fromJson(data.getStringExtra("mercadoPagoError"), MercadoPagoError.class);
-                    Toast.makeText(mActivity, mercadoPagoError.getMessage(), Toast.LENGTH_LONG).show();
+        if (requestCode == MercadoPagoCheckout.CHECKOUT_REQUEST_CODE) {
+            if (resultCode == MercadoPagoCheckout.PAYMENT_DATA_RESULT_CODE) {
+                PaymentData paymentData = JsonUtil.getInstance().fromJson(data.getStringExtra("paymentData"), PaymentData.class);
+                if (mAlreadyStartedRyC) {
+                    Toast.makeText(mActivity, "Restart en Resultados", Toast.LENGTH_SHORT).show();
+                    startWithPaymentResult(paymentData);
+                } else {
+                    mAlreadyStartedRyC = true;
+                    Toast.makeText(mActivity, "Restart en RyC", Toast.LENGTH_SHORT).show();
+                    startAgain(paymentData);
                 }
+
+            } else if (resultCode == RESULT_CANCELED) {
+
+                if (data != null && data.getStringExtra("mercadoPagoError") != null) {
+                    MercadoPagoError mercadoPagoError = JsonUtil.getInstance().fromJson(data.getStringExtra("mercadoPagoError"), MercadoPagoError.class);
+                    Log.d("log", "RESULT_CANCELED - " + mercadoPagoError.getMessage());
+                } else {
+                    Log.d("log", "RESULT_CANCELED");
+                }
+
+            } else if (resultCode == CellphoneReview.CELLPHONE_CHANGE) {
+                mPaymentData = JsonUtil.getInstance().fromJson(data.getStringExtra("paymentData"), PaymentData.class);
+
+            } else if (resultCode == CongratsReview.CUSTOM_REVIEW) {
+                Payment payment = JsonUtil.getInstance().fromJson(data.getStringExtra("payment"), Payment.class);
+                PaymentResult paymentResult = JsonUtil.getInstance().fromJson(data.getStringExtra("paymentResult"), PaymentResult.class);
+            } else if (resultCode == RESULT_CUSTOM_EXIT) {
+                Toast.makeText(mActivity, "Hola custom exit!", Toast.LENGTH_SHORT).show();
             }
         }
     }

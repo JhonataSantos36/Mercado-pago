@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.annotation.DrawableRes;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DividerItemDecoration;
@@ -175,7 +174,8 @@ public class PendingActivity extends MercadoPagoBaseActivity implements TimerObs
             }
             if (!mPaymentResultScreenPreference.isPendingSecondaryExitButtonEnabled() ||
                     mPaymentResultScreenPreference.getSecondaryPendingExitButtonTitle() == null ||
-                    CallbackHolder.getInstance().getPaymentResultCallback(CallbackHolder.PENDING_PAYMENT_RESULT_CALLBACK) == null) {
+                    (mPaymentResultScreenPreference.getSecondaryPendingExitResultCode() == null
+                            && !CallbackHolder.getInstance().hasPaymentResultCallback(CallbackHolder.PENDING_PAYMENT_RESULT_CALLBACK))) {
                 hideChangePaymentMethodButton();
                 hideSecondaryExitButton();
             } else {
@@ -192,10 +192,22 @@ public class PendingActivity extends MercadoPagoBaseActivity implements TimerObs
         mSecondaryExitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CallbackHolder.getInstance().getPaymentResultCallback(CallbackHolder.PENDING_PAYMENT_RESULT_CALLBACK).onResult(mPaymentResult);
-                finishWithOkResult(false);
+                //TODO Deprecate
+                if(CallbackHolder.getInstance().hasPaymentResultCallback(CallbackHolder.PENDING_PAYMENT_RESULT_CALLBACK)) {
+                    CallbackHolder.getInstance().getPaymentResultCallback(CallbackHolder.PENDING_PAYMENT_RESULT_CALLBACK).onResult(mPaymentResult);
+                    finishWithOkResult(false);
+                } else {
+                    finishWithResult(mPaymentResultScreenPreference.getSecondaryPendingExitResultCode());
+                }
             }
         });
+    }
+
+    private void finishWithResult(Integer resultCode) {
+        Intent intent = new Intent();
+        intent.putExtra("resultCode", resultCode);
+        setResult(RESULT_OK, intent);
+        finish();
     }
 
     private void setPaymentResultScreenWithoutPreferenceData() {
@@ -268,6 +280,14 @@ public class PendingActivity extends MercadoPagoBaseActivity implements TimerObs
             reviewable.getPaymentResultReviewableCallback().onChangeRequired(mPaymentResult);
         }
         finishWithOkResult(false);
+    }
+
+    @Override
+    public void changeRequired(Integer resultCode) {
+        Intent intent = new Intent();
+        intent.putExtra("resultCode", resultCode);
+        intent.putExtra("paymentResult", JsonUtil.getInstance().toJson(mPaymentResult));
+        setResult(RESULT_OK, intent);
     }
 
 

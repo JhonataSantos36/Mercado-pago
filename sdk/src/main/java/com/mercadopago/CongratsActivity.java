@@ -250,7 +250,8 @@ public class CongratsActivity extends MercadoPagoBaseActivity implements ReviewS
             }
             if (!mPaymentResultScreenPreference.isCongratsSecondaryExitButtonEnabled() ||
                     mPaymentResultScreenPreference.getSecondaryCongratsExitButtonTitle() == null ||
-                    CallbackHolder.getInstance().getPaymentResultCallback(CallbackHolder.CONGRATS_PAYMENT_RESULT_CALLBACK) == null) {
+                    (mPaymentResultScreenPreference.getSecondaryCongratsExitResultCode() == null
+                            && !CallbackHolder.getInstance().hasPaymentResultCallback(CallbackHolder.CONGRATS_PAYMENT_RESULT_CALLBACK))) {
                 hideSecondaryExitButton();
             } else {
                 mSecondaryExitTextView.setText(mPaymentResultScreenPreference.getSecondaryCongratsExitButtonTitle());
@@ -277,10 +278,23 @@ public class CongratsActivity extends MercadoPagoBaseActivity implements ReviewS
         mSecondaryExitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CallbackHolder.getInstance().getPaymentResultCallback(CallbackHolder.CONGRATS_PAYMENT_RESULT_CALLBACK).onResult(mPaymentResult);
-                finishWithOkResult(false);
+                
+                //TODO Deprecate
+                if(CallbackHolder.getInstance().hasPaymentResultCallback(CallbackHolder.CONGRATS_PAYMENT_RESULT_CALLBACK)) {
+                    CallbackHolder.getInstance().getPaymentResultCallback(CallbackHolder.CONGRATS_PAYMENT_RESULT_CALLBACK).onResult(mPaymentResult);
+                    finishWithOkResult(false);
+                } else {
+                    finishWithResult(mPaymentResultScreenPreference.getSecondaryCongratsExitResultCode());
+                }
             }
         });
+    }
+
+    private void finishWithResult(Integer resultCode) {
+        Intent intent = new Intent();
+        intent.putExtra("resultCode", resultCode);
+        setResult(RESULT_OK, intent);
+        finish();
     }
 
     private void hideSecondaryExitButton() {
@@ -322,6 +336,15 @@ public class CongratsActivity extends MercadoPagoBaseActivity implements ReviewS
             reviewable.getPaymentResultReviewableCallback().onChangeRequired(mPaymentResult);
         }
         finishWithOkResult(false);
+    }
+
+    @Override
+    public void changeRequired(Integer resultCode) {
+        Intent intent = new Intent();
+        intent.putExtra("resultCode", resultCode);
+        intent.putExtra("paymentResult", JsonUtil.getInstance().toJson(mPaymentResult));
+        setResult(RESULT_OK, intent);
+        finish();
     }
 
     private void showReceipt() {

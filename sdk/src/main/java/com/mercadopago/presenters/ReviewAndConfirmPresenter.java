@@ -272,9 +272,23 @@ public class ReviewAndConfirmPresenter extends MvpPresenter<ReviewAndConfirmView
             paymentData.setIssuer(mIssuer);
             paymentData.setToken(mToken);
 
+            //TODO Deprecate
             reviewable.getReviewableCallback().onChangeRequired(paymentData);
         }
+
         getView().cancelPayment(false);
+    }
+
+    @Override
+    public void changeRequired(Integer resultCode) {
+        PaymentData paymentData = new PaymentData();
+        paymentData.setPaymentMethod(mPaymentMethod);
+        paymentData.setPayerCost(mPayerCost);
+        paymentData.setDiscount(mDiscount);
+        paymentData.setIssuer(mIssuer);
+        paymentData.setToken(mToken);
+
+        getView().cancelPayment(resultCode, paymentData);
     }
 
     public List<String> getReviewOrder() {

@@ -91,9 +91,13 @@ public class RejectionActivity extends MercadoPagoBaseActivity implements TimerO
         if (mPaymentResult == null) {
             throw new IllegalStateException("payment result not set");
         }
-        if (mPaymentResult.getPaymentStatusDetail() == null) {
+        if (isStatusDetailMandatory() && mPaymentResult.getPaymentStatusDetail() == null) {
             throw new IllegalStateException("payment status detail not set");
         }
+    }
+
+    private boolean isStatusDetailMandatory() {
+        return mPaymentResultScreenPreference == null || mPaymentResultScreenPreference.getRejectedTitle() == null;
     }
 
     protected void setContentView() {
@@ -188,7 +192,8 @@ public class RejectionActivity extends MercadoPagoBaseActivity implements TimerO
             }
             if (!mPaymentResultScreenPreference.isRejectedSecondaryExitButtonEnabled() ||
                     mPaymentResultScreenPreference.getSecondaryRejectedExitButtonTitle() == null ||
-                    CallbackHolder.getInstance().getPaymentResultCallback(CallbackHolder.REJECTED_PAYMENT_RESULT_CALLBACK) == null) {
+                    (mPaymentResultScreenPreference.getSecondaryRejectedExitResultCode() == null
+                            && !CallbackHolder.getInstance().hasPaymentResultCallback(CallbackHolder.REJECTED_PAYMENT_RESULT_CALLBACK))) {
                 hideChangePaymentMethodButton();
                 hideSecondaryExitButton();
             } else {
@@ -221,8 +226,14 @@ public class RejectionActivity extends MercadoPagoBaseActivity implements TimerO
         mSecondaryExitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CallbackHolder.getInstance().getPaymentResultCallback(CallbackHolder.REJECTED_PAYMENT_RESULT_CALLBACK).onResult(mPaymentResult);
-                finishWithOkResult(false);
+
+                //TODO Deprecate
+                if (CallbackHolder.getInstance().hasPaymentResultCallback(CallbackHolder.REJECTED_PAYMENT_RESULT_CALLBACK)) {
+                    CallbackHolder.getInstance().getPaymentResultCallback(CallbackHolder.REJECTED_PAYMENT_RESULT_CALLBACK).onResult(mPaymentResult);
+                    finishWithOkResult(false);
+                } else {
+                    finishWithResult(mPaymentResultScreenPreference.getSecondaryRejectedExitResultCode());
+                }
             }
         });
     }
@@ -305,7 +316,7 @@ public class RejectionActivity extends MercadoPagoBaseActivity implements TimerO
                 mRejectionContentText.setVisibility(View.GONE);
             }
         } else {
-            ErrorUtil.startErrorActivity(this, getString(R.string.mpsdk_standard_error_message), false);
+            hideContentText();
         }
     }
 
@@ -345,6 +356,13 @@ public class RejectionActivity extends MercadoPagoBaseActivity implements TimerO
         Intent returnIntent = new Intent();
         int resultCode = notifyOk ? RESULT_OK : PaymentResultActivity.RESULT_SILENT_OK;
         setResult(resultCode, returnIntent);
+        finish();
+    }
+
+    private void finishWithResult(Integer resultCode) {
+        Intent intent = new Intent();
+        intent.putExtra("resultCode", resultCode);
+        setResult(RESULT_OK, intent);
         finish();
     }
 

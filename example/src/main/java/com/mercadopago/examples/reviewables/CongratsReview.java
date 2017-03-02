@@ -16,6 +16,7 @@ import com.mercadopago.model.Reviewable;
 
 public class CongratsReview extends Reviewable {
 
+    public static final Integer CUSTOM_REVIEW = 98;
     protected View mView;
     protected TextView mTextView;
     protected FrameLayout mButton;
@@ -47,7 +48,7 @@ public class CongratsReview extends Reviewable {
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                notifyChangeRequired();
+                notifyChangeRequired(CUSTOM_REVIEW);
             }
         });
     }

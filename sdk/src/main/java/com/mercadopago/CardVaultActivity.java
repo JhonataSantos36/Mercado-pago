@@ -73,12 +73,12 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultAct
         } else {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
         }
-        if (savedInstanceState != null) {
+        if(savedInstanceState != null) {
             restoreInstanceState(savedInstanceState);
         }
     }
 
-    private void restoreInstanceState(Bundle savedInstanceState) {
+    public void restoreInstanceState(Bundle savedInstanceState) {
         mPresenter = new CardVaultPresenter(getBaseContext());
 
         BigDecimal amountValue = null;
@@ -106,7 +106,7 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultAct
         mPresenter.setPaymentRecovery(JsonUtil.getInstance().fromJson(savedInstanceState.getString("paymentRecovery"), PaymentRecovery.class));
         mPresenter.setCard(JsonUtil.getInstance().fromJson(savedInstanceState.getString("card"), Card.class));
         mPresenter.setPublicKey(savedInstanceState.getString("merchantPublicKey"));
-        mPresenter.setPublicKey(savedInstanceState.getString("privateKey"));
+        mPresenter.setPrivateKey(savedInstanceState.getString("privateKey"));
         mPresenter.setSite(JsonUtil.getInstance().fromJson(savedInstanceState.getString("site"), Site.class));
         mPresenter.setPaymentMethod(JsonUtil.getInstance().fromJson(savedInstanceState.getString("paymentMethod"), PaymentMethod.class));
         mPresenter.setIssuer(JsonUtil.getInstance().fromJson(savedInstanceState.getString("issuer"), Issuer.class));

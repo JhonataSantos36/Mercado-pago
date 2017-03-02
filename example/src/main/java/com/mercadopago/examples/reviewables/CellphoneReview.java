@@ -16,6 +16,8 @@ import com.mercadopago.model.Reviewable;
 
 public class CellphoneReview extends Reviewable {
 
+    public static final Integer CELLPHONE_CHANGE = 321321;
+
     protected View mView;
     protected TextView mNumberTextView;
     protected View mNumberEdition;
@@ -47,7 +49,7 @@ public class CellphoneReview extends Reviewable {
         mNumberEdition.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                notifyChangeRequired();
+                notifyChangeRequired(CELLPHONE_CHANGE);
             }
         });
     }

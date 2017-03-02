@@ -7,5 +7,5 @@ import com.mercadopago.model.PaymentData;
  */
 
 public interface PaymentDataCallback extends ReturnCallback {
-    void onSuccess(PaymentData paymentData);
+    void onSuccess(PaymentData paymentData, boolean paymentMethodChanged);
 }

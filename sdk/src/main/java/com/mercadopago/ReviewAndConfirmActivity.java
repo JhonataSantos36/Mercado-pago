@@ -36,6 +36,7 @@ import com.mercadopago.model.CardInfo;
 import com.mercadopago.model.Discount;
 import com.mercadopago.model.Item;
 import com.mercadopago.model.PayerCost;
+import com.mercadopago.model.PaymentData;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.Reviewable;
 import com.mercadopago.model.Site;
@@ -383,6 +384,15 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
 
         int resultCode = notifyCancel ? RESULT_CANCEL_PAYMENT : RESULT_SILENT_CANCEL_PAYMENT;
         setResult(resultCode);
+        finish();
+    }
+
+    @Override
+    public void cancelPayment(Integer resultCode, PaymentData paymentData) {
+        Intent intent = new Intent();
+        intent.putExtra("resultCode", resultCode);
+        intent.putExtra("paymentData", JsonUtil.getInstance().toJson(paymentData));
+        setResult(RESULT_CANCEL_PAYMENT, intent);
         finish();
     }
 

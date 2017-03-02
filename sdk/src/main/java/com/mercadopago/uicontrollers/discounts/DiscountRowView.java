@@ -204,7 +204,6 @@ public class DiscountRowView implements DiscountView {
 
     @Override
     public View inflateInParent(ViewGroup parent, boolean attachToRoot) {
-        //TODO Review
         parent.removeAllViews();
         if (isShortRowEnabled()) {
             mView = LayoutInflater.from(mContext).inflate(R.layout.mpsdk_row_guessing_discount, parent, attachToRoot);
