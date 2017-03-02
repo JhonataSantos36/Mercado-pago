@@ -1,19 +1,19 @@
 package com.mercadopago.core;
 
-import com.google.gson.Gson;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.DrawableRes;
 import android.text.TextUtils;
 
+import com.google.gson.Gson;
 import com.mercadopago.CustomerCardsActivity;
 import com.mercadopago.ReviewAndConfirmActivity;
 import com.mercadopago.callbacks.OnConfirmPaymentCallback;
 import com.mercadopago.callbacks.OnReviewChange;
 import com.mercadopago.callbacks.OnSelectedCallback;
 import com.mercadopago.model.Card;
+import com.mercadopago.model.CardInfo;
 import com.mercadopago.model.CardInfo;
 import com.mercadopago.model.Discount;
 import com.mercadopago.model.Item;
@@ -24,6 +24,10 @@ import com.mercadopago.model.Site;
 import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.uicontrollers.discounts.DiscountRowView;
+import com.mercadopago.model.Reviewable;
+import com.mercadopago.model.Site;
+import com.mercadopago.uicontrollers.discounts.DiscountRowView;
+import com.mercadopago.uicontrollers.installments.InstallmentsReviewView;
 import com.mercadopago.uicontrollers.reviewandconfirm.ReviewItemsView;
 import com.mercadopago.uicontrollers.reviewandconfirm.ReviewPaymentOffView;
 import com.mercadopago.uicontrollers.reviewandconfirm.ReviewPaymentOnView;
@@ -434,7 +438,6 @@ public class MercadoPagoUI {
             }
         }
 
-
         public static class ReviewItemsViewBuilder {
             private Context context;
             private String currencyId;
@@ -523,7 +526,37 @@ public class MercadoPagoUI {
             public ReviewPaymentOffView build() {
                 return new ReviewPaymentOffView(context, paymentMethod, paymentMethodInfo, amount, site, reviewChangeCallback, editionEnabled, decorationPreference);
             }
+        }
 
+        public static class InstallmentsReviewViewBuilder {
+            private Context context;
+            private PayerCost payerCost;
+            private String currencyId;
+            private DecorationPreference decorationPreference;
+
+            public InstallmentsReviewViewBuilder setContext(Context context) {
+                this.context = context;
+                return this;
+            }
+
+            public InstallmentsReviewViewBuilder setPayerCost(PayerCost payerCost) {
+                this.payerCost = payerCost;
+                return this;
+            }
+
+            public InstallmentsReviewViewBuilder setCurrencyId(String currencyId) {
+                this.currencyId = currencyId;
+                return this;
+            }
+
+            public InstallmentsReviewViewBuilder setDecorationPreference(DecorationPreference decorationPreference) {
+                this.decorationPreference = decorationPreference;
+                return this;
+            }
+
+            public InstallmentsReviewView build() {
+                return new InstallmentsReviewView(context, payerCost, currencyId, decorationPreference);
+            }
         }
     }
 }

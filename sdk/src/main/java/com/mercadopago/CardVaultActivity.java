@@ -1,7 +1,5 @@
 package com.mercadopago;
 
-import com.google.gson.reflect.TypeToken;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -10,6 +8,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
+import com.google.gson.reflect.TypeToken;
+import com.mercadopago.core.MercadoPago;
 import com.mercadopago.core.MercadoPagoComponents;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.Card;
@@ -35,6 +35,7 @@ import com.mercadopago.views.CardVaultActivityView;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by vaserber on 10/12/16.
@@ -101,7 +102,6 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultAct
             paymentPreference = new PaymentPreference();
         }
 
-
         mPresenter.setPaymentPreference(paymentPreference);
         mPresenter.setPaymentRecovery(JsonUtil.getInstance().fromJson(savedInstanceState.getString("paymentRecovery"), PaymentRecovery.class));
         mPresenter.setCard(JsonUtil.getInstance().fromJson(savedInstanceState.getString("card"), Card.class));
@@ -122,13 +122,14 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultAct
     }
 
     private void getActivityParameters() {
+        Boolean installmentsEnabled = getIntent().getBooleanExtra("installmentsEnabled", false);
+        Boolean directDiscountEnabled = getIntent().getBooleanExtra("directDiscountEnabled", true);
+        Boolean installmentsReviewEnabled = getIntent().getBooleanExtra("installmentsReviewEnabled", true);
         String publicKey = getIntent().getStringExtra("merchantPublicKey");
         String payerAccessToken = getIntent().getStringExtra("payerAccessToken");
         PaymentPreference paymentPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("paymentPreference"), PaymentPreference.class);
         mDecorationPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("decorationPreference"), DecorationPreference.class);
 
-        Boolean installmentsEnabled = getIntent().getBooleanExtra("installmentsEnabled", false);
-        Boolean discountEnabled = getIntent().getBooleanExtra("discountEnabled", true);
         Site site = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("site"), Site.class);
         Card card = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("card"), Card.class);
         PaymentRecovery paymentRecovery = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("paymentRecovery"), PaymentRecovery.class);
@@ -136,6 +137,7 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultAct
         String amount = getIntent().getStringExtra("amount");
         String payerEmail = getIntent().getStringExtra("payerEmail");
         Discount discount = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("discount"), Discount.class);
+        Boolean discountEnabled = getIntent().getBooleanExtra("discountEnabled", true);
 
         if (amount != null) {
             amountValue = new BigDecimal(amount);
@@ -162,6 +164,8 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultAct
         mPresenter.setPayerEmail(payerEmail);
         mPresenter.setDiscount(discount);
         mPresenter.setDiscountEnabled(discountEnabled);
+        mPresenter.setDirectDiscountEnabled(directDiscountEnabled);
+        mPresenter.setInstallmentsReviewEnabled(installmentsReviewEnabled);
     }
 
     private void setContentView() {
@@ -240,6 +244,7 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultAct
                         .setPayerAccessToken(mPresenter.getPrivateKey())
                         .setDiscount(mPresenter.getDiscount())
                         .setDiscountEnabled(mPresenter.getDiscountEnabled())
+                        .setDirectDiscountEnabled(mPresenter.getDirectDiscountEnabled())
                         .setShowBankDeals(mShowBankDeals)
                         .setPaymentPreference(mPresenter.getPaymentPreference())
                         .setAcceptedPaymentMethods(mPresenter.getPaymentMethodList())
@@ -368,11 +373,14 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultAct
             CardToken cardToken = JsonUtil.getInstance().fromJson(data.getStringExtra("cardToken"), CardToken.class);
             Issuer issuer = JsonUtil.getInstance().fromJson(data.getStringExtra("issuer"), Issuer.class);
             Discount discount = JsonUtil.getInstance().fromJson(data.getStringExtra("discount"), Discount.class);
+            Boolean directDiscountEnabled = data.getBooleanExtra("directDiscountEnabled", true);
+
             mPresenter.setPaymentMethod(paymentMethod);
             mPresenter.setCardToken(cardToken);
             mPresenter.setIssuer(issuer);
             mPresenter.setCardInfo(new CardInfo(cardToken));
             mPresenter.checkStartIssuersActivity();
+            mPresenter.setDirectDiscountEnabled(directDiscountEnabled);
 
             if (discount != null) {
                 mPresenter.setDiscount(discount);
@@ -436,6 +444,8 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultAct
                 .setPaymentPreference(mPresenter.getPaymentPreference())
                 .setSite(mPresenter.getSite())
                 .setDecorationPreference(mDecorationPreference)
+                .setInstallmentsEnabled(mPresenter.getInstallmentsEnabled())
+                .setInstallmentsReviewEnabled(mPresenter.getInstallmentsReviewEnabled())
                 .setCardInfo(mPresenter.getCardInfo())
                 .startActivity();
     }

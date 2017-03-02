@@ -56,11 +56,23 @@ public class Discount {
         return this.percentOff;
     }
 
+    public void setPercentOff(BigDecimal percentOff) {
+        this.percentOff = percentOff;
+    }
+
     public BigDecimal getAmountWithDiscount(BigDecimal amount) {
         return amount.subtract(couponAmount);
     }
 
+    public void setAmountOff(BigDecimal amountOff) {
+        this.amountOff = amountOff;
+    }
+
+    public void setCouponAmount(BigDecimal couponAmount) {
+        this.couponAmount = couponAmount;
+    }
+
     public Boolean hasPercentOff() {
-        return !percentOff.equals(new BigDecimal(0));
+        return percentOff != null && !percentOff.equals(new BigDecimal(0));
     }
 }

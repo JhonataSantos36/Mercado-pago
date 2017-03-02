@@ -49,6 +49,7 @@ public class ReviewUtil {
             resource = R.string.mpsdk_review_off_text_3;
         } else if (key.startsWith("bolbradesco")) {
             resource = R.string.mpsdk_review_off_text_4;
+
         } else if (key.startsWith("account_money")) {
             resource = R.string.mpsdk_review_off_text_4;
         } else {

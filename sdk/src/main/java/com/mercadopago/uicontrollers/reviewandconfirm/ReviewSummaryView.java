@@ -28,11 +28,11 @@ import java.math.BigDecimal;
  */
 
 public class ReviewSummaryView extends Reviewable {
-
     public static final String TEA = "TEA ";
     public static final String CFT = "CFT ";
 
     protected View mView;
+
     protected LinearLayout mProductsRow;
     protected LinearLayout mDiscountsRow;
     protected LinearLayout mSubtotalRow;
@@ -81,12 +81,12 @@ public class ReviewSummaryView extends Reviewable {
     @Override
     public void initializeControls() {
         mProductsRow = (LinearLayout) mView.findViewById(R.id.mpsdkReviewSummaryProducts);
+        mProductsLabelText = (MPTextView) mView.findViewById(R.id.mpsdkReviewSummaryProductsLabelText);
         mDiscountsRow = (LinearLayout) mView.findViewById(R.id.mpsdkReviewSummaryDiscounts);
         mSubtotalRow = (LinearLayout) mView.findViewById(R.id.mpsdkReviewSummarySubtotal);
         mPayerCostRow = (LinearLayout) mView.findViewById(R.id.mpsdkReviewSummaryPay);
         mTotalRow = (LinearLayout) mView.findViewById(R.id.mpsdkReviewSummaryTotal);
         mProductsText = (MPTextView) mView.findViewById(R.id.mpsdkReviewSummaryProductsText);
-        mProductsLabelText = (MPTextView) mView.findViewById(R.id.mpsdkReviewSummaryProductsLabelText);
         mDiscountPercentageText = (MPTextView) mView.findViewById(R.id.mpsdkReviewSummaryDiscountPercentage);
         mDiscountsText = (MPTextView) mView.findViewById(R.id.mpsdkReviewSummaryDiscountsText);
         mSubtotalText = (MPTextView) mView.findViewById(R.id.mpsdkReviewSummarySubtotalText);
@@ -126,6 +126,7 @@ public class ReviewSummaryView extends Reviewable {
         mConfirmTextView.setText(mConfirmationMessage);
         mProductsText.setText(getFormattedAmount(mAmount));
         mProductsLabelText.setText(mProductDetailText);
+
         //Discounts
         if (hasDiscount()) {
             showDiscountRow();
@@ -152,11 +153,11 @@ public class ReviewSummaryView extends Reviewable {
     }
 
     private void showFinance() {
-        if(mPayerCost.hasTEA()) {
+        if (mPayerCost.hasTEA()) {
             mTEATextView.setVisibility(View.VISIBLE);
             mTEATextView.setText(TEA + mPayerCost.getTEAPercent());
         }
-        if(mPayerCost.hasCFT()) {
+        if (mPayerCost.hasCFT()) {
             mCFTTextView.setVisibility(View.VISIBLE);
             mCFTTextView.setText(CFT + mPayerCost.getCFTPercent());
         }
@@ -174,8 +175,16 @@ public class ReviewSummaryView extends Reviewable {
     private void showDiscountRow() {
         StringBuilder formattedAmountBuilder = new StringBuilder();
         Spanned amountText;
+        String discountText;
 
-        mDiscountPercentageText.setText(mDiscountDetailText);
+        if (mDiscount.hasPercentOff()) {
+            discountText = mContext.getResources().getString(R.string.mpsdk_review_summary_discount_with_percent_off,
+                    String.valueOf(mDiscount.getPercentOff()));
+        } else {
+            discountText = mContext.getResources().getString(R.string.mpsdk_review_summary_discount_with_amount_off);
+        }
+
+        mDiscountPercentageText.setText(discountText);
 
         formattedAmountBuilder.append("-");
         formattedAmountBuilder.append(CurrenciesUtil.formatNumber(mDiscount.getCouponAmount(), mCurrencyId));

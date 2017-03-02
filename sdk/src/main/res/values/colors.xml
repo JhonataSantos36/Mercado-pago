@@ -4,6 +4,7 @@
     <color name="colorPrimaryDark">#30AFE2</color>
 
     <color name="mpsdk_comment_color">#999</color>
+    <color name="mpsdk_black">#000000</color>
     <color name="mpsdk_white">#FFFFFF</color>
     <color name="mpsdk_white_background">#FFFFFF</color>
     <color name="mpsdk_base_text_alpha">#B3333333</color>

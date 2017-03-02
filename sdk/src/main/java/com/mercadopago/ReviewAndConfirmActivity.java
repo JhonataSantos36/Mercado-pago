@@ -1,5 +1,6 @@
 package com.mercadopago;
 
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -11,6 +12,7 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.NestedScrollView;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -24,6 +26,13 @@ import com.mercadopago.constants.ReviewKeys;
 import com.mercadopago.constants.Sites;
 import com.mercadopago.controllers.CheckoutTimer;
 import com.mercadopago.customviews.MPTextView;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.mercadopago.adapters.ReviewablesAdapter;
+import com.mercadopago.constants.Sites;
+import com.mercadopago.controllers.CheckoutTimer;
+import com.mercadopago.customviews.MPTextView;
+import com.mercadopago.model.CardInfo;
 import com.mercadopago.model.Discount;
 import com.mercadopago.model.Item;
 import com.mercadopago.model.PayerCost;
@@ -39,6 +48,12 @@ import com.mercadopago.providers.ReviewAndConfirmProviderImpl;
 import com.mercadopago.uicontrollers.FontCache;
 import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
+import com.mercadopago.observers.TimerObserver;
+import com.mercadopago.presenters.ReviewAndConfirmPresenter;
+import com.mercadopago.providers.ReviewAndConfirmProviderImpl;
+import com.mercadopago.util.ErrorUtil;
+import com.mercadopago.util.JsonUtil;
+import com.mercadopago.util.LayoutUtil;
 import com.mercadopago.views.ReviewAndConfirmView;
 
 import java.lang.reflect.Type;
@@ -120,9 +135,9 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
     }
 
     private void getActivityParameters() {
-
         Boolean termsAndConditionsEnabled = getIntent().getBooleanExtra("termsAndConditionsEnabled", true);
         Boolean editionEnabled = getIntent().getBooleanExtra("editionEnabled", true);
+        Boolean discountEnabled = getIntent().getBooleanExtra("discountEnabled", true);
         BigDecimal amount = new BigDecimal(getIntent().getStringExtra("amount"));
         Discount discount = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("discount"), Discount.class);
         PayerCost payerCost = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("payerCost"), PayerCost.class);
@@ -151,6 +166,7 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
         mPresenter.setEditionEnabled(editionEnabled);
         mPresenter.setDecorationPreference(mDecorationPreference);
         mPresenter.setTermsAndConditionsEnabled(termsAndConditionsEnabled);
+        mPresenter.setDiscountEnabled(discountEnabled);
 
         if (mReviewScreenPreference == null || !mReviewScreenPreference.hasReviewOrder()) {
             mPresenter.setReviewOrder(getDefaultOrder());
@@ -206,10 +222,12 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
             }
             getSupportActionBar().setHomeAsUpIndicator(upArrow);
         }
+
         if (FontCache.hasTypeface(FontCache.CUSTOM_REGULAR_FONT)) {
             mCollapsingToolbar.setCollapsedTitleTypeface(FontCache.getTypeface(FontCache.CUSTOM_REGULAR_FONT));
             mCollapsingToolbar.setExpandedTitleTypeface(FontCache.getTypeface(FontCache.CUSTOM_REGULAR_FONT));
         }
+
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

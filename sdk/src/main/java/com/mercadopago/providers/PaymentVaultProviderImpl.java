@@ -7,6 +7,9 @@ import com.mercadopago.callbacks.Callback;
 import com.mercadopago.core.CustomServer;
 import com.mercadopago.core.MercadoPagoServices;
 import com.mercadopago.exceptions.MercadoPagoError;
+
+import com.mercadopago.core.MercadoPago;
+import com.mercadopago.core.MerchantServer;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.Card;
 import com.mercadopago.model.Customer;
@@ -15,6 +18,8 @@ import com.mercadopago.model.Payer;
 import com.mercadopago.model.PaymentMethodSearch;
 import com.mercadopago.model.Site;
 import com.mercadopago.mvp.OnResourcesRetrievedCallback;
+import com.mercadopago.mvp.OnResourcesRetrievedCallback;
+import com.mercadopago.util.TextUtil;
 import com.mercadopago.preferences.PaymentPreference;
 
 import java.math.BigDecimal;
@@ -26,17 +31,27 @@ import java.util.Map;
  */
 
 public class PaymentVaultProviderImpl implements PaymentVaultProvider {
+
     private final Context context;
     private final MercadoPagoServices mercadoPago;
     private final String merchantBaseUrl;
     private final String merchantGetCustomerUri;
     private final Map<String, String> merchantGetCustomerAdditionalInfo;
+    private final String merchantDiscountBaseUrl;
+    private final String merchantGetDiscountUri;
+    private final Map<String, String> mDiscountAdditionalInfo;
 
-    public PaymentVaultProviderImpl(Context context, String publicKey, String privateKey, String merchantBaseUrl, String merchantGetCustomerUri, Map<String, String> merchantGetCustomerAdditionalInfo) {
+
+    public PaymentVaultProviderImpl(Context context, String publicKey, String privateKey, String merchantBaseUrl, String merchantGetCustomerUri, Map<String, String> merchantGetCustomerAdditionalInfo,
+                                    String merchantDiscountBaseUrl, String merchantGetDiscountUri, Map<String, String> discountAdditionalInfo) {
         this.context = context;
         this.merchantBaseUrl = merchantBaseUrl;
+        this.merchantDiscountBaseUrl = merchantDiscountBaseUrl;
         this.merchantGetCustomerUri = merchantGetCustomerUri;
+        this.merchantGetDiscountUri = merchantGetDiscountUri;
         this.merchantGetCustomerAdditionalInfo = merchantGetCustomerAdditionalInfo;
+        this.mDiscountAdditionalInfo = discountAdditionalInfo;
+
         this.mercadoPago = new MercadoPagoServices.Builder()
                 .setContext(context)
                 .setPublicKey(publicKey)
@@ -46,7 +61,31 @@ public class PaymentVaultProviderImpl implements PaymentVaultProvider {
 
     @Override
     public void getDirectDiscount(String amount, String payerEmail, final OnResourcesRetrievedCallback<Discount> onResourcesRetrievedCallback) {
+        if (isMerchantServerDiscountsAvailable()) {
+            getMerchantDirectDiscount(amount, payerEmail, onResourcesRetrievedCallback);
+        } else {
+            getMPDirectDiscount(amount, payerEmail, onResourcesRetrievedCallback);
+        }
+    }
+
+    private void getMPDirectDiscount(String amount, String payerEmail, final OnResourcesRetrievedCallback<Discount> onResourcesRetrievedCallback) {
         mercadoPago.getDirectDiscount(amount, payerEmail, new Callback<Discount>() {
+            @Override
+            public void success(Discount discount) {
+                onResourcesRetrievedCallback.onSuccess(discount);
+            }
+
+            @Override
+            public void failure(ApiException apiException) {
+                onResourcesRetrievedCallback.onFailure(new MercadoPagoError(apiException));
+            }
+        });
+    }
+
+    private void getMerchantDirectDiscount(String amount, String payerEmail, final OnResourcesRetrievedCallback<Discount> onResourcesRetrievedCallback) {
+        String merchantDiscountUrl = getMerchantServerDiscountUrl();
+
+        MerchantServer.getDirectDiscount(amount, payerEmail, context, merchantDiscountUrl, merchantGetDiscountUri, mDiscountAdditionalInfo, new Callback<Discount>() {
             @Override
             public void success(Discount discount) {
                 onResourcesRetrievedCallback.onSuccess(discount);
@@ -64,11 +103,11 @@ public class PaymentVaultProviderImpl implements PaymentVaultProvider {
 
         List<String> excludedPaymentTypes = paymentPreference == null ? null : paymentPreference.getExcludedPaymentTypes();
         List<String> excludedPaymentMethodIds = paymentPreference == null ? null : paymentPreference.getExcludedPaymentMethodIds();
-        mercadoPago.getPaymentMethodSearch(amount, excludedPaymentTypes, excludedPaymentMethodIds, payer, site, new Callback<PaymentMethodSearch>() {
 
+        mercadoPago.getPaymentMethodSearch(amount, excludedPaymentTypes, excludedPaymentMethodIds, payer, site, new Callback<PaymentMethodSearch>() {
             @Override
             public void success(final PaymentMethodSearch paymentMethodSearch) {
-                if (!paymentMethodSearch.hasSavedCards() && isMerchantServerInfoAvailable()) {
+                if (!paymentMethodSearch.hasSavedCards() && isMerchantServerCustomerAvailable()) {
                     addCustomerCardsFromMerchantServer(paymentMethodSearch, paymentPreference, onResourcesRetrievedCallback);
                 } else {
                     onResourcesRetrievedCallback.onSuccess(paymentMethodSearch);
@@ -139,7 +178,23 @@ public class PaymentVaultProviderImpl implements PaymentVaultProvider {
         return context.getString(R.string.mpsdk_no_payment_methods_found);
     }
 
-    private boolean isMerchantServerInfoAvailable() {
-        return merchantBaseUrl != null && !merchantBaseUrl.isEmpty() && merchantGetCustomerUri != null && !merchantGetCustomerUri.isEmpty();
+    private boolean isMerchantServerCustomerAvailable() {
+        return !TextUtil.isEmpty(merchantBaseUrl) && !TextUtil.isEmpty(merchantGetCustomerUri);
+    }
+
+    private boolean isMerchantServerDiscountsAvailable() {
+        return !TextUtil.isEmpty(getMerchantServerDiscountUrl()) && !TextUtil.isEmpty(merchantGetDiscountUri);
+    }
+
+    private String getMerchantServerDiscountUrl() {
+        String merchantBaseUrl;
+
+        if (TextUtil.isEmpty(merchantDiscountBaseUrl)) {
+            merchantBaseUrl = this.merchantBaseUrl;
+        } else {
+            merchantBaseUrl = this.merchantDiscountBaseUrl;
+        }
+
+        return merchantBaseUrl;
     }
 }

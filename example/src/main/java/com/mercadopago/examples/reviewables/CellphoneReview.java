@@ -56,5 +56,4 @@ public class CellphoneReview extends Reviewable {
     public void draw() {
         mNumberTextView.setText(mNumber);
     }
-
 }

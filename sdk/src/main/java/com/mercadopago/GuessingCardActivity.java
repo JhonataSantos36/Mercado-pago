@@ -1,7 +1,5 @@
 package com.mercadopago;
 
-import com.google.gson.reflect.TypeToken;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -25,6 +23,7 @@ import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.google.gson.reflect.TypeToken;
 import com.mercadopago.adapters.IdentificationTypesAdapter;
 import com.mercadopago.callbacks.PaymentMethodSelectionCallback;
 import com.mercadopago.callbacks.card.CardExpiryDateEditTextCallback;
@@ -34,6 +33,7 @@ import com.mercadopago.callbacks.card.CardSecurityCodeEditTextCallback;
 import com.mercadopago.callbacks.card.CardholderNameEditTextCallback;
 import com.mercadopago.constants.PaymentTypes;
 import com.mercadopago.controllers.CheckoutTimer;
+import com.mercadopago.controllers.CustomServicesHandler;
 import com.mercadopago.controllers.PaymentMethodGuessingController;
 import com.mercadopago.core.MercadoPagoComponents;
 import com.mercadopago.core.MercadoPagoUI;
@@ -60,6 +60,7 @@ import com.mercadopago.observers.TimerObserver;
 import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.presenters.GuessingCardPresenter;
+import com.mercadopago.services.CustomService;
 import com.mercadopago.uicontrollers.card.CardRepresentationModes;
 import com.mercadopago.uicontrollers.card.CardView;
 import com.mercadopago.uicontrollers.card.IdentificationCardView;
@@ -77,6 +78,7 @@ import com.mercadopago.views.GuessingCardActivityView;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by vaserber on 10/13/16.
@@ -129,6 +131,7 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
     //View Low Res
     private Toolbar mLowResToolbar;
     private MPTextView mLowResTitleToolbar;
+
     //View Normal
     private Toolbar mNormalToolbar;
     private MPTextView mBankDealsTextView;
@@ -170,6 +173,11 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
     private String mCurrentEditingEditText;
     private String mCardSideState;
 
+    protected String mDefaultBaseURL;
+    protected String mMerchantDiscountBaseURL;
+    protected String mMerchantGetDiscountURI;
+    protected Map<String, String> mDiscountAdditionalInfo;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -183,12 +191,27 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
             setTheme(R.style.Theme_MercadoPagoTheme_NoActionBar);
         }
         analizeLowRes();
+        setMerchantInfo();
         setContentView();
         mPresenter.validateActivityParameters();
     }
 
     private boolean isCustomColorSet() {
         return mDecorationPreference != null && mDecorationPreference.hasColors();
+    }
+
+    private void setMerchantInfo() {
+        if (CustomServicesHandler.getInstance().getServicePreference() != null) {
+            mDefaultBaseURL = CustomServicesHandler.getInstance().getServicePreference().getDefaultBaseURL();
+            mMerchantDiscountBaseURL = CustomServicesHandler.getInstance().getServicePreference().getGetMerchantDiscountBaseURL();
+            mMerchantGetDiscountURI = CustomServicesHandler.getInstance().getServicePreference().getGetMerchantDiscountURI();
+            mDiscountAdditionalInfo = CustomServicesHandler.getInstance().getServicePreference().getGetDiscountAdditionalInfo();
+        }
+
+        mPresenter.setMerchantBaseUrl(mDefaultBaseURL);
+        mPresenter.setMerchantDiscountBaseUrl(mMerchantDiscountBaseURL);
+        mPresenter.setMerchantGetDiscountUri(mMerchantGetDiscountURI);
+        mPresenter.setDiscountAdditionalInfo(mDiscountAdditionalInfo);
     }
 
     private void getActivityParameters() {
@@ -202,6 +225,7 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
 
         BigDecimal transactionAmount = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("transactionAmount"), BigDecimal.class);
         Boolean discountEnabled = this.getIntent().getBooleanExtra("discountEnabled", true);
+        Boolean directDiscountEnabled = this.getIntent().getBooleanExtra("directDiscountEnabled", true);
         Discount discount = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("discount"), Discount.class);
         String payerEmail = this.getIntent().getStringExtra("payerEmail");
 
@@ -235,6 +259,7 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
         mPresenter.setDiscount(discount);
         mPresenter.setTransactionAmount(transactionAmount);
         mPresenter.setDiscountEnabled(discountEnabled);
+        mPresenter.setDirectDiscountEnabled(directDiscountEnabled);
     }
 
     @Override
@@ -500,6 +525,8 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
                 public void onClick(View v) {
                     Intent returnIntent = new Intent();
                     returnIntent.putExtra("discount", JsonUtil.getInstance().toJson(mPresenter.getDiscount()));
+                    returnIntent.putExtra("discountEnabled", JsonUtil.getInstance().toJson(mPresenter.getDiscountEnabled()));
+                    returnIntent.putExtra("directDiscountEnabled", JsonUtil.getInstance().toJson(mPresenter.getDirectDiscountEnabled()));
                     setResult(RESULT_CANCELED, returnIntent);
                     finish();
                 }
@@ -1468,6 +1495,7 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
         returnIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(mPresenter.getPaymentMethod()));
         returnIntent.putExtra("cardToken", JsonUtil.getInstance().toJson(mPresenter.getCardToken()));
         returnIntent.putExtra("discount", JsonUtil.getInstance().toJson(mPresenter.getDiscount()));
+        returnIntent.putExtra("directDiscountEnabled", mPresenter.getDirectDiscountEnabled());
         setResult(RESULT_OK, returnIntent);
         finish();
         overridePendingTransition(R.anim.mpsdk_slide_right_to_left_in, R.anim.mpsdk_slide_right_to_left_out);
@@ -1480,6 +1508,8 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
                 BuildConfig.VERSION_NAME, this);
         Intent returnIntent = new Intent();
         returnIntent.putExtra("discount", JsonUtil.getInstance().toJson(mPresenter.getDiscount()));
+        returnIntent.putExtra("discountEnabled", JsonUtil.getInstance().toJson(mPresenter.getDiscountEnabled()));
+        returnIntent.putExtra("directDiscountEnabled", JsonUtil.getInstance().toJson(mPresenter.getDirectDiscountEnabled()));
         returnIntent.putExtra("backButtonPressed", true);
         setResult(RESULT_CANCELED, returnIntent);
         finish();
@@ -1511,6 +1541,7 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
                 .setPayerEmail(mPresenter.getPayerEmail())
                 .setAmount(transactionAmount)
                 .setDiscount(mPresenter.getDiscount())
+                .setDirectDiscountEnabled(mPresenter.getDirectDiscountEnabled())
                 .setDecorationPreference(mDecorationPreference);
 
         if (mPresenter.getDiscount() == null) {

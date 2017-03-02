@@ -67,6 +67,7 @@ public class CongratsActivity extends MercadoPagoBaseActivity implements ReviewS
     // Activity parameters
     protected String mMerchantPublicKey;
     protected Discount mDiscount;
+    protected Boolean mDiscountEnabled;
     protected PaymentResult mPaymentResult;
 
     //Local values
@@ -110,6 +111,7 @@ public class CongratsActivity extends MercadoPagoBaseActivity implements ReviewS
         mMerchantPublicKey = getIntent().getStringExtra("merchantPublicKey");
         mCongratsDisplay = getIntent().getIntExtra("congratsDisplay", -1);
         mDiscount = JsonUtil.getInstance().fromJson(getIntent().getExtras().getString("discount"), Discount.class);
+        mDiscountEnabled = getIntent().getExtras().getBoolean("discountEnabled", true);
         mPaymentResult = JsonUtil.getInstance().fromJson(getIntent().getExtras().getString("paymentResult"), PaymentResult.class);
         mSite = JsonUtil.getInstance().fromJson(getIntent().getExtras().getString("site"), Site.class);
         mPaymentResultScreenPreference = JsonUtil.getInstance().fromJson(getIntent().getExtras().getString("paymentResultScreenPreference"), PaymentResultScreenPreference.class);
@@ -185,6 +187,8 @@ public class CongratsActivity extends MercadoPagoBaseActivity implements ReviewS
         mPayerEmail = mPaymentResult.getPayerEmail();
         if (paymentData != null) {
             PaymentMethod paymentMethod = paymentData.getPaymentMethod();
+            mDiscount = paymentData.getDiscount();
+
             if (paymentData.getPayerCost() != null) {
                 mTotalAmount = paymentData.getPayerCost().getTotalAmount();
                 mInstallments = paymentData.getPayerCost().getInstallments();
@@ -356,7 +360,7 @@ public class CongratsActivity extends MercadoPagoBaseActivity implements ReviewS
     }
 
     private void setDiscountRow() {
-        if (mDiscount != null) {
+        if (mDiscountEnabled && mDiscount != null) {
             showDiscountRow(mTotalAmount);
         }
     }

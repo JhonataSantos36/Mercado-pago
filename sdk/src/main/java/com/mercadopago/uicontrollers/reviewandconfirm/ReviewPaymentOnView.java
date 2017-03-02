@@ -48,11 +48,11 @@ public class ReviewPaymentOnView extends Reviewable {
     protected PaymentMethod mPaymentMethod;
     protected OnReviewChange mCallback;
     protected Boolean mEditionEnabled;
+    protected Boolean mIsUniquePaymentMethod;
     protected DecorationPreference mDecorationPreference;
 
     public ReviewPaymentOnView(Context context, PaymentMethod paymentMethod, CardInfo cardInfo, PayerCost payerCost,
-                               String currencyId, OnReviewChange callback,
-                               Boolean editionEnabled, DecorationPreference decorationPreference) {
+                               String currencyId, OnReviewChange callback, Boolean editionEnabled, DecorationPreference decorationPreference) {
 
         this.mContext = context;
         this.mCallback = callback;
@@ -94,6 +94,7 @@ public class ReviewPaymentOnView extends Reviewable {
                 mCallback.onChangeSelected();
             }
         });
+
         if (mEditionEnabled) {
             mChangePaymentButton.setVisibility(View.VISIBLE);
         }

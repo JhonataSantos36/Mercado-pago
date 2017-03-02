@@ -13,6 +13,8 @@ public class FlowPreference {
     private boolean paymentApprovedScreenEnabled;
     private boolean paymentRejectedScreenEnabled;
     private boolean paymentPendingScreenEnabled;
+    private boolean installmentsReviewScreenEnabled;
+    private boolean discountEnabled;
     private int congratsDisplayTime;
     private int checkoutTimer;
     private CheckoutTimer.FinishListener checkoutTimerFinishListener;
@@ -24,6 +26,8 @@ public class FlowPreference {
         this.paymentApprovedScreenEnabled = builder.paymentApprovedScreenEnabled;
         this.paymentRejectedScreenEnabled = builder.paymentRejectedScreenEnabled;
         this.paymentPendingScreenEnabled = builder.paymentPendingScreenEnabled;
+        this.installmentsReviewScreenEnabled = builder.installmentsReviewScreenEnabled;
+        this.discountEnabled = builder.discountEnabled;
         this.congratsDisplayTime = builder.congratsDisplayTime;
         this.checkoutTimer = builder.checkoutTimer;
         this.checkoutTimerFinishListener = builder.checkoutTimerFinishListener;
@@ -65,14 +69,28 @@ public class FlowPreference {
         return this.paymentPendingScreenEnabled;
     }
 
+    public boolean isInstallmentsReviewScreenEnabled() {
+        return this.installmentsReviewScreenEnabled;
+    }
+
+    public boolean isDiscountEnabled() {
+        return this.discountEnabled;
+    }
+
+    public void disableDiscount() {
+        this.discountEnabled = false;
+    }
+
     public static class Builder {
 
-        private boolean paymentSearchScreenEnabled;
-        private boolean reviewAndConfirmScreenEnabled;
-        private boolean paymentResultScreenEnabled;
-        private boolean paymentApprovedScreenEnabled;
-        private boolean paymentRejectedScreenEnabled;
-        private boolean paymentPendingScreenEnabled;
+        private boolean paymentSearchScreenEnabled = false;
+        private boolean reviewAndConfirmScreenEnabled = true;
+        private boolean paymentResultScreenEnabled = true;
+        private boolean paymentApprovedScreenEnabled = true;
+        private boolean paymentRejectedScreenEnabled = true;
+        private boolean paymentPendingScreenEnabled = true;
+        private boolean installmentsReviewScreenEnabled = true;
+        private boolean discountEnabled = true;
         private int congratsDisplayTime;
         private int checkoutTimer;
         private CheckoutTimer.FinishListener checkoutTimerFinishListener;
@@ -104,6 +122,16 @@ public class FlowPreference {
 
         public Builder disablePaymentPendingScreen() {
             this.paymentPendingScreenEnabled = false;
+            return this;
+        }
+
+        public Builder disableInstallmentsReviewScreen() {
+            this.installmentsReviewScreenEnabled = false;
+            return this;
+        }
+
+        public Builder disableDiscount() {
+            this.discountEnabled = false;
             return this;
         }
 

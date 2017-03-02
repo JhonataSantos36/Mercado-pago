@@ -48,12 +48,11 @@ public class ReviewPaymentOffView extends Reviewable {
     private Site mSite;
     private OnReviewChange mOnReviewChange;
     private Boolean mEditionEnabled;
+    private Boolean mIsUniquePaymentMethod;
     private DecorationPreference mDecorationPreference;
     private ViewGroup mPaymentMethodExtraInfo;
 
-    public ReviewPaymentOffView(Context context, PaymentMethod paymentMethod, String extraInfo, BigDecimal amount, Site site, OnReviewChange onReviewChange,
-                                Boolean editionEnabled,
-                                DecorationPreference decorationPreference) {
+    public ReviewPaymentOffView(Context context, PaymentMethod paymentMethod, String extraInfo, BigDecimal amount, Site site, OnReviewChange onReviewChange, Boolean editionEnabled, DecorationPreference decorationPreference) {
         this.mContext = context;
         this.mPaymentMethod = paymentMethod;
         this.mExtraInfo = extraInfo;
@@ -80,7 +79,6 @@ public class ReviewPaymentOffView extends Reviewable {
     public void initializeControls() {
         mPaymentImage = (ImageView) mView.findViewById(R.id.mpsdkAdapterReviewPaymentImage);
         mPaymentText = (MPTextView) mView.findViewById(R.id.mpsdkAdapterReviewPaymentText);
-        mPaymentMethodExtraInfo = (ViewGroup) mView.findViewById(R.id.mpsdkExtraInfoContainer);
         mPaymentDescription = (MPTextView) mView.findViewById(R.id.mpsdkAdapterReviewPaymentDescription);
         mChangePaymentButton = (FrameLayout) mView.findViewById(R.id.mpsdkAdapterReviewPaymentChangeButton);
         mPayerCostContainer = (FrameLayout) mView.findViewById(R.id.mpsdkAdapterReviewPayerCostContainer);
@@ -92,6 +90,7 @@ public class ReviewPaymentOffView extends Reviewable {
                 mOnReviewChange.onChangeSelected();
             }
         });
+
         if (mEditionEnabled) {
             mChangePaymentButton.setVisibility(View.VISIBLE);
         }
@@ -123,6 +122,7 @@ public class ReviewPaymentOffView extends Reviewable {
         Spanned amountText = CurrenciesUtil.formatCurrencyInText(mAmount, mSite.getCurrencyId(), completeDescription, false, true);
 
         mPaymentText.setText(amountText);
+
         if(TextUtil.isEmpty(mExtraInfo)) {
             mPaymentMethodExtraInfo.setVisibility(View.GONE);
         } else {

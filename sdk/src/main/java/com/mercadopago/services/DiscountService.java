@@ -1,6 +1,11 @@
 package com.mercadopago.services;
 
 import com.mercadopago.adapters.MPCall;
+import com.mercadopago.model.Campaign;
+import com.mercadopago.model.Discount;
+
+import java.util.List;
+
 import com.mercadopago.model.Discount;
 
 import retrofit2.http.GET;
@@ -18,4 +23,6 @@ public interface DiscountService {
     @GET("/discount_campaigns")
     MPCall<Discount> getCodeDiscount(@Query("public_key") String publicKey, @Query("transaction_amount") String transactionAmount, @Query("email") String payerEmail, @Query("coupon_code") String couponCode);
 
+    @GET("/campaigns/check_availability")
+    MPCall<List<Campaign>> getCampaigns(@Query("public_key") String publicKey);
 }

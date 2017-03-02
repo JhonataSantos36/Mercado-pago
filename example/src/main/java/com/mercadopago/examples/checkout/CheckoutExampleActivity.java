@@ -16,6 +16,9 @@ import com.mercadopago.callbacks.Callback;
 import com.mercadopago.callbacks.PaymentCallback;
 import com.mercadopago.callbacks.PaymentDataCallback;
 import com.mercadopago.callbacks.ReviewableCallback;
+import com.mercadopago.constants.PaymentTypes;
+import com.mercadopago.constants.Sites;
+import com.mercadopago.controllers.CheckoutTimer;
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.core.MercadoPagoCheckout;
 import com.mercadopago.core.MerchantServer;
@@ -25,6 +28,8 @@ import com.mercadopago.examples.utils.ColorPickerDialog;
 import com.mercadopago.examples.utils.ExamplesUtils;
 import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.model.ApiException;
+import com.mercadopago.model.Discount;
+import com.mercadopago.model.Item;
 import com.mercadopago.model.PaymentData;
 import com.mercadopago.preferences.CheckoutPreference;
 import com.mercadopago.preferences.DecorationPreference;
@@ -84,6 +89,7 @@ public class CheckoutExampleActivity extends AppCompatActivity {
         Map<String, Object> map = new HashMap<>();
         map.put("item_id", "1");
         map.put("amount", new BigDecimal(300));
+
         MerchantServer.createPreference(this, "http://private-4d9654-mercadopagoexamples.apiary-mock.com/",
                 "merchantUri/create_preference", map, new Callback<CheckoutPreference>() {
                     @Override
@@ -101,7 +107,6 @@ public class CheckoutExampleActivity extends AppCompatActivity {
     }
 
     private void startMercadoPagoCheckout() {
-
         Map<String, Object> additionalInfo = new HashMap<>();
         additionalInfo.put("company_id", "movistar");
         additionalInfo.put("phone_number", "111111");
@@ -140,20 +145,23 @@ public class CheckoutExampleActivity extends AppCompatActivity {
                 .setReviewScreenPreference(reviewScreenPreference)
                 .setDecorationPreference(decorationPreference)
                 .setFlowPreference(flowPreference)
-                .start(new PaymentDataCallback() {
+                .start(new PaymentCallback() {
                     @Override
-                    public void onSuccess(PaymentData paymentData) {
-                        startAgain(paymentData);
+                    public void onSuccess(Payment payment) {
+//                        startAgain(payment);
                         Log.d("log", "en paymentdata callback");
-                        Log.d("log", paymentData.getPaymentMethod().getId());
+//                        Log.d("log", paymentData.getPaymentMethod().getId());
                     }
 
                     @Override
-                    public void onCancel() {}
+                    public void onCancel() {
+                    }
 
                     @Override
-                    public void onFailure(MercadoPagoError exception) {}
+                    public void onFailure(MercadoPagoError exception) {
+                    }
                 });
+
 //        new MercadoPagoCheckout.Builder()
 //                .setContext(this)
 //                .setPublicKey(mPublicKey)
@@ -200,10 +208,12 @@ public class CheckoutExampleActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onCancel() {}
+                    public void onCancel() {
+                    }
 
                     @Override
-                    public void onFailure(MercadoPagoError exception) {}
+                    public void onFailure(MercadoPagoError exception) {
+                    }
                 });
 //        new MercadoPagoCheckout.Builder()
 //                .setContext(this)

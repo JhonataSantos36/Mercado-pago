@@ -1,7 +1,5 @@
 package com.mercadopago;
 
-import com.google.gson.reflect.TypeToken;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,9 +12,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
+import com.google.gson.reflect.TypeToken;
 import com.mercadopago.adapters.PayerCostsAdapter;
 import com.mercadopago.callbacks.OnSelectedCallback;
 import com.mercadopago.controllers.CheckoutTimer;
+import com.mercadopago.controllers.CustomServicesHandler;
 import com.mercadopago.core.MercadoPagoComponents;
 import com.mercadopago.core.MercadoPagoUI;
 import com.mercadopago.customviews.MPTextView;
@@ -37,6 +37,8 @@ import com.mercadopago.uicontrollers.FontCache;
 import com.mercadopago.uicontrollers.card.CardRepresentationModes;
 import com.mercadopago.uicontrollers.card.FrontCardView;
 import com.mercadopago.uicontrollers.discounts.DiscountRowView;
+import com.mercadopago.uicontrollers.installments.InstallmentsReviewView;
+
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.ColorsUtil;
 import com.mercadopago.util.ErrorUtil;
@@ -48,6 +50,7 @@ import com.mercadopago.views.InstallmentsActivityView;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by vaserber on 9/29/16.
@@ -71,10 +74,16 @@ public class InstallmentsActivity extends MercadoPagoBaseActivity implements Ins
     protected CollapsingToolbarLayout mCollapsingToolbar;
     protected AppBarLayout mAppBar;
     protected FrameLayout mCardContainer;
+    protected FrameLayout mInstallmentsReview;
     protected Toolbar mNormalToolbar;
     protected FrontCardView mFrontCardView;
     protected MPTextView mTimerTextView;
     protected FrameLayout mDiscountFrameLayout;
+
+    protected String mDefaultBaseURL;
+    protected String mMerchantDiscountBaseURL;
+    protected String mMerchantGetDiscountURI;
+    protected Map<String, String> mDiscountAdditionalInfo;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -89,6 +98,7 @@ public class InstallmentsActivity extends MercadoPagoBaseActivity implements Ins
             setTheme(R.style.Theme_MercadoPagoTheme_NoActionBar);
         }
         analyzeLowRes();
+        setMerchantInfo();
         setContentView();
         mPresenter.validateActivityParameters();
     }
@@ -97,15 +107,27 @@ public class InstallmentsActivity extends MercadoPagoBaseActivity implements Ins
         return mDecorationPreference != null && mDecorationPreference.hasColors();
     }
 
-    private void getActivityParameters() {
+    private void setMerchantInfo() {
+        if (CustomServicesHandler.getInstance().getServicePreference() != null) {
+            mDefaultBaseURL = CustomServicesHandler.getInstance().getServicePreference().getDefaultBaseURL();
+            mMerchantDiscountBaseURL = CustomServicesHandler.getInstance().getServicePreference().getGetMerchantDiscountBaseURL();
+            mMerchantGetDiscountURI = CustomServicesHandler.getInstance().getServicePreference().getGetMerchantDiscountURI();
+            mDiscountAdditionalInfo = CustomServicesHandler.getInstance().getServicePreference().getGetDiscountAdditionalInfo();
+        }
 
+        mPresenter.setMerchantBaseUrl(mDefaultBaseURL);
+        mPresenter.setMerchantDiscountBaseUrl(mMerchantDiscountBaseURL);
+        mPresenter.setMerchantGetDiscountUri(mMerchantGetDiscountURI);
+        mPresenter.setDiscountAdditionalInfo(mDiscountAdditionalInfo);
+    }
+
+    private void getActivityParameters() {
         String publicKey = getIntent().getStringExtra("merchantPublicKey");
         String payerAccessToken = getIntent().getStringExtra("payerAccessToken");
         PaymentPreference paymentPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("paymentPreference"), PaymentPreference.class);
         mDecorationPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("decorationPreference"), DecorationPreference.class);
 
-        PaymentMethod paymentMethod = JsonUtil.getInstance().fromJson(
-                this.getIntent().getStringExtra("paymentMethod"), PaymentMethod.class);
+        PaymentMethod paymentMethod = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("paymentMethod"), PaymentMethod.class);
         CardInfo cardInfo = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("cardInfo"), CardInfo.class);
         Issuer issuer = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("issuer"), Issuer.class);
         BigDecimal amount = null;
@@ -123,8 +145,10 @@ public class InstallmentsActivity extends MercadoPagoBaseActivity implements Ins
         }
 
         Discount discount = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("discount"), Discount.class);
-        String payerEmail = this.getIntent().getStringExtra("payerEmail");
         Boolean discountEnabled = this.getIntent().getBooleanExtra("discountEnabled", true);
+        Boolean directDiscountEnabled = this.getIntent().getBooleanExtra("directDiscountEnabled", true);
+        Boolean installmentsReviewEnabled = this.getIntent().getBooleanExtra("installmentsReviewEnabled", true);
+        String payerEmail = this.getIntent().getStringExtra("payerEmail");
 
         mPresenter.setPaymentMethod(paymentMethod);
         mPresenter.setPublicKey(publicKey);
@@ -134,10 +158,12 @@ public class InstallmentsActivity extends MercadoPagoBaseActivity implements Ins
         mPresenter.setPayerEmail(payerEmail);
         mPresenter.setDiscount(discount);
         mPresenter.setDiscountEnabled(discountEnabled);
+        mPresenter.setDirectDiscountEnabled(directDiscountEnabled);
         mPresenter.setSite(site);
         mPresenter.setPayerCosts(payerCosts);
         mPresenter.setPaymentPreference(paymentPreference);
         mPresenter.setCardInfo(cardInfo);
+        mPresenter.setInstallmentsReviewEnabled(installmentsReviewEnabled);
     }
 
     private boolean isDecorationEnabled() {
@@ -233,6 +259,9 @@ public class InstallmentsActivity extends MercadoPagoBaseActivity implements Ins
         }
 
         mDiscountFrameLayout = (FrameLayout) findViewById(R.id.mpsdkDiscount);
+        mDiscountFrameLayout.setVisibility(View.VISIBLE);
+
+        mInstallmentsReview = (FrameLayout) findViewById(R.id.mpsdkInstallmentsReview);
     }
 
     public void loadLowResViews() {
@@ -271,10 +300,19 @@ public class InstallmentsActivity extends MercadoPagoBaseActivity implements Ins
             toolbar.setNavigationOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent returnIntent = new Intent();
-                    returnIntent.putExtra("discount", JsonUtil.getInstance().toJson(mPresenter.getDiscount()));
-                    setResult(RESULT_CANCELED, returnIntent);
-                    finish();
+                    if (isInstallmentsReviewVisible()) {
+                        hideInstallmentsReviewView();
+                        showInstallmentsRecyclerView();
+
+                        mPresenter.initializeDiscountRow();
+                    } else {
+                        Intent returnIntent = new Intent();
+                        returnIntent.putExtra("discount", JsonUtil.getInstance().toJson(mPresenter.getDiscount()));
+                        returnIntent.putExtra("discountEnabled", JsonUtil.getInstance().toJson(mPresenter.getDiscountEnabled()));
+                        returnIntent.putExtra("directDiscountEnabled", mPresenter.getDirectDiscountEnabled());
+                        setResult(RESULT_CANCELED, returnIntent);
+                        finish();
+                    }
                 }
             });
         }
@@ -394,19 +432,30 @@ public class InstallmentsActivity extends MercadoPagoBaseActivity implements Ins
         Intent returnIntent = new Intent();
         returnIntent.putExtra("payerCost", JsonUtil.getInstance().toJson(payerCost));
         returnIntent.putExtra("discount", JsonUtil.getInstance().toJson(mPresenter.getDiscount()));
+        returnIntent.putExtra("discountEnabled", JsonUtil.getInstance().toJson(mPresenter.getDiscountEnabled()));
+        returnIntent.putExtra("directDiscountEnabled", mPresenter.getDirectDiscountEnabled());
         setResult(RESULT_OK, returnIntent);
         finish();
     }
 
     @Override
     public void onBackPressed() {
-        MPTracker.getInstance().trackEvent("CARD_INSTALLMENTS", "BACK_PRESSED", "2",
-                mPresenter.getPublicKey(), mPresenter.getSite().getId(), BuildConfig.VERSION_NAME, this);
-        Intent returnIntent = new Intent();
-        returnIntent.putExtra("backButtonPressed", true);
-        returnIntent.putExtra("discount", JsonUtil.getInstance().toJson(mPresenter.getDiscount()));
-        setResult(RESULT_CANCELED, returnIntent);
-        finish();
+        if (isInstallmentsReviewVisible()) {
+            hideInstallmentsReviewView();
+            showInstallmentsRecyclerView();
+
+            mPresenter.initializeDiscountRow();
+        } else {
+            MPTracker.getInstance().trackEvent("CARD_INSTALLMENTS", "BACK_PRESSED", "2",
+                    mPresenter.getPublicKey(), mPresenter.getSite().getId(), BuildConfig.VERSION_NAME, this);
+            Intent returnIntent = new Intent();
+            returnIntent.putExtra("backButtonPressed", true);
+            returnIntent.putExtra("discount", JsonUtil.getInstance().toJson(mPresenter.getDiscount()));
+            returnIntent.putExtra("discountEnabled", JsonUtil.getInstance().toJson(mPresenter.getDiscountEnabled()));
+            returnIntent.putExtra("directDiscountEnabled", mPresenter.getDirectDiscountEnabled());
+            setResult(RESULT_CANCELED, returnIntent);
+            finish();
+        }
     }
 
     @Override
@@ -453,6 +502,7 @@ public class InstallmentsActivity extends MercadoPagoBaseActivity implements Ins
                 .setPayerEmail(mPresenter.getPayerEmail())
                 .setAmount(transactionAmount)
                 .setDiscount(mPresenter.getDiscount())
+                .setDirectDiscountEnabled(mPresenter.getDirectDiscountEnabled())
                 .setDecorationPreference(mDecorationPreference);
 
         if (mPresenter.getDiscount() == null) {
@@ -466,13 +516,20 @@ public class InstallmentsActivity extends MercadoPagoBaseActivity implements Ins
 
     @Override
     public void showDiscountRow(BigDecimal transactionAmount) {
-        DiscountRowView discountRowView = new MercadoPagoUI.Views.DiscountRowViewBuilder()
-                .setContext(this)
+        MercadoPagoUI.Views.DiscountRowViewBuilder discountRowViewBuilder = new MercadoPagoUI.Views.DiscountRowViewBuilder();
+
+        discountRowViewBuilder.setContext(this)
                 .setDiscount(mPresenter.getDiscount())
                 .setTransactionAmount(transactionAmount)
-                .setCurrencyId(mPresenter.getSite().getCurrencyId())
-                .setDiscountEnabled(mPresenter.getDiscountEnabled())
-                .build();
+                .setCurrencyId(mPresenter.getSite().getCurrencyId());
+
+        if (isInstallmentsReviewVisible() && mPresenter.getDiscount() == null) {
+            discountRowViewBuilder.setDiscountEnabled(false);
+        } else {
+            discountRowViewBuilder.setDiscountEnabled(mPresenter.getDiscountEnabled());
+        }
+
+        DiscountRowView discountRowView = discountRowViewBuilder.build();
 
         discountRowView.inflateInParent(mDiscountFrameLayout, true);
         discountRowView.initializeControls();
@@ -480,14 +537,62 @@ public class InstallmentsActivity extends MercadoPagoBaseActivity implements Ins
         discountRowView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mPresenter.getDiscountEnabled()) {
+                if (isInstallmentsRecyclerOnClickEnabled() || isInstallmentsReviewOnClickEnabled()) {
                     mPresenter.initializeDiscountActivity();
                 }
             }
         });
     }
 
-    public InstallmentsPresenter getPresenter() {
-        return mPresenter;
+    private Boolean isInstallmentsRecyclerOnClickEnabled() {
+        return !isInstallmentsReviewVisible() && mPresenter.getDiscountEnabled();
+    }
+
+    private Boolean isInstallmentsReviewOnClickEnabled() {
+        return isInstallmentsReviewVisible() && mPresenter.getDiscount() != null && mPresenter.getDiscountEnabled();
+    }
+
+    @Override
+    public void initInstallmentsReviewView(final PayerCost payerCost) {
+        InstallmentsReviewView installmentsReviewView = new MercadoPagoUI.Views.InstallmentsReviewViewBuilder()
+                .setContext(this)
+                .setCurrencyId(mPresenter.getSite().getCurrencyId())
+                .setPayerCost(payerCost)
+                .setDecorationPreference(mDecorationPreference)
+                .build();
+
+        installmentsReviewView.inflateInParent(mInstallmentsReview, true);
+        installmentsReviewView.initializeControls();
+        installmentsReviewView.draw();
+        installmentsReviewView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finishWithResult(payerCost);
+            }
+        });
+    }
+
+    @Override
+    public void hideInstallmentsRecyclerView() {
+        mInstallmentsRecyclerView.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void showInstallmentsRecyclerView() {
+        mInstallmentsRecyclerView.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void showInstallmentsReviewView() {
+        mInstallmentsReview.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideInstallmentsReviewView() {
+        mInstallmentsReview.setVisibility(View.GONE);
+    }
+
+    private Boolean isInstallmentsReviewVisible() {
+        return mInstallmentsReview.getVisibility() == View.VISIBLE;
     }
 }

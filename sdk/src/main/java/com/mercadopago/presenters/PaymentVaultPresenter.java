@@ -39,7 +39,9 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
     private String mPayerEmail;
     private PaymentPreference mPaymentPreference;
     private BigDecimal mAmount;
+    private Boolean mInstallmentsReviewEnabled;
     private Boolean mDiscountEnabled = true;
+    private Boolean mDirectDiscountEnabled = true;
     private Integer mMaxSavedCards;
 
     private boolean mSelectAutomatically;
@@ -78,13 +80,15 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
 
         if (isItemSelected()) {
             showSelectedItemChildren();
+
         } else {
             initPaymentMethodSearch();
         }
     }
 
     private void loadDiscount() {
-        if (mDiscount == null) {
+        if (mDirectDiscountEnabled && mDiscount == null) {
+            getView().showProgress();
             getDirectDiscount();
         } else {
             initializeDiscountRow();
@@ -114,6 +118,7 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
 
             @Override
             public void onFailure(MercadoPagoError error) {
+                mDirectDiscountEnabled = false;
                 initializeDiscountRow();
                 initPaymentVaultFlow();
                 mDiscountEnabled = false;
@@ -130,7 +135,7 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
         initPaymentVaultFlow();
     }
 
-    public void validateParameters() throws IllegalStateException {
+    private void validateParameters() throws IllegalStateException {
         if (mPaymentPreference != null) {
             if (!mPaymentPreference.validMaxInstallments()) {
                 throw new IllegalStateException(getResourcesProvider().getInvalidMaxInstallmentsErrorMessage());
@@ -198,6 +203,7 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
             public void onFailure(MercadoPagoError error) {
                 if (viewAttached()) {
                     getView().showError(error);
+
                     getView().setFailureRecovery(new FailureRecovery() {
                         @Override
                         public void recover() {
@@ -429,8 +435,24 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
         return mPayerEmail;
     }
 
+    public void setInstallmentsReviewEnabled(Boolean installmentReviewEnabled) {
+        this.mInstallmentsReviewEnabled = installmentReviewEnabled;
+    }
+
+    public Boolean getInstallmentsReviewEnabled() {
+        return this.mInstallmentsReviewEnabled;
+    }
+
     public void setDiscountEnabled(Boolean discountEnabled) {
         this.mDiscountEnabled = discountEnabled;
+    }
+
+    public void setDirectDiscountEnabled(Boolean directDiscountEnabled) {
+        this.mDirectDiscountEnabled = directDiscountEnabled;
+    }
+
+    public Boolean getDirectDiscountEnabled() {
+        return this.mDirectDiscountEnabled;
     }
 
     public Boolean getDiscountEnabled() {

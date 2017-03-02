@@ -17,7 +17,6 @@ public abstract class MvpPresenter<V extends MvpView, R extends ResourcesProvide
     private WeakReference<V> mView;
     private R resourcesProvider;
 
-
     public void attachResourcesProvider(final R resourcesProvider){
         this.resourcesProvider = resourcesProvider;
     }

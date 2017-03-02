@@ -20,28 +20,36 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.mercadopago.controllers.CheckoutTimer;
+import com.mercadopago.controllers.CustomServicesHandler;
 import com.mercadopago.customviews.MPEditText;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.model.Currency;
+
 import com.mercadopago.model.Discount;
 import com.mercadopago.mptracker.MPTracker;
 import com.mercadopago.observers.TimerObserver;
 import com.mercadopago.preferences.DecorationPreference;
+
 import com.mercadopago.presenters.DiscountsPresenter;
 import com.mercadopago.providers.DiscountProviderImpl;
 import com.mercadopago.util.CurrenciesUtil;
 import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;
-import com.mercadopago.views.DiscountsView;
+import com.mercadopago.views.DiscountsActivityView;
 
 import java.math.BigDecimal;
+import java.util.Map;
 
-public class DiscountsActivity extends AppCompatActivity implements DiscountsView, TimerObserver {
+public class DiscountsActivity extends AppCompatActivity implements DiscountsActivityView, TimerObserver {
 
     // Local vars
     protected DecorationPreference mDecorationPreference;
     protected MPTextView mTimerTextView;
+    private String mMerchantBaseURL;
+    private String mMerchantDiscountBaseURL;
+    private String mMerchantGetDiscountURI;
+    private Map<String, String> mDiscountAdditionalInfo;
 
     //View
     protected ProgressBar mProgressBar;
@@ -64,7 +72,7 @@ public class DiscountsActivity extends AppCompatActivity implements DiscountsVie
     protected ScrollView mScrollView;
     protected Toolbar mToolbar;
 
-    protected DiscountsPresenter mDiscountsPresenter;
+    protected DiscountsPresenter mPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,32 +85,42 @@ public class DiscountsActivity extends AppCompatActivity implements DiscountsVie
         }
 
         setContentView();
+        setMerchantInfo();
         initializeControls();
         onValidStart();
     }
 
     private void initializePresenter() {
         try {
-            DiscountProviderImpl discountProvider = new DiscountProviderImpl(this, mDiscountsPresenter.getPublicKey());
-            mDiscountsPresenter.attachResourcesProvider(discountProvider);
-            mDiscountsPresenter.attachView(this);
+            DiscountProviderImpl discountProvider = new DiscountProviderImpl(this, mPresenter.getPublicKey(), mMerchantBaseURL, mMerchantDiscountBaseURL, mMerchantGetDiscountURI, mDiscountAdditionalInfo);
+            mPresenter.attachResourcesProvider(discountProvider);
+            mPresenter.attachView(this);
         } catch (IllegalStateException exception) {
             finishWithCancelResult();
         }
     }
 
+    private void setMerchantInfo() {
+        if (CustomServicesHandler.getInstance().getServicePreference() != null) {
+            mMerchantBaseURL = CustomServicesHandler.getInstance().getServicePreference().getDefaultBaseURL();
+            mMerchantDiscountBaseURL = CustomServicesHandler.getInstance().getServicePreference().getGetMerchantDiscountBaseURL();
+            mMerchantGetDiscountURI = CustomServicesHandler.getInstance().getServicePreference().getGetMerchantDiscountURI();
+            mDiscountAdditionalInfo = CustomServicesHandler.getInstance().getServicePreference().getGetDiscountAdditionalInfo();
+        }
+    }
+
     protected void createPresenter() {
-        mDiscountsPresenter = new DiscountsPresenter();
+        mPresenter = new DiscountsPresenter();
     }
 
     protected void getActivityParameters() {
         mDecorationPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("decorationPreference"), DecorationPreference.class);
 
-        mDiscountsPresenter.setMerchantPublicKey(getIntent().getStringExtra("merchantPublicKey"));
-        mDiscountsPresenter.setPayerEmail(this.getIntent().getStringExtra("payerEmail"));
-        mDiscountsPresenter.setTransactionAmount(new BigDecimal(this.getIntent().getStringExtra("amount")));
-        mDiscountsPresenter.setDiscount(JsonUtil.getInstance().fromJson(getIntent().getStringExtra("discount"), Discount.class));
-        mDiscountsPresenter.setDirectDiscountEnabled(this.getIntent().getBooleanExtra("directDiscountEnabled", true));
+        mPresenter.setMerchantPublicKey(getIntent().getStringExtra("merchantPublicKey"));
+        mPresenter.setPayerEmail(this.getIntent().getStringExtra("payerEmail"));
+        mPresenter.setTransactionAmount(new BigDecimal(this.getIntent().getStringExtra("amount")));
+        mPresenter.setDiscount(JsonUtil.getInstance().fromJson(getIntent().getStringExtra("discount"), Discount.class));
+        mPresenter.setDirectDiscountEnabled(this.getIntent().getBooleanExtra("directDiscountEnabled", true));
     }
 
     protected void setContentView() {
@@ -111,7 +129,7 @@ public class DiscountsActivity extends AppCompatActivity implements DiscountsVie
 
     protected void onValidStart() {
         showTimer();
-        mDiscountsPresenter.initialize();
+        mPresenter.initialize();
     }
 
     protected void initializeControls() {
@@ -152,7 +170,7 @@ public class DiscountsActivity extends AppCompatActivity implements DiscountsVie
             @Override
             public void onClick(View view) {
                 CharSequence discountCode = mDiscountCodeEditText.getText();
-                mDiscountsPresenter.validateDiscountCodeInput(discountCode.toString());
+                mPresenter.validateDiscountCodeInput(discountCode.toString());
             }
         });
 
@@ -200,7 +218,7 @@ public class DiscountsActivity extends AppCompatActivity implements DiscountsVie
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mDiscountsPresenter.getDiscount() == null) {
+                if (mPresenter.getDiscount() == null) {
                     onBackPressed();
                 } else {
                     finishWithResult();
@@ -257,7 +275,7 @@ public class DiscountsActivity extends AppCompatActivity implements DiscountsVie
 
     @Override
     public void drawSummary() {
-        MPTracker.getInstance().trackScreen("DISCOUNT_SUMMARY", "2", mDiscountsPresenter.getPublicKey(), BuildConfig.VERSION_NAME, this);
+        MPTracker.getInstance().trackScreen("DISCOUNT_SUMMARY", "2", mPresenter.getPublicKey(), BuildConfig.VERSION_NAME, this);
 
         mDiscountCodeContainer.setVisibility(View.GONE);
         mReviewDiscountSummaryContainer.setVisibility(View.VISIBLE);
@@ -279,8 +297,8 @@ public class DiscountsActivity extends AppCompatActivity implements DiscountsVie
     }
 
     private void showTotalRow() {
-        if (isAmountValid(mDiscountsPresenter.getTransactionAmount()) && isDiscountCurrencyIdValid()) {
-            mReviewSummaryTotalAmount.setText(getFormattedAmount(mDiscountsPresenter.getDiscount().getAmountWithDiscount(mDiscountsPresenter.getTransactionAmount()), mDiscountsPresenter.getDiscount().getCurrencyId()));
+        if (isAmountValid(mPresenter.getTransactionAmount()) && isDiscountCurrencyIdValid()) {
+            mReviewSummaryTotalAmount.setText(getFormattedAmount(mPresenter.getDiscount().getAmountWithDiscount(mPresenter.getTransactionAmount()), mPresenter.getDiscount().getCurrencyId()));
         } else {
             finishWithCancelResult();
         }
@@ -290,10 +308,11 @@ public class DiscountsActivity extends AppCompatActivity implements DiscountsVie
         StringBuilder discountAmountBuilder = new StringBuilder();
         Spanned discountAmount;
 
-        if (isAmountValid(mDiscountsPresenter.getCouponAmount()) && isDiscountCurrencyIdValid()) {
+        if (isAmountValid(mPresenter.getCouponAmount()) && isDiscountCurrencyIdValid()) {
             discountAmountBuilder.append("-");
-            discountAmountBuilder.append(CurrenciesUtil.formatNumber(mDiscountsPresenter.getCouponAmount(), mDiscountsPresenter.getCurrencyId()));
-            discountAmount = CurrenciesUtil.formatCurrencyInText(mDiscountsPresenter.getCouponAmount(), mDiscountsPresenter.getCurrencyId(), discountAmountBuilder.toString(), false, true);
+            discountAmountBuilder.append(CurrenciesUtil.formatNumber(mPresenter.getCouponAmount(), mPresenter.getCurrencyId()));
+            discountAmount = CurrenciesUtil.formatCurrencyInText(mPresenter.getCouponAmount(), mPresenter.getCurrencyId(), discountAmountBuilder.toString(), false, true);
+
             mReviewSummaryDiscountAmount.setText(discountAmount);
         } else {
             finishWithCancelResult();
@@ -301,8 +320,8 @@ public class DiscountsActivity extends AppCompatActivity implements DiscountsVie
     }
 
     private void showTransactionRow() {
-        if (isAmountValid(mDiscountsPresenter.getTransactionAmount()) && isDiscountCurrencyIdValid()) {
-            mReviewSummaryProductAmount.setText(getFormattedAmount(mDiscountsPresenter.getTransactionAmount(), mDiscountsPresenter.getDiscount().getCurrencyId()));
+        if (isAmountValid(mPresenter.getTransactionAmount()) && isDiscountCurrencyIdValid()) {
+            mReviewSummaryProductAmount.setText(getFormattedAmount(mPresenter.getTransactionAmount(), mPresenter.getDiscount().getCurrencyId()));
         } else {
             finishWithCancelResult();
         }
@@ -310,12 +329,11 @@ public class DiscountsActivity extends AppCompatActivity implements DiscountsVie
 
     private void showSummaryTitle() {
         if (isPercentOffValid()) {
-            String title = mDiscountsPresenter.getDiscount().getPercentOff() + getString(R.string.mpsdk_percent_of_discount);
+            String title = mPresenter.getDiscount().getPercentOff() + getString(R.string.mpsdk_percent_of_discount);
             mReviewSummaryTitle.setText(title);
-        } else if (isAmountOffValid()){
-            Currency currency = CurrenciesUtil.getCurrency(mDiscountsPresenter.getDiscount().getCurrencyId());
-            String amount = currency.getSymbol() + mDiscountsPresenter.getDiscount().getAmountOff();
-
+        } else if (isAmountOffValid()) {
+            Currency currency = CurrenciesUtil.getCurrency(mPresenter.getDiscount().getCurrencyId());
+            String amount = currency.getSymbol() + mPresenter.getDiscount().getAmountOff();
             StringBuilder title = new StringBuilder();
 
             title.append(amount);
@@ -323,12 +341,14 @@ public class DiscountsActivity extends AppCompatActivity implements DiscountsVie
             title.append(getString(R.string.mpsdk_of_discount));
 
             mReviewSummaryTitle.setText(title);
+        } else {
+            mReviewSummaryTitle.setText(getString(R.string.mpsdk_discount));
         }
     }
 
     @Override
     public void requestDiscountCode() {
-        MPTracker.getInstance().trackScreen("DISCOUNT_INPUT_CODE", "2", mDiscountsPresenter.getPublicKey(), BuildConfig.VERSION_NAME, this);
+        MPTracker.getInstance().trackScreen("DISCOUNT_INPUT_CODE", "2", mPresenter.getPublicKey(), BuildConfig.VERSION_NAME, this);
 
         mReviewDiscountSummaryContainer.setVisibility(View.GONE);
         mDiscountCodeContainer.setVisibility(View.VISIBLE);
@@ -385,7 +405,9 @@ public class DiscountsActivity extends AppCompatActivity implements DiscountsVie
     @Override
     public void finishWithResult() {
         Intent returnIntent = new Intent();
-        returnIntent.putExtra("discount", JsonUtil.getInstance().toJson(mDiscountsPresenter.getDiscount()));
+        returnIntent.putExtra("discount", JsonUtil.getInstance().toJson(mPresenter.getDiscount()));
+        returnIntent.putExtra("directDiscountEnabled", mPresenter.getDirectDiscountEnabled());
+
         setResult(RESULT_OK, returnIntent);
         finish();
     }
@@ -424,11 +446,11 @@ public class DiscountsActivity extends AppCompatActivity implements DiscountsVie
     }
 
     private Boolean isAmountOffValid() {
-        return mDiscountsPresenter.getDiscount() != null && mDiscountsPresenter.getDiscount().getAmountOff() != null && mDiscountsPresenter.getDiscount().getAmountOff().compareTo(BigDecimal.ZERO) > 0;
+        return mPresenter.getDiscount() != null && mPresenter.getDiscount().getAmountOff() != null && mPresenter.getDiscount().getAmountOff().compareTo(BigDecimal.ZERO) > 0;
     }
 
     private Boolean isPercentOffValid() {
-        return mDiscountsPresenter.getDiscount() != null && mDiscountsPresenter.getDiscount().getPercentOff() != null && mDiscountsPresenter.getDiscount().getPercentOff().compareTo(BigDecimal.ZERO) > 0;
+        return mPresenter.getDiscount() != null && mPresenter.getDiscount().getPercentOff() != null && mPresenter.getDiscount().getPercentOff().compareTo(BigDecimal.ZERO) > 0;
     }
 
     private Boolean isAmountValid(BigDecimal amount) {
@@ -436,6 +458,11 @@ public class DiscountsActivity extends AppCompatActivity implements DiscountsVie
     }
 
     private Boolean isDiscountCurrencyIdValid() {
-        return mDiscountsPresenter.getDiscount() != null && mDiscountsPresenter.getDiscount().getCurrencyId() != null && CurrenciesUtil.isValidCurrency(mDiscountsPresenter.getDiscount().getCurrencyId());
+        return mPresenter.getDiscount() != null && mPresenter.getDiscount().getCurrencyId() != null && CurrenciesUtil.isValidCurrency(mPresenter.getDiscount().getCurrencyId());
+    }
+
+    @Override
+    public void hideDiscountSummary() {
+        mReviewDiscountSummaryContainer.setVisibility(View.GONE);
     }
 }

@@ -4,6 +4,7 @@ import com.mercadopago.callbacks.OnConfirmPaymentCallback;
 import com.mercadopago.callbacks.OnReviewChange;
 import com.mercadopago.controllers.CustomReviewablesHandler;
 import com.mercadopago.model.CardInfo;
+
 import com.mercadopago.model.Discount;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.Item;
@@ -24,6 +25,10 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Created by mreverter on 2/2/17.
+ */
+
 public class ReviewAndConfirmPresenter extends MvpPresenter<ReviewAndConfirmView, ReviewAndConfirmProvider> implements ReviewSubscriber {
     private PaymentMethod mPaymentMethod;
     private PayerCost mPayerCost;
@@ -36,6 +41,7 @@ public class ReviewAndConfirmPresenter extends MvpPresenter<ReviewAndConfirmView
     private String mExtraPaymentMethodInfo;
     private DecorationPreference mDecorationPreference;
     private Boolean mEditionEnabled;
+    private Boolean mDiscountEnabled;
     private boolean mTermsAndConditionsEnabled;
     private List<String> reviewOrder;
 
@@ -72,7 +78,6 @@ public class ReviewAndConfirmPresenter extends MvpPresenter<ReviewAndConfirmView
     }
 
     private void showReviewAndConfirm() {
-
         setReviewTitle();
         setConfirmationMessage();
         setCancelMessage();
@@ -247,6 +252,14 @@ public class ReviewAndConfirmPresenter extends MvpPresenter<ReviewAndConfirmView
 
     public void setReviewOrder(List<String> reviewOrder) {
         this.reviewOrder = reviewOrder;
+    }
+
+    public void setDiscountEnabled(Boolean discountEnabled) {
+        this.mDiscountEnabled = discountEnabled;
+    }
+
+    public Boolean getDiscountEnabled() {
+        return mDiscountEnabled;
     }
 
     @Override

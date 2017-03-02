@@ -8,6 +8,7 @@ import com.mercadopago.callbacks.OnReviewChange;
 import com.mercadopago.controllers.CustomReviewablesHandler;
 import com.mercadopago.core.MercadoPagoComponents;
 import com.mercadopago.model.CardInfo;
+import com.mercadopago.core.MercadoPagoUI;
 import com.mercadopago.model.Discount;
 import com.mercadopago.model.Item;
 import com.mercadopago.model.PayerCost;
@@ -35,7 +36,6 @@ public class ReviewAndConfirmProviderImpl implements ReviewAndConfirmProvider {
 
     @Override
     public Reviewable getSummaryReviewable(PaymentMethod paymentMethod, PayerCost payerCost, BigDecimal amount, Discount discount, Site site, DecorationPreference decorationPreference, OnConfirmPaymentCallback onConfirmPaymentCallback) {
-
         String confirmationMessage = getConfirmationMessage();
         String productDetailText = getProductDetailText();
         String discountDetailText = getDiscountDetailText(discount);

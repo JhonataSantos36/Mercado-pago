@@ -25,7 +25,8 @@ public class PaymentResultActivity extends Activity {
     public static final int RESULT_SILENT_OK = 3;
 
     protected Discount mDiscount;
-    protected String mMerchantPublicKey;
+    protected Boolean mDiscountEnabled;
+    private String mMerchantPublicKey;
     protected Integer mCongratsDisplay;
     protected PaymentResult mPaymentResult;
     protected Site mSite;
@@ -48,9 +49,9 @@ public class PaymentResultActivity extends Activity {
 
     protected void getActivityParameters() {
         mMerchantPublicKey = getIntent().getStringExtra("merchantPublicKey");
-
         mCongratsDisplay = getIntent().getIntExtra("congratsDisplay", -1);
         mDiscount = JsonUtil.getInstance().fromJson(getIntent().getExtras().getString("discount"), Discount.class);
+        mDiscountEnabled = getIntent().getExtras().getBoolean("discountEnabled", true);
         mPaymentResult = JsonUtil.getInstance().fromJson(getIntent().getExtras().getString("paymentResult"), PaymentResult.class);
         mPaymentResultScreenPreference = JsonUtil.getInstance().fromJson(getIntent().getExtras().getString("paymentResultScreenPreference"), PaymentResultScreenPreference.class);
         mSite = JsonUtil.getInstance().fromJson(getIntent().getExtras().getString("site"), Site.class);
@@ -115,6 +116,7 @@ public class PaymentResultActivity extends Activity {
         new MercadoPagoComponents.Activities.CongratsActivityBuilder()
                 .setMerchantPublicKey(mMerchantPublicKey)
                 .setActivity(this)
+                .setDiscountEnabled(mDiscountEnabled)
                 .setCongratsDisplay(mCongratsDisplay)
                 .setPaymentResult(mPaymentResult)
                 .setPaymentResultScreenPreference(mPaymentResultScreenPreference)

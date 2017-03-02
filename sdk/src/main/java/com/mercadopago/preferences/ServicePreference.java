@@ -1,5 +1,7 @@
 package com.mercadopago.preferences;
 
+import com.mercadopago.util.TextUtil;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,12 +13,15 @@ public class ServicePreference {
     private String getCustomerURL;
     private String createPaymentURL;
     private String createCheckoutPreferenceURL;
+    private String getMerchantDiscountBaseURL;
     private String getCustomerURI;
     private String createPaymentURI;
     private String createCheckoutPreferenceURI;
+    private String getMerchantDiscountURI;
     private Map<String, String> getCustomerAdditionalInfo;
     private Map<String, Object> createPaymentAdditionalInfo;
     private Map<String, Object> createCheckoutPreferenceAdditionalInfo;
+    private Map<String, String> getDiscountAdditionalInfo;
 
     private ServicePreference(Builder builder) {
 
@@ -26,12 +31,15 @@ public class ServicePreference {
         this.getCustomerURL = builder.getCustomerURL;
         this.createPaymentURL = builder.createPaymentURL;
         this.createCheckoutPreferenceURL = builder.createCheckoutPreferenceURL;
+        this.getMerchantDiscountBaseURL = builder.getMerchantDiscountBaseURL;
         this.getCustomerURI = builder.getCustomerURI;
         this.createPaymentURI = builder.createPaymentURI;
         this.createCheckoutPreferenceURI = builder.createCheckoutPreferenceURI;
+        this.getMerchantDiscountURI = builder.getMerchantDiscountURI;
         this.getCustomerAdditionalInfo = builder.getCustomerAdditionalInfo;
         this.createPaymentAdditionalInfo = builder.createPaymentAdditionalInfo;
         this.createCheckoutPreferenceAdditionalInfo = builder.createCheckoutPreferenceAdditionalInfo;
+        this.getDiscountAdditionalInfo = builder.getDiscountAdditionalInfo;
     }
 
     public String getDefaultBaseURL() {
@@ -54,6 +62,10 @@ public class ServicePreference {
         return this.createCheckoutPreferenceURL;
     }
 
+    public String getGetMerchantDiscountBaseURL() {
+        return this.getMerchantDiscountBaseURL;
+    }
+
     public String getGetCustomerURI() {
         return getCustomerURI;
     }
@@ -64,6 +76,10 @@ public class ServicePreference {
 
     public String getCreateCheckoutPreferenceURI() {
         return createCheckoutPreferenceURI;
+    }
+
+    public String getGetMerchantDiscountURI() {
+        return getMerchantDiscountURI;
     }
 
     public Map<String, String> getGetCustomerAdditionalInfo() {
@@ -87,12 +103,23 @@ public class ServicePreference {
         return this.createCheckoutPreferenceAdditionalInfo;
     }
 
+    public Map<String, String> getGetDiscountAdditionalInfo() {
+        if (this.getDiscountAdditionalInfo == null) {
+            this.getDiscountAdditionalInfo = new HashMap<>();
+        }
+        return this.getDiscountAdditionalInfo;
+    }
+
     public boolean hasGetCustomerURL() {
         return getCustomerURL != null && getCustomerURI != null;
     }
 
     public boolean hasCreatePaymentURL() {
         return createPaymentURL != null && createPaymentURI != null;
+    }
+
+    public boolean hasGetDiscountURL() {
+        return (getMerchantDiscountBaseURL != null || defaultBaseURL != null) && getMerchantDiscountURI != null;
     }
 
     public static class Builder {
@@ -103,12 +130,15 @@ public class ServicePreference {
         private String getCustomerURL;
         private String createPaymentURL;
         private String createCheckoutPreferenceURL;
+        private String getMerchantDiscountBaseURL;
         private String getCustomerURI;
         private String createPaymentURI;
         private String createCheckoutPreferenceURI;
+        private String getMerchantDiscountURI;
         private Map<String, String> getCustomerAdditionalInfo;
         private Map<String, Object> createPaymentAdditionalInfo;
         private Map<String, Object> createCheckoutPreferenceAdditionalInfo;
+        private Map<String, String> getDiscountAdditionalInfo;
 
         public Builder setGetCustomerURL(String getCustomerURL, String getCustomerURI) {
             this.getCustomerURL = getCustomerURL;
@@ -146,6 +176,13 @@ public class ServicePreference {
             this.createCheckoutPreferenceURL = createCheckoutPreferenceURL;
             this.createCheckoutPreferenceURI = getURI(createCheckoutPreferenceURI);
             this.createCheckoutPreferenceAdditionalInfo = additionalInfo;
+            return this;
+        }
+
+        public Builder setDiscountURL(String getMerchantDiscountBaseURL, String getMerchantDiscountURI, Map<String, String> additionalInfo) {
+            this.getMerchantDiscountBaseURL = getMerchantDiscountBaseURL;
+            this.getMerchantDiscountURI = getMerchantDiscountURI;
+            this.getDiscountAdditionalInfo = additionalInfo;
             return this;
         }
 

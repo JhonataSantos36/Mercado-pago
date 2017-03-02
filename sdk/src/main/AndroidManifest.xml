@@ -107,4 +107,5 @@
             android:name=".VaultActivity"
             android:theme="@style/Theme.MercadoPagoTheme" />
     </application>
+
 </manifest>

@@ -1,14 +1,19 @@
 package com.mercadopago.discounts;
 
+import com.mercadopago.model.Campaign;
 import com.mercadopago.model.Discount;
 import com.mercadopago.mvp.OnResourcesRetrievedCallback;
 import com.mercadopago.presenters.DiscountsPresenter;
 import com.mercadopago.providers.DiscountsProvider;
 import com.mercadopago.views.DiscountsView;
+import com.mercadopago.views.DiscountsActivityView;
 
 import org.junit.Test;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 import static org.junit.Assert.assertTrue;
 
@@ -72,7 +77,7 @@ public class DiscountsPresenterTest {
         assertTrue(mockedView.drawedSummary);
     }
 
-    private class MockedView implements DiscountsView {
+    private class MockedView implements DiscountsActivityView {
 
         private Boolean drawedSummary;
         private Boolean requestedDiscountCode;
@@ -82,6 +87,7 @@ public class DiscountsPresenterTest {
         private Boolean showedEmptyDiscountCodeError;
         private Boolean hidedKeyboard;
         private Boolean setedSoftInputModeSummary;
+        private Boolean hidedDiscountSummary;
         private String error;
 
         @Override
@@ -138,6 +144,11 @@ public class DiscountsPresenterTest {
         public void setSoftInputModeSummary() {
             this.setedSoftInputModeSummary = true;
         }
+
+        @Override
+        public void hideDiscountSummary() {
+            this.hidedDiscountSummary = true;
+        }
     }
 
     private class DiscountMockedResourcesProvider implements DiscountsProvider {
@@ -150,6 +161,11 @@ public class DiscountsPresenterTest {
         @Override
         public void getCodeDiscount(String transactionAmount, String payerEmail, String discountCode, OnResourcesRetrievedCallback<Discount> onResourcesRetrievedCallback) {
             onResourcesRetrievedCallback.onSuccess(new Discount());
+        }
+
+        @Override
+        public void getCampaigns(OnResourcesRetrievedCallback<List<Campaign>> onResourcesRetrievedCallback) {
+            onResourcesRetrievedCallback.onSuccess(new ArrayList<Campaign>());
         }
 
         @Override

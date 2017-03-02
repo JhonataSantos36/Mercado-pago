@@ -49,6 +49,9 @@ public class CheckoutPreference {
         paymentPreference.setMaxAcceptedInstallments(builder.maxInstallments);
         paymentPreference.setDefaultInstallments(builder.defaultInstallments);
         this.paymentPreference = paymentPreference;
+
+        //TODO borrar
+        this.id = builder.id;
     }
 
     public void validate() throws CheckoutPreferenceException {
@@ -251,6 +254,8 @@ public class CheckoutPreference {
         private Site localPreferenceSite;
         private String payerAccessToken;
         private boolean excludeAccountMoney = true;
+        //TODO borrar
+        private String id;
 
         public Builder() {
             items = new ArrayList<>();
@@ -332,6 +337,12 @@ public class CheckoutPreference {
 
         public Builder setPayerAccessToken(String payerAccessToken) {
             this.payerAccessToken = payerAccessToken;
+            return this;
+        }
+
+        //TODO borrar
+        public Builder setId(String id) {
+            this.id = id;
             return this;
         }
 

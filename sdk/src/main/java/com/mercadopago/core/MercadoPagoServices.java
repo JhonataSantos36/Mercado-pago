@@ -7,6 +7,7 @@ import com.mercadopago.adapters.ErrorHandlingCallAdapter;
 import com.mercadopago.callbacks.Callback;
 import com.mercadopago.controllers.CustomServicesHandler;
 import com.mercadopago.model.BankDeal;
+import com.mercadopago.model.Campaign;
 import com.mercadopago.model.CardToken;
 import com.mercadopago.model.Discount;
 import com.mercadopago.model.IdentificationType;
@@ -185,6 +186,12 @@ public class MercadoPagoServices {
         MPTracker.getInstance().trackEvent("NO_SCREEN", "GET_CODE_DISCOUNT", "1", mPublicKey, BuildConfig.VERSION_NAME, mContext);
         DiscountService service = getDefaultRetrofit().create(DiscountService.class);
         service.getCodeDiscount(this.mPublicKey, amount, payerEmail, couponCode).enqueue(callback);
+    }
+
+    public void getCampaigns(final Callback<List<Campaign>> callback) {
+        MPTracker.getInstance().trackEvent("NO_SCREEN", "GET_CAMPAIGNS", "1", mPublicKey, BuildConfig.VERSION_NAME, mContext);
+        DiscountService service = getDefaultRetrofit().create(DiscountService.class);
+        service.getCampaigns(this.mPublicKey).enqueue(callback);
     }
 
     public static List<PaymentMethod> getValidPaymentMethodsForBin(String bin, List<PaymentMethod> paymentMethods) {

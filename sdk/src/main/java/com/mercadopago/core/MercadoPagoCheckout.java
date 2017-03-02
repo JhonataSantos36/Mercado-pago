@@ -56,6 +56,7 @@ public class MercadoPagoCheckout {
         this.reviewScreenPreference = builder.reviewScreenPreference;
         this.binaryMode = builder.binaryMode;
         this.maxSavedCards = builder.maxSavedCards;
+        this.discount = builder.discount;
 
         customizeServices(servicePreference);
 
@@ -159,6 +160,7 @@ public class MercadoPagoCheckout {
         private ReviewScreenPreference reviewScreenPreference;
         private PaymentData paymentData;
         private PaymentResult paymentResult;
+        private Discount discount;
 
         public Builder setContext(Context context) {
             this.context = context;
@@ -177,6 +179,11 @@ public class MercadoPagoCheckout {
 
         public Builder setDecorationPreference(DecorationPreference decorationPreference) {
             this.decorationPreference = decorationPreference;
+            return this;
+        }
+
+        public Builder setDiscount(Discount discount) {
+            this.discount = discount;
             return this;
         }
 

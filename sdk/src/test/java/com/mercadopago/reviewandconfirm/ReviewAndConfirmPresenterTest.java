@@ -41,8 +41,10 @@ public class ReviewAndConfirmPresenterTest {
     public void ifPaymentMethodNotSetShowError() {
 
         PayerCost payerCost = new PayerCost();
+
         Token token = Mockito.mock(Token.class);
         Mockito.when(token.getLastFourDigits()).thenReturn("1234");
+
         List<Item> items = new ArrayList<>();
         BigDecimal amount = BigDecimal.TEN;
         Site site = Sites.ARGENTINA;
@@ -72,6 +74,7 @@ public class ReviewAndConfirmPresenterTest {
         PayerCost payerCost = new PayerCost();
         Token token = Mockito.mock(Token.class);
         Mockito.when(token.getLastFourDigits()).thenReturn("1234");
+
         List<Item> items = new ArrayList<>();
         BigDecimal amount = BigDecimal.TEN;
         PaymentMethod paymentMethod = new PaymentMethod();
@@ -101,6 +104,7 @@ public class ReviewAndConfirmPresenterTest {
         PayerCost payerCost = new PayerCost();
         Token token = Mockito.mock(Token.class);
         Mockito.when(token.getLastFourDigits()).thenReturn("1234");
+
         Site site = Sites.ARGENTINA;
         BigDecimal amount = BigDecimal.TEN;
         PaymentMethod paymentMethod = new PaymentMethod();
@@ -128,8 +132,10 @@ public class ReviewAndConfirmPresenterTest {
     public void ifAmountNotSetShowError() {
 
         PayerCost payerCost = new PayerCost();
+
         Token token = Mockito.mock(Token.class);
         Mockito.when(token.getLastFourDigits()).thenReturn("1234");
+
         Site site = Sites.ARGENTINA;
         PaymentMethod paymentMethod = new PaymentMethod();
         List<Item> items = new ArrayList<>();
@@ -220,6 +226,7 @@ public class ReviewAndConfirmPresenterTest {
 
         Token token = Mockito.mock(Token.class);
         Mockito.when(token.getLastFourDigits()).thenReturn("1234");
+
         PayerCost payerCost = new PayerCost();
         List<Item> items = new ArrayList<>();
         BigDecimal amount = BigDecimal.TEN;
@@ -231,7 +238,6 @@ public class ReviewAndConfirmPresenterTest {
         ReviewAndConfirmPresenter presenter = new ReviewAndConfirmPresenter();
         presenter.attachResourcesProvider(provider);
         presenter.attachView(view);
-
 
         presenter.setPaymentMethod(paymentMethod);
         presenter.setPayerCost(payerCost);
@@ -252,6 +258,7 @@ public class ReviewAndConfirmPresenterTest {
 
         Token token = Mockito.mock(Token.class);
         Mockito.when(token.getLastFourDigits()).thenReturn("1234");
+
         PayerCost payerCost = new PayerCost();
         List<Item> items = new ArrayList<>();
         BigDecimal amount = BigDecimal.TEN;
@@ -263,7 +270,6 @@ public class ReviewAndConfirmPresenterTest {
         ReviewAndConfirmPresenter presenter = new ReviewAndConfirmPresenter();
         presenter.attachResourcesProvider(provider);
         presenter.attachView(view);
-
 
         presenter.setPaymentMethod(paymentMethod);
         presenter.setPayerCost(payerCost);
@@ -286,6 +292,7 @@ public class ReviewAndConfirmPresenterTest {
 
         Token token = Mockito.mock(Token.class);
         Mockito.when(token.getLastFourDigits()).thenReturn("1234");
+
         PayerCost payerCost = new PayerCost();
         List<Item> items = new ArrayList<>();
         BigDecimal amount = BigDecimal.TEN;
@@ -298,9 +305,9 @@ public class ReviewAndConfirmPresenterTest {
         presenter.attachResourcesProvider(provider);
         presenter.attachView(view);
 
-
         presenter.setPaymentMethod(paymentMethod);
         presenter.setPayerCost(payerCost);
+
         presenter.setToken(token);
         presenter.setItems(items);
         presenter.setAmount(amount);
@@ -328,7 +335,6 @@ public class ReviewAndConfirmPresenterTest {
         ReviewAndConfirmPresenter presenter = new ReviewAndConfirmPresenter();
         presenter.attachResourcesProvider(provider);
         presenter.attachView(view);
-
 
         presenter.setPaymentMethod(paymentMethod);
         presenter.setItems(items);
@@ -358,7 +364,6 @@ public class ReviewAndConfirmPresenterTest {
         presenter.attachResourcesProvider(provider);
         presenter.attachView(view);
 
-
         presenter.setPaymentMethod(paymentMethod);
         presenter.setItems(items);
         presenter.setAmount(amount);
@@ -386,7 +391,6 @@ public class ReviewAndConfirmPresenterTest {
         ReviewAndConfirmPresenter presenter = new ReviewAndConfirmPresenter();
         presenter.attachResourcesProvider(provider);
         presenter.attachView(view);
-
 
         presenter.setPaymentMethod(paymentMethod);
         presenter.setItems(items);

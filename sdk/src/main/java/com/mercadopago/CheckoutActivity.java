@@ -18,10 +18,12 @@ import com.mercadopago.constants.PaymentTypes;
 import com.mercadopago.core.CustomServer;
 import com.mercadopago.core.MercadoPagoComponents;
 import com.mercadopago.core.MercadoPagoServices;
+import com.mercadopago.core.MerchantServer;
 import com.mercadopago.exceptions.CheckoutPreferenceException;
 import com.mercadopago.exceptions.ExceptionHandler;
 import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.model.ApiException;
+import com.mercadopago.model.Campaign;
 import com.mercadopago.model.Card;
 import com.mercadopago.model.Customer;
 import com.mercadopago.model.Discount;
@@ -47,6 +49,7 @@ import com.mercadopago.preferences.PaymentResultScreenPreference;
 import com.mercadopago.preferences.ReviewScreenPreference;
 import com.mercadopago.preferences.ServicePreference;
 import com.mercadopago.util.ApiUtil;
+import com.mercadopago.util.CurrenciesUtil;
 import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;
@@ -80,6 +83,7 @@ public class CheckoutActivity extends MercadoPagoBaseActivity {
     private static final String BINARY_MODE_BUNDLE = "mBinaryMode";
     private static final String MAX_SAVED_CARDS_BUNDLE = "mMaxSavedCards";
     private static final String CONGRATS_DISPLAY_BUNDLE = "mCongratsDisplay";
+
     //Parameters
     protected CheckoutPreference mCheckoutPreference;
     protected String mMerchantPublicKey;
@@ -104,7 +108,8 @@ public class CheckoutActivity extends MercadoPagoBaseActivity {
     protected Discount mDiscount;
     protected String mCustomerId;
     protected Boolean mBinaryModeEnabled;
-    protected Boolean mDiscountEnabled;
+
+    protected List<Campaign> mCampaigns;
     protected List<Card> mSavedCards;
     protected DecorationPreference mDecorationPreference;
     protected ServicePreference mServicePreference;
@@ -116,6 +121,12 @@ public class CheckoutActivity extends MercadoPagoBaseActivity {
     protected FailureRecovery mFailureRecovery;
     protected ReviewScreenPreference mReviewScreenPreference;
     protected Integer mMaxSavedCards;
+
+    protected Boolean mDiscountEnabled = true;
+    protected Boolean mInstallmentsReviewScreenEnabled = true;
+    protected Boolean mHasDirectDiscount = false;
+    protected Boolean mHasCodeDiscount = false;
+    protected Boolean mDirectDiscountEnabled = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -149,11 +160,16 @@ public class CheckoutActivity extends MercadoPagoBaseActivity {
         mBinaryModeEnabled = this.getIntent().getBooleanExtra("binaryMode", false);
         mMaxSavedCards = this.getIntent().getIntExtra("maxSavedCards", 0);
         mDiscount = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("discount"), Discount.class);
-        mDiscountEnabled = this.getIntent().getBooleanExtra("discountEnabled", true);
+
+        mDirectDiscountEnabled = this.getIntent().getBooleanExtra("directDiscountEnabled", true);
+
         mPaymentResultInput = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("paymentResult"), PaymentResult.class);
         mDecorationPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("decorationPreference"), DecorationPreference.class);
         mReviewScreenPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("reviewScreenPreference"), ReviewScreenPreference.class);
         mFlowPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("flowPreference"), FlowPreference.class);
+
+        mDiscountEnabled = isDiscountEnabled();
+        mInstallmentsReviewScreenEnabled = isInstallmentsReviewScreenEnabled();
     }
 
     protected void onValidStart() {
@@ -239,7 +255,7 @@ public class CheckoutActivity extends MercadoPagoBaseActivity {
     }
 
     private void initializeCheckout() {
-        getPaymentMethodSearch();
+        getDiscountAsync();
     }
 
     protected void validateActivityParameters() throws IllegalStateException {
@@ -283,6 +299,7 @@ public class CheckoutActivity extends MercadoPagoBaseActivity {
 
     private void getCustomerAsync() {
         showProgressBar();
+
         CustomServer.getCustomer(this, mServicePreference.getGetCustomerURL(), mServicePreference.getGetCustomerURI(), mServicePreference.getGetCustomerAdditionalInfo(), new Callback<Customer>() {
             @Override
             public void success(Customer customer) {
@@ -290,28 +307,75 @@ public class CheckoutActivity extends MercadoPagoBaseActivity {
                     mCustomerId = customer.getId();
                     mSavedCards = mCheckoutPreference.getPaymentPreference() == null ? customer.getCards() : mCheckoutPreference.getPaymentPreference().getValidCards(customer.getCards());
                 }
-                getDiscountAsync();
+                startFlow();
             }
 
             @Override
             public void failure(ApiException apiException) {
-                getDiscountAsync();
+                startFlow();
             }
         });
     }
 
     private void getDiscountAsync() {
 
+        if (mDiscountEnabled && mDiscount == null && mServicePreference != null && mServicePreference.hasGetDiscountURL()) {
+            getMerchantDirectDiscount();
+        } else if (mDiscountEnabled && mDiscount == null) {
+            mMercadoPagoServices.getCampaigns(new Callback<List<Campaign>>() {
+                @Override
+                public void success(List<Campaign> campaigns) {
+                    mCampaigns = campaigns;
+                    analyzeCampaigns(campaigns);
+                }
+
+                @Override
+                public void failure(ApiException apiException) {
+                    mDiscountEnabled = false;
+                    getPaymentMethodSearch();
+                }
+            });
+        } else {
+            getPaymentMethodSearch();
+        }
+    }
+
+    private void getDirectDiscount() {
         mMercadoPagoServices.getDirectDiscount(mCheckoutPreference.getAmount().toString(), mCheckoutPreference.getPayer().getEmail(), new Callback<Discount>() {
             @Override
             public void success(Discount discount) {
                 mDiscount = discount;
-                startFlow();
+                getPaymentMethodSearch();
             }
 
             @Override
             public void failure(ApiException apiException) {
-                startFlow();
+                mDirectDiscountEnabled = false;
+                if (mHasCodeDiscount) {
+                    getPaymentMethodSearch();
+                } else {
+                    mDiscountEnabled = false;
+                    getPaymentMethodSearch();
+                }
+            }
+        });
+    }
+
+    private void getMerchantDirectDiscount() {
+        Map<String, Object> discountInfoMap = new HashMap<>();
+        discountInfoMap.putAll(mServicePreference.getGetDiscountAdditionalInfo());
+
+        CustomServer.getDirectDiscount(mCheckoutPreference.getAmount().toString(), mCheckoutPreference.getPayer().getEmail(), this, mServicePreference.getGetMerchantDiscountBaseURL(), mServicePreference.getGetMerchantDiscountURI(), mServicePreference.getGetDiscountAdditionalInfo(), new Callback<Discount>() {
+            @Override
+            public void success(Discount discount) {
+                mDiscount = discount;
+                getPaymentMethodSearch();
+            }
+
+            @Override
+            public void failure(ApiException apiException) {
+                mDirectDiscountEnabled = false;
+                getPaymentMethodSearch();
             }
         });
     }
@@ -337,7 +401,6 @@ public class CheckoutActivity extends MercadoPagoBaseActivity {
     }
 
     protected void startPaymentVaultActivity() {
-
         new MercadoPagoComponents.Activities.PaymentVaultActivityBuilder()
                 .setActivity(this)
                 .setMerchantPublicKey(mMerchantPublicKey)
@@ -347,12 +410,39 @@ public class CheckoutActivity extends MercadoPagoBaseActivity {
                 .setAmount(mCheckoutPreference.getAmount())
                 .setPaymentMethodSearch(mPaymentMethodSearch)
                 .setDiscount(mDiscount)
+                .setInstallmentsEnabled(true)
                 .setDiscountEnabled(mDiscountEnabled)
+                .setDirectDiscountEnabled(mDirectDiscountEnabled)
+                .setInstallmentsReviewEnabled(mInstallmentsReviewScreenEnabled)
                 .setPaymentPreference(mCheckoutPreference.getPaymentPreference())
                 .setDecorationPreference(mDecorationPreference)
                 .setCards(mSavedCards)
                 .setMaxSavedCards(mMaxSavedCards)
                 .startActivity();
+    }
+
+    private void analyzeCampaigns(List<Campaign> campaigns) {
+        if (campaigns.size() == 0) {
+            mDiscountEnabled = false;
+            getPaymentMethodSearch();
+        } else {
+            for (Campaign campaign : campaigns) {
+                if (campaign.isDirectDiscountCampaign()) {
+                    mHasDirectDiscount = true;
+                }
+
+                if (campaign.isCodeDiscountCampaign()) {
+                    mHasCodeDiscount = true;
+                }
+            }
+        }
+
+        if (mHasDirectDiscount) {
+            getDirectDiscount();
+        } else if (mHasCodeDiscount) {
+            mDirectDiscountEnabled = false;
+            getPaymentMethodSearch();
+        }
     }
 
     @Override
@@ -515,9 +605,13 @@ public class CheckoutActivity extends MercadoPagoBaseActivity {
                 .setSite(mCheckoutPreference.getSite())
                 .setDecorationPreference(mDecorationPreference)
                 .setEditionEnabled(!isUniquePaymentMethod())
-                .setDiscount(mDiscount)
+                .setDiscountEnabled(mDiscountEnabled)
                 .setItems(mCheckoutPreference.getItems())
                 .setTermsAndConditionsEnabled(!isUserLogged());
+
+        if (mDiscountEnabled && isDiscountValid()) {
+            builder.setDiscount(mDiscount);
+        }
 
         if (MercadoPagoUtil.isCard(mSelectedPaymentMethod.getPaymentTypeId())) {
             builder.setToken(mCreatedToken);
@@ -578,9 +672,11 @@ public class CheckoutActivity extends MercadoPagoBaseActivity {
                 .setAmount(mCheckoutPreference.getAmount())
                 .setSite(mCheckoutPreference.getSite())
                 .setInstallmentsEnabled(true)
+                .setAcceptedPaymentMethods(mPaymentMethodSearch.getPaymentMethods())
+                .setInstallmentsReviewEnabled(mInstallmentsReviewScreenEnabled)
                 .setDiscount(mDiscount)
                 .setDiscountEnabled(mDiscountEnabled)
-                .setAcceptedPaymentMethods(mPaymentMethodSearch.getPaymentMethods())
+                .setDirectDiscountEnabled(mDirectDiscountEnabled)
                 .setPaymentRecovery(mPaymentRecovery)
                 .startActivity();
 
@@ -604,6 +700,14 @@ public class CheckoutActivity extends MercadoPagoBaseActivity {
 
     private boolean isReviewAndConfirmEnabled() {
         return mFlowPreference == null || mFlowPreference.isReviewAndConfirmScreenEnabled();
+    }
+
+    private boolean isDiscountEnabled() {
+        return mFlowPreference == null || mFlowPreference.isDiscountEnabled();
+    }
+
+    private boolean isInstallmentsReviewScreenEnabled() {
+        return mFlowPreference == null || mFlowPreference.isInstallmentsReviewScreenEnabled();
     }
 
     private boolean noUserInteractionReached() {
@@ -760,7 +864,7 @@ public class CheckoutActivity extends MercadoPagoBaseActivity {
 
         mTransactionId = getTransactionID();
 
-        if (mDiscount != null) {
+        if (mDiscountEnabled && isDiscountValid()) {
             paymentIntent.setCampaignId(mDiscount.getId().intValue());
             paymentIntent.setCouponAmount(mDiscount.getCouponAmount().floatValue());
 
@@ -781,6 +885,22 @@ public class CheckoutActivity extends MercadoPagoBaseActivity {
             transactionId = mTransactionId;
         }
         return transactionId;
+    }
+
+    private Boolean isDiscountValid() {
+        return mDiscount != null && isCampaignIdValid() && isCouponAmountValid() && isDiscountCurrencyIdValid();
+    }
+
+    private Boolean isCampaignIdValid() {
+        return mDiscount.getId() != null;
+    }
+
+    private Boolean isCouponAmountValid() {
+        return mDiscount.getCouponAmount() != null && mDiscount.getCouponAmount().compareTo(BigDecimal.ZERO) >= 0;
+    }
+
+    private Boolean isDiscountCurrencyIdValid() {
+        return mDiscount != null && mDiscount.getCurrencyId() != null && CurrenciesUtil.isValidCurrency(mDiscount.getCurrencyId());
     }
 
     private void checkStartPaymentResultActivity(PaymentResult paymentResult) {
@@ -804,7 +924,7 @@ public class CheckoutActivity extends MercadoPagoBaseActivity {
                 .setMerchantPublicKey(mMerchantPublicKey)
                 .setActivity(mActivity)
                 .setPaymentResult(paymentResult)
-                .setDiscount(mDiscount)
+                .setDiscountEnabled(mDiscountEnabled)
                 .setCongratsDisplay(mCongratsDisplay)
                 .setSite(mCheckoutPreference.getSite())
                 .setAmount(mCheckoutPreference.getAmount())
