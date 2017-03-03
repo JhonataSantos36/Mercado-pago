@@ -229,6 +229,7 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultAct
                 .setToken(mPresenter.getToken())
                 .setCard(mPresenter.getCard())
                 .setDecorationPreference(mDecorationPreference)
+                .setPayerAccessToken(mPresenter.getPrivateKey())
                 .startActivity();
         overridePendingTransition(R.anim.mpsdk_slide_right_to_left_in, R.anim.mpsdk_slide_right_to_left_out);
     }

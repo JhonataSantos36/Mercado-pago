@@ -200,7 +200,7 @@
     <string name="mpsdk_confirm_prompt_no">No</string>
 
     <!-- Review and Confirm -->
-    <string name="mpsdk_change_payment">Cambiar pago</string>
+    <string name="mpsdk_change_payment">Cambiar medio de pago</string>
     <string name="mpsdk_review_description_card">%1$s terminada en: %2$s</string>
     <string name="mpsdk_review_off_text_default">Pagarás %1$s\n%2$s</string>
     <string name="mpsdk_review_off_text">Pagarás %1$s en un\n%2$s</string>

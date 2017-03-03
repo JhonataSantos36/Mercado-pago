@@ -1,6 +1,8 @@
 package com.mercadopago;
 
+import android.content.Context;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -17,8 +19,8 @@ public abstract class MercadoPagoBaseActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstance) {
-        if(savedInstance == null) {
-            mLanguage = getResources().getConfiguration().locale.getLanguage();
+        if (savedInstance == null) {
+            mLanguage = Locale.getDefault().getLanguage();
             mCountry = getResources().getConfiguration().locale.getCountry();
         } else {
             mLanguage = savedInstance.getString("language");
@@ -37,10 +39,8 @@ public abstract class MercadoPagoBaseActivity extends AppCompatActivity {
 
     private void updateLanguage(@NonNull String language, @NonNull String country) {
         final Configuration cfg = new Configuration();
-        final Locale current = getResources().getConfiguration().locale;
         cfg.locale = new Locale(language, country);
-        if (cfg.locale.getLanguage() != null && !current.getLanguage().equals(cfg.locale.getLanguage())) {
-            getResources().updateConfiguration(cfg, null);
-        }
+        getResources().updateConfiguration(cfg, null);
     }
+
 }

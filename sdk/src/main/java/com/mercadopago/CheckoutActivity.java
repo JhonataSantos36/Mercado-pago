@@ -19,7 +19,6 @@ import com.mercadopago.core.CustomServer;
 import com.mercadopago.core.MercadoPagoCheckout;
 import com.mercadopago.core.MercadoPagoComponents;
 import com.mercadopago.core.MercadoPagoServices;
-import com.mercadopago.core.MerchantServer;
 import com.mercadopago.exceptions.CheckoutPreferenceException;
 import com.mercadopago.exceptions.ExceptionHandler;
 import com.mercadopago.exceptions.MercadoPagoError;
@@ -61,6 +60,7 @@ import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import static android.text.TextUtils.isEmpty;
@@ -277,6 +277,7 @@ public class CheckoutActivity extends MercadoPagoBaseActivity {
 
     protected void getPaymentMethodSearch() {
         showProgressBar();
+
         mMercadoPagoServices.getPaymentMethodSearch(mCheckoutPreference.getAmount(), mCheckoutPreference.getExcludedPaymentTypes(), mCheckoutPreference.getExcludedPaymentMethods(), mCheckoutPreference.getPayer(), mCheckoutPreference.getSite(), new Callback<PaymentMethodSearch>() {
             @Override
             public void success(PaymentMethodSearch paymentMethodSearch) {
@@ -556,7 +557,6 @@ public class CheckoutActivity extends MercadoPagoBaseActivity {
             cancelCheckout();
         } else if (resultCode == RESULT_CANCELED) {
             mPaymentMethodEdited = true;
-//            mPaymentMethodEditionRequested = true;
             animateBackToPaymentMethodSelection();
             startPaymentVaultActivity();
         } else {

@@ -191,7 +191,7 @@
     <string name="mpsdk_payment_types_title">Qual é o tipo do cartão?</string>
 
     <!-- Review and Confirm -->
-    <string name="mpsdk_change_payment">Alterar pagamento</string>
+    <string name="mpsdk_change_payment">Alterar meio de pagamento</string>
     <string name="mpsdk_review_description_card">%1$s terminado em: %2$s</string>
     <string name="mpsdk_review_off_text_default">Você pagará %1$s\n%2$s</string>
     <string name="mpsdk_review_off_text">Você pagará %1$s com\n%2$s</string>
@@ -210,6 +210,7 @@
     <string name="mpsdk_review_summary_discount">Desconto</string>
     <string name="mpsdk_review_summary_discount_with_percent_off">Desconto %1$s%%</string>
     <string name="mpsdk_review_summary_discount_with_amount_off">Desconto</string>
+    <string name="mpsdk_account_money_description">Dinheiro em conta \ndo Mercado Pago</string>
 
     <!-- Discount -->
     <string name="mpsdk_discount">Desconto</string>

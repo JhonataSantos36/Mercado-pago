@@ -22,7 +22,7 @@
             android:id="@+id/mpsdkReviewSummaryProductsLabelText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.4"
+            android:layout_weight="0.6"
             android:layout_gravity="start"
             android:textSize="18dp"
             android:text="@string/mpsdk_review_summary_products"/>
@@ -30,7 +30,7 @@
             android:id="@+id/mpsdkReviewSummaryProductsText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.6"
+            android:layout_weight="0.4"
             android:gravity="end"
             android:textSize="18dp"
             tools:text="$124"/>
@@ -71,7 +71,7 @@
         <com.mercadopago.customviews.MPTextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.4"
+            android:layout_weight="0.6"
             android:layout_gravity="start"
             android:textSize="18dp"
             android:text="@string/mpsdk_review_summary_subtotal" />
@@ -79,7 +79,7 @@
             android:id="@+id/mpsdkReviewSummarySubtotalText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.6"
+            android:layout_weight="0.4"
             android:gravity="end"
             android:textSize="18dp"
             tools:text="$124"/>
@@ -101,7 +101,7 @@
         <com.mercadopago.customviews.MPTextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.4"
+            android:layout_weight="0.6"
             android:layout_gravity="start"
             android:textSize="18dp"
             android:text="@string/mpsdk_review_summary_pay" />
@@ -109,7 +109,7 @@
             android:id="@+id/mpsdkReviewSummaryPayerCostContainer"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.6"
+            android:layout_weight="0.4"
             android:gravity="center"
             android:layout_gravity="center"/>
     </LinearLayout>
@@ -130,7 +130,7 @@
         <com.mercadopago.customviews.MPTextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.4"
+            android:layout_weight="0.6"
             android:layout_gravity="start"
             android:textSize="18dp"
             android:text="@string/mpsdk_review_summary_total" />
@@ -138,7 +138,7 @@
             android:id="@+id/mpsdkReviewSummaryTotalText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.6"
+            android:layout_weight="0.4"
             android:gravity="end"
             android:textSize="18dp"
             tools:text="$124"/>

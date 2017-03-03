@@ -193,7 +193,7 @@
     <string name="mpsdk_confirm_prompt_no">No</string>
 
     <!-- Review and Confirm -->
-    <string name="mpsdk_change_payment">Change payment</string>
+    <string name="mpsdk_change_payment">Change payment method</string>
     <string name="mpsdk_review_description_card">%1$s ending in: %2$s</string>
     <string name="mpsdk_your_atm">ATM of</string>
     <string name="mpsdk_review_off_text_default">You will pay %1$s\n%2$s</string>
@@ -212,6 +212,7 @@
     <string name="mpsdk_review_summary_discount">Discount</string>
     <string name="mpsdk_review_summary_discount_with_percent_off">Discount %1$s%%</string>
     <string name="mpsdk_review_summary_discount_with_amount_off">Discount</string>
+    <string name="mpsdk_account_money_description">Account money \nof Mercado Pago</string>
 
     <!-- Discount -->
     <string name="mpsdk_discount">Discount</string>

@@ -47,6 +47,7 @@ import com.mercadopago.util.LayoutUtil;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 public class CheckoutExampleActivity extends AppCompatActivity {
@@ -118,6 +119,10 @@ public class CheckoutExampleActivity extends AppCompatActivity {
         additionalInfo.put("company_id", "movistar");
         additionalInfo.put("phone_number", "111111");
 
+        String languageToLoad  = "pt"; // your language
+        Locale locale = new Locale(languageToLoad);
+        Locale.setDefault(locale);
+
         CellphoneReview cellphoneReview = new CellphoneReview(this, "15111111");
 
         ReviewScreenPreference reviewScreenPreference = new ReviewScreenPreference.Builder()
@@ -147,12 +152,13 @@ public class CheckoutExampleActivity extends AppCompatActivity {
 
         mCheckoutPreference = new CheckoutPreference.Builder()
                 .addItem(new Item("Item", BigDecimal.ONE))
+//                .addItem(new Item("Item", new BigDecimal(1000)))
                 .setSite(Sites.ARGENTINA)
-                .addExcludedPaymentType(PaymentTypes.ATM)
-                .addExcludedPaymentType(PaymentTypes.BANK_TRANSFER)
+//                .addExcludedPaymentType(PaymentTypes.ATM)
+//                .addExcludedPaymentType(PaymentTypes.BANK_TRANSFER)
 //                .addExcludedPaymentType(PaymentTypes.CREDIT_CARD)
-                .addExcludedPaymentType(PaymentTypes.DEBIT_CARD)
-                .addExcludedPaymentType(PaymentTypes.TICKET)
+//                .addExcludedPaymentType(PaymentTypes.DEBIT_CARD)
+//                .addExcludedPaymentType(PaymentTypes.TICKET)
                 .enableAccountMoney()
                 .setPayerAccessToken("TEST-7176766875549918-111008-fa5660d2d0aa37532716eb2bf2f9089b__LB_LC__-192992930")
                 .build();
@@ -165,7 +171,6 @@ public class CheckoutExampleActivity extends AppCompatActivity {
                 .setDecorationPreference(decorationPreference)
                 .setFlowPreference(flowPreference)
                 .setPaymentResultScreenPreference(paymentResultScreenPreference)
-                .setReviewScreenPreference(reviewScreenPreference)
                 .start(new PaymentDataCallback() {
                     @Override
                     public void onSuccess(PaymentData paymentData, boolean paymentMethodChanged) {
@@ -212,7 +217,7 @@ public class CheckoutExampleActivity extends AppCompatActivity {
                 .setTitle("Confirma tu recarga")
                 .setConfirmText("Recargar")
                 .setCancelText("Ir a Actividad")
-                .setProductDetail("Recarga")
+                .setProductDetail("Sarasa")
                 .addReviewable(cellphoneReview)
                 .build();
 
