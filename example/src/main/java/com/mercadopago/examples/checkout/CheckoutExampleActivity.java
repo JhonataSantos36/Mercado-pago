@@ -129,7 +129,7 @@ public class CheckoutExampleActivity extends AppCompatActivity {
                 .setTitle("Confirma tu recarga")
                 .setConfirmText("Recargar")
                 .setCancelText("Ir a Actividad")
-                .setProductDetail("Recarga")
+                .setProductDetail("Recarga de celular")
                 .addReviewable(cellphoneReview)
                 .build();
 
@@ -142,6 +142,12 @@ public class CheckoutExampleActivity extends AppCompatActivity {
 
         PaymentResultScreenPreference paymentResultScreenPreference = new PaymentResultScreenPreference.Builder()
                 //.addCongratsReviewable(congratsReview)
+                .setApprovedSecondaryExitButton("lala", new PaymentResultCallback() {
+                    @Override
+                    public void onResult(PaymentResult paymentResult) {
+                        Log.d("log", "on result");
+                    }
+                })
                 .build();
 
         FlowPreference flowPreference = new FlowPreference.Builder()
@@ -154,11 +160,11 @@ public class CheckoutExampleActivity extends AppCompatActivity {
                 .addItem(new Item("Item", BigDecimal.ONE))
 //                .addItem(new Item("Item", new BigDecimal(1000)))
                 .setSite(Sites.ARGENTINA)
-//                .addExcludedPaymentType(PaymentTypes.ATM)
-//                .addExcludedPaymentType(PaymentTypes.BANK_TRANSFER)
-//                .addExcludedPaymentType(PaymentTypes.CREDIT_CARD)
-//                .addExcludedPaymentType(PaymentTypes.DEBIT_CARD)
-//                .addExcludedPaymentType(PaymentTypes.TICKET)
+                .addExcludedPaymentType(PaymentTypes.ATM)
+                .addExcludedPaymentType(PaymentTypes.BANK_TRANSFER)
+                .addExcludedPaymentType(PaymentTypes.CREDIT_CARD)
+                .addExcludedPaymentType(PaymentTypes.DEBIT_CARD)
+                .addExcludedPaymentType(PaymentTypes.TICKET)
                 .enableAccountMoney()
                 .setPayerAccessToken("TEST-7176766875549918-111008-fa5660d2d0aa37532716eb2bf2f9089b__LB_LC__-192992930")
                 .build();
@@ -217,7 +223,7 @@ public class CheckoutExampleActivity extends AppCompatActivity {
                 .setTitle("Confirma tu recarga")
                 .setConfirmText("Recargar")
                 .setCancelText("Ir a Actividad")
-                .setProductDetail("Sarasa")
+                .setProductDetail("Recarga de celular")
                 .addReviewable(cellphoneReview)
                 .build();
 
@@ -267,6 +273,9 @@ public class CheckoutExampleActivity extends AppCompatActivity {
         PaymentResult paymentResult = new PaymentResult.Builder()
                 .setPaymentData(paymentData)
                 .setPaymentStatus(Payment.StatusCodes.STATUS_APPROVED)
+//                .setPaymentStatus(Payment.StatusCodes.STATUS_PENDING)
+//                .setPaymentStatus(Payment.StatusCodes.STATUS_REJECTED)
+//                .setPaymentStatusDetail(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_BAD_FILLED_CARD_NUMBER)
                 .build();
 
         PaymentResultScreenPreference paymentResultScreenPreference = new PaymentResultScreenPreference.Builder()
@@ -291,12 +300,12 @@ public class CheckoutExampleActivity extends AppCompatActivity {
 
                     @Override
                     public void onCancel() {
-
+                        Log.d("log", "en cancel 3");
                     }
 
                     @Override
                     public void onFailure(MercadoPagoError error) {
-
+                        Log.d("log", "en failure 3");
                     }
                 });
 //                .startForPaymentData();

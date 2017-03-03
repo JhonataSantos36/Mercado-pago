@@ -694,6 +694,7 @@ public class CheckoutActivity extends MercadoPagoBaseActivity {
                 }
             }
         } else if (resultCode == PaymentResultActivity.RESULT_SILENT_OK) {
+//            finishPaymentResultOnBack();
             setResult(RESULT_OK);
             finish();
         } else {
@@ -701,10 +702,17 @@ public class CheckoutActivity extends MercadoPagoBaseActivity {
                 Integer finalResultCode = data.getIntExtra("resultCode", MercadoPagoCheckout.PAYMENT_RESULT_CODE);
                 finishWithPaymentResult(finalResultCode);
             } else {
-                setResult(RESULT_OK);
-                finish();
+                finishPaymentResultOnBack();
             }
         }
+    }
+
+    private void finishPaymentResultOnBack() {
+        setResult(RESULT_OK);
+        if (CallbackHolder.getInstance().hasPaymentDataCallback()) {
+            CallbackHolder.getInstance().getPaymentDataCallback().onCancel();
+        }
+        finish();
     }
 
     private void createPaymentRecovery() {
