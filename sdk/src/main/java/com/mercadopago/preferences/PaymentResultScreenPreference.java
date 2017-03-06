@@ -37,8 +37,10 @@ public class PaymentResultScreenPreference {
     private boolean enablePendingSecondaryExitButton = true;
     private boolean enableRejectedSecondaryExitButton = true;
     private boolean enablePendingContentText = true;
+    private boolean enablePendingContentTitle = true;
     private boolean enableRejectedContentText = true;
     private boolean enableRejectedContentTitle = true;
+    private boolean enableRejectedIconSubtext = true;
     private boolean enableApprovedReceipt = true;
     private boolean enableApprovedAmount = true;
     private boolean enableApprovedPaymentMethodInfo = true;
@@ -75,8 +77,10 @@ public class PaymentResultScreenPreference {
         this.enablePendingSecondaryExitButton = builder.enablePendingSecondaryExitButton;
         this.enableRejectedSecondaryExitButton = builder.enableRejectedSecondaryExitButton;
         this.enablePendingContentText = builder.enablePendingContentText;
+        this.enablePendingContentTitle = builder.enablePendingContentTitle;
         this.enableRejectedContentText = builder.enableRejectedContentText;
         this.enableRejectedContentTitle = builder.enableRejectedContentTitle;
+        this.enableRejectedIconSubtext = builder.enableRejectedIconSubtext;
         this.enableApprovedReceipt = builder.enableApprovedReceipt;
         this.enableApprovedAmount = builder.enableApprovedAmount;
         this.enableApprovedPaymentMethodInfo = builder.enableApprovedPaymentMethodInfo;
@@ -200,12 +204,20 @@ public class PaymentResultScreenPreference {
         return this.enablePendingContentText;
     }
 
+    public boolean isPendingContentTitleEnabled() {
+        return this.enablePendingContentTitle;
+    }
+
     public boolean isRejectedContentTextEnabled() {
         return this.enableRejectedContentText;
     }
 
     public boolean isRejectedContentTitleEnabled() {
         return this.enableRejectedContentTitle;
+    }
+
+    public boolean isRejectedIconSubtextEnabled() {
+        return this.enableRejectedIconSubtext;
     }
 
     public void addCongratsReviewable(@NonNull Reviewable reviewable) {
@@ -250,8 +262,10 @@ public class PaymentResultScreenPreference {
         private String rejectedContentTitle;
         private String rejectedContentText;
         private boolean enablePendingContentText = true;
+        private boolean enablePendingContentTitle = true;
         private boolean enableRejectedContentText = true;
         private boolean enableRejectedContentTitle = true;
+        private boolean enableRejectedIconSubtext = true;
         private boolean enableCongratsSecondaryExitButton = true;
         private boolean enablePendingSecondaryExitButton = true;
         private boolean enableRejectedSecondaryExitButton = true;
@@ -364,6 +378,11 @@ public class PaymentResultScreenPreference {
             return this;
         }
 
+        public Builder disablePendingContentTitle() {
+            this.enablePendingContentTitle = false;
+            return this;
+        }
+
         public Builder disableRejectedContentText() {
             this.enableRejectedContentText = false;
             return this;
@@ -371,6 +390,11 @@ public class PaymentResultScreenPreference {
 
         public Builder disableRejectedContentTitle() {
             this.enableRejectedContentTitle = false;
+            return this;
+        }
+
+        public Builder disableRejectedIconSubtext() {
+            this.enableRejectedIconSubtext = false;
             return this;
         }
 

@@ -174,10 +174,14 @@ public class RejectionActivity extends MercadoPagoBaseActivity implements TimerO
             } else {
                 mRejectionContentText.setText(mPaymentResultScreenPreference.getRejectedContentText());
             }
-            if (mPaymentResultScreenPreference.getRejectedIconSubtext() == null) {
-                setDefaultRejectedIconSubtext();
+            if (mPaymentResultScreenPreference.isRejectedIconSubtextEnabled()) {
+                if (mPaymentResultScreenPreference.getRejectedIconSubtext() == null) {
+                    setDefaultRejectedIconSubtext();
+                } else {
+                    mIconSubtext.setText(mPaymentResultScreenPreference.getRejectedIconSubtext());
+                }
             } else {
-                mIconSubtext.setText(mPaymentResultScreenPreference.getRejectedIconSubtext());
+                hideIconSubtext();
             }
             if (mPaymentResultScreenPreference.getRejectedIconName() != null) {
                 Drawable image = ContextCompat.getDrawable(this, mPaymentResultScreenPreference.getRejectedIconName());
@@ -286,6 +290,10 @@ public class RejectionActivity extends MercadoPagoBaseActivity implements TimerO
 
     private void hideContentText() {
         mRejectionContentText.setVisibility(View.GONE);
+    }
+
+    private void hideIconSubtext() {
+        mIconSubtext.setVisibility(View.GONE);
     }
 
     private void hideContentTitle() {

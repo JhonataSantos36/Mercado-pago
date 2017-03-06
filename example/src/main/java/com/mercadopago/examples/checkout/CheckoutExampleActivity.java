@@ -142,6 +142,9 @@ public class CheckoutExampleActivity extends AppCompatActivity {
 
         PaymentResultScreenPreference paymentResultScreenPreference = new PaymentResultScreenPreference.Builder()
                 //.addCongratsReviewable(congratsReview)
+                .setPendingContentTitle("Ahora acredita tu carga y sigue viajando")
+                .disablePendingContentText()
+                .disablePendingContentTitle()
                 .setApprovedSecondaryExitButton("lala", new PaymentResultCallback() {
                     @Override
                     public void onResult(PaymentResult paymentResult) {
@@ -160,11 +163,11 @@ public class CheckoutExampleActivity extends AppCompatActivity {
                 .addItem(new Item("Item", BigDecimal.ONE))
 //                .addItem(new Item("Item", new BigDecimal(1000)))
                 .setSite(Sites.ARGENTINA)
-                .addExcludedPaymentType(PaymentTypes.ATM)
-                .addExcludedPaymentType(PaymentTypes.BANK_TRANSFER)
+//                .addExcludedPaymentType(PaymentTypes.ATM)
+//                .addExcludedPaymentType(PaymentTypes.BANK_TRANSFER)
                 .addExcludedPaymentType(PaymentTypes.CREDIT_CARD)
-                .addExcludedPaymentType(PaymentTypes.DEBIT_CARD)
-                .addExcludedPaymentType(PaymentTypes.TICKET)
+//                .addExcludedPaymentType(PaymentTypes.DEBIT_CARD)
+//                .addExcludedPaymentType(PaymentTypes.TICKET)
                 .enableAccountMoney()
                 .setPayerAccessToken("TEST-7176766875549918-111008-fa5660d2d0aa37532716eb2bf2f9089b__LB_LC__-192992930")
                 .build();
@@ -281,6 +284,7 @@ public class CheckoutExampleActivity extends AppCompatActivity {
         PaymentResultScreenPreference paymentResultScreenPreference = new PaymentResultScreenPreference.Builder()
                 .setApprovedTitle("Recargaste!")
                 .setApprovedSecondaryExitButton("Secondary", RESULT_CUSTOM_EXIT)
+                .addPendingReviewable(congratsReview)
                 .setExitButtonTitle("Ir a Actividad")
                 .build();
 

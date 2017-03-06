@@ -154,10 +154,14 @@ public class PendingActivity extends MercadoPagoBaseActivity implements TimerObs
             } else {
                 mExitButtonText.setText(mPaymentResultScreenPreference.getExitButtonTitle());
             }
-            if (mPaymentResultScreenPreference.getPendingContentTitle() == null) {
-                setDefaultPendingContentTitle();
+            if (mPaymentResultScreenPreference.isPendingContentTitleEnabled()) {
+                if (mPaymentResultScreenPreference.getPendingContentTitle() == null) {
+                    setDefaultPendingContentTitle();
+                } else {
+                    mContentTitleTextView.setText(mPaymentResultScreenPreference.getPendingContentTitle());
+                }
             } else {
-                mContentTitleTextView.setText(mPaymentResultScreenPreference.getPendingContentTitle());
+                hidePendingContentTitle();
             }
             if (mPaymentResultScreenPreference.isPendingContentTextEnabled()) {
                 if (mPaymentResultScreenPreference.getPendingContentText() == null) {
@@ -293,6 +297,10 @@ public class PendingActivity extends MercadoPagoBaseActivity implements TimerObs
 
     private void hidePendingContentText() {
         mContentTextView.setVisibility(View.GONE);
+    }
+
+    private void hidePendingContentTitle() {
+        mContentTitleTextView.setVisibility(View.GONE);
     }
 
     private void showTimer() {
