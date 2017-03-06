@@ -76,7 +76,7 @@ public class FlowPreference {
     }
 
     public boolean isInstallmentsReviewScreenEnabled() {
-        return this.installmentsReviewScreenEnabled;
+        return this.installmentsReviewScreenEnabled && !this.reviewAndConfirmScreenEnabled;
     }
 
     public boolean isDiscountEnabled() {

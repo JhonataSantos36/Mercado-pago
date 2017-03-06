@@ -92,7 +92,7 @@ public class PendingActivity extends MercadoPagoBaseActivity implements TimerObs
     }
 
     protected void setContentView() {
-        MPTracker.getInstance().trackScreen("RESULT_PENDING", "2", mMerchantPublicKey, BuildConfig.VERSION_NAME, this);
+        MPTracker.getInstance().trackScreen("RESULT", "2", mMerchantPublicKey, BuildConfig.VERSION_NAME, this);
         setContentView(R.layout.mpsdk_activity_pending);
     }
 
