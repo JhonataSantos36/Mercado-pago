@@ -51,7 +51,7 @@ public class CallbackHolderTest {
     public void setCallbackHolderPaymentDataCallback() {
         PaymentDataCallback paymentDataCallback = new PaymentDataCallback() {
             @Override
-            public void onSuccess(PaymentData paymentData) {
+            public void onSuccess(PaymentData paymentData, boolean paymentMethodChanged) {
 
             }
 

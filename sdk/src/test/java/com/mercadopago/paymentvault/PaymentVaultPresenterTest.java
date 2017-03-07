@@ -521,7 +521,7 @@ public class PaymentVaultPresenterTest {
         presenter.setSite(Sites.ARGENTINA);
         presenter.setDiscountEnabled(false);
 
-        presenter.initialize();
+        presenter.initialize(true);
 
         mockedView.simulateItemSelection(0);
 
@@ -547,7 +547,7 @@ public class PaymentVaultPresenterTest {
         presenter.setAmount(BigDecimal.TEN);
         presenter.setSite(Sites.ARGENTINA);
 
-        presenter.initialize();
+        presenter.initialize(true);
     }
 
     @Test
@@ -569,7 +569,7 @@ public class PaymentVaultPresenterTest {
         presenter.setAmount(BigDecimal.TEN);
         presenter.setSite(Sites.ARGENTINA);
 
-        presenter.initialize();
+        presenter.initialize(true);
 
         mockedView.simulateItemSelection(0);
 
@@ -593,7 +593,7 @@ public class PaymentVaultPresenterTest {
         presenter.setSite(Sites.ARGENTINA);
         presenter.setDirectDiscountEnabled(false);
 
-        presenter.initialize();
+        presenter.initialize(true);
 
         mockedView.simulateItemSelection(0);
 
@@ -619,7 +619,7 @@ public class PaymentVaultPresenterTest {
         presenter.setAmount(BigDecimal.TEN);
         presenter.setSite(Sites.ARGENTINA);
 
-        presenter.initialize();
+        presenter.initialize(true);
 
         mockedView.simulateItemSelection(0);
 

@@ -12,6 +12,7 @@ import com.mercadopago.model.CardInfo;
 import com.mercadopago.model.Discount;
 import com.mercadopago.model.Item;
 import com.mercadopago.model.PayerCost;
+import com.mercadopago.model.PaymentData;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.Reviewable;
 import com.mercadopago.model.Site;
@@ -664,6 +665,11 @@ public class ReviewAndConfirmPresenterTest {
         @Override
         public void showTermsAndConditions() {
             this.termsAndConditionsShown = true;
+        }
+
+        @Override
+        public void cancelPayment(Integer resultCode, PaymentData paymentData) {
+
         }
     }
 
