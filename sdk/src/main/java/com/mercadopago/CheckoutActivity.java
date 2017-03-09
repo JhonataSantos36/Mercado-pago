@@ -78,6 +78,7 @@ public class CheckoutActivity extends MercadoPagoBaseActivity {
     private static final String DECORATION_PREFERENCE_BUNDLE = "mDecorationPreference";
     private static final String SERVICE_PREFERENCE_BUNDLE = "mServicePreference";
     private static final String REVIEW_SCREEN_PREFERENCE_BUNDLE = "mReviewScreenPreference";
+    private static final String FLOW_PREFERENCE_BUNDLE = "mFlowPreference";
     private static final String DISCOUNT_BUNDLE = "mDiscount";
     private static final String DISCOUNT_ENABLED_BUNDLE = "mDiscountEnabled";
     private static final String BINARY_MODE_BUNDLE = "mBinaryMode";
@@ -475,6 +476,7 @@ public class CheckoutActivity extends MercadoPagoBaseActivity {
         outState.putString(DECORATION_PREFERENCE_BUNDLE, JsonUtil.getInstance().toJson(mDecorationPreference));
         outState.putString(SERVICE_PREFERENCE_BUNDLE, JsonUtil.getInstance().toJson(mServicePreference));
         outState.putString(REVIEW_SCREEN_PREFERENCE_BUNDLE, JsonUtil.getInstance().toJson(mReviewScreenPreference));
+        outState.putString(FLOW_PREFERENCE_BUNDLE, JsonUtil.getInstance().toJson(mFlowPreference));
         outState.putString(DISCOUNT_BUNDLE, JsonUtil.getInstance().toJson(mDiscount));
         outState.putBoolean(DISCOUNT_ENABLED_BUNDLE, mDiscountEnabled);
         outState.putBoolean(BINARY_MODE_BUNDLE, mBinaryModeEnabled);
@@ -517,6 +519,8 @@ public class CheckoutActivity extends MercadoPagoBaseActivity {
             mServicePreference = JsonUtil.getInstance().fromJson(savedInstanceState.getString(SERVICE_PREFERENCE_BUNDLE), ServicePreference.class);
             mDecorationPreference = JsonUtil.getInstance().fromJson(savedInstanceState.getString(DECORATION_PREFERENCE_BUNDLE), DecorationPreference.class);
             mReviewScreenPreference = JsonUtil.getInstance().fromJson(savedInstanceState.getString(REVIEW_SCREEN_PREFERENCE_BUNDLE), ReviewScreenPreference.class);
+            mFlowPreference = JsonUtil.getInstance().fromJson(savedInstanceState.getString(FLOW_PREFERENCE_BUNDLE), FlowPreference.class);
+            mInstallmentsReviewScreenEnabled = isInstallmentsReviewScreenEnabled();
 
             mSelectedPaymentMethod = JsonUtil.getInstance().fromJson(savedInstanceState.getString(SELECTED_PAYMENT_METHOD_BUNDLE), PaymentMethod.class);
             mSelectedIssuer = JsonUtil.getInstance().fromJson(savedInstanceState.getString(SELECTED_ISSUER_BUNDLE), Issuer.class);

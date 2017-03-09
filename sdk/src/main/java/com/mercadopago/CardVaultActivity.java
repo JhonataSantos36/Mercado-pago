@@ -114,6 +114,7 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultAct
         mPresenter.setCardToken(JsonUtil.getInstance().fromJson(savedInstanceState.getString("cardToken"), CardToken.class));
         mPresenter.setCardInfo(JsonUtil.getInstance().fromJson(savedInstanceState.getString("cardInfo"), CardInfo.class));
         mPresenter.setInstallmentsEnabled(savedInstanceState.getBoolean("installmentsEnabled", false));
+        mPresenter.setInstallmentsReviewEnabled(savedInstanceState.getBoolean("installmentsReviewEnabled", false));
 
         mShowBankDeals = savedInstanceState.getBoolean("showBankDeals", true);
         mDecorationPreference = JsonUtil.getInstance().fromJson(savedInstanceState.getString("decorationPreference"), DecorationPreference.class);
@@ -278,6 +279,7 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultAct
         super.onSaveInstanceState(outState);
         if (mPresenter != null) {
             outState.putBoolean("installmentsEnabled", mPresenter.installmentsRequired());
+            outState.putBoolean("installmentsReviewEnabled", mPresenter.getInstallmentsReviewEnabled());
             outState.putString("merchantPublicKey", mPresenter.getPublicKey());
             outState.putString("privateKey", mPresenter.getPrivateKey());
             outState.putString("site", JsonUtil.getInstance().toJson(mPresenter.getSite()));
