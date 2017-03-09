@@ -41,7 +41,6 @@ import com.mercadopago.util.TextUtils;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -89,7 +88,7 @@ public class MercadoPagoServices {
     public void getInstructions(Long paymentId, String paymentTypeId, final Callback<Instructions> callback) {
         MPTracker.getInstance().trackEvent("NO_SCREEN", "GET_INSTRUCTIONS", "1", mPublicKey, BuildConfig.VERSION_NAME, mContext);
         CheckoutService service = getDefaultRetrofit().create(CheckoutService.class);
-        service.getPaymentResult(Locale.getDefault().getLanguage(), paymentId, this.mPublicKey, paymentTypeId, PAYMENT_RESULT_API_VERSION).enqueue(callback);
+        service.getPaymentResult(mContext.getResources().getConfiguration().locale.getLanguage(), paymentId, this.mPublicKey, paymentTypeId, PAYMENT_RESULT_API_VERSION).enqueue(callback);
     }
 
     public void getPaymentMethodSearch(BigDecimal amount, List<String> excludedPaymentTypes, List<String> excludedPaymentMethods, Payer payer, Site site, final Callback<PaymentMethodSearch> callback) {
@@ -101,7 +100,7 @@ public class MercadoPagoServices {
         String excludedPaymentTypesAppended = getListAsString(excludedPaymentTypes, separator);
         String excludedPaymentMethodsAppended = getListAsString(excludedPaymentMethods, separator);
         String siteId = site == null ? "" : site.getId();
-        service.getPaymentMethodSearch(Locale.getDefault().getLanguage(), this.mPublicKey, amount, excludedPaymentTypesAppended, excludedPaymentMethodsAppended, payerIntent, siteId, PAYMENT_METHODS_OPTIONS_API_VERSION).enqueue(callback);
+        service.getPaymentMethodSearch(mContext.getResources().getConfiguration().locale.getLanguage(), this.mPublicKey, amount, excludedPaymentTypesAppended, excludedPaymentMethodsAppended, payerIntent, siteId, PAYMENT_METHODS_OPTIONS_API_VERSION).enqueue(callback);
     }
 
     public void createPayment(final PaymentBody paymentBody, final Callback<Payment> callback) {
