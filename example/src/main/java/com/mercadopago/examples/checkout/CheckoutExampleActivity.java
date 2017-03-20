@@ -84,7 +84,7 @@ public class CheckoutExampleActivity extends AppCompatActivity {
         Locale.setDefault(locale);
 
         FlowPreference flowPreference = new FlowPreference.Builder()
-                .disableReviewAndConfirmScreen()
+//                .disableReviewAndConfirmScreen()
                 .disableDiscount()
                 .disableBankDeals()
                 .disableInstallmentsReviewScreen()
