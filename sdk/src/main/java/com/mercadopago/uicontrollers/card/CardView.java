@@ -47,6 +47,7 @@ public class CardView {
         this.mBackCardView = new BackCardView(mContext);
     }
 
+
     public void setSize(String size) {
         this.mSize = size;
         if (mSize == null) {

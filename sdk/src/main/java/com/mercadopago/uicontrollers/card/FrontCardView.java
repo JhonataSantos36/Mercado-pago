@@ -13,9 +13,11 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.mercadopago.R;
 import com.mercadopago.core.MercadoPago;
+import com.mercadopago.customviews.MPAutoResizeTextView;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.util.LayoutUtil;
@@ -37,14 +39,21 @@ public class FrontCardView {
 
     public static final int CARD_DEFAULT_AMOUNT_SPACES = 3;
     public static final int CARD_AMEX_DINERS_AMOUNT_SPACES = 2;
+    public static final int CARD_NUMBER_MAESTRO_SETTING_2_AMOUNT_SPACES = 1;
 
     public static final int CARD_NUMBER_AMEX_LENGTH = 15;
     public static final int CARD_NUMBER_DINERS_LENGTH = 14;
+    public static final int CARD_NUMBER_MAESTRO_SETTING_1_LENGTH = 18;
+    public static final int CARD_NUMBER_MAESTRO_SETTING_2_LENGTH = 19;
 
     public static final int EDITING_TEXT_VIEW_ALPHA = 255;
 
     public static final int NEUTRAL_CARD_COLOR = R.color.mpsdk_white;
     public static final int FULL_TEXT_VIEW_COLOR = R.color.mpsdk_base_text_alpha;
+
+    public static final String NEUTRAL_CARD_COLOR_NAME = "mpsdk_white";
+    public static final String FULL_TEXT_VIEW_COLOR_NAME = "mpsdk_base_text_alpha";
+
 
     private Context mContext;
     private View mView;
@@ -61,7 +70,7 @@ public class FrontCardView {
     //View controls
     private FrameLayout mCardContainer;
     private ImageView mCardBorder;
-    private MPTextView mCardNumberTextView;
+    private MPAutoResizeTextView mCardNumberTextView;
     private MPTextView mCardholderNameTextView;
     private MPTextView mCardExpiryMonthTextView;
     private MPTextView mCardExpiryYearTextView;
@@ -80,6 +89,7 @@ public class FrontCardView {
         this.mSecurityCodeLength = CARD_SECURITY_CODE_DEFAULT_LENGTH;
         this.mShowSecurityCode = false;
     }
+
 
     public void setPaymentMethod(PaymentMethod paymentMethod) {
         this.mPaymentMethod = paymentMethod;
@@ -114,7 +124,7 @@ public class FrontCardView {
         mCardContainer = (FrameLayout) mView.findViewById(R.id.mpsdkCardFrontContainer);
         mCardBorder = (ImageView) mView.findViewById(R.id.mpsdkCardShadowBorder);
         mAnimFadeIn = AnimationUtils.loadAnimation(mContext, R.anim.mpsdk_fade_in);
-        mCardNumberTextView = (MPTextView) mView.findViewById(R.id.mpsdkCardNumberTextView);
+        mCardNumberTextView = (MPAutoResizeTextView) mView.findViewById(R.id.mpsdkCardNumberTextView);
         mCardholderNameTextView = (MPTextView) mView.findViewById(R.id.mpsdkCardholderNameView);
         mCardExpiryMonthTextView = (MPTextView) mView.findViewById(R.id.mpsdkCardHolderExpiryMonth);
         mCardExpiryYearTextView = (MPTextView) mView.findViewById(R.id.mpsdkCardHolderExpiryYear);
@@ -124,9 +134,11 @@ public class FrontCardView {
         mImageCardContainer = (ImageView) mView.findViewById(R.id.mpsdkImageCardContainer);
         mCardLowApiImageView = (ImageView) mView.findViewById(R.id.mpsdkCardLowApiImageView);
         mCardLollipopImageView = (ImageView) mView.findViewById(R.id.mpsdkCardLollipopImageView);
+
         if (mSize != null) {
             resize();
         }
+
     }
 
     public void hide() {
@@ -167,7 +179,7 @@ public class FrontCardView {
     }
 
     public void drawEditingCard(String cardNumber, String cardholderName, String expiryMonth,
-                                 String expiryYear, String securityCode) {
+                                String expiryYear, String securityCode) {
         onPaymentMethodSet();
         drawEditingCardNumber(cardNumber);
         drawEditingCardHolderName(cardholderName);
@@ -183,7 +195,7 @@ public class FrontCardView {
             mCardNumberTextView.setText(BASE_NUMBER_CARDHOLDER);
         } else if (cardNumber.length() < MercadoPago.BIN_LENGTH || mPaymentMethod == null) {
             mCardNumberTextView.setText(MPCardMaskUtil.buildNumberWithMask(CARD_NUMBER_MAX_LENGTH, cardNumber));
-        } else  {
+        } else {
             mCardNumberTextView.setText(MPCardMaskUtil.buildNumberWithMask(mCardNumberLength, cardNumber));
         }
         enableEditingFontColor(mCardNumberTextView);
@@ -244,7 +256,7 @@ public class FrontCardView {
     public void drawEditingSecurityCode(String securityCode) {
         if (securityCode == null || securityCode.length() == 0) {
             mCardSecurityCodeTextView.setText(BASE_FRONT_SECURITY_CODE);
-        } else  {
+        } else {
             mCardSecurityCodeTextView.setText(MPCardMaskUtil.buildSecurityCode(mSecurityCodeLength, securityCode));
         }
         enableEditingFontColor(mCardSecurityCodeTextView);
@@ -336,7 +348,7 @@ public class FrontCardView {
         transitionImage(image, false);
     }
 
-    private void setFontColor(int color, MPTextView textView) {
+    private void setFontColor(int color, TextView textView) {
         textView.setTextColor(ContextCompat.getColor(mContext, color));
     }
 
@@ -358,7 +370,11 @@ public class FrontCardView {
 
     private int getCardColor(PaymentMethod paymentMethod) {
         String colorName = "mpsdk_" + paymentMethod.getId().toLowerCase();
-        return mContext.getResources().getIdentifier(colorName, "color", mContext.getPackageName());
+        int color = mContext.getResources().getIdentifier(colorName, "color", mContext.getPackageName());
+        if (color == 0) {
+            color = mContext.getResources().getIdentifier(NEUTRAL_CARD_COLOR_NAME, "color", mContext.getPackageName());
+        }
+        return color;
     }
 
     private int getCardFontColor(PaymentMethod paymentMethod) {
@@ -366,7 +382,11 @@ public class FrontCardView {
             return FULL_TEXT_VIEW_COLOR;
         }
         String colorName = "mpsdk_font_" + paymentMethod.getId().toLowerCase();
-        return mContext.getResources().getIdentifier(colorName, "color", mContext.getPackageName());
+        int color = mContext.getResources().getIdentifier(colorName, "color", mContext.getPackageName());
+        if (color == 0) {
+            color = mContext.getResources().getIdentifier(FULL_TEXT_VIEW_COLOR_NAME, "color", mContext.getPackageName());
+        }
+        return color;
     }
 
     private void resize() {
@@ -389,6 +409,12 @@ public class FrontCardView {
     private void resizeCard(ViewGroup cardViewContainer, int cardHeight, int cardWidth, int cardNumberFontSize,
                             int cardHolderNameFontSize, int cardExpiryDateSize, int cardSecurityCodeSize) {
         LayoutUtil.resizeViewGroupLayoutParams(cardViewContainer, cardHeight, cardWidth, mContext);
+
+        if(cardNumberFontSize == CardRepresentationModes.CARD_NUMBER_SIZE_MEDIUM){
+            float minTextSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8, mContext.getResources().getDisplayMetrics());
+            mCardNumberTextView.setMinTextSize(minTextSize);
+        }
+
         mCardNumberTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, cardNumberFontSize);
         mCardholderNameTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, cardHolderNameFontSize);
         mCardExpiryMonthTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, cardExpiryDateSize);
@@ -409,7 +435,7 @@ public class FrontCardView {
         enableEditingFontColor(mCardNumberTextView);
     }
 
-    private void enableEditingFontColor(MPTextView textView) {
+    private void enableEditingFontColor(TextView textView) {
         int alpha = EDITING_TEXT_VIEW_ALPHA;
         int fontColor = getCardFontColor(mPaymentMethod);
         int color = ContextCompat.getColor(mContext, fontColor);
@@ -417,7 +443,7 @@ public class FrontCardView {
         textView.setTextColor(newColor);
     }
 
-    private void disableEditingFontColor(MPTextView textView) {
+    private void disableEditingFontColor(TextView textView) {
         int fontColor = getCardFontColor(mPaymentMethod);
         setFontColor(fontColor, textView);
     }

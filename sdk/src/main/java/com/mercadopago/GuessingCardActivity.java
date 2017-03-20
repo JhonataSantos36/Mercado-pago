@@ -169,6 +169,7 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
     private String mCurrentEditingEditText;
     private String mCardSideState;
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -652,15 +653,22 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
                     @Override
                     public void onPaymentMethodSet(PaymentMethod paymentMethod) {
                         setPaymentMethod(paymentMethod);
+                        //We need to erase default space in position 4 in some special cases.
+                        if (mPresenter.isDefaultSpaceErasable()) {
+                            eraseDefaultSpace();
+                        }
                     }
 
                     @Override
                     public void onPaymentMethodCleared() {
                         clearErrorView();
                         clearCardNumberInputLength();
-                        if (mPresenter.getPaymentMethod() == null) {
+
+                        if (!mPresenter.isPaymentMethodResolved()) {
                             return;
                         }
+                        mPresenter.clearSpaceErasableSettings();
+                        clearCardNumberEditTextMask();
                         mPresenter.setPaymentMethod(null);
                         mSecurityCodeEditText.getText().clear();
                         mPresenter.initializeCardToken();
@@ -671,6 +679,7 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
                             mCardView.clearPaymentMethod();
                         }
                     }
+
                 },
                 new CardNumberEditTextCallback() {
                     @Override
@@ -684,11 +693,12 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
                         if (cardViewsActive()) {
                             mCardView.drawEditingCardNumber(string.toString());
                         }
+                        mPresenter.setCurrentNumberLength(string.length());
                     }
 
                     @Override
-                    public void appendSpace(CharSequence string) {
-                        if (MPCardMaskUtil.needsMask(string, mPresenter.getCardNumberLength())) {
+                    public void appendSpace(CharSequence currentNumber) {
+                        if (MPCardMaskUtil.needsMask(currentNumber, mPresenter.getCardNumberLength())) {
                             mCardNumberEditText.append(" ");
                         }
                     }
@@ -698,6 +708,7 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
                         if (MPCardMaskUtil.needsMask(s, mPresenter.getCardNumberLength())) {
                             mCardNumberEditText.getText().delete(s.length() - 1, s.length());
                         }
+                        mPresenter.setCurrentNumberLength(s.length());
                     }
 
                     @Override
@@ -710,6 +721,26 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
                         mCardNumberEditText.toggleLineColorOnError(toggle);
                     }
                 }));
+    }
+
+    private void clearCardNumberEditTextMask() {
+        String currentCardNumber = getCardNumberTextTrimmed();
+        if (currentCardNumber.length() == MPCardMaskUtil.ORIGINAL_SPACE_DIGIT + 1) {
+            StringBuilder cardNumberReset = MPCardMaskUtil.getCardNumberReset(currentCardNumber);
+            mPresenter.setPaymentMethod(null);
+            setEditText(mCardNumberEditText, cardNumberReset);
+        }
+    }
+
+
+    private void eraseDefaultSpace() {
+        String text = getCardNumberTextTrimmed();
+        setEditText(mCardNumberEditText, text);
+    }
+
+    private void setEditText(MPEditText editText, CharSequence text) {
+        editText.setText(text);
+        editText.setSelection(editText.getText().length());
     }
 
     private void setPaymentMethod(PaymentMethod paymentMethod) {

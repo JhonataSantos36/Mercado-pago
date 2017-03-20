@@ -85,25 +85,25 @@
         </RelativeLayout>
 
         <com.mercadopago.customviews.MPTextView
-                android:id="@+id/mpsdkTEA"
-                android:visibility="gone"
-                android:includeFontPadding="false"
-                android:layout_marginTop="20dp"
-                android:textSize="10dp"
-                android:gravity="center"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                tools:text="TEA 0,00%"/>
+            android:id="@+id/mpsdkTEA"
+            android:visibility="gone"
+            android:includeFontPadding="false"
+            android:layout_marginTop="20dp"
+            android:textSize="10dp"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="TEA 0,00%"/>
         <com.mercadopago.customviews.MPTextView
-                android:includeFontPadding="false"
-                android:visibility="gone"
-                android:id="@+id/mpsdkCFT"
-                android:textSize="28dp"
-                android:gravity="center"
-                app:fontStyle="default_light"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                tools:text="CFT 0,00%"/>
+            android:includeFontPadding="false"
+            android:visibility="gone"
+            android:id="@+id/mpsdkCFT"
+            android:textSize="28dp"
+            android:gravity="center"
+            app:fontStyle="default_light"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="CFT 0,00%"/>
 
         <FrameLayout
             android:id="@+id/mpsdkAdapterReviewPaymentChangeButton"

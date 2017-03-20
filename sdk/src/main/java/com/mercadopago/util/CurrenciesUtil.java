@@ -60,6 +60,12 @@ public class CurrenciesUtil {
         }
     }
 
+    public static Spanned getFormattedAmount(BigDecimal amount, String currencyId) {
+        String originalNumber = CurrenciesUtil.formatNumber(amount, currencyId);
+        Spanned amountText = CurrenciesUtil.formatCurrencyInText(amount, currencyId, originalNumber, false, true);
+        return amountText;
+    }
+
     public static Spanned formatNumber(BigDecimal amount, String currencyId, boolean symbolUp, boolean decimalsUp) {
 
         // Get currency configuration

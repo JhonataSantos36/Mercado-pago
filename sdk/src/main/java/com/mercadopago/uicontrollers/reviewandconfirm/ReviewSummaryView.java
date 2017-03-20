@@ -114,7 +114,7 @@ public class ReviewSummaryView extends Reviewable {
     public void draw() {
         decorateButton();
         //Products
-        mProductsText.setText(getFormattedAmount(mAmount));
+        mProductsText.setText(CurrenciesUtil.getFormattedAmount(mAmount,mCurrencyId));
         //Discounts
         if (hasDiscount()) {
             showDiscountRow();
@@ -123,23 +123,36 @@ public class ReviewSummaryView extends Reviewable {
         }
         //Subtotal
         if (hasSubtotal()) {
-            mSubtotalText.setText(getFormattedAmount(getSubtotal()));
+            mSubtotalText.setText(CurrenciesUtil.getFormattedAmount(getSubtotal(),mCurrencyId));
         } else {
             mSubtotalRow.setVisibility(View.GONE);
         }
         if (mPaymentMethod != null && MercadoPagoUtil.isCard(mPaymentMethod.getPaymentTypeId())) {
-            //Pagas
-            showPayerCostRow();
+
+            if(mPayerCost.getInstallments() == 1){
+                hidePayerCostInfo();
+            }else{
+                showPayerCostRow();
+                showFinance();
+            }
+
             showTotal(mPayerCost.getTotalAmount());
-            showFinance();
+
         } else {
-            mPayerCostRow.setVisibility(View.GONE);
-            mFirstSeparator.setVisibility(View.GONE);
-            mSubtotalRow.setVisibility(View.GONE);
-            mTotalText.setText(getFormattedAmount(getSubtotal()));
+
+            hidePayerCostInfo();
+            mTotalText.setText(CurrenciesUtil.getFormattedAmount(getSubtotal(),mCurrencyId));
         }
     }
 
+
+    private void hidePayerCostInfo() {
+        mPayerCostRow.setVisibility(View.GONE);
+        mFirstSeparator.setVisibility(View.GONE);
+        mSubtotalRow.setVisibility(View.GONE);
+        mTEATextView.setVisibility(View.GONE);
+        mCFTTextView.setVisibility(View.GONE);
+    }
     private void showFinance() {
         if (mPayerCost.hasTEA()) {
             mTEATextView.setVisibility(View.VISIBLE);
@@ -190,7 +203,7 @@ public class ReviewSummaryView extends Reviewable {
     }
 
     private void showTotal(BigDecimal amount) {
-        mTotalText.setText(getFormattedAmount(amount));
+        mTotalText.setText(CurrenciesUtil.getFormattedAmount(amount,mCurrencyId));
     }
 
     private boolean hasDiscount() {
@@ -198,11 +211,7 @@ public class ReviewSummaryView extends Reviewable {
                 && (mDiscount.hasPercentOff() != null || mDiscount.getCouponAmount() != null));
     }
 
-    private Spanned getFormattedAmount(BigDecimal amount) {
-        String originalNumber = CurrenciesUtil.formatNumber(amount, mCurrencyId);
-        Spanned amountText = CurrenciesUtil.formatCurrencyInText(amount, mCurrencyId, originalNumber, false, true);
-        return amountText;
-    }
+
 
     private boolean hasSubtotal() {
         return hasDiscount();

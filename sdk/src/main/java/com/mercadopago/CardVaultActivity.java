@@ -385,12 +385,11 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultAct
         if (resultCode == RESULT_OK) {
             PaymentMethod paymentMethod = JsonUtil.getInstance().fromJson(data.getStringExtra("paymentMethod"), PaymentMethod.class);
             CardToken cardToken = JsonUtil.getInstance().fromJson(data.getStringExtra("cardToken"), CardToken.class);
-            Issuer issuer = JsonUtil.getInstance().fromJson(data.getStringExtra("issuer"), Issuer.class);
             Discount discount = JsonUtil.getInstance().fromJson(data.getStringExtra("discount"), Discount.class);
+
             Boolean directDiscountEnabled = data.getBooleanExtra("directDiscountEnabled", true);
             mPresenter.setPaymentMethod(paymentMethod);
             mPresenter.setCardToken(cardToken);
-            mPresenter.setIssuer(issuer);
             mPresenter.setCardInfo(new CardInfo(cardToken));
             mPresenter.checkStartIssuersActivity();
             mPresenter.setDirectDiscountEnabled(directDiscountEnabled);

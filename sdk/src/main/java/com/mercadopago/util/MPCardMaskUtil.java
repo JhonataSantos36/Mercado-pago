@@ -2,6 +2,7 @@ package com.mercadopago.util;
 
 import com.mercadopago.model.IdentificationType;
 
+import java.math.BigInteger;
 import java.util.Locale;
 
 /**
@@ -14,10 +15,13 @@ public class MPCardMaskUtil {
     public static final int CNPJ_SEPARATOR_AMOUNT = 4;
     public static final int LAST_DIGITS_LENGTH = 4;
     public static final char HIDDEN_NUMBER_CHAR = "•".charAt(0);
+    public static final int ORIGINAL_SPACE_DIGIT = 4;
 
     public static final int CARD_NUMBER_MAX_LENGTH = 16;
     public static final int CARD_NUMBER_AMEX_LENGTH = 15;
     public static final int CARD_NUMBER_DINERS_LENGTH = 14;
+    private static final int CARD_NUMBER_MAESTRO_SETTING_1_LENGTH = 18;
+    private static final int CARD_NUMBER_MAESTRO_SETTING_2_LENGTH = 19;
 
     protected MPCardMaskUtil() {
 
@@ -68,6 +72,38 @@ public class MPCardMaskUtil {
                 sb.append(c);
             }
             result = sb.toString();
+
+        } else if (cardLength == CARD_NUMBER_MAESTRO_SETTING_1_LENGTH) {
+            StringBuffer sb = new StringBuffer();
+            for (int i = 0; i < 10; i++) {
+                char c = getCharOfCard(number, i);
+                sb.append(c);
+            }
+            sb.append(" ");
+            for (int i = 10; i < 15; i++) {
+                char c = getCharOfCard(number, i);
+                sb.append(c);
+            }
+            sb.append(" ");
+            for (int i = 15; i < CARD_NUMBER_MAESTRO_SETTING_1_LENGTH; i++) {
+                char c = getCharOfCard(number, i);
+                sb.append(c);
+            }
+            result = sb.toString();
+
+        } else if (cardLength == CARD_NUMBER_MAESTRO_SETTING_2_LENGTH) {
+            StringBuffer sb = new StringBuffer();
+            for (int i = 0; i < 9; i++) {
+                char c = getCharOfCard(number, i);
+                sb.append(c);
+            }
+            sb.append(" ");
+            for (int i = 9; i < CARD_NUMBER_MAESTRO_SETTING_2_LENGTH; i++) {
+                char c = getCharOfCard(number, i);
+                sb.append(c);
+            }
+            result = sb.toString();
+
         } else {
             StringBuffer sb = new StringBuffer();
             for (int i = 1; i <= cardLength; i++) {
@@ -106,7 +142,7 @@ public class MPCardMaskUtil {
             return number.toString();
         }
         try {
-            Long value = Long.valueOf(number.toString());
+            BigInteger value = new BigInteger(number.toString());
             Locale.setDefault(Locale.GERMAN);
             return String.format("%,d", value);
         } catch (NumberFormatException e) {
@@ -158,12 +194,32 @@ public class MPCardMaskUtil {
         return sb.toString();
     }
 
-    public static boolean needsMask(CharSequence s, int cardNumberLength) {
-        if (cardNumberLength == CARD_NUMBER_AMEX_LENGTH || cardNumberLength == CARD_NUMBER_DINERS_LENGTH) {
-            return s.length() == 4 || s.length() == 11;
+    public static boolean needsMask(CharSequence currentNumber, int cardNumberLength) {
+
+        if (cardNumberLength == CARD_NUMBER_MAESTRO_SETTING_1_LENGTH) {
+
+            return currentNumber.length() == 10 || currentNumber.length() == 16;
+        } else if (cardNumberLength == CARD_NUMBER_MAESTRO_SETTING_2_LENGTH) {
+
+            return currentNumber.length() == 9;
+        } else if (cardNumberLength == CARD_NUMBER_AMEX_LENGTH || cardNumberLength == CARD_NUMBER_DINERS_LENGTH) {
+            return currentNumber.length() == 4 || currentNumber.length() == 11;
         } else {
-            return s.length() == 4 || s.length() == 9 || s.length() == 14;
+            return currentNumber.length() == 4 || currentNumber.length() == 9 || currentNumber.length() == 14;
         }
+
+    }
+
+    public static StringBuilder getCardNumberReset(String currentCardNumber) {
+        StringBuilder cardNumberReset = new StringBuilder();
+        cardNumberReset.append(currentCardNumber, 0, ORIGINAL_SPACE_DIGIT);
+        cardNumberReset.append(" ");
+        cardNumberReset.append(currentCardNumber.charAt(ORIGINAL_SPACE_DIGIT));
+        return cardNumberReset;
+    }
+
+    public static boolean isDefaultSpaceErasable(int currentNumberLength) {
+        return currentNumberLength < 6;
     }
 
 }

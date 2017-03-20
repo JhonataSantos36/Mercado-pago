@@ -105,6 +105,7 @@ public class PaymentMethodGuessingController {
     }
 
     public static Integer getCardNumberLength(PaymentMethod paymentMethod, String bin) {
+
         if (paymentMethod == null || bin == null) {
             return CardInformation.CARD_NUMBER_MAX_LENGTH;
         }

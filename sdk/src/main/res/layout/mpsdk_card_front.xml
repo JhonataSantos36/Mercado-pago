@@ -126,16 +126,17 @@
                         android:paddingLeft="15dp"
                         android:paddingRight="15dp"
                         android:paddingEnd="15dp">
-                        <com.mercadopago.customviews.MPTextView
+                        <com.mercadopago.customviews.MPAutoResizeTextView
                             android:id="@+id/mpsdkCardNumberTextView"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:gravity="start"
-                            android:singleLine="true"
                             android:ellipsize="none"
                             android:textColor="@color/mpsdk_base_text"
                             android:textSize="19dp"
                             app:fontStyle="roboto_regular"
+                            app:minTextSize="8dp"
+                            android:maxLines="1"
                             tools:text="1234 1234 1234 1234"
                             android:visibility="visible" />
                     </FrameLayout>
@@ -155,7 +156,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.6"
-                        android:singleLine="true"
+                        android:maxLines="1"
                         android:paddingStart="15dp"
                         android:paddingLeft="15dp"
                         android:gravity="start"

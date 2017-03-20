@@ -28,7 +28,6 @@ public class MerchantServer {
     }
 
     public static void getCustomer(Context context, String merchantBaseUrl, String merchantGetCustomerUri, String merchantAccessToken, Callback<Customer> callback) {
-
         MerchantService service = getService(context, merchantBaseUrl);
         service.getCustomer(ripFirstSlash(merchantGetCustomerUri), merchantAccessToken).enqueue(callback);
     }

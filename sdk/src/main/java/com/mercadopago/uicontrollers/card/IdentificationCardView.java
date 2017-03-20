@@ -8,8 +8,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.mercadopago.R;
+import com.mercadopago.customviews.MPAutoResizeTextView;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.model.IdentificationType;
 import com.mercadopago.util.MPCardMaskUtil;
@@ -29,7 +31,7 @@ public class IdentificationCardView {
     //View controls
     private FrameLayout mCardContainer;
     private ImageView mCardBorder;
-    private MPTextView mCardIdentificationNumberTextView;
+    private MPAutoResizeTextView mCardIdentificationNumberTextView;
     private MPTextView mBaseIdNumberView;
 
     //Identification Info
@@ -50,7 +52,8 @@ public class IdentificationCardView {
         mCardContainer = (FrameLayout) mView.findViewById(R.id.mpsdkIdentificationCardContainer);
         mCardBorder = (ImageView) mView.findViewById(R.id.mpsdkCardShadowBorder);
         mBaseIdNumberView = (MPTextView) mView.findViewById(R.id.mpsdkIdentificationCardholderContainer);
-        mCardIdentificationNumberTextView = (MPTextView) mView.findViewById(R.id.mpsdkIdNumberView);
+        mCardIdentificationNumberTextView = (MPAutoResizeTextView) mView.findViewById(R.id.mpsdkIdNumberView);
+
     }
 
     public void setIdentificationNumber(String number) {
