@@ -1,5 +1,6 @@
 package com.mercadopago.model;
 
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 
 import com.mercadopago.callbacks.PaymentResultReviewableCallback;
@@ -59,7 +60,13 @@ public abstract class Reviewable implements CustomViewController {
 
     public void notifyChangeRequired(@NonNull Integer resultCode) {
         if(this.reviewSubscriber != null) {
-            reviewSubscriber.changeRequired(resultCode);
+            reviewSubscriber.changeRequired(resultCode, null);
+        }
+    }
+
+    public void notifyChangeRequired(@NonNull Integer resultCode, Bundle resultData) {
+        if(this.reviewSubscriber != null) {
+            reviewSubscriber.changeRequired(resultCode, resultData);
         }
     }
 

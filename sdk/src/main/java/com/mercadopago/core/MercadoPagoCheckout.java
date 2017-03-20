@@ -132,7 +132,7 @@ public class MercadoPagoCheckout {
     private void startCheckoutActivity(Integer resultCode) {
         validate(resultCode);
         Intent checkoutIntent;
-        if(context != null) {
+        if (context != null) {
             checkoutIntent = new Intent(context, CheckoutActivity.class);
         } else {
             checkoutIntent = new Intent(activity, CheckoutActivity.class);
@@ -151,7 +151,7 @@ public class MercadoPagoCheckout {
         checkoutIntent.putExtra("maxSavedCards", maxSavedCards);
         checkoutIntent.putExtra("resultCode", resultCode);
 
-        if(context != null) {
+        if (context != null) {
             context.startActivity(checkoutIntent);
         } else {
             activity.startActivityForResult(checkoutIntent, MercadoPagoCheckout.CHECKOUT_REQUEST_CODE);

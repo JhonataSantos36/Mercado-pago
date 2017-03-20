@@ -278,9 +278,9 @@ public class CongratsActivity extends MercadoPagoBaseActivity implements ReviewS
         mSecondaryExitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                
+
                 //TODO Deprecate
-                if(CallbackHolder.getInstance().hasPaymentResultCallback(CallbackHolder.CONGRATS_PAYMENT_RESULT_CALLBACK)) {
+                if (CallbackHolder.getInstance().hasPaymentResultCallback(CallbackHolder.CONGRATS_PAYMENT_RESULT_CALLBACK)) {
                     CallbackHolder.getInstance().getPaymentResultCallback(CallbackHolder.CONGRATS_PAYMENT_RESULT_CALLBACK).onResult(mPaymentResult);
                     finishWithOkResult(false);
                 } else {
@@ -339,8 +339,11 @@ public class CongratsActivity extends MercadoPagoBaseActivity implements ReviewS
     }
 
     @Override
-    public void changeRequired(Integer resultCode) {
+    public void changeRequired(Integer resultCode, Bundle data) {
         Intent intent = new Intent();
+        if (data != null) {
+            intent.putExtras(data);
+        }
         intent.putExtra("resultCode", resultCode);
         intent.putExtra("paymentResult", JsonUtil.getInstance().toJson(mPaymentResult));
         setResult(RESULT_OK, intent);

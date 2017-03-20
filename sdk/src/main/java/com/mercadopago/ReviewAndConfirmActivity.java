@@ -26,8 +26,10 @@ import com.mercadopago.constants.ReviewKeys;
 import com.mercadopago.constants.Sites;
 import com.mercadopago.controllers.CheckoutTimer;
 import com.mercadopago.customviews.MPTextView;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+
 import com.mercadopago.adapters.ReviewablesAdapter;
 import com.mercadopago.constants.Sites;
 import com.mercadopago.controllers.CheckoutTimer;
@@ -38,6 +40,7 @@ import com.mercadopago.model.Item;
 import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.PaymentData;
 import com.mercadopago.model.PaymentMethod;
+import com.mercadopago.model.ReviewSubscriber;
 import com.mercadopago.model.Reviewable;
 import com.mercadopago.model.Site;
 import com.mercadopago.model.Token;
@@ -62,7 +65,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements TimerObserver, ReviewAndConfirmView {
+public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements TimerObserver, ReviewAndConfirmView, ReviewSubscriber {
 
     public static final int RESULT_CHANGE_PAYMENT_METHOD = 3;
     public static final int RESULT_CANCEL_PAYMENT = 4;
@@ -381,19 +384,25 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
 
     @Override
     public void cancelPayment(boolean notifyCancel) {
-
         int resultCode = notifyCancel ? RESULT_CANCEL_PAYMENT : RESULT_SILENT_CANCEL_PAYMENT;
         setResult(resultCode);
         finish();
     }
 
-    @Override
-    public void cancelPayment(Integer resultCode, PaymentData paymentData) {
+    public void cancelPayment(Integer resultCode, Bundle resultData, PaymentData paymentData) {
         Intent intent = new Intent();
+        if (resultData != null) {
+            intent.putExtras(resultData);
+        }
         intent.putExtra("resultCode", resultCode);
         intent.putExtra("paymentData", JsonUtil.getInstance().toJson(paymentData));
         setResult(RESULT_CANCEL_PAYMENT, intent);
         finish();
+    }
+
+    @Override
+    public ReviewSubscriber getReviewSubscriber() {
+        return this;
     }
 
     private List<String> getDefaultOrder() {
@@ -403,5 +412,21 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
             add(ReviewKeys.PAYMENT_METHODS);
             add(ReviewKeys.DEFAULT);
         }};
+    }
+
+
+    @Override
+    public void changeRequired(Reviewable reviewable) {
+        if (reviewable.getReviewableCallback() != null) {
+            //TODO Deprecate
+            reviewable.getReviewableCallback().onChangeRequired(mPresenter.getPaymentData());
+        }
+        cancelPayment(false);
+    }
+
+
+    @Override
+    public void changeRequired(Integer resultCode, Bundle resultData) {
+        cancelPayment(resultCode, resultData, mPresenter.getPaymentData());
     }
 }
