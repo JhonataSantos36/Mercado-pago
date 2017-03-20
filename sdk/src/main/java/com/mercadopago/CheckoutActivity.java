@@ -1013,16 +1013,16 @@ public class CheckoutActivity extends MercadoPagoBaseActivity {
 
     private void startPaymentResultActivity(PaymentResult paymentResult) {
 
-        BigDecimal amount = mCreatedPayment == null ? mCheckoutPreference.getAmount() : mCreatedPayment.getTransactionDetails().getTotalPaidAmount();
+        BigDecimal amount = mCreatedPayment == null ? mCheckoutPreference.getAmount() : mCreatedPayment.getTransactionAmount();
 
         new MercadoPagoComponents.Activities.PaymentResultActivityBuilder()
                 .setMerchantPublicKey(mMerchantPublicKey)
                 .setActivity(mActivity)
                 .setPaymentResult(paymentResult)
+                .setDiscount(mDiscount)
                 .setDiscountEnabled(mDiscountEnabled)
                 .setCongratsDisplay(mCongratsDisplay)
                 .setSite(mCheckoutPreference.getSite())
-                .setAmount(mCheckoutPreference.getAmount())
                 .setPaymentResultScreenPreference(mPaymentResultScreenPreference)
                 .setAmount(amount)
                 .startActivity();

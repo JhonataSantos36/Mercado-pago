@@ -119,7 +119,7 @@ public class CheckoutExampleActivity extends AppCompatActivity {
         additionalInfo.put("company_id", "movistar");
         additionalInfo.put("phone_number", "111111");
 
-        String languageToLoad  = "pt"; // your language
+        String languageToLoad  = "en"; // your language
         Locale locale = new Locale(languageToLoad);
         Locale.setDefault(locale);
 
@@ -155,13 +155,13 @@ public class CheckoutExampleActivity extends AppCompatActivity {
 
         FlowPreference flowPreference = new FlowPreference.Builder()
                 .disableReviewAndConfirmScreen()
-                .disableDiscount()
+                .disableInstallmentsReviewScreen()
+//                .disableDiscount()
                 .disableBankDeals()
                 .build();
 
         mCheckoutPreference = new CheckoutPreference.Builder()
                 .addItem(new Item("Item", BigDecimal.ONE))
-//                .addItem(new Item("Item", new BigDecimal(1000)))
                 .setSite(Sites.ARGENTINA)
 //                .addExcludedPaymentType(PaymentTypes.ATM)
 //                .addExcludedPaymentType(PaymentTypes.BANK_TRANSFER)
@@ -176,52 +176,32 @@ public class CheckoutExampleActivity extends AppCompatActivity {
                 .setActivity(this)
                 .setPublicKey(mPublicKey)
                 .setCheckoutPreference(mCheckoutPreference)
-                .setReviewScreenPreference(reviewScreenPreference)
-                .setDecorationPreference(decorationPreference)
                 .setFlowPreference(flowPreference)
-                .setPaymentResultScreenPreference(paymentResultScreenPreference)
                 .start(new PaymentDataCallback() {
                     @Override
                     public void onSuccess(PaymentData paymentData, boolean paymentMethodChanged) {
-                        Log.d("log", "success");
-                        Log.d("log", paymentData.getPaymentMethod().getId());
-                        Log.d("log", "payment method changed: " + paymentMethodChanged);
-                        startAgain(paymentData);
+                        StringBuilder stringBuilder = new StringBuilder();
+                        stringBuilder.append("Success! " + paymentData.getPaymentMethod().getId() + " selected. ");
+                        if(paymentMethodChanged) {
+                            stringBuilder.append("And it has changed!");
+                        }
+                        Toast.makeText(mActivity, stringBuilder.toString(), Toast.LENGTH_SHORT).show();
+                        startRyC(paymentData);
                     }
-
                     @Override
                     public void onCancel() {
-                        Log.d("log", "cancel");
+                        Toast.makeText(mActivity, "Cancel callback", Toast.LENGTH_SHORT).show();
                     }
-
                     @Override
                     public void onFailure(MercadoPagoError error) {
                         Log.d("log", "failure");
                     }
                 });
-//                .startForPaymentData();
-//        .start(new PaymentCallback() {
-//            @Override
-//            public void onSuccess(Payment payment) {
-//                Log.d("log", "success");
-//            }
-//
-//            @Override
-//            public void onCancel() {
-//                Log.d("log", "cancel");
-//            }
-//
-//            @Override
-//            public void onFailure(MercadoPagoError error) {
-//
-//            }
-//        });
     }
 
-    private void startAgain(PaymentData paymentData) {
 
+    private void startRyC(PaymentData paymentData) {
         CellphoneReview cellphoneReview = new CellphoneReview(this, "15111111");
-
         ReviewScreenPreference reviewScreenPreference = new ReviewScreenPreference.Builder()
                 .setTitle("Confirma tu recarga")
                 .setConfirmText("Recargar")
@@ -234,6 +214,7 @@ public class CheckoutExampleActivity extends AppCompatActivity {
                 .disableReviewAndConfirmScreen()
                 .disableBankDeals()
                 .disableDiscount()
+                .disableInstallmentsReviewScreen()
                 .build();
 
         new MercadoPagoCheckout.Builder()
@@ -246,27 +227,35 @@ public class CheckoutExampleActivity extends AppCompatActivity {
                 .start(new PaymentDataCallback() {
                     @Override
                     public void onSuccess(PaymentData paymentData, boolean paymentMethodChanged) {
-                        Log.d("log", "en success 2");
-                        Log.d("log", paymentData.getPaymentMethod().getId());
-                        Log.d("log", "payment method changed: " + paymentMethodChanged);
                         if (paymentMethodChanged) {
-                            startAgain(paymentData);
+                            startRyC(paymentData);
                         } else {
                             startWithPaymentResult(paymentData);
                         }
                     }
-
                     @Override
                     public void onCancel() {
-                        Log.d("log", "en cancel 2");
+                        Toast.makeText(mActivity, "Cancel callback", Toast.LENGTH_SHORT).show();
                     }
-
                     @Override
                     public void onFailure(MercadoPagoError error) {
-                        Log.d("log", "en failure 2");
+                        Toast.makeText(mActivity, "Error callback: " + error.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
-//                .startForPaymentData();
+    }
+
+    private CheckoutPreference getCheckoutPreference() {
+        return new CheckoutPreference.Builder()
+                .addItem(new Item("Item", BigDecimal.TEN.multiply(BigDecimal.TEN)))
+                .setSite(Sites.ARGENTINA)
+//                .addExcludedPaymentType(PaymentTypes.ATM)
+//                .addExcludedPaymentType(PaymentTypes.BANK_TRANSFER)
+//                .addExcludedPaymentType(PaymentTypes.DEBIT_CARD)
+//                .addExcludedPaymentType(PaymentTypes.DEBIT_CARD)
+//                .addExcludedPaymentType(PaymentTypes.TICKET)
+                .enableAccountMoney()
+                .setPayerAccessToken("APP_USR-6077407713835188-120612-9c010367e2aba8808865b227526f4ccc__LB_LD__-232134231")
+                .build();
     }
 
     private void startWithPaymentResult(PaymentData paymentData) {
@@ -288,12 +277,12 @@ public class CheckoutExampleActivity extends AppCompatActivity {
                 .setExitButtonTitle("Ir a Actividad")
                 .build();
 
-
         new MercadoPagoCheckout.Builder()
                 .setActivity(this)
                 .setPublicKey(mPublicKey)
                 .setCheckoutPreference(mCheckoutPreference)
                 .setPaymentResult(paymentResult)
+                .setDiscount(paymentData.getDiscount())
                 .setPaymentResultScreenPreference(paymentResultScreenPreference)
                 .start(new PaymentDataCallback() {
                     @Override
@@ -407,7 +396,7 @@ public class CheckoutExampleActivity extends AppCompatActivity {
                 } else {
                     mAlreadyStartedRyC = true;
                     Toast.makeText(mActivity, "Restart en RyC", Toast.LENGTH_SHORT).show();
-                    startAgain(paymentData);
+                    startRyC(paymentData);
                 }
 
             } else if (resultCode == RESULT_CANCELED) {

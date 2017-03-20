@@ -210,6 +210,10 @@ public class ReviewAndConfirmPresenter extends MvpPresenter<ReviewAndConfirmView
         this.mDiscount = discount;
     }
 
+    public Discount getDiscount() {
+        return this.mDiscount;
+    }
+
     public void setPayerCost(PayerCost mPayerCost) {
         this.mPayerCost = mPayerCost;
     }

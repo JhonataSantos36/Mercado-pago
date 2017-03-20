@@ -384,7 +384,7 @@ public class CongratsActivity extends MercadoPagoBaseActivity implements ReviewS
 
     private void setDiscountRow() {
         if (mDiscountEnabled && mDiscount != null) {
-            showDiscountRow(mTotalAmount);
+            showDiscountRow(mAmount);
         }
     }
 
