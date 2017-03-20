@@ -110,7 +110,33 @@ public class MercadoPagoCheckout {
                 && (this.servicePreference == null || !this.servicePreference.hasCreatePaymentURL())) {
             throw new IllegalStateException("Payment service or preference created with private key required to create a payment");
         }
+        if (hasTwoDiscountsSet()) {
+            throw new IllegalStateException("payment data discount and discount set");
+        }
     }
+
+    private Boolean hasTwoDiscountsSet() {
+        Boolean hasTwoDiscountsSet = false;
+
+        if ((hasPaymentDataDiscount() || hasPaymentResultDiscount()) && hasDiscount()) {
+            hasTwoDiscountsSet = true;
+        }
+
+        return hasTwoDiscountsSet;
+    }
+
+    private Boolean hasPaymentDataDiscount() {
+        return this.paymentData != null && this.paymentData.getDiscount() != null;
+    }
+
+    private Boolean hasPaymentResultDiscount() {
+        return this.paymentResult != null && this.paymentResult.getPaymentData() != null && this.paymentResult.getPaymentData().getDiscount() != null;
+    }
+
+    private Boolean hasDiscount() {
+        return this.discount != null;
+    }
+
 
     private void start(PaymentCallback paymentCallback) {
         CallbackHolder.getInstance().clean();

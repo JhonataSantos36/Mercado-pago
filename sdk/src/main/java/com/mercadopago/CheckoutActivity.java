@@ -60,7 +60,6 @@ import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import static android.text.TextUtils.isEmpty;
@@ -183,10 +182,11 @@ public class CheckoutActivity extends MercadoPagoBaseActivity {
 
         mDiscountEnabled = isDiscountEnabled();
         mInstallmentsReviewScreenEnabled = isInstallmentsReviewScreenEnabled();
+
+        setDiscount();
     }
 
     protected void onValidStart() {
-
         if (CallbackHolder.getInstance().hasPaymentCallback() || mRequestedResultCode == MercadoPagoCheckout.PAYMENT_RESULT_CODE) {
             CallbackHolder.getInstance().setPaymentDataCallback(new PaymentDataCallback() {
                 @Override
@@ -226,6 +226,14 @@ public class CheckoutActivity extends MercadoPagoBaseActivity {
                 String errorMessage = ExceptionHandler.getErrorMessage(mActivity, e);
                 ErrorUtil.startErrorActivity(mActivity, errorMessage, false);
             }
+        }
+    }
+
+    private void setDiscount() {
+        if (mDiscount == null && hasPaymentDataDiscount()) {
+            mDiscount = mPaymentDataInput.getDiscount();
+        } else if (mDiscount == null && hasPaymentResultDiscount()) {
+            mDiscount = mPaymentResultInput.getPaymentData().getDiscount();
         }
     }
 
@@ -277,6 +285,14 @@ public class CheckoutActivity extends MercadoPagoBaseActivity {
         } else if (mCheckoutPreference == null) {
             throw new IllegalStateException("preference not set");
         }
+    }
+
+    private Boolean hasPaymentDataDiscount() {
+        return mPaymentDataInput != null && mPaymentDataInput.getDiscount() != null;
+    }
+
+    private Boolean hasPaymentResultDiscount() {
+        return mPaymentResultInput != null && mPaymentResultInput.getPaymentData() != null && mPaymentResultInput.getPaymentData().getDiscount() != null;
     }
 
     protected void getPaymentMethodSearch() {
