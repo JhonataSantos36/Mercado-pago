@@ -232,6 +232,7 @@
 
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/mpsdkReviewablesRecyclerView"
+                        android:overScrollMode="never"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:visibility="visible"/>
