@@ -1,6 +1,9 @@
 package com.mercadopago.uicontrollers.reviewandconfirm;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.support.annotation.ColorInt;
+import android.support.annotation.ColorRes;
 import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +26,9 @@ import com.mercadopago.util.MercadoPagoUtil;
 
 import java.math.BigDecimal;
 
+import static android.view.View.GONE;
+import static com.mercadopago.util.TextUtils.isEmpty;
+
 /**
  * Created by vaserber on 11/10/16.
  */
@@ -38,6 +44,7 @@ public class ReviewSummaryView extends Reviewable {
     protected LinearLayout mSubtotalRow;
     protected LinearLayout mPayerCostRow;
     protected LinearLayout mTotalRow;
+    protected LinearLayout mCustomRow;
     protected MPTextView mProductsText;
     protected MPTextView mDiscountPercentageText;
     protected MPTextView mDiscountsText;
@@ -50,6 +57,9 @@ public class ReviewSummaryView extends Reviewable {
     protected MPTextView mConfirmTextView;
     protected MPTextView mTEATextView;
     protected MPTextView mCFTTextView;
+    protected MPTextView mCustomDescriptionTextView;
+    protected MPTextView mCustomAmountTextView;
+
     protected OnConfirmPaymentCallback mCallback;
 
     protected Context mContext;
@@ -57,14 +67,17 @@ public class ReviewSummaryView extends Reviewable {
     protected String mDiscountDetailText;
     protected String mConfirmationMessage;
     protected String mCurrencyId;
+    protected String mCustomDescription;
+    protected Integer mCustomTextColor;
     protected BigDecimal mAmount;
+    protected BigDecimal mCustomAmount;
     protected PayerCost mPayerCost;
     protected PaymentMethod mPaymentMethod;
     protected DecorationPreference mDecorationPreference;
     protected Discount mDiscount;
     protected MPTextView mProductsLabelText;
 
-    public ReviewSummaryView(Context context, String confirmationMessage, String productDetailText, String discountDetailText, PaymentMethod paymentMethod, PayerCost payerCost, BigDecimal amount, Discount discount, String currencyId, DecorationPreference decorationPreference, OnConfirmPaymentCallback callback) {
+    public ReviewSummaryView(Context context, String confirmationMessage, String productDetailText, String discountDetailText, PaymentMethod paymentMethod, PayerCost payerCost, BigDecimal amount, Discount discount, String currencyId, String customDescription, BigDecimal customAmount, @ColorInt Integer customTextColor, DecorationPreference decorationPreference, OnConfirmPaymentCallback callback) {
         this.mContext = context;
         this.mConfirmationMessage = confirmationMessage;
         this.mProductDetailText = productDetailText;
@@ -74,6 +87,9 @@ public class ReviewSummaryView extends Reviewable {
         this.mPayerCost = payerCost;
         this.mPaymentMethod = paymentMethod;
         this.mDiscount = discount;
+        this.mCustomDescription = customDescription;
+        this.mCustomAmount = customAmount;
+        this.mCustomTextColor = customTextColor;
         this.mCallback = callback;
         this.mDecorationPreference = decorationPreference;
     }
@@ -86,6 +102,7 @@ public class ReviewSummaryView extends Reviewable {
         mSubtotalRow = (LinearLayout) mView.findViewById(R.id.mpsdkReviewSummarySubtotal);
         mPayerCostRow = (LinearLayout) mView.findViewById(R.id.mpsdkReviewSummaryPay);
         mTotalRow = (LinearLayout) mView.findViewById(R.id.mpsdkReviewSummaryTotal);
+        mCustomRow = (LinearLayout) mView.findViewById(R.id.mpsdkReviewSummaryCustom);
         mProductsText = (MPTextView) mView.findViewById(R.id.mpsdkReviewSummaryProductsText);
         mDiscountPercentageText = (MPTextView) mView.findViewById(R.id.mpsdkReviewSummaryDiscountPercentage);
         mDiscountsText = (MPTextView) mView.findViewById(R.id.mpsdkReviewSummaryDiscountsText);
@@ -98,6 +115,8 @@ public class ReviewSummaryView extends Reviewable {
         mConfirmTextView = (MPTextView) mView.findViewById(R.id.mpsdkReviewButtonText);
         mTEATextView = (MPTextView) mView.findViewById(R.id.mpsdkTEA);
         mCFTTextView = (MPTextView) mView.findViewById(R.id.mpsdkCFT);
+        mCustomDescriptionTextView = (MPTextView) mView.findViewById(R.id.mpsdkReviewSummaryCustomText);
+        mCustomAmountTextView = (MPTextView) mView.findViewById(R.id.mpsdkReviewSummaryCustomAmount);
         mConfirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -127,17 +146,22 @@ public class ReviewSummaryView extends Reviewable {
         mProductsText.setText(getFormattedAmount(mAmount));
         mProductsLabelText.setText(mProductDetailText);
 
+        //Custom info
+        if (hasCustomInfo()) {
+            showCustomInfo();
+        }
+        
         //Discounts
         if (hasDiscount()) {
             showDiscountRow();
         } else {
-            mDiscountsRow.setVisibility(View.GONE);
+            mDiscountsRow.setVisibility(GONE);
         }
         //Subtotal
         if (hasSubtotal()) {
             mSubtotalText.setText(getFormattedAmount(getSubtotal()));
         } else {
-            mSubtotalRow.setVisibility(View.GONE);
+            mSubtotalRow.setVisibility(GONE);
         }
         if (isCardPaymentMethod()) {
             //Pagas
@@ -145,9 +169,9 @@ public class ReviewSummaryView extends Reviewable {
             showTotal(mPayerCost.getTotalAmount());
             showFinance();
         } else {
-            mPayerCostRow.setVisibility(View.GONE);
-            mFirstSeparator.setVisibility(View.GONE);
-            mSubtotalRow.setVisibility(View.GONE);
+            mPayerCostRow.setVisibility(GONE);
+            mFirstSeparator.setVisibility(GONE);
+            mSubtotalRow.setVisibility(GONE);
             mTotalText.setText(getFormattedAmount(getSubtotal()));
         }
 
@@ -162,6 +186,7 @@ public class ReviewSummaryView extends Reviewable {
             mTEATextView.setVisibility(View.VISIBLE);
             mTEATextView.setText(TEA + mPayerCost.getTEAPercent());
         }
+
         if (mPayerCost.hasCFT()) {
             mCFTTextView.setVisibility(View.VISIBLE);
             mCFTTextView.setText(CFT + mPayerCost.getCFTPercent());
@@ -174,6 +199,20 @@ public class ReviewSummaryView extends Reviewable {
             if (mDecorationPreference.isDarkFontEnabled()) {
                 mConfirmTextView.setTextColor(mDecorationPreference.getDarkFontColor(mContext));
             }
+        }
+    }
+
+    private void showCustomInfo() {
+        mCustomRow.setVisibility(View.VISIBLE);
+
+        Spanned customAmount = getFormattedAmount(mCustomAmount);
+
+        mCustomAmountTextView.setText(customAmount);
+        mCustomDescriptionTextView.setText(mCustomDescription);
+
+        if (mCustomTextColor != null) {
+            mCustomAmountTextView.setTextColor(mCustomTextColor);
+            mCustomDescriptionTextView.setTextColor(mCustomTextColor);
         }
     }
 
@@ -208,6 +247,10 @@ public class ReviewSummaryView extends Reviewable {
 
     private void showTotal(BigDecimal amount) {
         mTotalText.setText(getFormattedAmount(amount));
+    }
+
+    private boolean hasCustomInfo() {
+        return mCurrencyId != null && !isEmpty(mCustomDescription) && mCustomAmount != null && mCustomAmount.compareTo(BigDecimal.ZERO) >= 0;
     }
 
     private boolean hasDiscount() {

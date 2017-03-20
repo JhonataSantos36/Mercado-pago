@@ -1,10 +1,15 @@
 package com.mercadopago.preferences;
 
+import android.graphics.Color;
+import android.support.annotation.ColorInt;
+import android.support.annotation.ColorRes;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 
 import com.mercadopago.constants.ReviewKeys;
 import com.mercadopago.model.Reviewable;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +27,9 @@ public class ReviewScreenPreference {
     private transient List<Reviewable> reviewables;
     private List<String> reviewOrder;
     private String discountDetail;
+    private String summaryCustomDescription;
+    private Integer summaryCustomDetailColor;
+    private BigDecimal summaryCustomAmount;
 
     public ReviewScreenPreference(Builder builder) {
         this.title = builder.title;
@@ -32,6 +40,9 @@ public class ReviewScreenPreference {
         this.itemsReview = builder.itemsReview;
         this.reviewables = builder.reviewables;
         this.reviewOrder = builder.reviewOrder;
+        this.summaryCustomDescription = builder.summaryCustomDescription;
+        this.summaryCustomDetailColor = builder.summaryCustomDetailColor;
+        this.summaryCustomAmount = builder.summaryCustomAmount;
     }
 
     public boolean hasCustomReviewables() {
@@ -71,6 +82,30 @@ public class ReviewScreenPreference {
         return discountDetail;
     }
 
+    public String getSummaryCustomDescription() {
+        return summaryCustomDescription;
+    }
+
+    public BigDecimal getSummaryCustomAmount() {
+        return summaryCustomAmount;
+    }
+
+    public Integer getSummaryCustomTextColor() {
+        return summaryCustomDetailColor;
+    }
+
+    public boolean hasSummaryCustomInfo() {
+        return isSummaryCustomDescriptionValid() && isSummaryCustomAmountValid();
+    }
+
+    private boolean isSummaryCustomDescriptionValid() {
+        return this.summaryCustomDescription != null && !this.summaryCustomDescription.isEmpty();
+    }
+
+    private boolean isSummaryCustomAmountValid() {
+        return summaryCustomAmount != null && summaryCustomAmount.compareTo(BigDecimal.ZERO) > 0;
+    }
+
     public void addReviewable(@NonNull Reviewable reviewable) {
         if(this.reviewables == null) {
             this.reviewables = new ArrayList<>();
@@ -94,8 +129,11 @@ public class ReviewScreenPreference {
         private String cancelText;
         private String productDetail;
         private String discountDetail;
+        private String summaryCustomDescription;
+        private BigDecimal summaryCustomAmount;
         private Reviewable itemsReview;
         private List<String> reviewOrder;
+        private Integer summaryCustomDetailColor;
 
         public Builder() {
             this.reviewables = new ArrayList<>();
@@ -138,6 +176,26 @@ public class ReviewScreenPreference {
 
         public Builder setReviewOrder(List<String> reviewOrder) {
             this.reviewOrder = reviewOrder;
+            return this;
+        }
+
+        public Builder setSummaryCustomDetail(String customRowDescription, BigDecimal customRowAmount) {
+            this.summaryCustomDescription = customRowDescription;
+            this.summaryCustomAmount = customRowAmount;
+            return this;
+        }
+
+        public Builder setSummaryCustomDetail(String summaryCustomDescription, BigDecimal summaryCustomAmount, String summaryCustomTextColor) {
+            this.summaryCustomDescription = summaryCustomDescription;
+            this.summaryCustomAmount = summaryCustomAmount;
+            this.summaryCustomDetailColor = Color.parseColor(summaryCustomTextColor);
+            return this;
+        }
+
+        public Builder setSummaryCustomDetail(String summaryCustomDescription, BigDecimal summaryCustomAmount, @ColorInt Integer summaryCustomDetailColor) {
+            this.summaryCustomDescription = summaryCustomDescription;
+            this.summaryCustomAmount = summaryCustomAmount;
+            this.summaryCustomDetailColor = summaryCustomDetailColor;
             return this;
         }
 

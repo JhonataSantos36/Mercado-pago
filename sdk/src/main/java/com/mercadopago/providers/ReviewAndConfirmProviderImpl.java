@@ -8,7 +8,6 @@ import com.mercadopago.callbacks.OnReviewChange;
 import com.mercadopago.controllers.CustomReviewablesHandler;
 import com.mercadopago.core.MercadoPagoComponents;
 import com.mercadopago.model.CardInfo;
-import com.mercadopago.core.MercadoPagoUI;
 import com.mercadopago.model.Discount;
 import com.mercadopago.model.Item;
 import com.mercadopago.model.PayerCost;
@@ -44,6 +43,9 @@ public class ReviewAndConfirmProviderImpl implements ReviewAndConfirmProvider {
         }
         String productDetailText = getProductDetailText();
         String discountDetailText = getDiscountDetailText(discount);
+        String customDescriptionText = getCustomDescriptionText();
+        Integer customTextColor = getCustomTextColor();
+        BigDecimal customAmount = getCustomAmount();
 
         return new MercadoPagoComponents.Views.SummaryViewBuilder()
                 .setContext(context)
@@ -55,6 +57,9 @@ public class ReviewAndConfirmProviderImpl implements ReviewAndConfirmProvider {
                 .setAmount(amount)
                 .setDiscount(discount)
                 .setCurrencyId(site.getCurrencyId())
+                .setCustomDescriptionText(customDescriptionText)
+                .setCustomAmount(customAmount)
+                .setCustomTextColor(customTextColor)
                 .setDecorationPreference(decorationPreference)
                 .setConfirmPaymentCallback(onConfirmPaymentCallback)
                 .build();
@@ -151,5 +156,33 @@ public class ReviewAndConfirmProviderImpl implements ReviewAndConfirmProvider {
             }
         }
         return discountDetail;
+    }
+
+    private String getCustomDescriptionText() {
+        String customDescription = "";
+        if (this.reviewScreenPreference != null && !TextUtil.isEmpty(this.reviewScreenPreference.getSummaryCustomDescription())) {
+            customDescription = reviewScreenPreference.getSummaryCustomDescription();
+        }
+        return customDescription;
+    }
+
+    private Integer getCustomTextColor() {
+        Integer customTextColor = null;
+        if (this.reviewScreenPreference != null && this.reviewScreenPreference.getSummaryCustomTextColor() != null) {
+            customTextColor = reviewScreenPreference.getSummaryCustomTextColor();
+        }
+        return customTextColor;
+    }
+
+    private BigDecimal getCustomAmount() {
+        BigDecimal customAmount = new BigDecimal(0);
+        if (this.reviewScreenPreference != null && isCustomRowAmountValid()) {
+            customAmount = reviewScreenPreference.getSummaryCustomAmount();
+        }
+        return customAmount;
+    }
+
+    private boolean isCustomRowAmountValid() {
+        return reviewScreenPreference.getSummaryCustomAmount() != null && reviewScreenPreference.getSummaryCustomAmount().compareTo(BigDecimal.ZERO) >= 0;
     }
 }

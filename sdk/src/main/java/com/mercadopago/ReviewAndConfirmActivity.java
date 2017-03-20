@@ -12,7 +12,6 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.NestedScrollView;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -27,14 +26,6 @@ import com.mercadopago.constants.Sites;
 import com.mercadopago.controllers.CheckoutTimer;
 import com.mercadopago.customviews.MPTextView;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import com.mercadopago.adapters.ReviewablesAdapter;
-import com.mercadopago.constants.Sites;
-import com.mercadopago.controllers.CheckoutTimer;
-import com.mercadopago.customviews.MPTextView;
-import com.mercadopago.model.CardInfo;
 import com.mercadopago.model.Discount;
 import com.mercadopago.model.Item;
 import com.mercadopago.model.PayerCost;
@@ -52,12 +43,6 @@ import com.mercadopago.providers.ReviewAndConfirmProviderImpl;
 import com.mercadopago.uicontrollers.FontCache;
 import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
-import com.mercadopago.observers.TimerObserver;
-import com.mercadopago.presenters.ReviewAndConfirmPresenter;
-import com.mercadopago.providers.ReviewAndConfirmProviderImpl;
-import com.mercadopago.util.ErrorUtil;
-import com.mercadopago.util.JsonUtil;
-import com.mercadopago.util.LayoutUtil;
 import com.mercadopago.views.ReviewAndConfirmView;
 
 import java.lang.reflect.Type;

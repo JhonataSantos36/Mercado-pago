@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.ColorInt;
 import android.support.annotation.DrawableRes;
 
 import com.mercadopago.BankDealsActivity;
@@ -1844,7 +1845,9 @@ public class MercadoPagoComponents {
             private String confirmationMessage;
             private String productDetailText;
             private String discountDetailText;
-
+            private String customDescriptionText;
+            private Integer customTextColor;
+            private BigDecimal customAmount;
 
             public SummaryViewBuilder setContext(Context context) {
                 this.context = context;
@@ -1901,8 +1904,23 @@ public class MercadoPagoComponents {
                 return this;
             }
 
+            public SummaryViewBuilder setCustomDescriptionText(String customDescriptionText) {
+                this.customDescriptionText = customDescriptionText;
+                return this;
+            }
+
+            public SummaryViewBuilder setCustomAmount(BigDecimal customAmount) {
+                this.customAmount = customAmount;
+                return this;
+            }
+
+            public SummaryViewBuilder setCustomTextColor(@ColorInt Integer customTextColor) {
+                this.customTextColor = customTextColor;
+                return this;
+            }
+
             public ReviewSummaryView build() {
-                return new ReviewSummaryView(context, confirmationMessage, productDetailText, discountDetailText, paymentMethod, payerCost, amount, discount, currencyId, decorationPreference, callback);
+                return new ReviewSummaryView(context, confirmationMessage, productDetailText, discountDetailText, paymentMethod, payerCost, amount, discount, currencyId, customDescriptionText, customAmount, customTextColor, decorationPreference, callback);
             }
         }
 
