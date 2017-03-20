@@ -2,13 +2,16 @@ package com.mercadopago;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spanned;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
@@ -28,6 +31,7 @@ import com.mercadopago.model.Site;
 import com.mercadopago.mptracker.MPTracker;
 import com.mercadopago.preferences.PaymentResultScreenPreference;
 import com.mercadopago.uicontrollers.discounts.DiscountRowView;
+import com.mercadopago.util.ColorsUtil;
 import com.mercadopago.util.CurrenciesUtil;
 import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
@@ -90,6 +94,7 @@ public class CongratsActivity extends MercadoPagoBaseActivity implements ReviewS
     private Site mSite;
     private BigDecimal mAmount;
     private PaymentResultScreenPreference mPaymentResultScreenPreference;
+    private ViewGroup mTitleBackground;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -154,6 +159,7 @@ public class CongratsActivity extends MercadoPagoBaseActivity implements ReviewS
         mReviewables = (RecyclerView) findViewById(R.id.mpsdkReviewablesRecyclerView);
         mSecondaryExitButton = (FrameLayout) findViewById(R.id.mpsdkCongratsSecondaryExitButton);
         mSecondaryExitTextView = (MPTextView) findViewById(R.id.mpsdkCongratsSecondaryExitButtonText);
+        mTitleBackground = (ViewGroup) findViewById(R.id.mpsdkTitleBackground);
 
         mDiscountFrameLayout.setVisibility(View.GONE);
         mExitButtonText.setOnClickListener(new View.OnClickListener() {
@@ -258,6 +264,13 @@ public class CongratsActivity extends MercadoPagoBaseActivity implements ReviewS
                 mSecondaryExitButton.setVisibility(View.VISIBLE);
                 mSecondaryExitTextView.setVisibility(View.VISIBLE);
                 setSecondaryExitButtonListener();
+            }
+            if (mPaymentResultScreenPreference.hasTitleBackgroundColor()) {
+                mTitleBackground.setBackgroundColor(ContextCompat.getColor(this, mPaymentResultScreenPreference.getTitleBackgroundColor()));
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    int darkerTintColor = ColorsUtil.darker(ContextCompat.getColor(this, mPaymentResultScreenPreference.getTitleBackgroundColor()));
+                    ColorsUtil.tintStatusBar(this, darkerTintColor);
+                }
             }
         }
     }

@@ -1,5 +1,7 @@
 package com.mercadopago.util;
 
+import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -76,9 +78,9 @@ public class ColorsUtil {
     }
 
     public static void decorateTransparentToolbar(Toolbar toolbar, MPTextView title,
-                                             DecorationPreference decorationPreference,
-                                             ActionBar actionBar,
-                                             Context context) {
+                                                  DecorationPreference decorationPreference,
+                                                  ActionBar actionBar,
+                                                  Context context) {
         if (decorationPreference.isDarkFontEnabled()) {
             decorateDarkFontUpArrow(toolbar, decorationPreference,
                     actionBar, context);
@@ -99,11 +101,15 @@ public class ColorsUtil {
     }
 
     public static void decorateTextView(DecorationPreference decorationPreference,
-                                         MPTextView textView,
-                                         Context context) {
+                                        MPTextView textView,
+                                        Context context) {
         if (decorationPreference.isDarkFontEnabled()) {
             textView.setTextColor(decorationPreference.getDarkFontColor(context));
         }
     }
 
+    @TargetApi(value = 21)
+    public static void tintStatusBar(Activity activity, Integer color) {
+        activity.getWindow().setStatusBarColor(color);
+    }
 }

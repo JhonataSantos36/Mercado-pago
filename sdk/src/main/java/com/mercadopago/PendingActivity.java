@@ -3,6 +3,7 @@ package com.mercadopago;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
@@ -10,6 +11,7 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
@@ -26,6 +28,7 @@ import com.mercadopago.model.Reviewable;
 import com.mercadopago.mptracker.MPTracker;
 import com.mercadopago.observers.TimerObserver;
 import com.mercadopago.preferences.PaymentResultScreenPreference;
+import com.mercadopago.util.ColorsUtil;
 import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
 
@@ -47,6 +50,7 @@ public class PendingActivity extends MercadoPagoBaseActivity implements TimerObs
     protected RecyclerView mReviewables;
     protected FrameLayout mSecondaryExitButton;
     protected MPTextView mSecondaryExitTextView;
+    protected ViewGroup mTitleBackground;
 
     //Params
     protected String mMerchantPublicKey;
@@ -97,6 +101,7 @@ public class PendingActivity extends MercadoPagoBaseActivity implements TimerObs
     }
 
     protected void initializeControls() {
+        mTitleBackground = (ViewGroup) findViewById(R.id.mpsdkTitleBackground);
         mPendingTitle = (MPTextView) findViewById(R.id.mpsdkPendingTitle);
         mPendingSubtitle = (MPTextView) findViewById(R.id.mpsdkPendingSubtitle);
         mExitButtonText = (MPTextView) findViewById(R.id.mpsdkExitButtonPending);
@@ -108,7 +113,6 @@ public class PendingActivity extends MercadoPagoBaseActivity implements TimerObs
         mReviewables = (RecyclerView) findViewById(R.id.mpsdkReviewablesRecyclerView);
         mSecondaryExitButton = (FrameLayout) findViewById(R.id.mpsdkPendingSecondaryExitButton);
         mSecondaryExitTextView = (MPTextView) findViewById(R.id.mpsdkPendingSecondaryExitButtonText);
-
         mExitButtonText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -188,6 +192,13 @@ public class PendingActivity extends MercadoPagoBaseActivity implements TimerObs
                 mSecondaryExitButton.setVisibility(View.VISIBLE);
                 mSecondaryExitTextView.setVisibility(View.VISIBLE);
                 setSecondaryExitButtonListener();
+            }
+            if (mPaymentResultScreenPreference.hasTitleBackgroundColor()) {
+                mTitleBackground.setBackgroundColor(ContextCompat.getColor(this, mPaymentResultScreenPreference.getTitleBackgroundColor()));
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    int darkerTintColor = ColorsUtil.darker(ContextCompat.getColor(this, mPaymentResultScreenPreference.getTitleBackgroundColor()));
+                    ColorsUtil.tintStatusBar(this, darkerTintColor);
+                }
             }
         }
     }

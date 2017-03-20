@@ -165,7 +165,7 @@ public class CheckoutExampleActivity extends AppCompatActivity {
                 .setSite(Sites.ARGENTINA)
 //                .addExcludedPaymentType(PaymentTypes.ATM)
 //                .addExcludedPaymentType(PaymentTypes.BANK_TRANSFER)
-                .addExcludedPaymentType(PaymentTypes.CREDIT_CARD)
+//                .addExcludedPaymentType(PaymentTypes.CREDIT_CARD)
 //                .addExcludedPaymentType(PaymentTypes.DEBIT_CARD)
 //                .addExcludedPaymentType(PaymentTypes.TICKET)
                 .enableAccountMoney()
@@ -274,6 +274,7 @@ public class CheckoutExampleActivity extends AppCompatActivity {
                 .setApprovedTitle("Recargaste!")
                 .setApprovedSecondaryExitButton("Secondary", RESULT_CUSTOM_EXIT)
                 .addPendingReviewable(congratsReview)
+                .addCongratsReviewable(congratsReview)
                 .setExitButtonTitle("Ir a Actividad")
                 .build();
 

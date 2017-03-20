@@ -1,5 +1,6 @@
 package com.mercadopago.preferences;
 
+import android.support.annotation.ColorRes;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 
@@ -16,6 +17,7 @@ import java.util.List;
 
 public class PaymentResultScreenPreference {
 
+    private Integer titleBackgroundColor;
     private String approvedTitle;
     private String approvedSubtitle;
     private String pendingTitle;
@@ -52,6 +54,7 @@ public class PaymentResultScreenPreference {
     private Integer secondaryPendingExitResultCode;
 
     private PaymentResultScreenPreference(Builder builder) {
+        this.titleBackgroundColor = builder.titleBackgroundColor;
         this.approvedTitle = builder.approvedTitle;
         this.approvedSubtitle = builder.approvedSubtitle;
         this.pendingTitle = builder.pendingTitle;
@@ -242,8 +245,17 @@ public class PaymentResultScreenPreference {
         return secondaryPendingExitResultCode;
     }
 
+    public boolean hasTitleBackgroundColor() {
+        return titleBackgroundColor != null;
+    }
+
+    public Integer getTitleBackgroundColor() {
+        return titleBackgroundColor;
+    }
+
     public static class Builder {
 
+        private Integer titleBackgroundColor;
         private String approvedTitle;
         private String approvedSubtitle;
         private String pendingTitle;
@@ -455,6 +467,11 @@ public class PaymentResultScreenPreference {
 
         public Builder setRejectedIconSubtext(String text) {
             this.rejectedIconSubtext = text;
+            return this;
+        }
+
+        public Builder setTitleBackgroundColor(@ColorRes Integer titleBackgroundColor) {
+            this.titleBackgroundColor = titleBackgroundColor;
             return this;
         }
 
