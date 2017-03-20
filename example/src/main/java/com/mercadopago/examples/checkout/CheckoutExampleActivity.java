@@ -51,7 +51,6 @@ import java.util.Locale;
 import java.util.Map;
 
 public class CheckoutExampleActivity extends AppCompatActivity {
-
     private static final int RESULT_CUSTOM_EXIT = 1321;
     private Activity mActivity;
     private ProgressBar mProgressBar;
@@ -108,7 +107,6 @@ public class CheckoutExampleActivity extends AppCompatActivity {
                 .setCancelText("Ir a Actividad")
                 .setProductDetail("Recarga de celular")
                 .addReviewable(cellphoneReview)
-                .setSummaryCustomDetail("Lala", new BigDecimal("20"), ContextCompat.getColor(this, R.color.mpsdk_blue_button))
                 .build();
 
         FlowPreference flowPreference = new FlowPreference.Builder()

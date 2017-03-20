@@ -1,9 +1,8 @@
 package com.mercadopago.uicontrollers.reviewandconfirm;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.support.annotation.ColorInt;
-import android.support.annotation.ColorRes;
+
 import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,7 +25,6 @@ import com.mercadopago.util.MercadoPagoUtil;
 
 import java.math.BigDecimal;
 
-import static android.view.View.GONE;
 import static com.mercadopago.util.TextUtils.isEmpty;
 
 /**
@@ -155,13 +153,13 @@ public class ReviewSummaryView extends Reviewable {
         if (hasDiscount()) {
             showDiscountRow();
         } else {
-            mDiscountsRow.setVisibility(GONE);
+            mDiscountsRow.setVisibility(View.GONE);
         }
         //Subtotal
         if (hasSubtotal()) {
             mSubtotalText.setText(getFormattedAmount(getSubtotal()));
         } else {
-            mSubtotalRow.setVisibility(GONE);
+            mSubtotalRow.setVisibility(View.GONE);
         }
         if (isCardPaymentMethod()) {
             //Pagas
@@ -169,9 +167,9 @@ public class ReviewSummaryView extends Reviewable {
             showTotal(mPayerCost.getTotalAmount());
             showFinance();
         } else {
-            mPayerCostRow.setVisibility(GONE);
-            mFirstSeparator.setVisibility(GONE);
-            mSubtotalRow.setVisibility(GONE);
+            mPayerCostRow.setVisibility(View.GONE);
+            mFirstSeparator.setVisibility(View.GONE);
+            mSubtotalRow.setVisibility(View.GONE);
             mTotalText.setText(getFormattedAmount(getSubtotal()));
         }
 
@@ -221,13 +219,7 @@ public class ReviewSummaryView extends Reviewable {
         Spanned amountText;
         String discountText;
 
-        if (mDiscount.hasPercentOff()) {
-            discountText = mContext.getResources().getString(R.string.mpsdk_review_summary_discount_with_percent_off,
-                    String.valueOf(mDiscount.getPercentOff()));
-        } else {
-            discountText = mContext.getResources().getString(R.string.mpsdk_review_summary_discount_with_amount_off);
-        }
-
+        discountText = getDiscountText();
         mDiscountPercentageText.setText(discountText);
 
         formattedAmountBuilder.append("-");
@@ -236,6 +228,47 @@ public class ReviewSummaryView extends Reviewable {
         amountText = CurrenciesUtil.formatCurrencyInText(mDiscount.getCouponAmount(), mCurrencyId, formattedAmountBuilder.toString(), false, true);
 
         mDiscountsText.setText(amountText);
+    }
+
+    private String getDiscountText() {
+        String discountText;
+
+        if (mDiscount.hasPercentOff()) {
+            discountText = getDiscountTextWithPercentOff();
+        } else {
+            discountText = getDiscountTextWithoutPercentOff();
+        }
+
+        return discountText;
+    }
+
+    private String getDiscountTextWithPercentOff() {
+        String discountText;
+
+        if (hasDiscountConcept()) {
+            discountText = mDiscount.getConcept() + " " + mDiscount.getPercentOff() + mContext.getResources().getString(R.string.mpsdk_percent);
+        } else {
+            discountText = mContext.getResources().getString(R.string.mpsdk_review_summary_discount_with_percent_off,
+                    String.valueOf(mDiscount.getPercentOff()));
+        }
+
+        return discountText;
+    }
+
+    private String getDiscountTextWithoutPercentOff() {
+        String discountText;
+
+        if (hasDiscountConcept()) {
+            discountText = mDiscount.getConcept();
+        } else {
+            discountText = mContext.getResources().getString(R.string.mpsdk_review_summary_discount_with_amount_off);
+        }
+
+        return discountText;
+    }
+
+    private Boolean hasDiscountConcept() {
+        return mDiscount != null && !isEmpty(mDiscount.getConcept());
     }
 
     private void showPayerCostRow() {

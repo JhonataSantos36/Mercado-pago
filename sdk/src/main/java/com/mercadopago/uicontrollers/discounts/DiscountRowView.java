@@ -17,6 +17,8 @@ import com.mercadopago.util.CurrenciesUtil;
 
 import java.math.BigDecimal;
 
+import static com.mercadopago.util.TextUtils.isEmpty;
+
 /**
  * Created by mromar on 1/19/17.
  */
@@ -38,6 +40,7 @@ public class DiscountRowView implements DiscountView {
     private MPTextView mTotalAmountTextView;
     private MPTextView mDiscountAmountTextView;
     private MPTextView mDiscountOffTextView;
+    private MPTextView mDiscountConcept;
     private ImageView mDiscountArrow;
     private LinearLayout mHighDiscountRow;
     private LinearLayout mHasDiscountLinearLayout;
@@ -115,6 +118,7 @@ public class DiscountRowView implements DiscountView {
             mDiscountAmountTextView.setVisibility(View.VISIBLE);
             mHasDiscountLinearLayout.setVisibility(View.GONE);
 
+            setDiscountConcept();
             setArrowVisibility();
             setSeparatorVisibility();
             setDiscountOff();
@@ -142,6 +146,16 @@ public class DiscountRowView implements DiscountView {
         } else {
             mHighDiscountRow.setVisibility(View.GONE);
         }
+    }
+
+    private void setDiscountConcept() {
+        if (hasDiscountConcept()) {
+            mDiscountConcept.setText(mDiscount.getConcept());
+        }
+    }
+
+    private Boolean hasDiscountConcept() {
+        return mDiscount != null && !isEmpty(mDiscount.getConcept());
     }
 
     private void setArrowVisibility() {
@@ -195,6 +209,7 @@ public class DiscountRowView implements DiscountView {
         mTotalAmountTextView = (MPTextView) mView.findViewById(R.id.mpsdkTotalAmount);
         mDiscountAmountTextView = (MPTextView) mView.findViewById(R.id.mpsdkDiscountAmount);
         mDiscountOffTextView = (MPTextView) mView.findViewById(R.id.mpsdkDiscountOff);
+        mDiscountConcept = (MPTextView) mView.findViewById(R.id.mpsdkDiscountConcept);
         mHasDiscountLinearLayout = (LinearLayout) mView.findViewById(R.id.mpsdkHasDiscount);
         mHasDirectDiscountLinearLayout = (LinearLayout) mView.findViewById(R.id.mpsdkHasDirectDiscount);
         mDiscountDetail = (LinearLayout) mView.findViewById(R.id.mpsdkDiscountDetail);

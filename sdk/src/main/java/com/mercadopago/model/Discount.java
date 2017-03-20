@@ -11,6 +11,7 @@ public class Discount {
     private BigDecimal couponAmount;
     private String currencyId;
     private String couponCode;
+    private String concept;
 
     public void setCouponCode(String couponCode) {
         this.couponCode = couponCode;
@@ -74,5 +75,13 @@ public class Discount {
 
     public Boolean hasPercentOff() {
         return percentOff != null && !percentOff.equals(new BigDecimal(0));
+    }
+
+    public void setConcept(String concept) {
+        this.concept = concept;
+    }
+
+    public String getConcept() {
+        return this.concept;
     }
 }
