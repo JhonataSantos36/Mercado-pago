@@ -139,7 +139,7 @@ public class ReviewSummaryView extends Reviewable {
         } else {
             mSubtotalRow.setVisibility(View.GONE);
         }
-        if (mPaymentMethod != null && MercadoPagoUtil.isCard(mPaymentMethod.getPaymentTypeId())) {
+        if (isCardPaymentMethod()) {
             //Pagas
             showPayerCostRow();
             showTotal(mPayerCost.getTotalAmount());
@@ -149,6 +149,11 @@ public class ReviewSummaryView extends Reviewable {
             mFirstSeparator.setVisibility(View.GONE);
             mSubtotalRow.setVisibility(View.GONE);
             mTotalText.setText(getFormattedAmount(getSubtotal()));
+        }
+
+        if(!hasDiscount() && !isCardPaymentMethod()) {
+            mTotalRow.setVisibility(View.GONE);
+            mSecondSeparator.setVisibility(View.GONE);
         }
     }
 
@@ -218,6 +223,10 @@ public class ReviewSummaryView extends Reviewable {
 
     private boolean hasSubtotal() {
         return hasDiscount();
+    }
+
+    private boolean isCardPaymentMethod() {
+        return mPaymentMethod != null && MercadoPagoUtil.isCard(mPaymentMethod.getPaymentTypeId());
     }
 
     private BigDecimal getSubtotal() {

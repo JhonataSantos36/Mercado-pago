@@ -36,7 +36,12 @@ public class ReviewAndConfirmProviderImpl implements ReviewAndConfirmProvider {
 
     @Override
     public Reviewable getSummaryReviewable(PaymentMethod paymentMethod, PayerCost payerCost, BigDecimal amount, Discount discount, Site site, DecorationPreference decorationPreference, OnConfirmPaymentCallback onConfirmPaymentCallback) {
-        String confirmationMessage = getConfirmationMessage();
+        String confirmationMessage;
+        if (this.reviewScreenPreference != null && !TextUtil.isEmpty(this.reviewScreenPreference.getConfirmText())) {
+            confirmationMessage = reviewScreenPreference.getConfirmText();
+        } else {
+            confirmationMessage = context.getString(R.string.mpsdk_confirm);
+        }
         String productDetailText = getProductDetailText();
         String discountDetailText = getDiscountDetailText(discount);
 
@@ -109,13 +114,7 @@ public class ReviewAndConfirmProviderImpl implements ReviewAndConfirmProvider {
 
     @Override
     public String getConfirmationMessage() {
-        String confirmationMessage;
-        if (this.reviewScreenPreference != null && !TextUtil.isEmpty(this.reviewScreenPreference.getConfirmText())) {
-            confirmationMessage = reviewScreenPreference.getConfirmText();
-        } else {
-            confirmationMessage = context.getString(R.string.mpsdk_confirm);
-        }
-        return confirmationMessage;
+        return context.getString(R.string.mpsdk_confirm);
     }
 
     @Override

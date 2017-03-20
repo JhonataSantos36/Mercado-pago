@@ -39,7 +39,6 @@
             android:paddingStart="25dp"
             android:paddingEnd="25dp"
             android:paddingRight="25dp"
-            android:textColor="@color/mpsdk_review_payment_text"
             android:textSize="24dp"
             tools:text="Pagaras con Rapipago"/>
 

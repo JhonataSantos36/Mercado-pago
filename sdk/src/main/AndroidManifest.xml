@@ -102,7 +102,7 @@
         <activity
             android:name=".ReviewAndConfirmActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.ProcessMercadoPagoTheme.NoActionbar" />
+            android:theme="@style/Theme.ReviewConfirmMercadoPagoTheme.NoActionbar" />
         <activity
             android:name=".VaultActivity"
             android:theme="@style/Theme.MercadoPagoTheme" />
