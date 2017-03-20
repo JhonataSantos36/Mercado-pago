@@ -101,7 +101,7 @@
         <com.mercadopago.customviews.MPTextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.6"
+            android:layout_weight="0.4"
             android:layout_gravity="start"
             android:textSize="18dp"
             android:text="@string/mpsdk_review_summary_pay" />
@@ -109,7 +109,7 @@
             android:id="@+id/mpsdkReviewSummaryPayerCostContainer"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.4"
+            android:layout_weight="0.6"
             android:gravity="center"
             android:layout_gravity="center"/>
     </LinearLayout>

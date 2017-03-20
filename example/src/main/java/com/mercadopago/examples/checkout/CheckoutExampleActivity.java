@@ -161,7 +161,7 @@ public class CheckoutExampleActivity extends AppCompatActivity {
                 .build();
 
         mCheckoutPreference = new CheckoutPreference.Builder()
-                .addItem(new Item("Item", BigDecimal.ONE))
+                .addItem(new Item("Item", new BigDecimal(10000)))
                 .setSite(Sites.ARGENTINA)
 //                .addExcludedPaymentType(PaymentTypes.ATM)
 //                .addExcludedPaymentType(PaymentTypes.BANK_TRANSFER)
