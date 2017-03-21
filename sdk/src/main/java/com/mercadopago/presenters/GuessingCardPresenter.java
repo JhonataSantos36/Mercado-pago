@@ -28,6 +28,7 @@ import com.mercadopago.uicontrollers.card.CardView;
 import com.mercadopago.uicontrollers.card.FrontCardView;
 import com.mercadopago.util.TextUtil;
 import com.mercadopago.util.MercadoPagoUtil;
+import com.mercadopago.util.MPCardMaskUtil;
 import com.mercadopago.views.GuessingCardActivityView;
 
 import java.math.BigDecimal;
@@ -73,6 +74,7 @@ public class GuessingCardPresenter {
     private int mSecurityCodeLength;
     private String mSecurityCodeLocation;
     private boolean mIsSecurityCodeRequired;
+    private boolean mEraseSpace;
 
     //Card Info
     private String mBin;
@@ -100,9 +102,16 @@ public class GuessingCardPresenter {
     private BigDecimal mTransactionAmount;
     private Discount mDiscount;
     private String mPrivateKey;
+    private int mCurrentNumberLength;
+
 
     public GuessingCardPresenter(Context context) {
         this.mContext = context;
+        this.mEraseSpace = true;
+    }
+
+    public void setCurrentNumberLength(int currentNumberLength) {
+        this.mCurrentNumberLength = currentNumberLength;
     }
 
     public void setView(GuessingCardActivityView view) {
@@ -295,6 +304,10 @@ public class GuessingCardPresenter {
 
     public CardInformation getCardInformation() {
         return mCardInfo;
+    }
+
+    public boolean isCardLengthResolved() {
+        return mPaymentMethod != null && mBin != null;
     }
 
     public Integer getCardNumberLength() {
@@ -558,8 +571,11 @@ public class GuessingCardPresenter {
         } else {
             int cardNumberLength = getCardNumberLength();
             int spaces = FrontCardView.CARD_DEFAULT_AMOUNT_SPACES;
-            if (cardNumberLength == FrontCardView.CARD_NUMBER_DINERS_LENGTH || cardNumberLength == FrontCardView.CARD_NUMBER_AMEX_LENGTH) {
+
+            if (cardNumberLength == FrontCardView.CARD_NUMBER_DINERS_LENGTH || cardNumberLength == FrontCardView.CARD_NUMBER_AMEX_LENGTH || cardNumberLength == FrontCardView.CARD_NUMBER_MAESTRO_SETTING_1_LENGTH) {
                 spaces = FrontCardView.CARD_AMEX_DINERS_AMOUNT_SPACES;
+            } else if (cardNumberLength == FrontCardView.CARD_NUMBER_MAESTRO_SETTING_2_LENGTH) {
+                spaces = FrontCardView.CARD_NUMBER_MAESTRO_SETTING_2_AMOUNT_SPACES;
             }
             mView.setCardNumberInputMaxLength(cardNumberLength + spaces);
             SecurityCode securityCode = setting.getSecurityCode();
@@ -882,6 +898,19 @@ public class GuessingCardPresenter {
         this.mTransactionAmount = transactionAmount;
     }
 
+    public boolean isDefaultSpaceErasable() {
+
+        if (MPCardMaskUtil.isDefaultSpaceErasable(mCurrentNumberLength)) {
+            mEraseSpace = true;
+        }
+
+        if (isCardLengthResolved() && mEraseSpace && (getCardNumberLength() == FrontCardView.CARD_NUMBER_MAESTRO_SETTING_1_LENGTH || getCardNumberLength() == FrontCardView.CARD_NUMBER_MAESTRO_SETTING_2_LENGTH)) {
+            mEraseSpace = false;
+            return true;
+        }
+        return false;
+    }
+
     private boolean isMerchantServerDiscountsAvailable() {
         return !TextUtil.isEmpty(getMerchantServerDiscountUrl()) && !TextUtil.isEmpty(mMerchantGetDiscountUri);
     }
@@ -904,6 +933,13 @@ public class GuessingCardPresenter {
 
     public String getPrivateKey() {
         return mPrivateKey;
+    }
 
+    public void clearSpaceErasableSettings() {
+        this.mEraseSpace = true;
+    }
+
+    public boolean isPaymentMethodResolved() {
+        return mPaymentMethod != null;
     }
 }

@@ -50,6 +50,7 @@ public class CellphoneReview extends Reviewable {
             @Override
             public void onClick(View v) {
                 notifyChangeRequired(CELLPHONE_CHANGE);
+                Toast.makeText(mContext, "Cambiar número!", Toast.LENGTH_SHORT).show();
             }
         });
     }

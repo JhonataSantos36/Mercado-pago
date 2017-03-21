@@ -1,5 +1,7 @@
 package com.mercadopago.reviewandconfirm;
 
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -12,8 +14,8 @@ import com.mercadopago.model.CardInfo;
 import com.mercadopago.model.Discount;
 import com.mercadopago.model.Item;
 import com.mercadopago.model.PayerCost;
-import com.mercadopago.model.PaymentData;
 import com.mercadopago.model.PaymentMethod;
+import com.mercadopago.model.ReviewSubscriber;
 import com.mercadopago.model.Reviewable;
 import com.mercadopago.model.Site;
 import com.mercadopago.model.Token;
@@ -608,7 +610,7 @@ public class ReviewAndConfirmPresenterTest {
         }
     }
 
-    public class ReviewAndConfirmMockedView implements ReviewAndConfirmView {
+    public class ReviewAndConfirmMockedView implements ReviewAndConfirmView, ReviewSubscriber {
 
         private String errorMessage;
         private List<Reviewable> reviewables;
@@ -668,7 +670,17 @@ public class ReviewAndConfirmPresenterTest {
         }
 
         @Override
-        public void cancelPayment(Integer resultCode, PaymentData paymentData) {
+        public ReviewSubscriber getReviewSubscriber() {
+            return this;
+        }
+
+        @Override
+        public void changeRequired(Integer resultCode, @Nullable Bundle data) {
+
+        }
+
+        @Override
+        public void changeRequired(Reviewable reviewable) {
 
         }
     }

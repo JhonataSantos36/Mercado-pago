@@ -1,6 +1,7 @@
 package com.mercadopago.uicontrollers.reviewandconfirm;
 
 import android.content.Context;
+import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,8 @@ import com.mercadopago.model.Reviewable;
 import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.uicontrollers.payercosts.PayerCostColumn;
 import com.mercadopago.uicontrollers.payercosts.PayerCostViewController;
+import com.mercadopago.util.CurrenciesUtil;
+import com.mercadopago.util.ReviewUtil;
 
 /**
  * Created by vaserber on 11/7/16.
@@ -94,7 +97,6 @@ public class ReviewPaymentOnView extends Reviewable {
                 mCallback.onChangeSelected();
             }
         });
-
         if (mEditionEnabled) {
             mChangePaymentButton.setVisibility(View.VISIBLE);
         }
@@ -105,24 +107,38 @@ public class ReviewPaymentOnView extends Reviewable {
 
         decorateText();
         mPaymentImage.setImageResource(R.drawable.mpsdk_review_payment_on);
-        mPaymentText.setVisibility(View.GONE);
 
-        mPayerCostViewController = new PayerCostColumn(mContext, mCurrency);
-        mPayerCostViewController.inflateInParent(mPayerCostContainer, true);
-        mPayerCostViewController.initializeControls();
-        mPayerCostViewController.drawPayerCost(mPayerCost);
-        showFinance();
+        if (mPayerCost.getInstallments() != 1) {
+            mPaymentText.setVisibility(View.GONE);
+
+            mPayerCostViewController = new PayerCostColumn(mContext, mCurrency);
+            mPayerCostViewController.inflateInParent(mPayerCostContainer, true);
+            mPayerCostViewController.initializeControls();
+            mPayerCostViewController.drawPayerCost(mPayerCost);
+            showFinance();
+
+
+        } else {
+            mPayerCostContainer.setVisibility(View.GONE);
+            mTEATextView.setVisibility(View.GONE);
+            mCFTTextView.setVisibility(View.GONE);
+
+            Spanned amountText = CurrenciesUtil.getFormattedAmount(mPayerCost.getTotalAmount(), mCurrency);
+            mPaymentText.setText(amountText);
+        }
+
         String description = mContext.getString(R.string.mpsdk_review_description_card, mPaymentMethod.getName(),
                 mCardInfo.getLastFourDigits());
+
         mPaymentDescription.setText(description);
     }
 
     private void showFinance() {
-        if(mPayerCost.hasTEA()) {
+        if (mPayerCost.hasTEA()) {
             mTEATextView.setVisibility(View.VISIBLE);
             mTEATextView.setText(TEA + mPayerCost.getTEAPercent());
         }
-        if(mPayerCost.hasCFT()) {
+        if (mPayerCost.hasCFT()) {
             mCFTTextView.setVisibility(View.VISIBLE);
             mCFTTextView.setText(CFT + mPayerCost.getCFTPercent());
         }

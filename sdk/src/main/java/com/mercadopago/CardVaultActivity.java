@@ -9,7 +9,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
 import com.google.gson.reflect.TypeToken;
-import com.mercadopago.core.MercadoPago;
 import com.mercadopago.core.MercadoPagoComponents;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.Card;
@@ -124,6 +123,7 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultAct
 
     private void getActivityParameters() {
         Boolean installmentsEnabled = getIntent().getBooleanExtra("installmentsEnabled", false);
+        Boolean discountEnabled = getIntent().getBooleanExtra("discountEnabled", true);
         Boolean directDiscountEnabled = getIntent().getBooleanExtra("directDiscountEnabled", true);
         Boolean installmentsReviewEnabled = getIntent().getBooleanExtra("installmentsReviewEnabled", true);
         String publicKey = getIntent().getStringExtra("merchantPublicKey");
@@ -138,7 +138,11 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultAct
         String amount = getIntent().getStringExtra("amount");
         String payerEmail = getIntent().getStringExtra("payerEmail");
         Discount discount = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("discount"), Discount.class);
-        Boolean discountEnabled = getIntent().getBooleanExtra("discountEnabled", true);
+
+        String discountAdditionalInfo = getIntent().getStringExtra("discountAdditionalInfo");
+        Type type = new TypeToken<Map<String, String>>() {
+        }.getType();
+        Map<String, String> discountAdditionalInfoMap = JsonUtil.getInstance().getGson().fromJson(discountAdditionalInfo, type);
 
         if (amount != null) {
             amountValue = new BigDecimal(amount);
@@ -253,7 +257,6 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultAct
                         .setDecorationPreference(mDecorationPreference)
                         .setPaymentRecovery(mPresenter.getPaymentRecovery())
                         .startActivity();
-
                 overridePendingTransition(R.anim.mpsdk_slide_right_to_left_in, R.anim.mpsdk_slide_right_to_left_out);
             }
         });
@@ -380,7 +383,6 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultAct
 
             mPresenter.setPaymentMethod(paymentMethod);
             mPresenter.setCardToken(cardToken);
-            mPresenter.setIssuer(issuer);
             mPresenter.setCardInfo(new CardInfo(cardToken));
             mPresenter.checkStartIssuersActivity();
             mPresenter.setDirectDiscountEnabled(directDiscountEnabled);

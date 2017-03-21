@@ -52,6 +52,7 @@ public class PayerCostColumn implements PayerCostViewController {
 
     private void drawBasicPayerCost(PayerCost payerCost) {
         mPayerCost = payerCost;
+
         setInstallmentsText();
 
         if (payerCost.getInstallmentRate().compareTo(BigDecimal.ZERO) == 0) {

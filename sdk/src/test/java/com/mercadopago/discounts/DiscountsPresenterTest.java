@@ -5,7 +5,6 @@ import com.mercadopago.model.Discount;
 import com.mercadopago.mvp.OnResourcesRetrievedCallback;
 import com.mercadopago.presenters.DiscountsPresenter;
 import com.mercadopago.providers.DiscountsProvider;
-import com.mercadopago.views.DiscountsView;
 import com.mercadopago.views.DiscountsActivityView;
 
 import org.junit.Test;

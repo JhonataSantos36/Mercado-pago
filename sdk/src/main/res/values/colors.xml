@@ -85,13 +85,14 @@
     <color name="mpsdk_tarshop">#3D4064</color>
     <color name="mpsdk_cencosud">#F7F7F7</color>
     <color name="mpsdk_cabal">#D4B44B</color>
+    <color name="mpsdk_debcabal">#D4B44B</color>
     <color name="mpsdk_argencard">#405B72</color>
     <color name="mpsdk_cordobesa">#5BAB97</color>
     <color name="mpsdk_cordial">#CBD8DF</color>
     <color name="mpsdk_mercadopago_cc">#DCDDD9</color>
     <color name="mpsdk_mercadopagocard">#DCDDD9</color>
     <color name="mpsdk_cmr">#3D7D4E</color>
-
+    <color name="mpsdk_maestro">#004883</color>
 
     <color name="mpsdk_pagofacil">#FFFFFF</color>
     <color name="mpsdk_rapipago">#FFFFFF</color>
@@ -117,12 +118,14 @@
     <color name="mpsdk_font_tarshop">#B3FFFFFF</color>
     <color name="mpsdk_font_cencosud">#B3333333</color>
     <color name="mpsdk_font_cabal">#B3333333</color>
+    <color name="mpsdk_font_debcabal">#B3333333</color>
     <color name="mpsdk_font_argencard">#B3FFFFFF</color>
     <color name="mpsdk_font_cordobesa">#B3333333</color>
     <color name="mpsdk_font_cordial">#B3333333</color>
     <color name="mpsdk_font_mercadopago_cc">#B3333333</color>
     <color name="mpsdk_font_mercadopagocard">#B3333333</color>
     <color name="mpsdk_font_cmr">#B3FFFFFF</color>
+    <color name="mpsdk_font_maestro">#B3FFFFFF</color>
 
     <color name="mpsdk_font_pagofacil">#B3333333</color>
     <color name="mpsdk_font_rapipago">#B3333333</color>

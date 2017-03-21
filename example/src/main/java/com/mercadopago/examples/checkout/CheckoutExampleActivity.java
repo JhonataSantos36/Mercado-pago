@@ -3,40 +3,23 @@ package com.mercadopago.examples.checkout;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
-import android.widget.CheckBox;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.mercadopago.callbacks.Callback;
-import com.mercadopago.callbacks.PaymentCallback;
-import com.mercadopago.callbacks.PaymentDataCallback;
-import com.mercadopago.callbacks.PaymentResultCallback;
-import com.mercadopago.callbacks.ReviewableCallback;
 import com.mercadopago.constants.PaymentTypes;
 import com.mercadopago.constants.Sites;
-import com.mercadopago.controllers.CheckoutTimer;
-import com.mercadopago.core.MercadoPago;
 import com.mercadopago.core.MercadoPagoCheckout;
-import com.mercadopago.core.MerchantServer;
 import com.mercadopago.examples.R;
 import com.mercadopago.examples.reviewables.CellphoneReview;
 import com.mercadopago.examples.reviewables.CongratsReview;
-import com.mercadopago.examples.utils.ColorPickerDialog;
 import com.mercadopago.examples.utils.ExamplesUtils;
 import com.mercadopago.exceptions.MercadoPagoError;
-import com.mercadopago.model.ApiException;
-import com.mercadopago.model.Discount;
 import com.mercadopago.model.Item;
 import com.mercadopago.model.PaymentData;
 import com.mercadopago.model.PaymentResult;
-import com.mercadopago.model.Site;
 import com.mercadopago.preferences.CheckoutPreference;
-import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.model.Payment;
 import com.mercadopago.preferences.FlowPreference;
 import com.mercadopago.preferences.PaymentResultScreenPreference;
@@ -47,7 +30,6 @@ import com.mercadopago.util.LayoutUtil;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 
 public class CheckoutExampleActivity extends AppCompatActivity {
@@ -66,6 +48,7 @@ public class CheckoutExampleActivity extends AppCompatActivity {
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
         mRegularLayout = findViewById(R.id.regularLayout);
         mPublicKey = ExamplesUtils.DUMMY_MERCHANT_PUBLIC_KEY;
+
     }
 
     public void onContinueClicked(View view) {
@@ -74,16 +57,9 @@ public class CheckoutExampleActivity extends AppCompatActivity {
     }
 
     private void startMercadoPagoCheckout() {
-        Map<String, Object> additionalInfo = new HashMap<>();
-        additionalInfo.put("company_id", "movistar");
-        additionalInfo.put("phone_number", "111111");
-
-        String languageToLoad  = "pt"; // your language
-        Locale locale = new Locale(languageToLoad);
-        Locale.setDefault(locale);
 
         FlowPreference flowPreference = new FlowPreference.Builder()
-//                .disableReviewAndConfirmScreen()
+                .disableReviewAndConfirmScreen()
                 .disableDiscount()
                 .disableBankDeals()
                 .disableInstallmentsReviewScreen()
@@ -132,8 +108,7 @@ public class CheckoutExampleActivity extends AppCompatActivity {
                 .setSite(Sites.ARGENTINA)
                 .addExcludedPaymentType(PaymentTypes.ATM)
                 .addExcludedPaymentType(PaymentTypes.BANK_TRANSFER)
-                .addExcludedPaymentType(PaymentTypes.DEBIT_CARD)
-                .addExcludedPaymentType(PaymentTypes.DEBIT_CARD)
+//                .addExcludedPaymentType(PaymentTypes.DEBIT_CARD)
                 .addExcludedPaymentType(PaymentTypes.TICKET)
                 .enableAccountMoney()
                 .setPayerAccessToken("APP_USR-6077407713835188-120612-9c010367e2aba8808865b227526f4ccc__LB_LD__-232134231")

@@ -73,19 +73,21 @@
                     android:paddingRight="2dp"
                     android:layout_marginTop="10dp">
 
-                    <com.mercadopago.customviews.MPTextView
+                    <com.mercadopago.customviews.MPAutoResizeTextView
                         android:id="@+id/mpsdkIdentificationCardholderContainer"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="start"
                         android:textColor="@color/mpsdk_base_text"
                         android:textSize="20dp"
+                        app:minTextSize="8dp"
+                        android:maxLines="1"
                         android:visibility="visible"
                         android:text="•• ••• •••"
                         app:allowCustomFont="false"
                         app:fontStyle="mono_regular"/>
 
-                    <com.mercadopago.customviews.MPTextView
+                    <com.mercadopago.customviews.MPAutoResizeTextView
                         android:id="@+id/mpsdkIdNumberView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -93,6 +95,8 @@
                         android:textColor="@color/mpsdk_base_text"
                         android:textSize="18dp"
                         app:allowCustomFont="false"
+                        app:minTextSize="8dp"
+                        android:maxLines="1"
                         android:visibility="invisible"/>
 
                 </FrameLayout>

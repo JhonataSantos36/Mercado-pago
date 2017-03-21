@@ -988,6 +988,15 @@ public class CheckoutActivity extends MercadoPagoBaseActivity {
             }
         }
 
+        if (mDiscountEnabled && isDiscountValid()) {
+            paymentIntent.setCampaignId(mDiscount.getId().intValue());
+            paymentIntent.setCouponAmount(mDiscount.getCouponAmount().floatValue());
+
+            if (!isEmpty(mDiscount.getCouponCode())) {
+                paymentIntent.setCouponCode(mDiscount.getCouponCode());
+            }
+        }
+
         paymentIntent.setTransactionId(mTransactionId);
         return paymentIntent;
     }
