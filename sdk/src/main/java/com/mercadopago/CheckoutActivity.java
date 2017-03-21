@@ -551,7 +551,9 @@ public class CheckoutActivity extends MercadoPagoBaseActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == MercadoPagoComponents.Activities.PAYMENT_VAULT_REQUEST_CODE) {
+        if (data !=null && data.getStringExtra(ErrorUtil.ERROR_EXTRA_KEY) != null) {
+            resolveErrorRequest(resultCode, data);
+        } else if (requestCode == MercadoPagoComponents.Activities.PAYMENT_VAULT_REQUEST_CODE) {
             resolvePaymentVaultRequest(resultCode, data);
         } else if (requestCode == MercadoPagoComponents.Activities.PAYMENT_RESULT_REQUEST_CODE) {
             resolvePaymentResultRequest(resultCode, data);
@@ -559,8 +561,6 @@ public class CheckoutActivity extends MercadoPagoBaseActivity {
             resolveCardVaultRequest(resultCode, data);
         } else if (requestCode == MercadoPagoComponents.Activities.REVIEW_AND_CONFIRM_REQUEST_CODE) {
             resolveReviewAndConfirmRequest(resultCode, data);
-        } else {
-            resolveErrorRequest(resultCode, data);
         }
     }
 

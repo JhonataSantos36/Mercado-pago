@@ -23,6 +23,14 @@ import static com.mercadopago.core.MercadoPagoComponents.Activities.CONGRATS_REQ
 public class PaymentResultActivity extends Activity {
 
     public static final int RESULT_SILENT_OK = 3;
+    public static final String DISCOUNT_BUNDLE = "mDiscount";
+    public static final String DISCOUNT_ENABLED_BUNDLE = "mDiscountEnabled";
+    public static final String MERCHANT_PUBLIC_KEY_BUNDLE = "mMerchantPublicKey";
+    public static final String CONGRATS_DISPLAY_BUNDLE = "mCongratsDisplay";
+    public static final String PAYMENT_RESULT_BUNDLE = "mPaymentResult";
+    public static final String SITE_BUNDLE = "mSite";
+    public static final String AMOUNT_BUNDLE = "mAmount";
+    public static final String PAYMENT_RESULT_SCREEN_PREFERENCE_BUNDLE = "mPaymentResultScreenPreference";
 
     protected Discount mDiscount;
     protected Boolean mDiscountEnabled;
@@ -36,15 +44,45 @@ public class PaymentResultActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        getActivityParameters();
-
-        try {
-            validateActivityParameters();
-            onValidStart();
-        } catch (IllegalStateException exception) {
-            onInvalidStart(exception.getMessage());
+        if(savedInstanceState == null) {
+            getActivityParameters();
+            try {
+                validateActivityParameters();
+                onValidStart();
+            } catch (IllegalStateException exception) {
+                onInvalidStart(exception.getMessage());
+            }
         }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(DISCOUNT_BUNDLE, JsonUtil.getInstance().toJson(mDiscount));
+        outState.putBoolean(DISCOUNT_ENABLED_BUNDLE, mDiscountEnabled);
+        outState.putString(MERCHANT_PUBLIC_KEY_BUNDLE, mMerchantPublicKey);
+        outState.putInt(CONGRATS_DISPLAY_BUNDLE, mCongratsDisplay);
+        outState.putString(PAYMENT_RESULT_BUNDLE, JsonUtil.getInstance().toJson(mPaymentResult));
+        outState.putString(SITE_BUNDLE, JsonUtil.getInstance().toJson(mSite));
+        if(mAmount != null) {
+            outState.putString(AMOUNT_BUNDLE, mAmount.toString());
+        }
+        outState.putString(PAYMENT_RESULT_SCREEN_PREFERENCE_BUNDLE, JsonUtil.getInstance().toJson(mPaymentResultScreenPreference));
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        mDiscount = JsonUtil.getInstance().fromJson(savedInstanceState.getString(DISCOUNT_BUNDLE), Discount.class);
+        mDiscountEnabled = savedInstanceState.getBoolean(DISCOUNT_ENABLED_BUNDLE);
+        mMerchantPublicKey = savedInstanceState.getString(MERCHANT_PUBLIC_KEY_BUNDLE);
+        mCongratsDisplay = savedInstanceState.getInt(CONGRATS_DISPLAY_BUNDLE, -1);
+        mPaymentResult = JsonUtil.getInstance().fromJson(savedInstanceState.getString(PAYMENT_RESULT_BUNDLE), PaymentResult.class);
+        mSite = JsonUtil.getInstance().fromJson(savedInstanceState.getString(SITE_BUNDLE), Site.class);
+        if(savedInstanceState.getString(AMOUNT_BUNDLE) != null) {
+            mAmount = new BigDecimal(savedInstanceState.getString(AMOUNT_BUNDLE));
+        }
+        mPaymentResultScreenPreference = JsonUtil.getInstance().fromJson(savedInstanceState.getString(PAYMENT_RESULT_SCREEN_PREFERENCE_BUNDLE), PaymentResultScreenPreference.class);
+        super.onRestoreInstanceState(savedInstanceState);
     }
 
     protected void getActivityParameters() {
@@ -62,10 +100,12 @@ public class PaymentResultActivity extends Activity {
 
     protected void validateActivityParameters() throws IllegalStateException {
         if (mMerchantPublicKey == null) {
-            throw new IllegalStateException("merchant public key not set");
+            throw new IllegalStateException("merchant public key is null");
         }
         if (mPaymentResult == null) {
-            throw new IllegalStateException("payment result not set");
+            throw new IllegalStateException("payment result is null");
+        } else if (mPaymentResult.getPaymentData() == null) {
+            throw new IllegalStateException("payment data is null");
         }
         if (!isStatusValid()) {
             throw new IllegalStateException("payment not does not have status");

@@ -12,6 +12,7 @@ import com.mercadopago.exceptions.MercadoPagoError;
 public class ErrorUtil {
 
     public static final int ERROR_REQUEST_CODE = 94;
+    public static final String ERROR_EXTRA_KEY = "mercadoPagoError";
 
     public static void startErrorActivity(Activity launcherActivity, String message, boolean recoverable) {
         MercadoPagoError mercadoPagoError = new MercadoPagoError(message, recoverable);
