@@ -671,12 +671,13 @@ public class CheckoutActivity extends MercadoPagoBaseActivity {
     }
 
     private void showReviewAndConfirm() {
-        MPTracker.getInstance().trackScreen("REVIEW_AND_CONFIRM", "3", mMerchantPublicKey, mCheckoutPreference.getSite().getId(), BuildConfig.VERSION_NAME, this);
 
         mPaymentMethodEditionRequested = false;
 
         MercadoPagoComponents.Activities.ReviewAndConfirmBuilder builder = new MercadoPagoComponents.Activities.ReviewAndConfirmBuilder()
                 .setActivity(this)
+                .setMerchantPublicKey(mMerchantPublicKey)
+                .setSite(mCheckoutPreference.getSite())
                 .setReviewScreenPreference(mReviewScreenPreference)
                 .setPaymentMethod(mSelectedPaymentMethod)
                 .setPayerCost(mSelectedPayerCost)

@@ -35,6 +35,7 @@ import com.mercadopago.model.ReviewSubscriber;
 import com.mercadopago.model.Reviewable;
 import com.mercadopago.model.Site;
 import com.mercadopago.model.Token;
+import com.mercadopago.mptracker.MPTracker;
 import com.mercadopago.observers.TimerObserver;
 import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.preferences.ReviewScreenPreference;
@@ -43,6 +44,7 @@ import com.mercadopago.providers.ReviewAndConfirmProviderImpl;
 import com.mercadopago.uicontrollers.FontCache;
 import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
+import com.mercadopago.util.TextUtil;
 import com.mercadopago.views.ReviewAndConfirmView;
 
 import java.lang.reflect.Type;
@@ -77,6 +79,8 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
     protected ReviewAndConfirmPresenter mPresenter;
     protected DecorationPreference mDecorationPreference;
     protected ReviewScreenPreference mReviewScreenPreference;
+    protected String mPublicKey;
+    protected Site mSite;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,6 +100,7 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
         setListeners();
         initializeReviewablesRecyclerView();
         mPresenter.initialize();
+        trackScreen();
     }
 
     private void setListeners() {
@@ -124,6 +129,9 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
     }
 
     private void getActivityParameters() {
+        mPublicKey = getIntent().getStringExtra("merchantPublicKey");
+        mSite = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("site"), Site.class);
+
         Boolean termsAndConditionsEnabled = getIntent().getBooleanExtra("termsAndConditionsEnabled", true);
         Boolean editionEnabled = getIntent().getBooleanExtra("editionEnabled", true);
         Boolean discountEnabled = getIntent().getBooleanExtra("discountEnabled", true);
@@ -413,5 +421,11 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
     @Override
     public void changeRequired(Integer resultCode, Bundle resultData) {
         cancelPayment(resultCode, resultData, mPresenter.getPaymentData());
+    }
+
+    private void trackScreen() {
+        if(mSite != null && !TextUtil.isEmpty(mPublicKey)) {
+            MPTracker.getInstance().trackScreen("REVIEW_AND_CONFIRM", "2", mPublicKey, mSite.getId(), BuildConfig.VERSION_NAME, this);
+        }
     }
 }
