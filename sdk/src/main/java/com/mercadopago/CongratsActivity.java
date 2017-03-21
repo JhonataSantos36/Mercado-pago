@@ -500,11 +500,7 @@ public class CongratsActivity extends MercadoPagoBaseActivity implements ReviewS
                 Spanned spannedInstallmentsText = CurrenciesUtil.formatCurrencyInText(mTotalAmount,
                         mCurrencyId, sb.toString(), false, true);
 
-                if (mDiscount != null) {
-                    mInstallmentsDescription.setVisibility(View.GONE);
-                    mInstallmentsTotalAmountDescription.setVisibility(View.GONE);
-                }
-
+                mInstallmentsTotalAmountDescription.setVisibility(View.GONE);
                 mInstallmentsDescription.setText(spannedInstallmentsText);
                 mInterestAmountDescription.setVisibility(View.GONE);
             }
