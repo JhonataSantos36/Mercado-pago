@@ -1,5 +1,6 @@
 package com.mercadopago.preferences;
 
+import android.support.annotation.ColorInt;
 import android.support.annotation.ColorRes;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
@@ -470,7 +471,7 @@ public class PaymentResultScreenPreference {
             return this;
         }
 
-        public Builder setTitleBackgroundColor(@ColorRes Integer titleBackgroundColor) {
+        public Builder setTitleBackgroundColor(@ColorInt Integer titleBackgroundColor) {
             this.titleBackgroundColor = titleBackgroundColor;
             return this;
         }

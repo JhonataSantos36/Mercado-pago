@@ -266,9 +266,9 @@ public class CongratsActivity extends MercadoPagoBaseActivity implements ReviewS
                 setSecondaryExitButtonListener();
             }
             if (mPaymentResultScreenPreference.hasTitleBackgroundColor()) {
-                mTitleBackground.setBackgroundColor(ContextCompat.getColor(this, mPaymentResultScreenPreference.getTitleBackgroundColor()));
+                mTitleBackground.setBackgroundColor(mPaymentResultScreenPreference.getTitleBackgroundColor());
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    int darkerTintColor = ColorsUtil.darker(ContextCompat.getColor(this, mPaymentResultScreenPreference.getTitleBackgroundColor()));
+                    int darkerTintColor = ColorsUtil.darker(mPaymentResultScreenPreference.getTitleBackgroundColor());
                     ColorsUtil.tintStatusBar(this, darkerTintColor);
                 }
             }
