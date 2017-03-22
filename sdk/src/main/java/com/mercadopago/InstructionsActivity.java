@@ -31,6 +31,7 @@ import com.mercadopago.model.PaymentData;
 import com.mercadopago.model.PaymentResult;
 import com.mercadopago.model.Site;
 import com.mercadopago.mptracker.MPTracker;
+import com.mercadopago.preferences.PaymentResultScreenPreference;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.CurrenciesUtil;
 import com.mercadopago.util.ErrorUtil;
@@ -38,6 +39,7 @@ import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;
 import com.mercadopago.util.MercadoPagoUtil;
 import com.mercadopago.util.ScaleUtil;
+import com.mercadopago.util.TextUtil;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -78,6 +80,7 @@ public class InstructionsActivity extends MercadoPagoBaseActivity {
     protected Site mSite;
     protected String mCurrencyId;
     protected BigDecimal mTotalAmount;
+    protected PaymentResultScreenPreference mPaymentResultScreenPreference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +88,7 @@ public class InstructionsActivity extends MercadoPagoBaseActivity {
         getActivityParameters();
         setContentView();
         initializeControls();
+        customizeScreen();
         mActivity = this;
         try {
             validateActivityParameters();
@@ -97,7 +101,8 @@ public class InstructionsActivity extends MercadoPagoBaseActivity {
     protected void getActivityParameters() {
         mMerchantPublicKey = getIntent().getStringExtra("merchantPublicKey");
         mPaymentResult = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("paymentResult"), PaymentResult.class);
-        if(getIntent().getStringExtra("amount") != null) {
+        mPaymentResultScreenPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("paymentResultScreenPreference"), PaymentResultScreenPreference.class);
+        if (getIntent().getStringExtra("amount") != null) {
             mTotalAmount = new BigDecimal(getIntent().getStringExtra("amount"));
         }
         mSite = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("site"), Site.class);
@@ -139,6 +144,12 @@ public class InstructionsActivity extends MercadoPagoBaseActivity {
                 finish();
             }
         });
+    }
+
+    private void customizeScreen() {
+        if (mPaymentResultScreenPreference != null && !TextUtil.isEmpty(mPaymentResultScreenPreference.getExitButtonTitle())) {
+            mExitTextView.setText(mPaymentResultScreenPreference.getExitButtonTitle());
+        }
     }
 
     protected void onInvalidStart(String message) {

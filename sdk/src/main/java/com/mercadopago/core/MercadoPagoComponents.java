@@ -1344,6 +1344,7 @@ public class MercadoPagoComponents {
             private PaymentResult paymentResult;
             private Site site;
             private BigDecimal amount;
+            private PaymentResultScreenPreference paymentResultScreenPreference;
 
             public InstructionsActivityBuilder setActivity(Activity activity) {
                 this.activity = activity;
@@ -1370,6 +1371,11 @@ public class MercadoPagoComponents {
                 return this;
             }
 
+            public InstructionsActivityBuilder setPaymentResultScreenPreference(PaymentResultScreenPreference preference) {
+                this.paymentResultScreenPreference = preference;
+                return this;
+            }
+
             public void startActivity() {
                 if (this.activity == null) throw new IllegalStateException("activity is null");
                 if (this.amount == null) throw new IllegalStateException("amount is null");
@@ -1386,6 +1392,7 @@ public class MercadoPagoComponents {
                 Intent instructionIntent = new Intent(activity, InstructionsActivity.class);
                 instructionIntent.putExtra("merchantPublicKey", merchantPublicKey);
                 instructionIntent.putExtra("paymentResult", JsonUtil.getInstance().toJson(paymentResult));
+                instructionIntent.putExtra("paymentResultScreenPreference", JsonUtil.getInstance().toJson(paymentResultScreenPreference));
                 instructionIntent.putExtra("site", JsonUtil.getInstance().toJson(site));
                 instructionIntent.putExtra("amount", amount.toString());
 

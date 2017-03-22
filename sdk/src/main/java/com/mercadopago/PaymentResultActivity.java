@@ -149,6 +149,7 @@ public class PaymentResultActivity extends Activity {
                 .setPaymentResult(mPaymentResult)
                 .setSite(mSite)
                 .setAmount(mAmount)
+                .setPaymentResultScreenPreference(mPaymentResultScreenPreference)
                 .startActivity();
     }
 
