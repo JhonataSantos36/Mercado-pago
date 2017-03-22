@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,6 +16,7 @@ import android.widget.ImageView;
 
 import com.mercadopago.adapters.ReviewablesAdapter;
 import com.mercadopago.callbacks.CallbackHolder;
+import com.mercadopago.constants.ContentLocation;
 import com.mercadopago.constants.PaymentTypes;
 import com.mercadopago.controllers.CustomReviewablesHandler;
 import com.mercadopago.core.MercadoPagoComponents;
@@ -64,7 +64,7 @@ public class CongratsActivity extends MercadoPagoBaseActivity implements ReviewS
     protected MPTextView mExitButtonText;
     protected FrameLayout mDiscountFrameLayout;
     protected Activity mActivity;
-    protected RecyclerView mReviewables;
+    protected RecyclerView mBottomReviewables;
     protected FrameLayout mSecondaryExitButton;
     protected MPTextView mSecondaryExitTextView;
 
@@ -95,6 +95,7 @@ public class CongratsActivity extends MercadoPagoBaseActivity implements ReviewS
     private BigDecimal mAmount;
     private PaymentResultScreenPreference mPaymentResultScreenPreference;
     private ViewGroup mTitleBackground;
+    private RecyclerView mTopReviewables;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -156,7 +157,8 @@ public class CongratsActivity extends MercadoPagoBaseActivity implements ReviewS
         mPaymentMethodImage = (ImageView) findViewById(R.id.mpsdkPaymentMethodImage);
         mExitButtonText = (MPTextView) findViewById(R.id.mpsdkExitButtonCongrats);
         mDiscountFrameLayout = (FrameLayout) findViewById(R.id.mpsdkDiscount);
-        mReviewables = (RecyclerView) findViewById(R.id.mpsdkReviewablesRecyclerView);
+        mBottomReviewables = (RecyclerView) findViewById(R.id.mpsdkReviewablesRecyclerView);
+        mTopReviewables = (RecyclerView) findViewById(R.id.mpsdkTopReviewablesRecyclerView);
         mSecondaryExitButton = (FrameLayout) findViewById(R.id.mpsdkCongratsSecondaryExitButton);
         mSecondaryExitTextView = (MPTextView) findViewById(R.id.mpsdkCongratsSecondaryExitButtonText);
         mTitleBackground = (ViewGroup) findViewById(R.id.mpsdkTitleBackground);
@@ -171,9 +173,13 @@ public class CongratsActivity extends MercadoPagoBaseActivity implements ReviewS
     }
 
     private void initializeReviewablesRecyclerView() {
-        mReviewables.setNestedScrollingEnabled(false);
-        mReviewables.setLayoutManager(new LinearLayoutManager(this));
-        mReviewables.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.HORIZONTAL));
+        mBottomReviewables.setNestedScrollingEnabled(false);
+        mBottomReviewables.setLayoutManager(new LinearLayoutManager(this));
+        mBottomReviewables.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.HORIZONTAL));
+
+        mTopReviewables.setNestedScrollingEnabled(false);
+        mTopReviewables.setLayoutManager(new LinearLayoutManager(this));
+        mTopReviewables.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.HORIZONTAL));
     }
 
     protected void onValidStart() {
@@ -183,7 +189,8 @@ public class CongratsActivity extends MercadoPagoBaseActivity implements ReviewS
         setPaymentEmailDescription();
         setPaymentStatementDescription();
         setDisplayTime();
-        showReviewables();
+        showBottomReviewables();
+        showTopReviewables();
     }
 
     private void initializePaymentData() {
@@ -327,14 +334,30 @@ public class CongratsActivity extends MercadoPagoBaseActivity implements ReviewS
         mExitButtonText.setText(getResources().getString(R.string.mpsdk_text_continue));
     }
 
-    public void showReviewables() {
-        List<Reviewable> customReviewables = retrieveCustomReviewables();
+    public void showBottomReviewables() {
+        List<Reviewable> customReviewables = retrieveBottomCustomReviewables();
         ReviewablesAdapter reviewablesAdapter = new ReviewablesAdapter(customReviewables);
-        mReviewables.setAdapter(reviewablesAdapter);
+        mBottomReviewables.setAdapter(reviewablesAdapter);
     }
 
-    private List<Reviewable> retrieveCustomReviewables() {
-        List<Reviewable> customReviewables = CustomReviewablesHandler.getInstance().getCongratsReviewables();
+    public void showTopReviewables() {
+        List<Reviewable> customReviewables = retrieveTopCustomReviewables();
+        ReviewablesAdapter reviewablesAdapter = new ReviewablesAdapter(customReviewables);
+        mTopReviewables.setAdapter(reviewablesAdapter);
+    }
+
+    private List<Reviewable> retrieveTopCustomReviewables() {
+        List<Reviewable> customReviewables = CustomReviewablesHandler.getInstance().getCongratsReviewables(ContentLocation.TOP);
+
+        for (Reviewable reviewable : customReviewables) {
+            reviewable.setReviewSubscriber(this);
+        }
+
+        return customReviewables;
+    }
+
+    private List<Reviewable> retrieveBottomCustomReviewables() {
+        List<Reviewable> customReviewables = CustomReviewablesHandler.getInstance().getCongratsReviewables(ContentLocation.BOTTOM);
 
         for (Reviewable reviewable : customReviewables) {
             reviewable.setReviewSubscriber(this);

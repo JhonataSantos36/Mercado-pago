@@ -137,7 +137,6 @@ public class InstructionsActivity extends MercadoPagoBaseActivity {
             @Override
             public void onClick(View v) {
                 finish();
-                animateOut();
             }
         });
     }
@@ -372,10 +371,6 @@ public class InstructionsActivity extends MercadoPagoBaseActivity {
                 finish();
             }
         }
-    }
-
-    private void animateOut() {
-        overridePendingTransition(R.anim.mpsdk_slide_right_to_left_in, R.anim.mpsdk_slide_right_to_left_out);
     }
 
     @Override

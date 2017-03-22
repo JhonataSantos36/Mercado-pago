@@ -9,6 +9,7 @@ import com.mercadopago.CheckoutActivity;
 import com.mercadopago.callbacks.CallbackHolder;
 import com.mercadopago.callbacks.PaymentCallback;
 import com.mercadopago.callbacks.PaymentDataCallback;
+import com.mercadopago.constants.ContentLocation;
 import com.mercadopago.controllers.CustomReviewablesHandler;
 import com.mercadopago.controllers.CustomServicesHandler;
 import com.mercadopago.model.Discount;
@@ -88,7 +89,8 @@ public class MercadoPagoCheckout {
 
     private void customizePaymentResultReview(PaymentResultScreenPreference paymentResultScreenPreference) {
         if (paymentResultScreenPreference != null && paymentResultScreenPreference.hasCustomCongratsReviewables()) {
-            CustomReviewablesHandler.getInstance().addCongratsReviewables(paymentResultScreenPreference.getCongratsReviewables());
+            CustomReviewablesHandler.getInstance().addCongratsReviewables(paymentResultScreenPreference.getCongratsReviewables(ContentLocation.BOTTOM), ContentLocation.BOTTOM);
+            CustomReviewablesHandler.getInstance().addCongratsReviewables(paymentResultScreenPreference.getCongratsReviewables(ContentLocation.TOP), ContentLocation.TOP);
         }
         if (paymentResultScreenPreference != null && paymentResultScreenPreference.hasCustomPendingReviewables()) {
             CustomReviewablesHandler.getInstance().addPendingReviewables(paymentResultScreenPreference.getPendingReviewables());

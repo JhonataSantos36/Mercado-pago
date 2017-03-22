@@ -1,16 +1,18 @@
 package com.mercadopago.preferences;
 
 import android.support.annotation.ColorInt;
-import android.support.annotation.ColorRes;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 
 import com.mercadopago.callbacks.CallbackHolder;
 import com.mercadopago.callbacks.PaymentResultCallback;
+import com.mercadopago.constants.ContentLocation;
 import com.mercadopago.model.Reviewable;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by vaserber on 2/13/17.
@@ -47,7 +49,7 @@ public class PaymentResultScreenPreference {
     private boolean enableApprovedReceipt = true;
     private boolean enableApprovedAmount = true;
     private boolean enableApprovedPaymentMethodInfo = true;
-    private transient List<Reviewable> congratsReviewables;
+    private transient Map<ContentLocation, List<Reviewable>> congratsReviewables;
     private transient List<Reviewable> pendingReviewables;
 
     private Integer secondaryRejectedExitResultCode;
@@ -88,8 +90,12 @@ public class PaymentResultScreenPreference {
         this.enableApprovedReceipt = builder.enableApprovedReceipt;
         this.enableApprovedAmount = builder.enableApprovedAmount;
         this.enableApprovedPaymentMethodInfo = builder.enableApprovedPaymentMethodInfo;
-        this.congratsReviewables = builder.congratsReviewables;
         this.pendingReviewables = builder.pendingReviewables;
+
+        this.congratsReviewables = new HashMap<>();
+        this.congratsReviewables.put(ContentLocation.BOTTOM, builder.bottomCongratsReviewables);
+        this.congratsReviewables.put(ContentLocation.TOP, builder.topCongratsReviewables);
+
     }
 
     public boolean hasCustomCongratsReviewables() {
@@ -100,8 +106,13 @@ public class PaymentResultScreenPreference {
         return pendingReviewables != null && !pendingReviewables.isEmpty();
     }
 
+    @Deprecated
     public List<Reviewable> getCongratsReviewables() {
-        return congratsReviewables;
+        return congratsReviewables.get(ContentLocation.BOTTOM);
+    }
+
+    public List<Reviewable> getCongratsReviewables(ContentLocation location) {
+        return congratsReviewables.get(location);
     }
 
     public List<Reviewable> getPendingReviewables() {
@@ -224,20 +235,6 @@ public class PaymentResultScreenPreference {
         return this.enableRejectedIconSubtext;
     }
 
-    public void addCongratsReviewable(@NonNull Reviewable reviewable) {
-        if (this.congratsReviewables == null) {
-            this.congratsReviewables = new ArrayList<>();
-        }
-        this.congratsReviewables.add(reviewable);
-    }
-
-    public void addPendingReviewable(@NonNull Reviewable reviewable) {
-        if (this.pendingReviewables == null) {
-            this.pendingReviewables = new ArrayList<>();
-        }
-        this.pendingReviewables.add(reviewable);
-    }
-
     public Integer getSecondaryRejectedExitResultCode() {
         return secondaryRejectedExitResultCode;
     }
@@ -285,7 +282,8 @@ public class PaymentResultScreenPreference {
         private boolean enableApprovedReceipt = true;
         private boolean enableApprovedAmount = true;
         private boolean enableApprovedPaymentMethodInfo = true;
-        private List<Reviewable> congratsReviewables;
+        private List<Reviewable> topCongratsReviewables;
+        private List<Reviewable> bottomCongratsReviewables;
         private List<Reviewable> pendingReviewables;
 
         private Integer secondaryCongratsExitResultCode;
@@ -293,7 +291,8 @@ public class PaymentResultScreenPreference {
         private Integer secondaryRejectedExitResultCode;
 
         public Builder() {
-            this.congratsReviewables = new ArrayList<>();
+            this.topCongratsReviewables = new ArrayList<>();
+            this.bottomCongratsReviewables = new ArrayList<>();
             this.pendingReviewables = new ArrayList<>();
         }
 
@@ -417,7 +416,17 @@ public class PaymentResultScreenPreference {
         }
 
         public Builder addCongratsReviewable(Reviewable customReviewable) {
-            this.congratsReviewables.add(customReviewable);
+            addCongratsReviewable(customReviewable, ContentLocation.BOTTOM);
+            return this;
+        }
+
+
+        public Builder addCongratsReviewable(Reviewable reviewable, ContentLocation location) {
+            if(ContentLocation.BOTTOM.equals(location)) {
+                this.bottomCongratsReviewables.add(reviewable);
+            } else {
+                this.topCongratsReviewables.add(reviewable);
+            }
             return this;
         }
 

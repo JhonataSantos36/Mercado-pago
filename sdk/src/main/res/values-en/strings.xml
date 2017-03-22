@@ -213,6 +213,7 @@
     <string name="mpsdk_review_summary_discount_with_percent_off">Discount %1$s%%</string>
     <string name="mpsdk_review_summary_discount_with_amount_off">Discount</string>
     <string name="mpsdk_account_money_description">Account money \nof Mercado Pago</string>
+    <string name="mpsdk_ryc_account_money_description">Mercado Pago account money</string>
 
     <!-- Discount -->
     <string name="mpsdk_discount">Discount</string>
