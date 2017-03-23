@@ -38,6 +38,7 @@ import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.MercadoPagoUtil;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -347,23 +348,31 @@ public class CongratsActivity extends MercadoPagoBaseActivity implements ReviewS
     }
 
     private List<Reviewable> retrieveTopCustomReviewables() {
-        List<Reviewable> customReviewables = CustomReviewablesHandler.getInstance().getCongratsReviewables(ContentLocation.TOP);
+        if (CustomReviewablesHandler.getInstance().hasCongratsReviewables(ContentLocation.TOP)) {
+            List<Reviewable> customReviewables = CustomReviewablesHandler.getInstance().getCongratsReviewables(ContentLocation.TOP);
 
-        for (Reviewable reviewable : customReviewables) {
-            reviewable.setReviewSubscriber(this);
+            for (Reviewable reviewable : customReviewables) {
+                reviewable.setReviewSubscriber(this);
+            }
+
+            return customReviewables;
+        } else {
+            return new ArrayList<>();
         }
-
-        return customReviewables;
     }
 
     private List<Reviewable> retrieveBottomCustomReviewables() {
-        List<Reviewable> customReviewables = CustomReviewablesHandler.getInstance().getCongratsReviewables(ContentLocation.BOTTOM);
+        if (CustomReviewablesHandler.getInstance().hasCongratsReviewables(ContentLocation.BOTTOM)) {
+            List<Reviewable> customReviewables = CustomReviewablesHandler.getInstance().getCongratsReviewables(ContentLocation.BOTTOM);
 
-        for (Reviewable reviewable : customReviewables) {
-            reviewable.setReviewSubscriber(this);
+            for (Reviewable reviewable : customReviewables) {
+                reviewable.setReviewSubscriber(this);
+            }
+
+            return customReviewables;
+        } else {
+            return new ArrayList<>();
         }
-
-        return customReviewables;
     }
 
     @Override

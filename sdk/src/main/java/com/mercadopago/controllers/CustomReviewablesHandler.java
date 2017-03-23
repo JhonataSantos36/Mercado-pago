@@ -56,6 +56,10 @@ public class CustomReviewablesHandler {
         return !congratsReviewables.isEmpty();
     }
 
+    public boolean hasCongratsReviewables(ContentLocation location) {
+        return congratsReviewables.containsKey(location);
+    }
+
     public boolean hasPendingReviewables() {
         return !pendingReviewables.isEmpty();
     }
