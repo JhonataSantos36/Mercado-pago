@@ -8,6 +8,7 @@ import android.text.TextUtils;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+
 import com.mercadopago.callbacks.Callback;
 import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.core.MercadoPago;
@@ -380,8 +381,7 @@ public class CheckoutActivity extends AppCompatActivity {
             showReviewAndConfirm();
         } else {
             if (!mPaymentMethodEditionRequested) {
-                Intent returnIntent = new Intent();
-                setResult(RESULT_CANCELED, returnIntent);
+                setResult(RESULT_CANCELED, data);
                 finish();
             } else {
                 showReviewAndConfirm();

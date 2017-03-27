@@ -56,7 +56,7 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
 
 
     private void onValidStart() {
-        if(viewAttached()) {
+        if (viewAttached()) {
             if (mDiscountEnabled) {
                 initPaymentVaultDiscountFlow();
             } else {
@@ -107,7 +107,7 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
         getResourcesProvider().getDirectDiscount(mAmount.toString(), mPayerEmail, new OnResourcesRetrievedCallback<Discount>() {
             @Override
             public void onSuccess(Discount discount) {
-                if(viewAttached()) {
+                if (viewAttached()) {
                     mDiscount = discount;
                     initializeDiscountRow();
                     initPaymentVaultFlow();
@@ -239,7 +239,7 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
         }
     }
 
-    private boolean isOnlyAccountMoneyEnabled() {
+    public boolean isOnlyAccountMoneyEnabled() {
         return mAccountMoneyEnabled
                 && mPaymentMethodSearch.getCustomSearchItems().size() == 1
                 && mPaymentMethodSearch.getCustomSearchItems().get(0).getId().equals(ACCOUNT_MONEY_ID)
