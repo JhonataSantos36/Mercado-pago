@@ -315,7 +315,7 @@ public class PendingActivity extends MercadoPagoBaseActivity implements TimerObs
     }
 
     private void hidePendingContentTitle() {
-        mContentTitleTextView.setVisibility(View.GONE);
+        mContentTitleTextView.setVisibility(View.INVISIBLE);
     }
 
     private void showTimer() {

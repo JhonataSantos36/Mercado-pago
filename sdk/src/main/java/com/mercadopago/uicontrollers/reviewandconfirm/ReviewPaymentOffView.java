@@ -11,6 +11,7 @@ import android.widget.ImageView;
 
 import com.mercadopago.R;
 import com.mercadopago.callbacks.OnReviewChange;
+import com.mercadopago.constants.PaymentMethods;
 import com.mercadopago.constants.ReviewKeys;
 import com.mercadopago.constants.Sites;
 import com.mercadopago.customviews.MPTextView;
@@ -112,22 +113,28 @@ public class ReviewPaymentOffView extends Reviewable {
 
         mPayerCostContainer.setVisibility(View.GONE);
 
-        int paymentInstructionsTemplate = ReviewUtil.getPaymentInstructionTemplate(mPaymentMethod);
+        mPaymentText.setText(getPaymentMethodDescription());
 
-        String originalNumber = CurrenciesUtil.formatNumber(mAmount, mSite.getCurrencyId());
-        String itemName;
-        itemName = ReviewUtil.getPaymentMethodDescription(mPaymentMethod, mContext);
-        String completeDescription = mContext.getString(paymentInstructionsTemplate, originalNumber, itemName);
-
-        Spanned amountText = CurrenciesUtil.formatCurrencyInText(mAmount, mSite.getCurrencyId(), completeDescription, false, true);
-
-        mPaymentText.setText(amountText);
-
-        if(TextUtil.isEmpty(mExtraInfo)) {
+        if (TextUtil.isEmpty(mExtraInfo)) {
             mPaymentMethodExtraInfo.setVisibility(View.GONE);
         } else {
             mPaymentDescription.setText(mExtraInfo);
         }
+    }
+
+    private CharSequence getPaymentMethodDescription() {
+        CharSequence description;
+        if (PaymentMethods.ACCOUNT_MONEY.equals(mPaymentMethod.getId())) {
+            description = mContext.getString(R.string.mpsdk_ryc_account_money_description);
+        } else {
+            int paymentInstructionsTemplate = ReviewUtil.getPaymentInstructionTemplate(mPaymentMethod);
+            String originalNumber = CurrenciesUtil.formatNumber(mAmount, mSite.getCurrencyId());
+            String itemName;
+            itemName = ReviewUtil.getPaymentMethodDescription(mPaymentMethod, mContext);
+            String completeDescription = mContext.getString(paymentInstructionsTemplate, originalNumber, itemName);
+            description = CurrenciesUtil.formatCurrencyInText(mAmount, mSite.getCurrencyId(), completeDescription, false, true);
+        }
+        return description;
     }
 
     private void setSmallTextSize() {
