@@ -157,8 +157,7 @@
                     android:layout_marginRight="25dp"
                     android:layout_marginStart="25dp"
                     android:layout_marginTop="14dp"
-                    android:background="@drawable/mpsdk_button_bg_stroke"
-                    android:onClick="onClickRejectionOptionButton">
+                    android:background="@drawable/mpsdk_button_bg_stroke">
 
                     <com.mercadopago.customviews.MPTextView
                         android:id="@+id/mpsdkRejectionOptionButtonText"

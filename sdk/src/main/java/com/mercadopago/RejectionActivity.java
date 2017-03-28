@@ -124,6 +124,12 @@ public class RejectionActivity extends MercadoPagoBaseActivity implements TimerO
             }
         });
 
+        mChangePaymentMethodButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClickRejectionOptionButton();
+            }
+        });
         mTimerTextView = (MPTextView) findViewById(R.id.mpsdkTimerTextView);
     }
 
@@ -411,7 +417,7 @@ public class RejectionActivity extends MercadoPagoBaseActivity implements TimerO
         mExitButton.setText(getString(R.string.mpsdk_text_cancel_payment_and_continue));
     }
 
-    public void onClickRejectionOptionButton(View view) {
+    public void onClickRejectionOptionButton() {
         if (isPaymentStatusDetailRecoverable()) {
             MPTracker.getInstance().trackEvent("REJECTION", "RECOVER_PAYMENT", "2", mMerchantPublicKey, BuildConfig.VERSION_NAME, this);
 

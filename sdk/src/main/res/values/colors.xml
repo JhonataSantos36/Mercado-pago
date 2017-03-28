@@ -144,7 +144,7 @@
     <color name="mpsdk_blue_button">#009FDE</color>
     <color name="mpsdk_blue_button_focused">#007FB1</color>
     <color name="mpsdk_blue_button_pressed">#005F85</color>
-    <color name="mpsdk_review_gray_background">#F5F5F5</color>
+    <color name="mpsdk_review_gray_background">#F7F7F7</color>
     <color name="mpsdk_review_payment_text">#333333</color>
     <color name="mpsdk_review_description_text">#666666</color>
     <color name="mpsdk_discount_row">#F5F5F5</color>

@@ -30,7 +30,8 @@
                     android:id="@+id/mpsdkTitleBackground"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="34dp"
+                    android:paddingBottom="55dp"
+                    android:paddingTop="55dp"
                     android:background="@color/mpsdk_color_pending_background"
                     android:orientation="vertical">
 
@@ -55,7 +56,6 @@
                         android:id="@+id/mpsdkHeaderIcon"
                         android:layout_width="60dp"
                         android:layout_height="60dp"
-                        android:layout_marginTop="34dp"
                         android:tint="@color/mpsdk_white"
                         android:src="@drawable/mpsdk_icon_pending"
                         android:layout_gravity="center_horizontal" />
@@ -79,7 +79,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:layout_marginBottom="10dp"
                         android:layout_marginRight="25dp"
                         android:layout_marginEnd="25dp"
                         android:layout_marginStart="25dp"
