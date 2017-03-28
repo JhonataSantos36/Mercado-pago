@@ -38,7 +38,7 @@
     <color name="mpsdk_color_instructions_background_title">#FFA15A</color>
     <color name="mpsdk_color_instructions_status_bar">#E69150</color>
 
-    <color name="mpsdk_color_congrats_background">#3BC280</color>
+    <color name="mpsdk_color_congrats_background">#0DB478</color>
     <color name="mpsdk_color_congrats_status_bar">#35AE73</color>
 
     <color name="mpsdk_color_congrats_installments">#009FDE</color>
@@ -48,7 +48,7 @@
     <color name="mpsdk_color_rejection_image">#990601</color>
     <color name="mpsdk_color_rejection_result_text">#BD494A</color>
     <color name="mpsdk_color_rejection_title_background">#FF5959</color>
-    <color name="mpsdk_color_rejection_status_bar">#e55050</color>
+    <color name="mpsdk_color_rejection_status_bar">#FF6E6E</color>
 
     <color name="mpsdk_installments_text">#009FDE</color>
     <color name="mpsdk_installments_zero_rate">#43B000</color>

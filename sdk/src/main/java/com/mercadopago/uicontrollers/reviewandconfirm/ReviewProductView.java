@@ -12,6 +12,7 @@ import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.model.Item;
 import com.mercadopago.util.CircleTransform;
 import com.mercadopago.util.CurrenciesUtil;
+import com.mercadopago.util.ScaleUtil;
 import com.squareup.picasso.Picasso;
 
 import java.math.BigDecimal;
@@ -67,10 +68,12 @@ public class ReviewProductView implements ReviewProductViewController {
         if (pictureUrl == null || pictureUrl.isEmpty()) {
             mProductImage.setImageResource(R.drawable.review_product_placeholder);
         } else {
+            int dimen = ScaleUtil.getPxFromDp(48, mContext);
             Picasso.with(mContext)
                     .load(pictureUrl)
                     .transform(new CircleTransform())
-                    .fit()
+                    .resize(dimen, dimen)
+                    .centerInside()
                     .placeholder(R.drawable.review_product_placeholder)
                     .into(mProductImage);
         }
