@@ -175,7 +175,7 @@ public class ReviewAndConfirmProviderImpl implements ReviewAndConfirmProvider {
     }
 
     private BigDecimal getCustomAmount() {
-        BigDecimal customAmount = new BigDecimal(0);
+        BigDecimal customAmount = null;
         if (this.reviewScreenPreference != null && isCustomRowAmountValid()) {
             customAmount = reviewScreenPreference.getSummaryCustomAmount();
         }

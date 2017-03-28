@@ -179,6 +179,23 @@ public class ReviewScreenPreference {
             return this;
         }
 
+        public Builder setSummaryCustomDetail(String customRowDescription) {
+            this.summaryCustomDescription = customRowDescription;
+            return this;
+        }
+
+        public Builder setSummaryCustomDetail(String customRowDescription, String summaryCustomTextColor) {
+            this.summaryCustomDescription = customRowDescription;
+            this.summaryCustomDetailColor = Color.parseColor(summaryCustomTextColor);
+            return this;
+        }
+
+        public Builder setSummaryCustomDetail(String customRowDescription, @ColorInt Integer summaryCustomDetailColor) {
+            this.summaryCustomDescription = customRowDescription;
+            this.summaryCustomDetailColor = summaryCustomDetailColor;
+            return this;
+        }
+
         public Builder setSummaryCustomDetail(String customRowDescription, BigDecimal customRowAmount) {
             this.summaryCustomDescription = customRowDescription;
             this.summaryCustomAmount = customRowAmount;

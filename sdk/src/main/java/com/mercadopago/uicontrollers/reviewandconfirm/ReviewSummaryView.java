@@ -223,15 +223,28 @@ public class ReviewSummaryView extends Reviewable {
 
     private void showCustomInfo() {
         mCustomRow.setVisibility(View.VISIBLE);
-
-        Spanned customAmount = CurrenciesUtil.getFormattedAmount(mCustomAmount, mCurrencyId);
-
-        mCustomAmountTextView.setText(customAmount);
         mCustomDescriptionTextView.setText(mCustomDescription);
 
+        setCustomAmount();
+        setCustomTextColor();
+    }
+
+    private void setCustomAmount() {
+        if (mCurrencyId != null && mCustomAmount != null && mCustomAmount.compareTo(BigDecimal.ZERO) >= 0) {
+            Spanned customAmount = CurrenciesUtil.getFormattedAmount(mCustomAmount, mCurrencyId);
+            mCustomAmountTextView.setText(customAmount);
+        } else {
+            mCustomAmountTextView.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    private void setCustomTextColor() {
         if (mCustomTextColor != null) {
-            mCustomAmountTextView.setTextColor(mCustomTextColor);
             mCustomDescriptionTextView.setTextColor(mCustomTextColor);
+
+            if (mCustomAmount != null) {
+                mCustomAmountTextView.setTextColor(mCustomTextColor);
+            }
         }
     }
 
@@ -304,7 +317,7 @@ public class ReviewSummaryView extends Reviewable {
     }
 
     private boolean hasCustomInfo() {
-        return mCurrencyId != null && !isEmpty(mCustomDescription) && mCustomAmount != null && mCustomAmount.compareTo(BigDecimal.ZERO) >= 0;
+        return !isEmpty(mCustomDescription);
     }
 
     private boolean hasDiscount() {
