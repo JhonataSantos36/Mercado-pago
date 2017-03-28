@@ -198,14 +198,15 @@ public class RejectionActivity extends MercadoPagoBaseActivity implements TimerO
                     mPaymentResultScreenPreference.getSecondaryRejectedExitButtonTitle() == null ||
                     (mPaymentResultScreenPreference.getSecondaryRejectedExitResultCode() == null
                             && !CallbackHolder.getInstance().hasPaymentResultCallback(CallbackHolder.REJECTED_PAYMENT_RESULT_CALLBACK))) {
-                hideChangePaymentMethodButton();
                 hideSecondaryExitButton();
             } else {
-                hideChangePaymentMethodButton();
                 mSecondaryExitTextView.setText(mPaymentResultScreenPreference.getSecondaryRejectedExitButtonTitle());
                 mSecondaryExitButton.setVisibility(View.VISIBLE);
                 mSecondaryExitTextView.setVisibility(View.VISIBLE);
                 setSecondaryExitButtonListener();
+            }
+            if (!mPaymentResultScreenPreference.isRejectionRetryEnabled()) {
+                hideChangePaymentMethodButton();
             }
         }
     }

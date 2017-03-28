@@ -171,6 +171,7 @@ public class PaymentResultActivity extends Activity {
                 .setMerchantPublicKey(mMerchantPublicKey)
                 .setActivity(this)
                 .setPaymentResult(mPaymentResult)
+                .setPaymentResultScreenPreference(mPaymentResultScreenPreference)
                 .setSite(mSite)
                 .startActivity();
     }

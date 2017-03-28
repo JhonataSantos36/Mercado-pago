@@ -241,7 +241,7 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
         }
     }
 
-    private boolean isOnlyAccountMoneyEnabled() {
+    public boolean isOnlyAccountMoneyEnabled() {
         return mPaymentMethodSearch.hasCustomSearchItems()
                 && mPaymentMethodSearch.getCustomSearchItems().size() == 1
                 && mPaymentMethodSearch.getCustomSearchItems().get(0).getId().equals(ACCOUNT_MONEY_ID)

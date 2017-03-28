@@ -16,6 +16,7 @@ import android.widget.FrameLayout;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+
 import com.mercadopago.adapters.PaymentMethodSearchItemAdapter;
 import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.callbacks.OnSelectedCallback;
@@ -413,10 +414,15 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
             setResult(Activity.RESULT_CANCELED, data);
             this.finish();
         } else {
-            Discount discount = JsonUtil.getInstance().fromJson(data.getStringExtra("discount"), Discount.class);
-            if (discount != null) {
-                mPaymentVaultPresenter.setDiscount(discount);
-                mPaymentVaultPresenter.initializeDiscountRow();
+            if (shouldFinishOnBack(data)) {
+                setResult(Activity.RESULT_CANCELED, data);
+                this.finish();
+            } else {
+                Discount discount = JsonUtil.getInstance().fromJson(data.getStringExtra("discount"), Discount.class);
+                if (discount != null) {
+                    mPaymentVaultPresenter.setDiscount(discount);
+                    mPaymentVaultPresenter.initializeDiscountRow();
+                }
             }
         }
     }
@@ -437,8 +443,7 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
             finishWithCardResult();
         } else {
             MPTracker.getInstance().trackEvent(PAYMENT_VAULT_SCREEN_NAME, "CANCELED", "2", mPublicKey, mPaymentVaultPresenter.getSite().getId(), BuildConfig.VERSION_NAME, this);
-            if (mPaymentVaultPresenter.isOnlyUniqueSearchSelectionAvailable()
-                    || (data != null) && (data.getStringExtra("mercadoPagoError") != null)) {
+            if (shouldFinishOnBack(data)) {
                 setResult(Activity.RESULT_CANCELED, data);
                 this.finish();
             } else {
@@ -467,6 +472,12 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
                 mPaymentVaultPresenter.onDiscountReceived(discount);
             }
         }
+    }
+
+    private boolean shouldFinishOnBack(Intent data) {
+        return mPaymentVaultPresenter.getSelectedSearchItem() != null && (!mPaymentVaultPresenter.getSelectedSearchItem().hasChildren() || mPaymentVaultPresenter.getSelectedSearchItem().getChildren().size() == 1)
+                || (mPaymentVaultPresenter.getSelectedSearchItem() == null && (mPaymentVaultPresenter.isOnlyUniqueSearchSelectionAvailable() || mPaymentVaultPresenter.isOnlyAccountMoneyEnabled()))
+                || (data != null) && (data.getStringExtra("mercadoPagoError") != null);
     }
 
     @Override

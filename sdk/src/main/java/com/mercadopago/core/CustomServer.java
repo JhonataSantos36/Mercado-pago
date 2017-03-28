@@ -1,6 +1,7 @@
 package com.mercadopago.core;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 
 import com.mercadopago.adapters.ErrorHandlingCallAdapter;
 import com.mercadopago.callbacks.Callback;
@@ -9,10 +10,10 @@ import com.mercadopago.model.Discount;
 import com.mercadopago.model.Payment;
 import com.mercadopago.preferences.CheckoutPreference;
 import com.mercadopago.services.CustomService;
-import com.mercadopago.services.MerchantService;
 import com.mercadopago.util.HttpClientUtil;
 import com.mercadopago.util.JsonUtil;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import retrofit2.Retrofit;
@@ -39,25 +40,35 @@ public class CustomServer {
         service.getCustomer(uri, null).enqueue(callback);
     }
 
-    public static void getCustomer(Context context, String url, String uri, Map<String, String> additionalInfo, Callback<Customer> callback) {
+    public static void getCustomer(Context context, String url, String uri, @NonNull Map<String, String> additionalInfo, Callback<Customer> callback) {
+        if (additionalInfo == null) {
+            additionalInfo = new HashMap<>();
+        }
         CustomService service = getService(context, url);
         service.getCustomer(uri, additionalInfo).enqueue(callback);
     }
 
     public static void createPayment(Context context, String transactionId, String baseUrl, String uri,
-                                     Map<String, Object> paymentData, Callback<Payment> callback) {
+                                     Map<String, Object> paymentData, @NonNull Map<String, String> query, Callback<Payment> callback) {
+        if (query == null) {
+            query = new HashMap<>();
+        }
         CustomService service = getService(context, baseUrl);
-        service.createPayment(transactionId, ripFirstSlash(uri), paymentData).enqueue(callback);
+        service.createPayment(transactionId, ripFirstSlash(uri), paymentData, query).enqueue(callback);
     }
 
-    public static void getDirectDiscount(String transactionAmount, String payerEmail, Context context, String url, String uri, Map<String, String> discountAdditionalInfo, Callback<Discount> callback) {
-
+    public static void getDirectDiscount(String transactionAmount, String payerEmail, Context context, String url, String uri, @NonNull Map<String, String> discountAdditionalInfo, Callback<Discount> callback) {
+        if (discountAdditionalInfo == null) {
+            discountAdditionalInfo = new HashMap<>();
+        }
         CustomService service = getService(context, url);
         service.getDirectDiscount(ripFirstSlash(uri), transactionAmount, payerEmail, discountAdditionalInfo).enqueue(callback);
     }
 
-    public static void getCodeDiscount(String discountCode, String transactionAmount, String payerEmail, Context context, String url, String uri, Map<String, String> discountAdditionalInfo, Callback<Discount> callback) {
-
+    public static void getCodeDiscount(String discountCode, String transactionAmount, String payerEmail, Context context, String url, String uri, @NonNull Map<String, String> discountAdditionalInfo, Callback<Discount> callback) {
+        if (discountAdditionalInfo == null) {
+            discountAdditionalInfo = new HashMap<>();
+        }
         CustomService service = getService(context, url);
         service.getCodeDiscount(ripFirstSlash(uri), transactionAmount, payerEmail, discountCode, discountAdditionalInfo).enqueue(callback);
     }

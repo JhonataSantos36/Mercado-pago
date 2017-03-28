@@ -55,6 +55,7 @@ public class PaymentResultScreenPreference {
     private Integer secondaryRejectedExitResultCode;
     private Integer secondaryCongratsExitResultCode;
     private Integer secondaryPendingExitResultCode;
+    private Boolean rejectionRetryEnabled;
 
     private PaymentResultScreenPreference(Builder builder) {
         this.titleBackgroundColor = builder.titleBackgroundColor;
@@ -79,6 +80,8 @@ public class PaymentResultScreenPreference {
         this.rejectedContentTitle = builder.rejectedContentTitle;
         this.rejectedContentText = builder.rejectedContentText;
         this.rejectedContentTitle = builder.rejectedContentTitle;
+        this.rejectionRetryEnabled = builder.rejectionRetryEnabled;
+
         this.enableCongratsSecondaryExitButton = builder.enableCongratsSecondaryExitButton;
         this.enablePendingSecondaryExitButton = builder.enablePendingSecondaryExitButton;
         this.enableRejectedSecondaryExitButton = builder.enableRejectedSecondaryExitButton;
@@ -251,6 +254,10 @@ public class PaymentResultScreenPreference {
         return titleBackgroundColor;
     }
 
+    public boolean isRejectionRetryEnabled() {
+        return rejectionRetryEnabled;
+    }
+
     public static class Builder {
 
         private Integer titleBackgroundColor;
@@ -271,6 +278,7 @@ public class PaymentResultScreenPreference {
         private String rejectedIconSubtext;
         private String rejectedContentTitle;
         private String rejectedContentText;
+        private boolean rejectionRetryEnabled = true;
         private boolean enablePendingContentText = true;
         private boolean enablePendingContentTitle = true;
         private boolean enableRejectedContentText = true;
@@ -422,7 +430,7 @@ public class PaymentResultScreenPreference {
 
 
         public Builder addCongratsReviewable(Reviewable reviewable, ContentLocation location) {
-            if(ContentLocation.BOTTOM.equals(location)) {
+            if (ContentLocation.BOTTOM.equals(location)) {
                 this.bottomCongratsReviewables.add(reviewable);
             } else {
                 this.topCongratsReviewables.add(reviewable);
@@ -477,6 +485,11 @@ public class PaymentResultScreenPreference {
 
         public Builder setRejectedIconSubtext(String text) {
             this.rejectedIconSubtext = text;
+            return this;
+        }
+
+        public Builder disableRejectionRetry() {
+            this.rejectionRetryEnabled = false;
             return this;
         }
 

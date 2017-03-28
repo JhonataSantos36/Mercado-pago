@@ -18,6 +18,7 @@ import com.mercadopago.model.Setting;
 import com.mercadopago.model.Token;
 import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.uicontrollers.card.CardView;
+import com.mercadopago.util.TextUtils;
 import com.mercadopago.views.SecurityCodeActivityView;
 
 
@@ -201,7 +202,11 @@ public class SecurityCodePresenter {
 
     private boolean validateSecurityCodeFromToken() {
         try {
-            CardToken.validateSecurityCode(mContext, mSecurityCode, mPaymentMethod, mToken.getFirstSixDigits());
+            if (!TextUtils.isEmpty(mToken.getFirstSixDigits())) {
+                CardToken.validateSecurityCode(mContext, mSecurityCode, mPaymentMethod, mToken.getFirstSixDigits());
+            } else {
+                CardToken.validateSecurityCode(mSecurityCode);
+            }
             mView.clearErrorView();
             return true;
         } catch (Exception e) {

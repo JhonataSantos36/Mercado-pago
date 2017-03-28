@@ -421,7 +421,12 @@ public class CheckoutActivity extends MercadoPagoBaseActivity {
             mCreatedToken = mPaymentDataInput.getToken();
             mSelectedPaymentMethod = mPaymentDataInput.getPaymentMethod();
             showReviewAndConfirm();
-        } else if (mPaymentResultInput != null) {
+        } else if (mPaymentResultInput != null && mPaymentResultInput.getPaymentData() != null) {
+            mSelectedPaymentMethod = mPaymentResultInput.getPaymentData().getPaymentMethod();
+            mSelectedPayerCost = mPaymentResultInput.getPaymentData().getPayerCost();
+            mSelectedIssuer = mPaymentResultInput.getPaymentData().getIssuer();
+            mCreatedToken = mPaymentResultInput.getPaymentData().getToken();
+            mDiscount = mPaymentResultInput.getPaymentData().getDiscount();
             checkStartPaymentResultActivity(mPaymentResultInput);
         } else {
             startPaymentVaultActivity();
@@ -551,7 +556,7 @@ public class CheckoutActivity extends MercadoPagoBaseActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (data !=null && data.getStringExtra(ErrorUtil.ERROR_EXTRA_KEY) != null) {
+        if (data != null && data.getStringExtra(ErrorUtil.ERROR_EXTRA_KEY) != null) {
             resolveErrorRequest(resultCode, data);
         } else if (requestCode == MercadoPagoComponents.Activities.PAYMENT_VAULT_REQUEST_CODE) {
             resolvePaymentVaultRequest(resultCode, data);
@@ -628,9 +633,13 @@ public class CheckoutActivity extends MercadoPagoBaseActivity {
             mSelectedPayerCost = JsonUtil.getInstance().fromJson(data.getStringExtra("payerCost"), PayerCost.class);
             mCreatedToken = JsonUtil.getInstance().fromJson(data.getStringExtra("token"), Token.class);
             mSelectedPaymentMethod = JsonUtil.getInstance().fromJson(data.getStringExtra("paymentMethod"), PaymentMethod.class);
+            Discount discount = JsonUtil.getInstance().fromJson(data.getStringExtra("discount"), Discount.class);
+            if (discount != null) {
+                mDiscount = discount;
+            }
 
             if (mPaymentRecovery != null && mPaymentRecovery.isTokenRecoverable()) {
-                createPayment(createPaymentData());
+                resolvePaymentDataCallback();
             } else {
                 checkFlowWithPaymentMethodSelected();
             }
@@ -712,8 +721,9 @@ public class CheckoutActivity extends MercadoPagoBaseActivity {
             if (!isEmpty(nextAction)) {
                 if (nextAction.equals(PaymentResultAction.SELECT_OTHER_PAYMENT_METHOD)) {
                     startPaymentVaultActivity();
+                    overridePendingTransition(R.anim.mpsdk_slide_left_to_right_in, R.anim.mpsdk_slide_left_to_right_out);
                 }
-                if (nextAction.equals(PaymentResultAction.RECOVER_PAYMENT)) {
+                else if (nextAction.equals(PaymentResultAction.RECOVER_PAYMENT)) {
                     createPaymentRecovery();
                     startCardVaultActivity();
                 }
@@ -742,7 +752,9 @@ public class CheckoutActivity extends MercadoPagoBaseActivity {
 
     private void createPaymentRecovery() {
         try {
-            mPaymentRecovery = new PaymentRecovery(mCreatedToken, mCreatedPayment, mSelectedPaymentMethod, mSelectedPayerCost, mSelectedIssuer);
+            String paymentStatus = mCreatedPayment == null ? mPaymentResultInput.getPaymentStatus() : mCreatedPayment.getStatus();
+            String paymentStatusDetail = mCreatedPayment == null ? mPaymentResultInput.getPaymentStatusDetail() : mCreatedPayment.getStatusDetail();
+            mPaymentRecovery = new PaymentRecovery(mCreatedToken, mSelectedPaymentMethod, mSelectedPayerCost, mSelectedIssuer, paymentStatus, paymentStatusDetail);
         } catch (Exception e) {
             throw new IllegalStateException(e.getMessage());
         }
@@ -888,7 +900,7 @@ public class CheckoutActivity extends MercadoPagoBaseActivity {
 
             paymentInfoMap.putAll(paymentDataMap);
 
-            CustomServer.createPayment(this, getTransactionID(paymentData), mServicePreference.getCreatePaymentURL(), mServicePreference.getCreatePaymentURI(), paymentInfoMap, new Callback<Payment>() {
+            CustomServer.createPayment(this, getTransactionID(paymentData), mServicePreference.getCreatePaymentURL(), mServicePreference.getCreatePaymentURI(), paymentInfoMap, new HashMap<String, String>(), new Callback<Payment>() {
                 @Override
                 public void success(Payment payment) {
                     mCreatedPayment = payment;

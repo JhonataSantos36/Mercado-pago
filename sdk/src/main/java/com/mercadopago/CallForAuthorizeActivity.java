@@ -17,9 +17,11 @@ import com.mercadopago.model.PaymentResultAction;
 import com.mercadopago.model.Site;
 import com.mercadopago.mptracker.MPTracker;
 import com.mercadopago.observers.TimerObserver;
+import com.mercadopago.preferences.PaymentResultScreenPreference;
 import com.mercadopago.util.CurrenciesUtil;
 import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
+import com.mercadopago.util.TextUtils;
 
 import java.math.BigDecimal;
 
@@ -48,6 +50,7 @@ public class CallForAuthorizeActivity extends MercadoPagoBaseActivity implements
     private BigDecimal mTotalAmount;
     private String mPaymentTypeId;
     private String mPaymentMethodId;
+    private PaymentResultScreenPreference mPaymentResultScreenPreference;
 
 
     @Override
@@ -56,6 +59,7 @@ public class CallForAuthorizeActivity extends MercadoPagoBaseActivity implements
         getActivityParameters();
         setContentView();
         initializeControls();
+        customizeViews();
         mActivity = this;
         try {
             validateActivityParameters();
@@ -65,9 +69,16 @@ public class CallForAuthorizeActivity extends MercadoPagoBaseActivity implements
         }
     }
 
+    private void customizeViews() {
+        if(mPaymentResultScreenPreference != null && !TextUtils.isEmpty(mPaymentResultScreenPreference.getExitButtonTitle())) {
+            mKeepBuyingButton.setText(mPaymentResultScreenPreference.getExitButtonTitle());
+        }
+    }
+
     protected void getActivityParameters() {
         mMerchantPublicKey = getIntent().getStringExtra("merchantPublicKey");
         mPaymentResult = JsonUtil.getInstance().fromJson(getIntent().getExtras().getString("paymentResult"), PaymentResult.class);
+        mPaymentResultScreenPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("paymentResultScreenPreference"), PaymentResultScreenPreference.class);
         mSite = JsonUtil.getInstance().fromJson(getIntent().getExtras().getString("site"), Site.class);
     }
 

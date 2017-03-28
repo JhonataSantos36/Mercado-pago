@@ -29,7 +29,8 @@ public interface CustomService {
     @POST("/{uri}")
     MPCall<Payment> createPayment(@Header("X-Idempotency-Key") String transactionId,
                                   @Path(value = "uri", encoded = true) String uri,
-                                  @Body Map<String, Object> additionalInfo);
+                                  @Body Map<String, Object> additionalInfo,
+                                  @QueryMap Map<String, String> query);
 
     @GET("/{uri}")
     MPCall<Customer> getCustomer(@Path(value = "uri", encoded = true) String uri,
