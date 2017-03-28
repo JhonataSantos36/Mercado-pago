@@ -30,6 +30,7 @@ import com.mercadopago.uicontrollers.card.CardRepresentationModes;
 import com.mercadopago.uicontrollers.card.CardView;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.ColorsUtil;
+import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.ScaleUtil;
 import com.mercadopago.views.SecurityCodeActivityView;
@@ -277,6 +278,20 @@ public class SecurityCodeActivity extends MercadoPagoBaseActivity implements Sec
         ediText.requestFocus();
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.showSoftInput(ediText, InputMethodManager.SHOW_IMPLICIT);
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == ErrorUtil.ERROR_REQUEST_CODE) {
+            if(resultCode == RESULT_OK) {
+                mPresenter.recoverFromFailure();
+            } else {
+                setResult(RESULT_CANCELED, data);
+                finish();
+            }
+        }
     }
 
     @Override

@@ -26,7 +26,7 @@ public class ErrorUtil {
 
     public static void startErrorActivity(Activity launcherActivity, MercadoPagoError mercadoPagoError) {
         Intent intent = new Intent(launcherActivity, ErrorActivity.class);
-        intent.putExtra("mercadoPagoError", JsonUtil.getInstance().toJson(mercadoPagoError));
+        intent.putExtra(ERROR_EXTRA_KEY, JsonUtil.getInstance().toJson(mercadoPagoError));
         launcherActivity.startActivityForResult(intent, ERROR_REQUEST_CODE);
     }
 }

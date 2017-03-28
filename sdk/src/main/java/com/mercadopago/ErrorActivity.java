@@ -8,6 +8,7 @@ import android.widget.TextView;
 import com.mercadopago.controllers.CheckoutErrorHandler;
 import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.util.ApiUtil;
+import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
 
 public class ErrorActivity extends MercadoPagoBaseActivity {
@@ -48,7 +49,7 @@ public class ErrorActivity extends MercadoPagoBaseActivity {
     }
 
     private void getActivityParameters() {
-        this.mMercadoPagoError = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("mercadoPagoError"), MercadoPagoError.class);
+        this.mMercadoPagoError = JsonUtil.getInstance().fromJson(getIntent().getStringExtra(ErrorUtil.ERROR_EXTRA_KEY), MercadoPagoError.class);
     }
 
     private void initializeControls() {
@@ -91,7 +92,7 @@ public class ErrorActivity extends MercadoPagoBaseActivity {
     public void onBackPressed() {
 
         Intent intent = new Intent();
-        intent.putExtra("mercadoPagoError", JsonUtil.getInstance().toJson(mMercadoPagoError));
+        intent.putExtra(ErrorUtil.ERROR_EXTRA_KEY, JsonUtil.getInstance().toJson(mMercadoPagoError));
         setResult(RESULT_CANCELED, intent);
         finish();
     }

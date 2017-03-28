@@ -556,7 +556,7 @@ public class CheckoutActivity extends MercadoPagoBaseActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (data != null && data.getStringExtra(ErrorUtil.ERROR_EXTRA_KEY) != null) {
+        if (requestCode == ErrorUtil.ERROR_REQUEST_CODE) {
             resolveErrorRequest(resultCode, data);
         } else if (requestCode == MercadoPagoComponents.Activities.PAYMENT_VAULT_REQUEST_CODE) {
             resolvePaymentVaultRequest(resultCode, data);
