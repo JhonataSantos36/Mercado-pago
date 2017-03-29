@@ -2,6 +2,7 @@ package com.mercadopago.presenters;
 
 import android.content.Context;
 
+import com.mercadopago.R;
 import com.mercadopago.callbacks.Callback;
 import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.controllers.PaymentMethodGuessingController;
@@ -11,6 +12,7 @@ import com.mercadopago.model.Card;
 import com.mercadopago.model.CardInfo;
 import com.mercadopago.model.CardToken;
 import com.mercadopago.model.Discount;
+import com.mercadopago.model.Installment;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.PaymentMethod;
@@ -18,6 +20,7 @@ import com.mercadopago.model.PaymentRecovery;
 import com.mercadopago.model.Site;
 import com.mercadopago.model.Token;
 import com.mercadopago.preferences.PaymentPreference;
+import com.mercadopago.util.TextUtils;
 import com.mercadopago.views.CardVaultActivityView;
 
 import java.math.BigDecimal;
@@ -30,6 +33,9 @@ import java.util.Map;
 
 public class CardVaultPresenter {
 
+    public static final String NO_PAYER_COSTS_FOUND = "no payer costs found";
+    public static final String NO_INSTALLMENTS_FOUND_FOR_AN_ISSUER = "no installments found for an issuer";
+    public static final String MULTIPLE_INSTALLMENTS_FOUND_FOR_AN_ISSUER = "multiple installments found for an issuer";
     protected Context mContext;
     protected CardVaultActivityView mView;
     protected FailureRecovery mFailureRecovery;
@@ -66,7 +72,8 @@ public class CardVaultPresenter {
     protected Boolean mDirectDiscountEnabled;
     protected Discount mDiscount;
     protected String mPayerEmail;
-    private String mPrivateKey;
+    protected String mPrivateKey;
+    protected List<PayerCost> mPayerCostsList;
 
     public CardVaultPresenter(Context context) {
         this.mContext = context;
@@ -345,5 +352,66 @@ public class CardVaultPresenter {
                 mView.showApiExceptionError(apiException);
             }
         });
+    }
+
+    public List<PayerCost> getPayerCostList() {
+        return mPayerCostsList;
+    }
+
+    public void getInstallmentsForCardAsync(Card card) {
+        String bin = TextUtils.isEmpty(mCardInfo.getFirstSixDigits()) ? "" : mCardInfo.getFirstSixDigits();
+        Long issuerId = mCard.getIssuer() == null ? null : mCard.getIssuer().getId();
+        String paymentMethodId = card.getPaymentMethod() == null ? "" : card.getPaymentMethod().getId();
+        getInstallmentsAsync(bin, issuerId, paymentMethodId, mAmount);
+    }
+
+    private void getInstallmentsAsync(final String bin, final Long issuerId, final String paymentMethodId, final BigDecimal amount) {
+        mMercadoPago.getInstallments(bin, amount, issuerId, paymentMethodId, new Callback<List<Installment>>() {
+            @Override
+            public void success(List<Installment> installments) {
+                if (installments.size() == 0) {
+                    mView.startErrorView(mContext.getString(R.string.mpsdk_standard_error_message),
+                            NO_INSTALLMENTS_FOUND_FOR_AN_ISSUER);
+                } else if (installments.size() == 1) {
+                    resolvePayerCosts(installments.get(0).getPayerCosts());
+                } else {
+                    mView.startErrorView(mContext.getString(R.string.mpsdk_standard_error_message),
+                            MULTIPLE_INSTALLMENTS_FOUND_FOR_AN_ISSUER);
+                }
+            }
+
+            @Override
+            public void failure(ApiException apiException) {
+                setFailureRecovery(new FailureRecovery() {
+                    @Override
+                    public void recover() {
+                        getInstallmentsAsync(bin, issuerId, paymentMethodId, amount);
+                    }
+                });
+                mView.startErrorView(apiException);
+            }
+        });
+    }
+
+    private void resolvePayerCosts(List<PayerCost> payerCosts) {
+        PayerCost defaultPayerCost = mPaymentPreference.getDefaultInstallments(payerCosts);
+        mPayerCostsList = payerCosts;
+
+        if (defaultPayerCost != null) {
+            mPayerCost = defaultPayerCost;
+            mView.startSecurityCodeActivity();
+        } else if (mPayerCostsList.isEmpty()) {
+            mView.startErrorView(mContext.getString(R.string.mpsdk_standard_error_message),
+                    NO_PAYER_COSTS_FOUND);
+        } else if (mPayerCostsList.size() == 1) {
+            mPayerCost = payerCosts.get(0);
+            mView.startSecurityCodeActivity();
+        } else {
+            mView.startInstallmentsActivity();
+        }
+    }
+
+    public void setPayerCostsList(List<PayerCost> payerCostsList) {
+        this.mPayerCostsList = payerCostsList;
     }
 }

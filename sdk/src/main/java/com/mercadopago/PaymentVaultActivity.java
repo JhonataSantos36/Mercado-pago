@@ -442,7 +442,8 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
 
             finishWithCardResult();
         } else {
-            MPTracker.getInstance().trackEvent(PAYMENT_VAULT_SCREEN_NAME, "CANCELED", "2", mPublicKey, mPaymentVaultPresenter.getSite().getId(), BuildConfig.VERSION_NAME, this);
+            String siteId = mPaymentVaultPresenter.getSite() == null ? "" : mPaymentVaultPresenter.getSite().getId();
+            MPTracker.getInstance().trackEvent(PAYMENT_VAULT_SCREEN_NAME, "CANCELED", "2", mPublicKey, siteId, BuildConfig.VERSION_NAME, this);
             if (shouldFinishOnBack(data)) {
                 setResult(Activity.RESULT_CANCELED, data);
                 this.finish();

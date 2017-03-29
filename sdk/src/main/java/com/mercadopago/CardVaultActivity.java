@@ -8,8 +8,11 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
+import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+
 import com.mercadopago.core.MercadoPagoComponents;
+import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.Card;
 import com.mercadopago.model.CardInfo;
@@ -48,6 +51,7 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultAct
 
     //View controls
     private Boolean mShowBankDeals;
+    private boolean mInstallmentsListShown = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -72,7 +76,7 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultAct
         } else {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
         }
-        if(savedInstanceState != null) {
+        if (savedInstanceState != null) {
             restoreInstanceState(savedInstanceState);
         }
     }
@@ -95,7 +99,18 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultAct
         } catch (Exception ex) {
             paymentMethods = null;
         }
+
+        List<PayerCost> payerCosts;
+        try {
+            Type listType = new TypeToken<List<Card>>() {
+            }.getType();
+            payerCosts = JsonUtil.getInstance().getGson().fromJson(savedInstanceState.getString("payerCostsList"), listType);
+        } catch (Exception ex) {
+            payerCosts = null;
+        }
+
         mPresenter.setPaymentMethodList(paymentMethods);
+        mPresenter.setPayerCostsList(payerCosts);
         PaymentPreference paymentPreference = JsonUtil.getInstance().fromJson(savedInstanceState.getString("paymentPreference"), PaymentPreference.class);
         if (paymentPreference == null) {
             paymentPreference = new PaymentPreference();
@@ -115,6 +130,7 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultAct
         mPresenter.setInstallmentsEnabled(savedInstanceState.getBoolean("installmentsEnabled", false));
         mPresenter.setInstallmentsReviewEnabled(savedInstanceState.getBoolean("installmentsReviewEnabled", false));
 
+        mInstallmentsListShown = savedInstanceState.getBoolean("installmentsListShown", true);
         mShowBankDeals = savedInstanceState.getBoolean("showBankDeals", true);
         mDecorationPreference = JsonUtil.getInstance().fromJson(savedInstanceState.getString("decorationPreference"), DecorationPreference.class);
 
@@ -195,12 +211,10 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultAct
             mPresenter.setPaymentMethod(mPresenter.getCard().getPaymentMethod());
             mPresenter.setIssuer(mPresenter.getCard().getIssuer());
             if (mPresenter.installmentsRequired()) {
-                startInstallmentsActivity();
+                mPresenter.getInstallmentsForCardAsync(mPresenter.getCard());
             } else {
                 startSecurityCodeActivity();
             }
-            overrideTransitionSlideOutIn();
-
         } else {
             startGuessingCardActivity();
         }
@@ -225,7 +239,8 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultAct
         LayoutUtil.showProgressLayout(this);
     }
 
-    private void startSecurityCodeActivity() {
+    @Override
+    public void startSecurityCodeActivity() {
         new MercadoPagoComponents.Activities.SecurityCodeActivityBuilder()
                 .setActivity(mActivity)
                 .setMerchantPublicKey(mPresenter.getPublicKey())
@@ -236,7 +251,11 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultAct
                 .setDecorationPreference(mDecorationPreference)
                 .setPayerAccessToken(mPresenter.getPrivateKey())
                 .startActivity();
-        overridePendingTransition(R.anim.mpsdk_slide_right_to_left_in, R.anim.mpsdk_slide_right_to_left_out);
+        if (mInstallmentsListShown) {
+            overridePendingTransition(R.anim.mpsdk_slide_right_to_left_in, R.anim.mpsdk_slide_right_to_left_out);
+        } else {
+            overridePendingTransition(R.anim.mpsdk_fade_in_seamless, R.anim.mpsdk_fade_out_seamless);
+        }
     }
 
     private void startGuessingCardActivity() {
@@ -289,6 +308,11 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultAct
             outState.putString("card", JsonUtil.getInstance().toJson(mPresenter.getCard()));
             outState.putString("paymentRecovery", JsonUtil.getInstance().toJson(mPresenter.getPaymentRecovery()));
             outState.putBoolean("showBankDeals", mShowBankDeals);
+            outState.putBoolean("installmentsListShown", mInstallmentsListShown);
+
+            if (mPresenter.getPayerCostList() != null) {
+                outState.putString("payerCostsList", JsonUtil.getInstance().toJson(mPresenter.getPayerCostList()));
+            }
 
             if (mPresenter.getAmount() != null) {
                 outState.putString("amount", mPresenter.getAmount().toString());
@@ -352,6 +376,7 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultAct
     }
 
     protected void resolveInstallmentsRequest(int resultCode, Intent data) {
+        mInstallmentsListShown = true;
         if (resultCode == RESULT_OK) {
             Bundle bundle = data.getExtras();
             PayerCost payerCost = JsonUtil.getInstance().fromJson(bundle.getString("payerCost"), PayerCost.class);
@@ -452,7 +477,9 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultAct
                 .setInstallmentsEnabled(mPresenter.getInstallmentsEnabled())
                 .setInstallmentsReviewEnabled(mPresenter.getInstallmentsReviewEnabled())
                 .setCardInfo(mPresenter.getCardInfo())
+                .setPayerCosts(mPresenter.getPayerCostList())
                 .startActivity();
+        overridePendingTransition(R.anim.mpsdk_fade_in_seamless, R.anim.mpsdk_fade_out_seamless);
     }
 
     @Override
@@ -463,6 +490,11 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultAct
     @Override
     public void overrideTransitionSlideOutIn() {
         overridePendingTransition(R.anim.mpsdk_slide_right_to_left_in, R.anim.mpsdk_slide_right_to_left_out);
+    }
+
+    @Override
+    public void startErrorView(ApiException apiException) {
+        ErrorUtil.startErrorActivity(this, new MercadoPagoError(apiException));
     }
 
     @Override

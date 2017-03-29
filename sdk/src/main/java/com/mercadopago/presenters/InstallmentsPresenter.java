@@ -210,8 +210,6 @@ public class InstallmentsPresenter {
     }
 
     private void loadDiscount() {
-        mView.showLoadingView();
-
         if (mDirectDiscountEnabled && mDiscount == null) {
             if (isAmountValid()) {
                 getDirectDiscount();
@@ -426,6 +424,7 @@ public class InstallmentsPresenter {
             mView.showHeader();
             mView.initializeInstallments(mPayerCosts);
         }
+        mView.stopLoadingView();
     }
 
     public void onItemSelected(int position) {

@@ -1,6 +1,9 @@
 package com.mercadopago.views;
 
 import com.mercadopago.model.ApiException;
+import com.mercadopago.model.PayerCost;
+
+import java.util.List;
 
 /**
  * Created by vaserber on 10/12/16.
@@ -14,7 +17,11 @@ public interface CardVaultActivityView {
     void startErrorView(String message);
     void showApiExceptionError(ApiException exception);
     void startInstallmentsActivity();
+
+    void startSecurityCodeActivity();
+
     void startIssuersActivity();
     void overrideTransitionHold();
     void overrideTransitionSlideOutIn();
+    void startErrorView(ApiException apiException);
 }

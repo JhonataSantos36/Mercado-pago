@@ -7,7 +7,6 @@ import com.mercadopago.model.PayerIntent;
 import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentBody;
 import com.mercadopago.model.PaymentMethodSearch;
-import com.mercadopago.model.PaymentResult;
 import com.mercadopago.preferences.CheckoutPreference;
 
 import java.math.BigDecimal;
