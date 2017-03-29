@@ -648,6 +648,7 @@ public class CheckoutActivity extends MercadoPagoBaseActivity {
                 MPTracker.getInstance().trackEvent("CARD_VAULT", "CANCELED", "3", mMerchantPublicKey, mCheckoutPreference.getSite().getId(), BuildConfig.VERSION_NAME, this);
                 cancelCheckout(data);
             } else {
+                mPaymentMethodEdited = true;
                 startPaymentVaultActivity();
             }
         }
@@ -720,6 +721,7 @@ public class CheckoutActivity extends MercadoPagoBaseActivity {
             String nextAction = data.getStringExtra("nextAction");
             if (!isEmpty(nextAction)) {
                 if (nextAction.equals(PaymentResultAction.SELECT_OTHER_PAYMENT_METHOD)) {
+                    mPaymentMethodEdited = true;
                     startPaymentVaultActivity();
                     overridePendingTransition(R.anim.mpsdk_slide_left_to_right_in, R.anim.mpsdk_slide_left_to_right_out);
                 }

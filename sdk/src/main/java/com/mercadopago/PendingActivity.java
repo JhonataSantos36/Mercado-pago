@@ -119,6 +119,12 @@ public class PendingActivity extends MercadoPagoBaseActivity implements TimerObs
                 finishWithOkResult(true);
             }
         });
+        mChangePaymentMethodButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClickPendingOptionButton();
+            }
+        });
     }
 
     private void initializeReviewablesRecyclerView() {
@@ -315,7 +321,7 @@ public class PendingActivity extends MercadoPagoBaseActivity implements TimerObs
     }
 
     private void hidePendingContentTitle() {
-        mContentTitleTextView.setVisibility(View.INVISIBLE);
+        mContentTitleTextView.setVisibility(View.GONE);
     }
 
     private void showTimer() {
@@ -354,7 +360,7 @@ public class PendingActivity extends MercadoPagoBaseActivity implements TimerObs
         }
     }
 
-    public void onClickPendingOptionButton(View view) {
+    public void onClickPendingOptionButton() {
         MPTracker.getInstance().trackEvent("PENDING", "SELECT_OTHER_PAYMENT_METHOD", "2", mMerchantPublicKey, BuildConfig.VERSION_NAME, this);
 
         Intent returnIntent = new Intent();

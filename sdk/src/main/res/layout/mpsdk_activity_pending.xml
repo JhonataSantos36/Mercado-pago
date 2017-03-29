@@ -154,8 +154,7 @@
                     android:layout_marginLeft="25dp"
                     android:layout_marginTop="14dp"
                     android:visibility="visible"
-                    android:background="@drawable/mpsdk_button_bg_stroke"
-                    android:onClick="onClickPendingOptionButton">
+                    android:background="@drawable/mpsdk_button_bg_stroke">
 
                     <com.mercadopago.customviews.MPTextView
                         android:id="@+id/mpsdkPendingOptionButtonText"

@@ -481,6 +481,9 @@ public class CongratsActivity extends MercadoPagoBaseActivity implements ReviewS
                 mAmountDescription.setVisibility(View.GONE);
             } else if (mPaymentTypeId.equals(PaymentTypes.ACCOUNT_MONEY)) {
                 StringBuffer sb = new StringBuffer();
+                if(mDiscount != null) {
+                    mTotalAmount = mDiscount.getAmountWithDiscount(mTotalAmount);
+                }
                 sb.append(CurrenciesUtil.formatNumber(mTotalAmount, mCurrencyId));
                 mAmountDescription.setText(CurrenciesUtil.formatCurrencyInText(mTotalAmount,
                         mCurrencyId, sb.toString(), false, true));
