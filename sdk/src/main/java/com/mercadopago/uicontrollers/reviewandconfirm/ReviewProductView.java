@@ -89,12 +89,13 @@ public class ReviewProductView implements ReviewProductViewController {
             quantity = 1;
         }
         mProductQuantity.setText(mContext.getResources().getString(R.string.mpsdk_review_product_quantity, String.valueOf(quantity)));
-        BigDecimal price = item.getUnitPrice();
-        String originalNumber = CurrenciesUtil.formatNumber(price, currencyId);
-        String string = mContext.getString(R.string.mpsdk_review_product_price, originalNumber);
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(string);
-        Spanned priceText = CurrenciesUtil.formatCurrencyInText(price, currencyId, stringBuilder.toString(), false, true);
-        mProductPrice.setText(priceText);
+
+        if(item.getUnitPrice() !=null) {
+            BigDecimal price = item.getUnitPrice();
+            String originalNumber = CurrenciesUtil.formatNumber(price, currencyId);
+            String string = mContext.getString(R.string.mpsdk_review_product_price, originalNumber);
+            Spanned priceText = CurrenciesUtil.formatCurrencyInText(price, currencyId, string, false, true);
+            mProductPrice.setText(priceText);
+        }
     }
 }

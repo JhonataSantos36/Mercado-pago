@@ -5,10 +5,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mercadopago.callbacks.Callback;
@@ -39,8 +43,10 @@ public class CheckoutExampleActivity extends AppCompatActivity {
 
     private CheckoutPreference mCheckoutPreference;
     private String mPublicKey;
+    private String mMerchantPreferenceId;
     private Integer mDefaultColor;
     private Integer mSelectedColor;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +59,7 @@ public class CheckoutExampleActivity extends AppCompatActivity {
         mRegularLayout = findViewById(R.id.regularLayout);
         mPublicKey = ExamplesUtils.DUMMY_MERCHANT_PUBLIC_KEY;
         mDefaultColor = ContextCompat.getColor(this, R.color.colorPrimary);
+
     }
 
     public void changeColor(View view) {
@@ -66,13 +73,13 @@ public class CheckoutExampleActivity extends AppCompatActivity {
         }).show();
     }
 
-
     public void onContinueClicked(View view) {
         showProgressLayout();
         Map<String, Object> map = new HashMap<>();
         map.put("item_id", "1");
         map.put("amount", new BigDecimal(300));
-        MerchantServer.createPreference(this, "http://private-4d9654-mercadopagoexamples.apiary-mock.com/",
+
+        MerchantServer.createPreference(this, "https://private-afe56-mercadopagoexamples.apiary-mock.com/",
                 "merchantUri/create_preference", map, new Callback<CheckoutPreference>() {
                     @Override
                     public void success(CheckoutPreference checkoutPreference) {
@@ -89,6 +96,7 @@ public class CheckoutExampleActivity extends AppCompatActivity {
     }
 
     private void startMercadoPagoCheckout() {
+
         DecorationPreference decorationPreference = getCurrentDecorationPreference();
 
         new MercadoPago.StartActivityBuilder()

@@ -18,9 +18,14 @@ public class LayoutUtil {
             InputMethodManager imm = (InputMethodManager) activity.getSystemService(
                     Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
+        } catch (Exception ex) {
         }
-        catch (Exception ex) {
-        }
+    }
+
+    public static void openKeyboard(View view) {
+        view.requestFocus();
+        InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT);
     }
 
     public static void showProgressLayout(Activity activity) {
@@ -41,11 +46,11 @@ public class LayoutUtil {
         final View progress = activity.findViewById(R.id.mpsdkProgressLayout);
         final View refresh = activity.findViewById(R.id.mpsdkRefreshLayout);
 
-        if(progress != null) {
+        if (progress != null) {
             progress.setVisibility(showRefresh || showLayout ? View.GONE : View.VISIBLE);
         }
 
-        if(form != null) {
+        if (form != null) {
             form.setVisibility(showRefresh || showProgress ? View.GONE : View.VISIBLE);
         }
 

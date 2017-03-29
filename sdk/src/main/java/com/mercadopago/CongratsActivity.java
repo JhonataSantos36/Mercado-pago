@@ -1,21 +1,28 @@
 package com.mercadopago;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.design.widget.Snackbar;
 import android.text.Spanned;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 
+import com.mercadopago.core.MercadoPagoUI;
 import com.mercadopago.customviews.MPTextView;
+import com.mercadopago.model.Discount;
 import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.mptracker.MPTracker;
+import com.mercadopago.uicontrollers.discounts.DiscountRowView;
 import com.mercadopago.util.CurrenciesUtil;
 import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.MercadoPagoUtil;
 
 import java.math.BigDecimal;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import static android.text.TextUtils.isEmpty;
 
@@ -32,20 +39,28 @@ public class CongratsActivity extends MercadoPagoActivity {
     protected View mTopEmailSeparator;
     protected ImageView mPaymentMethodImage;
     protected MPTextView mKeepBuyingButton;
+    protected FrameLayout mDiscountFrameLayout;
+    protected Activity mActivity;
 
     // Activity parameters
     protected Payment mPayment;
     protected PaymentMethod mPaymentMethod;
     protected String mMerchantPublicKey;
+    protected Discount mDiscount;
+    protected Boolean mDiscountEnabled;
 
     //Local values
     private boolean mBackPressedOnce;
+    private Integer mCongratsDisplay;
 
     @Override
     protected void getActivityParameters() {
         mMerchantPublicKey = getIntent().getStringExtra("merchantPublicKey");
+        mCongratsDisplay = getIntent().getIntExtra("congratsDisplay", -1);
         mPayment = JsonUtil.getInstance().fromJson(getIntent().getExtras().getString("payment"), Payment.class);
         mPaymentMethod = JsonUtil.getInstance().fromJson(getIntent().getExtras().getString("paymentMethod"), PaymentMethod.class);
+        mDiscount = JsonUtil.getInstance().fromJson(getIntent().getExtras().getString("discount"), Discount.class);
+        mDiscountEnabled = getIntent().getExtras().getBoolean("discountEnabled", true);
     }
 
     @Override
@@ -64,7 +79,6 @@ public class CongratsActivity extends MercadoPagoActivity {
     @Override
     protected void setContentView() {
         MPTracker.getInstance().trackScreen("CONGRATS", "2", mMerchantPublicKey, BuildConfig.VERSION_NAME, getActivity());
-
         setContentView(R.layout.mpsdk_activity_congrats);
     }
 
@@ -82,10 +96,13 @@ public class CongratsActivity extends MercadoPagoActivity {
         mKeepBuyingButton = (MPTextView) findViewById(R.id.mpsdkKeepBuyingCongrats);
         mKeepBuyingButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
                 finishWithOkResult();
             }
         });
+
+        //Discount
+        mDiscountFrameLayout = (FrameLayout) findViewById(R.id.mpsdkDiscount);
     }
 
     @Override
@@ -93,7 +110,9 @@ public class CongratsActivity extends MercadoPagoActivity {
         setPaymentEmailDescription();
         setLastFourDigitsCard();
         setInstallmentsDescription();
+        setDiscountRow();
         setPaymentIdDescription();
+        setDisplayTime();
     }
 
     @Override
@@ -112,14 +131,7 @@ public class CongratsActivity extends MercadoPagoActivity {
     }
 
     private void setInterestAmountDescription() {
-        StringBuilder sb = new StringBuilder();
-
-        sb.append("(");
-        sb.append(CurrenciesUtil.formatNumber(mPayment.getTransactionDetails().getTotalPaidAmount(), mPayment.getCurrencyId()));
-        sb.append(")");
-        Spanned spannedFullAmountText = CurrenciesUtil.formatCurrencyInText(mPayment.getTransactionDetails().getTotalPaidAmount(),
-                mPayment.getCurrencyId(), sb.toString(), false, true);
-        mTotalAmountDescription.setText(spannedFullAmountText);
+        setTotalAmountDescription();
 
         if (hasInterests()) {
             mInterestAmountDescription.setVisibility(View.GONE);
@@ -127,6 +139,40 @@ public class CongratsActivity extends MercadoPagoActivity {
             mInterestAmountDescription.setText(getString(R.string.mpsdk_zero_rate));
             mInstallmentsDescription.setVisibility(View.VISIBLE);
         }
+    }
+
+    private void setDiscountRow() {
+        if (mDiscountEnabled && mDiscount != null) {
+            showDiscountRow(mPayment.getTransactionAmount());
+        }
+    }
+
+    public void showDiscountRow(BigDecimal transactionAmount) {
+        DiscountRowView discountRowView = new MercadoPagoUI.Views.DiscountRowViewBuilder()
+                .setContext(this)
+                .setDiscount(mDiscount)
+                .setTransactionAmount(transactionAmount)
+                .setCurrencyId(mPayment.getCurrencyId())
+                .setShowArrow(false)
+                .setShowSeparator(false)
+                .build();
+
+        discountRowView.inflateInParent(mDiscountFrameLayout, true);
+        discountRowView.initializeControls();
+        discountRowView.draw();
+    }
+
+    private void setTotalAmountDescription() {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("(");
+        sb.append(CurrenciesUtil.formatNumber(mPayment.getTransactionDetails().getTotalPaidAmount(), mPayment.getCurrencyId()));
+        sb.append(")");
+        Spanned spannedFullAmountText = CurrenciesUtil.formatCurrencyInText(mPayment.getTransactionDetails().getTotalPaidAmount(),
+                mPayment.getCurrencyId(), sb.toString(), false, true);
+
+        mTotalAmountDescription.setVisibility(View.VISIBLE);
+        mTotalAmountDescription.setText(spannedFullAmountText);
     }
 
     private boolean hasInterests() {
@@ -153,14 +199,34 @@ public class CongratsActivity extends MercadoPagoActivity {
                 Spanned spannedInstallmentsText = CurrenciesUtil.formatCurrencyInText(mPayment.getTransactionDetails().getTotalPaidAmount(),
                         mPayment.getCurrencyId(), sb.toString(), false, true);
 
-                mInstallmentsDescription.setText(spannedInstallmentsText);
+                if (mDiscount != null) {
+                    mInstallmentsDescription.setVisibility(View.GONE);
+                    mTotalAmountDescription.setVisibility(View.GONE);
+                }
 
+                mInstallmentsDescription.setText(spannedInstallmentsText);
                 mInterestAmountDescription.setVisibility(View.GONE);
             }
         } else {
             mInstallmentsDescription.setVisibility(View.GONE);
             mInterestAmountDescription.setVisibility(View.GONE);
         }
+    }
+
+    private void setDisplayTime() {
+        if (mCongratsDisplay > 0) {
+            startCountdown(mCongratsDisplay);
+        }
+    }
+
+    private void startCountdown(Integer seconds) {
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                finishWithOkResult();
+            }
+        }, seconds * 1000);
     }
 
     private void setLastFourDigitsCard() {
@@ -277,5 +343,9 @@ public class CongratsActivity extends MercadoPagoActivity {
                 }
             }
         }).start();
+    }
+
+    public Discount getDiscount() {
+        return mDiscount;
     }
 }

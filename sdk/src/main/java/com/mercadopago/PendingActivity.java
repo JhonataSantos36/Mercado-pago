@@ -4,19 +4,22 @@ import android.content.Intent;
 import android.support.design.widget.Snackbar;
 import android.view.View;
 
+import com.mercadopago.controllers.CheckoutTimer;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentResultAction;
 import com.mercadopago.mptracker.MPTracker;
+import com.mercadopago.observers.TimerObserver;
 import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
 
 import static android.text.TextUtils.isEmpty;
 
-public class PendingActivity extends MercadoPagoActivity {
+public class PendingActivity extends MercadoPagoActivity implements TimerObserver {
 
     //Controls
+    protected MPTextView mTimerTextView;
     protected MPTextView mPendingSubtitle;
     protected MPTextView mKeepBuying;
 
@@ -60,10 +63,17 @@ public class PendingActivity extends MercadoPagoActivity {
                 finishWithOkResult();
             }
         });
+
+        mTimerTextView = (MPTextView) findViewById(R.id.mpsdkTimerTextView);
     }
 
     @Override
     protected void onValidStart() {
+        showTimer();
+        showSubtitle();
+    }
+
+    private void showSubtitle() {
         if (isStatusDetailValid()) {
             if (mPayment.getStatusDetail().equals(Payment.StatusCodes.STATUS_DETAIL_PENDING_CONTINGENCY)) {
                 mPendingSubtitle.setText(getString(R.string.mpsdk_subtitle_pending_contingency));
@@ -72,6 +82,14 @@ public class PendingActivity extends MercadoPagoActivity {
             }
         } else {
             mPendingSubtitle.setVisibility(View.GONE);
+        }
+    }
+
+    private void showTimer() {
+        if (CheckoutTimer.getInstance().isTimerEnabled()) {
+            CheckoutTimer.getInstance().addObserver(this);
+            mTimerTextView.setVisibility(View.VISIBLE);
+            mTimerTextView.setText(CheckoutTimer.getInstance().getCurrentTime());
         }
     }
 
@@ -103,7 +121,7 @@ public class PendingActivity extends MercadoPagoActivity {
         }
     }
 
-    public void onClickPendingOptionButton(View view){
+    public void onClickPendingOptionButton(View view) {
         MPTracker.getInstance().trackEvent("PENDING", "SELECT_OTHER_PAYMENT_METHOD", "2", mMerchantPublicKey, BuildConfig.VERSION_NAME, this);
 
         Intent returnIntent = new Intent();
@@ -133,5 +151,15 @@ public class PendingActivity extends MercadoPagoActivity {
             setResult(RESULT_CANCELED, data);
             finish();
         }
+    }
+
+    @Override
+    public void onTimeChanged(String timeToShow) {
+        mTimerTextView.setText(timeToShow);
+    }
+
+    @Override
+    public void onFinish() {
+        this.finish();
     }
 }

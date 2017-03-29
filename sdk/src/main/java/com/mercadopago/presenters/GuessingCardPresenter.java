@@ -8,11 +8,13 @@ import com.mercadopago.callbacks.Callback;
 import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.controllers.PaymentMethodGuessingController;
 import com.mercadopago.core.MercadoPago;
+import com.mercadopago.core.MerchantServer;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.BankDeal;
 import com.mercadopago.model.CardInformation;
 import com.mercadopago.model.CardToken;
 import com.mercadopago.model.Cardholder;
+import com.mercadopago.model.Discount;
 import com.mercadopago.model.Identification;
 import com.mercadopago.model.IdentificationType;
 import com.mercadopago.model.PaymentMethod;
@@ -24,10 +26,14 @@ import com.mercadopago.model.Setting;
 import com.mercadopago.model.Token;
 import com.mercadopago.uicontrollers.card.CardView;
 import com.mercadopago.uicontrollers.card.FrontCardView;
+import com.mercadopago.util.MPCardMaskUtil;
+import com.mercadopago.util.TextUtil;
 import com.mercadopago.views.GuessingCardActivityView;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by vaserber on 10/13/16.
@@ -35,12 +41,12 @@ import java.util.List;
 
 public class GuessingCardPresenter {
 
-    public static final int CARD_DEFAULT_SECURITY_CODE_LENGTH = 4;
-    public static final int CARD_DEFAULT_IDENTIFICATION_NUMBER_LENGTH = 12;
+    private static final int CARD_DEFAULT_SECURITY_CODE_LENGTH = 4;
+    private static final int CARD_DEFAULT_IDENTIFICATION_NUMBER_LENGTH = 12;
 
     //Card controller
-    protected PaymentMethodGuessingController mPaymentMethodGuessingController;
-    protected List<IdentificationType> mIdentificationTypes;
+    private PaymentMethodGuessingController mPaymentMethodGuessingController;
+    private List<IdentificationType> mIdentificationTypes;
 
     private GuessingCardActivityView mView;
     private Context mContext;
@@ -57,12 +63,17 @@ public class GuessingCardPresenter {
     private Identification mIdentification;
     private boolean mIdentificationNumberRequired;
     private PaymentPreference mPaymentPreference;
+    private String mMerchantBaseUrl;
+    private String mMerchantDiscountUrl;
+    private String mMerchantGetDiscountUri;
+    private Map<String, String> mDiscountAdditionalInfo;
 
     //Card Settings
     private CardInformation mCardInfo;
     private int mSecurityCodeLength;
     private String mSecurityCodeLocation;
     private boolean mIsSecurityCodeRequired;
+    private boolean mEraseSpace;
 
     //Card Info
     private String mBin;
@@ -83,8 +94,22 @@ public class GuessingCardPresenter {
     private List<PaymentType> mPaymentTypesList;
     private Boolean mShowBankDeals;
 
+    //Discount
+    private Boolean mDiscountEnabled;
+    private Boolean mDirectDiscountEnabled;
+    private String mPayerEmail;
+    private BigDecimal mTransactionAmount;
+    private Discount mDiscount;
+    private int mCurrentNumberLength;
+
+
     public GuessingCardPresenter(Context context) {
         this.mContext = context;
+        this.mEraseSpace = true;
+    }
+
+    public void setCurrentNumberLength(int currentNumberLength) {
+        this.mCurrentNumberLength = currentNumberLength;
     }
 
     public void setView(GuessingCardActivityView view) {
@@ -278,6 +303,10 @@ public class GuessingCardPresenter {
         return mCardInfo;
     }
 
+    public boolean isCardLengthResolved() {
+        return mPaymentMethod != null && mBin != null;
+    }
+
     public Integer getCardNumberLength() {
         return PaymentMethodGuessingController.getCardNumberLength(mPaymentMethod, mBin);
     }
@@ -290,7 +319,7 @@ public class GuessingCardPresenter {
                 mPaymentPreference.getExcludedPaymentTypes());
     }
 
-    protected void startGuessingForm() {
+    private void startGuessingForm() {
         initializeGuessingCardNumberController();
         mView.initializeTitle();
         mView.setCardNumberListeners(mPaymentMethodGuessingController);
@@ -311,7 +340,163 @@ public class GuessingCardPresenter {
         }
     }
 
-    public void loadPaymentMethods() {
+    public void initialize() {
+        if (showDiscount()) {
+            loadDiscount();
+        } else {
+            loadPaymentMethods();
+        }
+    }
+
+    private void loadDiscount() {
+        if (mDirectDiscountEnabled) {
+            getDirectDiscount();
+        } else {
+            initializeDiscountRow();
+            loadPaymentMethods();
+        }
+    }
+
+    private void getDirectDiscount() {
+        if (isMerchantServerDiscountsAvailable()) {
+            getMerchantDirectDiscount();
+        } else {
+            getMPDirectDiscount();
+        }
+    }
+
+    private Boolean isAmountValid() {
+        return mTransactionAmount != null && mTransactionAmount.compareTo(BigDecimal.ZERO) > 0;
+    }
+
+    public void initializeDiscountActivity() {
+        mView.startDiscountActivity(mTransactionAmount);
+    }
+
+    private void initializeDiscountRow() {
+        mView.showDiscountRow(mTransactionAmount);
+    }
+
+    private void getMPDirectDiscount() {
+        mMercadoPago.getDirectDiscount(mTransactionAmount.toString(), mPayerEmail, new Callback<Discount>() {
+            @Override
+            public void success(Discount discount) {
+                mDiscount = discount;
+                initializeDiscountRow();
+                loadPaymentMethods();
+            }
+
+            @Override
+            public void failure(ApiException apiException) {
+                mDirectDiscountEnabled = false;
+                initializeDiscountRow();
+                loadPaymentMethods();
+            }
+        });
+    }
+
+    private void getMerchantDirectDiscount() {
+        String merchantDiscountUrl = getMerchantServerDiscountUrl();
+
+        MerchantServer.getDirectDiscount(mTransactionAmount.toString(), mPayerEmail, mContext, merchantDiscountUrl, mMerchantGetDiscountUri, mDiscountAdditionalInfo, new Callback<Discount>() {
+            @Override
+            public void success(Discount discount) {
+                mDiscount = discount;
+                initializeDiscountRow();
+                loadPaymentMethods();
+            }
+
+            @Override
+            public void failure(ApiException apiException) {
+                mDirectDiscountEnabled = false;
+                initializeDiscountRow();
+                loadPaymentMethods();
+            }
+        });
+    }
+
+    public void onDiscountReceived(Discount discount) {
+        setDiscount(discount);
+        initializeDiscountRow();
+    }
+
+    public Discount getDiscount() {
+        return mDiscount;
+    }
+
+    public void setDiscount(Discount discount) {
+        this.mDiscount = discount;
+    }
+
+    public void setPayerEmail(String payerEmail) {
+        this.mPayerEmail = payerEmail;
+    }
+
+    public String getPayerEmail() {
+        return mPayerEmail;
+    }
+
+    public void setDiscountEnabled(Boolean discountEnabled) {
+        this.mDiscountEnabled = discountEnabled;
+    }
+
+    public void setDiscountAdditionalInfo(Map<String, String> discountAdditionalInfo) {
+        this.mDiscountAdditionalInfo = discountAdditionalInfo;
+    }
+
+    public Map<String, String> getDiscountAdditionalInfo() {
+        return this.mDiscountAdditionalInfo;
+    }
+
+    public void setMerchantDiscountBaseUrl(String merchantDiscountUrl) {
+        this.mMerchantDiscountUrl = merchantDiscountUrl;
+    }
+
+    public String getMerchantDiscountBaseUrl() {
+        return this.mMerchantDiscountUrl;
+    }
+
+    public void setMerchantBaseUrl(String merchantBaseUrl) {
+        this.mMerchantBaseUrl = merchantBaseUrl;
+    }
+
+    public String getMerchantBaseUrl() {
+        return this.mMerchantBaseUrl;
+    }
+
+    public void setMerchantGetDiscountUri(String merchantGetDiscountUri) {
+        this.mMerchantGetDiscountUri = merchantGetDiscountUri;
+    }
+
+    public String getMerchantGetDiscountUri() {
+        return mMerchantGetDiscountUri;
+    }
+
+    public Boolean getDiscountEnabled() {
+        return this.mDiscountEnabled;
+    }
+
+    public void setDirectDiscountEnabled(Boolean directDiscountEnabled) {
+        this.mDirectDiscountEnabled = directDiscountEnabled;
+    }
+
+    public Boolean getDirectDiscountEnabled() {
+        return this.mDirectDiscountEnabled;
+    }
+
+    public BigDecimal getTransactionAmount() {
+        BigDecimal amount;
+
+        if (mDiscount == null) {
+            amount = mTransactionAmount;
+        } else {
+            amount = mDiscount.getAmountWithDiscount(mTransactionAmount);
+        }
+
+        return amount;
+    }
+
+    private void loadPaymentMethods() {
         if (mPaymentMethodList == null || mPaymentMethodList.isEmpty()) {
             getPaymentMethodsAsync();
         } else {
@@ -321,14 +506,14 @@ public class GuessingCardPresenter {
     }
 
     public void resolveBankDeals() {
-        if(mShowBankDeals) {
+        if (mShowBankDeals) {
             getBankDealsAsync();
         } else {
             mView.hideBankDeals();
         }
     }
 
-    protected void getPaymentMethodsAsync() {
+    private void getPaymentMethodsAsync() {
         mMercadoPago.getPaymentMethods(new Callback<List<PaymentMethod>>() {
             @Override
             public void success(List<PaymentMethod> paymentMethods) {
@@ -354,7 +539,7 @@ public class GuessingCardPresenter {
         if (mPaymentMethodGuessingController == null) {
             return;
         }
-        for (PaymentMethod paymentMethod: mPaymentMethodGuessingController.getGuessedPaymentMethods()) {
+        for (PaymentMethod paymentMethod : mPaymentMethodGuessingController.getGuessedPaymentMethods()) {
             if (paymentMethod.getPaymentTypeId().equals(paymentType.getId())) {
                 setPaymentMethod(paymentMethod);
             }
@@ -383,8 +568,11 @@ public class GuessingCardPresenter {
         } else {
             int cardNumberLength = getCardNumberLength();
             int spaces = FrontCardView.CARD_DEFAULT_AMOUNT_SPACES;
-            if (cardNumberLength == FrontCardView.CARD_NUMBER_DINERS_LENGTH || cardNumberLength == FrontCardView.CARD_NUMBER_AMEX_LENGTH) {
+
+            if (cardNumberLength == FrontCardView.CARD_NUMBER_DINERS_LENGTH || cardNumberLength == FrontCardView.CARD_NUMBER_AMEX_LENGTH || cardNumberLength == FrontCardView.CARD_NUMBER_MAESTRO_SETTING_1_LENGTH) {
                 spaces = FrontCardView.CARD_AMEX_DINERS_AMOUNT_SPACES;
+            } else if (cardNumberLength == FrontCardView.CARD_NUMBER_MAESTRO_SETTING_2_LENGTH) {
+                spaces = FrontCardView.CARD_NUMBER_MAESTRO_SETTING_2_AMOUNT_SPACES;
             }
             mView.setCardNumberInputMaxLength(cardNumberLength + spaces);
             SecurityCode securityCode = setting.getSecurityCode();
@@ -466,7 +654,7 @@ public class GuessingCardPresenter {
 
     public void enablePaymentTypeSelection(List<PaymentMethod> paymentMethodList) {
         List<PaymentType> paymentTypesList = new ArrayList<>();
-        for (PaymentMethod pm: paymentMethodList) {
+        for (PaymentMethod pm : paymentMethodList) {
             PaymentType type = new PaymentType(pm.getPaymentTypeId());
             paymentTypesList.add(type);
         }
@@ -696,7 +884,53 @@ public class GuessingCardPresenter {
         }
     }
 
+    private Boolean showDiscount() {
+        return mDiscountEnabled && mDiscount == null && isAmountValid();
+    }
+
     public void setShowBankDeals(Boolean showBankDeals) {
         this.mShowBankDeals = showBankDeals;
+    }
+
+    public void setTransactionAmount(BigDecimal transactionAmount) {
+        this.mTransactionAmount = transactionAmount;
+    }
+
+
+    public boolean isDefaultSpaceErasable() {
+
+        if (MPCardMaskUtil.isDefaultSpaceErasable(mCurrentNumberLength)) {
+            mEraseSpace = true;
+        }
+
+        if (isCardLengthResolved() && mEraseSpace && (getCardNumberLength() == FrontCardView.CARD_NUMBER_MAESTRO_SETTING_1_LENGTH || getCardNumberLength() == FrontCardView.CARD_NUMBER_MAESTRO_SETTING_2_LENGTH)) {
+            mEraseSpace = false;
+            return true;
+        }
+        return false;
+    }
+
+    private boolean isMerchantServerDiscountsAvailable() {
+        return !TextUtil.isEmpty(getMerchantServerDiscountUrl()) && !TextUtil.isEmpty(mMerchantGetDiscountUri);
+    }
+
+    private String getMerchantServerDiscountUrl() {
+        String merchantBaseUrl;
+
+        if (TextUtil.isEmpty(mMerchantDiscountUrl)) {
+            merchantBaseUrl = this.mMerchantBaseUrl;
+        } else {
+            merchantBaseUrl = this.mMerchantDiscountUrl;
+        }
+
+        return merchantBaseUrl;
+    }
+
+    public void clearSpaceErasableSettings() {
+        this.mEraseSpace = true;
+    }
+
+    public boolean isPaymentMethodResolved() {
+        return mPaymentMethod != null;
     }
 }

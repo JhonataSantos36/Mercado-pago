@@ -119,7 +119,6 @@ public class CheckoutPreference {
     }
 
     public BigDecimal getAmount() {
-
         BigDecimal totalAmount = BigDecimal.ZERO;
         if (items != null) {
             for (Item item : items) {

@@ -7,18 +7,22 @@ import com.mercadopago.callbacks.Callback;
 import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.controllers.PaymentMethodGuessingController;
 import com.mercadopago.core.MercadoPago;
+import com.mercadopago.core.MerchantServer;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.CardInfo;
+import com.mercadopago.model.Discount;
 import com.mercadopago.model.Installment;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentPreference;
 import com.mercadopago.model.Site;
+import com.mercadopago.util.TextUtil;
 import com.mercadopago.views.InstallmentsActivityView;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by vaserber on 9/29/16.
@@ -39,6 +43,7 @@ public class InstallmentsPresenter {
 
     //Activity parameters
     private String mPublicKey;
+    private String mPayerEmail;
     private PaymentMethod mPaymentMethod;
     private Issuer mIssuer;
     private BigDecimal mAmount;
@@ -46,6 +51,14 @@ public class InstallmentsPresenter {
     private List<PayerCost> mPayerCosts;
     private PaymentPreference mPaymentPreference;
     private CardInfo mCardInfo;
+    private Discount mDiscount;
+    private Boolean mDiscountEnabled;
+    private Boolean mDirectDiscountEnabled;
+    private String mMerchantBaseUrl;
+    private String mMerchantDiscountUrl;
+    private String mMerchantGetDiscountUri;
+    private Map<String, String> mDiscountAdditionalInfo;
+    private Boolean mInstallmentsReviewEnabled;
 
     public InstallmentsPresenter(Context context) {
         this.mContext = context;
@@ -120,7 +133,14 @@ public class InstallmentsPresenter {
     }
 
     public BigDecimal getAmount() {
-        return mAmount;
+        BigDecimal amount;
+
+        if (!mDiscountEnabled || mDiscount == null || mDiscount.getCouponAmount() == null) {
+            amount = mAmount;
+        } else {
+            amount = mDiscount.getAmountWithDiscount(mAmount);
+        }
+        return amount;
     }
 
     public List<PayerCost> getPayerCosts() {
@@ -165,7 +185,167 @@ public class InstallmentsPresenter {
         return mPayerCosts != null;
     }
 
-    public void loadPayerCosts() {
+    public void initialize() {
+        if (mDiscountEnabled) {
+            loadDiscount();
+        } else {
+            initializeDiscountRow();
+            loadPayerCosts();
+        }
+    }
+
+    private void loadDiscount() {
+        mView.showLoadingView();
+
+        if (mDirectDiscountEnabled && mDiscount == null) {
+            if (isAmountValid()) {
+                getDirectDiscount();
+            } else {
+                loadPayerCosts();
+            }
+        } else {
+            initializeDiscountRow();
+            loadPayerCosts();
+        }
+    }
+
+    private Boolean isAmountValid() {
+        return mAmount != null && mAmount.compareTo(BigDecimal.ZERO) > 0;
+    }
+
+    public void initializeDiscountActivity() {
+        mView.startDiscountActivity(mAmount);
+    }
+
+    public void initializeDiscountRow() {
+        mView.showDiscountRow(mAmount);
+    }
+
+    private void getDirectDiscount() {
+        if (isMerchantServerDiscountsAvailable()) {
+            getMerchantDirectDiscount();
+        } else {
+            getMPDirectDiscount();
+        }
+    }
+
+    private void getMPDirectDiscount() {
+        mMercadoPago.getDirectDiscount(mAmount.toString(), mPayerEmail, new Callback<Discount>() {
+            @Override
+            public void success(Discount discount) {
+                mDiscount = discount;
+                getInstallmentsAsync();
+                initializeDiscountRow();
+            }
+
+            @Override
+            public void failure(ApiException apiException) {
+                mDirectDiscountEnabled = false;
+                initializeDiscountRow();
+                loadPayerCosts();
+            }
+        });
+    }
+
+    private void getMerchantDirectDiscount() {
+        String merchantDiscountUrl = getMerchantServerDiscountUrl();
+
+        MerchantServer.getDirectDiscount(mAmount.toString(), mPayerEmail, mContext, merchantDiscountUrl, mMerchantGetDiscountUri, mDiscountAdditionalInfo, new Callback<Discount>() {
+            @Override
+            public void success(Discount discount) {
+                mDiscount = discount;
+                getInstallmentsAsync();
+                initializeDiscountRow();
+            }
+
+            @Override
+            public void failure(ApiException apiException) {
+                mDirectDiscountEnabled = false;
+                initializeDiscountRow();
+                loadPayerCosts();
+            }
+        });
+    }
+
+    public void onDiscountReceived(Discount discount) {
+        setDiscount(discount);
+        initializeDiscountRow();
+        getInstallmentsAsync();
+    }
+
+    public void setPayerEmail(String payerEmail) {
+        this.mPayerEmail = payerEmail;
+    }
+
+    public Discount getDiscount() {
+        return this.mDiscount;
+    }
+
+    public void setDiscount(Discount discount) {
+        this.mDiscount = discount;
+    }
+
+    public String getPayerEmail() {
+        return mPayerEmail;
+    }
+
+    public void setDiscountEnabled(Boolean discountEnabled) {
+        this.mDiscountEnabled = discountEnabled;
+    }
+
+    public void setMerchantDiscountBaseUrl(String merchantDiscountUrl) {
+        this.mMerchantDiscountUrl = merchantDiscountUrl;
+    }
+
+    public String getMerchantDiscountBaseUrl() {
+        return this.mMerchantDiscountUrl;
+    }
+
+    public void setMerchantGetDiscountUri(String merchantGetDiscountUri) {
+        this.mMerchantGetDiscountUri = merchantGetDiscountUri;
+    }
+
+    public String getMerchantGetDiscountUri() {
+        return mMerchantGetDiscountUri;
+    }
+
+    public Boolean getDiscountEnabled() {
+        return this.mDiscountEnabled;
+    }
+
+    public void setMerchantBaseUrl(String merchantBaseUrl) {
+        this.mMerchantBaseUrl = merchantBaseUrl;
+    }
+
+    public String getMerchantBaseUrl() {
+        return this.mMerchantBaseUrl;
+    }
+
+    public void setDiscountAdditionalInfo(Map<String, String> discountAdditionalInfo) {
+        this.mDiscountAdditionalInfo = discountAdditionalInfo;
+    }
+
+    public Map<String, String> getDiscountAdditionalInfo() {
+        return this.mDiscountAdditionalInfo;
+    }
+
+    public void setInstallmentsReviewEnabled(Boolean installmentReviewEnabled) {
+        this.mInstallmentsReviewEnabled = installmentReviewEnabled;
+    }
+
+    public Boolean getInstallmentReviewEnabled() {
+        return this.mInstallmentsReviewEnabled;
+    }
+
+    public void setDirectDiscountEnabled(Boolean directDiscountEnabled) {
+        this.mDirectDiscountEnabled = directDiscountEnabled;
+    }
+
+    public Boolean getDirectDiscountEnabled() {
+        return mDirectDiscountEnabled;
+    }
+
+    private void loadPayerCosts() {
         if (werePayerCostsSet()) {
             resolvePayerCosts(mPayerCosts);
         } else {
@@ -182,34 +362,34 @@ public class InstallmentsPresenter {
     private void getInstallmentsAsync() {
         if (mMercadoPago == null) return;
         mView.showLoadingView();
-        mMercadoPago.getInstallments(mBin, mAmount, mIssuerId, mPaymentMethod.getId(),
-            new Callback<List<Installment>>() {
-                @Override
-                public void success(List<Installment> installments) {
-                    mView.stopLoadingView();
-                    if (installments.size() == 0) {
-                        mView.startErrorView(mContext.getString(R.string.mpsdk_standard_error_message),
-                                "no installments found for an issuer at InstallmentsActivity");
-                    } else if (installments.size() == 1) {
-                        resolvePayerCosts(installments.get(0).getPayerCosts());
-                    } else {
-                        mView.startErrorView(mContext.getString(R.string.mpsdk_standard_error_message),
-                                "multiple installments found for an issuer at InstallmentsActivity");
-                    }
-                }
-
-                @Override
-                public void failure(ApiException apiException) {
-                    mView.stopLoadingView();
-                    setFailureRecovery(new FailureRecovery() {
-                        @Override
-                        public void recover() {
-                            getInstallmentsAsync();
+        mMercadoPago.getInstallments(mBin, getAmount(), mIssuerId, mPaymentMethod.getId(),
+                new Callback<List<Installment>>() {
+                    @Override
+                    public void success(List<Installment> installments) {
+                        mView.stopLoadingView();
+                        if (installments.size() == 0) {
+                            mView.startErrorView(mContext.getString(R.string.mpsdk_standard_error_message),
+                                    "no installments found for an issuer at InstallmentsActivity");
+                        } else if (installments.size() == 1) {
+                            resolvePayerCosts(installments.get(0).getPayerCosts());
+                        } else {
+                            mView.startErrorView(mContext.getString(R.string.mpsdk_standard_error_message),
+                                    "multiple installments found for an issuer at InstallmentsActivity");
                         }
-                    });
-                    mView.showApiExceptionError(apiException);
-                }
-            });
+                    }
+
+                    @Override
+                    public void failure(ApiException apiException) {
+                        mView.stopLoadingView();
+                        setFailureRecovery(new FailureRecovery() {
+                            @Override
+                            public void recover() {
+                                getInstallmentsAsync();
+                            }
+                        });
+                        mView.showApiExceptionError(apiException);
+                    }
+                });
     }
 
     private void resolvePayerCosts(List<PayerCost> payerCosts) {
@@ -230,7 +410,34 @@ public class InstallmentsPresenter {
     }
 
     public void onItemSelected(int position) {
-        mView.finishWithResult(mPayerCosts.get(position));
+        if (isInstallmentsReviewEnabled()) {
+            mView.hideInstallmentsRecyclerView();
+            mView.showInstallmentsReviewView();
+
+            initializeDiscountRow();
+            mView.initInstallmentsReviewView(mPayerCosts.get(position));
+        } else {
+            mView.finishWithResult(mPayerCosts.get(position));
+        }
     }
 
+    private Boolean isInstallmentsReviewEnabled() {
+        return mInstallmentsReviewEnabled != null && mInstallmentsReviewEnabled;
+    }
+
+    private boolean isMerchantServerDiscountsAvailable() {
+        return !TextUtil.isEmpty(getMerchantServerDiscountUrl()) && !TextUtil.isEmpty(mMerchantGetDiscountUri);
+    }
+
+    private String getMerchantServerDiscountUrl() {
+        String merchantBaseUrl;
+
+        if (TextUtil.isEmpty(mMerchantDiscountUrl)) {
+            merchantBaseUrl = this.mMerchantBaseUrl;
+        } else {
+            merchantBaseUrl = this.mMerchantDiscountUrl;
+        }
+
+        return merchantBaseUrl;
+    }
 }

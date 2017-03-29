@@ -46,4 +46,8 @@ public class MPException {
         }
         return errorDetail;
     }
+
+    public boolean isApiException() {
+        return apiException != null;
+    }
 }

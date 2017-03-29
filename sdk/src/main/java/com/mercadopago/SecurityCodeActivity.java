@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.MotionEventCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.text.InputFilter;
 import android.view.MotionEvent;
 import android.view.View;
@@ -40,24 +39,24 @@ import com.mercadopago.views.SecurityCodeActivityView;
  * Created by vaserber on 10/26/16.
  */
 
-public class SecurityCodeActivity extends AppCompatActivity implements SecurityCodeActivityView, TimerObserver {
+public class SecurityCodeActivity extends MercadoPagoBaseActivity implements SecurityCodeActivityView, TimerObserver {
 
     protected SecurityCodePresenter mPresenter;
-    private Activity mActivity;
+    protected Activity mActivity;
 
     //View controls
-    private ProgressBar mProgressBar;
-    private DecorationPreference mDecorationPreference;
-    private MPEditText mSecurityCodeEditText;
-    private FrameLayout mContinueButton;
-    private MPTextView mErrorText;
-    private FrameLayout mBackground;
+    protected ProgressBar mProgressBar;
+    protected DecorationPreference mDecorationPreference;
+    protected MPEditText mSecurityCodeEditText;
+    protected FrameLayout mContinueButton;
+    protected MPTextView mErrorText;
+    protected FrameLayout mBackground;
     //ViewMode
     protected boolean mLowResActive;
     //Normal View
     protected FrameLayout mCardContainer;
     protected CardView mCardView;
-    private MPTextView mTimerTextView;
+    protected MPTextView mTimerTextView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -120,10 +119,6 @@ public class SecurityCodeActivity extends AppCompatActivity implements SecurityC
         mBackground = (FrameLayout) findViewById(R.id.mpsdkSecurityCodeActivityBackground);
         mCardContainer = (FrameLayout) findViewById(R.id.mpsdkCardViewContainer);
         mTimerTextView = (MPTextView) findViewById(R.id.mpsdkTimerTextView);
-        if (mLowResActive) {
-            //TODO
-            //aca le cambio la altura al background
-        }
         mProgressBar.setVisibility(View.GONE);
     }
 
@@ -146,12 +141,7 @@ public class SecurityCodeActivity extends AppCompatActivity implements SecurityC
 
     private void loadNormalViews() {
         mCardView = new CardView(mActivity);
-        if (mLowResActive) {
-            //TODO cambiar
-            mCardView.setSize(CardRepresentationModes.BIG_SIZE);
-        } else {
-            mCardView.setSize(CardRepresentationModes.BIG_SIZE);
-        }
+        mCardView.setSize(CardRepresentationModes.BIG_SIZE);
         mCardView.inflateInParent(mCardContainer, true);
         mCardView.initializeControls();
         mCardView.setPaymentMethod(mPresenter.getPaymentMethod());
@@ -171,7 +161,8 @@ public class SecurityCodeActivity extends AppCompatActivity implements SecurityC
     private void decorate() {
         if (isDecorationEnabled()) {
             mBackground.setBackgroundColor(mDecorationPreference.getLighterColor());
-            if(mTimerTextView != null) {
+            mCardView.decorateCardBorder(mDecorationPreference.getLighterColor());
+            if (mTimerTextView != null) {
                 ColorsUtil.decorateTextView(mDecorationPreference, mTimerTextView, this);
             }
         }
@@ -194,7 +185,7 @@ public class SecurityCodeActivity extends AppCompatActivity implements SecurityC
     }
 
     private void showTimer() {
-        if (CheckoutTimer.getInstance().isTimerEnabled()){
+        if (CheckoutTimer.getInstance().isTimerEnabled()) {
             CheckoutTimer.getInstance().addObserver(this);
             mTimerTextView.setVisibility(View.VISIBLE);
             mTimerTextView.setText(CheckoutTimer.getInstance().getCurrentTime());
@@ -203,7 +194,9 @@ public class SecurityCodeActivity extends AppCompatActivity implements SecurityC
 
     @Override
     public void onInvalidStart(String message) {
-
+        Intent returnIntent = new Intent();
+        setResult(RESULT_CANCELED, returnIntent);
+        finish();
     }
 
     @Override

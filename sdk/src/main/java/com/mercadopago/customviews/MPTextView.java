@@ -10,7 +10,6 @@ import com.mercadopago.R;
 
 public class MPTextView extends TextView {
 
-
     public static final String LIGHT = "default_light";
     public static final String REGULAR = "regular";
     public static final String MONO_REGULAR = "roboto_regular";
@@ -47,7 +46,7 @@ public class MPTextView extends TextView {
 
     private void readAttr(Context context, AttributeSet attrs) {
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.MPTextView);
-        String fontStyle = a.getString(R.styleable.MPTextView_fontStyle) ;
+        String fontStyle = a.getString(R.styleable.MPTextView_fontStyle);
         if (fontStyle != null) {
             switch (fontStyle) {
 

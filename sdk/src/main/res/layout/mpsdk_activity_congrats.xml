@@ -83,7 +83,7 @@
                         android:textSize="24dp"
                         app:fontStyle="regular"
                         android:textColor="@color/mpsdk_base_text"
-                        tools:text="12 x $ 800"/>
+                        tools:text="12 x $ 800" />
 
                     <com.mercadopago.customviews.MPTextView
                         android:id="@+id/mpsdkInterestAmountDescription"
@@ -101,17 +101,23 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
+                        android:layout_marginBottom="15dp"
                         android:gravity="center"
                         android:textSize="18dp"
                         app:fontStyle="regular"
                         android:textColor="@color/mpsdk_base_text"
                         tools:text="$ 800"/>
 
+                    <FrameLayout
+                        android:id="@+id/mpsdkDiscount"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
                     <ImageView
                         android:id="@+id/mpsdkPaymentMethodImage"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:layout_marginTop="20dp"
+                        android:layout_marginTop="5dp"
                         android:layout_marginBottom="10dp"
                         android:adjustViewBounds="true"
                         android:gravity="center"

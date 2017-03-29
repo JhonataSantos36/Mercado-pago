@@ -1,0 +1,60 @@
+package com.mercadopago.examples.reviewables;
+
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.mercadopago.examples.R;
+import com.mercadopago.model.Reviewable;
+
+/**
+ * Created by mreverter on 2/3/17.
+ */
+
+public class CellphoneReview extends Reviewable {
+
+    protected View mView;
+    protected TextView mNumberTextView;
+    protected View mNumberEdition;
+
+    private Context mContext;
+    private String mNumber;
+
+    public CellphoneReview(Context context, String cellphoneNumber) {
+        this.mContext = context;
+        this.mNumber = cellphoneNumber;
+    }
+
+    @Override
+    public View getView() {
+        return mView;
+    }
+
+    @Override
+    public View inflateInParent(ViewGroup parent, boolean attachToRoot) {
+        mView = LayoutInflater.from(mContext)
+                .inflate(R.layout.cellphone_review, parent, attachToRoot);
+        return mView;
+    }
+
+    @Override
+    public void initializeControls() {
+        mNumberTextView = (TextView) mView.findViewById(R.id.phoneNumber);
+        mNumberEdition = mView.findViewById(R.id.phoneNumberEdition);
+    }
+
+    @Override
+    public void draw() {
+        mNumberTextView.setText(mNumber);
+        mNumberEdition.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                notifyChangeRequired();
+                Toast.makeText(mContext, "Cambiar número!", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+}

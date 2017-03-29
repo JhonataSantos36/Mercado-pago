@@ -13,8 +13,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static android.text.TextUtils.isEmpty;
-
 public class CurrenciesUtil {
 
     public static final String CURRENCY_ARGENTINA = "ARS";
@@ -60,6 +58,12 @@ public class CurrenciesUtil {
         } else {
             return null;
         }
+    }
+
+    public static Spanned getFormattedAmount(BigDecimal amount, String currencyId) {
+        String originalNumber = CurrenciesUtil.formatNumber(amount, currencyId);
+        Spanned amountText = CurrenciesUtil.formatCurrencyInText(amount, currencyId, originalNumber, false, true);
+        return amountText;
     }
 
     public static Spanned formatNumber(BigDecimal amount, String currencyId, boolean symbolUp, boolean decimalsUp) {
@@ -140,10 +144,14 @@ public class CurrenciesUtil {
     }
 
     public static boolean isValidCurrency(String currencyId) {
-        return !isEmpty(currencyId) && currenciesList.containsKey(currencyId);
+        return !TextUtil.isEmpty(currencyId) && currenciesList.containsKey(currencyId);
     }
 
     public static List<Currency> getAllCurrencies() {
         return new ArrayList<>(currenciesList.values());
+    }
+
+    public static Currency getCurrency(String currencyKey) {
+        return currenciesList.get(currencyKey);
     }
 }

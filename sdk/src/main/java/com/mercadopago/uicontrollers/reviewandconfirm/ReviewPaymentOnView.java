@@ -1,6 +1,7 @@
 package com.mercadopago.uicontrollers.reviewandconfirm;
 
 import android.content.Context;
+import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,42 +9,60 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.mercadopago.R;
-import com.mercadopago.callbacks.OnChangePaymentMethodCallback;
+import com.mercadopago.callbacks.OnReviewChange;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.model.CardInfo;
 import com.mercadopago.model.DecorationPreference;
 import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.PaymentMethod;
+import com.mercadopago.model.Reviewable;
+import com.mercadopago.uicontrollers.payercosts.PayerCostColumn;
 import com.mercadopago.uicontrollers.payercosts.PayerCostViewController;
+import com.mercadopago.util.CurrenciesUtil;
+import com.mercadopago.util.ReviewUtil;
 
 /**
  * Created by vaserber on 11/7/16.
  */
 
-public class ReviewPaymentOnView implements ReviewPaymentViewOnController {
+public class ReviewPaymentOnView extends Reviewable {
 
+
+    public static final String TEA = "TEA ";
+    public static final String CFT = "CFT ";
     protected View mView;
     protected ImageView mPaymentImage;
     protected MPTextView mPaymentText;
     protected MPTextView mPaymentDescription;
+    protected MPTextView mChangePaymentTextView;
+    protected MPTextView mTEATextView;
+    protected MPTextView mCFTTextView;
     protected FrameLayout mChangePaymentButton;
     protected FrameLayout mPayerCostContainer;
     protected ImageView mIconTimeImageView;
-    protected MPTextView mChangePaymentTextView;
 
-    private Context mContext;
-    private PayerCostViewController payerCostViewController;
+    protected Context mContext;
+    protected PayerCostViewController mPayerCostViewController;
 
-    private OnChangePaymentMethodCallback mCallback;
-    private boolean isUniquePaymentMethod;
-    private DecorationPreference mDecorationPreference;
+    protected String mCurrency;
+    protected PayerCost mPayerCost;
+    protected CardInfo mCardInfo;
+    protected PaymentMethod mPaymentMethod;
+    protected OnReviewChange mCallback;
+    protected Boolean mIsUniquePaymentMethod;
+    protected DecorationPreference mDecorationPreference;
 
-    public ReviewPaymentOnView(Context context, OnChangePaymentMethodCallback callback,
-                               boolean uniquePaymentMethod, DecorationPreference decorationPreference) {
+    public ReviewPaymentOnView(Context context, PaymentMethod paymentMethod, CardInfo cardInfo, PayerCost payerCost,
+                               String currencyId, OnReviewChange callback,
+                               Boolean uniquePaymentMethod, DecorationPreference decorationPreference) {
 
         this.mContext = context;
         this.mCallback = callback;
-        this.isUniquePaymentMethod = uniquePaymentMethod;
+        this.mPaymentMethod = paymentMethod;
+        this.mCardInfo = cardInfo;
+        this.mPayerCost = payerCost;
+        this.mCurrency = currencyId;
+        this.mIsUniquePaymentMethod = uniquePaymentMethod == null ? false : mIsUniquePaymentMethod;
         this.mDecorationPreference = decorationPreference;
     }
 
@@ -69,32 +88,59 @@ public class ReviewPaymentOnView implements ReviewPaymentViewOnController {
         mIconTimeImageView = (ImageView) mView.findViewById(R.id.mpsdkIconTime);
         mChangePaymentTextView = (MPTextView) mView.findViewById(R.id.mpsdkReviewChangePaymentText);
         mIconTimeImageView.setVisibility(View.GONE);
+        mTEATextView = (MPTextView) mView.findViewById(R.id.mpsdkTEA);
+        mCFTTextView = (MPTextView) mView.findViewById(R.id.mpsdkCFT);
         mChangePaymentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mCallback.onChangePaymentMethodSelected();
+                mCallback.onChangeSelected();
             }
         });
-        if (isUniquePaymentMethod) {
+        if (mIsUniquePaymentMethod) {
             mChangePaymentButton.setVisibility(View.GONE);
         }
     }
 
     @Override
-    public void drawPaymentMethod(PaymentMethod paymentMethod, CardInfo cardInfo, PayerCost payerCost,
-                                  String currencyId) {
+    public void draw() {
+
         decorateText();
         mPaymentImage.setImageResource(R.drawable.mpsdk_review_payment_on);
-        mPaymentText.setVisibility(View.GONE);
 
-        payerCostViewController = ReviewPaymentViewFactory.getReviewPayerCostController(mContext, currencyId);
-        payerCostViewController.inflateInParent(mPayerCostContainer, true);
-        payerCostViewController.initializeControls();
-        payerCostViewController.drawPayerCost(payerCost);
+        if (mPayerCost.getInstallments() != 1) {
+            mPaymentText.setVisibility(View.GONE);
 
-        String description = mContext.getString(R.string.mpsdk_review_description_card, paymentMethod.getName(),
-                cardInfo.getLastFourDigits());
+            mPayerCostViewController = new PayerCostColumn(mContext, mCurrency);
+            mPayerCostViewController.inflateInParent(mPayerCostContainer, true);
+            mPayerCostViewController.initializeControls();
+            mPayerCostViewController.drawPayerCost(mPayerCost);
+            showFinance();
+
+
+        } else {
+            mPayerCostContainer.setVisibility(View.GONE);
+            mTEATextView.setVisibility(View.GONE);
+            mCFTTextView.setVisibility(View.GONE);
+
+            Spanned amountText = CurrenciesUtil.getFormattedAmount(mPayerCost.getTotalAmount(), mCurrency);
+            mPaymentText.setText(amountText);
+        }
+
+        String description = mContext.getString(R.string.mpsdk_review_description_card, mPaymentMethod.getName(),
+                mCardInfo.getLastFourDigits());
+
         mPaymentDescription.setText(description);
+    }
+
+    private void showFinance() {
+        if (mPayerCost.hasTEA()) {
+            mTEATextView.setVisibility(View.VISIBLE);
+            mTEATextView.setText(TEA + mPayerCost.getTEAPercent());
+        }
+        if (mPayerCost.hasCFT()) {
+            mCFTTextView.setVisibility(View.VISIBLE);
+            mCFTTextView.setText(CFT + mPayerCost.getCFTPercent());
+        }
     }
 
     private void decorateText() {
@@ -102,4 +148,6 @@ public class ReviewPaymentOnView implements ReviewPaymentViewOnController {
             mChangePaymentTextView.setTextColor(mDecorationPreference.getBaseColor());
         }
     }
+
+
 }

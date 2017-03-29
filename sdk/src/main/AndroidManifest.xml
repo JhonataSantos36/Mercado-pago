@@ -41,7 +41,8 @@
             android:name=".CheckoutActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.ProcessMercadoPagoTheme.NoActionbar" />
-        <activity android:name=".GuessingCardActivity"
+        <activity
+            android:name=".GuessingCardActivity"
             android:screenOrientation="behind"
             android:theme="@style/Theme.ProcessMercadoPagoTheme.NoActionbar"
             android:windowSoftInputMode="adjustResize" />
@@ -88,14 +89,26 @@
             android:theme="@style/Theme.PendingMercadoPagoTheme.NoActionbar" />
         <activity
             android:name=".PaymentResultActivity"
-            android:theme="@style/Theme.MercadoPagoTheme.NoActionBar"/>
-        <activity android:name=".SecurityCodeActivity"
+            android:theme="@style/Theme.MercadoPagoTheme.NoActionBar" />
+        <activity
+            android:name=".SecurityCodeActivity"
+            android:screenOrientation="behind"
+            android:windowSoftInputMode="stateVisible"
+            android:theme="@style/Theme.ProcessMercadoPagoTheme.NoActionbar" />
+        <activity
+            android:name=".PaymentTypesActivity"
             android:screenOrientation="behind"
             android:theme="@style/Theme.ProcessMercadoPagoTheme.NoActionbar" />
-        <activity android:name=".PaymentTypesActivity"
-            android:screenOrientation="behind"
+        <activity
+            android:name=".DiscountsActivity"
             android:theme="@style/Theme.ProcessMercadoPagoTheme.NoActionbar" />
-        <activity android:name=".VaultActivity"
+        <activity
+            android:name=".ReviewAndConfirmActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.ProcessMercadoPagoTheme.NoActionbar" />
+        <activity
+            android:name=".VaultActivity"
             android:theme="@style/Theme.MercadoPagoTheme" />
     </application>
+
 </manifest>

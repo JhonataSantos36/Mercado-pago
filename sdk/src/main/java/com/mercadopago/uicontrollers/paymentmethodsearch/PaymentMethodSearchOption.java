@@ -1,6 +1,7 @@
 package com.mercadopago.uicontrollers.paymentmethodsearch;
 
 import android.content.Context;
+import android.graphics.PorterDuff;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +9,7 @@ import android.widget.ImageView;
 
 import com.mercadopago.R;
 import com.mercadopago.customviews.MPTextView;
+import com.mercadopago.model.DecorationPreference;
 import com.mercadopago.model.PaymentMethodSearchItem;
 import com.mercadopago.util.MercadoPagoUtil;
 
@@ -17,17 +19,21 @@ import com.mercadopago.util.MercadoPagoUtil;
 public class PaymentMethodSearchOption implements PaymentMethodSearchViewController {
 
     private static final int COMMENT_MAX_LENGTH = 75;
+    private static final String TO_TINT_IMAGES_PREFIX = "grey_";
+
     protected PaymentMethodSearchItem mItem;
     protected Context mContext;
     protected View mView;
     protected MPTextView mDescription;
     protected MPTextView mComment;
     protected ImageView mIcon;
+    protected DecorationPreference mDecorationPreference;
     protected View.OnClickListener mListener;
 
-    public PaymentMethodSearchOption(Context context, PaymentMethodSearchItem item) {
+    public PaymentMethodSearchOption(Context context, PaymentMethodSearchItem item, DecorationPreference decorationPreference) {
         mContext = context;
         mItem = item;
+        mDecorationPreference = decorationPreference;
     }
 
     public View inflateInParent(ViewGroup parent, boolean attachToRoot) {
@@ -61,10 +67,19 @@ public class PaymentMethodSearchOption implements PaymentMethodSearchViewControl
         if (mItem.hasComment() && mItem.getComment().length() < COMMENT_MAX_LENGTH) {
             mComment.setText(mItem.getComment());
         }
+
         int resourceId = 0;
 
+        Boolean needsTint = itemNeedsTint(mItem);
+        String imageId;
+        if(needsTint) {
+            imageId = TO_TINT_IMAGES_PREFIX + mItem.getId();
+        } else {
+            imageId = mItem.getId();
+        }
+
         if (mItem.isIconRecommended()) {
-            resourceId = MercadoPagoUtil.getPaymentMethodSearchItemIcon(mContext, mItem.getId());
+            resourceId = MercadoPagoUtil.getPaymentMethodSearchItemIcon(mContext, imageId);
         }
 
         if (resourceId != 0) {
@@ -72,6 +87,17 @@ public class PaymentMethodSearchOption implements PaymentMethodSearchViewControl
         } else {
             mIcon.setVisibility(View.GONE);
         }
+
+        if(needsTint) {
+            mIcon.setColorFilter(mDecorationPreference.getBaseColor(), PorterDuff.Mode.MULTIPLY);
+        }
+    }
+
+    private boolean itemNeedsTint(PaymentMethodSearchItem paymentMethodSearchItem) {
+
+        return mDecorationPreference != null && mDecorationPreference.hasColors()
+                && (paymentMethodSearchItem.isGroup()
+                || paymentMethodSearchItem.isPaymentType());
     }
 
     @Override

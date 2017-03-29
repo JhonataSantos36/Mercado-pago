@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.mercadopago.core.MercadoPago;
+import com.mercadopago.model.Discount;
 import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.util.ErrorUtil;
@@ -18,8 +19,10 @@ public class PaymentResultActivity extends Activity {
     //Params
     protected Payment mPayment;
     protected PaymentMethod mPaymentMethod;
-
+    protected Discount mDiscount;
+    protected Boolean mDiscountEnabled;
     private String mMerchantPublicKey;
+    private Integer mCongratsDisplay;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,8 +40,11 @@ public class PaymentResultActivity extends Activity {
 
     protected void getActivityParameters() {
         mMerchantPublicKey = getIntent().getStringExtra("merchantPublicKey");
+        mCongratsDisplay = getIntent().getIntExtra("congratsDisplay", -1);
         mPayment = JsonUtil.getInstance().fromJson(getIntent().getExtras().getString("payment"), Payment.class);
         mPaymentMethod = JsonUtil.getInstance().fromJson(getIntent().getExtras().getString("paymentMethod"), PaymentMethod.class);
+        mDiscount = JsonUtil.getInstance().fromJson(getIntent().getExtras().getString("discount"), Discount.class);
+        mDiscountEnabled = getIntent().getExtras().getBoolean("discountEnabled", true);
     }
 
     protected void validateActivityParameters() throws IllegalStateException {
@@ -98,7 +104,10 @@ public class PaymentResultActivity extends Activity {
                 .setPublicKey(mMerchantPublicKey)
                 .setActivity(this)
                 .setPayment(mPayment)
+                .setDiscount(mDiscount)
+                .setDiscountEnabled(mDiscountEnabled)
                 .setPaymentMethod(mPaymentMethod)
+                .setCongratsDisplay(mCongratsDisplay)
                 .startCongratsActivity();
     }
 

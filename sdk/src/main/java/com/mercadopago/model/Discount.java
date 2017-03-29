@@ -4,27 +4,28 @@ import java.math.BigDecimal;
 
 public class Discount {
 
-    private BigDecimal amountOff;
-    private BigDecimal couponAmount;
-    private String currencyId;
     private Long id;
     private String name;
     private BigDecimal percentOff;
+    private BigDecimal amountOff;
+    private BigDecimal couponAmount;
+    private String currencyId;
+    private String couponCode;
+
+    public void setCouponCode(String couponCode) {
+        this.couponCode = couponCode;
+    }
+
+    public String getCouponCode() {
+        return couponCode;
+    }
 
     public BigDecimal getAmountOff() {
         return amountOff;
     }
 
-    public void setAmountOff(BigDecimal amountOff) {
-        this.amountOff = amountOff;
-    }
-
     public BigDecimal getCouponAmount() {
-        return couponAmount;
-    }
-
-    public void setCouponAmount(BigDecimal couponAmount) {
-        this.couponAmount = couponAmount;
+        return this.couponAmount;
     }
 
     public String getCurrencyId() {
@@ -36,7 +37,7 @@ public class Discount {
     }
 
     public Long getId() {
-        return id;
+        return this.id;
     }
 
     public void setId(Long id) {
@@ -44,7 +45,7 @@ public class Discount {
     }
 
     public String getName() {
-        return name;
+        return this.name;
     }
 
     public void setName(String name) {
@@ -52,10 +53,26 @@ public class Discount {
     }
 
     public BigDecimal getPercentOff() {
-        return percentOff;
+        return this.percentOff;
+    }
+
+    public BigDecimal getAmountWithDiscount(BigDecimal amount) {
+        return amount.subtract(couponAmount);
     }
 
     public void setPercentOff(BigDecimal percentOff) {
         this.percentOff = percentOff;
+    }
+
+    public void setAmountOff(BigDecimal amountOff) {
+        this.amountOff = amountOff;
+    }
+
+    public void setCouponAmount(BigDecimal couponAmount) {
+        this.couponAmount = couponAmount;
+    }
+
+    public Boolean hasPercentOff() {
+        return percentOff != null && !percentOff.equals(new BigDecimal(0));
     }
 }

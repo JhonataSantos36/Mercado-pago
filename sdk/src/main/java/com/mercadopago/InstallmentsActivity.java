@@ -5,24 +5,26 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.ProgressBar;
 
 import com.google.gson.reflect.TypeToken;
+
 import com.mercadopago.adapters.PayerCostsAdapter;
 import com.mercadopago.callbacks.OnSelectedCallback;
 import com.mercadopago.controllers.CheckoutTimer;
+import com.mercadopago.core.MercadoPago;
+import com.mercadopago.core.MercadoPagoUI;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.listeners.RecyclerItemClickListener;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.CardInfo;
 import com.mercadopago.model.DecorationPreference;
+import com.mercadopago.model.Discount;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.PaymentMethod;
@@ -33,22 +35,26 @@ import com.mercadopago.observers.TimerObserver;
 import com.mercadopago.presenters.InstallmentsPresenter;
 import com.mercadopago.uicontrollers.card.CardRepresentationModes;
 import com.mercadopago.uicontrollers.card.FrontCardView;
+import com.mercadopago.uicontrollers.discounts.DiscountRowView;
+import com.mercadopago.uicontrollers.installments.InstallmentsReviewView;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.ColorsUtil;
 import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
+import com.mercadopago.util.LayoutUtil;
 import com.mercadopago.util.ScaleUtil;
 import com.mercadopago.views.InstallmentsActivityView;
 
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by vaserber on 9/29/16.
  */
 
-public class InstallmentsActivity extends AppCompatActivity implements InstallmentsActivityView, TimerObserver {
+public class InstallmentsActivity extends MercadoPagoBaseActivity implements InstallmentsActivityView, TimerObserver {
 
     protected InstallmentsPresenter mPresenter;
     protected Activity mActivity;
@@ -56,7 +62,6 @@ public class InstallmentsActivity extends AppCompatActivity implements Installme
     //View controls
     protected PayerCostsAdapter mPayerCostsAdapter;
     protected RecyclerView mInstallmentsRecyclerView;
-    protected ProgressBar mProgressBar;
     protected DecorationPreference mDecorationPreference;
     //ViewMode
     protected boolean mLowResActive;
@@ -67,9 +72,11 @@ public class InstallmentsActivity extends AppCompatActivity implements Installme
     protected CollapsingToolbarLayout mCollapsingToolbar;
     protected AppBarLayout mAppBar;
     protected FrameLayout mCardContainer;
+    protected FrameLayout mInstallmentsReview;
     protected Toolbar mNormalToolbar;
     protected FrontCardView mFrontCardView;
     protected MPTextView mTimerTextView;
+    protected FrameLayout mDiscountFrameLayout;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -91,10 +98,9 @@ public class InstallmentsActivity extends AppCompatActivity implements Installme
     private boolean isCustomColorSet() {
         return mDecorationPreference != null && mDecorationPreference.hasColors();
     }
-    
+
     private void getActivityParameters() {
-        PaymentMethod paymentMethod = JsonUtil.getInstance().fromJson(
-                this.getIntent().getStringExtra("paymentMethod"), PaymentMethod.class);
+        PaymentMethod paymentMethod = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("paymentMethod"), PaymentMethod.class);
         CardInfo cardInfo = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("cardInfo"), CardInfo.class);
         String publicKey = getIntent().getStringExtra("merchantPublicKey");
         Issuer issuer = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("issuer"), Issuer.class);
@@ -102,7 +108,6 @@ public class InstallmentsActivity extends AppCompatActivity implements Installme
         if (this.getIntent().getStringExtra("amount") != null) {
             amount = new BigDecimal(this.getIntent().getStringExtra("amount"));
         }
-
         Site site = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("site"), Site.class);
         List<PayerCost> payerCosts;
         try {
@@ -121,14 +126,37 @@ public class InstallmentsActivity extends AppCompatActivity implements Installme
             mDecorationPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("decorationPreference"), DecorationPreference.class);
         }
 
+        Discount discount = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("discount"), Discount.class);
+        Boolean discountEnabled = this.getIntent().getBooleanExtra("discountEnabled", true);
+        Boolean directDiscountEnabled = this.getIntent().getBooleanExtra("directDiscountEnabled", true);
+        String payerEmail = this.getIntent().getStringExtra("payerEmail");
+        String merchantBaseUrl = getIntent().getStringExtra("merchantBaseUrl");
+        String merchantDiscountBaseUrl = getIntent().getStringExtra("merchantDiscountBaseUrl");
+        String merchantGetDiscountUri = getIntent().getStringExtra("merchantGetDiscountUri");
+
+        String discountAdditionalInfo = getIntent().getStringExtra("discountAdditionalInfo");
+        Type type = new TypeToken<Map<String, String>>() {
+        }.getType();
+        Map<String, String> discountAdditionalInfoMap = JsonUtil.getInstance().getGson().fromJson(discountAdditionalInfo, type);
+        Boolean installmentsReviewEnabled = this.getIntent().getBooleanExtra("installmentsReviewEnabled", true);
+
         mPresenter.setPaymentMethod(paymentMethod);
         mPresenter.setPublicKey(publicKey);
         mPresenter.setIssuer(issuer);
         mPresenter.setAmount(amount);
+        mPresenter.setPayerEmail(payerEmail);
+        mPresenter.setDiscount(discount);
+        mPresenter.setDiscountEnabled(discountEnabled);
+        mPresenter.setDirectDiscountEnabled(directDiscountEnabled);
         mPresenter.setSite(site);
         mPresenter.setPayerCosts(payerCosts);
         mPresenter.setPaymentPreference(paymentPreference);
         mPresenter.setCardInfo(cardInfo);
+        mPresenter.setMerchantBaseUrl(merchantBaseUrl);
+        mPresenter.setMerchantDiscountBaseUrl(merchantDiscountBaseUrl);
+        mPresenter.setMerchantGetDiscountUri(merchantGetDiscountUri);
+        mPresenter.setDiscountAdditionalInfo(discountAdditionalInfoMap);
+        mPresenter.setInstallmentsReviewEnabled(installmentsReviewEnabled);
     }
 
     private boolean isDecorationEnabled() {
@@ -178,11 +206,12 @@ public class InstallmentsActivity extends AppCompatActivity implements Installme
         decorate();
         showTimer();
         initializeAdapter();
-        mPresenter.loadPayerCosts();
+
+        mPresenter.initialize();
     }
 
     private void showTimer() {
-        if (CheckoutTimer.getInstance().isTimerEnabled()){
+        if (CheckoutTimer.getInstance().isTimerEnabled()) {
             CheckoutTimer.getInstance().addObserver(this);
             mTimerTextView.setVisibility(View.VISIBLE);
             mTimerTextView.setText(CheckoutTimer.getInstance().getCurrentTime());
@@ -192,22 +221,22 @@ public class InstallmentsActivity extends AppCompatActivity implements Installme
     @Override
     public void onInvalidStart(String message) {
         Intent returnIntent = new Intent();
+        returnIntent.putExtra("discount", JsonUtil.getInstance().toJson(mPresenter.getDiscount()));
         setResult(RESULT_CANCELED, returnIntent);
         finish();
     }
 
     private void initializeViews() {
         mInstallmentsRecyclerView = (RecyclerView) findViewById(R.id.mpsdkActivityInstallmentsView);
-        mProgressBar = (ProgressBar) findViewById(R.id.mpsdkProgressBar);
         mTimerTextView = (MPTextView) findViewById(R.id.mpsdkTimerTextView);
 
         if (mLowResActive) {
             mLowResToolbar = (Toolbar) findViewById(R.id.mpsdkRegularToolbar);
             mLowResTitleToolbar = (MPTextView) findViewById(R.id.mpsdkTitle);
 
-            if (CheckoutTimer.getInstance().isTimerEnabled()){
+            if (CheckoutTimer.getInstance().isTimerEnabled()) {
                 Toolbar.LayoutParams marginParams = new Toolbar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                marginParams.setMargins(0,0,0,6);
+                marginParams.setMargins(0, 0, 0, 6);
                 mLowResTitleToolbar.setLayoutParams(marginParams);
                 mLowResTitleToolbar.setTextSize(19);
                 mTimerTextView.setTextSize(17);
@@ -221,7 +250,11 @@ public class InstallmentsActivity extends AppCompatActivity implements Installme
             mNormalToolbar = (Toolbar) findViewById(R.id.mpsdkRegularToolbar);
             mNormalToolbar.setVisibility(View.VISIBLE);
         }
-        mProgressBar.setVisibility(View.GONE);
+
+        mDiscountFrameLayout = (FrameLayout) findViewById(R.id.mpsdkDiscount);
+        mDiscountFrameLayout.setVisibility(View.VISIBLE);
+
+        mInstallmentsReview = (FrameLayout) findViewById(R.id.mpsdkInstallmentsReview);
     }
 
     public void loadLowResViews() {
@@ -257,7 +290,19 @@ public class InstallmentsActivity extends AppCompatActivity implements Installme
             toolbar.setNavigationOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    finish();
+                    if (isInstallmentsReviewVisible()) {
+                        hideInstallmentsReviewView();
+                        showInstallmentsRecyclerView();
+
+                        mPresenter.initializeDiscountRow();
+                    } else {
+                        Intent returnIntent = new Intent();
+                        returnIntent.putExtra("discount", JsonUtil.getInstance().toJson(mPresenter.getDiscount()));
+                        returnIntent.putExtra("discountEnabled", JsonUtil.getInstance().toJson(mPresenter.getDiscountEnabled()));
+                        returnIntent.putExtra("directDiscountEnabled", mPresenter.getDirectDiscountEnabled());
+                        setResult(RESULT_CANCELED, returnIntent);
+                        finish();
+                    }
                 }
             });
         }
@@ -293,7 +338,7 @@ public class InstallmentsActivity extends AppCompatActivity implements Installme
     private void decorateLowRes() {
         ColorsUtil.decorateLowResToolbar(mLowResToolbar, mLowResTitleToolbar, mDecorationPreference,
                 getSupportActionBar(), this);
-        if(mTimerTextView != null) {
+        if (mTimerTextView != null) {
             ColorsUtil.decorateTextView(mDecorationPreference, mTimerTextView, this);
         }
     }
@@ -302,7 +347,7 @@ public class InstallmentsActivity extends AppCompatActivity implements Installme
         ColorsUtil.decorateNormalToolbar(mNormalToolbar, mDecorationPreference, mAppBar,
                 mCollapsingToolbar, getSupportActionBar(), this);
         mFrontCardView.decorateCardBorder(mDecorationPreference.getLighterColor());
-        if(mTimerTextView != null) {
+        if (mTimerTextView != null) {
             ColorsUtil.decorateTextView(mDecorationPreference, mTimerTextView, this);
         }
     }
@@ -316,12 +361,12 @@ public class InstallmentsActivity extends AppCompatActivity implements Installme
         view.setAdapter(adapter);
         view.setLayoutManager(new LinearLayoutManager(this));
         view.addOnItemTouchListener(new RecyclerItemClickListener(this,
-            new RecyclerItemClickListener.OnItemClickListener() {
-                @Override
-                public void onItemClick(View view, int position) {
-                    mPresenter.onItemSelected(position);
-                }
-            }));
+                new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        mPresenter.onItemSelected(position);
+                    }
+                }));
     }
 
     protected OnSelectedCallback<Integer> getDpadSelectionCallback() {
@@ -341,13 +386,17 @@ public class InstallmentsActivity extends AppCompatActivity implements Installme
     @Override
     public void showLoadingView() {
         mInstallmentsRecyclerView.setVisibility(View.GONE);
-        mProgressBar.setVisibility(View.VISIBLE);
+        mDiscountFrameLayout.setVisibility(View.GONE);
+
+        LayoutUtil.showProgressLayout(this);
     }
 
     @Override
     public void stopLoadingView() {
         mInstallmentsRecyclerView.setVisibility(View.VISIBLE);
-        mProgressBar.setVisibility(View.GONE);
+        mDiscountFrameLayout.setVisibility(View.VISIBLE);
+
+        LayoutUtil.showRegularLayout(this);
     }
 
     @Override
@@ -364,18 +413,31 @@ public class InstallmentsActivity extends AppCompatActivity implements Installme
     public void finishWithResult(PayerCost payerCost) {
         Intent returnIntent = new Intent();
         returnIntent.putExtra("payerCost", JsonUtil.getInstance().toJson(payerCost));
+        returnIntent.putExtra("discount", JsonUtil.getInstance().toJson(mPresenter.getDiscount()));
+        returnIntent.putExtra("discountEnabled", JsonUtil.getInstance().toJson(mPresenter.getDiscountEnabled()));
+        returnIntent.putExtra("directDiscountEnabled", mPresenter.getDirectDiscountEnabled());
         setResult(RESULT_OK, returnIntent);
         finish();
     }
 
     @Override
     public void onBackPressed() {
-        MPTracker.getInstance().trackEvent("CARD_INSTALLMENTS", "BACK_PRESSED", "2",
-                mPresenter.getPublicKey(), mPresenter.getSite().getId(), BuildConfig.VERSION_NAME, this);
-        Intent returnIntent = new Intent();
-        returnIntent.putExtra("backButtonPressed", true);
-        setResult(RESULT_CANCELED, returnIntent);
-        finish();
+        if (isInstallmentsReviewVisible()) {
+            hideInstallmentsReviewView();
+            showInstallmentsRecyclerView();
+
+            mPresenter.initializeDiscountRow();
+        } else {
+            MPTracker.getInstance().trackEvent("CARD_INSTALLMENTS", "BACK_PRESSED", "2",
+                    mPresenter.getPublicKey(), mPresenter.getSite().getId(), BuildConfig.VERSION_NAME, this);
+            Intent returnIntent = new Intent();
+            returnIntent.putExtra("backButtonPressed", true);
+            returnIntent.putExtra("discount", JsonUtil.getInstance().toJson(mPresenter.getDiscount()));
+            returnIntent.putExtra("discountEnabled", JsonUtil.getInstance().toJson(mPresenter.getDiscountEnabled()));
+            returnIntent.putExtra("directDiscountEnabled", mPresenter.getDirectDiscountEnabled());
+            setResult(RESULT_CANCELED, returnIntent);
+            finish();
+        }
     }
 
     @Override
@@ -388,6 +450,20 @@ public class InstallmentsActivity extends AppCompatActivity implements Installme
                 setResult(resultCode, data);
                 finish();
             }
+        } else if (requestCode == MercadoPago.DISCOUNTS_REQUEST_CODE) {
+            resolveDiscountRequest(resultCode, data);
+        } else {
+            setResult(resultCode, data);
+            finish();
+        }
+    }
+
+    protected void resolveDiscountRequest(int resultCode, Intent data) {
+        if (resultCode == RESULT_OK) {
+            if (mPresenter.getDiscount() == null) {
+                Discount discount = JsonUtil.getInstance().fromJson(data.getStringExtra("discount"), Discount.class);
+                mPresenter.onDiscountReceived(discount);
+            }
         }
     }
 
@@ -399,5 +475,116 @@ public class InstallmentsActivity extends AppCompatActivity implements Installme
     @Override
     public void onFinish() {
         this.finish();
+    }
+
+    @Override
+    public void startDiscountActivity(BigDecimal transactionAmount) {
+        MercadoPago.StartActivityBuilder mercadoPagoBuilder = new MercadoPago.StartActivityBuilder();
+
+        mercadoPagoBuilder.setActivity(this)
+                .setPublicKey(mPresenter.getPublicKey())
+                .setPayerEmail(mPresenter.getPayerEmail())
+                .setAmount(transactionAmount)
+                .setDiscount(mPresenter.getDiscount())
+                .setDirectDiscountEnabled(mPresenter.getDirectDiscountEnabled())
+                .setMerchantBaseUrl(mPresenter.getMerchantBaseUrl())
+                .setMerchantDiscountBaseUrl(mPresenter.getMerchantDiscountBaseUrl())
+                .setMerchantGetDiscountUri(mPresenter.getMerchantGetDiscountUri())
+                .setDiscountAdditionalInfo(mPresenter.getDiscountAdditionalInfo())
+                .setDecorationPreference(mDecorationPreference);
+
+        if (mPresenter.getDiscount() == null) {
+            mercadoPagoBuilder.setDirectDiscountEnabled(false);
+        } else {
+            mercadoPagoBuilder.setDiscount(mPresenter.getDiscount());
+        }
+
+        mercadoPagoBuilder.startDiscountsActivity();
+    }
+
+    @Override
+    public void showDiscountRow(BigDecimal transactionAmount) {
+        MercadoPagoUI.Views.DiscountRowViewBuilder discountRowViewBuilder = new MercadoPagoUI.Views.DiscountRowViewBuilder();
+
+        discountRowViewBuilder.setContext(this)
+                .setDiscount(mPresenter.getDiscount())
+                .setTransactionAmount(transactionAmount)
+                .setCurrencyId(mPresenter.getSite().getCurrencyId());
+
+        if (isInstallmentsReviewVisible() && mPresenter.getDiscount() == null) {
+            discountRowViewBuilder.setDiscountEnabled(false);
+        } else {
+            discountRowViewBuilder.setDiscountEnabled(mPresenter.getDiscountEnabled());
+        }
+
+        DiscountRowView discountRowView = discountRowViewBuilder.build();
+
+        discountRowView.inflateInParent(mDiscountFrameLayout, true);
+        discountRowView.initializeControls();
+        discountRowView.draw();
+        discountRowView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (isInstallmentsRecyclerOnClickEnabled() || isInstallmentsReviewOnClickEnabled()) {
+                    mPresenter.initializeDiscountActivity();
+                }
+            }
+        });
+    }
+
+    private Boolean isInstallmentsRecyclerOnClickEnabled() {
+        return !isInstallmentsReviewVisible() && mPresenter.getDiscountEnabled();
+    }
+
+    private Boolean isInstallmentsReviewOnClickEnabled() {
+        return isInstallmentsReviewVisible() && mPresenter.getDiscount() != null && mPresenter.getDiscountEnabled();
+    }
+
+    @Override
+    public void initInstallmentsReviewView(final PayerCost payerCost) {
+        InstallmentsReviewView installmentsReviewView = new MercadoPagoUI.Views.InstallmentsReviewViewBuilder()
+                .setContext(this)
+                .setCurrencyId(mPresenter.getSite().getCurrencyId())
+                .setPayerCost(payerCost)
+                .setDecorationPreference(mDecorationPreference)
+                .build();
+
+        installmentsReviewView.inflateInParent(mInstallmentsReview, true);
+        installmentsReviewView.initializeControls();
+        installmentsReviewView.draw();
+        installmentsReviewView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finishWithResult(payerCost);
+            }
+        });
+    }
+
+    @Override
+    public void hideInstallmentsRecyclerView() {
+        mInstallmentsRecyclerView.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void showInstallmentsRecyclerView() {
+        mInstallmentsRecyclerView.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void showInstallmentsReviewView() {
+        mInstallmentsReview.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideInstallmentsReviewView() {
+        mInstallmentsReview.setVisibility(View.GONE);
+    }
+
+    private Boolean isInstallmentsReviewVisible() {
+        return mInstallmentsReview.getVisibility() == View.VISIBLE;
+    }
+
+    public InstallmentsPresenter getPresenter() {
+        return mPresenter;
     }
 }

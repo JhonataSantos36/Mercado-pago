@@ -10,6 +10,7 @@ import com.mercadopago.model.ApiException;
 import com.mercadopago.model.Card;
 import com.mercadopago.model.CardInfo;
 import com.mercadopago.model.CardToken;
+import com.mercadopago.model.Discount;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.PaymentMethod;
@@ -21,6 +22,7 @@ import com.mercadopago.views.CardVaultActivityView;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by vaserber on 10/12/16.
@@ -28,11 +30,11 @@ import java.util.List;
 
 public class CardVaultPresenter {
 
-    private Context mContext;
-    private CardVaultActivityView mView;
-    private FailureRecovery mFailureRecovery;
+    protected Context mContext;
+    protected CardVaultActivityView mView;
+    protected FailureRecovery mFailureRecovery;
+    protected String mBin;
     protected MercadoPago mMercadoPago;
-    private String mBin;
 
     //Activity parameters
     protected PaymentRecovery mPaymentRecovery;
@@ -40,8 +42,13 @@ public class CardVaultPresenter {
     protected List<PaymentMethod> mPaymentMethodList;
     protected Site mSite;
     protected Boolean mInstallmentsEnabled;
+    protected Boolean mInstallmentsReviewEnabled;
     protected String mPublicKey;
     protected BigDecimal mAmount;
+    protected String mMerchantBaseUrl;
+    protected String mMerchantDiscountUrl;
+    protected String mMerchantGetDiscountUri;
+    protected Map<String, String> mDiscountAdditionalInfo;
 
     //Activity result
     protected PaymentMethod mPaymentMethod;
@@ -53,6 +60,12 @@ public class CardVaultPresenter {
     protected Token mToken;
     protected CardToken mCardToken;
     protected Card mCard;
+
+    //Discount
+    protected Boolean mDiscountEnabled;
+    protected Boolean mDirectDiscountEnabled;
+    protected Discount mDiscount;
+    protected String mPayerEmail;
 
     public CardVaultPresenter(Context context) {
         this.mContext = context;
@@ -80,6 +93,10 @@ public class CardVaultPresenter {
 
     public void setInstallmentsEnabled(Boolean installmentsEnabled) {
         this.mInstallmentsEnabled = installmentsEnabled;
+    }
+
+    public Boolean getInstallmentsEnabled() {
+        return mInstallmentsEnabled;
     }
 
     public void setCard(Card card) {
@@ -175,12 +192,84 @@ public class CardVaultPresenter {
         }
     }
 
+    public void setPayerEmail(String payerEmail) {
+        this.mPayerEmail = payerEmail;
+    }
+
+    public String getPayerEmail() {
+        return this.mPayerEmail;
+    }
+
+    public void setDiscount(Discount discount) {
+        this.mDiscount = discount;
+    }
+
+    public Discount getDiscount() {
+        return mDiscount;
+    }
+
+    public void setDiscountEnabled(Boolean discountEnabled) {
+        this.mDiscountEnabled = discountEnabled;
+    }
+
+    public Boolean getDiscountEnabled() {
+        return this.mDiscountEnabled;
+    }
+
+    public void setDiscountAdditionalInfo(Map<String, String> discountAdditionalInfo) {
+        this.mDiscountAdditionalInfo = discountAdditionalInfo;
+    }
+
+    public Map<String, String> getDiscountAdditionalInfo() {
+        return this.mDiscountAdditionalInfo;
+    }
+
+    public void setInstallmentsReviewEnabled(Boolean installmentReviewEnabled) {
+        this.mInstallmentsReviewEnabled = installmentReviewEnabled;
+    }
+
+    public Boolean getInstallmentsReviewEnabled() {
+        return this.mInstallmentsReviewEnabled;
+    }
+
     public CardInfo getCardInfo() {
         return mCardInfo;
     }
 
     public Integer getCardNumberLength() {
         return PaymentMethodGuessingController.getCardNumberLength(mPaymentMethod, mBin);
+    }
+
+    public void setMerchantBaseUrl(String merchantBaseUrl) {
+        this.mMerchantBaseUrl = merchantBaseUrl;
+    }
+
+    public String getMerchantBaseUrl() {
+        return this.mMerchantBaseUrl;
+    }
+
+    public void setMerchantDiscountBaseUrl(String merchantDiscountUrl) {
+        this.mMerchantDiscountUrl = merchantDiscountUrl;
+    }
+
+    public String getMerchantDiscountBaseUrl() {
+        return this.mMerchantDiscountUrl;
+    }
+
+    public void setMerchantGetDiscountUri(String merchantGetDiscountUri) {
+        this.mMerchantGetDiscountUri = merchantGetDiscountUri;
+    }
+
+    public String getMerchantGetDiscountUri() {
+        return mMerchantGetDiscountUri;
+    }
+
+    public void setDirectDiscountEnabled(Boolean directDiscountEnabled) {
+        this.mDirectDiscountEnabled = directDiscountEnabled;
+    }
+
+    public Boolean getDirectDiscountEnabled() {
+        return this.mDirectDiscountEnabled;
     }
 
     public void checkStartInstallmentsActivity() {

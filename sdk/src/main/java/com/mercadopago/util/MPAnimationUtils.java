@@ -181,6 +181,7 @@ public class MPAnimationUtils {
             @Override
             public void onAnimationEnd(Animator animation) {
                 frontView.setAlpha(0);
+                backView.setAlpha(1.0f);
             }
 
             @Override
@@ -215,7 +216,6 @@ public class MPAnimationUtils {
                 backView.setLayerType(View.LAYER_TYPE_NONE, null);
             }
         });
-        backView.setAlpha(1.0f);
         animFront.start();
         animBack.start();
     }
@@ -243,6 +243,7 @@ public class MPAnimationUtils {
             @Override
             public void onAnimationEnd(Animator animation) {
                 backView.setAlpha(0);
+                frontView.setAlpha(1.0f);
             }
 
             @Override
@@ -270,7 +271,6 @@ public class MPAnimationUtils {
             }
         });
 
-        frontView.setAlpha(1.0f);
         animBack.start();
         animFront.start();
     }
@@ -303,8 +303,8 @@ public class MPAnimationUtils {
     }
 
     public static void flipToFront(Context context, final FrontCardView frontCardView, final BackCardView backCardView) {
-        Animation animFront = AnimationUtils.loadAnimation(context, R.anim.mpsdk_from_middle_left);
-        Animation animBack = AnimationUtils.loadAnimation(context, R.anim.mpsdk_to_middle_left);
+        final Animation animFront = AnimationUtils.loadAnimation(context, R.anim.mpsdk_from_middle_left);
+        final Animation animBack = AnimationUtils.loadAnimation(context, R.anim.mpsdk_to_middle_left);
 
         backCardView.getView().startAnimation(animBack);
 

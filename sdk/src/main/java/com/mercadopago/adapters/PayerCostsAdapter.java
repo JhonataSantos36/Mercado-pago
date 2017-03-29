@@ -31,7 +31,7 @@ public class PayerCostsAdapter extends  RecyclerView.Adapter<PayerCostsAdapter.V
     }
 
     public void addResults(List<PayerCost> list) {
-        mInstallmentsList.addAll(list);
+        mInstallmentsList = list;
         notifyDataSetChanged();
     }
 

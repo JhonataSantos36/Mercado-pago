@@ -7,12 +7,14 @@
     android:background="@color/mpsdk_white">
 
     <include layout="@layout/mpsdk_regular_toolbar"/>
+    <include layout="@layout/mpsdk_view_progress_bar"/>
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true">
         <FrameLayout
+            android:id="@+id/mpsdkRegularLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 

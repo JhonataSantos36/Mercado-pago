@@ -204,8 +204,27 @@
     <string name="mpsdk_review_product_price">Preço unitário: %1$s</string>
     <string name="mpsdk_activity_checkout_title">Confirme a sua compra</string>
     <string name="mpsdk_review_summary_products">Produtos</string>
-    <string name="mpsdk_review_summary_discounts">Desconto %1$s</string>
     <string name="mpsdk_review_summary_subtotal">Subtotal</string>
     <string name="mpsdk_review_summary_pay">Você paga</string>
     <string name="mpsdk_review_summary_total">Total</string>
+    <string name="mpsdk_review_summary_discount">Desconto</string>
+    <string name="mpsdk_review_summary_discount_with_percent_off">Desconto %1$s%%</string>
+    <string name="mpsdk_review_summary_discount_with_amount_off">Desconto</string>
+
+    <!-- Discount -->
+    <string name="mpsdk_discount">Desconto</string>
+    <string name="mpsdk_input_button_exchange">Aplicar</string>
+    <string name="mpsdk_discount_code">Código de desconto</string>
+    <string name="mpsdk_has_a_discount">Tenho um desconto</string>
+    <string name="mpsdk_of_discount">de desconto</string>
+    <string name="mpsdk_percent_of_discount">% de desconto</string>
+    <string name="mpsdk_do_not_enter_code">O código não foi digitado</string>
+    <string name="mpsdk_invalid_code">Código inválido</string>
+    <string name="mpsdk_merchant_without_discount_available">Vendedor não tem desconto disponíveis</string>
+    <string name="mpsdk_ran_out_of_quantity_uses_quantity">O número de pedidos esgotados</string>
+    <string name="mpsdk_amount_doesnt_match">Montante fora do alcance</string>
+    <string name="mpsdk_campaign_expired">Campanha expirado</string>
+    <string name="mpsdk_discount_percent_off">%1$s %%</string>
+    <string name="mpsdk_total">Total:</string>
+    <string name="mpsdk_something_went_wrong">Ops! Algo deu errado…</string>
 </resources>

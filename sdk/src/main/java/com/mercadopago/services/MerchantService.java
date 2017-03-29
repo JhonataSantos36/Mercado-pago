@@ -3,6 +3,7 @@ package com.mercadopago.services;
 import com.mercadopago.adapters.MPCall;
 import com.mercadopago.model.CheckoutPreference;
 import com.mercadopago.model.Customer;
+import com.mercadopago.model.Discount;
 import com.mercadopago.model.MerchantPayment;
 import com.mercadopago.model.Payment;
 
@@ -13,6 +14,7 @@ import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
+import retrofit2.http.QueryMap;
 
 public interface MerchantService {
 
@@ -24,4 +26,10 @@ public interface MerchantService {
 
     @POST("/{uri}")
     MPCall<CheckoutPreference> createPreference(@Path(value = "uri", encoded = true) String uri, @Body Map<String, Object> body);
+
+    @GET("/{uri}")
+    MPCall<Discount> getDirectDiscount(@Path(value = "uri", encoded = true) String uri, @Query("transaction_amount") String transactionAmount, @Query("email") String payerEmail, @QueryMap(encoded = true) Map<String, String> discountAdditionalInfo);
+
+    @GET("/{uri}")
+    MPCall<Discount> getCodeDiscount(@Path(value = "uri", encoded = true) String uri, @Query("transaction_amount") String transactionAmount, @Query("email") String payerEmail, @Query("coupon_code") String couponCode, @QueryMap(encoded = true) Map<String, String> discountAdditionalInfo);
 }

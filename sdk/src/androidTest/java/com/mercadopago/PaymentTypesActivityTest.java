@@ -14,8 +14,6 @@ import android.test.suitebuilder.annotation.LargeTest;
 
 import com.google.gson.reflect.TypeToken;
 import com.mercadopago.model.CardInfo;
-import com.mercadopago.model.CardToken;
-import com.mercadopago.model.Issuer;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentType;
 import com.mercadopago.test.ActivityResult;
