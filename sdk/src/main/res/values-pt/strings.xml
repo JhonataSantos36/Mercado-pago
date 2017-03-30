@@ -98,7 +98,7 @@
 
     <!-- Rejection -->
     <string name="mpsdk_text_other_payment_method_button_rejection">Usar outro meio de pagamento</string>
-    <string name="mpsdk_text_pay_with_other_method">Pagar com outro meio</string>
+    <string name="mpsdk_text_pay_with_other_method">Alterar o meio de pagamento</string>
     <string name="mpsdk_text_enter_again">Digite novamente</string>
     <string name="mpsdk_subtitle_rejection_insufficient_amount_credit_card">Não se preocupe! Você pode escolher outros meios de pagamento.</string>
     <string name="mpsdk_title_other_reason_rejection">%1$s não processou o pagamento</string>

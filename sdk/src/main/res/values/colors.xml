@@ -135,6 +135,9 @@
 
     <!-- Revamp 2.0 -->
 
+    <color name="mpsdk_summary_top_color">#EEEEEE</color>
+
+    <color name="mpsdk_discounts_summary_background_color">#474747</color>
     <color name="mpsdk_ryc_status_bar">#DCDCDC</color>
     <color name="mpsdk_background_blue">#009EE3</color>
     <color name="mpsdk_colorPrimary">#009EE3</color>
