@@ -362,7 +362,7 @@ public class CardVaultPresenter {
         String bin = TextUtils.isEmpty(mCardInfo.getFirstSixDigits()) ? "" : mCardInfo.getFirstSixDigits();
         Long issuerId = mCard.getIssuer() == null ? null : mCard.getIssuer().getId();
         String paymentMethodId = card.getPaymentMethod() == null ? "" : card.getPaymentMethod().getId();
-        getInstallmentsAsync(bin, issuerId, paymentMethodId, mAmount);
+        getInstallmentsAsync(bin, issuerId, paymentMethodId, getTotalAmount());
     }
 
     private void getInstallmentsAsync(final String bin, final Long issuerId, final String paymentMethodId, final BigDecimal amount) {
@@ -391,6 +391,17 @@ public class CardVaultPresenter {
                 mView.startErrorView(apiException);
             }
         });
+    }
+
+    private BigDecimal getTotalAmount() {
+        BigDecimal amount;
+
+        if (!mDiscountEnabled || mDiscount == null) {
+            amount = mAmount;
+        } else {
+            amount = mDiscount.getAmountWithDiscount(mAmount);
+        }
+        return amount;
     }
 
     private void resolvePayerCosts(List<PayerCost> payerCosts) {
