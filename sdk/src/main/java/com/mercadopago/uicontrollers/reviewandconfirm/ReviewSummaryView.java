@@ -165,7 +165,11 @@ public class ReviewSummaryView extends Reviewable {
         if (isCardPaymentMethod()) {
             if (mPayerCost.getInstallments() == 1) {
                 hidePayerCostInfo();
-                hideTotalRow();
+                if(mDiscount == null) {
+                    hideTotalRow();
+                } else {
+                    showTotal(mPayerCost.getTotalAmount());
+                }
             } else {
                 showPayerCostRow();
                 showFinance();
