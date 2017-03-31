@@ -7,6 +7,7 @@ import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.mercadopago.constants.Sites;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.util.ErrorUtil;
@@ -102,12 +103,14 @@ public class TermsAndConditionsActivity extends MercadoPagoActivity {
                 mMPTermsAndConditionsView.setVisibility(View.VISIBLE);
             }
         });
-        if ("MLA".equals(mSiteId)) {
+        if (Sites.ARGENTINA.getId().equals(mSiteId)) {
             mTermsAndConditionsWebView.loadUrl("https://www.mercadopago.com.ar/ayuda/terminos-y-condiciones_299");
-        } else if ("MLM".equals(mSiteId)) {
+        } else if (Sites.MEXICO.getId().equals(mSiteId)) {
             mTermsAndConditionsWebView.loadUrl("https://www.mercadopago.com.mx/ayuda/terminos-y-condiciones_715");
-        } else if ("MLB".equals(mSiteId)) {
+        } else if (Sites.BRASIL.getId().equals(mSiteId)) {
             mTermsAndConditionsWebView.loadUrl("https://www.mercadopago.com.br/ajuda/termos-e-condicoes_300");
+        } else if (Sites.PERU.getId().equals(mSiteId)) {
+            mTermsAndConditionsWebView.loadUrl("https://www.mercadopago.com.pe/ayuda/terminos-condiciones-uso_2483");
         } else {
             finish();
         }

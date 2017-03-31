@@ -44,7 +44,8 @@ public class ReviewPaymentOffView extends Reviewable {
 
     private Context mContext;
     private PaymentMethod mPaymentMethod;
-    private String mExtraInfo;
+    private String mPaymentMethodCommentInfo;
+    private String mPaymentMethodDescriptionInfo;
     private BigDecimal mAmount;
     private Site mSite;
     private OnReviewChange mOnReviewChange;
@@ -52,10 +53,11 @@ public class ReviewPaymentOffView extends Reviewable {
     private DecorationPreference mDecorationPreference;
     private ViewGroup mPaymentMethodExtraInfo;
 
-    public ReviewPaymentOffView(Context context, PaymentMethod paymentMethod, String extraInfo, BigDecimal amount, Site site, OnReviewChange onReviewChange, Boolean editionEnabled, DecorationPreference decorationPreference) {
+    public ReviewPaymentOffView(Context context, PaymentMethod paymentMethod, String paymentMethodCommentInfo, String paymentMethodDescriptionInfo, BigDecimal amount, Site site, OnReviewChange onReviewChange, Boolean editionEnabled, DecorationPreference decorationPreference) {
         this.mContext = context;
         this.mPaymentMethod = paymentMethod;
-        this.mExtraInfo = extraInfo;
+        this.mPaymentMethodCommentInfo = paymentMethodCommentInfo;
+        this.mPaymentMethodDescriptionInfo = paymentMethodDescriptionInfo;
         this.mAmount = amount;
         this.mSite = site;
         this.mOnReviewChange = onReviewChange;
@@ -115,10 +117,10 @@ public class ReviewPaymentOffView extends Reviewable {
 
         mPaymentText.setText(getPaymentMethodDescription());
 
-        if (TextUtil.isEmpty(mExtraInfo)) {
+        if(TextUtil.isEmpty(mPaymentMethodCommentInfo)) {
             mPaymentMethodExtraInfo.setVisibility(View.GONE);
         } else {
-            mPaymentDescription.setText(mExtraInfo);
+            mPaymentDescription.setText(mPaymentMethodCommentInfo);
         }
     }
 
@@ -130,7 +132,7 @@ public class ReviewPaymentOffView extends Reviewable {
             int paymentInstructionsTemplate = ReviewUtil.getPaymentInstructionTemplate(mPaymentMethod);
             String originalNumber = CurrenciesUtil.formatNumber(mAmount, mSite.getCurrencyId());
             String itemName;
-            itemName = ReviewUtil.getPaymentMethodDescription(mPaymentMethod, mContext);
+            itemName = ReviewUtil.getPaymentMethodDescription(mPaymentMethod, mPaymentMethodDescriptionInfo, mContext);
             String completeDescription = mContext.getString(paymentInstructionsTemplate, originalNumber, itemName);
             description = CurrenciesUtil.formatCurrencyInText(mAmount, mSite.getCurrencyId(), completeDescription, false, true);
         }

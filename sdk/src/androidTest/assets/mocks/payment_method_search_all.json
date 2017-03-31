@@ -135,6 +135,15 @@
                "id": "serfin_bank_transfer",
                "type": "payment_method",
                "show_icon": true
+            },
+            {
+               "children": null,
+               "children_header": null,
+               "comment": "Se acreditará en 7 hábiles",
+               "description": "PagoEfectivo",
+               "id": "pagoefectivo_atm_pagoefectivo_atm",
+               "type": "payment_method",
+               "show_icon": true
             }
          ],
          "children_header": "¿Cuál es tu banco?",
@@ -415,6 +424,22 @@
          "id": "telecomm",
          "name": "Telecomm",
          "payment_type_id": "ticket",
+         "status": "active",
+         "secure_thumbnail": "https://www.mercadopago.com/org-img/MP3/API/logos/telecomm.gif",
+         "thumbnail": "http://img.mlstatic.com/org-img/MP3/API/logos/telecomm.gif",
+         "deferred_capture": "does_not_apply",
+         "settings": [
+         ],
+         "additional_info_needed": [
+         ],
+         "min_allowed_amount": 10,
+         "max_allowed_amount": 10000,
+         "accreditation_time": 10080
+      },
+      {
+         "id": "pagoefectivo_atm",
+         "name": "PagoEfectivo",
+         "payment_type_id": "atm",
          "status": "active",
          "secure_thumbnail": "https://www.mercadopago.com/org-img/MP3/API/logos/telecomm.gif",
          "thumbnail": "http://img.mlstatic.com/org-img/MP3/API/logos/telecomm.gif",

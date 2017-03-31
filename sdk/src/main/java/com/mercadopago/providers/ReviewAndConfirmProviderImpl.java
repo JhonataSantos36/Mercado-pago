@@ -93,11 +93,12 @@ public class ReviewAndConfirmProviderImpl implements ReviewAndConfirmProvider {
     }
 
     @Override
-    public Reviewable getPaymentMethodOffReviewable(PaymentMethod paymentMethod, String extraPaymentMethodInfo, BigDecimal amount, Site site, DecorationPreference decorationPreference, Boolean editionEnabled, OnReviewChange onReviewChange) {
+    public Reviewable getPaymentMethodOffReviewable(PaymentMethod paymentMethod, String paymentMethodCommentInfo, String paymentMethodDescriptionInfo, BigDecimal amount, Site site, DecorationPreference decorationPreference, Boolean editionEnabled, OnReviewChange onReviewChange) {
         return new MercadoPagoComponents.Views.ReviewPaymentMethodOffBuilder()
                 .setContext(context)
                 .setPaymentMethod(paymentMethod)
-                .setExtraPaymentMethodInfo(extraPaymentMethodInfo)
+                .setPaymentMethodCommentInfo(paymentMethodCommentInfo)
+                .setPaymentMethodDescriptionInfo(paymentMethodDescriptionInfo)
                 .setAmount(amount)
                 .setSite(site)
                 .setDecorationPreference(decorationPreference)

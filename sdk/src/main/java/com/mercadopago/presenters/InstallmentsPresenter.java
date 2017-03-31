@@ -428,19 +428,24 @@ public class InstallmentsPresenter {
     }
 
     public void onItemSelected(int position) {
-        if (isInstallmentsReviewEnabled()) {
+        PayerCost selectedPayerCost = mPayerCosts.get(position);
+        if (isInstallmentsReviewEnabled() && isInstallmentsReviewRequired(selectedPayerCost)) {
             mView.hideInstallmentsRecyclerView();
             mView.showInstallmentsReviewView();
 
             initializeDiscountRow();
-            mView.initInstallmentsReviewView(mPayerCosts.get(position));
+            mView.initInstallmentsReviewView(selectedPayerCost);
         } else {
-            mView.finishWithResult(mPayerCosts.get(position));
+            mView.finishWithResult(selectedPayerCost);
         }
     }
 
     private Boolean isInstallmentsReviewEnabled() {
         return mInstallmentsReviewEnabled != null && mInstallmentsReviewEnabled;
+    }
+
+    private Boolean isInstallmentsReviewRequired(PayerCost payerCost) {
+        return payerCost != null && payerCost.getCFTPercent() != null && payerCost.getTEAPercent() != null;
     }
 
     private boolean isMerchantServerDiscountsAvailable() {

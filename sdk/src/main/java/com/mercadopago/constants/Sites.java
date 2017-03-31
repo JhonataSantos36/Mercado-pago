@@ -14,6 +14,8 @@ public class Sites {
     public static final Site COLOMBIA = new Site("MCO", "COP");
     public static final Site VENEZUELA = new Site("MLV", "VEF");
     public static final Site USA = new Site("USA", "USD");
+    public static final Site PERU = new Site("MPE", "PEN");
+
 
     private Sites() {
     }
@@ -34,6 +36,8 @@ public class Sites {
             site = Sites.VENEZUELA;
         } else if (siteId.equals(Sites.USA.getId())) {
             site = Sites.USA;
+        } else if (siteId.equals(Sites.PERU.getId())) {
+            site = Sites.PERU;
         } else {
             site = null;
         }
