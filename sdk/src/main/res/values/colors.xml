@@ -94,6 +94,8 @@
     <color name="mpsdk_cmr">#3D7D4E</color>
     <color name="mpsdk_maestro">#004883</color>
     <color name="mpsdk_codensa">#D3B21D</color>
+    <color name="mpsdk_magna">#666666</color>
+    <color name="mpsdk_presto">#0071b2</color>
 
     <color name="mpsdk_pagofacil">#FFFFFF</color>
     <color name="mpsdk_rapipago">#FFFFFF</color>
@@ -128,6 +130,8 @@
     <color name="mpsdk_font_cmr">#B3FFFFFF</color>
     <color name="mpsdk_font_maestro">#B3FFFFFF</color>
     <color name="mpsdk_font_codensa">#B3FFFFFF</color>
+    <color name="mpsdk_font_magna">#B3FFFFFF</color>
+    <color name="mpsdk_font_presto">#B3FFFFFF</color>
 
     <color name="mpsdk_font_pagofacil">#B3333333</color>
     <color name="mpsdk_font_rapipago">#B3333333</color>

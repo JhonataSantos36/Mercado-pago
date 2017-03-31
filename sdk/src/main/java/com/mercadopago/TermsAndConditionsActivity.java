@@ -109,6 +109,8 @@ public class TermsAndConditionsActivity extends MercadoPagoActivity {
             mTermsAndConditionsWebView.loadUrl("https://www.mercadopago.com.mx/ayuda/terminos-y-condiciones_715");
         } else if (Sites.BRASIL.getId().equals(mSiteId)) {
             mTermsAndConditionsWebView.loadUrl("https://www.mercadopago.com.br/ajuda/termos-e-condicoes_300");
+        } else if (Sites.CHILE.getId().equals(mSiteId)) {
+            mTermsAndConditionsWebView.loadUrl("https://www.mercadopago.cl/ayuda/terminos-y-condiciones_299");
         } else if (Sites.PERU.getId().equals(mSiteId)) {
             mTermsAndConditionsWebView.loadUrl("https://www.mercadopago.com.pe/ayuda/terminos-condiciones-uso_2483");
         } else if (Sites.COLOMBIA.getId().equals(mSiteId)) {

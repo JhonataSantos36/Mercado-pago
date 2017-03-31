@@ -198,6 +198,8 @@
     <string name="mpsdk_review_off_text_2">Você pagará %1$s no\n%2$s</string>
     <string name="mpsdk_review_off_text_3">Você pagará %1$s no\n%2$s</string>
     <string name="mpsdk_review_off_text_4">Você pagará %1$s com\n%2$s</string>
+    <string name="mpsdk_review_off_text_5">Você pagará %1$s por\n%2$s</string>
+    <string name="mpsdk_review_off_text_6">Você pagará %1$s em\n%2$s</string>
     <string name="mpsdk_homebanking">Internet Banking de</string>
     <string name="mpsdk_your_atm">caixa eletrônico de</string>
     <string name="mpsdk_review_product_quantity">Quantidade: %1$s</string>

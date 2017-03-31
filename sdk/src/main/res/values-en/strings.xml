@@ -201,6 +201,8 @@
     <string name="mpsdk_review_off_text_2">You will pay %1$s in\n%2$s</string>
     <string name="mpsdk_review_off_text_3">You will pay %1$s in your\n%2$s</string>
     <string name="mpsdk_review_off_text_4">You will pay %1$s with\n%2$s</string>
+    <string name="mpsdk_review_off_text_5">You will pay %1$s through\n%2$s</string>
+    <string name="mpsdk_review_off_text_6">You will pay %1$s at\n%2$s</string>
     <string name="mpsdk_homebanking">Home Banking of</string>
     <string name="mpsdk_review_summary_total">Total</string>
     <string name="mpsdk_review_product_quantity">Quantity: %1$s</string>
