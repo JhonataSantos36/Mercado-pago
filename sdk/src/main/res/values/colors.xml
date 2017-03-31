@@ -79,7 +79,7 @@
     <color name="mpsdk_diners">#CECECE</color>
     <color name="mpsdk_elo">#666666</color>
     <color name="mpsdk_hipercard">#941F16</color>
-    <color name="mpsdk_melicard">#2D3277</color>
+    <color name="mpsdk_melicard">#F7F7F7</color>
     <color name="mpsdk_naranja">#FF723F</color>
     <color name="mpsdk_nativa">#013C76</color>
     <color name="mpsdk_tarshop">#3D4064</color>
@@ -113,7 +113,7 @@
     <color name="mpsdk_font_diners">#B3333333</color>
     <color name="mpsdk_font_elo">#B3FFFFFF</color>
     <color name="mpsdk_font_hipercard">#B3FFFFFF</color>
-    <color name="mpsdk_font_melicard">#B3FFFFFF</color>
+    <color name="mpsdk_font_melicard">#B3333333</color>
     <color name="mpsdk_font_naranja">#B3FFFFFF</color>
     <color name="mpsdk_font_nativa">#B3FFFFFF</color>
     <color name="mpsdk_font_tarshop">#B3FFFFFF</color>
