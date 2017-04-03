@@ -42,7 +42,7 @@ public class InstructionReference {
         if (fieldValue != null) {
             for (String string : fieldValue) {
                 stringBuilder.append(string);
-                if (fieldValue.indexOf(string) != fieldValue.size() - 1) {
+                if (fieldValue.indexOf(string) != fieldValue.size() - 1 && !TextUtils.isEmpty(this.separator)) {
                     stringBuilder.append(this.separator);
                 }
             }
