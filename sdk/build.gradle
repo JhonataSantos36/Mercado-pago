@@ -53,7 +53,7 @@ android {
     }
     buildTypes {
         debug {
-//            testCoverageEnabled true
+            testCoverageEnabled true
             multiDexEnabled true
             versionNameSuffix " Debug"
             debuggable true

@@ -9,13 +9,20 @@
     android:visibility="visible"
     android:background="@color/mpsdk_background_blue">
 
-    <ImageView
-        android:id="@+id/mpsdkCloseImage"
-        android:layout_margin="15dp"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_gravity="top|start"
-        android:src="@drawable/mpsdk_close"/>
+    <FrameLayout
+        android:id="@+id/mpsdkCloseImageFrameLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="3dp">
+
+        <ImageView
+            android:id="@+id/mpsdkCloseImage"
+            android:layout_margin="15dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="top|start"
+            android:src="@drawable/mpsdk_close"/>
+    </FrameLayout>
 
     <LinearLayout
         android:layout_gravity="center"
