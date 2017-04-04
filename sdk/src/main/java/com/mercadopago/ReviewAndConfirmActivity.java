@@ -19,6 +19,7 @@ import android.widget.LinearLayout;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+
 import com.mercadopago.adapters.ReviewablesAdapter;
 import com.mercadopago.constants.Sites;
 import com.mercadopago.controllers.CheckoutTimer;
