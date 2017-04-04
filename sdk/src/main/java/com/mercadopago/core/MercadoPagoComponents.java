@@ -1955,6 +1955,7 @@ public class MercadoPagoComponents {
             private Context context;
             private String currencyId;
             private List<Item> items;
+            private DecorationPreference decorationPreference;
 
             public ReviewItemsViewBuilder() {
                 items = new ArrayList<>();
@@ -1970,6 +1971,11 @@ public class MercadoPagoComponents {
                 return this;
             }
 
+            public ReviewItemsViewBuilder setDecorationPreference(DecorationPreference decorationPreference) {
+                this.decorationPreference = decorationPreference;
+                return this;
+            }
+
             public ReviewItemsViewBuilder addItem(Item item) {
                 this.items.add(item);
                 return this;
@@ -1981,7 +1987,7 @@ public class MercadoPagoComponents {
             }
 
             public ReviewItemsView build() {
-                return new ReviewItemsView(context, items, currencyId);
+                return new ReviewItemsView(context, items, currencyId, decorationPreference);
             }
         }
 

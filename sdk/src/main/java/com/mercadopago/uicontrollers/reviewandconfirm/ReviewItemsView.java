@@ -12,6 +12,7 @@ import com.mercadopago.adapters.ReviewProductAdapter;
 import com.mercadopago.constants.ReviewKeys;
 import com.mercadopago.model.Item;
 import com.mercadopago.model.Reviewable;
+import com.mercadopago.preferences.DecorationPreference;
 
 import java.util.List;
 
@@ -21,19 +22,21 @@ import java.util.List;
 public class ReviewItemsView extends Reviewable {
     private final List<Item> items;
     private final String currency;
+    private final DecorationPreference decorationPreference;
     private Context context;
     private View view;
     private RecyclerView reviewItemsRecyclerView;
 
-    public ReviewItemsView(Context context, List<Item> items, String currencyId) {
+    public ReviewItemsView(Context context, List<Item> items, String currencyId, DecorationPreference decorationPreference) {
         this.context = context;
         this.items = items;
         this.currency = currencyId;
+        this.decorationPreference = decorationPreference;
     }
 
     @Override
     public void draw() {
-        ReviewProductAdapter adapter = new ReviewProductAdapter(context, items, currency);
+        ReviewProductAdapter adapter = new ReviewProductAdapter(context, items, currency, decorationPreference);
         reviewItemsRecyclerView.setAdapter(adapter);
     }
 

@@ -1,7 +1,7 @@
 package com.mercadopago.uicontrollers.reviewandconfirm;
 
 import android.content.Context;
-import android.text.Spanned;
+import android.graphics.PorterDuff;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -103,15 +103,7 @@ public class ReviewPaymentOffView extends Reviewable {
     public void draw() {
         setSmallTextSize();
         decorateText();
-
-        mPaymentImage.setImageResource(R.drawable.mpsdk_review_payment_off);
-        if (PaymentMethods.BRASIL.BOLBRADESCO.equals(mPaymentMethod.getId())) {
-            Picasso.with(mContext)
-                    .load(R.drawable.mpsdk_boleto_off)
-                    .transform(new CircleTransform())
-                    .placeholder(R.drawable.mpsdk_review_payment_off)
-                    .into(mPaymentImage);
-        }
+        setIcon();
 
         mPayerCostContainer.setVisibility(View.GONE);
 
@@ -137,6 +129,36 @@ public class ReviewPaymentOffView extends Reviewable {
             description = CurrenciesUtil.formatCurrencyInText(mAmount, mSite.getCurrencyId(), completeDescription, false, true);
         }
         return description;
+    }
+
+    private void setIcon() {
+        int resId = getResource();
+        mPaymentImage.setImageResource(resId);
+
+        if (mDecorationPreference != null && mDecorationPreference.hasColors()) {
+            mPaymentImage.setColorFilter(mDecorationPreference.getBaseColor(), PorterDuff.Mode.SRC_ATOP);
+        }
+    }
+
+    private int getResource() {
+        int resId;
+        boolean isMLB = mSite != null && Sites.BRASIL.getId().equals(mSite.getId());
+        boolean isTintNeeded = mDecorationPreference != null && mDecorationPreference.hasColors();
+
+        if (isTintNeeded) {
+            if (isMLB) {
+                resId = R.drawable.mpsdk_grey_boleto_off;
+            } else {
+                resId = R.drawable.mpsdk_grey_review_payment_off;
+            }
+        } else {
+            if (isMLB) {
+                resId = R.drawable.mpsdk_boleto_off;
+            } else {
+                resId = R.drawable.mpsdk_review_payment_off;
+            }
+        }
+        return resId;
     }
 
     private void setSmallTextSize() {

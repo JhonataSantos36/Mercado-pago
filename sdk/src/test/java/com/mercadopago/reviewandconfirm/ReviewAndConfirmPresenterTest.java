@@ -577,9 +577,8 @@ public class ReviewAndConfirmPresenterTest {
         }
 
         @Override
-        public Reviewable getItemsReviewable(String currency, List<Item> items) {
-            itemsReviewable = new ItemsMockedReviewable();
-            return itemsReviewable;
+        public Reviewable getItemsReviewable(String currency, List<Item> items, DecorationPreference decorationPreference) {
+            return new ItemsMockedReviewable();
         }
 
         @Override

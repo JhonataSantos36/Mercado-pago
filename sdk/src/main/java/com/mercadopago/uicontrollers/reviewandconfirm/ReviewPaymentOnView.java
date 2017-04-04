@@ -1,6 +1,7 @@
 package com.mercadopago.uicontrollers.reviewandconfirm;
 
 import android.content.Context;
+import android.graphics.PorterDuff;
 import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -106,7 +107,7 @@ public class ReviewPaymentOnView extends Reviewable {
     public void draw() {
 
         decorateText();
-        mPaymentImage.setImageResource(R.drawable.mpsdk_review_payment_on);
+        setIcon();
 
         if (mPayerCost.getInstallments() != 1) {
             mPaymentText.setVisibility(View.GONE);
@@ -131,6 +132,15 @@ public class ReviewPaymentOnView extends Reviewable {
                 mCardInfo.getLastFourDigits());
 
         mPaymentDescription.setText(description);
+    }
+
+    private void setIcon() {
+        if (mDecorationPreference != null && mDecorationPreference.hasColors()) {
+            mPaymentImage.setImageResource(R.drawable.mpsdk_grey_review_payment_on);
+            mPaymentImage.setColorFilter(mDecorationPreference.getBaseColor(), PorterDuff.Mode.SRC_ATOP);
+        } else {
+            mPaymentImage.setImageResource(R.drawable.mpsdk_review_payment_on);
+        }
     }
 
     private void showFinance() {
