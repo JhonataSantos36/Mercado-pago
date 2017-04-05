@@ -728,8 +728,7 @@ public class CheckoutActivity extends MercadoPagoBaseActivity {
                     mPaymentMethodEdited = true;
                     startPaymentVaultActivity();
                     overridePendingTransition(R.anim.mpsdk_slide_left_to_right_in, R.anim.mpsdk_slide_left_to_right_out);
-                }
-                else if (nextAction.equals(PaymentResultAction.RECOVER_PAYMENT)) {
+                } else if (nextAction.equals(PaymentResultAction.RECOVER_PAYMENT)) {
                     createPaymentRecovery();
                     startCardVaultActivity();
                 }

@@ -49,6 +49,7 @@ public class CardVaultPresenter {
     protected Site mSite;
     protected Boolean mInstallmentsEnabled;
     protected Boolean mInstallmentsReviewEnabled;
+    protected Boolean mAutomaticSelection;
     protected String mPublicKey;
     protected BigDecimal mAmount;
     protected String mMerchantBaseUrl;
@@ -286,6 +287,14 @@ public class CardVaultPresenter {
 
     public Boolean getDirectDiscountEnabled() {
         return this.mDirectDiscountEnabled;
+    }
+
+    public void setAutomaticSelection(Boolean automaticSelection) {
+        this.mAutomaticSelection = automaticSelection;
+    }
+
+    public Boolean getAutomaticSelection() {
+        return mAutomaticSelection;
     }
 
     public void checkStartInstallmentsActivity() {

@@ -35,7 +35,7 @@ public interface PaymentVaultView extends MvpView {
 
     void setFailureRecovery(FailureRecovery failureRecovery);
 
-    void startCardFlow(String paymentType, BigDecimal transactionAmount);
+    void startCardFlow(String paymentType, BigDecimal transactionAmount, Boolean automaticallySelection);
 
     void startPaymentMethodsActivity();
 

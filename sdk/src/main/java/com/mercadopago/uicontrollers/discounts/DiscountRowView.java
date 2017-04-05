@@ -104,7 +104,7 @@ public class DiscountRowView implements DiscountView {
     }
 
     private void drawShortDiscountDetailRow() {
-        if (isAmountValid(mDiscount.getCouponAmount())) {
+        if (isDiscountCurrencyIdValid() && isAmountValid(mDiscount.getCouponAmount()) && isCampaignIdValid()) {
             mDiscountDetail.setVisibility(View.VISIBLE);
             mHasDiscountLinearLayout.setVisibility(View.GONE);
 
@@ -264,6 +264,6 @@ public class DiscountRowView implements DiscountView {
     }
 
     private Boolean isCampaignIdValid() {
-        return mDiscount.getId() != null;
+        return mDiscount != null && mDiscount.getId() != null;
     }
 }

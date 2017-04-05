@@ -26,6 +26,7 @@ import com.mercadopago.model.Token;
 import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.uicontrollers.card.CardView;
 import com.mercadopago.uicontrollers.card.FrontCardView;
+import com.mercadopago.util.CurrenciesUtil;
 import com.mercadopago.util.TextUtil;
 import com.mercadopago.util.MercadoPagoUtil;
 import com.mercadopago.util.MPCardMaskUtil;
@@ -68,6 +69,7 @@ public class GuessingCardPresenter {
     private String mMerchantDiscountUrl;
     private String mMerchantGetDiscountUri;
     private Map<String, String> mDiscountAdditionalInfo;
+    private Boolean mShowDiscount;
 
     //Card Settings
     private CardInformation mCardInfo;
@@ -352,12 +354,9 @@ public class GuessingCardPresenter {
     }
 
     private void loadDiscount() {
-        if (mDirectDiscountEnabled) {
-            getDirectDiscount();
-        } else {
-            initializeDiscountRow();
-            loadPaymentMethods();
-        }
+        initializeDiscountRow();
+        loadPaymentMethods();
+
     }
 
     private void getDirectDiscount() {
@@ -483,6 +482,10 @@ public class GuessingCardPresenter {
         this.mDirectDiscountEnabled = directDiscountEnabled;
     }
 
+    public void setShowDiscount(Boolean showDiscount) {
+        this.mShowDiscount = showDiscount;
+    }
+
     public Boolean getDirectDiscountEnabled() {
         return this.mDirectDiscountEnabled;
     }
@@ -490,14 +493,31 @@ public class GuessingCardPresenter {
     public BigDecimal getTransactionAmount() {
         BigDecimal amount;
 
-        if (mDiscount == null) {
-            amount = mTransactionAmount;
-        } else {
+        if (mDiscount != null && isDiscountValid()) {
             amount = mDiscount.getAmountWithDiscount(mTransactionAmount);
+        } else {
+            amount = mTransactionAmount;
         }
 
         return amount;
     }
+
+    private Boolean isDiscountValid() {
+        return isDiscountCurrencyIdValid() && isAmountValid(mDiscount.getCouponAmount()) && isCampaignIdValid();
+    }
+
+    private Boolean isDiscountCurrencyIdValid() {
+        return mDiscount != null && mDiscount.getCurrencyId() != null && CurrenciesUtil.isValidCurrency(mDiscount.getCurrencyId());
+    }
+
+    private Boolean isCampaignIdValid() {
+        return mDiscount != null && mDiscount.getId() != null;
+    }
+
+    private Boolean isAmountValid(BigDecimal amount) {
+        return amount != null && amount.compareTo(BigDecimal.ZERO) >= 0;
+    }
+
 
     private void loadPaymentMethods() {
         if (mPaymentMethodList == null || mPaymentMethodList.isEmpty()) {
@@ -887,7 +907,7 @@ public class GuessingCardPresenter {
     }
 
     private Boolean showDiscount() {
-        return mDiscountEnabled && mDiscount == null && isAmountValid();
+        return mDiscountEnabled && mShowDiscount;
     }
 
     public void setShowBankDeals(Boolean showBankDeals) {

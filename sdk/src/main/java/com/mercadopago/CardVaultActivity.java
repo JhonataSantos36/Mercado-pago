@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
-import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import com.mercadopago.core.MercadoPagoComponents;
@@ -139,7 +138,6 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultAct
 
     private void getActivityParameters() {
         Boolean installmentsEnabled = getIntent().getBooleanExtra("installmentsEnabled", false);
-        Boolean discountEnabled = getIntent().getBooleanExtra("discountEnabled", true);
         Boolean directDiscountEnabled = getIntent().getBooleanExtra("directDiscountEnabled", true);
         Boolean installmentsReviewEnabled = getIntent().getBooleanExtra("installmentsReviewEnabled", true);
         String publicKey = getIntent().getStringExtra("merchantPublicKey");
@@ -154,6 +152,8 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultAct
         String amount = getIntent().getStringExtra("amount");
         String payerEmail = getIntent().getStringExtra("payerEmail");
         Discount discount = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("discount"), Discount.class);
+        Boolean discountEnabled = getIntent().getBooleanExtra("discountEnabled", true);
+        Boolean automaticSelection = getIntent().getBooleanExtra("automaticSelection", false);
 
         String discountAdditionalInfo = getIntent().getStringExtra("discountAdditionalInfo");
         Type type = new TypeToken<Map<String, String>>() {
@@ -187,6 +187,7 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultAct
         mPresenter.setDiscountEnabled(discountEnabled);
         mPresenter.setDirectDiscountEnabled(directDiscountEnabled);
         mPresenter.setInstallmentsReviewEnabled(installmentsReviewEnabled);
+        mPresenter.setAutomaticSelection(automaticSelection);
     }
 
     private void setContentView() {
@@ -268,11 +269,13 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultAct
                         .setPayerEmail(mPresenter.getPayerEmail())
                         .setPayerAccessToken(mPresenter.getPrivateKey())
                         .setDiscount(mPresenter.getDiscount())
+                        .setAmount(mPresenter.getAmount())
                         .setDiscountEnabled(mPresenter.getDiscountEnabled())
                         .setDirectDiscountEnabled(mPresenter.getDirectDiscountEnabled())
                         .setShowBankDeals(mShowBankDeals)
                         .setPaymentPreference(mPresenter.getPaymentPreference())
                         .setAcceptedPaymentMethods(mPresenter.getPaymentMethodList())
+                        .setShowDiscount(mPresenter.getAutomaticSelection())
                         .setDecorationPreference(mDecorationPreference)
                         .setPaymentRecovery(mPresenter.getPaymentRecovery())
                         .startActivity();

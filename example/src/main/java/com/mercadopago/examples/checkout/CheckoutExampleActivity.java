@@ -127,7 +127,7 @@ public class CheckoutExampleActivity extends AppCompatActivity {
     private String getSuccessMessage(PaymentData paymentData, boolean paymentMethodChanged) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("Success! " + paymentData.getPaymentMethod().getId() + " selected. ");
-        if(paymentMethodChanged) {
+        if (paymentMethodChanged) {
             stringBuilder.append("And it has changed!");
         }
         return stringBuilder.toString();
@@ -171,7 +171,7 @@ public class CheckoutExampleActivity extends AppCompatActivity {
                 PaymentData paymentData = JsonUtil.getInstance().fromJson(data.getStringExtra("paymentData"), PaymentData.class);
                 Boolean paymentMethodChanged = data.getBooleanExtra("paymentMethodChanged", false);
                 Toast.makeText(mActivity, getSuccessMessage(paymentData, paymentMethodChanged), Toast.LENGTH_SHORT).show();
-                if(!mAlreadyStartedRyC || paymentMethodChanged) {
+                if (!mAlreadyStartedRyC || paymentMethodChanged) {
                     mAlreadyStartedRyC = true;
                     startRyC(paymentData);
                 } else {
