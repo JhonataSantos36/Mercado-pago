@@ -3,6 +3,7 @@ package com.mercadopago.presenters;
 import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.callbacks.OnSelectedCallback;
 import com.mercadopago.exceptions.MPException;
+import com.mercadopago.model.Campaign;
 import com.mercadopago.model.Card;
 import com.mercadopago.model.CustomSearchItem;
 import com.mercadopago.model.Discount;
@@ -43,6 +44,8 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
     private Boolean mAccountMoneyEnabled = false;
     private Boolean mDiscountEnabled = true;
     private Boolean mDirectDiscountEnabled = true;
+    private Boolean mHasDirectDiscount = false;
+    private Boolean mHasCodeDiscount = false;
     private Integer mMaxSavedCards;
 
     public void initialize() {
@@ -86,10 +89,54 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
     }
 
     private void loadDiscount() {
-        if (mDirectDiscountEnabled && mDiscount == null) {
+        if (mDiscount == null) {
             getView().showProgress();
-            getDirectDiscount();
+            getDiscountAsync();
         } else {
+            initializeDiscountRow();
+            initPaymentVaultFlow();
+        }
+    }
+
+    private void getDiscountAsync() {
+        if (mDiscountEnabled && mDiscount == null) {
+            getResourcesProvider().getCampaigns(new OnResourcesRetrievedCallback<List<Campaign>>() {
+                @Override
+                public void onSuccess(List<Campaign> campaigns) {
+                    resolveAvailableCampaigns(campaigns);
+                }
+
+                @Override
+                public void onFailure(MPException exception) {
+                    mDiscountEnabled = false;
+                    initPaymentVaultFlow();
+                }
+            });
+        } else {
+            initPaymentVaultFlow();
+        }
+    }
+
+    private void resolveAvailableCampaigns(List<Campaign> campaigns) {
+        if (campaigns.size() == 0) {
+            mDiscountEnabled = false;
+            initPaymentVaultFlow();
+        } else {
+            for (Campaign campaign : campaigns) {
+                if (campaign.isDirectDiscountCampaign()) {
+                    mHasDirectDiscount = true;
+                }
+
+                if (campaign.isCodeDiscountCampaign()) {
+                    mHasCodeDiscount = true;
+                }
+            }
+        }
+
+        if (mHasDirectDiscount) {
+            getDirectDiscount();
+        } else if (mHasCodeDiscount) {
+            mDirectDiscountEnabled = false;
             initializeDiscountRow();
             initPaymentVaultFlow();
         }

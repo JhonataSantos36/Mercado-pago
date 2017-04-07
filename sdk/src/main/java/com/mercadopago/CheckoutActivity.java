@@ -18,7 +18,6 @@ import com.mercadopago.exceptions.CheckoutPreferenceException;
 import com.mercadopago.exceptions.ExceptionHandler;
 import com.mercadopago.exceptions.MPException;
 import com.mercadopago.model.ApiException;
-import com.mercadopago.model.Campaign;
 import com.mercadopago.model.Card;
 import com.mercadopago.model.CardInfo;
 import com.mercadopago.model.CheckoutPreference;
@@ -93,16 +92,11 @@ public class CheckoutActivity extends AppCompatActivity {
     protected Boolean mBinaryModeEnabled;
     protected Boolean mInstallmentsReviewEnabled;
     protected List<Card> mSavedCards;
-    protected List<Campaign> mCampaigns;
     protected DecorationPreference mDecorationPreference;
     protected FailureRecovery mFailureRecovery;
 
     protected Boolean mDiscountEnabled = true;
-    protected Boolean mInstallmentsReviewScreenEnabled = true;
-    protected Boolean mHasDirectDiscount = false;
-    protected Boolean mHasCodeDiscount = false;
     protected Boolean mDirectDiscountEnabled = true;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -195,7 +189,7 @@ public class CheckoutActivity extends AppCompatActivity {
 
     private void initializeCheckout() {
         mSite = new Site(mCheckoutPreference.getSiteId(), mCheckoutPreference.getItems().get(0).getCurrencyId());
-        getDiscountAsync();
+        getPaymentMethodSearch();
     }
 
     protected void validateActivityParameters() throws IllegalStateException {
@@ -254,106 +248,6 @@ public class CheckoutActivity extends AppCompatActivity {
                 startPaymentVaultActivity();
             }
         });
-    }
-
-    private void getDiscountAsync() {
-        if (mDiscountEnabled && mDiscount == null) {
-            mMercadoPago.getCampaigns(new Callback<List<Campaign>>() {
-                @Override
-                public void success(List<Campaign> campaigns) {
-                    mCampaigns = campaigns;
-                    analyzeCampaigns(campaigns);
-                }
-
-                @Override
-                public void failure(ApiException apiException) {
-                    mDiscountEnabled = false;
-                    getPaymentMethodSearch();
-                }
-            });
-        } else {
-            getPaymentMethodSearch();
-        }
-    }
-
-    private void analyzeCampaigns(List<Campaign> campaigns) {
-        if (campaigns.size() == 0) {
-            mDiscountEnabled = false;
-            getPaymentMethodSearch();
-        } else {
-            for (Campaign campaign : campaigns) {
-                if (campaign.isDirectDiscountCampaign()) {
-                    mHasDirectDiscount = true;
-                }
-
-                if (campaign.isCodeDiscountCampaign()) {
-                    mHasCodeDiscount = true;
-                }
-            }
-        }
-
-        if (mHasDirectDiscount) {
-            getDirectDiscount();
-        } else if (mHasCodeDiscount) {
-            mDirectDiscountEnabled = false;
-            getPaymentMethodSearch();
-        }
-    }
-
-    private void getDirectDiscount() {
-        if (isMerchantServerDiscountsAvailable()) {
-            getMerchantDirectDiscount();
-        } else {
-            getMPDirectDiscount();
-        }
-    }
-
-    private boolean isMerchantServerDiscountsAvailable() {
-        return !TextUtil.isEmpty(getMerchantServerDiscountUrl()) && !TextUtil.isEmpty(mMerchantGetDiscountUri);
-    }
-
-    private void getMPDirectDiscount() {
-        mMercadoPago.getDirectDiscount(mCheckoutPreference.getAmount().toString(), mCheckoutPreference.getPayer().getEmail(), new Callback<Discount>() {
-            @Override
-            public void success(Discount discount) {
-                mDiscount = discount;
-                getPaymentMethodSearch();
-            }
-
-            @Override
-            public void failure(ApiException apiException) {
-                getPaymentMethodSearch();
-            }
-        });
-    }
-
-    private void getMerchantDirectDiscount() {
-        String merchantDiscountUrl = getMerchantServerDiscountUrl();
-
-        MerchantServer.getDirectDiscount(mCheckoutPreference.getAmount().toString(), mCheckoutPreference.getPayer().getEmail(), this, merchantDiscountUrl, mMerchantGetDiscountUri, mDiscountAdditionalInfo, new Callback<Discount>() {
-            @Override
-            public void success(Discount discount) {
-                mDiscount = discount;
-                getPaymentMethodSearch();
-            }
-
-            @Override
-            public void failure(ApiException apiException) {
-                getPaymentMethodSearch();
-            }
-        });
-    }
-
-    private String getMerchantServerDiscountUrl() {
-        String merchantBaseUrl;
-
-        if (TextUtil.isEmpty(mMerchantDiscountBaseUrl)) {
-            merchantBaseUrl = this.mMerchantBaseUrl;
-        } else {
-            merchantBaseUrl = this.mMerchantDiscountBaseUrl;
-        }
-
-        return merchantBaseUrl;
     }
 
     private void showProgressBar() {
