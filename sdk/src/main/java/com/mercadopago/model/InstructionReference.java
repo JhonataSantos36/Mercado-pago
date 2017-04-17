@@ -42,7 +42,7 @@ public class InstructionReference {
         if (fieldValue != null) {
             for (String string : fieldValue) {
                 stringBuilder.append(string);
-                if (fieldValue.indexOf(string) != fieldValue.size() - 1) {
+                if (fieldValue.indexOf(string) != fieldValue.size() - 1 && !TextUtils.isEmpty(this.separator)) {
                     stringBuilder.append(this.separator);
                 }
             }
@@ -58,12 +58,12 @@ public class InstructionReference {
         return this.getFieldValue() != null && this.getFieldValue().size() != 0;
     }
 
-    public boolean isNumericReference(){
-        for (String text : fieldValue){
-            text = text.replace(":","");
-            text = text.replace("-","");
+    public boolean isNumericReference() {
+        for (String text : fieldValue) {
+            text = text.replace(":", "");
+            text = text.replace("-", "");
 
-            if (!TextUtils.isDigitsOnly(text)){
+            if (!TextUtils.isDigitsOnly(text)) {
                 return false;
             }
         }
