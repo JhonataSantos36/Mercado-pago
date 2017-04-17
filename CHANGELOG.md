@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+## VERSION 2.5.2
+
+_7-4-2017_
+* New: Active discount campaigns check in payment method selection component.
+
 ## VERSION 2.5.1
 
 _4-4-2017_
