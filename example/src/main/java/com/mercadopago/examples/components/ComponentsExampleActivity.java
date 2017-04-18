@@ -365,8 +365,8 @@ public class ComponentsExampleActivity extends AppCompatActivity {
         String tokenId = token != null ? token.getId() : null;
         Integer installments = payerCost != null ? payerCost.getInstallments() : null;
         Long issuerId = issuer != null ? issuer.getId() : null;
-        MerchantPayment payment = new MerchantPayment(item, installments, issuerId,
-                tokenId, paymentMethodId, campaignId, ExamplesUtils.DUMMY_MERCHANT_ACCESS_TOKEN);
+        MerchantPayment payment = new MerchantPayment(mAmount, installments, issuerId,
+                tokenId, paymentMethodId, campaignId);
 
         // Create payment
         showProgressLayout();
