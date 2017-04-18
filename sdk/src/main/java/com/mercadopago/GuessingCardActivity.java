@@ -24,6 +24,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
+
 import com.mercadopago.adapters.IdentificationTypesAdapter;
 import com.mercadopago.callbacks.PaymentMethodSelectionCallback;
 import com.mercadopago.callbacks.card.CardExpiryDateEditTextCallback;
@@ -51,6 +52,8 @@ import com.mercadopago.model.CardToken;
 import com.mercadopago.model.Discount;
 import com.mercadopago.model.Identification;
 import com.mercadopago.model.IdentificationType;
+import com.mercadopago.model.Issuer;
+import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentRecovery;
 import com.mercadopago.model.PaymentType;
@@ -68,6 +71,7 @@ import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.ColorsUtil;
 import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
+import com.mercadopago.util.LayoutUtil;
 import com.mercadopago.util.MPAnimationUtils;
 import com.mercadopago.util.MPCardMaskUtil;
 import com.mercadopago.util.MercadoPagoUtil;
@@ -1484,8 +1488,16 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
             overridePendingTransition(R.anim.mpsdk_slide_right_to_left_in, R.anim.mpsdk_slide_right_to_left_out);
 
         } else {
-            finishWithCardToken();
+            finishCardFlow();
         }
+    }
+
+    private void finishCardFlow() {
+        LayoutUtil.hideKeyboard(this);
+        mButtonContainer.setVisibility(View.GONE);
+        mInputContainer.setVisibility(View.GONE);
+        mProgressBar.setVisibility(View.VISIBLE);
+        mPresenter.finishCardFlow();
     }
 
     @Override
@@ -1496,7 +1508,7 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
                 Bundle bundle = data.getExtras();
                 PaymentType paymentType = JsonUtil.getInstance().fromJson(bundle.getString("paymentType"), PaymentType.class);
                 mPresenter.setSelectedPaymentType(paymentType);
-                finishWithCardToken();
+                finishCardFlow();
             } else if (resultCode == RESULT_CANCELED) {
                 finish();
             }
@@ -1521,16 +1533,47 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
         }
     }
 
-    private void finishWithCardToken() {
+    @Override
+    public void finishCardFlow(PaymentMethod paymentMethod, Token token, Discount discount, Boolean directDiscountEnabled, List<Issuer> issuers) {
         Intent returnIntent = new Intent();
-        returnIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(mPresenter.getPaymentMethod()));
-        returnIntent.putExtra("cardToken", JsonUtil.getInstance().toJson(mPresenter.getCardToken()));
-        returnIntent.putExtra("discount", JsonUtil.getInstance().toJson(mPresenter.getDiscount()));
-        returnIntent.putExtra("directDiscountEnabled", mPresenter.getDirectDiscountEnabled());
+        returnIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
+        returnIntent.putExtra("token", JsonUtil.getInstance().toJson(token));
+        returnIntent.putExtra("issuers", JsonUtil.getInstance().toJson(issuers));
+        returnIntent.putExtra("discount", JsonUtil.getInstance().toJson(discount));
+        returnIntent.putExtra("directDiscountEnabled", directDiscountEnabled);
         setResult(RESULT_OK, returnIntent);
         finish();
         overridePendingTransition(R.anim.mpsdk_slide_right_to_left_in, R.anim.mpsdk_slide_right_to_left_out);
     }
+
+    @Override
+    public void finishCardFlow(PaymentMethod paymentMethod, Token token, Discount discount, Boolean directDiscountEnabled, Issuer issuer, List<PayerCost> payerCosts) {
+        Intent returnIntent = new Intent();
+        returnIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
+        returnIntent.putExtra("token", JsonUtil.getInstance().toJson(token));
+        returnIntent.putExtra("issuer", JsonUtil.getInstance().toJson(issuer));
+        returnIntent.putExtra("payerCosts", JsonUtil.getInstance().toJson(payerCosts));
+        returnIntent.putExtra("discount", JsonUtil.getInstance().toJson(discount));
+        returnIntent.putExtra("directDiscountEnabled", directDiscountEnabled);
+        setResult(RESULT_OK, returnIntent);
+        finish();
+        overridePendingTransition(R.anim.mpsdk_slide_right_to_left_in, R.anim.mpsdk_slide_right_to_left_out);
+    }
+
+    @Override
+    public void finishCardFlow(PaymentMethod paymentMethod, Token token, Discount discount, Boolean directDiscountEnabled, Issuer issuer, PayerCost payerCost) {
+        Intent returnIntent = new Intent();
+        returnIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
+        returnIntent.putExtra("token", JsonUtil.getInstance().toJson(token));
+        returnIntent.putExtra("issuer", JsonUtil.getInstance().toJson(issuer));
+        returnIntent.putExtra("payerCost", JsonUtil.getInstance().toJson(payerCost));
+        returnIntent.putExtra("discount", JsonUtil.getInstance().toJson(discount));
+        returnIntent.putExtra("directDiscountEnabled", directDiscountEnabled);
+        setResult(RESULT_OK, returnIntent);
+        finish();
+        overridePendingTransition(R.anim.mpsdk_slide_right_to_left_in, R.anim.mpsdk_slide_right_to_left_out);
+    }
+
 
     @Override
     public void onBackPressed() {

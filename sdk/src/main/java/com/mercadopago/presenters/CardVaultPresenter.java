@@ -10,7 +10,6 @@ import com.mercadopago.core.MercadoPagoServices;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.Card;
 import com.mercadopago.model.CardInfo;
-import com.mercadopago.model.CardToken;
 import com.mercadopago.model.Discount;
 import com.mercadopago.model.Installment;
 import com.mercadopago.model.Issuer;
@@ -65,7 +64,6 @@ public class CardVaultPresenter {
     //Card Info
     protected CardInfo mCardInfo;
     protected Token mToken;
-    protected CardToken mCardToken;
     protected Card mCard;
 
     //Discount
@@ -75,6 +73,7 @@ public class CardVaultPresenter {
     protected String mPayerEmail;
     protected String mPrivateKey;
     protected List<PayerCost> mPayerCostsList;
+    protected List<Issuer> mIssuersList;
 
     public CardVaultPresenter(Context context) {
         this.mContext = context;
@@ -184,14 +183,6 @@ public class CardVaultPresenter {
         return mPublicKey;
     }
 
-    public CardToken getCardToken() {
-        return mCardToken;
-    }
-
-    public void setCardToken(CardToken mCardToken) {
-        this.mCardToken = mCardToken;
-    }
-
     public void setCardInfo(CardInfo cardInfo) {
         this.mCardInfo = cardInfo;
         if (mCardInfo == null) {
@@ -298,11 +289,10 @@ public class CardVaultPresenter {
     }
 
     public void checkStartInstallmentsActivity() {
-        if (installmentsRequired()) {
+        if (installmentsRequired() && mPayerCost == null) {
             mView.startInstallmentsActivity();
-            mView.overrideTransitionHold();
         } else {
-            createToken();
+            mView.finishWithResult();
         }
     }
 
@@ -340,27 +330,6 @@ public class CardVaultPresenter {
         if (mFailureRecovery != null) {
             mFailureRecovery.recover();
         }
-    }
-
-    public void createToken() {
-        mMercadoPago.createToken(mCardToken, new Callback<Token>() {
-            @Override
-            public void success(Token token) {
-                mToken = token;
-                mView.finishWithResult();
-            }
-
-            @Override
-            public void failure(ApiException apiException) {
-                setFailureRecovery(new FailureRecovery() {
-                    @Override
-                    public void recover() {
-                        createToken();
-                    }
-                });
-                mView.showApiExceptionError(apiException);
-            }
-        });
     }
 
     public List<PayerCost> getPayerCostList() {
@@ -433,5 +402,13 @@ public class CardVaultPresenter {
 
     public void setPayerCostsList(List<PayerCost> payerCostsList) {
         this.mPayerCostsList = payerCostsList;
+    }
+
+    public void setIssuersList(List<Issuer> issuers) {
+        mIssuersList = issuers;
+    }
+
+    public List<Issuer> getIssuersList() {
+        return mIssuersList;
     }
 }

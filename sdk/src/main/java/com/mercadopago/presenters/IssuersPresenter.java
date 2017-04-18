@@ -58,7 +58,7 @@ public class IssuersPresenter {
     }
 
     public void setPrivateKey(String privateKey) {
-            this.mPrivateKey = privateKey;
+        this.mPrivateKey = privateKey;
     }
 
     public void setCardInfo(CardInfo cardInfo) {
@@ -140,28 +140,28 @@ public class IssuersPresenter {
         if (mMercadoPago == null) return;
         mView.showLoadingView();
         mMercadoPago.getIssuers(mPaymentMethod.getId(), mBin,
-            new Callback<List<Issuer>>() {
-                @Override
-                public void success(List<Issuer> issuers) {
-                    mView.stopLoadingView();
-                    if (issuers == null) {
-                        issuers = new ArrayList<Issuer>();
-                    }
-                    resolveIssuers(issuers);
-                }
-
-                @Override
-                public void failure(ApiException apiException) {
-                    mView.stopLoadingView();
-                    setFailureRecovery(new FailureRecovery() {
-                        @Override
-                        public void recover() {
-                            getIssuersAsync();
+                new Callback<List<Issuer>>() {
+                    @Override
+                    public void success(List<Issuer> issuers) {
+                        mView.stopLoadingView();
+                        if (issuers == null) {
+                            issuers = new ArrayList<Issuer>();
                         }
-                    });
-                    mView.showApiExceptionError(apiException);
-                }
-            });
+                        resolveIssuers(issuers);
+                    }
+
+                    @Override
+                    public void failure(ApiException apiException) {
+                        mView.stopLoadingView();
+                        setFailureRecovery(new FailureRecovery() {
+                            @Override
+                            public void recover() {
+                                getIssuersAsync();
+                            }
+                        });
+                        mView.showApiExceptionError(apiException);
+                    }
+                });
     }
 
     protected void resolveIssuers(List<Issuer> issuers) {

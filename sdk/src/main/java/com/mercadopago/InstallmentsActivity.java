@@ -437,6 +437,7 @@ public class InstallmentsActivity extends MercadoPagoBaseActivity implements Ins
         returnIntent.putExtra("directDiscountEnabled", mPresenter.getDirectDiscountEnabled());
         setResult(RESULT_OK, returnIntent);
         finish();
+        overridePendingTransition(R.anim.mpsdk_fade_in_seamless, R.anim.mpsdk_fade_out_seamless);
     }
 
     @Override

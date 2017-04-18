@@ -388,7 +388,6 @@ public class InstallmentsPresenter {
                 new Callback<List<Installment>>() {
                     @Override
                     public void success(List<Installment> installments) {
-                        mView.stopLoadingView();
                         if (installments.size() == 0) {
                             mView.startErrorView(mContext.getString(R.string.mpsdk_standard_error_message),
                                     "no installments found for an issuer at InstallmentsActivity");
@@ -428,8 +427,8 @@ public class InstallmentsPresenter {
         } else {
             mView.showHeader();
             mView.initializeInstallments(mPayerCosts);
+            mView.stopLoadingView();
         }
-        mView.stopLoadingView();
     }
 
     public void onItemSelected(int position) {

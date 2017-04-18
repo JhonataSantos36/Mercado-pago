@@ -356,6 +356,7 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
                 .setInstallmentsReviewEnabled(mPaymentVaultPresenter.getInstallmentsReviewEnabled())
                 .setShowBankDeals(mShowBankDeals)
                 .startActivity();
+        animatePaymentMethodSelection();
     }
 
     @Override
