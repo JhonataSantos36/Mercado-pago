@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="description" content="Sitio para desarrolladores de MercadoPago.">
+      <meta name="keywords" content="mercadopago,sdk,payment,pagos,braintree,paypal,html5,javascript,mobile,drifty,ionic,hybrid,phonegap,cordova,native,ios,android,angularjs">
+      <title>MercadoPago</title>
+      <link href="../css/site.css" rel="stylesheet">
+      <link href="../css/prism.css" rel="stylesheet" />
+      <script src="../js/jquery.min.js"></script>
+      <link rel="stylesheet" type="text/css" href="../css/lato.css" />
+
+   </head>
+   <body class="getting-started-page">
+         <nav class="navbar navbar-default" role="navigation">
+         <div class="container">
+            <div class="navbar-header">
+               <button type="button" class="navbar-toggle button ionic" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+               <i class="icon ion-navicon"></i>
+               </button>
+               <a class="navbar-brand" href="http://mercadopago.com/">
+               <img src="../img/iso-mercadopago.png" width="60" height="41" alt="MercadoPago SDK">
+               </a>
+            </div>
+            <div class="collapse navbar-collapse navbar-ex1-collapse">
+               <ul class="nav navbar-nav navbar-right" style="color: white;">
+                  <li><a class="getting-started-nav nav-link" href="migration-doc.html">Beta</a></li>
+                  <li><a class="docs-nav nav-link" href="index.html">Our Checkout</a></li>
+                  <li><a class="docs-nav nav-link" href="checkout_custom.html">Your checkout</a></li>
+                  <li><a class="nav-link" href="https://www.mercadopago.com.ar/developers/es/community/forum/">Developers forum</a></li>
+               </ul>
+            </div>
+         </div>
+      </nav>
+      <div class="header"/>
+
+      </div>
+      <div id="mati_header" style="height: 80px; margin: 0 auto; padding: 0;position: relative;width: 100%;top: -276px;overflow-x: hidden;OVERFLOW-Y: hidden;z-index: -100;background: url('../img/landing.jpg');background-size: cover;">
+         <div style="background: rgba(0,0,0,0.5); height: 500px;" ></div>
+      </div>
+      <div class="container content-container" style="margin-top: -300px;">
+         <div id="getting-started">
+            <div class="text-center">
+               <h2>New MercadoPago Android SDK</h2>
+               <p class="sub-heading">
+                  Please, if you have any problems with this beta version, <a href = "https://github.com/mercadopago/px-android/issues">open an issue in our Github repository</a>
+                  <br />
+               </p>
+               <br />
+            </div>
+
+          <!--  <div class="row" id="step-one">
+               <div class="col-md-6 step-desc">
+                  <div class="desc">
+                     <h2>Whats new?</h2>
+                     We've developed a new integration experience, based on the same visual components documented here. Now you don't need to use those components directly in order to achieve a personalized experience: just start Our Checkout and add configurations accordig to your needs. Here's the basic usages docs.
+                     This versions includes rollouts for Colombia, Peru and Venezuela.
+                     <br />
+                  </div>
+               </div>
+            </div>
+          -->
+          <section class="docs-section">
+             <p>Using gradle? Add it in the build.gradle file of the module where you will integrate us.</p>
+             <p>Otherwise <a href="https://github.com/mercadopago/px-android/releases" target="_blank">download MercadoPago SDK</a></p>
+             <p>
+                <pre class="snippet">
+                   <code class="line-numbers language-java">dependencies {
+                     compile 'com.mercadopago:sdk:3.1.0-beta'
+                   }
+                   </code>
+                   <button class="copy-button" alt="Copiar código">
+                      <img src="./img/clippy.svg" width="13">
+                   </button>
+                </pre>
+             </p>
+          </section>
+          <div class="row" id="pay-pref">
+            <div class="desc">
+               <h3>Possible integrations</h3>
+               <b>Pay a Checkout Preference</b>
+                <li>Create a checkout preference in your server and start our checkout, we handle everything else.</li>
+              <b>Collect data to make a payment.</b>
+                <li>Start our checkout process, we'll return all the information needed to make a payment. It must be made from your server.</li>
+               <br />
+            </div>
+            <div class="row" id="pay-pref">
+              <div class="desc">
+                 <h3>Pay a Checkout Preference</h3>
+                 After <a href="https://www.mercadopago.com.ar/developers/en/api-docs/basic-checkout/checkout-preferences/">creating a Checkout Preference in Mercado Pago servers</a>, you can use it to start an entire checkout process, getting a Payment as a result.
+                 <br />
+                 Check out our Server side SDK's <a href="https://www.mercadopago.com.ar/developers/es/tools/">here</a>.
+                 <br />
+              </div>
+            </div>
+            <div class="row" id="create-pref">
+              <div class="desc">
+                   <h4>Create or get a Checkout Preference</h4>
+                   <p>
+                      Get a preference from your server in order to pay it with Our Checkout. You can use the "CustomServer" class in our SDK to retrieve it:
+                   </p>
+              </div>
+            <pre class="snippet">
+              <code id="get-pref" class="line-numbers language-java">
+                Map&ltString, Object&gt map = new HashMap&lt&gt();
+                map.put("item_id", "Id1");
+                map.put("quantity", 1);
+                CustomServer.createCheckoutPreference(this, "https://your-base-URL.com/",
+                                "your_create_preference_URI", necessaryInfoMap, new Callback&ltCheckoutPreference&gt() {
+                                    @Override
+                                    public void success(CheckoutPreference checkoutPreference) {
+                                        startMercadoPagoCheckout(checkoutPreference);
+                                    }
+
+                                    @Override
+                                    public void failure(ApiException error) {
+                                        //Handle failure
+                                    }
+                                });
+                 </code>
+                 <button class="copy-button">
+                    <img src="../img/clippy.svg" width="13" alt="Copy to clipboard">
+                </button>
+              </pre>
+            </div>
+            <div class="row" id="start-cho">
+              <div class="desc">
+                   <h4>Start the Checkout process</h4>
+                   <p>
+                      Start Our Checkout with a preference posted to Mercado Pago Servers.
+                   </p>
+              </div>
+            <pre class="snippet">
+              <code id="start-cho" class="line-numbers language-java">
+private void startMercadoPagoCheckout(CheckoutPreference checkoutPreference) {
+  new MercadoPagoCheckout.Builder()
+          .setActivity(activity)
+          .setPublicKey(publicKey)
+          .setCheckoutPreference(checkoutPreference)
+          .startForPayment();
+}
+                 </code>
+                 <button class="copy-button">
+                    <img src="../img/clippy.svg" width="13" alt="Copy to clipboard">
+                </button>
+              </pre>
+            </div>
+            <div class="row" id="vault">
+              <div class="desc">
+                    Get the response:
+              </div>
+            <pre class="snippet">
+              <code id="get-result" class="line-numbers language-java">
+@Override
+protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    if (requestCode == MercadoPagoCheckout.CHECKOUT_REQUEST_CODE) {
+        if (resultCode == MercadoPagoCheckout.PAYMENT_RESULT_CODE) {
+            Payment payment = JsonUtil.getInstance().fromJson(data.getStringExtra("payment"), Payment.class);
+            //Done!
+        } else if (resultCode == RESULT_CANCELED) {
+            if (data != null && data.getStringExtra("mercadoPagoError") != null) {
+                //Resolve error in checkout
+            } else {
+                //Resolve canceled checkout
+            }
+        }
+    }
+}
+
+                 </code>
+                 <button class="copy-button">
+                    <img src="../img/clippy.svg" width="13" alt="Copy to clipboard">
+                </button>
+              </pre>
+            </div>
+
+            <div class="row" id="get-payment-data">
+              <div class="desc">
+                 <h3>Collect data to make a Payment</h3>
+                 An alternative to avoid creating Checkout Preferences in Mercado Pago servers is to collect data to make the payment, and finish it in your servers.
+                 <br />
+              </div>
+            </div>
+            <div class="row" id="create-local-pref">
+              <div class="desc">
+                   <h4>Create a local instance of a Checkout Preference </h4>
+                   <p>
+                      If needed, specify constraints to the Checkout process within this object.
+                   </p>
+              </div>
+            <pre class="snippet">
+              <code id="create-local-pref" class="line-numbers language-java">
+CheckoutPreference checkoutPreference = new CheckoutPreference.Builder()
+                                              .addItem(new Item("Item", new BigDecimal("1000")))
+                                              .setSite(Sites.ARGENTINA)
+                                              .addExcludedPaymentType(PaymentTypes.TICKET) //Handle exclusions by payment types
+                                              .addExcludedPaymentMethod(PaymentMethods.ARGENTINA.VISA) //Exclude specific payment methods
+                                              .setMaxInstallments(1) //Limit the amount of installments
+                                              .build();
+startMercadoPagoCheckout(checkoutPreference);
+                 </code>
+                 <button class="copy-button">
+                    <img src="../img/clippy.svg" width="13" alt="Copy to clipboard">
+                </button>
+              </pre>
+            </div>
+            <div class="row" id="start-cho-local-pref">
+              <div class="desc">
+                   <h4>Start the Checkout process</h4>
+                   <p>
+                      Start Our Checkout with a preference posted to Mercado Pago Servers.
+                   </p>
+              </div>
+            <pre class="snippet">
+              <code id="start-cho-local-pref" class="line-numbers language-java">
+private void startMercadoPagoCheckout(CheckoutPreference checkoutPreference) {
+  new MercadoPagoCheckout.Builder()
+          .setActivity(activity)
+          .setPublicKey(publicKey)
+          .setCheckoutPreference(checkoutPreference)
+          .startForPaymentData();
+}
+                 </code>
+                 <button class="copy-button">
+                    <img src="../img/clippy.svg" width="13" alt="Copy to clipboard">
+                </button>
+              </pre>
+            </div>
+            <div class="row" id="get-payment-data">
+              <div class="desc">
+                    Get the response:
+              </div>
+            <pre class="snippet">
+              <code id="start_pref" class="line-numbers language-java">
+@Override
+protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    if (requestCode == MercadoPagoCheckout.CHECKOUT_REQUEST_CODE) {
+        if (resultCode == MercadoPagoCheckout.PAYMENT_DATA_RESULT_CODE) {
+            PaymentData paymentData = JsonUtil.getInstance().fromJson(data.getStringExtra("paymentData"), PaymentData.class);
+            //Done!
+        } else if (resultCode == RESULT_CANCELED) {
+            if (data != null && data.getStringExtra("mercadoPagoError") != null) {
+                //Resolve error in checkout
+            } else {
+                //Resolve canceled checkout
+            }
+        }
+    }
+}
+                 </code>
+                 <button class="copy-button">
+                    <img src="../img/clippy.svg" width="13" alt="Copy to clipboard">
+                </button>
+              </pre>
+            </div>
+            <div class="row" id="get-data-payment">
+              <div class="desc">
+                    The PaymentData object has all the information needed to make the payment in your server:
+              </div>
+            <pre class="snippet">
+              <code id="get-data-payment" class="line-numbers language-java">
+String paymentMethodId = paymentData.getPaymentMethod().getId();
+Long cardIssuerId = paymentData.getIssuer() == null ? null : paymentData.getIssuer().getId();
+Integer installment = paymentData.getPayerCost() == null ? null : paymentData.getPayerCost().getInstallments();
+String cardToken = paymentData.getToken() == null ? null : paymentData.getToken().getId();
+Long campaignId = paymentData.getDiscount() == null ? null : paymentData.getDiscount().getId();
+                 </code>
+                 <button class="copy-button">
+                    <img src="../img/clippy.svg" width="13" alt="Copy to clipboard">
+                </button>
+              </pre>
+            </div>
+            Check the docs to <a href="https://www.mercadopago.com.br/developers/es/api-docs/custom-checkout/create-payments/">create a Payment in your server</a>.
+            <br />
+            Check out our Server side SDK's <a href="https://www.mercadopago.com.ar/developers/es/tools/">here</a>.
+         </div>
+         <div class="row" id="customize-colors">
+           <div class="desc">
+                <h3>Customize colors</h3>
+                <p>
+                   Create a Decoration Preference and start checkout:
+                </p>
+           </div>
+         <pre class="snippet">
+           <code id="customize-colors" class="line-numbers language-java">
+private void startMercadoPagoCheckout(CheckoutPreference checkoutPreference) {
+
+DecorationPreference decorationPreference = new DecorationPreference.Builder()
+        .setBaseColor(ContextCompat.getColor(context, R.color.your_color))
+        .enableDarkFont() //Optional
+        .build();
+
+new MercadoPagoCheckout.Builder()
+        .setActivity(activity)
+        .setDecorationPreference(decorationPreference)
+        .setPublicKey(publicKey)
+        .setCheckoutPreference(checkoutPreference)
+        .startForPayment();
+}
+              </code>
+              <button class="copy-button">
+                 <img src="../img/clippy.svg" width="13" alt="Copy to clipboard">
+             </button>
+           </pre>
+         </div>
+      </div>
+      <footer class="footer">
+
+         <div class="copy">
+            <div class="copy-container">
+               <p class="authors">
+                  © 2016 MercadoLibre S.R.L.
+               </p>
+            </div>
+         </div>
+      </footer>
+      <script src="../js/bootstrap.min.js"></script>
+      <script src="../js/site.js"></script>
+      <script src="../js/cookies.min.js"></script>
+      <script src="../js/prism.js"></script>
+      <script src="../js/clipboard.js"></script>
+   <script>
+
+   (function() {
+
+    new Clipboard('.copy-button');
+    var pre = document.getElementsByTagName('pre');
+    for (var i = 0; i < pre.length; i++) {
+      var isLanguage = pre[i].children[0].className.indexOf('language-');
+      if ( isLanguage === 0 ) {
+        var button = document.createElement('button');
+        button.className = 'copy-button';
+        pre[i].appendChild(button);
+      }
+    }
+
+var copyCode = new Clipboard('.copy-button', {
+    target: function(trigger) {
+        return trigger.previousElementSibling;
+    }
+});
+
+
+    $("#flavor_3_step_2").html("&lt;LinearLayout xmlns:android='http://schemas.android.com/apk/res/android'");
+    $("#flavor_3_step_2").append("\n\txmlns:tools='http://schemas.android.com/tools'");
+    $("#flavor_3_step_2").append("\n\tandroid:layout_width='match_parent'");
+    $("#flavor_3_step_2").append("\n\tandroid:layout_height='match_parent'");
+    $("#flavor_3_step_2").append("\n\tandroid:paddingLeft='@dimen/activity_horizontal_margin'");
+    $("#flavor_3_step_2").append("\n\tandroid:paddingRight='@dimen/activity_horizontal_margin'");
+    $("#flavor_3_step_2").append("\n\tandroid:paddingTop='@dimen/activity_vertical_margin'");
+    $("#flavor_3_step_2").append("\n\tandroid:paddingBottom='@dimen/activity_vertical_margin'");
+    $("#flavor_3_step_2").append("\n\tandroid:orientation='vertical'");
+    $("#flavor_3_step_2").append("\n\ttools:context='.MainActivity'&gt;");
+    $("#flavor_3_step_2").append("\n");
+    $("#flavor_3_step_2").append("\n");
+    $("#flavor_3_step_2").append("\t&lt;Button");
+        $("#flavor_3_step_2").append("\n\t\tandroid:layout_width='match_parent'");
+        $("#flavor_3_step_2").append("\n\t\tandroid:layout_height='@dimen/mpsdk_button_height'");
+        $("#flavor_3_step_2").append("\n\t\tandroid:layout_marginTop='25dp'");
+        $("#flavor_3_step_2").append("\n\t\tandroid:gravity='center'");
+        $("#flavor_3_step_2").append("\n\t\tandroid:text='Pagar $100'");
+        $("#flavor_3_step_2").append("\n\t\tandroid:onClick='submit'");
+        $("#flavor_3_step_2").append("\n\t\tstyle='@style/mpsdk_button_normal'/&gt;");
+        $("#flavor_3_step_2").append("\n");
+    $("#flavor_3_step_2").append("\n\t&lt;TextView");
+        $("#flavor_3_step_2").append("\n\t\tandroid:layout_width='match_parent'");
+        $("#flavor_3_step_2").append("\n\t\tandroid:layout_height='wrap_content'");
+        $("#flavor_3_step_2").append("\n\t\tandroid:id='@+id/mp_results'");
+        $("#flavor_3_step_2").append("\n\t\tandroid:paddingTop='50dp'/&gt;");
+   $("#flavor_3_step_2").append("\n&lt;/LinearLayout&gt;");
+})();
+</script>
+
+
+
+</body>
+</html>
