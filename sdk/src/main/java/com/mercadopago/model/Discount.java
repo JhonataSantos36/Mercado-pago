@@ -1,5 +1,7 @@
 package com.mercadopago.model;
 
+import com.mercadopago.util.CurrenciesUtil;
+
 import java.math.BigDecimal;
 
 public class Discount {
@@ -84,4 +86,17 @@ public class Discount {
     public String getConcept() {
         return this.concept;
     }
+
+    public boolean isValid() {
+        return isDiscountCurrencyIdValid() && isAmountValid(couponAmount) && id != null;
+    }
+
+    private Boolean isDiscountCurrencyIdValid() {
+        return currencyId != null && CurrenciesUtil.isValidCurrency(currencyId);
+    }
+
+    private Boolean isAmountValid(BigDecimal amount) {
+        return amount != null && amount.compareTo(BigDecimal.ZERO) >= 0;
+    }
+
 }

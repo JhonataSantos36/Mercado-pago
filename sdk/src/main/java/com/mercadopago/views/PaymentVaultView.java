@@ -19,7 +19,7 @@ public interface PaymentVaultView extends MvpView {
 
     void startSavedCardFlow(Card card, BigDecimal transactionAmount);
 
-    void restartWithSelectedItem(PaymentMethodSearchItem item);
+    void showSelectedItem(PaymentMethodSearchItem item);
 
     void showProgress();
 
@@ -33,17 +33,15 @@ public interface PaymentVaultView extends MvpView {
 
     void setTitle(String title);
 
-    void setFailureRecovery(FailureRecovery failureRecovery);
-
     void startCardFlow(String paymentType, BigDecimal transactionAmount, Boolean automaticallySelection);
 
-    void startPaymentMethodsActivity();
+    void startPaymentMethodsSelection();
 
     void selectPaymentMethod(PaymentMethod selectedPaymentMethod);
 
-    void showDiscountRow(BigDecimal transactionAmount);
+    void showDiscount(BigDecimal transactionAmount);
 
-    void startDiscountActivity(BigDecimal transactionAmount);
+    void startDiscountFlow(BigDecimal transactionAmount);
 
     void cleanPaymentMethodOptions();
 }
