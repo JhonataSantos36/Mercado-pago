@@ -8,7 +8,7 @@ _27-04-2017_
 
 _26-04-2017_
 
-* Fix: Fix: Payment method selection crash from null presenter on restore instance.
+* Fix: Payment method selection crash from null presenter on restore instance.
 
 ## VERSION 3.0.4-rc1
 
