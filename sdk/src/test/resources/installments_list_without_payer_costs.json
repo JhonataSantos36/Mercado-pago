@@ -1,0 +1,13 @@
+[
+  {
+    "issuer":{
+      "id":319,
+      "name":"Citi"
+    },
+    "payer_costs":
+    [
+    ],
+    "payment_method_id":"visa",
+    "payment_type_id":"credit_card"
+  }
+]

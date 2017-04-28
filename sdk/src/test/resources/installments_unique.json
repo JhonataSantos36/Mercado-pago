@@ -1,0 +1,24 @@
+[
+  {
+    "issuer":{
+      "id":319,
+      "name":"Citi"
+    },
+    "payer_costs":[
+      {
+        "installment_amount":60,
+        "installment_rate":0,
+        "installments":1,
+        "labels":[
+          "CFT_0,00%|TEA_0,00%"
+        ],
+        "max_allowed_amount":250000,
+        "min_allowed_amount":0,
+        "recommended_message":"1 cuota de $ 60,00 ($ 60,00)",
+        "total_amount":60
+      }
+    ],
+    "payment_method_id":"visa",
+    "payment_type_id":"credit_card"
+  }
+]

@@ -173,9 +173,9 @@ public class StaticMock {
         }
     }
 
-    public static List<PayerCost> getPayerCosts(Context context) {
+    public static List<PayerCost> getPayerCosts() {
 
-        Installment installment = JsonUtil.getInstance().fromJson(getFile(context, "mocks/installment.json"), Installment.class);
+        Installment installment = JsonUtil.getInstance().fromJson(getFile(InstrumentationRegistry.getContext(), "mocks/installment.json"), Installment.class);
         return installment.getPayerCosts();
     }
 
@@ -200,6 +200,19 @@ public class StaticMock {
         } catch (Exception ex) {
             return null;
         }
+    }
+
+    public static List<Issuer> getIssuersList() {
+        List<Issuer> issuerList;
+        String json = getIssuersJson();
+        try {
+            Type listType = new TypeToken<List<Issuer>>() {
+            }.getType();
+            issuerList = JsonUtil.getInstance().getGson().fromJson(json, listType);
+        } catch (Exception ex) {
+            issuerList = null;
+        }
+        return issuerList;
     }
 
     public static PaymentPreference getEmptyPaymentPreference() {

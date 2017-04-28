@@ -142,6 +142,12 @@
     <string name="mpsdk_error_title">¡Uy! Algo salió mal</string>
     <string name="mpsdk_standard_error_message">Vamos a solucionarlo. Intenta más tarde.</string>
     <string name="mpsdk_error_message_email_required">El email es requerido</string>
+    <string name="mpsdk_error_message_missing_public_key">Public key requerida</string>
+    <string name="mpsdk_error_message_missing_amount">El monto es requerido</string>
+    <string name="mpsdk_error_message_missing_site">El site es requerido</string>
+    <string name="mpsdk_error_message_missing_payer_cost">No se encontraron cuotas</string>
+    <string name="mpsdk_error_message_missing_installment_for_issuer">No se encontraron planes de cuotas para ese banco</string>
+    <string name="mpsdk_error_message_multiple_installments_for_issuer">Se encontraron múltiples planes de cuotas para ese banco</string>
 
     <!-- API exception messages -->
     <string name="mpsdk_empty_card_expiration_month">No se ingresó el mes de la fecha de expiración de la tarjeta</string>

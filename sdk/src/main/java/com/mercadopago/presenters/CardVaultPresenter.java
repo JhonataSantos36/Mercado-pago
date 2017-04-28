@@ -1,13 +1,8 @@
 package com.mercadopago.presenters;
 
-import android.content.Context;
-
-import com.mercadopago.R;
-import com.mercadopago.callbacks.Callback;
 import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.controllers.PaymentMethodGuessingController;
-import com.mercadopago.core.MercadoPagoServices;
-import com.mercadopago.model.ApiException;
+import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.model.Card;
 import com.mercadopago.model.CardInfo;
 import com.mercadopago.model.Discount;
@@ -18,9 +13,12 @@ import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentRecovery;
 import com.mercadopago.model.Site;
 import com.mercadopago.model.Token;
+import com.mercadopago.mvp.MvpPresenter;
+import com.mercadopago.mvp.OnResourcesRetrievedCallback;
 import com.mercadopago.preferences.PaymentPreference;
+import com.mercadopago.providers.CardVaultProvider;
 import com.mercadopago.util.TextUtils;
-import com.mercadopago.views.CardVaultActivityView;
+import com.mercadopago.views.CardVaultView;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -30,16 +28,10 @@ import java.util.Map;
  * Created by vaserber on 10/12/16.
  */
 
-public class CardVaultPresenter {
+public class CardVaultPresenter extends MvpPresenter<CardVaultView, CardVaultProvider> {
 
-    public static final String NO_PAYER_COSTS_FOUND = "no payer costs found";
-    public static final String NO_INSTALLMENTS_FOUND_FOR_AN_ISSUER = "no installments found for an issuer";
-    public static final String MULTIPLE_INSTALLMENTS_FOUND_FOR_AN_ISSUER = "multiple installments found for an issuer";
-    protected Context mContext;
-    protected CardVaultActivityView mView;
     protected FailureRecovery mFailureRecovery;
     protected String mBin;
-    protected MercadoPagoServices mMercadoPago;
 
     //Activity parameters
     protected PaymentRecovery mPaymentRecovery;
@@ -55,6 +47,8 @@ public class CardVaultPresenter {
     protected String mMerchantDiscountUrl;
     protected String mMerchantGetDiscountUri;
     protected Map<String, String> mDiscountAdditionalInfo;
+    protected Boolean mInstallmentsListShown;
+    protected Boolean mIssuersListShown;
 
     //Activity result
     protected PaymentMethod mPaymentMethod;
@@ -71,16 +65,27 @@ public class CardVaultPresenter {
     protected Boolean mDirectDiscountEnabled;
     protected Discount mDiscount;
     protected String mPayerEmail;
-    protected String mPrivateKey;
     protected List<PayerCost> mPayerCostsList;
     protected List<Issuer> mIssuersList;
 
-    public CardVaultPresenter(Context context) {
-        this.mContext = context;
+    public CardVaultPresenter() {
+        super();
+        this.mInstallmentsEnabled = true;
+        this.mDiscountEnabled = true;
+        this.mPaymentPreference = new PaymentPreference();
     }
 
-    public void setView(CardVaultActivityView view) {
-        this.mView = view;
+    public void initialize() {
+        try {
+            validateParameters();
+            onValidStart();
+        } catch (IllegalStateException exception) {
+            getView().showError(new MercadoPagoError(exception.getMessage(), false));
+        }
+    }
+
+    private boolean viewAttached() {
+        return getView() != null;
     }
 
     public void setPaymentRecovery(PaymentRecovery paymentRecovery) {
@@ -103,10 +108,6 @@ public class CardVaultPresenter {
         this.mInstallmentsEnabled = installmentsEnabled;
     }
 
-    public Boolean getInstallmentsEnabled() {
-        return mInstallmentsEnabled;
-    }
-
     public void setCard(Card card) {
         this.mCard = card;
     }
@@ -119,7 +120,7 @@ public class CardVaultPresenter {
         this.mAmount = amount;
     }
 
-    private void setFailureRecovery(FailureRecovery failureRecovery) {
+    public void setFailureRecovery(FailureRecovery failureRecovery) {
         this.mFailureRecovery = failureRecovery;
     }
 
@@ -232,14 +233,6 @@ public class CardVaultPresenter {
         return this.mInstallmentsReviewEnabled;
     }
 
-    public void setPrivateKey(String privateKey) {
-        this.mPrivateKey = privateKey;
-    }
-
-    public String getPrivateKey() {
-        return mPrivateKey;
-    }
-
     public CardInfo getCardInfo() {
         return mCardInfo;
     }
@@ -288,42 +281,64 @@ public class CardVaultPresenter {
         return mAutomaticSelection;
     }
 
-    public void checkStartInstallmentsActivity() {
-        if (installmentsRequired() && mPayerCost == null) {
-            mView.startInstallmentsActivity();
+    public Boolean isInstallmentsListShown() {
+        return mInstallmentsListShown;
+    }
+
+    public Boolean isIssuersListShown() {
+        return mIssuersListShown;
+    }
+
+    public void setInstallmentsListShown(Boolean installmentsListShown) {
+        mInstallmentsListShown = installmentsListShown;
+    }
+
+    public void setIssuersListShown(Boolean issuersListShown) {
+        mIssuersListShown = issuersListShown;
+    }
+
+    private void checkStartInstallmentsActivity() {
+        if (isInstallmentsEnabled() && mPayerCost == null) {
+            mInstallmentsListShown = true;
+            askForInstallments();
         } else {
-            mView.finishWithResult();
+            getView().finishWithResult();
         }
     }
 
-    public void checkStartIssuersActivity() {
+    private void askForInstallments() {
+        if (mIssuersListShown) {
+            getView().askForInstallmentsFromIssuers();
+        } else if (!savedCardAvailable()) {
+            getView().askForInstallmentsFromNewCard();
+        } else {
+            getView().askForInstallments();
+        }
+    }
+
+    private void checkStartIssuersActivity() {
         if (mIssuer == null) {
-            mView.startIssuersActivity();
+            mIssuersListShown = true;
+            getView().startIssuersActivity();
         } else {
             checkStartInstallmentsActivity();
         }
     }
 
-    public boolean installmentsRequired() {
+    public boolean isInstallmentsEnabled() {
         return mInstallmentsEnabled;
     }
 
-    public void validateActivityParameters() {
+    private void validateParameters() throws IllegalStateException {
         if (mPublicKey == null) {
-            mView.onInvalidStart("public key not set");
-        } else if (mInstallmentsEnabled && (mSite == null || mAmount == null)) {
-            mView.onInvalidStart("missing site or amount");
-        } else {
-            mView.onValidStart();
+            throw new IllegalStateException(getResourcesProvider().getMissingPublicKeyErrorMessage());
+        } else if (mInstallmentsEnabled) {
+            if (mSite == null) {
+                throw new IllegalStateException(getResourcesProvider().getMissingSiteErrorMessage());
+            } else if (mAmount == null) {
+                throw new IllegalStateException(getResourcesProvider().getMissingAmountErrorMessage());
+            }
         }
-    }
-
-    public void initializeMercadoPago() {
-        mMercadoPago = new MercadoPagoServices.Builder()
-                .setContext(mContext)
-                .setPublicKey(mPublicKey)
-                .setPrivateKey(mPrivateKey)
-                .build();
     }
 
     public void recoverFromFailure() {
@@ -336,39 +351,45 @@ public class CardVaultPresenter {
         return mPayerCostsList;
     }
 
-    public void getInstallmentsForCardAsync(Card card) {
+    private void getInstallmentsForCardAsync(final Card card) {
         String bin = TextUtils.isEmpty(mCardInfo.getFirstSixDigits()) ? "" : mCardInfo.getFirstSixDigits();
         Long issuerId = mCard.getIssuer() == null ? null : mCard.getIssuer().getId();
         String paymentMethodId = card.getPaymentMethod() == null ? "" : card.getPaymentMethod().getId();
-        getInstallmentsAsync(bin, issuerId, paymentMethodId, getTotalAmount());
-    }
 
-    private void getInstallmentsAsync(final String bin, final Long issuerId, final String paymentMethodId, final BigDecimal amount) {
-        mMercadoPago.getInstallments(bin, amount, issuerId, paymentMethodId, new Callback<List<Installment>>() {
+        getResourcesProvider().getInstallmentsAsync(bin, issuerId, paymentMethodId, getTotalAmount(), new OnResourcesRetrievedCallback<List<Installment>>() {
             @Override
-            public void success(List<Installment> installments) {
-                if (installments.size() == 0) {
-                    mView.startErrorView(mContext.getString(R.string.mpsdk_standard_error_message),
-                            NO_INSTALLMENTS_FOUND_FOR_AN_ISSUER);
-                } else if (installments.size() == 1) {
-                    resolvePayerCosts(installments.get(0).getPayerCosts());
-                } else {
-                    mView.startErrorView(mContext.getString(R.string.mpsdk_standard_error_message),
-                            MULTIPLE_INSTALLMENTS_FOUND_FOR_AN_ISSUER);
+            public void onSuccess(List<Installment> installments) {
+                resolveInstallmentsList(installments);
+            }
+
+            @Override
+            public void onFailure(MercadoPagoError error) {
+                if (viewAttached()) {
+                    getView().showError(error);
+
+                    setFailureRecovery(new FailureRecovery() {
+                        @Override
+                        public void recover() {
+                            getInstallmentsForCardAsync(card);
+                        }
+                    });
                 }
             }
-
-            @Override
-            public void failure(ApiException apiException) {
-                setFailureRecovery(new FailureRecovery() {
-                    @Override
-                    public void recover() {
-                        getInstallmentsAsync(bin, issuerId, paymentMethodId, amount);
-                    }
-                });
-                mView.startErrorView(apiException);
-            }
         });
+    }
+
+    private void resolveInstallmentsList(List<Installment> installments) {
+        String errorMessage = null;
+        if (installments.size() == 0) {
+            errorMessage = getResourcesProvider().getMissingInstallmentsForIssuerErrorMessage();
+        } else if (installments.size() == 1) {
+            resolvePayerCosts(installments.get(0).getPayerCosts());
+        } else {
+            errorMessage = getResourcesProvider().getMultipleInstallmentsForIssuerErrorMessage();
+        }
+        if (errorMessage != null && isViewAttached()) {
+            getView().showError(new MercadoPagoError(errorMessage, false));
+        }
     }
 
     private BigDecimal getTotalAmount() {
@@ -388,23 +409,122 @@ public class CardVaultPresenter {
 
         if (defaultPayerCost != null) {
             mPayerCost = defaultPayerCost;
-            mView.startSecurityCodeActivity();
+            getView().askForSecurityCodeWithoutInstallments();
         } else if (mPayerCostsList.isEmpty()) {
-            mView.startErrorView(mContext.getString(R.string.mpsdk_standard_error_message),
-                    NO_PAYER_COSTS_FOUND);
+            getView().showError(new MercadoPagoError(getResourcesProvider().getMissingPayerCostsErrorMessage(), false));
         } else if (mPayerCostsList.size() == 1) {
             mPayerCost = payerCosts.get(0);
-            mView.startSecurityCodeActivity();
+            getView().askForSecurityCodeWithoutInstallments();
         } else {
-            mView.startInstallmentsActivity();
+            mInstallmentsListShown = true;
+            getView().askForInstallments();
         }
+    }
+
+    public void resolveIssuersRequest(Issuer issuer) {
+        mIssuersListShown = true;
+        setIssuer(issuer);
+        checkStartInstallmentsActivity();
+    }
+
+    public void resolveInstallmentsRequest(PayerCost payerCost, Discount discount) {
+        mInstallmentsListShown = true;
+        setPayerCost(payerCost);
+        setDiscount(discount);
+
+        if (savedCardAvailable()) {
+            if (mInstallmentsListShown) {
+                getView().askForSecurityCodeFromInstallments();
+            } else {
+                getView().askForSecurityCodeWithoutInstallments();
+            }
+        } else {
+            getView().finishWithResult();
+        }
+    }
+
+    public void resolveSecurityCodeRequest(Token token) {
+        setToken(token);
+        if (tokenRecoveryAvailable()) {
+            setPayerCost(getPaymentRecovery().getPayerCost());
+            setIssuer(getPaymentRecovery().getIssuer());
+        }
+        getView().finishWithResult();
+    }
+
+    public void resolveNewCardRequest(PaymentMethod paymentMethod, Token token, Boolean directDiscountEnabled, PayerCost payerCost,
+                                      Issuer issuer, List<PayerCost> payerCosts, List<Issuer> issuers, Discount discount) {
+
+            setPaymentMethod(paymentMethod);
+            setToken(token);
+            setCardInfo(new CardInfo(token));
+            setDirectDiscountEnabled(directDiscountEnabled);
+            setPayerCost(payerCost);
+            setIssuer(issuer);
+            setPayerCostsList(payerCosts);
+            setIssuersList(issuers);
+
+            if (discount != null) {
+                setDiscount(discount);
+            }
+
+            checkStartIssuersActivity();
+    }
+
+    public void onResultCancel() {
+        getView().cancelCardVault();
+    }
+
+    private void onValidStart() {
+        mInstallmentsListShown = false;
+        mIssuersListShown = false;
+        if (viewAttached()) {
+            getView().showProgressLayout();
+        }
+        if (tokenRecoveryAvailable()) {
+            startTokenRecoveryFlow();
+        } else if (savedCardAvailable()) {
+            startSavedCardFlow();
+        } else {
+            startNewCardFlow();
+        }
+    }
+
+    private void startTokenRecoveryFlow() {
+        setCardInfo(new CardInfo(getPaymentRecovery().getToken()));
+        setPaymentMethod(getPaymentRecovery().getPaymentMethod());
+        setToken(getPaymentRecovery().getToken());
+        getView().askForSecurityCodeFromTokenRecovery();
+    }
+
+    private void startSavedCardFlow() {
+        setCardInfo(new CardInfo(getCard()));
+        setPaymentMethod(getCard().getPaymentMethod());
+        setIssuer(getCard().getIssuer());
+        if (isInstallmentsEnabled()) {
+            getInstallmentsForCardAsync(getCard());
+        } else {
+            getView().askForSecurityCodeWithoutInstallments();
+        }
+    }
+
+    private void startNewCardFlow() {
+        getView().askForCardInformation();
+    }
+
+    private boolean tokenRecoveryAvailable() {
+        return getPaymentRecovery() != null && getPaymentRecovery().isTokenRecoverable();
+    }
+
+    private boolean savedCardAvailable() {
+        return getCard() != null;
     }
 
     public void setPayerCostsList(List<PayerCost> payerCostsList) {
         this.mPayerCostsList = payerCostsList;
     }
 
-    public void setIssuersList(List<Issuer> issuers) {
+    private void setIssuersList(List<Issuer> issuers) {
         mIssuersList = issuers;
     }
 

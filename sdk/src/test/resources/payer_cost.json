@@ -1,0 +1,12 @@
+{
+  "installments": 3,
+  "installment_rate": 5.99,
+  "discount_rate": 0,
+  "labels": [
+  ],
+  "min_allowed_amount": 500,
+  "max_allowed_amount": 200000,
+  "recommended_message": "3 mensualidades de $ 353.30 ($ 1,059.90)",
+  "installment_amount": 353.3,
+  "total_amount": 1059.9
+}
