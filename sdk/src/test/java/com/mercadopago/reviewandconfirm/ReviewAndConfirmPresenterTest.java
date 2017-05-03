@@ -587,7 +587,7 @@ public class ReviewAndConfirmPresenterTest {
             paymentMethodOnReviewable = new PaymentMethodMockedReviewable(reviewChange);
             return paymentMethodOnReviewable;
         }
-        
+
         @Override
         public Reviewable getPaymentMethodOffReviewable(PaymentMethod paymentMethod, String paymentMethodCommentInfo, String paymentMethodDescriptionInfo, BigDecimal amount, Site site, DecorationPreference decorationPreference, Boolean editionEnabled, OnReviewChange reviewChange) {
             paymentMethodOffReviewable = new PaymentMethodMockedReviewable(reviewChange);

@@ -28,7 +28,6 @@ import com.mercadopago.ReviewAndConfirmActivity;
 import com.mercadopago.callbacks.OnConfirmPaymentCallback;
 import com.mercadopago.callbacks.OnReviewChange;
 import com.mercadopago.SecurityCodeActivity;
-import com.mercadopago.callbacks.OnSelectedCallback;
 import com.mercadopago.model.BankDeal;
 import com.mercadopago.model.Card;
 import com.mercadopago.model.CardInfo;
@@ -55,7 +54,6 @@ import com.mercadopago.uicontrollers.reviewandconfirm.ReviewSummaryView;
 import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.uicontrollers.savedcards.SavedCardRowView;
 import com.mercadopago.uicontrollers.savedcards.SavedCardView;
-import com.mercadopago.uicontrollers.savedcards.SavedCardsListView;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.MercadoPagoUtil;
 
@@ -63,6 +61,8 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import static com.mercadopago.util.TextUtils.isEmpty;
 
 /**
  * Created by mreverter on 1/17/17.
@@ -422,11 +422,14 @@ public class MercadoPagoComponents {
             private Activity activity;
             private List<Card> cards;
             private String title;
-            private String footerText;
+            private String customActionMessage;
             private DecorationPreference decorationPreference;
             private PaymentPreference paymentPreference;
             private Integer selectionImageResId;
             private String selectionConfirmPromptText;
+            private String privateKey;
+            private String merchantBaseUrl;
+            private String merchantGetCustomerUri;
 
             public SavedCardsActivityBuilder setActivity(Activity activity) {
                 this.activity = activity;
@@ -463,15 +466,35 @@ public class MercadoPagoComponents {
                 return this;
             }
 
-            public SavedCardsActivityBuilder setFooter(String footerText) {
-                this.footerText = footerText;
+            public SavedCardsActivityBuilder setCustomActionMessage(String customActionMessage) {
+                this.customActionMessage = customActionMessage;
+                return this;
+            }
+
+            public SavedCardsActivityBuilder setMerchantBaseUrl(String merchantBaseUrl) {
+                this.merchantBaseUrl = merchantBaseUrl;
+                return this;
+            }
+
+            public SavedCardsActivityBuilder setMerchantGetCustomerUri(String merchantGetCustomerUri) {
+                this.merchantGetCustomerUri = merchantGetCustomerUri;
+                return this;
+            }
+
+            public SavedCardsActivityBuilder setPrivateKey(String privateKey) {
+                this.privateKey = privateKey;
                 return this;
             }
 
             public void startActivity() {
 
                 if (this.activity == null) throw new IllegalStateException("activity is null");
-                if (this.cards == null) throw new IllegalStateException("cards is null");
+                if (this.cards == null && (isEmpty(merchantBaseUrl)
+                        || isEmpty(merchantGetCustomerUri)
+                        || isEmpty(privateKey))) {
+                    throw new IllegalStateException("cards or merchant server info required");
+                }
+
                 startCustomerCardsActivity();
             }
 
@@ -482,9 +505,12 @@ public class MercadoPagoComponents {
                 customerCardsIntent.putExtra("title", title);
                 customerCardsIntent.putExtra("selectionConfirmPromptText", selectionConfirmPromptText);
                 customerCardsIntent.putExtra("selectionImageResId", selectionImageResId);
-                customerCardsIntent.putExtra("footerText", footerText);
+                customerCardsIntent.putExtra("customActionMessage", customActionMessage);
                 customerCardsIntent.putExtra("decorationPreference", JsonUtil.getInstance().toJson(decorationPreference));
                 customerCardsIntent.putExtra("paymentPreference", JsonUtil.getInstance().toJson(paymentPreference));
+                customerCardsIntent.putExtra("merchantBaseUrl", merchantBaseUrl);
+                customerCardsIntent.putExtra("merchantGetCustomerUri", merchantGetCustomerUri);
+                customerCardsIntent.putExtra("privateKey", privateKey);
                 activity.startActivityForResult(customerCardsIntent, CUSTOMER_CARDS_REQUEST_CODE);
             }
         }
@@ -1760,44 +1786,6 @@ public class MercadoPagoComponents {
 
             public Reviewable build() {
                 return new ReviewPaymentOnView(context, paymentMethod, cardInfo, payerCost, currencyId, reviewChangeCallback, editionEnabled, decorationPreference);
-            }
-        }
-
-        public static class SavedCardsListViewBuilder {
-
-            private Context context;
-            private List<Card> cards;
-            private String footerText;
-            private OnSelectedCallback<Card> onSelectedCallback;
-            private int selectionImageResId;
-
-            public SavedCardsListViewBuilder setContext(Context context) {
-                this.context = context;
-                return this;
-            }
-
-            public SavedCardsListViewBuilder setSelectionImage(@DrawableRes int drawableResId) {
-                this.selectionImageResId = drawableResId;
-                return this;
-            }
-
-            public SavedCardsListViewBuilder setCards(List<Card> cards) {
-                this.cards = cards;
-                return this;
-            }
-
-            public SavedCardsListViewBuilder setFooter(String footerText) {
-                this.footerText = footerText;
-                return this;
-            }
-
-            public SavedCardsListViewBuilder setOnSelectedCallback(OnSelectedCallback<Card> onSelectedCallback) {
-                this.onSelectedCallback = onSelectedCallback;
-                return this;
-            }
-
-            public SavedCardsListView build() {
-                return new SavedCardsListView(context, cards, footerText, selectionImageResId, onSelectedCallback);
             }
         }
 

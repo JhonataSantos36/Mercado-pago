@@ -86,6 +86,7 @@ public class DiscountsActivity extends AppCompatActivity implements DiscountsAct
         createPresenter();
         getActivityParameters();
         initializePresenter();
+
         if (isCustomColorSet()) {
             setTheme(R.style.Theme_MercadoPagoTheme_NoActionBar);
         }

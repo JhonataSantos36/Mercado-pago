@@ -44,6 +44,7 @@ public class CustomServer {
         if (additionalInfo == null) {
             additionalInfo = new HashMap<>();
         }
+
         CustomService service = getService(context, url);
         service.getCustomer(uri, additionalInfo).enqueue(callback);
     }

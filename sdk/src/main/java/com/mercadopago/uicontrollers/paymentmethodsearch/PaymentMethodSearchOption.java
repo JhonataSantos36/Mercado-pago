@@ -72,7 +72,7 @@ public class PaymentMethodSearchOption implements PaymentMethodSearchViewControl
 
         Boolean needsTint = itemNeedsTint(mItem);
         String imageId;
-        if(needsTint) {
+        if (needsTint) {
             imageId = TO_TINT_IMAGES_PREFIX + mItem.getId();
         } else {
             imageId = mItem.getId();
@@ -88,13 +88,12 @@ public class PaymentMethodSearchOption implements PaymentMethodSearchViewControl
             mIcon.setVisibility(View.GONE);
         }
 
-        if(needsTint) {
+        if (needsTint) {
             mIcon.setColorFilter(mDecorationPreference.getBaseColor(), PorterDuff.Mode.MULTIPLY);
         }
     }
 
     private boolean itemNeedsTint(PaymentMethodSearchItem paymentMethodSearchItem) {
-
         return mDecorationPreference != null && mDecorationPreference.hasColors()
                 && (paymentMethodSearchItem.isGroup()
                 || paymentMethodSearchItem.isPaymentType());
