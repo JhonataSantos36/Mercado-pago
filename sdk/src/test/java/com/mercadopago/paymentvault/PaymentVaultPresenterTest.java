@@ -6,6 +6,7 @@ import com.mercadopago.constants.PaymentTypes;
 import com.mercadopago.constants.Sites;
 import com.mercadopago.exceptions.MPException;
 import com.mercadopago.model.ApiException;
+import com.mercadopago.model.Campaign;
 import com.mercadopago.model.Card;
 import com.mercadopago.model.CustomSearchItem;
 import com.mercadopago.model.Discount;
@@ -655,6 +656,11 @@ public class PaymentVaultPresenterTest {
             } else {
                 onResourcesRetrievedCallback.onSuccess(successfulDiscountResponse);
             }
+        }
+
+        @Override
+        public void getCampaigns(OnResourcesRetrievedCallback<List<Campaign>> onResourcesRetrievedCallback) {
+            //Not yet tested
         }
 
         @Override

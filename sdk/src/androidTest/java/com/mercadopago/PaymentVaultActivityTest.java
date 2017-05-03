@@ -557,8 +557,7 @@ public class PaymentVaultActivityTest {
 
     @Test
     public void ifNoMaxSavedCardsSetShowAllSavedCards() {
-        PaymentMethodSearch paymentMethodSearch = JsonUtil.getInstance()
-                .fromJson(StaticMock.getPaymentMethodSearchWithoutCustomOptionsAsJson(), PaymentMethodSearch.class);
+        PaymentMethodSearch paymentMethodSearch = JsonUtil.getInstance().fromJson(StaticMock.getPaymentMethodSearchWithoutCustomOptionsAsJson(), PaymentMethodSearch.class);
 
         Customer customer = StaticMock.getCustomer(3);
         Card card = customer.getCards().get(0);

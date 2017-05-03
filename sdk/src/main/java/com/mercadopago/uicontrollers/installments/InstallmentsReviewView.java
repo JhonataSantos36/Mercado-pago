@@ -29,7 +29,6 @@ public class InstallmentsReviewView implements InstallmentsView {
     private View mView;
     private MPTextView mInstallmentsAmount;
     private MPTextView mTotalAmount;
-    private MPTextView mTeaPercent;
     private MPTextView mCftpercent;
     private MPTextView mContinueTextButton;
     private FrameLayout mInstallmentsContinueButton;
@@ -46,7 +45,6 @@ public class InstallmentsReviewView implements InstallmentsView {
         decorateButton();
         setInstallmentAmountText();
         setTotalAmountWithRateText();
-        setTEAPercentText();
         setCFTPercentText();
     }
 
@@ -85,11 +83,6 @@ public class InstallmentsReviewView implements InstallmentsView {
         mTotalAmount.setText(spannedFullAmountText);
     }
 
-    private void setTEAPercentText() {
-        String teaPercent = mContext.getString(R.string.mpsdk_installments_tea) + " " + mPayerCost.getTEAPercent();
-        mTeaPercent.setText(teaPercent);
-    }
-
     private void setCFTPercentText() {
         String cftPercent = mContext.getString(R.string.mpsdk_installments_cft) + " " + mPayerCost.getCFTPercent();
         mCftpercent.setText(cftPercent);
@@ -106,7 +99,6 @@ public class InstallmentsReviewView implements InstallmentsView {
         mContinueTextButton = (MPTextView) mView.findViewById(R.id.mpsdkInstallmentsButtonText);
         mInstallmentsAmount = (MPTextView) mView.findViewById(R.id.mpsdkInstallmentsAmount);
         mTotalAmount = (MPTextView) mView.findViewById(R.id.mpsdkReviewTotalAmount);
-        mTeaPercent = (MPTextView) mView.findViewById(R.id.mpsdkTeaPercent);
         mCftpercent = (MPTextView) mView.findViewById(R.id.mpsdkCftpercent);
     }
 

@@ -128,7 +128,8 @@ public class InstallmentsActivityTest {
     @Test
     public void getActivityParametersOnCreateIsValid() {
         String payerCosts = StaticMock.getPayerCostsJson();
-        Type listType = new TypeToken<List<PayerCost>>(){}.getType();
+        Type listType = new TypeToken<List<PayerCost>>() {
+        }.getType();
         List<PayerCost> payerCostList = JsonUtil.getInstance().getGson().fromJson(payerCosts, listType);
 
         validStartIntent.putExtra("payerCosts", JsonUtil.getInstance().toJson(payerCostList));
@@ -148,7 +149,8 @@ public class InstallmentsActivityTest {
     @Test
     public void initializeWithoutPayerCostsButWithIssuerIsValid() {
         String installments = StaticMock.getInstallmentsJson();
-        Type listType = new TypeToken<List<Installment>>(){}.getType();
+        Type listType = new TypeToken<List<Installment>>() {
+        }.getType();
         List<Installment> installmentList = JsonUtil.getInstance().getGson().fromJson(installments, listType);
 
         mFakeAPI.addResponseToQueue(installmentList, 200, "");
@@ -169,7 +171,8 @@ public class InstallmentsActivityTest {
     @Test
     public void hideCardWhenNoTokenOrCard() {
         String payerCosts = StaticMock.getPayerCostsJson();
-        Type listType = new TypeToken<List<PayerCost>>(){}.getType();
+        Type listType = new TypeToken<List<PayerCost>>() {
+        }.getType();
         List<PayerCost> payerCostList = JsonUtil.getInstance().getGson().fromJson(payerCosts, listType);
 
         validStartIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(mPaymentMethod));
@@ -185,7 +188,8 @@ public class InstallmentsActivityTest {
     @Test
     public void hideCardWhenNoPaymentMethod() {
         String payerCosts = StaticMock.getPayerCostsJson();
-        Type listType = new TypeToken<List<PayerCost>>(){}.getType();
+        Type listType = new TypeToken<List<PayerCost>>() {
+        }.getType();
         List<PayerCost> payerCostList = JsonUtil.getInstance().getGson().fromJson(payerCosts, listType);
 
         Token token = StaticMock.getToken();
@@ -204,7 +208,8 @@ public class InstallmentsActivityTest {
     @Test
     public void showCardWhenTokenAndPaymentMethod() {
         String payerCosts = StaticMock.getPayerCostsJson();
-        Type listType = new TypeToken<List<PayerCost>>(){}.getType();
+        Type listType = new TypeToken<List<PayerCost>>() {
+        }.getType();
         List<PayerCost> payerCostList = JsonUtil.getInstance().getGson().fromJson(payerCosts, listType);
         Token token = StaticMock.getToken();
 
@@ -222,7 +227,8 @@ public class InstallmentsActivityTest {
     @Test
     public void showToolbarWithTitleWhenNoTokenOrCard() {
         String payerCosts = StaticMock.getPayerCostsJson();
-        Type listType = new TypeToken<List<PayerCost>>(){}.getType();
+        Type listType = new TypeToken<List<PayerCost>>() {
+        }.getType();
         List<PayerCost> payerCostList = JsonUtil.getInstance().getGson().fromJson(payerCosts, listType);
 
         validStartIntent.putExtra("payerCosts", JsonUtil.getInstance().toJson(payerCostList));
@@ -237,7 +243,8 @@ public class InstallmentsActivityTest {
     @Test
     public void showCollapsingToolbarWhenToken() {
         String payerCosts = StaticMock.getPayerCostsJson();
-        Type listType = new TypeToken<List<PayerCost>>(){}.getType();
+        Type listType = new TypeToken<List<PayerCost>>() {
+        }.getType();
         List<PayerCost> payerCostList = JsonUtil.getInstance().getGson().fromJson(payerCosts, listType);
         Token token = StaticMock.getToken();
 
@@ -257,7 +264,8 @@ public class InstallmentsActivityTest {
     @Test
     public void initializeCardWhenCardSet() {
         String payerCosts = StaticMock.getPayerCostsJson();
-        Type listType = new TypeToken<List<PayerCost>>(){}.getType();
+        Type listType = new TypeToken<List<PayerCost>>() {
+        }.getType();
         List<PayerCost> payerCostList = JsonUtil.getInstance().getGson().fromJson(payerCosts, listType);
         //Visa
         Card card = StaticMock.getCards().get(1);
@@ -279,7 +287,8 @@ public class InstallmentsActivityTest {
     @Test
     public void initializeCardWhenToken() {
         String payerCosts = StaticMock.getPayerCostsJson();
-        Type listType = new TypeToken<List<PayerCost>>(){}.getType();
+        Type listType = new TypeToken<List<PayerCost>>() {
+        }.getType();
         List<PayerCost> payerCostList = JsonUtil.getInstance().getGson().fromJson(payerCosts, listType);
         Token token = StaticMock.getToken();
 
@@ -299,7 +308,8 @@ public class InstallmentsActivityTest {
     @Test
     public void ifPayerCostsSetAllowStartWithoutPaymentMethod() {
         String payerCosts = StaticMock.getPayerCostsJson();
-        Type listType = new TypeToken<List<PayerCost>>(){}.getType();
+        Type listType = new TypeToken<List<PayerCost>>() {
+        }.getType();
         List<PayerCost> payerCostList = JsonUtil.getInstance().getGson().fromJson(payerCosts, listType);
 
         Issuer issuer = StaticMock.getIssuer();
@@ -318,7 +328,8 @@ public class InstallmentsActivityTest {
     @Test
     public void ifPayerCostListSetAllowStartWithoutPublicKey() {
         String payerCosts = StaticMock.getPayerCostsJson();
-        Type listType = new TypeToken<List<PayerCost>>(){}.getType();
+        Type listType = new TypeToken<List<PayerCost>>() {
+        }.getType();
         List<PayerCost> payerCostList = JsonUtil.getInstance().getGson().fromJson(payerCosts, listType);
 
         Issuer issuer = StaticMock.getIssuer();
@@ -337,7 +348,8 @@ public class InstallmentsActivityTest {
     @Test
     public void ifPayerCostListSetAllowStartWithoutIssuer() {
         String payerCosts = StaticMock.getPayerCostsJson();
-        Type listType = new TypeToken<List<PayerCost>>(){}.getType();
+        Type listType = new TypeToken<List<PayerCost>>() {
+        }.getType();
         List<PayerCost> payerCostList = JsonUtil.getInstance().getGson().fromJson(payerCosts, listType);
 
         Issuer issuer = StaticMock.getIssuer();
@@ -385,7 +397,8 @@ public class InstallmentsActivityTest {
     @Test
     public void ifPayerCostsNotSetFinishOnInvalidParameterIssuer() {
         String installments = StaticMock.getInstallmentsJson();
-        Type listType = new TypeToken<List<Installment>>(){}.getType();
+        Type listType = new TypeToken<List<Installment>>() {
+        }.getType();
         List<Installment> installmentList = JsonUtil.getInstance().getGson().fromJson(installments, listType);
 
         mFakeAPI.addResponseToQueue(installmentList, 200, "");
@@ -404,7 +417,8 @@ public class InstallmentsActivityTest {
     @Test
     public void finishOnInvalidParameterAmount() {
         String payerCosts = StaticMock.getPayerCostsJson();
-        Type listType = new TypeToken<List<PayerCost>>(){}.getType();
+        Type listType = new TypeToken<List<PayerCost>>() {
+        }.getType();
         List<PayerCost> payerCostList = JsonUtil.getInstance().getGson().fromJson(payerCosts, listType);
 
         Intent invalidIntent = new Intent();
@@ -445,7 +459,8 @@ public class InstallmentsActivityTest {
     @Test
     public void initializePayerCostsWhenListSent() {
         String payerCosts = StaticMock.getPayerCostsJson();
-        Type listType = new TypeToken<List<PayerCost>>(){}.getType();
+        Type listType = new TypeToken<List<PayerCost>>() {
+        }.getType();
         List<PayerCost> payerCostList = JsonUtil.getInstance().getGson().fromJson(payerCosts, listType);
 
         validStartIntent.putExtra("payerCosts", JsonUtil.getInstance().toJson(payerCostList));
@@ -459,7 +474,8 @@ public class InstallmentsActivityTest {
     @Test
     public void selectPayerCostAndGetResult() {
         String installments = StaticMock.getInstallmentsJson();
-        Type listType = new TypeToken<List<Installment>>(){}.getType();
+        Type listType = new TypeToken<List<Installment>>() {
+        }.getType();
         List<Installment> installmentList = JsonUtil.getInstance().getGson().fromJson(installments, listType);
         List<PayerCost> payerCosts = installmentList.get(0).getPayerCosts();
         PayerCost mockedPayerCostFirst = payerCosts.get(0);
@@ -502,7 +518,8 @@ public class InstallmentsActivityTest {
         onView(withId(R.id.mpsdkErrorRetry)).perform(click());
 
         //Prepare assertion data
-        Type listType = new TypeToken<List<Installment>>(){}.getType();
+        Type listType = new TypeToken<List<Installment>>() {
+        }.getType();
         List<Installment> installmentsList = JsonUtil.getInstance().getGson().fromJson(installmentsJson, listType);
 
 
@@ -513,7 +530,8 @@ public class InstallmentsActivityTest {
     @Test
     public void decorationPreferenceWithTokenPaintsBackground() {
         String payerCosts = StaticMock.getPayerCostsJson();
-        Type listType = new TypeToken<List<PayerCost>>(){}.getType();
+        Type listType = new TypeToken<List<PayerCost>>() {
+        }.getType();
         List<PayerCost> payerCostList = JsonUtil.getInstance().getGson().fromJson(payerCosts, listType);
         validStartIntent.putExtra("payerCosts", JsonUtil.getInstance().toJson(payerCostList));
 
@@ -535,7 +553,8 @@ public class InstallmentsActivityTest {
     @Test
     public void decorationPreferenceWithoutTokenPaintsToolbar() {
         String payerCosts = StaticMock.getPayerCostsJson();
-        Type listType = new TypeToken<List<PayerCost>>(){}.getType();
+        Type listType = new TypeToken<List<PayerCost>>() {
+        }.getType();
         List<PayerCost> payerCostList = JsonUtil.getInstance().getGson().fromJson(payerCosts, listType);
         validStartIntent.putExtra("payerCosts", JsonUtil.getInstance().toJson(payerCostList));
 
@@ -546,7 +565,7 @@ public class InstallmentsActivityTest {
         mTestRule.launchActivity(validStartIntent);
 
         int color = ViewUtils.getBackgroundColor(mTestRule.getActivity().mLowResToolbar);
-        assertEquals(color, (int)decorationPreference.getBaseColor());
+        assertEquals(color, (int) decorationPreference.getBaseColor());
 
 
         MPTextView toolbarTitle = (MPTextView) mTestRule.getActivity().findViewById(R.id.mpsdkTitle);
@@ -573,7 +592,8 @@ public class InstallmentsActivityTest {
         mTestRule.launchActivity(validStartIntent);
 
         //Prepare assertion data
-        Type listType = new TypeToken<List<Installment>>(){}.getType();
+        Type listType = new TypeToken<List<Installment>>() {
+        }.getType();
         List<Installment> installmentsList = JsonUtil.getInstance().getGson().fromJson(installmentsJson, listType);
 
         ActivityResult activityResult = getActivityResult(mTestRule.getActivity());
@@ -651,7 +671,8 @@ public class InstallmentsActivityTest {
     @Test
     public void decorationPreferenceWithDarkFontAndTokenPaintsBackground() {
         String payerCosts = StaticMock.getPayerCostsJson();
-        Type listType = new TypeToken<List<PayerCost>>(){}.getType();
+        Type listType = new TypeToken<List<PayerCost>>() {
+        }.getType();
         List<PayerCost> payerCostList = JsonUtil.getInstance().getGson().fromJson(payerCosts, listType);
         validStartIntent.putExtra("payerCosts", JsonUtil.getInstance().toJson(payerCostList));
 
@@ -670,11 +691,12 @@ public class InstallmentsActivityTest {
         int toolbarColor = ViewUtils.getBackgroundColor(mTestRule.getActivity().mNormalToolbar);
         assertEquals(toolbarColor, decorationPreference.getLighterColor());
     }
-    
+
     @Test
     public void decorationPreferenceWithDarkFontAndWithoutTokenPaintsToolbarAndTitle() {
         String payerCosts = StaticMock.getPayerCostsJson();
-        Type listType = new TypeToken<List<PayerCost>>(){}.getType();
+        Type listType = new TypeToken<List<PayerCost>>() {
+        }.getType();
         List<PayerCost> payerCostList = JsonUtil.getInstance().getGson().fromJson(payerCosts, listType);
         validStartIntent.putExtra("payerCosts", JsonUtil.getInstance().toJson(payerCostList));
 
@@ -686,7 +708,7 @@ public class InstallmentsActivityTest {
         mTestRule.launchActivity(validStartIntent);
 
         int color = ViewUtils.getBackgroundColor(mTestRule.getActivity().mLowResToolbar);
-        assertEquals(color, (int)decorationPreference.getBaseColor());
+        assertEquals(color, (int) decorationPreference.getBaseColor());
 
         MPTextView toolbarTitle = (MPTextView) mTestRule.getActivity().findViewById(R.id.mpsdkTitle);
         int fontColor = toolbarTitle.getCurrentTextColor();
@@ -696,12 +718,13 @@ public class InstallmentsActivityTest {
 
     //Timer
     @Test
-    public void showCountDownTimerWhenItIsInitialized(){
+    public void showCountDownTimerWhenItIsInitialized() {
         if (Looper.myLooper() == null) {
             Looper.prepare();
         }
         String payerCosts = StaticMock.getPayerCostsJson();
-        Type listType = new TypeToken<List<PayerCost>>(){}.getType();
+        Type listType = new TypeToken<List<PayerCost>>() {
+        }.getType();
         List<PayerCost> payerCostList = JsonUtil.getInstance().getGson().fromJson(payerCosts, listType);
         validStartIntent.putExtra("payerCosts", JsonUtil.getInstance().toJson(payerCostList));
 
@@ -715,10 +738,11 @@ public class InstallmentsActivityTest {
     }
 
     @Test
-    public void finishActivityWhenSetOnFinishCheckoutListener(){
+    public void finishActivityWhenSetOnFinishCheckoutListener() {
         Looper.prepare();
         String payerCosts = StaticMock.getPayerCostsJson();
-        Type listType = new TypeToken<List<PayerCost>>(){}.getType();
+        Type listType = new TypeToken<List<PayerCost>>() {
+        }.getType();
         List<PayerCost> payerCostList = JsonUtil.getInstance().getGson().fromJson(payerCosts, listType);
         validStartIntent.putExtra("payerCosts", JsonUtil.getInstance().toJson(payerCostList));
 
@@ -745,7 +769,8 @@ public class InstallmentsActivityTest {
 
         String installments = StaticMock.getInstallmentsJson();
 
-        Type listType = new TypeToken<List<Installment>>(){}.getType();
+        Type listType = new TypeToken<List<Installment>>() {
+        }.getType();
         List<Installment> installmentList = JsonUtil.getInstance().getGson().fromJson(installments, listType);
 
         Issuer issuer = StaticMock.getIssuer();
@@ -938,14 +963,15 @@ public class InstallmentsActivityTest {
 
         String installments = StaticMock.getInstallmentsJson();
 
-        Type listType = new TypeToken<List<Installment>>(){}.getType();
+        Type listType = new TypeToken<List<Installment>>() {
+        }.getType();
         List<Installment> installmentList = JsonUtil.getInstance().getGson().fromJson(installments, listType);
 
         Issuer issuer = StaticMock.getIssuer();
 
         validStartIntent.putExtra("issuer", JsonUtil.getInstance().toJson(issuer));
         validStartIntent.putExtra("paymentPreference", JsonUtil.getInstance().toJson(paymentPreference));
-        validStartIntent.putExtra("discountEnabled",false);
+        validStartIntent.putExtra("discountEnabled", false);
 
         mFakeAPI.addResponseToQueue(discount, 200, "");
         mFakeAPI.addResponseToQueue(installmentList, 200, "");
@@ -966,7 +992,8 @@ public class InstallmentsActivityTest {
 
         String installments = StaticMock.getInstallmentsJson();
 
-        Type listType = new TypeToken<List<Installment>>(){}.getType();
+        Type listType = new TypeToken<List<Installment>>() {
+        }.getType();
         List<Installment> installmentList = JsonUtil.getInstance().getGson().fromJson(installments, listType);
 
         Issuer issuer = StaticMock.getIssuer();
@@ -999,7 +1026,6 @@ public class InstallmentsActivityTest {
 
         onView(withId(R.id.mpsdkInstallmentsAmount)).check(matches(withText(formatInstallmentAmountText(selectedPayerCost, mCurrencyId).toString())));
         onView(withId(R.id.mpsdkReviewTotalAmount)).check(matches(withText(formatTotalAmountWithRateText(selectedPayerCost, mCurrencyId).toString())));
-        onView(withId(R.id.mpsdkTeaPercent)).check(matches(withText(formatTEAPercentText(selectedPayerCost))));
         onView(withId(R.id.mpsdkCftpercent)).check(matches(withText(formatCFTPercentText(selectedPayerCost))));
     }
 
@@ -1011,7 +1037,8 @@ public class InstallmentsActivityTest {
 
         String installments = StaticMock.getInstallmentsJson();
 
-        Type listType = new TypeToken<List<Installment>>(){}.getType();
+        Type listType = new TypeToken<List<Installment>>() {
+        }.getType();
         List<Installment> installmentList = JsonUtil.getInstance().getGson().fromJson(installments, listType);
 
         Issuer issuer = StaticMock.getIssuer();
@@ -1033,7 +1060,6 @@ public class InstallmentsActivityTest {
         onView(withId(R.id.mpsdkTotalAmount)).check(matches(withText(getFormattedAmount(mAmount, mCurrencyId).toString())));
         onView(withId(R.id.mpsdkInstallmentsAmount)).check(matches(withText(formatInstallmentAmountText(selectedPayerCost, mCurrencyId).toString())));
         onView(withId(R.id.mpsdkReviewTotalAmount)).check(matches(withText(formatTotalAmountWithRateText(selectedPayerCost, mCurrencyId).toString())));
-        onView(withId(R.id.mpsdkTeaPercent)).check(matches(withText(formatTEAPercentText(selectedPayerCost))));
         onView(withId(R.id.mpsdkCftpercent)).check(matches(withText(formatCFTPercentText(selectedPayerCost))));
     }
 
@@ -1046,7 +1072,8 @@ public class InstallmentsActivityTest {
 
         String installments = StaticMock.getInstallmentsJson();
 
-        Type listType = new TypeToken<List<Installment>>(){}.getType();
+        Type listType = new TypeToken<List<Installment>>() {
+        }.getType();
         List<Installment> installmentList = JsonUtil.getInstance().getGson().fromJson(installments, listType);
 
         Issuer issuer = StaticMock.getIssuer();
@@ -1101,19 +1128,13 @@ public class InstallmentsActivityTest {
         return spannedFullAmountText;
     }
 
-    private String formatTEAPercentText(PayerCost payerCost) {
-        String teaPercent = mTestRule.getActivity().getString(R.string.mpsdk_installments_tea) + " " + payerCost.getTEAPercent();
-
-        return teaPercent;
-    }
-
     private String formatCFTPercentText(PayerCost payerCost) {
         String cftPercent = mTestRule.getActivity().getString(R.string.mpsdk_installments_cft) + " " + payerCost.getCFTPercent();
         return cftPercent;
     }
 
     private String getDiscountOff(Discount discount) {
-        if (discount.getAmountOff() != null && discount.getAmountOff().compareTo(BigDecimal.ZERO)>0) {
+        if (discount.getAmountOff() != null && discount.getAmountOff().compareTo(BigDecimal.ZERO) > 0) {
             Currency currency = CurrenciesUtil.getCurrency(discount.getCurrencyId());
             String amount = currency.getSymbol() + " " + discount.getAmountOff();
             return amount;

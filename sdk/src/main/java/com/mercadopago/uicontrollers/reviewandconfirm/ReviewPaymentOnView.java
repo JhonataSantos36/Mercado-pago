@@ -28,15 +28,12 @@ import com.mercadopago.util.ReviewUtil;
 
 public class ReviewPaymentOnView extends Reviewable {
 
-
-    public static final String TEA = "TEA ";
     public static final String CFT = "CFT ";
     protected View mView;
     protected ImageView mPaymentImage;
     protected MPTextView mPaymentText;
     protected MPTextView mPaymentDescription;
     protected MPTextView mChangePaymentTextView;
-    protected MPTextView mTEATextView;
     protected MPTextView mCFTTextView;
     protected FrameLayout mChangePaymentButton;
     protected FrameLayout mPayerCostContainer;
@@ -89,7 +86,6 @@ public class ReviewPaymentOnView extends Reviewable {
         mIconTimeImageView = (ImageView) mView.findViewById(R.id.mpsdkIconTime);
         mChangePaymentTextView = (MPTextView) mView.findViewById(R.id.mpsdkReviewChangePaymentText);
         mIconTimeImageView.setVisibility(View.GONE);
-        mTEATextView = (MPTextView) mView.findViewById(R.id.mpsdkTEA);
         mCFTTextView = (MPTextView) mView.findViewById(R.id.mpsdkCFT);
         mChangePaymentButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -120,7 +116,6 @@ public class ReviewPaymentOnView extends Reviewable {
 
         } else {
             mPayerCostContainer.setVisibility(View.GONE);
-            mTEATextView.setVisibility(View.GONE);
             mCFTTextView.setVisibility(View.GONE);
 
             Spanned amountText = CurrenciesUtil.getFormattedAmount(mPayerCost.getTotalAmount(), mCurrency);
@@ -143,10 +138,6 @@ public class ReviewPaymentOnView extends Reviewable {
     }
 
     private void showFinance() {
-        if (mPayerCost.hasTEA()) {
-            mTEATextView.setVisibility(View.VISIBLE);
-            mTEATextView.setText(TEA + mPayerCost.getTEAPercent());
-        }
         if (mPayerCost.hasCFT()) {
             mCFTTextView.setVisibility(View.VISIBLE);
             mCFTTextView.setText(CFT + mPayerCost.getCFTPercent());
