@@ -140,7 +140,7 @@ public class IssuersPresenter {
                 public void success(List<Issuer> issuers) {
                     mView.stopLoadingView();
                     if (issuers == null) {
-                        issuers = new ArrayList<Issuer>();
+                        issuers = new ArrayList<>();
                     }
                     resolveIssuers(issuers);
                 }
