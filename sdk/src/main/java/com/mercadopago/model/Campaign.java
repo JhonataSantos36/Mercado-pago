@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
+import static com.mercadopago.util.TextUtil.isEmpty;
+
 /**
  * Created by mromar on 3/31/17.
  */
@@ -25,6 +27,7 @@ public class Campaign {
     private Integer maxRedeemPerUser;
     private String siteId;
     private String marketplace;
+    
     private String codeType;
     private BigDecimal maxUserAmountPerCampaign;
     private List<String> labels;
@@ -272,5 +275,9 @@ public class Campaign {
 
     public Boolean isDirectDiscountCampaign() {
         return codeType.contains(CODE_TYPE_NONE);
+    }
+
+    public Boolean isCodeTypeValid() {
+        return !isEmpty(codeType);
     }
 }

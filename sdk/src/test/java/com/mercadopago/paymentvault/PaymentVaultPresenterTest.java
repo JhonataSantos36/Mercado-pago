@@ -19,6 +19,7 @@ import com.mercadopago.model.Site;
 import com.mercadopago.mvp.OnResourcesRetrievedCallback;
 import com.mercadopago.presenters.PaymentVaultPresenter;
 import com.mercadopago.providers.PaymentVaultProvider;
+import com.mercadopago.utils.Campaigns;
 import com.mercadopago.utils.Discounts;
 import com.mercadopago.utils.PaymentMethodSearchs;
 import com.mercadopago.views.PaymentVaultView;
@@ -124,6 +125,9 @@ public class PaymentVaultPresenterTest {
         PaymentMethodSearch paymentMethodSearch = PaymentMethodSearchs.getPaymentMethodWithoutCustomOptionsMLA();
         provider.setPaymentMethodSearchResponse(paymentMethodSearch);
 
+        List<Campaign> campaigns = Campaigns.getCampaigns();
+        provider.setCampaignsResponse(campaigns);
+
         PaymentVaultPresenter presenter = new PaymentVaultPresenter();
         presenter.attachView(mockedView);
         presenter.attachResourcesProvider(provider);
@@ -143,6 +147,9 @@ public class PaymentVaultPresenterTest {
 
         PaymentMethodSearch paymentMethodSearch = PaymentMethodSearchs.getCompletePaymentMethodSearchMLA();
         provider.setPaymentMethodSearchResponse(paymentMethodSearch);
+
+        List<Campaign> campaigns = Campaigns.getCampaigns();
+        provider.setCampaignsResponse(campaigns);
 
         PaymentVaultPresenter presenter = new PaymentVaultPresenter();
         presenter.attachView(mockedView);
@@ -167,6 +174,9 @@ public class PaymentVaultPresenterTest {
         PaymentMethodSearch paymentMethodSearch = PaymentMethodSearchs.getPaymentMethodSearchWithOnlyTicketMLA();
         provider.setPaymentMethodSearchResponse(paymentMethodSearch);
 
+        List<Campaign> campaigns = Campaigns.getCampaigns();
+        provider.setCampaignsResponse(campaigns);
+
         PaymentVaultPresenter presenter = new PaymentVaultPresenter();
         presenter.attachView(mockedView);
         presenter.attachResourcesProvider(provider);
@@ -177,7 +187,6 @@ public class PaymentVaultPresenterTest {
         presenter.initialize();
 
         assertEquals(paymentMethodSearch.getGroups().get(0), mockedView.itemShown);
-
     }
 
     @Test
@@ -188,6 +197,9 @@ public class PaymentVaultPresenterTest {
 
         PaymentMethodSearch paymentMethodSearch = PaymentMethodSearchs.getPaymentMethodSearchWithOnlyCreditCardMLA();
         provider.setPaymentMethodSearchResponse(paymentMethodSearch);
+
+        List<Campaign> campaigns = Campaigns.getCampaigns();
+        provider.setCampaignsResponse(campaigns);
 
         PaymentVaultPresenter presenter = new PaymentVaultPresenter();
         presenter.attachView(mockedView);
@@ -214,6 +226,9 @@ public class PaymentVaultPresenterTest {
         PaymentMethodSearch paymentMethodSearch = PaymentMethodSearchs.getPaymentMethodSearchWithOnlyCreditCardAndOneCardMLA();
         provider.setPaymentMethodSearchResponse(paymentMethodSearch);
 
+        List<Campaign> campaigns = Campaigns.getCampaigns();
+        provider.setCampaignsResponse(campaigns);
+
         PaymentVaultPresenter presenter = new PaymentVaultPresenter();
         presenter.attachView(mockedView);
         presenter.attachResourcesProvider(provider);
@@ -237,6 +252,9 @@ public class PaymentVaultPresenterTest {
 
         PaymentMethodSearch paymentMethodSearch = PaymentMethodSearchs.getPaymentMethodSearchWithOnlyCreditCardAndAccountMoneyMLA();
         provider.setPaymentMethodSearchResponse(paymentMethodSearch);
+
+        List<Campaign> campaigns = Campaigns.getCampaigns();
+        provider.setCampaignsResponse(campaigns);
 
         PaymentVaultPresenter presenter = new PaymentVaultPresenter();
         presenter.attachView(mockedView);
@@ -263,6 +281,9 @@ public class PaymentVaultPresenterTest {
         PaymentMethodSearch paymentMethodSearch = PaymentMethodSearchs.getPaymentMethodSearchWithOnlyOneOffTypeAndAccountMoneyMLA();
         provider.setPaymentMethodSearchResponse(paymentMethodSearch);
 
+        List<Campaign> campaigns = Campaigns.getCampaigns();
+        provider.setCampaignsResponse(campaigns);
+
         PaymentVaultPresenter presenter = new PaymentVaultPresenter();
         presenter.attachView(mockedView);
         presenter.attachResourcesProvider(provider);
@@ -288,6 +309,9 @@ public class PaymentVaultPresenterTest {
         PaymentMethodSearch paymentMethodSearch = PaymentMethodSearchs.getPaymentMethodSearchWithOnlyAccountMoneyMLA();
         provider.setPaymentMethodSearchResponse(paymentMethodSearch);
 
+        List<Campaign> campaigns = Campaigns.getCampaigns();
+        provider.setCampaignsResponse(campaigns);
+
         PaymentVaultPresenter presenter = new PaymentVaultPresenter();
         presenter.attachView(mockedView);
         presenter.attachResourcesProvider(provider);
@@ -312,6 +336,9 @@ public class PaymentVaultPresenterTest {
         PaymentMethodSearch paymentMethodSearch = PaymentMethodSearchs.getCompletePaymentMethodSearchMLA();
         provider.setPaymentMethodSearchResponse(paymentMethodSearch);
 
+        List<Campaign> campaigns = Campaigns.getCampaigns();
+        provider.setCampaignsResponse(campaigns);
+
         PaymentVaultPresenter presenter = new PaymentVaultPresenter();
         presenter.attachView(mockedView);
         presenter.attachResourcesProvider(provider);
@@ -334,6 +361,9 @@ public class PaymentVaultPresenterTest {
 
         PaymentMethodSearch paymentMethodSearch = PaymentMethodSearchs.getCompletePaymentMethodSearchMLA();
         provider.setPaymentMethodSearchResponse(paymentMethodSearch);
+
+        List<Campaign> campaigns = Campaigns.getCampaigns();
+        provider.setCampaignsResponse(campaigns);
 
         PaymentVaultPresenter presenter = new PaymentVaultPresenter();
         presenter.attachView(mockedView);
@@ -358,6 +388,9 @@ public class PaymentVaultPresenterTest {
         PaymentMethodSearch paymentMethodSearch = PaymentMethodSearchs.getCompletePaymentMethodSearchMLA();
         provider.setPaymentMethodSearchResponse(paymentMethodSearch);
 
+        List<Campaign> campaigns = Campaigns.getCampaigns();
+        provider.setCampaignsResponse(campaigns);
+
         PaymentVaultPresenter presenter = new PaymentVaultPresenter();
         presenter.attachView(mockedView);
         presenter.attachResourcesProvider(provider);
@@ -380,6 +413,9 @@ public class PaymentVaultPresenterTest {
 
         PaymentMethodSearch paymentMethodSearch = PaymentMethodSearchs.getCompletePaymentMethodSearchMLA();
         provider.setPaymentMethodSearchResponse(paymentMethodSearch);
+
+        List<Campaign> campaigns = Campaigns.getCampaigns();
+        provider.setCampaignsResponse(campaigns);
 
         PaymentVaultPresenter presenter = new PaymentVaultPresenter();
         presenter.attachView(mockedView);
@@ -504,6 +540,9 @@ public class PaymentVaultPresenterTest {
         PaymentMethodSearch paymentMethodSearch = PaymentMethodSearchs.getCompletePaymentMethodSearchMLA();
         provider.setPaymentMethodSearchResponse(paymentMethodSearch);
 
+        List<Campaign> campaigns = Campaigns.getCampaigns();
+        provider.setCampaignsResponse(campaigns);
+
         Discount discount = Discounts.getDiscountWithAmountOffMLA();
         provider.setDiscountResponse(discount);
 
@@ -528,6 +567,9 @@ public class PaymentVaultPresenterTest {
 
         PaymentMethodSearch paymentMethodSearch = PaymentMethodSearchs.getCompletePaymentMethodSearchMLA();
         provider.setPaymentMethodSearchResponse(paymentMethodSearch);
+
+        List<Campaign> campaigns = Campaigns.getCampaigns();
+        provider.setCampaignsResponse(campaigns);
 
         ApiException apiException = Discounts.getDoNotFindCampaignApiException();
         MPException mpException = new MPException(apiException);
@@ -556,6 +598,9 @@ public class PaymentVaultPresenterTest {
         PaymentMethodSearch paymentMethodSearch = PaymentMethodSearchs.getCompletePaymentMethodSearchMLA();
         provider.setPaymentMethodSearchResponse(paymentMethodSearch);
 
+        List<Campaign> campaigns = Campaigns.getCampaigns();
+        provider.setCampaignsResponse(campaigns);
+
         PaymentVaultPresenter presenter = new PaymentVaultPresenter();
         presenter.attachView(mockedView);
         presenter.attachResourcesProvider(provider);
@@ -578,6 +623,9 @@ public class PaymentVaultPresenterTest {
 
         PaymentMethodSearch paymentMethodSearch = PaymentMethodSearchs.getCompletePaymentMethodSearchMLA();
         provider.setPaymentMethodSearchResponse(paymentMethodSearch);
+
+        List<Campaign> campaigns = Campaigns.getCampaigns();
+        provider.setCampaignsResponse(campaigns);
 
         ApiException apiException = Discounts.getDoNotFindCampaignApiException();
         MPException mpException = new MPException(apiException);
@@ -611,11 +659,13 @@ public class PaymentVaultPresenterTest {
 
         private boolean shouldFail;
         private boolean shouldDiscountFail;
+        private boolean shouldCampaignFail;
         private PaymentMethodSearch successfulResponse;
         private Discount successfulDiscountResponse;
+        private List<Campaign> successfulCampaignsResponse;
         private MPException failedResponse;
 
-        public void setPaymentMethodSearchResponse(PaymentMethodSearch paymentMethodSearch) {
+        private void setPaymentMethodSearchResponse(PaymentMethodSearch paymentMethodSearch) {
             shouldFail = false;
             successfulResponse = paymentMethodSearch;
         }
@@ -625,13 +675,23 @@ public class PaymentVaultPresenterTest {
             failedResponse = exception;
         }
 
-        public void setDiscountResponse(Discount discount) {
+        private void setDiscountResponse(Discount discount) {
             shouldDiscountFail = false;
             successfulDiscountResponse = discount;
         }
 
-        public void setDiscountResponse(MPException exception) {
+        private void setDiscountResponse(MPException exception) {
             shouldDiscountFail = true;
+            failedResponse = exception;
+        }
+
+        private void setCampaignsResponse(List<Campaign> campaigns) {
+            shouldDiscountFail = false;
+            successfulCampaignsResponse = campaigns;
+        }
+
+        private void setCampaingsResponse(MPException exception) {
+            shouldCampaignFail = true;
             failedResponse = exception;
         }
 
@@ -660,7 +720,11 @@ public class PaymentVaultPresenterTest {
 
         @Override
         public void getCampaigns(OnResourcesRetrievedCallback<List<Campaign>> onResourcesRetrievedCallback) {
-            //Not yet tested
+            if (shouldCampaignFail) {
+                onResourcesRetrievedCallback.onFailure(failedResponse);
+            } else {
+                onResourcesRetrievedCallback.onSuccess(successfulCampaignsResponse);
+            }
         }
 
         @Override
@@ -799,11 +863,11 @@ public class PaymentVaultPresenterTest {
             //Not yet tested
         }
 
-        public void simulateItemSelection(int index) {
+        private void simulateItemSelection(int index) {
             itemSelectionCallback.onSelected(searchItemsShown.get(index));
         }
 
-        public void simulateCustomItemSelection(int index) {
+        private void simulateCustomItemSelection(int index) {
             customItemSelectionCallback.onSelected(customOptionsShown.get(index));
         }
     }

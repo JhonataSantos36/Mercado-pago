@@ -57,7 +57,6 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
         }
     }
 
-
     private void onValidStart() {
         if (viewAttached()) {
             if (mDiscountEnabled) {
@@ -123,11 +122,11 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
             initPaymentVaultFlow();
         } else {
             for (Campaign campaign : campaigns) {
-                if (campaign.isDirectDiscountCampaign()) {
+                if (campaign.isCodeTypeValid() && campaign.isDirectDiscountCampaign()) {
                     mHasDirectDiscount = true;
                 }
 
-                if (campaign.isCodeDiscountCampaign()) {
+                if (campaign.isCodeTypeValid() && campaign.isCodeDiscountCampaign()) {
                     mHasCodeDiscount = true;
                 }
             }
@@ -232,8 +231,10 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
     }
 
     private void getPaymentMethodSearchAsync() {
+        if (isViewAttached()) {
+            getView().showProgress();
+        }
 
-        getView().showProgress();
         Payer payer = new Payer();
         payer.setAccessToken(mPayerAccessToken);
 

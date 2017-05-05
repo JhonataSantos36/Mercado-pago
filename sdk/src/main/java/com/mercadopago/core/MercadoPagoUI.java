@@ -11,7 +11,6 @@ import com.mercadopago.CustomerCardsActivity;
 import com.mercadopago.ReviewAndConfirmActivity;
 import com.mercadopago.callbacks.OnConfirmPaymentCallback;
 import com.mercadopago.callbacks.OnReviewChange;
-import com.mercadopago.callbacks.OnSelectedCallback;
 import com.mercadopago.model.Card;
 import com.mercadopago.model.CardInfo;
 import com.mercadopago.model.DecorationPreference;
@@ -30,7 +29,6 @@ import com.mercadopago.uicontrollers.reviewandconfirm.ReviewPaymentOnView;
 import com.mercadopago.uicontrollers.reviewandconfirm.ReviewSummaryView;
 import com.mercadopago.uicontrollers.savedcards.SavedCardRowView;
 import com.mercadopago.uicontrollers.savedcards.SavedCardView;
-import com.mercadopago.uicontrollers.savedcards.SavedCardsListView;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.MercadoPagoUtil;
 
@@ -66,7 +64,7 @@ public class MercadoPagoUI {
             private Activity activity;
             private List<Card> cards;
             private String title;
-            private String footerText;
+            private String customActionMessage;
             private DecorationPreference decorationPreference;
             private PaymentPreference paymentPreference;
             private Integer selectionImageResId;
@@ -125,8 +123,8 @@ public class MercadoPagoUI {
                 return this;
             }
 
-            public SavedCardsActivityBuilder setFooter(String footerText) {
-                this.footerText = footerText;
+            public SavedCardsActivityBuilder setCustomActionMessage(String customActionMessage) {
+                this.customActionMessage = customActionMessage;
                 return this;
             }
 
@@ -151,7 +149,7 @@ public class MercadoPagoUI {
                 customerCardsIntent.putExtra("title", title);
                 customerCardsIntent.putExtra("selectionConfirmPromptText", selectionConfirmPromptText);
                 customerCardsIntent.putExtra("selectionImageResId", selectionImageResId);
-                customerCardsIntent.putExtra("footerText", footerText);
+                customerCardsIntent.putExtra("customActionMessage", customActionMessage);
                 customerCardsIntent.putExtra("decorationPreference", JsonUtil.getInstance().toJson(decorationPreference));
                 customerCardsIntent.putExtra("paymentPreference", JsonUtil.getInstance().toJson(paymentPreference));
                 activity.startActivityForResult(customerCardsIntent, CUSTOMER_CARDS_REQUEST_CODE);
@@ -229,10 +227,12 @@ public class MercadoPagoUI {
             public void startActivity() {
 
                 if (this.activity == null) throw new IllegalStateException("activity is null");
-                if (this.paymentMethod == null) throw new IllegalStateException("payment method is null");
+                if (this.paymentMethod == null)
+                    throw new IllegalStateException("payment method is null");
                 if (this.items == null) throw new IllegalStateException("items not set");
                 if (MercadoPagoUtil.isCard(paymentMethod.getPaymentTypeId())) {
-                    if (this.payerCost == null) throw new IllegalStateException("payer cost is null");
+                    if (this.payerCost == null)
+                        throw new IllegalStateException("payer cost is null");
                     if (this.cardInfo == null) throw new IllegalStateException("card info is null");
                 }
                 startReviewAndConfirmActivity();
@@ -314,44 +314,6 @@ public class MercadoPagoUI {
             }
         }
 
-        public static class SavedCardsListViewBuilder {
-
-            private Context context;
-            private List<Card> cards;
-            private String footerText;
-            private OnSelectedCallback<Card> onSelectedCallback;
-            private int selectionImageResId;
-
-            public SavedCardsListViewBuilder setContext(Context context) {
-                this.context = context;
-                return this;
-            }
-
-            public SavedCardsListViewBuilder setSelectionImage(@DrawableRes int drawableResId) {
-                this.selectionImageResId = drawableResId;
-                return this;
-            }
-
-            public SavedCardsListViewBuilder setCards(List<Card> cards) {
-                this.cards = cards;
-                return this;
-            }
-
-            public SavedCardsListViewBuilder setFooter(String footerText) {
-                this.footerText = footerText;
-                return this;
-            }
-
-            public SavedCardsListViewBuilder setOnSelectedCallback(OnSelectedCallback<Card> onSelectedCallback) {
-                this.onSelectedCallback = onSelectedCallback;
-                return this;
-            }
-
-            public SavedCardsListView build() {
-                return new SavedCardsListView(context, cards, footerText, selectionImageResId, onSelectedCallback);
-            }
-        }
-
         public static class SavedCardViewBuilder {
             private Context context;
             private Card card;
@@ -429,7 +391,7 @@ public class MercadoPagoUI {
 
             public DiscountRowView build() {
                 return new DiscountRowView(context, discount, transactionAmount, currencyId, shortRowEnabled,
-                                            discountEnabled, showArrow, showSeparator);
+                        discountEnabled, showArrow, showSeparator);
             }
         }
 

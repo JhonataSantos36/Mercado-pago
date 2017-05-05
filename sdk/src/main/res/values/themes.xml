@@ -10,9 +10,7 @@
         <item name="actionMenuTextColor">@color/mpsdk_white</item>
     </style>
 
-
     <style name="ToolbarTheme" parent="Theme.MercadoPagoTheme.NoActionBar">
         <item name="colorControlNormal">@color/mpsdk_white</item>
     </style>
-
 </resources>
