@@ -141,6 +141,7 @@
     <string name="mpsdk_error_message_invalid_installments">Número de cuotas inválido</string>
     <string name="mpsdk_error_title">¡Uy! Algo salió mal</string>
     <string name="mpsdk_standard_error_message">Vamos a solucionarlo. Intenta más tarde.</string>
+    <string name="mpsdk_error_message_detail_issuers">no se encontraron issuers en IssuersActivity</string>
     <string name="mpsdk_error_message_email_required">El email es requerido</string>
     <string name="mpsdk_error_message_missing_public_key">Public key requerida</string>
     <string name="mpsdk_error_message_missing_amount">El monto es requerido</string>

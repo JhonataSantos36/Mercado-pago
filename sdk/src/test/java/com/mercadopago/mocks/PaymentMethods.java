@@ -5,7 +5,7 @@ import com.mercadopago.util.JsonUtil;
 import com.mercadopago.utils.ResourcesUtil;
 
 /**
- * Created by vaserber on 4/24/17.
+ * Created by mromar on 5/3/17.
  */
 
 public class PaymentMethods {
