@@ -88,23 +88,13 @@
         </RelativeLayout>
 
         <com.mercadopago.customviews.MPTextView
-            android:id="@+id/mpsdkTEA"
+            android:id="@+id/mpsdkCFT"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:gravity="center"
             android:includeFontPadding="false"
-            android:textSize="10dp"
-            android:visibility="gone"
-            tools:text="TEA 0,00%" />
-
-        <com.mercadopago.customviews.MPTextView
-            android:id="@+id/mpsdkCFT"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:includeFontPadding="false"
-            android:textSize="28dp"
+            android:textSize="24dp"
             android:visibility="gone"
             app:fontStyle="light"
             tools:text="CFT 0,00%" />

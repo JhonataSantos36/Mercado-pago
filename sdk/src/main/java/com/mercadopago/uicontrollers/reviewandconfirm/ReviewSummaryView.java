@@ -33,7 +33,6 @@ import static com.mercadopago.util.TextUtils.isEmpty;
 
 public class ReviewSummaryView extends Reviewable {
 
-    public static final String TEA = "TEA ";
     public static final String CFT = "CFT ";
     protected View mView;
 
@@ -53,7 +52,6 @@ public class ReviewSummaryView extends Reviewable {
     protected FrameLayout mPayerCostContainer;
     protected FrameLayout mConfirmButton;
     protected MPTextView mConfirmTextView;
-    protected MPTextView mTEATextView;
     protected MPTextView mCFTTextView;
     protected MPTextView mCustomDescriptionTextView;
     protected MPTextView mCustomAmountTextView;
@@ -111,7 +109,6 @@ public class ReviewSummaryView extends Reviewable {
         mPayerCostContainer = (FrameLayout) mView.findViewById(R.id.mpsdkReviewSummaryPayerCostContainer);
         mConfirmButton = (FrameLayout) mView.findViewById(R.id.mpsdkReviewSummaryConfirmButton);
         mConfirmTextView = (MPTextView) mView.findViewById(R.id.mpsdkReviewButtonText);
-        mTEATextView = (MPTextView) mView.findViewById(R.id.mpsdkTEA);
         mCFTTextView = (MPTextView) mView.findViewById(R.id.mpsdkCFT);
         mCustomDescriptionTextView = (MPTextView) mView.findViewById(R.id.mpsdkReviewSummaryCustomText);
         mCustomAmountTextView = (MPTextView) mView.findViewById(R.id.mpsdkReviewSummaryCustomAmount);
@@ -148,7 +145,7 @@ public class ReviewSummaryView extends Reviewable {
         if (hasCustomInfo()) {
             showCustomInfo();
         }
-        
+
         //Discounts
         if (hasDiscount()) {
             showDiscountRow();
@@ -165,7 +162,7 @@ public class ReviewSummaryView extends Reviewable {
         if (isCardPaymentMethod()) {
             if (mPayerCost.getInstallments() == 1) {
                 hidePayerCostInfo();
-                if(mDiscount == null) {
+                if (mDiscount == null) {
                     hideTotalRow();
                 } else {
                     showTotal(mPayerCost.getTotalAmount());
@@ -194,19 +191,10 @@ public class ReviewSummaryView extends Reviewable {
         mPayerCostRow.setVisibility(View.GONE);
         mFirstSeparator.setVisibility(View.GONE);
         mSubtotalRow.setVisibility(View.GONE);
-        mTEATextView.setVisibility(View.GONE);
         mCFTTextView.setVisibility(View.GONE);
     }
 
     private void showFinance() {
-        if (mPayerCost.hasTEA()) {
-            mTEATextView.setVisibility(View.VISIBLE);
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append(TEA);
-            stringBuilder.append(mPayerCost.getTEAPercent());
-            mTEATextView.setText(stringBuilder);
-        }
-
         if (mPayerCost.hasCFT()) {
             mCFTTextView.setVisibility(View.VISIBLE);
             StringBuilder stringBuilder = new StringBuilder();

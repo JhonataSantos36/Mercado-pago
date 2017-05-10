@@ -449,7 +449,7 @@ public class InstallmentsPresenter {
     }
 
     private Boolean isInstallmentsReviewRequired(PayerCost payerCost) {
-        return payerCost != null && payerCost.getCFTPercent() != null && payerCost.getTEAPercent() != null;
+        return payerCost != null && payerCost.getCFTPercent() != null;
     }
 
     private boolean isMerchantServerDiscountsAvailable() {
