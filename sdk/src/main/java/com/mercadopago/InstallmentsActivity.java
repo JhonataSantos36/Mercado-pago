@@ -1,6 +1,5 @@
 package com.mercadopago;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
@@ -21,6 +20,7 @@ import com.mercadopago.controllers.CustomServicesHandler;
 import com.mercadopago.core.MercadoPagoComponents;
 import com.mercadopago.core.MercadoPagoUI;
 import com.mercadopago.customviews.MPTextView;
+import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.listeners.RecyclerItemClickListener;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.CardInfo;
@@ -34,6 +34,7 @@ import com.mercadopago.observers.TimerObserver;
 import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.presenters.InstallmentsPresenter;
+import com.mercadopago.providers.InstallmentsProviderImpl;
 import com.mercadopago.uicontrollers.FontCache;
 import com.mercadopago.uicontrollers.card.CardRepresentationModes;
 import com.mercadopago.uicontrollers.card.FrontCardView;
@@ -60,17 +61,31 @@ import java.util.Map;
 public class InstallmentsActivity extends MercadoPagoBaseActivity implements InstallmentsActivityView, TimerObserver {
 
     protected InstallmentsPresenter mPresenter;
-    protected Activity mActivity;
+
+    //Local vars
+    protected String mPublicKey;
+    protected String mPrivateKey;
+    protected boolean mActivityActive;
+    protected PaymentPreference mPaymentPreference;
+    protected DecorationPreference mDecorationPreference;
+    protected Site mSite;
+
+    protected String mDefaultBaseURL;
+    protected String mMerchantDiscountBaseURL;
+    protected String mMerchantGetDiscountURI;
+    protected Map<String, String> mDiscountAdditionalInfo;
 
     //View controls
     protected PayerCostsAdapter mPayerCostsAdapter;
     protected RecyclerView mInstallmentsRecyclerView;
-    protected DecorationPreference mDecorationPreference;
+
     //ViewMode
     protected boolean mLowResActive;
+
     //Low Res View
     protected Toolbar mLowResToolbar;
     protected MPTextView mLowResTitleToolbar;
+
     //Normal View
     protected CollapsingToolbarLayout mCollapsingToolbar;
     protected AppBarLayout mAppBar;
@@ -81,61 +96,52 @@ public class InstallmentsActivity extends MercadoPagoBaseActivity implements Ins
     protected MPTextView mTimerTextView;
     protected FrameLayout mDiscountFrameLayout;
 
-    protected String mDefaultBaseURL;
-    protected String mMerchantDiscountBaseURL;
-    protected String mMerchantGetDiscountURI;
-    protected Map<String, String> mDiscountAdditionalInfo;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (mPresenter == null) {
-            mPresenter = new InstallmentsPresenter(getBaseContext());
-        }
-        mPresenter.setView(this);
-        mActivity = this;
+        createPresenter();
         getActivityParameters();
+
+        setMerchantInfo();
+
+        mPresenter.attachView(this);
+        mPresenter.attachResourcesProvider(new InstallmentsProviderImpl(this, mPublicKey, mPrivateKey, mDefaultBaseURL,
+                mMerchantDiscountBaseURL, mMerchantGetDiscountURI, mDiscountAdditionalInfo));
+
         if (isCustomColorSet()) {
             setTheme(R.style.Theme_MercadoPagoTheme_NoActionBar);
         }
+
+        mActivityActive = true;
         analyzeLowRes();
-        setMerchantInfo();
         setContentView();
-        mPresenter.validateActivityParameters();
+        initializeControls();
+        initializeView();
+
+        mPresenter.initialize();
     }
 
-    private boolean isCustomColorSet() {
-        return mDecorationPreference != null && mDecorationPreference.hasColors();
-    }
-
-    private void setMerchantInfo() {
-        if (CustomServicesHandler.getInstance().getServicePreference() != null) {
-            mDefaultBaseURL = CustomServicesHandler.getInstance().getServicePreference().getDefaultBaseURL();
-            mMerchantDiscountBaseURL = CustomServicesHandler.getInstance().getServicePreference().getGetMerchantDiscountBaseURL();
-            mMerchantGetDiscountURI = CustomServicesHandler.getInstance().getServicePreference().getGetMerchantDiscountURI();
-            mDiscountAdditionalInfo = CustomServicesHandler.getInstance().getServicePreference().getGetDiscountAdditionalInfo();
-        }
-
-        mPresenter.setMerchantBaseUrl(mDefaultBaseURL);
-        mPresenter.setMerchantDiscountBaseUrl(mMerchantDiscountBaseURL);
-        mPresenter.setMerchantGetDiscountUri(mMerchantGetDiscountURI);
-        mPresenter.setDiscountAdditionalInfo(mDiscountAdditionalInfo);
+    private void createPresenter() {
+        mPresenter = new InstallmentsPresenter();
     }
 
     private void getActivityParameters() {
-        String publicKey = getIntent().getStringExtra("merchantPublicKey");
-        String payerAccessToken = getIntent().getStringExtra("payerAccessToken");
-        PaymentPreference paymentPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("paymentPreference"), PaymentPreference.class);
+        mPublicKey = getIntent().getStringExtra("merchantPublicKey");
+        mPrivateKey = getIntent().getStringExtra("payerAccessToken");
         mDecorationPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("decorationPreference"), DecorationPreference.class);
+        mSite = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("site"), Site.class);
 
-        PaymentMethod paymentMethod = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("paymentMethod"), PaymentMethod.class);
-        CardInfo cardInfo = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("cardInfo"), CardInfo.class);
-        Issuer issuer = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("issuer"), Issuer.class);
+        mPresenter.setPaymentMethod(JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("paymentMethod"), PaymentMethod.class));
+        mPresenter.setIssuer(JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("issuer"), Issuer.class));
+        mPresenter.setCardInfo(JsonUtil.getInstance().fromJson(getIntent().getStringExtra("cardInfo"), CardInfo.class));
+
         BigDecimal amount = null;
         if (this.getIntent().getStringExtra("amount") != null) {
             amount = new BigDecimal(this.getIntent().getStringExtra("amount"));
         }
-        Site site = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("site"), Site.class);
+
+        mPresenter.setAmount(amount);
+
         List<PayerCost> payerCosts;
         try {
             Type listType = new TypeToken<List<PayerCost>>() {
@@ -145,51 +151,39 @@ public class InstallmentsActivity extends MercadoPagoBaseActivity implements Ins
             payerCosts = null;
         }
 
-        Discount discount = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("discount"), Discount.class);
-        Boolean discountEnabled = this.getIntent().getBooleanExtra("discountEnabled", true);
-        Boolean directDiscountEnabled = this.getIntent().getBooleanExtra("directDiscountEnabled", true);
-        Boolean installmentsReviewEnabled = this.getIntent().getBooleanExtra("installmentsReviewEnabled", true);
-        String payerEmail = this.getIntent().getStringExtra("payerEmail");
-
-        mPresenter.setPaymentMethod(paymentMethod);
-        mPresenter.setPublicKey(publicKey);
-        mPresenter.setPrivateKey(payerAccessToken);
-        mPresenter.setIssuer(issuer);
-        mPresenter.setAmount(amount);
-        mPresenter.setPayerEmail(payerEmail);
-        mPresenter.setDiscount(discount);
-        mPresenter.setDiscountEnabled(discountEnabled);
-        mPresenter.setDirectDiscountEnabled(directDiscountEnabled);
-        mPresenter.setSite(site);
         mPresenter.setPayerCosts(payerCosts);
-        mPresenter.setPaymentPreference(paymentPreference);
-        mPresenter.setCardInfo(cardInfo);
-        mPresenter.setInstallmentsReviewEnabled(installmentsReviewEnabled);
+        mPresenter.setPaymentPreference(JsonUtil.getInstance().fromJson(getIntent().getStringExtra("paymentPreference"), PaymentPreference.class));
+        mPresenter.setDiscount(JsonUtil.getInstance().fromJson(getIntent().getStringExtra("discount"), Discount.class));
+        mPresenter.setDiscountEnabled(this.getIntent().getBooleanExtra("discountEnabled", true));
+        mPresenter.setDirectDiscountEnabled(this.getIntent().getBooleanExtra("directDiscountEnabled", true));
+        mPresenter.setInstallmentsReviewEnabled(this.getIntent().getBooleanExtra("installmentsReviewEnabled", true));
+        mPresenter.setPayerEmail(this.getIntent().getStringExtra("payerEmail"));
     }
 
-    private boolean isDecorationEnabled() {
+    private void setMerchantInfo() {
+        if (CustomServicesHandler.getInstance().getServicePreference() != null) {
+            mDefaultBaseURL = CustomServicesHandler.getInstance().getServicePreference().getDefaultBaseURL();
+            mMerchantDiscountBaseURL = CustomServicesHandler.getInstance().getServicePreference().getGetMerchantDiscountBaseURL();
+            mMerchantGetDiscountURI = CustomServicesHandler.getInstance().getServicePreference().getGetMerchantDiscountURI();
+            mDiscountAdditionalInfo = CustomServicesHandler.getInstance().getServicePreference().getGetDiscountAdditionalInfo();
+        }
+    }
+
+    private boolean isCustomColorSet() {
         return mDecorationPreference != null && mDecorationPreference.hasColors();
     }
 
     public void analyzeLowRes() {
-        if (mPresenter.isCardInfoAvailable()) {
+        if (mPresenter.isRequiredCardDrawn()) {
             this.mLowResActive = ScaleUtil.isLowRes(this);
         } else {
             this.mLowResActive = true;
         }
     }
 
-    public void loadViews() {
-        if (mLowResActive) {
-            loadLowResViews();
-        } else {
-            loadNormalViews();
-        }
-    }
-
     public void setContentView() {
-        MPTracker.getInstance().trackScreen("CARD_INSTALLMENTS", "2", mPresenter.getPublicKey(),
-                mPresenter.getSite().getId(), BuildConfig.VERSION_NAME, this);
+        MPTracker.getInstance().trackScreen("CARD_INSTALLMENTS", "2", mPublicKey, mSite.getId(), BuildConfig.VERSION_NAME, this);
+
         if (mLowResActive) {
             setContentViewLowRes();
         } else {
@@ -205,69 +199,63 @@ public class InstallmentsActivity extends MercadoPagoBaseActivity implements Ins
         setContentView(R.layout.mpsdk_activity_installments_normal);
     }
 
-    @Override
-    public void onValidStart() {
-        mPresenter.initializeMercadoPago();
-        initializeViews();
-        loadViews();
-        hideHeader();
-        decorate();
-        showTimer();
-        initializeAdapter();
-
-        mPresenter.initialize();
-    }
-
-    private void showTimer() {
-        if (CheckoutTimer.getInstance().isTimerEnabled()) {
-            CheckoutTimer.getInstance().addObserver(this);
-            mTimerTextView.setVisibility(View.VISIBLE);
-            mTimerTextView.setText(CheckoutTimer.getInstance().getCurrentTime());
-        }
-    }
-
-    @Override
-    public void onInvalidStart(String message) {
-        Intent returnIntent = new Intent();
-        returnIntent.putExtra("discount", JsonUtil.getInstance().toJson(mPresenter.getDiscount()));
-        setResult(RESULT_CANCELED, returnIntent);
-        finish();
-    }
-
-    private void initializeViews() {
+    private void initializeControls() {
         mInstallmentsRecyclerView = (RecyclerView) findViewById(R.id.mpsdkActivityInstallmentsView);
         mTimerTextView = (MPTextView) findViewById(R.id.mpsdkTimerTextView);
 
         if (mLowResActive) {
-            mLowResToolbar = (Toolbar) findViewById(R.id.mpsdkRegularToolbar);
-            mLowResTitleToolbar = (MPTextView) findViewById(R.id.mpsdkTitle);
-
-            if (CheckoutTimer.getInstance().isTimerEnabled()) {
-                Toolbar.LayoutParams marginParams = new Toolbar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                marginParams.setMargins(0, 0, 0, 6);
-                mLowResTitleToolbar.setLayoutParams(marginParams);
-                mLowResTitleToolbar.setTextSize(19);
-                mTimerTextView.setTextSize(17);
-            }
-
-            mLowResToolbar.setVisibility(View.VISIBLE);
+            initializeLowResControls();
         } else {
-            mCollapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.mpsdkCollapsingToolbar);
-            mAppBar = (AppBarLayout) findViewById(R.id.mpsdkInstallmentesAppBar);
-            mCardContainer = (FrameLayout) findViewById(R.id.mpsdkActivityCardContainer);
-            mNormalToolbar = (Toolbar) findViewById(R.id.mpsdkRegularToolbar);
-            mNormalToolbar.setVisibility(View.VISIBLE);
+            initializeNormalControls();
         }
 
         mDiscountFrameLayout = (FrameLayout) findViewById(R.id.mpsdkDiscount);
         mDiscountFrameLayout.setVisibility(View.VISIBLE);
-
         mInstallmentsReview = (FrameLayout) findViewById(R.id.mpsdkInstallmentsReview);
+    }
+
+    private void initializeLowResControls() {
+        mLowResToolbar = (Toolbar) findViewById(R.id.mpsdkRegularToolbar);
+        mLowResTitleToolbar = (MPTextView) findViewById(R.id.mpsdkTitle);
+
+        if (CheckoutTimer.getInstance().isTimerEnabled()) {
+            Toolbar.LayoutParams marginParams = new Toolbar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            marginParams.setMargins(0, 0, 0, 6);
+            mLowResTitleToolbar.setLayoutParams(marginParams);
+            mLowResTitleToolbar.setTextSize(19);
+            mTimerTextView.setTextSize(17);
+        }
+
+        mLowResToolbar.setVisibility(View.VISIBLE);
+    }
+
+    private void initializeNormalControls() {
+        mCollapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.mpsdkCollapsingToolbar);
+        mAppBar = (AppBarLayout) findViewById(R.id.mpsdkInstallmentesAppBar);
+        mCardContainer = (FrameLayout) findViewById(R.id.mpsdkActivityCardContainer);
+        mNormalToolbar = (Toolbar) findViewById(R.id.mpsdkRegularToolbar);
+        mNormalToolbar.setVisibility(View.VISIBLE);
+    }
+
+    private void initializeView() {
+        loadViews();
+        hideHeader();
+        decorate();
+        showTimer();
+    }
+
+    public void loadViews() {
+        if (mLowResActive) {
+            loadLowResViews();
+        } else {
+            loadNormalViews();
+        }
     }
 
     public void loadLowResViews() {
         loadToolbarArrow(mLowResToolbar);
         mLowResTitleToolbar.setText(getString(R.string.mpsdk_card_installments_title));
+
         if (FontCache.hasTypeface(FontCache.CUSTOM_REGULAR_FONT)) {
             mLowResTitleToolbar.setTypeface(FontCache.getTypeface(FontCache.CUSTOM_REGULAR_FONT));
         }
@@ -277,7 +265,8 @@ public class InstallmentsActivity extends MercadoPagoBaseActivity implements Ins
         loadToolbarArrow(mNormalToolbar);
         mNormalToolbar.setTitle(getString(R.string.mpsdk_card_installments_title));
         setCustomFontNormal();
-        mFrontCardView = new FrontCardView(mActivity, CardRepresentationModes.SHOW_FULL_FRONT_ONLY);
+
+        mFrontCardView = new FrontCardView(this, CardRepresentationModes.SHOW_FULL_FRONT_ONLY);
         mFrontCardView.setSize(CardRepresentationModes.MEDIUM_SIZE);
         mFrontCardView.setPaymentMethod(mPresenter.getPaymentMethod());
         if (mPresenter.getCardInfo() != null) {
@@ -319,28 +308,18 @@ public class InstallmentsActivity extends MercadoPagoBaseActivity implements Ins
         }
     }
 
+    private void setCustomFontNormal() {
+        if (FontCache.hasTypeface(FontCache.CUSTOM_REGULAR_FONT)) {
+            mCollapsingToolbar.setCollapsedTitleTypeface(FontCache.getTypeface(FontCache.CUSTOM_REGULAR_FONT));
+            mCollapsingToolbar.setExpandedTitleTypeface(FontCache.getTypeface(FontCache.CUSTOM_REGULAR_FONT));
+        }
+    }
+
     private void hideHeader() {
         if (mLowResActive) {
             mLowResToolbar.setVisibility(View.GONE);
         } else {
             mNormalToolbar.setTitle("");
-        }
-    }
-
-    @Override
-    public void showHeader() {
-        if (mLowResActive) {
-            mLowResToolbar.setVisibility(View.VISIBLE);
-        } else {
-            mNormalToolbar.setTitle(getString(R.string.mpsdk_card_installments_title));
-            setCustomFontNormal();
-        }
-    }
-
-    private void setCustomFontNormal() {
-        if (FontCache.hasTypeface(FontCache.CUSTOM_REGULAR_FONT)) {
-            mCollapsingToolbar.setCollapsedTitleTypeface(FontCache.getTypeface(FontCache.CUSTOM_REGULAR_FONT));
-            mCollapsingToolbar.setExpandedTitleTypeface(FontCache.getTypeface(FontCache.CUSTOM_REGULAR_FONT));
         }
     }
 
@@ -355,24 +334,40 @@ public class InstallmentsActivity extends MercadoPagoBaseActivity implements Ins
     }
 
     private void decorateLowRes() {
-        ColorsUtil.decorateLowResToolbar(mLowResToolbar, mLowResTitleToolbar, mDecorationPreference,
-                getSupportActionBar(), this);
+        ColorsUtil.decorateLowResToolbar(mLowResToolbar, mLowResTitleToolbar, mDecorationPreference, getSupportActionBar(), this);
         if (mTimerTextView != null) {
             ColorsUtil.decorateTextView(mDecorationPreference, mTimerTextView, this);
         }
     }
 
     private void decorateNormal() {
-        ColorsUtil.decorateNormalToolbar(mNormalToolbar, mDecorationPreference, mAppBar,
-                mCollapsingToolbar, getSupportActionBar(), this);
+        ColorsUtil.decorateNormalToolbar(mNormalToolbar, mDecorationPreference, mAppBar, mCollapsingToolbar, getSupportActionBar(), this);
         mFrontCardView.decorateCardBorder(mDecorationPreference.getLighterColor());
         if (mTimerTextView != null) {
             ColorsUtil.decorateTextView(mDecorationPreference, mTimerTextView, this);
         }
     }
 
-    private void initializeAdapter() {
-        mPayerCostsAdapter = new PayerCostsAdapter(this, mPresenter.getSite().getCurrencyId(), getDpadSelectionCallback());
+    private void showTimer() {
+        if (CheckoutTimer.getInstance().isTimerEnabled()) {
+            CheckoutTimer.getInstance().addObserver(this);
+            mTimerTextView.setVisibility(View.VISIBLE);
+            mTimerTextView.setText(CheckoutTimer.getInstance().getCurrentTime());
+        }
+    }
+
+    @Override
+    public void showHeader() {
+        if (mLowResActive) {
+            mLowResToolbar.setVisibility(View.VISIBLE);
+        } else {
+            mNormalToolbar.setTitle(getString(R.string.mpsdk_card_installments_title));
+            setCustomFontNormal();
+        }
+    }
+
+    private void initializeAdapter(OnSelectedCallback<Integer> onSelectedCallback) {
+        mPayerCostsAdapter = new PayerCostsAdapter(this, mSite.getCurrencyId(), onSelectedCallback);
         initializeAdapterListener(mPayerCostsAdapter, mInstallmentsRecyclerView);
     }
 
@@ -388,17 +383,38 @@ public class InstallmentsActivity extends MercadoPagoBaseActivity implements Ins
                 }));
     }
 
-    protected OnSelectedCallback<Integer> getDpadSelectionCallback() {
-        return new OnSelectedCallback<Integer>() {
-            @Override
-            public void onSelected(Integer position) {
-                mPresenter.onItemSelected(position);
-            }
-        };
+    @Override
+    public void showError(MercadoPagoError error) {
+        if (error.isApiException()) {
+            showApiException(error.getApiException());
+        } else {
+            ErrorUtil.startErrorActivity(this, error);
+        }
+    }
+
+    public void showApiException(ApiException apiException) {
+        if (mActivityActive) {
+            ApiUtil.showApiExceptionError(this, apiException);
+        }
     }
 
     @Override
-    public void initializeInstallments(List<PayerCost> payerCostList) {
+    public void onTimeChanged(String timeToShow) {
+        mTimerTextView.setText(timeToShow);
+    }
+
+    @Override
+    public void onFinish() {
+        this.finish();
+    }
+
+    private boolean isDecorationEnabled() {
+        return mDecorationPreference != null && mDecorationPreference.hasColors();
+    }
+
+    @Override
+    public void showInstallments(List<PayerCost> payerCostList, OnSelectedCallback<Integer> onSelectedCallback) {
+        initializeAdapter(onSelectedCallback);
         mPayerCostsAdapter.addResults(payerCostList);
     }
 
@@ -411,21 +427,11 @@ public class InstallmentsActivity extends MercadoPagoBaseActivity implements Ins
     }
 
     @Override
-    public void stopLoadingView() {
+    public void hideLoadingView() {
         mInstallmentsRecyclerView.setVisibility(View.VISIBLE);
         mDiscountFrameLayout.setVisibility(View.VISIBLE);
 
         LayoutUtil.showRegularLayout(this);
-    }
-
-    @Override
-    public void startErrorView(String message, String errorDetail) {
-        ErrorUtil.startErrorActivity(mActivity, message, errorDetail, false);
-    }
-
-    @Override
-    public void showApiExceptionError(ApiException exception) {
-        ApiUtil.showApiExceptionError(mActivity, exception);
     }
 
     @Override
@@ -448,8 +454,7 @@ public class InstallmentsActivity extends MercadoPagoBaseActivity implements Ins
 
             mPresenter.initializeDiscountRow();
         } else {
-            MPTracker.getInstance().trackEvent("CARD_INSTALLMENTS", "BACK_PRESSED", "2",
-                    mPresenter.getPublicKey(), mPresenter.getSite().getId(), BuildConfig.VERSION_NAME, this);
+            MPTracker.getInstance().trackEvent("CARD_INSTALLMENTS", "BACK_PRESSED", "2", mPublicKey, mSite.getId(), BuildConfig.VERSION_NAME, this);
             Intent returnIntent = new Intent();
             returnIntent.putExtra("backButtonPressed", true);
             returnIntent.putExtra("discount", JsonUtil.getInstance().toJson(mPresenter.getDiscount()));
@@ -488,22 +493,11 @@ public class InstallmentsActivity extends MercadoPagoBaseActivity implements Ins
     }
 
     @Override
-    public void onTimeChanged(String timeToShow) {
-        mTimerTextView.setText(timeToShow);
-    }
-
-    @Override
-    public void onFinish() {
-        this.finish();
-    }
-
-    @Override
-    public void startDiscountActivity(BigDecimal transactionAmount) {
-        MercadoPagoComponents.Activities.DiscountsActivityBuilder mercadoPagoBuilder
-                = new MercadoPagoComponents.Activities.DiscountsActivityBuilder();
+    public void startDiscountFlow(BigDecimal transactionAmount) {
+        MercadoPagoComponents.Activities.DiscountsActivityBuilder mercadoPagoBuilder = new MercadoPagoComponents.Activities.DiscountsActivityBuilder();
 
         mercadoPagoBuilder.setActivity(this)
-                .setMerchantPublicKey(mPresenter.getPublicKey())
+                .setMerchantPublicKey(mPublicKey)
                 .setPayerEmail(mPresenter.getPayerEmail())
                 .setAmount(transactionAmount)
                 .setDiscount(mPresenter.getDiscount())
@@ -526,7 +520,7 @@ public class InstallmentsActivity extends MercadoPagoBaseActivity implements Ins
         discountRowViewBuilder.setContext(this)
                 .setDiscount(mPresenter.getDiscount())
                 .setTransactionAmount(transactionAmount)
-                .setCurrencyId(mPresenter.getSite().getCurrencyId());
+                .setCurrencyId(mSite.getCurrencyId());
 
         if (isInstallmentsReviewVisible() && mPresenter.getDiscount() == null) {
             discountRowViewBuilder.setDiscountEnabled(false);
@@ -561,7 +555,7 @@ public class InstallmentsActivity extends MercadoPagoBaseActivity implements Ins
     public void initInstallmentsReviewView(final PayerCost payerCost) {
         InstallmentsReviewView installmentsReviewView = new MercadoPagoUI.Views.InstallmentsReviewViewBuilder()
                 .setContext(this)
-                .setCurrencyId(mPresenter.getSite().getCurrencyId())
+                .setCurrencyId(mSite.getCurrencyId())
                 .setPayerCost(payerCost)
                 .setDecorationPreference(mDecorationPreference)
                 .build();

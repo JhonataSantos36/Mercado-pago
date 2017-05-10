@@ -1,0 +1,15 @@
+[
+  {
+    "installments": 1,
+    "installment_rate": 0,
+    "discount_rate": 0,
+    "labels": [
+      "CFT_0,00%|TEA_0,00%"
+    ],
+    "min_allowed_amount": 5,
+    "max_allowed_amount": 200000,
+    "recommended_message": "1 mensualidad de $ 1,000.00 ($ 1,000.00)",
+    "installment_amount": 1000,
+    "total_amount": 1000
+  }
+]
