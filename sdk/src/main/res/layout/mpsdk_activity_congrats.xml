@@ -36,8 +36,10 @@
 
                     <ImageView
                         android:id="@+id/mpsdkIcon"
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
+                        android:minHeight="60dp"
+                        android:minWidth="60dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:src="@drawable/mpsdk_icon_ok"
                         android:tint="@color/mpsdk_white" />
