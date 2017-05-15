@@ -34,7 +34,6 @@ import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.ColorsUtil;
 import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
-import com.mercadopago.util.LayoutUtil;
 import com.mercadopago.util.ScaleUtil;
 import com.mercadopago.views.IssuersActivityView;
 
@@ -51,7 +50,6 @@ public class IssuersActivity extends MercadoPagoBaseActivity implements IssuersA
     protected Activity mActivity;
 
     //View controls
-    protected IssuersAdapter mIssuersAdapter;
     protected RecyclerView mIssuersRecyclerView;
     protected DecorationPreference mDecorationPreference;
     //ViewMode
@@ -66,6 +64,7 @@ public class IssuersActivity extends MercadoPagoBaseActivity implements IssuersA
     protected FrameLayout mCardContainer;
     protected Toolbar mNormalToolbar;
     protected FrontCardView mFrontCardView;
+    private View mProgressLayout;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -143,7 +142,6 @@ public class IssuersActivity extends MercadoPagoBaseActivity implements IssuersA
         hideHeader();
         decorate();
         showTimer();
-        initializeAdapter();
         mPresenter.loadIssuers();
     }
 
@@ -173,7 +171,7 @@ public class IssuersActivity extends MercadoPagoBaseActivity implements IssuersA
     private void initializeViews() {
         mIssuersRecyclerView = (RecyclerView) findViewById(R.id.mpsdkActivityIssuersView);
         mTimerTextView = (MPTextView) findViewById(R.id.mpsdkTimerTextView);
-
+        mProgressLayout = findViewById(R.id.mpsdkProgressLayout);
         if (mLowResActive) {
             mLowResToolbar = (Toolbar) findViewById(R.id.mpsdkRegularToolbar);
             mLowResTitleToolbar = (MPTextView) findViewById(R.id.mpsdkTitle);
@@ -194,6 +192,18 @@ public class IssuersActivity extends MercadoPagoBaseActivity implements IssuersA
             mNormalToolbar = (Toolbar) findViewById(R.id.mpsdkRegularToolbar);
             mNormalToolbar.setVisibility(View.VISIBLE);
         }
+        initializeRecyclerView();
+    }
+
+    private void initializeRecyclerView() {
+        mIssuersRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mIssuersRecyclerView.addOnItemTouchListener(new RecyclerItemClickListener(this,
+                new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        mPresenter.onItemSelected(position);
+                    }
+                }));
     }
 
     private void loadViews() {
@@ -202,11 +212,6 @@ public class IssuersActivity extends MercadoPagoBaseActivity implements IssuersA
         } else {
             loadNormalViews();
         }
-    }
-
-    private void initializeAdapter() {
-        mIssuersAdapter = new IssuersAdapter(this, getDpadSelectionCallback());
-        initializeAdapterListener(mIssuersAdapter, mIssuersRecyclerView);
     }
 
     protected OnSelectedCallback<Integer> getDpadSelectionCallback() {
@@ -218,21 +223,9 @@ public class IssuersActivity extends MercadoPagoBaseActivity implements IssuersA
         };
     }
 
-    private void initializeAdapterListener(RecyclerView.Adapter adapter, RecyclerView view) {
-        view.setAdapter(adapter);
-        view.setLayoutManager(new LinearLayoutManager(this));
-        view.addOnItemTouchListener(new RecyclerItemClickListener(this,
-                new RecyclerItemClickListener.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(View view, int position) {
-                        mPresenter.onItemSelected(position);
-                    }
-                }));
-    }
-
     @Override
     public void initializeIssuers(List<Issuer> issuersList) {
-        mIssuersAdapter.addResults(issuersList);
+        mIssuersRecyclerView.setAdapter(new IssuersAdapter(this, issuersList, getDpadSelectionCallback()));
     }
 
     @Override
@@ -334,13 +327,13 @@ public class IssuersActivity extends MercadoPagoBaseActivity implements IssuersA
     @Override
     public void showLoadingView() {
         mIssuersRecyclerView.setVisibility(View.GONE);
-        LayoutUtil.showProgressLayout(this);
+        mProgressLayout.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void stopLoadingView() {
         mIssuersRecyclerView.setVisibility(View.VISIBLE);
-        LayoutUtil.showRegularLayout(this);
+        mProgressLayout.setVisibility(View.GONE);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.mercadopago.uicontrollers.reviewandconfirm;
 
 import android.content.Context;
+import android.graphics.PorterDuff;
 import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.ImageView;
 
 import com.mercadopago.R;
 import com.mercadopago.customviews.MPTextView;
+import com.mercadopago.model.DecorationPreference;
 import com.mercadopago.model.Item;
 import com.mercadopago.util.CircleTransform;
 import com.mercadopago.util.CurrenciesUtil;
@@ -59,21 +61,12 @@ public class ReviewProductView implements ReviewProductViewController {
     }
 
     @Override
-    public void drawProduct(int position, Item item, String currencyId) {
+    public void drawProduct(int position, Item item, String currencyId, DecorationPreference decorationPreference) {
         if (position != 0) {
             mFirstSeparator.setVisibility(View.GONE);
         }
         String pictureUrl = item.getPictureUrl();
-        if (pictureUrl == null || pictureUrl.isEmpty()) {
-            mProductImage.setImageResource(R.drawable.review_product_placeholder);
-        } else {
-            Picasso.with(mContext)
-                    .load(pictureUrl)
-                    .transform(new CircleTransform())
-                    .fit()
-                    .placeholder(R.drawable.review_product_placeholder)
-                    .into(mProductImage);
-        }
+        setProductIcon(pictureUrl, decorationPreference);
         if (item.getTitle() == null) {
             mProductName.setVisibility(View.GONE);
         } else {
@@ -90,12 +83,39 @@ public class ReviewProductView implements ReviewProductViewController {
         }
         mProductQuantity.setText(mContext.getResources().getString(R.string.mpsdk_review_product_quantity, String.valueOf(quantity)));
 
-        if(item.getUnitPrice() !=null) {
+        if (item.getUnitPrice() != null) {
             BigDecimal price = item.getUnitPrice();
             String originalNumber = CurrenciesUtil.formatNumber(price, currencyId);
             String string = mContext.getString(R.string.mpsdk_review_product_price, originalNumber);
             Spanned priceText = CurrenciesUtil.formatCurrencyInText(price, currencyId, string, false, true);
             mProductPrice.setText(priceText);
+        }
+    }
+
+    private void setProductIcon(String pictureUrl, DecorationPreference decorationPreference) {
+        int resId;
+        if (decorationPreference != null && decorationPreference.hasColors()) {
+            resId = R.drawable.mpsdk_grey_review_product_placeholder;
+        } else {
+            resId = R.drawable.review_product_placeholder;
+        }
+
+        if (pictureUrl == null || pictureUrl.isEmpty()) {
+            setDefaultProductIcon(resId, decorationPreference);
+        } else {
+            Picasso.with(mContext)
+                    .load(pictureUrl)
+                    .transform(new CircleTransform())
+                    .fit()
+                    .placeholder(resId)
+                    .into(mProductImage);
+        }
+    }
+
+    private void setDefaultProductIcon(int resourceId, DecorationPreference decorationPreference) {
+        mProductImage.setImageResource(resourceId);
+        if (decorationPreference != null && decorationPreference.hasColors()) {
+            mProductImage.setColorFilter(decorationPreference.getBaseColor(), PorterDuff.Mode.SRC_ATOP);
         }
     }
 }

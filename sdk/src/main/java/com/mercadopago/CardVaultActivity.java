@@ -7,6 +7,7 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 
 import com.google.gson.reflect.TypeToken;
 import com.mercadopago.core.MercadoPago;
@@ -228,7 +229,8 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultAct
     }
 
     private void initializeViews() {
-        LayoutUtil.showProgressLayout(this);
+        View progressLayout = findViewById(R.id.mpsdkProgressLayout);
+        progressLayout.setVisibility(View.VISIBLE);
     }
 
     private void startSecurityCodeActivity() {
@@ -352,8 +354,9 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultAct
             mPresenter.setIssuer(issuer);
             mPresenter.checkStartInstallmentsActivity();
         } else if (resultCode == RESULT_CANCELED) {
+            String sitedId = mPresenter.getSite() == null ? "" : mPresenter.getSite().getId();
             MPTracker.getInstance().trackEvent("INSTALLMENTS", "CANCELED", "2", mPresenter.getPublicKey(),
-                    mPresenter.getSite().getId(), BuildConfig.VERSION_NAME, this);
+                    sitedId, BuildConfig.VERSION_NAME, this);
             setResult(RESULT_CANCELED, data);
             finish();
         }
@@ -374,8 +377,9 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultAct
                 mPresenter.createToken();
             }
         } else if (resultCode == RESULT_CANCELED) {
+            String sitedId = mPresenter.getSite() == null ? "" : mPresenter.getSite().getId();
             MPTracker.getInstance().trackEvent("INSTALLMENTS", "CANCELED", "2", mPresenter.getPublicKey(),
-                    mPresenter.getSite().getId(), BuildConfig.VERSION_NAME, this);
+                    sitedId, BuildConfig.VERSION_NAME, this);
             setResult(RESULT_CANCELED, data);
             finish();
         }

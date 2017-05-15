@@ -8,6 +8,7 @@ import com.mercadopago.core.MercadoPago;
 import com.mercadopago.core.MerchantServer;
 import com.mercadopago.exceptions.MPException;
 import com.mercadopago.model.ApiException;
+import com.mercadopago.model.Campaign;
 import com.mercadopago.model.Card;
 import com.mercadopago.model.Customer;
 import com.mercadopago.model.Discount;
@@ -49,6 +50,21 @@ public class PaymentVaultProviderImpl implements PaymentVaultProvider {
                 .setContext(context)
                 .setPublicKey(publicKey)
                 .build();
+    }
+
+    @Override
+    public void getCampaigns(final OnResourcesRetrievedCallback<List<Campaign>> onResourcesRetrievedCallback) {
+        mercadoPago.getCampaigns(new Callback<List<Campaign>>() {
+            @Override
+            public void success(List<Campaign> campaigns) {
+                onResourcesRetrievedCallback.onSuccess(campaigns);
+            }
+
+            @Override
+            public void failure(ApiException apiException) {
+                onResourcesRetrievedCallback.onFailure(new MPException(apiException));
+            }
+        });
     }
 
     @Override

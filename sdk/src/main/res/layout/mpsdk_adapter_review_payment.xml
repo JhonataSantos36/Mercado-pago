@@ -1,33 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/mpsdk_review_gray_background">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:gravity="center_vertical"
-        android:paddingTop="20dp"
+        android:orientation="vertical"
         android:paddingBottom="20dp"
-        android:orientation="vertical">
+        android:paddingTop="20dp">
+
         <ImageView
             android:id="@+id/mpsdkAdapterReviewPaymentImage"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:layout_gravity="center_horizontal"/>
+            android:layout_gravity="center_horizontal" />
+
         <FrameLayout
             android:id="@+id/mpsdkAdapterReviewPayerCostContainer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
             android:layout_marginTop="20dp"
-            android:paddingLeft="25dp"
-            android:paddingStart="25dp"
             android:paddingEnd="25dp"
+            android:paddingLeft="25dp"
             android:paddingRight="25dp"
-            android:layout_gravity="center_horizontal"/>
+            android:paddingStart="25dp" />
+
         <com.mercadopago.customviews.MPTextView
             android:id="@+id/mpsdkAdapterReviewPaymentText"
             android:layout_width="wrap_content"
@@ -35,102 +39,95 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="20dp"
             android:gravity="center_horizontal"
-            android:paddingLeft="25dp"
-            android:paddingStart="25dp"
             android:paddingEnd="25dp"
+            android:paddingLeft="25dp"
             android:paddingRight="25dp"
-            app:fontStyle="regular"
+            android:paddingStart="25dp"
             android:textColor="@color/mpsdk_review_payment_text"
             android:textSize="24dp"
-            tools:text="Pagaras con Rapipago"/>
+            app:fontStyle="regular"
+            tools:text="Pagaras con Rapipago" />
 
 
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginStart="25dp"
+            android:layout_marginEnd="25dp"
             android:layout_marginLeft="25dp"
             android:layout_marginRight="25dp"
-            android:layout_marginEnd="25dp"
+            android:layout_marginStart="25dp"
             android:layout_marginTop="10dp">
 
             <ImageView
                 android:id="@+id/mpsdkIconTime"
-                android:layout_marginRight="5dp"
-                android:layout_marginEnd="5dp"
-                android:paddingTop="2dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/mpsdk_time"
-                android:maxWidth="20dp"
-                android:maxHeight="20dp"
-                android:adjustViewBounds="true"
-                android:layout_alignParentTop="true"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:tint="@color/mpsdk_warm_grey"/>
+                android:layout_alignParentTop="true"
+                android:layout_marginEnd="5dp"
+                android:layout_marginRight="5dp"
+                android:adjustViewBounds="true"
+                android:maxHeight="20dp"
+                android:maxWidth="20dp"
+                android:paddingTop="2dp"
+                android:src="@drawable/mpsdk_time"
+                android:tint="@color/mpsdk_warm_grey" />
 
             <com.mercadopago.customviews.MPTextView
                 android:id="@+id/mpsdkAdapterReviewPaymentDescription"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                tools:text="Se acreditará en tantos días"
-                android:textSize="18dp"
-                android:layout_centerVertical="true"
                 android:layout_alignTop="@id/mpsdkIconTime"
+                android:layout_centerVertical="true"
                 android:layout_toRightOf="@+id/mpsdkIconTime"
-                app:fontStyle="default_light"/>
+                android:gravity="center_horizontal"
+                android:textSize="18dp"
+                app:fontStyle="default_light"
+                tools:text="Se acreditará en tantos días" />
         </RelativeLayout>
 
         <com.mercadopago.customviews.MPTextView
-            android:id="@+id/mpsdkTEA"
-            android:visibility="gone"
-            android:includeFontPadding="false"
-            android:layout_marginTop="20dp"
-            android:textSize="10dp"
-            android:gravity="center"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            tools:text="TEA 0,00%"/>
-        <com.mercadopago.customviews.MPTextView
-            android:includeFontPadding="false"
-            android:visibility="gone"
             android:id="@+id/mpsdkCFT"
-            android:textSize="28dp"
-            android:gravity="center"
-            app:fontStyle="default_light"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:text="CFT 0,00%"/>
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:includeFontPadding="false"
+            android:textSize="24dp"
+            android:visibility="gone"
+            app:fontStyle="default_light"
+            tools:text="CFT 0,00%" />
 
         <FrameLayout
             android:id="@+id/mpsdkAdapterReviewPaymentChangeButton"
             android:layout_width="match_parent"
             android:layout_height="45dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginEnd="25dp"
             android:layout_marginLeft="25dp"
-            android:layout_marginStart="25dp"
             android:layout_marginRight="25dp"
-            android:layout_marginEnd="25dp">
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="20dp">
+
             <com.mercadopago.customviews.MPTextView
                 android:id="@+id/mpsdkReviewChangePaymentText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                app:fontStyle="regular"
-                android:textSize="18dp"
+                android:text="@string/mpsdk_change_payment"
                 android:textColor="@color/mpsdk_background_blue"
-                android:text="@string/mpsdk_change_payment" />
+                android:textSize="18dp"
+                app:fontStyle="regular" />
         </FrameLayout>
 
     </LinearLayout>
+
     <View
         android:id="@+id/mpsdkSeparator"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_gravity="bottom"
-        android:background="@color/mpsdk_separator"/>
+        android:background="@color/mpsdk_separator" />
 
 </FrameLayout>

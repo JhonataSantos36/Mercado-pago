@@ -110,7 +110,7 @@ public class ReviewAndConfirmPresenter extends MvpPresenter<ReviewAndConfirmView
     }
 
     private Reviewable getItemsReview() {
-        Reviewable itemsReview = getResourcesProvider().getItemsReviewable(mSite.getCurrencyId(), mItems);
+        Reviewable itemsReview = getResourcesProvider().getItemsReviewable(mSite.getCurrencyId(), mItems, mDecorationPreference);
         return itemsReview;
     }
 

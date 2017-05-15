@@ -31,6 +31,7 @@ import com.mercadopago.callbacks.Callback;
 import com.mercadopago.constants.PaymentTypes;
 import com.mercadopago.controllers.CustomReviewablesHandler;
 import com.mercadopago.model.BankDeal;
+import com.mercadopago.model.Campaign;
 import com.mercadopago.model.Card;
 import com.mercadopago.model.CardInfo;
 import com.mercadopago.model.CardToken;
@@ -219,6 +220,17 @@ public class MercadoPago {
             MPTracker.getInstance().trackEvent("NO_SCREEN", "GET_BANK_DEALS", "1", mKey, BuildConfig.VERSION_NAME, mContext);
             BankDealService service = mRetrofit.create(BankDealService.class);
             service.getBankDeals(this.mKey, mContext.getResources().getConfiguration().locale.toString()).enqueue(callback);
+        } else {
+            throw new RuntimeException("Unsupported key type for this method");
+        }
+    }
+
+    public void getCampaigns(final Callback<List<Campaign>> callback) {
+        if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {
+            MPTracker.getInstance().trackEvent("NO_SCREEN", "GET_CAMPAIGN", "1", mKey, BuildConfig.VERSION_NAME, mContext);
+
+            DiscountService service = mRetrofit.create(DiscountService.class);
+            service.getCampaigns(this.mKey).enqueue(callback);
         } else {
             throw new RuntimeException("Unsupported key type for this method");
         }

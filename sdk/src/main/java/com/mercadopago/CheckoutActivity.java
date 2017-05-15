@@ -42,6 +42,7 @@ import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;
 import com.mercadopago.util.MercadoPagoUtil;
+import com.mercadopago.util.TextUtil;
 
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
@@ -89,12 +90,13 @@ public class CheckoutActivity extends AppCompatActivity {
     protected Discount mDiscount;
     protected String mCustomerId;
     protected Boolean mBinaryModeEnabled;
-    protected Boolean mDiscountEnabled;
-    protected Boolean mDirectDiscountEnabled;
     protected Boolean mInstallmentsReviewEnabled;
     protected List<Card> mSavedCards;
     protected DecorationPreference mDecorationPreference;
     protected FailureRecovery mFailureRecovery;
+
+    protected Boolean mDiscountEnabled = true;
+    protected Boolean mDirectDiscountEnabled = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -238,21 +240,6 @@ public class CheckoutActivity extends AppCompatActivity {
                     mCustomerId = customer.getId();
                     mSavedCards = mCheckoutPreference.getPaymentPreference() == null ? customer.getCards() : mCheckoutPreference.getPaymentPreference().getValidCards(customer.getCards());
                 }
-                getDiscountAsync();
-            }
-
-            @Override
-            public void failure(ApiException apiException) {
-                getDiscountAsync();
-            }
-        });
-    }
-
-    private void getDiscountAsync() {
-        mMercadoPago.getDirectDiscount(mCheckoutPreference.getAmount().toString(), mCheckoutPreference.getPayer().getEmail(), new Callback<Discount>() {
-            @Override
-            public void success(Discount discount) {
-                mDiscount = discount;
                 startPaymentVaultActivity();
             }
 

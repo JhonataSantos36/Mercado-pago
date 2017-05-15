@@ -6,6 +6,7 @@
     android:minHeight="45dp"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+
     <LinearLayout
         android:gravity="center"
         android:orientation="vertical"

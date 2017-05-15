@@ -42,11 +42,12 @@ public class ReviewAndConfirmProviderImpl implements ReviewAndConfirmProvider {
     }
 
     @Override
-    public Reviewable getItemsReviewable(String currency, List<Item> items) {
+    public Reviewable getItemsReviewable(String currency, List<Item> items, DecorationPreference decorationPreference) {
         return new MercadoPagoUI.Views.ReviewItemsViewBuilder()
                 .setContext(context)
                 .setCurrencyId(currency)
                 .addItems(items)
+                .setDecorationPreference(decorationPreference)
                 .build();
     }
 

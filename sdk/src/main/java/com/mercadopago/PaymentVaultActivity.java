@@ -243,6 +243,7 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
             if (mDecorationPreference.hasColors()) {
                 toolbar.setBackgroundColor(mDecorationPreference.getBaseColor());
             }
+
             decorateUpArrow(toolbar);
         }
     }
