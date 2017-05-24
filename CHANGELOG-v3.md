@@ -1,3 +1,9 @@
+## VERSION 3.0.7
+
+_24-05-2017_
+
+* Fix: Removed white tint from result screens icon.
+
 ## VERSION 3.0.6
 
 _27-04-2017_
