@@ -1,3 +1,9 @@
+## VERSION 3.0.8
+
+_07-06-2017_
+
+* Fix: Bug afer card form in low memory devices.
+
 ## VERSION 3.0.7
 
 _24-05-2017_
