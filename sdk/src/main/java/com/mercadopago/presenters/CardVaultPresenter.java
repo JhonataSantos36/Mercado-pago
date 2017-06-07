@@ -41,7 +41,6 @@ public class CardVaultPresenter extends MvpPresenter<CardVaultView, CardVaultPro
     protected Boolean mInstallmentsEnabled;
     protected Boolean mInstallmentsReviewEnabled;
     protected Boolean mAutomaticSelection;
-    protected String mPublicKey;
     protected BigDecimal mAmount;
     protected String mMerchantBaseUrl;
     protected String mMerchantDiscountUrl;
@@ -112,10 +111,6 @@ public class CardVaultPresenter extends MvpPresenter<CardVaultView, CardVaultPro
         this.mCard = card;
     }
 
-    public void setPublicKey(String publicKey) {
-        this.mPublicKey = publicKey;
-    }
-
     public void setAmount(BigDecimal amount) {
         this.mAmount = amount;
     }
@@ -178,10 +173,6 @@ public class CardVaultPresenter extends MvpPresenter<CardVaultView, CardVaultPro
 
     public Card getCard() {
         return mCard;
-    }
-
-    public String getPublicKey() {
-        return mPublicKey;
     }
 
     public void setCardInfo(CardInfo cardInfo) {
@@ -330,9 +321,7 @@ public class CardVaultPresenter extends MvpPresenter<CardVaultView, CardVaultPro
     }
 
     private void validateParameters() throws IllegalStateException {
-        if (mPublicKey == null) {
-            throw new IllegalStateException(getResourcesProvider().getMissingPublicKeyErrorMessage());
-        } else if (mInstallmentsEnabled) {
+        if (mInstallmentsEnabled) {
             if (mSite == null) {
                 throw new IllegalStateException(getResourcesProvider().getMissingSiteErrorMessage());
             } else if (mAmount == null) {

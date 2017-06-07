@@ -42,20 +42,6 @@ import static org.junit.Assert.assertEquals;
 public class CardVaultPresenterTest {
 
     @Test
-    public void ifPublicKeyNotSetThenShowMissingPublicKeyError() {
-        MockedView mockedView = new MockedView();
-        MockedProvider provider = new MockedProvider();
-
-        CardVaultPresenter presenter = new CardVaultPresenter();
-        presenter.attachView(mockedView);
-        presenter.attachResourcesProvider(provider);
-
-        presenter.initialize();
-
-        assertEquals(MockedProvider.MISSING_PUBLIC_KEY, mockedView.errorShown.getMessage());
-    }
-
-    @Test
     public void ifInstallmentsEnabledNotSetThenDefaultValueIsTrue() {
         MockedView mockedView = new MockedView();
         MockedProvider provider = new MockedProvider();
@@ -63,8 +49,6 @@ public class CardVaultPresenterTest {
         CardVaultPresenter presenter = new CardVaultPresenter();
         presenter.attachView(mockedView);
         presenter.attachResourcesProvider(provider);
-
-        presenter.setPublicKey("mockedPublicKey");
 
         presenter.initialize();
 
@@ -80,7 +64,6 @@ public class CardVaultPresenterTest {
         presenter.attachView(mockedView);
         presenter.attachResourcesProvider(provider);
 
-        presenter.setPublicKey("mockedPublicKey");
         presenter.setAmount(new BigDecimal(100));
 
         presenter.initialize();
@@ -97,7 +80,6 @@ public class CardVaultPresenterTest {
         presenter.attachView(mockedView);
         presenter.attachResourcesProvider(provider);
 
-        presenter.setPublicKey("mockedPublicKey");
         presenter.setSite(Sites.ARGENTINA);
 
         presenter.initialize();
@@ -116,8 +98,6 @@ public class CardVaultPresenterTest {
         CardVaultPresenter presenter = new CardVaultPresenter();
         presenter.attachView(mockedView);
         presenter.attachResourcesProvider(provider);
-
-        presenter.setPublicKey("mockedPublicKey");
         presenter.setSite(Sites.ARGENTINA);
         presenter.setAmount(new BigDecimal(100));
         presenter.setCard(Cards.getCard());
@@ -144,7 +124,6 @@ public class CardVaultPresenterTest {
         presenter.attachView(mockedView);
         presenter.attachResourcesProvider(provider);
 
-        presenter.setPublicKey("mockedPublicKey");
         presenter.setSite(Sites.ARGENTINA);
         presenter.setAmount(new BigDecimal(100));
         presenter.setCard(Cards.getCard());
@@ -167,7 +146,6 @@ public class CardVaultPresenterTest {
         presenter.attachView(mockedView);
         presenter.attachResourcesProvider(provider);
 
-        presenter.setPublicKey("mockedPublicKey");
         presenter.setSite(Sites.ARGENTINA);
         presenter.setAmount(new BigDecimal(100));
         presenter.setCard(Cards.getCard());
@@ -191,7 +169,6 @@ public class CardVaultPresenterTest {
         presenter.attachView(mockedView);
         presenter.attachResourcesProvider(provider);
 
-        presenter.setPublicKey("mockedPublicKey");
         presenter.setSite(Sites.ARGENTINA);
         presenter.setAmount(new BigDecimal(100));
         presenter.setCard(Cards.getCard());
@@ -213,7 +190,6 @@ public class CardVaultPresenterTest {
         presenter.attachView(mockedView);
         presenter.attachResourcesProvider(provider);
 
-        presenter.setPublicKey("mockedPublicKey");
         presenter.setSite(Sites.ARGENTINA);
         presenter.setAmount(new BigDecimal(100));
         presenter.setCard(Cards.getCard());
@@ -237,7 +213,6 @@ public class CardVaultPresenterTest {
         presenter.attachView(mockedView);
         presenter.attachResourcesProvider(provider);
 
-        presenter.setPublicKey("mockedPublicKey");
         presenter.setSite(Sites.ARGENTINA);
         presenter.setAmount(new BigDecimal(100));
         presenter.setCard(Cards.getCard());
@@ -260,7 +235,6 @@ public class CardVaultPresenterTest {
         presenter.attachView(mockedView);
         presenter.attachResourcesProvider(provider);
 
-        presenter.setPublicKey("mockedPublicKey");
         presenter.setSite(Sites.ARGENTINA);
         presenter.setAmount(new BigDecimal(100));
         presenter.setCard(Cards.getCard());
@@ -282,7 +256,6 @@ public class CardVaultPresenterTest {
         presenter.attachView(mockedView);
         presenter.attachResourcesProvider(provider);
 
-        presenter.setPublicKey("mockedPublicKey");
         presenter.setSite(Sites.ARGENTINA);
         presenter.setAmount(new BigDecimal(100));
         presenter.setCard(Cards.getCard());
@@ -311,7 +284,6 @@ public class CardVaultPresenterTest {
         presenter.attachView(mockedView);
         presenter.attachResourcesProvider(provider);
 
-        presenter.setPublicKey("mockedPublicKey");
         presenter.setSite(Sites.ARGENTINA);
         presenter.setAmount(new BigDecimal(100));
         presenter.setCard(Cards.getCard());
@@ -340,7 +312,6 @@ public class CardVaultPresenterTest {
         presenter.attachView(mockedView);
         presenter.attachResourcesProvider(provider);
 
-        presenter.setPublicKey("mockedPublicKey");
         presenter.setSite(Sites.ARGENTINA);
         presenter.setAmount(new BigDecimal(100));
         presenter.setCard(Cards.getCard());
@@ -363,7 +334,6 @@ public class CardVaultPresenterTest {
         presenter.attachView(mockedView);
         presenter.attachResourcesProvider(provider);
 
-        presenter.setPublicKey("mockedPublicKey");
         presenter.setSite(Sites.ARGENTINA);
         presenter.setAmount(new BigDecimal(100));
         presenter.setCard(Cards.getCard());
@@ -391,7 +361,6 @@ public class CardVaultPresenterTest {
         presenter.attachView(mockedView);
         presenter.attachResourcesProvider(provider);
 
-        presenter.setPublicKey("mockedPublicKey");
         presenter.setSite(Sites.ARGENTINA);
         presenter.setAmount(new BigDecimal(100));
         presenter.setPaymentRecovery(mockedPaymentRecovery);
@@ -415,7 +384,6 @@ public class CardVaultPresenterTest {
         presenter.attachView(mockedView);
         presenter.attachResourcesProvider(provider);
 
-        presenter.setPublicKey("mockedPublicKey");
         presenter.setSite(Sites.ARGENTINA);
         presenter.setAmount(new BigDecimal(100));
 
@@ -433,7 +401,6 @@ public class CardVaultPresenterTest {
         presenter.attachView(mockedView);
         presenter.attachResourcesProvider(provider);
 
-        presenter.setPublicKey("mockedPublicKey");
         presenter.setSite(Sites.ARGENTINA);
         presenter.setAmount(new BigDecimal(100));
 
@@ -463,7 +430,6 @@ public class CardVaultPresenterTest {
         presenter.attachView(mockedView);
         presenter.attachResourcesProvider(provider);
 
-        presenter.setPublicKey("mockedPublicKey");
         presenter.setSite(Sites.ARGENTINA);
         presenter.setAmount(new BigDecimal(100));
 
@@ -494,7 +460,6 @@ public class CardVaultPresenterTest {
         presenter.attachView(mockedView);
         presenter.attachResourcesProvider(provider);
 
-        presenter.setPublicKey("mockedPublicKey");
         presenter.setSite(Sites.ARGENTINA);
         presenter.setAmount(new BigDecimal(100));
 
@@ -526,7 +491,6 @@ public class CardVaultPresenterTest {
         presenter.attachView(mockedView);
         presenter.attachResourcesProvider(provider);
 
-        presenter.setPublicKey("mockedPublicKey");
         presenter.setSite(Sites.ARGENTINA);
         presenter.setAmount(new BigDecimal(100));
 
@@ -558,7 +522,6 @@ public class CardVaultPresenterTest {
         presenter.attachView(mockedView);
         presenter.attachResourcesProvider(provider);
 
-        presenter.setPublicKey("mockedPublicKey");
         presenter.setSite(Sites.ARGENTINA);
         presenter.setAmount(new BigDecimal(100));
 
@@ -594,7 +557,6 @@ public class CardVaultPresenterTest {
         presenter.attachView(mockedView);
         presenter.attachResourcesProvider(provider);
 
-        presenter.setPublicKey("mockedPublicKey");
         presenter.setSite(Sites.ARGENTINA);
         presenter.setAmount(new BigDecimal(100));
         presenter.setCard(Cards.getCard());
@@ -622,7 +584,6 @@ public class CardVaultPresenterTest {
         presenter.attachView(mockedView);
         presenter.attachResourcesProvider(provider);
 
-        presenter.setPublicKey("mockedPublicKey");
         presenter.setSite(Sites.ARGENTINA);
         presenter.setAmount(new BigDecimal(100));
         presenter.setCard(Cards.getCard());
@@ -649,7 +610,6 @@ public class CardVaultPresenterTest {
         presenter.attachView(mockedView);
         presenter.attachResourcesProvider(provider);
 
-        presenter.setPublicKey("mockedPublicKey");
         presenter.setSite(Sites.ARGENTINA);
         presenter.setAmount(new BigDecimal(100));
         presenter.setCard(Cards.getCard());
@@ -682,7 +642,6 @@ public class CardVaultPresenterTest {
         presenter.attachView(mockedView);
         presenter.attachResourcesProvider(provider);
 
-        presenter.setPublicKey("mockedPublicKey");
         presenter.setSite(Sites.ARGENTINA);
         presenter.setAmount(new BigDecimal(100));
         presenter.setPaymentRecovery(mockedPaymentRecovery);
@@ -712,7 +671,6 @@ public class CardVaultPresenterTest {
         presenter.attachView(mockedView);
         presenter.attachResourcesProvider(provider);
 
-        presenter.setPublicKey("mockedPublicKey");
         presenter.setSite(Sites.ARGENTINA);
         presenter.setAmount(new BigDecimal(100));
         presenter.setCard(Cards.getCard());
