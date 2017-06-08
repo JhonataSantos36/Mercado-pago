@@ -1,8 +1,15 @@
 Change Log
 ==========
+## VERSION 2.5.4
+
+_8-6-2017_
+
+* New: Card payments support in Colombia
+
 ## VERSION 2.5.3
 
 _5-5-2017_
+
 * New: Rediseño de componente de tarjetas.
 * New Se actualizan las libreras de soporte a la versión 25.3.1
 * Fix: Pantalla de selección de bancos en blanco.
@@ -52,6 +59,7 @@ _27-12-2016_
 
 _14-12-2016_
 
+>>>>>>> master
 * New: Assets optimized.
 * Fix: Card flow restarts after finishing running in low memory devices.
 * Fix: Basic checkout fails with multiple items in preference.

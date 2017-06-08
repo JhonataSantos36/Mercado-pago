@@ -125,12 +125,17 @@ public class BackCardView {
     }
 
     private void onPaymentMethodSet() {
-        mCardImageView.setBackgroundColor(ContextCompat.getColor(mContext, getCardColor(mPaymentMethod)));
+        int resId = ContextCompat.getColor(mContext, getCardColor(mPaymentMethod));
+        mCardImageView.setBackgroundColor(resId);
     }
 
     private int getCardColor(PaymentMethod paymentMethod) {
         String colorName = "mpsdk_" + paymentMethod.getId().toLowerCase();
-        return mContext.getResources().getIdentifier(colorName, "color", mContext.getPackageName());
+        int color = mContext.getResources().getIdentifier(colorName, "color", mContext.getPackageName());
+        if (color == 0) {
+            color = NEUTRAL_CARD_COLOR;
+        }
+        return color;
     }
 
     public void drawEditingSecurityCode(String securityCode) {

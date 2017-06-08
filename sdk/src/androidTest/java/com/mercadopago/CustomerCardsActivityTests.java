@@ -105,7 +105,6 @@ public class CustomerCardsActivityTests {
 
         mTestRule.launchActivity(intent);
 
-        Assert.assertTrue(ViewUtils.getBackgroundColor(mTestRule.getActivity().mToolbar) == decorationPreference.getBaseColor());
         Assert.assertTrue(mTestRule.getActivity().mTitle.getCurrentTextColor() == decorationPreference.getDarkFontColor(mTestRule.getActivity()));
     }
 

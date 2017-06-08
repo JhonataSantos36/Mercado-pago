@@ -49,6 +49,20 @@ public class ReviewUtil {
             resource = R.string.mpsdk_review_off_text_3;
         } else if (key.startsWith("bolbradesco")) {
             resource = R.string.mpsdk_review_off_text_4;
+        } else if (key.startsWith("davivienda")) {
+            resource = R.string.mpsdk_review_off_text;
+        } else if (key.startsWith("efecty")) {
+            resource = R.string.mpsdk_review_off_text;
+        } else if (key.startsWith("movilred")) {
+            resource = R.string.mpsdk_review_off_text;
+        } else if (key.startsWith("viabaloto")) {
+            resource = R.string.mpsdk_review_off_text;
+        } else if (key.startsWith("account_money")) {
+            resource = R.string.mpsdk_review_off_text_4;
+        } else if (key.startsWith("pagoefectivo_atm") && !(key.contains("bank_transfer"))) {
+            resource = R.string.mpsdk_review_off_text;
+        } else if (key.endsWith("bank_transfer")) {
+            resource = R.string.mpsdk_review_off_text_3;
         } else {
             resource = R.string.mpsdk_review_off_text_default;
         }
@@ -103,6 +117,18 @@ public class ReviewUtil {
                 break;
             case "bolbradesco":
                 string = "boleto";
+                break;
+            case "davivienda":
+                string = paymentMethod.getName();
+                break;
+            case "efecty":
+                string = paymentMethod.getName();
+                break;
+            case "movilred":
+                string = paymentMethod.getName();
+                break;
+            case "viabaloto":
+                string = paymentMethod.getName();
                 break;
             default:
                 string = paymentMethod.getName();

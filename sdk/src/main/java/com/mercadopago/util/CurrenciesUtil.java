@@ -99,9 +99,14 @@ public class CurrenciesUtil {
         }
 
         int decimalDivisionIndex = formattedAmount.indexOf(currency.getDecimalSeparator());
-        String wholeNumber = formattedAmount.substring(0, decimalDivisionIndex);
-        String decimals = formattedAmount.substring(decimalDivisionIndex + 1, formattedAmount.length());
-
+        String wholeNumber = null;
+        String decimals = null;
+        if (decimalDivisionIndex == -1) {
+            wholeNumber = formattedAmount;
+        } else {
+            wholeNumber = formattedAmount.substring(0, decimalDivisionIndex);
+            decimals = formattedAmount.substring(decimalDivisionIndex + 1, formattedAmount.length());
+        }
         StringBuilder htmlFormatBuilder = new StringBuilder();
 
         if (symbolUp) {
@@ -111,10 +116,12 @@ public class CurrenciesUtil {
         }
         htmlFormatBuilder.append(wholeNumber);
 
-        if (decimalsUp) {
-            htmlFormatBuilder.append("<sup><small><small> " + decimals + "</small></small></sup>");
-        } else {
-            htmlFormatBuilder.append(decimals);
+        if (decimals != null) {
+            if (decimalsUp) {
+                htmlFormatBuilder.append("<sup><small><small> " + decimals + "</small></small></sup>");
+            } else {
+                htmlFormatBuilder.append(decimals);
+            }
         }
         return htmlFormatBuilder.toString();
     }
