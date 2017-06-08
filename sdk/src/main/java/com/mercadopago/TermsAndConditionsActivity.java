@@ -7,6 +7,7 @@ import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.mercadopago.constants.Sites;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.model.DecorationPreference;
 import com.mercadopago.util.ErrorUtil;
@@ -108,6 +109,10 @@ public class TermsAndConditionsActivity extends MercadoPagoActivity {
             mTermsAndConditionsWebView.loadUrl("https://www.mercadopago.com.mx/ayuda/terminos-y-condiciones_715");
         } else if ("MLB".equals(mSiteId)) {
             mTermsAndConditionsWebView.loadUrl("https://www.mercadopago.com.br/ajuda/termos-e-condicoes_300");
+        } else if ("MPE".equals(mSiteId)) {
+            mTermsAndConditionsWebView.loadUrl("https://www.mercadopago.com.pe/ayuda/terminos-condiciones-uso_2483");
+        } else if ("MCO".equals(mSiteId)) {
+            mTermsAndConditionsWebView.loadUrl("https://www.mercadopago.com.co/ayuda/terminos-y-condiciones_299");
         } else {
             finish();
         }
