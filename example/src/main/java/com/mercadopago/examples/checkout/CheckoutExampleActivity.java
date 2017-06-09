@@ -3,8 +3,11 @@ package com.mercadopago.examples.checkout;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -14,6 +17,7 @@ import com.mercadopago.core.MercadoPagoCheckout;
 import com.mercadopago.examples.R;
 import com.mercadopago.examples.reviewables.CellphoneReview;
 import com.mercadopago.examples.reviewables.CongratsReview;
+import com.mercadopago.examples.utils.ColorPickerDialog;
 import com.mercadopago.examples.utils.ExamplesUtils;
 import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.model.Item;
@@ -21,6 +25,7 @@ import com.mercadopago.model.PaymentData;
 import com.mercadopago.model.PaymentResult;
 import com.mercadopago.preferences.CheckoutPreference;
 import com.mercadopago.model.Payment;
+import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.preferences.FlowPreference;
 import com.mercadopago.preferences.PaymentResultScreenPreference;
 import com.mercadopago.preferences.ReviewScreenPreference;
@@ -40,6 +45,13 @@ public class CheckoutExampleActivity extends AppCompatActivity {
     private boolean mAlreadyStartedRyC;
     private String mPublicKey;
 
+    private Integer mDefaultColor;
+    private CheckBox mDarkFontEnabled;
+    private ImageView mColorSample;
+    private Integer mSelectedColor;
+    private CheckBox mVisaExcluded;
+    private CheckBox mCashExcluded;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,7 +60,11 @@ public class CheckoutExampleActivity extends AppCompatActivity {
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
         mRegularLayout = findViewById(R.id.regularLayout);
         mPublicKey = ExamplesUtils.DUMMY_MERCHANT_PUBLIC_KEY;
-
+        mDefaultColor = ContextCompat.getColor(this, R.color.colorPrimary);
+        mDarkFontEnabled = (CheckBox) findViewById(R.id.darkFontEnabled);
+        mColorSample = (ImageView) findViewById(R.id.colorSample);
+        mVisaExcluded = (CheckBox) findViewById(R.id.visaExcluded);
+        mCashExcluded = (CheckBox) findViewById(R.id.cashExcluded);
     }
 
     public void onContinueClicked(View view) {
@@ -70,6 +86,7 @@ public class CheckoutExampleActivity extends AppCompatActivity {
                 .setPublicKey(mPublicKey)
                 .setCheckoutPreference(getCheckoutPreference())
                 .setFlowPreference(flowPreference)
+                .setDecorationPreference(getCurrentDecorationPreference())
 //                .startForPayment();
                 .startForPaymentData();
     }
@@ -104,6 +121,7 @@ public class CheckoutExampleActivity extends AppCompatActivity {
                 .setReviewScreenPreference(reviewScreenPreference)
                 .setPublicKey(mPublicKey)
                 .setCheckoutPreference(getCheckoutPreference())
+                .setDecorationPreference(getCurrentDecorationPreference())
 //                .setServicePreference(servicePreference)
                 .setFlowPreference(flowPreference)
                 .setPaymentData(paymentData)
@@ -157,6 +175,7 @@ public class CheckoutExampleActivity extends AppCompatActivity {
                 .setActivity(this)
                 .setPublicKey(mPublicKey)
                 .setCheckoutPreference(getCheckoutPreference())
+                .setDecorationPreference(getCurrentDecorationPreference())
                 .setPaymentResult(paymentResult)
                 .setPaymentResultScreenPreference(paymentResultScreenPreference)
                 .startForPaymentData();
@@ -207,5 +226,36 @@ public class CheckoutExampleActivity extends AppCompatActivity {
     private void showRegularLayout() {
         mProgressBar.setVisibility(View.GONE);
         mRegularLayout.setVisibility(View.VISIBLE);
+    }
+
+    public void changeColor(View view) {
+        new ColorPickerDialog(this, mDefaultColor, new ColorPickerDialog.OnColorSelectedListener() {
+            @Override
+            public void onColorSelected(int color) {
+                mDarkFontEnabled.setEnabled(true);
+                mColorSample.setBackgroundColor(color);
+                mSelectedColor = color;
+            }
+        }).show();
+    }
+
+    public void resetSelection(View view) {
+        mSelectedColor = null;
+        mColorSample.setBackgroundColor(mDefaultColor);
+        mDarkFontEnabled.setChecked(false);
+        mDarkFontEnabled.setEnabled(false);
+        mVisaExcluded.setChecked(false);
+        mCashExcluded.setChecked(false);
+    }
+
+    private DecorationPreference getCurrentDecorationPreference() {
+        com.mercadopago.preferences.DecorationPreference.Builder decorationPreferenceBuilder = new DecorationPreference.Builder();
+        if (mSelectedColor != null) {
+            decorationPreferenceBuilder.setBaseColor(mSelectedColor);
+            if (mDarkFontEnabled.isChecked()) {
+                decorationPreferenceBuilder.enableDarkFont();
+            }
+        }
+        return decorationPreferenceBuilder.build();
     }
 }
