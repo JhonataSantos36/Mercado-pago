@@ -43,7 +43,7 @@ public class IssuersPresenter extends MvpPresenter<IssuersActivityView, IssuersP
 
     private void resolveIssuers(List<Issuer> issuers) {
         if (issuers == null) {
-            issuers = new ArrayList<Issuer>();
+            issuers = new ArrayList<>();
         }
 
         mIssuers = issuers;

@@ -55,7 +55,6 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultVie
     //View controls
     private Boolean mShowBankDeals;
 
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -380,8 +379,9 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultVie
             mCardVaultPresenter.resolveIssuersRequest(issuer);
 
         } else if (resultCode == RESULT_CANCELED) {
+            String sitedId = mCardVaultPresenter.getSite() == null ? "" : mCardVaultPresenter.getSite().getId();
             MPTracker.getInstance().trackEvent("INSTALLMENTS", "CANCELED", "2", mPublicKey,
-                    mCardVaultPresenter.getSite().getId(), BuildConfig.VERSION_NAME, this);
+                    sitedId, BuildConfig.VERSION_NAME, this);
             mCardVaultPresenter.onResultCancel();
         }
     }
@@ -395,8 +395,9 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultVie
             mCardVaultPresenter.resolveInstallmentsRequest(payerCost, discount);
 
         } else if (resultCode == RESULT_CANCELED) {
+            String sitedId = mCardVaultPresenter.getSite() == null ? "" : mCardVaultPresenter.getSite().getId();
             MPTracker.getInstance().trackEvent("INSTALLMENTS", "CANCELED", "2", mPublicKey,
-                    mCardVaultPresenter.getSite().getId(), BuildConfig.VERSION_NAME, this);
+                    sitedId, BuildConfig.VERSION_NAME, this);
             mCardVaultPresenter.onResultCancel();
         }
     }

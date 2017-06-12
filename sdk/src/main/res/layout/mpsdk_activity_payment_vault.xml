@@ -53,36 +53,38 @@
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
 
-    <LinearLayout
-        android:id="@+id/mpsdkRegularLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/mpsdk_white"
-        android:orientation="vertical"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-        <android.support.v4.widget.NestedScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <FrameLayout
-                android:id="@+id/mpsdkDiscount"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-        </android.support.v4.widget.NestedScrollView>
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/mpsdkGroupsList"
-            android:fitsSystemWindows="true"
+    <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/mpsdk_white"
-            android:divider="@null"
-            android:listSelector="@android:color/transparent"
-            android:paddingEnd="10dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:paddingStart="10dp" />
-    </LinearLayout>
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        <android.support.v4.widget.NestedScrollView
+                android:id="@+id/mpsdkContentLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/mpsdk_white"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                android:layout_marginBottom="?attr/actionBarSize">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+                <FrameLayout
+                    android:id="@+id/mpsdkDiscount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/mpsdkGroupsList"
+                    android:fitsSystemWindows="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/mpsdk_white"
+                    android:divider="@null"
+                    android:listSelector="@android:color/transparent"
+                    android:paddingEnd="10dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:paddingStart="10dp"/>
+            </LinearLayout>
+        </android.support.v4.widget.NestedScrollView>
+    </FrameLayout>
 </android.support.design.widget.CoordinatorLayout>

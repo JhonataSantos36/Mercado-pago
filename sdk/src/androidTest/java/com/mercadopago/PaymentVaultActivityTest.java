@@ -8,12 +8,12 @@ import android.content.Intent;
 import android.os.Looper;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.intent.Intents;
+import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.test.runner.lifecycle.ActivityLifecycleMonitorRegistry;
 import android.support.test.runner.lifecycle.Stage;
 import android.support.v4.content.ContextCompat;
-import android.test.suitebuilder.annotation.LargeTest;
 import android.view.View;
 
 import com.mercadopago.constants.Sites;
@@ -55,10 +55,7 @@ import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExt
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.mercadopago.utils.ActivityResultUtil.assertFinishCalledWithResult;
 import static com.mercadopago.utils.CustomMatchers.atPosition;
-import static org.hamcrest.Matchers.allOf;
 
 /**
  * Created by mreverter on 4/18/17.
@@ -198,6 +195,7 @@ public class PaymentVaultActivityTest {
         String paymentMethodSearchJson = StaticMock.getPaymentMethodSearchWithoutCustomOptionsAsJson();
 
         mFakeAPI.addResponseToQueue("", 401, "");
+        mFakeAPI.addResponseToQueue("", 401, "");
         mFakeAPI.addResponseToQueue(paymentMethodSearchJson, 200, "");
 
         Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(Activity.RESULT_OK, new Intent());
@@ -232,56 +230,6 @@ public class PaymentVaultActivityTest {
         mTestRule.launchActivity(validStartIntent);
 
         Assert.assertTrue(ViewUtils.getBackgroundColor(mTestRule.getActivity().mAppBarLayout) == decorationPreference.getBaseColor());
-    }
-
-    @Test
-    public void showCountDownTimerWhenItIsInitialized() {
-        if (Looper.myLooper() == null) {
-            Looper.prepare();
-        }
-        String paymentMethodSearchJson = StaticMock.getPaymentMethodSearchWithoutCustomOptionsAsJson();
-        mFakeAPI.addResponseToQueue(getDirectDiscount(), 200, "");
-        mFakeAPI.addResponseToQueue(paymentMethodSearchJson, 200, "");
-
-        List<String> excludedTypes = new ArrayList<String>() {{
-            add("ticket");
-        }};
-        PaymentPreference paymentPreference = new PaymentPreference();
-        paymentPreference.setExcludedPaymentTypeIds(excludedTypes);
-        validStartIntent.putExtra("paymentPreference", JsonUtil.getInstance().toJson(paymentPreference));
-
-        CheckoutTimer.getInstance().start(60);
-
-        mTestRule.launchActivity(validStartIntent);
-
-        Assert.assertTrue(mTestRule.getActivity().findViewById(R.id.mpsdkTimerTextView).getVisibility() == View.VISIBLE);
-        Assert.assertTrue(CheckoutTimer.getInstance().isTimerEnabled());
-        Looper.myLooper().quit();
-    }
-
-    @Test
-    public void whenSetOnFinishCheckoutListenerThenFinishActivity() {
-        Looper.prepare();
-        String paymentMethodSearchJson = StaticMock.getPaymentMethodSearchWithoutCustomOptionsAsJson();
-        mFakeAPI.addResponseToQueue(paymentMethodSearchJson, 200, "");
-
-        List<String> excludedTypes = new ArrayList<String>() {{
-            add("ticket");
-        }};
-        PaymentPreference paymentPreference = new PaymentPreference();
-        paymentPreference.setExcludedPaymentTypeIds(excludedTypes);
-        validStartIntent.putExtra("paymentPreference", JsonUtil.getInstance().toJson(paymentPreference));
-
-        CheckoutTimer.getInstance().start(10);
-        CheckoutTimer.getInstance().setOnFinishListener(new CheckoutTimer.FinishListener() {
-            @Override
-            public void onFinish() {
-                CheckoutTimer.getInstance().finishCheckout();
-                Assert.assertTrue(mTestRule.getActivity().isFinishing());
-                Looper.myLooper().quit();
-            }
-        });
-        mTestRule.launchActivity(validStartIntent);
     }
 
     private Discount getDirectDiscount() {

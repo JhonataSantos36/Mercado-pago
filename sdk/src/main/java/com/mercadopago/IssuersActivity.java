@@ -10,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ProgressBar;
 
 import com.google.gson.reflect.TypeToken;
 
@@ -36,7 +37,6 @@ import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.ColorsUtil;
 import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
-import com.mercadopago.util.LayoutUtil;
 import com.mercadopago.util.ScaleUtil;
 import com.mercadopago.views.IssuersActivityView;
 
@@ -75,6 +75,7 @@ public class IssuersActivity extends MercadoPagoBaseActivity implements IssuersA
     protected FrameLayout mCardContainer;
     protected Toolbar mNormalToolbar;
     protected FrontCardView mFrontCardView;
+    protected ViewGroup mProgressLayout;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -156,6 +157,7 @@ public class IssuersActivity extends MercadoPagoBaseActivity implements IssuersA
     private void initializeControls() {
         mIssuersRecyclerView = (RecyclerView) findViewById(R.id.mpsdkActivityIssuersView);
         mTimerTextView = (MPTextView) findViewById(R.id.mpsdkTimerTextView);
+        mProgressLayout = (ViewGroup) findViewById(R.id.mpsdkProgressLayout);
 
         if (mLowResActive) {
             initializeLowResControls();
@@ -375,13 +377,13 @@ public class IssuersActivity extends MercadoPagoBaseActivity implements IssuersA
     @Override
     public void showLoadingView() {
         mIssuersRecyclerView.setVisibility(View.GONE);
-        LayoutUtil.showProgressLayout(this);
+        mProgressLayout.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void stopLoadingView() {
         mIssuersRecyclerView.setVisibility(View.VISIBLE);
-        LayoutUtil.showRegularLayout(this);
+        mProgressLayout.setVisibility(View.GONE);
     }
 
     @Override

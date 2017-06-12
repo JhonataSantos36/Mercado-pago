@@ -118,7 +118,6 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
                 mDirectDiscountEnabled = false;
                 initializeDiscountRow();
                 initPaymentVaultFlow();
-                mDiscountEnabled = false;
             }
         });
     }

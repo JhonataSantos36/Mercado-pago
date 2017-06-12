@@ -248,5 +248,4 @@ public class CardVaultActivityTest {
 
         assertTrue(cardVaultActivity.isFinishing());
     }
-
 }

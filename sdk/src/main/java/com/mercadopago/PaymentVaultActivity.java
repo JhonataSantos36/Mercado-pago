@@ -95,6 +95,9 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
     protected Boolean mShowBankDeals;
     protected FrameLayout mDiscountFrameLayout;
 
+    protected View mContentLayout;
+    protected View mProgressLayout;
+
     protected String mPublicKey;
     protected String mPrivateKey;
     protected ServicePreference mServicePreference;
@@ -206,6 +209,8 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
         mTimerTextView = (MPTextView) findViewById(R.id.mpsdkTimerTextView);
 
         mDiscountFrameLayout = (FrameLayout) findViewById(R.id.mpsdkDiscount);
+        mContentLayout = findViewById(R.id.mpsdkContentLayout);
+        mProgressLayout = findViewById(R.id.mpsdkProgressLayout);
 
         initializePaymentOptionsRecyclerView();
         mAppBar = (AppBarLayout) findViewById(R.id.mpsdkAppBar);
@@ -518,14 +523,16 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
 
     @Override
     public void showProgress() {
-        mAppBar.setVisibility(View.INVISIBLE);
-        LayoutUtil.showProgressLayout(this);
+        mProgressLayout.setVisibility(View.VISIBLE);
+        mAppBar.setVisibility(View.GONE);
+        mContentLayout.setVisibility(View.GONE);
     }
 
     @Override
     public void hideProgress() {
-        LayoutUtil.showRegularLayout(this);
+        mProgressLayout.setVisibility(View.GONE);
         mAppBar.setVisibility(View.VISIBLE);
+        mContentLayout.setVisibility(View.VISIBLE);
     }
 
     @Override
