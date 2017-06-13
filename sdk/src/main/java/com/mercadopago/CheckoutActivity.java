@@ -208,12 +208,15 @@ public class CheckoutActivity extends MercadoPagoBaseActivity {
             });
         }
 
-        mMercadoPagoServices = new MercadoPagoServices.Builder()
+        MercadoPagoServices.Builder builder = new MercadoPagoServices.Builder()
                 .setContext(this)
                 .setPublicKey(mMerchantPublicKey)
-                .setPrivateKey(mCheckoutPreference.getPayer().getAccessToken())
-                .setServicePreference(mServicePreference)
-                .build();
+                .setServicePreference(mServicePreference);
+
+        if (mCheckoutPreference.getPayer() != null) {
+            builder.setPrivateKey(mCheckoutPreference.getPayer().getAccessToken());
+        }
+        mMercadoPagoServices = builder.build();
 
         showProgressBar();
 
