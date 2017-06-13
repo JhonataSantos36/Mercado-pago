@@ -1,3 +1,9 @@
+## VERSION 3.0.9
+
+_13-06-2017_
+
+* Fix: Custom items review block not working.
+
 ## VERSION 3.0.8
 
 _07-06-2017_
