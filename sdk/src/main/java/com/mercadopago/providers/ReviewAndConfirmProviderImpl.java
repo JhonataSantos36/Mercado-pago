@@ -68,12 +68,16 @@ public class ReviewAndConfirmProviderImpl implements ReviewAndConfirmProvider {
 
     @Override
     public Reviewable getItemsReviewable(String currency, List<Item> items, DecorationPreference decorationPreference) {
-        return new MercadoPagoComponents.Views.ReviewItemsViewBuilder()
-                .setContext(context)
-                .setCurrencyId(currency)
-                .addItems(items)
-                .setDecorationPreference(decorationPreference)
-                .build();
+        if (CustomReviewablesHandler.getInstance().hasCustomItemsReviewable()) {
+            return CustomReviewablesHandler.getInstance().getItemsReviewable();
+        } else {
+            return new MercadoPagoComponents.Views.ReviewItemsViewBuilder()
+                    .setContext(context)
+                    .setCurrencyId(currency)
+                    .addItems(items)
+                    .setDecorationPreference(decorationPreference)
+                    .build();
+        }
     }
 
     @Override
@@ -146,7 +150,7 @@ public class ReviewAndConfirmProviderImpl implements ReviewAndConfirmProvider {
         String discountDetail = "";
         if (this.reviewScreenPreference != null && !TextUtil.isEmpty(this.reviewScreenPreference.getDiscountDetail())) {
             discountDetail = reviewScreenPreference.getDiscountDetail();
-        } else if(discount != null){
+        } else if (discount != null) {
             if (discount.hasPercentOff()) {
                 discountDetail = context.getResources().getString(R.string.mpsdk_review_summary_discount_with_percent_off,
                         String.valueOf(discount.getPercentOff()));
