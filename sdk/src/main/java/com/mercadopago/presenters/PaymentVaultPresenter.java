@@ -39,6 +39,7 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
     private Boolean mInstallmentsReviewEnabled;
     private Boolean mDiscountEnabled = true;
     private Boolean mDirectDiscountEnabled = true;
+    private Boolean mShowAllSavedCardsEnabled = false;
     private Integer mMaxSavedCards;
 
     private boolean mSelectAutomatically;
@@ -271,10 +272,11 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
 
         if (mPaymentMethodSearch.hasCustomSearchItems()) {
             List<CustomSearchItem> shownCustomItems;
-            if (mMaxSavedCards != null && mMaxSavedCards > 0) {
-                shownCustomItems = getLimitedCustomOptions(mPaymentMethodSearch.getCustomSearchItems(), mMaxSavedCards);
-            } else {
+
+            if (mShowAllSavedCardsEnabled) {
                 shownCustomItems = mPaymentMethodSearch.getCustomSearchItems();
+            } else {
+                shownCustomItems = getLimitedCustomOptions(mPaymentMethodSearch.getCustomSearchItems(), mMaxSavedCards);
             }
             getView().showCustomOptions(shownCustomItems, getCustomOptionCallback());
         }
@@ -470,6 +472,10 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
 
     public void setMaxSavedCards(int maxSavedCards) {
         this.mMaxSavedCards = maxSavedCards;
+    }
+
+    public void setShowAllSavedCardsEnabled(boolean showAll) {
+        this.mShowAllSavedCardsEnabled = showAll;
     }
 
     public void recoverFromFailure() {

@@ -39,6 +39,7 @@ import com.mercadopago.model.Token;
 import com.mercadopago.mptracker.MPTracker;
 import com.mercadopago.observers.TimerObserver;
 import com.mercadopago.preferences.DecorationPreference;
+import com.mercadopago.preferences.FlowPreference;
 import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.preferences.ServicePreference;
 import com.mercadopago.presenters.PaymentVaultPresenter;
@@ -168,7 +169,8 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
         mPaymentVaultPresenter.setDiscountEnabled(this.getIntent().getBooleanExtra("discountEnabled", true));
         mPaymentVaultPresenter.setDirectDiscountEnabled(this.getIntent().getBooleanExtra("directDiscountEnabled", true));
         mPaymentVaultPresenter.setInstallmentsReviewEnabled(this.getIntent().getBooleanExtra("installmentsReviewEnabled", true));
-        mPaymentVaultPresenter.setMaxSavedCards(this.getIntent().getIntExtra("maxSavedCards", 0));
+        mPaymentVaultPresenter.setMaxSavedCards(this.getIntent().getIntExtra("maxSavedCards", FlowPreference.DEFAULT_MAX_SAVED_CARDS_TO_SHOW));
+        mPaymentVaultPresenter.setShowAllSavedCardsEnabled(this.getIntent().getBooleanExtra("showAllSavedCardsEnabled", false));
         mShowBankDeals = getIntent().getBooleanExtra("showBankDeals", true);
 
         if (getIntent().getStringExtra("paymentPreference") != null) {

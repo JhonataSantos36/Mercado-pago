@@ -79,6 +79,8 @@ public class CheckoutExampleActivity extends AppCompatActivity {
                 .disableDiscount()
                 .disableBankDeals()
                 .disableInstallmentsReviewScreen()
+//                .setMaxSavedCardsToShow(FlowPreference.SHOW_ALL_SAVED_CARDS_CODE)
+//                .setMaxSavedCardsToShow(5)
                 .build();
 
         new MercadoPagoCheckout.Builder()

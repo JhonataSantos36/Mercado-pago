@@ -83,7 +83,6 @@ public class CheckoutActivity extends MercadoPagoBaseActivity {
     private static final String DISCOUNT_BUNDLE = "mDiscount";
     private static final String DISCOUNT_ENABLED_BUNDLE = "mDiscountEnabled";
     private static final String BINARY_MODE_BUNDLE = "mBinaryMode";
-    private static final String MAX_SAVED_CARDS_BUNDLE = "mMaxSavedCards";
     private static final String CONGRATS_DISPLAY_BUNDLE = "mCongratsDisplay";
     private static final String RESULT_CODE_BUNDLE = "mRequestedResultCode";
     private static final String PAYMENT_METHOD_EDITION_REQUESTED = "mPaymentMethodEditionRequested";
@@ -131,7 +130,6 @@ public class CheckoutActivity extends MercadoPagoBaseActivity {
     protected PaymentResult mPaymentResultInput;
     protected FailureRecovery mFailureRecovery;
     protected ReviewScreenPreference mReviewScreenPreference;
-    protected Integer mMaxSavedCards;
     protected Integer mRequestedResultCode;
     protected boolean mPaymentMethodEdited = false;
 
@@ -171,7 +169,6 @@ public class CheckoutActivity extends MercadoPagoBaseActivity {
         mPaymentDataInput = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("paymentData"), PaymentData.class);
         mCongratsDisplay = this.getIntent().getIntExtra("congratsDisplay", -1);
         mBinaryModeEnabled = this.getIntent().getBooleanExtra("binaryMode", false);
-        mMaxSavedCards = this.getIntent().getIntExtra("maxSavedCards", 0);
         mDiscount = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("discount"), Discount.class);
 
         mDirectDiscountEnabled = this.getIntent().getBooleanExtra("directDiscountEnabled", true);
@@ -445,6 +442,14 @@ public class CheckoutActivity extends MercadoPagoBaseActivity {
         if (mFlowPreference != null && !mFlowPreference.isBankDealsEnabled()) {
             showBankDeals = false;
         }
+        boolean showAllSavedCards = false;
+        if (mFlowPreference != null && mFlowPreference.isShowAllSavedCardsEnabled()) {
+            showAllSavedCards = true;
+        }
+        int maxSavedCardsToShow = FlowPreference.DEFAULT_MAX_SAVED_CARDS_TO_SHOW;
+        if (mFlowPreference != null) {
+            maxSavedCardsToShow = mFlowPreference.getMaxSavedCardsToShow();
+        }
 
         new MercadoPagoComponents.Activities.PaymentVaultActivityBuilder()
                 .setActivity(this)
@@ -462,7 +467,8 @@ public class CheckoutActivity extends MercadoPagoBaseActivity {
                 .setPaymentPreference(mCheckoutPreference.getPaymentPreference())
                 .setDecorationPreference(mDecorationPreference)
                 .setCards(mSavedCards)
-                .setMaxSavedCards(mMaxSavedCards)
+                .setMaxSavedCards(maxSavedCardsToShow)
+                .setShowAllSavedCardsEnabled(showAllSavedCards)
                 .setShowBankDeals(showBankDeals)
                 .startActivity();
     }
@@ -506,7 +512,6 @@ public class CheckoutActivity extends MercadoPagoBaseActivity {
         outState.putString(DISCOUNT_BUNDLE, JsonUtil.getInstance().toJson(mDiscount));
         outState.putBoolean(DISCOUNT_ENABLED_BUNDLE, mDiscountEnabled);
         outState.putBoolean(BINARY_MODE_BUNDLE, mBinaryModeEnabled);
-        outState.putInt(MAX_SAVED_CARDS_BUNDLE, mMaxSavedCards);
         outState.putInt(RESULT_CODE_BUNDLE, mRequestedResultCode);
         outState.putInt(CONGRATS_DISPLAY_BUNDLE, mCongratsDisplay);
         outState.putBoolean(PAYMENT_METHOD_EDITION_REQUESTED, mPaymentMethodEditionRequested);
@@ -536,7 +541,6 @@ public class CheckoutActivity extends MercadoPagoBaseActivity {
             mPaymentDataInput = JsonUtil.getInstance().fromJson(savedInstanceState.getString(PAYMENT_DATA_BUNDLE), PaymentData.class);
             mCongratsDisplay = savedInstanceState.getInt(CONGRATS_DISPLAY_BUNDLE, -1);
             mBinaryModeEnabled = savedInstanceState.getBoolean(BINARY_MODE_BUNDLE, false);
-            mMaxSavedCards = savedInstanceState.getInt(MAX_SAVED_CARDS_BUNDLE, 0);
             mDiscount = JsonUtil.getInstance().fromJson(savedInstanceState.getString(DISCOUNT_BUNDLE), Discount.class);
             mDiscountEnabled = savedInstanceState.getBoolean(DISCOUNT_ENABLED_BUNDLE, true);
             mRequestedResultCode = savedInstanceState.getInt(RESULT_CODE_BUNDLE, 0);

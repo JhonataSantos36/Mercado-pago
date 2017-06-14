@@ -120,6 +120,7 @@ public class MercadoPagoComponents {
             private boolean discountEnabled;
             private boolean directDiscountEnabled;
             private boolean installmentsReviewEnabled;
+            private boolean showAllSavedCardsEnabled;
             private String merchantDiscountBaseUrl;
             private String merchantGetDiscountUri;
             private Map<String, String> discountAdditionalInfo;
@@ -199,6 +200,11 @@ public class MercadoPagoComponents {
                 return this;
             }
 
+            public PaymentVaultActivityBuilder setShowAllSavedCardsEnabled(boolean showAll) {
+                this.showAllSavedCardsEnabled = showAll;
+                return this;
+            }
+
             public PaymentVaultActivityBuilder setPayerEmail(String payerEmail) {
                 this.payerEmail = payerEmail;
                 return this;
@@ -267,6 +273,7 @@ public class MercadoPagoComponents {
                 paymentVaultIntent.putExtra("decorationPreference", JsonUtil.getInstance().toJson(decorationPreference));
                 paymentVaultIntent.putExtra("payerAccessToken", payerAccessToken);
                 paymentVaultIntent.putExtra("maxSavedCards", maxSavedCards);
+                paymentVaultIntent.putExtra("showAllSavedCardsEnabled", showAllSavedCardsEnabled);
 
                 //Discounts
                 paymentVaultIntent.putExtra("payerEmail", payerEmail);

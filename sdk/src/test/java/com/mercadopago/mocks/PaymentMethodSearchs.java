@@ -17,6 +17,11 @@ public class PaymentMethodSearchs {
         return JsonUtil.getInstance().fromJson(json, PaymentMethodSearch.class);
     }
 
+    public static PaymentMethodSearch getPaymentMethodSearchWithSavedCardsMLA() {
+        String json = ResourcesUtil.getStringResource("saved_cards_payment_method_search_MLA.json");
+        return JsonUtil.getInstance().fromJson(json, PaymentMethodSearch.class);
+    }
+
     public static PaymentMethodSearch getPaymentMethodSearchWithPaymentMethodOnTop() {
         String json = ResourcesUtil.getStringResource("payment_method_on_top.json");
         return JsonUtil.getInstance().fromJson(json, PaymentMethodSearch.class);
