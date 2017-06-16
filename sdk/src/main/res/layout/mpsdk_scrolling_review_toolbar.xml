@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    app:contentScrim="?attr/colorPrimary"
+    app:contentScrim="@color/mpsdk_white"
     android:minHeight="@dimen/mpsdk_toolbar_height"
     app:expandedTitleTextAppearance="@style/CollapsedWhiteAppBar"
     app:expandedTitleMarginTop="45dp"
