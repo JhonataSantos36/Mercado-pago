@@ -215,6 +215,8 @@ public class CheckoutExampleActivity extends AppCompatActivity {
                 Toast.makeText(mActivity, "Custom congrats view!", Toast.LENGTH_SHORT).show();
             } else if (resultCode == RESULT_CUSTOM_EXIT) {
                 Toast.makeText(mActivity, "Custom exit!", Toast.LENGTH_SHORT).show();
+            } else if (resultCode == MercadoPagoCheckout.TIMER_FINISHED_RESULT_CODE) {
+                Toast.makeText(mActivity, "Time is Over!", Toast.LENGTH_SHORT).show();
             }
         }
     }

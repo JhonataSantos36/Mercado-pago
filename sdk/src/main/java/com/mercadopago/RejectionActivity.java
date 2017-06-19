@@ -12,6 +12,7 @@ import android.widget.ImageView;
 
 import com.mercadopago.callbacks.CallbackHolder;
 import com.mercadopago.controllers.CheckoutTimer;
+import com.mercadopago.core.MercadoPagoCheckout;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentData;
@@ -451,6 +452,7 @@ public class RejectionActivity extends MercadoPagoBaseActivity implements TimerO
 
     @Override
     public void onFinish() {
+        setResult(MercadoPagoCheckout.TIMER_FINISHED_RESULT_CODE);
         this.finish();
     }
 }

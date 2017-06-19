@@ -14,6 +14,7 @@ import android.widget.ProgressBar;
 
 import com.mercadopago.callbacks.card.CardSecurityCodeEditTextCallback;
 import com.mercadopago.controllers.CheckoutTimer;
+import com.mercadopago.core.MercadoPagoCheckout;
 import com.mercadopago.customviews.MPEditText;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.listeners.card.CardSecurityCodeTextWatcher;
@@ -285,7 +286,7 @@ public class SecurityCodeActivity extends MercadoPagoBaseActivity implements Sec
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == ErrorUtil.ERROR_REQUEST_CODE) {
-            if(resultCode == RESULT_OK) {
+            if (resultCode == RESULT_OK) {
                 mPresenter.recoverFromFailure();
             } else {
                 setResult(RESULT_CANCELED, data);
@@ -314,6 +315,7 @@ public class SecurityCodeActivity extends MercadoPagoBaseActivity implements Sec
 
     @Override
     public void onFinish() {
+        setResult(MercadoPagoCheckout.TIMER_FINISHED_RESULT_CODE);
         this.finish();
     }
 }

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.mercadopago.constants.PaymentTypes;
+import com.mercadopago.controllers.CheckoutTimer;
 import com.mercadopago.core.MercadoPagoCheckout;
 import com.mercadopago.core.MercadoPagoComponents;
 import com.mercadopago.exceptions.MercadoPagoError;
@@ -74,6 +75,7 @@ public class CheckoutActivity extends MercadoPagoBaseActivity implements Checkou
         mCheckoutPresenter.attachResourcesProvider(provider);
         mCheckoutPresenter.attachView(this);
         mCheckoutPresenter.setIdempotencyKeySeed(mMerchantPublicKey);
+        mCheckoutPresenter.setTimer(CheckoutTimer.getInstance());
     }
 
     private void decorate() {
@@ -148,6 +150,8 @@ public class CheckoutActivity extends MercadoPagoBaseActivity implements Checkou
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == ErrorUtil.ERROR_REQUEST_CODE) {
             resolveErrorRequest(resultCode, data);
+        }else if (resultCode == MercadoPagoCheckout.TIMER_FINISHED_RESULT_CODE) {
+                resolveTimerObserverResult(resultCode);
         } else if (requestCode == MercadoPagoComponents.Activities.PAYMENT_VAULT_REQUEST_CODE) {
             resolvePaymentVaultRequest(resultCode, data);
         } else if (requestCode == MercadoPagoComponents.Activities.PAYMENT_RESULT_REQUEST_CODE) {
@@ -157,6 +161,11 @@ public class CheckoutActivity extends MercadoPagoBaseActivity implements Checkou
         } else if (requestCode == MercadoPagoComponents.Activities.REVIEW_AND_CONFIRM_REQUEST_CODE) {
             resolveReviewAndConfirmRequest(resultCode, data);
         }
+    }
+
+    private void resolveTimerObserverResult(int resultCode) {
+        setResult(resultCode);
+        finish();
     }
 
     private void resolveReviewAndConfirmRequest(int resultCode, Intent data) {

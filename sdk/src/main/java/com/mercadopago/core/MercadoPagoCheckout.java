@@ -32,6 +32,7 @@ public class MercadoPagoCheckout {
     public static final Integer CHECKOUT_REQUEST_CODE = 5;
     public static final Integer PAYMENT_DATA_RESULT_CODE = 6;
     public static final Integer PAYMENT_RESULT_CODE = 7;
+    public static final Integer TIMER_FINISHED_RESULT_CODE = 8;
 
     private final ReviewScreenPreference reviewScreenPreference;
     private Context context;
@@ -111,6 +112,17 @@ public class MercadoPagoCheckout {
         if (hasTwoDiscountsSet()) {
             throw new IllegalStateException("payment data discount and discount set");
         }
+        if (isCheckoutTimerAvailable(resultCode) && isPaymentDataIntegration(resultCode)) {
+            throw new IllegalStateException("CheckoutTimer is not available with PaymentData integration");
+        }
+    }
+
+    private boolean isCheckoutTimerAvailable(int resultCode) {
+        return flowPreference != null && flowPreference.isCheckoutTimerEnabled();
+    }
+
+    private boolean isPaymentDataIntegration(int resultCode) {
+        return resultCode == MercadoPagoCheckout.PAYMENT_DATA_RESULT_CODE;
     }
 
     private Boolean hasTwoDiscountsSet() {
@@ -167,6 +179,8 @@ public class MercadoPagoCheckout {
         } else {
             activity.startActivityForResult(checkoutIntent, MercadoPagoCheckout.CHECKOUT_REQUEST_CODE);
         }
+
+
     }
 
     private void startCheckoutActivity() {

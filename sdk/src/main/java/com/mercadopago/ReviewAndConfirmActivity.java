@@ -24,6 +24,7 @@ import com.mercadopago.adapters.ReviewablesAdapter;
 import com.mercadopago.constants.ReviewKeys;
 import com.mercadopago.constants.Sites;
 import com.mercadopago.controllers.CheckoutTimer;
+import com.mercadopago.core.MercadoPagoCheckout;
 import com.mercadopago.customviews.MPTextView;
 
 import com.mercadopago.model.Discount;
@@ -94,8 +95,8 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
             setTheme(R.style.Theme_MercadoPagoTheme_NoActionBar);
         }
         setContentView(R.layout.mpsdk_activity_review_confirm);
-        showTimer();
         initializeControls();
+        showTimer();
         setListeners();
         initializeReviewablesRecyclerView();
         mPresenter.initialize();
@@ -349,7 +350,7 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
     @Override
     public void onFinish() {
         Intent intent = new Intent();
-        setResult(RESULT_CANCEL_PAYMENT, intent);
+        setResult(MercadoPagoCheckout.TIMER_FINISHED_RESULT_CODE, intent);
         this.finish();
     }
 
@@ -413,7 +414,7 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
     }
 
     private void trackScreen() {
-        if(mSite != null && !TextUtil.isEmpty(mPublicKey)) {
+        if (mSite != null && !TextUtil.isEmpty(mPublicKey)) {
             MPTracker.getInstance().trackScreen("REVIEW_AND_CONFIRM", "2", mPublicKey, mSite.getId(), BuildConfig.VERSION_NAME, this);
         }
     }

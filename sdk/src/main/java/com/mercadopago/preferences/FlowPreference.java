@@ -22,8 +22,7 @@ public class FlowPreference {
     private boolean showAllSavedCardsEnabled;
     private int maxSavedCardsToShow;
     private Integer congratsDisplayTime = null;
-    private int checkoutTimer;
-    private CheckoutTimer.FinishListener checkoutTimerFinishListener;
+    private Integer checkoutTimer;
 
     private FlowPreference(Builder builder) {
         this.paymentSearchScreenEnabled = builder.paymentSearchScreenEnabled;
@@ -39,19 +38,15 @@ public class FlowPreference {
         this.maxSavedCardsToShow = builder.maxSavedCardsToShow;
         this.congratsDisplayTime = builder.congratsDisplayTime;
         this.checkoutTimer = builder.checkoutTimer;
-        this.checkoutTimerFinishListener = builder.checkoutTimerFinishListener;
+
     }
 
     public Integer getCongratsDisplayTime() {
         return this.congratsDisplayTime;
     }
 
-    public int getCheckoutTimerInitialTime() {
+    public Integer getCheckoutTimerInitialTime() {
         return this.checkoutTimer;
-    }
-
-    public CheckoutTimer.FinishListener getCheckoutTimerFinishListener() {
-        return this.checkoutTimerFinishListener;
     }
 
     public boolean isPaymentSearchScreenEnabled() {
@@ -94,6 +89,10 @@ public class FlowPreference {
         this.discountEnabled = false;
     }
 
+    public boolean isCheckoutTimerEnabled() {
+        return checkoutTimer != null;
+    }
+
     public int getMaxSavedCardsToShow() {
         return maxSavedCardsToShow;
     }
@@ -116,8 +115,7 @@ public class FlowPreference {
         private boolean showAllSavedCardsEnabled = false;
         private int maxSavedCardsToShow = DEFAULT_MAX_SAVED_CARDS_TO_SHOW;
         private Integer congratsDisplayTime = null;
-        private int checkoutTimer;
-        private CheckoutTimer.FinishListener checkoutTimerFinishListener;
+        private Integer checkoutTimer;
 
         public Builder enablePaymentSearchScreen() {
             this.paymentSearchScreenEnabled = true;
@@ -188,9 +186,8 @@ public class FlowPreference {
             return this;
         }
 
-        public Builder setCheckoutTimer(int seconds, CheckoutTimer.FinishListener onFinishListener) {
+        public Builder setCheckoutTimer(Integer seconds) {
             this.checkoutTimer = seconds;
-            this.checkoutTimerFinishListener = onFinishListener;
             return this;
         }
 

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.mercadopago.constants.PaymentTypes;
+import com.mercadopago.core.MercadoPagoCheckout;
 import com.mercadopago.core.MercadoPagoComponents;
 import com.mercadopago.model.Discount;
 import com.mercadopago.model.Payment;
@@ -43,7 +44,7 @@ public class PaymentResultActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(savedInstanceState == null) {
+        if (savedInstanceState == null) {
             getActivityParameters();
             try {
                 validateActivityParameters();
@@ -63,7 +64,7 @@ public class PaymentResultActivity extends Activity {
         outState.putInt(CONGRATS_DISPLAY_BUNDLE, mCongratsDisplay);
         outState.putString(PAYMENT_RESULT_BUNDLE, JsonUtil.getInstance().toJson(mPaymentResult));
         outState.putString(SITE_BUNDLE, JsonUtil.getInstance().toJson(mSite));
-        if(mAmount != null) {
+        if (mAmount != null) {
             outState.putString(AMOUNT_BUNDLE, mAmount.toString());
         }
         outState.putString(PAYMENT_RESULT_SCREEN_PREFERENCE_BUNDLE, JsonUtil.getInstance().toJson(mPaymentResultScreenPreference));
@@ -77,7 +78,7 @@ public class PaymentResultActivity extends Activity {
         mCongratsDisplay = savedInstanceState.getInt(CONGRATS_DISPLAY_BUNDLE, -1);
         mPaymentResult = JsonUtil.getInstance().fromJson(savedInstanceState.getString(PAYMENT_RESULT_BUNDLE), PaymentResult.class);
         mSite = JsonUtil.getInstance().fromJson(savedInstanceState.getString(SITE_BUNDLE), Site.class);
-        if(savedInstanceState.getString(AMOUNT_BUNDLE) != null) {
+        if (savedInstanceState.getString(AMOUNT_BUNDLE) != null) {
             mAmount = new BigDecimal(savedInstanceState.getString(AMOUNT_BUNDLE));
         }
         mPaymentResultScreenPreference = JsonUtil.getInstance().fromJson(savedInstanceState.getString(PAYMENT_RESULT_SCREEN_PREFERENCE_BUNDLE), PaymentResultScreenPreference.class);
@@ -112,7 +113,7 @@ public class PaymentResultActivity extends Activity {
     }
 
     protected void onValidStart() {
-        if(mPaymentResult.getPaymentStatusDetail() != null && mPaymentResult.getPaymentStatusDetail().equals(Payment.StatusCodes.STATUS_DETAIL_PENDING_WAITING_PAYMENT)) {
+        if (mPaymentResult.getPaymentStatusDetail() != null && mPaymentResult.getPaymentStatusDetail().equals(Payment.StatusCodes.STATUS_DETAIL_PENDING_WAITING_PAYMENT)) {
             startInstructionsActivity();
         } else if (mPaymentResult.getPaymentStatus().equals(Payment.StatusCodes.STATUS_IN_PROCESS) ||
                 mPaymentResult.getPaymentStatus().equals(Payment.StatusCodes.STATUS_PENDING)) {
@@ -208,7 +209,9 @@ public class PaymentResultActivity extends Activity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        if (requestCode == MercadoPagoComponents.Activities.CONGRATS_REQUEST_CODE) {
+        if (resultCode == MercadoPagoCheckout.TIMER_FINISHED_RESULT_CODE) {
+            resolveTimerObserverResult(resultCode);
+        } else if (requestCode == MercadoPagoComponents.Activities.CONGRATS_REQUEST_CODE) {
             finishWithOkResult(resultCode, data);
         } else if (requestCode == MercadoPagoComponents.Activities.PENDING_REQUEST_CODE) {
             resolveRequest(resultCode, data);
@@ -221,6 +224,11 @@ public class PaymentResultActivity extends Activity {
         } else {
             finishWithCancelResult(data);
         }
+    }
+
+    private void resolveTimerObserverResult(int resultCode) {
+        setResult(resultCode);
+        finish();
     }
 
     private void resolveRequest(int resultCode, Intent data) {

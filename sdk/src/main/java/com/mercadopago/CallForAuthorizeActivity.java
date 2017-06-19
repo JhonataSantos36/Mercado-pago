@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 import com.mercadopago.controllers.CheckoutTimer;
+import com.mercadopago.core.MercadoPagoCheckout;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentData;
@@ -70,7 +71,7 @@ public class CallForAuthorizeActivity extends MercadoPagoBaseActivity implements
     }
 
     private void customizeViews() {
-        if(mPaymentResultScreenPreference != null && !TextUtils.isEmpty(mPaymentResultScreenPreference.getExitButtonTitle())) {
+        if (mPaymentResultScreenPreference != null && !TextUtils.isEmpty(mPaymentResultScreenPreference.getExitButtonTitle())) {
             mKeepBuyingButton.setText(mPaymentResultScreenPreference.getExitButtonTitle());
         }
     }
@@ -256,6 +257,7 @@ public class CallForAuthorizeActivity extends MercadoPagoBaseActivity implements
 
     @Override
     public void onFinish() {
+        setResult(MercadoPagoCheckout.TIMER_FINISHED_RESULT_CODE);
         this.finish();
     }
 }

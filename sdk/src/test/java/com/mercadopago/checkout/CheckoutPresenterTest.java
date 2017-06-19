@@ -1,6 +1,8 @@
 package com.mercadopago.checkout;
 
 import com.mercadopago.constants.Sites;
+import com.mercadopago.controllers.CheckoutTimer;
+import com.mercadopago.controllers.Timer;
 import com.mercadopago.core.MercadoPagoCheckout;
 import com.mercadopago.exceptions.CheckoutPreferenceException;
 import com.mercadopago.exceptions.MercadoPagoError;
@@ -1243,7 +1245,67 @@ public class CheckoutPresenterTest {
         assertTrue(!TextUtils.isEmpty(provider.paymentCustomerId));
     }
 
-    //Payment tests
+    //Timer tests
+    @Test
+    public void ifTimeInFlowPreferenceSetThenStartCheckoutTimer() {
+        MockedProvider provider = new MockedProvider();
+        MockedView view = new MockedView();
+
+        CheckoutPresenter presenter = new CheckoutPresenter();
+        presenter.attachResourcesProvider(provider);
+        presenter.attachView(view);
+
+        //Real preference, without items
+        CheckoutPreference preference = new CheckoutPreference.Builder()
+                .addItem(new Item("id", BigDecimal.TEN))
+                .setSite(Sites.ARGENTINA)
+                .build();
+
+        //Flow preference with timer
+        FlowPreference flowPreference = new FlowPreference.Builder()
+                .setCheckoutTimer(5)
+                .build();
+
+        provider.setCheckoutPreferenceResponse(preference);
+        provider.setPaymentMethodSearchResponse(PaymentMethodSearchs.getCompletePaymentMethodSearchMLA());
+
+        presenter.setCheckoutPreference(preference);
+        presenter.setFlowPreference(flowPreference);
+
+        Timer timer = new MockedTimer();
+        presenter.setTimer(timer);
+        presenter.initialize();
+
+        assertTrue(timer.isTimerEnabled());
+    }
+
+    @Test
+    public void ifTimeInFlowPreferenceNotSetThenDoNotStartCheckoutTimer() {
+        MockedProvider provider = new MockedProvider();
+        MockedView view = new MockedView();
+
+        CheckoutPresenter presenter = new CheckoutPresenter();
+        presenter.attachResourcesProvider(provider);
+        presenter.attachView(view);
+
+        //Real preference, without items
+        CheckoutPreference preference = new CheckoutPreference.Builder()
+                .addItem(new Item("id", BigDecimal.TEN))
+                .setSite(Sites.ARGENTINA)
+                .build();
+
+        provider.setCheckoutPreferenceResponse(preference);
+        provider.setPaymentMethodSearchResponse(PaymentMethodSearchs.getCompletePaymentMethodSearchMLA());
+
+        presenter.setCheckoutPreference(preference);
+
+        Timer timer = new MockedTimer();
+        presenter.setTimer(timer);
+        presenter.initialize();
+
+        assertFalse(timer.isTimerEnabled());
+    }
+
     private class MockedView implements CheckoutView {
 
         private MercadoPagoError errorShown;
@@ -1448,6 +1510,36 @@ public class CheckoutPresenterTest {
 
         public void setCustomerResponse(Customer customerResponse) {
             this.customerResponse = customerResponse;
+        }
+    }
+
+    private class MockedTimer implements Timer {
+
+        private boolean enabled = false;
+
+        @Override
+        public void start(long seconds) {
+            enabled = true;
+        }
+
+        @Override
+        public void stop() {
+
+        }
+
+        @Override
+        public Boolean isTimerEnabled() {
+            return enabled;
+        }
+
+        @Override
+        public void setOnFinishListener(FinishListener listener) {
+
+        }
+
+        @Override
+        public void finishCheckout() {
+
         }
     }
 }

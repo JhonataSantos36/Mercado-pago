@@ -19,6 +19,7 @@ import com.mercadopago.adapters.ReviewablesAdapter;
 import com.mercadopago.callbacks.CallbackHolder;
 import com.mercadopago.controllers.CheckoutTimer;
 import com.mercadopago.controllers.CustomReviewablesHandler;
+import com.mercadopago.core.MercadoPagoCheckout;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentResult;
@@ -390,6 +391,7 @@ public class PendingActivity extends MercadoPagoBaseActivity implements TimerObs
 
     @Override
     public void onFinish() {
+        setResult(MercadoPagoCheckout.TIMER_FINISHED_RESULT_CODE);
         this.finish();
     }
 }

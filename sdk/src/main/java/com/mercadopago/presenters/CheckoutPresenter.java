@@ -2,6 +2,8 @@ package com.mercadopago.presenters;
 
 import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.constants.PaymentMethods;
+import com.mercadopago.controllers.CheckoutTimer;
+import com.mercadopago.controllers.Timer;
 import com.mercadopago.core.MercadoPagoCheckout;
 import com.mercadopago.exceptions.CheckoutPreferenceException;
 import com.mercadopago.exceptions.MercadoPagoError;
@@ -65,6 +67,7 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
     private String mCurrentPaymentIdempotencyKey;
 
     private transient FailureRecovery failureRecovery;
+    private transient Timer mCheckoutTimer;
 
     public CheckoutPresenter() {
         mFlowPreference = new FlowPreference.Builder()
@@ -109,11 +112,24 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
 
     private void startCheckout() {
         resolvePreSelectedData();
+        setCheckoutTimer();
         boolean shouldGetDiscounts = mDiscount == null && isDiscountEnabled();
         if (shouldGetDiscounts) {
             getDiscountCampaigns();
         } else {
             retrievePaymentMethodSearch();
+        }
+    }
+
+    private void setCheckoutTimer() {
+        if (mFlowPreference.isCheckoutTimerEnabled()) {
+            mCheckoutTimer.start(mFlowPreference.getCheckoutTimerInitialTime());
+            mCheckoutTimer.setOnFinishListener(new Timer.FinishListener() {
+                @Override
+                public void onFinish() {
+                    mCheckoutTimer.finishCheckout();
+                }
+            });
         }
     }
 
@@ -723,6 +739,10 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
 
     public void setRequestedResult(Integer requestedResult) {
         this.mRequestedResult = requestedResult;
+    }
+
+    public void setTimer(Timer timer) {
+        this.mCheckoutTimer = timer;
     }
 
     public CheckoutPreference getCheckoutPreference() {

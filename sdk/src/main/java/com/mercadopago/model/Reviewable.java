@@ -52,13 +52,13 @@ public abstract class Reviewable implements CustomViewController {
     }
 
     public void notifyChangeRequired(@NonNull Integer resultCode) {
-        if(this.reviewSubscriber != null) {
+        if (this.reviewSubscriber != null) {
             reviewSubscriber.changeRequired(resultCode, null);
         }
     }
 
     public void notifyChangeRequired(@NonNull Integer resultCode, Bundle resultData) {
-        if(this.reviewSubscriber != null) {
+        if (this.reviewSubscriber != null) {
             reviewSubscriber.changeRequired(resultCode, resultData);
         }
     }
