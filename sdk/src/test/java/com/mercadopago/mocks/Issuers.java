@@ -1,6 +1,7 @@
 package com.mercadopago.mocks;
 
 import com.google.gson.reflect.TypeToken;
+
 import com.mercadopago.model.Issuer;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.utils.ResourcesUtil;
@@ -8,13 +9,15 @@ import com.mercadopago.utils.ResourcesUtil;
 import java.lang.reflect.Type;
 import java.util.List;
 
-/**
- * Created by mromar on 5/4/17.
- */
 
 public class Issuers {
+    private Issuers() {}
 
-    private Issuers() {
+    public static List<Issuer> getIssuers() {
+        String json = ResourcesUtil.getStringResource("issuers.json");
+        Type listType = new TypeToken<List<Issuer>>() {
+        }.getType();
+        return JsonUtil.getInstance().getGson().fromJson(json, listType);
     }
 
     public static Issuer getIssuerMLA() {

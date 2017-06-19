@@ -34,10 +34,6 @@ import static junit.framework.Assert.assertFalse;
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
 
-/**
- * Created by mreverter on 1/30/17.
- */
-
 public class PaymentVaultPresenterTest {
 
     @Test

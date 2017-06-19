@@ -9,6 +9,7 @@ import com.mercadopago.model.Item;
 import com.mercadopago.model.Payer;
 import com.mercadopago.model.Site;
 import com.mercadopago.util.CurrenciesUtil;
+import com.mercadopago.util.TextUtils;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -345,9 +346,11 @@ public class CheckoutPreference {
         }
 
         public CheckoutPreference build() {
-            if (items == null || items.isEmpty()) throw new IllegalStateException("Items required");
-            if (localPreferenceSite == null) throw new IllegalStateException("Site is required");
 
+            if (items == null || items.isEmpty())
+                throw new IllegalStateException("Items required");
+            if (localPreferenceSite == null)
+                throw new IllegalStateException("Site is required");
             if (excludeAccountMoney) {
                 addExcludedPaymentType(PaymentTypes.ACCOUNT_MONEY);
             }

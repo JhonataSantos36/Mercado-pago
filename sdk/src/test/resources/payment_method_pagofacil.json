@@ -1,0 +1,18 @@
+{
+    "id": "pagofacil",
+    "name": "Pago Fácil",
+    "payment_type_id": "ticket",
+    "status": "active",
+    "secure_thumbnail": "https://www.mercadopago.com/org-img/MP3/API/logos/pagofacil.gif",
+    "thumbnail": "http://img.mlstatic.com/org-img/MP3/API/logos/pagofacil.gif",
+    "deferred_capture": "does_not_apply",
+    "settings": [
+    ],
+    "additional_info_needed": [
+    ],
+    "min_allowed_amount": 10,
+    "max_allowed_amount": 15000,
+    "accreditation_time": 0,
+    "financial_institutions": [
+    ]
+}

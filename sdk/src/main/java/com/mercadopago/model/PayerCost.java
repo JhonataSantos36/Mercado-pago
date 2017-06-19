@@ -7,8 +7,8 @@ import java.util.Map;
 
 public class PayerCost {
 
-    public static final String CFT = "CFT";
-    public static final String TEA = "TEA";
+    private static final String CFT = "CFT";
+    private static final String TEA = "TEA";
     private Integer installments;
     private BigDecimal installmentRate;
     private List<String> labels;

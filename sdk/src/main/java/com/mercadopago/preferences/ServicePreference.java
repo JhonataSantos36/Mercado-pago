@@ -1,7 +1,5 @@
 package com.mercadopago.preferences;
 
-import com.mercadopago.util.TextUtil;
-
 import java.util.HashMap;
 import java.util.Map;
 

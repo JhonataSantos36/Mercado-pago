@@ -7,8 +7,6 @@ import android.support.annotation.NonNull;
 
 import com.mercadopago.CheckoutActivity;
 import com.mercadopago.callbacks.CallbackHolder;
-import com.mercadopago.callbacks.PaymentCallback;
-import com.mercadopago.callbacks.PaymentDataCallback;
 import com.mercadopago.constants.ContentLocation;
 import com.mercadopago.controllers.CustomReviewablesHandler;
 import com.mercadopago.controllers.CustomServicesHandler;
@@ -138,18 +136,6 @@ public class MercadoPagoCheckout {
     }
 
 
-    private void start(PaymentCallback paymentCallback) {
-        CallbackHolder.getInstance().clean();
-        attachCheckoutCallback(paymentCallback);
-        startCheckoutActivity();
-    }
-
-    private void start(PaymentDataCallback paymentDataCallback) {
-        CallbackHolder.getInstance().clean();
-        attachCheckoutCallback(paymentDataCallback);
-        startCheckoutActivity();
-    }
-
     private void startForResult(@NonNull Integer resultCode) {
         CallbackHolder.getInstance().clean();
         startCheckoutActivity(resultCode);
@@ -183,14 +169,6 @@ public class MercadoPagoCheckout {
         }
     }
 
-    private void attachCheckoutCallback(PaymentCallback paymentCallback) {
-        CallbackHolder.getInstance().setPaymentCallback(paymentCallback);
-    }
-
-    private void attachCheckoutCallback(PaymentDataCallback paymentDataCallback) {
-        CallbackHolder.getInstance().setPaymentDataCallback(paymentDataCallback);
-    }
-
     private void startCheckoutActivity() {
         startCheckoutActivity(Activity.RESULT_OK);
     }
@@ -209,12 +187,6 @@ public class MercadoPagoCheckout {
         private PaymentData paymentData;
         private PaymentResult paymentResult;
         private Discount discount;
-
-        @Deprecated
-        public Builder setContext(Context context) {
-            this.context = context;
-            return this;
-        }
 
         public Builder setActivity(Activity activity) {
             this.activity = activity;
@@ -274,19 +246,6 @@ public class MercadoPagoCheckout {
         public Builder setPaymentResult(PaymentResult paymentResult) {
             this.paymentResult = paymentResult;
             return this;
-        }
-
-        @Deprecated
-        public void start(PaymentCallback paymentCallback) {
-            MercadoPagoCheckout mercadoPagoCheckout = new MercadoPagoCheckout(this);
-            mercadoPagoCheckout.start(paymentCallback);
-
-        }
-
-        @Deprecated
-        public void start(PaymentDataCallback paymentDataCallback) {
-            MercadoPagoCheckout mercadoPagoCheckout = new MercadoPagoCheckout(this);
-            mercadoPagoCheckout.start(paymentDataCallback);
         }
 
         public void startForPaymentData() {

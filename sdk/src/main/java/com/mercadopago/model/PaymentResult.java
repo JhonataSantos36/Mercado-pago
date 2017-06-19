@@ -46,6 +46,10 @@ public class PaymentResult {
         return statementDescription;
     }
 
+    public boolean hasDiscount() {
+        return paymentData != null && paymentData.getDiscount() != null;
+    }
+
     public static class Builder{
 
         private PaymentData paymentData;

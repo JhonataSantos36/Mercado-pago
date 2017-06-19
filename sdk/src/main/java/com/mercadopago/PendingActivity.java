@@ -116,7 +116,7 @@ public class PendingActivity extends MercadoPagoBaseActivity implements TimerObs
         mExitButtonText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finishWithOkResult(true);
+                finishWithOkResult();
             }
         });
         mChangePaymentMethodButton.setOnClickListener(new View.OnClickListener() {
@@ -216,7 +216,7 @@ public class PendingActivity extends MercadoPagoBaseActivity implements TimerObs
                 //TODO Deprecate
                 if (CallbackHolder.getInstance().hasPaymentResultCallback(CallbackHolder.PENDING_PAYMENT_RESULT_CALLBACK)) {
                     CallbackHolder.getInstance().getPaymentResultCallback(CallbackHolder.PENDING_PAYMENT_RESULT_CALLBACK).onResult(mPaymentResult);
-                    finishWithOkResult(false);
+                    finishWithOkResult();
                 } else {
                     finishWithResult(mPaymentResultScreenPreference.getSecondaryPendingExitResultCode());
                 }
@@ -296,14 +296,6 @@ public class PendingActivity extends MercadoPagoBaseActivity implements TimerObs
     }
 
     @Override
-    public void changeRequired(Reviewable reviewable) {
-        if (reviewable.getPaymentResultReviewableCallback() != null) {
-            reviewable.getPaymentResultReviewableCallback().onChangeRequired(mPaymentResult);
-        }
-        finishWithOkResult(false);
-    }
-
-    @Override
     public void changeRequired(Integer resultCode, Bundle data) {
         Intent intent = new Intent();
         if (data != null) {
@@ -340,10 +332,9 @@ public class PendingActivity extends MercadoPagoBaseActivity implements TimerObs
         return !isEmpty(mPaymentStatusDetail);
     }
 
-    private void finishWithOkResult(boolean notifyOk) {
+    private void finishWithOkResult() {
         Intent returnIntent = new Intent();
-        int resultCode = notifyOk ? RESULT_OK : PaymentResultActivity.RESULT_SILENT_OK;
-        setResult(resultCode, returnIntent);
+        setResult(RESULT_OK, returnIntent);
         finish();
     }
 
@@ -352,7 +343,7 @@ public class PendingActivity extends MercadoPagoBaseActivity implements TimerObs
         MPTracker.getInstance().trackEvent("PENDING", "BACK_PRESSED", "2", mMerchantPublicKey, BuildConfig.VERSION_NAME, this);
 
         if (mBackPressedOnce) {
-            finishWithOkResult(true);
+            finishWithOkResult();
         } else {
             Snackbar.make(mExitButtonText, getString(R.string.mpsdk_press_again_to_leave), Snackbar.LENGTH_LONG).show();
             mBackPressedOnce = true;

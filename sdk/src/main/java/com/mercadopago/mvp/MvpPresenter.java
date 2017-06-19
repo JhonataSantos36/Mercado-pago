@@ -43,6 +43,10 @@ public abstract class MvpPresenter<V extends MvpView, R extends ResourcesProvide
     public R getResourcesProvider(){
         return resourcesProvider;
     }
+
+    public void detachResourceProvider() {
+        resourcesProvider = null;
+    }
 }
 
 

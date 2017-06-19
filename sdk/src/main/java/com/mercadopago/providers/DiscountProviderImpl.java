@@ -87,7 +87,7 @@ public class DiscountProviderImpl implements DiscountsProvider {
     }
 
     private void getMerchantDirectDiscount(String amount, String payerEmail, final OnResourcesRetrievedCallback<Discount> onResourcesRetrievedCallback) {
-        CustomServer.getDirectDiscount(amount, payerEmail, context, servicePreference.getGetMerchantDiscountBaseURL(), servicePreference.getGetMerchantDiscountURI(), servicePreference.getGetDiscountAdditionalInfo(), new Callback<Discount>() {
+        CustomServer.getDirectDiscount(context, amount, payerEmail, servicePreference.getGetMerchantDiscountBaseURL(), servicePreference.getGetMerchantDiscountURI(), servicePreference.getGetDiscountAdditionalInfo(), new Callback<Discount>() {
             @Override
             public void success(Discount discount) {
                 onResourcesRetrievedCallback.onSuccess(discount);

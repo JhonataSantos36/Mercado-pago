@@ -1,16 +1,29 @@
 package com.mercadopago.model;
 
+import android.support.test.InstrumentationRegistry;
+import android.support.test.rule.ActivityTestRule;
+import android.support.test.runner.AndroidJUnit4;
+
+import com.mercadopago.CardVaultActivity;
 import com.mercadopago.CheckoutActivity;
 import com.mercadopago.R;
 import com.mercadopago.test.BaseTest;
 import com.mercadopago.test.StaticMock;
 
-public class SavedCardTokenTest extends BaseTest<CheckoutActivity> {
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
-    public SavedCardTokenTest() {
-        super(CheckoutActivity.class);
-    }
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
+@RunWith(AndroidJUnit4.class)
+public class SavedCardTokenTest {
+
+    @Rule
+    public ActivityTestRule<CheckoutActivity> mTestRule = new ActivityTestRule<>(CheckoutActivity.class, true, false);
+
+    @Test
     public void testConstructor() {
 
         SavedCardToken savedCardToken = StaticMock.getSavedCardToken();
@@ -18,6 +31,7 @@ public class SavedCardTokenTest extends BaseTest<CheckoutActivity> {
         assertTrue(savedCardToken.getSecurityCode().equals(StaticMock.DUMMY_SECURITY_CODE));
     }
 
+    @Test
     public void testValidate() {
 
         SavedCardToken savedCardToken = StaticMock.getSavedCardToken();
@@ -26,6 +40,7 @@ public class SavedCardTokenTest extends BaseTest<CheckoutActivity> {
 
     // * Card id
 
+    @Test
     public void testValidateNullCardId() {
 
         SavedCardToken savedCardToken = StaticMock.getSavedCardToken();
@@ -33,6 +48,7 @@ public class SavedCardTokenTest extends BaseTest<CheckoutActivity> {
         assertTrue(!savedCardToken.validate());
     }
 
+    @Test
     public void testValidateWrongCardId() {
 
         SavedCardToken savedCardToken = StaticMock.getSavedCardToken();
@@ -42,12 +58,14 @@ public class SavedCardTokenTest extends BaseTest<CheckoutActivity> {
 
     // * Security code
 
+    @Test
     public void testSecurityCode() {
 
         SavedCardToken savedCardToken = StaticMock.getSavedCardToken();
         assertTrue(savedCardToken.validateSecurityCode());
     }
 
+    @Test
     public void testSecurityCodeEmpty() {
 
         SavedCardToken savedCardToken = StaticMock.getSavedCardToken();
@@ -57,6 +75,7 @@ public class SavedCardTokenTest extends BaseTest<CheckoutActivity> {
         assertTrue(!savedCardToken.validateSecurityCode());
     }
 
+    @Test
     public void testSecurityCodeMinLength() {
 
         SavedCardToken savedCardToken = StaticMock.getSavedCardToken();
@@ -66,6 +85,7 @@ public class SavedCardTokenTest extends BaseTest<CheckoutActivity> {
         assertTrue(!savedCardToken.validateSecurityCode());
     }
 
+    @Test
     public void testSecurityCodeMaxLength() {
 
         SavedCardToken savedCardToken = StaticMock.getSavedCardToken();
@@ -75,6 +95,7 @@ public class SavedCardTokenTest extends BaseTest<CheckoutActivity> {
         assertTrue(!savedCardToken.validateSecurityCode());
     }
 
+    @Test
     public void testSecurityCodeLengthZero() {
 
         SavedCardToken savedCardToken = StaticMock.getSavedCardToken();
@@ -83,19 +104,19 @@ public class SavedCardTokenTest extends BaseTest<CheckoutActivity> {
         savedCardToken.setSecurityCode(null);
 
         try {
-            savedCardToken.validateSecurityCode(getApplicationContext(), card);
+            savedCardToken.validateSecurityCode(InstrumentationRegistry.getContext(), card);
             fail("Should have failed on security code length zero test");
         } catch (Exception ex) {
-            assertTrue(ex.getMessage().equals(getApplicationContext().getString(R.string.mpsdk_invalid_field)));
+            assertTrue(ex.getMessage().equals(InstrumentationRegistry.getContext().getString(R.string.mpsdk_invalid_field)));
         }
 
         savedCardToken.setSecurityCode("4444");
 
         try {
-            savedCardToken.validateSecurityCode(getApplicationContext(), card);
+            savedCardToken.validateSecurityCode(InstrumentationRegistry.getContext(), card);
             fail("Should have failed on security code length zero test");
         } catch (Exception ex) {
-            assertTrue(ex.getMessage().equals(getActivity().getString(R.string.mpsdk_invalid_cvv_length, 3)));
+            assertTrue(ex.getMessage().equals(InstrumentationRegistry.getContext().getString(R.string.mpsdk_invalid_cvv_length, 3)));
         }
 
         // Simulate a cards with security code not required
@@ -103,7 +124,7 @@ public class SavedCardTokenTest extends BaseTest<CheckoutActivity> {
         card.getSecurityCode().setLength(0);
 
         try {
-            savedCardToken.validateSecurityCode(getApplicationContext(), card);
+            savedCardToken.validateSecurityCode(InstrumentationRegistry.getContext(), card);
         } catch (Exception ex) {
             fail("Security code length zero test failed, cause: " + ex.getMessage());
         }
@@ -111,7 +132,7 @@ public class SavedCardTokenTest extends BaseTest<CheckoutActivity> {
         card.setSecurityCode(null);
 
         try {
-            savedCardToken.validateSecurityCode(getApplicationContext(), card);
+            savedCardToken.validateSecurityCode(InstrumentationRegistry.getContext(), card);
         } catch (Exception ex) {
             fail("Security code length zero test failed, cause: " + ex.getMessage());
         }

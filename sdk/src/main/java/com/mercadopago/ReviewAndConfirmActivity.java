@@ -56,7 +56,6 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
 
     public static final int RESULT_CHANGE_PAYMENT_METHOD = 3;
     public static final int RESULT_CANCEL_PAYMENT = 4;
-    public static final int RESULT_SILENT_CANCEL_PAYMENT = 5;
 
     //Controls
 
@@ -113,7 +112,7 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
         mCancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                cancelPayment(true);
+                cancelPayment();
             }
         });
         mTermsAndConditionsButton.setOnClickListener(new View.OnClickListener() {
@@ -350,7 +349,7 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
     @Override
     public void onFinish() {
         Intent intent = new Intent();
-        setResult(RESULT_CANCELED, intent);
+        setResult(RESULT_CANCEL_PAYMENT, intent);
         this.finish();
     }
 
@@ -378,9 +377,8 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
     }
 
     @Override
-    public void cancelPayment(boolean notifyCancel) {
-        int resultCode = notifyCancel ? RESULT_CANCEL_PAYMENT : RESULT_SILENT_CANCEL_PAYMENT;
-        setResult(resultCode);
+    public void cancelPayment() {
+        setResult(RESULT_CANCEL_PAYMENT);
         finish();
     }
 
@@ -408,17 +406,6 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
             add(ReviewKeys.DEFAULT);
         }};
     }
-
-
-    @Override
-    public void changeRequired(Reviewable reviewable) {
-        if (reviewable.getReviewableCallback() != null) {
-            //TODO Deprecate
-            reviewable.getReviewableCallback().onChangeRequired(mPresenter.getPaymentData());
-        }
-        cancelPayment(false);
-    }
-
 
     @Override
     public void changeRequired(Integer resultCode, Bundle resultData) {

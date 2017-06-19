@@ -168,7 +168,7 @@ public class CongratsActivity extends MercadoPagoBaseActivity implements ReviewS
         mExitButtonText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finishWithOkResult(true);
+                finishWithOkResult();
             }
         });
     }
@@ -299,14 +299,7 @@ public class CongratsActivity extends MercadoPagoBaseActivity implements ReviewS
         mSecondaryExitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                //TODO Deprecate
-                if (CallbackHolder.getInstance().hasPaymentResultCallback(CallbackHolder.CONGRATS_PAYMENT_RESULT_CALLBACK)) {
-                    CallbackHolder.getInstance().getPaymentResultCallback(CallbackHolder.CONGRATS_PAYMENT_RESULT_CALLBACK).onResult(mPaymentResult);
-                    finishWithOkResult(false);
-                } else {
-                    finishWithResult(mPaymentResultScreenPreference.getSecondaryCongratsExitResultCode());
-                }
+        finishWithResult(mPaymentResultScreenPreference.getSecondaryCongratsExitResultCode());
             }
         });
     }
@@ -373,14 +366,6 @@ public class CongratsActivity extends MercadoPagoBaseActivity implements ReviewS
         } else {
             return new ArrayList<>();
         }
-    }
-
-    @Override
-    public void changeRequired(Reviewable reviewable) {
-        if (reviewable.getPaymentResultReviewableCallback() != null) {
-            reviewable.getPaymentResultReviewableCallback().onChangeRequired(mPaymentResult);
-        }
-        finishWithOkResult(false);
     }
 
     @Override
@@ -555,7 +540,7 @@ public class CongratsActivity extends MercadoPagoBaseActivity implements ReviewS
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                finishWithOkResult(true);
+                finishWithOkResult();
             }
         }, seconds * 1000);
     }
@@ -631,10 +616,9 @@ public class CongratsActivity extends MercadoPagoBaseActivity implements ReviewS
         }
     }
 
-    private void finishWithOkResult(boolean notifyOk) {
+    private void finishWithOkResult() {
         Intent returnIntent = new Intent();
-        int resultCode = notifyOk ? RESULT_OK : PaymentResultActivity.RESULT_SILENT_OK;
-        setResult(resultCode, returnIntent);
+        setResult(RESULT_OK, returnIntent);
         finish();
     }
 
@@ -643,7 +627,7 @@ public class CongratsActivity extends MercadoPagoBaseActivity implements ReviewS
         MPTracker.getInstance().trackEvent("CONGRATS", "BACK_PRESSED", "2", mMerchantPublicKey, BuildConfig.VERSION_NAME, this);
 
         if (mBackPressedOnce) {
-            finishWithOkResult(true);
+            finishWithOkResult();
         } else {
             Snackbar.make(mExitButtonText, getString(R.string.mpsdk_press_again_to_leave), Snackbar.LENGTH_LONG).show();
             mBackPressedOnce = true;

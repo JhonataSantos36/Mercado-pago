@@ -1,7 +1,6 @@
 package com.mercadopago;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -17,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.mercadopago.callbacks.Callback;
+import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.constants.PaymentMethods;
 import com.mercadopago.constants.PaymentTypes;
 import com.mercadopago.core.MercadoPagoServices;
@@ -25,7 +25,6 @@ import com.mercadopago.model.ApiException;
 import com.mercadopago.model.Instruction;
 import com.mercadopago.model.InstructionActionInfo;
 import com.mercadopago.model.InstructionReference;
-import com.mercadopago.model.Payment;
 import com.mercadopago.model.Instructions;
 import com.mercadopago.model.PaymentData;
 import com.mercadopago.model.PaymentResult;
@@ -44,8 +43,6 @@ import com.mercadopago.util.TextUtil;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.crypto.Mac;
 
 public class InstructionsActivity extends MercadoPagoBaseActivity {
 
@@ -70,8 +67,6 @@ public class InstructionsActivity extends MercadoPagoBaseActivity {
     protected View mPrimaryInfoSeparator;
 
     //Params
-//    protected Payment mPayment;
-//    protected String mPaymentTypeId;
     protected String mMerchantPublicKey;
     protected PaymentResult mPaymentResult;
     protected Long mPaymentId;
@@ -81,6 +76,7 @@ public class InstructionsActivity extends MercadoPagoBaseActivity {
     protected String mCurrencyId;
     protected BigDecimal mTotalAmount;
     protected PaymentResultScreenPreference mPaymentResultScreenPreference;
+    private FailureRecovery failureRecovery;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -198,6 +194,12 @@ public class InstructionsActivity extends MercadoPagoBaseActivity {
             @Override
             public void failure(ApiException apiException) {
                 ApiUtil.showApiExceptionError(mActivity, apiException);
+                setFailureRecovery(new FailureRecovery() {
+                    @Override
+                    public void recover() {
+                        getInstructionsAsync();
+                    }
+                });
             }
         });
     }
@@ -376,7 +378,7 @@ public class InstructionsActivity extends MercadoPagoBaseActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == ErrorUtil.ERROR_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
-//                recoverFromFailure();
+                recoverFromFailure();
             } else {
                 setResult(RESULT_CANCELED, data);
                 finish();
@@ -409,5 +411,15 @@ public class InstructionsActivity extends MercadoPagoBaseActivity {
                 }
             }
         }).start();
+    }
+
+    public void setFailureRecovery(FailureRecovery failureRecovery) {
+        this.failureRecovery = failureRecovery;
+    }
+
+    private void recoverFromFailure() {
+        if(failureRecovery != null) {
+            failureRecovery.recover();
+        }
     }
 }

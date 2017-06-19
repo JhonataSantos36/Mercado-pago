@@ -1,0 +1,25 @@
+{
+    "public_key": "TEST-fc427b57-199c-4e58-b859-165c24f74dca",
+    "card_id": null,
+    "first_six_digits": "450995",
+    "luhn_validation": true,
+    "date_used": null,
+    "status": "active",
+    "date_due": "2017-04-28T13:42:56.470-04:00",
+    "live_mode": true,
+    "card_number_length": 16,
+    "id": "0540c070abeee0610c2c07630bf5d2ec",
+    "security_code_length": null,
+    "expiration_year": 2020,
+    "expiration_month": 4,
+    "date_last_updated": "2017-04-20T13:42:56.470-04:00",
+    "last_four_digits": "3704",
+    "cardholder": {
+        "identification": {
+            "number": "12345678",
+            "type": "DNI"
+        },
+        "name": "CALL"
+    },
+    "date_created": "2017-04-20T13:42:56.470-04:00"
+}

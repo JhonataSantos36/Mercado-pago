@@ -58,7 +58,7 @@ public class CustomServer {
         service.createPayment(transactionId, ripFirstSlash(uri), paymentData, query).enqueue(callback);
     }
 
-    public static void getDirectDiscount(String transactionAmount, String payerEmail, Context context, String url, String uri, @NonNull Map<String, String> discountAdditionalInfo, Callback<Discount> callback) {
+    public static void getDirectDiscount(Context context, String transactionAmount, String payerEmail,String url, String uri, @NonNull Map<String, String> discountAdditionalInfo, Callback<Discount> callback) {
         if (discountAdditionalInfo == null) {
             discountAdditionalInfo = new HashMap<>();
         }

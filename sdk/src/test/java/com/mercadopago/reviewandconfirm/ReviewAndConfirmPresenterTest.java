@@ -34,10 +34,6 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-/**
- * Created by mreverter on 2/3/17.
- */
-
 public class ReviewAndConfirmPresenterTest {
 
     @Test
@@ -402,7 +398,7 @@ public class ReviewAndConfirmPresenterTest {
 
         presenter.initialize();
 
-        view.cancelPayment(false);
+        view.cancelPayment();
 
         assertTrue(view.paymentCanceled);
     }
@@ -621,7 +617,6 @@ public class ReviewAndConfirmPresenterTest {
         private String confirmationMessage;
         private String cancelMessage;
         private boolean termsAndConditionsShown = false;
-        private boolean paymentCanceledNotified;
 
         @Override
         public void showError(String message) {
@@ -644,8 +639,7 @@ public class ReviewAndConfirmPresenterTest {
         }
 
         @Override
-        public void cancelPayment(boolean notifyCancel) {
-            this.paymentCanceledNotified = notifyCancel;
+        public void cancelPayment() {
             this.paymentCanceled = true;
         }
 
@@ -676,11 +670,6 @@ public class ReviewAndConfirmPresenterTest {
 
         @Override
         public void changeRequired(Integer resultCode, @Nullable Bundle data) {
-
-        }
-
-        @Override
-        public void changeRequired(Reviewable reviewable) {
 
         }
     }

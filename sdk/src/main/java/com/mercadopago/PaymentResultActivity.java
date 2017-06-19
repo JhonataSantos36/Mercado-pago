@@ -22,7 +22,6 @@ import static com.mercadopago.core.MercadoPagoComponents.Activities.CONGRATS_REQ
 
 public class PaymentResultActivity extends Activity {
 
-    public static final int RESULT_SILENT_OK = 3;
     public static final String DISCOUNT_BUNDLE = "mDiscount";
     public static final String DISCOUNT_ENABLED_BUNDLE = "mDiscountEnabled";
     public static final String MERCHANT_PUBLIC_KEY_BUNDLE = "mMerchantPublicKey";

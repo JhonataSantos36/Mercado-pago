@@ -21,7 +21,7 @@ public class FlowPreference {
     private boolean discountEnabled;
     private boolean showAllSavedCardsEnabled;
     private int maxSavedCardsToShow;
-    private int congratsDisplayTime;
+    private Integer congratsDisplayTime = null;
     private int checkoutTimer;
     private CheckoutTimer.FinishListener checkoutTimerFinishListener;
 
@@ -42,7 +42,7 @@ public class FlowPreference {
         this.checkoutTimerFinishListener = builder.checkoutTimerFinishListener;
     }
 
-    public int getCongratsDisplayTime() {
+    public Integer getCongratsDisplayTime() {
         return this.congratsDisplayTime;
     }
 
@@ -115,7 +115,7 @@ public class FlowPreference {
         private boolean discountEnabled = true;
         private boolean showAllSavedCardsEnabled = false;
         private int maxSavedCardsToShow = DEFAULT_MAX_SAVED_CARDS_TO_SHOW;
-        private int congratsDisplayTime;
+        private Integer congratsDisplayTime = null;
         private int checkoutTimer;
         private CheckoutTimer.FinishListener checkoutTimerFinishListener;
 

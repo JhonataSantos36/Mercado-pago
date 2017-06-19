@@ -1,17 +1,14 @@
 package com.mercadopago.mocks;
 
 import com.google.gson.reflect.TypeToken;
-import com.mercadopago.model.Installment;
+
 import com.mercadopago.model.ApiException;
+import com.mercadopago.model.Installment;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.utils.ResourcesUtil;
 
 import java.lang.reflect.Type;
 import java.util.List;
-
-/**
- * Created by mromar on 5/4/17.
- */
 
 public class Installments {
 

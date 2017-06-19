@@ -120,7 +120,7 @@ public class RejectionActivity extends MercadoPagoBaseActivity implements TimerO
         mExitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finishWithOkResult(true);
+                finishWithOkResult();
             }
         });
 
@@ -237,14 +237,7 @@ public class RejectionActivity extends MercadoPagoBaseActivity implements TimerO
         mSecondaryExitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                //TODO Deprecate
-                if (CallbackHolder.getInstance().hasPaymentResultCallback(CallbackHolder.REJECTED_PAYMENT_RESULT_CALLBACK)) {
-                    CallbackHolder.getInstance().getPaymentResultCallback(CallbackHolder.REJECTED_PAYMENT_RESULT_CALLBACK).onResult(mPaymentResult);
-                    finishWithOkResult(false);
-                } else {
-                    finishWithResult(mPaymentResultScreenPreference.getSecondaryRejectedExitResultCode());
-                }
+                finishWithResult(mPaymentResultScreenPreference.getSecondaryRejectedExitResultCode());
             }
         });
     }
@@ -367,10 +360,9 @@ public class RejectionActivity extends MercadoPagoBaseActivity implements TimerO
         return !isEmpty(mPaymentMethodId);
     }
 
-    private void finishWithOkResult(boolean notifyOk) {
+    private void finishWithOkResult() {
         Intent returnIntent = new Intent();
-        int resultCode = notifyOk ? RESULT_OK : PaymentResultActivity.RESULT_SILENT_OK;
-        setResult(resultCode, returnIntent);
+        setResult(RESULT_OK, returnIntent);
         finish();
     }
 
@@ -390,7 +382,7 @@ public class RejectionActivity extends MercadoPagoBaseActivity implements TimerO
         MPTracker.getInstance().trackEvent("REJECTION", "BACK_PRESSED", "2", mMerchantPublicKey, BuildConfig.VERSION_NAME, this);
 
         if (mBackPressedOnce) {
-            finishWithOkResult(true);
+            finishWithOkResult();
         } else {
             Snackbar.make(mExitButton, getString(R.string.mpsdk_press_again_to_leave), Snackbar.LENGTH_LONG).show();
             mBackPressedOnce = true;
