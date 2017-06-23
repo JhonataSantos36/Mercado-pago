@@ -223,15 +223,16 @@ public class CheckoutActivity extends MercadoPagoBaseActivity implements Checkou
             Token token = JsonUtil.getInstance().fromJson(data.getStringExtra("token"), Token.class);
             PaymentMethod paymentMethod = JsonUtil.getInstance().fromJson(data.getStringExtra("paymentMethod"), PaymentMethod.class);
             mCheckoutPresenter.onPaymentMethodSelectionResponse(paymentMethod, issuer, payerCost, token, discount);
+        } else if (isErrorResult(data)) {
+            MercadoPagoError mercadoPagoError = JsonUtil.getInstance().fromJson(data.getStringExtra("mercadoPagoError"), MercadoPagoError.class);
+            mCheckoutPresenter.onPaymentMethodSelectionError(mercadoPagoError);
         } else {
-            MercadoPagoError mercadoPagoError = data.getStringExtra("mercadoPagoError") == null ? null :
-                    JsonUtil.getInstance().fromJson(data.getStringExtra("mercadoPagoError"), MercadoPagoError.class);
-            if (mercadoPagoError == null) {
-                mCheckoutPresenter.onPaymentMethodSelectionCancel();
-            } else {
-                mCheckoutPresenter.onPaymentMethodSelectionError(mercadoPagoError);
-            }
+            mCheckoutPresenter.onPaymentMethodSelectionCancel();
         }
+    }
+
+    private boolean isErrorResult(Intent data) {
+        return data != null && !TextUtil.isEmpty(data.getStringExtra("mercadoPagoError"));
     }
 
     @Override
