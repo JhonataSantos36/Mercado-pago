@@ -149,14 +149,11 @@ public class PaymentMethodSearch {
         return cards != null && !cards.isEmpty();
     }
 
-    public void addCards(List<Card> cards, String lastFourDigitsText) {
+    public void setCards(List<Card> cards, String lastFourDigitsText) {
         if (cards != null) {
-            if (this.customSearchItems == null) {
-                this.customSearchItems = new ArrayList<>();
-            }
-            if (this.cards == null) {
-                this.cards = new ArrayList<>();
-            }
+            this.customSearchItems = new ArrayList<>();
+            this.cards = new ArrayList<>();
+
             for (Card card : cards) {
                 CustomSearchItem searchItem = new CustomSearchItem();
                 searchItem.setDescription(lastFourDigitsText + " " + card.getLastFourDigits());

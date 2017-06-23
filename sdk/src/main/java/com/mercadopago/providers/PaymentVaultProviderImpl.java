@@ -8,7 +8,6 @@ import com.mercadopago.core.CustomServer;
 import com.mercadopago.core.MercadoPagoServices;
 import com.mercadopago.exceptions.MercadoPagoError;
 
-import com.mercadopago.core.MercadoPago;
 import com.mercadopago.core.MerchantServer;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.Card;
@@ -17,7 +16,6 @@ import com.mercadopago.model.Discount;
 import com.mercadopago.model.Payer;
 import com.mercadopago.model.PaymentMethodSearch;
 import com.mercadopago.model.Site;
-import com.mercadopago.mvp.OnResourcesRetrievedCallback;
 import com.mercadopago.mvp.OnResourcesRetrievedCallback;
 import com.mercadopago.util.TextUtil;
 import com.mercadopago.preferences.PaymentPreference;
@@ -126,7 +124,7 @@ public class PaymentVaultProviderImpl implements PaymentVaultProvider {
             @Override
             public void success(Customer customer) {
                 List<Card> savedCards = paymentPreference == null ? customer.getCards() : paymentPreference.getValidCards(customer.getCards());
-                paymentMethodSearch.addCards(savedCards, context.getString(R.string.mpsdk_last_digits_label));
+                paymentMethodSearch.setCards(savedCards, context.getString(R.string.mpsdk_last_digits_label));
                 onResourcesRetrievedCallback.onSuccess(paymentMethodSearch);
             }
 

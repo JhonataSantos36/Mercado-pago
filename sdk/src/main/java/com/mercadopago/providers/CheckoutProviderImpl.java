@@ -107,8 +107,8 @@ public class CheckoutProviderImpl implements CheckoutProvider {
         mercadoPagoServices.getPaymentMethodSearch(amount, excludedPaymentTypes, excludedPaymentMethods, payer, site, new Callback<PaymentMethodSearch>() {
             @Override
             public void success(final PaymentMethodSearch paymentMethodSearch) {
-                if (!paymentMethodSearch.hasSavedCards() && servicePreference != null && servicePreference.hasGetCustomerURL()) {
-                    addCustomerCardsFromMerchantServer(paymentMethodSearch, excludedPaymentTypes, excludedPaymentMethods, onPaymentMethodSearchRetrievedCallback, onCustomerRetrievedCallback);
+                if (servicePreference != null && servicePreference.hasGetCustomerURL()) {
+                    attachCustomerCardsFromMerchantServer(paymentMethodSearch, excludedPaymentTypes, excludedPaymentMethods, onPaymentMethodSearchRetrievedCallback, onCustomerRetrievedCallback);
                 } else {
                     onPaymentMethodSearchRetrievedCallback.onSuccess(paymentMethodSearch);
                 }
@@ -121,7 +121,7 @@ public class CheckoutProviderImpl implements CheckoutProvider {
         });
     }
 
-    private void addCustomerCardsFromMerchantServer(final PaymentMethodSearch paymentMethodSearch, final List<String> excludedPaymentTypes, final List<String> excludedPaymentMethods, final OnResourcesRetrievedCallback<PaymentMethodSearch> onPaymentMethodSearchRetrievedCallback, final OnResourcesRetrievedCallback<Customer> onCustomerRetrievedCallback) {
+    private void attachCustomerCardsFromMerchantServer(final PaymentMethodSearch paymentMethodSearch, final List<String> excludedPaymentTypes, final List<String> excludedPaymentMethods, final OnResourcesRetrievedCallback<PaymentMethodSearch> onPaymentMethodSearchRetrievedCallback, final OnResourcesRetrievedCallback<Customer> onCustomerRetrievedCallback) {
         CustomServer.getCustomer(context, servicePreference.getGetCustomerURL(), servicePreference.getGetCustomerURI(), servicePreference.getGetCustomerAdditionalInfo(), new Callback<Customer>() {
             @Override
             public void success(Customer customer) {
@@ -129,7 +129,7 @@ public class CheckoutProviderImpl implements CheckoutProvider {
                 paymentPreference.setExcludedPaymentTypeIds(excludedPaymentTypes);
                 paymentPreference.setExcludedPaymentMethodIds(excludedPaymentMethods);
                 List<Card> savedCards = paymentPreference.getValidCards(customer.getCards());
-                paymentMethodSearch.addCards(savedCards, context.getString(R.string.mpsdk_last_digits_label));
+                paymentMethodSearch.setCards(savedCards, context.getString(R.string.mpsdk_last_digits_label));
 
                 onCustomerRetrievedCallback.onSuccess(customer);
                 onPaymentMethodSearchRetrievedCallback.onSuccess(paymentMethodSearch);

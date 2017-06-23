@@ -53,7 +53,6 @@ import com.mercadopago.uicontrollers.paymentmethodsearch.PaymentMethodSearchView
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
-import com.mercadopago.util.LayoutUtil;
 import com.mercadopago.util.ScaleUtil;
 import com.mercadopago.views.PaymentVaultView;
 
@@ -198,7 +197,7 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
                 }.getType();
                 List<Card> cards = (gson.fromJson(this.getIntent().getStringExtra("cards"), listType));
 
-                paymentMethodSearch.addCards(cards, getString(R.string.mpsdk_last_digits_label));
+                paymentMethodSearch.setCards(cards, getString(R.string.mpsdk_last_digits_label));
             } catch (Exception ex) {
                 //Do nothing...
             }
