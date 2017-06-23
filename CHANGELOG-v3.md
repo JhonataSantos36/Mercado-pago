@@ -1,3 +1,10 @@
+## VERSION 3.1.0
+
+_23-06-2017_
+
+* New: Timer for Complete Checkout.
+* New: Max Saved Cards configuration.
+
 ## VERSION 3.0.9
 
 _13-06-2017_
