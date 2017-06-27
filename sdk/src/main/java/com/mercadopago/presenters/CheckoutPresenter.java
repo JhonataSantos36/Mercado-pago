@@ -666,6 +666,10 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
         return mSelectedPaymentMethod;
     }
 
+    public Issuer getIssuer() {
+        return mSelectedIssuer;
+    }
+
     public PayerCost getSelectedPayerCost() {
         return mSelectedPayerCost;
     }

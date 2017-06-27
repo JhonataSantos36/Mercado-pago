@@ -10,6 +10,7 @@ import com.mercadopago.core.MercadoPagoComponents;
 import com.mercadopago.core.MercadoPagoUI;
 import com.mercadopago.model.CardInfo;
 import com.mercadopago.model.Discount;
+import com.mercadopago.model.Issuer;
 import com.mercadopago.model.Item;
 import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.PaymentMethod;
@@ -35,7 +36,7 @@ public class ReviewAndConfirmProviderImpl implements ReviewAndConfirmProvider {
     }
 
     @Override
-    public Reviewable getSummaryReviewable(PaymentMethod paymentMethod, PayerCost payerCost, BigDecimal amount, Discount discount, Site site, DecorationPreference decorationPreference, OnConfirmPaymentCallback onConfirmPaymentCallback) {
+    public Reviewable getSummaryReviewable(PaymentMethod paymentMethod, PayerCost payerCost, BigDecimal amount, Discount discount, Site site, Issuer issuer, DecorationPreference decorationPreference, OnConfirmPaymentCallback onConfirmPaymentCallback) {
         String confirmationMessage;
         if (this.reviewScreenPreference != null && !TextUtil.isEmpty(this.reviewScreenPreference.getConfirmText())) {
             confirmationMessage = reviewScreenPreference.getConfirmText();
@@ -63,6 +64,8 @@ public class ReviewAndConfirmProviderImpl implements ReviewAndConfirmProvider {
                 .setCustomTextColor(customTextColor)
                 .setDecorationPreference(decorationPreference)
                 .setConfirmPaymentCallback(onConfirmPaymentCallback)
+                .setIssuer(issuer)
+                .setSite(site)
                 .build();
     }
 

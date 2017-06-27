@@ -204,6 +204,7 @@
     <string name="mpsdk_review_off_text_4">Pagarás %1$s con\n%2$s</string>
     <string name="mpsdk_review_off_text_5">Pagarás %1$s por\n%2$s</string>
     <string name="mpsdk_review_off_text_6">Pagarás %1$s en\n%2$s</string>
+
     <string name="mpsdk_homebanking">Home Banking de</string>
     <string name="mpsdk_your_atm">cajero automático de</string>
     <string name="mpsdk_review_product_quantity">Cantidad: %1$s</string>

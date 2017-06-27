@@ -68,6 +68,7 @@ public class ReviewProductView implements ReviewProductViewController {
         }
         String pictureUrl = item.getPictureUrl();
         setProductIcon(pictureUrl, decorationPreference);
+
         if (item.getTitle() == null) {
             mProductName.setVisibility(View.GONE);
         } else {

@@ -190,6 +190,7 @@
     <string name="mpsdk_instant_accreditation_time">Se acreditará instantáneamente</string>
     <string name="mpsdk_accreditation_time">Se acreditará en</string>
     <string name="mpsdk_what_can_do">¿Qué puedo hacer?</string>
+    <string name="mpsdk_debit">por</string>
 
     <!-- Low Res -->
     <string name="mpsdk_form_card_title_payment_type">Tarjeta de %1$s</string>
@@ -247,4 +248,10 @@
     <string name="mpsdk_percent">%</string>
     <string name="mpsdk_total">Total:</string>
     <string name="mpsdk_something_went_wrong">¡Uy! Algo salió mal…</string>
+
+    <!-- Unlock Card -->
+    <string name="mpsdk_text_unlock_card_start">Recuerda</string>
+    <string name="mpsdk_text_unlock_card_linked">desbloquear tu tarjeta</string>
+    <string name="mpsdk_text_unlock_card_end">antes de confirmar el pago.</string>
+    <string name="mpsdk_title_unlock_card">Desbloqueo de Tarjeta</string>
 </resources>

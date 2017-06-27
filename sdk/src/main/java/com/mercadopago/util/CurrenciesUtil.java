@@ -26,7 +26,7 @@ public class CurrenciesUtil {
     public static final String CURRENCY_URUGUAY = "UYU";
 
     protected CurrenciesUtil() {
-        
+
     }
 
     private static Map<String, Currency> currenciesList = new HashMap<String, Currency>() {{

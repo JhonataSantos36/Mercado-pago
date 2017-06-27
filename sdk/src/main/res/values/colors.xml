@@ -157,5 +157,10 @@
     <color name="mpsdk_review_payment_text">#333333</color>
     <color name="mpsdk_review_description_text">#666666</color>
     <color name="mpsdk_discount_row">#F5F5F5</color>
+    <color name="mpsdk_color_unlock_card_text">#A1924C</color>
+    <color name="mpsdk_color_unlock_card_link">#118BDC</color>
+    <color name="mpsdk_color_unlock_card">#FFF4C3</color>
+
+
 
 </resources>

@@ -244,6 +244,7 @@ public class CheckoutActivity extends MercadoPagoBaseActivity implements Checkou
                 .setSite(mCheckoutPresenter.getCheckoutPreference().getSite())
                 .setReviewScreenPreference(mCheckoutPresenter.getReviewScreenPreference())
                 .setPaymentMethod(mCheckoutPresenter.getSelectedPaymentMethod())
+                .setIssuer(mCheckoutPresenter.getIssuer())
                 .setPayerCost(mCheckoutPresenter.getSelectedPayerCost())
                 .setAmount(mCheckoutPresenter.getCheckoutPreference().getAmount())
                 .setSite(mCheckoutPresenter.getCheckoutPreference().getSite())

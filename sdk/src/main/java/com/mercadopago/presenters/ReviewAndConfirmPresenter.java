@@ -153,7 +153,7 @@ public class ReviewAndConfirmPresenter extends MvpPresenter<ReviewAndConfirmView
     }
 
     private Reviewable getSummary() {
-        Reviewable summary = getResourcesProvider().getSummaryReviewable(mPaymentMethod, mPayerCost, mAmount, mDiscount, mSite, mDecorationPreference, new OnConfirmPaymentCallback() {
+        Reviewable summary = getResourcesProvider().getSummaryReviewable(mPaymentMethod, mPayerCost, mAmount, mDiscount, mSite, mIssuer, mDecorationPreference, new OnConfirmPaymentCallback() {
             @Override
             public void confirmPayment() {
                 getView().confirmPayment();

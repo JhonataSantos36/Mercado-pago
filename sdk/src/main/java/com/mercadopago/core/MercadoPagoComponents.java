@@ -296,6 +296,7 @@ public class MercadoPagoComponents {
             private PayerCost payerCost;
             private BigDecimal amount;
             private Site site;
+            private Issuer issuer;
             private Boolean editionEnabled;
             private String paymentMethodCommentInfo;
             private String paymentMethodDescriptionInfo;
@@ -307,6 +308,11 @@ public class MercadoPagoComponents {
             private Boolean termsAndConditionsEnabled;
             private Boolean discountEnabled;
             private String merchantPublicKey;
+
+            public ReviewAndConfirmBuilder setIssuer(Issuer issuer) {
+                this.issuer = issuer;
+                return this;
+            }
 
             public ReviewAndConfirmBuilder setActivity(Activity activity) {
                 this.activity = activity;
@@ -408,6 +414,7 @@ public class MercadoPagoComponents {
                 intent.putExtra("editionEnabled", editionEnabled);
                 intent.putExtra("amount", amount.toString());
                 intent.putExtra("site", JsonUtil.getInstance().toJson(site));
+                intent.putExtra("issuer", JsonUtil.getInstance().toJson(issuer));
                 intent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
                 intent.putExtra("payerCost", JsonUtil.getInstance().toJson(payerCost));
                 intent.putExtra("token", JsonUtil.getInstance().toJson(token));
@@ -1892,6 +1899,18 @@ public class MercadoPagoComponents {
             private String customDescriptionText;
             private Integer customTextColor;
             private BigDecimal customAmount;
+            private Issuer issuer;
+            private Site site;
+
+            public SummaryViewBuilder setSite(Site site) {
+                this.site = site;
+                return this;
+            }
+
+            public SummaryViewBuilder setIssuer(Issuer issuer) {
+                this.issuer = issuer;
+                return this;
+            }
 
             public SummaryViewBuilder setContext(Context context) {
                 this.context = context;
@@ -1964,7 +1983,7 @@ public class MercadoPagoComponents {
             }
 
             public ReviewSummaryView build() {
-                return new ReviewSummaryView(context, confirmationMessage, productDetailText, discountDetailText, paymentMethod, payerCost, amount, discount, currencyId, customDescriptionText, customAmount, customTextColor, decorationPreference, callback);
+                return new ReviewSummaryView(context, confirmationMessage, productDetailText, discountDetailText, paymentMethod, payerCost, amount, discount, currencyId, customDescriptionText, customAmount, site, issuer, customTextColor, decorationPreference, callback);
             }
         }
 

@@ -201,6 +201,74 @@
         app:fontStyle="light"
         tools:text="CFT 0,00%" />
 
+    <LinearLayout
+        android:id="@+id/mpsdkCheckoutUnlockCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="33dp"
+        android:background="@drawable/mpsdk_unlock_card_drawable"
+        android:orientation="horizontal"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
+        android:visibility="gone"
+        android:weightSum="1">
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="0.2">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/mpsdk_unlock_card" />
+
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="17dp"
+            android:layout_weight="0.8"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <com.mercadopago.customviews.MPTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/mpsdk_text_unlock_card_start"
+                    android:textColor="@color/mpsdk_color_unlock_card_text"
+                    android:textSize="14dp"
+                    app:fontStyle="light" />
+
+                <com.mercadopago.customviews.MPTextView
+                    android:id="@+id/mpsdkUnlockCard"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="3dp"
+                    android:text="@string/mpsdk_text_unlock_card_linked"
+                    android:textColor="@color/mpsdk_color_unlock_card_link"
+                    android:textSize="14dp"
+                    app:fontStyle="regular" />
+            </LinearLayout>
+
+            <com.mercadopago.customviews.MPTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/mpsdk_text_unlock_card_end"
+                android:textColor="@color/mpsdk_color_unlock_card_text"
+                android:textSize="14dp"
+                app:fontStyle="light" />
+        </LinearLayout>
+    </LinearLayout>
+
     <FrameLayout
         android:id="@+id/mpsdkReviewSummaryConfirmButton"
         android:layout_width="match_parent"
