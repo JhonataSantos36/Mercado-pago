@@ -1,6 +1,7 @@
 package com.mercadopago.installments;
 
 import com.mercadopago.callbacks.OnSelectedCallback;
+import com.mercadopago.constants.Sites;
 import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.mocks.Installments;
 import com.mercadopago.mocks.Issuers;
@@ -26,10 +27,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.mercadopago.util.TextUtil.isEmpty;
-import static junit.framework.TestCase.assertFalse;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 
 /**
  * Created by mromar on 5/4/17.
@@ -589,6 +591,56 @@ public class InstallmentsPresenterTest {
         assertEquals(presenter.getAmount(), amount);
     }
 
+    @Test
+    public void whenMCOThenShowBankInterestsNotCoveredWarning() {
+
+        MockedView mockedView = new MockedView();
+        MockedProvider provider = new MockedProvider();
+
+        PaymentMethod paymentMethod = PaymentMethods.getPaymentMethodOn();
+        Issuer issuer = Issuers.getIssuers().get(0);
+
+        InstallmentsPresenter presenter = new InstallmentsPresenter();
+        presenter.attachView(mockedView);
+        presenter.attachResourcesProvider(provider);
+
+
+        presenter.setSite(Sites.COLOMBIA);
+        presenter.setAmount(new BigDecimal(1000));
+        presenter.setCardInfo(getCardInfo());
+        presenter.setPaymentMethod(paymentMethod);
+        presenter.setIssuer(issuer);
+
+        presenter.initialize();
+
+        assertTrue(mockedView.bankInterestsWarningShown);
+    }
+
+    @Test
+    public void whenNotMCOThenDoNotShowBankInterestsNotCoveredWarning() {
+
+        MockedView mockedView = new MockedView();
+        MockedProvider provider = new MockedProvider();
+
+        PaymentMethod paymentMethod = PaymentMethods.getPaymentMethodOn();
+        Issuer issuer = Issuers.getIssuers().get(0);
+
+        InstallmentsPresenter presenter = new InstallmentsPresenter();
+        presenter.attachView(mockedView);
+        presenter.attachResourcesProvider(provider);
+
+
+        presenter.setSite(Sites.ARGENTINA);
+        presenter.setAmount(new BigDecimal(1000));
+        presenter.setCardInfo(getCardInfo());
+        presenter.setPaymentMethod(paymentMethod);
+        presenter.setIssuer(issuer);
+
+        presenter.initialize();
+
+        assertFalse(mockedView.bankInterestsWarningShown);
+    }
+
     private CardInfo getCardInfo() {
         Card card = new Card();
         card.setLastFourDigits("4321");
@@ -686,6 +738,11 @@ public class InstallmentsPresenterTest {
         private boolean noPayerCostFoundErrorGotten = false;
         private boolean multipleInstallmentsErrorGotten = false;
 
+        MockedProvider() {
+            successfulResponse = Installments.getInstallmentsList();
+            failedResponse = new MercadoPagoError("Default mocked error", false);
+        }
+
         private void setResponse(List<Installment> installments) {
             shouldFail = false;
             successfulResponse = installments;
@@ -737,6 +794,7 @@ public class InstallmentsPresenterTest {
         private boolean installmentsReviewViewInitialized = false;
         private PayerCost selectedPayerCost;
         private OnSelectedCallback<Integer> installmentSelectionCallback;
+        private boolean bankInterestsWarningShown = false;
 
         @Override
         public void showInstallments(List<PayerCost> payerCostList, OnSelectedCallback<Integer> onSelectedCallback) {
@@ -803,6 +861,11 @@ public class InstallmentsPresenterTest {
         @Override
         public void showInstallmentsReviewView() {
             this.installmentsReviewViewShown = true;
+        }
+
+        @Override
+        public void warnAboutBankInterests() {
+            bankInterestsWarningShown = true;
         }
 
         private void simulateInstallmentSelection(int index) {

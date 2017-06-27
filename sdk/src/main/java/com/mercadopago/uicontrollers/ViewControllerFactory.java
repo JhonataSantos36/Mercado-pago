@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentMethodSearchItem;
+import com.mercadopago.model.Site;
 import com.mercadopago.model.Token;
 import com.mercadopago.uicontrollers.payercosts.PayerCostRow;
 import com.mercadopago.uicontrollers.payercosts.PayerCostViewController;
@@ -28,8 +29,8 @@ public class ViewControllerFactory {
         return new PaymentMethodOffEditableRow(context, item);
     }
 
-    public static PayerCostViewController getPayerCostEditionViewController(Context context, String currencyId) {
-        return new PayerCostRow(context, currencyId);
+    public static PayerCostViewController getPayerCostEditionViewController(Context context, Site site) {
+        return new PayerCostRow(context, site);
     }
 
 }

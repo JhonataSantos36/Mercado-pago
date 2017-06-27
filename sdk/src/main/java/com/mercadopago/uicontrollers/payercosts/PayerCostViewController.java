@@ -3,6 +3,7 @@ package com.mercadopago.uicontrollers.payercosts;
 import android.view.View;
 
 import com.mercadopago.model.PayerCost;
+import com.mercadopago.model.Site;
 import com.mercadopago.uicontrollers.CustomViewController;
 
 /**

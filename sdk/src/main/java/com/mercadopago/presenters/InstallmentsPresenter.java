@@ -10,11 +10,13 @@ import com.mercadopago.model.Installment;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.PaymentMethod;
+import com.mercadopago.model.Site;
 import com.mercadopago.mvp.MvpPresenter;
 import com.mercadopago.mvp.OnResourcesRetrievedCallback;
 import com.mercadopago.providers.InstallmentsProvider;
 import com.mercadopago.util.CurrenciesUtil;
 import com.mercadopago.preferences.PaymentPreference;
+import com.mercadopago.util.InstallmentsUtil;
 import com.mercadopago.views.InstallmentsActivityView;
 
 import java.math.BigDecimal;
@@ -41,13 +43,21 @@ public class InstallmentsPresenter extends MvpPresenter<InstallmentsActivityView
     private PaymentPreference mPaymentPreference;
     private CardInfo mCardInfo;
     private Discount mDiscount;
-    private Boolean mDiscountEnabled;
-    private Boolean mDirectDiscountEnabled;
+    private Boolean mDiscountEnabled = true;
+    private Boolean mDirectDiscountEnabled = true;
     private Boolean mInstallmentsReviewEnabled;
+    private Site mSite;
 
     public void initialize() {
         initializeDiscountRow();
+        showSiteRelatedInformation();
         loadPayerCosts();
+    }
+
+    private void showSiteRelatedInformation() {
+        if (InstallmentsUtil.shouldWarnAboutBankInterests(mSite)) {
+            getView().warnAboutBankInterests();
+        }
     }
 
     private void loadPayerCosts() {
@@ -63,8 +73,8 @@ public class InstallmentsPresenter extends MvpPresenter<InstallmentsActivityView
     }
 
     private void resolvePayerCosts(List<PayerCost> payerCosts) {
-        PayerCost defaultPayerCost = mPaymentPreference.getDefaultInstallments(payerCosts);
-        mPayerCosts = mPaymentPreference.getInstallmentsBelowMax(payerCosts);
+        PayerCost defaultPayerCost = mPaymentPreference == null ? null : mPaymentPreference.getDefaultInstallments(payerCosts);
+        mPayerCosts = mPaymentPreference == null ? payerCosts : mPaymentPreference.getInstallmentsBelowMax(payerCosts);
 
         if (defaultPayerCost != null) {
             getView().finishWithResult(defaultPayerCost);
@@ -261,6 +271,14 @@ public class InstallmentsPresenter extends MvpPresenter<InstallmentsActivityView
         if (mFailureRecovery != null) {
             mFailureRecovery.recover();
         }
+    }
+
+    public void setSite(Site site) {
+        this.mSite = site;
+    }
+
+    public Site getSite() {
+        return this.mSite;
     }
 
     public void onItemSelected(int position) {

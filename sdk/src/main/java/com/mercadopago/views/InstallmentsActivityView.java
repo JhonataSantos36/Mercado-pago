@@ -40,4 +40,6 @@ public interface InstallmentsActivityView extends MvpView {
     void hideInstallmentsReviewView();
 
     void showInstallmentsReviewView();
+
+    void warnAboutBankInterests();
 }

@@ -3,6 +3,7 @@
 <android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_content"
     android:background="@color/mpsdk_white"
     android:layout_width="match_parent"
@@ -11,15 +12,18 @@
 
     <include layout="@layout/mpsdk_view_progress_bar_small"/>
 
+
     <android.support.design.widget.AppBarLayout
         android:id="@+id/mpsdkInstallmentesAppBar"
         android:layout_width="match_parent"
         android:layout_height="240dp"
         android:theme="@style/ThemeOverlay.AppCompat.Dark"
         android:background="@color/mpsdk_background_blue"
-        android:fitsSystemWindows="true">
+        android:fitsSystemWindows="true"
+        app:elevation="0dp">
 
-        <include layout="@layout/mpsdk_scrolling_toolbar"/>
+        <include layout="@layout/mpsdk_scrolling_toolbar" />
+
     </android.support.design.widget.AppBarLayout>
 
     <FrameLayout
@@ -30,10 +34,32 @@
         <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/mpsdkNoInstallmentsRate"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_gravity="top|center"
+                    android:gravity="center_horizontal"
+                    android:visibility="gone"
+                    android:background="@color/mpsdk_background_blue">
+
+                    <com.mercadopago.customviews.MPTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:fontStyle="light"
+                        android:textSize="14dp"
+                        android:background="@color/mpsdk_background_blue"
+                        android:textColor="@color/mpsdk_white"
+                        android:id="@+id/mpsdkNoInstallmentsRateTextView"
+                        />
+                </LinearLayout>
+
                 <FrameLayout
                     android:id="@+id/mpsdkDiscount"
                     android:layout_width="match_parent"

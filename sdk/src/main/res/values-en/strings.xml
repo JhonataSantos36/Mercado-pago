@@ -238,9 +238,12 @@
     <string name="mpsdk_total">Total:</string>
     <string name="mpsdk_something_went_wrong">Oops! Something went wrong…</string>
 
+    <string name="mpsdk_interest_label">Does\'t include bank interest</string>
+
     <!-- Unlock Card -->
     <string name="mpsdk_text_unlock_card_start">Remember to</string>
     <string name="mpsdk_text_unlock_card_linked">unlock your card</string>
     <string name="mpsdk_text_unlock_card_end">before you confirm the payment.</string>
     <string name="mpsdk_title_unlock_card">Card Unlocking</string>
+
 </resources>

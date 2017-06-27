@@ -11,6 +11,7 @@ import android.widget.FrameLayout;
 import com.mercadopago.R;
 import com.mercadopago.callbacks.OnSelectedCallback;
 import com.mercadopago.model.PayerCost;
+import com.mercadopago.model.Site;
 import com.mercadopago.uicontrollers.payercosts.PayerCostRow;
 
 import java.util.ArrayList;
@@ -18,14 +19,16 @@ import java.util.List;
 
 public class PayerCostsAdapter extends  RecyclerView.Adapter<PayerCostsAdapter.ViewHolder> {
 
+    private final Site mSite;
     private Context mContext;
     private List<PayerCost> mInstallmentsList;
     private String mCurrencyId;
     private OnSelectedCallback<Integer> mCallback;
 
-    public PayerCostsAdapter(Context context, String currency, OnSelectedCallback<Integer> callback) {
+    public PayerCostsAdapter(Context context, Site site, OnSelectedCallback<Integer> callback) {
         this.mContext = context;
-        this.mCurrencyId = currency;
+        this.mCurrencyId = site.getCurrencyId();
+        this.mSite = site;
         this.mInstallmentsList = new ArrayList<>();
         this.mCallback = callback;
     }
@@ -73,7 +76,7 @@ public class PayerCostsAdapter extends  RecyclerView.Adapter<PayerCostsAdapter.V
         public ViewHolder(View itemView) {
             super(itemView);
             mPayerCostContainer = (FrameLayout) itemView.findViewById(R.id.mpsdkPayerCostAdapterContainer);
-            mPayerCostRow = new PayerCostRow(mContext, mCurrencyId);
+            mPayerCostRow = new PayerCostRow(mContext, mSite);
             mPayerCostRow.inflateInParent(mPayerCostContainer, true);
             mPayerCostRow.initializeControls();
 

@@ -10,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 
 import com.google.gson.reflect.TypeToken;
 
@@ -47,6 +48,7 @@ import com.mercadopago.util.ColorsUtil;
 import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;
+import com.mercadopago.util.InstallmentsUtil;
 import com.mercadopago.util.ScaleUtil;
 import com.mercadopago.views.InstallmentsActivityView;
 
@@ -69,7 +71,6 @@ public class InstallmentsActivity extends MercadoPagoBaseActivity implements Ins
     protected boolean mActivityActive;
     protected PaymentPreference mPaymentPreference;
     protected DecorationPreference mDecorationPreference;
-    protected Site mSite;
 
     protected String mDefaultBaseURL;
     protected String mMerchantDiscountBaseURL;
@@ -97,6 +98,10 @@ public class InstallmentsActivity extends MercadoPagoBaseActivity implements Ins
     protected MPTextView mTimerTextView;
     protected FrameLayout mDiscountFrameLayout;
 
+    private MPTextView mNoInstallmentsRateTextView;
+    private LinearLayout mNoInstallmentsRate;
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -119,6 +124,7 @@ public class InstallmentsActivity extends MercadoPagoBaseActivity implements Ins
         initializeControls();
         initializeView();
 
+
         mPresenter.initialize();
     }
 
@@ -130,8 +136,8 @@ public class InstallmentsActivity extends MercadoPagoBaseActivity implements Ins
         mPublicKey = getIntent().getStringExtra("merchantPublicKey");
         mPrivateKey = getIntent().getStringExtra("payerAccessToken");
         mDecorationPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("decorationPreference"), DecorationPreference.class);
-        mSite = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("site"), Site.class);
 
+        mPresenter.setSite(JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("site"), Site.class));
         mPresenter.setPaymentMethod(JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("paymentMethod"), PaymentMethod.class));
         mPresenter.setIssuer(JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("issuer"), Issuer.class));
         mPresenter.setCardInfo(JsonUtil.getInstance().fromJson(getIntent().getStringExtra("cardInfo"), CardInfo.class));
@@ -183,7 +189,8 @@ public class InstallmentsActivity extends MercadoPagoBaseActivity implements Ins
     }
 
     public void setContentView() {
-        MPTracker.getInstance().trackScreen("CARD_INSTALLMENTS", "2", mPublicKey, mSite.getId(), BuildConfig.VERSION_NAME, this);
+        String siteId = mPresenter.getSite() == null ? "" : mPresenter.getSite().getId();
+        MPTracker.getInstance().trackScreen("CARD_INSTALLMENTS", "2", mPublicKey, siteId, BuildConfig.VERSION_NAME, this);
 
         if (mLowResActive) {
             setContentViewLowRes();
@@ -251,6 +258,15 @@ public class InstallmentsActivity extends MercadoPagoBaseActivity implements Ins
         } else {
             loadNormalViews();
         }
+    }
+
+    @Override
+    public void warnAboutBankInterests() {
+        mNoInstallmentsRate = (LinearLayout) findViewById(R.id.mpsdkNoInstallmentsRate);
+        mNoInstallmentsRate.setVisibility(View.VISIBLE);
+        mNoInstallmentsRateTextView = (MPTextView) findViewById(R.id.mpsdkNoInstallmentsRateTextView);
+        mNoInstallmentsRateTextView.setVisibility(View.VISIBLE);
+        mNoInstallmentsRateTextView.setText(R.string.mpsdk_interest_label);
     }
 
     public void loadLowResViews() {
@@ -368,7 +384,7 @@ public class InstallmentsActivity extends MercadoPagoBaseActivity implements Ins
     }
 
     private void initializeAdapter(OnSelectedCallback<Integer> onSelectedCallback) {
-        mPayerCostsAdapter = new PayerCostsAdapter(this, mSite.getCurrencyId(), onSelectedCallback);
+        mPayerCostsAdapter = new PayerCostsAdapter(this, mPresenter.getSite(), onSelectedCallback);
         initializeAdapterListener(mPayerCostsAdapter, mInstallmentsRecyclerView);
     }
 
@@ -456,7 +472,8 @@ public class InstallmentsActivity extends MercadoPagoBaseActivity implements Ins
 
             mPresenter.initializeDiscountRow();
         } else {
-            MPTracker.getInstance().trackEvent("CARD_INSTALLMENTS", "BACK_PRESSED", "2", mPublicKey, mSite.getId(), BuildConfig.VERSION_NAME, this);
+            String siteId = mPresenter.getSite() == null ? "" : mPresenter.getSite().getId();
+            MPTracker.getInstance().trackEvent("CARD_INSTALLMENTS", "BACK_PRESSED", "2", mPublicKey, siteId, BuildConfig.VERSION_NAME, this);
             Intent returnIntent = new Intent();
             returnIntent.putExtra("backButtonPressed", true);
             returnIntent.putExtra("discount", JsonUtil.getInstance().toJson(mPresenter.getDiscount()));
@@ -522,7 +539,7 @@ public class InstallmentsActivity extends MercadoPagoBaseActivity implements Ins
         discountRowViewBuilder.setContext(this)
                 .setDiscount(mPresenter.getDiscount())
                 .setTransactionAmount(transactionAmount)
-                .setCurrencyId(mSite.getCurrencyId());
+                .setCurrencyId(mPresenter.getSite().getCurrencyId());
 
         if (isInstallmentsReviewVisible() && mPresenter.getDiscount() == null) {
             discountRowViewBuilder.setDiscountEnabled(false);
@@ -557,7 +574,7 @@ public class InstallmentsActivity extends MercadoPagoBaseActivity implements Ins
     public void initInstallmentsReviewView(final PayerCost payerCost) {
         InstallmentsReviewView installmentsReviewView = new MercadoPagoUI.Views.InstallmentsReviewViewBuilder()
                 .setContext(this)
-                .setCurrencyId(mSite.getCurrencyId())
+                .setCurrencyId(mPresenter.getSite().getCurrencyId())
                 .setPayerCost(payerCost)
                 .setDecorationPreference(mDecorationPreference)
                 .build();

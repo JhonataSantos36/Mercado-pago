@@ -249,9 +249,12 @@
     <string name="mpsdk_total">Total:</string>
     <string name="mpsdk_something_went_wrong">¡Uy! Algo salió mal…</string>
 
+    <string name="mpsdk_interest_label">No incluye intereses bancarios</string>
+
     <!-- Unlock Card -->
     <string name="mpsdk_text_unlock_card_start">Recuerda</string>
     <string name="mpsdk_text_unlock_card_linked">desbloquear tu tarjeta</string>
     <string name="mpsdk_text_unlock_card_end">antes de confirmar el pago.</string>
     <string name="mpsdk_title_unlock_card">Desbloqueo de Tarjeta</string>
+
 </resources>

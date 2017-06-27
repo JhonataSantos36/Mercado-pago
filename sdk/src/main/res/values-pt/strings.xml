@@ -233,10 +233,11 @@
     <string name="mpsdk_total">Total:</string>
     <string name="mpsdk_something_went_wrong">Ops! Algo deu errado…</string>
 
+    <string name="mpsdk_interest_label">Não inclui juros bancários</string>
+
     <!-- Unlock Card -->
     <string name="mpsdk_text_unlock_card_start">Lembre-se de</string>
     <string name="mpsdk_text_unlock_card_linked">desbloquear o seu cartã</string>
     <string name="mpsdk_text_unlock_card_end">o antes de confirmar o pagamento.</string>
     <string name="mpsdk_title_unlock_card">Desbloquear Cartão</string>
-
 </resources>
