@@ -1,21 +1,21 @@
 [![Build Status](https://travis-ci.org/mercadopago/px-android.png)](https://travis-ci.org/mercadopago/px-android)
 [![Codecov branch](https://img.shields.io/codecov/c/github/mercadopago/px-android/develop.svg)](https://codecov.io/gh/mercadopago/px-android/)
 
-#MercadoPago - Android SDK
+# MercadoPago - Android SDK
 
 The MercadoPago Android SDK makes it easy to collect your user's credit card details inside your android app. By creating tokens, MercadoPago handles the bulk of PCI compliance by preventing sensitive card data from hitting your server.
 
 ![Screenshot MercadoPago](https://cloud.githubusercontent.com/assets/11367894/20360662/5f3947dc-ac13-11e6-94d9-9a938f6b2cff.png)
 
-##Installation
+## Installation
 
-###Android Studio
+### Android Studio
 
 Add this line to your app's `build.gradle` inside the `dependencies` section:
 
-    compile 'com.mercadopago:sdk:3.0.0-beta2'
+    compile 'com.mercadopago:sdk:3.1.0'
 
-###Eclipse
+### Eclipse
 
 1. Clone the repository.
 2. Be sure you've installed the Android SDK with API Level 25 and _android-support-v7_
