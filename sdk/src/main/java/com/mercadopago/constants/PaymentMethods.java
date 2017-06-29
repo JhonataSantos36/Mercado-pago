@@ -27,6 +27,10 @@ public class PaymentMethods {
         public static final String REDLINK = "redlink";
         public static final String BAPROPAGOS = "bapropagos";
         public static final String CORDIAL = "cordial";
+        public static final String MAESTRO = "maestro";
+        public static final String DEBMASTER = "debmaster";
+        public static final String DEBCABAL = "debcabal";
+        public static final String DEBVISA = "debvisa";
     }
 
     public class BRASIL {
@@ -43,6 +47,7 @@ public class PaymentMethods {
     public class MEXICO {
         public static final String VISA = "visa";
         public static final String MASTER = "master";
+        public static final String AMEX = "amex";
         public static final String DEBVISA = "debvisa";
         public static final String DEBMASTER = "debmaster";
         public static final String MERCADOPAGOCARD = "mercadopagocard";
@@ -55,8 +60,6 @@ public class PaymentMethods {
     public class VENEZUELA {
         public static final String VISA = "visa";
         public static final String MASTER = "master";
-        public static final String PROVINCIAL = "provincial";
-        public static final String MERCANTIL = "mercantil";
     }
 
     public class COLOMBIA {
@@ -67,6 +70,23 @@ public class PaymentMethods {
         public static final String CODENSA = "codensa";
         public static final String EFECTY = "efecty";
         public static final String DAVIVIENDA = "davivienda";
+        public static final String PSE = "pse";
+    }
+
+    public class PERU {
+        public static final String VISA = "visa";
+        public static final String DEBVISA = "debvisa";
+        public static final String PAGOEFECTIVO_ATM = "pagoefectivo_atm";
+    }
+
+    public class CHILE {
+        public static final String VISA = "visa";
+        public static final String AMEX = "amex";
+        public static final String MASTER = "master";
+        public static final String MAGNA = "magna";
+        public static final String PRESTO = "presto";
+        public static final String CMR = "cmr";
+        public static final String DINERS = "diners";
     }
 
     private PaymentMethods(){}
