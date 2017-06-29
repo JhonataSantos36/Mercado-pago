@@ -1,0 +1,14 @@
+[
+  {
+    "payment_method_id": "master",
+    "payment_type_id": "credit_card",
+    "issuer": {
+      "id": "159",
+      "name": "Banamex",
+      "secure_thumbnail": "https://www.mercadopago.com/org-img/MP3/API/logos/159.gif",
+      "thumbnail": "http://img.mlstatic.com/org-img/MP3/API/logos/159.gif"
+    },
+    "payer_costs": [
+    ]
+  }
+]

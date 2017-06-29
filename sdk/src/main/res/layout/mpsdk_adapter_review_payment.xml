@@ -12,8 +12,8 @@
         android:layout_gravity="center_vertical"
         android:gravity="center_vertical"
         android:orientation="vertical"
-        android:paddingBottom="20dp"
-        android:paddingTop="20dp">
+        android:paddingBottom="40dp"
+        android:paddingTop="40dp">
 
         <ImageView
             android:id="@+id/mpsdkAdapterReviewPaymentImage"
@@ -43,13 +43,12 @@
             android:paddingLeft="25dp"
             android:paddingRight="25dp"
             android:paddingStart="25dp"
-            android:textColor="@color/mpsdk_review_payment_text"
             android:textSize="24dp"
-            app:fontStyle="regular"
             tools:text="Pagaras con Rapipago" />
 
 
         <RelativeLayout
+            android:id="@+id/mpsdkExtraInfoContainer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
@@ -84,7 +83,7 @@
                 android:layout_toRightOf="@+id/mpsdkIconTime"
                 android:gravity="center_horizontal"
                 android:textSize="18dp"
-                app:fontStyle="default_light"
+                app:fontStyle="light"
                 tools:text="Se acreditará en tantos días" />
         </RelativeLayout>
 
@@ -97,7 +96,7 @@
             android:includeFontPadding="false"
             android:textSize="24dp"
             android:visibility="gone"
-            app:fontStyle="default_light"
+            app:fontStyle="light"
             tools:text="CFT 0,00%" />
 
         <FrameLayout
@@ -108,7 +107,8 @@
             android:layout_marginLeft="25dp"
             android:layout_marginRight="25dp"
             android:layout_marginStart="25dp"
-            android:layout_marginTop="20dp">
+            android:layout_marginTop="20dp"
+            android:visibility="gone">
 
             <com.mercadopago.customviews.MPTextView
                 android:id="@+id/mpsdkReviewChangePaymentText"
@@ -117,8 +117,7 @@
                 android:layout_gravity="center"
                 android:text="@string/mpsdk_change_payment"
                 android:textColor="@color/mpsdk_background_blue"
-                android:textSize="18dp"
-                app:fontStyle="regular" />
+                android:textSize="18dp" />
         </FrameLayout>
 
     </LinearLayout>

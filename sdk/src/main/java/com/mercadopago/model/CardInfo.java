@@ -32,7 +32,7 @@ public class CardInfo {
                 && token.getFirstSixDigits() != null;
     }
 
-    public int getCardNumberLength() {
+    public Integer getCardNumberLength() {
         return cardNumberLength;
     }
 

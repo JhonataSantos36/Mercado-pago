@@ -23,7 +23,7 @@ import com.mercadopago.model.ApiException;
 import com.mercadopago.model.Card;
 import com.mercadopago.model.Customer;
 import com.mercadopago.model.PaymentMethod;
-import com.mercadopago.model.PaymentPreference;
+import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.model.SavedCardToken;
 import com.mercadopago.model.Token;
 import com.mercadopago.util.ApiUtil;

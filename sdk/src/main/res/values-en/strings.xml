@@ -79,9 +79,9 @@
     <string name="mpsdk_title_activity_new_card">Enter your card\'s information</string>
 
     <!-- Congrats -->
-    <string name="mpsdk_title_activity_congrat">Done, your payment was accredited!</string>
-    <string name="mpsdk_subtitle_action_activity_congrat">We will send you the data to\n%1$s</string>
-    <string name="mpsdk_text_state_acount_activity_congrat">On your statement you will see the charge as\n MERCADOPAGO</string>
+    <string name="mpsdk_title_activity_congrats">Done, your payment was accredited!</string>
+    <string name="mpsdk_subtitle_action_activity_congrats">We will send you the data to\n%1$s</string>
+    <string name="mpsdk_text_state_acount_activity_congrat">On your statement you will see the charge as\n  %1$s</string>
     <string name="mpsdk_payment_id_description">Ticket</string>
     <string name="mpsdk_payment_id_description_number">Nº %1$s</string>
 
@@ -99,7 +99,7 @@
 
     <!-- Rejection -->
     <string name="mpsdk_text_other_payment_method_button_rejection">Use another payment method</string>
-    <string name="mpsdk_text_pay_with_other_method">Pay with other method</string>
+    <string name="mpsdk_text_pay_with_other_method">Change payment method</string>
     <string name="mpsdk_text_enter_again">Enter again</string>
     <string name="mpsdk_subtitle_rejection_insufficient_amount_credit_card">Don\'t worry! You can choose another payment method.</string>
     <string name="mpsdk_title_other_reason_rejection">%1$s did not process the payment</string>
@@ -135,6 +135,10 @@
     <string name="mpsdk_error_message_invalid_installments">Invalid installments number</string>
     <string name="mpsdk_error_title">Oops! Something went wrong</string>
     <string name="mpsdk_standard_error_message">We are going to fix it. Try later.</string>
+    <string name="mpsdk_error_message_detail_no_installments">no installments found for an issuer at InstallmentsActivity</string>
+    <string name="mpsdk_error_message_detail_no_payer_cost_found">no payer costs found at InstallmentsActivity</string>
+    <string name="mpsdk_error_message_detail_multiple_installments">multiple installments found for an issuer at InstallmentsActivity</string>
+    <string name="mpsdk_error_message_detail_issuers">no issuers found at IssuersActivity</string>
     <string name="mpsdk_error_message_email_required">Email is required</string>
 
     <!-- API exception messages -->
@@ -193,7 +197,7 @@
     <string name="mpsdk_confirm_prompt_no">No</string>
 
     <!-- Review and Confirm -->
-    <string name="mpsdk_change_payment">Change payment</string>
+    <string name="mpsdk_change_payment">Change payment method</string>
     <string name="mpsdk_review_description_card">%1$s ending in: %2$s</string>
     <string name="mpsdk_your_atm">ATM of</string>
     <string name="mpsdk_review_off_text_default">You will pay %1$s\n%2$s</string>
@@ -201,6 +205,8 @@
     <string name="mpsdk_review_off_text_2">You will pay %1$s in\n%2$s</string>
     <string name="mpsdk_review_off_text_3">You will pay %1$s in your\n%2$s</string>
     <string name="mpsdk_review_off_text_4">You will pay %1$s with\n%2$s</string>
+    <string name="mpsdk_review_off_text_5">You will pay %1$s through\n%2$s</string>
+    <string name="mpsdk_review_off_text_6">You will pay %1$s at\n%2$s</string>
     <string name="mpsdk_homebanking">Home Banking of</string>
     <string name="mpsdk_review_summary_total">Total</string>
     <string name="mpsdk_review_product_quantity">Quantity: %1$s</string>
@@ -212,6 +218,8 @@
     <string name="mpsdk_review_summary_discount">Discount</string>
     <string name="mpsdk_review_summary_discount_with_percent_off">Discount %1$s%%</string>
     <string name="mpsdk_review_summary_discount_with_amount_off">Discount</string>
+    <string name="mpsdk_account_money_description">Account money \nof Mercado Pago</string>
+    <string name="mpsdk_ryc_account_money_description">With your account money</string>
 
     <!-- Discount -->
     <string name="mpsdk_discount">Discount</string>
@@ -229,4 +237,13 @@
     <string name="mpsdk_discount_percent_off">%1$s %%</string>
     <string name="mpsdk_total">Total:</string>
     <string name="mpsdk_something_went_wrong">Oops! Something went wrong…</string>
+
+    <string name="mpsdk_interest_label">Does\'t include bank interest</string>
+
+    <!-- Unlock Card -->
+    <string name="mpsdk_text_unlock_card_start">Remember to</string>
+    <string name="mpsdk_text_unlock_card_linked">unlock your card</string>
+    <string name="mpsdk_text_unlock_card_end">before you confirm the payment.</string>
+    <string name="mpsdk_title_unlock_card">Card Unlocking</string>
+
 </resources>

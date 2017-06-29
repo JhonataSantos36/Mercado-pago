@@ -1,6 +1,8 @@
 package com.mercadopago;
 
+import android.content.Context;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -17,7 +19,7 @@ public abstract class MercadoPagoBaseActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstance) {
-        if(savedInstance == null) {
+        if (savedInstance == null) {
             mLanguage = getResources().getConfiguration().locale.getLanguage();
             mCountry = getResources().getConfiguration().locale.getCountry();
         } else {
@@ -43,4 +45,5 @@ public abstract class MercadoPagoBaseActivity extends AppCompatActivity {
             getResources().updateConfiguration(cfg, null);
         }
     }
+
 }

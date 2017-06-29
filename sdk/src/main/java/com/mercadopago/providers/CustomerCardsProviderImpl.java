@@ -5,7 +5,7 @@ import android.content.Context;
 import com.mercadopago.R;
 import com.mercadopago.callbacks.Callback;
 import com.mercadopago.core.MerchantServer;
-import com.mercadopago.exceptions.MPException;
+import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.Customer;
 import com.mercadopago.mvp.OnResourcesRetrievedCallback;
@@ -38,7 +38,7 @@ public class CustomerCardsProviderImpl implements CustomerCardsProvider {
 
             @Override
             public void failure(ApiException apiException) {
-                onResourcesRetrievedCallback.onFailure(new MPException(apiException));
+                onResourcesRetrievedCallback.onFailure(new MercadoPagoError(apiException));
             }
         });
     }

@@ -15,14 +15,14 @@ import retrofit2.http.Query;
 public interface GatewayService {
 
     @POST("/v1/card_tokens")
-    MPCall<Token> getToken(@Query("public_key") String publicKey, @Body CardToken cardToken);
+    MPCall<Token> getToken(@Query("public_key") String publicKey, @Query("access_token") String privateKey, @Body CardToken cardToken);
 
     @POST("/v1/card_tokens")
-    MPCall<Token> getToken(@Query("public_key") String publicKey, @Body SavedCardToken savedCardToken);
+    MPCall<Token> getToken(@Query("public_key") String publicKey, @Query("access_token") String privateKey, @Body SavedCardToken savedCardToken);
 
     @POST("/v1/card_tokens/{token_id}/clone")
-    MPCall<Token> getToken(@Path(value = "token_id") String tokenId, @Query("public_key") String publicKey);
+    MPCall<Token> getToken(@Path(value = "token_id") String tokenId, @Query("public_key") String publicKey, @Query("access_token") String privateKey);
 
     @PUT("/v1/card_tokens/{token_id}")
-    MPCall<Token> getToken(@Path(value = "token_id") String tokenId, @Query("public_key") String publicKey, @Body SecurityCodeIntent securityCodeIntent);
+    MPCall<Token> getToken(@Path(value = "token_id") String tokenId, @Query("public_key") String publicKey, @Query("access_token") String privateKey, @Body SecurityCodeIntent securityCodeIntent);
 }

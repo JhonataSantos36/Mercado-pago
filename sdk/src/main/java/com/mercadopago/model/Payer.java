@@ -43,4 +43,8 @@ public class Payer {
     public void setAccessToken(String accessToken) {
         this.accessToken = accessToken;
     }
+
+    public String getAccessToken() {
+        return accessToken;
+    }
 }

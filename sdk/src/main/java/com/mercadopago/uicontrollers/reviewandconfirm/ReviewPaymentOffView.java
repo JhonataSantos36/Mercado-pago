@@ -2,7 +2,6 @@ package com.mercadopago.uicontrollers.reviewandconfirm;
 
 import android.content.Context;
 import android.graphics.PorterDuff;
-import android.text.Spanned;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,15 +11,18 @@ import android.widget.ImageView;
 
 import com.mercadopago.R;
 import com.mercadopago.callbacks.OnReviewChange;
+import com.mercadopago.constants.PaymentMethods;
+import com.mercadopago.constants.ReviewKeys;
 import com.mercadopago.constants.Sites;
 import com.mercadopago.customviews.MPTextView;
-import com.mercadopago.model.DecorationPreference;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.Reviewable;
 import com.mercadopago.model.Site;
+import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.util.CircleTransform;
 import com.mercadopago.util.CurrenciesUtil;
 import com.mercadopago.util.ReviewUtil;
+import com.mercadopago.util.TextUtil;
 import com.squareup.picasso.Picasso;
 
 import java.math.BigDecimal;
@@ -42,23 +44,24 @@ public class ReviewPaymentOffView extends Reviewable {
 
     private Context mContext;
     private PaymentMethod mPaymentMethod;
-    private String mExtraInfo;
+    private String mPaymentMethodCommentInfo;
+    private String mPaymentMethodDescriptionInfo;
     private BigDecimal mAmount;
     private Site mSite;
     private OnReviewChange mOnReviewChange;
-    private Boolean mIsUniquePaymentMethod;
+    private Boolean mEditionEnabled;
     private DecorationPreference mDecorationPreference;
+    private ViewGroup mPaymentMethodExtraInfo;
 
-    public ReviewPaymentOffView(Context context, PaymentMethod paymentMethod, String extraInfo, BigDecimal amount, Site site, OnReviewChange onReviewChange,
-                                Boolean uniquePaymentMethod,
-                                DecorationPreference decorationPreference) {
+    public ReviewPaymentOffView(Context context, PaymentMethod paymentMethod, String paymentMethodCommentInfo, String paymentMethodDescriptionInfo, BigDecimal amount, Site site, OnReviewChange onReviewChange, Boolean editionEnabled, DecorationPreference decorationPreference) {
         this.mContext = context;
         this.mPaymentMethod = paymentMethod;
-        this.mExtraInfo = extraInfo;
+        this.mPaymentMethodCommentInfo = paymentMethodCommentInfo;
+        this.mPaymentMethodDescriptionInfo = paymentMethodDescriptionInfo;
         this.mAmount = amount;
         this.mSite = site;
         this.mOnReviewChange = onReviewChange;
-        this.mIsUniquePaymentMethod = uniquePaymentMethod == null ? false : mIsUniquePaymentMethod;
+        this.mEditionEnabled = editionEnabled == null ? true : editionEnabled;
         this.mDecorationPreference = decorationPreference;
     }
 
@@ -76,6 +79,7 @@ public class ReviewPaymentOffView extends Reviewable {
 
     @Override
     public void initializeControls() {
+        mPaymentMethodExtraInfo = (ViewGroup) mView.findViewById(R.id.mpsdkExtraInfoContainer);
         mPaymentImage = (ImageView) mView.findViewById(R.id.mpsdkAdapterReviewPaymentImage);
         mPaymentText = (MPTextView) mView.findViewById(R.id.mpsdkAdapterReviewPaymentText);
         mPaymentDescription = (MPTextView) mView.findViewById(R.id.mpsdkAdapterReviewPaymentDescription);
@@ -89,8 +93,9 @@ public class ReviewPaymentOffView extends Reviewable {
                 mOnReviewChange.onChangeSelected();
             }
         });
-        if (mIsUniquePaymentMethod) {
-            mChangePaymentButton.setVisibility(View.GONE);
+
+        if (mEditionEnabled) {
+            mChangePaymentButton.setVisibility(View.VISIBLE);
         }
     }
 
@@ -102,17 +107,28 @@ public class ReviewPaymentOffView extends Reviewable {
 
         mPayerCostContainer.setVisibility(View.GONE);
 
-        int paymentInstructionsTemplate = ReviewUtil.getPaymentInstructionTemplate(mPaymentMethod);
+        mPaymentText.setText(getPaymentMethodDescription());
 
-        String originalNumber = CurrenciesUtil.formatNumber(mAmount, mSite.getCurrencyId());
-        String itemName;
-        itemName = ReviewUtil.getPaymentMethodDescription(mPaymentMethod, mContext);
-        String completeDescription = mContext.getString(paymentInstructionsTemplate, originalNumber, itemName);
+        if(TextUtil.isEmpty(mPaymentMethodCommentInfo)) {
+            mPaymentMethodExtraInfo.setVisibility(View.GONE);
+        } else {
+            mPaymentDescription.setText(mPaymentMethodCommentInfo);
+        }
+    }
 
-        Spanned amountText = CurrenciesUtil.formatCurrencyInText(mAmount, mSite.getCurrencyId(), completeDescription, false, true);
-
-        mPaymentText.setText(amountText);
-        mPaymentDescription.setText(mExtraInfo);
+    private CharSequence getPaymentMethodDescription() {
+        CharSequence description;
+        if (PaymentMethods.ACCOUNT_MONEY.equals(mPaymentMethod.getId())) {
+            description = mContext.getString(R.string.mpsdk_ryc_account_money_description);
+        } else {
+            int paymentInstructionsTemplate = ReviewUtil.getPaymentInstructionTemplate(mPaymentMethod);
+            String originalNumber = CurrenciesUtil.formatNumber(mAmount, mSite.getCurrencyId());
+            String itemName;
+            itemName = ReviewUtil.getPaymentMethodDescription(mPaymentMethod, mPaymentMethodDescriptionInfo, mContext);
+            String completeDescription = mContext.getString(paymentInstructionsTemplate, originalNumber, itemName);
+            description = CurrenciesUtil.formatCurrencyInText(mAmount, mSite.getCurrencyId(), completeDescription, false, true);
+        }
+        return description;
     }
 
     private void setIcon() {
@@ -156,4 +172,8 @@ public class ReviewPaymentOffView extends Reviewable {
         }
     }
 
+    @Override
+    public String getKey() {
+        return ReviewKeys.PAYMENT_METHODS;
+    }
 }

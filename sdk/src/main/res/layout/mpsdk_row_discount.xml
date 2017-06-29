@@ -91,6 +91,7 @@
                 android:layout_marginTop="3dp"
                 android:visibility="gone">
                 <com.mercadopago.customviews.MPTextView
+                    android:id="@+id/mpsdkDiscountConcept"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="5dp"

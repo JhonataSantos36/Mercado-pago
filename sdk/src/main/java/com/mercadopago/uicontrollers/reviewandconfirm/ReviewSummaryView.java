@@ -1,6 +1,10 @@
 package com.mercadopago.uicontrollers.reviewandconfirm;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.support.annotation.ColorInt;
+
 import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,17 +14,26 @@ import android.widget.LinearLayout;
 
 import com.mercadopago.R;
 import com.mercadopago.callbacks.OnConfirmPaymentCallback;
+import com.mercadopago.constants.ReviewKeys;
+import com.mercadopago.constants.Sites;
 import com.mercadopago.customviews.MPTextView;
-import com.mercadopago.model.DecorationPreference;
 import com.mercadopago.model.Discount;
+import com.mercadopago.model.Issuer;
 import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.Reviewable;
+import com.mercadopago.model.Site;
+import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.uicontrollers.payercosts.PayerCostColumn;
 import com.mercadopago.util.CurrenciesUtil;
+import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.MercadoPagoUtil;
+import com.mercadopago.util.TextUtil;
+import com.mercadopago.util.UnlockCardUtil;
 
 import java.math.BigDecimal;
+
+import static com.mercadopago.util.TextUtils.isEmpty;
 
 /**
  * Created by vaserber on 11/10/16.
@@ -30,11 +43,13 @@ public class ReviewSummaryView extends Reviewable {
 
     public static final String CFT = "CFT ";
     protected View mView;
+
     protected LinearLayout mProductsRow;
     protected LinearLayout mDiscountsRow;
     protected LinearLayout mSubtotalRow;
     protected LinearLayout mPayerCostRow;
     protected LinearLayout mTotalRow;
+    protected LinearLayout mCustomRow;
     protected MPTextView mProductsText;
     protected MPTextView mDiscountPercentageText;
     protected MPTextView mDiscountsText;
@@ -46,35 +61,59 @@ public class ReviewSummaryView extends Reviewable {
     protected FrameLayout mConfirmButton;
     protected MPTextView mConfirmTextView;
     protected MPTextView mCFTTextView;
+    protected MPTextView mCustomDescriptionTextView;
+    protected MPTextView mCustomAmountTextView;
+
     protected OnConfirmPaymentCallback mCallback;
 
     protected Context mContext;
+    protected String mProductDetailText;
+    protected String mDiscountDetailText;
+    protected String mConfirmationMessage;
     protected String mCurrencyId;
+    protected String mCustomDescription;
+    protected Integer mCustomTextColor;
     protected BigDecimal mAmount;
-
+    protected BigDecimal mCustomAmount;
     protected PayerCost mPayerCost;
     protected PaymentMethod mPaymentMethod;
     protected DecorationPreference mDecorationPreference;
     protected Discount mDiscount;
+    protected MPTextView mProductsLabelText;
+    private MPTextView mUnlockCardTextView;
+    private LinearLayout mUnlockCard;
+    private Issuer mIssuer;
+    private Site mSite;
+    private String mUnlockLink;
 
-    public ReviewSummaryView(Context context, PaymentMethod paymentMethod, PayerCost payerCost, BigDecimal amount, Discount discount, String currency, DecorationPreference decorationPreference, OnConfirmPaymentCallback callback) {
+    public ReviewSummaryView(Context context, String confirmationMessage, String productDetailText, String discountDetailText, PaymentMethod paymentMethod, PayerCost payerCost, BigDecimal amount, Discount discount, String currencyId, String customDescription, BigDecimal customAmount, Site site, Issuer issuer, @ColorInt Integer customTextColor, DecorationPreference decorationPreference, OnConfirmPaymentCallback callback) {
         this.mContext = context;
-        this.mCurrencyId = currency;
+        this.mConfirmationMessage = confirmationMessage;
+        this.mProductDetailText = productDetailText;
+        this.mDiscountDetailText = discountDetailText;
+        this.mCurrencyId = currencyId;
         this.mAmount = amount;
         this.mPayerCost = payerCost;
         this.mPaymentMethod = paymentMethod;
         this.mDiscount = discount;
+        this.mCustomDescription = customDescription;
+        this.mCustomAmount = customAmount;
+        this.mCustomTextColor = customTextColor;
         this.mCallback = callback;
         this.mDecorationPreference = decorationPreference;
+        this.mIssuer = issuer;
+        this.mSite = site;
     }
 
     @Override
     public void initializeControls() {
         mProductsRow = (LinearLayout) mView.findViewById(R.id.mpsdkReviewSummaryProducts);
+        mProductsLabelText = (MPTextView) mView.findViewById(R.id.mpsdkReviewSummaryProductsLabelText);
         mDiscountsRow = (LinearLayout) mView.findViewById(R.id.mpsdkReviewSummaryDiscounts);
         mSubtotalRow = (LinearLayout) mView.findViewById(R.id.mpsdkReviewSummarySubtotal);
         mPayerCostRow = (LinearLayout) mView.findViewById(R.id.mpsdkReviewSummaryPay);
         mTotalRow = (LinearLayout) mView.findViewById(R.id.mpsdkReviewSummaryTotal);
+        mCustomRow = (LinearLayout) mView.findViewById(R.id.mpsdkReviewSummaryCustom);
         mProductsText = (MPTextView) mView.findViewById(R.id.mpsdkReviewSummaryProductsText);
         mDiscountPercentageText = (MPTextView) mView.findViewById(R.id.mpsdkReviewSummaryDiscountPercentage);
         mDiscountsText = (MPTextView) mView.findViewById(R.id.mpsdkReviewSummaryDiscountsText);
@@ -86,6 +125,10 @@ public class ReviewSummaryView extends Reviewable {
         mConfirmButton = (FrameLayout) mView.findViewById(R.id.mpsdkReviewSummaryConfirmButton);
         mConfirmTextView = (MPTextView) mView.findViewById(R.id.mpsdkReviewButtonText);
         mCFTTextView = (MPTextView) mView.findViewById(R.id.mpsdkCFT);
+        mUnlockCard = (LinearLayout) mView.findViewById(R.id.mpsdkCheckoutUnlockCard);
+        mUnlockCardTextView = (MPTextView) mView.findViewById(R.id.mpsdkUnlockCard);
+        mCustomDescriptionTextView = (MPTextView) mView.findViewById(R.id.mpsdkReviewSummaryCustomText);
+        mCustomAmountTextView = (MPTextView) mView.findViewById(R.id.mpsdkReviewSummaryCustomAmount);
         mConfirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -93,6 +136,39 @@ public class ReviewSummaryView extends Reviewable {
 
             }
         });
+    }
+
+    private void startUnlockCardActivity() {
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(mUnlockLink));
+        mContext.startActivity(browserIntent);
+    }
+
+    public void showUnlockCard() {
+
+        mUnlockCard.setVisibility(View.VISIBLE);
+
+        mUnlockCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startUnlockCardActivity();
+            }
+        });
+    }
+
+    private boolean isCardUnlockingNeeded() {
+        String link = getCardUnlockingLink();
+        if (!TextUtil.isEmpty(link)) {
+            mUnlockLink = link;
+            return true;
+        }
+        return false;
+    }
+
+    private String getCardUnlockingLink() {
+        if (mSite == null || mIssuer == null) {
+            return null;
+        }
+        return UnlockCardUtil.getCardUnlockingLink(mSite.getId(), mIssuer.getId());
     }
 
     @Override
@@ -111,7 +187,15 @@ public class ReviewSummaryView extends Reviewable {
     public void draw() {
         decorateButton();
         //Products
+        mConfirmTextView.setText(mConfirmationMessage);
+        mProductsLabelText.setText(mProductDetailText);
         mProductsText.setText(CurrenciesUtil.getFormattedAmount(mAmount, mCurrencyId));
+
+        //Custom info
+        if (hasCustomInfo()) {
+            showCustomInfo();
+        }
+
         //Discounts
         if (hasDiscount()) {
             showDiscountRow();
@@ -124,24 +208,41 @@ public class ReviewSummaryView extends Reviewable {
         } else {
             mSubtotalRow.setVisibility(View.GONE);
         }
-        if (mPaymentMethod != null && MercadoPagoUtil.isCard(mPaymentMethod.getPaymentTypeId())) {
 
+        if (isCardPaymentMethod()) {
             if (mPayerCost.getInstallments() == 1) {
                 hidePayerCostInfo();
+                if (mDiscount == null) {
+                    hideTotalRow();
+                } else {
+                    showTotal(mPayerCost.getTotalAmount());
+                }
             } else {
                 showPayerCostRow();
                 showFinance();
+                showTotal(mPayerCost.getTotalAmount());
+
             }
 
-            showTotal(mPayerCost.getTotalAmount());
-
+        } else if (!hasDiscount()) {
+            hideTotalRow();
+            hidePayerCostInfo();
         } else {
-
             hidePayerCostInfo();
             mTotalText.setText(CurrenciesUtil.getFormattedAmount(getSubtotal(), mCurrencyId));
+
         }
+
+        if (isCardUnlockingNeeded()) {
+            showUnlockCard();
+        }
+
     }
 
+    private void hideTotalRow() {
+        mTotalRow.setVisibility(View.GONE);
+        mSecondSeparator.setVisibility(View.GONE);
+    }
 
     private void hidePayerCostInfo() {
         mPayerCostRow.setVisibility(View.GONE);
@@ -153,7 +254,10 @@ public class ReviewSummaryView extends Reviewable {
     private void showFinance() {
         if (mPayerCost.hasCFT()) {
             mCFTTextView.setVisibility(View.VISIBLE);
-            mCFTTextView.setText(CFT + mPayerCost.getCFTPercent());
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append(CFT);
+            stringBuilder.append(mPayerCost.getCFTPercent());
+            mCFTTextView.setText(stringBuilder);
         }
     }
 
@@ -163,6 +267,34 @@ public class ReviewSummaryView extends Reviewable {
             if (mDecorationPreference.isDarkFontEnabled()) {
                 mConfirmTextView.setTextColor(mDecorationPreference.getDarkFontColor(mContext));
             }
+            mUnlockCardTextView.setTextColor(mDecorationPreference.getBaseColor());
+        }
+    }
+
+    private void showCustomInfo() {
+        mCustomRow.setVisibility(View.VISIBLE);
+        mCustomDescriptionTextView.setText(mCustomDescription);
+
+        setCustomAmount();
+        setCustomTextColor();
+    }
+
+    private void setCustomAmount() {
+        if (mCurrencyId != null && mCustomAmount != null && mCustomAmount.compareTo(BigDecimal.ZERO) >= 0) {
+            Spanned customAmount = CurrenciesUtil.getFormattedAmount(mCustomAmount, mCurrencyId);
+            mCustomAmountTextView.setText(customAmount);
+        } else {
+            mCustomAmountTextView.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    private void setCustomTextColor() {
+        if (mCustomTextColor != null) {
+            mCustomDescriptionTextView.setTextColor(mCustomTextColor);
+
+            if (mCustomAmount != null) {
+                mCustomAmountTextView.setTextColor(mCustomTextColor);
+            }
         }
     }
 
@@ -171,13 +303,7 @@ public class ReviewSummaryView extends Reviewable {
         Spanned amountText;
         String discountText;
 
-        if (mDiscount.hasPercentOff()) {
-            discountText = mContext.getResources().getString(R.string.mpsdk_review_summary_discount_with_percent_off,
-                    String.valueOf(mDiscount.getPercentOff()));
-        } else {
-            discountText = mContext.getResources().getString(R.string.mpsdk_review_summary_discount_with_amount_off);
-        }
-
+        discountText = getDiscountText();
         mDiscountPercentageText.setText(discountText);
 
         formattedAmountBuilder.append("-");
@@ -186,6 +312,47 @@ public class ReviewSummaryView extends Reviewable {
         amountText = CurrenciesUtil.formatCurrencyInText(mDiscount.getCouponAmount(), mCurrencyId, formattedAmountBuilder.toString(), false, true);
 
         mDiscountsText.setText(amountText);
+    }
+
+    private String getDiscountText() {
+        String discountText;
+
+        if (mDiscount.hasPercentOff()) {
+            discountText = getDiscountTextWithPercentOff();
+        } else {
+            discountText = getDiscountTextWithoutPercentOff();
+        }
+
+        return discountText;
+    }
+
+    private String getDiscountTextWithPercentOff() {
+        String discountText;
+
+        if (hasDiscountConcept()) {
+            discountText = mDiscount.getConcept() + " " + mDiscount.getPercentOff() + mContext.getResources().getString(R.string.mpsdk_percent);
+        } else {
+            discountText = mContext.getResources().getString(R.string.mpsdk_review_summary_discount_with_percent_off,
+                    String.valueOf(mDiscount.getPercentOff()));
+        }
+
+        return discountText;
+    }
+
+    private String getDiscountTextWithoutPercentOff() {
+        String discountText;
+
+        if (hasDiscountConcept()) {
+            discountText = mDiscount.getConcept();
+        } else {
+            discountText = mContext.getResources().getString(R.string.mpsdk_review_summary_discount_with_amount_off);
+        }
+
+        return discountText;
+    }
+
+    private Boolean hasDiscountConcept() {
+        return mDiscount != null && !isEmpty(mDiscount.getConcept());
     }
 
     private void showPayerCostRow() {
@@ -199,6 +366,10 @@ public class ReviewSummaryView extends Reviewable {
         mTotalText.setText(CurrenciesUtil.getFormattedAmount(amount, mCurrencyId));
     }
 
+    private boolean hasCustomInfo() {
+        return !isEmpty(mCustomDescription);
+    }
+
     private boolean hasDiscount() {
         return (mDiscount != null && mCurrencyId != null
                 && (mDiscount.hasPercentOff() != null || mDiscount.getCouponAmount() != null));
@@ -209,11 +380,20 @@ public class ReviewSummaryView extends Reviewable {
         return hasDiscount();
     }
 
+    private boolean isCardPaymentMethod() {
+        return mPaymentMethod != null && MercadoPagoUtil.isCard(mPaymentMethod.getPaymentTypeId());
+    }
+
     private BigDecimal getSubtotal() {
         BigDecimal ans = mAmount;
         if (hasDiscount()) {
             ans = mAmount.subtract(mDiscount.getCouponAmount());
         }
         return ans;
+    }
+
+    @Override
+    public String getKey() {
+        return ReviewKeys.SUMMARY;
     }
 }

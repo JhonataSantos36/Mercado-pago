@@ -62,7 +62,7 @@ public class ExamplesUtils {
     // * Payment item
     public static final String DUMMY_ITEM_ID = "id1";
     public static final Integer DUMMY_ITEM_QUANTITY = 1;
-    public static final BigDecimal DUMMY_ITEM_UNIT_PRICE = new BigDecimal("100");
+    public static final BigDecimal DUMMY_ITEM_UNIT_PRICE = new BigDecimal("1000");
 
     public static PaymentMethod getDummyPaymentMethod() {
         PaymentMethod paymentMethod = new PaymentMethod();
@@ -138,8 +138,8 @@ public class ExamplesUtils {
             Long campaignId = (discount != null) ? discount.getId() : null;
 
             // Set merchant payment
-            MerchantPayment payment = new MerchantPayment(item, installments, cardIssuerId,
-                    token, paymentMethodId, campaignId, DUMMY_MERCHANT_ACCESS_TOKEN);
+            MerchantPayment payment = new MerchantPayment(new BigDecimal("100"), installments, cardIssuerId,
+                    token, paymentMethodId, campaignId);
 
             // Create payment
             MerchantServer.createPayment(activity, DUMMY_MERCHANT_BASE_URL, DUMMY_MERCHANT_CREATE_PAYMENT_URI, payment, new Callback<Payment>() {

@@ -10,10 +10,11 @@ import android.widget.ImageView;
 
 import com.mercadopago.R;
 import com.mercadopago.customviews.MPTextView;
-import com.mercadopago.model.DecorationPreference;
 import com.mercadopago.model.Item;
+import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.util.CircleTransform;
 import com.mercadopago.util.CurrenciesUtil;
+import com.mercadopago.util.ScaleUtil;
 import com.squareup.picasso.Picasso;
 
 import java.math.BigDecimal;
@@ -67,6 +68,7 @@ public class ReviewProductView implements ReviewProductViewController {
         }
         String pictureUrl = item.getPictureUrl();
         setProductIcon(pictureUrl, decorationPreference);
+
         if (item.getTitle() == null) {
             mProductName.setVisibility(View.GONE);
         } else {
@@ -97,16 +99,18 @@ public class ReviewProductView implements ReviewProductViewController {
         if (decorationPreference != null && decorationPreference.hasColors()) {
             resId = R.drawable.mpsdk_grey_review_product_placeholder;
         } else {
-            resId = R.drawable.review_product_placeholder;
+            resId = R.drawable.mpsdk_review_product_placeholder;
         }
 
         if (pictureUrl == null || pictureUrl.isEmpty()) {
             setDefaultProductIcon(resId, decorationPreference);
         } else {
+            int dimen = ScaleUtil.getPxFromDp(48, mContext);
             Picasso.with(mContext)
                     .load(pictureUrl)
                     .transform(new CircleTransform())
-                    .fit()
+                    .resize(dimen, dimen)
+                    .centerInside()
                     .placeholder(resId)
                     .into(mProductImage);
         }

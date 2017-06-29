@@ -22,17 +22,25 @@ public class IssuersAdapter extends RecyclerView.Adapter<IssuersAdapter.ViewHold
     private List<Issuer> mIssuers;
     private OnSelectedCallback<Integer> mCallback;
 
-    public IssuersAdapter(Context context, List<Issuer> issuers, OnSelectedCallback<Integer> callback) {
-        if(issuers == null) {
-            issuers = new ArrayList<>();
-        }
+    public IssuersAdapter(Context context, OnSelectedCallback<Integer> callback) {
         this.mContext = context;
-        this.mIssuers = issuers;
+        this.mIssuers = new ArrayList<>();
         this.mCallback = callback;
+    }
+
+    public void addResults(List<Issuer> list) {
+        mIssuers.addAll(list);
+        notifyDataSetChanged();
+    }
+
+    public void clear() {
+        mIssuers.clear();
+        notifyDataSetChanged();
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
         LayoutInflater inflater = LayoutInflater.from(mContext);
         View adapterView = inflater.inflate(R.layout.mpsdk_adapter_issuer, parent, false);
         ViewHolder viewHolder = new ViewHolder(adapterView);
@@ -43,6 +51,11 @@ public class IssuersAdapter extends RecyclerView.Adapter<IssuersAdapter.ViewHold
     public void onBindViewHolder(ViewHolder holder, int position) {
         Issuer issuer = mIssuers.get(position);
         holder.mIssuersView.drawIssuer(issuer);
+    }
+
+
+    public Issuer getItem(int position) {
+        return mIssuers.get(position);
     }
 
     @Override

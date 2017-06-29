@@ -1,7 +1,7 @@
 package com.mercadopago.customerCards;
 
 import com.mercadopago.callbacks.OnSelectedCallback;
-import com.mercadopago.exceptions.MPException;
+import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.mocks.Cards;
 import com.mercadopago.model.Card;
 import com.mercadopago.model.Customer;
@@ -65,8 +65,8 @@ public class CustomerCardsPresenterTest {
         MockedView mockedView = new MockedView();
         MockedProvider provider = new MockedProvider();
 
-        MPException mpException = new MPException("Error", true);
-        provider.setResponse(mpException);
+        MercadoPagoError mercadoPagoError = new MercadoPagoError("Error", true);
+        provider.setResponse(mercadoPagoError);
 
         CustomerCardsPresenter presenter = new CustomerCardsPresenter();
         presenter.attachView(mockedView);
@@ -144,16 +144,16 @@ public class CustomerCardsPresenterTest {
 
         private boolean shouldFail;
         private List<Card> successfulResponse;
-        private MPException failedResponse;
+        private MercadoPagoError failedResponse;
 
         private void setResponse(List<Card> cards) {
             shouldFail = false;
             successfulResponse = cards;
         }
 
-        private void setResponse(MPException mpException) {
+        private void setResponse(MercadoPagoError exception) {
             shouldFail = true;
-            failedResponse = mpException;
+            failedResponse = exception;
         }
 
         @Override
@@ -225,7 +225,7 @@ public class CustomerCardsPresenterTest {
         }
 
         @Override
-        public void showError(MPException mpException) {
+        public void showError(MercadoPagoError error) {
             this.errorShown = true;
         }
 

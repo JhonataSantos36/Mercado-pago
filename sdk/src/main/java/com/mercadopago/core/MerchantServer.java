@@ -4,11 +4,11 @@ import android.content.Context;
 
 import com.mercadopago.adapters.ErrorHandlingCallAdapter;
 import com.mercadopago.callbacks.Callback;
-import com.mercadopago.model.CheckoutPreference;
 import com.mercadopago.model.Customer;
 import com.mercadopago.model.Discount;
 import com.mercadopago.model.MerchantPayment;
 import com.mercadopago.model.Payment;
+import com.mercadopago.preferences.CheckoutPreference;
 import com.mercadopago.services.MerchantService;
 import com.mercadopago.util.HttpClientUtil;
 import com.mercadopago.util.JsonUtil;
@@ -19,6 +19,7 @@ import java.util.Map;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+@Deprecated
 public class MerchantServer {
 
     public static void createPreference(Context context, String merchantBaseUrl, String merchantCreatePreferenceUri, Map<String, Object> checkoutData, Callback<CheckoutPreference> callback) {

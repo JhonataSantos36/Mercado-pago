@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@color/mpsdk_review_gray_background">
+
+
+    <com.mercadopago.customviews.MPTextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="20dp"
+        android:gravity="center_horizontal"
+        android:paddingEnd="15dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:paddingStart="15dp"
+        android:textColor="@color/mpsdk_darker_gray"
+        android:textSize="18dp" />
+
+    <FrameLayout
+        android:id="@+id/button"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/mpsdk_button">
+        <com.mercadopago.customviews.MPTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textSize="19dp"
+            android:textColor="@color/mpsdk_white"
+            android:text="Hacer otra recarga"/>
+    </FrameLayout>
+    <View
+        android:id="@+id/mpsdkSeparator"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_gravity="bottom"
+        android:background="@color/mpsdk_separator" />
+
+</LinearLayout>

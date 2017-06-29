@@ -5,19 +5,20 @@ import android.content.Context;
 import com.mercadopago.callbacks.Callback;
 import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.controllers.PaymentMethodGuessingController;
-import com.mercadopago.core.MercadoPago;
+import com.mercadopago.core.MercadoPagoServices;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.Card;
 import com.mercadopago.model.CardInfo;
 import com.mercadopago.model.CardToken;
 import com.mercadopago.model.PaymentMethod;
-import com.mercadopago.model.PaymentPreference;
 import com.mercadopago.model.SavedCardToken;
 import com.mercadopago.model.SecurityCode;
 import com.mercadopago.model.SecurityCodeIntent;
 import com.mercadopago.model.Setting;
 import com.mercadopago.model.Token;
+import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.uicontrollers.card.CardView;
+import com.mercadopago.util.TextUtils;
 import com.mercadopago.views.SecurityCodeActivityView;
 
 
@@ -35,7 +36,7 @@ public class SecurityCodePresenter {
     private FailureRecovery mFailureRecovery;
 
     //Mercado Pago instance
-    private MercadoPago mMercadoPago;
+    private MercadoPagoServices mMercadoPago;
 
     //Card Info
     private int mSecurityCodeLength;
@@ -50,6 +51,7 @@ public class SecurityCodePresenter {
     protected CardInfo mCardInfo;
     protected Card mCard;
     protected Token mToken;
+    private String mPrivateKey;
 
     public SecurityCodePresenter(Context context) {
         this.mContext = context;
@@ -85,6 +87,10 @@ public class SecurityCodePresenter {
 
     public void setPaymentPreference(PaymentPreference paymentPreference) {
         this.mPaymentPreference = paymentPreference;
+    }
+
+    public void setPrivateKey(String privateKey) {
+        this.mPrivateKey = privateKey;
     }
 
     private void setFailureRecovery(FailureRecovery failureRecovery) {
@@ -139,9 +145,10 @@ public class SecurityCodePresenter {
 
     public void initializeMercadoPago() {
         if (mPublicKey == null) return;
-        mMercadoPago = new MercadoPago.Builder()
+        mMercadoPago = new MercadoPagoServices.Builder()
                 .setContext(mContext)
-                .setKey(mPublicKey, MercadoPago.KEY_TYPE_PUBLIC)
+                .setPublicKey(mPublicKey)
+                .setPrivateKey(mPrivateKey)
                 .build();
     }
 
@@ -195,7 +202,11 @@ public class SecurityCodePresenter {
 
     private boolean validateSecurityCodeFromToken() {
         try {
-            CardToken.validateSecurityCode(mContext, mSecurityCode, mPaymentMethod, mToken.getFirstSixDigits());
+            if (!TextUtils.isEmpty(mToken.getFirstSixDigits())) {
+                CardToken.validateSecurityCode(mContext, mSecurityCode, mPaymentMethod, mToken.getFirstSixDigits());
+            } else {
+                CardToken.validateSecurityCode(mSecurityCode);
+            }
             mView.clearErrorView();
             return true;
         } catch (Exception e) {
@@ -235,6 +246,7 @@ public class SecurityCodePresenter {
             @Override
             public void success(Token token) {
                 mToken = token;
+                mToken.setLastFourDigits(mCardInfo.getLastFourDigits());
                 mView.finishWithResult();
             }
 
@@ -275,6 +287,4 @@ public class SecurityCodePresenter {
             }
         });
     }
-
-
 }

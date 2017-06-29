@@ -7,8 +7,8 @@ import java.util.Map;
 
 public class PayerCost {
 
-    public static final String CFT = "CFT";
-    public static final String TEA = "TEA";
+    private static final String CFT = "CFT";
+    private static final String TEA = "TEA";
     private Integer installments;
     private BigDecimal installmentRate;
     private List<String> labels;
@@ -93,7 +93,7 @@ public class PayerCost {
     public Map<String, String> getRates() {
         Map<String, String> ratesMap = new HashMap<>();
 
-        if (isValidLabels()) {
+        if (isValidLabels()){
             for (String label : labels) {
                 if (label.contains(CFT) || label.contains(TEA)) {
                     String[] ratesRaw = label.split("\\|");
@@ -120,7 +120,7 @@ public class PayerCost {
     }
 
     private Boolean isValidLabels() {
-        return labels != null && labels.size() > 0;
+        return labels != null && labels.size()>0;
     }
 
     @Override

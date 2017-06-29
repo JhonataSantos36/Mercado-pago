@@ -1,44 +1,96 @@
 package com.mercadopago.model;
 
-import java.math.BigDecimal;
-import java.util.List;
-
 /**
- * Created by mreverter on 3/8/16.
+ * Created by vaserber on 2/13/17.
  */
-public class PaymentResult {
-    private AmountInfo amountInfo;
-    private List<Instruction> instructions;
 
-    public List<Instruction> getInstructions() {
-        return instructions;
+public class PaymentResult {
+
+    private PaymentData paymentData;
+    private Long paymentId;
+    private String paymentStatus;
+    private String paymentStatusDetail;
+    private String payerEmail;
+    private String statementDescription;
+
+    private PaymentResult(Builder builder) {
+        this.paymentData = builder.paymentData;
+        this.paymentId = builder.paymentId;
+        this.paymentStatus = builder.paymentStatus;
+        this.paymentStatusDetail = builder.paymentStatusDetail;
+        this.payerEmail = builder.payerEmail;
+        this.statementDescription = builder.statementDescription;
     }
 
-    private class AmountInfo {
-        private BigDecimal amount;
-        private String symbol;
-        private int decimalPlaces;
-        private Character decimalSeparator;
-        private Character thousandsSeparator;
+    public PaymentData getPaymentData() {
+        return paymentData;
+    }
 
-        public BigDecimal getAmount() {
-            return amount;
+    public Long getPaymentId() {
+        return paymentId;
+    }
+
+    public String getPaymentStatus() {
+        return paymentStatus;
+    }
+
+    public String getPaymentStatusDetail() {
+        return paymentStatusDetail;
+    }
+
+    public String getPayerEmail() {
+        return payerEmail;
+    }
+
+    public String getStatementDescription() {
+        return statementDescription;
+    }
+
+    public boolean hasDiscount() {
+        return paymentData != null && paymentData.getDiscount() != null;
+    }
+
+    public static class Builder{
+
+        private PaymentData paymentData;
+        private Long paymentId;
+        private String paymentStatus;
+        private String paymentStatusDetail;
+        private String payerEmail;
+        private String statementDescription;
+
+        public Builder setPaymentData(PaymentData paymentData) {
+            this.paymentData = paymentData;
+            return this;
         }
 
-        public String getSymbol() {
-            return symbol;
+        public Builder setPaymentId(Long paymentId) {
+            this.paymentId = paymentId;
+            return this;
         }
 
-        public int getDecimalPlaces() {
-            return decimalPlaces;
+        public Builder setPaymentStatus(String paymentStatus) {
+            this.paymentStatus = paymentStatus;
+            return this;
         }
 
-        public Character getDecimalSeparator() {
-            return decimalSeparator;
+        public Builder setPaymentStatusDetail(String statusDetail) {
+            this.paymentStatusDetail = statusDetail;
+            return this;
         }
 
-        public Character getThousandsSeparator() {
-            return thousandsSeparator;
+        public Builder setPayerEmail(String payerEmail) {
+            this.payerEmail = payerEmail;
+            return this;
+        }
+
+        public Builder setStatementDescription(String statementDescription) {
+            this.statementDescription = statementDescription;
+            return this;
+        }
+
+        public PaymentResult build() {
+            return new PaymentResult(this);
         }
     }
 }

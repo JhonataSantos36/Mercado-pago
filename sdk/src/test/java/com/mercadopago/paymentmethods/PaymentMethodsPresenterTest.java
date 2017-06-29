@@ -1,10 +1,10 @@
 package com.mercadopago.paymentmethods;
 
 import com.mercadopago.constants.PaymentTypes;
-import com.mercadopago.exceptions.MPException;
+import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.model.PaymentMethod;
-import com.mercadopago.model.PaymentPreference;
 import com.mercadopago.mvp.OnResourcesRetrievedCallback;
+import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.presenters.PaymentMethodsPresenter;
 import com.mercadopago.providers.PaymentMethodsProvider;
 import com.mercadopago.views.PaymentMethodsView;
@@ -73,7 +73,7 @@ public class PaymentMethodsPresenterTest {
 
         public List<PaymentMethod> paymentMethods;
         private boolean progressVisible;
-        private MPException error;
+        private MercadoPagoError error;
         private boolean bankDealsShown;
 
         @Override
@@ -92,7 +92,7 @@ public class PaymentMethodsPresenterTest {
         }
 
         @Override
-        public void showError(MPException exception) {
+        public void showError(MercadoPagoError exception) {
             this.error = exception;
         }
 

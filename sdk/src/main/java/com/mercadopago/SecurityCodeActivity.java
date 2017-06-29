@@ -14,22 +14,24 @@ import android.widget.ProgressBar;
 
 import com.mercadopago.callbacks.card.CardSecurityCodeEditTextCallback;
 import com.mercadopago.controllers.CheckoutTimer;
+import com.mercadopago.core.MercadoPagoCheckout;
 import com.mercadopago.customviews.MPEditText;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.listeners.card.CardSecurityCodeTextWatcher;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.Card;
 import com.mercadopago.model.CardInfo;
-import com.mercadopago.model.DecorationPreference;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.Token;
 import com.mercadopago.mptracker.MPTracker;
 import com.mercadopago.observers.TimerObserver;
+import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.presenters.SecurityCodePresenter;
 import com.mercadopago.uicontrollers.card.CardRepresentationModes;
 import com.mercadopago.uicontrollers.card.CardView;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.ColorsUtil;
+import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.ScaleUtil;
 import com.mercadopago.views.SecurityCodeActivityView;
@@ -81,16 +83,16 @@ public class SecurityCodeActivity extends MercadoPagoBaseActivity implements Sec
 
     private void getActivityParameters() {
         String publicKey = getIntent().getStringExtra("merchantPublicKey");
+        String payerAccessToken = getIntent().getStringExtra("payerAccessToken");
+        mDecorationPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("decorationPreference"), DecorationPreference.class);
+
         CardInfo cardInfo = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("cardInfo"), CardInfo.class);
         Card card = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("card"), Card.class);
         Token token = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("token"), Token.class);
         PaymentMethod paymentMethod = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("paymentMethod"), PaymentMethod.class);
-        mDecorationPreference = null;
-        if (getIntent().getStringExtra("decorationPreference") != null) {
-            mDecorationPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("decorationPreference"), DecorationPreference.class);
-        }
 
         mPresenter.setPublicKey(publicKey);
+        mPresenter.setPrivateKey(payerAccessToken);
         mPresenter.setToken(token);
         mPresenter.setCard(card);
         mPresenter.setPaymentMethod(paymentMethod);
@@ -161,7 +163,6 @@ public class SecurityCodeActivity extends MercadoPagoBaseActivity implements Sec
     private void decorate() {
         if (isDecorationEnabled()) {
             mBackground.setBackgroundColor(mDecorationPreference.getLighterColor());
-            mCardView.decorateCardBorder(mDecorationPreference.getLighterColor());
             if (mTimerTextView != null) {
                 ColorsUtil.decorateTextView(mDecorationPreference, mTimerTextView, this);
             }
@@ -280,6 +281,20 @@ public class SecurityCodeActivity extends MercadoPagoBaseActivity implements Sec
         imm.showSoftInput(ediText, InputMethodManager.SHOW_IMPLICIT);
     }
 
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == ErrorUtil.ERROR_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                mPresenter.recoverFromFailure();
+            } else {
+                setResult(RESULT_CANCELED, data);
+                finish();
+            }
+        }
+    }
+
     @Override
     public void showApiExceptionError(ApiException exception) {
         ApiUtil.showApiExceptionError(mActivity, exception);
@@ -300,6 +315,7 @@ public class SecurityCodeActivity extends MercadoPagoBaseActivity implements Sec
 
     @Override
     public void onFinish() {
+        setResult(MercadoPagoCheckout.TIMER_FINISHED_RESULT_CODE);
         this.finish();
     }
 }

@@ -1,5 +1,6 @@
 package com.mercadopago.discounts;
 
+import com.mercadopago.model.Campaign;
 import com.mercadopago.model.Discount;
 import com.mercadopago.mvp.OnResourcesRetrievedCallback;
 import com.mercadopago.presenters.DiscountsPresenter;
@@ -9,6 +10,9 @@ import com.mercadopago.views.DiscountsActivityView;
 import org.junit.Test;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 import static org.junit.Assert.assertTrue;
 
@@ -156,6 +160,11 @@ public class DiscountsPresenterTest {
         @Override
         public void getCodeDiscount(String transactionAmount, String payerEmail, String discountCode, OnResourcesRetrievedCallback<Discount> onResourcesRetrievedCallback) {
             onResourcesRetrievedCallback.onSuccess(new Discount());
+        }
+
+        @Override
+        public void getCampaigns(OnResourcesRetrievedCallback<List<Campaign>> onResourcesRetrievedCallback) {
+            onResourcesRetrievedCallback.onSuccess(new ArrayList<Campaign>());
         }
 
         @Override

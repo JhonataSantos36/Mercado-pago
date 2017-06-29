@@ -2,6 +2,7 @@
 <resources>
     <declare-styleable name="MPTextView">
         <attr name="fontStyle" format="string" />
+        <attr name="allowCustomFont" format="boolean" />
     </declare-styleable>
 
     <declare-styleable name="MPAdaptativeTextView">

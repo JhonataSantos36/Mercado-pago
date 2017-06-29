@@ -16,16 +16,18 @@ import com.google.gson.reflect.TypeToken;
 import com.mercadopago.adapters.PaymentTypesAdapter;
 import com.mercadopago.callbacks.OnSelectedCallback;
 import com.mercadopago.controllers.CheckoutTimer;
+import com.mercadopago.core.MercadoPagoCheckout;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.listeners.RecyclerItemClickListener;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.CardInfo;
-import com.mercadopago.model.DecorationPreference;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentType;
 import com.mercadopago.mptracker.MPTracker;
 import com.mercadopago.observers.TimerObserver;
+import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.presenters.PaymentTypesPresenter;
+import com.mercadopago.uicontrollers.FontCache;
 import com.mercadopago.uicontrollers.card.CardRepresentationModes;
 import com.mercadopago.uicontrollers.card.FrontCardView;
 import com.mercadopago.util.ApiUtil;
@@ -87,6 +89,10 @@ public class PaymentTypesActivity extends MercadoPagoBaseActivity implements Pay
     }
 
     private void getActivityParameters() {
+
+        String publicKey = getIntent().getStringExtra("merchantPublicKey");
+        mDecorationPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("decorationPreference"), DecorationPreference.class);
+
         List<PaymentMethod> paymentMethods;
         try {
             Type listType = new TypeToken<List<PaymentMethod>>() {
@@ -104,12 +110,7 @@ public class PaymentTypesActivity extends MercadoPagoBaseActivity implements Pay
         } catch (Exception ex) {
             paymentTypes = null;
         }
-        String publicKey = getIntent().getStringExtra("merchantPublicKey");
         CardInfo cardInfo = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("cardInfo"), CardInfo.class);
-        mDecorationPreference = null;
-        if (getIntent().getStringExtra("decorationPreference") != null) {
-            mDecorationPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("decorationPreference"), DecorationPreference.class);
-        }
         mPresenter.setPaymentMethodList(paymentMethods);
         mPresenter.setPaymentTypesList(paymentTypes);
         mPresenter.setPublicKey(publicKey);
@@ -146,7 +147,7 @@ public class PaymentTypesActivity extends MercadoPagoBaseActivity implements Pay
     }
 
     private void showTimer() {
-        if (CheckoutTimer.getInstance().isTimerEnabled()){
+        if (CheckoutTimer.getInstance().isTimerEnabled()) {
             CheckoutTimer.getInstance().addObserver(this);
             mTimerTextView.setVisibility(View.VISIBLE);
             mTimerTextView.setText(CheckoutTimer.getInstance().getCurrentTime());
@@ -238,11 +239,15 @@ public class PaymentTypesActivity extends MercadoPagoBaseActivity implements Pay
     private void loadLowResViews() {
         loadToolbarArrow(mLowResToolbar);
         mLowResTitleToolbar.setText(getString(R.string.mpsdk_payment_types_title));
+        if (FontCache.hasTypeface(FontCache.CUSTOM_REGULAR_FONT)) {
+            mLowResTitleToolbar.setTypeface(FontCache.getTypeface(FontCache.CUSTOM_REGULAR_FONT));
+        }
     }
 
     private void loadNormalViews() {
         loadToolbarArrow(mNormalToolbar);
         mNormalToolbar.setTitle(getString(R.string.mpsdk_payment_types_title));
+        setCustomFontNormal();
         mFrontCardView = new FrontCardView(mActivity, CardRepresentationModes.SHOW_FULL_FRONT_ONLY);
         mFrontCardView.setSize(CardRepresentationModes.MEDIUM_SIZE);
         mFrontCardView.setPaymentMethod(mPresenter.getPaymentMethod());
@@ -254,6 +259,13 @@ public class PaymentTypesActivity extends MercadoPagoBaseActivity implements Pay
         mFrontCardView.initializeControls();
         mFrontCardView.draw();
         mFrontCardView.enableEditingCardNumber();
+    }
+
+    private void setCustomFontNormal() {
+        if (FontCache.hasTypeface(FontCache.CUSTOM_REGULAR_FONT)) {
+            mCollapsingToolbar.setCollapsedTitleTypeface(FontCache.getTypeface(FontCache.CUSTOM_REGULAR_FONT));
+            mCollapsingToolbar.setExpandedTitleTypeface(FontCache.getTypeface(FontCache.CUSTOM_REGULAR_FONT));
+        }
     }
 
     private void loadToolbarArrow(Toolbar toolbar) {
@@ -290,7 +302,7 @@ public class PaymentTypesActivity extends MercadoPagoBaseActivity implements Pay
     private void decorateLowRes() {
         ColorsUtil.decorateLowResToolbar(mLowResToolbar, mLowResTitleToolbar, mDecorationPreference,
                 getSupportActionBar(), this);
-        if(mTimerTextView != null) {
+        if (mTimerTextView != null) {
             ColorsUtil.decorateTextView(mDecorationPreference, mTimerTextView, this);
         }
     }
@@ -298,7 +310,7 @@ public class PaymentTypesActivity extends MercadoPagoBaseActivity implements Pay
     private void decorateNormal() {
         ColorsUtil.decorateNormalToolbar(mNormalToolbar, mDecorationPreference, mAppBar,
                 mCollapsingToolbar, getSupportActionBar(), this);
-        if(mTimerTextView != null) {
+        if (mTimerTextView != null) {
             ColorsUtil.decorateTextView(mDecorationPreference, mTimerTextView, this);
         }
         mFrontCardView.decorateCardBorder(mDecorationPreference.getLighterColor());
@@ -355,6 +367,7 @@ public class PaymentTypesActivity extends MercadoPagoBaseActivity implements Pay
 
     @Override
     public void onFinish() {
+        setResult(MercadoPagoCheckout.TIMER_FINISHED_RESULT_CODE);
         this.finish();
     }
 }

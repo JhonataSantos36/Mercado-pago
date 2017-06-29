@@ -5,6 +5,8 @@ package com.mercadopago.constants;
  */
 public class PaymentMethods {
 
+    public static final String ACCOUNT_MONEY = "account_money";
+
     public class ARGENTINA {
         public static final String VISA = "visa";
         public static final String MASTER = "master";

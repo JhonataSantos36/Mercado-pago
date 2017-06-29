@@ -1,10 +1,13 @@
 package com.mercadopago.presenters;
 
-import com.mercadopago.exceptions.MPException;
+import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.model.Discount;
 import com.mercadopago.mvp.MvpPresenter;
 import com.mercadopago.mvp.OnResourcesRetrievedCallback;
 import com.mercadopago.providers.DiscountsProvider;
+import com.mercadopago.views.DiscountsView;
+
+import java.math.BigDecimal;
 import com.mercadopago.views.DiscountsActivityView;
 
 import java.math.BigDecimal;
@@ -57,11 +60,10 @@ public class DiscountsPresenter extends MvpPresenter<DiscountsActivityView, Disc
             public void onSuccess(Discount discount) {
                 mDiscount = discount;
                 mDiscountsView.drawSummary();
-
             }
 
             @Override
-            public void onFailure(MPException exception) {
+            public void onFailure(MercadoPagoError error) {
                 mDiscountsView.requestDiscountCode();
             }
         });
@@ -83,10 +85,10 @@ public class DiscountsPresenter extends MvpPresenter<DiscountsActivityView, Disc
             }
 
             @Override
-            public void onFailure(MPException exception) {
+            public void onFailure(MercadoPagoError error) {
                 mDiscountsView.hideProgressBar();
-                if (exception.isApiException()) {
-                    String errorMessage = getResourcesProvider().getApiErrorMessage(exception.getApiException().getError());
+                if(error.isApiException()) {
+                    String errorMessage = getResourcesProvider().getApiErrorMessage(error.getApiException().getError());
                     mDiscountsView.showCodeInputError(errorMessage);
                 } else {
                     mDiscountsView.showCodeInputError(getResourcesProvider().getStandardErrorMessage());

@@ -16,6 +16,8 @@ import com.mercadopago.model.Reviewable;
 
 public class CellphoneReview extends Reviewable {
 
+    public static final Integer CELLPHONE_CHANGE = 321321;
+
     protected View mView;
     protected TextView mNumberTextView;
     protected View mNumberEdition;
@@ -44,17 +46,17 @@ public class CellphoneReview extends Reviewable {
     public void initializeControls() {
         mNumberTextView = (TextView) mView.findViewById(R.id.phoneNumber);
         mNumberEdition = mView.findViewById(R.id.phoneNumberEdition);
+        mNumberEdition.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                notifyChangeRequired(CELLPHONE_CHANGE);
+                Toast.makeText(mContext, "Cambiar número!", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
     public void draw() {
         mNumberTextView.setText(mNumber);
-        mNumberEdition.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                notifyChangeRequired();
-                Toast.makeText(mContext, "Cambiar número!", Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 }

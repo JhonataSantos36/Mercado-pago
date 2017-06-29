@@ -1,5 +1,8 @@
 package com.mercadopago;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.PorterDuff;
@@ -14,13 +17,13 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.mercadopago.adapters.PaymentMethodsAdapter;
-import com.mercadopago.core.MercadoPago;
+import com.mercadopago.core.MercadoPagoComponents;
 import com.mercadopago.decorations.DividerItemDecoration;
-import com.mercadopago.exceptions.MPException;
-import com.mercadopago.model.DecorationPreference;
+import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.model.PaymentMethod;
-import com.mercadopago.model.PaymentPreference;
 import com.mercadopago.mptracker.MPTracker;
+import com.mercadopago.preferences.DecorationPreference;
+import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.presenters.PaymentMethodsPresenter;
 import com.mercadopago.providers.PaymentMethodsProvider;
 import com.mercadopago.providers.PaymentMethodsProviderImpl;
@@ -51,9 +54,9 @@ public class PaymentMethodsActivity extends MercadoPagoBaseActivity implements P
         super.onCreate(savedInstanceState);
 
         mPresenter = new PaymentMethodsPresenter();
-        mMerchantPublicKey = this.getIntent().getStringExtra("merchantPublicKey");
 
         try {
+            getActivityParameters();
             mResourcesProvider = new PaymentMethodsProviderImpl(this, mMerchantPublicKey);
             onValidStart();
         } catch (IllegalStateException exception) {
@@ -63,13 +66,15 @@ public class PaymentMethodsActivity extends MercadoPagoBaseActivity implements P
 
     protected void getActivityParameters() {
 
+        mMerchantPublicKey = getIntent().getStringExtra("merchantPublicKey");
+        mDecorationPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("decorationPreference"), DecorationPreference.class);
+
+        PaymentPreference paymentPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("paymentPreference"), PaymentPreference.class);
+        mPresenter.setPaymentPreference(paymentPreference);
+
         Boolean showBankDeals = this.getIntent().getBooleanExtra("showBankDeals", true);
         mPresenter.setShowBankDeals(showBankDeals);
 
-        if (getIntent().getStringExtra("paymentPreference") != null) {
-            PaymentPreference paymentPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("paymentPreference"), PaymentPreference.class);
-            mPresenter.setPaymentPreference(paymentPreference);
-        }
         if (this.getIntent().getStringExtra("supportedPaymentTypes") != null) {
             Gson gson = new Gson();
             Type listType = new TypeToken<List<String>>() {
@@ -77,10 +82,6 @@ public class PaymentMethodsActivity extends MercadoPagoBaseActivity implements P
 
             List<String> supportedPaymentTypes = gson.fromJson(this.getIntent().getStringExtra("supportedPaymentTypes"), listType);
             mPresenter.setSupportedPaymentTypes(supportedPaymentTypes);
-        }
-
-        if (getIntent().getStringExtra("decorationPreference") != null) {
-            mDecorationPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("decorationPreference"), DecorationPreference.class);
         }
     }
 
@@ -100,11 +101,8 @@ public class PaymentMethodsActivity extends MercadoPagoBaseActivity implements P
     }
 
     protected void onValidStart() {
-
         mPresenter.attachView(this);
         mPresenter.attachResourcesProvider(mResourcesProvider);
-
-        getActivityParameters();
 
         if (mDecorationPreference != null && mDecorationPreference.hasColors()) {
             setTheme(R.style.Theme_MercadoPagoTheme_NoActionBar);
@@ -217,7 +215,7 @@ public class PaymentMethodsActivity extends MercadoPagoBaseActivity implements P
     }
 
     @Override
-    public void showError(MPException exception) {
+    public void showError(MercadoPagoError exception) {
         ErrorUtil.startErrorActivity(this, exception);
     }
 
@@ -228,11 +226,11 @@ public class PaymentMethodsActivity extends MercadoPagoBaseActivity implements P
         mBankDealsTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new MercadoPago.StartActivityBuilder()
+                new MercadoPagoComponents.Activities.BankDealsActivityBuilder()
                         .setActivity(mActivity)
-                        .setPublicKey(mMerchantPublicKey)
+                        .setMerchantPublicKey(mMerchantPublicKey)
                         .setDecorationPreference(mDecorationPreference)
-                        .startBankDealsActivity();
+                        .startActivity();
             }
         });
     }

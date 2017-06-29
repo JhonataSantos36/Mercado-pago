@@ -9,8 +9,8 @@ import android.widget.ImageView;
 
 import com.mercadopago.R;
 import com.mercadopago.customviews.MPTextView;
-import com.mercadopago.model.DecorationPreference;
 import com.mercadopago.model.PaymentMethodSearchItem;
+import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.util.MercadoPagoUtil;
 
 /**

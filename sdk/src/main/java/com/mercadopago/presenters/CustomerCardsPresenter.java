@@ -2,7 +2,7 @@ package com.mercadopago.presenters;
 
 import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.callbacks.OnSelectedCallback;
-import com.mercadopago.exceptions.MPException;
+import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.model.Card;
 import com.mercadopago.model.Customer;
 import com.mercadopago.mvp.MvpPresenter;
@@ -47,8 +47,8 @@ public class CustomerCardsPresenter extends MvpPresenter<CustomerCardsView, Cust
             }
 
             @Override
-            public void onFailure(MPException mpException) {
-                getView().showError(mpException);
+            public void onFailure(MercadoPagoError error) {
+                getView().showError(error);
                 getView().hideProgress();
 
                 setFailureRecovery(new FailureRecovery() {

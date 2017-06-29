@@ -1,5 +1,7 @@
 package com.mercadopago.model;
 
+import com.mercadopago.util.CurrenciesUtil;
+
 import java.math.BigDecimal;
 
 public class Discount {
@@ -11,6 +13,7 @@ public class Discount {
     private BigDecimal couponAmount;
     private String currencyId;
     private String couponCode;
+    private String concept;
 
     public void setCouponCode(String couponCode) {
         this.couponCode = couponCode;
@@ -56,12 +59,12 @@ public class Discount {
         return this.percentOff;
     }
 
-    public BigDecimal getAmountWithDiscount(BigDecimal amount) {
-        return amount.subtract(couponAmount);
-    }
-
     public void setPercentOff(BigDecimal percentOff) {
         this.percentOff = percentOff;
+    }
+
+    public BigDecimal getAmountWithDiscount(BigDecimal amount) {
+        return amount.subtract(couponAmount);
     }
 
     public void setAmountOff(BigDecimal amountOff) {
@@ -75,4 +78,25 @@ public class Discount {
     public Boolean hasPercentOff() {
         return percentOff != null && !percentOff.equals(new BigDecimal(0));
     }
+
+    public void setConcept(String concept) {
+        this.concept = concept;
+    }
+
+    public String getConcept() {
+        return this.concept;
+    }
+
+    public boolean isValid() {
+        return isDiscountCurrencyIdValid() && isAmountValid(couponAmount) && id != null;
+    }
+
+    private Boolean isDiscountCurrencyIdValid() {
+        return currencyId != null && CurrenciesUtil.isValidCurrency(currencyId);
+    }
+
+    private Boolean isAmountValid(BigDecimal amount) {
+        return amount != null && amount.compareTo(BigDecimal.ZERO) >= 0;
+    }
+
 }

@@ -1,7 +1,7 @@
 package com.mercadopago.views;
 
 import com.mercadopago.callbacks.OnSelectedCallback;
-import com.mercadopago.exceptions.MPException;
+import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.model.Card;
 import com.mercadopago.mvp.MvpView;
 
@@ -21,7 +21,7 @@ public interface CustomerCardsView extends MvpView {
 
     void hideProgress();
 
-    void showError(MPException mpException);
+    void showError(MercadoPagoError error);
 
     void finishWithCardResult(Card card);
 

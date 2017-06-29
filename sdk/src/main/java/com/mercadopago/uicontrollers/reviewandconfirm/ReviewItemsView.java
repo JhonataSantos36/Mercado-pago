@@ -9,9 +9,10 @@ import android.view.ViewGroup;
 
 import com.mercadopago.R;
 import com.mercadopago.adapters.ReviewProductAdapter;
-import com.mercadopago.model.DecorationPreference;
+import com.mercadopago.constants.ReviewKeys;
 import com.mercadopago.model.Item;
 import com.mercadopago.model.Reviewable;
+import com.mercadopago.preferences.DecorationPreference;
 
 import java.util.List;
 
@@ -56,5 +57,10 @@ public class ReviewItemsView extends Reviewable {
     @Override
     public View getView() {
         return view;
+    }
+
+    @Override
+    public String getKey() {
+        return ReviewKeys.ITEMS;
     }
 }

@@ -4,8 +4,8 @@ import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 
-import com.mercadopago.model.DecorationPreference;
 import com.mercadopago.model.Item;
+import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.uicontrollers.reviewandconfirm.ReviewProductView;
 import com.mercadopago.uicontrollers.reviewandconfirm.ReviewProductViewController;
 

@@ -1,5 +1,9 @@
 package com.mercadopago;
 
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
@@ -8,7 +12,6 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.NestedScrollView;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -17,38 +20,41 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
 import com.mercadopago.adapters.ReviewablesAdapter;
+import com.mercadopago.constants.ReviewKeys;
 import com.mercadopago.constants.Sites;
 import com.mercadopago.controllers.CheckoutTimer;
+import com.mercadopago.core.MercadoPagoCheckout;
 import com.mercadopago.customviews.MPTextView;
-import com.mercadopago.model.CardInfo;
-import com.mercadopago.model.DecorationPreference;
+
 import com.mercadopago.model.Discount;
+import com.mercadopago.model.Issuer;
 import com.mercadopago.model.Item;
 import com.mercadopago.model.PayerCost;
+import com.mercadopago.model.PaymentData;
 import com.mercadopago.model.PaymentMethod;
+import com.mercadopago.model.ReviewSubscriber;
 import com.mercadopago.model.Reviewable;
 import com.mercadopago.model.Site;
+import com.mercadopago.model.Token;
+import com.mercadopago.mptracker.MPTracker;
 import com.mercadopago.observers.TimerObserver;
+import com.mercadopago.preferences.DecorationPreference;
+import com.mercadopago.preferences.ReviewScreenPreference;
 import com.mercadopago.presenters.ReviewAndConfirmPresenter;
 import com.mercadopago.providers.ReviewAndConfirmProviderImpl;
+import com.mercadopago.uicontrollers.FontCache;
 import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
-import com.mercadopago.util.LayoutUtil;
+import com.mercadopago.util.TextUtil;
 import com.mercadopago.views.ReviewAndConfirmView;
 
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by mreverter on 2/1/17.
- */
-
-public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements TimerObserver, ReviewAndConfirmView {
+public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements TimerObserver, ReviewAndConfirmView, ReviewSubscriber {
 
     public static final int RESULT_CHANGE_PAYMENT_METHOD = 3;
     public static final int RESULT_CANCEL_PAYMENT = 4;
@@ -73,25 +79,30 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
 
     protected ReviewAndConfirmPresenter mPresenter;
     protected DecorationPreference mDecorationPreference;
+    protected ReviewScreenPreference mReviewScreenPreference;
+    protected String mPublicKey;
+    protected Site mSite;
+    private Issuer mIssuer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getDecorationPreference();
+        getUIPreferences();
         createPresenter();
         getActivityParameters();
         mPresenter.attachView(this);
-        mPresenter.attachResourcesProvider(new ReviewAndConfirmProviderImpl(this));
+        mPresenter.attachResourcesProvider(new ReviewAndConfirmProviderImpl(this, mReviewScreenPreference));
 
         if (mDecorationPreference != null && mDecorationPreference.hasColors()) {
             setTheme(R.style.Theme_MercadoPagoTheme_NoActionBar);
         }
         setContentView(R.layout.mpsdk_activity_review_confirm);
         initializeControls();
-        setListeners();
         showTimer();
+        setListeners();
         initializeReviewablesRecyclerView();
         mPresenter.initialize();
+        trackScreen();
     }
 
     private void setListeners() {
@@ -113,7 +124,6 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
                 startTermsAndConditionsActivity();
             }
         });
-
     }
 
     private void createPresenter() {
@@ -121,15 +131,22 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
     }
 
     private void getActivityParameters() {
-
+        mPublicKey = getIntent().getStringExtra("merchantPublicKey");
+        mSite = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("site"), Site.class);
+        mIssuer = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("issuer"), Issuer.class);
+        Boolean termsAndConditionsEnabled = getIntent().getBooleanExtra("termsAndConditionsEnabled", true);
+        Boolean editionEnabled = getIntent().getBooleanExtra("editionEnabled", true);
+        Boolean discountEnabled = getIntent().getBooleanExtra("discountEnabled", true);
         BigDecimal amount = new BigDecimal(getIntent().getStringExtra("amount"));
         Discount discount = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("discount"), Discount.class);
         PayerCost payerCost = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("payerCost"), PayerCost.class);
-        CardInfo cardInfo = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("cardInfo"), CardInfo.class);
+        Token token = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("token"), Token.class);
         PaymentMethod paymentMethod = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("paymentMethod"), PaymentMethod.class);
-        String extraPaymentMethodInfo = getIntent().getStringExtra("extraPaymentMethodInfo");
+        String paymentMethodCommentInfo = getIntent().getStringExtra("paymentMethodCommentInfo");
+        String paymentMethodDescriptionInfo = getIntent().getStringExtra("paymentMethodDescriptionInfo");
         Site site = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("site"), Site.class);
         List<Item> items;
+
         try {
             Gson gson = new Gson();
             Type listType = new TypeToken<List<Item>>() {
@@ -141,14 +158,24 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
 
         mPresenter.setItems(items);
         mPresenter.setAmount(amount);
-        mPresenter.setSite(site);
+        mPresenter.setSite(mSite);
+        mPresenter.setIssuer(mIssuer);
         mPresenter.setDiscount(discount);
         mPresenter.setPayerCost(payerCost);
-        mPresenter.setCardInfo(cardInfo);
+        mPresenter.setToken(token);
         mPresenter.setPaymentMethod(paymentMethod);
-        mPresenter.setExtraPaymentMethodInfo(extraPaymentMethodInfo);
-
+        mPresenter.setPaymentMethodCommentInfo(paymentMethodCommentInfo);
+        mPresenter.setPaymentMethodDescriptionInfo(paymentMethodDescriptionInfo);
+        mPresenter.setEditionEnabled(editionEnabled);
         mPresenter.setDecorationPreference(mDecorationPreference);
+        mPresenter.setTermsAndConditionsEnabled(termsAndConditionsEnabled);
+        mPresenter.setDiscountEnabled(discountEnabled);
+
+        if (mReviewScreenPreference == null || !mReviewScreenPreference.hasReviewOrder()) {
+            mPresenter.setReviewOrder(getDefaultOrder());
+        } else {
+            mPresenter.setReviewOrder(mReviewScreenPreference.getReviewOrder());
+        }
     }
 
     private void initializeControls() {
@@ -166,7 +193,6 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
         mReviewables = (RecyclerView) findViewById(R.id.mpsdkReviewablesRecyclerView);
 
         initializeToolbar();
-        setToolbarTitle();
         decorateButtons();
     }
 
@@ -174,7 +200,6 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
         mReviewables = (RecyclerView) findViewById(R.id.mpsdkReviewablesRecyclerView);
         mReviewables.setNestedScrollingEnabled(false);
         mReviewables.setLayoutManager(new LinearLayoutManager(this));
-        mReviewables.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.HORIZONTAL));
     }
 
     private void setTimerColor() {
@@ -200,24 +225,18 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
             }
             getSupportActionBar().setHomeAsUpIndicator(upArrow);
         }
+
+        if (FontCache.hasTypeface(FontCache.CUSTOM_REGULAR_FONT)) {
+            mCollapsingToolbar.setCollapsedTitleTypeface(FontCache.getTypeface(FontCache.CUSTOM_REGULAR_FONT));
+            mCollapsingToolbar.setExpandedTitleTypeface(FontCache.getTypeface(FontCache.CUSTOM_REGULAR_FONT));
+        }
+
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onBackPressed();
             }
         });
-    }
-
-    private void setToolbarTitle() {
-        LayoutUtil.showRegularLayout(this);
-        mCollapsingToolbar.setTitle(getString(R.string.mpsdk_activity_checkout_title));
-        if (mDecorationPreference != null && mDecorationPreference.hasColors()) {
-            mCollapsingToolbar.setExpandedTitleColor(mDecorationPreference.getBaseColor());
-            mCollapsingToolbar.setCollapsedTitleTextColor(mDecorationPreference.getBaseColor());
-        } else {
-            mCollapsingToolbar.setExpandedTitleColor(ContextCompat.getColor(this, R.color.mpsdk_background_blue));
-            mCollapsingToolbar.setCollapsedTitleTextColor(ContextCompat.getColor(this, R.color.mpsdk_background_blue));
-        }
     }
 
     private void showTimer() {
@@ -235,10 +254,12 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
         startActivity(termsAndConditionsIntent);
     }
 
-    private void getDecorationPreference() {
+    private void getUIPreferences() {
         if (getIntent().getStringExtra("decorationPreference") != null) {
             mDecorationPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("decorationPreference"), DecorationPreference.class);
         }
+        mReviewScreenPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("reviewScreenPreference"), ReviewScreenPreference.class);
+
     }
 
     protected boolean isCustomColorSet() {
@@ -299,6 +320,33 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
     }
 
     @Override
+    public void showTitle(String title) {
+        mCollapsingToolbar.setTitle(title);
+        if (mDecorationPreference != null && mDecorationPreference.hasColors()) {
+            mCollapsingToolbar.setExpandedTitleColor(mDecorationPreference.getBaseColor());
+            mCollapsingToolbar.setCollapsedTitleTextColor(mDecorationPreference.getBaseColor());
+        } else {
+            mCollapsingToolbar.setExpandedTitleColor(ContextCompat.getColor(this, R.color.mpsdk_background_blue));
+            mCollapsingToolbar.setCollapsedTitleTextColor(ContextCompat.getColor(this, R.color.mpsdk_background_blue));
+        }
+    }
+
+    @Override
+    public void showConfirmationMessage(String message) {
+        mConfirmTextButton.setText(message);
+    }
+
+    @Override
+    public void showCancelMessage(String message) {
+        mCancelTextView.setText(message);
+    }
+
+    @Override
+    public void showTermsAndConditions() {
+        mTermsAndConditionsButton.setVisibility(View.VISIBLE);
+    }
+
+    @Override
     public void onTimeChanged(String timeToShow) {
         mTimerTextView.setText(timeToShow);
     }
@@ -306,7 +354,7 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
     @Override
     public void onFinish() {
         Intent intent = new Intent();
-        setResult(RESULT_CANCEL_PAYMENT, intent);
+        setResult(MercadoPagoCheckout.TIMER_FINISHED_RESULT_CODE, intent);
         this.finish();
     }
 
@@ -339,4 +387,39 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
         finish();
     }
 
+    public void cancelPayment(Integer resultCode, Bundle resultData, PaymentData paymentData) {
+        Intent intent = new Intent();
+        if (resultData != null) {
+            intent.putExtras(resultData);
+        }
+        intent.putExtra("resultCode", resultCode);
+        intent.putExtra("paymentData", JsonUtil.getInstance().toJson(paymentData));
+        setResult(RESULT_CANCEL_PAYMENT, intent);
+        finish();
+    }
+
+    @Override
+    public ReviewSubscriber getReviewSubscriber() {
+        return this;
+    }
+
+    private List<String> getDefaultOrder() {
+        return new ArrayList<String>() {{
+            add(ReviewKeys.SUMMARY);
+            add(ReviewKeys.ITEMS);
+            add(ReviewKeys.PAYMENT_METHODS);
+            add(ReviewKeys.DEFAULT);
+        }};
+    }
+
+    @Override
+    public void changeRequired(Integer resultCode, Bundle resultData) {
+        cancelPayment(resultCode, resultData, mPresenter.getPaymentData());
+    }
+
+    private void trackScreen() {
+        if (mSite != null && !TextUtil.isEmpty(mPublicKey)) {
+            MPTracker.getInstance().trackScreen("REVIEW_AND_CONFIRM", "2", mPublicKey, mSite.getId(), BuildConfig.VERSION_NAME, this);
+        }
+    }
 }

@@ -12,7 +12,7 @@ import com.mercadopago.callbacks.OnSelectedCallback;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.model.Card;
 import com.mercadopago.util.MercadoPagoUtil;
-import com.mercadopago.util.TextUtil;
+import com.mercadopago.util.TextUtils;
 
 import java.util.List;
 
@@ -76,7 +76,7 @@ public class CustomerCardItemAdapter extends RecyclerView.Adapter<CustomerCardIt
 
     @Override
     public int getItemCount() {
-        return TextUtil.isEmpty((mActionMessage)) ? mCards.size() : mCards.size() + 1;
+        return TextUtils.isEmpty((mActionMessage)) ? mCards.size() : mCards.size() + 1;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

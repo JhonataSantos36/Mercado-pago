@@ -3,7 +3,9 @@ package com.mercadopago;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
@@ -11,6 +13,7 @@ import android.text.InputFilter;
 import android.text.Spanned;
 import android.text.TextWatcher;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -19,24 +22,27 @@ import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.google.gson.reflect.TypeToken;
 import com.mercadopago.controllers.CheckoutTimer;
+import com.mercadopago.controllers.CustomServicesHandler;
+import com.mercadopago.core.MercadoPagoCheckout;
 import com.mercadopago.customviews.MPEditText;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.model.Currency;
-import com.mercadopago.model.DecorationPreference;
+
 import com.mercadopago.model.Discount;
 import com.mercadopago.mptracker.MPTracker;
 import com.mercadopago.observers.TimerObserver;
+import com.mercadopago.preferences.DecorationPreference;
+
 import com.mercadopago.presenters.DiscountsPresenter;
 import com.mercadopago.providers.DiscountProviderImpl;
 import com.mercadopago.util.CurrenciesUtil;
 import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;
+import com.mercadopago.util.TextUtils;
 import com.mercadopago.views.DiscountsActivityView;
 
-import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.util.Map;
 
@@ -45,9 +51,9 @@ public class DiscountsActivity extends AppCompatActivity implements DiscountsAct
     // Local vars
     protected DecorationPreference mDecorationPreference;
     protected MPTextView mTimerTextView;
-    private String mMerchantBaseUrl;
-    private String mMerchantDiscountBaseUrl;
-    private String mMerchantGetDiscountUri;
+    private String mMerchantBaseURL;
+    private String mMerchantDiscountBaseURL;
+    private String mMerchantGetDiscountURI;
     private Map<String, String> mDiscountAdditionalInfo;
 
     //View
@@ -63,6 +69,7 @@ public class DiscountsActivity extends AppCompatActivity implements DiscountsAct
     protected MPTextView mReviewSummaryTitle;
     protected MPTextView mReviewSummaryProductAmount;
     protected MPTextView mReviewSummaryDiscountAmount;
+    protected MPTextView mReviewSummaryDiscountLabel;
     protected MPTextView mReviewSummaryTotalAmount;
     protected MPTextView mErrorTextView;
     protected TextView mNextButtonText;
@@ -86,17 +93,27 @@ public class DiscountsActivity extends AppCompatActivity implements DiscountsAct
         }
 
         setContentView();
+        setMerchantInfo();
         initializeControls();
         onValidStart();
     }
 
     private void initializePresenter() {
         try {
-            DiscountProviderImpl discountProvider = new DiscountProviderImpl(this, mPresenter.getPublicKey(), mMerchantBaseUrl, mMerchantDiscountBaseUrl, mMerchantGetDiscountUri, mDiscountAdditionalInfo);
+            DiscountProviderImpl discountProvider = new DiscountProviderImpl(this, mPresenter.getPublicKey(), mMerchantBaseURL, mMerchantDiscountBaseURL, mMerchantGetDiscountURI, mDiscountAdditionalInfo);
             mPresenter.attachResourcesProvider(discountProvider);
             mPresenter.attachView(this);
         } catch (IllegalStateException exception) {
             finishWithCancelResult();
+        }
+    }
+
+    private void setMerchantInfo() {
+        if (CustomServicesHandler.getInstance().getServicePreference() != null) {
+            mMerchantBaseURL = CustomServicesHandler.getInstance().getServicePreference().getDefaultBaseURL();
+            mMerchantDiscountBaseURL = CustomServicesHandler.getInstance().getServicePreference().getGetMerchantDiscountBaseURL();
+            mMerchantGetDiscountURI = CustomServicesHandler.getInstance().getServicePreference().getGetMerchantDiscountURI();
+            mDiscountAdditionalInfo = CustomServicesHandler.getInstance().getServicePreference().getGetDiscountAdditionalInfo();
         }
     }
 
@@ -106,15 +123,6 @@ public class DiscountsActivity extends AppCompatActivity implements DiscountsAct
 
     protected void getActivityParameters() {
         mDecorationPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("decorationPreference"), DecorationPreference.class);
-
-        mMerchantBaseUrl = getIntent().getStringExtra("merchantBaseUrl");
-        mMerchantDiscountBaseUrl = getIntent().getStringExtra("merchantDiscountBaseUrl");
-        mMerchantGetDiscountUri = getIntent().getStringExtra("merchantGetDiscountUri");
-
-        String discountAdditionalInfo = getIntent().getStringExtra("discountAdditionalInfo");
-        Type type = new TypeToken<Map<String, String>>() {
-        }.getType();
-        mDiscountAdditionalInfo = JsonUtil.getInstance().getGson().fromJson(discountAdditionalInfo, type);
 
         mPresenter.setMerchantPublicKey(getIntent().getStringExtra("merchantPublicKey"));
         mPresenter.setPayerEmail(this.getIntent().getStringExtra("payerEmail"));
@@ -141,6 +149,7 @@ public class DiscountsActivity extends AppCompatActivity implements DiscountsAct
         //Review discount summary
         mReviewSummaryTitle = (MPTextView) findViewById(R.id.mpsdkReviewSummaryTitle);
         mReviewSummaryProductAmount = (MPTextView) findViewById(R.id.mpsdkReviewSummaryProductsAmount);
+        mReviewSummaryDiscountLabel = (MPTextView) findViewById(R.id.mpsdkReviewSummaryDiscountLabel);
         mReviewSummaryDiscountAmount = (MPTextView) findViewById(R.id.mpsdkReviewSummaryDiscountsAmount);
         mReviewSummaryTotalAmount = (MPTextView) findViewById(R.id.mpsdkReviewSummaryTotalAmount);
 
@@ -155,6 +164,7 @@ public class DiscountsActivity extends AppCompatActivity implements DiscountsAct
 
         mCloseImageFrameLayout = (FrameLayout) findViewById(R.id.mpsdkCloseImageFrameLayout);
         mCloseImage = (ImageView) findViewById(R.id.mpsdkCloseImage);
+
         mErrorContainer = (FrameLayout) findViewById(R.id.mpsdkErrorContainer);
         mErrorTextView = (MPTextView) findViewById(R.id.mpsdkErrorTextView);
         mProgressBar = (ProgressBar) findViewById(R.id.mpsdkProgressBar);
@@ -281,11 +291,20 @@ public class DiscountsActivity extends AppCompatActivity implements DiscountsAct
         mDiscountCodeContainer.setVisibility(View.GONE);
         mReviewDiscountSummaryContainer.setVisibility(View.VISIBLE);
 
+        setDiscountSummaryStatusBarColor();
         showSummaryTitle();
         showTransactionRow();
         showDiscountRow();
         showTotalRow();
         decorateSummary();
+    }
+
+    private void setDiscountSummaryStatusBarColor() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(ContextCompat.getColor(this, R.color.mpsdk_discounts_summary_background_color));
+        }
     }
 
     private void decorateSummary() {
@@ -310,10 +329,15 @@ public class DiscountsActivity extends AppCompatActivity implements DiscountsAct
         Spanned discountAmount;
 
         if (isAmountValid(mPresenter.getCouponAmount()) && isDiscountCurrencyIdValid()) {
+
             discountAmountBuilder.append("-");
             discountAmountBuilder.append(CurrenciesUtil.formatNumber(mPresenter.getCouponAmount(), mPresenter.getCurrencyId()));
             discountAmount = CurrenciesUtil.formatCurrencyInText(mPresenter.getCouponAmount(), mPresenter.getCurrencyId(), discountAmountBuilder.toString(), false, true);
+
             mReviewSummaryDiscountAmount.setText(discountAmount);
+            if (!TextUtils.isEmpty(mPresenter.getDiscount().getConcept())) {
+                mReviewSummaryDiscountLabel.setText(mPresenter.getDiscount().getConcept());
+            }
         } else {
             finishWithCancelResult();
         }
@@ -334,7 +358,6 @@ public class DiscountsActivity extends AppCompatActivity implements DiscountsAct
         } else if (isAmountOffValid()) {
             Currency currency = CurrenciesUtil.getCurrency(mPresenter.getDiscount().getCurrencyId());
             String amount = currency.getSymbol() + mPresenter.getDiscount().getAmountOff();
-
             StringBuilder title = new StringBuilder();
 
             title.append(amount);
@@ -408,6 +431,7 @@ public class DiscountsActivity extends AppCompatActivity implements DiscountsAct
         Intent returnIntent = new Intent();
         returnIntent.putExtra("discount", JsonUtil.getInstance().toJson(mPresenter.getDiscount()));
         returnIntent.putExtra("directDiscountEnabled", mPresenter.getDirectDiscountEnabled());
+
         setResult(RESULT_OK, returnIntent);
         finish();
     }
@@ -442,6 +466,7 @@ public class DiscountsActivity extends AppCompatActivity implements DiscountsAct
 
     @Override
     public void onFinish() {
+        setResult(MercadoPagoCheckout.TIMER_FINISHED_RESULT_CODE);
         this.finish();
     }
 

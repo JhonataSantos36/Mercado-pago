@@ -1,5 +1,7 @@
 package com.mercadopago.views;
 
+import com.mercadopago.model.PaymentData;
+import com.mercadopago.model.ReviewSubscriber;
 import com.mercadopago.model.Reviewable;
 import com.mercadopago.mvp.MvpView;
 
@@ -18,4 +20,14 @@ public interface ReviewAndConfirmView extends MvpView {
     void confirmPayment();
 
     void cancelPayment();
+
+    void showTitle(String title);
+
+    void showConfirmationMessage(String message);
+
+    void showCancelMessage(String message);
+
+    void showTermsAndConditions();
+
+    ReviewSubscriber getReviewSubscriber();
 }

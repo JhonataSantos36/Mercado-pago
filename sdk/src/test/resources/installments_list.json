@@ -1,0 +1,75 @@
+[
+  {
+    "issuer":{
+      "id":319,
+      "name":"Citi"
+    },
+    "payer_costs":
+    [
+      {
+        "installment_amount":60,
+        "installment_rate":0,
+        "installments":1,
+        "labels":[
+          "CFT_0,00%|TEA_0,00%"
+        ],
+        "max_allowed_amount":250000,
+        "min_allowed_amount":0,
+        "recommended_message":"1 cuota de $ 60,00 ($ 60,00)",
+        "total_amount":60
+      },
+      {
+        "installment_amount":22.19,
+        "installment_rate":10.97,
+        "installments":3,
+        "labels":[
+          "CFT_89,43%|TEA_70,21%"
+        ],
+        "max_allowed_amount":250000,
+        "min_allowed_amount":2,
+        "recommended_message":"3 cuotas de $ 22,19 ($ 66,58)",
+        "total_amount":66.58
+      },
+      {
+        "installment_amount":11.95,
+        "installment_rate":19.5,
+        "installments":6,
+        "labels":[
+          "CFT_88,33%|TEA_69,73%",
+          "recommended_interest_installment_with_some_banks"
+        ],
+        "max_allowed_amount":250000,
+        "min_allowed_amount":3,
+        "recommended_message":"6 cuotas de $ 11,95 ($ 71,70)",
+        "total_amount":71.7
+      },
+      {
+        "installment_amount":8.59,
+        "installment_rate":28.78,
+        "installments":9,
+        "labels":[
+          "CFT_89,23%|TEA_70,74%"
+        ],
+        "max_allowed_amount":250000,
+        "min_allowed_amount":5,
+        "recommended_message":"9 cuotas de $ 8,59 ($ 77,26)",
+        "total_amount":77.26
+      },
+      {
+        "installment_amount":6.92,
+        "installment_rate":38.38,
+        "installments":12,
+        "labels":[
+          "recommended_installment",
+          "CFT_89,38%|TEA_71,14%"
+        ],
+        "max_allowed_amount":250000,
+        "min_allowed_amount":6,
+        "recommended_message":"12 cuotas de $ 6,92 ($ 83,02)",
+        "total_amount":83.02
+      }
+    ],
+    "payment_method_id":"visa",
+    "payment_type_id":"credit_card"
+  }
+]

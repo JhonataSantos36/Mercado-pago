@@ -19,7 +19,6 @@
         android:layout_marginLeft="20dp"
         android:layout_marginStart="20dp"
         android:textSize="18dp"
-        app:fontStyle="regular"
         tools:text="Tarjeta de crédito"
         style="@style/mpsdk_title_text"/>
 
@@ -32,7 +31,6 @@
         android:layout_marginEnd="16dp"
         android:textSize="12dp"
         android:visibility="gone"
-        app:fontStyle="regular"
         tools:text="Ver Promociones"
         style="@style/mpsdk_title_text"/>
 
@@ -47,7 +45,8 @@
         android:textSize="17dp"
         android:visibility="gone"
         android:background="@drawable/mpsdk_title_toolbar"
-        app:fontStyle="roboto_regular"
+        app:fontStyle="mono_regular"
+        app:allowCustomFont="false"
         style="@style/mpsdk_title_text"/>
 
 </android.support.v7.widget.Toolbar>

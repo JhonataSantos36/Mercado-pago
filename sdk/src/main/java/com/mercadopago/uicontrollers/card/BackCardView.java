@@ -125,8 +125,7 @@ public class BackCardView {
     }
 
     private void onPaymentMethodSet() {
-        int resId = ContextCompat.getColor(mContext, getCardColor(mPaymentMethod));
-        mCardImageView.setBackgroundColor(resId);
+        mCardImageView.setBackgroundColor(ContextCompat.getColor(mContext, getCardColor(mPaymentMethod)));
     }
 
     private int getCardColor(PaymentMethod paymentMethod) {
@@ -141,7 +140,7 @@ public class BackCardView {
     public void drawEditingSecurityCode(String securityCode) {
         if (securityCode == null || securityCode.length() == 0) {
             mCardSecurityCodeTextView.setText(BASE_BACK_SECURITY_CODE);
-        } else  {
+        } else {
             mCardSecurityCodeTextView.setText(MPCardMaskUtil.buildSecurityCode(mSecurityCodeLength, securityCode));
         }
     }

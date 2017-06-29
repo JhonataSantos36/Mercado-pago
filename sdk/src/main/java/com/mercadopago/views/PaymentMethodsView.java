@@ -1,6 +1,6 @@
 package com.mercadopago.views;
 
-import com.mercadopago.exceptions.MPException;
+import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.mvp.MvpView;
 
@@ -13,6 +13,6 @@ public interface PaymentMethodsView extends MvpView{
     void showPaymentMethods(List<PaymentMethod> paymentMethods);
     void showProgress();
     void hideProgress();
-    void showError(MPException exception);
+    void showError(MercadoPagoError exception);
     void showBankDeals();
 }

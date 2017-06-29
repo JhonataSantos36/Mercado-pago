@@ -3,29 +3,28 @@ package com.mercadopago.examples.checkout;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
-import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.mercadopago.callbacks.Callback;
-import com.mercadopago.core.MercadoPago;
-import com.mercadopago.core.MerchantServer;
+import com.mercadopago.constants.PaymentTypes;
+import com.mercadopago.constants.Sites;
+import com.mercadopago.core.MercadoPagoCheckout;
 import com.mercadopago.examples.R;
-import com.mercadopago.examples.utils.ColorPickerDialog;
+import com.mercadopago.examples.reviewables.CellphoneReview;
+import com.mercadopago.examples.reviewables.CongratsReview;
 import com.mercadopago.examples.utils.ExamplesUtils;
-import com.mercadopago.exceptions.MPException;
-import com.mercadopago.model.ApiException;
-import com.mercadopago.model.CheckoutPreference;
-import com.mercadopago.model.DecorationPreference;
+import com.mercadopago.exceptions.MercadoPagoError;
+import com.mercadopago.model.Item;
+import com.mercadopago.model.PaymentData;
+import com.mercadopago.model.PaymentResult;
+import com.mercadopago.preferences.CheckoutPreference;
 import com.mercadopago.model.Payment;
+import com.mercadopago.preferences.FlowPreference;
+import com.mercadopago.preferences.PaymentResultScreenPreference;
+import com.mercadopago.preferences.ReviewScreenPreference;
+import com.mercadopago.preferences.ServicePreference;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;
 
@@ -34,107 +33,167 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class CheckoutExampleActivity extends AppCompatActivity {
-
+    private static final int RESULT_CUSTOM_EXIT = 1321;
     private Activity mActivity;
-    private ImageView mColorSample;
-    private CheckBox mDarkFontEnabled;
     private ProgressBar mProgressBar;
     private View mRegularLayout;
-
-    private CheckoutPreference mCheckoutPreference;
+    private boolean mAlreadyStartedRyC;
     private String mPublicKey;
-    private String mMerchantPreferenceId;
-    private Integer mDefaultColor;
-    private Integer mSelectedColor;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_checkout_example);
         mActivity = this;
-        mColorSample = (ImageView) findViewById(R.id.colorSample);
-        mDarkFontEnabled = (CheckBox) findViewById(R.id.darkFontEnabled);
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
         mRegularLayout = findViewById(R.id.regularLayout);
         mPublicKey = ExamplesUtils.DUMMY_MERCHANT_PUBLIC_KEY;
-        mDefaultColor = ContextCompat.getColor(this, R.color.colorPrimary);
 
-    }
-
-    public void changeColor(View view) {
-        new ColorPickerDialog(this, mDefaultColor, new ColorPickerDialog.OnColorSelectedListener() {
-            @Override
-            public void onColorSelected(int color) {
-                mDarkFontEnabled.setEnabled(true);
-                mColorSample.setBackgroundColor(color);
-                mSelectedColor = color;
-            }
-        }).show();
     }
 
     public void onContinueClicked(View view) {
-        showProgressLayout();
-        Map<String, Object> map = new HashMap<>();
-        map.put("item_id", "1");
-        map.put("amount", new BigDecimal(300));
-
-        MerchantServer.createPreference(this, "https://private-afe56-mercadopagoexamples.apiary-mock.com/",
-                "merchantUri/create_preference", map, new Callback<CheckoutPreference>() {
-                    @Override
-                    public void success(CheckoutPreference checkoutPreference) {
-                        mCheckoutPreference = checkoutPreference;
-                        startMercadoPagoCheckout();
-                    }
-
-                    @Override
-                    public void failure(ApiException error) {
-                        showRegularLayout();
-                        Toast.makeText(mActivity, getString(R.string.preference_creation_failed), Toast.LENGTH_LONG).show();
-                    }
-                });
+        startMercadoPagoCheckout();
+        mAlreadyStartedRyC = false;
     }
 
     private void startMercadoPagoCheckout() {
 
-        DecorationPreference decorationPreference = getCurrentDecorationPreference();
+        FlowPreference flowPreference = new FlowPreference.Builder()
+                .disableReviewAndConfirmScreen()
+                .disableDiscount()
+                .disableBankDeals()
+                .disableInstallmentsReviewScreen()
+                .build();
 
-        new MercadoPago.StartActivityBuilder()
+        new MercadoPagoCheckout.Builder()
                 .setActivity(this)
                 .setPublicKey(mPublicKey)
-                .setCheckoutPreferenceId(mCheckoutPreference.getId())
-                .setDecorationPreference(decorationPreference) //Optional
-                .startCheckoutActivity();
+                .setCheckoutPreference(getCheckoutPreference())
+                .setFlowPreference(flowPreference)
+//                .startForPayment();
+                .startForPaymentData();
     }
 
-    private DecorationPreference getCurrentDecorationPreference() {
-        DecorationPreference decorationPreference = new DecorationPreference();
-        if (mSelectedColor != null) {
-            decorationPreference.setBaseColor(mSelectedColor);
-            if (mDarkFontEnabled.isChecked()) {
-                decorationPreference.enableDarkFont();
-            }
+    private void startRyC(PaymentData paymentData) {
+
+        CellphoneReview cellphoneReview = new CellphoneReview(this, "15111111");
+
+        ReviewScreenPreference reviewScreenPreference = new ReviewScreenPreference.Builder()
+                .setTitle("Confirma tu recarga")
+                .setConfirmText("Recargar")
+                .setCancelText("Ir a Actividad")
+                .setProductDetail("Recarga de celular")
+                .addReviewable(cellphoneReview)
+                .build();
+
+        FlowPreference flowPreference = new FlowPreference.Builder()
+                .disableReviewAndConfirmScreen()
+                .disableBankDeals()
+                .disableDiscount()
+                .disableInstallmentsReviewScreen()
+                .build();
+
+//        Map<String, String> additionalInfo = new HashMap<>();
+//        additionalInfo.put("merchant_access_token", ExamplesUtils.DUMMY_MERCHANT_ACCESS_TOKEN);
+//        ServicePreference servicePreference = new ServicePreference.Builder()
+//                .setGetCustomerURL(ExamplesUtils.DUMMY_MERCHANT_BASE_URL, ExamplesUtils.DUMMY_MERCHANT_GET_CUSTOMER_URI, additionalInfo)
+//                .build();
+
+        new MercadoPagoCheckout.Builder()
+                .setActivity(this)
+                .setReviewScreenPreference(reviewScreenPreference)
+                .setPublicKey(mPublicKey)
+                .setCheckoutPreference(getCheckoutPreference())
+//                .setServicePreference(servicePreference)
+                .setFlowPreference(flowPreference)
+                .setPaymentData(paymentData)
+                .startForPaymentData();
+    }
+
+    private CheckoutPreference getCheckoutPreference() {
+        return new CheckoutPreference.Builder()
+                .addItem(new Item("Item", BigDecimal.TEN.multiply(BigDecimal.TEN)))
+                .setSite(Sites.ARGENTINA)
+//                .addExcludedPaymentType(PaymentTypes.ATM)
+//                .addExcludedPaymentType(PaymentTypes.BANK_TRANSFER)
+//                .addExcludedPaymentType(PaymentTypes.DEBIT_CARD)
+//                .addExcludedPaymentType(PaymentTypes.DEBIT_CARD)
+//                .addExcludedPaymentType(PaymentTypes.TICKET)
+//                .enableAccountMoney()
+//                .setPayerAccessToken("APP_USR-6077407713835188-120612-9c010367e2aba8808865b227526f4ccc__LB_LD__-232134231")
+                .build();
+    }
+
+    private String getSuccessMessage(PaymentData paymentData, boolean paymentMethodChanged) {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("Success! " + paymentData.getPaymentMethod().getId() + " selected. ");
+        if (paymentMethodChanged) {
+            stringBuilder.append("And it has changed!");
         }
-        return decorationPreference;
+        return stringBuilder.toString();
+    }
+
+    private void startWithPaymentResult(PaymentData paymentData) {
+
+        CongratsReview congratsReview = new CongratsReview(this, "Hola!");
+
+        PaymentResult paymentResult = new PaymentResult.Builder()
+                .setPaymentData(paymentData)
+                .setPaymentStatus(Payment.StatusCodes.STATUS_APPROVED)
+//                .setPaymentStatus(Payment.StatusCodes.STATUS_PENDING)
+//                .setPaymentStatus(Payment.StatusCodes.STATUS_REJECTED)
+//                .setPaymentStatusDetail(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_BAD_FILLED_CARD_NUMBER)
+                .build();
+
+        PaymentResultScreenPreference paymentResultScreenPreference = new PaymentResultScreenPreference.Builder()
+                .setApprovedTitle("Recargaste!")
+                .setApprovedSecondaryExitButton("Intentar nuevamente", RESULT_CUSTOM_EXIT)
+                .addCongratsReviewable(congratsReview)
+                .setExitButtonTitle("Ir a Actividad")
+                .build();
+
+
+        new MercadoPagoCheckout.Builder()
+                .setActivity(this)
+                .setPublicKey(mPublicKey)
+                .setCheckoutPreference(getCheckoutPreference())
+                .setPaymentResult(paymentResult)
+                .setPaymentResultScreenPreference(paymentResultScreenPreference)
+                .startForPaymentData();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         LayoutUtil.showRegularLayout(this);
 
-        if (requestCode == MercadoPago.CHECKOUT_REQUEST_CODE) {
-            showRegularLayout();
-            if (resultCode == RESULT_OK && data != null) {
-
-                // Set message
-                Payment payment = JsonUtil.getInstance().fromJson(data.getStringExtra("payment"), Payment.class);
-                Toast.makeText(mActivity, getString(R.string.payment_received_congrats) + payment.getId(), Toast.LENGTH_LONG).show();
-
-            } else {
-                if ((data != null) && (data.getStringExtra("mpException") != null)) {
-                    MPException mpException = JsonUtil.getInstance().fromJson(data.getStringExtra("mpException"), MPException.class);
-                    Toast.makeText(mActivity, mpException.getMessage(), Toast.LENGTH_LONG).show();
+        if (requestCode == MercadoPagoCheckout.CHECKOUT_REQUEST_CODE) {
+            if (resultCode == MercadoPagoCheckout.PAYMENT_DATA_RESULT_CODE) {
+                PaymentData paymentData = JsonUtil.getInstance().fromJson(data.getStringExtra("paymentData"), PaymentData.class);
+                Boolean paymentMethodChanged = data.getBooleanExtra("paymentMethodChanged", false);
+                Toast.makeText(mActivity, getSuccessMessage(paymentData, paymentMethodChanged), Toast.LENGTH_SHORT).show();
+                if (!mAlreadyStartedRyC || paymentMethodChanged) {
+                    mAlreadyStartedRyC = true;
+                    startRyC(paymentData);
+                } else {
+                    startWithPaymentResult(paymentData);
                 }
+
+
+            } else if (resultCode == RESULT_CANCELED) {
+
+                if (data != null && data.getStringExtra("mercadoPagoError") != null) {
+                    MercadoPagoError mercadoPagoError = JsonUtil.getInstance().fromJson(data.getStringExtra("mercadoPagoError"), MercadoPagoError.class);
+                    Toast.makeText(mActivity, "Error: " + mercadoPagoError.getMessage(), Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(mActivity, "Cancel", Toast.LENGTH_SHORT).show();
+                }
+
+            } else if (resultCode == CellphoneReview.CELLPHONE_CHANGE) {
+                Toast.makeText(mActivity, "Change cellphone!", Toast.LENGTH_SHORT).show();
+            } else if (resultCode == CongratsReview.CUSTOM_REVIEW) {
+                Toast.makeText(mActivity, "Custom congrats view!", Toast.LENGTH_SHORT).show();
+            } else if (resultCode == RESULT_CUSTOM_EXIT) {
+                Toast.makeText(mActivity, "Custom exit!", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -148,17 +207,5 @@ public class CheckoutExampleActivity extends AppCompatActivity {
     private void showRegularLayout() {
         mProgressBar.setVisibility(View.GONE);
         mRegularLayout.setVisibility(View.VISIBLE);
-    }
-
-    private void showProgressLayout() {
-        mProgressBar.setVisibility(View.VISIBLE);
-        mRegularLayout.setVisibility(View.GONE);
-    }
-
-    public void resetSelection(View view) {
-        mSelectedColor = null;
-        mColorSample.setBackgroundColor(mDefaultColor);
-        mDarkFontEnabled.setChecked(false);
-        mDarkFontEnabled.setEnabled(false);
     }
 }

@@ -22,8 +22,7 @@
             android:layout_gravity="center"
             android:textColor="@color/mpsdk_base_text"
             android:textSize="24dp"
-            tools:text="3x $ 173"
-            app:fontStyle="regular" />
+            tools:text="3x $ 173"/>
 
         <com.mercadopago.customviews.MPTextView
             android:id="@+id/mpsdkInstallmentsZeroRate"
@@ -33,8 +32,7 @@
             android:textColor="@color/mpsdk_color_congrats_background"
             android:text="@string/mpsdk_zero_rate"
             android:textSize="18dp"
-            android:visibility="gone"
-            app:fontStyle="regular" />
+            android:visibility="gone"/>
 
         <com.mercadopago.customviews.MPTextView
             android:id="@+id/mpsdkInstallmentsTotalAmount"
@@ -44,7 +42,6 @@
             android:textColor="@color/mpsdk_base_text"
             android:textSize="18dp"
             android:visibility="visible"
-            tools:text="1040"
-            app:fontStyle="regular" />
+            tools:text="1040"/>
     </LinearLayout>
 </LinearLayout>

@@ -10,7 +10,9 @@ import android.view.ViewGroup;
 import com.mercadopago.R;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.model.PayerCost;
+import com.mercadopago.model.Site;
 import com.mercadopago.util.CurrenciesUtil;
+import com.mercadopago.util.InstallmentsUtil;
 
 import java.math.BigDecimal;
 
@@ -19,6 +21,7 @@ import java.math.BigDecimal;
  */
 public class PayerCostRow implements PayerCostViewController {
 
+    private final Site mSite;
     private PayerCost mPayerCost;
     private String mCurrencyId;
 
@@ -28,9 +31,10 @@ public class PayerCostRow implements PayerCostViewController {
     private MPTextView mZeroRateText;
     private MPTextView mTotalText;
 
-    public PayerCostRow(Context context, String currencyId) {
+    public PayerCostRow(Context context, Site site) {
         this.mContext = context;
-        this.mCurrencyId = currencyId;
+        this.mCurrencyId = site.getCurrencyId();
+        this.mSite = site;
 
     }
 
@@ -38,15 +42,17 @@ public class PayerCostRow implements PayerCostViewController {
     public void drawPayerCost(PayerCost payerCost) {
         mPayerCost = payerCost;
         setInstallmentsText();
-
-        if (payerCost.getInstallmentRate().compareTo(BigDecimal.ZERO) == 0) {
-            mTotalText.setVisibility(View.GONE);
-            if (payerCost.getInstallments() > 1) {
-                mZeroRateText.setVisibility(View.VISIBLE);
+        if (!InstallmentsUtil.shouldWarnAboutBankInterests(mSite)) {
+            if (payerCost.getInstallmentRate().compareTo(BigDecimal.ZERO) == 0) {
+                mTotalText.setVisibility(View.GONE);
+                if (payerCost.getInstallments() > 1) {
+                    mZeroRateText.setVisibility(View.VISIBLE);
+                }
+            } else {
+                setAmountWithRateText();
             }
-        } else {
-            setAmountWithRateText();
         }
+
     }
 
     @Override
@@ -54,12 +60,16 @@ public class PayerCostRow implements PayerCostViewController {
         mPayerCost = payerCost;
         setInstallmentsText();
 
-        if (payerCost.getInstallmentRate().compareTo(BigDecimal.ZERO) == 0) {
-            mTotalText.setVisibility(View.GONE);
-            if (payerCost.getInstallments() > 1) {
-                mZeroRateText.setVisibility(View.VISIBLE);
+        if (!InstallmentsUtil.shouldWarnAboutBankInterests(mSite)) {
+            if (payerCost.getInstallmentRate().compareTo(BigDecimal.ZERO) == 0) {
+                mTotalText.setVisibility(View.GONE);
+                if (payerCost.getInstallments() > 1) {
+                    mZeroRateText.setVisibility(View.VISIBLE);
+                }
             }
         }
+
+
     }
 
     @Override

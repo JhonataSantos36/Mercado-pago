@@ -58,12 +58,12 @@ public class InstructionReference {
         return this.getFieldValue() != null && this.getFieldValue().size() != 0;
     }
 
-    public boolean isNumericReference(){
-        for (String text : fieldValue){
-            text = text.replace(":","");
-            text = text.replace("-","");
+    public boolean isNumericReference() {
+        for (String text : fieldValue) {
+            text = text.replace(":", "");
+            text = text.replace("-", "");
 
-            if (!TextUtils.isDigitsOnly(text)){
+            if (!TextUtils.isDigitsOnly(text)) {
                 return false;
             }
         }

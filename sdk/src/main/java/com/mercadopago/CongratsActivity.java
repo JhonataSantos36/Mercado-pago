@@ -2,131 +2,405 @@ package com.mercadopago;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Build;
+import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Spanned;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
-import com.mercadopago.core.MercadoPagoUI;
+import com.mercadopago.adapters.ReviewablesAdapter;
+import com.mercadopago.callbacks.CallbackHolder;
+import com.mercadopago.constants.ContentLocation;
+import com.mercadopago.constants.PaymentTypes;
+import com.mercadopago.controllers.CustomReviewablesHandler;
+import com.mercadopago.core.MercadoPagoComponents;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.model.Discount;
-import com.mercadopago.model.Payment;
+import com.mercadopago.model.PaymentData;
 import com.mercadopago.model.PaymentMethod;
+import com.mercadopago.model.PaymentResult;
+import com.mercadopago.model.ReviewSubscriber;
+import com.mercadopago.model.Reviewable;
+import com.mercadopago.model.Site;
 import com.mercadopago.mptracker.MPTracker;
+import com.mercadopago.preferences.PaymentResultScreenPreference;
 import com.mercadopago.uicontrollers.discounts.DiscountRowView;
+import com.mercadopago.util.ColorsUtil;
 import com.mercadopago.util.CurrenciesUtil;
 import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.MercadoPagoUtil;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import static android.text.TextUtils.isEmpty;
 
-public class CongratsActivity extends MercadoPagoActivity {
+public class CongratsActivity extends MercadoPagoBaseActivity implements ReviewSubscriber {
 
     // Controls
-    protected MPTextView mLastFourDigitsDescription;
+    protected MPTextView mPaymentMethodDescription;
     protected MPTextView mInstallmentsDescription;
+    protected MPTextView mAmountDescription;
     protected MPTextView mInterestAmountDescription;
-    protected MPTextView mTotalAmountDescription;
+    protected MPTextView mInstallmentsTotalAmountDescription;
     protected MPTextView mPaymentIdDescription;
     protected MPTextView mPaymentIdDescriptionNumber;
-    protected MPTextView mPayerEmail;
+    protected MPTextView mPayerEmailTextView;
+    protected MPTextView mPaymentStatementDescriptionTextView;
+    protected MPTextView mCongratulationsTitle;
+    protected MPTextView mCongratulationsSubtitle;
     protected View mTopEmailSeparator;
+    protected View mBottomEmailSeparator;
     protected ImageView mPaymentMethodImage;
-    protected MPTextView mKeepBuyingButton;
+    protected MPTextView mExitButtonText;
     protected FrameLayout mDiscountFrameLayout;
     protected Activity mActivity;
+    protected RecyclerView mBottomReviewables;
+    protected FrameLayout mSecondaryExitButton;
+    protected MPTextView mSecondaryExitTextView;
 
     // Activity parameters
-    protected Payment mPayment;
-    protected PaymentMethod mPaymentMethod;
     protected String mMerchantPublicKey;
     protected Discount mDiscount;
     protected Boolean mDiscountEnabled;
+    protected PaymentResult mPaymentResult;
 
     //Local values
     private boolean mBackPressedOnce;
     private Integer mCongratsDisplay;
 
+    //Data from PaymentResult
+    private BigDecimal mTotalAmount;
+    private String mCurrencyId;
+    private int mInstallments;
+    private BigDecimal mInstallmentsAmount;
+    private BigDecimal mInstallmentsRate;
+    private String mStatementDescription;
+    private Long mPaymentId;
+    private String mLastFourDigits;
+    private String mPaymentMethodId;
+    private String mPaymentMethodName;
+    private String mPaymentTypeId;
+    private String mPayerEmail;
+    private Site mSite;
+    private BigDecimal mAmount;
+    private PaymentResultScreenPreference mPaymentResultScreenPreference;
+    private ViewGroup mTitleBackground;
+    private RecyclerView mTopReviewables;
+
     @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        getActivityParameters();
+        setContentView();
+        initializeControls();
+        initializeReviewablesRecyclerView();
+        mActivity = this;
+        try {
+            validateActivityParameters();
+            onValidStart();
+        } catch (IllegalStateException exception) {
+            onInvalidStart(exception.getMessage());
+        }
+    }
+
     protected void getActivityParameters() {
         mMerchantPublicKey = getIntent().getStringExtra("merchantPublicKey");
         mCongratsDisplay = getIntent().getIntExtra("congratsDisplay", -1);
-        mPayment = JsonUtil.getInstance().fromJson(getIntent().getExtras().getString("payment"), Payment.class);
-        mPaymentMethod = JsonUtil.getInstance().fromJson(getIntent().getExtras().getString("paymentMethod"), PaymentMethod.class);
         mDiscount = JsonUtil.getInstance().fromJson(getIntent().getExtras().getString("discount"), Discount.class);
         mDiscountEnabled = getIntent().getExtras().getBoolean("discountEnabled", true);
+        mPaymentResult = JsonUtil.getInstance().fromJson(getIntent().getExtras().getString("paymentResult"), PaymentResult.class);
+        mSite = JsonUtil.getInstance().fromJson(getIntent().getExtras().getString("site"), Site.class);
+        mPaymentResultScreenPreference = JsonUtil.getInstance().fromJson(getIntent().getExtras().getString("paymentResultScreenPreference"), PaymentResultScreenPreference.class);
+        if (getIntent().getStringExtra("amount") != null) {
+            mAmount = new BigDecimal(getIntent().getStringExtra("amount"));
+        }
     }
 
-    @Override
     protected void validateActivityParameters() throws IllegalStateException {
         if (mMerchantPublicKey == null) {
             throw new IllegalStateException("merchant public key not set");
         }
-        if (mPayment == null) {
-            throw new IllegalStateException("payment not set");
-        }
-        if (mPaymentMethod == null) {
-            throw new IllegalStateException("payment method not set");
+        if (mPaymentResult == null) {
+            throw new IllegalStateException("payment result not set");
         }
     }
 
-    @Override
     protected void setContentView() {
-        MPTracker.getInstance().trackScreen("CONGRATS", "2", mMerchantPublicKey, BuildConfig.VERSION_NAME, getActivity());
+        MPTracker.getInstance().trackScreen("RESULT", "2", mMerchantPublicKey, BuildConfig.VERSION_NAME, this);
         setContentView(R.layout.mpsdk_activity_congrats);
     }
 
-    @Override
     protected void initializeControls() {
-        mPayerEmail = (MPTextView) findViewById(R.id.mpsdkPayerEmail);
-        mLastFourDigitsDescription = (MPTextView) findViewById(R.id.mpsdkLastFourDigitsDescription);
+        mPayerEmailTextView = (MPTextView) findViewById(R.id.mpsdkPayerEmail);
+        mPaymentMethodDescription = (MPTextView) findViewById(R.id.mpsdkPaymentMethodDescription);
         mInstallmentsDescription = (MPTextView) findViewById(R.id.mpsdkInstallmentsDescription);
+        mAmountDescription = (MPTextView) findViewById(R.id.mpsdkAmountDescription);
         mInterestAmountDescription = (MPTextView) findViewById(R.id.mpsdkInterestAmountDescription);
-        mTotalAmountDescription = (MPTextView) findViewById(R.id.mpsdkTotalAmountDescription);
+        mInstallmentsTotalAmountDescription = (MPTextView) findViewById(R.id.mpsdkInstallmentsTotalAmountDescription);
         mPaymentIdDescription = (MPTextView) findViewById(R.id.mpsdkPaymentIdDescription);
         mPaymentIdDescriptionNumber = (MPTextView) findViewById(R.id.mpsdkPaymentIdDescriptionNumber);
+        mPaymentStatementDescriptionTextView = (MPTextView) findViewById(R.id.mpsdkStateDescription);
+        mCongratulationsTitle = (MPTextView) findViewById(R.id.mpsdkCongratulationsTitle);
+        mCongratulationsSubtitle = (MPTextView) findViewById(R.id.mpsdkCongratulationsSubtitle);
         mTopEmailSeparator = findViewById(R.id.mpsdkTopEmailSeparator);
+        mBottomEmailSeparator = findViewById(R.id.mpsdkBottomEmailSeparator);
         mPaymentMethodImage = (ImageView) findViewById(R.id.mpsdkPaymentMethodImage);
-        mKeepBuyingButton = (MPTextView) findViewById(R.id.mpsdkKeepBuyingCongrats);
-        mKeepBuyingButton.setOnClickListener(new View.OnClickListener() {
+        mExitButtonText = (MPTextView) findViewById(R.id.mpsdkExitButtonCongrats);
+        mDiscountFrameLayout = (FrameLayout) findViewById(R.id.mpsdkDiscount);
+        mBottomReviewables = (RecyclerView) findViewById(R.id.mpsdkReviewablesRecyclerView);
+        mTopReviewables = (RecyclerView) findViewById(R.id.mpsdkTopReviewablesRecyclerView);
+        mSecondaryExitButton = (FrameLayout) findViewById(R.id.mpsdkCongratsSecondaryExitButton);
+        mSecondaryExitTextView = (MPTextView) findViewById(R.id.mpsdkCongratsSecondaryExitButtonText);
+        mTitleBackground = (ViewGroup) findViewById(R.id.mpsdkTitleBackground);
+
+        mDiscountFrameLayout.setVisibility(View.GONE);
+        mExitButtonText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 finishWithOkResult();
             }
         });
-
-        //Discount
-        mDiscountFrameLayout = (FrameLayout) findViewById(R.id.mpsdkDiscount);
     }
 
-    @Override
+    private void initializeReviewablesRecyclerView() {
+        mBottomReviewables.setNestedScrollingEnabled(false);
+        mBottomReviewables.setLayoutManager(new LinearLayoutManager(this));
+        mBottomReviewables.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.HORIZONTAL));
+
+        mTopReviewables.setNestedScrollingEnabled(false);
+        mTopReviewables.setLayoutManager(new LinearLayoutManager(this));
+        mTopReviewables.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.HORIZONTAL));
+    }
+
     protected void onValidStart() {
+        initializePaymentData();
+        setPaymentResultScreenPreferenceData();
+        setPaymentResultScreenWithoutPreferenceData();
         setPaymentEmailDescription();
-        setLastFourDigitsCard();
-        setInstallmentsDescription();
-        setDiscountRow();
-        setPaymentIdDescription();
+        setPaymentStatementDescription();
         setDisplayTime();
+        showBottomReviewables();
+        showTopReviewables();
     }
 
-    @Override
+    private void initializePaymentData() {
+        PaymentData paymentData = mPaymentResult.getPaymentData();
+        mStatementDescription = mPaymentResult.getStatementDescription();
+        mPaymentId = mPaymentResult.getPaymentId();
+        mPayerEmail = mPaymentResult.getPayerEmail();
+        if (paymentData != null) {
+            PaymentMethod paymentMethod = paymentData.getPaymentMethod();
+            mDiscount = paymentData.getDiscount();
+
+            if (paymentData.getPayerCost() != null) {
+                mTotalAmount = paymentData.getPayerCost().getTotalAmount();
+                mInstallments = paymentData.getPayerCost().getInstallments();
+                mInstallmentsAmount = paymentData.getPayerCost().getInstallmentAmount();
+                mInstallmentsRate = paymentData.getPayerCost().getInstallmentRate();
+            } else {
+                mTotalAmount = mAmount;
+            }
+            if (paymentData.getToken() != null) {
+                mLastFourDigits = paymentData.getToken().getLastFourDigits();
+            }
+            if (paymentMethod != null) {
+                mPaymentMethodId = paymentMethod.getId();
+                mPaymentMethodName = paymentMethod.getName();
+                mPaymentTypeId = paymentMethod.getPaymentTypeId();
+            }
+        }
+        if (mSite != null) {
+            mCurrencyId = mSite.getCurrencyId();
+        }
+    }
+
     protected void onInvalidStart(String errorMessage) {
         ErrorUtil.startErrorActivity(this, getString(R.string.mpsdk_standard_error_message), errorMessage, false);
     }
 
-    private void setPaymentIdDescription() {
+    private void setPaymentResultScreenPreferenceData() {
+        if (mPaymentResultScreenPreference != null) {
+            if (mPaymentResultScreenPreference.getApprovedTitle() == null) {
+                setDefaultCongratulationsTitle();
+            } else {
+                mCongratulationsTitle.setText(mPaymentResultScreenPreference.getApprovedTitle());
+            }
+            if (mPaymentResultScreenPreference.getApprovedSubtitle() == null) {
+                setDefaultCongratulationsSubtitle();
+            } else {
+                mCongratulationsSubtitle.setText(mPaymentResultScreenPreference.getApprovedSubtitle());
+                mCongratulationsSubtitle.setVisibility(View.VISIBLE);
+            }
+            if (mPaymentResultScreenPreference.getExitButtonTitle() == null) {
+                setDefaultExitButtonTitle();
+            } else {
+                mExitButtonText.setText(mPaymentResultScreenPreference.getExitButtonTitle());
+            }
+            if (mPaymentResultScreenPreference.isApprovedReceiptEnabled()) {
+                showReceipt();
+            } else {
+                hideReceipt();
+            }
+            if (mPaymentResultScreenPreference.isApprovedAmountEnabled()) {
+                showAmount();
+            } else {
+                hideAmount();
+            }
+            if (mPaymentResultScreenPreference.isApprovedPaymentMethodInfoEnabled()) {
+                showPaymentMethod();
+            } else {
+                hidePaymentMethod();
+            }
+            if (!mPaymentResultScreenPreference.isCongratsSecondaryExitButtonEnabled() ||
+                    mPaymentResultScreenPreference.getSecondaryCongratsExitButtonTitle() == null ||
+                    (mPaymentResultScreenPreference.getSecondaryCongratsExitResultCode() == null
+                            && !CallbackHolder.getInstance().hasPaymentResultCallback(CallbackHolder.CONGRATS_PAYMENT_RESULT_CALLBACK))) {
+                hideSecondaryExitButton();
+            } else {
+                mSecondaryExitTextView.setText(mPaymentResultScreenPreference.getSecondaryCongratsExitButtonTitle());
+                mSecondaryExitButton.setVisibility(View.VISIBLE);
+                mSecondaryExitTextView.setVisibility(View.VISIBLE);
+                setSecondaryExitButtonListener();
+            }
+            if (mPaymentResultScreenPreference.hasTitleBackgroundColor()) {
+                mTitleBackground.setBackgroundColor(mPaymentResultScreenPreference.getTitleBackgroundColor());
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    int darkerTintColor = ColorsUtil.darker(mPaymentResultScreenPreference.getTitleBackgroundColor());
+                    ColorsUtil.tintStatusBar(this, darkerTintColor);
+                }
+            }
+        }
+    }
+
+    private void setPaymentResultScreenWithoutPreferenceData() {
+        if (mPaymentResultScreenPreference == null) {
+            setDefaultCongratulationsTitle();
+            setDefaultCongratulationsSubtitle();
+            setDefaultExitButtonTitle();
+            showReceipt();
+            showAmount();
+            showPaymentMethod();
+            hideSecondaryExitButton();
+        }
+    }
+
+    private void setSecondaryExitButtonListener() {
+        mSecondaryExitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+        finishWithResult(mPaymentResultScreenPreference.getSecondaryCongratsExitResultCode());
+            }
+        });
+    }
+
+    private void finishWithResult(Integer resultCode) {
+        Intent intent = new Intent();
+        intent.putExtra("resultCode", resultCode);
+        setResult(RESULT_OK, intent);
+        finish();
+    }
+
+    private void hideSecondaryExitButton() {
+        mSecondaryExitButton.setVisibility(View.GONE);
+        mSecondaryExitTextView.setVisibility(View.GONE);
+    }
+
+    private void setDefaultCongratulationsTitle() {
+        mCongratulationsTitle.setText(getResources().getString(R.string.mpsdk_title_activity_congrats));
+    }
+
+    private void setDefaultCongratulationsSubtitle() {
+        mCongratulationsSubtitle.setVisibility(View.GONE);
+    }
+
+    private void setDefaultExitButtonTitle() {
+        mExitButtonText.setText(getResources().getString(R.string.mpsdk_text_continue));
+    }
+
+    public void showBottomReviewables() {
+        List<Reviewable> customReviewables = retrieveBottomCustomReviewables();
+        ReviewablesAdapter reviewablesAdapter = new ReviewablesAdapter(customReviewables);
+        mBottomReviewables.setAdapter(reviewablesAdapter);
+    }
+
+    public void showTopReviewables() {
+        List<Reviewable> customReviewables = retrieveTopCustomReviewables();
+        ReviewablesAdapter reviewablesAdapter = new ReviewablesAdapter(customReviewables);
+        mTopReviewables.setAdapter(reviewablesAdapter);
+    }
+
+    private List<Reviewable> retrieveTopCustomReviewables() {
+        if (CustomReviewablesHandler.getInstance().hasCongratsReviewables(ContentLocation.TOP)) {
+            List<Reviewable> customReviewables = CustomReviewablesHandler.getInstance().getCongratsReviewables(ContentLocation.TOP);
+
+            for (Reviewable reviewable : customReviewables) {
+                reviewable.setReviewSubscriber(this);
+            }
+
+            return customReviewables;
+        } else {
+            return new ArrayList<>();
+        }
+    }
+
+    private List<Reviewable> retrieveBottomCustomReviewables() {
+        if (CustomReviewablesHandler.getInstance().hasCongratsReviewables(ContentLocation.BOTTOM)) {
+            List<Reviewable> customReviewables = CustomReviewablesHandler.getInstance().getCongratsReviewables(ContentLocation.BOTTOM);
+
+            for (Reviewable reviewable : customReviewables) {
+                reviewable.setReviewSubscriber(this);
+            }
+
+            return customReviewables;
+        } else {
+            return new ArrayList<>();
+        }
+    }
+
+    @Override
+    public void changeRequired(Integer resultCode, Bundle data) {
+        Intent intent = new Intent();
+        if (data != null) {
+            intent.putExtras(data);
+        }
+        intent.putExtra("resultCode", resultCode);
+        intent.putExtra("paymentResult", JsonUtil.getInstance().toJson(mPaymentResult));
+        setResult(RESULT_OK, intent);
+        finish();
+    }
+
+    private void showReceipt() {
         if (isPaymentIdValid()) {
-            String message = getString(R.string.mpsdk_payment_id_description_number, String.valueOf(mPayment.getId()));
+            String message = getString(R.string.mpsdk_payment_id_description_number, String.valueOf(mPaymentId));
             mPaymentIdDescriptionNumber.setText(message);
         } else {
-            mPaymentIdDescription.setVisibility(View.GONE);
-            mPaymentIdDescriptionNumber.setVisibility(View.GONE);
+            hideReceipt();
+        }
+    }
+
+    private void hideReceipt() {
+        mPaymentIdDescription.setVisibility(View.GONE);
+        mPaymentIdDescriptionNumber.setVisibility(View.GONE);
+    }
+
+    private void setPaymentStatementDescription() {
+        if (mStatementDescription == null) {
+            mPaymentStatementDescriptionTextView.setVisibility(View.GONE);
+        } else {
+            String description = getResources().getString(R.string.mpsdk_text_state_acount_activity_congrat, mStatementDescription);
+            mPaymentStatementDescriptionTextView.setText(description);
+            mPaymentStatementDescriptionTextView.setVisibility(View.VISIBLE);
         }
     }
 
@@ -143,20 +417,21 @@ public class CongratsActivity extends MercadoPagoActivity {
 
     private void setDiscountRow() {
         if (mDiscountEnabled && mDiscount != null) {
-            showDiscountRow(mPayment.getTransactionAmount());
+            showDiscountRow(mAmount);
         }
     }
 
     public void showDiscountRow(BigDecimal transactionAmount) {
-        DiscountRowView discountRowView = new MercadoPagoUI.Views.DiscountRowViewBuilder()
+        DiscountRowView discountRowView = new MercadoPagoComponents.Views.DiscountRowViewBuilder()
                 .setContext(this)
                 .setDiscount(mDiscount)
                 .setTransactionAmount(transactionAmount)
-                .setCurrencyId(mPayment.getCurrencyId())
+                .setCurrencyId(mCurrencyId)
                 .setShowArrow(false)
                 .setShowSeparator(false)
                 .build();
 
+        mDiscountFrameLayout.setVisibility(View.VISIBLE);
         discountRowView.inflateInParent(mDiscountFrameLayout, true);
         discountRowView.initializeControls();
         discountRowView.draw();
@@ -166,50 +441,91 @@ public class CongratsActivity extends MercadoPagoActivity {
         StringBuilder sb = new StringBuilder();
 
         sb.append("(");
-        sb.append(CurrenciesUtil.formatNumber(mPayment.getTransactionDetails().getTotalPaidAmount(), mPayment.getCurrencyId()));
-        sb.append(")");
-        Spanned spannedFullAmountText = CurrenciesUtil.formatCurrencyInText(mPayment.getTransactionDetails().getTotalPaidAmount(),
-                mPayment.getCurrencyId(), sb.toString(), false, true);
+        sb.append(CurrenciesUtil.formatNumber(mTotalAmount, mCurrencyId));
 
-        mTotalAmountDescription.setVisibility(View.VISIBLE);
-        mTotalAmountDescription.setText(spannedFullAmountText);
+        sb.append(")");
+        Spanned spannedFullAmountText = CurrenciesUtil.formatCurrencyInText(mTotalAmount,
+                mCurrencyId, sb.toString(), false, true);
+
+        mInstallmentsTotalAmountDescription.setVisibility(View.VISIBLE);
+        mInstallmentsTotalAmountDescription.setText(spannedFullAmountText);
     }
 
     private boolean hasInterests() {
-        if (mPayment.getFeeDetails() != null && mPayment.getFeeDetails().size() > 0) {
-            for (int i = 0; i < mPayment.getFeeDetails().size(); i++) {
-                if (mPayment.getFeeDetails().get(i).isFinancialFree()) {
-                    return true;
+
+        return mInstallments > 1 && !mInstallmentsRate.equals(BigDecimal.ZERO);
+    }
+
+    private void showAmount() {
+        if (mPaymentTypeId == null) {
+            hideAmount();
+        } else {
+            setDiscountRow();
+            if (MercadoPagoUtil.isCard(mPaymentTypeId)) {
+                setInstallmentsDescription();
+                mAmountDescription.setVisibility(View.GONE);
+            } else if (mPaymentTypeId.equals(PaymentTypes.ACCOUNT_MONEY)) {
+                StringBuffer sb = new StringBuffer();
+                if(mDiscount != null) {
+                    mTotalAmount = mDiscount.getAmountWithDiscount(mTotalAmount);
                 }
+                sb.append(CurrenciesUtil.formatNumber(mTotalAmount, mCurrencyId));
+                mAmountDescription.setText(CurrenciesUtil.formatCurrencyInText(mTotalAmount,
+                        mCurrencyId, sb.toString(), false, true));
+                mAmountDescription.setVisibility(View.VISIBLE);
+                mInstallmentsDescription.setVisibility(View.GONE);
+                mInterestAmountDescription.setVisibility(View.GONE);
+                mInstallmentsTotalAmountDescription.setVisibility(View.GONE);
             }
         }
-        return false;
+    }
+
+    private void hideAmount() {
+        mInstallmentsDescription.setVisibility(View.GONE);
+        mInterestAmountDescription.setVisibility(View.GONE);
+        mInstallmentsTotalAmountDescription.setVisibility(View.GONE);
+        mAmountDescription.setVisibility(View.GONE);
+    }
+
+    private void showPaymentMethod() {
+        if (mPaymentTypeId != null && MercadoPagoUtil.isCard(mPaymentTypeId) && isLastFourDigitsValid() &&
+                isPaymentMethodValid()) {
+            setPaymentMethodImage();
+            String message = getString(R.string.mpsdk_last_digits_label) + " " + mLastFourDigits;
+            mPaymentMethodDescription.setText(message);
+        } else if (mPaymentTypeId != null && mPaymentTypeId.equals(PaymentTypes.ACCOUNT_MONEY)) {
+            mPaymentMethodImage.setImageResource(R.drawable.mpsdk_mercadopago);
+            mPaymentMethodImage.setVisibility(View.VISIBLE);
+            mPaymentMethodDescription.setText(getResources().getString(R.string.mpsdk_account_money_description));
+        } else {
+            hidePaymentMethod();
+        }
+    }
+
+    private void hidePaymentMethod() {
+        mPaymentMethodDescription.setVisibility(View.GONE);
+        mPaymentMethodImage.setVisibility(View.GONE);
     }
 
     private void setInstallmentsDescription() {
-        if (isInstallmentQuantityValid() && isInstallmentAmountValid() && isTotalPaidAmountValid() && CurrenciesUtil.isValidCurrency(mPayment.getCurrencyId())) {
-            if (mPayment.getInstallments() > 1) {
+        if (isInstallmentQuantityValid() && isInstallmentAmountValid() && isTotalPaidAmountValid() && CurrenciesUtil.isValidCurrency(mCurrencyId)) {
+            if (mInstallments > 1) {
                 mInstallmentsDescription.setText(getInstallmentsText());
                 setInterestAmountDescription();
             } else {
                 //Installments quantity 0 or 1
                 StringBuilder sb = new StringBuilder();
-                sb.append(CurrenciesUtil.formatNumber(mPayment.getTransactionDetails().getTotalPaidAmount(), mPayment.getCurrencyId()));
 
-                Spanned spannedInstallmentsText = CurrenciesUtil.formatCurrencyInText(mPayment.getTransactionDetails().getTotalPaidAmount(),
-                        mPayment.getCurrencyId(), sb.toString(), false, true);
+                sb.append(CurrenciesUtil.formatNumber(mTotalAmount, mCurrencyId));
+                Spanned spannedInstallmentsText = CurrenciesUtil.formatCurrencyInText(mTotalAmount,
+                        mCurrencyId, sb.toString(), false, true);
 
-                if (mDiscount != null) {
-                    mInstallmentsDescription.setVisibility(View.GONE);
-                    mTotalAmountDescription.setVisibility(View.GONE);
-                }
-
+                mInstallmentsTotalAmountDescription.setVisibility(View.GONE);
                 mInstallmentsDescription.setText(spannedInstallmentsText);
                 mInterestAmountDescription.setVisibility(View.GONE);
             }
         } else {
-            mInstallmentsDescription.setVisibility(View.GONE);
-            mInterestAmountDescription.setVisibility(View.GONE);
+            hideAmount();
         }
     }
 
@@ -229,19 +545,8 @@ public class CongratsActivity extends MercadoPagoActivity {
         }, seconds * 1000);
     }
 
-    private void setLastFourDigitsCard() {
-        if (isLastFourDigitsValid() && isPaymentMethodValid()) {
-            setPaymentMethodImage();
-            String message = getString(R.string.mpsdk_last_digits_label) + " " + mPayment.getCard().getLastFourDigits();
-            mLastFourDigitsDescription.setText(message);
-        } else {
-            mLastFourDigitsDescription.setVisibility(View.GONE);
-            mPaymentMethodImage.setVisibility(View.GONE);
-        }
-    }
-
     private void setPaymentMethodImage() {
-        int resourceId = MercadoPagoUtil.getPaymentMethodIcon(this, mPaymentMethod.getId());
+        int resourceId = MercadoPagoUtil.getPaymentMethodIcon(this, mPaymentMethodId);
         if (resourceId != 0) {
             mPaymentMethodImage.setImageResource(resourceId);
         } else {
@@ -251,57 +556,56 @@ public class CongratsActivity extends MercadoPagoActivity {
 
     private void setPaymentEmailDescription() {
         if (isPayerEmailValid()) {
-            String subtitle = String.format(getString(R.string.mpsdk_subtitle_action_activity_congrat), mPayment.getPayer().getEmail());
-            mPayerEmail.setText(subtitle);
+            String subtitle = String.format(getString(R.string.mpsdk_subtitle_action_activity_congrats), mPayerEmail);
+            mPayerEmailTextView.setText(subtitle);
         } else {
-            mPayerEmail.setVisibility(View.GONE);
+            mPayerEmailTextView.setVisibility(View.GONE);
             mTopEmailSeparator.setVisibility(View.GONE);
+            mBottomEmailSeparator.setVisibility(View.GONE);
         }
     }
 
     private Boolean isPaymentIdValid() {
-        return mPayment.getId() != null && mPayment.getId() >= 0;
+        return mPaymentId != null && mPaymentId >= 0;
     }
 
     private Boolean isTotalPaidAmountValid() {
-        return mPayment.getTransactionDetails() != null && mPayment.getTransactionDetails().getTotalPaidAmount() != null
-                && (mPayment.getTransactionDetails().getTotalPaidAmount().compareTo(BigDecimal.ZERO)) > 0;
+        return mTotalAmount != null && (mTotalAmount.compareTo(BigDecimal.ZERO)) > 0;
     }
 
     private Boolean isInstallmentAmountValid() {
-        return mPayment.getTransactionDetails() != null && mPayment.getTransactionDetails().getInstallmentAmount() != null &&
-                mPayment.getTransactionDetails().getInstallmentAmount().compareTo(BigDecimal.ZERO) > 0;
+        return mInstallmentsAmount != null && mInstallmentsAmount.compareTo(BigDecimal.ZERO) > 0;
     }
 
     private Boolean isInstallmentQuantityValid() {
-        return mPayment.getInstallments() != null && mPayment.getInstallments() >= 0;
+        return mInstallments >= 0;
     }
 
     private Boolean isPayerEmailValid() {
-        return mPayment.getPayer() != null && !isEmpty(mPayment.getPayer().getEmail());
+        return !isEmpty(mPayerEmail);
     }
 
     private Boolean isPaymentMethodValid() {
-        return isPaymentMethodIdValid() && !isEmpty(mPaymentMethod.getName());
+        return isPaymentMethodIdValid() && !isEmpty(mPaymentMethodName);
     }
 
     private Boolean isPaymentMethodIdValid() {
-        return !isEmpty(mPaymentMethod.getId()) && mPaymentMethod.getId().equals(mPayment.getPaymentMethodId());
+        return !isEmpty(mPaymentMethodId);
     }
 
     private Boolean isLastFourDigitsValid() {
-        return mPayment.getCard() != null && !isEmpty(mPayment.getCard().getLastFourDigits());
+        return !isEmpty(mLastFourDigits);
     }
 
     private Spanned getInstallmentsText() {
         StringBuffer sb = new StringBuffer();
-        sb.append(mPayment.getInstallments());
+        sb.append(mInstallments);
         sb.append(" ");
         sb.append(getString(R.string.mpsdk_installments_by));
         sb.append(" ");
-        sb.append(CurrenciesUtil.formatNumber(mPayment.getTransactionDetails().getInstallmentAmount(), mPayment.getCurrencyId()));
-        return CurrenciesUtil.formatCurrencyInText(mPayment.getTransactionDetails().getInstallmentAmount(),
-                mPayment.getCurrencyId(), sb.toString(), false, true);
+        sb.append(CurrenciesUtil.formatNumber(mInstallmentsAmount, mCurrencyId));
+        return CurrenciesUtil.formatCurrencyInText(mInstallmentsAmount,
+                mCurrencyId, sb.toString(), false, true);
     }
 
     @Override
@@ -325,7 +629,7 @@ public class CongratsActivity extends MercadoPagoActivity {
         if (mBackPressedOnce) {
             finishWithOkResult();
         } else {
-            Snackbar.make(mKeepBuyingButton, getString(R.string.mpsdk_press_again_to_leave), Snackbar.LENGTH_LONG).show();
+            Snackbar.make(mExitButtonText, getString(R.string.mpsdk_press_again_to_leave), Snackbar.LENGTH_LONG).show();
             mBackPressedOnce = true;
             resetBackPressedOnceIn(4000);
         }

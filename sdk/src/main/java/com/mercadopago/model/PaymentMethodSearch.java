@@ -49,7 +49,7 @@ public class PaymentMethodSearch {
     private String getPaymentTypeIdFromItem(PaymentMethodSearchItem item, PaymentMethod paymentMethod) {
         //Remove payment method id from item id and the splitter
         String paymentType;
-        String itemIdWithoutPaymentMethod = item.getId().replace(paymentMethod.getId(), "");
+        String itemIdWithoutPaymentMethod = item.getId().replaceFirst(paymentMethod.getId(), "");
         if (itemIdWithoutPaymentMethod.isEmpty()) {
             paymentType = paymentMethod.getPaymentTypeId();
         } else {
@@ -88,7 +88,7 @@ public class PaymentMethodSearch {
             //Case like "bancomer_ticket", with the payment type in the item id
             else if (itemMatchesPaymentMethod(currentItem, paymentMethod)) {
                 //Remove payment method id from item id
-                String potentialPaymentType = currentItem.getId().replace(paymentMethod.getId(), "");
+                String potentialPaymentType = currentItem.getId().replaceFirst(paymentMethod.getId(), "");
                 if (potentialPaymentType.endsWith(paymentMethod.getPaymentTypeId())) {
                     requiredItem = currentItem;
                     break;
@@ -149,14 +149,11 @@ public class PaymentMethodSearch {
         return cards != null && !cards.isEmpty();
     }
 
-    public void addCards(List<Card> cards, String lastFourDigitsText) {
+    public void setCards(List<Card> cards, String lastFourDigitsText) {
         if (cards != null) {
-            if (this.customSearchItems == null) {
-                this.customSearchItems = new ArrayList<>();
-            }
-            if (this.cards == null) {
-                this.cards = new ArrayList<>();
-            }
+            this.customSearchItems = new ArrayList<>();
+            this.cards = new ArrayList<>();
+
             for (Card card : cards) {
                 CustomSearchItem searchItem = new CustomSearchItem();
                 searchItem.setDescription(lastFourDigitsText + " " + card.getLastFourDigits());

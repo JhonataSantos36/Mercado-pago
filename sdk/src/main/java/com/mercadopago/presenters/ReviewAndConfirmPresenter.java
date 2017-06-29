@@ -4,15 +4,18 @@ import com.mercadopago.callbacks.OnConfirmPaymentCallback;
 import com.mercadopago.callbacks.OnReviewChange;
 import com.mercadopago.controllers.CustomReviewablesHandler;
 import com.mercadopago.model.CardInfo;
-import com.mercadopago.model.DecorationPreference;
+
 import com.mercadopago.model.Discount;
+import com.mercadopago.model.Issuer;
 import com.mercadopago.model.Item;
 import com.mercadopago.model.PayerCost;
+import com.mercadopago.model.PaymentData;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.Reviewable;
-import com.mercadopago.model.Reviewer;
 import com.mercadopago.model.Site;
+import com.mercadopago.model.Token;
 import com.mercadopago.mvp.MvpPresenter;
+import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.providers.ReviewAndConfirmProvider;
 import com.mercadopago.util.MercadoPagoUtil;
 import com.mercadopago.views.ReviewAndConfirmView;
@@ -24,16 +27,23 @@ import java.util.List;
 /**
  * Created by mreverter on 2/2/17.
  */
-public class ReviewAndConfirmPresenter extends MvpPresenter<ReviewAndConfirmView, ReviewAndConfirmProvider> implements Reviewer {
+
+public class ReviewAndConfirmPresenter extends MvpPresenter<ReviewAndConfirmView, ReviewAndConfirmProvider> {
     private PaymentMethod mPaymentMethod;
     private PayerCost mPayerCost;
     private BigDecimal mAmount;
     private Discount mDiscount;
+    private Issuer mIssuer;
+    private Token mToken;
     private Site mSite;
     private List<Item> mItems;
-    private CardInfo mCardInfo;
-    private String mExtraPaymentMethodInfo;
+    private String mPaymentMethodCommentInfo;
+    private String mPaymentMethodDescriptionInfo;
     private DecorationPreference mDecorationPreference;
+    private Boolean mEditionEnabled;
+    private Boolean mDiscountEnabled;
+    private boolean mTermsAndConditionsEnabled;
+    private List<String> reviewOrder;
 
     public void initialize() {
         try {
@@ -61,46 +71,89 @@ public class ReviewAndConfirmPresenter extends MvpPresenter<ReviewAndConfirmView
             if (this.mPayerCost == null) {
                 throw new IllegalStateException("payer cost is null");
             }
-            if (this.mCardInfo == null) {
-                throw new IllegalStateException("card info is null");
+            if (this.mToken == null) {
+                throw new IllegalStateException("token is null");
             }
         }
     }
 
     private void showReviewAndConfirm() {
-        Reviewable summary = getSummary();
-        summary.setReviewer(this);
+        setReviewTitle();
+        setConfirmationMessage();
+        setCancelMessage();
+
+        Reviewable summaryReview = getSummary();
+        summaryReview.setReviewSubscriber(getView().getReviewSubscriber());
 
         Reviewable itemsReview = getItemsReview();
-        summary.setReviewer(this);
+        itemsReview.setReviewSubscriber(getView().getReviewSubscriber());
 
-        Reviewable reviewable = getPaymentMethodReview();
-        summary.setReviewer(this);
+        Reviewable paymentMethodReview = getPaymentMethodReview();
+        paymentMethodReview.setReviewSubscriber(getView().getReviewSubscriber());
 
         List<Reviewable> customReviewables = retrieveCustomReviewables();
 
-        List<Reviewable> reviewables = new ArrayList<>();
+        List<Reviewable> reviewablesAvailable = new ArrayList<>();
+        reviewablesAvailable.add(summaryReview);
+        reviewablesAvailable.add(itemsReview);
+        reviewablesAvailable.add(paymentMethodReview);
+        reviewablesAvailable.addAll(customReviewables);
 
-        reviewables.add(summary);
-        reviewables.add(itemsReview);
-        reviewables.add(reviewable);
-        reviewables.addAll(customReviewables);
+        List<Reviewable> orderedReviewables = getOrderedReviewables(reviewablesAvailable, getReviewOrder());
+        getView().showReviewables(orderedReviewables);
 
-        getView().showReviewables(reviewables);
+        if (mTermsAndConditionsEnabled) {
+            getView().showTermsAndConditions();
+        }
+    }
+
+    private List<Reviewable> getOrderedReviewables(List<Reviewable> reviewablesAvailable, List<String> reviewOrder) {
+
+        List<Reviewable> orderedReviewables = new ArrayList<>();
+        if (reviewOrder == null || reviewOrder.isEmpty()) {
+            orderedReviewables = reviewablesAvailable;
+        } else {
+            for (String key : reviewOrder) {
+                List<Reviewable> toRemove = new ArrayList<>();
+                for (Reviewable reviewable : reviewablesAvailable) {
+                    if (key.equals(reviewable.getKey())) {
+                        orderedReviewables.add(reviewable);
+                        toRemove.add(reviewable);
+                    }
+                }
+                reviewablesAvailable.removeAll(toRemove);
+            }
+        }
+        return orderedReviewables;
+    }
+
+    private void setReviewTitle() {
+        String title = getResourcesProvider().getReviewTitle();
+        getView().showTitle(title);
+    }
+
+    private void setConfirmationMessage() {
+        String message = getResourcesProvider().getConfirmationMessage();
+        getView().showConfirmationMessage(message);
+    }
+
+    private void setCancelMessage() {
+        String message = getResourcesProvider().getCancelMessage();
+        getView().showCancelMessage(message);
     }
 
     private List<Reviewable> retrieveCustomReviewables() {
         List<Reviewable> customReviewables = CustomReviewablesHandler.getInstance().getReviewables();
 
         for (Reviewable reviewable : customReviewables) {
-            reviewable.setReviewer(this);
+            reviewable.setReviewSubscriber(getView().getReviewSubscriber());
         }
 
         return customReviewables;
     }
 
     private Reviewable getSummary() {
-        Reviewable summary = getResourcesProvider().getSummaryReviewable(mPaymentMethod, mPayerCost, mAmount, mDiscount, mSite, mDecorationPreference, new OnConfirmPaymentCallback() {
+        Reviewable summary = getResourcesProvider().getSummaryReviewable(mPaymentMethod, mPayerCost, mAmount, mDiscount, mSite, mIssuer, mDecorationPreference, new OnConfirmPaymentCallback() {
             @Override
             public void confirmPayment() {
                 getView().confirmPayment();
@@ -131,7 +184,7 @@ public class ReviewAndConfirmPresenter extends MvpPresenter<ReviewAndConfirmView
         } else {
             finalAmount = mAmount.subtract(mDiscount.getCouponAmount());
         }
-        return getResourcesProvider().getPaymentMethodOffReviewable(mPaymentMethod, mExtraPaymentMethodInfo, finalAmount, mSite, mDecorationPreference, new OnReviewChange() {
+        return getResourcesProvider().getPaymentMethodOffReviewable(mPaymentMethod, mPaymentMethodCommentInfo, mPaymentMethodDescriptionInfo, finalAmount, mSite, mDecorationPreference, mEditionEnabled, new OnReviewChange() {
             @Override
             public void onChangeSelected() {
                 getView().changePaymentMethod();
@@ -140,7 +193,8 @@ public class ReviewAndConfirmPresenter extends MvpPresenter<ReviewAndConfirmView
     }
 
     private Reviewable getPaymentMethodOnReview() {
-        return getResourcesProvider().getPaymentMethodOnReviewable(mPaymentMethod, mPayerCost, mCardInfo, mSite, mDecorationPreference, new OnReviewChange() {
+        CardInfo cardInfo = new CardInfo(mToken);
+        return getResourcesProvider().getPaymentMethodOnReviewable(mPaymentMethod, mPayerCost, cardInfo, mSite, mDecorationPreference, mEditionEnabled, new OnReviewChange() {
             @Override
             public void onChangeSelected() {
                 getView().changePaymentMethod();
@@ -156,16 +210,24 @@ public class ReviewAndConfirmPresenter extends MvpPresenter<ReviewAndConfirmView
         this.mDiscount = discount;
     }
 
+    public Discount getDiscount() {
+        return this.mDiscount;
+    }
+
     public void setPayerCost(PayerCost mPayerCost) {
         this.mPayerCost = mPayerCost;
     }
 
-    public void setCardInfo(CardInfo cardInfo) {
-        this.mCardInfo = cardInfo;
+    public void setPaymentMethod(PaymentMethod paymentMethod) {
+        this.mPaymentMethod = paymentMethod;
     }
 
-    public void setPaymentMethod(PaymentMethod mPaymentMethod) {
-        this.mPaymentMethod = mPaymentMethod;
+    public void setToken(Token token) {
+        this.mToken = token;
+    }
+
+    public void setIssuer(Issuer issuer) {
+        this.mIssuer = issuer;
     }
 
     public void setSite(Site site) {
@@ -176,16 +238,49 @@ public class ReviewAndConfirmPresenter extends MvpPresenter<ReviewAndConfirmView
         this.mItems = items;
     }
 
-    public void setExtraPaymentMethodInfo(String extraPaymentMethodInfo) {
-        this.mExtraPaymentMethodInfo = extraPaymentMethodInfo;
+    public void setPaymentMethodCommentInfo(String paymentMethodCommentInfo) {
+        this.mPaymentMethodCommentInfo = paymentMethodCommentInfo;
+    }
+
+    public void setPaymentMethodDescriptionInfo(String paymentMethodDescriptionInfo) {
+        this.mPaymentMethodDescriptionInfo = paymentMethodDescriptionInfo;
     }
 
     public void setDecorationPreference(DecorationPreference decorationPreference) {
         this.mDecorationPreference = decorationPreference;
     }
 
-    @Override
-    public void changeRequired() {
-        getView().cancelPayment();
+    public void setEditionEnabled(Boolean editionEnabled) {
+        this.mEditionEnabled = editionEnabled;
+    }
+
+    public void setTermsAndConditionsEnabled(boolean termsAndConditionsEnabled) {
+        this.mTermsAndConditionsEnabled = termsAndConditionsEnabled;
+    }
+
+    public void setReviewOrder(List<String> reviewOrder) {
+        this.reviewOrder = reviewOrder;
+    }
+
+    public void setDiscountEnabled(Boolean discountEnabled) {
+        this.mDiscountEnabled = discountEnabled;
+    }
+
+    public Boolean getDiscountEnabled() {
+        return mDiscountEnabled;
+    }
+
+    public List<String> getReviewOrder() {
+        return reviewOrder;
+    }
+
+    public PaymentData getPaymentData() {
+        PaymentData paymentData = new PaymentData();
+        paymentData.setPaymentMethod(mPaymentMethod);
+        paymentData.setIssuer(mIssuer);
+        paymentData.setToken(mToken);
+        paymentData.setPayerCost(mPayerCost);
+        paymentData.setDiscount(mDiscount);
+        return paymentData;
     }
 }

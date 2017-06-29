@@ -357,7 +357,7 @@ public class MPAnimationUtils {
         identificationCardView.show();
     }
 
-    public static void transitionCardDissappear(Context context, final CardView cardView, final IdentificationCardView identificationCardView) {
+    public static void transitionCardDisappear(Context context, final CardView cardView, final IdentificationCardView identificationCardView) {
 
         Animation animAppear = AnimationUtils.loadAnimation(context, R.anim.mpsdk_appear_from_left);
         Animation animDisappear = AnimationUtils.loadAnimation(context, R.anim.mpsdk_dissapear_to_right);

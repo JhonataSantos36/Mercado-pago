@@ -9,9 +9,10 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.mercadopago.callbacks.FailureRecovery;
-import com.mercadopago.model.DecorationPreference;
+import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.util.JsonUtil;
 
+@Deprecated
 public abstract class MercadoPagoActivity extends MercadoPagoBaseActivity {
 
     private boolean mActivityActive;
@@ -70,8 +71,9 @@ public abstract class MercadoPagoActivity extends MercadoPagoBaseActivity {
     }
 
     private void getDecorationPreference() {
-        if (getIntent().getStringExtra("decorationPreference") != null) {
-            mDecorationPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("decorationPreference"), DecorationPreference.class);
+        mDecorationPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("decorationPreference"), DecorationPreference.class);
+        if (mDecorationPreference != null) {
+            mDecorationPreference.activateFont(this);
         }
     }
 

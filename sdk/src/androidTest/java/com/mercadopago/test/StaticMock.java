@@ -8,7 +8,6 @@ import com.mercadopago.model.ApiException;
 import com.mercadopago.model.BankDeal;
 import com.mercadopago.model.Card;
 import com.mercadopago.model.CardToken;
-import com.mercadopago.model.CheckoutPreference;
 import com.mercadopago.model.Customer;
 import com.mercadopago.model.Discount;
 import com.mercadopago.model.IdentificationType;
@@ -18,10 +17,12 @@ import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentMethodSearch;
-import com.mercadopago.model.PaymentPreference;
-import com.mercadopago.model.PaymentResult;
+import com.mercadopago.preferences.PaymentPreference;
+import com.mercadopago.model.Instructions;
 import com.mercadopago.model.SavedCardToken;
 import com.mercadopago.model.Token;
+import com.mercadopago.preferences.CheckoutPreference;
+
 import com.mercadopago.util.JsonUtil;
 
 import java.io.InputStream;
@@ -31,6 +32,7 @@ import java.util.List;
 public class StaticMock {
 
     // * Merchant public key
+    public static final String DUMMY_PRIVATE_KEY = "MOCKED_AT";
     public static final String DUMMY_MERCHANT_PUBLIC_KEY = "444a9ef5-8a6b-429f-abdf-587639155d88";
     public static final String DUMMY_TEST_PUBLIC_KEY = "TEST-ad365c37-8012-4014-84f5-6c895b3f8e0a";
     public static final String DUMMY_TEST_MX_PUBLIC_KEY = "TEST-9eb0be69-329a-417f-9dd5-aad772a4d50b";
@@ -171,9 +173,9 @@ public class StaticMock {
         }
     }
 
-    public static List<PayerCost> getPayerCosts(Context context) {
+    public static List<PayerCost> getPayerCosts() {
 
-        Installment installment = JsonUtil.getInstance().fromJson(getFile(context, "mocks/installment.json"), Installment.class);
+        Installment installment = JsonUtil.getInstance().fromJson(getFile(InstrumentationRegistry.getContext(), "mocks/installment.json"), Installment.class);
         return installment.getPayerCosts();
     }
 
@@ -198,6 +200,19 @@ public class StaticMock {
         } catch (Exception ex) {
             return null;
         }
+    }
+
+    public static List<Issuer> getIssuersList() {
+        List<Issuer> issuerList;
+        String json = getIssuersJson();
+        try {
+            Type listType = new TypeToken<List<Issuer>>() {
+            }.getType();
+            issuerList = JsonUtil.getInstance().getGson().fromJson(json, listType);
+        } catch (Exception ex) {
+            issuerList = null;
+        }
+        return issuerList;
     }
 
     public static PaymentPreference getEmptyPaymentPreference() {
@@ -568,109 +583,109 @@ public class StaticMock {
         }
     }
 
-    public static PaymentResult getInstructions() {
+    public static Instructions getInstructions() {
         try {
             String json = getFile(InstrumentationRegistry.getContext(), "mocks/instructions_many.json");
-            return JsonUtil.getInstance().fromJson(json, PaymentResult.class);
+            return JsonUtil.getInstance().fromJson(json, Instructions.class);
         } catch (Exception ex) {
             return null;
         }
     }
 
-    public static PaymentResult getInstructionWithoutActions() {
+    public static Instructions getInstructionWithoutActions() {
         try {
             String json = getFile(InstrumentationRegistry.getContext(), "mocks/instructions_cash.json");
-            return JsonUtil.getInstance().fromJson(json, PaymentResult.class);
+            return JsonUtil.getInstance().fromJson(json, Instructions.class);
         } catch (Exception ex) {
             return null;
         }
     }
 
-    public static PaymentResult getInstructionWithAction() {
+    public static Instructions getInstructionWithAction() {
         try {
             String json = getFile(InstrumentationRegistry.getContext(), "mocks/instructions_actions.json");
-            return JsonUtil.getInstance().fromJson(json, PaymentResult.class);
+            return JsonUtil.getInstance().fromJson(json, Instructions.class);
         } catch (Exception ex) {
             return null;
         }
     }
 
-    public static PaymentResult getInstructionWithInvalidAction() {
+    public static Instructions getInstructionWithInvalidAction() {
         try {
             String json = getFile(InstrumentationRegistry.getContext(), "mocks/instructions_actions_invalid_tag.json");
-            return JsonUtil.getInstance().fromJson(json, PaymentResult.class);
+            return JsonUtil.getInstance().fromJson(json, Instructions.class);
         } catch (Exception ex) {
             return null;
         }
     }
 
-    public static PaymentResult getInstructionWithActionButNullUrl() {
+    public static Instructions getInstructionWithActionButNullUrl() {
         try {
             String json = getFile(InstrumentationRegistry.getContext(), "mocks/instructions_action_without_url.json");
-            return JsonUtil.getInstance().fromJson(json, PaymentResult.class);
+            return JsonUtil.getInstance().fromJson(json, Instructions.class);
         } catch (Exception ex) {
             return null;
         }
     }
 
-    public static PaymentResult getInstructionWithActionButEmptyUrl() {
+    public static Instructions getInstructionWithActionButEmptyUrl() {
         try {
             String json = getFile(InstrumentationRegistry.getContext(), "mocks/instructions_action_with_empty_url.json");
-            return JsonUtil.getInstance().fromJson(json, PaymentResult.class);
+            return JsonUtil.getInstance().fromJson(json, Instructions.class);
         } catch (Exception ex) {
             return null;
         }
     }
 
-    public static PaymentResult getInstructionWithoutLabels() {
+    public static Instructions getInstructionWithoutLabels() {
         try {
             String json = getFile(InstrumentationRegistry.getContext(), "mocks/instructions_cash_without_labels.json");
-            return JsonUtil.getInstance().fromJson(json, PaymentResult.class);
+            return JsonUtil.getInstance().fromJson(json, Instructions.class);
         } catch (Exception ex) {
             return null;
         }
     }
 
-    public static PaymentResult getInstructionWithoutPrimaryInfo() {
+    public static Instructions getInstructionWithoutPrimaryInfo() {
         try {
             String json = getFile(InstrumentationRegistry.getContext(), "mocks/instructions_cash_no_primary_info.json");
-            return JsonUtil.getInstance().fromJson(json, PaymentResult.class);
+            return JsonUtil.getInstance().fromJson(json, Instructions.class);
         } catch (Exception ex) {
             return null;
         }
     }
 
-    public static PaymentResult getInstructionWithNullInfo() {
+    public static Instructions getInstructionWithNullInfo() {
         try {
             String json = getFile(InstrumentationRegistry.getContext(), "mocks/instructions_cash_null_info.json");
-            return JsonUtil.getInstance().fromJson(json, PaymentResult.class);
+            return JsonUtil.getInstance().fromJson(json, Instructions.class);
         } catch (Exception ex) {
             return null;
         }
     }
 
-    public static PaymentResult getInstructionWithoutSecondaryInfo() {
+    public static Instructions getInstructionWithoutSecondaryInfo() {
         try {
             String json = getFile(InstrumentationRegistry.getContext(), "mocks/instructions_cash_no_secondary_info.json");
-            return JsonUtil.getInstance().fromJson(json, PaymentResult.class);
+            return JsonUtil.getInstance().fromJson(json, Instructions.class);
         } catch (Exception ex) {
             return null;
         }
     }
 
-    public static PaymentResult getInstructionWithoutTertiaryInfo() {
+    public static Instructions getInstructionWithoutTertiaryInfo() {
         try {
             String json = getFile(InstrumentationRegistry.getContext(), "mocks/instructions_cash_no_tertiary_info.json");
-            return JsonUtil.getInstance().fromJson(json, PaymentResult.class);
+            return JsonUtil.getInstance().fromJson(json, Instructions.class);
         } catch (Exception ex) {
             return null;
         }
     }
 
-    public static PaymentResult getInstructionWithInvalidReference() {
+    public static Instructions getInstructionWithInvalidReference() {
         try {
             String json = getFile(InstrumentationRegistry.getContext(), "mocks/instruction_with_invalid_reference.json");
-            return JsonUtil.getInstance().fromJson(json, PaymentResult.class);
+            return JsonUtil.getInstance().fromJson(json, Instructions.class);
         } catch (Exception ex) {
             return null;
         }

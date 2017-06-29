@@ -1,20 +1,26 @@
 package com.mercadopago.reviewandconfirm;
 
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.mercadopago.callbacks.OnConfirmPaymentCallback;
 import com.mercadopago.callbacks.OnReviewChange;
 import com.mercadopago.constants.PaymentTypes;
+import com.mercadopago.constants.ReviewKeys;
 import com.mercadopago.constants.Sites;
 import com.mercadopago.model.CardInfo;
-import com.mercadopago.model.DecorationPreference;
 import com.mercadopago.model.Discount;
+import com.mercadopago.model.Issuer;
 import com.mercadopago.model.Item;
 import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.PaymentMethod;
+import com.mercadopago.model.ReviewSubscriber;
 import com.mercadopago.model.Reviewable;
 import com.mercadopago.model.Site;
+import com.mercadopago.model.Token;
+import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.presenters.ReviewAndConfirmPresenter;
 import com.mercadopago.providers.ReviewAndConfirmProvider;
 import com.mercadopago.views.ReviewAndConfirmView;
@@ -26,11 +32,8 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-
-/**
- * Created by mreverter on 2/3/17.
- */
 
 public class ReviewAndConfirmPresenterTest {
 
@@ -38,7 +41,10 @@ public class ReviewAndConfirmPresenterTest {
     public void ifPaymentMethodNotSetShowError() {
 
         PayerCost payerCost = new PayerCost();
-        CardInfo cardInfo = Mockito.mock(CardInfo.class);
+
+        Token token = Mockito.mock(Token.class);
+        Mockito.when(token.getLastFourDigits()).thenReturn("1234");
+
         List<Item> items = new ArrayList<>();
         BigDecimal amount = BigDecimal.TEN;
         Site site = Sites.ARGENTINA;
@@ -49,7 +55,7 @@ public class ReviewAndConfirmPresenterTest {
         ReviewAndConfirmPresenter presenter = new ReviewAndConfirmPresenter();
 
         presenter.setPayerCost(payerCost);
-        presenter.setCardInfo(cardInfo);
+        presenter.setToken(token);
         presenter.setItems(items);
         presenter.setAmount(amount);
         presenter.setSite(site);
@@ -66,7 +72,9 @@ public class ReviewAndConfirmPresenterTest {
     public void ifSiteNotSetShowError() {
 
         PayerCost payerCost = new PayerCost();
-        CardInfo cardInfo = Mockito.mock(CardInfo.class);
+        Token token = Mockito.mock(Token.class);
+        Mockito.when(token.getLastFourDigits()).thenReturn("1234");
+
         List<Item> items = new ArrayList<>();
         BigDecimal amount = BigDecimal.TEN;
         PaymentMethod paymentMethod = new PaymentMethod();
@@ -77,7 +85,7 @@ public class ReviewAndConfirmPresenterTest {
         ReviewAndConfirmPresenter presenter = new ReviewAndConfirmPresenter();
 
         presenter.setPayerCost(payerCost);
-        presenter.setCardInfo(cardInfo);
+        presenter.setToken(token);
         presenter.setItems(items);
         presenter.setAmount(amount);
         presenter.setPaymentMethod(paymentMethod);
@@ -94,7 +102,9 @@ public class ReviewAndConfirmPresenterTest {
     public void ifItemsNotSetShowError() {
 
         PayerCost payerCost = new PayerCost();
-        CardInfo cardInfo = Mockito.mock(CardInfo.class);
+        Token token = Mockito.mock(Token.class);
+        Mockito.when(token.getLastFourDigits()).thenReturn("1234");
+
         Site site = Sites.ARGENTINA;
         BigDecimal amount = BigDecimal.TEN;
         PaymentMethod paymentMethod = new PaymentMethod();
@@ -105,7 +115,7 @@ public class ReviewAndConfirmPresenterTest {
         ReviewAndConfirmPresenter presenter = new ReviewAndConfirmPresenter();
 
         presenter.setPayerCost(payerCost);
-        presenter.setCardInfo(cardInfo);
+        presenter.setToken(token);
         presenter.setAmount(amount);
         presenter.setPaymentMethod(paymentMethod);
         presenter.setSite(site);
@@ -122,7 +132,10 @@ public class ReviewAndConfirmPresenterTest {
     public void ifAmountNotSetShowError() {
 
         PayerCost payerCost = new PayerCost();
-        CardInfo cardInfo = Mockito.mock(CardInfo.class);
+
+        Token token = Mockito.mock(Token.class);
+        Mockito.when(token.getLastFourDigits()).thenReturn("1234");
+
         Site site = Sites.ARGENTINA;
         PaymentMethod paymentMethod = new PaymentMethod();
         List<Item> items = new ArrayList<>();
@@ -133,7 +146,7 @@ public class ReviewAndConfirmPresenterTest {
         ReviewAndConfirmPresenter presenter = new ReviewAndConfirmPresenter();
 
         presenter.setPayerCost(payerCost);
-        presenter.setCardInfo(cardInfo);
+        presenter.setToken(token);
         presenter.setItems(items);
         presenter.setPaymentMethod(paymentMethod);
         presenter.setSite(site);
@@ -184,7 +197,8 @@ public class ReviewAndConfirmPresenterTest {
         BigDecimal amount = BigDecimal.TEN;
         Site site = Sites.ARGENTINA;
 
-        CardInfo cardInfo = Mockito.mock(CardInfo.class);
+        Token token = Mockito.mock(Token.class);
+        Mockito.when(token.getLastFourDigits()).thenReturn("1234");
 
         ReviewAndConfirmMockedProvider provider = new ReviewAndConfirmMockedProvider();
         ReviewAndConfirmMockedView view = new ReviewAndConfirmMockedView();
@@ -192,7 +206,7 @@ public class ReviewAndConfirmPresenterTest {
         ReviewAndConfirmPresenter presenter = new ReviewAndConfirmPresenter();
 
         presenter.setPaymentMethod(paymentMethod);
-        presenter.setCardInfo(cardInfo);
+        presenter.setToken(token);
 
         presenter.attachResourcesProvider(provider);
         presenter.attachView(view);
@@ -210,7 +224,9 @@ public class ReviewAndConfirmPresenterTest {
     public void onReviewAndConfirmStartedShowFixedReviewables() {
         PaymentMethod paymentMethod = new PaymentMethod();
 
-        CardInfo cardInfo = Mockito.mock(CardInfo.class);
+        Token token = Mockito.mock(Token.class);
+        Mockito.when(token.getLastFourDigits()).thenReturn("1234");
+
         PayerCost payerCost = new PayerCost();
         List<Item> items = new ArrayList<>();
         BigDecimal amount = BigDecimal.TEN;
@@ -223,10 +239,9 @@ public class ReviewAndConfirmPresenterTest {
         presenter.attachResourcesProvider(provider);
         presenter.attachView(view);
 
-
         presenter.setPaymentMethod(paymentMethod);
         presenter.setPayerCost(payerCost);
-        presenter.setCardInfo(cardInfo);
+        presenter.setToken(token);
         presenter.setItems(items);
         presenter.setAmount(amount);
         presenter.setSite(site);
@@ -241,7 +256,9 @@ public class ReviewAndConfirmPresenterTest {
         PaymentMethod paymentMethod = new PaymentMethod();
         paymentMethod.setPaymentTypeId(PaymentTypes.CREDIT_CARD);
 
-        CardInfo cardInfo = Mockito.mock(CardInfo.class);
+        Token token = Mockito.mock(Token.class);
+        Mockito.when(token.getLastFourDigits()).thenReturn("1234");
+
         PayerCost payerCost = new PayerCost();
         List<Item> items = new ArrayList<>();
         BigDecimal amount = BigDecimal.TEN;
@@ -254,10 +271,9 @@ public class ReviewAndConfirmPresenterTest {
         presenter.attachResourcesProvider(provider);
         presenter.attachView(view);
 
-
         presenter.setPaymentMethod(paymentMethod);
         presenter.setPayerCost(payerCost);
-        presenter.setCardInfo(cardInfo);
+        presenter.setToken(token);
         presenter.setItems(items);
         presenter.setAmount(amount);
         presenter.setSite(site);
@@ -274,7 +290,9 @@ public class ReviewAndConfirmPresenterTest {
         PaymentMethod paymentMethod = new PaymentMethod();
         paymentMethod.setPaymentTypeId(PaymentTypes.CREDIT_CARD);
 
-        CardInfo cardInfo = Mockito.mock(CardInfo.class);
+        Token token = Mockito.mock(Token.class);
+        Mockito.when(token.getLastFourDigits()).thenReturn("1234");
+
         PayerCost payerCost = new PayerCost();
         List<Item> items = new ArrayList<>();
         BigDecimal amount = BigDecimal.TEN;
@@ -287,10 +305,10 @@ public class ReviewAndConfirmPresenterTest {
         presenter.attachResourcesProvider(provider);
         presenter.attachView(view);
 
-
         presenter.setPaymentMethod(paymentMethod);
         presenter.setPayerCost(payerCost);
-        presenter.setCardInfo(cardInfo);
+
+        presenter.setToken(token);
         presenter.setItems(items);
         presenter.setAmount(amount);
         presenter.setSite(site);
@@ -307,8 +325,6 @@ public class ReviewAndConfirmPresenterTest {
         PaymentMethod paymentMethod = new PaymentMethod();
         paymentMethod.setPaymentTypeId(PaymentTypes.TICKET);
 
-        CardInfo cardInfo = Mockito.mock(CardInfo.class);
-        PayerCost payerCost = new PayerCost();
         List<Item> items = new ArrayList<>();
         BigDecimal amount = BigDecimal.TEN;
         Site site = Sites.ARGENTINA;
@@ -320,10 +336,7 @@ public class ReviewAndConfirmPresenterTest {
         presenter.attachResourcesProvider(provider);
         presenter.attachView(view);
 
-
         presenter.setPaymentMethod(paymentMethod);
-        presenter.setPayerCost(payerCost);
-        presenter.setCardInfo(cardInfo);
         presenter.setItems(items);
         presenter.setAmount(amount);
         presenter.setSite(site);
@@ -340,8 +353,6 @@ public class ReviewAndConfirmPresenterTest {
         PaymentMethod paymentMethod = new PaymentMethod();
         paymentMethod.setPaymentTypeId(PaymentTypes.TICKET);
 
-        CardInfo cardInfo = Mockito.mock(CardInfo.class);
-        PayerCost payerCost = new PayerCost();
         List<Item> items = new ArrayList<>();
         BigDecimal amount = BigDecimal.TEN;
         Site site = Sites.ARGENTINA;
@@ -353,10 +364,7 @@ public class ReviewAndConfirmPresenterTest {
         presenter.attachResourcesProvider(provider);
         presenter.attachView(view);
 
-
         presenter.setPaymentMethod(paymentMethod);
-        presenter.setPayerCost(payerCost);
-        presenter.setCardInfo(cardInfo);
         presenter.setItems(items);
         presenter.setAmount(amount);
         presenter.setSite(site);
@@ -373,8 +381,6 @@ public class ReviewAndConfirmPresenterTest {
         PaymentMethod paymentMethod = new PaymentMethod();
         paymentMethod.setPaymentTypeId(PaymentTypes.TICKET);
 
-        CardInfo cardInfo = Mockito.mock(CardInfo.class);
-        PayerCost payerCost = new PayerCost();
         List<Item> items = new ArrayList<>();
         BigDecimal amount = BigDecimal.TEN;
         Site site = Sites.ARGENTINA;
@@ -386,10 +392,7 @@ public class ReviewAndConfirmPresenterTest {
         presenter.attachResourcesProvider(provider);
         presenter.attachView(view);
 
-
         presenter.setPaymentMethod(paymentMethod);
-        presenter.setPayerCost(payerCost);
-        presenter.setCardInfo(cardInfo);
         presenter.setItems(items);
         presenter.setAmount(amount);
         presenter.setSite(site);
@@ -401,43 +404,220 @@ public class ReviewAndConfirmPresenterTest {
         assertTrue(view.paymentCanceled);
     }
 
+    @Test
+    public void ifReviewOrderSetOrderReviewablesAccordingToIt() {
+        PaymentMethod paymentMethod = new PaymentMethod();
+        paymentMethod.setPaymentTypeId(PaymentTypes.TICKET);
+
+        List<Item> items = new ArrayList<>();
+        BigDecimal amount = BigDecimal.TEN;
+        Site site = Sites.ARGENTINA;
+
+        ReviewAndConfirmMockedProvider provider = new ReviewAndConfirmMockedProvider();
+        ReviewAndConfirmMockedView view = new ReviewAndConfirmMockedView();
+
+        ReviewAndConfirmPresenter presenter = new ReviewAndConfirmPresenter();
+        presenter.attachResourcesProvider(provider);
+        presenter.attachView(view);
+
+        List<String> reviewOrder = new ArrayList<String>() {{
+            add(ReviewKeys.ITEMS);
+            add(ReviewKeys.PAYMENT_METHODS);
+            add(ReviewKeys.SUMMARY);
+        }};
+
+        presenter.setReviewOrder(reviewOrder);
+        presenter.setPaymentMethod(paymentMethod);
+        presenter.setItems(items);
+        presenter.setAmount(amount);
+        presenter.setSite(site);
+
+        presenter.initialize();
+
+        assertEquals(provider.itemsReviewable, view.reviewables.get(0));
+        assertEquals(provider.paymentMethodOffReviewable, view.reviewables.get(1));
+        assertEquals(provider.paymentSummaryReviewable, view.reviewables.get(2));
+    }
+
+    @Test
+    public void ifReviewOrderNotSetUseDefaultOrder() {
+        PaymentMethod paymentMethod = new PaymentMethod();
+        paymentMethod.setPaymentTypeId(PaymentTypes.TICKET);
+
+        List<Item> items = new ArrayList<>();
+        BigDecimal amount = BigDecimal.TEN;
+        Site site = Sites.ARGENTINA;
+
+        ReviewAndConfirmMockedProvider provider = new ReviewAndConfirmMockedProvider();
+        ReviewAndConfirmMockedView view = new ReviewAndConfirmMockedView();
+
+        ReviewAndConfirmPresenter presenter = new ReviewAndConfirmPresenter();
+        presenter.attachResourcesProvider(provider);
+        presenter.attachView(view);
+
+        presenter.setPaymentMethod(paymentMethod);
+        presenter.setItems(items);
+        presenter.setAmount(amount);
+        presenter.setSite(site);
+
+        presenter.initialize();
+
+        assertEquals(provider.paymentSummaryReviewable, view.reviewables.get(0));
+        assertEquals(provider.itemsReviewable, view.reviewables.get(1));
+        assertEquals(provider.paymentMethodOffReviewable, view.reviewables.get(2));
+    }
+
+    @Test
+    public void showTitleAccordingToResourceFromProvider() {
+        PaymentMethod paymentMethod = new PaymentMethod();
+        paymentMethod.setPaymentTypeId(PaymentTypes.TICKET);
+
+        List<Item> items = new ArrayList<>();
+        BigDecimal amount = BigDecimal.TEN;
+        Site site = Sites.ARGENTINA;
+
+        ReviewAndConfirmMockedProvider provider = new ReviewAndConfirmMockedProvider();
+        String newTitle = "Revisa tu recarga";
+        provider.title = newTitle;
+
+        ReviewAndConfirmMockedView view = new ReviewAndConfirmMockedView();
+
+        ReviewAndConfirmPresenter presenter = new ReviewAndConfirmPresenter();
+        presenter.attachResourcesProvider(provider);
+        presenter.attachView(view);
+
+
+        presenter.setPaymentMethod(paymentMethod);
+        presenter.setItems(items);
+        presenter.setAmount(amount);
+        presenter.setSite(site);
+
+        presenter.initialize();
+
+        assertEquals(newTitle, view.title);
+    }
+
+    @Test
+    public void showConfirmationMessageAccordingToResourceFromProvider() {
+        PaymentMethod paymentMethod = new PaymentMethod();
+        paymentMethod.setPaymentTypeId(PaymentTypes.TICKET);
+
+        List<Item> items = new ArrayList<>();
+        BigDecimal amount = BigDecimal.TEN;
+        Site site = Sites.ARGENTINA;
+
+        ReviewAndConfirmMockedProvider provider = new ReviewAndConfirmMockedProvider();
+        String newConfirmMessage = "Cargar";
+        provider.confirmationMessage = newConfirmMessage;
+
+        ReviewAndConfirmMockedView view = new ReviewAndConfirmMockedView();
+
+        ReviewAndConfirmPresenter presenter = new ReviewAndConfirmPresenter();
+        presenter.attachResourcesProvider(provider);
+        presenter.attachView(view);
+
+
+        presenter.setPaymentMethod(paymentMethod);
+        presenter.setItems(items);
+        presenter.setAmount(amount);
+        presenter.setSite(site);
+
+        presenter.initialize();
+
+        assertEquals(newConfirmMessage, view.confirmationMessage);
+    }
+
+    @Test
+    public void showCancelMessageAccordingToResourceFromProvider() {
+        PaymentMethod paymentMethod = new PaymentMethod();
+        paymentMethod.setPaymentTypeId(PaymentTypes.TICKET);
+
+        List<Item> items = new ArrayList<>();
+        BigDecimal amount = BigDecimal.TEN;
+        Site site = Sites.ARGENTINA;
+
+        ReviewAndConfirmMockedProvider provider = new ReviewAndConfirmMockedProvider();
+        String newCancelMessage = "Cancelar recarga";
+        provider.cancelMessage = newCancelMessage;
+
+        ReviewAndConfirmMockedView view = new ReviewAndConfirmMockedView();
+
+        ReviewAndConfirmPresenter presenter = new ReviewAndConfirmPresenter();
+        presenter.attachResourcesProvider(provider);
+        presenter.attachView(view);
+
+
+        presenter.setPaymentMethod(paymentMethod);
+        presenter.setItems(items);
+        presenter.setAmount(amount);
+        presenter.setSite(site);
+
+        presenter.initialize();
+
+        assertEquals(newCancelMessage, view.cancelMessage);
+    }
+
     public class ReviewAndConfirmMockedProvider implements ReviewAndConfirmProvider {
 
         private PaymentMethodMockedReviewable paymentMethodOnReviewable;
         private PaymentMethodMockedReviewable paymentMethodOffReviewable;
         private SummaryMockedReviewable paymentSummaryReviewable;
+        private ItemsMockedReviewable itemsReviewable;
+        private String title = "Revisa tu compra";
+        private String confirmationMessage = "Confirmar";
+        private String cancelMessage = "Cancelar";
 
         @Override
-        public Reviewable getSummaryReviewable(PaymentMethod paymentMethod, PayerCost payerCost, BigDecimal amount, Discount discount, Site site, DecorationPreference decorationPreference, OnConfirmPaymentCallback onConfirmPaymentCallback) {
+        public Reviewable getSummaryReviewable(PaymentMethod paymentMethod, PayerCost payerCost, BigDecimal amount, Discount discount, Site site, Issuer issuer, DecorationPreference decorationPreference, OnConfirmPaymentCallback onConfirmPaymentCallback) {
             paymentSummaryReviewable = new SummaryMockedReviewable(onConfirmPaymentCallback);
             return paymentSummaryReviewable;
         }
 
         @Override
         public Reviewable getItemsReviewable(String currency, List<Item> items, DecorationPreference decorationPreference) {
-            return new ItemsMockedReviewable();
+            itemsReviewable = new ItemsMockedReviewable();
+            return itemsReviewable;
         }
 
         @Override
-        public Reviewable getPaymentMethodOnReviewable(PaymentMethod paymentMethod, PayerCost payerCost, CardInfo cardInfo, Site site, DecorationPreference decorationPreference, OnReviewChange reviewChange) {
+        public Reviewable getPaymentMethodOnReviewable(PaymentMethod paymentMethod, PayerCost payerCost, CardInfo cardInfo, Site site, DecorationPreference decorationPreference, Boolean editionEnabled, OnReviewChange reviewChange) {
             paymentMethodOnReviewable = new PaymentMethodMockedReviewable(reviewChange);
             return paymentMethodOnReviewable;
         }
 
         @Override
-        public Reviewable getPaymentMethodOffReviewable(PaymentMethod paymentMethod, String extraPaymentMethodInfo, BigDecimal amount, Site site, DecorationPreference decorationPreference, OnReviewChange reviewChange) {
+        public Reviewable getPaymentMethodOffReviewable(PaymentMethod paymentMethod, String paymentMethodCommentInfo, String paymentMethodDescriptionInfo, BigDecimal amount, Site site, DecorationPreference decorationPreference, Boolean editionEnabled, OnReviewChange reviewChange) {
             paymentMethodOffReviewable = new PaymentMethodMockedReviewable(reviewChange);
             return paymentMethodOffReviewable;
         }
+
+        @Override
+        public String getReviewTitle() {
+            return this.title;
+        }
+
+        @Override
+        public String getConfirmationMessage() {
+            return this.confirmationMessage;
+        }
+
+        @Override
+        public String getCancelMessage() {
+            return this.cancelMessage;
+        }
     }
 
-    public class ReviewAndConfirmMockedView implements ReviewAndConfirmView {
+    public class ReviewAndConfirmMockedView implements ReviewAndConfirmView, ReviewSubscriber {
 
         private String errorMessage;
         private List<Reviewable> reviewables;
         private boolean paymentMethodChanged = false;
         private boolean paymentConfirmed = false;
         private boolean paymentCanceled = false;
+        private String title;
+        private String confirmationMessage;
+        private String cancelMessage;
+        private boolean termsAndConditionsShown = false;
 
         @Override
         public void showError(String message) {
@@ -463,6 +643,36 @@ public class ReviewAndConfirmPresenterTest {
         public void cancelPayment() {
             this.paymentCanceled = true;
         }
+
+        @Override
+        public void showTitle(String title) {
+            this.title = title;
+        }
+
+        @Override
+        public void showConfirmationMessage(String message) {
+            this.confirmationMessage = message;
+        }
+
+        @Override
+        public void showCancelMessage(String message) {
+            this.cancelMessage = message;
+        }
+
+        @Override
+        public void showTermsAndConditions() {
+            this.termsAndConditionsShown = true;
+        }
+
+        @Override
+        public ReviewSubscriber getReviewSubscriber() {
+            return this;
+        }
+
+        @Override
+        public void changeRequired(Integer resultCode, @Nullable Bundle data) {
+
+        }
     }
 
     public class ItemsMockedReviewable extends Reviewable {
@@ -487,6 +697,11 @@ public class ReviewAndConfirmPresenterTest {
         public View getView() {
             //Mocked
             return null;
+        }
+
+        @Override
+        public String getKey() {
+            return ReviewKeys.ITEMS;
         }
     }
 
@@ -518,6 +733,11 @@ public class ReviewAndConfirmPresenterTest {
         public View getView() {
             //Mocked
             return null;
+        }
+
+        @Override
+        public String getKey() {
+            return ReviewKeys.PAYMENT_METHODS;
         }
 
         public void changePayment() {
@@ -553,6 +773,11 @@ public class ReviewAndConfirmPresenterTest {
         public View getView() {
             //Mocked
             return null;
+        }
+
+        @Override
+        public String getKey() {
+            return ReviewKeys.SUMMARY;
         }
 
         public void confirmPayment() {

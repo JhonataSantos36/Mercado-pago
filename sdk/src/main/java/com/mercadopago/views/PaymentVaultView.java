@@ -2,7 +2,7 @@ package com.mercadopago.views;
 
 import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.callbacks.OnSelectedCallback;
-import com.mercadopago.exceptions.MPException;
+import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.model.Card;
 import com.mercadopago.model.CustomSearchItem;
 import com.mercadopago.model.PaymentMethod;
@@ -19,7 +19,7 @@ public interface PaymentVaultView extends MvpView {
 
     void startSavedCardFlow(Card card, BigDecimal transactionAmount);
 
-    void restartWithSelectedItem(PaymentMethodSearchItem item);
+    void showSelectedItem(PaymentMethodSearchItem item);
 
     void showProgress();
 
@@ -29,21 +29,19 @@ public interface PaymentVaultView extends MvpView {
 
     void showSearchItems(List<PaymentMethodSearchItem> searchItems, OnSelectedCallback<PaymentMethodSearchItem> paymentMethodSearchItemSelectionCallback);
 
-    void showError(MPException mpException);
+    void showError(MercadoPagoError mercadoPagoError);
 
     void setTitle(String title);
 
-    void setFailureRecovery(FailureRecovery failureRecovery);
+    void startCardFlow(String paymentType, BigDecimal transactionAmount, Boolean automaticallySelection);
 
-    void startCardFlow(String paymentType, BigDecimal transactionAmount);
-
-    void startPaymentMethodsActivity();
+    void startPaymentMethodsSelection();
 
     void selectPaymentMethod(PaymentMethod selectedPaymentMethod);
 
-    void showDiscountRow(BigDecimal transactionAmount);
+    void showDiscount(BigDecimal transactionAmount);
 
-    void startDiscountActivity(BigDecimal transactionAmount);
+    void startDiscountFlow(BigDecimal transactionAmount);
 
     void cleanPaymentMethodOptions();
 }

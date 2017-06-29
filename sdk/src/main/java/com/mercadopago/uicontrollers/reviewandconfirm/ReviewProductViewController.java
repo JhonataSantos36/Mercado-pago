@@ -1,7 +1,7 @@
 package com.mercadopago.uicontrollers.reviewandconfirm;
 
-import com.mercadopago.model.DecorationPreference;
 import com.mercadopago.model.Item;
+import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.uicontrollers.CustomViewController;
 
 /**

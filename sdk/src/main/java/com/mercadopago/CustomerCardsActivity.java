@@ -18,10 +18,10 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.mercadopago.adapters.CustomerCardItemAdapter;
 import com.mercadopago.callbacks.OnSelectedCallback;
-import com.mercadopago.exceptions.MPException;
+import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.Card;
-import com.mercadopago.model.DecorationPreference;
+import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.presenters.CustomerCardsPresenter;
 import com.mercadopago.providers.CustomerCardsProviderImpl;
 import com.mercadopago.uicontrollers.GridSpacingItemDecoration;
@@ -231,11 +231,11 @@ public class CustomerCardsActivity extends MercadoPagoBaseActivity implements Cu
     }
 
     @Override
-    public void showError(MPException mpexception) {
-        if (mpexception.isApiException()) {
-            showApiException(mpexception.getApiException());
+    public void showError(MercadoPagoError error) {
+        if (error.isApiException()) {
+            showApiException(error.getApiException());
         } else {
-            ErrorUtil.startErrorActivity(this, mpexception);
+            ErrorUtil.startErrorActivity(this, error);
         }
     }
 

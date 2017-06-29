@@ -11,7 +11,7 @@ import java.util.List;
  * Created by mromar on 11/10/16.
  */
 
-public class CheckoutTimer {
+public class CheckoutTimer implements Timer {
 
     private CountDownTimer mCountDownTimer;
     private static CheckoutTimer mCountDownTimerInstance;
@@ -29,18 +29,19 @@ public class CheckoutTimer {
     private List<TimerObserver> timerObservers = new ArrayList<TimerObserver>();
     private CheckoutTimer.FinishListener mFinishListener;
 
-    private CheckoutTimer(){}
+    private CheckoutTimer() {
+    }
 
-    synchronized public static CheckoutTimer getInstance(){
-        if(mCountDownTimerInstance == null) {
+    synchronized public static CheckoutTimer getInstance() {
+        if (mCountDownTimerInstance == null) {
             mCountDownTimerInstance = new com.mercadopago.controllers.CheckoutTimer();
         }
         return mCountDownTimerInstance;
     }
 
     //If timer is counting down, this method reset the countdown
-    public void start(long seconds){
-        if (isCountDownTimerOn){
+    public void start(long seconds) {
+        if (isCountDownTimerOn) {
             mCountDownTimer.cancel();
         }
 
@@ -52,15 +53,15 @@ public class CheckoutTimer {
         }
     }
 
-    public void stop(){
+    public void stop() {
         isCountDownTimerOn = false;
         if (mCountDownTimer != null) {
             mCountDownTimer.cancel();
         }
     }
 
-    private void setTime(long seconds){
-        if (seconds >= 3600L){
+    private void setTime(long seconds) {
+        if (seconds >= 3600L) {
             mShowHours = true;
         }
 
@@ -68,18 +69,18 @@ public class CheckoutTimer {
         createCountDownTimer();
     }
 
-    public void addObserver(TimerObserver timerObserver){
+    public void addObserver(TimerObserver timerObserver) {
         timerObservers.add(timerObserver);
     }
 
-    private void notifyOnTimeChangeAllObservers(String timeToShow){
-        for (TimerObserver timerObserver : timerObservers){
+    private void notifyOnTimeChangeAllObservers(String timeToShow) {
+        for (TimerObserver timerObserver : timerObservers) {
             timerObserver.onTimeChanged(timeToShow);
         }
     }
 
-    public void finishCheckout(){
-        for (TimerObserver timerObserver : timerObservers){
+    public void finishCheckout() {
+        for (TimerObserver timerObserver : timerObservers) {
             timerObserver.onFinish();
         }
     }
@@ -98,7 +99,7 @@ public class CheckoutTimer {
                 String timeToShow = calculateTime(0);
                 notifyOnTimeChangeAllObservers(timeToShow);
                 stop();
-                if(mFinishListener != null) {
+                if (mFinishListener != null) {
                     mFinishListener.onFinish();
                 }
             }
@@ -107,10 +108,6 @@ public class CheckoutTimer {
 
     private long convertToMilliSeconds(long seconds) {
         return seconds * 1000L;
-    }
-
-    public interface FinishListener {
-        void onFinish();
     }
 
     private String calculateTime(long milliSeconds) {
@@ -127,7 +124,7 @@ public class CheckoutTimer {
     private String getFormattedTime() {
         StringBuilder stringBuilder = new StringBuilder();
 
-        if (mShowHours){
+        if (mShowHours) {
             stringBuilder.append(getTwoDigitNumber(mHours));
             stringBuilder.append(":");
         }
@@ -146,15 +143,15 @@ public class CheckoutTimer {
         return String.valueOf(number);
     }
 
-    public void setOnFinishListener(com.mercadopago.controllers.CheckoutTimer.FinishListener finishListener){
+    public void setOnFinishListener(com.mercadopago.controllers.CheckoutTimer.FinishListener finishListener) {
         mFinishListener = finishListener;
     }
 
-    public Boolean isTimerEnabled(){
+    public Boolean isTimerEnabled() {
         return this.isCountDownTimerOn;
     }
 
-    public String getCurrentTime (){
+    public String getCurrentTime() {
         return mCurrentTime;
     }
 }

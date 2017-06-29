@@ -1,6 +1,4 @@
-package com.mercadopago.Model;
-
-import com.mercadopago.model.PayerCost;
+package com.mercadopago.model;
 
 import org.junit.Test;
 
@@ -10,10 +8,6 @@ import java.util.List;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-
-/**
- * Created by mromar on 2/3/17.
- */
 
 public class PayerCostTest {
 

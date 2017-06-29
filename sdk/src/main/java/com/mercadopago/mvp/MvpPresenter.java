@@ -14,9 +14,8 @@ import java.lang.ref.WeakReference;
 
 public abstract class MvpPresenter<V extends MvpView, R extends ResourcesProvider> {
 
-    private WeakReference<V> mView;
-    private R resourcesProvider;
-
+    private transient WeakReference<V> mView;
+    private transient R resourcesProvider;
 
     public void attachResourcesProvider(final R resourcesProvider){
         this.resourcesProvider = resourcesProvider;
@@ -43,6 +42,10 @@ public abstract class MvpPresenter<V extends MvpView, R extends ResourcesProvide
 
     public R getResourcesProvider(){
         return resourcesProvider;
+    }
+
+    public void detachResourceProvider() {
+        resourcesProvider = null;
     }
 }
 

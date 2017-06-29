@@ -60,7 +60,6 @@
                     android:layout_alignStart="@+id/mpsdkImage"
                     android:layout_alignLeft="@+id/mpsdkImage"
                     tools:text="Hola, soy un comentario"
-                    app:fontStyle="regular"
                     style="@style/mpsdk_list_label_comment"/>
             </RelativeLayout>
         </LinearLayout>

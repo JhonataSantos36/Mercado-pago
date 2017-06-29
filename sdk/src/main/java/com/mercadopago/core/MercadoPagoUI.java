@@ -9,24 +9,22 @@ import android.text.TextUtils;
 import com.google.gson.Gson;
 import com.mercadopago.CustomerCardsActivity;
 import com.mercadopago.ReviewAndConfirmActivity;
-import com.mercadopago.callbacks.OnConfirmPaymentCallback;
 import com.mercadopago.callbacks.OnReviewChange;
 import com.mercadopago.model.Card;
 import com.mercadopago.model.CardInfo;
-import com.mercadopago.model.DecorationPreference;
 import com.mercadopago.model.Discount;
 import com.mercadopago.model.Item;
 import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.PaymentMethod;
-import com.mercadopago.model.PaymentPreference;
 import com.mercadopago.model.Reviewable;
 import com.mercadopago.model.Site;
+import com.mercadopago.preferences.DecorationPreference;
+import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.uicontrollers.discounts.DiscountRowView;
 import com.mercadopago.uicontrollers.installments.InstallmentsReviewView;
 import com.mercadopago.uicontrollers.reviewandconfirm.ReviewItemsView;
 import com.mercadopago.uicontrollers.reviewandconfirm.ReviewPaymentOffView;
 import com.mercadopago.uicontrollers.reviewandconfirm.ReviewPaymentOnView;
-import com.mercadopago.uicontrollers.reviewandconfirm.ReviewSummaryView;
 import com.mercadopago.uicontrollers.savedcards.SavedCardRowView;
 import com.mercadopago.uicontrollers.savedcards.SavedCardView;
 import com.mercadopago.util.JsonUtil;
@@ -39,6 +37,7 @@ import java.util.List;
 /**
  * Created by mreverter on 6/10/16.
  */
+@Deprecated
 public class MercadoPagoUI {
 
     public static class Activities {
@@ -164,7 +163,8 @@ public class MercadoPagoUI {
             private Site site;
             private CardInfo cardInfo;
             private Boolean editionEnabled;
-            private String extraPaymentMethodInfo;
+            private String paymentMethodCommentInfo;
+            private String paymentMethodDescriptionInfo;
             private List<Item> items;
             private DecorationPreference decorationPreference;
             private Discount discount;
@@ -204,8 +204,13 @@ public class MercadoPagoUI {
                 return this;
             }
 
-            public ReviewAndConfirmBuilder setExtraPaymentMethodInfo(String extraPaymentMethodInfo) {
-                this.extraPaymentMethodInfo = extraPaymentMethodInfo;
+            public ReviewAndConfirmBuilder setPaymentMethodCommentInfo(String paymentMethodCommentInfo) {
+                this.paymentMethodCommentInfo = paymentMethodCommentInfo;
+                return this;
+            }
+
+            public ReviewAndConfirmBuilder setPaymentMethodDescriptionInfo(String paymentMethodDescriptionInfo) {
+                this.paymentMethodDescriptionInfo = paymentMethodDescriptionInfo;
                 return this;
             }
 
@@ -247,11 +252,12 @@ public class MercadoPagoUI {
                 intent.putExtra("payerCost", JsonUtil.getInstance().toJson(payerCost));
                 intent.putExtra("decorationPreference", JsonUtil.getInstance().toJson(decorationPreference));
                 intent.putExtra("cardInfo", JsonUtil.getInstance().toJson(cardInfo));
-                intent.putExtra("extraPaymentMethodInfo", extraPaymentMethodInfo);
+                intent.putExtra("paymentMethodCommentInfo", paymentMethodCommentInfo);
+                intent.putExtra("paymentMethodDescriptionInfo", paymentMethodDescriptionInfo);
                 intent.putExtra("discount", JsonUtil.getInstance().toJson(discount));
                 intent.putExtra("items", new Gson().toJson(items));
 
-                activity.startActivityForResult(intent, MercadoPago.REVIEW_AND_CONFIRM_REQUEST_CODE);
+                activity.startActivityForResult(intent, MercadoPagoComponents.Activities.REVIEW_AND_CONFIRM_REQUEST_CODE);
             }
         }
     }
@@ -395,61 +401,6 @@ public class MercadoPagoUI {
             }
         }
 
-        public static class SummaryViewBuilder {
-            private Context context;
-            private String currencyId;
-            private BigDecimal amount;
-            private PayerCost payerCost;
-            private PaymentMethod paymentMethod;
-            private DecorationPreference decorationPreference;
-            private OnConfirmPaymentCallback callback;
-            private Discount discount;
-
-
-            public SummaryViewBuilder setContext(Context context) {
-                this.context = context;
-                return this;
-            }
-
-            public SummaryViewBuilder setCurrencyId(String currencyId) {
-                this.currencyId = currencyId;
-                return this;
-            }
-
-            public SummaryViewBuilder setAmount(BigDecimal amount) {
-                this.amount = amount;
-                return this;
-            }
-
-            public SummaryViewBuilder setPayerCost(PayerCost payerCost) {
-                this.payerCost = payerCost;
-                return this;
-            }
-
-            public SummaryViewBuilder setPaymentMethod(PaymentMethod paymentMethod) {
-                this.paymentMethod = paymentMethod;
-                return this;
-            }
-
-            public SummaryViewBuilder setDiscount(Discount discount) {
-                this.discount = discount;
-                return this;
-            }
-
-            public SummaryViewBuilder setDecorationPreference(DecorationPreference decorationPreference) {
-                this.decorationPreference = decorationPreference;
-                return this;
-            }
-
-            public SummaryViewBuilder setConfirmPaymentCallback(OnConfirmPaymentCallback callback) {
-                this.callback = callback;
-                return this;
-            }
-
-            public ReviewSummaryView build() {
-                return new ReviewSummaryView(context, paymentMethod, payerCost, amount, discount, currencyId, decorationPreference, callback);
-            }
-        }
         public static class ReviewItemsViewBuilder {
             private Context context;
             private String currencyId;
@@ -494,7 +445,8 @@ public class MercadoPagoUI {
 
             private Context context;
             private PaymentMethod paymentMethod;
-            private String paymentMethodInfo;
+            private String paymentMethodComment;
+            private String paymentMethodDescription;
             private BigDecimal amount;
             private Site site;
             private DecorationPreference decorationPreference;
@@ -511,8 +463,13 @@ public class MercadoPagoUI {
                 return this;
             }
 
-            public ReviewPaymentMethodOffBuilder setExtraPaymentMethodInfo(String paymentMethodInfo) {
-                this.paymentMethodInfo = paymentMethodInfo;
+            public ReviewPaymentMethodOffBuilder setPaymentMethodCommentInfo(String paymentMethodComment) {
+                this.paymentMethodComment = paymentMethodComment;
+                return this;
+            }
+
+            public ReviewPaymentMethodOffBuilder setPaymentMethodDescriptionInfo(String paymentMethodDescription) {
+                this.paymentMethodDescription = paymentMethodDescription;
                 return this;
             }
 
@@ -542,9 +499,8 @@ public class MercadoPagoUI {
             }
 
             public ReviewPaymentOffView build() {
-                return new ReviewPaymentOffView(context, paymentMethod, paymentMethodInfo, amount, site, reviewChangeCallback, editionEnabled, decorationPreference);
+                return new ReviewPaymentOffView(context, paymentMethod, paymentMethodComment, paymentMethodDescription, amount, site, reviewChangeCallback, editionEnabled, decorationPreference);
             }
-
         }
 
         public static class InstallmentsReviewViewBuilder {

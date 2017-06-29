@@ -37,12 +37,11 @@
                 android:paddingLeft="50dp"
                 android:gravity="center"
                 android:layout_gravity="center"
-                android:textSize="22dp"
+                android:textSize="25dp"
                 android:textColor="@color/mpsdk_white"
                 android:layout_marginBottom="50dp"
                 android:layout_centerHorizontal="true"
                 android:layout_below="@+id/mpsdkImageCashSign"
-                app:fontStyle="regular"
                 tools:text="Listo, solo te falta pagar $ 2579.00 en un Provincia Pagos"/>
         </LinearLayout>
         <LinearLayout
@@ -57,9 +56,8 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="35dp"
                 android:layout_marginBottom="35dp"
-                android:textSize="22dp"
-                android:text="@string/mpsdk_pay_with_this_data"
-                app:fontStyle="regular"/>
+                android:textSize="23dp"
+                android:text="@string/mpsdk_pay_with_this_data"/>
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -130,7 +128,6 @@
                 android:layout_gravity="center_horizontal"
                 android:gravity="center"
                 tools:text="Info terciaria"
-                app:fontStyle="regular"
                 android:layout_marginBottom="25dp" />
             <RelativeLayout
                 android:layout_width="wrap_content"
@@ -159,8 +156,7 @@
                     android:textSize="12dp"
                     android:layout_centerVertical="true"
                     android:layout_alignTop="@id/mpsdkAccreditationImage"
-                    android:layout_toRightOf="@+id/mpsdkAccreditationImage"
-                    app:fontStyle="regular"/>
+                    android:layout_toRightOf="@+id/mpsdkAccreditationImage"/>
             </RelativeLayout>
             <com.mercadopago.customviews.MPTextView
                 android:id="@+id/mpsdkActionButton"

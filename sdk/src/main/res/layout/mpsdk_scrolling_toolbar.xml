@@ -2,6 +2,7 @@
 <android.support.design.widget.CollapsingToolbarLayout
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mpsdkCollapsingToolbar"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -22,7 +23,8 @@
         android:layout_marginTop="40dp"
         android:layout_gravity="center"
         app:layout_scrollFlags="scroll|exitUntilCollapsed"
-        app:layout_collapseMode="parallax" />
+        app:layout_collapseMode="parallax"
+        />
 
     <android.support.v7.widget.Toolbar
         android:visibility="gone"
@@ -34,13 +36,13 @@
         android:minHeight="?attr/actionBarSize"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         app:layout_scrollFlags="scroll|exitUntilCollapsed"
-        app:layout_collapseMode="pin" >
+        app:layout_collapseMode="pin">
+
 
         <com.mercadopago.customviews.MPTextView
             android:id="@+id/mpsdkTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:fontStyle="regular"
             style="@style/mpsdk_title_text"/>
 
         <com.mercadopago.customviews.MPTextView
@@ -54,9 +56,10 @@
             android:textSize="17dp"
             android:background="@drawable/mpsdk_title_toolbar"
             android:visibility="gone"
-            app:fontStyle="roboto_regular"
+            app:fontStyle="mono_regular"
+            app:allowCustomFont="false"
             style="@style/mpsdk_title_text"/>
 
-    </android.support.v7.widget.Toolbar>
 
+    </android.support.v7.widget.Toolbar>
 </android.support.design.widget.CollapsingToolbarLayout>

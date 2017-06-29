@@ -38,7 +38,7 @@
     <color name="mpsdk_color_instructions_background_title">#FFA15A</color>
     <color name="mpsdk_color_instructions_status_bar">#E69150</color>
 
-    <color name="mpsdk_color_congrats_background">#3BC280</color>
+    <color name="mpsdk_color_congrats_background">#0DB478</color>
     <color name="mpsdk_color_congrats_status_bar">#35AE73</color>
 
     <color name="mpsdk_color_congrats_installments">#009FDE</color>
@@ -48,7 +48,7 @@
     <color name="mpsdk_color_rejection_image">#990601</color>
     <color name="mpsdk_color_rejection_result_text">#BD494A</color>
     <color name="mpsdk_color_rejection_title_background">#FF5959</color>
-    <color name="mpsdk_color_rejection_status_bar">#e55050</color>
+    <color name="mpsdk_color_rejection_status_bar">#FF6E6E</color>
 
     <color name="mpsdk_installments_text">#009FDE</color>
     <color name="mpsdk_installments_zero_rate">#43B000</color>
@@ -79,7 +79,7 @@
     <color name="mpsdk_diners">#CECECE</color>
     <color name="mpsdk_elo">#666666</color>
     <color name="mpsdk_hipercard">#941F16</color>
-    <color name="mpsdk_melicard">#2D3277</color>
+    <color name="mpsdk_melicard">#F7F7F7</color>
     <color name="mpsdk_naranja">#FF723F</color>
     <color name="mpsdk_nativa">#013C76</color>
     <color name="mpsdk_tarshop">#3D4064</color>
@@ -94,6 +94,8 @@
     <color name="mpsdk_cmr">#3D7D4E</color>
     <color name="mpsdk_maestro">#004883</color>
     <color name="mpsdk_codensa">#D3B21D</color>
+    <color name="mpsdk_magna">#666666</color>
+    <color name="mpsdk_presto">#0071b2</color>
 
     <color name="mpsdk_pagofacil">#FFFFFF</color>
     <color name="mpsdk_rapipago">#FFFFFF</color>
@@ -113,7 +115,7 @@
     <color name="mpsdk_font_diners">#B3333333</color>
     <color name="mpsdk_font_elo">#B3FFFFFF</color>
     <color name="mpsdk_font_hipercard">#B3FFFFFF</color>
-    <color name="mpsdk_font_melicard">#B3FFFFFF</color>
+    <color name="mpsdk_font_melicard">#B3333333</color>
     <color name="mpsdk_font_naranja">#B3FFFFFF</color>
     <color name="mpsdk_font_nativa">#B3FFFFFF</color>
     <color name="mpsdk_font_tarshop">#B3FFFFFF</color>
@@ -128,6 +130,8 @@
     <color name="mpsdk_font_cmr">#B3FFFFFF</color>
     <color name="mpsdk_font_maestro">#B3FFFFFF</color>
     <color name="mpsdk_font_codensa">#B3FFFFFF</color>
+    <color name="mpsdk_font_magna">#B3FFFFFF</color>
+    <color name="mpsdk_font_presto">#B3FFFFFF</color>
 
     <color name="mpsdk_font_pagofacil">#B3333333</color>
     <color name="mpsdk_font_rapipago">#B3333333</color>
@@ -137,6 +141,10 @@
 
     <!-- Revamp 2.0 -->
 
+    <color name="mpsdk_summary_top_color">#EEEEEE</color>
+
+    <color name="mpsdk_discounts_summary_background_color">#474747</color>
+    <color name="mpsdk_ryc_status_bar">#DCDCDC</color>
     <color name="mpsdk_background_blue">#009EE3</color>
     <color name="mpsdk_colorPrimary">#009EE3</color>
     <color name="mpsdk_color_payer_costs">#999999</color>
@@ -145,9 +153,14 @@
     <color name="mpsdk_blue_button">#009FDE</color>
     <color name="mpsdk_blue_button_focused">#007FB1</color>
     <color name="mpsdk_blue_button_pressed">#005F85</color>
-    <color name="mpsdk_review_gray_background">#F5F5F5</color>
+    <color name="mpsdk_review_gray_background">#F7F7F7</color>
     <color name="mpsdk_review_payment_text">#333333</color>
     <color name="mpsdk_review_description_text">#666666</color>
     <color name="mpsdk_discount_row">#F5F5F5</color>
+    <color name="mpsdk_color_unlock_card_text">#A1924C</color>
+    <color name="mpsdk_color_unlock_card_link">#118BDC</color>
+    <color name="mpsdk_color_unlock_card">#FFF4C3</color>
+
+
 
 </resources>

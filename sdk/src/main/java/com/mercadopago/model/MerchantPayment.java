@@ -1,29 +1,52 @@
 package com.mercadopago.model;
 
-import java.util.List;
+import android.support.annotation.NonNull;
+
+import java.math.BigDecimal;
 
 public class MerchantPayment {
 
+    private Payer payer;
     private Long cardIssuerId;
     private String cardToken;
     private Long campaignId;
     private Integer installments;
-    private Item item;
-    private String merchantAccessToken;
     private String paymentMethodId;
+    private BigDecimal transactionAmount;
 
-    public MerchantPayment() {}
-
-    public MerchantPayment(Item item, Integer installments, Long cardIssuerId, String cardToken,
-                           String paymentMethodId, Long campaignId, String merchantAccessToken) {
-
-        this.item = item;
+    public MerchantPayment(BigDecimal transactionAmount, Integer installments, Long cardIssuerId, String cardToken,
+                           String paymentMethodId, Long campaignId) {
+        this.transactionAmount = transactionAmount;
         this.installments = installments;
         this.cardIssuerId = cardIssuerId;
         this.cardToken = cardToken;
-        this.merchantAccessToken = merchantAccessToken;
         this.paymentMethodId = paymentMethodId;
         this.campaignId = campaignId;
+    }
+
+    public MerchantPayment(@NonNull PaymentData paymentData) {
+        if (paymentData.getPayerCost() != null) {
+            this.installments = paymentData.getPayerCost().getInstallments();
+        }
+
+        if (paymentData.getToken() != null) {
+            this.cardToken = paymentData.getToken().getId();
+        }
+
+        if (paymentData.getPaymentMethod() != null) {
+            this.paymentMethodId = paymentData.getPaymentMethod().getId();
+        }
+
+        if (paymentData.getDiscount() != null) {
+            this.campaignId = paymentData.getDiscount().getId();
+        }
+
+        if (paymentData.getIssuer() != null) {
+            this.cardIssuerId = paymentData.getIssuer().getId();
+        }
+
+        this.payer = paymentData.getPayer();
+        this.transactionAmount = paymentData.getTransactionAmount();
     }
 
     public Long getCardIssuerId() {
@@ -56,22 +79,6 @@ public class MerchantPayment {
 
     public void setInstallments(Integer installments) {
         this.installments = installments;
-    }
-
-    public Item getItem() {
-        return item;
-    }
-
-    public void setItem(List<Item> items) {
-        this.item = item;
-    }
-
-    public String getMerchantAccessToken() {
-        return merchantAccessToken;
-    }
-
-    public void setMerchantAccessToken(String merchantAccessToken) {
-        this.merchantAccessToken = merchantAccessToken;
     }
 
     public String getPaymentMethodId() {
