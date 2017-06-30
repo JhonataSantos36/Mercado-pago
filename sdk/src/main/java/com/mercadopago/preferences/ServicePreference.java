@@ -1,21 +1,42 @@
 package com.mercadopago.preferences;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.HashMap;
 import java.util.Map;
 
 public class ServicePreference {
 
+    @SerializedName("default_base_url")
     private String defaultBaseURL;
+
+    @SerializedName("gateway_base_url")
     private String gatewayBaseURL;
 
+    @SerializedName("get_customer_url")
     private String getCustomerURL;
+
+    @SerializedName("create_payment_url")
     private String createPaymentURL;
+
+    @SerializedName("create_checkout_preference_url")
     private String createCheckoutPreferenceURL;
+
+    @SerializedName("get_merchant_discount_url")
     private String getMerchantDiscountBaseURL;
+
+    @SerializedName("get_customer_uri")
     private String getCustomerURI;
+
+    @SerializedName("create_payment_uri")
     private String createPaymentURI;
+
+    @SerializedName("create_checkout_preference_uri")
     private String createCheckoutPreferenceURI;
+
+    @SerializedName("get_merchant_discount_uri")
     private String getMerchantDiscountURI;
+
     private Map<String, String> getCustomerAdditionalInfo;
     private Map<String, Object> createPaymentAdditionalInfo;
     private Map<String, Object> createCheckoutPreferenceAdditionalInfo;

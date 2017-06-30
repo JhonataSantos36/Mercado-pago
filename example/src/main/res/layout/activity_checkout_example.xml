@@ -13,6 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_marginBottom="8dp" />
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -62,12 +63,22 @@
                 android:onClick="onContinueClicked"
                 style="@style/mpsdk_button_normal"/>
 
+            <TextView
+                    android:id="@+id/jsonConfigButton"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:textColor="@color/mpsdk_background_blue"
+                    android:text="@string/json_config_button_text"
+                    android:layout_marginTop="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/mpsdk_button_height"/>
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_gravity="center"
-                android:layout_marginTop="25dp">
+                android:layout_marginTop="10dp">
 
                 <LinearLayout
                     android:layout_width="wrap_content"

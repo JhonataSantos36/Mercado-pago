@@ -9,5 +9,6 @@
     <color name="button_pressed">#0277BD</color>
     <color name="button_disabled">#CCCCCC</color>
     <color name="myPrimaryColor">#30cc28</color>
+    <color name="examples_green">#5bcc55</color>
 
 </resources>
