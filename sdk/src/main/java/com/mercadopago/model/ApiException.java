@@ -59,6 +59,19 @@ public class ApiException {
                 && (getCause() == null || getCause().isEmpty());
     }
 
+    public boolean containsCause(String code) {
+        boolean found = false;
+        if (cause != null && code != null) {
+            for (Cause currentCause : this.cause) {
+                if (code.equals(currentCause.getCode())) {
+                    found = true;
+                    break;
+                }
+            }
+        }
+        return found;
+    }
+
     public class ErrorCodes {
         public static final String CUSTOMER_NOT_ALLOWED_TO_OPERATE = "2021";
         public static final String COLLECTOR_NOT_ALLOWED_TO_OPERATE = "2022";
@@ -81,6 +94,9 @@ public class ApiException {
         public static final String INVALID_CARD_EXPIRATION_MONTH = "3030";
         public static final String INVALID_CARD_EXPIRATION_YEAR = "4000";
         public static final String INVALID_PAYER_EMAIL = "4050";
+
+        //Token creation error cause codes
+        public static final String INVALID_CARD_HOLDER_IDENTIFICATION_NUMBER = "324";
     }
 }
 

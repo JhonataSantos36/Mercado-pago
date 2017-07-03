@@ -14,6 +14,7 @@ import com.mercadopago.model.BankDeal;
 import com.mercadopago.model.CardInformation;
 import com.mercadopago.model.CardToken;
 import com.mercadopago.model.Cardholder;
+import com.mercadopago.model.Cause;
 import com.mercadopago.model.Discount;
 import com.mercadopago.model.Identification;
 import com.mercadopago.model.IdentificationType;
@@ -988,15 +989,37 @@ public class GuessingCardPresenter {
 
             @Override
             public void failure(ApiException apiException) {
-                setFailureRecovery(new FailureRecovery() {
-                    @Override
-                    public void recover() {
-                        createToken(onTokenCreated());
-                    }
-                });
-                mView.showApiExceptionError(apiException);
+                resolveTokenCreationError(apiException);
             }
         };
+    }
+
+    private void resolveTokenCreationError(ApiException apiException) {
+        if (wrongIdentificationNumber(apiException)) {
+            showIdentificationNumberError();
+        } else {
+            showError(apiException);
+        }
+    }
+
+    private boolean wrongIdentificationNumber(ApiException apiException) {
+        return apiException.containsCause(ApiException.ErrorCodes.INVALID_CARD_HOLDER_IDENTIFICATION_NUMBER);
+    }
+
+    private void showIdentificationNumberError() {
+        mView.hideProgress();
+        mView.setErrorView(mContext.getString(R.string.mpsdk_invalid_field));
+        mView.setErrorIdentificationNumber();
+    }
+
+    private void showError(ApiException apiException) {
+        setFailureRecovery(new FailureRecovery() {
+            @Override
+            public void recover() {
+                createToken(onTokenCreated());
+            }
+        });
+        mView.showApiExceptionError(apiException);
     }
 
     private void getIssuers(Callback<List<Issuer>> callback) {
