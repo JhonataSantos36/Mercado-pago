@@ -4,9 +4,9 @@
       <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <meta name="description" content="Sitio para desarrolladores de MercadoPago.">
+      <meta name="description" content="Sitio para desarrolladores de Mercado Pago.">
       <meta name="keywords" content="mercadopago,sdk,payment,pagos,braintree,paypal,html5,javascript,mobile,drifty,ionic,hybrid,phonegap,cordova,native,ios,android,angularjs">
-      <title>Soluciones de pago para el negocio que quieras - MercadoPago</title>
+      <title>Soluciones de pago para el negocio que quieras - Mercado Pago</title>
       <link href="./css/site.css" rel="stylesheet">
       <link href="./css/font-awesome.css" rel="stylesheet">
       <script src="./js/jquery.min.js"></script>
@@ -21,14 +21,15 @@
                <i class="icon ion-navicon"></i>
                </button>
                <a class="navbar-brand" href="http://mercadopago.com/">
-               <img src="img/iso-mercadopago.png" width="60" height="41" alt="MercadoPago SDK">
+               <img src="img/iso-mercadopago.png" width="60" height="41" alt="Mercado Pago SDK">
                </a>
             </div>
             <div class="collapse navbar-collapse navbar-ex1-collapse">
                <ul class="nav navbar-nav navbar-right" style="color: white;">
-                  <li><a class="getting-started-nav nav-link" href="index.html">Nuestro checkout</a></li>
+                  <li><a class="getting-started-nav nav-link" href="v2.html">Nuestro checkout</a></li>
                   <li><a class="docs-nav nav-link" href="checkout_custom.html">Tu checkout</a></li>
                   <li><a class="nav-link" href="https://www.mercadopago.com.ar/developers/es/community/forum/">Foro de desarrolladores</a></li>
+                  <li><a class="nav-link" href="index.html">Versión <span class="newV3Version"></span></a></li>
                </ul>
             </div>
          </div>
@@ -37,8 +38,9 @@
          <div class="container" style="
     padding-top: 120px;
 ">
-            <h3>MercadoPago Android SDK</h3>
+            <h3>Mercado Pago Android SDK</h3>
             <h4>La manera más rápida de cobrar en una app con la mejor experiencia.</h4>
+            <h6>Versión <span class="oldV2Version"></span></h6>
          </div>
 
       </div>
@@ -110,6 +112,18 @@
             </div>
             <div class="col-md-9 col-sm-8 main-content">
                <section class="docs-section" id="our_proposal">
+                 <div class="advanced-panel text-center">
+                   <p class="sub-heading">
+                     Antes de comenzar, ten en cuenta que en esta versión sólo puedes integrar el SDK mobile para <b>Argentina, México, Brasil y Colombia<sup>*</sup></b>.
+                     <br />
+                     Si necesitas integrarte desde otro lugar, puedes ver qué países soportamos en la <a href="index.html">nueva versión</a>.
+                     <br />
+                   </p>
+                   <p>
+                     <sup>*</sup></b>En Colombia sólo soportamos pagos con tarjetas de crédito, por lo que deberás excluir los demás medios de pago.
+                   </p>
+                 </div>
+                 <br>
                   <h3 class="title">¿Qué ofrecemos para que personalices tu checkout?</h3>
                   <br />
                   <article class="article-icon">
@@ -140,7 +154,7 @@
                         <li><b>Medio de pago:</b> Marca de la tarjeta o entidad de cobro en efectivo (ya sea un cajero automático o por ventanilla). Notar que cada medio de pago tiene sus particularidades. Por ejemplo: para pagos que no son con tarjeta (offline), tenemos el tiempo de acreditación o para los pagos con tarjeta, longitud del número de tarjeta, del código de seguridad, entre otros. </li>
                         <li><b>Banco (solo para tarjetas):</b> Es el emisor de la tarjeta. Con quienes establecemos planes de cuotas sin interes para que tus usuarios tengan la mejor financiación.</li>
                         <li><b>Cuotas (solo para tarjetas):</b> La cantidad de cuotas seleccionadas por tu usuario. Nosotros nos encargamos de saber si el pago debe ser procesado con o sin interés dependiendo del medio de pago y el banco de la tarjeta.</li>
-                        <li><b>Token (solo para tarjetas):</b> Necesitamos el número, el nombre, la fecha de expiración y el código de seguridad de la tarjeta de tu usuario. En algunos países también es necesario que nos indiques su tipo y número de documento. <b>MercadoPago tokeniza estos datos para proteger la información sensible de la tarjeta.</b></li>
+                        <li><b>Token (solo para tarjetas):</b> Necesitamos el número, el nombre, la fecha de expiración y el código de seguridad de la tarjeta de tu usuario. En algunos países también es necesario que nos indiques su tipo y número de documento. <b>Mercado Pago tokeniza estos datos para proteger la información sensible de la tarjeta.</b></li>
                      </ul>
                   </p>
                </section>
@@ -148,7 +162,7 @@
                   <h3 class="title">¿Qué necesitas para empezar?</h3>
                   <p>
                      <ul>
-                        <li style="list-style-type: decimal;"><a href="https://registration.mercadopago.com.ar/registration-mp?mode=mp" target="_blank">Registrar</a> una cuenta de MercadoPago donde recibirás el dinero.</li>
+                        <li style="list-style-type: decimal;"><a href="https://registration.mercadopago.com.ar/registration-mp?mode=mp" target="_blank">Registrar</a> una cuenta de Mercado Pago donde recibirás el dinero.</li>
                         <li style="list-style-type: decimal;"><a href="https://applications.mercadopago.com.ar" target="_blank">Crear una aplicación</a>.</li>
                         <li style="list-style-type: decimal;"><a href="https://www.mercadopago.com/mla/account/credentials?type=personalized" target="_blank">Configurar credenciales</a>.</li>
                      </ul>
@@ -169,7 +183,7 @@
                   <p>
                      Existen dos tipos de claves:
                      <ul>
-                     <li><b>Claves públicas:</b> identifican tu cuenta de MercadoPago y no son secretas. Se utilizan en el frontend.</li>
+                     <li><b>Claves públicas:</b> identifican tu cuenta de Mercado Pago y no son secretas. Se utilizan en el frontend.</li>
                      <li><b>Claves privadas (o access token):</b> permiten acceder a operaciones privadas de tu cuenta. La mismas deben ser mantenidas confidencialmente en tus servidores de backend y <b>nunca</b> deben ser publicadas.</li>
                      </ul>
                      Para estas claves existen dos modos de uso:
@@ -200,7 +214,7 @@
                <section class="docs-section" id="notifications">
                   <h3 class="title">Recibe notificaciones de pagos</h3>
                   <p>
-                     Cada vez que recibes un pago o se modifique uno que te hicieron, te podemos avisar mediante Notificaciones de Pagos que se envían desde los servidores de Mercadopago a los tuyos. Esto te permitirá conocer el estado del pago, administrar tu stock o saber quién te está pagando.
+                     Cada vez que recibes un pago o se modifique uno que te hicieron, te podemos avisar mediante Notificaciones de Pagos que se envían desde los servidores de Mercado Pago a los tuyos. Esto te permitirá conocer el estado del pago, administrar tu stock o saber quién te está pagando.
                      <br />
                      Te mostramos un ejemplo sencillo de <a href="https://www.mercadopago.com.ar/developers/es/solutions/payments/basic-checkout/receive-notifications/" target="_blank">cómo recibir notificaciones de pagos</a>, que puedes utilizar.
                   </p>
@@ -222,6 +236,7 @@
       <script src="./js/site.js"></script>
       <script src="./js/cookies.min.js"></script>
       <script src="./js/clipboard.js"></script>
+      <script src="./js/versions.js"></script>
    <script>
 
    (function() {

@@ -4,9 +4,9 @@
       <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <meta name="description" content="Sitio para desarrolladores de MercadoPago.">
+      <meta name="description" content="Sitio para desarrolladores de Mercado Pago.">
       <meta name="keywords" content="mercadopago,sdk,payment,pagos,braintree,paypal,html5,javascript,mobile,drifty,ionic,hybrid,phonegap,cordova,native,ios,android,angularjs">
-      <title>Soluciones de pago para el negocio que quieras - MercadoPago</title>
+      <title>Soluciones de pago para el negocio que quieras - Mercado Pago</title>
       <link href="./css/site.css" rel="stylesheet">
       <link href="./css/prism.css" rel="stylesheet" />
       <script src="./js/jquery.min.js"></script>
@@ -21,14 +21,15 @@
                <i class="icon ion-navicon"></i>
                </button>
                <a class="navbar-brand" href="http://mercadopago.com/">
-               <img src="img/iso-mercadopago.png" width="60" height="41" alt="MercadoPago SDK">
+               <img src="img/iso-mercadopago.png" width="60" height="41" alt="Mercado Pago SDK">
                </a>
             </div>
             <div class="collapse navbar-collapse navbar-ex1-collapse">
                <ul class="nav navbar-nav navbar-right" style="color: white;">
-                  <li><a class="getting-started-nav nav-link" href="index.html">Nuestro checkout</a></li>
+                  <li><a class="getting-started-nav nav-link" href="v2.html">Nuestro checkout</a></li>
                   <li><a class="docs-nav nav-link" href="checkout_custom.html">Tu checkout</a></li>
                   <li><a class="nav-link" href="https://www.mercadopago.com.ar/developers/es/community/forum/">Foro de desarrolladores</a></li>
+                  <li><a class="nav-link" href="index.html">Versión <span class="newV3Version"></span></a></li>
                </ul>
             </div>
          </div>
@@ -37,8 +38,9 @@
          <div class="container" style="
     padding-top: 120px;
 ">
-            <h3>MercadoPago Android SDK</h3>
+            <h3>Mercado Pago Android SDK</h3>
             <h4>La manera más rápida de cobrar en una app con la mejor experiencia.</h4>
+            <h6>Versión <span class="oldV2Version"></span></h6>
          </div>
 
       </div>
@@ -115,13 +117,25 @@
                   </div>
                </div>
                   <section class="docs-section" id="f2_payment_vault">
+                    <div class="advanced-panel text-center">
+                      <p class="sub-heading">
+                        Antes de comenzar, ten en cuenta que en esta versión sólo puedes integrar el SDK mobile para <b>Argentina, México, Brasil y Colombia<sup>*</sup></b>.
+                        <br />
+                        Si necesitas integrarte desde otro lugar, puedes ver qué países soportamos en la <a href="index.html">nueva versión</a>.
+                        <br />
+                      </p>
+                      <p>
+                        <sup>*</sup></b>En Colombia sólo soportamos pagos con tarjetas de crédito, por lo que deberás excluir los demás medios de pago.
+                      </p>
+                    </div>
+                  <br>
                   <h3 class="title">Nuestros componentes visuales en tu checkout</h3>
                   <p>¿Usas Gradle? Agrégala en el build.gradle del módulo donde nos integres.</p>
-                  <p>Sino <a href="https://github.com/mercadopago/px-android/releases" target="_blank">descarga el SDK</a> de MercadoPago.</p>
+                  <p>Sino <a href="https://github.com/mercadopago/px-android/releases" target="_blank">descarga el SDK</a> de Mercado Pago.</p>
                   <p>
                      <pre class="snippet">
                         <code class="line-numbers language-java">dependencies {
-   compile 'com.mercadopago:sdk:2.5.4'
+   compile 'com.mercadopago:sdk:<span class="oldV2Version"></span>'
 }
                         </code>
                         <button class="copy-button" alt="Copiar código">
@@ -503,7 +517,7 @@ public void onBankDealsButtonClicked(View view) {
                      Junto con el token creado necesitas enviar también el medio de pago, cuotas y banco seleccionados por el usuario, además de un identificador del artículo o servicio que se está pagando y del usuario que está presente en tu aplicación.
                      <br />
                      En este caso, el método <b>createPayment</b> hace un POST y envía como cuerpo del mensaje el objeto <a href="https://github.com/mercadopago/px-android/blob/master/sdk/src/main/java/com/mercadopago/core/MerchantPayment.java">MerchantPayment</a> que agrupa toda la información que precisas tener en tu servidor para conectarte con el nuestro. Por eso debes indicarnos tu URL base (https://api.tunombre.com) y la uri (/create_payment) donde esperas los datos para crear el pago.
-                     <a href="https://github.com/mercadopago/px-android/blob/master/sdk/src/main/java/com/mercadopago/core/MerchantServer.java" target="_blank">MerchantServer</a> se encargará de transformar la respuesta de tu servicio (la misma que los servicios de MercadoPago) en un objeto <a href="https://github.com/mercadopago/px-android/blob/master/sdk/src/main/java/com/mercadopago/model/Payment.java" target="_blank">Payment</a>.
+                     <a href="https://github.com/mercadopago/px-android/blob/master/sdk/src/main/java/com/mercadopago/core/MerchantServer.java" target="_blank">MerchantServer</a> se encargará de transformar la respuesta de tu servicio (la misma que los servicios de Mercado Pago) en un objeto <a href="https://github.com/mercadopago/px-android/blob/master/sdk/src/main/java/com/mercadopago/model/Payment.java" target="_blank">Payment</a>.
                   </p>
                   <p>
                      Una vez recibida la información en tus servidores, puedes crear el pago usando uno de los SDKs de MercadoPago. En <a href="https://github.com/mercadopago/code-examples/tree/master/customized-checkout/payment/basic" target="_blank">este link</a> podrás ver ejemplos de cómo utilizar nuestras SDK para realizar pagos. Los ejemplos están disponibles para PHP, cURL, ASP.NET, Java, Node.js, Phyton y Ruby.
@@ -794,7 +808,8 @@ new MercadoPago.StartActivityBuilder().
       <script src="./js/bootstrap.min.js"></script>
       <script src="./js/site.js"></script>
       <script src="./js/cookies.min.js"></script>
-          <script src="./js/clipboard.js"></script>
+      <script src="./js/clipboard.js"></script>
+      <script src="./js/versions.js"></script>
    <script>
 
    (function() {

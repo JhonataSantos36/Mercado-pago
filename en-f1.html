@@ -28,9 +28,10 @@
             </div>
             <div class="collapse navbar-collapse navbar-ex1-collapse">
                <ul class="nav navbar-nav navbar-right" style="color: white;">
-                  <li><a class="getting-started-nav nav-link" href="en-index.html">Our checkout</a></li>
-                  <li><a class="docs-nav nav-link" href="en-checkout_custom.html">Your checkout</a></li>
-                  <li><a class="nav-link" href="https://www.mercadopago.com.ar/developers/es/community/forum/">Developers forum</a></li>
+                 <li><a class="getting-started-nav nav-link" href="en-v2.html">Our checkout</a></li>
+                 <li><a class="docs-nav nav-link" href="en-checkout_custom.html">Your checkout</a></li>
+                 <li><a class="nav-link" href="https://www.mercadopago.com.ar/developers/es/community/forum/">Developers forum</a></li>
+                 <li><a class="nav-link" href="index.html">Version <span class="newV3Version"></span></a></li>
                </ul>
             </div>
          </div>
@@ -41,6 +42,7 @@
 ">
             <h3>MercadoPago Android SDK</h3>
             <h4>The quickest way to receive in-app payments with the best experience.</h4>
+            <h6>Version <span class="oldV2Version"></span></h6>
          </div>
 
       </div>
@@ -108,13 +110,25 @@
             </div>
             <div class="col-md-9 col-sm-8 main-content">
                <section class="docs-section">
+                 <div class="advanced-panel text-center">
+                   <p class="sub-heading">
+                     Before starting, take into account that our mobile SDK solution is only available in <b>Argentina, Mexico, Brazil and Colombia<sup>*</sup></b>.
+                     <br />
+                     If you are trying to integrate our solution in other of the countries in which Mercado Pago is available, you can check which ones are supported in the <a href="index.html">new version</a>.
+                     <br />
+                   </p>
+                   <p>
+                     <sup>*</sup></b>In Colombia we only support credit card payments, therefore you have to exclude the rest of the payment types.
+                   </p>
+                 </div>
+                 <br>
                   <h3 class="title">Personalize your checkout</h3>
                   <p>Using gradle? Add it in the build.gradle file of the module where you will integrate us.</p>
                   <p>Otherwise <a href="https://github.com/mercadopago/px-android/releases" target="_blank">download MercadoPago SDK</a></p>
                   <p>
                      <pre class="snippet">
                         <code class="line-numbers language-java">dependencies {
-   compile 'com.mercadopago:sdk:2.5.4'
+   compile 'com.mercadopago:sdk:<span class="oldV2Version"></span>'
 }
                         </code>
                         <button class="copy-button" alt="Copiar código">
@@ -683,6 +697,7 @@ MerchantServer.getCustomer(this, YOUR_BASE_URL, YOUR_GET_CUSTOMER_URI, USER_IDEN
       <script src="./js/site.js"></script>
       <script src="./js/cookies.min.js"></script>
       <script src="./js/clipboard.js"></script>
+      <script src="./js/versions.js"></script>
    <script>
 
    (function() {

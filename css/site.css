@@ -21,21 +21,21 @@
 }
 
 .article-icon {
-  width:45%; 
-  margin:0; 
-  vertical-align: top; 
-  display: inline-block; 
+  width:45%;
+  margin:0;
+  vertical-align: top;
+  display: inline-block;
   text-align: center;
 }
 
 .div-icon {
-  width: 180px; 
-  height: 180px; 
-  border-width: 2px; 
-  border-color: #03B3EB; 
-  border-radius: 50%; 
-  border-style: solid; 
-  vertical-align: middle; 
+  width: 180px;
+  height: 180px;
+  border-width: 2px;
+  border-color: #03B3EB;
+  border-radius: 50%;
+  border-style: solid;
+  vertical-align: middle;
   display: inline-block;
 }
 
@@ -58,24 +58,24 @@
 }
 
 .start-button {
-  border-color: #00B2EB; 
-  background-color: #00B2EB; 
-  color: #fff; 
-  text-decoration: none; 
-  border-style: solid; 
-  border-width: 1px; 
-  border-radius: 3px; 
-  display: inline-block; 
-  line-height: 16px; 
-  font-size: 16px; 
-  text-align: center; 
-  padding: 10px 30px; 
+  border-color: #00B2EB;
+  background-color: #00B2EB;
+  color: #fff;
+  text-decoration: none;
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 3px;
+  display: inline-block;
+  line-height: 16px;
+  font-size: 16px;
+  text-align: center;
+  padding: 10px 30px;
   margin: 5px 10px 5px 0;
 }
 
 .icon-plug-outline:before {
   font-family: 'devsite-icons';
-  content: "\e605";  
+  content: "\e605";
 }
 
 .icon-puzzle:before {
@@ -4928,6 +4928,10 @@ h1, h2, h3, h4, h5, h6 {
 h1 a, h2 a, h3 a, h4 a, h5 a, h6 a {
   color: #333; }
 
+h6 {
+  color: #FFF;
+}
+
 h1 + h2 {
   margin-top: 0;
   color: #666;
@@ -5643,7 +5647,7 @@ h1 + h2 + p {
       max-width: 440px; }
     #slider .slide-market .btn-row .btn-download {
       color: #04499e; }
-    
+
 
 @supports (overflow: -webkit-marquee) and ((-webkit-justify-content: inherit) or (-ms-flex-pack: inherit) or (justify-content: inherit)) {
   #slider {
@@ -6044,7 +6048,7 @@ h1 + h2 + p {
       opacity: 1; }
     .device-preview-page .device-preview > div.screen-bg {
       opacity: 1 !important; }
-  
+
 
 .attention-arrow {
   position: absolute;
@@ -15462,7 +15466,7 @@ a {
   position: relative;
   z-index: 100;
   padding: 20px 0 0 0;
-  
+
   text-align: center;
   font-size: 14px;
   font-family: Lato; }
@@ -15595,7 +15599,7 @@ a {
 
 
 .img-phone-case, .image_map map {
-  width: 320px; 
+  width: 320px;
   height: 576px;
 }
 
@@ -15609,6 +15613,6 @@ area {
 
 
 
-@keyframes fadeIn { 
-  from { opacity: 0; } 
+@keyframes fadeIn {
+  from { opacity: 0; }
 }
