@@ -7,6 +7,7 @@ import android.content.Context;
 
 import com.mercadopago.R;
 import com.mercadopago.callbacks.Callback;
+import com.mercadopago.constants.PaymentMethods;
 import com.mercadopago.core.CustomServer;
 import com.mercadopago.core.MercadoPagoServices;
 import com.mercadopago.exceptions.CheckoutPreferenceException;
@@ -22,6 +23,7 @@ import com.mercadopago.model.Payer;
 import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentBody;
 import com.mercadopago.model.PaymentData;
+import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentMethodSearch;
 import com.mercadopago.model.Site;
 import com.mercadopago.mvp.OnResourcesRetrievedCallback;
@@ -34,9 +36,13 @@ import com.mercadopago.util.TextUtils;
 
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class CheckoutProviderImpl implements CheckoutProvider {
 
@@ -104,7 +110,11 @@ public class CheckoutProviderImpl implements CheckoutProvider {
 
     @Override
     public void getPaymentMethodSearch(BigDecimal amount, final List<String> excludedPaymentTypes, final List<String> excludedPaymentMethods, Payer payer, Site site, final OnResourcesRetrievedCallback<PaymentMethodSearch> onPaymentMethodSearchRetrievedCallback, final OnResourcesRetrievedCallback<Customer> onCustomerRetrievedCallback) {
-        mercadoPagoServices.getPaymentMethodSearch(amount, excludedPaymentTypes, excludedPaymentMethods, payer, site, new Callback<PaymentMethodSearch>() {
+
+        Set<String> excludedPaymentMethodsSet = new HashSet<>(excludedPaymentMethods);
+        excludedPaymentMethodsSet.addAll(getUnsupportedPaymentMethods());
+
+        mercadoPagoServices.getPaymentMethodSearch(amount, excludedPaymentTypes, new ArrayList<>(excludedPaymentMethodsSet), payer, site, new Callback<PaymentMethodSearch>() {
             @Override
             public void success(final PaymentMethodSearch paymentMethodSearch) {
                 if (servicePreference != null && servicePreference.hasGetCustomerURL()) {
@@ -268,5 +278,17 @@ public class CheckoutProviderImpl implements CheckoutProvider {
 
         paymentBody.setTransactionId(transactionId);
         return paymentBody;
+    }
+
+    private List<String> getUnsupportedPaymentMethods() {
+        return new ArrayList<String>(){{
+            add(PaymentMethods.COLOMBIA.PSE);
+            add(PaymentMethods.CHILE.WEBPAY);
+            add(PaymentMethods.CHILE.SERVIPAG);
+            add(PaymentMethods.CHILE.KHIPU);
+            add(PaymentMethods.VENEZUELA.MERCANTIL);
+            add(PaymentMethods.VENEZUELA.PROVINCIAL);
+            add(PaymentMethods.VENEZUELA.BANESCO);
+        }};
     }
 }

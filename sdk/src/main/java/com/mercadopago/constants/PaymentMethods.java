@@ -60,6 +60,9 @@ public class PaymentMethods {
     public class VENEZUELA {
         public static final String VISA = "visa";
         public static final String MASTER = "master";
+        public static final String MERCANTIL = "mercantil";
+        public static final String PROVINCIAL = "provincial";
+        public static final String BANESCO = "banesco";
     }
 
     public class COLOMBIA {
@@ -87,6 +90,9 @@ public class PaymentMethods {
         public static final String PRESTO = "presto";
         public static final String CMR = "cmr";
         public static final String DINERS = "diners";
+        public static final String WEBPAY = "webpay";
+        public static final String SERVIPAG = "servipag";
+        public static final String KHIPU = "khipu";
     }
 
     private PaymentMethods(){}
