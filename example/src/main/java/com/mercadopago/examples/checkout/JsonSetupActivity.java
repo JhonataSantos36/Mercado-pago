@@ -105,7 +105,7 @@ public class JsonSetupActivity extends AppCompatActivity {
             checkoutBuilder.setCheckoutPreference(preference);
         }
 
-        if(mConfiguration.getServicePreference() != null) {
+        if (mConfiguration.getServicePreference() != null) {
             checkoutBuilder.setServicePreference(mConfiguration.getServicePreference());
         }
 
@@ -122,18 +122,30 @@ public class JsonSetupActivity extends AppCompatActivity {
 
     private FlowPreference createFlowPreference(CheckoutConfiguration checkoutConfiguration) {
         FlowPreference flowPreference = null;
-        if (checkoutConfiguration.timerSet() || checkoutConfiguration.maxSavedCardsSet()) {
+        if (shouldCreateFlowPreference(checkoutConfiguration)) {
             FlowPreference.Builder fpBuilder = new FlowPreference.Builder();
             fpBuilder.setCheckoutTimer(checkoutConfiguration.getTime());
             if (checkoutConfiguration.getMaxSavedCards() != null) {
                 fpBuilder.setMaxSavedCardsToShow(checkoutConfiguration.getMaxSavedCards());
             }
-            if(!TextUtil.isEmpty(checkoutConfiguration.getMaxSavedCardsString())) {
+            if (!TextUtil.isEmpty(checkoutConfiguration.getMaxSavedCardsString())) {
                 fpBuilder.setMaxSavedCardsToShow(checkoutConfiguration.getMaxSavedCardsString());
+            }
+            if (checkoutConfiguration.reviewAndConfirmEnabled() != null && !checkoutConfiguration.reviewAndConfirmEnabled()) {
+                fpBuilder.disableReviewAndConfirmScreen();
+            }
+            if (checkoutConfiguration.reviewInstallments() != null && !checkoutConfiguration.reviewInstallments()) {
+                fpBuilder.disableInstallmentsReviewScreen();
             }
             flowPreference = fpBuilder.build();
         }
         return flowPreference;
+    }
+
+    private boolean shouldCreateFlowPreference(CheckoutConfiguration checkoutConfiguration) {
+        return checkoutConfiguration.timerSet() || checkoutConfiguration.maxSavedCardsSet()
+                || checkoutConfiguration.reviewAndConfirmEnabled() != null
+                || checkoutConfiguration.reviewInstallments() != null;
     }
 
     private CheckoutPreference createCheckoutPreference(CheckoutConfiguration checkoutConfiguration) {

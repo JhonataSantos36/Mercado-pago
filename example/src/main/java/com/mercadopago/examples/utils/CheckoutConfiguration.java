@@ -17,6 +17,12 @@ public class CheckoutConfiguration {
     private List<Item> items;
     private String payerEmail;
     private String siteId;
+
+    @SerializedName(value = "review_and_confirm_screen_enabled")
+    private Boolean reviewAndConfirm;
+
+    @SerializedName(value = "installments_review_screen_enabled")
+    private Boolean reviewInstallments;
     private ServicePreference servicePreference;
 
     @SerializedName(value = "timer")
@@ -78,6 +84,14 @@ public class CheckoutConfiguration {
 
     public boolean maxSavedCardsSet() {
         return maxSavedCards != null || !TextUtil.isEmpty(maxSavedCardsString);
+    }
+
+    public Boolean reviewAndConfirmEnabled() {
+        return reviewAndConfirm;
+    }
+
+    public Boolean reviewInstallments() {
+        return reviewInstallments;
     }
 
     public ServicePreference getServicePreference() {
