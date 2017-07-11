@@ -1,3 +1,10 @@
+## VERSION 3.2.0
+
+_11-07-2017_
+
+* New: Rollout in Chile, Venezuela and Perú for card payments.
+* New: Rollout in Perú for online payments.
+
 ## VERSION 3.1.0
 
 _23-06-2017_
