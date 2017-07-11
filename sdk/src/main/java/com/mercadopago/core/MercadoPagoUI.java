@@ -274,6 +274,7 @@ public class MercadoPagoUI {
             private DecorationPreference decorationPreference;
             private OnReviewChange reviewChangeCallback;
             private Boolean editionEnabled;
+            private Site site;
 
             public ReviewPaymentMethodOnBuilder setContext(Context context) {
                 this.context = context;
@@ -282,6 +283,11 @@ public class MercadoPagoUI {
 
             public ReviewPaymentMethodOnBuilder setCurrencyId(String currencyId) {
                 this.currencyId = currencyId;
+                return this;
+            }
+
+            public ReviewPaymentMethodOnBuilder setSite(Site site) {
+                this.site = site;
                 return this;
             }
 
@@ -316,7 +322,7 @@ public class MercadoPagoUI {
             }
 
             public Reviewable build() {
-                return new ReviewPaymentOnView(context, paymentMethod, cardInfo, payerCost, currencyId, reviewChangeCallback, editionEnabled, decorationPreference);
+                return new ReviewPaymentOnView(context, paymentMethod, cardInfo, payerCost, site, reviewChangeCallback, editionEnabled, decorationPreference);
             }
         }
 

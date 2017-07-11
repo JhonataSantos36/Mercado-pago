@@ -12,7 +12,9 @@ import android.widget.LinearLayout;
 import com.mercadopago.R;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.model.PayerCost;
+import com.mercadopago.model.Site;
 import com.mercadopago.util.CurrenciesUtil;
+import com.mercadopago.util.InstallmentsUtil;
 
 import java.math.BigDecimal;
 
@@ -22,6 +24,7 @@ import java.math.BigDecimal;
 
 public class PayerCostColumn implements PayerCostViewController {
 
+    private final Site mSite;
     private PayerCost mPayerCost;
     private String mCurrencyId;
 
@@ -31,9 +34,10 @@ public class PayerCostColumn implements PayerCostViewController {
     private MPTextView mZeroRateText;
     private MPTextView mTotalText;
 
-    public PayerCostColumn(Context context, String currencyId) {
+    public PayerCostColumn(Context context, Site site) {
         this.mContext = context;
-        this.mCurrencyId = currencyId;
+        this.mCurrencyId = site.getCurrencyId();
+        this.mSite = site;
     }
 
     @Override
@@ -55,11 +59,13 @@ public class PayerCostColumn implements PayerCostViewController {
 
         setInstallmentsText();
 
-        if (payerCost.getInstallmentRate().compareTo(BigDecimal.ZERO) == 0) {
-            if (payerCost.getInstallments() > 1) {
-                mZeroRateText.setVisibility(View.VISIBLE);
-            } else {
-                mZeroRateText.setVisibility(View.GONE);
+        if (!InstallmentsUtil.shouldWarnAboutBankInterests(mSite)) {
+            if (payerCost.getInstallmentRate().compareTo(BigDecimal.ZERO) == 0) {
+                if (payerCost.getInstallments() > 1) {
+                    mZeroRateText.setVisibility(View.VISIBLE);
+                } else {
+                    mZeroRateText.setVisibility(View.GONE);
+                }
             }
         }
     }

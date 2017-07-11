@@ -30,7 +30,25 @@
             android:paddingEnd="25dp"
             android:paddingLeft="25dp"
             android:paddingRight="25dp"
-            android:paddingStart="25dp" />
+            android:paddingStart="25dp"
+            />
+
+        <com.mercadopago.customviews.MPTextView
+            android:id="@+id/mpsdkNoInstallmentsRateTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"
+            android:gravity="center_horizontal"
+            android:paddingEnd="25dp"
+            android:paddingLeft="25dp"
+            android:paddingRight="25dp"
+            android:paddingStart="25dp"
+            android:textSize="18dp"
+            android:visibility="gone"
+            android:textColor="@color/mpsdk_review_payment_text"
+            app:fontStyle="regular"
+            tools:text="No incluye intereses bancarios" />
 
         <com.mercadopago.customviews.MPTextView
             android:id="@+id/mpsdkAdapterReviewPaymentText"

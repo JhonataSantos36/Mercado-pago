@@ -34,6 +34,7 @@ import com.mercadopago.uicontrollers.discounts.DiscountRowView;
 import com.mercadopago.util.ColorsUtil;
 import com.mercadopago.util.CurrenciesUtil;
 import com.mercadopago.util.ErrorUtil;
+import com.mercadopago.util.InstallmentsUtil;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.MercadoPagoUtil;
 
@@ -59,6 +60,7 @@ public class CongratsActivity extends MercadoPagoBaseActivity implements ReviewS
     protected MPTextView mPaymentStatementDescriptionTextView;
     protected MPTextView mCongratulationsTitle;
     protected MPTextView mCongratulationsSubtitle;
+    private MPTextView mNoInstallmentsRateTextView;
     protected View mTopEmailSeparator;
     protected View mBottomEmailSeparator;
     protected ImageView mPaymentMethodImage;
@@ -97,6 +99,7 @@ public class CongratsActivity extends MercadoPagoBaseActivity implements ReviewS
     private PaymentResultScreenPreference mPaymentResultScreenPreference;
     private ViewGroup mTitleBackground;
     private RecyclerView mTopReviewables;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -299,7 +302,7 @@ public class CongratsActivity extends MercadoPagoBaseActivity implements ReviewS
         mSecondaryExitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-        finishWithResult(mPaymentResultScreenPreference.getSecondaryCongratsExitResultCode());
+                finishWithResult(mPaymentResultScreenPreference.getSecondaryCongratsExitResultCode());
             }
         });
     }
@@ -407,12 +410,25 @@ public class CongratsActivity extends MercadoPagoBaseActivity implements ReviewS
     private void setInterestAmountDescription() {
         setTotalAmountDescription();
 
+
         if (hasInterests()) {
             mInterestAmountDescription.setVisibility(View.GONE);
         } else {
-            mInterestAmountDescription.setText(getString(R.string.mpsdk_zero_rate));
-            mInstallmentsDescription.setVisibility(View.VISIBLE);
+            if (!InstallmentsUtil.shouldWarnAboutBankInterests(mSite)) {
+                mInterestAmountDescription.setText(getString(R.string.mpsdk_zero_rate));
+                mInstallmentsDescription.setVisibility(View.VISIBLE);
+            } else {
+                mInterestAmountDescription.setVisibility(View.GONE);
+                warnAboutBankInterests();
+            }
         }
+
+    }
+
+    private void warnAboutBankInterests() {
+        mNoInstallmentsRateTextView = (MPTextView) findViewById(R.id.mpsdkNoInstallmentsRateTextView);
+        mNoInstallmentsRateTextView.setVisibility(View.VISIBLE);
+        mNoInstallmentsRateTextView.setText(R.string.mpsdk_interest_label);
     }
 
     private void setDiscountRow() {
@@ -466,7 +482,7 @@ public class CongratsActivity extends MercadoPagoBaseActivity implements ReviewS
                 mAmountDescription.setVisibility(View.GONE);
             } else if (mPaymentTypeId.equals(PaymentTypes.ACCOUNT_MONEY)) {
                 StringBuffer sb = new StringBuffer();
-                if(mDiscount != null) {
+                if (mDiscount != null) {
                     mTotalAmount = mDiscount.getAmountWithDiscount(mTotalAmount);
                 }
                 sb.append(CurrenciesUtil.formatNumber(mTotalAmount, mCurrencyId));

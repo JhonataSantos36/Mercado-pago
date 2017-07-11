@@ -94,6 +94,7 @@ public class ReviewAndConfirmProviderImpl implements ReviewAndConfirmProvider {
                 .setDecorationPreference(decorationPreference)
                 .setReviewChangeCallback(onReviewChange)
                 .setEditionEnabled(editionEnabled)
+                .setSite(site)
                 .build();
     }
 

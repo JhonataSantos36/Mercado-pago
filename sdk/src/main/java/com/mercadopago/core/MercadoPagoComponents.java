@@ -1757,6 +1757,7 @@ public class MercadoPagoComponents {
             private DecorationPreference decorationPreference;
             private OnReviewChange reviewChangeCallback;
             private Boolean editionEnabled;
+            private Site site;
 
             public ReviewPaymentMethodOnBuilder setContext(Context context) {
                 this.context = context;
@@ -1798,9 +1799,15 @@ public class MercadoPagoComponents {
                 return this;
             }
 
-            public Reviewable build() {
-                return new ReviewPaymentOnView(context, paymentMethod, cardInfo, payerCost, currencyId, reviewChangeCallback, editionEnabled, decorationPreference);
+            public ReviewPaymentMethodOnBuilder setSite(Site site) {
+                this.site = site;
+                return this;
             }
+
+            public Reviewable build() {
+                return new ReviewPaymentOnView(context, paymentMethod, cardInfo, payerCost, site, reviewChangeCallback, editionEnabled, decorationPreference);
+            }
+
         }
 
         public static class SavedCardViewBuilder {

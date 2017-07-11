@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.mercadopago.R;
 import com.mercadopago.callbacks.OnReviewChange;
@@ -17,10 +18,12 @@ import com.mercadopago.model.CardInfo;
 import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.Reviewable;
+import com.mercadopago.model.Site;
 import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.uicontrollers.payercosts.PayerCostColumn;
 import com.mercadopago.uicontrollers.payercosts.PayerCostViewController;
 import com.mercadopago.util.CurrenciesUtil;
+import com.mercadopago.util.InstallmentsUtil;
 
 /**
  * Created by vaserber on 11/7/16.
@@ -35,6 +38,7 @@ public class ReviewPaymentOnView extends Reviewable {
     protected MPTextView mPaymentDescription;
     protected MPTextView mChangePaymentTextView;
     protected MPTextView mCFTTextView;
+    private MPTextView mNoInstallmentsRateTextView;
     protected FrameLayout mChangePaymentButton;
     protected FrameLayout mPayerCostContainer;
     protected ImageView mIconTimeImageView;
@@ -49,16 +53,19 @@ public class ReviewPaymentOnView extends Reviewable {
     protected OnReviewChange mCallback;
     protected Boolean mEditionEnabled;
     protected DecorationPreference mDecorationPreference;
+    private final Site mSite;
+
 
     public ReviewPaymentOnView(Context context, PaymentMethod paymentMethod, CardInfo cardInfo, PayerCost payerCost,
-                               String currencyId, OnReviewChange callback, Boolean editionEnabled, DecorationPreference decorationPreference) {
+                               Site site, OnReviewChange callback, Boolean editionEnabled, DecorationPreference decorationPreference) {
 
         this.mContext = context;
         this.mCallback = callback;
         this.mPaymentMethod = paymentMethod;
         this.mCardInfo = cardInfo;
         this.mPayerCost = payerCost;
-        this.mCurrency = currencyId;
+        this.mSite = site;
+        this.mCurrency = site.getCurrencyId();
         this.mEditionEnabled = editionEnabled == null ? true : editionEnabled;
         this.mDecorationPreference = decorationPreference;
     }
@@ -106,12 +113,13 @@ public class ReviewPaymentOnView extends Reviewable {
         if (mPayerCost.getInstallments() != 1) {
             mPaymentText.setVisibility(View.GONE);
 
-            mPayerCostViewController = new PayerCostColumn(mContext, mCurrency);
+            mPayerCostViewController = new PayerCostColumn(mContext, mSite);
             mPayerCostViewController.inflateInParent(mPayerCostContainer, true);
             mPayerCostViewController.initializeControls();
             mPayerCostViewController.drawPayerCost(mPayerCost);
-            showFinance();
 
+            showFinance();
+            showSiteRelatedInformation();
 
         } else {
             mPayerCostContainer.setVisibility(View.GONE);
@@ -125,6 +133,18 @@ public class ReviewPaymentOnView extends Reviewable {
                 mCardInfo.getLastFourDigits());
 
         mPaymentDescription.setText(description);
+    }
+
+    private void showSiteRelatedInformation() {
+        if (InstallmentsUtil.shouldWarnAboutBankInterests(mSite)) {
+            warnAboutBankInterests();
+        }
+    }
+
+    private void warnAboutBankInterests() {
+        mNoInstallmentsRateTextView = (MPTextView) mView.findViewById(R.id.mpsdkNoInstallmentsRateTextView);
+        mNoInstallmentsRateTextView.setVisibility(View.VISIBLE);
+        mNoInstallmentsRateTextView.setText(R.string.mpsdk_interest_label);
     }
 
     private void setIcon() {
