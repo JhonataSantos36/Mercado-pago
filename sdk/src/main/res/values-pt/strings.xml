@@ -133,7 +133,6 @@
     <string name="mpsdk_error_message_invalid_installments">Número do parcelas inválido</string>
     <string name="mpsdk_error_title">Ops! Algo deu errado</string>
     <string name="mpsdk_standard_error_message">Estamos trabalhando para solucionar o problema. Por favor, tente novamente mais tarde.</string>
-    <string name="mpsdk_error_message_detail_issuers">não foram encontrados issuers em IssuersActivity</string>
     <string name="mpsdk_error_message_email_required">O e-mail é obrigatório</string>
 
     <!-- API exception messages -->

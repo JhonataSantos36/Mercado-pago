@@ -135,10 +135,6 @@
     <string name="mpsdk_error_message_invalid_installments">Invalid installments number</string>
     <string name="mpsdk_error_title">Oops! Something went wrong</string>
     <string name="mpsdk_standard_error_message">We are going to fix it. Try later.</string>
-    <string name="mpsdk_error_message_detail_no_installments">no installments found for an issuer at InstallmentsActivity</string>
-    <string name="mpsdk_error_message_detail_no_payer_cost_found">no payer costs found at InstallmentsActivity</string>
-    <string name="mpsdk_error_message_detail_multiple_installments">multiple installments found for an issuer at InstallmentsActivity</string>
-    <string name="mpsdk_error_message_detail_issuers">no issuers found at IssuersActivity</string>
     <string name="mpsdk_error_message_email_required">Email is required</string>
 
     <!-- API exception messages -->
