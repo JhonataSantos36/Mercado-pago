@@ -7,7 +7,8 @@ import android.content.Context;
 
 import com.mercadopago.R;
 import com.mercadopago.callbacks.Callback;
-import com.mercadopago.constants.PaymentMethods;
+import com.mercadopago.constants.PaymentTypes;
+import com.mercadopago.constants.Sites;
 import com.mercadopago.core.CustomServer;
 import com.mercadopago.core.MercadoPagoServices;
 import com.mercadopago.exceptions.CheckoutPreferenceException;
@@ -23,7 +24,6 @@ import com.mercadopago.model.Payer;
 import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentBody;
 import com.mercadopago.model.PaymentData;
-import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentMethodSearch;
 import com.mercadopago.model.Site;
 import com.mercadopago.mvp.OnResourcesRetrievedCallback;
@@ -37,7 +37,6 @@ import com.mercadopago.util.TextUtils;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -101,7 +100,7 @@ public class CheckoutProviderImpl implements CheckoutProvider {
 
     @Override
     public void getDirectDiscount(BigDecimal amount, String payerEmail, OnResourcesRetrievedCallback<Discount> onResourcesRetrievedCallback) {
-        if(servicePreference != null && servicePreference.hasGetDiscountURL()) {
+        if (servicePreference != null && servicePreference.hasGetDiscountURL()) {
             getDiscountFromMerchantServer(amount, payerEmail, onResourcesRetrievedCallback);
         } else {
             getDiscountFromMercadoPago(amount, payerEmail, onResourcesRetrievedCallback);
@@ -111,10 +110,10 @@ public class CheckoutProviderImpl implements CheckoutProvider {
     @Override
     public void getPaymentMethodSearch(BigDecimal amount, final List<String> excludedPaymentTypes, final List<String> excludedPaymentMethods, Payer payer, Site site, final OnResourcesRetrievedCallback<PaymentMethodSearch> onPaymentMethodSearchRetrievedCallback, final OnResourcesRetrievedCallback<Customer> onCustomerRetrievedCallback) {
 
-        Set<String> excludedPaymentMethodsSet = new HashSet<>(excludedPaymentMethods);
-        excludedPaymentMethodsSet.addAll(getUnsupportedPaymentMethods());
+        Set<String> excludedPaymentTypesSet = new HashSet<>(excludedPaymentTypes);
+        excludedPaymentTypesSet.addAll(getUnsupportedPaymentTypes(site));
 
-        mercadoPagoServices.getPaymentMethodSearch(amount, excludedPaymentTypes, new ArrayList<>(excludedPaymentMethodsSet), payer, site, new Callback<PaymentMethodSearch>() {
+        mercadoPagoServices.getPaymentMethodSearch(amount, new ArrayList<>(excludedPaymentTypesSet), excludedPaymentMethods, payer, site, new Callback<PaymentMethodSearch>() {
             @Override
             public void success(final PaymentMethodSearch paymentMethodSearch) {
                 if (servicePreference != null && servicePreference.hasGetCustomerURL()) {
@@ -198,7 +197,7 @@ public class CheckoutProviderImpl implements CheckoutProvider {
 
     @Override
     public void createPayment(String transactionId, CheckoutPreference checkoutPreference, PaymentData paymentData, Boolean binaryMode, String customerId, OnResourcesRetrievedCallback<Payment> onResourcesRetrievedCallback) {
-        if(servicePreference != null && servicePreference.hasCreatePaymentURL()) {
+        if (servicePreference != null && servicePreference.hasCreatePaymentURL()) {
             createPaymentInMerchantServer(transactionId, paymentData, onResourcesRetrievedCallback);
         } else {
             createPaymentInMercadoPago(transactionId, checkoutPreference, paymentData, binaryMode, customerId, onResourcesRetrievedCallback);
@@ -233,17 +232,17 @@ public class CheckoutProviderImpl implements CheckoutProvider {
 
     private void createPaymentInMercadoPago(String transactionId, CheckoutPreference checkoutPreference, PaymentData paymentData, Boolean binaryMode, String customerId, final OnResourcesRetrievedCallback<Payment> onResourcesRetrievedCallback) {
         PaymentBody paymentBody = createPaymentBody(transactionId, checkoutPreference, paymentData, binaryMode, customerId);
-            mercadoPagoServices.createPayment(paymentBody, new Callback<Payment>() {
-                @Override
-                public void success(Payment payment) {
-                    onResourcesRetrievedCallback.onSuccess(payment);
-                }
+        mercadoPagoServices.createPayment(paymentBody, new Callback<Payment>() {
+            @Override
+            public void success(Payment payment) {
+                onResourcesRetrievedCallback.onSuccess(payment);
+            }
 
-                @Override
-                public void failure(ApiException apiException) {
-                    onResourcesRetrievedCallback.onFailure(new MercadoPagoError(apiException));
-                }
-            });
+            @Override
+            public void failure(ApiException apiException) {
+                onResourcesRetrievedCallback.onFailure(new MercadoPagoError(apiException));
+            }
+        });
     }
 
     private PaymentBody createPaymentBody(String transactionId, CheckoutPreference checkoutPreference, PaymentData paymentData, Boolean binaryMode, String customerId) {
@@ -280,15 +279,17 @@ public class CheckoutProviderImpl implements CheckoutProvider {
         return paymentBody;
     }
 
-    private List<String> getUnsupportedPaymentMethods() {
-        return new ArrayList<String>(){{
-            add(PaymentMethods.COLOMBIA.PSE);
-            add(PaymentMethods.CHILE.WEBPAY);
-            add(PaymentMethods.CHILE.SERVIPAG);
-            add(PaymentMethods.CHILE.KHIPU);
-            add(PaymentMethods.VENEZUELA.MERCANTIL);
-            add(PaymentMethods.VENEZUELA.PROVINCIAL);
-            add(PaymentMethods.VENEZUELA.BANESCO);
-        }};
+    private List<String> getUnsupportedPaymentTypes(Site site) {
+
+        List<String> unsupportedTypesForSite = new ArrayList<>();
+        if (Sites.CHILE.getId().equals(site.getId())
+                || Sites.VENEZUELA.getId().equals(site.getId())
+                || Sites.COLOMBIA.getId().equals(site.getId())) {
+
+            unsupportedTypesForSite.add(PaymentTypes.TICKET);
+            unsupportedTypesForSite.add(PaymentTypes.ATM);
+            unsupportedTypesForSite.add(PaymentTypes.BANK_TRANSFER);
+        }
+        return unsupportedTypesForSite;
     }
 }
