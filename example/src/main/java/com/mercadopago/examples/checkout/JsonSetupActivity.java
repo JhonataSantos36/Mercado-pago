@@ -105,11 +105,11 @@ public class JsonSetupActivity extends AppCompatActivity {
             checkoutBuilder.setCheckoutPreference(preference);
         }
 
-        if(mConfiguration.getServicePreference() != null) {
+        if (mConfiguration.getServicePreference() != null) {
             checkoutBuilder.setServicePreference(mConfiguration.getServicePreference());
         }
 
-        checkoutBuilder.setFlowPreference(createFlowPreference(mConfiguration));
+        checkoutBuilder.setFlowPreference(mConfiguration.getFlowPreference());
 
         if (mConfiguration.paymentRequired()) {
             checkoutBuilder.startForPayment();
@@ -118,22 +118,6 @@ public class JsonSetupActivity extends AppCompatActivity {
         } else {
             Toast.makeText(this, R.string.start_for_wrong, Toast.LENGTH_SHORT).show();
         }
-    }
-
-    private FlowPreference createFlowPreference(CheckoutConfiguration checkoutConfiguration) {
-        FlowPreference flowPreference = null;
-        if (checkoutConfiguration.timerSet() || checkoutConfiguration.maxSavedCardsSet()) {
-            FlowPreference.Builder fpBuilder = new FlowPreference.Builder();
-            fpBuilder.setCheckoutTimer(checkoutConfiguration.getTime());
-            if (checkoutConfiguration.getMaxSavedCards() != null) {
-                fpBuilder.setMaxSavedCardsToShow(checkoutConfiguration.getMaxSavedCards());
-            }
-            if(!TextUtil.isEmpty(checkoutConfiguration.getMaxSavedCardsString())) {
-                fpBuilder.setMaxSavedCardsToShow(checkoutConfiguration.getMaxSavedCardsString());
-            }
-            flowPreference = fpBuilder.build();
-        }
-        return flowPreference;
     }
 
     private CheckoutPreference createCheckoutPreference(CheckoutConfiguration checkoutConfiguration) {

@@ -356,7 +356,7 @@ public class ReviewSummaryView extends Reviewable {
     }
 
     private void showPayerCostRow() {
-        PayerCostColumn payerCostColumn = new PayerCostColumn(mContext, mCurrencyId);
+        PayerCostColumn payerCostColumn = new PayerCostColumn(mContext, mSite);
         payerCostColumn.inflateInParent(mPayerCostContainer, true);
         payerCostColumn.initializeControls();
         payerCostColumn.drawPayerCostWithoutTotal(mPayerCost);

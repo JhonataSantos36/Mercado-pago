@@ -155,6 +155,17 @@
                         android:visibility="visible"
                         tools:text="$ 800" />
 
+                    <com.mercadopago.customviews.MPTextView
+                        android:id="@+id/mpsdkNoInstallmentsRateTextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginBottom="15dp"
+                        android:gravity="center"
+                        android:textColor="@color/mpsdk_review_payment_text"
+                        android:textSize="18dp"
+                        android:visibility="gone" />
+
                     <FrameLayout
                         android:id="@+id/mpsdkDiscount"
                         android:layout_width="match_parent"

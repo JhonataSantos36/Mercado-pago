@@ -124,7 +124,6 @@ public class InstallmentsActivity extends MercadoPagoBaseActivity implements Ins
         initializeControls();
         initializeView();
 
-
         mPresenter.initialize();
     }
 

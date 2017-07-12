@@ -1284,6 +1284,7 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
 
     @Override
     public void setErrorIdentificationNumber() {
+        LayoutUtil.openKeyboard(mIdentificationNumberEditText);
         mIdentificationNumberEditText.toggleLineColorOnError(true);
         mIdentificationNumberEditText.requestFocus();
     }
@@ -1627,6 +1628,13 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
         }
 
         discountsActivityBuilder.startActivity();
+    }
+
+    @Override
+    public void hideProgress() {
+        mButtonContainer.setVisibility(View.VISIBLE);
+        mInputContainer.setVisibility(View.VISIBLE);
+        mProgressBar.setVisibility(View.GONE);
     }
 
     @Override

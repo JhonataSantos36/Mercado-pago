@@ -5,6 +5,7 @@ import com.google.gson.annotations.SerializedName;
 import com.mercadopago.constants.Sites;
 import com.mercadopago.model.Item;
 import com.mercadopago.model.Site;
+import com.mercadopago.preferences.FlowPreference;
 import com.mercadopago.preferences.ServicePreference;
 import com.mercadopago.util.TextUtil;
 
@@ -17,16 +18,11 @@ public class CheckoutConfiguration {
     private List<Item> items;
     private String payerEmail;
     private String siteId;
+    private FlowPreference flowPreference;
     private ServicePreference servicePreference;
 
     @SerializedName(value = "timer")
     private Integer time;
-
-    @SerializedName(value = "show_max_saved_cards")
-    private Integer maxSavedCards;
-
-    @SerializedName(value = "show_max_saved_cards_string")
-    private String maxSavedCardsString;
 
     public String getStartFor() {
         return startFor;
@@ -64,20 +60,8 @@ public class CheckoutConfiguration {
         return time;
     }
 
-    public Integer getMaxSavedCards() {
-        return maxSavedCards;
-    }
-
-    public String getMaxSavedCardsString() {
-        return maxSavedCardsString;
-    }
-
-    public boolean timerSet() {
-        return time != null && time != 0;
-    }
-
-    public boolean maxSavedCardsSet() {
-        return maxSavedCards != null || !TextUtil.isEmpty(maxSavedCardsString);
+    public FlowPreference getFlowPreference() {
+        return flowPreference;
     }
 
     public ServicePreference getServicePreference() {
