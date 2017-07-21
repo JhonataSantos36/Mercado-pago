@@ -1,125 +1,204 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:custom="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/mpsdk_white"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:orientation="vertical">
 
-    <FrameLayout
-        android:id="@+id/mpsdkSecurityCodeActivityBackground"
-        android:layout_width="match_parent"
-        android:layout_height="145dp"
-        android:background="@color/mpsdk_background_blue">
-
-        <com.mercadopago.customviews.MPTextView
-            android:id="@+id/mpsdkTimerTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:layout_gravity="top|right"
-            android:layout_marginRight="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginTop="14dp"
-            android:textSize="17dp"
-            android:background="@drawable/mpsdk_title_toolbar"
-            android:visibility="gone"
-            app:fontStyle="mono_regular"
-            app:allowCustomFont="false"
-            style="@style/mpsdk_title_text"/>
-
-        <FrameLayout
-            android:id="@+id/mpsdkCardViewContainer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
-            android:layout_gravity="center_horizontal"/>
-    </FrameLayout>
-
-    <LinearLayout
+    <ScrollView
+        android:id="@+id/mpsdkScrollViewContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingLeft="25dp"
-        android:paddingRight="25dp"
-        android:paddingStart="25dp"
-        android:paddingEnd="25dp"
-        android:paddingTop="20dp"
         android:background="@color/mpsdk_white"
-        android:orientation="vertical">
+        android:fillViewport="true">
+
         <LinearLayout
-            android:id="@+id/mpsdkCardSecurityCodeContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="10dp"
-            android:paddingStart="10dp"
-            android:paddingRight="10dp"
-            android:paddingEnd="10dp"
-            android:orientation="vertical"
-            android:visibility="visible">
+            android:orientation="vertical">
 
-            <com.mercadopago.customviews.MPTextView
+            <FrameLayout
+                android:id="@+id/mpsdkSecurityCodeActivityBackground"
+                android:layout_width="match_parent"
+                android:layout_height="208dp"
+                android:background="@color/mpsdk_background_blue">
+
+                <com.mercadopago.customviews.MPTextView
+                    android:id="@+id/mpsdkTimerTextView"
+                    style="@style/mpsdk_title_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top|right"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginTop="14dp"
+                    android:background="@drawable/mpsdk_title_toolbar"
+                    android:gravity="center_vertical"
+                    android:textSize="17dp"
+                    android:visibility="gone"
+                    app:allowCustomFont="false"
+                    app:fontStyle="mono_regular" />
+
+                <FrameLayout
+                    android:id="@+id/mpsdkCardViewContainer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="40dp" />
+            </FrameLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:lines="1"
-                android:text="@string/mpsdk_security_code"
-                android:textColor="@color/mpsdk_color_new_card_text"
-                android:textSize="14dp" />
+                android:background="@color/mpsdk_white"
+                android:orientation="vertical"
+                android:paddingEnd="25dp"
+                android:paddingLeft="25dp"
+                android:paddingRight="25dp"
+                android:paddingStart="25dp"
+                android:paddingTop="20dp">
 
-            <com.mercadopago.customviews.MPEditText
-                android:id="@+id/mpsdkCardSecurityCode"
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="1">
+
+                    <LinearLayout
+                        android:id="@+id/mpsdkCardSecurityCodeContainer"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.8"
+                        android:orientation="vertical"
+                        android:paddingEnd="10dp"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:paddingStart="10dp"
+                        android:visibility="visible">
+
+                        <com.mercadopago.customviews.MPTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:lines="1"
+                            android:text="@string/mpsdk_security_code"
+                            android:textColor="@color/mpsdk_color_new_card_text"
+                            android:textSize="14dp" />
+
+                        <com.mercadopago.customviews.MPEditText
+                            android:id="@+id/mpsdkCardSecurityCode"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:imeOptions="actionNext"
+                            android:inputType="number"
+                            android:maxLength="4"
+                            android:singleLine="true"
+                            android:textColor="@color/abc_search_url_text_selected"
+                            android:textSize="19dp"
+                            custom:errorColor="@color/mpsdk_color_red_error" />
+
+                    </LinearLayout>
+
+                    <FrameLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginTop="5dp"
+                        android:layout_weight="0.2">
+
+                        <ImageView
+                            android:id="@+id/mpsdkSecurityCodeCardIcon"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="2dp"
+                            android:layout_marginRight="2dp"
+                            android:visibility="visible" />
+                    </FrameLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:imeOptions="actionNext"
-                android:inputType="number"
-                android:maxLength="4"
-                android:singleLine="true"
-                android:textColor="@color/abc_search_url_text_selected"
-                android:textSize="19dp"
-                custom:errorColor="@color/mpsdk_color_red_error" />
+                android:layout_height="match_parent"
+                android:background="@color/mpsdk_white">
 
+                <LinearLayout
+                    android:id="@+id/mpsdkButtonContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:orientation="horizontal"
+                    android:visibility="visible"
+                    android:weightSum="1">
+
+                    <FrameLayout
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_weight="0.5">
+
+                        <FrameLayout
+                            android:id="@+id/mpsdkBackButton"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/mpsdk_form_input_button"
+                            android:focusable="true">
+
+                            <com.mercadopago.customviews.MPTextView
+                                android:id="@+id/mpsdkBackButtonText"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:text="@string/mpsdk_input_button_back"
+                                android:textColor="@color/mpsdk_active_button" />
+                        </FrameLayout>
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:id="@+id/mpsdkNextButton"
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_weight="0.5"
+                        android:background="@drawable/mpsdk_form_input_button"
+                        android:focusable="true">
+
+                        <com.mercadopago.customviews.MPTextView
+                            android:id="@+id/mpsdkNextButtonText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="@string/mpsdk_input_button_next"
+                            android:textColor="@color/mpsdk_active_button" />
+                    </FrameLayout>
+                </LinearLayout>
+
+                <FrameLayout
+                    android:id="@+id/mpsdkErrorContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_gravity="bottom"
+                    android:background="@color/mpsdk_light_gray"
+                    android:visibility="gone">
+
+                    <com.mercadopago.customviews.MPTextView
+                        android:id="@+id/mpsdkErrorTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:textColor="@color/mpsdk_color_red_error"
+                        android:textSize="14sp" />
+                </FrameLayout>
+
+                <ProgressBar
+                    android:id="@+id/mpsdkProgressBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:visibility="gone" />
+            </FrameLayout>
         </LinearLayout>
-
-        <com.mercadopago.customviews.MPTextView
-            android:id="@+id/mpsdkSecurityCodeErrorText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
-            android:layout_marginStart="15dp"
-            android:layout_marginEnd="15dp"
-            android:layout_marginTop="5dp"
-            android:textSize="16dp"
-            android:textColor="@color/mpsdk_color_red_error"
-            android:visibility="invisible"
-            tools:text="Revisa este dato"/>
-        <FrameLayout
-            android:id="@+id/mpsdkSecurityCodeNextButton"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginTop="10dp"
-            android:visibility="visible"
-            android:focusable="true"
-            android:background="@drawable/mpsdk_button_bg_stroke">
-            <com.mercadopago.customviews.MPTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:textSize="16dp"
-                android:textColor="@color/mpsdk_white_background"
-                android:text="@string/mpsdk_input_button_next"/>
-        </FrameLayout>
-        <ProgressBar
-            android:id="@+id/mpsdkProgressBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:visibility="gone"/>
-    </LinearLayout>
-
+    </ScrollView>
 </LinearLayout>

@@ -3,13 +3,17 @@ package com.mercadopago;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MotionEventCompat;
 import android.text.InputFilter;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import com.mercadopago.callbacks.card.CardSecurityCodeEditTextCallback;
@@ -18,21 +22,20 @@ import com.mercadopago.core.MercadoPagoCheckout;
 import com.mercadopago.customviews.MPEditText;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.listeners.card.CardSecurityCodeTextWatcher;
-import com.mercadopago.model.ApiException;
 import com.mercadopago.model.Card;
 import com.mercadopago.model.CardInfo;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.Token;
-import com.mercadopago.mptracker.MPTracker;
 import com.mercadopago.observers.TimerObserver;
 import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.presenters.SecurityCodePresenter;
+import com.mercadopago.providers.SecurityCodeProviderImpl;
 import com.mercadopago.uicontrollers.card.CardRepresentationModes;
 import com.mercadopago.uicontrollers.card.CardView;
-import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.ColorsUtil;
 import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
+import com.mercadopago.util.MPCardUIUtils;
 import com.mercadopago.util.ScaleUtil;
 import com.mercadopago.views.SecurityCodeActivityView;
 
@@ -43,16 +46,34 @@ import com.mercadopago.views.SecurityCodeActivityView;
 
 public class SecurityCodeActivity extends MercadoPagoBaseActivity implements SecurityCodeActivityView, TimerObserver {
 
-    protected SecurityCodePresenter mPresenter;
+    private static final String PRESENTER_BUNDLE = "mSecurityCodePresenter";
+    private static final String DECORATION_PREFERENCE_BUNDLE = "mDecorationPreference";
+    private static final String PUBLIC_KEY_BUNDLE = "mMerchantPublicKey";
+    private static final String PRIVATE_KEY_BUNDLE = "mPrivateKey";
+
+    protected SecurityCodePresenter mSecurityCodePresenter;
     protected Activity mActivity;
+
+    public static final String ERROR_STATE = "textview_error";
+    public static final String NORMAL_STATE = "textview_normal";
+    //Parameters
+    protected String mMerchantPublicKey;
+    protected String mPrivateKey;
 
     //View controls
     protected ProgressBar mProgressBar;
     protected DecorationPreference mDecorationPreference;
     protected MPEditText mSecurityCodeEditText;
-    protected FrameLayout mContinueButton;
-    protected MPTextView mErrorText;
+    protected FrameLayout mNextButton;
+    protected FrameLayout mBackButton;
+    protected MPTextView mNextButtonText;
+    protected MPTextView mBackButtonText;
+    protected LinearLayout mButtonContainer;
+    protected FrameLayout mErrorContainer;
+    protected MPTextView mErrorTextView;
+    protected String mErrorState;
     protected FrameLayout mBackground;
+    protected ImageView mSecurityCodeCardIcon;
     //ViewMode
     protected boolean mLowResActive;
     //Normal View
@@ -60,21 +81,69 @@ public class SecurityCodeActivity extends MercadoPagoBaseActivity implements Sec
     protected CardView mCardView;
     protected MPTextView mTimerTextView;
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (mPresenter == null) {
-            mPresenter = new SecurityCodePresenter(getBaseContext());
-        }
-        mPresenter.setView(this);
         mActivity = this;
-        getActivityParameters();
+
+        if (savedInstanceState == null) {
+            createPresenter();
+            getActivityParameters();
+            configurePresenter();
+            setTheme();
+            analyzeLowRes();
+            setContentView();
+            mSecurityCodePresenter.initialize();
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putString(DECORATION_PREFERENCE_BUNDLE, JsonUtil.getInstance().toJson(mDecorationPreference));
+        outState.putString(PRESENTER_BUNDLE, JsonUtil.getInstance().toJson(mSecurityCodePresenter));
+        outState.putString(PUBLIC_KEY_BUNDLE, mMerchantPublicKey);
+        outState.putString(PRIVATE_KEY_BUNDLE, mPrivateKey);
+
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+
+        if (savedInstanceState != null) {
+            mSecurityCodePresenter = JsonUtil.getInstance().fromJson(savedInstanceState.getString(PRESENTER_BUNDLE), SecurityCodePresenter.class);
+            mDecorationPreference = JsonUtil.getInstance().fromJson(savedInstanceState.getString(DECORATION_PREFERENCE_BUNDLE), DecorationPreference.class);
+            mMerchantPublicKey = savedInstanceState.getString(PUBLIC_KEY_BUNDLE);
+            mPrivateKey = savedInstanceState.getString(PRIVATE_KEY_BUNDLE);
+            configurePresenter();
+            setTheme();
+            analyzeLowRes();
+            setContentView();
+            mSecurityCodePresenter.initialize();
+        }
+
+        super.onRestoreInstanceState(savedInstanceState);
+    }
+
+    private void setTheme() {
         if (isCustomColorSet()) {
             setTheme(R.style.Theme_MercadoPagoTheme_NoActionBar);
         }
-        analyzeLowRes();
-        setContentView();
-        mPresenter.validateActivityParameters();
+    }
+
+    private void createPresenter() {
+        if (mSecurityCodePresenter == null) {
+            mSecurityCodePresenter = new SecurityCodePresenter();
+        }
+    }
+
+    private void configurePresenter() {
+        if (mSecurityCodePresenter != null) {
+            mSecurityCodePresenter.attachView(this);
+            SecurityCodeProviderImpl provider = new SecurityCodeProviderImpl(this, mMerchantPublicKey, mPrivateKey);
+            mSecurityCodePresenter.attachResourcesProvider(provider);
+        }
     }
 
     private boolean isCustomColorSet() {
@@ -82,8 +151,8 @@ public class SecurityCodeActivity extends MercadoPagoBaseActivity implements Sec
     }
 
     private void getActivityParameters() {
-        String publicKey = getIntent().getStringExtra("merchantPublicKey");
-        String payerAccessToken = getIntent().getStringExtra("payerAccessToken");
+        mMerchantPublicKey = getIntent().getStringExtra("merchantPublicKey");
+        mPrivateKey = getIntent().getStringExtra("payerAccessToken");
         mDecorationPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("decorationPreference"), DecorationPreference.class);
 
         CardInfo cardInfo = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("cardInfo"), CardInfo.class);
@@ -91,12 +160,10 @@ public class SecurityCodeActivity extends MercadoPagoBaseActivity implements Sec
         Token token = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("token"), Token.class);
         PaymentMethod paymentMethod = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("paymentMethod"), PaymentMethod.class);
 
-        mPresenter.setPublicKey(publicKey);
-        mPresenter.setPrivateKey(payerAccessToken);
-        mPresenter.setToken(token);
-        mPresenter.setCard(card);
-        mPresenter.setPaymentMethod(paymentMethod);
-        mPresenter.setCardInfo(cardInfo);
+        mSecurityCodePresenter.setToken(token);
+        mSecurityCodePresenter.setCard(card);
+        mSecurityCodePresenter.setPaymentMethod(paymentMethod);
+        mSecurityCodePresenter.setCardInfo(cardInfo);
     }
 
     private void analyzeLowRes() {
@@ -104,8 +171,6 @@ public class SecurityCodeActivity extends MercadoPagoBaseActivity implements Sec
     }
 
     public void setContentView() {
-        MPTracker.getInstance().trackScreen("SECURITY_CODE_CARD", "2", mPresenter.getPublicKey(),
-                BuildConfig.VERSION_NAME, this);
         setContentViewNormal();
     }
 
@@ -113,27 +178,49 @@ public class SecurityCodeActivity extends MercadoPagoBaseActivity implements Sec
         setContentView(R.layout.mpsdk_activity_security_code);
     }
 
-    private void initializeViews() {
+    private void initializeControls() {
         mProgressBar = (ProgressBar) findViewById(R.id.mpsdkProgressBar);
         mSecurityCodeEditText = (MPEditText) findViewById(R.id.mpsdkCardSecurityCode);
-        mContinueButton = (FrameLayout) findViewById(R.id.mpsdkSecurityCodeNextButton);
-        mErrorText = (MPTextView) findViewById(R.id.mpsdkSecurityCodeErrorText);
+        mNextButton = (FrameLayout) findViewById(R.id.mpsdkNextButton);
+        mBackButton = (FrameLayout) findViewById(R.id.mpsdkBackButton);
+        mNextButtonText = (MPTextView) findViewById(R.id.mpsdkNextButtonText);
+        mBackButtonText = (MPTextView) findViewById(R.id.mpsdkBackButtonText);
+        mButtonContainer = (LinearLayout) findViewById(R.id.mpsdkButtonContainer);
+        mErrorContainer = (FrameLayout) findViewById(R.id.mpsdkErrorContainer);
+        mErrorTextView = (MPTextView) findViewById(R.id.mpsdkErrorTextView);
         mBackground = (FrameLayout) findViewById(R.id.mpsdkSecurityCodeActivityBackground);
         mCardContainer = (FrameLayout) findViewById(R.id.mpsdkCardViewContainer);
         mTimerTextView = (MPTextView) findViewById(R.id.mpsdkTimerTextView);
         mProgressBar.setVisibility(View.GONE);
+        mSecurityCodeCardIcon = (ImageView) findViewById(R.id.mpsdkSecurityCodeCardIcon);
+        setListeners();
+    }
+
+    private void setListeners() {
+        setSecurityCodeListeners();
+        setButtonsListeners();
     }
 
     @Override
     public void showLoadingView() {
         mProgressBar.setVisibility(View.VISIBLE);
-        mContinueButton.setVisibility(View.GONE);
+        mNextButton.setVisibility(View.INVISIBLE);
+        mBackButton.setVisibility(View.INVISIBLE);
+        hideKeyboard();
+    }
+
+    private void hideKeyboard() {
+        // Check if no view has focus:
+        View view = this.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
     }
 
     @Override
     public void stopLoadingView() {
         mProgressBar.setVisibility(View.GONE);
-        mContinueButton.setVisibility(View.VISIBLE);
     }
 
 
@@ -146,22 +233,26 @@ public class SecurityCodeActivity extends MercadoPagoBaseActivity implements Sec
         mCardView.setSize(CardRepresentationModes.BIG_SIZE);
         mCardView.inflateInParent(mCardContainer, true);
         mCardView.initializeControls();
-        mCardView.setPaymentMethod(mPresenter.getPaymentMethod());
-        mCardView.setSecurityCodeLength(mPresenter.getSecurityCodeLength());
-        mCardView.setSecurityCodeLocation(mPresenter.getSecurityCodeLocation());
-        mCardView.setCardNumberLength(mPresenter.getCardNumberLength());
-        mCardView.setLastFourDigits(mPresenter.getCardInfo().getLastFourDigits());
-        if (mPresenter.getSecurityCodeLocation().equals(CardView.CARD_SIDE_BACK)) {
-            mCardView.draw(CardView.CARD_SIDE_BACK);
-        } else {
-            mCardView.draw(CardView.CARD_SIDE_FRONT);
-            mCardView.drawFullCard();
-            mCardView.drawEditingSecurityCode("");
-        }
+        mCardView.setPaymentMethod(mSecurityCodePresenter.getPaymentMethod());
+        mCardView.setSecurityCodeLength(mSecurityCodePresenter.getSecurityCodeLength());
+        mCardView.setSecurityCodeLocation(mSecurityCodePresenter.getSecurityCodeLocation());
+        mCardView.setCardNumberLength(mSecurityCodePresenter.getCardNumberLength());
+        mCardView.setLastFourDigits(mSecurityCodePresenter.getCardInfo().getLastFourDigits());
+        mCardView.draw(CardView.CARD_SIDE_FRONT);
+        mCardView.drawFullCard();
+        mCardView.drawEditingSecurityCode("");
+        mSecurityCodePresenter.setSecurityCodeCardType();
+    }
+
+
+    private void setSecurityCodeCardColorFilter() {
+        int color = MPCardUIUtils.getCardColor(mSecurityCodePresenter.getPaymentMethod(), this);
+        mSecurityCodeCardIcon.setColorFilter(ContextCompat.getColor(this, color), PorterDuff.Mode.DST_OVER);
     }
 
     private void decorate() {
         if (isDecorationEnabled()) {
+            decorateButtons();
             mBackground.setBackgroundColor(mDecorationPreference.getLighterColor());
             if (mTimerTextView != null) {
                 ColorsUtil.decorateTextView(mDecorationPreference, mTimerTextView, this);
@@ -173,19 +264,21 @@ public class SecurityCodeActivity extends MercadoPagoBaseActivity implements Sec
         return mDecorationPreference != null && mDecorationPreference.hasColors();
     }
 
-    @Override
-    public void onValidStart() {
-        mPresenter.initializeMercadoPago();
-        initializeViews();
-        mPresenter.initializeSecurityCodeSettings();
-        loadViews();
-        decorate();
-        showTimer();
-        setSecurityCodeListeners();
-        setContinueButtonListeners();
+    private void decorateButtons() {
+        mNextButtonText.setTextColor(mDecorationPreference.getDarkFontColor(this));
+        mBackButtonText.setTextColor(mDecorationPreference.getDarkFontColor(this));
     }
 
-    private void showTimer() {
+    @Override
+    public void initialize() {
+        initializeControls();
+        mSecurityCodePresenter.initializeSecurityCodeSettings();
+        loadViews();
+        decorate();
+    }
+
+    @Override
+    public void showTimer() {
         if (CheckoutTimer.getInstance().isTimerEnabled()) {
             CheckoutTimer.getInstance().addObserver(this);
             mTimerTextView.setVisibility(View.VISIBLE);
@@ -194,16 +287,28 @@ public class SecurityCodeActivity extends MercadoPagoBaseActivity implements Sec
     }
 
     @Override
-    public void onInvalidStart(String message) {
-        Intent returnIntent = new Intent();
-        setResult(RESULT_CANCELED, returnIntent);
-        finish();
+    public void trackScreen() {
+    }
+
+    @Override
+    public void showBackSecurityCodeCardView() {
+        int id = getResources().getIdentifier("mpsdk_tiny_card_cvv_screen", "drawable", getPackageName());
+        mSecurityCodeCardIcon.setImageResource(id);
+        setSecurityCodeCardColorFilter();
+    }
+
+    @Override
+    public void showFrontSecurityCodeCardView() {
+        int id = getResources().getIdentifier("mpsdk_amex_tiny_card_cvv_screen", "drawable", getPackageName());
+        mSecurityCodeCardIcon.setImageResource(id);
+        setSecurityCodeCardColorFilter();
     }
 
     @Override
     public void setSecurityCodeInputMaxLength(int length) {
         setInputMaxLength(mSecurityCodeEditText, length);
     }
+
 
     private void setInputMaxLength(MPEditText text, int maxLength) {
         InputFilter[] fArray = new InputFilter[1];
@@ -227,8 +332,8 @@ public class SecurityCodeActivity extends MercadoPagoBaseActivity implements Sec
 
             @Override
             public void saveSecurityCode(CharSequence s) {
-                mPresenter.saveSecurityCode(s.toString());
-                mCardView.setSecurityCodeLocation(mPresenter.getSecurityCodeLocation());
+                mSecurityCodePresenter.saveSecurityCode(s.toString());
+                mCardView.setSecurityCodeLocation(mSecurityCodePresenter.getSecurityCodeLocation());
                 mCardView.drawEditingSecurityCode(s.toString());
             }
 
@@ -244,28 +349,56 @@ public class SecurityCodeActivity extends MercadoPagoBaseActivity implements Sec
         }));
     }
 
-    private void setContinueButtonListeners() {
-        mContinueButton.setOnClickListener(new View.OnClickListener() {
+    private void setButtonsListeners() {
+        setNextButtonListeners();
+        setBackButtonListeners();
+    }
+
+    private void setNextButtonListeners() {
+        mNextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mPresenter.validateSecurityCodeInput();
+                mSecurityCodePresenter.validateSecurityCodeInput();
             }
         });
     }
 
+    public void setBackButtonListeners() {
+        mBackButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent returnIntent = new Intent();
+                setResult(RESULT_CANCELED, returnIntent);
+                finish();
+            }
+        });
+    }
+
+    private void setErrorState(String mErrorState) {
+        this.mErrorState = mErrorState;
+    }
+
     @Override
     public void setErrorView(String message) {
-        mErrorText.setVisibility(View.VISIBLE);
-        mErrorText.setText(message);
         mSecurityCodeEditText.toggleLineColorOnError(true);
-        mSecurityCodeEditText.requestFocus();
+        mButtonContainer.setVisibility(View.GONE);
+        mErrorContainer.setVisibility(View.VISIBLE);
+        mErrorTextView.setText(message);
+        setErrorState(ERROR_STATE);
+    }
+
+    @Override
+    public void showError(String message, String errorDetail) {
+        ErrorUtil.startErrorActivity(mActivity, message, errorDetail, false);
     }
 
     @Override
     public void clearErrorView() {
-        mErrorText.setText("");
-        mErrorText.setVisibility(View.INVISIBLE);
         mSecurityCodeEditText.toggleLineColorOnError(false);
+        mButtonContainer.setVisibility(View.VISIBLE);
+        mErrorContainer.setVisibility(View.GONE);
+        mErrorTextView.setText("");
+        setErrorState(NORMAL_STATE);
     }
 
     private void onTouchEditText(MPEditText editText, MotionEvent event) {
@@ -287,7 +420,7 @@ public class SecurityCodeActivity extends MercadoPagoBaseActivity implements Sec
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == ErrorUtil.ERROR_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
-                mPresenter.recoverFromFailure();
+                mSecurityCodePresenter.recoverFromFailure();
             } else {
                 setResult(RESULT_CANCELED, data);
                 finish();
@@ -296,14 +429,9 @@ public class SecurityCodeActivity extends MercadoPagoBaseActivity implements Sec
     }
 
     @Override
-    public void showApiExceptionError(ApiException exception) {
-        ApiUtil.showApiExceptionError(mActivity, exception);
-    }
-
-    @Override
     public void finishWithResult() {
         Intent returnIntent = new Intent();
-        returnIntent.putExtra("token", JsonUtil.getInstance().toJson(mPresenter.getToken()));
+        returnIntent.putExtra("token", JsonUtil.getInstance().toJson(mSecurityCodePresenter.getToken()));
         setResult(RESULT_OK, returnIntent);
         finish();
     }

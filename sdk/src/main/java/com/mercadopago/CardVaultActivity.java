@@ -229,6 +229,7 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultVie
         LayoutUtil.showProgressLayout(this);
     }
 
+
     @Override
     public void askForSecurityCodeFromTokenRecovery() {
         startSecurityCodeActivity();

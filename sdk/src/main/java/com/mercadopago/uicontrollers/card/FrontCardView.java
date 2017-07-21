@@ -19,9 +19,11 @@ import com.mercadopago.R;
 import com.mercadopago.customviews.MPAutoResizeTextView;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.model.PaymentMethod;
+import com.mercadopago.util.ColorsUtil;
 import com.mercadopago.util.LayoutUtil;
 import com.mercadopago.util.MPAnimationUtils;
 import com.mercadopago.util.MPCardMaskUtil;
+import com.mercadopago.util.MPCardUIUtils;
 import com.mercadopago.util.MercadoPagoUtil;
 import com.mercadopago.util.ScaleUtil;
 
@@ -47,12 +49,6 @@ public class FrontCardView {
     public static final int CARD_NUMBER_MAESTRO_SETTING_2_LENGTH = 19;
 
     public static final int EDITING_TEXT_VIEW_ALPHA = 255;
-
-    public static final int NEUTRAL_CARD_COLOR = R.color.mpsdk_white;
-    public static final int FULL_TEXT_VIEW_COLOR = R.color.mpsdk_base_text_alpha;
-
-    public static final String NEUTRAL_CARD_COLOR_NAME = "mpsdk_white";
-    public static final String FULL_TEXT_VIEW_COLOR_NAME = "mpsdk_base_text_alpha";
 
 
     private Context mContext;
@@ -268,8 +264,8 @@ public class FrontCardView {
     }
 
     public void transitionPaymentMethodSet() {
-        fadeInColor(getCardColor(mPaymentMethod));
-        int fontColor = getCardFontColor(mPaymentMethod);
+        fadeInColor(MPCardUIUtils.getCardColor(mPaymentMethod, mContext));
+        int fontColor = MPCardUIUtils.getCardFontColor(mPaymentMethod, mContext);
         setFontColor(fontColor, mCardNumberTextView);
         setFontColor(fontColor, mCardholderNameTextView);
         setFontColor(fontColor, mCardExpiryMonthTextView);
@@ -290,14 +286,14 @@ public class FrontCardView {
 
     public void transitionClearPaymentMethod() {
         mPaymentMethod = null;
-        fadeOutColor(NEUTRAL_CARD_COLOR);
+        fadeOutColor(MPCardUIUtils.NEUTRAL_CARD_COLOR);
         clearCardImage();
-        setFontColor(FULL_TEXT_VIEW_COLOR, mCardNumberTextView);
-        setFontColor(FULL_TEXT_VIEW_COLOR, mCardholderNameTextView);
-        setFontColor(FULL_TEXT_VIEW_COLOR, mCardExpiryMonthTextView);
-        setFontColor(FULL_TEXT_VIEW_COLOR, mCardDateDividerTextView);
-        setFontColor(FULL_TEXT_VIEW_COLOR, mCardExpiryYearTextView);
-        setFontColor(FULL_TEXT_VIEW_COLOR, mCardSecurityCodeTextView);
+        setFontColor(MPCardUIUtils.FULL_TEXT_VIEW_COLOR, mCardNumberTextView);
+        setFontColor(MPCardUIUtils.FULL_TEXT_VIEW_COLOR, mCardholderNameTextView);
+        setFontColor(MPCardUIUtils.FULL_TEXT_VIEW_COLOR, mCardExpiryMonthTextView);
+        setFontColor(MPCardUIUtils.FULL_TEXT_VIEW_COLOR, mCardDateDividerTextView);
+        setFontColor(MPCardUIUtils.FULL_TEXT_VIEW_COLOR, mCardExpiryYearTextView);
+        setFontColor(MPCardUIUtils.FULL_TEXT_VIEW_COLOR, mCardSecurityCodeTextView);
         enableEditingFontColor(mCardNumberTextView);
         mCardSecurityCodeTextView.setText("");
     }
@@ -368,26 +364,7 @@ public class FrontCardView {
         return mContext.getResources().getIdentifier(imageName, "drawable", mContext.getPackageName());
     }
 
-    private int getCardColor(PaymentMethod paymentMethod) {
-        String colorName = "mpsdk_" + paymentMethod.getId().toLowerCase();
-        int color = mContext.getResources().getIdentifier(colorName, "color", mContext.getPackageName());
-        if (color == 0) {
-            color = mContext.getResources().getIdentifier(NEUTRAL_CARD_COLOR_NAME, "color", mContext.getPackageName());
-        }
-        return color;
-    }
 
-    private int getCardFontColor(PaymentMethod paymentMethod) {
-        if (paymentMethod == null) {
-            return FULL_TEXT_VIEW_COLOR;
-        }
-        String colorName = "mpsdk_font_" + paymentMethod.getId().toLowerCase();
-        int color = mContext.getResources().getIdentifier(colorName, "color", mContext.getPackageName());
-        if (color == 0) {
-            color = mContext.getResources().getIdentifier(FULL_TEXT_VIEW_COLOR_NAME, "color", mContext.getPackageName());
-        }
-        return color;
-    }
 
     private void resize() {
         if (mSize == null) return;
@@ -437,22 +414,22 @@ public class FrontCardView {
 
     private void enableEditingFontColor(TextView textView) {
         int alpha = EDITING_TEXT_VIEW_ALPHA;
-        int fontColor = getCardFontColor(mPaymentMethod);
+        int fontColor = MPCardUIUtils.getCardFontColor(mPaymentMethod, mContext);
         int color = ContextCompat.getColor(mContext, fontColor);
         int newColor = Color.argb(alpha, Color.red(color), Color.green(color), Color.blue(color));
         textView.setTextColor(newColor);
     }
 
     private void disableEditingFontColor(TextView textView) {
-        int fontColor = getCardFontColor(mPaymentMethod);
+        int fontColor = MPCardUIUtils.getCardFontColor(mPaymentMethod, mContext);
         setFontColor(fontColor, textView);
     }
 
     private void onPaymentMethodSet() {
         if (mPaymentMethod == null) return;
-        setCardColor(getCardColor(mPaymentMethod));
+        setCardColor(MPCardUIUtils.getCardColor(mPaymentMethod, mContext));
         setCardImage(getCardImage(mPaymentMethod));
-        int fontColor = getCardFontColor(mPaymentMethod);
+        int fontColor = MPCardUIUtils.getCardFontColor(mPaymentMethod, mContext);
         setFontColor(fontColor, mCardNumberTextView);
     }
 
