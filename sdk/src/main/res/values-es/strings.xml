@@ -256,9 +256,4 @@
     <string name="mpsdk_text_unlock_card_end">antes de confirmar el pago.</string>
     <string name="mpsdk_title_unlock_card">Desbloqueo de Tarjeta</string>
 
-    <string translatable="false" name="mpsdk_error_message_detail_no_installments">no installments found for an issuer at InstallmentsActivity</string>
-    <string translatable="false" name="mpsdk_error_message_detail_no_payer_cost_found">no payer costs found at InstallmentsActivity</string>
-    <string translatable="false" name="mpsdk_error_message_detail_multiple_installments">multiple installments found for an issuer at InstallmentsActivity</string>
-    <string translatable="false" name="mpsdk_error_message_detail_issuers">no issuers found at IssuersActivity</string>
-
 </resources>
