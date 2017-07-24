@@ -2,9 +2,6 @@ package com.mercadopago.util;
 
 import com.mercadopago.model.IdentificationType;
 
-import java.math.BigInteger;
-import java.util.Locale;
-
 /**
  * Created by vaserber on 8/3/16.
  */
@@ -141,13 +138,24 @@ public class MPCardMaskUtil {
         if (number.length() == 0) {
             return number.toString();
         }
-        try {
-            BigInteger value = new BigInteger(number.toString());
-            Locale.setDefault(Locale.GERMAN);
-            return String.format("%,d", value);
-        } catch (NumberFormatException e) {
-            return "";
-        }
+        return getMaskedNumberWithDecimalSymbols(number.toString());
+    }
+
+    private static String getMaskedNumberWithDecimalSymbols(String idNumber) {
+        StringBuilder maskBuilder = new StringBuilder();
+
+        String nonNumericRegex = "(\\D(.*))";
+        String decimalsSymbolRegex = "(\\d)(?=(\\d{3})+$)";
+
+        String onlyNumbers = idNumber.replaceAll(nonNumericRegex, "");
+
+        //Add decimal symbol to numbers
+        maskBuilder.append(onlyNumbers.replaceAll(decimalsSymbolRegex, "$1."));
+
+        //Append anything after numeric prefix
+        maskBuilder.append(idNumber.replace(onlyNumbers, ""));
+
+        return maskBuilder.toString();
     }
 
     public static String buildIdentificationNumberOfTypeCPF(CharSequence number, int maxLength) {
