@@ -16,6 +16,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -60,18 +61,22 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
     public static final int RESULT_CANCEL_PAYMENT = 4;
 
     //Controls
-
     protected CollapsingToolbarLayout mCollapsingToolbar;
     protected Toolbar mToolbar;
     protected AppBarLayout mAppBar;
 
     protected MPTextView mConfirmTextButton;
+    protected MPTextView mFloatingConfirmTextButton;
     protected MPTextView mCancelTextView;
     protected MPTextView mTermsAndConditionsTextView;
     protected MPTextView mTimerTextView;
 
     protected FrameLayout mConfirmButton;
+    protected FrameLayout mFloatingConfirmButton;
+    protected FrameLayout mFloatingConfirmView;
     protected FrameLayout mCancelButton;
+
+    protected View mSeparatorView;
 
     protected NestedScrollView mScrollView;
     protected RecyclerView mReviewables;
@@ -112,6 +117,12 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
                 confirmPayment();
             }
         });
+        mFloatingConfirmButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                confirmPayment();
+            }
+        });
         mCancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -122,6 +133,13 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
             @Override
             public void onClick(View v) {
                 startTermsAndConditionsActivity();
+            }
+        });
+
+        mScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                checkFloatingButtonVisibility();
             }
         });
     }
@@ -183,6 +201,9 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
         mCollapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.mpsdkCollapsingToolbar);
         mAppBar = (AppBarLayout) findViewById(R.id.mpsdkCheckoutAppBar);
         mToolbar = (Toolbar) findViewById(R.id.mpsdkRegularToolbar);
+        mFloatingConfirmButton = (FrameLayout) findViewById(R.id.mpsdkCheckoutFloatingConfirmButton);
+        mFloatingConfirmTextButton = (MPTextView) findViewById(R.id.mpsdkFloatingConfirmText);
+        mFloatingConfirmView = (FrameLayout) findViewById(R.id.mpsdkCheckoutFloatingConfirmView);
         mConfirmButton = (FrameLayout) findViewById(R.id.mpsdkCheckoutConfirmButton);
         mConfirmTextButton = (MPTextView) findViewById(R.id.mpsdkConfirmText);
         mCancelButton = (FrameLayout) findViewById(R.id.mpsdkReviewCancelButton);
@@ -191,6 +212,7 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
         mTermsAndConditionsTextView = (MPTextView) findViewById(R.id.mpsdkReviewTermsAndConditions);
         mTimerTextView = (MPTextView) findViewById(R.id.mpsdkTimerTextView);
         mReviewables = (RecyclerView) findViewById(R.id.mpsdkReviewablesRecyclerView);
+        mSeparatorView = (View) findViewById(R.id.mpsdkFirstSeparator);
 
         initializeToolbar();
         decorateButtons();
@@ -311,8 +333,10 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
     private void decorateButtons() {
         if (mDecorationPreference != null && mDecorationPreference.hasColors()) {
             mConfirmButton.setBackgroundColor(mDecorationPreference.getBaseColor());
+            mFloatingConfirmButton.setBackgroundColor(mDecorationPreference.getBaseColor());
             if (mDecorationPreference.isDarkFontEnabled()) {
                 mConfirmTextButton.setTextColor(mDecorationPreference.getDarkFontColor(this));
+                mFloatingConfirmTextButton.setTextColor(mDecorationPreference.getDarkFontColor(this));
             }
             mCancelTextView.setTextColor(mDecorationPreference.getBaseColor());
             mTermsAndConditionsTextView.setTextColor(mDecorationPreference.getBaseColor());
@@ -396,6 +420,25 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
         intent.putExtra("paymentData", JsonUtil.getInstance().toJson(paymentData));
         setResult(RESULT_CANCEL_PAYMENT, intent);
         finish();
+    }
+
+    public boolean isConfirmButtonVisible() {
+
+        ViewGroup.MarginLayoutParams cancelButtonLayout = (ViewGroup.MarginLayoutParams) mCancelButton.getLayoutParams();
+        float scrollContent = mScrollView.getChildAt(0).getHeight();
+        float scrollViewSize = mScrollView.getHeight();
+        float cancelHeight = mCancelButton.getHeight();
+        float finalSize = scrollContent - scrollViewSize - cancelHeight - cancelButtonLayout.bottomMargin - mSeparatorView.getHeight() * 5;
+
+        return mScrollView.getScrollY() > finalSize;
+    }
+
+    public void checkFloatingButtonVisibility() {
+        if (isConfirmButtonVisible()) {
+            mFloatingConfirmView.setVisibility(View.GONE);
+        } else {
+            mFloatingConfirmView.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
