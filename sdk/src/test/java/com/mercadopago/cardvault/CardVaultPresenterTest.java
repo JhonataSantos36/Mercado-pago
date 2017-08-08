@@ -205,7 +205,7 @@ public class CardVaultPresenterTest {
         MockedProvider provider = new MockedProvider();
 
         ApiException apiException = Installments.getDoNotFindInstallmentsException();
-        MercadoPagoError mpException = new MercadoPagoError(apiException);
+        MercadoPagoError mpException = new MercadoPagoError(apiException, "");
         provider.setResponse(mpException);
 
 
@@ -663,7 +663,7 @@ public class CardVaultPresenterTest {
         MockedProvider provider = new MockedProvider();
 
         ApiException apiException = Installments.getDoNotFindInstallmentsException();
-        MercadoPagoError mpException = new MercadoPagoError(apiException);
+        MercadoPagoError mpException = new MercadoPagoError(apiException, "");
         provider.setResponse(mpException);
 
 
@@ -807,7 +807,7 @@ public class CardVaultPresenterTest {
         }
 
         @Override
-        public void showApiExceptionError(ApiException exception) {
+        public void showApiExceptionError(ApiException exception, String requestOrigin) {
 
         }
 
@@ -817,7 +817,7 @@ public class CardVaultPresenterTest {
         }
 
         @Override
-        public void showError(MercadoPagoError mercadoPagoError) {
+        public void showError(MercadoPagoError mercadoPagoError, String requestOrigin) {
             errorShown = mercadoPagoError;
             errorState = true;
         }

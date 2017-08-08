@@ -14,6 +14,7 @@ import com.mercadopago.mvp.MvpPresenter;
 import com.mercadopago.mvp.OnResourcesRetrievedCallback;
 import com.mercadopago.providers.SecurityCodeProvider;
 import com.mercadopago.uicontrollers.card.CardView;
+import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.TextUtils;
 import com.mercadopago.views.SecurityCodeActivityView;
 
@@ -43,7 +44,6 @@ public class SecurityCodePresenter extends MvpPresenter<SecurityCodeActivityView
     protected CardInfo mCardInfo;
     protected Card mCard;
     protected Token mToken;
-
 
     public void setPaymentMethod(PaymentMethod paymentMethod) {
         this.mPaymentMethod = paymentMethod;
@@ -121,7 +121,7 @@ public class SecurityCodePresenter extends MvpPresenter<SecurityCodeActivityView
             getView().trackScreen();
         } catch (IllegalStateException exception) {
             String standardErrorMessage = getResourcesProvider().getStandardErrorMessageGotten();
-            getView().showError(standardErrorMessage, exception.getMessage());
+            getView().showError(new MercadoPagoError(standardErrorMessage, false), "");
         }
     }
 
@@ -199,14 +199,16 @@ public class SecurityCodePresenter extends MvpPresenter<SecurityCodeActivityView
 
             @Override
             public void onFailure(MercadoPagoError error) {
-                setFailureRecovery(new FailureRecovery() {
-                    @Override
-                    public void recover() {
-                        cloneToken();
-                    }
-                });
-                getView().stopLoadingView();
-                getView().showError(error.getMessage(), error.getErrorDetail());
+                if (isViewAttached()) {
+                    setFailureRecovery(new FailureRecovery() {
+                        @Override
+                        public void recover() {
+                            cloneToken();
+                        }
+                    });
+                    getView().stopLoadingView();
+                    getView().showError(error, ApiUtil.RequestOrigin.CREATE_TOKEN);
+                }
             }
         });
 
@@ -224,15 +226,16 @@ public class SecurityCodePresenter extends MvpPresenter<SecurityCodeActivityView
 
             @Override
             public void onFailure(MercadoPagoError error) {
-                setFailureRecovery(new FailureRecovery() {
-                    @Override
-                    public void recover() {
-                        cloneToken();
-                    }
-                });
-                getView().stopLoadingView();
-                getView().showError(error.getMessage(), error.getErrorDetail());
-
+                if (isViewAttached()) {
+                    setFailureRecovery(new FailureRecovery() {
+                        @Override
+                        public void recover() {
+                            cloneToken();
+                        }
+                    });
+                    getView().stopLoadingView();
+                    getView().showError(error, ApiUtil.RequestOrigin.CREATE_TOKEN);
+                }
             }
         });
     }
@@ -250,14 +253,16 @@ public class SecurityCodePresenter extends MvpPresenter<SecurityCodeActivityView
 
             @Override
             public void onFailure(MercadoPagoError error) {
-                setFailureRecovery(new FailureRecovery() {
-                    @Override
-                    public void recover() {
-                        createToken(savedCardToken);
-                    }
-                });
-                getView().stopLoadingView();
-                getView().showError(error.getMessage(), error.getErrorDetail());
+                if (isViewAttached()) {
+                    setFailureRecovery(new FailureRecovery() {
+                        @Override
+                        public void recover() {
+                            createToken(savedCardToken);
+                        }
+                    });
+                    getView().stopLoadingView();
+                    getView().showError(error, ApiUtil.RequestOrigin.CREATE_TOKEN);
+                }
             }
 
         });

@@ -17,12 +17,14 @@ import com.mercadopago.core.MercadoPagoServices;
 import com.mercadopago.decorations.DividerItemDecoration;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.BankDeal;
-import com.mercadopago.mptracker.MPTracker;
 import com.mercadopago.preferences.DecorationPreference;
+import com.mercadopago.providers.MPTrackingProvider;
+import com.mercadopago.px_tracking.model.ScreenViewEvent;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;
+import com.mercadopago.util.TrackingUtil;
 
 import java.lang.reflect.Type;
 import java.util.List;
@@ -44,6 +46,7 @@ public class BankDealsActivity extends MercadoPagoActivity {
 
     @Override
     protected void onValidStart() {
+        trackScreen();
 
         mMercadoPago = new MercadoPagoServices.Builder()
                 .setContext(getActivity())
@@ -54,9 +57,22 @@ public class BankDealsActivity extends MercadoPagoActivity {
         getBankDeals();
     }
 
+    protected void trackScreen() {
+        MPTrackingProvider mpTrackingProvider = new MPTrackingProvider.Builder()
+                .setContext(this)
+                .setCheckoutVersion(BuildConfig.VERSION_NAME)
+                .setPublicKey(mMerchantPublicKey)
+                .build();
+        ScreenViewEvent event = new ScreenViewEvent.Builder()
+                .setScreenId(TrackingUtil.SCREEN_ID_BANK_DEALS)
+                .setScreenName(TrackingUtil.SCREEN_NAME_BANK_DEALS)
+                .build();
+        mpTrackingProvider.addTrackEvent(event);
+    }
+
     @Override
     protected void onInvalidStart(String message) {
-        ErrorUtil.startErrorActivity(this, message, false);
+        ErrorUtil.startErrorActivity(this, message, false, mMerchantPublicKey);
     }
 
     @Override
@@ -133,7 +149,7 @@ public class BankDealsActivity extends MercadoPagoActivity {
                                 getBankDeals();
                             }
                         });
-                        ApiUtil.showApiExceptionError(getActivity(), apiException);
+                        ApiUtil.showApiExceptionError(getActivity(), apiException, mMerchantPublicKey, ApiUtil.RequestOrigin.GET_BANK_DEALS);
                     } else {
                         finishWithCancelResult();
                     }
@@ -175,7 +191,6 @@ public class BankDealsActivity extends MercadoPagoActivity {
     }
 
     protected void solveBankDeals(List<BankDeal> bankDeals) {
-        MPTracker.getInstance().trackScreen("BANK_DEALS", "2", mMerchantPublicKey, BuildConfig.VERSION_NAME, getActivity());
         mRecyclerView.setAdapter(new BankDealsAdapter(getActivity(), bankDeals, getDpadSelectionCallback(), new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -23,11 +23,11 @@ import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentRecovery;
 import com.mercadopago.model.Site;
 import com.mercadopago.model.Token;
-import com.mercadopago.mptracker.MPTracker;
 import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.presenters.CardVaultPresenter;
 import com.mercadopago.providers.CardVaultProviderImpl;
+import com.mercadopago.px_tracking.MPTracker;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
@@ -164,6 +164,7 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultVie
 
         mPublicKey = getIntent().getStringExtra("merchantPublicKey");
         mPrivateKey = getIntent().getStringExtra("payerAccessToken");
+
         PaymentPreference paymentPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("paymentPreference"), PaymentPreference.class);
         mDecorationPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("decorationPreference"), DecorationPreference.class);
 
@@ -220,7 +221,6 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultVie
     }
 
     protected void initialize() {
-        MPTracker.getInstance().trackScreen("CARD_VAULT", "2", mPublicKey, BuildConfig.VERSION_NAME, this);
         mCardVaultPresenter.initialize();
     }
 
@@ -252,6 +252,7 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultVie
         new MercadoPagoComponents.Activities.SecurityCodeActivityBuilder()
                 .setActivity(this)
                 .setMerchantPublicKey(mPublicKey)
+                .setSiteId(mCardVaultPresenter.getSite().getId())
                 .setPaymentMethod(mCardVaultPresenter.getPaymentMethod())
                 .setCardInfo(mCardVaultPresenter.getCardInfo())
                 .setToken(mCardVaultPresenter.getToken())
@@ -273,6 +274,7 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultVie
                 new MercadoPagoComponents.Activities.GuessingCardActivityBuilder()
                         .setActivity(context)
                         .setMerchantPublicKey(mPublicKey)
+                        .setSiteId(mCardVaultPresenter.getSite().getId())
                         .setAmount(mCardVaultPresenter.getAmount())
                         .setPayerEmail(mCardVaultPresenter.getPayerEmail())
                         .setPayerAccessToken(mPrivateKey)
@@ -388,9 +390,6 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultVie
             mCardVaultPresenter.resolveIssuersRequest(issuer);
 
         } else if (resultCode == RESULT_CANCELED) {
-            String sitedId = mCardVaultPresenter.getSite() == null ? "" : mCardVaultPresenter.getSite().getId();
-            MPTracker.getInstance().trackEvent("INSTALLMENTS", "CANCELED", "2", mPublicKey,
-                    sitedId, BuildConfig.VERSION_NAME, this);
             mCardVaultPresenter.onResultCancel();
         }
     }
@@ -404,9 +403,6 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultVie
             mCardVaultPresenter.resolveInstallmentsRequest(payerCost, discount);
 
         } else if (resultCode == RESULT_CANCELED) {
-            String sitedId = mCardVaultPresenter.getSite() == null ? "" : mCardVaultPresenter.getSite().getId();
-            MPTracker.getInstance().trackEvent("INSTALLMENTS", "CANCELED", "2", mPublicKey,
-                    sitedId, BuildConfig.VERSION_NAME, this);
             mCardVaultPresenter.onResultCancel();
         }
     }
@@ -442,13 +438,6 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultVie
             mCardVaultPresenter.resolveNewCardRequest(paymentMethod, token, directDiscountEnabled, payerCost, issuer, payerCosts, issuers, discount);
 
         } else if (resultCode == RESULT_CANCELED) {
-            if (mCardVaultPresenter.getSite() == null) {
-                MPTracker.getInstance().trackEvent("GUESSING_CARD", "CANCELED", "2", mPublicKey,
-                        BuildConfig.VERSION_NAME, this);
-            } else {
-                MPTracker.getInstance().trackEvent("GUESSING_CARD", "CANCELED", "2", mPublicKey,
-                        mCardVaultPresenter.getSite().getId(), BuildConfig.VERSION_NAME, this);
-            }
             mCardVaultPresenter.onResultCancel();
         }
     }
@@ -460,13 +449,6 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultVie
             mCardVaultPresenter.resolveSecurityCodeRequest(token);
 
         } else if (resultCode == RESULT_CANCELED) {
-            if (mCardVaultPresenter.getSite() == null) {
-                MPTracker.getInstance().trackEvent("SECURITY_CODE_CARD", "CANCELED", "2", mPublicKey,
-                        BuildConfig.VERSION_NAME, this);
-            } else {
-                MPTracker.getInstance().trackEvent("SECURITY_CODE_CARD", "CANCELED", "2", mPublicKey,
-                        mCardVaultPresenter.getSite().getId(), BuildConfig.VERSION_NAME, this);
-            }
             mCardVaultPresenter.onResultCancel();
         }
     }
@@ -556,16 +538,16 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultVie
     }
 
     @Override
-    public void showApiExceptionError(ApiException exception) {
-        ApiUtil.showApiExceptionError(this, exception);
+    public void showApiExceptionError(ApiException exception, String requestOrigin) {
+        ApiUtil.showApiExceptionError(this, exception, mPublicKey, requestOrigin);
     }
 
     @Override
-    public void showError(MercadoPagoError error) {
+    public void showError(MercadoPagoError error, String requestOrigin) {
         if (error.isApiException()) {
-            showApiExceptionError(error.getApiException());
+            showApiExceptionError(error.getApiException(), requestOrigin);
         } else {
-            ErrorUtil.startErrorActivity(this, error);
+            ErrorUtil.startErrorActivity(this, error, mPublicKey);
         }
     }
 

@@ -22,11 +22,14 @@ import com.mercadopago.listeners.RecyclerItemClickListener;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.CardInfo;
 import com.mercadopago.model.PaymentMethod;
+import com.mercadopago.model.PaymentMethodSearchItem;
 import com.mercadopago.model.PaymentType;
-import com.mercadopago.mptracker.MPTracker;
 import com.mercadopago.observers.TimerObserver;
 import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.presenters.PaymentTypesPresenter;
+import com.mercadopago.providers.MPTrackingProvider;
+import com.mercadopago.px_tracking.MPTracker;
+import com.mercadopago.px_tracking.model.ScreenViewEvent;
 import com.mercadopago.uicontrollers.FontCache;
 import com.mercadopago.uicontrollers.card.CardRepresentationModes;
 import com.mercadopago.uicontrollers.card.FrontCardView;
@@ -35,6 +38,7 @@ import com.mercadopago.util.ColorsUtil;
 import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.ScaleUtil;
+import com.mercadopago.util.TrackingUtil;
 import com.mercadopago.views.PaymentTypesActivityView;
 
 import java.lang.reflect.Type;
@@ -126,8 +130,6 @@ public class PaymentTypesActivity extends MercadoPagoBaseActivity implements Pay
     }
 
     public void setContentView() {
-        MPTracker.getInstance().trackScreen("CARD_PAYMENT_TYPES", "2", mPresenter.getPublicKey(),
-                BuildConfig.VERSION_NAME, this);
         if (mLowResActive) {
             setContentViewLowRes();
         } else {
@@ -144,6 +146,21 @@ public class PaymentTypesActivity extends MercadoPagoBaseActivity implements Pay
         showTimer();
         initializeAdapter();
         mPresenter.loadPaymentTypes();
+        trackScreen();
+    }
+
+    protected void trackScreen() {
+        MPTrackingProvider mpTrackingProvider = new MPTrackingProvider.Builder()
+                .setContext(this)
+                .setCheckoutVersion(BuildConfig.VERSION_NAME)
+                .setPublicKey(mPresenter.getPublicKey())
+                .build();
+
+        ScreenViewEvent event = new ScreenViewEvent.Builder()
+                    .setScreenId(TrackingUtil.SCREEN_ID_PAYMENT_TYPES)
+                    .setScreenName(TrackingUtil.SCREEN_NAME_PAYMENT_TYPES)
+                    .build();
+        mpTrackingProvider.addTrackEvent(event);
     }
 
     private void showTimer() {
@@ -227,13 +244,13 @@ public class PaymentTypesActivity extends MercadoPagoBaseActivity implements Pay
     }
 
     @Override
-    public void showApiExceptionError(ApiException exception) {
-        ApiUtil.showApiExceptionError(mActivity, exception);
+    public void showApiExceptionError(ApiException exception, String requestOrigin) {
+        ApiUtil.showApiExceptionError(mActivity, exception, mPresenter.getPublicKey(), requestOrigin);
     }
 
     @Override
     public void startErrorView(String message, String errorDetail) {
-        ErrorUtil.startErrorActivity(mActivity, message, errorDetail, false);
+        ErrorUtil.startErrorActivity(mActivity, message, errorDetail, false, mPresenter.getPublicKey());
     }
 
     private void loadLowResViews() {
@@ -339,8 +356,6 @@ public class PaymentTypesActivity extends MercadoPagoBaseActivity implements Pay
 
     @Override
     public void onBackPressed() {
-        MPTracker.getInstance().trackEvent("CARD_PAYMENT_TYPES", "BACK_PRESSED", "2", mPresenter.getPublicKey(),
-                BuildConfig.VERSION_NAME, this);
         Intent returnIntent = new Intent();
         returnIntent.putExtra("backButtonPressed", true);
         setResult(RESULT_CANCELED, returnIntent);

@@ -215,7 +215,7 @@
                         android:gravity="center"
                         android:textSize="12dp"
                         android:visibility="visible"
-                        tools:text="@string/mpsdk_text_state_acount_activity_congrat" />
+                        tools:text="@string/mpsdk_text_state_account_activity_congrats" />
 
                     <View
                         android:id="@+id/mpsdkTopEmailSeparator"

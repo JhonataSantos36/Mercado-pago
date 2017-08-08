@@ -1,5 +1,7 @@
 package com.mercadopago.securitycode;
 
+import com.mercadopago.exceptions.MercadoPagoError;
+import com.mercadopago.model.ApiException;
 import com.mercadopago.model.Card;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.SavedCardToken;
@@ -93,7 +95,7 @@ public class SecurityCodePresenterTest {
 
 
     public boolean isErrorShown(SecurityCodeMockedView view) {
-        return !TextUtil.isEmpty(view.errorMessage) && !TextUtil.isEmpty(view.errorDetail);
+        return !TextUtil.isEmpty(view.errorMessage) && view.error != null;
     }
 
     public MVPStructure<SecurityCodePresenter, SecurityCodeMockedProvider, SecurityCodeMockedView, SecurityCode> getMVPStructure(String emptyParameter) {
@@ -184,8 +186,8 @@ public class SecurityCodePresenterTest {
         private boolean initializeDone = false;
         private boolean backSecurityCodeShown = false;
         private boolean frontSecurityCodeShown = false;
-        private String errorDetail;
         private String errorMessage;
+        private MercadoPagoError error;
         private boolean timerShown = false;
 
         @Override
@@ -200,9 +202,14 @@ public class SecurityCodePresenterTest {
         }
 
         @Override
-        public void showError(String message, String errorDetail) {
-            this.errorMessage = message;
-            this.errorDetail = errorDetail;
+        public void showError(MercadoPagoError error, String requestOrigin) {
+            this.error = error;
+            this.errorMessage = error.getMessage();
+        }
+
+        @Override
+        public void showApiExceptionError(ApiException exception, String requestOrigin) {
+
         }
 
         @Override

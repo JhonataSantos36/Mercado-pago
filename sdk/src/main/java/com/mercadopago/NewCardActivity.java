@@ -24,7 +24,7 @@ import com.mercadopago.model.ApiException;
 import com.mercadopago.model.CardToken;
 import com.mercadopago.model.IdentificationType;
 import com.mercadopago.model.PaymentMethod;
-import com.mercadopago.mptracker.MPTracker;
+import com.mercadopago.px_tracking.MPTracker;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;
@@ -98,8 +98,6 @@ public class NewCardActivity extends AppCompatActivity {
             }
         });
 
-        MPTracker.getInstance().trackScreen("NEW_CARD", "2", mKey, BuildConfig.VERSION_NAME, this);
-
         // Set security code visibility
         setSecurityCodeLayout();
         setFocusOrder();
@@ -156,8 +154,6 @@ public class NewCardActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        MPTracker.getInstance().trackEvent("NEW_CARD", "BACK_PRESSED", "2", mKey, BuildConfig.VERSION_NAME, this);
-
         Intent returnIntent = new Intent();
         returnIntent.putExtra("backButtonPressed", true);
         setResult(RESULT_CANCELED, returnIntent);

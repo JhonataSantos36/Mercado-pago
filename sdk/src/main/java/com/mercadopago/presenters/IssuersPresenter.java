@@ -9,6 +9,7 @@ import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.mvp.MvpPresenter;
 import com.mercadopago.mvp.OnResourcesRetrievedCallback;
 import com.mercadopago.providers.IssuersProvider;
+import com.mercadopago.util.ApiUtil;
 import com.mercadopago.views.IssuersActivityView;
 
 import java.util.ArrayList;
@@ -49,7 +50,7 @@ public class IssuersPresenter extends MvpPresenter<IssuersActivityView, IssuersP
         mIssuers = issuers;
 
         if (mIssuers.isEmpty()) {
-            getView().showError(getResourcesProvider().getEmptyIssuersError());
+            getView().showError(getResourcesProvider().getEmptyIssuersError(), "");
         } else if (mIssuers.size() == 1) {
             getView().finishWithResult(issuers.get(0));
         } else {
@@ -79,7 +80,7 @@ public class IssuersPresenter extends MvpPresenter<IssuersActivityView, IssuersP
                     }
                 });
 
-                getView().showError(error);
+                getView().showError(error, ApiUtil.RequestOrigin.GET_ISSUERS);
             }
         });
     }

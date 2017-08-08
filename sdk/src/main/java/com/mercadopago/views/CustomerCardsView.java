@@ -21,7 +21,7 @@ public interface CustomerCardsView extends MvpView {
 
     void hideProgress();
 
-    void showError(MercadoPagoError error);
+    void showError(MercadoPagoError error, String requestOrigin);
 
     void finishWithCardResult(Card card);
 

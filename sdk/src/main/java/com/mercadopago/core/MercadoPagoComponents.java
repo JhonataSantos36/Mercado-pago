@@ -9,6 +9,7 @@ import android.support.annotation.ColorInt;
 import android.support.annotation.DrawableRes;
 
 import com.mercadopago.BankDealsActivity;
+import com.mercadopago.BuildConfig;
 import com.mercadopago.CallForAuthorizeActivity;
 import com.mercadopago.CardVaultActivity;
 import com.mercadopago.CongratsActivity;
@@ -46,6 +47,8 @@ import com.mercadopago.model.PaymentType;
 import com.mercadopago.model.Site;
 import com.mercadopago.preferences.PaymentResultScreenPreference;
 import com.mercadopago.preferences.ReviewScreenPreference;
+import com.mercadopago.providers.MPTrackingProvider;
+import com.mercadopago.px_tracking.model.ScreenViewEvent;
 import com.mercadopago.uicontrollers.discounts.DiscountRowView;
 import com.mercadopago.uicontrollers.reviewandconfirm.ReviewItemsView;
 import com.mercadopago.uicontrollers.reviewandconfirm.ReviewPaymentOffView;
@@ -56,6 +59,7 @@ import com.mercadopago.uicontrollers.savedcards.SavedCardRowView;
 import com.mercadopago.uicontrollers.savedcards.SavedCardView;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.MercadoPagoUtil;
+import com.mercadopago.util.TrackingUtil;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -249,6 +253,7 @@ public class MercadoPagoComponents {
                 if (this.activity == null) throw new IllegalStateException("activity is null");
                 if (this.merchantPublicKey == null && this.payerAccessToken == null)
                     throw new IllegalStateException("key is null");
+
                 startPaymentVaultActivity();
             }
 
@@ -405,6 +410,7 @@ public class MercadoPagoComponents {
                         throw new IllegalStateException("payer cost is null");
                     if (this.token == null) throw new IllegalStateException("token is null");
                 }
+
                 startReviewAndConfirmActivity();
             }
 
@@ -697,6 +703,7 @@ public class MercadoPagoComponents {
         public static class GuessingCardActivityBuilder {
             private Activity activity;
             private String merchantPublicKey;
+            private String siteId;
             private Boolean showBankDeals;
             private PaymentPreference paymentPreference;
             private DecorationPreference decorationPreference;
@@ -720,6 +727,11 @@ public class MercadoPagoComponents {
 
             public GuessingCardActivityBuilder setMerchantPublicKey(String merchantPublicKey) {
                 this.merchantPublicKey = merchantPublicKey;
+                return this;
+            }
+
+            public GuessingCardActivityBuilder setSiteId(String siteId) {
+                this.siteId = siteId;
                 return this;
             }
 
@@ -810,6 +822,8 @@ public class MercadoPagoComponents {
             private void startGuessingCardActivity() {
                 Intent guessingCardIntent = new Intent(activity, GuessingCardActivity.class);
                 guessingCardIntent.putExtra("merchantPublicKey", merchantPublicKey);
+
+                guessingCardIntent.putExtra("siteId", siteId);
 
                 if (requireSecurityCode != null) {
                     guessingCardIntent.putExtra("requireSecurityCode", requireSecurityCode);
@@ -1111,6 +1125,7 @@ public class MercadoPagoComponents {
             private Activity activity;
             private CardInfo cardInformation;
             private String merchantPublicKey;
+            private String siteId;
             private String payerAccessToken;
             private PaymentMethod paymentMethod;
             private Integer congratsDisplay;
@@ -1133,6 +1148,11 @@ public class MercadoPagoComponents {
 
             public SecurityCodeActivityBuilder setMerchantPublicKey(String merchantPublicKey) {
                 this.merchantPublicKey = merchantPublicKey;
+                return this;
+            }
+
+            public SecurityCodeActivityBuilder setSiteId(String siteId) {
+                this.siteId = siteId;
                 return this;
             }
 
@@ -1188,6 +1208,7 @@ public class MercadoPagoComponents {
                 intent.putExtra("card", JsonUtil.getInstance().toJson(card));
                 intent.putExtra("merchantPublicKey", merchantPublicKey);
                 intent.putExtra("payerAccessToken", payerAccessToken);
+                intent.putExtra("siteId", siteId);
                 intent.putExtra("decorationPreference", JsonUtil.getInstance().toJson(decorationPreference));
                 intent.putExtra("cardInfo", JsonUtil.getInstance().toJson(cardInformation));
                 activity.startActivityForResult(intent, SECURITY_CODE_REQUEST_CODE);

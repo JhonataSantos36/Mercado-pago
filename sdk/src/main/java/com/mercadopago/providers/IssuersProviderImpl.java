@@ -9,6 +9,7 @@ import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.mvp.OnResourcesRetrievedCallback;
+import com.mercadopago.util.ApiUtil;
 
 import java.util.List;
 
@@ -41,7 +42,7 @@ public class IssuersProviderImpl implements IssuersProvider {
 
             @Override
             public void failure(ApiException apiException) {
-                onResourcesRetrievedCallback.onFailure(new MercadoPagoError(apiException));
+                onResourcesRetrievedCallback.onFailure(new MercadoPagoError(apiException, ApiUtil.RequestOrigin.GET_ISSUERS));
             }
         });
     }

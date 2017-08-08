@@ -25,7 +25,7 @@ public interface GuessingCardActivityView {
 
     void showInputContainer();
 
-    void showApiExceptionError(ApiException exception);
+    void showApiExceptionError(ApiException exception, String requestOrigin);
 
     void setCardNumberInputMaxLength(int length);
 

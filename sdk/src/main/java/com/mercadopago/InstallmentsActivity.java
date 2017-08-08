@@ -31,12 +31,13 @@ import com.mercadopago.model.Issuer;
 import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.Site;
-import com.mercadopago.mptracker.MPTracker;
 import com.mercadopago.observers.TimerObserver;
 import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.presenters.InstallmentsPresenter;
 import com.mercadopago.providers.InstallmentsProviderImpl;
+import com.mercadopago.providers.MPTrackingProvider;
+import com.mercadopago.px_tracking.model.ScreenViewEvent;
 import com.mercadopago.uicontrollers.FontCache;
 import com.mercadopago.uicontrollers.card.CardRepresentationModes;
 import com.mercadopago.uicontrollers.card.FrontCardView;
@@ -48,8 +49,8 @@ import com.mercadopago.util.ColorsUtil;
 import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;
-import com.mercadopago.util.InstallmentsUtil;
 import com.mercadopago.util.ScaleUtil;
+import com.mercadopago.util.TrackingUtil;
 import com.mercadopago.views.InstallmentsActivityView;
 
 import java.lang.reflect.Type;
@@ -124,6 +125,7 @@ public class InstallmentsActivity extends MercadoPagoBaseActivity implements Ins
         initializeControls();
         initializeView();
 
+        trackScreen();
         mPresenter.initialize();
     }
 
@@ -188,9 +190,6 @@ public class InstallmentsActivity extends MercadoPagoBaseActivity implements Ins
     }
 
     public void setContentView() {
-        String siteId = mPresenter.getSite() == null ? "" : mPresenter.getSite().getId();
-        MPTracker.getInstance().trackScreen("CARD_INSTALLMENTS", "2", mPublicKey, siteId, BuildConfig.VERSION_NAME, this);
-
         if (mLowResActive) {
             setContentViewLowRes();
         } else {
@@ -249,6 +248,22 @@ public class InstallmentsActivity extends MercadoPagoBaseActivity implements Ins
         hideHeader();
         decorate();
         showTimer();
+    }
+
+    protected void trackScreen() {
+        MPTrackingProvider mpTrackingProvider = new MPTrackingProvider.Builder()
+                .setContext(this)
+                .setCheckoutVersion(BuildConfig.VERSION_NAME)
+                .setPublicKey(mPublicKey)
+                .build();
+
+        ScreenViewEvent event = new ScreenViewEvent.Builder()
+                .setScreenId(TrackingUtil.SCREEN_ID_INSTALLMENTS)
+                .setScreenName(TrackingUtil.SCREEN_NAME_CARD_FORM_INSTALLMENTS)
+                .addMetaData(TrackingUtil.METADATA_PAYMENT_METHOD_ID, mPresenter.getPaymentMethod().getId())
+                .build();
+
+        mpTrackingProvider.addTrackEvent(event);
     }
 
     public void loadViews() {
@@ -400,17 +415,17 @@ public class InstallmentsActivity extends MercadoPagoBaseActivity implements Ins
     }
 
     @Override
-    public void showError(MercadoPagoError error) {
+    public void showError(MercadoPagoError error, String requestOrigin) {
         if (error.isApiException()) {
-            showApiException(error.getApiException());
+            showApiException(error.getApiException(), requestOrigin);
         } else {
-            ErrorUtil.startErrorActivity(this, error);
+            ErrorUtil.startErrorActivity(this, error, mPublicKey);
         }
     }
 
-    public void showApiException(ApiException apiException) {
+    public void showApiException(ApiException apiException, String requestOrigin) {
         if (mActivityActive) {
-            ApiUtil.showApiExceptionError(this, apiException);
+            ApiUtil.showApiExceptionError(this, apiException, mPublicKey, requestOrigin);
         }
     }
 
@@ -471,8 +486,6 @@ public class InstallmentsActivity extends MercadoPagoBaseActivity implements Ins
 
             mPresenter.initializeDiscountRow();
         } else {
-            String siteId = mPresenter.getSite() == null ? "" : mPresenter.getSite().getId();
-            MPTracker.getInstance().trackEvent("CARD_INSTALLMENTS", "BACK_PRESSED", "2", mPublicKey, siteId, BuildConfig.VERSION_NAME, this);
             Intent returnIntent = new Intent();
             returnIntent.putExtra("backButtonPressed", true);
             returnIntent.putExtra("discount", JsonUtil.getInstance().toJson(mPresenter.getDiscount()));

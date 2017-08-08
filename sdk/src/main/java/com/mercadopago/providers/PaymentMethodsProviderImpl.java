@@ -8,6 +8,7 @@ import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.mvp.OnResourcesRetrievedCallback;
+import com.mercadopago.util.ApiUtil;
 
 import java.util.List;
 
@@ -38,7 +39,7 @@ public class PaymentMethodsProviderImpl implements PaymentMethodsProvider {
 
             @Override
             public void failure(ApiException apiException) {
-                MercadoPagoError exception = new MercadoPagoError(apiException);
+                MercadoPagoError exception = new MercadoPagoError(apiException, ApiUtil.RequestOrigin.GET_PAYMENT_METHODS);
                 resourcesRetrievedCallback.onFailure(exception);
             }
         });

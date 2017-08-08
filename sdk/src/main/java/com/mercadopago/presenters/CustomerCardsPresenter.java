@@ -8,6 +8,7 @@ import com.mercadopago.model.Customer;
 import com.mercadopago.mvp.MvpPresenter;
 import com.mercadopago.mvp.OnResourcesRetrievedCallback;
 import com.mercadopago.providers.CustomerCardsProvider;
+import com.mercadopago.util.ApiUtil;
 import com.mercadopago.views.CustomerCardsView;
 
 import java.util.List;
@@ -48,7 +49,7 @@ public class CustomerCardsPresenter extends MvpPresenter<CustomerCardsView, Cust
 
             @Override
             public void onFailure(MercadoPagoError error) {
-                getView().showError(error);
+                getView().showError(error, ApiUtil.RequestOrigin.GET_CUSTOMER);
                 getView().hideProgress();
 
                 setFailureRecovery(new FailureRecovery() {

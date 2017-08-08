@@ -1,5 +1,7 @@
 package com.mercadopago.views;
 
+import com.mercadopago.exceptions.MercadoPagoError;
+import com.mercadopago.model.ApiException;
 import com.mercadopago.mvp.MvpView;
 
 /**
@@ -9,7 +11,7 @@ import com.mercadopago.mvp.MvpView;
 public interface SecurityCodeActivityView extends MvpView {
     void setSecurityCodeInputMaxLength(int length);
 
-    void showError(String standardErrorMessage, String message);
+    void showError(MercadoPagoError error, String requestOrigin);
 
     void setErrorView(String message);
 
@@ -18,6 +20,8 @@ public interface SecurityCodeActivityView extends MvpView {
     void showLoadingView();
 
     void stopLoadingView();
+
+    void showApiExceptionError(ApiException exception, String requestOrigin);
 
     void finishWithResult();
 

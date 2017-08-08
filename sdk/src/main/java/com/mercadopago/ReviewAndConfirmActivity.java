@@ -38,16 +38,17 @@ import com.mercadopago.model.ReviewSubscriber;
 import com.mercadopago.model.Reviewable;
 import com.mercadopago.model.Site;
 import com.mercadopago.model.Token;
-import com.mercadopago.mptracker.MPTracker;
 import com.mercadopago.observers.TimerObserver;
 import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.preferences.ReviewScreenPreference;
 import com.mercadopago.presenters.ReviewAndConfirmPresenter;
+import com.mercadopago.providers.MPTrackingProvider;
 import com.mercadopago.providers.ReviewAndConfirmProviderImpl;
+import com.mercadopago.px_tracking.model.ScreenViewEvent;
 import com.mercadopago.uicontrollers.FontCache;
 import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
-import com.mercadopago.util.TextUtil;
+import com.mercadopago.util.TrackingUtil;
 import com.mercadopago.views.ReviewAndConfirmView;
 
 import java.lang.reflect.Type;
@@ -107,7 +108,6 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
         setListeners();
         initializeReviewablesRecyclerView();
         mPresenter.initialize();
-        trackScreen();
     }
 
     private void setListeners() {
@@ -269,6 +269,39 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
         }
     }
 
+    @Override
+    public void trackScreen() {
+        MPTrackingProvider mpTrackingProvider = new MPTrackingProvider.Builder()
+                .setContext(this)
+                .setCheckoutVersion(BuildConfig.VERSION_NAME)
+                .setPublicKey(mPublicKey)
+                .build();
+
+        PaymentData paymentData = mPresenter.getPaymentData();
+        if (paymentData != null) {
+
+            ScreenViewEvent.Builder builder = new ScreenViewEvent.Builder()
+                    .setScreenId(TrackingUtil.SCREEN_ID_REVIEW_AND_CONFIRM)
+                    .setScreenName(TrackingUtil.SCREEN_NAME_REVIEW_AND_CONFIRM)
+                    .addMetaData(TrackingUtil.METADATA_SHIPPING_INFO, TrackingUtil.HAS_SHIPPING_DEFAULT_VALUE);
+
+            if (paymentData.getPaymentMethod() != null) {
+                if (paymentData.getPaymentMethod().getPaymentTypeId() != null) {
+                    builder.addMetaData(TrackingUtil.METADATA_PAYMENT_TYPE_ID, paymentData.getPaymentMethod().getPaymentTypeId());
+                }
+                if (paymentData.getPaymentMethod().getId() != null) {
+                    builder.addMetaData(TrackingUtil.METADATA_PAYMENT_METHOD_ID, paymentData.getPaymentMethod().getId());
+                }
+            }
+            if (paymentData.getIssuer() != null && paymentData.getIssuer().getId() != null) {
+                builder.addMetaData(TrackingUtil.METADATA_ISSUER_ID, String.valueOf(paymentData.getIssuer().getId()));
+            }
+
+            ScreenViewEvent event = builder.build();
+            mpTrackingProvider.addTrackEvent(event);
+        }
+    }
+
     private void startTermsAndConditionsActivity() {
         Intent termsAndConditionsIntent = new Intent(this, TermsAndConditionsActivity.class);
         termsAndConditionsIntent.putExtra("siteId", Sites.ARGENTINA.getId());
@@ -384,7 +417,7 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
 
     @Override
     public void showError(String message) {
-        ErrorUtil.startErrorActivity(this, getString(R.string.mpsdk_standard_error_message), message, false);
+        ErrorUtil.startErrorActivity(this, getString(R.string.mpsdk_standard_error_message), message, false, mPublicKey);
     }
 
     @Override
@@ -460,9 +493,4 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
         cancelPayment(resultCode, resultData, mPresenter.getPaymentData());
     }
 
-    private void trackScreen() {
-        if (mSite != null && !TextUtil.isEmpty(mPublicKey)) {
-            MPTracker.getInstance().trackScreen("REVIEW_AND_CONFIRM", "2", mPublicKey, mSite.getId(), BuildConfig.VERSION_NAME, this);
-        }
-    }
 }

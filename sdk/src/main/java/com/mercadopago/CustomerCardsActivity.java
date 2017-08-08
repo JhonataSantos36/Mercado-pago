@@ -231,11 +231,11 @@ public class CustomerCardsActivity extends MercadoPagoBaseActivity implements Cu
     }
 
     @Override
-    public void showError(MercadoPagoError error) {
+    public void showError(MercadoPagoError error, String requestOrigin) {
         if (error.isApiException()) {
-            showApiException(error.getApiException());
+            showApiException(error.getApiException(), requestOrigin);
         } else {
-            ErrorUtil.startErrorActivity(this, error);
+            ErrorUtil.startErrorActivity(this, error, "");
         }
     }
 
@@ -261,9 +261,9 @@ public class CustomerCardsActivity extends MercadoPagoBaseActivity implements Cu
         finish();
     }
 
-    public void showApiException(ApiException apiException) {
+    public void showApiException(ApiException apiException, String requestOrigin) {
         if (mActivityActive) {
-            ApiUtil.showApiExceptionError(this, apiException);
+            ApiUtil.showApiExceptionError(this, apiException, "", requestOrigin);
         }
     }
 

@@ -824,7 +824,7 @@ public class InstallmentsPresenterTest {
         }
 
         @Override
-        public void showError(MercadoPagoError error) {
+        public void showError(MercadoPagoError error, String requestOrigin) {
             this.errorShown = true;
         }
 

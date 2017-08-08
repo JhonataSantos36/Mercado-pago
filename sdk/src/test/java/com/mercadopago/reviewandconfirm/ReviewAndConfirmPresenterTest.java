@@ -673,6 +673,11 @@ public class ReviewAndConfirmPresenterTest {
         public void changeRequired(Integer resultCode, @Nullable Bundle data) {
 
         }
+
+        @Override
+        public void trackScreen() {
+            
+        }
     }
 
     public class ItemsMockedReviewable extends Reviewable {

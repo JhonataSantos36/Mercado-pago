@@ -5,6 +5,7 @@ import com.google.gson.reflect.TypeToken;
 
 import android.content.Context;
 
+import com.mercadopago.BuildConfig;
 import com.mercadopago.R;
 import com.mercadopago.callbacks.Callback;
 import com.mercadopago.constants.PaymentTypes;
@@ -30,6 +31,7 @@ import com.mercadopago.mvp.OnResourcesRetrievedCallback;
 import com.mercadopago.preferences.CheckoutPreference;
 import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.preferences.ServicePreference;
+import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.MercadoPagoUtil;
 import com.mercadopago.util.TextUtils;
@@ -49,6 +51,7 @@ public class CheckoutProviderImpl implements CheckoutProvider {
     private final Context context;
     private final MercadoPagoServices mercadoPagoServices;
     private final String publicKey;
+    private String siteId;
 
     public CheckoutProviderImpl(Context context, String publicKey, String privateKey, ServicePreference servicePreference) {
         if (TextUtils.isEmpty(publicKey) && TextUtils.isEmpty(privateKey)) {
@@ -68,6 +71,10 @@ public class CheckoutProviderImpl implements CheckoutProvider {
                 .build();
     }
 
+    public void setSiteId(String siteId) {
+        this.siteId = siteId;
+    }
+
     @Override
     public void getCheckoutPreference(String checkoutPreferenceId, final OnResourcesRetrievedCallback<CheckoutPreference> onResourcesRetrievedCallback) {
         mercadoPagoServices.getPreference(checkoutPreferenceId, new Callback<CheckoutPreference>() {
@@ -78,7 +85,7 @@ public class CheckoutProviderImpl implements CheckoutProvider {
 
             @Override
             public void failure(ApiException apiException) {
-                onResourcesRetrievedCallback.onFailure(new MercadoPagoError(apiException));
+                onResourcesRetrievedCallback.onFailure(new MercadoPagoError(apiException, ApiUtil.RequestOrigin.GET_PREFERENCE));
             }
         });
     }
@@ -93,7 +100,7 @@ public class CheckoutProviderImpl implements CheckoutProvider {
 
             @Override
             public void failure(ApiException apiException) {
-                callback.onFailure(new MercadoPagoError(apiException));
+                callback.onFailure(new MercadoPagoError(apiException, ApiUtil.RequestOrigin.GET_CAMPAIGNS));
             }
         });
     }
@@ -125,7 +132,7 @@ public class CheckoutProviderImpl implements CheckoutProvider {
 
             @Override
             public void failure(ApiException apiException) {
-                onPaymentMethodSearchRetrievedCallback.onFailure(new MercadoPagoError(apiException));
+                onPaymentMethodSearchRetrievedCallback.onFailure(new MercadoPagoError(apiException, ApiUtil.RequestOrigin.PAYMENT_METHOD_SEARCH));
             }
         });
     }
@@ -146,7 +153,7 @@ public class CheckoutProviderImpl implements CheckoutProvider {
 
             @Override
             public void failure(ApiException apiException) {
-                onCustomerRetrievedCallback.onFailure(new MercadoPagoError(apiException));
+                onCustomerRetrievedCallback.onFailure(new MercadoPagoError(apiException, ApiUtil.RequestOrigin.GET_CUSTOMER));
 
                 //Return payment method search to avoid failure due to merchant server
                 onPaymentMethodSearchRetrievedCallback.onSuccess(paymentMethodSearch);
@@ -166,7 +173,7 @@ public class CheckoutProviderImpl implements CheckoutProvider {
 
             @Override
             public void failure(ApiException apiException) {
-                onResourcesRetrievedCallback.onFailure(new MercadoPagoError(apiException));
+                onResourcesRetrievedCallback.onFailure(new MercadoPagoError(apiException, ApiUtil.RequestOrigin.GET_DIRECT_DISCOUNT));
             }
         });
     }
@@ -180,7 +187,7 @@ public class CheckoutProviderImpl implements CheckoutProvider {
 
             @Override
             public void failure(ApiException apiException) {
-                onResourcesRetrievedCallback.onFailure(new MercadoPagoError(apiException));
+                onResourcesRetrievedCallback.onFailure(new MercadoPagoError(apiException, ApiUtil.RequestOrigin.GET_DIRECT_DISCOUNT));
             }
         });
     }
@@ -225,7 +232,7 @@ public class CheckoutProviderImpl implements CheckoutProvider {
 
             @Override
             public void failure(ApiException apiException) {
-                onResourcesRetrievedCallback.onFailure(new MercadoPagoError(apiException));
+                onResourcesRetrievedCallback.onFailure(new MercadoPagoError(apiException, ApiUtil.RequestOrigin.CREATE_PAYMENT));
             }
         });
     }
@@ -240,7 +247,7 @@ public class CheckoutProviderImpl implements CheckoutProvider {
 
             @Override
             public void failure(ApiException apiException) {
-                onResourcesRetrievedCallback.onFailure(new MercadoPagoError(apiException));
+                onResourcesRetrievedCallback.onFailure(new MercadoPagoError(apiException, ApiUtil.RequestOrigin.CREATE_PAYMENT));
             }
         });
     }

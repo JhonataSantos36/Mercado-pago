@@ -14,6 +14,7 @@ import com.mercadopago.model.PaymentMethodSearch;
 import com.mercadopago.model.Site;
 import com.mercadopago.mvp.OnResourcesRetrievedCallback;
 import com.mercadopago.preferences.PaymentPreference;
+import com.mercadopago.util.ApiUtil;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -77,7 +78,7 @@ public class CardVaultProviderImpl implements CardVaultProvider {
 
             @Override
             public void failure(ApiException apiException) {
-                onResourcesRetrievedCallback.onFailure(new MercadoPagoError(apiException));
+                onResourcesRetrievedCallback.onFailure(new MercadoPagoError(apiException, ApiUtil.RequestOrigin.GET_INSTALLMENTS));
             }
         });
     }

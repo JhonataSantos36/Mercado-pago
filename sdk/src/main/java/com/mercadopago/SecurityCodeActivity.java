@@ -21,7 +21,9 @@ import com.mercadopago.controllers.CheckoutTimer;
 import com.mercadopago.core.MercadoPagoCheckout;
 import com.mercadopago.customviews.MPEditText;
 import com.mercadopago.customviews.MPTextView;
+import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.listeners.card.CardSecurityCodeTextWatcher;
+import com.mercadopago.model.ApiException;
 import com.mercadopago.model.Card;
 import com.mercadopago.model.CardInfo;
 import com.mercadopago.model.PaymentMethod;
@@ -29,14 +31,18 @@ import com.mercadopago.model.Token;
 import com.mercadopago.observers.TimerObserver;
 import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.presenters.SecurityCodePresenter;
+import com.mercadopago.providers.MPTrackingProvider;
 import com.mercadopago.providers.SecurityCodeProviderImpl;
+import com.mercadopago.px_tracking.model.ScreenViewEvent;
 import com.mercadopago.uicontrollers.card.CardRepresentationModes;
 import com.mercadopago.uicontrollers.card.CardView;
+import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.ColorsUtil;
 import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.MPCardUIUtils;
 import com.mercadopago.util.ScaleUtil;
+import com.mercadopago.util.TrackingUtil;
 import com.mercadopago.views.SecurityCodeActivityView;
 
 
@@ -124,6 +130,11 @@ public class SecurityCodeActivity extends MercadoPagoBaseActivity implements Sec
         }
 
         super.onRestoreInstanceState(savedInstanceState);
+    }
+
+    @Override
+    public void showApiExceptionError(ApiException exception, String requestOrigin) {
+        ApiUtil.showApiExceptionError(mActivity, exception, mMerchantPublicKey, requestOrigin);
     }
 
     private void setTheme() {
@@ -288,6 +299,17 @@ public class SecurityCodeActivity extends MercadoPagoBaseActivity implements Sec
 
     @Override
     public void trackScreen() {
+        MPTrackingProvider mpTrackingProvider = new MPTrackingProvider.Builder()
+                .setContext(this)
+                .setCheckoutVersion(BuildConfig.VERSION_NAME)
+                .setPublicKey(mMerchantPublicKey)
+                .build();
+
+        ScreenViewEvent event = new ScreenViewEvent.Builder()
+                .setScreenId(TrackingUtil.SCREEN_ID_CARD_FORM + mSecurityCodePresenter.getPaymentMethod().getPaymentTypeId() + TrackingUtil.CARD_SECURITY_CODE_VIEW)
+                .setScreenName(TrackingUtil.SCREEN_NAME_SECURITY_CODE)
+                .build();
+        mpTrackingProvider.addTrackEvent(event);
     }
 
     @Override
@@ -388,8 +410,12 @@ public class SecurityCodeActivity extends MercadoPagoBaseActivity implements Sec
     }
 
     @Override
-    public void showError(String message, String errorDetail) {
-        ErrorUtil.startErrorActivity(mActivity, message, errorDetail, false);
+    public void showError(MercadoPagoError error, String requestOrigin) {
+        if (error.isApiException()) {
+            showApiExceptionError(error.getApiException(), requestOrigin);
+        } else {
+            ErrorUtil.startErrorActivity(this, error, mMerchantPublicKey);
+        }
     }
 
     @Override

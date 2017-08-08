@@ -10,7 +10,7 @@ import com.mercadopago.exceptions.MercadoPagoError;
  */
 
 public interface OnResourcesRetrievedCallback<T> {
-    void  onSuccess(T t);
+    void onSuccess(T t);
     void onFailure(MercadoPagoError error);
 }
 

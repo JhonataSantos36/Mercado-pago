@@ -14,7 +14,7 @@ public interface PaymentTypesActivityView {
     void onValidStart();
     void onInvalidStart(String message);
     void initializePaymentTypes(List<PaymentType> paymentTypes);
-    void showApiExceptionError(ApiException exception);
+    void showApiExceptionError(ApiException exception, String requestOrigin);
     void showLoadingView();
     void stopLoadingView();
     void finishWithResult(PaymentType paymentType);

@@ -1,5 +1,6 @@
 package com.mercadopago.presenters;
 
+import com.mercadopago.BuildConfig;
 import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.constants.PaymentMethods;
 import com.mercadopago.controllers.CheckoutTimer;
@@ -94,6 +95,9 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
     private void startCheckoutForPreference() {
         try {
             validatePreference();
+
+            getView().initializeMPTracker();
+
             startCheckout();
         } catch (CheckoutPreferenceException e) {
             String message = getResourcesProvider().getCheckoutExceptionMessage(e);
