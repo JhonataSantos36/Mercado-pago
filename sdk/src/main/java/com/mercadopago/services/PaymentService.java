@@ -17,9 +17,9 @@ public interface PaymentService {
     MPCall<List<PaymentMethod>> getPaymentMethods(@Query("public_key") String publicKey, @Query("access_token") String privateKey);
 
     @GET("/v1/payment_methods/installments")
-    MPCall<List<Installment>> getInstallments(@Query("public_key") String publicKey, @Query("access_token") String privateKey, @Query("bin") String bin, @Query("amount") BigDecimal amount, @Query("issuer.id") Long issuerId, @Query("payment_method_id") String paymentMethodId, @Query("locale") String locale);
+    MPCall<List<Installment>> getInstallments(@Query("public_key") String publicKey, @Query("access_token") String privateKey, @Query("bin") String bin, @Query("amount") BigDecimal amount, @Query("issuer.id") Long issuerId, @Query("payment_method_id") String paymentMethodId, @Query("locale") String locale, @Query("processing_mode") String processingMode);
 
     @GET("/v1/payment_methods/card_issuers")
-    MPCall<List<Issuer>> getIssuers(@Query("public_key") String publicKey, @Query("access_token") String privateKey, @Query("payment_method_id") String paymentMethodId, @Query("bin") String bin);
+    MPCall<List<Issuer>> getIssuers(@Query("public_key") String publicKey, @Query("access_token") String privateKey, @Query("payment_method_id") String paymentMethodId, @Query("bin") String bin, @Query("processing_mode") String processingMode);
 
 }

@@ -1,6 +1,7 @@
 package com.mercadopago.preferences;
 
 import com.google.gson.annotations.SerializedName;
+import com.mercadopago.constants.ProcessingModes;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -37,6 +38,9 @@ public class ServicePreference {
     @SerializedName("get_merchant_discount_uri")
     private String getMerchantDiscountURI;
 
+    @SerializedName("processing_mode")
+    private String processingMode;
+
     private Map<String, String> getCustomerAdditionalInfo;
     private Map<String, Object> createPaymentAdditionalInfo;
     private Map<String, Object> createCheckoutPreferenceAdditionalInfo;
@@ -59,6 +63,7 @@ public class ServicePreference {
         this.createPaymentAdditionalInfo = builder.createPaymentAdditionalInfo;
         this.createCheckoutPreferenceAdditionalInfo = builder.createCheckoutPreferenceAdditionalInfo;
         this.getDiscountAdditionalInfo = builder.getDiscountAdditionalInfo;
+        this.processingMode = builder.processingMode;
     }
 
     public String getDefaultBaseURL() {
@@ -100,6 +105,8 @@ public class ServicePreference {
     public String getGetMerchantDiscountURI() {
         return getMerchantDiscountURI;
     }
+
+    public String getProcessingModeString() { return processingMode; }
 
     public Map<String, String> getGetCustomerAdditionalInfo() {
         if (this.getCustomerAdditionalInfo == null) {
@@ -154,6 +161,7 @@ public class ServicePreference {
         private String createPaymentURI;
         private String createCheckoutPreferenceURI;
         private String getMerchantDiscountURI;
+        private String processingMode = ProcessingModes.AGGREGATOR;
         private Map<String, String> getCustomerAdditionalInfo;
         private Map<String, Object> createPaymentAdditionalInfo;
         private Map<String, Object> createCheckoutPreferenceAdditionalInfo;
@@ -214,6 +222,22 @@ public class ServicePreference {
             this.gatewayBaseURL = gatewayBaseURL;
             return this;
         }
+
+        public Builder setAggregatorAsProcessingMode() {
+            this.processingMode = ProcessingModes.AGGREGATOR;
+            return this;
+        }
+
+        public Builder setGatewayAsProcessingMode() {
+            this.processingMode = ProcessingModes.GATEWAY;
+            return this;
+        }
+
+        //Turn on when hybrid is available
+        /*public Builder setHybridAsProcessingMode() {
+            this.processingMode = ProcessingModes.HYBRID;
+            return this;
+        }*/
 
         public ServicePreference build() {
             return new ServicePreference(this);
