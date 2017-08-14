@@ -125,6 +125,7 @@ public class MercadoPagoComponents {
             private boolean directDiscountEnabled;
             private boolean installmentsReviewEnabled;
             private boolean showAllSavedCardsEnabled;
+            private boolean escEnabled;
             private String merchantDiscountBaseUrl;
             private String merchantGetDiscountUri;
             private Map<String, String> discountAdditionalInfo;
@@ -209,6 +210,11 @@ public class MercadoPagoComponents {
                 return this;
             }
 
+            public PaymentVaultActivityBuilder setESCEnabled(boolean escEnabled) {
+                this.escEnabled = escEnabled;
+                return this;
+            }
+
             public PaymentVaultActivityBuilder setPayerEmail(String payerEmail) {
                 this.payerEmail = payerEmail;
                 return this;
@@ -279,6 +285,7 @@ public class MercadoPagoComponents {
                 paymentVaultIntent.putExtra("payerAccessToken", payerAccessToken);
                 paymentVaultIntent.putExtra("maxSavedCards", maxSavedCards);
                 paymentVaultIntent.putExtra("showAllSavedCardsEnabled", showAllSavedCardsEnabled);
+                paymentVaultIntent.putExtra("escEnabled", escEnabled);
 
                 //Discounts
                 paymentVaultIntent.putExtra("payerEmail", payerEmail);
@@ -542,6 +549,7 @@ public class MercadoPagoComponents {
             private Site site;
             private Boolean installmentsEnabled;
             private Boolean showBankDeals;
+            private Boolean escEnabled;
             private PaymentPreference paymentPreference;
             private DecorationPreference decorationPreference;
             private List<PaymentMethod> paymentMethodList;
@@ -608,6 +616,11 @@ public class MercadoPagoComponents {
 
             public CardVaultActivityBuilder setShowBankDeals(Boolean showBankDeals) {
                 this.showBankDeals = showBankDeals;
+                return this;
+            }
+
+            public CardVaultActivityBuilder setESCEnabled(Boolean escEnabled) {
+                this.escEnabled = escEnabled;
                 return this;
             }
 
@@ -695,6 +708,8 @@ public class MercadoPagoComponents {
                 cardVaultIntent.putExtra("directDiscountEnabled", directDiscountEnabled);
 
                 cardVaultIntent.putExtra("automaticSelection", automaticSelection);
+
+                cardVaultIntent.putExtra("escEnabled", escEnabled);
 
                 activity.startActivityForResult(cardVaultIntent, CARD_VAULT_REQUEST_CODE);
             }
@@ -1135,6 +1150,8 @@ public class MercadoPagoComponents {
             private DecorationPreference decorationPreference;
             private Card card;
             private Token token;
+            private boolean escEnabled;
+            private PaymentRecovery paymentRecovery;
 
             public SecurityCodeActivityBuilder setActivity(Activity activity) {
                 this.activity = activity;
@@ -1158,6 +1175,16 @@ public class MercadoPagoComponents {
 
             public SecurityCodeActivityBuilder setPayerAccessToken(String payerAccessToken) {
                 this.payerAccessToken = payerAccessToken;
+                return this;
+            }
+
+            public SecurityCodeActivityBuilder setESCEnabled(boolean escEnabled) {
+                this.escEnabled = escEnabled;
+                return this;
+            }
+
+            public SecurityCodeActivityBuilder setPaymentRecovery(PaymentRecovery paymentRecovery) {
+                this.paymentRecovery = paymentRecovery;
                 return this;
             }
 
@@ -1193,8 +1220,8 @@ public class MercadoPagoComponents {
                     throw new IllegalStateException("card info is null");
                 if (this.paymentMethod == null)
                     throw new IllegalStateException("payment method is null");
-                if (this.card != null && this.token != null)
-                    throw new IllegalStateException("can't start with card and token at the same time");
+                if (this.card != null && this.token != null && this.paymentRecovery == null)
+                    throw new IllegalStateException("can't start with card and token at the same time if it's not recoverable");
                 if (this.card == null && this.token == null)
                     throw new IllegalStateException("card and token can't both be null");
 
@@ -1211,6 +1238,8 @@ public class MercadoPagoComponents {
                 intent.putExtra("siteId", siteId);
                 intent.putExtra("decorationPreference", JsonUtil.getInstance().toJson(decorationPreference));
                 intent.putExtra("cardInfo", JsonUtil.getInstance().toJson(cardInformation));
+                intent.putExtra("paymentRecovery", JsonUtil.getInstance().toJson(paymentRecovery));
+                intent.putExtra("escEnabled", escEnabled);
                 activity.startActivityForResult(intent, SECURITY_CODE_REQUEST_CODE);
             }
         }

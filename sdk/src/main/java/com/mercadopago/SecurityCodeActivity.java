@@ -27,6 +27,7 @@ import com.mercadopago.model.ApiException;
 import com.mercadopago.model.Card;
 import com.mercadopago.model.CardInfo;
 import com.mercadopago.model.PaymentMethod;
+import com.mercadopago.model.PaymentRecovery;
 import com.mercadopago.model.Token;
 import com.mercadopago.observers.TimerObserver;
 import com.mercadopago.preferences.DecorationPreference;
@@ -56,6 +57,7 @@ public class SecurityCodeActivity extends MercadoPagoBaseActivity implements Sec
     private static final String DECORATION_PREFERENCE_BUNDLE = "mDecorationPreference";
     private static final String PUBLIC_KEY_BUNDLE = "mMerchantPublicKey";
     private static final String PRIVATE_KEY_BUNDLE = "mPrivateKey";
+    private static final String ESC_ENABLED_BUNDLE = "mEscEnabled";
 
     protected SecurityCodePresenter mSecurityCodePresenter;
     protected Activity mActivity;
@@ -65,6 +67,7 @@ public class SecurityCodeActivity extends MercadoPagoBaseActivity implements Sec
     //Parameters
     protected String mMerchantPublicKey;
     protected String mPrivateKey;
+    protected boolean mEscEnabled;
 
     //View controls
     protected ProgressBar mProgressBar;
@@ -110,6 +113,7 @@ public class SecurityCodeActivity extends MercadoPagoBaseActivity implements Sec
         outState.putString(PRESENTER_BUNDLE, JsonUtil.getInstance().toJson(mSecurityCodePresenter));
         outState.putString(PUBLIC_KEY_BUNDLE, mMerchantPublicKey);
         outState.putString(PRIVATE_KEY_BUNDLE, mPrivateKey);
+        outState.putBoolean(ESC_ENABLED_BUNDLE, mEscEnabled);
 
         super.onSaveInstanceState(outState);
     }
@@ -122,6 +126,8 @@ public class SecurityCodeActivity extends MercadoPagoBaseActivity implements Sec
             mDecorationPreference = JsonUtil.getInstance().fromJson(savedInstanceState.getString(DECORATION_PREFERENCE_BUNDLE), DecorationPreference.class);
             mMerchantPublicKey = savedInstanceState.getString(PUBLIC_KEY_BUNDLE);
             mPrivateKey = savedInstanceState.getString(PRIVATE_KEY_BUNDLE);
+            mEscEnabled = savedInstanceState.getBoolean(ESC_ENABLED_BUNDLE);
+
             configurePresenter();
             setTheme();
             analyzeLowRes();
@@ -152,7 +158,7 @@ public class SecurityCodeActivity extends MercadoPagoBaseActivity implements Sec
     private void configurePresenter() {
         if (mSecurityCodePresenter != null) {
             mSecurityCodePresenter.attachView(this);
-            SecurityCodeProviderImpl provider = new SecurityCodeProviderImpl(this, mMerchantPublicKey, mPrivateKey);
+            SecurityCodeProviderImpl provider = new SecurityCodeProviderImpl(this, mMerchantPublicKey, mPrivateKey, mEscEnabled);
             mSecurityCodePresenter.attachResourcesProvider(provider);
         }
     }
@@ -165,16 +171,19 @@ public class SecurityCodeActivity extends MercadoPagoBaseActivity implements Sec
         mMerchantPublicKey = getIntent().getStringExtra("merchantPublicKey");
         mPrivateKey = getIntent().getStringExtra("payerAccessToken");
         mDecorationPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("decorationPreference"), DecorationPreference.class);
+        mEscEnabled = getIntent().getBooleanExtra("escEnabled", false);
 
         CardInfo cardInfo = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("cardInfo"), CardInfo.class);
         Card card = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("card"), Card.class);
         Token token = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("token"), Token.class);
         PaymentMethod paymentMethod = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("paymentMethod"), PaymentMethod.class);
+        PaymentRecovery paymentRecovery = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("paymentRecovery"), PaymentRecovery.class);
 
         mSecurityCodePresenter.setToken(token);
         mSecurityCodePresenter.setCard(card);
         mSecurityCodePresenter.setPaymentMethod(paymentMethod);
         mSecurityCodePresenter.setCardInfo(cardInfo);
+        mSecurityCodePresenter.setPaymentRecovery(paymentRecovery);
     }
 
     private void analyzeLowRes() {
@@ -221,7 +230,6 @@ public class SecurityCodeActivity extends MercadoPagoBaseActivity implements Sec
     }
 
     private void hideKeyboard() {
-        // Check if no view has focus:
         View view = this.getCurrentFocus();
         if (view != null) {
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -472,4 +480,5 @@ public class SecurityCodeActivity extends MercadoPagoBaseActivity implements Sec
         setResult(MercadoPagoCheckout.TIMER_FINISHED_RESULT_CODE);
         this.finish();
     }
+
 }

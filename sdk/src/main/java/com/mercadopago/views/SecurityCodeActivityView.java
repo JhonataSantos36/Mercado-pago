@@ -34,4 +34,5 @@ public interface SecurityCodeActivityView extends MvpView {
     void showBackSecurityCodeCardView();
 
     void showFrontSecurityCodeCardView();
+
 }

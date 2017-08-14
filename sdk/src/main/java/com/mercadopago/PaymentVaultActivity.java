@@ -87,6 +87,7 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
     protected Token mToken;
     protected Issuer mSelectedIssuer;
     protected PayerCost mSelectedPayerCost;
+    protected Card mSelectedCard;
     protected Context mContext;
 
     protected Boolean mInstallmentsEnabled;
@@ -99,6 +100,7 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
     protected CollapsingToolbarLayout mAppBarLayout;
     protected MPTextView mTimerTextView;
     protected Boolean mShowBankDeals;
+    protected Boolean mEscEnabled;
     protected FrameLayout mDiscountFrameLayout;
 
     protected View mContentLayout;
@@ -177,6 +179,7 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
         mPaymentVaultPresenter.setMaxSavedCards(this.getIntent().getIntExtra("maxSavedCards", FlowPreference.DEFAULT_MAX_SAVED_CARDS_TO_SHOW));
         mPaymentVaultPresenter.setShowAllSavedCardsEnabled(this.getIntent().getBooleanExtra("showAllSavedCardsEnabled", false));
         mShowBankDeals = getIntent().getBooleanExtra("showBankDeals", true);
+        mEscEnabled = getIntent().getBooleanExtra("escEnabled", false);
 
         if (getIntent().getStringExtra("paymentPreference") != null) {
             mPaymentVaultPresenter.setPaymentPreference(JsonUtil.getInstance().fromJson(getIntent().getStringExtra("paymentPreference"), PaymentPreference.class));
@@ -402,6 +405,7 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
                 .setDirectDiscountEnabled(mPaymentVaultPresenter.getDirectDiscountEnabled())
                 .setInstallmentsReviewEnabled(mPaymentVaultPresenter.getInstallmentsReviewEnabled())
                 .setShowBankDeals(mShowBankDeals)
+                .setESCEnabled(mEscEnabled)
                 .startActivity();
         animatePaymentMethodSelection();
     }
@@ -481,6 +485,7 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
             mToken = JsonUtil.getInstance().fromJson(data.getStringExtra("token"), Token.class);
             mSelectedIssuer = JsonUtil.getInstance().fromJson(data.getStringExtra("issuer"), Issuer.class);
             mSelectedPayerCost = JsonUtil.getInstance().fromJson(data.getStringExtra("payerCost"), PayerCost.class);
+            mSelectedCard = JsonUtil.getInstance().fromJson(data.getStringExtra("card"), Card.class);
 
             Discount discount = JsonUtil.getInstance().fromJson(data.getStringExtra("discount"), Discount.class);
             if (discount != null) {
@@ -556,6 +561,7 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
         returnIntent.putExtra("payerCost", JsonUtil.getInstance().toJson(mSelectedPayerCost));
         returnIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(mSelectedPaymentMethod));
         returnIntent.putExtra("discount", JsonUtil.getInstance().toJson(mPaymentVaultPresenter.getDiscount()));
+        returnIntent.putExtra("card", JsonUtil.getInstance().toJson(mSelectedCard));
 
         this.setResult(Activity.RESULT_OK, returnIntent);
         this.finish();
@@ -608,6 +614,7 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
                 .setDirectDiscountEnabled(mPaymentVaultPresenter.getDirectDiscountEnabled())
                 .setInstallmentsReviewEnabled(mPaymentVaultPresenter.getInstallmentsReviewEnabled())
                 .setShowBankDeals(mShowBankDeals)
+                .setESCEnabled(mEscEnabled)
                 .setAcceptedPaymentMethods(mPaymentVaultPresenter.getPaymentMethodSearch().getPaymentMethods())
                 .startActivity();
         animatePaymentMethodSelection();

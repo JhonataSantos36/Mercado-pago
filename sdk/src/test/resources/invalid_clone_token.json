@@ -1,0 +1,12 @@
+{
+  "message": "Invalid clone token",
+  "error": "bad_request",
+  "status": 400,
+  "cause": [
+    {
+      "code": "111",
+      "description": "Invalid clone token",
+      "data": null
+    }
+  ]
+}

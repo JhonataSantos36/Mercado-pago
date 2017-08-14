@@ -11,10 +11,14 @@ import com.mercadopago.model.Card;
 import com.mercadopago.model.CardToken;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.SavedCardToken;
+import com.mercadopago.model.SavedESCCardToken;
 import com.mercadopago.model.SecurityCodeIntent;
 import com.mercadopago.model.Token;
 import com.mercadopago.mvp.OnResourcesRetrievedCallback;
+import com.mercadopago.util.MercadoPagoESC;
+import com.mercadopago.util.MercadoPagoESCImpl;
 import com.mercadopago.util.ApiUtil;
+
 
 /**
  * Created by marlanti on 7/18/17.
@@ -24,8 +28,14 @@ public class SecurityCodeProviderImpl implements SecurityCodeProvider {
 
     private final Context mContext;
     private final MercadoPagoServices mMercadoPagoServices;
+    private MercadoPagoESC mercadoPagoESC;
 
-    public SecurityCodeProviderImpl(Context context, String publicKey, String privateKey) {
+    private static final String TOKEN_AND_CARD_NOT_SET_MESSAGE = "token and card can't both be null";
+    private static final String TOKEN_AND_CARD_WITHOUT_RECOVERY_SET_MESSAGE = "can't set token and card at the same time without payment recovery";
+    private static final String PAYMENT_METHOD_NOT_SET = "payment method not set";
+    private static final String CARD_INFO_NOT_SET = "card info can't be null";
+
+    public SecurityCodeProviderImpl(Context context, String publicKey, String privateKey, boolean escEnabled) {
         this.mContext = context;
 
         mMercadoPagoServices = new MercadoPagoServices.Builder()
@@ -33,14 +43,39 @@ public class SecurityCodeProviderImpl implements SecurityCodeProvider {
                 .setPublicKey(publicKey)
                 .setPrivateKey(privateKey)
                 .build();
+
+        this.mercadoPagoESC = new MercadoPagoESCImpl(context, escEnabled);
     }
 
+    @Override
+    public boolean isESCEnabled() {
+        return mercadoPagoESC.isESCEnabled();
+    }
 
     @Override
     public String getStandardErrorMessageGotten() {
         return mContext.getString(R.string.mpsdk_standard_error_message);
     }
 
+    @Override
+    public String getCardInfoNotSetMessage() {
+        return CARD_INFO_NOT_SET;
+    }
+
+    @Override
+    public String getPaymentMethodNotSetMessage() {
+        return PAYMENT_METHOD_NOT_SET;
+    }
+
+    @Override
+    public String getTokenAndCardWithoutRecoveryCantBeBothSetMessage() {
+        return TOKEN_AND_CARD_WITHOUT_RECOVERY_SET_MESSAGE;
+    }
+
+    @Override
+    public String getTokenAndCardNotSetMessage() {
+        return TOKEN_AND_CARD_NOT_SET_MESSAGE;
+    }
 
     @Override
     public void cloneToken(final String tokenId, final OnResourcesRetrievedCallback<Token> onResourcesRetrievedCallback) {
@@ -91,6 +126,22 @@ public class SecurityCodeProviderImpl implements SecurityCodeProvider {
             }
         });
 
+    }
+
+    @Override
+    public void createToken(SavedESCCardToken savedESCCardToken, final OnResourcesRetrievedCallback<Token> onResourcesRetrievedCallback) {
+
+        mMercadoPagoServices.createToken(savedESCCardToken, new Callback<Token>() {
+            @Override
+            public void success(Token token) {
+                onResourcesRetrievedCallback.onSuccess(token);
+            }
+
+            @Override
+            public void failure(ApiException apiException) {
+                onResourcesRetrievedCallback.onFailure(new MercadoPagoError(apiException, ApiUtil.RequestOrigin.CREATE_TOKEN));
+            }
+        });
     }
 
     @Override

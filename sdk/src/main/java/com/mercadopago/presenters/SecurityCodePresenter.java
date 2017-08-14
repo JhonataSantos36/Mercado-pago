@@ -6,7 +6,9 @@ import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.model.Card;
 import com.mercadopago.model.CardInfo;
 import com.mercadopago.model.PaymentMethod;
+import com.mercadopago.model.PaymentRecovery;
 import com.mercadopago.model.SavedCardToken;
+import com.mercadopago.model.SavedESCCardToken;
 import com.mercadopago.model.SecurityCode;
 import com.mercadopago.model.Setting;
 import com.mercadopago.model.Token;
@@ -18,18 +20,14 @@ import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.TextUtils;
 import com.mercadopago.views.SecurityCodeActivityView;
 
-
 /**
  * Created by vaserber on 10/26/16.
  */
 
 public class SecurityCodePresenter extends MvpPresenter<SecurityCodeActivityView, SecurityCodeProvider> {
 
-    public static final int CARD_DEFAULT_SECURITY_CODE_LENGTH = 4;
-    public static final int CARD_NUMBER_MAX_LENGTH = 16;
-    private static final String TOKEN_AND_CARD_NOT_SET_MESSAGE = "token and card can't both be null";
-    private static final String TOKEN_AND_CARD_SET_MESSAGE = "can't set token and card at the same time";
-    private static final String PAYMENT_METHOD_NOT_SET = "payment method not set";
+    public static final Integer CARD_DEFAULT_SECURITY_CODE_LENGTH = 4;
+    public static final Integer CARD_NUMBER_MAX_LENGTH = 16;
 
     private FailureRecovery mFailureRecovery;
 
@@ -44,11 +42,12 @@ public class SecurityCodePresenter extends MvpPresenter<SecurityCodeActivityView
     protected CardInfo mCardInfo;
     protected Card mCard;
     protected Token mToken;
+    protected PaymentRecovery mPaymentRecovery;
+
 
     public void setPaymentMethod(PaymentMethod paymentMethod) {
         this.mPaymentMethod = paymentMethod;
     }
-
 
     public void setToken(Token token) {
         this.mToken = token;
@@ -60,6 +59,10 @@ public class SecurityCodePresenter extends MvpPresenter<SecurityCodeActivityView
 
     public void setCardInfo(CardInfo cardInfo) {
         this.mCardInfo = cardInfo;
+    }
+
+    public void setPaymentRecovery(PaymentRecovery paymentRecovery) {
+        this.mPaymentRecovery = paymentRecovery;
     }
 
     public CardInfo getCardInfo() {
@@ -101,15 +104,19 @@ public class SecurityCodePresenter extends MvpPresenter<SecurityCodeActivityView
 
     public void validate() throws IllegalStateException {
         if (mToken == null && mCard == null) {
-            throw new IllegalStateException(TOKEN_AND_CARD_NOT_SET_MESSAGE);
+            throw new IllegalStateException(getResourcesProvider().getTokenAndCardNotSetMessage());
         }
 
-        if (mToken != null && mCard != null) {
-            throw new IllegalStateException(TOKEN_AND_CARD_SET_MESSAGE);
+        if (mToken != null && mCard != null && mPaymentRecovery == null) {
+            throw new IllegalStateException(getResourcesProvider().getTokenAndCardWithoutRecoveryCantBeBothSetMessage());
         }
 
         if (mPaymentMethod == null) {
-            throw new IllegalStateException(PAYMENT_METHOD_NOT_SET);
+            throw new IllegalStateException(getResourcesProvider().getPaymentMethodNotSetMessage());
+        }
+
+        if (mCardInfo == null) {
+            throw new IllegalStateException(getResourcesProvider().getCardInfoNotSetMessage());
         }
     }
 
@@ -160,16 +167,53 @@ public class SecurityCodePresenter extends MvpPresenter<SecurityCodeActivityView
 
     public void validateSecurityCodeInput() {
         try {
-            if (mToken != null && validateSecurityCodeFromToken()) {
+            if (hasToCloneToken() && validateSecurityCodeFromToken()) {
                 cloneToken();
-            } else if (mCard != null) {
-                SavedCardToken savedCardToken = new SavedCardToken(mCard.getId(), mSecurityCode);
-                getResourcesProvider().validateSecurityCodeFromToken(savedCardToken, mCard);
-                createToken(savedCardToken);
+            } else if (isSavedCardWithESC() || hasToRecoverTokenFromESC()) {
+                createTokenWithESC();
+            } else if (isSavedCardWithoutESC()) {
+                createTokenWithoutESC();
             }
         } catch (Exception e) {
             getView().setErrorView(e.getMessage());
         }
+    }
+
+    private void createTokenWithESC() throws Exception {
+        SavedESCCardToken savedESCCardToken;
+        if (mCard != null) {
+            savedESCCardToken = new SavedESCCardToken(mCard.getId(), mSecurityCode, true, "");
+            getResourcesProvider().validateSecurityCodeFromToken(savedESCCardToken, mCard);
+            createESCToken(savedESCCardToken);
+        } else if (mToken != null) {
+            savedESCCardToken = new SavedESCCardToken(mToken.getCardId(), mSecurityCode, true, "");
+            validateSecurityCodeFromToken();
+            createESCToken(savedESCCardToken);
+        }
+    }
+
+    private void createTokenWithoutESC() throws Exception {
+        SavedCardToken savedCardToken = new SavedCardToken(mCard.getId(), mSecurityCode);
+        getResourcesProvider().validateSecurityCodeFromToken(savedCardToken, mCard);
+        createToken(savedCardToken);
+    }
+
+    private boolean hasToCloneToken() {
+        return mPaymentRecovery != null && mPaymentRecovery.isStatusDetailCallForAuthorize() && mToken != null;
+    }
+
+    private boolean hasToRecoverTokenFromESC() {
+        return mPaymentRecovery != null && mPaymentRecovery.isStatusDetailInvalidESC() &&
+                ((mToken != null && mToken.getCardId() != null && !mToken.getCardId().isEmpty()) ||
+                        (mCard != null && mCard.getId() != null && !mCard.getId().isEmpty()));
+    }
+
+    private boolean isSavedCardWithESC() {
+        return mCard != null && getResourcesProvider().isESCEnabled();
+    }
+
+    private boolean isSavedCardWithoutESC() {
+        return mCard != null && !getResourcesProvider().isESCEnabled();
     }
 
     private boolean validateSecurityCodeFromToken() {
@@ -214,14 +258,12 @@ public class SecurityCodePresenter extends MvpPresenter<SecurityCodeActivityView
 
     }
 
-    private void putSecurityCode() {
+    public void putSecurityCode() {
 
         getResourcesProvider().putSecurityCode(mSecurityCode, mToken.getId(), new OnResourcesRetrievedCallback<Token>() {
             @Override
             public void onSuccess(Token token) {
-                mToken = token;
-                mToken.setLastFourDigits(mCardInfo.getLastFourDigits());
-                getView().finishWithResult();
+                resolveTokenCreation(token);
             }
 
             @Override
@@ -246,9 +288,7 @@ public class SecurityCodePresenter extends MvpPresenter<SecurityCodeActivityView
         getResourcesProvider().createToken(savedCardToken, new OnResourcesRetrievedCallback<Token>() {
             @Override
             public void onSuccess(Token token) {
-                mToken = token;
-                mToken.setLastFourDigits(mCardInfo.getLastFourDigits());
-                getView().finishWithResult();
+                resolveTokenCreation(token);
             }
 
             @Override
@@ -267,6 +307,38 @@ public class SecurityCodePresenter extends MvpPresenter<SecurityCodeActivityView
 
         });
     }
+
+    private void createESCToken(final SavedESCCardToken savedESCCardToken) {
+        getView().showLoadingView();
+
+        getResourcesProvider().createToken(savedESCCardToken, new OnResourcesRetrievedCallback<Token>() {
+            @Override
+            public void onSuccess(Token token) {
+                resolveTokenCreation(token);
+            }
+
+            @Override
+            public void onFailure(MercadoPagoError error) {
+                setFailureRecovery(new FailureRecovery() {
+                    @Override
+                    public void recover() {
+                        createESCToken(savedESCCardToken);
+                    }
+                });
+                getView().stopLoadingView();
+                getView().showError(error, ApiUtil.RequestOrigin.CREATE_TOKEN);
+            }
+        });
+    }
+
+    private void resolveTokenCreation(Token token) {
+        mToken = token;
+        if (mCardInfo != null) {
+            mToken.setLastFourDigits(mCardInfo.getLastFourDigits());
+        }
+        getView().finishWithResult();
+    }
+
 
     public void setSecurityCodeCardType() {
         if (getSecurityCodeLocation().equals(CardView.CARD_SIDE_BACK)) {

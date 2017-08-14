@@ -33,6 +33,8 @@ import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.preferences.ServicePreference;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.JsonUtil;
+import com.mercadopago.util.MercadoPagoESC;
+import com.mercadopago.util.MercadoPagoESCImpl;
 import com.mercadopago.util.MercadoPagoUtil;
 import com.mercadopago.util.TextUtils;
 
@@ -51,9 +53,10 @@ public class CheckoutProviderImpl implements CheckoutProvider {
     private final Context context;
     private final MercadoPagoServices mercadoPagoServices;
     private final String publicKey;
+    private MercadoPagoESC mercadoPagoESC;
     private String siteId;
 
-    public CheckoutProviderImpl(Context context, String publicKey, String privateKey, ServicePreference servicePreference) {
+    public CheckoutProviderImpl(Context context, String publicKey, String privateKey, ServicePreference servicePreference, boolean escEnabled) {
         if (TextUtils.isEmpty(publicKey) && TextUtils.isEmpty(privateKey)) {
             throw new IllegalStateException("Credentials not set");
         } else if (context == null) {
@@ -69,6 +72,8 @@ public class CheckoutProviderImpl implements CheckoutProvider {
                 .setPrivateKey(privateKey)
                 .setServicePreference(servicePreference)
                 .build();
+
+        this.mercadoPagoESC = new MercadoPagoESCImpl(context, escEnabled);
     }
 
     public void setSiteId(String siteId) {
@@ -298,5 +303,15 @@ public class CheckoutProviderImpl implements CheckoutProvider {
             unsupportedTypesForSite.add(PaymentTypes.BANK_TRANSFER);
         }
         return unsupportedTypesForSite;
+    }
+
+    @Override
+    public void deleteESC(String cardId) {
+        mercadoPagoESC.deleteESC(cardId);
+    }
+
+    @Override
+    public boolean saveESC(String cardId, String value) {
+        return mercadoPagoESC.saveESC(cardId, value);
     }
 }

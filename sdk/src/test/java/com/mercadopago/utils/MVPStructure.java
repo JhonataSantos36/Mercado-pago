@@ -1,9 +1,5 @@
 package com.mercadopago.utils;
 
-import com.mercadopago.mvp.MvpPresenter;
-import com.mercadopago.mvp.MvpView;
-import com.mercadopago.mvp.ResourcesProvider;
-
 import java.util.List;
 
 /**

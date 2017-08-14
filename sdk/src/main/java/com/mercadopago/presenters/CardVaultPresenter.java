@@ -3,14 +3,17 @@ package com.mercadopago.presenters;
 import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.controllers.PaymentMethodGuessingController;
 import com.mercadopago.exceptions.MercadoPagoError;
+import com.mercadopago.model.ApiException;
 import com.mercadopago.model.Card;
 import com.mercadopago.model.CardInfo;
+import com.mercadopago.model.Cause;
 import com.mercadopago.model.Discount;
 import com.mercadopago.model.Installment;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentRecovery;
+import com.mercadopago.model.SavedESCCardToken;
 import com.mercadopago.model.Site;
 import com.mercadopago.model.Token;
 import com.mercadopago.mvp.MvpPresenter;
@@ -67,6 +70,10 @@ public class CardVaultPresenter extends MvpPresenter<CardVaultView, CardVaultPro
     protected String mPayerEmail;
     protected List<PayerCost> mPayerCostsList;
     protected List<Issuer> mIssuersList;
+
+    //Security Code
+    protected String mESC;
+    protected SavedESCCardToken mESCCardToken;
 
     public CardVaultPresenter() {
         super();
@@ -174,6 +181,14 @@ public class CardVaultPresenter extends MvpPresenter<CardVaultView, CardVaultPro
 
     public Card getCard() {
         return mCard;
+    }
+
+    public String getESC() {
+        return mESC;
+    }
+
+    public void setESC(String esc) {
+        this.mESC = esc;
     }
 
     public void setCardInfo(CardInfo cardInfo) {
@@ -418,9 +433,7 @@ public class CardVaultPresenter extends MvpPresenter<CardVaultView, CardVaultPro
     }
 
     public void resolveInstallmentsRequest(PayerCost payerCost, Discount discount) {
-        mInstallmentsListShown = true;
-        setPayerCost(payerCost);
-        setDiscount(discount);
+        setSelectedInstallments(payerCost, discount);
 
         if (savedCardAvailable()) {
             if (mInstallmentsListShown) {
@@ -431,6 +444,12 @@ public class CardVaultPresenter extends MvpPresenter<CardVaultView, CardVaultPro
         } else {
             getView().finishWithResult();
         }
+    }
+
+    private void setSelectedInstallments(PayerCost payerCost, Discount discount) {
+        mInstallmentsListShown = true;
+        setPayerCost(payerCost);
+        setDiscount(discount);
     }
 
     public void resolveSecurityCodeRequest(Token token) {
@@ -445,20 +464,20 @@ public class CardVaultPresenter extends MvpPresenter<CardVaultView, CardVaultPro
     public void resolveNewCardRequest(PaymentMethod paymentMethod, Token token, Boolean directDiscountEnabled, PayerCost payerCost,
                                       Issuer issuer, List<PayerCost> payerCosts, List<Issuer> issuers, Discount discount) {
 
-            setPaymentMethod(paymentMethod);
-            setToken(token);
-            setCardInfo(new CardInfo(token));
-            setDirectDiscountEnabled(directDiscountEnabled);
-            setPayerCost(payerCost);
-            setIssuer(issuer);
-            setPayerCostsList(payerCosts);
-            setIssuersList(issuers);
+        setPaymentMethod(paymentMethod);
+        setToken(token);
+        setCardInfo(new CardInfo(token));
+        setDirectDiscountEnabled(directDiscountEnabled);
+        setPayerCost(payerCost);
+        setIssuer(issuer);
+        setPayerCostsList(payerCosts);
+        setIssuersList(issuers);
 
-            if (discount != null) {
-                setDiscount(discount);
-            }
+        if (discount != null) {
+            setDiscount(discount);
+        }
 
-            checkStartIssuersActivity();
+        checkStartIssuersActivity();
     }
 
     public void onResultCancel() {
@@ -520,5 +539,80 @@ public class CardVaultPresenter extends MvpPresenter<CardVaultView, CardVaultPro
 
     public List<Issuer> getIssuersList() {
         return mIssuersList;
+    }
+
+    public void checkSecurityCodeFlow() {
+        if (savedCardAvailable() && isESCSaved()) {
+            createESCToken();
+        } else {
+            getView().startSecurityCodeActivity();
+        }
+    }
+
+    private boolean isESCSaved() {
+        if (!isESCEmpty()) {
+            return true;
+        } else {
+            setESC(getResourcesProvider().findESCSaved(mCard.getId()));
+            return !isESCEmpty();
+        }
+    }
+
+    private boolean isESCEmpty() {
+        return mESC == null || mESC.isEmpty();
+    }
+
+    private void createESCToken() {
+        if (savedCardAvailable() && !isESCEmpty()) {
+
+            mESCCardToken = new SavedESCCardToken(mCard.getId(), "", true, mESC);
+
+            getResourcesProvider().createESCTokenAsync(mESCCardToken, new OnResourcesRetrievedCallback<Token>() {
+                @Override
+                public void onSuccess(Token token) {
+                    mToken = token;
+                    mToken.setLastFourDigits(mCard.getLastFourDigits());
+                    getView().finishWithResult();
+                }
+
+                @Override
+                public void onFailure(MercadoPagoError error) {
+
+                    if (error.isApiException() && error.getApiException().getStatus().equals(ApiUtil.StatusCodes.BAD_REQUEST)) {
+                        List<Cause> causes = error.getApiException().getCause();
+                        if (causes != null && !causes.isEmpty()) {
+                            Cause cause = causes.get(0);
+                            if (ApiException.ErrorCodes.INVALID_ESC.equals(cause.getCode()) ||
+                                    ApiException.ErrorCodes.INVALID_FINGERPRINT.equals(cause.getCode())) {
+
+                                getResourcesProvider().deleteESC(mESCCardToken.getCardId());
+
+                                mESC = null;
+                                if (viewAttached()) {
+                                    getView().startSecurityCodeActivity();
+                                }
+                            } else {
+                                recoverCreateESCToken(error);
+                            }
+                        }
+                    } else {
+                        recoverCreateESCToken(error);
+                    }
+                }
+            });
+        }
+    }
+
+    private void recoverCreateESCToken(MercadoPagoError error) {
+        if (viewAttached()) {
+            getView().showError(error, ApiUtil.RequestOrigin.CREATE_TOKEN);
+
+            setFailureRecovery(new FailureRecovery() {
+                @Override
+                public void recover() {
+                    createESCToken();
+                }
+            });
+        }
     }
 }

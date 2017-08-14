@@ -21,6 +21,7 @@ import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentMethodSearch;
 import com.mercadopago.model.Instructions;
 import com.mercadopago.model.SavedCardToken;
+import com.mercadopago.model.SavedESCCardToken;
 import com.mercadopago.model.SecurityCodeIntent;
 import com.mercadopago.model.Site;
 import com.mercadopago.model.Token;
@@ -121,6 +122,17 @@ public class MercadoPagoServices {
                 cardToken.setDevice(mContext);
                 GatewayService service = getGatewayRetrofit().create(GatewayService.class);
                 service.getToken(mPublicKey, mPrivateKey, cardToken).enqueue(callback);
+            }
+        }).start();
+    }
+
+    public void createToken(final SavedESCCardToken savedESCCardToken, final Callback<Token> callback) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                savedESCCardToken.setDevice(mContext);
+                GatewayService service = getGatewayRetrofit().create(GatewayService.class);
+                service.getToken(mPublicKey, mPrivateKey, savedESCCardToken).enqueue(callback);
             }
         }).start();
     }

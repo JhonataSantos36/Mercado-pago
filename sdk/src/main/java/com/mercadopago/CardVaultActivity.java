@@ -55,6 +55,7 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultVie
 
     //View controls
     private Boolean mShowBankDeals;
+    private Boolean mEscEnabled;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -85,7 +86,7 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultVie
 
     private void configurePresenter() {
         mCardVaultPresenter.attachView(this);
-        mCardVaultPresenter.attachResourcesProvider(new CardVaultProviderImpl(this, mPublicKey, mPrivateKey));
+        mCardVaultPresenter.attachResourcesProvider(new CardVaultProviderImpl(this, mPublicKey, mPrivateKey, mEscEnabled));
     }
 
     private void setScreenOrientation() {
@@ -150,6 +151,7 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultVie
         mCardVaultPresenter.setInstallmentsReviewEnabled(savedInstanceState.getBoolean("installmentsReviewEnabled", false));
         mCardVaultPresenter.setInstallmentsListShown(savedInstanceState.getBoolean("installmentsListShown", false));
         mCardVaultPresenter.setIssuersListShown(savedInstanceState.getBoolean("issuersListShown", false));
+        mEscEnabled = savedInstanceState.getBoolean("escEnabled", false);
 
         mShowBankDeals = savedInstanceState.getBoolean("showBankDeals", true);
         mDecorationPreference = JsonUtil.getInstance().fromJson(savedInstanceState.getString("decorationPreference"), DecorationPreference.class);
@@ -161,6 +163,7 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultVie
         Boolean installmentsEnabled = getIntent().getBooleanExtra("installmentsEnabled", true);
         Boolean directDiscountEnabled = getIntent().getBooleanExtra("directDiscountEnabled", true);
         Boolean installmentsReviewEnabled = getIntent().getBooleanExtra("installmentsReviewEnabled", true);
+        mEscEnabled = getIntent().getBooleanExtra("escEnabled", false);
 
         mPublicKey = getIntent().getStringExtra("merchantPublicKey");
         mPrivateKey = getIntent().getStringExtra("payerAccessToken");
@@ -238,17 +241,18 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultVie
 
     @Override
     public void askForSecurityCodeFromInstallments() {
-        startSecurityCodeActivity();
+        mCardVaultPresenter.checkSecurityCodeFlow();
         animateTransitionSlideInSlideOut();
     }
 
     @Override
     public void askForSecurityCodeWithoutInstallments() {
-        startSecurityCodeActivity();
+        mCardVaultPresenter.checkSecurityCodeFlow();
         animateTransitionFadeInFadeOut();
     }
 
-    private void startSecurityCodeActivity() {
+    @Override
+    public void startSecurityCodeActivity() {
         new MercadoPagoComponents.Activities.SecurityCodeActivityBuilder()
                 .setActivity(this)
                 .setMerchantPublicKey(mPublicKey)
@@ -259,6 +263,8 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultVie
                 .setCard(mCardVaultPresenter.getCard())
                 .setDecorationPreference(mDecorationPreference)
                 .setPayerAccessToken(mPrivateKey)
+                .setESCEnabled(mEscEnabled)
+                .setPaymentRecovery(mCardVaultPresenter.getPaymentRecovery())
                 .startActivity();
     }
 
@@ -330,6 +336,7 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultVie
             outState.putBoolean("showBankDeals", mShowBankDeals);
             outState.putBoolean("installmentsListShown", mCardVaultPresenter.isInstallmentsListShown());
             outState.putBoolean("issuersListShown", mCardVaultPresenter.isIssuersListShown());
+            outState.putBoolean("escEnabled", mEscEnabled);
 
             if (mCardVaultPresenter.getPayerCostList() != null) {
                 outState.putString("payerCostsList", JsonUtil.getInstance().toJson(mCardVaultPresenter.getPayerCostList()));
@@ -532,6 +539,7 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultVie
         returnIntent.putExtra("token", JsonUtil.getInstance().toJson(mCardVaultPresenter.getToken()));
         returnIntent.putExtra("issuer", JsonUtil.getInstance().toJson(mCardVaultPresenter.getIssuer()));
         returnIntent.putExtra("discount", JsonUtil.getInstance().toJson(mCardVaultPresenter.getDiscount()));
+        returnIntent.putExtra("card", JsonUtil.getInstance().toJson(mCardVaultPresenter.getCard()));
         setResult(RESULT_OK, returnIntent);
         finish();
         animateTransitionSlideInSlideOut();
@@ -544,11 +552,10 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultVie
 
     @Override
     public void showError(MercadoPagoError error, String requestOrigin) {
-        if (error.isApiException()) {
+        if (error != null && error.isApiException()) {
             showApiExceptionError(error.getApiException(), requestOrigin);
         } else {
             ErrorUtil.startErrorActivity(this, error, mPublicKey);
         }
     }
-
 }

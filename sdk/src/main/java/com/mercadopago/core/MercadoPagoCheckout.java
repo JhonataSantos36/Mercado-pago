@@ -110,10 +110,11 @@ public class MercadoPagoCheckout {
         if (checkoutPreference == null) {
             throw new IllegalStateException("Checkout preference required");
         }
-        if ((CallbackHolder.getInstance().hasPaymentCallback() || resultCode == MercadoPagoCheckout.PAYMENT_RESULT_CODE)
+        if ((CallbackHolder.getInstance().hasPaymentCallback() || resultCode.equals(MercadoPagoCheckout.PAYMENT_RESULT_CODE))
                 && !this.checkoutPreference.hasId()
                 && (this.servicePreference == null || !this.servicePreference.hasCreatePaymentURL())) {
-            throw new IllegalStateException("Payment service or preference created with private key required to create a payment");
+            //TODO revisar
+//            throw new IllegalStateException("Payment service or preference created with private key required to create a payment");
         }
         if (hasTwoDiscountsSet()) {
             throw new IllegalStateException("payment data discount and discount set");

@@ -1,12 +1,8 @@
 package com.mercadopago.views;
 
-import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.model.ApiException;
-import com.mercadopago.model.PayerCost;
 import com.mercadopago.mvp.MvpView;
-
-import java.util.List;
 
 /**
  * Created by vaserber on 10/12/16.
@@ -24,6 +20,8 @@ public interface CardVaultView extends MvpView {
 
     void startIssuersActivity();
 
+    void startSecurityCodeActivity();
+
     void showProgressLayout();
 
     void askForCardInformation();
@@ -37,8 +35,6 @@ public interface CardVaultView extends MvpView {
     void askForInstallmentsFromIssuers();
 
     void askForInstallmentsFromNewCard();
-
-//    void setFailureRecovery(FailureRecovery failureRecovery);
 
     void cancelCardVault();
 
