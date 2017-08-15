@@ -250,23 +250,25 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
     @Override
     public void trackChildrenScreen() {
         PaymentMethodSearchItem selectedItem = mPaymentVaultPresenter.getSelectedSearchItem();
-        String selectedItemId = selectedItem.getId();
+        if (selectedItem != null) {
+            String selectedItemId = selectedItem.getId();
 
-        MPTrackingProvider mpTrackingProvider = new MPTrackingProvider.Builder()
-                .setContext(this)
-                .setCheckoutVersion(BuildConfig.VERSION_NAME)
-                .setPublicKey(mPublicKey)
-                .build();
-
-        ScreenViewEvent event = null;
-
-        if (selectedItemId != null) {
-            event = new ScreenViewEvent.Builder()
-                    .setScreenId(TrackingUtil.SCREEN_ID_PAYMENT_VAULT + "/" + selectedItemId)
-                    .setScreenName(TrackingUtil.SCREEN_NAME_PAYMENT_VAULT)
+            MPTrackingProvider mpTrackingProvider = new MPTrackingProvider.Builder()
+                    .setContext(this)
+                    .setCheckoutVersion(BuildConfig.VERSION_NAME)
+                    .setPublicKey(mPublicKey)
                     .build();
+
+            ScreenViewEvent event = null;
+
+            if (selectedItemId != null) {
+                event = new ScreenViewEvent.Builder()
+                        .setScreenId(TrackingUtil.SCREEN_ID_PAYMENT_VAULT + "/" + selectedItemId)
+                        .setScreenName(TrackingUtil.SCREEN_NAME_PAYMENT_VAULT)
+                        .build();
+            }
+            mpTrackingProvider.addTrackEvent(event);
         }
-        mpTrackingProvider.addTrackEvent(event);
     }
 
     private void showTimer() {
