@@ -1,3 +1,11 @@
+## VERSION 3.3.0
+
+_15-08-2017_
+
+* New: Support for ESC library
+* New: Security Code Screen updated
+* New: Scroll button in Review and Confirm
+
 ## VERSION 3.2.0
 
 _11-07-2017_
