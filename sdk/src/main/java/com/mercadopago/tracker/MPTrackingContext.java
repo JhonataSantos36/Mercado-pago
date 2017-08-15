@@ -1,4 +1,4 @@
-package com.mercadopago.providers;
+package com.mercadopago.tracker;
 
 import android.content.Context;
 import android.os.Build;
@@ -9,36 +9,46 @@ import com.mercadopago.px_tracking.model.AppInformation;
 import com.mercadopago.px_tracking.model.DeviceInfo;
 import com.mercadopago.px_tracking.model.Event;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Created by vaserber on 6/5/17.
  */
 
-public class MPTrackingProvider {
+
+public class MPTrackingContext {
+
+    private static final String TRACKING_STRATEGY_NOT_SET_MESSAGE = "trackingStrategy not set";
+    private static final String CONTEXT_NOT_SET_MESSAGE = "context not set";
+    private static final String PUBLIC_KEY_NOT_SET_MESSAGE = "publicKey not set";
 
     private Context context;
-    private List<Event> eventList;
     private String clientId;
     private AppInformation appInformation;
     private DeviceInfo deviceInfo;
+    private String trackingStrategy;
 
-    private MPTrackingProvider(Builder builder) {
+    private MPTrackingContext(Builder builder) {
         this.context = builder.context;
-        this.eventList = new ArrayList<>();
 
-        if (builder.eventList != null && !builder.eventList.isEmpty()) {
-            this.eventList = builder.eventList;
+        if (builder.trackingStrategy == null) {
+            throw new IllegalStateException(TRACKING_STRATEGY_NOT_SET_MESSAGE);
         }
+
+        if (builder.context == null) {
+            throw new IllegalStateException(CONTEXT_NOT_SET_MESSAGE);
+        }
+
+        if (builder.publicKey == null) {
+            throw new IllegalStateException(PUBLIC_KEY_NOT_SET_MESSAGE);
+        }
+
         if (this.context != null) {
             this.clientId = initializeClientId();
             this.deviceInfo = initializeDeviceInfo();
+            this.trackingStrategy = builder.trackingStrategy;
         }
         if (builder.publicKey != null && builder.checkoutVersion != null) {
             this.appInformation = initializeAppInformation(builder.publicKey, builder.checkoutVersion);
         }
-
     }
 
     private String initializeClientId() {
@@ -63,22 +73,19 @@ public class MPTrackingProvider {
                 .build();
     }
 
-
-    public void addTrackEvent(Event event) {
-        if (eventList == null) {
-            this.eventList = new ArrayList<>();
-        }
-        this.eventList.add(event);
-
-        MPTracker.getInstance().trackEvents(clientId, appInformation, deviceInfo, eventList, context);
+    public void trackEvent(Event event) {
+        MPTracker.getInstance().trackEvent(clientId, appInformation, deviceInfo, event, context, trackingStrategy);
     }
 
+    public void clearExpiredTracks() {
+        MPTracker.getInstance().clearExpiredTracks();
+    }
 
     public static class Builder {
         private Context context;
         private String publicKey;
         private String checkoutVersion;
-        private List<Event> eventList;
+        private String trackingStrategy;
 
         public Builder setContext(Context context) {
             this.context = context;
@@ -95,13 +102,13 @@ public class MPTrackingProvider {
             return this;
         }
 
-        public Builder setEventList(List<Event> eventList) {
-            this.eventList = eventList;
+        public Builder setTrackingStrategy(String trackingStrategy) {
+            this.trackingStrategy = trackingStrategy;
             return this;
         }
 
-        public MPTrackingProvider build() {
-            return new MPTrackingProvider(this);
+        public MPTrackingContext build() {
+            return new MPTrackingContext(this);
         }
     }
 }

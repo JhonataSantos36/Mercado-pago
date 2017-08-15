@@ -31,6 +31,7 @@ import com.mercadopago.preferences.FlowPreference;
 import com.mercadopago.preferences.PaymentResultScreenPreference;
 import com.mercadopago.preferences.ReviewScreenPreference;
 import com.mercadopago.providers.CheckoutProvider;
+import com.mercadopago.px_tracking.MPTracker;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.CurrenciesUtil;
 import com.mercadopago.util.TextUtils;
@@ -100,6 +101,8 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
             validatePreference();
 
             getView().initializeMPTracker();
+
+            getView().trackScreen();
 
             startCheckout();
         } catch (CheckoutPreferenceException e) {

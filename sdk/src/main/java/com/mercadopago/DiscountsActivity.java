@@ -286,7 +286,6 @@ public class DiscountsActivity extends AppCompatActivity implements DiscountsAct
 
     @Override
     public void drawSummary() {
-
         mDiscountCodeContainer.setVisibility(View.GONE);
         mReviewDiscountSummaryContainer.setVisibility(View.VISIBLE);
 
@@ -371,7 +370,6 @@ public class DiscountsActivity extends AppCompatActivity implements DiscountsAct
 
     @Override
     public void requestDiscountCode() {
-
         mReviewDiscountSummaryContainer.setVisibility(View.GONE);
         mDiscountCodeContainer.setVisibility(View.VISIBLE);
         decorateDiscountCodeContainer();

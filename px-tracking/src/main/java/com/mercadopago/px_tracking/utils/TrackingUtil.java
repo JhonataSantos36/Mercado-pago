@@ -1,6 +1,4 @@
-package com.mercadopago.util;
-
-
+package com.mercadopago.px_tracking.utils;
 
 /**
  * Created by vaserber on 6/5/17.
@@ -11,6 +9,9 @@ public class TrackingUtil {
     //Screen IDs
     public static final String SCREEN_ID_CHECKOUT = "/checkout_off/init";
     public static final String SCREEN_ID_PAYMENT_VAULT = "/checkout_off/payment_option";
+    public static final String SCREEN_ID_PAYMENT_VAULT_TICKET = "/checkout_off/payment_option/ticket";
+    public static final String SCREEN_ID_PAYMENT_VAULT_BANK_TRANSFER = "/checkout_off/payment_option/bank_transfer";
+    public static final String SCREEN_ID_PAYMENT_VAULT_CARDS = "/checkout_off/payment_option/card";
     public static final String SCREEN_ID_REVIEW_AND_CONFIRM = "/checkout_off/review";
     public static final String SCREEN_ID_PAYMENT_RESULT_APPROVED = "/checkout_off/congrats/approved";
     public static final String SCREEN_ID_PAYMENT_RESULT_PENDING = "/checkout_off/congrats/in_process";
@@ -27,6 +28,9 @@ public class TrackingUtil {
     //Screen Names
     public static final String SCREEN_NAME_CHECKOUT = "INIT_CHECKOUT";
     public static final String SCREEN_NAME_PAYMENT_VAULT = "PAYMENT_METHOD_SEARCH";
+    public static final String SCREEN_NAME_PAYMENT_VAULT_TICKET = "PAYMENT_METHOD_SEARCH";
+    public static final String SCREEN_NAME_PAYMENT_VAULT_BANK_TRANSFER = "PAYMENT_METHOD_SEARCH";
+    public static final String SCREEN_NAME_PAYMENT_VAULT_CARDS = "PAYMENT_METHOD_SEARCH";
     public static final String SCREEN_NAME_REVIEW_AND_CONFIRM = "REVIEW_AND_CONFIRM";
     public static final String SCREEN_NAME_PAYMENT_RESULT_APPROVED = "RESULT";
     public static final String SCREEN_NAME_PAYMENT_RESULT_PENDING = "RESULT";
@@ -45,6 +49,11 @@ public class TrackingUtil {
     public static final String SCREEN_NAME_ERROR = "ERROR_VIEW";
     public static final String SCREEN_NAME_PAYMENT_TYPES = "CARD_PAYMENT_TYPES";
     public static final String SCREEN_NAME_SECURITY_CODE = "SECURITY_CODE_CARD";
+
+    //Payment Vault Group Ids
+    public static final String GROUP_TICKET = "ticket";
+    public static final String GROUP_BANK_TRANSFER = "bank_transfer";
+    public static final String GROUP_CARDS = "cards";
 
     //Sufix
     public static final String CARD_NUMBER = "/number";
@@ -69,4 +78,6 @@ public class TrackingUtil {
     //Default values
     public static final String HAS_SHIPPING_DEFAULT_VALUE = "false";
     public static final String IS_EXPRESS_DEFAULT_VALUE = "false";
+    public static final String BATCH_STRATEGY = "batch_strategy";
+    public static final String FORCED_STRATEGY = "forced_strategy";
 }

@@ -132,6 +132,7 @@ public class VaultActivity extends AppCompatActivity {
 
             setFormGoButton(mSecurityCodeText);
 
+            String siteId = mSite == null ? "" : mSite.getId();
             initPaymentFlow();
         } else {
             Intent returnIntent = new Intent();

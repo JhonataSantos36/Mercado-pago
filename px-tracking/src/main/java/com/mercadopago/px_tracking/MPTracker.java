@@ -9,19 +9,21 @@ import com.mercadopago.px_tracking.model.ActionEvent;
 import com.mercadopago.px_tracking.model.AppInformation;
 import com.mercadopago.px_tracking.model.DeviceInfo;
 import com.mercadopago.px_tracking.model.Event;
-import com.mercadopago.px_tracking.model.EventTrackIntent;
 import com.mercadopago.px_tracking.model.PaymentIntent;
 import com.mercadopago.px_tracking.model.ScreenViewEvent;
 import com.mercadopago.px_tracking.model.TrackingIntent;
-import com.mercadopago.px_tracking.strategies.RealTimeTrackingStrategy;
+import com.mercadopago.px_tracking.strategies.BatchTrackingStrategy;
+import com.mercadopago.px_tracking.strategies.ConnectivityCheckerImpl;
+import com.mercadopago.px_tracking.strategies.EventsDatabaseImpl;
+import com.mercadopago.px_tracking.strategies.ForcedStrategy;
 import com.mercadopago.px_tracking.strategies.TrackingStrategy;
 import com.mercadopago.px_tracking.services.MPTrackingService;
 import com.mercadopago.px_tracking.services.MPTrackingServiceImpl;
 import com.mercadopago.px_tracking.utils.JsonConverter;
+import com.mercadopago.px_tracking.utils.TrackingUtil;
 
 import java.lang.reflect.Type;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static android.text.TextUtils.isEmpty;
@@ -33,6 +35,7 @@ import static android.text.TextUtils.isEmpty;
 public class MPTracker {
 
     private static MPTracker mMPTrackerInstance;
+    private EventsDatabaseImpl database;
 
     private TracksListener mTracksListener;
 
@@ -50,9 +53,9 @@ public class MPTracker {
     private static final String DEFAULT_FLAVOUR = "3";
 
     private Boolean trackerInitialized = false;
-    private Boolean mTrackingEnabled = false;
 
     private TrackingStrategy trackingStrategy;
+    private Event mEvent;
 
     protected MPTracker() {
     }
@@ -125,33 +128,46 @@ public class MPTracker {
 
     /**
      * This method tracks a list of events in one request
-     *
-     * @param clientId       Id that identifies the client that is using the SDK
+     *  @param clientId       Id that identifies the client that is using the SDK
      * @param appInformation Info about this application and SDK integration
      * @param deviceInfo     Info about the device that is using the app
-     * @param events         List of events to track
+     * @param event          Event to track
      * @param context        Application context
+     * @param trackingStrategy
      */
-    public EventTrackIntent trackEvents(String clientId, AppInformation appInformation, DeviceInfo deviceInfo, List<Event> events, Context context) {
-        EventTrackIntent eventTrackIntent = new EventTrackIntent(clientId, appInformation, deviceInfo, events);
+    public void trackEvent(String clientId, AppInformation appInformation, DeviceInfo deviceInfo, Event event, Context context, String trackingStrategy) {
+
         initializeMPTrackingService();
 
-        if (mTrackingEnabled != null && mTrackingEnabled) {
-            getTrackingStrategy().trackEvents(eventTrackIntent, context);
+        mEvent = event;
+        mContext = context;
+
+        initializeDatabase();
+        database.persist(event);
+
+        setTrackingStrategy(context, event, trackingStrategy);
+
+        if (this.trackingStrategy != null) {
+            this.trackingStrategy.setClientId(clientId);
+            this.trackingStrategy.setAppInformation(appInformation);
+            this.trackingStrategy.setDeviceInfo(deviceInfo);
+            this.trackingStrategy.trackEvent(event, context);
         }
 
-        //Notify external listeners
-        for (Event event : eventTrackIntent.getEvents()) {
-            if (event.getType().equals(Event.TYPE_ACTION)) {
-                ActionEvent actionEvent = (ActionEvent) event;
-                Map<String, String> eventMap = createEventMap(actionEvent);
-                trackEventPerformedListener(eventMap);
-            } else if (event.getType().equals(Event.TYPE_SCREEN_VIEW)) {
-                ScreenViewEvent screenViewEvent = (ScreenViewEvent) event;
-                trackScreenLaunchedListener(screenViewEvent.getScreenName());
-            }
+        if (event.getType().equals(Event.TYPE_ACTION)) {
+            ActionEvent actionEvent = (ActionEvent) event;
+            Map<String, String> eventMap = createEventMap(actionEvent);
+            trackEventPerformedListener(eventMap);
+        } else if (event.getType().equals(Event.TYPE_SCREEN_VIEW)) {
+            ScreenViewEvent screenViewEvent = (ScreenViewEvent) event;
+            trackScreenLaunchedListener(screenViewEvent.getScreenName());
         }
-        return eventTrackIntent;
+    }
+
+    private void initializeDatabase() {
+        if(database==null){
+            this.database = new EventsDatabaseImpl(mContext);
+        }
     }
 
     private Map<String, String> createEventMap(ActionEvent actionEvent) {
@@ -178,11 +194,11 @@ public class MPTracker {
         if (!isTrackerInitialized()) {
             if (areInitParametersValid(publicKey, siteId, sdkVersion, context)) {
                 trackerInitialized = true;
-
                 this.mPublicKey = publicKey;
                 this.mSiteId = siteId;
                 this.mSdkVersion = sdkVersion;
                 this.mContext = context;
+//                this.database = new EventsDatabaseImpl(mContext);
             }
         }
     }
@@ -226,15 +242,48 @@ public class MPTracker {
         return paymentTypeId.equals("credit_card") || paymentTypeId.equals("debit_card") || paymentTypeId.equals("prepaid_card");
     }
 
-    private TrackingStrategy getTrackingStrategy() {
-        if (trackingStrategy == null) {
-            trackingStrategy = new RealTimeTrackingStrategy(mMPTrackingService);
+    private TrackingStrategy setTrackingStrategy(Context context, Event event, String strategy) {
+
+        if (isBatchStrategy(strategy)) {
+            trackingStrategy = new BatchTrackingStrategy(database, new ConnectivityCheckerImpl(context), mMPTrackingService);
+        } else if (isForcedStrategy(strategy)) {
+            trackingStrategy = new ForcedStrategy(database, new ConnectivityCheckerImpl(context), mMPTrackingService);
         }
+
         return trackingStrategy;
     }
 
-    public void setTrackingEnabled(Boolean trackingEnabled) {
-        this.mTrackingEnabled = trackingEnabled;
+    private boolean isForcedStrategy(String strategy) {
+        return strategy!=null && strategy.equals(TrackingUtil.FORCED_STRATEGY);
     }
 
+    private boolean isBatchStrategy(String strategy) {
+        return strategy!=null && strategy.equals(TrackingUtil.BATCH_STRATEGY);
+    }
+
+
+    private boolean isErrorScreen(String name) {
+        return name.equals(TrackingUtil.SCREEN_NAME_ERROR);
+    }
+
+    private boolean isResultScreen(String name) {
+        return name.equals(TrackingUtil.SCREEN_NAME_PAYMENT_RESULT_APPROVED) || name.equals(TrackingUtil.SCREEN_NAME_PAYMENT_RESULT_PENDING) || name.equals(TrackingUtil.SCREEN_NAME_PAYMENT_RESULT_REJECTED) ||
+                name.equals(TrackingUtil.SCREEN_NAME_PAYMENT_RESULT_INSTRUCTIONS);
+    }
+
+    public TrackingStrategy setTrackingStrategy() {
+        return trackingStrategy;
+    }
+
+    public Event getEvent() {
+        return mEvent;
+    }
+
+    public void clearExpiredTracks() {
+        this.database.clearExpiredTracks();
+    }
+
+    public TrackingStrategy getTrackingStrategy() {
+        return trackingStrategy;
+    }
 }

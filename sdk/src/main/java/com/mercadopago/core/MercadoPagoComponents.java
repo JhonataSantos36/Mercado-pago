@@ -9,7 +9,6 @@ import android.support.annotation.ColorInt;
 import android.support.annotation.DrawableRes;
 
 import com.mercadopago.BankDealsActivity;
-import com.mercadopago.BuildConfig;
 import com.mercadopago.CallForAuthorizeActivity;
 import com.mercadopago.CardVaultActivity;
 import com.mercadopago.CongratsActivity;
@@ -47,8 +46,6 @@ import com.mercadopago.model.PaymentType;
 import com.mercadopago.model.Site;
 import com.mercadopago.preferences.PaymentResultScreenPreference;
 import com.mercadopago.preferences.ReviewScreenPreference;
-import com.mercadopago.providers.MPTrackingProvider;
-import com.mercadopago.px_tracking.model.ScreenViewEvent;
 import com.mercadopago.uicontrollers.discounts.DiscountRowView;
 import com.mercadopago.uicontrollers.reviewandconfirm.ReviewItemsView;
 import com.mercadopago.uicontrollers.reviewandconfirm.ReviewPaymentOffView;
@@ -59,7 +56,6 @@ import com.mercadopago.uicontrollers.savedcards.SavedCardRowView;
 import com.mercadopago.uicontrollers.savedcards.SavedCardView;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.MercadoPagoUtil;
-import com.mercadopago.util.TrackingUtil;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -830,6 +826,7 @@ public class MercadoPagoComponents {
                 if (this.activity == null) throw new IllegalStateException("activity is null");
                 if (this.merchantPublicKey == null && this.payerAccessToken == null)
                     throw new IllegalStateException("key is null");
+
 
                 startGuessingCardActivity();
             }
