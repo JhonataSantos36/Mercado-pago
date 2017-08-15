@@ -29,8 +29,7 @@ import com.mercadopago.preferences.ServicePreference;
 import com.mercadopago.presenters.CheckoutPresenter;
 import com.mercadopago.providers.CheckoutProvider;
 import com.mercadopago.providers.CheckoutProviderImpl;
-import com.mercadopago.px_tracking.utils.TrackingUtil;
-import com.mercadopago.tracker.MPTrackingContext;
+import com.mercadopago.providers.MPTrackingProvider;
 import com.mercadopago.px_tracking.MPTracker;
 import com.mercadopago.px_tracking.model.ScreenViewEvent;
 import com.mercadopago.util.ErrorUtil;
@@ -38,6 +37,7 @@ import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;
 import com.mercadopago.util.MercadoPagoUtil;
 import com.mercadopago.util.TextUtil;
+import com.mercadopago.util.TrackingUtil;
 import com.mercadopago.views.CheckoutView;
 
 import java.math.BigDecimal;
@@ -135,22 +135,6 @@ public class CheckoutActivity extends MercadoPagoBaseActivity implements Checkou
     }
 
     @Override
-    public void trackScreen() {
-        MPTrackingContext mpTrackingContext = new MPTrackingContext.Builder()
-                .setContext(this)
-                .setCheckoutVersion(BuildConfig.VERSION_NAME)
-                .setPublicKey(mMerchantPublicKey)
-                .setTrackingStrategy(TrackingUtil.BATCH_STRATEGY)
-                .build();
-        ScreenViewEvent event = new ScreenViewEvent.Builder()
-                .setScreenId(TrackingUtil.SCREEN_ID_CHECKOUT)
-                .setScreenName(TrackingUtil.SCREEN_NAME_CHECKOUT)
-                .build();
-        mpTrackingContext.clearExpiredTracks();
-        mpTrackingContext.trackEvent(event);
-    }
-
-    @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
@@ -179,8 +163,8 @@ public class CheckoutActivity extends MercadoPagoBaseActivity implements Checkou
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == ErrorUtil.ERROR_REQUEST_CODE) {
             resolveErrorRequest(resultCode, data);
-        } else if (resultCode == MercadoPagoCheckout.TIMER_FINISHED_RESULT_CODE) {
-            resolveTimerObserverResult(resultCode);
+        }else if (resultCode == MercadoPagoCheckout.TIMER_FINISHED_RESULT_CODE) {
+                resolveTimerObserverResult(resultCode);
         } else if (requestCode == MercadoPagoComponents.Activities.PAYMENT_VAULT_REQUEST_CODE) {
             resolvePaymentVaultRequest(resultCode, data);
         } else if (requestCode == MercadoPagoComponents.Activities.PAYMENT_RESULT_REQUEST_CODE) {
@@ -238,8 +222,6 @@ public class CheckoutActivity extends MercadoPagoBaseActivity implements Checkou
                     JsonUtil.getInstance().fromJson(data.getStringExtra("mercadoPagoError"), MercadoPagoError.class);
             if (mercadoPagoError == null) {
                 mCheckoutPresenter.onCardFlowCancel();
-//                String siteId = mCheckoutPreference.getSite() == null ? "" : mCheckoutPreference.getSite().getId();
-//                MPTracker.getInstance().trackEvents("CARD_VAULT", "CANCELED", "", "3", mMerchantPublicKey, siteId, BuildConfig.VERSION_NAME, this);
             } else {
                 mCheckoutPresenter.onCardFlowError(mercadoPagoError);
             }
@@ -256,6 +238,7 @@ public class CheckoutActivity extends MercadoPagoBaseActivity implements Checkou
             Card card = JsonUtil.getInstance().fromJson(data.getStringExtra("card"), Card.class);
 
             mCheckoutPresenter.onPaymentMethodSelectionResponse(paymentMethod, issuer, payerCost, token, discount, card);
+
         } else if (isErrorResult(data)) {
             MercadoPagoError mercadoPagoError = JsonUtil.getInstance().fromJson(data.getStringExtra("mercadoPagoError"), MercadoPagoError.class);
             mCheckoutPresenter.onPaymentMethodSelectionError(mercadoPagoError);

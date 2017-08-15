@@ -1818,10 +1818,6 @@ public class CheckoutPresenterTest {
 
         }
 
-        @Override
-        public void trackScreen() {
-
-        }
     }
 
     public class MockedProvider implements CheckoutProvider {

@@ -30,8 +30,7 @@ import com.mercadopago.model.PaymentData;
 import com.mercadopago.model.PaymentResult;
 import com.mercadopago.model.Site;
 import com.mercadopago.preferences.PaymentResultScreenPreference;
-import com.mercadopago.px_tracking.utils.TrackingUtil;
-import com.mercadopago.tracker.MPTrackingContext;
+import com.mercadopago.providers.MPTrackingProvider;
 import com.mercadopago.px_tracking.model.ScreenViewEvent;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.CurrenciesUtil;
@@ -41,7 +40,7 @@ import com.mercadopago.util.LayoutUtil;
 import com.mercadopago.util.MercadoPagoUtil;
 import com.mercadopago.util.ScaleUtil;
 import com.mercadopago.util.TextUtil;
-
+import com.mercadopago.util.TrackingUtil;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -181,11 +180,10 @@ public class InstructionsActivity extends MercadoPagoBaseActivity {
     }
 
     protected void trackScreen() {
-        MPTrackingContext mpTrackingContext = new MPTrackingContext.Builder()
+        MPTrackingProvider mpTrackingProvider = new MPTrackingProvider.Builder()
                 .setContext(this)
                 .setCheckoutVersion(BuildConfig.VERSION_NAME)
                 .setPublicKey(mMerchantPublicKey)
-                .setTrackingStrategy(TrackingUtil.FORCED_STRATEGY)
                 .build();
 
 
@@ -205,7 +203,7 @@ public class InstructionsActivity extends MercadoPagoBaseActivity {
         }
 
         ScreenViewEvent event = builder.build();
-        mpTrackingContext.trackEvent(event);
+        mpTrackingProvider.addTrackEvent(event);
     }
 
     protected void getInstructionsAsync() {
@@ -276,6 +274,7 @@ public class InstructionsActivity extends MercadoPagoBaseActivity {
     }
 
     protected void showInstructions(Instruction instruction) {
+
         setTitle(instruction.getTitle());
         setReferencesInformation(instruction);
         setInformationMessages(instruction);
@@ -418,6 +417,7 @@ public class InstructionsActivity extends MercadoPagoBaseActivity {
 
     @Override
     public void onBackPressed() {
+
         if (mBackPressedOnce) {
             super.onBackPressed();
         } else {

@@ -19,6 +19,7 @@ import com.google.gson.reflect.TypeToken;
 
 import com.mercadopago.adapters.PaymentMethodSearchItemAdapter;
 import com.mercadopago.callbacks.OnSelectedCallback;
+import com.mercadopago.constants.PaymentTypes;
 import com.mercadopago.controllers.CheckoutTimer;
 import com.mercadopago.core.MercadoPagoCheckout;
 import com.mercadopago.core.MercadoPagoComponents;
@@ -43,10 +44,9 @@ import com.mercadopago.preferences.FlowPreference;
 import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.preferences.ServicePreference;
 import com.mercadopago.presenters.PaymentVaultPresenter;
-import com.mercadopago.px_tracking.MPTracker;
-import com.mercadopago.px_tracking.utils.TrackingUtil;
-import com.mercadopago.tracker.MPTrackingContext;
+import com.mercadopago.providers.MPTrackingProvider;
 import com.mercadopago.providers.PaymentVaultProviderImpl;
+import com.mercadopago.px_tracking.MPTracker;
 import com.mercadopago.px_tracking.model.ScreenViewEvent;
 import com.mercadopago.uicontrollers.FontCache;
 import com.mercadopago.uicontrollers.discounts.DiscountRowView;
@@ -57,6 +57,8 @@ import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.ScaleUtil;
+import com.mercadopago.util.TrackingUtil;
+import com.mercadopago.views.PaymentTypesActivityView;
 import com.mercadopago.views.PaymentVaultView;
 
 import java.lang.reflect.Type;
@@ -233,17 +235,16 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
 
     @Override
     public void trackInitialScreen() {
-        MPTrackingContext mpTrackingContext = new MPTrackingContext.Builder()
+        MPTrackingProvider mpTrackingProvider = new MPTrackingProvider.Builder()
                 .setContext(this)
                 .setCheckoutVersion(BuildConfig.VERSION_NAME)
-                .setTrackingStrategy(TrackingUtil.BATCH_STRATEGY)
                 .setPublicKey(mPublicKey)
                 .build();
         ScreenViewEvent event = new ScreenViewEvent.Builder()
                 .setScreenId(TrackingUtil.SCREEN_ID_PAYMENT_VAULT)
                 .setScreenName(TrackingUtil.SCREEN_NAME_PAYMENT_VAULT)
                 .build();
-        mpTrackingContext.trackEvent(event);
+        mpTrackingProvider.addTrackEvent(event);
     }
 
     @Override
@@ -252,46 +253,23 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
         if (selectedItem != null) {
             String selectedItemId = selectedItem.getId();
 
-            MPTrackingContext mpTrackingContext = new MPTrackingContext.Builder()
+            MPTrackingProvider mpTrackingProvider = new MPTrackingProvider.Builder()
                     .setContext(this)
                     .setCheckoutVersion(BuildConfig.VERSION_NAME)
                     .setPublicKey(mPublicKey)
-                    .setTrackingStrategy(TrackingUtil.BATCH_STRATEGY)
                     .build();
 
             ScreenViewEvent event = null;
 
-            if (TrackingUtil.GROUP_TICKET.equals(selectedItemId)) {
+            if (selectedItemId != null) {
                 event = new ScreenViewEvent.Builder()
-                        .setScreenId(TrackingUtil.SCREEN_ID_PAYMENT_VAULT_TICKET)
-                        .setScreenName(TrackingUtil.SCREEN_NAME_PAYMENT_VAULT_TICKET)
-                        .build();
-            } else if (TrackingUtil.GROUP_BANK_TRANSFER.equals(selectedItemId)) {
-                event = new ScreenViewEvent.Builder()
-                        .setScreenId(TrackingUtil.SCREEN_ID_PAYMENT_VAULT_BANK_TRANSFER)
-                        .setScreenName(TrackingUtil.SCREEN_NAME_PAYMENT_VAULT_BANK_TRANSFER)
-                        .build();
-            } else if (TrackingUtil.GROUP_CARDS.equals(selectedItemId)) {
-                event = new ScreenViewEvent.Builder()
-                        .setScreenId(TrackingUtil.SCREEN_ID_PAYMENT_VAULT_CARDS)
-                        .setScreenName(TrackingUtil.SCREEN_NAME_PAYMENT_VAULT_CARDS)
-                        .build();
-            } else {
-                event = new ScreenViewEvent.Builder()
-                        .setScreenId(TrackingUtil.SCREEN_ID_PAYMENT_VAULT)
+                        .setScreenId(TrackingUtil.SCREEN_ID_PAYMENT_VAULT + "/" + selectedItemId)
                         .setScreenName(TrackingUtil.SCREEN_NAME_PAYMENT_VAULT)
                         .build();
             }
-
-            mpTrackingContext.trackEvent(event);
+            mpTrackingProvider.addTrackEvent(event);
         }
     }
-
-    @Override
-    public void initializeMPTracker() {
-        MPTracker.getInstance().initTracker(mPublicKey, mPaymentVaultPresenter.getSite().getId(), BuildConfig.VERSION_NAME, getApplicationContext());
-    }
-
 
     private void showTimer() {
         if (CheckoutTimer.getInstance().isTimerEnabled()) {
@@ -488,7 +466,6 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
             this.finish();
         } else {
             //When it comes back from payment vault "children" view
-            initializeMPTracker();
             trackInitialScreen();
 
             if (shouldFinishOnBack(data)) {
@@ -520,7 +497,7 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
 
             finishWithCardResult();
         } else {
-            initializeMPTracker();
+
             trackChildrenScreen();
 
             if (shouldFinishOnBack(data)) {

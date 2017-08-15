@@ -36,9 +36,8 @@ import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.presenters.InstallmentsPresenter;
 import com.mercadopago.providers.InstallmentsProviderImpl;
+import com.mercadopago.providers.MPTrackingProvider;
 import com.mercadopago.px_tracking.model.ScreenViewEvent;
-import com.mercadopago.px_tracking.utils.TrackingUtil;
-import com.mercadopago.tracker.MPTrackingContext;
 import com.mercadopago.uicontrollers.FontCache;
 import com.mercadopago.uicontrollers.card.CardRepresentationModes;
 import com.mercadopago.uicontrollers.card.FrontCardView;
@@ -51,6 +50,7 @@ import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;
 import com.mercadopago.util.ScaleUtil;
+import com.mercadopago.util.TrackingUtil;
 import com.mercadopago.views.InstallmentsActivityView;
 
 import java.lang.reflect.Type;
@@ -251,10 +251,9 @@ public class InstallmentsActivity extends MercadoPagoBaseActivity implements Ins
     }
 
     protected void trackScreen() {
-        MPTrackingContext mTrackingContext = new MPTrackingContext.Builder()
+        MPTrackingProvider mpTrackingProvider = new MPTrackingProvider.Builder()
                 .setContext(this)
                 .setCheckoutVersion(BuildConfig.VERSION_NAME)
-                .setTrackingStrategy(TrackingUtil.BATCH_STRATEGY)
                 .setPublicKey(mPublicKey)
                 .build();
 
@@ -264,7 +263,7 @@ public class InstallmentsActivity extends MercadoPagoBaseActivity implements Ins
                 .addMetaData(TrackingUtil.METADATA_PAYMENT_METHOD_ID, mPresenter.getPaymentMethod().getId())
                 .build();
 
-        mTrackingContext.trackEvent(event);
+        mpTrackingProvider.addTrackEvent(event);
     }
 
     public void loadViews() {

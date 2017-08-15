@@ -48,7 +48,4 @@ public interface PaymentVaultView extends MvpView {
     void trackInitialScreen();
 
     void trackChildrenScreen();
-
-    void initializeMPTracker();
-
 }

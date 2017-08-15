@@ -1247,11 +1247,6 @@ public class PaymentVaultPresenterTest {
         }
 
         @Override
-        public void initializeMPTracker() {
-
-        }
-
-        @Override
         public void trackInitialScreen() {
 
         }

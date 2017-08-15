@@ -670,13 +670,13 @@ public class ReviewAndConfirmPresenterTest {
         }
 
         @Override
-        public void trackScreen() {
+        public void changeRequired(Integer resultCode, @Nullable Bundle data) {
 
         }
 
         @Override
-        public void changeRequired(Integer resultCode, @Nullable Bundle data) {
-
+        public void trackScreen() {
+            
         }
     }
 

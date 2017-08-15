@@ -22,7 +22,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class MPTrackingServiceImpl implements MPTrackingService {
 
     private static final String BASE_URL = "https://api.mercadopago.com/";
-
+    
     private Retrofit getRetrofit(Context context) {
         return new Retrofit.Builder()
                 .client(HttpClientUtil.getClient(context))
@@ -76,7 +76,7 @@ public class MPTrackingServiceImpl implements MPTrackingService {
     }
 
     @Override
-    public void trackEvents(EventTrackIntent eventTrackIntent, Context context) {
+    public void trackEvent(EventTrackIntent eventTrackIntent, Context context) {
         Retrofit retrofit = getRetrofit(context);
         TrackingService service = retrofit.create(TrackingService.class);
 
@@ -95,13 +95,4 @@ public class MPTrackingServiceImpl implements MPTrackingService {
             }
         });
     }
-
-    @Override
-    public void trackEvents(EventTrackIntent eventTrackIntent, Context context, Callback<Void> callback) {
-        Retrofit retrofit = getRetrofit(context);
-        TrackingService service = retrofit.create(TrackingService.class);
-        Call<Void> call = service.trackEvents(eventTrackIntent);
-        call.enqueue(callback);
-    }
-
 }

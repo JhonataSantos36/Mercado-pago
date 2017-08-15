@@ -189,6 +189,7 @@ public class MercadoPago {
 
     public void cloneToken(final String tokenId, final Callback<Token> callback) {
         if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {
+
             GatewayService service = mRetrofit.create(GatewayService.class);
             service.getToken(tokenId, "", this.mKey).enqueue(callback);
         } else {
@@ -198,6 +199,7 @@ public class MercadoPago {
 
     public void putSecurityCode(final String tokenId, final SecurityCodeIntent securityCodeIntent, final Callback<Token> callback) {
         if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {
+
             GatewayService service = mRetrofit.create(GatewayService.class);
             service.getToken(tokenId, this.mKey,"",  securityCodeIntent).enqueue(callback);
         } else {
@@ -216,6 +218,7 @@ public class MercadoPago {
 
     public void getDirectDiscount(String amount, String payerEmail, final Callback<Discount> callback) {
         if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {
+
             DiscountService service = mRetrofit.create(DiscountService.class);
             service.getDirectDiscount(this.mKey, amount, payerEmail).enqueue(callback);
         } else {
@@ -225,6 +228,7 @@ public class MercadoPago {
 
     public void getCodeDiscount(String amount, String payerEmail, String couponCode, final Callback<Discount> callback) {
         if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {
+
             DiscountService service = mRetrofit.create(DiscountService.class);
             service.getCodeDiscount(this.mKey, amount, payerEmail, couponCode).enqueue(callback);
         } else {
@@ -295,6 +299,7 @@ public class MercadoPago {
 
     public void getPaymentResult(Long paymentId, String paymentTypeId, final Callback<Instructions> callback) {
         if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {
+
             CheckoutService service = mRetrofit.create(CheckoutService.class);
             service.getPaymentResult(mContext.getResources().getConfiguration().locale.getLanguage(), paymentId, this.mKey, paymentTypeId, PAYMENT_RESULT_API_VERSION).enqueue(callback);
         } else {

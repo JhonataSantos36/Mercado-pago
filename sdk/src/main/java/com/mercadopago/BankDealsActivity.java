@@ -18,13 +18,13 @@ import com.mercadopago.decorations.DividerItemDecoration;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.BankDeal;
 import com.mercadopago.preferences.DecorationPreference;
-import com.mercadopago.px_tracking.utils.TrackingUtil;
-import com.mercadopago.tracker.MPTrackingContext;
+import com.mercadopago.providers.MPTrackingProvider;
 import com.mercadopago.px_tracking.model.ScreenViewEvent;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;
+import com.mercadopago.util.TrackingUtil;
 
 import java.lang.reflect.Type;
 import java.util.List;
@@ -46,7 +46,7 @@ public class BankDealsActivity extends MercadoPagoActivity {
 
     @Override
     protected void onValidStart() {
-        trackInitialScreen();
+        trackScreen();
 
         mMercadoPago = new MercadoPagoServices.Builder()
                 .setContext(getActivity())
@@ -57,19 +57,17 @@ public class BankDealsActivity extends MercadoPagoActivity {
         getBankDeals();
     }
 
-    protected void trackInitialScreen() {
-        MPTrackingContext mpTrackingContext = new MPTrackingContext.Builder()
+    protected void trackScreen() {
+        MPTrackingProvider mpTrackingProvider = new MPTrackingProvider.Builder()
                 .setContext(this)
                 .setCheckoutVersion(BuildConfig.VERSION_NAME)
                 .setPublicKey(mMerchantPublicKey)
-                .setTrackingStrategy(TrackingUtil.BATCH_STRATEGY)
                 .build();
         ScreenViewEvent event = new ScreenViewEvent.Builder()
                 .setScreenId(TrackingUtil.SCREEN_ID_BANK_DEALS)
                 .setScreenName(TrackingUtil.SCREEN_NAME_BANK_DEALS)
                 .build();
-
-        mpTrackingContext.trackEvent(event);
+        mpTrackingProvider.addTrackEvent(event);
     }
 
     @Override
