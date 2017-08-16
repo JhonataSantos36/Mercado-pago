@@ -233,11 +233,14 @@ public class ServicePreference {
             return this;
         }
 
-        //Turn on when hybrid is available
-        /*public Builder setHybridAsProcessingMode() {
+        public Builder setHybridAsProcessingMode() {
             this.processingMode = ProcessingModes.HYBRID;
             return this;
-        }*/
+        }
+
+        public Boolean shouldShowBankDeals() {
+            return this.processingMode == ProcessingModes.AGGREGATOR
+        }
 
         public ServicePreference build() {
             return new ServicePreference(this);
