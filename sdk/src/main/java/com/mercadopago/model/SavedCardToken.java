@@ -11,6 +11,11 @@ public class SavedCardToken {
     private String securityCode;
     private Device device;
 
+    public SavedCardToken(String cardId, String securityCode) {
+        this.cardId = cardId;
+        this.securityCode = securityCode;
+    }
+
     public Device getDevice() {
         return device;
     }
@@ -32,11 +37,6 @@ public class SavedCardToken {
     }
 
     public void setSecurityCode(String securityCode) {
-        this.securityCode = securityCode;
-    }
-
-    public SavedCardToken(String cardId, String securityCode) {
-        this.cardId = cardId;
         this.securityCode = securityCode;
     }
 

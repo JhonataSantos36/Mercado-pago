@@ -1,13 +1,16 @@
 package com.mercadopago.presenters;
 
+import com.mercadopago.BuildConfig;
 import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.constants.PaymentMethods;
-import com.mercadopago.controllers.CheckoutTimer;
 import com.mercadopago.controllers.Timer;
 import com.mercadopago.core.MercadoPagoCheckout;
 import com.mercadopago.exceptions.CheckoutPreferenceException;
 import com.mercadopago.exceptions.MercadoPagoError;
+import com.mercadopago.model.ApiException;
 import com.mercadopago.model.Campaign;
+import com.mercadopago.model.Card;
+import com.mercadopago.model.Cause;
 import com.mercadopago.model.Customer;
 import com.mercadopago.model.Discount;
 import com.mercadopago.model.Issuer;
@@ -56,6 +59,7 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
     private Issuer mSelectedIssuer;
     private PayerCost mSelectedPayerCost;
     private Token mCreatedToken;
+    private Card mSelectedCard;
     private PaymentMethod mSelectedPaymentMethod;
     private Payment mCreatedPayment;
 
@@ -94,6 +98,9 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
     private void startCheckoutForPreference() {
         try {
             validatePreference();
+
+            getView().initializeMPTracker();
+
             startCheckout();
         } catch (CheckoutPreferenceException e) {
             String message = getResourcesProvider().getCheckoutExceptionMessage(e);
@@ -289,11 +296,48 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
     }
 
     private void checkStartPaymentResultActivity(PaymentResult paymentResult) {
-        if (hasToSkipPaymentResultScreen(paymentResult)) {
-            finishCheckout();
-        } else {
-            getView().showPaymentResult(paymentResult);
+        if (hasToDeleteESC(paymentResult)) {
+            deleteESC(paymentResult.getPaymentData());
         }
+        if (hasToContinuePaymentWithoutESC(paymentResult)) {
+            continuePaymentWithoutESC();
+        } else {
+            if (hasToStoreESC(paymentResult)) {
+                getResourcesProvider().saveESC(paymentResult.getPaymentData().getToken().getCardId(), paymentResult.getPaymentData().getToken().getEsc());
+            }
+            if (hasToSkipPaymentResultScreen(paymentResult)) {
+                finishCheckout();
+            } else {
+                getView().showPaymentResult(paymentResult);
+            }
+        }
+    }
+
+    private boolean hasToStoreESC(PaymentResult paymentResult) {
+        return hasValidParametersForESC(paymentResult) &&
+                paymentResult.getPaymentStatus().equals(Payment.StatusCodes.STATUS_APPROVED) &&
+                paymentResult.getPaymentData().getToken().getEsc() != null &&
+                !paymentResult.getPaymentData().getToken().getEsc().isEmpty();
+    }
+
+    private boolean hasValidParametersForESC(PaymentResult paymentResult) {
+        return paymentResult != null && paymentResult.getPaymentData() != null &&
+                paymentResult.getPaymentData().getToken() != null &&
+                paymentResult.getPaymentData().getToken().getCardId() != null &&
+                !paymentResult.getPaymentData().getToken().getCardId().isEmpty() &&
+                paymentResult.getPaymentStatus() != null &&
+                paymentResult.getPaymentStatusDetail() != null;
+    }
+
+    private boolean hasToDeleteESC(PaymentResult paymentResult) {
+        return hasValidParametersForESC(paymentResult) &&
+                !paymentResult.getPaymentStatus().equals(Payment.StatusCodes.STATUS_APPROVED);
+    }
+
+    private boolean hasToContinuePaymentWithoutESC(PaymentResult paymentResult) {
+        return hasValidParametersForESC(paymentResult) &&
+                paymentResult.getPaymentStatus().equals(Payment.StatusCodes.STATUS_REJECTED) &&
+                paymentResult.getPaymentStatusDetail().equals(Payment.StatusCodes.STATUS_DETAIL_INVALID_ESC);
     }
 
     private boolean hasToSkipPaymentResultScreen(PaymentResult paymentResult) {
@@ -319,6 +363,14 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
 
     public boolean isInstallmentsReviewScreenEnabled() {
         return mFlowPreference.isInstallmentsReviewScreenEnabled();
+    }
+
+    public boolean isESCEnabled() {
+        return mFlowPreference.isESCEnabled();
+    }
+
+    public Card getSelectedCard() {
+        return mSelectedCard;
     }
 
     private void retrieveCheckoutPreference() {
@@ -356,12 +408,13 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
         return mSelectedPaymentMethod == null;
     }
 
-    public void onPaymentMethodSelectionResponse(PaymentMethod paymentMethod, Issuer issuer, PayerCost payerCost, Token token, Discount discount) {
+    public void onPaymentMethodSelectionResponse(PaymentMethod paymentMethod, Issuer issuer, PayerCost payerCost, Token token, Discount discount, Card card) {
         mSelectedPaymentMethod = paymentMethod;
         mSelectedIssuer = issuer;
         mSelectedPayerCost = payerCost;
         mCreatedToken = token;
         mDiscount = discount;
+        mSelectedCard = card;
         onPaymentMethodSelected();
     }
 
@@ -397,15 +450,48 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
 
             @Override
             public void onFailure(MercadoPagoError error) {
-                setFailureRecovery(new FailureRecovery() {
-                    @Override
-                    public void recover() {
-                        createPayment();
+
+                if (error.isApiException() && error.getApiException().getStatus().equals(ApiUtil.StatusCodes.BAD_REQUEST)) {
+                    List<Cause> causes = error.getApiException().getCause();
+                    if (causes != null && !causes.isEmpty()) {
+                        Cause cause = causes.get(0);
+                        if (ApiException.ErrorCodes.INVALID_PAYMENT_WITH_ESC.equals(cause.getCode()) &&
+                                paymentData.getToken().getCardId() != null) {
+                            deleteESC(paymentData);
+                            continuePaymentWithoutESC();
+
+                        } else {
+                            recoverCreatePayment(error);
+                        }
                     }
-                });
-                resolvePaymentFailure(error);
+                } else {
+                    recoverCreatePayment(error);
+                }
+
             }
         });
+    }
+
+    private void continuePaymentWithoutESC() {
+        mPaymentRecovery = new PaymentRecovery(mCreatedToken, mSelectedPaymentMethod,
+                mSelectedPayerCost, mSelectedIssuer, Payment.StatusCodes.STATUS_REJECTED,
+                Payment.StatusCodes.STATUS_DETAIL_INVALID_ESC);
+
+        getView().startPaymentRecoveryFlow(mPaymentRecovery);
+    }
+
+    private void deleteESC(PaymentData paymentData) {
+        getResourcesProvider().deleteESC(paymentData.getToken().getCardId());
+    }
+
+    private void recoverCreatePayment(MercadoPagoError error) {
+        setFailureRecovery(new FailureRecovery() {
+            @Override
+            public void recover() {
+                createPayment();
+            }
+        });
+        resolvePaymentFailure(error);
     }
 
     private void finishCheckout() {

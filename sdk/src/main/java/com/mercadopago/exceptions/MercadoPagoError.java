@@ -9,6 +9,7 @@ public class MercadoPagoError {
 
     private String message;
     private String errorDetail;
+    private String requestOrigin;
     private ApiException apiException;
     private boolean recoverable;
 
@@ -23,8 +24,9 @@ public class MercadoPagoError {
         this.recoverable = recoverable;
     }
 
-    public MercadoPagoError(ApiException apiException) {
+    public MercadoPagoError(ApiException apiException, String requestOrigin) {
         this.apiException = apiException;
+        this.requestOrigin = requestOrigin;
         this.recoverable = apiException.isRecoverable();
     }
 
@@ -38,6 +40,10 @@ public class MercadoPagoError {
 
     public String getMessage() {
         return message;
+    }
+
+    public String getRequestOrigin() {
+        return requestOrigin;
     }
 
     public String getErrorDetail() {

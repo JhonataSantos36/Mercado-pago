@@ -48,6 +48,7 @@ public class ReviewAndConfirmPresenter extends MvpPresenter<ReviewAndConfirmView
     public void initialize() {
         try {
             validate();
+            getView().trackScreen();
             showReviewAndConfirm();
         } catch (IllegalStateException exception) {
             getView().showError(exception.getMessage());

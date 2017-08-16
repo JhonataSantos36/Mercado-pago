@@ -25,7 +25,7 @@ public interface InstallmentsActivityView extends MvpView {
 
     void hideLoadingView();
 
-    void showError(MercadoPagoError error);
+    void showError(MercadoPagoError error, String requestOrigin);
 
     void showHeader();
 

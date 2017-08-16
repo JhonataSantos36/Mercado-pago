@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.annotation.StringDef;
 
+import com.mercadopago.BuildConfig;
 import com.mercadopago.CheckoutActivity;
 import com.mercadopago.callbacks.CallbackHolder;
 import com.mercadopago.constants.ContentLocation;
@@ -19,8 +21,12 @@ import com.mercadopago.preferences.FlowPreference;
 import com.mercadopago.preferences.PaymentResultScreenPreference;
 import com.mercadopago.preferences.ReviewScreenPreference;
 import com.mercadopago.preferences.ServicePreference;
+import com.mercadopago.providers.MPTrackingProvider;
+import com.mercadopago.px_tracking.MPTracker;
+import com.mercadopago.px_tracking.model.ScreenViewEvent;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.TextUtil;
+import com.mercadopago.util.TrackingUtil;
 
 
 /**
@@ -104,10 +110,11 @@ public class MercadoPagoCheckout {
         if (checkoutPreference == null) {
             throw new IllegalStateException("Checkout preference required");
         }
-        if ((CallbackHolder.getInstance().hasPaymentCallback() || resultCode == MercadoPagoCheckout.PAYMENT_RESULT_CODE)
+        if ((CallbackHolder.getInstance().hasPaymentCallback() || resultCode.equals(MercadoPagoCheckout.PAYMENT_RESULT_CODE))
                 && !this.checkoutPreference.hasId()
                 && (this.servicePreference == null || !this.servicePreference.hasCreatePaymentURL())) {
-            throw new IllegalStateException("Payment service or preference created with private key required to create a payment");
+            //TODO revisar
+//            throw new IllegalStateException("Payment service or preference created with private key required to create a payment");
         }
         if (hasTwoDiscountsSet()) {
             throw new IllegalStateException("payment data discount and discount set");
@@ -174,13 +181,31 @@ public class MercadoPagoCheckout {
         checkoutIntent.putExtra("binaryMode", binaryMode);
         checkoutIntent.putExtra("resultCode", resultCode);
 
+        trackScreen();
+
         if (context != null) {
             context.startActivity(checkoutIntent);
         } else {
             activity.startActivityForResult(checkoutIntent, MercadoPagoCheckout.CHECKOUT_REQUEST_CODE);
         }
+    }
 
+    public void trackScreen() {
+        //Tracking Disabled
+        MPTracker.getInstance().setTrackingEnabled(false);
 
+        MPTrackingProvider mpTrackingProvider = new MPTrackingProvider.Builder()
+                .setContext(activity)
+                .setCheckoutVersion(BuildConfig.VERSION_NAME)
+                .setPublicKey(publicKey)
+                .build();
+
+        ScreenViewEvent event = new ScreenViewEvent.Builder()
+                .setScreenId(TrackingUtil.SCREEN_ID_CHECKOUT)
+                .setScreenName(TrackingUtil.SCREEN_NAME_CHECKOUT)
+                .build();
+
+        mpTrackingProvider.addTrackEvent(event);
     }
 
     private void startCheckoutActivity() {

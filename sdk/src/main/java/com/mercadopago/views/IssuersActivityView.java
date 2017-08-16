@@ -22,7 +22,7 @@ public interface IssuersActivityView extends MvpView {
 
     void stopLoadingView();
 
-    void showError(MercadoPagoError error);
+    void showError(MercadoPagoError error, String requestOrigin);
 
     void finishWithResult(Issuer issuer);
 }

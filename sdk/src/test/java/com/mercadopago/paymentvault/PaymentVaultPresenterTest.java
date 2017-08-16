@@ -637,7 +637,7 @@ public class PaymentVaultPresenterTest {
         provider.setResponse(paymentMethodSearch);
 
         ApiException apiException = Discounts.getDoNotFindCampaignApiException();
-        MercadoPagoError mpException = new MercadoPagoError(apiException);
+        MercadoPagoError mpException = new MercadoPagoError(apiException, "");
         provider.setDiscountResponse(mpException);
 
         PaymentVaultPresenter presenter = new PaymentVaultPresenter();
@@ -687,7 +687,7 @@ public class PaymentVaultPresenterTest {
         provider.setResponse(paymentMethodSearch);
 
         ApiException apiException = Discounts.getDoNotFindCampaignApiException();
-        MercadoPagoError mpException = new MercadoPagoError(apiException);
+        MercadoPagoError mpException = new MercadoPagoError(apiException, "");
         provider.setDiscountResponse(mpException);
 
         PaymentVaultPresenter presenter = new PaymentVaultPresenter();
@@ -712,7 +712,7 @@ public class PaymentVaultPresenterTest {
 
         ApiException apiException = new ApiException();
         apiException.setMessage("Mocked failure");
-        MercadoPagoError mercadoPagoError = new MercadoPagoError(apiException);
+        MercadoPagoError mercadoPagoError = new MercadoPagoError(apiException, "");
         provider.setResponse(mercadoPagoError);
 
         PaymentVaultPresenter presenter = new PaymentVaultPresenter();
@@ -736,7 +736,7 @@ public class PaymentVaultPresenterTest {
 
         ApiException apiException = new ApiException();
         apiException.setMessage("Mocked failure");
-        MercadoPagoError mercadoPagoError = new MercadoPagoError(apiException);
+        MercadoPagoError mercadoPagoError = new MercadoPagoError(apiException, "");
         provider.setResponse(mercadoPagoError);
 
         PaymentVaultPresenter presenter = new PaymentVaultPresenter();
@@ -763,7 +763,7 @@ public class PaymentVaultPresenterTest {
 
         ApiException apiException = new ApiException();
         apiException.setMessage("Mocked failure");
-        MercadoPagoError mercadoPagoError = new MercadoPagoError(apiException);
+        MercadoPagoError mercadoPagoError = new MercadoPagoError(apiException, "");
         provider.setResponse(mercadoPagoError);
 
         PaymentVaultPresenter presenter = new PaymentVaultPresenter();
@@ -1200,7 +1200,7 @@ public class PaymentVaultPresenterTest {
         }
 
         @Override
-        public void showError(MercadoPagoError mpException) {
+        public void showError(MercadoPagoError mpException, String requestOrigin) {
             errorShown = mpException;
         }
 
@@ -1239,6 +1239,16 @@ public class PaymentVaultPresenterTest {
         @Override
         public void cleanPaymentMethodOptions() {
             //Not yet tested
+        }
+
+        @Override
+        public void trackChildrenScreen() {
+
+        }
+
+        @Override
+        public void trackInitialScreen() {
+
         }
 
         public void simulateItemSelection(int index) {

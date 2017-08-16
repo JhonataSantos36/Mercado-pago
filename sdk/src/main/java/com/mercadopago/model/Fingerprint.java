@@ -38,6 +38,7 @@ import java.util.regex.Pattern;
 public class Fingerprint {
     private static final String TAG = "Fingerprint";
     private static final String SHARED_PREFS_FINGERPRINT_LOCATION = "FINGERPRINT_LOCATION";
+    public static final String PLATFORM_PROPERTY = "ro.product.cpu.abi";
 
     private transient Context mContext;
     private transient LocationManager mLocationManager;
@@ -54,7 +55,7 @@ public class Fingerprint {
     public Location location;
 
 
-    private static String getSystemProperty(String propName) {
+    public static String getSystemProperty(String propName) {
         String line;
         BufferedReader input = null;
         try {
@@ -101,7 +102,7 @@ public class Fingerprint {
         ArrayList<VendorId> vendorIds = new ArrayList<VendorId>();
 
         // android_id
-        String androidId = Settings.Secure.getString(mContext.getContentResolver(), Settings.Secure.ANDROID_ID);
+        String androidId = getAndroidId(mContext);
         vendorIds.add(new VendorId("android_id", androidId));
 
         // serial
@@ -118,6 +119,10 @@ public class Fingerprint {
         }
 
         return vendorIds;
+    }
+
+    public static String getAndroidId(Context context) {
+        return Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
     }
 
     private static class SecureRandomId {
@@ -169,30 +174,51 @@ public class Fingerprint {
     }
 
     public String getSystemVersion() {
+        return getDeviceSystemVersion();
+    }
+
+    public static String getDeviceSystemVersion() {
         return Build.VERSION.RELEASE;
     }
 
-    public String getResolution() {
-        WindowManager manager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
+    public static String getDeviceResolution(Context context) {
+        WindowManager manager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         Display display = manager.getDefaultDisplay();
 
         return display.getWidth() + "x" + display.getHeight();
     }
 
+    public String getResolution() {
+        return getDeviceResolution(mContext);
+    }
+
     public Long getRam() {
         Long ram = null;
+        RandomAccessFile reader = null;
         try {
-            RandomAccessFile reader = new RandomAccessFile("/proc/meminfo", "r");
+            reader = new RandomAccessFile("/proc/meminfo", "r");
             String load = reader.readLine();
+
             Pattern pattern = Pattern.compile("(\\d+)");
             Matcher matcher = pattern.matcher(load);
             if (matcher.find()) {
                 ram = Long.valueOf(matcher.group(0));
             }
-            reader.close();
-        } catch (Exception ex) {}
+        } catch (Exception ignored) {
+        } finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (Exception ignored) {
+                }
+            }
+        }
 
         return ram;
+    }
+
+    public static float getDeviceScreenDensity(Context context) {
+        return context.getResources().getDisplayMetrics().density;
     }
 
     public long getDiskSpace() {
@@ -327,7 +353,7 @@ public class Fingerprint {
         }
 
         public String getPlatform() {
-            return getSystemProperty("ro.product.cpu.abi");
+            return getSystemProperty(PLATFORM_PROPERTY);
         }
 
         public String getBrand() {
@@ -375,7 +401,7 @@ public class Fingerprint {
         }
 
         public float getScreenDensity() {
-            return mContext.getResources().getDisplayMetrics().density;
+            return getDeviceScreenDensity(mContext);
         }
     }
 

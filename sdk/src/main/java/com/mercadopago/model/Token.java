@@ -25,6 +25,7 @@ public class Token implements CardInformation {
     private String firstSixDigits;
     private String lastFourDigits;
     private Cardholder cardholder;
+    private String esc;
 
     public Integer getSecurityCodeLength() {
         return securityCodeLength;
@@ -160,6 +161,14 @@ public class Token implements CardInformation {
 
     public void setCardholder(Cardholder cardholder) {
         this.cardholder = cardholder;
+    }
+
+    public String getEsc() {
+        return esc;
+    }
+
+    public void setEsc(String esc) {
+        this.esc = esc;
     }
 
     public static Token parseJson(String json) {

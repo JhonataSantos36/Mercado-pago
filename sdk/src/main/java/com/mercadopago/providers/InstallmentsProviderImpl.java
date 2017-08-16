@@ -13,6 +13,7 @@ import com.mercadopago.model.Discount;
 import com.mercadopago.model.Installment;
 import com.mercadopago.mvp.OnResourcesRetrievedCallback;
 import com.mercadopago.preferences.ServicePreference;
+import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.TextUtil;
 
 import java.math.BigDecimal;
@@ -60,7 +61,7 @@ public class InstallmentsProviderImpl implements InstallmentsProvider {
 
             @Override
             public void failure(ApiException apiException) {
-                onResourcesRetrievedCallback.onFailure(new MercadoPagoError(apiException));
+                onResourcesRetrievedCallback.onFailure(new MercadoPagoError(apiException, ApiUtil.RequestOrigin.GET_INSTALLMENTS));
             }
         });
     }

@@ -81,7 +81,7 @@
     <!-- Congrats -->
     <string name="mpsdk_title_activity_congrats">Pronto! O seu pagamento foi aprovado!</string>
     <string name="mpsdk_subtitle_action_activity_congrats">Enviaremos os dados para\n%1$s</string>
-    <string name="mpsdk_text_state_acount_activity_congrat">Você verá o pagamento na fatura do seu cartão de crédito como\n  %1$s</string>
+    <string name="mpsdk_text_state_account_activity_congrats">Você verá o pagamento na fatura do seu cartão de crédito como\n %s</string>
     <string name="mpsdk_payment_id_description">Comprovante</string>
 
     <!-- CallForAuthorize -->

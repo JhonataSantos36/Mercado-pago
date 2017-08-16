@@ -15,6 +15,7 @@ import com.mercadopago.mvp.MvpPresenter;
 import com.mercadopago.mvp.OnResourcesRetrievedCallback;
 import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.providers.PaymentVaultProvider;
+import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.CurrenciesUtil;
 import com.mercadopago.util.MercadoPagoUtil;
 import com.mercadopago.views.PaymentVaultView;
@@ -51,7 +52,7 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
             validateParameters();
             onValidStart();
         } catch (IllegalStateException exception) {
-            getView().showError(new MercadoPagoError(exception.getMessage(), false));
+            getView().showError(new MercadoPagoError(exception.getMessage(), false), "");
         }
     }
 
@@ -176,6 +177,8 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
     }
 
     private void initPaymentMethodSearch() {
+        getView().trackInitialScreen();
+
         getView().setTitle(getResourcesProvider().getTitle());
 
         if (mPaymentMethodSearch == null) {
@@ -202,7 +205,7 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
                 @Override
                 public void onFailure(MercadoPagoError error) {
                     if (isViewAttached()) {
-                        getView().showError(error);
+                        getView().showError(error, ApiUtil.RequestOrigin.PAYMENT_METHOD_SEARCH);
 
                         setFailureRecovery(new FailureRecovery() {
                             @Override
@@ -221,6 +224,8 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
     }
 
     private void showSelectedItemChildren() {
+        getView().trackChildrenScreen();
+
         getView().setTitle(mSelectedSearchItem.getChildrenHeader());
         getView().showSearchItems(mSelectedSearchItem.getChildren(), getPaymentMethodSearchItemSelectionCallback());
     }
@@ -382,12 +387,12 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
 
     private void showEmptyPaymentMethodsError() {
         String errorMessage = getResourcesProvider().getEmptyPaymentMethodsErrorMessage();
-        getView().showError(new MercadoPagoError(errorMessage, false));
+        getView().showError(new MercadoPagoError(errorMessage, false), "");
     }
 
     private void showMismatchingPaymentMethodError() {
         String errorMessage = getResourcesProvider().getStandardErrorMessage();
-        getView().showError(new MercadoPagoError(errorMessage, MISMATCHING_PAYMENT_METHOD_ERROR, false));
+        getView().showError(new MercadoPagoError(errorMessage, MISMATCHING_PAYMENT_METHOD_ERROR, false), "");
     }
 
     public Site getSite() {

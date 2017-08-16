@@ -1,0 +1,12 @@
+{
+  "message": "Invalid esc",
+  "error": "bad_request",
+  "status": 400,
+  "cause": [
+    {
+      "code": "E216",
+      "description": "Invalid parameter esc",
+      "data": null
+    }
+  ]
+}

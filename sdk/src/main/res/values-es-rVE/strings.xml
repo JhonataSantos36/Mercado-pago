@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="mpsdk_card_installments_title">¿En cuántas cuotas?</string>
+    <string name="mpsdk_doc_number_label">Documento de identidad</string>
+    <string name="mpsdk_error_message_invalid_installments">Número de cuotas inválido</string>
+    <string name="mpsdk_homebanking">banca en línea de</string>
+</resources>

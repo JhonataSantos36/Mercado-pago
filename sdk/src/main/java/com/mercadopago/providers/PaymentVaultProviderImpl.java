@@ -17,6 +17,7 @@ import com.mercadopago.model.Payer;
 import com.mercadopago.model.PaymentMethodSearch;
 import com.mercadopago.model.Site;
 import com.mercadopago.mvp.OnResourcesRetrievedCallback;
+import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.TextUtil;
 import com.mercadopago.preferences.PaymentPreference;
 
@@ -75,7 +76,7 @@ public class PaymentVaultProviderImpl implements PaymentVaultProvider {
 
             @Override
             public void failure(ApiException apiException) {
-                onResourcesRetrievedCallback.onFailure(new MercadoPagoError(apiException));
+                onResourcesRetrievedCallback.onFailure(new MercadoPagoError(apiException, ApiUtil.RequestOrigin.GET_DIRECT_DISCOUNT));
             }
         });
     }
@@ -91,7 +92,7 @@ public class PaymentVaultProviderImpl implements PaymentVaultProvider {
 
             @Override
             public void failure(ApiException apiException) {
-                onResourcesRetrievedCallback.onFailure(new MercadoPagoError(apiException));
+                onResourcesRetrievedCallback.onFailure(new MercadoPagoError(apiException, ApiUtil.RequestOrigin.GET_DIRECT_DISCOUNT));
             }
         });
     }
@@ -114,7 +115,7 @@ public class PaymentVaultProviderImpl implements PaymentVaultProvider {
 
             @Override
             public void failure(ApiException apiException) {
-                onResourcesRetrievedCallback.onFailure(new MercadoPagoError(apiException));
+                onResourcesRetrievedCallback.onFailure(new MercadoPagoError(apiException, ApiUtil.RequestOrigin.GET_PAYMENT_METHODS));
             }
         });
     }

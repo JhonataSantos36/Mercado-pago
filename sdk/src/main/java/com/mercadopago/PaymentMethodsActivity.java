@@ -21,12 +21,12 @@ import com.mercadopago.core.MercadoPagoComponents;
 import com.mercadopago.decorations.DividerItemDecoration;
 import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.model.PaymentMethod;
-import com.mercadopago.mptracker.MPTracker;
 import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.presenters.PaymentMethodsPresenter;
 import com.mercadopago.providers.PaymentMethodsProvider;
 import com.mercadopago.providers.PaymentMethodsProviderImpl;
+import com.mercadopago.px_tracking.MPTracker;
 import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;
@@ -86,7 +86,6 @@ public class PaymentMethodsActivity extends MercadoPagoBaseActivity implements P
     }
 
     protected void setContentView() {
-        MPTracker.getInstance().trackScreen("PAYMENT_METHODS", "2", mMerchantPublicKey, BuildConfig.VERSION_NAME, this);
         setContentView(R.layout.mpsdk_activity_payment_methods);
     }
 
@@ -117,7 +116,7 @@ public class PaymentMethodsActivity extends MercadoPagoBaseActivity implements P
     }
 
     protected void onInvalidStart(String message) {
-        ErrorUtil.startErrorActivity(this, message, false);
+        ErrorUtil.startErrorActivity(this, message, false, mMerchantPublicKey);
     }
 
     private void initializeToolbar() {
@@ -142,8 +141,6 @@ public class PaymentMethodsActivity extends MercadoPagoBaseActivity implements P
     }
 
     public void onBackPressed() {
-        MPTracker.getInstance().trackEvent("PAYMENT_METHODS", "BACK_PRESSED", "2", mMerchantPublicKey, BuildConfig.VERSION_NAME, this);
-
         Intent returnIntent = new Intent();
         returnIntent.putExtra("backButtonPressed", true);
         setResult(RESULT_CANCELED, returnIntent);
@@ -216,7 +213,7 @@ public class PaymentMethodsActivity extends MercadoPagoBaseActivity implements P
 
     @Override
     public void showError(MercadoPagoError exception) {
-        ErrorUtil.startErrorActivity(this, exception);
+        ErrorUtil.startErrorActivity(this, exception, mMerchantPublicKey);
     }
 
     @Override

@@ -30,4 +30,6 @@ public interface ReviewAndConfirmView extends MvpView {
     void showTermsAndConditions();
 
     ReviewSubscriber getReviewSubscriber();
+
+    void trackScreen();
 }

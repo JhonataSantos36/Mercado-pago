@@ -37,7 +37,7 @@ public class IssuersPresenterTest {
         List<Issuer> issuers = Issuers.getIssuersListMLA();
         provider.setResponse(issuers);
 
-        PaymentMethod paymentMethod = PaymentMethods.getPaymentMethodOn();
+        PaymentMethod paymentMethod = PaymentMethods.getPaymentMethodOnVisa();
 
         IssuersPresenter presenter = new IssuersPresenter();
         presenter.attachView(mockedView);
@@ -62,7 +62,7 @@ public class IssuersPresenterTest {
         List<Issuer> issuers = Issuers.getOneIssuerListMLA();
         provider.setResponse(issuers);
 
-        PaymentMethod paymentMethod = PaymentMethods.getPaymentMethodOn();
+        PaymentMethod paymentMethod = PaymentMethods.getPaymentMethodOnVisa();
 
         IssuersPresenter presenter = new IssuersPresenter();
         presenter.attachView(mockedView);
@@ -83,7 +83,7 @@ public class IssuersPresenterTest {
         MockedProvider provider = new MockedProvider();
 
         List<Issuer> issuers = Issuers.getIssuersListMLA();
-        PaymentMethod paymentMethod = PaymentMethods.getPaymentMethodOn();
+        PaymentMethod paymentMethod = PaymentMethods.getPaymentMethodOnVisa();
 
         IssuersPresenter presenter = new IssuersPresenter();
         presenter.attachView(mockedView);
@@ -109,7 +109,7 @@ public class IssuersPresenterTest {
         List<Issuer> issuers = new ArrayList<Issuer>();
         provider.setResponse(issuers);
 
-        PaymentMethod paymentMethod = PaymentMethods.getPaymentMethodOn();
+        PaymentMethod paymentMethod = PaymentMethods.getPaymentMethodOnVisa();
 
         IssuersPresenter presenter = new IssuersPresenter();
         presenter.attachView(mockedView);
@@ -129,7 +129,7 @@ public class IssuersPresenterTest {
         MercadoPagoError mercadoPagoError = new MercadoPagoError("Error", true);
         provider.setResponse(mercadoPagoError);
 
-        PaymentMethod paymentMethod = PaymentMethods.getPaymentMethodOn();
+        PaymentMethod paymentMethod = PaymentMethods.getPaymentMethodOnVisa();
 
         IssuersPresenter presenter = new IssuersPresenter();
         presenter.attachView(mockedView);
@@ -149,7 +149,7 @@ public class IssuersPresenterTest {
 
         List<Issuer> issuers = null;
         provider.setResponse(issuers);
-        PaymentMethod paymentMethod = PaymentMethods.getPaymentMethodOn();
+        PaymentMethod paymentMethod = PaymentMethods.getPaymentMethodOnVisa();
 
         IssuersPresenter presenter = new IssuersPresenter();
         presenter.attachView(mockedView);
@@ -171,7 +171,7 @@ public class IssuersPresenterTest {
         MercadoPagoError mercadoPagoError = new MercadoPagoError("Error", true);
         provider.setResponse(mercadoPagoError);
 
-        PaymentMethod paymentMethod = PaymentMethods.getPaymentMethodOn();
+        PaymentMethod paymentMethod = PaymentMethods.getPaymentMethodOnVisa();
 
         IssuersPresenter presenter = new IssuersPresenter();
         presenter.attachView(mockedView);
@@ -222,7 +222,7 @@ public class IssuersPresenterTest {
     @Test
     public void whenIsCardInfoAndPaymentMethodAvailableThenIsNotRequiredCardDrawn() {
         CardInfo cardInfo = getCardInfo();
-        PaymentMethod paymentMethod = PaymentMethods.getPaymentMethodOn();
+        PaymentMethod paymentMethod = PaymentMethods.getPaymentMethodOnVisa();
 
         IssuersPresenter presenter = new IssuersPresenter();
         presenter.setCardInfo(cardInfo);
@@ -243,7 +243,7 @@ public class IssuersPresenterTest {
 
     @Test
     public void whenIsNotCardInfoAvailableThenIsNotRequiredCardDrawn() {
-        PaymentMethod paymentMethod = PaymentMethods.getPaymentMethodOn();
+        PaymentMethod paymentMethod = PaymentMethods.getPaymentMethodOnVisa();
 
         IssuersPresenter presenter = new IssuersPresenter();
         presenter.setPaymentMethod(paymentMethod);
@@ -331,7 +331,7 @@ public class IssuersPresenterTest {
         }
 
         @Override
-        public void showError(MercadoPagoError error) {
+        public void showError(MercadoPagoError error, String requestOrigin) {
             this.errorShown = true;
         }
 

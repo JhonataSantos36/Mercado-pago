@@ -1,0 +1,12 @@
+{
+  "message": "Invalid esc",
+  "error": "bad_request",
+  "status": 400,
+  "cause": [
+    {
+      "code": "E217",
+      "description": "Invalid parameter fingerprint",
+      "data": null
+    }
+  ]
+}

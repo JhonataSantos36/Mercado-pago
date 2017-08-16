@@ -30,12 +30,12 @@ import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.model.Currency;
 
 import com.mercadopago.model.Discount;
-import com.mercadopago.mptracker.MPTracker;
 import com.mercadopago.observers.TimerObserver;
 import com.mercadopago.preferences.DecorationPreference;
 
 import com.mercadopago.presenters.DiscountsPresenter;
 import com.mercadopago.providers.DiscountProviderImpl;
+import com.mercadopago.px_tracking.MPTracker;
 import com.mercadopago.util.CurrenciesUtil;
 import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
@@ -277,7 +277,7 @@ public class DiscountsActivity extends AppCompatActivity implements DiscountsAct
     }
 
     protected void onInvalidStart(String message) {
-        ErrorUtil.startErrorActivity(this, message, false);
+        ErrorUtil.startErrorActivity(this, message, false, mPresenter.getPublicKey());
     }
 
     private boolean isCustomColorSet() {
@@ -286,7 +286,6 @@ public class DiscountsActivity extends AppCompatActivity implements DiscountsAct
 
     @Override
     public void drawSummary() {
-        MPTracker.getInstance().trackScreen("DISCOUNT_SUMMARY", "2", mPresenter.getPublicKey(), BuildConfig.VERSION_NAME, this);
 
         mDiscountCodeContainer.setVisibility(View.GONE);
         mReviewDiscountSummaryContainer.setVisibility(View.VISIBLE);
@@ -372,7 +371,6 @@ public class DiscountsActivity extends AppCompatActivity implements DiscountsAct
 
     @Override
     public void requestDiscountCode() {
-        MPTracker.getInstance().trackScreen("DISCOUNT_INPUT_CODE", "2", mPresenter.getPublicKey(), BuildConfig.VERSION_NAME, this);
 
         mReviewDiscountSummaryContainer.setVisibility(View.GONE);
         mDiscountCodeContainer.setVisibility(View.VISIBLE);

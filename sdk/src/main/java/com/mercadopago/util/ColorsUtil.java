@@ -11,7 +11,9 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 
+import com.mercadopago.R;
 import com.mercadopago.customviews.MPTextView;
+import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.preferences.DecorationPreference;
 
 /**

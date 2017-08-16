@@ -52,7 +52,6 @@ import com.mercadopago.model.SavedCardToken;
 import com.mercadopago.model.SecurityCodeIntent;
 import com.mercadopago.model.Site;
 import com.mercadopago.model.Token;
-import com.mercadopago.mptracker.MPTracker;
 import com.mercadopago.preferences.CheckoutPreference;
 import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.preferences.PaymentPreference;
@@ -133,7 +132,6 @@ public class MercadoPago {
 
     public void getPreference(String checkoutPreferenceId, Callback<CheckoutPreference> callback) {
         if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {
-            MPTracker.getInstance().trackEvent("NO_SCREEN", "GET_PREFERENCE", "3", mKey, BuildConfig.VERSION_NAME, mContext);
             CheckoutService service = mRetrofit.create(CheckoutService.class);
             service.getPreference(checkoutPreferenceId, this.mKey).enqueue(callback);
         } else {
@@ -143,7 +141,6 @@ public class MercadoPago {
 
     public void createPayment(final PaymentBody paymentBody, final Callback<Payment> callback) {
         if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {
-            MPTracker.getInstance().trackEvent("NO_SCREEN", "CREATE_PAYMENT", "1", mKey, BuildConfig.VERSION_NAME, mContext);
             Retrofit paymentsRetrofitAdapter = new Retrofit.Builder()
                     .baseUrl(MP_API_BASE_URL)
                     .addConverterFactory(GsonConverterFactory.create(JsonUtil.getInstance().getGson()))
@@ -161,7 +158,6 @@ public class MercadoPago {
 
     public void createToken(final SavedCardToken savedCardToken, final Callback<Token> callback) {
         if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {
-            MPTracker.getInstance().trackEvent("NO_SCREEN", "CREATE_SAVED_CARD_TOKEN", "1", mKey, BuildConfig.VERSION_NAME, mContext);
             new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -178,7 +174,6 @@ public class MercadoPago {
 
     public void createToken(final CardToken cardToken, final Callback<Token> callback) {
         if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {
-            MPTracker.getInstance().trackEvent("NO_SCREEN", "CREATE_CARD_TOKEN", "1", mKey, BuildConfig.VERSION_NAME, mContext);
             new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -194,7 +189,6 @@ public class MercadoPago {
 
     public void cloneToken(final String tokenId, final Callback<Token> callback) {
         if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {
-            MPTracker.getInstance().trackEvent("NO_SCREEN", "CLONE_TOKEN", "1", mKey, BuildConfig.VERSION_NAME, mContext);
 
             GatewayService service = mRetrofit.create(GatewayService.class);
             service.getToken(tokenId, "", this.mKey).enqueue(callback);
@@ -205,7 +199,6 @@ public class MercadoPago {
 
     public void putSecurityCode(final String tokenId, final SecurityCodeIntent securityCodeIntent, final Callback<Token> callback) {
         if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {
-            MPTracker.getInstance().trackEvent("NO_SCREEN", "CLONE_TOKEN", "1", mKey, BuildConfig.VERSION_NAME, mContext);
 
             GatewayService service = mRetrofit.create(GatewayService.class);
             service.getToken(tokenId, this.mKey,"",  securityCodeIntent).enqueue(callback);
@@ -216,7 +209,6 @@ public class MercadoPago {
 
     public void getBankDeals(final Callback<List<BankDeal>> callback) {
         if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {
-            MPTracker.getInstance().trackEvent("NO_SCREEN", "GET_BANK_DEALS", "1", mKey, BuildConfig.VERSION_NAME, mContext);
             BankDealService service = mRetrofit.create(BankDealService.class);
             service.getBankDeals(this.mKey, "", mContext.getResources().getConfiguration().locale.toString()).enqueue(callback);
         } else {
@@ -226,7 +218,6 @@ public class MercadoPago {
 
     public void getDirectDiscount(String amount, String payerEmail, final Callback<Discount> callback) {
         if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {
-            MPTracker.getInstance().trackEvent("NO_SCREEN", "GET_DIRECT_DISCOUNT", "1", mKey, BuildConfig.VERSION_NAME, mContext);
 
             DiscountService service = mRetrofit.create(DiscountService.class);
             service.getDirectDiscount(this.mKey, amount, payerEmail).enqueue(callback);
@@ -237,7 +228,6 @@ public class MercadoPago {
 
     public void getCodeDiscount(String amount, String payerEmail, String couponCode, final Callback<Discount> callback) {
         if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {
-            MPTracker.getInstance().trackEvent("NO_SCREEN", "GET_CODE_DISCOUNT", "1", mKey, BuildConfig.VERSION_NAME, mContext);
 
             DiscountService service = mRetrofit.create(DiscountService.class);
             service.getCodeDiscount(this.mKey, amount, payerEmail, couponCode).enqueue(callback);
@@ -248,7 +238,6 @@ public class MercadoPago {
 
     public void getCampaigns(final Callback<List<Campaign>> callback) {
         if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {
-            MPTracker.getInstance().trackEvent("NO_SCREEN", "GET_CAMPAIGNS", "1", mKey, BuildConfig.VERSION_NAME, mContext);
 
             DiscountService service = mRetrofit.create(DiscountService.class);
             service.getCampaigns(this.mKey).enqueue(callback);
@@ -260,7 +249,6 @@ public class MercadoPago {
     public void getIdentificationTypes(Callback<List<IdentificationType>> callback) {
         IdentificationService service = mRetrofit.create(IdentificationService.class);
         if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {
-            MPTracker.getInstance().trackEvent("NO_SCREEN", "GET_IDENTIFICATION_TYPES", "1", mKey, BuildConfig.VERSION_NAME, mContext);
             service.getIdentificationTypes(this.mKey, null).enqueue(callback);
         } else {
             service.getIdentificationTypes(null, this.mKey).enqueue(callback);
@@ -269,7 +257,6 @@ public class MercadoPago {
 
     public void getInstallments(String bin, BigDecimal amount, Long issuerId, String paymentMethodId, Callback<List<Installment>> callback) {
         if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {
-            MPTracker.getInstance().trackEvent("NO_SCREEN", "GET_INSTALLMENTS", "1", mKey, BuildConfig.VERSION_NAME, mContext);
             PaymentService service = mRetrofit.create(PaymentService.class);
             service.getInstallments(this.mKey,"",  bin, amount, issuerId, paymentMethodId,
                     mContext.getResources().getConfiguration().locale.toString()).enqueue(callback);
@@ -280,7 +267,6 @@ public class MercadoPago {
 
     public void getIssuers(String paymentMethodId, String bin, final Callback<List<Issuer>> callback) {
         if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {
-            MPTracker.getInstance().trackEvent("NO_SCREEN", "GET_ISSUERS", "1", mKey, BuildConfig.VERSION_NAME, mContext);
             PaymentService service = mRetrofit.create(PaymentService.class);
             service.getIssuers(this.mKey, "", paymentMethodId, bin).enqueue(callback);
         } else {
@@ -290,7 +276,6 @@ public class MercadoPago {
 
     public void getPaymentMethods(final Callback<List<PaymentMethod>> callback) {
         if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {
-            MPTracker.getInstance().trackEvent("NO_SCREEN", "GET_PAYMENT_METHODS", "1", mKey, BuildConfig.VERSION_NAME, mContext);
             PaymentService service = mRetrofit.create(PaymentService.class);
             service.getPaymentMethods(this.mKey, "").enqueue(callback);
         } else {
@@ -300,7 +285,6 @@ public class MercadoPago {
 
     public void getPaymentMethodSearch(BigDecimal amount, List<String> excludedPaymentTypes, List<String> excludedPaymentMethods, Payer payer, final Callback<PaymentMethodSearch> callback) {
         if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {
-            MPTracker.getInstance().trackEvent("NO_SCREEN", "GET_PAYMENT_METHOD_SEARCH", "1", mKey, BuildConfig.VERSION_NAME, mContext);
             PayerIntent payerIntent = new PayerIntent(payer);
             CheckoutService service = mRetrofit.create(CheckoutService.class);
             String separator = ",";
@@ -315,7 +299,6 @@ public class MercadoPago {
 
     public void getPaymentResult(Long paymentId, String paymentTypeId, final Callback<Instructions> callback) {
         if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {
-            MPTracker.getInstance().trackEvent("NO_SCREEN", "GET_INSTRUCTIONS", "1", mKey, BuildConfig.VERSION_NAME, mContext);
 
             CheckoutService service = mRetrofit.create(CheckoutService.class);
             service.getPaymentResult(mContext.getResources().getConfiguration().locale.getLanguage(), paymentId, this.mKey, paymentTypeId, PAYMENT_RESULT_API_VERSION).enqueue(callback);

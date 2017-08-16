@@ -1,15 +1,19 @@
 package com.mercadopago.adapters;
 
+import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.NonNull;
 
 import com.google.gson.reflect.TypeToken;
+import com.mercadopago.BuildConfig;
 import com.mercadopago.callbacks.Callback;
 import com.mercadopago.model.Payment;
 import com.mercadopago.model.Token;
-import com.mercadopago.mptracker.MPTracker;
+import com.mercadopago.providers.MPTrackingProvider;
+import com.mercadopago.px_tracking.MPTracker;
 import com.mercadopago.util.ApiUtil;
+import com.mercadopago.util.TrackingUtil;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.ParameterizedType;
@@ -82,9 +86,12 @@ public class ErrorHandlingCallAdapter {
                                 T body = r.body();
                                 if (body instanceof Payment) {
                                     Payment mPayment = (Payment) body;
-                                    MPTracker.getInstance().trackPayment("NO_SCREEN", "CREATE_PAYMENT_RESPONSE", mPayment.getId(), mPayment.getPaymentMethodId(), mPayment.getStatus(), mPayment.getStatusDetail(), mPayment.getPaymentTypeId(), mPayment.getInstallments(), mPayment.getIssuerId());
+
+                                    MPTracker.getInstance().trackPayment(mPayment.getId(), mPayment.getPaymentTypeId());
+
                                 } else if (body instanceof Token) {
                                     Token mToken = (Token) body;
+
                                     MPTracker.getInstance().trackToken(mToken.getId());
                                 }
                                 callback.success(r.body());

@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
+    android:layout_marginBottom="33dp"
     android:layout_marginEnd="25dp"
     android:layout_marginLeft="25dp"
     android:layout_marginRight="25dp"
@@ -268,24 +269,4 @@
                 app:fontStyle="light" />
         </LinearLayout>
     </LinearLayout>
-
-    <FrameLayout
-        android:id="@+id/mpsdkReviewSummaryConfirmButton"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginBottom="33dp"
-        android:layout_marginTop="33dp"
-        android:background="@drawable/mpsdk_button_bg_stroke"
-        android:focusable="true"
-        android:visibility="visible">
-
-        <com.mercadopago.customviews.MPTextView
-            android:id="@+id/mpsdkReviewButtonText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/mpsdk_confirm"
-            android:textColor="@color/mpsdk_white_background"
-            android:textSize="18dp" />
-    </FrameLayout>
 </LinearLayout>

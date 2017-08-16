@@ -19,7 +19,6 @@ import com.mercadopago.util.MercadoPagoUtil;
 import java.math.BigDecimal;
 
 import static android.text.TextUtils.isEmpty;
-import static com.mercadopago.core.MercadoPagoComponents.Activities.CONGRATS_REQUEST_CODE;
 
 public class PaymentResultActivity extends Activity {
 
@@ -138,7 +137,7 @@ public class PaymentResultActivity extends Activity {
                 startRejectionActivity();
             }
         } else {
-            ErrorUtil.startErrorActivity(this, getString(R.string.mpsdk_standard_error_message), false);
+            ErrorUtil.startErrorActivity(this, getString(R.string.mpsdk_standard_error_message), false, mMerchantPublicKey);
         }
     }
 
@@ -203,7 +202,7 @@ public class PaymentResultActivity extends Activity {
     }
 
     protected void onInvalidStart(String errorMessage) {
-        ErrorUtil.startErrorActivity(this, getString(R.string.mpsdk_standard_error_message), errorMessage, false);
+        ErrorUtil.startErrorActivity(this, getString(R.string.mpsdk_standard_error_message), errorMessage, false, mMerchantPublicKey);
     }
 
     @Override

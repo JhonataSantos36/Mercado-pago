@@ -20,6 +20,7 @@ public class FlowPreference {
     private boolean installmentsReviewScreenEnabled;
     private boolean discountEnabled;
     private boolean showAllSavedCardsEnabled;
+    private boolean escEnabled;
     private int maxSavedCardsToShow;
     private Integer congratsDisplayTime = null;
     private Integer checkoutTimer;
@@ -35,6 +36,7 @@ public class FlowPreference {
         this.installmentsReviewScreenEnabled = builder.installmentsReviewScreenEnabled;
         this.discountEnabled = builder.discountEnabled;
         this.showAllSavedCardsEnabled = builder.showAllSavedCardsEnabled;
+        this.escEnabled = builder.escEnabled;
         this.maxSavedCardsToShow = builder.maxSavedCardsToShow;
         this.congratsDisplayTime = builder.congratsDisplayTime;
         this.checkoutTimer = builder.checkoutTimer;
@@ -101,6 +103,10 @@ public class FlowPreference {
         return showAllSavedCardsEnabled;
     }
 
+    public boolean isESCEnabled() {
+        return escEnabled;
+    }
+
     public static class Builder {
 
         private boolean bankDealsEnabled = true;
@@ -113,12 +119,23 @@ public class FlowPreference {
         private boolean installmentsReviewScreenEnabled = true;
         private boolean discountEnabled = true;
         private boolean showAllSavedCardsEnabled = false;
+        private boolean escEnabled = false;
         private int maxSavedCardsToShow = DEFAULT_MAX_SAVED_CARDS_TO_SHOW;
         private Integer congratsDisplayTime = null;
         private Integer checkoutTimer;
 
         public Builder enablePaymentSearchScreen() {
             this.paymentSearchScreenEnabled = true;
+            return this;
+        }
+
+        public Builder enableESC() {
+            this.escEnabled = true;
+            return this;
+        }
+
+        public Builder disableESC() {
+            this.escEnabled = false;
             return this;
         }
 

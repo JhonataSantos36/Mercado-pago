@@ -64,7 +64,7 @@ public class ApiUtil {
         }
     }
 
-    public static void showApiExceptionError(Activity activity, ApiException apiException) {
+    public static void showApiExceptionError(Activity activity, ApiException apiException, String publicKey, String requestOrigin) {
         MercadoPagoError mercadoPagoError;
         String errorMessage;
 
@@ -72,9 +72,9 @@ public class ApiUtil {
             errorMessage = activity.getString(R.string.mpsdk_no_connection_message);
             mercadoPagoError = new MercadoPagoError(errorMessage, true);
         } else {
-            mercadoPagoError = new MercadoPagoError(apiException);
+            mercadoPagoError = new MercadoPagoError(apiException, requestOrigin);
         }
-        ErrorUtil.startErrorActivity(activity, mercadoPagoError);
+        ErrorUtil.startErrorActivity(activity, mercadoPagoError, publicKey);
     }
 
     public static boolean checkConnection(Context context) {
@@ -188,5 +188,22 @@ public class ApiUtil {
         public static final int PROCESSING = 499;
         public static final int BAD_REQUEST = 400;
         public static final int NOT_FOUND = 404;
+    }
+
+    public class RequestOrigin {
+        public static final String GET_PREFERENCE = "GET_PREFERENCE";
+        public static final String PAYMENT_METHOD_SEARCH = "PAYMENT_METHOD_SEARCH";
+        public static final String GET_INSTALLMENTS = "GET_INSTALLMENTS";
+        public static final String GET_ISSUERS = "GET_ISSUERS";
+        public static final String GET_DIRECT_DISCOUNT = "GET_DIRECT_DISCOUNT";
+        public static final String CREATE_PAYMENT = "CREATE_PAYMENT";
+        public static final String CREATE_TOKEN = "CREATE_TOKEN";
+        public static final String GET_CUSTOMER = "GET_CUSTOMER";
+        public static final String GET_CODE_DISCOUNT = "GET_CODE_DISCOUNT";
+        public static final String GET_CAMPAIGNS = "GET_CAMPAIGNS";
+        public static final String GET_PAYMENT_METHODS = "GET_PAYMENT_METHODS";
+        public static final String GET_IDENTIFICATION_TYPES = "GET_IDENTIFICATION_TYPES";
+        public static final String GET_BANK_DEALS = "GET_BANK_DEALS";
+        public static final String GET_INSTRUCTIONS = "GET_INSTRUCTIONS";
     }
 }

@@ -9,6 +9,7 @@ import com.mercadopago.mocks.PayerCosts;
 import com.mercadopago.mocks.PaymentMethods;
 import com.mercadopago.mocks.Tokens;
 import com.mercadopago.model.ApiException;
+import com.mercadopago.model.Card;
 import com.mercadopago.model.Discount;
 import com.mercadopago.model.Installment;
 import com.mercadopago.model.Issuer;
@@ -16,6 +17,7 @@ import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentRecovery;
+import com.mercadopago.model.SavedESCCardToken;
 import com.mercadopago.model.Token;
 import com.mercadopago.mvp.OnResourcesRetrievedCallback;
 import com.mercadopago.preferences.PaymentPreference;
@@ -205,7 +207,7 @@ public class CardVaultPresenterTest {
         MockedProvider provider = new MockedProvider();
 
         ApiException apiException = Installments.getDoNotFindInstallmentsException();
-        MercadoPagoError mpException = new MercadoPagoError(apiException);
+        MercadoPagoError mpException = new MercadoPagoError(apiException, "");
         provider.setResponse(mpException);
 
 
@@ -349,7 +351,7 @@ public class CardVaultPresenterTest {
         MockedProvider provider = new MockedProvider();
 
         Token mockedToken = Tokens.getToken();
-        PaymentMethod mockedPaymentMethod = PaymentMethods.getPaymentMethodOn();
+        PaymentMethod mockedPaymentMethod = PaymentMethods.getPaymentMethodOnVisa();
         PayerCost mockedPayerCost = PayerCosts.getPayerCost();
         Issuer mockedIssuer = Issuers.getIssuerMLA();
         String mockedPaymentStatus = Payment.StatusCodes.STATUS_REJECTED;
@@ -407,7 +409,7 @@ public class CardVaultPresenterTest {
         presenter.initialize();
 
         Token mockedToken = Tokens.getToken();
-        PaymentMethod mockedPaymentMethod = PaymentMethods.getPaymentMethodOn();
+        PaymentMethod mockedPaymentMethod = PaymentMethods.getPaymentMethodOnVisa();
         PayerCost mockedPayerCost = PayerCosts.getPayerCost();
         Issuer mockedIssuer = null;
         List<PayerCost> mockedPayerCostList = PayerCosts.getPayerCostList();
@@ -436,7 +438,7 @@ public class CardVaultPresenterTest {
         presenter.initialize();
 
         Token mockedToken = Tokens.getToken();
-        PaymentMethod mockedPaymentMethod = PaymentMethods.getPaymentMethodOn();
+        PaymentMethod mockedPaymentMethod = PaymentMethods.getPaymentMethodOnVisa();
         PayerCost mockedPayerCost = null;
         Issuer mockedIssuer = Issuers.getIssuerMLA();
         List<PayerCost> mockedPayerCostList = PayerCosts.getPayerCostList();
@@ -466,7 +468,7 @@ public class CardVaultPresenterTest {
         presenter.initialize();
 
         Token mockedToken = Tokens.getToken();
-        PaymentMethod mockedPaymentMethod = PaymentMethods.getPaymentMethodOn();
+        PaymentMethod mockedPaymentMethod = PaymentMethods.getPaymentMethodOnVisa();
         PayerCost mockedPayerCost = PayerCosts.getPayerCost();
         Issuer mockedIssuer = Issuers.getIssuerMLA();
         List<PayerCost> mockedPayerCostList = PayerCosts.getPayerCostList();
@@ -497,7 +499,7 @@ public class CardVaultPresenterTest {
         presenter.initialize();
 
         Token mockedToken = Tokens.getToken();
-        PaymentMethod mockedPaymentMethod = PaymentMethods.getPaymentMethodOn();
+        PaymentMethod mockedPaymentMethod = PaymentMethods.getPaymentMethodOnVisa();
         Issuer mockedIssuer = Issuers.getIssuerMLA();
         List<PayerCost> mockedPayerCostList = PayerCosts.getPayerCostList();
         Boolean directDiscountEnabled = false;
@@ -528,7 +530,7 @@ public class CardVaultPresenterTest {
         presenter.initialize();
 
         Token mockedToken = Tokens.getToken();
-        PaymentMethod mockedPaymentMethod = PaymentMethods.getPaymentMethodOn();
+        PaymentMethod mockedPaymentMethod = PaymentMethods.getPaymentMethodOnVisa();
         PayerCost mockedPayerCost = PayerCosts.getPayerCost();
         Issuer mockedIssuer = Issuers.getIssuerMLA();
         Discount mockedDiscount = null;
@@ -630,13 +632,13 @@ public class CardVaultPresenterTest {
         provider.setResponse(installmentsList);
 
         Token mockedToken = Tokens.getToken();
-        PaymentMethod mockedPaymentMethod = PaymentMethods.getPaymentMethodOn();
+        PaymentMethod mockedPaymentMethod = PaymentMethods.getPaymentMethodOnVisa();
         PayerCost mockedPayerCost = PayerCosts.getPayerCost();
         Issuer mockedIssuer = Issuers.getIssuerMLA();
         String mockedPaymentStatus = Payment.StatusCodes.STATUS_REJECTED;
-        String mockedPaymentStatusDeatil = Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_CALL_FOR_AUTHORIZE;
+        String mockedPaymentStatusDetail = Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_CALL_FOR_AUTHORIZE;
 
-        PaymentRecovery mockedPaymentRecovery = new PaymentRecovery(mockedToken, mockedPaymentMethod, mockedPayerCost, mockedIssuer, mockedPaymentStatus, mockedPaymentStatusDeatil);
+        PaymentRecovery mockedPaymentRecovery = new PaymentRecovery(mockedToken, mockedPaymentMethod, mockedPayerCost, mockedIssuer, mockedPaymentStatus, mockedPaymentStatusDetail);
 
         CardVaultPresenter presenter = new CardVaultPresenter();
         presenter.attachView(mockedView);
@@ -663,7 +665,7 @@ public class CardVaultPresenterTest {
         MockedProvider provider = new MockedProvider();
 
         ApiException apiException = Installments.getDoNotFindInstallmentsException();
-        MercadoPagoError mpException = new MercadoPagoError(apiException);
+        MercadoPagoError mpException = new MercadoPagoError(apiException, "");
         provider.setResponse(mpException);
 
 
@@ -687,6 +689,223 @@ public class CardVaultPresenterTest {
 
     }
 
+    @Test
+    public void onInstallmentsAskedThenAskForSecurityCodeWhenCardIdIsNotSaved() {
+        MockedView mockedView = new MockedView();
+        MockedProvider provider = new MockedProvider();
+        provider.setESCEnabled(true);
+
+        List<Installment> installmentsList = Installments.getInstallmentsList();
+        provider.setResponse(installmentsList);
+
+        CardVaultPresenter presenter = new CardVaultPresenter();
+        presenter.attachView(mockedView);
+        presenter.attachResourcesProvider(provider);
+
+        presenter.setSite(Sites.ARGENTINA);
+        presenter.setAmount(new BigDecimal(100));
+        presenter.setCard(Cards.getCard());
+
+        presenter.initialize();
+
+        PayerCost mockedPayerCost = PayerCosts.getPayerCost();
+
+        //Installments response
+        presenter.resolveInstallmentsRequest(mockedPayerCost, null);
+        assertTrue(mockedView.securityCodeFlowStarted);
+
+        presenter.checkSecurityCodeFlow();
+        assertTrue(mockedView.securityCodeActivityStarted);
+    }
+
+    @Test
+    public void onInstallmentsAskedThenDontAskForSecurityCodeWhenCardIdIsSaved() {
+        MockedView mockedView = new MockedView();
+        MockedProvider provider = new MockedProvider();
+        provider.setESCEnabled(true);
+
+        List<Installment> installmentsList = Installments.getInstallmentsList();
+        provider.setResponse(installmentsList);
+
+        CardVaultPresenter presenter = new CardVaultPresenter();
+        presenter.attachView(mockedView);
+        presenter.attachResourcesProvider(provider);
+
+        presenter.setSite(Sites.ARGENTINA);
+        presenter.setAmount(new BigDecimal(100));
+        Card mockedCard = Cards.getCard();
+        mockedCard.setId("12345");
+        presenter.setCard(mockedCard);
+
+        presenter.initialize();
+
+        PayerCost mockedPayerCost = PayerCosts.getPayerCost();
+
+        //Installments response
+        presenter.resolveInstallmentsRequest(mockedPayerCost, null);
+        assertTrue(mockedView.securityCodeFlowStarted);
+
+        Token mockedToken = Tokens.getTokenWithESC();
+        provider.setResponse(mockedToken);
+
+        presenter.checkSecurityCodeFlow();
+        assertFalse(mockedView.securityCodeActivityStarted);
+
+        assertEquals(provider.successfulTokenResponse.getId(), mockedToken.getId());
+    }
+
+    @Test
+    public void onCreateTokenWithESCHasErrorThenAskForSecurityCode() {
+        MockedView mockedView = new MockedView();
+        MockedProvider provider = new MockedProvider();
+        provider.setESCEnabled(true);
+
+        List<Installment> installmentsList = Installments.getInstallmentsList();
+        provider.setResponse(installmentsList);
+
+        CardVaultPresenter presenter = new CardVaultPresenter();
+        presenter.attachView(mockedView);
+        presenter.attachResourcesProvider(provider);
+
+        presenter.setSite(Sites.ARGENTINA);
+        presenter.setAmount(new BigDecimal(100));
+        Card mockedCard = Cards.getCard();
+        mockedCard.setId("12345");
+        presenter.setCard(mockedCard);
+
+        presenter.initialize();
+
+        PayerCost mockedPayerCost = PayerCosts.getPayerCost();
+
+        //Installments response
+        presenter.resolveInstallmentsRequest(mockedPayerCost, null);
+        assertTrue(mockedView.securityCodeFlowStarted);
+
+        //Set error with create token ESC
+        ApiException apiException = Tokens.getInvalidTokenWithESC();
+        provider.setResponse(new MercadoPagoError(apiException, ""));
+
+        presenter.checkSecurityCodeFlow();
+        assertTrue(mockedView.securityCodeActivityStarted);
+
+        assertTrue(provider.deleteRequested);
+        assertEquals(provider.cardIdDeleted, "12345");
+
+    }
+
+    @Test
+    public void onCreateTokenWithESCHasErrorFingerprintThenAskForSecurityCode() {
+        MockedView mockedView = new MockedView();
+        MockedProvider provider = new MockedProvider();
+        provider.setESCEnabled(true);
+
+        List<Installment> installmentsList = Installments.getInstallmentsList();
+        provider.setResponse(installmentsList);
+
+        CardVaultPresenter presenter = new CardVaultPresenter();
+        presenter.attachView(mockedView);
+        presenter.attachResourcesProvider(provider);
+
+        presenter.setSite(Sites.ARGENTINA);
+        presenter.setAmount(new BigDecimal(100));
+        Card mockedCard = Cards.getCard();
+        mockedCard.setId("12345");
+        presenter.setCard(mockedCard);
+
+        presenter.initialize();
+
+        PayerCost mockedPayerCost = PayerCosts.getPayerCost();
+
+        //Installments response
+        presenter.resolveInstallmentsRequest(mockedPayerCost, null);
+        assertTrue(mockedView.securityCodeFlowStarted);
+
+        //Set error with create token ESC
+        ApiException apiException = Tokens.getInvalidTokenWithESCFingerprint();
+        provider.setResponse(new MercadoPagoError(apiException, ""));
+
+        presenter.checkSecurityCodeFlow();
+        assertTrue(mockedView.securityCodeActivityStarted);
+
+        assertTrue(provider.deleteRequested);
+        assertEquals(provider.cardIdDeleted, "12345");
+
+    }
+
+    @Test
+    public void onESCDisabledThenAskForSecurityCodeWhenCardIdIsSaved() {
+        MockedView mockedView = new MockedView();
+        MockedProvider provider = new MockedProvider();
+        //ESC disabled
+        provider.setESCEnabled(false);
+
+        List<Installment> installmentsList = Installments.getInstallmentsList();
+        provider.setResponse(installmentsList);
+
+        CardVaultPresenter presenter = new CardVaultPresenter();
+        presenter.attachView(mockedView);
+        presenter.attachResourcesProvider(provider);
+
+        presenter.setSite(Sites.ARGENTINA);
+        presenter.setAmount(new BigDecimal(100));
+        Card mockedCard = Cards.getCard();
+        mockedCard.setId("12345");
+        presenter.setCard(mockedCard);
+
+        presenter.initialize();
+
+        PayerCost mockedPayerCost = PayerCosts.getPayerCost();
+
+        //Installments response
+        presenter.resolveInstallmentsRequest(mockedPayerCost, null);
+        assertTrue(mockedView.securityCodeFlowStarted);
+
+        Token mockedToken = Tokens.getToken();
+        provider.setResponse(mockedToken);
+
+        presenter.checkSecurityCodeFlow();
+        assertTrue(mockedView.securityCodeActivityStarted);
+
+        assertEquals(provider.successfulTokenResponse.getId(), mockedToken.getId());
+    }
+
+    @Test
+    public void onSavedCardWithESCSavedThenCreateTokenWithESC() {
+        MockedView mockedView = new MockedView();
+        MockedProvider provider = new MockedProvider();
+        provider.setESCEnabled(true);
+
+        List<Installment> installmentsList = Installments.getInstallmentsList();
+        provider.setResponse(installmentsList);
+
+        CardVaultPresenter presenter = new CardVaultPresenter();
+        presenter.attachView(mockedView);
+        presenter.attachResourcesProvider(provider);
+
+        presenter.setSite(Sites.ARGENTINA);
+        presenter.setAmount(new BigDecimal(100));
+        Card mockedCard = Cards.getCard();
+        mockedCard.setId("12345");
+        presenter.setCard(mockedCard);
+
+        //Set ESC to simulate it is saved
+        presenter.setESC("12345678");
+
+        presenter.initialize();
+
+        PayerCost mockedPayerCost = PayerCosts.getPayerCost();
+        Token mockedToken = Tokens.getTokenWithESC();
+
+        //Installments response
+        presenter.resolveInstallmentsRequest(mockedPayerCost, null);
+
+        //Set error with create token ESC
+        provider.setResponse(mockedToken);
+
+        presenter.checkSecurityCodeFlow();
+        assertEquals(provider.successfulTokenResponse.getId(), mockedToken.getId());
+    }
+
     private class MockedProvider implements CardVaultProvider {
 
         private static final String MULTIPLE_INSTALLMENTS = "multiple installments";
@@ -700,7 +919,14 @@ public class CardVaultPresenterTest {
         private boolean shouldFail;
         private MercadoPagoError failedResponse;
         private List<Installment> successfulResponse;
+        private Token successfulTokenResponse;
+        private boolean escEnabled;
+        private boolean deleteRequested;
+        private String cardIdDeleted;
 
+        public void setESCEnabled(boolean enabled) {
+            this.escEnabled = enabled;
+        }
 
         public void setResponse(MercadoPagoError exception) {
             shouldFail = true;
@@ -710,6 +936,11 @@ public class CardVaultPresenterTest {
         public void setResponse(List<Installment> installmentList) {
             shouldFail = false;
             successfulResponse = installmentList;
+        }
+
+        public void setResponse(Token token) {
+            shouldFail = false;
+            successfulTokenResponse = token;
         }
 
         @Override
@@ -750,6 +981,34 @@ public class CardVaultPresenterTest {
                 onResourcesRetrievedCallback.onSuccess(successfulResponse);
             }
         }
+
+        @Override
+        public void createESCTokenAsync(SavedESCCardToken escCardToken, OnResourcesRetrievedCallback<Token> onResourcesRetrievedCallback) {
+            if (shouldFail) {
+                onResourcesRetrievedCallback.onFailure(failedResponse);
+            } else {
+                onResourcesRetrievedCallback.onSuccess(successfulTokenResponse);
+            }
+        }
+
+        @Override
+        public String findESCSaved(String cardId) {
+            if (escEnabled) {
+                if (cardId.equals("12345")) {
+                    return "12345";
+                } else {
+                    return null;
+                }
+            } else {
+                return null;
+            }
+        }
+
+        @Override
+        public void deleteESC(String cardId) {
+            deleteRequested = true;
+            cardIdDeleted = cardId;
+        }
     }
 
     private class MockedView implements CardVaultView {
@@ -764,6 +1023,7 @@ public class CardVaultPresenterTest {
         private boolean finishedWithResult;
         private boolean cardVaultCanceled;
         private boolean errorState;
+        private boolean securityCodeActivityStarted;
 
         @Override
         public void askForInstallments() {
@@ -807,7 +1067,7 @@ public class CardVaultPresenterTest {
         }
 
         @Override
-        public void showApiExceptionError(ApiException exception) {
+        public void showApiExceptionError(ApiException exception, String requestOrigin) {
 
         }
 
@@ -817,7 +1077,7 @@ public class CardVaultPresenterTest {
         }
 
         @Override
-        public void showError(MercadoPagoError mercadoPagoError) {
+        public void showError(MercadoPagoError mercadoPagoError, String requestOrigin) {
             errorShown = mercadoPagoError;
             errorState = true;
         }
@@ -830,6 +1090,11 @@ public class CardVaultPresenterTest {
         @Override
         public void cancelCardVault() {
             cardVaultCanceled = true;
+        }
+
+        @Override
+        public void startSecurityCodeActivity() {
+            securityCodeActivityStarted = true;
         }
     }
 }

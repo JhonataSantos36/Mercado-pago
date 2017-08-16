@@ -1,0 +1,82 @@
+apply plugin: 'com.android.library'
+apply plugin: 'jacoco-android'
+
+task jacocoFullTestReport(type: JacocoReport, dependsOn: ['jacocoTestReport', 'createDevDebugCoverageReport']) {
+
+    reports {
+        xml.enabled = true
+        html.enabled = true
+    }
+
+    def fileFilter = ['**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*', '**/*Test*.*', 'android/**/*.*']
+    def debugTree = fileTree(dir: "${buildDir}/intermediates/classes/debug", excludes: fileFilter)
+    def mainSrc = "${project.projectDir}/src/main/java"
+
+    sourceDirectories = files([mainSrc])
+    classDirectories = files([debugTree])
+    executionData = fileTree(dir: "$buildDir", includes: [
+            "jacoco/testDevDebugUnitTest.exec", "outputs/code-coverage/connected/flavors/DEV/*coverage.ec"
+    ])
+}
+
+android {
+    publishNonDefault true
+    compileSdkVersion 25
+    buildToolsVersion "25.0.0"
+
+    defaultConfig {
+        minSdkVersion 9
+        targetSdkVersion 25
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            testCoverageEnabled true
+            multiDexEnabled true
+            versionNameSuffix " Debug"
+            debuggable true
+        }
+    }
+
+    project.gradle.taskGraph.whenReady {
+        connectedDevDebugAndroidTest {
+            ignoreFailures = true
+        }
+    }
+
+    productFlavors {
+        dev {
+            buildConfigField "String", "API_VERSION", "\"beta\""
+        }
+        prod {
+            buildConfigField "String", "API_VERSION", "\"v1\""
+        }
+    }
+}
+
+project.gradle.taskGraph.whenReady {
+    connectedDevDebugAndroidTest {
+        ignoreFailures = true
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    compile 'com.android.support:appcompat-v7:25.0.1'
+    testCompile 'junit:junit:4.12'
+    compile 'com.squareup.retrofit2:retrofit:2.1.0'
+    compile 'com.squareup.okhttp3:logging-interceptor:3.5.0'
+    compile 'com.google.code.gson:gson:2.7'
+    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
+}

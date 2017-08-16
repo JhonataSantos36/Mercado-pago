@@ -15,11 +15,8 @@ import com.mercadopago.mvp.OnResourcesRetrievedCallback;
 
 import java.util.List;
 
-import com.mercadopago.core.MerchantServer;
-import com.mercadopago.model.ApiException;
-import com.mercadopago.model.Discount;
-import com.mercadopago.mvp.OnResourcesRetrievedCallback;
 import com.mercadopago.preferences.ServicePreference;
+import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.TextUtil;
 
 import java.util.Map;
@@ -81,7 +78,7 @@ public class DiscountProviderImpl implements DiscountsProvider {
 
             @Override
             public void failure(ApiException apiException) {
-                onResourcesRetrievedCallback.onFailure(new MercadoPagoError(apiException));
+                onResourcesRetrievedCallback.onFailure(new MercadoPagoError(apiException, ApiUtil.RequestOrigin.GET_DIRECT_DISCOUNT));
             }
         });
     }
@@ -95,7 +92,7 @@ public class DiscountProviderImpl implements DiscountsProvider {
 
             @Override
             public void failure(ApiException apiException) {
-                onResourcesRetrievedCallback.onFailure(new MercadoPagoError(apiException));
+                onResourcesRetrievedCallback.onFailure(new MercadoPagoError(apiException, ApiUtil.RequestOrigin.GET_DIRECT_DISCOUNT));
             }
         });
     }
@@ -118,7 +115,7 @@ public class DiscountProviderImpl implements DiscountsProvider {
 
             @Override
             public void failure(ApiException apiException) {
-                onResourcesRetrievedCallback.onFailure(new MercadoPagoError(apiException));
+                onResourcesRetrievedCallback.onFailure(new MercadoPagoError(apiException, ApiUtil.RequestOrigin.GET_CODE_DISCOUNT));
             }
         });
     }
@@ -133,7 +130,7 @@ public class DiscountProviderImpl implements DiscountsProvider {
 
             @Override
             public void failure(ApiException apiException) {
-                onResourcesRetrievedCallback.onFailure(new MercadoPagoError(apiException));
+                onResourcesRetrievedCallback.onFailure(new MercadoPagoError(apiException, ApiUtil.RequestOrigin.GET_CAMPAIGNS));
             }
         });
     }
@@ -147,7 +144,7 @@ public class DiscountProviderImpl implements DiscountsProvider {
 
             @Override
             public void failure(ApiException apiException) {
-                onResourcesRetrievedCallback.onFailure(new MercadoPagoError(apiException));
+                onResourcesRetrievedCallback.onFailure(new MercadoPagoError(apiException, ApiUtil.RequestOrigin.GET_CODE_DISCOUNT));
             }
         });
     }

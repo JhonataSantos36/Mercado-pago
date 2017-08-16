@@ -3,7 +3,7 @@ apply plugin: 'maven'
 apply plugin: 'signing'
 apply plugin: 'jacoco-android'
 
-version = "2.3.8"
+version = "3.3.0"
 group = "com.mercadopago"
 archivesBaseName = "sdk"
 
@@ -33,7 +33,7 @@ android {
         minSdkVersion 9
         targetSdkVersion 25
         versionCode 1
-        versionName '2.3.8'
+        versionName '3.3.0'
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     packagingOptions {
@@ -100,9 +100,8 @@ dependencies {
         exclude group: 'com.android.support', module: 'design'
         exclude group: 'com.android.support', module: 'recyclerview-v7'
     }
-    testCompile('junit:junit:4.12')
+    testCompile 'junit:junit:4.12'
     testCompile 'org.mockito:mockito-core:2.+'
-
     compile 'com.android.support:cardview-v7:25.3.1'
     compile 'com.android.support:recyclerview-v7:25.3.1'
     compile 'com.android.support:support-v4:25.3.1'
@@ -116,7 +115,8 @@ dependencies {
     compile 'com.squareup.retrofit2:retrofit:2.1.0'
     compile 'com.squareup.retrofit2:converter-gson:2.1.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
-    compile 'com.mercadopago:tracking:1.2.3'
+    devCompile project(path: ':px-tracking', configuration:'devDebug')
+    prodCompile project(path: ':px-tracking', configuration:'prodDebug')
 }
 
 configurations {

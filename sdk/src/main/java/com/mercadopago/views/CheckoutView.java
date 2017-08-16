@@ -42,4 +42,6 @@ public interface CheckoutView extends MvpView {
     void cancelCheckout(Integer customResultCode, PaymentData paymentData, Boolean paymentMethodEdited);
 
     void startPaymentRecoveryFlow(PaymentRecovery paymentRecovery);
+
+    void initializeMPTracker();
 }

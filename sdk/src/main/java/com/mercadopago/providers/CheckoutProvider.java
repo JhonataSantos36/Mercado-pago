@@ -34,4 +34,8 @@ public interface CheckoutProvider extends ResourcesProvider {
     String getCheckoutExceptionMessage(IllegalStateException exception);
 
     void createPayment(String transactionId, CheckoutPreference checkoutPreference, PaymentData paymentData, Boolean binaryMode, String customerId, OnResourcesRetrievedCallback<Payment> onResourcesRetrievedCallback);
+
+    void deleteESC(String cardId);
+
+    boolean saveESC(String cardId, String value);
 }

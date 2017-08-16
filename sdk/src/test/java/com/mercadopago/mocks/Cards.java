@@ -8,18 +8,6 @@ import com.mercadopago.utils.ResourcesUtil;
 import java.lang.reflect.Type;
 import java.util.List;
 
-/**
- * Created by mromar on 4/17/17.
- * =======
- * import com.mercadopago.model.Card;
- * import com.mercadopago.util.JsonUtil;
- * import com.mercadopago.utils.ResourcesUtil;
- * <p>
- * /**
- * Created by vaserber on 4/21/17.
- * >>>>>>> v3
- */
-
 public class Cards {
 
     private Cards() {
@@ -42,5 +30,10 @@ public class Cards {
             cards = null;
         }
         return cards;
+    }
+
+    public static Card getCardWithoutSecurityCodeSettings() {
+        String json = ResourcesUtil.getStringResource("card_without_security_code_settings.json");
+        return JsonUtil.getInstance().fromJson(json, Card.class);
     }
 }

@@ -30,6 +30,7 @@ import com.mercadopago.model.Token;
 import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.uicontrollers.card.CardView;
 import com.mercadopago.uicontrollers.card.FrontCardView;
+import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.CurrenciesUtil;
 import com.mercadopago.util.TextUtil;
 import com.mercadopago.util.MercadoPagoUtil;
@@ -66,6 +67,7 @@ public class GuessingCardPresenter {
 
     //Activity parameters
     private String mPublicKey;
+    private String mSiteId;
     private PaymentRecovery mPaymentRecovery;
     private PaymentMethod mPaymentMethod;
     private List<PaymentMethod> mPaymentMethodList;
@@ -142,6 +144,10 @@ public class GuessingCardPresenter {
 
     public void setPublicKey(String publicKey) {
         this.mPublicKey = publicKey;
+    }
+
+    public void setSiteId(String siteId) {
+        this.mSiteId = siteId;
     }
 
     public PaymentRecovery getPaymentRecovery() {
@@ -347,7 +353,11 @@ public class GuessingCardPresenter {
 
     public String getPaymentTypeId() {
         if (mPaymentMethodGuessingController == null) {
-            return null;
+            if (mPaymentPreference == null) {
+                return null;
+            } else {
+                return mPaymentPreference.getDefaultPaymentTypeId();
+            }
         } else {
             return mPaymentMethodGuessingController.getPaymentTypeId();
         }
@@ -561,7 +571,7 @@ public class GuessingCardPresenter {
                         getPaymentMethodsAsync();
                     }
                 });
-                mView.showApiExceptionError(apiException);
+                mView.showApiExceptionError(apiException, ApiUtil.RequestOrigin.GET_PAYMENT_METHODS);
             }
         });
     }
@@ -653,7 +663,7 @@ public class GuessingCardPresenter {
                         getIdentificationTypesAsync();
                     }
                 });
-                mView.showApiExceptionError(apiException);
+                mView.showApiExceptionError(apiException, ApiUtil.RequestOrigin.GET_IDENTIFICATION_TYPES);
             }
         });
     }
@@ -989,16 +999,16 @@ public class GuessingCardPresenter {
 
             @Override
             public void failure(ApiException apiException) {
-                resolveTokenCreationError(apiException);
+                resolveTokenCreationError(apiException, ApiUtil.RequestOrigin.CREATE_TOKEN);
             }
         };
     }
 
-    private void resolveTokenCreationError(ApiException apiException) {
+    private void resolveTokenCreationError(ApiException apiException, String requestOrigin) {
         if (wrongIdentificationNumber(apiException)) {
             showIdentificationNumberError();
         } else {
-            showError(apiException);
+            showError(apiException, requestOrigin);
         }
     }
 
@@ -1012,14 +1022,14 @@ public class GuessingCardPresenter {
         mView.setErrorIdentificationNumber();
     }
 
-    private void showError(ApiException apiException) {
+    private void showError(ApiException apiException, String requestOrigin) {
         setFailureRecovery(new FailureRecovery() {
             @Override
             public void recover() {
                 createToken(onTokenCreated());
             }
         });
-        mView.showApiExceptionError(apiException);
+        mView.showApiExceptionError(apiException, requestOrigin);
     }
 
     private void getIssuers(Callback<List<Issuer>> callback) {
@@ -1046,7 +1056,7 @@ public class GuessingCardPresenter {
                         getIssuers(onIssuersRetrieved());
                     }
                 });
-                mView.showApiExceptionError(apiException);
+                mView.showApiExceptionError(apiException, ApiUtil.RequestOrigin.GET_ISSUERS);
             }
         };
     }
@@ -1078,7 +1088,7 @@ public class GuessingCardPresenter {
                         getInstallments(onInstallmentsRetrieved());
                     }
                 });
-                mView.showApiExceptionError(apiException);
+                mView.showApiExceptionError(apiException, ApiUtil.RequestOrigin.GET_INSTALLMENTS);
             }
         };
     }

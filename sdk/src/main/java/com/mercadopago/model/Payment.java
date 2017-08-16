@@ -311,6 +311,7 @@ public class Payment {
         public static final String STATUS_REJECTED = "rejected";
         public static final String STATUS_PENDING = "pending";
 
+        public static final String STATUS_DETAIL_INVALID_ESC = "invalid_esc";
         public static final String STATUS_DETAIL_ACCREDITED = "accredited";
         public static final String STATUS_DETAIL_CC_REJECTED_CALL_FOR_AUTHORIZE = "cc_rejected_call_for_authorize";
         public static final String STATUS_DETAIL_PENDING_CONTINGENCY = "pending_contingency";
