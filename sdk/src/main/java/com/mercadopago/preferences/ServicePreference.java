@@ -148,6 +148,10 @@ public class ServicePreference {
         return (getMerchantDiscountBaseURL != null || defaultBaseURL != null) && getMerchantDiscountURI != null;
     }
 
+    public boolean showBankDealsByProcessingMode() {
+        return processingMode.equals(ProcessingModes.AGGREGATOR);
+    }
+
     public static class Builder {
 
         private String defaultBaseURL;
@@ -236,10 +240,6 @@ public class ServicePreference {
         public Builder setHybridAsProcessingMode() {
             this.processingMode = ProcessingModes.HYBRID;
             return this;
-        }
-
-        public Boolean shouldShowBankDeals() {
-            return this.processingMode == ProcessingModes.AGGREGATOR
         }
 
         public ServicePreference build() {
