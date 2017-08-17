@@ -126,6 +126,7 @@ public class CheckoutActivity extends MercadoPagoBaseActivity implements Checkou
         mCheckoutPresenter.setPaymentDataInput(paymentDataInput);
         mCheckoutPresenter.setPaymentResultInput(paymentResultInput);
         mCheckoutPresenter.setRequestedResult(mRequestedResultCode);
+        mCheckoutPresenter.setServicePreference(mServicePreference);
     }
 
     @Override

@@ -30,6 +30,7 @@ import com.mercadopago.preferences.CheckoutPreference;
 import com.mercadopago.preferences.FlowPreference;
 import com.mercadopago.preferences.PaymentResultScreenPreference;
 import com.mercadopago.preferences.ReviewScreenPreference;
+import com.mercadopago.preferences.ServicePreference;
 import com.mercadopago.providers.CheckoutProvider;
 import com.mercadopago.px_tracking.MPTracker;
 import com.mercadopago.util.ApiUtil;
@@ -49,6 +50,7 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
     private PaymentResultScreenPreference mPaymentResultScreenPreference;
     private ReviewScreenPreference mReviewScreenPreference;
     private FlowPreference mFlowPreference;
+    private ServicePreference mServicePreference;
     private Boolean mBinaryMode;
     private Discount mDiscount;
     private Boolean mDirectDiscountEnabled;
@@ -78,6 +80,7 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
     public CheckoutPresenter() {
         mFlowPreference = new FlowPreference.Builder()
                 .build();
+        mServicePreference = new ServicePreference.Builder().build();
     }
 
     public void initialize() {
@@ -803,6 +806,12 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
         this.mPaymentResultScreenPreference = paymentResultScreenPreference;
     }
 
+    public void setServicePreference(ServicePreference servicePreference) {
+        if (servicePreference != null) {
+            this.mServicePreference = servicePreference;
+        }
+    }
+
     public void setReviewScreenPreference(ReviewScreenPreference reviewScreenPreference) {
         this.mReviewScreenPreference = reviewScreenPreference;
     }
@@ -858,7 +867,7 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
     }
 
     public Boolean getShowBankDeals() {
-        return mFlowPreference.isBankDealsEnabled();
+        return mFlowPreference.isBankDealsEnabled() && mServicePreference.showBankDealsByProcessingMode();
     }
 
     public Boolean shouldShowAllSavedCards() {
