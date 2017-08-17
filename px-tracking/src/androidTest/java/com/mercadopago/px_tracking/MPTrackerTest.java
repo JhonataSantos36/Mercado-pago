@@ -12,11 +12,12 @@ import com.mercadopago.px_tracking.model.AppInformation;
 import com.mercadopago.px_tracking.model.DeviceInfo;
 import com.mercadopago.px_tracking.model.ErrorEvent;
 import com.mercadopago.px_tracking.model.Event;
-import com.mercadopago.px_tracking.model.EventTrackIntent;
 import com.mercadopago.px_tracking.model.PaymentIntent;
 import com.mercadopago.px_tracking.model.ScreenViewEvent;
 import com.mercadopago.px_tracking.model.StackTraceInfo;
 import com.mercadopago.px_tracking.model.TrackingIntent;
+import com.mercadopago.px_tracking.strategies.TrackingStrategy;
+import com.mercadopago.px_tracking.utils.TrackingUtil;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -73,12 +74,12 @@ public class MPTrackerTest {
     private static final Integer MOCKED_STACK_TRACE_LINE = 123;
     private static final Integer MOCKED_STACK_TRACE_COLUMN = 3;
     private static final String MOCKED_STACK_TRACE_METHOD = "method_name";
-    private static final Boolean MOCKED_TRACKING_ENABLED = true;
+    private static final String MOCKED_SCREEN_REVIEW_AND_CONFIRM = "Review and confirm";
+
 
     @Test
     public void sendScreenViewEventTrack() {
         Context appContext = InstrumentationRegistry.getTargetContext();
-        Boolean trackingEnabled = MOCKED_TRACKING_ENABLED;
 
         String clientId = MOCKED_CLIENT_ID;
 
@@ -96,23 +97,19 @@ public class MPTrackerTest {
                 .setSystemVersion(MOCKED_SYSTEM_VERSION)
                 .build();
 
-        List<Event> events = new ArrayList<>();
+        final Event screenViewEvent = new ScreenViewEvent.Builder()
+            .setScreenId(MOCKED_SCREEN_ID_1)
+            .setScreenName(MOCKED_SCREEN_REVIEW_AND_CONFIRM)
+            .build();
 
-        final ScreenViewEvent screenViewEvent = new ScreenViewEvent.Builder()
-                .setScreenId(MOCKED_SCREEN_ID_1)
-                .setScreenName(MOCKED_SCREEN_NAME_1)
-                .build();
-
-        events.add(screenViewEvent);
-
-        MPTracker.getInstance().setTrackingEnabled(trackingEnabled);
+        MPTracker.getInstance().initTracker(MOCKED_PUBLIC_KEY, MOCKED_SITE_ID, MOCKED_CHECKOUT_VERSION, appContext);
 
         MPTracker.getInstance().setMPTrackingService(new MPMockedTrackingService());
 
         MPTracker.getInstance().setTracksListener(new TracksListener() {
             @Override
             public void onScreenLaunched(String screenName) {
-                assertEquals(screenViewEvent.getScreenName(), screenName);
+                assertEquals(((ScreenViewEvent)screenViewEvent).getScreenName(), screenName);
             }
 
             @Override
@@ -120,19 +117,19 @@ public class MPTrackerTest {
 
             }
         });
-        EventTrackIntent eventTrackIntent = MPTracker.getInstance().trackEvents(MOCKED_CLIENT_ID, appInformation, deviceInfo, events, appContext);
 
-        assertEquals(eventTrackIntent.getApplication(), appInformation);
-        assertEquals(eventTrackIntent.getDevice(), deviceInfo);
-        assertEquals(eventTrackIntent.getClientId(), clientId);
-        List<Event> sentList = eventTrackIntent.getEvents();
-        assertTrue(sentList.size() == 1);
+        MPTracker.getInstance().trackEvent(MOCKED_CLIENT_ID, appInformation, deviceInfo, screenViewEvent, appContext, TrackingUtil.BATCH_STRATEGY);
+
+        TrackingStrategy strategy = MPTracker.getInstance().getTrackingStrategy();
+
+        assertEquals(strategy.getAppInformation(), appInformation);
+        assertEquals(strategy.getDeviceInfo(), deviceInfo);
+        assertEquals(strategy.getClientId(), clientId);
     }
 
     @Test
     public void sendActionEventTrack() {
         Context appContext = InstrumentationRegistry.getTargetContext();
-        Boolean trackingEnabled = MOCKED_TRACKING_ENABLED;
 
         String clientId = MOCKED_CLIENT_ID;
 
@@ -150,9 +147,7 @@ public class MPTrackerTest {
                 .setSystemVersion(MOCKED_SYSTEM_VERSION)
                 .build();
 
-        List<Event> events = new ArrayList<>();
-
-        ActionEvent actionEvent = new ActionEvent.Builder()
+        Event actionEvent = new ActionEvent.Builder()
                 .setAction(MOCKED_ACTION)
                 .setCategory(MOCKED_CATEGORY)
                 .setLabel(MOCKED_LABEL)
@@ -161,9 +156,7 @@ public class MPTrackerTest {
                 .setScreenName(MOCKED_SCREEN_NAME_1)
                 .build();
 
-        events.add(actionEvent);
-
-        MPTracker.getInstance().setTrackingEnabled(trackingEnabled);
+        MPTracker.getInstance().initTracker(MOCKED_PUBLIC_KEY, MOCKED_SITE_ID, MOCKED_CHECKOUT_VERSION, appContext);
 
         MPTracker.getInstance().setMPTrackingService(new MPMockedTrackingService());
 
@@ -183,20 +176,11 @@ public class MPTrackerTest {
                 assertEquals(event.get(ACTION_EVENT_KEY_SCREEN_NAME), MOCKED_SCREEN_NAME_1);
             }
         });
-
-        EventTrackIntent eventTrackIntent = MPTracker.getInstance().trackEvents(MOCKED_CLIENT_ID, appInformation, deviceInfo, events, appContext);
-
-        assertEquals(eventTrackIntent.getApplication(), appInformation);
-        assertEquals(eventTrackIntent.getDevice(), deviceInfo);
-        assertEquals(eventTrackIntent.getClientId(), clientId);
-        List<Event> sentList = eventTrackIntent.getEvents();
-        assertTrue(sentList.size() == 1);
     }
 
     @Test
     public void sendErrorEventTrack() {
         Context appContext = InstrumentationRegistry.getTargetContext();
-        Boolean trackingEnabled = MOCKED_TRACKING_ENABLED;
 
         String clientId = MOCKED_CLIENT_ID;
 
@@ -214,17 +198,13 @@ public class MPTrackerTest {
                 .setSystemVersion(MOCKED_SYSTEM_VERSION)
                 .build();
 
-        List<Event> events = new ArrayList<>();
-
-        ErrorEvent errorEvent = new ErrorEvent.Builder()
+        Event errorEvent = new ErrorEvent.Builder()
                 .setErrorClass(MOCKED_ERROR_CLASS_1)
                 .setErrorMessage(MOCKED_ERROR_MESSAGE_1)
                 .setStackTraceList(new ArrayList<StackTraceInfo>())
                 .build();
 
-        events.add(errorEvent);
-
-        MPTracker.getInstance().setTrackingEnabled(trackingEnabled);
+        MPTracker.getInstance().initTracker(MOCKED_PUBLIC_KEY, MOCKED_SITE_ID, MOCKED_CHECKOUT_VERSION, appContext);
 
         MPTracker.getInstance().setMPTrackingService(new MPMockedTrackingService());
 
@@ -240,85 +220,6 @@ public class MPTrackerTest {
             }
         });
 
-        EventTrackIntent eventTrackIntent = MPTracker.getInstance().trackEvents(MOCKED_CLIENT_ID, appInformation, deviceInfo, events, appContext);
-
-        assertEquals(eventTrackIntent.getApplication(), appInformation);
-        assertEquals(eventTrackIntent.getDevice(), deviceInfo);
-        assertEquals(eventTrackIntent.getClientId(), clientId);
-        List<Event> sentList = eventTrackIntent.getEvents();
-        assertTrue(sentList.size() == 1);
-    }
-
-    @Test
-    public void sendMultipleEventsTrack() {
-        Context appContext = InstrumentationRegistry.getTargetContext();
-        Boolean trackingEnabled = MOCKED_TRACKING_ENABLED;
-
-        String clientId = MOCKED_CLIENT_ID;
-
-        AppInformation appInformation = new AppInformation.Builder()
-                .setCheckoutVersion(MOCKED_CHECKOUT_VERSION)
-                .setPlatform(MOCKED_PLATFORM)
-                .setPublicKey(MOCKED_PUBLIC_KEY)
-                .build();
-
-        DeviceInfo deviceInfo = new DeviceInfo.Builder()
-                .setModel(MOCKED_MODEL)
-                .setOS(MOCKED_OS)
-                .setResolution(MOCKED_RESOLUTION)
-                .setScreenSize(MOCKED_SCREEN_SIZE)
-                .setSystemVersion(MOCKED_SYSTEM_VERSION)
-                .build();
-
-        List<Event> events = new ArrayList<>();
-
-        ScreenViewEvent screenViewEvent = new ScreenViewEvent.Builder()
-                .setScreenId(MOCKED_SCREEN_ID_1)
-                .setScreenName(MOCKED_SCREEN_NAME_1)
-                .build();
-
-        ActionEvent actionEvent = new ActionEvent.Builder()
-                .setAction(MOCKED_ACTION)
-                .setCategory(MOCKED_CATEGORY)
-                .setLabel(MOCKED_LABEL)
-                .setValue(MOCKED_VALUE)
-                .setScreenId(MOCKED_SCREEN_ID_1)
-                .setScreenName(MOCKED_SCREEN_NAME_1)
-                .build();
-
-        ErrorEvent errorEvent = new ErrorEvent.Builder()
-                .setErrorClass(MOCKED_ERROR_CLASS_1)
-                .setErrorMessage(MOCKED_ERROR_MESSAGE_1)
-                .setStackTraceList(new ArrayList<StackTraceInfo>())
-                .build();
-
-        events.add(screenViewEvent);
-        events.add(actionEvent);
-        events.add(errorEvent);
-
-        MPTracker.getInstance().setTrackingEnabled(trackingEnabled);
-
-        MPTracker.getInstance().setMPTrackingService(new MPMockedTrackingService());
-
-        MPTracker.getInstance().setTracksListener(new TracksListener() {
-            @Override
-            public void onScreenLaunched(String screenName) {
-
-            }
-
-            @Override
-            public void onEventPerformed(Map<String, String> event) {
-
-            }
-        });
-
-        EventTrackIntent eventTrackIntent = MPTracker.getInstance().trackEvents(MOCKED_CLIENT_ID, appInformation, deviceInfo, events, appContext);
-
-        assertEquals(eventTrackIntent.getApplication(), appInformation);
-        assertEquals(eventTrackIntent.getDevice(), deviceInfo);
-        assertEquals(eventTrackIntent.getClientId(), clientId);
-        List<Event> sentList = eventTrackIntent.getEvents();
-        assertTrue(sentList.size() == 3);
     }
 
     @Test
@@ -386,7 +287,6 @@ public class MPTrackerTest {
     @Test
     public void sendErrorEventWithStackTraceInfo() {
         Context appContext = InstrumentationRegistry.getTargetContext();
-        Boolean trackingEnabled = MOCKED_TRACKING_ENABLED;
 
         String clientId = MOCKED_CLIENT_ID;
 
@@ -403,8 +303,6 @@ public class MPTrackerTest {
                 .setScreenSize(MOCKED_SCREEN_SIZE)
                 .setSystemVersion(MOCKED_SYSTEM_VERSION)
                 .build();
-
-        List<Event> events = new ArrayList<>();
 
         List<StackTraceInfo> stackTraceInfoList = new ArrayList<>();
         StackTraceInfo stackTraceInfo = new StackTraceInfo(MOCKED_STACK_TRACE_FILE, MOCKED_STACK_TRACE_LINE,
@@ -417,9 +315,7 @@ public class MPTrackerTest {
                 .setStackTraceList(stackTraceInfoList)
                 .build();
 
-        events.add(errorEvent);
-
-        MPTracker.getInstance().setTrackingEnabled(trackingEnabled);
+        MPTracker.getInstance().initTracker(MOCKED_PUBLIC_KEY, MOCKED_SITE_ID, MOCKED_CHECKOUT_VERSION, appContext);
 
         MPTracker.getInstance().setMPTrackingService(new MPMockedTrackingService());
 
@@ -435,15 +331,9 @@ public class MPTrackerTest {
             }
         });
 
-        EventTrackIntent eventTrackIntent = MPTracker.getInstance().trackEvents(MOCKED_CLIENT_ID, appInformation, deviceInfo, events, appContext);
+        MPTracker.getInstance().trackEvent(MOCKED_CLIENT_ID, appInformation, deviceInfo, errorEvent, appContext, null);
 
-        assertEquals(eventTrackIntent.getApplication(), appInformation);
-        assertEquals(eventTrackIntent.getDevice(), deviceInfo);
-        assertEquals(eventTrackIntent.getClientId(), clientId);
-        List<Event> sentList = eventTrackIntent.getEvents();
-        assertTrue(sentList.size() == 1);
-
-        ErrorEvent sentEvent = (ErrorEvent) sentList.get(0);
+        ErrorEvent sentEvent = (ErrorEvent) MPTracker.getInstance().getEvent();
         List<StackTraceInfo> sentStackTraceList = sentEvent.getStackTraceList();
         assertTrue(sentStackTraceList.size() == 1);
         StackTraceInfo sentStackTrace = sentStackTraceList.get(0);
@@ -451,65 +341,6 @@ public class MPTrackerTest {
         assertEquals(sentStackTrace.getLineNumber(), MOCKED_STACK_TRACE_LINE);
         assertEquals(sentStackTrace.getColumnNumber(), MOCKED_STACK_TRACE_COLUMN);
         assertEquals(sentStackTrace.getMethod(), MOCKED_STACK_TRACE_METHOD);
-    }
-
-    @Test
-    public void sendScreenViewEventWithMetadataTrack() {
-        Context appContext = InstrumentationRegistry.getTargetContext();
-        Boolean trackingEnabled = MOCKED_TRACKING_ENABLED;
-
-        String clientId = MOCKED_CLIENT_ID;
-
-        AppInformation appInformation = new AppInformation.Builder()
-                .setCheckoutVersion(MOCKED_CHECKOUT_VERSION)
-                .setPlatform(MOCKED_PLATFORM)
-                .setPublicKey(MOCKED_PUBLIC_KEY)
-                .build();
-
-        DeviceInfo deviceInfo = new DeviceInfo.Builder()
-                .setModel(MOCKED_MODEL)
-                .setOS(MOCKED_OS)
-                .setResolution(MOCKED_RESOLUTION)
-                .setScreenSize(MOCKED_SCREEN_SIZE)
-                .setSystemVersion(MOCKED_SYSTEM_VERSION)
-                .build();
-
-        List<Event> events = new ArrayList<>();
-
-        final ScreenViewEvent screenViewEvent = new ScreenViewEvent.Builder()
-                .setScreenId(MOCKED_SCREEN_ID_1)
-                .setScreenName(MOCKED_SCREEN_NAME_1)
-                .addMetaData(MOCKED_METADATA_KEY_1, MOCKED_METADATA_VALUE_1)
-                .build();
-
-        events.add(screenViewEvent);
-
-        MPTracker.getInstance().setTrackingEnabled(trackingEnabled);
-
-        MPTracker.getInstance().setMPTrackingService(new MPMockedTrackingService());
-
-        MPTracker.getInstance().setTracksListener(new TracksListener() {
-            @Override
-            public void onScreenLaunched(String screenName) {
-                assertEquals(screenViewEvent.getScreenName(), screenName);
-            }
-
-            @Override
-            public void onEventPerformed(Map<String, String> event) {
-
-            }
-        });
-        EventTrackIntent eventTrackIntent = MPTracker.getInstance().trackEvents(MOCKED_CLIENT_ID, appInformation, deviceInfo, events ,appContext);
-
-        assertEquals(eventTrackIntent.getApplication(), appInformation);
-        assertEquals(eventTrackIntent.getDevice(), deviceInfo);
-        assertEquals(eventTrackIntent.getClientId(), clientId);
-        List<Event> sentList = eventTrackIntent.getEvents();
-        assertTrue(sentList.size() == 1);
-
-        ScreenViewEvent sentEvent = (ScreenViewEvent) sentList.get(0);
-        assertTrue(sentEvent.getMetadata().containsKey(MOCKED_METADATA_KEY_1));
-        assertEquals(sentEvent.getMetadata().get(MOCKED_METADATA_KEY_1), MOCKED_METADATA_VALUE_1);
     }
 
 }

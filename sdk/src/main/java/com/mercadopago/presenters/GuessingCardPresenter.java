@@ -3,6 +3,7 @@ package com.mercadopago.presenters;
 import android.content.Context;
 import android.text.TextUtils;
 
+import com.mercadopago.BuildConfig;
 import com.mercadopago.R;
 import com.mercadopago.callbacks.Callback;
 import com.mercadopago.callbacks.FailureRecovery;
@@ -14,7 +15,6 @@ import com.mercadopago.model.BankDeal;
 import com.mercadopago.model.CardInformation;
 import com.mercadopago.model.CardToken;
 import com.mercadopago.model.Cardholder;
-import com.mercadopago.model.Cause;
 import com.mercadopago.model.Discount;
 import com.mercadopago.model.Identification;
 import com.mercadopago.model.IdentificationType;
@@ -28,6 +28,8 @@ import com.mercadopago.model.SecurityCode;
 import com.mercadopago.model.Setting;
 import com.mercadopago.model.Token;
 import com.mercadopago.preferences.PaymentPreference;
+import com.mercadopago.px_tracking.utils.TrackingUtil;
+import com.mercadopago.tracker.MPTrackingContext;
 import com.mercadopago.uicontrollers.card.CardView;
 import com.mercadopago.uicontrollers.card.FrontCardView;
 import com.mercadopago.util.ApiUtil;
@@ -115,6 +117,7 @@ public class GuessingCardPresenter {
     private String mPrivateKey;
     private int mCurrentNumberLength;
     private Issuer mIssuer;
+    private MPTrackingContext mTrackingContext;
 
 
     public GuessingCardPresenter(Context context) {
@@ -1105,5 +1108,21 @@ public class GuessingCardPresenter {
         } else {
             mView.finishCardFlow(mPaymentMethod, mToken, mDiscount, mDirectDiscountEnabled, mIssuer, payerCosts);
         }
+    }
+
+    public MPTrackingContext getTrackingContext(){
+        if(mTrackingContext==null){
+            mTrackingContext = new MPTrackingContext.Builder()
+                    .setContext(mContext)
+                    .setCheckoutVersion(BuildConfig.VERSION_NAME)
+                    .setTrackingStrategy(TrackingUtil.BATCH_STRATEGY)
+                    .setPublicKey(mPublicKey)
+                    .build();
+        }
+        return mTrackingContext;
+    }
+
+    public void setTrackingContext(MPTrackingContext trackingContext) {
+        this.mTrackingContext = trackingContext;
     }
 }

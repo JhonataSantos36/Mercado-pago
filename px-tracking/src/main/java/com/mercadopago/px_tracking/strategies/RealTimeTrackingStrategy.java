@@ -2,11 +2,14 @@ package com.mercadopago.px_tracking.strategies;
 
 import android.content.Context;
 
+import com.mercadopago.px_tracking.model.Event;
 import com.mercadopago.px_tracking.model.EventTrackIntent;
 import com.mercadopago.px_tracking.services.MPTrackingService;
 
-public class RealTimeTrackingStrategy implements TrackingStrategy {
+import java.util.ArrayList;
+import java.util.List;
 
+public class RealTimeTrackingStrategy extends TrackingStrategy {
     private final MPTrackingService trackingService;
 
     public RealTimeTrackingStrategy(MPTrackingService trackingService) {
@@ -14,7 +17,10 @@ public class RealTimeTrackingStrategy implements TrackingStrategy {
     }
 
     @Override
-    public void trackEvents(EventTrackIntent eventTrackIntent, Context context) {
-        trackingService.trackEvent(eventTrackIntent, context);
+    public void trackEvent(Event event, Context context) {
+        List<Event> events = new ArrayList<>();
+        events.add(event);
+        EventTrackIntent eventTrackIntent = new EventTrackIntent(getClientId(), getAppInformation(), getDeviceInfo(), events);
+        trackingService.trackEvents(eventTrackIntent, context);
     }
 }
