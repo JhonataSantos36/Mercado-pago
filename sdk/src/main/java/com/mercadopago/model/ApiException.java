@@ -94,7 +94,7 @@ public class ApiException {
         public static final String INVALID_CARD_EXPIRATION_MONTH = "3030";
         public static final String INVALID_CARD_EXPIRATION_YEAR = "4000";
         public static final String INVALID_PAYER_EMAIL = "4050";
-        public static final String INVALID_PAYMENT_WITH_ESC = "2105";
+        public static final String INVALID_PAYMENT_WITH_ESC = "2107";
 
         //Token creation error cause codes
         public static final String INVALID_CARD_HOLDER_IDENTIFICATION_NUMBER = "324";
