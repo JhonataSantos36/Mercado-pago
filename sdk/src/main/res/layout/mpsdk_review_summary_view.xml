@@ -27,6 +27,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="start"
             android:layout_weight="0.6"
+            android:ellipsize="end"
+            android:maxLines="1"
             android:text="@string/mpsdk_review_summary_products"
             android:textSize="18dp" />
 

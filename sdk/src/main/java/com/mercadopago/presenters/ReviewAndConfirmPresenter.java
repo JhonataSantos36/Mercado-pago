@@ -29,6 +29,7 @@ import java.util.List;
  */
 
 public class ReviewAndConfirmPresenter extends MvpPresenter<ReviewAndConfirmView, ReviewAndConfirmProvider> {
+
     private PaymentMethod mPaymentMethod;
     private PayerCost mPayerCost;
     private BigDecimal mAmount;

@@ -104,7 +104,6 @@ public class CongratsActivity extends MercadoPagoBaseActivity implements ReviewS
     private ViewGroup mTitleBackground;
     private RecyclerView mTopReviewables;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

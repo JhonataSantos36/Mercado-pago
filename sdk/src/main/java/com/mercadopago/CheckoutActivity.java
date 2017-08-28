@@ -26,6 +26,7 @@ import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.preferences.PaymentResultScreenPreference;
 import com.mercadopago.preferences.ReviewScreenPreference;
 import com.mercadopago.preferences.ServicePreference;
+import com.mercadopago.preferences.ShoppingReviewPreference;
 import com.mercadopago.presenters.CheckoutPresenter;
 import com.mercadopago.providers.CheckoutProvider;
 import com.mercadopago.providers.CheckoutProviderImpl;
@@ -59,6 +60,7 @@ public class CheckoutActivity extends MercadoPagoBaseActivity implements Checkou
 
     protected DecorationPreference mDecorationPreference;
     protected ServicePreference mServicePreference;
+    protected ShoppingReviewPreference mShoppingReviewPreference;
     protected Integer mRequestedResultCode;
     protected Intent mCustomDataBundle;
 
@@ -73,9 +75,7 @@ public class CheckoutActivity extends MercadoPagoBaseActivity implements Checkou
             decorate();
             mCheckoutPresenter.initialize();
         }
-
     }
-
 
     private void configurePresenter() {
         CheckoutProvider provider = new CheckoutProviderImpl(this, mMerchantPublicKey, mPrivateKey, mServicePreference, mCheckoutPresenter.isESCEnabled());
@@ -112,6 +112,7 @@ public class CheckoutActivity extends MercadoPagoBaseActivity implements Checkou
         mRequestedResultCode = this.getIntent().getIntExtra("resultCode", 0);
 
         mServicePreference = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("servicePreference"), ServicePreference.class);
+        mShoppingReviewPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("shoppingReviewPreference"), ShoppingReviewPreference.class);
         mDecorationPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("decorationPreference"), DecorationPreference.class);
         mMerchantPublicKey = this.getIntent().getStringExtra("merchantPublicKey");
         mPrivateKey = checkoutPreference.getPayer() != null ? checkoutPreference.getPayer().getAccessToken() : "";
@@ -275,6 +276,7 @@ public class CheckoutActivity extends MercadoPagoBaseActivity implements Checkou
                 .setMerchantPublicKey(mMerchantPublicKey)
                 .setSite(mCheckoutPresenter.getCheckoutPreference().getSite())
                 .setReviewScreenPreference(mCheckoutPresenter.getReviewScreenPreference())
+                .setShoppingReviewPreference(mShoppingReviewPreference)
                 .setPaymentMethod(mCheckoutPresenter.getSelectedPaymentMethod())
                 .setIssuer(mCheckoutPresenter.getIssuer())
                 .setPayerCost(mCheckoutPresenter.getSelectedPayerCost())

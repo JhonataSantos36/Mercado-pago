@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 
 import com.mercadopago.model.Item;
 import com.mercadopago.preferences.DecorationPreference;
+import com.mercadopago.preferences.ShoppingReviewPreference;
 import com.mercadopago.uicontrollers.reviewandconfirm.ReviewProductView;
 import com.mercadopago.uicontrollers.reviewandconfirm.ReviewProductViewController;
 
@@ -18,20 +19,22 @@ import java.util.List;
 public class ReviewProductAdapter extends RecyclerView.Adapter<ReviewProductAdapter.ViewHolder> {
 
     private DecorationPreference mDecorationPreference;
+    private ShoppingReviewPreference mShoppingReviewPreference;
     private List<Item> mItemList;
     private String mCurrency;
     private Context mContext;
 
-    public ReviewProductAdapter(Context context, List<Item> items, String currency, DecorationPreference decorationPreference) {
+    public ReviewProductAdapter(Context context, List<Item> items, String currency, DecorationPreference decorationPreference, ShoppingReviewPreference shoppingReviewPreference) {
         this.mContext = context;
         this.mItemList = items;
         this.mCurrency = currency;
+        this.mShoppingReviewPreference = shoppingReviewPreference;
         this.mDecorationPreference = decorationPreference;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        ReviewProductViewController productViewController = new ReviewProductView(mContext);
+        ReviewProductViewController productViewController = new ReviewProductView(mContext, mShoppingReviewPreference);
         productViewController.inflateInParent(parent, false);
         return new ReviewProductAdapter.ViewHolder(productViewController);
     }

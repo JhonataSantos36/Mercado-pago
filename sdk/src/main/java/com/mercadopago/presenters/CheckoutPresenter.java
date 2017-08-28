@@ -1,6 +1,5 @@
 package com.mercadopago.presenters;
 
-import com.mercadopago.BuildConfig;
 import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.constants.PaymentMethods;
 import com.mercadopago.controllers.Timer;
@@ -32,7 +31,6 @@ import com.mercadopago.preferences.PaymentResultScreenPreference;
 import com.mercadopago.preferences.ReviewScreenPreference;
 import com.mercadopago.preferences.ServicePreference;
 import com.mercadopago.providers.CheckoutProvider;
-import com.mercadopago.px_tracking.MPTracker;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.CurrenciesUtil;
 import com.mercadopago.util.TextUtils;
@@ -102,9 +100,7 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
     private void startCheckoutForPreference() {
         try {
             validatePreference();
-
             getView().initializeMPTracker();
-
             getView().trackScreen();
 
             startCheckout();
@@ -193,6 +189,7 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
     private void analyzeCampaigns(List<Campaign> campaigns) {
         boolean directDiscountFound = false;
         boolean couponDiscountFound = false;
+
         if (campaigns == null) {
             mFlowPreference.disableDiscount();
             retrievePaymentMethodSearch();

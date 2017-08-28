@@ -107,7 +107,7 @@ public class ReviewScreenPreference {
     }
 
     public void addReviewable(@NonNull Reviewable reviewable) {
-        if(this.reviewables == null) {
+        if (this.reviewables == null) {
             this.reviewables = new ArrayList<>();
         }
         this.reviewables.add(reviewable);
