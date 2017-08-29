@@ -28,7 +28,7 @@ public class ErrorActivity extends MercadoPagoBaseActivity {
         super.onCreate(savedInstanceState);
         animateErrorScreenLaunch();
 
-        if(CheckoutErrorHandler.getInstance().hasCustomErrorLayout()) {
+        if (CheckoutErrorHandler.getInstance().hasCustomErrorLayout()) {
             setContentView(CheckoutErrorHandler.getInstance().getCustomErrorLayout());
         } else {
             setContentView(R.layout.mpsdk_activity_error);
@@ -60,11 +60,9 @@ public class ErrorActivity extends MercadoPagoBaseActivity {
     }
 
     private void trackScreen() {
-        MPTrackingContext mpTrackingContext = new MPTrackingContext.Builder()
-                .setContext(this)
+        MPTrackingContext mpTrackingContext = new MPTrackingContext.Builder(this, mPublicKey)
                 .setCheckoutVersion(BuildConfig.VERSION_NAME)
                 .setTrackingStrategy(TrackingUtil.FORCED_STRATEGY)
-                .setPublicKey(mPublicKey)
                 .build();
 
         ScreenViewEvent.Builder builder = new ScreenViewEvent.Builder()

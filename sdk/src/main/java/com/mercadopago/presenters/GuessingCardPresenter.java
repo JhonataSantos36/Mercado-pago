@@ -1110,13 +1110,11 @@ public class GuessingCardPresenter {
         }
     }
 
-    public MPTrackingContext getTrackingContext(){
-        if(mTrackingContext==null){
-            mTrackingContext = new MPTrackingContext.Builder()
-                    .setContext(mContext)
+    public MPTrackingContext getTrackingContext() {
+        if (mTrackingContext == null) {
+            mTrackingContext = new MPTrackingContext.Builder(mContext, mPublicKey)
                     .setCheckoutVersion(BuildConfig.VERSION_NAME)
                     .setTrackingStrategy(TrackingUtil.BATCH_STRATEGY)
-                    .setPublicKey(mPublicKey)
                     .build();
         }
         return mTrackingContext;

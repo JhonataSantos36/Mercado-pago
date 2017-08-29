@@ -233,11 +233,9 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
 
     @Override
     public void trackInitialScreen() {
-        MPTrackingContext mpTrackingContext = new MPTrackingContext.Builder()
-                .setContext(this)
+        MPTrackingContext mpTrackingContext = new MPTrackingContext.Builder(this, mPublicKey)
                 .setCheckoutVersion(BuildConfig.VERSION_NAME)
                 .setTrackingStrategy(TrackingUtil.BATCH_STRATEGY)
-                .setPublicKey(mPublicKey)
                 .build();
         ScreenViewEvent event = new ScreenViewEvent.Builder()
                 .setScreenId(TrackingUtil.SCREEN_ID_PAYMENT_VAULT)
@@ -252,10 +250,8 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
         if (selectedItem != null) {
             String selectedItemId = selectedItem.getId();
 
-            MPTrackingContext mpTrackingContext = new MPTrackingContext.Builder()
-                    .setContext(this)
+            MPTrackingContext mpTrackingContext = new MPTrackingContext.Builder(this, mPublicKey)
                     .setCheckoutVersion(BuildConfig.VERSION_NAME)
-                    .setPublicKey(mPublicKey)
                     .setTrackingStrategy(TrackingUtil.BATCH_STRATEGY)
                     .build();
 
@@ -284,6 +280,7 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
             }
 
             mpTrackingContext.trackEvent(event);
+
         }
     }
 

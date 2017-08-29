@@ -160,10 +160,8 @@ public class CallForAuthorizeActivity extends MercadoPagoBaseActivity implements
     }
 
     protected void trackScreen() {
-        MPTrackingContext mpTrackingContext = new MPTrackingContext.Builder()
-                .setContext(this)
+        MPTrackingContext mpTrackingContext = new MPTrackingContext.Builder(this, mMerchantPublicKey)
                 .setCheckoutVersion(BuildConfig.VERSION_NAME)
-                .setPublicKey(mMerchantPublicKey)
                 .setTrackingStrategy(TrackingUtil.FORCED_STRATEGY)
                 .build();
 

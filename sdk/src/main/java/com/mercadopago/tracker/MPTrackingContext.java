@@ -8,6 +8,7 @@ import com.mercadopago.px_tracking.MPTracker;
 import com.mercadopago.px_tracking.model.AppInformation;
 import com.mercadopago.px_tracking.model.DeviceInfo;
 import com.mercadopago.px_tracking.model.Event;
+import com.mercadopago.px_tracking.utils.TrackingUtil;
 
 /**
  * Created by vaserber on 6/5/17.
@@ -15,10 +16,6 @@ import com.mercadopago.px_tracking.model.Event;
 
 
 public class MPTrackingContext {
-
-    private static final String TRACKING_STRATEGY_NOT_SET_MESSAGE = "trackingStrategy not set";
-    private static final String CONTEXT_NOT_SET_MESSAGE = "context not set";
-    private static final String PUBLIC_KEY_NOT_SET_MESSAGE = "publicKey not set";
 
     private Context context;
     private String clientId;
@@ -30,25 +27,17 @@ public class MPTrackingContext {
         this.context = builder.context;
 
         if (builder.trackingStrategy == null) {
-            throw new IllegalStateException(TRACKING_STRATEGY_NOT_SET_MESSAGE);
+            builder.trackingStrategy = TrackingUtil.BATCH_STRATEGY;
         }
 
-        if (builder.context == null) {
-            throw new IllegalStateException(CONTEXT_NOT_SET_MESSAGE);
-        }
+        this.clientId = initializeClientId();
+        this.deviceInfo = initializeDeviceInfo();
+        this.trackingStrategy = builder.trackingStrategy;
 
-        if (builder.publicKey == null) {
-            throw new IllegalStateException(PUBLIC_KEY_NOT_SET_MESSAGE);
-        }
-
-        if (this.context != null) {
-            this.clientId = initializeClientId();
-            this.deviceInfo = initializeDeviceInfo();
-            this.trackingStrategy = builder.trackingStrategy;
-        }
-        if (builder.publicKey != null && builder.checkoutVersion != null) {
+        if (!builder.publicKey.isEmpty() && builder.checkoutVersion != null) {
             this.appInformation = initializeAppInformation(builder.publicKey, builder.checkoutVersion);
         }
+
     }
 
     private String initializeClientId() {
@@ -87,14 +76,9 @@ public class MPTrackingContext {
         private String checkoutVersion;
         private String trackingStrategy;
 
-        public Builder setContext(Context context) {
+        public Builder(Context context, String publicKey) {
             this.context = context;
-            return this;
-        }
-
-        public Builder setPublicKey(String publicKey) {
             this.publicKey = publicKey;
-            return this;
         }
 
         public Builder setCheckoutVersion(String checkoutVersion) {

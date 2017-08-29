@@ -181,10 +181,8 @@ public class InstructionsActivity extends MercadoPagoBaseActivity {
     }
 
     protected void trackScreen() {
-        MPTrackingContext mpTrackingContext = new MPTrackingContext.Builder()
-                .setContext(this)
+        MPTrackingContext mpTrackingContext = new MPTrackingContext.Builder(this, mMerchantPublicKey)
                 .setCheckoutVersion(BuildConfig.VERSION_NAME)
-                .setPublicKey(mMerchantPublicKey)
                 .setTrackingStrategy(TrackingUtil.FORCED_STRATEGY)
                 .build();
 
@@ -446,7 +444,7 @@ public class InstructionsActivity extends MercadoPagoBaseActivity {
     }
 
     private void recoverFromFailure() {
-        if(failureRecovery != null) {
+        if (failureRecovery != null) {
             failureRecovery.recover();
         }
     }
