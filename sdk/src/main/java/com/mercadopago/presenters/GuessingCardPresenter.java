@@ -1125,4 +1125,24 @@ public class GuessingCardPresenter {
     public void setTrackingContext(MPTrackingContext trackingContext) {
         this.mTrackingContext = trackingContext;
     }
+
+    public boolean shouldAskPaymentType(List<PaymentMethod> paymentMethodList) {
+
+        boolean paymentTypeUndefined = false;
+        String paymentType;
+
+
+        if (paymentMethodList == null || paymentMethodList.isEmpty()) {
+            paymentTypeUndefined = true;
+        } else {
+            paymentType = paymentMethodList.get(0).getPaymentTypeId();
+            for (PaymentMethod currentPaymentMethod : paymentMethodList) {
+                if (!paymentType.equals(currentPaymentMethod.getPaymentTypeId())) {
+                    paymentTypeUndefined = true;
+                    break;
+                }
+            }
+        }
+        return paymentTypeUndefined;
+    }
 }

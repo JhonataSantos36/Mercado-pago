@@ -64,7 +64,6 @@ import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.presenters.GuessingCardPresenter;
 import com.mercadopago.px_tracking.utils.TrackingUtil;
-import com.mercadopago.tracker.MPTrackingContext;
 import com.mercadopago.px_tracking.model.ScreenViewEvent;
 import com.mercadopago.uicontrollers.card.CardRepresentationModes;
 import com.mercadopago.uicontrollers.card.CardView;
@@ -733,9 +732,11 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
                             setErrorView(getString(R.string.mpsdk_invalid_payment_method));
                         } else if (paymentMethodList.size() == 1) {
                             onPaymentMethodSet(paymentMethodList.get(0));
-                        } else {
+                        } else if (mPresenter.shouldAskPaymentType(paymentMethodList)) {
                             mPresenter.enablePaymentTypeSelection(paymentMethodList);
                             setPaymentMethod(paymentMethodList.get(0));
+                        } else {
+                            onPaymentMethodSet(paymentMethodList.get(0));
                         }
                     }
 
