@@ -28,6 +28,7 @@ import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.presenters.CardVaultPresenter;
 import com.mercadopago.providers.CardVaultProviderImpl;
 import com.mercadopago.px_tracking.MPTracker;
+import com.mercadopago.px_tracking.utils.TrackingUtil;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
@@ -235,7 +236,16 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultVie
 
     @Override
     public void askForSecurityCodeFromTokenRecovery() {
-        startSecurityCodeActivity();
+        PaymentRecovery paymentRecovery = mCardVaultPresenter.getPaymentRecovery();
+        String reason = "";
+        if (paymentRecovery != null) {
+            if (paymentRecovery.isStatusDetailInvalidESC()) {
+                reason = TrackingUtil.SECURITY_CODE_REASON_ESC;
+            } else if (paymentRecovery.isStatusDetailCallForAuthorize()) {
+                reason = TrackingUtil.SECURITY_CODE_REASON_CALL;
+            }
+        }
+        startSecurityCodeActivity(reason);
         animateTransitionFadeInFadeOut();
     }
 
@@ -252,7 +262,7 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultVie
     }
 
     @Override
-    public void startSecurityCodeActivity() {
+    public void startSecurityCodeActivity(String reason) {
         new MercadoPagoComponents.Activities.SecurityCodeActivityBuilder()
                 .setActivity(this)
                 .setMerchantPublicKey(mPublicKey)
@@ -265,6 +275,7 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultVie
                 .setPayerAccessToken(mPrivateKey)
                 .setESCEnabled(mEscEnabled)
                 .setPaymentRecovery(mCardVaultPresenter.getPaymentRecovery())
+                .setTrackingReason(reason)
                 .startActivity();
     }
 

@@ -165,7 +165,7 @@ public class ServicePreference {
         private String createPaymentURI;
         private String createCheckoutPreferenceURI;
         private String getMerchantDiscountURI;
-        private String processingMode = ProcessingModes.AGGREGATOR;
+        private String processingMode;
         private Map<String, String> getCustomerAdditionalInfo;
         private Map<String, Object> createPaymentAdditionalInfo;
         private Map<String, Object> createCheckoutPreferenceAdditionalInfo;
@@ -243,6 +243,9 @@ public class ServicePreference {
         }
 
         public ServicePreference build() {
+            if (this.processingMode == null) {
+                this.processingMode = ProcessingModes.AGGREGATOR;
+            }
             return new ServicePreference(this);
         }
 

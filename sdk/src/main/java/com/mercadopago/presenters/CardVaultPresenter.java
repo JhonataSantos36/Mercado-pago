@@ -20,6 +20,7 @@ import com.mercadopago.mvp.MvpPresenter;
 import com.mercadopago.mvp.OnResourcesRetrievedCallback;
 import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.providers.CardVaultProvider;
+import com.mercadopago.px_tracking.utils.TrackingUtil;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.TextUtils;
 import com.mercadopago.views.CardVaultView;
@@ -545,7 +546,7 @@ public class CardVaultPresenter extends MvpPresenter<CardVaultView, CardVaultPro
         if (savedCardAvailable() && isESCSaved()) {
             createESCToken();
         } else {
-            getView().startSecurityCodeActivity();
+            getView().startSecurityCodeActivity(TrackingUtil.SECURITY_CODE_REASON_SAVED_CARD);
         }
     }
 
@@ -589,7 +590,7 @@ public class CardVaultPresenter extends MvpPresenter<CardVaultView, CardVaultPro
 
                                 mESC = null;
                                 if (viewAttached()) {
-                                    getView().startSecurityCodeActivity();
+                                    getView().startSecurityCodeActivity(TrackingUtil.SECURITY_CODE_REASON_ESC);
                                 }
                             } else {
                                 recoverCreateESCToken(error);

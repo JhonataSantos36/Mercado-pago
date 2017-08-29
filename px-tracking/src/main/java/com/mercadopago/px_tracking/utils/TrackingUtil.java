@@ -55,6 +55,11 @@ public class TrackingUtil {
     public static final String GROUP_BANK_TRANSFER = "bank_transfer";
     public static final String GROUP_CARDS = "cards";
 
+    //Security Code Reason
+    public static final String SECURITY_CODE_REASON_CALL = "call_for_auth";
+    public static final String SECURITY_CODE_REASON_SAVED_CARD = "saved_card";
+    public static final String SECURITY_CODE_REASON_ESC = "invalid_esc";
+
     //Sufix
     public static final String CARD_NUMBER = "/number";
     public static final String CARD_HOLDER_NAME = "/name";
@@ -71,6 +76,7 @@ public class TrackingUtil {
     public static final String METADATA_PAYMENT_ID = "payment_id";
     public static final String METADATA_PAYMENT_STATUS_DETAIL = "payment_status_detail";
     public static final String METADATA_PAYMENT_IS_EXPRESS = "is_express";
+    public static final String METADATA_SECURITY_CODE_REASON = "security_code_view_reason";
     public static final String METADATA_ERROR_STATUS = "error_status";
     public static final String METADATA_ERROR_CODE = "error_code";
     public static final String METADATA_ERROR_REQUEST = "error_request_origin";

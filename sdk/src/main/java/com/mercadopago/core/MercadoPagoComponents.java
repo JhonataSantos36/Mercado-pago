@@ -1157,6 +1157,7 @@ public class MercadoPagoComponents {
             private Token token;
             private boolean escEnabled;
             private PaymentRecovery paymentRecovery;
+            private String reason;
 
             public SecurityCodeActivityBuilder setActivity(Activity activity) {
                 this.activity = activity;
@@ -1185,6 +1186,11 @@ public class MercadoPagoComponents {
 
             public SecurityCodeActivityBuilder setESCEnabled(boolean escEnabled) {
                 this.escEnabled = escEnabled;
+                return this;
+            }
+
+            public SecurityCodeActivityBuilder setTrackingReason(String reason) {
+                this.reason = reason;
                 return this;
             }
 
@@ -1245,6 +1251,7 @@ public class MercadoPagoComponents {
                 intent.putExtra("cardInfo", JsonUtil.getInstance().toJson(cardInformation));
                 intent.putExtra("paymentRecovery", JsonUtil.getInstance().toJson(paymentRecovery));
                 intent.putExtra("escEnabled", escEnabled);
+                intent.putExtra("reason", reason);
                 activity.startActivityForResult(intent, SECURITY_CODE_REQUEST_CODE);
             }
         }

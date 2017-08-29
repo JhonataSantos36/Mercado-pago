@@ -1093,7 +1093,7 @@ public class CardVaultPresenterTest {
         }
 
         @Override
-        public void startSecurityCodeActivity() {
+        public void startSecurityCodeActivity(String reason) {
             securityCodeActivityStarted = true;
         }
     }
