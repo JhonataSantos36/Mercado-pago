@@ -1,3 +1,17 @@
+## VERSION 3.3.1
+
+_29_08_2017_
+
+* New: Tracking screens (metrics v2)
+* New: Customization in Review and Confirm to support services
+* New: Support for new endpoints of installments and issuers
+* New: Tracking invalid ESC
+* Fix: Invalid ESC code changed
+* Fix: Check to open payment types screen
+* Fix: Image for account money in Brasil changed
+* Fix: Tracker initialization crash fixed
+
+
 ## VERSION 3.3.0
 
 _15-08-2017_
