@@ -1,6 +1,6 @@
-## VERSION 3.3.1
+## VERSION 3.4.0
 
-_29_08_2017_
+_30_08_2017_
 
 * New: Tracking screens (metrics v2)
 * New: Customization in Review and Confirm to support services
