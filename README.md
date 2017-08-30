@@ -13,7 +13,7 @@ The MercadoPago Android SDK makes it easy to collect your user's credit card det
 
 Add this line to your app's `build.gradle` inside the `dependencies` section:
 
-    compile 'com.mercadopago:sdk:3.3.0'
+    compile 'com.mercadopago:sdk:3.4.0'
 
 ### Eclipse
 

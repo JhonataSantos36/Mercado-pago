@@ -41,14 +41,15 @@ import com.mercadopago.model.Token;
 import com.mercadopago.observers.TimerObserver;
 import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.preferences.ReviewScreenPreference;
+import com.mercadopago.preferences.ShoppingReviewPreference;
 import com.mercadopago.presenters.ReviewAndConfirmPresenter;
-import com.mercadopago.providers.MPTrackingProvider;
+import com.mercadopago.px_tracking.utils.TrackingUtil;
+import com.mercadopago.tracker.MPTrackingContext;
 import com.mercadopago.providers.ReviewAndConfirmProviderImpl;
 import com.mercadopago.px_tracking.model.ScreenViewEvent;
 import com.mercadopago.uicontrollers.FontCache;
 import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
-import com.mercadopago.util.TrackingUtil;
 import com.mercadopago.views.ReviewAndConfirmView;
 
 import java.lang.reflect.Type;
@@ -86,6 +87,7 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
     protected ReviewAndConfirmPresenter mPresenter;
     protected DecorationPreference mDecorationPreference;
     protected ReviewScreenPreference mReviewScreenPreference;
+    protected ShoppingReviewPreference mShoppingReviewPreference;
     protected String mPublicKey;
     protected Site mSite;
     private Issuer mIssuer;
@@ -97,11 +99,12 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
         createPresenter();
         getActivityParameters();
         mPresenter.attachView(this);
-        mPresenter.attachResourcesProvider(new ReviewAndConfirmProviderImpl(this, mReviewScreenPreference));
+        mPresenter.attachResourcesProvider(new ReviewAndConfirmProviderImpl(this, mReviewScreenPreference, mShoppingReviewPreference));
 
         if (mDecorationPreference != null && mDecorationPreference.hasColors()) {
             setTheme(R.style.Theme_MercadoPagoTheme_NoActionBar);
         }
+
         setContentView(R.layout.mpsdk_activity_review_confirm);
         initializeControls();
         showTimer();
@@ -152,6 +155,8 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
         mPublicKey = getIntent().getStringExtra("merchantPublicKey");
         mSite = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("site"), Site.class);
         mIssuer = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("issuer"), Issuer.class);
+        mShoppingReviewPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("shoppingReviewPreference"), ShoppingReviewPreference.class);
+
         Boolean termsAndConditionsEnabled = getIntent().getBooleanExtra("termsAndConditionsEnabled", true);
         Boolean editionEnabled = getIntent().getBooleanExtra("editionEnabled", true);
         Boolean discountEnabled = getIntent().getBooleanExtra("discountEnabled", true);
@@ -162,7 +167,6 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
         PaymentMethod paymentMethod = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("paymentMethod"), PaymentMethod.class);
         String paymentMethodCommentInfo = getIntent().getStringExtra("paymentMethodCommentInfo");
         String paymentMethodDescriptionInfo = getIntent().getStringExtra("paymentMethodDescriptionInfo");
-        Site site = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("site"), Site.class);
         List<Item> items;
 
         try {
@@ -212,7 +216,7 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
         mTermsAndConditionsTextView = (MPTextView) findViewById(R.id.mpsdkReviewTermsAndConditions);
         mTimerTextView = (MPTextView) findViewById(R.id.mpsdkTimerTextView);
         mReviewables = (RecyclerView) findViewById(R.id.mpsdkReviewablesRecyclerView);
-        mSeparatorView = (View) findViewById(R.id.mpsdkFirstSeparator);
+        mSeparatorView = findViewById(R.id.mpsdkFirstSeparator);
 
         initializeToolbar();
         decorateButtons();
@@ -271,10 +275,9 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
 
     @Override
     public void trackScreen() {
-        MPTrackingProvider mpTrackingProvider = new MPTrackingProvider.Builder()
-                .setContext(this)
+        MPTrackingContext mpTrackingContext = new MPTrackingContext.Builder(this, mPublicKey)
                 .setCheckoutVersion(BuildConfig.VERSION_NAME)
-                .setPublicKey(mPublicKey)
+                .setTrackingStrategy(TrackingUtil.BATCH_STRATEGY)
                 .build();
 
         PaymentData paymentData = mPresenter.getPaymentData();
@@ -298,7 +301,7 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
             }
 
             ScreenViewEvent event = builder.build();
-            mpTrackingProvider.addTrackEvent(event);
+            mpTrackingContext.trackEvent(event);
         }
     }
 

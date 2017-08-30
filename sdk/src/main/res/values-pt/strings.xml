@@ -15,8 +15,8 @@
     <string name="other_payment_method">Outro meio de pagamento…</string>
 
     <!-- Vault -->
-    <string name="mpsdk_cod_seg_desc">Últimos <xliff:g id="numeros" example="4">%1$d</xliff:g> números do verso do cartão</string>
-    <string name="mpsdk_cod_seg_desc_amex"><xliff:g id="numeros" example="4">%1$d</xliff:g> dígitos da frente do cartão</string>
+    <string name="mpsdk_cod_seg_desc">Últimos <xliff:g example="4" id="numeros">%1$d</xliff:g> números do verso do cartão</string>
+    <string name="mpsdk_cod_seg_desc_amex"><xliff:g example="4" id="numeros">%1$d</xliff:g> dígitos da frente do cartão</string>
     <string name="mpsdk_title_activity_vault">Pagar</string>
     <string name="mpsdk_select_pm_label">Escolha o meio de pagamento…</string>
     <string name="mpsdk_last_digits_label">Terminado em</string>
@@ -204,7 +204,7 @@
     <string name="mpsdk_your_atm">caixa eletrônico de</string>
     <string name="mpsdk_review_product_quantity">Quantidade: %1$s</string>
     <string name="mpsdk_review_product_price">Preço unitário: %1$s</string>
-    <string name="mpsdk_activity_checkout_title">Confirme a sua compra</string>
+    <string name="mpsdk_activity_checkout_title">Rever o seu pagamento</string>
     <string name="mpsdk_review_summary_products">Produtos</string>
     <string name="mpsdk_review_summary_subtotal">Subtotal</string>
     <string name="mpsdk_review_summary_pay">Você paga</string>

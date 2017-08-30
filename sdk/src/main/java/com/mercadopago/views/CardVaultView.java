@@ -20,7 +20,7 @@ public interface CardVaultView extends MvpView {
 
     void startIssuersActivity();
 
-    void startSecurityCodeActivity();
+    void startSecurityCodeActivity(String reason);
 
     void showProgressLayout();
 

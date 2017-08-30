@@ -63,8 +63,7 @@ import com.mercadopago.observers.TimerObserver;
 import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.presenters.GuessingCardPresenter;
-import com.mercadopago.providers.MPTrackingProvider;
-import com.mercadopago.px_tracking.MPTracker;
+import com.mercadopago.px_tracking.utils.TrackingUtil;
 import com.mercadopago.px_tracking.model.ScreenViewEvent;
 import com.mercadopago.uicontrollers.card.CardRepresentationModes;
 import com.mercadopago.uicontrollers.card.CardView;
@@ -79,7 +78,6 @@ import com.mercadopago.util.MPAnimationUtils;
 import com.mercadopago.util.MPCardMaskUtil;
 import com.mercadopago.util.MercadoPagoUtil;
 import com.mercadopago.util.ScaleUtil;
-import com.mercadopago.util.TrackingUtil;
 import com.mercadopago.views.GuessingCardActivityView;
 
 import java.lang.reflect.Type;
@@ -275,6 +273,7 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
+
         super.onSaveInstanceState(outState);
 
         if (mPresenter.getPaymentMethod() != null) {
@@ -300,6 +299,7 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
             outState.putString(IDENTIFICATION_TYPES_LIST_BUNDLE, JsonUtil.getInstance().toJson(mPresenter.getIdentificationTypes()));
             outState.putString(PAYMENT_RECOVERY_BUNDLE, JsonUtil.getInstance().toJson(mPresenter.getPaymentRecovery()));
             outState.putBoolean(LOW_RES_BUNDLE, mLowResActive);
+
             mSecurityCodeEditText.getText().clear();
         }
     }
@@ -388,6 +388,7 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
                     if (cardViewsActive()) {
                         mCardView.updateCardNumberMask(getCardNumberTextTrimmed());
                     }
+
                 }
             }
         }
@@ -439,98 +440,67 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
         mPresenter.initialize();
     }
 
-    public void trackScreen() {
+    protected void trackScreen() {
         String paymentTypeId = mPresenter.getPaymentTypeId();
-
-        MPTrackingProvider mpTrackingProvider = new MPTrackingProvider.Builder()
-                .setContext(this)
-                .setCheckoutVersion(BuildConfig.VERSION_NAME)
-                .setPublicKey(mPresenter.getPublicKey())
-                .build();
 
         ScreenViewEvent event = new ScreenViewEvent.Builder()
                 .setScreenId(TrackingUtil.SCREEN_ID_CARD_FORM + paymentTypeId)
-                .setScreenName(TrackingUtil.SCREEN_NAME_CARD_FORM)
+                .setScreenName(TrackingUtil.SCREEN_NAME_CARD_FORM + " " + paymentTypeId)
                 .build();
 
-        mpTrackingProvider.addTrackEvent(event);
+        mPresenter.getTrackingContext().trackEvent(event);
     }
 
     protected void trackCardNumber() {
         String paymentTypeId = mPresenter.getPaymentTypeId();
 
-        MPTrackingProvider mpTrackingProvider = new MPTrackingProvider.Builder()
-                .setContext(this)
-                .setCheckoutVersion(BuildConfig.VERSION_NAME)
-                .setPublicKey(mPresenter.getPublicKey())
-                .build();
         ScreenViewEvent event = new ScreenViewEvent.Builder()
                 .setScreenId(TrackingUtil.SCREEN_ID_CARD_FORM + paymentTypeId + TrackingUtil.CARD_NUMBER)
                 .setScreenName(TrackingUtil.SCREEN_NAME_CARD_FORM_NUMBER)
                 .build();
-        mpTrackingProvider.addTrackEvent(event);
+        mPresenter.getTrackingContext().trackEvent(event);
     }
 
     protected void trackCardHolderName() {
         String paymentTypeId = mPresenter.getPaymentTypeId();
 
-        MPTrackingProvider mpTrackingProvider = new MPTrackingProvider.Builder()
-                .setContext(this)
-                .setCheckoutVersion(BuildConfig.VERSION_NAME)
-                .setPublicKey(mPresenter.getPublicKey())
-                .build();
         ScreenViewEvent event = new ScreenViewEvent.Builder()
                 .setScreenId(TrackingUtil.SCREEN_ID_CARD_FORM + paymentTypeId + TrackingUtil.CARD_HOLDER_NAME)
                 .setScreenName(TrackingUtil.SCREEN_NAME_CARD_FORM_NAME)
                 .build();
-        mpTrackingProvider.addTrackEvent(event);
+        mPresenter.getTrackingContext().trackEvent(event);
     }
 
     protected void trackCardExpiryDate() {
         String paymentTypeId = mPresenter.getPaymentTypeId();
 
-        MPTrackingProvider mpTrackingProvider = new MPTrackingProvider.Builder()
-                .setContext(this)
-                .setCheckoutVersion(BuildConfig.VERSION_NAME)
-                .setPublicKey(mPresenter.getPublicKey())
-                .build();
         ScreenViewEvent event = new ScreenViewEvent.Builder()
                 .setScreenId(TrackingUtil.SCREEN_ID_CARD_FORM + paymentTypeId + TrackingUtil.CARD_EXPIRATION_DATE)
                 .setScreenName(TrackingUtil.SCREEN_NAME_CARD_FORM_EXPIRY)
                 .build();
-        mpTrackingProvider.addTrackEvent(event);
+        mPresenter.getTrackingContext().trackEvent(event);
     }
 
     protected void trackCardSecurityCode() {
         String paymentTypeId = mPresenter.getPaymentTypeId();
 
-        MPTrackingProvider mpTrackingProvider = new MPTrackingProvider.Builder()
-                .setContext(this)
-                .setCheckoutVersion(BuildConfig.VERSION_NAME)
-                .setPublicKey(mPresenter.getPublicKey())
-                .build();
         ScreenViewEvent event = new ScreenViewEvent.Builder()
                 .setScreenId(TrackingUtil.SCREEN_ID_CARD_FORM + paymentTypeId + TrackingUtil.CARD_SECURITY_CODE)
                 .setScreenName(TrackingUtil.SCREEN_NAME_CARD_FORM_CVV)
                 .build();
-        mpTrackingProvider.addTrackEvent(event);
+        mPresenter.getTrackingContext().trackEvent(event);
     }
 
     protected void trackCardIdentification() {
         String paymentTypeId = mPresenter.getPaymentTypeId();
 
-        MPTrackingProvider mpTrackingProvider = new MPTrackingProvider.Builder()
-                .setContext(this)
-                .setCheckoutVersion(BuildConfig.VERSION_NAME)
-                .setPublicKey(mPresenter.getPublicKey())
-                .build();
         ScreenViewEvent event = new ScreenViewEvent.Builder()
                 .setScreenId(TrackingUtil.SCREEN_ID_IDENTIFICATION)
                 .setScreenName(TrackingUtil.SCREEN_NAME_CARD_FORM_IDENTIFICATION_NUMBER)
                 .addMetaData(TrackingUtil.METADATA_PAYMENT_TYPE_ID, paymentTypeId)
                 .addMetaData(TrackingUtil.METADATA_PAYMENT_METHOD_ID, mPresenter.getPaymentMethod().getId())
                 .build();
-        mpTrackingProvider.addTrackEvent(event);
+        mPresenter.getTrackingContext().trackEvent(event);
     }
 
     private void initializeViews() {
@@ -762,9 +732,11 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
                             setErrorView(getString(R.string.mpsdk_invalid_payment_method));
                         } else if (paymentMethodList.size() == 1) {
                             onPaymentMethodSet(paymentMethodList.get(0));
-                        } else {
+                        } else if (mPresenter.shouldAskPaymentType(paymentMethodList)) {
                             mPresenter.enablePaymentTypeSelection(paymentMethodList);
                             setPaymentMethod(paymentMethodList.get(0));
+                        } else {
+                            onPaymentMethodSet(paymentMethodList.get(0));
                         }
                     }
 
@@ -1675,7 +1647,6 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
     @Override
     public void onBackPressed() {
         checkFlipCardToFront();
-
         Intent returnIntent = new Intent();
         returnIntent.putExtra("discount", JsonUtil.getInstance().toJson(mPresenter.getDiscount()));
         returnIntent.putExtra("discountEnabled", JsonUtil.getInstance().toJson(mPresenter.getDiscountEnabled()));

@@ -109,7 +109,7 @@ public class ReviewPaymentOffView extends Reviewable {
 
         mPaymentText.setText(getPaymentMethodDescription());
 
-        if(TextUtil.isEmpty(mPaymentMethodCommentInfo)) {
+        if (TextUtil.isEmpty(mPaymentMethodCommentInfo)) {
             mPaymentMethodExtraInfo.setVisibility(View.GONE);
         } else {
             mPaymentDescription.setText(mPaymentMethodCommentInfo);
@@ -142,21 +142,12 @@ public class ReviewPaymentOffView extends Reviewable {
 
     private int getResource() {
         int resId;
-        boolean isMLB = mSite != null && Sites.BRASIL.getId().equals(mSite.getId());
         boolean isTintNeeded = mDecorationPreference != null && mDecorationPreference.hasColors();
 
         if (isTintNeeded) {
-            if (isMLB) {
-                resId = R.drawable.mpsdk_grey_boleto_off;
-            } else {
-                resId = R.drawable.mpsdk_grey_review_payment_off;
-            }
+            resId = R.drawable.mpsdk_grey_review_payment_off;
         } else {
-            if (isMLB) {
-                resId = R.drawable.mpsdk_boleto_off;
-            } else {
-                resId = R.drawable.mpsdk_review_payment_off;
-            }
+            resId = R.drawable.mpsdk_review_payment_off;
         }
         return resId;
     }

@@ -1,6 +1,5 @@
 package com.mercadopago.presenters;
 
-import com.mercadopago.BuildConfig;
 import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.constants.PaymentMethods;
 import com.mercadopago.controllers.Timer;
@@ -30,6 +29,7 @@ import com.mercadopago.preferences.CheckoutPreference;
 import com.mercadopago.preferences.FlowPreference;
 import com.mercadopago.preferences.PaymentResultScreenPreference;
 import com.mercadopago.preferences.ReviewScreenPreference;
+import com.mercadopago.preferences.ServicePreference;
 import com.mercadopago.providers.CheckoutProvider;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.CurrenciesUtil;
@@ -48,6 +48,7 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
     private PaymentResultScreenPreference mPaymentResultScreenPreference;
     private ReviewScreenPreference mReviewScreenPreference;
     private FlowPreference mFlowPreference;
+    private ServicePreference mServicePreference;
     private Boolean mBinaryMode;
     private Discount mDiscount;
     private Boolean mDirectDiscountEnabled;
@@ -77,6 +78,7 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
     public CheckoutPresenter() {
         mFlowPreference = new FlowPreference.Builder()
                 .build();
+        mServicePreference = new ServicePreference.Builder().build();
     }
 
     public void initialize() {
@@ -98,8 +100,8 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
     private void startCheckoutForPreference() {
         try {
             validatePreference();
-
             getView().initializeMPTracker();
+            getView().trackScreen();
 
             startCheckout();
         } catch (CheckoutPreferenceException e) {
@@ -187,6 +189,7 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
     private void analyzeCampaigns(List<Campaign> campaigns) {
         boolean directDiscountFound = false;
         boolean couponDiscountFound = false;
+
         if (campaigns == null) {
             mFlowPreference.disableDiscount();
             retrievePaymentMethodSearch();
@@ -800,6 +803,12 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
         this.mPaymentResultScreenPreference = paymentResultScreenPreference;
     }
 
+    public void setServicePreference(ServicePreference servicePreference) {
+        if (servicePreference != null) {
+            this.mServicePreference = servicePreference;
+        }
+    }
+
     public void setReviewScreenPreference(ReviewScreenPreference reviewScreenPreference) {
         this.mReviewScreenPreference = reviewScreenPreference;
     }
@@ -855,7 +864,7 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
     }
 
     public Boolean getShowBankDeals() {
-        return mFlowPreference.isBankDealsEnabled();
+        return mFlowPreference.isBankDealsEnabled() && mServicePreference.showBankDealsByProcessingMode();
     }
 
     public Boolean shouldShowAllSavedCards() {

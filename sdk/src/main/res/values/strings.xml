@@ -220,7 +220,7 @@
     <string name="mpsdk_your_atm">cajero automático de</string>
     <string name="mpsdk_review_product_quantity">Cantidad: %1$s</string>
     <string name="mpsdk_review_product_price">Precio unitario: %1$s</string>
-    <string name="mpsdk_activity_checkout_title">Confirma tu compra</string>
+    <string name="mpsdk_activity_checkout_title">Revisa tu pago</string>
     <string name="mpsdk_review_summary_products">Productos</string>
     <string name="mpsdk_review_summary_subtotal">Subtotal</string>
     <string name="mpsdk_review_summary_pay">Pagas</string>
@@ -256,9 +256,9 @@
     <string name="mpsdk_text_unlock_card_end">antes de confirmar el pago.</string>
     <string name="mpsdk_title_unlock_card">Desbloqueo de Tarjeta</string>
 
-    <string translatable="false" name="mpsdk_error_message_detail_no_installments">no installments found for an issuer at InstallmentsActivity</string>
-    <string translatable="false" name="mpsdk_error_message_detail_no_payer_cost_found">no payer costs found at InstallmentsActivity</string>
-    <string translatable="false" name="mpsdk_error_message_detail_multiple_installments">multiple installments found for an issuer at InstallmentsActivity</string>
-    <string translatable="false" name="mpsdk_error_message_detail_issuers">no issuers found at IssuersActivity</string>
+    <string name="mpsdk_error_message_detail_no_installments" translatable="false">no installments found for an issuer at InstallmentsActivity</string>
+    <string name="mpsdk_error_message_detail_no_payer_cost_found" translatable="false">no payer costs found at InstallmentsActivity</string>
+    <string name="mpsdk_error_message_detail_multiple_installments" translatable="false">multiple installments found for an issuer at InstallmentsActivity</string>
+    <string name="mpsdk_error_message_detail_issuers" translatable="false">no issuers found at IssuersActivity</string>
 
 </resources>

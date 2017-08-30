@@ -8,12 +8,12 @@ import android.widget.TextView;
 import com.mercadopago.controllers.CheckoutErrorHandler;
 import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.model.ApiException;
-import com.mercadopago.providers.MPTrackingProvider;
 import com.mercadopago.px_tracking.model.ScreenViewEvent;
+import com.mercadopago.px_tracking.utils.TrackingUtil;
+import com.mercadopago.tracker.MPTrackingContext;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
-import com.mercadopago.util.TrackingUtil;
 
 public class ErrorActivity extends MercadoPagoBaseActivity {
 
@@ -28,7 +28,7 @@ public class ErrorActivity extends MercadoPagoBaseActivity {
         super.onCreate(savedInstanceState);
         animateErrorScreenLaunch();
 
-        if(CheckoutErrorHandler.getInstance().hasCustomErrorLayout()) {
+        if (CheckoutErrorHandler.getInstance().hasCustomErrorLayout()) {
             setContentView(CheckoutErrorHandler.getInstance().getCustomErrorLayout());
         } else {
             setContentView(R.layout.mpsdk_activity_error);
@@ -60,10 +60,9 @@ public class ErrorActivity extends MercadoPagoBaseActivity {
     }
 
     private void trackScreen() {
-        MPTrackingProvider mpTrackingProvider = new MPTrackingProvider.Builder()
-                .setContext(this)
+        MPTrackingContext mpTrackingContext = new MPTrackingContext.Builder(this, mPublicKey)
                 .setCheckoutVersion(BuildConfig.VERSION_NAME)
-                .setPublicKey(mPublicKey)
+                .setTrackingStrategy(TrackingUtil.FORCED_STRATEGY)
                 .build();
 
         ScreenViewEvent.Builder builder = new ScreenViewEvent.Builder()
@@ -90,7 +89,7 @@ public class ErrorActivity extends MercadoPagoBaseActivity {
 
         ScreenViewEvent event = builder.build();
 
-        mpTrackingProvider.addTrackEvent(event);
+        mpTrackingContext.trackEvent(event);
     }
 
     private void initializeControls() {

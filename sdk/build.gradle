@@ -3,7 +3,7 @@ apply plugin: 'maven'
 apply plugin: 'signing'
 apply plugin: 'jacoco-android'
 
-version = "3.3.0"
+version = "3.4.0"
 group = "com.mercadopago"
 archivesBaseName = "sdk"
 
@@ -33,7 +33,7 @@ android {
         minSdkVersion 9
         targetSdkVersion 25
         versionCode 1
-        versionName '3.3.0'
+        versionName '3.4.0'
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     packagingOptions {

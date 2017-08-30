@@ -5,6 +5,7 @@ import android.content.Context;
 import com.mercadopago.BuildConfig;
 import com.mercadopago.adapters.ErrorHandlingCallAdapter;
 import com.mercadopago.callbacks.Callback;
+import com.mercadopago.constants.ProcessingModes;
 import com.mercadopago.controllers.CustomServicesHandler;
 import com.mercadopago.model.BankDeal;
 import com.mercadopago.model.Campaign;
@@ -69,12 +70,14 @@ public class MercadoPagoServices {
     private String mPublicKey;
     private String mPrivateKey;
     private Context mContext;
+    private String mProcessingMode;
 
     private MercadoPagoServices(MercadoPagoServices.Builder builder) {
         this.mContext = builder.mContext;
         this.mPublicKey = builder.mPublicKey;
         this.mPrivateKey = builder.mPrivateKey;
         this.mServicePreference = CustomServicesHandler.getInstance().getServicePreference();
+        this.mProcessingMode = mServicePreference != null ? mServicePreference.getProcessingModeString() : ProcessingModes.AGGREGATOR;
 
         System.setProperty("http.keepAlive", "false");
     }
@@ -96,12 +99,12 @@ public class MercadoPagoServices {
         String excludedPaymentTypesAppended = getListAsString(excludedPaymentTypes, separator);
         String excludedPaymentMethodsAppended = getListAsString(excludedPaymentMethods, separator);
         String siteId = site == null ? "" : site.getId();
-        service.getPaymentMethodSearch(mContext.getResources().getConfiguration().locale.getLanguage(), this.mPublicKey, amount, excludedPaymentTypesAppended, excludedPaymentMethodsAppended, payerIntent, siteId, PAYMENT_METHODS_OPTIONS_API_VERSION).enqueue(callback);
+        service.getPaymentMethodSearch(mContext.getResources().getConfiguration().locale.getLanguage(), this.mPublicKey, amount, excludedPaymentTypesAppended, excludedPaymentMethodsAppended, payerIntent, siteId, PAYMENT_METHODS_OPTIONS_API_VERSION, mProcessingMode).enqueue(callback);
     }
 
     public void createPayment(final PaymentBody paymentBody, final Callback<Payment> callback) {
         CheckoutService service = getDefaultRetrofit(DEFAULT_PAYMENT_CONNECT_TIMEOUT, DEFAULT_PAYMENT_READ_TIMEOUT, DEFAULT_PAYMENT_WRITE_TIMEOUT).create(CheckoutService.class);
-        service.createPayment(paymentBody.getTransactionId(), paymentBody).enqueue(callback);
+        service.createPayment(paymentBody.getTransactionId(), paymentBody, mProcessingMode).enqueue(callback);
     }
 
     public void createToken(final SavedCardToken savedCardToken, final Callback<Token> callback) {
@@ -161,12 +164,12 @@ public class MercadoPagoServices {
     public void getInstallments(String bin, BigDecimal amount, Long issuerId, String paymentMethodId, Callback<List<Installment>> callback) {
         PaymentService service = getDefaultRetrofit().create(PaymentService.class);
         service.getInstallments(this.mPublicKey, mPrivateKey, bin, amount, issuerId, paymentMethodId,
-                mContext.getResources().getConfiguration().locale.toString()).enqueue(callback);
+                mContext.getResources().getConfiguration().locale.toString(), mProcessingMode).enqueue(callback);
     }
 
     public void getIssuers(String paymentMethodId, String bin, final Callback<List<Issuer>> callback) {
         PaymentService service = getDefaultRetrofit().create(PaymentService.class);
-        service.getIssuers(this.mPublicKey, mPrivateKey, paymentMethodId, bin).enqueue(callback);
+        service.getIssuers(this.mPublicKey, mPrivateKey, paymentMethodId, bin, mProcessingMode).enqueue(callback);
     }
 
     public void getPaymentMethods(final Callback<List<PaymentMethod>> callback) {

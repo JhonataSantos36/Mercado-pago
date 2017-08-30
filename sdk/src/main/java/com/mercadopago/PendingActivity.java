@@ -29,12 +29,12 @@ import com.mercadopago.model.ReviewSubscriber;
 import com.mercadopago.model.Reviewable;
 import com.mercadopago.observers.TimerObserver;
 import com.mercadopago.preferences.PaymentResultScreenPreference;
-import com.mercadopago.providers.MPTrackingProvider;
+import com.mercadopago.px_tracking.utils.TrackingUtil;
+import com.mercadopago.tracker.MPTrackingContext;
 import com.mercadopago.px_tracking.model.ScreenViewEvent;
 import com.mercadopago.util.ColorsUtil;
 import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
-import com.mercadopago.util.TrackingUtil;
 
 import java.util.List;
 
@@ -153,10 +153,9 @@ public class PendingActivity extends MercadoPagoBaseActivity implements TimerObs
     }
 
     protected void trackScreen() {
-        MPTrackingProvider mpTrackingProvider = new MPTrackingProvider.Builder()
-                .setContext(this)
+        MPTrackingContext mpTrackingContext = new MPTrackingContext.Builder(this, mMerchantPublicKey)
                 .setCheckoutVersion(BuildConfig.VERSION_NAME)
-                .setPublicKey(mMerchantPublicKey)
+                .setTrackingStrategy(TrackingUtil.FORCED_STRATEGY)
                 .build();
 
 
@@ -181,7 +180,7 @@ public class PendingActivity extends MercadoPagoBaseActivity implements TimerObs
         }
 
         ScreenViewEvent event = builder.build();
-        mpTrackingProvider.addTrackEvent(event);
+        mpTrackingContext.trackEvent(event);
     }
 
     private void setPaymentResultScreenPreferenceData() {

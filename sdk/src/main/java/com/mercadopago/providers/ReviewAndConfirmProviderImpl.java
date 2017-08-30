@@ -7,7 +7,6 @@ import com.mercadopago.callbacks.OnConfirmPaymentCallback;
 import com.mercadopago.callbacks.OnReviewChange;
 import com.mercadopago.controllers.CustomReviewablesHandler;
 import com.mercadopago.core.MercadoPagoComponents;
-import com.mercadopago.core.MercadoPagoUI;
 import com.mercadopago.model.CardInfo;
 import com.mercadopago.model.Discount;
 import com.mercadopago.model.Issuer;
@@ -18,6 +17,7 @@ import com.mercadopago.model.Reviewable;
 import com.mercadopago.model.Site;
 import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.preferences.ReviewScreenPreference;
+import com.mercadopago.preferences.ShoppingReviewPreference;
 import com.mercadopago.util.TextUtil;
 
 import java.math.BigDecimal;
@@ -27,22 +27,27 @@ import java.util.List;
  * Created by mreverter on 2/2/17.
  */
 public class ReviewAndConfirmProviderImpl implements ReviewAndConfirmProvider {
+
     private final Context context;
     private final ReviewScreenPreference reviewScreenPreference;
+    private final ShoppingReviewPreference shoppingReviewPreference;
 
-    public ReviewAndConfirmProviderImpl(Context context, ReviewScreenPreference reviewScreenPreference) {
+    public ReviewAndConfirmProviderImpl(Context context, ReviewScreenPreference reviewScreenPreference, ShoppingReviewPreference shoppingReviewPreference) {
         this.context = context;
         this.reviewScreenPreference = reviewScreenPreference;
+        this.shoppingReviewPreference = shoppingReviewPreference;
     }
 
     @Override
     public Reviewable getSummaryReviewable(PaymentMethod paymentMethod, PayerCost payerCost, BigDecimal amount, Discount discount, Site site, Issuer issuer, DecorationPreference decorationPreference, OnConfirmPaymentCallback onConfirmPaymentCallback) {
         String confirmationMessage;
+
         if (this.reviewScreenPreference != null && !TextUtil.isEmpty(this.reviewScreenPreference.getConfirmText())) {
             confirmationMessage = reviewScreenPreference.getConfirmText();
         } else {
             confirmationMessage = context.getString(R.string.mpsdk_confirm);
         }
+
         String productDetailText = getProductDetailText();
         String discountDetailText = getDiscountDetailText(discount);
         String customDescriptionText = getCustomDescriptionText();
@@ -79,6 +84,7 @@ public class ReviewAndConfirmProviderImpl implements ReviewAndConfirmProvider {
                     .setCurrencyId(currency)
                     .addItems(items)
                     .setDecorationPreference(decorationPreference)
+                    .setShoppingReviewPreference(shoppingReviewPreference)
                     .build();
         }
     }
@@ -142,7 +148,10 @@ public class ReviewAndConfirmProviderImpl implements ReviewAndConfirmProvider {
 
     private String getProductDetailText() {
         String productDetail;
-        if (this.reviewScreenPreference != null && !TextUtil.isEmpty(this.reviewScreenPreference.getProductDetail())) {
+
+        if (shoppingReviewPreference != null && !TextUtil.isEmpty(this.shoppingReviewPreference.getOneWordDescription())) {
+            productDetail = shoppingReviewPreference.getOneWordDescription();
+        } else if (this.reviewScreenPreference != null && !TextUtil.isEmpty(this.reviewScreenPreference.getProductDetail())) {
             productDetail = reviewScreenPreference.getProductDetail();
         } else {
             productDetail = context.getString(R.string.mpsdk_review_summary_products);

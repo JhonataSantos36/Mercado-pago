@@ -1,19 +1,15 @@
 package com.mercadopago.adapters;
 
-import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.NonNull;
 
 import com.google.gson.reflect.TypeToken;
-import com.mercadopago.BuildConfig;
 import com.mercadopago.callbacks.Callback;
 import com.mercadopago.model.Payment;
 import com.mercadopago.model.Token;
-import com.mercadopago.providers.MPTrackingProvider;
 import com.mercadopago.px_tracking.MPTracker;
 import com.mercadopago.util.ApiUtil;
-import com.mercadopago.util.TrackingUtil;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.ParameterizedType;

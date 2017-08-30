@@ -32,9 +32,10 @@ import com.mercadopago.model.Token;
 import com.mercadopago.observers.TimerObserver;
 import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.presenters.SecurityCodePresenter;
-import com.mercadopago.providers.MPTrackingProvider;
 import com.mercadopago.providers.SecurityCodeProviderImpl;
 import com.mercadopago.px_tracking.model.ScreenViewEvent;
+import com.mercadopago.px_tracking.utils.TrackingUtil;
+import com.mercadopago.tracker.MPTrackingContext;
 import com.mercadopago.uicontrollers.card.CardRepresentationModes;
 import com.mercadopago.uicontrollers.card.CardView;
 import com.mercadopago.util.ApiUtil;
@@ -43,7 +44,6 @@ import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.MPCardUIUtils;
 import com.mercadopago.util.ScaleUtil;
-import com.mercadopago.util.TrackingUtil;
 import com.mercadopago.views.SecurityCodeActivityView;
 
 
@@ -58,6 +58,7 @@ public class SecurityCodeActivity extends MercadoPagoBaseActivity implements Sec
     private static final String PUBLIC_KEY_BUNDLE = "mMerchantPublicKey";
     private static final String PRIVATE_KEY_BUNDLE = "mPrivateKey";
     private static final String ESC_ENABLED_BUNDLE = "mEscEnabled";
+    private static final String REASON_BUNDLE = "mReason";
 
     protected SecurityCodePresenter mSecurityCodePresenter;
     protected Activity mActivity;
@@ -68,6 +69,7 @@ public class SecurityCodeActivity extends MercadoPagoBaseActivity implements Sec
     protected String mMerchantPublicKey;
     protected String mPrivateKey;
     protected boolean mEscEnabled;
+    protected String mReason;
 
     //View controls
     protected ProgressBar mProgressBar;
@@ -114,6 +116,7 @@ public class SecurityCodeActivity extends MercadoPagoBaseActivity implements Sec
         outState.putString(PUBLIC_KEY_BUNDLE, mMerchantPublicKey);
         outState.putString(PRIVATE_KEY_BUNDLE, mPrivateKey);
         outState.putBoolean(ESC_ENABLED_BUNDLE, mEscEnabled);
+        outState.putString(REASON_BUNDLE, mReason);
 
         super.onSaveInstanceState(outState);
     }
@@ -127,6 +130,7 @@ public class SecurityCodeActivity extends MercadoPagoBaseActivity implements Sec
             mMerchantPublicKey = savedInstanceState.getString(PUBLIC_KEY_BUNDLE);
             mPrivateKey = savedInstanceState.getString(PRIVATE_KEY_BUNDLE);
             mEscEnabled = savedInstanceState.getBoolean(ESC_ENABLED_BUNDLE);
+            mReason = savedInstanceState.getString(REASON_BUNDLE);
 
             configurePresenter();
             setTheme();
@@ -172,6 +176,7 @@ public class SecurityCodeActivity extends MercadoPagoBaseActivity implements Sec
         mPrivateKey = getIntent().getStringExtra("payerAccessToken");
         mDecorationPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("decorationPreference"), DecorationPreference.class);
         mEscEnabled = getIntent().getBooleanExtra("escEnabled", false);
+        mReason = getIntent().getStringExtra("reason");
 
         CardInfo cardInfo = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("cardInfo"), CardInfo.class);
         Card card = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("card"), Card.class);
@@ -307,17 +312,18 @@ public class SecurityCodeActivity extends MercadoPagoBaseActivity implements Sec
 
     @Override
     public void trackScreen() {
-        MPTrackingProvider mpTrackingProvider = new MPTrackingProvider.Builder()
-                .setContext(this)
+        MPTrackingContext mpTrackingContext = new MPTrackingContext.Builder(this, mMerchantPublicKey)
                 .setCheckoutVersion(BuildConfig.VERSION_NAME)
-                .setPublicKey(mMerchantPublicKey)
+                .setTrackingStrategy(TrackingUtil.BATCH_STRATEGY)
                 .build();
 
         ScreenViewEvent event = new ScreenViewEvent.Builder()
                 .setScreenId(TrackingUtil.SCREEN_ID_CARD_FORM + mSecurityCodePresenter.getPaymentMethod().getPaymentTypeId() + TrackingUtil.CARD_SECURITY_CODE_VIEW)
                 .setScreenName(TrackingUtil.SCREEN_NAME_SECURITY_CODE)
+                .addMetaData(TrackingUtil.METADATA_SECURITY_CODE_REASON, mReason)
                 .build();
-        mpTrackingProvider.addTrackEvent(event);
+
+        mpTrackingContext.trackEvent(event);
     }
 
     @Override

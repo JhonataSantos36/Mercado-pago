@@ -9,7 +9,6 @@ import android.support.annotation.ColorInt;
 import android.support.annotation.DrawableRes;
 
 import com.mercadopago.BankDealsActivity;
-import com.mercadopago.BuildConfig;
 import com.mercadopago.CallForAuthorizeActivity;
 import com.mercadopago.CardVaultActivity;
 import com.mercadopago.CongratsActivity;
@@ -47,8 +46,7 @@ import com.mercadopago.model.PaymentType;
 import com.mercadopago.model.Site;
 import com.mercadopago.preferences.PaymentResultScreenPreference;
 import com.mercadopago.preferences.ReviewScreenPreference;
-import com.mercadopago.providers.MPTrackingProvider;
-import com.mercadopago.px_tracking.model.ScreenViewEvent;
+import com.mercadopago.preferences.ShoppingReviewPreference;
 import com.mercadopago.uicontrollers.discounts.DiscountRowView;
 import com.mercadopago.uicontrollers.reviewandconfirm.ReviewItemsView;
 import com.mercadopago.uicontrollers.reviewandconfirm.ReviewPaymentOffView;
@@ -59,7 +57,6 @@ import com.mercadopago.uicontrollers.savedcards.SavedCardRowView;
 import com.mercadopago.uicontrollers.savedcards.SavedCardView;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.MercadoPagoUtil;
-import com.mercadopago.util.TrackingUtil;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -317,6 +314,7 @@ public class MercadoPagoComponents {
             private Token token;
             private DecorationPreference decorationPreference;
             private ReviewScreenPreference reviewScreenPreference;
+            private ShoppingReviewPreference shoppingReviewPreference;
             private Boolean termsAndConditionsEnabled;
             private Boolean discountEnabled;
             private String merchantPublicKey;
@@ -396,6 +394,11 @@ public class MercadoPagoComponents {
                 return this;
             }
 
+            public ReviewAndConfirmBuilder setShoppingReviewPreference(ShoppingReviewPreference shoppingReviewPreference) {
+                this.shoppingReviewPreference = shoppingReviewPreference;
+                return this;
+            }
+
             public ReviewAndConfirmBuilder setTermsAndConditionsEnabled(Boolean termsAndConditionsEnabled) {
                 this.termsAndConditionsEnabled = termsAndConditionsEnabled;
                 return this;
@@ -439,6 +442,7 @@ public class MercadoPagoComponents {
                 intent.putExtra("discountEnabled", discountEnabled);
                 intent.putExtra("decorationPreference", JsonUtil.getInstance().toJson(decorationPreference));
                 intent.putExtra("reviewScreenPreference", JsonUtil.getInstance().toJson(reviewScreenPreference));
+                intent.putExtra("shoppingReviewPreference", JsonUtil.getInstance().toJson(shoppingReviewPreference));
 
                 activity.startActivityForResult(intent, MercadoPagoComponents.Activities.REVIEW_AND_CONFIRM_REQUEST_CODE);
             }
@@ -831,6 +835,7 @@ public class MercadoPagoComponents {
                 if (this.merchantPublicKey == null && this.payerAccessToken == null)
                     throw new IllegalStateException("key is null");
 
+
                 startGuessingCardActivity();
             }
 
@@ -1152,6 +1157,7 @@ public class MercadoPagoComponents {
             private Token token;
             private boolean escEnabled;
             private PaymentRecovery paymentRecovery;
+            private String reason;
 
             public SecurityCodeActivityBuilder setActivity(Activity activity) {
                 this.activity = activity;
@@ -1180,6 +1186,11 @@ public class MercadoPagoComponents {
 
             public SecurityCodeActivityBuilder setESCEnabled(boolean escEnabled) {
                 this.escEnabled = escEnabled;
+                return this;
+            }
+
+            public SecurityCodeActivityBuilder setTrackingReason(String reason) {
+                this.reason = reason;
                 return this;
             }
 
@@ -1240,6 +1251,7 @@ public class MercadoPagoComponents {
                 intent.putExtra("cardInfo", JsonUtil.getInstance().toJson(cardInformation));
                 intent.putExtra("paymentRecovery", JsonUtil.getInstance().toJson(paymentRecovery));
                 intent.putExtra("escEnabled", escEnabled);
+                intent.putExtra("reason", reason);
                 activity.startActivityForResult(intent, SECURITY_CODE_REQUEST_CODE);
             }
         }
@@ -2048,6 +2060,7 @@ public class MercadoPagoComponents {
             private Context context;
             private String currencyId;
             private List<Item> items;
+            private ShoppingReviewPreference shoppingReviewPreference;
             private DecorationPreference decorationPreference;
 
             public ReviewItemsViewBuilder() {
@@ -2069,6 +2082,11 @@ public class MercadoPagoComponents {
                 return this;
             }
 
+            public ReviewItemsViewBuilder setShoppingReviewPreference(ShoppingReviewPreference shoppingReviewPreference) {
+                this.shoppingReviewPreference = shoppingReviewPreference;
+                return this;
+            }
+
             public ReviewItemsViewBuilder addItem(Item item) {
                 this.items.add(item);
                 return this;
@@ -2080,7 +2098,7 @@ public class MercadoPagoComponents {
             }
 
             public ReviewItemsView build() {
-                return new ReviewItemsView(context, items, currencyId, decorationPreference);
+                return new ReviewItemsView(context, items, currencyId, shoppingReviewPreference, decorationPreference);
             }
         }
 

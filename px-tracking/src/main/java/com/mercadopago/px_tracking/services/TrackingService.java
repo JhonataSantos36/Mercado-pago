@@ -16,15 +16,12 @@ import retrofit2.http.POST;
 
 public interface TrackingService {
 
-    public static final String TRACKING_SERVICE_VERSION = "1";
-
     @POST("/" + BuildConfig.API_VERSION + "/checkout/tracking")
     Call<Void> trackToken(@Body TrackingIntent body);
 
     @POST("/" + BuildConfig.API_VERSION + "/checkout/tracking/off")
     Call<Void> trackPaymentId(@Body PaymentIntent body);
 
-    @Headers("Accept-Version:" + TRACKING_SERVICE_VERSION)
     @POST("/" + BuildConfig.API_VERSION + "/checkout/tracking/events")
     Call<Void> trackEvents(@Body EventTrackIntent body);
 }

@@ -17,6 +17,7 @@ public class PaymentMethod {
     private BigDecimal minAllowedAmount;
     private BigDecimal maxAllowedAmount;
     private Integer accreditationTime;
+    private String merchantAccountId;
 
     public List<String> getAdditionalInfoNeeded() {
         return additionalInfoNeeded;

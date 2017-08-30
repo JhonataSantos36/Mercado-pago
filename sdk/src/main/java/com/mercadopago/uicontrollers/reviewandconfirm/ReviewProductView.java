@@ -12,12 +12,15 @@ import com.mercadopago.R;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.model.Item;
 import com.mercadopago.preferences.DecorationPreference;
+import com.mercadopago.preferences.ShoppingReviewPreference;
 import com.mercadopago.util.CircleTransform;
 import com.mercadopago.util.CurrenciesUtil;
 import com.mercadopago.util.ScaleUtil;
 import com.squareup.picasso.Picasso;
 
 import java.math.BigDecimal;
+
+import static com.mercadopago.util.TextUtils.isEmpty;
 
 /**
  * Created by vaserber on 11/10/16.
@@ -32,17 +35,18 @@ public class ReviewProductView implements ReviewProductViewController {
     protected MPTextView mProductQuantity;
     protected MPTextView mProductPrice;
     protected View mFirstSeparator;
+    protected ShoppingReviewPreference mShoppingReviewPreference;
 
     private Context mContext;
 
-    public ReviewProductView(Context context) {
+    public ReviewProductView(Context context, ShoppingReviewPreference shoppingReviewPreference) {
         this.mContext = context;
+        this.mShoppingReviewPreference = shoppingReviewPreference;
     }
 
     @Override
     public View inflateInParent(ViewGroup parent, boolean attachToRoot) {
-        mView = LayoutInflater.from(mContext)
-                .inflate(R.layout.mpsdk_adapter_review_product, parent, attachToRoot);
+        mView = LayoutInflater.from(mContext).inflate(R.layout.mpsdk_adapter_review_product, parent, attachToRoot);
         return mView;
     }
 
@@ -67,30 +71,63 @@ public class ReviewProductView implements ReviewProductViewController {
             mFirstSeparator.setVisibility(View.GONE);
         }
         String pictureUrl = item.getPictureUrl();
-        setProductIcon(pictureUrl, decorationPreference);
 
+        setProductIcon(pictureUrl, decorationPreference);
+        setProductName(item);
+        setProductDescription(item);
+        setProductQuantity(item);
+        setProductAmount(item, currencyId);
+    }
+
+    private void setProductName(Item item) {
         if (item.getTitle() == null) {
             mProductName.setVisibility(View.GONE);
         } else {
             mProductName.setText(item.getTitle());
         }
+    }
+
+    private void setProductDescription(Item item) {
         if (item.getDescription() == null || item.getDescription().isEmpty()) {
             mProductDescription.setVisibility(View.GONE);
         } else {
             mProductDescription.setText(item.getDescription());
         }
+    }
+
+    private void setProductQuantity(Item item) {
         Integer quantity = item.getQuantity();
         if (quantity == null) {
             quantity = 1;
         }
-        mProductQuantity.setText(mContext.getResources().getString(R.string.mpsdk_review_product_quantity, String.valueOf(quantity)));
 
+        if (mShoppingReviewPreference != null && !mShoppingReviewPreference.shouldShowQuantityRow()) {
+            mProductQuantity.setVisibility(View.GONE);
+        } else if (mShoppingReviewPreference != null && mShoppingReviewPreference.shouldShowQuantityRow() && !isEmpty(mShoppingReviewPreference.getQuantityTitle())) {
+            String productQuantityText = mShoppingReviewPreference.getQuantityTitle() + quantity;
+            mProductQuantity.setText(productQuantityText);
+        } else {
+            mProductQuantity.setText(mContext.getResources().getString(R.string.mpsdk_review_product_quantity, String.valueOf(quantity)));
+        }
+    }
+
+    private void setProductAmount(Item item, String currencyId) {
         if (item.getUnitPrice() != null) {
+            String priceText;
             BigDecimal price = item.getUnitPrice();
-            String originalNumber = CurrenciesUtil.formatNumber(price, currencyId);
-            String string = mContext.getString(R.string.mpsdk_review_product_price, originalNumber);
-            Spanned priceText = CurrenciesUtil.formatCurrencyInText(price, currencyId, string, false, true);
-            mProductPrice.setText(priceText);
+
+            if (mShoppingReviewPreference != null && !mShoppingReviewPreference.shouldShowAmountTitle()) {
+                priceText = CurrenciesUtil.formatNumber(price, currencyId);
+            } else if (mShoppingReviewPreference != null && mShoppingReviewPreference.shouldShowAmountTitle() && !isEmpty(mShoppingReviewPreference.getAmountTitle())) {
+                String originalNumber = CurrenciesUtil.formatNumber(price, currencyId);
+                priceText = mShoppingReviewPreference.getAmountTitle() + originalNumber;
+            } else {
+                String originalNumber = CurrenciesUtil.formatNumber(price, currencyId);
+                priceText = mContext.getString(R.string.mpsdk_review_product_price, originalNumber);
+            }
+
+            Spanned priceSpanned = CurrenciesUtil.formatCurrencyInText(price, currencyId, priceText, false, true);
+            mProductPrice.setText(priceSpanned);
         }
     }
 

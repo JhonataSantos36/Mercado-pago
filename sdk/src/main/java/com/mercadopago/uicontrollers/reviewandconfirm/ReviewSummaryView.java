@@ -131,9 +131,7 @@ public class ReviewSummaryView extends Reviewable {
     }
 
     public void showUnlockCard() {
-
         mUnlockCard.setVisibility(View.VISIBLE);
-
         mUnlockCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
