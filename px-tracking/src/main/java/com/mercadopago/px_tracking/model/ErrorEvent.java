@@ -20,7 +20,7 @@ public class ErrorEvent extends Event {
     private ErrorEvent(Builder builder) {
         super();
         setType(TYPE_ERROR);
-        setTimestamp(new Timestamp(System.currentTimeMillis()));
+        setTimestamp(System.currentTimeMillis());
         this.errorClass = builder.errorClass;
         this.errorMessage = builder.errorMessage;
         this.stackTraceList = builder.stackTraceList;
