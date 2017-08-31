@@ -1,13 +1,11 @@
 package com.mercadopago.px_tracking.strategies;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.mercadopago.px_tracking.model.Event;
 import com.mercadopago.px_tracking.model.EventTrackIntent;
 import com.mercadopago.px_tracking.services.MPTrackingService;
 
-import java.sql.Timestamp;
 import java.util.List;
 
 import retrofit2.Call;
@@ -16,7 +14,7 @@ import retrofit2.Response;
 
 public class BatchTrackingStrategy extends TrackingStrategy {
 
-    private static final long MAX_AGEING = 15;
+    private static final long MAX_AGEING_SECONDS = 10;
 
     private final MPTrackingService trackingService;
     private final ConnectivityChecker connectivityChecker;
@@ -47,11 +45,12 @@ public class BatchTrackingStrategy extends TrackingStrategy {
     }
 
     private boolean isDataReady() {
-        return getNextTrackAge() >= MAX_AGEING;
+        return getNextTrackAge() >= MAX_AGEING_SECONDS;
     }
 
     private void sendTracksBatch(final Context context) {
         final List<Event> batch = getDatabase().retrieveBatch();
+
         EventTrackIntent intent = new EventTrackIntent(getClientId(), getAppInformation(), getDeviceInfo(), batch);
         trackingService.trackEvents(intent, context, new Callback<Void>() {
             @Override
@@ -68,12 +67,7 @@ public class BatchTrackingStrategy extends TrackingStrategy {
         });
     }
 
-    public Timestamp getCurrentTimestamp() {
-        return new Timestamp(System.currentTimeMillis());
-    }
-
-    public long getNextTrackAge() {
-        long result = (getCurrentTimestamp().getTime() - getDatabase().getNextTrackTimestamp().getTime()) / 1000;
-        return result;
+    private long getNextTrackAge() {
+        return (long) (System.currentTimeMillis() - getDatabase().getNextTrackTimestamp()) / 1000;
     }
 }
