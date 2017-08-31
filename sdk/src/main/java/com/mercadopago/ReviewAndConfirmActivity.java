@@ -17,6 +17,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -109,7 +110,9 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
         initializeControls();
         showTimer();
         setListeners();
+
         initializeReviewablesRecyclerView();
+
         mPresenter.initialize();
     }
 
@@ -142,6 +145,14 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
         mScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
             @Override
             public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                checkFloatingButtonVisibility();
+            }
+        });
+
+        ViewTreeObserver viewTreeObserver = mScrollView.getViewTreeObserver();
+        viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
                 checkFloatingButtonVisibility();
             }
         });
@@ -459,12 +470,12 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
     }
 
     public boolean isConfirmButtonVisible() {
-
         ViewGroup.MarginLayoutParams cancelButtonLayout = (ViewGroup.MarginLayoutParams) mCancelButton.getLayoutParams();
         float scrollContent = mScrollView.getChildAt(0).getHeight();
-        float scrollViewSize = mScrollView.getHeight();
+        float scrollViewHeight = mScrollView.getHeight();
         float cancelHeight = mCancelButton.getHeight();
-        float finalSize = scrollContent - scrollViewSize - cancelHeight - cancelButtonLayout.bottomMargin - mSeparatorView.getHeight() * 5;
+
+        float finalSize = scrollContent - scrollViewHeight - cancelHeight - cancelButtonLayout.bottomMargin - mSeparatorView.getHeight() * 5;
 
         return mScrollView.getScrollY() > finalSize;
     }

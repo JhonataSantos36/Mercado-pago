@@ -18,7 +18,7 @@ public class ActionEvent extends Event {
     private ActionEvent(Builder builder) {
         super();
         setType(TYPE_ACTION);
-        setTimestamp(new Timestamp(System.currentTimeMillis()));
+        setTimestamp(System.currentTimeMillis());
         this.screenId = builder.screenId;
         this.screenName = builder.screenName;
         this.action = builder.action;

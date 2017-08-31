@@ -24,15 +24,15 @@ public abstract class Event {
     public @interface EventType {}
 
 
-    private Timestamp timestamp;
+    private Long timestamp;
     private @EventType String type;
     private Map<String, String> metadata;
 
-    public Timestamp getTimestamp() {
+    public Long getTimestamp() {
         return timestamp;
     }
 
-    protected void setTimestamp(Timestamp timestamp) {
+    protected void setTimestamp(Long timestamp) {
         this.timestamp = timestamp;
     }
 
