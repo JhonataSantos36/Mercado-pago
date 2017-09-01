@@ -1,3 +1,10 @@
+## VERSION 3.4.1
+
+_31_08_2017_
+
+* HotFix: Time in millis in tracking
+* HotFix: Floating button in RyC
+
 ## VERSION 3.4.0
 
 _30_08_2017_

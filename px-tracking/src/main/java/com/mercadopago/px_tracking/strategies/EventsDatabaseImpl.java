@@ -9,15 +9,12 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.mercadopago.px_tracking.model.Event;
-import com.mercadopago.px_tracking.model.ScreenViewEvent;
 import com.mercadopago.px_tracking.utils.EventFactory;
 import com.mercadopago.px_tracking.utils.JsonConverter;
 
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class EventsDatabaseImpl extends SQLiteOpenHelper implements EventsDatabase {
 
@@ -26,7 +23,7 @@ public class EventsDatabaseImpl extends SQLiteOpenHelper implements EventsDataba
     private static final String ID = "_id";
     private static final String TRACK_JSON = "track";
     private static final String TIMESTAMP = "timestamp";
-    private static final String MAX_LIFETIME = "45";
+    private static final int MAX_LIFETIME_DAYS = 45;
     private static final int MAX_BATCH_SIZE = 10;
     private static final int DATABASE_VERSION = 1;
 
@@ -100,20 +97,21 @@ public class EventsDatabaseImpl extends SQLiteOpenHelper implements EventsDataba
     public void clearExpiredTracks() {
         getBatchSize();
         SQLiteDatabase db = getWritableDatabase();
-        int count = db.delete(TABLE_NAME, "julianday('now') - julianday(" + TIMESTAMP + ") >= " + MAX_LIFETIME, null);
+        Long maxLifeTimeMillis = TimeUnit.DAYS.toMillis(MAX_LIFETIME_DAYS);
+        Long currentTimeMillis = System.currentTimeMillis();
+
+        int count = db.delete(TABLE_NAME, "(" + currentTimeMillis.toString() + " - " + TIMESTAMP + ") >= " + maxLifeTimeMillis.toString(), null);
         batchSizeCache = batchSizeCache - count;
         db.close();
     }
 
     @Override
-    public Timestamp getNextTrackTimestamp() {
-        Timestamp timestamp = null;
+    public Long getNextTrackTimestamp() {
+        Long timestamp = null;
         SQLiteDatabase db = getWritableDatabase();
         String timestampJson = DatabaseUtils.stringForQuery(db, "SELECT " + TIMESTAMP + " FROM " + TABLE_NAME + " ORDER BY " + ID + " ASC LIMIT 1", null);
         try {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS");
-            Date parsedDate = dateFormat.parse(timestampJson);
-            timestamp = new java.sql.Timestamp(parsedDate.getTime());
+            timestamp = Long.valueOf(timestampJson);
         } catch (Exception e) {
             e.printStackTrace();
         }
