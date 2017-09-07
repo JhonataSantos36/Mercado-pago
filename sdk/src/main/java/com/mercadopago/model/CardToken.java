@@ -3,7 +3,7 @@ package com.mercadopago.model;
 import android.content.Context;
 import android.text.TextUtils;
 
-import com.mercadopago.R;
+import com.mercadopago.exceptions.CardTokenException;
 import com.mercadopago.util.MercadoPagoUtil;
 
 import java.util.Calendar;
@@ -96,11 +96,12 @@ public class CardToken {
         return !TextUtils.isEmpty(cardNumber) && (cardNumber.length() > MIN_LENGTH_NUMBER) && (cardNumber.length() < MAX_LENGTH_NUMBER);
     }
 
-    public void validateCardNumber(Context context, PaymentMethod paymentMethod) throws Exception {
+    public void validateCardNumber(PaymentMethod paymentMethod) throws CardTokenException {
 
         // Empty field
-        if (TextUtils.isEmpty(cardNumber)) {
-            throw new Exception(context.getString(R.string.mpsdk_invalid_empty_card));
+
+        if (cardNumber == null || cardNumber.isEmpty()) {
+            throw new CardTokenException(CardTokenException.INVALID_EMPTY_CARD);
         }
 
         Setting setting = Setting.getSettingByBin(paymentMethod.getSettings(), (cardNumber.length()
@@ -109,20 +110,21 @@ public class CardToken {
         if (setting == null) {
 
             // Invalid bin
-            throw new Exception(context.getString(R.string.mpsdk_invalid_card_bin));
+            throw new CardTokenException(CardTokenException.INVALID_CARD_BIN);
 
         } else {
 
             // Validate cards length
             int cardLength = setting.getCardNumber().getLength();
             if (cardNumber.trim().length() != cardLength) {
-                throw new Exception(context.getString(R.string.mpsdk_invalid_card_length, cardLength));
+
+                throw new CardTokenException(CardTokenException.INVALID_CARD_LENGTH, String.valueOf(cardLength));
             }
 
             // Validate luhn
             String luhnAlgorithm = setting.getCardNumber().getValidation();
             if (("standard".equals(luhnAlgorithm)) && (!checkLuhn(cardNumber))) {
-                throw new Exception(context.getString(R.string.mpsdk_invalid_card_luhn));
+                throw new CardTokenException(CardTokenException.INVALID_CARD_LUHN);
             }
         }
     }
@@ -137,12 +139,12 @@ public class CardToken {
         return securityCode == null || (!TextUtils.isEmpty(securityCode) && securityCode.length() >= 3 && securityCode.length() <= 4);
     }
 
-    public void validateSecurityCode(Context context, PaymentMethod paymentMethod) throws Exception {
+    public void validateSecurityCode(PaymentMethod paymentMethod) throws CardTokenException {
 
-        validateSecurityCode(context, securityCode, paymentMethod, (((cardNumber != null) ? cardNumber.length() : 0) >= MercadoPagoUtil.BIN_LENGTH ? cardNumber.substring(0, MercadoPagoUtil.BIN_LENGTH) : ""));
+        validateSecurityCode(securityCode, paymentMethod, (((cardNumber != null) ? cardNumber.length() : 0) >= MercadoPagoUtil.BIN_LENGTH ? cardNumber.substring(0, MercadoPagoUtil.BIN_LENGTH) : ""));
     }
 
-    public static void validateSecurityCode(Context context, String securityCode, PaymentMethod paymentMethod, String bin) throws Exception {
+    public static void validateSecurityCode(String securityCode, PaymentMethod paymentMethod, String bin) throws CardTokenException {
 
         if (paymentMethod != null) {
             Setting setting = Setting.getSettingByBin(paymentMethod.getSettings(), bin);
@@ -151,10 +153,10 @@ public class CardToken {
             if (setting != null) {
                 int cvvLength = setting.getSecurityCode().getLength();
                 if ((securityCode == null) || ((cvvLength != 0) && (securityCode.trim().length() != cvvLength))) {
-                    throw new Exception(context.getString(R.string.mpsdk_invalid_cvv_length, cvvLength));
+                    throw new CardTokenException(CardTokenException.INVALID_CVV_LENGTH, String.valueOf(cvvLength));
                 }
             } else {
-                throw new Exception(context.getString(R.string.mpsdk_invalid_field));
+                throw new CardTokenException(CardTokenException.INVALID_FIELD);
             }
         }
     }
@@ -224,8 +226,7 @@ public class CardToken {
     }
 
     public boolean validateCardholderName() {
-        return (cardholder == null) ? false :
-                !TextUtils.isEmpty(cardholder.getName());
+        return cardholder != null && cardholder.getName() != null && !cardholder.getName().isEmpty();
     }
 
     public static boolean checkLuhn(String cardNumber) {

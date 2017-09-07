@@ -82,6 +82,12 @@
     <string name="mpsdk_cardholder_name_short">NOMBRE APELLIDO</string>
     <string name="mpsdk_title_activity_new_card">Ingresa los datos de tu tarjeta</string>
 
+    <string name="mpsdk_more_info">MÁS INFO</string>
+    <string name="mpsdk_try_other_card">Ingresar tarjeta</string>
+    <string name="mpsdk_you_can_finish_your_payment_with_cards">No te preocupes, aún puedes terminar tu pago con:</string>
+    <string name="mpsdk_invalid_card_payment_method">No puedes pagar con esta tarjeta</string>
+    <string name="mpsdk_exclusion_one_element">Solo puedes pagar con %1$s</string>
+
     <!-- Congrats -->
     <string name="mpsdk_title_activity_congrats">¡Listo, se acreditó tu pago!</string>
     <string name="mpsdk_subtitle_action_activity_congrats">Te enviaremos los datos a\n%1$s</string>
@@ -148,6 +154,8 @@
     <string name="mpsdk_error_message_missing_payer_cost">No se encontraron cuotas</string>
     <string name="mpsdk_error_message_missing_installment_for_issuer">No se encontraron planes de cuotas para ese banco</string>
     <string name="mpsdk_error_message_multiple_installments_for_issuer">Se encontraron múltiples planes de cuotas para ese banco</string>
+    <string name="mpsdk_error_message_missing_identification_types">No se encontraron identification types</string>
+    <string name="mpsdk_error_message_missing_setting_for_bin">No se encontraron settings para ese bin</string>
 
     <!-- API exception messages -->
     <string name="mpsdk_empty_card_expiration_month">No se ingresó el mes de la fecha de expiración de la tarjeta</string>
@@ -260,5 +268,6 @@
     <string name="mpsdk_error_message_detail_no_payer_cost_found" translatable="false">no payer costs found at InstallmentsActivity</string>
     <string name="mpsdk_error_message_detail_multiple_installments" translatable="false">multiple installments found for an issuer at InstallmentsActivity</string>
     <string name="mpsdk_error_message_detail_issuers" translatable="false">no issuers found at IssuersActivity</string>
+    <string name="mpsdk_error_message_detail_no_payment_method_list" translatable="false">no payment method list found at ReviewPaymentMethodsActivity</string>
 
 </resources>

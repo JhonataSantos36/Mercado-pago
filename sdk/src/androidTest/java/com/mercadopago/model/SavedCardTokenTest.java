@@ -4,16 +4,17 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.mercadopago.CardVaultActivity;
 import com.mercadopago.CheckoutActivity;
 import com.mercadopago.R;
-import com.mercadopago.test.BaseTest;
+import com.mercadopago.exceptions.CardTokenException;
+import com.mercadopago.exceptions.ExceptionHandler;
 import com.mercadopago.test.StaticMock;
 
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static junit.framework.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -104,19 +105,25 @@ public class SavedCardTokenTest {
         savedCardToken.setSecurityCode(null);
 
         try {
-            savedCardToken.validateSecurityCode(InstrumentationRegistry.getContext(), card);
+            savedCardToken.validateSecurityCode(card);
             fail("Should have failed on security code length zero test");
-        } catch (Exception ex) {
-            assertTrue(ex.getMessage().equals(InstrumentationRegistry.getContext().getString(R.string.mpsdk_invalid_field)));
+        } catch (CardTokenException ex) {
+            assertEquals(ex.getErrorCode(), CardTokenException.INVALID_FIELD);
+            String message = ExceptionHandler.getErrorMessage(InstrumentationRegistry.getContext(), ex);
+            String expectedMessage = InstrumentationRegistry.getContext().getString(R.string.mpsdk_invalid_field);
+            assertEquals(message, expectedMessage);
         }
 
         savedCardToken.setSecurityCode("4444");
 
         try {
-            savedCardToken.validateSecurityCode(InstrumentationRegistry.getContext(), card);
+            savedCardToken.validateSecurityCode(card);
             fail("Should have failed on security code length zero test");
-        } catch (Exception ex) {
-            assertTrue(ex.getMessage().equals(InstrumentationRegistry.getContext().getString(R.string.mpsdk_invalid_cvv_length, 3)));
+        } catch (CardTokenException ex) {
+            assertEquals(ex.getErrorCode(), CardTokenException.INVALID_CVV_LENGTH);
+            String message = ExceptionHandler.getErrorMessage(InstrumentationRegistry.getContext(), ex);
+            String expectedMessage = InstrumentationRegistry.getContext().getString(R.string.mpsdk_invalid_cvv_length, String.valueOf(3));
+            assertEquals(message, expectedMessage);
         }
 
         // Simulate a cards with security code not required
@@ -124,16 +131,16 @@ public class SavedCardTokenTest {
         card.getSecurityCode().setLength(0);
 
         try {
-            savedCardToken.validateSecurityCode(InstrumentationRegistry.getContext(), card);
-        } catch (Exception ex) {
+            savedCardToken.validateSecurityCode(card);
+        } catch (CardTokenException ex) {
             fail("Security code length zero test failed, cause: " + ex.getMessage());
         }
 
         card.setSecurityCode(null);
 
         try {
-            savedCardToken.validateSecurityCode(InstrumentationRegistry.getContext(), card);
-        } catch (Exception ex) {
+            savedCardToken.validateSecurityCode(card);
+        } catch (CardTokenException ex) {
             fail("Security code length zero test failed, cause: " + ex.getMessage());
         }
     }

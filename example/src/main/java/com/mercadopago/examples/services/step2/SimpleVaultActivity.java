@@ -414,7 +414,7 @@ public class SimpleVaultActivity extends AppCompatActivity {
 
         // Validate CVV
         try {
-            savedCardToken.validateSecurityCode(this, mSelectedCard);
+            savedCardToken.validateSecurityCode(mSelectedCard);
             mSecurityCodeText.setError(null);
         } catch (Exception ex) {
             mSecurityCodeText.setError(ex.getMessage());

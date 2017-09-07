@@ -289,12 +289,12 @@ public class NewCardActivity extends AppCompatActivity {
 
     protected void validateCardNumber(CardToken cardToken) throws Exception {
 
-        cardToken.validateCardNumber(this, mPaymentMethod);
+        cardToken.validateCardNumber(mPaymentMethod);
     }
 
     protected void validateSecurityCode(CardToken cardToken) throws Exception {
 
-        cardToken.validateSecurityCode(this, mPaymentMethod);
+        cardToken.validateSecurityCode(mPaymentMethod);
     }
 
     protected void getIdentificationTypesAsync() {

@@ -196,6 +196,7 @@ public class ApiUtil {
         public static final String GET_INSTALLMENTS = "GET_INSTALLMENTS";
         public static final String GET_ISSUERS = "GET_ISSUERS";
         public static final String GET_DIRECT_DISCOUNT = "GET_DIRECT_DISCOUNT";
+        public static final String GET_MERCHANT_DIRECT_DISCOUNT = "GET_MERCHANT_DIRECT_DISCOUNT";
         public static final String CREATE_PAYMENT = "CREATE_PAYMENT";
         public static final String CREATE_TOKEN = "CREATE_TOKEN";
         public static final String GET_CUSTOMER = "GET_CUSTOMER";

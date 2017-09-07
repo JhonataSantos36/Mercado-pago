@@ -78,6 +78,12 @@
     <string name="mpsdk_cardholder_name_short">NAME SURNAME</string>
     <string name="mpsdk_title_activity_new_card">Enter your card\'s information</string>
 
+    <string name="mpsdk_more_info">MORE INFO</string>
+    <string name="mpsdk_try_other_card">Enter card</string>
+    <string name="mpsdk_you_can_finish_your_payment_with_cards">Don\'t worry, you can still pay with:</string>
+    <string name="mpsdk_invalid_card_payment_method">Credit card not supported</string>
+    <string name="mpsdk_exclusion_one_element">You can only pay with %1$s</string>
+
     <!-- Congrats -->
     <string name="mpsdk_title_activity_congrats">Done, your payment was accredited!</string>
     <string name="mpsdk_subtitle_action_activity_congrats">We will send you the data to\n%1$s</string>

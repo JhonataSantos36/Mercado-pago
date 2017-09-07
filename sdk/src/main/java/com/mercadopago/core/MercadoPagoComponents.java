@@ -25,6 +25,7 @@ import com.mercadopago.PaymentVaultActivity;
 import com.mercadopago.PendingActivity;
 import com.mercadopago.RejectionActivity;
 import com.mercadopago.ReviewAndConfirmActivity;
+import com.mercadopago.ReviewPaymentMethodsActivity;
 import com.mercadopago.callbacks.OnConfirmPaymentCallback;
 import com.mercadopago.callbacks.OnReviewChange;
 import com.mercadopago.SecurityCodeActivity;
@@ -76,9 +77,6 @@ public class MercadoPagoComponents {
 
     public static class Activities {
 
-        private Activities() {
-        }
-
         public static final int CUSTOMER_CARDS_REQUEST_CODE = 0;
         public static final int PAYMENT_METHODS_REQUEST_CODE = 1;
         public static final int INSTALLMENTS_REQUEST_CODE = 2;
@@ -98,6 +96,10 @@ public class MercadoPagoComponents {
         public static final int SECURITY_CODE_REQUEST_CODE = 18;
         public static final int DISCOUNTS_REQUEST_CODE = 19;
         public static final int REVIEW_AND_CONFIRM_REQUEST_CODE = 20;
+        public static final int REVIEW_PAYMENT_METHODS_REQUEST_CODE = 21;
+
+        private Activities() {
+        }
 
         public static class PaymentVaultActivityBuilder {
 
@@ -1800,6 +1802,54 @@ public class MercadoPagoComponents {
                     bankDealsIntent.putExtra("bankDeals", JsonUtil.getInstance().toJson(bankDeals));
                 }
                 activity.startActivityForResult(bankDealsIntent, BANK_DEALS_REQUEST_CODE);
+            }
+        }
+
+        public static class ReviewPaymentMethodsActivityBuilder {
+
+            private Activity activity;
+            private DecorationPreference decorationPreference;
+            private List<PaymentMethod> paymentMethods;
+            private String publicKey;
+
+            public ReviewPaymentMethodsActivityBuilder setActivity(Activity activity) {
+                this.activity = activity;
+                return this;
+            }
+
+            public ReviewPaymentMethodsActivityBuilder setPaymentMethods(List<PaymentMethod> paymentMethods) {
+                this.paymentMethods = paymentMethods;
+                return this;
+            }
+
+            public ReviewPaymentMethodsActivityBuilder setDecorationPreference(DecorationPreference decorationPreference) {
+                this.decorationPreference = decorationPreference;
+                return this;
+            }
+
+            public ReviewPaymentMethodsActivityBuilder setPublicKey(String publicKey) {
+                this.publicKey = publicKey;
+                return this;
+            }
+
+            public void startActivity() {
+                if (this.activity == null)
+                    throw new IllegalStateException("activity is null");
+                if (this.publicKey == null)
+                    throw new IllegalStateException("public key is null");
+                if (this.paymentMethods == null)
+                    throw new IllegalStateException("payment methods is null");
+                if (this.paymentMethods.isEmpty())
+                    throw new IllegalStateException("payment methods is empty");
+                startReviewPaymentMethodsActivity();
+            }
+
+            private void startReviewPaymentMethodsActivity() {
+                Intent intent = new Intent(activity, ReviewPaymentMethodsActivity.class);
+                intent.putExtra("paymentMethods", JsonUtil.getInstance().toJson(paymentMethods));
+                intent.putExtra("decorationPreference", JsonUtil.getInstance().toJson(decorationPreference));
+                intent.putExtra("publicKey", publicKey);
+                activity.startActivityForResult(intent, REVIEW_PAYMENT_METHODS_REQUEST_CODE);
             }
         }
     }

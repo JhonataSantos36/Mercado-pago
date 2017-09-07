@@ -34,6 +34,8 @@
     <color name="mpsdk_color_link">#0066CC</color>
     <color name="mpsdk_active_button">#3383FA</color>
     <color name="mpsdk_inactive_button">#84b4fc</color>
+    <color name="mpsdk_error_red_pink">#F04449</color>
+    <color name="mpsdk_black_info_background">#333333</color>
 
     <color name="mpsdk_color_instructions_background_title">#FFA15A</color>
     <color name="mpsdk_color_instructions_status_bar">#E69150</color>

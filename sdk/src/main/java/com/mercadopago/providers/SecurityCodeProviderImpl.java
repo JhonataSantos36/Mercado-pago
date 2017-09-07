@@ -5,6 +5,7 @@ import android.content.Context;
 import com.mercadopago.R;
 import com.mercadopago.callbacks.Callback;
 import com.mercadopago.core.MercadoPagoServices;
+import com.mercadopago.exceptions.CardTokenException;
 import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.Card;
@@ -145,8 +146,8 @@ public class SecurityCodeProviderImpl implements SecurityCodeProvider {
     }
 
     @Override
-    public void validateSecurityCodeFromToken(String securityCode, PaymentMethod paymentMethod, String firstSixDigits) throws Exception {
-        CardToken.validateSecurityCode(mContext, securityCode, paymentMethod, firstSixDigits);
+    public void validateSecurityCodeFromToken(String securityCode, PaymentMethod paymentMethod, String firstSixDigits) throws CardTokenException {
+        CardToken.validateSecurityCode(securityCode, paymentMethod, firstSixDigits);
     }
 
     @Override
@@ -155,7 +156,7 @@ public class SecurityCodeProviderImpl implements SecurityCodeProvider {
     }
 
     @Override
-    public void validateSecurityCodeFromToken(SavedCardToken savedCardToken, Card card) throws Exception {
-        savedCardToken.validateSecurityCode(mContext, card);
+    public void validateSecurityCodeFromToken(SavedCardToken savedCardToken, Card card) throws CardTokenException {
+        savedCardToken.validateSecurityCode(card);
     }
 }

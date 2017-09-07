@@ -1,5 +1,6 @@
 package com.mercadopago.providers;
 
+import com.mercadopago.exceptions.CardTokenException;
 import com.mercadopago.model.Card;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.SavedCardToken;
@@ -32,11 +33,11 @@ public interface SecurityCodeProvider extends ResourcesProvider {
 
     void createToken(final SavedESCCardToken savedESCCardToken, final OnResourcesRetrievedCallback<Token> onResourcesRetrievedCallback);
 
-    void validateSecurityCodeFromToken(String mSecurityCode, PaymentMethod mPaymentMethod, String firstSixDigits) throws Exception;
+    void validateSecurityCodeFromToken(String mSecurityCode, PaymentMethod mPaymentMethod, String firstSixDigits) throws CardTokenException;
 
     void validateSecurityCodeFromToken(String mSecurityCode);
 
-    void validateSecurityCodeFromToken(SavedCardToken savedCardToken, Card card) throws Exception;
+    void validateSecurityCodeFromToken(SavedCardToken savedCardToken, Card card) throws CardTokenException;
 
     boolean isESCEnabled();
 

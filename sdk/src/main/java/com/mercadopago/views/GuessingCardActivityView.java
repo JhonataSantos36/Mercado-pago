@@ -1,6 +1,8 @@
 package com.mercadopago.views;
 
 import com.mercadopago.controllers.PaymentMethodGuessingController;
+import com.mercadopago.exceptions.CardTokenException;
+import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.Discount;
 import com.mercadopago.model.IdentificationType;
@@ -8,6 +10,7 @@ import com.mercadopago.model.Issuer;
 import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.Token;
+import com.mercadopago.mvp.MvpView;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -16,10 +19,14 @@ import java.util.List;
  * Created by vaserber on 10/13/16.
  */
 
-public interface GuessingCardActivityView {
+public interface GuessingCardActivityView extends MvpView {
     void onValidStart();
 
     void onInvalidStart(String message);
+
+    void initializeTimer();
+
+    void showError(MercadoPagoError error, String requestOrigin);
 
     void setCardNumberListeners(PaymentMethodGuessingController controller);
 
@@ -33,13 +40,15 @@ public interface GuessingCardActivityView {
 
     void setSecurityCodeViewLocation(String location);
 
-    void startErrorView(String message, String errorDetail);
-
     void initializeIdentificationTypes(List<IdentificationType> identificationTypes);
 
     void setNextButtonListeners();
 
     void setBackButtonListeners();
+
+    void setErrorContainerListener();
+
+    void setContainerAnimationListeners();
 
     void setIdentificationTypeListeners();
 
@@ -67,7 +76,9 @@ public interface GuessingCardActivityView {
 
     void clearErrorView();
 
-    void setErrorView(String mErrorState);
+    void setErrorView(String message);
+
+    void setErrorView(CardTokenException exception);
 
     void setErrorCardNumber();
 
@@ -100,4 +111,32 @@ public interface GuessingCardActivityView {
     void startDiscountActivity(BigDecimal transactionAmount);
 
     void hideProgress();
+
+    void setExclusionWithOneElementInfoView(PaymentMethod supportedPaymentMethod, boolean withAnimation);
+
+    void hideExclusionWithOneElementInfoView();
+
+    void setInvalidCardOnePaymentMethodErrorView();
+
+    void setInvalidCardMultipleErrorView();
+
+    void resolvePaymentMethodSet(PaymentMethod paymentMethod);
+
+    void clearSecurityCodeEditText();
+
+    void checkClearCardView();
+
+    void hideRedErrorContainerView(boolean withAnimation);
+
+    void restoreBlackInfoContainerView();
+
+    void clearCardNumberInputLength();
+
+    void clearCardNumberEditTextMask();
+
+    void askForPaymentType();
+
+    void showFinishCardFlow();
+
+    void setPaymentMethod(PaymentMethod paymentMethod);
 }

@@ -21,7 +21,7 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="25dp"
-                tools:src="@drawable/amex"
+                tools:src="@drawable/mpsdk_amex"
                 android:adjustViewBounds="true"
                 android:id="@+id/mpsdkPmImage"
                 android:maxWidth="40dp"

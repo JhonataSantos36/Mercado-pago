@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/mpsdkReviewPaymentMethodsContainer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/mpsdk_discounts_summary_background_color"
+    android:visibility="visible">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="78dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginRight="32dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="78dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/mpsdkReviewPaymentMethodsTitleContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/mpsdk_round_summary_top"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <com.mercadopago.customviews.MPTextView
+                    android:id="@+id/mpsdkReviewPaymentMethodsTitleText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:paddingEnd="28dp"
+                    android:paddingLeft="28dp"
+                    android:paddingRight="28dp"
+                    android:paddingStart="28dp"
+                    android:paddingTop="21dp"
+                    android:paddingBottom="20dp"
+                    android:text="@string/mpsdk_you_can_finish_your_payment_with_cards"
+                    android:textColor="@color/mpsdk_form_text"
+                    android:textSize="20dp"
+                    app:fontStyle="regular" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/mpsdkReviewPaymentMethodsListContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/mpsdk_round_summary_bottom"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/mpsdkReviewPaymentMethodsView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingEnd="17dp"
+                    android:paddingLeft="17dp"
+                    android:paddingRight="17dp"
+                    android:paddingStart="17dp"
+                    android:overScrollMode="never"
+                    app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/tryOtherCardButton"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="12dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginRight="32dp"
+        android:layout_marginStart="32dp">
+
+        <com.mercadopago.customviews.MPTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/mpsdk_try_other_card"
+            android:textColor="@color/mpsdk_white_background"
+            android:textSize="18dp" />
+
+    </FrameLayout>
+
+</FrameLayout>

@@ -1,15 +1,12 @@
 package com.mercadopago.presenters;
 
-import android.content.Context;
 import android.text.TextUtils;
 
-import com.mercadopago.BuildConfig;
-import com.mercadopago.R;
-import com.mercadopago.callbacks.Callback;
 import com.mercadopago.callbacks.FailureRecovery;
+import com.mercadopago.controllers.CheckoutTimer;
 import com.mercadopago.controllers.PaymentMethodGuessingController;
-import com.mercadopago.core.MerchantServer;
-import com.mercadopago.core.MercadoPagoServices;
+import com.mercadopago.exceptions.CardTokenException;
+import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.BankDeal;
 import com.mercadopago.model.CardInformation;
@@ -27,8 +24,10 @@ import com.mercadopago.model.PaymentType;
 import com.mercadopago.model.SecurityCode;
 import com.mercadopago.model.Setting;
 import com.mercadopago.model.Token;
+import com.mercadopago.mvp.MvpPresenter;
+import com.mercadopago.mvp.OnResourcesRetrievedCallback;
 import com.mercadopago.preferences.PaymentPreference;
-import com.mercadopago.px_tracking.utils.TrackingUtil;
+import com.mercadopago.providers.GuessingCardProvider;
 import com.mercadopago.tracker.MPTrackingContext;
 import com.mercadopago.uicontrollers.card.CardView;
 import com.mercadopago.uicontrollers.card.FrontCardView;
@@ -48,24 +47,16 @@ import java.util.Map;
  * Created by vaserber on 10/13/16.
  */
 
-public class GuessingCardPresenter {
+public class GuessingCardPresenter extends MvpPresenter<GuessingCardActivityView, GuessingCardProvider> {
 
-    private static final int CARD_DEFAULT_SECURITY_CODE_LENGTH = 4;
-    private static final int CARD_DEFAULT_IDENTIFICATION_NUMBER_LENGTH = 12;
-    private static final String NO_PAYER_COSTS_FOUND = "no payer costs found";
-    private static final String NO_INSTALLMENTS_FOUND_FOR_AN_ISSUER = "no installments found for an issuer";
-    private static final String MULTIPLE_INSTALLMENTS_FOUND_FOR_AN_ISSUER = "multiple installments found for an issuer";
+    public static final int CARD_DEFAULT_SECURITY_CODE_LENGTH = 4;
+    public static final int CARD_DEFAULT_IDENTIFICATION_NUMBER_LENGTH = 12;
 
     //Card controller
     private PaymentMethodGuessingController mPaymentMethodGuessingController;
     private List<IdentificationType> mIdentificationTypes;
 
-    private GuessingCardActivityView mView;
-    private Context mContext;
     private FailureRecovery mFailureRecovery;
-
-    //Mercado Pago instance
-    private MercadoPagoServices mMercadoPago;
 
     //Activity parameters
     private String mPublicKey;
@@ -117,20 +108,49 @@ public class GuessingCardPresenter {
     private String mPrivateKey;
     private int mCurrentNumberLength;
     private Issuer mIssuer;
-    private MPTrackingContext mTrackingContext;
 
-
-    public GuessingCardPresenter(Context context) {
-        this.mContext = context;
+    public GuessingCardPresenter() {
+        super();
+        this.mShowBankDeals = true;
+        this.mDiscountEnabled = false;
+        this.mShowDiscount = false;
         this.mEraseSpace = true;
+    }
+
+    public void initialize() {
+        try {
+            validateParameters();
+            onValidStart();
+        } catch (IllegalStateException exception) {
+            getView().showError(new MercadoPagoError(exception.getMessage(), false), "");
+        }
+    }
+
+    private boolean isTimerEnabled() {
+        return CheckoutTimer.getInstance().isTimerEnabled();
+    }
+
+    private void validateParameters() throws IllegalStateException {
+        if (mPublicKey == null) {
+            throw new IllegalStateException(getResourcesProvider().getMissingPublicKeyErrorMessage());
+        }
+    }
+
+    private void onValidStart() {
+        initializeCardToken();
+        getView().onValidStart();
+        if (isTimerEnabled()) {
+            getView().initializeTimer();
+        } else {
+            resolveBankDeals();
+        }
+        checkToLoadDiscountOrPaymentMethods();
+
+        fillRecoveryFields();
     }
 
     public void setCurrentNumberLength(int currentNumberLength) {
         this.mCurrentNumberLength = currentNumberLength;
-    }
-
-    public void setView(GuessingCardActivityView view) {
-        this.mView = view;
     }
 
     public FailureRecovery getFailureRecovery() {
@@ -167,8 +187,8 @@ public class GuessingCardPresenter {
 
     private void fillRecoveryFields() {
         if (recoverWithCardholder()) {
-            mView.setCardholderName(mPaymentRecovery.getToken().getCardHolder().getName());
-            mView.setIdentificationNumber(mPaymentRecovery.getToken().getCardHolder().getIdentification().getNumber());
+            getView().setCardholderName(mPaymentRecovery.getToken().getCardHolder().getName());
+            getView().setIdentificationNumber(mPaymentRecovery.getToken().getCardHolder().getIdentification().getNumber());
         }
     }
 
@@ -203,7 +223,6 @@ public class GuessingCardPresenter {
     public void setSecurityCodeRequired(boolean required) {
         this.mIsSecurityCodeRequired = required;
         if (required) {
-            mView.showSecurityCodeInput();
         }
     }
 
@@ -277,7 +296,7 @@ public class GuessingCardPresenter {
     public void setIdentificationNumberRequired(boolean identificationNumberRequired) {
         this.mIdentificationNumberRequired = identificationNumberRequired;
         if (identificationNumberRequired) {
-            mView.showIdentificationInput();
+            getView().showIdentificationInput();
         }
     }
 
@@ -289,17 +308,8 @@ public class GuessingCardPresenter {
         this.mPaymentPreference = paymentPreference;
     }
 
-    public void initializeCardToken() {
+    private void initializeCardToken() {
         mCardToken = new CardToken("", null, null, "", "", "", "");
-    }
-
-    public void validateActivityParameters() {
-        if (mPublicKey == null) {
-            mView.onInvalidStart("public key not set");
-        } else {
-            mView.onValidStart();
-            fillRecoveryFields();
-        }
     }
 
     public String getSecurityCodeFront() {
@@ -310,22 +320,11 @@ public class GuessingCardPresenter {
         return securityCode;
     }
 
-    public void initializeMercadoPago() {
-        if (mPublicKey == null) {
-            return;
-        }
-        mMercadoPago = new MercadoPagoServices.Builder()
-                .setContext(mContext)
-                .setPublicKey(mPublicKey)
-                .setPrivateKey(mPrivateKey)
-                .build();
-    }
-
     public CardInformation getCardInformation() {
         return mCardInfo;
     }
 
-    public boolean isCardLengthResolved() {
+    private boolean isCardLengthResolved() {
         return mPaymentMethod != null && mBin != null;
     }
 
@@ -341,17 +340,47 @@ public class GuessingCardPresenter {
                 mPaymentPreference.getExcludedPaymentTypes());
     }
 
+    public List<PaymentMethod> getAllSupportedPaymentMethods() {
+        List<PaymentMethod> list = null;
+        if (mPaymentMethodGuessingController != null) {
+            list = mPaymentMethodGuessingController.getAllSupportedPaymentMethods();
+        }
+        return list;
+    }
+
     private void startGuessingForm() {
         initializeGuessingCardNumberController();
-        mView.initializeTitle();
-        mView.setCardNumberListeners(mPaymentMethodGuessingController);
-        mView.setCardholderNameListeners();
-        mView.setExpiryDateListeners();
-        mView.setSecurityCodeListeners();
-        mView.setIdentificationTypeListeners();
-        mView.setIdentificationNumberListeners();
-        mView.setNextButtonListeners();
-        mView.setBackButtonListeners();
+        getView().initializeTitle();
+        getView().setCardNumberListeners(mPaymentMethodGuessingController);
+        getView().setCardholderNameListeners();
+        getView().setExpiryDateListeners();
+        getView().setSecurityCodeListeners();
+        getView().setIdentificationTypeListeners();
+        getView().setIdentificationNumberListeners();
+        getView().setNextButtonListeners();
+        getView().setBackButtonListeners();
+        getView().setErrorContainerListener();
+        getView().setContainerAnimationListeners();
+        checkPaymentMethodsSupported(false);
+    }
+
+    private void checkPaymentMethodsSupported(boolean withAnimation) {
+        if (onlyOnePaymentMethodSupported()) {
+            getView().setExclusionWithOneElementInfoView(getAllSupportedPaymentMethods().get(0), withAnimation);
+        }
+    }
+
+    private boolean onlyOnePaymentMethodSupported() {
+        List<PaymentMethod> supportedPaymentMethods = getAllSupportedPaymentMethods();
+        return supportedPaymentMethods != null && supportedPaymentMethods.size() == 1;
+    }
+
+    private void setInvalidCardMessage() {
+        if (onlyOnePaymentMethodSupported()) {
+            getView().setInvalidCardOnePaymentMethodErrorView();
+        } else {
+            getView().setInvalidCardMultipleErrorView();
+        }
     }
 
     public String getPaymentTypeId() {
@@ -366,7 +395,7 @@ public class GuessingCardPresenter {
         }
     }
 
-    public void initialize() {
+    private void checkToLoadDiscountOrPaymentMethods() {
         if (showDiscount()) {
             loadDiscount();
         } else {
@@ -393,27 +422,23 @@ public class GuessingCardPresenter {
     }
 
     public void initializeDiscountActivity() {
-        mView.startDiscountActivity(mTransactionAmount);
+        getView().startDiscountActivity(mTransactionAmount);
     }
 
     private void initializeDiscountRow() {
-        mView.showDiscountRow(mTransactionAmount);
+        getView().showDiscountRow(mTransactionAmount);
     }
 
     private void getMPDirectDiscount() {
-        mMercadoPago.getDirectDiscount(mTransactionAmount.toString(), mPayerEmail, new Callback<Discount>() {
+        getResourcesProvider().getMPDirectDiscount(mTransactionAmount.toString(), mPayerEmail, new OnResourcesRetrievedCallback<Discount>() {
             @Override
-            public void success(Discount discount) {
-                mDiscount = discount;
-                initializeDiscountRow();
-                loadPaymentMethods();
+            public void onSuccess(Discount discount) {
+                onDiscountSuccess(discount);
             }
 
             @Override
-            public void failure(ApiException apiException) {
-                mDirectDiscountEnabled = false;
-                initializeDiscountRow();
-                loadPaymentMethods();
+            public void onFailure(MercadoPagoError error) {
+                onDiscountFailure();
             }
         });
     }
@@ -421,21 +446,28 @@ public class GuessingCardPresenter {
     private void getMerchantDirectDiscount() {
         String merchantDiscountUrl = getMerchantServerDiscountUrl();
 
-        MerchantServer.getDirectDiscount(mTransactionAmount.toString(), mPayerEmail, mContext, merchantDiscountUrl, mMerchantGetDiscountUri, mDiscountAdditionalInfo, new Callback<Discount>() {
+        getResourcesProvider().getDirectDiscountAsync(mTransactionAmount.toString(), mPayerEmail, merchantDiscountUrl, mMerchantGetDiscountUri, mDiscountAdditionalInfo, new OnResourcesRetrievedCallback<Discount>() {
             @Override
-            public void success(Discount discount) {
-                mDiscount = discount;
-                initializeDiscountRow();
-                loadPaymentMethods();
+            public void onSuccess(Discount discount) {
+                onDiscountSuccess(discount);
             }
 
             @Override
-            public void failure(ApiException apiException) {
-                mDirectDiscountEnabled = false;
-                initializeDiscountRow();
-                loadPaymentMethods();
+            public void onFailure(MercadoPagoError error) {
+                onDiscountFailure();
             }
         });
+    }
+
+    private void onDiscountSuccess(Discount discount) {
+        onDiscountReceived(discount);
+        loadPaymentMethods();
+    }
+
+    private void onDiscountFailure() {
+        mDirectDiscountEnabled = false;
+        initializeDiscountRow();
+        loadPaymentMethods();
     }
 
     public void onDiscountReceived(Discount discount) {
@@ -544,7 +576,7 @@ public class GuessingCardPresenter {
         if (mPaymentMethodList == null || mPaymentMethodList.isEmpty()) {
             getPaymentMethodsAsync();
         } else {
-            mView.showInputContainer();
+            getView().showInputContainer();
             startGuessingForm();
         }
     }
@@ -553,30 +585,83 @@ public class GuessingCardPresenter {
         if (mShowBankDeals) {
             getBankDealsAsync();
         } else {
-            mView.hideBankDeals();
+            getView().hideBankDeals();
         }
     }
 
     private void getPaymentMethodsAsync() {
-        mMercadoPago.getPaymentMethods(new Callback<List<PaymentMethod>>() {
+        getResourcesProvider().getPaymentMethodsAsync(new OnResourcesRetrievedCallback<List<PaymentMethod>>() {
             @Override
-            public void success(List<PaymentMethod> paymentMethods) {
-                mView.showInputContainer();
-                mPaymentMethodList = paymentMethods;
-                startGuessingForm();
+            public void onSuccess(List<PaymentMethod> paymentMethods) {
+                resolvePaymentMethodsAsync(paymentMethods);
             }
 
             @Override
-            public void failure(ApiException apiException) {
-                setFailureRecovery(new FailureRecovery() {
-                    @Override
-                    public void recover() {
-                        getPaymentMethodsAsync();
-                    }
-                });
-                mView.showApiExceptionError(apiException, ApiUtil.RequestOrigin.GET_PAYMENT_METHODS);
+            public void onFailure(MercadoPagoError error) {
+                if (isViewAttached()) {
+                    getView().showError(error, ApiUtil.RequestOrigin.GET_PAYMENT_METHODS);
+                    setFailureRecovery(new FailureRecovery() {
+                        @Override
+                        public void recover() {
+                            getPaymentMethodsAsync();
+                        }
+                    });
+                }
             }
         });
+    }
+
+    private void resolvePaymentMethodsAsync(List<PaymentMethod> paymentMethods) {
+        getView().showInputContainer();
+        mPaymentMethodList = paymentMethods;
+        startGuessingForm();
+    }
+
+    public void resolvePaymentMethodListSet(List<PaymentMethod> paymentMethodList, String bin) {
+        saveBin(bin);
+        if (paymentMethodList.isEmpty()) {
+            getView().setCardNumberInputMaxLength(MercadoPagoUtil.BIN_LENGTH);
+            setInvalidCardMessage();
+        } else if (paymentMethodList.size() == 1) {
+            onPaymentMethodSet(paymentMethodList.get(0));
+        } else if (shouldAskPaymentType(paymentMethodList)) {
+            enablePaymentTypeSelection(paymentMethodList);
+            onPaymentMethodSet(paymentMethodList.get(0));
+
+        } else {
+            onPaymentMethodSet(paymentMethodList.get(0));
+        }
+    }
+
+    public void onPaymentMethodSet(PaymentMethod paymentMethod) {
+        if (mPaymentMethod == null) {
+            setPaymentMethod(paymentMethod);
+            configureWithSettings();
+            loadIdentificationTypes();
+            getView().setPaymentMethod(paymentMethod);
+        }
+        getView().resolvePaymentMethodSet(paymentMethod);
+    }
+
+    public void resolvePaymentMethodCleared() {
+        getView().clearErrorView();
+        getView().hideRedErrorContainerView(true);
+        getView().restoreBlackInfoContainerView();
+        getView().clearCardNumberInputLength();
+
+        if (!isPaymentMethodResolved()) {
+            return;
+        }
+        clearSpaceErasableSettings();
+        getView().clearCardNumberEditTextMask();
+        setPaymentMethod(null);
+        getView().clearSecurityCodeEditText();
+        initializeCardToken();
+        setIdentificationNumberRequired(true);
+        setSecurityCodeRequired(true);
+        disablePaymentTypeSelection();
+        getView().checkClearCardView();
+        checkPaymentMethodsSupported(true);
     }
 
     public void setSelectedPaymentType(PaymentType paymentType) {
@@ -604,11 +689,11 @@ public class GuessingCardPresenter {
 
         mIsSecurityCodeRequired = mPaymentMethod.isSecurityCodeRequired(mBin);
         if (!mIsSecurityCodeRequired) {
-            mView.hideSecurityCodeInput();
+            getView().hideSecurityCodeInput();
         }
         Setting setting = PaymentMethodGuessingController.getSettingByPaymentMethodAndBin(mPaymentMethod, mBin);
         if (setting == null) {
-            mView.startErrorView("", "Setting not found for BIN");
+            getView().showError(new MercadoPagoError(getResourcesProvider().getSettingNotFoundForBinErrorMessage(), false), "");
         } else {
             int cardNumberLength = getCardNumberLength();
             int spaces = FrontCardView.CARD_DEFAULT_AMOUNT_SPACES;
@@ -618,7 +703,7 @@ public class GuessingCardPresenter {
             } else if (cardNumberLength == FrontCardView.CARD_NUMBER_MAESTRO_SETTING_2_LENGTH) {
                 spaces = FrontCardView.CARD_NUMBER_MAESTRO_SETTING_2_AMOUNT_SPACES;
             }
-            mView.setCardNumberInputMaxLength(cardNumberLength + spaces);
+            getView().setCardNumberInputMaxLength(cardNumberLength + spaces);
             SecurityCode securityCode = setting.getSecurityCode();
             if (securityCode == null) {
                 mSecurityCodeLength = CARD_DEFAULT_SECURITY_CODE_LENGTH;
@@ -627,8 +712,8 @@ public class GuessingCardPresenter {
                 mSecurityCodeLength = securityCode.getLength();
                 mSecurityCodeLocation = securityCode.getCardLocation();
             }
-            mView.setSecurityCodeInputMaxLength(mSecurityCodeLength);
-            mView.setSecurityCodeViewLocation(mSecurityCodeLocation);
+            getView().setSecurityCodeInputMaxLength(mSecurityCodeLength);
+            getView().setSecurityCodeViewLocation(mSecurityCodeLocation);
         }
     }
 
@@ -640,35 +725,40 @@ public class GuessingCardPresenter {
         if (mIdentificationNumberRequired) {
             getIdentificationTypesAsync();
         } else {
-            mView.hideIdentificationInput();
+            getView().hideIdentificationInput();
         }
     }
 
     private void getIdentificationTypesAsync() {
-        mMercadoPago.getIdentificationTypes(new Callback<List<IdentificationType>>() {
+        getResourcesProvider().getIdentificationTypesAsync(new OnResourcesRetrievedCallback<List<IdentificationType>>() {
             @Override
-            public void success(List<IdentificationType> identificationTypes) {
-                if (identificationTypes.isEmpty()) {
-                    mView.startErrorView(mContext.getString(R.string.mpsdk_standard_error_message),
-                            "identification types call is empty at GuessingCardActivity");
-                } else {
-                    mIdentificationType = identificationTypes.get(0);
-                    mView.initializeIdentificationTypes(identificationTypes);
-                    mIdentificationTypes = identificationTypes;
-                }
+            public void onSuccess(List<IdentificationType> identificationTypes) {
+                resolveIdentificationTypes(identificationTypes);
             }
 
             @Override
-            public void failure(ApiException apiException) {
-                setFailureRecovery(new FailureRecovery() {
-                    @Override
-                    public void recover() {
-                        getIdentificationTypesAsync();
-                    }
-                });
-                mView.showApiExceptionError(apiException, ApiUtil.RequestOrigin.GET_IDENTIFICATION_TYPES);
+            public void onFailure(MercadoPagoError error) {
+                if (isViewAttached()) {
+                    getView().showError(error, ApiUtil.RequestOrigin.GET_IDENTIFICATION_TYPES);
+                    setFailureRecovery(new FailureRecovery() {
+                        @Override
+                        public void recover() {
+                            getIdentificationTypesAsync();
+                        }
+                    });
+                }
             }
         });
+    }
+
+    private void resolveIdentificationTypes(List<IdentificationType> identificationTypes) {
+        if (identificationTypes.isEmpty()) {
+            getView().showError(new MercadoPagoError(getResourcesProvider().getMissingIdentificationTypesErrorMessage(), false), ApiUtil.RequestOrigin.GET_IDENTIFICATION_TYPES);
+        } else {
+            mIdentificationType = identificationTypes.get(0);
+            getView().initializeIdentificationTypes(identificationTypes);
+            mIdentificationTypes = identificationTypes;
+        }
     }
 
     public List<BankDeal> getBankDealsList() {
@@ -676,24 +766,34 @@ public class GuessingCardPresenter {
     }
 
     private void getBankDealsAsync() {
-        mMercadoPago.getBankDeals(new Callback<List<BankDeal>>() {
+        getResourcesProvider().getBankDealsAsync(new OnResourcesRetrievedCallback<List<BankDeal>>() {
             @Override
-            public void success(final List<BankDeal> bankDeals) {
-                if (bankDeals != null) {
-                    if (bankDeals.isEmpty()) {
-                        mView.hideBankDeals();
-                    } else if (bankDeals.size() >= 1) {
-                        mBankDealsList = bankDeals;
-                        mView.showBankDeals();
-                    }
-                }
+            public void onSuccess(List<BankDeal> bankDeals) {
+                resolveBankDeals(bankDeals);
             }
 
             @Override
-            public void failure(ApiException apiException) {
-                //do nothing
+            public void onFailure(MercadoPagoError error) {
+                if (isViewAttached()) {
+                    setFailureRecovery(new FailureRecovery() {
+                        @Override
+                        public void recover() {
+                            getBankDealsAsync();
+                        }
+                    });
+                }
             }
         });
+
+    }
+
+    private void resolveBankDeals(List<BankDeal> bankDeals) {
+        if (bankDeals == null || bankDeals.isEmpty()) {
+            getView().hideBankDeals();
+        } else {
+            mBankDealsList = bankDeals;
+            getView().showBankDeals();
+        }
     }
 
     public void enablePaymentTypeSelection(List<PaymentMethod> paymentMethodList) {
@@ -711,6 +811,10 @@ public class GuessingCardPresenter {
         mPaymentType = null;
         showPaymentTypes = false;
         mPaymentTypesList = null;
+    }
+
+    public PaymentMethodGuessingController getGuessingController() {
+        return mPaymentMethodGuessingController;
     }
 
     public List<PaymentMethod> getGuessedPaymentMethods() {
@@ -752,7 +856,7 @@ public class GuessingCardPresenter {
         this.mIdentificationType = identificationType;
         if (identificationType != null) {
             mIdentification.setType(identificationType.getId());
-            mView.setIdentificationNumberRestrictions(identificationType.getType());
+            getView().setIdentificationNumberRestrictions(identificationType.getType());
         }
     }
 
@@ -818,19 +922,19 @@ public class GuessingCardPresenter {
         try {
             if (mPaymentMethod == null) {
                 if (getCardNumber() == null || getCardNumber().length() < MercadoPagoUtil.BIN_LENGTH) {
-                    throw new RuntimeException(mContext.getString(R.string.mpsdk_invalid_card_number_incomplete));
+                    throw new CardTokenException(CardTokenException.INVALID_CARD_NUMBER_INCOMPLETE);
                 } else if (getCardNumber().length() == MercadoPagoUtil.BIN_LENGTH) {
-                    throw new RuntimeException(mContext.getString(R.string.mpsdk_invalid_payment_method));
+                    throw new CardTokenException(CardTokenException.INVALID_PAYMENT_METHOD);
                 } else {
-                    throw new RuntimeException(mContext.getString(R.string.mpsdk_invalid_payment_method));
+                    throw new CardTokenException(CardTokenException.INVALID_PAYMENT_METHOD);
                 }
             }
-            mCardToken.validateCardNumber(mContext, mPaymentMethod);
-            mView.clearErrorView();
+            mCardToken.validateCardNumber(mPaymentMethod);
+            getView().clearErrorView();
             return true;
-        } catch (Exception e) {
-            mView.setErrorView(e.getMessage());
-            mView.setErrorCardNumber();
+        } catch (CardTokenException e) {
+            getView().setErrorView(e);
+            getView().setErrorCardNumber();
             return false;
         }
     }
@@ -841,11 +945,11 @@ public class GuessingCardPresenter {
         cardHolder.setIdentification(mIdentification);
         mCardToken.setCardholder(cardHolder);
         if (mCardToken.validateCardholderName()) {
-            mView.clearErrorView();
+            getView().clearErrorView();
             return true;
         } else {
-            mView.setErrorView(mContext.getString(R.string.mpsdk_invalid_empty_name));
-            mView.setErrorCardholderName();
+            getView().setErrorView(getResourcesProvider().getInvalidEmptyNameErrorMessage());
+            getView().setErrorCardholderName();
             return false;
         }
     }
@@ -858,11 +962,11 @@ public class GuessingCardPresenter {
         mCardToken.setExpirationMonth(month);
         mCardToken.setExpirationYear(year);
         if (mCardToken.validateExpiryDate()) {
-            mView.clearErrorView();
+            getView().clearErrorView();
             return true;
         } else {
-            mView.setErrorView(mContext.getString(R.string.mpsdk_invalid_expiry_date));
-            mView.setErrorExpiryDate();
+            getView().setErrorView(getResourcesProvider().getInvalidExpiryDateErrorMessage());
+            getView().setErrorExpiryDate();
             return false;
         }
     }
@@ -870,21 +974,21 @@ public class GuessingCardPresenter {
     public boolean validateSecurityCode() {
         mCardToken.setSecurityCode(getSecurityCode());
         try {
-            mCardToken.validateSecurityCode(mContext, mPaymentMethod);
-            mView.clearErrorView();
+            mCardToken.validateSecurityCode(mPaymentMethod);
+            getView().clearErrorView();
             return true;
-        } catch (Exception e) {
-            setCardSecurityCodeErrorView(e.getMessage());
+        } catch (CardTokenException e) {
+            setCardSecurityCodeErrorView(e);
             return false;
         }
     }
 
-    private void setCardSecurityCodeErrorView(String message) {
+    private void setCardSecurityCodeErrorView(CardTokenException exception) {
         if (!isSecurityCodeRequired()) {
             return;
         }
-        mView.setErrorView(message);
-        mView.setErrorSecurityCode();
+        getView().setErrorView(exception);
+        getView().setErrorSecurityCode();
     }
 
     public boolean validateIdentificationNumber() {
@@ -892,17 +996,17 @@ public class GuessingCardPresenter {
         mCardToken.getCardholder().setIdentification(mIdentification);
         boolean ans = mCardToken.validateIdentificationNumber(mIdentificationType);
         if (ans) {
-            mView.clearErrorView();
-            mView.clearErrorIdentificationNumber();
+            getView().clearErrorView();
+            getView().clearErrorIdentificationNumber();
         } else {
-            setCardIdentificationErrorView(mContext.getString(R.string.mpsdk_invalid_identification_number));
+            setCardIdentificationErrorView(getResourcesProvider().getInvalidIdentificationNumberErrorMessage());
         }
         return ans;
     }
 
     private void setCardIdentificationErrorView(String message) {
-        mView.setErrorView(message);
-        mView.setErrorIdentificationNumber();
+        getView().setErrorView(message);
+        getView().setErrorIdentificationNumber();
     }
 
     public boolean checkIsEmptyOrValidCardholderName() {
@@ -985,143 +1089,143 @@ public class GuessingCardPresenter {
     }
 
     public void finishCardFlow() {
-        createToken(onTokenCreated());
+        createToken();
     }
 
-    private void createToken(Callback<Token> onTokenCreated) {
-        mMercadoPago.createToken(mCardToken, onTokenCreated);
-    }
-
-    private Callback<Token> onTokenCreated() {
-        return new Callback<Token>() {
+    private void createToken() {
+        getResourcesProvider().createTokenAsync(mCardToken, new OnResourcesRetrievedCallback<Token>() {
             @Override
-            public void success(Token token) {
-                mToken = token;
-                getIssuers(onIssuersRetrieved());
+            public void onSuccess(Token token) {
+                resolveTokenRequest(token);
             }
 
             @Override
-            public void failure(ApiException apiException) {
-                resolveTokenCreationError(apiException, ApiUtil.RequestOrigin.CREATE_TOKEN);
+            public void onFailure(MercadoPagoError error) {
+                resolveTokenCreationError(error, ApiUtil.RequestOrigin.CREATE_TOKEN);
             }
-        };
+        });
     }
 
-    private void resolveTokenCreationError(ApiException apiException, String requestOrigin) {
-        if (wrongIdentificationNumber(apiException)) {
+    public void resolveTokenRequest(Token token) {
+        mToken = token;
+        getIssuers();
+    }
+
+    private void resolveTokenCreationError(MercadoPagoError error, String requestOrigin) {
+        if (wrongIdentificationNumber(error)) {
             showIdentificationNumberError();
         } else {
-            showError(apiException, requestOrigin);
+            setFailureRecovery(new FailureRecovery() {
+                @Override
+                public void recover() {
+                    createToken();
+                }
+            });
+            getView().showError(error, requestOrigin);
         }
     }
 
-    private boolean wrongIdentificationNumber(ApiException apiException) {
-        return apiException.containsCause(ApiException.ErrorCodes.INVALID_CARD_HOLDER_IDENTIFICATION_NUMBER);
+    private boolean wrongIdentificationNumber(MercadoPagoError error) {
+        boolean answer = false;
+        if (error.isApiException()) {
+            ApiException apiException = error.getApiException();
+            answer = apiException.containsCause(ApiException.ErrorCodes.INVALID_CARD_HOLDER_IDENTIFICATION_NUMBER);
+        }
+        return answer;
     }
 
     private void showIdentificationNumberError() {
-        mView.hideProgress();
-        mView.setErrorView(mContext.getString(R.string.mpsdk_invalid_field));
-        mView.setErrorIdentificationNumber();
+        getView().hideProgress();
+        getView().setErrorView(getResourcesProvider().getInvalidFieldErrorMessage());
+        getView().setErrorIdentificationNumber();
     }
 
-    private void showError(ApiException apiException, String requestOrigin) {
-        setFailureRecovery(new FailureRecovery() {
+    private void getIssuers() {
+        getResourcesProvider().getIssuersAsync(mPaymentMethod.getId(), mBin, new OnResourcesRetrievedCallback<List<Issuer>>() {
             @Override
-            public void recover() {
-                createToken(onTokenCreated());
+            public void onSuccess(List<Issuer> issuers) {
+                resolveIssuersList(issuers);
+            }
+
+            @Override
+            public void onFailure(MercadoPagoError error) {
+                setFailureRecovery(new FailureRecovery() {
+                    @Override
+                    public void recover() {
+                        getIssuers();
+                    }
+                });
+                getView().showError(error, ApiUtil.RequestOrigin.GET_ISSUERS);
             }
         });
-        mView.showApiExceptionError(apiException, requestOrigin);
     }
 
-    private void getIssuers(Callback<List<Issuer>> callback) {
-        mMercadoPago.getIssuers(mPaymentMethod.getId(), mBin, callback);
+    private void resolveIssuersList(List<Issuer> issuers) {
+        if (issuers.size() == 1) {
+            mIssuer = issuers.get(0);
+            getInstallments();
+        } else {
+            getView().finishCardFlow(mPaymentMethod, mToken, mDiscount, mDirectDiscountEnabled, issuers);
+        }
     }
 
-    private Callback<List<Issuer>> onIssuersRetrieved() {
-        return new Callback<List<Issuer>>() {
+    private void getInstallments() {
+        getResourcesProvider().getInstallmentsAsync(mBin, mTransactionAmount, mIssuer.getId(), mPaymentMethod.getId(), new OnResourcesRetrievedCallback<List<Installment>>() {
             @Override
-            public void success(List<Issuer> issuers) {
-                if (issuers.size() == 1) {
-                    mIssuer = issuers.get(0);
-                    getInstallments(onInstallmentsRetrieved());
-                } else {
-                    mView.finishCardFlow(mPaymentMethod, mToken, mDiscount, mDirectDiscountEnabled, issuers);
-                }
+            public void onSuccess(List<Installment> installments) {
+                resolveInstallments(installments);
             }
 
             @Override
-            public void failure(ApiException apiException) {
+            public void onFailure(MercadoPagoError error) {
                 setFailureRecovery(new FailureRecovery() {
                     @Override
                     public void recover() {
-                        getIssuers(onIssuersRetrieved());
+                        getInstallments();
                     }
                 });
-                mView.showApiExceptionError(apiException, ApiUtil.RequestOrigin.GET_ISSUERS);
+                getView().showError(error, ApiUtil.RequestOrigin.GET_INSTALLMENTS);
             }
-        };
+        });
     }
 
-    private void getInstallments(Callback<List<Installment>> installmentsRetrievedCallback) {
-        mMercadoPago.getInstallments(mBin, mTransactionAmount, mIssuer.getId(), mPaymentMethod.getId(), installmentsRetrievedCallback);
-    }
-
-    private Callback<List<Installment>> onInstallmentsRetrieved() {
-        return new Callback<List<Installment>>() {
-            @Override
-            public void success(List<Installment> installments) {
-                if (installments == null || installments.size() == 0) {
-                    mView.startErrorView(mContext.getString(R.string.mpsdk_standard_error_message),
-                            NO_INSTALLMENTS_FOUND_FOR_AN_ISSUER);
-                } else if (installments.size() == 1) {
-                    resolvePayerCosts(installments.get(0).getPayerCosts());
-                } else {
-                    mView.startErrorView(mContext.getString(R.string.mpsdk_standard_error_message),
-                            MULTIPLE_INSTALLMENTS_FOUND_FOR_AN_ISSUER);
-                }
-            }
-
-            @Override
-            public void failure(ApiException apiException) {
-                setFailureRecovery(new FailureRecovery() {
-                    @Override
-                    public void recover() {
-                        getInstallments(onInstallmentsRetrieved());
-                    }
-                });
-                mView.showApiExceptionError(apiException, ApiUtil.RequestOrigin.GET_INSTALLMENTS);
-            }
-        };
+    private void resolveInstallments(List<Installment> installments) {
+        String errorMessage = null;
+        if (installments == null || installments.size() == 0) {
+            errorMessage = getResourcesProvider().getMissingInstallmentsForIssuerErrorMessage();
+        } else if (installments.size() == 1) {
+            resolvePayerCosts(installments.get(0).getPayerCosts());
+        } else {
+            errorMessage = getResourcesProvider().getMultipleInstallmentsForIssuerErrorMessage();
+        }
+        if (errorMessage != null && isViewAttached()) {
+            getView().showError(new MercadoPagoError(errorMessage, false), ApiUtil.RequestOrigin.GET_INSTALLMENTS);
+        }
     }
 
     private void resolvePayerCosts(List<PayerCost> payerCosts) {
         PayerCost defaultPayerCost = mPaymentPreference.getDefaultInstallments(payerCosts);
         if (defaultPayerCost != null) {
-            mView.finishCardFlow(mPaymentMethod, mToken, mDiscount, mDirectDiscountEnabled, mIssuer, defaultPayerCost);
+            getView().finishCardFlow(mPaymentMethod, mToken, mDiscount, mDirectDiscountEnabled, mIssuer, defaultPayerCost);
         } else if (payerCosts.isEmpty()) {
-            mView.startErrorView(mContext.getString(R.string.mpsdk_standard_error_message),
-                    NO_PAYER_COSTS_FOUND);
+            getView().showError(new MercadoPagoError(getResourcesProvider().getMissingPayerCostsErrorMessage(), false), ApiUtil.RequestOrigin.GET_INSTALLMENTS);
         } else if (payerCosts.size() == 1) {
-            mView.finishCardFlow(mPaymentMethod, mToken, mDiscount, mDirectDiscountEnabled, mIssuer, payerCosts.get(0));
+            getView().finishCardFlow(mPaymentMethod, mToken, mDiscount, mDirectDiscountEnabled, mIssuer, payerCosts.get(0));
         } else {
-            mView.finishCardFlow(mPaymentMethod, mToken, mDiscount, mDirectDiscountEnabled, mIssuer, payerCosts);
+            getView().finishCardFlow(mPaymentMethod, mToken, mDiscount, mDirectDiscountEnabled, mIssuer, payerCosts);
         }
     }
 
     public MPTrackingContext getTrackingContext() {
-        if (mTrackingContext == null) {
-            mTrackingContext = new MPTrackingContext.Builder(mContext, mPublicKey)
-                    .setCheckoutVersion(BuildConfig.VERSION_NAME)
-                    .setTrackingStrategy(TrackingUtil.BATCH_STRATEGY)
-                    .build();
-        }
-        return mTrackingContext;
+        return getResourcesProvider().getTrackingContext();
     }
 
-    public void setTrackingContext(MPTrackingContext trackingContext) {
-        this.mTrackingContext = trackingContext;
+    public void checkFinishWithCardToken() {
+        if (hasToShowPaymentTypes() && getGuessedPaymentMethods() != null) {
+            getView().askForPaymentType();
+        } else {
+            getView().showFinishCardFlow();
+        }
     }
 
     public boolean shouldAskPaymentType(List<PaymentMethod> paymentMethodList) {

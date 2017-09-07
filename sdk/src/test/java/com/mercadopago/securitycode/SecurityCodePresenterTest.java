@@ -1,5 +1,6 @@
 package com.mercadopago.securitycode;
 
+import com.mercadopago.exceptions.CardTokenException;
 import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.mocks.Cards;
 import com.mercadopago.mocks.Issuers;
@@ -184,6 +185,7 @@ public class SecurityCodePresenterTest {
 
         //Input for security code
         mvp.getProvider().setCloneTokenResponse(mockedToken);
+        mvp.getProvider().setPutSecurityCodeResponse(mockedToken);
         mvp.getPresenter().saveSecurityCode("123");
         mvp.getPresenter().validateSecurityCodeInput();
         assertEquals(mvp.getProvider().successfulCloneTokenResponse, mockedToken);
@@ -623,7 +625,7 @@ public class SecurityCodePresenterTest {
 
 
         @Override
-        public void validateSecurityCodeFromToken(String mSecurityCode, PaymentMethod mPaymentMethod, String firstSixDigits) throws Exception {
+        public void validateSecurityCodeFromToken(String mSecurityCode, PaymentMethod mPaymentMethod, String firstSixDigits) throws CardTokenException {
             if (shouldFailSecurityCodeValidation) {
                 throw new RuntimeException("ERROR_SECURITY_CODE");
             }
@@ -635,7 +637,7 @@ public class SecurityCodePresenterTest {
         }
 
         @Override
-        public void validateSecurityCodeFromToken(SavedCardToken savedCardToken, Card card) throws Exception {
+        public void validateSecurityCodeFromToken(SavedCardToken savedCardToken, Card card) throws CardTokenException {
             if (shouldFailSecurityCodeValidation) {
                 throw new RuntimeException("ERROR_SECURITY_CODE");
             }
