@@ -47,6 +47,7 @@ import com.mercadopago.model.PaymentType;
 import com.mercadopago.model.Site;
 import com.mercadopago.preferences.PaymentResultScreenPreference;
 import com.mercadopago.preferences.ReviewScreenPreference;
+import com.mercadopago.preferences.ServicePreference;
 import com.mercadopago.preferences.ShoppingReviewPreference;
 import com.mercadopago.uicontrollers.discounts.DiscountRowView;
 import com.mercadopago.uicontrollers.reviewandconfirm.ReviewItemsView;
@@ -1394,6 +1395,7 @@ public class MercadoPagoComponents {
             private Site site;
             private BigDecimal amount;
             private PaymentResultScreenPreference paymentResultScreenPreference;
+            private ServicePreference servicePreference;
 
             public PaymentResultActivityBuilder setActivity(Activity activity) {
                 this.activity = activity;
@@ -1440,6 +1442,11 @@ public class MercadoPagoComponents {
                 return this;
             }
 
+            public PaymentResultActivityBuilder setServicePreference(ServicePreference servicePreference) {
+                this.servicePreference = servicePreference;
+                return this;
+            }
+
             public void startActivity() {
                 if (this.activity == null) throw new IllegalStateException("activity is null");
                 if (this.paymentResult == null)
@@ -1459,6 +1466,7 @@ public class MercadoPagoComponents {
                 resultIntent.putExtra("paymentResult", JsonUtil.getInstance().toJson(paymentResult));
                 resultIntent.putExtra("site", JsonUtil.getInstance().toJson(site));
                 resultIntent.putExtra("paymentResultScreenPreference", JsonUtil.getInstance().toJson(paymentResultScreenPreference));
+                resultIntent.putExtra("servicePreference", JsonUtil.getInstance().toJson(servicePreference));
                 if (amount != null) {
                     resultIntent.putExtra("amount", amount.toString());
                 }
@@ -1474,6 +1482,7 @@ public class MercadoPagoComponents {
             private Site site;
             private BigDecimal amount;
             private PaymentResultScreenPreference paymentResultScreenPreference;
+            private ServicePreference servicePreference;
 
             public InstructionsActivityBuilder setActivity(Activity activity) {
                 this.activity = activity;
@@ -1505,6 +1514,11 @@ public class MercadoPagoComponents {
                 return this;
             }
 
+            public InstructionsActivityBuilder setServicePreference(ServicePreference servicePreference) {
+                this.servicePreference = servicePreference;
+                return this;
+            }
+
             public void startActivity() {
                 if (this.activity == null) throw new IllegalStateException("activity is null");
                 if (this.amount == null) throw new IllegalStateException("amount is null");
@@ -1525,6 +1539,7 @@ public class MercadoPagoComponents {
                 instructionIntent.putExtra("paymentResultScreenPreference", JsonUtil.getInstance().toJson(paymentResultScreenPreference));
                 instructionIntent.putExtra("site", JsonUtil.getInstance().toJson(site));
                 instructionIntent.putExtra("amount", amount.toString());
+                instructionIntent.putExtra("servicePreference", JsonUtil.getInstance().toJson(servicePreference));
 
                 activity.startActivityForResult(instructionIntent, INSTRUCTIONS_REQUEST_CODE);
             }
@@ -1539,6 +1554,7 @@ public class MercadoPagoComponents {
             private BigDecimal amount;
             private PaymentResultScreenPreference paymentResultScreenPreference;
             private Boolean discountEnabled;
+            private ServicePreference servicePreference;
 
             public CongratsActivityBuilder setActivity(Activity activity) {
                 this.activity = activity;
@@ -1580,6 +1596,11 @@ public class MercadoPagoComponents {
                 return this;
             }
 
+            public CongratsActivityBuilder setServicePreference(ServicePreference servicePreference) {
+                this.servicePreference = servicePreference;
+                return this;
+            }
+
             public void startActivity() {
                 if (this.activity == null) throw new IllegalStateException("activity is null");
                 if (this.paymentResult == null)
@@ -1598,6 +1619,7 @@ public class MercadoPagoComponents {
                 congratsIntent.putExtra("site", JsonUtil.getInstance().toJson(site));
                 congratsIntent.putExtra("paymentResultScreenPreference", JsonUtil.getInstance().toJson(paymentResultScreenPreference));
                 congratsIntent.putExtra("discountEnabled", discountEnabled);
+                congratsIntent.putExtra("servicePreference", JsonUtil.getInstance().toJson(servicePreference));
                 if (amount != null) {
                     congratsIntent.putExtra("amount", amount.toString());
                 }

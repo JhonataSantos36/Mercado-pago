@@ -864,7 +864,7 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
     }
 
     public Boolean getShowBankDeals() {
-        return mFlowPreference.isBankDealsEnabled() && mServicePreference.showBankDealsByProcessingMode();
+        return mFlowPreference.isBankDealsEnabled() && mServicePreference.shouldShowBankDeals();
     }
 
     public Boolean shouldShowAllSavedCards() {

@@ -148,7 +148,11 @@ public class ServicePreference {
         return (getMerchantDiscountBaseURL != null || defaultBaseURL != null) && getMerchantDiscountURI != null;
     }
 
-    public boolean showBankDealsByProcessingMode() {
+    public boolean shouldShowBankDeals() {
+        return processingMode.equals(ProcessingModes.AGGREGATOR);
+    }
+
+    public boolean shouldShowEmailConfirmationCell() {
         return processingMode.equals(ProcessingModes.AGGREGATOR);
     }
 

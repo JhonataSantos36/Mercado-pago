@@ -30,6 +30,7 @@ import com.mercadopago.model.ReviewSubscriber;
 import com.mercadopago.model.Reviewable;
 import com.mercadopago.model.Site;
 import com.mercadopago.preferences.PaymentResultScreenPreference;
+import com.mercadopago.preferences.ServicePreference;
 import com.mercadopago.px_tracking.utils.TrackingUtil;
 import com.mercadopago.tracker.MPTrackingContext;
 import com.mercadopago.px_tracking.model.ScreenViewEvent;
@@ -103,6 +104,7 @@ public class CongratsActivity extends MercadoPagoBaseActivity implements ReviewS
     private PaymentResultScreenPreference mPaymentResultScreenPreference;
     private ViewGroup mTitleBackground;
     private RecyclerView mTopReviewables;
+    private ServicePreference mServicePreference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,6 +130,7 @@ public class CongratsActivity extends MercadoPagoBaseActivity implements ReviewS
         mPaymentResult = JsonUtil.getInstance().fromJson(getIntent().getExtras().getString("paymentResult"), PaymentResult.class);
         mSite = JsonUtil.getInstance().fromJson(getIntent().getExtras().getString("site"), Site.class);
         mPaymentResultScreenPreference = JsonUtil.getInstance().fromJson(getIntent().getExtras().getString("paymentResultScreenPreference"), PaymentResultScreenPreference.class);
+        mServicePreference = JsonUtil.getInstance().fromJson(getIntent().getExtras().getString("servicePreference"), ServicePreference.class);
         if (getIntent().getStringExtra("amount") != null) {
             mAmount = new BigDecimal(getIntent().getStringExtra("amount"));
         }
@@ -600,7 +603,7 @@ public class CongratsActivity extends MercadoPagoBaseActivity implements ReviewS
     }
 
     private void setPaymentEmailDescription() {
-        if (isPayerEmailValid()) {
+        if (isPayerEmailValid() && mServicePreference.shouldShowEmailConfirmationCell()) {
             String subtitle = String.format(getString(R.string.mpsdk_subtitle_action_activity_congrats), mPayerEmail);
             mPayerEmailTextView.setText(subtitle);
         } else {
