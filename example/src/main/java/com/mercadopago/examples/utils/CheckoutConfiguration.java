@@ -67,4 +67,8 @@ public class CheckoutConfiguration {
     public ServicePreference getServicePreference() {
         return servicePreference;
     }
+
+    public void setServicePreference(ServicePreference servicePreference) {
+        this.servicePreference = servicePreference;
+    }
 }

@@ -144,6 +144,10 @@ public class ServicePreference {
         return createPaymentURL != null && createPaymentURI != null;
     }
 
+    public boolean hasCreateCheckoutPrefURL() {
+        return createCheckoutPreferenceURL != null && createCheckoutPreferenceURI != null;
+    }
+
     public boolean hasGetDiscountURL() {
         return (getMerchantDiscountBaseURL != null || defaultBaseURL != null) && getMerchantDiscountURI != null;
     }
