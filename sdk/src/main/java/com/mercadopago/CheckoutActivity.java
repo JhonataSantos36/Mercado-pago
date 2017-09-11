@@ -59,7 +59,6 @@ public class CheckoutActivity extends MercadoPagoBaseActivity implements Checkou
     protected CheckoutPresenter mCheckoutPresenter;
 
     protected DecorationPreference mDecorationPreference;
-    protected ServicePreference mServicePreference;
     protected ShoppingReviewPreference mShoppingReviewPreference;
     protected Integer mRequestedResultCode;
     protected Intent mCustomDataBundle;
@@ -78,7 +77,7 @@ public class CheckoutActivity extends MercadoPagoBaseActivity implements Checkou
     }
 
     private void configurePresenter() {
-        CheckoutProvider provider = new CheckoutProviderImpl(this, mMerchantPublicKey, mPrivateKey, mServicePreference, mCheckoutPresenter.isESCEnabled());
+        CheckoutProvider provider = new CheckoutProviderImpl(this, mMerchantPublicKey, mPrivateKey, mCheckoutPresenter.getServicePreference(), mCheckoutPresenter.isESCEnabled());
         mCheckoutPresenter.attachResourcesProvider(provider);
         mCheckoutPresenter.attachView(this);
         mCheckoutPresenter.setIdempotencyKeySeed(mMerchantPublicKey);
@@ -111,7 +110,7 @@ public class CheckoutActivity extends MercadoPagoBaseActivity implements Checkou
 
         mRequestedResultCode = this.getIntent().getIntExtra("resultCode", 0);
 
-        mServicePreference = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("servicePreference"), ServicePreference.class);
+        ServicePreference servicePreference = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("servicePreference"), ServicePreference.class);
         mShoppingReviewPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("shoppingReviewPreference"), ShoppingReviewPreference.class);
         mDecorationPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("decorationPreference"), DecorationPreference.class);
         mMerchantPublicKey = this.getIntent().getStringExtra("merchantPublicKey");
@@ -127,7 +126,7 @@ public class CheckoutActivity extends MercadoPagoBaseActivity implements Checkou
         mCheckoutPresenter.setPaymentDataInput(paymentDataInput);
         mCheckoutPresenter.setPaymentResultInput(paymentResultInput);
         mCheckoutPresenter.setRequestedResult(mRequestedResultCode);
-        mCheckoutPresenter.setServicePreference(mServicePreference);
+        mCheckoutPresenter.setServicePreference(servicePreference);
     }
 
     @Override
@@ -158,7 +157,6 @@ public class CheckoutActivity extends MercadoPagoBaseActivity implements Checkou
 
         outState.putString(MERCHANT_PUBLIC_KEY_BUNDLE, mMerchantPublicKey);
         outState.putString(DECORATION_PREFERENCE_BUNDLE, JsonUtil.getInstance().toJson(mDecorationPreference));
-        outState.putString(SERVICE_PREFERENCE_BUNDLE, JsonUtil.getInstance().toJson(mServicePreference));
         outState.putInt(RESULT_CODE_BUNDLE, mRequestedResultCode);
     }
 
@@ -167,7 +165,6 @@ public class CheckoutActivity extends MercadoPagoBaseActivity implements Checkou
         if (savedInstanceState != null) {
             mMerchantPublicKey = savedInstanceState.getString(MERCHANT_PUBLIC_KEY_BUNDLE);
             mRequestedResultCode = savedInstanceState.getInt(RESULT_CODE_BUNDLE, 0);
-            mServicePreference = JsonUtil.getInstance().fromJson(savedInstanceState.getString(SERVICE_PREFERENCE_BUNDLE), ServicePreference.class);
             mDecorationPreference = JsonUtil.getInstance().fromJson(savedInstanceState.getString(DECORATION_PREFERENCE_BUNDLE), DecorationPreference.class);
             mCheckoutPresenter = JsonUtil.getInstance().fromJson(savedInstanceState.getString(PRESENTER_BUNDLE), CheckoutPresenter.class);
             configurePresenter();
@@ -352,7 +349,7 @@ public class CheckoutActivity extends MercadoPagoBaseActivity implements Checkou
                 .setSite(mCheckoutPresenter.getCheckoutPreference().getSite())
                 .setPaymentResultScreenPreference(mCheckoutPresenter.getPaymentResultScreenPreference())
                 .setAmount(amount)
-                .setServicePreference(mServicePreference)
+                .setServicePreference(mCheckoutPresenter.getServicePreference())
                 .startActivity();
     }
 
