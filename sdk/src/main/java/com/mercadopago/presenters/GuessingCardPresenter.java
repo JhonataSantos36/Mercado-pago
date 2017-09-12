@@ -1065,7 +1065,7 @@ public class GuessingCardPresenter {
     }
 
     private void getInstallments(Callback<List<Installment>> installmentsRetrievedCallback) {
-        mMercadoPago.getInstallments(mBin, mTransactionAmount, mIssuer.getId(), mPaymentMethod.getId(), installmentsRetrievedCallback);
+        mMercadoPago.getInstallments(mBin, getTransactionAmount(), mIssuer.getId(), mPaymentMethod.getId(), installmentsRetrievedCallback);
     }
 
     private Callback<List<Installment>> onInstallmentsRetrieved() {
