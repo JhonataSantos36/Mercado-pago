@@ -1,6 +1,7 @@
 package com.mercadopago.core;
 
 import android.content.Context;
+import android.os.Build;
 
 import com.mercadopago.BuildConfig;
 import com.mercadopago.adapters.ErrorHandlingCallAdapter;
@@ -79,7 +80,7 @@ public class MercadoPagoServices {
         this.mServicePreference = CustomServicesHandler.getInstance().getServicePreference();
         this.mProcessingMode = mServicePreference != null ? mServicePreference.getProcessingModeString() : ProcessingModes.AGGREGATOR;
 
-        System.setProperty("http.keepAlive", "false");
+        disableConnectionReuseIfNecessary();
     }
 
     public void getPreference(String checkoutPreferenceId, Callback<CheckoutPreference> callback) {
@@ -244,6 +245,26 @@ public class MercadoPagoServices {
                 .build();
     }
 
+    private void disableConnectionReuseIfNecessary() {
+        // HTTP connection reuse which was buggy pre-froyo
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+            System.setProperty("http.keepAlive", "false");
+        }
+    }
+
+    private String getListAsString(List<String> list, String separator) {
+        StringBuilder stringBuilder = new StringBuilder();
+        if (list != null) {
+            for (String typeId : list) {
+                stringBuilder.append(typeId);
+                if (!typeId.equals(list.get(list.size() - 1))) {
+                    stringBuilder.append(separator);
+                }
+            }
+        }
+        return stringBuilder.toString();
+    }
+
     public static class Builder {
 
         private Context mContext;
@@ -290,18 +311,5 @@ public class MercadoPagoServices {
 
             return new MercadoPagoServices(this);
         }
-    }
-
-    private String getListAsString(List<String> list, String separator) {
-        StringBuilder stringBuilder = new StringBuilder();
-        if (list != null) {
-            for (String typeId : list) {
-                stringBuilder.append(typeId);
-                if (!typeId.equals(list.get(list.size() - 1))) {
-                    stringBuilder.append(separator);
-                }
-            }
-        }
-        return stringBuilder.toString();
     }
 }

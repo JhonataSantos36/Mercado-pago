@@ -1,12 +1,13 @@
 package com.mercadopago.core;
 
+import android.os.Build;
+import android.support.test.InstrumentationRegistry;
+
 import com.mercadopago.CheckoutActivity;
 import com.mercadopago.test.BaseTest;
 import com.mercadopago.test.StaticMock;
 
-/**
- * Created by mreverter on 1/18/17.
- */
+import junit.framework.Assert;
 
 public class MercadoPagoServicesTest extends BaseTest<CheckoutActivity> {
 
@@ -72,6 +73,19 @@ public class MercadoPagoServicesTest extends BaseTest<CheckoutActivity> {
             fail("Start should have failed on key null");
         } catch (Exception ex) {
             assertTrue(ex.getMessage().equals("key is null"));
+        }
+    }
+
+    public void testWhenAndroidVersionIsPriorICSThenPropertyKeepAliveFalseElseDefault() {
+        new MercadoPagoServices.Builder()
+                .setContext(InstrumentationRegistry.getContext())
+                .setPublicKey("DUMMY_PK")
+                .build();
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+            Assert.assertEquals("false", System.getProperty("http.keepAlive"));
+        } else {
+            Assert.assertEquals(null, System.getProperty("http.keepAlive"));
         }
     }
 }
