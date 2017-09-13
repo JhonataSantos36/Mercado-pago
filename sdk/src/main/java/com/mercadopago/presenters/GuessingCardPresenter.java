@@ -1170,7 +1170,7 @@ public class GuessingCardPresenter extends MvpPresenter<GuessingCardActivityView
     }
 
     private void getInstallments() {
-        getResourcesProvider().getInstallmentsAsync(mBin, mTransactionAmount, mIssuer.getId(), mPaymentMethod.getId(), new OnResourcesRetrievedCallback<List<Installment>>() {
+        getResourcesProvider().getInstallmentsAsync(mBin, getTransactionAmount(), mIssuer.getId(), mPaymentMethod.getId(), new OnResourcesRetrievedCallback<List<Installment>>() {
             @Override
             public void onSuccess(List<Installment> installments) {
                 resolveInstallments(installments);

@@ -296,7 +296,6 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultVie
                         .setPayerEmail(mCardVaultPresenter.getPayerEmail())
                         .setPayerAccessToken(mPrivateKey)
                         .setDiscount(mCardVaultPresenter.getDiscount())
-                        .setAmount(mCardVaultPresenter.getAmount())
                         .setDiscountEnabled(mCardVaultPresenter.getDiscountEnabled())
                         .setDirectDiscountEnabled(mCardVaultPresenter.getDirectDiscountEnabled())
                         .setShowBankDeals(mShowBankDeals)

@@ -1,8 +1,14 @@
+## VERSION 3.4.3
+
+_12_09_2017_
+
+* Fix: Discount not applied in installments.
+
 ## VERSION 3.4.2
 
 _12_09_2017_
 
-* New: Updated Mercado Pago + Patagonia card logo
+* New: Updated Mercado Pago + Patagonia card logo.
 * Fix: Keep alive property false only for older android versions.
 
 ## VERSION 3.4.1
