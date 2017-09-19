@@ -1,5 +1,6 @@
 package com.mercadopago.views;
 
+import com.mercadopago.exceptions.CardTokenException;
 import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.mvp.MvpView;
@@ -13,7 +14,7 @@ public interface SecurityCodeActivityView extends MvpView {
 
     void showError(MercadoPagoError error, String requestOrigin);
 
-    void setErrorView(String message);
+    void setErrorView(CardTokenException exception);
 
     void clearErrorView();
 

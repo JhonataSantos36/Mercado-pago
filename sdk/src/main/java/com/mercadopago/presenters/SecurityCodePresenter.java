@@ -175,8 +175,8 @@ public class SecurityCodePresenter extends MvpPresenter<SecurityCodeActivityView
             } else if (isSavedCardWithoutESC()) {
                 createTokenWithoutESC();
             }
-        } catch (CardTokenException e) {
-            getView().setErrorView(e.getMessage());
+        } catch (CardTokenException exception) {
+            getView().setErrorView(exception);
         }
     }
 
@@ -226,8 +226,8 @@ public class SecurityCodePresenter extends MvpPresenter<SecurityCodeActivityView
             }
             getView().clearErrorView();
             return true;
-        } catch (Exception e) {
-            getView().setErrorView(e.getMessage());
+        } catch (CardTokenException exception) {
+            getView().setErrorView(exception);
             return false;
         }
     }
