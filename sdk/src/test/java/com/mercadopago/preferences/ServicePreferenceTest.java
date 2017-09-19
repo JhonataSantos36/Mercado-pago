@@ -15,29 +15,32 @@ import static junit.framework.Assert.assertTrue;
 public class ServicePreferenceTest {
 
     @Test
-    public void testSetAggregatorAsProcessingModeAndEnableBankDeals() {
+    public void testSetAggregatorAsProcessingModeAndEnableBankDealsAndEnableEmailConfirmationCell() {
         ServicePreference servicePreference = new ServicePreference.Builder()
                 .setAggregatorAsProcessingMode()
                 .build();
         assertTrue(servicePreference.getProcessingModeString().equals(ProcessingModes.AGGREGATOR));
-        assertTrue(servicePreference.showBankDealsByProcessingMode());
+        assertTrue(servicePreference.shouldShowBankDeals());
+        assertTrue(servicePreference.shouldShowEmailConfirmationCell());
     }
 
     @Test
-    public void testSetGatewayAsProcessingModeAndDisableBankDeals() {
+    public void testSetGatewayAsProcessingModeAndDisableBankDealsAndDisableEmailConfirmationCell() {
         ServicePreference servicePreference = new ServicePreference.Builder()
                 .setGatewayAsProcessingMode()
                 .build();
         assertTrue(servicePreference.getProcessingModeString().equals(ProcessingModes.GATEWAY));
-        assertFalse(servicePreference.showBankDealsByProcessingMode());
+        assertFalse(servicePreference.shouldShowBankDeals());
+        assertFalse(servicePreference.shouldShowEmailConfirmationCell());
     }
 
     @Test
-    public void testSetHybridAsProcessingModeAndDisableBankDeals() {
+    public void testSetHybridAsProcessingModeAndDisableBankDealsAndDisableEmailConfirmationCell() {
         ServicePreference servicePreference = new ServicePreference.Builder()
                 .setHybridAsProcessingMode()
                 .build();
         assertTrue(servicePreference.getProcessingModeString().equals(ProcessingModes.HYBRID));
-        assertFalse(servicePreference.showBankDealsByProcessingMode());
+        assertFalse(servicePreference.shouldShowBankDeals());
+        assertFalse(servicePreference.shouldShowEmailConfirmationCell());
     }
 }

@@ -6,7 +6,7 @@ import android.view.ViewGroup;
 
 import com.mercadopago.model.Item;
 import com.mercadopago.preferences.DecorationPreference;
-import com.mercadopago.preferences.ShoppingReviewPreference;
+import com.mercadopago.preferences.ReviewScreenPreference;
 import com.mercadopago.uicontrollers.reviewandconfirm.ReviewProductView;
 import com.mercadopago.uicontrollers.reviewandconfirm.ReviewProductViewController;
 
@@ -19,22 +19,22 @@ import java.util.List;
 public class ReviewProductAdapter extends RecyclerView.Adapter<ReviewProductAdapter.ViewHolder> {
 
     private DecorationPreference mDecorationPreference;
-    private ShoppingReviewPreference mShoppingReviewPreference;
     private List<Item> mItemList;
     private String mCurrency;
     private Context mContext;
+    private ReviewScreenPreference mReviewScreenPreference;
 
-    public ReviewProductAdapter(Context context, List<Item> items, String currency, DecorationPreference decorationPreference, ShoppingReviewPreference shoppingReviewPreference) {
+    public ReviewProductAdapter(Context context, List<Item> items, String currency, ReviewScreenPreference reviewScreenPreference, DecorationPreference decorationPreference) {
         this.mContext = context;
         this.mItemList = items;
         this.mCurrency = currency;
-        this.mShoppingReviewPreference = shoppingReviewPreference;
+        this.mReviewScreenPreference = reviewScreenPreference;
         this.mDecorationPreference = decorationPreference;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        ReviewProductViewController productViewController = new ReviewProductView(mContext, mShoppingReviewPreference);
+        ReviewProductViewController productViewController = new ReviewProductView(mContext, mReviewScreenPreference);
         productViewController.inflateInParent(parent, false);
         return new ReviewProductAdapter.ViewHolder(productViewController);
     }

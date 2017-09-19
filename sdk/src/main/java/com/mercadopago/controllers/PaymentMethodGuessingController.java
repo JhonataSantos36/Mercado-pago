@@ -1,5 +1,6 @@
 package com.mercadopago.controllers;
 
+import com.mercadopago.constants.PaymentTypes;
 import com.mercadopago.model.CardInformation;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.Setting;
@@ -30,6 +31,24 @@ public class PaymentMethodGuessingController {
 
     public List<PaymentMethod> getGuessedPaymentMethods() {
         return mGuessedPaymentMethods;
+    }
+
+    public List<PaymentMethod> getAllSupportedPaymentMethods() {
+        List<PaymentMethod> supportedPaymentMethods = new ArrayList<>();
+        for (PaymentMethod paymentMethod : mAllPaymentMethods) {
+            if (isCardPaymentType(paymentMethod) &&
+                    ((mPaymentTypeId == null) || (mPaymentTypeId.equals(paymentMethod.getPaymentTypeId())))) {
+                supportedPaymentMethods.add(paymentMethod);
+            }
+        }
+        return supportedPaymentMethods;
+    }
+
+    private boolean isCardPaymentType(PaymentMethod paymentMethod) {
+        String paymentTypeId = paymentMethod.getPaymentTypeId();
+        return paymentTypeId.equals(PaymentTypes.CREDIT_CARD) ||
+                paymentTypeId.equals(PaymentTypes.DEBIT_CARD) ||
+                paymentTypeId.equals(PaymentTypes.PREPAID_CARD);
     }
 
     public List<PaymentMethod> guessPaymentMethodsByBin(String bin) {
@@ -93,8 +112,8 @@ public class PaymentMethodGuessingController {
 
     public static Setting getSettingByPaymentMethodAndBin(PaymentMethod paymentMethod, String bin) {
         Setting setting = null;
-        if(bin == null) {
-            if(paymentMethod.getSettings() != null && !paymentMethod.getSettings().isEmpty()) {
+        if (bin == null) {
+            if (paymentMethod.getSettings() != null && !paymentMethod.getSettings().isEmpty()) {
                 setting = paymentMethod.getSettings().get(0);
             }
         } else {

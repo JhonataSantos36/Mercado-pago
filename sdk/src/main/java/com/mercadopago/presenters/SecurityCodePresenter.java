@@ -2,6 +2,7 @@ package com.mercadopago.presenters;
 
 import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.controllers.PaymentMethodGuessingController;
+import com.mercadopago.exceptions.CardTokenException;
 import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.model.Card;
 import com.mercadopago.model.CardInfo;
@@ -174,12 +175,12 @@ public class SecurityCodePresenter extends MvpPresenter<SecurityCodeActivityView
             } else if (isSavedCardWithoutESC()) {
                 createTokenWithoutESC();
             }
-        } catch (Exception e) {
-            getView().setErrorView(e.getMessage());
+        } catch (CardTokenException exception) {
+            getView().setErrorView(exception);
         }
     }
 
-    private void createTokenWithESC() throws Exception {
+    private void createTokenWithESC() throws CardTokenException {
         SavedESCCardToken savedESCCardToken;
         if (mCard != null) {
             savedESCCardToken = new SavedESCCardToken(mCard.getId(), mSecurityCode, true, "");
@@ -192,7 +193,7 @@ public class SecurityCodePresenter extends MvpPresenter<SecurityCodeActivityView
         }
     }
 
-    private void createTokenWithoutESC() throws Exception {
+    private void createTokenWithoutESC() throws CardTokenException {
         SavedCardToken savedCardToken = new SavedCardToken(mCard.getId(), mSecurityCode);
         getResourcesProvider().validateSecurityCodeFromToken(savedCardToken, mCard);
         createToken(savedCardToken);
@@ -225,8 +226,8 @@ public class SecurityCodePresenter extends MvpPresenter<SecurityCodeActivityView
             }
             getView().clearErrorView();
             return true;
-        } catch (Exception e) {
-            getView().setErrorView(e.getMessage());
+        } catch (CardTokenException exception) {
+            getView().setErrorView(exception);
             return false;
         }
     }

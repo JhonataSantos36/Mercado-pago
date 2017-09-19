@@ -1,3 +1,13 @@
+## VERSION 3.5.0
+
+_19_09_2017_
+
+* New: Exclusions are shown in credit card form
+* New: Supporting Mango mode
+* New: Summary in RyC is customizable
+* New: Approved payment screen has customizable image
+* Fix: Showing error message in SecurityCode screen
+
 ## VERSION 3.4.3
 
 _12_09_2017_

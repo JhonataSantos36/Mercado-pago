@@ -23,7 +23,7 @@ import com.mercadopago.core.MercadoPagoCheckout;
 import com.mercadopago.examples.R;
 import com.mercadopago.examples.utils.CheckoutConfiguration;
 import com.mercadopago.preferences.CheckoutPreference;
-import com.mercadopago.preferences.FlowPreference;
+import com.mercadopago.preferences.ServicePreference;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.TextUtil;
 
@@ -106,6 +106,7 @@ public class JsonSetupActivity extends AppCompatActivity {
         }
 
         if (mConfiguration.getServicePreference() != null) {
+            completeServicePreferenceWithDefaultValues();
             checkoutBuilder.setServicePreference(mConfiguration.getServicePreference());
         }
 
@@ -117,6 +118,34 @@ public class JsonSetupActivity extends AppCompatActivity {
             checkoutBuilder.startForPaymentData();
         } else {
             Toast.makeText(this, R.string.start_for_wrong, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void completeServicePreferenceWithDefaultValues() {
+        if (mConfiguration.getServicePreference() != null) {
+            ServicePreference servicePreference = mConfiguration.getServicePreference();
+            if (servicePreference.getProcessingModeString() == null || servicePreference.getProcessingModeString().isEmpty()) {
+
+                ServicePreference.Builder builder = new ServicePreference.Builder();
+                if (servicePreference.hasGetCustomerURL()) {
+                    builder.setGetCustomerURL(servicePreference.getGetCustomerURL(), servicePreference.getGetCustomerURI(), servicePreference.getGetCustomerAdditionalInfo());
+                }
+                if (servicePreference.hasCreatePaymentURL()) {
+                    builder.setCreatePaymentURL(servicePreference.getCreatePaymentURL(), servicePreference.getCreatePaymentURI(), servicePreference.getCreatePaymentAdditionalInfo());
+                }
+                if (servicePreference.hasGetDiscountURL()) {
+                    builder.setDiscountURL(servicePreference.getGetMerchantDiscountBaseURL(), servicePreference.getGetMerchantDiscountURI(), servicePreference.getGetDiscountAdditionalInfo());
+                }
+                if (servicePreference.hasCreateCheckoutPrefURL()) {
+                    builder.setCreateCheckoutPreferenceURL(servicePreference.getCreateCheckoutPreferenceURL(), servicePreference.getCreateCheckoutPreferenceURI(), servicePreference.getCreateCheckoutPreferenceAdditionalInfo());
+                }
+                builder.setDefaultBaseURL(servicePreference.getDefaultBaseURL())
+                        .setGatewayURL(servicePreference.getGatewayBaseURL());
+
+                ServicePreference newServicePreference = builder.build();
+
+                mConfiguration.setServicePreference(newServicePreference);
+            }
         }
     }
 

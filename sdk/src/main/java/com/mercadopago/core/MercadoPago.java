@@ -152,7 +152,7 @@ public class MercadoPago {
                     .build();
 
             CheckoutService service = paymentsRetrofitAdapter.create(CheckoutService.class);
-            service.createPayment(paymentBody.getTransactionId(), paymentBody, mprocessingMode).enqueue(callback);
+            service.createPayment(paymentBody.getTransactionId(), paymentBody).enqueue(callback);
 
         } else {
             throw new RuntimeException("Unsupported key type for this method");

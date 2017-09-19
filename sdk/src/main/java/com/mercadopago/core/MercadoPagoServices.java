@@ -105,7 +105,7 @@ public class MercadoPagoServices {
 
     public void createPayment(final PaymentBody paymentBody, final Callback<Payment> callback) {
         CheckoutService service = getDefaultRetrofit(DEFAULT_PAYMENT_CONNECT_TIMEOUT, DEFAULT_PAYMENT_READ_TIMEOUT, DEFAULT_PAYMENT_WRITE_TIMEOUT).create(CheckoutService.class);
-        service.createPayment(paymentBody.getTransactionId(), paymentBody, mProcessingMode).enqueue(callback);
+        service.createPayment(paymentBody.getTransactionId(), paymentBody).enqueue(callback);
     }
 
     public void createToken(final SavedCardToken savedCardToken, final Callback<Token> callback) {

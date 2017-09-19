@@ -14,90 +14,20 @@
     android:background="@color/mpsdk_white"
     android:orientation="vertical">
 
-    <LinearLayout
-        android:id="@+id/mpsdkReviewSummaryProducts"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="1">
+        android:layout_height="match_parent">
 
-        <com.mercadopago.customviews.MPTextView
-            android:id="@+id/mpsdkReviewSummaryProductsLabelText"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:layout_weight="0.6"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:text="@string/mpsdk_review_summary_products"
-            android:textSize="18dp" />
-
-        <com.mercadopago.customviews.MPTextView
-            android:id="@+id/mpsdkReviewSummaryProductsText"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.4"
-            android:gravity="end"
-            android:textSize="18dp"
-            tools:text="$124" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/mpsdkReviewSummaryCustom"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
-        android:orientation="horizontal"
-        android:visibility="gone"
-        android:weightSum="1">
-
-        <com.mercadopago.customviews.MPTextView
-            android:id="@+id/mpsdkReviewSummaryCustomText"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:layout_weight="0.6"
-            android:textSize="18dp"
-            tools:text="Custom Text" />
-
-        <com.mercadopago.customviews.MPTextView
-            android:id="@+id/mpsdkReviewSummaryCustomAmount"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.4"
-            android:gravity="end"
-            android:textSize="18dp"
-            tools:text="$124" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/mpsdkReviewSummaryDiscounts"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
-        android:orientation="horizontal"
-        android:weightSum="1">
-
-        <com.mercadopago.customviews.MPTextView
-            android:id="@+id/mpsdkReviewSummaryDiscountPercentage"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:layout_weight="0.75"
-            android:text="@string/mpsdk_review_summary_discount"
-            android:textColor="@color/mpsdk_color_payer_costs_no_rate"
-            android:textSize="18dp" />
-
-        <com.mercadopago.customviews.MPTextView
-            android:id="@+id/mpsdkReviewSummaryDiscountsText"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.25"
-            android:gravity="end"
-            android:textColor="@color/mpsdk_color_payer_costs_no_rate"
-            android:textSize="18dp"
-            tools:text="$124" />
-    </LinearLayout>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/mpsdkActivitySummaryView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_horizontal"
+            android:background="@color/mpsdk_white"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            android:descendantFocusability="afterDescendants"/>
+    </FrameLayout>
 
     <LinearLayout
         android:id="@+id/mpsdkReviewSummarySubtotal"
@@ -111,6 +41,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="start"
+            android:textColor="@android:color/tertiary_text_light"
             android:layout_weight="0.6"
             android:text="@string/mpsdk_review_summary_subtotal"
             android:textSize="18dp" />
@@ -191,6 +122,18 @@
             android:textSize="18dp"
             tools:text="$124" />
     </LinearLayout>
+
+    <com.mercadopago.customviews.MPTextView
+        android:id="@+id/mpsdkDisclaimer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:gravity="center"
+        android:includeFontPadding="false"
+        android:textSize="16dp"
+        android:visibility="visible"
+        app:fontStyle="light"
+        tools:text="No incluye intereses bancarios" />
 
     <com.mercadopago.customviews.MPTextView
         android:id="@+id/mpsdkCFT"

@@ -695,7 +695,7 @@ public class VaultActivity extends AppCompatActivity {
         // Validate CVV
         try {
             mCardToken.setSecurityCode(mSecurityCodeText.getText().toString());
-            mCardToken.validateSecurityCode(this, mSelectedPaymentMethod);
+            mCardToken.validateSecurityCode(mSelectedPaymentMethod);
             mSecurityCodeText.setError(null);
         } catch (Exception ex) {
             mSecurityCodeText.setError(ex.getMessage());
@@ -714,7 +714,7 @@ public class VaultActivity extends AppCompatActivity {
 
         // Validate CVV
         try {
-            savedCardToken.validateSecurityCode(this, mSelectedCard);
+            savedCardToken.validateSecurityCode(mSelectedCard);
             mSecurityCodeText.setError(null);
         } catch (Exception ex) {
             mSecurityCodeText.setError(ex.getMessage());

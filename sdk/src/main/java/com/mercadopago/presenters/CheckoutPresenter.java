@@ -76,9 +76,12 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
     private transient Timer mCheckoutTimer;
 
     public CheckoutPresenter() {
-        mFlowPreference = new FlowPreference.Builder()
-                .build();
-        mServicePreference = new ServicePreference.Builder().build();
+        if (mFlowPreference == null) {
+            mFlowPreference = new FlowPreference.Builder().build();
+        }
+        if (mServicePreference == null) {
+            mServicePreference = new ServicePreference.Builder().build();
+        }
     }
 
     public void initialize() {
@@ -374,6 +377,10 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
 
     public Card getSelectedCard() {
         return mSelectedCard;
+    }
+
+    public ServicePreference getServicePreference() {
+        return mServicePreference;
     }
 
     private void retrieveCheckoutPreference() {
@@ -864,7 +871,7 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
     }
 
     public Boolean getShowBankDeals() {
-        return mFlowPreference.isBankDealsEnabled() && mServicePreference.showBankDealsByProcessingMode();
+        return mFlowPreference.isBankDealsEnabled() && mServicePreference.shouldShowBankDeals();
     }
 
     public Boolean shouldShowAllSavedCards() {

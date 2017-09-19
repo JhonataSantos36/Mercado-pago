@@ -42,7 +42,6 @@ import com.mercadopago.model.Token;
 import com.mercadopago.observers.TimerObserver;
 import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.preferences.ReviewScreenPreference;
-import com.mercadopago.preferences.ShoppingReviewPreference;
 import com.mercadopago.presenters.ReviewAndConfirmPresenter;
 import com.mercadopago.px_tracking.utils.TrackingUtil;
 import com.mercadopago.tracker.MPTrackingContext;
@@ -88,7 +87,6 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
     protected ReviewAndConfirmPresenter mPresenter;
     protected DecorationPreference mDecorationPreference;
     protected ReviewScreenPreference mReviewScreenPreference;
-    protected ShoppingReviewPreference mShoppingReviewPreference;
     protected String mPublicKey;
     protected Site mSite;
     private Issuer mIssuer;
@@ -100,7 +98,7 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
         createPresenter();
         getActivityParameters();
         mPresenter.attachView(this);
-        mPresenter.attachResourcesProvider(new ReviewAndConfirmProviderImpl(this, mReviewScreenPreference, mShoppingReviewPreference));
+        mPresenter.attachResourcesProvider(new ReviewAndConfirmProviderImpl(this, mReviewScreenPreference));
 
         if (mDecorationPreference != null && mDecorationPreference.hasColors()) {
             setTheme(R.style.Theme_MercadoPagoTheme_NoActionBar);
@@ -166,7 +164,6 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
         mPublicKey = getIntent().getStringExtra("merchantPublicKey");
         mSite = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("site"), Site.class);
         mIssuer = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("issuer"), Issuer.class);
-        mShoppingReviewPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("shoppingReviewPreference"), ShoppingReviewPreference.class);
 
         Boolean termsAndConditionsEnabled = getIntent().getBooleanExtra("termsAndConditionsEnabled", true);
         Boolean editionEnabled = getIntent().getBooleanExtra("editionEnabled", true);

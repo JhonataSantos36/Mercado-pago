@@ -12,7 +12,7 @@ import com.mercadopago.R;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.model.Item;
 import com.mercadopago.preferences.DecorationPreference;
-import com.mercadopago.preferences.ShoppingReviewPreference;
+import com.mercadopago.preferences.ReviewScreenPreference;
 import com.mercadopago.util.CircleTransform;
 import com.mercadopago.util.CurrenciesUtil;
 import com.mercadopago.util.ScaleUtil;
@@ -35,13 +35,13 @@ public class ReviewProductView implements ReviewProductViewController {
     protected MPTextView mProductQuantity;
     protected MPTextView mProductPrice;
     protected View mFirstSeparator;
-    protected ShoppingReviewPreference mShoppingReviewPreference;
 
     private Context mContext;
+    private ReviewScreenPreference mReviewScreenPreference;
 
-    public ReviewProductView(Context context, ShoppingReviewPreference shoppingReviewPreference) {
+    public ReviewProductView(Context context, ReviewScreenPreference reviewScreenPreference) {
         this.mContext = context;
-        this.mShoppingReviewPreference = shoppingReviewPreference;
+        this.mReviewScreenPreference = reviewScreenPreference;
     }
 
     @Override
@@ -101,10 +101,10 @@ public class ReviewProductView implements ReviewProductViewController {
             quantity = 1;
         }
 
-        if (mShoppingReviewPreference != null && !mShoppingReviewPreference.shouldShowQuantityRow()) {
+        if (mReviewScreenPreference != null && !mReviewScreenPreference.showQuantityRow()) {
             mProductQuantity.setVisibility(View.GONE);
-        } else if (mShoppingReviewPreference != null && mShoppingReviewPreference.shouldShowQuantityRow() && !isEmpty(mShoppingReviewPreference.getQuantityTitle())) {
-            String productQuantityText = mShoppingReviewPreference.getQuantityTitle() + quantity;
+        } else if (mReviewScreenPreference != null && mReviewScreenPreference.showQuantityRow() && !isEmpty(mReviewScreenPreference.getQuantityTitle())) {
+            String productQuantityText = mReviewScreenPreference.getQuantityTitle() + quantity;
             mProductQuantity.setText(productQuantityText);
         } else {
             mProductQuantity.setText(mContext.getResources().getString(R.string.mpsdk_review_product_quantity, String.valueOf(quantity)));
@@ -116,11 +116,11 @@ public class ReviewProductView implements ReviewProductViewController {
             String priceText;
             BigDecimal price = item.getUnitPrice();
 
-            if (mShoppingReviewPreference != null && !mShoppingReviewPreference.shouldShowAmountTitle()) {
+            if (mReviewScreenPreference != null && !mReviewScreenPreference.showAmountTitle()) {
                 priceText = CurrenciesUtil.formatNumber(price, currencyId);
-            } else if (mShoppingReviewPreference != null && mShoppingReviewPreference.shouldShowAmountTitle() && !isEmpty(mShoppingReviewPreference.getAmountTitle())) {
+            } else if (mReviewScreenPreference != null && mReviewScreenPreference.showAmountTitle() && !isEmpty(mReviewScreenPreference.getAmountTitle())) {
                 String originalNumber = CurrenciesUtil.formatNumber(price, currencyId);
-                priceText = mShoppingReviewPreference.getAmountTitle() + originalNumber;
+                priceText = mReviewScreenPreference.getAmountTitle() + originalNumber;
             } else {
                 String originalNumber = CurrenciesUtil.formatNumber(price, currencyId);
                 priceText = mContext.getString(R.string.mpsdk_review_product_price, originalNumber);

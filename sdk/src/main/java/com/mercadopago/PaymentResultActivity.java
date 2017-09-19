@@ -12,6 +12,7 @@ import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentResult;
 import com.mercadopago.model.Site;
 import com.mercadopago.preferences.PaymentResultScreenPreference;
+import com.mercadopago.preferences.ServicePreference;
 import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.MercadoPagoUtil;
@@ -30,6 +31,7 @@ public class PaymentResultActivity extends Activity {
     public static final String SITE_BUNDLE = "mSite";
     public static final String AMOUNT_BUNDLE = "mAmount";
     public static final String PAYMENT_RESULT_SCREEN_PREFERENCE_BUNDLE = "mPaymentResultScreenPreference";
+    public static final String SERVICE_PREFERENCE_BUNDLE = "mServicePreference";
 
     protected Discount mDiscount;
     protected Boolean mDiscountEnabled;
@@ -39,6 +41,7 @@ public class PaymentResultActivity extends Activity {
     protected Site mSite;
     protected BigDecimal mAmount;
     protected PaymentResultScreenPreference mPaymentResultScreenPreference;
+    protected ServicePreference mServicePreference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +80,7 @@ public class PaymentResultActivity extends Activity {
         mCongratsDisplay = savedInstanceState.getInt(CONGRATS_DISPLAY_BUNDLE, -1);
         mPaymentResult = JsonUtil.getInstance().fromJson(savedInstanceState.getString(PAYMENT_RESULT_BUNDLE), PaymentResult.class);
         mSite = JsonUtil.getInstance().fromJson(savedInstanceState.getString(SITE_BUNDLE), Site.class);
+        mServicePreference = JsonUtil.getInstance().fromJson(savedInstanceState.getString(SERVICE_PREFERENCE_BUNDLE), ServicePreference.class);
         if (savedInstanceState.getString(AMOUNT_BUNDLE) != null) {
             mAmount = new BigDecimal(savedInstanceState.getString(AMOUNT_BUNDLE));
         }
@@ -92,6 +96,7 @@ public class PaymentResultActivity extends Activity {
         mPaymentResult = JsonUtil.getInstance().fromJson(getIntent().getExtras().getString("paymentResult"), PaymentResult.class);
         mPaymentResultScreenPreference = JsonUtil.getInstance().fromJson(getIntent().getExtras().getString("paymentResultScreenPreference"), PaymentResultScreenPreference.class);
         mSite = JsonUtil.getInstance().fromJson(getIntent().getExtras().getString("site"), Site.class);
+        mServicePreference = JsonUtil.getInstance().fromJson(getIntent().getExtras().getString("servicePreference"), ServicePreference.class);
         if (getIntent().getStringExtra("amount") != null) {
             mAmount = new BigDecimal(getIntent().getStringExtra("amount"));
         }
@@ -148,6 +153,7 @@ public class PaymentResultActivity extends Activity {
                 .setPaymentResult(mPaymentResult)
                 .setSite(mSite)
                 .setAmount(mAmount)
+                .setServicePreference(mServicePreference)
                 .setPaymentResultScreenPreference(mPaymentResultScreenPreference)
                 .startActivity();
     }
@@ -159,6 +165,7 @@ public class PaymentResultActivity extends Activity {
                 .setDiscountEnabled(mDiscountEnabled)
                 .setCongratsDisplay(mCongratsDisplay)
                 .setPaymentResult(mPaymentResult)
+                .setServicePreference(mServicePreference)
                 .setPaymentResultScreenPreference(mPaymentResultScreenPreference)
                 .setSite(mSite)
                 .setAmount(mAmount)

@@ -35,7 +35,6 @@ public class ReviewablesAdapter extends RecyclerView.Adapter<ReviewablesAdapter.
     public void onBindViewHolder(ReviewablesAdapter.ViewHolder holder, int position) {
         Reviewable reviewable = mReviewables.get(position);
         reviewable.draw();
-
     }
 
     @Override

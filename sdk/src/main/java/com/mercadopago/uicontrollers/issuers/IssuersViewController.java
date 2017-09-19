@@ -11,5 +11,6 @@ import com.mercadopago.uicontrollers.CustomViewController;
 
 public interface IssuersViewController extends CustomViewController {
     void drawIssuer(Issuer issuer);
+
     void setOnClickListener(View.OnClickListener listener);
 }

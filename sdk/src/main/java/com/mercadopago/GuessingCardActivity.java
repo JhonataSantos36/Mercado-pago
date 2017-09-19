@@ -13,6 +13,8 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -24,7 +26,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
-
 import com.mercadopago.adapters.IdentificationTypesAdapter;
 import com.mercadopago.callbacks.PaymentMethodSelectionCallback;
 import com.mercadopago.callbacks.card.CardExpiryDateEditTextCallback;
@@ -41,6 +42,9 @@ import com.mercadopago.core.MercadoPagoComponents;
 import com.mercadopago.core.MercadoPagoUI;
 import com.mercadopago.customviews.MPEditText;
 import com.mercadopago.customviews.MPTextView;
+import com.mercadopago.exceptions.CardTokenException;
+import com.mercadopago.exceptions.ExceptionHandler;
+import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.listeners.card.CardExpiryDateTextWatcher;
 import com.mercadopago.listeners.card.CardIdentificationNumberTextWatcher;
 import com.mercadopago.listeners.card.CardNumberTextWatcher;
@@ -63,6 +67,7 @@ import com.mercadopago.observers.TimerObserver;
 import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.presenters.GuessingCardPresenter;
+import com.mercadopago.providers.GuessingCardProviderImpl;
 import com.mercadopago.px_tracking.utils.TrackingUtil;
 import com.mercadopago.px_tracking.model.ScreenViewEvent;
 import com.mercadopago.uicontrollers.card.CardRepresentationModes;
@@ -76,7 +81,6 @@ import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;
 import com.mercadopago.util.MPAnimationUtils;
 import com.mercadopago.util.MPCardMaskUtil;
-import com.mercadopago.util.MercadoPagoUtil;
 import com.mercadopago.util.ScaleUtil;
 import com.mercadopago.views.GuessingCardActivityView;
 
@@ -168,15 +172,24 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
     private LinearLayout mCardIdentificationInput;
     private LinearLayout mCardSecurityCodeInput;
     private FrameLayout mErrorContainer;
+    private FrameLayout mRedErrorContainer;
+    private FrameLayout mBlackInfoContainer;
+    private MPTextView mInfoTextView;
     private MPTextView mErrorTextView;
     private String mErrorState;
     private TextView mNextButtonText;
     private TextView mBackButtonText;
     private TextView mBackInactiveButtonText;
+    private Animation mContainerUpAnimation;
+    private Animation mContainerDownAnimation;
+    private boolean mButtonContainerMustBeShown;
 
     //Input Controls
     private String mCurrentEditingEditText;
     private String mCardSideState;
+    private String mPublicKey;
+    private String mPrivateKey;
+    private boolean mActivityActive;
 
     protected String mDefaultBaseURL;
     protected String mMerchantDiscountBaseURL;
@@ -186,19 +199,55 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (mPresenter == null) {
-            mPresenter = new GuessingCardPresenter(getBaseContext());
-        }
-        mPresenter.setView(this);
+        createPresenter();
         mActivity = this;
+        mActivityActive = true;
+        mButtonContainerMustBeShown = true;
         getActivityParameters();
+        setMerchantInfo();
+        configurePresenter();
+        analizeLowRes();
+
         if (isCustomColorSet()) {
             setTheme(R.style.Theme_MercadoPagoTheme_NoActionBar);
         }
-        analizeLowRes();
-        setMerchantInfo();
+
         setContentView();
-        mPresenter.validateActivityParameters();
+        mPresenter.initialize();
+    }
+
+    @Override
+    protected void onResume() {
+        mActivityActive = true;
+        super.onResume();
+    }
+
+    @Override
+    protected void onDestroy() {
+        mActivityActive = false;
+        mPresenter.detachView();
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onPause() {
+        mActivityActive = false;
+        super.onPause();
+    }
+
+    @Override
+    protected void onStop() {
+        mActivityActive = false;
+        super.onStop();
+    }
+
+    protected void createPresenter() {
+        mPresenter = new GuessingCardPresenter();
+    }
+
+    private void configurePresenter() {
+        mPresenter.attachView(this);
+        mPresenter.attachResourcesProvider(new GuessingCardProviderImpl(this, mPublicKey, mPrivateKey));
     }
 
     private boolean isCustomColorSet() {
@@ -221,8 +270,8 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
 
     private void getActivityParameters() {
 
-        String publicKey = getIntent().getStringExtra("merchantPublicKey");
-        String privateKey = getIntent().getStringExtra("payerAccessToken");
+        mPublicKey = getIntent().getStringExtra("merchantPublicKey");
+        mPrivateKey = getIntent().getStringExtra("payerAccessToken");
         String siteId = getIntent().getStringExtra("siteId");
         PaymentPreference paymentPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("paymentPreference"), PaymentPreference.class);
         mDecorationPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("decorationPreference"), DecorationPreference.class);
@@ -252,8 +301,8 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
         Boolean showBankDeals = this.getIntent().getBooleanExtra("showBankDeals", true);
         Boolean showDiscount = this.getIntent().getBooleanExtra("showDiscount", false);
 
-        mPresenter.setPrivateKey(privateKey);
-        mPresenter.setPublicKey(publicKey);
+        mPresenter.setPrivateKey(mPrivateKey);
+        mPresenter.setPublicKey(mPublicKey);
         mPresenter.setSiteId(siteId);
         mPresenter.setToken(token);
         mPresenter.setShowBankDeals(showBankDeals);
@@ -382,7 +431,7 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
                         mIdentificationCardView.setIdentificationType(identificationType);
                         mIdentificationCardView.draw();
                     }
-                    setPaymentMethod(pm);
+                    mPresenter.onPaymentMethodSet(pm);
                     mSecurityCodeEditText.getText().clear();
                     requestCardNumberFocus();
                     if (cardViewsActive()) {
@@ -422,22 +471,34 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
     @Override
     public void onValidStart() {
         trackScreen();
-        mPresenter.initializeMercadoPago();
-        mPresenter.initializeCardToken();
         initializeViews();
         loadViews();
         decorate();
+        mErrorState = NORMAL_STATE;
+    }
 
+    @Override
+    public void initializeTimer() {
         if (CheckoutTimer.getInstance().isTimerEnabled()) {
             CheckoutTimer.getInstance().addObserver(this);
             mTimerTextView.setVisibility(View.VISIBLE);
             mTimerTextView.setText(CheckoutTimer.getInstance().getCurrentTime());
-        } else {
-            mPresenter.resolveBankDeals();
         }
+    }
 
-        mErrorState = NORMAL_STATE;
-        mPresenter.initialize();
+    @Override
+    public void showError(MercadoPagoError error, String requestOrigin) {
+        if (error.isApiException()) {
+            showApiException(error.getApiException(), requestOrigin);
+        } else {
+            ErrorUtil.startErrorActivity(this, error, mPublicKey);
+        }
+    }
+
+    public void showApiException(ApiException apiException, String requestOrigin) {
+        if (mActivityActive) {
+            ApiUtil.showApiExceptionError(this, apiException, mPublicKey, requestOrigin);
+        }
     }
 
     protected void trackScreen() {
@@ -539,13 +600,57 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
         mCardIdentificationInput = (LinearLayout) findViewById(R.id.mpsdkCardIdentificationInput);
         mCardSecurityCodeInput = (LinearLayout) findViewById(R.id.mpsdkCardSecurityCodeContainer);
         mErrorContainer = (FrameLayout) findViewById(R.id.mpsdkErrorContainer);
+        mRedErrorContainer = (FrameLayout) findViewById(R.id.mpsdkRedErrorContainer);
+        mBlackInfoContainer = (FrameLayout) findViewById(R.id.mpsdkBlackInfoContainer);
+        mInfoTextView = (MPTextView) findViewById(R.id.mpsdkBlackInfoTextView);
         mErrorTextView = (MPTextView) findViewById(R.id.mpsdkErrorTextView);
         mScrollView = (ScrollView) findViewById(R.id.mpsdkScrollViewContainer);
         mDiscountFrameLayout = (FrameLayout) findViewById(R.id.mpsdkDiscount);
+        mContainerUpAnimation = AnimationUtils.loadAnimation(mActivity, R.anim.mpsdk_slide_bottom_up);
+        mContainerDownAnimation = AnimationUtils.loadAnimation(mActivity, R.anim.mpsdk_slide_bottom_down);
+
         mInputContainer.setVisibility(View.GONE);
         mProgressBar.setVisibility(View.VISIBLE);
 
         fullScrollDown();
+    }
+
+    @Override
+    public void setContainerAnimationListeners() {
+        mContainerUpAnimation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                if (!mButtonContainerMustBeShown) {
+                    mButtonContainer.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        mContainerDownAnimation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                mButtonContainer.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
     }
 
     @Override
@@ -726,48 +831,17 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
                 new PaymentMethodSelectionCallback() {
                     @Override
                     public void onPaymentMethodListSet(List<PaymentMethod> paymentMethodList, String bin) {
-                        mPresenter.saveBin(bin);
-                        if (paymentMethodList.size() == 0) {
-                            setInputMaxLength(mCardNumberEditText, MercadoPagoUtil.BIN_LENGTH);
-                            setErrorView(getString(R.string.mpsdk_invalid_payment_method));
-                        } else if (paymentMethodList.size() == 1) {
-                            onPaymentMethodSet(paymentMethodList.get(0));
-                        } else if (mPresenter.shouldAskPaymentType(paymentMethodList)) {
-                            mPresenter.enablePaymentTypeSelection(paymentMethodList);
-                            setPaymentMethod(paymentMethodList.get(0));
-                        } else {
-                            onPaymentMethodSet(paymentMethodList.get(0));
-                        }
+                        mPresenter.resolvePaymentMethodListSet(paymentMethodList, bin);
                     }
 
                     @Override
                     public void onPaymentMethodSet(PaymentMethod paymentMethod) {
-                        setPaymentMethod(paymentMethod);
-                        //We need to erase default space in position 4 in some special cases.
-                        if (mPresenter.isDefaultSpaceErasable()) {
-                            eraseDefaultSpace();
-                        }
+                        mPresenter.onPaymentMethodSet(paymentMethod);
                     }
 
                     @Override
                     public void onPaymentMethodCleared() {
-                        clearErrorView();
-                        clearCardNumberInputLength();
-
-                        if (!mPresenter.isPaymentMethodResolved()) {
-                            return;
-                        }
-                        mPresenter.clearSpaceErasableSettings();
-                        clearCardNumberEditTextMask();
-                        mPresenter.setPaymentMethod(null);
-                        mSecurityCodeEditText.getText().clear();
-                        mPresenter.initializeCardToken();
-                        mPresenter.setIdentificationNumberRequired(true);
-                        mPresenter.setSecurityCodeRequired(true);
-                        mPresenter.disablePaymentTypeSelection();
-                        if (cardViewsActive()) {
-                            mCardView.clearPaymentMethod();
-                        }
+                        mPresenter.resolvePaymentMethodCleared();
                     }
 
                 },
@@ -813,7 +887,30 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
                 }));
     }
 
-    private void clearCardNumberEditTextMask() {
+    @Override
+    public void resolvePaymentMethodSet(PaymentMethod paymentMethod) {
+        hideExclusionWithOneElementInfoView();
+
+        //We need to erase default space in position 4 in some special cases.
+        if (mPresenter.isDefaultSpaceErasable()) {
+            eraseDefaultSpace();
+        }
+    }
+
+    @Override
+    public void clearSecurityCodeEditText() {
+        mSecurityCodeEditText.getText().clear();
+    }
+
+    @Override
+    public void checkClearCardView() {
+        if (cardViewsActive()) {
+            mCardView.clearPaymentMethod();
+        }
+    }
+
+    @Override
+    public void clearCardNumberEditTextMask() {
         String currentCardNumber = getCardNumberTextTrimmed();
         if (currentCardNumber.length() == MPCardMaskUtil.ORIGINAL_SPACE_DIGIT + 1) {
             StringBuilder cardNumberReset = MPCardMaskUtil.getCardNumberReset(currentCardNumber);
@@ -833,19 +930,15 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
         editText.setSelection(editText.getText().length());
     }
 
-    private void setPaymentMethod(PaymentMethod paymentMethod) {
-        if (mPresenter.getPaymentMethod() == null) {
-            mPresenter.setPaymentMethod(paymentMethod);
-            mPresenter.configureWithSettings();
-            mPresenter.loadIdentificationTypes();
-            if (cardViewsActive()) {
-                mCardView.setPaymentMethod(paymentMethod);
-                mCardView.setCardNumberLength(mPresenter.getCardNumberLength());
-                mCardView.setSecurityCodeLength(mPresenter.getSecurityCodeLength());
-                mCardView.setSecurityCodeLocation(mPresenter.getSecurityCodeLocation());
-                mCardView.updateCardNumberMask(getCardNumberTextTrimmed());
-                mCardView.transitionPaymentMethodSet();
-            }
+    @Override
+    public void setPaymentMethod(PaymentMethod paymentMethod) {
+        if (cardViewsActive()) {
+            mCardView.setPaymentMethod(paymentMethod);
+            mCardView.setCardNumberLength(mPresenter.getCardNumberLength());
+            mCardView.setSecurityCodeLength(mPresenter.getSecurityCodeLength());
+            mCardView.setSecurityCodeLocation(mPresenter.getSecurityCodeLocation());
+            mCardView.updateCardNumberMask(getCardNumberTextTrimmed());
+            mCardView.transitionPaymentMethodSet();
         }
     }
 
@@ -869,6 +962,30 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
                 }
             }
         });
+    }
+
+    @Override
+    public void setErrorContainerListener() {
+        mRedErrorContainer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                List<PaymentMethod> supportedPaymentMethods = mPresenter.getAllSupportedPaymentMethods();
+                if (supportedPaymentMethods != null && !supportedPaymentMethods.isEmpty()) {
+                    startReviewPaymentMethodsActivity(supportedPaymentMethods);
+                }
+            }
+        });
+    }
+
+    private void startReviewPaymentMethodsActivity(List<PaymentMethod> supportedPaymentMethods) {
+        new MercadoPagoComponents.Activities.ReviewPaymentMethodsActivityBuilder()
+                .setActivity(mActivity)
+                .setPublicKey(mPresenter.getPublicKey())
+                .setDecorationPreference(mDecorationPreference)
+                .setPaymentMethods(supportedPaymentMethods)
+                .startActivity();
+        overridePendingTransition(R.anim.mpsdk_slide_up_activity, R.anim.mpsdk_no_change_animation);
+
     }
 
     @Override
@@ -1165,11 +1282,6 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
     }
 
     @Override
-    public void startErrorView(String message, String errorDetail) {
-        ErrorUtil.startErrorActivity(mActivity, message, errorDetail, false, mPresenter.getPublicKey());
-    }
-
-    @Override
     public void setCardNumberInputMaxLength(int length) {
         setInputMaxLength(mCardNumberEditText, length);
     }
@@ -1180,7 +1292,8 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
         text.setFilters(fArray);
     }
 
-    private void clearCardNumberInputLength() {
+    @Override
+    public void clearCardNumberInputLength() {
         int maxLength = MPCardMaskUtil.CARD_NUMBER_MAX_LENGTH;
         setInputMaxLength(mCardNumberEditText, maxLength);
     }
@@ -1318,11 +1431,72 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
     }
 
     @Override
+    public void setErrorView(CardTokenException exception) {
+        mButtonContainer.setVisibility(View.GONE);
+        mErrorContainer.setVisibility(View.VISIBLE);
+        String errorText = ExceptionHandler.getErrorMessage(this, exception);
+        mErrorTextView.setText(errorText);
+        setErrorState(ERROR_STATE);
+    }
+
+    @Override
+    public void setInvalidCardMultipleErrorView() {
+        mButtonContainerMustBeShown = false;
+        mRedErrorContainer.startAnimation(mContainerUpAnimation);
+        mRedErrorContainer.setVisibility(View.VISIBLE);
+        setErrorState(ERROR_STATE);
+        setErrorCardNumber();
+    }
+
+    @Override
+    public void setInvalidCardOnePaymentMethodErrorView() {
+        mBlackInfoContainer.setBackgroundColor(ContextCompat.getColor(this, R.color.mpsdk_error_red_pink));
+        setErrorState(ERROR_STATE);
+        setErrorCardNumber();
+    }
+
+    @Override
+    public void setExclusionWithOneElementInfoView(PaymentMethod supportedPaymentMethod, boolean withAnimation) {
+        if (withAnimation) {
+            mButtonContainerMustBeShown = false;
+            mBlackInfoContainer.startAnimation(mContainerUpAnimation);
+        }
+        mBlackInfoContainer.setVisibility(View.VISIBLE);
+        mInfoTextView.setText(getResources().getString(R.string.mpsdk_exclusion_one_element, supportedPaymentMethod.getName()));
+        if (!withAnimation) {
+            mButtonContainer.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void restoreBlackInfoContainerView() {
+        mBlackInfoContainer.setBackgroundColor(ContextCompat.getColor(this, R.color.mpsdk_black_info_background));
+    }
+
+    @Override
+    public void hideExclusionWithOneElementInfoView() {
+        if (mBlackInfoContainer.getVisibility() == View.VISIBLE) {
+            mBlackInfoContainer.startAnimation(mContainerDownAnimation);
+            mBlackInfoContainer.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
     public void clearErrorView() {
         mButtonContainer.setVisibility(View.VISIBLE);
         mErrorContainer.setVisibility(View.GONE);
         mErrorTextView.setText("");
         setErrorState(NORMAL_STATE);
+    }
+
+    @Override
+    public void hideRedErrorContainerView(boolean withAnimation) {
+        if (mRedErrorContainer.getVisibility() == View.VISIBLE) {
+            if (withAnimation) {
+                mRedErrorContainer.startAnimation(mContainerDownAnimation);
+            }
+            mRedErrorContainer.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -1395,7 +1569,7 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
                     } else if (mPresenter.isIdentificationNumberRequired()) {
                         requestIdentificationFocus();
                     } else {
-                        checkFinishWithCardToken();
+                        mPresenter.checkFinishWithCardToken();
                     }
                     return true;
                 }
@@ -1406,14 +1580,14 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
                     if (mPresenter.isIdentificationNumberRequired()) {
                         requestIdentificationFocus();
                     } else {
-                        checkFinishWithCardToken();
+                        mPresenter.checkFinishWithCardToken();
                     }
                     return true;
                 }
                 return false;
             case CARD_IDENTIFICATION_INPUT:
                 if (mPresenter.validateIdentificationNumber()) {
-                    checkFinishWithCardToken();
+                    mPresenter.checkFinishWithCardToken();
                     return true;
                 }
                 return false;
@@ -1542,26 +1716,23 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
         return mCardSideState.equals(CardView.CARD_SIDE_FRONT);
     }
 
-    private void checkFinishWithCardToken() {
-        if (mPresenter.hasToShowPaymentTypes() && mPresenter.getGuessedPaymentMethods() != null) {
-            List<PaymentMethod> paymentMethods = mPresenter.getGuessedPaymentMethods();
-            List<PaymentType> paymentTypes = mPresenter.getPaymentTypes();
-            new MercadoPagoComponents.Activities.PaymentTypesActivityBuilder()
-                    .setActivity(mActivity)
-                    .setMerchantPublicKey(mPresenter.getPublicKey())
-                    .setPaymentMethods(paymentMethods)
-                    .setPaymentTypes(paymentTypes)
-                    .setCardInfo(new CardInfo(mPresenter.getCardToken()))
-                    .setDecorationPreference(mDecorationPreference)
-                    .startActivity();
-            overridePendingTransition(R.anim.mpsdk_slide_right_to_left_in, R.anim.mpsdk_slide_right_to_left_out);
-
-        } else {
-            finishCardFlow();
-        }
+    @Override
+    public void askForPaymentType() {
+        List<PaymentMethod> paymentMethods = mPresenter.getGuessedPaymentMethods();
+        List<PaymentType> paymentTypes = mPresenter.getPaymentTypes();
+        new MercadoPagoComponents.Activities.PaymentTypesActivityBuilder()
+                .setActivity(mActivity)
+                .setMerchantPublicKey(mPresenter.getPublicKey())
+                .setPaymentMethods(paymentMethods)
+                .setPaymentTypes(paymentTypes)
+                .setCardInfo(new CardInfo(mPresenter.getCardToken()))
+                .setDecorationPreference(mDecorationPreference)
+                .startActivity();
+        overridePendingTransition(R.anim.mpsdk_slide_right_to_left_in, R.anim.mpsdk_slide_right_to_left_out);
     }
 
-    private void finishCardFlow() {
+    @Override
+    public void showFinishCardFlow() {
         LayoutUtil.hideKeyboard(this);
         mButtonContainer.setVisibility(View.GONE);
         mInputContainer.setVisibility(View.GONE);
@@ -1577,12 +1748,14 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
                 Bundle bundle = data.getExtras();
                 PaymentType paymentType = JsonUtil.getInstance().fromJson(bundle.getString("paymentType"), PaymentType.class);
                 mPresenter.setSelectedPaymentType(paymentType);
-                finishCardFlow();
+                showFinishCardFlow();
             } else if (resultCode == RESULT_CANCELED) {
                 finish();
             }
         } else if (requestCode == MercadoPagoComponents.Activities.DISCOUNTS_REQUEST_CODE) {
             resolveDiscountRequest(resultCode, data);
+        } else if (requestCode == MercadoPagoComponents.Activities.REVIEW_PAYMENT_METHODS_REQUEST_CODE) {
+            clearReviewPaymentMethodsMode();
         } else if (requestCode == ErrorUtil.ERROR_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 mPresenter.recoverFromFailure();
@@ -1591,6 +1764,15 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
                 finish();
             }
         }
+    }
+
+    private void clearReviewPaymentMethodsMode() {
+        mButtonContainerMustBeShown = true;
+        clearErrorView();
+        hideRedErrorContainerView(false);
+        mCardNumberEditText.toggleLineColorOnError(false);
+        mCardNumberEditText.getText().clear();
+        openKeyboard(mCardNumberEditText);
     }
 
     private void resolveDiscountRequest(int resultCode, Intent data) {

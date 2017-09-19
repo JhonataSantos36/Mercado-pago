@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.mercadopago.R;
+import com.mercadopago.constants.PaymentTypes;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.model.PaymentMethodSearchItem;
 import com.mercadopago.preferences.DecorationPreference;
@@ -57,6 +58,12 @@ public class PaymentMethodSearchOption implements PaymentMethodSearchViewControl
 
     }
 
+    private boolean hasToShowComment(PaymentMethodSearchItem item) {
+        return (!(item.getId().equals(PaymentTypes.CREDIT_CARD) ||
+                item.getId().equals(PaymentTypes.DEBIT_CARD) ||
+                item.getId().equals(PaymentTypes.PREPAID_CARD)));
+    }
+
     public void draw() {
         if (mItem.hasDescription()) {
             mDescription.setVisibility(View.VISIBLE);
@@ -64,7 +71,7 @@ public class PaymentMethodSearchOption implements PaymentMethodSearchViewControl
         } else {
             mDescription.setVisibility(View.GONE);
         }
-        if (mItem.hasComment() && mItem.getComment().length() < COMMENT_MAX_LENGTH) {
+        if (hasToShowComment(mItem) && mItem.hasComment() && mItem.getComment().length() < COMMENT_MAX_LENGTH) {
             mComment.setText(mItem.getComment());
         }
 

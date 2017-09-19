@@ -4,6 +4,7 @@ import android.content.Context;
 import android.text.TextUtils;
 
 import com.mercadopago.R;
+import com.mercadopago.exceptions.CardTokenException;
 
 public class SavedCardToken {
 
@@ -53,16 +54,17 @@ public class SavedCardToken {
         return CardToken.validateSecurityCode(securityCode);
     }
 
-    public void validateSecurityCode(Context context, Card card) throws Exception {
+    public void validateSecurityCode(Card card) throws CardTokenException {
 
         // Validate security code length
         if (securityCode != null) {
             int cvvLength = (card.getSecurityCode() != null) ? card.getSecurityCode().getLength() : 0;
-            if ((cvvLength != 0) && (securityCode.length() != cvvLength)) {
-                throw new Exception(context.getString(R.string.mpsdk_invalid_cvv_length, cvvLength));
+            if ((cvvLength != 0) && (securityCode.trim().length() != cvvLength)) {
+                throw new CardTokenException(CardTokenException.INVALID_CVV_LENGTH, String.valueOf(cvvLength));
             }
         } else {
-            throw new Exception(context.getString(R.string.mpsdk_invalid_field));
+            throw new CardTokenException(CardTokenException.INVALID_FIELD);
         }
     }
+
 }

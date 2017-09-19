@@ -30,6 +30,7 @@ import com.mercadopago.model.PaymentData;
 import com.mercadopago.model.PaymentResult;
 import com.mercadopago.model.Site;
 import com.mercadopago.preferences.PaymentResultScreenPreference;
+import com.mercadopago.preferences.ServicePreference;
 import com.mercadopago.px_tracking.utils.TrackingUtil;
 import com.mercadopago.tracker.MPTrackingContext;
 import com.mercadopago.px_tracking.model.ScreenViewEvent;
@@ -80,6 +81,7 @@ public class InstructionsActivity extends MercadoPagoBaseActivity {
     protected BigDecimal mTotalAmount;
     protected PaymentResultScreenPreference mPaymentResultScreenPreference;
     private FailureRecovery failureRecovery;
+    private ServicePreference mServicePreference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,6 +103,7 @@ public class InstructionsActivity extends MercadoPagoBaseActivity {
         mMerchantPublicKey = getIntent().getStringExtra("merchantPublicKey");
         mPaymentResult = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("paymentResult"), PaymentResult.class);
         mPaymentResultScreenPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("paymentResultScreenPreference"), PaymentResultScreenPreference.class);
+        mServicePreference = JsonUtil.getInstance().fromJson(getIntent().getExtras().getString("servicePreference"), ServicePreference.class);
         if (getIntent().getStringExtra("amount") != null) {
             mTotalAmount = new BigDecimal(getIntent().getStringExtra("amount"));
         }
@@ -364,7 +367,7 @@ public class InstructionsActivity extends MercadoPagoBaseActivity {
             mPrimaryInfo.setVisibility(View.GONE);
         }
 
-        if (instruction.getSecondaryInfo() != null && !instruction.getSecondaryInfo().isEmpty()) {
+        if (instruction.getSecondaryInfo() != null && !instruction.getSecondaryInfo().isEmpty() && mServicePreference.shouldShowEmailConfirmationCell()) {
             mSecondaryInfo.setText(Html.fromHtml(getInfoHtmlText(instruction.getSecondaryInfo())));
         } else {
             mSecondaryInfo.setVisibility(View.GONE);

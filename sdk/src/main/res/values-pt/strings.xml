@@ -78,6 +78,13 @@
     <string name="mpsdk_cardholder_name_short">NOME SOBRENOME</string>
     <string name="mpsdk_title_activity_new_card">Digite os dados do seu cartão</string>
 
+    <string name="mpsdk_more_info">MAIS INFO</string>
+    <string name="mpsdk_try_other_card">Tentar com outro cartão</string>
+    <string name="mpsdk_you_can_finish_your_payment_with_cards">Não se preocupe, você ainda pode terminar o seu pagamento com:</string>
+    <string name="mpsdk_invalid_card_payment_method">Você não pode pagar com este cartão</string>
+    <string name="mpsdk_exclusion_one_element">Você só pode pagar com %1$s</string>
+
+
     <!-- Congrats -->
     <string name="mpsdk_title_activity_congrats">Pronto! O seu pagamento foi aprovado!</string>
     <string name="mpsdk_subtitle_action_activity_congrats">Enviaremos os dados para\n%1$s</string>
@@ -206,10 +213,16 @@
     <string name="mpsdk_review_product_price">Preço unitário: %1$s</string>
     <string name="mpsdk_activity_checkout_title">Rever o seu pagamento</string>
     <string name="mpsdk_review_summary_products">Produtos</string>
+    <string name="mpsdk_review_summary_interests">Interesses</string>
+    <string name="mpsdk_review_summary_charges">Cobranças</string>
+    <string name="mpsdk_review_summary_taxes">Impostos</string>
+    <string name="mpsdk_review_summary_shipping">Remessa</string>
+    <string name="mpsdk_review_summary_arrear">Atraso</string>
     <string name="mpsdk_review_summary_subtotal">Subtotal</string>
     <string name="mpsdk_review_summary_pay">Você paga</string>
     <string name="mpsdk_review_summary_total">Total</string>
     <string name="mpsdk_review_summary_discount">Desconto</string>
+    <string name="mpsdk_review_summary_discounts">Descontos</string>
     <string name="mpsdk_review_summary_discount_with_percent_off">Desconto %1$s%%</string>
     <string name="mpsdk_review_summary_discount_with_amount_off">Desconto</string>
     <string name="mpsdk_account_money_description">Dinheiro em conta \ndo Mercado Pago</string>

@@ -2,9 +2,11 @@ package com.mercadopago;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -30,6 +32,7 @@ import com.mercadopago.model.ReviewSubscriber;
 import com.mercadopago.model.Reviewable;
 import com.mercadopago.model.Site;
 import com.mercadopago.preferences.PaymentResultScreenPreference;
+import com.mercadopago.preferences.ServicePreference;
 import com.mercadopago.px_tracking.utils.TrackingUtil;
 import com.mercadopago.tracker.MPTrackingContext;
 import com.mercadopago.px_tracking.model.ScreenViewEvent;
@@ -63,7 +66,7 @@ public class CongratsActivity extends MercadoPagoBaseActivity implements ReviewS
     protected MPTextView mPaymentStatementDescriptionTextView;
     protected MPTextView mCongratulationsTitle;
     protected MPTextView mCongratulationsSubtitle;
-    private MPTextView mNoInstallmentsRateTextView;
+    protected MPTextView mNoInstallmentsRateTextView;
     protected View mTopEmailSeparator;
     protected View mBottomEmailSeparator;
     protected ImageView mPaymentMethodImage;
@@ -73,6 +76,7 @@ public class CongratsActivity extends MercadoPagoBaseActivity implements ReviewS
     protected RecyclerView mBottomReviewables;
     protected FrameLayout mSecondaryExitButton;
     protected MPTextView mSecondaryExitTextView;
+    protected ImageView mHeaderIcon;
 
     // Activity parameters
     protected String mMerchantPublicKey;
@@ -103,6 +107,7 @@ public class CongratsActivity extends MercadoPagoBaseActivity implements ReviewS
     private PaymentResultScreenPreference mPaymentResultScreenPreference;
     private ViewGroup mTitleBackground;
     private RecyclerView mTopReviewables;
+    private ServicePreference mServicePreference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,6 +133,7 @@ public class CongratsActivity extends MercadoPagoBaseActivity implements ReviewS
         mPaymentResult = JsonUtil.getInstance().fromJson(getIntent().getExtras().getString("paymentResult"), PaymentResult.class);
         mSite = JsonUtil.getInstance().fromJson(getIntent().getExtras().getString("site"), Site.class);
         mPaymentResultScreenPreference = JsonUtil.getInstance().fromJson(getIntent().getExtras().getString("paymentResultScreenPreference"), PaymentResultScreenPreference.class);
+        mServicePreference = JsonUtil.getInstance().fromJson(getIntent().getExtras().getString("servicePreference"), ServicePreference.class);
         if (getIntent().getStringExtra("amount") != null) {
             mAmount = new BigDecimal(getIntent().getStringExtra("amount"));
         }
@@ -168,6 +174,7 @@ public class CongratsActivity extends MercadoPagoBaseActivity implements ReviewS
         mSecondaryExitButton = (FrameLayout) findViewById(R.id.mpsdkCongratsSecondaryExitButton);
         mSecondaryExitTextView = (MPTextView) findViewById(R.id.mpsdkCongratsSecondaryExitButtonText);
         mTitleBackground = (ViewGroup) findViewById(R.id.mpsdkTitleBackground);
+        mHeaderIcon = (ImageView) findViewById(R.id.mpsdkIcon);
 
         mDiscountFrameLayout.setVisibility(View.GONE);
         mExitButtonText.setOnClickListener(new View.OnClickListener() {
@@ -293,6 +300,11 @@ public class CongratsActivity extends MercadoPagoBaseActivity implements ReviewS
                 showPaymentMethod();
             } else {
                 hidePaymentMethod();
+            }
+            if (mPaymentResultScreenPreference.getApprovedIconName() != null) {
+                Drawable image = ContextCompat.getDrawable(this, mPaymentResultScreenPreference.getApprovedIconName());
+
+                mHeaderIcon.setImageDrawable(image);
             }
             if (!mPaymentResultScreenPreference.isCongratsSecondaryExitButtonEnabled() ||
                     mPaymentResultScreenPreference.getSecondaryCongratsExitButtonTitle() == null ||
@@ -600,7 +612,7 @@ public class CongratsActivity extends MercadoPagoBaseActivity implements ReviewS
     }
 
     private void setPaymentEmailDescription() {
-        if (isPayerEmailValid()) {
+        if (isPayerEmailValid() && mServicePreference.shouldShowEmailConfirmationCell()) {
             String subtitle = String.format(getString(R.string.mpsdk_subtitle_action_activity_congrats), mPayerEmail);
             mPayerEmailTextView.setText(subtitle);
         } else {
