@@ -217,7 +217,13 @@
     <string name="mpsdk_review_product_price">Unit price: %1$s</string>
     <string name="mpsdk_activity_checkout_title">Check your payment</string>
     <string name="mpsdk_review_summary_products">Products</string>
+    <string name="mpsdk_review_summary_interests">Interests</string>
+    <string name="mpsdk_review_summary_charges">Charges</string>
+    <string name="mpsdk_review_summary_taxes">Taxes</string>
+    <string name="mpsdk_review_summary_shipping">Shipping</string>
+    <string name="mpsdk_review_summary_arrear">Arrear</string>
     <string name="mpsdk_review_summary_discount">Discount</string>
+    <string name="mpsdk_review_summary_discounts">Discounts</string>
     <string name="mpsdk_review_summary_discount_with_percent_off">Discount %1$s%%</string>
     <string name="mpsdk_review_summary_discount_with_amount_off">Discount</string>
     <string name="mpsdk_account_money_description">Account money \nof Mercado Pago</string>

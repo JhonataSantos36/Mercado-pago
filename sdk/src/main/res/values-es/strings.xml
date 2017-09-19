@@ -222,10 +222,16 @@
     <string name="mpsdk_review_product_price">Precio unitario: %1$s</string>
     <string name="mpsdk_activity_checkout_title">Revisa tu pago</string>
     <string name="mpsdk_review_summary_products">Productos</string>
+    <string name="mpsdk_review_summary_interests">Intereses</string>
+    <string name="mpsdk_review_summary_charges">Cargos</string>
+    <string name="mpsdk_review_summary_taxes">Impuestos</string>
+    <string name="mpsdk_review_summary_shipping">Envío</string>
+    <string name="mpsdk_review_summary_arrear">Mora</string>
     <string name="mpsdk_review_summary_subtotal">Subtotal</string>
     <string name="mpsdk_review_summary_pay">Pagas</string>
     <string name="mpsdk_review_summary_total">Total</string>
     <string name="mpsdk_review_summary_discount">Descuento</string>
+    <string name="mpsdk_review_summary_discounts">Descuentos</string>
     <string name="mpsdk_review_summary_discount_with_percent_off">Descuento %1$s%%</string>
     <string name="mpsdk_review_summary_discount_with_amount_off">Descuento</string>
     <string name="mpsdk_ryc_account_money_description">Con dinero en cuenta</string>

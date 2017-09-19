@@ -20,7 +20,7 @@ import com.mercadopago.model.Reviewable;
 import com.mercadopago.model.Site;
 import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.preferences.PaymentPreference;
-import com.mercadopago.preferences.ShoppingReviewPreference;
+import com.mercadopago.preferences.ReviewScreenPreference;
 import com.mercadopago.uicontrollers.discounts.DiscountRowView;
 import com.mercadopago.uicontrollers.installments.InstallmentsReviewView;
 import com.mercadopago.uicontrollers.reviewandconfirm.ReviewItemsView;
@@ -412,7 +412,7 @@ public class MercadoPagoUI {
             private Context context;
             private String currencyId;
             private List<Item> items;
-            private ShoppingReviewPreference shoppingReviewPreference;
+            private ReviewScreenPreference reviewScreenPreference;
             private DecorationPreference decorationPreference;
 
             public ReviewItemsViewBuilder() {
@@ -426,6 +426,11 @@ public class MercadoPagoUI {
 
             public ReviewItemsViewBuilder setCurrencyId(String currencyId) {
                 this.currencyId = currencyId;
+                return this;
+            }
+
+            public ReviewItemsViewBuilder setReviewScreenPreference(ReviewScreenPreference reviewScreenPreference) {
+                this.reviewScreenPreference = reviewScreenPreference;
                 return this;
             }
 
@@ -445,7 +450,7 @@ public class MercadoPagoUI {
             }
 
             public ReviewItemsView build() {
-                return new ReviewItemsView(context, items, currencyId, shoppingReviewPreference, decorationPreference);
+                return new ReviewItemsView(context, items, currencyId, reviewScreenPreference, decorationPreference);
             }
         }
 

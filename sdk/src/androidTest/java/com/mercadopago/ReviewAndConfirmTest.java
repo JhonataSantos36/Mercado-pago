@@ -10,8 +10,6 @@ import com.mercadopago.controllers.CustomReviewablesHandler;
 import com.mercadopago.model.Item;
 import com.mercadopago.model.Reviewable;
 import com.mercadopago.preferences.ReviewScreenPreference;
-import com.mercadopago.preferences.ShoppingReviewPreference;
-import com.mercadopago.providers.ReviewAndConfirmProvider;
 import com.mercadopago.providers.ReviewAndConfirmProviderImpl;
 import com.mercadopago.util.CurrenciesUtil;
 
@@ -41,16 +39,12 @@ public class ReviewAndConfirmTest {
 
         //Create preference
         ReviewScreenPreference reviewPreference = new ReviewScreenPreference.Builder()
-                .setItemsReview(customReviewable)
-                .build();
-
-        //Create preference
-        ShoppingReviewPreference shoppingReviewPreference = new ShoppingReviewPreference.Builder()
+                .setItemsSummary(customReviewable)
                 .build();
 
         //Create provider
         ReviewAndConfirmProviderImpl reviewScreenProviderImpl =
-                new ReviewAndConfirmProviderImpl(InstrumentationRegistry.getContext(), reviewPreference, shoppingReviewPreference);
+                new ReviewAndConfirmProviderImpl(InstrumentationRegistry.getContext(), reviewPreference);
 
         Reviewable providedReviewable = reviewScreenProviderImpl.getItemsReviewable(CurrenciesUtil.CURRENCY_ARGENTINA, new ArrayList<Item>(), null);
         providedReviewable.draw();

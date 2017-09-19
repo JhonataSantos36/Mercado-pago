@@ -5,7 +5,6 @@ import com.google.gson.Gson;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.support.annotation.ColorInt;
 import android.support.annotation.DrawableRes;
 
 import com.mercadopago.BankDealsActivity;
@@ -36,6 +35,7 @@ import com.mercadopago.model.Discount;
 import com.mercadopago.model.Item;
 import com.mercadopago.model.PaymentResult;
 import com.mercadopago.model.Reviewable;
+import com.mercadopago.model.Summary;
 import com.mercadopago.model.Token;
 import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.model.Issuer;
@@ -48,12 +48,11 @@ import com.mercadopago.model.Site;
 import com.mercadopago.preferences.PaymentResultScreenPreference;
 import com.mercadopago.preferences.ReviewScreenPreference;
 import com.mercadopago.preferences.ServicePreference;
-import com.mercadopago.preferences.ShoppingReviewPreference;
 import com.mercadopago.uicontrollers.discounts.DiscountRowView;
 import com.mercadopago.uicontrollers.reviewandconfirm.ReviewItemsView;
 import com.mercadopago.uicontrollers.reviewandconfirm.ReviewPaymentOffView;
 import com.mercadopago.uicontrollers.reviewandconfirm.ReviewPaymentOnView;
-import com.mercadopago.uicontrollers.reviewandconfirm.ReviewSummaryView;
+import com.mercadopago.uicontrollers.reviewandconfirm.SummaryView;
 import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.uicontrollers.savedcards.SavedCardRowView;
 import com.mercadopago.uicontrollers.savedcards.SavedCardView;
@@ -317,7 +316,6 @@ public class MercadoPagoComponents {
             private Token token;
             private DecorationPreference decorationPreference;
             private ReviewScreenPreference reviewScreenPreference;
-            private ShoppingReviewPreference shoppingReviewPreference;
             private Boolean termsAndConditionsEnabled;
             private Boolean discountEnabled;
             private String merchantPublicKey;
@@ -397,11 +395,6 @@ public class MercadoPagoComponents {
                 return this;
             }
 
-            public ReviewAndConfirmBuilder setShoppingReviewPreference(ShoppingReviewPreference shoppingReviewPreference) {
-                this.shoppingReviewPreference = shoppingReviewPreference;
-                return this;
-            }
-
             public ReviewAndConfirmBuilder setTermsAndConditionsEnabled(Boolean termsAndConditionsEnabled) {
                 this.termsAndConditionsEnabled = termsAndConditionsEnabled;
                 return this;
@@ -445,7 +438,6 @@ public class MercadoPagoComponents {
                 intent.putExtra("discountEnabled", discountEnabled);
                 intent.putExtra("decorationPreference", JsonUtil.getInstance().toJson(decorationPreference));
                 intent.putExtra("reviewScreenPreference", JsonUtil.getInstance().toJson(reviewScreenPreference));
-                intent.putExtra("shoppingReviewPreference", JsonUtil.getInstance().toJson(shoppingReviewPreference));
 
                 activity.startActivityForResult(intent, MercadoPagoComponents.Activities.REVIEW_AND_CONFIRM_REQUEST_CODE);
             }
@@ -2035,11 +2027,7 @@ public class MercadoPagoComponents {
             private OnConfirmPaymentCallback callback;
             private Discount discount;
             private String confirmationMessage;
-            private String productDetailText;
-            private String discountDetailText;
-            private String customDescriptionText;
-            private Integer customTextColor;
-            private BigDecimal customAmount;
+            private Summary summary;
             private Issuer issuer;
             private Site site;
 
@@ -2098,33 +2086,13 @@ public class MercadoPagoComponents {
                 return this;
             }
 
-            public SummaryViewBuilder setProductDetailText(String productDetailText) {
-                this.productDetailText = productDetailText;
+            public SummaryViewBuilder setSummary(Summary summary) {
+                this.summary = summary;
                 return this;
             }
 
-            public SummaryViewBuilder setDiscountDetailText(String discountDetailText) {
-                this.discountDetailText = discountDetailText;
-                return this;
-            }
-
-            public SummaryViewBuilder setCustomDescriptionText(String customDescriptionText) {
-                this.customDescriptionText = customDescriptionText;
-                return this;
-            }
-
-            public SummaryViewBuilder setCustomAmount(BigDecimal customAmount) {
-                this.customAmount = customAmount;
-                return this;
-            }
-
-            public SummaryViewBuilder setCustomTextColor(@ColorInt Integer customTextColor) {
-                this.customTextColor = customTextColor;
-                return this;
-            }
-
-            public ReviewSummaryView build() {
-                return new ReviewSummaryView(context, confirmationMessage, productDetailText, discountDetailText, paymentMethod, payerCost, amount, discount, currencyId, customDescriptionText, customAmount, site, issuer, customTextColor, decorationPreference, callback);
+            public SummaryView build() {
+                return new SummaryView(context, confirmationMessage, paymentMethod, payerCost, amount, discount, currencyId, site, issuer, summary, decorationPreference, callback);
             }
         }
 
@@ -2132,7 +2100,7 @@ public class MercadoPagoComponents {
             private Context context;
             private String currencyId;
             private List<Item> items;
-            private ShoppingReviewPreference shoppingReviewPreference;
+            private ReviewScreenPreference reviewScreenPreference;
             private DecorationPreference decorationPreference;
 
             public ReviewItemsViewBuilder() {
@@ -2149,13 +2117,13 @@ public class MercadoPagoComponents {
                 return this;
             }
 
-            public ReviewItemsViewBuilder setDecorationPreference(DecorationPreference decorationPreference) {
-                this.decorationPreference = decorationPreference;
+            public ReviewItemsViewBuilder setReviewScreenPreference(ReviewScreenPreference reviewScreenPreference) {
+                this.reviewScreenPreference = reviewScreenPreference;
                 return this;
             }
 
-            public ReviewItemsViewBuilder setShoppingReviewPreference(ShoppingReviewPreference shoppingReviewPreference) {
-                this.shoppingReviewPreference = shoppingReviewPreference;
+            public ReviewItemsViewBuilder setDecorationPreference(DecorationPreference decorationPreference) {
+                this.decorationPreference = decorationPreference;
                 return this;
             }
 
@@ -2170,7 +2138,7 @@ public class MercadoPagoComponents {
             }
 
             public ReviewItemsView build() {
-                return new ReviewItemsView(context, items, currencyId, shoppingReviewPreference, decorationPreference);
+                return new ReviewItemsView(context, items, currencyId, reviewScreenPreference, decorationPreference);
             }
         }
 

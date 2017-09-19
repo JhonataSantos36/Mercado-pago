@@ -163,6 +163,9 @@
     <color name="mpsdk_color_unlock_card_link">#118BDC</color>
     <color name="mpsdk_color_unlock_card">#FFF4C3</color>
 
+    <!-- Summary -->
+
+    <color name="mpsdk_default_disclaimer">#777777</color>
 
 
 </resources>

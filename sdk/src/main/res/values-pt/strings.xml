@@ -213,10 +213,16 @@
     <string name="mpsdk_review_product_price">Preço unitário: %1$s</string>
     <string name="mpsdk_activity_checkout_title">Rever o seu pagamento</string>
     <string name="mpsdk_review_summary_products">Produtos</string>
+    <string name="mpsdk_review_summary_interests">Interesses</string>
+    <string name="mpsdk_review_summary_charges">Cobranças</string>
+    <string name="mpsdk_review_summary_taxes">Impostos</string>
+    <string name="mpsdk_review_summary_shipping">Remessa</string>
+    <string name="mpsdk_review_summary_arrear">Atraso</string>
     <string name="mpsdk_review_summary_subtotal">Subtotal</string>
     <string name="mpsdk_review_summary_pay">Você paga</string>
     <string name="mpsdk_review_summary_total">Total</string>
     <string name="mpsdk_review_summary_discount">Desconto</string>
+    <string name="mpsdk_review_summary_discounts">Descontos</string>
     <string name="mpsdk_review_summary_discount_with_percent_off">Desconto %1$s%%</string>
     <string name="mpsdk_review_summary_discount_with_amount_off">Desconto</string>
     <string name="mpsdk_account_money_description">Dinheiro em conta \ndo Mercado Pago</string>

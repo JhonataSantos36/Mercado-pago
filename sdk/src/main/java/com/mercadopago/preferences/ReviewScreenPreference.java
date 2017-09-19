@@ -1,10 +1,6 @@
 package com.mercadopago.preferences;
 
-import android.graphics.Color;
-import android.support.annotation.ColorInt;
-import android.support.annotation.ColorRes;
 import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
 
 import com.mercadopago.constants.ReviewKeys;
 import com.mercadopago.model.Reviewable;
@@ -22,31 +18,52 @@ public class ReviewScreenPreference {
     private String title;
     private String cancelText;
     private String confirmText;
-    private String productDetail;
-    private transient Reviewable itemsReview;
+
+    private transient Reviewable itemsSummary;
     private transient List<Reviewable> reviewables;
     private List<String> reviewOrder;
-    private String discountDetail;
-    private String summaryCustomDescription;
-    private Integer summaryCustomDetailColor;
-    private BigDecimal summaryCustomAmount;
+
+    private BigDecimal productAmount;
+    private BigDecimal discountAmount;
+    private BigDecimal chargeAmount;
+    private BigDecimal taxesAmount;
+    private BigDecimal shippingAmount;
+    private BigDecimal arrearsAmount;
+    private String oneWordProductTitle;
+    private String disclaimerText;
+    private String disclaimerColor;
+
+    private String quantityTitle;
+    private String amountTitle;
+    private boolean showQuantityRow;
+    private boolean showAmountTitle;
 
     public ReviewScreenPreference(Builder builder) {
         this.title = builder.title;
         this.confirmText = builder.confirmText;
         this.cancelText = builder.cancelText;
-        this.productDetail = builder.productDetail;
-        this.discountDetail = builder.discountDetail;
-        this.itemsReview = builder.itemsReview;
+        this.itemsSummary = builder.itemsSummary;
         this.reviewables = builder.reviewables;
         this.reviewOrder = builder.reviewOrder;
-        this.summaryCustomDescription = builder.summaryCustomDescription;
-        this.summaryCustomDetailColor = builder.summaryCustomDetailColor;
-        this.summaryCustomAmount = builder.summaryCustomAmount;
+
+        this.productAmount = builder.productAmount;
+        this.discountAmount = builder.discountAmount;
+        this.chargeAmount = builder.chargeAmount;
+        this.taxesAmount = builder.taxesAmount;
+        this.shippingAmount = builder.shippingAmount;
+        this.arrearsAmount = builder.arrearsAmount;
+        this.oneWordProductTitle = builder.oneWordProductTitle;
+        this.disclaimerText = builder.disclaimerText;
+        this.disclaimerColor = builder.disclaimerTextColor;
+
+        this.quantityTitle = builder.quantityTitle;
+        this.amountTitle = builder.amountTitle;
+        this.showQuantityRow = builder.showQuantityRow;
+        this.showAmountTitle = builder.showAmountTitle;
     }
 
     public boolean hasCustomReviewables() {
-        return itemsReview != null
+        return itemsSummary != null
                 || (reviewables != null && !reviewables.isEmpty());
     }
 
@@ -66,44 +83,64 @@ public class ReviewScreenPreference {
         return cancelText;
     }
 
-    public String getProductDetail() {
-        return productDetail;
+    public BigDecimal getProductAmount() {
+        return productAmount;
+    }
+
+    public BigDecimal getDiscountAmount() {
+        return discountAmount;
+    }
+
+    public BigDecimal getChargeAmount() {
+        return chargeAmount;
+    }
+
+    public BigDecimal getTaxesAmount() {
+        return taxesAmount;
+    }
+
+    public BigDecimal getShippingAmount() {
+        return shippingAmount;
+    }
+
+    public BigDecimal getArrearsAmount() {
+        return arrearsAmount;
+    }
+
+    public String getOneWordProductTitle() {
+        return oneWordProductTitle;
+    }
+
+    public String getDisclaimerText() {
+        return disclaimerText;
+    }
+
+    public String getDisclaimerTextColor() {
+        return disclaimerColor;
+    }
+
+    public String getQuantityTitle() {
+        return quantityTitle;
+    }
+
+    public String getAmountTitle() {
+        return amountTitle;
+    }
+
+    public boolean showQuantityRow() {
+        return showQuantityRow;
+    }
+
+    public boolean showAmountTitle() {
+        return showAmountTitle;
     }
 
     public Reviewable getItemsReviewable() {
-        return itemsReview;
+        return itemsSummary;
     }
 
     public List<String> getReviewOrder() {
         return reviewOrder;
-    }
-
-    public String getDiscountDetail() {
-        return discountDetail;
-    }
-
-    public String getSummaryCustomDescription() {
-        return summaryCustomDescription;
-    }
-
-    public BigDecimal getSummaryCustomAmount() {
-        return summaryCustomAmount;
-    }
-
-    public Integer getSummaryCustomTextColor() {
-        return summaryCustomDetailColor;
-    }
-
-    public boolean hasSummaryCustomInfo() {
-        return isSummaryCustomDescriptionValid() && isSummaryCustomAmountValid();
-    }
-
-    private boolean isSummaryCustomDescriptionValid() {
-        return this.summaryCustomDescription != null && !this.summaryCustomDescription.isEmpty();
-    }
-
-    private boolean isSummaryCustomAmountValid() {
-        return summaryCustomAmount != null && summaryCustomAmount.compareTo(BigDecimal.ZERO) > 0;
     }
 
     public void addReviewable(@NonNull Reviewable reviewable) {
@@ -113,9 +150,26 @@ public class ReviewScreenPreference {
         this.reviewables.add(reviewable);
     }
 
-    public void setItemsReview(@NonNull Reviewable reviewable) {
+    public void setItemsSummary(@NonNull Reviewable reviewable) {
         reviewable.setKey(ReviewKeys.ITEMS);
-        this.itemsReview = reviewable;
+        this.itemsSummary = reviewable;
+    }
+
+    public boolean hasProductAmount() {
+        return productAmount != null && productAmount.compareTo(BigDecimal.ZERO) > 0;
+    }
+
+    public BigDecimal getTotalAmount() {
+        BigDecimal totalAmount = new BigDecimal(0);
+
+        totalAmount = (productAmount == null) ? totalAmount.add(new BigDecimal(0)) : totalAmount.add(productAmount);
+        totalAmount = (chargeAmount == null) ? totalAmount.add(new BigDecimal(0)) : totalAmount.add(chargeAmount);
+        totalAmount = (taxesAmount == null) ? totalAmount.add(new BigDecimal(0)) : totalAmount.add(taxesAmount);
+        totalAmount = (shippingAmount == null) ? totalAmount.add(new BigDecimal(0)) : totalAmount.add(shippingAmount);
+        totalAmount = (arrearsAmount == null) ? totalAmount.add(new BigDecimal(0)) : totalAmount.add(arrearsAmount);
+        totalAmount = (discountAmount == null) ? totalAmount.subtract(new BigDecimal(0)) : totalAmount.subtract(discountAmount);
+
+        return totalAmount;
     }
 
     public boolean hasReviewOrder() {
@@ -124,16 +178,25 @@ public class ReviewScreenPreference {
 
     public static class Builder {
         private String title;
-        private List<Reviewable> reviewables;
         private String confirmText;
         private String cancelText;
-        private String productDetail;
-        private String discountDetail;
-        private String summaryCustomDescription;
-        private BigDecimal summaryCustomAmount;
-        private Reviewable itemsReview;
+        private Reviewable itemsSummary;
         private List<String> reviewOrder;
-        private Integer summaryCustomDetailColor;
+        private List<Reviewable> reviewables;
+        private BigDecimal productAmount;
+        private BigDecimal discountAmount;
+        private BigDecimal chargeAmount;
+        private BigDecimal taxesAmount;
+        private BigDecimal shippingAmount;
+        private BigDecimal arrearsAmount;
+        private String oneWordProductTitle;
+        private String disclaimerText;
+        private String disclaimerTextColor;
+
+        private String quantityTitle;
+        private String amountTitle;
+        private boolean showQuantityRow = true;
+        private boolean showAmountTitle = true;
 
         public Builder() {
             this.reviewables = new ArrayList<>();
@@ -159,18 +222,8 @@ public class ReviewScreenPreference {
             return this;
         }
 
-        public Builder setProductDetail(String productDetail) {
-            this.productDetail = productDetail;
-            return this;
-        }
-
-        public Builder setDiscountDetail(String discountDetail) {
-            this.discountDetail = discountDetail;
-            return this;
-        }
-
-        public Builder setItemsReview(Reviewable itemsReview) {
-            this.itemsReview = itemsReview;
+        public Builder setItemsSummary(Reviewable itemsSummary) {
+            this.itemsSummary = itemsSummary;
             return this;
         }
 
@@ -179,40 +232,78 @@ public class ReviewScreenPreference {
             return this;
         }
 
-        public Builder setSummaryCustomDetail(String customRowDescription) {
-            this.summaryCustomDescription = customRowDescription;
+        public Builder addSummaryProductDetail(BigDecimal amount) {
+            this.productAmount = amount;
             return this;
         }
 
-        public Builder setSummaryCustomDetail(String customRowDescription, String summaryCustomTextColor) {
-            this.summaryCustomDescription = customRowDescription;
-            this.summaryCustomDetailColor = Color.parseColor(summaryCustomTextColor);
+        public Builder addSummaryDiscountDetail(BigDecimal amount) {
+            this.discountAmount = amount;
             return this;
         }
 
-        public Builder setSummaryCustomDetail(String customRowDescription, @ColorInt Integer summaryCustomDetailColor) {
-            this.summaryCustomDescription = customRowDescription;
-            this.summaryCustomDetailColor = summaryCustomDetailColor;
+        public Builder addSummaryChargeDetail(BigDecimal amount) {
+            this.chargeAmount = amount;
             return this;
         }
 
-        public Builder setSummaryCustomDetail(String customRowDescription, BigDecimal customRowAmount) {
-            this.summaryCustomDescription = customRowDescription;
-            this.summaryCustomAmount = customRowAmount;
+        public Builder addSummaryTaxesDetail(BigDecimal amount) {
+            this.taxesAmount = amount;
             return this;
         }
 
-        public Builder setSummaryCustomDetail(String summaryCustomDescription, BigDecimal summaryCustomAmount, String summaryCustomTextColor) {
-            this.summaryCustomDescription = summaryCustomDescription;
-            this.summaryCustomAmount = summaryCustomAmount;
-            this.summaryCustomDetailColor = Color.parseColor(summaryCustomTextColor);
+        public Builder addSummaryShippingDetail(BigDecimal amount) {
+            this.shippingAmount = amount;
             return this;
         }
 
-        public Builder setSummaryCustomDetail(String summaryCustomDescription, BigDecimal summaryCustomAmount, @ColorInt Integer summaryCustomDetailColor) {
-            this.summaryCustomDescription = summaryCustomDescription;
-            this.summaryCustomAmount = summaryCustomAmount;
-            this.summaryCustomDetailColor = summaryCustomDetailColor;
+        public Builder addSummaryArrearsDetail(BigDecimal amount) {
+            this.arrearsAmount = amount;
+            return this;
+        }
+
+        public Builder setSummaryProductTitle(String oneWordProductTitle) {
+            this.oneWordProductTitle = oneWordProductTitle;
+            return this;
+        }
+
+        public Builder setDisclaimer(String disclaimer) {
+            this.disclaimerText = disclaimer;
+            return this;
+        }
+
+        public Builder setDisclaimerTextColor(String disclaimerTextColor) {
+            this.disclaimerTextColor = disclaimerTextColor;
+            return this;
+        }
+
+        public Builder setQuantityTitle(String quantityTitle) {
+            this.quantityTitle = quantityTitle;
+            return this;
+        }
+
+        public Builder setAmountTitle(String amountTitle) {
+            this.amountTitle = amountTitle;
+            return this;
+        }
+
+        public Builder showQuantityRow() {
+            this.showQuantityRow = true;
+            return this;
+        }
+
+        public Builder hideQuantityRow() {
+            this.showQuantityRow = false;
+            return this;
+        }
+
+        public Builder showAmountTitle() {
+            this.showAmountTitle = true;
+            return this;
+        }
+
+        public Builder hideAmountTitle() {
+            this.showAmountTitle = false;
             return this;
         }
 
