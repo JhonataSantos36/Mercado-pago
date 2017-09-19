@@ -29,7 +29,7 @@ public class ReviewScreenPreference {
     private BigDecimal taxesAmount;
     private BigDecimal shippingAmount;
     private BigDecimal arrearsAmount;
-    private String oneWordProductTitle;
+    private String productTitle;
     private String disclaimerText;
     private String disclaimerColor;
 
@@ -52,7 +52,7 @@ public class ReviewScreenPreference {
         this.taxesAmount = builder.taxesAmount;
         this.shippingAmount = builder.shippingAmount;
         this.arrearsAmount = builder.arrearsAmount;
-        this.oneWordProductTitle = builder.oneWordProductTitle;
+        this.productTitle = builder.productTitle;
         this.disclaimerText = builder.disclaimerText;
         this.disclaimerColor = builder.disclaimerTextColor;
 
@@ -107,8 +107,8 @@ public class ReviewScreenPreference {
         return arrearsAmount;
     }
 
-    public String getOneWordProductTitle() {
-        return oneWordProductTitle;
+    public String getProductTitle() {
+        return productTitle;
     }
 
     public String getDisclaimerText() {
@@ -189,7 +189,7 @@ public class ReviewScreenPreference {
         private BigDecimal taxesAmount;
         private BigDecimal shippingAmount;
         private BigDecimal arrearsAmount;
-        private String oneWordProductTitle;
+        private String productTitle;
         private String disclaimerText;
         private String disclaimerTextColor;
 
@@ -262,8 +262,8 @@ public class ReviewScreenPreference {
             return this;
         }
 
-        public Builder setSummaryProductTitle(String oneWordProductTitle) {
-            this.oneWordProductTitle = oneWordProductTitle;
+        public Builder setSummaryProductTitle(String productTitle) {
+            this.productTitle = productTitle;
             return this;
         }
 

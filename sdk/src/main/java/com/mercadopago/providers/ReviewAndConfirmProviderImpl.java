@@ -13,13 +13,11 @@ import com.mercadopago.model.CardInfo;
 import com.mercadopago.model.Discount;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.Item;
-import com.mercadopago.model.Payer;
 import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.Reviewable;
 import com.mercadopago.model.Site;
 import com.mercadopago.model.Summary;
-import com.mercadopago.model.SummaryDetail;
 import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.preferences.ReviewScreenPreference;
 import com.mercadopago.util.TextUtil;
@@ -253,8 +251,8 @@ public class ReviewAndConfirmProviderImpl implements ReviewAndConfirmProvider {
         private String getSummaryProductsTitle() {
             String summaryProductTitle;
 
-            if (reviewScreenPreference != null && !isEmpty(reviewScreenPreference.getOneWordProductTitle())) {
-                summaryProductTitle = reviewScreenPreference.getOneWordProductTitle();
+            if (reviewScreenPreference != null && !isEmpty(reviewScreenPreference.getProductTitle())) {
+                summaryProductTitle = reviewScreenPreference.getProductTitle();
             } else {
                 summaryProductTitle = context.getString(R.string.mpsdk_review_summary_products);
             }
