@@ -23,6 +23,7 @@ public class PaymentResultScreenPreference {
     private Integer titleBackgroundColor;
     private String approvedTitle;
     private String approvedSubtitle;
+    private Integer approvedIconName;
     private String pendingTitle;
     private String pendingSubtitle;
     private String pendingContentTitle;
@@ -61,6 +62,7 @@ public class PaymentResultScreenPreference {
         this.titleBackgroundColor = builder.titleBackgroundColor;
         this.approvedTitle = builder.approvedTitle;
         this.approvedSubtitle = builder.approvedSubtitle;
+        this.approvedIconName = builder.approvedIcon;
         this.pendingTitle = builder.pendingTitle;
         this.pendingSubtitle = builder.pendingSubtitle;
         this.pendingContentTitle = builder.pendingContentTitle;
@@ -128,6 +130,10 @@ public class PaymentResultScreenPreference {
 
     public String getApprovedSubtitle() {
         return this.approvedSubtitle;
+    }
+
+    public Integer getApprovedIconName() {
+        return approvedIconName;
     }
 
     public String getPendingTitle() {
@@ -263,6 +269,7 @@ public class PaymentResultScreenPreference {
         private Integer titleBackgroundColor;
         private String approvedTitle;
         private String approvedSubtitle;
+        private Integer approvedIcon;
         private String pendingTitle;
         private String pendingSubtitle;
         private String pendingContentTitle;
@@ -420,6 +427,11 @@ public class PaymentResultScreenPreference {
 
         public Builder setPendingHeaderIcon(@DrawableRes Integer headerIcon) {
             this.pendingIcon = headerIcon;
+            return this;
+        }
+
+        public Builder setApprovedHeaderIcon(@DrawableRes Integer headerIcon) {
+            this.approvedIcon = headerIcon;
             return this;
         }
 

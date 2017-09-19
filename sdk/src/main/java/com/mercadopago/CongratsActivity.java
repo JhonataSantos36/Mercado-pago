@@ -2,9 +2,11 @@ package com.mercadopago;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -64,7 +66,7 @@ public class CongratsActivity extends MercadoPagoBaseActivity implements ReviewS
     protected MPTextView mPaymentStatementDescriptionTextView;
     protected MPTextView mCongratulationsTitle;
     protected MPTextView mCongratulationsSubtitle;
-    private MPTextView mNoInstallmentsRateTextView;
+    protected MPTextView mNoInstallmentsRateTextView;
     protected View mTopEmailSeparator;
     protected View mBottomEmailSeparator;
     protected ImageView mPaymentMethodImage;
@@ -74,6 +76,7 @@ public class CongratsActivity extends MercadoPagoBaseActivity implements ReviewS
     protected RecyclerView mBottomReviewables;
     protected FrameLayout mSecondaryExitButton;
     protected MPTextView mSecondaryExitTextView;
+    protected ImageView mHeaderIcon;
 
     // Activity parameters
     protected String mMerchantPublicKey;
@@ -171,6 +174,7 @@ public class CongratsActivity extends MercadoPagoBaseActivity implements ReviewS
         mSecondaryExitButton = (FrameLayout) findViewById(R.id.mpsdkCongratsSecondaryExitButton);
         mSecondaryExitTextView = (MPTextView) findViewById(R.id.mpsdkCongratsSecondaryExitButtonText);
         mTitleBackground = (ViewGroup) findViewById(R.id.mpsdkTitleBackground);
+        mHeaderIcon = (ImageView) findViewById(R.id.mpsdkIcon);
 
         mDiscountFrameLayout.setVisibility(View.GONE);
         mExitButtonText.setOnClickListener(new View.OnClickListener() {
@@ -296,6 +300,11 @@ public class CongratsActivity extends MercadoPagoBaseActivity implements ReviewS
                 showPaymentMethod();
             } else {
                 hidePaymentMethod();
+            }
+            if (mPaymentResultScreenPreference.getApprovedIconName() != null) {
+                Drawable image = ContextCompat.getDrawable(this, mPaymentResultScreenPreference.getApprovedIconName());
+
+                mHeaderIcon.setImageDrawable(image);
             }
             if (!mPaymentResultScreenPreference.isCongratsSecondaryExitButtonEnabled() ||
                     mPaymentResultScreenPreference.getSecondaryCongratsExitButtonTitle() == null ||
