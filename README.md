@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/mercadopago/px-android.png)](https://travis-ci.org/mercadopago/px-android)
+[![Build Status](https://travis-ci.org/mercadopago/px-android.svg?branch=master)](https://travis-ci.org/mercadopago/px-android)
 [![Codecov branch](https://img.shields.io/codecov/c/github/mercadopago/px-android/develop.svg)](https://codecov.io/gh/mercadopago/px-android/)
 
 # MercadoPago - Android SDK
