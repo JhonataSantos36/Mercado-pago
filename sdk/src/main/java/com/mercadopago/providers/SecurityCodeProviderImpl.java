@@ -151,8 +151,10 @@ public class SecurityCodeProviderImpl implements SecurityCodeProvider {
     }
 
     @Override
-    public void validateSecurityCodeFromToken(String securityCode) {
-        CardToken.validateSecurityCode(securityCode);
+    public void validateSecurityCodeFromToken(String securityCode) throws CardTokenException {
+        if (!CardToken.validateSecurityCode(securityCode)) {
+            throw new CardTokenException(CardTokenException.INVALID_FIELD);
+        }
     }
 
     @Override

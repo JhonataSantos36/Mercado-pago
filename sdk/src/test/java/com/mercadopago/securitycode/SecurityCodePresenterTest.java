@@ -44,6 +44,7 @@ public class SecurityCodePresenterTest {
     private static final String CARD_AND_TOKEN_SET_WITHOUT_RECOVERY = "card_and_token_set_without_recovery";
     private static final String CARD_INFO_NOT_SET = "card_info_not_set";
     private static final String ERROR_SECURITY_CODE = "error_security_code";
+    private static final int CARD_TOKEN_INVALID_SECURITY_CODE = 9;
 
     @Test
     public void showErrorWhenInvalidParameters() {
@@ -293,7 +294,7 @@ public class SecurityCodePresenterTest {
         mvp.getPresenter().validateSecurityCodeInput();
 
         assertTrue(mvp.getView().errorState);
-        assertNotNull(mvp.getView().errorMessage);
+        assertNotNull(mvp.getView().cardTokenErrorCode);
     }
 
     @Test
@@ -627,7 +628,7 @@ public class SecurityCodePresenterTest {
         @Override
         public void validateSecurityCodeFromToken(String mSecurityCode, PaymentMethod mPaymentMethod, String firstSixDigits) throws CardTokenException {
             if (shouldFailSecurityCodeValidation) {
-                throw new RuntimeException("ERROR_SECURITY_CODE");
+                throw new CardTokenException(CARD_TOKEN_INVALID_SECURITY_CODE);
             }
         }
 
@@ -639,7 +640,7 @@ public class SecurityCodePresenterTest {
         @Override
         public void validateSecurityCodeFromToken(SavedCardToken savedCardToken, Card card) throws CardTokenException {
             if (shouldFailSecurityCodeValidation) {
-                throw new RuntimeException("ERROR_SECURITY_CODE");
+                throw new CardTokenException(CARD_TOKEN_INVALID_SECURITY_CODE);
             }
         }
 
@@ -659,6 +660,7 @@ public class SecurityCodePresenterTest {
         private boolean timerShown = false;
         private Integer maxLenght;
         private boolean errorState = false;
+        private Integer cardTokenErrorCode;
 
         @Override
         public void initialize() {
@@ -683,8 +685,8 @@ public class SecurityCodePresenterTest {
         }
 
         @Override
-        public void setErrorView(String message) {
-            this.errorMessage = message;
+        public void setErrorView(CardTokenException exception) {
+            this.cardTokenErrorCode = exception.getErrorCode();
             this.errorState = true;
         }
 

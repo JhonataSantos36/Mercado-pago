@@ -21,6 +21,8 @@ import com.mercadopago.controllers.CheckoutTimer;
 import com.mercadopago.core.MercadoPagoCheckout;
 import com.mercadopago.customviews.MPEditText;
 import com.mercadopago.customviews.MPTextView;
+import com.mercadopago.exceptions.CardTokenException;
+import com.mercadopago.exceptions.ExceptionHandler;
 import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.listeners.card.CardSecurityCodeTextWatcher;
 import com.mercadopago.model.ApiException;
@@ -415,11 +417,12 @@ public class SecurityCodeActivity extends MercadoPagoBaseActivity implements Sec
     }
 
     @Override
-    public void setErrorView(String message) {
+    public void setErrorView(CardTokenException exception) {
         mSecurityCodeEditText.toggleLineColorOnError(true);
         mButtonContainer.setVisibility(View.GONE);
         mErrorContainer.setVisibility(View.VISIBLE);
-        mErrorTextView.setText(message);
+        String errorText = ExceptionHandler.getErrorMessage(this, exception);
+        mErrorTextView.setText(errorText);
         setErrorState(ERROR_STATE);
     }
 

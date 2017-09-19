@@ -35,7 +35,7 @@ public interface SecurityCodeProvider extends ResourcesProvider {
 
     void validateSecurityCodeFromToken(String mSecurityCode, PaymentMethod mPaymentMethod, String firstSixDigits) throws CardTokenException;
 
-    void validateSecurityCodeFromToken(String mSecurityCode);
+    void validateSecurityCodeFromToken(String mSecurityCode) throws CardTokenException;
 
     void validateSecurityCodeFromToken(SavedCardToken savedCardToken, Card card) throws CardTokenException;
 
