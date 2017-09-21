@@ -33,6 +33,7 @@ public class MercadoPagoCheckout {
     public static final Integer PAYMENT_DATA_RESULT_CODE = 6;
     public static final Integer PAYMENT_RESULT_CODE = 7;
     public static final Integer TIMER_FINISHED_RESULT_CODE = 8;
+    public static final Integer PAYMENT_METHOD_CHANGED_REQUESTED = 9;
 
     private final ReviewScreenPreference reviewScreenPreference;
     private Context context;
