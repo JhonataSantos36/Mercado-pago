@@ -1,7 +1,5 @@
 package com.mercadopago.preferences;
 
-import com.mercadopago.controllers.CheckoutTimer;
-
 /**
  * Created by mreverter on 1/17/17.
  */
@@ -16,6 +14,7 @@ public class FlowPreference {
     private boolean paymentApprovedScreenEnabled;
     private boolean paymentRejectedScreenEnabled;
     private boolean paymentPendingScreenEnabled;
+    private boolean exitOnPaymentMethodChange;
     private boolean bankDealsEnabled;
     private boolean installmentsReviewScreenEnabled;
     private boolean discountEnabled;
@@ -40,6 +39,7 @@ public class FlowPreference {
         this.maxSavedCardsToShow = builder.maxSavedCardsToShow;
         this.congratsDisplayTime = builder.congratsDisplayTime;
         this.checkoutTimer = builder.checkoutTimer;
+        this.exitOnPaymentMethodChange = builder.exitOnPaymentMethodChange;
 
     }
 
@@ -107,6 +107,10 @@ public class FlowPreference {
         return escEnabled;
     }
 
+    public boolean shouldExitOnPaymentMethodChange() {
+        return exitOnPaymentMethodChange;
+    }
+
     public static class Builder {
 
         private boolean bankDealsEnabled = true;
@@ -123,6 +127,7 @@ public class FlowPreference {
         private int maxSavedCardsToShow = DEFAULT_MAX_SAVED_CARDS_TO_SHOW;
         private Integer congratsDisplayTime = null;
         private Integer checkoutTimer;
+        private boolean exitOnPaymentMethodChange = false;
 
         public Builder enablePaymentSearchScreen() {
             this.paymentSearchScreenEnabled = true;
@@ -205,6 +210,11 @@ public class FlowPreference {
 
         public Builder setCheckoutTimer(Integer seconds) {
             this.checkoutTimer = seconds;
+            return this;
+        }
+
+        public Builder exitOnPaymentMethodChange() {
+            this.exitOnPaymentMethodChange = true;
             return this;
         }
 

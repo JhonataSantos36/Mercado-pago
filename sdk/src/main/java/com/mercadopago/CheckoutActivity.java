@@ -148,6 +148,12 @@ public class CheckoutActivity extends MercadoPagoBaseActivity implements Checkou
     }
 
     @Override
+    public void finishFromReviewAndConfirm() {
+        setResult(MercadoPagoCheckout.PAYMENT_METHOD_CHANGED_REQUESTED);
+        finish();
+    }
+
+    @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
