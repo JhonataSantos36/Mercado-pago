@@ -6,7 +6,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.mercadopago.util.TextUtil.isEmpty;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -101,8 +100,8 @@ public class SummaryTest {
 
         defaultSummaryDetailsOrder.add(SummaryItemType.PRODUCT);
         defaultSummaryDetailsOrder.add(SummaryItemType.CHARGE);
-        defaultSummaryDetailsOrder.add(SummaryItemType.TAX);
-        defaultSummaryDetailsOrder.add(SummaryItemType.ARREAR);
+        defaultSummaryDetailsOrder.add(SummaryItemType.TAXES);
+        defaultSummaryDetailsOrder.add(SummaryItemType.ARREARS);
         defaultSummaryDetailsOrder.add(SummaryItemType.SHIPPING);
         defaultSummaryDetailsOrder.add(SummaryItemType.DISCOUNT);
 

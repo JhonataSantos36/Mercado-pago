@@ -1,3 +1,9 @@
+## VERSION 3.5.2
+
+_21_09_2017_
+
+* Fix: Renamed summary item types
+
 ## VERSION 3.5.1
 
 _21_09_2017_

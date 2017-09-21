@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import static com.mercadopago.util.TextUtils.isEmpty;
-
 /**
  * Created by mromar on 9/6/17.
  */
@@ -43,8 +41,8 @@ public class Summary {
         defaultSummaryDetailsOrder.add(SummaryItemType.PRODUCT);
         defaultSummaryDetailsOrder.add(SummaryItemType.DISCOUNT);
         defaultSummaryDetailsOrder.add(SummaryItemType.CHARGE);
-        defaultSummaryDetailsOrder.add(SummaryItemType.TAX);
-        defaultSummaryDetailsOrder.add(SummaryItemType.ARREAR);
+        defaultSummaryDetailsOrder.add(SummaryItemType.TAXES);
+        defaultSummaryDetailsOrder.add(SummaryItemType.ARREARS);
         defaultSummaryDetailsOrder.add(SummaryItemType.SHIPPING);
 
         return defaultSummaryDetailsOrder;
@@ -96,7 +94,7 @@ public class Summary {
         }
 
         public Builder addSummaryTaxesDetail(BigDecimal amount, String title, Integer textColor) {
-            putSummaryDetail(amount, title, SummaryItemType.TAX, textColor);
+            putSummaryDetail(amount, title, SummaryItemType.TAXES, textColor);
             return this;
         }
 
@@ -106,7 +104,7 @@ public class Summary {
         }
 
         public Builder addSummaryArrearsDetail(BigDecimal amount, String title, Integer textColor) {
-            putSummaryDetail(amount, title, SummaryItemType.ARREAR, textColor);
+            putSummaryDetail(amount, title, SummaryItemType.ARREARS, textColor);
             return this;
         }
 
