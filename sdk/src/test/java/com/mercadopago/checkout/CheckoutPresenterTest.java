@@ -1822,6 +1822,11 @@ public class CheckoutPresenterTest {
         public void trackScreen() {
 
         }
+
+        @Override
+        public void finishFromReviewAndConfirm() {
+
+        }
     }
 
     public class MockedProvider implements CheckoutProvider {
