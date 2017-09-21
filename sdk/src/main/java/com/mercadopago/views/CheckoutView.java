@@ -46,4 +46,6 @@ public interface CheckoutView extends MvpView {
     void initializeMPTracker();
 
     void trackScreen();
+
+    void finishFromReviewAndConfirm();
 }
