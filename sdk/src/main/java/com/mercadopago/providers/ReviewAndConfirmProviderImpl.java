@@ -177,6 +177,10 @@ public class ReviewAndConfirmProviderImpl implements ReviewAndConfirmProvider {
             } else {
                 summaryBuilder.addSummaryProductDetail(amount, getSummaryProductsTitle(), getDefaultTextColor());
 
+                if (payerCost != null && payerCost.getInstallments() > 1 && isValidAmount(payerCost.getTotalAmount())) {
+                    summaryBuilder.addSummaryChargeDetail(getPayerCostChargesAmount(), getSummaryChargesTitle(), getDefaultTextColor());
+                }
+
                 if (reviewScreenPreference != null && !isEmpty(reviewScreenPreference.getDisclaimerText())) {
                     summaryBuilder.setDisclaimerText(reviewScreenPreference.getDisclaimerText())
                             .setDisclaimerColor(getDisclaimerTextColor());
@@ -237,11 +241,24 @@ public class ReviewAndConfirmProviderImpl implements ReviewAndConfirmProvider {
             }
 
             if (payerCost != null && payerCost.getInstallments() > 1 && isValidAmount(payerCost.getTotalAmount())) {
-                BigDecimal totalInterestsAmount = payerCost.getTotalAmount().subtract(amount);
+                BigDecimal totalInterestsAmount = getPayerCostChargesAmount();
                 interestAmount = interestAmount.add(totalInterestsAmount);
             }
 
             return interestAmount;
+        }
+
+        private BigDecimal getPayerCostChargesAmount() {
+            BigDecimal totalInterestsAmount;
+
+            if (discount != null && isValidAmount(discount.getCouponAmount())) {
+                BigDecimal totalAmount = amount.subtract(discount.getCouponAmount());
+                totalInterestsAmount = payerCost.getTotalAmount().subtract(totalAmount);
+            } else {
+                totalInterestsAmount = payerCost.getTotalAmount().subtract(amount);
+            }
+
+            return totalInterestsAmount;
         }
 
         private boolean isValidAmount(BigDecimal amount) {
