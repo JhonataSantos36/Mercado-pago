@@ -1,3 +1,9 @@
+## VERSION 3.5.1
+
+_21_09_2017_
+
+* Fix: Summary charges in RyC
+
 ## VERSION 3.5.0
 
 _19_09_2017_
