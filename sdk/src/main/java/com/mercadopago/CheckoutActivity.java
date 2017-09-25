@@ -15,6 +15,7 @@ import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentData;
 import com.mercadopago.model.PaymentMethod;
+import com.mercadopago.model.PaymentMethodSearch;
 import com.mercadopago.model.PaymentMethodSearchItem;
 import com.mercadopago.model.PaymentRecovery;
 import com.mercadopago.model.PaymentResult;
@@ -120,7 +121,7 @@ public class CheckoutActivity extends MercadoPagoBaseActivity implements Checkou
         mCheckoutPresenter.setFlowPreference(flowPreference);
         mCheckoutPresenter.setBinaryMode(binaryMode);
         mCheckoutPresenter.setDiscount(discount);
-        mCheckoutPresenter.setDirectDiscount(directDiscountEnabled);
+        mCheckoutPresenter.setDirectDiscountEnabled(directDiscountEnabled);
         mCheckoutPresenter.setPaymentDataInput(paymentDataInput);
         mCheckoutPresenter.setPaymentResultInput(paymentResultInput);
         mCheckoutPresenter.setRequestedResult(mRequestedResultCode);
@@ -253,6 +254,10 @@ public class CheckoutActivity extends MercadoPagoBaseActivity implements Checkou
             Token token = JsonUtil.getInstance().fromJson(data.getStringExtra("token"), Token.class);
             PaymentMethod paymentMethod = JsonUtil.getInstance().fromJson(data.getStringExtra("paymentMethod"), PaymentMethod.class);
             Card card = JsonUtil.getInstance().fromJson(data.getStringExtra("card"), Card.class);
+            PaymentMethodSearch paymentMethodSearch = JsonUtil.getInstance().fromJson(data.getStringExtra("paymentMethodSearch"), PaymentMethodSearch.class);
+            if (paymentMethodSearch != null) {
+                mCheckoutPresenter.setPaymentMethodSearch(paymentMethodSearch);
+            }
 
             mCheckoutPresenter.onPaymentMethodSelectionResponse(paymentMethod, issuer, payerCost, token, discount, card);
         } else if (isErrorResult(data)) {

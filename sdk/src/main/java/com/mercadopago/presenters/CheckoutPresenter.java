@@ -248,7 +248,19 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
         getView().showProgress();
         Payer payer = new Payer();
         payer.setAccessToken(mCheckoutPreference.getPayer().getAccessToken());
-        getResourcesProvider().getPaymentMethodSearch(mCheckoutPreference.getAmount(), mCheckoutPreference.getExcludedPaymentTypes(), mCheckoutPreference.getExcludedPaymentMethods(), payer, mCheckoutPreference.getSite(), onPaymentMethodSearchRetrieved(), onCustomerRetrieved());
+        getResourcesProvider().getPaymentMethodSearch(getTransactionAmount(), mCheckoutPreference.getExcludedPaymentTypes(), mCheckoutPreference.getExcludedPaymentMethods(), payer, mCheckoutPreference.getSite(), onPaymentMethodSearchRetrieved(), onCustomerRetrieved());
+    }
+
+    public BigDecimal getTransactionAmount() {
+        BigDecimal amount;
+
+        if (mDiscount != null && isDiscountEnabled() && mDiscount.isValid()) {
+            amount = mDiscount.getAmountWithDiscount(mCheckoutPreference.getAmount());
+        } else {
+            amount = mCheckoutPreference.getAmount();
+        }
+
+        return amount;
     }
 
     private OnResourcesRetrievedCallback<PaymentMethodSearch> onPaymentMethodSearchRetrieved() {
@@ -774,22 +786,6 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
         return mSelectedPayerCost;
     }
 
-    public Boolean isDiscountValid() {
-        return mDiscount != null && isCampaignIdValid() && isCouponAmountValid() && isDiscountCurrencyIdValid();
-    }
-
-    private Boolean isCampaignIdValid() {
-        return mDiscount.getId() != null;
-    }
-
-    private Boolean isCouponAmountValid() {
-        return mDiscount.getCouponAmount() != null && mDiscount.getCouponAmount().compareTo(BigDecimal.ZERO) >= 0;
-    }
-
-    private Boolean isDiscountCurrencyIdValid() {
-        return mDiscount != null && mDiscount.getCurrencyId() != null && CurrenciesUtil.isValidCurrency(mDiscount.getCurrencyId());
-    }
-
     public Token getCreatedToken() {
         return mCreatedToken;
     }
@@ -834,12 +830,12 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
         this.mBinaryMode = binaryMode;
     }
 
-    public void setDiscount(Discount dicount) {
-        this.mDiscount = dicount;
+    public void setDiscount(Discount discount) {
+        this.mDiscount = discount;
     }
 
-    public void setDirectDiscount(Boolean directDiscount) {
-        this.mDirectDiscountEnabled = directDiscount;
+    public void setDirectDiscountEnabled(Boolean directDiscountEnabled) {
+        this.mDirectDiscountEnabled = directDiscountEnabled;
     }
 
     public void setPaymentDataInput(PaymentData paymentDataInput) {
@@ -866,6 +862,10 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
         return mPaymentMethodSearch;
     }
 
+    public void setPaymentMethodSearch(PaymentMethodSearch paymentMethodSearch) {
+        this.mPaymentMethodSearch = paymentMethodSearch;
+    }
+
     public Discount getDiscount() {
         return mDiscount;
     }
@@ -880,6 +880,10 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
 
     public Boolean shouldShowAllSavedCards() {
         return mFlowPreference.isShowAllSavedCardsEnabled();
+    }
+
+    public Boolean isDiscountValid() {
+        return mDiscount != null && mDiscount.isValid();
     }
 
     public Integer getMaxSavedCardsToShow() {
