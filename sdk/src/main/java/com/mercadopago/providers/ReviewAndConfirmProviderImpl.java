@@ -177,7 +177,7 @@ public class ReviewAndConfirmProviderImpl implements ReviewAndConfirmProvider {
             } else {
                 summaryBuilder.addSummaryProductDetail(amount, getSummaryProductsTitle(), getDefaultTextColor());
 
-                if (getPayerCostChargesAmount().compareTo(BigDecimal.ZERO) > 0) {
+                if (payerCost != null && getPayerCostChargesAmount().compareTo(BigDecimal.ZERO) > 0) {
                     summaryBuilder.addSummaryChargeDetail(getPayerCostChargesAmount(), getSummaryChargesTitle(), getDefaultTextColor());
                 }
 
