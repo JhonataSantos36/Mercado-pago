@@ -1,3 +1,11 @@
+## VERSION 3.5.3
+
+_26_09_2017_
+
+* Fix: Summary fee with free interests
+* Fix: Crash when loading coupon in payment method selection
+* Fix: New issuers logos
+
 ## VERSION 3.5.2
 
 _21_09_2017_
