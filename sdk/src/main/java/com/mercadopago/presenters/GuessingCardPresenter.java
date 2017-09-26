@@ -546,7 +546,7 @@ public class GuessingCardPresenter extends MvpPresenter<GuessingCardActivityView
     public BigDecimal getTransactionAmount() {
         BigDecimal amount;
 
-        if (mDiscount != null && mDiscountEnabled && isDiscountValid()) {
+        if (mDiscount != null && mDiscountEnabled && mDiscount.isValid()) {
             amount = mDiscount.getAmountWithDiscount(mTransactionAmount);
         } else {
             amount = mTransactionAmount;
@@ -554,23 +554,6 @@ public class GuessingCardPresenter extends MvpPresenter<GuessingCardActivityView
 
         return amount;
     }
-
-    private Boolean isDiscountValid() {
-        return isDiscountCurrencyIdValid() && isAmountValid(mDiscount.getCouponAmount()) && isCampaignIdValid();
-    }
-
-    private Boolean isDiscountCurrencyIdValid() {
-        return mDiscount != null && mDiscount.getCurrencyId() != null && CurrenciesUtil.isValidCurrency(mDiscount.getCurrencyId());
-    }
-
-    private Boolean isCampaignIdValid() {
-        return mDiscount != null && mDiscount.getId() != null;
-    }
-
-    private Boolean isAmountValid(BigDecimal amount) {
-        return amount != null && amount.compareTo(BigDecimal.ZERO) >= 0;
-    }
-
 
     private void loadPaymentMethods() {
         if (mPaymentMethodList == null || mPaymentMethodList.isEmpty()) {
@@ -788,11 +771,13 @@ public class GuessingCardPresenter extends MvpPresenter<GuessingCardActivityView
     }
 
     private void resolveBankDeals(List<BankDeal> bankDeals) {
-        if (bankDeals == null || bankDeals.isEmpty()) {
-            getView().hideBankDeals();
-        } else {
-            mBankDealsList = bankDeals;
-            getView().showBankDeals();
+        if (isViewAttached()) {
+            if (bankDeals == null || bankDeals.isEmpty()) {
+                getView().hideBankDeals();
+            } else {
+                mBankDealsList = bankDeals;
+                getView().showBankDeals();
+            }
         }
     }
 

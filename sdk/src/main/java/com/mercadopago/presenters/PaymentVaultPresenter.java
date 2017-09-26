@@ -78,8 +78,7 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
         initializeDiscountRow();
 
         if (isItemSelected()) {
-            showSelectedItemChildren();
-
+            checkAvailablePaymentMethods();
         } else {
             initPaymentMethodSearch();
         }
@@ -148,7 +147,7 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
                 throw new IllegalStateException(getResourcesProvider().getAllPaymentTypesExcludedErrorMessage());
             }
         }
-        if (!isAmountValid()) {
+        if (!isAmountValid(mAmount)) {
             throw new IllegalStateException(getResourcesProvider().getInvalidAmountErrorMessage());
         }
         if (!isSiteConfigurationValid()) {
@@ -156,8 +155,8 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
         }
     }
 
-    private boolean isAmountValid() {
-        return mAmount != null && mAmount.compareTo(BigDecimal.ZERO) >= 0;
+    private Boolean isAmountValid(BigDecimal amount) {
+        return amount != null && amount.compareTo(BigDecimal.ZERO) >= 0;
     }
 
     private boolean isSiteConfigurationValid() {
@@ -184,11 +183,52 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
 
         getView().setTitle(getResourcesProvider().getTitle());
 
+        checkAvailablePaymentMethods();
+    }
+
+    private void checkAvailablePaymentMethods() {
         if (mPaymentMethodSearch == null) {
             getPaymentMethodSearchAsync();
         } else {
+            showPaymentMethodGroup();
+        }
+    }
+
+    private void showPaymentMethodGroup() {
+        if (isItemSelected()) {
+            showSelectedItemChildren();
+        } else {
             resolveAvailablePaymentMethods();
         }
+    }
+
+    private void reselectSearchItem() {
+        if (mSelectedSearchItem != null) {
+            if (mPaymentMethodSearch == null || noPaymentMethodsAvailable()) {
+                showEmptyPaymentMethodsError();
+            } else {
+                //Reemplazo el selected item por el nuevo que vino de la api
+                List<PaymentMethodSearchItem> groups = mPaymentMethodSearch.getGroups();
+                for (PaymentMethodSearchItem item : groups) {
+                    if (item.getId().equals(mSelectedSearchItem.getId())) {
+                        mSelectedSearchItem = item;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    public BigDecimal getTransactionAmount() {
+        BigDecimal amount;
+
+        if (mDiscount != null && mDiscountEnabled && mDiscount.isValid()) {
+            amount = mDiscount.getAmountWithDiscount(mAmount);
+        } else {
+            amount = mAmount;
+        }
+
+        return amount;
     }
 
     private void getPaymentMethodSearchAsync() {
@@ -197,12 +237,14 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
             Payer payer = new Payer();
             payer.setAccessToken(mPayerAccessToken);
 
-            getResourcesProvider().getPaymentMethodSearch(mAmount, mPaymentPreference, payer, mSite, new OnResourcesRetrievedCallback<PaymentMethodSearch>() {
+
+            getResourcesProvider().getPaymentMethodSearch(getTransactionAmount(), mPaymentPreference, payer, mSite, new OnResourcesRetrievedCallback<PaymentMethodSearch>() {
 
                 @Override
                 public void onSuccess(PaymentMethodSearch paymentMethodSearch) {
                     mPaymentMethodSearch = paymentMethodSearch;
-                    resolveAvailablePaymentMethods();
+                    reselectSearchItem();
+                    showPaymentMethodGroup();
                 }
 
                 @Override
@@ -232,6 +274,7 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
 
         getView().setTitle(mSelectedSearchItem.getChildrenHeader());
         getView().showSearchItems(mSelectedSearchItem.getChildren(), getPaymentMethodSearchItemSelectionCallback());
+        getView().hideProgress();
     }
 
     private void resolveAvailablePaymentMethods() {

@@ -130,6 +130,7 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
 
         setContentView();
         initializeControls();
+        cleanPaymentMethodOptions();
 
         //Avoid automatic selection if activity restored on back pressed from next step
         boolean selectAutomatically = savedInstanceState == null;
@@ -493,6 +494,10 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
                 this.finish();
             } else {
                 Discount discount = JsonUtil.getInstance().fromJson(data.getStringExtra("discount"), Discount.class);
+                PaymentMethodSearch paymentMethodSearch = JsonUtil.getInstance().fromJson(data.getStringExtra("paymentMethodSearch"), PaymentMethodSearch.class);
+                if (paymentMethodSearch != null) {
+                    mPaymentVaultPresenter.setPaymentMethodSearch(paymentMethodSearch);
+                }
                 if (discount != null) {
                     mPaymentVaultPresenter.setDiscount(discount);
                     mPaymentVaultPresenter.initializeDiscountRow();
@@ -568,6 +573,7 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
         Intent returnIntent = new Intent();
         returnIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
         returnIntent.putExtra("discount", JsonUtil.getInstance().toJson(mPaymentVaultPresenter.getDiscount()));
+        returnIntent.putExtra("paymentMethodSearch", JsonUtil.getInstance().toJson(mPaymentVaultPresenter.getPaymentMethodSearch()));
 
         this.setResult(Activity.RESULT_OK, returnIntent);
         this.finish();
@@ -681,6 +687,7 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
     public void onBackPressed() {
         Intent returnIntent = new Intent();
         returnIntent.putExtra("discount", JsonUtil.getInstance().toJson(mPaymentVaultPresenter.getDiscount()));
+        returnIntent.putExtra("paymentMethodSearch", JsonUtil.getInstance().toJson(mPaymentVaultPresenter.getPaymentMethodSearch()));
         setResult(RESULT_CANCELED, returnIntent);
         finish();
 
