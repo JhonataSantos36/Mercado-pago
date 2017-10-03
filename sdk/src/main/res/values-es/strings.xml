@@ -172,6 +172,7 @@
 
     <!-- Utils -->
     <string name="mpsdk_text_continue">Continuar</string>
+    <string name="mpsdk_continue_shopping">Seguir comprando</string>
     <string name="mpsdk_text_cancel_payment_and_continue">Cancelar pago y continuar</string>
     <string name="mpsdk_zero_rate">Sin interés</string>
     <string name="mpsdk_exit_label">Salir</string>

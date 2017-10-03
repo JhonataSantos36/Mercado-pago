@@ -8,10 +8,12 @@ import java.util.List;
 public class Instruction {
     private List<InstructionReference> references;
     private String title;
+    private String subtitle;
     private List<String> info;
     private List<String> secondaryInfo;
     private List<String> tertiaryInfo;
     private String accreditationMessage;
+    private List<String> accreditationComments;
     private List<InstructionActionInfo> actions;
     private String type;
 
@@ -21,6 +23,10 @@ public class Instruction {
 
     public String getTitle() {
         return title;
+    }
+
+    public String getSubtitle() {
+        return subtitle;
     }
 
     public List<String> getInfo() {
@@ -37,6 +43,10 @@ public class Instruction {
 
     public String getAcreditationMessage() {
         return accreditationMessage;
+    }
+
+    public List<String> getAccreditationComments() {
+        return accreditationComments;
     }
 
     public List<InstructionActionInfo> getActions() {
