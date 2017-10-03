@@ -25,7 +25,8 @@ public class PaymentResultActivity extends Activity {
 
     public static final String DISCOUNT_BUNDLE = "mDiscount";
     public static final String DISCOUNT_ENABLED_BUNDLE = "mDiscountEnabled";
-    public static final String MERCHANT_PUBLIC_KEY_BUNDLE = "mMerchantPublicKey";
+    public static final String PAYER_ACCESS_TOKEN_BUNDLE = "mMerchantPublicKey";
+    public static final String MERCHANT_PUBLIC_KEY_BUNDLE = "mpayerAccessToken";
     public static final String CONGRATS_DISPLAY_BUNDLE = "mCongratsDisplay";
     public static final String PAYMENT_RESULT_BUNDLE = "mPaymentResult";
     public static final String SITE_BUNDLE = "mSite";
@@ -36,6 +37,7 @@ public class PaymentResultActivity extends Activity {
     protected Discount mDiscount;
     protected Boolean mDiscountEnabled;
     private String mMerchantPublicKey;
+    private  String mPayerAccessToken;
     protected Integer mCongratsDisplay;
     protected PaymentResult mPaymentResult;
     protected Site mSite;
@@ -63,6 +65,7 @@ public class PaymentResultActivity extends Activity {
         outState.putString(DISCOUNT_BUNDLE, JsonUtil.getInstance().toJson(mDiscount));
         outState.putBoolean(DISCOUNT_ENABLED_BUNDLE, mDiscountEnabled);
         outState.putString(MERCHANT_PUBLIC_KEY_BUNDLE, mMerchantPublicKey);
+        outState.putString(PAYER_ACCESS_TOKEN_BUNDLE, mPayerAccessToken);
         outState.putInt(CONGRATS_DISPLAY_BUNDLE, mCongratsDisplay);
         outState.putString(PAYMENT_RESULT_BUNDLE, JsonUtil.getInstance().toJson(mPaymentResult));
         outState.putString(SITE_BUNDLE, JsonUtil.getInstance().toJson(mSite));
@@ -77,6 +80,7 @@ public class PaymentResultActivity extends Activity {
         mDiscount = JsonUtil.getInstance().fromJson(savedInstanceState.getString(DISCOUNT_BUNDLE), Discount.class);
         mDiscountEnabled = savedInstanceState.getBoolean(DISCOUNT_ENABLED_BUNDLE);
         mMerchantPublicKey = savedInstanceState.getString(MERCHANT_PUBLIC_KEY_BUNDLE);
+        mPayerAccessToken = savedInstanceState.getString(PAYER_ACCESS_TOKEN_BUNDLE);
         mCongratsDisplay = savedInstanceState.getInt(CONGRATS_DISPLAY_BUNDLE, -1);
         mPaymentResult = JsonUtil.getInstance().fromJson(savedInstanceState.getString(PAYMENT_RESULT_BUNDLE), PaymentResult.class);
         mSite = JsonUtil.getInstance().fromJson(savedInstanceState.getString(SITE_BUNDLE), Site.class);
@@ -90,6 +94,7 @@ public class PaymentResultActivity extends Activity {
 
     protected void getActivityParameters() {
         mMerchantPublicKey = getIntent().getStringExtra("merchantPublicKey");
+        mPayerAccessToken = getIntent().getStringExtra("payerAccessToken");
         mCongratsDisplay = getIntent().getIntExtra("congratsDisplay", -1);
         mDiscount = JsonUtil.getInstance().fromJson(getIntent().getExtras().getString("discount"), Discount.class);
         mDiscountEnabled = getIntent().getExtras().getBoolean("discountEnabled", true);
@@ -149,6 +154,7 @@ public class PaymentResultActivity extends Activity {
     private void startInstructionsActivity() {
         new MercadoPagoComponents.Activities.InstructionsActivityBuilder()
                 .setMerchantPublicKey(mMerchantPublicKey)
+                .setPayerAccessToken(mPayerAccessToken)
                 .setActivity(this)
                 .setPaymentResult(mPaymentResult)
                 .setSite(mSite)

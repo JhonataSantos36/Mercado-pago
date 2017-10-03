@@ -299,7 +299,7 @@ public class MercadoPago {
     public void getPaymentResult(Long paymentId, String paymentTypeId, final Callback<Instructions> callback) {
         if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {
             CheckoutService service = mRetrofit.create(CheckoutService.class);
-            service.getPaymentResult(mContext.getResources().getConfiguration().locale.getLanguage(), paymentId, this.mKey, paymentTypeId, PAYMENT_RESULT_API_VERSION).enqueue(callback);
+            service.getPaymentResult(mContext.getResources().getConfiguration().locale.getLanguage(), paymentId, this.mKey, "", paymentTypeId, PAYMENT_RESULT_API_VERSION).enqueue(callback);
         } else {
             throw new RuntimeException("Unsupported key type for this method");
         }

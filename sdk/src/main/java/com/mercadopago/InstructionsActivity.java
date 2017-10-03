@@ -72,6 +72,7 @@ public class InstructionsActivity extends MercadoPagoBaseActivity {
 
     //Params
     protected String mMerchantPublicKey;
+    protected String mPayerAccessToken;
     protected PaymentResult mPaymentResult;
     protected Long mPaymentId;
     protected String mPaymentTypeId;
@@ -101,6 +102,7 @@ public class InstructionsActivity extends MercadoPagoBaseActivity {
 
     protected void getActivityParameters() {
         mMerchantPublicKey = getIntent().getStringExtra("merchantPublicKey");
+        mPayerAccessToken = getIntent().getStringExtra("payerAccessToken");
         mPaymentResult = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("paymentResult"), PaymentResult.class);
         mPaymentResultScreenPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("paymentResultScreenPreference"), PaymentResultScreenPreference.class);
         mServicePreference = JsonUtil.getInstance().fromJson(getIntent().getExtras().getString("servicePreference"), ServicePreference.class);
@@ -165,6 +167,7 @@ public class InstructionsActivity extends MercadoPagoBaseActivity {
         mMercadoPagoServices = new MercadoPagoServices.Builder()
                 .setContext(this)
                 .setPublicKey(mMerchantPublicKey)
+                .setPrivateKey(mPayerAccessToken)
                 .build();
         getInstructionsAsync();
     }
