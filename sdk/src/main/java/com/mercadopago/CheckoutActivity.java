@@ -11,6 +11,7 @@ import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.model.Card;
 import com.mercadopago.model.Discount;
 import com.mercadopago.model.Issuer;
+import com.mercadopago.model.Payer;
 import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentData;
@@ -254,12 +255,13 @@ public class CheckoutActivity extends MercadoPagoBaseActivity implements Checkou
             Token token = JsonUtil.getInstance().fromJson(data.getStringExtra("token"), Token.class);
             PaymentMethod paymentMethod = JsonUtil.getInstance().fromJson(data.getStringExtra("paymentMethod"), PaymentMethod.class);
             Card card = JsonUtil.getInstance().fromJson(data.getStringExtra("card"), Card.class);
+            Payer payer = JsonUtil.getInstance().fromJson(data.getStringExtra("payer"), Payer.class);
             PaymentMethodSearch paymentMethodSearch = JsonUtil.getInstance().fromJson(data.getStringExtra("paymentMethodSearch"), PaymentMethodSearch.class);
             if (paymentMethodSearch != null) {
                 mCheckoutPresenter.setPaymentMethodSearch(paymentMethodSearch);
             }
 
-            mCheckoutPresenter.onPaymentMethodSelectionResponse(paymentMethod, issuer, payerCost, token, discount, card);
+            mCheckoutPresenter.onPaymentMethodSelectionResponse(paymentMethod, issuer, payerCost, token, discount, card, payer);
         } else if (isErrorResult(data)) {
             MercadoPagoError mercadoPagoError = JsonUtil.getInstance().fromJson(data.getStringExtra("mercadoPagoError"), MercadoPagoError.class);
             mCheckoutPresenter.onPaymentMethodSelectionError(mercadoPagoError);
@@ -325,7 +327,7 @@ public class CheckoutActivity extends MercadoPagoBaseActivity implements Checkou
                 .setActivity(this)
                 .setMerchantPublicKey(mMerchantPublicKey)
                 .setDecorationPreference(mDecorationPreference)
-                .setPayerAccessToken(mCheckoutPresenter.getCheckoutPreference().getPayer().getAccessToken())
+                .setPayerAccessToken(mPrivateKey)
                 .setPayerEmail(mCheckoutPresenter.getCheckoutPreference().getPayer().getEmail())
                 .setSite(mCheckoutPresenter.getCheckoutPreference().getSite())
                 .setAmount(mCheckoutPresenter.getCheckoutPreference().getAmount())
@@ -349,6 +351,7 @@ public class CheckoutActivity extends MercadoPagoBaseActivity implements Checkou
 
         new MercadoPagoComponents.Activities.PaymentResultActivityBuilder()
                 .setMerchantPublicKey(mMerchantPublicKey)
+                .setPayerAccessToken(mPrivateKey)
                 .setActivity(this)
                 .setPaymentResult(paymentResult)
                 .setDiscount(mCheckoutPresenter.getDiscount())
@@ -450,7 +453,7 @@ public class CheckoutActivity extends MercadoPagoBaseActivity implements Checkou
         new MercadoPagoComponents.Activities.CardVaultActivityBuilder()
                 .setActivity(this)
                 .setMerchantPublicKey(mMerchantPublicKey)
-                .setPayerAccessToken(mCheckoutPresenter.getCheckoutPreference().getPayer().getAccessToken())
+                .setPayerAccessToken(mPrivateKey)
                 .setPaymentPreference(paymentPreference)
                 .setDecorationPreference(mDecorationPreference)
                 .setAmount(mCheckoutPresenter.getCheckoutPreference().getAmount())

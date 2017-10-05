@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.mercadopago.R;
+import com.mercadopago.constants.PaymentMethods;
 import com.mercadopago.constants.PaymentTypes;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.model.PaymentMethodSearchItem;
@@ -103,7 +104,8 @@ public class PaymentMethodSearchOption implements PaymentMethodSearchViewControl
     private boolean itemNeedsTint(PaymentMethodSearchItem paymentMethodSearchItem) {
         return mDecorationPreference != null && mDecorationPreference.hasColors()
                 && (paymentMethodSearchItem.isGroup()
-                || paymentMethodSearchItem.isPaymentType());
+                || paymentMethodSearchItem.isPaymentType()
+                || paymentMethodSearchItem.getId().contains(PaymentMethods.BRASIL.BOLBRADESCO));
     }
 
     @Override

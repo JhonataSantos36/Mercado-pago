@@ -1,10 +1,10 @@
 package com.mercadopago.views;
 
-import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.callbacks.OnSelectedCallback;
 import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.model.Card;
 import com.mercadopago.model.CustomSearchItem;
+import com.mercadopago.model.Payer;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentMethodSearchItem;
 import com.mercadopago.mvp.MvpView;
@@ -37,11 +37,15 @@ public interface PaymentVaultView extends MvpView {
 
     void startPaymentMethodsSelection();
 
-    void selectPaymentMethod(PaymentMethod selectedPaymentMethod);
+    void finishPaymentMethodSelection(PaymentMethod selectedPaymentMethod);
+
+    void finishPaymentMethodSelection(PaymentMethod paymentMethod, Payer payer);
 
     void showDiscount(BigDecimal transactionAmount);
 
     void startDiscountFlow(BigDecimal transactionAmount);
+
+    void collectPayerInformation();
 
     void cleanPaymentMethodOptions();
 

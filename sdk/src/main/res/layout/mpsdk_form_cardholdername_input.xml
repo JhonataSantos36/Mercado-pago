@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/mpsdkCardholderNameInput"
+    android:id="@+id/mpsdkNameInput"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="vertical"
@@ -16,25 +16,25 @@
         android:text="@string/mpsdk_cardholder_name"
         android:textColor="@color/mpsdk_color_new_card_text"
         android:textSize="14dp"
-        app:fontStyle="light"
-        app:allowCustomFont="false"/>
+        app:allowCustomFont="false"
+        app:fontStyle="light" />
 
     <com.mercadopago.customviews.MPEditText
         android:id="@+id/mpsdkCardholderName"
-        app:errorColor="@color/mpsdk_color_red_error"
         android:layout_width="293dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
         android:layout_marginTop="2dp"
+        android:focusableInTouchMode="true"
         android:imeOptions="actionNext"
         android:inputType="textNoSuggestions|textPersonName"
         android:maxLength="50"
         android:privateImeOptions="nm"
         android:singleLine="true"
-        android:focusableInTouchMode="true"
-        android:textIsSelectable="true"
         android:textColor="@color/abc_search_url_text_selected"
-        android:textSize="19dp" />
+        android:textIsSelectable="true"
+        android:textSize="19dp"
+        app:errorColor="@color/mpsdk_color_red_error" />
 
 </LinearLayout>

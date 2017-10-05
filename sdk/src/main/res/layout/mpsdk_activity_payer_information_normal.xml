@@ -1,0 +1,67 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activityPayerInformationContainer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".PayerInformationActivity">
+
+    <ScrollView
+        android:id="@+id/mpsdkScrollViewContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/mpsdk_white"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:id="@+id/mpsdkBackground"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/mpsdk_card_background_height"
+                android:background="@color/mpsdk_background_blue">
+
+                <include layout="@layout/mpsdk_form_card_normal_toolbar" />
+
+                <FrameLayout
+                    android:id="@+id/mpsdkCardViewContainer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal|top"
+                    android:layout_marginTop="45dp"
+                    android:gravity="center_horizontal">
+
+                </FrameLayout>
+
+                <FrameLayout
+                    android:id="@+id/mpsdkIdentificationCardContainer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal|top"
+                    android:layout_marginTop="45dp"
+                    android:gravity="center_horizontal" />
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <include layout="@layout/mpsdk_payer_information_input" />
+                <ProgressBar
+                    android:id="@+id/mpsdkProgressBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:visibility="gone"
+                    android:layout_gravity="center" />
+            </FrameLayout>
+
+            <include layout="@layout/mpsdk_form_card_button_container" />
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

@@ -11,6 +11,7 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 
+import com.mercadopago.PayerInformationActivity;
 import com.mercadopago.R;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.model.PaymentMethod;
@@ -87,6 +88,13 @@ public class ColorsUtil {
             decorateDarkFontUpArrow(toolbar, decorationPreference,
                     actionBar, context);
             title.setTextColor(decorationPreference.getDarkFontColor(context));
+        }
+    }
+
+    public static void decorateTransparentToolbar(Toolbar toolbar, DecorationPreference decorationPreference, ActionBar actionBar, Context context) {
+        if (decorationPreference.isDarkFontEnabled()) {
+            decorateDarkFontUpArrow(toolbar, decorationPreference,
+                    actionBar, context);
         }
     }
 

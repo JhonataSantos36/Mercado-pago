@@ -5,7 +5,6 @@ import com.google.gson.reflect.TypeToken;
 
 import android.content.Context;
 
-import com.mercadopago.BuildConfig;
 import com.mercadopago.R;
 import com.mercadopago.callbacks.Callback;
 import com.mercadopago.constants.PaymentTypes;
@@ -244,6 +243,7 @@ public class CheckoutProviderImpl implements CheckoutProvider {
 
     private void createPaymentInMercadoPago(String transactionId, CheckoutPreference checkoutPreference, PaymentData paymentData, Boolean binaryMode, String customerId, final OnResourcesRetrievedCallback<Payment> onResourcesRetrievedCallback) {
         PaymentBody paymentBody = createPaymentBody(transactionId, checkoutPreference, paymentData, binaryMode, customerId);
+
         mercadoPagoServices.createPayment(paymentBody, new Callback<Payment>() {
             @Override
             public void success(Payment payment) {
@@ -263,11 +263,11 @@ public class CheckoutProviderImpl implements CheckoutProvider {
         paymentBody.setPublicKey(publicKey);
         paymentBody.setPaymentMethodId(paymentData.getPaymentMethod().getId());
         paymentBody.setBinaryMode(binaryMode);
-        Payer payer = checkoutPreference.getPayer();
+
+        Payer payer = paymentData.getPayer();
         if (!TextUtils.isEmpty(customerId) && MercadoPagoUtil.isCard(paymentData.getPaymentMethod().getPaymentTypeId())) {
             payer.setId(customerId);
         }
-
         paymentBody.setPayer(payer);
 
         if (paymentData.getToken() != null) {

@@ -1,3 +1,9 @@
+## VERSION 3.6.0
+
+_04_10_2017_
+
+* New: Added boleto as payment method in Brazil
+
 ## VERSION 3.5.3
 
 _26_09_2017_

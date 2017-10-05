@@ -2,13 +2,21 @@ package com.mercadopago;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.text.Html;
+import android.text.SpannableStringBuilder;
 import android.text.Spanned;
+import android.text.style.ImageSpan;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -35,6 +43,7 @@ import com.mercadopago.px_tracking.utils.TrackingUtil;
 import com.mercadopago.tracker.MPTrackingContext;
 import com.mercadopago.px_tracking.model.ScreenViewEvent;
 import com.mercadopago.util.ApiUtil;
+import com.mercadopago.util.BitmapUtils;
 import com.mercadopago.util.CurrenciesUtil;
 import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
@@ -59,7 +68,10 @@ public class InstructionsActivity extends MercadoPagoBaseActivity {
 
     //Controls
     protected LinearLayout mReferencesLayout;
+    protected LinearLayout mSubtitleContainer;
+    protected LinearLayout mAccreditationCommentsLayout;
     protected MPTextView mTitle;
+    protected MPTextView mSubtitle;
     protected MPTextView mPrimaryInfo;
     protected MPTextView mSecondaryInfo;
     protected MPTextView mTertiaryInfo;
@@ -72,6 +84,7 @@ public class InstructionsActivity extends MercadoPagoBaseActivity {
 
     //Params
     protected String mMerchantPublicKey;
+    protected String mPayerAccessToken;
     protected PaymentResult mPaymentResult;
     protected Long mPaymentId;
     protected String mPaymentTypeId;
@@ -101,6 +114,7 @@ public class InstructionsActivity extends MercadoPagoBaseActivity {
 
     protected void getActivityParameters() {
         mMerchantPublicKey = getIntent().getStringExtra("merchantPublicKey");
+        mPayerAccessToken = getIntent().getStringExtra("payerAccessToken");
         mPaymentResult = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("paymentResult"), PaymentResult.class);
         mPaymentResultScreenPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("paymentResultScreenPreference"), PaymentResultScreenPreference.class);
         mServicePreference = JsonUtil.getInstance().fromJson(getIntent().getExtras().getString("servicePreference"), ServicePreference.class);
@@ -130,7 +144,10 @@ public class InstructionsActivity extends MercadoPagoBaseActivity {
 
     protected void initializeControls() {
         mReferencesLayout = (LinearLayout) findViewById(R.id.mpsdkReferencesLayout);
+        mAccreditationCommentsLayout = (LinearLayout) findViewById(R.id.mpsdkAccreditationComments);
         mTitle = (MPTextView) findViewById(R.id.mpsdkTitle);
+        mSubtitleContainer = (LinearLayout) findViewById(R.id.mpsdkSubtitleContainer);
+        mSubtitle = (MPTextView) findViewById(R.id.mpsdkSubtitle);
         mPrimaryInfo = (MPTextView) findViewById(R.id.mpsdkPrimaryInfo);
         mSecondaryInfo = (MPTextView) findViewById(R.id.mpsdkSecondaryInfo);
         mTertiaryInfo = (MPTextView) findViewById(R.id.mpsdkTertiaryInfo);
@@ -165,6 +182,7 @@ public class InstructionsActivity extends MercadoPagoBaseActivity {
         mMercadoPagoServices = new MercadoPagoServices.Builder()
                 .setContext(this)
                 .setPublicKey(mMerchantPublicKey)
+                .setPrivateKey(mPayerAccessToken)
                 .build();
         getInstructionsAsync();
     }
@@ -278,15 +296,39 @@ public class InstructionsActivity extends MercadoPagoBaseActivity {
 
     protected void showInstructions(Instruction instruction) {
         setTitle(instruction.getTitle());
+        setSubtitle(instruction.getSubtitle());
         setReferencesInformation(instruction);
         setInformationMessages(instruction);
-        mAccreditationMessage.setText(instruction.getAcreditationMessage());
+        setAccreditationMessage(instruction.getAcreditationMessage());
+        setAccreditationComments(instruction);
         setActions(instruction);
     }
 
     protected void setTitle(String title) {
         Spanned formattedTitle = CurrenciesUtil.formatCurrencyInText("<br>", mTotalAmount, mCurrencyId, title, false, true);
         mTitle.setText(formattedTitle);
+    }
+
+    protected void setSubtitle(String subtitle) {
+        if (subtitle == null || subtitle.isEmpty()) {
+            mSubtitleContainer.setVisibility(View.GONE);
+        } else {
+            mSubtitle.setText(subtitle);
+        }
+    }
+
+    protected void setAccreditationMessage(String accreditationMessage) {
+        SpannableStringBuilder textspan = new SpannableStringBuilder("  " + accreditationMessage);
+
+        final Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.mpsdk_time);
+        Bitmap resizedBitmap = BitmapUtils.scaleDown(bitmap, ScaleUtil.getPxFromDp(13, mActivity), true);
+        Drawable drawable = new BitmapDrawable(getResources(), resizedBitmap);
+        PorterDuff.Mode mode = PorterDuff.Mode.SRC_ATOP;
+        drawable.setColorFilter(ContextCompat.getColor(mActivity, R.color.mpsdk_warm_grey), mode);
+
+        drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
+        textspan.setSpan(new ImageSpan(drawable, ImageSpan.ALIGN_BASELINE), 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        mAccreditationMessage.setText(textspan);
     }
 
     protected void setActions(Instruction instruction) {
@@ -307,6 +349,25 @@ public class InstructionsActivity extends MercadoPagoBaseActivity {
         }
     }
 
+    protected void setAccreditationComments(Instruction instruction) {
+        if (instruction.getAccreditationComments() != null) {
+            LinearLayout.LayoutParams marginParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT);
+            marginParams.setMargins(0, 0, 0, 15);
+
+            for (String accreditationComment : instruction.getAccreditationComments()) {
+                if (!accreditationComment.isEmpty()) {
+                    MPTextView commentTextView = new MPTextView(this);
+                    commentTextView.setText(accreditationComment);
+                    commentTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimensionPixelSize(R.dimen.mpsdk_smaller_text));
+                    commentTextView.setGravity(Gravity.CENTER_HORIZONTAL);
+                    commentTextView.setLayoutParams(marginParams);
+                    mAccreditationCommentsLayout.addView(commentTextView);
+                }
+            }
+        }
+    }
+
     protected void setReferencesInformation(Instruction instruction) {
         LinearLayout.LayoutParams marginParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -314,6 +375,7 @@ public class InstructionsActivity extends MercadoPagoBaseActivity {
         for (InstructionReference reference : instruction.getReferences()) {
             MPTextView currentTitleTextView = new MPTextView(this);
             MPTextView currentValueTextView = new MPTextView(this);
+            MPTextView currentCommentTextView = new MPTextView(this);
 
             if (reference.hasValue()) {
                 if (reference.hasLabel()) {
@@ -342,6 +404,17 @@ public class InstructionsActivity extends MercadoPagoBaseActivity {
                 currentValueTextView.setTypeface(currentTitleTextView.getTypeface(), Typeface.NORMAL);
 
                 mReferencesLayout.addView(currentValueTextView);
+
+                if (reference.hasComment()) {
+                    LinearLayout.LayoutParams commentMarginParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                            ViewGroup.LayoutParams.WRAP_CONTENT);
+                    commentMarginParams.setMargins(40, 15, 40, 45);
+                    currentCommentTextView.setText(reference.getComment());
+                    currentCommentTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimensionPixelSize(R.dimen.mpsdk_regular_text));
+                    currentCommentTextView.setGravity(Gravity.CENTER_HORIZONTAL);
+                    currentCommentTextView.setLayoutParams(commentMarginParams);
+                    mReferencesLayout.addView(currentCommentTextView);
+                }
             }
         }
     }

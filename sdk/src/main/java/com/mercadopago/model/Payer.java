@@ -2,11 +2,14 @@ package com.mercadopago.model;
 
 public class Payer {
 
-    private String email;
+
     private String id;
     private String accessToken;
     private Identification identification;
     private String type;
+    private String email;
+    private String firstName;
+    private String lastName;
 
     public String getEmail() {
         return email;
@@ -46,5 +49,21 @@ public class Payer {
 
     public String getAccessToken() {
         return accessToken;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 }

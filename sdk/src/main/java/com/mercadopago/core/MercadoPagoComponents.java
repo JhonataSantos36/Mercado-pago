@@ -17,6 +17,7 @@ import com.mercadopago.GuessingCardActivity;
 import com.mercadopago.InstallmentsActivity;
 import com.mercadopago.InstructionsActivity;
 import com.mercadopago.IssuersActivity;
+import com.mercadopago.PayerInformationActivity;
 import com.mercadopago.PaymentMethodsActivity;
 import com.mercadopago.PaymentResultActivity;
 import com.mercadopago.PaymentTypesActivity;
@@ -87,7 +88,6 @@ public class MercadoPagoComponents {
         public static final int REJECTION_REQUEST_CODE = 9;
         public static final int PAYMENT_VAULT_REQUEST_CODE = 10;
         public static final int BANK_DEALS_REQUEST_CODE = 11;
-        public static final int CHECKOUT_REQUEST_CODE = 12;
         public static final int GUESSING_CARD_REQUEST_CODE = 13;
         public static final int INSTRUCTIONS_REQUEST_CODE = 14;
         public static final int CARD_VAULT_REQUEST_CODE = 15;
@@ -97,6 +97,7 @@ public class MercadoPagoComponents {
         public static final int DISCOUNTS_REQUEST_CODE = 19;
         public static final int REVIEW_AND_CONFIRM_REQUEST_CODE = 20;
         public static final int REVIEW_PAYMENT_METHODS_REQUEST_CODE = 21;
+        public static final int PAYER_INFORMATION_REQUEST_CODE = 22;
 
         private Activities() {
         }
@@ -1311,6 +1312,51 @@ public class MercadoPagoComponents {
             }
         }
 
+        public static class PayerInformationActivityBuilder {
+            private Activity activity;
+            private String merchantPublicKey;
+            private DecorationPreference decorationPreference;
+            private String payerAccessToken;
+
+            public PayerInformationActivityBuilder setActivity(Activity activity) {
+                this.activity = activity;
+                return this;
+            }
+
+            public PayerInformationActivityBuilder setMerchantPublicKey(String merchantPublicKey) {
+                this.merchantPublicKey = merchantPublicKey;
+                return this;
+            }
+
+            public PayerInformationActivityBuilder setPayerAccessToken(String payerAccessToken) {
+                this.payerAccessToken = payerAccessToken;
+                return this;
+            }
+
+            public PayerInformationActivityBuilder setDecorationPreference(DecorationPreference decorationPreference) {
+                this.decorationPreference = decorationPreference;
+                return this;
+            }
+
+            public void startActivity() {
+
+                if (this.activity == null) throw new IllegalStateException("activity is null");
+                if (this.merchantPublicKey == null)
+                    throw new IllegalStateException("key is null");
+                startPayerInformationActivity();
+            }
+
+            private void startPayerInformationActivity() {
+                Intent payerInformationIntent = new Intent(activity, PayerInformationActivity.class);
+
+                payerInformationIntent.putExtra("merchantPublicKey", merchantPublicKey);
+                payerInformationIntent.putExtra("payerAccessToken", payerAccessToken);
+                payerInformationIntent.putExtra("decorationPreference", JsonUtil.getInstance().toJson(decorationPreference));
+
+                activity.startActivityForResult(payerInformationIntent, PAYER_INFORMATION_REQUEST_CODE);
+            }
+        }
+
         public static class DiscountsActivityBuilder {
             private Activity activity;
             private String merchantPublicKey;
@@ -1380,6 +1426,7 @@ public class MercadoPagoComponents {
         public static class PaymentResultActivityBuilder {
             private Activity activity;
             private String merchantPublicKey;
+            private String payerAccessToken;
             private Integer congratsDisplay;
             private Discount discount;
             private boolean discountEnabled;
@@ -1396,6 +1443,11 @@ public class MercadoPagoComponents {
 
             public PaymentResultActivityBuilder setMerchantPublicKey(String merchantPublicKey) {
                 this.merchantPublicKey = merchantPublicKey;
+                return this;
+            }
+
+            public PaymentResultActivityBuilder setPayerAccessToken(String accessToken) {
+                this.payerAccessToken = accessToken;
                 return this;
             }
 
@@ -1452,6 +1504,7 @@ public class MercadoPagoComponents {
             private void startPaymentResultActivity() {
                 Intent resultIntent = new Intent(activity, PaymentResultActivity.class);
                 resultIntent.putExtra("merchantPublicKey", merchantPublicKey);
+                resultIntent.putExtra("payerAccessToken", payerAccessToken);
                 resultIntent.putExtra("discount", JsonUtil.getInstance().toJson(discount));
                 resultIntent.putExtra("discountEnabled", discountEnabled);
                 resultIntent.putExtra("congratsDisplay", congratsDisplay);
@@ -1470,6 +1523,7 @@ public class MercadoPagoComponents {
         public static class InstructionsActivityBuilder {
             private Activity activity;
             private String merchantPublicKey;
+            private String payerAccessToken;
             private PaymentResult paymentResult;
             private Site site;
             private BigDecimal amount;
@@ -1483,6 +1537,11 @@ public class MercadoPagoComponents {
 
             public InstructionsActivityBuilder setMerchantPublicKey(String merchantPublicKey) {
                 this.merchantPublicKey = merchantPublicKey;
+                return this;
+            }
+
+            public InstructionsActivityBuilder setPayerAccessToken(String accessToken) {
+                this.payerAccessToken = accessToken;
                 return this;
             }
 
@@ -1527,6 +1586,7 @@ public class MercadoPagoComponents {
             private void startPaymentResultActivity() {
                 Intent instructionIntent = new Intent(activity, InstructionsActivity.class);
                 instructionIntent.putExtra("merchantPublicKey", merchantPublicKey);
+                instructionIntent.putExtra("payerAccessToken", payerAccessToken);
                 instructionIntent.putExtra("paymentResult", JsonUtil.getInstance().toJson(paymentResult));
                 instructionIntent.putExtra("paymentResultScreenPreference", JsonUtil.getInstance().toJson(paymentResultScreenPreference));
                 instructionIntent.putExtra("site", JsonUtil.getInstance().toJson(site));

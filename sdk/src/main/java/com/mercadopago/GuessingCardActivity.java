@@ -577,6 +577,7 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
             mCardViewContainer = (FrameLayout) findViewById(R.id.mpsdkCardViewContainer);
             mIdentificationCardContainer = (FrameLayout) findViewById(R.id.mpsdkIdentificationCardContainer);
         }
+
         mIdentificationTypeContainer = (LinearLayout) findViewById(R.id.mpsdkCardIdentificationTypeContainer);
         mIdentificationTypeSpinner = (Spinner) findViewById(R.id.mpsdkCardIdentificationType);
         mBankDealsTextView = (MPTextView) findViewById(R.id.mpsdkBankDealsText);
@@ -595,7 +596,7 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
         mBackButtonText = (TextView) findViewById(R.id.mpsdkBackButtonText);
         mButtonContainer = (LinearLayout) findViewById(R.id.mpsdkButtonContainer);
         mCardNumberInput = (LinearLayout) findViewById(R.id.mpsdkCardNumberInput);
-        mCardholderNameInput = (LinearLayout) findViewById(R.id.mpsdkCardholderNameInput);
+        mCardholderNameInput = (LinearLayout) findViewById(R.id.mpsdkNameInput);
         mCardExpiryDateInput = (LinearLayout) findViewById(R.id.mpsdkExpiryDateInput);
         mCardIdentificationInput = (LinearLayout) findViewById(R.id.mpsdkCardIdentificationInput);
         mCardSecurityCodeInput = (LinearLayout) findViewById(R.id.mpsdkCardSecurityCodeContainer);
@@ -1250,19 +1251,19 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
         }
     }
 
-    private void onTouchEditText(MPEditText editText, MotionEvent event) {
-        int action = MotionEventCompat.getActionMasked(event);
-        if (action == MotionEvent.ACTION_DOWN) {
-            openKeyboard(editText);
-        }
-    }
-
     private boolean onNextKey(int actionId, KeyEvent event) {
         if (isNextKey(actionId, event)) {
             validateCurrentEditText();
             return true;
         }
         return false;
+    }
+
+    private void onTouchEditText(MPEditText editText, MotionEvent event) {
+        int action = MotionEventCompat.getActionMasked(event);
+        if (action == MotionEvent.ACTION_DOWN) {
+            openKeyboard(editText);
+        }
     }
 
     private boolean isNextKey(int actionId, KeyEvent event) {

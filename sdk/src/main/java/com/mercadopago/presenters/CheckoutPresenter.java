@@ -33,6 +33,7 @@ import com.mercadopago.preferences.ServicePreference;
 import com.mercadopago.providers.CheckoutProvider;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.CurrenciesUtil;
+import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.TextUtils;
 import com.mercadopago.views.CheckoutView;
 
@@ -63,6 +64,7 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
     private Card mSelectedCard;
     private PaymentMethod mSelectedPaymentMethod;
     private Payment mCreatedPayment;
+    private Payer mCollectedPayer;
 
     private Boolean mPaymentMethodEdited = false;
     private boolean mPaymentMethodEditionRequested = false;
@@ -430,13 +432,14 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
         return mSelectedPaymentMethod == null;
     }
 
-    public void onPaymentMethodSelectionResponse(PaymentMethod paymentMethod, Issuer issuer, PayerCost payerCost, Token token, Discount discount, Card card) {
+    public void onPaymentMethodSelectionResponse(PaymentMethod paymentMethod, Issuer issuer, PayerCost payerCost, Token token, Discount discount, Card card, Payer payer) {
         mSelectedPaymentMethod = paymentMethod;
         mSelectedIssuer = issuer;
         mSelectedPayerCost = payerCost;
         mCreatedToken = token;
         mDiscount = discount;
         mSelectedCard = card;
+        mCollectedPayer = payer;
         onPaymentMethodSelected();
     }
 
@@ -450,8 +453,8 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
     }
 
     private void resolvePaymentDataResponse() {
-        PaymentData paymentData = createPaymentData();
         if (MercadoPagoCheckout.PAYMENT_DATA_RESULT_CODE.equals(mRequestedResult)) {
+            PaymentData paymentData = createPaymentData();
             getView().finishWithPaymentDataResult(paymentData, mPaymentMethodEdited);
         } else {
             createPayment();
@@ -714,8 +717,28 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
         paymentData.setDiscount(mDiscount);
         paymentData.setToken(mCreatedToken);
         paymentData.setTransactionAmount(mCheckoutPreference.getAmount());
-        paymentData.setPayer(mCheckoutPreference.getPayer());
+
+        Payer payer = createPayerFrom(mCheckoutPreference.getPayer(), mCollectedPayer);
+        paymentData.setPayer(payer);
+
         return paymentData;
+    }
+
+    private Payer createPayerFrom(Payer checkoutPreferencePayer, Payer collectedPayer) {
+        Payer payerForPayment;
+        if (checkoutPreferencePayer != null && collectedPayer != null) {
+            payerForPayment = copy(checkoutPreferencePayer);
+            payerForPayment.setFirstName(collectedPayer.getFirstName());
+            payerForPayment.setLastName(collectedPayer.getLastName());
+            payerForPayment.setIdentification(collectedPayer.getIdentification());
+        } else {
+            payerForPayment = checkoutPreferencePayer;
+        }
+        return payerForPayment;
+    }
+
+    private Payer copy(Payer original) {
+        return JsonUtil.getInstance().fromJson(JsonUtil.getInstance().toJson(original), Payer.class);
     }
 
     private void recoverPayment() {
