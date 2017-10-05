@@ -54,10 +54,15 @@
     <string name="mpsdk_invalid_empty_name">Ingresa el nombre y apellido impreso en la tarjeta</string>
     <string name="mpsdk_invalid_expiry_date">La fecha que ingresaste es inválida</string>
     <string name="mpsdk_invalid_identification_number">Ingresa todos los números</string>
+    <string name="mpsdk_invalid_identification_name">Ingresa tu nombre</string>
+    <string name="mpsdk_invalid_identification_last_name">Ingresa tu apellido</string>
+    <string name="mpsdk_invalid_identification_business_name">Ingresa la razón social</string>
     <string name="mpsdk_invalid_payment_method">No puedes pagar con este medio de pago</string>
     <string name="mpsdk_card_number_label">Número de tarjeta</string>
     <string name="mpsdk_card_expire_date_label">Fecha de expiración</string>
     <string name="mpsdk_cardholder_name">Nombre y apellido</string>
+    <string name="mpsdk_name">Nombre</string>
+    <string name="mpsdk_lastname">Apellido</string>
     <string name="mpsdk_doc_type_label">Tipo</string>
     <string name="mpsdk_doc_number_label">Documento</string>
     <string name="mpsdk_bank_deals_action">Ver promociones</string>
@@ -77,6 +82,8 @@
     <string name="mpsdk_card_expiry_divider_hint">/</string>
     <string name="mpsdk_card_expiry_year_hint">AA</string>
     <string name="mpsdk_card_identification_label">DOCUMENTO DEL TITULAR\nDE LA TARJETA</string>
+    <string name="mpsdk_ticket_identification_label">DATOS PARA VALIDAR SU PAGO</string>
+    <string name="mpsdk_name_and_lastname_identification_label">NOMBRE Y APELLIDO</string>
     <string name="mpsdk_card_identification_number">Número</string>
     <string name="mpsdk_card_identification_type">Tipo</string>
     <string name="mpsdk_cardholder_name_short">NOMBRE APELLIDO</string>

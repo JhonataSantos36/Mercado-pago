@@ -321,7 +321,7 @@ public class InstructionsActivity extends MercadoPagoBaseActivity {
         SpannableStringBuilder textspan = new SpannableStringBuilder("  " + accreditationMessage);
 
         final Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.mpsdk_time);
-        Bitmap resizedBitmap = BitmapUtils.scaleDown(bitmap, 40, true);
+        Bitmap resizedBitmap = BitmapUtils.scaleDown(bitmap, ScaleUtil.getPxFromDp(13, mActivity), true);
         Drawable drawable = new BitmapDrawable(getResources(), resizedBitmap);
         PorterDuff.Mode mode = PorterDuff.Mode.SRC_ATOP;
         drawable.setColorFilter(ContextCompat.getColor(mActivity, R.color.mpsdk_warm_grey), mode);

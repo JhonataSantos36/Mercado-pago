@@ -2,6 +2,7 @@ package com.mercadopago.presenters;
 
 import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.callbacks.OnSelectedCallback;
+import com.mercadopago.constants.PaymentMethods;
 import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.model.Card;
 import com.mercadopago.model.CustomSearchItem;
@@ -31,6 +32,7 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
 
     private Site mSite;
     private Discount mDiscount;
+    private PaymentMethod mSelectedPaymentMethod;
     private PaymentMethodSearchItem mSelectedSearchItem;
     private PaymentMethodSearch mPaymentMethodSearch;
     private String mPayerAccessToken;
@@ -128,6 +130,10 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
         clearPaymentMethodOptions();
         initializeDiscountRow();
         initPaymentVaultFlow();
+    }
+
+    public void onPayerInformationReceived(Payer payer) {
+        getView().finishPaymentMethodSelection(mSelectedPaymentMethod, payer);
     }
 
     private void clearPaymentMethodOptions() {
@@ -366,7 +372,7 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
         paymentMethod.setId(ACCOUNT_MONEY_ID);
         paymentMethod.setName(searchItem.getDescription());
         paymentMethod.setPaymentTypeId(searchItem.getType());
-        getView().selectPaymentMethod(paymentMethod);
+        getView().finishPaymentMethodSelection(paymentMethod);
     }
 
 
@@ -393,10 +399,6 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
         return foundCard;
     }
 
-    private void startNextStepForPaymentType(PaymentMethodSearchItem item) {
-        startNextStepForPaymentType(item, false);
-    }
-
     private void startNextStepForPaymentType(PaymentMethodSearchItem item, Boolean automaticSelection) {
 
         if (mPaymentPreference == null) {
@@ -414,8 +416,11 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
         PaymentMethod selectedPaymentMethod = mPaymentMethodSearch.getPaymentMethodBySearchItem(item);
         if (selectedPaymentMethod == null) {
             showMismatchingPaymentMethodError();
+        } else if (selectedPaymentMethod.getId().equals(PaymentMethods.BRASIL.BOLBRADESCO)) {
+            mSelectedPaymentMethod = selectedPaymentMethod;
+            getView().collectPayerInformation();
         } else {
-            getView().selectPaymentMethod(selectedPaymentMethod);
+            getView().finishPaymentMethodSelection(selectedPaymentMethod);
         }
     }
 

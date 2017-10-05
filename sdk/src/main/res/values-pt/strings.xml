@@ -50,10 +50,15 @@
     <string name="mpsdk_invalid_empty_name">Digite o nome e o sobrenome impresso no cartão</string>
     <string name="mpsdk_invalid_expiry_date">A data que você inseriu não é válida</string>
     <string name="mpsdk_invalid_identification_number">Digite todos os números</string>
+    <string name="mpsdk_invalid_identification_name">Digite seu nome</string>
+    <string name="mpsdk_invalid_identification_last_name">Digite seu sobrenome</string>
+    <string name="mpsdk_invalid_identification_business_name">Digite o nome da empresa</string>
     <string name="mpsdk_invalid_payment_method">Você não pode pagar com este meio de pagamento</string>
     <string name="mpsdk_card_number_label">Número do cartão</string>
     <string name="mpsdk_card_expire_date_label">Data de validade</string>
     <string name="mpsdk_cardholder_name">Nome e sobrenome</string>
+    <string name="mpsdk_name">Nome</string>
+    <string name="mpsdk_lastname">Sobrenome</string>
     <string name="mpsdk_doc_type_label">Tipo</string>
     <string name="mpsdk_doc_number_label">Documento</string>
     <string name="mpsdk_bank_deals_action">Ver promoções</string>
@@ -73,6 +78,8 @@
     <string name="mpsdk_card_expiry_divider_hint">/</string>
     <string name="mpsdk_card_expiry_year_hint">AA</string>
     <string name="mpsdk_card_identification_label">DOCUMENTO DO TITULAR \nDO CARTÃO</string>
+    <string name="mpsdk_ticket_identification_label">DADOS PARA VALIDAR O SEU PAGAMENTO</string>
+    <string name="mpsdk_name_and_lastname_identification_label">NOME E SOBRENOME</string>
     <string name="mpsdk_card_identification_number">Número</string>
     <string name="mpsdk_card_identification_type">Tipo</string>
     <string name="mpsdk_cardholder_name_short">NOME SOBRENOME</string>
@@ -253,4 +260,8 @@
     <string name="mpsdk_text_unlock_card_linked">desbloquear o seu cartã</string>
     <string name="mpsdk_text_unlock_card_end">o antes de confirmar o pagamento.</string>
     <string name="mpsdk_title_unlock_card">Desbloquear Cartão</string>
+
+    <!-- Boleto low res -->
+    <string name="mpsdk_fill_your_data">Digite seus dados…</string>
+
 </resources>

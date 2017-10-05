@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <uses-feature
         android:name="android.hardware.location.gps"
         android:required="false" />
@@ -90,8 +91,8 @@
         <activity
             android:name=".SecurityCodeActivity"
             android:screenOrientation="behind"
-            android:windowSoftInputMode="stateVisible"
-            android:theme="@style/Theme.ProcessMercadoPagoTheme.NoActionbar" />
+            android:theme="@style/Theme.ProcessMercadoPagoTheme.NoActionbar"
+            android:windowSoftInputMode="stateVisible" />
         <activity
             android:name=".PaymentTypesActivity"
             android:screenOrientation="behind"
@@ -103,12 +104,16 @@
             android:name=".ReviewAndConfirmActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.ReviewConfirmMercadoPagoTheme.NoActionbar" />
-        <activity android:name=".ReviewPaymentMethodsActivity"
+        <activity
+            android:name=".ReviewPaymentMethodsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.MercadoPagoTheme.NoActionBar" />
         <activity
             android:name=".VaultActivity"
             android:theme="@style/Theme.MercadoPagoTheme" />
+        <activity
+            android:name=".PayerInformationActivity"
+            android:theme="@style/Theme.ProcessMercadoPagoTheme.NoActionbar" />
     </application>
 
 </manifest>

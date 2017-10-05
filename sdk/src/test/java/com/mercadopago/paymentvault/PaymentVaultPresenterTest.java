@@ -1,6 +1,7 @@
 package com.mercadopago.paymentvault;
 
 import com.mercadopago.callbacks.OnSelectedCallback;
+import com.mercadopago.constants.PaymentMethods;
 import com.mercadopago.constants.PaymentTypes;
 import com.mercadopago.constants.Sites;
 import com.mercadopago.exceptions.MercadoPagoError;
@@ -26,8 +27,10 @@ import junit.framework.Assert;
 import com.mercadopago.utils.Discounts;
 
 import org.junit.Test;
+import org.mockito.Mockito;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 import static junit.framework.Assert.assertFalse;
@@ -787,13 +790,13 @@ public class PaymentVaultPresenterTest {
     @Test
     public void onDiscountReceivedThenShowIt() {
         PaymentVaultPresenter presenter = new PaymentVaultPresenter();
-        
+
         MockedView mockedView = new MockedView();
         MockedProvider provider = new MockedProvider();
-        
+
         provider.setResponse(PaymentMethodSearchs.getCompletePaymentMethodSearchMLA());
         presenter.recoverFromFailure();
-        
+
         presenter.attachView(mockedView);
         presenter.attachResourcesProvider(provider);
 
@@ -802,14 +805,14 @@ public class PaymentVaultPresenterTest {
         presenter.setMaxSavedCards(1);
 
         presenter.initialize(true);
-        
+
         Discount discount = new Discount();
         discount.setCurrencyId("ARS");
         discount.setId(123L);
         discount.setAmountOff(new BigDecimal("10"));
         discount.setCouponAmount(new BigDecimal("10"));
         presenter.onDiscountReceived(discount);
-        
+
         Assert.assertTrue(mockedView.showedDiscountRow);
     }
 
@@ -1048,6 +1051,97 @@ public class PaymentVaultPresenterTest {
         assertEquals(mockedView.customOptionsShown.size(), paymentMethodSearch.getCustomSearchItems().size());
     }
 
+    @Test
+    public void ifBoletoSelectedThenCollectPayerInformation() {
+
+        // Setup mocks
+        PaymentMethodSearchItem boletoItem = new PaymentMethodSearchItem();
+        boletoItem.setId(PaymentMethods.BRASIL.BOLBRADESCO);
+        boletoItem.setType("payment_method");
+
+        PaymentMethodSearchItem anotherItem = new PaymentMethodSearchItem();
+        anotherItem.setId(PaymentMethods.BRASIL.HIPERCARD);
+        anotherItem.setType("payment_method");
+
+        PaymentMethod boleto = new PaymentMethod();
+        boleto.setId(PaymentMethods.BRASIL.BOLBRADESCO);
+        boleto.setPaymentTypeId(PaymentTypes.TICKET);
+
+        List<PaymentMethodSearchItem> items = new ArrayList<>();
+        items.add(boletoItem);
+        items.add(anotherItem);
+
+        PaymentMethodSearch paymentMethodSearch = Mockito.mock(PaymentMethodSearch.class);
+        Mockito.when(paymentMethodSearch.getGroups()).thenReturn(items);
+        Mockito.when(paymentMethodSearch.getPaymentMethodBySearchItem(boletoItem)).thenReturn(boleto);
+
+        // Setup presenter
+        PaymentVaultPresenter presenter = new PaymentVaultPresenter();
+        presenter.setAmount(BigDecimal.TEN);
+        presenter.setSite(Sites.ARGENTINA);
+        presenter.setPaymentMethodSearch(paymentMethodSearch);
+
+        MockedView mockedView = new MockedView();
+        MockedProvider provider = new MockedProvider();
+
+        presenter.attachView(mockedView);
+        presenter.attachResourcesProvider(provider);
+
+        // Simulate selection
+        presenter.initialize(true);
+        mockedView.simulateItemSelection(0);
+
+        assertTrue(mockedView.payerInformationStarted);
+    }
+
+    @Test
+    public void ifPayerInformationCollectedThenFinishWithPaymentMethodAndPayer() {
+
+        // Setup mocks
+        PaymentMethodSearchItem boletoItem = new PaymentMethodSearchItem();
+        boletoItem.setId(PaymentMethods.BRASIL.BOLBRADESCO);
+        boletoItem.setType("payment_method");
+
+        PaymentMethodSearchItem anotherItem = new PaymentMethodSearchItem();
+        anotherItem.setId(PaymentMethods.BRASIL.HIPERCARD);
+        anotherItem.setType("payment_method");
+
+        PaymentMethod boleto = new PaymentMethod();
+        boleto.setId(PaymentMethods.BRASIL.BOLBRADESCO);
+        boleto.setPaymentTypeId(PaymentTypes.TICKET);
+
+        List<PaymentMethodSearchItem> items = new ArrayList<>();
+        items.add(boletoItem);
+        items.add(anotherItem);
+
+        PaymentMethodSearch paymentMethodSearch = Mockito.mock(PaymentMethodSearch.class);
+        Mockito.when(paymentMethodSearch.getGroups()).thenReturn(items);
+        Mockito.when(paymentMethodSearch.getPaymentMethodBySearchItem(boletoItem)).thenReturn(boleto);
+
+        Payer payer = new Payer();
+
+        // Setup presenter
+        PaymentVaultPresenter presenter = new PaymentVaultPresenter();
+        presenter.setAmount(BigDecimal.TEN);
+        presenter.setSite(Sites.ARGENTINA);
+        presenter.setPaymentMethodSearch(paymentMethodSearch);
+
+        MockedView mockedView = new MockedView();
+        MockedProvider provider = new MockedProvider();
+
+        presenter.attachView(mockedView);
+        presenter.attachResourcesProvider(provider);
+
+        // Simulate selection
+        presenter.initialize(true);
+        mockedView.simulateItemSelection(0);
+
+        presenter.onPayerInformationReceived(payer);
+
+        assertEquals(boleto, mockedView.selectedPaymentMethod);
+        assertEquals(payer, mockedView.selectedPayer);
+    }
+
     private class MockedProvider implements PaymentVaultProvider {
 
         private static final String INVALID_SITE = "invalid site";
@@ -1158,11 +1252,13 @@ public class PaymentVaultPresenterTest {
         private OnSelectedCallback<CustomSearchItem> customItemSelectionCallback;
         private String title;
         private boolean savedCardFlowStarted;
+        private boolean payerInformationStarted;
         private Card savedCardSelected;
         private String selectedPaymentType;
         private Boolean showedDiscountRow;
-        public boolean discountsFlowStarted = false;
-        public boolean paymentMethodSelectionStarted = false;
+        private boolean discountsFlowStarted = false;
+        private boolean paymentMethodSelectionStarted = false;
+        private Payer selectedPayer;
 
         @Override
         public void startSavedCardFlow(Card card, BigDecimal transactionAmount) {
@@ -1222,8 +1318,14 @@ public class PaymentVaultPresenterTest {
         }
 
         @Override
-        public void selectPaymentMethod(PaymentMethod selectedPaymentMethod) {
+        public void finishPaymentMethodSelection(PaymentMethod selectedPaymentMethod) {
             this.selectedPaymentMethod = selectedPaymentMethod;
+        }
+
+        @Override
+        public void finishPaymentMethodSelection(PaymentMethod paymentMethod, Payer payer) {
+            this.selectedPaymentMethod = paymentMethod;
+            this.selectedPayer = payer;
         }
 
         @Override
@@ -1234,6 +1336,11 @@ public class PaymentVaultPresenterTest {
         @Override
         public void startDiscountFlow(BigDecimal transactionAmount) {
             discountsFlowStarted = true;
+        }
+
+        @Override
+        public void collectPayerInformation() {
+            this.payerInformationStarted = true;
         }
 
         @Override
@@ -1256,11 +1363,11 @@ public class PaymentVaultPresenterTest {
 
         }
 
-        public void simulateItemSelection(int index) {
+        void simulateItemSelection(int index) {
             itemSelectionCallback.onSelected(searchItemsShown.get(index));
         }
 
-        public void simulateCustomItemSelection(int index) {
+        void simulateCustomItemSelection(int index) {
             customItemSelectionCallback.onSelected(customOptionsShown.get(index));
         }
     }

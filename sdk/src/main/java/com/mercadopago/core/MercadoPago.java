@@ -166,7 +166,7 @@ public class MercadoPago {
                 public void run() {
                     savedCardToken.setDevice(mContext);
                     GatewayService service = mRetrofit.create(GatewayService.class);
-                    service.getToken(mKey,"", savedCardToken).enqueue(callback);
+                    service.getToken(mKey, "", savedCardToken).enqueue(callback);
                 }
             }).start();
 
@@ -202,7 +202,7 @@ public class MercadoPago {
     public void putSecurityCode(final String tokenId, final SecurityCodeIntent securityCodeIntent, final Callback<Token> callback) {
         if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {
             GatewayService service = mRetrofit.create(GatewayService.class);
-            service.getToken(tokenId, this.mKey,"",  securityCodeIntent).enqueue(callback);
+            service.getToken(tokenId, this.mKey, "", securityCodeIntent).enqueue(callback);
         } else {
             throw new RuntimeException("Unsupported key type for this method");
         }
@@ -257,7 +257,7 @@ public class MercadoPago {
     public void getInstallments(String bin, BigDecimal amount, Long issuerId, String paymentMethodId, Callback<List<Installment>> callback) {
         if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {
             PaymentService service = mRetrofit.create(PaymentService.class);
-            service.getInstallments(this.mKey,"",  bin, amount, issuerId, paymentMethodId,
+            service.getInstallments(this.mKey, "", bin, amount, issuerId, paymentMethodId,
                     mContext.getResources().getConfiguration().locale.toString(), mprocessingMode).enqueue(callback);
         } else {
             throw new RuntimeException("Unsupported key type for this method");
@@ -1138,7 +1138,8 @@ public class MercadoPago {
 
             if (this.mActivity == null) throw new IllegalStateException("activity is null");
             if (this.mPayment == null) throw new IllegalStateException("payment is null");
-            if (this.mPaymentMethod == null) throw new IllegalStateException("payment method is null");
+            if (this.mPaymentMethod == null)
+                throw new IllegalStateException("payment method is null");
             if (this.mKey == null) throw new IllegalStateException("key is null");
             if (this.mKeyType == null) throw new IllegalStateException("key type is null");
 

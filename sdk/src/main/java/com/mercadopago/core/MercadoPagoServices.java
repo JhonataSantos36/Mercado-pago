@@ -95,6 +95,7 @@ public class MercadoPagoServices {
 
     public void getPaymentMethodSearch(BigDecimal amount, List<String> excludedPaymentTypes, List<String> excludedPaymentMethods, Payer payer, Site site, final Callback<PaymentMethodSearch> callback) {
         PayerIntent payerIntent = new PayerIntent(payer);
+
         CheckoutService service = getDefaultRetrofit().create(CheckoutService.class);
 
         String separator = ",";

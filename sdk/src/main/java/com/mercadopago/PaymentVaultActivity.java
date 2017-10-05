@@ -31,6 +31,7 @@ import com.mercadopago.model.Card;
 import com.mercadopago.model.CustomSearchItem;
 import com.mercadopago.model.Discount;
 import com.mercadopago.model.Issuer;
+import com.mercadopago.model.Payer;
 import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentMethodSearch;
@@ -441,6 +442,7 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
         intent.putExtra("paymentMethodSearch", JsonUtil.getInstance().toJson(mPaymentVaultPresenter.getPaymentMethodSearch()));
         intent.putExtra("discountEnabled", mPaymentVaultPresenter.getDiscountEnabled());
         intent.putExtra("directDiscountEnabled", mPaymentVaultPresenter.getDirectDiscountEnabled());
+        intent.putExtra("decorationPreference", JsonUtil.getInstance().toJson(mDecorationPreference));
 
         startActivityForResult(intent, MercadoPagoComponents.Activities.PAYMENT_VAULT_REQUEST_CODE);
         overridePendingTransition(R.anim.mpsdk_slide_right_to_left_in, R.anim.mpsdk_slide_right_to_left_out);
@@ -457,6 +459,8 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
             resolvePaymentVaultRequest(resultCode, data);
         } else if (requestCode == MercadoPagoComponents.Activities.DISCOUNTS_REQUEST_CODE) {
             resolveDiscountRequest(resultCode, data);
+        } else if (requestCode == MercadoPagoComponents.Activities.PAYER_INFORMATION_REQUEST_CODE) {
+            resolvePayerInformationRequest(resultCode, data);
         } else if (requestCode == ErrorUtil.ERROR_REQUEST_CODE) {
             resolveErrorRequest(resultCode, data);
         }
@@ -543,7 +547,7 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
     protected void resolvePaymentMethodsRequest(int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
             PaymentMethod paymentMethod = JsonUtil.getInstance().fromJson(data.getStringExtra("paymentMethod"), PaymentMethod.class);
-            selectPaymentMethod(paymentMethod);
+            finishPaymentMethodSelection(paymentMethod);
         }
     }
 
@@ -553,6 +557,15 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
                 Discount discount = JsonUtil.getInstance().fromJson(data.getStringExtra("discount"), Discount.class);
                 mPaymentVaultPresenter.onDiscountReceived(discount);
             }
+        }
+    }
+
+    private void resolvePayerInformationRequest(int resultCode, Intent data) {
+        if (resultCode == RESULT_OK) {
+            Payer payer = JsonUtil.getInstance().fromJson(data.getStringExtra("payer"), Payer.class);
+            mPaymentVaultPresenter.onPayerInformationReceived(payer);
+        } else {
+            overridePendingTransition(R.anim.mpsdk_slide_left_to_right_in, R.anim.mpsdk_slide_left_to_right_out);
         }
     }
 
@@ -569,10 +582,20 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
     }
 
     @Override
-    public void selectPaymentMethod(PaymentMethod paymentMethod) {
+    public void finishPaymentMethodSelection(PaymentMethod paymentMethod) {
+        finishWith(paymentMethod, mPaymentVaultPresenter.getDiscount(), null);
+    }
+
+    @Override
+    public void finishPaymentMethodSelection(PaymentMethod paymentMethod, Payer payer) {
+        finishWith(paymentMethod, mPaymentVaultPresenter.getDiscount(), payer);
+    }
+
+    private void finishWith(PaymentMethod paymentMethod, Discount discount, Payer payer) {
         Intent returnIntent = new Intent();
         returnIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
-        returnIntent.putExtra("discount", JsonUtil.getInstance().toJson(mPaymentVaultPresenter.getDiscount()));
+        returnIntent.putExtra("discount", JsonUtil.getInstance().toJson(discount));
+        returnIntent.putExtra("payer", JsonUtil.getInstance().toJson(payer));
         returnIntent.putExtra("paymentMethodSearch", JsonUtil.getInstance().toJson(mPaymentVaultPresenter.getPaymentMethodSearch()));
 
         this.setResult(Activity.RESULT_OK, returnIntent);
@@ -782,6 +805,17 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
         }
 
         mercadoPagoBuilder.startActivity();
+    }
+
+    @Override
+    public void collectPayerInformation() {
+        new MercadoPagoComponents.Activities.PayerInformationActivityBuilder()
+                .setActivity(this)
+                .setMerchantPublicKey(mPublicKey)
+                .setPayerAccessToken(mPrivateKey)
+                .setDecorationPreference(mDecorationPreference)
+                .startActivity();
+        animatePaymentMethodSelection();
     }
 
     @Override

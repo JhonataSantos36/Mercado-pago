@@ -50,10 +50,15 @@
     <string name="mpsdk_invalid_empty_name">Enter the name and last name printed on the card</string>
     <string name="mpsdk_invalid_expiry_date">The date you entered is not valid</string>
     <string name="mpsdk_invalid_identification_number">Enter all numbers</string>
+    <string name="mpsdk_invalid_identification_name">Enter your name</string>
+    <string name="mpsdk_invalid_identification_last_name">Enter your last name</string>
+    <string name="mpsdk_invalid_identification_business_name">Enter the business name</string>
     <string name="mpsdk_invalid_payment_method">You can\'t pay with this payment method</string>
     <string name="mpsdk_card_number_label">Card number</string>
     <string name="mpsdk_card_expire_date_label">Expiration date</string>
     <string name="mpsdk_cardholder_name">Name and surname</string>
+    <string name="mpsdk_name">Name</string>
+    <string name="mpsdk_lastname">Surname</string>
     <string name="mpsdk_doc_type_label">Type</string>
     <string name="mpsdk_doc_number_label">Document</string>
     <string name="mpsdk_bank_deals_action">See deals</string>
@@ -73,6 +78,8 @@
     <string name="mpsdk_card_expiry_divider_hint">/</string>
     <string name="mpsdk_card_expiry_year_hint">YY</string>
     <string name="mpsdk_card_identification_label">CARD HOLDER DOCUMENT</string>
+    <string name="mpsdk_ticket_identification_label">DATA TO VALIDATE YOUR PAYMENT</string>
+    <string name="mpsdk_name_and_lastname_identification_label">NAME AND SURNAME</string>
     <string name="mpsdk_card_identification_number">Number</string>
     <string name="mpsdk_card_identification_type">Type</string>
     <string name="mpsdk_cardholder_name_short">NAME SURNAME</string>
@@ -255,4 +262,6 @@
     <string name="mpsdk_text_unlock_card_end">before you confirm the payment.</string>
     <string name="mpsdk_title_unlock_card">Card Unlocking</string>
 
+    <!-- Boleto low res -->
+    <string name="mpsdk_fill_your_data">Enter your data…</string>
 </resources>

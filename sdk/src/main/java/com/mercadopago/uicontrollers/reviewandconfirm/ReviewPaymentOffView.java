@@ -144,10 +144,18 @@ public class ReviewPaymentOffView extends Reviewable {
         int resId;
         boolean isTintNeeded = mDecorationPreference != null && mDecorationPreference.hasColors();
 
-        if (isTintNeeded) {
-            resId = R.drawable.mpsdk_grey_review_payment_off;
+        if (mPaymentMethod != null && mPaymentMethod.getId().equals(PaymentMethods.BRASIL.BOLBRADESCO)) {
+            if (isTintNeeded) {
+                resId = R.drawable.mpsdk_grey_boleto_off;
+            } else {
+                resId = R.drawable.mpsdk_boleto_off;
+            }
         } else {
-            resId = R.drawable.mpsdk_review_payment_off;
+            if (isTintNeeded) {
+                resId = R.drawable.mpsdk_grey_review_payment_off;
+            } else {
+                resId = R.drawable.mpsdk_review_payment_off;
+            }
         }
         return resId;
     }
