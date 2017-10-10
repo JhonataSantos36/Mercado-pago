@@ -69,7 +69,11 @@ public class IdentificationTicketView extends IdentificationView {
 
     private void drawIdentificationName() {
         if (isEmpty(mName)) {
-            mNameTextView.setText(mContext.getText(R.string.mpsdk_name_and_lastname_identification_label));
+            if (isEmpty(mLastName)) {
+                mNameTextView.setText(mContext.getText(R.string.mpsdk_name_and_lastname_identification_label));
+            } else {
+                mNameTextView.setText("");
+            }
         } else {
             mNameTextView.setText(mName);
             mLastNameContainer.setVisibility(View.VISIBLE);
