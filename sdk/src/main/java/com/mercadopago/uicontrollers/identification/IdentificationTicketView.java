@@ -21,7 +21,6 @@ public class IdentificationTicketView extends IdentificationView {
 
     private String mName;
     private String mLastName;
-    private String mIdentificationTypeId;
 
     private MPTextView mNameTextView;
     private MPTextView mLastNameTextView;
@@ -76,6 +75,7 @@ public class IdentificationTicketView extends IdentificationView {
             }
         } else {
             mNameTextView.setText(mName);
+            setNormalColorNameText();
             mLastNameContainer.setVisibility(View.VISIBLE);
         }
     }
@@ -89,8 +89,8 @@ public class IdentificationTicketView extends IdentificationView {
     }
 
     public void drawIdentificationTypeName() {
-        if (!isEmpty(mIdentificationTypeId)) {
-            mIdentificationTypeIdTextView.setText(mIdentificationTypeId);
+        if (mIdentificationType != null && !isEmpty(mIdentificationType.getId())) {
+            mIdentificationTypeIdTextView.setText(mIdentificationType.getId());
         }
     }
 
@@ -102,7 +102,23 @@ public class IdentificationTicketView extends IdentificationView {
         this.mLastName = lastName;
     }
 
-    public void setIdentificationTypeId(String identificationTypeId) {
-        this.mIdentificationTypeId = identificationTypeId;
+    public void setNormalColorNameText() {
+        mNameTextView.setTextColor(ContextCompat.getColor(mContext, NORMAL_TEXT_VIEW_COLOR));
+    }
+
+    public void setNormalColorLastNameText() {
+        mLastNameTextView.setTextColor(ContextCompat.getColor(mContext, NORMAL_TEXT_VIEW_COLOR));
+    }
+
+    public void setAlphaColorNameText() {
+        setAlphaColorText(mNameTextView);
+    }
+
+    public void setAlphaColorLastNameText() {
+        setAlphaColorText(mLastNameTextView);
+    }
+
+    private void setAlphaColorText(MPTextView mpTextView) {
+        mpTextView.setTextColor(ContextCompat.getColor(mContext, ALPHA_TEXT_VIEW_COLOR));
     }
 }

@@ -37,7 +37,6 @@ import com.mercadopago.model.Payer;
 import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.presenters.PayerInformationPresenter;
 import com.mercadopago.providers.PayerInformationProviderImpl;
-import com.mercadopago.uicontrollers.FontCache;
 import com.mercadopago.uicontrollers.identification.IdentificationTicketView;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.ColorsUtil;
@@ -118,7 +117,7 @@ public class PayerInformationActivity extends MercadoPagoBaseActivity implements
         mActivityActive = true;
 
         createPresenter();
-        analizeLowRes();
+        analyzeLowRes();
         getActivityParameters();
 
         configurePresenter();
@@ -205,7 +204,7 @@ public class PayerInformationActivity extends MercadoPagoBaseActivity implements
         }
     }
 
-    private void analizeLowRes() {
+    private void analyzeLowRes() {
         this.mLowResActive = ScaleUtil.isLowRes(this);
     }
 
@@ -291,7 +290,7 @@ public class PayerInformationActivity extends MercadoPagoBaseActivity implements
 
     @Override
     public void initializeIdentificationTypes(List<IdentificationType> identificationTypes) {
-        mIdentificationTicketView.setIdentificationTypeId(identificationTypes.get(0).getId());
+        mIdentificationTicketView.setIdentificationType(identificationTypes.get(0));
         mIdentificationTicketView.drawIdentificationTypeName();
 
         mIdentificationTypeSpinner.setAdapter(new IdentificationTypesAdapter(this, identificationTypes));
@@ -330,6 +329,7 @@ public class PayerInformationActivity extends MercadoPagoBaseActivity implements
         mIdentificationNumberEditText.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
+                setAlphaColorText();
                 onTouchEditText(mIdentificationNumberEditText, event);
                 return true;
             }
@@ -338,6 +338,7 @@ public class PayerInformationActivity extends MercadoPagoBaseActivity implements
         mIdentificationNumberEditText.addTextChangedListener(new TicketIdentificationNumberTextWatcher(new TicketIdentificationNumberEditTextCallback() {
             @Override
             public void checkOpenKeyboard() {
+                setAlphaColorText();
                 openKeyboard(mIdentificationNumberEditText);
             }
 
@@ -346,19 +347,28 @@ public class PayerInformationActivity extends MercadoPagoBaseActivity implements
                 mPresenter.saveIdentificationNumber(string.toString());
 
                 mIdentificationTicketView.setIdentificationNumber(string.toString());
+
+                setAlphaColorText();
                 mIdentificationTicketView.draw();
             }
 
             @Override
             public void changeErrorView() {
+                setAlphaColorText();
                 checkChangeErrorView();
             }
 
             @Override
             public void toggleLineColorOnError(boolean toggle) {
+                setAlphaColorText();
                 mIdentificationNumberEditText.toggleLineColorOnError(toggle);
             }
         }));
+    }
+
+    private void setAlphaColorText() {
+        mIdentificationTicketView.setAlphaColorNameText();
+        mIdentificationTicketView.setAlphaColorLastNameText();
     }
 
     private void setIdentificationNameEditTextListeners() {
@@ -456,7 +466,7 @@ public class PayerInformationActivity extends MercadoPagoBaseActivity implements
                 IdentificationType identificationType = (IdentificationType) mIdentificationTypeSpinner.getSelectedItem();
 
 
-                mIdentificationTicketView.setIdentificationTypeId(identificationType.getId());
+                mIdentificationTicketView.setIdentificationType(identificationType);
                 mIdentificationTicketView.drawIdentificationTypeName();
 
                 mPresenter.saveIdentificationType(identificationType);
@@ -585,6 +595,8 @@ public class PayerInformationActivity extends MercadoPagoBaseActivity implements
                 if (mPresenter.validateIdentificationNumber()) {
                     mIdentificationNumberInput.setVisibility(View.GONE);
 
+                    mIdentificationTicketView.setNormalColorNameText();
+
                     if (mPresenter.getIdentificationType().getId().equals(IDENTIFICATION_TYPE_CNPJ)) {
                         requestIdentificationBusinessNameFocus();
                     } else {
@@ -596,6 +608,7 @@ public class PayerInformationActivity extends MercadoPagoBaseActivity implements
             case IDENTIFICATION_NAME_INPUT:
                 if (mPresenter.validateName()) {
                     mIdentificationNameInput.setVisibility(View.GONE);
+                    mIdentificationTicketView.setNormalColorLastNameText();
                     requestIdentificationLastNameFocus();
                     return true;
                 }
@@ -625,6 +638,8 @@ public class PayerInformationActivity extends MercadoPagoBaseActivity implements
             case IDENTIFICATION_NAME_INPUT:
                 if (mPresenter.checkIsEmptyOrValidName()) {
                     mIdentificationNumberInput.setVisibility(View.VISIBLE);
+                    mIdentificationTicketView.setAlphaColorNameText();
+                    mIdentificationTicketView.setAlphaColorLastNameText();
                     requestIdentificationNumberFocus();
                     return true;
                 }
