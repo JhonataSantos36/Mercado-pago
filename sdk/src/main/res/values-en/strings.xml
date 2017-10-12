@@ -170,6 +170,7 @@
     <string name="mpsdk_invalid_security_code">Invalid security code</string>
     <string name="mpsdk_security_code_required">Required security code</string>
     <string name="mpsdk_invalid_card_number">Invalid card number</string>
+    <string name="mpsdk_api_invalid_identification_number">Invalid identification number</string>
 
     <!-- Low Res -->
     <string name="mpsdk_form_card_title">Card</string>

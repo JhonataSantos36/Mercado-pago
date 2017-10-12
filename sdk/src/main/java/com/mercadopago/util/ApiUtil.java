@@ -173,6 +173,9 @@ public class ApiUtil {
                 case ApiException.ErrorCodes.INVALID_PAYER_EMAIL:
                     message = context.getString(R.string.mpsdk_invalid_payer_email);
                     break;
+                case ApiException.ErrorCodes.INVALID_IDENTIFICATION_NUMBER:
+                    message = context.getString(R.string.mpsdk_api_invalid_identification_number);
+                    break;
                 default:
                     message = context.getString(R.string.mpsdk_standard_error_message);
                     break;

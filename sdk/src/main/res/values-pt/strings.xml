@@ -169,6 +169,8 @@
     <string name="mpsdk_invalid_security_code">Código de segurança inválido</string>
     <string name="mpsdk_security_code_required">Código de segurança obrigatório</string>
     <string name="mpsdk_invalid_card_number">Número do cartão inválido</string>
+    <string name="mpsdk_api_invalid_identification_number">O número de identificação é inválido</string>
+
 
     <!-- Utils -->
     <string name="mpsdk_text_continue">Continuar</string>

@@ -421,11 +421,27 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
     }
 
     public void onErrorCancel(MercadoPagoError mercadoPagoError) {
-        if (noUserInteractionReached() || !isReviewAndConfirmEnabled()) {
+        if (isIdentificationInvalidInPayment(mercadoPagoError)) {
+            getView().backToPaymentMethodSelection();
+        } else if (noUserInteractionReached() || !isReviewAndConfirmEnabled()) {
             getView().cancelCheckout(mercadoPagoError);
         } else {
             showReviewAndConfirm();
         }
+    }
+
+    private boolean isIdentificationInvalidInPayment(MercadoPagoError mercadoPagoError) {
+        boolean identificationInvalid = false;
+        if (mercadoPagoError != null && mercadoPagoError.isApiException()) {
+            List<Cause> causeList = mercadoPagoError.getApiException().getCause();
+            if (causeList != null && !causeList.isEmpty()) {
+                Cause cause = causeList.get(0);
+                if (cause.getCode().equals(ApiException.ErrorCodes.INVALID_IDENTIFICATION_NUMBER)) {
+                    identificationInvalid = true;
+                }
+            }
+        }
+        return identificationInvalid;
     }
 
     private boolean noUserInteractionReached() {

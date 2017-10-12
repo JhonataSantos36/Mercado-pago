@@ -1773,6 +1773,80 @@ public class CheckoutPresenterTest {
         Assert.assertEquals(provider.payerPosted.getAccessToken(), preferencePayer.getAccessToken());
     }
 
+    @Test
+    public void onIdentificationInvalidAndErrorShownThenGoBackToPaymentMethodSelection() {
+        MockedProvider provider = new MockedProvider();
+        MockedView view = new MockedView();
+
+        CheckoutPresenter presenter = new CheckoutPresenter();
+        presenter.attachResourcesProvider(provider);
+        presenter.attachView(view);
+
+        //Real preference, without items
+        CheckoutPreference preference = new CheckoutPreference("dummy_id");
+
+        Payer preferencePayer = new Payer();
+        preferencePayer.setEmail("unemail@gmail.com");
+        preferencePayer.setAccessToken("AT");
+        preference.setPayer(preferencePayer);
+
+        provider.setCheckoutPreferenceResponse(preference);
+        provider.setPaymentMethodSearchResponse(PaymentMethodSearchs.getCompletePaymentMethodSearchMLA());
+
+        ApiException apiException = Payments.getInvalidIdentificationPayment();
+        MercadoPagoError mpException = new MercadoPagoError(apiException, "");
+        provider.setPaymentResponse(mpException);
+
+        presenter.setRequestedResult(MercadoPagoCheckout.PAYMENT_RESULT_CODE);
+        presenter.setCheckoutPreference(preference);
+        presenter.initialize();
+
+        presenter.onErrorCancel(mpException);
+        assertTrue(view.showingPaymentMethodSelection);
+    }
+
+    @Test
+    public void createPaymentWithInvalidIdentificationThenShowError() {
+        MockedProvider provider = new MockedProvider();
+        MockedView view = new MockedView();
+
+        CheckoutPresenter presenter = new CheckoutPresenter();
+        presenter.attachResourcesProvider(provider);
+        presenter.attachView(view);
+
+        CheckoutPreference checkoutPreference = new CheckoutPreference.Builder()
+                .addItem(new Item("description", new BigDecimal(100)))
+                .setSite(Sites.ARGENTINA)
+                .setPayerAccessToken("ACCESS_TOKEN")
+                .build();
+
+        provider.setCheckoutPreferenceResponse(checkoutPreference);
+        provider.setPaymentMethodSearchResponse(PaymentMethodSearchs.getCompletePaymentMethodSearchMLA());
+
+        ApiException apiException = Payments.getInvalidIdentificationPayment();
+        MercadoPagoError mpException = new MercadoPagoError(apiException, "");
+        provider.setPaymentResponse(mpException);
+
+        presenter.setCheckoutPreference(checkoutPreference);
+        presenter.initialize();
+
+        PaymentMethod paymentMethod = PaymentMethods.getPaymentMethodOnVisa();
+        Issuer issuer = Issuers.getIssuers().get(0);
+        PayerCost payerCost = Installments.getInstallments().getPayerCosts().get(0);
+        Token token = Tokens.getTokenWithESC();
+
+        //Response from payment method selection
+        presenter.onPaymentMethodSelectionResponse(paymentMethod, issuer, payerCost, token, null, null, null);
+
+        //Response from Review And confirm
+        presenter.onPaymentConfirmation();
+        assertTrue(provider.paymentRequested);
+
+        Cause cause = provider.failedResponse.getApiException().getCause().get(0);
+        assertEquals(cause.getCode(), ApiException.ErrorCodes.INVALID_IDENTIFICATION_NUMBER);
+        assertTrue(view.showingError);
+    }
+
     private class MockedView implements CheckoutView {
 
         private MercadoPagoError errorShown;
