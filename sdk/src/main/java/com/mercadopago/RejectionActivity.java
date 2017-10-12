@@ -11,6 +11,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.mercadopago.callbacks.CallbackHolder;
+import com.mercadopago.constants.PaymentMethods;
 import com.mercadopago.controllers.CheckoutTimer;
 import com.mercadopago.core.MercadoPagoCheckout;
 import com.mercadopago.customviews.MPTextView;
@@ -134,9 +135,16 @@ public class RejectionActivity extends MercadoPagoBaseActivity implements TimerO
     protected void onValidStart() {
         initializePaymentData();
         trackScreen();
-        setPaymentResultScreenPreferenceData();
-        setPaymentResultScreenWithoutPreferenceData();
+        drawScreen();
         showTimer();
+    }
+
+    private void drawScreen() {
+        if (mPaymentResultScreenPreference == null) {
+            setPaymentResultScreenWithoutPreferenceData();
+        } else {
+            setPaymentResultScreenPreferenceData();
+        }
     }
 
     private void initializePaymentData() {
@@ -183,78 +191,117 @@ public class RejectionActivity extends MercadoPagoBaseActivity implements TimerO
     }
 
     private void setPaymentResultScreenPreferenceData() {
-        if (mPaymentResultScreenPreference != null) {
-            if (mPaymentResultScreenPreference.getRejectedTitle() == null) {
-                setDefaultRejectedTitle();
-            } else {
-                mRejectionTitle.setText(mPaymentResultScreenPreference.getRejectedTitle());
-            }
-            if (mPaymentResultScreenPreference.getRejectedSubtitle() == null) {
-                setDefaultRejectedSubtitle();
-            } else {
-                mRejectionSubtitle.setText(mPaymentResultScreenPreference.getRejectedSubtitle());
-                mRejectionSubtitle.setVisibility(View.VISIBLE);
-            }
-            if (!mPaymentResultScreenPreference.isRejectedContentTitleEnabled()) {
-                hideContentTitle();
-            } else if (mPaymentResultScreenPreference.getRejectedContentTitle() == null) {
-                setDefaultRejectedContentTitle();
-            } else {
-                mRejectionContentTitle.setText(mPaymentResultScreenPreference.getRejectedContentTitle());
-            }
-            if (!mPaymentResultScreenPreference.isRejectedContentTextEnabled()) {
-                hideContentText();
-            } else if (mPaymentResultScreenPreference.getRejectedContentText() == null) {
-                setDefaultRejectedContentText();
-            } else {
-                mRejectionContentText.setText(mPaymentResultScreenPreference.getRejectedContentText());
-            }
-            if (mPaymentResultScreenPreference.isRejectedIconSubtextEnabled()) {
-                if (mPaymentResultScreenPreference.getRejectedIconSubtext() == null) {
-                    setDefaultRejectedIconSubtext();
-                } else {
-                    mIconSubtext.setText(mPaymentResultScreenPreference.getRejectedIconSubtext());
-                }
-            } else {
-                hideIconSubtext();
-            }
-            if (mPaymentResultScreenPreference.getRejectedIconName() != null) {
-                Drawable image = ContextCompat.getDrawable(this, mPaymentResultScreenPreference.getRejectedIconName());
-
-                mHeaderIcon.setImageDrawable(image);
-
-            }
-            if (mPaymentResultScreenPreference.getExitButtonTitle() == null) {
-                setDefaultExitButtonText();
-            } else {
-                mExitButton.setText(mPaymentResultScreenPreference.getExitButtonTitle());
-            }
-            if (!mPaymentResultScreenPreference.isRejectedSecondaryExitButtonEnabled() ||
-                    mPaymentResultScreenPreference.getSecondaryRejectedExitButtonTitle() == null ||
-                    (mPaymentResultScreenPreference.getSecondaryRejectedExitResultCode() == null
-                            && !CallbackHolder.getInstance().hasPaymentResultCallback(CallbackHolder.REJECTED_PAYMENT_RESULT_CALLBACK))) {
-                hideSecondaryExitButton();
-            } else {
-                mSecondaryExitTextView.setText(mPaymentResultScreenPreference.getSecondaryRejectedExitButtonTitle());
-                mSecondaryExitButton.setVisibility(View.VISIBLE);
-                mSecondaryExitTextView.setVisibility(View.VISIBLE);
-                setSecondaryExitButtonListener();
-            }
-            if (!mPaymentResultScreenPreference.isRejectionRetryEnabled()) {
-                hideChangePaymentMethodButton();
-            }
-        }
+        setTitle();
+        setSubtitle();
+        setContentTitle();
+        setContentText();
+        setIconEpigrafe();
+        setHeaderIcon();
+        setExitButtonText();
+        configureSecondaryExit();
+        configurePaymentMethodChangeCallToAction();
     }
 
     private void setPaymentResultScreenWithoutPreferenceData() {
-        if (mPaymentResultScreenPreference == null) {
-            setDefaultRejectedTitle();
-            setDefaultRejectedSubtitle();
-            setDefaultRejectedContentTitle();
-            setDefaultRejectedContentText();
+        setDefaultRejectedHeaderIcon();
+        setDefaultRejectedTitle();
+        setDefaultRejectedSubtitle();
+        setDefaultRejectedContentTitle();
+        setDefaultRejectedContentText();
+        setDefaultExitButtonText();
+        setDefaultRejectedIconSubtext();
+        setDefaultSecondaryButton();
+    }
+
+    private void configurePaymentMethodChangeCallToAction() {
+        if (!mPaymentResultScreenPreference.isRejectionRetryEnabled()) {
+            hideChangePaymentMethodButton();
+        }
+    }
+
+    private void configureSecondaryExit() {
+        if (!mPaymentResultScreenPreference.isRejectedSecondaryExitButtonEnabled() ||
+                mPaymentResultScreenPreference.getSecondaryRejectedExitButtonTitle() == null ||
+                (mPaymentResultScreenPreference.getSecondaryRejectedExitResultCode() == null
+                        && !CallbackHolder.getInstance().hasPaymentResultCallback(CallbackHolder.REJECTED_PAYMENT_RESULT_CALLBACK))) {
+            hideSecondaryExitButton();
+        } else {
+            mSecondaryExitTextView.setText(mPaymentResultScreenPreference.getSecondaryRejectedExitButtonTitle());
+            mSecondaryExitButton.setVisibility(View.VISIBLE);
+            mSecondaryExitTextView.setVisibility(View.VISIBLE);
+            setSecondaryExitButtonListener();
+        }
+    }
+
+    private void setExitButtonText() {
+        if (mPaymentResultScreenPreference.getExitButtonTitle() == null) {
             setDefaultExitButtonText();
-            setDefaultRejectedIconSubtext();
-            setDefaultSecondaryButton();
+        } else {
+            mExitButton.setText(mPaymentResultScreenPreference.getExitButtonTitle());
+        }
+    }
+
+    private void setHeaderIcon() {
+        if (mPaymentResultScreenPreference.getRejectedIconName() != null) {
+            Drawable image = ContextCompat.getDrawable(this, mPaymentResultScreenPreference.getRejectedIconName());
+            mHeaderIcon.setImageDrawable(image);
+        }
+    }
+
+    private void setIconEpigrafe() {
+        if (mPaymentResultScreenPreference.isRejectedIconSubtextEnabled()) {
+            if (mPaymentResultScreenPreference.getRejectedIconSubtext() == null) {
+                setDefaultRejectedIconSubtext();
+            } else {
+                mIconSubtext.setText(mPaymentResultScreenPreference.getRejectedIconSubtext());
+            }
+        } else {
+            hideIconSubtext();
+        }
+    }
+
+    private void setContentText() {
+        if (!mPaymentResultScreenPreference.isRejectedContentTextEnabled()) {
+            hideContentText();
+        } else if (mPaymentResultScreenPreference.getRejectedContentText() == null) {
+            setDefaultRejectedContentText();
+        } else {
+            mRejectionContentText.setText(mPaymentResultScreenPreference.getRejectedContentText());
+        }
+    }
+
+    private void setContentTitle() {
+        if (!mPaymentResultScreenPreference.isRejectedContentTitleEnabled()) {
+            hideContentTitle();
+        } else if (mPaymentResultScreenPreference.getRejectedContentTitle() == null) {
+            setDefaultRejectedContentTitle();
+        } else {
+            mRejectionContentTitle.setText(mPaymentResultScreenPreference.getRejectedContentTitle());
+        }
+    }
+
+    private void setSubtitle() {
+        if (mPaymentResultScreenPreference.getRejectedSubtitle() == null) {
+            setDefaultRejectedSubtitle();
+        } else {
+            mRejectionSubtitle.setText(mPaymentResultScreenPreference.getRejectedSubtitle());
+            mRejectionSubtitle.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void setTitle() {
+        if (mPaymentResultScreenPreference.getRejectedTitle() == null) {
+            setDefaultRejectedTitle();
+        } else {
+            mRejectionTitle.setText(mPaymentResultScreenPreference.getRejectedTitle());
+        }
+    }
+
+    private void setDefaultRejectedHeaderIcon() {
+        if (mPaymentMethodId.equals(PaymentMethods.BRASIL.BOLBRADESCO)) {
+            mHeaderIcon.setImageResource(R.drawable.mpsdk_rejection_boleto);
+        } else {
+            mHeaderIcon.setImageResource(R.drawable.mpsdk_tc_with_container);
         }
     }
 
@@ -301,12 +348,19 @@ public class RejectionActivity extends MercadoPagoBaseActivity implements TimerO
             } else if (isPaymentStatusDetailRecoverable()) {
                 mRejectionTitle.setText(String.format(getString(R.string.mpsdk_text_some_card_data_is_incorrect), mPaymentMethodName));
                 setBadFillTextButtons();
+            } else if (isBankRejectionOrInsufficientAmount(mPaymentStatusDetail)) {
+                mRejectionTitle.setText(R.string.mpsdk_bolbradesco_rejection);
             } else {
                 mRejectionTitle.setText(R.string.mpsdk_title_bad_filled_other);
             }
         } else {
             ErrorUtil.startErrorActivity(this, getString(R.string.mpsdk_standard_error_message), false, mMerchantPublicKey);
         }
+    }
+
+    private boolean isBankRejectionOrInsufficientAmount(String statusDetail) {
+        return statusDetail.equals(Payment.StatusCodes.STATUS_DETAIL_REJECTED_REJECTED_BY_BANK)
+                || statusDetail.equals(Payment.StatusCodes.STATUS_DETAIL_REJECTED_REJECTED_INSUFFICIENT_DATA);
     }
 
     private void setDefaultRejectedSubtitle() {
@@ -349,6 +403,8 @@ public class RejectionActivity extends MercadoPagoBaseActivity implements TimerO
                 mRejectionContentText.setText(getString(R.string.mpsdk_subtitle_rejection_max_attempts));
             } else if (isPaymentStatusDetailRecoverable()) {
                 mRejectionContentText.setVisibility(View.GONE);
+            } else if (isBankRejectionOrInsufficientAmount(mPaymentStatusDetail)) {
+                mRejectionContentText.setText(getString(R.string.mpsdk_bolbradesco_rejection_text));
             } else {
                 mRejectionContentText.setVisibility(View.GONE);
             }
@@ -362,7 +418,7 @@ public class RejectionActivity extends MercadoPagoBaseActivity implements TimerO
     }
 
     private void setDefaultExitButtonText() {
-        mExitButton.setText(getResources().getString(R.string.mpsdk_text_continue));
+        mExitButton.setText(getResources().getString(R.string.mpsdk_continue_shopping));
     }
 
     private void showTimer() {

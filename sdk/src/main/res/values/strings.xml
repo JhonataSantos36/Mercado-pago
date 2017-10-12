@@ -284,6 +284,8 @@
     <string name="mpsdk_error_message_detail_issuers" translatable="false">no issuers found at IssuersActivity</string>
     <string name="mpsdk_error_message_detail_no_payment_method_list" translatable="false">no payment method list found at ReviewPaymentMethodsActivity</string>
 
-    <!-- Boleto low res -->
+    <!-- Boleto -->
     <string name="mpsdk_fill_your_data">Ingrese sus datos…</string>
+    <string name="mpsdk_bolbradesco_rejection">No fue posible procesar su pago</string>
+    <string name="mpsdk_bolbradesco_rejection_text">Intenta otro medio de pago</string>
 </resources>

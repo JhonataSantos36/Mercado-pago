@@ -226,7 +226,7 @@
             android:paddingRight="40dp"
             android:paddingTop="25dp"
             android:text="@string/mpsdk_continue_shopping"
-            android:textColor="@color/mpsdk_instructions_continue_button"
+            android:textColor="@color/mpsdk_continue_button"
             android:textSize="16dp"
             app:fontStyle="regular" />
     </LinearLayout>

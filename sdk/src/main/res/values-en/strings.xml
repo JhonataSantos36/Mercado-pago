@@ -262,6 +262,8 @@
     <string name="mpsdk_text_unlock_card_end">before you confirm the payment.</string>
     <string name="mpsdk_title_unlock_card">Card Unlocking</string>
 
-    <!-- Boleto low res -->
+    <!-- Boleto -->
     <string name="mpsdk_fill_your_data">Enter your data…</string>
+    <string name="mpsdk_bolbradesco_rejection">Payment could not be processed</string>
+    <string name="mpsdk_bolbradesco_rejection_text">Try another payment method</string>
 </resources>
