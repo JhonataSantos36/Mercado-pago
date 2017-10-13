@@ -4,218 +4,169 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.mercadopago.constants.PaymentTypes;
 import com.mercadopago.core.MercadoPagoCheckout;
 import com.mercadopago.core.MercadoPagoComponents;
-import com.mercadopago.model.Discount;
-import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentResult;
 import com.mercadopago.model.Site;
 import com.mercadopago.preferences.PaymentResultScreenPreference;
 import com.mercadopago.preferences.ServicePreference;
+import com.mercadopago.presenters.PaymentResultPresenter;
+import com.mercadopago.providers.PaymentResultProvider;
+import com.mercadopago.providers.PaymentResultProviderImpl;
 import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
-import com.mercadopago.util.MercadoPagoUtil;
+import com.mercadopago.views.PaymentResultView;
 
 import java.math.BigDecimal;
 
-import static android.text.TextUtils.isEmpty;
+public class PaymentResultActivity extends Activity implements PaymentResultView {
 
-public class PaymentResultActivity extends Activity {
-
-    public static final String DISCOUNT_BUNDLE = "mDiscount";
-    public static final String DISCOUNT_ENABLED_BUNDLE = "mDiscountEnabled";
     public static final String PAYER_ACCESS_TOKEN_BUNDLE = "mMerchantPublicKey";
     public static final String MERCHANT_PUBLIC_KEY_BUNDLE = "mpayerAccessToken";
+
     public static final String CONGRATS_DISPLAY_BUNDLE = "mCongratsDisplay";
-    public static final String PAYMENT_RESULT_BUNDLE = "mPaymentResult";
-    public static final String SITE_BUNDLE = "mSite";
-    public static final String AMOUNT_BUNDLE = "mAmount";
     public static final String PAYMENT_RESULT_SCREEN_PREFERENCE_BUNDLE = "mPaymentResultScreenPreference";
     public static final String SERVICE_PREFERENCE_BUNDLE = "mServicePreference";
 
-    protected Discount mDiscount;
-    protected Boolean mDiscountEnabled;
+    public static final String PRESENTER_BUNDLE = "mPresenter";
+
+    private PaymentResultPresenter mPresenter;
+
     private String mMerchantPublicKey;
     private  String mPayerAccessToken;
-    protected Integer mCongratsDisplay;
-    protected PaymentResult mPaymentResult;
-    protected Site mSite;
-    protected BigDecimal mAmount;
-    protected PaymentResultScreenPreference mPaymentResultScreenPreference;
-    protected ServicePreference mServicePreference;
+
+    private Integer mCongratsDisplay;
+    private PaymentResultScreenPreference mPaymentResultScreenPreference;
+    private ServicePreference mServicePreference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (savedInstanceState == null) {
+            mPresenter = new PaymentResultPresenter();
             getActivityParameters();
-            try {
-                validateActivityParameters();
-                onValidStart();
-            } catch (IllegalStateException exception) {
-                onInvalidStart(exception.getMessage());
-            }
+            configurePresenter();
+            mPresenter.initialize();
         }
+    }
+
+    @Override
+    public void showCongrats(Site site, BigDecimal amount, PaymentResult paymentResult, Boolean discountEnabled) {
+        new MercadoPagoComponents.Activities.CongratsActivityBuilder()
+                .setMerchantPublicKey(mMerchantPublicKey)
+                .setActivity(this)
+                .setCongratsDisplay(mCongratsDisplay)
+                .setServicePreference(mServicePreference)
+                .setPaymentResultScreenPreference(mPaymentResultScreenPreference)
+                .setSite(site)
+                .setAmount(amount)
+                .setDiscountEnabled(discountEnabled)
+                .setPaymentResult(paymentResult)
+                .startActivity();
+    }
+
+    @Override
+    public void showCallForAuthorize(Site site, PaymentResult paymentResult) {
+        new MercadoPagoComponents.Activities.CallForAuthorizeActivityBuilder()
+                .setMerchantPublicKey(mMerchantPublicKey)
+                .setActivity(this)
+                .setPaymentResultScreenPreference(mPaymentResultScreenPreference)
+                .setPaymentResult(paymentResult)
+                .setSite(site)
+                .startActivity();
+    }
+
+    @Override
+    public void showRejection(PaymentResult paymentResult) {
+        new MercadoPagoComponents.Activities.RejectionActivityBuilder()
+                .setMerchantPublicKey(mMerchantPublicKey)
+                .setActivity(this)
+                .setPaymentResultScreenPreference(mPaymentResultScreenPreference)
+                .setPaymentResult(paymentResult)
+                .startActivity();
+    }
+
+    @Override
+    public void showPending(PaymentResult paymentResult) {
+        new MercadoPagoComponents.Activities.PendingActivityBuilder()
+                .setMerchantPublicKey(mMerchantPublicKey)
+                .setActivity(this)
+                .setPaymentResultScreenPreference(mPaymentResultScreenPreference)
+                .setPaymentResult(paymentResult)
+                .startActivity();
+    }
+
+    @Override
+    public void showInstructions(Site site, BigDecimal amount, PaymentResult paymentResult) {
+        new MercadoPagoComponents.Activities.InstructionsActivityBuilder()
+                .setMerchantPublicKey(mMerchantPublicKey)
+                .setPayerAccessToken(mPayerAccessToken)
+                .setActivity(this)
+                .setServicePreference(mServicePreference)
+                .setPaymentResultScreenPreference(mPaymentResultScreenPreference)
+                .setSite(site)
+                .setAmount(amount)
+                .setPaymentResult(paymentResult)
+                .startActivity();
+    }
+
+    @Override
+    public void showError(String errorMessage) {
+        ErrorUtil.startErrorActivity(this, getString(R.string.mpsdk_standard_error_message), false, mMerchantPublicKey);
+    }
+
+    @Override
+    public void showError(String errorMessage, String errorDetail) {
+        ErrorUtil.startErrorActivity(this, errorMessage, errorDetail, false, mMerchantPublicKey);
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putString(DISCOUNT_BUNDLE, JsonUtil.getInstance().toJson(mDiscount));
-        outState.putBoolean(DISCOUNT_ENABLED_BUNDLE, mDiscountEnabled);
+        outState.putString(PRESENTER_BUNDLE, JsonUtil.getInstance().toJson(mPresenter));
+
         outState.putString(MERCHANT_PUBLIC_KEY_BUNDLE, mMerchantPublicKey);
         outState.putString(PAYER_ACCESS_TOKEN_BUNDLE, mPayerAccessToken);
+
         outState.putInt(CONGRATS_DISPLAY_BUNDLE, mCongratsDisplay);
-        outState.putString(PAYMENT_RESULT_BUNDLE, JsonUtil.getInstance().toJson(mPaymentResult));
-        outState.putString(SITE_BUNDLE, JsonUtil.getInstance().toJson(mSite));
-        if (mAmount != null) {
-            outState.putString(AMOUNT_BUNDLE, mAmount.toString());
-        }
         outState.putString(PAYMENT_RESULT_SCREEN_PREFERENCE_BUNDLE, JsonUtil.getInstance().toJson(mPaymentResultScreenPreference));
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        mDiscount = JsonUtil.getInstance().fromJson(savedInstanceState.getString(DISCOUNT_BUNDLE), Discount.class);
-        mDiscountEnabled = savedInstanceState.getBoolean(DISCOUNT_ENABLED_BUNDLE);
+        mPresenter = JsonUtil.getInstance().fromJson(savedInstanceState.getString(PRESENTER_BUNDLE), PaymentResultPresenter.class);
+
         mMerchantPublicKey = savedInstanceState.getString(MERCHANT_PUBLIC_KEY_BUNDLE);
         mPayerAccessToken = savedInstanceState.getString(PAYER_ACCESS_TOKEN_BUNDLE);
+
         mCongratsDisplay = savedInstanceState.getInt(CONGRATS_DISPLAY_BUNDLE, -1);
-        mPaymentResult = JsonUtil.getInstance().fromJson(savedInstanceState.getString(PAYMENT_RESULT_BUNDLE), PaymentResult.class);
-        mSite = JsonUtil.getInstance().fromJson(savedInstanceState.getString(SITE_BUNDLE), Site.class);
         mServicePreference = JsonUtil.getInstance().fromJson(savedInstanceState.getString(SERVICE_PREFERENCE_BUNDLE), ServicePreference.class);
-        if (savedInstanceState.getString(AMOUNT_BUNDLE) != null) {
-            mAmount = new BigDecimal(savedInstanceState.getString(AMOUNT_BUNDLE));
-        }
+
         mPaymentResultScreenPreference = JsonUtil.getInstance().fromJson(savedInstanceState.getString(PAYMENT_RESULT_SCREEN_PREFERENCE_BUNDLE), PaymentResultScreenPreference.class);
         super.onRestoreInstanceState(savedInstanceState);
     }
 
     protected void getActivityParameters() {
+
+        Boolean discountEnabled = getIntent().getExtras().getBoolean("discountEnabled", true);
+        PaymentResult paymentResult = JsonUtil.getInstance().fromJson(getIntent().getExtras().getString("paymentResult"), PaymentResult.class);
+        Site site = JsonUtil.getInstance().fromJson(getIntent().getExtras().getString("site"), Site.class);
+        BigDecimal amount = null;
+        if (getIntent().getStringExtra("amount") != null) {
+            amount = new BigDecimal(getIntent().getStringExtra("amount"));
+        }
+
+        mPresenter.setDiscountEnabled(discountEnabled);
+        mPresenter.setPaymentResult(paymentResult);
+        mPresenter.setSite(site);
+        mPresenter.setAmount(amount);
+
         mMerchantPublicKey = getIntent().getStringExtra("merchantPublicKey");
         mPayerAccessToken = getIntent().getStringExtra("payerAccessToken");
+
         mCongratsDisplay = getIntent().getIntExtra("congratsDisplay", -1);
-        mDiscount = JsonUtil.getInstance().fromJson(getIntent().getExtras().getString("discount"), Discount.class);
-        mDiscountEnabled = getIntent().getExtras().getBoolean("discountEnabled", true);
-        mPaymentResult = JsonUtil.getInstance().fromJson(getIntent().getExtras().getString("paymentResult"), PaymentResult.class);
         mPaymentResultScreenPreference = JsonUtil.getInstance().fromJson(getIntent().getExtras().getString("paymentResultScreenPreference"), PaymentResultScreenPreference.class);
-        mSite = JsonUtil.getInstance().fromJson(getIntent().getExtras().getString("site"), Site.class);
         mServicePreference = JsonUtil.getInstance().fromJson(getIntent().getExtras().getString("servicePreference"), ServicePreference.class);
-        if (getIntent().getStringExtra("amount") != null) {
-            mAmount = new BigDecimal(getIntent().getStringExtra("amount"));
-        }
-    }
-
-    protected void validateActivityParameters() throws IllegalStateException {
-        if (mMerchantPublicKey == null) {
-            throw new IllegalStateException("merchant public key is null");
-        }
-        if (mPaymentResult == null) {
-            throw new IllegalStateException("payment result is null");
-        } else if (mPaymentResult.getPaymentData() == null) {
-            throw new IllegalStateException("payment data is null");
-        }
-        if (!isStatusValid()) {
-            throw new IllegalStateException("payment not does not have status");
-        }
-    }
-
-    protected void onValidStart() {
-        if (mPaymentResult.getPaymentStatusDetail() != null && mPaymentResult.getPaymentStatusDetail().equals(Payment.StatusCodes.STATUS_DETAIL_PENDING_WAITING_PAYMENT)) {
-            startInstructionsActivity();
-        } else if (mPaymentResult.getPaymentStatus().equals(Payment.StatusCodes.STATUS_IN_PROCESS) ||
-                mPaymentResult.getPaymentStatus().equals(Payment.StatusCodes.STATUS_PENDING)) {
-            startPendingActivity();
-        } else if (checkCongratsPaymentTypeResult()) {
-            startCardPaymentTypeResult();
-        }
-    }
-
-    private boolean checkCongratsPaymentTypeResult() {
-        return MercadoPagoUtil.isCard(mPaymentResult.getPaymentData().getPaymentMethod().getPaymentTypeId()) ||
-                mPaymentResult.getPaymentData().getPaymentMethod().getPaymentTypeId().equals(PaymentTypes.ACCOUNT_MONEY);
-    }
-
-    private void startCardPaymentTypeResult() {
-        if (mPaymentResult.getPaymentStatus().equals(Payment.StatusCodes.STATUS_APPROVED)) {
-            startCongratsActivity();
-        } else if (mPaymentResult.getPaymentStatus().equals(Payment.StatusCodes.STATUS_REJECTED)) {
-            if (isStatusDetailValid() && mPaymentResult.getPaymentStatusDetail().equals(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_CALL_FOR_AUTHORIZE)) {
-                startCallForAuthorizeActivity();
-            } else {
-                startRejectionActivity();
-            }
-        } else {
-            ErrorUtil.startErrorActivity(this, getString(R.string.mpsdk_standard_error_message), false, mMerchantPublicKey);
-        }
-    }
-
-    private void startInstructionsActivity() {
-        new MercadoPagoComponents.Activities.InstructionsActivityBuilder()
-                .setMerchantPublicKey(mMerchantPublicKey)
-                .setPayerAccessToken(mPayerAccessToken)
-                .setActivity(this)
-                .setPaymentResult(mPaymentResult)
-                .setSite(mSite)
-                .setAmount(mAmount)
-                .setServicePreference(mServicePreference)
-                .setPaymentResultScreenPreference(mPaymentResultScreenPreference)
-                .startActivity();
-    }
-
-    private void startCongratsActivity() {
-        new MercadoPagoComponents.Activities.CongratsActivityBuilder()
-                .setMerchantPublicKey(mMerchantPublicKey)
-                .setActivity(this)
-                .setDiscountEnabled(mDiscountEnabled)
-                .setCongratsDisplay(mCongratsDisplay)
-                .setPaymentResult(mPaymentResult)
-                .setServicePreference(mServicePreference)
-                .setPaymentResultScreenPreference(mPaymentResultScreenPreference)
-                .setSite(mSite)
-                .setAmount(mAmount)
-                .startActivity();
-    }
-
-    private void startCallForAuthorizeActivity() {
-        new MercadoPagoComponents.Activities.CallForAuthorizeActivityBuilder()
-                .setMerchantPublicKey(mMerchantPublicKey)
-                .setActivity(this)
-                .setPaymentResult(mPaymentResult)
-                .setPaymentResultScreenPreference(mPaymentResultScreenPreference)
-                .setSite(mSite)
-                .startActivity();
-    }
-
-    private void startPendingActivity() {
-        new MercadoPagoComponents.Activities.PendingActivityBuilder()
-                .setMerchantPublicKey(mMerchantPublicKey)
-                .setActivity(this)
-                .setPaymentResult(mPaymentResult)
-                .setPaymentResultScreenPreference(mPaymentResultScreenPreference)
-                .startActivity();
-    }
-
-    private void startRejectionActivity() {
-        new MercadoPagoComponents.Activities.RejectionActivityBuilder()
-                .setMerchantPublicKey(mMerchantPublicKey)
-                .setActivity(this)
-                .setPaymentResult(mPaymentResult)
-                .setPaymentResultScreenPreference(mPaymentResultScreenPreference)
-                .startActivity();
-    }
-
-    private Boolean isStatusValid() {
-        return !isEmpty(mPaymentResult.getPaymentStatus());
-    }
-
-    private Boolean isStatusDetailValid() {
-        return !isEmpty(mPaymentResult.getPaymentStatusDetail());
-    }
-
-    protected void onInvalidStart(String errorMessage) {
-        ErrorUtil.startErrorActivity(this, getString(R.string.mpsdk_standard_error_message), errorMessage, false, mMerchantPublicKey);
     }
 
     @Override
@@ -236,6 +187,12 @@ public class PaymentResultActivity extends Activity {
         } else {
             finishWithCancelResult(data);
         }
+    }
+
+    private void configurePresenter() {
+        PaymentResultProvider provider = new PaymentResultProviderImpl(this);
+        mPresenter.attachView(this);
+        mPresenter.attachResourcesProvider(provider);
     }
 
     private void resolveTimerObserverResult(int resultCode) {

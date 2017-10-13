@@ -1,0 +1,12 @@
+{
+  "message": "Invalid identification",
+  "error": "bad_request",
+  "status": 400,
+  "cause": [
+    {
+      "code": 2067,
+      "description": "Invalid identification",
+      "data": null
+    }
+  ]
+}

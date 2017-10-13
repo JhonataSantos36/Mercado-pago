@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import com.mercadopago.R;
+import com.mercadopago.customviews.MPAutoResizeTextView;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.util.MPCardMaskUtil;
 
@@ -21,7 +22,6 @@ public class IdentificationTicketView extends IdentificationView {
 
     private String mName;
     private String mLastName;
-    private String mIdentificationTypeId;
 
     private MPTextView mNameTextView;
     private MPTextView mLastNameTextView;
@@ -40,6 +40,16 @@ public class IdentificationTicketView extends IdentificationView {
         mIdentificationTypeIdTextView = (MPTextView) mView.findViewById(R.id.mpsdkIdentificationTypeId);
         mLastNameContainer = (FrameLayout) mView.findViewById(R.id.mpsdkLastnameContainer);
         drawIdentificationTypeName();
+        setIdentificationNumberTextSizes();
+    }
+
+    private void setIdentificationNumberTextSizes() {
+        MPAutoResizeTextView mIdentificationCardholderContainer = (MPAutoResizeTextView) mView.findViewById(R.id.mpsdkIdentificationCardholderContainer);
+        if(mIdentificationNumberTextView!=null && mIdentificationCardholderContainer!=null){
+            int minSize = mContext.getResources().getDimensionPixelSize(R.dimen.mpsdk_small_text);
+            mIdentificationNumberTextView.setMinTextSize(minSize);
+            mIdentificationCardholderContainer.setMinTextSize(minSize);
+        }
     }
 
     @Override
@@ -69,9 +79,14 @@ public class IdentificationTicketView extends IdentificationView {
 
     private void drawIdentificationName() {
         if (isEmpty(mName)) {
-            mNameTextView.setText(mContext.getText(R.string.mpsdk_name_and_lastname_identification_label));
+            if (isEmpty(mLastName)) {
+                mNameTextView.setText(mContext.getText(R.string.mpsdk_name_and_lastname_identification_label));
+            } else {
+                mNameTextView.setText("");
+            }
         } else {
             mNameTextView.setText(mName);
+            setNormalColorNameText();
             mLastNameContainer.setVisibility(View.VISIBLE);
         }
     }
@@ -85,8 +100,8 @@ public class IdentificationTicketView extends IdentificationView {
     }
 
     public void drawIdentificationTypeName() {
-        if (!isEmpty(mIdentificationTypeId)) {
-            mIdentificationTypeIdTextView.setText(mIdentificationTypeId);
+        if (mIdentificationType != null && !isEmpty(mIdentificationType.getId())) {
+            mIdentificationTypeIdTextView.setText(mIdentificationType.getId());
         }
     }
 
@@ -98,7 +113,23 @@ public class IdentificationTicketView extends IdentificationView {
         this.mLastName = lastName;
     }
 
-    public void setIdentificationTypeId(String identificationTypeId) {
-        this.mIdentificationTypeId = identificationTypeId;
+    public void setNormalColorNameText() {
+        mNameTextView.setTextColor(ContextCompat.getColor(mContext, NORMAL_TEXT_VIEW_COLOR));
+    }
+
+    public void setNormalColorLastNameText() {
+        mLastNameTextView.setTextColor(ContextCompat.getColor(mContext, NORMAL_TEXT_VIEW_COLOR));
+    }
+
+    public void setAlphaColorNameText() {
+        setAlphaColorText(mNameTextView);
+    }
+
+    public void setAlphaColorLastNameText() {
+        setAlphaColorText(mLastNameTextView);
+    }
+
+    private void setAlphaColorText(MPTextView mpTextView) {
+        mpTextView.setTextColor(ContextCompat.getColor(mContext, ALPHA_TEXT_VIEW_COLOR));
     }
 }

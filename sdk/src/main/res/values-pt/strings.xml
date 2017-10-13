@@ -169,6 +169,8 @@
     <string name="mpsdk_invalid_security_code">Código de segurança inválido</string>
     <string name="mpsdk_security_code_required">Código de segurança obrigatório</string>
     <string name="mpsdk_invalid_card_number">Número do cartão inválido</string>
+    <string name="mpsdk_api_invalid_identification_number">O número de identificação é inválido</string>
+
 
     <!-- Utils -->
     <string name="mpsdk_text_continue">Continuar</string>
@@ -261,7 +263,9 @@
     <string name="mpsdk_text_unlock_card_end">o antes de confirmar o pagamento.</string>
     <string name="mpsdk_title_unlock_card">Desbloquear Cartão</string>
 
-    <!-- Boleto low res -->
+    <!-- Boleto -->
     <string name="mpsdk_fill_your_data">Digite seus dados…</string>
+    <string name="mpsdk_bolbradesco_rejection">Não foi possível processar o seu pagamento, desculpe-nos</string>
+    <string name="mpsdk_bolbradesco_rejection_text">Por favor, tente pagar de outra forma.</string>
 
 </resources>

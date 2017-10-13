@@ -125,7 +125,6 @@ public class InstallmentsActivity extends MercadoPagoBaseActivity implements Ins
         initializeControls();
         initializeView();
 
-        trackScreen();
         mPresenter.initialize();
     }
 
@@ -445,6 +444,8 @@ public class InstallmentsActivity extends MercadoPagoBaseActivity implements Ins
 
     @Override
     public void showInstallments(List<PayerCost> payerCostList, OnSelectedCallback<Integer> onSelectedCallback) {
+        //We track after evaluating default installments or autoselected installments
+        trackScreen();
         initializeAdapter(onSelectedCallback);
         mPayerCostsAdapter.addResults(payerCostList);
     }

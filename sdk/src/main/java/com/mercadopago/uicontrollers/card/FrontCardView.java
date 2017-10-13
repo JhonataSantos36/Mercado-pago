@@ -388,7 +388,7 @@ public class FrontCardView {
         LayoutUtil.resizeViewGroupLayoutParams(cardViewContainer, cardHeight, cardWidth, mContext);
 
         if(cardNumberFontSize == CardRepresentationModes.CARD_NUMBER_SIZE_MEDIUM){
-            float minTextSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8, mContext.getResources().getDisplayMetrics());
+            int minTextSize = mContext.getResources().getDimensionPixelSize(R.dimen.mpsdk_smallest_text);
             mCardNumberTextView.setMinTextSize(minTextSize);
         }
 

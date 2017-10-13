@@ -203,8 +203,9 @@
                     android:paddingRight="30dp"
                     android:paddingTop="10dp"
                     android:text="@string/mpsdk_text_continue"
-                    android:textColor="@color/mpsdk_background_blue"
-                    android:textSize="16dp" />
+                    android:textColor="@color/mpsdk_continue_button"
+                    android:textSize="16dp"
+                    app:fontStyle="regular"/>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

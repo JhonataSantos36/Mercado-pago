@@ -59,8 +59,8 @@
                         android:layout_height="wrap_content"
                         android:maxLines="1"
                         android:paddingLeft="4dp"
-                        android:text="•• ••• •••"
-                        android:textColor="@color/mpsdk_base_text"
+                        android:text="*** *** *** **"
+                        android:textColor="@color/mpsdk_base_text_alpha"
                         android:textSize="14dp"
                         app:allowCustomFont="false"
                         app:fontStyle="mono_regular"
@@ -77,6 +77,7 @@
                         android:textSize="14dp"
                         android:visibility="invisible"
                         app:allowCustomFont="false"
+                        app:fontStyle="mono_regular"
                         app:minTextSize="8dp" />
                 </FrameLayout>
             </LinearLayout>
@@ -100,7 +101,7 @@
                         android:layout_height="wrap_content"
                         android:maxLines="1"
                         android:text="@string/mpsdk_name_and_lastname_identification_label"
-                        android:textColor="@color/mpsdk_base_text"
+                        android:textColor="@color/mpsdk_base_text_alpha"
                         android:textSize="12dp"
                         app:allowCustomFont="false"
                         app:minTextSize="8dp" />

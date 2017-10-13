@@ -30,4 +30,9 @@ public class Payments {
         String json = ResourcesUtil.getStringResource("invalid_esc_payment.json");
         return JsonUtil.getInstance().fromJson(json, ApiException.class);
     }
+
+    public static ApiException getInvalidIdentificationPayment() {
+        String json = ResourcesUtil.getStringResource("invalid_identification_payment.json");
+        return JsonUtil.getInstance().fromJson(json, ApiException.class);
+    }
 }
