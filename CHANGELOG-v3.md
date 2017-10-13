@@ -1,8 +1,16 @@
+## VERSION 3.6.1
+
+_13_10_2017_
+
+* New: Improvement in payer data form UI
+* Fix: Communicating error because of invalid CPF
+* Fix: Handling rejected Boleto
+
 ## VERSION 3.6.0
 
 _04_10_2017_
 
-* New: Added boleto as payment method in Brazil
+* New: Added Boleto as payment method in Brazil
 
 ## VERSION 3.5.3
 
