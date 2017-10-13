@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import com.mercadopago.R;
+import com.mercadopago.customviews.MPAutoResizeTextView;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.util.MPCardMaskUtil;
 
@@ -39,6 +40,16 @@ public class IdentificationTicketView extends IdentificationView {
         mIdentificationTypeIdTextView = (MPTextView) mView.findViewById(R.id.mpsdkIdentificationTypeId);
         mLastNameContainer = (FrameLayout) mView.findViewById(R.id.mpsdkLastnameContainer);
         drawIdentificationTypeName();
+        setIdentificationNumberTextSizes();
+    }
+
+    private void setIdentificationNumberTextSizes() {
+        MPAutoResizeTextView mIdentificationCardholderContainer = (MPAutoResizeTextView) mView.findViewById(R.id.mpsdkIdentificationCardholderContainer);
+        if(mIdentificationNumberTextView!=null && mIdentificationCardholderContainer!=null){
+            int minSize = mContext.getResources().getDimensionPixelSize(R.dimen.mpsdk_small_text);
+            mIdentificationNumberTextView.setMinTextSize(minSize);
+            mIdentificationCardholderContainer.setMinTextSize(minSize);
+        }
     }
 
     @Override
