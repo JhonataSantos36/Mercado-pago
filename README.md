@@ -6,9 +6,9 @@ The first step is to create an instance of **_MercadoPagoServices_** class:
 
 ``` java
 MercadoPagoServices mercadoPagoServices = new MercadoPagoServices.Builder()
-.setContext(context)
-.setPublicKey(publicKey)
-.build();
+    .setContext(context)
+    .setPublicKey(publicKey)
+    .build();
 ```
 
 ## Charging cards
@@ -23,16 +23,16 @@ Display available payment methods with the getPaymentMethods function of the **_
 
 ``` java
 mercadoPagoServices.getPaymentMethods(new Callback<List<PaymentMethod>>() {
-@Override
-public void success(List<PaymentMethod> paymentMethods) {
+            @Override
+            public void success(List<PaymentMethod> paymentMethods) {
 
-}
+            }
 
-@Override
-public void failure(ApiException apiException) {
+            @Override
+            public void failure(ApiException apiException) {
 
-}
-});
+            }
+        });
 ```
 
 ### Collecting credit card information
@@ -49,20 +49,20 @@ Depending on the country from which you are making the collection, you have to a
 
 ``` java
 mercadoPagoServices.getIdentificationTypes(new Callback<List<IdentificationType>>() {
-@Override
-public void success(List<IdentificationType> identificationTypes) {
-// Done, show the identification types to your users.
-}
+      @Override
+      public void success(List<IdentificationType> identificationTypes) {
+         // Done, show the identification types to your users.
+      }
 
-@Override
-public void failure(ApiException apiException) {
-if (error.getStatus() == 404) {
-// No identification type for this country. Not necessary to ask for it.
-} else {
-//TODO: Manage API Failure
-}
-}
-});
+      @Override
+      public void failure(ApiException apiException) {
+         if (error.getStatus() == 404) {
+            // No identification type for this country. Not necessary to ask for it.
+         } else {
+	    //TODO: Manage API Failure
+         }
+      }
+   });
 ```
 
 ### Validate the information
@@ -76,41 +76,41 @@ In the case of the credit card number and the security code, additional validati
 ``` java
 private boolean validateCardToken(CardToken cardToken, PaymentMethod paymentMethod) {
 
-/* Set errors within this function
-*  Request focus on the first wrong filled field recommended */
+   /* Set errors within this function
+   *  Request focus on the first wrong filled field recommended */
 
-boolean result = true;
+   boolean result = true;
 
-/* Validate card number and security code
-*  according the payment method’s particularities */
+   /* Validate card number and security code
+   *  according the payment method’s particularities */
 
-try {
-cardToken.validateCardNumber(this, paymentMethod);
-} catch (Exception ex) {
-result = false;
-}
+   try {
+      cardToken.validateCardNumber(this, paymentMethod);
+   } catch (Exception ex) {
+      result = false;
+   }
 
-try {
-cardToken.validateSecurityCode(this, paymentMethod);
-} catch (Exception ex) {
-result = false;
-}
+   try {
+      cardToken.validateSecurityCode(this, paymentMethod);
+   } catch (Exception ex) {
+      result = false;
+   }
 
-if (!cardToken.validateExpiryDate()) {
-result = false;
-}
+   if (!cardToken.validateExpiryDate()) {
+      result = false;
+   }
 
-if (!cardToken.validateCardholderName()) {
-result = false;
-}
+   if (!cardToken.validateCardholderName()) {
+      result = false;
+   }
 
-/* If an identification type was selected,
-*  validate it’s configurations */
-if (getIdentificationType() != null &&
-!cardToken.validateIdentificationNumber(getIdentificationType())) {
-result = false;
-}
-return result;
+   /* If an identification type was selected,
+   *  validate it’s configurations */
+   if (getIdentificationType() != null &&
+      !cardToken.validateIdentificationNumber(getIdentificationType())) {
+        result = false;
+   }
+   return result;
 }
 ```
 
@@ -120,16 +120,16 @@ The following code shows you how you can exchange the credit card details for a 
 
 ```java
 mercadoPagoServices.createToken(cardToken, new Callback<Token>() {
-@Override
-public void success(Token token) {
-//DONE! 
-}
+        @Override
+        public void success(Token token) {
+            //DONE! 
+        }
 
-@Override
-public void failure(ApiException apiException) {
-//Manage API Failure
-}
-});
+        @Override
+        public void failure(ApiException apiException) {
+            //Manage API Failure
+        }
+    });
 ```
 
 **Done!** Now you can send this information to your servers!
@@ -138,29 +138,29 @@ Along with the token you have just created, you will also need to send the payme
 
 ```java
 mercadoPagoServices.createPayment(YOUR_BASE_URL, YOUR_PAYMENTS_URI, body, queryParams, new Callback<Payment>() {
-@Override
-public void success(Payment payment) {
-//DONE!
-}
+    @Override
+    public void success(Payment payment) {
+        //DONE!
+    }
 
-@Override
-public void failure(ApiException apiException) {
-// Manage API Failure
-}
+    @Override
+    public void failure(ApiException apiException) {
+        // Manage API Failure
+    }
 });
 ```
 
 The BODY of the request must contain:
 ```json
 {
-"transaction_amount": ...,
-"token": ...,
-"description": "Title of what you are paying for",
-"installments": 1,
-"payment_method_id": ...,
-"payer": {
-"email": payer_email
-}
+        "transaction_amount": ...,
+        "token": ...,
+        "description": "Title of what you are paying for",
+        "installments": 1,
+        "payment_method_id": ...,
+        "payer": {
+                "email": payer_email
+        }
 }
 ```
 
@@ -174,21 +174,21 @@ We will see later on that when the bin is not enough to identify the card’s is
 
 ```java
 mercadoPagoServices.getInstallments(bin, amount, issuerId,
-paymentMethodId, new Callback <List<Installment>>() {
-@Override
-public void success(List<Installment> installments) {
-if ((installments.size() > 0) && (installments.get(0).getPayerCosts().size() > 0)) {
-List<PayerCost> payerCosts = installments.get(0).getPayerCosts();
-// Show payerCosts list for selection
-} else {
-// Invalid payment method for current amount
-}
-}
+      paymentMethodId, new Callback <List<Installment>>() {
+         @Override
+         public void success(List<Installment> installments) {
+            if ((installments.size() > 0) && (installments.get(0).getPayerCosts().size() > 0)) {
+               List<PayerCost> payerCosts = installments.get(0).getPayerCosts();
+               // Show payerCosts list for selection
+            } else {
+               // Invalid payment method for current amount
+            }
+         }
 
-@Override
-public void failure(ApiException error) {
-// Manage API Failure
-}
+         @Override
+         public void failure(ApiException error) {
+            // Manage API Failure
+         }
 });
 ```
 
@@ -200,16 +200,16 @@ To know if you need to request this information from the user, you can use the _
 
 ```java
 mercadoPagoServices.getIssuers(paymentMethodId, bin, new Callback<List<Issuer>>() {
-@Override
-public void success(List<Issuer> issuers) {
-//Show issuers for selection
-}
+            @Override
+            public void success(List<Issuer> issuers) {
+                //Show issuers for selection
+            }
 
-@Override
-public void failure(ApiException apiException) {
-//Manage API failure
-}
-});
+            @Override
+            public void failure(ApiException apiException) {
+                //Manage API failure
+            }
+        });
 ```
 
 Create the payment with the issuer data.
@@ -218,14 +218,14 @@ The BODY of the request must contain:
 
 ```json
 {
-"transaction_amount": 100,
-"token": "ff8080814c11e237014c1ff593b57b4d",
-"description": "Title of what you are paying for",
-"payer": {
-"email": "test_user_19653727@testuser.com"
-},
-"installments": 3,
-"payment_method_id": "master",
-"issuer_id": 338
+    "transaction_amount": 100,
+    "token": "ff8080814c11e237014c1ff593b57b4d",
+    "description": "Title of what you are paying for",
+    "payer": {
+            "email": "test_user_19653727@testuser.com"
+    },
+    "installments": 3,
+    "payment_method_id": "master",
+    "issuer_id": 338
 }
 ```
