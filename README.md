@@ -45,7 +45,7 @@ Create a form for you customer to enter his credit card information, for example
 
 ![Card form](https://secure.mlstatic.com/developers/site/cloud/assets/Uploads/new-card2-screenshot.png "Sample card form")
 
-Depending on the country from which you are making the collection, you have to ask your customer for his identification type and number. To do this, you can consult the **_getIdentificationTypes_** method from the **_MercadoPagoServices_** class which, provided with your _public key_ returns valid identification types from the country in question. **Only Mexico doesn’t require this information.**
+Depending on the country from which you are requesting the payment, you have to ask your customer for his identification type and number. To do this, you can consult the **_getIdentificationTypes_** method from the **_MercadoPagoServices_** class which, provided with your _public key_ returns valid identification types from the country in question.
 
 ``` java
 mercadoPagoServices.getIdentificationTypes(new Callback<List<IdentificationType>>() {
@@ -65,7 +65,7 @@ mercadoPagoServices.getIdentificationTypes(new Callback<List<IdentificationType>
    });
 ```
 
-### Validate the information
+### Validate the information
 
 Before creating a token for credit card information, it would be advisable for you to validate the information entered by the user. Many of these validations are very simple, including verifying that the types of data entered are correct or that mandatory fields have been filled out.
 
@@ -132,7 +132,7 @@ mercadoPagoServices.createToken(cardToken, new Callback<Token>() {
     });
 ```
 
-**Done!** Now you can send this information to your servers!
+**Done!** Now you can create a payment in your servers!
 
 Along with the token you have just created, you will also need to send the payment method, number of installments and bank selected by the user. You will also need to identify the item or service that is being purchased and the customer who is using your application.
 
@@ -153,11 +153,11 @@ mercadoPagoServices.createPayment(YOUR_BASE_URL, YOUR_PAYMENTS_URI, body, queryP
 The BODY of the request must contain:
 ```json
 {
-        "transaction_amount": ...,
-        "token": ...,
+        "transaction_amount": 100,
+        "token": "ff8080814c11e237014c1ff593b57b4d",
         "description": "Title of what you are paying for",
         "installments": 1,
-        "payment_method_id": ...,
+        "payment_method_id": visa,
         "payer": {
                 "email": payer_email
         }
@@ -194,7 +194,7 @@ mercadoPagoServices.getInstallments(bin, amount, issuerId,
 
 ### Let the user select a bank, if needed
 
-In some cases, MercadoPago needs to know the card’s issuing bank to find promotions offered by it (Argentina) or to know how to process the payment (Mexico).
+In some cases, MercadoPago needs to know the card’s issuing bank to find promotions offered by it or to know how to process the payment.
 
 To know if you need to request this information from the user, you can use the _isIssuerRequired()_ method from the **_PaymentMethod_** class.
 
