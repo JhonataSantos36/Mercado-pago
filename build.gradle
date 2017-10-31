@@ -8,15 +8,21 @@ def coverageExcludes = ['**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Ma
 def coverageClassDirectories = [fileTree(dir: 'sdk/build/intermediates/classes/debug', excludes: coverageExcludes),
                                 fileTree(dir: 'px-tracking/build/intermediates/classes/debug', excludes: coverageExcludes)]
 
-
 buildscript {
     repositories {
         jcenter()
+        google()
     }
 
     dependencies {
-        classpath 'com.dicedmelon.gradle:jacoco-android:0.1.1'
-        classpath 'com.android.tools.build:gradle:2.2.3'
+        classpath 'com.dicedmelon.gradle:jacoco-android:0.1.2'
+        classpath 'com.android.tools.build:gradle:3.0.0'
+    }
+
+    configurations.all {
+        resolutionStrategy {
+            force 'org.jacoco:org.jacoco.core:0.7.9+'
+        }
     }
 }
 
@@ -29,6 +35,9 @@ ext {
 allprojects {
     repositories {
         jcenter()
+        maven {
+            url 'https://maven.google.com'
+        }
     }
 }
 

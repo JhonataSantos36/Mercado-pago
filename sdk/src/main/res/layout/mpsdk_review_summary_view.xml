@@ -132,7 +132,7 @@
         android:includeFontPadding="false"
         android:textSize="16dp"
         android:visibility="visible"
-        app:fontStyle="light"
+        app:font_style="light"
         tools:text="No incluye intereses bancarios" />
 
     <com.mercadopago.customviews.MPTextView
@@ -144,7 +144,7 @@
         android:includeFontPadding="false"
         android:textSize="24dp"
         android:visibility="gone"
-        app:fontStyle="light"
+        app:font_style="light"
         tools:text="CFT 0,00%" />
 
     <LinearLayout
@@ -192,7 +192,7 @@
                     android:text="@string/mpsdk_text_unlock_card_start"
                     android:textColor="@color/mpsdk_color_unlock_card_text"
                     android:textSize="14dp"
-                    app:fontStyle="light" />
+                    app:font_style="light" />
 
                 <com.mercadopago.customviews.MPTextView
                     android:id="@+id/mpsdkUnlockCard"
@@ -202,7 +202,7 @@
                     android:text="@string/mpsdk_text_unlock_card_linked"
                     android:textColor="@color/mpsdk_color_unlock_card_link"
                     android:textSize="14dp"
-                    app:fontStyle="regular" />
+                    app:font_style="regular" />
             </LinearLayout>
 
             <com.mercadopago.customviews.MPTextView
@@ -211,7 +211,7 @@
                 android:text="@string/mpsdk_text_unlock_card_end"
                 android:textColor="@color/mpsdk_color_unlock_card_text"
                 android:textSize="14dp"
-                app:fontStyle="light" />
+                app:font_style="light" />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

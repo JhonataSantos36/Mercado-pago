@@ -3,10 +3,6 @@ apply plugin: 'maven'
 apply plugin: 'signing'
 apply plugin: 'jacoco-android'
 
-version = "3.6.0"
-group = "com.mercadopago"
-archivesBaseName = "sdk"
-
 task jacocoFullTestReport(type: JacocoReport, dependsOn: ['jacocoTestReport', 'createDevDebugCoverageReport']) {
 
     reports {
@@ -26,12 +22,11 @@ task jacocoFullTestReport(type: JacocoReport, dependsOn: ['jacocoTestReport', 'c
 }
 
 android {
-    publishNonDefault true
-    compileSdkVersion 25
-    buildToolsVersion "25.0.0"
+    compileSdkVersion api_level.toInteger()
+    buildToolsVersion build_tools_version
     defaultConfig {
-        minSdkVersion 9
-        targetSdkVersion 25
+        minSdkVersion min_api_level.toInteger()
+        targetSdkVersion api_level.toInteger()
         versionCode 1
         versionName '3.6.0'
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -51,6 +46,7 @@ android {
         exclude 'META-INF/ASL2.0'
         exclude 'LICENSE.txt'
     }
+
     buildTypes {
         debug {
             testCoverageEnabled true
@@ -70,18 +66,29 @@ android {
         // Skip pre-dexing when running on Travis CI or when disabled via -Dpre-dex=false.
         preDexLibraries = preDexEnabled && !travisBuild
     }
+
     lintOptions {
         abortOnError false
     }
 
+    flavorDimensions "environment"
+
     productFlavors {
         dev {
+            dimension "environment"
             buildConfigField "String", "API_VERSION", "\"beta\""
         }
         prod {
+            dimension "environment"
             buildConfigField "String", "API_VERSION", "\"v1\""
         }
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
 }
 
 project.gradle.taskGraph.whenReady {
@@ -91,32 +98,37 @@ project.gradle.taskGraph.whenReady {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.2'
-    androidTestCompile 'com.android.support.test.espresso:espresso-intents:2.2.2'
-    androidTestCompile('com.android.support.test.espresso:espresso-contrib:2.2.2') {
+
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+
+    androidTestImplementation "com.android.support.test.espresso:espresso-core:2.2.2"
+    androidTestImplementation "com.android.support.test.espresso:espresso-intents:2.2.2"
+    androidTestImplementation("com.android.support.test.espresso:espresso-contrib:2.2.2") {
         exclude module: 'support-v4'
         exclude group: 'com.android.support', module: 'appcompat-v7'
         exclude group: 'com.android.support', module: 'design'
         exclude group: 'com.android.support', module: 'recyclerview-v7'
     }
-    testCompile 'junit:junit:4.12'
-    testCompile 'org.mockito:mockito-core:2.+'
-    compile 'com.android.support:cardview-v7:25.3.1'
-    compile 'com.android.support:recyclerview-v7:25.3.1'
-    compile 'com.android.support:support-v4:25.3.1'
-    compile 'com.android.support:appcompat-v7:25.3.1'
-    compile 'com.android.support:design:25.3.1'
-    compile 'com.android.support:percent:25.3.1'
-    compile 'com.android.support:support-annotations:25.3.1'
-    compile 'com.squareup.okhttp3:okhttp:3.5.0'
-    compile 'com.squareup.okhttp3:okhttp-urlconnection:3.5.0'
-    compile 'com.squareup.okhttp3:logging-interceptor:3.5.0'
-    compile 'com.squareup.retrofit2:retrofit:2.1.0'
-    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
-    compile 'com.squareup.picasso:picasso:2.5.2'
-    devCompile project(path: ':px-tracking', configuration:'devDebug')
-    prodCompile project(path: ':px-tracking', configuration:'prodDebug')
+
+    testImplementation "junit:junit:$junit"
+    testImplementation "org.mockito:mockito-core:2.+"
+
+    implementation "com.android.support:cardview-v7:$support_library_version"
+    implementation "com.android.support:recyclerview-v7:$support_library_version"
+    implementation "com.android.support:support-v4:$support_library_version"
+    implementation "com.android.support:appcompat-v7:$support_library_version"
+    implementation "com.android.support:design:$support_library_version"
+    implementation "com.android.support:percent:$support_library_version"
+    implementation "com.android.support:support-annotations:$support_library_version"
+
+    implementation "com.squareup.okhttp3:okhttp:$okhttp"
+    implementation "com.squareup.okhttp3:okhttp-urlconnection:$okhttp"
+    implementation "com.squareup.okhttp3:logging-interceptor:$okhttp"
+    implementation "com.squareup.retrofit2:retrofit:$retrofit"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofit"
+    implementation "com.squareup.picasso:picasso:$picasso"
+
+    implementation project(':px-tracking')
 }
 
 configurations {

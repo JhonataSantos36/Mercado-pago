@@ -157,7 +157,7 @@ public class MPAnimationUtils {
         imageView.setBackgroundColor(ContextCompat.getColor(context, color));
     }
 
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR1)
+    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     public static void flipToBack(Context context, float cameraDistance, final View frontView, final View backView,
                                   final BackCardView backCardView) {
 
@@ -220,7 +220,7 @@ public class MPAnimationUtils {
         animBack.start();
     }
 
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR1)
+    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     public static void flipToFront(Context context, float cameraDistance, final View frontView, final View backView) {
 
         AnimatorSet animFront = (AnimatorSet) AnimatorInflater.loadAnimator(context, R.animator.mpsdk_card_flip_left_in);

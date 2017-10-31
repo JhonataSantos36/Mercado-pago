@@ -39,7 +39,7 @@
                     android:textSize="17dp"
                     android:visibility="gone"
                     android:background="@drawable/mpsdk_title_toolbar"
-                    app:fontStyle="roboto_regular"
+                    app:font_style="roboto_regular"
                     style="@style/mpsdk_title_text"/>
             </android.support.v7.widget.Toolbar>
 

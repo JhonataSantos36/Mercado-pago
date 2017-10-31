@@ -47,7 +47,7 @@
             android:textSize="18dp"
             android:visibility="gone"
             android:textColor="@color/mpsdk_review_payment_text"
-            app:fontStyle="regular"
+            app:font_style="regular"
             tools:text="No incluye intereses bancarios" />
 
         <com.mercadopago.customviews.MPTextView
@@ -101,7 +101,7 @@
                 android:layout_toRightOf="@+id/mpsdkIconTime"
                 android:gravity="center_horizontal"
                 android:textSize="18dp"
-                app:fontStyle="light"
+                app:font_style="light"
                 tools:text="Se acreditará en tantos días" />
         </RelativeLayout>
 
@@ -114,7 +114,7 @@
             android:includeFontPadding="false"
             android:textSize="24dp"
             android:visibility="gone"
-            app:fontStyle="light"
+            app:font_style="light"
             tools:text="CFT 0,00%" />
 
         <FrameLayout

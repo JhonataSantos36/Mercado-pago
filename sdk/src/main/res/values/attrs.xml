@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="MPTextView">
-        <attr name="fontStyle" format="string" />
+        <attr name="font_style" format="string" />
         <attr name="allowCustomFont" format="boolean" />
     </declare-styleable>
 

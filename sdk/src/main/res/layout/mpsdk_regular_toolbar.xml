@@ -4,7 +4,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:visibility="gone"
     android:id="@+id/mpsdkRegularToolbar"
-    android:background="?attr/colorPrimary"
+    android:background="@color/mpsdk_colorPrimary"
     android:theme="@style/ToolbarTheme"
     app:popupTheme="@style/Theme.MercadoPagoTheme.NoActionBar"
     android:layout_width="match_parent"
@@ -17,6 +17,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:gravity="center_vertical"
+        android:textColor="@color/mpsdk_white"
         style="@style/mpsdk_title_text"/>
 
     <com.mercadopago.customviews.MPTextView
@@ -43,7 +44,7 @@
         android:textSize="17dp"
         android:background="@drawable/mpsdk_title_toolbar"
         android:visibility="gone"
-        app:fontStyle="mono_regular"
+        app:font_style="mono_regular"
         app:allowCustomFont="false"
         style="@style/mpsdk_title_text"/>
 

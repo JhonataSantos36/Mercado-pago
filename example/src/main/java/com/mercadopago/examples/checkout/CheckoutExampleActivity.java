@@ -61,6 +61,8 @@ public class CheckoutExampleActivity extends AppCompatActivity {
                 startJsonInput();
             }
         });
+
+        mSelectedColor = ContextCompat.getColor(this, R.color.mpsdk_colorPrimary);
     }
 
     public void onContinueClicked(View view) {
@@ -112,13 +114,10 @@ public class CheckoutExampleActivity extends AppCompatActivity {
     }
 
     public void changeColor(View view) {
-        new ColorPickerDialog(this, mDefaultColor, new ColorPickerDialog.OnColorSelectedListener() {
-            @Override
-            public void onColorSelected(int color) {
-                mDarkFontEnabled.setEnabled(true);
-                mColorSample.setBackgroundColor(color);
-                mSelectedColor = color;
-            }
+        new ColorPickerDialog(this, mDefaultColor, color -> {
+            mDarkFontEnabled.setEnabled(true);
+            mColorSample.setBackgroundColor(color);
+            mSelectedColor = color;
         }).show();
     }
 
@@ -132,9 +131,11 @@ public class CheckoutExampleActivity extends AppCompatActivity {
     }
 
     private DecorationPreference getCurrentDecorationPreference() {
-        com.mercadopago.preferences.DecorationPreference.Builder decorationPreferenceBuilder = new DecorationPreference.Builder();
+        DecorationPreference.Builder decorationPreferenceBuilder =
+                new DecorationPreference.Builder();
         if (mSelectedColor != null) {
             decorationPreferenceBuilder.setBaseColor(mSelectedColor);
+
             if (mDarkFontEnabled.isChecked()) {
                 decorationPreferenceBuilder.enableDarkFont();
             }

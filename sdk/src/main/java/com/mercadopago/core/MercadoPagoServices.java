@@ -79,8 +79,6 @@ public class MercadoPagoServices {
         this.mPrivateKey = builder.mPrivateKey;
         this.mServicePreference = CustomServicesHandler.getInstance().getServicePreference();
         this.mProcessingMode = mServicePreference != null ? mServicePreference.getProcessingModeString() : ProcessingModes.AGGREGATOR;
-
-        disableConnectionReuseIfNecessary();
     }
 
     public void getPreference(String checkoutPreferenceId, Callback<CheckoutPreference> callback) {
@@ -245,13 +243,6 @@ public class MercadoPagoServices {
                 .client(HttpClientUtil.getClient(this.mContext, connectTimeout, readTimeout, writeTimeout))
                 .addCallAdapterFactory(new ErrorHandlingCallAdapter.ErrorHandlingCallAdapterFactory())
                 .build();
-    }
-
-    private void disableConnectionReuseIfNecessary() {
-        // HTTP connection reuse which was buggy pre-froyo
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-            System.setProperty("http.keepAlive", "false");
-        }
     }
 
     private String getListAsString(List<String> list, String separator) {

@@ -105,11 +105,8 @@ public class Fingerprint {
         String androidId = getAndroidId(mContext);
         vendorIds.add(new VendorId("android_id", androidId));
 
-        // serial
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.FROYO) {
-            if (!TextUtils.isEmpty(Build.SERIAL) && !"unknown".equals(Build.SERIAL)) {
-                vendorIds.add(new VendorId("serial", Build.SERIAL));
-            }
+        if (!TextUtils.isEmpty(Build.SERIAL) && !"unknown".equals(Build.SERIAL)) {
+            vendorIds.add(new VendorId("serial", Build.SERIAL));
         }
 
         // SecureRandom

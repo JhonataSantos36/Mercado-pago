@@ -46,7 +46,7 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="20dp"
                 android:textSize="23dp"
-                app:fontStyle="regular"
+                app:font_style="regular"
                 tools:text="$100 de descuento"/>
         </LinearLayout>
 
@@ -71,7 +71,7 @@
                     android:layout_weight="0.7"
                     android:layout_gravity="start"
                     android:textSize="18dp"
-                    app:fontStyle="regular"
+                    app:font_style="regular"
                     android:text="@string/mpsdk_review_summary_products"/>
                 <com.mercadopago.customviews.MPTextView
                     android:id="@+id/mpsdkReviewSummaryProductsAmount"
@@ -80,7 +80,7 @@
                     android:layout_weight="0.3"
                     android:gravity="end"
                     android:textSize="18dp"
-                    app:fontStyle="regular"
+                    app:font_style="regular"
                     tools:text="$ 1000"/>
             </LinearLayout>
             <LinearLayout
@@ -99,7 +99,7 @@
                     android:layout_gravity="start"
                     android:textSize="18dp"
                     android:textColor="@color/mpsdk_color_payer_costs_no_rate"
-                    app:fontStyle="regular"
+                    app:font_style="regular"
                     android:text="@string/mpsdk_review_summary_discount" />
                 <com.mercadopago.customviews.MPTextView
                     android:id="@+id/mpsdkReviewSummaryDiscountsAmount"
@@ -109,7 +109,7 @@
                     android:gravity="end"
                     android:textSize="18dp"
                     android:textColor="@color/mpsdk_color_payer_costs_no_rate"
-                    app:fontStyle="regular"
+                    app:font_style="regular"
                     tools:text="$ 100"/>
             </LinearLayout>
 
@@ -134,7 +134,7 @@
                     android:layout_weight="0.5"
                     android:layout_gravity="start"
                     android:textSize="18dp"
-                    app:fontStyle="regular"
+                    app:font_style="regular"
                     android:text="@string/mpsdk_review_summary_total" />
                 <com.mercadopago.customviews.MPTextView
                     android:id="@+id/mpsdkReviewSummaryTotalAmount"
@@ -143,7 +143,7 @@
                     android:layout_weight="0.5"
                     android:gravity="end"
                     android:textSize="18dp"
-                    app:fontStyle="regular"
+                    app:font_style="regular"
                     tools:text="$ 900"/>
             </LinearLayout>
         </LinearLayout>

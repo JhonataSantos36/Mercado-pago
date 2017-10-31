@@ -60,7 +60,7 @@
                     android:text="@string/mpsdk_text_terms_and_conditions_start"
                     android:textColor="@color/mpsdk_color_payer_costs"
                     android:textSize="12dp"
-                    app:fontStyle="regular" />
+                    app:font_style="regular" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -76,7 +76,7 @@
                         android:text="@string/mpsdk_text_terms_and_conditions_linked"
                         android:textColor="@color/mpsdk_background_blue"
                         android:textSize="12dp"
-                        app:fontStyle="regular" />
+                        app:font_style="regular" />
 
                     <com.mercadopago.customviews.MPTextView
                         android:layout_width="wrap_content"
@@ -86,7 +86,7 @@
                         android:text="@string/mpsdk_text_terms_and_conditions_end"
                         android:textColor="@color/mpsdk_color_payer_costs"
                         android:textSize="12dp"
-                        app:fontStyle="regular" />
+                        app:font_style="regular" />
 
                 </LinearLayout>
 
@@ -139,7 +139,7 @@
                     android:text="@string/mpsdk_cancel_payment"
                     android:textColor="@color/mpsdk_background_blue"
                     android:textSize="16dp"
-                    app:fontStyle="regular" />
+                    app:font_style="regular" />
 
             </FrameLayout>
 

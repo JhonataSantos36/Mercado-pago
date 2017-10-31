@@ -44,7 +44,7 @@
                     android:textSize="14dp"
                     android:textColor="@color/mpsdk_base_text"
                     app:allowCustomFont="false"
-                    app:fontStyle="mono_regular"
+                    app:font_style="mono_regular"
                     app:minTextSize="8dp"
                     tools:text="CPF: " />
 
@@ -63,7 +63,7 @@
                         android:textColor="@color/mpsdk_base_text_alpha"
                         android:textSize="14dp"
                         app:allowCustomFont="false"
-                        app:fontStyle="mono_regular"
+                        app:font_style="mono_regular"
                         app:minTextSize="8dp" />
 
                     <com.mercadopago.customviews.MPAutoResizeTextView
@@ -77,7 +77,7 @@
                         android:textSize="14dp"
                         android:visibility="invisible"
                         app:allowCustomFont="false"
-                        app:fontStyle="mono_regular"
+                        app:font_style="mono_regular"
                         app:minTextSize="8dp" />
                 </FrameLayout>
             </LinearLayout>
