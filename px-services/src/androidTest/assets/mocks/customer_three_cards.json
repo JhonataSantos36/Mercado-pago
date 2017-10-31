@@ -1,0 +1,133 @@
+{
+  "address": {
+    "street_name": null,
+    "street_number": null,
+    "zip_code": null
+  },
+  "cards": [{
+    "card_holder": null,
+    "customer_id": "178101336",
+    "date_created": null,
+    "date_last_updated": null,
+    "expiration_month": 11,
+    "expiration_year": 2019,
+    "first_six_digits": "503175",
+    "id": "149024476",
+    "issuer": {
+      "id": 3,
+      "name": "Mastercard"
+    },
+    "last_four_digits": "0604",
+    "payment_method": {
+      "accreditation_time": null,
+      "additional_info_needed": null,
+      "deferred_capture": null,
+      "id": "master",
+      "max_allowed_amount": null,
+      "min_allowed_amount": null,
+      "name": "Mastercard",
+      "payment_type_id": "credit_card",
+      "secure_thumbnail": "https://www.mercadopago.com/org-img/MP3/API/logos/master.gif",
+      "settings":  [
+        {
+          "card_number": {
+            "validation": "standard",
+            "length": 16
+          },
+          "bin": {
+            "pattern": "^(5|(2(221|222|223|224|225|226|227|228|229|23|24|25|26|27|28|29|3|4|5|6|70|71|720)))",
+            "installments_pattern": "^(5|(2(221|222|223|224|225|226|227|228|229|23|24|25|26|27|28|29|3|4|5|6|70|71|720)))",
+            "exclusion_pattern": "^(589657|589562|557039|522135|522137|527555|542702|544764|550073|528824|511849|551238|501105|501020|501021|501023|501062|501038|501057|588729|501041|501056|501075|501080|501081)"
+          },
+          "security_code": {
+            "length": 3,
+            "card_location": "back",
+            "mode": "mandatory"
+          }
+        }
+      ],
+      "status": null,
+      "thumbnail": "http://img.mlstatic.com/org-img/MP3/API/logos/master.gif"
+    },
+    "security_code": {
+      "card_location": "back",
+      "length": 3,
+      "mode": null
+    }
+  }, {
+    "card_holder": null,
+    "customer_id": "178101336",
+    "date_created": null,
+    "date_last_updated": null,
+    "expiration_month": 11,
+    "expiration_year": 2019,
+    "first_six_digits": "417006",
+    "id": "149024476",
+    "issuer": {
+      "id": 1,
+      "name": "Visa"
+    },
+    "last_four_digits": "1234",
+    "payment_method": {
+      "accreditation_time": null,
+      "additional_info_needed": null,
+      "id": "visa",
+      "name": "Visa",
+      "payment_type_id": "credit_card",
+      "settings": null
+    },
+    "security_code": {
+      "card_location": "back",
+      "length": 3,
+      "mode": null
+    }
+  }, {
+    "card_holder": null,
+    "customer_id": "178101336",
+    "date_created": null,
+    "date_last_updated": null,
+    "expiration_month": 12,
+    "expiration_year": 2019,
+    "first_six_digits": "371180",
+    "id": "149024476",
+    "issuer": {
+      "id": 1,
+      "name": "American Express"
+    },
+    "last_four_digits": "7522",
+    "payment_method": {
+      "accreditation_time": null,
+      "additional_info_needed": null,
+      "id": "amex",
+      "name": "American Express",
+      "payment_type_id": "credit_card",
+      "settings": null
+    },
+    "security_code": {
+      "card_location": "front",
+      "length": 4,
+      "mode": "mandatory"
+    }
+  }],
+  "date_created": "2015-02-27T11:45:47.000-0500",
+  "date_last_updated": "2015-05-05T17:04:08.814-0400",
+  "default_card": 149024476,
+  "description": null,
+  "email": "test_user_61065665@testuser.com",
+  "first_name": "test user",
+  "id": "178101336",
+  "identification": {
+    "number": null,
+    "type": null
+  },
+  "last_name": null,
+  "live_mode": true,
+  "metadata": {
+
+  },
+  "phone": {
+    "area_code": null,
+    "number": null
+  },
+  "registration_date": null
+}

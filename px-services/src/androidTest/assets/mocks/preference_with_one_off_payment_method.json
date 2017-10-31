@@ -1,0 +1,67 @@
+{
+  "additional_info": "",
+  "auto_return": "",
+  "back_urls": {},
+  "client_id": "963",
+  "collector_id": 157723203,
+  "date_created": "2016-01-11T13:39:40.044-04:00",
+  "expiration_date_from": null,
+  "expiration_date_to": null,
+  "expires": false,
+  "external_reference": "",
+  "id": "157723203-a225d4d6-adab-4072-ad92-6389ede0cabd",
+  "init_point": "https://www.mercadopago.com/mla/checkout/start?pref_id=157723203-a225d4d6-adab-4072-ad92-6389ede0cabd",
+  "items": [
+    {
+      "id": "",
+      "currency_id": "MXN",
+      "title": "Mate de madera!",
+      "picture_url": "",
+      "description": "",
+      "category_id": "",
+      "quantity": 1,
+      "unit_price": 100
+    }
+  ],
+  "marketplace": "NONE",
+  "marketplace_fee": 0,
+  "notification_url": null,
+  "operation_type": "regular_payment",
+  "payer": {
+    "phone": {
+      "area_code": "",
+      "number": ""
+    },
+    "address": {
+      "zip_code": "",
+      "street_name": "",
+      "street_number": null
+    },
+    "email": "test@mgmail.com",
+    "identification": {
+      "number": "",
+      "type": ""
+    },
+    "name": "",
+    "surname": "",
+    "date_created": ""
+  },
+  "payment_methods": {
+    "excluded_payment_methods": [
+      {"id":"rapipago"},
+      {"id":"cargavirtual"}
+    ],
+    "default_installments": null,
+    "default_payment_method_id": null,
+    "excluded_payment_types": [
+      {"id":"atm"},
+      {"id":"debit_card"},
+      {"id":"credit_card"},
+      {"id":"prepaid_card"},
+      {"id":"digital_currency"}
+    ],
+    "installments": null
+  },
+  "sandbox_init_point": "https://sandbox.mercadopago.com/mla/checkout/pay?pref_id=157723203-a225d4d6-adab-4072-ad92-6389ede0cabd",
+  "shipments": {}
+}

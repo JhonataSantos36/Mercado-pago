@@ -1,0 +1,20 @@
+{
+  "default_option": null,
+  "custom_options": [
+    {
+      "description": "Dinero en cuenta de Mercado Pago",
+      "id": "account_money",
+      "payment_method_id": "account_money",
+      "payment_type_id": "account_money"
+    }
+  ],
+  "groups": [
+  ],
+  "payment_methods": [
+    {
+      "id": "account_money",
+      "name": "Dinero en cuenta",
+      "payment_type_id": "account_money"
+    }
+  ]
+}
