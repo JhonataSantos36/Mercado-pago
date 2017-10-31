@@ -52,6 +52,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.4"
             android:gravity="end"
+            android:textColor="@color/default_primary_color"
             android:textSize="18dp"
             tools:text="$124" />
     </LinearLayout>
@@ -77,6 +78,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="start"
             android:layout_weight="0.4"
+            android:textColor="@color/default_primary_color"
             android:text="@string/mpsdk_review_summary_pay"
             android:textSize="18dp" />
 
@@ -110,6 +112,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="start"
             android:layout_weight="0.6"
+            android:textColor="@color/default_primary_color"
             android:text="@string/mpsdk_review_summary_total"
             android:textSize="18dp" />
 
@@ -119,6 +122,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.4"
             android:gravity="end"
+            android:textColor="@color/default_primary_color"
             android:textSize="18dp"
             tools:text="$124" />
     </LinearLayout>
@@ -133,6 +137,7 @@
         android:textSize="16dp"
         android:visibility="visible"
         app:font_style="light"
+        android:textColor="@color/default_primary_color"
         tools:text="No incluye intereses bancarios" />
 
     <com.mercadopago.customviews.MPTextView
