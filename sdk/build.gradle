@@ -28,7 +28,7 @@ android {
         minSdkVersion min_api_level.toInteger()
         targetSdkVersion api_level.toInteger()
         versionCode 1
-        versionName '3.6.0'
+        versionName '3.7.0'
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     packagingOptions {
