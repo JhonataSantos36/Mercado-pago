@@ -114,10 +114,13 @@ public class CheckoutExampleActivity extends AppCompatActivity {
     }
 
     public void changeColor(View view) {
-        new ColorPickerDialog(this, mDefaultColor, color -> {
-            mDarkFontEnabled.setEnabled(true);
-            mColorSample.setBackgroundColor(color);
-            mSelectedColor = color;
+        new ColorPickerDialog(this, mDefaultColor, new ColorPickerDialog.OnColorSelectedListener() {
+            @Override
+            public void onColorSelected(int color) {
+                mDarkFontEnabled.setEnabled(true);
+                mColorSample.setBackgroundColor(color);
+                mSelectedColor = color;
+            }
         }).show();
     }
 
