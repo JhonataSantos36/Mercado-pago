@@ -3,6 +3,8 @@
     <color name="colorAccent">#009EE3</color>
     <color name="colorPrimaryDark">#30AFE2</color>
 
+    <color name="default_primary_color">#666666</color>
+
     <color name="mpsdk_comment_color">#999</color>
     <color name="mpsdk_black">#000000</color>
     <color name="mpsdk_white">#FFFFFF</color>

@@ -178,20 +178,17 @@ public class CardView {
         setPaymentMethod(paymentMethod);
         setSecurityCodeLength(securityCodeLength);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR1) {
-            window.setFlags(
-                    WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED,
-                    WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED);
+        window.setFlags(
+                WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED,
+                WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED);
 
-            float distance = cardBackground.getResources().getDimension(R.dimen.mpsdk_card_camera_distance);
-            float scale = mContext.getResources().getDisplayMetrics().density;
-            float cameraDistance = scale * distance;
+        float distance = cardBackground.getResources().getDimension(R.dimen.mpsdk_card_camera_distance);
+        float scale = mContext.getResources().getDisplayMetrics().density;
+        float cameraDistance = scale * distance;
 
-            MPAnimationUtils.flipToBack(mContext, cameraDistance, mFrontCardView.getView(), mBackCardView.getView(),
-                    mBackCardView);
-        } else {
-            MPAnimationUtils.flipToBack(mContext, mFrontCardView, mBackCardView);
-        }
+        MPAnimationUtils.flipToBack(mContext, cameraDistance, mFrontCardView.getView(), mBackCardView.getView(),
+                mBackCardView);
+
         mBackCardView.draw();
         mBackCardView.drawEditingSecurityCode(securityCode);
 
@@ -202,19 +199,17 @@ public class CardView {
     public void flipCardToFrontFromBack(Window window, FrameLayout cardBackground, String cardNumber,
                                         String cardholderName, String expiryMonth, String expiryYear,
                                         String securityCodeFront) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR1) {
-            window.setFlags(
-                    WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED,
-                    WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED);
 
-            float distance = cardBackground.getResources().getDimension(R.dimen.mpsdk_card_camera_distance);
-            float scale = mContext.getResources().getDisplayMetrics().density;
-            float cameraDistance = scale * distance;
+        window.setFlags(
+                WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED,
+                WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED);
 
-            MPAnimationUtils.flipToFront(mContext, cameraDistance, mFrontCardView.getView(), mBackCardView.getView());
-        } else {
-            MPAnimationUtils.flipToFront(mContext, mFrontCardView, mBackCardView);
-        }
+        float distance = cardBackground.getResources().getDimension(R.dimen.mpsdk_card_camera_distance);
+        float scale = mContext.getResources().getDisplayMetrics().density;
+        float cameraDistance = scale * distance;
+
+        MPAnimationUtils.flipToFront(mContext, cameraDistance, mFrontCardView.getView(), mBackCardView.getView());
+
         mFrontCardView.drawEditingCard(cardNumber, cardholderName, expiryMonth, expiryYear, securityCodeFront);
 
         mCardSideState = CARD_SIDE_FRONT;

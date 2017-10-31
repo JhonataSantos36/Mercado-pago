@@ -35,7 +35,7 @@
                 <com.mercadopago.customviews.MPTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:fontStyle="light"
+                        app:font_style="light"
                         android:textSize="14dp"
                         android:background="@color/mpsdk_background_blue"
                         android:textColor="@color/mpsdk_white"

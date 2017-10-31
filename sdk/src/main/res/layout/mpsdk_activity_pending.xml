@@ -47,7 +47,7 @@
                         android:textSize="17dp"
                         android:background="@drawable/mpsdk_title_toolbar"
                         android:visibility="gone"
-                        app:fontStyle="mono_regular"
+                        app:font_style="mono_regular"
                         app:allowCustomFont="false"
                         tools:text="123123123"
                         style="@style/mpsdk_title_text"/>
@@ -111,6 +111,7 @@
                         android:gravity="bottom|center"
                         android:textSize="22dp"
                         android:visibility="visible"
+                        android:textColor="@color/default_primary_color"
                         android:text="@string/mpsdk_what_can_do" />
 
                     <com.mercadopago.customviews.MPTextView
@@ -126,6 +127,7 @@
                         android:gravity="bottom|center"
                         android:textSize="20dp"
                         android:visibility="visible"
+                        android:textColor="@color/default_primary_color"
                         android:text="@string/mpsdk_subtitle_pending_contingency" />
 
                     <android.support.v7.widget.RecyclerView

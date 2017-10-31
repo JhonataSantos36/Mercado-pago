@@ -112,7 +112,7 @@
                         android:gravity="end"
                         tools:text="1234"
                         app:allowCustomFont="false"
-                        app:fontStyle="mono_regular"/>
+                        app:font_style="mono_regular"/>
                 </FrameLayout>
                 <FrameLayout
                     android:layout_width="match_parent"
@@ -135,7 +135,7 @@
                             android:ellipsize="none"
                             android:textColor="@color/mpsdk_base_text"
                             android:textSize="19dp"
-                            app:fontStyle="mono_regular"
+                            app:font_style="mono_regular"
                             app:allowCustomFont="false"
                             app:minTextSize="8dp"
                             android:maxLines="1"

@@ -20,19 +20,17 @@ task jacocoFullTestReport(type: JacocoReport, dependsOn: ['jacocoTestReport', 'c
 }
 
 android {
-    publishNonDefault true
-    compileSdkVersion 25
-    buildToolsVersion "25.0.0"
+    compileSdkVersion api_level.toInteger()
+    buildToolsVersion build_tools_version
 
     defaultConfig {
-        minSdkVersion 9
-        targetSdkVersion 25
+        minSdkVersion min_api_level.toInteger()
+        targetSdkVersion api_level.toInteger()
         versionCode 1
         versionName "1.0"
-
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
     }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -52,11 +50,15 @@ android {
         }
     }
 
+    flavorDimensions "environment"
+
     productFlavors {
         dev {
+            dimension "environment"
             buildConfigField "String", "API_VERSION", "\"beta\""
         }
         prod {
+            dimension "environment"
             buildConfigField "String", "API_VERSION", "\"v1\""
         }
     }
@@ -69,14 +71,18 @@ project.gradle.taskGraph.whenReady {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:appcompat-v7:25.0.1'
-    testCompile 'junit:junit:4.12'
-    compile 'com.squareup.retrofit2:retrofit:2.1.0'
-    compile 'com.squareup.okhttp3:logging-interceptor:3.5.0'
-    compile 'com.google.code.gson:gson:2.7'
-    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
+
+    testImplementation "junit:junit:$junit"
+
+    implementation "com.android.support:appcompat-v7:$build_tools_version"
+    implementation "com.squareup.retrofit2:retrofit:$retrofit"
+    implementation "com.squareup.okhttp3:logging-interceptor:$okhttp"
+    implementation "com.google.code.gson:gson:2.7"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofit"
 }

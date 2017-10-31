@@ -7,9 +7,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    app:contentScrim="?attr/colorPrimary"
+    app:contentScrim="@color/mpsdk_colorPrimary"
     android:minHeight="@dimen/mpsdk_toolbar_height"
     app:expandedTitleTextAppearance="@style/CollapsedAppBar"
+    app:collapsedTitleTextAppearance="@style/CollapsedAppBar"
     app:expandedTitleMarginTop="45dp"
     app:expandedTitleMarginBottom="25dp"
     app:expandedTitleGravity="top|center_horizontal"
@@ -33,7 +34,7 @@
         android:theme="@style/ToolbarTheme"
         android:layout_width="match_parent"
         android:layout_height="@dimen/mpsdk_toolbar_height"
-        android:minHeight="?attr/actionBarSize"
+        android:minHeight="@dimen/mpsdk_toolbar_height"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         app:layout_scrollFlags="scroll|exitUntilCollapsed"
         app:layout_collapseMode="pin">
@@ -56,7 +57,7 @@
             android:textSize="17dp"
             android:background="@drawable/mpsdk_title_toolbar"
             android:visibility="gone"
-            app:fontStyle="mono_regular"
+            app:font_style="mono_regular"
             app:allowCustomFont="false"
             style="@style/mpsdk_title_text"/>
 

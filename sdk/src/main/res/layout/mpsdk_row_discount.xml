@@ -24,6 +24,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="@string/mpsdk_total"
+                android:textColor="@color/default_primary_color"
                 android:textSize="16dp" />
 
             <com.mercadopago.customviews.MPTextView
@@ -32,6 +33,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_gravity="center"
+                android:textColor="@color/default_primary_color"
                 android:textSize="16dp"
                 tools:text="$ 1.309" />
 

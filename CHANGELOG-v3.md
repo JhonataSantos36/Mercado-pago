@@ -1,3 +1,9 @@
+## VERSION 3.7.0
+
+_31_10_2017_
+
+* New: Support for Android SDK 26
+
 ## VERSION 3.6.1
 
 _13_10_2017_

@@ -61,6 +61,8 @@ public class CheckoutExampleActivity extends AppCompatActivity {
                 startJsonInput();
             }
         });
+
+        mSelectedColor = ContextCompat.getColor(this, R.color.mpsdk_colorPrimary);
     }
 
     public void onContinueClicked(View view) {
@@ -132,9 +134,11 @@ public class CheckoutExampleActivity extends AppCompatActivity {
     }
 
     private DecorationPreference getCurrentDecorationPreference() {
-        com.mercadopago.preferences.DecorationPreference.Builder decorationPreferenceBuilder = new DecorationPreference.Builder();
+        DecorationPreference.Builder decorationPreferenceBuilder =
+                new DecorationPreference.Builder();
         if (mSelectedColor != null) {
             decorationPreferenceBuilder.setBaseColor(mSelectedColor);
+
             if (mDarkFontEnabled.isChecked()) {
                 decorationPreferenceBuilder.enableDarkFont();
             }

@@ -47,7 +47,7 @@
                         android:textSize="17dp"
                         android:visibility="gone"
                         app:allowCustomFont="false"
-                        app:fontStyle="mono_regular" />
+                        app:font_style="mono_regular" />
 
                     <ImageView
                         android:id="@+id/mpsdkIcon"
@@ -123,6 +123,7 @@
                         android:layout_marginTop="50dp"
                         android:gravity="bottom|center"
                         android:text="@string/mpsdk_what_can_do"
+                        android:textColor="@color/default_primary_color"
                         android:textSize="22dp" />
 
                     <com.mercadopago.customviews.MPTextView
@@ -136,6 +137,7 @@
                         android:layout_marginStart="25dp"
                         android:layout_marginTop="10dp"
                         android:gravity="bottom|center"
+                        android:textColor="@color/default_primary_color"
                         android:text="Usa otra tarjeta u otro medio de pago."
                         android:textSize="18dp" />
                 </LinearLayout>
@@ -205,7 +207,7 @@
                     android:text="@string/mpsdk_text_continue"
                     android:textColor="@color/mpsdk_continue_button"
                     android:textSize="16dp"
-                    app:fontStyle="regular"/>
+                    app:font_style="regular"/>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

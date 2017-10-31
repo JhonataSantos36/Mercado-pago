@@ -38,7 +38,7 @@
         android:textSize="17dp"
         android:visibility="gone"
         android:background="@drawable/mpsdk_title_toolbar"
-        app:fontStyle="mono_regular"
+        app:font_style="mono_regular"
         app:allowCustomFont="false"
         style="@style/mpsdk_title_text"/>
 

@@ -97,6 +97,7 @@
                         android:paddingTop="40dp"
                         android:text="@string/mpsdk_payment_id_description"
                         android:textSize="22dp"
+                        android:textColor="@color/default_primary_color"
                         android:visibility="visible" />
 
                     <com.mercadopago.customviews.MPTextView
@@ -107,6 +108,7 @@
                         android:paddingBottom="5dp"
                         android:paddingTop="2dp"
                         android:textSize="14dp"
+                        android:textColor="@color/default_primary_color"
                         android:visibility="visible"
                         tools:text="Nº 123456789" />
 
@@ -200,6 +202,7 @@
                         android:visibility="visible"
                         android:text="@string/mpsdk_last_digits_label"
                         android:textSize="16dp"
+                        android:textColor="@color/default_primary_color"
                         tools:text="Terminada en 1234" />
 
                     <com.mercadopago.customviews.MPTextView
@@ -215,6 +218,7 @@
                         android:gravity="center"
                         android:textSize="12dp"
                         android:visibility="visible"
+                        android:textColor="@color/default_primary_color"
                         tools:text="@string/mpsdk_text_state_account_activity_congrats" />
 
                     <View
@@ -240,6 +244,7 @@
                         android:lineSpacingExtra="3dp"
                         android:textSize="12dp"
                         android:visibility="visible"
+                        android:textColor="@color/default_primary_color"
                         tools:text="Te enviaremos los datos a\n juan.perez@email.com" />
 
                     <View

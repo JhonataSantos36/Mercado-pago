@@ -17,7 +17,7 @@
         android:textColor="@color/mpsdk_color_new_card_text"
         android:textSize="14dp"
         app:allowCustomFont="false"
-        app:fontStyle="light" />
+        app:font_style="light" />
 
     <com.mercadopago.customviews.MPEditText
         android:id="@+id/mpsdkCardholderName"
@@ -28,7 +28,7 @@
         android:layout_marginTop="2dp"
         android:focusableInTouchMode="true"
         android:imeOptions="actionNext"
-        android:inputType="textNoSuggestions|textPersonName"
+        android:inputType="text"
         android:maxLength="50"
         android:privateImeOptions="nm"
         android:singleLine="true"

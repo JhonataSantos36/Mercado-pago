@@ -7,4 +7,45 @@
         <item name="android:statusBarColor">@color/colorPrimaryDark</item>
         <item name="android:colorPrimary">@color/mpsdk_colorPrimary</item>
     </style>
+
+    <style name="mpsdk_button_normal" parent="@android:style/Widget.Button">
+        <item name="android:background">@drawable/mpsdk_button</item>
+        <item name="android:textSize">@dimen/mpsdk_big_text</item>
+        <item name="android:textColor">@color/mpsdk_white</item>
+        <item name="android:stateListAnimator">@null</item>
+    </style>
+
+    <style name="Theme.ProcessMercadoPagoTheme.NoActionbar" parent="Theme.MercadoPagoTheme.NoActionBar">
+        <item name="android:statusBarColor">@color/colorPrimaryDark</item>
+    </style>
+
+    <style name="Theme.ReviewConfirmMercadoPagoTheme.NoActionbar" parent="Theme.MercadoPagoTheme.NoActionBar">
+        <item name="android:statusBarColor">@color/mpsdk_ryc_status_bar</item>
+        <item name="colorControlNormal">@color/mpsdk_color_new_card_text</item>
+    </style>
+
+    <style name="Theme.InfoMercadoPagoTheme.NoActionbar" parent="Theme.MercadoPagoTheme.NoActionBar">
+        <item name="android:statusBarColor">@color/mpsdk_info_color_dark</item>
+    </style>
+
+    <style name="Theme.CongratsMercadoPagoTheme.NoActionbar" parent="Theme.MercadoPagoTheme.NoActionBar">
+        <item name="android:statusBarColor">@color/mpsdk_color_congrats_status_bar</item>
+    </style>
+
+    <style name="Theme.InstructionsMercadoPagoTheme.NoActionbar" parent="Theme.MercadoPagoTheme.NoActionBar">
+        <item name="android:statusBarColor">@color/mpsdk_color_instructions_status_bar</item>
+    </style>
+
+    <style name="Theme.CallForAuthorizeMercadoPagoTheme.NoActionbar" parent="Theme.MercadoPagoTheme.NoActionBar">
+        <item name="android:statusBarColor">@color/mpsdk_color_call_for_authorize_status_bar</item>
+    </style>
+
+    <style name="Theme.RejectionMercadoPagoTheme.NoActionbar" parent="Theme.MercadoPagoTheme.NoActionBar">
+        <item name="android:statusBarColor">@color/mpsdk_color_rejection_status_bar</item>
+    </style>
+
+    <style name="Theme.PendingMercadoPagoTheme.NoActionbar" parent="Theme.MercadoPagoTheme.NoActionBar">
+        <item name="android:statusBarColor">@color/mpsdk_color_pending_status_bar</item>
+    </style>
+
 </resources>

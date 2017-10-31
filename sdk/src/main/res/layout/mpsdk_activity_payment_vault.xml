@@ -22,7 +22,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:fitsSystemWindows="true"
-                app:contentScrim="?attr/colorPrimary"
+                app:contentScrim="@color/mpsdk_colorPrimary"
+                android:background="@color/mpsdk_colorPrimary"
                 app:expandedTitleGravity="center_horizontal"
                 app:expandedTitleTextAppearance="@style/Base.TextAppearance.AppCompat.Large"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed"
@@ -31,7 +32,7 @@
             <android.support.v7.widget.Toolbar
                     android:id="@+id/mpsdkToolbar"
                     android:layout_width="match_parent"
-                    android:layout_height="?attr/actionBarSize"
+                    android:layout_height="@dimen/mpsdk_toolbar_height"
                     android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
                     app:layout_collapseMode="pin">
 
@@ -48,7 +49,9 @@
                         android:textSize="17dp"
                         android:visibility="visible"
                         app:allowCustomFont="false"
-                        app:fontStyle="mono_regular" />
+                        app:font_style="mono_regular"
+                        tools:text="10.123123"/>
+
             </android.support.v7.widget.Toolbar>
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
