@@ -43,16 +43,16 @@ public class CardVaultPresenter extends MvpPresenter<CardVaultView, CardVaultPro
     protected PaymentPreference mPaymentPreference;
     protected List<PaymentMethod> mPaymentMethodList;
     protected Site mSite;
-    protected Boolean mInstallmentsEnabled;
-    protected Boolean mInstallmentsReviewEnabled;
-    protected Boolean mAutomaticSelection;
+    protected boolean mInstallmentsEnabled;
+    protected boolean mInstallmentsReviewEnabled;
+    protected boolean mAutomaticSelection;
     protected BigDecimal mAmount;
     protected String mMerchantBaseUrl;
     protected String mMerchantDiscountUrl;
     protected String mMerchantGetDiscountUri;
     protected Map<String, String> mDiscountAdditionalInfo;
-    protected Boolean mInstallmentsListShown;
-    protected Boolean mIssuersListShown;
+    protected boolean mInstallmentsListShown;
+    protected boolean mIssuersListShown;
 
     //Activity result
     protected PaymentMethod mPaymentMethod;
@@ -65,8 +65,8 @@ public class CardVaultPresenter extends MvpPresenter<CardVaultView, CardVaultPro
     protected Card mCard;
 
     //Discount
-    protected Boolean mDiscountEnabled;
-    protected Boolean mDirectDiscountEnabled;
+    protected boolean mDiscountEnabled;
+    protected boolean mDirectDiscountEnabled;
     protected Discount mDiscount;
     protected String mPayerEmail;
     protected List<PayerCost> mPayerCostsList;
@@ -87,7 +87,7 @@ public class CardVaultPresenter extends MvpPresenter<CardVaultView, CardVaultPro
         try {
             validateParameters();
             onValidStart();
-        } catch (IllegalStateException exception) {
+        } catch (final IllegalStateException exception) {
             getView().showError(new MercadoPagoError(exception.getMessage(), false), "");
         }
     }
@@ -96,35 +96,35 @@ public class CardVaultPresenter extends MvpPresenter<CardVaultView, CardVaultPro
         return getView() != null;
     }
 
-    public void setPaymentRecovery(PaymentRecovery paymentRecovery) {
+    public void setPaymentRecovery(final PaymentRecovery paymentRecovery) {
         this.mPaymentRecovery = paymentRecovery;
     }
 
-    public void setPaymentPreference(PaymentPreference paymentPreference) {
+    public void setPaymentPreference(final PaymentPreference paymentPreference) {
         this.mPaymentPreference = paymentPreference;
     }
 
-    public void setPaymentMethodList(List<PaymentMethod> paymentMethodList) {
+    public void setPaymentMethodList(final List<PaymentMethod> paymentMethodList) {
         this.mPaymentMethodList = paymentMethodList;
     }
 
-    public void setSite(Site site) {
+    public void setSite(final Site site) {
         this.mSite = site;
     }
 
-    public void setInstallmentsEnabled(Boolean installmentsEnabled) {
+    public void setInstallmentsEnabled(final boolean installmentsEnabled) {
         this.mInstallmentsEnabled = installmentsEnabled;
     }
 
-    public void setCard(Card card) {
+    public void setCard(final Card card) {
         this.mCard = card;
     }
 
-    public void setAmount(BigDecimal amount) {
+    public void setAmount(final BigDecimal amount) {
         this.mAmount = amount;
     }
 
-    public void setFailureRecovery(FailureRecovery failureRecovery) {
+    public void setFailureRecovery(final FailureRecovery failureRecovery) {
         this.mFailureRecovery = failureRecovery;
     }
 
@@ -132,7 +132,7 @@ public class CardVaultPresenter extends MvpPresenter<CardVaultView, CardVaultPro
         return mIssuer;
     }
 
-    public void setIssuer(Issuer mIssuer) {
+    public void setIssuer(final Issuer mIssuer) {
         this.mIssuer = mIssuer;
     }
 
@@ -140,7 +140,7 @@ public class CardVaultPresenter extends MvpPresenter<CardVaultView, CardVaultPro
         return mToken;
     }
 
-    public void setToken(Token mToken) {
+    public void setToken(final Token mToken) {
         this.mToken = mToken;
     }
 
@@ -148,7 +148,7 @@ public class CardVaultPresenter extends MvpPresenter<CardVaultView, CardVaultPro
         return mPaymentMethod;
     }
 
-    public void setPaymentMethod(PaymentMethod mPaymentMethod) {
+    public void setPaymentMethod(final PaymentMethod mPaymentMethod) {
         this.mPaymentMethod = mPaymentMethod;
     }
 
@@ -156,7 +156,7 @@ public class CardVaultPresenter extends MvpPresenter<CardVaultView, CardVaultPro
         return mPayerCost;
     }
 
-    public void setPayerCost(PayerCost mPayerCost) {
+    public void setPayerCost(final PayerCost mPayerCost) {
         this.mPayerCost = mPayerCost;
     }
 
@@ -188,11 +188,11 @@ public class CardVaultPresenter extends MvpPresenter<CardVaultView, CardVaultPro
         return mESC;
     }
 
-    public void setESC(String esc) {
+    public void setESC(final String esc) {
         this.mESC = esc;
     }
 
-    public void setCardInfo(CardInfo cardInfo) {
+    public void setCardInfo(final CardInfo cardInfo) {
         this.mCardInfo = cardInfo;
         if (mCardInfo == null) {
             mBin = "";
@@ -201,7 +201,7 @@ public class CardVaultPresenter extends MvpPresenter<CardVaultView, CardVaultPro
         }
     }
 
-    public void setPayerEmail(String payerEmail) {
+    public void setPayerEmail(final String payerEmail) {
         this.mPayerEmail = payerEmail;
     }
 
@@ -209,7 +209,7 @@ public class CardVaultPresenter extends MvpPresenter<CardVaultView, CardVaultPro
         return this.mPayerEmail;
     }
 
-    public void setDiscount(Discount discount) {
+    public void setDiscount(final Discount discount) {
         this.mDiscount = discount;
     }
 
@@ -217,15 +217,15 @@ public class CardVaultPresenter extends MvpPresenter<CardVaultView, CardVaultPro
         return mDiscount;
     }
 
-    public void setDiscountEnabled(Boolean discountEnabled) {
+    public void setDiscountEnabled(final boolean discountEnabled) {
         this.mDiscountEnabled = discountEnabled;
     }
 
-    public Boolean getDiscountEnabled() {
+    public boolean getDiscountEnabled() {
         return this.mDiscountEnabled;
     }
 
-    public void setDiscountAdditionalInfo(Map<String, String> discountAdditionalInfo) {
+    public void setDiscountAdditionalInfo(final Map<String, String> discountAdditionalInfo) {
         this.mDiscountAdditionalInfo = discountAdditionalInfo;
     }
 
@@ -233,7 +233,7 @@ public class CardVaultPresenter extends MvpPresenter<CardVaultView, CardVaultPro
         return this.mDiscountAdditionalInfo;
     }
 
-    public void setInstallmentsReviewEnabled(Boolean installmentReviewEnabled) {
+    public void setInstallmentsReviewEnabled(final boolean installmentReviewEnabled) {
         this.mInstallmentsReviewEnabled = installmentReviewEnabled;
     }
 
@@ -249,7 +249,7 @@ public class CardVaultPresenter extends MvpPresenter<CardVaultView, CardVaultPro
         return PaymentMethodGuessingController.getCardNumberLength(mPaymentMethod, mBin);
     }
 
-    public void setMerchantBaseUrl(String merchantBaseUrl) {
+    public void setMerchantBaseUrl(final String merchantBaseUrl) {
         this.mMerchantBaseUrl = merchantBaseUrl;
     }
 
@@ -257,7 +257,7 @@ public class CardVaultPresenter extends MvpPresenter<CardVaultView, CardVaultPro
         return this.mMerchantBaseUrl;
     }
 
-    public void setMerchantDiscountBaseUrl(String merchantDiscountUrl) {
+    public void setMerchantDiscountBaseUrl(final String merchantDiscountUrl) {
         this.mMerchantDiscountUrl = merchantDiscountUrl;
     }
 
@@ -265,7 +265,7 @@ public class CardVaultPresenter extends MvpPresenter<CardVaultView, CardVaultPro
         return this.mMerchantDiscountUrl;
     }
 
-    public void setMerchantGetDiscountUri(String merchantGetDiscountUri) {
+    public void setMerchantGetDiscountUri(final String merchantGetDiscountUri) {
         this.mMerchantGetDiscountUri = merchantGetDiscountUri;
     }
 
@@ -273,35 +273,35 @@ public class CardVaultPresenter extends MvpPresenter<CardVaultView, CardVaultPro
         return mMerchantGetDiscountUri;
     }
 
-    public void setDirectDiscountEnabled(Boolean directDiscountEnabled) {
+    public void setDirectDiscountEnabled(final boolean directDiscountEnabled) {
         this.mDirectDiscountEnabled = directDiscountEnabled;
     }
 
-    public Boolean getDirectDiscountEnabled() {
+    public boolean getDirectDiscountEnabled() {
         return this.mDirectDiscountEnabled;
     }
 
-    public void setAutomaticSelection(Boolean automaticSelection) {
+    public void setAutomaticSelection(final boolean automaticSelection) {
         this.mAutomaticSelection = automaticSelection;
     }
 
-    public Boolean getAutomaticSelection() {
+    public boolean getAutomaticSelection() {
         return mAutomaticSelection;
     }
 
-    public Boolean isInstallmentsListShown() {
+    public boolean isInstallmentsListShown() {
         return mInstallmentsListShown;
     }
 
-    public Boolean isIssuersListShown() {
+    public boolean isIssuersListShown() {
         return mIssuersListShown;
     }
 
-    public void setInstallmentsListShown(Boolean installmentsListShown) {
+    public void setInstallmentsListShown(final boolean installmentsListShown) {
         mInstallmentsListShown = installmentsListShown;
     }
 
-    public void setIssuersListShown(Boolean issuersListShown) {
+    public void setIssuersListShown(final boolean issuersListShown) {
         mIssuersListShown = issuersListShown;
     }
 
@@ -364,12 +364,12 @@ public class CardVaultPresenter extends MvpPresenter<CardVaultView, CardVaultPro
 
         getResourcesProvider().getInstallmentsAsync(bin, issuerId, paymentMethodId, getTotalAmount(), new OnResourcesRetrievedCallback<List<Installment>>() {
             @Override
-            public void onSuccess(List<Installment> installments) {
+            public void onSuccess(final List<Installment> installments) {
                 resolveInstallmentsList(installments);
             }
 
             @Override
-            public void onFailure(MercadoPagoError error) {
+            public void onFailure(final MercadoPagoError error) {
                 if (viewAttached()) {
                     getView().showError(error, ApiUtil.RequestOrigin.GET_INSTALLMENTS);
 
@@ -384,7 +384,7 @@ public class CardVaultPresenter extends MvpPresenter<CardVaultView, CardVaultPro
         });
     }
 
-    private void resolveInstallmentsList(List<Installment> installments) {
+    private void resolveInstallmentsList(final List<Installment> installments) {
         String errorMessage = null;
         if (installments.size() == 0) {
             errorMessage = getResourcesProvider().getMissingInstallmentsForIssuerErrorMessage();
@@ -409,7 +409,7 @@ public class CardVaultPresenter extends MvpPresenter<CardVaultView, CardVaultPro
         return amount;
     }
 
-    private void resolvePayerCosts(List<PayerCost> payerCosts) {
+    private void resolvePayerCosts(final List<PayerCost> payerCosts) {
         PayerCost defaultPayerCost = mPaymentPreference.getDefaultInstallments(payerCosts);
         mPayerCostsList = payerCosts;
 
@@ -427,13 +427,13 @@ public class CardVaultPresenter extends MvpPresenter<CardVaultView, CardVaultPro
         }
     }
 
-    public void resolveIssuersRequest(Issuer issuer) {
+    public void resolveIssuersRequest(final Issuer issuer) {
         mIssuersListShown = true;
         setIssuer(issuer);
         checkStartInstallmentsActivity();
     }
 
-    public void resolveInstallmentsRequest(PayerCost payerCost, Discount discount) {
+    public void resolveInstallmentsRequest(final PayerCost payerCost, final Discount discount) {
         setSelectedInstallments(payerCost, discount);
 
         if (savedCardAvailable()) {
@@ -447,13 +447,13 @@ public class CardVaultPresenter extends MvpPresenter<CardVaultView, CardVaultPro
         }
     }
 
-    private void setSelectedInstallments(PayerCost payerCost, Discount discount) {
+    private void setSelectedInstallments(final PayerCost payerCost, final Discount discount) {
         mInstallmentsListShown = true;
         setPayerCost(payerCost);
         setDiscount(discount);
     }
 
-    public void resolveSecurityCodeRequest(Token token) {
+    public void resolveSecurityCodeRequest(final Token token) {
         setToken(token);
         if (tokenRecoveryAvailable()) {
             setPayerCost(getPaymentRecovery().getPayerCost());
@@ -462,8 +462,11 @@ public class CardVaultPresenter extends MvpPresenter<CardVaultView, CardVaultPro
         getView().finishWithResult();
     }
 
-    public void resolveNewCardRequest(PaymentMethod paymentMethod, Token token, Boolean directDiscountEnabled, PayerCost payerCost,
-                                      Issuer issuer, List<PayerCost> payerCosts, List<Issuer> issuers, Discount discount) {
+    public void resolveNewCardRequest(final PaymentMethod paymentMethod, final Token token,
+                                      final boolean directDiscountEnabled,
+                                      final PayerCost payerCost, final Issuer issuer,
+                                      final List<PayerCost> payerCosts, final List<Issuer> issuers,
+                                      final Discount discount) {
 
         setPaymentMethod(paymentMethod);
         setToken(token);
@@ -530,11 +533,11 @@ public class CardVaultPresenter extends MvpPresenter<CardVaultView, CardVaultPro
         return getCard() != null;
     }
 
-    public void setPayerCostsList(List<PayerCost> payerCostsList) {
+    public void setPayerCostsList(final List<PayerCost> payerCostsList) {
         this.mPayerCostsList = payerCostsList;
     }
 
-    private void setIssuersList(List<Issuer> issuers) {
+    private void setIssuersList(final List<Issuer> issuers) {
         mIssuersList = issuers;
     }
 
@@ -570,14 +573,14 @@ public class CardVaultPresenter extends MvpPresenter<CardVaultView, CardVaultPro
 
             getResourcesProvider().createESCTokenAsync(mESCCardToken, new OnResourcesRetrievedCallback<Token>() {
                 @Override
-                public void onSuccess(Token token) {
+                public void onSuccess(final Token token) {
                     mToken = token;
                     mToken.setLastFourDigits(mCard.getLastFourDigits());
                     getView().finishWithResult();
                 }
 
                 @Override
-                public void onFailure(MercadoPagoError error) {
+                public void onFailure(final MercadoPagoError error) {
 
                     if (error.isApiException() && error.getApiException().getStatus().equals(ApiUtil.StatusCodes.BAD_REQUEST)) {
                         List<Cause> causes = error.getApiException().getCause();
@@ -604,7 +607,7 @@ public class CardVaultPresenter extends MvpPresenter<CardVaultView, CardVaultPro
         }
     }
 
-    private void recoverCreateESCToken(MercadoPagoError error) {
+    private void recoverCreateESCToken(final MercadoPagoError error) {
         if (viewAttached()) {
             getView().showError(error, ApiUtil.RequestOrigin.CREATE_TOKEN);
 
