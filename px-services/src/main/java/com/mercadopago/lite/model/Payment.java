@@ -326,6 +326,7 @@ public class Payment {
     }
 
     public class StatusDetail {
+        public static final String RECOVERY = "recovery";
         public static final String INVALID_ESC = "invalid_esc";
         public static final String ACCREDITED = "accredited";
         public static final String REJECTED_CALL_FOR_AUTHORIZE = "cc_rejected_call_for_authorize";
@@ -342,7 +343,7 @@ public class Payment {
         public static final String REJECTED_MAX_ATTEMPTS = "cc_rejected_max_attempts";
         public static final String REJECTED_DUPLICATED_PAYMENT = "cc_rejected_duplicated_payment";
         public static final String REJECTED_CARD_DISABLED = "cc_rejected_card_disabled";
-        public static final String REJECTED_REJECTED_BY_BANK = "rejected_by_bank";
-        public static final String REJECTED_REJECTED_INSUFFICIENT_DATA = "rejected_insufficient_data";
+        public static final String REJECTED_BY_BANK = "rejected_by_bank";
+        public static final String REJECTED_INSUFFICIENT_DATA = "rejected_insufficient_data";
     }
 }
