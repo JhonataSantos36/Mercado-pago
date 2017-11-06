@@ -207,8 +207,7 @@ public class MercadoPagoServices {
         customService.getCustomer(uri, additionalInfo).enqueue(callback);
     }
 
-    public void createPayment(String baseUrl, String uri,
-                              Map<String, Object> paymentData, @NonNull Map<String, String> query, Callback<Payment> callback) {
+    public void createPayment(String baseUrl, String uri, Map<String, Object> paymentData, @NonNull Map<String, String> query, Callback<Payment> callback) {
         if (query == null) {
             query = new HashMap<>();
         }

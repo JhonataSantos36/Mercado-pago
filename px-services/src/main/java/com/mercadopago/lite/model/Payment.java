@@ -1,4 +1,5 @@
 package com.mercadopago.lite.model;
+
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -14,7 +15,7 @@ public class Payment {
     private String callForAuthorizeId;
     private Boolean captured;
     private Card card;
-    private String collectorId;
+    private Integer collectorId;
     private BigDecimal couponAmount;
     private String currencyId;
     private Date dateApproved;
@@ -24,9 +25,9 @@ public class Payment {
     private Long differentialPricingId;
     private String externalReference;
     private List<FeeDetail> feeDetails;
-    private String id;
+    private Long id;
     private Integer installments;
-    private Integer issuerId;
+    private String issuerId;
     private Boolean liveMode;
     private Map metadata;
     private Date moneyReleaseDate;
@@ -77,11 +78,11 @@ public class Payment {
         this.card = card;
     }
 
-    public String getCollectorId() {
+    public Integer getCollectorId() {
         return collectorId;
     }
 
-    public void setCollectorId(String collectorId) {
+    public void setCollectorId(Integer collectorId) {
         this.collectorId = collectorId;
     }
 
@@ -157,11 +158,11 @@ public class Payment {
         this.feeDetails = feeDetails;
     }
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -173,11 +174,11 @@ public class Payment {
         this.installments = installments;
     }
 
-    public Integer getIssuerId() {
+    public String getIssuerId() {
         return issuerId;
     }
 
-    public void setIssuerId(Integer issuerId) {
+    public void setIssuerId(String issuerId) {
         this.issuerId = issuerId;
     }
 
