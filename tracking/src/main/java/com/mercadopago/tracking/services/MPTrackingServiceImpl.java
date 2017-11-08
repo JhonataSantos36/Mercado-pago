@@ -3,6 +3,7 @@ package com.mercadopago.tracking.services;
 import android.content.Context;
 import android.util.Log;
 
+import com.mercadopago.tracking.core.Settings;
 import com.mercadopago.tracking.model.EventTrackIntent;
 import com.mercadopago.tracking.model.PaymentIntent;
 import com.mercadopago.tracking.model.TrackingIntent;
@@ -37,18 +38,18 @@ public class MPTrackingServiceImpl implements MPTrackingService {
         Retrofit retrofit = getRetrofit(context);
         TrackingService service = retrofit.create(TrackingService.class);
 
-        Call<Void> call = service.trackToken(trackingIntent);
+        Call<Void> call = service.trackToken(Settings.servicesVersion, trackingIntent);
         call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
-                if(response.code() == 400) {
-                    Log.e("Failure","Error 400, parameter invalid");
+                if (response.code() == 400) {
+                    Log.e("Failure", "Error 400, parameter invalid");
                 }
             }
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
-                Log.e("Failure","Service failure");
+                Log.e("Failure", "Service failure");
             }
         });
     }
@@ -59,18 +60,18 @@ public class MPTrackingServiceImpl implements MPTrackingService {
         Retrofit retrofit = getRetrofit(context);
         TrackingService service = retrofit.create(TrackingService.class);
 
-        Call<Void> call = service.trackPaymentId(paymentIntent);
+        Call<Void> call = service.trackPaymentId(Settings.servicesVersion, paymentIntent);
         call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
-                if(response.code() == 400) {
-                    Log.e("Failure","Error 400, parameter invalid");
+                if (response.code() == 400) {
+                    Log.e("Failure", "Error 400, parameter invalid");
                 }
             }
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
-                Log.e("Failure","Service failure");
+                Log.e("Failure", "Service failure");
             }
         });
     }
@@ -80,18 +81,18 @@ public class MPTrackingServiceImpl implements MPTrackingService {
         Retrofit retrofit = getRetrofit(context);
         TrackingService service = retrofit.create(TrackingService.class);
 
-        Call<Void> call = service.trackEvents(eventTrackIntent);
+        Call<Void> call = service.trackEvents(Settings.servicesVersion, eventTrackIntent);
         call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
-                if(response.code() == 400) {
-                    Log.e("Failure","Error 400, parameter invalid");
+                if (response.code() == 400) {
+                    Log.e("Failure", "Error 400, parameter invalid");
                 }
             }
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
-                Log.e("Failure","Service failure");
+                Log.e("Failure", "Service failure");
             }
         });
     }
@@ -100,7 +101,7 @@ public class MPTrackingServiceImpl implements MPTrackingService {
     public void trackEvents(EventTrackIntent eventTrackIntent, Context context, Callback<Void> callback) {
         Retrofit retrofit = getRetrofit(context);
         TrackingService service = retrofit.create(TrackingService.class);
-        Call<Void> call = service.trackEvents(eventTrackIntent);
+        Call<Void> call = service.trackEvents(Settings.servicesVersion, eventTrackIntent);
         call.enqueue(callback);
     }
 
