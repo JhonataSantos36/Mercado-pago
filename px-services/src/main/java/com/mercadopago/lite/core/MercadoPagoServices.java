@@ -68,6 +68,7 @@ public class MercadoPagoServices {
     private String mPrivateKey;
     private Context mContext;
     private String mProcessingMode;
+    private Boolean mBetaEnvironment;
 
     private MercadoPagoServices(Builder builder) {
         this.mContext = builder.mContext;
@@ -75,17 +76,18 @@ public class MercadoPagoServices {
         this.mPrivateKey = builder.mPrivateKey;
         this.mServicePreference = CustomServicesHandler.getInstance().getServicePreference();
         this.mProcessingMode = mServicePreference != null ? mServicePreference.getProcessingModeString() : ProcessingModes.AGGREGATOR;
+        this.mBetaEnvironment = builder.mBetaEnvironment;
         disableConnectionReuseIfNecessary();
     }
 
     public void getCheckoutPreference(String checkoutPreferenceId, Callback<CheckoutPreference> callback) {
         CheckoutService service = getDefaultRetrofit().create(CheckoutService.class);
-        service.getPreference(checkoutPreferenceId, this.mPublicKey).enqueue(callback);
+        service.getPreference(Settings.servicesVersion, checkoutPreferenceId, this.mPublicKey).enqueue(callback);
     }
 
     public void getInstructions(Long paymentId, String paymentTypeId, final Callback<Instructions> callback) {
         CheckoutService service = getDefaultRetrofit().create(CheckoutService.class);
-        service.getPaymentResult(mContext.getResources().getConfiguration().locale.getLanguage(), paymentId, this.mPublicKey, this.mPrivateKey, paymentTypeId, PAYMENT_RESULT_API_VERSION).enqueue(callback);
+        service.getPaymentResult(Settings.servicesVersion, mContext.getResources().getConfiguration().locale.getLanguage(), paymentId, this.mPublicKey, this.mPrivateKey, paymentTypeId, PAYMENT_RESULT_API_VERSION).enqueue(callback);
     }
 
     public void getPaymentMethodSearch(BigDecimal amount, List<String> excludedPaymentTypes, List<String> excludedPaymentMethods, Payer payer, Site site, final Callback<PaymentMethodSearch> callback) {
@@ -96,7 +98,7 @@ public class MercadoPagoServices {
         String excludedPaymentTypesAppended = getListAsString(excludedPaymentTypes, separator);
         String excludedPaymentMethodsAppended = getListAsString(excludedPaymentMethods, separator);
         String siteId = site == null ? "" : site.getId();
-        service.getPaymentMethodSearch(mContext.getResources().getConfiguration().locale.getLanguage(), this.mPublicKey, amount, excludedPaymentTypesAppended, excludedPaymentMethodsAppended, payerIntent, siteId, PAYMENT_METHODS_OPTIONS_API_VERSION, mProcessingMode).enqueue(callback);
+        service.getPaymentMethodSearch(Settings.servicesVersion, mContext.getResources().getConfiguration().locale.getLanguage(), this.mPublicKey, amount, excludedPaymentTypesAppended, excludedPaymentMethodsAppended, payerIntent, siteId, PAYMENT_METHODS_OPTIONS_API_VERSION, mProcessingMode).enqueue(callback);
     }
 
     public void createToken(final SavedCardToken savedCardToken, final Callback<Token> callback) {
@@ -154,13 +156,13 @@ public class MercadoPagoServices {
 
     public void getInstallments(String bin, BigDecimal amount, Long issuerId, String paymentMethodId, Callback<List<Installment>> callback) {
         PaymentService service = getDefaultRetrofit().create(PaymentService.class);
-        service.getInstallments(this.mPublicKey, mPrivateKey, bin, amount, issuerId, paymentMethodId,
+        service.getInstallments(Settings.servicesVersion, this.mPublicKey, mPrivateKey, bin, amount, issuerId, paymentMethodId,
                 mContext.getResources().getConfiguration().locale.toString(), mProcessingMode).enqueue(callback);
     }
 
     public void getIssuers(String paymentMethodId, String bin, final Callback<List<Issuer>> callback) {
         PaymentService service = getDefaultRetrofit().create(PaymentService.class);
-        service.getIssuers(this.mPublicKey, mPrivateKey, paymentMethodId, bin, mProcessingMode).enqueue(callback);
+        service.getIssuers(Settings.servicesVersion, this.mPublicKey, mPrivateKey, paymentMethodId, bin, mProcessingMode).enqueue(callback);
     }
 
     public void getPaymentMethods(final Callback<List<PaymentMethod>> callback) {
@@ -207,13 +209,12 @@ public class MercadoPagoServices {
         customService.getCustomer(uri, additionalInfo).enqueue(callback);
     }
 
-    public void createPayment(String baseUrl, String uri,
-                              Map<String, Object> paymentData, @NonNull Map<String, String> query, Callback<Payment> callback) {
+    public void createPayment(String baseUrl, String uri, Map<String, Object> paymentData, @NonNull Map<String, String> query, Callback<Payment> callback) {
         if (query == null) {
             query = new HashMap<>();
         }
         CustomService customService = getCustomService(baseUrl, DEFAULT_PAYMENT_CONNECT_TIMEOUT, DEFAULT_PAYMENT_READ_TIMEOUT, DEFAULT_PAYMENT_WRITE_TIMEOUT);
-        customService.createPayment(ripFirstSlash(uri), paymentData, query).enqueue(callback);
+        customService.createPayment(Settings.servicesVersion, ripFirstSlash(uri), paymentData, query).enqueue(callback);
     }
 
     public void createPayment(String transactionId, String baseUrl, String uri,
@@ -225,7 +226,7 @@ public class MercadoPagoServices {
         customService.createPayment(transactionId, ripFirstSlash(uri), paymentData, query).enqueue(callback);
     }
 
-    public void getDirectDiscount(String transactionAmount, String payerEmail,String url, String uri, @NonNull Map<String, String> discountAdditionalInfo, Callback<Discount> callback) {
+    public void getDirectDiscount(String transactionAmount, String payerEmail, String url, String uri, @NonNull Map<String, String> discountAdditionalInfo, Callback<Discount> callback) {
         if (discountAdditionalInfo == null) {
             discountAdditionalInfo = new HashMap<>();
         }
@@ -320,6 +321,7 @@ public class MercadoPagoServices {
         private String mPublicKey;
         public String mPrivateKey;
         public ServicePreference mServicePreference;
+        private Boolean mBetaEnvironment;
 
         public Builder() {
 
@@ -349,6 +351,12 @@ public class MercadoPagoServices {
         public Builder setServicePreference(ServicePreference servicePreference) {
 
             this.mServicePreference = servicePreference;
+            return this;
+        }
+
+        public Builder setBetaEnvironment(Boolean betaEnvironment) {
+
+            this.mBetaEnvironment = betaEnvironment;
             return this;
         }
 

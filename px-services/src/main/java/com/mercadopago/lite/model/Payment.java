@@ -1,4 +1,7 @@
 package com.mercadopago.lite.model;
+
+import com.mercadopago.lite.constants.PaymentTypes;
+
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -14,7 +17,7 @@ public class Payment {
     private String callForAuthorizeId;
     private Boolean captured;
     private Card card;
-    private String collectorId;
+    private Integer collectorId;
     private BigDecimal couponAmount;
     private String currencyId;
     private Date dateApproved;
@@ -24,9 +27,9 @@ public class Payment {
     private Long differentialPricingId;
     private String externalReference;
     private List<FeeDetail> feeDetails;
-    private String id;
+    private Long id;
     private Integer installments;
-    private Integer issuerId;
+    private String issuerId;
     private Boolean liveMode;
     private Map metadata;
     private Date moneyReleaseDate;
@@ -77,11 +80,11 @@ public class Payment {
         this.card = card;
     }
 
-    public String getCollectorId() {
+    public Integer getCollectorId() {
         return collectorId;
     }
 
-    public void setCollectorId(String collectorId) {
+    public void setCollectorId(Integer collectorId) {
         this.collectorId = collectorId;
     }
 
@@ -157,11 +160,11 @@ public class Payment {
         this.feeDetails = feeDetails;
     }
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -173,11 +176,11 @@ public class Payment {
         this.installments = installments;
     }
 
-    public Integer getIssuerId() {
+    public String getIssuerId() {
         return issuerId;
     }
 
-    public void setIssuerId(Integer issuerId) {
+    public void setIssuerId(String issuerId) {
         this.issuerId = issuerId;
     }
 
@@ -317,6 +320,10 @@ public class Payment {
         this.tokenId = tokenId;
     }
 
+    public Boolean isCardPaymentType(String paymentTypeId) {
+        return paymentTypeId.equals(PaymentTypes.CREDIT_CARD) || paymentTypeId.equals(PaymentTypes.DEBIT_CARD) || paymentTypeId.equals(PaymentTypes.PREPAID_CARD);
+    }
+
     public class Status {
         public static final String APPROVED = "approved";
         public static final String IN_PROCESS = "in_process";
@@ -325,6 +332,7 @@ public class Payment {
     }
 
     public class StatusDetail {
+        public static final String RECOVERY = "recovery";
         public static final String INVALID_ESC = "invalid_esc";
         public static final String ACCREDITED = "accredited";
         public static final String REJECTED_CALL_FOR_AUTHORIZE = "cc_rejected_call_for_authorize";
@@ -341,7 +349,7 @@ public class Payment {
         public static final String REJECTED_MAX_ATTEMPTS = "cc_rejected_max_attempts";
         public static final String REJECTED_DUPLICATED_PAYMENT = "cc_rejected_duplicated_payment";
         public static final String REJECTED_CARD_DISABLED = "cc_rejected_card_disabled";
-        public static final String REJECTED_REJECTED_BY_BANK = "rejected_by_bank";
-        public static final String REJECTED_REJECTED_INSUFFICIENT_DATA = "rejected_insufficient_data";
+        public static final String REJECTED_BY_BANK = "rejected_by_bank";
+        public static final String REJECTED_INSUFFICIENT_DATA = "rejected_insufficient_data";
     }
 }

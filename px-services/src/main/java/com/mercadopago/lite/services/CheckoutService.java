@@ -19,16 +19,16 @@ import retrofit2.http.Query;
 
 public interface CheckoutService {
 
-    @POST("/v1/checkout/payment_methods/search/options")
-    MPCall<PaymentMethodSearch> getPaymentMethodSearch(@Header("Accept-Language") String locale, @Query("public_key") String publicKey, @Query("amount") BigDecimal amount, @Query("excluded_payment_types") String excludedPaymentTypes, @Query("excluded_payment_methods") String excludedPaymentMethods, @Body PayerIntent payerIntent, @Query("site_id") String siteId, @Query("api_version") String apiVersion, @Query("processing_mode") String processingMode);
+    @POST("/{version}/checkout/payment_methods/search/options")
+    MPCall<PaymentMethodSearch> getPaymentMethodSearch(@Path(value = "version", encoded = true) String version, @Header("Accept-Language") String locale, @Query("public_key") String publicKey, @Query("amount") BigDecimal amount, @Query("excluded_payment_types") String excludedPaymentTypes, @Query("excluded_payment_methods") String excludedPaymentMethods, @Body PayerIntent payerIntent, @Query("site_id") String siteId, @Query("api_version") String apiVersion, @Query("processing_mode") String processingMode);
 
-    @POST("/v1/checkout/payments")
-    MPCall<Payment> createPayment(@Header("X-Idempotency-Key") String transactionId, @Body Map<String, Object> body);
+    @POST("/{version}/checkout/payments")
+    MPCall<Payment> createPayment(@Path(value = "version", encoded = true) String version, @Header("X-Idempotency-Key") String transactionId, @Body Map<String, Object> body);
 
-    @GET("/v1/checkout/payments/{payment_id}/results")
-    MPCall<Instructions> getPaymentResult(@Header("Accept-Language") String locale, @Path(value = "payment_id", encoded = true) Long paymentId, @Query("public_key") String mKey, @Query("access_token") String privateKey, @Query("payment_type") String paymentTypeId, @Query("api_version") String apiVersion);
+    @GET("/{version}/checkout/payments/{payment_id}/results")
+    MPCall<Instructions> getPaymentResult(@Path(value = "version", encoded = true) String version, @Header("Accept-Language") String locale, @Path(value = "payment_id", encoded = true) Long paymentId, @Query("public_key") String mKey, @Query("access_token") String privateKey, @Query("payment_type") String paymentTypeId, @Query("api_version") String apiVersion);
 
-    @GET("/v1/checkout/preferences/{preference_id}")
-    MPCall<CheckoutPreference> getPreference(@Path(value = "preference_id", encoded = true) String checkoutPreferenceId, @Query("public_key") String publicKey);
+    @GET("/{version}/checkout/preferences/{preference_id}")
+    MPCall<CheckoutPreference> getPreference(@Path(value = "version", encoded = true) String version, @Path(value = "preference_id", encoded = true) String checkoutPreferenceId, @Query("public_key") String publicKey);
 }
 
