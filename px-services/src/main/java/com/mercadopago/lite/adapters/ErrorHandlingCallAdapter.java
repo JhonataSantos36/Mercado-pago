@@ -82,9 +82,11 @@ public class ErrorHandlingCallAdapter {
                                 T body = r.body();
                                 if (body instanceof Payment) {
                                     Payment mPayment = (Payment) body;
-                                    //FIXME no puede ser Long
-                                    MPTracker.getInstance().trackPayment(new Long(mPayment.getId()), mPayment.getPaymentTypeId());
 
+                                    if (!mPayment.isCardPaymentType(mPayment.getPaymentTypeId())){
+                                        //FIXME no puede ser Long
+                                        MPTracker.getInstance().trackPayment(new Long(mPayment.getId()), mPayment.getPaymentTypeId());
+                                    }
                                 } else if (body instanceof Token) {
                                     Token mToken = (Token) body;
 

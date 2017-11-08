@@ -1,5 +1,7 @@
 package com.mercadopago.lite.model;
 
+import com.mercadopago.lite.constants.PaymentTypes;
+
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -316,6 +318,10 @@ public class Payment {
 
     public void setTokenId(String tokenId) {
         this.tokenId = tokenId;
+    }
+
+    public Boolean isCardPaymentType(String paymentTypeId) {
+        return paymentTypeId.equals(PaymentTypes.CREDIT_CARD) || paymentTypeId.equals(PaymentTypes.DEBIT_CARD) || paymentTypeId.equals(PaymentTypes.PREPAID_CARD);
     }
 
     public class Status {
