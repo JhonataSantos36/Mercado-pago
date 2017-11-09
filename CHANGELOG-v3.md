@@ -1,3 +1,9 @@
+## VERSION 3.7.1
+
+_09_11_2017_
+
+* Fix: Fixed dependencies transitivity
+
 ## VERSION 3.7.0
 
 _31_10_2017_
