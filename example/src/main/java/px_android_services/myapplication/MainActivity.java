@@ -6,7 +6,6 @@ import android.widget.Toast;
 
 import com.mercadopago.lite.callbacks.Callback;
 import com.mercadopago.lite.core.MercadoPagoServices;
-import com.mercadopago.lite.core.Settings;
 import com.mercadopago.lite.model.Issuer;
 
 import java.util.List;
@@ -17,8 +16,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        Settings.enableBetaServices();
 
         MercadoPagoServices mercadoPagoServices = new MercadoPagoServices.Builder()
                 .setContext(this)
