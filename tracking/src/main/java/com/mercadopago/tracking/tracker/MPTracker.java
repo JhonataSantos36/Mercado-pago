@@ -102,13 +102,9 @@ public class MPTracker {
         PaymentIntent paymentIntent = null;
 
         if (trackerInitialized) {
-
-            if (!isCardPaymentType(typeId)) {
-                paymentIntent = new PaymentIntent(mPublicKey, paymentId.toString(), DEFAULT_FLAVOUR, SDK_PLATFORM, SDK_TYPE, mSdkVersion, mSiteId);
-                initializeMPTrackingService();
-                mMPTrackingService.trackPaymentId(paymentIntent, mContext);
-            }
-
+            paymentIntent = new PaymentIntent(mPublicKey, paymentId.toString(), DEFAULT_FLAVOUR, SDK_PLATFORM, SDK_TYPE, mSdkVersion, mSiteId);
+            initializeMPTrackingService();
+            mMPTrackingService.trackPaymentId(paymentIntent, mContext);
         }
         return paymentIntent;
     }
