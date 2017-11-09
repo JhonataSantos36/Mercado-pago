@@ -24,7 +24,7 @@ public class HttpClientUtil {
 
             // Set log info
             HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-            interceptor.setLevel(HttpLoggingInterceptor.Level.NONE);
+            interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 
             // Set cache size
             int cacheSize = 10 * 1024 * 1024; // 10 MiB
