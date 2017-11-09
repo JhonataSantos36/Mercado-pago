@@ -23,6 +23,7 @@ import retrofit2.Retrofit;
 /**
  * Created by mreverter on 6/6/16.
  */
+
 public class ErrorHandlingCallAdapter {
     public static class ErrorHandlingCallAdapterFactory extends CallAdapter.Factory {
 
@@ -83,7 +84,7 @@ public class ErrorHandlingCallAdapter {
                                 if (body instanceof Payment) {
                                     Payment mPayment = (Payment) body;
 
-                                    if (!mPayment.isCardPaymentType(mPayment.getPaymentTypeId())){
+                                    if (!mPayment.isCardPaymentType(mPayment.getPaymentTypeId())) {
                                         //FIXME no puede ser Long
                                         MPTracker.getInstance().trackPayment(new Long(mPayment.getId()), mPayment.getPaymentTypeId());
                                     }

@@ -1,1 +1,1 @@
-include ':px-services', ':myapplication'
+include ':services', ':example'
