@@ -6,6 +6,7 @@ import com.mercadopago.tracking.model.TrackingIntent;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 
@@ -22,5 +23,5 @@ public interface TrackingService {
     Call<Void> trackPaymentId(@Path(value = "version", encoded = true) String version, @Body PaymentIntent body);
 
     @POST("/{version}/checkout/tracking/events")
-    Call<Void> trackEvents(@Path(value = "version", encoded = true) String version, @Body EventTrackIntent body);
+    Call<Void> trackEvents(@Header("Accept-version") String eventsTrackingVersion, @Path(value = "version", encoded = true) String version, @Body EventTrackIntent body);
 }
