@@ -5,7 +5,7 @@ import android.content.Context;
 import com.mercadopago.R;
 import com.mercadopago.callbacks.Callback;
 import com.mercadopago.core.CustomServer;
-import com.mercadopago.core.MercadoPagoServices;
+import com.mercadopago.core.MercadoPagoServicesAdapter;
 import com.mercadopago.exceptions.MercadoPagoError;
 
 import com.mercadopago.core.MerchantServer;
@@ -32,7 +32,7 @@ import java.util.Map;
 public class PaymentVaultProviderImpl implements PaymentVaultProvider {
 
     private final Context context;
-    private final MercadoPagoServices mercadoPago;
+    private final MercadoPagoServicesAdapter mercadoPago;
     private final String merchantBaseUrl;
     private final String merchantGetCustomerUri;
     private final Map<String, String> merchantGetCustomerAdditionalInfo;
@@ -51,7 +51,7 @@ public class PaymentVaultProviderImpl implements PaymentVaultProvider {
         this.merchantGetCustomerAdditionalInfo = merchantGetCustomerAdditionalInfo;
         this.mDiscountAdditionalInfo = discountAdditionalInfo;
 
-        this.mercadoPago = new MercadoPagoServices.Builder()
+        this.mercadoPago = new MercadoPagoServicesAdapter.Builder()
                 .setContext(context)
                 .setPublicKey(publicKey)
                 .setPrivateKey(privateKey)

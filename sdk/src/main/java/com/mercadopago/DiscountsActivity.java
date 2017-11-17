@@ -35,7 +35,6 @@ import com.mercadopago.preferences.DecorationPreference;
 
 import com.mercadopago.presenters.DiscountsPresenter;
 import com.mercadopago.providers.DiscountProviderImpl;
-import com.mercadopago.px_tracking.MPTracker;
 import com.mercadopago.util.CurrenciesUtil;
 import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;

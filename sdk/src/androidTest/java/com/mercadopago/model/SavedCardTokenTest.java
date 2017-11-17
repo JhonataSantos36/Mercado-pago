@@ -26,7 +26,6 @@ public class SavedCardTokenTest {
 
     @Test
     public void testConstructor() {
-
         SavedCardToken savedCardToken = StaticMock.getSavedCardToken();
         assertTrue(savedCardToken.getCardId().equals(StaticMock.DUMMY_CARD_ID));
         assertTrue(savedCardToken.getSecurityCode().equals(StaticMock.DUMMY_SECURITY_CODE));
@@ -34,7 +33,6 @@ public class SavedCardTokenTest {
 
     @Test
     public void testValidate() {
-
         SavedCardToken savedCardToken = StaticMock.getSavedCardToken();
         assertTrue(savedCardToken.validate());
     }
@@ -43,7 +41,6 @@ public class SavedCardTokenTest {
 
     @Test
     public void testValidateNullCardId() {
-
         SavedCardToken savedCardToken = StaticMock.getSavedCardToken();
         savedCardToken.setCardId(null);
         assertTrue(!savedCardToken.validate());
@@ -51,7 +48,6 @@ public class SavedCardTokenTest {
 
     @Test
     public void testValidateWrongCardId() {
-
         SavedCardToken savedCardToken = StaticMock.getSavedCardToken();
         savedCardToken.setCardId("john");
         assertTrue(!savedCardToken.validate());
@@ -61,14 +57,12 @@ public class SavedCardTokenTest {
 
     @Test
     public void testSecurityCode() {
-
         SavedCardToken savedCardToken = StaticMock.getSavedCardToken();
         assertTrue(savedCardToken.validateSecurityCode());
     }
 
     @Test
     public void testSecurityCodeEmpty() {
-
         SavedCardToken savedCardToken = StaticMock.getSavedCardToken();
         savedCardToken.setSecurityCode("");
 
@@ -78,7 +72,6 @@ public class SavedCardTokenTest {
 
     @Test
     public void testSecurityCodeMinLength() {
-
         SavedCardToken savedCardToken = StaticMock.getSavedCardToken();
         savedCardToken.setSecurityCode("4");
 
@@ -88,7 +81,6 @@ public class SavedCardTokenTest {
 
     @Test
     public void testSecurityCodeMaxLength() {
-
         SavedCardToken savedCardToken = StaticMock.getSavedCardToken();
         savedCardToken.setSecurityCode("44444");
 
@@ -98,7 +90,6 @@ public class SavedCardTokenTest {
 
     @Test
     public void testSecurityCodeLengthZero() {
-
         SavedCardToken savedCardToken = StaticMock.getSavedCardToken();
         Card card = StaticMock.getCard();
 

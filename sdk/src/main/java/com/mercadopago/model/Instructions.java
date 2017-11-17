@@ -40,5 +40,25 @@ public class Instructions {
         public Character getThousandsSeparator() {
             return thousandsSeparator;
         }
+
+        public void setAmount(BigDecimal amount) {
+            this.amount = amount;
+        }
+
+        public void setSymbol(String symbol) {
+            this.symbol = symbol;
+        }
+
+        public void setDecimalPlaces(int decimalPlaces) {
+            this.decimalPlaces = decimalPlaces;
+        }
+
+        public void setDecimalSeparator(Character decimalSeparator) {
+            this.decimalSeparator = decimalSeparator;
+        }
+
+        public void setThousandsSeparator(Character thousandsSeparator) {
+            this.thousandsSeparator = thousandsSeparator;
+        }
     }
 }

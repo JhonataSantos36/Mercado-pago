@@ -5,10 +5,11 @@ import android.os.Looper;
 import android.support.annotation.NonNull;
 
 import com.google.gson.reflect.TypeToken;
+
 import com.mercadopago.callbacks.Callback;
 import com.mercadopago.model.Payment;
 import com.mercadopago.model.Token;
-import com.mercadopago.px_tracking.MPTracker;
+import com.mercadopago.tracking.tracker.MPTracker;
 import com.mercadopago.util.ApiUtil;
 
 import java.lang.annotation.Annotation;

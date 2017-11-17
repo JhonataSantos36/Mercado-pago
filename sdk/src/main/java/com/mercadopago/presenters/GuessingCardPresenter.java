@@ -32,7 +32,6 @@ import com.mercadopago.tracker.MPTrackingContext;
 import com.mercadopago.uicontrollers.card.CardView;
 import com.mercadopago.uicontrollers.card.FrontCardView;
 import com.mercadopago.util.ApiUtil;
-import com.mercadopago.util.CurrenciesUtil;
 import com.mercadopago.util.TextUtil;
 import com.mercadopago.util.MercadoPagoUtil;
 import com.mercadopago.util.MPCardMaskUtil;

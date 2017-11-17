@@ -20,4 +20,12 @@ public class Site {
     public String getCurrencyId(){
         return currencyId;
     }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setCurrencyId(String currencyId) {
+        this.currencyId = currencyId;
+    }
 }

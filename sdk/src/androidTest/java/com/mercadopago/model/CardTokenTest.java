@@ -14,7 +14,6 @@ public class CardTokenTest extends BaseTest<CheckoutActivity> {
     }
 
     public void testConstructor() {
-
         CardToken cardToken = StaticMock.getCardToken();
         assertTrue(cardToken.getCardNumber().equals(StaticMock.DUMMY_CARD_NUMBER));
         assertTrue(cardToken.getExpirationMonth() == StaticMock.DUMMY_EXPIRATION_MONTH);
@@ -24,16 +23,14 @@ public class CardTokenTest extends BaseTest<CheckoutActivity> {
         assertTrue(cardToken.getCardholder().getIdentification().getType().equals(StaticMock.DUMMY_IDENTIFICATION_TYPE));
         assertTrue(cardToken.getCardholder().getIdentification().getNumber().equals(StaticMock.DUMMY_IDENTIFICATION_NUMBER));
     }
-    
-    public void testValidate() {
 
+    public void testValidate() {
         CardToken cardToken = StaticMock.getCardToken();
 
         assertTrue(cardToken.validate(true));
     }
 
     public void testValidateNoSecurityCode() {
-
         CardToken cardToken = StaticMock.getCardToken();
 
         assertTrue(cardToken.validate(false));
@@ -41,14 +38,12 @@ public class CardTokenTest extends BaseTest<CheckoutActivity> {
 
     // * Card number
     public void testCardNumber() {
-
         CardToken cardToken = StaticMock.getCardToken();
 
         assertTrue(cardToken.validateCardNumber());
     }
 
     public void testCardNumberEmpty() {
-
         CardToken cardToken = StaticMock.getCardToken();
         cardToken.setCardNumber("");
 
@@ -56,7 +51,6 @@ public class CardTokenTest extends BaseTest<CheckoutActivity> {
     }
 
     public void testCardNumberMinLength() {
-
         CardToken cardToken = StaticMock.getCardToken();
         cardToken.setCardNumber("4444");
 
@@ -64,7 +58,6 @@ public class CardTokenTest extends BaseTest<CheckoutActivity> {
     }
 
     public void testCardNumberMaxLength() {
-
         CardToken cardToken = StaticMock.getCardToken();
         cardToken.setCardNumber("44440000444400004444");
 
@@ -72,7 +65,6 @@ public class CardTokenTest extends BaseTest<CheckoutActivity> {
     }
 
     public void testCardNumberWithPaymentMethod() {
-
         CardToken cardToken = StaticMock.getCardToken();
         PaymentMethod paymentMethod = StaticMock.getPaymentMethod(getApplicationContext());
 
@@ -84,7 +76,6 @@ public class CardTokenTest extends BaseTest<CheckoutActivity> {
     }
 
     public void testCardNumberWithPaymentMethodEmptyCardNumber() {
-
         CardToken cardToken = StaticMock.getCardToken();
         cardToken.setCardNumber("");
         PaymentMethod paymentMethod = StaticMock.getPaymentMethod(getApplicationContext());
@@ -101,7 +92,6 @@ public class CardTokenTest extends BaseTest<CheckoutActivity> {
     }
 
     public void testCardNumberWithPaymentMethodInvalidBin() {
-
         CardToken cardToken = StaticMock.getCardToken();
         cardToken.setCardNumber("5300888800009999");
         PaymentMethod paymentMethod = StaticMock.getPaymentMethod(getApplicationContext());
@@ -118,7 +108,6 @@ public class CardTokenTest extends BaseTest<CheckoutActivity> {
     }
 
     public void testCardNumberWithPaymentMethodInvalidLength() {
-
         CardToken cardToken = StaticMock.getCardToken();
         cardToken.setCardNumber("466057001125");
         PaymentMethod paymentMethod = StaticMock.getPaymentMethod(getApplicationContext());
@@ -135,7 +124,6 @@ public class CardTokenTest extends BaseTest<CheckoutActivity> {
     }
 
     public void testCardNumberWithPaymentMethodInvalidLuhn() {
-
         CardToken cardToken = StaticMock.getCardToken();
         cardToken.setCardNumber("4660888888888888");
         PaymentMethod paymentMethod = StaticMock.getPaymentMethod(getApplicationContext());
@@ -153,14 +141,12 @@ public class CardTokenTest extends BaseTest<CheckoutActivity> {
 
     // * Security code
     public void testSecurityCode() {
-
         CardToken cardToken = StaticMock.getCardToken();
 
         assertTrue(cardToken.validateSecurityCode());
     }
 
     public void testSecurityCodeEmpty() {
-
         CardToken cardToken = StaticMock.getCardToken();
         cardToken.setSecurityCode("");
 
@@ -168,15 +154,13 @@ public class CardTokenTest extends BaseTest<CheckoutActivity> {
     }
 
     public void testSecurityCodeMinLength() {
-
         CardToken cardToken = StaticMock.getCardToken();
         cardToken.setSecurityCode("4");
 
         assertTrue(!cardToken.validateSecurityCode());
     }
-    
-    public void testSecurityCodeMaxLength() {
 
+    public void testSecurityCodeMaxLength() {
         CardToken cardToken = StaticMock.getCardToken();
         cardToken.setSecurityCode("44444");
 
@@ -184,7 +168,6 @@ public class CardTokenTest extends BaseTest<CheckoutActivity> {
     }
 
     public void testSecurityCodeWithPaymentMethod() {
-
         CardToken cardToken = StaticMock.getCardToken();
         PaymentMethod paymentMethod = StaticMock.getPaymentMethod(getApplicationContext());
 
@@ -196,7 +179,6 @@ public class CardTokenTest extends BaseTest<CheckoutActivity> {
     }
 
     public void testSecurityCodeWithPaymentMethodInvalidBin() {
-
         CardToken cardToken = StaticMock.getCardToken();
         cardToken.setCardNumber("5300888800009999");
         PaymentMethod paymentMethod = StaticMock.getPaymentMethod(getApplicationContext());
@@ -213,7 +195,6 @@ public class CardTokenTest extends BaseTest<CheckoutActivity> {
     }
 
     public void testSecurityCodeWithPaymentMethodInvalidLength() {
-
         CardToken cardToken = StaticMock.getCardToken();
         cardToken.setSecurityCode("4444");
         PaymentMethod paymentMethod = StaticMock.getPaymentMethod(getApplicationContext());
@@ -226,70 +207,54 @@ public class CardTokenTest extends BaseTest<CheckoutActivity> {
             String message = ExceptionHandler.getErrorMessage(getApplicationContext(), ex);
             String expectedMessage = getApplicationContext().getString(R.string.mpsdk_invalid_cvv_length, String.valueOf(3));
             assertEquals(message, expectedMessage);
-//            assertTrue(ex.getMessage().equals(getApplicationContext().getString(R.string.mpsdk_invalid_cvv_length, String.valueOf(3))));
         }
     }
 
     // TODO: test cvv not required
 
     // * Expiry date
-
-    
     public void testExpiryDate() {
-
         CardToken cardToken = StaticMock.getCardToken();
 
         assertTrue(cardToken.validateExpiryDate());
     }
 
-    
     public void testExpiryDateShortYear() {
-
         CardToken cardToken = StaticMock.getCardToken();
         cardToken.setExpirationYear(18);
 
         assertTrue(cardToken.validateExpiryDate());
     }
 
-    
     public void testExpiryDateNullMonth() {
-
         CardToken cardToken = StaticMock.getCardToken();
         cardToken.setExpirationMonth(null);
 
         assertFalse(cardToken.validateExpiryDate());
     }
 
-    
     public void testExpiryDateWrongMonth() {
-
         CardToken cardToken = StaticMock.getCardToken();
         cardToken.setExpirationMonth(13);
 
         assertFalse(cardToken.validateExpiryDate());
     }
 
-    
     public void testExpiryDateNullYear() {
-
         CardToken cardToken = StaticMock.getCardToken();
         cardToken.setExpirationYear(null);
 
         assertFalse(cardToken.validateExpiryDate());
     }
 
-    
     public void testExpiryDateWrongYear() {
-
         CardToken cardToken = StaticMock.getCardToken();
         cardToken.setExpirationYear(2000);
 
         assertFalse(cardToken.validateExpiryDate());
     }
 
-    
     public void testExpiryDateWrongShortYear() {
-
         CardToken cardToken = StaticMock.getCardToken();
         cardToken.setExpirationYear(10);
 
@@ -297,64 +262,48 @@ public class CardTokenTest extends BaseTest<CheckoutActivity> {
     }
 
     // * Identification
-
-    
     public void testIdentification() {
-
         CardToken cardToken = StaticMock.getCardToken();
 
         assertTrue(cardToken.validateIdentification());
     }
 
-    
     public void testIdentificationNullCardholder() {
-
         CardToken cardToken = StaticMock.getCardToken();
         cardToken.setCardholder(null);
 
         assertFalse(cardToken.validateIdentification());
     }
 
-    
     public void testIdentificationNullIdentification() {
-
         CardToken cardToken = StaticMock.getCardToken();
         cardToken.getCardholder().setIdentification(null);
 
         assertFalse(cardToken.validateIdentification());
     }
 
-    
     public void testIdentificationEmptyType() {
-
         CardToken cardToken = StaticMock.getCardToken();
         cardToken.getCardholder().getIdentification().setType("");
 
         assertFalse(cardToken.validateIdentification());
     }
 
-    
     public void testIdentificationEmptyNumber() {
-
         CardToken cardToken = StaticMock.getCardToken();
         cardToken.getCardholder().getIdentification().setNumber("");
 
         assertFalse(cardToken.validateIdentification());
     }
 
-    
     public void testIdentificationNumber() {
-
         CardToken cardToken = StaticMock.getCardToken();
-
         IdentificationType type = StaticMock.getIdentificationType();
 
         assertTrue(cardToken.validateIdentificationNumber(type));
     }
 
-    
     public void testIdentificationNumberWrongLength() {
-
         CardToken cardToken;
         IdentificationType type;
 
@@ -369,17 +318,13 @@ public class CardTokenTest extends BaseTest<CheckoutActivity> {
         assertFalse(cardToken.validateIdentificationNumber(type));
     }
 
-    
     public void testIdentificationNumberNullIdType() {
-
         CardToken cardToken = StaticMock.getCardToken();
 
         assertTrue(cardToken.validateIdentificationNumber(null));
     }
 
-    
     public void testIdentificationNumberNullCardholderValues() {
-
         CardToken cardToken;
         IdentificationType type;
 
@@ -399,9 +344,7 @@ public class CardTokenTest extends BaseTest<CheckoutActivity> {
         assertFalse(cardToken.validateIdentificationNumber(type));
     }
 
-    
     public void testIdentificationNumberNullMinMaxLength() {
-
         CardToken cardToken;
         IdentificationType type;
 
@@ -417,36 +360,27 @@ public class CardTokenTest extends BaseTest<CheckoutActivity> {
     }
 
     // * Cardholder name
-
-    
     public void testCardholderName() {
-
         CardToken cardToken = StaticMock.getCardToken();
 
         assertTrue(cardToken.validateCardholderName());
     }
 
-    
     public void testCardholderNameEmpty() {
-
         CardToken cardToken = StaticMock.getCardToken();
         cardToken.getCardholder().setName("");
 
         assertFalse(cardToken.validateCardholderName());
     }
 
-    
     public void testCardholderNameNull() {
-
         CardToken cardToken = StaticMock.getCardToken();
         cardToken.getCardholder().setName(null);
 
         assertFalse(cardToken.validateCardholderName());
     }
 
-    
     public void testCardholderNameCardholderNull() {
-
         CardToken cardToken = StaticMock.getCardToken();
         cardToken.setCardholder(null);
 
@@ -454,23 +388,16 @@ public class CardTokenTest extends BaseTest<CheckoutActivity> {
     }
 
     // * Luhn
-
-    
     public void testLuhn() {
-
         assertTrue(CardToken.checkLuhn(StaticMock.DUMMY_CARD_NUMBER));
     }
 
-    
     public void testLuhnNullOrEmptyCardNumber() {
-
         assertFalse(CardToken.checkLuhn(null));
         assertFalse(CardToken.checkLuhn(""));
     }
 
-    
     public void testLuhnWrongCardNumber() {
-
         assertFalse(CardToken.checkLuhn("1111000000000000"));
     }
 }

@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.mercadopago.R;
 import com.mercadopago.callbacks.Callback;
-import com.mercadopago.core.MercadoPagoServices;
+import com.mercadopago.core.MercadoPagoServicesAdapter;
 import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.Issuer;
@@ -20,12 +20,12 @@ import java.util.List;
 public class IssuersProviderImpl implements IssuersProvider {
 
     private final Context context;
-    private final MercadoPagoServices mercadoPago;
+    private final MercadoPagoServicesAdapter mercadoPago;
 
     public IssuersProviderImpl(Context context, String publicKey, String privateKey) {
         this.context = context;
 
-        this.mercadoPago = new MercadoPagoServices.Builder()
+        this.mercadoPago = new MercadoPagoServicesAdapter.Builder()
                 .setContext(context)
                 .setPublicKey(publicKey)
                 .setPrivateKey(privateKey)

@@ -3,7 +3,6 @@ package com.mercadopago.model;
 import android.content.Context;
 import android.text.TextUtils;
 
-import com.mercadopago.R;
 import com.mercadopago.exceptions.CardTokenException;
 
 public class SavedCardToken {

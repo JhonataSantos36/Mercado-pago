@@ -15,11 +15,12 @@ import java.util.Collection;
 /**
  * Created by mreverter on 27/4/16.
  */
+
 @RunWith(Parameterized.class)
 public class PaymentMethodSearchGetPaymentMethodTest {
     @Parameterized.Parameters
     public static Collection<Object[]> data() {
-    return Arrays.asList(new Object[][]{
+        return Arrays.asList(new Object[][]{
                 {"oxxo", "oxxo", "ticket"},
                 {"bancomer_bank_transfer", "bancomer", "bank_transfer"},
                 {"bancomer.ticket", "bancomer", "ticket"},
@@ -40,7 +41,7 @@ public class PaymentMethodSearchGetPaymentMethodTest {
     public String mPaymentTypeId;
 
 
-    public PaymentMethodSearchGetPaymentMethodTest(String itemId, String paymentMethodId, String paymentTypeId){
+    public PaymentMethodSearchGetPaymentMethodTest(String itemId, String paymentMethodId, String paymentTypeId) {
         this.paymentMethodSearch = getPaymentMethodSearch();
         this.mItemId = itemId;
         this.mPaymentMethodId = paymentMethodId;
@@ -54,7 +55,7 @@ public class PaymentMethodSearchGetPaymentMethodTest {
 
         PaymentMethod paymentMethod = paymentMethodSearch.getPaymentMethodBySearchItem(item);
 
-        if(paymentMethod != null) {
+        if (paymentMethod != null) {
             Assert.assertEquals(mPaymentMethodId, paymentMethod.getId());
             Assert.assertEquals(mPaymentTypeId, paymentMethod.getPaymentTypeId());
         } else {

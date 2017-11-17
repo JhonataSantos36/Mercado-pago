@@ -19,7 +19,6 @@ import com.mercadopago.R;
 import com.mercadopago.customviews.MPAutoResizeTextView;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.model.PaymentMethod;
-import com.mercadopago.util.ColorsUtil;
 import com.mercadopago.util.LayoutUtil;
 import com.mercadopago.util.MPAnimationUtils;
 import com.mercadopago.util.MPCardMaskUtil;

@@ -1,9 +1,5 @@
 package com.mercadopago;
 
-import com.google.gson.Gson;
-
-import android.app.Activity;
-import android.app.Instrumentation;
 import android.content.Intent;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.intent.Intents;
@@ -18,12 +14,10 @@ import com.mercadopago.constants.Sites;
 import com.mercadopago.model.Customer;
 import com.mercadopago.model.Discount;
 import com.mercadopago.model.PaymentMethodSearch;
-import com.mercadopago.model.PaymentMethodSearchItem;
 import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.test.FakeAPI;
 import com.mercadopago.test.StaticMock;
 import com.mercadopago.util.JsonUtil;
-import com.mercadopago.utils.CustomMatchers;
 import com.mercadopago.utils.ViewUtils;
 
 import junit.framework.Assert;
@@ -35,7 +29,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.math.BigDecimal;
-import java.util.Collection;
 
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onView;
@@ -48,7 +41,6 @@ import static android.support.test.espresso.intent.matcher.IntentMatchers.hasCom
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static com.mercadopago.utils.CustomMatchers.atPosition;
 
 /**
  * Created by mreverter on 4/18/17.

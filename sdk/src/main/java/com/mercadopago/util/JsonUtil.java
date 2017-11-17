@@ -4,8 +4,6 @@ import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import java.lang.reflect.Modifier;
-
 public class JsonUtil {
 
     private static JsonUtil mInstance = null;

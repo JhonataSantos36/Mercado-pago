@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.mercadopago.R;
 import com.mercadopago.callbacks.Callback;
-import com.mercadopago.core.MercadoPagoServices;
+import com.mercadopago.core.MercadoPagoServicesAdapter;
 import com.mercadopago.exceptions.CardTokenException;
 import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.model.ApiException;
@@ -28,7 +28,7 @@ import com.mercadopago.util.ApiUtil;
 public class SecurityCodeProviderImpl implements SecurityCodeProvider {
 
     private final Context mContext;
-    private final MercadoPagoServices mMercadoPagoServices;
+    private final MercadoPagoServicesAdapter mMercadoPagoServicesAdapter;
     private MercadoPagoESC mercadoPagoESC;
 
     private static final String TOKEN_AND_CARD_NOT_SET_MESSAGE = "token and card can't both be null";
@@ -39,7 +39,7 @@ public class SecurityCodeProviderImpl implements SecurityCodeProvider {
     public SecurityCodeProviderImpl(Context context, String publicKey, String privateKey, boolean escEnabled) {
         this.mContext = context;
 
-        mMercadoPagoServices = new MercadoPagoServices.Builder()
+        mMercadoPagoServicesAdapter = new MercadoPagoServicesAdapter.Builder()
                 .setContext(context)
                 .setPublicKey(publicKey)
                 .setPrivateKey(privateKey)
@@ -80,7 +80,7 @@ public class SecurityCodeProviderImpl implements SecurityCodeProvider {
 
     @Override
     public void cloneToken(final String tokenId, final OnResourcesRetrievedCallback<Token> onResourcesRetrievedCallback) {
-        mMercadoPagoServices.cloneToken(tokenId, new Callback<Token>() {
+        mMercadoPagoServicesAdapter.cloneToken(tokenId, new Callback<Token>() {
             @Override
             public void success(Token token) {
                 onResourcesRetrievedCallback.onSuccess(token);
@@ -99,7 +99,7 @@ public class SecurityCodeProviderImpl implements SecurityCodeProvider {
         SecurityCodeIntent securityCodeIntent = new SecurityCodeIntent();
         securityCodeIntent.setSecurityCode(securityCode);
 
-        mMercadoPagoServices.putSecurityCode(tokenId, securityCodeIntent, new Callback<Token>() {
+        mMercadoPagoServicesAdapter.putSecurityCode(tokenId, securityCodeIntent, new Callback<Token>() {
             @Override
             public void success(Token token) {
                 onResourcesRetrievedCallback.onSuccess(token);
@@ -115,7 +115,7 @@ public class SecurityCodeProviderImpl implements SecurityCodeProvider {
     @Override
     public void createToken(final SavedCardToken savedCardToken, final OnResourcesRetrievedCallback<Token> onResourcesRetrievedCallback) {
 
-        mMercadoPagoServices.createToken(savedCardToken, new Callback<Token>() {
+        mMercadoPagoServicesAdapter.createToken(savedCardToken, new Callback<Token>() {
             @Override
             public void success(Token token) {
                 onResourcesRetrievedCallback.onSuccess(token);
@@ -132,7 +132,7 @@ public class SecurityCodeProviderImpl implements SecurityCodeProvider {
     @Override
     public void createToken(SavedESCCardToken savedESCCardToken, final OnResourcesRetrievedCallback<Token> onResourcesRetrievedCallback) {
 
-        mMercadoPagoServices.createToken(savedESCCardToken, new Callback<Token>() {
+        mMercadoPagoServicesAdapter.createToken(savedESCCardToken, new Callback<Token>() {
             @Override
             public void success(Token token) {
                 onResourcesRetrievedCallback.onSuccess(token);

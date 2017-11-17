@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.mercadopago.R;
 import com.mercadopago.callbacks.Callback;
-import com.mercadopago.core.MercadoPagoServices;
+import com.mercadopago.core.MercadoPagoServicesAdapter;
 import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.Installment;
@@ -13,7 +13,6 @@ import com.mercadopago.model.Token;
 import com.mercadopago.mvp.OnResourcesRetrievedCallback;
 import com.mercadopago.util.MercadoPagoESC;
 import com.mercadopago.util.MercadoPagoESCImpl;
-import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.util.ApiUtil;
 
 
@@ -27,13 +26,13 @@ import java.util.List;
 public class CardVaultProviderImpl implements CardVaultProvider {
 
     private final Context context;
-    private final MercadoPagoServices mercadoPago;
+    private final MercadoPagoServicesAdapter mercadoPago;
     private MercadoPagoESC mercadoPagoESC;
 
     public CardVaultProviderImpl(Context context, String publicKey, String privateKey, boolean escEnabled) {
         this.context = context;
 
-        this.mercadoPago = new MercadoPagoServices.Builder()
+        this.mercadoPago = new MercadoPagoServicesAdapter.Builder()
                 .setContext(context)
                 .setPublicKey(publicKey)
                 .setPrivateKey(privateKey)

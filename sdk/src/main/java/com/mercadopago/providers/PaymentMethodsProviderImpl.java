@@ -3,7 +3,7 @@ package com.mercadopago.providers;
 import android.content.Context;
 
 import com.mercadopago.callbacks.Callback;
-import com.mercadopago.core.MercadoPagoServices;
+import com.mercadopago.core.MercadoPagoServicesAdapter;
 import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.PaymentMethod;
@@ -17,7 +17,7 @@ import java.util.List;
  */
 
 public class PaymentMethodsProviderImpl implements PaymentMethodsProvider {
-    private MercadoPagoServices mercadoPago;
+    private MercadoPagoServicesAdapter mercadoPago;
 
     public PaymentMethodsProviderImpl(Context context, String publicKey) throws IllegalStateException {
         if (publicKey == null) {
@@ -45,8 +45,8 @@ public class PaymentMethodsProviderImpl implements PaymentMethodsProvider {
         });
     }
 
-    protected MercadoPagoServices createMercadoPago(Context context, String publicKey) {
-        return new MercadoPagoServices.Builder()
+    protected MercadoPagoServicesAdapter createMercadoPago(Context context, String publicKey) {
+        return new MercadoPagoServicesAdapter.Builder()
                 .setContext(context)
                 .setPublicKey(publicKey)
                 .build();

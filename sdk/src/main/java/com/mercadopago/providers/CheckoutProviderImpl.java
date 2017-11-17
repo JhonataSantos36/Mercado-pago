@@ -10,7 +10,7 @@ import com.mercadopago.callbacks.Callback;
 import com.mercadopago.constants.PaymentTypes;
 import com.mercadopago.constants.Sites;
 import com.mercadopago.core.CustomServer;
-import com.mercadopago.core.MercadoPagoServices;
+import com.mercadopago.core.MercadoPagoServicesAdapter;
 import com.mercadopago.exceptions.CheckoutPreferenceException;
 import com.mercadopago.exceptions.ExceptionHandler;
 import com.mercadopago.exceptions.MercadoPagoError;
@@ -50,7 +50,7 @@ public class CheckoutProviderImpl implements CheckoutProvider {
 
     private final ServicePreference servicePreference;
     private final Context context;
-    private final MercadoPagoServices mercadoPagoServices;
+    private final MercadoPagoServicesAdapter mercadoPagoServicesAdapter;
     private final String publicKey;
     private MercadoPagoESC mercadoPagoESC;
     private String siteId;
@@ -65,7 +65,7 @@ public class CheckoutProviderImpl implements CheckoutProvider {
         this.servicePreference = servicePreference;
         this.publicKey = publicKey;
 
-        mercadoPagoServices = new MercadoPagoServices.Builder()
+        mercadoPagoServicesAdapter = new MercadoPagoServicesAdapter.Builder()
                 .setContext(context)
                 .setPublicKey(publicKey)
                 .setPrivateKey(privateKey)
@@ -81,7 +81,7 @@ public class CheckoutProviderImpl implements CheckoutProvider {
 
     @Override
     public void getCheckoutPreference(String checkoutPreferenceId, final OnResourcesRetrievedCallback<CheckoutPreference> onResourcesRetrievedCallback) {
-        mercadoPagoServices.getPreference(checkoutPreferenceId, new Callback<CheckoutPreference>() {
+        mercadoPagoServicesAdapter.getPreference(checkoutPreferenceId, new Callback<CheckoutPreference>() {
             @Override
             public void success(CheckoutPreference checkoutPreference) {
                 onResourcesRetrievedCallback.onSuccess(checkoutPreference);
@@ -96,7 +96,7 @@ public class CheckoutProviderImpl implements CheckoutProvider {
 
     @Override
     public void getDiscountCampaigns(final OnResourcesRetrievedCallback<List<Campaign>> callback) {
-        mercadoPagoServices.getCampaigns(new Callback<List<Campaign>>() {
+        mercadoPagoServicesAdapter.getCampaigns(new Callback<List<Campaign>>() {
             @Override
             public void success(List<Campaign> campaigns) {
                 callback.onSuccess(campaigns);
@@ -124,7 +124,7 @@ public class CheckoutProviderImpl implements CheckoutProvider {
         Set<String> excludedPaymentTypesSet = new HashSet<>(excludedPaymentTypes);
         excludedPaymentTypesSet.addAll(getUnsupportedPaymentTypes(site));
 
-        mercadoPagoServices.getPaymentMethodSearch(amount, new ArrayList<>(excludedPaymentTypesSet), excludedPaymentMethods, payer, site, new Callback<PaymentMethodSearch>() {
+        mercadoPagoServicesAdapter.getPaymentMethodSearch(amount, new ArrayList<>(excludedPaymentTypesSet), excludedPaymentMethods, payer, site, new Callback<PaymentMethodSearch>() {
             @Override
             public void success(final PaymentMethodSearch paymentMethodSearch) {
                 if (servicePreference != null && servicePreference.hasGetCustomerURL()) {
@@ -183,7 +183,7 @@ public class CheckoutProviderImpl implements CheckoutProvider {
     }
 
     private void getDiscountFromMercadoPago(BigDecimal amount, String payerEmail, final OnResourcesRetrievedCallback<Discount> onResourcesRetrievedCallback) {
-        mercadoPagoServices.getDirectDiscount(amount.toString(), payerEmail, new Callback<Discount>() {
+        mercadoPagoServicesAdapter.getDirectDiscount(amount.toString(), payerEmail, new Callback<Discount>() {
             @Override
             public void success(Discount discount) {
                 onResourcesRetrievedCallback.onSuccess(discount);
@@ -244,7 +244,7 @@ public class CheckoutProviderImpl implements CheckoutProvider {
     private void createPaymentInMercadoPago(String transactionId, CheckoutPreference checkoutPreference, PaymentData paymentData, Boolean binaryMode, String customerId, final OnResourcesRetrievedCallback<Payment> onResourcesRetrievedCallback) {
         PaymentBody paymentBody = createPaymentBody(transactionId, checkoutPreference, paymentData, binaryMode, customerId);
 
-        mercadoPagoServices.createPayment(paymentBody, new Callback<Payment>() {
+        mercadoPagoServicesAdapter.createPayment(paymentBody, new Callback<Payment>() {
             @Override
             public void success(Payment payment) {
                 onResourcesRetrievedCallback.onSuccess(payment);

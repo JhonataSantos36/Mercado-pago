@@ -20,7 +20,7 @@ import com.mercadopago.callbacks.Callback;
 import com.mercadopago.constants.PaymentTypes;
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.core.MercadoPagoComponents;
-import com.mercadopago.core.MercadoPagoServices;
+import com.mercadopago.core.MercadoPagoServicesAdapter;
 import com.mercadopago.core.MerchantServer;
 import com.mercadopago.customviews.MPButton;
 import com.mercadopago.customviews.MPEditText;
@@ -37,7 +37,6 @@ import com.mercadopago.model.SavedCardToken;
 import com.mercadopago.model.Site;
 import com.mercadopago.model.Token;
 import com.mercadopago.preferences.PaymentPreference;
-import com.mercadopago.px_tracking.MPTracker;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;
@@ -88,7 +87,7 @@ public class VaultActivity extends AppCompatActivity {
     // Local vars
     protected Activity mActivity;
     protected String mExceptionOnMethod;
-    protected MercadoPagoServices mMercadoPago;
+    protected MercadoPagoServicesAdapter mMercadoPago;
     protected PaymentPreference mPaymentPreference;
 
     @Override
@@ -118,7 +117,7 @@ public class VaultActivity extends AppCompatActivity {
             mSecurityCodeText = (MPEditText) findViewById(R.id.mpsdkSecurityCode);
 
             // Init MercadoPago object with public key
-            mMercadoPago = new MercadoPagoServices.Builder()
+            mMercadoPago = new MercadoPagoServicesAdapter.Builder()
                     .setContext(mActivity)
                     .setPublicKey(mMerchantPublicKey)
                     .build();

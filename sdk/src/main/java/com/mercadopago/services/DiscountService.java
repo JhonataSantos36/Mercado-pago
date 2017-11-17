@@ -6,8 +6,6 @@ import com.mercadopago.model.Discount;
 
 import java.util.List;
 
-import com.mercadopago.model.Discount;
-
 import retrofit2.http.GET;
 import retrofit2.http.Query;
 

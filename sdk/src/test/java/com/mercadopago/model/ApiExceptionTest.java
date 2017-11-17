@@ -25,7 +25,6 @@ public class ApiExceptionTest {
 
     @Test
     public void whenCauseIsNotInListOfCausesThenContainsCauseShouldBeFalse() {
-
         final Cause cause1 = new Cause();
         cause1.setCode("1");
 
@@ -45,7 +44,6 @@ public class ApiExceptionTest {
 
     @Test
     public void whenCauseIsInListOfCausesThenContainsCauseShouldBeTrue() {
-
         final Cause cause1 = new Cause();
         cause1.setCode("1");
 
