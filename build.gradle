@@ -1,12 +1,11 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 apply plugin: 'jacoco'
 
-def coverageSourceDirs = ['sdk/src/main/java', 'px-tracking/src/main/java']
+def coverageSourceDirs = ['sdk/src/main/java']
 
 def coverageExcludes = ['**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*', '**/*Test*.*', 'android/**/*.*']
 
-def coverageClassDirectories = [fileTree(dir: 'sdk/build/intermediates/classes/debug', excludes: coverageExcludes),
-                                fileTree(dir: 'px-tracking/build/intermediates/classes/debug', excludes: coverageExcludes)]
+def coverageClassDirectories = [fileTree(dir: 'sdk/build/intermediates/classes/debug', excludes: coverageExcludes)]
 
 buildscript {
     repositories {
@@ -42,15 +41,12 @@ allprojects {
 }
 
 task jacocoRootReport(type: JacocoReport) {
-    dependsOn "sdk:jacocoFullTestReport",
-            "px-tracking:jacocoFullTestReport"
+    dependsOn "sdk:jacocoFullTestReport"
 
     additionalSourceDirs = files(coverageSourceDirs)
     sourceDirectories = files(coverageSourceDirs)
     classDirectories = files(coverageClassDirectories)
-    executionData = files(tasks.getByPath("sdk:jacocoFullTestReport").executionData,
-            tasks.getByPath("px-tracking:jacocoFullTestReport").executionData
-    )
+    executionData = files(tasks.getByPath("sdk:jacocoFullTestReport").executionData)
 
     reports {
         html.enabled = true
@@ -60,5 +56,4 @@ task jacocoRootReport(type: JacocoReport) {
     onlyIf = {
         true
     }
-
 }

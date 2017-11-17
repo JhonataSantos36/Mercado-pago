@@ -165,4 +165,24 @@ public class PaymentMethodSearch {
             }
         }
     }
+
+    public void setGroups(List<PaymentMethodSearchItem> groups) {
+        this.groups = groups;
+    }
+
+    public void setCustomSearchItems(List<CustomSearchItem> customSearchItems) {
+        this.customSearchItems = customSearchItems;
+    }
+
+    public void setPaymentMethods(List<PaymentMethod> paymentMethods) {
+        this.paymentMethods = paymentMethods;
+    }
+
+    public void setCards(List<Card> cards) {
+        this.cards = cards;
+    }
+
+    public void setAccountMoney(AccountMoney accountMoney) {
+        this.accountMoney = accountMoney;
+    }
 }

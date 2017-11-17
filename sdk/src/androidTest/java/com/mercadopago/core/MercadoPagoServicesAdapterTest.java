@@ -9,16 +9,16 @@ import com.mercadopago.test.StaticMock;
 
 import junit.framework.Assert;
 
-public class MercadoPagoServicesTest extends BaseTest<CheckoutActivity> {
+public class MercadoPagoServicesAdapterTest extends BaseTest<CheckoutActivity> {
 
-    public MercadoPagoServicesTest() {
+    public MercadoPagoServicesAdapterTest() {
         super(CheckoutActivity.class);
     }
 
     public void testStartOkWithPublicKey() {
 
         try {
-            new MercadoPagoServices.Builder()
+            new MercadoPagoServicesAdapter.Builder()
                     .setContext(getApplicationContext())
                     .setPublicKey(StaticMock.DUMMY_MERCHANT_PUBLIC_KEY)
                     .build();
@@ -30,7 +30,7 @@ public class MercadoPagoServicesTest extends BaseTest<CheckoutActivity> {
     public void testStartOkWithPrivateKey() {
 
         try {
-            new MercadoPagoServices.Builder()
+            new MercadoPagoServicesAdapter.Builder()
                     .setContext(getApplicationContext())
                     .setPrivateKey(StaticMock.DUMMY_PRIVATE_KEY)
                     .build();
@@ -42,7 +42,7 @@ public class MercadoPagoServicesTest extends BaseTest<CheckoutActivity> {
     public void testStartOkWithPublicAndPrivateKey() {
 
         try {
-            new MercadoPagoServices.Builder()
+            new MercadoPagoServicesAdapter.Builder()
                     .setContext(getApplicationContext())
                     .setPrivateKey(StaticMock.DUMMY_PRIVATE_KEY)
                     .setPublicKey(StaticMock.DUMMY_MERCHANT_PUBLIC_KEY)
@@ -55,7 +55,7 @@ public class MercadoPagoServicesTest extends BaseTest<CheckoutActivity> {
     public void testContextNull() {
 
         try {
-            new MercadoPagoServices.Builder()
+            new MercadoPagoServicesAdapter.Builder()
                     .setPublicKey(StaticMock.DUMMY_MERCHANT_PUBLIC_KEY)
                     .build();
             fail("Start should have failed on context null");
@@ -67,7 +67,7 @@ public class MercadoPagoServicesTest extends BaseTest<CheckoutActivity> {
     public void testNullKey() {
 
         try {
-            new MercadoPagoServices.Builder()
+            new MercadoPagoServicesAdapter.Builder()
                     .setContext(getApplicationContext())
                     .build();
             fail("Start should have failed on key null");
@@ -77,7 +77,7 @@ public class MercadoPagoServicesTest extends BaseTest<CheckoutActivity> {
     }
 
     public void testWhenAndroidVersionIsPriorICSThenPropertyKeepAliveFalseElseDefault() {
-        new MercadoPagoServices.Builder()
+        new MercadoPagoServicesAdapter.Builder()
                 .setContext(InstrumentationRegistry.getContext())
                 .setPublicKey("DUMMY_PK")
                 .build();

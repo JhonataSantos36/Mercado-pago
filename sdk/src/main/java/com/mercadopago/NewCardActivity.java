@@ -17,14 +17,13 @@ import android.widget.Spinner;
 
 import com.mercadopago.adapters.IdentificationTypesAdapter;
 import com.mercadopago.callbacks.Callback;
-import com.mercadopago.core.MercadoPagoServices;
+import com.mercadopago.core.MercadoPagoServicesAdapter;
 import com.mercadopago.customviews.MPEditText;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.CardToken;
 import com.mercadopago.model.IdentificationType;
 import com.mercadopago.model.PaymentMethod;
-import com.mercadopago.px_tracking.MPTracker;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;
@@ -301,7 +300,7 @@ public class NewCardActivity extends AppCompatActivity {
 
         LayoutUtil.showProgressLayout(mActivity);
 
-        MercadoPagoServices mercadoPago = new MercadoPagoServices.Builder()
+        MercadoPagoServicesAdapter mercadoPago = new MercadoPagoServicesAdapter.Builder()
                 .setContext(mActivity)
                 .setPublicKey(mKey)
                 .build();

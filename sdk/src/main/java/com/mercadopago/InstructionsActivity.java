@@ -27,7 +27,7 @@ import com.mercadopago.callbacks.Callback;
 import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.constants.PaymentMethods;
 import com.mercadopago.constants.PaymentTypes;
-import com.mercadopago.core.MercadoPagoServices;
+import com.mercadopago.core.MercadoPagoServicesAdapter;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.Instruction;
@@ -39,9 +39,9 @@ import com.mercadopago.model.PaymentResult;
 import com.mercadopago.model.Site;
 import com.mercadopago.preferences.PaymentResultScreenPreference;
 import com.mercadopago.preferences.ServicePreference;
-import com.mercadopago.px_tracking.utils.TrackingUtil;
 import com.mercadopago.tracker.MPTrackingContext;
-import com.mercadopago.px_tracking.model.ScreenViewEvent;
+import com.mercadopago.tracking.model.ScreenViewEvent;
+import com.mercadopago.tracking.utils.TrackingUtil;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.BitmapUtils;
 import com.mercadopago.util.CurrenciesUtil;
@@ -62,7 +62,7 @@ public class InstructionsActivity extends MercadoPagoBaseActivity {
     //Const
     private static final String INSTRUCTIONS_NOT_FOUND_FOR_TYPE = "instruction not found for type";
 
-    protected MercadoPagoServices mMercadoPagoServices;
+    protected MercadoPagoServicesAdapter mMercadoPagoServicesAdapter;
     protected Boolean mBackPressedOnce;
     protected Activity mActivity;
 
@@ -179,7 +179,7 @@ public class InstructionsActivity extends MercadoPagoBaseActivity {
         initializePaymentData();
         trackScreen();
         mBackPressedOnce = false;
-        mMercadoPagoServices = new MercadoPagoServices.Builder()
+        mMercadoPagoServicesAdapter = new MercadoPagoServicesAdapter.Builder()
                 .setContext(this)
                 .setPublicKey(mMerchantPublicKey)
                 .setPrivateKey(mPayerAccessToken)
@@ -230,7 +230,7 @@ public class InstructionsActivity extends MercadoPagoBaseActivity {
     protected void getInstructionsAsync() {
 
         showLoading();
-        mMercadoPagoServices.getInstructions(mPaymentId, mPaymentTypeId, new Callback<Instructions>() {
+        mMercadoPagoServicesAdapter.getInstructions(mPaymentId, mPaymentTypeId, new Callback<Instructions>() {
             @Override
             public void success(Instructions instructions) {
                 List<Instruction> instructionsList

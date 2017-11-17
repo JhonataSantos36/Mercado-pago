@@ -19,6 +19,7 @@ import static junit.framework.Assert.assertTrue;
 /**
  * Created by mromar on 2/24/16.
  */
+
 public class CheckoutPreferenceTest {
 
     @Test
@@ -87,8 +88,7 @@ public class CheckoutPreferenceTest {
             preference.validate();
         } catch (CheckoutPreferenceException e) {
             valid = false;
-        }
-        finally{
+        } finally {
             assertTrue(valid);
         }
     }
@@ -126,7 +126,7 @@ public class CheckoutPreferenceTest {
         }
     }
 
-    @Test (expected = IllegalStateException.class)
+    @Test(expected = IllegalStateException.class)
     public void testWhenValidatePreferenceWithNoItemsThrowException() {
         new CheckoutPreference.Builder()
                 .setPayerEmail("test@gmail.com")
@@ -178,7 +178,7 @@ public class CheckoutPreferenceTest {
         Assert.assertFalse(preference.itemsValid());
     }
 
-    @Test (expected = IllegalStateException.class)
+    @Test(expected = IllegalStateException.class)
     public void testWhenValidatePreferenceWithEmptyItemsListThrowException() {
         CheckoutPreference preference = new CheckoutPreference.Builder()
                 .addItems(new ArrayList<Item>())
@@ -485,7 +485,7 @@ public class CheckoutPreferenceTest {
     ///////////////////Getters preferences with different PAYMENTS_TYPES///////////////////
     private CheckoutPreference getPreferenceWithAllPaymentTypesExcluded() {
 
-        ArrayList<String> paymentTypes= new ArrayList<>();
+        ArrayList<String> paymentTypes = new ArrayList<>();
         Item item = new Item("123", BigDecimal.ONE);
 
         paymentTypes.addAll(PaymentTypes.getAllPaymentTypes());
@@ -590,7 +590,7 @@ public class CheckoutPreferenceTest {
     ///////////////////Getters preferences with different EXCEPTIONS///////////////////
     private CheckoutPreference getPreferenceWithOneItemValidActiveAndSomePaymentTypesExcluded() {
 
-        ArrayList<String> paymentTypes= new ArrayList<>();
+        ArrayList<String> paymentTypes = new ArrayList<>();
         Item itemA = new Item("123", BigDecimal.ONE);
 
         itemA.setUnitPrice(new BigDecimal(2));
@@ -616,7 +616,7 @@ public class CheckoutPreferenceTest {
 
     private CheckoutPreference getPreferenceWithOneItemValidActiveButAllPaymentTypesExcluded() {
 
-        ArrayList<String> paymentTypes= new ArrayList<>();
+        ArrayList<String> paymentTypes = new ArrayList<>();
         Item itemA = new Item("123", BigDecimal.ONE);
 
         itemA.setUnitPrice(new BigDecimal(2));

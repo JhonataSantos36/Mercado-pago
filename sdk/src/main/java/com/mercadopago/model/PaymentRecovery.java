@@ -3,6 +3,7 @@ package com.mercadopago.model;
 /**
  * Created by mromar on 8/19/16.
  */
+
 public class PaymentRecovery {
     private Token mToken;
     private String mStatus;
@@ -79,7 +80,7 @@ public class PaymentRecovery {
     private Boolean isStatusDetailRecoverable(String statusDetail) {
         return statusDetail != null &&
                 (Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_CALL_FOR_AUTHORIZE.equals(statusDetail) ||
-                Payment.StatusCodes.STATUS_DETAIL_INVALID_ESC.equals(statusDetail));
+                        Payment.StatusCodes.STATUS_DETAIL_INVALID_ESC.equals(statusDetail));
     }
 
     public boolean isStatusDetailCallForAuthorize() {

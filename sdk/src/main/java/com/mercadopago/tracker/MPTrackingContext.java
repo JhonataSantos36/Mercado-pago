@@ -4,11 +4,11 @@ import android.content.Context;
 import android.os.Build;
 
 import com.mercadopago.model.Fingerprint;
-import com.mercadopago.px_tracking.MPTracker;
-import com.mercadopago.px_tracking.model.AppInformation;
-import com.mercadopago.px_tracking.model.DeviceInfo;
-import com.mercadopago.px_tracking.model.Event;
-import com.mercadopago.px_tracking.utils.TrackingUtil;
+import com.mercadopago.tracking.model.AppInformation;
+import com.mercadopago.tracking.model.DeviceInfo;
+import com.mercadopago.tracking.model.Event;
+import com.mercadopago.tracking.tracker.MPTracker;
+import com.mercadopago.tracking.utils.TrackingUtil;
 
 /**
  * Created by vaserber on 6/5/17.

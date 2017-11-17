@@ -159,4 +159,12 @@ public class PaymentMethod {
     public Integer getAccreditationTime() {
         return accreditationTime;
     }
+
+    public String getMerchantAccountId() {
+        return merchantAccountId;
+    }
+
+    public void setMerchantAccountId(String merchantAccountId) {
+        this.merchantAccountId = merchantAccountId;
+    }
 }

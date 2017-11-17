@@ -6,7 +6,7 @@ import com.mercadopago.R;
 import com.mercadopago.callbacks.Callback;
 import com.mercadopago.controllers.CustomServicesHandler;
 import com.mercadopago.core.CustomServer;
-import com.mercadopago.core.MercadoPagoServices;
+import com.mercadopago.core.MercadoPagoServicesAdapter;
 import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.Campaign;
@@ -33,7 +33,7 @@ public class DiscountProviderImpl implements DiscountsProvider {
     private static final String DISCOUNT_ERROR_CAMPAIGN_DOESNT_MATCH = "campaign-doesnt-match";
     private static final String DISCOUNT_ERROR_CAMPAIGN_EXPIRED = "campaign-expired";
 
-    private final MercadoPagoServices mercadoPago;
+    private final MercadoPagoServicesAdapter mercadoPago;
 
     private Context context;
     private String merchantBaseUrl;
@@ -54,7 +54,7 @@ public class DiscountProviderImpl implements DiscountsProvider {
         if (publicKey == null) throw new IllegalStateException("public key not found");
         if (context == null) throw new IllegalStateException("context not found");
 
-        mercadoPago = new MercadoPagoServices.Builder()
+        mercadoPago = new MercadoPagoServicesAdapter.Builder()
                 .setContext(context)
                 .setPublicKey(publicKey)
                 .build();

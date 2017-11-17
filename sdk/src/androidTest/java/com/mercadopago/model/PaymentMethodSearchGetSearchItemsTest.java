@@ -15,6 +15,7 @@ import java.util.Collection;
 /**
  * Created by mreverter on 27/4/16.
  */
+
 @RunWith(Parameterized.class)
 public class PaymentMethodSearchGetSearchItemsTest {
     @Parameterized.Parameters
@@ -40,7 +41,7 @@ public class PaymentMethodSearchGetSearchItemsTest {
     public String mPaymentTypeId;
 
 
-    public PaymentMethodSearchGetSearchItemsTest(String paymentMethodId, String paymentTypeId, String itemId){
+    public PaymentMethodSearchGetSearchItemsTest(String paymentMethodId, String paymentTypeId, String itemId) {
         this.paymentMethodSearch = getPaymentMethodSearch();
         this.mItemId = itemId;
         this.mPaymentMethodId = paymentMethodId;
@@ -55,7 +56,7 @@ public class PaymentMethodSearchGetSearchItemsTest {
 
         PaymentMethodSearchItem item = paymentMethodSearch.getSearchItemByPaymentMethod(paymentMethod);
 
-        if(item != null) {
+        if (item != null) {
             Assert.assertEquals(mItemId, item.getId());
         } else {
             Assert.assertEquals(mItemId, "null");

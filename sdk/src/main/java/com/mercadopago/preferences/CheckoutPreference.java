@@ -9,7 +9,6 @@ import com.mercadopago.model.Item;
 import com.mercadopago.model.Payer;
 import com.mercadopago.model.Site;
 import com.mercadopago.util.CurrenciesUtil;
-import com.mercadopago.util.TextUtils;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;

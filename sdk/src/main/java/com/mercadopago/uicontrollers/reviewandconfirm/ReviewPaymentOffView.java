@@ -13,17 +13,14 @@ import com.mercadopago.R;
 import com.mercadopago.callbacks.OnReviewChange;
 import com.mercadopago.constants.PaymentMethods;
 import com.mercadopago.constants.ReviewKeys;
-import com.mercadopago.constants.Sites;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.Reviewable;
 import com.mercadopago.model.Site;
 import com.mercadopago.preferences.DecorationPreference;
-import com.mercadopago.util.CircleTransform;
 import com.mercadopago.util.CurrenciesUtil;
 import com.mercadopago.util.ReviewUtil;
 import com.mercadopago.util.TextUtil;
-import com.squareup.picasso.Picasso;
 
 import java.math.BigDecimal;
 

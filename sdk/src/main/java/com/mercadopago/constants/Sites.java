@@ -5,6 +5,7 @@ import com.mercadopago.model.Site;
 /**
  * Created by mromar on 6/3/16.
  */
+
 public class Sites {
 
     public static final Site ARGENTINA = new Site("MLA", "ARS");

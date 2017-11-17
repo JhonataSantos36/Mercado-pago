@@ -2,8 +2,6 @@ package com.mercadopago.views;
 
 import com.mercadopago.callbacks.OnSelectedCallback;
 import com.mercadopago.exceptions.MercadoPagoError;
-import com.mercadopago.model.ApiException;
-import com.mercadopago.model.Discount;
 import com.mercadopago.model.PayerCost;
 import com.mercadopago.mvp.MvpView;
 

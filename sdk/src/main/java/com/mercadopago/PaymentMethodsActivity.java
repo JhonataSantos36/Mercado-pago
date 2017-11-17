@@ -14,8 +14,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.mercadopago.adapters.PaymentMethodsAdapter;
 import com.mercadopago.core.MercadoPagoComponents;
 import com.mercadopago.decorations.DividerItemDecoration;
@@ -26,7 +24,6 @@ import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.presenters.PaymentMethodsPresenter;
 import com.mercadopago.providers.PaymentMethodsProvider;
 import com.mercadopago.providers.PaymentMethodsProviderImpl;
-import com.mercadopago.px_tracking.MPTracker;
 import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;

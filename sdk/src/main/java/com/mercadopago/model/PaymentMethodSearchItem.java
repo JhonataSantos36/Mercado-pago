@@ -5,6 +5,7 @@ import java.util.List;
 /**
  * Created by mreverter on 15/1/16.
  */
+
 public class PaymentMethodSearchItem {
 
     private static final String TYPE_PAYMENT_METHOD = "payment_method";
@@ -90,5 +91,17 @@ public class PaymentMethodSearchItem {
 
     public boolean isGroup() {
         return type != null && type.equals(TYPE_GROUP);
+    }
+
+    public void setChildrenHeader(String childrenHeader) {
+        this.childrenHeader = childrenHeader;
+    }
+
+    public Boolean getShowIcon() {
+        return showIcon;
+    }
+
+    public void setShowIcon(Boolean showIcon) {
+        this.showIcon = showIcon;
     }
 }

@@ -12,6 +12,7 @@ import com.mercadopago.ReviewAndConfirmActivity;
 import com.mercadopago.callbacks.OnReviewChange;
 import com.mercadopago.model.Card;
 import com.mercadopago.model.CardInfo;
+import com.mercadopago.model.Customer;
 import com.mercadopago.model.Discount;
 import com.mercadopago.model.Item;
 import com.mercadopago.model.PayerCost;
@@ -49,15 +50,15 @@ public class MercadoPagoUI {
          * Card selection, responds: card
          * Requires:
          * Activity {@link android.app.Activity}
-         * Cards {@link List}&lt;{@link com.mercadopago.model.Customer}&gt;
+         * Cards {@link List}&lt;{@link Customer}&gt;
          * <p>
-         * Get results as Jsons, using {@link com.mercadopago.util.JsonUtil#fromJson(String, Class)}
+         * Get results as Jsons, using {@link JsonUtil#fromJson(String, Class)}
          * in method {@link android.app.Activity#onActivityResult(int, int, Intent)}  of the caller activity
          * from the Intent with keys:
-         * "card" {@link com.mercadopago.model.Card}
+         * "card" {@link Card}
          * <p>
          * RESULT_CANCEL:
-         * "mpException" {@link com.mercadopago.model.PaymentMethod}
+         * "mpException" {@link PaymentMethod}
          */
         public static class SavedCardsActivityBuilder {
 

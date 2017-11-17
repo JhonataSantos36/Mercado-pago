@@ -9,6 +9,7 @@ import com.mercadopago.exceptions.MercadoPagoError;
 /**
  * Created by mreverter on 9/5/16.
  */
+
 public class ErrorUtil {
 
     public static final int ERROR_REQUEST_CODE = 94;

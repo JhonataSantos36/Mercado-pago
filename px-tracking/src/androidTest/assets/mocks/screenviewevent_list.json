@@ -1,1 +1,0 @@
-{"application":{"checkout_version":"3.0.0","platform":"native/android","public_key":"public_key"},"client_id":"12345","device":{"model":"model","os":"android","resolution":"resolution","screen_size":"size","system_version":"system_version"},"events":[{"screen_id":"id_1","screen_name":"name_1","timestamp":"timestamp","type":"screenview"}]}

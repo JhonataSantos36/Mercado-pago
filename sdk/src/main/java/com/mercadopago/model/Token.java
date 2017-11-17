@@ -182,5 +182,4 @@ public class Token implements CardInformation {
         Gson gson = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).serializeNulls().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").create();
         return gson.toJson(this);
     }
-
 }

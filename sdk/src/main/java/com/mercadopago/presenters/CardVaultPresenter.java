@@ -20,7 +20,7 @@ import com.mercadopago.mvp.MvpPresenter;
 import com.mercadopago.mvp.OnResourcesRetrievedCallback;
 import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.providers.CardVaultProvider;
-import com.mercadopago.px_tracking.utils.TrackingUtil;
+import com.mercadopago.tracking.utils.TrackingUtil;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.TextUtils;
 import com.mercadopago.views.CardVaultView;
