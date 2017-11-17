@@ -1,6 +1,28 @@
 # Mercado Pago Services SDK
 
 This library makes it easy to consume Mercado Pago API from your application. By creating tokens, Mercado Pago handles the bulk of PCI compliance by preventing sensitive card data from hitting your server. 
+## Installation
+
+### Android Studio
+
+Add this line to your app's `build.gradle` inside the `dependencies` section:
+
+    compile 'com.mercadopago:services:1.0.1'
+
+### Eclipse
+
+1. Clone the repository.
+2. Be sure you've installed the Android SDK with API Level 26 and _android-support-v7_
+3. Import the _services_ folder into Android Studio
+4. Add the folder as library.
+
+### ProGuard
+
+If you're planning on optimizing your app with ProGuard, make sure that you exclude the MercadoPago bindings. You can do this by adding the following to your app's `proguard.cfg` file:
+
+    -keep class com.mercadopago.** { *; }
+
+## Documentation
 
 The first step is to create an instance of **_MercadoPagoServices_** class:
 
