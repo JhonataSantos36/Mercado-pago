@@ -3,6 +3,8 @@
 _17_11_2017_
 
 * New: Integrated services library 1.0.1
+* Fix: Back exit checkout with only one payment method
+* Fix: NPE in CardVaultPresenter
 
 ## VERSION 3.7.1
 
