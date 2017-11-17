@@ -9,6 +9,7 @@ import java.util.List;
 
 public class PaymentMethodSearch {
 
+    @SerializedName("groups")
     private List<PaymentMethodSearchItem> paymentMethodSearchItem;
     @SerializedName("custom_options")
     private List<CustomOptionSearchItem> customOptionSearchItems;
