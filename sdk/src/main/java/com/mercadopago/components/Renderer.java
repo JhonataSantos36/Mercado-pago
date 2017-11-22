@@ -1,6 +1,7 @@
 package com.mercadopago.components;
 
 import android.content.Context;
+import android.support.annotation.StringRes;
 import android.view.View;
 import android.content.res.Resources;
 import android.support.annotation.NonNull;
@@ -30,8 +31,6 @@ public abstract class Renderer<T extends Component> {
 
     public abstract View render();
 
-    //TODO: move to component
-    @Deprecated
     public void wrapHeight(@NonNull final ViewGroup viewGroup) {
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
@@ -40,8 +39,6 @@ public abstract class Renderer<T extends Component> {
         viewGroup.setLayoutParams(params);
     }
 
-    //TODO: move to component
-    @Deprecated
     public void stretchHeight(@NonNull final ViewGroup viewGroup) {
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
@@ -51,24 +48,20 @@ public abstract class Renderer<T extends Component> {
         viewGroup.setLayoutParams(params);
     }
 
-    //TODO: move to Text component
-    @Deprecated
-    protected void setText(@NonNull final TextView view, final int id) {
+    protected void setText(@NonNull final TextView view, @StringRes final int resource) {
         try {
-            String text = context.getResources().getString(id);
+            String text = context.getResources().getString(resource);
             if (text.isEmpty()) {
                 view.setVisibility(View.GONE);
             } else {
                 view.setText(text);
             }
-        } catch (Resources.NotFoundException ex) {
+        } catch (final Resources.NotFoundException ex) {
             //Todo: add to tracker
             view.setVisibility(View.GONE);
         }
     }
 
-    //TODO: move to Text component
-    @Deprecated
     protected void setText(@NonNull final TextView view, String text) {
         if(TextUtils.isEmpty(text)) {
             view.setVisibility(View.GONE);

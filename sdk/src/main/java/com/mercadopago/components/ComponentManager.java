@@ -12,7 +12,6 @@ public class ComponentManager<T> implements ActionDispatcher, MutatorPropsListen
     private Activity activity;
     private Component root;
     private ActionsListener actionsListener;
-    private Mutator mutator;
     private Renderer renderer;
 
     public ComponentManager(@NonNull final Activity activity) {
@@ -39,11 +38,6 @@ public class ComponentManager<T> implements ActionDispatcher, MutatorPropsListen
         if (actionsListener != null) {
             actionsListener.onAction(action);
         }
-    }
-
-    public void setMutator(@NonNull final Mutator mutator) {
-        this.mutator = mutator;
-        this.mutator.setPropsListener(this);
     }
 
     @Override
