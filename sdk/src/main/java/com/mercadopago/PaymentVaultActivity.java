@@ -26,6 +26,8 @@ import com.mercadopago.core.MercadoPagoUI;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.decorations.GridSpacingItemDecoration;
 import com.mercadopago.exceptions.MercadoPagoError;
+import com.mercadopago.hooks.Hook;
+import com.mercadopago.hooks.HookActivity;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.Card;
 import com.mercadopago.model.CustomSearchItem;
@@ -165,6 +167,7 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
     }
 
     protected void getActivityParameters() {
+
         mDecorationPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("decorationPreference"), DecorationPreference.class);
         mServicePreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("servicePreference"), ServicePreference.class);
         mPublicKey = getIntent().getStringExtra("merchantPublicKey");
@@ -178,6 +181,8 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
         mPaymentVaultPresenter.setInstallmentsReviewEnabled(this.getIntent().getBooleanExtra("installmentsReviewEnabled", true));
         mPaymentVaultPresenter.setMaxSavedCards(this.getIntent().getIntExtra("maxSavedCards", FlowPreference.DEFAULT_MAX_SAVED_CARDS_TO_SHOW));
         mPaymentVaultPresenter.setShowAllSavedCardsEnabled(this.getIntent().getBooleanExtra("showAllSavedCardsEnabled", false));
+        mPaymentVaultPresenter.setDecorationPreference(mDecorationPreference);
+
         mShowBankDeals = getIntent().getBooleanExtra("showBankDeals", true);
         mEscEnabled = getIntent().getBooleanExtra("escEnabled", false);
 
@@ -290,7 +295,6 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
     public void initializeMPTracker() {
         MPTracker.getInstance().initTracker(mPublicKey, mPaymentVaultPresenter.getSite().getId(), BuildConfig.VERSION_NAME, getApplicationContext());
     }
-
 
     private void showTimer() {
         if (CheckoutTimer.getInstance().isTimerEnabled()) {
@@ -463,10 +467,16 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
             resolvePayerInformationRequest(resultCode, data);
         } else if (requestCode == ErrorUtil.ERROR_REQUEST_CODE) {
             resolveErrorRequest(resultCode, data);
+        } else if (requestCode == MercadoPagoComponents.Activities.HOOK_1) {
+            resolveHook1Request(resultCode);
+        } else if (requestCode == MercadoPagoComponents.Activities.HOOK_1_ACCOUNT_MONEY) {
+            resolveHook1AccountMoneyRequest(resultCode);
         }
     }
 
     private void resolveErrorRequest(int resultCode, Intent data) {
+        mPaymentVaultPresenter.onHookReset();
+
         if (resultCode == RESULT_OK) {
             recoverFromFailure();
         } else if (mPaymentVaultPresenter.isItemSelected()) {
@@ -482,6 +492,8 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
     }
 
     private void resolvePaymentVaultRequest(int resultCode, Intent data) {
+        mPaymentVaultPresenter.onHookReset();
+
         if (resultCode == RESULT_OK) {
             setResult(RESULT_OK, data);
             finish();
@@ -511,6 +523,8 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
     }
 
     protected void resolveCardRequest(int resultCode, Intent data) {
+        mPaymentVaultPresenter.onHookReset();
+
         if (resultCode == RESULT_OK) {
             mSelectedPaymentMethod = JsonUtil.getInstance().fromJson(data.getStringExtra("paymentMethod"), PaymentMethod.class);
             mToken = JsonUtil.getInstance().fromJson(data.getStringExtra("token"), Token.class);
@@ -523,6 +537,7 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
                 mPaymentVaultPresenter.setDiscount(discount);
                 mPaymentVaultPresenter.initializeDiscountRow();
             }
+
 
             finishWithCardResult();
         } else {
@@ -552,6 +567,7 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
     }
 
     protected void resolveDiscountRequest(int resultCode, Intent data) {
+        mPaymentVaultPresenter.onHookReset();
         if (resultCode == RESULT_OK) {
             if (mPaymentVaultPresenter.getDiscount() == null) {
                 Discount discount = JsonUtil.getInstance().fromJson(data.getStringExtra("discount"), Discount.class);
@@ -561,6 +577,7 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
     }
 
     private void resolvePayerInformationRequest(int resultCode, Intent data) {
+        mPaymentVaultPresenter.onHookReset();
         if (resultCode == RESULT_OK) {
             Payer payer = JsonUtil.getInstance().fromJson(data.getStringExtra("payer"), Payer.class);
             mPaymentVaultPresenter.onPayerInformationReceived(payer);
@@ -839,5 +856,28 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
                 }
             }
         });
+    }
+
+    //### HOOKS ######################
+
+    public void resolveHook1Request(int resultCode) {
+        if (resultCode == RESULT_OK) {
+            mPaymentVaultPresenter.onHookContinue();
+        } else {
+            mPaymentVaultPresenter.onHookReset();
+        }
+    }
+
+    public void resolveHook1AccountMoneyRequest(int resultCode) {
+        if (resultCode == RESULT_OK) {
+            finishPaymentMethodSelection(mPaymentVaultPresenter.getAccountMoneyPaymentMethod());
+        } else {
+            mPaymentVaultPresenter.onHookReset();
+        }
+    }
+
+    @Override
+    public void showHook(final Hook hook, final int code) {
+        startActivityForResult(HookActivity.getIntent(this, hook), code);
     }
 }

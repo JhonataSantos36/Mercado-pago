@@ -115,6 +115,9 @@
         <activity
             android:name=".PayerInformationActivity"
             android:theme="@style/Theme.ProcessMercadoPagoTheme.NoActionbar" />
+        <activity
+            android:name=".hooks.HookActivity"
+            android:theme="@style/Theme.ProcessMercadoPagoTheme.NoActionbar" />
     </application>
 
 </manifest>

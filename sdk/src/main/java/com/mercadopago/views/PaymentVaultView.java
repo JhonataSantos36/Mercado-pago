@@ -2,6 +2,7 @@ package com.mercadopago.views;
 
 import com.mercadopago.callbacks.OnSelectedCallback;
 import com.mercadopago.exceptions.MercadoPagoError;
+import com.mercadopago.hooks.Hook;
 import com.mercadopago.model.Card;
 import com.mercadopago.model.CustomSearchItem;
 import com.mercadopago.model.Payer;
@@ -55,4 +56,5 @@ public interface PaymentVaultView extends MvpView {
 
     void initializeMPTracker();
 
+    void showHook(final Hook hook, final int code);
 }

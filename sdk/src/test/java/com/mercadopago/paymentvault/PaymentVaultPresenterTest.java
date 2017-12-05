@@ -5,6 +5,7 @@ import com.mercadopago.constants.PaymentMethods;
 import com.mercadopago.constants.PaymentTypes;
 import com.mercadopago.constants.Sites;
 import com.mercadopago.exceptions.MercadoPagoError;
+import com.mercadopago.hooks.Hook;
 import com.mercadopago.mocks.PaymentMethodSearchs;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.Card;
@@ -1355,6 +1356,11 @@ public class PaymentVaultPresenterTest {
 
         @Override
         public void initializeMPTracker() {
+
+        }
+
+        @Override
+        public void showHook(Hook hook, int code) {
 
         }
 

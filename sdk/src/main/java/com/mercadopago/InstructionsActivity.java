@@ -495,7 +495,8 @@ public class InstructionsActivity extends MercadoPagoBaseActivity {
         if (mBackPressedOnce) {
             super.onBackPressed();
         } else {
-            Snackbar.make(mTertiaryInfo, getString(R.string.mpsdk_press_again_to_leave), Snackbar.LENGTH_LONG).show();
+            Snackbar.make(mTertiaryInfo, getString(R.string.mpsdk_press_again_to_leave),
+                    Snackbar.LENGTH_LONG).show();
             mBackPressedOnce = true;
             resetBackPressedOnceIn(4000);
         }

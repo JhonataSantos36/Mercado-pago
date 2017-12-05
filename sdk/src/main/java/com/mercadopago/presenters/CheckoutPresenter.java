@@ -4,8 +4,11 @@ import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.constants.PaymentMethods;
 import com.mercadopago.controllers.Timer;
 import com.mercadopago.core.MercadoPagoCheckout;
+import com.mercadopago.core.MercadoPagoComponents;
 import com.mercadopago.exceptions.CheckoutPreferenceException;
 import com.mercadopago.exceptions.MercadoPagoError;
+import com.mercadopago.hooks.Hook;
+import com.mercadopago.hooks.HooksStore;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.Campaign;
 import com.mercadopago.model.Card;
@@ -26,6 +29,7 @@ import com.mercadopago.model.Token;
 import com.mercadopago.mvp.MvpPresenter;
 import com.mercadopago.mvp.OnResourcesRetrievedCallback;
 import com.mercadopago.preferences.CheckoutPreference;
+import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.preferences.FlowPreference;
 import com.mercadopago.preferences.PaymentResultScreenPreference;
 import com.mercadopago.preferences.ReviewScreenPreference;
@@ -73,6 +77,8 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
     private String mIdempotencyKeySeed;
     private String mCurrentPaymentIdempotencyKey;
 
+    private DecorationPreference decorationPreference;
+
     private transient FailureRecovery failureRecovery;
     private transient Timer mCheckoutTimer;
 
@@ -99,6 +105,10 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
             String exceptionDetail = e.getMessage();
             getView().showError(new MercadoPagoError(userMessage, exceptionDetail, false));
         }
+    }
+
+    public void setDecorationPreference(DecorationPreference decorationPreference) {
+        this.decorationPreference = decorationPreference;
     }
 
     private void startCheckoutForPreference() {
@@ -322,7 +332,8 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
             continuePaymentWithoutESC();
         } else {
             if (hasToStoreESC(paymentResult)) {
-                getResourcesProvider().saveESC(paymentResult.getPaymentData().getToken().getCardId(), paymentResult.getPaymentData().getToken().getEsc());
+                getResourcesProvider().saveESC(paymentResult.getPaymentData().getToken().getCardId(),
+                        paymentResult.getPaymentData().getToken().getEsc());
             }
             if (hasToSkipPaymentResultScreen(paymentResult)) {
                 finishCheckout();
@@ -465,15 +476,12 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
     }
 
     private void onPaymentMethodSelected() {
-        mPaymentMethodEditionRequested = false;
-        if (isReviewAndConfirmEnabled()) {
-            showReviewAndConfirm();
-        } else {
-            resolvePaymentDataResponse();
+        if (!showHook2(createPaymentData())) {
+            hook2Continue();
         }
     }
 
-    private void resolvePaymentDataResponse() {
+    public void resolvePaymentDataResponse() {
         if (MercadoPagoCheckout.PAYMENT_DATA_RESULT_CODE.equals(mRequestedResult)) {
             PaymentData paymentData = createPaymentData();
             getView().finishWithPaymentDataResult(paymentData, mPaymentMethodEdited);
@@ -621,7 +629,9 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
     }
 
     public void onPaymentConfirmation() {
-        resolvePaymentDataResponse();
+        if (!showHook3(createPaymentData())) {
+            resolvePaymentDataResponse();
+        }
     }
 
     public void changePaymentMethod() {
@@ -939,5 +949,44 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
 
     public Integer getMaxSavedCardsToShow() {
         return mFlowPreference.getMaxSavedCardsToShow();
+    }
+
+    //### Hooks #####################
+
+    public boolean showHook2(final PaymentData paymentData) {
+        return showHook2(paymentData, MercadoPagoComponents.Activities.HOOK_2);
+    }
+
+    public boolean showHook2(final PaymentData paymentData, final int requestCode) {
+        final HooksStore store = HooksStore.getInstance();
+        final Hook hook = store.activateAfterPaymentMethodConfig(paymentData, decorationPreference);
+        if (hook != null && getView() != null) {
+            getView().showHook(hook, requestCode);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean showHook3(final PaymentData paymentData) {
+        return showHook3(paymentData, MercadoPagoComponents.Activities.HOOK_3);
+    }
+
+    public boolean showHook3(final PaymentData paymentData, final int requestCode) {
+        final HooksStore store = HooksStore.getInstance();
+        final Hook hook = store.activateBeforePayment(paymentData, decorationPreference);
+        if (hook != null && getView() != null) {
+            getView().showHook(hook, requestCode);
+            return true;
+        }
+        return false;
+    }
+
+    public void hook2Continue() {
+        mPaymentMethodEditionRequested = false;
+        if (isReviewAndConfirmEnabled()) {
+            showReviewAndConfirm();
+        } else {
+            resolvePaymentDataResponse();
+        }
     }
 }

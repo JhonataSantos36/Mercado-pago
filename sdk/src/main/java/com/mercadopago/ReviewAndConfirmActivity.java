@@ -89,6 +89,7 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
     protected ReviewScreenPreference mReviewScreenPreference;
     protected String mPublicKey;
     protected Site mSite;
+
     private Issuer mIssuer;
 
     @Override

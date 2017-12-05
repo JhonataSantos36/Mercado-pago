@@ -2,12 +2,15 @@ package com.mercadopago;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 
 import com.mercadopago.constants.PaymentTypes;
 import com.mercadopago.controllers.CheckoutTimer;
 import com.mercadopago.core.MercadoPagoCheckout;
 import com.mercadopago.core.MercadoPagoComponents;
 import com.mercadopago.exceptions.MercadoPagoError;
+import com.mercadopago.hooks.Hook;
+import com.mercadopago.hooks.HookActivity;
 import com.mercadopago.model.Card;
 import com.mercadopago.model.Discount;
 import com.mercadopago.model.Issuer;
@@ -82,6 +85,7 @@ public class CheckoutActivity extends MercadoPagoBaseActivity implements Checkou
         mCheckoutPresenter.attachView(this);
         mCheckoutPresenter.setIdempotencyKeySeed(mMerchantPublicKey);
         mCheckoutPresenter.setTimer(CheckoutTimer.getInstance());
+        mCheckoutPresenter.setDecorationPreference(mDecorationPreference);
     }
 
     private void decorate() {
@@ -192,6 +196,21 @@ public class CheckoutActivity extends MercadoPagoBaseActivity implements Checkou
             resolveCardVaultRequest(resultCode, data);
         } else if (requestCode == MercadoPagoComponents.Activities.REVIEW_AND_CONFIRM_REQUEST_CODE) {
             resolveReviewAndConfirmRequest(resultCode, data);
+        } else if (requestCode == MercadoPagoComponents.Activities.HOOK_2) {
+
+            if (resultCode == RESULT_OK) {
+                mCheckoutPresenter.hook2Continue();
+            } else {
+                cancelCheckout();
+            }
+
+        } else if (requestCode == MercadoPagoComponents.Activities.HOOK_3) {
+
+            if (resultCode == RESULT_OK) {
+                mCheckoutPresenter.resolvePaymentDataResponse();
+            } else {
+                backToReviewAndConfirm();
+            }
         }
     }
 
@@ -201,6 +220,7 @@ public class CheckoutActivity extends MercadoPagoBaseActivity implements Checkou
     }
 
     private void resolveReviewAndConfirmRequest(int resultCode, Intent data) {
+
         if (resultCode == RESULT_OK) {
             mCheckoutPresenter.onPaymentConfirmation();
         } else if (resultCode == ReviewAndConfirmActivity.RESULT_CHANGE_PAYMENT_METHOD) {
@@ -342,6 +362,7 @@ public class CheckoutActivity extends MercadoPagoBaseActivity implements Checkou
                 .setMaxSavedCards(mCheckoutPresenter.getMaxSavedCardsToShow())
                 .setShowAllSavedCardsEnabled(mCheckoutPresenter.shouldShowAllSavedCards())
                 .setESCEnabled(mCheckoutPresenter.isESCEnabled())
+                .setCheckoutPreference(mCheckoutPresenter.getCheckoutPreference())
                 .startActivity();
     }
 
@@ -521,5 +542,10 @@ public class CheckoutActivity extends MercadoPagoBaseActivity implements Checkou
     @Override
     public void showProgress() {
         LayoutUtil.showProgressLayout(this);
+    }
+
+    @Override
+    public void showHook(@NonNull final Hook hook, final int requestCode) {
+        startActivityForResult(HookActivity.getIntent(this, hook), requestCode);
     }
 }

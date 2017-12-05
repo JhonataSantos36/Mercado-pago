@@ -2,6 +2,7 @@ package com.mercadopago.components;
 
 import android.app.Activity;
 import android.support.annotation.NonNull;
+import android.view.ViewGroup;
 
 /**
  * Created by vaserber on 10/20/17.
@@ -26,6 +27,20 @@ public class ComponentManager<T> implements ActionDispatcher, MutatorPropsListen
     private void render() {
         if (renderer != null) {
             activity.setContentView(renderer.render());
+        }
+    }
+
+    public void render(final Component component) {
+        if (component != null) {
+            setComponent(component);
+            render();
+        }
+    }
+
+    public void render(@NonNull final Component component, @NonNull final ViewGroup parent) {
+        setComponent(component);
+        if (renderer != null) {
+            parent.addView(renderer.render());
         }
     }
 

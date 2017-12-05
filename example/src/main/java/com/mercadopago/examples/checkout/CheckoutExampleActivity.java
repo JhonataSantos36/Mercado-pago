@@ -17,6 +17,13 @@ import com.mercadopago.examples.R;
 import com.mercadopago.examples.utils.ColorPickerDialog;
 import com.mercadopago.examples.utils.ExamplesUtils;
 import com.mercadopago.exceptions.MercadoPagoError;
+import com.mercadopago.hooks.ExampleHooks;
+import com.mercadopago.hooks.components.PaymentConfirm;
+import com.mercadopago.hooks.components.PaymentConfirmRenderer;
+import com.mercadopago.hooks.components.PaymentMethodConfirm;
+import com.mercadopago.hooks.components.PaymentMethodConfirmRenderer;
+import com.mercadopago.hooks.components.PaymentTypeConfirm;
+import com.mercadopago.hooks.components.PaymentTypeConfirmRenderer;
 import com.mercadopago.model.Payment;
 import com.mercadopago.preferences.CheckoutPreference;
 import com.mercadopago.preferences.DecorationPreference;
@@ -32,6 +39,7 @@ public class CheckoutExampleActivity extends AppCompatActivity {
 
     private Integer mDefaultColor;
     private CheckBox mDarkFontEnabled;
+    private CheckBox mHooksEnabled;
     private ImageView mColorSample;
     private Integer mSelectedColor;
     private CheckBox mVisaExcluded;
@@ -51,6 +59,7 @@ public class CheckoutExampleActivity extends AppCompatActivity {
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
         mRegularLayout = findViewById(R.id.regularLayout);
         mDarkFontEnabled = (CheckBox) findViewById(R.id.darkFontEnabled);
+        mHooksEnabled = (CheckBox) findViewById(R.id.hooks_enabled);
         mColorSample = (ImageView) findViewById(R.id.colorSample);
         mVisaExcluded = (CheckBox) findViewById(R.id.visaExcluded);
         mCashExcluded = (CheckBox) findViewById(R.id.cashExcluded);
@@ -70,14 +79,32 @@ public class CheckoutExampleActivity extends AppCompatActivity {
     }
 
     private void startMercadoPagoCheckout() {
-        new MercadoPagoCheckout.Builder()
+
+        final MercadoPagoCheckout.Builder builder = new MercadoPagoCheckout.Builder()
                 .setActivity(this)
                 .setPublicKey(mPublicKey)
                 .setCheckoutPreference(getCheckoutPreference())
-                .setDecorationPreference(getCurrentDecorationPreference())
-                .startForPayment();
-    }
+                .setDecorationPreference(getCurrentDecorationPreference());
 
+        if (mHooksEnabled.isChecked()) {
+
+            builder.registerComponent(
+                    PaymentMethodConfirm.class,
+                    PaymentMethodConfirmRenderer.class);
+
+            builder.registerComponent(
+                    PaymentTypeConfirm.class,
+                    PaymentTypeConfirmRenderer.class);
+
+            builder.registerComponent(
+                    PaymentConfirm.class,
+                    PaymentConfirmRenderer.class);
+
+            builder.setCheckoutHooks(new ExampleHooks());
+        }
+
+        builder.startForPayment();
+    }
 
     private CheckoutPreference getCheckoutPreference() {
         return new CheckoutPreference(mCheckoutPreferenceId);

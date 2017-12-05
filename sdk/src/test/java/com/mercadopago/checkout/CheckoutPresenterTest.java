@@ -5,6 +5,7 @@ import com.mercadopago.controllers.Timer;
 import com.mercadopago.core.MercadoPagoCheckout;
 import com.mercadopago.exceptions.CheckoutPreferenceException;
 import com.mercadopago.exceptions.MercadoPagoError;
+import com.mercadopago.hooks.Hook;
 import com.mercadopago.mocks.Cards;
 import com.mercadopago.mocks.Customers;
 import com.mercadopago.mocks.Discounts;
@@ -1981,6 +1982,11 @@ public class CheckoutPresenterTest {
 
         @Override
         public void finishFromReviewAndConfirm() {
+
+        }
+
+        @Override
+        public void showHook(Hook hook, int requestCode) {
 
         }
     }

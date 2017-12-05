@@ -113,6 +113,15 @@
                     android:text="@string/dark_font"
                     android:textSize="14dp"/>
             </LinearLayout>
+
+            <CheckBox
+                android:id="@+id/hooks_enabled"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/enable_hooks"
+                android:textSize="14dp"/>
+
             <com.mercadopago.customviews.MPTextView
                 android:layout_marginTop="15dp"
                 android:layout_width="wrap_content"
