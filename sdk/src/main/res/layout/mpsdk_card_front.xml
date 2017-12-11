@@ -117,8 +117,8 @@
                 <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="0.2"
-                    android:layout_marginTop="17dp">
+                    android:layout_weight="0.25"
+                    android:layout_marginTop="10dp">
 
                     <FrameLayout
                         android:layout_width="match_parent"
@@ -127,29 +127,31 @@
                         android:paddingLeft="15dp"
                         android:paddingRight="15dp"
                         android:paddingEnd="15dp">
-                        <com.mercadopago.customviews.MPAutoResizeTextView
+
+                        <com.mercadopago.customviews.MPTextView
                             android:id="@+id/mpsdkCardNumberTextView"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:gravity="start"
-                            android:ellipsize="none"
+                            android:gravity="bottom"
+                            android:maxLength="40"
                             android:textColor="@color/mpsdk_base_text"
-                            android:textSize="19dp"
+                            app:autoSizeTextType="uniform"
+                            app:autoSizeMinTextSize="10dp"
+                            app:autoSizeMaxTextSize="24dp"
+                            app:autoSizeStepGranularity="1dp"
                             app:font_style="mono_regular"
                             app:allowCustomFont="false"
-                            app:minTextSize="8dp"
-                            android:maxLines="1"
-                            tools:text="1234 1234 1234 1234"
-                            android:visibility="visible" />
+                            tools:text="1234 1234 1234 1234"/>
+
                     </FrameLayout>
                 </FrameLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="0.2"
+                    android:layout_weight="0.15"
                     android:layout_gravity="center"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="12dp"
                     android:orientation="horizontal"
                     android:weightSum="1">
 
