@@ -29,7 +29,6 @@ import com.mercadopago.model.Token;
 import com.mercadopago.mvp.MvpPresenter;
 import com.mercadopago.mvp.OnResourcesRetrievedCallback;
 import com.mercadopago.preferences.CheckoutPreference;
-import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.preferences.FlowPreference;
 import com.mercadopago.preferences.PaymentResultScreenPreference;
 import com.mercadopago.preferences.ReviewScreenPreference;
@@ -77,8 +76,6 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
     private String mIdempotencyKeySeed;
     private String mCurrentPaymentIdempotencyKey;
 
-    private DecorationPreference decorationPreference;
-
     private transient FailureRecovery failureRecovery;
     private transient Timer mCheckoutTimer;
 
@@ -105,10 +102,6 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
             String exceptionDetail = e.getMessage();
             getView().showError(new MercadoPagoError(userMessage, exceptionDetail, false));
         }
-    }
-
-    public void setDecorationPreference(DecorationPreference decorationPreference) {
-        this.decorationPreference = decorationPreference;
     }
 
     private void startCheckoutForPreference() {
@@ -959,7 +952,7 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
 
     public boolean showHook2(final PaymentData paymentData, final int requestCode) {
         final HooksStore store = HooksStore.getInstance();
-        final Hook hook = store.activateAfterPaymentMethodConfig(paymentData, decorationPreference);
+        final Hook hook = store.activateAfterPaymentMethodConfig(paymentData);
         if (hook != null && getView() != null) {
             getView().showHook(hook, requestCode);
             return true;
@@ -973,7 +966,7 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
 
     public boolean showHook3(final PaymentData paymentData, final int requestCode) {
         final HooksStore store = HooksStore.getInstance();
-        final Hook hook = store.activateBeforePayment(paymentData, decorationPreference);
+        final Hook hook = store.activateBeforePayment(paymentData);
         if (hook != null && getView() != null) {
             getView().showHook(hook, requestCode);
             return true;

@@ -85,7 +85,6 @@ public class CheckoutActivity extends MercadoPagoBaseActivity implements Checkou
         mCheckoutPresenter.attachView(this);
         mCheckoutPresenter.setIdempotencyKeySeed(mMerchantPublicKey);
         mCheckoutPresenter.setTimer(CheckoutTimer.getInstance());
-        mCheckoutPresenter.setDecorationPreference(mDecorationPreference);
     }
 
     private void decorate() {

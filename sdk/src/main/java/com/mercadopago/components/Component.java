@@ -2,9 +2,6 @@ package com.mercadopago.components;
 
 import android.support.annotation.NonNull;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Created by vaserber on 10/20/17.
  */

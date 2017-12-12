@@ -1,12 +1,12 @@
 package com.mercadopago.hooks;
 
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import com.mercadopago.components.Component;
 import com.mercadopago.components.NextAction;
 import com.mercadopago.model.PaymentData;
-import com.mercadopago.preferences.DecorationPreference;
+
+import java.util.Map;
 
 public abstract class HookComponent extends Component<HookComponent.Props> {
 
@@ -16,25 +16,64 @@ public abstract class HookComponent extends Component<HookComponent.Props> {
 
     public static class Props {
 
-        public final HooksStore store;
+        public final Map<String, Object> data;
         public final String paymentTypeId;
         public final PaymentData paymentData;
-        public final DecorationPreference decorationPreference;
         public final String toolbarTitle;
         public final boolean toolbarVisible;
 
-        public Props(@NonNull final HooksStore store,
-                     @Nullable final String paymentTypeId,
-                     @Nullable final PaymentData paymentData,
-                     @NonNull final DecorationPreference decorationPreference,
-                     @NonNull final String toolbarTitle,
-                     final boolean toolbarVisible) {
-            this.store = store;
-            this.paymentTypeId = paymentTypeId;
-            this.paymentData = paymentData;
-            this.decorationPreference = decorationPreference;
-            this.toolbarTitle = toolbarTitle;
-            this.toolbarVisible = toolbarVisible;
+        public Props(@NonNull final Builder builder) {
+            this.data = builder.data;
+            this.paymentTypeId = builder.paymentTypeId;
+            this.paymentData = builder.paymentData;
+            this.toolbarTitle = builder.toolbarTitle;
+            this.toolbarVisible = builder.toolbarVisible;
+        }
+
+        public Builder toBuilder() {
+            return new Builder()
+                .setData(this.data)
+                .setPaymentTypeId(this.paymentTypeId)
+                .setPaymentData(this.paymentData)
+                .setToolbarTitle(this.toolbarTitle)
+                .setToolbarVisible(this.toolbarVisible);
+        }
+
+        public static class Builder {
+            public Map<String, Object> data;
+            public String paymentTypeId;
+            public PaymentData paymentData;
+            public String toolbarTitle = "";
+            public boolean toolbarVisible = true;
+
+            public Builder setData(@NonNull final Map<String, Object> data) {
+                this.data = data;
+                return this;
+            }
+
+            public Builder setPaymentTypeId(@NonNull final String paymentTypeId) {
+                this.paymentTypeId = paymentTypeId;
+                return this;
+            }
+
+            public Builder setPaymentData(@NonNull final PaymentData paymentData) {
+                this.paymentData = paymentData;
+                return this;
+            }
+
+            public Builder setToolbarTitle(@NonNull final String toolbarTitle) {
+                this.toolbarTitle = toolbarTitle;
+                return this;
+            }
+
+            public Builder setToolbarVisible(@NonNull final boolean toolbarVisible) {
+                this.toolbarVisible = toolbarVisible;
+                return this;
+            }
+
+            public Props build() {
+                return new Props(this);
+            }
         }
     }
 

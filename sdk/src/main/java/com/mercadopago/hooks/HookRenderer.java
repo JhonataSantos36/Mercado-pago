@@ -12,8 +12,12 @@ import android.widget.TextView;
 import com.mercadopago.R;
 import com.mercadopago.components.BackAction;
 import com.mercadopago.components.Renderer;
+import com.mercadopago.core.PreferenceStore;
+import com.mercadopago.preferences.DecorationPreference;
 
 public abstract class HookRenderer extends Renderer<HookComponent> {
+
+    private DecorationPreference decorationPreference = PreferenceStore.getInstance().getDecorationPreference();
 
     @Override
     @CallSuper
@@ -56,16 +60,16 @@ public abstract class HookRenderer extends Renderer<HookComponent> {
 
     private void decorate(final AppCompatActivity activity, final Toolbar toolbar) {
         if (toolbar != null) {
-            if (isCustomColorSet()) {
-                toolbar.setBackgroundColor(getCustomBaseColor());
+            if (decorationPreference.hasColors()) {
+                toolbar.setBackgroundColor(decorationPreference.getBaseColor());
             }
             decorateUpArrow(activity, toolbar);
         }
     }
 
     private void decorateUpArrow(final AppCompatActivity activity, final Toolbar toolbar) {
-        if (isDarkFontEnabled()) {
-            int darkFont = getDarkFontColor();
+        if (decorationPreference.isDarkFontEnabled()) {
+            int darkFont = decorationPreference.getDarkFontColor(context);
             Drawable upArrow = toolbar.getNavigationIcon();
             if (upArrow != null && activity.getSupportActionBar() != null) {
                 upArrow.setColorFilter(darkFont, PorterDuff.Mode.SRC_ATOP);
@@ -75,24 +79,8 @@ public abstract class HookRenderer extends Renderer<HookComponent> {
     }
 
     protected void decorateFont(final TextView textView) {
-        if (textView != null && isDarkFontEnabled()) {
-            textView.setTextColor(getDarkFontColor());
+        if (textView != null && decorationPreference.isDarkFontEnabled()) {
+            textView.setTextColor(decorationPreference.getDarkFontColor(context));
         }
-    }
-
-    private boolean isCustomColorSet() {
-        return component.props.decorationPreference.hasColors();
-    }
-
-    private boolean isDarkFontEnabled() {
-        return component.props.decorationPreference.isDarkFontEnabled();
-    }
-
-    private int getCustomBaseColor() {
-        return component.props.decorationPreference.getBaseColor();
-    }
-
-    private int getDarkFontColor() {
-        return component.props.decorationPreference.getDarkFontColor(context);
     }
 }

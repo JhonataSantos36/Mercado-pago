@@ -2,9 +2,11 @@ package com.mercadopago.hooks;
 
 import com.mercadopago.components.Component;
 
-public interface Hook {
+public abstract class Hook {
 
-    Component<HookComponent.Props> createComponent();
+    abstract Component<HookComponent.Props> createComponent();
 
-    boolean isEnabled();
+    public boolean isEnabled() {
+        return true;
+    }
 }

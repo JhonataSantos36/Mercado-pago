@@ -3,13 +3,16 @@ package com.mercadopago.hooks;
 import android.support.annotation.NonNull;
 
 import com.mercadopago.model.PaymentData;
-import com.mercadopago.preferences.DecorationPreference;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class HooksStore {
 
     private static HooksStore instance;
     private CheckoutHooks checkoutHooks;
     private Hook hook;
+    private Map<String, Object> data = new HashMap();
 
     private HooksStore() {
 
@@ -22,50 +25,45 @@ public class HooksStore {
         return instance;
     }
 
-    public boolean hasCheckoutHooks() {
-        return checkoutHooks != null;
-    }
-
-    public Hook activateBeforePaymentMethodConfig(@NonNull final String typeId,
-                                                 @NonNull final DecorationPreference preference) {
+    public Hook activateBeforePaymentMethodConfig(@NonNull final String typeId) {
         Hook hook = null;
-
         if (this.checkoutHooks != null) {
-            hook = this.checkoutHooks.beforePaymentMethodConfig(typeId, preference);
+            final HookComponent.Props props = new HookComponent.Props.Builder()
+                    .setData(data)
+                    .setPaymentTypeId(typeId).build();
+            hook = this.checkoutHooks.beforePaymentMethodConfig(props);
             if (hook != null && !hook.isEnabled()) {
                 hook = null;
             }
         }
-
         return hook;
     }
 
-    public Hook activateAfterPaymentMethodConfig(@NonNull final PaymentData paymentData,
-                                                  @NonNull final DecorationPreference preference) {
-
+    public Hook activateAfterPaymentMethodConfig(@NonNull final PaymentData paymentData) {
         Hook hook = null;
-
         if (this.checkoutHooks != null) {
-            hook = this.checkoutHooks.afterPaymentMethodConfig(paymentData, preference);
+            final HookComponent.Props props = new HookComponent.Props.Builder()
+                    .setData(data)
+                    .setPaymentData(paymentData).build();
+            hook = this.checkoutHooks.afterPaymentMethodConfig(props);
             if (hook != null && !hook.isEnabled()) {
                 hook = null;
             }
         }
-
         return hook;
     }
 
-    public Hook activateBeforePayment(@NonNull final PaymentData paymentData,
-                                      @NonNull final DecorationPreference preference) {
+    public Hook activateBeforePayment(@NonNull final PaymentData paymentData) {
         Hook hook = null;
-
         if (this.checkoutHooks != null) {
-            hook = this.checkoutHooks.beforePayment(paymentData, preference);
+            final HookComponent.Props props = new HookComponent.Props.Builder()
+                    .setData(data)
+                    .setPaymentData(paymentData).build();
+            hook = this.checkoutHooks.beforePayment(props);
             if (hook != null && !hook.isEnabled()) {
                 hook = null;
             }
         }
-
         return hook;
     }
 
@@ -79,5 +77,9 @@ public class HooksStore {
 
     public void setHook(final Hook hook) {
         this.hook = hook;
+    }
+
+    public Map<String, Object> getData() {
+        return data;
     }
 }

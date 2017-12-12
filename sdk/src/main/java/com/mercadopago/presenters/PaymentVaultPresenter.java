@@ -610,7 +610,7 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
 
     public boolean showHook1(final String typeId, final int requestCode) {
         final HooksStore store = HooksStore.getInstance();
-        final Hook hook = store.activateBeforePaymentMethodConfig(typeId, decorationPreference);
+        final Hook hook = store.activateBeforePaymentMethodConfig(typeId);
         if (resumeItem == null && hook != null && getView() != null) {
             hook1Displayed = true;
             getView().showHook(hook, requestCode);
