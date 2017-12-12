@@ -78,7 +78,6 @@ public class CheckoutExampleActivity extends AppCompatActivity {
                 .startForPayment();
     }
 
-
     private CheckoutPreference getCheckoutPreference() {
         return new CheckoutPreference(mCheckoutPreferenceId);
     }
