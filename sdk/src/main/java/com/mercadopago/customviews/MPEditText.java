@@ -5,6 +5,7 @@ import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.support.v7.widget.AppCompatEditText;
 import android.util.AttributeSet;
 
@@ -13,7 +14,6 @@ import com.mercadopago.uicontrollers.FontCache;
 
 public class MPEditText extends AppCompatEditText {
 
-    private String mTypeName;
     private int mErrorColor;
 
     public MPEditText(final Context context) {
@@ -28,11 +28,7 @@ public class MPEditText extends AppCompatEditText {
         super(context, attrs, defStyle);
         setErrorColor(context, attrs, defStyle);
         if (!isInEditMode()) {
-            if (mTypeName == null) {
-                mTypeName = "fonts/Roboto-Regular.ttf";
-            }
-            Typeface tf = FontCache.createTypeface(mTypeName, getContext());
-            setTypeface(tf);
+            setTextStyle(context, R.style.mpsdk_font_roboto_regular);
         }
     }
 
@@ -50,6 +46,14 @@ public class MPEditText extends AppCompatEditText {
             getBackground().setColorFilter(mErrorColor, PorterDuff.Mode.SRC_ATOP);
         } else {
             getBackground().setColorFilter(null);
+        }
+    }
+
+    private void setTextStyle(Context context, int resId) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            super.setTextAppearance(context, resId);
+        } else {
+            super.setTextAppearance(resId);
         }
     }
 

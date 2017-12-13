@@ -6,7 +6,7 @@
     android:paddingTop="@dimen/mpsdk_activity_vertical_margin"
     android:paddingBottom="@dimen/mpsdk_activity_vertical_margin"
     android:orientation="vertical"
-    tools:context="com.mercadopago.examples.step1.Step1Activity">
+    tools:context="com.mercadopago.examples.services.step1.Step1Activity">
     <include layout="@layout/mpsdk_view_progress_bar"/>
     <LinearLayout
         android:id="@+id/mpsdkRegularLayout"
@@ -35,7 +35,6 @@
         android:layout_marginTop="25dp"
         android:gravity="center"
         android:text="@string/mpsdk_continue_label"
-        android:onClick="submitSimpleForm"
         style="@style/mpsdk_button_normal" />
     </LinearLayout>
 </LinearLayout>

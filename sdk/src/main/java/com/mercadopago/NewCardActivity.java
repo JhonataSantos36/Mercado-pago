@@ -18,6 +18,7 @@ import android.widget.Spinner;
 import com.mercadopago.adapters.IdentificationTypesAdapter;
 import com.mercadopago.callbacks.Callback;
 import com.mercadopago.core.MercadoPagoServicesAdapter;
+import com.mercadopago.customviews.MPButton;
 import com.mercadopago.customviews.MPEditText;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.model.ApiException;
@@ -53,6 +54,7 @@ public class NewCardActivity extends AppCompatActivity {
     protected Spinner mIdentificationType;
     protected RelativeLayout mSecurityCodeLayout;
     protected MPEditText mSecurityCode;
+    protected MPButton mSubmitButton;
 
     // Local vars
     protected Activity mActivity;
@@ -110,18 +112,25 @@ public class NewCardActivity extends AppCompatActivity {
     }
 
     protected void setInputControls() {
-        mCardNumber = (MPEditText) findViewById(R.id.mpsdkCardNumber);
-        mCardHolderName = (MPEditText) findViewById(R.id.mpsdkCardholderName);
-        mIdentificationNumber = (MPEditText) findViewById(R.id.mpsdkIdentificationNumber);
-        mIdentificationType = (Spinner) findViewById(R.id.mpsdkIdentificationType);
-        mIdentificationLayout = (RelativeLayout) findViewById(R.id.mpsdkIdentificationLayout);
-        mSecurityCodeLayout = (RelativeLayout) findViewById(R.id.mpsdkSecurityCodeLayout);
-        mCVVImage = (ImageView) findViewById(R.id.mpsdkCVVImage);
-        mCVVDescriptor = (MPTextView) findViewById(R.id.mpsdkCVVDescriptor);
-        mSecurityCode = (MPEditText) findViewById(R.id.mpsdkSecurityCode);
-        mExpiryError = (MPTextView) findViewById(R.id.mpsdkExpiryError);
-        mExpiryMonth = (MPEditText) findViewById(R.id.mpsdkExpiryMonth);
-        mExpiryYear = (MPEditText) findViewById(R.id.mpsdkExpiryYear);
+        mCardNumber = findViewById(R.id.mpsdkCardNumber);
+        mCardHolderName = findViewById(R.id.mpsdkCardholderName);
+        mIdentificationNumber = findViewById(R.id.mpsdkIdentificationNumber);
+        mIdentificationType = findViewById(R.id.mpsdkIdentificationType);
+        mIdentificationLayout = findViewById(R.id.mpsdkIdentificationLayout);
+        mSecurityCodeLayout = findViewById(R.id.mpsdkSecurityCodeLayout);
+        mCVVImage = findViewById(R.id.mpsdkCVVImage);
+        mCVVDescriptor = findViewById(R.id.mpsdkCVVDescriptor);
+        mSecurityCode = findViewById(R.id.mpsdkSecurityCode);
+        mExpiryError = findViewById(R.id.mpsdkExpiryError);
+        mExpiryMonth = findViewById(R.id.mpsdkExpiryMonth);
+        mExpiryYear = findViewById(R.id.mpsdkExpiryYear);
+        mSubmitButton = findViewById(R.id.submitButton);
+        mSubmitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                submitForm();
+            }
+        });
     }
 
     protected void setPaymentMethodImage() {
@@ -164,7 +173,7 @@ public class NewCardActivity extends AppCompatActivity {
         getIdentificationTypesAsync();
     }
 
-    public void submitForm(View view) {
+    private void submitForm() {
 
         LayoutUtil.hideKeyboard(mActivity);
 
@@ -350,7 +359,7 @@ public class NewCardActivity extends AppCompatActivity {
                 // If the event is a key-down event on the "enter" button
                 if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
                         (keyCode == KeyEvent.KEYCODE_ENTER)) {
-                    submitForm(v);
+                    submitForm();
                     return true;
                 }
                 return false;

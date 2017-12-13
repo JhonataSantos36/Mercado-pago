@@ -18,6 +18,13 @@ public class FinalVaultActivity extends AdvancedVaultActivity {
 
         super.onCreate(savedInstanceState);
 
+        mSubmitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                submitForm();
+            }
+        });
+
     }
 
     protected void setContentView() {
@@ -89,7 +96,7 @@ public class FinalVaultActivity extends AdvancedVaultActivity {
     }
 
     @Override
-    public void submitForm(View view) {
+    public void submitForm() {
 
         LayoutUtil.hideKeyboard(mActivity);
 

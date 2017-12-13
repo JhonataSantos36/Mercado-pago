@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mercadopago.core.MercadoPagoCheckout;
+import com.mercadopago.customviews.MPButton;
 import com.mercadopago.examples.R;
 import com.mercadopago.examples.utils.ColorPickerDialog;
 import com.mercadopago.examples.utils.ExamplesUtils;
@@ -46,6 +47,7 @@ public class CheckoutExampleActivity extends AppCompatActivity {
     private CheckBox mCashExcluded;
     private TextView mJsonConfigButton;
     private String mCheckoutPreferenceId;
+    private MPButton mContinueButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,17 +66,23 @@ public class CheckoutExampleActivity extends AppCompatActivity {
         mVisaExcluded = (CheckBox) findViewById(R.id.visaExcluded);
         mCashExcluded = (CheckBox) findViewById(R.id.cashExcluded);
         mJsonConfigButton = (TextView) findViewById(R.id.jsonConfigButton);
+        mContinueButton = findViewById(R.id.continueButton);
         mJsonConfigButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startJsonInput();
             }
         });
-
+        mContinueButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onContinueClicked();
+            }
+        });
         mSelectedColor = ContextCompat.getColor(this, R.color.mpsdk_colorPrimary);
     }
 
-    public void onContinueClicked(View view) {
+    private void onContinueClicked() {
         startMercadoPagoCheckout();
     }
 

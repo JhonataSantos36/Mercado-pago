@@ -106,15 +106,22 @@ public class VaultActivity extends AppCompatActivity {
             // Set layout controls
             mInstallmentsCard = findViewById(R.id.mpsdkInstallmentsCard);
             mSecurityCodeCard = findViewById(R.id.mpsdkSecurityCodeCard);
-            mCVVImage = (ImageView) findViewById(R.id.mpsdkCVVImage);
-            mCVVDescriptor = (MPTextView) findViewById(R.id.mpsdkCVVDescriptor);
-            mSubmitButton = (MPButton) findViewById(R.id.mpsdkPayButton);
-            mCustomerMethodsLayout = (LinearLayout) findViewById(R.id.mpsdkCustomerMethodLayout);
-            mCustomerMethodsText = (MPTextView) findViewById(R.id.mpsdkCustomerMethodLabel);
-            mCustomerMethodsImage = (ImageView) findViewById(R.id.mpsdkCustomerMethodImage);
-            mInstallmentsLayout = (FrameLayout) findViewById(R.id.mpsdkInstallmentsLayout);
-            mInstallmentsText = (MPTextView) findViewById(R.id.mpsdkInstallmentsLabel);
-            mSecurityCodeText = (MPEditText) findViewById(R.id.mpsdkSecurityCode);
+            mCVVImage = findViewById(R.id.mpsdkCVVImage);
+            mCVVDescriptor = findViewById(R.id.mpsdkCVVDescriptor);
+            mSubmitButton = findViewById(R.id.mpsdkPayButton);
+            mCustomerMethodsLayout = findViewById(R.id.mpsdkCustomerMethodLayout);
+            mCustomerMethodsText = findViewById(R.id.mpsdkCustomerMethodLabel);
+            mCustomerMethodsImage = findViewById(R.id.mpsdkCustomerMethodImage);
+            mInstallmentsLayout = findViewById(R.id.mpsdkInstallmentsLayout);
+            mInstallmentsText = findViewById(R.id.mpsdkInstallmentsLabel);
+            mSecurityCodeText = findViewById(R.id.mpsdkSecurityCode);
+
+            mSubmitButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    submitForm();
+                }
+            });
 
             // Init MercadoPago object with public key
             mMercadoPago = new MercadoPagoServicesAdapter.Builder()
@@ -636,7 +643,7 @@ public class VaultActivity extends AppCompatActivity {
                 // If the event is a key-down event on the "enter" button
                 if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
                         (keyCode == KeyEvent.KEYCODE_ENTER)) {
-                    submitForm(v);
+                    submitForm();
                 }
                 return false;
             }
@@ -660,7 +667,7 @@ public class VaultActivity extends AppCompatActivity {
         getInstallmentsAsync();
     }
 
-    public void submitForm(View view) {
+    private void submitForm() {
 
         LayoutUtil.hideKeyboard(mActivity);
 

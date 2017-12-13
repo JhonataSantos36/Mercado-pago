@@ -7,6 +7,7 @@ import android.widget.Toast;
 
 import com.mercadopago.ExampleActivity;
 import com.mercadopago.constants.PaymentTypes;
+import com.mercadopago.customviews.MPButton;
 import com.mercadopago.examples.R;
 import com.mercadopago.examples.utils.ExamplesUtils;
 import com.mercadopago.model.ApiException;
@@ -20,6 +21,8 @@ import java.util.List;
 
 public class Step4Activity extends ExampleActivity {
 
+    private MPButton mContinueButton;
+
     protected List<String> mExcludedPaymentTypes = new ArrayList<String>(){{
         add(PaymentTypes.DEBIT_CARD);
         add(PaymentTypes.CREDIT_CARD);
@@ -29,6 +32,13 @@ public class Step4Activity extends ExampleActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_step4);
+        mContinueButton = findViewById(R.id.continueButton);
+        mContinueButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                submitForm();
+            }
+        });
     }
 
     @Override
@@ -62,7 +72,7 @@ public class Step4Activity extends ExampleActivity {
         }
     }
 
-    public void submitForm(View view) {
+    public void submitForm() {
 
         // Call final vault activity
         ExamplesUtils.startFinalVaultActivity(this, ExamplesUtils.DUMMY_MERCHANT_PUBLIC_KEY,

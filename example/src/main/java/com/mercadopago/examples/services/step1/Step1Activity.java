@@ -10,6 +10,7 @@ import com.mercadopago.ExampleActivity;
 import com.mercadopago.constants.PaymentMethods;
 import com.mercadopago.constants.PaymentTypes;
 import com.mercadopago.core.MercadoPago;
+import com.mercadopago.customviews.MPButton;
 import com.mercadopago.examples.R;
 import com.mercadopago.examples.utils.ExamplesUtils;
 import com.mercadopago.model.ApiException;
@@ -23,6 +24,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Step1Activity extends ExampleActivity {
+
+    private MPButton mSubmitButton;
 
     protected List<String> mExcludedPaymentTypeIds = new ArrayList<String>() {{
         add(PaymentTypes.TICKET);
@@ -44,6 +47,13 @@ public class Step1Activity extends ExampleActivity {
         mPaymentPreference = new PaymentPreference();
         mPaymentPreference.setExcludedPaymentTypeIds(mExcludedPaymentTypeIds);
         mPaymentPreference.setExcludedPaymentMethodIds(mExcludedPaymentMethodIds);
+        mSubmitButton = findViewById(R.id.btnSimpleFlow);
+        mSubmitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                submitSimpleForm();
+            }
+        });
     }
 
     @Override
@@ -93,7 +103,7 @@ public class Step1Activity extends ExampleActivity {
         }
     }
 
-    public void submitSimpleForm(View view) {
+    private void submitSimpleForm() {
 
         // Call payment methods activity
         new MercadoPago.StartActivityBuilder()

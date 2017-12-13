@@ -56,11 +56,11 @@
                 style="@style/form_label"/>
 
             <com.mercadopago.customviews.MPButton
+                android:id="@+id/continueButton"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/mpsdk_button_height"
                 android:layout_marginTop="25dp"
                 android:text="@string/mpsdk_continue_label"
-                android:onClick="onContinueClicked"
                 style="@style/mpsdk_button_normal"/>
 
             <TextView

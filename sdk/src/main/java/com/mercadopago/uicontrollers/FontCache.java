@@ -1,6 +1,5 @@
 package com.mercadopago.uicontrollers;
 
-import android.content.Context;
 import android.graphics.Typeface;
 
 import java.util.HashMap;
@@ -28,18 +27,4 @@ public class FontCache {
         return fontCache.containsKey(fontName);
     }
 
-    public static Typeface createTypeface(String fontName, Context context) {
-        Typeface typeFace;
-        if (hasTypeface(fontName)) {
-            typeFace = getTypeface(fontName);
-        } else {
-            try {
-                typeFace = Typeface.createFromAsset(context.getAssets(), fontName);
-            } catch (Exception e) {
-                return null;
-            }
-            setTypeface(fontName, typeFace);
-        }
-        return typeFace;
-    }
 }

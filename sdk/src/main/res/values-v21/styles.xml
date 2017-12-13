@@ -1,5 +1,23 @@
 <resources>
 
+    <style name="mpsdk_font_roboto_regular">
+        <item name="fontFamily">@font/roboto</item>
+    </style>
+    <style name="mpsdk_font_roboto_light">
+        <item name="fontFamily">@font/roboto_light</item>
+    </style>
+    <style name="mpsdk_font_roboto_bold">
+        <item name="fontFamily">@font/roboto_bold</item>
+    </style>
+    <style name="mpsdk_font_roboto_mono">
+        <item name="fontFamily">@font/roboto_mono</item>
+    </style>
+
+    <style name="mpsdk_basic_color">
+        <item name="android:textColor">@color/mpsdk_black</item>
+    </style>
+
+
     <style name="Theme.MercadoPagoTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>

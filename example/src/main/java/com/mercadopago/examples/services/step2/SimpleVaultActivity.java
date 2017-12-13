@@ -114,13 +114,19 @@ public class SimpleVaultActivity extends AppCompatActivity {
 
     private void initializeControls() {
         mSecurityCodeCard = findViewById(R.id.securityCodeCard);
-        mCVVImage = (ImageView) findViewById(R.id.cVVImage);
-        mCVVDescriptor = (MPTextView) findViewById(R.id.cVVDescriptor);
-        mSubmitButton = (MPButton) findViewById(R.id.submitButton);
-        mCustomerMethodsLayout = (LinearLayout) findViewById(R.id.customerMethodLayout);
-        mPaymentMethodImage = (ImageView) findViewById(R.id.pmImage);
-        mCustomerMethodsText = (MPTextView) findViewById(R.id.customerMethodLabel);
-        mSecurityCodeText = (MPEditText) findViewById(R.id.securityCode);
+        mCVVImage = findViewById(R.id.cVVImage);
+        mCVVDescriptor = findViewById(R.id.cVVDescriptor);
+        mSubmitButton = findViewById(R.id.submitButton);
+        mCustomerMethodsLayout = findViewById(R.id.customerMethodLayout);
+        mPaymentMethodImage = findViewById(R.id.pmImage);
+        mCustomerMethodsText = findViewById(R.id.customerMethodLabel);
+        mSecurityCodeText = findViewById(R.id.securityCode);
+        mSubmitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                submitForm();
+            }
+        });
     }
 
     private void getActivityParameters() {
@@ -372,7 +378,7 @@ public class SimpleVaultActivity extends AppCompatActivity {
                 // If the event is a key-down event on the "enter" button
                 if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
                         (keyCode == KeyEvent.KEYCODE_ENTER)) {
-                    submitForm(v);
+                    submitForm();
                 }
                 return false;
             }
@@ -395,7 +401,7 @@ public class SimpleVaultActivity extends AppCompatActivity {
         mSubmitButton.setEnabled(true);
     }
 
-    public void submitForm(View view) {
+    public void submitForm() {
 
         LayoutUtil.hideKeyboard(mActivity);
 

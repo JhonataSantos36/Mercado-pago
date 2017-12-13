@@ -18,6 +18,7 @@ import com.mercadopago.constants.Sites;
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.core.MercadoPagoUI;
 import com.mercadopago.core.MerchantServer;
+import com.mercadopago.customviews.MPButton;
 import com.mercadopago.examples.R;
 import com.mercadopago.examples.utils.ColorPickerDialog;
 import com.mercadopago.examples.utils.ExamplesUtils;
@@ -50,6 +51,14 @@ public class ComponentsExampleActivity extends AppCompatActivity {
     private CheckBox mCashExcluded;
     private ProgressBar mProgressBar;
     private View mRegularLayout;
+    private MPButton mCompleteSelectionButton;
+    private MPButton mCardInstallmentsButton;
+    private MPButton mCardNoInstallmentsButton;
+    private MPButton mPaymentMethodSelectionButton;
+    private MPButton mIssuersSelectionButton;
+    private MPButton mInstallmentsSelectionButton;
+    private MPButton mCustomerCardSelectionButton;
+    private MPButton mPayButton;
 
     private String mPublicKey;
     private Integer mSelectedColor;
@@ -64,18 +73,82 @@ public class ComponentsExampleActivity extends AppCompatActivity {
 
         mActivity = this;
         mCreatePaymentExampleSelected = false;
-        mColorSample = (ImageView) findViewById(R.id.colorSample);
+        mColorSample = findViewById(R.id.colorSample);
         mDefaultColor = ContextCompat.getColor(this, R.color.colorPrimary);
-        mDarkFontEnabled = (CheckBox) findViewById(R.id.darkFontEnabled);
-        mCashExcluded = (CheckBox) findViewById(R.id.cashExcluded);
-        mVisaExcluded = (CheckBox) findViewById(R.id.visaExcluded);
-        mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
+        mDarkFontEnabled = findViewById(R.id.darkFontEnabled);
+        mCashExcluded = findViewById(R.id.cashExcluded);
+        mVisaExcluded = findViewById(R.id.visaExcluded);
+        mProgressBar = findViewById(R.id.progressBar);
         mRegularLayout = findViewById(R.id.regularLayout);
         mPublicKey = ExamplesUtils.DUMMY_MERCHANT_PUBLIC_KEY_EXAMPLES_SERVICE;
         mAmount = ExamplesUtils.DUMMY_ITEM_UNIT_PRICE;
+        mCompleteSelectionButton = findViewById(R.id.completeSelectionButton);
+        mCardInstallmentsButton = findViewById(R.id.cardInstallmentsButton);
+        mCardNoInstallmentsButton = findViewById(R.id.cardNoInstallmentsButton);
+        mPaymentMethodSelectionButton = findViewById(R.id.paymentMethodSelectionButton);
+        mIssuersSelectionButton = findViewById(R.id.issuersSelectionButton);
+        mInstallmentsSelectionButton = findViewById(R.id.installmentsSelectionButton);
+        mCustomerCardSelectionButton = findViewById(R.id.customerCardSelectionButton);
+        mPayButton = findViewById(R.id.payButton);
+
+        mCompleteSelectionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onCompletePaymentMethodSelectionClicked();
+            }
+        });
+
+        mCardInstallmentsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onCardWithInstallmentsClicked();
+            }
+        });
+
+        mCardNoInstallmentsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onCardWithoutInstallmentsClicked();
+            }
+        });
+
+        mPaymentMethodSelectionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onPaymentMethodsSelectionClicked();
+            }
+        });
+
+        mIssuersSelectionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onIssuersSelectionClicked();
+            }
+        });
+
+        mInstallmentsSelectionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onInstallmentsSelectionClicked();
+            }
+        });
+
+        mCustomerCardSelectionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onCustomerCardSelectionClicked();
+            }
+        });
+
+        mPayButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onPayButtonClicked();
+            }
+        });
     }
 
-    public void onCompletePaymentMethodSelectionClicked(View view) {
+    private void onCompletePaymentMethodSelectionClicked() {
         PaymentPreference paymentPreference = getCurrentPaymentPreference();
         DecorationPreference decorationPreference = getCurrentDecorationPreference();
 
@@ -89,7 +162,7 @@ public class ComponentsExampleActivity extends AppCompatActivity {
                 .startPaymentVaultActivity();
     }
 
-    public void onCardWithInstallmentsClicked(View view) {
+    public void onCardWithInstallmentsClicked() {
         startCardVaultWithInstallments();
     }
 
@@ -108,7 +181,7 @@ public class ComponentsExampleActivity extends AppCompatActivity {
                 .startCardVaultActivity();
     }
 
-    public void onCardWithoutInstallmentsClicked(View view) {
+    private void onCardWithoutInstallmentsClicked() {
         PaymentPreference paymentPreference = getCurrentPaymentPreference();
         DecorationPreference decorationPreference = getCurrentDecorationPreference();
 
@@ -120,7 +193,7 @@ public class ComponentsExampleActivity extends AppCompatActivity {
                 .startCardVaultActivity();
     }
 
-    public void onPaymentMethodsSelectionClicked(View view) {
+    private void onPaymentMethodsSelectionClicked() {
         PaymentPreference paymentPreference = getCurrentPaymentPreference();
         DecorationPreference decorationPreference = getCurrentDecorationPreference();
 
@@ -132,7 +205,7 @@ public class ComponentsExampleActivity extends AppCompatActivity {
                 .startPaymentMethodsActivity();
     }
 
-    public void onIssuersSelectionClicked(View view) {
+    private void onIssuersSelectionClicked() {
         PaymentPreference paymentPreference = getCurrentPaymentPreference();
         DecorationPreference decorationPreference = getCurrentDecorationPreference();
 
@@ -148,7 +221,7 @@ public class ComponentsExampleActivity extends AppCompatActivity {
                 .startIssuersActivity();
     }
 
-    public void onInstallmentsSelectionClicked(View view) {
+    private void onInstallmentsSelectionClicked() {
         PaymentPreference paymentPreference = getCurrentPaymentPreference();
         DecorationPreference decorationPreference = getCurrentDecorationPreference();
 
@@ -170,7 +243,7 @@ public class ComponentsExampleActivity extends AppCompatActivity {
                 .startInstallmentsActivity();
     }
 
-    public void onCustomerCardSelectionClicked(View view) {
+    private void onCustomerCardSelectionClicked() {
         final PaymentPreference paymentPreference = getCurrentPaymentPreference();
         final DecorationPreference decorationPreference = getCurrentDecorationPreference();
 
@@ -345,7 +418,7 @@ public class ComponentsExampleActivity extends AppCompatActivity {
         return paymentPreference;
     }
 
-    public void onPayButtonClicked(View view) {
+    private void onPayButtonClicked() {
         mCreatePaymentExampleSelected = true;
         startCardVaultWithInstallments();
     }
