@@ -33,7 +33,7 @@ import static org.junit.Assert.*;
 @LargeTest
 public class MPTrackerTest {
 
-    private static final String MOCKED_CLIENT_ID = "12345";
+    private static final String MOCKED_FLOW_ID = "12345";
     private static final String MOCKED_CHECKOUT_VERSION = "3.0.0";
     private static final String MOCKED_PLATFORM = "native/android";
     private static final String MOCKED_PUBLIC_KEY = "public_key";
@@ -82,12 +82,9 @@ public class MPTrackerTest {
     public void sendScreenViewEventTrack() {
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        String clientId = MOCKED_CLIENT_ID;
-
         AppInformation appInformation = new AppInformation.Builder()
                 .setCheckoutVersion(MOCKED_CHECKOUT_VERSION)
                 .setPlatform(MOCKED_PLATFORM)
-                .setPublicKey(MOCKED_PUBLIC_KEY)
                 .build();
 
         DeviceInfo deviceInfo = new DeviceInfo.Builder()
@@ -99,6 +96,7 @@ public class MPTrackerTest {
                 .build();
 
         final Event screenViewEvent = new ScreenViewEvent.Builder()
+            .setFlowId(MOCKED_FLOW_ID)
             .setScreenId(MOCKED_SCREEN_ID_1)
             .setScreenName(MOCKED_SCREEN_REVIEW_AND_CONFIRM)
             .build();
@@ -119,25 +117,21 @@ public class MPTrackerTest {
             }
         });
 
-        MPTracker.getInstance().trackEvent(MOCKED_CLIENT_ID, appInformation, deviceInfo, screenViewEvent, appContext, TrackingUtil.BATCH_STRATEGY);
+        MPTracker.getInstance().trackEvent(MOCKED_PUBLIC_KEY, appInformation, deviceInfo, screenViewEvent, appContext, TrackingUtil.BATCH_STRATEGY);
 
         TrackingStrategy strategy = MPTracker.getInstance().getTrackingStrategy();
 
         assertEquals(strategy.getAppInformation(), appInformation);
         assertEquals(strategy.getDeviceInfo(), deviceInfo);
-        assertEquals(strategy.getClientId(), clientId);
     }
 
     @Test
     public void sendActionEventTrack() {
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        String clientId = MOCKED_CLIENT_ID;
-
         AppInformation appInformation = new AppInformation.Builder()
                 .setCheckoutVersion(MOCKED_CHECKOUT_VERSION)
                 .setPlatform(MOCKED_PLATFORM)
-                .setPublicKey(MOCKED_PUBLIC_KEY)
                 .build();
 
         DeviceInfo deviceInfo = new DeviceInfo.Builder()
@@ -183,12 +177,9 @@ public class MPTrackerTest {
     public void sendErrorEventTrack() {
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        String clientId = MOCKED_CLIENT_ID;
-
         AppInformation appInformation = new AppInformation.Builder()
                 .setCheckoutVersion(MOCKED_CHECKOUT_VERSION)
                 .setPlatform(MOCKED_PLATFORM)
-                .setPublicKey(MOCKED_PUBLIC_KEY)
                 .build();
 
         DeviceInfo deviceInfo = new DeviceInfo.Builder()
@@ -289,12 +280,9 @@ public class MPTrackerTest {
     public void sendErrorEventWithStackTraceInfo() {
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        String clientId = MOCKED_CLIENT_ID;
-
         AppInformation appInformation = new AppInformation.Builder()
                 .setCheckoutVersion(MOCKED_CHECKOUT_VERSION)
                 .setPlatform(MOCKED_PLATFORM)
-                .setPublicKey(MOCKED_PUBLIC_KEY)
                 .build();
 
         DeviceInfo deviceInfo = new DeviceInfo.Builder()
@@ -332,7 +320,7 @@ public class MPTrackerTest {
             }
         });
 
-        MPTracker.getInstance().trackEvent(MOCKED_CLIENT_ID, appInformation, deviceInfo, errorEvent, appContext, null);
+        MPTracker.getInstance().trackEvent(MOCKED_PUBLIC_KEY, appInformation, deviceInfo, errorEvent, appContext, null);
 
         ErrorEvent sentEvent = (ErrorEvent) MPTracker.getInstance().getEvent();
         List<StackTraceInfo> sentStackTraceList = sentEvent.getStackTraceList();

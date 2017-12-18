@@ -19,7 +19,7 @@ import com.mercadopago.tracking.model.Fingerprint;
 public class MPTrackingContext {
 
     private Context context;
-    private String clientId;
+    private String publicKey;
     private AppInformation appInformation;
     private DeviceInfo deviceInfo;
     private String trackingStrategy;
@@ -31,23 +31,18 @@ public class MPTrackingContext {
             builder.trackingStrategy = TrackingUtil.BATCH_STRATEGY;
         }
 
-        this.clientId = initializeClientId();
+        this.publicKey = builder.publicKey;
         this.deviceInfo = initializeDeviceInfo();
         this.trackingStrategy = builder.trackingStrategy;
 
         if (!builder.publicKey.isEmpty() && builder.checkoutVersion != null) {
-            this.appInformation = initializeAppInformation(builder.publicKey, builder.checkoutVersion);
+            this.appInformation = initializeAppInformation(builder.checkoutVersion);
         }
 
     }
 
-    private String initializeClientId() {
-        return Fingerprint.getAndroidId(this.context);
-    }
-
-    private AppInformation initializeAppInformation(String publicKey, String checkoutVersion) {
+    private AppInformation initializeAppInformation(String checkoutVersion) {
         return new AppInformation.Builder()
-                .setPublicKey(publicKey)
                 .setCheckoutVersion(checkoutVersion)
                 .setPlatform("native/android")
                 .build();
@@ -57,6 +52,7 @@ public class MPTrackingContext {
         return new DeviceInfo.Builder()
                 .setModel(Build.MODEL)
                 .setOS("android")
+                .setUuid(Fingerprint.getAndroidId(this.context))
                 .setSystemVersion(Fingerprint.getDeviceSystemVersion())
                 .setScreenSize(Fingerprint.getDeviceResolution(this.context))
                 .setResolution(String.valueOf(Fingerprint.getDeviceScreenDensity(this.context)))
@@ -64,7 +60,7 @@ public class MPTrackingContext {
     }
 
     public void trackEvent(Event event) {
-        MPTracker.getInstance().trackEvent(clientId, appInformation, deviceInfo, event, context, trackingStrategy);
+        MPTracker.getInstance().trackEvent(publicKey, appInformation, deviceInfo, event, context, trackingStrategy);
     }
 
     public void clearExpiredTracks() {

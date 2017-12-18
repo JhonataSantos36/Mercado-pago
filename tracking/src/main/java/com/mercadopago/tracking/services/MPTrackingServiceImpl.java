@@ -77,11 +77,11 @@ public class MPTrackingServiceImpl implements MPTrackingService {
     }
 
     @Override
-    public void trackEvents(EventTrackIntent eventTrackIntent, Context context) {
+    public void trackEvents(String publicKey, EventTrackIntent eventTrackIntent, Context context) {
         Retrofit retrofit = getRetrofit(context);
         TrackingService service = retrofit.create(TrackingService.class);
 
-        Call<Void> call = service.trackEvents(Settings.eventsTrackingVersion, Settings.servicesVersion, eventTrackIntent);
+        Call<Void> call = service.trackEvents(Settings.eventsTrackingVersion, Settings.servicesVersion, publicKey, eventTrackIntent);
         call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
@@ -98,10 +98,10 @@ public class MPTrackingServiceImpl implements MPTrackingService {
     }
 
     @Override
-    public void trackEvents(EventTrackIntent eventTrackIntent, Context context, Callback<Void> callback) {
+    public void trackEvents(String publicKey, EventTrackIntent eventTrackIntent, Context context, Callback<Void> callback) {
         Retrofit retrofit = getRetrofit(context);
         TrackingService service = retrofit.create(TrackingService.class);
-        Call<Void> call = service.trackEvents(Settings.eventsTrackingVersion, Settings.servicesVersion, eventTrackIntent);
+        Call<Void> call = service.trackEvents(Settings.eventsTrackingVersion, Settings.servicesVersion, publicKey, eventTrackIntent);
         call.enqueue(callback);
     }
 

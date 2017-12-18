@@ -11,6 +11,7 @@ public class DeviceInfo {
     private String systemVersion;
     private String resolution;
     private String screenSize;
+    private String uuid;
 
     protected DeviceInfo() {
 
@@ -22,6 +23,7 @@ public class DeviceInfo {
         this.systemVersion = builder.systemVersion;
         this.resolution = builder.resolution;
         this.screenSize = builder.screenSize;
+        this.uuid = builder.uuid;
     }
 
     public String getModel() {
@@ -51,6 +53,7 @@ public class DeviceInfo {
         private String systemVersion;
         private String resolution;
         private String screenSize;
+        private String uuid;
 
         public Builder setModel(String model) {
             this.model = model;
@@ -77,6 +80,11 @@ public class DeviceInfo {
             return this;
         }
 
+        public Builder setUuid(String uuid) {
+            this.uuid = uuid;
+            return this;
+        }
+
         public DeviceInfo build() {
             return new DeviceInfo(this);
         }
@@ -93,6 +101,7 @@ public class DeviceInfo {
         if (!os.equals(that.os)) return false;
         if (!systemVersion.equals(that.systemVersion)) return false;
         if (!resolution.equals(that.resolution)) return false;
+        if (!uuid.equals(that.uuid)) return false;
         return screenSize.equals(that.screenSize);
 
     }
@@ -104,6 +113,7 @@ public class DeviceInfo {
         result = 31 * result + systemVersion.hashCode();
         result = 31 * result + resolution.hashCode();
         result = 31 * result + screenSize.hashCode();
+        result = 31 * result + uuid.hashCode();
         return result;
     }
 }

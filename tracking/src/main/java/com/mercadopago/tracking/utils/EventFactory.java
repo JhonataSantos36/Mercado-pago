@@ -1,5 +1,6 @@
 package com.mercadopago.tracking.utils;
 
+import com.mercadopago.tracking.model.ActionEvent;
 import com.mercadopago.tracking.model.Event;
 import com.mercadopago.tracking.model.ScreenViewEvent;
 
@@ -13,10 +14,11 @@ public class EventFactory {
 
     public static Event getEvent(String toParseJson) {
         Event event = null;
-        if(toParseJson.contains(Event.TYPE_SCREEN_VIEW)){
+        if (toParseJson.contains(Event.TYPE_SCREEN_VIEW)) {
             event = JsonConverter.getInstance().fromJson(toParseJson, ScreenViewEvent.class);
-        }
-        else {
+        } else if (toParseJson.contains(Event.TYPE_ACTION)) {
+            event = JsonConverter.getInstance().fromJson(toParseJson, ActionEvent.class);
+        } else {
             throw new IllegalStateException(NO_TRACKING_SUPPORTED_ERROR_MESSAGE);
         }
 

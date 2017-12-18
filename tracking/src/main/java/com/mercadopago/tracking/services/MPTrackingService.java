@@ -16,6 +16,6 @@ public interface MPTrackingService {
 
     void trackToken(TrackingIntent trackingIntent, Context context);
     void trackPaymentId(PaymentIntent paymentIntent, Context context);
-    void trackEvents(EventTrackIntent eventTrackIntent, Context context);
-    void trackEvents(EventTrackIntent eventTrackIntent, Context context, Callback<Void> callback);
+    void trackEvents(String publicKey, EventTrackIntent eventTrackIntent, Context context);
+    void trackEvents(String publicKey, EventTrackIntent eventTrackIntent, Context context, Callback<Void> callback);
 }

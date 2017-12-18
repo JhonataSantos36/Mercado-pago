@@ -6,24 +6,27 @@ package com.mercadopago.tracking.utils;
 
 public class TrackingUtil {
 
+    //Action IDs
+    public static final String ACTION_CHECKOUT_CONFIRMED = "/checkout_confirmed";
+
     //Screen IDs
-    public static final String SCREEN_ID_CHECKOUT = "/checkout_off/init";
-    public static final String SCREEN_ID_PAYMENT_VAULT = "/checkout_off/payment_option";
-    public static final String SCREEN_ID_PAYMENT_VAULT_TICKET = "/checkout_off/payment_option/ticket";
-    public static final String SCREEN_ID_PAYMENT_VAULT_BANK_TRANSFER = "/checkout_off/payment_option/bank_transfer";
-    public static final String SCREEN_ID_PAYMENT_VAULT_CARDS = "/checkout_off/payment_option/card";
-    public static final String SCREEN_ID_REVIEW_AND_CONFIRM = "/checkout_off/review";
-    public static final String SCREEN_ID_PAYMENT_RESULT_APPROVED = "/checkout_off/congrats/approved";
-    public static final String SCREEN_ID_PAYMENT_RESULT_PENDING = "/checkout_off/congrats/in_process";
-    public static final String SCREEN_ID_PAYMENT_RESULT_REJECTED = "/checkout_off/congrats/rejected";
-    public static final String SCREEN_ID_PAYMENT_RESULT_INSTRUCTIONS = "/checkout_off/congrats/instructions";
-    public static final String SCREEN_ID_BANK_DEALS = "/checkout_off/bank_deals";
-    public static final String SCREEN_ID_CARD_FORM = "/checkout_off/card/";
-    public static final String SCREEN_ID_ERROR = "/checkout_off/failure";
-    public static final String SCREEN_ID_PAYMENT_TYPES = "/checkout_off/card/payment_types";
-    public static final String SCREEN_ID_IDENTIFICATION = "/checkout_off/identification";
-    public static final String SCREEN_ID_ISSUERS = "/checkout_off/card/issuer";
-    public static final String SCREEN_ID_INSTALLMENTS = "/checkout_off/card/installments";
+    public static final String SCREEN_ID_CHECKOUT = "/init";
+    public static final String SCREEN_ID_PAYMENT_VAULT = "/payment_option";
+    public static final String SCREEN_ID_PAYMENT_VAULT_TICKET = "/payment_option/ticket";
+    public static final String SCREEN_ID_PAYMENT_VAULT_BANK_TRANSFER = "/payment_option/bank_transfer";
+    public static final String SCREEN_ID_PAYMENT_VAULT_CARDS = "/payment_option/card";
+    public static final String SCREEN_ID_REVIEW_AND_CONFIRM = "/review";
+    public static final String SCREEN_ID_PAYMENT_RESULT_APPROVED = "/congrats/approved";
+    public static final String SCREEN_ID_PAYMENT_RESULT_PENDING = "/congrats/in_process";
+    public static final String SCREEN_ID_PAYMENT_RESULT_REJECTED = "/congrats/rejected";
+    public static final String SCREEN_ID_PAYMENT_RESULT_INSTRUCTIONS = "/congrats/instructions";
+    public static final String SCREEN_ID_BANK_DEALS = "/bank_deals";
+    public static final String SCREEN_ID_CARD_FORM = "/card/";
+    public static final String SCREEN_ID_ERROR = "/failure";
+    public static final String SCREEN_ID_PAYMENT_TYPES = "/card/payment_types";
+    public static final String SCREEN_ID_IDENTIFICATION = "/identification";
+    public static final String SCREEN_ID_ISSUERS = "/card/issuer";
+    public static final String SCREEN_ID_INSTALLMENTS = "/card/installments";
 
     //Screen Names
     public static final String SCREEN_NAME_CHECKOUT = "INIT_CHECKOUT";

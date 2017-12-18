@@ -6,22 +6,24 @@ package com.mercadopago.tracking.model;
 
 public class AppInformation {
 
-    private String publicKey;
+    private String flowId;
     private String checkoutVersion;
     private String platform;
+    private String environment;
 
     protected AppInformation() {
 
     }
 
     private AppInformation(Builder builder) {
-        this.publicKey = builder.publicKey;
+        this.flowId = builder.flowId;
         this.checkoutVersion = builder.checkoutVersion;
         this.platform = builder.platform;
+        this.environment = builder.environment;
     }
 
-    public String getPublicKey() {
-        return publicKey;
+    public String getFlowId() {
+        return flowId;
     }
 
     public String getCheckoutVersion() {
@@ -32,14 +34,19 @@ public class AppInformation {
         return platform;
     }
 
+    public void setFlowId(String flowId) {
+        this.flowId = flowId;
+    }
+
     public static class Builder {
 
-        private String publicKey;
+        private String flowId;
         private String checkoutVersion;
         private String platform;
+        private String environment;
 
-        public Builder setPublicKey(String publicKey) {
-            this.publicKey = publicKey;
+        public Builder setFlowId(String flowId) {
+            this.flowId = flowId;
             return this;
         }
 
@@ -50,6 +57,11 @@ public class AppInformation {
 
         public Builder setPlatform(String platform) {
             this.platform = platform;
+            return this;
+        }
+
+        public Builder setEnvironment(String environment) {
+            this.environment = environment;
             return this;
         }
 
@@ -65,17 +77,28 @@ public class AppInformation {
 
         AppInformation that = (AppInformation) o;
 
-        if (!publicKey.equals(that.publicKey)) return false;
+        if (!flowId.equals(that.flowId)) return false;
         if (!checkoutVersion.equals(that.checkoutVersion)) return false;
+        if (!environment.equals(that.environment)) return false;
         return platform.equals(that.platform);
 
     }
 
     @Override
     public int hashCode() {
-        int result = publicKey.hashCode();
+        int result = flowId.hashCode();
+        result = 31 * result + environment.hashCode();
         result = 31 * result + checkoutVersion.hashCode();
         result = 31 * result + platform.hashCode();
         return result;
+    }
+
+    public AppInformation copy() {
+        return new AppInformation.Builder()
+                .setEnvironment(this.environment)
+                .setFlowId(this.flowId)
+                .setCheckoutVersion(this.checkoutVersion)
+                .setPlatform(this.platform)
+                .build();
     }
 }

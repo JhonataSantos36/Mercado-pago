@@ -21,17 +21,17 @@ public class MPMockedTrackingService implements MPTrackingService {
     }
 
     @Override
+    public void trackEvents(String publicKey, EventTrackIntent eventTrackIntent, Context context) {
+
+    }
+
+    @Override
+    public void trackEvents(String publicKey, EventTrackIntent eventTrackIntent, Context context, Callback<Void> callback) {
+
+    }
+
+    @Override
     public void trackToken(TrackingIntent trackingIntent, Context context) {
-
-    }
-
-    @Override
-    public void trackEvents(EventTrackIntent eventTrackIntent, Context context) {
-
-    }
-
-    @Override
-    public void trackEvents(EventTrackIntent eventTrackIntent, Context context, Callback<Void> callback) {
 
     }
 }

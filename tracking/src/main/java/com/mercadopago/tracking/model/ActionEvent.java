@@ -16,6 +16,7 @@ public class ActionEvent extends Event {
     private ActionEvent(Builder builder) {
         super();
         setType(TYPE_ACTION);
+        setFlowId(builder.flowId);
         setTimestamp(System.currentTimeMillis());
         this.screenId = builder.screenId;
         this.screenName = builder.screenName;
@@ -51,12 +52,18 @@ public class ActionEvent extends Event {
 
     public static class Builder {
 
+        private String flowId;
         private String screenId;
         private String screenName;
         private String action;
         private String category;
         private String label;
         private String value;
+
+        public Builder setFlowId(String flowId) {
+            this.flowId = flowId;
+            return this;
+        }
 
         public Builder setScreenId(String screenId) {
             this.screenId = screenId;

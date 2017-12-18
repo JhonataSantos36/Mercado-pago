@@ -44,22 +44,24 @@ public class ForcedStrategy extends TrackingStrategy {
 
 
     private void sendTracksBatch(final Context context) {
-        final List<Event> batch = getDatabase().retrieveBatch();
-        EventTrackIntent intent = new EventTrackIntent(getClientId(), getAppInformation(), getDeviceInfo(), batch);
-        trackingService.trackEvents(intent, context, new Callback<Void>() {
-            @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
-                if (response.isSuccessful()) {
-                    performTrackAttempt(context);
-                } else {
-                    getDatabase().returnEvents(batch);
+        final List<Event> savedEvents = getDatabase().retrieveBatch();
+        List<EventTrackIntent> intents = groupEventsByFlow(savedEvents);
+        for(EventTrackIntent intent : intents) {
+            trackingService.trackEvents(getPublicKey(), intent, context, new Callback<Void>() {
+                @Override
+                public void onResponse(Call<Void> call, Response<Void> response) {
+                    if (response.isSuccessful()) {
+                        performTrackAttempt(context);
+                    } else {
+                        getDatabase().returnEvents(savedEvents);
+                    }
                 }
-            }
 
-            @Override
-            public void onFailure(Call<Void> call, Throwable t) {
-                getDatabase().returnEvents(batch);
-            }
-        });
+                @Override
+                public void onFailure(Call<Void> call, Throwable t) {
+                    getDatabase().returnEvents(savedEvents);
+                }
+            });
+        }
     }
 }

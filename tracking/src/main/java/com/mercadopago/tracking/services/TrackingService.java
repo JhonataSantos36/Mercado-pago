@@ -9,6 +9,7 @@ import retrofit2.http.Body;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 /**
  * Created by vaserber on 6/5/17.
@@ -23,5 +24,5 @@ public interface TrackingService {
     Call<Void> trackPaymentId(@Path(value = "version", encoded = true) String version, @Body PaymentIntent body);
 
     @POST("/{version}/checkout/tracking/events")
-    Call<Void> trackEvents(@Header("Accept-version") String eventsTrackingVersion, @Path(value = "version", encoded = true) String version, @Body EventTrackIntent body);
+    Call<Void> trackEvents(@Header("Accept-version") String eventsTrackingVersion, @Path(value = "version", encoded = true) String version, @Query("public_key") String publicKey, @Body EventTrackIntent body);
 }

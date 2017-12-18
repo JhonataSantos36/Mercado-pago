@@ -2,6 +2,8 @@ package com.mercadopago.tracking.utils;
 
 import android.content.Context;
 
+import com.mercadopago.tracking.core.Settings;
+
 import java.io.File;
 import java.util.concurrent.TimeUnit;
 
@@ -24,7 +26,7 @@ public class HttpClientUtil {
 
             // Set log info
             HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-            interceptor.setLevel(HttpLoggingInterceptor.Level.NONE);
+            interceptor.setLevel(Settings.OKHTTP_LOGGING);
 
             // Set cache size
             int cacheSize = 10 * 1024 * 1024; // 10 MiB

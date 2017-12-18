@@ -125,14 +125,13 @@ public class MPTracker {
     /**
      * This method tracks a list of events in one request
      *
-     * @param clientId         Id that identifies the client that is using the SDK
      * @param appInformation   Info about this application and SDK integration
      * @param deviceInfo       Info about the device that is using the app
      * @param event            Event to track
      * @param context          Application context
      * @param trackingStrategy
      */
-    public void trackEvent(String clientId, AppInformation appInformation, DeviceInfo deviceInfo, Event event, Context context, String trackingStrategy) {
+    public void trackEvent(String publicKey, AppInformation appInformation, DeviceInfo deviceInfo, Event event, Context context, String trackingStrategy) {
 
         initializeMPTrackingService();
 
@@ -145,7 +144,7 @@ public class MPTracker {
         setTrackingStrategy(context, event, trackingStrategy);
 
         if (this.trackingStrategy != null) {
-            this.trackingStrategy.setClientId(clientId);
+            this.trackingStrategy.setPublicKey(publicKey);
             this.trackingStrategy.setAppInformation(appInformation);
             this.trackingStrategy.setDeviceInfo(deviceInfo);
             this.trackingStrategy.trackEvent(event, context);

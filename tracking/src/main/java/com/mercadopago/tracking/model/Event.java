@@ -23,9 +23,18 @@ public abstract class Event {
     public @interface EventType {}
 
 
+    private String flowId;
     private Long timestamp;
     private @EventType String type;
     private Map<String, String> metadata;
+
+    public String getFlowId() {
+        return flowId;
+    }
+
+    public void setFlowId(String flowId) {
+        this.flowId = flowId;
+    }
 
     public Long getTimestamp() {
         return timestamp;

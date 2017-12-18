@@ -2,6 +2,7 @@ package com.mercadopago.tracking.strategies;
 
 import android.content.Context;
 
+import com.mercadopago.tracking.model.AppInformation;
 import com.mercadopago.tracking.model.Event;
 import com.mercadopago.tracking.model.EventTrackIntent;
 import com.mercadopago.tracking.services.MPTrackingService;
@@ -20,7 +21,10 @@ public class RealTimeTrackingStrategy extends TrackingStrategy {
     public void trackEvent(Event event, Context context) {
         List<Event> events = new ArrayList<>();
         events.add(event);
-        EventTrackIntent eventTrackIntent = new EventTrackIntent(getClientId(), getAppInformation(), getDeviceInfo(), events);
-        trackingService.trackEvents(eventTrackIntent, context);
+        //Adapt to service v2.
+        AppInformation appInformation = getAppInformation();
+        appInformation.setFlowId(event.getFlowId());
+        EventTrackIntent eventTrackIntent = new EventTrackIntent(appInformation, getDeviceInfo(), events);
+        trackingService.trackEvents(getPublicKey(), eventTrackIntent, context);
     }
 }

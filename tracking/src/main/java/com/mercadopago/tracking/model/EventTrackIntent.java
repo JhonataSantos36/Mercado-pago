@@ -8,20 +8,14 @@ import java.util.List;
 
 public class EventTrackIntent {
 
-    private String clientId;
     private AppInformation application;
     private DeviceInfo device;
     private List<Event> events;
 
-    public EventTrackIntent(String clientId, AppInformation application, DeviceInfo device, List<Event> events) {
-        this.clientId = clientId;
+    public EventTrackIntent(AppInformation application, DeviceInfo device, List<Event> events) {
         this.application = application;
         this.device = device;
         this.events = events;
-    }
-
-    public String getClientId() {
-        return clientId;
     }
 
     public AppInformation getApplication() {

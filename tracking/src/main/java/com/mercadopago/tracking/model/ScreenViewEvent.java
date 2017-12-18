@@ -21,6 +21,7 @@ public class ScreenViewEvent extends Event {
         setType(TYPE_SCREEN_VIEW);
         setTimestamp(System.currentTimeMillis());
         setMetadata(builder.metadata);
+        setFlowId(builder.flowId);
         this.screenId = builder.screenId;
         this.screenName = builder.screenName;
     }
@@ -35,9 +36,15 @@ public class ScreenViewEvent extends Event {
 
     public static class Builder {
 
+        private String flowId;
         private String screenId;
         private String screenName;
         private Map<String, String> metadata = new HashMap<>();
+
+        public Builder setFlowId(String flowId) {
+            this.flowId = flowId;
+            return this;
+        }
 
         public Builder setScreenId(String screenId) {
             this.screenId = screenId;
