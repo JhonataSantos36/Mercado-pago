@@ -22,7 +22,7 @@ public class RealTimeTrackingStrategy extends TrackingStrategy {
         List<Event> events = new ArrayList<>();
         events.add(event);
         //Adapt to service v2.
-        AppInformation appInformation = getAppInformation();
+        AppInformation appInformation = getAppInformation().copy();
         appInformation.setFlowId(event.getFlowId());
         EventTrackIntent eventTrackIntent = new EventTrackIntent(appInformation, getDeviceInfo(), events);
         trackingService.trackEvents(getPublicKey(), eventTrackIntent, context);

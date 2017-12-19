@@ -16,6 +16,7 @@ import com.mercadopago.tracking.strategies.BatchTrackingStrategy;
 import com.mercadopago.tracking.strategies.ConnectivityCheckerImpl;
 import com.mercadopago.tracking.strategies.EventsDatabaseImpl;
 import com.mercadopago.tracking.strategies.ForcedStrategy;
+import com.mercadopago.tracking.strategies.RealTimeTrackingStrategy;
 import com.mercadopago.tracking.strategies.TrackingStrategy;
 import com.mercadopago.tracking.services.MPTrackingService;
 import com.mercadopago.tracking.services.MPTrackingServiceImpl;
@@ -243,6 +244,8 @@ public class MPTracker {
             trackingStrategy = new BatchTrackingStrategy(database, new ConnectivityCheckerImpl(context), mMPTrackingService);
         } else if (isForcedStrategy(strategy)) {
             trackingStrategy = new ForcedStrategy(database, new ConnectivityCheckerImpl(context), mMPTrackingService);
+        } else {
+            trackingStrategy = new RealTimeTrackingStrategy(mMPTrackingService);
         }
 
         return trackingStrategy;
@@ -255,7 +258,6 @@ public class MPTracker {
     private boolean isBatchStrategy(String strategy) {
         return strategy != null && strategy.equals(TrackingUtil.BATCH_STRATEGY);
     }
-
 
     private boolean isErrorScreen(String name) {
         return name.equals(TrackingUtil.SCREEN_NAME_ERROR);
