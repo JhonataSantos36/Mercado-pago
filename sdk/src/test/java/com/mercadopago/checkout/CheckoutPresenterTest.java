@@ -1848,12 +1848,63 @@ public class CheckoutPresenterTest {
         assertTrue(view.showingError);
     }
 
+    @Test
+    public void ifNotNewFlowThenDoNotTrackInit() {
+        MockedProvider provider = new MockedProvider();
+        MockedView view = new MockedView();
+
+        CheckoutPresenter presenter = new CheckoutPresenter();
+        presenter.attachResourcesProvider(provider);
+        presenter.attachView(view);
+
+        PaymentData paymentData = new PaymentData();
+        paymentData.setPaymentMethod(PaymentMethods.getPaymentMethodOff());
+
+        //Real preference, with items
+        CheckoutPreference preference = new CheckoutPreference.Builder()
+                .addItem(new Item("id", BigDecimal.TEN))
+                .setSite(Sites.ARGENTINA)
+                .build();
+
+        provider.setCheckoutPreferenceResponse(preference);
+        presenter.setCheckoutPreference(preference);
+
+        //With a PaymentData input
+        presenter.setPaymentDataInput(paymentData);
+
+        presenter.initialize();
+        assertFalse(view.initTracked);
+    }
+
+    @Test
+    public void ifNewFlowThenDoTrackInit() {
+        MockedProvider provider = new MockedProvider();
+        MockedView view = new MockedView();
+
+        CheckoutPresenter presenter = new CheckoutPresenter();
+        presenter.attachResourcesProvider(provider);
+        presenter.attachView(view);
+
+        //Real preference, with items
+        CheckoutPreference preference = new CheckoutPreference.Builder()
+                .addItem(new Item("id", BigDecimal.TEN))
+                .setSite(Sites.ARGENTINA)
+                .build();
+
+        provider.setCheckoutPreferenceResponse(preference);
+        presenter.setCheckoutPreference(preference);
+
+        presenter.initialize();
+        assertTrue(view.initTracked);
+    }
+
     private class MockedView implements CheckoutView {
 
         private MercadoPagoError errorShown;
         private boolean showingError = false;
         private boolean showingPaymentMethodSelection = false;
         private boolean showingReviewAndConfirm = false;
+        private boolean initTracked = false;
         private PaymentData paymentDataFinalResponse;
         private boolean showingPaymentResult = false;
         private boolean checkoutCanceled = false;
@@ -1977,7 +2028,7 @@ public class CheckoutPresenterTest {
 
         @Override
         public void trackScreen() {
-
+            initTracked = true;
         }
 
         @Override

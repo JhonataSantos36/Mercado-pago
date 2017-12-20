@@ -29,6 +29,7 @@ import com.mercadopago.model.ReviewSubscriber;
 import com.mercadopago.model.Reviewable;
 import com.mercadopago.observers.TimerObserver;
 import com.mercadopago.preferences.PaymentResultScreenPreference;
+import com.mercadopago.tracker.FlowHandler;
 import com.mercadopago.tracker.MPTrackingContext;
 import com.mercadopago.tracking.model.ScreenViewEvent;
 import com.mercadopago.tracking.utils.TrackingUtil;
@@ -160,6 +161,7 @@ public class PendingActivity extends MercadoPagoBaseActivity implements TimerObs
 
 
         ScreenViewEvent.Builder builder = new ScreenViewEvent.Builder()
+                .setFlowId(FlowHandler.getInstance().getFlowId())
                 .setScreenId(TrackingUtil.SCREEN_ID_PAYMENT_RESULT_PENDING)
                 .setScreenName(TrackingUtil.SCREEN_NAME_PAYMENT_RESULT_PENDING)
                 .addMetaData(TrackingUtil.METADATA_PAYMENT_IS_EXPRESS, TrackingUtil.IS_EXPRESS_DEFAULT_VALUE)

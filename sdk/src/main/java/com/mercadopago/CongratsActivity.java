@@ -33,6 +33,7 @@ import com.mercadopago.model.Reviewable;
 import com.mercadopago.model.Site;
 import com.mercadopago.preferences.PaymentResultScreenPreference;
 import com.mercadopago.preferences.ServicePreference;
+import com.mercadopago.tracker.FlowHandler;
 import com.mercadopago.tracker.MPTrackingContext;
 import com.mercadopago.tracking.model.ScreenViewEvent;
 import com.mercadopago.tracking.utils.TrackingUtil;
@@ -240,13 +241,13 @@ public class CongratsActivity extends MercadoPagoBaseActivity implements ReviewS
     }
 
     protected void trackScreen() {
-        MPTrackingContext mpTrackingContext = new MPTrackingContext.Builder(this, mMerchantPublicKey)
+        final MPTrackingContext mpTrackingContext = new MPTrackingContext.Builder(this, mMerchantPublicKey)
                 .setCheckoutVersion(BuildConfig.VERSION_NAME)
                 .setTrackingStrategy(TrackingUtil.FORCED_STRATEGY)
                 .build();
 
-
-        ScreenViewEvent.Builder builder = new ScreenViewEvent.Builder()
+        final ScreenViewEvent.Builder builder = new ScreenViewEvent.Builder()
+                .setFlowId(FlowHandler.getInstance().getFlowId())
                 .setScreenId(TrackingUtil.SCREEN_ID_PAYMENT_RESULT_APPROVED)
                 .setScreenName(TrackingUtil.SCREEN_NAME_PAYMENT_RESULT_APPROVED)
                 .addMetaData(TrackingUtil.METADATA_PAYMENT_IS_EXPRESS, TrackingUtil.IS_EXPRESS_DEFAULT_VALUE)

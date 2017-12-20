@@ -46,6 +46,7 @@ import com.mercadopago.preferences.FlowPreference;
 import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.preferences.ServicePreference;
 import com.mercadopago.presenters.PaymentVaultPresenter;
+import com.mercadopago.tracker.FlowHandler;
 import com.mercadopago.tracker.MPTrackingContext;
 import com.mercadopago.providers.PaymentVaultProviderImpl;
 import com.mercadopago.tracking.model.ScreenViewEvent;
@@ -245,6 +246,7 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
                 .setTrackingStrategy(TrackingUtil.BATCH_STRATEGY)
                 .build();
         ScreenViewEvent event = new ScreenViewEvent.Builder()
+                .setFlowId(FlowHandler.getInstance().getFlowId())
                 .setScreenId(TrackingUtil.SCREEN_ID_PAYMENT_VAULT)
                 .setScreenName(TrackingUtil.SCREEN_NAME_PAYMENT_VAULT)
                 .build();
@@ -266,21 +268,25 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
 
             if (TrackingUtil.GROUP_TICKET.equals(selectedItemId)) {
                 event = new ScreenViewEvent.Builder()
+                        .setFlowId(FlowHandler.getInstance().getFlowId())
                         .setScreenId(TrackingUtil.SCREEN_ID_PAYMENT_VAULT_TICKET)
                         .setScreenName(TrackingUtil.SCREEN_NAME_PAYMENT_VAULT_TICKET)
                         .build();
             } else if (TrackingUtil.GROUP_BANK_TRANSFER.equals(selectedItemId)) {
                 event = new ScreenViewEvent.Builder()
+                        .setFlowId(FlowHandler.getInstance().getFlowId())
                         .setScreenId(TrackingUtil.SCREEN_ID_PAYMENT_VAULT_BANK_TRANSFER)
                         .setScreenName(TrackingUtil.SCREEN_NAME_PAYMENT_VAULT_BANK_TRANSFER)
                         .build();
             } else if (TrackingUtil.GROUP_CARDS.equals(selectedItemId)) {
                 event = new ScreenViewEvent.Builder()
+                        .setFlowId(FlowHandler.getInstance().getFlowId())
                         .setScreenId(TrackingUtil.SCREEN_ID_PAYMENT_VAULT_CARDS)
                         .setScreenName(TrackingUtil.SCREEN_NAME_PAYMENT_VAULT_CARDS)
                         .build();
             } else {
                 event = new ScreenViewEvent.Builder()
+                        .setFlowId(FlowHandler.getInstance().getFlowId())
                         .setScreenId(TrackingUtil.SCREEN_ID_PAYMENT_VAULT)
                         .setScreenName(TrackingUtil.SCREEN_NAME_PAYMENT_VAULT)
                         .build();

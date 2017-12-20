@@ -108,13 +108,18 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
         try {
             validatePreference();
             getView().initializeMPTracker();
-            getView().trackScreen();
-
+            if(isNewFlow()) {
+                getView().trackScreen();
+            }
             startCheckout();
         } catch (CheckoutPreferenceException e) {
             String message = getResourcesProvider().getCheckoutExceptionMessage(e);
             getView().showError(new MercadoPagoError(message, false));
         }
+    }
+
+    private boolean isNewFlow() {
+        return mPaymentDataInput == null && mPaymentResultInput == null;
     }
 
     private void validateParameters() throws IllegalStateException {

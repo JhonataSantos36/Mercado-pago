@@ -22,6 +22,7 @@ import com.mercadopago.preferences.FlowPreference;
 import com.mercadopago.preferences.PaymentResultScreenPreference;
 import com.mercadopago.preferences.ReviewScreenPreference;
 import com.mercadopago.preferences.ServicePreference;
+import com.mercadopago.tracker.FlowHandler;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.TextUtil;
 
@@ -75,6 +76,11 @@ public class MercadoPagoCheckout {
 
         PreferenceStore.getInstance().setDecorationPreference(decorationPreference);
         HooksStore.getInstance().setCheckoutHooks(builder.checkoutHooks);
+
+        //Create flow identifier only for new checkouts
+        if(paymentResult == null && paymentData == null) {
+            FlowHandler.getInstance().generateFlowId();
+        }
     }
 
     private void customizeServices(ServicePreference servicePreference) {
@@ -110,12 +116,6 @@ public class MercadoPagoCheckout {
         }
         if (checkoutPreference == null) {
             throw new IllegalStateException("Checkout preference required");
-        }
-        if ((CallbackHolder.getInstance().hasPaymentCallback() || resultCode.equals(MercadoPagoCheckout.PAYMENT_RESULT_CODE))
-                && !this.checkoutPreference.hasId()
-                && (this.servicePreference == null || !this.servicePreference.hasCreatePaymentURL())) {
-            //TODO revisar
-//            throw new IllegalStateException("Payment service or preference created with private key required to create a payment");
         }
         if (hasTwoDiscountsSet()) {
             throw new IllegalStateException("payment data discount and discount set");

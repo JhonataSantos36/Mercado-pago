@@ -34,8 +34,9 @@ import com.mercadopago.preferences.ServicePreference;
 import com.mercadopago.presenters.CheckoutPresenter;
 import com.mercadopago.providers.CheckoutProvider;
 import com.mercadopago.providers.CheckoutProviderImpl;
+import com.mercadopago.tracker.FlowHandler;
 import com.mercadopago.tracker.MPTrackingContext;
-import com.mercadopago.tracking.model.ScreenViewEvent;
+import com.mercadopago.tracking.model.ActionEvent;
 import com.mercadopago.tracking.tracker.MPTracker;
 import com.mercadopago.tracking.utils.TrackingUtil;
 import com.mercadopago.util.ErrorUtil;
@@ -140,13 +141,12 @@ public class CheckoutActivity extends MercadoPagoBaseActivity implements Checkou
 
     @Override
     public void trackScreen() {
-        MPTrackingContext mpTrackingContext = new MPTrackingContext.Builder(this, mMerchantPublicKey)
+        final MPTrackingContext mpTrackingContext = new MPTrackingContext.Builder(this, mMerchantPublicKey)
                 .setCheckoutVersion(BuildConfig.VERSION_NAME)
-                .setTrackingStrategy(TrackingUtil.BATCH_STRATEGY)
                 .build();
-        ScreenViewEvent event = new ScreenViewEvent.Builder()
-                .setScreenId(TrackingUtil.SCREEN_ID_CHECKOUT)
-                .setScreenName(TrackingUtil.SCREEN_NAME_CHECKOUT)
+        final ActionEvent event = new ActionEvent.Builder()
+                .setFlowId(FlowHandler.getInstance().getFlowId())
+                .setAction(TrackingUtil.SCREEN_ID_CHECKOUT)
                 .build();
         mpTrackingContext.clearExpiredTracks();
         mpTrackingContext.trackEvent(event);

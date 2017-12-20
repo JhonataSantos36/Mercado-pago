@@ -26,6 +26,7 @@ import com.mercadopago.model.PaymentType;
 import com.mercadopago.observers.TimerObserver;
 import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.presenters.PaymentTypesPresenter;
+import com.mercadopago.tracker.FlowHandler;
 import com.mercadopago.tracker.MPTrackingContext;
 import com.mercadopago.tracking.model.ScreenViewEvent;
 import com.mercadopago.tracking.utils.TrackingUtil;
@@ -154,6 +155,7 @@ public class PaymentTypesActivity extends MercadoPagoBaseActivity implements Pay
                 .build();
 
         ScreenViewEvent event = new ScreenViewEvent.Builder()
+                .setFlowId(FlowHandler.getInstance().getFlowId())
                 .setScreenId(TrackingUtil.SCREEN_ID_PAYMENT_TYPES)
                 .setScreenName(TrackingUtil.SCREEN_NAME_PAYMENT_TYPES)
                 .build();

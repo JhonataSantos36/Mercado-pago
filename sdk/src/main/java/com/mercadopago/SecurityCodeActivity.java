@@ -35,6 +35,7 @@ import com.mercadopago.observers.TimerObserver;
 import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.presenters.SecurityCodePresenter;
 import com.mercadopago.providers.SecurityCodeProviderImpl;
+import com.mercadopago.tracker.FlowHandler;
 import com.mercadopago.tracker.MPTrackingContext;
 import com.mercadopago.tracking.model.ScreenViewEvent;
 import com.mercadopago.tracking.utils.TrackingUtil;
@@ -320,6 +321,7 @@ public class SecurityCodeActivity extends MercadoPagoBaseActivity implements Sec
                 .build();
 
         ScreenViewEvent event = new ScreenViewEvent.Builder()
+                .setFlowId(FlowHandler.getInstance().getFlowId())
                 .setScreenId(TrackingUtil.SCREEN_ID_CARD_FORM + mSecurityCodePresenter.getPaymentMethod().getPaymentTypeId() + TrackingUtil.CARD_SECURITY_CODE_VIEW)
                 .setScreenName(TrackingUtil.SCREEN_NAME_SECURITY_CODE)
                 .addMetaData(TrackingUtil.METADATA_SECURITY_CODE_REASON, mReason)

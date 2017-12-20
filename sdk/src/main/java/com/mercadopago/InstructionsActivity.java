@@ -39,6 +39,7 @@ import com.mercadopago.model.PaymentResult;
 import com.mercadopago.model.Site;
 import com.mercadopago.preferences.PaymentResultScreenPreference;
 import com.mercadopago.preferences.ServicePreference;
+import com.mercadopago.tracker.FlowHandler;
 import com.mercadopago.tracker.MPTrackingContext;
 import com.mercadopago.tracking.model.ScreenViewEvent;
 import com.mercadopago.tracking.utils.TrackingUtil;
@@ -209,6 +210,7 @@ public class InstructionsActivity extends MercadoPagoBaseActivity {
 
 
         ScreenViewEvent.Builder builder = new ScreenViewEvent.Builder()
+                .setFlowId(FlowHandler.getInstance().getFlowId())
                 .setScreenId(TrackingUtil.SCREEN_ID_PAYMENT_RESULT_INSTRUCTIONS)
                 .setScreenName(TrackingUtil.SCREEN_NAME_PAYMENT_RESULT_INSTRUCTIONS)
                 .addMetaData(TrackingUtil.METADATA_PAYMENT_IS_EXPRESS, TrackingUtil.IS_EXPRESS_DEFAULT_VALUE)

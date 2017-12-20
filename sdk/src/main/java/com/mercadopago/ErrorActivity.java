@@ -8,6 +8,7 @@ import android.widget.TextView;
 import com.mercadopago.controllers.CheckoutErrorHandler;
 import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.model.ApiException;
+import com.mercadopago.tracker.FlowHandler;
 import com.mercadopago.tracker.MPTrackingContext;
 import com.mercadopago.tracking.model.ScreenViewEvent;
 import com.mercadopago.tracking.utils.TrackingUtil;
@@ -66,6 +67,7 @@ public class ErrorActivity extends MercadoPagoBaseActivity {
                 .build();
 
         ScreenViewEvent.Builder builder = new ScreenViewEvent.Builder()
+                .setFlowId(FlowHandler.getInstance().getFlowId())
                 .setScreenId(TrackingUtil.SCREEN_ID_ERROR)
                 .setScreenName(TrackingUtil.SCREEN_NAME_ERROR);
 
