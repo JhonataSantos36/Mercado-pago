@@ -1894,6 +1894,7 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
 
     @Override
     public void showDiscountRow(BigDecimal transactionAmount) {
+
         MercadoPagoUI.Views.DiscountRowViewBuilder discountRowBuilder = new MercadoPagoUI.Views.DiscountRowViewBuilder();
 
         discountRowBuilder.setContext(this)

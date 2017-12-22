@@ -95,19 +95,6 @@ public class CheckoutExampleActivity extends AppCompatActivity {
                 .setDecorationPreference(getCurrentDecorationPreference());
 
         if (mHooksEnabled.isChecked()) {
-
-            builder.registerComponent(
-                    PaymentMethodConfirm.class,
-                    PaymentMethodConfirmRenderer.class);
-
-            builder.registerComponent(
-                    PaymentTypeConfirm.class,
-                    PaymentTypeConfirmRenderer.class);
-
-            builder.registerComponent(
-                    PaymentConfirm.class,
-                    PaymentConfirmRenderer.class);
-
             builder.setCheckoutHooks(new ExampleHooks());
         }
 

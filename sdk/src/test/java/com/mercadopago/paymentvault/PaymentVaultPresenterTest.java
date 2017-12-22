@@ -17,6 +17,7 @@ import com.mercadopago.model.PaymentMethodSearch;
 import com.mercadopago.model.PaymentMethodSearchItem;
 import com.mercadopago.model.Site;
 import com.mercadopago.mvp.OnResourcesRetrievedCallback;
+import com.mercadopago.plugins.model.PaymentMethodInfo;
 import com.mercadopago.preferences.FlowPreference;
 import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.presenters.PaymentVaultPresenter;
@@ -1288,6 +1289,11 @@ public class PaymentVaultPresenterTest {
         public void showCustomOptions(List<CustomSearchItem> customSearchItems, OnSelectedCallback<CustomSearchItem> customSearchItemOnSelectedCallback) {
             this.customOptionsShown = customSearchItems;
             this.customItemSelectionCallback = customSearchItemOnSelectedCallback;
+        }
+
+        @Override
+        public void showPluginOptions(List<PaymentMethodInfo> items) {
+
         }
 
         @Override

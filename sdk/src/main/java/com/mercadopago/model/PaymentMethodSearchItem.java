@@ -1,5 +1,12 @@
 package com.mercadopago.model;
 
+import android.support.annotation.DrawableRes;
+import android.support.annotation.NonNull;
+
+import com.mercadopago.constants.PaymentTypes;
+import com.mercadopago.plugins.model.PaymentMethodInfo;
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,7 +26,22 @@ public class PaymentMethodSearchItem {
     private List<PaymentMethodSearchItem> children;
     private String childrenHeader;
     private Boolean showIcon;
+    private @DrawableRes int icon;
 
+    public PaymentMethodSearchItem() {
+
+    }
+
+    public PaymentMethodSearchItem(@NonNull final PaymentMethodInfo info) {
+        id = info.id;
+        type = PaymentTypes.PLUGIN;
+        description = info.name;
+        comment = info.description;
+        children = new ArrayList<>();
+        childrenHeader = null;
+        showIcon = true;
+        icon = info.icon;
+    }
 
     public String getId() {
         return id;
@@ -103,5 +125,13 @@ public class PaymentMethodSearchItem {
 
     public void setShowIcon(Boolean showIcon) {
         this.showIcon = showIcon;
+    }
+
+    public int getIcon() {
+        return icon;
+    }
+
+    public void setIcon(int icon) {
+        this.icon = icon;
     }
 }

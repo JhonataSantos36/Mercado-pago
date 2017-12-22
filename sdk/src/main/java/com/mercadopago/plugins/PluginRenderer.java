@@ -1,4 +1,4 @@
-package com.mercadopago.hooks;
+package com.mercadopago.plugins;
 
 import android.support.annotation.CallSuper;
 import android.view.LayoutInflater;
@@ -10,13 +10,13 @@ import com.mercadopago.R;
 import com.mercadopago.components.Renderer;
 import com.mercadopago.components.RendererFactory;
 
-public abstract class HookRenderer extends Renderer<HookComponent> {
+public abstract class PluginRenderer extends Renderer<PluginComponent> {
 
     @Override
     @CallSuper
     public View render() {
         final ViewGroup view = (ViewGroup) LayoutInflater.from(context)
-                .inflate(R.layout.mpsdk_hooks_layout, null);
+                .inflate(R.layout.mpsdk_plugin_layout, null);
         view.addView(RendererFactory.create(context, component.getToolbarComponent()).render());
 
         final View contents = renderContents();

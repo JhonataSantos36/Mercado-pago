@@ -1,0 +1,55 @@
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@android:color/transparent"
+    android:minHeight="45dp"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <LinearLayout
+        android:gravity="center"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <FrameLayout
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:background="@drawable/mpsdk_light_grey_circle">
+            <ImageView
+                android:adjustViewBounds= "true"
+                android:id="@+id/mpsdk_image"
+                android:padding="16dp"
+                android:maxWidth="80dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                tools:src="@drawable/mpsdk_bapropagos"/>
+        </FrameLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginTop="5dp"
+            android:gravity="top"
+            android:orientation="vertical">
+            <com.mercadopago.customviews.MPTextView
+                android:id="@+id/mpsdk_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:maxLines="3"
+                tools:text="Transferencia por Red Link"
+                android:textSize="16dp"
+                android:textColor="@color/mpsdk_form_text"/>
+
+            <com.mercadopago.customviews.MPTextView
+                android:id="@+id/mpsdk_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="14dp"
+                tools:text="Hola, soy un comentario"
+                android:gravity="center"
+                style="@style/mpsdk_list_label_comment"/>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

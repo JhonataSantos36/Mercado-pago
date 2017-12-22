@@ -3,12 +3,13 @@ package com.mercadopago.presenters;
 import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.constants.PaymentMethods;
 import com.mercadopago.controllers.Timer;
+import com.mercadopago.core.CheckoutStore;
 import com.mercadopago.core.MercadoPagoCheckout;
 import com.mercadopago.core.MercadoPagoComponents;
 import com.mercadopago.exceptions.CheckoutPreferenceException;
 import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.hooks.Hook;
-import com.mercadopago.hooks.HooksStore;
+import com.mercadopago.hooks.HookHelper;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.Campaign;
 import com.mercadopago.model.Card;
@@ -24,10 +25,10 @@ import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentMethodSearch;
 import com.mercadopago.model.PaymentRecovery;
 import com.mercadopago.model.PaymentResult;
-import com.mercadopago.model.PaymentResultAction;
 import com.mercadopago.model.Token;
 import com.mercadopago.mvp.MvpPresenter;
 import com.mercadopago.mvp.OnResourcesRetrievedCallback;
+import com.mercadopago.plugins.model.PaymentMethodInfo;
 import com.mercadopago.preferences.CheckoutPreference;
 import com.mercadopago.preferences.FlowPreference;
 import com.mercadopago.preferences.PaymentResultScreenPreference;
@@ -42,6 +43,7 @@ import com.mercadopago.views.CheckoutView;
 import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Map;
 
 public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvider> {
 
@@ -489,39 +491,51 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
     }
 
     private void createPayment() {
+
         final PaymentData paymentData = createPaymentData();
-        String transactionId = getTransactionID();
-        getResourcesProvider().createPayment(transactionId, mCheckoutPreference, paymentData, mBinaryMode, mCustomerId, new OnResourcesRetrievedCallback<Payment>() {
-            @Override
-            public void onSuccess(final Payment payment) {
-                mCreatedPayment = payment;
-                PaymentResult paymentResult = createPaymentResult(payment, paymentData);
-                checkStartPaymentResultActivity(paymentResult);
-                cleanTransactionId();
-            }
 
-            @Override
-            public void onFailure(final MercadoPagoError error) {
-
-                if (error.isApiException() && error.getApiException().getStatus().equals(ApiUtil.StatusCodes.BAD_REQUEST)) {
-                    List<Cause> causes = error.getApiException().getCause();
-                    if (causes != null && !causes.isEmpty()) {
-                        Cause cause = causes.get(0);
-                        if (ApiException.ErrorCodes.INVALID_PAYMENT_WITH_ESC.equals(cause.getCode()) &&
-                                paymentData.getToken().getCardId() != null) {
-                            deleteESC(paymentData);
-                            continuePaymentWithoutESC();
-
-                        } else {
-                            recoverCreatePayment(error);
-                        }
-                    }
-                } else {
-                    recoverCreatePayment(error);
+        if (hasPaymentPlugin()) {
+            CheckoutStore.getInstance().setPaymentData(paymentData);
+            getView().showPaymentPlugin();
+        } else {
+            final String transactionId = getTransactionID();
+            getResourcesProvider().createPayment(transactionId, mCheckoutPreference,
+                    paymentData, mBinaryMode, mCustomerId, new OnResourcesRetrievedCallback<Payment>() {
+                @Override
+                public void onSuccess(final Payment payment) {
+                    mCreatedPayment = payment;
+                    PaymentResult paymentResult = createPaymentResult(payment, paymentData);
+                    checkStartPaymentResultActivity(paymentResult);
+                    cleanTransactionId();
                 }
+                @Override
+                public void onFailure(final MercadoPagoError error) {
+                    if (error.isApiException() && error.getApiException().getStatus().equals(ApiUtil.StatusCodes.BAD_REQUEST)) {
+                        List<Cause> causes = error.getApiException().getCause();
+                        if (causes != null && !causes.isEmpty()) {
+                            Cause cause = causes.get(0);
+                            if (ApiException.ErrorCodes.INVALID_PAYMENT_WITH_ESC.equals(cause.getCode()) &&
+                                    paymentData.getToken().getCardId() != null) {
+                                deleteESC(paymentData);
+                                continuePaymentWithoutESC();
+                            } else {
+                                recoverCreatePayment(error);
+                            }
+                        }
+                    } else {
+                        recoverCreatePayment(error);
+                    }
+                }
+            });
+        }
+    }
 
-            }
-        });
+    private boolean hasPaymentPlugin() {
+        final PaymentMethodInfo paymentMethodInfo = CheckoutStore.getInstance()
+                    .getSelectedPaymentMethod();
+        return paymentMethodInfo != null
+                && CheckoutStore.getInstance()
+                    .getPaymentPluginByMethod(paymentMethodInfo.id) != null;
     }
 
     private void continuePaymentWithoutESC() {
@@ -665,10 +679,10 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
 
     public void onPaymentResultCancel(final String nextAction) {
         if (!TextUtils.isEmpty(nextAction)) {
-            if (nextAction.equals(PaymentResultAction.SELECT_OTHER_PAYMENT_METHOD)) {
+            if (nextAction.equals(PaymentResult.SELECT_OTHER_PAYMENT_METHOD)) {
                 mPaymentMethodEdited = true;
                 getView().backToPaymentMethodSelection();
-            } else if (nextAction.equals(PaymentResultAction.RECOVER_PAYMENT)) {
+            } else if (nextAction.equals(PaymentResult.RECOVER_PAYMENT)) {
                 recoverPayment();
             }
         }
@@ -956,8 +970,9 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
     }
 
     public boolean showHook2(final PaymentData paymentData, final int requestCode) {
-        final HooksStore store = HooksStore.getInstance();
-        final Hook hook = store.activateAfterPaymentMethodConfig(paymentData);
+        final Map<String, Object> data = CheckoutStore.getInstance().getData();
+        final Hook hook = HookHelper.activateAfterPaymentMethodConfig(
+                CheckoutStore.getInstance().getCheckoutHooks(), paymentData, data);
         if (hook != null && getView() != null) {
             getView().showHook(hook, requestCode);
             return true;
@@ -970,8 +985,9 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
     }
 
     public boolean showHook3(final PaymentData paymentData, final int requestCode) {
-        final HooksStore store = HooksStore.getInstance();
-        final Hook hook = store.activateBeforePayment(paymentData);
+        final Map<String, Object> data = CheckoutStore.getInstance().getData();
+        final Hook hook = HookHelper.activateBeforePayment(
+                CheckoutStore.getInstance().getCheckoutHooks(), paymentData, data);
         if (hook != null && getView() != null) {
             getView().showHook(hook, requestCode);
             return true;

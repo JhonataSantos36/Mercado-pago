@@ -24,7 +24,6 @@ import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentData;
 import com.mercadopago.model.PaymentResult;
-import com.mercadopago.model.PaymentResultAction;
 import com.mercadopago.model.ReviewSubscriber;
 import com.mercadopago.model.Reviewable;
 import com.mercadopago.observers.TimerObserver;
@@ -390,7 +389,7 @@ public class PendingActivity extends MercadoPagoBaseActivity implements TimerObs
 
     public void onClickPendingOptionButton() {
         Intent returnIntent = new Intent();
-        returnIntent.putExtra("nextAction", PaymentResultAction.SELECT_OTHER_PAYMENT_METHOD);
+        returnIntent.putExtra("nextAction", PaymentResult.SELECT_OTHER_PAYMENT_METHOD);
         setResult(RESULT_CANCELED, returnIntent);
         finish();
     }

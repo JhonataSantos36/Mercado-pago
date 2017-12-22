@@ -32,7 +32,6 @@ import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentMethodSearch;
 import com.mercadopago.model.PaymentRecovery;
 import com.mercadopago.model.PaymentResult;
-import com.mercadopago.model.PaymentResultAction;
 import com.mercadopago.model.Site;
 import com.mercadopago.model.Token;
 import com.mercadopago.mvp.OnResourcesRetrievedCallback;
@@ -981,7 +980,7 @@ public class CheckoutPresenterTest {
         assertTrue(view.showingReviewAndConfirm);
         presenter.onPaymentConfirmation();
         assertTrue(view.showingPaymentResult);
-        presenter.onPaymentResultCancel(PaymentResultAction.RECOVER_PAYMENT);
+        presenter.onPaymentResultCancel(PaymentResult.RECOVER_PAYMENT);
         assertTrue(view.showingPaymentRecoveryFlow);
         assertEquals(view.paymentRecoveryRequested.getPaymentMethod().getId(), paymentMethod.getId());
     }
@@ -1018,7 +1017,7 @@ public class CheckoutPresenterTest {
         assertTrue(view.showingReviewAndConfirm);
         presenter.onPaymentConfirmation();
         assertTrue(view.showingPaymentResult);
-        presenter.onPaymentResultCancel(PaymentResultAction.RECOVER_PAYMENT);
+        presenter.onPaymentResultCancel(PaymentResult.RECOVER_PAYMENT);
         assertTrue(view.showingPaymentRecoveryFlow);
         assertEquals(view.paymentRecoveryRequested.getPaymentMethod().getId(), paymentMethod.getId());
 
@@ -1052,11 +1051,12 @@ public class CheckoutPresenterTest {
         presenter.setCheckoutPreference(preference);
         presenter.initialize();
 
-        presenter.onPaymentMethodSelectionResponse(PaymentMethods.getPaymentMethodOff(), null, null, null, null, null, null);
+        presenter.onPaymentMethodSelectionResponse(PaymentMethods
+                .getPaymentMethodOff(), null, null, null, null, null, null);
         assertTrue(view.showingReviewAndConfirm);
         presenter.onPaymentConfirmation();
         assertTrue(view.showingPaymentResult);
-        presenter.onPaymentResultCancel(PaymentResultAction.RECOVER_PAYMENT);
+        presenter.onPaymentResultCancel(PaymentResult.RECOVER_PAYMENT);
         assertTrue(view.showingError);
     }
 
@@ -1140,7 +1140,7 @@ public class CheckoutPresenterTest {
         assertTrue(view.showingReviewAndConfirm);
         presenter.onPaymentConfirmation();
         assertTrue(view.showingPaymentResult);
-        presenter.onPaymentResultCancel(PaymentResultAction.RECOVER_PAYMENT);
+        presenter.onPaymentResultCancel(PaymentResult.RECOVER_PAYMENT);
         assertTrue(view.showingPaymentRecoveryFlow);
         presenter.onCardFlowCancel();
         assertTrue(view.showingPaymentMethodSelection);
@@ -2038,6 +2038,11 @@ public class CheckoutPresenterTest {
 
         @Override
         public void showHook(Hook hook, int requestCode) {
+
+        }
+
+        @Override
+        public void showPaymentPlugin() {
 
         }
     }

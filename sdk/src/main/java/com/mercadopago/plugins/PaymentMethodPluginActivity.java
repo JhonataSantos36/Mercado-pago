@@ -1,4 +1,4 @@
-package com.mercadopago.hooks;
+package com.mercadopago.plugins;
 
 import android.content.Context;
 import android.content.Intent;
@@ -13,33 +13,47 @@ import com.mercadopago.components.BackAction;
 import com.mercadopago.components.Component;
 import com.mercadopago.components.ComponentManager;
 import com.mercadopago.components.NextAction;
-import com.mercadopago.components.RendererFactory;
 import com.mercadopago.core.CheckoutStore;
+import com.mercadopago.plugins.model.PaymentMethodInfo;
 
-public class HookActivity extends AppCompatActivity implements ActionDispatcher {
+/**
+ * Created by nfortuna on 12/13/17.
+ */
 
-    public static Intent getIntent(@NonNull final Context context, @NonNull final Hook hook) {
-        CheckoutStore.getInstance().setHook(hook);
-        final Intent intent = new Intent(context, HookActivity.class);
-        return intent;
+public class PaymentMethodPluginActivity extends AppCompatActivity implements ActionDispatcher {
+
+    public static Intent getIntent(@NonNull final Context context) {
+        return new Intent(context, PaymentMethodPluginActivity.class);
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        RendererFactory.register(HookComponent.class, HookRenderer.class);
+        final PaymentMethodInfo paymentMethodInfo =
+                CheckoutStore.getInstance().getSelectedPaymentMethod();
+        final PaymentMethodPlugin plugin = CheckoutStore
+                .getInstance().getPaymentMethodPluginById(paymentMethodInfo.id);
 
-        final ComponentManager componentManager = new ComponentManager(this);
-        final Hook hook = CheckoutStore.getInstance().getHook();
-
-        if (hook == null) {
+        if (plugin == null) {
             setResult(RESULT_CANCELED);
             finish();
             return;
         }
 
-        final Component component = hook.createComponent();
+        final PluginComponent.Props props = new PluginComponent.Props.Builder()
+                .setData(CheckoutStore.getInstance().getData())
+                .build();
+
+        final Component component = plugin.createConfigurationComponent(props);
+        final ComponentManager componentManager = new ComponentManager(this);
+
+        if (component == null) {
+            setResult(RESULT_CANCELED);
+            finish();
+            return;
+        }
+
         component.setDispatcher(this);
         componentManager.render(component);
     }

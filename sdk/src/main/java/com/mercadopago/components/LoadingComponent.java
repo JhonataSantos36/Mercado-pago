@@ -7,7 +7,7 @@ import android.support.annotation.NonNull;
  */
 public class LoadingComponent extends Component {
 
-    public LoadingComponent(@NonNull final ActionDispatcher dispatcher) {
-        super(null, dispatcher); // No props
+    public LoadingComponent() {
+        super(null, null);
     }
 }

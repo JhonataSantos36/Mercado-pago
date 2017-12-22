@@ -13,7 +13,6 @@ import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.PaymentData;
 import com.mercadopago.model.PaymentResult;
-import com.mercadopago.model.PaymentResultAction;
 import com.mercadopago.model.Site;
 import com.mercadopago.observers.TimerObserver;
 import com.mercadopago.preferences.PaymentResultScreenPreference;
@@ -106,7 +105,7 @@ public class CallForAuthorizeActivity extends MercadoPagoBaseActivity implements
             @Override
             public void onClick(View v) {
                 Intent returnIntent = new Intent();
-                mNextAction = PaymentResultAction.RECOVER_PAYMENT;
+                mNextAction = PaymentResult.RECOVER_PAYMENT;
                 returnIntent.putExtra("nextAction", mNextAction);
                 setResult(RESULT_CANCELED, returnIntent);
                 finish();
@@ -117,7 +116,7 @@ public class CallForAuthorizeActivity extends MercadoPagoBaseActivity implements
             @Override
             public void onClick(View v) {
                 Intent returnIntent = new Intent();
-                mNextAction = PaymentResultAction.SELECT_OTHER_PAYMENT_METHOD;
+                mNextAction = PaymentResult.SELECT_OTHER_PAYMENT_METHOD;
                 returnIntent.putExtra("nextAction", mNextAction);
                 setResult(RESULT_CANCELED, returnIntent);
                 finish();

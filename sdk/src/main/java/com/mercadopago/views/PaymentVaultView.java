@@ -9,6 +9,7 @@ import com.mercadopago.model.Payer;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentMethodSearchItem;
 import com.mercadopago.mvp.MvpView;
+import com.mercadopago.plugins.model.PaymentMethodInfo;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -27,6 +28,8 @@ public interface PaymentVaultView extends MvpView {
     void hideProgress();
 
     void showCustomOptions(List<CustomSearchItem> customSearchItems, OnSelectedCallback<CustomSearchItem> customSearchItemOnSelectedCallback);
+
+    void showPluginOptions(List<PaymentMethodInfo> items);
 
     void showSearchItems(List<PaymentMethodSearchItem> searchItems, OnSelectedCallback<PaymentMethodSearchItem> paymentMethodSearchItemSelectionCallback);
 

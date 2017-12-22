@@ -1,5 +1,10 @@
 package com.mercadopago.model;
 
+import android.support.annotation.NonNull;
+
+import com.mercadopago.constants.PaymentTypes;
+import com.mercadopago.plugins.model.PaymentMethodInfo;
+
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -18,6 +23,16 @@ public class PaymentMethod {
     private BigDecimal maxAllowedAmount;
     private Integer accreditationTime;
     private String merchantAccountId;
+
+    public PaymentMethod() {
+
+    }
+
+    public PaymentMethod(@NonNull final PaymentMethodInfo info) {
+        id = info.id;
+        name = info.name;
+        paymentTypeId = PaymentTypes.PLUGIN;
+    }
 
     public List<String> getAdditionalInfoNeeded() {
         return additionalInfoNeeded;

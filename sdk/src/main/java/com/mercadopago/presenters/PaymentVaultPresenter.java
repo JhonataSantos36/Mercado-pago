@@ -3,10 +3,11 @@ package com.mercadopago.presenters;
 import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.callbacks.OnSelectedCallback;
 import com.mercadopago.constants.PaymentMethods;
+import com.mercadopago.core.CheckoutStore;
 import com.mercadopago.core.MercadoPagoComponents;
 import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.hooks.Hook;
-import com.mercadopago.hooks.HooksStore;
+import com.mercadopago.hooks.HookHelper;
 import com.mercadopago.model.Card;
 import com.mercadopago.model.CustomSearchItem;
 import com.mercadopago.model.Discount;
@@ -17,6 +18,8 @@ import com.mercadopago.model.PaymentMethodSearchItem;
 import com.mercadopago.model.Site;
 import com.mercadopago.mvp.MvpPresenter;
 import com.mercadopago.mvp.OnResourcesRetrievedCallback;
+import com.mercadopago.plugins.PaymentMethodPlugin;
+import com.mercadopago.plugins.model.PaymentMethodInfo;
 import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.providers.PaymentVaultProvider;
@@ -28,6 +31,7 @@ import com.mercadopago.views.PaymentVaultView;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, PaymentVaultProvider> {
 
@@ -341,6 +345,25 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
 
     private void showAvailableOptions() {
 
+        final List<PaymentMethodInfo> pluginUpItems = new ArrayList<>();
+        final List<PaymentMethodInfo> pluginDownItems = new ArrayList<>();
+        final List<PaymentMethodPlugin> paymentMethodPlugins = CheckoutStore.getInstance().getPaymentMethodPluginList();
+
+        if (paymentMethodPlugins != null && !paymentMethodPlugins.isEmpty()) {
+            for (PaymentMethodPlugin plugin : paymentMethodPlugins) {
+                final PaymentMethodInfo info = plugin.getPaymentMethodInfo();
+                if (info != null) {
+                    if (PaymentMethodPlugin.POSIION_TOP.equalsIgnoreCase(plugin.displayOrder())) {
+                        pluginUpItems.add(info);
+                    } else if (PaymentMethodPlugin.POSIION_BOTTOM.equalsIgnoreCase(plugin.displayOrder())) {
+                        pluginDownItems.add(info);
+                    }
+                }
+            }
+        }
+
+        getView().showPluginOptions(pluginUpItems);
+
         if (mPaymentMethodSearch.hasCustomSearchItems()) {
             List<CustomSearchItem> shownCustomItems;
 
@@ -349,12 +372,16 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
             } else {
                 shownCustomItems = getLimitedCustomOptions(mPaymentMethodSearch.getCustomSearchItems(), mMaxSavedCards);
             }
+
+
             getView().showCustomOptions(shownCustomItems, getCustomOptionCallback());
         }
 
         if (searchItemsAvailable()) {
             getView().showSearchItems(mPaymentMethodSearch.getGroups(), getPaymentMethodSearchItemSelectionCallback());
         }
+
+        getView().showPluginOptions(pluginDownItems);
     }
 
     private OnSelectedCallback<PaymentMethodSearchItem> getPaymentMethodSearchItemSelectionCallback() {
@@ -587,6 +614,7 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
         } else {
             limitedItems = customSearchItems;
         }
+
         return limitedItems;
     }
 
@@ -609,8 +637,11 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
     }
 
     public boolean showHook1(final String typeId, final int requestCode) {
-        final HooksStore store = HooksStore.getInstance();
-        final Hook hook = store.activateBeforePaymentMethodConfig(typeId);
+
+        final Map<String, Object> data = CheckoutStore.getInstance().getData();
+        final Hook hook = HookHelper.activateBeforePaymentMethodConfig(
+                CheckoutStore.getInstance().getCheckoutHooks(), typeId, data);
+
         if (resumeItem == null && hook != null && getView() != null) {
             hook1Displayed = true;
             getView().showHook(hook, requestCode);

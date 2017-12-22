@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.widget.GridLayoutManager;
@@ -19,7 +20,9 @@ import com.google.gson.reflect.TypeToken;
 
 import com.mercadopago.adapters.PaymentMethodSearchItemAdapter;
 import com.mercadopago.callbacks.OnSelectedCallback;
+import com.mercadopago.constants.PaymentTypes;
 import com.mercadopago.controllers.CheckoutTimer;
+import com.mercadopago.core.CheckoutStore;
 import com.mercadopago.core.MercadoPagoCheckout;
 import com.mercadopago.core.MercadoPagoComponents;
 import com.mercadopago.core.MercadoPagoUI;
@@ -41,6 +44,9 @@ import com.mercadopago.model.PaymentMethodSearchItem;
 import com.mercadopago.model.Site;
 import com.mercadopago.model.Token;
 import com.mercadopago.observers.TimerObserver;
+import com.mercadopago.plugins.PaymentMethodPlugin;
+import com.mercadopago.plugins.PaymentMethodPluginActivity;
+import com.mercadopago.plugins.model.PaymentMethodInfo;
 import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.preferences.FlowPreference;
 import com.mercadopago.preferences.PaymentPreference;
@@ -54,6 +60,7 @@ import com.mercadopago.tracking.tracker.MPTracker;
 import com.mercadopago.tracking.utils.TrackingUtil;
 import com.mercadopago.uicontrollers.FontCache;
 import com.mercadopago.uicontrollers.discounts.DiscountRowView;
+import com.mercadopago.uicontrollers.paymentmethodsearch.PaymentMethodInfoController;
 import com.mercadopago.uicontrollers.paymentmethodsearch.PaymentMethodSearchCustomOption;
 import com.mercadopago.uicontrollers.paymentmethodsearch.PaymentMethodSearchOption;
 import com.mercadopago.uicontrollers.paymentmethodsearch.PaymentMethodSearchViewController;
@@ -420,6 +427,50 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
         return customViewControllers;
     }
 
+    private List<PaymentMethodSearchViewController> createPluginItemsViewControllers(final List<PaymentMethodInfo> infoItems) {
+        final List<PaymentMethodSearchViewController> controllers = new ArrayList<>();
+        for (final PaymentMethodInfo infoItem : infoItems) {
+
+            final PaymentMethodSearchViewController viewController =
+                    new PaymentMethodInfoController(this, infoItem, mDecorationPreference);
+
+            viewController.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(final View v) {
+
+                    final String id = String.valueOf(v.getTag());
+                    final PaymentMethodInfo info = CheckoutStore.getInstance().getPaymentMethodPluginInfoById(id);
+                    CheckoutStore.getInstance().setSelectedPaymentMethod(info);
+
+                    if (!mPaymentVaultPresenter.showHook1(PaymentTypes.PLUGIN, MercadoPagoComponents.Activities.HOOK_1_PLUGIN)) {
+                        showPaymentMethodPluginConfiguration();
+                    }
+                }
+            });
+            controllers.add(viewController);
+        }
+        return controllers;
+    }
+
+    private void showPaymentMethodPluginConfiguration() {
+
+        final PaymentMethodInfo info =  CheckoutStore.getInstance().getSelectedPaymentMethod();
+        final PaymentMethodPlugin plugin =  CheckoutStore.getInstance().getPaymentMethodPluginById(info.id);
+
+        if (plugin.hasConfigurationComponent()) {
+
+            startActivityForResult(PaymentMethodPluginActivity
+                            .getIntent(PaymentVaultActivity.this),
+                    MercadoPagoComponents.Activities.PLUGIN_PAYMENT_METHOD_REQUEST_CODE);
+
+        } else {
+
+            final PaymentMethodInfo paymentMethodInfo =
+                    CheckoutStore.getInstance().getSelectedPaymentMethod();
+            finishPaymentMethodSelection(new PaymentMethod(paymentMethodInfo));
+        }
+    }
+
     @Override
     public void startSavedCardFlow(Card card, BigDecimal amount) {
         new MercadoPagoComponents.Activities.CardVaultActivityBuilder()
@@ -471,12 +522,26 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
             resolveDiscountRequest(resultCode, data);
         } else if (requestCode == MercadoPagoComponents.Activities.PAYER_INFORMATION_REQUEST_CODE) {
             resolvePayerInformationRequest(resultCode, data);
-        } else if (requestCode == ErrorUtil.ERROR_REQUEST_CODE) {
-            resolveErrorRequest(resultCode, data);
+        } else if (requestCode == MercadoPagoComponents.Activities.PLUGIN_PAYMENT_METHOD_REQUEST_CODE) {
+
+            if (resultCode == RESULT_OK) {
+                final PaymentMethodInfo paymentMethodInfo =
+                        CheckoutStore.getInstance().getSelectedPaymentMethod();
+                finishPaymentMethodSelection(new PaymentMethod(paymentMethodInfo));
+            }
+
         } else if (requestCode == MercadoPagoComponents.Activities.HOOK_1) {
+
             resolveHook1Request(resultCode);
+
+        } else if (requestCode == MercadoPagoComponents.Activities.HOOK_1_PLUGIN) {
+
+            showPaymentMethodPluginConfiguration();
+
         } else if (requestCode == MercadoPagoComponents.Activities.HOOK_1_ACCOUNT_MONEY) {
             resolveHook1AccountMoneyRequest(resultCode);
+        } else if (requestCode == ErrorUtil.ERROR_REQUEST_CODE) {
+            resolveErrorRequest(resultCode, data);
         }
     }
 
@@ -718,6 +783,15 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
     @Override
     public void showSearchItems(List<PaymentMethodSearchItem> searchItems, OnSelectedCallback<PaymentMethodSearchItem> paymentMethodSearchItemSelectionCallback) {
         populateSearchList(searchItems, paymentMethodSearchItemSelectionCallback);
+    }
+
+
+    @Override
+    public void showPluginOptions(@NonNull final List<PaymentMethodInfo> items) {
+        final PaymentMethodSearchItemAdapter adapter = (PaymentMethodSearchItemAdapter) mSearchItemsRecyclerView.getAdapter();
+        final List<PaymentMethodSearchViewController> customViewControllers = createPluginItemsViewControllers(items);
+        adapter.addItems(customViewControllers);
+        adapter.notifyItemInserted();
     }
 
     @Override
