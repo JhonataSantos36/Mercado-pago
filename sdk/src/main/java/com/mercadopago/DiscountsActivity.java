@@ -39,7 +39,7 @@ import com.mercadopago.util.CurrenciesUtil;
 import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;
-import com.mercadopago.util.TextUtils;
+import com.mercadopago.util.TextUtil;
 import com.mercadopago.views.DiscountsActivityView;
 
 import java.math.BigDecimal;
@@ -332,7 +332,7 @@ public class DiscountsActivity extends AppCompatActivity implements DiscountsAct
             discountAmount = CurrenciesUtil.formatCurrencyInText(mPresenter.getCouponAmount(), mPresenter.getCurrencyId(), discountAmountBuilder.toString(), false, true);
 
             mReviewSummaryDiscountAmount.setText(discountAmount);
-            if (!TextUtils.isEmpty(mPresenter.getDiscount().getConcept())) {
+            if (!TextUtil.isEmpty(mPresenter.getDiscount().getConcept())) {
                 mReviewSummaryDiscountLabel.setText(mPresenter.getDiscount().getConcept());
             }
         } else {

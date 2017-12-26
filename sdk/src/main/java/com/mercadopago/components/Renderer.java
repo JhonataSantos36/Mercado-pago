@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.mercadopago.util.TextUtils;
+import com.mercadopago.util.TextUtil;
 
 
 /**
@@ -63,7 +63,7 @@ public abstract class Renderer<T extends Component> {
     }
 
     protected void setText(@NonNull final TextView view, String text) {
-        if(TextUtils.isEmpty(text)) {
+        if(TextUtil.isEmpty(text)) {
             view.setVisibility(View.GONE);
         } else {
             view.setText(text);

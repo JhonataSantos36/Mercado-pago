@@ -23,7 +23,7 @@ import com.mercadopago.tracking.utils.TrackingUtil;
 import com.mercadopago.util.CurrenciesUtil;
 import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
-import com.mercadopago.util.TextUtils;
+import com.mercadopago.util.TextUtil;
 
 import java.math.BigDecimal;
 
@@ -73,7 +73,7 @@ public class CallForAuthorizeActivity extends MercadoPagoBaseActivity implements
     }
 
     private void customizeViews() {
-        if (mPaymentResultScreenPreference != null && !TextUtils.isEmpty(mPaymentResultScreenPreference.getExitButtonTitle())) {
+        if (mPaymentResultScreenPreference != null && !TextUtil.isEmpty(mPaymentResultScreenPreference.getExitButtonTitle())) {
             mKeepBuyingButton.setText(mPaymentResultScreenPreference.getExitButtonTitle());
         }
     }

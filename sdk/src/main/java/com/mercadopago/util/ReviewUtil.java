@@ -132,11 +132,11 @@ public class ReviewUtil {
                 break;
             case "pagoefectivo_atm":
                 string = context.getResources().getString(R.string.mpsdk_your_atm) + " ";
-                string += TextUtils.isEmpty(description) ? paymentMethod.getName() : description;
+                string += TextUtil.isEmpty(description) ? paymentMethod.getName() : description;
                 break;
             case "pagoefectivo_atm_bank_transfer":
                 string = context.getResources().getString(R.string.mpsdk_homebanking) + " ";
-                string += TextUtils.isEmpty(description) ? paymentMethod.getName() : description;
+                string += TextUtil.isEmpty(description) ? paymentMethod.getName() : description;
                 break;
             case "davivienda":
                 string = paymentMethod.getName();
@@ -152,11 +152,11 @@ public class ReviewUtil {
                 break;
             case "mercantil_atm":
                 string = context.getResources().getString(R.string.mpsdk_your_atm) + " ";
-                string += TextUtils.isEmpty(description) ? paymentMethod.getName() : description;
+                string += TextUtil.isEmpty(description) ? paymentMethod.getName() : description;
                 break;
             case "mercantil_bank_transfer":
                 string = context.getResources().getString(R.string.mpsdk_homebanking) + " ";
-                string += TextUtils.isEmpty(description) ? paymentMethod.getName() : description;
+                string += TextUtil.isEmpty(description) ? paymentMethod.getName() : description;
                 break;
             case "provincial":
                 string = paymentMethod.getName();
@@ -169,7 +169,7 @@ public class ReviewUtil {
                 break;
             case "account_money_account_money":
                 string = context.getString(R.string.mpsdk_ryc_account_money_description);
-                string += TextUtils.isEmpty(description) ? paymentMethod.getName() : description;
+                string += TextUtil.isEmpty(description) ? paymentMethod.getName() : description;
                 break;
             default:
                 string = paymentMethod.getName();

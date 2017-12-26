@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static com.mercadopago.util.TextUtils.isEmpty;
+import static com.mercadopago.util.TextUtil.isEmpty;
 
 public class CheckoutPreference {
 

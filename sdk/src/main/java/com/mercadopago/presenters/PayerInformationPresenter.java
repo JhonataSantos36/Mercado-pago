@@ -9,13 +9,13 @@ import com.mercadopago.mvp.MvpPresenter;
 import com.mercadopago.mvp.OnResourcesRetrievedCallback;
 import com.mercadopago.providers.PayerInformationProvider;
 import com.mercadopago.util.ApiUtil;
-import com.mercadopago.util.TextUtils;
+import com.mercadopago.util.TextUtil;
 import com.mercadopago.views.PayerInformationView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.mercadopago.util.TextUtils.isEmpty;
+import static com.mercadopago.util.TextUtil.isEmpty;
 
 /**
  * Created by mromar on 9/25/17.
@@ -185,11 +185,11 @@ public class PayerInformationPresenter extends MvpPresenter<PayerInformationView
     }
 
     private boolean validateNumber() {
-        return mIdentification != null && validateIdentificationType() && !TextUtils.isEmpty(mIdentification.getNumber());
+        return mIdentification != null && validateIdentificationType() && !TextUtil.isEmpty(mIdentification.getNumber());
     }
 
     private boolean validateIdentificationType() {
-        return mIdentification != null && !TextUtils.isEmpty(mIdentification.getType());
+        return mIdentification != null && !TextUtil.isEmpty(mIdentification.getType());
     }
 
     public boolean checkIsEmptyOrValidName() {

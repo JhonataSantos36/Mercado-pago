@@ -11,7 +11,7 @@ import com.mercadopago.views.PaymentResultView;
 
 import java.math.BigDecimal;
 
-import static com.mercadopago.util.TextUtils.isEmpty;
+import static com.mercadopago.util.TextUtil.isEmpty;
 
 public class PaymentResultPresenter extends MvpPresenter<PaymentResultView, PaymentResultProvider> {
     private Boolean discountEnabled;

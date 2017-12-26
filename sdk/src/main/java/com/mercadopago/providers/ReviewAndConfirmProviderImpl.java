@@ -25,7 +25,7 @@ import com.mercadopago.util.TextUtil;
 import java.math.BigDecimal;
 import java.util.List;
 
-import static com.mercadopago.util.TextUtils.isEmpty;
+import static com.mercadopago.util.TextUtil.isEmpty;
 
 /**
  * Created by mreverter on 2/2/17.

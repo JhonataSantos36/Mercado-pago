@@ -20,7 +20,7 @@ import com.squareup.picasso.Picasso;
 
 import java.math.BigDecimal;
 
-import static com.mercadopago.util.TextUtils.isEmpty;
+import static com.mercadopago.util.TextUtil.isEmpty;
 
 /**
  * Created by vaserber on 11/10/16.

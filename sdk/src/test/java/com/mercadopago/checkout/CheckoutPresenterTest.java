@@ -39,7 +39,7 @@ import com.mercadopago.preferences.CheckoutPreference;
 import com.mercadopago.preferences.FlowPreference;
 import com.mercadopago.presenters.CheckoutPresenter;
 import com.mercadopago.providers.CheckoutProvider;
-import com.mercadopago.util.TextUtils;
+import com.mercadopago.util.TextUtil;
 import com.mercadopago.views.CheckoutView;
 
 import junit.framework.Assert;
@@ -1215,7 +1215,7 @@ public class CheckoutPresenterTest {
         presenter.onPaymentConfirmation();
 
         assertTrue(provider.paymentRequested);
-        assertTrue(!TextUtils.isEmpty(provider.transactionId));
+        assertTrue(!TextUtil.isEmpty(provider.transactionId));
     }
 
     @Test
@@ -1249,7 +1249,7 @@ public class CheckoutPresenterTest {
         presenter.onPaymentConfirmation();
 
         assertTrue(provider.paymentRequested);
-        assertTrue(!TextUtils.isEmpty(provider.paymentCustomerId));
+        assertTrue(!TextUtil.isEmpty(provider.paymentCustomerId));
     }
 
     //Timer tests

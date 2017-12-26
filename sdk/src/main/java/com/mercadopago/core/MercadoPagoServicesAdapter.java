@@ -28,7 +28,6 @@ import com.mercadopago.model.PaymentBody;
 import com.mercadopago.preferences.CheckoutPreference;
 import com.mercadopago.preferences.ServicePreference;
 import com.mercadopago.util.TextUtil;
-import com.mercadopago.util.TextUtils;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
@@ -365,7 +364,7 @@ public class MercadoPagoServicesAdapter {
         public MercadoPagoServicesAdapter build() {
 
             if (this.mContext == null) throw new IllegalStateException("context is null");
-            if (TextUtils.isEmpty(this.mPublicKey) && TextUtil.isEmpty(this.mPrivateKey))
+            if (TextUtil.isEmpty(this.mPublicKey) && TextUtil.isEmpty(this.mPrivateKey))
                 throw new IllegalStateException("key is null");
 
             return new MercadoPagoServicesAdapter(this);

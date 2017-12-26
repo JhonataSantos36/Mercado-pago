@@ -35,7 +35,7 @@ import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.MercadoPagoESC;
 import com.mercadopago.util.MercadoPagoESCImpl;
 import com.mercadopago.util.MercadoPagoUtil;
-import com.mercadopago.util.TextUtils;
+import com.mercadopago.util.TextUtil;
 
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
@@ -56,7 +56,7 @@ public class CheckoutProviderImpl implements CheckoutProvider {
     private String siteId;
 
     public CheckoutProviderImpl(Context context, String publicKey, String privateKey, ServicePreference servicePreference, boolean escEnabled) {
-        if (TextUtils.isEmpty(publicKey) && TextUtils.isEmpty(privateKey)) {
+        if (TextUtil.isEmpty(publicKey) && TextUtil.isEmpty(privateKey)) {
             throw new IllegalStateException("Credentials not set");
         } else if (context == null) {
             throw new IllegalStateException("Context not context");
@@ -271,7 +271,7 @@ public class CheckoutProviderImpl implements CheckoutProvider {
         paymentBody.setBinaryMode(binaryMode);
 
         Payer payer = paymentData.getPayer();
-        if (!TextUtils.isEmpty(customerId) && MercadoPagoUtil.isCard(paymentData.getPaymentMethod().getPaymentTypeId())) {
+        if (!TextUtil.isEmpty(customerId) && MercadoPagoUtil.isCard(paymentData.getPaymentMethod().getPaymentTypeId())) {
             payer.setId(customerId);
         }
         paymentBody.setPayer(payer);
