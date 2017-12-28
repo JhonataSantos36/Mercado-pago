@@ -1,3 +1,11 @@
+## VERSION 3.8.0
+
+_28_12_2017_
+
+* New: Payment methods plugin
+* New: Checkout Hooks
+* New: Updated tracking version
+
 ## VERSION 3.7.2
 
 _17_11_2017_
