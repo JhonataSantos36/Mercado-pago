@@ -230,11 +230,11 @@
                 </android.support.v7.widget.CardView>
 
                 <com.mercadopago.customviews.MPButton
+                    android:id="@+id/submitButton"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/mpsdk_button_height"
                     android:layout_margin="@dimen/mpsdk_margin_std"
                     android:text="@string/mpsdk_continue_label"
-                    android:onClick="submitForm"
                     style="@style/mpsdk_button_normal"/>
 
             </LinearLayout>

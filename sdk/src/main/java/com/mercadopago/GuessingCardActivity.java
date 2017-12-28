@@ -68,6 +68,7 @@ import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.presenters.GuessingCardPresenter;
 import com.mercadopago.providers.GuessingCardProviderImpl;
+import com.mercadopago.tracker.FlowHandler;
 import com.mercadopago.tracking.model.ScreenViewEvent;
 import com.mercadopago.tracking.utils.TrackingUtil;
 import com.mercadopago.uicontrollers.card.CardRepresentationModes;
@@ -504,7 +505,8 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
     protected void trackScreen() {
         String paymentTypeId = mPresenter.getPaymentTypeId();
 
-        ScreenViewEvent event = new ScreenViewEvent.Builder()
+        final ScreenViewEvent event = new ScreenViewEvent.Builder()
+                .setFlowId(FlowHandler.getInstance().getFlowId())
                 .setScreenId(TrackingUtil.SCREEN_ID_CARD_FORM + paymentTypeId)
                 .setScreenName(TrackingUtil.SCREEN_NAME_CARD_FORM + " " + paymentTypeId)
                 .build();
@@ -515,7 +517,8 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
     protected void trackCardNumber() {
         String paymentTypeId = mPresenter.getPaymentTypeId();
 
-        ScreenViewEvent event = new ScreenViewEvent.Builder()
+        final ScreenViewEvent event = new ScreenViewEvent.Builder()
+                .setFlowId(FlowHandler.getInstance().getFlowId())
                 .setScreenId(TrackingUtil.SCREEN_ID_CARD_FORM + paymentTypeId + TrackingUtil.CARD_NUMBER)
                 .setScreenName(TrackingUtil.SCREEN_NAME_CARD_FORM_NUMBER)
                 .build();
@@ -525,7 +528,8 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
     protected void trackCardHolderName() {
         String paymentTypeId = mPresenter.getPaymentTypeId();
 
-        ScreenViewEvent event = new ScreenViewEvent.Builder()
+        final ScreenViewEvent event = new ScreenViewEvent.Builder()
+                .setFlowId(FlowHandler.getInstance().getFlowId())
                 .setScreenId(TrackingUtil.SCREEN_ID_CARD_FORM + paymentTypeId + TrackingUtil.CARD_HOLDER_NAME)
                 .setScreenName(TrackingUtil.SCREEN_NAME_CARD_FORM_NAME)
                 .build();
@@ -535,7 +539,8 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
     protected void trackCardExpiryDate() {
         String paymentTypeId = mPresenter.getPaymentTypeId();
 
-        ScreenViewEvent event = new ScreenViewEvent.Builder()
+        final ScreenViewEvent event = new ScreenViewEvent.Builder()
+                .setFlowId(FlowHandler.getInstance().getFlowId())
                 .setScreenId(TrackingUtil.SCREEN_ID_CARD_FORM + paymentTypeId + TrackingUtil.CARD_EXPIRATION_DATE)
                 .setScreenName(TrackingUtil.SCREEN_NAME_CARD_FORM_EXPIRY)
                 .build();
@@ -545,7 +550,8 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
     protected void trackCardSecurityCode() {
         String paymentTypeId = mPresenter.getPaymentTypeId();
 
-        ScreenViewEvent event = new ScreenViewEvent.Builder()
+        final ScreenViewEvent event = new ScreenViewEvent.Builder()
+                .setFlowId(FlowHandler.getInstance().getFlowId())
                 .setScreenId(TrackingUtil.SCREEN_ID_CARD_FORM + paymentTypeId + TrackingUtil.CARD_SECURITY_CODE)
                 .setScreenName(TrackingUtil.SCREEN_NAME_CARD_FORM_CVV)
                 .build();
@@ -555,7 +561,8 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
     protected void trackCardIdentification() {
         String paymentTypeId = mPresenter.getPaymentTypeId();
 
-        ScreenViewEvent event = new ScreenViewEvent.Builder()
+        final ScreenViewEvent event = new ScreenViewEvent.Builder()
+                .setFlowId(FlowHandler.getInstance().getFlowId())
                 .setScreenId(TrackingUtil.SCREEN_ID_IDENTIFICATION)
                 .setScreenName(TrackingUtil.SCREEN_NAME_CARD_FORM_IDENTIFICATION_NUMBER)
                 .addMetaData(TrackingUtil.METADATA_PAYMENT_TYPE_ID, paymentTypeId)
@@ -1887,6 +1894,7 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
 
     @Override
     public void showDiscountRow(BigDecimal transactionAmount) {
+
         MercadoPagoUI.Views.DiscountRowViewBuilder discountRowBuilder = new MercadoPagoUI.Views.DiscountRowViewBuilder();
 
         discountRowBuilder.setContext(this)

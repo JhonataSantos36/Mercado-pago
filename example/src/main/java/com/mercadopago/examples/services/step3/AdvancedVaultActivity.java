@@ -9,6 +9,7 @@ import android.widget.Toast;
 import com.mercadopago.callbacks.Callback;
 import com.mercadopago.constants.Sites;
 import com.mercadopago.core.MercadoPago;
+import com.mercadopago.customviews.MPButton;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.examples.R;
 import com.mercadopago.examples.services.step2.SimpleVaultActivity;
@@ -37,6 +38,7 @@ public class AdvancedVaultActivity extends SimpleVaultActivity {
     protected PayerCost mSelectedPayerCost;
     protected Issuer mSelectedIssuer;
     protected Issuer mTempIssuer;
+    protected MPButton mSubmitButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,9 +54,10 @@ public class AdvancedVaultActivity extends SimpleVaultActivity {
         if (mAmount != null) {
 
             mInstallmentsCard = findViewById(R.id.installmentsCard);
-            mInstallmentsLayout = (FrameLayout) findViewById(R.id.installmentsLayout);
-            mInstallmentsText = (MPTextView) findViewById(R.id.installmentsLabel);
+            mInstallmentsLayout = findViewById(R.id.installmentsLayout);
+            mInstallmentsText = findViewById(R.id.installmentsLabel);
             mInstallmentsCard.setVisibility(View.GONE);
+            mSubmitButton = findViewById(R.id.submitButton);
 
         } else {
             Intent returnIntent = new Intent();
@@ -350,7 +353,7 @@ public class AdvancedVaultActivity extends SimpleVaultActivity {
     }
 
     @Override
-    public void submitForm(View view) {
+    public void submitForm() {
 
         LayoutUtil.hideKeyboard(mActivity);
 
@@ -359,7 +362,7 @@ public class AdvancedVaultActivity extends SimpleVaultActivity {
             return;
         }
 
-        super.submitForm(view);
+        super.submitForm();
     }
 
     @Override

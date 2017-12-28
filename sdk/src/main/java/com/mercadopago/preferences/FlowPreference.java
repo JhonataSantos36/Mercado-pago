@@ -40,7 +40,6 @@ public class FlowPreference {
         this.congratsDisplayTime = builder.congratsDisplayTime;
         this.checkoutTimer = builder.checkoutTimer;
         this.exitOnPaymentMethodChange = builder.exitOnPaymentMethodChange;
-
     }
 
     public Integer getCongratsDisplayTime() {

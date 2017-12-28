@@ -5,6 +5,7 @@ import com.mercadopago.controllers.Timer;
 import com.mercadopago.core.MercadoPagoCheckout;
 import com.mercadopago.exceptions.CheckoutPreferenceException;
 import com.mercadopago.exceptions.MercadoPagoError;
+import com.mercadopago.hooks.Hook;
 import com.mercadopago.mocks.Cards;
 import com.mercadopago.mocks.Customers;
 import com.mercadopago.mocks.Discounts;
@@ -31,7 +32,6 @@ import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentMethodSearch;
 import com.mercadopago.model.PaymentRecovery;
 import com.mercadopago.model.PaymentResult;
-import com.mercadopago.model.PaymentResultAction;
 import com.mercadopago.model.Site;
 import com.mercadopago.model.Token;
 import com.mercadopago.mvp.OnResourcesRetrievedCallback;
@@ -39,7 +39,7 @@ import com.mercadopago.preferences.CheckoutPreference;
 import com.mercadopago.preferences.FlowPreference;
 import com.mercadopago.presenters.CheckoutPresenter;
 import com.mercadopago.providers.CheckoutProvider;
-import com.mercadopago.util.TextUtils;
+import com.mercadopago.util.TextUtil;
 import com.mercadopago.views.CheckoutView;
 
 import junit.framework.Assert;
@@ -980,7 +980,7 @@ public class CheckoutPresenterTest {
         assertTrue(view.showingReviewAndConfirm);
         presenter.onPaymentConfirmation();
         assertTrue(view.showingPaymentResult);
-        presenter.onPaymentResultCancel(PaymentResultAction.RECOVER_PAYMENT);
+        presenter.onPaymentResultCancel(PaymentResult.RECOVER_PAYMENT);
         assertTrue(view.showingPaymentRecoveryFlow);
         assertEquals(view.paymentRecoveryRequested.getPaymentMethod().getId(), paymentMethod.getId());
     }
@@ -1017,7 +1017,7 @@ public class CheckoutPresenterTest {
         assertTrue(view.showingReviewAndConfirm);
         presenter.onPaymentConfirmation();
         assertTrue(view.showingPaymentResult);
-        presenter.onPaymentResultCancel(PaymentResultAction.RECOVER_PAYMENT);
+        presenter.onPaymentResultCancel(PaymentResult.RECOVER_PAYMENT);
         assertTrue(view.showingPaymentRecoveryFlow);
         assertEquals(view.paymentRecoveryRequested.getPaymentMethod().getId(), paymentMethod.getId());
 
@@ -1051,11 +1051,12 @@ public class CheckoutPresenterTest {
         presenter.setCheckoutPreference(preference);
         presenter.initialize();
 
-        presenter.onPaymentMethodSelectionResponse(PaymentMethods.getPaymentMethodOff(), null, null, null, null, null, null);
+        presenter.onPaymentMethodSelectionResponse(PaymentMethods
+                .getPaymentMethodOff(), null, null, null, null, null, null);
         assertTrue(view.showingReviewAndConfirm);
         presenter.onPaymentConfirmation();
         assertTrue(view.showingPaymentResult);
-        presenter.onPaymentResultCancel(PaymentResultAction.RECOVER_PAYMENT);
+        presenter.onPaymentResultCancel(PaymentResult.RECOVER_PAYMENT);
         assertTrue(view.showingError);
     }
 
@@ -1139,7 +1140,7 @@ public class CheckoutPresenterTest {
         assertTrue(view.showingReviewAndConfirm);
         presenter.onPaymentConfirmation();
         assertTrue(view.showingPaymentResult);
-        presenter.onPaymentResultCancel(PaymentResultAction.RECOVER_PAYMENT);
+        presenter.onPaymentResultCancel(PaymentResult.RECOVER_PAYMENT);
         assertTrue(view.showingPaymentRecoveryFlow);
         presenter.onCardFlowCancel();
         assertTrue(view.showingPaymentMethodSelection);
@@ -1214,7 +1215,7 @@ public class CheckoutPresenterTest {
         presenter.onPaymentConfirmation();
 
         assertTrue(provider.paymentRequested);
-        assertTrue(!TextUtils.isEmpty(provider.transactionId));
+        assertTrue(!TextUtil.isEmpty(provider.transactionId));
     }
 
     @Test
@@ -1248,7 +1249,7 @@ public class CheckoutPresenterTest {
         presenter.onPaymentConfirmation();
 
         assertTrue(provider.paymentRequested);
-        assertTrue(!TextUtils.isEmpty(provider.paymentCustomerId));
+        assertTrue(!TextUtil.isEmpty(provider.paymentCustomerId));
     }
 
     //Timer tests
@@ -1847,12 +1848,63 @@ public class CheckoutPresenterTest {
         assertTrue(view.showingError);
     }
 
+    @Test
+    public void ifNotNewFlowThenDoNotTrackInit() {
+        MockedProvider provider = new MockedProvider();
+        MockedView view = new MockedView();
+
+        CheckoutPresenter presenter = new CheckoutPresenter();
+        presenter.attachResourcesProvider(provider);
+        presenter.attachView(view);
+
+        PaymentData paymentData = new PaymentData();
+        paymentData.setPaymentMethod(PaymentMethods.getPaymentMethodOff());
+
+        //Real preference, with items
+        CheckoutPreference preference = new CheckoutPreference.Builder()
+                .addItem(new Item("id", BigDecimal.TEN))
+                .setSite(Sites.ARGENTINA)
+                .build();
+
+        provider.setCheckoutPreferenceResponse(preference);
+        presenter.setCheckoutPreference(preference);
+
+        //With a PaymentData input
+        presenter.setPaymentDataInput(paymentData);
+
+        presenter.initialize();
+        assertFalse(view.initTracked);
+    }
+
+    @Test
+    public void ifNewFlowThenDoTrackInit() {
+        MockedProvider provider = new MockedProvider();
+        MockedView view = new MockedView();
+
+        CheckoutPresenter presenter = new CheckoutPresenter();
+        presenter.attachResourcesProvider(provider);
+        presenter.attachView(view);
+
+        //Real preference, with items
+        CheckoutPreference preference = new CheckoutPreference.Builder()
+                .addItem(new Item("id", BigDecimal.TEN))
+                .setSite(Sites.ARGENTINA)
+                .build();
+
+        provider.setCheckoutPreferenceResponse(preference);
+        presenter.setCheckoutPreference(preference);
+
+        presenter.initialize();
+        assertTrue(view.initTracked);
+    }
+
     private class MockedView implements CheckoutView {
 
         private MercadoPagoError errorShown;
         private boolean showingError = false;
         private boolean showingPaymentMethodSelection = false;
         private boolean showingReviewAndConfirm = false;
+        private boolean initTracked = false;
         private PaymentData paymentDataFinalResponse;
         private boolean showingPaymentResult = false;
         private boolean checkoutCanceled = false;
@@ -1976,11 +2028,21 @@ public class CheckoutPresenterTest {
 
         @Override
         public void trackScreen() {
-
+            initTracked = true;
         }
 
         @Override
         public void finishFromReviewAndConfirm() {
+
+        }
+
+        @Override
+        public void showHook(Hook hook, int requestCode) {
+
+        }
+
+        @Override
+        public void showPaymentPlugin() {
 
         }
     }

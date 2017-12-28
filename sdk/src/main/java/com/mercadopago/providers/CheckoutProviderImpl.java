@@ -1,14 +1,14 @@
 package com.mercadopago.providers;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
 import android.content.Context;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.mercadopago.R;
 import com.mercadopago.callbacks.Callback;
 import com.mercadopago.constants.PaymentTypes;
 import com.mercadopago.constants.Sites;
+import com.mercadopago.core.CheckoutStore;
 import com.mercadopago.core.CustomServer;
 import com.mercadopago.core.MercadoPagoServicesAdapter;
 import com.mercadopago.exceptions.CheckoutPreferenceException;
@@ -35,7 +35,7 @@ import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.MercadoPagoESC;
 import com.mercadopago.util.MercadoPagoESCImpl;
 import com.mercadopago.util.MercadoPagoUtil;
-import com.mercadopago.util.TextUtils;
+import com.mercadopago.util.TextUtil;
 
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
@@ -56,7 +56,7 @@ public class CheckoutProviderImpl implements CheckoutProvider {
     private String siteId;
 
     public CheckoutProviderImpl(Context context, String publicKey, String privateKey, ServicePreference servicePreference, boolean escEnabled) {
-        if (TextUtils.isEmpty(publicKey) && TextUtils.isEmpty(privateKey)) {
+        if (TextUtil.isEmpty(publicKey) && TextUtil.isEmpty(privateKey)) {
             throw new IllegalStateException("Credentials not set");
         } else if (context == null) {
             throw new IllegalStateException("Context not context");
@@ -96,17 +96,23 @@ public class CheckoutProviderImpl implements CheckoutProvider {
 
     @Override
     public void getDiscountCampaigns(final OnResourcesRetrievedCallback<List<Campaign>> callback) {
-        mercadoPagoServicesAdapter.getCampaigns(new Callback<List<Campaign>>() {
-            @Override
-            public void success(List<Campaign> campaigns) {
-                callback.onSuccess(campaigns);
-            }
 
-            @Override
-            public void failure(ApiException apiException) {
-                callback.onFailure(new MercadoPagoError(apiException, ApiUtil.RequestOrigin.GET_CAMPAIGNS));
-            }
-        });
+        if (CheckoutStore.getInstance().getPaymentMethodPluginList().isEmpty()) {
+            mercadoPagoServicesAdapter.getCampaigns(new Callback<List<Campaign>>() {
+                @Override
+                public void success(List<Campaign> campaigns) {
+                    callback.onSuccess(campaigns);
+                }
+
+                @Override
+                public void failure(ApiException apiException) {
+                    callback.onFailure(new MercadoPagoError(apiException, ApiUtil.RequestOrigin.GET_CAMPAIGNS));
+                }
+            });
+        } else {
+            final List<Campaign> empty = new ArrayList<>();
+            callback.onSuccess(empty);
+        }
     }
 
     @Override
@@ -265,7 +271,7 @@ public class CheckoutProviderImpl implements CheckoutProvider {
         paymentBody.setBinaryMode(binaryMode);
 
         Payer payer = paymentData.getPayer();
-        if (!TextUtils.isEmpty(customerId) && MercadoPagoUtil.isCard(paymentData.getPaymentMethod().getPaymentTypeId())) {
+        if (!TextUtil.isEmpty(customerId) && MercadoPagoUtil.isCard(paymentData.getPaymentMethod().getPaymentTypeId())) {
             payer.setId(customerId);
         }
         paymentBody.setPayer(payer);

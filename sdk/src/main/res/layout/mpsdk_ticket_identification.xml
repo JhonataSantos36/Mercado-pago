@@ -32,15 +32,16 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="20dp"
                 android:layout_marginTop="20dp"
                 android:orientation="horizontal"
+                android:paddingStart="15dp"
                 android:paddingLeft="15dp">
 
                 <com.mercadopago.customviews.MPTextView
                     android:id="@+id/mpsdkIdentificationTypeId"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:textSize="14dp"
                     android:textColor="@color/mpsdk_base_text"
                     app:allowCustomFont="false"
@@ -51,34 +52,45 @@
                 <FrameLayout
                     android:id="@+id/mpsdkIdNumberClickableZone"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="match_parent">
 
-                    <com.mercadopago.customviews.MPAutoResizeTextView
+                    <com.mercadopago.customviews.MPTextView
                         android:id="@+id/mpsdkIdentificationCardholderContainer"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:maxLines="1"
-                        android:paddingLeft="4dp"
-                        android:text="*** *** *** **"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:maxLength="40"
                         android:textColor="@color/mpsdk_base_text_alpha"
-                        android:textSize="14dp"
-                        app:allowCustomFont="false"
+                        android:paddingLeft="4dp"
+                        android:paddingStart="4dp"
+                        android:paddingEnd="4dp"
+                        android:paddingRight="4dp"
+                        app:autoSizeTextType="uniform"
+                        app:autoSizeMinTextSize="8dp"
+                        app:autoSizeMaxTextSize="14dp"
+                        app:autoSizeStepGranularity="1dp"
                         app:font_style="mono_regular"
-                        app:minTextSize="8dp" />
+                        app:allowCustomFont="false"
+                        android:text="*** *** *** **"/>
 
-                    <com.mercadopago.customviews.MPAutoResizeTextView
+                    <com.mercadopago.customviews.MPTextView
                         android:id="@+id/mpsdkIdNumberView"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="start"
-                        android:maxLines="1"
+                        android:layout_height="match_parent"
                         android:paddingLeft="4dp"
+                        android:paddingStart="4dp"
+                        android:paddingEnd="4dp"
+                        android:paddingRight="4dp"
+                        android:gravity="center_vertical"
+                        android:maxLength="40"
                         android:textColor="@color/mpsdk_base_text"
-                        android:textSize="14dp"
-                        android:visibility="invisible"
-                        app:allowCustomFont="false"
+                        app:autoSizeTextType="uniform"
+                        app:autoSizeMinTextSize="8dp"
+                        app:autoSizeMaxTextSize="16dp"
+                        app:autoSizeStepGranularity="1dp"
                         app:font_style="mono_regular"
-                        app:minTextSize="8dp" />
+                        app:allowCustomFont="false"/>
+
                 </FrameLayout>
             </LinearLayout>
 
@@ -92,8 +104,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
+                    android:paddingStart="15dp"
                     android:paddingLeft="15dp"
-                    android:paddingRight="7dp">
+                    android:paddingRight="7dp"
+                    android:paddingEnd="7dp">
 
                     <com.mercadopago.customviews.MPTextView
                         android:id="@+id/mpsdkNameView"
@@ -104,7 +118,7 @@
                         android:textColor="@color/mpsdk_base_text_alpha"
                         android:textSize="12dp"
                         app:allowCustomFont="false"
-                        app:minTextSize="8dp" />
+                        app:minTextSize="8dp"/>
                 </FrameLayout>
 
                 <FrameLayout
@@ -121,6 +135,7 @@
                         android:ellipsize="end"
                         android:maxLines="1"
                         android:paddingRight="10dp"
+                        android:paddingEnd="10dp"
                         android:textColor="@color/mpsdk_base_text"
                         android:textSize="12dp"
                         app:allowCustomFont="false"

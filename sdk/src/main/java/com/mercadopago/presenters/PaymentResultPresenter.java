@@ -11,7 +11,7 @@ import com.mercadopago.views.PaymentResultView;
 
 import java.math.BigDecimal;
 
-import static com.mercadopago.util.TextUtils.isEmpty;
+import static com.mercadopago.util.TextUtil.isEmpty;
 
 public class PaymentResultPresenter extends MvpPresenter<PaymentResultView, PaymentResultProvider> {
     private Boolean discountEnabled;
@@ -45,7 +45,7 @@ public class PaymentResultPresenter extends MvpPresenter<PaymentResultView, Paym
         } else if (paymentResult.getPaymentStatus().equals(Payment.StatusCodes.STATUS_IN_PROCESS) ||
                 paymentResult.getPaymentStatus().equals(Payment.StatusCodes.STATUS_PENDING)) {
             getView().showPending(paymentResult);
-        } else if (isCardOrAccountMoney()) {
+        } else if (isCardOrAccountMoney() || isPlugin()) {
             startPaymentsOnResult();
         } else if (paymentResult.getPaymentStatus().equals(Payment.StatusCodes.STATUS_REJECTED)) {
             getView().showRejection(paymentResult);
@@ -59,6 +59,10 @@ public class PaymentResultPresenter extends MvpPresenter<PaymentResultView, Paym
     private boolean isCardOrAccountMoney() {
         return MercadoPagoUtil.isCard(paymentResult.getPaymentData().getPaymentMethod().getPaymentTypeId()) ||
                 paymentResult.getPaymentData().getPaymentMethod().getPaymentTypeId().equals(PaymentTypes.ACCOUNT_MONEY);
+    }
+
+    private boolean isPlugin() {
+        return PaymentTypes.PLUGIN.equalsIgnoreCase(paymentResult.getPaymentData().getPaymentMethod().getPaymentTypeId());
     }
 
     private void startPaymentsOnResult() {

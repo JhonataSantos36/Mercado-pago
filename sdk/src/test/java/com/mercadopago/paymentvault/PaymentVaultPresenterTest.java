@@ -5,6 +5,7 @@ import com.mercadopago.constants.PaymentMethods;
 import com.mercadopago.constants.PaymentTypes;
 import com.mercadopago.constants.Sites;
 import com.mercadopago.exceptions.MercadoPagoError;
+import com.mercadopago.hooks.Hook;
 import com.mercadopago.mocks.PaymentMethodSearchs;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.Card;
@@ -16,6 +17,7 @@ import com.mercadopago.model.PaymentMethodSearch;
 import com.mercadopago.model.PaymentMethodSearchItem;
 import com.mercadopago.model.Site;
 import com.mercadopago.mvp.OnResourcesRetrievedCallback;
+import com.mercadopago.plugins.model.PaymentMethodInfo;
 import com.mercadopago.preferences.FlowPreference;
 import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.presenters.PaymentVaultPresenter;
@@ -1290,6 +1292,11 @@ public class PaymentVaultPresenterTest {
         }
 
         @Override
+        public void showPluginOptions(List<PaymentMethodInfo> items) {
+
+        }
+
+        @Override
         public void showSearchItems(List<PaymentMethodSearchItem> searchItems, OnSelectedCallback<PaymentMethodSearchItem> paymentMethodSearchItemSelectionCallback) {
             this.searchItemsShown = searchItems;
             this.itemSelectionCallback = paymentMethodSearchItemSelectionCallback;
@@ -1355,6 +1362,11 @@ public class PaymentVaultPresenterTest {
 
         @Override
         public void initializeMPTracker() {
+
+        }
+
+        @Override
+        public void showHook(Hook hook, int code) {
 
         }
 

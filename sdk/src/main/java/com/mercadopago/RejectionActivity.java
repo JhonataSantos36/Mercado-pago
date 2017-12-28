@@ -19,9 +19,9 @@ import com.mercadopago.model.Issuer;
 import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentData;
 import com.mercadopago.model.PaymentResult;
-import com.mercadopago.model.PaymentResultAction;
 import com.mercadopago.observers.TimerObserver;
 import com.mercadopago.preferences.PaymentResultScreenPreference;
+import com.mercadopago.tracker.FlowHandler;
 import com.mercadopago.tracker.MPTrackingContext;
 import com.mercadopago.tracking.model.ScreenViewEvent;
 import com.mercadopago.tracking.utils.TrackingUtil;
@@ -169,6 +169,7 @@ public class RejectionActivity extends MercadoPagoBaseActivity implements TimerO
 
 
         ScreenViewEvent.Builder builder = new ScreenViewEvent.Builder()
+                .setFlowId(FlowHandler.getInstance().getFlowId())
                 .setScreenId(TrackingUtil.SCREEN_ID_PAYMENT_RESULT_REJECTED)
                 .setScreenName(TrackingUtil.SCREEN_NAME_PAYMENT_RESULT_REJECTED)
                 .addMetaData(TrackingUtil.METADATA_PAYMENT_IS_EXPRESS, TrackingUtil.IS_EXPRESS_DEFAULT_VALUE)
@@ -495,13 +496,13 @@ public class RejectionActivity extends MercadoPagoBaseActivity implements TimerO
     public void onClickRejectionOptionButton() {
         if (isPaymentStatusDetailRecoverable()) {
             Intent returnIntent = new Intent();
-            mNextAction = PaymentResultAction.RECOVER_PAYMENT;
+            mNextAction = PaymentResult.RECOVER_PAYMENT;
             returnIntent.putExtra("nextAction", mNextAction);
             setResult(RESULT_CANCELED, returnIntent);
             finish();
         } else {
             Intent returnIntent = new Intent();
-            mNextAction = PaymentResultAction.SELECT_OTHER_PAYMENT_METHOD;
+            mNextAction = PaymentResult.SELECT_OTHER_PAYMENT_METHOD;
             returnIntent.putExtra("nextAction", mNextAction);
             setResult(RESULT_CANCELED, returnIntent);
             finish();

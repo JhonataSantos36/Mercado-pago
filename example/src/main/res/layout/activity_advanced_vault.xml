@@ -35,8 +35,7 @@
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
                     android:background="@color/mpsdk_white"
-                    android:clickable="true"
-                    android:onClick="onCustomerMethodsClick">
+                    android:clickable="true">
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="25dp"
@@ -168,7 +167,6 @@
                 android:text="@string/mpsdk_confirm"
                 android:enabled="false"
                 android:layout_margin="@dimen/mpsdk_margin_std"
-                android:onClick="submitForm"
                 style="@style/mpsdk_button_normal"/>
 
         </LinearLayout>

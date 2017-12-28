@@ -36,6 +36,7 @@ import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.presenters.InstallmentsPresenter;
 import com.mercadopago.providers.InstallmentsProviderImpl;
+import com.mercadopago.tracker.FlowHandler;
 import com.mercadopago.tracker.MPTrackingContext;
 import com.mercadopago.tracking.model.ScreenViewEvent;
 import com.mercadopago.tracking.utils.TrackingUtil;
@@ -256,6 +257,7 @@ public class InstallmentsActivity extends MercadoPagoBaseActivity implements Ins
                 .build();
 
         ScreenViewEvent event = new ScreenViewEvent.Builder()
+                .setFlowId(FlowHandler.getInstance().getFlowId())
                 .setScreenId(TrackingUtil.SCREEN_ID_INSTALLMENTS)
                 .setScreenName(TrackingUtil.SCREEN_NAME_CARD_FORM_INSTALLMENTS)
                 .addMetaData(TrackingUtil.METADATA_PAYMENT_METHOD_ID, mPresenter.getPaymentMethod().getId())

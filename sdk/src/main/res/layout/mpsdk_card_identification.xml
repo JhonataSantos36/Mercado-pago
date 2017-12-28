@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mpsdkIdentificationCardContainer"
     android:layout_width="@dimen/mpsdk_card_size_big_width"
     android:layout_height="@dimen/mpsdk_card_size_big_height"
@@ -44,7 +44,7 @@
             </FrameLayout>
             <LinearLayout
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="0.7"
                 android:layout_gravity="center_vertical"
                 android:paddingLeft="8dp"
@@ -58,6 +58,7 @@
                     android:layout_height="wrap_content"
                     android:paddingRight="14dp"
                     android:paddingEnd="14dp"
+                    android:layout_marginTop="35dp"
                     android:textColor="@color/mpsdk_base_text_alpha"
                     android:text="@string/mpsdk_card_identification_label"
                     android:lineSpacingExtra="5dp"
@@ -67,37 +68,45 @@
                 <FrameLayout
                     android:id="@+id/mpsdkIdNumberClickableZone"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_gravity="start"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="35dp"
+                    android:paddingStart="2dp"
+                    android:paddingLeft="2dp"
                     android:paddingEnd="2dp"
-                    android:paddingRight="2dp"
-                    android:layout_marginTop="10dp">
+                    android:paddingRight="2dp">
 
-                    <com.mercadopago.customviews.MPAutoResizeTextView
+                    <com.mercadopago.customviews.MPTextView
                         android:id="@+id/mpsdkIdentificationCardholderContainer"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="start"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:maxLength="40"
                         android:textColor="@color/mpsdk_base_text"
-                        android:textSize="20dp"
-                        app:minTextSize="8dp"
-                        android:maxLines="1"
-                        android:visibility="visible"
-                        android:text="•• ••• •••"
+                        app:autoSizeTextType="uniform"
+                        app:autoSizeMinTextSize="10dp"
+                        app:autoSizeMaxTextSize="20dp"
+                        app:autoSizeStepGranularity="1dp"
+                        app:font_style="mono_regular"
                         app:allowCustomFont="false"
-                        app:font_style="mono_regular"/>
+                        android:text="•• ••• •••"/>
 
-                    <com.mercadopago.customviews.MPAutoResizeTextView
+                    <com.mercadopago.customviews.MPTextView
                         android:id="@+id/mpsdkIdNumberView"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="start"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:maxLength="40"
                         android:textColor="@color/mpsdk_base_text"
-                        android:textSize="18dp"
+                        app:autoSizeTextType="uniform"
+                        app:autoSizeMinTextSize="8dp"
+                        app:autoSizeMaxTextSize="16dp"
+                        app:autoSizeStepGranularity="1dp"
+                        app:font_style="mono_regular"
                         app:allowCustomFont="false"
-                        app:minTextSize="8dp"
-                        android:maxLines="1"
-                        android:visibility="invisible"/>
+                        tools:text="123123122"/>
+
 
                 </FrameLayout>
             </LinearLayout>

@@ -3,6 +3,7 @@ package com.mercadopago.tracker;
 import android.content.Context;
 import android.os.Build;
 
+import com.mercadopago.core.Settings;
 import com.mercadopago.model.Fingerprint;
 import com.mercadopago.tracking.model.AppInformation;
 import com.mercadopago.tracking.model.DeviceInfo;
@@ -14,41 +15,30 @@ import com.mercadopago.tracking.utils.TrackingUtil;
  * Created by vaserber on 6/5/17.
  */
 
-
 public class MPTrackingContext {
 
+    private String publicKey;
     private Context context;
-    private String clientId;
     private AppInformation appInformation;
     private DeviceInfo deviceInfo;
     private String trackingStrategy;
 
     private MPTrackingContext(Builder builder) {
         this.context = builder.context;
-
-        if (builder.trackingStrategy == null) {
-            builder.trackingStrategy = TrackingUtil.BATCH_STRATEGY;
-        }
-
-        this.clientId = initializeClientId();
         this.deviceInfo = initializeDeviceInfo();
         this.trackingStrategy = builder.trackingStrategy;
+        this.publicKey = builder.publicKey;
 
         if (!builder.publicKey.isEmpty() && builder.checkoutVersion != null) {
-            this.appInformation = initializeAppInformation(builder.publicKey, builder.checkoutVersion);
+            this.appInformation = initializeAppInformation(builder.checkoutVersion);
         }
-
     }
 
-    private String initializeClientId() {
-        return Fingerprint.getAndroidId(this.context);
-    }
-
-    private AppInformation initializeAppInformation(String publicKey, String checkoutVersion) {
+    private AppInformation initializeAppInformation(final String checkoutVersion) {
         return new AppInformation.Builder()
-                .setPublicKey(publicKey)
                 .setCheckoutVersion(checkoutVersion)
-                .setPlatform("native/android")
+                .setPlatform("/native/android")
+                .setEnvironment(Settings.trackingEnvironment)
                 .build();
     }
 
@@ -56,6 +46,7 @@ public class MPTrackingContext {
         return new DeviceInfo.Builder()
                 .setModel(Build.MODEL)
                 .setOS("android")
+                .setUuid(Fingerprint.getAndroidId(this.context))
                 .setSystemVersion(Fingerprint.getDeviceSystemVersion())
                 .setScreenSize(Fingerprint.getDeviceResolution(this.context))
                 .setResolution(String.valueOf(Fingerprint.getDeviceScreenDensity(this.context)))
@@ -63,7 +54,7 @@ public class MPTrackingContext {
     }
 
     public void trackEvent(Event event) {
-        MPTracker.getInstance().trackEvent(clientId, appInformation, deviceInfo, event, context, trackingStrategy);
+        MPTracker.getInstance().trackEvent(publicKey, appInformation, deviceInfo, event, context, trackingStrategy);
     }
 
     public void clearExpiredTracks() {
@@ -76,17 +67,22 @@ public class MPTrackingContext {
         private String checkoutVersion;
         private String trackingStrategy;
 
-        public Builder(Context context, String publicKey) {
+        public Builder(final Context context, final String publicKey) {
             this.context = context;
             this.publicKey = publicKey;
         }
 
-        public Builder setCheckoutVersion(String checkoutVersion) {
+        public Builder setPublicKey(final String publicKey) {
+            this.publicKey = publicKey;
+            return this;
+        }
+
+        public Builder setCheckoutVersion(final String checkoutVersion) {
             this.checkoutVersion = checkoutVersion;
             return this;
         }
 
-        public Builder setTrackingStrategy(String trackingStrategy) {
+        public Builder setTrackingStrategy(final String trackingStrategy) {
             this.trackingStrategy = trackingStrategy;
             return this;
         }

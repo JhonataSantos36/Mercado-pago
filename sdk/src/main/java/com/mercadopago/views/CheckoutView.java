@@ -1,6 +1,7 @@
 package com.mercadopago.views;
 
 import com.mercadopago.exceptions.MercadoPagoError;
+import com.mercadopago.hooks.Hook;
 import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentData;
 import com.mercadopago.model.PaymentRecovery;
@@ -48,4 +49,8 @@ public interface CheckoutView extends MvpView {
     void trackScreen();
 
     void finishFromReviewAndConfirm();
+
+    void showHook(final Hook hook, final int requestCode);
+
+    void showPaymentPlugin();
 }

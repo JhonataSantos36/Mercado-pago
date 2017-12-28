@@ -7,20 +7,30 @@ import android.support.annotation.NonNull;
 
 import com.mercadopago.CheckoutActivity;
 import com.mercadopago.callbacks.CallbackHolder;
+import com.mercadopago.components.RendererFactory;
 import com.mercadopago.constants.ContentLocation;
 import com.mercadopago.controllers.CustomReviewablesHandler;
 import com.mercadopago.controllers.CustomServicesHandler;
+import com.mercadopago.hooks.CheckoutHooks;
 import com.mercadopago.model.Discount;
 import com.mercadopago.model.PaymentData;
 import com.mercadopago.model.PaymentResult;
+import com.mercadopago.plugins.PaymentMethodPlugin;
+import com.mercadopago.plugins.PaymentPlugin;
 import com.mercadopago.preferences.CheckoutPreference;
 import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.preferences.FlowPreference;
 import com.mercadopago.preferences.PaymentResultScreenPreference;
 import com.mercadopago.preferences.ReviewScreenPreference;
 import com.mercadopago.preferences.ServicePreference;
+import com.mercadopago.tracker.FlowHandler;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.TextUtil;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -69,6 +79,17 @@ public class MercadoPagoCheckout {
         CustomReviewablesHandler.getInstance().clear();
         customizeCheckoutReview(reviewScreenPreference);
         customizePaymentResultReview(paymentResultScreenPreference);
+
+        CheckoutStore.getInstance().reset();
+        CheckoutStore.getInstance().setDecorationPreference(decorationPreference);
+        CheckoutStore.getInstance().setPaymentMethodPluginList(builder.paymentMethodPluginList);
+        CheckoutStore.getInstance().setPaymentPlugins(builder.paymentPlugins);
+        CheckoutStore.getInstance().setCheckoutHooks(builder.checkoutHooks);
+
+        //Create flow identifier only for new checkouts
+        if(paymentResult == null && paymentData == null) {
+            FlowHandler.getInstance().generateFlowId();
+        }
     }
 
     private void customizeServices(ServicePreference servicePreference) {
@@ -104,12 +125,6 @@ public class MercadoPagoCheckout {
         }
         if (checkoutPreference == null) {
             throw new IllegalStateException("Checkout preference required");
-        }
-        if ((CallbackHolder.getInstance().hasPaymentCallback() || resultCode.equals(MercadoPagoCheckout.PAYMENT_RESULT_CODE))
-                && !this.checkoutPreference.hasId()
-                && (this.servicePreference == null || !this.servicePreference.hasCreatePaymentURL())) {
-            //TODO revisar
-//            throw new IllegalStateException("Payment service or preference created with private key required to create a payment");
         }
         if (hasTwoDiscountsSet()) {
             throw new IllegalStateException("payment data discount and discount set");
@@ -196,6 +211,9 @@ public class MercadoPagoCheckout {
         private PaymentData paymentData;
         private PaymentResult paymentResult;
         private Discount discount;
+        private CheckoutHooks checkoutHooks;
+        private List<PaymentMethodPlugin> paymentMethodPluginList = new ArrayList<>();
+        private Map<String, PaymentPlugin> paymentPlugins = new HashMap<>();
 
         public Builder setActivity(Activity activity) {
             this.activity = activity;
@@ -255,6 +273,28 @@ public class MercadoPagoCheckout {
         public Builder setPaymentResult(PaymentResult paymentResult) {
             this.paymentResult = paymentResult;
             return this;
+        }
+
+        public Builder setCheckoutHooks(@NonNull final CheckoutHooks checkoutHooks) {
+            this.checkoutHooks = checkoutHooks;
+            return this;
+        }
+
+        public Builder addPaymentMethodPlugin(@NonNull final String paymentMethodId,
+                                              @NonNull final PaymentMethodPlugin paymentMethodPlugin,
+                                              @NonNull final PaymentPlugin paymentPlugin) {
+            paymentMethodPluginList.add(paymentMethodPlugin);
+            paymentPlugins.put(paymentMethodId, paymentPlugin);
+            return this;
+        }
+
+        public Builder addPaymentPlugin(@NonNull final PaymentPlugin plugin, @NonNull final String paymentMethod) {
+            paymentPlugins.put(paymentMethod, plugin);
+            return this;
+        }
+
+        public void registerComponent(@NonNull final Class component, @NonNull final Class renderer) {
+            RendererFactory.register(component, renderer);
         }
 
         public void startForPaymentData() {

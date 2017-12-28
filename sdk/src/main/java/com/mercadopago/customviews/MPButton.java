@@ -1,13 +1,13 @@
 package com.mercadopago.customviews;
 
 import android.content.Context;
-import android.graphics.Typeface;
+import android.os.Build;
+import android.support.v7.widget.AppCompatButton;
 import android.util.AttributeSet;
-import android.widget.Button;
 
-public class MPButton extends Button {
+import com.mercadopago.R;
 
-    private String mTypeName;
+public class MPButton extends AppCompatButton {
 
     public MPButton(Context context) {
         super(context);
@@ -26,13 +26,16 @@ public class MPButton extends Button {
 
     private void init() {
         if (!isInEditMode()) {
-            if (mTypeName == null) {
-                mTypeName = "fonts/Roboto-Regular.ttf";
-            }
-            Typeface tf = Typeface.createFromAsset(getContext().getAssets(), mTypeName);
-            setTypeface(tf);
+            setTextStyle(getContext(), R.style.mpsdk_font_roboto_regular);
         }
     }
 
+    private void setTextStyle(Context context, int resId) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            super.setTextAppearance(context, resId);
+        } else {
+            super.setTextAppearance(resId);
+        }
+    }
 
 }

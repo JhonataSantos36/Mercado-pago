@@ -40,7 +40,7 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="25dp"
-                        tools:src="@drawable/amex"
+                        tools:src="@drawable/mpsdk_amex"
                         android:adjustViewBounds="true"
                         android:id="@+id/pmImage"
                         android:maxWidth="40dp"
@@ -145,7 +145,7 @@
                             android:layout_height="70dp"
                             android:layout_gravity="right"
                             android:layout_marginBottom="10dp"
-                            tools:src="@drawable/bank" />
+                            tools:src="@drawable/mpsdk_bank" />
 
                         <com.mercadopago.customviews.MPTextView
                             android:id="@+id/cVVDescriptor"
@@ -168,7 +168,6 @@
                 android:text="@string/mpsdk_confirm"
                 android:enabled="false"
                 android:layout_margin="@dimen/mpsdk_margin_std"
-                android:onClick="submitForm"
                 style="@style/mpsdk_button_normal"/>
 
         </LinearLayout>

@@ -11,6 +11,11 @@
         android:required="false" />
 
     <application android:allowBackup="true">
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
+
         <activity
             android:name=".CustomerCardsActivity"
             android:label="@string/mpsdk_title_activity_customer_pms"
@@ -115,6 +120,16 @@
         <activity
             android:name=".PayerInformationActivity"
             android:theme="@style/Theme.ProcessMercadoPagoTheme.NoActionbar" />
+        <activity
+            android:name=".hooks.HookActivity"
+            android:theme="@style/Theme.ProcessMercadoPagoTheme.NoActionbar" />
+        <activity
+            android:name=".plugins.PaymentMethodPluginActivity"
+            android:theme="@style/Theme.ProcessMercadoPagoTheme.NoActionbar" />
+        <activity
+            android:name=".plugins.PaymentPluginActivity"
+            android:theme="@style/Theme.ProcessMercadoPagoTheme.NoActionbar" />
+
     </application>
 
 </manifest>

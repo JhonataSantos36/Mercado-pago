@@ -18,6 +18,7 @@ import com.mercadopago.decorations.DividerItemDecoration;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.BankDeal;
 import com.mercadopago.preferences.DecorationPreference;
+import com.mercadopago.tracker.FlowHandler;
 import com.mercadopago.tracker.MPTrackingContext;
 import com.mercadopago.tracking.model.ScreenViewEvent;
 import com.mercadopago.tracking.utils.TrackingUtil;
@@ -63,6 +64,7 @@ public class BankDealsActivity extends MercadoPagoActivity {
                 .setTrackingStrategy(TrackingUtil.BATCH_STRATEGY)
                 .build();
         ScreenViewEvent event = new ScreenViewEvent.Builder()
+                .setFlowId(FlowHandler.getInstance().getFlowId())
                 .setScreenId(TrackingUtil.SCREEN_ID_BANK_DEALS)
                 .setScreenName(TrackingUtil.SCREEN_NAME_BANK_DEALS)
                 .build();

@@ -1,6 +1,7 @@
 package com.mercadopago.providers;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 
 import com.mercadopago.R;
 import com.mercadopago.callbacks.Callback;
@@ -98,14 +99,14 @@ public class PaymentVaultProviderImpl implements PaymentVaultProvider {
     }
 
     @Override
-    public void getPaymentMethodSearch(BigDecimal amount, final PaymentPreference paymentPreference, Payer payer, Site site, final OnResourcesRetrievedCallback<PaymentMethodSearch> onResourcesRetrievedCallback) {
+    public void getPaymentMethodSearch(BigDecimal amount, final PaymentPreference paymentPreference, final Payer payer, Site site, final OnResourcesRetrievedCallback<PaymentMethodSearch> onResourcesRetrievedCallback) {
 
-        List<String> excludedPaymentTypes = paymentPreference == null ? null : paymentPreference.getExcludedPaymentTypes();
-        List<String> excludedPaymentMethodIds = paymentPreference == null ? null : paymentPreference.getExcludedPaymentMethodIds();
+        final List<String> excludedPaymentTypes = paymentPreference == null ? null : paymentPreference.getExcludedPaymentTypes();
+        final List<String> excludedPaymentMethodIds = paymentPreference == null ? null : paymentPreference.getExcludedPaymentMethodIds();
 
         mercadoPago.getPaymentMethodSearch(amount, excludedPaymentTypes, excludedPaymentMethodIds, payer, site, new Callback<PaymentMethodSearch>() {
             @Override
-            public void success(final PaymentMethodSearch paymentMethodSearch) {
+            public void success(@NonNull final PaymentMethodSearch paymentMethodSearch) {
                 if (!paymentMethodSearch.hasSavedCards() && isMerchantServerCustomerAvailable()) {
                     addCustomerCardsFromMerchantServer(paymentMethodSearch, paymentPreference, onResourcesRetrievedCallback);
                 } else {

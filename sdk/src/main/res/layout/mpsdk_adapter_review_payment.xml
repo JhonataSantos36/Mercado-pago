@@ -19,7 +19,8 @@
             android:id="@+id/mpsdkAdapterReviewPaymentImage"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:layout_gravity="center_horizontal" />
+            android:scaleType="fitCenter"
+            android:layout_gravity="center_horizontal"/>
 
         <FrameLayout
             android:id="@+id/mpsdkAdapterReviewPayerCostContainer"

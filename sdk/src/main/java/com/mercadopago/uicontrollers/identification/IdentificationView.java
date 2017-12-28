@@ -9,7 +9,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.mercadopago.R;
-import com.mercadopago.customviews.MPAutoResizeTextView;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.model.IdentificationType;
 import com.mercadopago.util.ScaleUtil;
@@ -29,7 +28,7 @@ public abstract class IdentificationView {
     //View controls
     protected FrameLayout mCardContainer;
     protected ImageView mCardBorder;
-    protected MPAutoResizeTextView mIdentificationNumberTextView;
+    protected MPTextView mIdentificationNumberTextView;
     protected MPTextView mBaseIdNumberView;
 
     //Identification Info
@@ -45,10 +44,10 @@ public abstract class IdentificationView {
     public abstract void draw();
 
     public void initializeControls() {
-        mCardContainer = (FrameLayout) mView.findViewById(R.id.mpsdkIdentificationCardContainer);
-        mCardBorder = (ImageView) mView.findViewById(R.id.mpsdkCardShadowBorder);
-        mBaseIdNumberView = (MPTextView) mView.findViewById(R.id.mpsdkIdentificationCardholderContainer);
-        mIdentificationNumberTextView = (MPAutoResizeTextView) mView.findViewById(R.id.mpsdkIdNumberView);
+        mCardContainer =  mView.findViewById(R.id.mpsdkIdentificationCardContainer);
+        mCardBorder =  mView.findViewById(R.id.mpsdkCardShadowBorder);
+        mBaseIdNumberView =  mView.findViewById(R.id.mpsdkIdentificationCardholderContainer);
+        mIdentificationNumberTextView =  mView.findViewById(R.id.mpsdkIdNumberView);
     }
 
     public void setIdentificationNumber(String number) {

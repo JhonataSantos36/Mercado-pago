@@ -17,7 +17,7 @@ import com.mercadopago.util.CurrenciesUtil;
 
 import java.math.BigDecimal;
 
-import static com.mercadopago.util.TextUtils.isEmpty;
+import static com.mercadopago.util.TextUtil.isEmpty;
 
 /**
  * Created by mromar on 1/19/17.

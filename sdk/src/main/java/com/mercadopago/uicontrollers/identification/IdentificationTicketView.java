@@ -8,11 +8,10 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import com.mercadopago.R;
-import com.mercadopago.customviews.MPAutoResizeTextView;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.util.MPCardMaskUtil;
 
-import static com.mercadopago.util.TextUtils.isEmpty;
+import static com.mercadopago.util.TextUtil.isEmpty;
 
 /**
  * Created by mromar on 9/27/17.
@@ -35,21 +34,11 @@ public class IdentificationTicketView extends IdentificationView {
     public void initializeControls() {
         super.initializeControls();
 
-        mNameTextView = (MPTextView) mView.findViewById(R.id.mpsdkNameView);
-        mLastNameTextView = (MPTextView) mView.findViewById(R.id.mpsdkLastnameView);
-        mIdentificationTypeIdTextView = (MPTextView) mView.findViewById(R.id.mpsdkIdentificationTypeId);
-        mLastNameContainer = (FrameLayout) mView.findViewById(R.id.mpsdkLastnameContainer);
+        mNameTextView =  mView.findViewById(R.id.mpsdkNameView);
+        mLastNameTextView =  mView.findViewById(R.id.mpsdkLastnameView);
+        mIdentificationTypeIdTextView =  mView.findViewById(R.id.mpsdkIdentificationTypeId);
+        mLastNameContainer =  mView.findViewById(R.id.mpsdkLastnameContainer);
         drawIdentificationTypeName();
-        setIdentificationNumberTextSizes();
-    }
-
-    private void setIdentificationNumberTextSizes() {
-        MPAutoResizeTextView mIdentificationCardholderContainer = (MPAutoResizeTextView) mView.findViewById(R.id.mpsdkIdentificationCardholderContainer);
-        if(mIdentificationNumberTextView!=null && mIdentificationCardholderContainer!=null){
-            int minSize = mContext.getResources().getDimensionPixelSize(R.dimen.mpsdk_small_text);
-            mIdentificationNumberTextView.setMinTextSize(minSize);
-            mIdentificationCardholderContainer.setMinTextSize(minSize);
-        }
     }
 
     @Override

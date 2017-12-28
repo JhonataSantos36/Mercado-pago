@@ -1,12 +1,11 @@
 package com.mercadopago.core;
 
-import com.google.gson.Gson;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.DrawableRes;
 
+import com.google.gson.Gson;
 import com.mercadopago.BankDealsActivity;
 import com.mercadopago.CallForAuthorizeActivity;
 import com.mercadopago.CardVaultActivity;
@@ -26,26 +25,28 @@ import com.mercadopago.PendingActivity;
 import com.mercadopago.RejectionActivity;
 import com.mercadopago.ReviewAndConfirmActivity;
 import com.mercadopago.ReviewPaymentMethodsActivity;
+import com.mercadopago.SecurityCodeActivity;
 import com.mercadopago.callbacks.OnConfirmPaymentCallback;
 import com.mercadopago.callbacks.OnReviewChange;
-import com.mercadopago.SecurityCodeActivity;
 import com.mercadopago.model.BankDeal;
 import com.mercadopago.model.Card;
 import com.mercadopago.model.CardInfo;
 import com.mercadopago.model.Discount;
-import com.mercadopago.model.Item;
-import com.mercadopago.model.PaymentResult;
-import com.mercadopago.model.Reviewable;
-import com.mercadopago.model.Summary;
-import com.mercadopago.model.Token;
-import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.model.Issuer;
+import com.mercadopago.model.Item;
 import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentMethodSearch;
 import com.mercadopago.model.PaymentRecovery;
+import com.mercadopago.model.PaymentResult;
 import com.mercadopago.model.PaymentType;
+import com.mercadopago.model.Reviewable;
 import com.mercadopago.model.Site;
+import com.mercadopago.model.Summary;
+import com.mercadopago.model.Token;
+import com.mercadopago.preferences.CheckoutPreference;
+import com.mercadopago.preferences.DecorationPreference;
+import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.preferences.PaymentResultScreenPreference;
 import com.mercadopago.preferences.ReviewScreenPreference;
 import com.mercadopago.preferences.ServicePreference;
@@ -54,7 +55,6 @@ import com.mercadopago.uicontrollers.reviewandconfirm.ReviewItemsView;
 import com.mercadopago.uicontrollers.reviewandconfirm.ReviewPaymentOffView;
 import com.mercadopago.uicontrollers.reviewandconfirm.ReviewPaymentOnView;
 import com.mercadopago.uicontrollers.reviewandconfirm.SummaryView;
-import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.uicontrollers.savedcards.SavedCardRowView;
 import com.mercadopago.uicontrollers.savedcards.SavedCardView;
 import com.mercadopago.util.JsonUtil;
@@ -65,7 +65,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static com.mercadopago.util.TextUtils.isEmpty;
+import static com.mercadopago.util.TextUtil.isEmpty;
 
 /**
  * Created by mreverter on 1/17/17.
@@ -99,6 +99,18 @@ public class MercadoPagoComponents {
         public static final int REVIEW_PAYMENT_METHODS_REQUEST_CODE = 21;
         public static final int PAYER_INFORMATION_REQUEST_CODE = 22;
 
+        public static final int HOOK_1 = 50;
+        public static final int HOOK_1_ACCOUNT_MONEY = 51;
+        public static final int HOOK_1_PLUGIN = 52;
+
+        public static final int HOOK_2 = 60;
+
+        public static final int HOOK_3 = 70;
+
+        public static final int PLUGIN_PAYMENT_METHOD_REQUEST_CODE = 100;
+
+        public static final int PLUGIN_PAYMENT_REQUEST_CODE = 200;
+
         private Activities() {
         }
 
@@ -129,6 +141,7 @@ public class MercadoPagoComponents {
             private String merchantDiscountBaseUrl;
             private String merchantGetDiscountUri;
             private Map<String, String> discountAdditionalInfo;
+            private CheckoutPreference checkoutPreference;
 
             public PaymentVaultActivityBuilder setActivity(Activity activity) {
                 this.activity = activity;
@@ -215,6 +228,11 @@ public class MercadoPagoComponents {
                 return this;
             }
 
+            public PaymentVaultActivityBuilder setCheckoutPreference(final CheckoutPreference checkoutPreference) {
+                this.checkoutPreference = checkoutPreference;
+                return this;
+            }
+
             public PaymentVaultActivityBuilder setPayerEmail(String payerEmail) {
                 this.payerEmail = payerEmail;
                 return this;
@@ -278,6 +296,7 @@ public class MercadoPagoComponents {
                 paymentVaultIntent.putExtra("merchantAccessToken", merchantAccessToken);
                 paymentVaultIntent.putExtra("paymentMethodSearch", JsonUtil.getInstance().toJson(paymentMethodSearch));
                 paymentVaultIntent.putExtra("paymentPreference", JsonUtil.getInstance().toJson(paymentPreference));
+                paymentVaultIntent.putExtra("checkoutPreference", JsonUtil.getInstance().toJson(checkoutPreference));
 
                 Gson gson = new Gson();
                 paymentVaultIntent.putExtra("cards", gson.toJson(cards));

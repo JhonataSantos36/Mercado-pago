@@ -2,12 +2,14 @@ package com.mercadopago.views;
 
 import com.mercadopago.callbacks.OnSelectedCallback;
 import com.mercadopago.exceptions.MercadoPagoError;
+import com.mercadopago.hooks.Hook;
 import com.mercadopago.model.Card;
 import com.mercadopago.model.CustomSearchItem;
 import com.mercadopago.model.Payer;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentMethodSearchItem;
 import com.mercadopago.mvp.MvpView;
+import com.mercadopago.plugins.model.PaymentMethodInfo;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -26,6 +28,8 @@ public interface PaymentVaultView extends MvpView {
     void hideProgress();
 
     void showCustomOptions(List<CustomSearchItem> customSearchItems, OnSelectedCallback<CustomSearchItem> customSearchItemOnSelectedCallback);
+
+    void showPluginOptions(List<PaymentMethodInfo> items);
 
     void showSearchItems(List<PaymentMethodSearchItem> searchItems, OnSelectedCallback<PaymentMethodSearchItem> paymentMethodSearchItemSelectionCallback);
 
@@ -55,4 +59,5 @@ public interface PaymentVaultView extends MvpView {
 
     void initializeMPTracker();
 
+    void showHook(final Hook hook, final int code);
 }

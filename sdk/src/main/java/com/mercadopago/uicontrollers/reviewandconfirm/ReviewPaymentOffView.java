@@ -12,7 +12,9 @@ import android.widget.ImageView;
 import com.mercadopago.R;
 import com.mercadopago.callbacks.OnReviewChange;
 import com.mercadopago.constants.PaymentMethods;
+import com.mercadopago.constants.PaymentTypes;
 import com.mercadopago.constants.ReviewKeys;
+import com.mercadopago.core.CheckoutStore;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.Reviewable;
@@ -132,7 +134,9 @@ public class ReviewPaymentOffView extends Reviewable {
         int resId = getResource();
         mPaymentImage.setImageResource(resId);
 
-        if (mDecorationPreference != null && mDecorationPreference.hasColors()) {
+        if (mDecorationPreference != null
+                && mDecorationPreference.hasColors()
+                && !PaymentTypes.PLUGIN.equals(mPaymentMethod.getPaymentTypeId())) {
             mPaymentImage.setColorFilter(mDecorationPreference.getBaseColor(), PorterDuff.Mode.SRC_ATOP);
         }
     }
@@ -141,7 +145,9 @@ public class ReviewPaymentOffView extends Reviewable {
         int resId;
         boolean isTintNeeded = mDecorationPreference != null && mDecorationPreference.hasColors();
 
-        if (mPaymentMethod != null && mPaymentMethod.getId().equals(PaymentMethods.BRASIL.BOLBRADESCO)) {
+        if (mPaymentMethod != null && PaymentTypes.PLUGIN.equals(mPaymentMethod.getPaymentTypeId())) {
+            resId = CheckoutStore.getInstance().getSelectedPaymentMethod().icon;
+        } else if (mPaymentMethod != null && mPaymentMethod.getId().equals(PaymentMethods.BRASIL.BOLBRADESCO)) {
             if (isTintNeeded) {
                 resId = R.drawable.mpsdk_grey_boleto_off;
             } else {

@@ -16,7 +16,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mercadopago.R;
-import com.mercadopago.customviews.MPAutoResizeTextView;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.util.LayoutUtil;
@@ -65,7 +64,7 @@ public class FrontCardView {
     //View controls
     private FrameLayout mCardContainer;
     private ImageView mCardBorder;
-    private MPAutoResizeTextView mCardNumberTextView;
+    private MPTextView mCardNumberTextView;
     private MPTextView mCardholderNameTextView;
     private MPTextView mCardExpiryMonthTextView;
     private MPTextView mCardExpiryYearTextView;
@@ -116,19 +115,19 @@ public class FrontCardView {
     }
 
     public void initializeControls() {
-        mCardContainer = (FrameLayout) mView.findViewById(R.id.mpsdkCardFrontContainer);
-        mCardBorder = (ImageView) mView.findViewById(R.id.mpsdkCardShadowBorder);
+        mCardContainer = mView.findViewById(R.id.mpsdkCardFrontContainer);
+        mCardBorder = mView.findViewById(R.id.mpsdkCardShadowBorder);
         mAnimFadeIn = AnimationUtils.loadAnimation(mContext, R.anim.mpsdk_fade_in);
-        mCardNumberTextView = (MPAutoResizeTextView) mView.findViewById(R.id.mpsdkCardNumberTextView);
-        mCardholderNameTextView = (MPTextView) mView.findViewById(R.id.mpsdkCardholderNameView);
-        mCardExpiryMonthTextView = (MPTextView) mView.findViewById(R.id.mpsdkCardHolderExpiryMonth);
-        mCardExpiryYearTextView = (MPTextView) mView.findViewById(R.id.mpsdkCardHolderExpiryYear);
-        mCardDateDividerTextView = (MPTextView) mView.findViewById(R.id.mpsdkCardHolderDateDivider);
-        mCardSecurityCodeTextView = (MPTextView) mView.findViewById(R.id.mpsdkCardSecurityCodeViewFront);
-        mBaseImageCard = (FrameLayout) mView.findViewById(R.id.mpsdkBaseImageCard);
-        mImageCardContainer = (ImageView) mView.findViewById(R.id.mpsdkImageCardContainer);
-        mCardLowApiImageView = (ImageView) mView.findViewById(R.id.mpsdkCardLowApiImageView);
-        mCardLollipopImageView = (ImageView) mView.findViewById(R.id.mpsdkCardLollipopImageView);
+        mCardNumberTextView = mView.findViewById(R.id.mpsdkCardNumberTextView);
+        mCardholderNameTextView =  mView.findViewById(R.id.mpsdkCardholderNameView);
+        mCardExpiryMonthTextView =  mView.findViewById(R.id.mpsdkCardHolderExpiryMonth);
+        mCardExpiryYearTextView =  mView.findViewById(R.id.mpsdkCardHolderExpiryYear);
+        mCardDateDividerTextView =  mView.findViewById(R.id.mpsdkCardHolderDateDivider);
+        mCardSecurityCodeTextView =  mView.findViewById(R.id.mpsdkCardSecurityCodeViewFront);
+        mBaseImageCard =  mView.findViewById(R.id.mpsdkBaseImageCard);
+        mImageCardContainer =  mView.findViewById(R.id.mpsdkImageCardContainer);
+        mCardLowApiImageView =  mView.findViewById(R.id.mpsdkCardLowApiImageView);
+        mCardLollipopImageView =  mView.findViewById(R.id.mpsdkCardLollipopImageView);
 
         if (mSize != null) {
             resize();
@@ -369,29 +368,23 @@ public class FrontCardView {
         if (mSize == null) return;
         if (mSize.equals(CardRepresentationModes.MEDIUM_SIZE)) {
             resizeCard(mCardContainer, R.dimen.mpsdk_card_size_medium_height, R.dimen.mpsdk_card_size_medium_width,
-                    CardRepresentationModes.CARD_NUMBER_SIZE_MEDIUM, CardRepresentationModes.CARD_HOLDER_NAME_SIZE_MEDIUM,
+                    CardRepresentationModes.CARD_HOLDER_NAME_SIZE_MEDIUM,
                     CardRepresentationModes.CARD_EXPIRY_DATE_SIZE_MEDIUM, CardRepresentationModes.CARD_SECURITY_CODE_FRONT_SIZE_MEDIUM);
         } else if (mSize.equals(CardRepresentationModes.BIG_SIZE)) {
             resizeCard(mCardContainer, R.dimen.mpsdk_card_size_big_height, R.dimen.mpsdk_card_size_big_width,
-                    CardRepresentationModes.CARD_NUMBER_SIZE_BIG, CardRepresentationModes.CARD_HOLDER_NAME_SIZE_BIG,
+                    CardRepresentationModes.CARD_HOLDER_NAME_SIZE_BIG,
                     CardRepresentationModes.CARD_EXPIRY_DATE_SIZE_BIG, CardRepresentationModes.CARD_SECURITY_CODE_FRONT_SIZE_BIG);
         } else if (mSize.equals(CardRepresentationModes.EXTRA_BIG_SIZE)) {
             resizeCard(mCardContainer, R.dimen.mpsdk_card_size_extra_big_height, R.dimen.mpsdk_card_size_extra_big_width,
-                    CardRepresentationModes.CARD_NUMBER_SIZE_EXTRA_BIG, CardRepresentationModes.CARD_HOLDER_NAME_SIZE_EXTRA_BIG,
+                    CardRepresentationModes.CARD_HOLDER_NAME_SIZE_EXTRA_BIG,
                     CardRepresentationModes.CARD_EXPIRY_DATE_SIZE_EXTRA_BIG, CardRepresentationModes.CARD_SECURITY_CODE_FRONT_SIZE_EXTRA_BIG);
         }
     }
 
-    private void resizeCard(ViewGroup cardViewContainer, int cardHeight, int cardWidth, int cardNumberFontSize,
+    private void resizeCard(ViewGroup cardViewContainer, int cardHeight, int cardWidth,
                             int cardHolderNameFontSize, int cardExpiryDateSize, int cardSecurityCodeSize) {
         LayoutUtil.resizeViewGroupLayoutParams(cardViewContainer, cardHeight, cardWidth, mContext);
 
-        if(cardNumberFontSize == CardRepresentationModes.CARD_NUMBER_SIZE_MEDIUM){
-            int minTextSize = mContext.getResources().getDimensionPixelSize(R.dimen.mpsdk_smallest_text);
-            mCardNumberTextView.setMinTextSize(minTextSize);
-        }
-
-        mCardNumberTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, cardNumberFontSize);
         mCardholderNameTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, cardHolderNameFontSize);
         mCardExpiryMonthTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, cardExpiryDateSize);
         mCardDateDividerTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, cardExpiryDateSize);

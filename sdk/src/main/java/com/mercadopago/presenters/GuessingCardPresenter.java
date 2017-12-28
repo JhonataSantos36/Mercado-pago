@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.controllers.CheckoutTimer;
 import com.mercadopago.controllers.PaymentMethodGuessingController;
+import com.mercadopago.core.CheckoutStore;
 import com.mercadopago.exceptions.CardTokenException;
 import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.model.ApiException;
@@ -425,7 +426,9 @@ public class GuessingCardPresenter extends MvpPresenter<GuessingCardActivityView
     }
 
     private void initializeDiscountRow() {
-        getView().showDiscountRow(mTransactionAmount);
+        if (CheckoutStore.getInstance().getPaymentMethodPluginList().isEmpty()) {
+            getView().showDiscountRow(mTransactionAmount);
+        }
     }
 
     private void getMPDirectDiscount() {

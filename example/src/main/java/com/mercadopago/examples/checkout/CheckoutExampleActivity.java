@@ -13,10 +13,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mercadopago.core.MercadoPagoCheckout;
+import com.mercadopago.customviews.MPButton;
 import com.mercadopago.examples.R;
 import com.mercadopago.examples.utils.ColorPickerDialog;
 import com.mercadopago.examples.utils.ExamplesUtils;
 import com.mercadopago.exceptions.MercadoPagoError;
+import com.mercadopago.hooks.ExampleHooks;
+import com.mercadopago.hooks.components.PaymentConfirm;
+import com.mercadopago.hooks.components.PaymentConfirmRenderer;
+import com.mercadopago.hooks.components.PaymentMethodConfirm;
+import com.mercadopago.hooks.components.PaymentMethodConfirmRenderer;
+import com.mercadopago.hooks.components.PaymentTypeConfirm;
+import com.mercadopago.hooks.components.PaymentTypeConfirmRenderer;
 import com.mercadopago.model.Payment;
 import com.mercadopago.preferences.CheckoutPreference;
 import com.mercadopago.preferences.DecorationPreference;
@@ -32,12 +40,14 @@ public class CheckoutExampleActivity extends AppCompatActivity {
 
     private Integer mDefaultColor;
     private CheckBox mDarkFontEnabled;
+    private CheckBox mHooksEnabled;
     private ImageView mColorSample;
     private Integer mSelectedColor;
     private CheckBox mVisaExcluded;
     private CheckBox mCashExcluded;
     private TextView mJsonConfigButton;
     private String mCheckoutPreferenceId;
+    private MPButton mContinueButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,33 +61,45 @@ public class CheckoutExampleActivity extends AppCompatActivity {
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
         mRegularLayout = findViewById(R.id.regularLayout);
         mDarkFontEnabled = (CheckBox) findViewById(R.id.darkFontEnabled);
+        mHooksEnabled = (CheckBox) findViewById(R.id.hooks_enabled);
         mColorSample = (ImageView) findViewById(R.id.colorSample);
         mVisaExcluded = (CheckBox) findViewById(R.id.visaExcluded);
         mCashExcluded = (CheckBox) findViewById(R.id.cashExcluded);
         mJsonConfigButton = (TextView) findViewById(R.id.jsonConfigButton);
+        mContinueButton = findViewById(R.id.continueButton);
         mJsonConfigButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startJsonInput();
             }
         });
-
+        mContinueButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onContinueClicked();
+            }
+        });
         mSelectedColor = ContextCompat.getColor(this, R.color.mpsdk_colorPrimary);
     }
 
-    public void onContinueClicked(View view) {
+    private void onContinueClicked() {
         startMercadoPagoCheckout();
     }
 
     private void startMercadoPagoCheckout() {
-        new MercadoPagoCheckout.Builder()
+
+        final MercadoPagoCheckout.Builder builder = new MercadoPagoCheckout.Builder()
                 .setActivity(this)
                 .setPublicKey(mPublicKey)
                 .setCheckoutPreference(getCheckoutPreference())
-                .setDecorationPreference(getCurrentDecorationPreference())
-                .startForPayment();
-    }
+                .setDecorationPreference(getCurrentDecorationPreference());
 
+        if (mHooksEnabled.isChecked()) {
+            builder.setCheckoutHooks(new ExampleHooks());
+        }
+
+        builder.startForPayment();
+    }
 
     private CheckoutPreference getCheckoutPreference() {
         return new CheckoutPreference(mCheckoutPreferenceId);

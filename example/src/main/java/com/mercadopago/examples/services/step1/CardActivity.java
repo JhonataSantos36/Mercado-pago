@@ -17,6 +17,7 @@ import android.widget.Spinner;
 import com.mercadopago.adapters.IdentificationTypesAdapter;
 import com.mercadopago.callbacks.Callback;
 import com.mercadopago.core.MercadoPago;
+import com.mercadopago.customviews.MPButton;
 import com.mercadopago.customviews.MPEditText;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.examples.R;
@@ -47,6 +48,7 @@ public class CardActivity extends AppCompatActivity {
     private MPEditText mIdentificationNumber;
     private Spinner mIdentificationType;
     private MPEditText mSecurityCode;
+    private MPButton mSubmitButton;
 
     // Current values
     private CardToken mCardToken;
@@ -78,6 +80,14 @@ public class CardActivity extends AppCompatActivity {
         mExpiryError = (MPTextView) findViewById(R.id.expiryError);
         mExpiryMonth = (MPEditText) findViewById(R.id.expiryMonth);
         mExpiryYear = (MPEditText) findViewById(R.id.expiryYear);
+        mSubmitButton = findViewById(R.id.submitButton);
+
+        mSubmitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                submitForm();
+            }
+        });
 
         // Init MercadoPago object with public key
         mMercadoPago = new MercadoPago.Builder()
@@ -136,7 +146,7 @@ public class CardActivity extends AppCompatActivity {
         }
     }
 
-    public void submitForm(View view) {
+    public void submitForm() {
 
         LayoutUtil.hideKeyboard(mActivity);
 
@@ -302,7 +312,7 @@ public class CardActivity extends AppCompatActivity {
                 // If the event is a key-down event on the "enter" button
                 if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
                         (keyCode == KeyEvent.KEYCODE_ENTER)) {
-                    submitForm(v);
+                    submitForm();
                 }
                 return false;
             }

@@ -66,4 +66,7 @@
     <string name="start_checkout_from_json">Ir al Checkout</string>
     <string name="start_for_wrong">Inicio requerido no especificado o inválido.</string>
 
+    <!-- HOOKS -->
+    <string name="enable_hooks">Habilitar hooks</string>
+
 </resources>

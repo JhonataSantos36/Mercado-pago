@@ -13,17 +13,17 @@ import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.PaymentData;
 import com.mercadopago.model.PaymentResult;
-import com.mercadopago.model.PaymentResultAction;
 import com.mercadopago.model.Site;
 import com.mercadopago.observers.TimerObserver;
 import com.mercadopago.preferences.PaymentResultScreenPreference;
+import com.mercadopago.tracker.FlowHandler;
 import com.mercadopago.tracker.MPTrackingContext;
 import com.mercadopago.tracking.model.ScreenViewEvent;
 import com.mercadopago.tracking.utils.TrackingUtil;
 import com.mercadopago.util.CurrenciesUtil;
 import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
-import com.mercadopago.util.TextUtils;
+import com.mercadopago.util.TextUtil;
 
 import java.math.BigDecimal;
 
@@ -73,7 +73,7 @@ public class CallForAuthorizeActivity extends MercadoPagoBaseActivity implements
     }
 
     private void customizeViews() {
-        if (mPaymentResultScreenPreference != null && !TextUtils.isEmpty(mPaymentResultScreenPreference.getExitButtonTitle())) {
+        if (mPaymentResultScreenPreference != null && !TextUtil.isEmpty(mPaymentResultScreenPreference.getExitButtonTitle())) {
             mKeepBuyingButton.setText(mPaymentResultScreenPreference.getExitButtonTitle());
         }
     }
@@ -105,7 +105,7 @@ public class CallForAuthorizeActivity extends MercadoPagoBaseActivity implements
             @Override
             public void onClick(View v) {
                 Intent returnIntent = new Intent();
-                mNextAction = PaymentResultAction.RECOVER_PAYMENT;
+                mNextAction = PaymentResult.RECOVER_PAYMENT;
                 returnIntent.putExtra("nextAction", mNextAction);
                 setResult(RESULT_CANCELED, returnIntent);
                 finish();
@@ -116,7 +116,7 @@ public class CallForAuthorizeActivity extends MercadoPagoBaseActivity implements
             @Override
             public void onClick(View v) {
                 Intent returnIntent = new Intent();
-                mNextAction = PaymentResultAction.SELECT_OTHER_PAYMENT_METHOD;
+                mNextAction = PaymentResult.SELECT_OTHER_PAYMENT_METHOD;
                 returnIntent.putExtra("nextAction", mNextAction);
                 setResult(RESULT_CANCELED, returnIntent);
                 finish();
@@ -166,6 +166,7 @@ public class CallForAuthorizeActivity extends MercadoPagoBaseActivity implements
                 .build();
 
         ScreenViewEvent.Builder builder = new ScreenViewEvent.Builder()
+                .setFlowId(FlowHandler.getInstance().getFlowId())
                 .setScreenId(TrackingUtil.SCREEN_ID_PAYMENT_RESULT_REJECTED)
                 .setScreenName(TrackingUtil.SCREEN_NAME_PAYMENT_RESULT_CALL_FOR_AUTH)
                 .addMetaData(TrackingUtil.METADATA_PAYMENT_IS_EXPRESS, TrackingUtil.IS_EXPRESS_DEFAULT_VALUE)

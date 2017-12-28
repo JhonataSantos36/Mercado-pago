@@ -6,6 +6,9 @@ package com.mercadopago.model;
 
 public class PaymentResult {
 
+    public static final String SELECT_OTHER_PAYMENT_METHOD = "select_other_payment_method";
+    public static final String RECOVER_PAYMENT = "recover_payment";
+
     private PaymentData paymentData;
     private Long paymentId;
     private String paymentStatus;

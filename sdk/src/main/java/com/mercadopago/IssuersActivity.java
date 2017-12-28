@@ -28,6 +28,7 @@ import com.mercadopago.observers.TimerObserver;
 import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.presenters.IssuersPresenter;
 import com.mercadopago.providers.IssuersProviderImpl;
+import com.mercadopago.tracker.FlowHandler;
 import com.mercadopago.tracker.MPTrackingContext;
 import com.mercadopago.tracking.model.ScreenViewEvent;
 import com.mercadopago.tracking.utils.TrackingUtil;
@@ -203,6 +204,7 @@ public class IssuersActivity extends MercadoPagoBaseActivity implements IssuersA
                 .build();
 
         ScreenViewEvent event = new ScreenViewEvent.Builder()
+                .setFlowId(FlowHandler.getInstance().getFlowId())
                 .setScreenId(TrackingUtil.SCREEN_ID_ISSUERS)
                 .setScreenName(TrackingUtil.SCREEN_NAME_CARD_FORM_ISSUERS)
                 .addMetaData(TrackingUtil.METADATA_PAYMENT_TYPE_ID, mPresenter.getPaymentMethod().getPaymentTypeId())

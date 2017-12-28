@@ -43,8 +43,10 @@ import com.mercadopago.observers.TimerObserver;
 import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.preferences.ReviewScreenPreference;
 import com.mercadopago.presenters.ReviewAndConfirmPresenter;
+import com.mercadopago.tracker.FlowHandler;
 import com.mercadopago.tracker.MPTrackingContext;
 import com.mercadopago.providers.ReviewAndConfirmProviderImpl;
+import com.mercadopago.tracking.model.ActionEvent;
 import com.mercadopago.tracking.model.ScreenViewEvent;
 import com.mercadopago.tracking.utils.TrackingUtil;
 import com.mercadopago.uicontrollers.FontCache;
@@ -89,6 +91,7 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
     protected ReviewScreenPreference mReviewScreenPreference;
     protected String mPublicKey;
     protected Site mSite;
+
     private Issuer mIssuer;
 
     @Override
@@ -292,6 +295,7 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
         if (paymentData != null) {
 
             ScreenViewEvent.Builder builder = new ScreenViewEvent.Builder()
+                    .setFlowId(FlowHandler.getInstance().getFlowId())
                     .setScreenId(TrackingUtil.SCREEN_ID_REVIEW_AND_CONFIRM)
                     .setScreenName(TrackingUtil.SCREEN_NAME_REVIEW_AND_CONFIRM)
                     .addMetaData(TrackingUtil.METADATA_SHIPPING_INFO, TrackingUtil.HAS_SHIPPING_DEFAULT_VALUE);
@@ -445,8 +449,24 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
 
     @Override
     public void confirmPayment() {
+        trackCheckoutConfirmed();
         setResult(RESULT_OK);
         finish();
+    }
+
+    private void trackCheckoutConfirmed() {
+        final MPTrackingContext mpTrackingContext = new MPTrackingContext.Builder(this, mPublicKey)
+                .setCheckoutVersion(BuildConfig.VERSION_NAME)
+                .build();
+
+        final ActionEvent actionEvent = new ActionEvent.Builder()
+                .setFlowId(FlowHandler.getInstance().getFlowId())
+                .setAction(TrackingUtil.ACTION_CHECKOUT_CONFIRMED)
+                .setScreenId(TrackingUtil.SCREEN_ID_REVIEW_AND_CONFIRM)
+                .setScreenName(TrackingUtil.SCREEN_NAME_REVIEW_AND_CONFIRM)
+                .build();
+
+        mpTrackingContext.trackEvent(actionEvent);
     }
 
     @Override

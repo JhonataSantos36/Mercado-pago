@@ -35,7 +35,6 @@
             android:layout_marginTop="25dp"
             android:gravity="center"
             android:text="@string/mpsdk_continue_label"
-            android:onClick="submitForm"
             style="@style/mpsdk_button_normal"/>
     </LinearLayout>
 </LinearLayout>
