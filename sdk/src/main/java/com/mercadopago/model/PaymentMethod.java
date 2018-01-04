@@ -1,7 +1,9 @@
 package com.mercadopago.model;
 
+import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 
+import com.mercadopago.R;
 import com.mercadopago.constants.PaymentTypes;
 import com.mercadopago.plugins.model.PaymentMethodInfo;
 
@@ -16,13 +18,13 @@ public class PaymentMethod {
     private String paymentTypeId;
     private String status;
     private String secureThumbnail;
-    private String thumbnail;
     private String deferredCapture;
     private List<Setting> settings;
     private BigDecimal minAllowedAmount;
     private BigDecimal maxAllowedAmount;
     private Integer accreditationTime;
     private String merchantAccountId;
+    private @DrawableRes Integer icon = R.drawable.mpsdk_none;
 
     public PaymentMethod() {
 
@@ -135,12 +137,12 @@ public class PaymentMethod {
         this.secureThumbnail = secureThumbnail;
     }
 
-    public String getThumbnail() {
-        return thumbnail;
+    public Integer getIcon() {
+        return icon;
     }
 
-    public void setThumbnail(String thumbnail) {
-        this.thumbnail = thumbnail;
+    public void setIcon(Integer icon) {
+        this.icon = icon;
     }
 
     public String getDeferredCapture() {
