@@ -146,5 +146,9 @@ public class CheckoutStore {
 
     public void reset() {
         data.clear();
+        selectedPaymentMethod = null;
+        paymentResult= null;
+        paymentData= null;
+        payment= null;
     }
 }

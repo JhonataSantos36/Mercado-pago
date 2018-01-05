@@ -329,5 +329,7 @@ public class Payment {
         public static final String STATUS_DETAIL_CC_REJECTED_CARD_DISABLED = "cc_rejected_card_disabled";
         public static final String STATUS_DETAIL_REJECTED_REJECTED_BY_BANK = "rejected_by_bank";
         public static final String STATUS_DETAIL_REJECTED_REJECTED_INSUFFICIENT_DATA = "rejected_insufficient_data";
+        public static final String STATUS_DETAIL_CC_REJECTED_PLUGIN_PM = "cc_rejected_plugin_pm";
+        public static final String STATUS_DETAIL_APPROVED_PLUGIN_PM = "approved_plugin_pm";
     }
 }

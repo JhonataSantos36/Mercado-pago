@@ -404,6 +404,7 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
             viewController.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    CheckoutStore.getInstance().reset();
                     onSelectedCallback.onSelected(item);
                 }
             });
@@ -419,6 +420,7 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
             viewController.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    CheckoutStore.getInstance().reset();
                     onSelectedCallback.onSelected(item);
                 }
             });

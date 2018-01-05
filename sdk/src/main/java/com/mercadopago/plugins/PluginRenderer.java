@@ -10,7 +10,7 @@ import com.mercadopago.R;
 import com.mercadopago.components.Renderer;
 import com.mercadopago.components.RendererFactory;
 
-public abstract class PluginRenderer extends Renderer<PluginComponent> {
+public abstract class PluginRenderer<T extends PluginComponent> extends Renderer<T> {
 
     @Override
     @CallSuper
