@@ -46,4 +46,12 @@ public abstract class MercadoPagoBaseActivity extends AppCompatActivity {
         }
     }
 
+    public void overrideTransitionIn() {
+        overridePendingTransition(R.anim.mpsdk_slide_right_to_left_in, R.anim.mpsdk_slide_right_to_left_out);
+    }
+
+    public void overrideTransitionOut() {
+        overridePendingTransition(R.anim.mpsdk_slide_left_to_right_in, R.anim.mpsdk_slide_left_to_right_out);
+    }
+
 }

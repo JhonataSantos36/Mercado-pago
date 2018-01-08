@@ -456,20 +456,18 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
 
     private void showPaymentMethodPluginConfiguration() {
 
-        final PaymentMethodInfo info =  CheckoutStore.getInstance().getSelectedPaymentMethod();
-        final PaymentMethodPlugin plugin =  CheckoutStore.getInstance().getPaymentMethodPluginById(info.id);
+        final PaymentMethodInfo info = CheckoutStore.getInstance().getSelectedPaymentMethod();
+        final PaymentMethodPlugin plugin = CheckoutStore.getInstance().getPaymentMethodPluginById(info.id);
 
         if (plugin.hasConfigurationComponent()) {
 
-            startActivityForResult(PaymentMethodPluginActivity
-                            .getIntent(PaymentVaultActivity.this),
-                    MercadoPagoComponents.Activities.PLUGIN_PAYMENT_METHOD_REQUEST_CODE);
+            startActivityForResult(PaymentMethodPluginActivity.getIntent(PaymentVaultActivity.this), MercadoPagoComponents.Activities.PLUGIN_PAYMENT_METHOD_REQUEST_CODE);
+            overrideTransitionIn();
 
         } else {
-
-            final PaymentMethodInfo paymentMethodInfo =
-                    CheckoutStore.getInstance().getSelectedPaymentMethod();
+            final PaymentMethodInfo paymentMethodInfo = CheckoutStore.getInstance().getSelectedPaymentMethod();
             finishPaymentMethodSelection(new PaymentMethod(paymentMethodInfo));
+            overrideTransitionOut();
         }
     }
 
@@ -493,7 +491,7 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
                 .setShowBankDeals(mShowBankDeals)
                 .setESCEnabled(mEscEnabled)
                 .startActivity();
-        animatePaymentMethodSelection();
+        overrideTransitionIn();
     }
 
     @Override
@@ -513,7 +511,6 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-
         if (requestCode == MercadoPagoComponents.Activities.CARD_VAULT_REQUEST_CODE) {
             resolveCardRequest(resultCode, data);
         } else if (requestCode == MercadoPagoComponents.Activities.PAYMENT_METHODS_REQUEST_CODE) {
@@ -527,23 +524,22 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
         } else if (requestCode == MercadoPagoComponents.Activities.PLUGIN_PAYMENT_METHOD_REQUEST_CODE) {
 
             if (resultCode == RESULT_OK) {
-                final PaymentMethodInfo paymentMethodInfo =
-                        CheckoutStore.getInstance().getSelectedPaymentMethod();
+                final PaymentMethodInfo paymentMethodInfo = CheckoutStore.getInstance().getSelectedPaymentMethod();
                 finishPaymentMethodSelection(new PaymentMethod(paymentMethodInfo));
+            } else {
+                overrideTransitionOut();
             }
 
         } else if (requestCode == MercadoPagoComponents.Activities.HOOK_1) {
-
             resolveHook1Request(resultCode);
-
         } else if (requestCode == MercadoPagoComponents.Activities.HOOK_1_PLUGIN) {
-
             showPaymentMethodPluginConfiguration();
-
         } else if (requestCode == MercadoPagoComponents.Activities.HOOK_1_ACCOUNT_MONEY) {
             resolveHook1AccountMoneyRequest(resultCode);
+            overrideTransitionOut();
         } else if (requestCode == ErrorUtil.ERROR_REQUEST_CODE) {
             resolveErrorRequest(resultCode, data);
+            overrideTransitionOut();
         }
     }
 
@@ -690,7 +686,7 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
 
         this.setResult(Activity.RESULT_OK, returnIntent);
         this.finish();
-        animatePaymentMethodSelection();
+        overrideTransitionIn();
     }
 
     protected void finishWithCardResult() {
@@ -706,11 +702,7 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
 
         this.setResult(Activity.RESULT_OK, returnIntent);
         this.finish();
-        animatePaymentMethodSelection();
-    }
-
-    private void animatePaymentMethodSelection() {
-        overridePendingTransition(R.anim.mpsdk_slide_right_to_left_in, R.anim.mpsdk_slide_right_to_left_out);
+        overrideTransitionIn();
     }
 
     @Override
@@ -758,7 +750,7 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
                 .setESCEnabled(mEscEnabled)
                 .setAcceptedPaymentMethods(mPaymentVaultPresenter.getPaymentMethodSearch().getPaymentMethods())
                 .startActivity();
-        animatePaymentMethodSelection();
+        overrideTransitionIn();
     }
 
     @Override
@@ -914,7 +906,7 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
                 .setPayerAccessToken(mPrivateKey)
                 .setDecorationPreference(mDecorationPreference)
                 .startActivity();
-        animatePaymentMethodSelection();
+        overrideTransitionIn();
     }
 
     @Override
@@ -946,6 +938,7 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
         if (resultCode == RESULT_OK) {
             mPaymentVaultPresenter.onHookContinue();
         } else {
+            overrideTransitionOut();
             mPaymentVaultPresenter.onHookReset();
         }
     }
@@ -961,5 +954,6 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
     @Override
     public void showHook(final Hook hook, final int code) {
         startActivityForResult(HookActivity.getIntent(this, hook), code);
+        overrideTransitionIn();
     }
 }
