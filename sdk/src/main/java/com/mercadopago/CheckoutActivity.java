@@ -199,29 +199,27 @@ public class CheckoutActivity extends MercadoPagoBaseActivity implements Checkou
         } else if (requestCode == MercadoPagoComponents.Activities.REVIEW_AND_CONFIRM_REQUEST_CODE) {
             resolveReviewAndConfirmRequest(resultCode, data);
         } else if (requestCode == MercadoPagoComponents.Activities.HOOK_2) {
-
             if (resultCode == RESULT_OK) {
                 mCheckoutPresenter.hook2Continue();
             } else {
+                overrideTransitionOut();
                 cancelCheckout();
             }
-
         } else if (requestCode == MercadoPagoComponents.Activities.HOOK_3) {
-
             if (resultCode == RESULT_OK) {
                 mCheckoutPresenter.resolvePaymentDataResponse();
             } else {
                 backToReviewAndConfirm();
             }
-
+            overrideTransitionIn();
         } else if (requestCode == MercadoPagoComponents.Activities.PLUGIN_PAYMENT_REQUEST_CODE) {
-
             if (resultCode == RESULT_OK) {
 
                 final PaymentResult paymentResult = CheckoutStore.getInstance().getPaymentResult();
                 showPaymentResult(paymentResult);
 
             } else {
+                overrideTransitionOut();
                 setResult(RESULT_CANCELED);
                 finish();
             }
@@ -310,6 +308,7 @@ public class CheckoutActivity extends MercadoPagoBaseActivity implements Checkou
 
     @Override
     public void showReviewAndConfirm() {
+        overrideTransitionIn();
 
         final CheckoutStore store = CheckoutStore.getInstance();
         final PaymentMethodInfo paymentMethodInfo = store.getSelectedPaymentMethod();
@@ -352,12 +351,12 @@ public class CheckoutActivity extends MercadoPagoBaseActivity implements Checkou
     @Override
     public void backToReviewAndConfirm() {
         showReviewAndConfirm();
-        animateBackFromPaymentEdition();
+        overrideTransitionOut();
     }
 
     @Override
     public void backToPaymentMethodSelection() {
-        animateBackToPaymentMethodSelection();
+        overrideTransitionOut();
         showPaymentMethodSelection();
     }
 
@@ -403,6 +402,8 @@ public class CheckoutActivity extends MercadoPagoBaseActivity implements Checkou
                 .setAmount(amount)
                 .setServicePreference(mCheckoutPresenter.getServicePreference())
                 .startActivity();
+
+        overrideTransitionIn();
     }
 
     private boolean isUserLogged() {
@@ -511,17 +512,13 @@ public class CheckoutActivity extends MercadoPagoBaseActivity implements Checkou
                 .setCard(mCheckoutPresenter.getSelectedCard())
                 .startActivity();
 
-        animatePaymentMethodSelection();
+        overrideTransitionIn();
     }
 
     @Override
     public void startPaymentMethodEdition() {
         showPaymentMethodSelection();
-        animatePaymentMethodSelection();
-    }
-
-    private void animatePaymentMethodSelection() {
-        overridePendingTransition(R.anim.mpsdk_slide_right_to_left_in, R.anim.mpsdk_slide_right_to_left_out);
+        overrideTransitionIn();
     }
 
     private void resolveErrorRequest(int resultCode, Intent data) {
@@ -532,14 +529,6 @@ public class CheckoutActivity extends MercadoPagoBaseActivity implements Checkou
                     JsonUtil.getInstance().fromJson(data.getStringExtra("mercadoPagoError"), MercadoPagoError.class);
             mCheckoutPresenter.onErrorCancel(mercadoPagoError);
         }
-    }
-
-    private void animateBackFromPaymentEdition() {
-        overridePendingTransition(R.anim.mpsdk_slide_left_to_right_in, R.anim.mpsdk_slide_left_to_right_out);
-    }
-
-    private void animateBackToPaymentMethodSelection() {
-        overridePendingTransition(R.anim.mpsdk_slide_left_to_right_in, R.anim.mpsdk_slide_left_to_right_out);
     }
 
     @Override
@@ -572,10 +561,12 @@ public class CheckoutActivity extends MercadoPagoBaseActivity implements Checkou
     @Override
     public void showHook(@NonNull final Hook hook, final int requestCode) {
         startActivityForResult(HookActivity.getIntent(this, hook), requestCode);
+        overrideTransitionIn();
     }
 
     @Override
     public void showPaymentPlugin() {
         startActivityForResult(PaymentPluginActivity.getIntent(this), MercadoPagoComponents.Activities.PLUGIN_PAYMENT_REQUEST_CODE);
+        overrideTransitionIn();
     }
 }
