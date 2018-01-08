@@ -326,7 +326,7 @@ public class InstructionsActivity extends MercadoPagoBaseActivity {
         Bitmap resizedBitmap = BitmapUtils.scaleDown(bitmap, ScaleUtil.getPxFromDp(13, mActivity), true);
         Drawable drawable = new BitmapDrawable(getResources(), resizedBitmap);
         PorterDuff.Mode mode = PorterDuff.Mode.SRC_ATOP;
-        drawable.setColorFilter(ContextCompat.getColor(mActivity, R.color.mpsdk_warm_grey), mode);
+        drawable.setColorFilter(ContextCompat.getColor(mActivity, R.color.mpsdk_warm_grey_with_alpha), mode);
 
         drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
         textspan.setSpan(new ImageSpan(drawable, ImageSpan.ALIGN_BASELINE), 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);

@@ -1,0 +1,56 @@
+{
+  "accreditation_message": "It will be accredited in 1 or 2 business days",
+  "info": [
+    "Primero sigue estos pasos en el cajero",
+    "",
+    "1. Ingresa a Pagos",
+    "2. Pagos de impuestos y servicios",
+    "3. Rubro cobranzas",
+    "",
+    "Luego te irá pidiendo estos datos"
+  ],
+  "references": [
+    {
+      "label": "Código de Link Pagos",
+      "field_value": [
+        "0243",
+        "9625",
+        "061"
+      ],
+      "separator": " ",
+      "comment": null
+    },
+    {
+      "label": "Referencia para abonar",
+      "field_value": [
+        "0008",
+        "4066",
+        "57"
+      ],
+      "separator": " ",
+      "comment": null
+    },
+    {
+      "label": "Concepto",
+      "field_value": [
+        "MPAGO:COMPRA"
+      ],
+      "separator": "",
+      "comment": null
+    },
+    {
+      "label": "Empresa",
+      "field_value": [
+        "Mercado Libre - Mercado Pago"
+      ],
+      "separator": " ",
+      "comment": null
+    }
+  ],
+  "secondary_info": [
+    "También enviamos estos datos a tu email"
+  ],
+  "subtitle": "Paga con estos datos",
+  "title": "Listo, solo te falta pagar $ 1.000,00 en cualquier cajero automático de Red Link",
+  "type": "atm"
+}

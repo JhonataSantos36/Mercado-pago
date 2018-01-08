@@ -746,7 +746,7 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
         }
         mNextButtonText.setTextColor(mDecorationPreference.getDarkFontColor(this));
         mBackButtonText.setTextColor(mDecorationPreference.getDarkFontColor(this));
-        mBackInactiveButtonText.setTextColor(ContextCompat.getColor(this, R.color.mpsdk_warm_grey));
+        mBackInactiveButtonText.setTextColor(ContextCompat.getColor(this, R.color.mpsdk_warm_grey_with_alpha));
     }
 
     private void decorateNormal() {
@@ -760,7 +760,7 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
         mCardBackground.setBackgroundColor(mDecorationPreference.getLighterColor());
         mNextButtonText.setTextColor(mDecorationPreference.getDarkFontColor(this));
         mBackButtonText.setTextColor(mDecorationPreference.getDarkFontColor(this));
-        mBackInactiveButtonText.setTextColor(ContextCompat.getColor(this, R.color.mpsdk_warm_grey));
+        mBackInactiveButtonText.setTextColor(ContextCompat.getColor(this, R.color.mpsdk_warm_grey_with_alpha));
     }
 
     private String getCardNumberTextTrimmed() {

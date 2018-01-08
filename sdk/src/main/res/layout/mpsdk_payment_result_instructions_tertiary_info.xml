@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/mpsdk_light_gray"
+    android:paddingEnd="@dimen/mpsdk_xl_margin"
+    android:paddingLeft="@dimen/mpsdk_xl_margin"
+    android:paddingRight="@dimen/mpsdk_xl_margin"
+    android:paddingStart="@dimen/mpsdk_xl_margin">
+
+    <com.mercadopago.customviews.MPTextView
+        android:id="@+id/msdpkTertiaryInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/mpsdk_l_alternative_margin"
+        android:gravity="center_horizontal"
+        android:textColor="@color/mpsdk_brownish_grey"
+        android:textSize="@dimen/mpsdk_xxs_text"
+        tools:text="Tertiary info" />
+
+</FrameLayout>

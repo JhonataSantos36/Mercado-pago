@@ -90,34 +90,44 @@
     <string name="mpsdk_title_activity_new_card">Ingresa los datos de tu tarjeta</string>
 
     <!-- Congrats -->
-    <string name="mpsdk_title_activity_congrats">¡Listo, se acreditó tu pago!</string>
+    <string name="mpsdk_title_approved_payment">¡Listo! Se acreditó tu pago</string>
     <string name="mpsdk_subtitle_action_activity_congrats">Te enviaremos los datos a\n%1$s</string>
     <string name="mpsdk_text_state_acount_activity_congrat">En tu estado de cuenta verás el cargo como\n %1$s</string>
     <string name="mpsdk_payment_id_description">Comprobante</string>
     <string name="mpsdk_payment_id_description_number">Nº %1$s</string>
     <string name="mpsdk_statement_default">MERCADO PAGO</string>
+    <string name="mpsdk_account_money">Dinero en cuenta</string>
+    <string name="mpsdk_ending_in">terminada en</string>
+    <string name="mpsdk_text_state_acount">En tu estado de cuenta verás el cargo como\n MERCADOPAGO</string>
+    <string name="mpsdk_receipt">Número de operación %1$s</string>
+    <string name="mpsdk_date_divider">de</string>
 
     <!-- CallForAuthorize -->
     <string name="mpsdk_title_activity_call_for_authorize">Debes autorizar ante %1$s el pago de %2$s a Mercado Pago</string>
     <string name="mpsdk_text_order_call_for_authorize">El teléfono está al dorso de tu tarjeta.</string>
     <string name="mpsdk_error_title_activity_call_for_authorize">Debes autorizar el pago ante tu tarjeta</string>
     <string name="mpsdk_text_authorized_call_for_authorize">Ya hablé con %1$s y me autorizó</string>
-    <string name="mpsdk_text_question_call_for_authorize">¿No pudiste autorizarlo?</string>
     <string name="mpsdk_text_select_other_payment_method">Elige otro medio de pago</string>
 
     <!-- Pending -->
+    <string name="mpsdk_title_pending_payment">Estamos procesando el pago</string>
     <string name="mpsdk_title_pending">Estamos procesando\n el pago</string>
     <string name="mpsdk_subtitle_pending_contingency">En menos de 1 hora te enviaremos por e-mail el resultado.</string>
     <string name="mpsdk_subtitle_pending_review_manual">En menos de 2 días hábiles te diremos por e-mail si se acreditó o si necesitamos más información.</string>
+    <string name="mpsdk_error_description_contingency">En unas horas te avisaremos por e-mail si se acreditó.</string>
+    <string name="mpsdk_error_description_review_manual">Dentro de las próximas 24 horas te avisaremos por e-mail si se acreditó.</string>
 
     <!-- Rejection -->
     <string name="mpsdk_text_other_payment_method_button_rejection">Usar otro medio de pago</string>
-    <string name="mpsdk_text_pay_with_other_method">Cambiar medio de pago</string>
+    <string name="mpsdk_text_pay_with_other_method">Pagar con otro medio</string>
     <string name="mpsdk_text_enter_again">Ingrésalo nuevamente</string>
     <string name="mpsdk_subtitle_rejection_insufficient_amount_credit_card">¡No te desanimes! Puedes elegir otro medio de pago.</string>
     <string name="mpsdk_title_other_reason_rejection">%1$s no procesó el pago</string>
     <string name="mpsdk_text_select_other_rejection">Usa otra tarjeta u otro medio de pago</string>
-    <string name="mpsdk_text_some_card_data_is_incorrect">Algún dato de tu %1$s es incorrecto.</string>
+    <string name="mpsdk_text_some_card_data_is_incorrect">Algún dato de tu %1$s es incorrecto</string>
+    <string name="mpsdk_text_card_data_invalid">Revisar los datos de tarjeta</string>
+    <string name="mpsdk_text_card_enabled">Ya habilité mi tarjeta</string>
+
     <string name="mpsdk_title_bad_filled_other">Uy, no pudimos procesar el pago</string>
     <string name="mpsdk_text_some_number">Algún número de tu %1$s es incorrecto.</string>
     <string name="mpsdk_text_insufficient_amount">Tu %1$s no tiene fondos suficientes</string>
@@ -131,7 +141,20 @@
     <string name="mpsdk_subtitle_rejection_high_risk">Si quieres pagar con el dinero de tu cuenta, contactate con Atención al Cliente de Mercado Pago. O si prefieres, puedes elegir otro medio de pago.</string>
     <string name="mpsdk_title_rejection_max_attempts">Llegaste al límite de intentos permitidos</string>
     <string name="mpsdk_subtitle_rejection_max_attempts">Elige otra tarjeta u otro medio de pago.</string>
-    <string name="mpsdk_rejection_title">Algo salió mal…</string>
+    <string name="mpsdk_rejection_label">Algo salió mal…</string>
+
+    <string name="mpsdk_error_description_call">El teléfono está al dorso de tu tarjeta.</string>
+    <string name="mpsdk_error_description_card_disabled">Usa otro medio de pago o llama a %1$s para activar tu tarjeta.</string>
+    <string name="mpsdk_error_description_insufficient_amount">¡No te desanimes! Recárgala en cualquier banco o desde tu banca electrónica e inténtalo de nuevo.</string>
+    <string name="mpsdk_error_description_second_insufficient_amount">O si prefieres, puedes elegir otro medio de pago.</string>
+    <string name="mpsdk_error_description_other_reason">Usa otra tarjeta u otro medio de pago.</string>
+    <string name="mpsdk_error_description_by_bank">Por favor, intente pagar de otra forma.</string>
+    <string name="mpsdk_error_description_insufficient_data">Por favor, intente pagar de otra forma.</string>
+    <string name="mpsdk_error_description_duplicated_payment">Igual no te preocupes que tu pago anterior se efectuó con éxito.</string>
+    <string name="mpsdk_error_description_max_attempts">Como llegaste al límite de intentos con esta tarjeta, usa otro medio de pago.</string>
+    <string name="mpsdk_error_description_high_risk">Usa un medio de pago distinto de tarjeta.</string>
+    <string name="mpsdk_error_secondary_title_call">¿No pudiste autorizarlo?</string>
+
 
     <!-- Error messages -->
     <string name="mpsdk_error_message_invalid_amount">Monto inválido</string>

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/bodyErrorContainer"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/mpsdk_white"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/mpsdk_l_margin"
+        android:paddingEnd="@dimen/mpsdk_xl_margin"
+        android:paddingLeft="@dimen/mpsdk_xl_margin"
+        android:paddingRight="@dimen/mpsdk_xl_margin"
+        android:paddingStart="@dimen/mpsdk_xl_margin">
+
+        <com.mercadopago.customviews.MPTextView
+            android:id="@+id/paymentResultBodyErrorTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/mpsdk_l_margin"
+            android:gravity="center_horizontal"
+            android:textColor="@color/mpsdk_black"
+            android:textSize="@dimen/mpsdk_l_text"
+            tools:text="Title" />
+
+        <com.mercadopago.customviews.MPTextView
+            android:id="@+id/paymentResultBodyErrorDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/mpsdk_s_margin"
+            android:gravity="center_horizontal"
+            android:textColor="@color/mpsdk_brownish_grey"
+            android:textSize="@dimen/mpsdk_s_text"
+            tools:text="Description" />
+
+        <com.mercadopago.customviews.MPTextView
+            android:id="@+id/paymentResultBodyErrorSecondDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/mpsdk_xs_margin"
+            android:gravity="center_horizontal"
+            android:textColor="@color/mpsdk_brownish_grey"
+            android:textSize="@dimen/mpsdk_s_text"
+            tools:text="Description" />
+
+        <com.mercadopago.customviews.MPTextView
+            android:id="@+id/paymentResultBodyErrorAction"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/mpsdk_xxs_margin"
+            android:gravity="center_horizontal"
+            android:paddingBottom="@dimen/mpsdk_s_margin"
+            android:paddingTop="@dimen/mpsdk_s_margin"
+            android:textColor="@color/mpsdk_blue_MP"
+            android:textSize="@dimen/mpsdk_s_text"
+            android:visibility="gone"
+            tools:text="Action" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/bodyErrorMiddleDivider"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/mpsdk_xxxs_height"
+        android:background="@color/mpsdk_med_light_gray"
+        android:visibility="gone" />
+
+    <com.mercadopago.customviews.MPTextView
+        android:id="@+id/bodyErrorSecondaryTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_horizontal"
+        android:paddingBottom="@dimen/mpsdk_l_margin"
+        android:paddingEnd="@dimen/mpsdk_xl_margin"
+        android:paddingLeft="@dimen/mpsdk_xl_margin"
+        android:paddingRight="@dimen/mpsdk_xl_margin"
+        android:paddingStart="@dimen/mpsdk_xl_margin"
+        android:paddingTop="@dimen/mpsdk_l_margin"
+        android:textColor="@color/mpsdk_black"
+        android:textSize="@dimen/mpsdk_l_text"
+        android:visibility="gone"
+        tools:text="¿No pudiste autorizarlo?" />
+
+    <View
+        android:id="@+id/bodyErrorBottomDivider"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/mpsdk_xxxs_height"
+        android:background="@color/mpsdk_med_light_gray"
+        android:visibility="gone" />
+
+</LinearLayout>

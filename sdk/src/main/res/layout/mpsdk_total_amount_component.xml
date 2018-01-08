@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mpsdkTotalAmountContainer"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <com.mercadopago.customviews.MPTextView
+        android:id="@+id/mpsdkAmountTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/mpsdk_black"
+        android:textSize="@dimen/mpsdk_xxl_text"
+        tools:text="2x $786" />
+
+    <com.mercadopago.customviews.MPTextView
+        android:id="@+id/mpsdkAmountDetail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/mpsdk_xxxs_margin"
+        android:textColor="@color/mpsdk_brownish_grey"
+        android:textSize="@dimen/mpsdk_s_text"
+        tools:text="($1459,00)" />
+</LinearLayout>

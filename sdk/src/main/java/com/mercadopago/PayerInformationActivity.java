@@ -783,7 +783,7 @@ public class PayerInformationActivity extends MercadoPagoBaseActivity implements
                 getSupportActionBar(), this);
         mNextButtonText.setTextColor(mDecorationPreference.getDarkFontColor(this));
         mBackButtonText.setTextColor(mDecorationPreference.getDarkFontColor(this));
-        mBackInactiveButtonText.setTextColor(ContextCompat.getColor(this, R.color.mpsdk_warm_grey));
+        mBackInactiveButtonText.setTextColor(ContextCompat.getColor(this, R.color.mpsdk_warm_grey_with_alpha));
     }
 
     private void decorateNormal() {
@@ -792,6 +792,6 @@ public class PayerInformationActivity extends MercadoPagoBaseActivity implements
         mBackground.setBackgroundColor(mDecorationPreference.getLighterColor());
         mNextButtonText.setTextColor(mDecorationPreference.getDarkFontColor(this));
         mBackButtonText.setTextColor(mDecorationPreference.getDarkFontColor(this));
-        mBackInactiveButtonText.setTextColor(ContextCompat.getColor(this, R.color.mpsdk_warm_grey));
+        mBackInactiveButtonText.setTextColor(ContextCompat.getColor(this, R.color.mpsdk_warm_grey_with_alpha));
     }
 }

@@ -1,0 +1,40 @@
+{
+  "accreditation_message": "It will be accredited in 1 or 2 business days",
+  "info": [
+  ],
+  "references": [
+    {
+      "label": "Código de Link Pagos",
+      "field_value": [
+        "0243",
+        "9625",
+        "061"
+      ],
+      "separator": " ",
+      "comment": null
+    },
+    {
+      "label": "Concepto",
+      "field_value": [
+        "MPAGO:COMPRA"
+      ],
+      "separator": "",
+      "comment": null
+    },
+    {
+      "label": "Referencia para abonar",
+      "field_value": [
+        "00084",
+        "06657"
+      ],
+      "separator": null,
+      "comment": null
+    }
+  ],
+  "secondary_info": [
+    "También enviamos estos datos a tu email"
+  ],
+  "subtitle": "Paga con estos datos",
+  "title": "Listo, solo te falta pagar $ 1.000,00 en tu Home Banking adherido a Red Link",
+  "type": "bank_transfer"
+}

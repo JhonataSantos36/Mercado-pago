@@ -1,0 +1,47 @@
+{ "accreditation_message": "It will be accredited in 1 hour",
+  "actions": [
+    {
+      "label": "Ir a banca en línea",
+      "tag": "link",
+      "url": "http://www.banamex.com.mx"
+    }
+  ],
+  "info": [
+  ],
+  "references": [
+    {
+      "label": "Sucursal",
+      "field_value": [
+        "0165-7806117"
+      ],
+      "separator": " ",
+      "comment": null
+    },
+    {
+      "label": "Número de cuenta",
+      "field_value": [
+        "0165",
+        "-780",
+        "6117"
+      ],
+      "separator": " ",
+      "comment": null
+    },
+    {
+      "label": "Referencia",
+      "field_value": [
+        "2679764782-53"
+      ],
+      "separator": " ",
+      "comment": null
+    }
+  ],
+  "secondary_info": [
+    "También enviamos estos datos a tu email"
+  ],
+  "subtitle": "Paga con estos datos",
+  "tertiary_info": [
+  ],
+  "title": "Listo, solo te falta pagar $ 200.26 en tu banca en línea de Banamex",
+  "type": "bank_transfer"
+}

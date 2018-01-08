@@ -133,7 +133,7 @@
                     android:layout_marginBottom="20dp"
                     android:textSize="22dp"
                     android:textColor="@color/default_primary_color"
-                    android:text="@string/mpsdk_text_question_call_for_authorize" />
+                    android:text="@string/mpsdk_error_secondary_title_call" />
 
                 <FrameLayout
                     android:id="@+id/mpsdkCallForAuthorizeOptionButton"

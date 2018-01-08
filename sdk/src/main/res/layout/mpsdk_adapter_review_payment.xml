@@ -91,7 +91,7 @@
                 android:maxWidth="20dp"
                 android:paddingTop="2dp"
                 android:src="@drawable/mpsdk_time"
-                android:tint="@color/mpsdk_warm_grey" />
+                android:tint="@color/mpsdk_warm_grey_with_alpha" />
 
             <com.mercadopago.customviews.MPTextView
                 android:id="@+id/mpsdkAdapterReviewPaymentDescription"

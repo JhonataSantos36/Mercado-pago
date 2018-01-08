@@ -565,6 +565,11 @@ public class CheckoutActivity extends MercadoPagoBaseActivity implements Checkou
     }
 
     @Override
+    public void hideProgress() {
+        LayoutUtil.hideProgressLayout(this);
+    }
+
+    @Override
     public void showHook(@NonNull final Hook hook, final int requestCode) {
         startActivityForResult(HookActivity.getIntent(this, hook), requestCode);
     }

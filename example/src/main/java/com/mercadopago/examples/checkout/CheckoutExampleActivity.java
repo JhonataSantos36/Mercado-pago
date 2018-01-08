@@ -22,8 +22,12 @@ import com.mercadopago.hooks.ExampleHooks;
 import com.mercadopago.model.Payment;
 import com.mercadopago.plugins.SamplePaymentMethodPlugin;
 import com.mercadopago.plugins.SamplePaymentPlugin;
+import com.mercadopago.paymentresult.model.Badge;
+import com.mercadopago.plugins.SamplePaymentMethodPlugin;
+import com.mercadopago.plugins.SamplePaymentPlugin;
 import com.mercadopago.preferences.CheckoutPreference;
 import com.mercadopago.preferences.DecorationPreference;
+import com.mercadopago.preferences.PaymentResultScreenPreference;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;
 
@@ -84,14 +88,21 @@ public class CheckoutExampleActivity extends AppCompatActivity {
 
     private void startMercadoPagoCheckout() {
 
+        final PaymentResultScreenPreference paymentResultScreenPreference =
+                new PaymentResultScreenPreference.Builder()
+                        .disableRejectedLabelText()
+                        .setBadgeApproved(Badge.PENDING_BADGE_IMAGE)
+                        .build();
+
         final MercadoPagoCheckout.Builder builder = new MercadoPagoCheckout.Builder()
                 .setActivity(this)
                 .setPublicKey(mPublicKey)
                 .setCheckoutPreference(getCheckoutPreference())
                 .setDecorationPreference(getCurrentDecorationPreference())
                 .addPaymentMethodPlugin("sample",
-                        new SamplePaymentMethodPlugin(this),
-                        new SamplePaymentPlugin());
+                    new SamplePaymentMethodPlugin(this),
+                    new SamplePaymentPlugin()
+                );
 
         if (mHooksEnabled.isChecked()) {
             builder.setCheckoutHooks(new ExampleHooks());
@@ -105,7 +116,7 @@ public class CheckoutExampleActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
         LayoutUtil.showRegularLayout(this);
 
         if (requestCode == MercadoPagoCheckout.CHECKOUT_REQUEST_CODE) {
@@ -134,7 +145,7 @@ public class CheckoutExampleActivity extends AppCompatActivity {
         mRegularLayout.setVisibility(View.VISIBLE);
     }
 
-    public void changeColor(View view) {
+    public void changeColor(final View view) {
         new ColorPickerDialog(this, mDefaultColor, new ColorPickerDialog.OnColorSelectedListener() {
             @Override
             public void onColorSelected(int color) {
@@ -145,7 +156,7 @@ public class CheckoutExampleActivity extends AppCompatActivity {
         }).show();
     }
 
-    public void resetSelection(View view) {
+    public void resetSelection(final View view) {
         mSelectedColor = null;
         mColorSample.setBackgroundColor(mDefaultColor);
         mDarkFontEnabled.setChecked(false);

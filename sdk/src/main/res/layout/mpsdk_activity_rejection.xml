@@ -63,7 +63,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="bottom|center"
-                        android:text="@string/mpsdk_rejection_title"
+                        android:text="@string/mpsdk_rejection_label"
                         android:textColor="@color/mpsdk_white"
                         android:visibility="visible"
                         android:textSize="16dp" />

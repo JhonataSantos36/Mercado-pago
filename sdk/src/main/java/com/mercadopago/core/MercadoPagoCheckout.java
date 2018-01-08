@@ -14,6 +14,8 @@ import com.mercadopago.hooks.CheckoutHooks;
 import com.mercadopago.model.Discount;
 import com.mercadopago.model.PaymentData;
 import com.mercadopago.model.PaymentResult;
+import com.mercadopago.plugins.PaymentMethodPlugin;
+import com.mercadopago.plugins.PaymentPlugin;
 import com.mercadopago.preferences.CheckoutPreference;
 import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.preferences.FlowPreference;
@@ -23,6 +25,11 @@ import com.mercadopago.preferences.ServicePreference;
 import com.mercadopago.tracker.FlowHandler;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.TextUtil;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -74,6 +81,8 @@ public class MercadoPagoCheckout {
 
         CheckoutStore.getInstance().reset();
         CheckoutStore.getInstance().setDecorationPreference(decorationPreference);
+        CheckoutStore.getInstance().setPaymentMethodPluginList(builder.paymentMethodPluginList);
+        CheckoutStore.getInstance().setPaymentPlugins(builder.paymentPlugins);
         CheckoutStore.getInstance().setCheckoutHooks(builder.checkoutHooks);
 
         //Create flow identifier only for new checkouts
@@ -202,6 +211,8 @@ public class MercadoPagoCheckout {
         private PaymentResult paymentResult;
         private Discount discount;
         private CheckoutHooks checkoutHooks;
+        private List<PaymentMethodPlugin> paymentMethodPluginList = new ArrayList<>();
+        private Map<String, PaymentPlugin> paymentPlugins = new HashMap<>();
 
         public Builder setActivity(Activity activity) {
             this.activity = activity;
@@ -265,6 +276,14 @@ public class MercadoPagoCheckout {
 
         public Builder setCheckoutHooks(@NonNull final CheckoutHooks checkoutHooks) {
             this.checkoutHooks = checkoutHooks;
+            return this;
+        }
+
+        public Builder addPaymentMethodPlugin(@NonNull final String paymentMethodId,
+                                              @NonNull final PaymentMethodPlugin paymentMethodPlugin,
+                                              @NonNull final PaymentPlugin paymentPlugin) {
+            paymentMethodPluginList.add(paymentMethodPlugin);
+            paymentPlugins.put(paymentMethodId, paymentPlugin);
             return this;
         }
 

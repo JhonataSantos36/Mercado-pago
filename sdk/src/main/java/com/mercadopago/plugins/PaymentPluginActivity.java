@@ -27,7 +27,6 @@ public class PaymentPluginActivity extends AppCompatActivity implements ActionDi
 
     private static final String TAG = PaymentPluginActivity.class.getName();
 
-
     public static Intent getIntent(@NonNull final Context context) {
         return new Intent(context, PaymentPluginActivity.class);
     }

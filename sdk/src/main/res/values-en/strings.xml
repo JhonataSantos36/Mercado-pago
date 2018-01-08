@@ -92,23 +92,29 @@
     <string name="mpsdk_exclusion_one_element">You can only pay with %1$s</string>
 
     <!-- Congrats -->
-    <string name="mpsdk_title_activity_congrats">Done, your payment was accredited!</string>
+    <string name="mpsdk_title_approved_payment">Done! Your payment was accredited</string>
     <string name="mpsdk_subtitle_action_activity_congrats">We will send you the data to\n%1$s</string>
     <string name="mpsdk_text_state_account_activity_congrats">On your statement you will see the charge as\n %s</string>
     <string name="mpsdk_payment_id_description">Ticket</string>
     <string name="mpsdk_payment_id_description_number">Nº %1$s</string>
+    <string name="mpsdk_account_money">Account money</string>
+    <string name="mpsdk_ending_in">ending in</string>
+    <string name="mpsdk_receipt">Transaction number %1$s</string>
+    <string name="mpsdk_date_divider">of</string>
 
     <!-- CallForAuthorize -->
     <string name="mpsdk_title_activity_call_for_authorize">You must authorize with %1$s the payment of %2$s to Mercado Pago</string>
     <string name="mpsdk_text_order_call_for_authorize">The phone number is on the back of your card.</string>
     <string name="mpsdk_error_title_activity_call_for_authorize">You must authorize the payment with your card</string>
     <string name="mpsdk_text_authorized_call_for_authorize">Already talked with %1$s and I am authorized</string>
-    <string name="mpsdk_text_question_call_for_authorize">Could not authorize it?</string>
     <string name="mpsdk_text_select_other_payment_method">Choose another payment method</string>
 
     <!-- Pending -->
+    <string name="mpsdk_title_pending_payment">We are processing the payment</string>
     <string name="mpsdk_title_pending">We are processing\n the payment</string>
     <string name="mpsdk_subtitle_pending_contingency">In less than an hour we will send you the result by e-mail.</string>
+    <string name="mpsdk_error_description_contingency">In a few hours we will notify you via e-mail if it is accredited.</string>
+    <string name="mpsdk_error_description_review_manual">Within the next 24 hours we will notify you via e-mail if it was accredited.</string>
 
     <!-- Rejection -->
     <string name="mpsdk_text_other_payment_method_button_rejection">Use another payment method</string>
@@ -118,7 +124,7 @@
     <string name="mpsdk_title_other_reason_rejection">%1$s did not process the payment</string>
     <string name="mpsdk_text_select_other_rejection">Use another card or another payment method</string>
     <string name="mpsdk_title_bad_filled_other">Oops, we could not process your payment</string>
-    <string name="mpsdk_text_some_card_data_is_incorrect">Any datum of your %1$s is incorrect.</string>
+    <string name="mpsdk_text_some_card_data_is_incorrect">Any datum of your %1$s is incorrect</string>
     <string name="mpsdk_text_some_number">Some number of your %1$s is incorrect.</string>
     <string name="mpsdk_text_insufficient_amount">Yours %1$s has insufficient funds</string>
     <string name="mpsdk_subtitle_rejection_insufficient_amount">Don\'t worry! Recharge at any bank or from your electronic banking and try again. Or if you prefer, you can choose another payment method.</string>
@@ -131,7 +137,19 @@
     <string name="mpsdk_subtitle_rejection_high_risk">If you want to pay with the money from your account, contact Mercado Pago customer service. Or if you prefer, you can choose other payment method.</string>
     <string name="mpsdk_title_rejection_max_attempts">You reached the limit of attempts allowed</string>
     <string name="mpsdk_subtitle_rejection_max_attempts">Choose another card or another payment method.</string>
-    <string name="mpsdk_rejection_title">Something went wrong…</string>
+    <string name="mpsdk_rejection_label">Something went wrong…</string>
+    <string name="mpsdk_error_secondary_title_call">Could not authorize it?</string>
+    <string name="mpsdk_error_description_call">The phone number is on the back of your card.</string>
+    <string name="mpsdk_error_description_card_disabled">Use another payment method or call %1$s to activate your card.</string>
+    <string name="mpsdk_error_description_insufficient_amount">Do not be discouraged! Recharge it in any bank or from your internet banking and try again.</string>
+    <string name="mpsdk_error_description_second_insufficient_amount">Or if you prefer, you can choose another payment method.</string>
+    <string name="mpsdk_error_description_other_reason">Use another card or other payment method.</string>
+    <string name="mpsdk_error_description_by_bank">Please try to pay with other payment method.</string>
+    <string name="mpsdk_error_description_insufficient_data">Please try to pay with other payment method.</string>
+    <string name="mpsdk_error_description_duplicated_payment">Don\'t worry, your previous payment was approved.</string>
+    <string name="mpsdk_error_description_max_attempts">As you reached the limit of attempts with this card, use another payment method.</string>
+    <string name="mpsdk_error_description_high_risk">Use a payment method other than a card.</string>
+
 
     <!-- Error messages -->
     <string name="mpsdk_error_message_invalid_amount">Invalid amount</string>

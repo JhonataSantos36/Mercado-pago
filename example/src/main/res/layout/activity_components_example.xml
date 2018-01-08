@@ -127,7 +127,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/mpsdk_warm_grey"
+                android:background="@color/mpsdk_warm_grey_with_alpha"
                 android:layout_marginTop="15dp"
                 android:layout_marginBottom="15dp"/>
 
@@ -152,7 +152,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/mpsdk_warm_grey"
+                android:background="@color/mpsdk_warm_grey_with_alpha"
                 android:layout_marginTop="15dp"
                 android:layout_marginBottom="15dp"/>
 

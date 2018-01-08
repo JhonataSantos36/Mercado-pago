@@ -74,17 +74,23 @@ public class PaymentRecovery {
                 Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_BAD_FILLED_SECURITY_CODE.equals(statusDetail) ||
                 Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_BAD_FILLED_DATE.equals(statusDetail) ||
                 Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_CALL_FOR_AUTHORIZE.equals(statusDetail) ||
-                Payment.StatusCodes.STATUS_DETAIL_INVALID_ESC.equals(statusDetail);
+                Payment.StatusCodes.STATUS_DETAIL_INVALID_ESC.equals(statusDetail) ||
+                Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_CARD_DISABLED.equals(statusDetail);
     }
 
     private Boolean isStatusDetailRecoverable(String statusDetail) {
         return statusDetail != null &&
                 (Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_CALL_FOR_AUTHORIZE.equals(statusDetail) ||
-                        Payment.StatusCodes.STATUS_DETAIL_INVALID_ESC.equals(statusDetail));
+                        Payment.StatusCodes.STATUS_DETAIL_INVALID_ESC.equals(statusDetail) ||
+                        Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_CARD_DISABLED.equals(statusDetail));
     }
 
     public boolean isStatusDetailCallForAuthorize() {
         return mStatusDetail != null && Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_CALL_FOR_AUTHORIZE.equals(mStatusDetail);
+    }
+
+    public boolean isStatusDetailCardDisabled() {
+        return mStatusDetail != null && Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_CARD_DISABLED.equals(mStatusDetail);
     }
 
     public boolean isStatusDetailInvalidESC() {

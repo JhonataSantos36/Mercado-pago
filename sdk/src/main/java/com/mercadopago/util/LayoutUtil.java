@@ -40,6 +40,14 @@ public class LayoutUtil {
         showLayout(activity, false, false, true);
     }
 
+    public static void hideProgressLayout(Activity activity) {
+        final View progress = activity.findViewById(R.id.mpsdkProgressLayout);
+
+        if (progress != null) {
+            progress.setVisibility(View.GONE);
+        }
+    }
+
     private static void showLayout(Activity activity, final boolean showProgress, final boolean showLayout, final boolean showRefresh) {
 
         final View form = activity.findViewById(R.id.mpsdkRegularLayout);

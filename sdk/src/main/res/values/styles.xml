@@ -134,7 +134,7 @@
 
     <style name="mpsdk_small_grey_light">
         <item name="android:textSize">@dimen/mpsdk_small_text</item>
-        <item name="android:textColor">@color/mpsdk_warm_grey</item>
+        <item name="android:textColor">@color/mpsdk_warm_grey_with_alpha</item>
         <item name="android:lineSpacingMultiplier">1.3</item>
     </style>
 
@@ -151,7 +151,7 @@
     <!--bold-->
     <style name="mpsdk_smaller_warm_grey_thin_bold_text">
         <item name="android:textSize">@dimen/mpsdk_small_text</item>
-        <item name="android:textColor">@color/mpsdk_warm_grey</item>
+        <item name="android:textColor">@color/mpsdk_warm_grey_with_alpha</item>
         <item name="android:lineSpacingMultiplier">1.3</item>
     </style>
 
@@ -174,7 +174,7 @@
 
     <style name="ThemeMercadoPagoAlertDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
         <item name="colorAccent">@color/mpsdk_blue_button</item>
-        <item name="android:textColorPrimary">@color/mpsdk_black</item>
+        <item name="android:textColorPrimary">@color/mpsdk_real_black</item>
         <item name="android:background">@color/mpsdk_white</item>
     </style>
 

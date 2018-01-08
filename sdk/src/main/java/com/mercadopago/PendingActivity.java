@@ -220,8 +220,8 @@ public class PendingActivity extends MercadoPagoBaseActivity implements TimerObs
             } else {
                 hidePendingContentText();
             }
-            if (mPaymentResultScreenPreference.getPendingIconName() != null) {
-                Drawable image = ContextCompat.getDrawable(this, mPaymentResultScreenPreference.getPendingIconName());
+            if (mPaymentResultScreenPreference.getPendingIcon() != null) {
+                Drawable image = ContextCompat.getDrawable(this, mPaymentResultScreenPreference.getPendingIcon());
                 mHeaderIcon.setImageDrawable(image);
             }
             if (!mPaymentResultScreenPreference.isPendingSecondaryExitButtonEnabled() ||

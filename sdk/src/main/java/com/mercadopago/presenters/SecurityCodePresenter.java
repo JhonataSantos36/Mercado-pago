@@ -200,7 +200,8 @@ public class SecurityCodePresenter extends MvpPresenter<SecurityCodeActivityView
     }
 
     private boolean hasToCloneToken() {
-        return mPaymentRecovery != null && mPaymentRecovery.isStatusDetailCallForAuthorize() && mToken != null;
+        return mPaymentRecovery != null && (mPaymentRecovery.isStatusDetailCallForAuthorize() ||
+                mPaymentRecovery.isStatusDetailCardDisabled()) && mToken != null;
     }
 
     private boolean hasToRecoverTokenFromESC() {

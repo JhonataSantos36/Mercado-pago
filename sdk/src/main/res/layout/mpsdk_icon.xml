@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:background="@color/mpsdk_green_MP">
+
+    <ImageView
+        android:id="@+id/mpsdkIconProduct"
+        android:layout_width="@dimen/mpsdk_xxxxl_height"
+        android:layout_height="@dimen/mpsdk_xxxxl_height"
+        android:layout_gravity="center"
+        android:layout_margin="@dimen/mpsdk_xs_alternative_1_margin"
+        tools:src="@drawable/mpsdk_icon_product"/>
+
+    <ImageView
+        android:id="@+id/mpsdkIconBadge"
+        android:layout_width="@dimen/mpsdk_l_alternative_margin"
+        android:layout_height="@dimen/mpsdk_l_alternative_margin"
+        android:layout_marginBottom="@dimen/mpsdk_xs_alternative_1_margin"
+        android:layout_gravity="bottom|right"
+        tools:src="@drawable/mpsdk_badge_check" />
+
+</FrameLayout>

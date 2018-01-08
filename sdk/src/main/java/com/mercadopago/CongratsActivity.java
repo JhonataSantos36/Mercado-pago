@@ -302,8 +302,8 @@ public class CongratsActivity extends MercadoPagoBaseActivity implements ReviewS
             } else {
                 hidePaymentMethod();
             }
-            if (mPaymentResultScreenPreference.getApprovedIconName() != null) {
-                Drawable image = ContextCompat.getDrawable(this, mPaymentResultScreenPreference.getApprovedIconName());
+            if (mPaymentResultScreenPreference.getApprovedIcon() != null) {
+                Drawable image = ContextCompat.getDrawable(this, mPaymentResultScreenPreference.getApprovedIcon());
 
                 mHeaderIcon.setImageDrawable(image);
             }
@@ -362,7 +362,7 @@ public class CongratsActivity extends MercadoPagoBaseActivity implements ReviewS
     }
 
     private void setDefaultCongratulationsTitle() {
-        mCongratulationsTitle.setText(getResources().getString(R.string.mpsdk_title_activity_congrats));
+        mCongratulationsTitle.setText(getResources().getString(R.string.mpsdk_title_approved_payment));
     }
 
     private void setDefaultCongratulationsSubtitle() {

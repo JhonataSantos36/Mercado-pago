@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/mpsdk_light_gray">
+
+    <com.mercadopago.customviews.MPTextView
+        android:id="@+id/mpsdkReferenceLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="@dimen/mpsdk_l_margin"
+        android:textColor="@color/mpsdk_brownish_grey"
+        android:textSize="@dimen/mpsdk_xxs_text"
+        tools:text="Label" />
+
+    <com.mercadopago.customviews.MPTextView
+        android:id="@+id/mpsdkReferenceValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="@dimen/mpsdk_xxxs_margin"
+        android:textColor="@color/mpsdk_black"
+        android:textSize="@dimen/mpsdk_l_text"
+        tools:text="1234 1234 1234" />
+
+    <com.mercadopago.customviews.MPTextView
+        android:id="@+id/mpsdkReferenceComment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="@dimen/mpsdk_l_alternative_margin"
+        android:textColor="@color/mpsdk_brownish_grey"
+        android:textSize="@dimen/mpsdk_s_text"
+        tools:text="comment" />
+
+</LinearLayout>

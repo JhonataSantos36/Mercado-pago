@@ -37,6 +37,22 @@ public class PaymentResult {
         return paymentStatus;
     }
 
+    public boolean isStatusApproved() {
+        return Payment.StatusCodes.STATUS_APPROVED.equals(paymentStatus);
+    }
+
+    public boolean isStatusRejected() {
+        return Payment.StatusCodes.STATUS_REJECTED.equals(paymentStatus);
+    }
+
+    public boolean isStatusPending() {
+        return Payment.StatusCodes.STATUS_PENDING.equals(paymentStatus);
+    }
+
+    public boolean isStatusInProcess() {
+        return Payment.StatusCodes.STATUS_IN_PROCESS.equals(paymentStatus);
+    }
+
     public String getPaymentStatusDetail() {
         return paymentStatusDetail;
     }

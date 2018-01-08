@@ -1,6 +1,7 @@
 package com.mercadopago.util;
 
 import android.content.Context;
+import android.support.annotation.DrawableRes;
 
 import com.mercadopago.R;
 import com.mercadopago.model.PaymentMethod;

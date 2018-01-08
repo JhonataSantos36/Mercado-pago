@@ -1,0 +1,41 @@
+{ "accreditation_message": "It will be accredited in 1 hour",
+  "actions": [
+  ],
+  "geolocation": {
+    "enabled": true
+  },
+  "info": [
+    "Díctale estos códigos al cajero"
+  ],
+  "references": [
+    {
+      "label": "Número de convenio CIE",
+      "field_value": [
+        "6413",
+        "75"
+      ],
+      "separator": " ",
+      "comment": null
+    },
+    {
+      "label": "Referencia",
+      "field_value": [
+        "2679",
+        "2394",
+        "533"
+      ],
+      "separator": " ",
+      "comment": null
+    }
+  ],
+  "secondary_info": [
+    "También enviamos estos datos a tu email"
+  ],
+  "subtitle": "Paga con estos datos",
+  "tertiary_info": [
+    "Si hay fila en BBVA Bancomer, no pierdas tiempo.",
+    "Paga en el 7-Eleven más cercano con estos mismos datos."
+  ],
+  "title": "Listo, solo te falta depositar $ 200.26 en el BBVA Bancomer más cercano",
+  "type": "atm"
+}

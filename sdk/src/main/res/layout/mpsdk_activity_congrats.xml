@@ -50,7 +50,7 @@
                         android:layout_marginBottom="10dp"
                         android:layout_marginTop="24dp"
                         android:gravity="bottom|center"
-                        android:text="@string/mpsdk_title_activity_congrats"
+                        android:text="@string/mpsdk_title_approved_payment"
                         android:textColor="@color/mpsdk_white"
                         android:textSize="22dp" />
 

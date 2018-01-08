@@ -63,4 +63,9 @@ public class PayerCosts {
         String json = ResourcesUtil.getStringResource("payer_cost.json");
         return JsonUtil.getInstance().fromJson(json, PayerCost.class);
     }
+
+    public static PayerCost getPayerCostWithoutInstallments() {
+        String json = ResourcesUtil.getStringResource("payer_cost_one_installment.json");
+        return JsonUtil.getInstance().fromJson(json, PayerCost.class);
+    }
 }

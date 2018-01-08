@@ -25,7 +25,7 @@
     <item android:state_enabled="false">
         <shape xmlns:android="http://schemas.android.com/apk/res/android"
             android:shape="rectangle">
-            <solid android:color="@color/mpsdk_light_gray"/>
+            <solid android:color="@color/mpsdk_very_light_gray"/>
         </shape>
     </item>
     <item>
@@ -33,7 +33,7 @@
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:shape="rectangle">
             <solid
-                android:color="@color/mpsdk_light_gray"/>
+                android:color="@color/mpsdk_very_light_gray"/>
             <size
                 android:width="70dp"
                 android:height="40dp"/>

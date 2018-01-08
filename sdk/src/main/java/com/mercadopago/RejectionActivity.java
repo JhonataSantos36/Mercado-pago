@@ -243,8 +243,8 @@ public class RejectionActivity extends MercadoPagoBaseActivity implements TimerO
     }
 
     private void setHeaderIcon() {
-        if (mPaymentResultScreenPreference.getRejectedIconName() != null) {
-            Drawable image = ContextCompat.getDrawable(this, mPaymentResultScreenPreference.getRejectedIconName());
+        if (mPaymentResultScreenPreference.getRejectedIcon() != null) {
+            Drawable image = ContextCompat.getDrawable(this, mPaymentResultScreenPreference.getRejectedIcon());
             mHeaderIcon.setImageDrawable(image);
         }
     }
@@ -415,7 +415,7 @@ public class RejectionActivity extends MercadoPagoBaseActivity implements TimerO
     }
 
     private void setDefaultRejectedIconSubtext() {
-        mIconSubtext.setText(getResources().getString(R.string.mpsdk_rejection_title));
+        mIconSubtext.setText(getResources().getString(R.string.mpsdk_rejection_label));
     }
 
     private void setDefaultExitButtonText() {

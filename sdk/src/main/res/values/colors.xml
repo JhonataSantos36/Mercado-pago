@@ -5,15 +5,14 @@
 
     <color name="default_primary_color">#666666</color>
 
+    <color name="mpsdk_real_black">#000000</color>
     <color name="mpsdk_comment_color">#999</color>
-    <color name="mpsdk_black">#000000</color>
-    <color name="mpsdk_white">#FFFFFF</color>
     <color name="mpsdk_white_background">#FFFFFF</color>
     <color name="mpsdk_base_text_alpha">#B3333333</color>
     <color name="mpsdk_base_text">#333333</color>
     <color name="mpsdk_form_text">#666666</color>
     <color name="mpsdk_separator">#DEDEDE</color>
-    <color name="mpsdk_light_gray">#EEEEEE</color>
+    <color name="mpsdk_very_light_gray">#EEEEEE</color>
     <color name="mpsdk_gray">#D6D6D6</color>
     <color name="mpsdk_darker_gray">#ABABAB</color>
     <color name="mpsdk_info_color_light">#FBF8E1</color>
@@ -26,7 +25,7 @@
     <color name="mpsdk_rejection_color_dark">#F8DADA</color>
     <color name="mpsdk_process_color_dark">#30AFE2</color>
     <color name="mpsdk_icon_image_color">#1D9FDE</color>
-    <color name="mpsdk_warm_grey">#b7999999</color>
+    <color name="mpsdk_warm_grey_with_alpha">#b7999999</color>
     <color name="mpsdk_shopping_cart_background">#ce76cdf1</color>
     <color name="mpsdk_transparent">#00000000</color>
     <color name="mpsdk_color_instructions_title_image">#EFC703</color>
@@ -170,5 +169,20 @@
 
     <color name="mpsdk_default_disclaimer">#777777</color>
 
+    <!-- Payment Result components -->
 
+    <color name="mpsdk_black">#333333</color>
+    <color name="mpsdk_brownish_grey">#666666</color>
+    <color name="mpsdk_warm_grey">#999999</color>
+    <color name="mpsdk_med_light_gray">#EEEEEE</color>
+    <color name="mpsdk_light_gray">#F7F7F7</color>
+    <color name="mpsdk_white">#FFFFFF</color>
+    <color name="mpsdk_blue_MP">#009CEE</color>
+    <color name="mpsdk_green_MP">#00C677</color>
+    <color name="mpsdk_red_MP">#FF4E55</color>
+    <color name="mpsdk_orange_MP">#FFA644</color>
+    <color name="mpsdk_blue_status_MP">#008CD6</color>
+    <color name="mpsdk_green_status_MP">#00B26B</color>
+    <color name="mpsdk_red_status_MP">#E5464C</color>
+    <color name="mpsdk_orange_status_MP">#E5953D</color>
 </resources>

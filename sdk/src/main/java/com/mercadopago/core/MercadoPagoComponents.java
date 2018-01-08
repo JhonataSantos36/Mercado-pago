@@ -18,7 +18,7 @@ import com.mercadopago.InstructionsActivity;
 import com.mercadopago.IssuersActivity;
 import com.mercadopago.PayerInformationActivity;
 import com.mercadopago.PaymentMethodsActivity;
-import com.mercadopago.PaymentResultActivity;
+import com.mercadopago.paymentresult.PaymentResultActivity;
 import com.mercadopago.PaymentTypesActivity;
 import com.mercadopago.PaymentVaultActivity;
 import com.mercadopago.PendingActivity;
