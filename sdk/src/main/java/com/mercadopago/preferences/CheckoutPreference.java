@@ -247,6 +247,14 @@ public class CheckoutPreference {
         return getId() != null;
     }
 
+    public Date getExpirationDateTo() {
+        return expirationDateTo;
+    }
+
+    public Date getExpirationDateFrom() {
+        return expirationDateFrom;
+    }
+
     public static class Builder {
         private List<Item> items;
         private List<String> excludedPaymentMethods;

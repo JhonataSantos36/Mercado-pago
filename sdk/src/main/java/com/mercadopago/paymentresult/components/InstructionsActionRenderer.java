@@ -1,5 +1,6 @@
 package com.mercadopago.paymentresult.components;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 
@@ -17,7 +18,7 @@ import com.mercadopago.paymentresult.components.InstructionsAction;
 public class InstructionsActionRenderer extends Renderer<InstructionsAction> {
 
     @Override
-    public View render() {
+    public View render(final InstructionsAction component, final Context context) {
         final View actionView = LayoutInflater.from(context).inflate(R.layout.mpsdk_payment_result_instructions_action, null, false);
         final MPTextView actionTextView = actionView.findViewById(R.id.instructionAction);
 

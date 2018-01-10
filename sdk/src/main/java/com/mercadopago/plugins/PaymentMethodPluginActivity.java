@@ -26,6 +26,8 @@ public class PaymentMethodPluginActivity extends AppCompatActivity implements Ac
         return new Intent(context, PaymentMethodPluginActivity.class);
     }
 
+    private ComponentManager componentManager;
+
     @Override
     public void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,7 +48,7 @@ public class PaymentMethodPluginActivity extends AppCompatActivity implements Ac
                 .build();
 
         final Component component = plugin.createConfigurationComponent(props);
-        final ComponentManager componentManager = new ComponentManager(this);
+        componentManager = new ComponentManager(this);
 
         if (component == null) {
             setResult(RESULT_CANCELED);
@@ -60,11 +62,18 @@ public class PaymentMethodPluginActivity extends AppCompatActivity implements Ac
 
     @Override
     public void dispatch(final Action action) {
-        if (action instanceof NextAction) {
-            setResult(RESULT_OK);
-            finish();
-        } else if (action instanceof BackAction) {
-            onBackPressed();
-        }
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (action instanceof NextAction) {
+                    setResult(RESULT_OK);
+                    finish();
+                } else if (action instanceof BackAction) {
+                    onBackPressed();
+                } else {
+                    componentManager.dispatch(action);
+                }
+            }
+        });
     }
 }

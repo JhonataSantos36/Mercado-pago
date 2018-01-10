@@ -1,5 +1,6 @@
 package com.mercadopago.paymentresult.components;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -9,8 +10,9 @@ import com.mercadopago.R;
 import com.mercadopago.components.Renderer;
 
 public class FooterRenderer extends Renderer<Footer> {
+
     @Override
-    public View render() {
+    public View render(final Footer component, final Context context) {
         final View view = LayoutInflater.from(context)
                 .inflate(R.layout.mpsdk_payment_result_footer, null);
 

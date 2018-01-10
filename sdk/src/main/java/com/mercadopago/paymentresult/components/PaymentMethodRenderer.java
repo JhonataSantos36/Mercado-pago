@@ -1,5 +1,6 @@
 package com.mercadopago.paymentresult.components;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +18,7 @@ import com.mercadopago.customviews.MPTextView;
 
 public class PaymentMethodRenderer extends Renderer<PaymentMethod> {
     @Override
-    public View render() {
+    public View render(final PaymentMethod component, final Context context) {
         final View paymentMethodView = LayoutInflater.from(context).inflate(R.layout.mpsdk_payment_method_component, null, false);
         final ViewGroup paymentMethodViewGroup = paymentMethodView.findViewById(R.id.mpsdkPaymentMethodContainer);
         final ImageView imageView = paymentMethodView.findViewById(R.id.mpsdkPaymentMethodIcon);

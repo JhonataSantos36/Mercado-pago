@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:orientation="vertical"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp">
+
+        <ImageView
+            android:id="@+id/lock"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:adjustViewBounds="true"
+            android:src="@drawable/lock"/>
+
+        <TextView
+            android:id="@+id/label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:text="Ingresar clave"
+            android:textSize="20sp"/>
+
+
+        <EditText
+            android:id="@+id/password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:ellipsize="start"
+            android:gravity="center"
+            android:imeOptions="actionDone"
+            android:inputType="textPassword"/>
+
+        <TextView
+            android:id="@+id/error_label"
+            style="@style/TextAppearance.Design.Error"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            tools:text="La clave ingresada es inválida"
+            android:textSize="14sp"/>
+
+    </LinearLayout>
+
+    <com.mercadopago.customviews.MPButton
+        android:id="@+id/button_continue"
+        style="@style/mpsdk_button_normal"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/mpsdk_button_height"
+        android:layout_margin="20dp"
+        android:layout_alignParentBottom="true"
+        android:text="Continuar" />
+
+</RelativeLayout>

@@ -1,5 +1,6 @@
 package com.mercadopago.paymentresult.components;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 
@@ -14,7 +15,7 @@ import com.mercadopago.customviews.MPTextView;
 public class TotalAmountRenderer extends Renderer<TotalAmount> {
 
     @Override
-    public View render() {
+    public View render(final TotalAmount component, final Context context) {
         final View bodyView = LayoutInflater.from(context).inflate(R.layout.mpsdk_total_amount_component, null, false);
         final MPTextView amountTitleTextView = bodyView.findViewById(R.id.mpsdkAmountTitle);
         final MPTextView amountDetailTextView = bodyView.findViewById(R.id.mpsdkAmountDetail);

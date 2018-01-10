@@ -16,7 +16,7 @@ import java.util.List;
  * Created by vaserber on 11/13/17.
  */
 
-public class Instructions extends Component<InstructionsProps> {
+public class Instructions extends Component<InstructionsProps, Void> {
 
     public Instructions(@NonNull final InstructionsProps props,
                         @NonNull final ActionDispatcher dispatcher) {

@@ -1,5 +1,6 @@
 package com.mercadopago.paymentresult.components;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 
@@ -18,18 +19,11 @@ import java.util.Locale;
 public class ReceiptRenderer extends Renderer<Receipt> {
 
     @Override
-    public View render() {
+    public View render(final Receipt component, final Context context) {
         final View receiptView = LayoutInflater.from(context).inflate(R.layout.mpsdk_payment_receipt_component, null, false);
         final MPTextView descriptionTextView = receiptView.findViewById(R.id.mpsdkReceiptDescription);
         final MPTextView dateTextView = receiptView.findViewById(R.id.mpsdkReceiptDate);
 
-        renderDate(dateTextView);
-        setText(descriptionTextView, component.getDescription());
-
-        return receiptView;
-    }
-
-    private void renderDate(final MPTextView dateTextView) {
         final String divider = context.getResources().getString(R.string.mpsdk_date_divider);
         final Calendar calendar = Calendar.getInstance();
         final Locale locale = context.getResources().getConfiguration().locale;
@@ -43,5 +37,8 @@ public class ReceiptRenderer extends Renderer<Receipt> {
                 .append(divider).append(" ").append(year);
 
         setText(dateTextView, builder.toString());
+        setText(descriptionTextView, component.getDescription());
+
+        return receiptView;
     }
 }

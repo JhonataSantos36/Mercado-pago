@@ -10,7 +10,7 @@ import com.mercadopago.model.InstructionActionInfo;
  * Created by vaserber on 11/14/17.
  */
 
-public class InstructionsAction extends Component<InstructionsAction.Prop> {
+public class InstructionsAction extends Component<InstructionsAction.Prop, Void> {
 
     public InstructionsAction(@NonNull final Prop props, @NonNull final ActionDispatcher dispatcher) {
         super(props, dispatcher);

@@ -2,7 +2,7 @@ package com.mercadopago.components;
 
 import android.support.annotation.NonNull;
 
-public class ToolbarComponent extends Component<ToolbarComponent.Props> {
+public class ToolbarComponent extends Component<ToolbarComponent.Props, Void> {
 
     static {
         RendererFactory.register(ToolbarComponent.class, ToolbarRenderer.class);

@@ -1,5 +1,6 @@
 package com.mercadopago.paymentresult.components;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +16,7 @@ import com.mercadopago.components.RendererFactory;
 public class PaymentResultRenderer extends Renderer<PaymentResultContainer> {
 
     @Override
-    public View render() {
+    public View render(final PaymentResultContainer component, final Context context) {
         View view;
 
         if (component.isLoading()) {

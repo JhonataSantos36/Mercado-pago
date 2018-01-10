@@ -13,14 +13,22 @@ import java.util.Map;
  * Created by nfortuna on 12/13/17.
  */
 
-public abstract class PluginComponent extends Component<PluginComponent.Props> {
+public abstract class PluginComponent<T> extends Component<PluginComponent.Props, T> {
 
     static {
         RendererFactory.register(PluginComponent.class, PluginRenderer.class);
     }
 
-    public PluginComponent(@NonNull Props props) {
+    public PluginComponent(@NonNull final PluginComponent.Props props) {
         super(props);
+    }
+
+    public ToolbarComponent getToolbarComponent() {
+        final ToolbarComponent.Props props = new ToolbarComponent.Props.Builder()
+                .setToolbarTitle(this.props.toolbarTitle)
+                .setToolbarVisible(this.props.toolbarVisible)
+                .build();
+        return new ToolbarComponent(props);
     }
 
     public static class Props {
@@ -35,11 +43,17 @@ public abstract class PluginComponent extends Component<PluginComponent.Props> {
             this.toolbarVisible = builder.toolbarVisible;
         }
 
-        public PluginComponent.Props.Builder toBuilder() {
-            return new PluginComponent.Props.Builder()
-                    .setData(this.data)
-                    .setToolbarTitle(this.toolbarTitle)
-                    .setToolbarVisible(this.toolbarVisible);
+        public Builder toBuilder() {
+            return new Builder()
+                .setData(this.data)
+                .setToolbarVisible(this.toolbarVisible)
+                .setToolbarTitle(this.toolbarTitle);
+        }
+
+        public void setPluginProps(@NonNull final Props.Builder builder) {
+            builder.setData(this.data)
+                .setToolbarTitle(this.toolbarTitle)
+                .setToolbarVisible(this.toolbarVisible);
         }
 
         public static class Builder {
@@ -78,13 +92,5 @@ public abstract class PluginComponent extends Component<PluginComponent.Props> {
                 return new PluginComponent.Props(this);
             }
         }
-    }
-
-    public ToolbarComponent getToolbarComponent() {
-        final ToolbarComponent.Props props = new ToolbarComponent.Props.Builder()
-                .setToolbarTitle(this.props.toolbarTitle)
-                .setToolbarVisible(this.props.toolbarVisible)
-                .build();
-        return new ToolbarComponent(props);
     }
 }

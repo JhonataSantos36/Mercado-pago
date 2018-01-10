@@ -1,5 +1,6 @@
 package com.mercadopago.paymentresult.components;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,18 +20,17 @@ import java.util.List;
 public class InstructionsActionsRenderer extends Renderer<InstructionsActions> {
 
     @Override
-    public View render() {
+    public View render(InstructionsActions component, Context context) {
         final View actionsView = LayoutInflater.from(context).inflate(R.layout.mpsdk_payment_result_instructions_actions, null, false);
         final ViewGroup parentViewGroup = actionsView.findViewById(R.id.mpsdkInstructionsActionsContainer);
 
         List<InstructionsAction> actionComponentList = component.getActionComponents();
-        for (InstructionsAction component: actionComponentList) {
-            final Renderer actionRenderer = RendererFactory.create(context, component);
+        for (InstructionsAction instructionsAction : actionComponentList) {
+            final Renderer actionRenderer = RendererFactory.create(context, instructionsAction);
             final View action = actionRenderer.render();
             parentViewGroup.addView(action);
         }
 
         return actionsView;
     }
-
 }

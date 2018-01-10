@@ -430,42 +430,45 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
     }
 
     private List<PaymentMethodSearchViewController> createPluginItemsViewControllers(final List<PaymentMethodInfo> infoItems) {
+        final CheckoutStore store = CheckoutStore.getInstance();
         final List<PaymentMethodSearchViewController> controllers = new ArrayList<>();
         for (final PaymentMethodInfo infoItem : infoItems) {
+            final PaymentMethodPlugin plugin = store.getPaymentMethodPluginById(infoItem.id);
+            if (plugin != null && plugin.isEnabled(store.getData())) {
+                final PaymentMethodSearchViewController viewController =
+                        new PaymentMethodInfoController(this, infoItem, mDecorationPreference);
+                viewController.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(final View v) {
 
-            final PaymentMethodSearchViewController viewController =
-                    new PaymentMethodInfoController(this, infoItem, mDecorationPreference);
+                        final String id = String.valueOf(v.getTag());
+                        final PaymentMethodInfo info = store.getPaymentMethodPluginInfoById(id);
+                        store.setSelectedPaymentMethod(info);
 
-            viewController.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(final View v) {
-
-                    final String id = String.valueOf(v.getTag());
-                    final PaymentMethodInfo info = CheckoutStore.getInstance().getPaymentMethodPluginInfoById(id);
-                    CheckoutStore.getInstance().setSelectedPaymentMethod(info);
-
-                    if (!mPaymentVaultPresenter.showHook1(PaymentTypes.PLUGIN, MercadoPagoComponents.Activities.HOOK_1_PLUGIN)) {
-                        showPaymentMethodPluginConfiguration();
+                        if (!mPaymentVaultPresenter.showHook1(PaymentTypes.PLUGIN, MercadoPagoComponents.Activities.HOOK_1_PLUGIN)) {
+                            showPaymentMethodPluginConfiguration();
+                        }
                     }
-                }
-            });
-            controllers.add(viewController);
+                });
+                controllers.add(viewController);
+            }
         }
         return controllers;
     }
 
     private void showPaymentMethodPluginConfiguration() {
 
-        final PaymentMethodInfo info = CheckoutStore.getInstance().getSelectedPaymentMethod();
-        final PaymentMethodPlugin plugin = CheckoutStore.getInstance().getPaymentMethodPluginById(info.id);
+        final CheckoutStore store = CheckoutStore.getInstance();
+        final PaymentMethodInfo info = store.getSelectedPaymentMethod();
+        final PaymentMethodPlugin plugin = store.getPaymentMethodPluginById(info.id);
 
-        if (plugin.hasConfigurationComponent()) {
+        if (plugin != null && plugin.isEnabled(store.getData()) && plugin.hasConfigurationComponent()) {
 
             startActivityForResult(PaymentMethodPluginActivity.getIntent(PaymentVaultActivity.this), MercadoPagoComponents.Activities.PLUGIN_PAYMENT_METHOD_REQUEST_CODE);
             overrideTransitionIn();
 
         } else {
-            final PaymentMethodInfo paymentMethodInfo = CheckoutStore.getInstance().getSelectedPaymentMethod();
+            final PaymentMethodInfo paymentMethodInfo = store.getSelectedPaymentMethod();
             finishPaymentMethodSelection(new PaymentMethod(paymentMethodInfo));
             overrideTransitionOut();
         }

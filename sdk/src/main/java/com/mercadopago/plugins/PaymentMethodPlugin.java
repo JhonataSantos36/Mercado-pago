@@ -5,6 +5,8 @@ import android.support.annotation.NonNull;
 
 import com.mercadopago.plugins.model.PaymentMethodInfo;
 
+import java.util.Map;
+
 /**
  * Created by nfortuna on 12/11/17.
  */
@@ -27,6 +29,10 @@ public abstract class PaymentMethodPlugin {
     public boolean hasConfigurationComponent() {
         final PluginComponent.Props props = new PluginComponent.Props.Builder().build();
         return createConfigurationComponent(props) != null;
+    }
+
+    public boolean isEnabled(@NonNull final Map<String, Object> data) {
+        return true;
     }
 
     public abstract PaymentMethodInfo getPaymentMethodInfo();

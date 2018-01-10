@@ -1,5 +1,6 @@
 package com.mercadopago.paymentresult.components;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +18,7 @@ public class InstructionsRenderer extends Renderer<Instructions> {
 
 
     @Override
-    public View render() {
+    public View render(final Instructions component, final Context context) {
         final View instructionsView = LayoutInflater.from(context).inflate(R.layout.mpsdk_payment_result_instructions, null, false);
         final ViewGroup parentViewGroup = instructionsView.findViewById(R.id.mpsdkInstructionsContainer);
 

@@ -14,7 +14,7 @@ import com.mercadopago.paymentresult.props.TotalAmountProps;
  * Created by mromar on 11/22/17.
  */
 
-public class PaymentMethod extends Component<PaymentMethodProps> {
+public class PaymentMethod extends Component<PaymentMethodProps, Void> {
 
     private PaymentMethodProvider provider;
 

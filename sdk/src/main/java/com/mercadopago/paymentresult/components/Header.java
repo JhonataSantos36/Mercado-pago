@@ -11,7 +11,7 @@ import com.mercadopago.paymentresult.props.IconProps;
  * Created by vaserber on 10/20/17.
  */
 
-public class Header extends Component<HeaderProps> {
+public class Header extends Component<HeaderProps, Void> {
 
     public Header(@NonNull final HeaderProps props,
                   @NonNull final ActionDispatcher dispatcher) {

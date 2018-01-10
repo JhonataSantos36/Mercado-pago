@@ -1,5 +1,6 @@
 package com.mercadopago.paymentresult.components;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,7 +19,7 @@ import java.util.List;
 public class InstructionsInfoRenderer extends Renderer<InstructionsInfo> {
 
     @Override
-    public View render() {
+    public View render(final InstructionsInfo component, final Context context) {
         final View infoView = LayoutInflater.from(context).inflate(R.layout.mpsdk_payment_result_instructions_info, null, false);
         final MPTextView infoTitle = infoView.findViewById(R.id.mpsdkInstructionsInfoTitle);
         final MPTextView infoContent = infoView.findViewById(R.id.mpsdkInstructionsInfoContent);
@@ -26,31 +27,23 @@ public class InstructionsInfoRenderer extends Renderer<InstructionsInfo> {
 
         setText(infoTitle, component.props.infoTitle);
 
-        renderInfoContent(infoContent);
+        if (component.props.infoContent == null || component.props.infoContent.isEmpty()) {
+            infoContent.setVisibility(View.GONE);
+        } else {
+            infoContent.setText(getInfoText(component.props.infoContent));
+            infoContent.setVisibility(View.VISIBLE);
+        }
 
-        renderDivider(bottomDivider);
+        if (component.props.bottomDivider) {
+            bottomDivider.setVisibility(View.VISIBLE);
+        } else {
+            bottomDivider.setVisibility(View.GONE);
+        }
 
         return infoView;
     }
 
-    private void renderDivider(@NonNull final View bottomDividerView) {
-        if (component.props.bottomDivider) {
-            bottomDividerView.setVisibility(View.VISIBLE);
-        } else {
-            bottomDividerView.setVisibility(View.GONE);
-        }
-    }
-
-    private void renderInfoContent(@NonNull final MPTextView infoContentTextView) {
-        if (component.props.infoContent == null || component.props.infoContent.isEmpty()) {
-            infoContentTextView.setVisibility(View.GONE);
-        } else {
-            infoContentTextView.setText(getInfoText(component.props.infoContent));
-            infoContentTextView.setVisibility(View.VISIBLE);
-        }
-    }
-
-    private String getInfoText(List<String> info) {
+    private String getInfoText(final List<String> info) {
         StringBuilder stringBuilder = new StringBuilder();
         for (int i = 0; i < info.size(); i++) {
             stringBuilder.append(info.get(i));

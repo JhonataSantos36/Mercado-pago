@@ -14,7 +14,7 @@ import com.mercadopago.paymentresult.props.BodyErrorProps;
  * Created by vaserber on 27/11/2017.
  */
 
-public class BodyError extends Component<BodyErrorProps> {
+public class BodyError extends Component<BodyErrorProps, Void> {
 
     public PaymentResultProvider resourcesProvider;
 

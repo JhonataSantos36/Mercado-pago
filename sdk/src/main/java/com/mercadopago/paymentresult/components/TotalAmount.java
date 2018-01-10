@@ -16,7 +16,7 @@ import java.text.DecimalFormatSymbols;
  * Created by mromar on 11/28/17.
  */
 
-public class TotalAmount extends Component<TotalAmountProps> {
+public class TotalAmount extends Component<TotalAmountProps, Void> {
 
     public TotalAmount(@NonNull final TotalAmountProps props,
                        @NonNull final ActionDispatcher dispatcher) {

@@ -14,7 +14,7 @@ import com.mercadopago.paymentresult.PaymentResultProvider;
 import com.mercadopago.preferences.PaymentResultScreenPreference;
 import com.mercadopago.util.TextUtils;
 
-public class FooterContainer extends Component<FooterContainer.Props> {
+public class FooterContainer extends Component<FooterContainer.Props, Void> {
 
     public PaymentResultProvider resourcesProvider;
 

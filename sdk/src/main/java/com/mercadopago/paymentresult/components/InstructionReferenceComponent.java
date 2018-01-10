@@ -10,7 +10,7 @@ import com.mercadopago.model.InstructionReference;
  * Created by vaserber on 11/13/17.
  */
 
-public class InstructionReferenceComponent extends Component<InstructionReferenceComponent.Props> {
+public class InstructionReferenceComponent extends Component<InstructionReferenceComponent.Props, Void> {
 
 
     public InstructionReferenceComponent(@NonNull final Props props, @NonNull final ActionDispatcher dispatcher) {

@@ -1,5 +1,6 @@
 package com.mercadopago.paymentresult.components;
 
+import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
@@ -21,34 +22,30 @@ import com.squareup.picasso.Picasso;
 public class IconRenderer extends Renderer<Icon> {
 
     @Override
-    public View render() {
+    public View render(final Icon component, final Context context) {
         final View iconView = LayoutInflater.from(context).inflate(R.layout.mpsdk_icon, null);
         final ImageView iconImageView = iconView.findViewById(R.id.mpsdkIconProduct);
         final ImageView iconBadgeView = iconView.findViewById(R.id.mpsdkIconBadge);
-        renderIcon(iconImageView);
-        renderBadge(iconBadgeView);
-        return iconView;
-    }
 
-    private void renderIcon(@NonNull final ImageView imageView) {
-        final int dimen = ScaleUtil.getPxFromDp(90, context);
+        //Render icon
+        final int size = ScaleUtil.getPxFromDp(90, context);
         Picasso.with(context)
                 .load(component.props.iconImage)
                 .transform(new CircleTransform())
-                .resize(dimen, dimen)
+                .resize(size, size)
                 .centerInside()
-                .into(imageView);
-    }
+                .into(iconImageView);
 
-    private void renderBadge(@NonNull final ImageView imageView) {
+        //Render badge
         if (component.props.badgeImage == 0) {
-            imageView.setVisibility(View.INVISIBLE);
+            iconBadgeView.setVisibility(View.INVISIBLE);
         } else {
             final Drawable badgeImage = ContextCompat.getDrawable(context,
                     component.props.badgeImage);
-            imageView.setImageDrawable(badgeImage);
-            imageView.setVisibility(View.VISIBLE);
+            iconBadgeView.setImageDrawable(badgeImage);
+            iconBadgeView.setVisibility(View.VISIBLE);
         }
-    }
 
+        return iconView;
+    }
 }

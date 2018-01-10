@@ -4,6 +4,8 @@ import android.support.annotation.NonNull;
 
 import com.mercadopago.plugins.components.SamplePayment;
 
+import java.util.Map;
+
 /**
  * Created by nfortuna on 12/13/17.
  */

@@ -21,7 +21,7 @@ import com.mercadopago.paymentresult.props.PaymentResultProps;
  * Created by vaserber on 10/20/17.
  */
 
-public class PaymentResultContainer extends Component<PaymentResultProps> {
+public class PaymentResultContainer extends Component<PaymentResultProps, Void> {
 
     public static final int DEFAULT_BACKGROUND_COLOR = R.color.mpsdk_blue_MP;
     public static final int GREEN_BACKGROUND_COLOR = R.color.mpsdk_green_MP;

@@ -19,7 +19,7 @@ import java.util.List;
  * Created by vaserber on 11/14/17.
  */
 
-public class InstructionsContent extends Component<InstructionsContentProps> {
+public class InstructionsContent extends Component<InstructionsContentProps, Void> {
 
     public InstructionsContent(@NonNull final InstructionsContentProps props, @NonNull final ActionDispatcher dispatcher) {
         super(props, dispatcher);

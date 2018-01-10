@@ -1,5 +1,6 @@
 package com.mercadopago.paymentresult.components;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,8 +15,9 @@ import com.mercadopago.core.CheckoutSessionStore;
  */
 
 public class BodyRenderer extends Renderer<Body> {
+
     @Override
-    public View render() {
+    public View render(final Body component, final Context context) {
         final View bodyView = LayoutInflater.from(context).inflate(R.layout.mpsdk_payment_result_body, null, false);
         final ViewGroup bodyViewGroup = bodyView.findViewById(R.id.mpsdkPaymentResultContainerBody);
 

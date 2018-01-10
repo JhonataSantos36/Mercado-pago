@@ -10,7 +10,7 @@ import com.mercadopago.model.PaymentData;
 
 import java.util.Map;
 
-public abstract class HookComponent extends Component<HookComponent.Props> {
+public abstract class HookComponent<T> extends Component<HookComponent.Props, T> {
 
     static {
         RendererFactory.register(HookComponent.class, HookRenderer.class);

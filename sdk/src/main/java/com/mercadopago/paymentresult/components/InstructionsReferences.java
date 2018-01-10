@@ -14,7 +14,7 @@ import java.util.List;
  * Created by vaserber on 11/13/17.
  */
 
-public class InstructionsReferences extends Component<InstructionsReferencesProps> {
+public class InstructionsReferences extends Component<InstructionsReferencesProps, Void> {
 
     public InstructionsReferences(@NonNull final InstructionsReferencesProps props, @NonNull final ActionDispatcher dispatcher) {
         super(props, dispatcher);

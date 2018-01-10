@@ -1,5 +1,6 @@
 package com.mercadopago.plugins.components;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
@@ -14,7 +15,7 @@ import com.mercadopago.examples.R;
 public class SamplePaymentRenderer extends Renderer<SamplePayment> {
 
     @Override
-    public View render() {
+    public View render(final SamplePayment component, final Context context) {
         final View view = LayoutInflater.from(context)
                 .inflate(R.layout.mpsdk_pmplugin_sample_payment, null);
         final TextView docu = view.findViewById(R.id.docu);

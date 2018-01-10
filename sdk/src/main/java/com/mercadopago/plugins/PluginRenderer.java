@@ -1,5 +1,6 @@
 package com.mercadopago.plugins;
 
+import android.content.Context;
 import android.support.annotation.CallSuper;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,12 +15,12 @@ public abstract class PluginRenderer<T extends PluginComponent> extends Renderer
 
     @Override
     @CallSuper
-    public View render() {
+    public View render(final T component, final Context context) {
         final ViewGroup view = (ViewGroup) LayoutInflater.from(context)
                 .inflate(R.layout.mpsdk_plugin_layout, null);
         view.addView(RendererFactory.create(context, component.getToolbarComponent()).render());
 
-        final View contents = renderContents();
+        final View contents = renderContents(component, context);
         final LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 0, 1f);
@@ -28,5 +29,5 @@ public abstract class PluginRenderer<T extends PluginComponent> extends Renderer
         return view;
     }
 
-    public abstract View renderContents();
+    public abstract View renderContents(final T component, final Context context);
 }

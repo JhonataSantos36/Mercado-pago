@@ -15,7 +15,7 @@ import com.mercadopago.plugins.model.PluginPaymentResult;
  * Created by nfortuna on 12/13/17.
  */
 
-public class SamplePayment extends PluginComponent {
+public class SamplePayment extends PluginComponent<PluginComponent.Props> {
 
     private final Handler handler = new Handler();
 

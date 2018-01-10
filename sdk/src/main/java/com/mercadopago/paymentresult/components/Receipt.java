@@ -11,7 +11,7 @@ import com.mercadopago.paymentresult.props.ReceiptProps;
  * Created by vaserber on 04/12/2017.
  */
 
-public class Receipt extends Component<ReceiptProps> {
+public class Receipt extends Component<ReceiptProps, Void> {
 
     public PaymentResultProvider paymentResultProvider;
 

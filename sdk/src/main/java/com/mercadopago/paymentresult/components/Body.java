@@ -19,7 +19,7 @@ import com.mercadopago.paymentresult.props.PaymentResultBodyProps;
  * Created by vaserber on 10/23/17.
  */
 
-public class Body extends Component<PaymentResultBodyProps> {
+public class Body extends Component<PaymentResultBodyProps, Void> {
 
     private PaymentMethodProvider paymentMethodProvider;
     public PaymentResultProvider paymentResultProvider;

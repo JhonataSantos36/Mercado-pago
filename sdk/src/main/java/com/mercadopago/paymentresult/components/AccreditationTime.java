@@ -12,7 +12,7 @@ import java.util.List;
  * Created by vaserber on 11/13/17.
  */
 
-public class AccreditationTime extends Component<AccreditationTime.Props> {
+public class AccreditationTime extends Component<AccreditationTime.Props, Void> {
 
     public AccreditationTime(@NonNull final Props props, @NonNull final ActionDispatcher dispatcher) {
         super(props, dispatcher);

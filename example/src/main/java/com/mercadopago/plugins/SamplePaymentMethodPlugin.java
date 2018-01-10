@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 
 import com.mercadopago.examples.R;
 import com.mercadopago.plugins.components.SamplePaymentMethod;
+import com.mercadopago.plugins.components.SampleResourcesProvider;
 import com.mercadopago.plugins.model.PaymentMethodInfo;
 
 /**
@@ -38,7 +39,8 @@ public class SamplePaymentMethodPlugin extends PaymentMethodPlugin {
             props.toBuilder()
                 .setToolbarTitle("Sample Pago")
                 .setToolbarVisible(true)
-                .build()
+                .build(),
+            new SampleResourcesProvider(context)
         );
     }
 }

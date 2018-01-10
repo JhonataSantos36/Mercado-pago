@@ -1,5 +1,6 @@
 package com.mercadopago.components;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 
@@ -11,7 +12,7 @@ import com.mercadopago.R;
 
 public class LoadingRenderer extends Renderer<LoadingComponent> {
     @Override
-    public View render() {
+    public View render(final LoadingComponent component, final Context context) {
         return LayoutInflater.from(context)
                 .inflate(R.layout.mpsdk_component_loading, null);
     }

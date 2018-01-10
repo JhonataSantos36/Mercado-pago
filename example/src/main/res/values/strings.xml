@@ -69,4 +69,8 @@
     <!-- HOOKS -->
     <string name="enable_hooks">Habilitar hooks</string>
 
+    <!-- Second factor messages -->
+    <string name="auth_error_password">La clave ingresada es incorrecta.</string>
+    <string name="auth_error_password_required">El campo clave es requerido.</string>
+
 </resources>

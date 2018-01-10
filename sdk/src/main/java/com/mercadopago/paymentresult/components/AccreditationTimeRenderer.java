@@ -1,5 +1,6 @@
 package com.mercadopago.paymentresult.components;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.PorterDuff;
@@ -15,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.mercadopago.R;
+import com.mercadopago.components.Component;
 import com.mercadopago.components.Renderer;
 import com.mercadopago.components.RendererFactory;
 import com.mercadopago.customviews.MPTextView;
@@ -31,23 +33,24 @@ import java.util.List;
 
 public class AccreditationTimeRenderer extends Renderer<AccreditationTime> {
 
-
     @Override
-    public View render() {
+    public View render(final AccreditationTime component, final Context context) {
         final View accreditationTimeView = LayoutInflater.from(context).inflate(R.layout.mpsdk_accreditation_time, null, false);
         final MPTextView messageTextView = accreditationTimeView.findViewById(R.id.mpsdkAccreditationTimeMessage);
         final ViewGroup accreditationCommentsContainer = accreditationTimeView.findViewById(R.id.mpsdkAccreditationTimeComments);
 
-        renderAccreditationMessage(messageTextView);
+        renderAccreditationMessage(messageTextView, component, context);
 
         if (component.hasAccreditationComments()) {
-            renderAccreditationComments(accreditationCommentsContainer);
+            renderAccreditationComments(accreditationCommentsContainer, component, context);
         }
 
         return accreditationTimeView;
     }
 
-    private void renderAccreditationMessage(@NonNull final MPTextView messageTextView) {
+    private void renderAccreditationMessage(@NonNull final MPTextView messageTextView,
+                                            @NonNull final AccreditationTime component,
+                                            @NonNull final Context context) {
 
         String accreditationMessage = component.props.accreditationMessage;
         if (accreditationMessage == null || accreditationMessage.isEmpty()) {
@@ -69,15 +72,16 @@ public class AccreditationTimeRenderer extends Renderer<AccreditationTime> {
         }
     }
 
-    private void renderAccreditationComments(@NonNull final ViewGroup parent) {
+    private void renderAccreditationComments(@NonNull final ViewGroup parent,
+                                             @NonNull final AccreditationTime component,
+                                             @NonNull final Context context) {
 
         List<AccreditationComment> commentComponents = component.getAccreditationCommentComponents();
 
-        for (AccreditationComment component: commentComponents) {
-            final Renderer commentRenderer = RendererFactory.create(context, component);
-            View accreditationComment = commentRenderer.render();
+        for (AccreditationComment commentComp : commentComponents) {
+            final Renderer commentRenderer = RendererFactory.create(context, commentComp);
+            final View accreditationComment = commentRenderer.render();
             parent.addView(accreditationComment);
         }
     }
-
 }

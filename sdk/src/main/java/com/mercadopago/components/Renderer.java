@@ -18,8 +18,8 @@ import com.mercadopago.util.TextUtil;
 
 public abstract class Renderer<T extends Component> {
 
-    protected T component;
-    protected Context context;
+    private T component;
+    private Context context;
 
     public void setComponent(@NonNull final T component) {
         this.component = component;
@@ -29,7 +29,23 @@ public abstract class Renderer<T extends Component> {
         this.context = context;
     }
 
-    public abstract View render();
+    public View render() {
+        final View view = render(component, context);
+        view.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
+            @Override
+            public void onViewAttachedToWindow(View v) {
+                component.viewAttachedToWindow();
+            }
+
+            @Override
+            public void onViewDetachedFromWindow(View v) {
+                component.viewDetachedFromWindow();
+            }
+        });
+        return view;
+    }
+
+    public abstract View render(final T component, final Context context);
 
     public void wrapHeight(@NonNull final ViewGroup viewGroup) {
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(

@@ -50,7 +50,9 @@ public class ComponentManager<T> implements ActionDispatcher, MutatorPropsListen
 
     @Override
     public void dispatch(@NonNull final Action action) {
-        if (actionsListener != null) {
+        if (action instanceof PropsUpdatedAction) {
+            render();
+        } else if (actionsListener != null) {
             actionsListener.onAction(action);
         }
     }

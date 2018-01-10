@@ -9,7 +9,7 @@ import com.mercadopago.components.Component;
  * Created by vaserber on 11/13/17.
  */
 
-public class AccreditationComment extends Component<AccreditationComment.Props> {
+public class AccreditationComment extends Component<AccreditationComment.Props, Void> {
 
     public AccreditationComment(@NonNull final Props props, @NonNull final ActionDispatcher dispatcher) {
         super(props, dispatcher);

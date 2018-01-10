@@ -1,6 +1,7 @@
 package com.mercadopago.paymentresult.components;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
@@ -24,8 +25,7 @@ import com.mercadopago.paymentresult.props.HeaderProps;
 public class HeaderRenderer extends Renderer<Header> {
 
     @Override
-    public View render() {
-
+    public View render(final Header component, final Context context) {
         final View headerView = LayoutInflater.from(context).inflate(R.layout.mpsdk_payment_result_header, null, false);
         final ViewGroup headerContainer = headerView.findViewById(R.id.mpsdkPaymentResultContainerHeader);
         final MPTextView titleTextView = headerView.findViewById(R.id.mpsdkHeaderTitle);
@@ -34,43 +34,37 @@ public class HeaderRenderer extends Renderer<Header> {
         final int background = ContextCompat.getColor(context, component.props.background);
         final int statusBarColor = ContextCompat.getColor(context, component.props.statusBarColor);
 
-        renderHeight(headerContainer);
-        headerContainer.setBackgroundColor(background);
-        setStatusBarColor(statusBarColor);
-        setText(labelTextView, component.props.label);
-        renderIcon(iconParentViewGroup);
-        renderTitle(titleTextView);
-
-        return headerView;
-    }
-
-    private void setStatusBarColor(final int statusBarColor) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Window window = ((Activity) context).getWindow();
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(statusBarColor);
+        //Render height
+        if (component.props.height.equals(HeaderProps.HEADER_MODE_WRAP)) {
+            wrapHeight(headerContainer);
+        } else if (component.props.height.equals(HeaderProps.HEADER_MODE_STRETCH)) {
+            stretchHeight(headerContainer);
         }
-    }
 
-    private void renderIcon(@NonNull final ViewGroup parent) {
+        headerContainer.setBackgroundColor(background);
+        setStatusBarColor(statusBarColor, context);
+        setText(labelTextView, component.props.label);
+
+        //Render icon
         final Renderer iconRenderer = RendererFactory.create(context, component.getIconComponent());
-        View icon = iconRenderer.render();
-        parent.addView(icon);
-    }
+        final View icon = iconRenderer.render();
+        iconParentViewGroup.addView(icon);
 
-    private void renderTitle(@NonNull final MPTextView titleTextView) {
+        //Render title
         if (component.props.amountFormat == null) {
             setText(titleTextView, component.props.title);
         } else {
             titleTextView.setText(component.props.amountFormat.formatTextWithAmount(component.props.title));
         }
+
+        return headerView;
     }
 
-    private void renderHeight(ViewGroup viewGroup) {
-        if (component.props.height.equals(HeaderProps.HEADER_MODE_WRAP)) {
-            wrapHeight(viewGroup);
-        } else if (component.props.height.equals(HeaderProps.HEADER_MODE_STRETCH)) {
-            stretchHeight(viewGroup);
+    private void setStatusBarColor(final int statusBarColor, final Context context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = ((Activity) context).getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(statusBarColor);
         }
     }
 }
