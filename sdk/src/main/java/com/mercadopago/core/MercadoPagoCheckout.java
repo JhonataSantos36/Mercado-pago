@@ -61,7 +61,7 @@ public class MercadoPagoCheckout {
     private Boolean binaryMode;
     private Discount discount;
     public final List<PaymentMethodPlugin> paymentMethodPluginList;
-    public final Map<String, PaymentPlugin> paymentPlugins;
+    public final Map<String, PaymentProcessor> paymentPlugins;
     public final DataInitializationTask dataInitializationTask;
     public final CheckoutHooks checkoutHooks;
 
@@ -226,6 +226,7 @@ public class MercadoPagoCheckout {
         private CheckoutHooks checkoutHooks;
         private List<PaymentMethodPlugin> paymentMethodPluginList = new ArrayList<>();
         private Map<String, PaymentProcessor> paymentPlugins = new HashMap<>();
+        private DataInitializationTask dataInitializationTask;
 
         public Builder setActivity(Activity activity) {
             this.activity = activity;

@@ -30,9 +30,6 @@ import com.mercadopago.preferences.PaymentResultScreenPreference;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class CheckoutExampleActivity extends AppCompatActivity {
 
     private Activity mActivity;
@@ -96,19 +93,11 @@ public class CheckoutExampleActivity extends AppCompatActivity {
                         .setBadgeApproved(Badge.PENDING_BADGE_IMAGE)
                         .build();
 
-        final Map<String, Object> data = new HashMap<>();
-        data.put("user", "Nico");
-
         final MercadoPagoCheckout.Builder builder = new MercadoPagoCheckout.Builder()
                 .setActivity(this)
                 .setPublicKey(mPublicKey)
                 .setCheckoutPreference(getCheckoutPreference())
                 .setDecorationPreference(getCurrentDecorationPreference())
-                .addPaymentMethodPlugin(
-                    new SamplePaymentMethodPlugin(),
-                    new SamplePaymentProcessor()
-                )
-                .setPaymentProcessor(new MainPaymentProcessor())
                 .addPaymentMethodPlugin(
                     new SamplePaymentMethodPlugin(),
                     new SamplePaymentProcessor()
