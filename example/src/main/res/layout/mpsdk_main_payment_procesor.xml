@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:textSize="16sp"
-            android:text="OTRO Procesador para medio de pago"/>
+            android:text="MAIN Procesador para medio de pago"/>
 
         <TextView
             android:layout_width="match_parent"
