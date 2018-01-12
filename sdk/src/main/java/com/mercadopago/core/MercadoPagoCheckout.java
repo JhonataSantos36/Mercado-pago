@@ -14,6 +14,7 @@ import com.mercadopago.hooks.CheckoutHooks;
 import com.mercadopago.model.Discount;
 import com.mercadopago.model.PaymentData;
 import com.mercadopago.model.PaymentResult;
+import com.mercadopago.plugins.DataInitializationTask;
 import com.mercadopago.plugins.PaymentMethodPlugin;
 import com.mercadopago.plugins.PaymentProcessor;
 import com.mercadopago.preferences.CheckoutPreference;
@@ -59,6 +60,10 @@ public class MercadoPagoCheckout {
     private PaymentResult paymentResult;
     private Boolean binaryMode;
     private Discount discount;
+    public final List<PaymentMethodPlugin> paymentMethodPluginList;
+    public final Map<String, PaymentPlugin> paymentPlugins;
+    public final DataInitializationTask dataInitializationTask;
+    public final CheckoutHooks checkoutHooks;
 
     private MercadoPagoCheckout(Builder builder) {
         this.activity = builder.activity;
@@ -74,6 +79,10 @@ public class MercadoPagoCheckout {
         this.reviewScreenPreference = builder.reviewScreenPreference;
         this.binaryMode = builder.binaryMode;
         this.discount = builder.discount;
+        this.dataInitializationTask = builder.dataInitializationTask;
+        this.paymentMethodPluginList = builder.paymentMethodPluginList;
+        this.paymentPlugins = builder.paymentPlugins;
+        this.checkoutHooks = builder.checkoutHooks;
 
         customizeServices(servicePreference);
 
@@ -81,11 +90,13 @@ public class MercadoPagoCheckout {
         customizeCheckoutReview(reviewScreenPreference);
         customizePaymentResultReview(paymentResultScreenPreference);
 
-        CheckoutStore.getInstance().reset();
-        CheckoutStore.getInstance().setDecorationPreference(decorationPreference);
-        CheckoutStore.getInstance().setPaymentMethodPluginList(builder.paymentMethodPluginList);
-        CheckoutStore.getInstance().setPaymentPlugins(builder.paymentPlugins);
-        CheckoutStore.getInstance().setCheckoutHooks(builder.checkoutHooks);
+        final CheckoutStore store = CheckoutStore.getInstance();
+        store.reset();
+        store.setDecorationPreference(decorationPreference);
+        store.setPaymentMethodPluginList(builder.paymentMethodPluginList);
+        store.setPaymentPlugins(builder.paymentPlugins);
+        store.setCheckoutHooks(builder.checkoutHooks);
+        store.setDataInitializationTask(builder.dataInitializationTask);
 
         //Create flow identifier only for new checkouts
         if(paymentResult == null && paymentData == null) {
@@ -213,9 +224,7 @@ public class MercadoPagoCheckout {
         private PaymentResult paymentResult;
         private Discount discount;
         private CheckoutHooks checkoutHooks;
-
         private List<PaymentMethodPlugin> paymentMethodPluginList = new ArrayList<>();
-
         private Map<String, PaymentProcessor> paymentPlugins = new HashMap<>();
 
         public Builder setActivity(Activity activity) {
@@ -292,6 +301,11 @@ public class MercadoPagoCheckout {
 
         public Builder setPaymentProcessor(@NonNull final PaymentProcessor paymentProcessor) {
             paymentPlugins.put(PAYMENT_PROCESSOR_KEY, paymentProcessor);
+            return this;
+        }
+
+        public Builder setDataInitializationTask(@NonNull final DataInitializationTask dataInitializationTask) {
+            this.dataInitializationTask = dataInitializationTask;
             return this;
         }
 

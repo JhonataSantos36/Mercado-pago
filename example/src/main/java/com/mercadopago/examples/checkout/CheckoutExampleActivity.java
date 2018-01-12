@@ -3,6 +3,8 @@ package com.mercadopago.examples.checkout;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -22,6 +24,7 @@ import com.mercadopago.hooks.ExampleHooks;
 import com.mercadopago.model.Payment;
 import com.mercadopago.paymentresult.model.Badge;
 import com.mercadopago.plugins.MainPaymentProcessor;
+import com.mercadopago.plugins.DataInitializationTask;
 import com.mercadopago.plugins.SamplePaymentMethodPlugin;
 import com.mercadopago.plugins.SamplePaymentProcessor;
 import com.mercadopago.preferences.CheckoutPreference;
@@ -29,6 +32,9 @@ import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.preferences.PaymentResultScreenPreference;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class CheckoutExampleActivity extends AppCompatActivity {
 
@@ -93,6 +99,9 @@ public class CheckoutExampleActivity extends AppCompatActivity {
                         .setBadgeApproved(Badge.PENDING_BADGE_IMAGE)
                         .build();
 
+        final Map<String, Object> data = new HashMap<>();
+        data.put("user", "Nico");
+
         final MercadoPagoCheckout.Builder builder = new MercadoPagoCheckout.Builder()
                 .setActivity(this)
                 .setPublicKey(mPublicKey)
@@ -101,6 +110,11 @@ public class CheckoutExampleActivity extends AppCompatActivity {
                 .addPaymentMethodPlugin(
                     new SamplePaymentMethodPlugin(),
                     new SamplePaymentProcessor()
+                )
+                .setPaymentProcessor(new MainPaymentProcessor());
+                .addPaymentMethodPlugin("sample",
+                    new SamplePaymentMethodPlugin(this),
+                    new SamplePaymentPlugin()
                 )
                 .setPaymentProcessor(new MainPaymentProcessor());
 
