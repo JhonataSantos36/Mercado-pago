@@ -7,6 +7,7 @@ import com.mercadopago.hooks.Hook;
 import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentData;
 import com.mercadopago.model.PaymentResult;
+import com.mercadopago.plugins.DataInitializationTask;
 import com.mercadopago.plugins.PaymentMethodPlugin;
 import com.mercadopago.plugins.PaymentProcessor;
 import com.mercadopago.plugins.model.PaymentMethodInfo;
@@ -25,13 +26,14 @@ public class CheckoutStore {
     //Preferences
     private PaymentResultScreenPreference paymentResultScreenPreference;
 
-    //Read only data
+    //Config
+    private DataInitializationTask dataInitializationTask;
     private List<PaymentMethodPlugin> paymentMethodPluginList = new ArrayList<>();
     private Map<String, PaymentProcessor> paymentPlugins = new HashMap<>();
     private CheckoutHooks checkoutHooks;
-    private Hook hook;
 
     //App state
+    private Hook hook;
     private Map<String, Object> data = new HashMap();
     private String selectedPaymentMethodId;
 
@@ -39,7 +41,6 @@ public class CheckoutStore {
     private PaymentResult paymentResult;
     private PaymentData paymentData;
     private Payment payment;
-
 
     private CheckoutStore() {
     }
@@ -57,6 +58,14 @@ public class CheckoutStore {
 
     public void setPaymentResultScreenPreference(PaymentResultScreenPreference paymentResultScreenPreference) {
         this.paymentResultScreenPreference = paymentResultScreenPreference;
+    }
+
+    public DataInitializationTask getDataInitializationTask() {
+        return dataInitializationTask;
+    }
+
+    public void setDataInitializationTask(DataInitializationTask dataInitializationTask) {
+        this.dataInitializationTask = dataInitializationTask;
     }
 
     public List<PaymentMethodPlugin> getPaymentMethodPluginList() {
@@ -130,6 +139,10 @@ public class CheckoutStore {
 
     public Map<String, Object> getData() {
         return data;
+    }
+
+    public void setData(Map<String, Object> data) {
+        this.data = data;
     }
 
     public PaymentProcessor getPaymentProcessor() {

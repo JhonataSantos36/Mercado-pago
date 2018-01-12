@@ -550,4 +550,10 @@ public class CheckoutActivity extends MercadoPagoBaseActivity implements Checkou
         startActivityForResult(PaymentPluginActivity.getIntent(this), MercadoPagoComponents.Activities.PLUGIN_PAYMENT_REQUEST_CODE);
         overrideTransitionIn();
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mCheckoutPresenter.cancelInitialization();
+    }
 }
