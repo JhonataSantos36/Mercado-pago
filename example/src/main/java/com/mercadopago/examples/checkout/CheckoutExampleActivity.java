@@ -3,8 +3,6 @@ package com.mercadopago.examples.checkout;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -24,7 +22,6 @@ import com.mercadopago.hooks.ExampleHooks;
 import com.mercadopago.model.Payment;
 import com.mercadopago.paymentresult.model.Badge;
 import com.mercadopago.plugins.MainPaymentProcessor;
-import com.mercadopago.plugins.DataInitializationTask;
 import com.mercadopago.plugins.SamplePaymentMethodPlugin;
 import com.mercadopago.plugins.MainPaymentProcessor;
 import com.mercadopago.plugins.SamplePaymentProcessor;
@@ -109,10 +106,10 @@ public class CheckoutExampleActivity extends AppCompatActivity {
                         new SamplePaymentMethodPlugin(),
                         new SamplePaymentProcessor()
                 )
-                .setPaymentProcessor(new MainPaymentProcessor());
+                .setPaymentProcessor(new MainPaymentProcessor())
                 .addPaymentMethodPlugin("sample",
                     new SamplePaymentMethodPlugin(this),
-                    new SamplePaymentPlugin()
+                    new SamplePaymentProcessor()
                 )
                 .setPaymentProcessor(new MainPaymentProcessor());
 
