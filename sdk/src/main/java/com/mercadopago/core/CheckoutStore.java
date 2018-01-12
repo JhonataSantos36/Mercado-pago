@@ -12,6 +12,7 @@ import com.mercadopago.plugins.PaymentProcessor;
 import com.mercadopago.plugins.model.PaymentMethodInfo;
 import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.util.TextUtil;
+import com.mercadopago.preferences.PaymentResultScreenPreference;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,8 +23,11 @@ public class CheckoutStore {
 
     private static final CheckoutStore INSTANCE = new CheckoutStore();
 
-    //Read only data
+    //Preferences
     private DecorationPreference decorationPreference;
+    private PaymentResultScreenPreference paymentResultScreenPreference;
+
+    //Read only data
     private List<PaymentMethodPlugin> paymentMethodPluginList = new ArrayList<>();
     private Map<String, PaymentProcessor> paymentPlugins = new HashMap<>();
     private CheckoutHooks checkoutHooks;
@@ -47,11 +51,25 @@ public class CheckoutStore {
     }
 
     public DecorationPreference getDecorationPreference() {
+        if (decorationPreference == null) {
+            decorationPreference = new DecorationPreference.Builder().build();
+        }
         return decorationPreference;
     }
 
     public void setDecorationPreference(@NonNull final DecorationPreference decorationPreference) {
         this.decorationPreference = decorationPreference;
+    }
+
+    public PaymentResultScreenPreference getPaymentResultScreenPreference() {
+        if (paymentResultScreenPreference == null) {
+            paymentResultScreenPreference = new PaymentResultScreenPreference.Builder().build();
+        }
+        return paymentResultScreenPreference;
+    }
+
+    public void setPaymentResultScreenPreference(PaymentResultScreenPreference paymentResultScreenPreference) {
+        this.paymentResultScreenPreference = paymentResultScreenPreference;
     }
 
     public List<PaymentMethodPlugin> getPaymentMethodPluginList() {

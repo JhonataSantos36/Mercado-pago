@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import com.mercadopago.R;
 import com.mercadopago.components.Renderer;
 import com.mercadopago.components.RendererFactory;
-import com.mercadopago.core.CheckoutSessionStore;
+import com.mercadopago.core.CheckoutStore;
 
 /**
  * Created by vaserber on 10/23/17.
@@ -37,7 +37,7 @@ public class BodyRenderer extends Renderer<Body> {
             }
 
             if (component.hasTopCustomComponent()) {
-                final Renderer customComponentRenderer = RendererFactory.create(context, CheckoutSessionStore.getInstance().getPaymentResultScreenPreference().getApprovedTopCustomComponent());
+                final Renderer customComponentRenderer = RendererFactory.create(context, CheckoutStore.getInstance().getPaymentResultScreenPreference().getApprovedTopCustomComponent());
                 final View customView = customComponentRenderer.render();
                 bodyViewGroup.addView(customView);
             }
@@ -49,7 +49,7 @@ public class BodyRenderer extends Renderer<Body> {
             }
 
             if (component.hasBottomCustomComponent()) {
-                final Renderer customComponentRenderer = RendererFactory.create(context, CheckoutSessionStore.getInstance().getPaymentResultScreenPreference().getApprovedBottomCustomComponent());
+                final Renderer customComponentRenderer = RendererFactory.create(context, CheckoutStore.getInstance().getPaymentResultScreenPreference().getApprovedBottomCustomComponent());
                 final View customView = customComponentRenderer.render();
                 bodyViewGroup.addView(customView);
             }

@@ -5,7 +5,7 @@ import android.support.annotation.NonNull;
 import com.mercadopago.components.ActionDispatcher;
 import com.mercadopago.components.Component;
 import com.mercadopago.constants.PaymentTypes;
-import com.mercadopago.core.CheckoutSessionStore;
+import com.mercadopago.core.CheckoutStore;
 import com.mercadopago.model.Payment;
 import com.mercadopago.paymentresult.PaymentMethodProvider;
 import com.mercadopago.paymentresult.PaymentResultProvider;
@@ -136,16 +136,16 @@ public class Body extends Component<PaymentResultBodyProps, Void> {
     }
 
     public boolean hasTopCustomComponent() {
-        return hasPaymentResultScreenPreference() && CheckoutSessionStore.getInstance()
+        return hasPaymentResultScreenPreference() && CheckoutStore.getInstance()
                 .getPaymentResultScreenPreference().getApprovedTopCustomComponent() != null;
     }
 
     public boolean hasBottomCustomComponent() {
-        return hasPaymentResultScreenPreference() && CheckoutSessionStore.getInstance()
+        return hasPaymentResultScreenPreference() && CheckoutStore.getInstance()
                 .getPaymentResultScreenPreference().getApprovedBottomCustomComponent() != null;
     }
 
     private boolean hasPaymentResultScreenPreference() {
-        return CheckoutSessionStore.getInstance().getPaymentResultScreenPreference() != null;
+        return CheckoutStore.getInstance().getPaymentResultScreenPreference() != null;
     }
 }

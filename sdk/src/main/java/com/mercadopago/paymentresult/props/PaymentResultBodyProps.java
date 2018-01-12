@@ -2,12 +2,10 @@ package com.mercadopago.paymentresult.props;
 
 import android.support.annotation.NonNull;
 
-import com.mercadopago.core.CheckoutSessionStore;
+import com.mercadopago.core.CheckoutStore;
 import com.mercadopago.model.Instruction;
 import com.mercadopago.model.PaymentData;
 import com.mercadopago.paymentresult.formatter.BodyAmountFormatter;
-import com.mercadopago.paymentresult.formatter.HeaderTitleFormatter;
-import com.mercadopago.preferences.PaymentResultScreenPreference;
 
 /**
  * Created by vaserber on 10/23/17.
@@ -48,8 +46,8 @@ public class PaymentResultBodyProps {
     }
 
     public boolean isReceiptEnabled() {
-        return CheckoutSessionStore.getInstance().getPaymentResultScreenPreference() == null ||
-                CheckoutSessionStore.getInstance().getPaymentResultScreenPreference().isApprovedReceiptEnabled();
+        return CheckoutStore.getInstance().getPaymentResultScreenPreference() == null ||
+                CheckoutStore.getInstance().getPaymentResultScreenPreference().isApprovedReceiptEnabled();
     }
 
     public static class Builder {
