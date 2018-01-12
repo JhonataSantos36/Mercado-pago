@@ -3,8 +3,10 @@ package com.mercadopago.plugins.components;
 import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -26,6 +28,7 @@ public class SamplePaymentMethodRenderer extends PluginRenderer<SamplePaymentMet
         final View continueButton = view.findViewById(R.id.button_continue);
         final EditText passwordView = view.findViewById(R.id.password);
         final TextView errorLabel = view.findViewById(R.id.error_label);
+        final View progressbar = view.findViewById(R.id.progressbar);
 
         continueButton.setEnabled(!component.state.authenticating);
         passwordView.setEnabled(!component.state.authenticating);
@@ -33,12 +36,24 @@ public class SamplePaymentMethodRenderer extends PluginRenderer<SamplePaymentMet
         errorLabel.setVisibility(TextUtil.isEmpty(component.state.errorMessage)
                 ? View.GONE : View.VISIBLE);
         errorLabel.setText(component.state.errorMessage);
+        progressbar.setVisibility(component.state.authenticating ? View.VISIBLE : View.GONE);
 
         continueButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 final EditText editText = view.findViewById(R.id.password);
                 component.authenticate(editText.getText().toString());
+            }
+        });
+
+        passwordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) || (actionId == EditorInfo.IME_ACTION_DONE)) {
+                    final EditText editText = view.findViewById(R.id.password);
+                    component.authenticate(editText.getText().toString());
+                    return true;
+                }
+                return false;
             }
         });
 

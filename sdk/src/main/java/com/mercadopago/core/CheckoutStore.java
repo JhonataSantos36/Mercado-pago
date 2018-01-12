@@ -8,9 +8,10 @@ import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentData;
 import com.mercadopago.model.PaymentResult;
 import com.mercadopago.plugins.PaymentMethodPlugin;
-import com.mercadopago.plugins.PaymentPlugin;
+import com.mercadopago.plugins.PaymentProcessor;
 import com.mercadopago.plugins.model.PaymentMethodInfo;
 import com.mercadopago.preferences.DecorationPreference;
+import com.mercadopago.util.TextUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,13 +25,13 @@ public class CheckoutStore {
     //Read only data
     private DecorationPreference decorationPreference;
     private List<PaymentMethodPlugin> paymentMethodPluginList = new ArrayList<>();
-    private Map<String, PaymentPlugin> paymentPlugins = new HashMap<>();
+    private Map<String, PaymentProcessor> paymentPlugins = new HashMap<>();
     private CheckoutHooks checkoutHooks;
     private Hook hook;
 
     //App state
     private Map<String, Object> data = new HashMap();
-    private PaymentMethodInfo selectedPaymentMethod;
+    private String selectedPaymentMethodId;
 
     //Payment
     private PaymentResult paymentResult;
@@ -66,6 +67,13 @@ public class CheckoutStore {
         return null;
     }
 
+    public PaymentMethodPlugin getSelectedPaymentMethodPlugin() {
+        if (!TextUtil.isEmpty(selectedPaymentMethodId)) {
+            return getPaymentMethodPluginById(selectedPaymentMethodId);
+        }
+        return null;
+    }
+
     public PaymentMethodInfo getPaymentMethodPluginInfoById(@NonNull final String id) {
         for (PaymentMethodPlugin plugin : paymentMethodPluginList) {
             final PaymentMethodInfo info = plugin.getPaymentMethodInfo();
@@ -76,20 +84,27 @@ public class CheckoutStore {
         return null;
     }
 
+    public PaymentMethodInfo getSelectedPaymentMethodInfo() {
+        if (!TextUtil.isEmpty(selectedPaymentMethodId)) {
+            return getPaymentMethodPluginInfoById(selectedPaymentMethodId);
+        }
+        return null;
+    }
+
     public void setPaymentMethodPluginList(@NonNull final List<PaymentMethodPlugin> paymentMethodPluginList) {
         this.paymentMethodPluginList = paymentMethodPluginList;
     }
 
-    public PaymentMethodInfo getSelectedPaymentMethod() {
-        return selectedPaymentMethod;
+    public String getSelectedPaymentMethodId() {
+        return selectedPaymentMethodId;
     }
 
-    public void setPaymentPlugins(Map<String, PaymentPlugin> paymentPlugins) {
+    public void setSelectedPaymentMethodId(final String selectedPaymentMethodId) {
+        this.selectedPaymentMethodId = selectedPaymentMethodId;
+    }
+
+    public void setPaymentPlugins(Map<String, PaymentProcessor> paymentPlugins) {
         this.paymentPlugins = paymentPlugins;
-    }
-
-    public void setSelectedPaymentMethod(PaymentMethodInfo selectedPaymentMethod) {
-        this.selectedPaymentMethod = selectedPaymentMethod;
     }
 
     public Hook getHook() {
@@ -112,19 +127,26 @@ public class CheckoutStore {
         return data;
     }
 
-    public PaymentPlugin getPaymentPluginByMethod(@NonNull final String paymentMethod) {
-        return paymentPlugins.get(paymentMethod);
+    public PaymentProcessor getPaymentProcessor() {
+        PaymentProcessor paymentProcessor = null;
+        if (!TextUtil.isEmpty(selectedPaymentMethodId)) {
+            paymentProcessor = paymentPlugins.get(MercadoPagoCheckout.PAYMENT_PROCESSOR_KEY);
+            if (paymentProcessor == null || !paymentProcessor.support(selectedPaymentMethodId, getData())) {
+                paymentProcessor = paymentPlugins.get(selectedPaymentMethodId);
+            }
+        }
+        return paymentProcessor;
     }
 
-    public void addPaymentPlugins(@NonNull final PaymentPlugin paymentPlugin, @NonNull final String paymentMethod) {
-        this.paymentPlugins.put(paymentMethod, paymentPlugin);
+    public void addPaymentPlugins(@NonNull final PaymentProcessor paymentProcessor, @NonNull final String paymentMethod) {
+        this.paymentPlugins.put(paymentMethod, paymentProcessor);
     }
 
     public PaymentData getPaymentData() {
         return paymentData;
     }
 
-    public void setPaymentData(PaymentData paymentData) {
+    public void setPaymentData(final PaymentData paymentData) {
         this.paymentData = paymentData;
     }
 
@@ -146,7 +168,7 @@ public class CheckoutStore {
 
     public void reset() {
         data.clear();
-        selectedPaymentMethod = null;
+        selectedPaymentMethodId = null;
         paymentResult= null;
         paymentData= null;
         payment= null;

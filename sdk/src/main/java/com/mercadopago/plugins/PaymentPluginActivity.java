@@ -16,16 +16,13 @@ import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentData;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentResult;
-import com.mercadopago.plugins.model.PaymentMethodInfo;
-import com.mercadopago.plugins.model.PluginPaymentResult;
+import com.mercadopago.plugins.model.ProcessorPaymentResult;
 
 /**
  * Created by nfortuna on 12/13/17.
  */
 
 public class PaymentPluginActivity extends AppCompatActivity implements ActionDispatcher {
-
-    private static final String TAG = PaymentPluginActivity.class.getName();
 
     public static Intent getIntent(@NonNull final Context context) {
         return new Intent(context, PaymentPluginActivity.class);
@@ -35,28 +32,24 @@ public class PaymentPluginActivity extends AppCompatActivity implements ActionDi
     public void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        final PaymentMethodInfo paymentMethodInfo =
-                CheckoutStore.getInstance().getSelectedPaymentMethod();
+        final CheckoutStore store = CheckoutStore.getInstance();
+        final PaymentProcessor paymentProcessor = store.getPaymentProcessor();
 
-        if (paymentMethodInfo == null) {
-            finish();
-            return;
-        }
-
-        final PaymentPlugin paymentPlugin = CheckoutStore.getInstance().getPaymentPluginByMethod(paymentMethodInfo.id);
-        if (paymentPlugin == null) {
-            finish();
+        if (paymentProcessor == null) {
+            cancel();
             return;
         }
 
         final PluginComponent.Props props = new PluginComponent.Props.Builder()
-                .setData(CheckoutStore.getInstance().getData()).build();
+                .setData(store.getData())
+                .setPaymentData(store.getPaymentData())
+                .build();
 
-        final PluginComponent component = paymentPlugin.createPaymentComponent(props);
+        final PluginComponent component = paymentProcessor.createPaymentComponent(props, this);
         final ComponentManager componentManager = new ComponentManager(this);
 
         if (component == null) {
-            finish();
+            cancel();
             return;
         }
 
@@ -64,10 +57,15 @@ public class PaymentPluginActivity extends AppCompatActivity implements ActionDi
         componentManager.render(component);
     }
 
+    private void cancel() {
+        setResult(RESULT_CANCELED);
+        finish();
+    }
+
     @Override
     public void dispatch(final Action action) {
         if (action instanceof PluginPaymentResultAction) {
-            final PluginPaymentResult pluginResult = ((PluginPaymentResultAction) action).getPluginPaymentResult();
+            final ProcessorPaymentResult pluginResult = ((PluginPaymentResultAction) action).getPluginPaymentResult();
             if (pluginResult != null) {
                 try {
                     final PaymentResult paymentResult = toPaymentResult(pluginResult);
@@ -83,20 +81,20 @@ public class PaymentPluginActivity extends AppCompatActivity implements ActionDi
         }
     }
 
-    private PaymentResult toPaymentResult(@NonNull final PluginPaymentResult pluginResult) {
+    private PaymentResult toPaymentResult(@NonNull final ProcessorPaymentResult pluginResult) {
 
         final Payment payment = new Payment();
         payment.setId(pluginResult.paymentId);
-        payment.setPaymentMethodId(pluginResult.paymentMethodInfo.id);
+        payment.setPaymentMethodId(pluginResult.paymentMethodId);
         payment.setPaymentTypeId(PaymentTypes.PLUGIN);
         payment.setStatus(pluginResult.status);
         payment.setStatusDetail(pluginResult.statusDetail);
 
         final PaymentMethod paymentMethod = new PaymentMethod();
         paymentMethod.setId(String.valueOf(pluginResult.paymentId));
-        paymentMethod.setName(pluginResult.paymentMethodInfo.name);
+        paymentMethod.setName(pluginResult.paymentMethodName);
         paymentMethod.setPaymentTypeId(PaymentTypes.PLUGIN);
-        paymentMethod.setIcon(pluginResult.paymentMethodInfo.icon);
+        paymentMethod.setIcon(pluginResult.paymentMethodIcon);
 
         final PaymentData paymentData = new PaymentData();
         paymentData.setPaymentMethod(paymentMethod);

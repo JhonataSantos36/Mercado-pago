@@ -146,7 +146,7 @@ public class ReviewPaymentOffView extends Reviewable {
         boolean isTintNeeded = mDecorationPreference != null && mDecorationPreference.hasColors();
 
         if (mPaymentMethod != null && PaymentTypes.PLUGIN.equals(mPaymentMethod.getPaymentTypeId())) {
-            resId = CheckoutStore.getInstance().getSelectedPaymentMethod().icon;
+            resId = CheckoutStore.getInstance().getSelectedPaymentMethodInfo().icon;
         } else if (mPaymentMethod != null && mPaymentMethod.getId().equals(PaymentMethods.BRASIL.BOLBRADESCO)) {
             if (isTintNeeded) {
                 resId = R.drawable.mpsdk_grey_boleto_off;

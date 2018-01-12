@@ -54,5 +54,5 @@ public interface CheckoutView extends MvpView {
 
     void showHook(final Hook hook, final int requestCode);
 
-    void showPaymentPlugin();
+    void showPaymentProcessor();
 }

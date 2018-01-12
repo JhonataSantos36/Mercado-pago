@@ -17,19 +17,30 @@
             android:layout_gravity="center"
             android:scaleType="fitCenter"
             android:adjustViewBounds="true"
-            android:src="@drawable/mpsdk_icon_ok"
-            android:tint="@color/colorPrimary"/>
+            android:src="@drawable/mpsdk_sample"/>
 
         <TextView
-            android:id="@+id/docu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="16sp"
+            android:text="OTRO Procesador para medio de pago"/>
+
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:layout_margin="20dp"
             android:textSize="16sp"
-            tools:text="721346238764823"/>
+            android:text="Realizando el pago..."/>
 
-        <include layout="@layout/mpsdk_component_loading" />
+        <ProgressBar
+            android:id="@+id/progressbar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:indeterminate="true"/>
 
     </LinearLayout>
 

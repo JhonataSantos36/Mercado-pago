@@ -3,7 +3,7 @@ package com.mercadopago.plugins;
 import android.support.annotation.NonNull;
 
 import com.mercadopago.components.Action;
-import com.mercadopago.plugins.model.PluginPaymentResult;
+import com.mercadopago.plugins.model.ProcessorPaymentResult;
 
 /**
  * Created by nfortuna on 12/18/17.
@@ -11,14 +11,14 @@ import com.mercadopago.plugins.model.PluginPaymentResult;
 
 public class PluginPaymentResultAction extends Action {
 
-    private final PluginPaymentResult pluginPaymentResult;
+    private final ProcessorPaymentResult processorPaymentResult;
 
-    public PluginPaymentResultAction(@NonNull final PluginPaymentResult pluginPaymentResult) {
-        this.pluginPaymentResult = pluginPaymentResult;
+    public PluginPaymentResultAction(@NonNull final ProcessorPaymentResult processorPaymentResult) {
+        this.processorPaymentResult = processorPaymentResult;
     }
 
-    public PluginPaymentResult getPluginPaymentResult() {
-        return pluginPaymentResult;
+    public ProcessorPaymentResult getPluginPaymentResult() {
+        return processorPaymentResult;
     }
 
     @Override

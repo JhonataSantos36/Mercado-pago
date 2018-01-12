@@ -311,7 +311,7 @@ public class CheckoutActivity extends MercadoPagoBaseActivity implements Checkou
         overrideTransitionIn();
 
         final CheckoutStore store = CheckoutStore.getInstance();
-        final PaymentMethodInfo paymentMethodInfo = store.getSelectedPaymentMethod();
+        final PaymentMethodInfo paymentMethodInfo = store.getSelectedPaymentMethodInfo();
 
         MercadoPagoComponents.Activities.ReviewAndConfirmBuilder builder = new MercadoPagoComponents.Activities.ReviewAndConfirmBuilder()
                 .setActivity(this)
@@ -565,7 +565,7 @@ public class CheckoutActivity extends MercadoPagoBaseActivity implements Checkou
     }
 
     @Override
-    public void showPaymentPlugin() {
+    public void showPaymentProcessor() {
         startActivityForResult(PaymentPluginActivity.getIntent(this), MercadoPagoComponents.Activities.PLUGIN_PAYMENT_REQUEST_CODE);
         overrideTransitionIn();
     }

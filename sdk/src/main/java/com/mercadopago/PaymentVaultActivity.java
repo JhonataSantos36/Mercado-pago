@@ -85,6 +85,8 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
     private static final String SHOW_BANK_DEALS_BUNDLE = "mShowBankDeals";
     private static final String PRESENTER_BUNDLE = "mPresenter";
 
+    private static final String PAYMENT_METHOD = "payment_method";
+
     public static final String PAYMENT_VAULT_SCREEN_NAME = "PAYMENT_VAULT";
     public static final int COLUMN_SPACING_DP_VALUE = 20;
     public static final int COLUMNS = 2;
@@ -398,13 +400,19 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
     }
 
     private List<PaymentMethodSearchViewController> createSearchItemsViewControllers(List<PaymentMethodSearchItem> items, final OnSelectedCallback<PaymentMethodSearchItem> onSelectedCallback) {
-        List<PaymentMethodSearchViewController> customViewControllers = new ArrayList<>();
+        final CheckoutStore store = CheckoutStore.getInstance();
+        final List<PaymentMethodSearchViewController> customViewControllers = new ArrayList<>();
         for (final PaymentMethodSearchItem item : items) {
             PaymentMethodSearchViewController viewController = new PaymentMethodSearchOption(this, item, mDecorationPreference);
             viewController.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     CheckoutStore.getInstance().reset();
+
+                    if (PAYMENT_METHOD.equals(item.getType())) {
+                        store.setSelectedPaymentMethodId(item.getId());
+                    }
+
                     onSelectedCallback.onSelected(item);
                 }
             });
@@ -414,13 +422,19 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
     }
 
     private List<PaymentMethodSearchViewController> createCustomSearchItemsViewControllers(List<CustomSearchItem> customSearchItems, final OnSelectedCallback<CustomSearchItem> onSelectedCallback) {
-        List<PaymentMethodSearchViewController> customViewControllers = new ArrayList<>();
+        final CheckoutStore store = CheckoutStore.getInstance();
+        final List<PaymentMethodSearchViewController> customViewControllers = new ArrayList<>();
         for (final CustomSearchItem item : customSearchItems) {
             PaymentMethodSearchCustomOption viewController = new PaymentMethodSearchCustomOption(this, item);
             viewController.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     CheckoutStore.getInstance().reset();
+
+                    if (PAYMENT_METHOD.equals(item.getType())) {
+                        store.setSelectedPaymentMethodId(item.getId());
+                    }
+
                     onSelectedCallback.onSelected(item);
                 }
             });
@@ -442,8 +456,7 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
                     public void onClick(final View v) {
 
                         final String id = String.valueOf(v.getTag());
-                        final PaymentMethodInfo info = store.getPaymentMethodPluginInfoById(id);
-                        store.setSelectedPaymentMethod(info);
+                        store.setSelectedPaymentMethodId(id);
 
                         if (!mPaymentVaultPresenter.showHook1(PaymentTypes.PLUGIN, MercadoPagoComponents.Activities.HOOK_1_PLUGIN)) {
                             showPaymentMethodPluginConfiguration();
@@ -459,16 +472,16 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
     private void showPaymentMethodPluginConfiguration() {
 
         final CheckoutStore store = CheckoutStore.getInstance();
-        final PaymentMethodInfo info = store.getSelectedPaymentMethod();
-        final PaymentMethodPlugin plugin = store.getPaymentMethodPluginById(info.id);
+        final PaymentMethodPlugin plugin = store.getSelectedPaymentMethodPlugin();
 
-        if (plugin != null && plugin.isEnabled(store.getData()) && plugin.hasConfigurationComponent()) {
+        if (plugin != null && plugin.isEnabled(store.getData()) && plugin.isConfigurationComponentEnabled(store.getData())) {
 
             startActivityForResult(PaymentMethodPluginActivity.getIntent(PaymentVaultActivity.this), MercadoPagoComponents.Activities.PLUGIN_PAYMENT_METHOD_REQUEST_CODE);
             overrideTransitionIn();
 
         } else {
-            final PaymentMethodInfo paymentMethodInfo = store.getSelectedPaymentMethod();
+
+            final PaymentMethodInfo paymentMethodInfo = store.getSelectedPaymentMethodInfo();
             finishPaymentMethodSelection(new PaymentMethod(paymentMethodInfo));
             overrideTransitionOut();
         }
@@ -527,7 +540,8 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
         } else if (requestCode == MercadoPagoComponents.Activities.PLUGIN_PAYMENT_METHOD_REQUEST_CODE) {
 
             if (resultCode == RESULT_OK) {
-                final PaymentMethodInfo paymentMethodInfo = CheckoutStore.getInstance().getSelectedPaymentMethod();
+                final PaymentMethodInfo paymentMethodInfo =
+                        CheckoutStore.getInstance().getSelectedPaymentMethodInfo();
                 finishPaymentMethodSelection(new PaymentMethod(paymentMethodInfo));
             } else {
                 overrideTransitionOut();

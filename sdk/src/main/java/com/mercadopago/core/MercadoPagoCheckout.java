@@ -15,7 +15,7 @@ import com.mercadopago.model.Discount;
 import com.mercadopago.model.PaymentData;
 import com.mercadopago.model.PaymentResult;
 import com.mercadopago.plugins.PaymentMethodPlugin;
-import com.mercadopago.plugins.PaymentPlugin;
+import com.mercadopago.plugins.PaymentProcessor;
 import com.mercadopago.preferences.CheckoutPreference;
 import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.preferences.FlowPreference;
@@ -43,6 +43,8 @@ public class MercadoPagoCheckout {
     public static final Integer PAYMENT_RESULT_CODE = 7;
     public static final Integer TIMER_FINISHED_RESULT_CODE = 8;
     public static final Integer PAYMENT_METHOD_CHANGED_REQUESTED = 9;
+
+    public static final String PAYMENT_PROCESSOR_KEY = "payment_processor";
 
     private final ReviewScreenPreference reviewScreenPreference;
     private Context context;
@@ -211,8 +213,10 @@ public class MercadoPagoCheckout {
         private PaymentResult paymentResult;
         private Discount discount;
         private CheckoutHooks checkoutHooks;
+
         private List<PaymentMethodPlugin> paymentMethodPluginList = new ArrayList<>();
-        private Map<String, PaymentPlugin> paymentPlugins = new HashMap<>();
+
+        private Map<String, PaymentProcessor> paymentPlugins = new HashMap<>();
 
         public Builder setActivity(Activity activity) {
             this.activity = activity;
@@ -279,11 +283,15 @@ public class MercadoPagoCheckout {
             return this;
         }
 
-        public Builder addPaymentMethodPlugin(@NonNull final String paymentMethodId,
-                                              @NonNull final PaymentMethodPlugin paymentMethodPlugin,
-                                              @NonNull final PaymentPlugin paymentPlugin) {
+        public Builder addPaymentMethodPlugin(@NonNull final PaymentMethodPlugin paymentMethodPlugin,
+                                              @NonNull final PaymentProcessor paymentProcessor) {
             paymentMethodPluginList.add(paymentMethodPlugin);
-            paymentPlugins.put(paymentMethodId, paymentPlugin);
+            paymentPlugins.put(paymentMethodPlugin.getPaymentMethodInfo().id, paymentProcessor);
+            return this;
+        }
+
+        public Builder setPaymentProcessor(@NonNull final PaymentProcessor paymentProcessor) {
+            paymentPlugins.put(PAYMENT_PROCESSOR_KEY, paymentProcessor);
             return this;
         }
 

@@ -20,11 +20,10 @@ import com.mercadopago.examples.utils.ExamplesUtils;
 import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.hooks.ExampleHooks;
 import com.mercadopago.model.Payment;
-import com.mercadopago.plugins.SamplePaymentMethodPlugin;
-import com.mercadopago.plugins.SamplePaymentPlugin;
 import com.mercadopago.paymentresult.model.Badge;
+import com.mercadopago.plugins.MainPaymentProcessor;
 import com.mercadopago.plugins.SamplePaymentMethodPlugin;
-import com.mercadopago.plugins.SamplePaymentPlugin;
+import com.mercadopago.plugins.SamplePaymentProcessor;
 import com.mercadopago.preferences.CheckoutPreference;
 import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.preferences.PaymentResultScreenPreference;
@@ -99,10 +98,11 @@ public class CheckoutExampleActivity extends AppCompatActivity {
                 .setPublicKey(mPublicKey)
                 .setCheckoutPreference(getCheckoutPreference())
                 .setDecorationPreference(getCurrentDecorationPreference())
-                .addPaymentMethodPlugin("sample",
-                    new SamplePaymentMethodPlugin(this),
-                    new SamplePaymentPlugin()
-                );
+                .addPaymentMethodPlugin(
+                    new SamplePaymentMethodPlugin(),
+                    new SamplePaymentProcessor()
+                )
+                .setPaymentProcessor(new MainPaymentProcessor());
 
         if (mHooksEnabled.isChecked()) {
             builder.setCheckoutHooks(new ExampleHooks());

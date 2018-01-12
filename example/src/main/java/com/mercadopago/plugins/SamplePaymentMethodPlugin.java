@@ -14,10 +14,6 @@ import com.mercadopago.plugins.model.PaymentMethodInfo;
 
 public class SamplePaymentMethodPlugin extends PaymentMethodPlugin {
 
-    public SamplePaymentMethodPlugin(@NonNull final Context context) {
-        super(context);
-    }
-
     @Override
     public PaymentMethodInfo getPaymentMethodInfo() {
         return new PaymentMethodInfo(
@@ -34,7 +30,8 @@ public class SamplePaymentMethodPlugin extends PaymentMethodPlugin {
     }
 
     @Override
-    public PluginComponent createConfigurationComponent(@NonNull final PluginComponent.Props props) {
+    public PluginComponent createConfigurationComponent(@NonNull final PluginComponent.Props props,
+                                                        @NonNull final Context context) {
         return new SamplePaymentMethod(
             props.toBuilder()
                 .setToolbarTitle("Sample Pago")

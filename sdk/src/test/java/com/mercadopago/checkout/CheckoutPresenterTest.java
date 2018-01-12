@@ -2047,7 +2047,7 @@ public class CheckoutPresenterTest {
         }
 
         @Override
-        public void showPaymentPlugin() {
+        public void showPaymentProcessor() {
 
         }
     }

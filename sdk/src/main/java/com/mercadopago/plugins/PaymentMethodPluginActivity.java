@@ -33,7 +33,7 @@ public class PaymentMethodPluginActivity extends AppCompatActivity implements Ac
         super.onCreate(savedInstanceState);
 
         final PaymentMethodInfo paymentMethodInfo =
-                CheckoutStore.getInstance().getSelectedPaymentMethod();
+                CheckoutStore.getInstance().getSelectedPaymentMethodInfo();
         final PaymentMethodPlugin plugin = CheckoutStore
                 .getInstance().getPaymentMethodPluginById(paymentMethodInfo.id);
 
@@ -47,7 +47,7 @@ public class PaymentMethodPluginActivity extends AppCompatActivity implements Ac
                 .setData(CheckoutStore.getInstance().getData())
                 .build();
 
-        final Component component = plugin.createConfigurationComponent(props);
+        final Component component = plugin.createConfigurationComponent(props, this);
         componentManager = new ComponentManager(this);
 
         if (component == null) {

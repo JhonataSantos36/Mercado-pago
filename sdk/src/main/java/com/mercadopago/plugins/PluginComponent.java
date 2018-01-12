@@ -34,6 +34,7 @@ public abstract class PluginComponent<T> extends Component<PluginComponent.Props
     public static class Props {
 
         public final Map<String, Object> data;
+        public final PaymentData paymentData;
         public final String toolbarTitle;
         public final boolean toolbarVisible;
 
@@ -41,35 +42,25 @@ public abstract class PluginComponent<T> extends Component<PluginComponent.Props
             this.data = builder.data;
             this.toolbarTitle = builder.toolbarTitle;
             this.toolbarVisible = builder.toolbarVisible;
+            this.paymentData = builder.paymentData;
         }
 
         public Builder toBuilder() {
             return new Builder()
                 .setData(this.data)
                 .setToolbarVisible(this.toolbarVisible)
-                .setToolbarTitle(this.toolbarTitle);
-        }
-
-        public void setPluginProps(@NonNull final Props.Builder builder) {
-            builder.setData(this.data)
                 .setToolbarTitle(this.toolbarTitle)
-                .setToolbarVisible(this.toolbarVisible);
+                .setPaymentData(this.paymentData);
         }
 
         public static class Builder {
             public Map<String, Object> data;
-            public String paymentTypeId;
             public PaymentData paymentData;
             public String toolbarTitle = "";
             public boolean toolbarVisible = true;
 
             public PluginComponent.Props.Builder setData(@NonNull final Map<String, Object> data) {
                 this.data = data;
-                return this;
-            }
-
-            public PluginComponent.Props.Builder setPaymentTypeId(@NonNull final String paymentTypeId) {
-                this.paymentTypeId = paymentTypeId;
                 return this;
             }
 

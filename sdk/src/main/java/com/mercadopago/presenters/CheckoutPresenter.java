@@ -28,7 +28,6 @@ import com.mercadopago.model.PaymentResult;
 import com.mercadopago.model.Token;
 import com.mercadopago.mvp.MvpPresenter;
 import com.mercadopago.mvp.OnResourcesRetrievedCallback;
-import com.mercadopago.plugins.model.PaymentMethodInfo;
 import com.mercadopago.preferences.CheckoutPreference;
 import com.mercadopago.preferences.FlowPreference;
 import com.mercadopago.preferences.PaymentResultScreenPreference;
@@ -494,10 +493,12 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
 
         final PaymentData paymentData = createPaymentData();
 
-        if (hasPaymentPlugin()) {
+        if (hasCustomPaymentProcessor()) {
+
             getView().hideProgress();
             CheckoutStore.getInstance().setPaymentData(paymentData);
-            getView().showPaymentPlugin();
+            getView().showPaymentProcessor();
+
         } else {
             final String transactionId = getTransactionID();
             getResourcesProvider().createPayment(transactionId, mCheckoutPreference,
@@ -532,12 +533,8 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
         }
     }
 
-    private boolean hasPaymentPlugin() {
-        final PaymentMethodInfo paymentMethodInfo = CheckoutStore.getInstance()
-                .getSelectedPaymentMethod();
-        return paymentMethodInfo != null
-                && CheckoutStore.getInstance()
-                .getPaymentPluginByMethod(paymentMethodInfo.id) != null;
+    private boolean hasCustomPaymentProcessor() {
+        return CheckoutStore.getInstance().getPaymentProcessor() != null;
     }
 
     private void continuePaymentWithoutESC() {
@@ -761,6 +758,7 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
     }
 
     private PaymentData createPaymentData() {
+
         PaymentData paymentData = new PaymentData();
         paymentData.setPaymentMethod(mSelectedPaymentMethod);
         paymentData.setPayerCost(mSelectedPayerCost);

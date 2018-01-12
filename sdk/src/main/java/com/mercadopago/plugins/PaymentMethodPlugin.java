@@ -2,6 +2,7 @@ package com.mercadopago.plugins;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.mercadopago.plugins.model.PaymentMethodInfo;
 
@@ -16,27 +17,20 @@ public abstract class PaymentMethodPlugin {
     public static final String POSIION_TOP = "position_up";
     public static final String POSIION_BOTTOM = "position_down";
 
-    protected Context context;
-
-    public PaymentMethodPlugin(@NonNull final Context context) {
-        this.context = context;
-    }
-
     public String displayOrder() {
         return POSIION_TOP;
-    }
-
-    public boolean hasConfigurationComponent() {
-        final PluginComponent.Props props = new PluginComponent.Props.Builder().build();
-        return createConfigurationComponent(props) != null;
     }
 
     public boolean isEnabled(@NonNull final Map<String, Object> data) {
         return true;
     }
 
-    public abstract PaymentMethodInfo getPaymentMethodInfo();
+    public abstract @NonNull PaymentMethodInfo getPaymentMethodInfo();
 
-    public abstract PluginComponent createConfigurationComponent(@NonNull final PluginComponent.Props props);
+    public abstract @Nullable PluginComponent createConfigurationComponent(@NonNull final PluginComponent.Props props,
+                                                                           @NonNull final Context context);
 
+    public boolean isConfigurationComponentEnabled(@NonNull final Map<String, Object> data) {
+        return true;
+    }
 }

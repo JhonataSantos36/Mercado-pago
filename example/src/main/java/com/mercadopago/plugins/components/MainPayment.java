@@ -8,22 +8,21 @@ import com.mercadopago.core.CheckoutStore;
 import com.mercadopago.model.Payment;
 import com.mercadopago.plugins.PluginComponent;
 import com.mercadopago.plugins.PluginPaymentResultAction;
-import com.mercadopago.plugins.model.PaymentMethodInfo;
 import com.mercadopago.plugins.model.ProcessorPaymentResult;
 
 /**
  * Created by nfortuna on 12/13/17.
  */
 
-public class SamplePayment extends PluginComponent<Void> {
+public class MainPayment extends PluginComponent<Void> {
 
     private final Handler handler = new Handler();
 
     static {
-        RendererFactory.register(SamplePayment.class, SamplePaymentRenderer.class);
+        RendererFactory.register(MainPayment.class, MainPaymentRenderer.class);
     }
 
-    public SamplePayment(@NonNull final Props props) {
+    public MainPayment(@NonNull final Props props) {
         super(props);
     }
 
@@ -38,13 +37,14 @@ public class SamplePayment extends PluginComponent<Void> {
             public void run() {
 
                 final ProcessorPaymentResult result = new ProcessorPaymentResult(
-                    123456l,
+                    98723496234l,
                     Payment.StatusCodes.STATUS_REJECTED,
                     Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_PLUGIN_PM,
                     props.paymentData.getPaymentMethod().getId(),
                     props.paymentData.getPaymentMethod().getName(),
                     props.paymentData.getPaymentMethod().getIcon()
                 );
+
                 getDispatcher().dispatch(new PluginPaymentResultAction(result));
             }
         }, 2000);

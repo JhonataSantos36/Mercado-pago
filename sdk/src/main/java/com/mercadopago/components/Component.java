@@ -23,7 +23,6 @@ public class Component<T, S> {
         setProps(props);
     }
 
-
     protected void viewAttachedToWindow() {
         viewAttached = true;
         onViewAttachedToWindow();
