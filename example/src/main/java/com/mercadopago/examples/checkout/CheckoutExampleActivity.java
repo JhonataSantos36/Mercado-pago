@@ -107,8 +107,8 @@ public class CheckoutExampleActivity extends AppCompatActivity {
                         new SamplePaymentProcessor()
                 )
                 .setPaymentProcessor(new MainPaymentProcessor())
-                .addPaymentMethodPlugin("sample",
-                    new SamplePaymentMethodPlugin(this),
+                .addPaymentMethodPlugin(
+                    new SamplePaymentMethodPlugin(),
                     new SamplePaymentProcessor()
                 )
                 .setPaymentProcessor(new MainPaymentProcessor());
