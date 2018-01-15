@@ -1,43 +1,48 @@
 package com.mercadopago.plugins;
 
-import android.os.AsyncTask;
 import android.support.annotation.NonNull;
-
-import com.mercadopago.core.CheckoutStore;
+import android.util.Log;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class DataInitializationTask extends AsyncTask<Void, Void, Map<String, Object>> {
+public abstract class DataInitializationTask {
 
-    private DataInitializationListener listener;
-    protected Map<String, Object> data = new HashMap<>();
+    private DataInitializationCallbacks listener;
+    private final Map<String, Object> data = new HashMap<>();
+    private Thread taskThread;
 
     public DataInitializationTask(@NonNull final Map<String, Object> data) {
-        this.data = data;
+        this.data.putAll(data);
     }
 
-    @Override
-    protected Map<String, Object> doInBackground(Void... voids) {
-        return initializeData();
+    public void execute(final DataInitializationCallbacks callbacks) {
+        taskThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    onLoadData(data);
+                    if (!taskThread.isInterrupted()) {
+                        callbacks.onDataInitialized(data);
+                    }
+                } catch (final Exception e) {
+                    //Do nothing
+                }
+            }
+        });
+        taskThread.start();
     }
 
-    protected void onPostExecute(@NonNull final Map<String, Object> data) {
-        CheckoutStore.getInstance().setData(data);
-        if (listener != null) {
-            listener.onDataInitialized(data);
+    public void cancel() {
+        if (taskThread != null && taskThread.isAlive() && !taskThread.isInterrupted()) {
+            Log.d("loaddata", "cancel load...");
+            taskThread.interrupt();
         }
     }
 
-    public DataInitializationTask setListener(@NonNull final DataInitializationListener listener) {
-        this.listener = listener;
-        return this;
-    }
+    public abstract void onLoadData(@NonNull final Map<String, Object> data);
 
-    public abstract Map<String, Object> initializeData();
-    public abstract void onFailure(@NonNull final Exception e);
-
-    public interface DataInitializationListener {
+    public interface DataInitializationCallbacks {
         void onDataInitialized(@NonNull final Map<String, Object> data);
     }
 }

@@ -55,4 +55,6 @@ public interface CheckoutView extends MvpView {
     void showHook(final Hook hook, final int requestCode);
 
     void showPaymentProcessor();
+
+    boolean isActive();
 }
