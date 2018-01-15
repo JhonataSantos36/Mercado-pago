@@ -556,4 +556,9 @@ public class CheckoutActivity extends MercadoPagoBaseActivity implements Checkou
         super.onDestroy();
         mCheckoutPresenter.cancelInitialization();
     }
+
+    @Override
+    public boolean isActive() {
+        return !isFinishing();
+    }
 }

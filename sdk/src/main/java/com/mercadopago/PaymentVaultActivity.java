@@ -401,6 +401,7 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
                     @Override
                     public void onClick(final View v) {
 
+                        store.reset();
                         final String id = String.valueOf(v.getTag());
                         store.setSelectedPaymentMethodId(id);
 

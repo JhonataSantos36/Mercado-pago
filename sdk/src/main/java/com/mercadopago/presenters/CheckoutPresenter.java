@@ -1,6 +1,5 @@
 package com.mercadopago.presenters;
 
-import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 
 import com.mercadopago.callbacks.FailureRecovery;
@@ -32,7 +31,6 @@ import com.mercadopago.model.Token;
 import com.mercadopago.mvp.MvpPresenter;
 import com.mercadopago.mvp.OnResourcesRetrievedCallback;
 import com.mercadopago.plugins.DataInitializationTask;
-import com.mercadopago.plugins.model.PaymentMethodInfo;
 import com.mercadopago.preferences.CheckoutPreference;
 import com.mercadopago.preferences.FlowPreference;
 import com.mercadopago.preferences.PaymentResultScreenPreference;
@@ -85,7 +83,7 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
     private transient FailureRecovery failureRecovery;
     private transient Timer mCheckoutTimer;
 
-    private AsyncTask dataInitializationRef;
+    private DataInitializationTask dataInitializationTask;
 
     public CheckoutPresenter() {
         if (mFlowPreference == null) {
@@ -148,19 +146,17 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
 
     private void initializePluginsData() {
         final CheckoutStore store = CheckoutStore.getInstance();
-        final DataInitializationTask task = store.getDataInitializationTask();
-        if (task != null) {
-            try {
-                dataInitializationRef = task.setListener(new DataInitializationTask.DataInitializationListener() {
-                    @Override
-                    public void onDataInitialized(@NonNull final Map<String, Object> data) {
+        dataInitializationTask = store.getDataInitializationTask();
+        if (dataInitializationTask != null) {
+            dataInitializationTask.execute(new DataInitializationTask.DataInitializationCallbacks() {
+                @Override
+                public void onDataInitialized(@NonNull final Map<String, Object> data) {
+                    if (getView().isActive() && isViewAttached()) {
+                        CheckoutStore.getInstance().setData(data);
                         finishInitializingPluginsData();
                     }
-                }).execute();
-            } catch (final Exception e) {
-                task.onFailure(e);
-                finishInitializingPluginsData();
-            }
+                }
+            });
         } else {
             finishInitializingPluginsData();
         }
@@ -1039,8 +1035,8 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
     }
 
     public void cancelInitialization() {
-        if (dataInitializationRef != null) {
-            dataInitializationRef.cancel(true);
+        if (dataInitializationTask != null) {
+            dataInitializationTask.cancel();
         }
     }
 }

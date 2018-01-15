@@ -90,6 +90,7 @@ public class MercadoPagoCheckout {
         final CheckoutStore store = CheckoutStore.getInstance();
         store.reset();
         store.setDecorationPreference(decorationPreference);
+        store.setPaymentResultScreenPreference(paymentResultScreenPreference);
         store.setPaymentMethodPluginList(builder.paymentMethodPluginList);
         store.setPaymentPlugins(builder.paymentPlugins);
         store.setCheckoutHooks(builder.checkoutHooks);
