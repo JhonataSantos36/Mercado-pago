@@ -1,7 +1,6 @@
 package com.mercadopago.preferences;
 
 import com.google.gson.annotations.SerializedName;
-
 import com.mercadopago.constants.PaymentTypes;
 import com.mercadopago.constants.Sites;
 import com.mercadopago.exceptions.CheckoutPreferenceException;

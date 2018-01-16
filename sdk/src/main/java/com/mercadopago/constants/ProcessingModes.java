@@ -1,7 +1,5 @@
 package com.mercadopago.constants;
 
-import java.util.List;
-
 /**
  * Created by acollerone on 8/14/17.
  */

@@ -28,7 +28,6 @@ import com.mercadopago.model.Token;
 import com.mercadopago.plugins.PaymentPluginActivity;
 import com.mercadopago.plugins.model.PaymentMethodInfo;
 import com.mercadopago.preferences.CheckoutPreference;
-import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.preferences.FlowPreference;
 import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.preferences.PaymentResultScreenPreference;
@@ -54,7 +53,6 @@ import java.math.BigDecimal;
 public class CheckoutActivity extends MercadoPagoBaseActivity implements CheckoutView {
 
     private static final String MERCHANT_PUBLIC_KEY_BUNDLE = "mMerchantPublicKey";
-    private static final String DECORATION_PREFERENCE_BUNDLE = "mDecorationPreference";
     private static final String SERVICE_PREFERENCE_BUNDLE = "mServicePreference";
     private static final String RESULT_CODE_BUNDLE = "mRequestedResultCode";
     private static final String PRESENTER_BUNDLE = "mCheckoutPresenter";
@@ -66,7 +64,6 @@ public class CheckoutActivity extends MercadoPagoBaseActivity implements Checkou
     //Local vars
     protected CheckoutPresenter mCheckoutPresenter;
 
-    protected DecorationPreference mDecorationPreference;
     protected Integer mRequestedResultCode;
     protected Intent mCustomDataBundle;
 
@@ -78,7 +75,6 @@ public class CheckoutActivity extends MercadoPagoBaseActivity implements Checkou
             getActivityParameters();
             configurePresenter();
             setContentView(R.layout.mpsdk_activity_checkout);
-            decorate();
             mCheckoutPresenter.initialize();
         }
     }
@@ -89,15 +85,6 @@ public class CheckoutActivity extends MercadoPagoBaseActivity implements Checkou
         mCheckoutPresenter.attachView(this);
         mCheckoutPresenter.setIdempotencyKeySeed(mMerchantPublicKey);
         mCheckoutPresenter.setTimer(CheckoutTimer.getInstance());
-    }
-
-    private void decorate() {
-        if (mDecorationPreference != null) {
-            mDecorationPreference.activateFont(this);
-            if (mDecorationPreference.hasColors()) {
-                setTheme(R.style.Theme_MercadoPagoTheme_NoActionBar);
-            }
-        }
     }
 
     protected void getActivityParameters() {
@@ -119,7 +106,6 @@ public class CheckoutActivity extends MercadoPagoBaseActivity implements Checkou
 
         ServicePreference servicePreference = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("servicePreference"), ServicePreference.class);
 
-        mDecorationPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("decorationPreference"), DecorationPreference.class);
         mMerchantPublicKey = this.getIntent().getStringExtra("merchantPublicKey");
         mPrivateKey = checkoutPreference.getPayer() != null ? checkoutPreference.getPayer().getAccessToken() : "";
 
@@ -168,7 +154,6 @@ public class CheckoutActivity extends MercadoPagoBaseActivity implements Checkou
         outState.putString(PRESENTER_BUNDLE, JsonUtil.getInstance().toJson(mCheckoutPresenter));
 
         outState.putString(MERCHANT_PUBLIC_KEY_BUNDLE, mMerchantPublicKey);
-        outState.putString(DECORATION_PREFERENCE_BUNDLE, JsonUtil.getInstance().toJson(mDecorationPreference));
         outState.putInt(RESULT_CODE_BUNDLE, mRequestedResultCode);
     }
 
@@ -177,7 +162,6 @@ public class CheckoutActivity extends MercadoPagoBaseActivity implements Checkou
         if (savedInstanceState != null) {
             mMerchantPublicKey = savedInstanceState.getString(MERCHANT_PUBLIC_KEY_BUNDLE);
             mRequestedResultCode = savedInstanceState.getInt(RESULT_CODE_BUNDLE, 0);
-            mDecorationPreference = JsonUtil.getInstance().fromJson(savedInstanceState.getString(DECORATION_PREFERENCE_BUNDLE), DecorationPreference.class);
             mCheckoutPresenter = JsonUtil.getInstance().fromJson(savedInstanceState.getString(PRESENTER_BUNDLE), CheckoutPresenter.class);
             configurePresenter();
         }
@@ -326,7 +310,6 @@ public class CheckoutActivity extends MercadoPagoBaseActivity implements Checkou
                 .setEditionEnabled(!mCheckoutPresenter.isUniquePaymentMethod())
                 .setDiscountEnabled(mCheckoutPresenter.isDiscountEnabled())
                 .setItems(mCheckoutPresenter.getCheckoutPreference().getItems())
-                .setDecorationPreference(mDecorationPreference)
                 .setTermsAndConditionsEnabled(!isUserLogged());
 
         if (mCheckoutPresenter.isDiscountEnabled() && mCheckoutPresenter.isDiscountValid()) {
@@ -365,7 +348,6 @@ public class CheckoutActivity extends MercadoPagoBaseActivity implements Checkou
         new MercadoPagoComponents.Activities.PaymentVaultActivityBuilder()
                 .setActivity(this)
                 .setMerchantPublicKey(mMerchantPublicKey)
-                .setDecorationPreference(mDecorationPreference)
                 .setPayerAccessToken(mPrivateKey)
                 .setPayerEmail(mCheckoutPresenter.getCheckoutPreference().getPayer().getEmail())
                 .setSite(mCheckoutPresenter.getCheckoutPreference().getSite())
@@ -497,7 +479,6 @@ public class CheckoutActivity extends MercadoPagoBaseActivity implements Checkou
                 .setMerchantPublicKey(mMerchantPublicKey)
                 .setPayerAccessToken(mPrivateKey)
                 .setPaymentPreference(paymentPreference)
-                .setDecorationPreference(mDecorationPreference)
                 .setAmount(mCheckoutPresenter.getCheckoutPreference().getAmount())
                 .setSite(mCheckoutPresenter.getCheckoutPreference().getSite())
                 .setInstallmentsEnabled(true)

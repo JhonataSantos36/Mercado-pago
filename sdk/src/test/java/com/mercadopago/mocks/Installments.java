@@ -1,7 +1,6 @@
 package com.mercadopago.mocks;
 
 import com.google.gson.reflect.TypeToken;
-
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.Installment;
 import com.mercadopago.util.JsonUtil;

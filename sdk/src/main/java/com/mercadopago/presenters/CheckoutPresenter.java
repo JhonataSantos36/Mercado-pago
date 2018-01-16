@@ -513,24 +513,27 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
 
                         @Override
                         public void onFailure(final MercadoPagoError error) {
-                            if (error.isApiException() && error.getApiException().getStatus().equals(ApiUtil.StatusCodes.BAD_REQUEST)) {
-                                List<Cause> causes = error.getApiException().getCause();
-                                if (causes != null && !causes.isEmpty()) {
-                                    Cause cause = causes.get(0);
-                                    if (ApiException.ErrorCodes.INVALID_PAYMENT_WITH_ESC.equals(cause.getCode()) &&
-                                            paymentData.getToken().getCardId() != null) {
-                                        deleteESC(paymentData);
-                                        continuePaymentWithoutESC();
-                                    } else {
-                                        recoverCreatePayment(error);
-                                    }
-                                }
+                            if (isErrorInvalidPaymentWithEsc(error, paymentData)) {
+                                deleteESC(paymentData);
+                                continuePaymentWithoutESC();
                             } else {
                                 recoverCreatePayment(error);
                             }
                         }
                     });
         }
+    }
+
+    private boolean isErrorInvalidPaymentWithEsc(MercadoPagoError error, PaymentData paymentData) {
+        if (error.isApiException() && error.getApiException().getStatus().equals(ApiUtil.StatusCodes.BAD_REQUEST)) {
+            List<Cause> causes = error.getApiException().getCause();
+            if (causes != null && !causes.isEmpty()) {
+                Cause cause = causes.get(0);
+                return ApiException.ErrorCodes.INVALID_PAYMENT_WITH_ESC.equals(cause.getCode()) &&
+                        paymentData.getToken().getCardId() != null;
+            }
+        }
+        return false;
     }
 
     private boolean hasCustomPaymentProcessor() {

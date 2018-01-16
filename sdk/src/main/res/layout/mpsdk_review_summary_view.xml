@@ -11,7 +11,7 @@
     android:layout_marginRight="25dp"
     android:layout_marginStart="25dp"
     android:layout_marginTop="16dp"
-    android:background="@color/mpsdk_white"
+    android:background="@color/mpsdk_summary_background_color"
     android:orientation="vertical">
 
     <FrameLayout
@@ -23,10 +23,10 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center_horizontal"
+            android:background="@color/mpsdk_summary_background_color"
+            android:descendantFocusability="afterDescendants"
             android:gravity="center_horizontal"
-            android:background="@color/mpsdk_white"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            android:descendantFocusability="afterDescendants"/>
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
     </FrameLayout>
 
     <LinearLayout
@@ -41,9 +41,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="start"
-            android:textColor="@android:color/tertiary_text_light"
             android:layout_weight="0.6"
             android:text="@string/mpsdk_review_summary_subtotal"
+            android:textColor="@color/mpsdk_summary_text_color"
             android:textSize="18dp" />
 
         <com.mercadopago.customviews.MPTextView
@@ -52,7 +52,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.4"
             android:gravity="end"
-            android:textColor="@color/default_primary_color"
+            android:textColor="@color/mpsdk_summary_text_color"
             android:textSize="18dp"
             tools:text="$124" />
     </LinearLayout>
@@ -63,7 +63,7 @@
         android:layout_height="1dp"
         android:layout_gravity="bottom"
         android:layout_marginTop="15dp"
-        android:background="@color/mpsdk_separator" />
+        android:background="@color/mpsdk_summary_separator_color" />
 
     <LinearLayout
         android:id="@+id/mpsdkReviewSummaryPay"
@@ -78,8 +78,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="start"
             android:layout_weight="0.4"
-            android:textColor="@color/default_primary_color"
             android:text="@string/mpsdk_review_summary_pay"
+            android:textColor="@color/mpsdk_summary_text_color"
             android:textSize="18dp" />
 
         <FrameLayout
@@ -97,7 +97,7 @@
         android:layout_height="1dp"
         android:layout_gravity="bottom"
         android:layout_marginTop="12dp"
-        android:background="@color/mpsdk_separator" />
+        android:background="@color/mpsdk_summary_separator_color" />
 
     <LinearLayout
         android:id="@+id/mpsdkReviewSummaryTotal"
@@ -112,8 +112,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="start"
             android:layout_weight="0.6"
-            android:textColor="@color/default_primary_color"
             android:text="@string/mpsdk_review_summary_total"
+            android:textColor="@color/mpsdk_summary_text_color"
             android:textSize="18dp" />
 
         <com.mercadopago.customviews.MPTextView
@@ -122,7 +122,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.4"
             android:gravity="end"
-            android:textColor="@color/default_primary_color"
+            android:textColor="@color/mpsdk_summary_text_color"
             android:textSize="18dp"
             tools:text="$124" />
     </LinearLayout>
@@ -134,10 +134,10 @@
         android:layout_marginTop="15dp"
         android:gravity="center"
         android:includeFontPadding="false"
+        android:textColor="@color/mpsdk_summary_text_color"
         android:textSize="16dp"
         android:visibility="visible"
         app:font_style="light"
-        android:textColor="@color/default_primary_color"
         tools:text="No incluye intereses bancarios" />
 
     <com.mercadopago.customviews.MPTextView
@@ -149,6 +149,7 @@
         android:includeFontPadding="false"
         android:textSize="24dp"
         android:visibility="gone"
+        android:textColor="@color/mpsdk_summary_text_color"
         app:font_style="light"
         tools:text="CFT 0,00%" />
 

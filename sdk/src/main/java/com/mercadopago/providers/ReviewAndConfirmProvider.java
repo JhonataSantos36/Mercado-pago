@@ -11,7 +11,6 @@ import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.Reviewable;
 import com.mercadopago.model.Site;
 import com.mercadopago.mvp.ResourcesProvider;
-import com.mercadopago.preferences.DecorationPreference;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -19,14 +18,15 @@ import java.util.List;
 /**
  * Created by mreverter on 2/2/17.
  */
+
 public interface ReviewAndConfirmProvider extends ResourcesProvider {
-    Reviewable getSummaryReviewable(PaymentMethod paymentMethod, PayerCost payerCost, BigDecimal amount, Discount discount, Site site, Issuer issuer, DecorationPreference decorationPreference, OnConfirmPaymentCallback onConfirmPaymentCallback);
+    Reviewable getSummaryReviewable(PaymentMethod paymentMethod, PayerCost payerCost, BigDecimal amount, Discount discount, Site site, Issuer issuer, OnConfirmPaymentCallback onConfirmPaymentCallback);
 
-    Reviewable getItemsReviewable(String currency, List<Item> items, DecorationPreference decorationPreference);
+    Reviewable getItemsReviewable(String currency, List<Item> items);
 
-    Reviewable getPaymentMethodOnReviewable(PaymentMethod paymentMethod, PayerCost payerCost, CardInfo cardInfo, Site site, DecorationPreference decorationPreference, Boolean editionEnabled, OnReviewChange reviewChange);
+    Reviewable getPaymentMethodOnReviewable(PaymentMethod paymentMethod, PayerCost payerCost, CardInfo cardInfo, Site site, Boolean editionEnabled, OnReviewChange reviewChange);
 
-    Reviewable getPaymentMethodOffReviewable(PaymentMethod paymentMethod, String paymentMethodCommentInfo, String paymentMethodDescriptionInfo, BigDecimal amount, Site site, DecorationPreference decorationPreference, Boolean editionEnabled, OnReviewChange reviewChange);
+    Reviewable getPaymentMethodOffReviewable(PaymentMethod paymentMethod, String paymentMethodCommentInfo, String paymentMethodDescriptionInfo, BigDecimal amount, Site site, Boolean editionEnabled, OnReviewChange reviewChange);
 
     String getReviewTitle();
 

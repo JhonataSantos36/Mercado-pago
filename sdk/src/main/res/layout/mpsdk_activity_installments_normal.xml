@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<android.support.design.widget.CoordinatorLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/main_content"
-        android:background="@color/mpsdk_white"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fitsSystemWindows="true">
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main_content"
+    android:background="@color/mpsdk_white"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
 
     <include layout="@layout/mpsdk_view_progress_bar_small"/>
 
@@ -18,7 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="240dp"
             android:theme="@style/ThemeOverlay.AppCompat.Dark"
-            android:background="@color/mpsdk_background_blue"
+            android:background="@color/mpsdk_background"
             android:fitsSystemWindows="true"
             app:elevation="0dp">
 

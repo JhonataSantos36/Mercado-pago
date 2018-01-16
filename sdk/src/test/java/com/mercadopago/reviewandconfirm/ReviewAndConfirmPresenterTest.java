@@ -20,7 +20,6 @@ import com.mercadopago.model.ReviewSubscriber;
 import com.mercadopago.model.Reviewable;
 import com.mercadopago.model.Site;
 import com.mercadopago.model.Token;
-import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.presenters.ReviewAndConfirmPresenter;
 import com.mercadopago.providers.ReviewAndConfirmProvider;
 import com.mercadopago.views.ReviewAndConfirmView;
@@ -568,25 +567,25 @@ public class ReviewAndConfirmPresenterTest {
         private String cancelMessage = "Cancelar";
 
         @Override
-        public Reviewable getSummaryReviewable(PaymentMethod paymentMethod, PayerCost payerCost, BigDecimal amount, Discount discount, Site site, Issuer issuer, DecorationPreference decorationPreference, OnConfirmPaymentCallback onConfirmPaymentCallback) {
+        public Reviewable getSummaryReviewable(PaymentMethod paymentMethod, PayerCost payerCost, BigDecimal amount, Discount discount, Site site, Issuer issuer, OnConfirmPaymentCallback onConfirmPaymentCallback) {
             paymentSummaryReviewable = new SummaryMockedReviewable(onConfirmPaymentCallback);
             return paymentSummaryReviewable;
         }
 
         @Override
-        public Reviewable getItemsReviewable(String currency, List<Item> items, DecorationPreference decorationPreference) {
+        public Reviewable getItemsReviewable(String currency, List<Item> items) {
             itemsReviewable = new ItemsMockedReviewable();
             return itemsReviewable;
         }
 
         @Override
-        public Reviewable getPaymentMethodOnReviewable(PaymentMethod paymentMethod, PayerCost payerCost, CardInfo cardInfo, Site site, DecorationPreference decorationPreference, Boolean editionEnabled, OnReviewChange reviewChange) {
+        public Reviewable getPaymentMethodOnReviewable(PaymentMethod paymentMethod, PayerCost payerCost, CardInfo cardInfo, Site site, Boolean editionEnabled, OnReviewChange reviewChange) {
             paymentMethodOnReviewable = new PaymentMethodMockedReviewable(reviewChange);
             return paymentMethodOnReviewable;
         }
 
         @Override
-        public Reviewable getPaymentMethodOffReviewable(PaymentMethod paymentMethod, String paymentMethodCommentInfo, String paymentMethodDescriptionInfo, BigDecimal amount, Site site, DecorationPreference decorationPreference, Boolean editionEnabled, OnReviewChange reviewChange) {
+        public Reviewable getPaymentMethodOffReviewable(PaymentMethod paymentMethod, String paymentMethodCommentInfo, String paymentMethodDescriptionInfo, BigDecimal amount, Site site, Boolean editionEnabled, OnReviewChange reviewChange) {
             paymentMethodOffReviewable = new PaymentMethodMockedReviewable(reviewChange);
             return paymentMethodOffReviewable;
         }

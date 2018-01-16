@@ -5,7 +5,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 
 import com.mercadopago.model.Item;
-import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.preferences.ReviewScreenPreference;
 import com.mercadopago.uicontrollers.reviewandconfirm.ReviewProductView;
 import com.mercadopago.uicontrollers.reviewandconfirm.ReviewProductViewController;
@@ -18,18 +17,16 @@ import java.util.List;
 
 public class ReviewProductAdapter extends RecyclerView.Adapter<ReviewProductAdapter.ViewHolder> {
 
-    private DecorationPreference mDecorationPreference;
     private List<Item> mItemList;
     private String mCurrency;
     private Context mContext;
     private ReviewScreenPreference mReviewScreenPreference;
 
-    public ReviewProductAdapter(Context context, List<Item> items, String currency, ReviewScreenPreference reviewScreenPreference, DecorationPreference decorationPreference) {
+    public ReviewProductAdapter(Context context, List<Item> items, String currency, ReviewScreenPreference reviewScreenPreference) {
         this.mContext = context;
         this.mItemList = items;
         this.mCurrency = currency;
         this.mReviewScreenPreference = reviewScreenPreference;
-        this.mDecorationPreference = decorationPreference;
     }
 
     @Override
@@ -47,7 +44,7 @@ public class ReviewProductAdapter extends RecyclerView.Adapter<ReviewProductAdap
     @Override
     public void onBindViewHolder(ReviewProductAdapter.ViewHolder holder, int position) {
         Item item = mItemList.get(position);
-        holder.mReviewProductViewController.drawProduct(position, item, mCurrency, mDecorationPreference);
+        holder.mReviewProductViewController.drawProduct(position, item, mCurrency);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

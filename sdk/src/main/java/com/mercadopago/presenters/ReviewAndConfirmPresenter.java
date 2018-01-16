@@ -4,7 +4,6 @@ import com.mercadopago.callbacks.OnConfirmPaymentCallback;
 import com.mercadopago.callbacks.OnReviewChange;
 import com.mercadopago.controllers.CustomReviewablesHandler;
 import com.mercadopago.model.CardInfo;
-
 import com.mercadopago.model.Discount;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.Item;
@@ -15,7 +14,6 @@ import com.mercadopago.model.Reviewable;
 import com.mercadopago.model.Site;
 import com.mercadopago.model.Token;
 import com.mercadopago.mvp.MvpPresenter;
-import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.providers.ReviewAndConfirmProvider;
 import com.mercadopago.util.MercadoPagoUtil;
 import com.mercadopago.views.ReviewAndConfirmView;
@@ -40,7 +38,6 @@ public class ReviewAndConfirmPresenter extends MvpPresenter<ReviewAndConfirmView
     private List<Item> mItems;
     private String mPaymentMethodCommentInfo;
     private String mPaymentMethodDescriptionInfo;
-    private DecorationPreference mDecorationPreference;
     private Boolean mEditionEnabled;
     private Boolean mDiscountEnabled;
     private boolean mTermsAndConditionsEnabled;
@@ -155,7 +152,7 @@ public class ReviewAndConfirmPresenter extends MvpPresenter<ReviewAndConfirmView
     }
 
     private Reviewable getSummary() {
-        Reviewable summary = getResourcesProvider().getSummaryReviewable(mPaymentMethod, mPayerCost, mAmount, mDiscount, mSite, mIssuer, mDecorationPreference, new OnConfirmPaymentCallback() {
+        Reviewable summary = getResourcesProvider().getSummaryReviewable(mPaymentMethod, mPayerCost, mAmount, mDiscount, mSite, mIssuer, new OnConfirmPaymentCallback() {
             @Override
             public void confirmPayment() {
                 getView().confirmPayment();
@@ -165,7 +162,7 @@ public class ReviewAndConfirmPresenter extends MvpPresenter<ReviewAndConfirmView
     }
 
     private Reviewable getItemsReview() {
-        Reviewable itemsReview = getResourcesProvider().getItemsReviewable(mSite.getCurrencyId(), mItems, mDecorationPreference);
+        Reviewable itemsReview = getResourcesProvider().getItemsReviewable(mSite.getCurrencyId(), mItems);
         return itemsReview;
     }
 
@@ -186,7 +183,7 @@ public class ReviewAndConfirmPresenter extends MvpPresenter<ReviewAndConfirmView
         } else {
             finalAmount = mAmount.subtract(mDiscount.getCouponAmount());
         }
-        return getResourcesProvider().getPaymentMethodOffReviewable(mPaymentMethod, mPaymentMethodCommentInfo, mPaymentMethodDescriptionInfo, finalAmount, mSite, mDecorationPreference, mEditionEnabled, new OnReviewChange() {
+        return getResourcesProvider().getPaymentMethodOffReviewable(mPaymentMethod, mPaymentMethodCommentInfo, mPaymentMethodDescriptionInfo, finalAmount, mSite, mEditionEnabled, new OnReviewChange() {
             @Override
             public void onChangeSelected() {
                 getView().changePaymentMethod();
@@ -196,7 +193,7 @@ public class ReviewAndConfirmPresenter extends MvpPresenter<ReviewAndConfirmView
 
     private Reviewable getPaymentMethodOnReview() {
         CardInfo cardInfo = new CardInfo(mToken);
-        return getResourcesProvider().getPaymentMethodOnReviewable(mPaymentMethod, mPayerCost, cardInfo, mSite, mDecorationPreference, mEditionEnabled, new OnReviewChange() {
+        return getResourcesProvider().getPaymentMethodOnReviewable(mPaymentMethod, mPayerCost, cardInfo, mSite, mEditionEnabled, new OnReviewChange() {
             @Override
             public void onChangeSelected() {
                 getView().changePaymentMethod();
@@ -246,10 +243,6 @@ public class ReviewAndConfirmPresenter extends MvpPresenter<ReviewAndConfirmView
 
     public void setPaymentMethodDescriptionInfo(String paymentMethodDescriptionInfo) {
         this.mPaymentMethodDescriptionInfo = paymentMethodDescriptionInfo;
-    }
-
-    public void setDecorationPreference(DecorationPreference decorationPreference) {
-        this.mDecorationPreference = decorationPreference;
     }
 
     public void setEditionEnabled(Boolean editionEnabled) {

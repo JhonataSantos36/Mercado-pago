@@ -12,13 +12,11 @@ import com.mercadopago.model.ApiException;
 import com.mercadopago.model.Campaign;
 import com.mercadopago.model.Discount;
 import com.mercadopago.mvp.OnResourcesRetrievedCallback;
-
-import java.util.List;
-
 import com.mercadopago.preferences.ServicePreference;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.TextUtil;
 
+import java.util.List;
 import java.util.Map;
 
 /**

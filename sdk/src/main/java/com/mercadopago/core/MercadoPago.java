@@ -13,13 +13,11 @@ import com.mercadopago.CheckoutActivity;
 import com.mercadopago.CongratsActivity;
 import com.mercadopago.CustomerCardsActivity;
 import com.mercadopago.DiscountsActivity;
-import com.mercadopago.constants.ProcessingModes;
 import com.mercadopago.GuessingCardActivity;
 import com.mercadopago.InstallmentsActivity;
 import com.mercadopago.InstructionsActivity;
 import com.mercadopago.IssuersActivity;
 import com.mercadopago.PaymentMethodsActivity;
-import com.mercadopago.paymentresult.PaymentResultActivity;
 import com.mercadopago.PaymentTypesActivity;
 import com.mercadopago.PaymentVaultActivity;
 import com.mercadopago.PendingActivity;
@@ -28,6 +26,7 @@ import com.mercadopago.SecurityCodeActivity;
 import com.mercadopago.VaultActivity;
 import com.mercadopago.adapters.ErrorHandlingCallAdapter;
 import com.mercadopago.callbacks.Callback;
+import com.mercadopago.constants.ProcessingModes;
 import com.mercadopago.model.BankDeal;
 import com.mercadopago.model.Campaign;
 import com.mercadopago.model.Card;
@@ -36,6 +35,7 @@ import com.mercadopago.model.CardToken;
 import com.mercadopago.model.Discount;
 import com.mercadopago.model.IdentificationType;
 import com.mercadopago.model.Installment;
+import com.mercadopago.model.Instructions;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.Payer;
 import com.mercadopago.model.PayerCost;
@@ -45,14 +45,13 @@ import com.mercadopago.model.PaymentBody;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentMethodSearch;
 import com.mercadopago.model.PaymentRecovery;
-import com.mercadopago.model.Instructions;
 import com.mercadopago.model.PaymentType;
 import com.mercadopago.model.SavedCardToken;
 import com.mercadopago.model.SecurityCodeIntent;
 import com.mercadopago.model.Site;
 import com.mercadopago.model.Token;
+import com.mercadopago.paymentresult.PaymentResultActivity;
 import com.mercadopago.preferences.CheckoutPreference;
-import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.services.BankDealService;
 import com.mercadopago.services.CheckoutService;
@@ -317,11 +316,10 @@ public class MercadoPago {
 
     // * Static methods for StartActivityBuilder implementation
 
-    private static void startBankDealsActivity(Activity activity, String publicKey, List<BankDeal> bankDeals, DecorationPreference decorationPreference) {
+    private static void startBankDealsActivity(Activity activity, String publicKey, List<BankDeal> bankDeals) {
 
         Intent bankDealsIntent = new Intent(activity, BankDealsActivity.class);
         bankDealsIntent.putExtra("merchantPublicKey", publicKey);
-        bankDealsIntent.putExtra("decorationPreference", JsonUtil.getInstance().toJson(decorationPreference));
         if (bankDeals != null) {
             bankDealsIntent.putExtra("bankDeals", JsonUtil.getInstance().toJson(bankDeals));
         }
@@ -329,7 +327,7 @@ public class MercadoPago {
     }
 
     private static void startCheckoutActivity(Activity activity, String merchantPublicKey, String merchantBaseUrl, String merchantGetCustomerUri, String merchantAccessToken,
-                                              String checkoutPreferenceId, Boolean showBankDeals, Boolean binaryModeEnabled, Integer congratsDisplay, DecorationPreference decorationPreference,
+                                              String checkoutPreferenceId, Boolean showBankDeals, Boolean binaryModeEnabled, Integer congratsDisplay,
                                               Discount discount, Boolean discountEnabled, Boolean directDiscountEnabled, Boolean installmentsReviewEnabled, String merchantDiscountBaseUrl, String merchantGetDiscountUri,
                                               Map<String, String> discountAdditionalInfo) {
 
@@ -341,7 +339,6 @@ public class MercadoPago {
         checkoutIntent.putExtra("merchantGetCustomerUri", merchantGetCustomerUri);
         checkoutIntent.putExtra("merchantAccessToken", merchantAccessToken);
         checkoutIntent.putExtra("congratsDisplay", congratsDisplay);
-        checkoutIntent.putExtra("decorationPreference", JsonUtil.getInstance().toJson(decorationPreference));
         checkoutIntent.putExtra("binaryModeEnabled", binaryModeEnabled);
         checkoutIntent.putExtra("discount", JsonUtil.getInstance().toJson(discount));
         checkoutIntent.putExtra("discountEnabled", discountEnabled);
@@ -435,7 +432,7 @@ public class MercadoPago {
     private static void startInstallmentsActivity(Activity activity, BigDecimal amount, Site site,
                                                   String publicKey, List<PayerCost> payerCosts,
                                                   PaymentPreference paymentPreference, Issuer issuer,
-                                                  PaymentMethod paymentMethod, DecorationPreference decorationPreference,
+                                                  PaymentMethod paymentMethod,
                                                   CardInfo cardInfo, BigDecimal transactionAmount,
                                                   String payerEmail, Discount discount, Boolean discountEnabled, Boolean directDiscountEnabled,
                                                   Boolean installmentsReviewEnabled, String merchantBaseUrl, String merchantDiscountBaseUrl,
@@ -453,7 +450,6 @@ public class MercadoPago {
         intent.putExtra("site", JsonUtil.getInstance().toJson(site));
         intent.putExtra("payerCosts", JsonUtil.getInstance().toJson(payerCosts));
         intent.putExtra("paymentPreference", JsonUtil.getInstance().toJson(paymentPreference));
-        intent.putExtra("decorationPreference", JsonUtil.getInstance().toJson(decorationPreference));
         intent.putExtra("cardInfo", JsonUtil.getInstance().toJson(cardInfo));
         intent.putExtra("payerEmail", payerEmail);
         intent.putExtra("transactionAmount", JsonUtil.getInstance().toJson(transactionAmount));
@@ -471,14 +467,13 @@ public class MercadoPago {
 
     private static void startIssuersActivity(Activity activity, String publicKey,
                                              PaymentMethod paymentMethod,
-                                             List<Issuer> issuers, DecorationPreference decorationPreference,
+                                             List<Issuer> issuers,
                                              CardInfo cardInfo) {
 
         Intent intent = new Intent(activity, IssuersActivity.class);
         intent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
         intent.putExtra("merchantPublicKey", publicKey);
         intent.putExtra("issuers", JsonUtil.getInstance().toJson(issuers));
-        intent.putExtra("decorationPreference", JsonUtil.getInstance().toJson(decorationPreference));
         intent.putExtra("cardInfo", JsonUtil.getInstance().toJson(cardInfo));
         activity.startActivityForResult(intent, ISSUERS_REQUEST_CODE);
 
@@ -486,15 +481,13 @@ public class MercadoPago {
 
     private static void startSecurityCodeActivity(Activity activity, String publicKey,
                                                   CardInfo cardInfo, Card card, Token token,
-                                                  PaymentMethod paymentMethod,
-                                                  DecorationPreference decorationPreference) {
+                                                  PaymentMethod paymentMethod) {
 
         Intent intent = new Intent(activity, SecurityCodeActivity.class);
         intent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
         intent.putExtra("token", JsonUtil.getInstance().toJson(token));
         intent.putExtra("card", JsonUtil.getInstance().toJson(card));
         intent.putExtra("merchantPublicKey", publicKey);
-        intent.putExtra("decorationPreference", JsonUtil.getInstance().toJson(decorationPreference));
         intent.putExtra("cardInfo", JsonUtil.getInstance().toJson(cardInfo));
         activity.startActivityForResult(intent, SECURITY_CODE_REQUEST_CODE);
     }
@@ -502,22 +495,20 @@ public class MercadoPago {
     private static void startPaymentTypesActivity(Activity activity, String publicKey,
                                                   List<PaymentMethod> paymentMethods,
                                                   List<PaymentType> paymentTypes,
-                                                  CardInfo cardInfo,
-                                                  DecorationPreference decorationPreference) {
+                                                  CardInfo cardInfo) {
 
         Intent intent = new Intent(activity, PaymentTypesActivity.class);
         intent.putExtra("paymentMethods", JsonUtil.getInstance().toJson(paymentMethods));
         intent.putExtra("paymentTypes", JsonUtil.getInstance().toJson(paymentTypes));
         intent.putExtra("merchantPublicKey", publicKey);
         intent.putExtra("cardInfo", JsonUtil.getInstance().toJson(cardInfo));
-        intent.putExtra("decorationPreference", JsonUtil.getInstance().toJson(decorationPreference));
         activity.startActivityForResult(intent, PAYMENT_TYPES_REQUEST_CODE);
 
     }
 
     private static void startGuessingCardActivity(Activity activity, String key, Boolean requireSecurityCode,
                                                   Boolean requireIssuer, Boolean showBankDeals, PaymentPreference paymentPreference,
-                                                  DecorationPreference decorationPreference, List<PaymentMethod> paymentMethodList,
+                                                  List<PaymentMethod> paymentMethodList,
                                                   PaymentRecovery paymentRecovery, Card card, BigDecimal transactionAmount,
                                                   String payerEmail, Discount discount, Boolean discountEnabled, Boolean directDiscountEnabled,
                                                   Boolean installmentsEnabled, String merchantBaseUrl, String merchantDiscountBaseUrl,
@@ -541,8 +532,6 @@ public class MercadoPago {
         guessingCardIntent.putExtra("paymentPreference", JsonUtil.getInstance().toJson(paymentPreference));
 
         guessingCardIntent.putExtra("paymentMethodList", JsonUtil.getInstance().toJson(paymentMethodList));
-
-        guessingCardIntent.putExtra("decorationPreference", JsonUtil.getInstance().toJson(decorationPreference));
 
         guessingCardIntent.putExtra("paymentRecovery", JsonUtil.getInstance().toJson(paymentRecovery));
 
@@ -572,7 +561,7 @@ public class MercadoPago {
     }
 
     private static void startCardVaultActivity(Activity activity, String key, BigDecimal amount, Site site, Boolean installmentsEnabled,
-                                               Boolean showBankDeals, PaymentPreference paymentPreference, DecorationPreference decorationPreference,
+                                               Boolean showBankDeals, PaymentPreference paymentPreference,
                                                List<PaymentMethod> paymentMethodList, PaymentRecovery paymentRecovery, Card card,
                                                String payerEmail, Discount discount, Boolean discountEnabled, Boolean directDiscountEnabled, Boolean installmentsReviewEnabled,
                                                String merchantBaseUrl, String merchantDiscountBaseUrl, String merchantGetDiscountUri, Map<String, String> discountAdditionalInfo) {
@@ -590,7 +579,6 @@ public class MercadoPago {
         cardVaultIntent.putExtra("paymentPreference", JsonUtil.getInstance().toJson(paymentPreference));
         cardVaultIntent.putExtra("paymentMethodList", JsonUtil.getInstance().toJson(paymentMethodList));
         cardVaultIntent.putExtra("paymentRecovery", JsonUtil.getInstance().toJson(paymentRecovery));
-        cardVaultIntent.putExtra("decorationPreference", JsonUtil.getInstance().toJson(decorationPreference));
         cardVaultIntent.putExtra("card", JsonUtil.getInstance().toJson(card));
         cardVaultIntent.putExtra("payerEmail", payerEmail);
         cardVaultIntent.putExtra("discount", JsonUtil.getInstance().toJson(discount));
@@ -606,7 +594,7 @@ public class MercadoPago {
     }
 
     private static void startDiscountsActivity(Activity activity, String key, BigDecimal amount, String payerEmail, Discount discount,
-                                               DecorationPreference decorationPreference, Boolean directDiscountEnabled,
+                                               Boolean directDiscountEnabled,
                                                String merchantBaseUrl, String merchantDiscountBaseUrl, String merchantGetDiscountUri,
                                                Map<String, String> discountAdditionalInfo) {
 
@@ -616,7 +604,6 @@ public class MercadoPago {
         discountsIntent.putExtra("payerEmail", payerEmail);
         discountsIntent.putExtra("directDiscountEnabled", directDiscountEnabled);
         discountsIntent.putExtra("discount", JsonUtil.getInstance().toJson(discount));
-        discountsIntent.putExtra("decorationPreference", JsonUtil.getInstance().toJson(decorationPreference));
         discountsIntent.putExtra("merchantBaseUrl", merchantBaseUrl);
         discountsIntent.putExtra("merchantDiscountBaseUrl", merchantDiscountBaseUrl);
         discountsIntent.putExtra("merchantGetDiscountUri", merchantGetDiscountUri);
@@ -625,13 +612,12 @@ public class MercadoPago {
         activity.startActivityForResult(discountsIntent, DISCOUNTS_REQUEST_CODE);
     }
 
-    private static void startPaymentMethodsActivity(Activity activity, String merchantPublicKey, Boolean showBankDeals, PaymentPreference paymentPreference, DecorationPreference decorationPreference) {
+    private static void startPaymentMethodsActivity(Activity activity, String merchantPublicKey, Boolean showBankDeals, PaymentPreference paymentPreference) {
 
         Intent paymentMethodsIntent = new Intent(activity, PaymentMethodsActivity.class);
         paymentMethodsIntent.putExtra("merchantPublicKey", merchantPublicKey);
         paymentMethodsIntent.putExtra("showBankDeals", showBankDeals);
         paymentMethodsIntent.putExtra("paymentPreference", JsonUtil.getInstance().toJson(paymentPreference));
-        paymentMethodsIntent.putExtra("decorationPreference", JsonUtil.getInstance().toJson(decorationPreference));
 
         activity.startActivityForResult(paymentMethodsIntent, PAYMENT_METHODS_REQUEST_CODE);
     }
@@ -639,7 +625,7 @@ public class MercadoPago {
     private static void startPaymentVaultActivity(Activity activity, String merchantPublicKey, String merchantBaseUrl,
                                                   String merchantGetCustomerUri, String merchantAccessToken, BigDecimal amount,
                                                   Site site, Boolean installmentsEnabled, Boolean showBankDeals, PaymentPreference paymentPreference,
-                                                  DecorationPreference decorationPreference, PaymentMethodSearch paymentMethodSearch, List<Card> cards,
+                                                  PaymentMethodSearch paymentMethodSearch, List<Card> cards,
                                                   String payerAccessToken, Boolean accountMoneyEnabled, Integer maxSavedCards, String payerEmail,
                                                   Discount discount, Boolean discountEnabled, Boolean directDiscountEnabled, Boolean installmentsReviewEnabled, String merchantDiscountBaseUrl,
                                                   String merchantGetDiscountUri, Map<String, String> discountAdditionalInfo) {
@@ -661,7 +647,6 @@ public class MercadoPago {
         vaultIntent.putExtra("paymentPreference", JsonUtil.getInstance().toJson(paymentPreference));
         Gson gson = new Gson();
         vaultIntent.putExtra("cards", gson.toJson(cards));
-        vaultIntent.putExtra("decorationPreference", JsonUtil.getInstance().toJson(decorationPreference));
         vaultIntent.putExtra("payerAccessToken", payerAccessToken);
         vaultIntent.putExtra("accountMoneyEnabled", accountMoneyEnabled);
         vaultIntent.putExtra("payerEmail", payerEmail);
@@ -812,7 +797,6 @@ public class MercadoPago {
         private Token mToken;
         private Issuer mIssuer;
         private Site mSite;
-        private DecorationPreference mDecorationPreference;
         private Boolean mInstallmentsEnabled;
         private List<String> mSupportedPaymentTypes;
         private List<BankDeal> mBankDeals;
@@ -1053,11 +1037,6 @@ public class MercadoPago {
             return this;
         }
 
-        public StartActivityBuilder setDecorationPreference(DecorationPreference decorationPreference) {
-            this.mDecorationPreference = decorationPreference;
-            return this;
-        }
-
         public StartActivityBuilder setPayerAccessToken(String payerAccessToken) {
             this.mPayerAccessToken = payerAccessToken;
             return this;
@@ -1091,7 +1070,7 @@ public class MercadoPago {
             if (this.mKeyType == null) throw new IllegalStateException("key type is null");
 
             if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {
-                MercadoPago.startBankDealsActivity(this.mActivity, this.mKey, this.mBankDeals, this.mDecorationPreference);
+                MercadoPago.startBankDealsActivity(this.mActivity, this.mKey, this.mBankDeals);
             } else {
                 throw new RuntimeException("Unsupported key type for this method");
             }
@@ -1107,7 +1086,7 @@ public class MercadoPago {
 
             if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {
                 MercadoPago.startCheckoutActivity(this.mActivity, this.mKey, this.mMerchantBaseUrl, this.mMerchantGetCustomerUri, this.mMerchantAccessToken,
-                        this.mCheckoutPreferenceId, this.mShowBankDeals, this.mBinaryModeEnabled, this.mCongratsDisplay, this.mDecorationPreference,
+                        this.mCheckoutPreferenceId, this.mShowBankDeals, this.mBinaryModeEnabled, this.mCongratsDisplay,
                         this.mDiscount, this.mDiscountEnabled, this.mDirectDiscountEnabled, this.mInstallmentsReviewEnabled, this.mMerchantDiscountBaseUrl, this.mMerchantGetDiscountUri,
                         this.mDiscountAdditionalInfo);
             } else {
@@ -1230,7 +1209,7 @@ public class MercadoPago {
             }
 
             MercadoPago.startInstallmentsActivity(mActivity, mAmount, mSite,
-                    mKey, mPayerCosts, mPaymentPreference, mIssuer, mPaymentMethod, mDecorationPreference,
+                    mKey, mPayerCosts, mPaymentPreference, mIssuer, mPaymentMethod,
                     mCardInfo, mAmount, mPayerEmail, mDiscount, mDiscountEnabled, mDirectDiscountEnabled, mInstallmentsReviewEnabled,
                     mMerchantBaseUrl, mMerchantDiscountBaseUrl, mMerchantGetDiscountUri, mDiscountAdditionalInfo);
         }
@@ -1242,7 +1221,7 @@ public class MercadoPago {
                 throw new IllegalStateException("payment method is null");
 
             MercadoPago.startIssuersActivity(this.mActivity, this.mKey, this.mPaymentMethod,
-                    this.mIssuers, this.mDecorationPreference, this.mCardInfo);
+                    this.mIssuers, this.mCardInfo);
 
         }
 
@@ -1258,7 +1237,7 @@ public class MercadoPago {
                 throw new IllegalStateException("card and token can't both be null");
 
             MercadoPago.startSecurityCodeActivity(this.mActivity, this.mKey, this.mCardInfo,
-                    this.mCard, this.mToken, this.mPaymentMethod, this.mDecorationPreference);
+                    this.mCard, this.mToken, this.mPaymentMethod);
 
         }
 
@@ -1271,7 +1250,7 @@ public class MercadoPago {
                 throw new IllegalStateException("payment types list is null");
 
             MercadoPago.startPaymentTypesActivity(mActivity, mKey, mPaymentMethodList, mPaymentTypesList,
-                    mCardInfo, mDecorationPreference);
+                    mCardInfo);
         }
 
         public void startGuessingCardActivity() {
@@ -1281,7 +1260,7 @@ public class MercadoPago {
             if (this.mKeyType == null) throw new IllegalStateException("key type is null");
 
             MercadoPago.startGuessingCardActivity(this.mActivity, this.mKey, this.mRequireSecurityCode,
-                    this.mRequireIssuer, this.mShowBankDeals, this.mPaymentPreference, this.mDecorationPreference,
+                    this.mRequireIssuer, this.mShowBankDeals, this.mPaymentPreference,
                     this.mPaymentMethodList, this.mPaymentRecovery, this.mCard, this.mAmount,
                     this.mPayerEmail, this.mDiscount, this.mDiscountEnabled, this.mDirectDiscountEnabled, this.mInstallmentsEnabled,
                     this.mMerchantBaseUrl, this.mMerchantDiscountBaseUrl, this.mMerchantGetDiscountUri, this.mDiscountAdditionalInfo);
@@ -1296,7 +1275,7 @@ public class MercadoPago {
             }
 
             MercadoPago.startCardVaultActivity(this.mActivity, this.mKey, this.mAmount, this.mSite, this.mInstallmentsEnabled, this.mShowBankDeals,
-                    this.mPaymentPreference, this.mDecorationPreference, this.mPaymentMethodList, this.mPaymentRecovery, this.mCard,
+                    this.mPaymentPreference, this.mPaymentMethodList, this.mPaymentRecovery, this.mCard,
                     this.mPayerEmail, this.mDiscount, this.mDiscountEnabled, this.mDirectDiscountEnabled, this.mInstallmentsReviewEnabled, this.mMerchantBaseUrl, this.mMerchantDiscountBaseUrl,
                     this.mMerchantGetDiscountUri, this.mDiscountAdditionalInfo);
         }
@@ -1306,7 +1285,7 @@ public class MercadoPago {
             if (this.mKey == null) throw new IllegalStateException("key is null");
             if (this.mAmount == null) throw new IllegalStateException("amount is null");
 
-            MercadoPago.startDiscountsActivity(this.mActivity, this.mKey, this.mAmount, this.mPayerEmail, this.mDiscount, this.mDecorationPreference,
+            MercadoPago.startDiscountsActivity(this.mActivity, this.mKey, this.mAmount, this.mPayerEmail, this.mDiscount,
                     this.mDirectDiscountEnabled, this.mMerchantBaseUrl, this.mMerchantDiscountBaseUrl, this.mMerchantGetDiscountUri,
                     this.mDiscountAdditionalInfo);
         }
@@ -1319,7 +1298,7 @@ public class MercadoPago {
 
             if (this.mKeyType.equals(KEY_TYPE_PUBLIC)) {
                 MercadoPago.startPaymentMethodsActivity(this.mActivity, this.mKey,
-                        this.mShowBankDeals, this.mPaymentPreference, this.mDecorationPreference);
+                        this.mShowBankDeals, this.mPaymentPreference);
             } else {
                 throw new RuntimeException("Unsupported key type for this method");
             }
@@ -1337,7 +1316,7 @@ public class MercadoPago {
                 MercadoPago.startPaymentVaultActivity(this.mActivity, this.mKey, this.mMerchantBaseUrl,
                         this.mMerchantGetCustomerUri, this.mMerchantAccessToken,
                         this.mAmount, this.mSite, this.mInstallmentsEnabled, this.mShowBankDeals,
-                        this.mPaymentPreference, this.mDecorationPreference, this.mPaymentMethodSearch,
+                        this.mPaymentPreference, this.mPaymentMethodSearch,
                         this.mCards, this.mPayerAccessToken, this.mAccountMoneyEnabled, this.mMaxSavedCards,
                         this.mPayerEmail, this.mDiscount, this.mDiscountEnabled, this.mDirectDiscountEnabled,
                         this.mInstallmentsReviewEnabled, this.mMerchantDiscountBaseUrl, this.mMerchantGetDiscountUri,

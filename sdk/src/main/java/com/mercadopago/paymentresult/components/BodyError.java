@@ -2,7 +2,6 @@ package com.mercadopago.paymentresult.components;
 
 import android.support.annotation.NonNull;
 
-import com.mercadopago.R;
 import com.mercadopago.components.ActionDispatcher;
 import com.mercadopago.components.Component;
 import com.mercadopago.components.RecoverPaymentAction;

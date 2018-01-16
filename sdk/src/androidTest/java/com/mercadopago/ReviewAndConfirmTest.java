@@ -46,7 +46,7 @@ public class ReviewAndConfirmTest {
         ReviewAndConfirmProviderImpl reviewScreenProviderImpl =
                 new ReviewAndConfirmProviderImpl(InstrumentationRegistry.getContext(), reviewPreference);
 
-        Reviewable providedReviewable = reviewScreenProviderImpl.getItemsReviewable(CurrenciesUtil.CURRENCY_ARGENTINA, new ArrayList<Item>(), null);
+        Reviewable providedReviewable = reviewScreenProviderImpl.getItemsReviewable(CurrenciesUtil.CURRENCY_ARGENTINA, new ArrayList<Item>());
         providedReviewable.draw();
 
         assertTrue(customReviewable.drawn);

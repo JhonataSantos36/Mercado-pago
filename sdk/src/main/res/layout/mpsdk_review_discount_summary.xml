@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mpsdkReviewDiscountSummaryContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:visibility="visible"
-    android:background="@color/mpsdk_discounts_summary_background_color">
+    android:background="@color/mpsdk_discount_summary_background"
+    android:visibility="visible">
 
     <FrameLayout
         android:id="@+id/mpsdkCloseImageFrameLayout"
@@ -17,62 +16,67 @@
 
         <ImageView
             android:id="@+id/mpsdkCloseImage"
-            android:layout_margin="15dp"
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_gravity="top|start"
-            android:src="@drawable/mpsdk_close"/>
+            android:layout_margin="15dp"
+            android:src="@drawable/mpsdk_close"
+            android:tint="@color/mpsdk_toolbar_text" />
     </FrameLayout>
 
     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:orientation="vertical"
         android:paddingLeft="30dp"
-        android:paddingRight="30dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:paddingRight="30dp">
+
         <LinearLayout
             android:id="@+id/mpsdkReviewSummaryTitleDiscount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:background="@drawable/mpsdk_round_summary_top"
             android:gravity="center"
-            android:background="@drawable/mpsdk_round_summary_top">
+            android:orientation="horizontal">
 
             <com.mercadopago.customviews.MPTextView
                 android:id="@+id/mpsdkReviewSummaryTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
                 android:layout_marginBottom="20dp"
+                android:layout_marginTop="20dp"
                 android:textSize="23dp"
                 app:font_style="regular"
-                tools:text="$100 de descuento"/>
+                tools:text="$100 de descuento" />
         </LinearLayout>
 
         <LinearLayout
-            android:background="@drawable/mpsdk_round_summary_bottom"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/mpsdk_round_summary_bottom"
             android:orientation="vertical"
-            android:paddingRight="15dp"
-            android:paddingLeft="15dp">
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp">
+
             <LinearLayout
                 android:id="@+id/mpsdkReviewSummaryProducts"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="18dp"
                 android:layout_marginBottom="5dp"
+                android:layout_marginTop="18dp"
                 android:orientation="horizontal"
                 android:weightSum="1">
+
                 <com.mercadopago.customviews.MPTextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.7"
                     android:layout_gravity="start"
+                    android:layout_weight="0.7"
+                    android:text="@string/mpsdk_review_summary_products"
                     android:textSize="18dp"
-                    app:font_style="regular"
-                    android:text="@string/mpsdk_review_summary_products"/>
+                    app:font_style="regular" />
+
                 <com.mercadopago.customviews.MPTextView
                     android:id="@+id/mpsdkReviewSummaryProductsAmount"
                     android:layout_width="0dp"
@@ -81,61 +85,66 @@
                     android:gravity="end"
                     android:textSize="18dp"
                     app:font_style="regular"
-                    tools:text="$ 1000"/>
+                    tools:text="$ 1000" />
             </LinearLayout>
+
             <LinearLayout
                 android:id="@+id/mpsdkReviewSummaryDiscounts"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
                 android:layout_marginBottom="10dp"
+                android:layout_marginTop="5dp"
                 android:orientation="horizontal"
                 android:weightSum="1">
+
                 <com.mercadopago.customviews.MPTextView
                     android:id="@+id/mpsdkReviewSummaryDiscountLabel"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.7"
                     android:layout_gravity="start"
+                    android:layout_weight="0.7"
+                    android:text="@string/mpsdk_review_summary_discount"
+                    android:textColor="@color/mpsdk_summary_discount_color"
                     android:textSize="18dp"
-                    android:textColor="@color/mpsdk_color_payer_costs_no_rate"
-                    app:font_style="regular"
-                    android:text="@string/mpsdk_review_summary_discount" />
+                    app:font_style="regular" />
+
                 <com.mercadopago.customviews.MPTextView
                     android:id="@+id/mpsdkReviewSummaryDiscountsAmount"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.3"
                     android:gravity="end"
+                    android:textColor="@color/mpsdk_summary_discount_color"
                     android:textSize="18dp"
-                    android:textColor="@color/mpsdk_color_payer_costs_no_rate"
                     app:font_style="regular"
-                    tools:text="$ 100"/>
+                    tools:text="$ 100" />
             </LinearLayout>
 
             <View
                 android:id="@+id/mpsdkTopEmailSeparator"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/mpsdk_separator"
-                android:layout_gravity="center_horizontal|bottom" />
+                android:layout_gravity="center_horizontal|bottom"
+                android:background="@color/mpsdk_separator" />
 
             <LinearLayout
                 android:id="@+id/mpsdkReviewSummaryTotal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
                 android:layout_marginBottom="18dp"
+                android:layout_marginTop="10dp"
                 android:orientation="horizontal"
                 android:weightSum="1">
+
                 <com.mercadopago.customviews.MPTextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.5"
                     android:layout_gravity="start"
+                    android:layout_weight="0.5"
+                    android:text="@string/mpsdk_review_summary_total"
                     android:textSize="18dp"
-                    app:font_style="regular"
-                    android:text="@string/mpsdk_review_summary_total" />
+                    app:font_style="regular" />
+
                 <com.mercadopago.customviews.MPTextView
                     android:id="@+id/mpsdkReviewSummaryTotalAmount"
                     android:layout_width="0dp"
@@ -144,7 +153,7 @@
                     android:gravity="end"
                     android:textSize="18dp"
                     app:font_style="regular"
-                    tools:text="$ 900"/>
+                    tools:text="$ 900" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

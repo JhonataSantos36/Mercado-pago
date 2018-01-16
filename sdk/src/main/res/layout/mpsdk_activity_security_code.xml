@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:custom="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/mpsdk_white"
@@ -24,11 +23,10 @@
                 android:id="@+id/mpsdkSecurityCodeActivityBackground"
                 android:layout_width="match_parent"
                 android:layout_height="208dp"
-                android:background="@color/mpsdk_background_blue">
+                android:background="@color/mpsdk_background">
 
                 <com.mercadopago.customviews.MPTextView
                     android:id="@+id/mpsdkTimerTextView"
-                    style="@style/mpsdk_title_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="top|right"
@@ -37,6 +35,7 @@
                     android:layout_marginTop="14dp"
                     android:background="@drawable/mpsdk_title_toolbar"
                     android:gravity="center_vertical"
+                    android:textColor="@color/mpsdk_toolbar_text"
                     android:textSize="17dp"
                     android:visibility="gone"
                     app:allowCustomFont="false"
@@ -97,7 +96,9 @@
                             android:maxLength="4"
                             android:singleLine="true"
                             android:textColor="@color/abc_search_url_text_selected"
+                            android:textCursorDrawable="@drawable/mpsdk_cursor_input"
                             android:textSize="19dp"
+                            app:backgroundTint="@color/mpsdk_input"
                             custom:errorColor="@color/mpsdk_color_red_error" />
 
                     </LinearLayout>

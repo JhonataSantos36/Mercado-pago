@@ -1,8 +1,6 @@
 package com.mercadopago.components;
 
 import android.content.Context;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.support.annotation.CallSuper;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -11,12 +9,8 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.mercadopago.R;
-import com.mercadopago.core.CheckoutStore;
-import com.mercadopago.preferences.DecorationPreference;
 
 public class ToolbarRenderer extends Renderer<ToolbarComponent> {
-
-    private DecorationPreference decorationPreference = CheckoutStore.getInstance().getDecorationPreference();
 
     @Override
     @CallSuper
@@ -51,36 +45,7 @@ public class ToolbarRenderer extends Renderer<ToolbarComponent> {
                 }
             });
 
-            decorate(activity, toolbar);
-            decorateFont(titleView, context);
-
             titleView.setText(component.props.toolbarTitle);
-        }
-    }
-
-    private void decorate(final AppCompatActivity activity, final Toolbar toolbar) {
-        if (toolbar != null) {
-            if (decorationPreference.hasColors()) {
-                toolbar.setBackgroundColor(decorationPreference.getBaseColor());
-            }
-            decorateUpArrow(activity, toolbar);
-        }
-    }
-
-    private void decorateUpArrow(final AppCompatActivity activity, final Toolbar toolbar) {
-        if (decorationPreference.isDarkFontEnabled()) {
-            int darkFont = decorationPreference.getDarkFontColor(activity);
-            Drawable upArrow = toolbar.getNavigationIcon();
-            if (upArrow != null && activity.getSupportActionBar() != null) {
-                upArrow.setColorFilter(darkFont, PorterDuff.Mode.SRC_ATOP);
-                activity.getSupportActionBar().setHomeAsUpIndicator(upArrow);
-            }
-        }
-    }
-
-    protected void decorateFont(final TextView textView, final Context context) {
-        if (textView != null && decorationPreference.isDarkFontEnabled()) {
-            textView.setTextColor(decorationPreference.getDarkFontColor(context));
         }
     }
 }

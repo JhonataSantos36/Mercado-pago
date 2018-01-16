@@ -6,12 +6,10 @@ import com.mercadopago.components.Mutator;
 import com.mercadopago.components.MutatorPropsListener;
 import com.mercadopago.model.Instruction;
 import com.mercadopago.model.PaymentResult;
-import com.mercadopago.paymentresult.components.Body;
 import com.mercadopago.paymentresult.formatter.BodyAmountFormatter;
 import com.mercadopago.paymentresult.formatter.HeaderTitleFormatter;
 import com.mercadopago.paymentresult.props.HeaderProps;
 import com.mercadopago.paymentresult.props.PaymentResultProps;
-import com.mercadopago.preferences.PaymentResultScreenPreference;
 
 /**
  * Created by vaserber on 10/20/17.

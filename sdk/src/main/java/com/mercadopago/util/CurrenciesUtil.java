@@ -1,6 +1,7 @@
 package com.mercadopago.util;
 
-import android.text.*;
+import android.text.Html;
+import android.text.Spanned;
 
 import com.mercadopago.model.Currency;
 

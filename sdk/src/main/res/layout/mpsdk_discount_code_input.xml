@@ -25,8 +25,8 @@
                 android:id="@+id/mpsdkToolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:background="@color/mpsdk_background_blue"
-                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" >
+                android:background="@color/mpsdk_background"
+                android:theme="@style/ToolbarTheme" >
 
                 <com.mercadopago.customviews.MPTextView
                     android:id="@+id/mpsdkTimerTextView"
@@ -47,7 +47,7 @@
                 android:id="@+id/mpsdkDiscountBackground"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/mpsdk_background_blue">
+                android:background="@color/mpsdk_background">
 
                 <ImageView
                     android:layout_width="135dp"

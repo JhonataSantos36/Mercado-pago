@@ -26,7 +26,6 @@ import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.Card;
 import com.mercadopago.model.Customer;
-import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.model.Discount;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.Item;
@@ -150,7 +149,6 @@ public class ComponentsExampleActivity extends AppCompatActivity {
 
     private void onCompletePaymentMethodSelectionClicked() {
         PaymentPreference paymentPreference = getCurrentPaymentPreference();
-        DecorationPreference decorationPreference = getCurrentDecorationPreference();
 
         new MercadoPago.StartActivityBuilder()
                 .setActivity(this)
@@ -158,7 +156,6 @@ public class ComponentsExampleActivity extends AppCompatActivity {
                 .setSite(Sites.ARGENTINA)
                 .setAmount(mAmount)
                 .setPaymentPreference(paymentPreference) //Optional
-                .setDecorationPreference(decorationPreference) //Optional
                 .startPaymentVaultActivity();
     }
 
@@ -168,7 +165,6 @@ public class ComponentsExampleActivity extends AppCompatActivity {
 
     private void startCardVaultWithInstallments() {
         PaymentPreference paymentPreference = getCurrentPaymentPreference();
-        DecorationPreference decorationPreference = getCurrentDecorationPreference();
 
         new MercadoPago.StartActivityBuilder()
                 .setActivity(this)
@@ -177,37 +173,31 @@ public class ComponentsExampleActivity extends AppCompatActivity {
                 .setSite(Sites.ARGENTINA)
                 .setInstallmentsEnabled(true)
                 .setPaymentPreference(paymentPreference) //Optional
-                .setDecorationPreference(decorationPreference) //Optional
                 .startCardVaultActivity();
     }
 
     private void onCardWithoutInstallmentsClicked() {
         PaymentPreference paymentPreference = getCurrentPaymentPreference();
-        DecorationPreference decorationPreference = getCurrentDecorationPreference();
 
         new MercadoPago.StartActivityBuilder()
                 .setActivity(this)
                 .setPublicKey(mPublicKey)
                 .setPaymentPreference(paymentPreference) //Optional
-                .setDecorationPreference(decorationPreference) //Optional
                 .startCardVaultActivity();
     }
 
     private void onPaymentMethodsSelectionClicked() {
         PaymentPreference paymentPreference = getCurrentPaymentPreference();
-        DecorationPreference decorationPreference = getCurrentDecorationPreference();
 
         new MercadoPago.StartActivityBuilder()
                 .setActivity(this)
                 .setPublicKey(mPublicKey)
                 .setPaymentPreference(paymentPreference) //Optional
-                .setDecorationPreference(decorationPreference) //Optional
                 .startPaymentMethodsActivity();
     }
 
     private void onIssuersSelectionClicked() {
         PaymentPreference paymentPreference = getCurrentPaymentPreference();
-        DecorationPreference decorationPreference = getCurrentDecorationPreference();
 
         //Payment method required
         PaymentMethod paymentMethod = ExamplesUtils.getDummyPaymentMethod();
@@ -217,13 +207,11 @@ public class ComponentsExampleActivity extends AppCompatActivity {
                 .setPublicKey(mPublicKey)
                 .setPaymentMethod(paymentMethod)
                 .setPaymentPreference(paymentPreference) //Optional
-                .setDecorationPreference(decorationPreference) //Optional
                 .startIssuersActivity();
     }
 
     private void onInstallmentsSelectionClicked() {
         PaymentPreference paymentPreference = getCurrentPaymentPreference();
-        DecorationPreference decorationPreference = getCurrentDecorationPreference();
 
         //Payment method required
         PaymentMethod paymentMethod = ExamplesUtils.getDummyPaymentMethod();
@@ -239,13 +227,11 @@ public class ComponentsExampleActivity extends AppCompatActivity {
                 .setIssuer(issuer)
                 .setPaymentMethod(paymentMethod)
                 .setPaymentPreference(paymentPreference) //Optional
-                .setDecorationPreference(decorationPreference) //Optional
                 .startInstallmentsActivity();
     }
 
     private void onCustomerCardSelectionClicked() {
         final PaymentPreference paymentPreference = getCurrentPaymentPreference();
-        final DecorationPreference decorationPreference = getCurrentDecorationPreference();
 
         mProgressBar.setVisibility(View.VISIBLE);
         MerchantServer.getCustomer(this, ExamplesUtils.DUMMY_MERCHANT_BASE_URL,
@@ -256,7 +242,6 @@ public class ComponentsExampleActivity extends AppCompatActivity {
                         new MercadoPagoUI.Activities.SavedCardsActivityBuilder()
                                 .setActivity(mActivity)
                                 .setPaymentPreference(paymentPreference)
-                                .setDecorationPreference(decorationPreference)
                                 .setCards(customer.getCards())
                                 .startActivity();
                         mProgressBar.setVisibility(View.GONE);
@@ -390,18 +375,6 @@ public class ComponentsExampleActivity extends AppCompatActivity {
             }
         }).show();
     }
-
-    private DecorationPreference getCurrentDecorationPreference() {
-        DecorationPreference.Builder decorationPreferenceBuilder = new DecorationPreference.Builder();
-        if (mSelectedColor != null) {
-            decorationPreferenceBuilder.setBaseColor(mSelectedColor);
-            if (mDarkFontEnabled.isChecked()) {
-                decorationPreferenceBuilder.enableDarkFont();
-            }
-        }
-        return decorationPreferenceBuilder.build();
-    }
-
 
     private PaymentPreference getCurrentPaymentPreference() {
         PaymentPreference paymentPreference = new PaymentPreference();

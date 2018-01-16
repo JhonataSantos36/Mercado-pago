@@ -5,13 +5,11 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
-import android.graphics.Typeface;
 import android.os.Build;
 import android.support.v7.widget.AppCompatEditText;
 import android.util.AttributeSet;
 
 import com.mercadopago.R;
-import com.mercadopago.uicontrollers.FontCache;
 
 public class MPEditText extends AppCompatEditText {
 

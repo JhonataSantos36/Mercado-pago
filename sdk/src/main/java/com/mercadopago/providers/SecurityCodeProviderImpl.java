@@ -16,9 +16,9 @@ import com.mercadopago.model.SavedESCCardToken;
 import com.mercadopago.model.SecurityCodeIntent;
 import com.mercadopago.model.Token;
 import com.mercadopago.mvp.OnResourcesRetrievedCallback;
+import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.MercadoPagoESC;
 import com.mercadopago.util.MercadoPagoESCImpl;
-import com.mercadopago.util.ApiUtil;
 
 
 /**

@@ -33,8 +33,10 @@
         android:privateImeOptions="nm"
         android:singleLine="true"
         android:textColor="@color/abc_search_url_text_selected"
+        android:textCursorDrawable="@drawable/mpsdk_cursor_input"
         android:textIsSelectable="true"
         android:textSize="19dp"
+        app:backgroundTint="@color/mpsdk_input"
         app:errorColor="@color/mpsdk_color_red_error" />
 
 </LinearLayout>

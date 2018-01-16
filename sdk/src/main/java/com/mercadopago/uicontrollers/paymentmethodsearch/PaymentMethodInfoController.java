@@ -10,7 +10,6 @@ import android.widget.ImageView;
 import com.mercadopago.R;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.plugins.model.PaymentMethodInfo;
-import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.util.TextUtils;
 
 /**
@@ -26,15 +25,12 @@ public class PaymentMethodInfoController implements PaymentMethodSearchViewContr
     protected MPTextView mName;
     protected MPTextView mDescription;
     protected ImageView mIcon;
-    protected DecorationPreference mDecorationPreference;
     protected View.OnClickListener mListener;
 
     public PaymentMethodInfoController(@NonNull final Context context,
-                                       @NonNull final PaymentMethodInfo item,
-                                       @NonNull final DecorationPreference decorationPreference) {
+                                       @NonNull final PaymentMethodInfo item) {
         mContext = context;
         mItem = item;
-        mDecorationPreference = decorationPreference;
     }
 
     public View inflateInParent(ViewGroup parent, boolean attachToRoot) {
@@ -59,8 +55,6 @@ public class PaymentMethodInfoController implements PaymentMethodSearchViewContr
     }
 
     public void draw() {
-
-
 
         if (TextUtils.isEmpty(mItem.name)) {
             mName.setVisibility(View.GONE);

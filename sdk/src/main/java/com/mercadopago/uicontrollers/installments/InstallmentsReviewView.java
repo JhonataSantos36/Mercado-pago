@@ -10,7 +10,6 @@ import android.widget.FrameLayout;
 import com.mercadopago.R;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.model.PayerCost;
-import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.util.CurrenciesUtil;
 
 /**
@@ -23,7 +22,6 @@ public class InstallmentsReviewView implements InstallmentsView {
     private Context mContext;
     private PayerCost mPayerCost;
     private String mCurrencyId;
-    private DecorationPreference mDecorationPreference;
 
     //Views
     private View mView;
@@ -33,28 +31,17 @@ public class InstallmentsReviewView implements InstallmentsView {
     private MPTextView mContinueTextButton;
     private FrameLayout mInstallmentsContinueButton;
 
-    public InstallmentsReviewView(Context context, PayerCost payerCost, String currencyId, DecorationPreference decorationPreference) {
+    public InstallmentsReviewView(Context context, PayerCost payerCost, String currencyId) {
         mContext = context;
         mPayerCost = payerCost;
         mCurrencyId = currencyId;
-        mDecorationPreference = decorationPreference;
     }
 
     @Override
     public void draw() {
-        decorateButton();
         setInstallmentAmountText();
         setTotalAmountWithRateText();
         setCFTPercentText();
-    }
-
-    private void decorateButton() {
-        if (mDecorationPreference != null && mDecorationPreference.hasColors()) {
-            mInstallmentsContinueButton.setBackgroundColor(mDecorationPreference.getBaseColor());
-            if (mDecorationPreference.isDarkFontEnabled()) {
-                mContinueTextButton.setTextColor(mDecorationPreference.getDarkFontColor(mContext));
-            }
-        }
     }
 
     private void setInstallmentAmountText() {

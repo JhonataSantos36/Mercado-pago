@@ -3,7 +3,6 @@ package com.mercadopago.uicontrollers.reviewandconfirm;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -28,7 +27,6 @@ import com.mercadopago.model.Site;
 import com.mercadopago.model.Summary;
 import com.mercadopago.model.SummaryDetail;
 import com.mercadopago.model.SummaryRow;
-import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.uicontrollers.payercosts.PayerCostColumn;
 import com.mercadopago.util.CurrenciesUtil;
 import com.mercadopago.util.MercadoPagoUtil;
@@ -71,7 +69,6 @@ public class SummaryView extends Reviewable {
     protected PayerCost mPayerCost;
     protected PaymentMethod mPaymentMethod;
     protected SummaryRowAdapter mSummaryRowAdapter;
-    protected DecorationPreference mDecorationPreference;
     protected Discount mDiscount;
     private MPTextView mUnlockCardTextView;
     private LinearLayout mUnlockCard;
@@ -80,7 +77,7 @@ public class SummaryView extends Reviewable {
     private String mUnlockLink;
     private Summary mSummary;
 
-    public SummaryView(Context context, String confirmationMessage, PaymentMethod paymentMethod, PayerCost payerCost, BigDecimal amount, Discount discount, String currencyId, Site site, Issuer issuer, Summary summary, DecorationPreference decorationPreference, OnConfirmPaymentCallback callback) {
+    public SummaryView(Context context, String confirmationMessage, PaymentMethod paymentMethod, PayerCost payerCost, BigDecimal amount, Discount discount, String currencyId, Site site, Issuer issuer, Summary summary, OnConfirmPaymentCallback callback) {
         this.mContext = context;
         this.mConfirmationMessage = confirmationMessage;
         this.mCurrencyId = currencyId;
@@ -89,7 +86,6 @@ public class SummaryView extends Reviewable {
         this.mPaymentMethod = paymentMethod;
         this.mDiscount = discount;
         this.mCallback = callback;
-        this.mDecorationPreference = decorationPreference;
         this.mIssuer = issuer;
         this.mSite = site;
         this.mSummary = summary;
@@ -166,15 +162,12 @@ public class SummaryView extends Reviewable {
 
     @Override
     public View inflateInParent(ViewGroup parent, boolean attachToRoot) {
-        mView = LayoutInflater.from(mContext)
-                .inflate(R.layout.mpsdk_review_summary_view, parent, attachToRoot);
+        mView = LayoutInflater.from(mContext).inflate(R.layout.mpsdk_review_summary_view, parent, attachToRoot);
         return mView;
     }
 
     @Override
     public void draw() {
-        decorateButton();
-
         List<SummaryRow> summaryRowList = getSummaryRows();
         drawSummaryRows(summaryRowList, getDpadSelectionCallback());
 
@@ -264,12 +257,6 @@ public class SummaryView extends Reviewable {
             stringBuilder.append(CFT);
             stringBuilder.append(mPayerCost.getCFTPercent());
             mCFTTextView.setText(stringBuilder);
-        }
-    }
-
-    private void decorateButton() {
-        if (mDecorationPreference != null && mDecorationPreference.hasColors()) {
-            mUnlockCardTextView.setTextColor(mDecorationPreference.getBaseColor());
         }
     }
 

@@ -13,7 +13,6 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 import com.google.gson.reflect.TypeToken;
-
 import com.mercadopago.adapters.PayerCostsAdapter;
 import com.mercadopago.callbacks.OnSelectedCallback;
 import com.mercadopago.controllers.CheckoutTimer;
@@ -32,7 +31,6 @@ import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.Site;
 import com.mercadopago.observers.TimerObserver;
-import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.presenters.InstallmentsPresenter;
 import com.mercadopago.providers.InstallmentsProviderImpl;
@@ -45,9 +43,7 @@ import com.mercadopago.uicontrollers.card.CardRepresentationModes;
 import com.mercadopago.uicontrollers.card.FrontCardView;
 import com.mercadopago.uicontrollers.discounts.DiscountRowView;
 import com.mercadopago.uicontrollers.installments.InstallmentsReviewView;
-
 import com.mercadopago.util.ApiUtil;
-import com.mercadopago.util.ColorsUtil;
 import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;
@@ -72,7 +68,6 @@ public class InstallmentsActivity extends MercadoPagoBaseActivity implements Ins
     protected String mPrivateKey;
     protected boolean mActivityActive;
     protected PaymentPreference mPaymentPreference;
-    protected DecorationPreference mDecorationPreference;
 
     protected String mDefaultBaseURL;
     protected String mMerchantDiscountBaseURL;
@@ -116,10 +111,6 @@ public class InstallmentsActivity extends MercadoPagoBaseActivity implements Ins
         mPresenter.attachResourcesProvider(new InstallmentsProviderImpl(this, mPublicKey, mPrivateKey, mDefaultBaseURL,
                 mMerchantDiscountBaseURL, mMerchantGetDiscountURI, mDiscountAdditionalInfo));
 
-        if (isCustomColorSet()) {
-            setTheme(R.style.Theme_MercadoPagoTheme_NoActionBar);
-        }
-
         mActivityActive = true;
         analyzeLowRes();
         setContentView();
@@ -136,7 +127,6 @@ public class InstallmentsActivity extends MercadoPagoBaseActivity implements Ins
     private void getActivityParameters() {
         mPublicKey = getIntent().getStringExtra("merchantPublicKey");
         mPrivateKey = getIntent().getStringExtra("payerAccessToken");
-        mDecorationPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("decorationPreference"), DecorationPreference.class);
 
         mPresenter.setSite(JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("site"), Site.class));
         mPresenter.setPaymentMethod(JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("paymentMethod"), PaymentMethod.class));
@@ -175,10 +165,6 @@ public class InstallmentsActivity extends MercadoPagoBaseActivity implements Ins
             mMerchantGetDiscountURI = CustomServicesHandler.getInstance().getServicePreference().getGetMerchantDiscountURI();
             mDiscountAdditionalInfo = CustomServicesHandler.getInstance().getServicePreference().getGetDiscountAdditionalInfo();
         }
-    }
-
-    private boolean isCustomColorSet() {
-        return mDecorationPreference != null && mDecorationPreference.hasColors();
     }
 
     public void analyzeLowRes() {
@@ -246,7 +232,6 @@ public class InstallmentsActivity extends MercadoPagoBaseActivity implements Ins
     private void initializeView() {
         loadViews();
         hideHeader();
-        decorate();
         showTimer();
     }
 
@@ -354,31 +339,6 @@ public class InstallmentsActivity extends MercadoPagoBaseActivity implements Ins
         }
     }
 
-    private void decorate() {
-        if (isDecorationEnabled()) {
-            if (mLowResActive) {
-                decorateLowRes();
-            } else {
-                decorateNormal();
-            }
-        }
-    }
-
-    private void decorateLowRes() {
-        ColorsUtil.decorateLowResToolbar(mLowResToolbar, mLowResTitleToolbar, mDecorationPreference, getSupportActionBar(), this);
-        if (mTimerTextView != null) {
-            ColorsUtil.decorateTextView(mDecorationPreference, mTimerTextView, this);
-        }
-    }
-
-    private void decorateNormal() {
-        ColorsUtil.decorateNormalToolbar(mNormalToolbar, mDecorationPreference, mAppBar, mCollapsingToolbar, getSupportActionBar(), this);
-        mFrontCardView.decorateCardBorder(mDecorationPreference.getLighterColor());
-        if (mTimerTextView != null) {
-            ColorsUtil.decorateTextView(mDecorationPreference, mTimerTextView, this);
-        }
-    }
-
     private void showTimer() {
         if (CheckoutTimer.getInstance().isTimerEnabled()) {
             CheckoutTimer.getInstance().addObserver(this);
@@ -438,10 +398,6 @@ public class InstallmentsActivity extends MercadoPagoBaseActivity implements Ins
     public void onFinish() {
         setResult(MercadoPagoCheckout.TIMER_FINISHED_RESULT_CODE);
         this.finish();
-    }
-
-    private boolean isDecorationEnabled() {
-        return mDecorationPreference != null && mDecorationPreference.hasColors();
     }
 
     @Override
@@ -534,8 +490,7 @@ public class InstallmentsActivity extends MercadoPagoBaseActivity implements Ins
                 .setPayerEmail(mPresenter.getPayerEmail())
                 .setAmount(transactionAmount)
                 .setDiscount(mPresenter.getDiscount())
-                .setDirectDiscountEnabled(mPresenter.getDirectDiscountEnabled())
-                .setDecorationPreference(mDecorationPreference);
+                .setDirectDiscountEnabled(mPresenter.getDirectDiscountEnabled());
 
         if (mPresenter.getDiscount() == null) {
             mercadoPagoBuilder.setDirectDiscountEnabled(false);
@@ -590,7 +545,6 @@ public class InstallmentsActivity extends MercadoPagoBaseActivity implements Ins
                 .setContext(this)
                 .setCurrencyId(mPresenter.getSite().getCurrencyId())
                 .setPayerCost(payerCost)
-                .setDecorationPreference(mDecorationPreference)
                 .build();
 
         installmentsReviewView.inflateInParent(mInstallmentsReview, true);

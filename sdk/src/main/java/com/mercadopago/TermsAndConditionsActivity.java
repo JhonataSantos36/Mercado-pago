@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import com.mercadopago.constants.Sites;
 import com.mercadopago.customviews.MPTextView;
-import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.util.ErrorUtil;
 
 import static android.text.TextUtils.isEmpty;
@@ -24,7 +23,6 @@ public class TermsAndConditionsActivity extends MercadoPagoActivity {
     protected Toolbar mToolbar;
     protected TextView mTitle;
 
-    protected DecorationPreference mDecorationPreference;
     protected String mBankDealsTermsAndConditions;
     protected String mSiteId;
 
@@ -74,9 +72,6 @@ public class TermsAndConditionsActivity extends MercadoPagoActivity {
                 onBackPressed();
             }
         });
-
-        decorate(mToolbar);
-        decorateFont(mTitle);
     }
 
     @Override

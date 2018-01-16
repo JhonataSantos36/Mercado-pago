@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/mpsdk_review_gray_background">
+    android:background="@color/mpsdk_review_component_background">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -135,7 +135,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="@string/mpsdk_change_payment"
-                android:textColor="@color/mpsdk_background_blue"
+                android:textColor="@color/mpsdk_link"
                 android:textSize="18dp" />
         </FrameLayout>
 

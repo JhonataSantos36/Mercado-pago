@@ -1,6 +1,5 @@
 package com.mercadopago.paymentresult;
 
-import com.mercadopago.components.Action;
 import com.mercadopago.components.ActionDispatcher;
 import com.mercadopago.components.ChangePaymentMethodAction;
 import com.mercadopago.components.NextAction;

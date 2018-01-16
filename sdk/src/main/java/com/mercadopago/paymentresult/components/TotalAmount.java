@@ -4,13 +4,9 @@ import android.support.annotation.NonNull;
 
 import com.mercadopago.components.ActionDispatcher;
 import com.mercadopago.components.Component;
-import com.mercadopago.model.Currency;
 import com.mercadopago.paymentresult.props.TotalAmountProps;
-import com.mercadopago.util.CurrenciesUtil;
 
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 
 /**
  * Created by mromar on 11/28/17.

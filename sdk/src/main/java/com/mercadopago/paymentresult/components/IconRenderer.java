@@ -2,7 +2,6 @@ package com.mercadopago.paymentresult.components;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,7 +9,6 @@ import android.widget.ImageView;
 
 import com.mercadopago.R;
 import com.mercadopago.components.Renderer;
-import com.mercadopago.paymentresult.components.Icon;
 import com.mercadopago.util.CircleTransform;
 import com.mercadopago.util.ScaleUtil;
 import com.squareup.picasso.Picasso;

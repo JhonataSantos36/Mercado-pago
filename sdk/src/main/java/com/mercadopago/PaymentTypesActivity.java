@@ -24,7 +24,6 @@ import com.mercadopago.model.CardInfo;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentType;
 import com.mercadopago.observers.TimerObserver;
-import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.presenters.PaymentTypesPresenter;
 import com.mercadopago.tracker.FlowHandler;
 import com.mercadopago.tracker.MPTrackingContext;
@@ -34,7 +33,6 @@ import com.mercadopago.uicontrollers.FontCache;
 import com.mercadopago.uicontrollers.card.CardRepresentationModes;
 import com.mercadopago.uicontrollers.card.FrontCardView;
 import com.mercadopago.util.ApiUtil;
-import com.mercadopago.util.ColorsUtil;
 import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.ScaleUtil;
@@ -56,7 +54,6 @@ public class PaymentTypesActivity extends MercadoPagoBaseActivity implements Pay
     private PaymentTypesAdapter mPaymentTypesAdapter;
     private RecyclerView mPaymentTypesRecyclerView;
     private ProgressBar mProgressBar;
-    private DecorationPreference mDecorationPreference;
     //ViewMode
     protected boolean mLowResActive;
     //Low Res View
@@ -79,22 +76,14 @@ public class PaymentTypesActivity extends MercadoPagoBaseActivity implements Pay
         mPresenter.setView(this);
         mActivity = this;
         getActivityParameters();
-        if (isCustomColorSet()) {
-            setTheme(R.style.Theme_MercadoPagoTheme_NoActionBar);
-        }
+
         analizeLowRes();
         setContentView();
         mPresenter.validateActivityParameters();
     }
 
-    private boolean isCustomColorSet() {
-        return mDecorationPreference != null && mDecorationPreference.hasColors();
-    }
-
     private void getActivityParameters() {
-
         String publicKey = getIntent().getStringExtra("merchantPublicKey");
-        mDecorationPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("decorationPreference"), DecorationPreference.class);
 
         List<PaymentMethod> paymentMethods;
         try {
@@ -141,7 +130,6 @@ public class PaymentTypesActivity extends MercadoPagoBaseActivity implements Pay
         mPresenter.initializePaymentMethod();
         initializeViews();
         loadViews();
-        decorate();
         showTimer();
         initializeAdapter();
         mPresenter.loadPaymentTypes();
@@ -299,37 +287,6 @@ public class PaymentTypesActivity extends MercadoPagoBaseActivity implements Pay
                 }
             });
         }
-    }
-
-    private void decorate() {
-        if (isDecorationEnabled()) {
-            if (mLowResActive) {
-                decorateLowRes();
-            } else {
-                decorateNormal();
-            }
-        }
-    }
-
-    private boolean isDecorationEnabled() {
-        return mDecorationPreference != null && mDecorationPreference.hasColors();
-    }
-
-    private void decorateLowRes() {
-        ColorsUtil.decorateLowResToolbar(mLowResToolbar, mLowResTitleToolbar, mDecorationPreference,
-                getSupportActionBar(), this);
-        if (mTimerTextView != null) {
-            ColorsUtil.decorateTextView(mDecorationPreference, mTimerTextView, this);
-        }
-    }
-
-    private void decorateNormal() {
-        ColorsUtil.decorateNormalToolbar(mNormalToolbar, mDecorationPreference, mAppBar,
-                mCollapsingToolbar, getSupportActionBar(), this);
-        if (mTimerTextView != null) {
-            ColorsUtil.decorateTextView(mDecorationPreference, mTimerTextView, this);
-        }
-        mFrontCardView.decorateCardBorder(mDecorationPreference.getLighterColor());
     }
 
     @Override

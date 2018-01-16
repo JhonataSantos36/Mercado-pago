@@ -1,22 +1,14 @@
 package com.mercadopago;
 
 import android.app.Activity;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
-import android.widget.Button;
-import android.widget.TextView;
 
 import com.mercadopago.callbacks.FailureRecovery;
-import com.mercadopago.preferences.DecorationPreference;
-import com.mercadopago.util.JsonUtil;
 
 @Deprecated
 public abstract class MercadoPagoActivity extends MercadoPagoBaseActivity {
 
     private boolean mActivityActive;
-    protected DecorationPreference mDecorationPreference;
     private FailureRecovery mFailureRecovery;
     private Activity mActivity;
 
@@ -24,11 +16,8 @@ public abstract class MercadoPagoActivity extends MercadoPagoBaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         onBeforeCreation();
-        getDecorationPreference();
         getActivityParameters();
-        if (mDecorationPreference != null && mDecorationPreference.hasColors()) {
-            setTheme(R.style.Theme_MercadoPagoTheme_NoActionBar);
-        }
+
         setActivity();
         mActivityActive = true;
         setContentView();
@@ -67,14 +56,6 @@ public abstract class MercadoPagoActivity extends MercadoPagoBaseActivity {
     protected abstract void onInvalidStart(String message);
 
     protected void initializeFragments(Bundle savedInstanceState) {
-
-    }
-
-    private void getDecorationPreference() {
-        mDecorationPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("decorationPreference"), DecorationPreference.class);
-        if (mDecorationPreference != null) {
-            mDecorationPreference.activateFont(this);
-        }
     }
 
     @Override
@@ -112,60 +93,6 @@ public abstract class MercadoPagoActivity extends MercadoPagoBaseActivity {
     protected void recoverFromFailure() {
         if (mFailureRecovery != null) {
             mFailureRecovery.recover();
-        }
-    }
-
-    protected boolean isCustomColorSet() {
-        return mDecorationPreference != null && mDecorationPreference.hasColors();
-    }
-
-    protected int getCustomBaseColor() {
-        return mDecorationPreference.getBaseColor();
-    }
-
-    protected boolean isDarkFontEnabled() {
-        return mDecorationPreference != null && mDecorationPreference.isDarkFontEnabled();
-    }
-
-    protected int getDarkFontColor() {
-        return mDecorationPreference.getDarkFontColor(this);
-    }
-
-    protected void decorate(Button button) {
-        if (isCustomColorSet()) {
-            button.setBackgroundColor(getCustomBaseColor());
-        }
-
-        if (isDarkFontEnabled()) {
-            button.setTextColor(getDarkFontColor());
-        }
-    }
-
-    protected void decorate(Toolbar toolbar) {
-        if (toolbar != null) {
-            if (isCustomColorSet()) {
-                toolbar.setBackgroundColor(getCustomBaseColor());
-            }
-            decorateUpArrow(toolbar);
-        }
-    }
-
-    protected void decorateFont(TextView textView) {
-        if (textView != null) {
-            if (isDarkFontEnabled()) {
-                textView.setTextColor(getDarkFontColor());
-            }
-        }
-    }
-
-    protected void decorateUpArrow(Toolbar toolbar) {
-        if (isDarkFontEnabled()) {
-            int darkFont = getDarkFontColor();
-            Drawable upArrow = toolbar.getNavigationIcon();
-            if (upArrow != null && getSupportActionBar() != null) {
-                upArrow.setColorFilter(darkFont, PorterDuff.Mode.SRC_ATOP);
-                getSupportActionBar().setHomeAsUpIndicator(upArrow);
-            }
         }
     }
 }

@@ -1,14 +1,12 @@
 package com.mercadopago.paymentresult.components;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 
 import com.mercadopago.R;
 import com.mercadopago.components.Renderer;
 import com.mercadopago.customviews.MPTextView;
-import com.mercadopago.paymentresult.components.InstructionsInfo;
 
 import java.util.List;
 

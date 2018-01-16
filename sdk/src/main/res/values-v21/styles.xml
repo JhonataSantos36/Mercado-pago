@@ -3,27 +3,49 @@
     <style name="mpsdk_font_roboto_regular">
         <item name="fontFamily">@font/roboto</item>
     </style>
+
     <style name="mpsdk_font_roboto_light">
         <item name="fontFamily">@font/roboto_light</item>
     </style>
+
     <style name="mpsdk_font_roboto_bold">
         <item name="fontFamily">@font/roboto_bold</item>
     </style>
+
     <style name="mpsdk_font_roboto_mono">
         <item name="fontFamily">@font/roboto_mono</item>
+    </style>
+
+    <style name="mpsdk_collapsing_toolbar_text_large" parent="Base.TextAppearance.AppCompat.Large">
+        <item name="android:textColor">@color/mpsdk_toolbar_text</item>
+    </style>
+
+    <style name="mpsdk_collapsing_toolbar_text_medium" parent="Base.TextAppearance.AppCompat.Medium">
+        <item name="android:textColor">@color/mpsdk_toolbar_text</item>
+    </style>
+
+    <style name="mpsdk_collapsing_review_toolbar_text_large" parent="Base.TextAppearance.AppCompat.Large">
+        <item name="android:textColor">@color/mpsdk_review_toolbar_text</item>
+    </style>
+
+    <style name="mpsdk_collapsing_review_toolbar_text_medium" parent="Base.TextAppearance.AppCompat.Medium">
+        <item name="android:textColor">@color/mpsdk_review_toolbar_text</item>
     </style>
 
     <style name="mpsdk_basic_color">
         <item name="android:textColor">@color/mpsdk_black</item>
     </style>
 
-
     <style name="Theme.MercadoPagoTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
-        <item name="android:statusBarColor">@color/colorPrimaryDark</item>
+        <item name="android:statusBarColor">@color/mpsdk_status_bar</item>
         <item name="android:colorPrimary">@color/mpsdk_colorPrimary</item>
+    </style>
+
+    <style name="Theme.MercadoPagoTheme.Modal" parent="Theme.MercadoPagoTheme.NoActionBar">
+        <item name="android:statusBarColor">@color/mpsdk_modal_status_bar</item>
     </style>
 
     <style name="mpsdk_button_normal" parent="@android:style/Widget.Button">

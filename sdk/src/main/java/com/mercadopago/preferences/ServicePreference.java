@@ -2,7 +2,6 @@ package com.mercadopago.preferences;
 
 import com.google.gson.annotations.SerializedName;
 import com.mercadopago.constants.ProcessingModes;
-import com.mercadopago.core.Settings;
 
 import java.util.HashMap;
 import java.util.Map;

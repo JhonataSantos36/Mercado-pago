@@ -1,7 +1,6 @@
 package com.mercadopago.uicontrollers.reviewandconfirm;
 
 import android.content.Context;
-import android.graphics.PorterDuff;
 import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,7 +10,6 @@ import android.widget.ImageView;
 import com.mercadopago.R;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.model.Item;
-import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.preferences.ReviewScreenPreference;
 import com.mercadopago.util.CircleTransform;
 import com.mercadopago.util.CurrenciesUtil;
@@ -66,13 +64,13 @@ public class ReviewProductView implements ReviewProductViewController {
     }
 
     @Override
-    public void drawProduct(int position, Item item, String currencyId, DecorationPreference decorationPreference) {
+    public void drawProduct(int position, Item item, String currencyId) {
         if (position != 0) {
             mFirstSeparator.setVisibility(View.GONE);
         }
         String pictureUrl = item.getPictureUrl();
 
-        setProductIcon(pictureUrl, decorationPreference);
+        setProductIcon(pictureUrl);
         setProductName(item);
         setProductDescription(item);
         setProductQuantity(item);
@@ -131,16 +129,11 @@ public class ReviewProductView implements ReviewProductViewController {
         }
     }
 
-    private void setProductIcon(String pictureUrl, DecorationPreference decorationPreference) {
-        int resId;
-        if (decorationPreference != null && decorationPreference.hasColors()) {
-            resId = R.drawable.mpsdk_grey_review_product_placeholder;
-        } else {
-            resId = R.drawable.mpsdk_review_product_placeholder;
-        }
+    private void setProductIcon(String pictureUrl) {
+        int resId = R.drawable.mpsdk_review_product_placeholder;
 
         if (pictureUrl == null || pictureUrl.isEmpty()) {
-            setDefaultProductIcon(resId, decorationPreference);
+            setDefaultProductIcon(resId);
         } else {
             int dimen = ScaleUtil.getPxFromDp(48, mContext);
             Picasso.with(mContext)
@@ -153,10 +146,7 @@ public class ReviewProductView implements ReviewProductViewController {
         }
     }
 
-    private void setDefaultProductIcon(int resourceId, DecorationPreference decorationPreference) {
+    private void setDefaultProductIcon(int resourceId) {
         mProductImage.setImageResource(resourceId);
-        if (decorationPreference != null && decorationPreference.hasColors()) {
-            mProductImage.setColorFilter(decorationPreference.getBaseColor(), PorterDuff.Mode.SRC_ATOP);
-        }
     }
 }

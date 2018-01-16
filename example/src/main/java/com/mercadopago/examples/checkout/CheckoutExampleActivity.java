@@ -20,13 +20,10 @@ import com.mercadopago.examples.utils.ExamplesUtils;
 import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.hooks.ExampleHooks;
 import com.mercadopago.model.Payment;
-import com.mercadopago.paymentresult.model.Badge;
-import com.mercadopago.plugins.MainPaymentProcessor;
 import com.mercadopago.plugins.SamplePaymentMethodPlugin;
+import com.mercadopago.plugins.MainPaymentProcessor;
 import com.mercadopago.plugins.SamplePaymentProcessor;
 import com.mercadopago.preferences.CheckoutPreference;
-import com.mercadopago.preferences.DecorationPreference;
-import com.mercadopago.preferences.PaymentResultScreenPreference;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;
 
@@ -86,21 +83,13 @@ public class CheckoutExampleActivity extends AppCompatActivity {
     }
 
     private void startMercadoPagoCheckout() {
-
-        final PaymentResultScreenPreference paymentResultScreenPreference =
-                new PaymentResultScreenPreference.Builder()
-                        .disableRejectedLabelText()
-                        .setBadgeApproved(Badge.PENDING_BADGE_IMAGE)
-                        .build();
-
         final MercadoPagoCheckout.Builder builder = new MercadoPagoCheckout.Builder()
                 .setActivity(this)
                 .setPublicKey(mPublicKey)
                 .setCheckoutPreference(getCheckoutPreference())
-                .setDecorationPreference(getCurrentDecorationPreference())
                 .addPaymentMethodPlugin(
-                    new SamplePaymentMethodPlugin(),
-                    new SamplePaymentProcessor()
+                        new SamplePaymentMethodPlugin(),
+                        new SamplePaymentProcessor()
                 )
                 .setPaymentProcessor(new MainPaymentProcessor());
 
@@ -163,19 +152,6 @@ public class CheckoutExampleActivity extends AppCompatActivity {
         mDarkFontEnabled.setEnabled(false);
         mVisaExcluded.setChecked(false);
         mCashExcluded.setChecked(false);
-    }
-
-    private DecorationPreference getCurrentDecorationPreference() {
-        DecorationPreference.Builder decorationPreferenceBuilder =
-                new DecorationPreference.Builder();
-        if (mSelectedColor != null) {
-            decorationPreferenceBuilder.setBaseColor(mSelectedColor);
-
-            if (mDarkFontEnabled.isChecked()) {
-                decorationPreferenceBuilder.enableDarkFont();
-            }
-        }
-        return decorationPreferenceBuilder.build();
     }
 
     private void startJsonInput() {

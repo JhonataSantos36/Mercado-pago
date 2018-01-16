@@ -48,12 +48,12 @@
         <activity
             android:name=".GuessingCardActivity"
             android:screenOrientation="behind"
-            android:theme="@style/Theme.ProcessMercadoPagoTheme.NoActionbar"
+            android:theme="@style/Theme.MercadoPagoTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".PaymentVaultActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.ProcessMercadoPagoTheme.NoActionbar" />
+            android:theme="@style/Theme.MercadoPagoTheme.NoActionBar" />
         <activity
             android:name=".InstructionsActivity"
             android:launchMode="singleTask"
@@ -62,15 +62,15 @@
         <activity
             android:name=".InstallmentsActivity"
             android:screenOrientation="behind"
-            android:theme="@style/Theme.ProcessMercadoPagoTheme.NoActionbar" />
+            android:theme="@style/Theme.MercadoPagoTheme.NoActionBar" />
         <activity
             android:name=".IssuersActivity"
             android:screenOrientation="behind"
-            android:theme="@style/Theme.ProcessMercadoPagoTheme.NoActionbar" />
+            android:theme="@style/Theme.MercadoPagoTheme.NoActionBar" />
         <activity
             android:name=".CardVaultActivity"
             android:screenOrientation="behind"
-            android:theme="@style/Theme.ProcessMercadoPagoTheme.NoActionbar" />
+            android:theme="@style/Theme.MercadoPagoTheme.NoActionBar" />
         <activity
             android:name=".ErrorActivity"
             android:screenOrientation="behind"
@@ -97,7 +97,7 @@
         <activity
             android:name=".SecurityCodeActivity"
             android:screenOrientation="behind"
-            android:theme="@style/Theme.ProcessMercadoPagoTheme.NoActionbar"
+            android:theme="@style/Theme.MercadoPagoTheme.NoActionBar"
             android:windowSoftInputMode="stateVisible" />
         <activity
             android:name=".PaymentTypesActivity"
@@ -105,11 +105,11 @@
             android:theme="@style/Theme.ProcessMercadoPagoTheme.NoActionbar" />
         <activity
             android:name=".DiscountsActivity"
-            android:theme="@style/Theme.ProcessMercadoPagoTheme.NoActionbar" />
+            android:theme="@style/Theme.MercadoPagoTheme.Modal" />
         <activity
             android:name=".ReviewAndConfirmActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.ReviewConfirmMercadoPagoTheme.NoActionbar" />
+            android:theme="@style/Theme.MercadoPagoTheme.NoActionBar" />
         <activity
             android:name=".ReviewPaymentMethodsActivity"
             android:screenOrientation="portrait"

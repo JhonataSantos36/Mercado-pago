@@ -11,6 +11,11 @@
     </style>
 
     <style name="ToolbarTheme" parent="Theme.MercadoPagoTheme.NoActionBar">
-        <item name="colorControlNormal">@color/mpsdk_white</item>
+        <item name="colorControlNormal">@color/mpsdk_toolbar_text</item>
     </style>
+
+    <style name="ReviewToolbarTheme" parent="Theme.MercadoPagoTheme.NoActionBar">
+        <item name="colorControlNormal">@color/mpsdk_review_toolbar_text</item>
+    </style>
+
 </resources>

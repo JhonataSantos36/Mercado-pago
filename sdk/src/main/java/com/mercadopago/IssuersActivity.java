@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import com.google.gson.reflect.TypeToken;
-
 import com.mercadopago.adapters.IssuersAdapter;
 import com.mercadopago.callbacks.OnSelectedCallback;
 import com.mercadopago.controllers.CheckoutTimer;
@@ -25,7 +24,6 @@ import com.mercadopago.model.CardInfo;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.observers.TimerObserver;
-import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.presenters.IssuersPresenter;
 import com.mercadopago.providers.IssuersProviderImpl;
 import com.mercadopago.tracker.FlowHandler;
@@ -36,7 +34,6 @@ import com.mercadopago.uicontrollers.FontCache;
 import com.mercadopago.uicontrollers.card.CardRepresentationModes;
 import com.mercadopago.uicontrollers.card.FrontCardView;
 import com.mercadopago.util.ApiUtil;
-import com.mercadopago.util.ColorsUtil;
 import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.ScaleUtil;
@@ -55,7 +52,6 @@ public class IssuersActivity extends MercadoPagoBaseActivity implements IssuersA
 
     // Local vars
     protected boolean mActivityActive;
-    protected DecorationPreference mDecorationPreference;
     protected String mPublicKey;
     protected String mPrivateKey;
 
@@ -87,10 +83,6 @@ public class IssuersActivity extends MercadoPagoBaseActivity implements IssuersA
         mPresenter.attachView(this);
         mPresenter.attachResourcesProvider(new IssuersProviderImpl(this, mPublicKey, mPrivateKey));
 
-        if (isCustomColorSet()) {
-            setTheme(R.style.Theme_MercadoPagoTheme_NoActionBar);
-        }
-
         mActivityActive = true;
 
         analyzeLowRes();
@@ -106,7 +98,6 @@ public class IssuersActivity extends MercadoPagoBaseActivity implements IssuersA
     }
 
     private void getActivityParameters() {
-        mDecorationPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("decorationPreference"), DecorationPreference.class);
         mPublicKey = getIntent().getStringExtra("merchantPublicKey");
         mPrivateKey = getIntent().getStringExtra("payerAccessToken");
 
@@ -122,10 +113,6 @@ public class IssuersActivity extends MercadoPagoBaseActivity implements IssuersA
         mPresenter.setPaymentMethod(JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("paymentMethod"), PaymentMethod.class));
         mPresenter.setCardInfo(JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("cardInfo"), CardInfo.class));
         mPresenter.setIssuers(issuers);
-    }
-
-    private boolean isCustomColorSet() {
-        return mDecorationPreference != null && mDecorationPreference.hasColors();
     }
 
     public void analyzeLowRes() {
@@ -191,7 +178,6 @@ public class IssuersActivity extends MercadoPagoBaseActivity implements IssuersA
     private void initialize() {
         loadViews();
         hideHeader();
-        decorate();
         showTimer();
         trackScreen();
     }
@@ -279,37 +265,6 @@ public class IssuersActivity extends MercadoPagoBaseActivity implements IssuersA
         } else {
             mNormalToolbar.setTitle("");
         }
-    }
-
-    private void decorate() {
-        if (isDecorationEnabled()) {
-            if (mLowResActive) {
-                decorateLowRes();
-            } else {
-                decorateNormal();
-            }
-        }
-    }
-
-    private boolean isDecorationEnabled() {
-        return mDecorationPreference != null && mDecorationPreference.hasColors();
-    }
-
-    private void decorateLowRes() {
-        ColorsUtil.decorateLowResToolbar(mLowResToolbar, mLowResTitleToolbar, mDecorationPreference,
-                getSupportActionBar(), this);
-        if (mTimerTextView != null) {
-            ColorsUtil.decorateTextView(mDecorationPreference, mTimerTextView, this);
-        }
-    }
-
-    private void decorateNormal() {
-        ColorsUtil.decorateNormalToolbar(mNormalToolbar, mDecorationPreference, mAppBar,
-                mCollapsingToolbar, getSupportActionBar(), this);
-        if (mTimerTextView != null) {
-            ColorsUtil.decorateTextView(mDecorationPreference, mTimerTextView, this);
-        }
-        mFrontCardView.decorateCardBorder(mDecorationPreference.getLighterColor());
     }
 
     private void showTimer() {

@@ -9,7 +9,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
 import com.google.gson.reflect.TypeToken;
-
 import com.mercadopago.core.MercadoPagoCheckout;
 import com.mercadopago.core.MercadoPagoComponents;
 import com.mercadopago.exceptions.MercadoPagoError;
@@ -23,7 +22,6 @@ import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentRecovery;
 import com.mercadopago.model.Site;
 import com.mercadopago.model.Token;
-import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.presenters.CardVaultPresenter;
 import com.mercadopago.providers.CardVaultProviderImpl;
@@ -46,7 +44,6 @@ import java.util.Map;
 public class CardVaultActivity extends AppCompatActivity implements CardVaultView {
 
     protected CardVaultPresenter mCardVaultPresenter;
-    protected DecorationPreference mDecorationPreference;
     protected boolean mActivityActive;
 
     //Parameters
@@ -154,7 +151,6 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultVie
         mEscEnabled = savedInstanceState.getBoolean("escEnabled", false);
 
         mShowBankDeals = savedInstanceState.getBoolean("showBankDeals", true);
-        mDecorationPreference = JsonUtil.getInstance().fromJson(savedInstanceState.getString("decorationPreference"), DecorationPreference.class);
 
         configurePresenter();
     }
@@ -169,7 +165,6 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultVie
         mPrivateKey = getIntent().getStringExtra("payerAccessToken");
 
         PaymentPreference paymentPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("paymentPreference"), PaymentPreference.class);
-        mDecorationPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("decorationPreference"), DecorationPreference.class);
 
         Site site = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("site"), Site.class);
         Card card = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("card"), Card.class);
@@ -270,7 +265,6 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultVie
                 .setCardInfo(mCardVaultPresenter.getCardInfo())
                 .setToken(mCardVaultPresenter.getToken())
                 .setCard(mCardVaultPresenter.getCard())
-                .setDecorationPreference(mDecorationPreference)
                 .setPayerAccessToken(mPrivateKey)
                 .setESCEnabled(mEscEnabled)
                 .setPaymentRecovery(mCardVaultPresenter.getPaymentRecovery())
@@ -301,7 +295,6 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultVie
                         .setPaymentPreference(mCardVaultPresenter.getPaymentPreference())
                         .setAcceptedPaymentMethods(mCardVaultPresenter.getPaymentMethodList())
                         .setShowDiscount(mCardVaultPresenter.getAutomaticSelection())
-                        .setDecorationPreference(mDecorationPreference)
                         .setPaymentRecovery(mCardVaultPresenter.getPaymentRecovery())
                         .startActivity();
                 overridePendingTransition(R.anim.mpsdk_slide_right_to_left_in, R.anim.mpsdk_slide_right_to_left_out);
@@ -381,10 +374,6 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultVie
 
             if (mCardVaultPresenter.getCardInfo() != null) {
                 outState.putString("cardInfo", JsonUtil.getInstance().toJson(mCardVaultPresenter.getCardInfo()));
-            }
-
-            if (mDecorationPreference != null) {
-                outState.putString("decorationPreference", JsonUtil.getInstance().toJson(mDecorationPreference));
             }
         }
     }
@@ -484,7 +473,6 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultVie
                 .setPaymentMethod(mCardVaultPresenter.getPaymentMethod())
                 .setCardInfo(mCardVaultPresenter.getCardInfo())
                 .setIssuers(mCardVaultPresenter.getIssuersList())
-                .setDecorationPreference(mDecorationPreference)
                 .startActivity();
         animateTransitionSlideInSlideOut();
     }
@@ -520,7 +508,6 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultVie
                 .setIssuer(mCardVaultPresenter.getIssuer())
                 .setPaymentPreference(mCardVaultPresenter.getPaymentPreference())
                 .setSite(mCardVaultPresenter.getSite())
-                .setDecorationPreference(mDecorationPreference)
                 .setInstallmentsEnabled(mCardVaultPresenter.isInstallmentsEnabled())
                 .setInstallmentsReviewEnabled(mCardVaultPresenter.getInstallmentsReviewEnabled())
                 .setCardInfo(mCardVaultPresenter.getCardInfo())

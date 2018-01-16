@@ -1,12 +1,7 @@
 package com.mercadopago;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,12 +9,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.mercadopago.adapters.PaymentMethodsAdapter;
 import com.mercadopago.core.MercadoPagoComponents;
 import com.mercadopago.decorations.DividerItemDecoration;
 import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.model.PaymentMethod;
-import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.presenters.PaymentMethodsPresenter;
 import com.mercadopago.providers.PaymentMethodsProvider;
@@ -35,7 +31,6 @@ import java.util.List;
 
 public class PaymentMethodsActivity extends MercadoPagoBaseActivity implements PaymentMethodsView {
 
-    protected DecorationPreference mDecorationPreference;
     protected String mMerchantPublicKey;
     protected RecyclerView mRecyclerView;
     protected Toolbar mToolbar;
@@ -64,7 +59,6 @@ public class PaymentMethodsActivity extends MercadoPagoBaseActivity implements P
     protected void getActivityParameters() {
 
         mMerchantPublicKey = getIntent().getStringExtra("merchantPublicKey");
-        mDecorationPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("decorationPreference"), DecorationPreference.class);
 
         PaymentPreference paymentPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("paymentPreference"), PaymentPreference.class);
         mPresenter.setPaymentPreference(paymentPreference);
@@ -100,10 +94,6 @@ public class PaymentMethodsActivity extends MercadoPagoBaseActivity implements P
         mPresenter.attachView(this);
         mPresenter.attachResourcesProvider(mResourcesProvider);
 
-        if (mDecorationPreference != null && mDecorationPreference.hasColors()) {
-            setTheme(R.style.Theme_MercadoPagoTheme_NoActionBar);
-        }
-
         setContentView();
         initializeControls();
 
@@ -132,9 +122,6 @@ public class PaymentMethodsActivity extends MercadoPagoBaseActivity implements P
                 onBackPressed();
             }
         });
-
-        decorate(mToolbar);
-        decorateFont(mTitle);
     }
 
     public void onBackPressed() {
@@ -159,28 +146,6 @@ public class PaymentMethodsActivity extends MercadoPagoBaseActivity implements P
 
     protected void recoverFromFailure() {
         mPresenter.recoverFromFailure();
-    }
-
-    protected boolean isCustomColorSet() {
-        return mDecorationPreference != null && mDecorationPreference.hasColors();
-    }
-
-    protected int getCustomBaseColor() {
-        return mDecorationPreference.getBaseColor();
-    }
-
-    protected boolean isDarkFontEnabled() {
-        return mDecorationPreference != null && mDecorationPreference.isDarkFontEnabled();
-    }
-
-    protected int getDarkFontColor() {
-        return mDecorationPreference.getDarkFontColor(this);
-    }
-
-    protected void decorateFont(TextView textView) {
-        if (textView != null && isDarkFontEnabled()) {
-            textView.setTextColor(getDarkFontColor());
-        }
     }
 
     @Override
@@ -215,7 +180,6 @@ public class PaymentMethodsActivity extends MercadoPagoBaseActivity implements P
 
     @Override
     public void showBankDeals() {
-        decorateFont(mBankDealsTextView);
         mBankDealsTextView.setVisibility(View.VISIBLE);
         mBankDealsTextView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -223,31 +187,9 @@ public class PaymentMethodsActivity extends MercadoPagoBaseActivity implements P
                 new MercadoPagoComponents.Activities.BankDealsActivityBuilder()
                         .setActivity(mActivity)
                         .setMerchantPublicKey(mMerchantPublicKey)
-                        .setDecorationPreference(mDecorationPreference)
                         .startActivity();
             }
         });
     }
-
-    protected void decorate(Toolbar toolbar) {
-        if (toolbar != null) {
-            if (isCustomColorSet()) {
-                toolbar.setBackgroundColor(getCustomBaseColor());
-            }
-            decorateUpArrow(toolbar);
-        }
-    }
-
-    protected void decorateUpArrow(Toolbar toolbar) {
-        if (isDarkFontEnabled()) {
-            int darkFont = getDarkFontColor();
-            Drawable upArrow = toolbar.getNavigationIcon();
-            if (upArrow != null && getSupportActionBar() != null) {
-                upArrow.setColorFilter(darkFont, PorterDuff.Mode.SRC_ATOP);
-                getSupportActionBar().setHomeAsUpIndicator(upArrow);
-            }
-        }
-    }
-
 }
 

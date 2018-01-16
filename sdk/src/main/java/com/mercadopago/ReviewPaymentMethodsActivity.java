@@ -11,11 +11,9 @@ import com.google.gson.reflect.TypeToken;
 import com.mercadopago.adapters.ReviewPaymentMethodsAdapter;
 import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.model.PaymentMethod;
-import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.presenters.ReviewPaymentMethodsPresenter;
 import com.mercadopago.providers.ReviewPaymentMethodsProviderImpl;
 import com.mercadopago.util.ErrorUtil;
-import com.mercadopago.util.JsonUtil;
 import com.mercadopago.views.ReviewPaymentMethodsView;
 
 import java.lang.reflect.Type;
@@ -30,7 +28,6 @@ public class ReviewPaymentMethodsActivity extends MercadoPagoBaseActivity implem
     //Controls
     protected ReviewPaymentMethodsPresenter mPresenter;
     //Parameters
-    protected DecorationPreference mDecorationPreference;
     protected String mPublicKey;
     //View controls
     protected RecyclerView mPaymentMethodsView;
@@ -45,10 +42,6 @@ public class ReviewPaymentMethodsActivity extends MercadoPagoBaseActivity implem
         getActivityParameters();
         configurePresenter();
 
-        if (isCustomColorSet()) {
-            setTheme(R.style.Theme_MercadoPagoTheme_NoActionBar);
-        }
-
         setContentView();
         initializeControls();
         setListeners();
@@ -60,7 +53,6 @@ public class ReviewPaymentMethodsActivity extends MercadoPagoBaseActivity implem
     }
 
     protected void getActivityParameters() {
-        mDecorationPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("decorationPreference"), DecorationPreference.class);
         mPublicKey = getIntent().getStringExtra("publicKey");
         List<PaymentMethod> supportedPaymentMethods = null;
         try {
@@ -82,10 +74,6 @@ public class ReviewPaymentMethodsActivity extends MercadoPagoBaseActivity implem
     private void configurePresenter() {
         mPresenter.attachView(this);
         mPresenter.attachResourcesProvider(new ReviewPaymentMethodsProviderImpl(this));
-    }
-
-    private boolean isCustomColorSet() {
-        return mDecorationPreference != null && mDecorationPreference.hasColors();
     }
 
     protected void setContentView() {

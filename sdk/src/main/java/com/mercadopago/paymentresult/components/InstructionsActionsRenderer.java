@@ -8,8 +8,6 @@ import android.view.ViewGroup;
 import com.mercadopago.R;
 import com.mercadopago.components.Renderer;
 import com.mercadopago.components.RendererFactory;
-import com.mercadopago.paymentresult.components.InstructionsAction;
-import com.mercadopago.paymentresult.components.InstructionsActions;
 
 import java.util.List;
 

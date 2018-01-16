@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_discounts"
     android:layout_width="match_parent"
@@ -12,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true">
+
         <LinearLayout
             android:id="@+id/mpsdkDiscountLinearLayout"
             android:layout_width="match_parent"
@@ -19,9 +19,9 @@
             android:layout_gravity="center"
             android:orientation="vertical">
 
-            <include layout="@layout/mpsdk_discount_code_input"/>
+            <include layout="@layout/mpsdk_discount_code_input" />
 
-            <include layout="@layout/mpsdk_review_discount_summary"/>
+            <include layout="@layout/mpsdk_review_discount_summary" />
 
         </LinearLayout>
     </ScrollView>

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:visibility="gone"
     android:id="@+id/mpsdkLowResToolbar"
-    android:background="?attr/colorPrimary"
+    android:background="@color/mpsdk_background"
     android:theme="@style/ToolbarTheme"
     app:popupTheme="@style/Theme.MercadoPagoTheme.NoActionBar"
     android:layout_width="match_parent"
@@ -19,8 +19,8 @@
         android:layout_marginLeft="20dp"
         android:layout_marginStart="20dp"
         android:textSize="18dp"
-        tools:text="Tarjeta de crédito"
-        style="@style/mpsdk_title_text"/>
+        android:textColor="@color/mpsdk_toolbar_text"
+        tools:text="Tarjeta de crédito"/>
 
     <com.mercadopago.customviews.MPTextView
         android:id="@+id/mpsdkBankDealsText"
@@ -30,9 +30,9 @@
         android:layout_marginRight="16dp"
         android:layout_marginEnd="16dp"
         android:textSize="12dp"
+        android:textColor="@color/mpsdk_toolbar_text"
         android:visibility="gone"
-        tools:text="Ver Promociones"
-        style="@style/mpsdk_title_text"/>
+        tools:text="Ver Promociones"/>
 
     <com.mercadopago.customviews.MPTextView
         android:id="@+id/mpsdkTimerTextView"
@@ -43,10 +43,10 @@
         android:layout_marginEnd="13dp"
         android:layout_marginTop="17dp"
         android:textSize="17dp"
+        android:textColor="@color/mpsdk_toolbar_text"
         android:visibility="gone"
         android:background="@drawable/mpsdk_title_toolbar"
         app:font_style="mono_regular"
-        app:allowCustomFont="false"
-        style="@style/mpsdk_title_text"/>
+        app:allowCustomFont="false"/>
 
 </android.support.v7.widget.Toolbar>

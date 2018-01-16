@@ -9,7 +9,6 @@ import com.mercadopago.components.LinkAction;
 import com.mercadopago.components.Renderer;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.model.InstructionActionInfo;
-import com.mercadopago.paymentresult.components.InstructionsAction;
 
 /**
  * Created by vaserber on 11/14/17.

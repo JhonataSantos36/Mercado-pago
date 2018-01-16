@@ -18,7 +18,6 @@ import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.Reviewable;
 import com.mercadopago.model.Site;
 import com.mercadopago.model.Summary;
-import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.preferences.ReviewScreenPreference;
 import com.mercadopago.util.TextUtil;
 
@@ -41,7 +40,7 @@ public class ReviewAndConfirmProviderImpl implements ReviewAndConfirmProvider {
     }
 
     @Override
-    public Reviewable getSummaryReviewable(PaymentMethod paymentMethod, PayerCost payerCost, BigDecimal amount, Discount discount, Site site, Issuer issuer, DecorationPreference decorationPreference, OnConfirmPaymentCallback onConfirmPaymentCallback) {
+    public Reviewable getSummaryReviewable(PaymentMethod paymentMethod, PayerCost payerCost, BigDecimal amount, Discount discount, Site site, Issuer issuer, OnConfirmPaymentCallback onConfirmPaymentCallback) {
         String confirmationMessage;
 
         SummaryHelper summaryHelper = new SummaryHelper(context, reviewScreenPreference, amount, payerCost, discount);
@@ -62,7 +61,6 @@ public class ReviewAndConfirmProviderImpl implements ReviewAndConfirmProvider {
                 .setAmount(amount)
                 .setDiscount(discount)
                 .setCurrencyId(site.getCurrencyId())
-                .setDecorationPreference(decorationPreference)
                 .setConfirmPaymentCallback(onConfirmPaymentCallback)
                 .setIssuer(issuer)
                 .setSite(site)
@@ -70,7 +68,7 @@ public class ReviewAndConfirmProviderImpl implements ReviewAndConfirmProvider {
     }
 
     @Override
-    public Reviewable getItemsReviewable(String currency, List<Item> items, DecorationPreference decorationPreference) {
+    public Reviewable getItemsReviewable(String currency, List<Item> items) {
         if (CustomReviewablesHandler.getInstance().hasCustomItemsReviewable()) {
             return CustomReviewablesHandler.getInstance().getItemsReviewable();
         } else {
@@ -79,20 +77,18 @@ public class ReviewAndConfirmProviderImpl implements ReviewAndConfirmProvider {
                     .setCurrencyId(currency)
                     .addItems(items)
                     .setReviewScreenPreference(reviewScreenPreference)
-                    .setDecorationPreference(decorationPreference)
                     .build();
         }
     }
 
     @Override
-    public Reviewable getPaymentMethodOnReviewable(PaymentMethod paymentMethod, PayerCost payerCost, CardInfo cardInfo, Site site, DecorationPreference decorationPreference, Boolean editionEnabled, OnReviewChange onReviewChange) {
+    public Reviewable getPaymentMethodOnReviewable(PaymentMethod paymentMethod, PayerCost payerCost, CardInfo cardInfo, Site site, Boolean editionEnabled, OnReviewChange onReviewChange) {
         return new MercadoPagoComponents.Views.ReviewPaymentMethodOnBuilder()
                 .setContext(context)
                 .setCurrencyId(site.getCurrencyId())
                 .setPaymentMethod(paymentMethod)
                 .setPayerCost(payerCost)
                 .setCardInfo(cardInfo)
-                .setDecorationPreference(decorationPreference)
                 .setReviewChangeCallback(onReviewChange)
                 .setEditionEnabled(editionEnabled)
                 .setSite(site)
@@ -100,7 +96,7 @@ public class ReviewAndConfirmProviderImpl implements ReviewAndConfirmProvider {
     }
 
     @Override
-    public Reviewable getPaymentMethodOffReviewable(PaymentMethod paymentMethod, String paymentMethodCommentInfo, String paymentMethodDescriptionInfo, BigDecimal amount, Site site, DecorationPreference decorationPreference, Boolean editionEnabled, OnReviewChange onReviewChange) {
+    public Reviewable getPaymentMethodOffReviewable(PaymentMethod paymentMethod, String paymentMethodCommentInfo, String paymentMethodDescriptionInfo, BigDecimal amount, Site site, Boolean editionEnabled, OnReviewChange onReviewChange) {
         return new MercadoPagoComponents.Views.ReviewPaymentMethodOffBuilder()
                 .setContext(context)
                 .setPaymentMethod(paymentMethod)
@@ -108,7 +104,6 @@ public class ReviewAndConfirmProviderImpl implements ReviewAndConfirmProvider {
                 .setPaymentMethodDescriptionInfo(paymentMethodDescriptionInfo)
                 .setAmount(amount)
                 .setSite(site)
-                .setDecorationPreference(decorationPreference)
                 .setReviewChangeCallback(onReviewChange)
                 .setEditionEnabled(editionEnabled)
                 .build();
@@ -211,11 +206,11 @@ public class ReviewAndConfirmProviderImpl implements ReviewAndConfirmProvider {
         }
 
         private int getDefaultTextColor() {
-            return ContextCompat.getColor(context, android.R.color.tertiary_text_light);
+            return ContextCompat.getColor(context, R.color.mpsdk_summary_text_color);
         }
 
         private int getDiscountTextColor() {
-            return ContextCompat.getColor(context, R.color.mpsdk_color_payer_costs_no_rate);
+            return ContextCompat.getColor(context, R.color.mpsdk_summary_discount_color);
         }
 
         private boolean isValidTotalAmount() {

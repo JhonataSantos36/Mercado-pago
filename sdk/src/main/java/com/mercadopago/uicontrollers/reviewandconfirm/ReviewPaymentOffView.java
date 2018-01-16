@@ -1,7 +1,6 @@
 package com.mercadopago.uicontrollers.reviewandconfirm;
 
 import android.content.Context;
-import android.graphics.PorterDuff;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,7 +18,6 @@ import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.Reviewable;
 import com.mercadopago.model.Site;
-import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.util.CurrenciesUtil;
 import com.mercadopago.util.ReviewUtil;
 import com.mercadopago.util.TextUtil;
@@ -49,10 +47,9 @@ public class ReviewPaymentOffView extends Reviewable {
     private Site mSite;
     private OnReviewChange mOnReviewChange;
     private Boolean mEditionEnabled;
-    private DecorationPreference mDecorationPreference;
     private ViewGroup mPaymentMethodExtraInfo;
 
-    public ReviewPaymentOffView(Context context, PaymentMethod paymentMethod, String paymentMethodCommentInfo, String paymentMethodDescriptionInfo, BigDecimal amount, Site site, OnReviewChange onReviewChange, Boolean editionEnabled, DecorationPreference decorationPreference) {
+    public ReviewPaymentOffView(Context context, PaymentMethod paymentMethod, String paymentMethodCommentInfo, String paymentMethodDescriptionInfo, BigDecimal amount, Site site, OnReviewChange onReviewChange, Boolean editionEnabled) {
         this.mContext = context;
         this.mPaymentMethod = paymentMethod;
         this.mPaymentMethodCommentInfo = paymentMethodCommentInfo;
@@ -61,7 +58,6 @@ public class ReviewPaymentOffView extends Reviewable {
         this.mSite = site;
         this.mOnReviewChange = onReviewChange;
         this.mEditionEnabled = editionEnabled == null ? true : editionEnabled;
-        this.mDecorationPreference = decorationPreference;
     }
 
     @Override
@@ -101,7 +97,6 @@ public class ReviewPaymentOffView extends Reviewable {
     @Override
     public void draw() {
         setSmallTextSize();
-        decorateText();
         setIcon();
 
         mPayerCostContainer.setVisibility(View.GONE);
@@ -133,32 +128,17 @@ public class ReviewPaymentOffView extends Reviewable {
     private void setIcon() {
         int resId = getResource();
         mPaymentImage.setImageResource(resId);
-
-        if (mDecorationPreference != null
-                && mDecorationPreference.hasColors()
-                && !PaymentTypes.PLUGIN.equals(mPaymentMethod.getPaymentTypeId())) {
-            mPaymentImage.setColorFilter(mDecorationPreference.getBaseColor(), PorterDuff.Mode.SRC_ATOP);
-        }
     }
 
     private int getResource() {
         int resId;
-        boolean isTintNeeded = mDecorationPreference != null && mDecorationPreference.hasColors();
 
         if (mPaymentMethod != null && PaymentTypes.PLUGIN.equals(mPaymentMethod.getPaymentTypeId())) {
             resId = CheckoutStore.getInstance().getSelectedPaymentMethodInfo().icon;
         } else if (mPaymentMethod != null && mPaymentMethod.getId().equals(PaymentMethods.BRASIL.BOLBRADESCO)) {
-            if (isTintNeeded) {
-                resId = R.drawable.mpsdk_grey_boleto_off;
-            } else {
-                resId = R.drawable.mpsdk_boleto_off;
-            }
+            resId = R.drawable.mpsdk_boleto_off;
         } else {
-            if (isTintNeeded) {
-                resId = R.drawable.mpsdk_grey_review_payment_off;
-            } else {
-                resId = R.drawable.mpsdk_review_payment_off;
-            }
+            resId = R.drawable.mpsdk_review_payment_off;
         }
         return resId;
     }
@@ -166,12 +146,6 @@ public class ReviewPaymentOffView extends Reviewable {
     private void setSmallTextSize() {
         mPaymentText.setTextSize(TypedValue.COMPLEX_UNIT_PX, mContext.getResources().getDimension(R.dimen.mpsdk_payment_text_small_text));
         mPaymentDescription.setTextSize(TypedValue.COMPLEX_UNIT_PX, mContext.getResources().getDimension(R.dimen.mpsdk_payment_description_small_text));
-    }
-
-    private void decorateText() {
-        if (mDecorationPreference != null && mDecorationPreference.hasColors()) {
-            mChangePaymentTextView.setTextColor(mDecorationPreference.getBaseColor());
-        }
     }
 
     @Override

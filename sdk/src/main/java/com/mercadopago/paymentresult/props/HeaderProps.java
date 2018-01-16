@@ -3,7 +3,6 @@ package com.mercadopago.paymentresult.props;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 
-import com.mercadopago.paymentresult.formatter.AmountFormat;
 import com.mercadopago.paymentresult.formatter.HeaderTitleFormatter;
 
 

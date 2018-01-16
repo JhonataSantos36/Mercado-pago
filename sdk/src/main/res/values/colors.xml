@@ -185,4 +185,24 @@
     <color name="mpsdk_green_status_MP">#00B26B</color>
     <color name="mpsdk_red_status_MP">#E5464C</color>
     <color name="mpsdk_orange_status_MP">#E5953D</color>
+
+    <!-- Customized colors -->
+    <color name="mpsdk_background">#009EE3</color>
+    <color name="mpsdk_discount_summary_background">#474747</color>
+    <color name="mpsdk_toolbar_text">#FFFFFF</color>
+    <color name="mpsdk_status_bar">#008CD6</color>
+    <color name="mpsdk_modal_status_bar">#404040</color>
+    <color name="mpsdk_input">#009CEE</color>
+    <color name="mpsdk_summary_background_color">#FFFFFF</color>
+    <color name="mpsdk_summary_text_color">#666666</color>
+    <color name="mpsdk_summary_separator_color">#DEDEDE</color>
+    <color name="mpsdk_summary_discount_color">#3BC280</color>
+    <color name="mpsdk_review_background">#00000000</color>
+    <color name="mpsdk_review_toolbar_text">#009EE3</color>
+    <color name="mpsdk_review_component_background">#F7F7F7</color>
+    <color name="mpsdk_link">#009EE3</color>
+    <color name="mpsdk_button">#009EE3</color>
+    <color name="mpsdk_green_payment_result_background">#00C677</color>
+    <color name="mpsdk_red_payment_result_background">#E5464C</color>
+    <color name="mpsdk_orange_payment_result_background">#E5953D</color>
 </resources>

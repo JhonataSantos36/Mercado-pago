@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/mpsdkTransparentToolbar"
-    app:theme="@style/MPTransparentActionBar"
+    app:theme="@style/ToolbarTheme"
     android:layout_width="match_parent"
     android:layout_height="@dimen/mpsdk_toolbar_height"
     android:minHeight="@dimen/mpsdk_toolbar_height"
@@ -25,6 +25,7 @@
         android:textSize="16dp"
         android:visibility="gone"
         android:background="@drawable/mpsdk_title_toolbar"
+        android:textColor="@color/mpsdk_toolbar_text"
         style="@style/mpsdk_title_text"/>
 
     <com.mercadopago.customviews.MPTextView

@@ -17,7 +17,6 @@ import com.mercadopago.model.PaymentResult;
 import com.mercadopago.plugins.PaymentMethodPlugin;
 import com.mercadopago.plugins.PaymentProcessor;
 import com.mercadopago.preferences.CheckoutPreference;
-import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.preferences.FlowPreference;
 import com.mercadopago.preferences.PaymentResultScreenPreference;
 import com.mercadopago.preferences.ReviewScreenPreference;
@@ -51,7 +50,6 @@ public class MercadoPagoCheckout {
     private Activity activity;
     private String publicKey;
     private CheckoutPreference checkoutPreference;
-    private DecorationPreference decorationPreference;
     private ServicePreference servicePreference;
     private FlowPreference flowPreference;
     private PaymentResultScreenPreference paymentResultScreenPreference;
@@ -66,7 +64,6 @@ public class MercadoPagoCheckout {
         this.publicKey = builder.publicKey;
         this.paymentData = builder.paymentData;
         this.checkoutPreference = builder.checkoutPreference;
-        this.decorationPreference = builder.decorationPreference;
         this.servicePreference = builder.servicePreference;
         this.flowPreference = builder.flowPreference;
         this.paymentResultScreenPreference = builder.paymentResultScreenPreference;
@@ -82,13 +79,12 @@ public class MercadoPagoCheckout {
         customizePaymentResultReview(paymentResultScreenPreference);
 
         CheckoutStore.getInstance().reset();
-        CheckoutStore.getInstance().setDecorationPreference(decorationPreference);
         CheckoutStore.getInstance().setPaymentMethodPluginList(builder.paymentMethodPluginList);
         CheckoutStore.getInstance().setPaymentPlugins(builder.paymentPlugins);
         CheckoutStore.getInstance().setCheckoutHooks(builder.checkoutHooks);
 
         //Create flow identifier only for new checkouts
-        if(paymentResult == null && paymentData == null) {
+        if (paymentResult == null && paymentData == null) {
             FlowHandler.getInstance().generateFlowId();
         }
     }
@@ -181,7 +177,6 @@ public class MercadoPagoCheckout {
         checkoutIntent.putExtra("merchantPublicKey", publicKey);
         checkoutIntent.putExtra("paymentData", JsonUtil.getInstance().toJson(paymentData));
         checkoutIntent.putExtra("checkoutPreference", JsonUtil.getInstance().toJson(checkoutPreference));
-        checkoutIntent.putExtra("decorationPreference", JsonUtil.getInstance().toJson(decorationPreference));
         checkoutIntent.putExtra("servicePreference", JsonUtil.getInstance().toJson(servicePreference));
         checkoutIntent.putExtra("flowPreference", JsonUtil.getInstance().toJson(flowPreference));
         checkoutIntent.putExtra("paymentResultScreenPreference", JsonUtil.getInstance().toJson(paymentResultScreenPreference));
@@ -204,7 +199,6 @@ public class MercadoPagoCheckout {
         private String publicKey;
         private Boolean binaryMode = false;
         private CheckoutPreference checkoutPreference;
-        private DecorationPreference decorationPreference;
         private ServicePreference servicePreference;
         private FlowPreference flowPreference;
         private PaymentResultScreenPreference paymentResultScreenPreference;
@@ -230,11 +224,6 @@ public class MercadoPagoCheckout {
 
         public Builder setCheckoutPreference(CheckoutPreference checkoutPreference) {
             this.checkoutPreference = checkoutPreference;
-            return this;
-        }
-
-        public Builder setDecorationPreference(DecorationPreference decorationPreference) {
-            this.decorationPreference = decorationPreference;
             return this;
         }
 

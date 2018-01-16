@@ -20,7 +20,6 @@ import com.mercadopago.mvp.MvpPresenter;
 import com.mercadopago.mvp.OnResourcesRetrievedCallback;
 import com.mercadopago.plugins.PaymentMethodPlugin;
 import com.mercadopago.plugins.model.PaymentMethodInfo;
-import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.providers.PaymentVaultProvider;
 import com.mercadopago.util.ApiUtil;
@@ -46,7 +45,6 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
     private String mPayerAccessToken;
     private String mPayerEmail;
     private PaymentPreference mPaymentPreference;
-    private DecorationPreference decorationPreference;
     private BigDecimal mAmount;
     private Boolean mInstallmentsReviewEnabled;
     private Boolean mDiscountEnabled = true;
@@ -70,10 +68,6 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
         } catch (IllegalStateException exception) {
             getView().showError(new MercadoPagoError(exception.getMessage(), false), "");
         }
-    }
-
-    public void setDecorationPreference(DecorationPreference decorationPreference) {
-        this.decorationPreference = decorationPreference;
     }
 
     private void onValidStart() {

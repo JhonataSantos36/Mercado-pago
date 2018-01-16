@@ -2,8 +2,6 @@ package com.mercadopago;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
@@ -21,7 +19,6 @@ import com.mercadopago.callbacks.OnSelectedCallback;
 import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.Card;
-import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.presenters.CustomerCardsPresenter;
 import com.mercadopago.providers.CustomerCardsProviderImpl;
 import com.mercadopago.uicontrollers.GridSpacingItemDecoration;
@@ -48,7 +45,6 @@ public class CustomerCardsActivity extends MercadoPagoBaseActivity implements Cu
     protected String mMerchantAccessToken;
     protected boolean mActivityActive;
     protected ViewGroup mSavedCardsContainer;
-    protected DecorationPreference mDecorationPreference;
 
     //Controls
     protected CustomerCardsPresenter mPresenter;
@@ -97,7 +93,6 @@ public class CustomerCardsActivity extends MercadoPagoBaseActivity implements Cu
         mMerchantBaseUrl = this.getIntent().getStringExtra("merchantBaseUrl");
         mMerchantGetCustomerUri = this.getIntent().getStringExtra("merchantGetCustomerUri");
         mMerchantAccessToken = this.getIntent().getStringExtra("merchantAccessToken");
-        mDecorationPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("decorationPreference"), DecorationPreference.class);
 
         mPresenter.setCustomTitle(this.getIntent().getStringExtra("title"));
         mPresenter.setSelectionConfirmPromptText(this.getIntent().getStringExtra("selectionConfirmPromptText"));
@@ -133,10 +128,6 @@ public class CustomerCardsActivity extends MercadoPagoBaseActivity implements Cu
                 onBackPressed();
             }
         });
-
-        if (isCustomColorSet()) {
-            decorate(toolbar);
-        }
     }
 
     @Override
@@ -156,31 +147,6 @@ public class CustomerCardsActivity extends MercadoPagoBaseActivity implements Cu
 
     protected void populateCustomerCardList(CustomerCardItemAdapter groupsAdapter) {
         mItemsRecyclerView.setAdapter(groupsAdapter);
-    }
-
-    private boolean isCustomColorSet() {
-        return mDecorationPreference != null && mDecorationPreference.hasColors();
-    }
-
-    private void decorate(Toolbar toolbar) {
-        if (toolbar != null) {
-            if (mDecorationPreference.hasColors()) {
-                toolbar.setBackgroundColor(mDecorationPreference.getBaseColor());
-            }
-            decorateUpArrow(toolbar);
-        }
-    }
-
-    protected void decorateUpArrow(Toolbar toolbar) {
-        if (mDecorationPreference.isDarkFontEnabled()) {
-            mTitle.setTextColor(mDecorationPreference.getDarkFontColor(this));
-            int darkFont = mDecorationPreference.getDarkFontColor(this);
-            Drawable upArrow = toolbar.getNavigationIcon();
-            if (upArrow != null && getSupportActionBar() != null) {
-                upArrow.setColorFilter(darkFont, PorterDuff.Mode.SRC_ATOP);
-                getSupportActionBar().setHomeAsUpIndicator(upArrow);
-            }
-        }
     }
 
     @Override

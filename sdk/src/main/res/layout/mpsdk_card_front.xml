@@ -1,33 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-    android:id="@+id/mpsdkCardFrontContainer"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_height="@dimen/mpsdk_card_size_extra_big_height"
-    android:layout_width="@dimen/mpsdk_card_size_extra_big_width">
+    android:id="@+id/mpsdkCardFrontContainer"
+    android:layout_width="@dimen/mpsdk_card_size_extra_big_width"
+    android:layout_height="@dimen/mpsdk_card_size_extra_big_height">
 
     <FrameLayout
         android:id="@+id/mpsdkCardFrontFragment"
-        android:layout_height="match_parent"
         android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_gravity="center_horizontal">
 
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="5dp"
-            android:layout_gravity="center">
+            android:layout_gravity="center"
+            android:padding="5dp">
+
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:background="@drawable/mpsdk_new_card_layout">
+
                 <ImageView
                     android:id="@+id/mpsdkCardLowApiImageView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@color/mpsdk_white"/>
+                    android:background="@color/mpsdk_white" />
 
                 <ImageView
                     android:id="@+id/mpsdkCardLollipopImageView"
@@ -42,6 +43,7 @@
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
                 android:weightSum="1">
+
                 <FrameLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
@@ -50,7 +52,7 @@
                     <ImageView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="@drawable/mpsdk_card_back_shadow"/>
+                        android:background="@drawable/mpsdk_card_back_shadow" />
 
                 </FrameLayout>
 
@@ -68,65 +70,71 @@
                 <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="0.4"
                     android:layout_gravity="start"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginLeft="16dp"
                     android:layout_marginStart="16dp"
-                    android:layout_marginLeft="16dp">
+                    android:layout_marginTop="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_weight="0.4">
+
                     <FrameLayout
                         android:id="@+id/mpsdkBaseImageCard"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:visibility="visible">
+
                         <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:layout_gravity="start"
-                            android:src="@drawable/mpsdk_base_card_image"/>
+                            android:src="@drawable/mpsdk_base_card_image" />
                     </FrameLayout>
+
                     <ImageView
                         android:id="@+id/mpsdkImageCardContainer"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="start"/>
+                        android:layout_gravity="start" />
                 </FrameLayout>
 
                 <FrameLayout
                     android:layout_width="64dp"
                     android:layout_height="0dp"
-                    android:layout_weight="0.2"
-                    android:layout_marginRight="15dp"
+                    android:layout_gravity="end"
                     android:layout_marginEnd="15dp"
                     android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
                     android:layout_marginStart="15dp"
                     android:layout_marginTop="-20dp"
-                    android:layout_gravity="end"
+                    android:layout_weight="0.2"
                     android:visibility="visible">
 
                     <com.mercadopago.customviews.MPTextView
                         android:id="@+id/mpsdkCardSecurityCodeViewFront"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:gravity="end"
                         android:textColor="@color/mpsdk_base_text"
                         android:textSize="18dp"
-                        android:gravity="end"
-                        tools:text="1234"
                         app:allowCustomFont="false"
-                        app:font_style="mono_regular"/>
+                        app:font_style="mono_regular"
+                        tools:text="1234" />
                 </FrameLayout>
+
                 <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="0.25"
-                    android:layout_marginTop="10dp">
+                    android:layout_marginTop="10dp"
+                    android:layout_weight="0.25">
 
                     <FrameLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:paddingStart="15dp"
+                        android:paddingEnd="15dp"
                         android:paddingLeft="15dp"
                         android:paddingRight="15dp"
-                        android:paddingEnd="15dp">
+                        android:paddingStart="15dp">
 
                         <com.mercadopago.customviews.MPTextView
                             android:id="@+id/mpsdkCardNumberTextView"
@@ -135,13 +143,13 @@
                             android:gravity="bottom"
                             android:maxLength="40"
                             android:textColor="@color/mpsdk_base_text"
-                            app:autoSizeTextType="uniform"
-                            app:autoSizeMinTextSize="10dp"
-                            app:autoSizeMaxTextSize="24dp"
-                            app:autoSizeStepGranularity="1dp"
-                            app:font_style="mono_regular"
                             app:allowCustomFont="false"
-                            tools:text="1234 1234 1234 1234"/>
+                            app:autoSizeMaxTextSize="24dp"
+                            app:autoSizeMinTextSize="10dp"
+                            app:autoSizeStepGranularity="1dp"
+                            app:autoSizeTextType="uniform"
+                            app:font_style="mono_regular"
+                            tools:text="1234 1234 1234 1234" />
 
                     </FrameLayout>
                 </FrameLayout>
@@ -149,9 +157,9 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="0.15"
                     android:layout_gravity="center"
                     android:layout_marginTop="12dp"
+                    android:layout_weight="0.15"
                     android:orientation="horizontal"
                     android:weightSum="1">
 
@@ -160,22 +168,22 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.6"
-                        android:maxLines="1"
-                        android:paddingStart="15dp"
-                        android:paddingLeft="15dp"
                         android:gravity="start"
+                        android:maxLines="1"
+                        android:paddingLeft="15dp"
+                        android:paddingStart="15dp"
                         android:text="@string/mpsdk_cardholder_name_short"
                         android:textColor="@color/mpsdk_base_text"
                         android:textSize="14dp"
-                        app:allowCustomFont="false"/>
+                        app:allowCustomFont="false" />
 
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.4"
-                        android:paddingRight="15dp"
+                        android:gravity="end"
                         android:paddingEnd="15dp"
-                        android:gravity="end">
+                        android:paddingRight="15dp">
 
                         <com.mercadopago.customviews.MPTextView
                             android:id="@+id/mpsdkCardHolderExpiryMonth"
@@ -184,7 +192,7 @@
                             android:text="@string/mpsdk_card_expiry_month_hint"
                             android:textColor="@color/mpsdk_base_text"
                             android:textSize="14dp"
-                            app:allowCustomFont="false"/>
+                            app:allowCustomFont="false" />
 
                         <com.mercadopago.customviews.MPTextView
                             android:id="@+id/mpsdkCardHolderDateDivider"
@@ -193,7 +201,7 @@
                             android:text="@string/mpsdk_card_expiry_divider_hint"
                             android:textColor="@color/mpsdk_base_text"
                             android:textSize="14dp"
-                            app:allowCustomFont="false"/>
+                            app:allowCustomFont="false" />
 
                         <com.mercadopago.customviews.MPTextView
                             android:id="@+id/mpsdkCardHolderExpiryYear"
@@ -202,7 +210,7 @@
                             android:text="@string/mpsdk_card_expiry_year_hint"
                             android:textColor="@color/mpsdk_base_text"
                             android:textSize="14dp"
-                            app:allowCustomFont="false"/>
+                            app:allowCustomFont="false" />
                     </LinearLayout>
 
                 </LinearLayout>
@@ -214,7 +222,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
-            android:src="@drawable/mpsdk_card_shadow_rounded"/>
+            android:src="@drawable/mpsdk_card_shadow_rounded" />
 
     </FrameLayout>
 </FrameLayout>

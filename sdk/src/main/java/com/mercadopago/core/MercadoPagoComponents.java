@@ -18,7 +18,6 @@ import com.mercadopago.InstructionsActivity;
 import com.mercadopago.IssuersActivity;
 import com.mercadopago.PayerInformationActivity;
 import com.mercadopago.PaymentMethodsActivity;
-import com.mercadopago.paymentresult.PaymentResultActivity;
 import com.mercadopago.PaymentTypesActivity;
 import com.mercadopago.PaymentVaultActivity;
 import com.mercadopago.PendingActivity;
@@ -44,8 +43,8 @@ import com.mercadopago.model.Reviewable;
 import com.mercadopago.model.Site;
 import com.mercadopago.model.Summary;
 import com.mercadopago.model.Token;
+import com.mercadopago.paymentresult.PaymentResultActivity;
 import com.mercadopago.preferences.CheckoutPreference;
-import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.preferences.PaymentResultScreenPreference;
 import com.mercadopago.preferences.ReviewScreenPreference;
@@ -118,7 +117,6 @@ public class MercadoPagoComponents {
 
             private Activity activity;
             private List<Card> cards;
-            private DecorationPreference decorationPreference;
             private PaymentPreference paymentPreference;
             private BigDecimal amount;
             private Site site;
@@ -175,11 +173,6 @@ public class MercadoPagoComponents {
 
             public PaymentVaultActivityBuilder setPaymentMethodSearch(PaymentMethodSearch paymentMethodSearch) {
                 this.paymentMethodSearch = paymentMethodSearch;
-                return this;
-            }
-
-            public PaymentVaultActivityBuilder setDecorationPreference(DecorationPreference decorationPreference) {
-                this.decorationPreference = decorationPreference;
                 return this;
             }
 
@@ -300,7 +293,6 @@ public class MercadoPagoComponents {
 
                 Gson gson = new Gson();
                 paymentVaultIntent.putExtra("cards", gson.toJson(cards));
-                paymentVaultIntent.putExtra("decorationPreference", JsonUtil.getInstance().toJson(decorationPreference));
                 paymentVaultIntent.putExtra("payerAccessToken", payerAccessToken);
                 paymentVaultIntent.putExtra("maxSavedCards", maxSavedCards);
                 paymentVaultIntent.putExtra("showAllSavedCardsEnabled", showAllSavedCardsEnabled);
@@ -334,7 +326,6 @@ public class MercadoPagoComponents {
             private List<Item> items;
             private Discount discount;
             private Token token;
-            private DecorationPreference decorationPreference;
             private ReviewScreenPreference reviewScreenPreference;
             private Boolean termsAndConditionsEnabled;
             private Boolean discountEnabled;
@@ -400,11 +391,6 @@ public class MercadoPagoComponents {
                 return this;
             }
 
-            public ReviewAndConfirmBuilder setDecorationPreference(DecorationPreference decorationPreference) {
-                this.decorationPreference = decorationPreference;
-                return this;
-            }
-
             public ReviewAndConfirmBuilder setDiscount(Discount discount) {
                 this.discount = discount;
                 return this;
@@ -456,7 +442,6 @@ public class MercadoPagoComponents {
                 intent.putExtra("items", new Gson().toJson(items));
                 intent.putExtra("termsAndConditionsEnabled", termsAndConditionsEnabled);
                 intent.putExtra("discountEnabled", discountEnabled);
-                intent.putExtra("decorationPreference", JsonUtil.getInstance().toJson(decorationPreference));
                 intent.putExtra("reviewScreenPreference", JsonUtil.getInstance().toJson(reviewScreenPreference));
 
                 activity.startActivityForResult(intent, MercadoPagoComponents.Activities.REVIEW_AND_CONFIRM_REQUEST_CODE);
@@ -469,7 +454,6 @@ public class MercadoPagoComponents {
             private List<Card> cards;
             private String title;
             private String customActionMessage;
-            private DecorationPreference decorationPreference;
             private PaymentPreference paymentPreference;
             private Integer selectionImageResId;
             private String selectionConfirmPromptText;
@@ -494,11 +478,6 @@ public class MercadoPagoComponents {
 
             public SavedCardsActivityBuilder setCards(List<Card> cards) {
                 this.cards = cards;
-                return this;
-            }
-
-            public SavedCardsActivityBuilder setDecorationPreference(DecorationPreference decorationPreference) {
-                this.decorationPreference = decorationPreference;
                 return this;
             }
 
@@ -552,7 +531,6 @@ public class MercadoPagoComponents {
                 customerCardsIntent.putExtra("selectionConfirmPromptText", selectionConfirmPromptText);
                 customerCardsIntent.putExtra("selectionImageResId", selectionImageResId);
                 customerCardsIntent.putExtra("customActionMessage", customActionMessage);
-                customerCardsIntent.putExtra("decorationPreference", JsonUtil.getInstance().toJson(decorationPreference));
                 customerCardsIntent.putExtra("paymentPreference", JsonUtil.getInstance().toJson(paymentPreference));
                 customerCardsIntent.putExtra("merchantBaseUrl", merchantBaseUrl);
                 customerCardsIntent.putExtra("merchantGetCustomerUri", merchantGetCustomerUri);
@@ -570,7 +548,6 @@ public class MercadoPagoComponents {
             private Boolean showBankDeals;
             private Boolean escEnabled;
             private PaymentPreference paymentPreference;
-            private DecorationPreference decorationPreference;
             private List<PaymentMethod> paymentMethodList;
             private Card card;
             private PaymentRecovery paymentRecovery;
@@ -643,11 +620,6 @@ public class MercadoPagoComponents {
                 return this;
             }
 
-            public CardVaultActivityBuilder setDecorationPreference(DecorationPreference decorationPreference) {
-                this.decorationPreference = decorationPreference;
-                return this;
-            }
-
             public CardVaultActivityBuilder setPaymentPreference(PaymentPreference paymentPreference) {
                 this.paymentPreference = paymentPreference;
                 return this;
@@ -714,8 +686,6 @@ public class MercadoPagoComponents {
 
                 cardVaultIntent.putExtra("paymentRecovery", JsonUtil.getInstance().toJson(paymentRecovery));
 
-                cardVaultIntent.putExtra("decorationPreference", JsonUtil.getInstance().toJson(decorationPreference));
-
                 cardVaultIntent.putExtra("card", JsonUtil.getInstance().toJson(card));
 
                 cardVaultIntent.putExtra("installmentsReviewEnabled", installmentsReviewEnabled);
@@ -740,7 +710,6 @@ public class MercadoPagoComponents {
             private String siteId;
             private Boolean showBankDeals;
             private PaymentPreference paymentPreference;
-            private DecorationPreference decorationPreference;
             private List<PaymentMethod> paymentMethodList;
             private Card card;
             private PaymentRecovery paymentRecovery;
@@ -791,11 +760,6 @@ public class MercadoPagoComponents {
 
             public GuessingCardActivityBuilder setPaymentRecovery(PaymentRecovery paymentRecovery) {
                 this.paymentRecovery = paymentRecovery;
-                return this;
-            }
-
-            public GuessingCardActivityBuilder setDecorationPreference(DecorationPreference decorationPreference) {
-                this.decorationPreference = decorationPreference;
                 return this;
             }
 
@@ -876,8 +840,6 @@ public class MercadoPagoComponents {
 
                 guessingCardIntent.putExtra("paymentMethodList", JsonUtil.getInstance().toJson(paymentMethodList));
 
-                guessingCardIntent.putExtra("decorationPreference", JsonUtil.getInstance().toJson(decorationPreference));
-
                 guessingCardIntent.putExtra("paymentRecovery", JsonUtil.getInstance().toJson(paymentRecovery));
 
                 guessingCardIntent.putExtra("card", JsonUtil.getInstance().toJson(card));
@@ -907,7 +869,6 @@ public class MercadoPagoComponents {
             private Activity activity;
             private String merchantPublicKey;
             private PaymentPreference paymentPreference;
-            private DecorationPreference decorationPreference;
             private Boolean showBankDeals;
 
             public PaymentMethodsActivityBuilder setActivity(Activity activity) {
@@ -930,11 +891,6 @@ public class MercadoPagoComponents {
                 return this;
             }
 
-            public PaymentMethodsActivityBuilder setDecorationPreference(DecorationPreference decorationPreference) {
-                this.decorationPreference = decorationPreference;
-                return this;
-            }
-
             public void startActivity() {
                 if (this.activity == null) throw new IllegalStateException("activity is null");
                 if (this.merchantPublicKey == null)
@@ -947,7 +903,6 @@ public class MercadoPagoComponents {
                 paymentMethodsIntent.putExtra("merchantPublicKey", merchantPublicKey);
                 paymentMethodsIntent.putExtra("showBankDeals", showBankDeals);
                 paymentMethodsIntent.putExtra("paymentPreference", JsonUtil.getInstance().toJson(paymentPreference));
-                paymentMethodsIntent.putExtra("decorationPreference", JsonUtil.getInstance().toJson(decorationPreference));
 
                 activity.startActivityForResult(paymentMethodsIntent, PAYMENT_METHODS_REQUEST_CODE);
             }
@@ -959,7 +914,6 @@ public class MercadoPagoComponents {
             private String merchantPublicKey;
             private PaymentMethod paymentMethod;
             private List<Issuer> issuers;
-            private DecorationPreference decorationPreference;
             private String payerAccessToken;
 
             public IssuersActivityBuilder setActivity(Activity activity) {
@@ -987,11 +941,6 @@ public class MercadoPagoComponents {
                 return this;
             }
 
-            public IssuersActivityBuilder setDecorationPreference(DecorationPreference decorationPreference) {
-                this.decorationPreference = decorationPreference;
-                return this;
-            }
-
             public IssuersActivityBuilder setPayerAccessToken(String payerAccessToken) {
                 this.payerAccessToken = payerAccessToken;
                 return this;
@@ -1012,7 +961,6 @@ public class MercadoPagoComponents {
                 intent.putExtra("merchantPublicKey", merchantPublicKey);
                 intent.putExtra("payerAccessToken", payerAccessToken);
                 intent.putExtra("issuers", JsonUtil.getInstance().toJson(issuers));
-                intent.putExtra("decorationPreference", JsonUtil.getInstance().toJson(decorationPreference));
                 intent.putExtra("cardInfo", JsonUtil.getInstance().toJson(cardInformation));
                 activity.startActivityForResult(intent, ISSUERS_REQUEST_CODE);
             }
@@ -1029,7 +977,6 @@ public class MercadoPagoComponents {
             private Issuer issuer;
             private PaymentMethod paymentMethod;
             private PaymentPreference paymentPreference;
-            private DecorationPreference decorationPreference;
             private String payerEmail;
             private Discount discount;
             private Boolean discountEnabled;
@@ -1087,11 +1034,6 @@ public class MercadoPagoComponents {
                 return this;
             }
 
-            public InstallmentsActivityBuilder setDecorationPreference(DecorationPreference decorationPreference) {
-                this.decorationPreference = decorationPreference;
-                return this;
-            }
-
             public InstallmentsActivityBuilder setPayerEmail(String payerEmail) {
                 this.payerEmail = payerEmail;
                 return this;
@@ -1144,7 +1086,6 @@ public class MercadoPagoComponents {
                 intent.putExtra("site", JsonUtil.getInstance().toJson(site));
                 intent.putExtra("payerCosts", JsonUtil.getInstance().toJson(payerCosts));
                 intent.putExtra("paymentPreference", JsonUtil.getInstance().toJson(paymentPreference));
-                intent.putExtra("decorationPreference", JsonUtil.getInstance().toJson(decorationPreference));
                 intent.putExtra("cardInfo", JsonUtil.getInstance().toJson(cardInfo));
                 intent.putExtra("payerEmail", payerEmail);
                 intent.putExtra("discount", JsonUtil.getInstance().toJson(discount));
@@ -1167,7 +1108,6 @@ public class MercadoPagoComponents {
             private Discount discount;
             private boolean discountEnabled;
             private List<Issuer> issuers;
-            private DecorationPreference decorationPreference;
             private Card card;
             private Token token;
             private boolean escEnabled;
@@ -1234,11 +1174,6 @@ public class MercadoPagoComponents {
                 return this;
             }
 
-            public SecurityCodeActivityBuilder setDecorationPreference(DecorationPreference decorationPreference) {
-                this.decorationPreference = decorationPreference;
-                return this;
-            }
-
             public void startActivity() {
                 if (this.activity == null) throw new IllegalStateException("activity is null");
                 if (this.merchantPublicKey == null) throw new IllegalStateException("key is null");
@@ -1262,7 +1197,6 @@ public class MercadoPagoComponents {
                 intent.putExtra("merchantPublicKey", merchantPublicKey);
                 intent.putExtra("payerAccessToken", payerAccessToken);
                 intent.putExtra("siteId", siteId);
-                intent.putExtra("decorationPreference", JsonUtil.getInstance().toJson(decorationPreference));
                 intent.putExtra("cardInfo", JsonUtil.getInstance().toJson(cardInformation));
                 intent.putExtra("paymentRecovery", JsonUtil.getInstance().toJson(paymentRecovery));
                 intent.putExtra("escEnabled", escEnabled);
@@ -1275,7 +1209,6 @@ public class MercadoPagoComponents {
             private Activity activity;
             private CardInfo cardInformation;
             private String merchantPublicKey;
-            private DecorationPreference decorationPreference;
             private List<PaymentMethod> paymentMethods;
             private List<PaymentType> paymentTypes;
 
@@ -1304,11 +1237,6 @@ public class MercadoPagoComponents {
                 return this;
             }
 
-            public PaymentTypesActivityBuilder setDecorationPreference(DecorationPreference decorationPreference) {
-                this.decorationPreference = decorationPreference;
-                return this;
-            }
-
             public void startActivity() {
                 if (this.activity == null) throw new IllegalStateException("activity is null");
                 if (this.merchantPublicKey == null) throw new IllegalStateException("key is null");
@@ -1326,7 +1254,6 @@ public class MercadoPagoComponents {
                 intent.putExtra("paymentTypes", JsonUtil.getInstance().toJson(paymentTypes));
                 intent.putExtra("merchantPublicKey", merchantPublicKey);
                 intent.putExtra("cardInfo", JsonUtil.getInstance().toJson(cardInformation));
-                intent.putExtra("decorationPreference", JsonUtil.getInstance().toJson(decorationPreference));
                 activity.startActivityForResult(intent, PAYMENT_TYPES_REQUEST_CODE);
             }
         }
@@ -1334,7 +1261,6 @@ public class MercadoPagoComponents {
         public static class PayerInformationActivityBuilder {
             private Activity activity;
             private String merchantPublicKey;
-            private DecorationPreference decorationPreference;
             private String payerAccessToken;
 
             public PayerInformationActivityBuilder setActivity(Activity activity) {
@@ -1352,11 +1278,6 @@ public class MercadoPagoComponents {
                 return this;
             }
 
-            public PayerInformationActivityBuilder setDecorationPreference(DecorationPreference decorationPreference) {
-                this.decorationPreference = decorationPreference;
-                return this;
-            }
-
             public void startActivity() {
 
                 if (this.activity == null) throw new IllegalStateException("activity is null");
@@ -1370,7 +1291,6 @@ public class MercadoPagoComponents {
 
                 payerInformationIntent.putExtra("merchantPublicKey", merchantPublicKey);
                 payerInformationIntent.putExtra("payerAccessToken", payerAccessToken);
-                payerInformationIntent.putExtra("decorationPreference", JsonUtil.getInstance().toJson(decorationPreference));
 
                 activity.startActivityForResult(payerInformationIntent, PAYER_INFORMATION_REQUEST_CODE);
             }
@@ -1379,7 +1299,6 @@ public class MercadoPagoComponents {
         public static class DiscountsActivityBuilder {
             private Activity activity;
             private String merchantPublicKey;
-            private DecorationPreference decorationPreference;
 
             private BigDecimal amount;
             private Boolean directDiscountEnabled;
@@ -1393,11 +1312,6 @@ public class MercadoPagoComponents {
 
             public DiscountsActivityBuilder setMerchantPublicKey(String merchantPublicKey) {
                 this.merchantPublicKey = merchantPublicKey;
-                return this;
-            }
-
-            public DiscountsActivityBuilder setDecorationPreference(DecorationPreference decorationPreference) {
-                this.decorationPreference = decorationPreference;
                 return this;
             }
 
@@ -1435,7 +1349,6 @@ public class MercadoPagoComponents {
                 discountsIntent.putExtra("amount", amount.toString());
                 discountsIntent.putExtra("directDiscountEnabled", directDiscountEnabled);
                 discountsIntent.putExtra("discount", JsonUtil.getInstance().toJson(discount));
-                discountsIntent.putExtra("decorationPreference", JsonUtil.getInstance().toJson(decorationPreference));
                 discountsIntent.putExtra("payerEmail", payerEmail);
 
                 activity.startActivityForResult(discountsIntent, DISCOUNTS_REQUEST_CODE);
@@ -1850,7 +1763,6 @@ public class MercadoPagoComponents {
 
             private Activity activity;
             private String merchantPublicKey;
-            private DecorationPreference decorationPreference;
             private List<BankDeal> bankDeals;
             private String payerAccessToken;
 
@@ -1866,11 +1778,6 @@ public class MercadoPagoComponents {
 
             public BankDealsActivityBuilder setMerchantPublicKey(String merchantPublicKey) {
                 this.merchantPublicKey = merchantPublicKey;
-                return this;
-            }
-
-            public BankDealsActivityBuilder setDecorationPreference(DecorationPreference decorationPreference) {
-                this.decorationPreference = decorationPreference;
                 return this;
             }
 
@@ -1890,7 +1797,6 @@ public class MercadoPagoComponents {
                 Intent bankDealsIntent = new Intent(activity, BankDealsActivity.class);
                 bankDealsIntent.putExtra("merchantPublicKey", merchantPublicKey);
                 bankDealsIntent.putExtra("payerAccessToken", payerAccessToken);
-                bankDealsIntent.putExtra("decorationPreference", JsonUtil.getInstance().toJson(decorationPreference));
                 if (bankDeals != null) {
                     bankDealsIntent.putExtra("bankDeals", JsonUtil.getInstance().toJson(bankDeals));
                 }
@@ -1901,7 +1807,6 @@ public class MercadoPagoComponents {
         public static class ReviewPaymentMethodsActivityBuilder {
 
             private Activity activity;
-            private DecorationPreference decorationPreference;
             private List<PaymentMethod> paymentMethods;
             private String publicKey;
 
@@ -1912,11 +1817,6 @@ public class MercadoPagoComponents {
 
             public ReviewPaymentMethodsActivityBuilder setPaymentMethods(List<PaymentMethod> paymentMethods) {
                 this.paymentMethods = paymentMethods;
-                return this;
-            }
-
-            public ReviewPaymentMethodsActivityBuilder setDecorationPreference(DecorationPreference decorationPreference) {
-                this.decorationPreference = decorationPreference;
                 return this;
             }
 
@@ -1940,7 +1840,6 @@ public class MercadoPagoComponents {
             private void startReviewPaymentMethodsActivity() {
                 Intent intent = new Intent(activity, ReviewPaymentMethodsActivity.class);
                 intent.putExtra("paymentMethods", JsonUtil.getInstance().toJson(paymentMethods));
-                intent.putExtra("decorationPreference", JsonUtil.getInstance().toJson(decorationPreference));
                 intent.putExtra("publicKey", publicKey);
                 activity.startActivityForResult(intent, REVIEW_PAYMENT_METHODS_REQUEST_CODE);
             }
@@ -1959,7 +1858,6 @@ public class MercadoPagoComponents {
             private PaymentMethod paymentMethod;
             private PayerCost payerCost;
             private CardInfo cardInfo;
-            private DecorationPreference decorationPreference;
             private OnReviewChange reviewChangeCallback;
             private Boolean editionEnabled;
             private Site site;
@@ -1989,11 +1887,6 @@ public class MercadoPagoComponents {
                 return this;
             }
 
-            public ReviewPaymentMethodOnBuilder setDecorationPreference(DecorationPreference decorationPreference) {
-                this.decorationPreference = decorationPreference;
-                return this;
-            }
-
             public ReviewPaymentMethodOnBuilder setReviewChangeCallback(OnReviewChange reviewChangeCallback) {
                 this.reviewChangeCallback = reviewChangeCallback;
                 return this;
@@ -2010,7 +1903,7 @@ public class MercadoPagoComponents {
             }
 
             public Reviewable build() {
-                return new ReviewPaymentOnView(context, paymentMethod, cardInfo, payerCost, site, reviewChangeCallback, editionEnabled, decorationPreference);
+                return new ReviewPaymentOnView(context, paymentMethod, cardInfo, payerCost, site, reviewChangeCallback, editionEnabled);
             }
 
         }
@@ -2102,7 +1995,6 @@ public class MercadoPagoComponents {
             private BigDecimal amount;
             private PayerCost payerCost;
             private PaymentMethod paymentMethod;
-            private DecorationPreference decorationPreference;
             private OnConfirmPaymentCallback callback;
             private Discount discount;
             private String confirmationMessage;
@@ -2150,11 +2042,6 @@ public class MercadoPagoComponents {
                 return this;
             }
 
-            public SummaryViewBuilder setDecorationPreference(DecorationPreference decorationPreference) {
-                this.decorationPreference = decorationPreference;
-                return this;
-            }
-
             public SummaryViewBuilder setConfirmPaymentCallback(OnConfirmPaymentCallback callback) {
                 this.callback = callback;
                 return this;
@@ -2171,7 +2058,7 @@ public class MercadoPagoComponents {
             }
 
             public SummaryView build() {
-                return new SummaryView(context, confirmationMessage, paymentMethod, payerCost, amount, discount, currencyId, site, issuer, summary, decorationPreference, callback);
+                return new SummaryView(context, confirmationMessage, paymentMethod, payerCost, amount, discount, currencyId, site, issuer, summary, callback);
             }
         }
 
@@ -2180,7 +2067,6 @@ public class MercadoPagoComponents {
             private String currencyId;
             private List<Item> items;
             private ReviewScreenPreference reviewScreenPreference;
-            private DecorationPreference decorationPreference;
 
             public ReviewItemsViewBuilder() {
                 items = new ArrayList<>();
@@ -2201,11 +2087,6 @@ public class MercadoPagoComponents {
                 return this;
             }
 
-            public ReviewItemsViewBuilder setDecorationPreference(DecorationPreference decorationPreference) {
-                this.decorationPreference = decorationPreference;
-                return this;
-            }
-
             public ReviewItemsViewBuilder addItem(Item item) {
                 this.items.add(item);
                 return this;
@@ -2217,7 +2098,7 @@ public class MercadoPagoComponents {
             }
 
             public ReviewItemsView build() {
-                return new ReviewItemsView(context, items, currencyId, reviewScreenPreference, decorationPreference);
+                return new ReviewItemsView(context, items, currencyId, reviewScreenPreference);
             }
         }
 
@@ -2229,7 +2110,6 @@ public class MercadoPagoComponents {
             private String paymentMethodDescriptionInfo;
             private BigDecimal amount;
             private Site site;
-            private DecorationPreference decorationPreference;
             private OnReviewChange reviewChangeCallback;
             private Boolean editionEnabled;
 
@@ -2263,11 +2143,6 @@ public class MercadoPagoComponents {
                 return this;
             }
 
-            public ReviewPaymentMethodOffBuilder setDecorationPreference(DecorationPreference decorationPreference) {
-                this.decorationPreference = decorationPreference;
-                return this;
-            }
-
             public ReviewPaymentMethodOffBuilder setReviewChangeCallback(OnReviewChange reviewChangeCallback) {
                 this.reviewChangeCallback = reviewChangeCallback;
                 return this;
@@ -2279,7 +2154,7 @@ public class MercadoPagoComponents {
             }
 
             public ReviewPaymentOffView build() {
-                return new ReviewPaymentOffView(context, paymentMethod, paymentMethodCommentInfo, paymentMethodDescriptionInfo, amount, site, reviewChangeCallback, editionEnabled, decorationPreference);
+                return new ReviewPaymentOffView(context, paymentMethod, paymentMethodCommentInfo, paymentMethodDescriptionInfo, amount, site, reviewChangeCallback, editionEnabled);
             }
 
         }

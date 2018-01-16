@@ -1,5 +1,4 @@
 package com.mercadopago.components;
-import com.mercadopago.components.Component;
 
 /**
  * Created by mromar on 11/22/17.

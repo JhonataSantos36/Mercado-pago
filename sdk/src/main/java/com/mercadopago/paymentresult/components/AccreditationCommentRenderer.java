@@ -7,7 +7,6 @@ import android.view.View;
 import com.mercadopago.R;
 import com.mercadopago.components.Renderer;
 import com.mercadopago.customviews.MPTextView;
-import com.mercadopago.paymentresult.components.AccreditationComment;
 
 /**
  * Created by vaserber on 11/13/17.

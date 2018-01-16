@@ -1,7 +1,6 @@
 package com.mercadopago.uicontrollers.paymentmethodsearch;
 
 import android.content.Context;
-import android.graphics.PorterDuff;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,12 +11,12 @@ import com.mercadopago.constants.PaymentMethods;
 import com.mercadopago.constants.PaymentTypes;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.model.PaymentMethodSearchItem;
-import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.util.MercadoPagoUtil;
 
 /**
  * Created by mreverter on 29/4/16.
  */
+
 public class PaymentMethodSearchOption implements PaymentMethodSearchViewController {
 
     private static final int COMMENT_MAX_LENGTH = 75;
@@ -29,13 +28,11 @@ public class PaymentMethodSearchOption implements PaymentMethodSearchViewControl
     protected MPTextView mDescription;
     protected MPTextView mComment;
     protected ImageView mIcon;
-    protected DecorationPreference mDecorationPreference;
     protected View.OnClickListener mListener;
 
-    public PaymentMethodSearchOption(Context context, PaymentMethodSearchItem item, DecorationPreference decorationPreference) {
+    public PaymentMethodSearchOption(Context context, PaymentMethodSearchItem item) {
         mContext = context;
         mItem = item;
-        mDecorationPreference = decorationPreference;
     }
 
     public View inflateInParent(ViewGroup parent, boolean attachToRoot) {
@@ -78,13 +75,7 @@ public class PaymentMethodSearchOption implements PaymentMethodSearchViewControl
 
         int resourceId = 0;
 
-        Boolean needsTint = itemNeedsTint(mItem);
-        String imageId;
-        if (needsTint) {
-            imageId = TO_TINT_IMAGES_PREFIX + mItem.getId();
-        } else {
-            imageId = mItem.getId();
-        }
+        String imageId = mItem.getId();
 
         if (mItem.isIconRecommended()) {
             resourceId = MercadoPagoUtil.getPaymentMethodSearchItemIcon(mContext, imageId);
@@ -95,17 +86,6 @@ public class PaymentMethodSearchOption implements PaymentMethodSearchViewControl
         } else {
             mIcon.setVisibility(View.GONE);
         }
-
-        if (needsTint) {
-            mIcon.setColorFilter(mDecorationPreference.getBaseColor(), PorterDuff.Mode.MULTIPLY);
-        }
-    }
-
-    private boolean itemNeedsTint(PaymentMethodSearchItem paymentMethodSearchItem) {
-        return mDecorationPreference != null && mDecorationPreference.hasColors()
-                && (paymentMethodSearchItem.isGroup()
-                || paymentMethodSearchItem.isPaymentType()
-                || paymentMethodSearchItem.getId().contains(PaymentMethods.BRASIL.BOLBRADESCO));
     }
 
     @Override

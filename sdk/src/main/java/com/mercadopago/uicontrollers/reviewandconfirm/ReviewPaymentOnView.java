@@ -1,7 +1,6 @@
 package com.mercadopago.uicontrollers.reviewandconfirm;
 
 import android.content.Context;
-import android.graphics.PorterDuff;
 import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,7 +17,6 @@ import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.Reviewable;
 import com.mercadopago.model.Site;
-import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.uicontrollers.payercosts.PayerCostColumn;
 import com.mercadopago.uicontrollers.payercosts.PayerCostViewController;
 import com.mercadopago.util.CurrenciesUtil;
@@ -51,12 +49,11 @@ public class ReviewPaymentOnView extends Reviewable {
     protected PaymentMethod mPaymentMethod;
     protected OnReviewChange mCallback;
     protected Boolean mEditionEnabled;
-    protected DecorationPreference mDecorationPreference;
     private final Site mSite;
 
 
     public ReviewPaymentOnView(Context context, PaymentMethod paymentMethod, CardInfo cardInfo, PayerCost payerCost,
-                               Site site, OnReviewChange callback, Boolean editionEnabled, DecorationPreference decorationPreference) {
+                               Site site, OnReviewChange callback, Boolean editionEnabled) {
 
         this.mContext = context;
         this.mCallback = callback;
@@ -66,7 +63,6 @@ public class ReviewPaymentOnView extends Reviewable {
         this.mSite = site;
         this.mCurrency = site.getCurrencyId();
         this.mEditionEnabled = editionEnabled == null ? true : editionEnabled;
-        this.mDecorationPreference = decorationPreference;
     }
 
     @Override
@@ -105,8 +101,6 @@ public class ReviewPaymentOnView extends Reviewable {
 
     @Override
     public void draw() {
-
-        decorateText();
         setIcon();
 
         if (mPayerCost.getInstallments() != 1) {
@@ -147,24 +141,13 @@ public class ReviewPaymentOnView extends Reviewable {
     }
 
     private void setIcon() {
-        if (mDecorationPreference != null && mDecorationPreference.hasColors()) {
-            mPaymentImage.setImageResource(R.drawable.mpsdk_grey_review_payment_on);
-            mPaymentImage.setColorFilter(mDecorationPreference.getBaseColor(), PorterDuff.Mode.SRC_ATOP);
-        } else {
-            mPaymentImage.setImageResource(R.drawable.mpsdk_review_payment_on);
-        }
+        mPaymentImage.setImageResource(R.drawable.mpsdk_review_payment_on);
     }
 
     private void showFinance() {
         if (mPayerCost.hasCFT()) {
             mCFTTextView.setVisibility(View.VISIBLE);
             mCFTTextView.setText(CFT + mPayerCost.getCFTPercent());
-        }
-    }
-
-    private void decorateText() {
-        if (mDecorationPreference != null && mDecorationPreference.hasColors()) {
-            mChangePaymentTextView.setTextColor(mDecorationPreference.getBaseColor());
         }
     }
 

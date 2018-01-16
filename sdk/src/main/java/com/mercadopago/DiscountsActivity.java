@@ -28,11 +28,8 @@ import com.mercadopago.core.MercadoPagoCheckout;
 import com.mercadopago.customviews.MPEditText;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.model.Currency;
-
 import com.mercadopago.model.Discount;
 import com.mercadopago.observers.TimerObserver;
-import com.mercadopago.preferences.DecorationPreference;
-
 import com.mercadopago.presenters.DiscountsPresenter;
 import com.mercadopago.providers.DiscountProviderImpl;
 import com.mercadopago.util.CurrenciesUtil;
@@ -48,7 +45,6 @@ import java.util.Map;
 public class DiscountsActivity extends AppCompatActivity implements DiscountsActivityView, TimerObserver {
 
     // Local vars
-    protected DecorationPreference mDecorationPreference;
     protected MPTextView mTimerTextView;
     private String mMerchantBaseURL;
     private String mMerchantDiscountBaseURL;
@@ -87,10 +83,6 @@ public class DiscountsActivity extends AppCompatActivity implements DiscountsAct
         getActivityParameters();
         initializePresenter();
 
-        if (isCustomColorSet()) {
-            setTheme(R.style.Theme_MercadoPagoTheme_NoActionBar);
-        }
-
         setContentView();
         setMerchantInfo();
         initializeControls();
@@ -121,8 +113,6 @@ public class DiscountsActivity extends AppCompatActivity implements DiscountsAct
     }
 
     protected void getActivityParameters() {
-        mDecorationPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("decorationPreference"), DecorationPreference.class);
-
         mPresenter.setMerchantPublicKey(getIntent().getStringExtra("merchantPublicKey"));
         mPresenter.setPayerEmail(this.getIntent().getStringExtra("payerEmail"));
         mPresenter.setTransactionAmount(new BigDecimal(this.getIntent().getStringExtra("amount")));
@@ -239,31 +229,17 @@ public class DiscountsActivity extends AppCompatActivity implements DiscountsAct
         decorateToolbar();
     }
 
+
     private void decorateToolbar() {
-        if (mToolbar != null && mDecorationPreference != null) {
-            if (mDecorationPreference.hasColors()) {
-                mToolbar.setBackgroundColor(mDecorationPreference.getBaseColor());
-            }
 
-            if (mDecorationPreference.isDarkFontEnabled()) {
-                mCloseImage.setColorFilter(mDecorationPreference.getDarkFontColor(this), PorterDuff.Mode.SRC_ATOP);
+        mCloseImage.setColorFilter(getResources().getColor(R.color.mpsdk_toolbar_text), PorterDuff.Mode.SRC_ATOP);
+        mToolbar.setBackgroundColor(getResources().getColor(R.color.mpsdk_background));
 
-                if (mTimerTextView != null) {
-                    mTimerTextView.setTextColor(mDecorationPreference.getDarkFontColor(this));
-                }
-            }
-            decorateUpArrow();
-        }
-    }
 
-    protected void decorateUpArrow() {
-        if (mDecorationPreference.isDarkFontEnabled()) {
-            int darkFont = mDecorationPreference.getDarkFontColor(this);
-            Drawable upArrow = mToolbar.getNavigationIcon();
-            if (upArrow != null && getSupportActionBar() != null) {
-                upArrow.setColorFilter(darkFont, PorterDuff.Mode.SRC_ATOP);
-                getSupportActionBar().setHomeAsUpIndicator(upArrow);
-            }
+        Drawable upArrow = mToolbar.getNavigationIcon();
+        if (upArrow != null && getSupportActionBar() != null) {
+            upArrow.setColorFilter(getResources().getColor(R.color.mpsdk_toolbar_text), PorterDuff.Mode.SRC_ATOP);
+            getSupportActionBar().setHomeAsUpIndicator(upArrow);
         }
     }
 
@@ -279,38 +255,15 @@ public class DiscountsActivity extends AppCompatActivity implements DiscountsAct
         ErrorUtil.startErrorActivity(this, message, false, mPresenter.getPublicKey());
     }
 
-    private boolean isCustomColorSet() {
-        return mDecorationPreference != null && mDecorationPreference.hasColors();
-    }
-
     @Override
     public void drawSummary() {
         mDiscountCodeContainer.setVisibility(View.GONE);
         mReviewDiscountSummaryContainer.setVisibility(View.VISIBLE);
 
-        setDiscountSummaryStatusBarColor();
         showSummaryTitle();
         showTransactionRow();
         showDiscountRow();
         showTotalRow();
-        decorateSummary();
-    }
-
-    private void setDiscountSummaryStatusBarColor() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Window window = getWindow();
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(ContextCompat.getColor(this, R.color.mpsdk_discounts_summary_background_color));
-        }
-    }
-
-    private void decorateSummary() {
-        if (mDecorationPreference != null && mDecorationPreference.hasColors()) {
-            mReviewDiscountSummaryContainer.setBackgroundColor(mDecorationPreference.getBaseColor());
-            if (mDecorationPreference.isDarkFontEnabled()) {
-                mCloseImage.setColorFilter(mDecorationPreference.getDarkFontColor(this), PorterDuff.Mode.SRC_ATOP);
-            }
-        }
     }
 
     private void showTotalRow() {
@@ -371,16 +324,15 @@ public class DiscountsActivity extends AppCompatActivity implements DiscountsAct
     public void requestDiscountCode() {
         mReviewDiscountSummaryContainer.setVisibility(View.GONE);
         mDiscountCodeContainer.setVisibility(View.VISIBLE);
-        decorateDiscountCodeContainer();
+        setStatusBarColor();
         fullScrollDown();
     }
 
-    public void decorateDiscountCodeContainer() {
-        if (mDecorationPreference != null && mDecorationPreference.hasColors()) {
-            mDiscountBackground.setBackgroundColor(mDecorationPreference.getBaseColor());
-            if (mDecorationPreference.isDarkFontEnabled()) {
-                mCloseImage.setColorFilter(mDecorationPreference.getDarkFontColor(this), PorterDuff.Mode.SRC_ATOP);
-            }
+    private void setStatusBarColor() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(ContextCompat.getColor(this, R.color.mpsdk_status_bar));
         }
     }
 

@@ -13,10 +13,10 @@ import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.Site;
 import com.mercadopago.mvp.MvpPresenter;
 import com.mercadopago.mvp.OnResourcesRetrievedCallback;
+import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.providers.InstallmentsProvider;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.CurrenciesUtil;
-import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.util.InstallmentsUtil;
 import com.mercadopago.views.InstallmentsActivityView;
 

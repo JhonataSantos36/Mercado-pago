@@ -4,7 +4,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:visibility="gone"
     android:id="@+id/mpsdkRegularToolbar"
-    android:background="@color/mpsdk_colorPrimary"
+    android:background="@color/mpsdk_background"
     android:theme="@style/ToolbarTheme"
     app:popupTheme="@style/Theme.MercadoPagoTheme.NoActionBar"
     android:layout_width="match_parent"
@@ -17,8 +17,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:gravity="center_vertical"
-        android:textColor="@color/mpsdk_white"
-        style="@style/mpsdk_title_text"/>
+        android:textSize="20dp"
+        android:textColor="@color/mpsdk_toolbar_text"/>
 
     <com.mercadopago.customviews.MPTextView
         android:id="@+id/mpsdkButtonText"
@@ -29,8 +29,8 @@
         android:layout_marginEnd="16dp"
         android:paddingTop="10dp"
         android:textSize="16dp"
-        android:visibility="gone"
-        style="@style/mpsdk_title_text"/>
+        android:textColor="@color/mpsdk_toolbar_text"
+        android:visibility="gone"/>
 
     <com.mercadopago.customviews.MPTextView
         android:id="@+id/mpsdkTimerTextView"
@@ -42,10 +42,10 @@
         android:layout_marginEnd="16dp"
         android:layout_marginTop="14dp"
         android:textSize="17dp"
+        android:textColor="@color/mpsdk_toolbar_text"
         android:background="@drawable/mpsdk_title_toolbar"
         android:visibility="gone"
         app:font_style="mono_regular"
-        app:allowCustomFont="false"
-        style="@style/mpsdk_title_text"/>
+        app:allowCustomFont="false"/>
 
 </android.support.v7.widget.Toolbar>

@@ -6,7 +6,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
 import com.mercadopago.adapters.BankDealsAdapter;
@@ -17,7 +16,6 @@ import com.mercadopago.core.MercadoPagoServicesAdapter;
 import com.mercadopago.decorations.DividerItemDecoration;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.BankDeal;
-import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.tracker.FlowHandler;
 import com.mercadopago.tracker.MPTrackingContext;
 import com.mercadopago.tracking.model.ScreenViewEvent;
@@ -39,7 +37,6 @@ public class BankDealsActivity extends MercadoPagoActivity {
     // Local vars
     protected MercadoPagoServicesAdapter mMercadoPago;
     protected RecyclerView mRecyclerView;
-    protected DecorationPreference mDecorationPreference;
     protected Toolbar mToolbar;
 
     protected List<BankDeal> mBankDeals;
@@ -106,7 +103,6 @@ public class BankDealsActivity extends MercadoPagoActivity {
 
     private void initializeToolbar() {
         mToolbar = (Toolbar) findViewById(R.id.mpsdkToolbar);
-        TextView title = (TextView) findViewById(R.id.mpsdkTitle);
 
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -119,9 +115,6 @@ public class BankDealsActivity extends MercadoPagoActivity {
                 onBackPressed();
             }
         });
-
-        decorate(mToolbar);
-        decorateFont(title);
     }
 
     @Override

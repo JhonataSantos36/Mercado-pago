@@ -1,7 +1,6 @@
 package com.mercadopago.uicontrollers.reviewandconfirm;
 
 import com.mercadopago.model.Item;
-import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.uicontrollers.CustomViewController;
 
 /**
@@ -9,5 +8,5 @@ import com.mercadopago.uicontrollers.CustomViewController;
  */
 
 public interface ReviewProductViewController extends CustomViewController {
-    void drawProduct(int position, Item item, String currencyId, DecorationPreference decorationPreference);
+    void drawProduct(int position, Item item, String currencyId);
 }

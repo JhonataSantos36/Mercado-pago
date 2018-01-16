@@ -16,7 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="240dp"
         android:theme="@style/ThemeOverlay.AppCompat.Dark"
-        android:background="@color/mpsdk_background_blue"
+        android:background="@color/mpsdk_background"
         android:fitsSystemWindows="true">
 
         <include layout="@layout/mpsdk_scrolling_toolbar"/>

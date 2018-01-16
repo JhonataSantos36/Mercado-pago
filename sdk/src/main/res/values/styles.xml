@@ -3,14 +3,33 @@
     <style name="mpsdk_font_roboto_regular">
         <item name="fontFamily">@font/roboto</item>
     </style>
+
     <style name="mpsdk_font_roboto_light">
         <item name="fontFamily">@font/roboto_light</item>
     </style>
+
     <style name="mpsdk_font_roboto_bold">
         <item name="fontFamily">@font/roboto_bold</item>
     </style>
+
     <style name="mpsdk_font_roboto_mono">
         <item name="fontFamily">@font/roboto_mono</item>
+    </style>
+
+    <style name="mpsdk_collapsing_toolbar_text_large" parent="Base.TextAppearance.AppCompat.Large">
+        <item name="android:textColor">@color/mpsdk_toolbar_text</item>
+    </style>
+
+    <style name="mpsdk_collapsing_toolbar_text_medium" parent="Base.TextAppearance.AppCompat.Medium">
+        <item name="android:textColor">@color/mpsdk_toolbar_text</item>
+    </style>
+
+    <style name="mpsdk_collapsing_review_toolbar_text_large" parent="Base.TextAppearance.AppCompat.Large">
+        <item name="android:textColor">@color/mpsdk_review_toolbar_text</item>
+    </style>
+
+    <style name="mpsdk_collapsing_review_toolbar_text_medium" parent="Base.TextAppearance.AppCompat.Medium">
+        <item name="android:textColor">@color/mpsdk_review_toolbar_text</item>
     </style>
 
     <style name="mpsdk_basic_color">
@@ -30,7 +49,7 @@
 
     <style name="mpsdk_title_text">
         <item name="android:textSize">@dimen/mpsdk_title_text</item>
-        <item name="android:textColor">@color/mpsdk_white</item>
+        <item name="android:textColor">@color/mpsdk_toolbar_text</item>
     </style>
 
     <style name="mpsdk_form_label">
@@ -184,34 +203,27 @@
         <item name="windowActionBarOverlay">true</item>
     </style>
 
-    <style name="Theme.ProcessMercadoPagoTheme.NoActionbar" parent="Theme.MercadoPagoTheme.NoActionBar">
-    </style>
+    <style name="Theme.ProcessMercadoPagoTheme.NoActionbar" parent="Theme.MercadoPagoTheme.NoActionBar"></style>
 
     <style name="Theme.ReviewConfirmMercadoPagoTheme.NoActionbar" parent="Theme.MercadoPagoTheme.NoActionBar">
         <item name="colorControlNormal">@color/mpsdk_color_new_card_text</item>
     </style>
 
-    <style name="Theme.InfoMercadoPagoTheme.NoActionbar" parent="Theme.MercadoPagoTheme.NoActionBar">
-    </style>
+    <style name="Theme.InfoMercadoPagoTheme.NoActionbar" parent="Theme.MercadoPagoTheme.NoActionBar"></style>
 
-    <style name="Theme.CongratsMercadoPagoTheme.NoActionbar" parent="Theme.MercadoPagoTheme.NoActionBar">
-    </style>
+    <style name="Theme.CongratsMercadoPagoTheme.NoActionbar" parent="Theme.MercadoPagoTheme.NoActionBar"></style>
 
-    <style name="Theme.InstructionsMercadoPagoTheme.NoActionbar" parent="Theme.MercadoPagoTheme.NoActionBar">
-    </style>
+    <style name="Theme.InstructionsMercadoPagoTheme.NoActionbar" parent="Theme.MercadoPagoTheme.NoActionBar"></style>
 
-    <style name="Theme.CallForAuthorizeMercadoPagoTheme.NoActionbar" parent="Theme.MercadoPagoTheme.NoActionBar">
-    </style>
+    <style name="Theme.CallForAuthorizeMercadoPagoTheme.NoActionbar" parent="Theme.MercadoPagoTheme.NoActionBar"></style>
 
-    <style name="Theme.RejectionMercadoPagoTheme.NoActionbar" parent="Theme.MercadoPagoTheme.NoActionBar">
-    </style>
+    <style name="Theme.RejectionMercadoPagoTheme.NoActionbar" parent="Theme.MercadoPagoTheme.NoActionBar"></style>
 
-    <style name="Theme.PendingMercadoPagoTheme.NoActionbar" parent="Theme.MercadoPagoTheme.NoActionBar">
-    </style>
+    <style name="Theme.PendingMercadoPagoTheme.NoActionbar" parent="Theme.MercadoPagoTheme.NoActionBar"></style>
 
-    <style name="Theme.MercadoPagoTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+    <style name="Theme.MercadoPagoTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-    <style name="Theme.MercadoPagoTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+    <style name="Theme.MercadoPagoTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <style name="CollapsedAppBar" parent="@android:style/TextAppearance.Medium">
         <item name="android:textSize">19dp</item>

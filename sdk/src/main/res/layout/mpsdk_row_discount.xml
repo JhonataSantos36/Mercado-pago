@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
     <LinearLayout
         android:id="@+id/mpsdkDiscountRow"
         android:layout_width="match_parent"
@@ -12,6 +12,7 @@
         android:layout_gravity="center"
         android:layout_marginTop="10dp"
         android:orientation="vertical">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -31,8 +32,8 @@
                 android:id="@+id/mpsdkTotalAmount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
                 android:layout_gravity="center"
+                android:layout_marginLeft="10dp"
                 android:textColor="@color/default_primary_color"
                 android:textSize="16dp"
                 tools:text="$ 1.309" />
@@ -41,21 +42,22 @@
                 android:id="@+id/mpsdkDiscountAmount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
                 android:layout_gravity="center"
-                android:visibility="gone"
-                android:textColor="@color/mpsdk_color_payer_costs_no_rate"
+                android:layout_marginLeft="10dp"
+                android:textColor="@color/mpsdk_summary_discount_color"
                 android:textSize="16dp"
+                android:visibility="gone"
                 tools:text="$ 1.309" />
 
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginBottom="12dp"
-            android:orientation="horizontal"
-            android:gravity="center" >
+            android:gravity="center"
+            android:orientation="horizontal">
 
             <LinearLayout
                 android:id="@+id/mpsdkHasDiscount"
@@ -63,11 +65,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="3dp"
                 android:visibility="gone">
+
                 <ImageView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:layout_marginRight="6dp"
-                    android:src="@drawable/mpsdk_discount"/>
+                    android:src="@drawable/mpsdk_discount" />
 
                 <com.mercadopago.customviews.MPTextView
                     android:layout_width="wrap_content"
@@ -81,9 +84,9 @@
                 <ImageView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:layout_marginTop="2dp"
                     android:layout_marginRight="5dp"
-                    android:src="@drawable/mpsdk_arrow_right_blue"/>
+                    android:layout_marginTop="2dp"
+                    android:src="@drawable/mpsdk_arrow_right_blue" />
             </LinearLayout>
 
             <LinearLayout
@@ -92,37 +95,38 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="3dp"
                 android:visibility="gone">
+
                 <com.mercadopago.customviews.MPTextView
                     android:id="@+id/mpsdkDiscountConcept"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="5dp"
                     android:layout_gravity="center"
+                    android:layout_marginRight="5dp"
                     android:text="@string/mpsdk_discount"
-                    android:textColor="@color/mpsdk_color_payer_costs_no_rate"
+                    android:textColor="@color/mpsdk_summary_discount_color"
                     android:textSize="16dp" />
 
                 <com.mercadopago.customviews.MPTextView
                     android:id="@+id/mpsdkDiscountOff"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:layout_marginRight="10dp"
+                    android:adjustViewBounds="true"
+                    android:background="@drawable/mpsdk_discount_applied"
+                    android:gravity="center"
                     android:paddingLeft="6dp"
                     android:paddingRight="1dp"
-                    android:layout_gravity="center"
-                    android:gravity="center"
                     android:textColor="@color/mpsdk_white"
-                    android:adjustViewBounds="true"
-                    android:textSize="12dp"
-                    android:background="@drawable/mpsdk_discount_applied"/>
+                    android:textSize="12dp" />
 
                 <ImageView
                     android:id="@+id/mpsdkDiscountArrow"
                     android:layout_width="15dp"
                     android:layout_height="15dp"
                     android:layout_marginTop="2dp"
-                    android:visibility="visible"
-                    android:src="@drawable/mpsdk_arrow_right_grey"/>
+                    android:src="@drawable/mpsdk_arrow_right_grey"
+                    android:visibility="visible" />
             </LinearLayout>
         </LinearLayout>
 
@@ -130,7 +134,7 @@
             android:id="@+id/mpsdkDiscountSeparator"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/mpsdk_separator"
-            android:layout_gravity="center_horizontal|bottom" />
+            android:layout_gravity="center_horizontal|bottom"
+            android:background="@color/mpsdk_separator" />
     </LinearLayout>
 </LinearLayout>

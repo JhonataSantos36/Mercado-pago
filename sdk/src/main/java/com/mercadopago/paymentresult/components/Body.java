@@ -11,9 +11,9 @@ import com.mercadopago.paymentresult.PaymentMethodProvider;
 import com.mercadopago.paymentresult.PaymentResultProvider;
 import com.mercadopago.paymentresult.props.BodyErrorProps;
 import com.mercadopago.paymentresult.props.InstructionsProps;
-import com.mercadopago.paymentresult.props.ReceiptProps;
 import com.mercadopago.paymentresult.props.PaymentMethodProps;
 import com.mercadopago.paymentresult.props.PaymentResultBodyProps;
+import com.mercadopago.paymentresult.props.ReceiptProps;
 
 /**
  * Created by vaserber on 10/23/17.

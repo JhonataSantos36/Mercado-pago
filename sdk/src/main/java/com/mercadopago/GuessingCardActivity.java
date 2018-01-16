@@ -64,7 +64,6 @@ import com.mercadopago.model.PaymentRecovery;
 import com.mercadopago.model.PaymentType;
 import com.mercadopago.model.Token;
 import com.mercadopago.observers.TimerObserver;
-import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.presenters.GuessingCardPresenter;
 import com.mercadopago.providers.GuessingCardProviderImpl;
@@ -76,7 +75,6 @@ import com.mercadopago.uicontrollers.card.CardView;
 import com.mercadopago.uicontrollers.card.IdentificationCardView;
 import com.mercadopago.uicontrollers.discounts.DiscountRowView;
 import com.mercadopago.util.ApiUtil;
-import com.mercadopago.util.ColorsUtil;
 import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;
@@ -135,7 +133,6 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
     private Activity mActivity;
 
     //View controls
-    private DecorationPreference mDecorationPreference;
     private ScrollView mScrollView;
 
     //View Low Res
@@ -209,10 +206,6 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
         configurePresenter();
         analizeLowRes();
 
-        if (isCustomColorSet()) {
-            setTheme(R.style.Theme_MercadoPagoTheme_NoActionBar);
-        }
-
         setContentView();
         mPresenter.initialize();
     }
@@ -251,10 +244,6 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
         mPresenter.attachResourcesProvider(new GuessingCardProviderImpl(this, mPublicKey, mPrivateKey));
     }
 
-    private boolean isCustomColorSet() {
-        return mDecorationPreference != null && mDecorationPreference.hasColors();
-    }
-
     private void setMerchantInfo() {
         if (CustomServicesHandler.getInstance().getServicePreference() != null) {
             mDefaultBaseURL = CustomServicesHandler.getInstance().getServicePreference().getDefaultBaseURL();
@@ -275,7 +264,6 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
         mPrivateKey = getIntent().getStringExtra("payerAccessToken");
         String siteId = getIntent().getStringExtra("siteId");
         PaymentPreference paymentPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("paymentPreference"), PaymentPreference.class);
-        mDecorationPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("decorationPreference"), DecorationPreference.class);
 
         PaymentRecovery paymentRecovery = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("paymentRecovery"), PaymentRecovery.class);
 
@@ -724,42 +712,18 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
     }
 
     private void decorate() {
-        if (isDecorationEnabled()) {
-            if (mLowResActive) {
-                decorateLowRes();
-            } else {
-                decorateNormal();
-            }
+        if (mLowResActive) {
+            decorateLowRes();
+        } else {
+            decorateNormal();
         }
-    }
-
-    private boolean isDecorationEnabled() {
-        return mDecorationPreference != null && mDecorationPreference.hasColors();
     }
 
     private void decorateLowRes() {
-        ColorsUtil.decorateLowResToolbar(mLowResToolbar, mLowResTitleToolbar, mDecorationPreference,
-                getSupportActionBar(), this);
-        ColorsUtil.decorateTextView(mDecorationPreference, mBankDealsTextView, this);
-        if (mTimerTextView != null) {
-            ColorsUtil.decorateTextView(mDecorationPreference, mTimerTextView, this);
-        }
-        mNextButtonText.setTextColor(mDecorationPreference.getDarkFontColor(this));
-        mBackButtonText.setTextColor(mDecorationPreference.getDarkFontColor(this));
         mBackInactiveButtonText.setTextColor(ContextCompat.getColor(this, R.color.mpsdk_warm_grey_with_alpha));
     }
 
     private void decorateNormal() {
-        ColorsUtil.decorateTransparentToolbar(mNormalToolbar, mBankDealsTextView, mDecorationPreference,
-                getSupportActionBar(), this);
-        if (mTimerTextView != null) {
-            ColorsUtil.decorateTextView(mDecorationPreference, mTimerTextView, this);
-        }
-        mCardView.decorateCardBorder(mDecorationPreference.getLighterColor());
-        mIdentificationCardView.decorateCardBorder(mDecorationPreference.getLighterColor());
-        mCardBackground.setBackgroundColor(mDecorationPreference.getLighterColor());
-        mNextButtonText.setTextColor(mDecorationPreference.getDarkFontColor(this));
-        mBackButtonText.setTextColor(mDecorationPreference.getDarkFontColor(this));
         mBackInactiveButtonText.setTextColor(ContextCompat.getColor(this, R.color.mpsdk_warm_grey_with_alpha));
     }
 
@@ -806,7 +770,6 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
                             .setActivity(mActivity)
                             .setMerchantPublicKey(mPresenter.getPublicKey())
                             .setPayerAccessToken(mPresenter.getPrivateKey())
-                            .setDecorationPreference(mDecorationPreference)
                             .setBankDeals(mPresenter.getBankDealsList())
                             .startActivity();
                 }
@@ -989,7 +952,6 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
         new MercadoPagoComponents.Activities.ReviewPaymentMethodsActivityBuilder()
                 .setActivity(mActivity)
                 .setPublicKey(mPresenter.getPublicKey())
-                .setDecorationPreference(mDecorationPreference)
                 .setPaymentMethods(supportedPaymentMethods)
                 .startActivity();
         overridePendingTransition(R.anim.mpsdk_slide_up_activity, R.anim.mpsdk_no_change_animation);
@@ -1734,7 +1696,6 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
                 .setPaymentMethods(paymentMethods)
                 .setPaymentTypes(paymentTypes)
                 .setCardInfo(new CardInfo(mPresenter.getCardToken()))
-                .setDecorationPreference(mDecorationPreference)
                 .startActivity();
         overridePendingTransition(R.anim.mpsdk_slide_right_to_left_in, R.anim.mpsdk_slide_right_to_left_out);
     }
@@ -1873,8 +1834,7 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
                 .setPayerEmail(mPresenter.getPayerEmail())
                 .setAmount(transactionAmount)
                 .setDiscount(mPresenter.getDiscount())
-                .setDirectDiscountEnabled(mPresenter.getDirectDiscountEnabled())
-                .setDecorationPreference(mDecorationPreference);
+                .setDirectDiscountEnabled(mPresenter.getDirectDiscountEnabled());
 
         if (mPresenter.getDiscount() == null) {
             discountsActivityBuilder.setDirectDiscountEnabled(false);

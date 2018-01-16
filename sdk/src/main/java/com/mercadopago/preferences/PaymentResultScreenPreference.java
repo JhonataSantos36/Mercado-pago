@@ -6,10 +6,10 @@ import android.support.annotation.NonNull;
 
 import com.mercadopago.callbacks.CallbackHolder;
 import com.mercadopago.callbacks.PaymentResultCallback;
+import com.mercadopago.components.CustomComponent;
 import com.mercadopago.constants.ContentLocation;
 import com.mercadopago.core.CheckoutStore;
 import com.mercadopago.model.Reviewable;
-import com.mercadopago.components.CustomComponent;
 import com.mercadopago.paymentresult.model.Badge;
 
 import java.util.ArrayList;

@@ -1,12 +1,7 @@
 package com.mercadopago.core;
 
 import com.google.gson.reflect.TypeToken;
-
 import com.mercadopago.constants.ProcessingModes;
-import com.mercadopago.preferences.CheckoutPreference;
-import com.mercadopago.model.Instructions;
-import com.mercadopago.model.Payer;
-import com.mercadopago.model.PaymentMethodSearch;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.BankDeal;
 import com.mercadopago.model.Campaign;
@@ -14,15 +9,19 @@ import com.mercadopago.model.CardToken;
 import com.mercadopago.model.Discount;
 import com.mercadopago.model.IdentificationType;
 import com.mercadopago.model.Installment;
+import com.mercadopago.model.Instructions;
 import com.mercadopago.model.Issuer;
+import com.mercadopago.model.Payer;
 import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentBody;
 import com.mercadopago.model.PaymentMethod;
+import com.mercadopago.model.PaymentMethodSearch;
 import com.mercadopago.model.SavedCardToken;
 import com.mercadopago.model.SavedESCCardToken;
 import com.mercadopago.model.SecurityCodeIntent;
 import com.mercadopago.model.Site;
 import com.mercadopago.model.Token;
+import com.mercadopago.preferences.CheckoutPreference;
 import com.mercadopago.preferences.ServicePreference;
 import com.mercadopago.util.JsonUtil;
 

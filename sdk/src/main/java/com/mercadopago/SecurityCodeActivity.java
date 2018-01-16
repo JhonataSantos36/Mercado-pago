@@ -32,7 +32,6 @@ import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentRecovery;
 import com.mercadopago.model.Token;
 import com.mercadopago.observers.TimerObserver;
-import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.presenters.SecurityCodePresenter;
 import com.mercadopago.providers.SecurityCodeProviderImpl;
 import com.mercadopago.tracker.FlowHandler;
@@ -42,7 +41,6 @@ import com.mercadopago.tracking.utils.TrackingUtil;
 import com.mercadopago.uicontrollers.card.CardRepresentationModes;
 import com.mercadopago.uicontrollers.card.CardView;
 import com.mercadopago.util.ApiUtil;
-import com.mercadopago.util.ColorsUtil;
 import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.MPCardUIUtils;
@@ -57,7 +55,6 @@ import com.mercadopago.views.SecurityCodeActivityView;
 public class SecurityCodeActivity extends MercadoPagoBaseActivity implements SecurityCodeActivityView, TimerObserver {
 
     private static final String PRESENTER_BUNDLE = "mSecurityCodePresenter";
-    private static final String DECORATION_PREFERENCE_BUNDLE = "mDecorationPreference";
     private static final String PUBLIC_KEY_BUNDLE = "mMerchantPublicKey";
     private static final String PRIVATE_KEY_BUNDLE = "mPrivateKey";
     private static final String ESC_ENABLED_BUNDLE = "mEscEnabled";
@@ -76,7 +73,6 @@ public class SecurityCodeActivity extends MercadoPagoBaseActivity implements Sec
 
     //View controls
     protected ProgressBar mProgressBar;
-    protected DecorationPreference mDecorationPreference;
     protected MPEditText mSecurityCodeEditText;
     protected FrameLayout mNextButton;
     protected FrameLayout mBackButton;
@@ -105,7 +101,6 @@ public class SecurityCodeActivity extends MercadoPagoBaseActivity implements Sec
             createPresenter();
             getActivityParameters();
             configurePresenter();
-            setTheme();
             analyzeLowRes();
             setContentView();
             mSecurityCodePresenter.initialize();
@@ -114,7 +109,6 @@ public class SecurityCodeActivity extends MercadoPagoBaseActivity implements Sec
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        outState.putString(DECORATION_PREFERENCE_BUNDLE, JsonUtil.getInstance().toJson(mDecorationPreference));
         outState.putString(PRESENTER_BUNDLE, JsonUtil.getInstance().toJson(mSecurityCodePresenter));
         outState.putString(PUBLIC_KEY_BUNDLE, mMerchantPublicKey);
         outState.putString(PRIVATE_KEY_BUNDLE, mPrivateKey);
@@ -129,14 +123,12 @@ public class SecurityCodeActivity extends MercadoPagoBaseActivity implements Sec
 
         if (savedInstanceState != null) {
             mSecurityCodePresenter = JsonUtil.getInstance().fromJson(savedInstanceState.getString(PRESENTER_BUNDLE), SecurityCodePresenter.class);
-            mDecorationPreference = JsonUtil.getInstance().fromJson(savedInstanceState.getString(DECORATION_PREFERENCE_BUNDLE), DecorationPreference.class);
             mMerchantPublicKey = savedInstanceState.getString(PUBLIC_KEY_BUNDLE);
             mPrivateKey = savedInstanceState.getString(PRIVATE_KEY_BUNDLE);
             mEscEnabled = savedInstanceState.getBoolean(ESC_ENABLED_BUNDLE);
             mReason = savedInstanceState.getString(REASON_BUNDLE);
 
             configurePresenter();
-            setTheme();
             analyzeLowRes();
             setContentView();
             mSecurityCodePresenter.initialize();
@@ -148,12 +140,6 @@ public class SecurityCodeActivity extends MercadoPagoBaseActivity implements Sec
     @Override
     public void showApiExceptionError(ApiException exception, String requestOrigin) {
         ApiUtil.showApiExceptionError(mActivity, exception, mMerchantPublicKey, requestOrigin);
-    }
-
-    private void setTheme() {
-        if (isCustomColorSet()) {
-            setTheme(R.style.Theme_MercadoPagoTheme_NoActionBar);
-        }
     }
 
     private void createPresenter() {
@@ -170,14 +156,9 @@ public class SecurityCodeActivity extends MercadoPagoBaseActivity implements Sec
         }
     }
 
-    private boolean isCustomColorSet() {
-        return mDecorationPreference != null && mDecorationPreference.hasColors();
-    }
-
     private void getActivityParameters() {
         mMerchantPublicKey = getIntent().getStringExtra("merchantPublicKey");
         mPrivateKey = getIntent().getStringExtra("payerAccessToken");
-        mDecorationPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("decorationPreference"), DecorationPreference.class);
         mEscEnabled = getIntent().getBooleanExtra("escEnabled", false);
         mReason = getIntent().getStringExtra("reason");
 
@@ -277,31 +258,11 @@ public class SecurityCodeActivity extends MercadoPagoBaseActivity implements Sec
         mSecurityCodeCardIcon.setColorFilter(ContextCompat.getColor(this, color), PorterDuff.Mode.DST_OVER);
     }
 
-    private void decorate() {
-        if (isDecorationEnabled()) {
-            decorateButtons();
-            mBackground.setBackgroundColor(mDecorationPreference.getLighterColor());
-            if (mTimerTextView != null) {
-                ColorsUtil.decorateTextView(mDecorationPreference, mTimerTextView, this);
-            }
-        }
-    }
-
-    private boolean isDecorationEnabled() {
-        return mDecorationPreference != null && mDecorationPreference.hasColors();
-    }
-
-    private void decorateButtons() {
-        mNextButtonText.setTextColor(mDecorationPreference.getDarkFontColor(this));
-        mBackButtonText.setTextColor(mDecorationPreference.getDarkFontColor(this));
-    }
-
     @Override
     public void initialize() {
         initializeControls();
         mSecurityCodePresenter.initializeSecurityCodeSettings();
         loadViews();
-        decorate();
     }
 
     @Override

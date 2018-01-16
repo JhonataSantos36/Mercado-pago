@@ -4,8 +4,6 @@ import com.mercadopago.components.ActionDispatcher;
 import com.mercadopago.mocks.Instructions;
 import com.mercadopago.model.Instruction;
 import com.mercadopago.model.InstructionActionInfo;
-import com.mercadopago.paymentresult.components.AccreditationComment;
-import com.mercadopago.paymentresult.components.AccreditationTime;
 import com.mercadopago.paymentresult.components.InstructionsAction;
 import com.mercadopago.paymentresult.components.InstructionsActions;
 import com.mercadopago.paymentresult.props.InstructionsActionsProps;

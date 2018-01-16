@@ -10,7 +10,6 @@ import com.mercadopago.model.PaymentResult;
 import com.mercadopago.plugins.PaymentMethodPlugin;
 import com.mercadopago.plugins.PaymentProcessor;
 import com.mercadopago.plugins.model.PaymentMethodInfo;
-import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.util.TextUtil;
 import com.mercadopago.preferences.PaymentResultScreenPreference;
 
@@ -24,7 +23,6 @@ public class CheckoutStore {
     private static final CheckoutStore INSTANCE = new CheckoutStore();
 
     //Preferences
-    private DecorationPreference decorationPreference;
     private PaymentResultScreenPreference paymentResultScreenPreference;
 
     //Read only data
@@ -48,17 +46,6 @@ public class CheckoutStore {
 
     public static CheckoutStore getInstance() {
         return INSTANCE;
-    }
-
-    public DecorationPreference getDecorationPreference() {
-        if (decorationPreference == null) {
-            decorationPreference = new DecorationPreference.Builder().build();
-        }
-        return decorationPreference;
-    }
-
-    public void setDecorationPreference(@NonNull final DecorationPreference decorationPreference) {
-        this.decorationPreference = decorationPreference;
     }
 
     public PaymentResultScreenPreference getPaymentResultScreenPreference() {
@@ -187,8 +174,8 @@ public class CheckoutStore {
     public void reset() {
         data.clear();
         selectedPaymentMethodId = null;
-        paymentResult= null;
-        paymentData= null;
-        payment= null;
+        paymentResult = null;
+        paymentData = null;
+        payment = null;
     }
 }

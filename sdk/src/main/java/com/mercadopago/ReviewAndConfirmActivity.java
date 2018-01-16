@@ -1,16 +1,11 @@
 package com.mercadopago;
 
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
 import android.content.Intent;
-import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,17 +13,17 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.mercadopago.adapters.ReviewablesAdapter;
 import com.mercadopago.constants.ReviewKeys;
 import com.mercadopago.constants.Sites;
 import com.mercadopago.controllers.CheckoutTimer;
 import com.mercadopago.core.MercadoPagoCheckout;
 import com.mercadopago.customviews.MPTextView;
-
 import com.mercadopago.model.Discount;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.Item;
@@ -40,16 +35,14 @@ import com.mercadopago.model.Reviewable;
 import com.mercadopago.model.Site;
 import com.mercadopago.model.Token;
 import com.mercadopago.observers.TimerObserver;
-import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.preferences.ReviewScreenPreference;
 import com.mercadopago.presenters.ReviewAndConfirmPresenter;
+import com.mercadopago.providers.ReviewAndConfirmProviderImpl;
 import com.mercadopago.tracker.FlowHandler;
 import com.mercadopago.tracker.MPTrackingContext;
-import com.mercadopago.providers.ReviewAndConfirmProviderImpl;
 import com.mercadopago.tracking.model.ActionEvent;
 import com.mercadopago.tracking.model.ScreenViewEvent;
 import com.mercadopago.tracking.utils.TrackingUtil;
-import com.mercadopago.uicontrollers.FontCache;
 import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.views.ReviewAndConfirmView;
@@ -87,7 +80,6 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
     protected LinearLayout mTermsAndConditionsButton;
 
     protected ReviewAndConfirmPresenter mPresenter;
-    protected DecorationPreference mDecorationPreference;
     protected ReviewScreenPreference mReviewScreenPreference;
     protected String mPublicKey;
     protected Site mSite;
@@ -103,11 +95,8 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
         mPresenter.attachView(this);
         mPresenter.attachResourcesProvider(new ReviewAndConfirmProviderImpl(this, mReviewScreenPreference));
 
-        if (mDecorationPreference != null && mDecorationPreference.hasColors()) {
-            setTheme(R.style.Theme_MercadoPagoTheme_NoActionBar);
-        }
+        setContentView();
 
-        setContentView(R.layout.mpsdk_activity_review_confirm);
         initializeControls();
         showTimer();
         setListeners();
@@ -115,6 +104,10 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
         initializeReviewablesRecyclerView();
 
         mPresenter.initialize();
+    }
+
+    private void setContentView() {
+        setContentView(R.layout.mpsdk_activity_review_confirm);
     }
 
     private void setListeners() {
@@ -200,7 +193,6 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
         mPresenter.setPaymentMethodCommentInfo(paymentMethodCommentInfo);
         mPresenter.setPaymentMethodDescriptionInfo(paymentMethodDescriptionInfo);
         mPresenter.setEditionEnabled(editionEnabled);
-        mPresenter.setDecorationPreference(mDecorationPreference);
         mPresenter.setTermsAndConditionsEnabled(termsAndConditionsEnabled);
         mPresenter.setDiscountEnabled(discountEnabled);
 
@@ -230,7 +222,6 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
         mSeparatorView = findViewById(R.id.mpsdkFirstSeparator);
 
         initializeToolbar();
-        decorateButtons();
     }
 
     private void initializeReviewablesRecyclerView() {
@@ -239,34 +230,12 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
         mReviewables.setLayoutManager(new LinearLayoutManager(this));
     }
 
-    private void setTimerColor() {
-        if (mTimerTextView != null) {
-            mTimerTextView.setTextColor(mDecorationPreference.getBaseColor());
-        }
-    }
-
     private void initializeToolbar() {
 
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-
-        Drawable upArrow = mToolbar.getNavigationIcon();
-        if (upArrow != null && getSupportActionBar() != null) {
-            if (mDecorationPreference != null && mDecorationPreference.hasColors()) {
-                setTimerColor();
-                upArrow.setColorFilter(mDecorationPreference.getBaseColor(), PorterDuff.Mode.SRC_ATOP);
-            } else {
-                upArrow.setColorFilter(ContextCompat.getColor(this, R.color.mpsdk_background_blue), PorterDuff.Mode.SRC_ATOP);
-            }
-            getSupportActionBar().setHomeAsUpIndicator(upArrow);
-        }
-
-        if (FontCache.hasTypeface(FontCache.CUSTOM_REGULAR_FONT)) {
-            mCollapsingToolbar.setCollapsedTitleTypeface(FontCache.getTypeface(FontCache.CUSTOM_REGULAR_FONT));
-            mCollapsingToolbar.setExpandedTitleTypeface(FontCache.getTypeface(FontCache.CUSTOM_REGULAR_FONT));
-        }
 
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -320,87 +289,17 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
     private void startTermsAndConditionsActivity() {
         Intent termsAndConditionsIntent = new Intent(this, TermsAndConditionsActivity.class);
         termsAndConditionsIntent.putExtra("siteId", Sites.ARGENTINA.getId());
-        termsAndConditionsIntent.putExtra("decorationPreference", JsonUtil.getInstance().toJson(mDecorationPreference));
         startActivity(termsAndConditionsIntent);
     }
 
     private void getUIPreferences() {
-        if (getIntent().getStringExtra("decorationPreference") != null) {
-            mDecorationPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("decorationPreference"), DecorationPreference.class);
-        }
         mReviewScreenPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("reviewScreenPreference"), ReviewScreenPreference.class);
 
-    }
-
-    protected boolean isCustomColorSet() {
-        return mDecorationPreference != null && mDecorationPreference.hasColors();
-    }
-
-    protected int getCustomBaseColor() {
-        return mDecorationPreference.getBaseColor();
-    }
-
-    protected boolean isDarkFontEnabled() {
-        return mDecorationPreference != null && mDecorationPreference.isDarkFontEnabled();
-    }
-
-    protected int getDarkFontColor() {
-        return mDecorationPreference.getDarkFontColor(this);
-    }
-
-    protected void decorate(Button button) {
-        if (isCustomColorSet()) {
-            button.setBackgroundColor(getCustomBaseColor());
-        }
-
-        if (isDarkFontEnabled()) {
-            button.setTextColor(getDarkFontColor());
-        }
-    }
-
-    protected void decorate(Toolbar toolbar) {
-        if (toolbar != null) {
-            if (isCustomColorSet()) {
-                toolbar.setBackgroundColor(getCustomBaseColor());
-            }
-            decorateUpArrow(toolbar);
-        }
-    }
-
-    protected void decorateUpArrow(Toolbar toolbar) {
-        if (isDarkFontEnabled()) {
-            int darkFont = getDarkFontColor();
-            Drawable upArrow = toolbar.getNavigationIcon();
-            if (upArrow != null && getSupportActionBar() != null) {
-                upArrow.setColorFilter(darkFont, PorterDuff.Mode.SRC_ATOP);
-                getSupportActionBar().setHomeAsUpIndicator(upArrow);
-            }
-        }
-    }
-
-    private void decorateButtons() {
-        if (mDecorationPreference != null && mDecorationPreference.hasColors()) {
-            mConfirmButton.setBackgroundColor(mDecorationPreference.getBaseColor());
-            mFloatingConfirmButton.setBackgroundColor(mDecorationPreference.getBaseColor());
-            if (mDecorationPreference.isDarkFontEnabled()) {
-                mConfirmTextButton.setTextColor(mDecorationPreference.getDarkFontColor(this));
-                mFloatingConfirmTextButton.setTextColor(mDecorationPreference.getDarkFontColor(this));
-            }
-            mCancelTextView.setTextColor(mDecorationPreference.getBaseColor());
-            mTermsAndConditionsTextView.setTextColor(mDecorationPreference.getBaseColor());
-        }
     }
 
     @Override
     public void showTitle(String title) {
         mCollapsingToolbar.setTitle(title);
-        if (mDecorationPreference != null && mDecorationPreference.hasColors()) {
-            mCollapsingToolbar.setExpandedTitleColor(mDecorationPreference.getBaseColor());
-            mCollapsingToolbar.setCollapsedTitleTextColor(mDecorationPreference.getBaseColor());
-        } else {
-            mCollapsingToolbar.setExpandedTitleColor(ContextCompat.getColor(this, R.color.mpsdk_background_blue));
-            mCollapsingToolbar.setCollapsedTitleTextColor(ContextCompat.getColor(this, R.color.mpsdk_background_blue));
-        }
     }
 
     @Override

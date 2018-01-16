@@ -3,7 +3,6 @@ package com.mercadopago;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.InputFilter;
@@ -34,12 +33,10 @@ import com.mercadopago.model.ApiException;
 import com.mercadopago.model.Identification;
 import com.mercadopago.model.IdentificationType;
 import com.mercadopago.model.Payer;
-import com.mercadopago.preferences.DecorationPreference;
 import com.mercadopago.presenters.PayerInformationPresenter;
 import com.mercadopago.providers.PayerInformationProviderImpl;
 import com.mercadopago.uicontrollers.identification.IdentificationTicketView;
 import com.mercadopago.util.ApiUtil;
-import com.mercadopago.util.ColorsUtil;
 import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;
@@ -77,7 +74,6 @@ public class PayerInformationActivity extends MercadoPagoBaseActivity implements
     private boolean mActivityActive;
 
     //View controls
-    protected DecorationPreference mDecorationPreference;
     private ScrollView mScrollView;
     private ProgressBar mProgressBar;
 
@@ -122,15 +118,10 @@ public class PayerInformationActivity extends MercadoPagoBaseActivity implements
 
         configurePresenter();
 
-        if (isCustomColorSet()) {
-            setTheme(R.style.Theme_MercadoPagoTheme_NoActionBar);
-        }
-
         setContentView();
         initializeControls();
         initializeToolbar();
         setListeners();
-        decorate();
         initialize();
     }
 
@@ -213,7 +204,6 @@ public class PayerInformationActivity extends MercadoPagoBaseActivity implements
     }
 
     private void getActivityParameters() {
-        mDecorationPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("decorationPreference"), DecorationPreference.class);
         mPublicKey = getIntent().getStringExtra("merchantPublicKey");
         mPayerAccessToken = getIntent().getStringExtra("payerAccessToken");
     }
@@ -229,7 +219,6 @@ public class PayerInformationActivity extends MercadoPagoBaseActivity implements
         } else {
             setContentViewNormal();
         }
-
     }
 
     private void setContentViewLowRes() {
@@ -758,40 +747,5 @@ public class PayerInformationActivity extends MercadoPagoBaseActivity implements
         returnIntent.putExtra("payer", JsonUtil.getInstance().toJson(mPresenter.getPayer()));
         setResult(RESULT_OK, returnIntent);
         finish();
-    }
-
-    private boolean isCustomColorSet() {
-        return mDecorationPreference != null && mDecorationPreference.hasColors();
-    }
-
-    private void decorate() {
-        if (isDecorationEnabled()) {
-            if (mLowResActive) {
-                decorateLowRes();
-            } else {
-                decorateNormal();
-            }
-        }
-    }
-
-    private boolean isDecorationEnabled() {
-        return mDecorationPreference != null && mDecorationPreference.hasColors();
-    }
-
-    private void decorateLowRes() {
-        ColorsUtil.decorateLowResToolbar(mLowResToolbar, mLowResTitleToolbar, mDecorationPreference,
-                getSupportActionBar(), this);
-        mNextButtonText.setTextColor(mDecorationPreference.getDarkFontColor(this));
-        mBackButtonText.setTextColor(mDecorationPreference.getDarkFontColor(this));
-        mBackInactiveButtonText.setTextColor(ContextCompat.getColor(this, R.color.mpsdk_warm_grey_with_alpha));
-    }
-
-    private void decorateNormal() {
-        ColorsUtil.decorateTransparentToolbar(mNormalToolbar, mDecorationPreference,
-                getSupportActionBar(), this);
-        mBackground.setBackgroundColor(mDecorationPreference.getLighterColor());
-        mNextButtonText.setTextColor(mDecorationPreference.getDarkFontColor(this));
-        mBackButtonText.setTextColor(mDecorationPreference.getDarkFontColor(this));
-        mBackInactiveButtonText.setTextColor(ContextCompat.getColor(this, R.color.mpsdk_warm_grey_with_alpha));
     }
 }

@@ -1,7 +1,6 @@
 package com.mercadopago.paymentresult;
 
 import com.mercadopago.components.ActionDispatcher;
-import com.mercadopago.components.RecoverPaymentAction;
 import com.mercadopago.mocks.PaymentResults;
 import com.mercadopago.model.PaymentResult;
 import com.mercadopago.paymentresult.components.BodyError;

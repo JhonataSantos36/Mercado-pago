@@ -24,9 +24,9 @@ import com.mercadopago.paymentresult.props.PaymentResultProps;
 public class PaymentResultContainer extends Component<PaymentResultProps, Void> {
 
     public static final int DEFAULT_BACKGROUND_COLOR = R.color.mpsdk_blue_MP;
-    public static final int GREEN_BACKGROUND_COLOR = R.color.mpsdk_green_MP;
-    public static final int RED_BACKGROUND_COLOR = R.color.mpsdk_red_MP;
-    public static final int ORANGE_BACKGROUND_COLOR = R.color.mpsdk_orange_MP;
+    public static final int GREEN_BACKGROUND_COLOR = R.color.mpsdk_green_payment_result_background;
+    public static final int RED_BACKGROUND_COLOR = R.color.mpsdk_red_payment_result_background;
+    public static final int ORANGE_BACKGROUND_COLOR = R.color.mpsdk_orange_payment_result_background;
 
     private static final int DEFAULT_STATUS_BAR_COLOR = R.color.mpsdk_blue_status_MP;
     private static final int GREEN_STATUS_BAR_COLOR = R.color.mpsdk_green_status_MP;

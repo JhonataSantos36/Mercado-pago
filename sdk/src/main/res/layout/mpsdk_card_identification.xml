@@ -18,64 +18,65 @@
         <FrameLayout
             android:layout_width="@dimen/mpsdk_card_size_big_shadow_width"
             android:layout_height="@dimen/mpsdk_card_size_medium_height_no_border"
-            android:background="@drawable/mpsdk_card_back_shadow">
-        </FrameLayout>
+            android:background="@drawable/mpsdk_card_back_shadow"></FrameLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
-            android:weightSum="1"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:weightSum="1">
 
             <FrameLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
+                android:layout_weight="0.3"
                 android:paddingLeft="10dp"
-                android:paddingStart="10dp"
-                android:layout_weight="0.3">
+                android:paddingStart="10dp">
+
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:src="@drawable/mpsdk_foto_sello"/>
+                    android:src="@drawable/mpsdk_foto_sello" />
 
             </FrameLayout>
+
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="0.7"
                 android:layout_gravity="center_vertical"
-                android:paddingLeft="8dp"
-                android:paddingStart="8dp"
-                android:paddingRight="8dp"
+                android:layout_weight="0.7"
+                android:orientation="vertical"
                 android:paddingEnd="8dp"
-                android:orientation="vertical">
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:paddingStart="8dp">
 
                 <com.mercadopago.customviews.MPTextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingRight="14dp"
-                    android:paddingEnd="14dp"
                     android:layout_marginTop="35dp"
-                    android:textColor="@color/mpsdk_base_text_alpha"
-                    android:text="@string/mpsdk_card_identification_label"
                     android:lineSpacingExtra="5dp"
+                    android:paddingEnd="14dp"
+                    android:paddingRight="14dp"
+                    android:text="@string/mpsdk_card_identification_label"
+                    android:textColor="@color/mpsdk_base_text_alpha"
                     android:textSize="10dp"
-                    app:allowCustomFont="false"/>
+                    app:allowCustomFont="false" />
 
                 <FrameLayout
                     android:id="@+id/mpsdkIdNumberClickableZone"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_gravity="start"
-                    android:layout_marginTop="8dp"
                     android:layout_marginBottom="35dp"
-                    android:paddingStart="2dp"
-                    android:paddingLeft="2dp"
+                    android:layout_marginTop="8dp"
                     android:paddingEnd="2dp"
-                    android:paddingRight="2dp">
+                    android:paddingLeft="2dp"
+                    android:paddingRight="2dp"
+                    android:paddingStart="2dp">
 
                     <com.mercadopago.customviews.MPTextView
                         android:id="@+id/mpsdkIdentificationCardholderContainer"
@@ -83,14 +84,14 @@
                         android:layout_height="match_parent"
                         android:gravity="center_vertical"
                         android:maxLength="40"
+                        android:text="•• ••• •••"
                         android:textColor="@color/mpsdk_base_text"
-                        app:autoSizeTextType="uniform"
-                        app:autoSizeMinTextSize="10dp"
-                        app:autoSizeMaxTextSize="20dp"
-                        app:autoSizeStepGranularity="1dp"
-                        app:font_style="mono_regular"
                         app:allowCustomFont="false"
-                        android:text="•• ••• •••"/>
+                        app:autoSizeMaxTextSize="20dp"
+                        app:autoSizeMinTextSize="10dp"
+                        app:autoSizeStepGranularity="1dp"
+                        app:autoSizeTextType="uniform"
+                        app:font_style="mono_regular" />
 
                     <com.mercadopago.customviews.MPTextView
                         android:id="@+id/mpsdkIdNumberView"
@@ -99,13 +100,13 @@
                         android:gravity="center_vertical"
                         android:maxLength="40"
                         android:textColor="@color/mpsdk_base_text"
-                        app:autoSizeTextType="uniform"
-                        app:autoSizeMinTextSize="8dp"
-                        app:autoSizeMaxTextSize="16dp"
-                        app:autoSizeStepGranularity="1dp"
-                        app:font_style="mono_regular"
                         app:allowCustomFont="false"
-                        tools:text="123123122"/>
+                        app:autoSizeMaxTextSize="16dp"
+                        app:autoSizeMinTextSize="8dp"
+                        app:autoSizeStepGranularity="1dp"
+                        app:autoSizeTextType="uniform"
+                        app:font_style="mono_regular"
+                        tools:text="123123122" />
 
 
                 </FrameLayout>
@@ -117,10 +118,10 @@
 
     <ImageView
         android:id="@+id/mpsdkCardShadowBorder"
-        android:src="@drawable/mpsdk_id_card_shadow_rounded"
         android:layout_width="@dimen/mpsdk_card_size_big_width"
         android:layout_height="@dimen/mpsdk_card_size_big_height"
-        android:layout_gravity="center"/>
+        android:layout_gravity="center"
+        android:src="@drawable/mpsdk_id_card_shadow_rounded" />
 </FrameLayout>
 
 

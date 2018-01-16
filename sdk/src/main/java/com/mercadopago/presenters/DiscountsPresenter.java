@@ -5,9 +5,9 @@ import com.mercadopago.model.Discount;
 import com.mercadopago.mvp.MvpPresenter;
 import com.mercadopago.mvp.OnResourcesRetrievedCallback;
 import com.mercadopago.providers.DiscountsProvider;
+import com.mercadopago.views.DiscountsActivityView;
 
 import java.math.BigDecimal;
-import com.mercadopago.views.DiscountsActivityView;
 
 /**
  * Created by mromar on 11/29/16.
