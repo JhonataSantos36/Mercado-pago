@@ -98,8 +98,8 @@ public class CheckoutExampleActivity extends AppCompatActivity {
                         .setBadgeApproved(Badge.PENDING_BADGE_IMAGE)
                         .build();
 
-        final Map<String, Object> data = new HashMap<>();
-        data.put("amount", 120f);
+        final Map<String, Object> defaultData = new HashMap<>();
+        defaultData.put("amount", 120f);
 
         final MercadoPagoCheckout.Builder builder = new MercadoPagoCheckout.Builder()
             .setActivity(this)
@@ -111,16 +111,9 @@ public class CheckoutExampleActivity extends AppCompatActivity {
                 new SamplePaymentProcessor()
             )
             .setPaymentProcessor(new MainPaymentProcessor())
-            .setDataInitializationTask(new DataInitializationTask(data) {
+            .setDataInitializationTask(new DataInitializationTask(defaultData) {
                 @Override
                 public void onLoadData(@NonNull final Map<String, Object> data) {
-
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        //Do nothing
-                    }
-
                     data.put("user", "Nico");
                 }
             });

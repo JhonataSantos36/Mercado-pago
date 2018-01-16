@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 
 import com.mercadopago.constants.PaymentTypes;
-import com.mercadopago.controllers.CheckoutTimer;
 import com.mercadopago.core.CheckoutStore;
 import com.mercadopago.core.MercadoPagoCheckout;
 import com.mercadopago.core.MercadoPagoComponents;
@@ -88,7 +87,6 @@ public class CheckoutActivity extends MercadoPagoBaseActivity implements Checkou
         mCheckoutPresenter.attachResourcesProvider(provider);
         mCheckoutPresenter.attachView(this);
         mCheckoutPresenter.setIdempotencyKeySeed(mMerchantPublicKey);
-        mCheckoutPresenter.setTimer(CheckoutTimer.getInstance());
     }
 
     private void decorate() {
@@ -311,7 +309,7 @@ public class CheckoutActivity extends MercadoPagoBaseActivity implements Checkou
         overrideTransitionIn();
 
         final CheckoutStore store = CheckoutStore.getInstance();
-        final PaymentMethodInfo paymentMethodInfo = store.getSelectedPaymentMethodInfo();
+        final PaymentMethodInfo paymentMethodInfo = store.getSelectedPaymentMethodInfo(this);
 
         MercadoPagoComponents.Activities.ReviewAndConfirmBuilder builder = new MercadoPagoComponents.Activities.ReviewAndConfirmBuilder()
                 .setActivity(this)
@@ -572,8 +570,8 @@ public class CheckoutActivity extends MercadoPagoBaseActivity implements Checkou
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         mCheckoutPresenter.cancelInitialization();
+        super.onDestroy();
     }
 
     @Override

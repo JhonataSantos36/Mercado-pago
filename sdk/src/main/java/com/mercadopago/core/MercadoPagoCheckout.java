@@ -297,7 +297,7 @@ public class MercadoPagoCheckout {
         public Builder addPaymentMethodPlugin(@NonNull final PaymentMethodPlugin paymentMethodPlugin,
                                               @NonNull final PaymentProcessor paymentProcessor) {
             paymentMethodPluginList.add(paymentMethodPlugin);
-            paymentPlugins.put(paymentMethodPlugin.getPaymentMethodInfo().id, paymentProcessor);
+            paymentPlugins.put(paymentMethodPlugin.getId(), paymentProcessor);
             return this;
         }
 

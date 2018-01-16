@@ -4,7 +4,6 @@ import android.support.annotation.NonNull;
 
 import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.constants.PaymentMethods;
-import com.mercadopago.controllers.Timer;
 import com.mercadopago.core.CheckoutStore;
 import com.mercadopago.core.MercadoPagoCheckout;
 import com.mercadopago.core.MercadoPagoComponents;
@@ -81,7 +80,6 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
     private String mCurrentPaymentIdempotencyKey;
 
     private transient FailureRecovery failureRecovery;
-    private transient Timer mCheckoutTimer;
 
     private DataInitializationTask dataInitializationTask;
 
@@ -140,7 +138,6 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
 
     private void startCheckout() {
         resolvePreSelectedData();
-        setCheckoutTimer();
         initializePluginsData();
     }
 
@@ -152,7 +149,6 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
                 @Override
                 public void onDataInitialized(@NonNull final Map<String, Object> data) {
                     if (getView().isActive() && isViewAttached()) {
-                        CheckoutStore.getInstance().setData(data);
                         finishInitializingPluginsData();
                     }
                 }
@@ -168,18 +164,6 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
             getDiscountCampaigns();
         } else {
             retrievePaymentMethodSearch();
-        }
-    }
-
-    private void setCheckoutTimer() {
-        if (mFlowPreference.isCheckoutTimerEnabled()) {
-            mCheckoutTimer.start(mFlowPreference.getCheckoutTimerInitialTime());
-            mCheckoutTimer.setOnFinishListener(new Timer.FinishListener() {
-                @Override
-                public void onFinish() {
-                    mCheckoutTimer.finishCheckout();
-                }
-            });
         }
     }
 
@@ -948,10 +932,6 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
 
     public void setRequestedResult(final Integer requestedResult) {
         this.mRequestedResult = requestedResult;
-    }
-
-    public void setTimer(Timer timer) {
-        this.mCheckoutTimer = timer;
     }
 
     public CheckoutPreference getCheckoutPreference() {
