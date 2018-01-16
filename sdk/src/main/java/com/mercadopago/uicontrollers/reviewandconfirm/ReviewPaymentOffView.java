@@ -134,7 +134,7 @@ public class ReviewPaymentOffView extends Reviewable {
         int resId;
 
         if (mPaymentMethod != null && PaymentTypes.PLUGIN.equals(mPaymentMethod.getPaymentTypeId())) {
-            resId = CheckoutStore.getInstance().getSelectedPaymentMethodInfo().icon;
+            resId = CheckoutStore.getInstance().getSelectedPaymentMethodInfo(mContext).icon;
         } else if (mPaymentMethod != null && mPaymentMethod.getId().equals(PaymentMethods.BRASIL.BOLBRADESCO)) {
             resId = R.drawable.mpsdk_boleto_off;
         } else {

@@ -1,5 +1,6 @@
 package com.mercadopago.core;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.mercadopago.hooks.CheckoutHooks;
@@ -34,7 +35,7 @@ public class CheckoutStore {
 
     //App state
     private Hook hook;
-    private Map<String, Object> data = new HashMap();
+    private final Map<String, Object> data = new HashMap();
     private String selectedPaymentMethodId;
 
     //Payment
@@ -72,9 +73,18 @@ public class CheckoutStore {
         return paymentMethodPluginList;
     }
 
+    public boolean hasEnabledPaymenthMethodPlugin() {
+        for (final PaymentMethodPlugin plugin : paymentMethodPluginList) {
+            if (plugin.isEnabled(CheckoutStore.getInstance().getData())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public PaymentMethodPlugin getPaymentMethodPluginById(@NonNull final String id) {
         for (PaymentMethodPlugin plugin : paymentMethodPluginList) {
-            if (plugin.getPaymentMethodInfo().id.equalsIgnoreCase(id)) {
+            if (plugin.getId().equalsIgnoreCase(id)) {
                 return plugin;
             }
         }
@@ -88,9 +98,9 @@ public class CheckoutStore {
         return null;
     }
 
-    public PaymentMethodInfo getPaymentMethodPluginInfoById(@NonNull final String id) {
+    public PaymentMethodInfo getPaymentMethodPluginInfoById(@NonNull final String id, @NonNull final Context context) {
         for (PaymentMethodPlugin plugin : paymentMethodPluginList) {
-            final PaymentMethodInfo info = plugin.getPaymentMethodInfo();
+            final PaymentMethodInfo info = plugin.getPaymentMethodInfo(context);
             if (info.id.equalsIgnoreCase(id)) {
                 return info;
             }
@@ -98,9 +108,9 @@ public class CheckoutStore {
         return null;
     }
 
-    public PaymentMethodInfo getSelectedPaymentMethodInfo() {
+    public PaymentMethodInfo getSelectedPaymentMethodInfo(@NonNull final Context context) {
         if (!TextUtil.isEmpty(selectedPaymentMethodId)) {
-            return getPaymentMethodPluginInfoById(selectedPaymentMethodId);
+            return getPaymentMethodPluginInfoById(selectedPaymentMethodId, context);
         }
         return null;
     }
@@ -139,10 +149,6 @@ public class CheckoutStore {
 
     public Map<String, Object> getData() {
         return data;
-    }
-
-    public void setData(Map<String, Object> data) {
-        this.data = data;
     }
 
     public PaymentProcessor getPaymentProcessor() {
@@ -185,7 +191,6 @@ public class CheckoutStore {
     }
 
     public void reset() {
-        data.clear();
         selectedPaymentMethodId = null;
         paymentResult = null;
         paymentData = null;

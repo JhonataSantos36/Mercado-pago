@@ -297,11 +297,14 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
 
     private void resolveAvailablePaymentMethods() {
 
+        final CheckoutStore store = CheckoutStore.getInstance();
+
         if (isViewAttached()) {
 
             if (noPaymentMethodsAvailable()) {
                 showEmptyPaymentMethodsError();
-            } else if (isOnlyUniqueSearchSelectionAvailable() && mSelectAutomatically) {
+            } else if (isOnlyUniqueSearchSelectionAvailable() && mSelectAutomatically
+                    && !store.hasEnabledPaymenthMethodPlugin()) {
                 selectItem(mPaymentMethodSearch.getGroups().get(0), true);
             } else if (isOnlyAccountMoneyEnabled() && mSelectAutomatically) {
                 selectAccountMoney(mPaymentMethodSearch.getCustomSearchItems().get(0));
@@ -345,7 +348,7 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
 
         if (paymentMethodPlugins != null && !paymentMethodPlugins.isEmpty()) {
             for (PaymentMethodPlugin plugin : paymentMethodPlugins) {
-                final PaymentMethodInfo info = plugin.getPaymentMethodInfo();
+                final PaymentMethodInfo info = getView().getPaymentMethodInfo(plugin);
                 if (info != null) {
                     if (PaymentMethodPlugin.POSIION_TOP.equalsIgnoreCase(plugin.displayOrder())) {
                         pluginUpItems.add(info);

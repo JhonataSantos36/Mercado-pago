@@ -17,6 +17,12 @@ public abstract class PaymentMethodPlugin {
     public static final String POSIION_TOP = "position_up";
     public static final String POSIION_BOTTOM = "position_down";
 
+    private String id;
+
+    public PaymentMethodPlugin(final String id) {
+        this.id = id;
+    }
+
     public String displayOrder() {
         return POSIION_TOP;
     }
@@ -25,7 +31,11 @@ public abstract class PaymentMethodPlugin {
         return true;
     }
 
-    public abstract @NonNull PaymentMethodInfo getPaymentMethodInfo();
+    public String getId() {
+        return this.id;
+    }
+
+    public abstract @NonNull PaymentMethodInfo getPaymentMethodInfo(@NonNull final Context context);
 
     public abstract @Nullable PluginComponent createConfigurationComponent(@NonNull final PluginComponent.Props props,
                                                                            @NonNull final Context context);

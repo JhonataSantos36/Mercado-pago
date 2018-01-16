@@ -1,19 +1,20 @@
 package com.mercadopago.plugins;
 
 import android.support.annotation.NonNull;
-import android.util.Log;
 
-import java.util.HashMap;
+import com.mercadopago.core.CheckoutStore;
+
 import java.util.Map;
 
 public abstract class DataInitializationTask {
 
-    private DataInitializationCallbacks listener;
-    private final Map<String, Object> data = new HashMap<>();
+    private final Map<String, Object> data;
     private Thread taskThread;
 
-    public DataInitializationTask(@NonNull final Map<String, Object> data) {
-        this.data.putAll(data);
+    public DataInitializationTask(@NonNull final Map<String, Object> defaultData) {
+        this.data = CheckoutStore.getInstance().getData();
+        this.data.clear();
+        this.data.putAll(defaultData);
     }
 
     public void execute(final DataInitializationCallbacks callbacks) {
@@ -35,7 +36,6 @@ public abstract class DataInitializationTask {
 
     public void cancel() {
         if (taskThread != null && taskThread.isAlive() && !taskThread.isInterrupted()) {
-            Log.d("loaddata", "cancel load...");
             taskThread.interrupt();
         }
     }

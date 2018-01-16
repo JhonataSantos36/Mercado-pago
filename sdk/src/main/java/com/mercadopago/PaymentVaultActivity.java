@@ -428,7 +428,7 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
 
         } else {
 
-            final PaymentMethodInfo paymentMethodInfo = store.getSelectedPaymentMethodInfo();
+            final PaymentMethodInfo paymentMethodInfo = store.getSelectedPaymentMethodInfo(this);
             finishPaymentMethodSelection(new PaymentMethod(paymentMethodInfo));
             overrideTransitionOut();
         }
@@ -486,7 +486,7 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
 
             if (resultCode == RESULT_OK) {
                 final PaymentMethodInfo paymentMethodInfo =
-                        CheckoutStore.getInstance().getSelectedPaymentMethodInfo();
+                        CheckoutStore.getInstance().getSelectedPaymentMethodInfo(this);
                 finishPaymentMethodSelection(new PaymentMethod(paymentMethodInfo));
             } else {
                 overrideTransitionOut();
@@ -913,5 +913,10 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
     public void showHook(final Hook hook, final int code) {
         startActivityForResult(HookActivity.getIntent(this, hook), code);
         overrideTransitionIn();
+    }
+
+    @Override
+    public PaymentMethodInfo getPaymentMethodInfo(final PaymentMethodPlugin plugin) {
+        return plugin.getPaymentMethodInfo(this);
     }
 }

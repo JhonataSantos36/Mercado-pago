@@ -37,6 +37,7 @@ public class SamplePaymentMethodRenderer extends PluginRenderer<SamplePaymentMet
                 ? View.GONE : View.VISIBLE);
         errorLabel.setText(component.state.errorMessage);
         progressbar.setVisibility(component.state.authenticating ? View.VISIBLE : View.GONE);
+        continueButton.setVisibility(component.state.authenticating ? View.GONE : View.VISIBLE);
 
         continueButton.setOnClickListener(new View.OnClickListener() {
             @Override
