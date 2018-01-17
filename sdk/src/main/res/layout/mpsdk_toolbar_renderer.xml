@@ -5,7 +5,7 @@
     android:id="@+id/toolbar"
     android:layout_width="match_parent"
     android:layout_height="@dimen/mpsdk_toolbar_height"
-    android:background="?attr/colorPrimary"
+    android:background="@color/mpsdk_background"
     android:theme="@style/ToolbarTheme"
     app:popupTheme="@style/Theme.MercadoPagoTheme.NoActionBar">
     <com.mercadopago.customviews.MPTextView
@@ -13,6 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         style="@style/mpsdk_title_text"
+        android:textColor="@color/mpsdk_toolbar_text"
         android:text="@string/mpsdk_title_activity_bank_deals"
         android:layout_gravity="center" />
 </android.support.v7.widget.Toolbar>
