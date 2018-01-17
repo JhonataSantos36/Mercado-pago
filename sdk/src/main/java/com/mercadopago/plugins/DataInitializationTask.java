@@ -8,6 +8,8 @@ import java.util.Map;
 
 public abstract class DataInitializationTask {
 
+    public static final String KEY_INIT_SUCCESS = "init_success";
+
     private final Map<String, Object> data;
     private Thread taskThread;
 
@@ -27,7 +29,7 @@ public abstract class DataInitializationTask {
                         callbacks.onDataInitialized(data);
                     }
                 } catch (final Exception e) {
-                    //Do nothing
+                    callbacks.onFailure(e, data);
                 }
             }
         });
@@ -44,5 +46,6 @@ public abstract class DataInitializationTask {
 
     public interface DataInitializationCallbacks {
         void onDataInitialized(@NonNull final Map<String, Object> data);
+        void onFailure(@NonNull final Exception e, @NonNull final Map<String, Object> data);
     }
 }

@@ -148,9 +148,14 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
             dataInitializationTask.execute(new DataInitializationTask.DataInitializationCallbacks() {
                 @Override
                 public void onDataInitialized(@NonNull final Map<String, Object> data) {
-                    if (getView().isActive() && isViewAttached()) {
-                        finishInitializingPluginsData();
-                    }
+                    data.put(DataInitializationTask.KEY_INIT_SUCCESS, true);
+                    finishInitializingPluginsData();
+                }
+
+                @Override
+                public void onFailure(@NonNull Exception e, @NonNull Map<String, Object> data) {
+                    data.put(DataInitializationTask.KEY_INIT_SUCCESS, false);
+                    finishInitializingPluginsData();
                 }
             });
         } else {
@@ -159,11 +164,13 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
     }
 
     private void finishInitializingPluginsData() {
-        boolean shouldGetDiscounts = mDiscount == null && isDiscountEnabled();
-        if (shouldGetDiscounts) {
-            getDiscountCampaigns();
-        } else {
-            retrievePaymentMethodSearch();
+        if (getView().isActive() && isViewAttached()) {
+            boolean shouldGetDiscounts = mDiscount == null && isDiscountEnabled();
+            if (shouldGetDiscounts) {
+                getDiscountCampaigns();
+            } else {
+                retrievePaymentMethodSearch();
+            }
         }
     }
 
