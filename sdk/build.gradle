@@ -15,7 +15,7 @@ ext {
     siteUrl = 'https://github.com/mercadopago/px-android'
     gitUrl = 'https://github.com/mercadopago/px-android.git'
 
-    libraryVersion = '4.0.0-beta-7'
+    libraryVersion = '4.0.0-beta-7b'
 
     developerId = 'matias.gualino'
     developerName = 'Matias Gualino'
@@ -26,7 +26,7 @@ ext {
     allLicenses = ["Apache-2.0"]
 }
 
-version = "4.0.0-beta-7"
+version = "4.0.0-beta-7b"
 group = "com.mercadopago"
 archivesBaseName = "sdk"
 
@@ -37,7 +37,7 @@ android {
         minSdkVersion min_api_level.toInteger()
         targetSdkVersion api_level.toInteger()
         versionCode 1
-        versionName '4.0.0-beta-7'
+        versionName '4.0.0-beta-7b'
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
