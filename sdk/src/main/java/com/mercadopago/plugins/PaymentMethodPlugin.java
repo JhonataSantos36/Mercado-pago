@@ -28,7 +28,7 @@ public abstract class PaymentMethodPlugin {
     }
 
     public boolean isEnabled(@NonNull final Map<String, Object> data) {
-        return true;
+        return (boolean) data.get(DataInitializationTask.KEY_INIT_SUCCESS);
     }
 
     public String getId() {
