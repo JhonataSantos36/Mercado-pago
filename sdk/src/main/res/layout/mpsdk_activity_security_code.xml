@@ -25,6 +25,16 @@
                 android:layout_height="208dp"
                 android:background="@color/mpsdk_background">
 
+                <android.support.v7.widget.Toolbar
+                    android:id="@+id/mpsdkToolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/mpsdk_background"
+                    android:theme="@style/ToolbarTheme"
+                    app:popupTheme="@style/Theme.MercadoPagoTheme.NoActionBar">
+
+                </android.support.v7.widget.Toolbar>
+
                 <com.mercadopago.customviews.MPTextView
                     android:id="@+id/mpsdkTimerTextView"
                     android:layout_width="wrap_content"

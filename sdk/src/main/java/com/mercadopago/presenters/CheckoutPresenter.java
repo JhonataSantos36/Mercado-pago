@@ -134,11 +134,13 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
     }
 
     private void startCheckout() {
+        boolean couponDiscountFound = false;
+
         resolvePreSelectedData();
         setCheckoutTimer();
         boolean shouldGetDiscounts = mDiscount == null && isDiscountEnabled();
         if (shouldGetDiscounts) {
-            getDiscountCampaigns();
+            getDirectDiscount(couponDiscountFound);
         } else {
             retrievePaymentMethodSearch();
         }
@@ -228,7 +230,7 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
         }
     }
 
-    private void getDirectDiscount(final boolean couponDiscountFount) {
+    private void getDirectDiscount(final boolean couponDiscountFound) {
         String payerEmail = mCheckoutPreference.getPayer() == null ? "" : mCheckoutPreference.getPayer().getEmail();
         getResourcesProvider().getDirectDiscount(mCheckoutPreference.getAmount(), payerEmail, new OnResourcesRetrievedCallback<Discount>() {
             @Override
@@ -243,7 +245,7 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
             public void onFailure(final MercadoPagoError error) {
                 if (isViewAttached()) {
                     mDirectDiscountEnabled = false;
-                    if (couponDiscountFount) {
+                    if (couponDiscountFound) {
                         retrievePaymentMethodSearch();
                     } else {
                         mFlowPreference.disableDiscount();

@@ -40,7 +40,7 @@
             android:name=".TermsAndConditionsActivity"
             android:label="@string/mpsdk_title_activity_terms_and_conditions"
             android:screenOrientation="behind"
-            android:theme="@style/Theme.ProcessMercadoPagoTheme.NoActionbar" />
+            android:theme="@style/Theme.MercadoPagoTheme.NoActionBar" />
         <activity
             android:name=".CheckoutActivity"
             android:screenOrientation="portrait"

@@ -21,9 +21,9 @@ import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.hooks.ExampleHooks;
 import com.mercadopago.model.Payment;
 import com.mercadopago.plugins.SamplePaymentMethodPlugin;
+import com.mercadopago.preferences.CheckoutPreference;
 import com.mercadopago.plugins.MainPaymentProcessor;
 import com.mercadopago.plugins.SamplePaymentProcessor;
-import com.mercadopago.preferences.CheckoutPreference;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;
 

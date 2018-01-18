@@ -7,6 +7,7 @@ import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MotionEventCompat;
+import android.support.v7.widget.Toolbar;
 import android.text.InputFilter;
 import android.view.MotionEvent;
 import android.view.View;
@@ -65,6 +66,7 @@ public class SecurityCodeActivity extends MercadoPagoBaseActivity implements Sec
 
     public static final String ERROR_STATE = "textview_error";
     public static final String NORMAL_STATE = "textview_normal";
+
     //Parameters
     protected String mMerchantPublicKey;
     protected String mPrivateKey;
@@ -84,8 +86,11 @@ public class SecurityCodeActivity extends MercadoPagoBaseActivity implements Sec
     protected String mErrorState;
     protected FrameLayout mBackground;
     protected ImageView mSecurityCodeCardIcon;
+    protected Toolbar mToolbar;
+
     //ViewMode
     protected boolean mLowResActive;
+
     //Normal View
     protected FrameLayout mCardContainer;
     protected CardView mCardView;
@@ -188,6 +193,8 @@ public class SecurityCodeActivity extends MercadoPagoBaseActivity implements Sec
     }
 
     private void initializeControls() {
+        initializeToolbar();
+
         mProgressBar = (ProgressBar) findViewById(R.id.mpsdkProgressBar);
         mSecurityCodeEditText = (MPEditText) findViewById(R.id.mpsdkCardSecurityCode);
         mNextButton = (FrameLayout) findViewById(R.id.mpsdkNextButton);
@@ -202,7 +209,24 @@ public class SecurityCodeActivity extends MercadoPagoBaseActivity implements Sec
         mTimerTextView = (MPTextView) findViewById(R.id.mpsdkTimerTextView);
         mProgressBar.setVisibility(View.GONE);
         mSecurityCodeCardIcon = (ImageView) findViewById(R.id.mpsdkSecurityCodeCardIcon);
+
         setListeners();
+    }
+
+    private void initializeToolbar() {
+        mToolbar = (Toolbar) findViewById(R.id.mpsdkToolbar);
+
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
     }
 
     private void setListeners() {
