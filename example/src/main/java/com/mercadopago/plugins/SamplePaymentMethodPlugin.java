@@ -8,17 +8,24 @@ import com.mercadopago.plugins.components.SamplePaymentMethod;
 import com.mercadopago.plugins.components.SampleResourcesProvider;
 import com.mercadopago.plugins.model.PaymentMethodInfo;
 
+import java.util.Map;
+
 /**
  * Created by nfortuna on 12/13/17.
  */
 
 public class SamplePaymentMethodPlugin extends PaymentMethodPlugin {
 
+
+    public SamplePaymentMethodPlugin() {
+        super("sample");
+    }
+
     @Override
-    public PaymentMethodInfo getPaymentMethodInfo() {
+    public PaymentMethodInfo getPaymentMethodInfo(@NonNull final Context context) {
         return new PaymentMethodInfo(
-            "sample",
-            "Sample Pago",
+            getId(),
+            "Dinero en cuenta",
             R.drawable.mpsdk_sample,
             "Custom payment method"
         );

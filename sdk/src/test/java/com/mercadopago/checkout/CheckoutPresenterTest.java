@@ -1255,67 +1255,6 @@ public class CheckoutPresenterTest {
         assertTrue(!TextUtil.isEmpty(provider.paymentCustomerId));
     }
 
-    //Timer tests
-    @Test
-    public void ifTimeInFlowPreferenceSetThenStartCheckoutTimer() {
-        MockedProvider provider = new MockedProvider();
-        MockedView view = new MockedView();
-
-        CheckoutPresenter presenter = new CheckoutPresenter();
-        presenter.attachResourcesProvider(provider);
-        presenter.attachView(view);
-
-        //Real preference, without items
-        CheckoutPreference preference = new CheckoutPreference.Builder()
-                .addItem(new Item("id", BigDecimal.TEN))
-                .setSite(Sites.ARGENTINA)
-                .build();
-
-        //Flow preference with timer
-        FlowPreference flowPreference = new FlowPreference.Builder()
-                .setCheckoutTimer(5)
-                .build();
-
-        provider.setCheckoutPreferenceResponse(preference);
-        provider.setPaymentMethodSearchResponse(PaymentMethodSearchs.getCompletePaymentMethodSearchMLA());
-
-        presenter.setCheckoutPreference(preference);
-        presenter.setFlowPreference(flowPreference);
-
-        Timer timer = new MockedTimer();
-        presenter.setTimer(timer);
-        presenter.initialize();
-
-        assertTrue(timer.isTimerEnabled());
-    }
-
-    @Test
-    public void ifTimeInFlowPreferenceNotSetThenDoNotStartCheckoutTimer() {
-        MockedProvider provider = new MockedProvider();
-        MockedView view = new MockedView();
-
-        CheckoutPresenter presenter = new CheckoutPresenter();
-        presenter.attachResourcesProvider(provider);
-        presenter.attachView(view);
-
-        //Real preference, without items
-        CheckoutPreference preference = new CheckoutPreference.Builder()
-                .addItem(new Item("id", BigDecimal.TEN))
-                .setSite(Sites.ARGENTINA)
-                .build();
-
-        provider.setCheckoutPreferenceResponse(preference);
-        provider.setPaymentMethodSearchResponse(PaymentMethodSearchs.getCompletePaymentMethodSearchMLA());
-
-        presenter.setCheckoutPreference(preference);
-
-        Timer timer = new MockedTimer();
-        presenter.setTimer(timer);
-        presenter.initialize();
-
-        assertFalse(timer.isTimerEnabled());
-    }
-
     @Test
     public void ifPaymentResultApprovedSetAndTokenWithESCAndESCEnabledThenSaveESC() {
         MockedProvider provider = new MockedProvider();
@@ -2052,6 +1991,11 @@ public class CheckoutPresenterTest {
         @Override
         public void showPaymentProcessor() {
 
+        }
+
+        @Override
+        public boolean isActive() {
+            return true;
         }
     }
 

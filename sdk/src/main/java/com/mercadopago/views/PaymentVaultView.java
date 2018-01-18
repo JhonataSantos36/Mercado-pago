@@ -9,6 +9,7 @@ import com.mercadopago.model.Payer;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentMethodSearchItem;
 import com.mercadopago.mvp.MvpView;
+import com.mercadopago.plugins.PaymentMethodPlugin;
 import com.mercadopago.plugins.model.PaymentMethodInfo;
 
 import java.math.BigDecimal;
@@ -27,17 +28,20 @@ public interface PaymentVaultView extends MvpView {
 
     void hideProgress();
 
-    void showCustomOptions(List<CustomSearchItem> customSearchItems, OnSelectedCallback<CustomSearchItem> customSearchItemOnSelectedCallback);
+    void showCustomOptions(List<CustomSearchItem> customSearchItems,
+                           OnSelectedCallback<CustomSearchItem> customSearchItemOnSelectedCallback);
 
     void showPluginOptions(List<PaymentMethodInfo> items);
 
-    void showSearchItems(List<PaymentMethodSearchItem> searchItems, OnSelectedCallback<PaymentMethodSearchItem> paymentMethodSearchItemSelectionCallback);
+    void showSearchItems(List<PaymentMethodSearchItem> searchItems,
+                         OnSelectedCallback<PaymentMethodSearchItem> paymentMethodSearchItemSelectionCallback);
 
     void showError(MercadoPagoError mercadoPagoError, String requestOrigin);
 
     void setTitle(String title);
 
-    void startCardFlow(String paymentType, BigDecimal transactionAmount, Boolean automaticallySelection);
+    void startCardFlow(String paymentType, BigDecimal transactionAmount,
+                       Boolean automaticallySelection);
 
     void startPaymentMethodsSelection();
 
@@ -60,4 +64,6 @@ public interface PaymentVaultView extends MvpView {
     void initializeMPTracker();
 
     void showHook(final Hook hook, final int code);
+
+    PaymentMethodInfo getPaymentMethodInfo(final PaymentMethodPlugin plugin);
 }

@@ -1,8 +1,9 @@
 package com.mercadopago.presenters;
 
+import android.support.annotation.NonNull;
+
 import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.constants.PaymentMethods;
-import com.mercadopago.controllers.Timer;
 import com.mercadopago.core.CheckoutStore;
 import com.mercadopago.core.MercadoPagoCheckout;
 import com.mercadopago.core.MercadoPagoComponents;
@@ -28,6 +29,7 @@ import com.mercadopago.model.PaymentResult;
 import com.mercadopago.model.Token;
 import com.mercadopago.mvp.MvpPresenter;
 import com.mercadopago.mvp.OnResourcesRetrievedCallback;
+import com.mercadopago.plugins.DataInitializationTask;
 import com.mercadopago.preferences.CheckoutPreference;
 import com.mercadopago.preferences.FlowPreference;
 import com.mercadopago.preferences.PaymentResultScreenPreference;
@@ -78,7 +80,8 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
     private String mCurrentPaymentIdempotencyKey;
 
     private transient FailureRecovery failureRecovery;
-    private transient Timer mCheckoutTimer;
+
+    private DataInitializationTask dataInitializationTask;
 
     public CheckoutPresenter() {
         if (mFlowPreference == null) {
@@ -137,24 +140,39 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
         boolean couponDiscountFound = false;
 
         resolvePreSelectedData();
-        setCheckoutTimer();
-        boolean shouldGetDiscounts = mDiscount == null && isDiscountEnabled();
-        if (shouldGetDiscounts) {
-            getDirectDiscount(couponDiscountFound);
+        initializePluginsData();
+    }
+
+    private void initializePluginsData() {
+        final CheckoutStore store = CheckoutStore.getInstance();
+        dataInitializationTask = store.getDataInitializationTask();
+        if (dataInitializationTask != null) {
+            dataInitializationTask.execute(new DataInitializationTask.DataInitializationCallbacks() {
+                @Override
+                public void onDataInitialized(@NonNull final Map<String, Object> data) {
+                    data.put(DataInitializationTask.KEY_INIT_SUCCESS, true);
+                    finishInitializingPluginsData();
+                }
+
+                @Override
+                public void onFailure(@NonNull Exception e, @NonNull Map<String, Object> data) {
+                    data.put(DataInitializationTask.KEY_INIT_SUCCESS, false);
+                    finishInitializingPluginsData();
+                }
+            });
         } else {
-            retrievePaymentMethodSearch();
+            finishInitializingPluginsData();
         }
     }
 
-    private void setCheckoutTimer() {
-        if (mFlowPreference.isCheckoutTimerEnabled()) {
-            mCheckoutTimer.start(mFlowPreference.getCheckoutTimerInitialTime());
-            mCheckoutTimer.setOnFinishListener(new Timer.FinishListener() {
-                @Override
-                public void onFinish() {
-                    mCheckoutTimer.finishCheckout();
-                }
-            });
+    private void finishInitializingPluginsData() {
+        if (getView().isActive() && isViewAttached()) {
+            boolean shouldGetDiscounts = mDiscount == null && isDiscountEnabled();
+            if (shouldGetDiscounts) {
+                getDiscountCampaigns();
+            } else {
+                retrievePaymentMethodSearch();
+            }
         }
     }
 
@@ -928,10 +946,6 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
         this.mRequestedResult = requestedResult;
     }
 
-    public void setTimer(Timer timer) {
-        this.mCheckoutTimer = timer;
-    }
-
     public CheckoutPreference getCheckoutPreference() {
         return mCheckoutPreference;
     }
@@ -1006,6 +1020,12 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
             showReviewAndConfirm();
         } else {
             resolvePaymentDataResponse();
+        }
+    }
+
+    public void cancelInitialization() {
+        if (dataInitializationTask != null) {
+            dataInitializationTask.cancel();
         }
     }
 }
