@@ -1,48 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/mpsdk_white">
+
     <LinearLayout
         android:id="@+id/mpsdkButtonContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:layout_gravity="bottom"
-        android:weightSum="1"
-        android:visibility="visible">
+        android:orientation="horizontal"
+        android:weightSum="1">
+
         <FrameLayout
             android:layout_width="0dp"
             android:layout_height="45dp"
             android:layout_weight="0.5">
+
             <FrameLayout
                 android:id="@+id/mpsdkBackButton"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:focusable="true"
-                android:background="@drawable/mpsdk_form_input_button">
+                android:background="@drawable/mpsdk_form_input_button"
+                android:focusable="true">
+
                 <com.mercadopago.customviews.MPTextView
                     android:id="@+id/mpsdkBackButtonText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:textColor="@color/mpsdk_active_button"
-                    android:text="@string/mpsdk_input_button_back"/>
+                    android:text="@string/mpsdk_input_button_back"
+                    android:textColor="@color/mpsdk_active_button" />
             </FrameLayout>
+
             <FrameLayout
                 android:id="@+id/mpsdkBackInactiveButton"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/mpsdk_very_light_gray"
                 android:visibility="gone">
+
                 <com.mercadopago.customviews.MPTextView
                     android:id="@+id/mpsdkBackInactiveButtonText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:textColor="@color/mpsdk_inactive_button"
-                    android:text="@string/mpsdk_input_button_back" />
+                    android:text="@string/mpsdk_input_button_back"
+                    android:textColor="@color/mpsdk_inactive_button" />
             </FrameLayout>
         </FrameLayout>
 
@@ -51,17 +56,19 @@
             android:layout_width="0dp"
             android:layout_height="45dp"
             android:layout_weight="0.5"
-            android:focusable="true"
-            android:background="@drawable/mpsdk_form_input_button">
+            android:background="@drawable/mpsdk_form_input_button"
+            android:focusable="true">
+
             <com.mercadopago.customviews.MPTextView
                 android:id="@+id/mpsdkNextButtonText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:textColor="@color/mpsdk_active_button"
-                android:text="@string/mpsdk_input_button_next"/>
+                android:text="@string/mpsdk_input_button_next"
+                android:textColor="@color/mpsdk_active_button" />
         </FrameLayout>
     </LinearLayout>
+
     <FrameLayout
         android:id="@+id/mpsdkErrorContainer"
         android:layout_width="match_parent"
@@ -69,14 +76,16 @@
         android:layout_gravity="bottom"
         android:background="@color/mpsdk_very_light_gray"
         android:visibility="gone">
+
         <com.mercadopago.customviews.MPTextView
             android:id="@+id/mpsdkErrorTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:textSize="14sp"
-            android:textColor="@color/mpsdk_color_red_error"/>
+            android:textColor="@color/mpsdk_color_red_error"
+            android:textSize="14sp" />
     </FrameLayout>
+
     <FrameLayout
         android:id="@+id/mpsdkRedErrorContainer"
         android:layout_width="match_parent"
@@ -84,27 +93,30 @@
         android:layout_gravity="bottom"
         android:background="@color/mpsdk_error_red_pink"
         android:visibility="gone">
+
         <com.mercadopago.customviews.MPTextView
             android:id="@+id/mpsdkRedErrorTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="start|center_vertical"
             android:layout_marginLeft="16dp"
             android:layout_marginStart="16dp"
-            android:layout_gravity="start|center_vertical"
             android:text="@string/mpsdk_invalid_card_payment_method"
-            android:textSize="12sp"
-            android:textColor="@color/mpsdk_white"/>
+            android:textColor="@color/mpsdk_white"
+            android:textSize="12sp" />
+
         <com.mercadopago.customviews.MPTextView
             android:id="@+id/mpsdkRedErrorMoreInfoTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="16dp"
-            android:layout_marginEnd="16dp"
             android:layout_gravity="end|center_vertical"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
             android:text="@string/mpsdk_more_info"
-            android:textSize="14sp"
-            android:textColor="@color/mpsdk_white"/>
+            android:textColor="@color/mpsdk_white"
+            android:textSize="14sp" />
     </FrameLayout>
+
     <FrameLayout
         android:id="@+id/mpsdkBlackInfoContainer"
         android:layout_width="match_parent"
@@ -112,21 +124,18 @@
         android:layout_gravity="bottom"
         android:background="@color/mpsdk_black_info_background"
         android:visibility="gone">
+
         <com.mercadopago.customviews.MPTextView
             android:id="@+id/mpsdkBlackInfoTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="start|center_vertical"
             android:layout_marginLeft="16dp"
             android:layout_marginStart="16dp"
-            android:layout_gravity="start|center_vertical"
-            tools:text="@string/mpsdk_exclusion_one_element"
+            android:textColor="@color/mpsdk_white"
             android:textSize="14sp"
-            android:textColor="@color/mpsdk_white"/>
+            tools:text="@string/mpsdk_exclusion_one_element" />
     </FrameLayout>
-    <ProgressBar
-        android:id="@+id/mpsdkProgressBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:visibility="gone"/>
+
+    <include layout="@layout/mpsdk_view_progress_bar_small" />
 </FrameLayout>

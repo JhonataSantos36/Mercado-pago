@@ -9,7 +9,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
 
-    <include layout="@layout/mpsdk_view_progress_bar_small"/>
+    <include layout="@layout/mpsdk_view_progress_bar"/>
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/mpsdkIssuersAppBar"

@@ -44,7 +44,7 @@
         <activity
             android:name=".CheckoutActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.ProcessMercadoPagoTheme.NoActionbar" />
+            android:theme="@style/Theme.MercadoPagoTheme.NoActionBar" />
         <activity
             android:name=".GuessingCardActivity"
             android:screenOrientation="behind"
@@ -122,13 +122,13 @@
             android:theme="@style/Theme.ProcessMercadoPagoTheme.NoActionbar" />
         <activity
             android:name=".hooks.HookActivity"
-            android:theme="@style/Theme.ProcessMercadoPagoTheme.NoActionbar" />
+            android:theme="@style/Theme.MercadoPagoTheme.NoActionBar" />
         <activity
             android:name=".plugins.PaymentMethodPluginActivity"
-            android:theme="@style/Theme.ProcessMercadoPagoTheme.NoActionbar" />
+            android:theme="@style/Theme.MercadoPagoTheme.NoActionBar" />
         <activity
             android:name=".plugins.PaymentPluginActivity"
-            android:theme="@style/Theme.ProcessMercadoPagoTheme.NoActionbar" />
+            android:theme="@style/Theme.MercadoPagoTheme.NoActionBar" />
 
     </application>
 

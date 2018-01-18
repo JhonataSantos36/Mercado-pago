@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/mpsdkProgressLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
-    android:visibility="gone">
+    android:background="@color/mpsdk_transparent">
 
-    <ProgressBar
-            style="?android:attr/progressBarStyleSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp" />
+
+    <com.mercadopago.customviews.MPProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:mpsdk_size="@dimen/mpsdk_xxl_height"
+        app:mpsdk_ui_stroke="@dimen/mpsdk_progress_stroke"/>
+
 
 </LinearLayout>

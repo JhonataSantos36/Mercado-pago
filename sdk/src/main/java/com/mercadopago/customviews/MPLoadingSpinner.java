@@ -68,14 +68,7 @@ public class MPLoadingSpinner extends View {
     private void init(AttributeSet attrs, int defStyleAttr) {
         final TypedArray typedArray = getContext().obtainStyledAttributes(attrs, R.styleable.MPLoadingSpinner, defStyleAttr, 0);
 
-        int primaryColorInt = loadColor(typedArray, R.styleable.MPLoadingSpinner_mpsdk_ui_primaryColor, R.color.mpsdk_colorPrimary);
-        int secondaryColorInt = loadColor(typedArray, R.styleable.MPLoadingSpinner_mpsdk_ui_secondaryColor, R.color.colorPrimaryDark);
         strokeSize = typedArray.getDimensionPixelSize(R.styleable.MPLoadingSpinner_mpsdk_ui_stroke, getResources().getDimensionPixelSize(R.dimen.mpsdk_progress_stroke));
-
-        primaryColor = createPaint(Paint.Style.STROKE, strokeSize, primaryColorInt);
-        secondaryColor = createPaint(Paint.Style.STROKE, strokeSize, secondaryColorInt);
-
-        updateColor();
 
         typedArray.recycle();
     }
@@ -83,7 +76,7 @@ public class MPLoadingSpinner extends View {
     /**
      * Load the color from xml attributes or fallback to the default if not found
      *
-     * @param typedArray            attributes typed array
+     * @param typedArray   attributes typed array
      * @param index        the styleable index
      * @param defaultColor the default color resource id
      * @return the color to use
@@ -225,7 +218,11 @@ public class MPLoadingSpinner extends View {
         super.onDraw(canvas);
 
         if (getVisibility() == VISIBLE) {
-            canvas.drawArc(viewBounds, startAngle, sweepAngle - startAngle, false, currentColor);
+
+            int color = ContextCompat.getColor(getContext(), R.color.mpsdk_loading);
+            Paint paint = createPaint(Paint.Style.STROKE, strokeSize, color);
+
+            canvas.drawArc(viewBounds, startAngle, sweepAngle - startAngle, false, paint);
         }
     }
 

@@ -4,7 +4,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.ProgressBar;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.mercadopago.constants.Sites;
@@ -18,7 +18,7 @@ public class TermsAndConditionsActivity extends MercadoPagoActivity {
     protected View mMPTermsAndConditionsView;
     protected View mBankDealsTermsAndConditionsView;
     protected WebView mTermsAndConditionsWebView;
-    protected ProgressBar mProgressbar;
+    protected LinearLayout mProgressLayout;
     protected MPTextView mBankDealsLegalsTextView;
     protected Toolbar mToolbar;
     protected TextView mTitle;
@@ -48,7 +48,7 @@ public class TermsAndConditionsActivity extends MercadoPagoActivity {
     @Override
     protected void initializeControls() {
         mBankDealsTermsAndConditionsView = findViewById(R.id.mpsdkBankDealsTermsAndConditions);
-        mProgressbar = (ProgressBar) findViewById(R.id.mpsdkProgressBar);
+        mProgressLayout = (LinearLayout) findViewById(R.id.mpsdkProgressLayout);
         mMPTermsAndConditionsView = findViewById(R.id.mpsdkMPTermsAndConditions);
         mTermsAndConditionsWebView = (WebView) findViewById(R.id.mpsdkTermsAndConditionsWebView);
         mBankDealsLegalsTextView = (MPTextView) findViewById(R.id.mpsdkTermsAndConditions);
@@ -91,10 +91,10 @@ public class TermsAndConditionsActivity extends MercadoPagoActivity {
     }
 
     private void showMPTermsAndConditions() {
-        mProgressbar.setVisibility(View.VISIBLE);
+        mProgressLayout.setVisibility(View.VISIBLE);
         mTermsAndConditionsWebView.setWebViewClient(new WebViewClient() {
             public void onPageFinished(WebView view, String url) {
-                mProgressbar.setVisibility(View.GONE);
+                mProgressLayout.setVisibility(View.GONE);
                 mMPTermsAndConditionsView.setVisibility(View.VISIBLE);
             }
         });

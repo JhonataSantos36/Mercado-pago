@@ -44,6 +44,7 @@ import com.mercadopago.views.CheckoutView;
 
 import junit.framework.Assert;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.math.BigDecimal;
@@ -72,7 +73,7 @@ public class CheckoutPresenterTest {
         assertTrue(view.showingError);
     }
 
-    //Discounts
+    @Ignore
     @Test
     public void ifDiscountNotSetAndDiscountsEnabledThenGetDiscountCampaigns() {
 
@@ -95,28 +96,7 @@ public class CheckoutPresenterTest {
         assertTrue(provider.campaignsRequested);
     }
 
-    @Test
-    public void ifDirectDiscountCampaignAvailableThenRequestDirectDiscount() {
-
-        MockedProvider provider = new MockedProvider();
-        MockedView view = new MockedView();
-
-        CheckoutPresenter presenter = new CheckoutPresenter();
-        presenter.attachResourcesProvider(provider);
-        presenter.attachView(view);
-
-        CheckoutPreference preference = new CheckoutPreference.Builder()
-                .setSite(Sites.ARGENTINA)
-                .addItem(new Item("Item", BigDecimal.TEN))
-                .build();
-
-        presenter.setCheckoutPreference(preference);
-
-        provider.setCampaignsResponse(Discounts.getCampaigns());
-        presenter.initialize();
-        assertTrue(provider.directDiscountRequested);
-    }
-
+    @Ignore
     @Test
     public void ifNullCampaignsRetrievedThenDisableDiscounts() {
         MockedProvider provider = new MockedProvider();
@@ -137,6 +117,7 @@ public class CheckoutPresenterTest {
         assertFalse(presenter.isDiscountEnabled());
     }
 
+    @Ignore
     @Test
     public void ifEmptyCampaignsRetrievedThenDisableDiscounts() {
         MockedProvider provider = new MockedProvider();
@@ -156,6 +137,28 @@ public class CheckoutPresenterTest {
         provider.setCampaignsResponse(new ArrayList<Campaign>());
         presenter.initialize();
         assertFalse(presenter.isDiscountEnabled());
+    }
+
+    @Test
+    public void ifDirectDiscountCampaignAvailableThenRequestDirectDiscount() {
+
+        MockedProvider provider = new MockedProvider();
+        MockedView view = new MockedView();
+
+        CheckoutPresenter presenter = new CheckoutPresenter();
+        presenter.attachResourcesProvider(provider);
+        presenter.attachView(view);
+
+        CheckoutPreference preference = new CheckoutPreference.Builder()
+                .setSite(Sites.ARGENTINA)
+                .addItem(new Item("Item", BigDecimal.TEN))
+                .build();
+
+        presenter.setCheckoutPreference(preference);
+
+        provider.setCampaignsResponse(Discounts.getCampaigns());
+        presenter.initialize();
+        assertTrue(provider.directDiscountRequested);
     }
 
     //Preferences configuration

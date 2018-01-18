@@ -51,13 +51,7 @@
                 android:layout_height="wrap_content">
 
                 <include layout="@layout/mpsdk_payer_information_input" />
-                <ProgressBar
-                    android:id="@+id/mpsdkProgressBar"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:visibility="gone"
-                    android:layout_gravity="center" />
+                <include layout="@layout/mpsdk_view_progress_bar_small"/>
             </FrameLayout>
 
             <include layout="@layout/mpsdk_form_card_button_container" />

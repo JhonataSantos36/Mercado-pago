@@ -10,7 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.ProgressBar;
+import android.widget.LinearLayout;
 
 import com.google.gson.reflect.TypeToken;
 import com.mercadopago.adapters.PaymentTypesAdapter;
@@ -53,7 +53,7 @@ public class PaymentTypesActivity extends MercadoPagoBaseActivity implements Pay
     //View controls
     private PaymentTypesAdapter mPaymentTypesAdapter;
     private RecyclerView mPaymentTypesRecyclerView;
-    private ProgressBar mProgressBar;
+    private LinearLayout mProgressLayout;
     //ViewMode
     protected boolean mLowResActive;
     //Low Res View
@@ -175,7 +175,7 @@ public class PaymentTypesActivity extends MercadoPagoBaseActivity implements Pay
 
     private void initializeViews() {
         mPaymentTypesRecyclerView = (RecyclerView) findViewById(R.id.mpsdkActivityPaymentTypesRecyclerView);
-        mProgressBar = (ProgressBar) findViewById(R.id.mpsdkProgressBar);
+        mProgressLayout = (LinearLayout) findViewById(R.id.mpsdkProgressLayout);
         if (mLowResActive) {
             mLowResToolbar = (Toolbar) findViewById(R.id.mpsdkRegularToolbar);
             mLowResTitleToolbar = (MPTextView) findViewById(R.id.mpsdkTitle);
@@ -188,7 +188,7 @@ public class PaymentTypesActivity extends MercadoPagoBaseActivity implements Pay
             mNormalToolbar.setVisibility(View.VISIBLE);
         }
         mTimerTextView = (MPTextView) findViewById(R.id.mpsdkTimerTextView);
-        mProgressBar.setVisibility(View.GONE);
+        mProgressLayout.setVisibility(View.GONE);
     }
 
     private void loadViews() {
@@ -292,13 +292,13 @@ public class PaymentTypesActivity extends MercadoPagoBaseActivity implements Pay
     @Override
     public void showLoadingView() {
         mPaymentTypesRecyclerView.setVisibility(View.GONE);
-        mProgressBar.setVisibility(View.VISIBLE);
+        mProgressLayout.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void stopLoadingView() {
         mPaymentTypesRecyclerView.setVisibility(View.VISIBLE);
-        mProgressBar.setVisibility(View.GONE);
+        mProgressLayout.setVisibility(View.GONE);
     }
 
     @Override

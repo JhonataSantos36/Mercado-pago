@@ -20,7 +20,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -150,7 +149,7 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
     private MPTextView mTimerTextView;
 
     //Input Views
-    private ProgressBar mProgressBar;
+    private LinearLayout mProgressLayout;
     private LinearLayout mInputContainer;
     private Spinner mIdentificationTypeSpinner;
     private LinearLayout mIdentificationTypeContainer;
@@ -582,7 +581,7 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
         mSecurityCodeEditText = (MPEditText) findViewById(R.id.mpsdkCardSecurityCode);
         mIdentificationNumberEditText = (MPEditText) findViewById(R.id.mpsdkCardIdentificationNumber);
         mInputContainer = (LinearLayout) findViewById(R.id.mpsdkInputContainer);
-        mProgressBar = (ProgressBar) findViewById(R.id.mpsdkProgressBar);
+        mProgressLayout = (LinearLayout) findViewById(R.id.mpsdkProgressLayout);
         mNextButton = (FrameLayout) findViewById(R.id.mpsdkNextButton);
         mBackButton = (FrameLayout) findViewById(R.id.mpsdkBackButton);
         mBackInactiveButton = (FrameLayout) findViewById(R.id.mpsdkBackInactiveButton);
@@ -606,7 +605,7 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
         mContainerDownAnimation = AnimationUtils.loadAnimation(mActivity, R.anim.mpsdk_slide_bottom_down);
 
         mInputContainer.setVisibility(View.GONE);
-        mProgressBar.setVisibility(View.VISIBLE);
+        mProgressLayout.setVisibility(View.VISIBLE);
 
         fullScrollDown();
     }
@@ -652,7 +651,7 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
     @Override
     public void showInputContainer() {
         mIdentificationTypeContainer.setVisibility(View.GONE);
-        mProgressBar.setVisibility(View.GONE);
+        mProgressLayout.setVisibility(View.GONE);
         mInputContainer.setVisibility(View.VISIBLE);
         requestCardNumberFocus();
     }
@@ -1705,7 +1704,7 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
         LayoutUtil.hideKeyboard(this);
         mButtonContainer.setVisibility(View.GONE);
         mInputContainer.setVisibility(View.GONE);
-        mProgressBar.setVisibility(View.VISIBLE);
+        mProgressLayout.setVisibility(View.VISIBLE);
         mPresenter.finishCardFlow();
     }
 
@@ -1849,7 +1848,7 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
     public void hideProgress() {
         mButtonContainer.setVisibility(View.VISIBLE);
         mInputContainer.setVisibility(View.VISIBLE);
-        mProgressBar.setVisibility(View.GONE);
+        mProgressLayout.setVisibility(View.GONE);
     }
 
     @Override

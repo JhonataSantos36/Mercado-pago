@@ -205,4 +205,6 @@
     <color name="mpsdk_green_payment_result_background">#00C677</color>
     <color name="mpsdk_red_payment_result_background">#E5464C</color>
     <color name="mpsdk_orange_payment_result_background">#E5953D</color>
+    <color name="mpsdk_loading">#009EE3</color>
+    <color name="mpsdk_background_loading">#FFFFFF</color>
 </resources>

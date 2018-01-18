@@ -18,7 +18,6 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -52,7 +51,7 @@ public class DiscountsActivity extends AppCompatActivity implements DiscountsAct
     private Map<String, String> mDiscountAdditionalInfo;
 
     //View
-    protected ProgressBar mProgressBar;
+    protected LinearLayout mProgressLayout;
     protected FrameLayout mReviewDiscountSummaryContainer;
     protected FrameLayout mNextButton;
     protected FrameLayout mBackButton;
@@ -121,7 +120,7 @@ public class DiscountsActivity extends AppCompatActivity implements DiscountsAct
     }
 
     protected void setContentView() {
-        setContentView(R.layout.activity_discounts);
+        setContentView(R.layout.mpsdk_activity_discounts);
     }
 
     protected void onValidStart() {
@@ -156,7 +155,7 @@ public class DiscountsActivity extends AppCompatActivity implements DiscountsAct
 
         mErrorContainer = (FrameLayout) findViewById(R.id.mpsdkErrorContainer);
         mErrorTextView = (MPTextView) findViewById(R.id.mpsdkErrorTextView);
-        mProgressBar = (ProgressBar) findViewById(R.id.mpsdkProgressBar);
+        mProgressLayout = (LinearLayout) findViewById(R.id.mpsdkProgressLayout);
         mScrollView = (ScrollView) findViewById(R.id.mpsdkScrollViewContainer);
         mTimerTextView = (MPTextView) findViewById(R.id.mpsdkTimerTextView);
 
@@ -365,12 +364,12 @@ public class DiscountsActivity extends AppCompatActivity implements DiscountsAct
 
     @Override
     public void showProgressBar() {
-        mProgressBar.setVisibility(View.VISIBLE);
+        mProgressLayout.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void hideProgressBar() {
-        mProgressBar.setVisibility(View.GONE);
+        mProgressLayout.setVisibility(View.GONE);
     }
 
     @Override

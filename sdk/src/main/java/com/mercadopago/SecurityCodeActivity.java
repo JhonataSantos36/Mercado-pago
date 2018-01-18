@@ -15,7 +15,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 
 import com.mercadopago.callbacks.card.CardSecurityCodeEditTextCallback;
 import com.mercadopago.controllers.CheckoutTimer;
@@ -74,7 +73,7 @@ public class SecurityCodeActivity extends MercadoPagoBaseActivity implements Sec
     protected String mReason;
 
     //View controls
-    protected ProgressBar mProgressBar;
+    protected LinearLayout mProgressLayout;
     protected MPEditText mSecurityCodeEditText;
     protected FrameLayout mNextButton;
     protected FrameLayout mBackButton;
@@ -195,7 +194,7 @@ public class SecurityCodeActivity extends MercadoPagoBaseActivity implements Sec
     private void initializeControls() {
         initializeToolbar();
 
-        mProgressBar = (ProgressBar) findViewById(R.id.mpsdkProgressBar);
+        mProgressLayout = (LinearLayout) findViewById(R.id.mpsdkProgressLayout);
         mSecurityCodeEditText = (MPEditText) findViewById(R.id.mpsdkCardSecurityCode);
         mNextButton = (FrameLayout) findViewById(R.id.mpsdkNextButton);
         mBackButton = (FrameLayout) findViewById(R.id.mpsdkBackButton);
@@ -207,7 +206,7 @@ public class SecurityCodeActivity extends MercadoPagoBaseActivity implements Sec
         mBackground = (FrameLayout) findViewById(R.id.mpsdkSecurityCodeActivityBackground);
         mCardContainer = (FrameLayout) findViewById(R.id.mpsdkCardViewContainer);
         mTimerTextView = (MPTextView) findViewById(R.id.mpsdkTimerTextView);
-        mProgressBar.setVisibility(View.GONE);
+        mProgressLayout.setVisibility(View.GONE);
         mSecurityCodeCardIcon = (ImageView) findViewById(R.id.mpsdkSecurityCodeCardIcon);
 
         setListeners();
@@ -236,7 +235,7 @@ public class SecurityCodeActivity extends MercadoPagoBaseActivity implements Sec
 
     @Override
     public void showLoadingView() {
-        mProgressBar.setVisibility(View.VISIBLE);
+        mProgressLayout.setVisibility(View.VISIBLE);
         mNextButton.setVisibility(View.INVISIBLE);
         mBackButton.setVisibility(View.INVISIBLE);
         hideKeyboard();
@@ -252,7 +251,7 @@ public class SecurityCodeActivity extends MercadoPagoBaseActivity implements Sec
 
     @Override
     public void stopLoadingView() {
-        mProgressBar.setVisibility(View.GONE);
+        mProgressLayout.setVisibility(View.GONE);
     }
 
 

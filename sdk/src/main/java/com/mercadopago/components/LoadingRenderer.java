@@ -14,6 +14,6 @@ public class LoadingRenderer extends Renderer<LoadingComponent> {
     @Override
     public View render(final LoadingComponent component, final Context context) {
         return LayoutInflater.from(context)
-                .inflate(R.layout.mpsdk_component_loading, null);
+                .inflate(R.layout.mpsdk_view_progress_bar, null);
     }
 }

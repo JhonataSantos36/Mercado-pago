@@ -15,7 +15,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -75,7 +74,7 @@ public class PayerInformationActivity extends MercadoPagoBaseActivity implements
 
     //View controls
     private ScrollView mScrollView;
-    private ProgressBar mProgressBar;
+    private LinearLayout mProgressLayout;
 
     //Input controls
     private String mCurrentEditingEditText;
@@ -249,7 +248,7 @@ public class PayerInformationActivity extends MercadoPagoBaseActivity implements
         mBackButtonText = (TextView) findViewById(R.id.mpsdkBackButtonText);
 
         mScrollView = (ScrollView) findViewById(R.id.mpsdkScrollViewContainer);
-        mProgressBar = (ProgressBar) findViewById(R.id.mpsdkProgressBar);
+        mProgressLayout = (LinearLayout) findViewById(R.id.mpsdkProgressLayout);
 
         mBackground = (FrameLayout) findViewById(R.id.mpsdkBackground);
         mIdentificationCardContainer = (FrameLayout) findViewById(R.id.mpsdkIdentificationCardContainer);
@@ -289,13 +288,13 @@ public class PayerInformationActivity extends MercadoPagoBaseActivity implements
     @Override
     public void showProgressBar() {
         mInputContainer.setVisibility(View.INVISIBLE);
-        mProgressBar.setVisibility(View.VISIBLE);
+        mProgressLayout.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void hideProgressBar() {
         mInputContainer.setVisibility(View.VISIBLE);
-        mProgressBar.setVisibility(View.GONE);
+        mProgressLayout.setVisibility(View.GONE);
     }
 
     private void setListeners() {

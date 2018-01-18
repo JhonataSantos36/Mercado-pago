@@ -2,10 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/mpsdk_white">
-    <include layout="@layout/mpsdk_view_progress_bar"/>
-    <FrameLayout
-            android:id="@+id/mpsdkRegularLayout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+    android:background="@color/mpsdk_background_loading">
+
+    <include layout="@layout/mpsdk_view_progress_bar" />
+
 </LinearLayout>

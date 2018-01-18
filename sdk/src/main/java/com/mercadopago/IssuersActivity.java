@@ -10,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 
 import com.google.gson.reflect.TypeToken;
 import com.mercadopago.adapters.IssuersAdapter;
@@ -72,7 +73,7 @@ public class IssuersActivity extends MercadoPagoBaseActivity implements IssuersA
     protected FrameLayout mCardContainer;
     protected Toolbar mNormalToolbar;
     protected FrontCardView mFrontCardView;
-    protected ViewGroup mProgressLayout;
+    protected LinearLayout mProgressLayout;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -142,7 +143,7 @@ public class IssuersActivity extends MercadoPagoBaseActivity implements IssuersA
     private void initializeControls() {
         mIssuersRecyclerView = (RecyclerView) findViewById(R.id.mpsdkActivityIssuersView);
         mTimerTextView = (MPTextView) findViewById(R.id.mpsdkTimerTextView);
-        mProgressLayout = (ViewGroup) findViewById(R.id.mpsdkProgressLayout);
+        mProgressLayout = (LinearLayout) findViewById(R.id.mpsdkProgressLayout);
 
         if (mLowResActive) {
             initializeLowResControls();

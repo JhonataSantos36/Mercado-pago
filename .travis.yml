@@ -19,9 +19,9 @@ android:
     - tools
     - platform-tools
     - tools # intentional, see travis-ci/docs-travis-ci-com#779
-    - build-tools-26.0.2
+    - build-tools-27.0.2
     - android-22 # avd creation fails without this
-    - android-26 # compile sdk
+    - android-27 # compile sdk
     - extra-android-m2repository
     - sys-img-armeabi-v7a-android-22 # emulator image
 
@@ -44,3 +44,6 @@ after_success:
 - pip install --user codecov
 - codecov
 - bash <(curl -s https://codecov.io/bash)
+
+before_install:
+- yes | sdkmanager "platforms;android-27"

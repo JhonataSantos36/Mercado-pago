@@ -26,13 +26,7 @@
                 android:visibility="visible">
                 <include layout="@layout/mpsdk_payment_types_list"/>
             </LinearLayout>
-            <ProgressBar
-                style="?android:attr/progressBarStyleLarge"
-                android:id="@+id/mpsdkProgressBar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:visibility="gone"/>
+            <include layout="@layout/mpsdk_view_progress_bar"/>
         </FrameLayout>
     </ScrollView>
 </LinearLayout>
