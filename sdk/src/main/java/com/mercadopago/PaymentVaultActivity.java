@@ -569,8 +569,13 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
                 mPaymentVaultPresenter.initializeDiscountRow();
             }
 
+            final CheckoutStore store = CheckoutStore.getInstance();
+
+            store.reset();
+            store.setSelectedPaymentMethodId(mSelectedPaymentMethod.getId());
 
             finishWithCardResult();
+
         } else {
             initializeMPTracker();
             trackChildrenScreen();

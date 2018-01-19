@@ -58,6 +58,12 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
     private PaymentMethodSearchItem resumeItem;
     private boolean skipHook = false;
     private boolean hook1Displayed = false;
+
+    /**
+     *
+     * @deprecated Account money is a plugin now.
+     */
+    @Deprecated
     private PaymentMethod accountMoneyPaymentMethod;
 
     public void initialize(boolean selectAutomatically) {
@@ -315,6 +321,11 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
         }
     }
 
+    /**
+     *
+     * @deprecated Account money is a plugin now.
+     */
+    @Deprecated
     public boolean isOnlyAccountMoneyEnabled() {
         return mPaymentMethodSearch.hasCustomSearchItems()
                 && mPaymentMethodSearch.getCustomSearchItems().size() == 1
@@ -404,6 +415,11 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
         };
     }
 
+    /**
+     *
+     * @deprecated Account money is a plugin now.
+     */
+    @Deprecated
     private void selectAccountMoney(CustomSearchItem searchItem) {
         accountMoneyPaymentMethod = new PaymentMethod();
         accountMoneyPaymentMethod.setId(ACCOUNT_MONEY_ID);
@@ -480,16 +496,20 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
     }
 
     public boolean isOnlyUniqueSearchSelectionAvailable() {
-        return searchItemsAvailable() && mPaymentMethodSearch.getGroups().size() == 1 && !mPaymentMethodSearch.hasCustomSearchItems();
+        return searchItemsAvailable() && mPaymentMethodSearch.getGroups().size() == 1
+                && !mPaymentMethodSearch.hasCustomSearchItems()
+                && !CheckoutStore.getInstance().hasEnabledPaymenthMethodPlugin();
     }
 
     private boolean searchItemsAvailable() {
-        return mPaymentMethodSearch != null && mPaymentMethodSearch.getGroups() != null && !mPaymentMethodSearch.getGroups().isEmpty();
+        return mPaymentMethodSearch != null && mPaymentMethodSearch.getGroups() != null
+                && (!mPaymentMethodSearch.getGroups().isEmpty() || CheckoutStore.getInstance().hasEnabledPaymenthMethodPlugin());
     }
 
     private boolean noPaymentMethodsAvailable() {
         return (mPaymentMethodSearch.getGroups() == null || mPaymentMethodSearch.getGroups().isEmpty())
-                && (mPaymentMethodSearch.getCustomSearchItems() == null || mPaymentMethodSearch.getCustomSearchItems().isEmpty());
+                && (mPaymentMethodSearch.getCustomSearchItems() == null || mPaymentMethodSearch.getCustomSearchItems().isEmpty())
+                && !CheckoutStore.getInstance().hasEnabledPaymenthMethodPlugin();
     }
 
     private void showEmptyPaymentMethodsError() {
@@ -647,6 +667,11 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
         return false;
     }
 
+    /**
+     *
+     * @deprecated Account money is a plugin now.
+     */
+    @Deprecated
     public PaymentMethod getAccountMoneyPaymentMethod() {
         return accountMoneyPaymentMethod;
     }
