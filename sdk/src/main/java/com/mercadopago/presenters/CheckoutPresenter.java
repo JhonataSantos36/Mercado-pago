@@ -161,6 +161,7 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
                 }
             });
         } else {
+            store.getData().put(DataInitializationTask.KEY_INIT_SUCCESS, true);
             finishInitializingPluginsData();
         }
     }
