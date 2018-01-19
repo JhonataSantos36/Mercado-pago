@@ -623,9 +623,10 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
     }
 
     private boolean shouldFinishOnBack(Intent data) {
-        return mPaymentVaultPresenter.getSelectedSearchItem() != null && (!mPaymentVaultPresenter.getSelectedSearchItem().hasChildren() || mPaymentVaultPresenter.getSelectedSearchItem().getChildren().size() == 1)
+        return  !CheckoutStore.getInstance().hasEnabledPaymenthMethodPlugin() && (mPaymentVaultPresenter.getSelectedSearchItem() != null && (!mPaymentVaultPresenter.getSelectedSearchItem().hasChildren()
+                || (mPaymentVaultPresenter.getSelectedSearchItem().getChildren().size() == 1))
                 || (mPaymentVaultPresenter.getSelectedSearchItem() == null && (mPaymentVaultPresenter.isOnlyUniqueSearchSelectionAvailable() || mPaymentVaultPresenter.isOnlyAccountMoneyEnabled()))
-                || (data != null) && (data.getStringExtra("mercadoPagoError") != null);
+                || (data != null) && (data.getStringExtra("mercadoPagoError") != null));
     }
 
     @Override

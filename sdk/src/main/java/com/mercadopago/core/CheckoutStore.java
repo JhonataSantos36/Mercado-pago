@@ -73,14 +73,6 @@ public class CheckoutStore {
         return paymentMethodPluginList;
     }
 
-    public boolean hasEnabledPaymenthMethodPlugin() {
-        for (final PaymentMethodPlugin plugin : paymentMethodPluginList) {
-            if (plugin.isEnabled(CheckoutStore.getInstance().getData())) {
-                return true;
-            }
-        }
-        return false;
-    }
 
     public PaymentMethodPlugin getPaymentMethodPluginById(@NonNull final String id) {
         for (PaymentMethodPlugin plugin : paymentMethodPluginList) {
@@ -119,8 +111,15 @@ public class CheckoutStore {
         this.paymentMethodPluginList = paymentMethodPluginList;
     }
 
-    public String getSelectedPaymentMethodId() {
-        return selectedPaymentMethodId;
+    public boolean hasEnabledPaymenthMethodPlugin() {
+        boolean result = false;
+        for (final PaymentMethodPlugin plugin : paymentMethodPluginList) {
+            if (plugin.isEnabled(CheckoutStore.getInstance().getData())) {
+                result = true;
+                break;
+            }
+        }
+        return result;
     }
 
     public void setSelectedPaymentMethodId(final String selectedPaymentMethodId) {

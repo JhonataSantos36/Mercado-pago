@@ -321,10 +321,10 @@ public class CheckoutActivity extends MercadoPagoBaseActivity implements Checkou
             builder.setPaymentMethodCommentInfo(paymentMethodInfo.description);
         } else if (!PaymentTypes.ACCOUNT_MONEY.equals(mCheckoutPresenter.getSelectedPaymentMethod().getPaymentTypeId())) {
             PaymentMethodSearchItem paymentMethodSearchItem = mCheckoutPresenter.getPaymentMethodSearch().getSearchItemByPaymentMethod(mCheckoutPresenter.getSelectedPaymentMethod());
-            String searchItemComment = paymentMethodSearchItem.getComment();
-            String searchItemDescription = paymentMethodSearchItem.getDescription();
-            builder.setPaymentMethodCommentInfo(searchItemComment);
-            builder.setPaymentMethodDescriptionInfo(searchItemDescription);
+            if (paymentMethodSearchItem != null) {
+                builder.setPaymentMethodCommentInfo(paymentMethodSearchItem.getComment());
+                builder.setPaymentMethodDescriptionInfo(paymentMethodSearchItem.getDescription());
+            }
         }
         builder.startActivity();
     }
