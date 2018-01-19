@@ -1152,7 +1152,7 @@ public class GuessingCardPresenter extends MvpPresenter<GuessingCardActivityView
             mIssuer = issuers.get(0);
             getInstallments();
         } else {
-            getView().finishCardFlow(mPaymentMethod, mToken, mDiscount, mDirectDiscountEnabled, issuers);
+            getView().finishCardFlow(mPaymentMethod, mToken, mDiscount, mDirectDiscountEnabled, mDiscountEnabled, issuers);
         }
     }
 
@@ -1193,13 +1193,13 @@ public class GuessingCardPresenter extends MvpPresenter<GuessingCardActivityView
     private void resolvePayerCosts(List<PayerCost> payerCosts) {
         PayerCost defaultPayerCost = mPaymentPreference.getDefaultInstallments(payerCosts);
         if (defaultPayerCost != null) {
-            getView().finishCardFlow(mPaymentMethod, mToken, mDiscount, mDirectDiscountEnabled, mIssuer, defaultPayerCost);
+            getView().finishCardFlow(mPaymentMethod, mToken, mDiscount, mDirectDiscountEnabled, mDiscountEnabled, mIssuer, defaultPayerCost);
         } else if (payerCosts.isEmpty()) {
             getView().showError(new MercadoPagoError(getResourcesProvider().getMissingPayerCostsErrorMessage(), false), ApiUtil.RequestOrigin.GET_INSTALLMENTS);
         } else if (payerCosts.size() == 1) {
-            getView().finishCardFlow(mPaymentMethod, mToken, mDiscount, mDirectDiscountEnabled, mIssuer, payerCosts.get(0));
+            getView().finishCardFlow(mPaymentMethod, mToken, mDiscount, mDirectDiscountEnabled, mDiscountEnabled, mIssuer, payerCosts.get(0));
         } else {
-            getView().finishCardFlow(mPaymentMethod, mToken, mDiscount, mDirectDiscountEnabled, mIssuer, payerCosts);
+            getView().finishCardFlow(mPaymentMethod, mToken, mDiscount, mDirectDiscountEnabled, mDiscountEnabled, mIssuer, payerCosts);
         }
     }
 

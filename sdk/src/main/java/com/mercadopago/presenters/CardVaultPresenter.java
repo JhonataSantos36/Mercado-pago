@@ -464,6 +464,7 @@ public class CardVaultPresenter extends MvpPresenter<CardVaultView, CardVaultPro
 
     public void resolveNewCardRequest(final PaymentMethod paymentMethod, final Token token,
                                       final boolean directDiscountEnabled,
+                                      final boolean discountEnabled,
                                       final PayerCost payerCost, final Issuer issuer,
                                       final List<PayerCost> payerCosts, final List<Issuer> issuers,
                                       final Discount discount) {
@@ -472,6 +473,7 @@ public class CardVaultPresenter extends MvpPresenter<CardVaultView, CardVaultPro
         setToken(token);
         setCardInfo(new CardInfo(token));
         setDirectDiscountEnabled(directDiscountEnabled);
+        setDiscountEnabled(discountEnabled);
         setPayerCost(payerCost);
         setIssuer(issuer);
         setPayerCostsList(payerCosts);

@@ -416,9 +416,10 @@ public class CardVaultPresenterTest {
         List<Issuer> mockedIssuerList = Issuers.getIssuersListMLA();
         Discount mockedDiscount = null;
         Boolean directDiscountEnabled = false;
+        Boolean discountEnabled = false;
 
         //Response from GuessingCardActivity, without an issuer selected
-        presenter.resolveNewCardRequest(mockedPaymentMethod, mockedToken, directDiscountEnabled, mockedPayerCost, mockedIssuer, mockedPayerCostList, mockedIssuerList, mockedDiscount);
+        presenter.resolveNewCardRequest(mockedPaymentMethod, mockedToken, directDiscountEnabled, discountEnabled, mockedPayerCost, mockedIssuer, mockedPayerCostList, mockedIssuerList, mockedDiscount);
 
         assertTrue(mockedView.issuerFlowStarted);
     }
@@ -445,9 +446,10 @@ public class CardVaultPresenterTest {
         List<Issuer> mockedIssuerList = Issuers.getIssuersListMLA();
         Discount mockedDiscount = null;
         Boolean directDiscountEnabled = false;
+        Boolean discountEnabled = false;
 
         //Response from GuessingCardActivity, with an issuer selected
-        presenter.resolveNewCardRequest(mockedPaymentMethod, mockedToken, directDiscountEnabled, mockedPayerCost, mockedIssuer, mockedPayerCostList, mockedIssuerList, mockedDiscount);
+        presenter.resolveNewCardRequest(mockedPaymentMethod, mockedToken, directDiscountEnabled, discountEnabled, mockedPayerCost, mockedIssuer, mockedPayerCostList, mockedIssuerList, mockedDiscount);
 
         assertFalse(mockedView.issuerFlowStarted);
         assertTrue(mockedView.installmentsFlowStarted);
@@ -475,9 +477,10 @@ public class CardVaultPresenterTest {
         List<Issuer> mockedIssuerList = Issuers.getIssuersListMLA();
         Discount mockedDiscount = null;
         Boolean directDiscountEnabled = false;
+        Boolean discountEnabled = false;
 
         //Response from GuessingCardActivity, with an issuer selected
-        presenter.resolveNewCardRequest(mockedPaymentMethod, mockedToken, directDiscountEnabled, mockedPayerCost, mockedIssuer, mockedPayerCostList, mockedIssuerList, mockedDiscount);
+        presenter.resolveNewCardRequest(mockedPaymentMethod, mockedToken, directDiscountEnabled, discountEnabled, mockedPayerCost, mockedIssuer, mockedPayerCostList, mockedIssuerList, mockedDiscount);
 
         assertFalse(mockedView.issuerFlowStarted);
         assertFalse(mockedView.installmentsFlowStarted);

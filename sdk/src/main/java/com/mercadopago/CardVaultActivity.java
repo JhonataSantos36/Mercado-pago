@@ -418,6 +418,7 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultVie
             Token token = JsonUtil.getInstance().fromJson(data.getStringExtra("token"), Token.class);
             Discount discount = JsonUtil.getInstance().fromJson(data.getStringExtra("discount"), Discount.class);
             Boolean directDiscountEnabled = data.getBooleanExtra("directDiscountEnabled", true);
+            Boolean discountEnabled = data.getBooleanExtra("discountEnabled", true);
 
             Issuer issuer = JsonUtil.getInstance().fromJson(data.getStringExtra("issuer"), Issuer.class);
             PayerCost payerCost = JsonUtil.getInstance().fromJson(data.getStringExtra("payerCost"), PayerCost.class);
@@ -440,7 +441,7 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultVie
                 issuers = null;
             }
 
-            mCardVaultPresenter.resolveNewCardRequest(paymentMethod, token, directDiscountEnabled, payerCost, issuer, payerCosts, issuers, discount);
+            mCardVaultPresenter.resolveNewCardRequest(paymentMethod, token, directDiscountEnabled, discountEnabled, payerCost, issuer, payerCosts, issuers, discount);
 
         } else if (resultCode == RESULT_CANCELED) {
             mCardVaultPresenter.onResultCancel();
