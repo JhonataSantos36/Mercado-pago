@@ -817,8 +817,9 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
 
     private void recoverPayment() {
         try {
-            String paymentStatus = mCreatedPayment == null ? mPaymentResultInput.getPaymentStatus() : mCreatedPayment.getStatus();
-            String paymentStatusDetail = mCreatedPayment == null ? mPaymentResultInput.getPaymentStatusDetail() : mCreatedPayment.getStatusDetail();
+            PaymentResult paymentResult = mPaymentResultInput == null ? CheckoutStore.getInstance().getPaymentResult() : mPaymentResultInput;
+            String paymentStatus = mCreatedPayment == null ? paymentResult.getPaymentStatus() : mCreatedPayment.getStatus();
+            String paymentStatusDetail = mCreatedPayment == null ? paymentResult.getPaymentStatusDetail() : mCreatedPayment.getStatusDetail();
             mPaymentRecovery = new PaymentRecovery(mCreatedToken, mSelectedPaymentMethod, mSelectedPayerCost, mSelectedIssuer, paymentStatus, paymentStatusDetail);
             getView().startPaymentRecoveryFlow(mPaymentRecovery);
         } catch (IllegalStateException e) {
