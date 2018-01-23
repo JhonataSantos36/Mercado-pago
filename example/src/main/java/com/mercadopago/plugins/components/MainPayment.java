@@ -40,10 +40,7 @@ public class MainPayment extends PluginComponent<Void> {
                     98723496234l,
                     Payment.StatusCodes.STATUS_REJECTED,
                     Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_PLUGIN_PM,
-                    props.paymentData.getPaymentMethod().getId(),
-                    props.paymentData.getPaymentMethod().getName(),
-                    props.paymentData.getPaymentMethod().getIcon()
-                );
+                    props.paymentData);
 
                 getDispatcher().dispatch(new PluginPaymentResultAction(result));
             }

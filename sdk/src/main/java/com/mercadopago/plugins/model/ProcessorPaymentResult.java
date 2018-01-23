@@ -1,9 +1,9 @@
 package com.mercadopago.plugins.model;
 
-import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 
 import com.mercadopago.model.Payment;
+import com.mercadopago.model.PaymentData;
 
 /**
  * Created by nfortuna on 12/29/17.
@@ -14,23 +14,17 @@ public class ProcessorPaymentResult {
     public final long paymentId;
     public final String status;
     public final String statusDetail;
-    public final String paymentMethodId;
-    public final String paymentMethodName;
-    public final @DrawableRes int paymentMethodIcon;
+    public final PaymentData paymentData;
 
     public ProcessorPaymentResult(final long paymentId,
                                   final @NonNull String status,
                                   final @NonNull String statusDetail,
-                                  final @NonNull String paymentMethodId,
-                                  final @NonNull String paymentMethodName,
-                                  final int paymentMethodIcon) {
+                                  final @NonNull PaymentData paymentData) {
 
         this.paymentId = paymentId;
         this.status = status;
         this.statusDetail = processStatusDetail(status, statusDetail);
-        this.paymentMethodId = paymentMethodId;
-        this.paymentMethodName = paymentMethodName;
-        this.paymentMethodIcon = paymentMethodIcon;
+        this.paymentData = paymentData;
     }
 
     private String processStatusDetail(@NonNull final String status, @NonNull final String statusDetail) {

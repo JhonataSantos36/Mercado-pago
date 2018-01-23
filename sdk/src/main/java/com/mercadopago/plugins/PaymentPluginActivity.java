@@ -85,22 +85,13 @@ public class PaymentPluginActivity extends AppCompatActivity implements ActionDi
 
         final Payment payment = new Payment();
         payment.setId(pluginResult.paymentId);
-        payment.setPaymentMethodId(pluginResult.paymentMethodId);
+        payment.setPaymentMethodId(pluginResult.paymentData.getPaymentMethod().getId());
         payment.setPaymentTypeId(PaymentTypes.PLUGIN);
         payment.setStatus(pluginResult.status);
         payment.setStatusDetail(pluginResult.statusDetail);
 
-        final PaymentMethod paymentMethod = new PaymentMethod();
-        paymentMethod.setId(String.valueOf(pluginResult.paymentId));
-        paymentMethod.setName(pluginResult.paymentMethodName);
-        paymentMethod.setPaymentTypeId(PaymentTypes.PLUGIN);
-        paymentMethod.setIcon(pluginResult.paymentMethodIcon);
-
-        final PaymentData paymentData = new PaymentData();
-        paymentData.setPaymentMethod(paymentMethod);
-
         return new PaymentResult.Builder()
-                .setPaymentData(paymentData)
+                .setPaymentData(pluginResult.paymentData)
                 .setPaymentId(payment.getId())
                 .setPaymentStatus(payment.getStatus())
                 .setPaymentStatusDetail(payment.getStatusDetail())
