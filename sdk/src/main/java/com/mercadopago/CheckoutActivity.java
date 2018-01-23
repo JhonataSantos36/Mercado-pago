@@ -198,7 +198,7 @@ public class CheckoutActivity extends MercadoPagoBaseActivity implements Checkou
             if (resultCode == RESULT_OK) {
 
                 final PaymentResult paymentResult = CheckoutStore.getInstance().getPaymentResult();
-                showPaymentResult(paymentResult);
+                mCheckoutPresenter.checkStartPaymentResultActivity(paymentResult);
 
             } else {
                 overrideTransitionOut();

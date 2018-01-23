@@ -344,7 +344,7 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
         mPaymentMethodEditionRequested = false;
     }
 
-    private void checkStartPaymentResultActivity(final PaymentResult paymentResult) {
+    public void checkStartPaymentResultActivity(final PaymentResult paymentResult) {
         if (hasToDeleteESC(paymentResult)) {
             deleteESC(paymentResult.getPaymentData());
         }
