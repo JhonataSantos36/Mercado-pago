@@ -1,6 +1,5 @@
 package com.mercadopago.paymentresult.components;
 
-import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 
 import com.mercadopago.components.ActionDispatcher;
@@ -26,9 +25,8 @@ public class PaymentMethod extends Component<PaymentMethodProps, Void> {
         this.provider = provider;
     }
 
-    public Drawable getImage() {
-
-        return provider.getImage(props.paymentMethod);
+    public int getIconResource() {
+        return provider.getIconResource(props.paymentMethod);
     }
 
     public String getDescription() {

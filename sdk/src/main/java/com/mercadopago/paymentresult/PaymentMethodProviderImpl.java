@@ -7,7 +7,11 @@ import android.support.annotation.DrawableRes;
 import android.support.v4.content.ContextCompat;
 
 import com.mercadopago.R;
+import com.mercadopago.core.CheckoutStore;
 import com.mercadopago.model.PaymentMethod;
+import com.mercadopago.plugins.PaymentMethodPlugin;
+
+import java.util.List;
 
 public class PaymentMethodProviderImpl implements PaymentMethodProvider {
 
@@ -21,16 +25,21 @@ public class PaymentMethodProviderImpl implements PaymentMethodProvider {
     }
 
     @Override
-    public Drawable getImage(PaymentMethod paymentMethod) {
-        Drawable drawable = null;
+    public int getIconResource(PaymentMethod paymentMethod) {
+        int icon;
+        PaymentMethodPlugin paymentMethodPlugin = CheckoutStore.getInstance().getPaymentMethodPluginById(paymentMethod.getId());
+
         try {
-            final @DrawableRes int image = getPaymentMethodIcon(context, paymentMethod.getId());
-            drawable = ContextCompat.getDrawable(context, image);
+            if (paymentMethodPlugin != null) {
+                icon = paymentMethodPlugin.getPaymentMethodInfo(context).icon;
+            } else {
+                icon = getPaymentMethodIcon(context, paymentMethod.getId());
+            }
         } catch (final Resources.NotFoundException e) {
             // Avoid crashes if the image doesn exist return empty default one.
-            drawable = ContextCompat.getDrawable(context, R.drawable.mpsdk_none);
+            icon = R.drawable.mpsdk_none;
         }
-        return drawable;
+        return icon;
     }
 
     @Override

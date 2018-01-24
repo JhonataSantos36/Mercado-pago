@@ -12,8 +12,8 @@ import com.mercadopago.plugins.DataInitializationTask;
 import com.mercadopago.plugins.PaymentMethodPlugin;
 import com.mercadopago.plugins.PaymentProcessor;
 import com.mercadopago.plugins.model.PaymentMethodInfo;
-import com.mercadopago.util.TextUtil;
 import com.mercadopago.preferences.PaymentResultScreenPreference;
+import com.mercadopago.util.TextUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;

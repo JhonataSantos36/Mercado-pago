@@ -1,6 +1,7 @@
 package com.mercadopago.paymentresult.components;
 
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +28,7 @@ public class PaymentMethodRenderer extends Renderer<PaymentMethod> {
         final MPTextView statementDescriptionTextView = paymentMethodView.findViewById(R.id.mpsdkStatementDescription);
         final FrameLayout totalAmountContainer = paymentMethodView.findViewById(R.id.mpsdkTotalAmountContainer);
 
-        imageView.setImageDrawable(component.getImage());
+        imageView.setImageDrawable(ContextCompat.getDrawable(context, component.getIconResource()));
 
         final Renderer totalAmountRenderer = RendererFactory.create(context, component.getTotalAmountComponent());
         final View amountView = totalAmountRenderer.render();

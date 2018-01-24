@@ -37,10 +37,10 @@ public class MainPayment extends PluginComponent<Void> {
             public void run() {
 
                 final ProcessorPaymentResult result = new ProcessorPaymentResult(
-                    98723496234l,
-                    Payment.StatusCodes.STATUS_REJECTED,
-                    Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_PLUGIN_PM,
-                    props.paymentData);
+                        98723496234l,
+                        Payment.StatusCodes.STATUS_REJECTED,
+                        Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_PLUGIN_PM,
+                        props.paymentData);
 
                 getDispatcher().dispatch(new PluginPaymentResultAction(result));
             }
