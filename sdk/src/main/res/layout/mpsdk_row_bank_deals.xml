@@ -24,6 +24,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:gravity="center"
         tools:text="6 cuotas sin interes"
         style="@style/mpsdk_form_input"/>
 
@@ -32,8 +33,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:gravity="center"
         tools:text="Mastercard, American Express y Visa"
-        android:visibility="visible"
         style="@style/mpsdk_list_label"/>
-
 </LinearLayout>
