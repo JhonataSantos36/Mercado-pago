@@ -55,12 +55,24 @@ public class PaymentResultPropsMutator implements Mutator, PaymentResultPropsVie
                 .build();
     }
 
+    /**
+     * @deprecated Este método tiene que ser privado, se hizo publico para poder hacer
+     * notificaciones condicionales. Esta no es la forma adecuada de hacerlo hay que definir algún
+     * mecanismo de transacciones para eso. Mejor no tener el feature a tener algo mal implementado.
+     */
+    @Deprecated
     public void notifyPropsChanged() {
         if (propsListener != null) {
             propsListener.onProps(props);
         }
     }
 
+    /**
+     * @deprecated Eliminar este método, no tiene sentido, los valores por default de un componente
+     * se define al construir el componente, cualquier otra cosa es inaceptable.
+     * Esto es código viejo.
+     */
+    @Deprecated
     public void renderDefaultProps() {
         notifyPropsChanged();
     }

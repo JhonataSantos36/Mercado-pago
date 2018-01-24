@@ -164,7 +164,7 @@ public class RejectionActivity extends MercadoPagoBaseActivity implements TimerO
     protected void trackScreen() {
         MPTrackingContext mpTrackingContext = new MPTrackingContext.Builder(this, mMerchantPublicKey)
                 .setCheckoutVersion(BuildConfig.VERSION_NAME)
-                .setTrackingStrategy(TrackingUtil.FORCED_STRATEGY)
+                .setTrackingStrategy(TrackingUtil.BATCH_STRATEGY)
                 .build();
 
 

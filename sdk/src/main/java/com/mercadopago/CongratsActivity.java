@@ -243,7 +243,7 @@ public class CongratsActivity extends MercadoPagoBaseActivity implements ReviewS
     protected void trackScreen() {
         final MPTrackingContext mpTrackingContext = new MPTrackingContext.Builder(this, mMerchantPublicKey)
                 .setCheckoutVersion(BuildConfig.VERSION_NAME)
-                .setTrackingStrategy(TrackingUtil.FORCED_STRATEGY)
+                .setTrackingStrategy(TrackingUtil.BATCH_STRATEGY)
                 .build();
 
         final ScreenViewEvent.Builder builder = new ScreenViewEvent.Builder()

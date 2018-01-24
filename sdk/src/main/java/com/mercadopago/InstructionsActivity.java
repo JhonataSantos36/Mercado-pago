@@ -204,7 +204,7 @@ public class InstructionsActivity extends MercadoPagoBaseActivity {
     protected void trackScreen() {
         MPTrackingContext mpTrackingContext = new MPTrackingContext.Builder(this, mMerchantPublicKey)
                 .setCheckoutVersion(BuildConfig.VERSION_NAME)
-                .setTrackingStrategy(TrackingUtil.FORCED_STRATEGY)
+                .setTrackingStrategy(TrackingUtil.BATCH_STRATEGY)
                 .build();
 
 
