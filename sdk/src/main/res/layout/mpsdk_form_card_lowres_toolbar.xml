@@ -18,8 +18,7 @@
         android:layout_gravity="start|center_vertical"
         android:layout_marginLeft="20dp"
         android:layout_marginStart="20dp"
-        android:textSize="18dp"
-        android:textColor="@color/mpsdk_toolbar_text"
+        style="@style/mpsdk_toolbar_text_medium"
         tools:text="Tarjeta de crédito"/>
 
     <com.mercadopago.customviews.MPTextView
@@ -29,8 +28,7 @@
         android:layout_gravity="end|center_vertical"
         android:layout_marginRight="16dp"
         android:layout_marginEnd="16dp"
-        android:textSize="12dp"
-        android:textColor="@color/mpsdk_toolbar_text"
+        style="@style/mpsdk_toolbar_text_xx_small"
         android:visibility="gone"
         tools:text="Ver Promociones"/>
 
@@ -42,8 +40,7 @@
         android:layout_marginRight="16dp"
         android:layout_marginEnd="13dp"
         android:layout_marginTop="17dp"
-        android:textSize="17dp"
-        android:textColor="@color/mpsdk_toolbar_text"
+        style="@style/mpsdk_toolbar_text_small"
         android:visibility="gone"
         android:background="@drawable/mpsdk_title_toolbar"
         app:font_style="mono_regular"

@@ -17,8 +17,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:gravity="center_vertical"
-        android:textSize="20dp"
-        android:textColor="@color/mpsdk_toolbar_text"/>
+        style="@style/mpsdk_toolbar_text_large"/>
 
     <com.mercadopago.customviews.MPTextView
         android:id="@+id/mpsdkButtonText"

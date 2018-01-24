@@ -32,6 +32,26 @@
         <item name="android:textColor">@color/mpsdk_review_toolbar_text</item>
     </style>
 
+    <style name="mpsdk_toolbar_text">
+        <item name="android:textColor">@color/mpsdk_toolbar_text</item>
+    </style>
+
+    <style name="mpsdk_toolbar_text_large" parent="mpsdk_toolbar_text">
+        <item name="android:textSize">@dimen/mpsdk_l_text</item>
+    </style>
+
+    <style name="mpsdk_toolbar_text_medium" parent="mpsdk_toolbar_text">
+        <item name="android:textSize">@dimen/mpsdk_m_text</item>
+    </style>
+
+    <style name="mpsdk_toolbar_text_small" parent="mpsdk_toolbar_text">
+        <item name="android:textSize">@dimen/mpsdk_s_text</item>
+    </style>
+
+    <style name="mpsdk_toolbar_text_xx_small" parent="mpsdk_toolbar_text">
+        <item name="android:textSize">@dimen/mpsdk_xxs_text</item>
+    </style>
+
     <style name="mpsdk_basic_color">
         <item name="android:textColor">@color/mpsdk_black</item>
     </style>
