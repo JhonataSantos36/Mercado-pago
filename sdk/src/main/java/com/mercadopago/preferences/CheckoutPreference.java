@@ -30,6 +30,8 @@ public class CheckoutPreference {
     private String siteId;
 
     private Site localPreferenceSite;
+    private BigDecimal marketplaceFee;
+    private BigDecimal shippingCost;
 
     public CheckoutPreference(String checkoutPreferenceId) {
         this.id = checkoutPreferenceId;
@@ -40,13 +42,15 @@ public class CheckoutPreference {
         this.expirationDateFrom = builder.expirationDateFrom;
         this.expirationDateTo = builder.expirationDateTo;
         this.localPreferenceSite = builder.localPreferenceSite;
+        this.marketplaceFee = builder.marketplaceFee;
+        this.shippingCost = builder.shippingCost;
 
-        Payer payer = new Payer();
+        final Payer payer = new Payer();
         payer.setEmail(builder.payerEmail);
         payer.setAccessToken(builder.payerAccessToken);
         this.payer = payer;
 
-        PaymentPreference paymentPreference = new PaymentPreference();
+        final PaymentPreference paymentPreference = new PaymentPreference();
         paymentPreference.setExcludedPaymentTypeIds(builder.excludedPaymentTypes);
         paymentPreference.setExcludedPaymentMethodIds(builder.excludedPaymentMethods);
         paymentPreference.setMaxAcceptedInstallments(builder.maxInstallments);
@@ -135,6 +139,13 @@ public class CheckoutPreference {
         return expirationDateFrom == null || date.after(expirationDateFrom);
     }
 
+    public BigDecimal getMarketplaceFee() {
+        return marketplaceFee;
+    }
+
+    public BigDecimal getShippingCost() {
+        return shippingCost;
+    }
 
     public void setExpirationDate(Date date) {
         this.expirationDateTo = date;
@@ -161,6 +172,14 @@ public class CheckoutPreference {
             }
         }
         return totalAmount;
+    }
+
+    public void setMarketplaceFee(final BigDecimal marketplaceFee) {
+        this.marketplaceFee = marketplaceFee;
+    }
+
+    public void setShippingCost(final BigDecimal shippingCost) {
+        this.shippingCost = shippingCost;
     }
 
     public String getId() {
@@ -266,6 +285,8 @@ public class CheckoutPreference {
         private Site localPreferenceSite;
         private String payerAccessToken;
         private boolean excludeAccountMoney = true;
+        private BigDecimal marketplaceFee;
+        private BigDecimal shippingCost;
 
         public Builder() {
             items = new ArrayList<>();
@@ -352,6 +373,16 @@ public class CheckoutPreference {
 
         public Builder enableAccountMoney() {
             this.excludeAccountMoney = false;
+            return this;
+        }
+
+        public Builder setMarketplaceFee(final BigDecimal marketplaceFee) {
+            this.marketplaceFee = marketplaceFee;
+            return this;
+        }
+
+        public Builder setShippingCost(final BigDecimal shippingCost) {
+            this.shippingCost = shippingCost;
             return this;
         }
 

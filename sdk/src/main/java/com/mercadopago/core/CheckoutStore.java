@@ -12,8 +12,9 @@ import com.mercadopago.plugins.DataInitializationTask;
 import com.mercadopago.plugins.PaymentMethodPlugin;
 import com.mercadopago.plugins.PaymentProcessor;
 import com.mercadopago.plugins.model.PaymentMethodInfo;
-import com.mercadopago.preferences.PaymentResultScreenPreference;
+import com.mercadopago.preferences.CheckoutPreference;
 import com.mercadopago.util.TextUtil;
+import com.mercadopago.preferences.PaymentResultScreenPreference;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,6 +27,7 @@ public class CheckoutStore {
 
     //Preferences
     private PaymentResultScreenPreference paymentResultScreenPreference;
+    private CheckoutPreference checkoutPreference;
 
     //Config
     private DataInitializationTask dataInitializationTask;
@@ -50,6 +52,10 @@ public class CheckoutStore {
         return INSTANCE;
     }
 
+    public CheckoutPreference getCheckoutPreference() {
+        return checkoutPreference;
+    }
+
     public PaymentResultScreenPreference getPaymentResultScreenPreference() {
         if (paymentResultScreenPreference == null) {
             paymentResultScreenPreference = new PaymentResultScreenPreference.Builder().build();
@@ -59,6 +65,10 @@ public class CheckoutStore {
 
     public void setPaymentResultScreenPreference(PaymentResultScreenPreference paymentResultScreenPreference) {
         this.paymentResultScreenPreference = paymentResultScreenPreference;
+    }
+
+    public void setCheckoutPreference(final CheckoutPreference checkoutPreference) {
+        this.checkoutPreference = checkoutPreference;
     }
 
     public DataInitializationTask getDataInitializationTask() {

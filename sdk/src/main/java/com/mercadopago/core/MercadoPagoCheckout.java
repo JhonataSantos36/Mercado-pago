@@ -94,6 +94,7 @@ public class MercadoPagoCheckout {
         store.setPaymentPlugins(builder.paymentPlugins);
         store.setCheckoutHooks(builder.checkoutHooks);
         store.setDataInitializationTask(builder.dataInitializationTask);
+        store.setCheckoutPreference(builder.checkoutPreference);
 
         //Create flow identifier only for new checkouts
         if (paymentResult == null && paymentData == null) {

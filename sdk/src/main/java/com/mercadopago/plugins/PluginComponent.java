@@ -1,12 +1,11 @@
 package com.mercadopago.plugins;
 
 import android.support.annotation.NonNull;
-
 import com.mercadopago.components.Component;
 import com.mercadopago.components.RendererFactory;
 import com.mercadopago.components.ToolbarComponent;
 import com.mercadopago.model.PaymentData;
-
+import com.mercadopago.preferences.CheckoutPreference;
 import java.util.Map;
 
 /**
@@ -37,12 +36,14 @@ public abstract class PluginComponent<T> extends Component<PluginComponent.Props
         public final PaymentData paymentData;
         public final String toolbarTitle;
         public final boolean toolbarVisible;
+        public final CheckoutPreference checkoutPreference;
 
         public Props(@NonNull final PluginComponent.Props.Builder builder) {
             this.data = builder.data;
             this.toolbarTitle = builder.toolbarTitle;
             this.toolbarVisible = builder.toolbarVisible;
             this.paymentData = builder.paymentData;
+            this.checkoutPreference = builder.checkoutPreference;
         }
 
         public Builder toBuilder() {
@@ -50,7 +51,8 @@ public abstract class PluginComponent<T> extends Component<PluginComponent.Props
                 .setData(this.data)
                 .setToolbarVisible(this.toolbarVisible)
                 .setToolbarTitle(this.toolbarTitle)
-                .setPaymentData(this.paymentData);
+                .setPaymentData(this.paymentData)
+                .setCheckoutPreference(this.checkoutPreference);
         }
 
         public static class Builder {
@@ -58,6 +60,7 @@ public abstract class PluginComponent<T> extends Component<PluginComponent.Props
             public PaymentData paymentData;
             public String toolbarTitle = "";
             public boolean toolbarVisible = true;
+            public CheckoutPreference checkoutPreference;
 
             public PluginComponent.Props.Builder setData(@NonNull final Map<String, Object> data) {
                 this.data = data;
@@ -74,8 +77,14 @@ public abstract class PluginComponent<T> extends Component<PluginComponent.Props
                 return this;
             }
 
-            public PluginComponent.Props.Builder setToolbarVisible(@NonNull final boolean toolbarVisible) {
+            public PluginComponent.Props.Builder setToolbarVisible(final boolean toolbarVisible) {
                 this.toolbarVisible = toolbarVisible;
+                return this;
+            }
+
+            public PluginComponent.Props.Builder setCheckoutPreference(
+                    @NonNull final CheckoutPreference checkoutPreference) {
+                this.checkoutPreference = checkoutPreference;
                 return this;
             }
 

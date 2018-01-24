@@ -45,6 +45,7 @@ public class PaymentMethodPluginActivity extends AppCompatActivity implements Ac
 
         final PluginComponent.Props props = new PluginComponent.Props.Builder()
                 .setData(CheckoutStore.getInstance().getData())
+                .setCheckoutPreference(CheckoutStore.getInstance().getCheckoutPreference())
                 .build();
 
         final Component component = plugin.createConfigurationComponent(props, this);
