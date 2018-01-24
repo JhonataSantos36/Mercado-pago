@@ -240,7 +240,7 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultVie
             }
         }
         startSecurityCodeActivity(reason);
-        animateTransitionFadeInFadeOut();
+        animateTransitionSlideInSlideOut();
     }
 
     @Override
@@ -252,7 +252,7 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultVie
     @Override
     public void askForSecurityCodeWithoutInstallments() {
         mCardVaultPresenter.checkSecurityCodeFlow();
-        animateTransitionFadeInFadeOut();
+        animateTransitionSlideInSlideOut();
     }
 
     @Override
@@ -481,7 +481,7 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultVie
     @Override
     public void askForInstallmentsFromIssuers() {
         startInstallmentsActivity();
-        animateTransitionHold();
+        animateTransitionSlideInSlideOut();
     }
 
     @Override
@@ -493,7 +493,7 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultVie
     @Override
     public void askForInstallments() {
         startInstallmentsActivity();
-        animateTransitionFadeInFadeOut();
+        animateTransitionSlideInSlideOut();
     }
 
     private void startInstallmentsActivity() {
@@ -516,16 +516,8 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultVie
                 .startActivity();
     }
 
-    public void animateTransitionHold() {
-        overridePendingTransition(R.anim.mpsdk_hold, R.anim.mpsdk_hold);
-    }
-
     public void animateTransitionSlideInSlideOut() {
         overridePendingTransition(R.anim.mpsdk_slide_right_to_left_in, R.anim.mpsdk_slide_right_to_left_out);
-    }
-
-    private void animateTransitionFadeInFadeOut() {
-        overridePendingTransition(R.anim.mpsdk_fade_in_seamless, R.anim.mpsdk_fade_out_seamless);
     }
 
     @Override

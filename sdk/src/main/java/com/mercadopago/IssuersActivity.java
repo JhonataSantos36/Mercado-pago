@@ -346,6 +346,7 @@ public class IssuersActivity extends MercadoPagoBaseActivity implements IssuersA
     public void showIssuers(List<Issuer> issuersList, OnSelectedCallback<Integer> onSelectedCallback) {
         initializeAdapter(onSelectedCallback);
         mIssuersAdapter.addResults(issuersList);
+        stopLoadingView();
     }
 
     @Override
@@ -366,8 +367,11 @@ public class IssuersActivity extends MercadoPagoBaseActivity implements IssuersA
         returnIntent.putExtra("issuer", JsonUtil.getInstance().toJson(issuer));
         setResult(RESULT_OK, returnIntent);
         finish();
+        animateTransitionSlideInSlideOut();
+    }
 
-        overridePendingTransition(R.anim.mpsdk_hold, R.anim.mpsdk_hold);
+    public void animateTransitionSlideInSlideOut() {
+        overridePendingTransition(R.anim.mpsdk_slide_right_to_left_in, R.anim.mpsdk_slide_right_to_left_out);
     }
 
     @Override

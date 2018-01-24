@@ -87,9 +87,6 @@ public class SecurityCodeActivity extends MercadoPagoBaseActivity implements Sec
     protected ImageView mSecurityCodeCardIcon;
     protected Toolbar mToolbar;
 
-    //ViewMode
-    protected boolean mLowResActive;
-
     //Normal View
     protected FrameLayout mCardContainer;
     protected CardView mCardView;
@@ -105,7 +102,6 @@ public class SecurityCodeActivity extends MercadoPagoBaseActivity implements Sec
             createPresenter();
             getActivityParameters();
             configurePresenter();
-            analyzeLowRes();
             setContentView();
             mSecurityCodePresenter.initialize();
         }
@@ -133,7 +129,6 @@ public class SecurityCodeActivity extends MercadoPagoBaseActivity implements Sec
             mReason = savedInstanceState.getString(REASON_BUNDLE);
 
             configurePresenter();
-            analyzeLowRes();
             setContentView();
             mSecurityCodePresenter.initialize();
         }
@@ -179,15 +174,7 @@ public class SecurityCodeActivity extends MercadoPagoBaseActivity implements Sec
         mSecurityCodePresenter.setPaymentRecovery(paymentRecovery);
     }
 
-    private void analyzeLowRes() {
-        this.mLowResActive = ScaleUtil.isLowRes(this);
-    }
-
     public void setContentView() {
-        setContentViewNormal();
-    }
-
-    private void setContentViewNormal() {
         setContentView(R.layout.mpsdk_activity_security_code);
     }
 
@@ -235,10 +222,10 @@ public class SecurityCodeActivity extends MercadoPagoBaseActivity implements Sec
 
     @Override
     public void showLoadingView() {
+        hideKeyboard();
         mProgressLayout.setVisibility(View.VISIBLE);
         mNextButton.setVisibility(View.INVISIBLE);
         mBackButton.setVisibility(View.INVISIBLE);
-        hideKeyboard();
     }
 
     private void hideKeyboard() {

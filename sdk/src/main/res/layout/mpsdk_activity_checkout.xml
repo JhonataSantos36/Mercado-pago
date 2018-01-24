@@ -5,10 +5,5 @@
     android:background="@color/mpsdk_background_loading"
     android:fitsSystemWindows="true">
 
-    <FrameLayout
-        android:id="@+id/mpsdkRegularLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
     <include layout="@layout/mpsdk_view_progress_bar" />
 </FrameLayout>

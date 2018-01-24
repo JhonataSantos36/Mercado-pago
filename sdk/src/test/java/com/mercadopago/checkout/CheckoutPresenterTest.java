@@ -1867,11 +1867,6 @@ public class CheckoutPresenterTest {
         }
 
         @Override
-        public void hideProgress() {
-
-        }
-
-        @Override
         public void showReviewAndConfirm() {
             showingPaymentMethodSelection = false;
             showingReviewAndConfirm = true;

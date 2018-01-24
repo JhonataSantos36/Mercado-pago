@@ -28,8 +28,6 @@
                 <include layout="@layout/mpsdk_new_card_issuers"/>
             </LinearLayout>
 
-            <include layout="@layout/mpsdk_view_progress_bar"/>
-
         </FrameLayout>
     </ScrollView>
 </LinearLayout>
