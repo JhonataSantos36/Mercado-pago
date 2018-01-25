@@ -1721,6 +1721,7 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
                 finish();
             }
         } else if (requestCode == MercadoPagoComponents.Activities.DISCOUNTS_REQUEST_CODE) {
+            setSoftInputMode();
             resolveDiscountRequest(resultCode, data);
         } else if (requestCode == MercadoPagoComponents.Activities.REVIEW_PAYMENT_METHODS_REQUEST_CODE) {
             clearReviewPaymentMethodsMode();
@@ -1731,6 +1732,8 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
                 setResult(resultCode, data);
                 finish();
             }
+        } else if (requestCode == MercadoPagoComponents.Activities.BANK_DEALS_REQUEST_CODE) {
+            setSoftInputMode();
         }
     }
 
@@ -1884,7 +1887,7 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
 
     @Override
     public void setSoftInputMode() {
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
     }
 
     public GuessingCardPresenter getPresenter() {
