@@ -13,8 +13,6 @@ import com.mercadopago.components.ComponentManager;
 import com.mercadopago.constants.PaymentTypes;
 import com.mercadopago.core.CheckoutStore;
 import com.mercadopago.model.Payment;
-import com.mercadopago.model.PaymentData;
-import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentResult;
 import com.mercadopago.plugins.model.ProcessorPaymentResult;
 
@@ -43,6 +41,7 @@ public class PaymentPluginActivity extends AppCompatActivity implements ActionDi
         final PluginComponent.Props props = new PluginComponent.Props.Builder()
                 .setData(store.getData())
                 .setPaymentData(store.getPaymentData())
+                .setCheckoutPreference(store.getCheckoutPreference())
                 .build();
 
         final PluginComponent component = paymentProcessor.createPaymentComponent(props, this);
