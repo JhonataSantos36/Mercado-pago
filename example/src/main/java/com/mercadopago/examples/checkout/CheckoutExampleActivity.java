@@ -14,6 +14,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mercadopago.core.MercadoPagoCheckout;
+import com.mercadopago.components.CustomComponent;
+import com.mercadopago.components.SampleCustomComponent;
 import com.mercadopago.customviews.MPButton;
 import com.mercadopago.examples.R;
 import com.mercadopago.examples.utils.ColorPickerDialog;
@@ -27,6 +29,7 @@ import com.mercadopago.plugins.MainPaymentProcessor;
 import com.mercadopago.plugins.SamplePaymentMethodPlugin;
 import com.mercadopago.plugins.SamplePaymentProcessor;
 import com.mercadopago.preferences.CheckoutPreference;
+import com.mercadopago.preferences.CustomComponentFactory;
 import com.mercadopago.preferences.PaymentResultScreenPreference;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;
@@ -108,6 +111,7 @@ public class CheckoutExampleActivity extends AppCompatActivity {
                         new SamplePaymentMethodPlugin(),
                         new SamplePaymentProcessor()
                 )
+                .setPaymentResultScreenPreference(paymentResultScreenPreference)
                 .setPaymentProcessor(new MainPaymentProcessor())
                 .setDataInitializationTask(new DataInitializationTask(defaultData) {
                     @Override

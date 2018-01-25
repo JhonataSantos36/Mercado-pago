@@ -6,6 +6,7 @@ import com.mercadopago.components.ActionDispatcher;
 import com.mercadopago.components.Component;
 import com.mercadopago.constants.PaymentTypes;
 import com.mercadopago.core.CheckoutStore;
+import com.mercadopago.components.CustomComponent;
 import com.mercadopago.model.Payment;
 import com.mercadopago.paymentresult.PaymentMethodProvider;
 import com.mercadopago.paymentresult.PaymentResultProvider;
@@ -137,15 +138,39 @@ public class Body extends Component<PaymentResultBodyProps, Void> {
 
     public boolean hasTopCustomComponent() {
         return hasPaymentResultScreenPreference() && CheckoutStore.getInstance()
-                .getPaymentResultScreenPreference().getApprovedTopCustomComponent() != null;
+                .getPaymentResultScreenPreference().hasApprovedTopCustomComponent();
     }
 
     public boolean hasBottomCustomComponent() {
         return hasPaymentResultScreenPreference() && CheckoutStore.getInstance()
-                .getPaymentResultScreenPreference().getApprovedBottomCustomComponent() != null;
+                .getPaymentResultScreenPreference().hasApprovedBottomCustomComponent();
     }
 
     private boolean hasPaymentResultScreenPreference() {
         return CheckoutStore.getInstance().getPaymentResultScreenPreference() != null;
+    }
+
+    public CustomComponent getApprovedTopCustomComponent() {
+        final CheckoutStore store = CheckoutStore.getInstance();
+        final CustomComponent.Props props =
+                new CustomComponent.Props(
+                    store.getData(),
+                    store.getCheckoutPreference()
+                );
+        return store.getPaymentResultScreenPreference()
+                .getApprovedTopCustomComponentFactory()
+                .create(props);
+    }
+
+    public CustomComponent getApprovedBottomCustomComponent() {
+        final CheckoutStore store = CheckoutStore.getInstance();
+        final CustomComponent.Props props =
+                new CustomComponent.Props(
+                        store.getData(),
+                        store.getCheckoutPreference()
+                );
+        return store.getPaymentResultScreenPreference()
+                .getApprovedBottomCustomComponentFactory()
+                .create(props);
     }
 }

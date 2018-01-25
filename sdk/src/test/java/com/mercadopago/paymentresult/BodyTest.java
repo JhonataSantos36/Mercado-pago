@@ -1,5 +1,7 @@
 package com.mercadopago.paymentresult;
 
+import android.support.annotation.NonNull;
+
 import com.mercadopago.components.ActionDispatcher;
 import com.mercadopago.components.CustomComponent;
 import com.mercadopago.constants.ProcessingModes;
@@ -13,6 +15,7 @@ import com.mercadopago.paymentresult.components.Body;
 import com.mercadopago.paymentresult.components.BodyError;
 import com.mercadopago.paymentresult.components.Receipt;
 import com.mercadopago.paymentresult.props.PaymentResultBodyProps;
+import com.mercadopago.preferences.CustomComponentFactory;
 import com.mercadopago.preferences.PaymentResultScreenPreference;
 
 import junit.framework.Assert;
@@ -176,7 +179,7 @@ public class BodyTest {
     @Test
     public void testBodyHasCustomTopComponent() {
         new PaymentResultScreenPreference.Builder()
-                .setApprovedTopCustomComponent(new CustomComponent())
+                .setApprovedCustomComponentFactory(getCustomComponentFactory(), CustomComponentFactory.POSIION_TOP)
                 .build();
 
         final PaymentResult paymentResult = PaymentResults.getStatusApprovedPaymentResult();
@@ -184,13 +187,13 @@ public class BodyTest {
                 dispatcher, paymentResultProvider, paymentMethodProvider);
 
         Assert.assertTrue(body.hasTopCustomComponent());
-        Assert.assertNotNull(CheckoutStore.getInstance().getPaymentResultScreenPreference().getApprovedTopCustomComponent());
+        Assert.assertNotNull(body.getApprovedTopCustomComponent());
     }
 
     @Test
     public void testBodyHasCustomBottomComponent() {
         new PaymentResultScreenPreference.Builder()
-                .setApprovedBottomCustomComponent(new CustomComponent())
+                .setApprovedCustomComponentFactory(getCustomComponentFactory(), CustomComponentFactory.POSIION_BOTTOM)
                 .build();
 
         final PaymentResult paymentResult = PaymentResults.getStatusApprovedPaymentResult();
@@ -198,14 +201,15 @@ public class BodyTest {
                 dispatcher, paymentResultProvider, paymentMethodProvider);
 
         Assert.assertTrue(body.hasBottomCustomComponent());
-        Assert.assertNotNull(CheckoutStore.getInstance().getPaymentResultScreenPreference().getApprovedBottomCustomComponent());
+        Assert.assertNotNull(body.getPaymentMethodComponent());
     }
 
     @Test
     public void testBodyHasBothCustomComponent() {
+
         new PaymentResultScreenPreference.Builder()
-                .setApprovedBottomCustomComponent(new CustomComponent())
-                .setApprovedTopCustomComponent(new CustomComponent())
+                .setApprovedCustomComponentFactory(getCustomComponentFactory(), CustomComponentFactory.POSIION_BOTTOM)
+                .setApprovedCustomComponentFactory(getCustomComponentFactory(), CustomComponentFactory.POSIION_TOP)
                 .build();
 
         final PaymentResult paymentResult = PaymentResults.getStatusApprovedPaymentResult();
@@ -213,8 +217,8 @@ public class BodyTest {
                 dispatcher, paymentResultProvider, paymentMethodProvider);
 
         Assert.assertTrue(body.hasBottomCustomComponent() && body.hasTopCustomComponent());
-        Assert.assertNotNull(CheckoutStore.getInstance().getPaymentResultScreenPreference().getApprovedBottomCustomComponent());
-        Assert.assertNotNull(CheckoutStore.getInstance().getPaymentResultScreenPreference().getApprovedTopCustomComponent());
+        Assert.assertNotNull(body.getApprovedBottomCustomComponent());
+        Assert.assertNotNull(body.getApprovedTopCustomComponent());
     }
 
     private PaymentResultBodyProps getBodyPropsForOnPayment(PaymentResult paymentResult) {
@@ -224,5 +228,15 @@ public class BodyTest {
                 .setPaymentData(paymentResult.getPaymentData())
                 .setPaymentId(paymentResult.getPaymentId())
                 .build();
+    }
+
+    private CustomComponentFactory getCustomComponentFactory() {
+        return new CustomComponentFactory() {
+            @NonNull
+            @Override
+            public CustomComponent create(@NonNull final CustomComponent.Props props) {
+                return new CustomComponent(new CustomComponent.Props(null, null));
+            }
+        };
     }
 }

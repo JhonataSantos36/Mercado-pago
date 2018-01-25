@@ -6,7 +6,6 @@ import android.support.annotation.NonNull;
 
 import com.mercadopago.callbacks.CallbackHolder;
 import com.mercadopago.callbacks.PaymentResultCallback;
-import com.mercadopago.components.CustomComponent;
 import com.mercadopago.constants.ContentLocation;
 import com.mercadopago.core.CheckoutStore;
 import com.mercadopago.model.Reviewable;
@@ -65,8 +64,7 @@ public class PaymentResultScreenPreference {
     private Integer secondaryPendingExitResultCode;
     private Boolean rejectionRetryEnabled;
 
-    private CustomComponent approvedTopCustomComponent;
-    private CustomComponent approvedBottomCustomComponent;
+    private Map<String, CustomComponentFactory> approvedCustomComponents;
 
     private PaymentResultScreenPreference(Builder builder) {
         this.titleBackgroundColor = builder.titleBackgroundColor;
@@ -114,16 +112,23 @@ public class PaymentResultScreenPreference {
         this.congratsReviewables.put(ContentLocation.BOTTOM, builder.bottomCongratsReviewables);
         this.congratsReviewables.put(ContentLocation.TOP, builder.topCongratsReviewables);
 
-        this.approvedBottomCustomComponent = builder.approvedBottomCustomComponent;
-        this.approvedTopCustomComponent = builder.approvedTopCustomComponent;
+        this.approvedCustomComponents = builder.approvedCustomComponents;
     }
 
-    public CustomComponent getApprovedTopCustomComponent() {
-        return approvedTopCustomComponent;
+    public boolean hasApprovedTopCustomComponent() {
+        return approvedCustomComponents.containsKey(CustomComponentFactory.POSIION_TOP);
     }
 
-    public CustomComponent getApprovedBottomCustomComponent() {
-        return approvedBottomCustomComponent;
+    public boolean hasApprovedBottomCustomComponent() {
+        return approvedCustomComponents.containsKey(CustomComponentFactory.POSIION_BOTTOM);
+    }
+
+    public CustomComponentFactory getApprovedTopCustomComponentFactory() {
+        return approvedCustomComponents.get(CustomComponentFactory.POSIION_TOP);
+    }
+
+    public CustomComponentFactory getApprovedBottomCustomComponentFactory() {
+        return approvedCustomComponents.get(CustomComponentFactory.POSIION_BOTTOM);
     }
 
     public boolean hasCustomCongratsReviewables() {
@@ -346,8 +351,7 @@ public class PaymentResultScreenPreference {
         private Integer secondaryPendingExitResultCode;
         private Integer secondaryRejectedExitResultCode;
 
-        private CustomComponent approvedTopCustomComponent;
-        private CustomComponent approvedBottomCustomComponent;
+        private Map<String, CustomComponentFactory> approvedCustomComponents = new HashMap<>();
 
         public Builder() {
             this.topCongratsReviewables = new ArrayList<>();
@@ -450,13 +454,9 @@ public class PaymentResultScreenPreference {
             return this;
         }
 
-        public Builder setApprovedTopCustomComponent(CustomComponent customComponent) {
-            this.approvedTopCustomComponent = customComponent;
-            return this;
-        }
-
-        public Builder setApprovedBottomCustomComponent(CustomComponent customComponent) {
-            this.approvedBottomCustomComponent = customComponent;
+        public Builder setApprovedCustomComponentFactory(@NonNull final CustomComponentFactory factory,
+                                                         @NonNull final String position) {
+            this.approvedCustomComponents.put(position, factory);
             return this;
         }
 

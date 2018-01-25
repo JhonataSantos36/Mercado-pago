@@ -4,11 +4,9 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 
 import com.mercadopago.components.RendererFactory;
-import com.mercadopago.core.CheckoutStore;
 import com.mercadopago.model.Payment;
 import com.mercadopago.plugins.PluginComponent;
 import com.mercadopago.plugins.PluginPaymentResultAction;
-import com.mercadopago.plugins.model.PaymentMethodInfo;
 import com.mercadopago.plugins.model.ProcessorPaymentResult;
 
 /**
