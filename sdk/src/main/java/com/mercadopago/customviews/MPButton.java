@@ -1,11 +1,13 @@
 package com.mercadopago.customviews;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.support.v7.widget.AppCompatButton;
 import android.util.AttributeSet;
 
 import com.mercadopago.R;
+import com.mercadopago.uicontrollers.FontCache;
 
 public class MPButton extends AppCompatButton {
 
@@ -26,8 +28,27 @@ public class MPButton extends AppCompatButton {
 
     private void init() {
         if (!isInEditMode()) {
-            setTextStyle(getContext(), R.style.mpsdk_font_roboto_regular);
+            Typeface tf = getCustomTypeface();
+
+            if (tf == null) {
+                setTextStyle(getContext(), R.style.mpsdk_font_roboto_regular);
+            } else {
+                setTypeface(tf);
+            }
         }
+    }
+
+    private Typeface getCustomTypeface() {
+        Typeface tf = null;
+        Typeface customFont = null;
+
+        if (FontCache.hasTypeface(FontCache.CUSTOM_REGULAR_FONT)) {
+            customFont = FontCache.getTypeface(FontCache.CUSTOM_REGULAR_FONT);
+        }
+        if (customFont != null) {
+            tf = customFont;
+        }
+        return tf;
     }
 
     private void setTextStyle(Context context, int resId) {

@@ -54,6 +54,7 @@ import com.mercadopago.tracker.MPTrackingContext;
 import com.mercadopago.tracking.model.ScreenViewEvent;
 import com.mercadopago.tracking.tracker.MPTracker;
 import com.mercadopago.tracking.utils.TrackingUtil;
+import com.mercadopago.uicontrollers.FontCache;
 import com.mercadopago.uicontrollers.discounts.DiscountRowView;
 import com.mercadopago.uicontrollers.paymentmethodsearch.PaymentMethodInfoController;
 import com.mercadopago.uicontrollers.paymentmethodsearch.PaymentMethodSearchCustomOption;
@@ -320,6 +321,11 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
                 onBackPressed();
             }
         });
+
+        if (FontCache.hasTypeface(FontCache.CUSTOM_REGULAR_FONT)) {
+            mAppBarLayout.setCollapsedTitleTypeface(FontCache.getTypeface(FontCache.CUSTOM_REGULAR_FONT));
+            mAppBarLayout.setExpandedTitleTypeface(FontCache.getTypeface(FontCache.CUSTOM_REGULAR_FONT));
+        }
     }
 
     protected void initializePaymentOptionsRecyclerView() {

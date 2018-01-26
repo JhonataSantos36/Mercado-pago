@@ -3,6 +3,7 @@ package com.mercadopago.core;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 
 import com.mercadopago.CheckoutActivity;
@@ -23,6 +24,7 @@ import com.mercadopago.preferences.PaymentResultScreenPreference;
 import com.mercadopago.preferences.ReviewScreenPreference;
 import com.mercadopago.preferences.ServicePreference;
 import com.mercadopago.tracker.FlowHandler;
+import com.mercadopago.uicontrollers.FontCache;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.TextUtil;
 
@@ -58,6 +60,8 @@ public class MercadoPagoCheckout {
     private PaymentResult paymentResult;
     private Boolean binaryMode;
     private Discount discount;
+    private String regularFontPath;
+    private String lightFontPath;
     public final List<PaymentMethodPlugin> paymentMethodPluginList;
     public final Map<String, PaymentProcessor> paymentPlugins;
     public final DataInitializationTask dataInitializationTask;
@@ -80,6 +84,8 @@ public class MercadoPagoCheckout {
         this.paymentMethodPluginList = builder.paymentMethodPluginList;
         this.paymentPlugins = builder.paymentPlugins;
         this.checkoutHooks = builder.checkoutHooks;
+        this.regularFontPath = builder.regularFontPath;
+        this.lightFontPath = builder.lightFontPath;
 
         customizeServices(servicePreference);
 
@@ -223,6 +229,8 @@ public class MercadoPagoCheckout {
         private List<PaymentMethodPlugin> paymentMethodPluginList = new ArrayList<>();
         private Map<String, PaymentProcessor> paymentPlugins = new HashMap<>();
         private DataInitializationTask dataInitializationTask;
+        private String regularFontPath;
+        private String lightFontPath;
 
         public Builder setActivity(Activity activity) {
             this.activity = activity;
@@ -310,5 +318,30 @@ public class MercadoPagoCheckout {
             MercadoPagoCheckout mercadoPagoCheckout = new MercadoPagoCheckout(this);
             mercadoPagoCheckout.startForResult(MercadoPagoCheckout.PAYMENT_RESULT_CODE);
         }
+
+        public Builder setCustomLightFont(String lightFontPath, Context context) {
+            this.lightFontPath = lightFontPath;
+            if (lightFontPath != null) {
+                setCustomFont(context, FontCache.CUSTOM_LIGHT_FONT, this.lightFontPath);
+            }
+            return this;
+        }
+
+        public Builder setCustomRegularFont(String regularFontPath, Context context) {
+            this.regularFontPath = regularFontPath;
+            if (regularFontPath != null) {
+                setCustomFont(context, FontCache.CUSTOM_REGULAR_FONT, this.regularFontPath);
+            }
+            return this;
+        }
+
+        private void setCustomFont(Context context, String fontType, String fontPath) {
+            Typeface typeFace = null;
+            if (!FontCache.hasTypeface(fontType)) {
+                typeFace = Typeface.createFromAsset(context.getAssets(), fontPath);
+                FontCache.setTypeface(fontType, typeFace);
+            }
+        }
+
     }
 }

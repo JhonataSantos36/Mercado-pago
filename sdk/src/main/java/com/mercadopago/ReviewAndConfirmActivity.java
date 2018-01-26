@@ -42,6 +42,7 @@ import com.mercadopago.tracker.MPTrackingContext;
 import com.mercadopago.tracking.model.ActionEvent;
 import com.mercadopago.tracking.model.ScreenViewEvent;
 import com.mercadopago.tracking.utils.TrackingUtil;
+import com.mercadopago.uicontrollers.FontCache;
 import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.views.ReviewAndConfirmView;
@@ -242,6 +243,11 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
                 onBackPressed();
             }
         });
+
+        if (FontCache.hasTypeface(FontCache.CUSTOM_REGULAR_FONT)) {
+            mCollapsingToolbar.setCollapsedTitleTypeface(FontCache.getTypeface(FontCache.CUSTOM_REGULAR_FONT));
+            mCollapsingToolbar.setExpandedTitleTypeface(FontCache.getTypeface(FontCache.CUSTOM_REGULAR_FONT));
+        }
     }
 
     private void showTimer() {

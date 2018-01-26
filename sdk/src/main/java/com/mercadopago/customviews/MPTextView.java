@@ -75,19 +75,19 @@ public class MPTextView extends AppCompatTextView {
 
 
     private boolean isLightFontStyle() {
-        return mFontStyle != null && mFontStyle.equals(LIGHT);
+        return LIGHT.equals(mFontStyle);
     }
 
     private boolean isRegularFontStyle() {
-        return (mFontStyle != null && mFontStyle.equals(REGULAR));
+        return REGULAR.equals(mFontStyle);
     }
 
     private boolean isBoldFontStyle() {
-        return (mFontStyle != null && mFontStyle.equals(BOLD));
+        return BOLD.equals(mFontStyle);
     }
 
     private boolean isMonoRegularFontStyle() {
-        return (mFontStyle != null && mFontStyle.equals(MONO_REGULAR));
+        return MONO_REGULAR.equals(mFontStyle);
     }
 
     private void readAttr(Context context, AttributeSet attrs) {

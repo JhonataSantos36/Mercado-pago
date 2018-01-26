@@ -37,8 +37,8 @@ public class SamplePayment extends PluginComponent<Void> {
 
                 final ProcessorPaymentResult result = new ProcessorPaymentResult(
                     123456l,
-                    Payment.StatusCodes.STATUS_REJECTED,
-                    Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_PLUGIN_PM,
+                    Payment.StatusCodes.STATUS_APPROVED,
+                    Payment.StatusCodes.STATUS_DETAIL_APPROVED_PLUGIN_PM,
                     props.paymentData);
 
                 getDispatcher().dispatch(new PluginPaymentResultAction(result));
