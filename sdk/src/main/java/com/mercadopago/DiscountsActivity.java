@@ -13,6 +13,7 @@ import android.text.InputFilter;
 import android.text.Spanned;
 import android.text.TextWatcher;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
@@ -51,7 +52,7 @@ public class DiscountsActivity extends AppCompatActivity implements DiscountsAct
     private Map<String, String> mDiscountAdditionalInfo;
 
     //View
-    protected LinearLayout mProgressLayout;
+    protected ViewGroup mProgressLayout;
     protected FrameLayout mReviewDiscountSummaryContainer;
     protected FrameLayout mNextButton;
     protected FrameLayout mBackButton;
@@ -129,35 +130,35 @@ public class DiscountsActivity extends AppCompatActivity implements DiscountsAct
     }
 
     protected void initializeControls() {
-        mDiscountLinearLayout = (LinearLayout) findViewById(R.id.mpsdkDiscountLinearLayout);
-        mReviewDiscountSummaryContainer = (FrameLayout) findViewById(R.id.mpsdkReviewDiscountSummaryContainer);
-        mDiscountBackground = (FrameLayout) findViewById(R.id.mpsdkDiscountBackground);
-        mDiscountCodeContainer = (LinearLayout) findViewById(R.id.mpsdkDiscountCodeContainer);
+        mDiscountLinearLayout = findViewById(R.id.mpsdkDiscountLinearLayout);
+        mReviewDiscountSummaryContainer = findViewById(R.id.mpsdkReviewDiscountSummaryContainer);
+        mDiscountBackground = findViewById(R.id.mpsdkDiscountBackground);
+        mDiscountCodeContainer = findViewById(R.id.mpsdkDiscountCodeContainer);
 
         //Review discount summary
-        mReviewSummaryTitle = (MPTextView) findViewById(R.id.mpsdkReviewSummaryTitle);
-        mReviewSummaryProductAmount = (MPTextView) findViewById(R.id.mpsdkReviewSummaryProductsAmount);
-        mReviewSummaryDiscountLabel = (MPTextView) findViewById(R.id.mpsdkReviewSummaryDiscountLabel);
-        mReviewSummaryDiscountAmount = (MPTextView) findViewById(R.id.mpsdkReviewSummaryDiscountsAmount);
-        mReviewSummaryTotalAmount = (MPTextView) findViewById(R.id.mpsdkReviewSummaryTotalAmount);
+        mReviewSummaryTitle = findViewById(R.id.mpsdkReviewSummaryTitle);
+        mReviewSummaryProductAmount = findViewById(R.id.mpsdkReviewSummaryProductsAmount);
+        mReviewSummaryDiscountLabel = findViewById(R.id.mpsdkReviewSummaryDiscountLabel);
+        mReviewSummaryDiscountAmount = findViewById(R.id.mpsdkReviewSummaryDiscountsAmount);
+        mReviewSummaryTotalAmount = findViewById(R.id.mpsdkReviewSummaryTotalAmount);
 
         //Discount code input
-        mDiscountCodeEditText = (MPEditText) findViewById(R.id.mpsdkDiscountCode);
+        mDiscountCodeEditText = findViewById(R.id.mpsdkDiscountCode);
         mDiscountCodeEditText.setFilters(new InputFilter[]{new InputFilter.AllCaps()});
 
-        mNextButton = (FrameLayout) findViewById(R.id.mpsdkNextButton);
-        mBackButton = (FrameLayout) findViewById(R.id.mpsdkBackButton);
+        mNextButton = findViewById(R.id.mpsdkNextButton);
+        mBackButton = findViewById(R.id.mpsdkBackButton);
         mNextButtonText = (MPTextView) findViewById(R.id.mpsdkNextButtonText);
         mBackButtonText = (MPTextView) findViewById(R.id.mpsdkBackButtonText);
 
-        mCloseImageFrameLayout = (FrameLayout) findViewById(R.id.mpsdkCloseImageFrameLayout);
-        mCloseImage = (ImageView) findViewById(R.id.mpsdkCloseImage);
+        mCloseImageFrameLayout = findViewById(R.id.mpsdkCloseImageFrameLayout);
+        mCloseImage = findViewById(R.id.mpsdkCloseImage);
 
-        mErrorContainer = (FrameLayout) findViewById(R.id.mpsdkErrorContainer);
-        mErrorTextView = (MPTextView) findViewById(R.id.mpsdkErrorTextView);
-        mProgressLayout = (LinearLayout) findViewById(R.id.mpsdkProgressLayout);
-        mScrollView = (ScrollView) findViewById(R.id.mpsdkScrollViewContainer);
-        mTimerTextView = (MPTextView) findViewById(R.id.mpsdkTimerTextView);
+        mErrorContainer = findViewById(R.id.mpsdkErrorContainer);
+        mErrorTextView = findViewById(R.id.mpsdkErrorTextView);
+        mProgressLayout = findViewById(R.id.mpsdkProgressLayout);
+        mScrollView = findViewById(R.id.mpsdkScrollViewContainer);
+        mTimerTextView = findViewById(R.id.mpsdkTimerTextView);
 
         setListeners();
         fullScrollDown();

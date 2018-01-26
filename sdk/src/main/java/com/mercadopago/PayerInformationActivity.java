@@ -10,6 +10,7 @@ import android.text.InputType;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -74,7 +75,7 @@ public class PayerInformationActivity extends MercadoPagoBaseActivity implements
 
     //View controls
     private ScrollView mScrollView;
-    private LinearLayout mProgressLayout;
+    private ViewGroup mProgressLayout;
 
     //Input controls
     private String mCurrentEditingEditText;
@@ -229,47 +230,47 @@ public class PayerInformationActivity extends MercadoPagoBaseActivity implements
     }
 
     private void initializeControls() {
-        mInputContainer = (LinearLayout) findViewById(R.id.mpsdkInputContainer);
-        mIdentificationNumberInput = (LinearLayout) findViewById(R.id.mpsdkCardIdentificationInput);
-        mIdentificationNameInput = (LinearLayout) findViewById(R.id.mpsdkNameInput);
-        mIdentificationLastNameInput = (LinearLayout) findViewById(R.id.mpsdkLastNameInput);
+        mInputContainer = findViewById(R.id.mpsdkInputContainer);
+        mIdentificationNumberInput = findViewById(R.id.mpsdkCardIdentificationInput);
+        mIdentificationNameInput = findViewById(R.id.mpsdkNameInput);
+        mIdentificationLastNameInput = findViewById(R.id.mpsdkLastNameInput);
 
-        mIdentificationNumberEditText = (MPEditText) findViewById(R.id.mpsdkCardIdentificationNumber);
-        mIdentificationNameEditText = (MPEditText) findViewById(R.id.mpsdkName);
-        mIdentificationLastNameEditText = (MPEditText) findViewById(R.id.mpsdkLastName);
+        mIdentificationNumberEditText = findViewById(R.id.mpsdkCardIdentificationNumber);
+        mIdentificationNameEditText = findViewById(R.id.mpsdkName);
+        mIdentificationLastNameEditText = findViewById(R.id.mpsdkLastName);
 
-        mIdentificationTypeSpinner = (Spinner) findViewById(R.id.mpsdkCardIdentificationType);
-        mIdentificationTypeContainer = (LinearLayout) findViewById(R.id.mpsdkCardIdentificationTypeContainer);
+        mIdentificationTypeSpinner = findViewById(R.id.mpsdkCardIdentificationType);
+        mIdentificationTypeContainer = findViewById(R.id.mpsdkCardIdentificationTypeContainer);
 
-        mNextButton = (FrameLayout) findViewById(R.id.mpsdkNextButton);
-        mNextButtonText = (TextView) findViewById(R.id.mpsdkNextButtonText);
+        mNextButton = findViewById(R.id.mpsdkNextButton);
+        mNextButtonText = findViewById(R.id.mpsdkNextButtonText);
 
-        mBackButton = (FrameLayout) findViewById(R.id.mpsdkBackButton);
-        mBackButtonText = (TextView) findViewById(R.id.mpsdkBackButtonText);
+        mBackButton = findViewById(R.id.mpsdkBackButton);
+        mBackButtonText = findViewById(R.id.mpsdkBackButtonText);
 
-        mScrollView = (ScrollView) findViewById(R.id.mpsdkScrollViewContainer);
-        mProgressLayout = (LinearLayout) findViewById(R.id.mpsdkProgressLayout);
+        mScrollView = findViewById(R.id.mpsdkScrollViewContainer);
+        mProgressLayout = findViewById(R.id.mpsdkProgressLayout);
 
-        mBackground = (FrameLayout) findViewById(R.id.mpsdkBackground);
-        mIdentificationCardContainer = (FrameLayout) findViewById(R.id.mpsdkIdentificationCardContainer);
+        mBackground = findViewById(R.id.mpsdkBackground);
+        mIdentificationCardContainer = findViewById(R.id.mpsdkIdentificationCardContainer);
 
         mIdentificationTicketView = new IdentificationTicketView(this);
         mIdentificationTicketView.inflateInParent(mIdentificationCardContainer, true);
         mIdentificationTicketView.initializeControls();
 
-        mBackInactiveButtonText = (TextView) findViewById(R.id.mpsdkBackInactiveButtonText);
+        mBackInactiveButtonText = findViewById(R.id.mpsdkBackInactiveButtonText);
 
-        mButtonContainer = (LinearLayout) findViewById(R.id.mpsdkButtonContainer);
-        mErrorContainer = (FrameLayout) findViewById(R.id.mpsdkErrorContainer);
-        mErrorTextView = (MPTextView) findViewById(R.id.mpsdkErrorTextView);
+        mButtonContainer = findViewById(R.id.mpsdkButtonContainer);
+        mErrorContainer = findViewById(R.id.mpsdkErrorContainer);
+        mErrorTextView = findViewById(R.id.mpsdkErrorTextView);
 
         if (mLowResActive) {
-            mLowResToolbar = (Toolbar) findViewById(R.id.mpsdkLowResToolbar);
-            mLowResTitleToolbar = (MPTextView) findViewById(R.id.mpsdkTitle);
+            mLowResToolbar = findViewById(R.id.mpsdkLowResToolbar);
+            mLowResTitleToolbar = findViewById(R.id.mpsdkTitle);
             mLowResTitleToolbar.setText(getResources().getText(R.string.mpsdk_fill_your_data));
             mLowResToolbar.setVisibility(View.VISIBLE);
         } else {
-            mNormalToolbar = (Toolbar) findViewById(R.id.mpsdkTransparentToolbar);
+            mNormalToolbar = findViewById(R.id.mpsdkTransparentToolbar);
         }
 
         showProgressBar();

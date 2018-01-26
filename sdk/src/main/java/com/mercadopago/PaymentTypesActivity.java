@@ -9,6 +9,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
@@ -53,7 +54,7 @@ public class PaymentTypesActivity extends MercadoPagoBaseActivity implements Pay
     //View controls
     private PaymentTypesAdapter mPaymentTypesAdapter;
     private RecyclerView mPaymentTypesRecyclerView;
-    private LinearLayout mProgressLayout;
+    private ViewGroup mProgressLayout;
     //ViewMode
     protected boolean mLowResActive;
     //Low Res View
@@ -174,20 +175,20 @@ public class PaymentTypesActivity extends MercadoPagoBaseActivity implements Pay
     }
 
     private void initializeViews() {
-        mPaymentTypesRecyclerView = (RecyclerView) findViewById(R.id.mpsdkActivityPaymentTypesRecyclerView);
-        mProgressLayout = (LinearLayout) findViewById(R.id.mpsdkProgressLayout);
+        mPaymentTypesRecyclerView = findViewById(R.id.mpsdkActivityPaymentTypesRecyclerView);
+        mProgressLayout = findViewById(R.id.mpsdkProgressLayout);
         if (mLowResActive) {
-            mLowResToolbar = (Toolbar) findViewById(R.id.mpsdkRegularToolbar);
-            mLowResTitleToolbar = (MPTextView) findViewById(R.id.mpsdkTitle);
+            mLowResToolbar = findViewById(R.id.mpsdkRegularToolbar);
+            mLowResTitleToolbar = findViewById(R.id.mpsdkTitle);
             mLowResToolbar.setVisibility(View.VISIBLE);
         } else {
-            mCollapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.mpsdkCollapsingToolbar);
-            mAppBar = (AppBarLayout) findViewById(R.id.mpsdkPaymentTypesAppBar);
-            mCardContainer = (FrameLayout) findViewById(R.id.mpsdkActivityCardContainer);
-            mNormalToolbar = (Toolbar) findViewById(R.id.mpsdkRegularToolbar);
+            mCollapsingToolbar = findViewById(R.id.mpsdkCollapsingToolbar);
+            mAppBar = findViewById(R.id.mpsdkPaymentTypesAppBar);
+            mCardContainer = findViewById(R.id.mpsdkActivityCardContainer);
+            mNormalToolbar = findViewById(R.id.mpsdkRegularToolbar);
             mNormalToolbar.setVisibility(View.VISIBLE);
         }
-        mTimerTextView = (MPTextView) findViewById(R.id.mpsdkTimerTextView);
+        mTimerTextView = findViewById(R.id.mpsdkTimerTextView);
         mProgressLayout.setVisibility(View.GONE);
     }
 

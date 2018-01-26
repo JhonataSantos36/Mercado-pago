@@ -11,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.InputFilter;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -73,7 +74,7 @@ public class SecurityCodeActivity extends MercadoPagoBaseActivity implements Sec
     protected String mReason;
 
     //View controls
-    protected LinearLayout mProgressLayout;
+    protected ViewGroup mProgressLayout;
     protected MPEditText mSecurityCodeEditText;
     protected FrameLayout mNextButton;
     protected FrameLayout mBackButton;
@@ -181,20 +182,20 @@ public class SecurityCodeActivity extends MercadoPagoBaseActivity implements Sec
     private void initializeControls() {
         initializeToolbar();
 
-        mProgressLayout = (LinearLayout) findViewById(R.id.mpsdkProgressLayout);
-        mSecurityCodeEditText = (MPEditText) findViewById(R.id.mpsdkCardSecurityCode);
-        mNextButton = (FrameLayout) findViewById(R.id.mpsdkNextButton);
-        mBackButton = (FrameLayout) findViewById(R.id.mpsdkBackButton);
-        mNextButtonText = (MPTextView) findViewById(R.id.mpsdkNextButtonText);
-        mBackButtonText = (MPTextView) findViewById(R.id.mpsdkBackButtonText);
-        mButtonContainer = (LinearLayout) findViewById(R.id.mpsdkButtonContainer);
-        mErrorContainer = (FrameLayout) findViewById(R.id.mpsdkErrorContainer);
-        mErrorTextView = (MPTextView) findViewById(R.id.mpsdkErrorTextView);
-        mBackground = (FrameLayout) findViewById(R.id.mpsdkSecurityCodeActivityBackground);
-        mCardContainer = (FrameLayout) findViewById(R.id.mpsdkCardViewContainer);
-        mTimerTextView = (MPTextView) findViewById(R.id.mpsdkTimerTextView);
+        mProgressLayout = findViewById(R.id.mpsdkProgressLayout);
+        mSecurityCodeEditText = findViewById(R.id.mpsdkCardSecurityCode);
+        mNextButton = findViewById(R.id.mpsdkNextButton);
+        mBackButton = findViewById(R.id.mpsdkBackButton);
+        mNextButtonText = findViewById(R.id.mpsdkNextButtonText);
+        mBackButtonText = findViewById(R.id.mpsdkBackButtonText);
+        mButtonContainer = findViewById(R.id.mpsdkButtonContainer);
+        mErrorContainer = findViewById(R.id.mpsdkErrorContainer);
+        mErrorTextView = findViewById(R.id.mpsdkErrorTextView);
+        mBackground = findViewById(R.id.mpsdkSecurityCodeActivityBackground);
+        mCardContainer = findViewById(R.id.mpsdkCardViewContainer);
+        mTimerTextView = findViewById(R.id.mpsdkTimerTextView);
         mProgressLayout.setVisibility(View.GONE);
-        mSecurityCodeCardIcon = (ImageView) findViewById(R.id.mpsdkSecurityCodeCardIcon);
+        mSecurityCodeCardIcon = findViewById(R.id.mpsdkSecurityCodeCardIcon);
 
         setListeners();
     }

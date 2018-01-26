@@ -52,4 +52,8 @@ public abstract class MercadoPagoBaseActivity extends AppCompatActivity {
         overridePendingTransition(R.anim.mpsdk_slide_left_to_right_in, R.anim.mpsdk_slide_left_to_right_out);
     }
 
+    public void overrideTransitionFadeInFadeOut() {
+        overridePendingTransition(R.anim.mpsdk_fade_in_seamless, R.anim.mpsdk_fade_out_seamless);
+    }
+
 }

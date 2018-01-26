@@ -383,7 +383,7 @@ public class CheckoutActivity extends MercadoPagoBaseActivity implements Checkou
                 .setServicePreference(mCheckoutPresenter.getServicePreference())
                 .startActivity();
 
-        overrideTransitionIn();
+        overrideTransitionFadeInFadeOut();
     }
 
     private boolean isUserLogged() {
@@ -541,7 +541,7 @@ public class CheckoutActivity extends MercadoPagoBaseActivity implements Checkou
     @Override
     public void showPaymentProcessor() {
         startActivityForResult(PaymentPluginActivity.getIntent(this), MercadoPagoComponents.Activities.PLUGIN_PAYMENT_REQUEST_CODE);
-        overrideTransitionIn();
+        overrideTransitionFadeInFadeOut();
     }
 
     @Override

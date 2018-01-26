@@ -73,7 +73,7 @@ public class IssuersActivity extends MercadoPagoBaseActivity implements IssuersA
     protected FrameLayout mCardContainer;
     protected Toolbar mNormalToolbar;
     protected FrontCardView mFrontCardView;
-    protected LinearLayout mProgressLayout;
+    protected ViewGroup mProgressLayout;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -141,9 +141,9 @@ public class IssuersActivity extends MercadoPagoBaseActivity implements IssuersA
     }
 
     private void initializeControls() {
-        mIssuersRecyclerView = (RecyclerView) findViewById(R.id.mpsdkActivityIssuersView);
-        mTimerTextView = (MPTextView) findViewById(R.id.mpsdkTimerTextView);
-        mProgressLayout = (LinearLayout) findViewById(R.id.mpsdkProgressLayout);
+        mIssuersRecyclerView = findViewById(R.id.mpsdkActivityIssuersView);
+        mTimerTextView = findViewById(R.id.mpsdkTimerTextView);
+        mProgressLayout = findViewById(R.id.mpsdkProgressLayout);
 
         if (mLowResActive) {
             initializeLowResControls();

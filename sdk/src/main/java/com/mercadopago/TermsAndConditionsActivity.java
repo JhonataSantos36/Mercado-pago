@@ -2,6 +2,7 @@ package com.mercadopago;
 
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
@@ -18,7 +19,7 @@ public class TermsAndConditionsActivity extends MercadoPagoActivity {
     protected View mMPTermsAndConditionsView;
     protected View mBankDealsTermsAndConditionsView;
     protected WebView mTermsAndConditionsWebView;
-    protected LinearLayout mProgressLayout;
+    protected ViewGroup mProgressLayout;
     protected MPTextView mBankDealsLegalsTextView;
     protected Toolbar mToolbar;
     protected TextView mTitle;
@@ -48,10 +49,10 @@ public class TermsAndConditionsActivity extends MercadoPagoActivity {
     @Override
     protected void initializeControls() {
         mBankDealsTermsAndConditionsView = findViewById(R.id.mpsdkBankDealsTermsAndConditions);
-        mProgressLayout = (LinearLayout) findViewById(R.id.mpsdkProgressLayout);
+        mProgressLayout = findViewById(R.id.mpsdkProgressLayout);
         mMPTermsAndConditionsView = findViewById(R.id.mpsdkMPTermsAndConditions);
-        mTermsAndConditionsWebView = (WebView) findViewById(R.id.mpsdkTermsAndConditionsWebView);
-        mBankDealsLegalsTextView = (MPTextView) findViewById(R.id.mpsdkTermsAndConditions);
+        mTermsAndConditionsWebView = findViewById(R.id.mpsdkTermsAndConditionsWebView);
+        mBankDealsLegalsTextView = findViewById(R.id.mpsdkTermsAndConditions);
         mTermsAndConditionsWebView.setVerticalScrollBarEnabled(true);
         mTermsAndConditionsWebView.setHorizontalScrollBarEnabled(true);
         initializeToolbar();

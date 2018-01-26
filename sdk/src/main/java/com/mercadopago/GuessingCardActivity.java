@@ -12,6 +12,7 @@ import android.text.InputType;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -149,7 +150,7 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
     private MPTextView mTimerTextView;
 
     //Input Views
-    private LinearLayout mProgressLayout;
+    private ViewGroup mProgressLayout;
     private LinearLayout mInputContainer;
     private Spinner mIdentificationTypeSpinner;
     private LinearLayout mIdentificationTypeContainer;
@@ -559,48 +560,48 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
     }
 
     private void initializeViews() {
-        mTimerTextView = (MPTextView) findViewById(R.id.mpsdkTimerTextView);
+        mTimerTextView = findViewById(R.id.mpsdkTimerTextView);
 
         if (mLowResActive) {
-            mLowResToolbar = (Toolbar) findViewById(R.id.mpsdkLowResToolbar);
-            mLowResTitleToolbar = (MPTextView) findViewById(R.id.mpsdkTitle);
+            mLowResToolbar = findViewById(R.id.mpsdkLowResToolbar);
+            mLowResTitleToolbar = findViewById(R.id.mpsdkTitle);
             mLowResToolbar.setVisibility(View.VISIBLE);
         } else {
-            mNormalToolbar = (Toolbar) findViewById(R.id.mpsdkTransparentToolbar);
-            mCardBackground = (FrameLayout) findViewById(R.id.mpsdkCardBackground);
-            mCardViewContainer = (FrameLayout) findViewById(R.id.mpsdkCardViewContainer);
-            mIdentificationCardContainer = (FrameLayout) findViewById(R.id.mpsdkIdentificationCardContainer);
+            mNormalToolbar = findViewById(R.id.mpsdkTransparentToolbar);
+            mCardBackground = findViewById(R.id.mpsdkCardBackground);
+            mCardViewContainer = findViewById(R.id.mpsdkCardViewContainer);
+            mIdentificationCardContainer = findViewById(R.id.mpsdkIdentificationCardContainer);
         }
 
-        mIdentificationTypeContainer = (LinearLayout) findViewById(R.id.mpsdkCardIdentificationTypeContainer);
-        mIdentificationTypeSpinner = (Spinner) findViewById(R.id.mpsdkCardIdentificationType);
-        mBankDealsTextView = (MPTextView) findViewById(R.id.mpsdkBankDealsText);
-        mCardNumberEditText = (MPEditText) findViewById(R.id.mpsdkCardNumber);
-        mCardHolderNameEditText = (MPEditText) findViewById(R.id.mpsdkCardholderName);
-        mCardExpiryDateEditText = (MPEditText) findViewById(R.id.mpsdkCardExpiryDate);
-        mSecurityCodeEditText = (MPEditText) findViewById(R.id.mpsdkCardSecurityCode);
-        mIdentificationNumberEditText = (MPEditText) findViewById(R.id.mpsdkCardIdentificationNumber);
-        mInputContainer = (LinearLayout) findViewById(R.id.mpsdkInputContainer);
-        mProgressLayout = (LinearLayout) findViewById(R.id.mpsdkProgressLayout);
-        mNextButton = (FrameLayout) findViewById(R.id.mpsdkNextButton);
-        mBackButton = (FrameLayout) findViewById(R.id.mpsdkBackButton);
-        mBackInactiveButton = (FrameLayout) findViewById(R.id.mpsdkBackInactiveButton);
-        mBackInactiveButtonText = (TextView) findViewById(R.id.mpsdkBackInactiveButtonText);
-        mNextButtonText = (TextView) findViewById(R.id.mpsdkNextButtonText);
-        mBackButtonText = (TextView) findViewById(R.id.mpsdkBackButtonText);
-        mButtonContainer = (LinearLayout) findViewById(R.id.mpsdkButtonContainer);
-        mCardNumberInput = (LinearLayout) findViewById(R.id.mpsdkCardNumberInput);
-        mCardholderNameInput = (LinearLayout) findViewById(R.id.mpsdkNameInput);
-        mCardExpiryDateInput = (LinearLayout) findViewById(R.id.mpsdkExpiryDateInput);
-        mCardIdentificationInput = (LinearLayout) findViewById(R.id.mpsdkCardIdentificationInput);
-        mCardSecurityCodeInput = (LinearLayout) findViewById(R.id.mpsdkCardSecurityCodeContainer);
-        mErrorContainer = (FrameLayout) findViewById(R.id.mpsdkErrorContainer);
-        mRedErrorContainer = (FrameLayout) findViewById(R.id.mpsdkRedErrorContainer);
-        mBlackInfoContainer = (FrameLayout) findViewById(R.id.mpsdkBlackInfoContainer);
-        mInfoTextView = (MPTextView) findViewById(R.id.mpsdkBlackInfoTextView);
-        mErrorTextView = (MPTextView) findViewById(R.id.mpsdkErrorTextView);
-        mScrollView = (ScrollView) findViewById(R.id.mpsdkScrollViewContainer);
-        mDiscountFrameLayout = (FrameLayout) findViewById(R.id.mpsdkDiscount);
+        mIdentificationTypeContainer = findViewById(R.id.mpsdkCardIdentificationTypeContainer);
+        mIdentificationTypeSpinner = findViewById(R.id.mpsdkCardIdentificationType);
+        mBankDealsTextView = findViewById(R.id.mpsdkBankDealsText);
+        mCardNumberEditText = findViewById(R.id.mpsdkCardNumber);
+        mCardHolderNameEditText = findViewById(R.id.mpsdkCardholderName);
+        mCardExpiryDateEditText = findViewById(R.id.mpsdkCardExpiryDate);
+        mSecurityCodeEditText = findViewById(R.id.mpsdkCardSecurityCode);
+        mIdentificationNumberEditText = findViewById(R.id.mpsdkCardIdentificationNumber);
+        mInputContainer = findViewById(R.id.mpsdkInputContainer);
+        mProgressLayout = findViewById(R.id.mpsdkProgressLayout);
+        mNextButton = findViewById(R.id.mpsdkNextButton);
+        mBackButton = findViewById(R.id.mpsdkBackButton);
+        mBackInactiveButton = findViewById(R.id.mpsdkBackInactiveButton);
+        mBackInactiveButtonText = findViewById(R.id.mpsdkBackInactiveButtonText);
+        mNextButtonText = findViewById(R.id.mpsdkNextButtonText);
+        mBackButtonText = findViewById(R.id.mpsdkBackButtonText);
+        mButtonContainer = findViewById(R.id.mpsdkButtonContainer);
+        mCardNumberInput = findViewById(R.id.mpsdkCardNumberInput);
+        mCardholderNameInput = findViewById(R.id.mpsdkNameInput);
+        mCardExpiryDateInput = findViewById(R.id.mpsdkExpiryDateInput);
+        mCardIdentificationInput = findViewById(R.id.mpsdkCardIdentificationInput);
+        mCardSecurityCodeInput = findViewById(R.id.mpsdkCardSecurityCodeContainer);
+        mErrorContainer = findViewById(R.id.mpsdkErrorContainer);
+        mRedErrorContainer = findViewById(R.id.mpsdkRedErrorContainer);
+        mBlackInfoContainer = findViewById(R.id.mpsdkBlackInfoContainer);
+        mInfoTextView = findViewById(R.id.mpsdkBlackInfoTextView);
+        mErrorTextView = findViewById(R.id.mpsdkErrorTextView);
+        mScrollView = findViewById(R.id.mpsdkScrollViewContainer);
+        mDiscountFrameLayout = findViewById(R.id.mpsdkDiscount);
         mContainerUpAnimation = AnimationUtils.loadAnimation(mActivity, R.anim.mpsdk_slide_bottom_up);
         mContainerDownAnimation = AnimationUtils.loadAnimation(mActivity, R.anim.mpsdk_slide_bottom_down);
 
