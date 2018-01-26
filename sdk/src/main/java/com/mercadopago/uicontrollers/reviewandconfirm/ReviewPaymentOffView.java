@@ -36,6 +36,7 @@ public class ReviewPaymentOffView extends Reviewable {
     protected MPTextView mPaymentDescription;
     protected FrameLayout mChangePaymentButton;
     protected FrameLayout mPayerCostContainer;
+    protected FrameLayout mImageContainer;
     protected ImageView mIconTimeImageView;
     protected MPTextView mChangePaymentTextView;
 
@@ -74,6 +75,7 @@ public class ReviewPaymentOffView extends Reviewable {
 
     @Override
     public void initializeControls() {
+        mImageContainer = (FrameLayout) mView.findViewById(R.id.mpsdkImageContainer);
         mPaymentMethodExtraInfo = (ViewGroup) mView.findViewById(R.id.mpsdkExtraInfoContainer);
         mPaymentImage = (ImageView) mView.findViewById(R.id.mpsdkAdapterReviewPaymentImage);
         mPaymentText = (MPTextView) mView.findViewById(R.id.mpsdkAdapterReviewPaymentText);
@@ -98,6 +100,7 @@ public class ReviewPaymentOffView extends Reviewable {
     public void draw() {
         setSmallTextSize();
         setIcon();
+        setGreyCircle();
 
         mPayerCostContainer.setVisibility(View.GONE);
 
@@ -130,17 +133,31 @@ public class ReviewPaymentOffView extends Reviewable {
         mPaymentImage.setImageResource(resId);
     }
 
+    private void setGreyCircle() {
+        if (mPaymentMethod != null && isPluginPaymentType()) {
+            mImageContainer.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.mpsdk_light_grey_circle));
+        }
+    }
+
     private int getResource() {
         int resId;
 
-        if (mPaymentMethod != null && PaymentTypes.PLUGIN.equals(mPaymentMethod.getPaymentTypeId())) {
+        if (mPaymentMethod != null && isPluginPaymentType()) {
             resId = CheckoutStore.getInstance().getSelectedPaymentMethodInfo(mContext).icon;
-        } else if (mPaymentMethod != null && mPaymentMethod.getId().equals(PaymentMethods.BRASIL.BOLBRADESCO)) {
+        } else if (mPaymentMethod != null && isBolbradescoPaymentType()) {
             resId = R.drawable.mpsdk_boleto_off;
         } else {
             resId = R.drawable.mpsdk_review_payment_off;
         }
         return resId;
+    }
+
+    private boolean isPluginPaymentType() {
+        return PaymentTypes.PLUGIN.equals(mPaymentMethod.getPaymentTypeId());
+    }
+
+    private boolean isBolbradescoPaymentType() {
+        return mPaymentMethod.getId().equals(PaymentMethods.BRASIL.BOLBRADESCO);
     }
 
     private void setSmallTextSize() {

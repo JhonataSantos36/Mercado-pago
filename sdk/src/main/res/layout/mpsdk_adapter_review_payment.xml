@@ -15,12 +15,20 @@
         android:paddingBottom="40dp"
         android:paddingTop="40dp">
 
-        <ImageView
-            android:id="@+id/mpsdkAdapterReviewPaymentImage"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:scaleType="fitCenter"
-            android:layout_gravity="center_horizontal"/>
+        <FrameLayout
+            android:id="@+id/mpsdkImageContainer"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:layout_gravity="center_horizontal">
+
+            <ImageView
+                android:id="@+id/mpsdkAdapterReviewPaymentImage"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:scaleType="fitCenter"
+                tools:src="@drawable/mpsdk_bapropagos" />
+        </FrameLayout>
 
         <FrameLayout
             android:id="@+id/mpsdkAdapterReviewPayerCostContainer"
@@ -31,8 +39,7 @@
             android:paddingEnd="25dp"
             android:paddingLeft="25dp"
             android:paddingRight="25dp"
-            android:paddingStart="25dp"
-            />
+            android:paddingStart="25dp" />
 
         <com.mercadopago.customviews.MPTextView
             android:id="@+id/mpsdkNoInstallmentsRateTextView"
@@ -45,9 +52,9 @@
             android:paddingLeft="25dp"
             android:paddingRight="25dp"
             android:paddingStart="25dp"
+            android:textColor="@color/mpsdk_review_payment_text"
             android:textSize="18dp"
             android:visibility="gone"
-            android:textColor="@color/mpsdk_review_payment_text"
             app:font_style="regular"
             tools:text="No incluye intereses bancarios" />
 
