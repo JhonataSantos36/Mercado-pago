@@ -126,7 +126,7 @@ public class Body extends Component<PaymentResultBodyProps, Void> {
     public boolean hasReceipt() {
         final com.mercadopago.model.PaymentMethod paymentMethod = props.paymentData.getPaymentMethod();
         return props.paymentId != null && props.isReceiptEnabled() && props.paymentData != null
-                && isStatusApproved() && !isPluginType(paymentMethod) && isPaymentTypeOn(paymentMethod);
+                && isStatusApproved() && isPaymentTypeOn(paymentMethod);
     }
 
     public Receipt getReceiptComponent() {
@@ -154,8 +154,8 @@ public class Body extends Component<PaymentResultBodyProps, Void> {
         final CheckoutStore store = CheckoutStore.getInstance();
         final CustomComponent.Props props =
                 new CustomComponent.Props(
-                    store.getData(),
-                    store.getCheckoutPreference()
+                        store.getData(),
+                        store.getCheckoutPreference()
                 );
         return store.getPaymentResultScreenPreference()
                 .getApprovedTopCustomComponentFactory()
