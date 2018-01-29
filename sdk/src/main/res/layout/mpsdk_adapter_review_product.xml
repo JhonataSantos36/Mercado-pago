@@ -4,12 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/mpsdk_review_component_background">
-    <View
-        android:id="@+id/mpsdkFirstSeparator"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_gravity="top"
-        android:background="@color/mpsdk_separator"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
