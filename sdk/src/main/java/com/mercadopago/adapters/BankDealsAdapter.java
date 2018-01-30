@@ -13,6 +13,7 @@ import com.mercadopago.R;
 import com.mercadopago.callbacks.OnSelectedCallback;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.model.BankDeal;
+import com.mercadopago.model.Picture;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -71,8 +72,8 @@ public class BankDealsAdapter extends RecyclerView.Adapter<BankDealsAdapter.View
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-
         BankDeal bankDeal = mData.get(position);
+        String picture = getPicture(bankDeal);
 
         // Set bank description
         holder.mBankDescView.setText(getBankDesc(bankDeal));
@@ -83,9 +84,13 @@ public class BankDealsAdapter extends RecyclerView.Adapter<BankDealsAdapter.View
         }
 
         // Set bank image
-        Picasso.with(mActivity)
-                .load(getPicture(bankDeal))
-                .into(holder.mBankImageView);
+        if (picture != null && !picture.isEmpty()) {
+            Picasso.with(mActivity)
+                    .load(picture)
+                    .into(holder.mBankImageView);
+        } else {
+            holder.mBankImageView.setVisibility(View.GONE);
+        }
 
         // Set installments
         holder.mInstallmentsView.setText(Html.fromHtml(getRecommendedMessage(bankDeal)));
