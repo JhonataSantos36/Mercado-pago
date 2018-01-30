@@ -30,7 +30,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/mpsdk_s_alternative_1_margin">
-
     </FrameLayout>
 
     <com.mercadopago.customviews.MPTextView
@@ -38,7 +37,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/mpsdk_xxs_alternative_margin"
+        android:paddingRight="@dimen/mpsdk_m_margin"
+        android:paddingLeft="@dimen/mpsdk_m_margin"
         android:textSize="@dimen/mpsdk_s_text"
+        android:gravity="center"
         android:textColor="@color/mpsdk_brownish_grey"
         tools:text="Master terminada en 123" />
 
@@ -47,6 +49,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/mpsdk_xxxs_margin"
+        android:gravity="center"
         android:textColor="@color/mpsdk_brownish_grey"
         android:textSize="@dimen/mpsdk_xs_text"
         tools:text="HSBC" />
