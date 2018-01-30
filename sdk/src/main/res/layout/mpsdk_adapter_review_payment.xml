@@ -123,6 +123,7 @@
             android:textSize="24dp"
             android:visibility="gone"
             app:font_style="light"
+            tools:visibility="visible"
             tools:text="CFT 0,00%" />
 
         <FrameLayout
@@ -134,7 +135,8 @@
             android:layout_marginRight="25dp"
             android:layout_marginStart="25dp"
             android:layout_marginTop="20dp"
-            android:visibility="gone">
+            android:visibility="gone"
+            tools:visibility="visible">
 
             <com.mercadopago.customviews.MPTextView
                 android:id="@+id/mpsdkReviewChangePaymentText"

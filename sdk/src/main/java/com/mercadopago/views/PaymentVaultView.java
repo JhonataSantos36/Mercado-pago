@@ -66,4 +66,6 @@ public interface PaymentVaultView extends MvpView {
     void showHook(final Hook hook, final int code);
 
     PaymentMethodInfo getPaymentMethodInfo(final PaymentMethodPlugin plugin);
+
+    void showPaymentMethodPluginConfiguration();
 }

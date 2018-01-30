@@ -358,27 +358,6 @@ public class PaymentVaultPresenterTest {
         assertFalse(mockedView.isItemShown);
     }
 
-    @Test
-    public void ifOnlyAccountMoneySelectItAutomatically() {
-        MockedView mockedView = new MockedView();
-        MockedProvider provider = new MockedProvider();
-
-        PaymentMethodSearch paymentMethodSearch = PaymentMethodSearchs.getPaymentMethodSearchWithOnlyAccountMoneyMLA();
-        provider.setResponse(paymentMethodSearch);
-
-        PaymentVaultPresenter presenter = new PaymentVaultPresenter();
-        presenter.attachView(mockedView);
-        presenter.attachResourcesProvider(provider);
-
-        BigDecimal amount = BigDecimal.TEN;
-        presenter.setAmount(amount);
-        presenter.setSite(Sites.ARGENTINA);
-
-        presenter.initialize(true);
-
-        assertEquals(paymentMethodSearch.getCustomSearchItems().get(0).getPaymentMethodId(), mockedView.selectedPaymentMethod.getId());
-    }
-
     //User selections
 
     @Test
@@ -448,28 +427,6 @@ public class PaymentVaultPresenterTest {
 
         assertTrue(mockedView.savedCardFlowStarted);
         assertTrue(mockedView.savedCardSelected.equals(paymentMethodSearch.getCards().get(0)));
-    }
-
-    @Test
-    public void ifAccountMoneySelectedSelectIt() {
-        MockedView mockedView = new MockedView();
-        MockedProvider provider = new MockedProvider();
-
-        PaymentMethodSearch paymentMethodSearch = PaymentMethodSearchs.getCompletePaymentMethodSearchMLA();
-        provider.setResponse(paymentMethodSearch);
-
-        PaymentVaultPresenter presenter = new PaymentVaultPresenter();
-        presenter.attachView(mockedView);
-        presenter.attachResourcesProvider(provider);
-
-        presenter.setAmount(BigDecimal.TEN);
-        presenter.setSite(Sites.ARGENTINA);
-
-        presenter.initialize(true);
-
-        mockedView.simulateCustomItemSelection(0);
-
-        assertEquals(paymentMethodSearch.getCustomSearchItems().get(0).getPaymentMethodId(), mockedView.selectedPaymentMethod.getId());
     }
 
     //Payment Preference tests
@@ -1373,6 +1330,11 @@ public class PaymentVaultPresenterTest {
         @Override
         public PaymentMethodInfo getPaymentMethodInfo(PaymentMethodPlugin plugin) {
             return null;
+        }
+
+        @Override
+        public void showPaymentMethodPluginConfiguration() {
+
         }
 
         @Override

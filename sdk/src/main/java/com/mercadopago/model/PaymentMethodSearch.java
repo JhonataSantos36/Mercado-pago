@@ -12,6 +12,7 @@ public class PaymentMethodSearch {
 
     private List<PaymentMethodSearchItem> groups;
 
+    @Deprecated
     @SerializedName("custom_options")
     private List<CustomSearchItem> customSearchItems;
 
@@ -129,10 +130,12 @@ public class PaymentMethodSearch {
         return foundCard;
     }
 
+    @Deprecated
     public List<CustomSearchItem> getCustomSearchItems() {
         return customSearchItems;
     }
 
+    @Deprecated
     public boolean hasCustomSearchItems() {
         return customSearchItems != null && !customSearchItems.isEmpty();
     }
@@ -170,6 +173,7 @@ public class PaymentMethodSearch {
         this.groups = groups;
     }
 
+    @Deprecated
     public void setCustomSearchItems(List<CustomSearchItem> customSearchItems) {
         this.customSearchItems = customSearchItems;
     }

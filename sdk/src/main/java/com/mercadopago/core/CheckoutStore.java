@@ -132,6 +132,25 @@ public class CheckoutStore {
         return result;
     }
 
+    public String getFirstEnabledPluginId() {
+        for (final PaymentMethodPlugin plugin : paymentMethodPluginList) {
+            if (plugin.isEnabled(CheckoutStore.getInstance().getData())) {
+                return plugin.getId();
+            }
+        }
+        return null;
+    }
+
+    public int getPaymenthMethodPluginCount() {
+        int count = 0;
+        for (final PaymentMethodPlugin plugin : paymentMethodPluginList) {
+            if (plugin.isEnabled(CheckoutStore.getInstance().getData())) {
+                count++;
+            }
+        }
+        return count;
+    }
+
     public void setSelectedPaymentMethodId(final String selectedPaymentMethodId) {
         this.selectedPaymentMethodId = selectedPaymentMethodId;
     }

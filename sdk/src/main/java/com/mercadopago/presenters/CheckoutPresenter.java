@@ -3,7 +3,6 @@ package com.mercadopago.presenters;
 import android.support.annotation.NonNull;
 
 import com.mercadopago.callbacks.FailureRecovery;
-import com.mercadopago.constants.PaymentMethods;
 import com.mercadopago.core.CheckoutStore;
 import com.mercadopago.core.MercadoPagoCheckout;
 import com.mercadopago.core.MercadoPagoComponents;
@@ -278,7 +277,15 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
     private void retrievePaymentMethodSearch() {
         Payer payer = new Payer();
         payer.setAccessToken(mCheckoutPreference.getPayer().getAccessToken());
-        getResourcesProvider().getPaymentMethodSearch(getTransactionAmount(), mCheckoutPreference.getExcludedPaymentTypes(), mCheckoutPreference.getExcludedPaymentMethods(), payer, mCheckoutPreference.getSite(), onPaymentMethodSearchRetrieved(), onCustomerRetrieved());
+        getResourcesProvider().getPaymentMethodSearch(
+            getTransactionAmount(),
+            mCheckoutPreference.getExcludedPaymentTypes(),
+            mCheckoutPreference.getExcludedPaymentMethods(),
+            payer,
+            mCheckoutPreference.getSite(),
+            onPaymentMethodSearchRetrieved(),
+            onCustomerRetrieved()
+        );
     }
 
     public BigDecimal getTransactionAmount() {
@@ -753,18 +760,23 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
     }
 
     public boolean isUniquePaymentMethod() {
-        return isOnlyUniquePaymentMethodAvailable() || isOnlyAccountMoneyEnabled();
-    }
+        final CheckoutStore store = CheckoutStore.getInstance();
+        int pluginCount = store.getPaymenthMethodPluginCount();
+        int groupCount = 0;
+        int customCount = 0;
 
-    private boolean isOnlyUniquePaymentMethodAvailable() {
-        return mPaymentMethodSearch != null && mPaymentMethodSearch.hasSearchItems() && mPaymentMethodSearch.getGroups().size() == 1 && mPaymentMethodSearch.getGroups().get(0).isPaymentMethod() && !mPaymentMethodSearch.hasCustomSearchItems();
-    }
+        if (mPaymentMethodSearch != null && mPaymentMethodSearch.hasSearchItems()) {
+            groupCount = mPaymentMethodSearch.getGroups().size();
+            if (pluginCount == 0 && groupCount == 1 && mPaymentMethodSearch.getGroups().get(0).isGroup()) {
+                return false;
+            }
+        }
 
-    private boolean isOnlyAccountMoneyEnabled() {
-        return mPaymentMethodSearch.hasCustomSearchItems()
-                && mPaymentMethodSearch.getCustomSearchItems().size() == 1
-                && mPaymentMethodSearch.getCustomSearchItems().get(0).getId().equals(PaymentMethods.ACCOUNT_MONEY)
-                && (mPaymentMethodSearch.getGroups() == null || mPaymentMethodSearch.getGroups().isEmpty());
+        if (mPaymentMethodSearch != null && mPaymentMethodSearch.hasCustomSearchItems()) {
+            customCount = mPaymentMethodSearch.getCustomSearchItems().size();
+        }
+
+        return groupCount + customCount + pluginCount == 1;
     }
 
     private PaymentResult createPaymentResult(final Payment payment, final PaymentData paymentData) {

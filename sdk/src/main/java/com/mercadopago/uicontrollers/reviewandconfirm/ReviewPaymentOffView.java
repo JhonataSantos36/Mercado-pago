@@ -84,6 +84,7 @@ public class ReviewPaymentOffView extends Reviewable {
         mPayerCostContainer = (FrameLayout) mView.findViewById(R.id.mpsdkAdapterReviewPayerCostContainer);
         mIconTimeImageView = (ImageView) mView.findViewById(R.id.mpsdkIconTime);
         mChangePaymentTextView = (MPTextView) mView.findViewById(R.id.mpsdkReviewChangePaymentText);
+
         mChangePaymentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
