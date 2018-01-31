@@ -26,11 +26,6 @@ public class MPTrackingContext {
 
     private MPTrackingContext(Builder builder) {
         this.context = builder.context;
-
-        if (builder.trackingStrategy == null) {
-            builder.trackingStrategy = TrackingUtil.BATCH_STRATEGY;
-        }
-
         this.publicKey = builder.publicKey;
         this.deviceInfo = initializeDeviceInfo();
         this.trackingStrategy = builder.trackingStrategy;
@@ -38,7 +33,6 @@ public class MPTrackingContext {
         if (!builder.publicKey.isEmpty() && builder.checkoutVersion != null) {
             this.appInformation = initializeAppInformation(builder.checkoutVersion);
         }
-
     }
 
     private AppInformation initializeAppInformation(String checkoutVersion) {

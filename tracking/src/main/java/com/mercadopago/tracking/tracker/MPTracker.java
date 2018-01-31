@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+
 import com.mercadopago.tracking.listeners.TracksListener;
 import com.mercadopago.tracking.model.ActionEvent;
 import com.mercadopago.tracking.model.AppInformation;
@@ -16,6 +17,7 @@ import com.mercadopago.tracking.strategies.BatchTrackingStrategy;
 import com.mercadopago.tracking.strategies.ConnectivityCheckerImpl;
 import com.mercadopago.tracking.strategies.EventsDatabaseImpl;
 import com.mercadopago.tracking.strategies.ForcedStrategy;
+import com.mercadopago.tracking.strategies.RealTimeTrackingStrategy;
 import com.mercadopago.tracking.strategies.TrackingStrategy;
 import com.mercadopago.tracking.services.MPTrackingService;
 import com.mercadopago.tracking.services.MPTrackingServiceImpl;
@@ -125,11 +127,10 @@ public class MPTracker {
     /**
      * This method tracks a list of events in one request
      *
-     * @param appInformation   Info about this application and SDK integration
-     * @param deviceInfo       Info about the device that is using the app
-     * @param event            Event to track
-     * @param context          Application context
-     * @param trackingStrategy
+     * @param appInformation Info about this application and SDK integration
+     * @param deviceInfo     Info about the device that is using the app
+     * @param event          Event to track
+     * @param context        Application context
      */
     public void trackEvent(String publicKey, AppInformation appInformation, DeviceInfo deviceInfo, Event event, Context context, String trackingStrategy) {
 
@@ -139,7 +140,6 @@ public class MPTracker {
         mContext = context;
 
         initializeDatabase();
-        database.persist(event);
 
         setTrackingStrategy(context, event, trackingStrategy);
 
@@ -148,6 +148,10 @@ public class MPTracker {
             this.trackingStrategy.setAppInformation(appInformation);
             this.trackingStrategy.setDeviceInfo(deviceInfo);
             this.trackingStrategy.trackEvent(event, context);
+        }
+
+        if (!isRealTimeStrategy(trackingStrategy)) {
+            database.persist(event);
         }
 
         if (event.getType().equals(Event.TYPE_ACTION)) {
@@ -243,6 +247,8 @@ public class MPTracker {
             trackingStrategy = new BatchTrackingStrategy(database, new ConnectivityCheckerImpl(context), mMPTrackingService);
         } else if (isForcedStrategy(strategy)) {
             trackingStrategy = new ForcedStrategy(database, new ConnectivityCheckerImpl(context), mMPTrackingService);
+        } else {
+            trackingStrategy = new RealTimeTrackingStrategy(mMPTrackingService);
         }
 
         return trackingStrategy;
@@ -256,6 +262,9 @@ public class MPTracker {
         return strategy != null && strategy.equals(TrackingUtil.BATCH_STRATEGY);
     }
 
+    private boolean isRealTimeStrategy(String strategy) {
+        return strategy == null;
+    }
 
     private boolean isErrorScreen(String name) {
         return name.equals(TrackingUtil.SCREEN_NAME_ERROR);
