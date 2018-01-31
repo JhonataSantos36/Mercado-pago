@@ -26,6 +26,7 @@ public class PaymentResultScreenPreference {
     private String approvedTitle;
     private String approvedSubtitle;
     private Integer approvedIcon;
+    private String approvedUrlIcon;
     private String approvedLabelText;
     private @Badge.ApprovedBadges
     String approvedBadge;
@@ -34,6 +35,7 @@ public class PaymentResultScreenPreference {
     private String pendingContentTitle;
     private String pendingContentText;
     private Integer pendingIcon;
+    private String pendingUrlIcon;
     private String exitButtonTitle;
     private String secondaryPendingExitButtonTitle;
     private String secondaryCongratsExitButtonTitle;
@@ -41,6 +43,7 @@ public class PaymentResultScreenPreference {
     private String rejectedTitle;
     private String rejectedSubtitle;
     private Integer rejectedIcon;
+    private String rejectedUrlIcon;
     private String rejectedIconSubtext;
     private String rejectedContentTitle;
     private String rejectedContentText;
@@ -71,6 +74,7 @@ public class PaymentResultScreenPreference {
         this.approvedTitle = builder.approvedTitle;
         this.approvedSubtitle = builder.approvedSubtitle;
         this.approvedIcon = builder.approvedIcon;
+        this.approvedUrlIcon = builder.approvedUrlIcon;
         this.approvedLabelText = builder.approvedLabelText;
         this.approvedBadge = builder.approvedBadge;
         this.pendingTitle = builder.pendingTitle;
@@ -78,6 +82,7 @@ public class PaymentResultScreenPreference {
         this.pendingContentTitle = builder.pendingContentTitle;
         this.pendingContentText = builder.pendingContentText;
         this.pendingIcon = builder.pendingIcon;
+        this.pendingUrlIcon = builder.pendingUrlIcon;
         this.exitButtonTitle = builder.exitButtonTitle;
         this.secondaryPendingExitButtonTitle = builder.secondaryPendingExitButtonTitle;
         this.secondaryPendingExitResultCode = builder.secondaryPendingExitResultCode;
@@ -88,6 +93,7 @@ public class PaymentResultScreenPreference {
         this.rejectedTitle = builder.rejectedTitle;
         this.rejectedSubtitle = builder.rejectedSubtitle;
         this.rejectedIcon = builder.rejectedIcon;
+        this.rejectedUrlIcon = builder.rejectedUrlIcon;
         this.rejectedIconSubtext = builder.rejectedIconSubtext;
         this.rejectedContentTitle = builder.rejectedContentTitle;
         this.rejectedContentText = builder.rejectedContentText;
@@ -164,6 +170,10 @@ public class PaymentResultScreenPreference {
         return approvedIcon;
     }
 
+    public String getApprovedUrlIcon() {
+        return approvedUrlIcon;
+    }
+
     public String getApprovedLabelText() {
         return approvedLabelText;
     }
@@ -229,12 +239,20 @@ public class PaymentResultScreenPreference {
         return rejectedIcon;
     }
 
+    public String getRejectedUrlIcon() {
+        return rejectedUrlIcon;
+    }
+
     public String getRejectedIconSubtext() {
         return rejectedIconSubtext;
     }
 
     public Integer getPendingIcon() {
         return pendingIcon;
+    }
+
+    public String getPendingUrlIcon() {
+        return pendingUrlIcon;
     }
 
     public boolean isApprovedReceiptEnabled() {
@@ -315,11 +333,13 @@ public class PaymentResultScreenPreference {
         private Integer titleBackgroundColor;
         private String approvedSubtitle;
         private Integer approvedIcon;
+        private String approvedUrlIcon;
         private String pendingTitle;
         private String pendingSubtitle;
         private String pendingContentTitle;
         private String pendingContentText;
         private Integer pendingIcon;
+        private String pendingUrlIcon;
         private String exitButtonTitle;
         private String secondaryPendingExitButtonTitle;
         private String secondaryCongratsExitButtonTitle;
@@ -327,6 +347,7 @@ public class PaymentResultScreenPreference {
         private String rejectedTitle;
         private String rejectedSubtitle;
         private Integer rejectedIcon;
+        private String rejectedUrlIcon;
         private String rejectedIconSubtext;
         private String rejectedContentTitle;
         private String rejectedContentText;
@@ -403,6 +424,21 @@ public class PaymentResultScreenPreference {
 
         public Builder setRejectedHeaderIcon(@DrawableRes int headerIcon) {
             this.rejectedIcon = headerIcon;
+            return this;
+        }
+
+        public Builder setApprovedHeaderIcon(@NonNull String headerIconUrl) {
+            this.approvedUrlIcon = headerIconUrl;
+            return this;
+        }
+
+        public Builder setPendingHeaderIcon(@NonNull String headerIconUrl) {
+            this.pendingUrlIcon = headerIconUrl;
+            return this;
+        }
+
+        public Builder setRejectedHeaderIcon(@NonNull String headerIconUrl) {
+            this.rejectedUrlIcon = headerIconUrl;
             return this;
         }
 

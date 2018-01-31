@@ -72,6 +72,7 @@ public class PaymentResultContainer extends Component<PaymentResultProps, Void> 
                 .setBackground(getBackground(props.paymentResult))
                 .setStatusBarColor(getStatusBarColor(props.paymentResult))
                 .setIconImage(getIconImage(props))
+                .setIconUrl(getIconUrl(props))
                 .setBadgeImage(getBadgeImage(props))
                 .setTitle(getTitle(props))
                 .setLabel(getLabel(props))
@@ -205,7 +206,7 @@ public class PaymentResultContainer extends Component<PaymentResultProps, Void> 
     }
 
     private int getIconImage(@NonNull final PaymentResultProps props) {
-        if (props.hasCustomizedIcon()) {
+        if (props.hasCustomizedImageIcon()) {
             return props.getPreferenceIcon();
         } else if (props.paymentResult == null) {
             return DEFAULT_ICON_IMAGE;
@@ -218,6 +219,13 @@ public class PaymentResultContainer extends Component<PaymentResultProps, Void> 
         } else {
             return DEFAULT_ICON_IMAGE;
         }
+    }
+
+    private String getIconUrl(@NonNull final PaymentResultProps props) {
+        if (props.hasCustomizedUrlIcon()) {
+            return props.getPreferenceUrlIcon();
+        }
+        return null;
     }
 
     private boolean isItemIconImage(@NonNull final PaymentResult paymentResult) {

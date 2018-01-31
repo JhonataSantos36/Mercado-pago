@@ -10,6 +10,7 @@ import com.mercadopago.model.PaymentResult;
 import com.mercadopago.paymentresult.formatter.BodyAmountFormatter;
 import com.mercadopago.paymentresult.formatter.HeaderTitleFormatter;
 import com.mercadopago.preferences.PaymentResultScreenPreference;
+import com.mercadopago.util.TextUtils;
 
 /**
  * Created by vaserber on 10/20/17.
@@ -155,7 +156,7 @@ public class PaymentResultProps {
         return isStatusApproved();
     }
 
-    public boolean hasCustomizedIcon() {
+    public boolean hasCustomizedImageIcon() {
         PaymentResultScreenPreference preferences = CheckoutStore.getInstance().getPaymentResultScreenPreference();
         if (preferences != null) {
             if (isApprovedIconValidState()) {
@@ -164,6 +165,20 @@ public class PaymentResultProps {
                 return preferences.getPendingIcon() != null;
             } else if (isRejectedIconValidState()) {
                 return preferences.getRejectedIcon() != null;
+            }
+        }
+        return false;
+    }
+
+    public boolean hasCustomizedUrlIcon() {
+        PaymentResultScreenPreference preferences = CheckoutStore.getInstance().getPaymentResultScreenPreference();
+        if (preferences != null) {
+            if (isApprovedIconValidState()) {
+                return !TextUtils.isEmpty(preferences.getApprovedUrlIcon());
+            } else if (isPendingIconValidState()) {
+                return !TextUtils.isEmpty(preferences.getPendingUrlIcon());
+            } else if (isRejectedIconValidState()) {
+                return !TextUtils.isEmpty(preferences.getRejectedUrlIcon());
             }
         }
         return false;
@@ -181,6 +196,20 @@ public class PaymentResultProps {
             }
         }
         return 0;
+    }
+
+    public String getPreferenceUrlIcon() {
+        PaymentResultScreenPreference preferences = CheckoutStore.getInstance().getPaymentResultScreenPreference();
+        if (preferences != null) {
+            if (isApprovedIconValidState()) {
+                return preferences.getApprovedUrlIcon();
+            } else if (isPendingIconValidState()) {
+                return preferences.getPendingUrlIcon();
+            } else if (isRejectedIconValidState()) {
+                return preferences.getRejectedUrlIcon();
+            }
+        }
+        return null;
     }
 
     private boolean isApprovedIconValidState() {

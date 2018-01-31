@@ -20,6 +20,7 @@ public class HeaderProps {
     public final int statusBarColor;
     public final int iconImage;
     public final int badgeImage;
+    public final String iconUrl;
     public final String title;
     public final String label;
     public final HeaderTitleFormatter amountFormat;
@@ -29,6 +30,7 @@ public class HeaderProps {
                        @DrawableRes final int statusBarColor,
                        @DrawableRes final int iconImage,
                        @DrawableRes final int badgeImage,
+                       final String iconUrl,
                        final String title,
                        final String label,
                        final HeaderTitleFormatter formatter) {
@@ -36,6 +38,7 @@ public class HeaderProps {
         this.background = background;
         this.statusBarColor = statusBarColor;
         this.iconImage = iconImage;
+        this.iconUrl = iconUrl;
         this.badgeImage = badgeImage;
         this.title = title;
         this.label = label;
@@ -47,6 +50,7 @@ public class HeaderProps {
         this.background = builder.background;
         this.statusBarColor = builder.statusBarColor;
         this.iconImage = builder.iconImage;
+        this.iconUrl = builder.iconUrl;
         this.badgeImage = builder.badgeImage;
         this.title = builder.title;
         this.label = builder.label;
@@ -59,6 +63,7 @@ public class HeaderProps {
                 .setBackground(this.background)
                 .setStatusBarColor(this.statusBarColor)
                 .setIconImage(this.iconImage)
+                .setIconUrl(this.iconUrl)
                 .setBadgeImage(this.badgeImage)
                 .setTitle(this.title)
                 .setLabel(this.label)
@@ -74,6 +79,7 @@ public class HeaderProps {
         public int statusBarColor;
         public int iconImage;
         public int badgeImage;
+        public String iconUrl;
         public String title;
         public String label;
         public HeaderTitleFormatter amountFormat;
@@ -90,6 +96,11 @@ public class HeaderProps {
 
         public Builder setIconImage(@DrawableRes final int iconImage) {
             this.iconImage = iconImage;
+            return this;
+        }
+
+        public Builder setIconUrl(final String iconUrl) {
+            this.iconUrl = iconUrl;
             return this;
         }
 

@@ -138,8 +138,23 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
     private void startCheckout() {
         boolean couponDiscountFound = false;
 
+        fetchImages();
         resolvePreSelectedData();
         initializePluginsData();
+    }
+
+    private void fetchImages() {
+        if (mPaymentResultScreenPreference != null && getView() != null) {
+            if (!TextUtils.isEmpty(mPaymentResultScreenPreference.getApprovedUrlIcon())) {
+                getView().fetchImageFromUrl(mPaymentResultScreenPreference.getApprovedUrlIcon());
+            }
+            if (!TextUtils.isEmpty(mPaymentResultScreenPreference.getRejectedUrlIcon())) {
+                getView().fetchImageFromUrl(mPaymentResultScreenPreference.getRejectedUrlIcon());
+            }
+            if (!TextUtils.isEmpty(mPaymentResultScreenPreference.getPendingUrlIcon())) {
+                getView().fetchImageFromUrl(mPaymentResultScreenPreference.getPendingUrlIcon());
+            }
+        }
     }
 
     private void initializePluginsData() {

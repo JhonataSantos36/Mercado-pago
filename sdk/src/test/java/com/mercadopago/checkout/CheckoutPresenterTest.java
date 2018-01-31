@@ -1856,6 +1856,11 @@ public class CheckoutPresenterTest {
         private PaymentRecovery paymentRecoveryRequested;
 
         @Override
+        public void fetchImageFromUrl(String url) {
+
+        }
+
+        @Override
         public void showError(MercadoPagoError error) {
             this.showingError = true;
             this.errorShown = error;

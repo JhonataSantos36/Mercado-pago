@@ -55,4 +55,6 @@ public interface CheckoutView extends MvpView {
     void showPaymentProcessor();
 
     boolean isActive();
+
+    void fetchImageFromUrl(String url);
 }

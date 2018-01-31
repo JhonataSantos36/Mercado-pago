@@ -22,6 +22,7 @@ public class Header extends Component<HeaderProps, Void> {
 
         final IconProps iconProps = new IconProps.Builder()
                 .setIconImage(props.iconImage)
+                .setIconUrl(props.iconUrl)
                 .setBadgeImage(props.badgeImage)
                 .build();
 

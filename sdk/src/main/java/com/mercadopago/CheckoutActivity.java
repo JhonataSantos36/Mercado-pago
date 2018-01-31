@@ -46,6 +46,7 @@ import com.mercadopago.util.LayoutUtil;
 import com.mercadopago.util.MercadoPagoUtil;
 import com.mercadopago.util.TextUtil;
 import com.mercadopago.views.CheckoutView;
+import com.squareup.picasso.Picasso;
 
 import java.math.BigDecimal;
 
@@ -118,6 +119,13 @@ public class CheckoutActivity extends MercadoPagoBaseActivity implements Checkou
         mCheckoutPresenter.setPaymentResultInput(paymentResultInput);
         mCheckoutPresenter.setRequestedResult(mRequestedResultCode);
         mCheckoutPresenter.setServicePreference(servicePreference);
+    }
+
+    @Override
+    public void fetchImageFromUrl(String url) {
+        Picasso.with(this)
+                .load(url)
+                .fetch();
     }
 
     @Override
