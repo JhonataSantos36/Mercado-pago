@@ -63,7 +63,6 @@ public class ErrorActivity extends MercadoPagoBaseActivity {
     private void trackScreen() {
         MPTrackingContext mpTrackingContext = new MPTrackingContext.Builder(this, mPublicKey)
                 .setCheckoutVersion(BuildConfig.VERSION_NAME)
-                .setTrackingStrategy(TrackingUtil.BATCH_STRATEGY)
                 .build();
 
         ScreenViewEvent.Builder builder = new ScreenViewEvent.Builder()

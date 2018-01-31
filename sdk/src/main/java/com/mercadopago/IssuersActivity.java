@@ -187,7 +187,6 @@ public class IssuersActivity extends MercadoPagoBaseActivity implements IssuersA
     protected void trackScreen() {
         MPTrackingContext mpTrackingContext = new MPTrackingContext.Builder(this, mPublicKey)
                 .setCheckoutVersion(BuildConfig.VERSION_NAME)
-                .setTrackingStrategy(TrackingUtil.BATCH_STRATEGY)
                 .build();
 
         ScreenViewEvent event = new ScreenViewEvent.Builder()

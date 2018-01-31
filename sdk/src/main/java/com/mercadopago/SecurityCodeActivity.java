@@ -289,7 +289,6 @@ public class SecurityCodeActivity extends MercadoPagoBaseActivity implements Sec
     public void trackScreen() {
         MPTrackingContext mpTrackingContext = new MPTrackingContext.Builder(this, mMerchantPublicKey)
                 .setCheckoutVersion(BuildConfig.VERSION_NAME)
-                .setTrackingStrategy(TrackingUtil.BATCH_STRATEGY)
                 .build();
 
         ScreenViewEvent event = new ScreenViewEvent.Builder()

@@ -52,7 +52,6 @@ public class GuessingCardProviderImpl implements GuessingCardProvider {
         if (trackingContext == null) {
             trackingContext = new MPTrackingContext.Builder(context, publicKey)
                     .setCheckoutVersion(BuildConfig.VERSION_NAME)
-                    .setTrackingStrategy(TrackingUtil.BATCH_STRATEGY)
                     .build();
         }
         return trackingContext;

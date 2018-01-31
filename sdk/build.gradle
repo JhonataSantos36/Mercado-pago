@@ -129,7 +129,7 @@ dependencies {
 
     compile "com.google.code.gson:gson:$gson"
     compile "com.squareup.picasso:picasso:$picasso"
-    compile 'com.mercadopago:tracking:3.0.2'
+    compile 'com.mercadopago:tracking:3.0.2-noop-1'
 }
 configurations {
     archives {

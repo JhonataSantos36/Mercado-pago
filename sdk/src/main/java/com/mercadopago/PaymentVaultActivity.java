@@ -239,7 +239,6 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
     public void trackInitialScreen() {
         MPTrackingContext mpTrackingContext = new MPTrackingContext.Builder(this, mPublicKey)
                 .setCheckoutVersion(BuildConfig.VERSION_NAME)
-                .setTrackingStrategy(TrackingUtil.BATCH_STRATEGY)
                 .build();
         ScreenViewEvent event = new ScreenViewEvent.Builder()
                 .setFlowId(FlowHandler.getInstance().getFlowId())
@@ -257,7 +256,6 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
 
             MPTrackingContext mpTrackingContext = new MPTrackingContext.Builder(this, mPublicKey)
                     .setCheckoutVersion(BuildConfig.VERSION_NAME)
-                    .setTrackingStrategy(TrackingUtil.BATCH_STRATEGY)
                     .build();
 
             ScreenViewEvent event = null;

@@ -140,7 +140,6 @@ public class PaymentTypesActivity extends MercadoPagoBaseActivity implements Pay
     protected void trackScreen() {
         MPTrackingContext mpTrackingContext = new MPTrackingContext.Builder(this, mPresenter.getPublicKey())
                 .setCheckoutVersion(BuildConfig.VERSION_NAME)
-                .setTrackingStrategy(TrackingUtil.BATCH_STRATEGY)
                 .build();
 
         ScreenViewEvent event = new ScreenViewEvent.Builder()

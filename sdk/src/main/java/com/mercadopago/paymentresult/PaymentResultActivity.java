@@ -312,7 +312,6 @@ public class PaymentResultActivity extends AppCompatActivity implements PaymentR
     public void trackScreen(ScreenViewEvent event) {
         MPTrackingContext mpTrackingContext = new MPTrackingContext.Builder(this, merchantPublicKey)
                 .setCheckoutVersion(BuildConfig.VERSION_NAME)
-                .setTrackingStrategy(TrackingUtil.FORCED_STRATEGY)
                 .build();
 
         mpTrackingContext.trackEvent(event);

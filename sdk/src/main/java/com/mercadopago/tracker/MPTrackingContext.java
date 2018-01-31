@@ -8,6 +8,7 @@ import com.mercadopago.model.Fingerprint;
 import com.mercadopago.tracking.model.AppInformation;
 import com.mercadopago.tracking.model.DeviceInfo;
 import com.mercadopago.tracking.model.Event;
+import com.mercadopago.tracking.tracker.MPTracker;
 
 /**
  * Created by vaserber on 6/5/17.
@@ -51,12 +52,12 @@ public class MPTrackingContext {
                 .build();
     }
 
-    public void trackEvent(final Event event) {
-        // No tracking
+    public void trackEvent(Event event) {
+        MPTracker.getInstance().trackEvent(publicKey, appInformation, deviceInfo, event, context, trackingStrategy);
     }
 
     public void clearExpiredTracks() {
-        // No tracking
+        MPTracker.getInstance().clearExpiredTracks();
     }
 
     public static class Builder {
