@@ -21,6 +21,10 @@ public abstract class TrackingStrategy {
 
     public abstract void trackEvent(Event event, Context context);
 
+    public boolean readsEventFromDB() {
+        return true;
+    }
+
     public void setAppInformation(AppInformation appInformation) {
         this.appInformation = appInformation;
     }

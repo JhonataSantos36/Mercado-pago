@@ -10,4 +10,9 @@ public class NoOpStrategy extends TrackingStrategy {
     public void trackEvent(Event event, Context context) {
         // This strategy does not track any event
     }
+
+    @Override
+    public boolean readsEventFromDB() {
+        return false;
+    }
 }

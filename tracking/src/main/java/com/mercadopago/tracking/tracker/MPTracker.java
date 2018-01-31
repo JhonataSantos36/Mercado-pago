@@ -169,10 +169,10 @@ public class MPTracker {
             this.trackingStrategy.setAppInformation(appInformation);
             this.trackingStrategy.setDeviceInfo(deviceInfo);
             this.trackingStrategy.trackEvent(event, context);
-        }
 
-        if (!isRealTimeStrategy(trackingStrategy)) {
-            database.persist(event);
+            if (this.trackingStrategy.readsEventFromDB()) {
+                database.persist(event);
+            }
         }
 
         if (event.getType().equals(Event.TYPE_ACTION)) {

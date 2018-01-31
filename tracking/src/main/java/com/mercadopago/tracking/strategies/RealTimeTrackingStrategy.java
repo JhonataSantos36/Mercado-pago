@@ -27,4 +27,9 @@ public class RealTimeTrackingStrategy extends TrackingStrategy {
         EventTrackIntent eventTrackIntent = new EventTrackIntent(appInformation, getDeviceInfo(), events);
         trackingService.trackEvents(getPublicKey(), eventTrackIntent, context);
     }
+
+    @Override
+    public boolean readsEventFromDB() {
+        return false;
+    }
 }
