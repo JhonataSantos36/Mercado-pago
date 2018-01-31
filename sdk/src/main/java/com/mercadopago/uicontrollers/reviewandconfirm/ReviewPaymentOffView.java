@@ -18,6 +18,7 @@ import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.Reviewable;
 import com.mercadopago.model.Site;
+import com.mercadopago.plugins.PaymentMethodPlugin;
 import com.mercadopago.util.CurrenciesUtil;
 import com.mercadopago.util.ReviewUtil;
 import com.mercadopago.util.TextUtil;
@@ -115,9 +116,11 @@ public class ReviewPaymentOffView extends Reviewable {
     }
 
     private CharSequence getPaymentMethodDescription() {
+        PaymentMethodPlugin paymentMethodPlugin = CheckoutStore.getInstance().getPaymentMethodPluginById(mPaymentMethod.getId());
         CharSequence description;
-        if (PaymentMethods.ACCOUNT_MONEY.equals(mPaymentMethod.getId())) {
-            description = mContext.getString(R.string.mpsdk_ryc_account_money_description);
+
+        if (paymentMethodPlugin != null) {
+            description = paymentMethodPlugin.getPaymentMethodInfo(mContext).name;
         } else {
             int paymentInstructionsTemplate = ReviewUtil.getPaymentInstructionTemplate(mPaymentMethod);
             String originalNumber = CurrenciesUtil.formatNumber(mAmount, mSite.getCurrencyId());
