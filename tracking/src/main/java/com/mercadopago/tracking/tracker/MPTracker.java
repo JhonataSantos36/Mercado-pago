@@ -4,7 +4,6 @@ import android.content.Context;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-
 import com.mercadopago.tracking.listeners.TracksListener;
 import com.mercadopago.tracking.model.ActionEvent;
 import com.mercadopago.tracking.model.AppInformation;
@@ -13,14 +12,15 @@ import com.mercadopago.tracking.model.Event;
 import com.mercadopago.tracking.model.PaymentIntent;
 import com.mercadopago.tracking.model.ScreenViewEvent;
 import com.mercadopago.tracking.model.TrackingIntent;
+import com.mercadopago.tracking.services.MPTrackingService;
+import com.mercadopago.tracking.services.MPTrackingServiceImpl;
 import com.mercadopago.tracking.strategies.BatchTrackingStrategy;
 import com.mercadopago.tracking.strategies.ConnectivityCheckerImpl;
 import com.mercadopago.tracking.strategies.EventsDatabaseImpl;
 import com.mercadopago.tracking.strategies.ForcedStrategy;
+import com.mercadopago.tracking.strategies.NoOpStrategy;
 import com.mercadopago.tracking.strategies.RealTimeTrackingStrategy;
 import com.mercadopago.tracking.strategies.TrackingStrategy;
-import com.mercadopago.tracking.services.MPTrackingService;
-import com.mercadopago.tracking.services.MPTrackingServiceImpl;
 import com.mercadopago.tracking.utils.JsonConverter;
 import com.mercadopago.tracking.utils.TrackingUtil;
 
@@ -132,7 +132,28 @@ public class MPTracker {
      * @param event          Event to track
      * @param context        Application context
      */
-    public void trackEvent(String publicKey, AppInformation appInformation, DeviceInfo deviceInfo, Event event, Context context, String trackingStrategy) {
+    public void trackEvent(final String publicKey,
+                           final AppInformation appInformation,
+                           final DeviceInfo deviceInfo,
+                           final Event event,
+                           final Context context) {
+        trackEvent(publicKey, appInformation, deviceInfo, event, context, TrackingUtil.NOOP_STRATEGY);
+    }
+
+    /**
+     * This method tracks a list of events in one request
+     *
+     * @param appInformation Info about this application and SDK integration
+     * @param deviceInfo     Info about the device that is using the app
+     * @param event          Event to track
+     * @param context        Application context
+     */
+    public void trackEvent(final String publicKey,
+                           final AppInformation appInformation,
+                           final DeviceInfo deviceInfo,
+                           final Event event,
+                           final Context context,
+                           final String trackingStrategy) {
 
         initializeMPTrackingService();
 
@@ -242,41 +263,39 @@ public class MPTracker {
     }
 
     private TrackingStrategy setTrackingStrategy(Context context, Event event, String strategy) {
-
         if (isBatchStrategy(strategy)) {
             trackingStrategy = new BatchTrackingStrategy(database, new ConnectivityCheckerImpl(context), mMPTrackingService);
         } else if (isForcedStrategy(strategy)) {
             trackingStrategy = new ForcedStrategy(database, new ConnectivityCheckerImpl(context), mMPTrackingService);
-        } else {
+        } else if (isRealTimeStrategy(strategy)) {
             trackingStrategy = new RealTimeTrackingStrategy(mMPTrackingService);
+        } else {
+            trackingStrategy = new NoOpStrategy();
         }
-
         return trackingStrategy;
     }
 
     private boolean isForcedStrategy(String strategy) {
-        return strategy != null && strategy.equals(TrackingUtil.FORCED_STRATEGY);
+        return TrackingUtil.FORCED_STRATEGY.equals(strategy);
     }
 
     private boolean isBatchStrategy(String strategy) {
-        return strategy != null && strategy.equals(TrackingUtil.BATCH_STRATEGY);
+        return TrackingUtil.BATCH_STRATEGY.equals(strategy);
     }
 
     private boolean isRealTimeStrategy(String strategy) {
-        return strategy == null;
+        return TrackingUtil.REALTIME_STRATEGY.equals(strategy);
     }
 
     private boolean isErrorScreen(String name) {
-        return name.equals(TrackingUtil.SCREEN_NAME_ERROR);
+        return TrackingUtil.SCREEN_NAME_ERROR.equals(name);
     }
 
     private boolean isResultScreen(String name) {
-        return name.equals(TrackingUtil.SCREEN_NAME_PAYMENT_RESULT_APPROVED) || name.equals(TrackingUtil.SCREEN_NAME_PAYMENT_RESULT_PENDING) || name.equals(TrackingUtil.SCREEN_NAME_PAYMENT_RESULT_REJECTED) ||
-                name.equals(TrackingUtil.SCREEN_NAME_PAYMENT_RESULT_INSTRUCTIONS);
-    }
-
-    public TrackingStrategy setTrackingStrategy() {
-        return trackingStrategy;
+        return TrackingUtil.SCREEN_NAME_PAYMENT_RESULT_APPROVED.equals(name)
+                || TrackingUtil.SCREEN_NAME_PAYMENT_RESULT_PENDING.equals(name)
+                || TrackingUtil.SCREEN_NAME_PAYMENT_RESULT_REJECTED.equals(name)
+                || TrackingUtil.SCREEN_NAME_PAYMENT_RESULT_INSTRUCTIONS.equals(name);
     }
 
     public Event getEvent() {

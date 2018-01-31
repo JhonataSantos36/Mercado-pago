@@ -87,6 +87,10 @@ public class TrackingUtil {
     //Default values
     public static final String HAS_SHIPPING_DEFAULT_VALUE = "false";
     public static final String IS_EXPRESS_DEFAULT_VALUE = "false";
+
+    //Strategies
+    public static final String NOOP_STRATEGY = "noop_strategy";
+    public static final String REALTIME_STRATEGY = "realtime_strategy";
     public static final String BATCH_STRATEGY = "batch_strategy";
     public static final String FORCED_STRATEGY = "forced_strategy";
 }
