@@ -57,42 +57,30 @@
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
 
-    <FrameLayout
+    <LinearLayout
+        android:id="@+id/mpsdkContentLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/mpsdk_white"
+        android:orientation="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <LinearLayout
-            android:id="@+id/mpsdkContentLayout"
+        <FrameLayout
+            android:id="@+id/mpsdkDiscount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/mpsdkGroupsList"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="?attr/actionBarSize"
             android:background="@color/mpsdk_white"
-            android:orientation="vertical"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+            android:divider="@null"
+            android:listSelector="@android:color/transparent"
+            android:paddingEnd="10dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingStart="10dp" />
+    </LinearLayout>
 
-            <android.support.v4.widget.NestedScrollView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <FrameLayout
-                    android:id="@+id/mpsdkDiscount"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-            </android.support.v4.widget.NestedScrollView>
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/mpsdkGroupsList"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/mpsdk_white"
-                android:divider="@null"
-                android:fitsSystemWindows="true"
-                android:listSelector="@android:color/transparent"
-                android:paddingEnd="10dp"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:paddingStart="10dp" />
-        </LinearLayout>
-    </FrameLayout>
 </android.support.design.widget.CoordinatorLayout>
