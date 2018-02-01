@@ -15,19 +15,28 @@
         android:paddingBottom="40dp"
         android:paddingTop="40dp">
 
+        <ImageView
+            android:id="@+id/mpsdkAdapterReviewPaymentImage"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center_horizontal|center_vertical"
+            android:scaleType="fitCenter"
+            tools:src="@drawable/mpsdk_bapropagos" />
+
         <FrameLayout
             android:id="@+id/mpsdkImageContainer"
             android:layout_width="55dp"
             android:layout_height="55dp"
-            android:layout_gravity="center_horizontal">
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/mpsdk_light_grey_circle"
+            android:visibility="gone">
 
             <ImageView
-                android:id="@+id/mpsdkAdapterReviewPaymentImage"
+                android:id="@+id/mpsdkAdapterReviewPaymentPluginImage"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_gravity="center_horizontal|center_vertical"
-                android:scaleType="fitCenter"
-                tools:src="@drawable/mpsdk_bapropagos" />
+                android:scaleType="fitCenter" />
         </FrameLayout>
 
         <FrameLayout
@@ -123,8 +132,8 @@
             android:textSize="24dp"
             android:visibility="gone"
             app:font_style="light"
-            tools:visibility="visible"
-            tools:text="CFT 0,00%" />
+            tools:text="CFT 0,00%"
+            tools:visibility="visible" />
 
         <FrameLayout
             android:id="@+id/mpsdkAdapterReviewPaymentChangeButton"

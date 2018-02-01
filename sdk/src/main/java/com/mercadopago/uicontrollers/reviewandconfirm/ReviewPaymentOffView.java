@@ -39,6 +39,7 @@ public class ReviewPaymentOffView extends Reviewable {
     protected FrameLayout mPayerCostContainer;
     protected FrameLayout mImageContainer;
     protected ImageView mIconTimeImageView;
+    protected ImageView mPaymentPluginImage;
     protected MPTextView mChangePaymentTextView;
 
     private Context mContext;
@@ -79,6 +80,7 @@ public class ReviewPaymentOffView extends Reviewable {
         mImageContainer = (FrameLayout) mView.findViewById(R.id.mpsdkImageContainer);
         mPaymentMethodExtraInfo = (ViewGroup) mView.findViewById(R.id.mpsdkExtraInfoContainer);
         mPaymentImage = (ImageView) mView.findViewById(R.id.mpsdkAdapterReviewPaymentImage);
+        mPaymentPluginImage = (ImageView) mView.findViewById(R.id.mpsdkAdapterReviewPaymentPluginImage);
         mPaymentText = (MPTextView) mView.findViewById(R.id.mpsdkAdapterReviewPaymentText);
         mPaymentDescription = (MPTextView) mView.findViewById(R.id.mpsdkAdapterReviewPaymentDescription);
         mChangePaymentButton = (FrameLayout) mView.findViewById(R.id.mpsdkAdapterReviewPaymentChangeButton);
@@ -102,7 +104,6 @@ public class ReviewPaymentOffView extends Reviewable {
     public void draw() {
         setSmallTextSize();
         setIcon();
-        setGreyCircle();
 
         mPayerCostContainer.setVisibility(View.GONE);
 
@@ -134,12 +135,14 @@ public class ReviewPaymentOffView extends Reviewable {
 
     private void setIcon() {
         int resId = getResource();
-        mPaymentImage.setImageResource(resId);
-    }
 
-    private void setGreyCircle() {
         if (mPaymentMethod != null && isPluginPaymentType()) {
-            mImageContainer.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.mpsdk_light_grey_circle));
+            mImageContainer.setVisibility(View.VISIBLE);
+            mPaymentImage.setVisibility(View.GONE);
+
+            mPaymentPluginImage.setImageResource(resId);
+        } else {
+            mPaymentImage.setImageResource(resId);
         }
     }
 
