@@ -20,8 +20,6 @@ import com.google.gson.reflect.TypeToken;
 import com.mercadopago.adapters.ReviewablesAdapter;
 import com.mercadopago.constants.ReviewKeys;
 import com.mercadopago.constants.Sites;
-import com.mercadopago.controllers.CheckoutTimer;
-import com.mercadopago.core.MercadoPagoCheckout;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.model.Discount;
 import com.mercadopago.model.Issuer;
@@ -33,7 +31,6 @@ import com.mercadopago.model.ReviewSubscriber;
 import com.mercadopago.model.Reviewable;
 import com.mercadopago.model.Site;
 import com.mercadopago.model.Token;
-import com.mercadopago.observers.TimerObserver;
 import com.mercadopago.preferences.ReviewScreenPreference;
 import com.mercadopago.presenters.ReviewAndConfirmPresenter;
 import com.mercadopago.providers.ReviewAndConfirmProviderImpl;
@@ -52,7 +49,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements TimerObserver, ReviewAndConfirmView, ReviewSubscriber {
+public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements ReviewAndConfirmView, ReviewSubscriber {
 
     public static final int RESULT_CHANGE_PAYMENT_METHOD = 3;
     public static final int RESULT_CANCEL_PAYMENT = 4;
@@ -66,7 +63,6 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
     protected MPTextView mFloatingConfirmTextButton;
     protected MPTextView mCancelTextView;
     protected MPTextView mTermsAndConditionsTextView;
-    protected MPTextView mTimerTextView;
 
     protected FrameLayout mConfirmButton;
     protected FrameLayout mFloatingConfirmButton;
@@ -95,10 +91,9 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
         mPresenter.attachView(this);
         mPresenter.attachResourcesProvider(new ReviewAndConfirmProviderImpl(this, mReviewScreenPreference));
 
-        setContentView();
+        setContentView(R.layout.mpsdk_activity_review_confirm);
 
         initializeControls();
-        showTimer();
         setListeners();
 
         initializeReviewablesRecyclerView();
@@ -106,23 +101,22 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
         mPresenter.initialize();
     }
 
-    private void setContentView() {
-        setContentView(R.layout.mpsdk_activity_review_confirm);
-    }
-
     private void setListeners() {
+
         mConfirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 confirmPayment();
             }
         });
+
         mFloatingConfirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 confirmPayment();
             }
         });
+
         mCancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -205,9 +199,9 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
 
     private void initializeControls() {
         mScrollView = (NestedScrollView) findViewById(R.id.mpsdkReviewScrollView);
-        mCollapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.mpsdkCollapsingToolbar);
-        mAppBar = (AppBarLayout) findViewById(R.id.mpsdkCheckoutAppBar);
-        mToolbar = (Toolbar) findViewById(R.id.mpsdkRegularToolbar);
+        mCollapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
+        mAppBar = (AppBarLayout) findViewById(R.id.appbar);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mFloatingConfirmButton = (FrameLayout) findViewById(R.id.mpsdkCheckoutFloatingConfirmButton);
         mFloatingConfirmTextButton = (MPTextView) findViewById(R.id.mpsdkFloatingConfirmText);
         mFloatingConfirmView = (FrameLayout) findViewById(R.id.mpsdkCheckoutFloatingConfirmView);
@@ -217,16 +211,13 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
         mCancelTextView = (MPTextView) findViewById(R.id.mpsdkCancelText);
         mTermsAndConditionsButton = (LinearLayout) findViewById(R.id.mpsdkCheckoutTermsAndConditions);
         mTermsAndConditionsTextView = (MPTextView) findViewById(R.id.mpsdkReviewTermsAndConditions);
-        mTimerTextView = (MPTextView) findViewById(R.id.mpsdkTimerTextView);
-        mReviewables = (RecyclerView) findViewById(R.id.mpsdkReviewablesRecyclerView);
+        mReviewables = findViewById(R.id.reviewables);
         mSeparatorView = findViewById(R.id.mpsdkFirstSeparator);
 
         initializeToolbar();
     }
 
     private void initializeReviewablesRecyclerView() {
-        mReviewables = (RecyclerView) findViewById(R.id.mpsdkReviewablesRecyclerView);
-        mReviewables.setNestedScrollingEnabled(false);
         mReviewables.setLayoutManager(new LinearLayoutManager(this));
     }
 
@@ -247,14 +238,6 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
         if (FontCache.hasTypeface(FontCache.CUSTOM_REGULAR_FONT)) {
             mCollapsingToolbar.setCollapsedTitleTypeface(FontCache.getTypeface(FontCache.CUSTOM_REGULAR_FONT));
             mCollapsingToolbar.setExpandedTitleTypeface(FontCache.getTypeface(FontCache.CUSTOM_REGULAR_FONT));
-        }
-    }
-
-    private void showTimer() {
-        if (CheckoutTimer.getInstance().isTimerEnabled()) {
-            CheckoutTimer.getInstance().addObserver(this);
-            mTimerTextView.setVisibility(View.VISIBLE);
-            mTimerTextView.setText(CheckoutTimer.getInstance().getCurrentTime());
         }
     }
 
@@ -322,18 +305,6 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
     }
 
     @Override
-    public void onTimeChanged(String timeToShow) {
-        mTimerTextView.setText(timeToShow);
-    }
-
-    @Override
-    public void onFinish() {
-        Intent intent = new Intent();
-        setResult(MercadoPagoCheckout.TIMER_FINISHED_RESULT_CODE, intent);
-        this.finish();
-    }
-
-    @Override
     public void showError(String message) {
         ErrorUtil.startErrorActivity(this, getString(R.string.mpsdk_standard_error_message), message, false, mPublicKey);
     }
@@ -394,9 +365,7 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
         float scrollContent = mScrollView.getChildAt(0).getHeight();
         float scrollViewHeight = mScrollView.getHeight();
         float cancelHeight = mCancelButton.getHeight();
-
         float finalSize = scrollContent - scrollViewHeight - cancelHeight - cancelButtonLayout.bottomMargin - mSeparatorView.getHeight() * 5;
-
         return mScrollView.getScrollY() > finalSize;
     }
 

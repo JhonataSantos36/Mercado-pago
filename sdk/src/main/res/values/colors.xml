@@ -196,7 +196,7 @@
     <color name="mpsdk_summary_text_color">#666666</color>
     <color name="mpsdk_summary_separator_color">#DEDEDE</color>
     <color name="mpsdk_summary_discount_color">#3BC280</color>
-    <color name="mpsdk_review_background">#00000000</color>
+    <color name="mpsdk_review_background">#FFFFFF</color>
     <color name="mpsdk_review_toolbar_text">#009EE3</color>
     <color name="mpsdk_review_component_background">#F7F7F7</color>
     <color name="mpsdk_link">#009EE3</color>
