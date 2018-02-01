@@ -27,11 +27,14 @@ public class CheckoutPreference {
 
     private Date expirationDateTo;
     private Date expirationDateFrom;
-    private String siteId;
 
     private Site localPreferenceSite;
+
+    //To support external integrations
+    private String siteId;
     private BigDecimal marketplaceFee;
     private BigDecimal shippingCost;
+    private String operationType;
 
     public CheckoutPreference(String checkoutPreferenceId) {
         this.id = checkoutPreferenceId;
@@ -44,6 +47,7 @@ public class CheckoutPreference {
         this.localPreferenceSite = builder.localPreferenceSite;
         this.marketplaceFee = builder.marketplaceFee;
         this.shippingCost = builder.shippingCost;
+        this.operationType = builder.operationType;
 
         final Payer payer = new Payer();
         payer.setEmail(builder.payerEmail);
@@ -137,6 +141,10 @@ public class CheckoutPreference {
     public Boolean isActive() {
         Date date = new Date();
         return expirationDateFrom == null || date.after(expirationDateFrom);
+    }
+
+    public String getOperationType() {
+        return operationType;
     }
 
     public BigDecimal getMarketplaceFee() {
@@ -287,6 +295,7 @@ public class CheckoutPreference {
         private boolean excludeAccountMoney = true;
         private BigDecimal marketplaceFee;
         private BigDecimal shippingCost;
+        private String operationType;
 
         public Builder() {
             items = new ArrayList<>();
@@ -386,6 +395,10 @@ public class CheckoutPreference {
             return this;
         }
 
+        public Builder setOperationType(final String operationType) {
+            this.operationType = operationType;
+            return this;
+        }
         public CheckoutPreference build() {
 
             if (items == null || items.isEmpty())
