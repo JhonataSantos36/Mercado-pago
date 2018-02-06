@@ -39,18 +39,26 @@ public class PaymentResultPresenter extends MvpPresenter<PaymentResultPropsView,
     private ServicePreference servicePreference;
     private PaymentResultNavigator navigator;
     private FailureRecovery failureRecovery;
+    private boolean initialized = false;
 
     public PaymentResultPresenter(@NonNull final PaymentResultNavigator navigator) {
         this.navigator = navigator;
     }
 
     public void initialize() {
-        try {
-            validateParameters();
-            onValidStart();
-        } catch (final IllegalStateException exception) {
-            navigator.showError(new MercadoPagoError(exception.getMessage(), false), "");
+        if (!isInitialized()) {
+            try {
+                validateParameters();
+                onValidStart();
+                initialized = true;
+            } catch (final IllegalStateException exception) {
+                navigator.showError(new MercadoPagoError(exception.getMessage(), false), "");
+            }
         }
+    }
+
+    public boolean isInitialized() {
+        return initialized;
     }
 
     private void validateParameters() {

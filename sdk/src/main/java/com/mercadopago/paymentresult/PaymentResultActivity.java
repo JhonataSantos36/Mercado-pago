@@ -65,7 +65,6 @@ import com.mercadopago.preferences.PaymentResultScreenPreference;
 import com.mercadopago.preferences.ServicePreference;
 import com.mercadopago.tracker.MPTrackingContext;
 import com.mercadopago.tracking.model.ScreenViewEvent;
-import com.mercadopago.tracking.utils.TrackingUtil;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
@@ -96,20 +95,20 @@ public class PaymentResultActivity extends AppCompatActivity implements PaymentR
     private ServicePreference servicePreference;
 
     private ComponentManager componentManager;
+    private PaymentResultPropsMutator mutator;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        final PaymentResultPropsMutator mutator = new PaymentResultPropsMutator();
-
+        mutator = new PaymentResultPropsMutator();
         presenter = new PaymentResultPresenter(this);
+
         getActivityParameters();
 
         final PaymentResultProvider paymentResultProvider = new PaymentResultProviderImpl(this, merchantPublicKey, payerAccessToken);
         final PaymentMethodProvider paymentMethodProvider = new PaymentMethodProviderImpl(this);
 
-        presenter.attachView(mutator);
         presenter.attachResourcesProvider(paymentResultProvider);
 
         componentManager = new ComponentManager(this);
@@ -144,6 +143,12 @@ public class PaymentResultActivity extends AppCompatActivity implements PaymentR
 
         mutator.setPropsListener(componentManager);
         mutator.renderDefaultProps();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        presenter.attachView(mutator);
         presenter.initialize();
     }
 
@@ -201,9 +206,7 @@ public class PaymentResultActivity extends AppCompatActivity implements PaymentR
         presenter.setAmount(amount);
         presenter.setServicePreference(servicePreference);
 
-        final PaymentResultPropsMutator mutator = new PaymentResultPropsMutator();
         final PaymentResultProvider provider = new PaymentResultProviderImpl(this, merchantPublicKey, payerAccessToken);
-        presenter.attachView(mutator);
         presenter.attachResourcesProvider(provider);
 
         super.onRestoreInstanceState(savedInstanceState);
