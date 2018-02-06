@@ -17,46 +17,8 @@
             </intent-filter>
         </activity>
         <activity
-                android:name=".services.step2.SimpleVaultActivity"
-                android:label="@string/title_activity_simple_vault"
-                android:screenOrientation="portrait"/>
-        <activity
-                android:name=".services.step3.AdvancedVaultActivity"
-                android:label="@string/title_activity_final_vault"
-                android:screenOrientation="portrait"/>
-        <activity
-                android:name=".services.step1.Step1Activity"
-                android:label="@string/title_activity_step1"
-                android:screenOrientation="portrait"/>
-        <activity
-                android:name=".services.step1.CardActivity"
-                android:label="@string/title_activity_card"
-                android:screenOrientation="portrait"/>
-        <activity
-                android:name=".services.step2.Step2Activity"
-                android:label="@string/title_activity_step2"
-                android:screenOrientation="portrait"/>
-        <activity
-                android:name=".services.step3.Step3Activity"
-                android:label="@string/title_activity_step3"
-                android:screenOrientation="portrait"/>
-        <activity
-                android:name=".services.step4.Step4Activity"
-                android:label="@string/title_activity_step4"
-                android:screenOrientation="portrait"/>
-        <activity
-                android:name=".services.step4.FinalVaultActivity"
-                android:label="@string/title_activity_final_vault"/>
-        <activity
                 android:name=".checkout.CheckoutExampleActivity"
                 android:label="@string/title_activity_checkout_example"/>
-        <activity
-                android:name=".components.ComponentsExampleActivity"
-                android:label="@string/title_activity_customized_example"/>
-        <activity
-                android:name=".services.ServicesExampleActivity"
-                android:label="@string/title_activity_customized_example"/>
-        <activity android:name=".checkout.JsonSetupActivity" />
     </application>
 
 </manifest>

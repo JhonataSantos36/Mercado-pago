@@ -22,11 +22,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.MercadoPagoTheme.NoActionBar" />
         <activity
-            android:name=".NewCardActivity"
-            android:label="@string/mpsdk_title_activity_new_card"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.MercadoPagoTheme" />
-        <activity
             android:name=".PaymentMethodsActivity"
             android:label="@string/mpsdk_title_activity_payment_methods"
             android:screenOrientation="portrait"
@@ -55,11 +50,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.MercadoPagoTheme.NoActionBar" />
         <activity
-            android:name=".InstructionsActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.InstructionsMercadoPagoTheme.NoActionbar" />
-        <activity
             android:name=".InstallmentsActivity"
             android:screenOrientation="behind"
             android:theme="@style/Theme.MercadoPagoTheme.NoActionBar" />
@@ -75,22 +65,6 @@
             android:name=".ErrorActivity"
             android:screenOrientation="behind"
             android:theme="@style/Theme.MercadoPagoTheme.NoActionBar" />
-        <activity
-            android:name=".CongratsActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.CongratsMercadoPagoTheme.NoActionbar" />
-        <activity
-            android:name=".CallForAuthorizeActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.CallForAuthorizeMercadoPagoTheme.NoActionbar" />
-        <activity
-            android:name=".RejectionActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.RejectionMercadoPagoTheme.NoActionbar" />
-        <activity
-            android:name=".PendingActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.PendingMercadoPagoTheme.NoActionbar" />
         <activity
             android:name=".paymentresult.PaymentResultActivity"
             android:theme="@style/Theme.MercadoPagoTheme.NoActionBar" />
@@ -114,9 +88,6 @@
             android:name=".ReviewPaymentMethodsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.MercadoPagoTheme.NoActionBar" />
-        <activity
-            android:name=".VaultActivity"
-            android:theme="@style/Theme.MercadoPagoTheme" />
         <activity
             android:name=".PayerInformationActivity"
             android:theme="@style/Theme.ProcessMercadoPagoTheme.NoActionbar" />
