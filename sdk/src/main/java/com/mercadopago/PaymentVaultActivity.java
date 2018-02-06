@@ -422,7 +422,7 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
 
         if (plugin != null && plugin.isEnabled(store.getData()) && plugin.isConfigurationComponentEnabled(store.getData())) {
 
-            startActivityForResult(PaymentMethodPluginActivity.getIntent(PaymentVaultActivity.this), MercadoPagoComponents.Activities.PLUGIN_PAYMENT_METHOD_REQUEST_CODE);
+            startActivityForResult(PaymentMethodPluginActivity.getIntent(PaymentVaultActivity.this, mPublicKey), MercadoPagoComponents.Activities.PLUGIN_PAYMENT_METHOD_REQUEST_CODE);
             overrideTransitionIn();
 
         } else {
@@ -624,7 +624,7 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
     }
 
     private boolean shouldFinishOnBack(Intent data) {
-        return  !CheckoutStore.getInstance().hasEnabledPaymenthMethodPlugin() && (mPaymentVaultPresenter.getSelectedSearchItem() != null && (!mPaymentVaultPresenter.getSelectedSearchItem().hasChildren()
+        return !CheckoutStore.getInstance().hasEnabledPaymenthMethodPlugin() && (mPaymentVaultPresenter.getSelectedSearchItem() != null && (!mPaymentVaultPresenter.getSelectedSearchItem().hasChildren()
                 || (mPaymentVaultPresenter.getSelectedSearchItem().getChildren().size() == 1))
                 || (mPaymentVaultPresenter.getSelectedSearchItem() == null && mPaymentVaultPresenter.isOnlyOneItemAvailable())
                 || (data != null) && (data.getStringExtra("mercadoPagoError") != null));
