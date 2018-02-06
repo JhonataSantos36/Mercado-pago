@@ -244,6 +244,7 @@
     <string name="mpsdk_review_product_price">Unit price: %1$s</string>
     <string name="mpsdk_activity_checkout_title">Check your payment</string>
     <string name="mpsdk_review_summary_products">Products</string>
+    <string name="mpsdk_review_summary_product">Product</string>
     <string name="mpsdk_review_summary_interests">Interests</string>
     <string name="mpsdk_review_summary_charges">Charges</string>
     <string name="mpsdk_review_summary_taxes">Taxes</string>

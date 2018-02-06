@@ -266,7 +266,7 @@ public class ReviewAndConfirmProviderImpl implements ReviewAndConfirmProvider {
             if (reviewScreenPreference != null && !isEmpty(reviewScreenPreference.getProductTitle())) {
                 summaryProductTitle = reviewScreenPreference.getProductTitle();
             } else {
-                summaryProductTitle = context.getString(R.string.mpsdk_review_summary_products);
+                summaryProductTitle = context.getString(R.string.mpsdk_review_summary_product);
             }
 
             return summaryProductTitle;

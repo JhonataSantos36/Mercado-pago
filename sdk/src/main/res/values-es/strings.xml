@@ -254,6 +254,7 @@
     <string name="mpsdk_review_product_price">Precio unitario: %1$s</string>
     <string name="mpsdk_activity_checkout_title">Revisa tu pago</string>
     <string name="mpsdk_review_summary_products">Productos</string>
+    <string name="mpsdk_review_summary_product">Producto</string>
     <string name="mpsdk_review_summary_interests">Intereses</string>
     <string name="mpsdk_review_summary_charges">Cargos</string>
     <string name="mpsdk_review_summary_taxes">Impuestos</string>
