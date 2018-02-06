@@ -1,25 +1,34 @@
 apply plugin: 'com.android.library'
 apply plugin: 'maven'
 apply plugin: 'signing'
-apply plugin: 'jacoco-android'
 
-task jacocoFullTestReport(type: JacocoReport, dependsOn: ['jacocoTestReport', 'createDevDebugCoverageReport']) {
+ext {
+    bintrayRepo = 'maven'
+    bintrayName = 'mercadopago-sdk_android'
 
-    reports {
-        xml.enabled = true
-        html.enabled = true
-    }
+    publishedGroupId = 'com.mercadopago'
+    libraryName = 'mercadopago-sdk_android'
+    artifact = 'sdk'
 
-    def fileFilter = ['**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*', '**/*Test*.*', 'android/**/*.*']
-    def debugTree = fileTree(dir: "${buildDir}/intermediates/classes/debug", excludes: fileFilter)
-    def mainSrc = "${project.projectDir}/src/main/java"
+    libraryDescription = 'MercadoPago Android SDK'
 
-    sourceDirectories = files([mainSrc])
-    classDirectories = files([debugTree])
-    executionData = fileTree(dir: "$buildDir", includes: [
-            "jacoco/testDevDebugUnitTest.exec", "outputs/code-coverage/connected/flavors/DEV/*coverage.ec"
-    ])
+    siteUrl = 'https://github.com/mercadopago/px-android'
+    gitUrl = 'https://github.com/mercadopago/px-android.git'
+
+    libraryVersion = '4.0.0-beta-16'
+
+    developerId = 'matias.gualino'
+    developerName = 'Matias Gualino'
+    developerEmail = 'matias.gualino@gmail.com'
+
+    licenseName = 'The Apache Software License, Version 2.0'
+    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    allLicenses = ["Apache-2.0"]
 }
+
+version = "4.0.0-beta-16"
+group = "com.mercadopago"
+archivesBaseName = "sdk"
 
 android {
     compileSdkVersion api_level.toInteger()
@@ -28,9 +37,10 @@ android {
         minSdkVersion min_api_level.toInteger()
         targetSdkVersion api_level.toInteger()
         versionCode 1
-        versionName '3.7.0'
+        versionName '4.0.0-beta-16'
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+
     packagingOptions {
         exclude 'META-INF/services/com.fasterxml.jackson.core.JsonFactory'
         exclude 'META-INF/DEPENDENCIES.txt'
@@ -56,38 +66,8 @@ android {
         }
     }
 
-    project.gradle.taskGraph.whenReady {
-        connectedDevDebugAndroidTest {
-            ignoreFailures = true
-        }
-    }
-
-    dexOptions {
-        // Skip pre-dexing when running on Travis CI or when disabled via -Dpre-dex=false.
-        preDexLibraries = preDexEnabled && !travisBuild
-    }
-
     lintOptions {
         abortOnError false
-    }
-
-    flavorDimensions "environment"
-
-    productFlavors {
-        dev {
-            dimension "environment"
-            buildConfigField "String", "API_VERSION", "\"beta\""
-        }
-        prod {
-            dimension "environment"
-            buildConfigField "String", "API_VERSION", "\"v1\""
-        }
-    }
-}
-
-project.gradle.taskGraph.whenReady {
-    connectedDevDebugAndroidTest {
-        ignoreFailures = true
     }
 }
 
@@ -129,10 +109,97 @@ dependencies {
 
     compile "com.google.code.gson:gson:$gson"
     compile "com.squareup.picasso:picasso:$picasso"
-    compile 'com.mercadopago:tracking:3.0.2-noop-1'
+    compile 'com.mercadopago:tracking:3.0.2'
 }
-configurations {
-    archives {
-        extendsFrom configurations.default
+
+apply plugin: 'com.github.dcendents.android-maven'
+
+group = publishedGroupId                               // Maven Group ID for the artifact
+
+install {
+    repositories.mavenInstaller {
+        // This generates POM.xml with proper parameters
+        pom {
+            project {
+                packaging 'aar'
+                groupId publishedGroupId
+                artifactId artifact
+
+                // Add your description here
+                name libraryName
+                description libraryDescription
+                url siteUrl
+
+                // Set your license
+                licenses {
+                    license {
+                        name licenseName
+                        url licenseUrl
+                    }
+                }
+                developers {
+                    developer {
+                        id developerId
+                        name developerName
+                        email developerEmail
+                    }
+                }
+                scm {
+                    connection gitUrl
+                    developerConnection gitUrl
+                    url siteUrl
+
+                }
+            }
+        }
+    }
+}
+
+apply plugin: 'com.jfrog.bintray'
+
+version = libraryVersion
+
+if (project.hasProperty("android")) { // Android libraries
+    task sourcesJar(type: Jar) {
+        classifier = 'sources'
+        from android.sourceSets.main.java.srcDirs
+    }
+} else { // Java libraries
+    task sourcesJar(type: Jar, dependsOn: classes) {
+        classifier = 'sources'
+        from sourceSets.main.allSource
+    }
+}
+
+artifacts {
+    archives sourcesJar
+}
+
+// Bintray
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+bintray {
+    user = properties.getProperty("bintray.user")
+    key = properties.getProperty("bintray.apikey")
+
+    configurations = ['archives']
+    pkg {
+        repo = bintrayRepo
+        name = bintrayName
+        desc = libraryDescription
+        websiteUrl = siteUrl
+        vcsUrl = gitUrl
+        licenses = allLicenses
+        publish = true
+        publicDownloadNumbers = true
+        version {
+            desc = libraryDescription
+            gpg {
+                sign = true //Determines whether to GPG sign the files. The default is false
+                passphrase = properties.getProperty("bintray.gpg.password")
+                //Optional. The passphrase for GPG signing'
+            }
+        }
     }
 }
