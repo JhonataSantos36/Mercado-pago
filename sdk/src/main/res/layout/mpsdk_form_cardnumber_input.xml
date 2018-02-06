@@ -26,7 +26,7 @@
         android:layout_marginRight="15dp"
         android:layout_marginTop="2dp"
         android:digits="0123456789 "
-        android:imeOptions="actionNext"
+        android:imeOptions="actionNext|flagNoExtractUi"
         android:inputType="number"
         android:maxLength="19"
         android:singleLine="true"

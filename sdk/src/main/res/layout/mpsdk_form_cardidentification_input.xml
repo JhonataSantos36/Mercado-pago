@@ -76,7 +76,7 @@
                         android:layout_marginLeft="15dp"
                         android:layout_marginRight="15dp"
                         android:layout_marginTop="2dp"
-                        android:imeOptions="actionNext"
+                        android:imeOptions="actionNext|flagNoExtractUi"
                         android:maxLength="15"
                         android:singleLine="true"
                         android:textColor="@color/abc_search_url_text_selected"

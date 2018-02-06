@@ -27,7 +27,7 @@
         android:layout_marginRight="15dp"
         android:layout_marginTop="2dp"
         android:focusableInTouchMode="true"
-        android:imeOptions="actionNext"
+        android:imeOptions="actionNext|flagNoExtractUi"
         android:inputType="text"
         android:maxLength="50"
         android:privateImeOptions="nm"

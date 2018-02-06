@@ -19,74 +19,61 @@
         <activity
             android:name=".CustomerCardsActivity"
             android:label="@string/mpsdk_title_activity_customer_pms"
-            android:screenOrientation="portrait"
             android:theme="@style/Theme.MercadoPagoTheme.NoActionBar" />
         <activity
             android:name=".PaymentMethodsActivity"
             android:label="@string/mpsdk_title_activity_payment_methods"
-            android:screenOrientation="portrait"
             android:theme="@style/Theme.MercadoPagoTheme.NoActionBar" />
         <activity
             android:name=".BankDealsActivity"
             android:label="@string/mpsdk_title_activity_bank_deals"
-            android:screenOrientation="behind"
             android:theme="@style/Theme.MercadoPagoTheme.NoActionBar" />
         <activity
             android:name=".TermsAndConditionsActivity"
             android:label="@string/mpsdk_title_activity_terms_and_conditions"
-            android:screenOrientation="behind"
             android:theme="@style/Theme.MercadoPagoTheme.NoActionBar" />
         <activity
             android:name=".CheckoutActivity"
-            android:screenOrientation="portrait"
             android:theme="@style/Theme.MercadoPagoTheme.NoActionBar" />
         <activity
             android:name=".GuessingCardActivity"
-            android:screenOrientation="behind"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.MercadoPagoTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".PaymentVaultActivity"
-            android:screenOrientation="portrait"
             android:theme="@style/Theme.MercadoPagoTheme.NoActionBar" />
         <activity
             android:name=".InstallmentsActivity"
-            android:screenOrientation="behind"
             android:theme="@style/Theme.MercadoPagoTheme.NoActionBar" />
         <activity
             android:name=".IssuersActivity"
-            android:screenOrientation="behind"
             android:theme="@style/Theme.MercadoPagoTheme.NoActionBar" />
         <activity
             android:name=".CardVaultActivity"
-            android:screenOrientation="behind"
             android:theme="@style/Theme.MercadoPagoTheme.NoActionBar" />
         <activity
             android:name=".ErrorActivity"
-            android:screenOrientation="behind"
             android:theme="@style/Theme.MercadoPagoTheme.NoActionBar" />
         <activity
             android:name=".paymentresult.PaymentResultActivity"
             android:theme="@style/Theme.MercadoPagoTheme.NoActionBar" />
         <activity
             android:name=".SecurityCodeActivity"
-            android:screenOrientation="behind"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.MercadoPagoTheme.NoActionBar"
             android:windowSoftInputMode="stateVisible" />
         <activity
             android:name=".PaymentTypesActivity"
-            android:screenOrientation="behind"
             android:theme="@style/Theme.ProcessMercadoPagoTheme.NoActionbar" />
         <activity
             android:name=".DiscountsActivity"
             android:theme="@style/Theme.MercadoPagoTheme.Modal" />
         <activity
             android:name=".ReviewAndConfirmActivity"
-            android:screenOrientation="portrait"
             android:theme="@style/Theme.MercadoPagoTheme.NoActionBar" />
         <activity
             android:name=".ReviewPaymentMethodsActivity"
-            android:screenOrientation="portrait"
             android:theme="@style/Theme.MercadoPagoTheme.NoActionBar" />
         <activity
             android:name=".PayerInformationActivity"
