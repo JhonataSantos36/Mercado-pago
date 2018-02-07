@@ -63,7 +63,7 @@
             android:layout_width="15dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:src="@drawable/mpsdk_arrow_right"
+            android:src="@drawable/mpsdk_arrow_right_grey"
             android:adjustViewBounds="true"/>
     </LinearLayout>
     <View

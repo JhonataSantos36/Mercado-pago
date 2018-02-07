@@ -42,6 +42,6 @@ public class PaymentMethodOnEditableRow extends PaymentMethodOnView {
     @Override
     public void draw() {
         super.draw();
-        mEditHint.setImageResource(R.drawable.mpsdk_arrow_right);
+        mEditHint.setImageResource(R.drawable.mpsdk_arrow_right_grey);
     }
 }
