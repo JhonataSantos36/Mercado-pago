@@ -14,6 +14,7 @@ public class Discount {
     private String currencyId;
     private String couponCode;
     private String concept;
+    private String campaignId;
 
     public void setCouponCode(String couponCode) {
         this.couponCode = couponCode;
@@ -99,4 +100,11 @@ public class Discount {
         return amount != null && amount.compareTo(BigDecimal.ZERO) >= 0;
     }
 
+    public String getCampaignId() {
+        return campaignId;
+    }
+
+    public void setCampaignId(final String campaignId) {
+        this.campaignId = campaignId;
+    }
 }
