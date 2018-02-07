@@ -22,12 +22,6 @@ Add this line to your app's `build.gradle` inside the `dependencies` section:
 3. Import the _sdk_ folder into Android Studio
 4. Add the folder as library.
 
-### ProGuard
-
-If you're planning on optimizing your app with ProGuard, make sure that you exclude the MercadoPago bindings. You can do this by adding the following to your app's `proguard.cfg` file:
-
-    -keep class com.mercadopago.** { *; }
-
 ## Documentation
 
 + [See the GitHub project.](https://github.com/mercadopago/px-android)
