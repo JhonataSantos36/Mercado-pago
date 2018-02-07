@@ -292,6 +292,7 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
     @Override
     public void showConfirmationMessage(String message) {
         mConfirmTextButton.setText(message);
+        mFloatingConfirmTextButton.setText(message);
     }
 
     @Override

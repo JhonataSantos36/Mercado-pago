@@ -63,7 +63,6 @@ public class SummaryView extends Reviewable {
     protected OnConfirmPaymentCallback mCallback;
 
     protected Context mContext;
-    protected String mConfirmationMessage;
     protected String mCurrencyId;
     protected BigDecimal mAmount;
     protected PayerCost mPayerCost;
@@ -77,9 +76,8 @@ public class SummaryView extends Reviewable {
     private String mUnlockLink;
     private Summary mSummary;
 
-    public SummaryView(Context context, String confirmationMessage, PaymentMethod paymentMethod, PayerCost payerCost, BigDecimal amount, Discount discount, String currencyId, Site site, Issuer issuer, Summary summary, OnConfirmPaymentCallback callback) {
+    public SummaryView(Context context, PaymentMethod paymentMethod, PayerCost payerCost, BigDecimal amount, Discount discount, String currencyId, Site site, Issuer issuer, Summary summary, OnConfirmPaymentCallback callback) {
         this.mContext = context;
-        this.mConfirmationMessage = confirmationMessage;
         this.mCurrencyId = currencyId;
         this.mAmount = amount;
         this.mPayerCost = payerCost;

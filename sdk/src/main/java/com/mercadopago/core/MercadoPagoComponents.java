@@ -1511,7 +1511,6 @@ public class MercadoPagoComponents {
             private PaymentMethod paymentMethod;
             private OnConfirmPaymentCallback callback;
             private Discount discount;
-            private String confirmationMessage;
             private Summary summary;
             private Issuer issuer;
             private Site site;
@@ -1561,18 +1560,13 @@ public class MercadoPagoComponents {
                 return this;
             }
 
-            public SummaryViewBuilder setConfirmationMessage(String confirmationMessage) {
-                this.confirmationMessage = confirmationMessage;
-                return this;
-            }
-
             public SummaryViewBuilder setSummary(Summary summary) {
                 this.summary = summary;
                 return this;
             }
 
             public SummaryView build() {
-                return new SummaryView(context, confirmationMessage, paymentMethod, payerCost, amount, discount, currencyId, site, issuer, summary, callback);
+                return new SummaryView(context, paymentMethod, payerCost, amount, discount, currencyId, site, issuer, summary, callback);
             }
         }
 

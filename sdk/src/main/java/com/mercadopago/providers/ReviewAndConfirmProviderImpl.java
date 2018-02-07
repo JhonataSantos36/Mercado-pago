@@ -41,21 +41,11 @@ public class ReviewAndConfirmProviderImpl implements ReviewAndConfirmProvider {
 
     @Override
     public Reviewable getSummaryReviewable(PaymentMethod paymentMethod, PayerCost payerCost, BigDecimal amount, Discount discount, Site site, Issuer issuer, OnConfirmPaymentCallback onConfirmPaymentCallback) {
-        String confirmationMessage;
-
-        SummaryHelper summaryHelper = new SummaryHelper(context, reviewScreenPreference, amount, payerCost, discount);
-        Summary summary = summaryHelper.getSummary();
-
-        if (this.reviewScreenPreference != null && !TextUtil.isEmpty(this.reviewScreenPreference.getConfirmText())) {
-            confirmationMessage = reviewScreenPreference.getConfirmText();
-        } else {
-            confirmationMessage = context.getString(R.string.mpsdk_confirm_payment);
-        }
-
+        final SummaryHelper summaryHelper = new SummaryHelper(context, reviewScreenPreference, amount, payerCost, discount);
+        final Summary summary = summaryHelper.getSummary();
         return new MercadoPagoComponents.Views.SummaryViewBuilder()
                 .setContext(context)
                 .setSummary(summary)
-                .setConfirmationMessage(confirmationMessage)
                 .setPaymentMethod(paymentMethod)
                 .setPayerCost(payerCost)
                 .setAmount(amount)
@@ -122,6 +112,9 @@ public class ReviewAndConfirmProviderImpl implements ReviewAndConfirmProvider {
 
     @Override
     public String getConfirmationMessage() {
+        if (this.reviewScreenPreference != null && !TextUtil.isEmpty(this.reviewScreenPreference.getConfirmText())) {
+            return this.reviewScreenPreference.getConfirmText();
+        }
         return context.getString(R.string.mpsdk_confirm_payment);
     }
 

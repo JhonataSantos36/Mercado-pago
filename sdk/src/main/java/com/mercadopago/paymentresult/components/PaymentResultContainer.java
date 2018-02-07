@@ -339,7 +339,7 @@ public class PaymentResultContainer extends Component<PaymentResultProps, Void> 
 
     private String getTitle(@NonNull final PaymentResultProps props) {
 
-        if (!props.isPluginPaymentResult(props.paymentResult) && props.hasCustomizedTitle()) {
+        if (props.hasCustomizedTitle()) {
             return props.getPreferenceTitle();
         } else if (props.hasInstructions()) {
             return props.getInstructionsTitle();
