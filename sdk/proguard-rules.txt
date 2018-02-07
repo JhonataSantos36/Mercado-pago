@@ -28,7 +28,7 @@
 -dontnote com.mercadopago.model.**
 -dontnote sun.misc.Unsafe
 -dontnote com.google.gson.JsonObject
--dontnote com.mercadopago.util.MercadoPagoESCImpl
+-dontnote com.mercadopago.util.MercadoPagoESCImpl #se usa esta clase pero no se tiene la lib
 
 ######################## Picasso #########################
 -dontwarn com.squareup.okhttp.**
