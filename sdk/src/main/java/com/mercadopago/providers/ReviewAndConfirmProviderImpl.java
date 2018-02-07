@@ -49,7 +49,7 @@ public class ReviewAndConfirmProviderImpl implements ReviewAndConfirmProvider {
         if (this.reviewScreenPreference != null && !TextUtil.isEmpty(this.reviewScreenPreference.getConfirmText())) {
             confirmationMessage = reviewScreenPreference.getConfirmText();
         } else {
-            confirmationMessage = context.getString(R.string.mpsdk_confirm);
+            confirmationMessage = context.getString(R.string.mpsdk_confirm_payment);
         }
 
         return new MercadoPagoComponents.Views.SummaryViewBuilder()
@@ -122,7 +122,7 @@ public class ReviewAndConfirmProviderImpl implements ReviewAndConfirmProvider {
 
     @Override
     public String getConfirmationMessage() {
-        return context.getString(R.string.mpsdk_confirm);
+        return context.getString(R.string.mpsdk_confirm_payment);
     }
 
     @Override

@@ -192,7 +192,7 @@
 
     <!-- Utils -->
     <string name="mpsdk_text_continue">Continuar</string>
-    <string name="mpsdk_continue_shopping">Continuar comprando</string>
+    <string name="mpsdk_continue_shopping">Pronto!</string>
     <string name="mpsdk_text_cancel_payment_and_continue">Cancelar pagamento e continuar</string>
     <string name="mpsdk_zero_rate">Sem juros</string>
     <string name="mpsdk_exit_label">Sair</string>
@@ -239,7 +239,7 @@
     <string name="mpsdk_your_atm">caixa eletrônico de</string>
     <string name="mpsdk_review_product_quantity">Quantidade: %1$s</string>
     <string name="mpsdk_review_product_price">Preço unitário: %1$s</string>
-    <string name="mpsdk_activity_checkout_title">Rever o seu pagamento</string>
+    <string name="mpsdk_activity_checkout_title">Revise se está tudo correto</string>
     <string name="mpsdk_review_summary_products">Produtos</string>
     <string name="mpsdk_review_summary_product">Produto</string>
     <string name="mpsdk_review_summary_interests">Interesses</string>
@@ -256,6 +256,7 @@
     <string name="mpsdk_review_summary_discount_with_amount_off">Desconto</string>
     <string name="mpsdk_account_money_description">Dinheiro em conta \ndo Mercado Pago</string>
     <string name="mpsdk_ryc_account_money_description">Com dinheiro em conta</string>
+    <string name="mpsdk_confirm_payment">Pagar</string>
 
     <!-- Discount -->
     <string name="mpsdk_discount">Desconto</string>
@@ -286,5 +287,4 @@
     <string name="mpsdk_fill_your_data">Digite seus dados…</string>
     <string name="mpsdk_bolbradesco_rejection">Não foi possível processar o seu pagamento, desculpe-nos</string>
     <string name="mpsdk_bolbradesco_rejection_text">Por favor, tente pagar de outra forma.</string>
-
 </resources>

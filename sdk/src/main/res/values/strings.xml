@@ -210,7 +210,7 @@
 
     <!-- Utils -->
     <string name="mpsdk_text_continue">Continuar</string>
-    <string name="mpsdk_continue_shopping">Seguir comprando</string>
+    <string name="mpsdk_continue_shopping">Continuar</string>
     <string name="mpsdk_text_cancel_payment_and_continue">Cancelar pago y continuar</string>
     <string name="mpsdk_zero_rate">Sin interés</string>
     <string name="mpsdk_exit_label">Salir</string>
@@ -259,7 +259,7 @@
     <string name="mpsdk_your_atm">cajero automático de</string>
     <string name="mpsdk_review_product_quantity">Cantidad: %1$s</string>
     <string name="mpsdk_review_product_price">Precio unitario: %1$s</string>
-    <string name="mpsdk_activity_checkout_title">Revisa tu pago</string>
+    <string name="mpsdk_activity_checkout_title">Revisa si está todo bien</string>
     <string name="mpsdk_review_summary_products">Productos</string>
     <string name="mpsdk_review_summary_product">Producto</string>
     <string name="mpsdk_review_summary_interests">Intereses</string>
@@ -275,6 +275,7 @@
     <string name="mpsdk_review_summary_discount_with_amount_off">Descuento</string>
     <string name="mpsdk_review_summary_discounts">Descuentos</string>
     <string name="mpsdk_ryc_account_money_description">Con dinero en cuenta</string>
+    <string name="mpsdk_confirm_payment">Pagar</string>
 
     <!-- Discount -->
     <string name="mpsdk_discount">Descuento</string>

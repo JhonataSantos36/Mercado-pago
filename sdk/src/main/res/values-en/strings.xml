@@ -204,7 +204,7 @@
 
     <!-- Utils -->
     <string name="mpsdk_text_continue">Continue</string>
-    <string name="mpsdk_continue_shopping">Continue shopping</string>
+    <string name="mpsdk_continue_shopping">Continue</string>
     <string name="mpsdk_text_cancel_payment_and_continue">Cancel payment and continue</string>
     <string name="mpsdk_zero_rate">Interest free</string>
     <string name="mpsdk_exit_label">Exit</string>
@@ -256,6 +256,7 @@
     <string name="mpsdk_review_summary_discount_with_amount_off">Discount</string>
     <string name="mpsdk_account_money_description">Account money \nof Mercado Pago</string>
     <string name="mpsdk_ryc_account_money_description">With your account money</string>
+    <string name="mpsdk_confirm_payment">Pay</string>
 
     <!-- Discount -->
     <string name="mpsdk_discount">Discount</string>
@@ -286,4 +287,5 @@
     <string name="mpsdk_fill_your_data">Enter your data…</string>
     <string name="mpsdk_bolbradesco_rejection">Payment could not be processed</string>
     <string name="mpsdk_bolbradesco_rejection_text">Try another payment method</string>
+
 </resources>
