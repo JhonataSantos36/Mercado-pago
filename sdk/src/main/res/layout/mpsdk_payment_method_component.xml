@@ -22,7 +22,7 @@
             android:layout_gravity="center"
             android:adjustViewBounds="true"
             android:padding="@dimen/mpsdk_xxs_margin"
-            tools:src="@drawable/mpsdk_bapropagos" />
+            tools:src="@drawable/mpsdk_amex" />
     </FrameLayout>
 
     <FrameLayout
