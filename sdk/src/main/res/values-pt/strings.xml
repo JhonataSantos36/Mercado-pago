@@ -136,6 +136,7 @@
     <string name="mpsdk_title_rejection_max_attempts">Você chegou ao limite de tentativas permitidas com este cartão</string>
     <string name="mpsdk_subtitle_rejection_max_attempts">Use outro cartão ou outro meio de pagamento.</string>
     <string name="mpsdk_rejection_label">Algo deu errado…</string>
+    <string name="mpsdk_text_card_data_invalid">Revisar os dados do cartão</string>
 
     <string name="mpsdk_error_description_call">O telefone do banco está no verso do seu cartão.</string>
     <string name="mpsdk_error_description_card_disabled">Use outro meio de pagamento ou ligue para %1$s e desbloqueie o cartão.</string>
