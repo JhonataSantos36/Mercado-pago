@@ -7,7 +7,7 @@ android {
     defaultConfig {
         minSdkVersion min_api_level.toInteger()
         targetSdkVersion api_level.toInteger()
-        applicationId "px_android_services.myapplication"
+        applicationId "px_android_tracking.myapplication"
         versionCode 1
         versionName "1.0"
 

@@ -15,7 +15,7 @@ ext {
     siteUrl = 'https://github.com/mercadopago/px-android_tracking'
     gitUrl = 'https://github.com/mercadopago/px-android_tracking.git'
 
-    libraryVersion = '3.0.2-noop-1'
+    libraryVersion = '3.0.2-noop-2'
 
     developerId = 'matias.gualino'
     developerName = 'Matias Gualino'
@@ -26,8 +26,7 @@ ext {
     allLicenses = ["Apache-2.0"]
 }
 
-version = "3.0.2-noop-1"
-group = "com.mercadopago"
+version = "3.0.2-noop-2"
 group = "com.mercadopago"
 archivesBaseName = "tracking"
 
@@ -38,7 +37,7 @@ android {
         minSdkVersion min_api_level.toInteger()
         targetSdkVersion api_level.toInteger()
         versionCode 1
-        versionName '3.0.2-noop-1'
+        versionName '3.0.2-noop-2'
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     packagingOptions {

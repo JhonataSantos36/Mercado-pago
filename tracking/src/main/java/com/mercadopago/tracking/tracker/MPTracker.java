@@ -91,7 +91,7 @@ public class MPTracker {
 
     private void trackEventPerformedListener(Map<String, String> eventMap) {
         if (this.mTracksListener != null) {
-            this.mTracksListener.onEventPerformed(eventMap);
+            this.mTracksListener.onEvent(eventMap);
         }
     }
 
@@ -122,6 +122,12 @@ public class MPTracker {
             mMPTrackingService.trackToken(trackingIntent, mContext);
         }
         return trackingIntent;
+    }
+
+    public void trackCustomEvent(final Object event) {
+        if (mTracksListener != null) {
+            mTracksListener.onEvent(event);
+        }
     }
 
     /**
