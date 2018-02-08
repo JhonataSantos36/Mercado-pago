@@ -231,6 +231,7 @@ public class MercadoPagoCheckout {
         private DataInitializationTask dataInitializationTask;
         private String regularFontPath;
         private String lightFontPath;
+        private String monoFontPath;
 
         public Builder setActivity(Activity activity) {
             this.activity = activity;
@@ -331,6 +332,14 @@ public class MercadoPagoCheckout {
             this.regularFontPath = regularFontPath;
             if (regularFontPath != null) {
                 setCustomFont(context, FontCache.CUSTOM_REGULAR_FONT, this.regularFontPath);
+            }
+            return this;
+        }
+
+        public Builder setCustomMonoFont(String monoFontPath, Context context) {
+            this.monoFontPath = monoFontPath;
+            if (monoFontPath != null) {
+                setCustomFont(context, FontCache.CUSTOM_MONO_FONT, this.monoFontPath);
             }
             return this;
         }

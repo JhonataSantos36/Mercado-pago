@@ -38,4 +38,6 @@ public interface CheckoutProvider extends ResourcesProvider {
     void deleteESC(String cardId);
 
     boolean saveESC(String cardId, String value);
+
+    void fetchFonts();
 }

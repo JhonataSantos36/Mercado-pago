@@ -50,7 +50,6 @@
                     android:background="@drawable/mpsdk_title_toolbar"
                     android:textSize="17dp"
                     android:visibility="visible"
-                    app:allowCustomFont="false"
                     app:font_style="mono_regular"
                     tools:text="10.123123" />
 

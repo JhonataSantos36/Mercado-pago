@@ -2023,6 +2023,11 @@ public class CheckoutPresenterTest {
         private MercadoPagoError failedResponse;
 
         @Override
+        public void fetchFonts() {
+
+        }
+
+        @Override
         public void getCheckoutPreference(String checkoutPreferenceId, OnResourcesRetrievedCallback<CheckoutPreference> onResourcesRetrievedCallback) {
             checkoutPreferenceRequested = true;
             onResourcesRetrievedCallback.onSuccess(preference);

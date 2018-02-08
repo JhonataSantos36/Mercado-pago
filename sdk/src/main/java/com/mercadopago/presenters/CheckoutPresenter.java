@@ -138,6 +138,7 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
     private void startCheckout() {
         boolean couponDiscountFound = false;
 
+        getResourcesProvider().fetchFonts();
         fetchImages();
         resolvePreSelectedData();
         initializePluginsData();

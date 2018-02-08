@@ -1,21 +1,5 @@
 <resources>
 
-    <style name="mpsdk_font_roboto_regular">
-        <item name="fontFamily">@font/roboto</item>
-    </style>
-
-    <style name="mpsdk_font_roboto_light">
-        <item name="fontFamily">@font/roboto_light</item>
-    </style>
-
-    <style name="mpsdk_font_roboto_bold">
-        <item name="fontFamily">@font/roboto_bold</item>
-    </style>
-
-    <style name="mpsdk_font_roboto_mono">
-        <item name="fontFamily">@font/roboto_mono</item>
-    </style>
-
     <style name="mpsdk_collapsing_toolbar_text_large" parent="Base.TextAppearance.AppCompat.Large">
         <item name="android:textColor">@color/mpsdk_toolbar_text</item>
     </style>

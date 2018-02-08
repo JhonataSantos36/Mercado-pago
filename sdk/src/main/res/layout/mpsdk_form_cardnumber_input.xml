@@ -15,7 +15,6 @@
         android:text="@string/mpsdk_card_number_label"
         android:textColor="@color/mpsdk_color_new_card_text"
         android:textSize="14dp"
-        app:allowCustomFont="false"
         app:font_style="light" />
 
     <com.mercadopago.customviews.MPEditText

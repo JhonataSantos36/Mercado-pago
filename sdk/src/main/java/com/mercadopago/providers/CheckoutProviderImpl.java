@@ -1,6 +1,11 @@
 package com.mercadopago.providers;
 
 import android.content.Context;
+import android.graphics.Typeface;
+import android.os.Handler;
+import android.os.HandlerThread;
+import android.support.v4.provider.FontRequest;
+import android.support.v4.provider.FontsContractCompat;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -30,11 +35,13 @@ import com.mercadopago.mvp.OnResourcesRetrievedCallback;
 import com.mercadopago.preferences.CheckoutPreference;
 import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.preferences.ServicePreference;
+import com.mercadopago.uicontrollers.FontCache;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.MercadoPagoESC;
 import com.mercadopago.util.MercadoPagoESCImpl;
 import com.mercadopago.util.MercadoPagoUtil;
+import com.mercadopago.util.QueryBuilder;
 import com.mercadopago.util.TextUtil;
 
 import java.lang.reflect.Type;
@@ -54,6 +61,7 @@ public class CheckoutProviderImpl implements CheckoutProvider {
     private final String publicKey;
     private MercadoPagoESC mercadoPagoESC;
     private String siteId;
+    private Handler mHandler;
 
     public CheckoutProviderImpl(Context context, String publicKey, String privateKey, ServicePreference servicePreference, boolean escEnabled) {
         if (TextUtil.isEmpty(publicKey) && TextUtil.isEmpty(privateKey)) {
@@ -77,6 +85,104 @@ public class CheckoutProviderImpl implements CheckoutProvider {
 
     public void setSiteId(String siteId) {
         this.siteId = siteId;
+    }
+
+    @Override
+    public void fetchFonts() {
+        if (!FontCache.hasTypeface(FontCache.CUSTOM_REGULAR_FONT)) {
+            fetchRegularFont();
+        }
+        if (!FontCache.hasTypeface(FontCache.CUSTOM_MONO_FONT)) {
+            fetchMonoFont();
+        }
+        if (!FontCache.hasTypeface(FontCache.CUSTOM_LIGHT_FONT)) {
+            fetchLightFont();
+        }
+    }
+
+    private void fetchRegularFont() {
+        FontsContractCompat.FontRequestCallback regularFontCallback = new FontsContractCompat
+                .FontRequestCallback() {
+            @Override
+            public void onTypefaceRetrieved(Typeface typeface) {
+                FontCache.setTypeface(FontCache.CUSTOM_REGULAR_FONT, typeface);
+            }
+
+            @Override
+            public void onTypefaceRequestFailed(int reason) {
+                //Do nothing
+            }
+        };
+        FontsContractCompat.requestFont(context,
+                getFontRequest(FontCache.FONT_ROBOTO, QueryBuilder.WIDTH_DEFAULT,
+                        QueryBuilder.WEIGHT_DEFAULT, QueryBuilder.ITALIC_DEFAULT),
+                regularFontCallback,
+                getHandlerThreadHandler());
+    }
+
+    private void fetchLightFont() {
+        FontsContractCompat.FontRequestCallback lightFontCallback = new FontsContractCompat
+                .FontRequestCallback() {
+            @Override
+            public void onTypefaceRetrieved(Typeface typeface) {
+                FontCache.setTypeface(FontCache.CUSTOM_LIGHT_FONT, typeface);
+            }
+
+            @Override
+            public void onTypefaceRequestFailed(int reason) {
+                //Do nothing
+            }
+        };
+        FontsContractCompat.requestFont(context,
+                getFontRequest(FontCache.FONT_ROBOTO, QueryBuilder.WIDTH_DEFAULT,
+                        QueryBuilder.WEIGHT_LIGHT, QueryBuilder.ITALIC_DEFAULT),
+                lightFontCallback,
+                getHandlerThreadHandler());
+    }
+
+    private void fetchMonoFont() {
+        FontsContractCompat.FontRequestCallback monoFontCallback = new FontsContractCompat
+                .FontRequestCallback() {
+            @Override
+            public void onTypefaceRetrieved(Typeface typeface) {
+                FontCache.setTypeface(FontCache.CUSTOM_MONO_FONT, typeface);
+            }
+
+            @Override
+            public void onTypefaceRequestFailed(int reason) {
+                //Do nothing
+            }
+        };
+        FontsContractCompat.requestFont(context,
+                getFontRequest(FontCache.FONT_ROBOTO_MONO, QueryBuilder.WIDTH_DEFAULT,
+                        QueryBuilder.WEIGHT_DEFAULT, QueryBuilder.ITALIC_DEFAULT),
+                monoFontCallback,
+                getHandlerThreadHandler());
+    }
+
+    private FontRequest getFontRequest(String fontName, int width, int weight, float italic) {
+        QueryBuilder queryBuilder = new QueryBuilder(fontName)
+                .withWidth(width)
+                .withWeight(weight)
+                .withItalic(italic)
+                .withBestEffort(true);
+        String query = queryBuilder.build();
+
+        return new FontRequest(
+                "com.google.android.gms.fonts",
+                "com.google.android.gms",
+                query,
+                R.array.com_google_android_gms_fonts_certs);
+    }
+
+
+    private Handler getHandlerThreadHandler() {
+        if (mHandler == null) {
+            HandlerThread handlerThread = new HandlerThread("fonts");
+            handlerThread.start();
+            mHandler = new Handler(handlerThread.getLooper());
+        }
+        return mHandler;
     }
 
     @Override

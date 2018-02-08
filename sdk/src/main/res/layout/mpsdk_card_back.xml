@@ -65,7 +65,6 @@
                             android:textColor="@color/mpsdk_base_text"
                             android:textSize="16dp"
                             tools:text="123"
-                            app:allowCustomFont="false"
                             app:font_style="mono_regular" />
                     </FrameLayout>
 

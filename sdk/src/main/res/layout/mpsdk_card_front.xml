@@ -117,7 +117,6 @@
                         android:gravity="end"
                         android:textColor="@color/mpsdk_base_text"
                         android:textSize="18dp"
-                        app:allowCustomFont="false"
                         app:font_style="mono_regular"
                         tools:text="1234" />
                 </FrameLayout>
@@ -143,7 +142,6 @@
                             android:gravity="bottom"
                             android:maxLength="40"
                             android:textColor="@color/mpsdk_base_text"
-                            app:allowCustomFont="false"
                             app:autoSizeMaxTextSize="24dp"
                             app:autoSizeMinTextSize="10dp"
                             app:autoSizeStepGranularity="1dp"
@@ -174,8 +172,7 @@
                         android:paddingStart="15dp"
                         android:text="@string/mpsdk_cardholder_name_short"
                         android:textColor="@color/mpsdk_base_text"
-                        android:textSize="14dp"
-                        app:allowCustomFont="false" />
+                        android:textSize="14dp" />
 
                     <LinearLayout
                         android:layout_width="0dp"
@@ -191,8 +188,7 @@
                             android:layout_height="wrap_content"
                             android:text="@string/mpsdk_card_expiry_month_hint"
                             android:textColor="@color/mpsdk_base_text"
-                            android:textSize="14dp"
-                            app:allowCustomFont="false" />
+                            android:textSize="14dp" />
 
                         <com.mercadopago.customviews.MPTextView
                             android:id="@+id/mpsdkCardHolderDateDivider"
@@ -200,8 +196,7 @@
                             android:layout_height="wrap_content"
                             android:text="@string/mpsdk_card_expiry_divider_hint"
                             android:textColor="@color/mpsdk_base_text"
-                            android:textSize="14dp"
-                            app:allowCustomFont="false" />
+                            android:textSize="14dp" />
 
                         <com.mercadopago.customviews.MPTextView
                             android:id="@+id/mpsdkCardHolderExpiryYear"
@@ -209,8 +204,7 @@
                             android:layout_height="wrap_content"
                             android:text="@string/mpsdk_card_expiry_year_hint"
                             android:textColor="@color/mpsdk_base_text"
-                            android:textSize="14dp"
-                            app:allowCustomFont="false" />
+                            android:textSize="14dp" />
                     </LinearLayout>
 
                 </LinearLayout>

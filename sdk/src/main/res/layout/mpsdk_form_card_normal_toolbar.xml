@@ -40,7 +40,6 @@
         android:visibility="gone"
         android:background="@drawable/mpsdk_title_toolbar"
         app:font_style="mono_regular"
-        app:allowCustomFont="false"
         style="@style/mpsdk_title_text"/>
 
 </android.support.v7.widget.Toolbar>

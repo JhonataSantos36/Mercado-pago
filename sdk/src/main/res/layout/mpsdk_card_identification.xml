@@ -63,8 +63,7 @@
                     android:paddingRight="14dp"
                     android:text="@string/mpsdk_card_identification_label"
                     android:textColor="@color/mpsdk_base_text_alpha"
-                    android:textSize="10dp"
-                    app:allowCustomFont="false" />
+                    android:textSize="10dp" />
 
                 <FrameLayout
                     android:id="@+id/mpsdkIdNumberClickableZone"
@@ -86,7 +85,6 @@
                         android:maxLength="40"
                         android:text="•• ••• •••"
                         android:textColor="@color/mpsdk_base_text"
-                        app:allowCustomFont="false"
                         app:autoSizeMaxTextSize="20dp"
                         app:autoSizeMinTextSize="10dp"
                         app:autoSizeStepGranularity="1dp"
@@ -100,7 +98,6 @@
                         android:gravity="center_vertical"
                         android:maxLength="40"
                         android:textColor="@color/mpsdk_base_text"
-                        app:allowCustomFont="false"
                         app:autoSizeMaxTextSize="16dp"
                         app:autoSizeMinTextSize="8dp"
                         app:autoSizeStepGranularity="1dp"
