@@ -351,26 +351,28 @@ public class CheckoutActivity extends MercadoPagoBaseActivity implements Checkou
 
     @Override
     public void showPaymentMethodSelection() {
-        new MercadoPagoComponents.Activities.PaymentVaultActivityBuilder()
-                .setActivity(this)
-                .setMerchantPublicKey(mMerchantPublicKey)
-                .setPayerAccessToken(mPrivateKey)
-                .setPayerEmail(mCheckoutPresenter.getCheckoutPreference().getPayer().getEmail())
-                .setSite(mCheckoutPresenter.getCheckoutPreference().getSite())
-                .setAmount(mCheckoutPresenter.getCheckoutPreference().getAmount())
-                .setPaymentMethodSearch(mCheckoutPresenter.getPaymentMethodSearch())
-                .setDiscount(mCheckoutPresenter.getDiscount())
-                .setInstallmentsEnabled(true)
-                .setDiscountEnabled(mCheckoutPresenter.isDiscountEnabled())
-                .setDirectDiscountEnabled(mCheckoutPresenter.isDirectDiscountEnabled())
-                .setInstallmentsReviewEnabled(mCheckoutPresenter.isInstallmentsReviewScreenEnabled())
-                .setPaymentPreference(mCheckoutPresenter.getCheckoutPreference().getPaymentPreference())
-                .setShowBankDeals(mCheckoutPresenter.getShowBankDeals())
-                .setMaxSavedCards(mCheckoutPresenter.getMaxSavedCardsToShow())
-                .setShowAllSavedCardsEnabled(mCheckoutPresenter.shouldShowAllSavedCards())
-                .setESCEnabled(mCheckoutPresenter.isESCEnabled())
-                .setCheckoutPreference(mCheckoutPresenter.getCheckoutPreference())
-                .startActivity();
+        if (this.isActive()) {
+            new MercadoPagoComponents.Activities.PaymentVaultActivityBuilder()
+                    .setActivity(this)
+                    .setMerchantPublicKey(mMerchantPublicKey)
+                    .setPayerAccessToken(mPrivateKey)
+                    .setPayerEmail(mCheckoutPresenter.getCheckoutPreference().getPayer().getEmail())
+                    .setSite(mCheckoutPresenter.getCheckoutPreference().getSite())
+                    .setAmount(mCheckoutPresenter.getCheckoutPreference().getAmount())
+                    .setPaymentMethodSearch(mCheckoutPresenter.getPaymentMethodSearch())
+                    .setDiscount(mCheckoutPresenter.getDiscount())
+                    .setInstallmentsEnabled(true)
+                    .setDiscountEnabled(mCheckoutPresenter.isDiscountEnabled())
+                    .setDirectDiscountEnabled(mCheckoutPresenter.isDirectDiscountEnabled())
+                    .setInstallmentsReviewEnabled(mCheckoutPresenter.isInstallmentsReviewScreenEnabled())
+                    .setPaymentPreference(mCheckoutPresenter.getCheckoutPreference().getPaymentPreference())
+                    .setShowBankDeals(mCheckoutPresenter.getShowBankDeals())
+                    .setMaxSavedCards(mCheckoutPresenter.getMaxSavedCardsToShow())
+                    .setShowAllSavedCardsEnabled(mCheckoutPresenter.shouldShowAllSavedCards())
+                    .setESCEnabled(mCheckoutPresenter.isESCEnabled())
+                    .setCheckoutPreference(mCheckoutPresenter.getCheckoutPreference())
+                    .startActivity();
+        }
     }
 
     @Override
