@@ -17,7 +17,7 @@
         android:id="@+id/button"
         style="?android:attr/borderlessButtonStyle"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/mpsdk_xxxl_height"
+        android:layout_height="@dimen/mpsdk_l_height"
         android:layout_marginLeft="@dimen/mpsdk_s_margin"
         android:layout_marginRight="@dimen/mpsdk_s_margin"
         android:layout_marginStart="@dimen/mpsdk_s_margin"
@@ -34,7 +34,7 @@
     <com.mercadopago.customviews.MPTextView
         android:id="@+id/link"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/mpsdk_xxxl_height"
+        android:layout_height="@dimen/mpsdk_l_height"
         android:layout_marginBottom="@dimen/mpsdk_s_alternative_1_margin"
         android:layout_marginLeft="@dimen/mpsdk_s_margin"
         android:layout_marginRight="@dimen/mpsdk_s_margin"

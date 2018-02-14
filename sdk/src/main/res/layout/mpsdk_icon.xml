@@ -8,8 +8,8 @@
 
     <ImageView
         android:id="@+id/mpsdkIconProduct"
-        android:layout_width="@dimen/mpsdk_xxxxl_height"
-        android:layout_height="@dimen/mpsdk_xxxxl_height"
+        android:layout_width="@dimen/mpsdk_xxl_height"
+        android:layout_height="@dimen/mpsdk_xxl_height"
         android:layout_gravity="center"
         android:layout_margin="@dimen/mpsdk_xs_alternative_1_margin"
         tools:src="@drawable/mpsdk_icon_product"/>

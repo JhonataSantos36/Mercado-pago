@@ -10,8 +10,8 @@
     android:paddingBottom="@dimen/mpsdk_l_alternative_margin">
 
     <FrameLayout
-        android:layout_width="@dimen/mpsdk_xxl_height"
-        android:layout_height="@dimen/mpsdk_xxl_height"
+        android:layout_width="@dimen/mpsdk_m_height"
+        android:layout_height="@dimen/mpsdk_m_height"
         android:layout_marginTop="@dimen/mpsdk_l_alternative_margin"
         android:background="@drawable/mpsdk_light_grey_circle">
 

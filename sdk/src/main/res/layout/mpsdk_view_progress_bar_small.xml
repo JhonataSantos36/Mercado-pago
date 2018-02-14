@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        app:mpsdk_size="@dimen/mpsdk_xxl_height"
+        app:mpsdk_size="@dimen/mpsdk_m_height"
         app:mpsdk_ui_stroke="@dimen/mpsdk_progress_stroke"/>
 
 </FrameLayout>

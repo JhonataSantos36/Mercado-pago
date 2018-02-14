@@ -1,71 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/mpsdkRefreshLayout"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:layout_centerInParent="true"
-    android:weightSum="1">
+    android:background="@color/mpsdk_white">
+
     <LinearLayout
+        android:id="@+id/mpsdkRefreshLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:orientation="vertical">
+        android:layout_gravity="center"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/mpsdk_l_margin"
+        android:paddingRight="@dimen/mpsdk_l_margin">
+
         <ImageView
             android:id="@+id/mpsdkErrorImage"
-            android:layout_marginTop="100dp"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:src="@drawable/mpsdk_icon_error"
-            android:layout_gravity="center_horizontal|top"
-            android:layout_marginBottom="20dp" />
+            android:layout_width="@dimen/mpsdk_xl_height"
+            android:layout_height="@dimen/mpsdk_xl_height"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/mpsdk_icon_error" />
 
         <com.mercadopago.customviews.MPTextView
             android:layout_width="wrap_content"
-            android:gravity="center"
-            android:layout_gravity="center_horizontal"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/mpsdk_m_margin"
+            android:gravity="center"
             android:text="@string/mpsdk_error_title"
-            android:textSize="25dp"
-            android:textColor="@color/mpsdk_dark_font_color"
-            android:layout_marginBottom="10dp" />
+            android:textColor="@color/mpsdk_black"
+            android:textSize="@dimen/mpsdk_xxxl_text" />
 
         <com.mercadopago.customviews.MPTextView
             android:id="@+id/mpsdkErrorMessage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:text="@string/mpsdk_standard_error_message"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/mpsdk_xs_margin"
             android:gravity="center"
-            android:layout_gravity="center_horizontal|top"
-            android:textColor="@color/mpsdk_dark_font_color"
-            android:textSize="16dp"/>
+            android:textColor="@color/mpsdk_warm_grey"
+            android:textSize="@dimen/mpsdk_m_text"
+            tools:text="@string/mpsdk_standard_error_message" />
 
         <com.mercadopago.customviews.MPTextView
             android:id="@+id/mpsdkErrorRetry"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/mpsdk_refresh_message"
-            android:gravity="center"
-            android:layout_gravity="center_horizontal|top"
-            android:textSize="25dp"
-            android:padding="15dp"
-            android:textColor="@color/mpsdk_color_link"
-            android:layout_marginTop="10dp"/>
-
-        <com.mercadopago.customviews.MPTextView
-            android:id="@+id/mpsdkExit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/mpsdk_exit_label"
-            android:textSize="22dp"
-            android:padding="20dp"
-            android:layout_marginTop="60dp"
-            android:textColor="@color/mpsdk_color_link"
             android:layout_gravity="center_horizontal"
-            android:gravity="center_horizontal"
-            android:layout_centerHorizontal="true" />
+            android:layout_marginTop="@dimen/mpsdk_xs_margin"
+            android:gravity="center"
+            android:padding="@dimen/mpsdk_s_margin"
+            android:text="@string/mpsdk_refresh_message"
+            android:textColor="@color/mpsdk_link"
+            android:textSize="@dimen/mpsdk_m_text" />
+
     </LinearLayout>
-</RelativeLayout>
+
+    <com.mercadopago.customviews.MPTextView
+        android:id="@+id/mpsdkExit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|bottom"
+        android:gravity="center_horizontal"
+        android:padding="@dimen/mpsdk_m_margin"
+        android:text="@string/mpsdk_exit_label"
+        android:textColor="@color/mpsdk_link"
+        android:textSize="@dimen/mpsdk_m_text" />
+</FrameLayout>
