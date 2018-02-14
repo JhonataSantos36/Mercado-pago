@@ -35,6 +35,9 @@ public class CheckoutPreference {
     private BigDecimal marketplaceFee;
     private BigDecimal shippingCost;
     private String operationType;
+    private Integer differentialPricingId;
+    private BigDecimal conceptAmount;
+    private String conceptId;
 
     public CheckoutPreference(String checkoutPreferenceId) {
         this.id = checkoutPreferenceId;
@@ -48,6 +51,9 @@ public class CheckoutPreference {
         this.marketplaceFee = builder.marketplaceFee;
         this.shippingCost = builder.shippingCost;
         this.operationType = builder.operationType;
+        differentialPricingId = builder.differentialPricingId;
+        conceptAmount = builder.conceptAmount;
+        conceptId = builder.conceptId;
 
         final Payer payer = new Payer();
         payer.setEmail(builder.payerEmail);
@@ -161,6 +167,58 @@ public class CheckoutPreference {
 
     public void setActiveFrom(Date date) {
         this.expirationDateFrom = date;
+    }
+
+    public Site getLocalPreferenceSite() {
+        return localPreferenceSite;
+    }
+
+    public String getSiteId() {
+        return siteId;
+    }
+
+    public Integer getDifferentialPricingId() {
+        return differentialPricingId;
+    }
+
+    public BigDecimal getConceptAmount() {
+        return conceptAmount;
+    }
+
+    public String getConceptId() {
+        return conceptId;
+    }
+
+    public void setExpirationDateTo(final Date expirationDateTo) {
+        this.expirationDateTo = expirationDateTo;
+    }
+
+    public void setExpirationDateFrom(final Date expirationDateFrom) {
+        this.expirationDateFrom = expirationDateFrom;
+    }
+
+    public void setLocalPreferenceSite(final Site localPreferenceSite) {
+        this.localPreferenceSite = localPreferenceSite;
+    }
+
+    public void setSiteId(final String siteId) {
+        this.siteId = siteId;
+    }
+
+    public void setOperationType(final String operationType) {
+        this.operationType = operationType;
+    }
+
+    public void setDifferentialPricingId(final Integer differentialPricingId) {
+        this.differentialPricingId = differentialPricingId;
+    }
+
+    public void setConceptAmount(final BigDecimal conceptAmount) {
+        this.conceptAmount = conceptAmount;
+    }
+
+    public void setConceptId(final String conceptId) {
+        this.conceptId = conceptId;
     }
 
     public void setPaymentPreference(PaymentPreference paymentPreference) {
@@ -296,6 +354,9 @@ public class CheckoutPreference {
         private BigDecimal marketplaceFee;
         private BigDecimal shippingCost;
         private String operationType;
+        private Integer differentialPricingId;
+        private BigDecimal conceptAmount;
+        private String conceptId;
 
         public Builder() {
             items = new ArrayList<>();
@@ -399,6 +460,22 @@ public class CheckoutPreference {
             this.operationType = operationType;
             return this;
         }
+
+        public Builder setDifferentialPricingId(final Integer differentialPricingId) {
+            this.differentialPricingId = differentialPricingId;
+            return this;
+        }
+
+        public Builder setConceptAmount(final BigDecimal conceptAmount) {
+            this.conceptAmount = conceptAmount;
+            return this;
+        }
+
+        public Builder setConceptId(final String conceptId) {
+            this.conceptId = conceptId;
+            return this;
+        }
+
         public CheckoutPreference build() {
 
             if (items == null || items.isEmpty())
