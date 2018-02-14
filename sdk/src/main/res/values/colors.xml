@@ -29,7 +29,7 @@
     <color name="mpsdk_shopping_cart_background">#ce76cdf1</color>
     <color name="mpsdk_transparent">#00000000</color>
     <color name="mpsdk_color_instructions_title_image">#EFC703</color>
-    <color name="mpsdk_color_light_grey">#F1F1F1</color>
+    <color name="mpsdk_color_light_grey">#F0F0F0</color>
     <color name="mpsdk_color_instructions_font">#B29054</color>
     <color name="mpsdk_color_instructions_button">#41c6f4</color>
     <color name="mpsdk_continue_button">#009EE3</color>
