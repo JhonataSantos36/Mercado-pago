@@ -149,7 +149,7 @@
     <string name="mpsdk_error_description_duplicated_payment">Don\'t worry, your previous payment was approved.</string>
     <string name="mpsdk_error_description_max_attempts">As you reached the limit of attempts with this card, use another payment method.</string>
     <string name="mpsdk_error_description_high_risk">Use a payment method other than a card.</string>
-
+    <string name="mpsdk_text_card_data_invalid">Review card data</string>
 
     <!-- Error messages -->
     <string name="mpsdk_error_message_invalid_amount">Invalid amount</string>
