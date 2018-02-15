@@ -24,7 +24,6 @@ public class PaymentMethodRenderer extends Renderer<PaymentMethod> {
         final ViewGroup paymentMethodViewGroup = paymentMethodView.findViewById(R.id.mpsdkPaymentMethodContainer);
         final ImageView imageView = paymentMethodView.findViewById(R.id.mpsdkPaymentMethodIcon);
         final MPTextView descriptionTextView = paymentMethodView.findViewById(R.id.mpsdkPaymentMethodDescription);
-        final MPTextView detailTextView = paymentMethodView.findViewById(R.id.mpsdkPaymentMethodDetail);
         final MPTextView statementDescriptionTextView = paymentMethodView.findViewById(R.id.mpsdkStatementDescription);
         final FrameLayout totalAmountContainer = paymentMethodView.findViewById(R.id.mpsdkTotalAmountContainer);
 
@@ -35,7 +34,6 @@ public class PaymentMethodRenderer extends Renderer<PaymentMethod> {
         totalAmountContainer.addView(amountView);
 
         setText(descriptionTextView, component.getDescription());
-        setText(detailTextView, component.getDetail());
         setText(statementDescriptionTextView, component.getDisclaimer());
 
         stretchHeight(paymentMethodViewGroup);

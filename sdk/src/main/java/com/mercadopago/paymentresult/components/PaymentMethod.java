@@ -43,16 +43,6 @@ public class PaymentMethod extends Component<PaymentMethodProps, Void> {
         return description;
     }
 
-    public String getDetail() {
-        String detail = "";
-
-        if (props.issuer != null) {
-            detail = props.issuer.getName();
-        }
-
-        return detail;
-    }
-
     public String getDisclaimer() {
         String disclaimer = "";
 

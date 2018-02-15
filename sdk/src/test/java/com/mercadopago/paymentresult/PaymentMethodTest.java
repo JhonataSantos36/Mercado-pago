@@ -87,34 +87,6 @@ public class PaymentMethodTest {
     }
 
     @Test
-    public void getDetailWhenComponentHasIssuer() {
-        final PaymentMethod paymentMethod = PaymentMethods.getPaymentMethodOnVisa();
-        final PayerCost payerCost = PayerCosts.getPayerCost();
-        final Token token = Tokens.getToken();
-        final Issuer issuer = Issuers.getIssuerMLA();
-        final BodyAmountFormatter amountFormatter = new BodyAmountFormatter("ARS", new BigDecimal(1000));
-
-        final com.mercadopago.paymentresult.components.PaymentMethod component =
-                getPaymentMethodComponent(paymentMethod, payerCost, token, issuer, DISCLAIMER_TEXT, amountFormatter);
-
-        Assert.assertTrue(component.getDetail().equals(issuer.getName()));
-    }
-
-    @Test
-    public void getEmptyDetailWhenComponentHasNotIssuer() {
-        final PaymentMethod paymentMethod = PaymentMethods.getPaymentMethodOnVisa();
-        final PayerCost payerCost = PayerCosts.getPayerCost();
-        final Token token = Tokens.getToken();
-        final Issuer issuer = null;
-        final BodyAmountFormatter amountFormatter = new BodyAmountFormatter("ARS", new BigDecimal(1000));
-
-        final com.mercadopago.paymentresult.components.PaymentMethod component =
-                getPaymentMethodComponent(paymentMethod, payerCost, token, issuer, DISCLAIMER_TEXT, amountFormatter);
-
-        Assert.assertTrue(component.getDetail().equals(""));
-    }
-
-    @Test
     public void getDisclaimerWhenComponentHasDisclaimer() {
         final PaymentMethod paymentMethod = PaymentMethods.getPaymentMethodOnVisa();
         final PayerCost payerCost = PayerCosts.getPayerCost();

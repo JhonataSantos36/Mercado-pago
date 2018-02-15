@@ -4,9 +4,9 @@
     android:id="@+id/mpsdkPaymentMethodContainer"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@color/mpsdk_white"
     android:gravity="center"
     android:orientation="vertical"
-    android:background="@color/mpsdk_white"
     android:paddingBottom="@dimen/mpsdk_l_alternative_margin">
 
     <FrameLayout
@@ -29,30 +29,19 @@
         android:id="@+id/mpsdkTotalAmountContainer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/mpsdk_s_alternative_1_margin">
-    </FrameLayout>
+        android:layout_marginTop="@dimen/mpsdk_s_alternative_1_margin" />
 
     <com.mercadopago.customviews.MPTextView
         android:id="@+id/mpsdkPaymentMethodDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/mpsdk_xxs_alternative_margin"
-        android:paddingRight="@dimen/mpsdk_m_margin"
+        android:gravity="center"
         android:paddingLeft="@dimen/mpsdk_m_margin"
+        android:paddingRight="@dimen/mpsdk_m_margin"
+        android:textColor="@color/mpsdk_brownish_grey"
         android:textSize="@dimen/mpsdk_s_text"
-        android:gravity="center"
-        android:textColor="@color/mpsdk_brownish_grey"
-        tools:text="Master terminada en 123" />
-
-    <com.mercadopago.customviews.MPTextView
-        android:id="@+id/mpsdkPaymentMethodDetail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/mpsdk_xxxs_margin"
-        android:gravity="center"
-        android:textColor="@color/mpsdk_brownish_grey"
-        android:textSize="@dimen/mpsdk_xs_text"
-        tools:text="HSBC" />
+        tools:text="Master terminada en 1234" />
 
     <com.mercadopago.customviews.MPTextView
         android:id="@+id/mpsdkStatementDescription"
