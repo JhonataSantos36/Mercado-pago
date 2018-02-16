@@ -16,7 +16,7 @@ import org.hamcrest.Matcher;
 import java.util.ArrayList;
 import java.util.List;
 
-import static android.support.test.espresso.core.deps.guava.base.Preconditions.checkNotNull;
+import static android.support.test.espresso.core.internal.deps.guava.base.Preconditions.checkNotNull;
 
 /**
  * Created by mreverter on 11/7/16.
@@ -34,20 +34,18 @@ public class CustomMatchers {
 
             private boolean anyChildMatches(ViewGroup view, String text) {
                 boolean textFound = false;
-                for(int i=0; i < view.getChildCount(); i++) {
+                for (int i = 0; i < view.getChildCount(); i++) {
                     View child = view.getChildAt(i);
-                    if(child != null && !textFound) {
+                    if (child != null && !textFound) {
                         if (child instanceof TextView) {
                             String textViewInGroup = ((TextView) child).getText().toString();
-                            if(textViewInGroup.equals(text)) {
+                            if (textViewInGroup.equals(text)) {
                                 textFound = true;
-                            }
-                            else {
+                            } else {
                                 textsFound.add(textViewInGroup);
                             }
-                        }
-                        else if(child instanceof ViewGroup) {
-                            textFound = anyChildMatches((ViewGroup)child, text);
+                        } else if (child instanceof ViewGroup) {
+                            textFound = anyChildMatches((ViewGroup) child, text);
                         }
                     }
                 }
@@ -58,10 +56,10 @@ public class CustomMatchers {
             @Override
             public void describeTo(Description description) {
                 description.appendText("Text: " + text + " not found");
-                if(!textsFound.isEmpty()) {
+                if (!textsFound.isEmpty()) {
                     description.appendText(", but some text were: ");
                 }
-                for(String s : textsFound) {
+                for (String s : textsFound) {
                     description.appendText(s + " - ");
                 }
             }
@@ -77,17 +75,16 @@ public class CustomMatchers {
 
             private boolean anyChildMatches(ViewGroup view, Bitmap bitmap) {
                 boolean imageFound = false;
-                for(int i=0; i < view.getChildCount(); i++) {
+                for (int i = 0; i < view.getChildCount(); i++) {
                     View child = view.getChildAt(i);
-                    if(child != null && !imageFound) {
+                    if (child != null && !imageFound) {
                         if (child instanceof ImageView) {
                             Bitmap viewImage = ((BitmapDrawable) ((ImageView) child).getDrawable()).getBitmap();
-                            if(viewImage == bitmap) {
+                            if (viewImage == bitmap) {
                                 imageFound = true;
                             }
-                        }
-                        else if(child instanceof ViewGroup) {
-                            imageFound = anyChildMatches((ViewGroup)child, bitmap);
+                        } else if (child instanceof ViewGroup) {
+                            imageFound = anyChildMatches((ViewGroup) child, bitmap);
                         }
                     }
                 }
@@ -100,6 +97,7 @@ public class CustomMatchers {
             }
         };
     }
+
     public static Matcher<View> atPosition(final int position, @NonNull final Matcher<View> itemMatcher) {
         checkNotNull(itemMatcher);
         return new BoundedMatcher<View, RecyclerView>(RecyclerView.class) {

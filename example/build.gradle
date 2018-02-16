@@ -1,40 +1,44 @@
 apply plugin: 'com.android.application'
-apply plugin: 'jacoco-android'
 
 android {
-    compileSdkVersion api_level.toInteger()
+    compileSdkVersion api_level as int
     buildToolsVersion build_tools_version
 
     defaultConfig {
         applicationId "com.mercadopago.example"
-        minSdkVersion min_api_level.toInteger()
-        targetSdkVersion api_level.toInteger()
+        minSdkVersion min_api_level as int
+        targetSdkVersion api_level as int
         versionCode 1
         versionName "1.0"
+    }
+
+    dexOptions {
+        preDexLibraries !(travisBuild)
     }
 
     lintOptions {
         abortOnError false
     }
 
-    dexOptions {
-        // Skip pre-dexing when running on Travis CI or when disabled via -Dpre-dex=false.
-        preDexLibraries = preDexEnabled && !travisBuild
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
     }
 
     buildTypes {
+
         debug {
-            testCoverageEnabled true
-            multiDexEnabled false
-            versionNameSuffix " Debug"
+            versionNameSuffix ".debug"
             debuggable true
+            signingConfig signingConfigs.debug
         }
 
         release {
+            debuggable false
             minifyEnabled true
             shrinkResources true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.debug
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
 
@@ -46,23 +50,10 @@ android {
             keyPassword "android"
         }
     }
-
-    flavorDimensions "environment"
-
-    productFlavors {
-        dev {
-            dimension "environment"
-        }
-        prod {
-            dimension "environment"
-        }
-    }
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':sdk')
-
     implementation "com.google.code.gson:gson:2.8.2"
     implementation "com.android.support:appcompat-v7:$support_library_version"
     implementation "com.android.support:design:$support_library_version"

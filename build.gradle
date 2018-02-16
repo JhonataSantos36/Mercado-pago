@@ -1,12 +1,4 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
-apply plugin: 'jacoco'
-
-def coverageSourceDirs = ['sdk/src/main/java']
-
-def coverageExcludes = ['**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*', '**/*Test*.*', 'android/**/*.*']
-
-def coverageClassDirectories = [fileTree(dir: 'sdk/build/intermediates/classes/debug', excludes: coverageExcludes)]
-
 buildscript {
     repositories {
         jcenter()
@@ -14,21 +6,12 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.dicedmelon.gradle:jacoco-android:0.1.2'
-        classpath 'com.android.tools.build:gradle:3.0.0'
-    }
-
-    configurations.all {
-        resolutionStrategy {
-            force 'org.jacoco:org.jacoco.core:0.7.9+'
-        }
+        classpath 'com.android.tools.build:gradle:3.0.1'
     }
 }
 
 ext {
-    travisBuild = System.getenv("TRAVIS") == "true"
-    // allows for -Dpre-dex=false to be set
-    preDexEnabled = "true".equals(System.getProperty("pre-dex", "true"))
+    travisBuild = System.getenv("TRAVIS") as boolean
 }
 
 allprojects {
@@ -37,23 +20,5 @@ allprojects {
         maven {
             url 'https://maven.google.com'
         }
-    }
-}
-
-task jacocoRootReport(type: JacocoReport) {
-    dependsOn "sdk:jacocoFullTestReport"
-
-    additionalSourceDirs = files(coverageSourceDirs)
-    sourceDirectories = files(coverageSourceDirs)
-    classDirectories = files(coverageClassDirectories)
-    executionData = files(tasks.getByPath("sdk:jacocoFullTestReport").executionData)
-
-    reports {
-        html.enabled = true
-        xml.enabled = false
-        csv.enabled = false
-    }
-    onlyIf = {
-        true
     }
 }
