@@ -32,7 +32,6 @@ public class ReviewProductView implements ReviewProductViewController {
     protected MPTextView mProductDescription;
     protected MPTextView mProductQuantity;
     protected MPTextView mProductPrice;
-    protected View mFirstSeparator;
 
     private Context mContext;
     private ReviewScreenPreference mReviewScreenPreference;
@@ -55,7 +54,6 @@ public class ReviewProductView implements ReviewProductViewController {
         mProductDescription = (MPTextView) mView.findViewById(R.id.mpsdkAdapterReviewProductDescription);
         mProductQuantity = (MPTextView) mView.findViewById(R.id.mpsdkAdapterReviewProductQuantity);
         mProductPrice = (MPTextView) mView.findViewById(R.id.mpsdkAdapterReviewProductPrice);
-        mFirstSeparator = mView.findViewById(R.id.mpsdkFirstSeparator);
     }
 
     @Override
@@ -65,9 +63,6 @@ public class ReviewProductView implements ReviewProductViewController {
 
     @Override
     public void drawProduct(int position, Item item, String currencyId) {
-        if (position != 0) {
-            mFirstSeparator.setVisibility(View.GONE);
-        }
         String pictureUrl = item.getPictureUrl();
 
         setProductIcon(pictureUrl);
