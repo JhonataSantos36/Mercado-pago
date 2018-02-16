@@ -66,4 +66,7 @@ dependencies {
     implementation "com.google.code.gson:gson:2.8.2"
     implementation "com.android.support:appcompat-v7:$support_library_version"
     implementation "com.android.support:design:$support_library_version"
+
+    debugImplementation "com.squareup.leakcanary:leakcanary-android:$leak_cannary"
+    releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$leak_cannary"
 }
