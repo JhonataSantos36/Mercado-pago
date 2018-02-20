@@ -130,15 +130,16 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
     //ViewMode
     protected boolean mLowResActive;
     protected GuessingCardPresenter mPresenter;
+    protected String mDefaultBaseURL;
+    protected String mMerchantDiscountBaseURL;
+    protected String mMerchantGetDiscountURI;
+    protected Map<String, String> mDiscountAdditionalInfo;
     private Activity mActivity;
-
     //View controls
     private ScrollView mScrollView;
-
     //View Low Res
     private Toolbar mLowResToolbar;
     private MPTextView mLowResTitleToolbar;
-
     //View Normal
     private Toolbar mNormalToolbar;
     private MPTextView mBankDealsTextView;
@@ -148,7 +149,6 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
     private CardView mCardView;
     private IdentificationCardView mIdentificationCardView;
     private MPTextView mTimerTextView;
-
     //Input Views
     private ViewGroup mProgressLayout;
     private LinearLayout mInputContainer;
@@ -181,18 +181,12 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
     private Animation mContainerUpAnimation;
     private Animation mContainerDownAnimation;
     private boolean mButtonContainerMustBeShown;
-
     //Input Controls
     private String mCurrentEditingEditText;
     private String mCardSideState;
     private String mPublicKey;
     private String mPrivateKey;
     private boolean mActivityActive;
-
-    protected String mDefaultBaseURL;
-    protected String mMerchantDiscountBaseURL;
-    protected String mMerchantGetDiscountURI;
-    protected Map<String, String> mDiscountAdditionalInfo;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -220,6 +214,7 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
     protected void onDestroy() {
         mActivityActive = false;
         mPresenter.detachView();
+        mPresenter.detachResourceProvider();
         super.onDestroy();
     }
 

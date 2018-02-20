@@ -67,10 +67,9 @@ public class MPLoadingSpinner extends View {
 
     private void init(AttributeSet attrs, int defStyleAttr) {
         final TypedArray typedArray = getContext().obtainStyledAttributes(attrs, R.styleable.MPLoadingSpinner, defStyleAttr, 0);
-
         strokeSize = typedArray.getDimensionPixelSize(R.styleable.MPLoadingSpinner_mpsdk_ui_stroke, getResources().getDimensionPixelSize(R.dimen.mpsdk_progress_stroke));
-
         typedArray.recycle();
+        setupAnimations();
     }
 
     /**
@@ -99,8 +98,10 @@ public class MPLoadingSpinner extends View {
     private void setupAnimations() {
         int duration = getResources().getInteger(R.integer.mpsdk_ui_spinner_spinning_time);
 
-        // - Head and tail start together, when the head finishes the full spin the tail catches up - //
         sweepAnim = createAnimator(0, FULL_CIRCLE, duration);
+        startAnim = createAnimator(0, QUARTER_CIRCLE, duration);
+        finalAnim = createAnimator(QUARTER_CIRCLE, FULL_CIRCLE, duration);
+
         sweepAnim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
@@ -108,7 +109,14 @@ public class MPLoadingSpinner extends View {
             }
         });
 
-        startAnim = createAnimator(0, QUARTER_CIRCLE, duration);
+        sweepAnim.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                finalAnim.start();
+            }
+        });
+
         startAnim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
@@ -117,7 +125,7 @@ public class MPLoadingSpinner extends View {
             }
         });
 
-        finalAnim = createAnimator(QUARTER_CIRCLE, FULL_CIRCLE, duration);
+
         finalAnim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
@@ -134,17 +142,6 @@ public class MPLoadingSpinner extends View {
                 startAnim.start();
             }
         });
-
-        sweepAnim.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                super.onAnimationEnd(animation);
-                finalAnim.start();
-            }
-        });
-
-        sweepAnim.start();
-        startAnim.start();
     }
 
     /**
@@ -230,13 +227,16 @@ public class MPLoadingSpinner extends View {
      * Call this on activity start to begin animations
      */
     public void onStart() {
-        if (startAnim == null || !startAnim.isRunning()) {
-            setupAnimations();
+        // - Head and tail start together, when the head finishes the full spin the tail catches up - //
+        if (!startAnim.isRunning()) {
+            sweepAnim.start();
+            startAnim.start();
         }
     }
 
     /**
      * Call this on activity stop to finish animations
+     * Clean the animators so as not to leak memory
      */
     public void onStop() {
         cleanAnimator(startAnim);
@@ -250,11 +250,9 @@ public class MPLoadingSpinner extends View {
      * @param animator the animator to clean
      */
     private void cleanAnimator(ValueAnimator animator) {
-        if (animator != null) {
-            animator.cancel();
-            animator.removeAllListeners();
-            animator.removeAllUpdateListeners();
-        }
+        animator.cancel();
+        animator.removeAllListeners();
+        animator.removeAllUpdateListeners();
     }
 
     /**

@@ -21,6 +21,8 @@ import com.mercadopago.R;
 @RequiresApi(api = Build.VERSION_CODES.HONEYCOMB)
 public class MPProgressBar extends FrameLayout {
 
+    private final boolean autostart;
+
     private MPLoadingSpinner spinner;
 
     public MPProgressBar(final Context context) {
@@ -40,16 +42,13 @@ public class MPProgressBar extends FrameLayout {
 
         final TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.MPProgressBar, defStyleAttr, 0);
 
-        final boolean autostart = typedArray.getBoolean(R.styleable.MPProgressBar_mpsdk_autostart, true);
+        autostart = typedArray.getBoolean(R.styleable.MPProgressBar_mpsdk_autostart, true);
 
         final int size = typedArray.getDimensionPixelSize(R.styleable.MPProgressBar_mpsdk_size, getResources().getDimensionPixelSize(R.dimen.mpsdk_progress_size));
 
         configureSpinnerSize(size);
 
         typedArray.recycle();
-        if (autostart) {
-            start();
-        }
     }
 
     /**
@@ -59,6 +58,14 @@ public class MPProgressBar extends FrameLayout {
     protected void onDetachedFromWindow() {
         stop();
         super.onDetachedFromWindow();
+    }
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        if (autostart) {
+            start();
+        }
     }
 
     /**

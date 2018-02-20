@@ -61,6 +61,9 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultVie
         mActivityActive = true;
         setContentView();
 
+        mCardVaultPresenter = new CardVaultPresenter();
+        mCardVaultPresenter.attachView(this);
+
         if (savedInstanceState == null) {
             initializeCardFlow();
         } else {
@@ -68,21 +71,21 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultVie
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        mCardVaultPresenter.detachView();
+        mCardVaultPresenter.detachResourceProvider();
+        super.onDestroy();
+    }
+
     private void initializeCardFlow() {
-        createPresenter();
         getActivityParameters();
         configurePresenter();
         initialize();
     }
 
-    protected void createPresenter() {
-        if (mCardVaultPresenter == null) {
-            mCardVaultPresenter = new CardVaultPresenter();
-        }
-    }
 
     private void configurePresenter() {
-        mCardVaultPresenter.attachView(this);
         mCardVaultPresenter.attachResourcesProvider(new CardVaultProviderImpl(this, mPublicKey, mPrivateKey, mEscEnabled));
     }
 
