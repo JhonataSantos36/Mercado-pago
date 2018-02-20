@@ -118,9 +118,13 @@ dependencies {
     compile "com.squareup.okhttp3:okhttp-urlconnection:$okhttp"
     compile "com.squareup.okhttp3:logging-interceptor:$okhttp"
     compile "com.squareup.retrofit2:retrofit:$retrofit"
-    compile "com.squareup.retrofit2:converter-gson:$retrofit"
-    compile "com.squareup.picasso:picasso:$picasso"
 
+    compile("com.squareup.retrofit2:converter-gson:$retrofit") {
+        exclude group: "com.google.code.gson", module: "gson"
+    }
+
+    compile "com.google.code.gson:gson:$gson"
+    compile "com.squareup.picasso:picasso:$picasso"
     compile "com.mercadopago:services:1.0.1"
     compile 'com.mercadopago:tracking:3.0.2'
 }
