@@ -12,7 +12,7 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="@dimen/mpsdk_m_alternative_2_margin"
         android:gravity="center_horizontal"
-        android:textColor="@color/mpsdk_blue_MP"
+        android:textColor="@color/mpsdk_link"
         android:textSize="@dimen/mpsdk_s_text"
         tools:text="Action"/>
 </FrameLayout>
