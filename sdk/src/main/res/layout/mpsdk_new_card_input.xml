@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:custom="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
-    android:layout_marginTop="12dp"
     android:layout_height="wrap_content"
+    android:layout_marginTop="12dp"
     android:orientation="horizontal">
 
     <LinearLayout
@@ -20,9 +19,10 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:layout_marginStart="16dp"
-            android:textSize="14dp"
+            android:text="@string/mpsdk_card_number_label"
             android:textColor="@color/mpsdk_color_new_card_text"
-            android:text="@string/mpsdk_card_number_label"/>
+            android:textSize="14dp" />
+
         <com.mercadopago.customviews.MPEditText
             android:id="@+id/mpsdkCardNumber"
             android:layout_width="293dp"
@@ -30,14 +30,14 @@
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
             android:layout_marginTop="2dp"
-            android:textSize="19dp"
-            android:textColor="@color/abc_search_url_text_selected"
-            android:inputType="number"
             android:digits="0123456789 "
             android:imeOptions="actionNext"
-            android:singleLine="true"
+            android:inputType="number"
             android:maxLength="19"
-            custom:errorColor="@color/mpsdk_color_red_error"/>
+            android:singleLine="true"
+            android:textColor="@color/mpsdk_real_black"
+            android:textSize="19dp"
+            custom:errorColor="@color/mpsdk_color_red_error" />
 
     </LinearLayout>
 
@@ -53,10 +53,11 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:layout_marginStart="16dp"
-            android:textSize="14dp"
             android:lines="1"
+            android:text="@string/mpsdk_cardholder_name"
             android:textColor="@color/mpsdk_color_new_card_text"
-            android:text="@string/mpsdk_cardholder_name"/>
+            android:textSize="14dp" />
+
         <com.mercadopago.customviews.MPEditText
             android:id="@+id/mpsdkCardholderName"
             android:layout_width="293dp"
@@ -64,14 +65,14 @@
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
             android:layout_marginTop="2dp"
-            android:maxLength="50"
-            android:singleLine="true"
             android:imeOptions="actionNext"
-            android:textSize="19dp"
-            android:privateImeOptions="nm"
             android:inputType="textNoSuggestions|textPersonName"
-            android:textColor="@color/abc_search_url_text_selected"
-            custom:errorColor="@color/mpsdk_color_red_error"/>
+            android:maxLength="50"
+            android:privateImeOptions="nm"
+            android:singleLine="true"
+            android:textColor="@color/mpsdk_real_black"
+            android:textSize="19dp"
+            custom:errorColor="@color/mpsdk_color_red_error" />
 
     </LinearLayout>
 
@@ -87,10 +88,11 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:layout_marginStart="16dp"
-            android:textSize="14dp"
             android:lines="1"
+            android:text="@string/mpsdk_card_expire_date_label"
             android:textColor="@color/mpsdk_color_new_card_text"
-            android:text="@string/mpsdk_card_expire_date_label"/>
+            android:textSize="14dp" />
+
         <com.mercadopago.customviews.MPEditText
             android:id="@+id/mpsdkCardExpiryDate"
             android:layout_width="293dp"
@@ -98,14 +100,14 @@
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
             android:layout_marginTop="2dp"
-            android:singleLine="true"
+            android:digits="0123456789/"
             android:imeOptions="actionNext"
             android:inputType="number"
-            android:digits="0123456789/"
-            android:textSize="19dp"
-            android:textColor="@color/abc_search_url_text_selected"
             android:maxLength="5"
-            custom:errorColor="@color/mpsdk_color_red_error"/>
+            android:singleLine="true"
+            android:textColor="@color/mpsdk_real_black"
+            android:textSize="19dp"
+            custom:errorColor="@color/mpsdk_color_red_error" />
 
     </LinearLayout>
 
@@ -121,10 +123,10 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:layout_marginStart="16dp"
-            android:textSize="14dp"
             android:lines="1"
+            android:text="@string/mpsdk_security_code"
             android:textColor="@color/mpsdk_color_new_card_text"
-            android:text="@string/mpsdk_security_code"/>
+            android:textSize="14dp" />
 
         <com.mercadopago.customviews.MPEditText
             android:id="@+id/mpsdkCardSecurityCode"
@@ -133,13 +135,13 @@
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
             android:layout_marginTop="2dp"
-            android:singleLine="true"
-            android:maxLength="4"
             android:imeOptions="actionNext"
             android:inputType="number"
+            android:maxLength="4"
+            android:singleLine="true"
+            android:textColor="@color/mpsdk_real_black"
             android:textSize="19dp"
-            android:textColor="@color/abc_search_url_text_selected"
-            custom:errorColor="@color/mpsdk_color_red_error"/>
+            custom:errorColor="@color/mpsdk_color_red_error" />
 
     </LinearLayout>
 
@@ -156,20 +158,20 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:layout_marginStart="16dp"
-            android:textSize="14dp"
             android:lines="1"
+            android:text="@string/mpsdk_card_identification_type"
             android:textColor="@color/mpsdk_color_new_card_text"
-            android:text="@string/mpsdk_card_identification_type"/>
+            android:textSize="14dp" />
 
         <Spinner
             android:id="@+id/mpsdkCardPaymentMethodSelector"
+            style="@style/Widget.AppCompat.Spinner.Underlined"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:paddingLeft="5dp"
-            android:paddingStart="5dp"
             android:paddingEnd="5dp"
+            android:paddingLeft="5dp"
             android:paddingRight="5dp"
-            style="@style/Widget.AppCompat.Spinner.Underlined"/>
+            android:paddingStart="5dp" />
     </LinearLayout>
 
     <LinearLayout
@@ -185,15 +187,15 @@
             android:layout_marginLeft="16dp"
             android:layout_marginStart="16dp"
             android:lines="1"
-            android:textSize="14dp"
+            android:text="@string/mpsdk_card_identification_type"
             android:textColor="@color/mpsdk_color_new_card_text"
-            android:text="@string/mpsdk_card_identification_type"/>
+            android:textSize="14dp" />
 
         <!-- spinner -->
         <Spinner
             android:id="@+id/mpsdkCardIdentificationType"
             android:layout_width="100dp"
-            android:layout_height="36dp"/>
+            android:layout_height="36dp" />
 
     </LinearLayout>
 
@@ -201,6 +203,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
+
         <LinearLayout
             android:id="@+id/mpsdkCardIdentificationNumberContainer"
             android:layout_width="wrap_content"
@@ -220,15 +223,17 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:visibility="gone">
+
                     <com.mercadopago.customviews.MPTextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="16dp"
                         android:layout_marginStart="16dp"
-                        android:textSize="14dp"
                         android:lines="1"
+                        android:text="@string/mpsdk_card_identification_number"
                         android:textColor="@color/mpsdk_color_new_card_text"
-                        android:text="@string/mpsdk_card_identification_number"/>
+                        android:textSize="14dp" />
+
                     <com.mercadopago.customviews.MPEditText
                         android:id="@+id/mpsdkCardIdentificationNumber"
                         android:layout_width="193dp"
@@ -237,11 +242,11 @@
                         android:layout_marginRight="15dp"
                         android:layout_marginTop="2dp"
                         android:imeOptions="actionNext"
-                        android:singleLine="true"
                         android:maxLength="15"
+                        android:singleLine="true"
+                        android:textColor="@color/mpsdk_real_black"
                         android:textSize="19dp"
-                        android:textColor="@color/abc_search_url_text_selected"
-                        custom:errorColor="@color/mpsdk_color_red_error"/>
+                        custom:errorColor="@color/mpsdk_color_red_error" />
                 </LinearLayout>
 
             </LinearLayout>

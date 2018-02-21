@@ -31,7 +31,7 @@
         android:maxLength="50"
         android:privateImeOptions="nm"
         android:singleLine="true"
-        android:textColor="@color/abc_search_url_text_selected"
+        android:textColor="@color/mpsdk_real_black"
         android:textCursorDrawable="@drawable/mpsdk_cursor_input"
         android:textIsSelectable="true"
         android:textSize="19dp"
