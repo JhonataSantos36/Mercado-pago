@@ -29,41 +29,24 @@ public class LayoutUtil {
     }
 
     public static void showProgressLayout(Activity activity) {
-        showLayout(activity, true, false, false);
+        showLayout(activity, true, false);
     }
 
     public static void showRegularLayout(Activity activity) {
-        showLayout(activity, false, true, false);
+        showLayout(activity, false, true);
     }
 
-    public static void showRefreshLayout(Activity activity) {
-        showLayout(activity, false, false, true);
-    }
-
-    public static void hideProgressLayout(Activity activity) {
-        final View progress = activity.findViewById(R.id.mpsdkProgressLayout);
-
-        if (progress != null) {
-            progress.setVisibility(View.GONE);
-        }
-    }
-
-    private static void showLayout(Activity activity, final boolean showProgress, final boolean showLayout, final boolean showRefresh) {
+    private static void showLayout(Activity activity, final boolean showProgress, final boolean showLayout) {
 
         final View form = activity.findViewById(R.id.mpsdkRegularLayout);
         final View progress = activity.findViewById(R.id.mpsdkProgressLayout);
-        final View refresh = activity.findViewById(R.id.mpsdkRefreshLayout);
 
         if (progress != null) {
-            progress.setVisibility(showRefresh || showLayout ? View.GONE : View.VISIBLE);
+            progress.setVisibility(showLayout ? View.GONE : View.VISIBLE);
         }
 
         if (form != null) {
-            form.setVisibility(showRefresh || showProgress ? View.GONE : View.VISIBLE);
-        }
-
-        if (refresh != null) {
-            refresh.setVisibility(showRefresh ? View.VISIBLE : View.GONE);
+            form.setVisibility(showProgress ? View.GONE : View.VISIBLE);
         }
     }
 

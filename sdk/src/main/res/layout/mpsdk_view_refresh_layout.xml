@@ -1,36 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mpsdkRefreshLayout"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
     android:clickable="true"
-    android:onClick="refreshLayout"
-    android:visibility="gone">
+    android:focusable="true"
+    android:gravity="center"
+    android:visibility="gone"
+    tools:visibility="visible">
 
-    <LinearLayout
+    <ImageView
+        android:id="@+id/refresh_image"
+        android:layout_width="96dp"
+        android:layout_height="96dp"
+        android:src="@drawable/mpsdk_ic_refresh" />
+
+    <com.mercadopago.customviews.MPTextView
+        style="@style/mpsdk_big_text_light"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_centerInParent="true">
-
-        <ImageView
-            android:layout_width="96dp"
-            android:layout_height="96dp"
-            android:src="@drawable/mpsdk_ic_refresh"
-            android:layout_gravity="center_horizontal|top"/>
-
-        <com.mercadopago.customviews.MPTextView
-            android:layout_width="wrap_content"
-            android:layout_marginTop="25dp"
-            android:gravity="bottom|center"
-            android:textAlignment="gravity"
-            android:layout_height="wrap_content"
-            android:text="@string/mpsdk_refresh_message"
-            android:layout_gravity="center_horizontal|top"
-            style="@style/mpsdk_big_text_light"/>
-
-    </LinearLayout>
+        android:layout_below="@+id/refresh_image"
+        android:gravity="bottom|center"
+        android:text="@string/mpsdk_refresh_message"
+        android:textAlignment="gravity" />
 
 </RelativeLayout>

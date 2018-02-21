@@ -5,9 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <include layout="@layout/mpsdk_view_refresh_layout" />
-
-    <include layout="@layout/mpsdk_view_progress_bar" />
+    <include layout="@layout/mpsdk_view_progress_bar"/>
 
     <ScrollView
         android:id="@+id/regularLayout"

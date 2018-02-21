@@ -4,14 +4,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-        <include layout="@layout/mpsdk_view_refresh_layout"/>
         <include layout="@layout/mpsdk_view_progress_bar"/>
 
         <ScrollView
+            android:id="@+id/regularLayout"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:layout_marginBottom="@dimen/mpsdk_margin_std"
-            android:id="@+id/regularLayout">
+            android:layout_marginBottom="@dimen/mpsdk_margin_std">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -22,8 +21,8 @@
                     xmlns:card_view="http://schemas.android.com/apk/res-auto"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/mpsdk_white_background"
                     android:layout_margin="@dimen/mpsdk_card_margin"
+                    android:background="@color/mpsdk_white_background"
                     card_view:cardCornerRadius="@dimen/mpsdk_card_corner_radius">
 
                     <LinearLayout
@@ -34,8 +33,8 @@
                         <LinearLayout
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:layout_marginBottom="10dp">
+                            android:layout_marginBottom="10dp"
+                            android:orientation="vertical">
 
                             <LinearLayout
                                 android:layout_width="fill_parent"
@@ -43,69 +42,69 @@
                                 android:orientation="horizontal">
 
                                 <com.mercadopago.customviews.MPTextView
+                                    style="@style/mpsdk_form_label"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="@string/mpsdk_card_number_label"
-                                    android:layout_marginLeft="10dp"
                                     android:layout_marginBottom="10dp"
+                                    android:layout_marginLeft="10dp"
                                     android:layout_marginTop="10dp"
-                                    style="@style/mpsdk_form_label"/>
+                                    android:text="@string/mpsdk_card_number_label" />
 
                                 <ImageView
                                     android:id="@+id/pmImage"
-                                    android:adjustViewBounds= "true"
-                                    android:maxHeight="20dp"
-                                    android:maxWidth="40dp"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center_vertical"
-                                    tools:src="@drawable/amex"
                                     android:layout_marginLeft="5dp"
-                                    android:layout_marginStart="5dp"/>
+                                    android:layout_marginStart="5dp"
+                                    android:adjustViewBounds="true"
+                                    android:maxHeight="20dp"
+                                    android:maxWidth="40dp"
+                                    tools:src="@drawable/amex" />
 
                             </LinearLayout>
 
                             <com.mercadopago.customviews.MPEditText
                                 android:id="@+id/cardNumber"
+                                style="@style/mpsdk_form_input"
                                 android:layout_width="fill_parent"
                                 android:layout_height="wrap_content"
-                                android:inputType="number"
-                                android:maxLength="16"
                                 android:layout_marginLeft="10dp"
                                 android:layout_marginRight="10dp"
-                                style="@style/mpsdk_form_input"/>
+                                android:inputType="number"
+                                android:maxLength="16" />
 
                             <com.mercadopago.customviews.MPTextView
                                 android:id="@+id/text_cod_seg"
+                                style="@style/mpsdk_form_label"
                                 android:layout_width="fill_parent"
                                 android:layout_height="wrap_content"
-                                android:text="@string/mpsdk_security_code"
-                                android:layout_marginTop="10dp"
                                 android:layout_marginLeft="10dp"
                                 android:layout_marginRight="10dp"
-                                style="@style/mpsdk_form_label"/>
+                                android:layout_marginTop="10dp"
+                                android:text="@string/mpsdk_security_code" />
 
                             <com.mercadopago.customviews.MPEditText
                                 android:id="@+id/securityCode"
+                                style="@style/mpsdk_form_input"
                                 android:layout_width="120dp"
                                 android:layout_height="wrap_content"
                                 android:layout_below="@+id/text_cod_seg"
-                                android:maxLength="4"
-                                android:inputType="number"
-                                android:singleLine="true"
-                                android:layout_marginTop="10dp"
                                 android:layout_marginLeft="10dp"
                                 android:layout_marginRight="10dp"
-                                style="@style/mpsdk_form_input"/>
+                                android:layout_marginTop="10dp"
+                                android:inputType="number"
+                                android:maxLength="4"
+                                android:singleLine="true" />
 
                             <com.mercadopago.customviews.MPTextView
+                                style="@style/mpsdk_form_label"
                                 android:layout_width="fill_parent"
                                 android:layout_height="wrap_content"
-                                android:text="@string/mpsdk_card_expire_date_label"
-                                android:layout_marginTop="10dp"
                                 android:layout_marginLeft="10dp"
                                 android:layout_marginRight="10dp"
-                                style="@style/mpsdk_form_label"/>
+                                android:layout_marginTop="10dp"
+                                android:text="@string/mpsdk_card_expire_date_label" />
 
                             <LinearLayout
                                 android:layout_width="fill_parent"
@@ -114,35 +113,35 @@
 
                                 <com.mercadopago.customviews.MPEditText
                                     android:id="@+id/expiryMonth"
+                                    style="@style/mpsdk_form_input"
                                     android:layout_width="40dp"
                                     android:layout_height="wrap_content"
-                                    android:maxLength="2"
-                                    android:inputType="number"
-                                    android:singleLine="true"
-                                    android:layout_marginTop="@dimen/mpsdk_margin_std"
                                     android:layout_marginLeft="10dp"
                                     android:layout_marginRight="10dp"
-                                    style="@style/mpsdk_form_input"/>
+                                    android:layout_marginTop="@dimen/mpsdk_margin_std"
+                                    android:inputType="number"
+                                    android:maxLength="2"
+                                    android:singleLine="true" />
 
                                 <com.mercadopago.customviews.MPTextView
+                                    style="@style/mpsdk_form_input"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="/"
-                                    android:layout_marginBottom="5dp"
                                     android:layout_gravity="bottom"
-                                    style="@style/mpsdk_form_input"/>
+                                    android:layout_marginBottom="5dp"
+                                    android:text="/" />
 
                                 <com.mercadopago.customviews.MPEditText
                                     android:id="@+id/expiryYear"
+                                    style="@style/mpsdk_form_input"
                                     android:layout_width="40dp"
                                     android:layout_height="wrap_content"
-                                    android:maxLength="2"
-                                    android:inputType="number"
-                                    android:singleLine="true"
-                                    android:layout_marginTop="@dimen/mpsdk_margin_std"
                                     android:layout_marginLeft="10dp"
                                     android:layout_marginStart="10dp"
-                                    style="@style/mpsdk_form_input"/>
+                                    android:layout_marginTop="@dimen/mpsdk_margin_std"
+                                    android:inputType="number"
+                                    android:maxLength="2"
+                                    android:singleLine="true" />
 
                                 <com.mercadopago.customviews.MPTextView
                                     android:id="@+id/expiryError"
@@ -158,24 +157,24 @@
                         <RelativeLayout
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
+                            android:layout_marginBottom="10dp"
                             android:orientation="vertical"
-                            android:padding="10dp"
-                            android:layout_marginBottom="10dp">
+                            android:padding="10dp">
 
                             <com.mercadopago.customviews.MPTextView
                                 android:id="@+id/cardholderNameText"
+                                style="@style/mpsdk_form_label"
                                 android:layout_width="fill_parent"
                                 android:layout_height="wrap_content"
-                                android:text="@string/mpsdk_cardholder_name"
                                 android:layout_marginBottom="10dp"
-                                style="@style/mpsdk_form_label"/>
+                                android:text="@string/mpsdk_cardholder_name" />
                             <com.mercadopago.customviews.MPEditText
                                 android:id="@+id/cardholderName"
+                                style="@style/mpsdk_form_input"
                                 android:layout_width="fill_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_below="@+id/cardholderNameText"
-                                android:inputType="textPersonName"
-                                style="@style/mpsdk_form_input"/>
+                                android:inputType="textPersonName" />
 
                             <RelativeLayout
                                 android:id="@+id/identificationLayout"
@@ -185,41 +184,41 @@
 
                                 <com.mercadopago.customviews.MPTextView
                                     android:id="@+id/identificationTypeText"
+                                    style="@style/mpsdk_form_label"
                                     android:layout_width="100dp"
                                     android:layout_height="wrap_content"
-                                    android:text="@string/mpsdk_doc_type_label"
                                     android:layout_marginBottom="10dp"
                                     android:layout_marginTop="10dp"
-                                    style="@style/mpsdk_form_label"/>
+                                    android:text="@string/mpsdk_doc_type_label" />
 
                                 <com.mercadopago.customviews.MPTextView
                                     android:id="@+id/identificationNumberText"
+                                    style="@style/mpsdk_form_label"
                                     android:layout_width="fill_parent"
                                     android:layout_height="wrap_content"
-                                    android:text="@string/mpsdk_doc_number_label"
-                                    android:layout_toRightOf="@id/identificationTypeText"
                                     android:layout_marginBottom="10dp"
                                     android:layout_marginTop="10dp"
-                                    style="@style/mpsdk_form_label"/>
+                                    android:layout_toRightOf="@id/identificationTypeText"
+                                    android:text="@string/mpsdk_doc_number_label" />
 
                                 <com.mercadopago.customviews.MPEditText
                                     android:id="@+id/identificationNumber"
+                                    style="@style/mpsdk_form_input"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:maxLength="11"
-                                    android:inputType="text"
-                                    android:layout_below="@+id/identificationNumberText"
                                     android:layout_alignLeft="@+id/identificationNumberText"
-                                    android:singleLine="true"
+                                    android:layout_below="@+id/identificationNumberText"
                                     android:imeOptions="actionGo"
-                                    style="@style/mpsdk_form_input"/>
+                                    android:inputType="text"
+                                    android:maxLength="11"
+                                    android:singleLine="true" />
 
                                 <Spinner
                                     android:id="@+id/identificationType"
                                     android:layout_width="100dp"
                                     android:layout_height="36dp"
-                                    android:layout_below="@+id/identificationTypeText"
-                                    android:layout_alignBottom="@id/identificationNumber"/>
+                                    android:layout_alignBottom="@id/identificationNumber"
+                                    android:layout_below="@+id/identificationTypeText" />
 
                             </RelativeLayout>
 
@@ -231,11 +230,11 @@
 
                 <com.mercadopago.customviews.MPButton
                     android:id="@+id/submitButton"
+                    style="@style/mpsdk_button_normal"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/mpsdk_button_height"
                     android:layout_margin="@dimen/mpsdk_margin_std"
-                    android:text="@string/mpsdk_continue_label"
-                    style="@style/mpsdk_button_normal"/>
+                    android:text="@string/mpsdk_continue_label" />
 
             </LinearLayout>
 
