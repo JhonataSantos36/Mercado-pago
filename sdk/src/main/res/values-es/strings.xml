@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:xliff="rn:oasis:names:tc:xliff:document:1.2">
+<resources xmlns:tools="http://schemas.android.com/tools" xmlns:xliff="rn:oasis:names:tc:xliff:document:1.2">
 
     <!-- Banks deals -->
     <string name="mpsdk_empty_bank_deals">No tienes ninguna promoción disponible</string>
@@ -16,7 +16,7 @@
 
     <!-- Vault -->
     <string name="mpsdk_cod_seg_desc">Últimos <xliff:g example="4" id="numeros">%1$d</xliff:g> números al dorso de la tarjeta</string>
-    <string name="mpsdk_cod_seg_desc_amex"><xliff:g example="4" id="numeros">%1$d</xliff:g> números al frente de la tarjeta</string>
+    <string name="mpsdk_cod_seg_desc_amex" tools:ignore="PluralsCandidate"><xliff:g example="4" id="numeros">%1$d</xliff:g> números al frente de la tarjeta</string>
     <string name="mpsdk_title_activity_vault">Pagar</string>
     <string name="mpsdk_select_pm_label">Selecciona un medio de pago…</string>
     <string name="mpsdk_last_digits_label">Terminada en</string>
@@ -92,7 +92,6 @@
     <!-- Congrats -->
     <string name="mpsdk_title_approved_payment">¡Listo! Se acreditó tu pago</string>
     <string name="mpsdk_subtitle_action_activity_congrats">Te enviaremos los datos a\n%1$s</string>
-    <string name="mpsdk_text_state_acount_activity_congrat">En tu estado de cuenta verás el cargo como\n %1$s</string>
     <string name="mpsdk_payment_id_description">Comprobante</string>
     <string name="mpsdk_payment_id_description_number">Nº %1$s</string>
     <string name="mpsdk_statement_default">MERCADO PAGO</string>

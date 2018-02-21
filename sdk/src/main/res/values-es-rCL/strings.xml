@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="mpsdk_text_state_acount_activity_congrat">En tu estado de cuenta verás el cargo como\n MERCADOPAGO</string>
     <string name="mpsdk_text_pay_with_other_method">Pagar con otro medio</string>
     <string name="mpsdk_change_payment">Cambiar pago</string>
 </resources>
