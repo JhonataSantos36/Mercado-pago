@@ -2,35 +2,11 @@
 <resources>
     <string name="app_name">MP SDK Samples</string>
     <string name="hello_world">Hello world!</string>
-    <string-array name="examples">
-        <item>@string/title_activity_step1</item>
-        <item>@string/title_activity_step2</item>
-        <item>@string/title_activity_step3</item>
-        <item>@string/title_activity_step4</item>
-    </string-array>
     <string name="welcome_title">Confira as opções que você tem para integrar. Desde módulos simples até o fluxo completo.</string>
-    <string name="title_activity_step1">Formulário simples</string>
-    <string name="title_activity_step2">Cartões salvos</string>
-    <string name="title_activity_step3">Pagamento parcelado</string>
-    <string name="title_activity_step4">Pagamentos com meios offline</string>
-    <string name="title_activity_step5">Fluxo de pagamento completo</string>
-    <string name="title_activity_card">Digite os dados do seu cartão</string>
-    <string name="title_activity_simple_vault">Pagar</string>
-    <string name="title_activity_final_vault">Pagar</string>
-    <string name="step1_description">Fluxo que valida os dados digitados com base nas regras do meio de pagamento.</string>
-    <string name="step2_description">Fluxo de pagamento que permite selecionar os cartões salvos do usuário.</string>
-    <string name="step3_description">Fluxo de pagamento para que o comprador escolha o parcelamento desejado e qual é a administradora do cartão.</string>
-    <string name="step4_description">Fluxo que inclui os meios offline como meios de pagamento disponíveis.</string>
-    <string name="step5_description">Fluxo de pagamento padrão. Inclui todos os módulos de pagamento.</string>
-
     <string name="step1_choice_description">Você pode coletar dados através de diferentes telas ou um único formulário para completar tudo o que puder para você.</string>
     <string name="step3_choice_description">A bank selection screen can be added to the simple flow, or use the guessing form.</string>
     <string name="step4_choice_description">Note que se você quiser aceitar pagamentos com cartão off-line e não devem utilizar o formulário para descartar adivinhar como mídia off-line.</string>
     <string name="step5_choice_description">Um ecrã de selecção do banco pode ser adicionado ao fluxo simples, ou usar formulário guessing.</string>
     <string name="simple_card_flow_label">Distintas pantallas</string>
     <string name="guessing_card_flow_label">Formulário guessing</string>
-
-    <string name="step6_description">Flujo de pagos por defecto. Resuelve la captura de datos de tarjeta de crédito, cuotas, tokenización, creación del pago y pantalla de felicitaciones. También permite pagar con la app de MercadoPago.</string>
-    <string name="opening_mp">Abriendo MercadoPago…</string>
-    <string name="title_activity_step6">Checkout</string>
 </resources>

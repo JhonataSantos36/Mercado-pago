@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:background="@color/mpsdk_review_gray_background">
+    android:theme="@style/Theme.AppTheme.Grey">
 
 
     <com.mercadopago.customviews.MPTextView
@@ -24,18 +24,20 @@
         android:id="@+id/button"
         android:layout_width="200dp"
         android:layout_height="50dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
         android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
         android:background="@drawable/mpsdk_button">
+
         <com.mercadopago.customviews.MPTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:textSize="19dp"
+            android:text="Hacer otra recarga"
             android:textColor="@color/mpsdk_white"
-            android:text="Hacer otra recarga"/>
+            android:textSize="19dp" />
     </FrameLayout>
+
     <View
         android:id="@+id/mpsdkSeparator"
         android:layout_width="match_parent"

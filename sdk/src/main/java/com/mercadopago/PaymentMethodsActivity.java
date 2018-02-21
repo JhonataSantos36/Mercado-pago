@@ -1,8 +1,10 @@
 package com.mercadopago;
 
-import android.app.Activity;
+
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -13,7 +15,6 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.mercadopago.adapters.PaymentMethodsAdapter;
 import com.mercadopago.core.MercadoPagoComponents;
-import com.mercadopago.decorations.DividerItemDecoration;
 import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.preferences.PaymentPreference;
@@ -37,7 +38,6 @@ public class PaymentMethodsActivity extends MercadoPagoBaseActivity implements P
     protected TextView mBankDealsTextView;
     protected TextView mTitle;
 
-    private Activity mActivity;
     private PaymentMethodsPresenter mPresenter;
     private PaymentMethodsProvider mResourcesProvider;
 
@@ -81,9 +81,9 @@ public class PaymentMethodsActivity extends MercadoPagoBaseActivity implements P
     }
 
     protected void initializeControls() {
-        mRecyclerView = (RecyclerView) findViewById(R.id.mpsdkPaymentMethodsList);
+        mRecyclerView = findViewById(R.id.mpsdkPaymentMethodsList);
         mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
 
         // Set a linear layout manager
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -96,9 +96,6 @@ public class PaymentMethodsActivity extends MercadoPagoBaseActivity implements P
 
         setContentView();
         initializeControls();
-
-        mActivity = this;
-
         mPresenter.start();
     }
 
@@ -108,14 +105,15 @@ public class PaymentMethodsActivity extends MercadoPagoBaseActivity implements P
 
     private void initializeToolbar() {
 
-        mToolbar = (Toolbar) findViewById(R.id.mpsdkToolbar);
-        mBankDealsTextView = (TextView) findViewById(R.id.mpsdkBankDeals);
-        mTitle = (TextView) findViewById(R.id.mpsdkToolbarTitle);
+        mToolbar = findViewById(R.id.mpsdkToolbar);
+        mBankDealsTextView = findViewById(R.id.mpsdkBankDeals);
+        mTitle = findViewById(R.id.mpsdkToolbarTitle);
 
         setSupportActionBar(mToolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        ActionBar supportActionBar = getSupportActionBar();
+        supportActionBar.setDisplayShowTitleEnabled(false);
+        supportActionBar.setDisplayHomeAsUpEnabled(true);
+        supportActionBar.setDisplayShowHomeEnabled(true);
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -150,7 +148,7 @@ public class PaymentMethodsActivity extends MercadoPagoBaseActivity implements P
 
     @Override
     public void showPaymentMethods(List<PaymentMethod> paymentMethods) {
-        mRecyclerView.setAdapter(new PaymentMethodsAdapter(mActivity, paymentMethods, new View.OnClickListener() {
+        mRecyclerView.setAdapter(new PaymentMethodsAdapter(this, paymentMethods, new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // Return to parent
@@ -165,12 +163,12 @@ public class PaymentMethodsActivity extends MercadoPagoBaseActivity implements P
 
     @Override
     public void showProgress() {
-        LayoutUtil.showProgressLayout(mActivity);
+        LayoutUtil.showProgressLayout(this);
     }
 
     @Override
     public void hideProgress() {
-        LayoutUtil.showRegularLayout(mActivity);
+        LayoutUtil.showRegularLayout(this);
     }
 
     @Override
@@ -185,7 +183,7 @@ public class PaymentMethodsActivity extends MercadoPagoBaseActivity implements P
             @Override
             public void onClick(View v) {
                 new MercadoPagoComponents.Activities.BankDealsActivityBuilder()
-                        .setActivity(mActivity)
+                        .setActivity(PaymentMethodsActivity.this)
                         .setMerchantPublicKey(mMerchantPublicKey)
                         .startActivity();
             }

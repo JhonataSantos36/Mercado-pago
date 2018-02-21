@@ -3,9 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fillViewport="true"
     android:orientation="vertical"
-    android:background="@color/mpsdk_amex"
-    android:fillViewport="true">
+    android:theme="@style/Theme.AppTheme.Amex">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,8 +16,8 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
-            android:layout_gravity="center_vertical">
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -28,23 +28,23 @@
                 <com.mercadopago.customviews.MPTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
                     android:layout_gravity="center"
-                    android:textSize="20sp"
-                    android:textColor="@color/mpsdk_black"
                     android:layout_margin="10dp"
-                    android:text="Payment METHOD"/>
+                    android:gravity="center_vertical"
+                    android:text="Payment METHOD"
+                    android:textColor="@color/mpsdk_black"
+                    android:textSize="20sp" />
 
                 <com.mercadopago.customviews.MPTextView
                     android:id="@+id/label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
                     android:layout_gravity="center"
-                    android:textSize="27sp"
-                    android:textColor="@color/mpsdk_black"
                     android:layout_marginBottom="20dp"
-                    tools:text="Tarjeta"/>
+                    android:gravity="center"
+                    android:textColor="@color/mpsdk_black"
+                    android:textSize="27sp"
+                    tools:text="Tarjeta" />
 
             </LinearLayout>
 
@@ -52,14 +52,14 @@
 
         <Button
             android:id="@+id/button"
+            style="@style/mpsdk_button_normal"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            style="@style/mpsdk_button_normal"
+            android:layout_margin="25dp"
             android:background="@drawable/mpsdk_button_bg_stroke"
             android:text="Continuar"
-            android:textSize="16dp"
             android:textColor="@color/mpsdk_white_background"
-            android:layout_margin="25dp"/>
+            android:textSize="16dp" />
 
     </LinearLayout>
 </ScrollView>

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/mpsdk_review_gray_background">
+    android:theme="@style/Theme.AppTheme.Grey">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -36,7 +36,7 @@
             android:paddingStart="25dp"
             android:text="Número de teléfono:"
             android:textColor="@color/mpsdk_review_payment_text"
-            android:textSize="24dp"/>
+            android:textSize="24dp" />
 
 
         <com.mercadopago.customviews.MPTextView
@@ -59,10 +59,9 @@
             android:layout_marginStart="25dp"
             android:layout_marginTop="20dp"
             android:gravity="center"
-            android:background="@color/mpsdk_review_gray_background"
-            android:textColor="@color/mpsdk_background_blue"
-            android:textAllCaps="false"
             android:text="Cambiar"
+            android:textAllCaps="false"
+            android:textColor="@color/mpsdk_background_blue"
             android:textSize="18dp" />
     </LinearLayout>
 

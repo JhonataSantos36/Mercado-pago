@@ -4,11 +4,9 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.CheckBox;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -16,7 +14,6 @@ import android.widget.Toast;
 import com.mercadopago.core.MercadoPagoCheckout;
 import com.mercadopago.customviews.MPButton;
 import com.mercadopago.examples.R;
-import com.mercadopago.examples.utils.ColorPickerDialog;
 import com.mercadopago.examples.utils.ExamplesUtils;
 import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.hooks.ExampleHooks;
@@ -39,16 +36,10 @@ public class CheckoutExampleActivity extends AppCompatActivity {
     private View mRegularLayout;
     private String mPublicKey;
 
-    private Integer mDefaultColor;
-    private CheckBox mDarkFontEnabled;
+
     private CheckBox mHooksEnabled;
-    private ImageView mColorSample;
-    private Integer mSelectedColor;
-    private CheckBox mVisaExcluded;
-    private CheckBox mCashExcluded;
-    private TextView mJsonConfigButton;
+
     private String mCheckoutPreferenceId;
-    private MPButton mContinueButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,17 +48,15 @@ public class CheckoutExampleActivity extends AppCompatActivity {
         mActivity = this;
         mPublicKey = ExamplesUtils.DUMMY_MERCHANT_PUBLIC_KEY;
         mCheckoutPreferenceId = ExamplesUtils.DUMMY_PREFERENCE_ID;
-        mDefaultColor = ContextCompat.getColor(this, R.color.colorPrimary);
 
-        mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
+        mProgressBar = findViewById(R.id.progressBar);
         mRegularLayout = findViewById(R.id.regularLayout);
-        mDarkFontEnabled = (CheckBox) findViewById(R.id.darkFontEnabled);
-        mHooksEnabled = (CheckBox) findViewById(R.id.hooks_enabled);
-        mColorSample = (ImageView) findViewById(R.id.colorSample);
-        mVisaExcluded = (CheckBox) findViewById(R.id.visaExcluded);
-        mCashExcluded = (CheckBox) findViewById(R.id.cashExcluded);
-        mJsonConfigButton = (TextView) findViewById(R.id.jsonConfigButton);
-        mContinueButton = findViewById(R.id.continueButton);
+
+        mHooksEnabled = findViewById(R.id.hooks_enabled);
+
+        TextView mJsonConfigButton = findViewById(R.id.jsonConfigButton);
+        MPButton mContinueButton = findViewById(R.id.continueButton);
+
         mJsonConfigButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -80,7 +69,6 @@ public class CheckoutExampleActivity extends AppCompatActivity {
                 onContinueClicked();
             }
         });
-        mSelectedColor = ContextCompat.getColor(this, R.color.mpsdk_colorPrimary);
     }
 
     private void onContinueClicked() {
@@ -147,26 +135,6 @@ public class CheckoutExampleActivity extends AppCompatActivity {
     private void showRegularLayout() {
         mProgressBar.setVisibility(View.GONE);
         mRegularLayout.setVisibility(View.VISIBLE);
-    }
-
-    public void changeColor(final View view) {
-        new ColorPickerDialog(this, mDefaultColor, new ColorPickerDialog.OnColorSelectedListener() {
-            @Override
-            public void onColorSelected(int color) {
-                mDarkFontEnabled.setEnabled(true);
-                mColorSample.setBackgroundColor(color);
-                mSelectedColor = color;
-            }
-        }).show();
-    }
-
-    public void resetSelection(final View view) {
-        mSelectedColor = null;
-        mColorSample.setBackgroundColor(mDefaultColor);
-        mDarkFontEnabled.setChecked(false);
-        mDarkFontEnabled.setEnabled(false);
-        mVisaExcluded.setChecked(false);
-        mCashExcluded.setChecked(false);
     }
 
     private void startJsonInput() {

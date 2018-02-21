@@ -1,28 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">MP Android SDK Samples</string>
-    <string name="hello_world">Hello world!</string>
-    <string-array name="examples">
-        <item>@string/title_activity_step1</item>
-        <item>@string/title_activity_step2</item>
-        <item>@string/title_activity_step3</item>
-        <item>@string/title_activity_step4</item>
-    </string-array>
     <string name="welcome_title">Check these integration options. From simple to full payment flows.</string>
     <string name="welcome_text">Try our Checkout, or create a custom one using our UI components or our services. </string>
-    <string name="title_activity_step1">Simple card form</string>
-    <string name="title_activity_step2">Saved cards</string>
-    <string name="title_activity_step3">Pay with installments</string>
-    <string name="title_activity_step4">Off-line payment methods</string>
-    <string name="title_activity_step5">Full payment flow</string>
-    <string name="title_activity_card">Enter your credit card</string>
-    <string name="title_activity_simple_vault">Pay</string>
-    <string name="title_activity_final_vault">Pay</string>
-    <string name="step1_description">This payment flow checks credit card data entered by the user against payment method rules.</string>
-    <string name="step2_description">This payment flow allows saved cards selection.</string>
-    <string name="step3_description">Payment flow with installments and card issuers management.</string>
-    <string name="step4_description">This payment flow includes off-line payment methods.</string>
-    <string name="step5_description">Default payment flow. Includes every payment module.</string>
 
     <string name="step1_choice_description">You can collect data through a few screens or use an unique form that will automatically fill the most it can.</string>
     <string name="step3_choice_description">A bank selection screen can be added to the simple flow, or use the guessing form.</string>
@@ -31,9 +11,6 @@
 
     <string name="simple_card_flow_label">Different screens</string>
     <string name="guessing_card_flow_label">Guessing form</string>
-    <string name="step6_description">Default Payment Flow. Collecting card data info, installments, tokenId, payment and congrats. You can pay with MercadoPago app too.</string>
-    <string name="opening_mp">Launching MercadoPago…</string>
-    <string name="title_activity_step6">Checkout</string>
 
     <string name="payment_received_congrats">"Congratulations, you received a payment with id: "</string>
     <string name="preference_creation_failed">Preference creation failed</string>

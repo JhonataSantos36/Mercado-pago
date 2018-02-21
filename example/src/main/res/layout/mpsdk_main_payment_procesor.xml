@@ -5,15 +5,14 @@
     android:id="@+id/mpsdkProgressLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
-    android:background="@color/mpsdk_background_loading">
+    android:gravity="center">
 
 
     <com.mercadopago.customviews.MPProgressBar
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        app:mpsdk_ui_stroke="@dimen/mpsdk_progress_stroke"/>
+        app:mpsdk_ui_stroke="@dimen/mpsdk_progress_stroke" />
 
 
 </FrameLayout>

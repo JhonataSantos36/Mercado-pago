@@ -1,23 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+
     <ProgressBar
         android:id="@+id/progressBar"
-        android:visibility="gone"
         style="?android:attr/progressBarStyleLarge"
-        android:layout_gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_marginBottom="8dp" />
+        android:layout_gravity="center"
+        android:layout_marginBottom="8dp"
+        android:visibility="gone" />
 
     <ScrollView
+        android:id="@+id/regularLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/regularLayout"
         android:visibility="visible">
 
         <LinearLayout
@@ -29,90 +28,49 @@
             <ImageView
                 android:layout_width="150dp"
                 android:layout_height="100dp"
+                android:layout_gravity="center_horizontal"
                 android:layout_marginTop="20dp"
-                android:src="@drawable/plugandplay"
-                android:layout_gravity="center_horizontal" />
+                android:src="@drawable/plugandplay" />
 
             <com.mercadopago.customviews.MPTextView
+                style="@style/big_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/checkout_title"
-                android:layout_marginTop="20dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:singleLine="false"
                 android:layout_gravity="center"
-                style="@style/big_label"/>
-
-            <com.mercadopago.customviews.MPTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/checkout_description"
-                android:layout_marginTop="20dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
+                android:layout_marginTop="20dp"
                 android:singleLine="false"
+                android:text="@string/checkout_title" />
+
+            <com.mercadopago.customviews.MPTextView
+                style="@style/form_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="20dp"
                 android:gravity="center_horizontal"
-                style="@style/form_label"/>
+                android:singleLine="false"
+                android:text="@string/checkout_description" />
 
             <com.mercadopago.customviews.MPButton
                 android:id="@+id/continueButton"
+                style="@style/mpsdk_button_normal"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/mpsdk_button_height"
                 android:layout_marginTop="25dp"
-                android:text="@string/mpsdk_continue_label"
-                style="@style/mpsdk_button_normal"/>
+                android:text="@string/mpsdk_continue_label" />
 
             <TextView
-                    android:id="@+id/jsonConfigButton"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:textColor="@color/mpsdk_background_blue"
-                    android:text="@string/json_config_button_text"
-                    android:layout_marginTop="10dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/mpsdk_button_height"/>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
+                android:id="@+id/jsonConfigButton"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/mpsdk_button_height"
                 android:layout_gravity="center"
-                android:layout_marginTop="10dp">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:onClick="changeColor"
-                    android:layout_gravity="center">
-
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:background="@color/colorPrimary"
-                        android:id="@+id/colorSample"/>
-
-                    <com.mercadopago.customviews.MPTextView
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginStart="5dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/pick_color"
-                        style="@style/form_label"/>
-                </LinearLayout>
-
-                <CheckBox
-                    android:enabled="false"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginLeft="10dp"
-                    android:id="@+id/darkFontEnabled"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="@string/dark_font"
-                    android:textSize="14dp"/>
-            </LinearLayout>
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:text="@string/json_config_button_text"
+                android:textColor="@color/mpsdk_background_blue" />
 
             <CheckBox
                 android:id="@+id/hooks_enabled"
@@ -120,19 +78,10 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="@string/enable_hooks"
-                android:textSize="14dp"/>
+                android:textSize="14sp" />
 
-            <com.mercadopago.customviews.MPTextView
-                android:layout_marginTop="15dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:layout_gravity="center"
-                android:textColor="@color/mpsdk_color_link"
-                android:textSize="15dp"
-                android:clickable="true"
-                android:onClick="resetSelection"
-                android:text="@string/reset"/>
         </LinearLayout>
+
     </ScrollView>
+
 </LinearLayout>

@@ -2,6 +2,7 @@ package com.mercadopago;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -13,7 +14,6 @@ import com.mercadopago.callbacks.Callback;
 import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.callbacks.OnSelectedCallback;
 import com.mercadopago.core.MercadoPagoServicesAdapter;
-import com.mercadopago.decorations.DividerItemDecoration;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.BankDeal;
 import com.mercadopago.tracker.FlowHandler;
@@ -81,9 +81,9 @@ public class BankDealsActivity extends MercadoPagoActivity {
     @Override
     protected void initializeControls() {
         initializeToolbar();
-        mRecyclerView = (RecyclerView) findViewById(R.id.mpsdkBankDealsList);
+        mRecyclerView = findViewById(R.id.mpsdkBankDealsList);
         mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 

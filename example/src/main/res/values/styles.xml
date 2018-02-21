@@ -1,3 +1,4 @@
+
 <resources>
     <style name="button_normal" parent="@android:style/Widget.Button">
         <item name="android:background">@drawable/button</item>

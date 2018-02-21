@@ -37,14 +37,13 @@ public class CellphoneReview extends Reviewable {
 
     @Override
     public View inflateInParent(ViewGroup parent, boolean attachToRoot) {
-        mView = LayoutInflater.from(mContext)
-                .inflate(R.layout.cellphone_review, parent, attachToRoot);
+        mView = LayoutInflater.from(mContext).inflate(R.layout.cellphone_review, parent, attachToRoot);
         return mView;
     }
 
     @Override
     public void initializeControls() {
-        mNumberTextView = (TextView) mView.findViewById(R.id.phoneNumber);
+        mNumberTextView = mView.findViewById(R.id.phoneNumber);
         mNumberEdition = mView.findViewById(R.id.phoneNumberEdition);
         mNumberEdition.setOnClickListener(new View.OnClickListener() {
             @Override
