@@ -67,7 +67,6 @@ public class InstallmentsActivity extends MercadoPagoBaseActivity implements Ins
     protected String mPublicKey;
     protected String mPrivateKey;
     protected boolean mActivityActive;
-    protected PaymentPreference mPaymentPreference;
 
     protected String mDefaultBaseURL;
     protected String mMerchantDiscountBaseURL;
