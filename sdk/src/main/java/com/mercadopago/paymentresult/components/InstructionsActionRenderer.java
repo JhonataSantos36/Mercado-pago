@@ -1,8 +1,8 @@
 package com.mercadopago.paymentresult.components;
 
 import android.content.Context;
-import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.mercadopago.R;
 import com.mercadopago.components.LinkAction;
@@ -17,8 +17,8 @@ import com.mercadopago.model.InstructionActionInfo;
 public class InstructionsActionRenderer extends Renderer<InstructionsAction> {
 
     @Override
-    public View render(final InstructionsAction component, final Context context) {
-        final View actionView = LayoutInflater.from(context).inflate(R.layout.mpsdk_payment_result_instructions_action, null, false);
+    public View render(final InstructionsAction component, final Context context, final ViewGroup parent) {
+        final View actionView = inflate(R.layout.mpsdk_payment_result_instructions_action, parent);
         final MPTextView actionTextView = actionView.findViewById(R.id.instructionAction);
 
         if (component.props.instructionActionInfo.getTag().equals(InstructionActionInfo.Tags.LINK)) {

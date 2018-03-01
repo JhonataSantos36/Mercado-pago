@@ -1,8 +1,8 @@
 package com.mercadopago.paymentresult.components;
 
 import android.content.Context;
-import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -12,9 +12,8 @@ import com.mercadopago.components.Renderer;
 public class FooterRenderer extends Renderer<Footer> {
 
     @Override
-    public View render(final Footer component, final Context context) {
-        final View view = LayoutInflater.from(context)
-                .inflate(R.layout.mpsdk_payment_result_footer, null);
+    public View render(final Footer component, final Context context, final ViewGroup parent) {
+        final View view = inflate(R.layout.mpsdk_payment_result_footer, parent);
 
         final Button button = view.findViewById(R.id.button);
         final TextView link = view.findViewById(R.id.link);

@@ -1,7 +1,6 @@
 package com.mercadopago.paymentresult.components;
 
 import android.content.Context;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -17,8 +16,8 @@ import com.mercadopago.customviews.MPTextView;
 public class BodyErrorRenderer extends Renderer<BodyError> {
 
     @Override
-    public View render(final BodyError component, final Context context) {
-        final View bodyErrorView = LayoutInflater.from(context).inflate(R.layout.mpsdk_payment_result_body_error, null, false);
+    public View render(final BodyError component, final Context context, final ViewGroup parent) {
+        final View bodyErrorView = inflate(R.layout.mpsdk_payment_result_body_error, parent);
         final ViewGroup bodyViewGroup = bodyErrorView.findViewById(R.id.bodyErrorContainer);
         final MPTextView titleTextView = bodyErrorView.findViewById(R.id.paymentResultBodyErrorTitle);
         final MPTextView descriptionTextView = bodyErrorView.findViewById(R.id.paymentResultBodyErrorDescription);

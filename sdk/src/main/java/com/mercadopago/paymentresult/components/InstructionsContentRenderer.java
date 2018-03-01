@@ -1,7 +1,6 @@
 package com.mercadopago.paymentresult.components;
 
 import android.content.Context;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -16,8 +15,8 @@ import com.mercadopago.components.RendererFactory;
 public class InstructionsContentRenderer extends Renderer<InstructionsContent> {
 
     @Override
-    public View render(final InstructionsContent component, final Context context) {
-        final View instructionsView = LayoutInflater.from(context).inflate(R.layout.mpsdk_payment_result_instructions_content, null, false);
+    public View render(final InstructionsContent component, final Context context, final ViewGroup parent) {
+        final View instructionsView = inflate(R.layout.mpsdk_payment_result_instructions_content, parent);
         final ViewGroup parentViewGroup = instructionsView.findViewById(R.id.mpsdkInstructionsContentContainer);
         final View bottomMarginView = instructionsView.findViewById(R.id.mpsdkContentBottomMargin);
 
@@ -28,29 +27,19 @@ public class InstructionsContentRenderer extends Renderer<InstructionsContent> {
         }
 
         if (component.hasInfo()) {
-            final Renderer infoRenderer = RendererFactory.create(context, component.getInfoComponent());
-            final View info = infoRenderer.render();
-            parentViewGroup.addView(info);
+            RendererFactory.create(context, component.getInfoComponent()).render(parentViewGroup);
         }
         if (component.hasReferences()) {
-            final Renderer referencesRenderer = RendererFactory.create(context, component.getReferencesComponent());
-            final View references = referencesRenderer.render();
-            parentViewGroup.addView(references);
+            RendererFactory.create(context, component.getReferencesComponent()).render(parentViewGroup);
         }
         if (component.hasTertiaryInfo()) {
-            final Renderer tertiaryInfoRenderer = RendererFactory.create(context, component.getTertiaryInfoComponent());
-            final View tertiaryInfo = tertiaryInfoRenderer.render();
-            parentViewGroup.addView(tertiaryInfo);
+            RendererFactory.create(context, component.getTertiaryInfoComponent()).render(parentViewGroup);
         }
         if (component.hasAccreditationTime()) {
-            final Renderer accreditationTimeRenderer = RendererFactory.create(context, component.getAccreditationTimeComponent());
-            final View accreditationTime = accreditationTimeRenderer.render();
-            parentViewGroup.addView(accreditationTime);
+            RendererFactory.create(context, component.getAccreditationTimeComponent()).render(parentViewGroup);
         }
         if (component.hasActions()) {
-            final Renderer actionsRenderer = RendererFactory.create(context, component.getActionsComponent());
-            final View actions = actionsRenderer.render();
-            parentViewGroup.addView(actions);
+            RendererFactory.create(context, component.getActionsComponent()).render(parentViewGroup);
         }
 
         return instructionsView;

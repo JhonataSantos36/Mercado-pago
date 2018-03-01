@@ -2,7 +2,6 @@ package com.mercadopago.paymentresult.components;
 
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -19,8 +18,8 @@ import com.mercadopago.customviews.MPTextView;
 
 public class PaymentMethodRenderer extends Renderer<PaymentMethod> {
     @Override
-    public View render(final PaymentMethod component, final Context context) {
-        final View paymentMethodView = LayoutInflater.from(context).inflate(R.layout.mpsdk_payment_method_component, null, false);
+    public View render(final PaymentMethod component, final Context context, final ViewGroup parent) {
+        final View paymentMethodView = inflate(R.layout.mpsdk_payment_method_component, parent);
         final ViewGroup paymentMethodViewGroup = paymentMethodView.findViewById(R.id.mpsdkPaymentMethodContainer);
         final ImageView imageView = paymentMethodView.findViewById(R.id.mpsdkPaymentMethodIcon);
         final MPTextView descriptionTextView = paymentMethodView.findViewById(R.id.mpsdkPaymentMethodDescription);
@@ -29,9 +28,7 @@ public class PaymentMethodRenderer extends Renderer<PaymentMethod> {
 
         imageView.setImageDrawable(ContextCompat.getDrawable(context, component.getIconResource()));
 
-        final Renderer totalAmountRenderer = RendererFactory.create(context, component.getTotalAmountComponent());
-        final View amountView = totalAmountRenderer.render();
-        totalAmountContainer.addView(amountView);
+        RendererFactory.create(context, component.getTotalAmountComponent()).render(totalAmountContainer);
 
         setText(descriptionTextView, component.getDescription());
         setText(statementDescriptionTextView, component.getDisclaimer());

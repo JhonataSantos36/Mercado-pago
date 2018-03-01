@@ -4,8 +4,8 @@ import android.content.Context;
 import android.support.annotation.CallSuper;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.mercadopago.R;
@@ -14,9 +14,8 @@ public class ToolbarRenderer extends Renderer<ToolbarComponent> {
 
     @Override
     @CallSuper
-    public View render(final ToolbarComponent component, final Context context) {
-        final View view = LayoutInflater.from(context)
-                .inflate(R.layout.mpsdk_toolbar_renderer, null);
+    public View render(final ToolbarComponent component, final Context context, final ViewGroup parent) {
+        final View view = inflate(R.layout.mpsdk_toolbar_renderer, parent);
         renderToolbar(view, component, context);
         return view;
     }

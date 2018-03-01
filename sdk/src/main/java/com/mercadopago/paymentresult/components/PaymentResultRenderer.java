@@ -1,7 +1,6 @@
 package com.mercadopago.paymentresult.components;
 
 import android.content.Context;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -16,29 +15,25 @@ import com.mercadopago.components.RendererFactory;
 public class PaymentResultRenderer extends Renderer<PaymentResultContainer> {
 
     @Override
-    public View render(final PaymentResultContainer component, final Context context) {
-        View view;
+    public View render(final PaymentResultContainer component, final Context context, final ViewGroup parent) {
+        final View view;
 
         if (component.isLoading()) {
 
-            view = RendererFactory.create(context, component.getLoadingComponent()).render();
+            view = RendererFactory.create(context, component.getLoadingComponent()).render(parent);
 
         } else {
 
-            view = LayoutInflater.from(context).inflate(R.layout.mpsdk_payment_result_container, null, false);
+            view = inflate(R.layout.mpsdk_payment_result_container, parent);
             final ViewGroup parentViewGroup = view.findViewById(R.id.mpsdkPaymentResultContainer);
 
-            final Renderer headerRenderer = RendererFactory.create(context, component.getHeaderComponent());
-            final View header = headerRenderer.render();
-            parentViewGroup.addView(header);
+            RendererFactory.create(context, component.getHeaderComponent()).render(parentViewGroup);
 
             if (component.hasBodyComponent()) {
-                final Renderer bodyRenderer = RendererFactory.create(context, component.getBodyComponent());
-                final View body = bodyRenderer.render();
-                parentViewGroup.addView(body);
+                RendererFactory.create(context, component.getBodyComponent()).render(parentViewGroup);
             }
 
-            parentViewGroup.addView(RendererFactory.create(context, component.getFooterContainer()).render());
+            RendererFactory.create(context, component.getFooterContainer()).render(parentViewGroup);
         }
 
         return view;
