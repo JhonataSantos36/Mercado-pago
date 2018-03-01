@@ -1,9 +1,10 @@
 package com.mercadopago.model;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.location.Criteria;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
@@ -13,6 +14,7 @@ import android.os.Looper;
 import android.os.StatFs;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
+import android.support.v4.app.ActivityCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Display;
@@ -34,6 +36,8 @@ import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import javax.annotation.Nonnull;
 
 public class Fingerprint {
     private static final String TAG = "Fingerprint";
@@ -80,9 +84,10 @@ public class Fingerprint {
 
     public Fingerprint(Context context) {
         mContext = context;
-
         mLocationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
         mLocationListener = new FingerprintLocationListener();
+        registerLocationUpdate(context);
+
         vendorIds = getVendorIds();
         model = getModel();
         os = getOs();
@@ -92,7 +97,21 @@ public class Fingerprint {
         diskSpace = getDiskSpace();
         freeDiskSpace = getFreeDiskSpace();
         vendorSpecificAttributes = getVendorSpecificAttributes();
-        location = getLocation();
+        location = getLocation(context);
+    }
+
+    @SuppressLint("MissingPermission")
+    private void registerLocationUpdate(Context context) {
+        if (isLocationPermissionGranted(context)) {
+            mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
+                    0, 0, mLocationListener, Looper.getMainLooper());
+        }
+    }
+
+    private boolean isLocationPermissionGranted(Context context) {
+        return mLocationManager.getAllProviders().contains(LocationManager.NETWORK_PROVIDER) &&
+                ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                || ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
     }
 
     public ArrayList<VendorId> getVendorIds() {
@@ -230,41 +249,23 @@ public class Fingerprint {
         return new VendorSpecificAttributes();
     }
 
-    public Location getLocation() {
-        Location location = new Location();
-        try {
-            // we're always gonna request a new location to keep it updated on local storage, check if we've
-            // location provider available since it crashes on simulator.
-            if (mLocationManager.getAllProviders().contains(LocationManager.NETWORK_PROVIDER)) {
-                Criteria criteria = new Criteria();
-                criteria.setAccuracy(Criteria.ACCURACY_COARSE);
-                mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
-                        0, 0, mLocationListener, Looper.getMainLooper());
-            }
-
-            // we've a few options here to get the location while we pull a new one.
-            // 1. get it from the local storage.
-            // 2. get it from provider's cache on the case we don't have any stored.
-            android.location.Location cached = mLocationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-            if (location.hasLocation()) {
-                return location;
-            } else if (cached != null) {
-                location = new Location(cached.getLatitude(), cached.getLongitude());
-                setLocation(location);
-
-                return location;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
+    public Location getLocation(Context context) {
+        Location diskLocation = Location.fromDisk(context);
+        Location resolvedLocation = getLocationFromNetworkOrDefault(context, diskLocation);
+        return resolvedLocation.hasLocation() ? resolvedLocation : null;
     }
 
-    private void setLocation(Location location) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putString(SHARED_PREFS_FINGERPRINT_LOCATION, location.toString());
-        editor.commit();
+    @SuppressLint("MissingPermission")
+    private Location getLocationFromNetworkOrDefault(Context context, Location defLocation) {
+        if (isLocationPermissionGranted(context)) {
+            android.location.Location cached = mLocationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+            if (cached != null) {
+                Location location = new Location(cached.getLatitude(), cached.getLongitude());
+                location.save(context);
+                return location;
+            }
+        }
+        return defLocation;
     }
 
     private class VendorId {
@@ -287,24 +288,24 @@ public class Fingerprint {
 
     private class VendorSpecificAttributes {
 
-        public boolean featureCamera;
-        public boolean featureFlash;
-        public boolean featureFrontCamera;
-        public String product;
-        public String device;
-        public String platform;
-        public String brand;
-        public boolean featureAccelerometer;
-        public boolean featureBluetooth;
-        public boolean featureCompass;
-        public boolean featureGps;
-        public boolean featureGyroscope;
-        public boolean featureMicrophone;
-        public boolean featureNfc;
-        public boolean featureTelephony;
-        public boolean featureTouchScreen;
-        public String manufacturer;
-        public float screenDensity;
+        boolean featureCamera;
+        boolean featureFlash;
+        boolean featureFrontCamera;
+        String product;
+        String device;
+        String platform;
+        String brand;
+        boolean featureAccelerometer;
+        boolean featureBluetooth;
+        boolean featureCompass;
+        boolean featureGps;
+        boolean featureGyroscope;
+        boolean featureMicrophone;
+        boolean featureNfc;
+        boolean featureTelephony;
+        boolean featureTouchScreen;
+        String manufacturer;
+        float screenDensity;
 
         private VendorSpecificAttributes() {
             this.featureCamera = getFeatureCamera();
@@ -400,30 +401,27 @@ public class Fingerprint {
         }
     }
 
-    private class Location {
+    private static class Location {
         private static final String LOCATION_TIMESTAMP = "timestamp";
         private static final String LOCATION_LATITUDE = "latitude";
         private static final String LOCATION_LONGITUDE = "longitude";
 
         private JSONObject location;
 
-        public Location() {
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
-            try {
-                location = new JSONObject(prefs.getString(SHARED_PREFS_FINGERPRINT_LOCATION, "{}"));
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+        private Location(@Nonnull JSONObject location) {
+            this.location = location;
         }
 
-        public Location(double latitude, double longitude) {
+        Location(double latitude, double longitude) {
             location = new JSONObject();
             try {
                 location.put(LOCATION_TIMESTAMP, System.currentTimeMillis() / 1000L);
                 location.put(LOCATION_LATITUDE, latitude);
                 location.put(LOCATION_LONGITUDE, longitude);
             } catch (JSONException ignored) {
+                // Do nothing
             }
+
         }
 
         @Override
@@ -432,47 +430,40 @@ public class Fingerprint {
             try {
                 return gson.toJson(this);
             } catch (Exception ignored) {
+                // Do nothing
             }
-
             return null;
         }
 
-        public boolean hasLocation() {
-            return getLatitude() != 0 && getLatitude() != 0;
+        static Location fromDisk(Context context) {
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+            String cache = prefs.getString(SHARED_PREFS_FINGERPRINT_LOCATION, null);
+            return cache == null ? Location.invalidLocation() : Location.fromString(cache);
         }
 
-        public long getTimestamp() {
-            if (location != null) {
-                try {
-                    return location.getLong(LOCATION_TIMESTAMP);
-                } catch (JSONException ignored) {
-                }
+        private static Location fromString(String cache) {
+            try {
+                JSONObject jsonObject = new JSONObject(cache);
+                return new Location(jsonObject);
+            } catch (JSONException exception) {
+                return Location.invalidLocation();
             }
-
-            return System.currentTimeMillis() / 1000L;
         }
 
-
-        public double getLatitude() {
-            if (location != null) {
-                try {
-                    return location.getDouble(LOCATION_LATITUDE);
-                } catch (JSONException ignored) {
-                }
-            }
-
-            return 0;
+        private static Location invalidLocation() {
+            return new Location(new JSONObject());
         }
 
-        public double getLongitude() {
-            if (location != null) {
-                try {
-                    return location.getDouble(LOCATION_LONGITUDE);
-                } catch (JSONException e) {
-                }
-            }
+        boolean hasLocation() {
+            return location.has(LOCATION_LATITUDE)
+                    && location.has(LOCATION_LATITUDE);
+        }
 
-            return 0;
+        public void save(Context context) {
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putString(SHARED_PREFS_FINGERPRINT_LOCATION, location.toString());
+            editor.apply();
         }
     }
 
@@ -480,7 +471,9 @@ public class Fingerprint {
 
         @Override
         public void onLocationChanged(android.location.Location location) {
-            setLocation(new Location(location.getLatitude(), location.getLongitude()));
+            Location newLocation = new Location(location.getLatitude(), location.getLongitude());
+            newLocation.save(mContext);
+
             try {
                 mLocationManager.removeUpdates(mLocationListener);
             } catch (Exception e) {
@@ -490,17 +483,17 @@ public class Fingerprint {
 
         @Override
         public void onStatusChanged(String s, int i, Bundle bundle) {
-            //Do something
+            // do nothing
         }
 
         @Override
         public void onProviderEnabled(String s) {
-            //Do something
+            // do nothing
         }
 
         @Override
         public void onProviderDisabled(String s) {
-            //Do something
+            // do nothing
         }
     }
 }
