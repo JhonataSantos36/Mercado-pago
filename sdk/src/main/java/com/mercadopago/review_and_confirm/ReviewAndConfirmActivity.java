@@ -9,11 +9,12 @@ import com.mercadopago.TermsAndConditionsActivity;
 import com.mercadopago.components.Action;
 import com.mercadopago.components.ActionDispatcher;
 import com.mercadopago.components.ComponentManager;
+import com.mercadopago.mvp.MvpView;
 import com.mercadopago.review_and_confirm.actions.TermsAndConditionAction;
 import com.mercadopago.review_and_confirm.components.ReviewAndConfirmContainer;
 import com.mercadopago.review_and_confirm.models.TermsAndConditionsModel;
 
-public class ReviewAndConfirmActivity extends AppCompatActivity implements ReviewAndConfirmView, ActionDispatcher {
+public class ReviewAndConfirmActivity extends AppCompatActivity implements ActionDispatcher, MvpView {
 
     private static final String EXTRA_TERMS_AND_CONDITIONS = "extra_terms_and_conditions";
 
