@@ -2,8 +2,11 @@ package com.mercadopago.components;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -30,7 +33,11 @@ public abstract class Renderer<T extends Component> {
     }
 
     public View render() {
-        final View view = render(component, context);
+        return render(null);
+    }
+
+    public View render(@Nullable final ViewGroup parent) {
+        final View view = render(component, context, parent);
         view.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
             @Override
             public void onViewAttachedToWindow(View v) {
@@ -45,7 +52,13 @@ public abstract class Renderer<T extends Component> {
         return view;
     }
 
-    public abstract View render(final T component, final Context context);
+    protected abstract View render(@NonNull final T component,
+                                    @NonNull final Context context,
+                                    @Nullable final ViewGroup parent);
+
+    protected View inflate(@LayoutRes int layout, @Nullable final ViewGroup parent) {
+        return LayoutInflater.from(context).inflate(layout, parent);
+    }
 
     public void wrapHeight(@NonNull final ViewGroup viewGroup) {
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(

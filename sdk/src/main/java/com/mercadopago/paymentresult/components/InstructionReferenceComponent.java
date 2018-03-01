@@ -21,10 +21,6 @@ public class InstructionReferenceComponent extends Component<InstructionReferenc
 
         public final InstructionReference reference;
 
-        public Props(@NonNull InstructionReference reference) {
-            this.reference = reference;
-        }
-
         public Props(final Builder builder) {
             this.reference = builder.reference;
         }

@@ -1,8 +1,8 @@
 package com.mercadopago.paymentresult.components;
 
 import android.content.Context;
-import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.mercadopago.R;
 import com.mercadopago.components.Renderer;
@@ -17,8 +17,8 @@ import java.util.List;
 public class InstructionsTertiaryInfoRenderer extends Renderer<InstructionsTertiaryInfo> {
 
     @Override
-    public View render(final InstructionsTertiaryInfo component, final Context context) {
-        final View secondaryInfoView = LayoutInflater.from(context).inflate(R.layout.mpsdk_payment_result_instructions_tertiary_info, null, false);
+    public View render(final InstructionsTertiaryInfo component, final Context context, final ViewGroup parent) {
+        final View secondaryInfoView = inflate(R.layout.mpsdk_payment_result_instructions_tertiary_info, parent);
         final MPTextView secondaryInfoTextView = secondaryInfoView.findViewById(R.id.msdpkTertiaryInfo);
 
         setText(secondaryInfoTextView, getTertiaryInfoText(component.props.tertiaryInfo));

@@ -11,7 +11,6 @@ import android.support.v4.content.ContextCompat;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.ImageSpan;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -31,8 +30,9 @@ import java.util.List;
 public class AccreditationTimeRenderer extends Renderer<AccreditationTime> {
 
     @Override
-    public View render(final AccreditationTime component, final Context context) {
-        final View accreditationTimeView = LayoutInflater.from(context).inflate(R.layout.mpsdk_accreditation_time, null, false);
+    public View render(final AccreditationTime component, final Context context, final ViewGroup parent) {
+
+        final View accreditationTimeView = inflate(R.layout.mpsdk_accreditation_time, parent);
         final MPTextView messageTextView = accreditationTimeView.findViewById(R.id.mpsdkAccreditationTimeMessage);
         final ViewGroup accreditationCommentsContainer = accreditationTimeView.findViewById(R.id.mpsdkAccreditationTimeComments);
 

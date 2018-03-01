@@ -1,8 +1,8 @@
 package com.mercadopago.paymentresult.components;
 
 import android.content.Context;
-import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.mercadopago.R;
 import com.mercadopago.components.Renderer;
@@ -15,8 +15,8 @@ import com.mercadopago.customviews.MPTextView;
 public class InstructionReferenceRenderer extends Renderer<InstructionReferenceComponent> {
 
     @Override
-    public View render(final InstructionReferenceComponent component, final Context context) {
-        final View referenceView = LayoutInflater.from(context).inflate(R.layout.mpsdk_payment_result_instruction_reference, null, false);
+    public View render(final InstructionReferenceComponent component, final Context context, final ViewGroup parent) {
+        final View referenceView = inflate(R.layout.mpsdk_payment_result_instruction_reference, parent);
         final MPTextView labelTextView = referenceView.findViewById(R.id.mpsdkReferenceLabel);
         final MPTextView valueTextView = referenceView.findViewById(R.id.mpsdkReferenceValue);
         final MPTextView commentTextView = referenceView.findViewById(R.id.mpsdkReferenceComment);

@@ -1,8 +1,8 @@
 package com.mercadopago.components;
 
 import android.content.Context;
-import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.mercadopago.R;
 
@@ -11,9 +11,9 @@ import com.mercadopago.R;
  */
 
 public class LoadingRenderer extends Renderer<LoadingComponent> {
+
     @Override
-    public View render(final LoadingComponent component, final Context context) {
-        return LayoutInflater.from(context)
-                .inflate(R.layout.mpsdk_view_progress_bar, null);
+    public View render(final LoadingComponent component, final Context context, final ViewGroup parent) {
+        return inflate(R.layout.mpsdk_view_progress_bar, parent);
     }
 }

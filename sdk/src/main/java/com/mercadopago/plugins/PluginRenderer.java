@@ -2,7 +2,6 @@ package com.mercadopago.plugins;
 
 import android.content.Context;
 import android.support.annotation.CallSuper;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -15,10 +14,9 @@ public abstract class PluginRenderer<T extends PluginComponent> extends Renderer
 
     @Override
     @CallSuper
-    public View render(final T component, final Context context) {
-        final ViewGroup view = (ViewGroup) LayoutInflater.from(context)
-                .inflate(R.layout.mpsdk_plugin_layout, null);
-        view.addView(RendererFactory.create(context, component.getToolbarComponent()).render());
+    public View render(final T component, final Context context, final ViewGroup parent) {
+        final ViewGroup view = (ViewGroup) inflate(R.layout.mpsdk_plugin_layout, parent);
+        RendererFactory.create(context, component.getToolbarComponent()).render(view);
 
         final View contents = renderContents(component, context);
         final LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(

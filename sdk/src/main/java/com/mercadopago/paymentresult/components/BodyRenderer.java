@@ -1,7 +1,6 @@
 package com.mercadopago.paymentresult.components;
 
 import android.content.Context;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -14,46 +13,29 @@ import com.mercadopago.components.RendererFactory;
  */
 
 public class BodyRenderer extends Renderer<Body> {
-
     @Override
-    public View render(final Body component, final Context context) {
-        final View bodyView = LayoutInflater.from(context).inflate(R.layout.mpsdk_payment_result_body, null, false);
+    public View render(final Body component, final Context context, final ViewGroup parent) {
+        final View bodyView = inflate(R.layout.mpsdk_payment_result_body, parent);
         final ViewGroup bodyViewGroup = bodyView.findViewById(R.id.mpsdkPaymentResultContainerBody);
 
         if (component.hasInstructions()) {
-            final Renderer instructionsRenderer = RendererFactory.create(context, component.getInstructionsComponent());
-            final View instructions = instructionsRenderer.render();
-            bodyViewGroup.addView(instructions);
+            RendererFactory.create(context, component.getInstructionsComponent()).render(bodyViewGroup);
         } else if (component.hasBodyError()) {
-            final Renderer bodyErrorRenderer = RendererFactory.create(context, component.getBodyErrorComponent());
-            final View bodyError = bodyErrorRenderer.render();
-            bodyViewGroup.addView(bodyError);
+            RendererFactory.create(context, component.getBodyErrorComponent()).render(bodyViewGroup);
         } else {
             if (component.hasReceipt()) {
-                final Renderer paymentIdRenderer = RendererFactory.create(context, component.getReceiptComponent());
-                final View paymentId = paymentIdRenderer.render();
-                bodyViewGroup.addView(paymentId);
+                RendererFactory.create(context, component.getReceiptComponent()).render(bodyViewGroup);
             }
-
             if (component.hasTopCustomComponent()) {
-                final Renderer customComponentRenderer = RendererFactory.create(context, component.getApprovedTopCustomComponent());
-                final View customView = customComponentRenderer.render();
-                bodyViewGroup.addView(customView);
+                RendererFactory.create(context, component.getApprovedTopCustomComponent()).render(bodyViewGroup);
             }
-
             if (component.hasPaymentMethodDescription()) {
-                final Renderer paymentMethodRenderer = RendererFactory.create(context, component.getPaymentMethodComponent());
-                final View paymentMethod = paymentMethodRenderer.render();
-                bodyViewGroup.addView(paymentMethod);
+                RendererFactory.create(context, component.getPaymentMethodComponent()).render(bodyViewGroup);
             }
-
             if (component.hasBottomCustomComponent()) {
-                final Renderer customComponentRenderer = RendererFactory.create(context, component.getApprovedBottomCustomComponent());
-                final View customView = customComponentRenderer.render();
-                bodyViewGroup.addView(customView);
+                RendererFactory.create(context, component.getApprovedBottomCustomComponent()).render(bodyViewGroup);
             }
         }
-
         stretchHeight(bodyViewGroup);
         return bodyView;
     }

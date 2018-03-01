@@ -1,8 +1,8 @@
 package com.mercadopago.paymentresult.components;
 
 import android.content.Context;
-import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.mercadopago.R;
 import com.mercadopago.components.Renderer;
@@ -19,8 +19,8 @@ import java.util.Locale;
 public class ReceiptRenderer extends Renderer<Receipt> {
 
     @Override
-    public View render(final Receipt component, final Context context) {
-        final View receiptView = LayoutInflater.from(context).inflate(R.layout.mpsdk_payment_receipt_component, null, false);
+    public View render(final Receipt component, final Context context, final ViewGroup parent) {
+        final View receiptView = inflate(R.layout.mpsdk_payment_receipt_component, parent);
         final MPTextView descriptionTextView = receiptView.findViewById(R.id.mpsdkReceiptDescription);
         final MPTextView dateTextView = receiptView.findViewById(R.id.mpsdkReceiptDate);
 

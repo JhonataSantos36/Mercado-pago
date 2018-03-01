@@ -1,7 +1,6 @@
 package com.mercadopago.paymentresult.components;
 
 import android.content.Context;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -15,27 +14,20 @@ import com.mercadopago.components.RendererFactory;
 
 public class InstructionsRenderer extends Renderer<Instructions> {
 
-
     @Override
-    public View render(final Instructions component, final Context context) {
-        final View instructionsView = LayoutInflater.from(context).inflate(R.layout.mpsdk_payment_result_instructions, null, false);
+    public View render(final Instructions component, final Context context, final ViewGroup parent) {
+        final View instructionsView = inflate(R.layout.mpsdk_payment_result_instructions, parent);
         final ViewGroup parentViewGroup = instructionsView.findViewById(R.id.mpsdkInstructionsContainer);
 
         if (component.hasSubtitle()) {
-            final Renderer subtitleRenderer = RendererFactory.create(context, component.getSubtitleComponent());
-            final View subtitle = subtitleRenderer.render();
-            parentViewGroup.addView(subtitle);
+            RendererFactory.create(context, component.getSubtitleComponent()).render(parentViewGroup);
         }
 
-        final Renderer contentRenderer = RendererFactory.create(context, component.getContentComponent());
-        final View content = contentRenderer.render();
-        parentViewGroup.addView(content);
+        RendererFactory.create(context, component.getContentComponent()).render(parentViewGroup);
 
         //TODO backend refactor: secondary info should be an email related component
         if (component.hasSecondaryInfo() && component.shouldShowEmailInSecondaryInfo()) {
-            final Renderer secondaryInfoRenderer = RendererFactory.create(context, component.getSecondaryInfoComponent());
-            final View secondaryInfo = secondaryInfoRenderer.render();
-            parentViewGroup.addView(secondaryInfo);
+            RendererFactory.create(context, component.getSecondaryInfoComponent()).render(parentViewGroup);
         }
 
         return instructionsView;

@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Build;
 import android.support.v4.content.ContextCompat;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -23,8 +22,8 @@ import com.mercadopago.paymentresult.props.HeaderProps;
 public class HeaderRenderer extends Renderer<Header> {
 
     @Override
-    public View render(final Header component, final Context context) {
-        final View headerView = LayoutInflater.from(context).inflate(R.layout.mpsdk_payment_result_header, null, false);
+    public View render(final Header component, final Context context, final ViewGroup parent) {
+        final View headerView = inflate(R.layout.mpsdk_payment_result_header, parent);
         final ViewGroup headerContainer = headerView.findViewById(R.id.mpsdkPaymentResultContainerHeader);
         final MPTextView titleTextView = headerView.findViewById(R.id.mpsdkHeaderTitle);
         final ViewGroup iconParentViewGroup = headerView.findViewById(R.id.iconContainer);
@@ -44,9 +43,7 @@ public class HeaderRenderer extends Renderer<Header> {
         setText(labelTextView, component.props.label);
 
         //Render icon
-        final Renderer iconRenderer = RendererFactory.create(context, component.getIconComponent());
-        final View icon = iconRenderer.render();
-        iconParentViewGroup.addView(icon);
+        RendererFactory.create(context, component.getIconComponent()).render(iconParentViewGroup);
 
         //Render title
         if (component.props.amountFormat == null) {
