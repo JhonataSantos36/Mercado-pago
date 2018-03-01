@@ -7,10 +7,6 @@ import com.mercadopago.components.Component;
 import com.mercadopago.components.RendererFactory;
 import com.mercadopago.review_and_confirm.models.TermsAndConditionsModel;
 
-/**
- * Created by lbais on 27/2/18.
- */
-
 public class ReviewAndConfirmContainer extends Component<ReviewAndConfirmContainer.Props, Void> {
 
     static {

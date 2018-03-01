@@ -8,43 +8,11 @@
     tools:context=".ReviewAndConfirmActivity"
     tools:ignore="MergeRootFrame">
 
-    <android.support.design.widget.AppBarLayout
+    <include
         android:id="@+id/appbar"
+        layout="@layout/mpsdk_view_collapsing_appbar"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:fitsSystemWindows="true"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark"
-        app:layout_behavior="com.mercadopago.core.FixAppBarLayoutBehavior">
-
-        <android.support.design.widget.CollapsingToolbarLayout
-            android:id="@+id/collapsing_toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/mpsdk_review_background"
-            android:fitsSystemWindows="true"
-            app:collapsedTitleGravity="start"
-            app:collapsedTitleTextAppearance="@style/mpsdk_collapsing_review_toolbar_text_medium"
-            app:contentScrim="@color/mpsdk_review_background"
-            app:expandedTitleGravity="center_horizontal"
-            app:expandedTitleMarginBottom="25dp"
-            app:expandedTitleMarginTop="45dp"
-            app:expandedTitleTextAppearance="@style/mpsdk_collapsing_review_toolbar_text_large"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed"
-            app:toolbarId="@+id/toolbar">
-
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/mpsdk_toolbar_height"
-                android:background="@color/mpsdk_review_background"
-                android:minHeight="?attr/actionBarSize"
-                android:theme="@style/ReviewToolbarTheme"
-                app:layout_collapseMode="pin"
-                app:layout_scrollFlags="scroll|exitUntilCollapsed"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
-
-        </android.support.design.widget.CollapsingToolbarLayout>
-    </android.support.design.widget.AppBarLayout>
+        android:layout_height="150dp" />
 
     <android.support.v4.widget.NestedScrollView
         android:id="@+id/mpsdkReviewScrollView"
@@ -73,7 +41,8 @@
                 android:id="@+id/mpsdkCheckoutTermsAndConditions"
                 layout="@layout/mpsdk_view_terms_and_condition"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:visibility="gone" />
 
             <View
                 android:id="@+id/mpsdkFirstSeparator"

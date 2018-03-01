@@ -10,10 +10,6 @@ import android.widget.LinearLayout;
 import com.mercadopago.components.Renderer;
 import com.mercadopago.components.RendererFactory;
 
-/**
- * Created by lbais on 27/2/18.
- */
-
 public class ReviewAndConfirmRenderer extends Renderer<ReviewAndConfirmContainer> {
 
     @Override
@@ -21,23 +17,26 @@ public class ReviewAndConfirmRenderer extends Renderer<ReviewAndConfirmContainer
                           @NonNull final Context context,
                           @Nullable final ViewGroup parent) {
 
-        //TODO add views
-        LinearLayout mainLayout = new LinearLayout(context);
-        mainLayout.setOrientation(LinearLayout.VERTICAL);
+        LinearLayout linearLayout = new LinearLayout(context);
+        linearLayout.setOrientation(LinearLayout.VERTICAL);
+        linearLayout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT));
 
         //TODO add views
         if (component.props.termsAndConditionsModel.isActive()) {
-            addReviewAndConfirm(component, mainLayout);
+            addReviewAndConfirm(component, linearLayout);
         }
 
         //TODO add views
 
-        return mainLayout;
+        parent.addView(linearLayout);
+
+        return linearLayout;
     }
 
     private void addReviewAndConfirm(final @NonNull ReviewAndConfirmContainer component,
                                      final ViewGroup container) {
         Renderer termsAndConditions = RendererFactory.create(container.getContext(), component.createTermsAndConditions());
-        container.addView(termsAndConditions.render(container));
+        termsAndConditions.render(container);
     }
 }

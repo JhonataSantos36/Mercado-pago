@@ -4,7 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.ViewGroup;
 
+import com.mercadopago.R;
 import com.mercadopago.TermsAndConditionsActivity;
 import com.mercadopago.components.Action;
 import com.mercadopago.components.ActionDispatcher;
@@ -27,13 +30,17 @@ public class ReviewAndConfirmActivity extends AppCompatActivity implements Actio
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.mpsdk_view_container_review_and_confirm);
+        ViewGroup mainContent = findViewById(R.id.mpsdkReviewScrollView);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         ReviewAndConfirmContainer.Props props = getActivityParameters();
         final ComponentManager manager = new ComponentManager(this);
         final ReviewAndConfirmContainer container = new ReviewAndConfirmContainer(props);
-
         container.setDispatcher(this);
-        manager.render(container);
+
+        manager.render(container, mainContent);
 
     }
 

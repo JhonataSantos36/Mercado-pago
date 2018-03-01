@@ -11,6 +11,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.mercadopago.constants.Sites;
 import com.mercadopago.core.MercadoPagoCheckout;
 import com.mercadopago.customviews.MPButton;
 import com.mercadopago.examples.R;
@@ -23,6 +24,8 @@ import com.mercadopago.plugins.MainPaymentProcessor;
 import com.mercadopago.plugins.SamplePaymentMethodPlugin;
 import com.mercadopago.plugins.SamplePaymentProcessor;
 import com.mercadopago.preferences.CheckoutPreference;
+import com.mercadopago.review_and_confirm.ReviewAndConfirmActivity;
+import com.mercadopago.review_and_confirm.models.TermsAndConditionsModel;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;
 
@@ -72,7 +75,8 @@ public class CheckoutExampleActivity extends AppCompatActivity {
     }
 
     private void onContinueClicked() {
-        startMercadoPagoCheckout();
+        //startMercadoPagoCheckout();
+        ReviewAndConfirmActivity.start(this, new TermsAndConditionsModel(Sites.ARGENTINA.getId(), true));
     }
 
     private void startMercadoPagoCheckout() {
