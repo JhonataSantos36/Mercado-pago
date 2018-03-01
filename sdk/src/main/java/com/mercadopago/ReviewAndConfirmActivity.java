@@ -271,9 +271,7 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
     }
 
     private void startTermsAndConditionsActivity() {
-        Intent termsAndConditionsIntent = new Intent(this, TermsAndConditionsActivity.class);
-        termsAndConditionsIntent.putExtra("siteId", Sites.ARGENTINA.getId());
-        startActivity(termsAndConditionsIntent);
+        TermsAndConditionsActivity.start(this, Sites.ARGENTINA.getId());
     }
 
     private void getUIPreferences() {

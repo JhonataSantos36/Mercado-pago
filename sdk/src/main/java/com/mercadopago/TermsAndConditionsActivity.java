@@ -1,11 +1,12 @@
 package com.mercadopago;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.mercadopago.constants.Sites;
@@ -16,6 +17,8 @@ import static android.text.TextUtils.isEmpty;
 
 public class TermsAndConditionsActivity extends MercadoPagoActivity {
 
+    public static final String EXTRA_SITE_ID = "siteId";
+    public static final String EXTRA_BANK_DEAL_LEGALS = "bankDealLegals";
     protected View mMPTermsAndConditionsView;
     protected View mBankDealsTermsAndConditionsView;
     protected WebView mTermsAndConditionsWebView;
@@ -27,10 +30,22 @@ public class TermsAndConditionsActivity extends MercadoPagoActivity {
     protected String mBankDealsTermsAndConditions;
     protected String mSiteId;
 
+    public static void startWithBankDealLegals(final Context context, final String bankDealLegals) {
+        Intent intent = new Intent(context, TermsAndConditionsActivity.class);
+        intent.putExtra(EXTRA_BANK_DEAL_LEGALS, bankDealLegals);
+        context.startActivity(intent);
+    }
+
+    public static void start(final Context context, final String siteId) {
+        Intent intent = new Intent(context, TermsAndConditionsActivity.class);
+        intent.putExtra(EXTRA_SITE_ID, siteId);
+        context.startActivity(intent);
+    }
+
     @Override
     protected void getActivityParameters() {
-        mBankDealsTermsAndConditions = getIntent().getStringExtra("bankDealLegals");
-        mSiteId = getIntent().getStringExtra("siteId");
+        mBankDealsTermsAndConditions = getIntent().getStringExtra(EXTRA_BANK_DEAL_LEGALS);
+        mSiteId = getIntent().getStringExtra(EXTRA_SITE_ID);
     }
 
     @Override

@@ -5,19 +5,21 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
+import com.mercadopago.TermsAndConditionsActivity;
 import com.mercadopago.components.Action;
 import com.mercadopago.components.ActionDispatcher;
 import com.mercadopago.components.ComponentManager;
+import com.mercadopago.review_and_confirm.actions.TermsAndConditionAction;
 import com.mercadopago.review_and_confirm.components.ReviewAndConfirmContainer;
+import com.mercadopago.review_and_confirm.models.TermsAndConditionsModel;
 
 public class ReviewAndConfirmActivity extends AppCompatActivity implements ReviewAndConfirmView, ActionDispatcher {
 
-    private static final String EXTRA_TEST = "extra_test";
-    private ReviewAndConfirmPresenter presenter;
+    private static final String EXTRA_TERMS_AND_CONDITIONS = "extra_terms_and_conditions";
 
-    public static void start(final Context context, final String test) {
+    public static void start(final Context context, final TermsAndConditionsModel termsAndConditions) {
         Intent intent = new Intent(context, ReviewAndConfirmActivity.class);
-        intent.putExtra(EXTRA_TEST, test);
+        intent.putExtra(EXTRA_TERMS_AND_CONDITIONS, termsAndConditions);
         context.startActivity(intent);
     }
 
@@ -25,30 +27,36 @@ public class ReviewAndConfirmActivity extends AppCompatActivity implements Revie
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        String test = getActivityParameters();
-        presenter = new ReviewAndConfirmPresenter(test);
-        presenter.attachView(this);
-
+        ReviewAndConfirmContainer.Props props = getActivityParameters();
         final ComponentManager manager = new ComponentManager(this);
-        final ReviewAndConfirmContainer container = new ReviewAndConfirmContainer(new ReviewAndConfirmContainer.Props());
+        final ReviewAndConfirmContainer container = new ReviewAndConfirmContainer(props);
 
         container.setDispatcher(this);
         manager.render(container);
 
     }
 
-    private String getActivityParameters() {
-        return getIntent().getStringExtra(EXTRA_TEST);
+    private ReviewAndConfirmContainer.Props getActivityParameters() {
+        Intent intent = getIntent();
+        Bundle extras = intent.getExtras();
+        TermsAndConditionsModel termsAndConditionsModel = null;
+        if (extras != null) {
+            termsAndConditionsModel = extras.getParcelable(EXTRA_TERMS_AND_CONDITIONS);
+        }
+        return new ReviewAndConfirmContainer.Props(termsAndConditionsModel);
     }
 
     @Override
     protected void onDestroy() {
-        presenter.detachView();
         super.onDestroy();
     }
 
     @Override
     public void dispatch(Action action) {
-        throw new UnsupportedOperationException();
+        if (action instanceof TermsAndConditionAction) {
+            TermsAndConditionsActivity.start(this, ((TermsAndConditionAction) action).getSiteId());
+        } else {
+            throw new UnsupportedOperationException();
+        }
     }
 }

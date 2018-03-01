@@ -20,28 +20,28 @@
             android:id="@+id/collapsing_toolbar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@color/mpsdk_review_background"
             android:fitsSystemWindows="true"
-            app:toolbarId="@+id/toolbar"
+            app:collapsedTitleGravity="start"
             app:collapsedTitleTextAppearance="@style/mpsdk_collapsing_review_toolbar_text_medium"
             app:contentScrim="@color/mpsdk_review_background"
             app:expandedTitleGravity="center_horizontal"
-            app:expandedTitleTextAppearance="@style/mpsdk_collapsing_review_toolbar_text_large"
-            app:expandedTitleMarginTop="45dp"
             app:expandedTitleMarginBottom="25dp"
-            app:collapsedTitleGravity="start"
+            app:expandedTitleMarginTop="45dp"
+            app:expandedTitleTextAppearance="@style/mpsdk_collapsing_review_toolbar_text_large"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
-            android:background="@color/mpsdk_review_background">
+            app:toolbarId="@+id/toolbar">
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/mpsdk_toolbar_height"
                 android:background="@color/mpsdk_review_background"
-                android:theme="@style/ReviewToolbarTheme"
                 android:minHeight="?attr/actionBarSize"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                android:theme="@style/ReviewToolbarTheme"
                 app:layout_collapseMode="pin"
-                app:layout_scrollFlags="scroll|exitUntilCollapsed" />
+                app:layout_scrollFlags="scroll|exitUntilCollapsed"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
@@ -69,52 +69,11 @@
                 android:background="@color/mpsdk_summary_background_color"
                 android:overScrollMode="never" />
 
-            <LinearLayout
+            <include
                 android:id="@+id/mpsdkCheckoutTermsAndConditions"
+                layout="@layout/mpsdk_view_terms_and_condition"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:orientation="vertical"
-                android:visibility="gone">
-
-                <com.mercadopago.customviews.MPTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:text="@string/mpsdk_text_terms_and_conditions_start"
-                    android:textColor="@color/mpsdk_color_payer_costs"
-                    android:textSize="12dp"
-                    app:font_style="regular" />
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginBottom="15dp"
-                    android:orientation="horizontal">
-
-                    <com.mercadopago.customviews.MPTextView
-                        android:id="@+id/mpsdkReviewTermsAndConditions"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/mpsdk_text_terms_and_conditions_linked"
-                        android:textColor="@color/mpsdk_link"
-                        android:textSize="12dp"
-                        app:font_style="regular" />
-
-                    <com.mercadopago.customviews.MPTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="3dp"
-                        android:layout_marginStart="3dp"
-                        android:text="@string/mpsdk_text_terms_and_conditions_end"
-                        android:textColor="@color/mpsdk_color_payer_costs"
-                        android:textSize="12dp"
-                        app:font_style="regular" />
-
-                </LinearLayout>
-
-            </LinearLayout>
+                android:layout_height="wrap_content" />
 
             <View
                 android:id="@+id/mpsdkFirstSeparator"

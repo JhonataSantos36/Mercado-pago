@@ -179,9 +179,7 @@ public class BankDealsActivity extends MercadoPagoActivity {
 
     private void showSelectedBankDealTerms(View view) {
         BankDeal selectedBankDeal = (BankDeal) view.getTag();
-        Intent intent = new Intent(getActivity(), TermsAndConditionsActivity.class);
-        intent.putExtra("bankDealLegals", selectedBankDeal.getLegals());
-        startActivity(intent);
+        TermsAndConditionsActivity.startWithBankDealLegals(this, selectedBankDeal.getLegals());
     }
 
     protected void solveBankDeals(List<BankDeal> bankDeals) {
