@@ -19,16 +19,15 @@ public class FakeAPI {
 
     public QueuedResponse getNextResponse() {
 
-        if(queuedResponses != null && !queuedResponses.isEmpty()) {
+        if (hasQueuedResponses()) {
             return queuedResponses.remove(0);
-        }
-        else {
+        } else {
             return new QueuedResponse("", 401, "");
         }
     }
 
     public <T> void addResponseToQueue(T response, int statusCode, String reason) {
-        if(queuedResponses == null) {
+        if (queuedResponses == null) {
             queuedResponses = new ArrayList<>();
         }
         String jsonResponse = JsonUtil.getInstance().toJson(response);
@@ -36,7 +35,7 @@ public class FakeAPI {
     }
 
     public void addResponseToQueue(String jsonResponse, int statusCode, String reason) {
-        if(queuedResponses == null) {
+        if (queuedResponses == null) {
             queuedResponses = new ArrayList<>();
         }
         QueuedResponse queuedResponse = new QueuedResponse(jsonResponse, statusCode, reason);
@@ -44,7 +43,7 @@ public class FakeAPI {
     }
 
     public void addResponseToQueue(String jsonResponse, int statusCode, String reason, int delayMilliseconds) {
-        if(queuedResponses == null) {
+        if (queuedResponses == null) {
             queuedResponses = new ArrayList<>();
         }
         QueuedResponse queuedResponse = new QueuedResponse(jsonResponse, statusCode, reason, delayMilliseconds);
@@ -61,21 +60,21 @@ public class FakeAPI {
     }
 
     public void cleanQueue() {
-        if(this.hasQueuedResponses()) {
+        if (this.hasQueuedResponses()) {
             queuedResponses.clear();
         }
     }
 
     private OkHttpClient createClient() {
 
-        okhttp3.OkHttpClient.Builder okHttpClientBuilder = new okhttp3.OkHttpClient.Builder()
+        OkHttpClient.Builder okHttpClientBuilder = new OkHttpClient.Builder()
                 .addInterceptor(getFakeInterceptor());
 
         return okHttpClientBuilder.build();
     }
 
     private Interceptor getFakeInterceptor() {
-        if(fakeInterceptor == null) {
+        if (fakeInterceptor == null) {
             fakeInterceptor = new FakeInterceptor(this);
         }
         return fakeInterceptor;

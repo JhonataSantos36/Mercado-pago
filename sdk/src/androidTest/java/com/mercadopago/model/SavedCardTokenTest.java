@@ -15,6 +15,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -43,14 +44,14 @@ public class SavedCardTokenTest {
     public void testValidateNullCardId() {
         SavedCardToken savedCardToken = StaticMock.getSavedCardToken();
         savedCardToken.setCardId(null);
-        assertTrue(!savedCardToken.validate());
+        assertFalse(savedCardToken.validate());
     }
 
     @Test
     public void testValidateWrongCardId() {
         SavedCardToken savedCardToken = StaticMock.getSavedCardToken();
         savedCardToken.setCardId("john");
-        assertTrue(!savedCardToken.validate());
+        assertFalse(savedCardToken.validate());
     }
 
     // * Security code
@@ -66,8 +67,8 @@ public class SavedCardTokenTest {
         SavedCardToken savedCardToken = StaticMock.getSavedCardToken();
         savedCardToken.setSecurityCode("");
 
-        assertTrue(!savedCardToken.validate());
-        assertTrue(!savedCardToken.validateSecurityCode());
+        assertFalse(savedCardToken.validate());
+        assertFalse(savedCardToken.validateSecurityCode());
     }
 
     @Test
@@ -75,8 +76,8 @@ public class SavedCardTokenTest {
         SavedCardToken savedCardToken = StaticMock.getSavedCardToken();
         savedCardToken.setSecurityCode("4");
 
-        assertTrue(!savedCardToken.validate());
-        assertTrue(!savedCardToken.validateSecurityCode());
+        assertFalse(savedCardToken.validate());
+        assertFalse(savedCardToken.validateSecurityCode());
     }
 
     @Test
@@ -84,8 +85,8 @@ public class SavedCardTokenTest {
         SavedCardToken savedCardToken = StaticMock.getSavedCardToken();
         savedCardToken.setSecurityCode("44444");
 
-        assertTrue(!savedCardToken.validate());
-        assertTrue(!savedCardToken.validateSecurityCode());
+        assertFalse(savedCardToken.validate());
+        assertFalse(savedCardToken.validateSecurityCode());
     }
 
     @Test

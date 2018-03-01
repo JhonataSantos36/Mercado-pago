@@ -260,12 +260,14 @@ public class CardToken {
     }
 
     private static Integer normalizeYear(Integer year) {
+        Integer normalizedYear = year;
+
         if ((year != null) && (year < 100 && year >= 0)) {
             String currentYear = String.valueOf(now.get(Calendar.YEAR));
             String prefix = currentYear.substring(0, currentYear.length() - 2);
-            year = Integer.parseInt(String.format(Locale.US, "%s%02d", prefix, year));
+            normalizedYear = Integer.parseInt(String.format(Locale.US, "%s%02d", prefix, year));
         }
-        return year;
+        return normalizedYear;
     }
 
     private String normalizeCardNumber(String number) {

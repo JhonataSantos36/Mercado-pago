@@ -803,7 +803,7 @@ public class InstallmentsPresenterTest {
 
         @Override
         public void startDiscountFlow(BigDecimal transactionAmount) {
-
+            //Do something
         }
 
         @Override

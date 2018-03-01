@@ -15,8 +15,8 @@ public class IdentificationTestUtils {
                 return new DummyIdentificationType("CPF", "12312312344", "123.123.123-44");
             case "CNPJ":
                 return new DummyIdentificationType("CNPJ", "57215433000181", "57.215.433/0001-81");
+            default:
+                return null;
         }
-        return null;
     }
-
 }

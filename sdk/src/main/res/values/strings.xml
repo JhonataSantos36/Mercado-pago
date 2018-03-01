@@ -36,9 +36,10 @@
     <!-- Installments -->
     <string name="mpsdk_card_installments_title">¿En cuántas cuotas?</string>
     <string name="mpsdk_installments_of">de</string>
-    <string name="mpsdk_installments_by">x</string>
-    <string name="mpsdk_installments_tea">TEA</string>
-    <string name="mpsdk_installments_cft">CFT</string>
+
+    <string name="mpsdk_installments_by" translatable="false">x</string>
+    <string name="mpsdk_installments_tea" translatable="false">TEA</string>
+    <string name="mpsdk_installments_cft" translatable="false">CFT</string>
 
     <!-- Checkout -->
     <string name="mpsdk_text_terms_and_conditions_start">Al pagar, afirmo que soy mayor de edad y acepto los</string>

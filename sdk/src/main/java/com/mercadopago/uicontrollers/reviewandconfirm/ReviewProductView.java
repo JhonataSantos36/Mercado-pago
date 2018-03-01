@@ -49,11 +49,11 @@ public class ReviewProductView implements ReviewProductViewController {
 
     @Override
     public void initializeControls() {
-        mProductImage = (ImageView) mView.findViewById(R.id.mpsdkAdapterReviewProductImage);
-        mProductName = (MPTextView) mView.findViewById(R.id.mpsdkAdapterReviewProductText);
-        mProductDescription = (MPTextView) mView.findViewById(R.id.mpsdkAdapterReviewProductDescription);
-        mProductQuantity = (MPTextView) mView.findViewById(R.id.mpsdkAdapterReviewProductQuantity);
-        mProductPrice = (MPTextView) mView.findViewById(R.id.mpsdkAdapterReviewProductPrice);
+        mProductImage = mView.findViewById(R.id.mpsdkAdapterReviewProductImage);
+        mProductName = mView.findViewById(R.id.mpsdkAdapterReviewProductText);
+        mProductDescription = mView.findViewById(R.id.mpsdkAdapterReviewProductDescription);
+        mProductQuantity = mView.findViewById(R.id.mpsdkAdapterReviewProductQuantity);
+        mProductPrice = mView.findViewById(R.id.mpsdkAdapterReviewProductPrice);
     }
 
     @Override

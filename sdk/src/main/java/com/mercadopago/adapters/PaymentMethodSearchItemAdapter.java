@@ -22,11 +22,8 @@ public class PaymentMethodSearchItemAdapter extends RecyclerView.Adapter<Payment
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int position) {
-
         CustomViewController item = mItems.get(position);
-
         item.inflateInParent(parent, false);
-
         return new ViewHolder(item);
     }
 

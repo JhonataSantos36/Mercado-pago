@@ -1071,12 +1071,12 @@ public class CardVaultPresenterTest {
 
         @Override
         public void showApiExceptionError(ApiException exception, String requestOrigin) {
-
+            //Do something
         }
 
         @Override
         public void showProgressLayout() {
-
+            //Do something
         }
 
         @Override

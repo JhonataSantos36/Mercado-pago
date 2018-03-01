@@ -58,7 +58,6 @@ public class FrontCardView {
     private PaymentMethod mPaymentMethod;
     private int mCardNumberLength;
     private int mSecurityCodeLength;
-    private boolean mShowSecurityCode;
     private String mLastFourDigits;
 
     //View controls
@@ -81,7 +80,6 @@ public class FrontCardView {
         this.mMode = mode;
         this.mCardNumberLength = CARD_NUMBER_MAX_LENGTH;
         this.mSecurityCodeLength = CARD_SECURITY_CODE_DEFAULT_LENGTH;
-        this.mShowSecurityCode = false;
     }
 
 
@@ -102,7 +100,6 @@ public class FrontCardView {
     }
 
     public void hasToShowSecurityCode(boolean show) {
-        this.mShowSecurityCode = show;
         if (show) {
             showEmptySecurityCode();
         } else {
@@ -119,15 +116,15 @@ public class FrontCardView {
         mCardBorder = mView.findViewById(R.id.mpsdkCardShadowBorder);
         mAnimFadeIn = AnimationUtils.loadAnimation(mContext, R.anim.mpsdk_fade_in);
         mCardNumberTextView = mView.findViewById(R.id.mpsdkCardNumberTextView);
-        mCardholderNameTextView =  mView.findViewById(R.id.mpsdkCardholderNameView);
-        mCardExpiryMonthTextView =  mView.findViewById(R.id.mpsdkCardHolderExpiryMonth);
-        mCardExpiryYearTextView =  mView.findViewById(R.id.mpsdkCardHolderExpiryYear);
-        mCardDateDividerTextView =  mView.findViewById(R.id.mpsdkCardHolderDateDivider);
-        mCardSecurityCodeTextView =  mView.findViewById(R.id.mpsdkCardSecurityCodeViewFront);
-        mBaseImageCard =  mView.findViewById(R.id.mpsdkBaseImageCard);
-        mImageCardContainer =  mView.findViewById(R.id.mpsdkImageCardContainer);
-        mCardLowApiImageView =  mView.findViewById(R.id.mpsdkCardLowApiImageView);
-        mCardLollipopImageView =  mView.findViewById(R.id.mpsdkCardLollipopImageView);
+        mCardholderNameTextView = mView.findViewById(R.id.mpsdkCardholderNameView);
+        mCardExpiryMonthTextView = mView.findViewById(R.id.mpsdkCardHolderExpiryMonth);
+        mCardExpiryYearTextView = mView.findViewById(R.id.mpsdkCardHolderExpiryYear);
+        mCardDateDividerTextView = mView.findViewById(R.id.mpsdkCardHolderDateDivider);
+        mCardSecurityCodeTextView = mView.findViewById(R.id.mpsdkCardSecurityCodeViewFront);
+        mBaseImageCard = mView.findViewById(R.id.mpsdkBaseImageCard);
+        mImageCardContainer = mView.findViewById(R.id.mpsdkImageCardContainer);
+        mCardLowApiImageView = mView.findViewById(R.id.mpsdkCardLowApiImageView);
+        mCardLollipopImageView = mView.findViewById(R.id.mpsdkCardLollipopImageView);
 
         if (mSize != null) {
             resize();
@@ -361,7 +358,6 @@ public class FrontCardView {
         String imageName = "mpsdk_ico_card_" + paymentMethod.getId().toLowerCase();
         return mContext.getResources().getIdentifier(imageName, "drawable", mContext.getPackageName());
     }
-
 
 
     private void resize() {

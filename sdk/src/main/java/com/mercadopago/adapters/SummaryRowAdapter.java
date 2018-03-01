@@ -1,6 +1,5 @@
 package com.mercadopago.adapters;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -19,15 +18,11 @@ import java.util.List;
 /**
  * Created by mromar on 9/11/17.
  */
-
 public class SummaryRowAdapter extends RecyclerView.Adapter<SummaryRowAdapter.ViewHolder> {
-
-    private Context mContext;
     private List<SummaryRow> mSummaryRows;
     private OnSelectedCallback<Integer> mCallback;
 
-    public SummaryRowAdapter(Context context, OnSelectedCallback<Integer> callback) {
-        this.mContext = context;
+    public SummaryRowAdapter(OnSelectedCallback<Integer> callback) {
         this.mSummaryRows = new ArrayList<>();
         this.mCallback = callback;
     }
@@ -39,10 +34,9 @@ public class SummaryRowAdapter extends RecyclerView.Adapter<SummaryRowAdapter.Vi
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        LayoutInflater inflater = LayoutInflater.from(mContext);
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View adapterView = inflater.inflate(R.layout.mpsdk_adapter_summary_row, parent, false);
-        ViewHolder viewHolder = new ViewHolder(adapterView);
-        return viewHolder;
+        return new ViewHolder(adapterView);
     }
 
     @Override
@@ -63,8 +57,8 @@ public class SummaryRowAdapter extends RecyclerView.Adapter<SummaryRowAdapter.Vi
 
         public ViewHolder(View itemView) {
             super(itemView);
-            mSummaryRowContainer = (FrameLayout) itemView.findViewById(R.id.mpsdkSummaryRowAdapterContainer);
-            mSummaryRowView = new SummaryRowView(mContext);
+            mSummaryRowContainer = itemView.findViewById(R.id.mpsdkSummaryRowAdapterContainer);
+            mSummaryRowView = new SummaryRowView(itemView.getContext());
             mSummaryRowView.inflateInParent(mSummaryRowContainer, true);
             mSummaryRowView.initializeControls();
 

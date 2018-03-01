@@ -145,12 +145,12 @@ public class MercadoPagoCheckout {
         if (hasTwoDiscountsSet()) {
             throw new IllegalStateException("payment data discount and discount set");
         }
-        if (isCheckoutTimerAvailable(resultCode) && isPaymentDataIntegration(resultCode)) {
+        if (isCheckoutTimerAvailable() && isPaymentDataIntegration(resultCode)) {
             throw new IllegalStateException("CheckoutTimer is not available with PaymentData integration");
         }
     }
 
-    private boolean isCheckoutTimerAvailable(int resultCode) {
+    private boolean isCheckoutTimerAvailable() {
         return flowPreference != null && flowPreference.isCheckoutTimerEnabled();
     }
 

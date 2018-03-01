@@ -1,6 +1,5 @@
 package com.mercadopago.adapters;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 
@@ -14,16 +13,13 @@ import java.util.List;
 /**
  * Created by vaserber on 11/10/16.
  */
-
 public class ReviewProductAdapter extends RecyclerView.Adapter<ReviewProductAdapter.ViewHolder> {
 
     private List<Item> mItemList;
     private String mCurrency;
-    private Context mContext;
     private ReviewScreenPreference mReviewScreenPreference;
 
-    public ReviewProductAdapter(Context context, List<Item> items, String currency, ReviewScreenPreference reviewScreenPreference) {
-        this.mContext = context;
+    public ReviewProductAdapter(List<Item> items, String currency, ReviewScreenPreference reviewScreenPreference) {
         this.mItemList = items;
         this.mCurrency = currency;
         this.mReviewScreenPreference = reviewScreenPreference;
@@ -31,7 +27,7 @@ public class ReviewProductAdapter extends RecyclerView.Adapter<ReviewProductAdap
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        ReviewProductViewController productViewController = new ReviewProductView(mContext, mReviewScreenPreference);
+        ReviewProductViewController productViewController = new ReviewProductView(parent.getContext(), mReviewScreenPreference);
         productViewController.inflateInParent(parent, false);
         return new ReviewProductAdapter.ViewHolder(productViewController);
     }

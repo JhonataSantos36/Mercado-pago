@@ -185,19 +185,19 @@ public class PayerInformationPresenter extends MvpPresenter<PayerInformationView
     }
 
     private boolean validateNumber() {
-        return mIdentification != null && validateIdentificationType() && !TextUtil.isEmpty(mIdentification.getNumber());
+        return mIdentification != null && validateIdentificationType() && !isEmpty(mIdentification.getNumber());
     }
 
     private boolean validateIdentificationType() {
-        return mIdentification != null && !TextUtil.isEmpty(mIdentification.getType());
+        return mIdentification != null && !isEmpty(mIdentification.getType());
     }
 
     public boolean checkIsEmptyOrValidName() {
-        return android.text.TextUtils.isEmpty(mIdentificationName) || validateName();
+        return isEmpty(mIdentificationName) || validateName();
     }
 
     public boolean checkIsEmptyOrValidLastName() {
-        return android.text.TextUtils.isEmpty(mIdentificationLastName) || validateLastName();
+        return isEmpty(mIdentificationLastName) || validateLastName();
     }
 
     public boolean validateName() {

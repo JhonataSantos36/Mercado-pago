@@ -7,7 +7,6 @@ import java.util.List;
  * Created by mreverter on 3/8/16.
  */
 public class Instructions {
-    private AmountInfo amountInfo;
     private List<Instruction> instructions;
 
     public List<Instruction> getInstructions() {

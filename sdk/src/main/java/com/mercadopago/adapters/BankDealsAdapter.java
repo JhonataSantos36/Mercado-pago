@@ -1,6 +1,6 @@
 package com.mercadopago.adapters;
 
-import android.app.Activity;
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.KeyEvent;
@@ -20,42 +20,11 @@ import java.util.List;
 
 public class BankDealsAdapter extends RecyclerView.Adapter<BankDealsAdapter.ViewHolder> {
 
-    private Activity mActivity;
     private List<BankDeal> mData;
     private OnSelectedCallback<View> mCallback;
     private View.OnClickListener mListener = null;
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-
-        public MPTextView mBankDescView;
-        public ImageView mBankImageView;
-        public MPTextView mInstallmentsView;
-
-        public ViewHolder(View v, View.OnClickListener listener) {
-
-            super(v);
-            mBankDescView = (MPTextView) v.findViewById(R.id.mpsdkBankDesc);
-            mBankImageView = (ImageView) v.findViewById(R.id.mpsdkBankImg);
-            mInstallmentsView = (MPTextView) v.findViewById(R.id.mpsdkInstallments);
-            if (listener != null) {
-                v.setOnClickListener(listener);
-            }
-            v.setOnKeyListener(new View.OnKeyListener() {
-                @Override
-                public boolean onKey(View v, int keyCode, KeyEvent event) {
-                    if (event != null && event.getAction() == KeyEvent.ACTION_DOWN
-                            && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_CENTER) {
-                        mCallback.onSelected(v);
-                        return true;
-                    }
-                    return false;
-                }
-            });
-        }
-    }
-
-    public BankDealsAdapter(Activity activity, List<BankDeal> data, OnSelectedCallback<View> callback, View.OnClickListener listener) {
-        mActivity = activity;
+    public BankDealsAdapter(List<BankDeal> data, OnSelectedCallback<View> callback, View.OnClickListener listener) {
         mData = data;
         mCallback = callback;
         mListener = listener;
@@ -76,7 +45,7 @@ public class BankDealsAdapter extends RecyclerView.Adapter<BankDealsAdapter.View
         String picture = getPicture(bankDeal);
 
         // Set bank description
-        holder.mBankDescView.setText(getBankDesc(bankDeal));
+        holder.mBankDescView.setText(getBankDesc(bankDeal, holder.mBankDescView.getContext()));
 
         if (!holder.mBankDescView.getText().equals("")) {
             holder.mBankDescView.setVisibility(View.VISIBLE);
@@ -88,7 +57,7 @@ public class BankDealsAdapter extends RecyclerView.Adapter<BankDealsAdapter.View
 
         // Set bank image
         if (picture != null && !picture.isEmpty()) {
-            Picasso.with(mActivity)
+            Picasso.with(holder.mBankImageView.getContext())
                     .load(picture)
                     .into(holder.mBankImageView, new Callback.EmptyCallback() {
                         @Override
@@ -116,7 +85,9 @@ public class BankDealsAdapter extends RecyclerView.Adapter<BankDealsAdapter.View
         return mData.get(position);
     }
 
-    private String getBankDesc(BankDeal bankDeal) {
+    private String getBankDesc(BankDeal bankDeal, Context context) {
+        String comma_separator = context.getString(R.string.mpsdk_comma_separator) + " ";
+        String and_label = context.getString(R.string.mpsdk_and) + " ";
 
         if (bankDeal.getPaymentMethods() != null) {
             String desc = "";
@@ -124,9 +95,9 @@ public class BankDealsAdapter extends RecyclerView.Adapter<BankDealsAdapter.View
                 desc += bankDeal.getPaymentMethods().get(i).getName();
                 desc += " ";
                 if (bankDeal.getPaymentMethods().size() > i + 2) {
-                    desc += mActivity.getString(R.string.mpsdk_comma_separator) + " ";
+                    desc += comma_separator;
                 } else if (bankDeal.getPaymentMethods().size() > i + 1) {
-                    desc += mActivity.getString(R.string.mpsdk_and) + " ";
+                    desc += and_label;
                 }
             }
             return desc;
@@ -142,5 +113,34 @@ public class BankDealsAdapter extends RecyclerView.Adapter<BankDealsAdapter.View
     private String getRecommendedMessage(BankDeal bankDeal) {
 
         return (bankDeal != null) ? (bankDeal.getRecommendedMessage() != null) ? bankDeal.getRecommendedMessage() : "" : "";
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
+
+        public MPTextView mBankDescView;
+        public ImageView mBankImageView;
+        public MPTextView mInstallmentsView;
+
+        public ViewHolder(View v, View.OnClickListener listener) {
+
+            super(v);
+            mBankDescView = v.findViewById(R.id.mpsdkBankDesc);
+            mBankImageView = v.findViewById(R.id.mpsdkBankImg);
+            mInstallmentsView = v.findViewById(R.id.mpsdkInstallments);
+            if (listener != null) {
+                v.setOnClickListener(listener);
+            }
+            v.setOnKeyListener(new View.OnKeyListener() {
+                @Override
+                public boolean onKey(View v, int keyCode, KeyEvent event) {
+                    if (event != null && event.getAction() == KeyEvent.ACTION_DOWN
+                            && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_CENTER) {
+                        mCallback.onSelected(v);
+                        return true;
+                    }
+                    return false;
+                }
+            });
+        }
     }
 }

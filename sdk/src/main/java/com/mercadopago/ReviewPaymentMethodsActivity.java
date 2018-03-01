@@ -87,7 +87,7 @@ public class ReviewPaymentMethodsActivity extends MercadoPagoBaseActivity implem
 
     @Override
     public void initializeSupportedPaymentMethods(List<PaymentMethod> supportedPaymentMethods) {
-        mAdapter = new ReviewPaymentMethodsAdapter(this, supportedPaymentMethods);
+        mAdapter = new ReviewPaymentMethodsAdapter(supportedPaymentMethods);
         mPaymentMethodsView.setAdapter(mAdapter);
         mPaymentMethodsView.setLayoutManager(new LinearLayoutManager(this));
     }

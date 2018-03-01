@@ -11,7 +11,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 
 import com.google.gson.reflect.TypeToken;
 import com.mercadopago.adapters.PaymentTypesAdapter;
@@ -49,17 +48,10 @@ import java.util.List;
 public class PaymentTypesActivity extends MercadoPagoBaseActivity implements PaymentTypesActivityView, TimerObserver {
 
     protected PaymentTypesPresenter mPresenter;
-    private Activity mActivity;
-
-    //View controls
-    private PaymentTypesAdapter mPaymentTypesAdapter;
-    private RecyclerView mPaymentTypesRecyclerView;
-    private ViewGroup mProgressLayout;
     //ViewMode
     protected boolean mLowResActive;
     //Low Res View
     protected Toolbar mLowResToolbar;
-    private MPTextView mLowResTitleToolbar;
     protected MPTextView mTimerTextView;
     //Normal View
     protected CollapsingToolbarLayout mCollapsingToolbar;
@@ -67,12 +59,18 @@ public class PaymentTypesActivity extends MercadoPagoBaseActivity implements Pay
     protected FrameLayout mCardContainer;
     protected Toolbar mNormalToolbar;
     protected FrontCardView mFrontCardView;
+    private Activity mActivity;
+    //View controls
+    private PaymentTypesAdapter mPaymentTypesAdapter;
+    private RecyclerView mPaymentTypesRecyclerView;
+    private ViewGroup mProgressLayout;
+    private MPTextView mLowResTitleToolbar;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (mPresenter == null) {
-            mPresenter = new PaymentTypesPresenter(getBaseContext());
+            mPresenter = new PaymentTypesPresenter();
         }
         mPresenter.setView(this);
         mActivity = this;
@@ -200,7 +198,7 @@ public class PaymentTypesActivity extends MercadoPagoBaseActivity implements Pay
     }
 
     private void initializeAdapter() {
-        mPaymentTypesAdapter = new PaymentTypesAdapter(this, getDpadSelectionCallback());
+        mPaymentTypesAdapter = new PaymentTypesAdapter(getDpadSelectionCallback());
         initializeAdapterListener(mPaymentTypesAdapter, mPaymentTypesRecyclerView);
     }
 

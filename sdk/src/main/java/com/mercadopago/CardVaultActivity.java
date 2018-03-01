@@ -102,9 +102,6 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultVie
 
         mPublicKey = savedInstanceState.getString("merchantPublicKey");
         mPrivateKey = savedInstanceState.getString("payerAccessToken");
-
-        mCardVaultPresenter = new CardVaultPresenter();
-
         BigDecimal amountValue = null;
         String amount = savedInstanceState.getString("amount");
         if (amount != null) {

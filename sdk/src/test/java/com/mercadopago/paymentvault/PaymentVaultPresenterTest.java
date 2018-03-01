@@ -519,7 +519,7 @@ public class PaymentVaultPresenterTest {
 
         presenter.initialize(true);
 
-        Assert.assertEquals(paymentMethodSearch.getCustomSearchItems().size(), mockedView.customOptionsShown.size());
+        assertEquals(paymentMethodSearch.getCustomSearchItems().size(), mockedView.customOptionsShown.size());
     }
 
     @Test
@@ -541,7 +541,7 @@ public class PaymentVaultPresenterTest {
         presenter.initialize(true);
 
         //Account money + 1 card
-        Assert.assertEquals(2, mockedView.customOptionsShown.size());
+        assertEquals(2, mockedView.customOptionsShown.size());
     }
 
     //Discounts
@@ -687,7 +687,7 @@ public class PaymentVaultPresenterTest {
 
         presenter.initialize(true);
 
-        Assert.assertTrue(mockedView.errorShown.getApiException().equals(mercadoPagoError.getApiException()));
+        assertTrue(mockedView.errorShown.getApiException().equals(mercadoPagoError.getApiException()));
     }
 
     @Test
@@ -715,7 +715,7 @@ public class PaymentVaultPresenterTest {
         provider.setResponse(PaymentMethodSearchs.getCompletePaymentMethodSearchMLA());
         presenter.recoverFromFailure();
 
-        Assert.assertFalse(mockedView.searchItemsShown.isEmpty());
+        assertFalse(mockedView.searchItemsShown.isEmpty());
     }
 
     @Test
@@ -743,7 +743,7 @@ public class PaymentVaultPresenterTest {
         provider.setResponse(PaymentMethodSearchs.getCompletePaymentMethodSearchMLA());
         presenter.recoverFromFailure();
 
-        Assert.assertTrue(mockedView.searchItemsShown == null);
+        assertTrue(mockedView.searchItemsShown == null);
     }
 
     @Test
@@ -772,7 +772,7 @@ public class PaymentVaultPresenterTest {
         discount.setCouponAmount(new BigDecimal("10"));
         presenter.onDiscountReceived(discount);
 
-        Assert.assertTrue(mockedView.showedDiscountRow);
+        assertTrue(mockedView.showedDiscountRow);
     }
 
     @Test
@@ -807,7 +807,7 @@ public class PaymentVaultPresenterTest {
         discount.setCouponAmount(new BigDecimal("10"));
         presenter.onDiscountReceived(discount);
 
-        Assert.assertTrue(mockedView.searchItemsShown.size() != originalPaymentMethodSearch.getGroups().size());
+        assertTrue(mockedView.searchItemsShown.size() != originalPaymentMethodSearch.getGroups().size());
     }
 
     @Test
@@ -1314,17 +1314,17 @@ public class PaymentVaultPresenterTest {
 
         @Override
         public void trackChildrenScreen() {
-
+            //Not yet tested
         }
 
         @Override
         public void initializeMPTracker() {
-
+            //Not yet tested
         }
 
         @Override
         public void showHook(Hook hook, int code) {
-
+            //Not yet tested
         }
 
         @Override
@@ -1339,14 +1339,14 @@ public class PaymentVaultPresenterTest {
 
         @Override
         public void trackInitialScreen() {
-
+            //Not yet tested
         }
 
-        void simulateItemSelection(int index) {
+        private void simulateItemSelection(int index) {
             itemSelectionCallback.onSelected(searchItemsShown.get(index));
         }
 
-        void simulateCustomItemSelection(int index) {
+        private void simulateCustomItemSelection(int index) {
             customItemSelectionCallback.onSelected(customOptionsShown.get(index));
         }
     }

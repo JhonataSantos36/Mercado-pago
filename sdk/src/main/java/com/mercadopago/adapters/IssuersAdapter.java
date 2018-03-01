@@ -1,6 +1,5 @@
 package com.mercadopago.adapters;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -18,12 +17,10 @@ import java.util.List;
 
 public class IssuersAdapter extends RecyclerView.Adapter<IssuersAdapter.ViewHolder> {
 
-    private Context mContext;
     private List<Issuer> mIssuers;
     private OnSelectedCallback<Integer> mCallback;
 
-    public IssuersAdapter(Context context, OnSelectedCallback<Integer> callback) {
-        this.mContext = context;
+    public IssuersAdapter(OnSelectedCallback<Integer> callback) {
         this.mIssuers = new ArrayList<>();
         this.mCallback = callback;
     }
@@ -40,22 +37,15 @@ public class IssuersAdapter extends RecyclerView.Adapter<IssuersAdapter.ViewHold
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
-        LayoutInflater inflater = LayoutInflater.from(mContext);
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View adapterView = inflater.inflate(R.layout.mpsdk_adapter_issuer, parent, false);
-        ViewHolder viewHolder = new ViewHolder(adapterView);
-        return viewHolder;
+        return new ViewHolder(adapterView);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Issuer issuer = mIssuers.get(position);
         holder.mIssuersView.drawIssuer(issuer);
-    }
-
-
-    public Issuer getItem(int position) {
-        return mIssuers.get(position);
     }
 
     @Override
@@ -65,13 +55,13 @@ public class IssuersAdapter extends RecyclerView.Adapter<IssuersAdapter.ViewHold
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        public FrameLayout mIssuerContainer;
-        public IssuersView mIssuersView;
+        private final FrameLayout mIssuerContainer;
+        private final IssuersView mIssuersView;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            mIssuerContainer = (FrameLayout) itemView.findViewById(R.id.mpsdkIssuerAdapterContainer);
-            mIssuersView = new IssuersView(mContext);
+            mIssuerContainer = itemView.findViewById(R.id.mpsdkIssuerAdapterContainer);
+            mIssuersView = new IssuersView(itemView.getContext());
             mIssuersView.inflateInParent(mIssuerContainer, true);
             mIssuersView.initializeControls();
 
