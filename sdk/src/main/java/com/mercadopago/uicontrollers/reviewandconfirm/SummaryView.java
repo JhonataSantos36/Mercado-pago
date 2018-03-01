@@ -118,6 +118,7 @@ public class SummaryView extends Reviewable {
                 new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
+                        //Do something
                     }
                 }));
     }
@@ -220,6 +221,7 @@ public class SummaryView extends Reviewable {
         return new OnSelectedCallback<Integer>() {
             @Override
             public void onSelected(Integer position) {
+                //Do something
             }
         };
     }
@@ -256,35 +258,6 @@ public class SummaryView extends Reviewable {
             stringBuilder.append(mPayerCost.getCFTPercent());
             mCFTTextView.setText(stringBuilder);
         }
-    }
-
-    private String getDiscountTextWithPercentOff() {
-        String discountText;
-
-        if (hasDiscountConcept()) {
-            discountText = mDiscount.getConcept() + " " + mDiscount.getPercentOff() + mContext.getResources().getString(R.string.mpsdk_percent);
-        } else {
-            discountText = mContext.getResources().getString(R.string.mpsdk_review_summary_discount_with_percent_off,
-                    String.valueOf(mDiscount.getPercentOff()));
-        }
-
-        return discountText;
-    }
-
-    private String getDiscountTextWithoutPercentOff() {
-        String discountText;
-
-        if (hasDiscountConcept()) {
-            discountText = mDiscount.getConcept();
-        } else {
-            discountText = mContext.getResources().getString(R.string.mpsdk_review_summary_discount_with_amount_off);
-        }
-
-        return discountText;
-    }
-
-    private Boolean hasDiscountConcept() {
-        return mDiscount != null && !isEmpty(mDiscount.getConcept());
     }
 
     private void showPayerCostRow() {

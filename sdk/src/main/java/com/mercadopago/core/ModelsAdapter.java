@@ -31,7 +31,7 @@ import java.util.Map;
 
 class ModelsAdapter {
 
-    static Map<String, Object> adapt(PaymentBody paymentBody) {
+    public static Map<String, Object> adapt(PaymentBody paymentBody) {
         Type type = new TypeToken<Map<String, Object>>() {
         }.getType();
         Map<String, Object> payload = JsonUtil.getInstance().getGson().fromJson(JsonUtil.getInstance().toJson(paymentBody), type);
@@ -41,7 +41,7 @@ class ModelsAdapter {
         return payload;
     }
 
-    static void adapt(ServicePreference servicePreference) {
+    public static void adapt(ServicePreference servicePreference) {
         if (servicePreference != null) {
             com.mercadopago.lite.preferences.ServicePreference.Builder builder = new com.mercadopago.lite.preferences.ServicePreference.Builder();
             builder.setDefaultBaseURL(servicePreference.getDefaultBaseURL());
@@ -73,16 +73,16 @@ class ModelsAdapter {
         }
     }
 
-    static Payment adapt(com.mercadopago.lite.model.Payment payment) {
+    public static Payment adapt(com.mercadopago.lite.model.Payment payment) {
         return JsonUtil.getInstance().fromJson(JsonUtil.getInstance().toJson(payment), Payment.class);
     }
 
-    static ApiException adapt(com.mercadopago.lite.model.ApiException apiException) {
+    public static ApiException adapt(com.mercadopago.lite.model.ApiException apiException) {
         return JsonUtil.getInstance().fromJson(JsonUtil.getInstance().toJson(apiException), ApiException.class);
     }
 
 
-    static List<PaymentMethod> adaptPaymentMethods(List<com.mercadopago.lite.model.PaymentMethod> list) {
+    public static List<PaymentMethod> adaptPaymentMethods(List<com.mercadopago.lite.model.PaymentMethod> list) {
         List<PaymentMethod> adaptedList;
         try {
             Type listType = new TypeToken<List<PaymentMethod>>() {
@@ -95,7 +95,7 @@ class ModelsAdapter {
         return adaptedList;
     }
 
-    static List<Issuer> adaptIssuers(List<com.mercadopago.lite.model.Issuer> list) {
+    public static List<Issuer> adaptIssuers(List<com.mercadopago.lite.model.Issuer> list) {
         List<Issuer> adaptedList;
         try {
             Type listType = new TypeToken<List<Issuer>>() {
@@ -108,7 +108,7 @@ class ModelsAdapter {
         return adaptedList;
     }
 
-    static List<BankDeal> adaptBankDeals(List<com.mercadopago.lite.model.BankDeal> list) {
+    public static List<BankDeal> adaptBankDeals(List<com.mercadopago.lite.model.BankDeal> list) {
         List<BankDeal> adaptedList;
         try {
             Type listType = new TypeToken<List<BankDeal>>() {
@@ -121,7 +121,7 @@ class ModelsAdapter {
         return adaptedList;
     }
 
-    static List<Campaign> adaptCampaigns(List<com.mercadopago.lite.model.Campaign> list) {
+    public static List<Campaign> adaptCampaigns(List<com.mercadopago.lite.model.Campaign> list) {
         List<Campaign> adaptedList;
         try {
             Type listType = new TypeToken<List<Campaign>>() {
@@ -134,11 +134,11 @@ class ModelsAdapter {
         return adaptedList;
     }
 
-    static Discount adapt(com.mercadopago.lite.model.Discount discount) {
+    public static Discount adapt(com.mercadopago.lite.model.Discount discount) {
         return JsonUtil.getInstance().fromJson(JsonUtil.getInstance().toJson(discount), Discount.class);
     }
 
-    static List<Installment> adaptInstallments(List<com.mercadopago.lite.model.Installment> list) {
+    public static List<Installment> adaptInstallments(List<com.mercadopago.lite.model.Installment> list) {
         List<Installment> adaptedList;
         try {
             Type listType = new TypeToken<List<Installment>>() {
@@ -151,7 +151,7 @@ class ModelsAdapter {
         return adaptedList;
     }
 
-    static List<IdentificationType> adaptIdentificationTypes(List<com.mercadopago.lite.model.IdentificationType> list) {
+    public static List<IdentificationType> adaptIdentificationTypes(List<com.mercadopago.lite.model.IdentificationType> list) {
         List<IdentificationType> adaptedList;
         try {
             Type listType = new TypeToken<List<IdentificationType>>() {
@@ -164,43 +164,43 @@ class ModelsAdapter {
         return adaptedList;
     }
 
-    static Token adapt(com.mercadopago.lite.model.Token token) {
+    public static Token adapt(com.mercadopago.lite.model.Token token) {
         return JsonUtil.getInstance().fromJson(JsonUtil.getInstance().toJson(token), Token.class);
     }
 
-    static com.mercadopago.lite.model.requests.SecurityCodeIntent adapt(SecurityCodeIntent securityCodeIntent) {
+    public static com.mercadopago.lite.model.requests.SecurityCodeIntent adapt(SecurityCodeIntent securityCodeIntent) {
         return JsonUtil.getInstance().fromJson(JsonUtil.getInstance().toJson(securityCodeIntent), com.mercadopago.lite.model.requests.SecurityCodeIntent.class);
     }
 
-    static com.mercadopago.lite.model.SavedESCCardToken adapt(SavedESCCardToken savedESCCardToken) {
+    public static com.mercadopago.lite.model.SavedESCCardToken adapt(SavedESCCardToken savedESCCardToken) {
         return JsonUtil.getInstance().fromJson(JsonUtil.getInstance().toJson(savedESCCardToken), com.mercadopago.lite.model.SavedESCCardToken.class);
     }
 
-    static com.mercadopago.lite.model.CardToken adapt(CardToken cardToken) {
+    public static com.mercadopago.lite.model.CardToken adapt(CardToken cardToken) {
         return JsonUtil.getInstance().fromJson(JsonUtil.getInstance().toJson(cardToken), com.mercadopago.lite.model.CardToken.class);
     }
 
-    static com.mercadopago.lite.model.SavedCardToken adapt(SavedCardToken savedCardToken) {
+    public static com.mercadopago.lite.model.SavedCardToken adapt(SavedCardToken savedCardToken) {
         return JsonUtil.getInstance().fromJson(JsonUtil.getInstance().toJson(savedCardToken), com.mercadopago.lite.model.SavedCardToken.class);
     }
 
-    static PaymentMethodSearch adapt(com.mercadopago.lite.model.PaymentMethodSearch paymentMethodSearch) {
+    public static PaymentMethodSearch adapt(com.mercadopago.lite.model.PaymentMethodSearch paymentMethodSearch) {
         return JsonUtil.getInstance().fromJson(JsonUtil.getInstance().toJson(paymentMethodSearch), PaymentMethodSearch.class);
     }
 
-    static com.mercadopago.lite.model.Payer adapt(Payer payer) {
+    public static com.mercadopago.lite.model.Payer adapt(Payer payer) {
         return JsonUtil.getInstance().fromJson(JsonUtil.getInstance().toJson(payer), com.mercadopago.lite.model.Payer.class);
     }
 
-    static com.mercadopago.lite.model.Site adapt(Site site) {
+    public static com.mercadopago.lite.model.Site adapt(Site site) {
         return JsonUtil.getInstance().fromJson(JsonUtil.getInstance().toJson(site), com.mercadopago.lite.model.Site.class);
     }
 
-    static Instructions adapt(com.mercadopago.lite.model.Instructions instructions) {
+    public static Instructions adapt(com.mercadopago.lite.model.Instructions instructions) {
         return JsonUtil.getInstance().fromJson(JsonUtil.getInstance().toJson(instructions), Instructions.class);
     }
 
-    static CheckoutPreference adapt(com.mercadopago.lite.preferences.CheckoutPreference checkoutPreference) {
+    public static CheckoutPreference adapt(com.mercadopago.lite.preferences.CheckoutPreference checkoutPreference) {
         return JsonUtil.getInstance().fromJson(JsonUtil.getInstance().toJson(checkoutPreference), CheckoutPreference.class);
     }
 }

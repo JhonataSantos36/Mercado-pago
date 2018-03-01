@@ -15,7 +15,7 @@ public class HttpClientUtil {
     private static OkHttpClient client;
     private static OkHttpClient customClient;
 
-    public synchronized static okhttp3.OkHttpClient getClient(Context context, int connectTimeout, int readTimeout, int writeTimeout) {
+    public synchronized static OkHttpClient getClient(Context context, int connectTimeout, int readTimeout, int writeTimeout) {
 
         if (customClientSet()) {
             return customClient;
@@ -37,7 +37,7 @@ public class HttpClientUtil {
         okhttp3.Cache cache = new okhttp3.Cache(new File(context.getCacheDir().getPath() + "okhttp"), cacheSize);
 
         // Set client
-        okhttp3.OkHttpClient.Builder okHttpClientBuilder = new okhttp3.OkHttpClient.Builder()
+        OkHttpClient.Builder okHttpClientBuilder = new OkHttpClient.Builder()
                 .connectTimeout(connectTimeout, TimeUnit.SECONDS)
                 .writeTimeout(writeTimeout, TimeUnit.SECONDS)
                 .readTimeout(readTimeout, TimeUnit.SECONDS)
@@ -47,7 +47,7 @@ public class HttpClientUtil {
         client = okHttpClientBuilder.build();
     }
 
-    public static void setCustomClient(okhttp3.OkHttpClient client) {
+    public static void setCustomClient(OkHttpClient client) {
         customClient = client;
     }
 

@@ -1,6 +1,5 @@
 package com.mercadopago;
 
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
@@ -80,8 +79,6 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
     protected String mPublicKey;
     protected Site mSite;
 
-    private Issuer mIssuer;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -153,8 +150,8 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
     private void getActivityParameters() {
         mPublicKey = getIntent().getStringExtra("merchantPublicKey");
         mSite = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("site"), Site.class);
-        mIssuer = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("issuer"), Issuer.class);
 
+        Issuer issuer = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("issuer"), Issuer.class);
         Boolean termsAndConditionsEnabled = getIntent().getBooleanExtra("termsAndConditionsEnabled", true);
         Boolean editionEnabled = getIntent().getBooleanExtra("editionEnabled", true);
         Boolean discountEnabled = getIntent().getBooleanExtra("discountEnabled", true);
@@ -179,7 +176,7 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
         mPresenter.setItems(items);
         mPresenter.setAmount(amount);
         mPresenter.setSite(mSite);
-        mPresenter.setIssuer(mIssuer);
+        mPresenter.setIssuer(issuer);
         mPresenter.setDiscount(discount);
         mPresenter.setPayerCost(payerCost);
         mPresenter.setToken(token);

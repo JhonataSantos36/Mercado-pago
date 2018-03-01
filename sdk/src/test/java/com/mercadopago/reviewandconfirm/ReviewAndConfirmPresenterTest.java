@@ -38,7 +38,6 @@ public class ReviewAndConfirmPresenterTest {
 
     @Test
     public void ifPaymentMethodNotSetShowError() {
-
         PayerCost payerCost = new PayerCost();
 
         Token token = Mockito.mock(Token.class);
@@ -69,7 +68,6 @@ public class ReviewAndConfirmPresenterTest {
 
     @Test
     public void ifSiteNotSetShowError() {
-
         PayerCost payerCost = new PayerCost();
         Token token = Mockito.mock(Token.class);
         Mockito.when(token.getLastFourDigits()).thenReturn("1234");
@@ -99,7 +97,6 @@ public class ReviewAndConfirmPresenterTest {
 
     @Test
     public void ifItemsNotSetShowError() {
-
         PayerCost payerCost = new PayerCost();
         Token token = Mockito.mock(Token.class);
         Mockito.when(token.getLastFourDigits()).thenReturn("1234");
@@ -129,7 +126,6 @@ public class ReviewAndConfirmPresenterTest {
 
     @Test
     public void ifAmountNotSetShowError() {
-
         PayerCost payerCost = new PayerCost();
 
         Token token = Mockito.mock(Token.class);
@@ -670,7 +666,6 @@ public class ReviewAndConfirmPresenterTest {
 
         @Override
         public void trackScreen() {
-
         }
 
         @Override

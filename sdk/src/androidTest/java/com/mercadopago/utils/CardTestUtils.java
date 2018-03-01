@@ -46,8 +46,9 @@ public class CardTestUtils {
                 return new DummyCard("mercadopago_cc", "5150730431208304", DUMMY_SECURITY_CODE, "5150 7304 3120 8304");
             case "master_mlm":
                 return new DummyCard("master", "5031755734530604", DUMMY_SECURITY_CODE, "5031 7557 3453 0604");
+            default:
+                return null;
         }
-        return null;
     }
 
 
@@ -111,9 +112,9 @@ public class CardTestUtils {
 
     public static String getMockedBinInFront(String cardNumber) {
         StringBuffer contained = new StringBuffer();
-        contained.append(cardNumber.substring(0,4));
+        contained.append(cardNumber.substring(0, 4));
         contained.append(" ");
-        contained.append(cardNumber.substring(4,6));
+        contained.append(cardNumber.substring(4, 6));
         return contained.toString();
     }
 

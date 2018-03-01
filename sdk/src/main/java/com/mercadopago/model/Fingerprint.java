@@ -63,17 +63,14 @@ public class Fingerprint {
             input = new BufferedReader(new InputStreamReader(p.getInputStream()), 1024);
             line = input.readLine();
             input.close();
-        }
-        catch (IOException ex) {
+        } catch (IOException ex) {
             Log.e(TAG, "Unable to read sysprop " + propName, ex);
             return null;
-        }
-        finally {
+        } finally {
             if (input != null) {
                 try {
                     input.close();
-                }
-                catch (IOException e) {
+                } catch (IOException e) {
                     Log.e(TAG, "Exception while closing InputStream", e);
                 }
             }
@@ -155,7 +152,8 @@ public class Fingerprint {
                         }
                     }
                     mFSUUID = readFile(file);
-                } catch (Exception ignored) {}
+                } catch (Exception ignored) {
+                }
             }
 
             return mFSUUID;
@@ -256,7 +254,7 @@ public class Fingerprint {
 
                 return location;
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
@@ -289,24 +287,24 @@ public class Fingerprint {
 
     private class VendorSpecificAttributes {
 
-        boolean featureCamera;
-        boolean featureFlash;
-        boolean featureFrontCamera;
-        String product;
-        String device;
-        String platform;
-        String brand;
-        boolean featureAccelerometer;
-        boolean featureBluetooth;
-        boolean featureCompass;
-        boolean featureGps;
-        boolean featureGyroscope;
-        boolean featureMicrophone;
-        boolean featureNfc;
-        boolean featureTelephony;
-        boolean featureTouchScreen;
-        String manufacturer;
-        float screenDensity;
+        public boolean featureCamera;
+        public boolean featureFlash;
+        public boolean featureFrontCamera;
+        public String product;
+        public String device;
+        public String platform;
+        public String brand;
+        public boolean featureAccelerometer;
+        public boolean featureBluetooth;
+        public boolean featureCompass;
+        public boolean featureGps;
+        public boolean featureGyroscope;
+        public boolean featureMicrophone;
+        public boolean featureNfc;
+        public boolean featureTelephony;
+        public boolean featureTouchScreen;
+        public String manufacturer;
+        public float screenDensity;
 
         private VendorSpecificAttributes() {
             this.featureCamera = getFeatureCamera();
@@ -424,7 +422,8 @@ public class Fingerprint {
                 location.put(LOCATION_TIMESTAMP, System.currentTimeMillis() / 1000L);
                 location.put(LOCATION_LATITUDE, latitude);
                 location.put(LOCATION_LONGITUDE, longitude);
-            } catch (JSONException ignored) {}
+            } catch (JSONException ignored) {
+            }
         }
 
         @Override
@@ -446,7 +445,8 @@ public class Fingerprint {
             if (location != null) {
                 try {
                     return location.getLong(LOCATION_TIMESTAMP);
-                } catch (JSONException ignored) {}
+                } catch (JSONException ignored) {
+                }
             }
 
             return System.currentTimeMillis() / 1000L;
@@ -457,7 +457,8 @@ public class Fingerprint {
             if (location != null) {
                 try {
                     return location.getDouble(LOCATION_LATITUDE);
-                } catch (JSONException ignored) {}
+                } catch (JSONException ignored) {
+                }
             }
 
             return 0;
@@ -467,7 +468,8 @@ public class Fingerprint {
             if (location != null) {
                 try {
                     return location.getDouble(LOCATION_LONGITUDE);
-                } catch (JSONException e) {}
+                } catch (JSONException e) {
+                }
             }
 
             return 0;
@@ -487,12 +489,18 @@ public class Fingerprint {
         }
 
         @Override
-        public void onStatusChanged(String s, int i, Bundle bundle) {}
+        public void onStatusChanged(String s, int i, Bundle bundle) {
+            //Do something
+        }
 
         @Override
-        public void onProviderEnabled(String s) {}
+        public void onProviderEnabled(String s) {
+            //Do something
+        }
 
         @Override
-        public void onProviderDisabled(String s) {}
+        public void onProviderDisabled(String s) {
+            //Do something
+        }
     }
 }

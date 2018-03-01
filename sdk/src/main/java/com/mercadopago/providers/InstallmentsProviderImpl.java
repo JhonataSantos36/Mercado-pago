@@ -4,13 +4,11 @@ import android.content.Context;
 
 import com.mercadopago.R;
 import com.mercadopago.callbacks.Callback;
-import com.mercadopago.controllers.CustomServicesHandler;
 import com.mercadopago.core.MercadoPagoServicesAdapter;
 import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.Installment;
 import com.mercadopago.mvp.OnResourcesRetrievedCallback;
-import com.mercadopago.preferences.ServicePreference;
 import com.mercadopago.util.ApiUtil;
 
 import java.math.BigDecimal;
@@ -30,8 +28,6 @@ public class InstallmentsProviderImpl implements InstallmentsProvider {
     private final String merchantGetDiscountUri;
     private final Map<String, String> mDiscountAdditionalInfo;
 
-    private ServicePreference servicePreference;
-
     public InstallmentsProviderImpl(Context context, String publicKey, String privateKey, String merchantBaseUrl,
                                     String merchantDiscountBaseUrl, String merchantGetDiscountUri, Map<String, String> discountAdditionalInfo) {
         this.context = context;
@@ -39,7 +35,6 @@ public class InstallmentsProviderImpl implements InstallmentsProvider {
         this.merchantDiscountBaseUrl = merchantDiscountBaseUrl;
         this.merchantGetDiscountUri = merchantGetDiscountUri;
         this.mDiscountAdditionalInfo = discountAdditionalInfo;
-        this.servicePreference = CustomServicesHandler.getInstance().getServicePreference();
 
         this.mercadoPago = new MercadoPagoServicesAdapter.Builder()
                 .setContext(context)

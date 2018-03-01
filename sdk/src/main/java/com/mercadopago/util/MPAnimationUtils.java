@@ -66,7 +66,7 @@ public class MPAnimationUtils {
                 anim.addListener(new Animator.AnimatorListener() {
                     @Override
                     public void onAnimationStart(Animator animation) {
-
+                        //Do something
                     }
 
                     @Override
@@ -77,12 +77,12 @@ public class MPAnimationUtils {
 
                     @Override
                     public void onAnimationCancel(Animator animation) {
-
+                        //Do something
                     }
 
                     @Override
                     public void onAnimationRepeat(Animator animation) {
-
+                        //Do something
                     }
                 });
                 anim.start();
@@ -96,11 +96,11 @@ public class MPAnimationUtils {
 
             @Override
             public void run() {
-                final Animation mAnimFadeIn = android.view.animation.AnimationUtils.loadAnimation(context, R.anim.mpsdk_fade_in);
+                final Animation mAnimFadeIn = AnimationUtils.loadAnimation(context, R.anim.mpsdk_fade_in);
                 mAnimFadeIn.setAnimationListener(new Animation.AnimationListener() {
                     @Override
                     public void onAnimationStart(Animation animation) {
-
+                        //Do something
                     }
 
                     @Override
@@ -110,7 +110,7 @@ public class MPAnimationUtils {
 
                     @Override
                     public void onAnimationRepeat(Animation animation) {
-
+                        //Do something
                     }
                 });
                 imageView.setBackgroundColor(ContextCompat.getColor(context, color));
@@ -124,11 +124,11 @@ public class MPAnimationUtils {
 
             @Override
             public void run() {
-                Animation mAnimFadeOut = android.view.animation.AnimationUtils.loadAnimation(context, R.anim.mpsdk_fade_out);
+                Animation mAnimFadeOut = AnimationUtils.loadAnimation(context, R.anim.mpsdk_fade_out);
                 mAnimFadeOut.setAnimationListener(new Animation.AnimationListener() {
                     @Override
                     public void onAnimationStart(Animation animation) {
-
+                        //Do something
                     }
 
                     @Override
@@ -139,7 +139,7 @@ public class MPAnimationUtils {
 
                     @Override
                     public void onAnimationRepeat(Animation animation) {
-
+                        //Do something
                     }
                 });
                 imageView.startAnimation(mAnimFadeOut);
@@ -175,7 +175,7 @@ public class MPAnimationUtils {
         animFront.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
-
+                //Do something
             }
 
             @Override
@@ -186,12 +186,12 @@ public class MPAnimationUtils {
 
             @Override
             public void onAnimationCancel(Animator animation) {
-
+                //Do something
             }
 
             @Override
             public void onAnimationRepeat(Animator animation) {
-
+                //Do something
             }
         });
 
@@ -237,7 +237,7 @@ public class MPAnimationUtils {
         animBack.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
-
+                //Do something
             }
 
             @Override
@@ -248,12 +248,12 @@ public class MPAnimationUtils {
 
             @Override
             public void onAnimationCancel(Animator animation) {
-
+                //Do something
             }
 
             @Override
             public void onAnimationRepeat(Animator animation) {
-
+                //Do something
             }
         });
 
@@ -284,7 +284,7 @@ public class MPAnimationUtils {
         animFront.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
-
+                //Do something
             }
 
             @Override
@@ -294,7 +294,7 @@ public class MPAnimationUtils {
 
             @Override
             public void onAnimationRepeat(Animation animation) {
-
+                //Do something
             }
         });
 
@@ -311,7 +311,7 @@ public class MPAnimationUtils {
         animBack.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
-
+                //Do something
             }
 
             @Override
@@ -321,7 +321,7 @@ public class MPAnimationUtils {
 
             @Override
             public void onAnimationRepeat(Animation animation) {
-
+                //Do something
             }
         });
 
@@ -339,7 +339,7 @@ public class MPAnimationUtils {
         animAppear.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
-
+                //Do something
             }
 
             @Override
@@ -349,7 +349,7 @@ public class MPAnimationUtils {
 
             @Override
             public void onAnimationRepeat(Animation animation) {
-
+                //Do something
             }
         });
 
@@ -367,7 +367,7 @@ public class MPAnimationUtils {
         animAppear.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
-
+                //Do something
             }
 
             @Override
@@ -377,7 +377,7 @@ public class MPAnimationUtils {
 
             @Override
             public void onAnimationRepeat(Animation animation) {
-
+                //Do something
             }
         });
 

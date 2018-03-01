@@ -6,7 +6,6 @@ package com.mercadopago.model;
 
 public class PaymentRecovery {
     private Token mToken;
-    private String mStatus;
     private String mStatusDetail;
     private PaymentMethod mPaymentMethod;
     private PayerCost mPayerCost;

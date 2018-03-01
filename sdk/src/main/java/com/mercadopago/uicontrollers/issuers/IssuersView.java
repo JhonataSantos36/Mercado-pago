@@ -18,8 +18,6 @@ public class IssuersView implements IssuersViewController {
 
     public static final String CARD_IMAGE_PREFIX = "mpsdk_issuer_";
 
-    private Issuer mIssuer;
-
     private Context mContext;
     private View mView;
     private ImageView mIssuerImageView;
@@ -54,7 +52,6 @@ public class IssuersView implements IssuersViewController {
 
     @Override
     public void drawIssuer(Issuer issuer) {
-        this.mIssuer = issuer;
         int image = getCardImage(issuer);
         if (image == 0) {
             mIssuerImageView.setVisibility(View.GONE);

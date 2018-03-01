@@ -611,7 +611,7 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
         mContainerUpAnimation.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
-
+                //Do something
             }
 
             @Override
@@ -623,7 +623,7 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
 
             @Override
             public void onAnimationRepeat(Animation animation) {
-
+                //Do something
             }
         });
         mContainerDownAnimation.setAnimationListener(new Animation.AnimationListener() {
@@ -634,12 +634,12 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
 
             @Override
             public void onAnimationEnd(Animation animation) {
-
+                //Do something
             }
 
             @Override
             public void onAnimationRepeat(Animation animation) {
-
+                //Do something
             }
         });
     }
@@ -1122,7 +1122,7 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-
+                //Do something
             }
         });
         mIdentificationTypeSpinner.setOnTouchListener(new View.OnTouchListener() {
@@ -1556,8 +1556,9 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
                     return true;
                 }
                 return false;
+            default:
+                return false;
         }
-        return false;
     }
 
     private boolean checkIsEmptyOrValid() {

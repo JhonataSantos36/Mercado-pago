@@ -4,7 +4,7 @@ import android.content.Context;
 
 public class Device {
 
-    Fingerprint fingerprint;
+    public Fingerprint fingerprint;
 
     public Device(Context context) {
         this.fingerprint = new Fingerprint(context);

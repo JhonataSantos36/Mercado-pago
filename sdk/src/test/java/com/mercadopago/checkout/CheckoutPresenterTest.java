@@ -39,10 +39,8 @@ import com.mercadopago.preferences.CheckoutPreference;
 import com.mercadopago.preferences.FlowPreference;
 import com.mercadopago.presenters.CheckoutPresenter;
 import com.mercadopago.providers.CheckoutProvider;
-import com.mercadopago.util.TextUtil;
+import com.mercadopago.util.TextUtils;
 import com.mercadopago.views.CheckoutView;
-
-import junit.framework.Assert;
 
 import org.junit.Ignore;
 import org.junit.Test;
@@ -825,7 +823,7 @@ public class CheckoutPresenterTest {
 
         presenter.initialize();
 
-        assertTrue(!view.showingPaymentMethodSelection);
+        assertFalse(view.showingPaymentMethodSelection);
         assertTrue(view.showingReviewAndConfirm);
     }
 
@@ -908,8 +906,8 @@ public class CheckoutPresenterTest {
 
         presenter.initialize();
 
-        assertTrue(!view.showingPaymentMethodSelection);
-        assertTrue(!view.showingReviewAndConfirm);
+        assertFalse(view.showingPaymentMethodSelection);
+        assertFalse(view.showingReviewAndConfirm);
         assertTrue(view.showingPaymentResult);
     }
 
@@ -1218,7 +1216,7 @@ public class CheckoutPresenterTest {
         presenter.onPaymentConfirmation();
 
         assertTrue(provider.paymentRequested);
-        assertTrue(!TextUtil.isEmpty(provider.transactionId));
+        assertFalse(TextUtils.isEmpty(provider.transactionId));
     }
 
     @Test
@@ -1252,7 +1250,7 @@ public class CheckoutPresenterTest {
         presenter.onPaymentConfirmation();
 
         assertTrue(provider.paymentRequested);
-        assertTrue(!TextUtil.isEmpty(provider.paymentCustomerId));
+        assertFalse(TextUtils.isEmpty(provider.paymentCustomerId));
     }
 
     @Test
@@ -1676,12 +1674,12 @@ public class CheckoutPresenterTest {
         presenter.onPaymentMethodSelectionResponse(PaymentMethods.getPaymentMethodOff(), null, null, null, null, null, collectedPayer);
         presenter.onPaymentConfirmation();
 
-        Assert.assertEquals(provider.payerPosted.getEmail(), preferencePayer.getEmail());
-        Assert.assertEquals(provider.payerPosted.getAccessToken(), preferencePayer.getAccessToken());
-        Assert.assertEquals(provider.payerPosted.getFirstName(), firstName);
-        Assert.assertEquals(provider.payerPosted.getLastName(), lastName);
-        Assert.assertEquals(provider.payerPosted.getIdentification().getType(), identification.getType());
-        Assert.assertEquals(provider.payerPosted.getIdentification().getNumber(), identification.getNumber());
+        assertEquals(provider.payerPosted.getEmail(), preferencePayer.getEmail());
+        assertEquals(provider.payerPosted.getAccessToken(), preferencePayer.getAccessToken());
+        assertEquals(provider.payerPosted.getFirstName(), firstName);
+        assertEquals(provider.payerPosted.getLastName(), lastName);
+        assertEquals(provider.payerPosted.getIdentification().getType(), identification.getType());
+        assertEquals(provider.payerPosted.getIdentification().getNumber(), identification.getNumber());
     }
 
     @Test
@@ -1712,8 +1710,8 @@ public class CheckoutPresenterTest {
         presenter.onPaymentMethodSelectionResponse(PaymentMethods.getPaymentMethodOff(), null, null, null, null, null, null);
         presenter.onPaymentConfirmation();
 
-        Assert.assertEquals(provider.payerPosted.getEmail(), preferencePayer.getEmail());
-        Assert.assertEquals(provider.payerPosted.getAccessToken(), preferencePayer.getAccessToken());
+        assertEquals(provider.payerPosted.getEmail(), preferencePayer.getEmail());
+        assertEquals(provider.payerPosted.getAccessToken(), preferencePayer.getAccessToken());
     }
 
     @Test

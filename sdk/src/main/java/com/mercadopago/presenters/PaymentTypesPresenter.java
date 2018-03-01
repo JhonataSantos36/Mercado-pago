@@ -27,12 +27,8 @@ public class PaymentTypesPresenter {
 
     //Local vars
     private PaymentMethod mPaymentMethod;
-    List<PaymentMethod> mPaymentMethodList;
-    List<PaymentType> mPaymentTypeList;
-
-    public PaymentTypesPresenter(Context context) {
-        this.mContext = context;
-    }
+    private List<PaymentMethod> mPaymentMethodList;
+    private List<PaymentType> mPaymentTypeList;
 
     public void setView(PaymentTypesActivityView view) {
         this.mView = view;

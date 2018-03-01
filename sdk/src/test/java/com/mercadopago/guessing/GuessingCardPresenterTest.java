@@ -35,8 +35,6 @@ import com.mercadopago.util.ApiUtil;
 import com.mercadopago.utils.CardTestUtils;
 import com.mercadopago.views.GuessingCardActivityView;
 
-import junit.framework.Assert;
-
 import org.junit.Test;
 
 import java.math.BigDecimal;
@@ -980,7 +978,7 @@ public class GuessingCardPresenterTest {
         GuessingCardPresenter presenter = new GuessingCardPresenter();
 
         boolean shouldAskPaymentType = presenter.shouldAskPaymentType(paymentMethodList);
-        Assert.assertFalse(shouldAskPaymentType);
+        assertFalse(shouldAskPaymentType);
     }
 
     @Test
@@ -999,7 +997,7 @@ public class GuessingCardPresenterTest {
         GuessingCardPresenter presenter = new GuessingCardPresenter();
 
         boolean shouldAskPaymentType = presenter.shouldAskPaymentType(paymentMethodList);
-        Assert.assertTrue(shouldAskPaymentType);
+        assertTrue(shouldAskPaymentType);
     }
 
     @Test
@@ -1010,7 +1008,7 @@ public class GuessingCardPresenterTest {
         GuessingCardPresenter presenter = new GuessingCardPresenter();
 
         boolean shouldAskPaymentType = presenter.shouldAskPaymentType(paymentMethodList);
-        Assert.assertTrue(shouldAskPaymentType);
+        assertTrue(shouldAskPaymentType);
     }
 
     @Test
@@ -1021,7 +1019,7 @@ public class GuessingCardPresenterTest {
         GuessingCardPresenter presenter = new GuessingCardPresenter();
 
         boolean shouldAskPaymentType = presenter.shouldAskPaymentType(paymentMethodList);
-        Assert.assertTrue(shouldAskPaymentType);
+        assertTrue(shouldAskPaymentType);
     }
 
     @Test
@@ -1036,7 +1034,7 @@ public class GuessingCardPresenterTest {
         GuessingCardPresenter presenter = new GuessingCardPresenter();
 
         boolean shouldAskPaymentType = presenter.shouldAskPaymentType(paymentMethodList);
-        Assert.assertFalse(shouldAskPaymentType);
+        assertFalse(shouldAskPaymentType);
     }
 
     private class MockedView implements GuessingCardActivityView {

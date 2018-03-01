@@ -18,6 +18,12 @@ import java.util.Collection;
 
 @RunWith(Parameterized.class)
 public class PaymentMethodSearchGetPaymentMethodTest {
+
+    private PaymentMethodSearch paymentMethodSearch;
+    private String mItemId;
+    private String mPaymentMethodId;
+    private String mPaymentTypeId;
+
     @Parameterized.Parameters
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
@@ -31,15 +37,6 @@ public class PaymentMethodSearchGetPaymentMethodTest {
                 {"invalid_item", "invalid_item", ""}
         });
     }
-
-    public PaymentMethodSearch paymentMethodSearch;
-
-    public String mItemId;
-
-    public String mPaymentMethodId;
-
-    public String mPaymentTypeId;
-
 
     public PaymentMethodSearchGetPaymentMethodTest(String itemId, String paymentMethodId, String paymentTypeId) {
         this.paymentMethodSearch = getPaymentMethodSearch();

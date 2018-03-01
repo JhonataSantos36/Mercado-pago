@@ -648,7 +648,6 @@ public class SecurityCodePresenterTest {
 
 
     private class SecurityCodeMockedView implements SecurityCodeActivityView {
-
         private boolean screenTracked = false;
         private boolean loadingViewShown = false;
         private boolean finishWithResult = false;
@@ -692,7 +691,6 @@ public class SecurityCodePresenterTest {
 
         @Override
         public void clearErrorView() {
-
         }
 
         @Override
@@ -722,12 +720,10 @@ public class SecurityCodePresenterTest {
 
         @Override
         public void showBackSecurityCodeCardView() {
-
         }
 
         @Override
         public void showFrontSecurityCodeCardView() {
-
         }
 
     }

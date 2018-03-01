@@ -9,4 +9,12 @@ public class PayerIntent {
     public PayerIntent(Payer payer) {
         this.payer = payer;
     }
+
+    public Payer getPayer() {
+        return this.payer;
+    }
+
+    public void setPayer(Payer payer) {
+        this.payer = payer;
+    }
 }

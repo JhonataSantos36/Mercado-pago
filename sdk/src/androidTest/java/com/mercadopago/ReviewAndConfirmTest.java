@@ -54,7 +54,7 @@ public class ReviewAndConfirmTest {
 
     private class MockedReviewable extends Reviewable {
 
-        boolean drawn = false;
+        private boolean drawn = false;
 
         @Override
         public void draw() {
@@ -63,7 +63,7 @@ public class ReviewAndConfirmTest {
 
         @Override
         public void initializeControls() {
-
+            //Do something
         }
 
         @Override

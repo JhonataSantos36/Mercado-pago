@@ -72,7 +72,7 @@ public class PaymentTypesActivity extends MercadoPagoBaseActivity implements Pay
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (mPresenter == null) {
-            mPresenter = new PaymentTypesPresenter(getBaseContext());
+            mPresenter = new PaymentTypesPresenter();
         }
         mPresenter.setView(this);
         mActivity = this;
