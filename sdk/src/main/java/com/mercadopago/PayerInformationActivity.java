@@ -282,7 +282,7 @@ public class PayerInformationActivity extends MercadoPagoBaseActivity implements
         mIdentificationTicketView.setIdentificationType(identificationTypes.get(0));
         mIdentificationTicketView.drawIdentificationTypeName();
 
-        mIdentificationTypeSpinner.setAdapter(new IdentificationTypesAdapter(this, identificationTypes));
+        mIdentificationTypeSpinner.setAdapter(new IdentificationTypesAdapter(identificationTypes));
         mIdentificationTypeContainer.setVisibility(View.VISIBLE);
     }
 

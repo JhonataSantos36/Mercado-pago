@@ -185,7 +185,7 @@ public class BankDealsActivity extends MercadoPagoActivity {
     }
 
     protected void solveBankDeals(List<BankDeal> bankDeals) {
-        mRecyclerView.setAdapter(new BankDealsAdapter(getActivity(), bankDeals, getDpadSelectionCallback(), new View.OnClickListener() {
+        mRecyclerView.setAdapter(new BankDealsAdapter(bankDeals, getDpadSelectionCallback(), new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 showSelectedBankDealTerms(view);

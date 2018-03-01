@@ -259,9 +259,9 @@ public class InstallmentsActivity extends MercadoPagoBaseActivity implements Ins
 
     @Override
     public void warnAboutBankInterests() {
-        mNoInstallmentsRate = (LinearLayout) findViewById(R.id.mpsdkNoInstallmentsRate);
+        mNoInstallmentsRate = findViewById(R.id.mpsdkNoInstallmentsRate);
         mNoInstallmentsRate.setVisibility(View.VISIBLE);
-        mNoInstallmentsRateTextView = (MPTextView) findViewById(R.id.mpsdkNoInstallmentsRateTextView);
+        mNoInstallmentsRateTextView = findViewById(R.id.mpsdkNoInstallmentsRateTextView);
         mNoInstallmentsRateTextView.setVisibility(View.VISIBLE);
         mNoInstallmentsRateTextView.setText(R.string.mpsdk_interest_label);
     }
@@ -356,7 +356,7 @@ public class InstallmentsActivity extends MercadoPagoBaseActivity implements Ins
     }
 
     private void initializeAdapter(OnSelectedCallback<Integer> onSelectedCallback) {
-        mPayerCostsAdapter = new PayerCostsAdapter(this, mPresenter.getSite(), onSelectedCallback);
+        mPayerCostsAdapter = new PayerCostsAdapter(mPresenter.getSite(), onSelectedCallback);
         initializeAdapterListener(mPayerCostsAdapter, mInstallmentsRecyclerView);
     }
 

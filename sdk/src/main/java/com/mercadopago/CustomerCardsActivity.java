@@ -137,10 +137,10 @@ public class CustomerCardsActivity extends MercadoPagoBaseActivity implements Cu
 
     protected void initializePaymentOptionsRecyclerView(List<Card> cards, String actionMessage, OnSelectedCallback<Card> onSelectedCallback) {
         int columns = COLUMNS;
-        mItemsRecyclerView = (RecyclerView) findViewById(R.id.mpsdkCardsList);
+        mItemsRecyclerView = findViewById(R.id.mpsdkCardsList);
         mItemsRecyclerView.setLayoutManager(new GridLayoutManager(this, columns));
         mItemsRecyclerView.addItemDecoration(new GridSpacingItemDecoration(columns, ScaleUtil.getPxFromDp(COLUMN_SPACING_DP_VALUE, this), true));
-        CustomerCardItemAdapter groupsAdapter = new CustomerCardItemAdapter(this, cards, actionMessage, onSelectedCallback);
+        CustomerCardItemAdapter groupsAdapter = new CustomerCardItemAdapter(cards, actionMessage, onSelectedCallback);
 
         populateCustomerCardList(groupsAdapter);
     }

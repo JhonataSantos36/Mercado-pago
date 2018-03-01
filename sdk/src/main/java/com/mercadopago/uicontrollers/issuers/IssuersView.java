@@ -29,8 +29,8 @@ public class IssuersView implements IssuersViewController {
 
     @Override
     public void initializeControls() {
-        mIssuerImageView = (ImageView) mView.findViewById(R.id.mpsdkIssuerImageView);
-        mIssuerTextView = (MPTextView) mView.findViewById(R.id.mpsdkIssuerTextView);
+        mIssuerImageView = mView.findViewById(R.id.mpsdkIssuerImageView);
+        mIssuerTextView = mView.findViewById(R.id.mpsdkIssuerTextView);
     }
 
     @Override

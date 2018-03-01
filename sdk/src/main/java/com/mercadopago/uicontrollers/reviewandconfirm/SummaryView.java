@@ -107,7 +107,7 @@ public class SummaryView extends Reviewable {
     }
 
     private void initializeAdapter(OnSelectedCallback<Integer> onSelectedCallback) {
-        mSummaryRowAdapter = new SummaryRowAdapter(mContext, onSelectedCallback);
+        mSummaryRowAdapter = new SummaryRowAdapter(onSelectedCallback);
         initializeAdapterListener(mSummaryRowAdapter, mSummaryRowsRecyclerView);
     }
 

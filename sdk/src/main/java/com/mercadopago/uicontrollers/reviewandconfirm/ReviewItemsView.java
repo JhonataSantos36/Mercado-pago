@@ -36,7 +36,7 @@ public class ReviewItemsView extends Reviewable {
 
     @Override
     public void draw() {
-        ReviewProductAdapter adapter = new ReviewProductAdapter(context, items, currency, reviewScreenPreference);
+        ReviewProductAdapter adapter = new ReviewProductAdapter(items, currency, reviewScreenPreference);
         reviewItemsRecyclerView.setAdapter(adapter);
     }
 

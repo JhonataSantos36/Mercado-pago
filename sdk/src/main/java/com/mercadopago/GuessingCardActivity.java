@@ -1201,7 +1201,7 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
 
     @Override
     public void initializeIdentificationTypes(List<IdentificationType> identificationTypes) {
-        mIdentificationTypeSpinner.setAdapter(new IdentificationTypesAdapter(this, identificationTypes));
+        mIdentificationTypeSpinner.setAdapter(new IdentificationTypesAdapter(identificationTypes));
         mIdentificationTypeContainer.setVisibility(View.VISIBLE);
         if (cardViewsActive()) {
             mIdentificationCardView.setIdentificationType(identificationTypes.get(0));

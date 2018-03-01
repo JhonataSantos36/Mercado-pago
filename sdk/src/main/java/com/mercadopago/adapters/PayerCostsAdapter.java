@@ -1,6 +1,5 @@
 package com.mercadopago.adapters;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -17,17 +16,13 @@ import com.mercadopago.uicontrollers.payercosts.PayerCostRow;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PayerCostsAdapter extends  RecyclerView.Adapter<PayerCostsAdapter.ViewHolder> {
+public class PayerCostsAdapter extends RecyclerView.Adapter<PayerCostsAdapter.ViewHolder> {
 
     private final Site mSite;
-    private Context mContext;
     private List<PayerCost> mInstallmentsList;
-    private String mCurrencyId;
     private OnSelectedCallback<Integer> mCallback;
 
-    public PayerCostsAdapter(Context context, Site site, OnSelectedCallback<Integer> callback) {
-        this.mContext = context;
-        this.mCurrencyId = site.getCurrencyId();
+    public PayerCostsAdapter(Site site, OnSelectedCallback<Integer> callback) {
         this.mSite = site;
         this.mInstallmentsList = new ArrayList<>();
         this.mCallback = callback;
@@ -45,11 +40,9 @@ public class PayerCostsAdapter extends  RecyclerView.Adapter<PayerCostsAdapter.V
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
-        LayoutInflater inflater = LayoutInflater.from(mContext);
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View adapterView = inflater.inflate(R.layout.mpsdk_adapter_payer_cost, parent, false);
-        ViewHolder viewHolder = new ViewHolder(adapterView);
-        return viewHolder;
+        return new ViewHolder(adapterView);
     }
 
     @Override
@@ -57,10 +50,6 @@ public class PayerCostsAdapter extends  RecyclerView.Adapter<PayerCostsAdapter.V
         PayerCost payerCost = mInstallmentsList.get(position);
         holder.mPayerCostRow.setSmallTextSize();
         holder.mPayerCostRow.drawPayerCost(payerCost);
-    }
-
-    public PayerCost getItem(int position) {
-        return mInstallmentsList.get(position);
     }
 
     @Override
@@ -75,8 +64,8 @@ public class PayerCostsAdapter extends  RecyclerView.Adapter<PayerCostsAdapter.V
 
         public ViewHolder(View itemView) {
             super(itemView);
-            mPayerCostContainer = (FrameLayout) itemView.findViewById(R.id.mpsdkPayerCostAdapterContainer);
-            mPayerCostRow = new PayerCostRow(mContext, mSite);
+            mPayerCostContainer = itemView.findViewById(R.id.mpsdkPayerCostAdapterContainer);
+            mPayerCostRow = new PayerCostRow(itemView.getContext(), mSite);
             mPayerCostRow.inflateInParent(mPayerCostContainer, true);
             mPayerCostRow.initializeControls();
 
