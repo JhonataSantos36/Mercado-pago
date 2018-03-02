@@ -6,7 +6,7 @@ import android.support.annotation.NonNull;
 import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.components.Action;
 import com.mercadopago.components.ActionsListener;
-import com.mercadopago.components.ChangePaymentMethodAction;
+import com.mercadopago.review_and_confirm.components.actions.ChangePaymentMethodAction;
 import com.mercadopago.components.LinkAction;
 import com.mercadopago.components.NextAction;
 import com.mercadopago.components.RecoverPaymentAction;

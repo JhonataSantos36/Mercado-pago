@@ -1,7 +1,7 @@
 package com.mercadopago.paymentresult;
 
 import com.mercadopago.components.ActionDispatcher;
-import com.mercadopago.components.ChangePaymentMethodAction;
+import com.mercadopago.review_and_confirm.components.actions.ChangePaymentMethodAction;
 import com.mercadopago.components.NextAction;
 import com.mercadopago.components.RecoverPaymentAction;
 import com.mercadopago.mocks.PaymentResults;

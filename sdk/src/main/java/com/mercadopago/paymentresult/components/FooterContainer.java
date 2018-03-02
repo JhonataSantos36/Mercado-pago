@@ -3,7 +3,7 @@ package com.mercadopago.paymentresult.components;
 import android.support.annotation.NonNull;
 
 import com.mercadopago.components.ActionDispatcher;
-import com.mercadopago.components.ChangePaymentMethodAction;
+import com.mercadopago.review_and_confirm.components.actions.ChangePaymentMethodAction;
 import com.mercadopago.components.Component;
 import com.mercadopago.components.RecoverPaymentAction;
 import com.mercadopago.components.ResultCodeAction;

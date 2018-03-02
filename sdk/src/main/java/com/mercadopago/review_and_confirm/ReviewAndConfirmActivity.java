@@ -14,12 +14,16 @@ import com.mercadopago.R;
 import com.mercadopago.components.Action;
 import com.mercadopago.components.ActionDispatcher;
 import com.mercadopago.components.ComponentManager;
+import com.mercadopago.review_and_confirm.components.actions.ChangePaymentMethodAction;
 import com.mercadopago.review_and_confirm.components.ReviewAndConfirmContainer;
 import com.mercadopago.review_and_confirm.models.PaymentModel;
 import com.mercadopago.review_and_confirm.models.TermsAndConditionsModel;
 import com.mercadopago.uicontrollers.FontCache;
 
 public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements ActionDispatcher {
+
+    public static final int RESULT_CANCEL_PAYMENT = 4;
+    public static final int RESULT_CHANGE_PAYMENT_METHOD = 3;
 
     private static final String EXTRA_TERMS_AND_CONDITIONS = "extra_terms_and_conditions";
     private static final String EXTRA_PAYMENT_MODEL = "payment_model";
@@ -37,6 +41,7 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //TODO tracking init screen?
         setContentView(R.layout.mpsdk_view_container_review_and_confirm);
         initToolbar();
         initContent();
@@ -61,7 +66,7 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onBackPressed();
+                cancelPayment();
             }
         });
         CollapsingToolbarLayout collapsingToolbarLayout = findViewById(R.id.collapsing_toolbar);
@@ -70,6 +75,24 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
             collapsingToolbarLayout.setCollapsedTitleTypeface(FontCache.getTypeface(FontCache.CUSTOM_REGULAR_FONT));
             collapsingToolbarLayout.setExpandedTitleTypeface(FontCache.getTypeface(FontCache.CUSTOM_REGULAR_FONT));
         }
+    }
+
+    private void confirmPayment() {
+        // TODO trackCheckoutConfirmed();
+        setResult(RESULT_OK);
+        finish();
+    }
+
+    private void cancelPayment() {
+        //TODO tracking finish screen?
+        setResult(RESULT_CANCEL_PAYMENT);
+        super.onBackPressed();
+    }
+
+    private void changePaymentMethod() {
+        //TODO tracking finish screen?
+        setResult(RESULT_CHANGE_PAYMENT_METHOD);
+        finish();
     }
 
     private ReviewAndConfirmContainer.Props getActivityParameters() {
@@ -91,6 +114,10 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
 
     @Override
     public void dispatch(Action action) {
-        throw new UnsupportedOperationException();
+        if (action instanceof ChangePaymentMethodAction) {
+            changePaymentMethod();
+        } else {
+            throw new UnsupportedOperationException();
+        }
     }
 }

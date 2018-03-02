@@ -7,10 +7,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import com.mercadopago.components.ActionDispatcher;
 import com.mercadopago.components.Renderer;
 import com.mercadopago.components.RendererFactory;
-import com.mercadopago.review_and_confirm.models.PaymentModel;
+import com.mercadopago.review_and_confirm.components.actions.ChangePaymentMethodAction;
 import com.mercadopago.review_and_confirm.components.payment_method.PaymentMethodComponent;
+import com.mercadopago.review_and_confirm.models.PaymentModel;
 
 public class ReviewAndConfirmRenderer extends Renderer<ReviewAndConfirmContainer> {
 
@@ -24,26 +26,23 @@ public class ReviewAndConfirmRenderer extends Renderer<ReviewAndConfirmContainer
         linearLayout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT));
 
+        //TODO add view summary - add view item - add view custom
 
-        //TODO add views
-        addPaymentMethod(component.props.paymentModel, linearLayout);
+        addPaymentMethod(component.props.paymentModel, component.getDispatcher(), linearLayout);
 
         if (component.props.termsAndConditionsModel.isActive()) {
             addReviewAndConfirm(component, linearLayout);
         }
 
-        //TODO add views
-
         parent.addView(linearLayout);
-
-        return linearLayout;
+        return parent;
     }
 
-    private void addPaymentMethod(final PaymentModel paymentModel, final ViewGroup parent) {
+    private void addPaymentMethod(final PaymentModel paymentModel, final ActionDispatcher dispatcher, final ViewGroup parent) {
         PaymentMethodComponent paymentMethodComponent = new PaymentMethodComponent(paymentModel, new PaymentMethodComponent.Actions() {
             @Override
             public void onPaymentMethodChangeClicked() {
-                //TODO start payment method activity.
+                dispatcher.dispatch(new ChangePaymentMethodAction());
             }
         });
 
