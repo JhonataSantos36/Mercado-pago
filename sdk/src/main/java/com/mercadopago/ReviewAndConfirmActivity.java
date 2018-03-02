@@ -195,16 +195,16 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
     }
 
     private void initializeControls() {
-        mScrollView = (NestedScrollView) findViewById(R.id.mpsdkReviewScrollView);
+        mScrollView = (NestedScrollView) findViewById(R.id.scroll_view);
         mCollapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         mAppBar = (AppBarLayout) findViewById(R.id.appbar);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        mFloatingConfirmButton = (FrameLayout) findViewById(R.id.mpsdkCheckoutFloatingConfirmButton);
+//        mFloatingConfirmButton = (FrameLayout) findViewById(R.id.mpsdkCheckoutFloatingConfirmButton);
+//        mCancelButton = (FrameLayout) findViewById(R.id.mpsdkReviewCancelButton);
         mFloatingConfirmTextButton = (MPTextView) findViewById(R.id.mpsdkFloatingConfirmText);
         mFloatingConfirmView = (FrameLayout) findViewById(R.id.mpsdkCheckoutFloatingConfirmView);
         mConfirmButton = (FrameLayout) findViewById(R.id.mpsdkCheckoutConfirmButton);
         mConfirmTextButton = (MPTextView) findViewById(R.id.mpsdkConfirmText);
-        mCancelButton = (FrameLayout) findViewById(R.id.mpsdkReviewCancelButton);
         mCancelTextView = (MPTextView) findViewById(R.id.mpsdkCancelText);
         mTermsAndConditionsButton = (LinearLayout) findViewById(R.id.mpsdkCheckoutTermsAndConditions);
         mTermsAndConditionsTextView = (MPTextView) findViewById(R.id.mpsdkReviewTermsAndConditions);

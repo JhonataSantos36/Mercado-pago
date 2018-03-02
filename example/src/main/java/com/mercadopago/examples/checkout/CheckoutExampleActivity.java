@@ -77,15 +77,7 @@ public class CheckoutExampleActivity extends AppCompatActivity {
     }
 
     private void onContinueClicked() {
-        TermsAndConditionsModel termsAndConditionsModel = new TermsAndConditionsModel(Sites.ARGENTINA.getId(), true);
-        PaymentModel paymentModel = new PaymentModel("debvisa",
-                "1234",
-                "MasterCard",
-                PaymentTypes.BANK_TRANSFER,
-                1000,
-                "HSBC", true, R.drawable.mpsdk_account_money);
-        ReviewAndConfirmActivity.start(this, termsAndConditionsModel, paymentModel);
-        //startMercadoPagoCheckout();
+        startMercadoPagoCheckout();
     }
 
     private void startMercadoPagoCheckout() {

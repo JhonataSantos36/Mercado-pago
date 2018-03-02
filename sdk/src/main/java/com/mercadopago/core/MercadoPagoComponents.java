@@ -3,11 +3,10 @@ package com.mercadopago.core;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.support.annotation.DrawableRes;
+
 import com.google.gson.Gson;
 import com.mercadopago.BankDealsActivity;
 import com.mercadopago.CardVaultActivity;
-import com.mercadopago.CustomerCardsActivity;
 import com.mercadopago.DiscountsActivity;
 import com.mercadopago.GuessingCardActivity;
 import com.mercadopago.InstallmentsActivity;
@@ -16,7 +15,6 @@ import com.mercadopago.PayerInformationActivity;
 import com.mercadopago.PaymentMethodsActivity;
 import com.mercadopago.PaymentTypesActivity;
 import com.mercadopago.PaymentVaultActivity;
-import com.mercadopago.ReviewAndConfirmActivity;
 import com.mercadopago.ReviewPaymentMethodsActivity;
 import com.mercadopago.SecurityCodeActivity;
 import com.mercadopago.callbacks.OnConfirmPaymentCallback;
@@ -43,21 +41,19 @@ import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.preferences.PaymentResultScreenPreference;
 import com.mercadopago.preferences.ReviewScreenPreference;
 import com.mercadopago.preferences.ServicePreference;
-import com.mercadopago.uicontrollers.discounts.DiscountRowView;
+import com.mercadopago.review_and_confirm.models.PaymentModel;
+import com.mercadopago.review_and_confirm.models.TermsAndConditionsModel;
 import com.mercadopago.uicontrollers.reviewandconfirm.ReviewItemsView;
 import com.mercadopago.uicontrollers.reviewandconfirm.ReviewPaymentOffView;
 import com.mercadopago.uicontrollers.reviewandconfirm.ReviewPaymentOnView;
 import com.mercadopago.uicontrollers.reviewandconfirm.SummaryView;
-import com.mercadopago.uicontrollers.savedcards.SavedCardRowView;
-import com.mercadopago.uicontrollers.savedcards.SavedCardView;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.MercadoPagoUtil;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import static com.mercadopago.util.TextUtil.isEmpty;
 
 /**
  * Created by mreverter on 1/17/17.
@@ -313,7 +309,7 @@ public class MercadoPagoComponents {
             private BigDecimal amount;
             private Site site;
             private Issuer issuer;
-            private Boolean editionEnabled;
+            private Boolean hasExtraPaymentMethods;
             private String paymentMethodCommentInfo;
             private String paymentMethodDescriptionInfo;
             private List<Item> items;
@@ -364,8 +360,8 @@ public class MercadoPagoComponents {
                 return this;
             }
 
-            public ReviewAndConfirmBuilder setEditionEnabled(Boolean editionEnabled) {
-                this.editionEnabled = editionEnabled;
+            public ReviewAndConfirmBuilder setHasExtraPaymentMethods(Boolean hasExtraPaymentMethods) {
+                this.hasExtraPaymentMethods = hasExtraPaymentMethods;
                 return this;
             }
 
@@ -420,24 +416,29 @@ public class MercadoPagoComponents {
             }
 
             private void startReviewAndConfirmActivity() {
-                Intent intent = new Intent(activity, ReviewAndConfirmActivity.class);
-                intent.putExtra("merchantPublicKey", merchantPublicKey);
-                intent.putExtra("editionEnabled", editionEnabled);
-                intent.putExtra("amount", amount.toString());
-                intent.putExtra("site", JsonUtil.getInstance().toJson(site));
-                intent.putExtra("issuer", JsonUtil.getInstance().toJson(issuer));
-                intent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
-                intent.putExtra("payerCost", JsonUtil.getInstance().toJson(payerCost));
-                intent.putExtra("token", JsonUtil.getInstance().toJson(token));
-                intent.putExtra("paymentMethodCommentInfo", paymentMethodCommentInfo);
-                intent.putExtra("paymentMethodDescriptionInfo", paymentMethodDescriptionInfo);
-                intent.putExtra("discount", JsonUtil.getInstance().toJson(discount));
-                intent.putExtra("items", new Gson().toJson(items));
-                intent.putExtra("termsAndConditionsEnabled", termsAndConditionsEnabled);
-                intent.putExtra("discountEnabled", discountEnabled);
-                intent.putExtra("reviewScreenPreference", JsonUtil.getInstance().toJson(reviewScreenPreference));
+                // TODO remove
+//                Intent intent = new Intent(activity, ReviewAndConfirmActivity.class);
+//                intent.putExtra("merchantPublicKey", merchantPublicKey);
+//                intent.putExtra("hasExtraPaymentMethods", hasExtraPaymentMethods);
+//                intent.putExtra("amount", amount.toString());
+//                intent.putExtra("site", JsonUtil.getInstance().toJson(site));
+//                intent.putExtra("issuer", JsonUtil.getInstance().toJson(issuer));
+//                intent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
+//                intent.putExtra("payerCost", JsonUtil.getInstance().toJson(payerCost));
+//                intent.putExtra("token", JsonUtil.getInstance().toJson(token));
+//                intent.putExtra("paymentMethodCommentInfo", paymentMethodCommentInfo);
+//                intent.putExtra("paymentMethodDescriptionInfo", paymentMethodDescriptionInfo);
+//                intent.putExtra("discount", JsonUtil.getInstance().toJson(discount));
+//                intent.putExtra("items", new Gson().toJson(items));
+//                intent.putExtra("termsAndConditionsEnabled", termsAndConditionsEnabled);
+//                intent.putExtra("discountEnabled", discountEnabled);
+//                intent.putExtra("reviewScreenPreference", JsonUtil.getInstance().toJson(reviewScreenPreference));
+//                activity.startActivityForResult(intent, MercadoPagoComponents.Activities.REVIEW_AND_CONFIRM_REQUEST_CODE);
 
-                activity.startActivityForResult(intent, MercadoPagoComponents.Activities.REVIEW_AND_CONFIRM_REQUEST_CODE);
+                //TODO remove the two trues and validate data.
+                TermsAndConditionsModel termsAndConditionsModel = new TermsAndConditionsModel(site.getId(), termsAndConditionsEnabled);
+                PaymentModel paymentModel = new PaymentModel(paymentMethod, token, issuer, hasExtraPaymentMethods);
+                com.mercadopago.review_and_confirm.ReviewAndConfirmActivity.start(activity, termsAndConditionsModel, paymentModel);
             }
         }
 

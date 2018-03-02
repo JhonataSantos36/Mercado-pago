@@ -15,7 +15,7 @@
         android:layout_height="150dp" />
 
     <android.support.v4.widget.NestedScrollView
-        android:id="@+id/mpsdkReviewScrollView"
+        android:id="@+id/scroll_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:overScrollMode="never"
@@ -75,69 +75,14 @@
 
             </FrameLayout>
 
-            <FrameLayout
-                android:id="@+id/mpsdkReviewCancelButton"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="18dp"
-                android:layout_marginTop="20dp">
-
-                <com.mercadopago.customviews.MPTextView
-                    android:id="@+id/mpsdkCancelText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="@string/mpsdk_cancel_payment"
-                    android:textColor="@color/mpsdk_link"
-                    android:textSize="16dp"
-                    app:font_style="regular" />
-
-            </FrameLayout>
-
         </LinearLayout>
 
     </android.support.v4.widget.NestedScrollView>
 
-    <FrameLayout
-        android:id="@+id/mpsdkCheckoutFloatingConfirmView"
+    <include
+        layout="@layout/mpsdk_view_confirm_cancel_buttons"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:layout_gravity="bottom"
-        android:layout_marginBottom="0dp"
-        android:background="@color/mpsdk_white_background"
-        android:orientation="horizontal">
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#DDDDDD" />
-
-        <FrameLayout
-            android:id="@+id/mpsdkCheckoutFloatingConfirmButton"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_gravity="bottom"
-            android:layout_marginBottom="15dp"
-            android:layout_marginEnd="15dp"
-            android:layout_marginLeft="25dp"
-            android:layout_marginRight="25dp"
-            android:layout_marginStart="15dp"
-            android:layout_marginTop="15dp"
-            android:background="@drawable/mpsdk_button_bg_stroke"
-            android:focusable="true"
-            android:visibility="visible">
-
-            <com.mercadopago.customviews.MPTextView
-                android:id="@+id/mpsdkFloatingConfirmText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/mpsdk_confirm_payment"
-                android:textColor="@color/mpsdk_white_background"
-                android:textSize="18dp" />
-
-        </FrameLayout>
-    </FrameLayout>
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom" />
 
 </android.support.design.widget.CoordinatorLayout>

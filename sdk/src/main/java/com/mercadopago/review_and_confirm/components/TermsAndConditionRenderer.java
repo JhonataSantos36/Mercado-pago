@@ -16,7 +16,8 @@ public class TermsAndConditionRenderer extends Renderer<TermsAndCondition> {
                           @NonNull final Context context,
                           @Nullable final ViewGroup parent) {
 
-        final View termsAndConditionsView = inflate(R.layout.mpsdk_view_terms_and_condition, parent);
+        final View root = inflate(R.layout.mpsdk_view_terms_and_condition, parent);
+        final View termsAndConditionsView = root.findViewById(R.id.mpsdkCheckoutTermsAndConditions);
         termsAndConditionsView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {

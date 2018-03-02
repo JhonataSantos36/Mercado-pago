@@ -313,7 +313,7 @@ public class CheckoutActivity extends MercadoPagoBaseActivity implements Checkou
                 .setPayerCost(mCheckoutPresenter.getSelectedPayerCost())
                 .setAmount(mCheckoutPresenter.getCheckoutPreference().getAmount())
                 .setSite(mCheckoutPresenter.getCheckoutPreference().getSite())
-                .setEditionEnabled(!mCheckoutPresenter.isUniquePaymentMethod())
+                .setHasExtraPaymentMethods(!mCheckoutPresenter.isUniquePaymentMethod())
                 .setDiscountEnabled(mCheckoutPresenter.isDiscountEnabled())
                 .setItems(mCheckoutPresenter.getCheckoutPreference().getItems())
                 .setTermsAndConditionsEnabled(!isUserLogged());

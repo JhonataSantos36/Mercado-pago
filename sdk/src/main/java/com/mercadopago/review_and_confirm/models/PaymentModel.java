@@ -4,6 +4,11 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.DrawableRes;
 
+import com.mercadopago.model.Issuer;
+import com.mercadopago.model.PaymentMethod;
+import com.mercadopago.model.Token;
+
+
 /**
  * Created by lbais on 1/3/18.
  */
@@ -21,42 +26,26 @@ public class PaymentModel implements Parcelable {
     private final int icon;
 
     //TODO make easier constructor with already known entities
-    public PaymentModel(String paymentMethodId, String lastFourDigits,
-                        String paymentMethodName,
-                        String paymentType,
-                        Integer accreditationTime,
-                        String issuerName,
-                        boolean moreThanOnePaymentMethod,
-                        int icon) {
+    public PaymentModel(PaymentMethod paymentMethod,
+                        Token token,
+                        Issuer issuer,
+                        boolean moreThanOnePaymentMethod) {
 
-        this.paymentMethodId = paymentMethodId;
-        this.lastFourDigits = lastFourDigits;
-        this.paymentMethodName = paymentMethodName;
-        this.paymentType = paymentType;
-        this.accreditationTime = accreditationTime;
-        this.issuerName = issuerName;
+        this.paymentMethodId = paymentMethod.getId();
+        this.paymentMethodName = paymentMethod.getName();
+        this.paymentType = paymentMethod.getPaymentTypeId();
+        this.accreditationTime = paymentMethod.getAccreditationTime();
+        this.icon = paymentMethod.getIcon();
+        //Token and issuer are not always available
+        this.lastFourDigits = token != null ? token.getLastFourDigits() : null;
+        this.issuerName = issuer != null ? issuer.getName() : null;
         this.moreThanOnePaymentMethod = moreThanOnePaymentMethod;
-        this.icon = icon;
     }
 
-
-    public String getPaymentType() {
-        return paymentType;
-    }
-
-    public String getPaymentMethodName() {
-        return paymentMethodName;
-    }
-
-    public int getIcon() {
-        return icon;
-    }
 
     protected PaymentModel(Parcel in) {
         paymentMethodId = in.readString();
         lastFourDigits = in.readString();
-        paymentMethodName = in.readString();
-        paymentType = in.readString();
         if (in.readByte() == 0) {
             accreditationTime = null;
         } else {
@@ -64,6 +53,8 @@ public class PaymentModel implements Parcelable {
         }
         issuerName = in.readString();
         moreThanOnePaymentMethod = in.readByte() != 0;
+        paymentMethodName = in.readString();
+        paymentType = in.readString();
         icon = in.readInt();
     }
 
@@ -79,17 +70,27 @@ public class PaymentModel implements Parcelable {
         }
     };
 
+    public String getPaymentType() {
+        return paymentType;
+    }
+
+    public String getPaymentMethodName() {
+        return paymentMethodName;
+    }
+
+    public int getIcon() {
+        return icon;
+    }
+
     @Override
     public int describeContents() {
         return 0;
     }
 
     @Override
-    public void writeToParcel(Parcel dest, int flags) {
+    public void writeToParcel(final Parcel dest, final int flags) {
         dest.writeString(paymentMethodId);
         dest.writeString(lastFourDigits);
-        dest.writeString(paymentMethodName);
-        dest.writeString(paymentType);
         if (accreditationTime == null) {
             dest.writeByte((byte) 0);
         } else {
@@ -98,6 +99,8 @@ public class PaymentModel implements Parcelable {
         }
         dest.writeString(issuerName);
         dest.writeByte((byte) (moreThanOnePaymentMethod ? 1 : 0));
+        dest.writeString(paymentMethodName);
+        dest.writeString(paymentType);
         dest.writeInt(icon);
     }
 }
