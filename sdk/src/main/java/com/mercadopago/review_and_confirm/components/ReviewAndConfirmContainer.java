@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import com.mercadopago.components.ActionDispatcher;
 import com.mercadopago.components.Component;
 import com.mercadopago.components.RendererFactory;
+import com.mercadopago.review_and_confirm.models.PaymentModel;
 import com.mercadopago.review_and_confirm.models.TermsAndConditionsModel;
 
 public class ReviewAndConfirmContainer extends Component<ReviewAndConfirmContainer.Props, Void> {
@@ -27,9 +28,11 @@ public class ReviewAndConfirmContainer extends Component<ReviewAndConfirmContain
 
     public static class Props {
         final TermsAndConditionsModel termsAndConditionsModel;
+        final PaymentModel paymentModel;
 
-        public Props(final TermsAndConditionsModel termsAndConditionsModel) {
+        public Props(final TermsAndConditionsModel termsAndConditionsModel, final PaymentModel paymentModel) {
             this.termsAndConditionsModel = termsAndConditionsModel;
+            this.paymentModel = paymentModel;
         }
     }
 

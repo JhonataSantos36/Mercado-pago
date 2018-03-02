@@ -11,6 +11,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.mercadopago.constants.PaymentTypes;
 import com.mercadopago.constants.Sites;
 import com.mercadopago.core.MercadoPagoCheckout;
 import com.mercadopago.customviews.MPButton;
@@ -24,6 +25,7 @@ import com.mercadopago.plugins.MainPaymentProcessor;
 import com.mercadopago.plugins.SamplePaymentMethodPlugin;
 import com.mercadopago.plugins.SamplePaymentProcessor;
 import com.mercadopago.preferences.CheckoutPreference;
+import com.mercadopago.review_and_confirm.models.PaymentModel;
 import com.mercadopago.review_and_confirm.ReviewAndConfirmActivity;
 import com.mercadopago.review_and_confirm.models.TermsAndConditionsModel;
 import com.mercadopago.util.JsonUtil;
@@ -75,8 +77,15 @@ public class CheckoutExampleActivity extends AppCompatActivity {
     }
 
     private void onContinueClicked() {
+        TermsAndConditionsModel termsAndConditionsModel = new TermsAndConditionsModel(Sites.ARGENTINA.getId(), true);
+        PaymentModel paymentModel = new PaymentModel("debvisa",
+                "1234",
+                "MasterCard",
+                PaymentTypes.BANK_TRANSFER,
+                1000,
+                "HSBC", true, R.drawable.mpsdk_account_money);
+        ReviewAndConfirmActivity.start(this, termsAndConditionsModel, paymentModel);
         //startMercadoPagoCheckout();
-        ReviewAndConfirmActivity.start(this, new TermsAndConditionsModel(Sites.ARGENTINA.getId(), true));
     }
 
     private void startMercadoPagoCheckout() {

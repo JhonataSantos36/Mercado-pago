@@ -15,16 +15,22 @@ import com.mercadopago.components.Action;
 import com.mercadopago.components.ActionDispatcher;
 import com.mercadopago.components.ComponentManager;
 import com.mercadopago.review_and_confirm.components.ReviewAndConfirmContainer;
+import com.mercadopago.review_and_confirm.models.PaymentModel;
 import com.mercadopago.review_and_confirm.models.TermsAndConditionsModel;
 import com.mercadopago.uicontrollers.FontCache;
 
 public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements ActionDispatcher {
 
     private static final String EXTRA_TERMS_AND_CONDITIONS = "extra_terms_and_conditions";
+    private static final String EXTRA_PAYMENT_MODEL = "payment_model";
 
-    public static void start(final Context context, final TermsAndConditionsModel termsAndConditions) {
+    public static void start(final Context context,
+                             final TermsAndConditionsModel termsAndConditions,
+                             final PaymentModel paymentModel) {
+
         Intent intent = new Intent(context, ReviewAndConfirmActivity.class);
         intent.putExtra(EXTRA_TERMS_AND_CONDITIONS, termsAndConditions);
+        intent.putExtra(EXTRA_PAYMENT_MODEL, paymentModel);
         context.startActivity(intent);
     }
 
@@ -70,10 +76,12 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
         TermsAndConditionsModel termsAndConditionsModel = null;
+        PaymentModel paymentModel = null;
         if (extras != null) {
             termsAndConditionsModel = extras.getParcelable(EXTRA_TERMS_AND_CONDITIONS);
+            paymentModel = extras.getParcelable(EXTRA_PAYMENT_MODEL);
         }
-        return new ReviewAndConfirmContainer.Props(termsAndConditionsModel);
+        return new ReviewAndConfirmContainer.Props(termsAndConditionsModel, paymentModel);
     }
 
     @Override

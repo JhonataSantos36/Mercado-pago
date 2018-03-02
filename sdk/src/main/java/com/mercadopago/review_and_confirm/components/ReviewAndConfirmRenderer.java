@@ -9,6 +9,8 @@ import android.widget.LinearLayout;
 
 import com.mercadopago.components.Renderer;
 import com.mercadopago.components.RendererFactory;
+import com.mercadopago.review_and_confirm.models.PaymentModel;
+import com.mercadopago.review_and_confirm.components.payment_method.PaymentMethodComponent;
 
 public class ReviewAndConfirmRenderer extends Renderer<ReviewAndConfirmContainer> {
 
@@ -22,7 +24,10 @@ public class ReviewAndConfirmRenderer extends Renderer<ReviewAndConfirmContainer
         linearLayout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT));
 
+
         //TODO add views
+        addPaymentMethod(component.props.paymentModel, linearLayout);
+
         if (component.props.termsAndConditionsModel.isActive()) {
             addReviewAndConfirm(component, linearLayout);
         }
@@ -32,6 +37,18 @@ public class ReviewAndConfirmRenderer extends Renderer<ReviewAndConfirmContainer
         parent.addView(linearLayout);
 
         return linearLayout;
+    }
+
+    private void addPaymentMethod(final PaymentModel paymentModel, final ViewGroup parent) {
+        PaymentMethodComponent paymentMethodComponent = new PaymentMethodComponent(paymentModel, new PaymentMethodComponent.Actions() {
+            @Override
+            public void onPaymentMethodChangeClicked() {
+                //TODO start payment method activity.
+            }
+        });
+
+        View paymentView = paymentMethodComponent.render(parent);
+        parent.addView(paymentView);
     }
 
     private void addReviewAndConfirm(final @NonNull ReviewAndConfirmContainer component,
