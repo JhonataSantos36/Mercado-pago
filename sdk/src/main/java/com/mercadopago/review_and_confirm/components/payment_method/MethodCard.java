@@ -37,7 +37,7 @@ class MethodCard extends CompactComponent<MethodCard.Props, PaymentMethodCompone
 
         static Props createFrom(final PaymentModel props) {
             return new Props(props.paymentMethodId,
-                    props.getPaymentMethodName(),
+                    props.paymentMethodName,
                     props.lastFourDigits,
                     props.issuerName,
                     props.moreThanOnePaymentMethod);

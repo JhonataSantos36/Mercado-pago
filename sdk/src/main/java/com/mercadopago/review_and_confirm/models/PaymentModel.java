@@ -20,10 +20,8 @@ public class PaymentModel implements Parcelable {
     public final Integer accreditationTime;
     public final String issuerName;
     public final boolean moreThanOnePaymentMethod;
-    private final String paymentMethodName;
+    public final String paymentMethodName;
     private final String paymentType;
-    @DrawableRes
-    private final int icon;
 
     //TODO make easier constructor with already known entities
     public PaymentModel(PaymentMethod paymentMethod,
@@ -35,13 +33,15 @@ public class PaymentModel implements Parcelable {
         this.paymentMethodName = paymentMethod.getName();
         this.paymentType = paymentMethod.getPaymentTypeId();
         this.accreditationTime = paymentMethod.getAccreditationTime();
-        this.icon = paymentMethod.getIcon();
         //Token and issuer are not always available
         this.lastFourDigits = token != null ? token.getLastFourDigits() : null;
         this.issuerName = issuer != null ? issuer.getName() : null;
         this.moreThanOnePaymentMethod = moreThanOnePaymentMethod;
     }
 
+    public String getPaymentType() {
+        return paymentType;
+    }
 
     protected PaymentModel(Parcel in) {
         paymentMethodId = in.readString();
@@ -55,7 +55,6 @@ public class PaymentModel implements Parcelable {
         moreThanOnePaymentMethod = in.readByte() != 0;
         paymentMethodName = in.readString();
         paymentType = in.readString();
-        icon = in.readInt();
     }
 
     public static final Creator<PaymentModel> CREATOR = new Creator<PaymentModel>() {
@@ -69,18 +68,6 @@ public class PaymentModel implements Parcelable {
             return new PaymentModel[size];
         }
     };
-
-    public String getPaymentType() {
-        return paymentType;
-    }
-
-    public String getPaymentMethodName() {
-        return paymentMethodName;
-    }
-
-    public int getIcon() {
-        return icon;
-    }
 
     @Override
     public int describeContents() {
@@ -101,6 +88,5 @@ public class PaymentModel implements Parcelable {
         dest.writeByte((byte) (moreThanOnePaymentMethod ? 1 : 0));
         dest.writeString(paymentMethodName);
         dest.writeString(paymentType);
-        dest.writeInt(icon);
     }
 }

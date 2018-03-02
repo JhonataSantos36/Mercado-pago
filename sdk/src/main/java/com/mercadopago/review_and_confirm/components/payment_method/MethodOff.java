@@ -29,7 +29,7 @@ class MethodOff extends CompactComponent<MethodOff.Props, PaymentMethodComponent
 
         static Props createFrom(final PaymentModel props) {
             return new Props(props.paymentMethodId,
-                    props.getPaymentMethodName(),
+                    props.paymentMethodName,
                     props.accreditationTime,
                     props.moreThanOnePaymentMethod);
         }
