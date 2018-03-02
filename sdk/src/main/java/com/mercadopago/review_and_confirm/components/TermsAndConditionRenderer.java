@@ -7,8 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.mercadopago.R;
+import com.mercadopago.TermsAndConditionsActivity;
 import com.mercadopago.components.Renderer;
-import com.mercadopago.review_and_confirm.actions.TermsAndConditionAction;
 
 public class TermsAndConditionRenderer extends Renderer<TermsAndCondition> {
     @Override
@@ -16,11 +16,11 @@ public class TermsAndConditionRenderer extends Renderer<TermsAndCondition> {
                           @NonNull final Context context,
                           @Nullable final ViewGroup parent) {
 
-        View termsAndConditionsView = inflate(R.layout.mpsdk_view_terms_and_condition, parent);
+        final View termsAndConditionsView = inflate(R.layout.mpsdk_view_terms_and_condition, parent);
         termsAndConditionsView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                component.getDispatcher().dispatch(new TermsAndConditionAction(component.props.getSiteId()));
+                TermsAndConditionsActivity.start(termsAndConditionsView.getContext(), component.props.getSiteId());
             }
         });
 

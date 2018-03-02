@@ -8,12 +8,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.ViewGroup;
 
 import com.mercadopago.R;
-import com.mercadopago.TermsAndConditionsActivity;
 import com.mercadopago.components.Action;
 import com.mercadopago.components.ActionDispatcher;
 import com.mercadopago.components.ComponentManager;
 import com.mercadopago.mvp.MvpView;
-import com.mercadopago.review_and_confirm.actions.TermsAndConditionAction;
 import com.mercadopago.review_and_confirm.components.ReviewAndConfirmContainer;
 import com.mercadopago.review_and_confirm.models.TermsAndConditionsModel;
 
@@ -61,10 +59,6 @@ public class ReviewAndConfirmActivity extends AppCompatActivity implements Actio
 
     @Override
     public void dispatch(Action action) {
-        if (action instanceof TermsAndConditionAction) {
-            TermsAndConditionsActivity.start(this, ((TermsAndConditionAction) action).getSiteId());
-        } else {
-            throw new UnsupportedOperationException();
-        }
+        throw new UnsupportedOperationException();
     }
 }
