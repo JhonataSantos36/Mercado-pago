@@ -2,16 +2,10 @@ package com.mercadopago.review_and_confirm.models;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.DrawableRes;
 
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.Token;
-
-
-/**
- * Created by lbais on 1/3/18.
- */
 
 public class PaymentModel implements Parcelable {
 
@@ -22,6 +16,7 @@ public class PaymentModel implements Parcelable {
     public final boolean moreThanOnePaymentMethod;
     public final String paymentMethodName;
     private final String paymentType;
+    public final long issuerId;
 
     //TODO make easier constructor with already known entities
     public PaymentModel(PaymentMethod paymentMethod,
@@ -36,11 +31,8 @@ public class PaymentModel implements Parcelable {
         //Token and issuer are not always available
         this.lastFourDigits = token != null ? token.getLastFourDigits() : null;
         this.issuerName = issuer != null ? issuer.getName() : null;
+        this.issuerId = issuer != null ? issuer.getId() : 0L;
         this.moreThanOnePaymentMethod = moreThanOnePaymentMethod;
-    }
-
-    public String getPaymentType() {
-        return paymentType;
     }
 
     protected PaymentModel(Parcel in) {
@@ -55,6 +47,7 @@ public class PaymentModel implements Parcelable {
         moreThanOnePaymentMethod = in.readByte() != 0;
         paymentMethodName = in.readString();
         paymentType = in.readString();
+        issuerId = in.readLong();
     }
 
     public static final Creator<PaymentModel> CREATOR = new Creator<PaymentModel>() {
@@ -68,6 +61,10 @@ public class PaymentModel implements Parcelable {
             return new PaymentModel[size];
         }
     };
+
+    public String getPaymentType() {
+        return paymentType;
+    }
 
     @Override
     public int describeContents() {
@@ -88,5 +85,6 @@ public class PaymentModel implements Parcelable {
         dest.writeByte((byte) (moreThanOnePaymentMethod ? 1 : 0));
         dest.writeString(paymentMethodName);
         dest.writeString(paymentType);
+        dest.writeLong(issuerId);
     }
 }

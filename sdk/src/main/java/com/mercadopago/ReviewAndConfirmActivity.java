@@ -337,7 +337,7 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
                 .build();
 
         mpTrackingContext.trackEvent(actionEvent);
-    }
+}
 
     @Override
     public void cancelPayment() {

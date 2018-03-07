@@ -23,6 +23,7 @@ import com.mercadopago.review_and_confirm.components.actions.ChangePaymentMethod
 import com.mercadopago.review_and_confirm.components.actions.ConfirmPaymentAction;
 import com.mercadopago.review_and_confirm.models.PaymentModel;
 import com.mercadopago.review_and_confirm.models.TermsAndConditionsModel;
+import com.mercadopago.tracker.Tracker;
 import com.mercadopago.uicontrollers.FontCache;
 
 public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements ActionDispatcher {
@@ -31,14 +32,17 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
     public static final int RESULT_CHANGE_PAYMENT_METHOD = 3;
 
     private static final String EXTRA_TERMS_AND_CONDITIONS = "extra_terms_and_conditions";
-    private static final String EXTRA_PAYMENT_MODEL = "payment_model";
+    private static final String EXTRA_PAYMENT_MODEL = "extra_payment_model";
+    private static final String EXTRA_PUBLIC_KEY = "extra_public_key";
+
     private View floatingConfirmLayout;
 
     public static void start(final Activity activity,
+                             final String merchantPublicKey,
                              final TermsAndConditionsModel termsAndConditions,
                              final PaymentModel paymentModel) {
-        //TODO result code should be changed by the outside.
         Intent intent = new Intent(activity, ReviewAndConfirmActivity.class);
+        intent.putExtra(EXTRA_PUBLIC_KEY, merchantPublicKey);
         intent.putExtra(EXTRA_TERMS_AND_CONDITIONS, termsAndConditions);
         intent.putExtra(EXTRA_PAYMENT_MODEL, paymentModel);
         activity.startActivityForResult(intent, MercadoPagoComponents.Activities.REVIEW_AND_CONFIRM_REQUEST_CODE);
@@ -47,7 +51,6 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //TODO tracking init screen?
         setContentView(R.layout.mpsdk_view_container_review_and_confirm);
         initializeViews();
     }
@@ -129,7 +132,10 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
         if (extras != null) {
             termsAndConditionsModel = extras.getParcelable(EXTRA_TERMS_AND_CONDITIONS);
             paymentModel = extras.getParcelable(EXTRA_PAYMENT_MODEL);
+            Tracker.trackReviewAndConfirmScreen(this, getIntent().getStringExtra(EXTRA_PUBLIC_KEY), paymentModel);
         }
+
+
         return new ReviewAndConfirmContainer.Props(termsAndConditionsModel, paymentModel);
     }
 
@@ -138,19 +144,17 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
     }
 
     private void confirmPayment() {
-        // TODO trackCheckoutConfirmed();
+        Tracker.trackCheckoutConfirm(this, getIntent().getStringExtra(EXTRA_PUBLIC_KEY));
         setResult(RESULT_OK);
         finish();
     }
 
     private void cancelPayment() {
-        //TODO tracking finish screen?
         setResult(RESULT_CANCEL_PAYMENT);
         super.onBackPressed();
     }
 
     private void changePaymentMethod() {
-        //TODO tracking finish screen?
         setResult(RESULT_CHANGE_PAYMENT_METHOD);
         finish();
     }

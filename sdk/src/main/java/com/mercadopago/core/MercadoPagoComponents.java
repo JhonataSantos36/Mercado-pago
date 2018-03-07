@@ -438,7 +438,7 @@ public class MercadoPagoComponents {
                 //TODO remove the two trues and validate data.
                 TermsAndConditionsModel termsAndConditionsModel = new TermsAndConditionsModel(site.getId(), termsAndConditionsEnabled);
                 PaymentModel paymentModel = new PaymentModel(paymentMethod, token, issuer, hasExtraPaymentMethods);
-                com.mercadopago.review_and_confirm.ReviewAndConfirmActivity.start(activity, termsAndConditionsModel, paymentModel);
+                com.mercadopago.review_and_confirm.ReviewAndConfirmActivity.start(activity, merchantPublicKey, termsAndConditionsModel, paymentModel);
             }
         }
 
