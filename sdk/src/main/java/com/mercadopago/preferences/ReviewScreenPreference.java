@@ -9,10 +9,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by mreverter on 2/13/17.
- */
-
+@Deprecated
 public class ReviewScreenPreference {
 
     private String title;
@@ -176,6 +173,7 @@ public class ReviewScreenPreference {
         return reviewOrder != null && !reviewOrder.isEmpty();
     }
 
+    @Deprecated
     public static class Builder {
         private String title;
         private String confirmText;

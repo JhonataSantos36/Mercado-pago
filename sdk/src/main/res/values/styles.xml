@@ -199,7 +199,7 @@
     </style>
 
     <style name="HeaderTitleText">
-        <item name="android:textSize">@dimen/mpsdk_xxl_text</item>
+        <item name="android:textSize">@dimen/mpsdk_l_text</item>
         <item name="android:textColor">@color/mpsdk_black</item>
     </style>
 

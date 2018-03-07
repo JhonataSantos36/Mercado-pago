@@ -23,6 +23,7 @@ import com.mercadopago.preferences.FlowPreference;
 import com.mercadopago.preferences.PaymentResultScreenPreference;
 import com.mercadopago.preferences.ReviewScreenPreference;
 import com.mercadopago.preferences.ServicePreference;
+import com.mercadopago.review_and_confirm.models.ReviewAndConfirmPreferences;
 import com.mercadopago.tracker.FlowHandler;
 import com.mercadopago.uicontrollers.FontCache;
 import com.mercadopago.util.JsonUtil;
@@ -69,7 +70,6 @@ public class MercadoPagoCheckout {
 
     private MercadoPagoCheckout(Builder builder) {
         this.activity = builder.activity;
-        this.context = builder.context;
         this.publicKey = builder.publicKey;
         this.paymentData = builder.paymentData;
         this.checkoutPreference = builder.checkoutPreference;
@@ -95,6 +95,7 @@ public class MercadoPagoCheckout {
 
         final CheckoutStore store = CheckoutStore.getInstance();
         store.reset();
+        store.setReviewAndConfirmPreferences(builder.reviewAndConfirmPreferences);
         store.setPaymentResultScreenPreference(paymentResultScreenPreference);
         store.setPaymentMethodPluginList(builder.paymentMethodPluginList);
         store.setPaymentPlugins(builder.paymentPlugins);
@@ -213,7 +214,6 @@ public class MercadoPagoCheckout {
     }
 
     public static class Builder {
-        private Context context;
         private Activity activity;
         private String publicKey;
         private Boolean binaryMode = false;
@@ -232,6 +232,7 @@ public class MercadoPagoCheckout {
         private String regularFontPath;
         private String lightFontPath;
         private String monoFontPath;
+        private ReviewAndConfirmPreferences reviewAndConfirmPreferences;
 
         public Builder setActivity(Activity activity) {
             this.activity = activity;
@@ -278,8 +279,21 @@ public class MercadoPagoCheckout {
             return this;
         }
 
+        /**
+         * Use {@link #setReviewAndConfirmPreferences review and confirm preferences} instead.
+         *
+         * @param reviewScreenPreference
+         * @return
+         */
+        @Deprecated
         public Builder setReviewScreenPreference(ReviewScreenPreference reviewScreenPreference) {
             this.reviewScreenPreference = reviewScreenPreference;
+            return this;
+        }
+
+
+        public Builder setReviewAndConfirmPreferences(ReviewAndConfirmPreferences reviewAndConfirmPreferences) {
+            this.reviewAndConfirmPreferences = reviewAndConfirmPreferences;
             return this;
         }
 

@@ -28,14 +28,27 @@ public class ReviewAndConfirmRenderer extends Renderer<ReviewAndConfirmContainer
 
         //TODO add view summary - add view item - add view custom
 
-        addPaymentMethod(component.props.paymentModel, component.getDispatcher(), linearLayout);
-
-        if (component.props.termsAndConditionsModel.isActive()) {
-            addReviewAndConfirm(component, linearLayout);
+        if (component.props.preferences.hasCustomTopView()) {
+            Renderer renderer = RendererFactory.create(context, component.props.preferences.getTopComponent());
+            linearLayout.addView(renderer.render(parent));
         }
 
+        addPaymentMethod(component.props.paymentModel, component.getDispatcher(), linearLayout);
+
+        if (component.props.preferences.hasCustomBottomView()) {
+            Renderer renderer = RendererFactory.create(context, component.props.preferences.getBottomComponent());
+            linearLayout.addView(renderer.render(parent));
+        }
+
+        if (component.props.termsAndConditionsModel.isActive()) {
+            addTermsAndConditions(component, linearLayout);
+        }
+
+
         addFooter(component, linearLayout);
+
         parent.addView(linearLayout);
+
         return parent;
     }
 
@@ -79,9 +92,10 @@ public class ReviewAndConfirmRenderer extends Renderer<ReviewAndConfirmContainer
         parent.addView(paymentView);
     }
 
-    private void addReviewAndConfirm(final @NonNull ReviewAndConfirmContainer component,
-                                     final ViewGroup container) {
-        Renderer termsAndConditions = RendererFactory.create(container.getContext(), component.createTermsAndConditions());
+    private void addTermsAndConditions(final @NonNull ReviewAndConfirmContainer component,
+                                       final ViewGroup container) {
+        Renderer termsAndConditions = RendererFactory.create(container.getContext(),
+                new TermsAndCondition(component.props.termsAndConditionsModel, component.getDispatcher()));
         termsAndConditions.render(container);
     }
 }

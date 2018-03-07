@@ -13,8 +13,9 @@ import com.mercadopago.plugins.PaymentMethodPlugin;
 import com.mercadopago.plugins.PaymentProcessor;
 import com.mercadopago.plugins.model.PaymentMethodInfo;
 import com.mercadopago.preferences.CheckoutPreference;
-import com.mercadopago.util.TextUtil;
 import com.mercadopago.preferences.PaymentResultScreenPreference;
+import com.mercadopago.review_and_confirm.models.ReviewAndConfirmPreferences;
+import com.mercadopago.util.TextUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,6 +29,7 @@ public class CheckoutStore {
     //Preferences
     private PaymentResultScreenPreference paymentResultScreenPreference;
     private CheckoutPreference checkoutPreference;
+    private ReviewAndConfirmPreferences reviewAndConfirmPreferences;
 
     //Config
     private DataInitializationTask dataInitializationTask;
@@ -61,6 +63,10 @@ public class CheckoutStore {
             paymentResultScreenPreference = new PaymentResultScreenPreference.Builder().build();
         }
         return paymentResultScreenPreference;
+    }
+
+    public ReviewAndConfirmPreferences getReviewAndConfirmPreferences() {
+        return reviewAndConfirmPreferences == null ? new ReviewAndConfirmPreferences.Builder().build() : reviewAndConfirmPreferences;
     }
 
     public void setPaymentResultScreenPreference(PaymentResultScreenPreference paymentResultScreenPreference) {
@@ -216,6 +222,10 @@ public class CheckoutStore {
 
     public void setPaymentResult(PaymentResult paymentResult) {
         this.paymentResult = paymentResult;
+    }
+
+    public void setReviewAndConfirmPreferences(final ReviewAndConfirmPreferences reviewAndConfirmPreferences) {
+        this.reviewAndConfirmPreferences = reviewAndConfirmPreferences;
     }
 
     public void reset() {

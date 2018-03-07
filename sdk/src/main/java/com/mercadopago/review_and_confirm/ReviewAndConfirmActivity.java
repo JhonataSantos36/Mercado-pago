@@ -16,17 +16,19 @@ import com.mercadopago.R;
 import com.mercadopago.components.Action;
 import com.mercadopago.components.ActionDispatcher;
 import com.mercadopago.components.ComponentManager;
+import com.mercadopago.core.CheckoutStore;
 import com.mercadopago.core.MercadoPagoComponents;
 import com.mercadopago.review_and_confirm.components.ReviewAndConfirmContainer;
 import com.mercadopago.review_and_confirm.components.actions.CancelPaymentAction;
 import com.mercadopago.review_and_confirm.components.actions.ChangePaymentMethodAction;
 import com.mercadopago.review_and_confirm.components.actions.ConfirmPaymentAction;
 import com.mercadopago.review_and_confirm.models.PaymentModel;
+import com.mercadopago.review_and_confirm.models.ReviewAndConfirmPreferences;
 import com.mercadopago.review_and_confirm.models.TermsAndConditionsModel;
 import com.mercadopago.tracker.Tracker;
 import com.mercadopago.uicontrollers.FontCache;
 
-public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements ActionDispatcher {
+public final class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements ActionDispatcher {
 
     public static final int RESULT_CANCEL_PAYMENT = 4;
     public static final int RESULT_CHANGE_PAYMENT_METHOD = 3;
@@ -84,15 +86,15 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
     }
 
     private void initFloatingButton(final NestedScrollView scrollView) {
+        final View confirmButton = findViewById(R.id.floating_confirm);
         floatingConfirmLayout = findViewById(R.id.floating_confirm_layout);
-        View confirmButton = findViewById(R.id.floating_confirm);
         confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
                 confirmPayment();
             }
         });
-        resolveFloatingButtonVisibility(scrollView);
+
         scrollView.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
             @Override
             public void onScrollChanged() {
@@ -102,18 +104,13 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
     }
 
     private void resolveFloatingButtonVisibility(final NestedScrollView scrollView) {
-        ViewGroup group = (ViewGroup) scrollView.getChildAt(0);
-        int positionY = scrollView.getScrollY();
-        int totalHeight = scrollView.getMeasuredHeight();
-        //Last child AKA footer
-        int lastChildHeight = group.getChildAt(group.getChildCount() - 1)
-                .getMeasuredHeight();
-
-        if ((totalHeight - lastChildHeight) < positionY) {
-            setFloatingVisibility(true);
-        } else {
-            setFloatingVisibility(false);
-        }
+        ViewGroup content = (ViewGroup) scrollView.getChildAt(0);
+        int containerHeight = content.getHeight();
+        // get footer/last child
+        View footer = content.getChildAt(content.getChildCount() - 1);
+        // This footer has two buttons, to avoid mesure cancel button we devide by 2 the footer height
+        float finalSize = containerHeight - scrollView.getHeight() - (footer.getHeight() / 2);
+        setFloatingVisibility(scrollView.getScrollY() < finalSize);
     }
 
     private void initContent(final ViewGroup mainContent) {
@@ -134,9 +131,8 @@ public class ReviewAndConfirmActivity extends MercadoPagoBaseActivity implements
             paymentModel = extras.getParcelable(EXTRA_PAYMENT_MODEL);
             Tracker.trackReviewAndConfirmScreen(this, getIntent().getStringExtra(EXTRA_PUBLIC_KEY), paymentModel);
         }
-
-
-        return new ReviewAndConfirmContainer.Props(termsAndConditionsModel, paymentModel);
+        ReviewAndConfirmPreferences reviewAndConfirmPreferences = CheckoutStore.getInstance().getReviewAndConfirmPreferences();
+        return new ReviewAndConfirmContainer.Props(termsAndConditionsModel, paymentModel, reviewAndConfirmPreferences);
     }
 
     private void setFloatingVisibility(boolean visible) {

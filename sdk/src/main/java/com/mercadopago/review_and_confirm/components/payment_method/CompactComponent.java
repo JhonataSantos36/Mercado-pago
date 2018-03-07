@@ -5,9 +5,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-/**
- * Created by lbais on 27/2/18.
- */
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public abstract class CompactComponent<Props, Actions> {
 
@@ -28,20 +27,23 @@ public abstract class CompactComponent<Props, Actions> {
         return render(parent);
     }
 
-    protected View compose(final ViewGroup container, final View... children) {
+    public abstract View render(@Nonnull final ViewGroup parent);
+
+    @Nullable
+    protected Actions getActions() {
+        return actions;
+    }
+
+    @Nonnull
+    public static View inflate(@Nonnull final ViewGroup parent, @LayoutRes final int layout) {
+        return LayoutInflater.from(parent.getContext()).inflate(layout, parent, false);
+    }
+
+    @Nonnull
+    public static View compose(@Nonnull final ViewGroup container, @Nonnull final View... children) {
         for (View child : children) {
             container.addView(child);
         }
         return container;
-    }
-
-    public abstract View render(final ViewGroup parent);
-
-    protected View inflate(final ViewGroup parent, @LayoutRes final int layout) {
-        return LayoutInflater.from(parent.getContext()).inflate(layout, parent, false);
-    }
-
-    protected Actions getActions() {
-        return actions;
     }
 }

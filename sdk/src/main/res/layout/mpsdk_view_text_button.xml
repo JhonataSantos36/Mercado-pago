@@ -4,6 +4,7 @@
     style="@style/TextButtonBlue"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/mpsdk_s_margin"
     android:clickable="true"
     android:focusable="true"
     android:foreground="?attr/selectableItemBackground"

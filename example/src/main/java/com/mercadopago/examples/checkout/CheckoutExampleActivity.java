@@ -11,6 +11,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.mercadopago.components.CustomComponent;
+import com.mercadopago.components.SampleCustomComponent;
 import com.mercadopago.constants.PaymentTypes;
 import com.mercadopago.constants.Sites;
 import com.mercadopago.core.MercadoPagoCheckout;
@@ -27,6 +29,7 @@ import com.mercadopago.plugins.SamplePaymentProcessor;
 import com.mercadopago.preferences.CheckoutPreference;
 import com.mercadopago.review_and_confirm.models.PaymentModel;
 import com.mercadopago.review_and_confirm.ReviewAndConfirmActivity;
+import com.mercadopago.review_and_confirm.models.ReviewAndConfirmPreferences;
 import com.mercadopago.review_and_confirm.models.TermsAndConditionsModel;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;
@@ -93,6 +96,10 @@ public class CheckoutExampleActivity extends AppCompatActivity {
                         new SamplePaymentMethodPlugin(),
                         new SamplePaymentProcessor()
                 )
+                .setReviewAndConfirmPreferences(new ReviewAndConfirmPreferences.Builder()
+                        .setTopComponent(new SampleCustomComponent(new CustomComponent.Props(new HashMap<String, Object>(), null)))
+                        .setBottomComponent(new SampleCustomComponent(new CustomComponent.Props(new HashMap<String, Object>(), null)))
+                        .build())
                 .setPaymentProcessor(new MainPaymentProcessor())
                 .setDataInitializationTask(new DataInitializationTask(defaultData) {
                     @Override

@@ -1,5 +1,6 @@
 package com.mercadopago.review_and_confirm.components.payment_method;
 
+import android.support.annotation.NonNull;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
@@ -37,7 +38,7 @@ class MethodPlugin extends CompactComponent<MethodPlugin.Props, PaymentMethodCom
     }
 
     @Override
-    public View render(final ViewGroup parent) {
+    public View render(@NonNull final ViewGroup parent) {
 
         View paymentView = inflate(parent, R.layout.mpsdk_payment_method_plugin);
 
@@ -54,7 +55,8 @@ class MethodPlugin extends CompactComponent<MethodPlugin.Props, PaymentMethodCom
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(final View v) {
-                    getActions().onPaymentMethodChangeClicked();
+                    if (getActions() != null)
+                        getActions().onPaymentMethodChangeClicked();
                 }
             });
         }

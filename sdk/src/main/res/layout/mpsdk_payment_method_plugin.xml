@@ -12,8 +12,7 @@
     <include
         layout="@layout/mpsdk_view_rounded_icon"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/mpsdk_s_margin" />
+        android:layout_height="wrap_content" />
 
     <com.mercadopago.customviews.MPTextView
         android:id="@+id/title"
@@ -21,6 +20,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/mpsdk_s_margin"
+        android:layout_marginTop="@dimen/mpsdk_s_margin"
         tools:text="@string/lorem_ipsum" />
 
     <ViewStub

@@ -18,7 +18,6 @@ public class PaymentModel implements Parcelable {
     private final String paymentType;
     public final long issuerId;
 
-    //TODO make easier constructor with already known entities
     public PaymentModel(PaymentMethod paymentMethod,
                         Token token,
                         Issuer issuer,

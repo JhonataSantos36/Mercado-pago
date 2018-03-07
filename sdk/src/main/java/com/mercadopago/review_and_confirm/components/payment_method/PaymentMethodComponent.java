@@ -1,5 +1,6 @@
 package com.mercadopago.review_and_confirm.components.payment_method;
 
+import android.support.annotation.NonNull;
 import android.support.annotation.VisibleForTesting;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +30,7 @@ public class PaymentMethodComponent extends CompactComponent<PaymentModel, Payme
     }
 
     @Override
-    public View render(final ViewGroup parent) {
+    public View render(@NonNull final ViewGroup parent) {
         return resolveComponent().render(parent);
     }
 }
