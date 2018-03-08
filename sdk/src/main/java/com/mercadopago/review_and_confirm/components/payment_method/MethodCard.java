@@ -2,6 +2,7 @@ package com.mercadopago.review_and_confirm.components.payment_method;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.annotation.VisibleForTesting;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 import com.mercadopago.R;
 import com.mercadopago.review_and_confirm.models.PaymentModel;
 import com.mercadopago.util.ResourceUtil;
+import com.mercadopago.util.TextUtils;
 
 import java.util.Locale;
 
@@ -24,11 +26,11 @@ class MethodCard extends CompactComponent<MethodCard.Props, PaymentMethodCompone
         private final String bankName;
         private final boolean hasChangePaymentMethod;
 
-        private Props(String id,
-                      String cardName,
-                      String lastFourDigits,
-                      String bankName,
-                      boolean hasChangePaymentMethod) {
+        Props(String id,
+              String cardName,
+              String lastFourDigits,
+              String bankName,
+              boolean hasChangePaymentMethod) {
             this.id = id;
             this.cardName = cardName;
             this.lastFourDigits = lastFourDigits;
@@ -59,8 +61,10 @@ class MethodCard extends CompactComponent<MethodCard.Props, PaymentMethodCompone
         TextView title = paymentView.findViewById(R.id.title);
         title.setText(formatTitle(title.getContext()));
 
-        TextView time = paymentView.findViewById(R.id.subtitle);
-        time.setText(props.bankName);
+        TextView subtitle = paymentView.findViewById(R.id.subtitle);
+        subtitle.setText(props.bankName);
+
+        subtitle.setVisibility(shouldShowSubtitle() ? View.VISIBLE : View.GONE);
 
         ImageView imageView = paymentView.findViewById(R.id.icon);
         imageView.setImageResource(ResourceUtil.getIconResource(imageView.getContext(), props.id));
@@ -79,6 +83,11 @@ class MethodCard extends CompactComponent<MethodCard.Props, PaymentMethodCompone
         }
 
         return paymentView;
+    }
+
+    @VisibleForTesting
+    boolean shouldShowSubtitle() {
+        return TextUtils.isNotEmpty(props.bankName) && !props.bankName.equals(props.cardName);
     }
 
     private String formatTitle(Context context) {
