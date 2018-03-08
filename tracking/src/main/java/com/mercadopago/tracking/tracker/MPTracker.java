@@ -166,8 +166,6 @@ public class MPTracker {
         mEvent = event;
         mContext = context;
 
-        initializeDatabase();
-
         setTrackingStrategy(context, event, trackingStrategy);
 
         if (this.trackingStrategy != null) {
@@ -192,9 +190,13 @@ public class MPTracker {
     }
 
     private void initializeDatabase() {
-        if (database == null) {
+        if (!isDatabaseInitialized()) {
             this.database = new EventsDatabaseImpl(mContext);
         }
+    }
+
+    private boolean isDatabaseInitialized() {
+        return this.database != null;
     }
 
     private Map<String, String> createEventMap(ActionEvent actionEvent) {
@@ -270,8 +272,10 @@ public class MPTracker {
 
     private TrackingStrategy setTrackingStrategy(Context context, Event event, String strategy) {
         if (isBatchStrategy(strategy)) {
+            initializeDatabase();
             trackingStrategy = new BatchTrackingStrategy(database, new ConnectivityCheckerImpl(context), mMPTrackingService);
         } else if (isForcedStrategy(strategy)) {
+            initializeDatabase();
             trackingStrategy = new ForcedStrategy(database, new ConnectivityCheckerImpl(context), mMPTrackingService);
         } else if (isRealTimeStrategy(strategy)) {
             trackingStrategy = new RealTimeTrackingStrategy(mMPTrackingService);
@@ -309,8 +313,9 @@ public class MPTracker {
     }
 
     public void clearExpiredTracks() {
-        initializeDatabase();
-        this.database.clearExpiredTracks();
+        if (isDatabaseInitialized()) {
+            this.database.clearExpiredTracks();
+        }
     }
 
     public TrackingStrategy getTrackingStrategy() {
