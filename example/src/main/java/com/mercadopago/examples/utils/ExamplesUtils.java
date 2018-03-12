@@ -8,6 +8,7 @@ public class ExamplesUtils {
 
     // * Preferences
     public static final String DUMMY_PREFERENCE_ID = "243962506-e9464aff-30dd-43e0-a6fa-37e3a54b884c";
+    public static final String DUMMY_PREFERENCE_ID_2 = "243962506-ad5df092-f5a2-4b99-bcc4-7578d6e71849";
 
     // * Merchant public key
     public static final String DUMMY_MERCHANT_PUBLIC_KEY = "TEST-c6d9b1f9-71ff-4e05-9327-3c62468a23ee";

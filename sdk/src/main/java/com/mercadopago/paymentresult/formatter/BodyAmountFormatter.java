@@ -17,8 +17,8 @@ public class BodyAmountFormatter extends AmountFormat {
         super(currencyId, amount);
     }
 
-    public String formatNumber(BigDecimal amount, String currencyId) {
-        String formattedAmount = formatNumber( amount, currencyId, true);
+    public String formatNumber(BigDecimal amount) {
+        String formattedAmount = formatNumber(amount,true);
         String decimals = getDecimals(formattedAmount);
         String wholeNumber = getWholeNumber(formattedAmount);
         String totalAmount;
@@ -32,7 +32,7 @@ public class BodyAmountFormatter extends AmountFormat {
         return totalAmount;
     }
 
-    public String formatNumber(BigDecimal amount, String currencyId, boolean hasSpace) {
+    public String formatNumber(BigDecimal amount, final boolean hasSpace) {
         // Get currency configuration
         Currency currency = CurrenciesUtil.currenciesList.get(currencyId);
 

@@ -91,6 +91,9 @@ public class PayerCost {
         return labels != null && labels.size() > 0;
     }
 
+    public boolean hasMultipleInstallments() {
+        return installments != null && installments > 1;
+    }
     @Override
     public String toString() {
         return installments.toString();

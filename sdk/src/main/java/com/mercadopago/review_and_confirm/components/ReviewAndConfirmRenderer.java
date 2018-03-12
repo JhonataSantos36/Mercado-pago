@@ -26,7 +26,11 @@ public class ReviewAndConfirmRenderer extends Renderer<ReviewAndConfirmContainer
 
         LinearLayout linearLayout = createMainLayout(context);
 
-        //TODO add view summary - add view item - add view custom
+        //TODO add view summary - add view custom
+
+        if (component.hasItemsEnabled()) {
+            addReviewItems(component, linearLayout);
+        }
 
         if (component.props.preferences.hasCustomTopView()) {
             Renderer renderer = RendererFactory.create(context, component.props.preferences.getTopComponent());
@@ -92,10 +96,22 @@ public class ReviewAndConfirmRenderer extends Renderer<ReviewAndConfirmContainer
         parent.addView(paymentView);
     }
 
+    private void addReviewItems(final @NonNull ReviewAndConfirmContainer component, final ViewGroup parent) {
+        Renderer renderer = RendererFactory.create(parent.getContext(),
+                new ReviewItems(
+                        new ReviewItems.Props(
+                                component.props.itemsModel,
+                                component.props.preferences.getCollectorIcon(),
+                                component.props.preferences.getQuantityLabel(),
+                                component.props.preferences.getUnitPriceLabel())));
+        renderer.render(parent);
+    }
+
     private void addTermsAndConditions(final @NonNull ReviewAndConfirmContainer component,
                                        final ViewGroup container) {
         Renderer termsAndConditions = RendererFactory.create(container.getContext(),
                 new TermsAndCondition(component.props.termsAndConditionsModel, component.getDispatcher()));
         termsAndConditions.render(container);
     }
+
 }

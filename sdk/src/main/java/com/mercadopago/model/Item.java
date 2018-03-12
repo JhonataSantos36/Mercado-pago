@@ -103,4 +103,8 @@ public class Item {
     public void setUnitPrice(BigDecimal unitPrice) {
         this.unitPrice = unitPrice;
     }
+
+    public boolean hasCardinality() {
+        return this.quantity != null && this.quantity > 1;
+    }
 }

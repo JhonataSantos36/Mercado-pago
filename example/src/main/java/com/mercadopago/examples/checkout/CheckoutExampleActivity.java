@@ -13,8 +13,6 @@ import android.widget.Toast;
 
 import com.mercadopago.components.CustomComponent;
 import com.mercadopago.components.SampleCustomComponent;
-import com.mercadopago.constants.PaymentTypes;
-import com.mercadopago.constants.Sites;
 import com.mercadopago.core.MercadoPagoCheckout;
 import com.mercadopago.customviews.MPButton;
 import com.mercadopago.examples.R;
@@ -27,10 +25,7 @@ import com.mercadopago.plugins.MainPaymentProcessor;
 import com.mercadopago.plugins.SamplePaymentMethodPlugin;
 import com.mercadopago.plugins.SamplePaymentProcessor;
 import com.mercadopago.preferences.CheckoutPreference;
-import com.mercadopago.review_and_confirm.models.PaymentModel;
-import com.mercadopago.review_and_confirm.ReviewAndConfirmActivity;
 import com.mercadopago.review_and_confirm.models.ReviewAndConfirmPreferences;
-import com.mercadopago.review_and_confirm.models.TermsAndConditionsModel;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;
 
@@ -55,7 +50,7 @@ public class CheckoutExampleActivity extends AppCompatActivity {
         setContentView(R.layout.activity_checkout_example);
         mActivity = this;
         mPublicKey = ExamplesUtils.DUMMY_MERCHANT_PUBLIC_KEY;
-        mCheckoutPreferenceId = ExamplesUtils.DUMMY_PREFERENCE_ID;
+        mCheckoutPreferenceId = ExamplesUtils.DUMMY_PREFERENCE_ID_2;
 
         mProgressBar = findViewById(R.id.progressBar);
         mRegularLayout = findViewById(R.id.regularLayout);

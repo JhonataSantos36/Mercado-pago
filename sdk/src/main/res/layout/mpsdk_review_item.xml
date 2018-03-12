@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/mpsdk_light_gray"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/mpsdk_l_margin"
+        android:paddingEnd="@dimen/mpsdk_m_margin"
+        android:paddingStart="@dimen/mpsdk_m_margin"
+        android:paddingTop="@dimen/mpsdk_l_margin">
+
+        <ImageView
+            android:id="@+id/item_image"
+            android:layout_width="@dimen/mpsdk_m_height"
+            android:layout_height="@dimen/mpsdk_m_height"
+            android:layout_gravity="center_horizontal"
+            tools:src="@drawable/mpsdk_review_item_default" />
+
+        <com.mercadopago.customviews.MPTextView
+            android:id="@+id/item_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/mpsdk_s_margin"
+            android:gravity="center_horizontal"
+            android:textColor="@color/mpsdk_black"
+            android:textSize="@dimen/mpsdk_l_text"
+            android:maxLines="3"
+            android:ellipsize="end"
+            tools:text="Titulo" />
+
+        <com.mercadopago.customviews.MPTextView
+            android:id="@+id/item_subtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/mpsdk_s_margin"
+            android:gravity="center_horizontal"
+            android:textColor="@color/mpsdk_brownish_grey"
+            android:textSize="@dimen/mpsdk_xs_text"
+            android:ellipsize="end"
+            android:maxLines="3"
+            tools:text="Subtitulo" />
+
+        <com.mercadopago.customviews.MPTextView
+            android:id="@+id/item_quantity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/mpsdk_s_margin"
+            android:textColor="@color/mpsdk_brownish_grey"
+            android:textSize="@dimen/mpsdk_s_text"
+            tools:text="Cantidad: 1" />
+
+        <com.mercadopago.customviews.MPTextView
+            android:id="@+id/item_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:textColor="@color/mpsdk_brownish_grey"
+            android:textSize="@dimen/mpsdk_s_text"
+            tools:text="Precio unitario: $1234" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/paymentIdBottomDivider"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/mpsdk_xxxs_height"
+        android:background="@color/mpsdk_med_light_gray" />
+
+</LinearLayout>

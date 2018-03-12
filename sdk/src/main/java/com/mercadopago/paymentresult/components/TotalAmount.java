@@ -7,6 +7,7 @@ import com.mercadopago.components.Component;
 import com.mercadopago.paymentresult.props.TotalAmountProps;
 
 import java.math.BigDecimal;
+import java.util.Locale;
 
 /**
  * Created by mromar on 11/28/17.
@@ -22,10 +23,13 @@ public class TotalAmount extends Component<TotalAmountProps, Void> {
     public String getAmountTitle() {
         String amountTitle;
 
-        if (hasPayerCost() && props.payerCost.getInstallments() > 1) {
-            amountTitle = props.payerCost.getInstallments() + "x " + props.amountFormatter.formatNumber(props.payerCost.getInstallmentAmount(), props.amountFormatter.getCurrencyId());
+        if (hasPayerCostWithMultipleInstallments()) {
+            amountTitle = String.format(Locale.getDefault(),
+                    "%dx %s",
+                    props.payerCost.getInstallments(),
+                    props.amountFormatter.formatNumber(props.payerCost.getInstallmentAmount()));
         } else {
-            amountTitle = props.amountFormatter.formatNumber(getAmount(), props.amountFormatter.getCurrencyId());
+            amountTitle = props.amountFormatter.formatNumber(getAmount());
         }
 
         return amountTitle;
@@ -34,15 +38,17 @@ public class TotalAmount extends Component<TotalAmountProps, Void> {
     public String getAmountDetail() {
         String amountDetail = "";
 
-        if (hasPayerCost() && props.payerCost.getInstallments() > 1) {
-            amountDetail = "(" + props.amountFormatter.formatNumber(props.payerCost.getTotalAmount(), props.amountFormatter.getCurrencyId()) + ")";
+        if (hasPayerCostWithMultipleInstallments()) {
+            amountDetail = String.format(Locale.getDefault(),
+                    "(%s)",
+                    props.amountFormatter.formatNumber(props.payerCost.getTotalAmount()));
         }
 
         return amountDetail;
     }
 
-    private boolean hasPayerCost() {
-        return props.payerCost != null;
+    private boolean hasPayerCostWithMultipleInstallments() {
+        return props.payerCost != null && props.payerCost.hasMultipleInstallments();
     }
 
     private BigDecimal getAmount() {
