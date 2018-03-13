@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    android:background="@color/mpsdk_summary_background_color"
+    android:background="@color/mpsdk_review_summary_background"
     android:orientation="vertical">
 
     <LinearLayout

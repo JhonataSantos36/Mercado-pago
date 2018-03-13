@@ -211,9 +211,9 @@
         <item name="android:drawableStart">@drawable/mpsdk_time</item>
     </style>
 
-    <style name="TextButtonBlue">
+    <style name="TextLinkButton">
         <item name="android:textSize">@dimen/mpsdk_m_text</item>
-        <item name="android:textColor">@color/mpsdk_blue_button</item>
+        <item name="android:textColor">@color/mpsdk_link</item>
         <item name="android:text">@string/mpsdk_change_payment</item>
     </style>
 
