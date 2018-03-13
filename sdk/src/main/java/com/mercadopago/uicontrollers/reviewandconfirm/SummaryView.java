@@ -261,10 +261,11 @@ public class SummaryView extends Reviewable {
     }
 
     private void showPayerCostRow() {
-        PayerCostColumn payerCostColumn = new PayerCostColumn(mContext, mSite);
+        PayerCostColumn payerCostColumn = new PayerCostColumn(mContext, mSite.getCurrencyId(), mSite.getId(),
+                mPayerCost.getInstallmentRate(),mPayerCost.getInstallments(), mPayerCost.getTotalAmount(), mPayerCost.getInstallmentAmount());
         payerCostColumn.inflateInParent(mPayerCostContainer, true);
         payerCostColumn.initializeControls();
-        payerCostColumn.drawPayerCostWithoutTotal(mPayerCost);
+        payerCostColumn.drawPayerCostWithoutTotal();
     }
 
     private void showTotal(BigDecimal amount) {

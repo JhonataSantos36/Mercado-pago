@@ -47,7 +47,7 @@ public class IdentificationTypesAdapter extends BaseAdapter {
             row = LayoutInflater.from(parent.getContext()).inflate(R.layout.mpsdk_row_simple_spinner, parent, false);
 
         IdentificationType identificationType = mData.get(position);
-        MPTextView label = row.findViewById(R.id.mpsdkLabel);
+        MPTextView label = row.findViewById(R.id.mpsdkItemTitle);
         label.setText(identificationType.getName());
         return row;
     }

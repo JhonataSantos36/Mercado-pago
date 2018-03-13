@@ -1,11 +1,12 @@
 package com.mercadopago.util;
 
 import com.mercadopago.constants.Sites;
-import com.mercadopago.model.Site;
 
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+
+import static com.mercadopago.util.TextUtils.isEmpty;
 
 /**
  * Created by marlanti on 4/6/17.
@@ -15,9 +16,9 @@ public class InstallmentsUtil {
 
     private static Set<String> bankInterestsNotIncludedInInstallmentsSites;
 
-    public static boolean shouldWarnAboutBankInterests(Site site) {
+    public static boolean shouldWarnAboutBankInterests(String siteId) {
         boolean shouldWarn = false;
-        if (site != null && getSitesWithBankInterestsNotIncluded().contains(site.getId())) {
+        if (!isEmpty(siteId) && getSitesWithBankInterestsNotIncluded().contains(siteId)) {
             shouldWarn = true;
         }
         return shouldWarn;

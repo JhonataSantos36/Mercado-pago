@@ -25,6 +25,7 @@ import com.mercadopago.review_and_confirm.components.actions.ConfirmPaymentActio
 import com.mercadopago.review_and_confirm.models.ItemsModel;
 import com.mercadopago.review_and_confirm.models.PaymentModel;
 import com.mercadopago.review_and_confirm.models.ReviewAndConfirmPreferences;
+import com.mercadopago.review_and_confirm.models.SummaryModel;
 import com.mercadopago.review_and_confirm.models.TermsAndConditionsModel;
 import com.mercadopago.tracker.Tracker;
 import com.mercadopago.uicontrollers.FontCache;
@@ -36,6 +37,7 @@ public final class ReviewAndConfirmActivity extends MercadoPagoBaseActivity impl
 
     private static final String EXTRA_TERMS_AND_CONDITIONS = "extra_terms_and_conditions";
     private static final String EXTRA_PAYMENT_MODEL = "extra_payment_model";
+    private static final String EXTRA_SUMMARY_MODEL = "extra_summary_model";
     private static final String EXTRA_PUBLIC_KEY = "extra_public_key";
     private static final String EXTRA_ITEMS = "extra_items";
     private View floatingConfirmLayout;
@@ -44,12 +46,14 @@ public final class ReviewAndConfirmActivity extends MercadoPagoBaseActivity impl
                              final String merchantPublicKey,
                              final TermsAndConditionsModel termsAndConditions,
                              final PaymentModel paymentModel,
+                             final SummaryModel summaryModel,
                              final ItemsModel itemsModel) {
         //TODO result code should be changed by the outside.
         Intent intent = new Intent(activity, ReviewAndConfirmActivity.class);
         intent.putExtra(EXTRA_PUBLIC_KEY, merchantPublicKey);
         intent.putExtra(EXTRA_TERMS_AND_CONDITIONS, termsAndConditions);
         intent.putExtra(EXTRA_PAYMENT_MODEL, paymentModel);
+        intent.putExtra(EXTRA_SUMMARY_MODEL, summaryModel);
         intent.putExtra(EXTRA_ITEMS, itemsModel);
         activity.startActivityForResult(intent, MercadoPagoComponents.Activities.REVIEW_AND_CONFIRM_REQUEST_CODE);
     }
@@ -120,7 +124,7 @@ public final class ReviewAndConfirmActivity extends MercadoPagoBaseActivity impl
     private void initContent(final ViewGroup mainContent) {
         ReviewAndConfirmContainer.Props props = getActivityParameters();
         final ComponentManager manager = new ComponentManager(this);
-        final ReviewAndConfirmContainer container = new ReviewAndConfirmContainer(props);
+        final ReviewAndConfirmContainer container = new ReviewAndConfirmContainer(props, this, new SummaryProviderImpl(this));
         container.setDispatcher(this);
         manager.render(container, mainContent);
     }
@@ -130,15 +134,19 @@ public final class ReviewAndConfirmActivity extends MercadoPagoBaseActivity impl
         Bundle extras = intent.getExtras();
         TermsAndConditionsModel termsAndConditionsModel = null;
         PaymentModel paymentModel = null;
+        SummaryModel summaryModel = null;
+
         ItemsModel itemsModel = null;
         if (extras != null) {
             termsAndConditionsModel = extras.getParcelable(EXTRA_TERMS_AND_CONDITIONS);
             paymentModel = extras.getParcelable(EXTRA_PAYMENT_MODEL);
+            summaryModel = extras.getParcelable(EXTRA_SUMMARY_MODEL);
             itemsModel = extras.getParcelable(EXTRA_ITEMS);
             Tracker.trackReviewAndConfirmScreen(this, getIntent().getStringExtra(EXTRA_PUBLIC_KEY), paymentModel);
         }
+
         ReviewAndConfirmPreferences reviewAndConfirmPreferences = CheckoutStore.getInstance().getReviewAndConfirmPreferences();
-        return new ReviewAndConfirmContainer.Props(termsAndConditionsModel, paymentModel, reviewAndConfirmPreferences, itemsModel);
+        return new ReviewAndConfirmContainer.Props(termsAndConditionsModel, paymentModel, summaryModel, reviewAndConfirmPreferences, itemsModel);
     }
 
     private void setFloatingVisibility(boolean visible) {

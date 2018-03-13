@@ -294,13 +294,13 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
         Payer payer = new Payer();
         payer.setAccessToken(mCheckoutPreference.getPayer().getAccessToken());
         getResourcesProvider().getPaymentMethodSearch(
-            getTransactionAmount(),
-            mCheckoutPreference.getExcludedPaymentTypes(),
-            mCheckoutPreference.getExcludedPaymentMethods(),
-            payer,
-            mCheckoutPreference.getSite(),
-            onPaymentMethodSearchRetrieved(),
-            onCustomerRetrieved()
+                getTransactionAmount(),
+                mCheckoutPreference.getExcludedPaymentTypes(),
+                mCheckoutPreference.getExcludedPaymentMethods(),
+                payer,
+                mCheckoutPreference.getSite(),
+                onPaymentMethodSearchRetrieved(),
+                onCustomerRetrieved()
         );
     }
 

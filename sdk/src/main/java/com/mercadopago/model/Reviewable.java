@@ -11,6 +11,7 @@ import com.mercadopago.uicontrollers.CustomViewController;
 /**
  * Created by mreverter on 2/2/17.
  */
+@Deprecated
 public abstract class Reviewable implements CustomViewController {
 
     public ReviewSubscriber reviewSubscriber;

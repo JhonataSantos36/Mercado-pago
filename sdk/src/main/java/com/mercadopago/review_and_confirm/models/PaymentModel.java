@@ -2,7 +2,6 @@ package com.mercadopago.review_and_confirm.models;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.Token;

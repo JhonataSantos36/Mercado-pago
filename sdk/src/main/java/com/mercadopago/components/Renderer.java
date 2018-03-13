@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.view.LayoutInflater;
+import android.text.Spanned;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -53,8 +54,8 @@ public abstract class Renderer<T extends Component> {
     }
 
     protected abstract View render(@NonNull final T component,
-                                    @NonNull final Context context,
-                                    @Nullable final ViewGroup parent);
+                                   @NonNull final Context context,
+                                   @Nullable final ViewGroup parent);
 
     protected View inflate(@LayoutRes int layout, @Nullable final ViewGroup parent) {
         return LayoutInflater.from(context).inflate(layout, parent);
@@ -92,7 +93,15 @@ public abstract class Renderer<T extends Component> {
     }
 
     protected void setText(@NonNull final TextView view, String text) {
-        if(TextUtil.isEmpty(text)) {
+        if (TextUtil.isEmpty(text)) {
+            view.setVisibility(View.GONE);
+        } else {
+            view.setText(text);
+        }
+    }
+
+    protected void setText(@NonNull final TextView view, Spanned text) {
+        if (text == null) {
             view.setVisibility(View.GONE);
         } else {
             view.setText(text);

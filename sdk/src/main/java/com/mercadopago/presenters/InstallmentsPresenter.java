@@ -56,7 +56,7 @@ public class InstallmentsPresenter extends MvpPresenter<InstallmentsActivityView
     }
 
     private void showSiteRelatedInformation() {
-        if (InstallmentsUtil.shouldWarnAboutBankInterests(mSite)) {
+        if (mSite != null && InstallmentsUtil.shouldWarnAboutBankInterests(mSite.getId())) {
             getView().warnAboutBankInterests();
         }
     }

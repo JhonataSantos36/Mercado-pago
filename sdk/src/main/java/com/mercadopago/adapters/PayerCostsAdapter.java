@@ -49,7 +49,10 @@ public class PayerCostsAdapter extends RecyclerView.Adapter<PayerCostsAdapter.Vi
     public void onBindViewHolder(ViewHolder holder, int position) {
         PayerCost payerCost = mInstallmentsList.get(position);
         holder.mPayerCostRow.setSmallTextSize();
-        holder.mPayerCostRow.drawPayerCost(payerCost);
+        holder.mPayerCostRow.drawPayerCost(payerCost.getInstallmentRate(),
+                payerCost.getInstallments(),
+                payerCost.getTotalAmount(),
+                payerCost.getInstallmentAmount());
     }
 
     @Override

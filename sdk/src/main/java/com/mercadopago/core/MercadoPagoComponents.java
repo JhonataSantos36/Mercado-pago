@@ -15,6 +15,7 @@ import com.mercadopago.PayerInformationActivity;
 import com.mercadopago.PaymentMethodsActivity;
 import com.mercadopago.PaymentTypesActivity;
 import com.mercadopago.PaymentVaultActivity;
+import com.mercadopago.R;
 import com.mercadopago.ReviewPaymentMethodsActivity;
 import com.mercadopago.SecurityCodeActivity;
 import com.mercadopago.callbacks.OnConfirmPaymentCallback;
@@ -41,8 +42,10 @@ import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.preferences.PaymentResultScreenPreference;
 import com.mercadopago.preferences.ReviewScreenPreference;
 import com.mercadopago.preferences.ServicePreference;
+import com.mercadopago.review_and_confirm.ReviewAndConfirmActivity;
 import com.mercadopago.review_and_confirm.models.ItemsModel;
 import com.mercadopago.review_and_confirm.models.PaymentModel;
+import com.mercadopago.review_and_confirm.models.SummaryModel;
 import com.mercadopago.review_and_confirm.models.TermsAndConditionsModel;
 import com.mercadopago.uicontrollers.reviewandconfirm.ReviewItemsView;
 import com.mercadopago.uicontrollers.reviewandconfirm.ReviewPaymentOffView;
@@ -436,11 +439,14 @@ public class MercadoPagoComponents {
 //                intent.putExtra("reviewScreenPreference", JsonUtil.getInstance().toJson(reviewScreenPreference));
 //                activity.startActivityForResult(intent, MercadoPagoComponents.Activities.REVIEW_AND_CONFIRM_REQUEST_CODE);
 
+                String title = SummaryModel.resolveTitle(items, activity.getApplicationContext().getResources().getString(R.string.mpsdk_review_summary_product), activity.getApplicationContext().getResources().getString(R.string.mpsdk_review_summary_products));
+
                 //TODO remove the two trues and validate data.
                 TermsAndConditionsModel termsAndConditionsModel = new TermsAndConditionsModel(site.getId(), termsAndConditionsEnabled);
                 PaymentModel paymentModel = new PaymentModel(paymentMethod, token, issuer, hasExtraPaymentMethods);
+                SummaryModel summaryModel = new SummaryModel(amount, paymentMethod, site, payerCost, discount, title);
                 ItemsModel itemsModel = new ItemsModel(site.getCurrencyId(), items);
-                com.mercadopago.review_and_confirm.ReviewAndConfirmActivity.start(activity, merchantPublicKey, termsAndConditionsModel, paymentModel, itemsModel);
+                com.mercadopago.review_and_confirm.ReviewAndConfirmActivity.start(activity, merchantPublicKey, termsAndConditionsModel, paymentModel, summaryModel, itemsModel);
             }
         }
 

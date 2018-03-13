@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.Toolbar
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/toolbar"
     android:layout_width="match_parent"
@@ -8,11 +7,12 @@
     android:background="@color/mpsdk_background"
     android:theme="@style/ToolbarTheme"
     app:popupTheme="@style/Theme.MercadoPagoTheme.NoActionBar">
+
     <com.mercadopago.customviews.MPTextView
         android:id="@+id/title"
+        style="@style/mpsdk_toolbar_text_medium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/mpsdk_toolbar_text_medium"
-        android:text="@string/mpsdk_title_activity_bank_deals"
-        android:layout_gravity="center" />
+        android:layout_gravity="center"
+        android:text="@string/mpsdk_title_activity_bank_deals" />
 </android.support.v7.widget.Toolbar>

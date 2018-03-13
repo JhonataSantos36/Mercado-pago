@@ -4,6 +4,8 @@ import android.support.annotation.DrawableRes;
 
 import com.mercadopago.components.CustomComponent;
 
+import java.math.BigDecimal;
+
 public final class ReviewAndConfirmPreferences {
 
     private final CustomComponent topComponent;
@@ -19,6 +21,18 @@ public final class ReviewAndConfirmPreferences {
 
     private final String unitPriceLabel;
 
+    public final BigDecimal productAmount;
+    public final BigDecimal shippingAmount;
+    public final BigDecimal arrearsAmount;
+    public final BigDecimal taxesAmount;
+    public final String disclaimerText;
+    public final BigDecimal chargeAmount;
+    public final BigDecimal discountAmount;
+    public final BigDecimal totalAmount;
+
+    public final String productTitle;
+    public final String disclaimerTextColor;
+
     private ReviewAndConfirmPreferences(Builder builder) {
         this.topComponent = builder.topView;
         this.bottomComponent = builder.bottomView;
@@ -26,6 +40,21 @@ public final class ReviewAndConfirmPreferences {
         this.collectorIcon = builder.collectorIcon;
         this.quantityLabel = builder.quantityLabel;
         this.unitPriceLabel = builder.unitPriceLabel;
+        this.productAmount = builder.productAmount;
+        this.shippingAmount = builder.shippingAmount;
+        this.arrearsAmount = builder.arrearsAmount;
+        this.taxesAmount = builder.taxesAmount;
+        this.disclaimerText = builder.disclaimerText;
+        this.chargeAmount = builder.chargeAmount;
+        this.discountAmount = builder.discountAmount;
+        this.productTitle = builder.productTitle;
+        this.disclaimerTextColor = builder.disclaimerTextColor;
+
+        this.totalAmount = calculateTotalAmount();
+    }
+
+    public boolean hasProductAmount() {
+        return productAmount != null && productAmount.compareTo(BigDecimal.ZERO) > 0;
     }
 
     public boolean hasCustomTopView() {
@@ -60,6 +89,19 @@ public final class ReviewAndConfirmPreferences {
         return unitPriceLabel;
     }
 
+    public BigDecimal calculateTotalAmount() {
+        BigDecimal totalAmount = new BigDecimal(0);
+
+        totalAmount = (productAmount == null) ? totalAmount.add(new BigDecimal(0)) : totalAmount.add(productAmount);
+        totalAmount = (chargeAmount == null) ? totalAmount.add(new BigDecimal(0)) : totalAmount.add(chargeAmount);
+        totalAmount = (taxesAmount == null) ? totalAmount.add(new BigDecimal(0)) : totalAmount.add(taxesAmount);
+        totalAmount = (shippingAmount == null) ? totalAmount.add(new BigDecimal(0)) : totalAmount.add(shippingAmount);
+        totalAmount = (arrearsAmount == null) ? totalAmount.add(new BigDecimal(0)) : totalAmount.add(arrearsAmount);
+        totalAmount = (discountAmount == null) ? totalAmount.subtract(new BigDecimal(0)) : totalAmount.subtract(discountAmount);
+
+        return totalAmount;
+    }
+
     public static class Builder {
         CustomComponent topView;
         CustomComponent bottomView;
@@ -67,6 +109,116 @@ public final class ReviewAndConfirmPreferences {
         Integer collectorIcon;
         String quantityLabel;
         String unitPriceLabel;
+
+        BigDecimal productAmount;
+        BigDecimal shippingAmount;
+        BigDecimal arrearsAmount;
+        BigDecimal taxesAmount;
+        String disclaimerText;
+        BigDecimal chargeAmount;
+        BigDecimal discountAmount;
+        BigDecimal totalAmount;
+        String productTitle;
+        String disclaimerTextColor;
+
+        /**
+         * Set product title that will appear in the top of review and confirm summary.
+         *
+         * @param productTitle the product title
+         * @return builder
+         */
+        public Builder setProductTitle(String productTitle) {
+            this.productTitle = productTitle;
+            return this;
+        }
+
+        /**
+         * Set product amount that will appear in the top of review and confirm summary.
+         *
+         * @param productAmount the product amount
+         * @return builder
+         */
+        public Builder setProductAmount(BigDecimal productAmount) {
+            this.productAmount = productAmount;
+            return this;
+        }
+
+        /**
+         * Set shipping amount that will appear in the top of review and confirm summary.
+         *
+         * @param shippingAmount the shipping amount
+         * @return builder
+         */
+        public Builder setShippingAmount(BigDecimal shippingAmount) {
+            this.shippingAmount = shippingAmount;
+            return this;
+        }
+
+        /**
+         * Set arrears amount that will appear in the top of review and confirm summary.
+         *
+         * @param arrearsAmount the arrears amount
+         * @return builder
+         */
+        public Builder setArrearsAmount(BigDecimal arrearsAmount) {
+            this.arrearsAmount = arrearsAmount;
+            return this;
+        }
+
+        /**
+         * Set taxes amount that will appear in the top of review and confirm summary.
+         *
+         * @param taxesAmount the taxes amount
+         * @return builder
+         */
+        public Builder setTaxesAmount(BigDecimal taxesAmount) {
+            this.taxesAmount = taxesAmount;
+            return this;
+        }
+
+        /**
+         * Set charges amount that will appear in the top of review and confirm summary.
+         *
+         * @param chargeAmount the charges amount
+         * @return builder
+         */
+        public Builder setChargeAmount(BigDecimal chargeAmount) {
+            this.chargeAmount = chargeAmount;
+            return this;
+        }
+
+        /**
+         * Set discount amount that will appear in the top of review and confirm summary.
+         *
+         * @param discountAmount the discount amount
+         * @return builder
+         */
+        public Builder setDiscountAmount(BigDecimal discountAmount) {
+            this.discountAmount = discountAmount;
+            return this;
+        }
+
+        /**
+         * Set disclaimer text that will appear in the bottom of review and confirm summary.
+         *
+         * @param disclaimerText the disclaimer text
+         * @return builder
+         */
+        public Builder setDisclaimerText(String disclaimerText) {
+            this.disclaimerText = disclaimerText;
+            return this;
+        }
+
+        /**
+         * Set disclaimer text color.
+         *
+         * @param disclaimerTextColor the disclaimer text color in hex with hashtag
+         * @return builder
+         */
+        public Builder setDisclaimerTextColor(String disclaimerTextColor) {
+            this.disclaimerTextColor = disclaimerTextColor;
+            return this;
+        }
 
         /**
          * Custom view that will appear before payment method description

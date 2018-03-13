@@ -34,6 +34,10 @@ public class PayerCost {
         this.installmentRate = installmentRate;
     }
 
+    public void setTotalAmount(BigDecimal totalAmount) {
+        this.totalAmount = totalAmount;
+    }
+
     public List<String> getLabels() {
         return labels;
     }

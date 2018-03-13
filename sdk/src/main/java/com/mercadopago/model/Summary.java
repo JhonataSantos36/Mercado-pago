@@ -139,4 +139,14 @@ public class Summary {
             return new Summary(this);
         }
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof Summary){
+            Summary other = (Summary) obj;
+            return disclaimer.equals(other.disclaimer);
+        }
+
+        return false;
+    }
 }

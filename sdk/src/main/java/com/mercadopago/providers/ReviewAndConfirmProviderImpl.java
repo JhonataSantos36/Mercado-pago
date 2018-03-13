@@ -29,6 +29,7 @@ import static com.mercadopago.util.TextUtil.isEmpty;
 /**
  * Created by mreverter on 2/2/17.
  */
+
 public class ReviewAndConfirmProviderImpl implements ReviewAndConfirmProvider {
 
     private final Context context;

@@ -26,7 +26,7 @@ public class ReviewAndConfirmRenderer extends Renderer<ReviewAndConfirmContainer
 
         LinearLayout linearLayout = createMainLayout(context);
 
-        //TODO add view summary - add view custom
+        addSummary(component, linearLayout);
 
         if (component.hasItemsEnabled()) {
             addReviewItems(component, linearLayout);
@@ -54,6 +54,14 @@ public class ReviewAndConfirmRenderer extends Renderer<ReviewAndConfirmContainer
         parent.addView(linearLayout);
 
         return parent;
+    }
+
+    private void addSummary(@NonNull ReviewAndConfirmContainer component, LinearLayout linearLayout) {
+        Renderer summary = RendererFactory.create(linearLayout.getContext(),
+                new SummaryComponent(SummaryComponent.SummaryProps.createFrom(component.props.summaryModel,
+                        component.props.preferences),
+                        component.getSummaryProvider()));
+        summary.render(linearLayout);
     }
 
     @NonNull

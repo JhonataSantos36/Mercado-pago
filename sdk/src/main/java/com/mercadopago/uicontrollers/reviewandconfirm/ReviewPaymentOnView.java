@@ -18,7 +18,6 @@ import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.Reviewable;
 import com.mercadopago.model.Site;
 import com.mercadopago.uicontrollers.payercosts.PayerCostColumn;
-import com.mercadopago.uicontrollers.payercosts.PayerCostViewController;
 import com.mercadopago.util.CurrenciesUtil;
 import com.mercadopago.util.InstallmentsUtil;
 
@@ -41,7 +40,7 @@ public class ReviewPaymentOnView extends Reviewable {
     protected ImageView mIconTimeImageView;
 
     protected Context mContext;
-    protected PayerCostViewController mPayerCostViewController;
+    protected PayerCostColumn mPayerCostViewController;
 
     protected String mCurrency;
     protected PayerCost mPayerCost;
@@ -106,10 +105,11 @@ public class ReviewPaymentOnView extends Reviewable {
         if (mPayerCost.getInstallments() != 1) {
             mPaymentText.setVisibility(View.GONE);
 
-            mPayerCostViewController = new PayerCostColumn(mContext, mSite);
+            mPayerCostViewController = new PayerCostColumn(mContext, mSite.getCurrencyId(), mSite.getId(), mPayerCost.getInstallmentRate(),
+                    mPayerCost.getInstallments(), mPayerCost.getTotalAmount(), mPayerCost.getInstallmentAmount());
             mPayerCostViewController.inflateInParent(mPayerCostContainer, true);
             mPayerCostViewController.initializeControls();
-            mPayerCostViewController.drawPayerCost(mPayerCost);
+            mPayerCostViewController.drawPayerCost();
 
             showFinance();
             showSiteRelatedInformation();
@@ -129,7 +129,7 @@ public class ReviewPaymentOnView extends Reviewable {
     }
 
     private void showSiteRelatedInformation() {
-        if (InstallmentsUtil.shouldWarnAboutBankInterests(mSite)) {
+        if (InstallmentsUtil.shouldWarnAboutBankInterests(mSite.getId())) {
             warnAboutBankInterests();
         }
     }
