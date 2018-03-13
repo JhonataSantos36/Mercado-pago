@@ -44,9 +44,10 @@
             android:clickable="true"
             android:focusable="true"
             android:foreground="?attr/selectableItemBackground"
+            android:padding="@dimen/mpsdk_xs_margin"
             android:text="@string/mpsdk_cancel_payment"
             android:textColor="@color/mpsdk_link"
-            android:textSize="@dimen/mpsdk_s_text"
+            android:textSize="@dimen/mpsdk_m_text"
             app:font_style="regular" />
 
     </LinearLayout>

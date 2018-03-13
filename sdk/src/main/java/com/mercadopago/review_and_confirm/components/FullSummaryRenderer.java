@@ -31,7 +31,7 @@ public class FullSummaryRenderer extends Renderer<FullSummary> {
         final MPTextView disclaimerTextView = summaryView.findViewById(R.id.mpsdkDisclaimer);
         final LinearLayout summaryDetailsContainer = summaryView.findViewById(R.id.mpsdkSummaryDetails);
         final LinearLayout reviewSummaryPayContainer = summaryView.findViewById(R.id.mpsdkReviewSummaryPay);
-        final View firstSeparetor = summaryView.findViewById(R.id.mpsdkFirstSeparator);
+        final View firstSeparator = summaryView.findViewById(R.id.mpsdkFirstSeparator);
         final LinearLayout totalAmountContainer = summaryView.findViewById(R.id.mpsdkReviewSummaryTotal);
         final View secondSeparator = summaryView.findViewById(R.id.mpsdkSecondSeparator);
         final LinearLayout disclaimerLinearLayout = summaryView.findViewById(R.id.disclaimer);
@@ -52,17 +52,17 @@ public class FullSummaryRenderer extends Renderer<FullSummary> {
             payerCostColumn.inflateInParent(payerCostContainer, true);
             payerCostColumn.initializeControls();
             payerCostColumn.drawPayerCostWithoutTotal();
-
-            //disclaimer
-            if (!isEmpty(component.props.summaryModel.cftPercent)) {
-                String disclaimer = getDisclaimer(component, context);
-                final Renderer disclaimerRenderer = RendererFactory.create(context, component.getDisclaimerComponent(disclaimer));
-                final View disclaimerView = disclaimerRenderer.render();
-                disclaimerLinearLayout.addView(disclaimerView);
-            }
         } else {
             reviewSummaryPayContainer.setVisibility(View.GONE);
-            firstSeparetor.setVisibility(View.GONE);
+            firstSeparator.setVisibility(View.GONE);
+        }
+
+        //disclaimer
+        if (!isEmpty(component.props.summaryModel.cftPercent)) {
+            String disclaimer = getDisclaimer(component, context);
+            final Renderer disclaimerRenderer = RendererFactory.create(context, component.getDisclaimerComponent(disclaimer));
+            final View disclaimerView = disclaimerRenderer.render();
+            disclaimerLinearLayout.addView(disclaimerView);
         }
 
         //total

@@ -11,6 +11,7 @@
     <color name="examples_green">#5bcc55</color>
 
     <!-- Customized colors -->
+    <!--
     <color name="mpsdk_background">#FFEA78</color>
     <color name="mpsdk_discount_summary_background">#FFDB15</color>
     <color name="mpsdk_toolbar_text">#333333</color>
@@ -30,12 +31,12 @@
     <color name="mpsdk_background_loading">#FFEA78</color>
     <color name="mpsdk_color_payer_costs_no_rate">#39B54A</color>
 
-    <!-- review and confirm custom colors -->
     <color name="mpsdk_review_payment_method_background">#39B54A</color>
     <color name="mpsdk_review_summary_background">#F96061</color>
     <color name="mpsdk_review_item_background">#3483FA</color>
 
     <color name="mpsdk_link">#FF00FF</color>
     <color name="mpsdk_button">#00FFFF</color>
+    -->
 
 </resources>
