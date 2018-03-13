@@ -2,7 +2,6 @@ package com.mercadopago.providers;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-
 import com.mercadopago.R;
 import com.mercadopago.callbacks.Callback;
 import com.mercadopago.core.CustomServer;
@@ -20,14 +19,9 @@ import com.mercadopago.mvp.OnResourcesRetrievedCallback;
 import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.TextUtil;
-
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
-
-/**
- * Created by mreverter on 1/30/17.
- */
 
 public class PaymentVaultProviderImpl implements PaymentVaultProvider {
 
@@ -40,9 +34,9 @@ public class PaymentVaultProviderImpl implements PaymentVaultProvider {
     private final String merchantGetDiscountUri;
     private final Map<String, String> mDiscountAdditionalInfo;
 
-
-    public PaymentVaultProviderImpl(Context context, String publicKey, String privateKey, String merchantBaseUrl, String merchantGetCustomerUri, Map<String, String> merchantGetCustomerAdditionalInfo,
-                                    String merchantDiscountBaseUrl, String merchantGetDiscountUri, Map<String, String> discountAdditionalInfo) {
+    public PaymentVaultProviderImpl(Context context, String publicKey, String privateKey, String merchantBaseUrl,
+        String merchantGetCustomerUri, Map<String, String> merchantGetCustomerAdditionalInfo,
+        String merchantDiscountBaseUrl, String merchantGetDiscountUri, Map<String, String> discountAdditionalInfo) {
         this.context = context;
         this.merchantBaseUrl = merchantBaseUrl;
         this.merchantDiscountBaseUrl = merchantDiscountBaseUrl;
@@ -52,14 +46,15 @@ public class PaymentVaultProviderImpl implements PaymentVaultProvider {
         this.mDiscountAdditionalInfo = discountAdditionalInfo;
 
         this.mercadoPago = new MercadoPagoServicesAdapter.Builder()
-                .setContext(context)
-                .setPublicKey(publicKey)
-                .setPrivateKey(privateKey)
-                .build();
+            .setContext(context)
+            .setPublicKey(publicKey)
+            .setPrivateKey(privateKey)
+            .build();
     }
 
     @Override
-    public void getDirectDiscount(String amount, String payerEmail, final OnResourcesRetrievedCallback<Discount> onResourcesRetrievedCallback) {
+    public void getDirectDiscount(String amount, String payerEmail,
+        final OnResourcesRetrievedCallback<Discount> onResourcesRetrievedCallback) {
         if (isMerchantServerDiscountsAvailable()) {
             getMerchantDirectDiscount(amount, payerEmail, onResourcesRetrievedCallback);
         } else {
@@ -67,7 +62,8 @@ public class PaymentVaultProviderImpl implements PaymentVaultProvider {
         }
     }
 
-    private void getMPDirectDiscount(String amount, String payerEmail, final OnResourcesRetrievedCallback<Discount> onResourcesRetrievedCallback) {
+    private void getMPDirectDiscount(String amount, String payerEmail,
+        final OnResourcesRetrievedCallback<Discount> onResourcesRetrievedCallback) {
         mercadoPago.getDirectDiscount(amount, payerEmail, new Callback<Discount>() {
             @Override
             public void success(Discount discount) {
@@ -76,65 +72,79 @@ public class PaymentVaultProviderImpl implements PaymentVaultProvider {
 
             @Override
             public void failure(ApiException apiException) {
-                onResourcesRetrievedCallback.onFailure(new MercadoPagoError(apiException, ApiUtil.RequestOrigin.GET_DIRECT_DISCOUNT));
+                onResourcesRetrievedCallback
+                    .onFailure(new MercadoPagoError(apiException, ApiUtil.RequestOrigin.GET_DIRECT_DISCOUNT));
             }
         });
     }
 
-    private void getMerchantDirectDiscount(String amount, String payerEmail, final OnResourcesRetrievedCallback<Discount> onResourcesRetrievedCallback) {
+    private void getMerchantDirectDiscount(String amount, String payerEmail,
+        final OnResourcesRetrievedCallback<Discount> onResourcesRetrievedCallback) {
         String merchantDiscountUrl = getMerchantServerDiscountUrl();
 
-        MerchantServer.getDirectDiscount(amount, payerEmail, context, merchantDiscountUrl, merchantGetDiscountUri, mDiscountAdditionalInfo, new Callback<Discount>() {
-            @Override
-            public void success(Discount discount) {
-                onResourcesRetrievedCallback.onSuccess(discount);
-            }
+        MerchantServer.getDirectDiscount(amount, payerEmail, context, merchantDiscountUrl, merchantGetDiscountUri,
+            mDiscountAdditionalInfo, new Callback<Discount>() {
+                @Override
+                public void success(Discount discount) {
+                    onResourcesRetrievedCallback.onSuccess(discount);
+                }
 
-            @Override
-            public void failure(ApiException apiException) {
-                onResourcesRetrievedCallback.onFailure(new MercadoPagoError(apiException, ApiUtil.RequestOrigin.GET_DIRECT_DISCOUNT));
-            }
-        });
+                @Override
+                public void failure(ApiException apiException) {
+                    onResourcesRetrievedCallback
+                        .onFailure(new MercadoPagoError(apiException, ApiUtil.RequestOrigin.GET_DIRECT_DISCOUNT));
+                }
+            });
     }
 
     @Override
-    public void getPaymentMethodSearch(BigDecimal amount, final PaymentPreference paymentPreference, final Payer payer, Site site, final OnResourcesRetrievedCallback<PaymentMethodSearch> onResourcesRetrievedCallback) {
+    public void getPaymentMethodSearch(BigDecimal amount, final PaymentPreference paymentPreference, final Payer payer,
+        Site site, final OnResourcesRetrievedCallback<PaymentMethodSearch> onResourcesRetrievedCallback) {
 
-        final List<String> excludedPaymentTypes = paymentPreference == null ? null : paymentPreference.getExcludedPaymentTypes();
-        final List<String> excludedPaymentMethodIds = paymentPreference == null ? null : paymentPreference.getExcludedPaymentMethodIds();
+        final List<String> excludedPaymentTypes =
+            paymentPreference == null ? null : paymentPreference.getExcludedPaymentTypes();
+        final List<String> excludedPaymentMethodIds =
+            paymentPreference == null ? null : paymentPreference.getExcludedPaymentMethodIds();
 
-        mercadoPago.getPaymentMethodSearch(amount, excludedPaymentTypes, excludedPaymentMethodIds, payer, site, new Callback<PaymentMethodSearch>() {
-            @Override
-            public void success(@NonNull final PaymentMethodSearch paymentMethodSearch) {
-                if (!paymentMethodSearch.hasSavedCards() && isMerchantServerCustomerAvailable()) {
-                    addCustomerCardsFromMerchantServer(paymentMethodSearch, paymentPreference, onResourcesRetrievedCallback);
-                } else {
-                    onResourcesRetrievedCallback.onSuccess(paymentMethodSearch);
+        mercadoPago.getPaymentMethodSearch(amount, excludedPaymentTypes, excludedPaymentMethodIds, payer, site,
+            new Callback<PaymentMethodSearch>() {
+                @Override
+                public void success(@NonNull final PaymentMethodSearch paymentMethodSearch) {
+                    if (!paymentMethodSearch.hasSavedCards() && isMerchantServerCustomerAvailable()) {
+                        addCustomerCardsFromMerchantServer(paymentMethodSearch, paymentPreference,
+                            onResourcesRetrievedCallback);
+                    } else {
+                        onResourcesRetrievedCallback.onSuccess(paymentMethodSearch);
+                    }
                 }
-            }
 
-            @Override
-            public void failure(ApiException apiException) {
-                onResourcesRetrievedCallback.onFailure(new MercadoPagoError(apiException, ApiUtil.RequestOrigin.GET_PAYMENT_METHODS));
-            }
-        });
+                @Override
+                public void failure(ApiException apiException) {
+                    onResourcesRetrievedCallback
+                        .onFailure(new MercadoPagoError(apiException, ApiUtil.RequestOrigin.GET_PAYMENT_METHODS));
+                }
+            });
     }
 
-    private void addCustomerCardsFromMerchantServer(final PaymentMethodSearch paymentMethodSearch, final PaymentPreference paymentPreference, final OnResourcesRetrievedCallback<PaymentMethodSearch> onResourcesRetrievedCallback) {
-        CustomServer.getCustomer(context, merchantBaseUrl, merchantGetCustomerUri, merchantGetCustomerAdditionalInfo, new Callback<Customer>() {
-            @Override
-            public void success(Customer customer) {
-                List<Card> savedCards = paymentPreference == null ? customer.getCards() : paymentPreference.getValidCards(customer.getCards());
-                paymentMethodSearch.setCards(savedCards, context.getString(R.string.mpsdk_last_digits_label));
-                onResourcesRetrievedCallback.onSuccess(paymentMethodSearch);
-            }
+    private void addCustomerCardsFromMerchantServer(final PaymentMethodSearch paymentMethodSearch,
+        final PaymentPreference paymentPreference,
+        final OnResourcesRetrievedCallback<PaymentMethodSearch> onResourcesRetrievedCallback) {
+        CustomServer.getCustomer(context, merchantBaseUrl, merchantGetCustomerUri, merchantGetCustomerAdditionalInfo,
+            new Callback<Customer>() {
+                @Override
+                public void success(Customer customer) {
+                    List<Card> savedCards = paymentPreference == null ? customer.getCards()
+                        : paymentPreference.getValidCards(customer.getCards());
+                    paymentMethodSearch.setCards(savedCards, context.getString(R.string.mpsdk_last_digits_label));
+                    onResourcesRetrievedCallback.onSuccess(paymentMethodSearch);
+                }
 
-            @Override
-            public void failure(ApiException apiException) {
-                //Avoid failure caused by merchant's server
-                onResourcesRetrievedCallback.onSuccess(paymentMethodSearch);
-            }
-        });
+                @Override
+                public void failure(ApiException apiException) {
+                    //Avoid failure caused by merchant's server
+                    onResourcesRetrievedCallback.onSuccess(paymentMethodSearch);
+                }
+            });
     }
 
     @Override

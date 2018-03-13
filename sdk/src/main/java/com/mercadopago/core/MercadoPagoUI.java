@@ -1,36 +1,13 @@
 package com.mercadopago.core;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
-import android.support.annotation.DrawableRes;
-import android.text.TextUtils;
-
-import com.google.gson.Gson;
-import com.mercadopago.CustomerCardsActivity;
-import com.mercadopago.ReviewAndConfirmActivity;
-import com.mercadopago.callbacks.OnReviewChange;
-import com.mercadopago.model.Card;
-import com.mercadopago.model.CardInfo;
-import com.mercadopago.model.Customer;
 import com.mercadopago.model.Discount;
 import com.mercadopago.model.Item;
 import com.mercadopago.model.PayerCost;
-import com.mercadopago.model.PaymentMethod;
-import com.mercadopago.model.Reviewable;
-import com.mercadopago.model.Site;
-import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.preferences.ReviewScreenPreference;
 import com.mercadopago.uicontrollers.discounts.DiscountRowView;
 import com.mercadopago.uicontrollers.installments.InstallmentsReviewView;
 import com.mercadopago.uicontrollers.reviewandconfirm.ReviewItemsView;
-import com.mercadopago.uicontrollers.reviewandconfirm.ReviewPaymentOffView;
-import com.mercadopago.uicontrollers.reviewandconfirm.ReviewPaymentOnView;
-import com.mercadopago.uicontrollers.savedcards.SavedCardRowView;
-import com.mercadopago.uicontrollers.savedcards.SavedCardView;
-import com.mercadopago.util.JsonUtil;
-import com.mercadopago.util.MercadoPagoUtil;
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -100,7 +77,7 @@ public class MercadoPagoUI {
 
             public DiscountRowView build() {
                 return new DiscountRowView(context, discount, transactionAmount, currencyId, shortRowEnabled,
-                        discountEnabled, showArrow, showSeparator);
+                    discountEnabled, showArrow, showSeparator);
             }
         }
 

@@ -405,7 +405,6 @@ public class MercadoPagoComponents {
             }
 
             public void startActivity() {
-
                 if (this.activity == null) throw new IllegalStateException("activity is null");
                 if (this.paymentMethod == null)
                     throw new IllegalStateException("payment method is null");
@@ -420,28 +419,7 @@ public class MercadoPagoComponents {
             }
 
             private void startReviewAndConfirmActivity() {
-                // TODO remove
-//                Intent intent = new Intent(activity, ReviewAndConfirmActivity.class);
-//                intent.putExtra("merchantPublicKey", merchantPublicKey);
-//                intent.putExtra("hasExtraPaymentMethods", hasExtraPaymentMethods);
-//                intent.putExtra("amount", amount.toString());
-//                intent.putExtra("site", JsonUtil.getInstance().toJson(site));
-//                intent.putExtra("issuer", JsonUtil.getInstance().toJson(issuer));
-//                intent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
-//                intent.putExtra("payerCost", JsonUtil.getInstance().toJson(payerCost));
-//                intent.putExtra("token", JsonUtil.getInstance().toJson(token));
-//                intent.putExtra("paymentMethodCommentInfo", paymentMethodCommentInfo);
-//                intent.putExtra("paymentMethodDescriptionInfo", paymentMethodDescriptionInfo);
-//                intent.putExtra("discount", JsonUtil.getInstance().toJson(discount));
-//                intent.putExtra("items", new Gson().toJson(items));
-//                intent.putExtra("termsAndConditionsEnabled", termsAndConditionsEnabled);
-//                intent.putExtra("discountEnabled", discountEnabled);
-//                intent.putExtra("reviewScreenPreference", JsonUtil.getInstance().toJson(reviewScreenPreference));
-//                activity.startActivityForResult(intent, MercadoPagoComponents.Activities.REVIEW_AND_CONFIRM_REQUEST_CODE);
-
                 String title = SummaryModel.resolveTitle(items, activity.getApplicationContext().getResources().getString(R.string.mpsdk_review_summary_product), activity.getApplicationContext().getResources().getString(R.string.mpsdk_review_summary_products));
-
-                //TODO remove the two trues and validate data.
                 TermsAndConditionsModel termsAndConditionsModel = new TermsAndConditionsModel(site.getId(), termsAndConditionsEnabled);
                 PaymentModel paymentModel = new PaymentModel(paymentMethod, token, issuer, hasExtraPaymentMethods);
                 SummaryModel summaryModel = new SummaryModel(amount, paymentMethod, site, payerCost, discount, title);

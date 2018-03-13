@@ -65,9 +65,6 @@
             android:name=".DiscountsActivity"
             android:theme="@style/Theme.MercadoPagoTheme.Modal" />
         <activity
-            android:name=".ReviewAndConfirmActivity"
-            android:theme="@style/Theme.MercadoPagoTheme.NoActionBar" />
-        <activity
             android:name=".ReviewPaymentMethodsActivity"
             android:theme="@style/Theme.MercadoPagoTheme.NoActionBar" />
         <activity
