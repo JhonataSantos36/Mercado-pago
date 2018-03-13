@@ -102,18 +102,11 @@
         app:font_style="light"
         tools:text="No incluye intereses bancarios" />
 
-    <com.mercadopago.customviews.MPTextView
-        android:id="@+id/mpsdkCFT"
+    <LinearLayout
+        android:id="@+id/disclaimer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/mpsdk_s_alternative_margin"
-        android:gravity="center"
-        android:includeFontPadding="false"
-        android:textColor="@color/mpsdk_summary_text_color"
-        android:textSize="@dimen/mpsdk_m_margin"
-        android:visibility="gone"
-        app:font_style="light"
-        tools:text="CFT 0,00%" />
+        android:orientation="vertical"></LinearLayout>
 
     <LinearLayout
         android:id="@+id/mpsdkCheckoutUnlockCard"

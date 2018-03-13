@@ -100,7 +100,7 @@ public class SummaryView extends Reviewable {
         mFirstSeparator = mView.findViewById(R.id.mpsdkFirstSeparator);
         mSecondSeparator = mView.findViewById(R.id.mpsdkSecondSeparator);
         mPayerCostContainer = (FrameLayout) mView.findViewById(R.id.mpsdkReviewSummaryPayerCostContainer);
-        mCFTTextView = (MPTextView) mView.findViewById(R.id.mpsdkCFT);
+        mCFTTextView = (MPTextView) mView.findViewById(R.id.disclaimer);
         mDisclaimerText = (MPTextView) mView.findViewById(R.id.mpsdkDisclaimer);
         mUnlockCard = (LinearLayout) mView.findViewById(R.id.mpsdkCheckoutUnlockCard);
         mUnlockCardTextView = (MPTextView) mView.findViewById(R.id.mpsdkUnlockCard);

@@ -28,13 +28,13 @@ public class FullSummaryRenderer extends Renderer<FullSummary> {
         final View summaryView = inflate(R.layout.mpsdk_full_summary_component, parent);
         final MPTextView totalAmountTextView = summaryView.findViewById(R.id.mpsdkReviewSummaryTotalText);
         final FrameLayout payerCostContainer = summaryView.findViewById(R.id.mpsdkReviewSummaryPayerCostContainer);
-        final MPTextView cftTextView = summaryView.findViewById(R.id.mpsdkCFT);
         final MPTextView disclaimerTextView = summaryView.findViewById(R.id.mpsdkDisclaimer);
         final LinearLayout summaryDetailsContainer = summaryView.findViewById(R.id.mpsdkSummaryDetails);
         final LinearLayout reviewSummaryPayContainer = summaryView.findViewById(R.id.mpsdkReviewSummaryPay);
         final View firstSeparetor = summaryView.findViewById(R.id.mpsdkFirstSeparator);
         final LinearLayout totalAmountContainer = summaryView.findViewById(R.id.mpsdkReviewSummaryTotal);
         final View secondSeparator = summaryView.findViewById(R.id.mpsdkSecondSeparator);
+        final LinearLayout disclaimerLinearLayout = summaryView.findViewById(R.id.disclaimer);
 
         //summaryDetails list
         for (AmountDescription amountDescription : component.getAmountDescriptionComponents()) {
@@ -53,9 +53,13 @@ public class FullSummaryRenderer extends Renderer<FullSummary> {
             payerCostColumn.initializeControls();
             payerCostColumn.drawPayerCostWithoutTotal();
 
-            //finance
-            setText(cftTextView, component.getFinance());
-            cftTextView.setVisibility(isEmpty(component.getFinance()) ? View.GONE : View.VISIBLE);
+            //disclaimer
+            if (!isEmpty(component.props.summaryModel.cftPercent)) {
+                String disclaimer = getDisclaimer(component, context);
+                final Renderer disclaimerRenderer = RendererFactory.create(context, component.getDisclaimerComponent(disclaimer));
+                final View disclaimerView = disclaimerRenderer.render();
+                disclaimerLinearLayout.addView(disclaimerView);
+            }
         } else {
             reviewSummaryPayContainer.setVisibility(View.GONE);
             firstSeparetor.setVisibility(View.GONE);
@@ -75,5 +79,17 @@ public class FullSummaryRenderer extends Renderer<FullSummary> {
 
     private Spanned getFormattedAmount(BigDecimal amount, String currencyId) {
         return amount != null && !isEmpty(currencyId) ? CurrenciesUtil.getFormattedAmount(amount, currencyId) : null;
+    }
+
+    public String getDisclaimer(FullSummary component, Context context) {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        if (!isEmpty(component.props.summaryModel.cftPercent)) {
+            stringBuilder.append(context.getString(R.string.mpsdk_installments_cft));
+            stringBuilder.append(" ");
+            stringBuilder.append(component.props.summaryModel.cftPercent);
+        }
+
+        return stringBuilder.toString();
     }
 }

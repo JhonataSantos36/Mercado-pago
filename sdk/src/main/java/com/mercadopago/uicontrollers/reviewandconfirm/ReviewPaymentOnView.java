@@ -86,7 +86,7 @@ public class ReviewPaymentOnView extends Reviewable {
         mIconTimeImageView = (ImageView) mView.findViewById(R.id.mpsdkIconTime);
         mChangePaymentTextView = (MPTextView) mView.findViewById(R.id.mpsdkReviewChangePaymentText);
         mIconTimeImageView.setVisibility(View.GONE);
-        mCFTTextView = (MPTextView) mView.findViewById(R.id.mpsdkCFT);
+        mCFTTextView = (MPTextView) mView.findViewById(R.id.disclaimer);
         mChangePaymentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

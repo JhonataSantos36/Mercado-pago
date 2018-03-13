@@ -2,6 +2,7 @@ package com.mercadopago.review_and_confirm.components;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.VisibleForTesting;
+
 import com.mercadopago.components.Component;
 import com.mercadopago.components.RendererFactory;
 import com.mercadopago.model.Summary;
@@ -9,6 +10,7 @@ import com.mercadopago.model.SummaryDetail;
 import com.mercadopago.review_and_confirm.SummaryProvider;
 import com.mercadopago.review_and_confirm.models.ReviewAndConfirmPreferences;
 import com.mercadopago.review_and_confirm.props.AmountDescriptionProps;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +28,7 @@ public class FullSummary extends Component<SummaryComponent.SummaryProps, Void> 
     }
 
     FullSummary(@NonNull final SummaryComponent.SummaryProps props,
-        @NonNull final SummaryProvider provider) {
+                @NonNull final SummaryProvider provider) {
         super(props);
         this.provider = provider;
     }
@@ -54,27 +56,15 @@ public class FullSummary extends Component<SummaryComponent.SummaryProps, Void> 
         return isCardPaymentMethod() && props.summaryModel.getInstallments() > 1;
     }
 
-    @VisibleForTesting
-    String getFinance() {
-        StringBuilder stringBuilder = new StringBuilder();
-
-        if (!isEmpty(props.summaryModel.cftPercent)) {
-            stringBuilder.append(CFT);
-            stringBuilder.append(props.summaryModel.cftPercent);
-        }
-
-        return stringBuilder.toString();
-    }
-
-    List<AmountDescription> getAmountDescriptionComponents() {
+    public List<AmountDescription> getAmountDescriptionComponents() {
         List<AmountDescription> amountDescriptionList = new ArrayList<>();
 
         for (SummaryDetail summaryDetail : getSummary().getSummaryDetails()) {
             final AmountDescriptionProps amountDescriptionProps = new AmountDescriptionProps(
-                summaryDetail.getTotalAmount(),
-                summaryDetail.getTitle(),
-                props.summaryModel.currencyId,
-                summaryDetail.getTextColor());
+                    summaryDetail.getTotalAmount(),
+                    summaryDetail.getTitle(),
+                    props.summaryModel.currencyId,
+                    summaryDetail.getTextColor());
 
             amountDescriptionList.add(new AmountDescription(amountDescriptionProps));
         }
@@ -89,41 +79,41 @@ public class FullSummary extends Component<SummaryComponent.SummaryProps, Void> 
 
         if (isValidTotalAmount() && reviewScreenPreference.hasProductAmount()) {
             summaryBuilder.addSummaryProductDetail(reviewScreenPreference.getProductAmount(), props.summaryModel.title,
-                provider.getDefaultTextColor())
-                .addSummaryShippingDetail(reviewScreenPreference.getShippingAmount(),
-                    provider.getSummaryShippingTitle(), provider.getDefaultTextColor())
-                .addSummaryArrearsDetail(reviewScreenPreference.getArrearsAmount(), provider.getSummaryArrearTitle(),
                     provider.getDefaultTextColor())
-                .addSummaryTaxesDetail(reviewScreenPreference.getTaxesAmount(), provider.getSummaryTaxesTitle(),
-                    provider.getDefaultTextColor())
-                .addSummaryDiscountDetail(getDiscountAmount(), provider.getSummaryDiscountsTitle(),
-                    provider.getDiscountTextColor())
-                .setDisclaimerText(reviewScreenPreference.getDisclaimerText())
-                .setDisclaimerColor(provider.getDisclaimerTextColor());
+                    .addSummaryShippingDetail(reviewScreenPreference.getShippingAmount(),
+                            provider.getSummaryShippingTitle(), provider.getDefaultTextColor())
+                    .addSummaryArrearsDetail(reviewScreenPreference.getArrearsAmount(), provider.getSummaryArrearTitle(),
+                            provider.getDefaultTextColor())
+                    .addSummaryTaxesDetail(reviewScreenPreference.getTaxesAmount(), provider.getSummaryTaxesTitle(),
+                            provider.getDefaultTextColor())
+                    .addSummaryDiscountDetail(getDiscountAmount(), provider.getSummaryDiscountsTitle(),
+                            provider.getDiscountTextColor())
+                    .setDisclaimerText(reviewScreenPreference.getDisclaimerText())
+                    .setDisclaimerColor(provider.getDisclaimerTextColor());
 
             if (getChargesAmount().compareTo(BigDecimal.ZERO) > 0) {
                 summaryBuilder.addSummaryChargeDetail(getChargesAmount(), provider.getSummaryChargesTitle(),
-                    provider.getDefaultTextColor());
+                        provider.getDefaultTextColor());
             }
         } else {
             summaryBuilder.addSummaryProductDetail(props.summaryModel.getTotalAmount(), props.summaryModel.title,
-                provider.getDefaultTextColor());
+                    provider.getDefaultTextColor());
 
             if (isValidAmount(props.summaryModel.getPayerCostTotalAmount()) &&
-                getPayerCostChargesAmount().compareTo(BigDecimal.ZERO) > 0) {
+                    getPayerCostChargesAmount().compareTo(BigDecimal.ZERO) > 0) {
                 summaryBuilder.addSummaryChargeDetail(getPayerCostChargesAmount(), provider.getSummaryChargesTitle(),
-                    provider.getDefaultTextColor());
+                        provider.getDefaultTextColor());
             }
 
             if (!isEmpty(reviewScreenPreference.getDisclaimerText())) {
                 summaryBuilder.setDisclaimerText(reviewScreenPreference.getDisclaimerText())
-                    .setDisclaimerColor(provider.getDisclaimerTextColor());
+                        .setDisclaimerColor(provider.getDisclaimerTextColor());
             }
 
             if (isValidAmount(props.summaryModel.getCouponAmount())) {
                 summaryBuilder.addSummaryDiscountDetail(props.summaryModel.getCouponAmount(),
-                    provider.getSummaryDiscountsTitle(),
-                    provider.getDiscountTextColor());
+                        provider.getSummaryDiscountsTitle(),
+                        provider.getDiscountTextColor());
             }
         }
 
@@ -140,7 +130,7 @@ public class FullSummary extends Component<SummaryComponent.SummaryProps, Void> 
         }
 
         if (props.summaryModel.getInstallments() != null && props.summaryModel.getInstallments() > 1 &&
-            isValidAmount(props.summaryModel.getPayerCostTotalAmount())) {
+                isValidAmount(props.summaryModel.getPayerCostTotalAmount())) {
             BigDecimal totalInterestsAmount = getPayerCostChargesAmount();
             interestAmount = interestAmount.add(totalInterestsAmount);
         }
@@ -156,7 +146,7 @@ public class FullSummary extends Component<SummaryComponent.SummaryProps, Void> 
             totalInterestsAmount = props.summaryModel.getPayerCostTotalAmount().subtract(totalAmount);
         } else {
             totalInterestsAmount =
-                props.summaryModel.getPayerCostTotalAmount().subtract(props.summaryModel.getTotalAmount());
+                    props.summaryModel.getPayerCostTotalAmount().subtract(props.summaryModel.getTotalAmount());
         }
 
         return totalInterestsAmount;
@@ -185,7 +175,7 @@ public class FullSummary extends Component<SummaryComponent.SummaryProps, Void> 
 
     private boolean isEmptySummaryDetails() {
         return getSummary() != null && getSummary().getSummaryDetails() != null &&
-            getSummary().getSummaryDetails().size() < 2;
+                getSummary().getSummaryDetails().size() < 2;
     }
 
     private BigDecimal getSubtotal() {
@@ -208,10 +198,15 @@ public class FullSummary extends Component<SummaryComponent.SummaryProps, Void> 
         boolean isCard = false;
 
         if ((paymentTypeId != null) && (paymentTypeId.equals("credit_card") ||
-            paymentTypeId.equals("debit_card") || paymentTypeId.equals("prepaid_card"))) {
+                paymentTypeId.equals("debit_card") || paymentTypeId.equals("prepaid_card"))) {
             isCard = true;
         }
 
         return isCard;
+    }
+
+    public DisclaimerComponent getDisclaimerComponent(String disclaimer) {
+        DisclaimerComponent.Props props = new DisclaimerComponent.Props(disclaimer);
+        return new DisclaimerComponent(props);
     }
 }

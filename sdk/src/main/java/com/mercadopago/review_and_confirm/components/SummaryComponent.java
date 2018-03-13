@@ -1,6 +1,7 @@
 package com.mercadopago.review_and_confirm.components;
 
 import android.support.annotation.NonNull;
+
 import com.mercadopago.components.Component;
 import com.mercadopago.components.RendererFactory;
 import com.mercadopago.review_and_confirm.SummaryProvider;
@@ -14,27 +15,24 @@ public class SummaryComponent extends Component<SummaryComponent.SummaryProps, V
         final ReviewAndConfirmPreferences reviewAndConfirmPreferences;
 
         private SummaryProps(final SummaryModel summaryModel,
-            final ReviewAndConfirmPreferences reviewAndConfirmPreferences) {
+                             final ReviewAndConfirmPreferences reviewAndConfirmPreferences) {
             this.summaryModel = summaryModel;
             this.reviewAndConfirmPreferences = reviewAndConfirmPreferences;
         }
 
-        public static SummaryProps createFrom(SummaryModel summaryModel,
-            ReviewAndConfirmPreferences reviewAndConfirmPreferences) {
+        public static SummaryProps createFrom(SummaryModel summaryModel, ReviewAndConfirmPreferences reviewAndConfirmPreferences) {
             return new SummaryProps(summaryModel, reviewAndConfirmPreferences);
         }
     }
 
     private SummaryProvider provider;
 
-    public static final String CFT = "CFT ";
-
     static {
         RendererFactory.register(SummaryComponent.class, SummaryRenderer.class);
     }
 
     SummaryComponent(@NonNull final SummaryComponent.SummaryProps props,
-        @NonNull final SummaryProvider provider) {
+                     @NonNull final SummaryProvider provider) {
         super(props);
         this.provider = provider;
     }
