@@ -26,7 +26,7 @@ public abstract class Event {
     private String flowId;
     private Long timestamp;
     private @EventType String type;
-    private Map<String, String> metadata;
+    private Map<String, String> properties;
 
     public String getFlowId() {
         return flowId;
@@ -52,14 +52,14 @@ public abstract class Event {
         this.type = type;
     }
 
-    public Map<String, String> getMetadata() {
-        return metadata;
+    public Map<String, String> getProperties() {
+        return properties;
     }
 
-    public void setMetadata(Map<String, String> metadata) {
-        if (this.metadata == null) {
-            this.metadata = new HashMap<>();
+    public void setProperties(Map<String, String> properties) {
+        if (this.properties == null) {
+            this.properties = new HashMap<>();
         }
-        this.metadata.putAll(metadata);
+        this.properties.putAll(properties);
     }
 }

@@ -1,5 +1,8 @@
 package com.mercadopago.tracking.model;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Created by vaserber on 6/5/17.
  */
@@ -18,6 +21,7 @@ public class ActionEvent extends Event {
         setType(TYPE_ACTION);
         setFlowId(builder.flowId);
         setTimestamp(System.currentTimeMillis());
+        setProperties(builder.properties);
         this.screenId = builder.screenId;
         this.screenName = builder.screenName;
         this.action = builder.action;
@@ -59,6 +63,7 @@ public class ActionEvent extends Event {
         private String category;
         private String label;
         private String value;
+        private Map<String, String> properties = new HashMap<>();
 
         public Builder setFlowId(String flowId) {
             this.flowId = flowId;
@@ -92,6 +97,11 @@ public class ActionEvent extends Event {
 
         public Builder setValue(String value) {
             this.value = value;
+            return this;
+        }
+
+        public Builder addProperty(String key, String value) {
+            properties.put(key, value);
             return this;
         }
 

@@ -1,7 +1,7 @@
 {
   "screen_id":"/checkout_off/init",
   "screen_name":"INIT_CHECKOUT",
-  "metadata":{
+  "properties":{
 
   },
   "timestamp":"1500310744083",

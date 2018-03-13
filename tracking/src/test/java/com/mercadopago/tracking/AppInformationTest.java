@@ -17,6 +17,7 @@ public class AppInformationTest {
     public static final String MOCKED_FLOW_ID_2 ="54321";
     public static final String MOCKED_CHECKOUT_VERSION_2 = "checkout version 2";
     public static final String MOCKED_PLATFORM = "native/android";
+    private static final String MOCKED_ENVIRONMENT = "staging";
 
     @Test
     public void testAppInformationEquals() {
@@ -24,12 +25,14 @@ public class AppInformationTest {
                 .setFlowId(MOCKED_FLOW_ID_1)
                 .setCheckoutVersion(MOCKED_CHECKOUT_VERSION_1)
                 .setPlatform(MOCKED_PLATFORM)
+                .setEnvironment(MOCKED_ENVIRONMENT)
                 .build();
 
         AppInformation appInformation2 = new AppInformation.Builder()
                 .setFlowId(MOCKED_FLOW_ID_1)
                 .setCheckoutVersion(MOCKED_CHECKOUT_VERSION_1)
                 .setPlatform(MOCKED_PLATFORM)
+                .setEnvironment(MOCKED_ENVIRONMENT)
                 .build();
 
         assertEquals(appInformation1, appInformation2);

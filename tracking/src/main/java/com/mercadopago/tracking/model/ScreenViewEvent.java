@@ -20,7 +20,7 @@ public class ScreenViewEvent extends Event {
         super();
         setType(TYPE_SCREEN_VIEW);
         setTimestamp(System.currentTimeMillis());
-        setMetadata(builder.metadata);
+        setProperties(builder.properties);
         setFlowId(builder.flowId);
         this.screenId = builder.screenId;
         this.screenName = builder.screenName;
@@ -39,7 +39,7 @@ public class ScreenViewEvent extends Event {
         private String flowId;
         private String screenId;
         private String screenName;
-        private Map<String, String> metadata = new HashMap<>();
+        private Map<String, String> properties = new HashMap<>();
 
         public Builder setFlowId(String flowId) {
             this.flowId = flowId;
@@ -56,8 +56,8 @@ public class ScreenViewEvent extends Event {
             return this;
         }
 
-        public Builder addMetaData(String key, String value) {
-            metadata.put(key, value);
+        public Builder addProperty(String key, String value) {
+            properties.put(key, value);
             return this;
         }
 

@@ -71,18 +71,18 @@ public class TrackingUtil {
     public static final String CARD_SECURITY_CODE_VIEW = "/security_code";
 
     //Additional Info Keys
-    public static final String METADATA_PAYMENT_METHOD_ID = "payment_method";
-    public static final String METADATA_PAYMENT_TYPE_ID = "payment_type";
-    public static final String METADATA_ISSUER_ID = "issuer";
-    public static final String METADATA_SHIPPING_INFO = "has_shipping";
-    public static final String METADATA_PAYMENT_STATUS = "payment_status";
-    public static final String METADATA_PAYMENT_ID = "payment_id";
-    public static final String METADATA_PAYMENT_STATUS_DETAIL = "payment_status_detail";
-    public static final String METADATA_PAYMENT_IS_EXPRESS = "is_express";
-    public static final String METADATA_SECURITY_CODE_REASON = "security_code_view_reason";
-    public static final String METADATA_ERROR_STATUS = "error_status";
-    public static final String METADATA_ERROR_CODE = "error_code";
-    public static final String METADATA_ERROR_REQUEST = "error_request_origin";
+    public static final String PROPERTY_PAYMENT_METHOD_ID = "payment_method";
+    public static final String PROPERTY_PAYMENT_TYPE_ID = "payment_type";
+    public static final String PROPERTY_ISSUER_ID = "issuer";
+    public static final String PROPERTY_SHIPPING_INFO = "has_shipping";
+    public static final String PROPERTY_PAYMENT_STATUS = "payment_status";
+    public static final String PROPERTY_PAYMENT_ID = "payment_id";
+    public static final String PROPERTY_PAYMENT_STATUS_DETAIL = "payment_status_detail";
+    public static final String PROPERTY_PAYMENT_IS_EXPRESS = "is_express";
+    public static final String PROPERTY_SECURITY_CODE_REASON = "security_code_view_reason";
+    public static final String PROPERTY_ERROR_STATUS = "error_status";
+    public static final String PROPERTY_ERROR_CODE = "error_code";
+    public static final String PROPERTY_ERROR_REQUEST = "error_request_origin";
 
     //Default values
     public static final String HAS_SHIPPING_DEFAULT_VALUE = "false";

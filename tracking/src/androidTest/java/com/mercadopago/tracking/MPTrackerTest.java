@@ -1,6 +1,7 @@
 package com.mercadopago.tracking;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.filters.LargeTest;
 import android.support.test.runner.AndroidJUnit4;
@@ -24,6 +25,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -52,8 +54,8 @@ public class MPTrackerTest {
     private static final String MOCKED_ERROR_CLASS_1 = "class_1";
     private static final String MOCKED_ERROR_MESSAGE_1 = "message_1";
 
-    private static final String MOCKED_METADATA_KEY_1 = "metadata_key_1";
-    private static final String MOCKED_METADATA_VALUE_1 = "metadata_value_1";
+    private static final String MOCKED_PROPERTY_KEY_1 = "property_key_1";
+    private static final String MOCKED_PROPERTY_VALUE_1 = "property_value_1";
 
     private static final String ACTION_EVENT_KEY_ACTION = "action";
     private static final String ACTION_EVENT_KEY_CATEGORY = "category";
@@ -96,10 +98,10 @@ public class MPTrackerTest {
                 .build();
 
         final Event screenViewEvent = new ScreenViewEvent.Builder()
-            .setFlowId(MOCKED_FLOW_ID)
-            .setScreenId(MOCKED_SCREEN_ID_1)
-            .setScreenName(MOCKED_SCREEN_REVIEW_AND_CONFIRM)
-            .build();
+                .setFlowId(MOCKED_FLOW_ID)
+                .setScreenId(MOCKED_SCREEN_ID_1)
+                .setScreenName(MOCKED_SCREEN_REVIEW_AND_CONFIRM)
+                .build();
 
         MPTracker.getInstance().initTracker(MOCKED_PUBLIC_KEY, MOCKED_SITE_ID, MOCKED_CHECKOUT_VERSION, appContext);
 
@@ -108,11 +110,11 @@ public class MPTrackerTest {
         MPTracker.getInstance().setTracksListener(new TracksListener() {
             @Override
             public void onScreenLaunched(String screenName) {
-                assertEquals(((ScreenViewEvent)screenViewEvent).getScreenName(), screenName);
+                assertEquals(((ScreenViewEvent) screenViewEvent).getScreenName(), screenName);
             }
 
             @Override
-            public void onEventPerformed(Map<String, String> event) {
+            public void onEvent(@NonNull Object event) {
 
             }
         });
@@ -149,28 +151,33 @@ public class MPTrackerTest {
                 .setValue(MOCKED_VALUE)
                 .setScreenId(MOCKED_SCREEN_ID_1)
                 .setScreenName(MOCKED_SCREEN_NAME_1)
+                .addProperty(MOCKED_PROPERTY_KEY_1, MOCKED_PROPERTY_VALUE_1)
                 .build();
 
         MPTracker.getInstance().initTracker(MOCKED_PUBLIC_KEY, MOCKED_SITE_ID, MOCKED_CHECKOUT_VERSION, appContext);
 
         MPTracker.getInstance().setMPTrackingService(new MPMockedTrackingService());
 
-        MPTracker.getInstance().setTracksListener(new TracksListener() {
+        MPTracker.getInstance().setTracksListener(new TracksListener<HashMap>() {
+
             @Override
             public void onScreenLaunched(String screenName) {
 
             }
 
             @Override
-            public void onEventPerformed(Map<String, String> event) {
-                assertEquals(event.get(ACTION_EVENT_KEY_ACTION), MOCKED_ACTION);
-                assertEquals(event.get(ACTION_EVENT_KEY_CATEGORY), MOCKED_CATEGORY);
-                assertEquals(event.get(ACTION_EVENT_KEY_LABEL), MOCKED_LABEL);
-                assertEquals(event.get(ACTION_EVENT_KEY_VALUE), MOCKED_VALUE);
-                assertEquals(event.get(ACTION_EVENT_KEY_SCREEN_ID), MOCKED_SCREEN_ID_1);
-                assertEquals(event.get(ACTION_EVENT_KEY_SCREEN_NAME), MOCKED_SCREEN_NAME_1);
+            public void onEvent(@NonNull HashMap eventMap) {
+                assertEquals(eventMap.get(ACTION_EVENT_KEY_ACTION), MOCKED_ACTION);
+                assertEquals(eventMap.get(ACTION_EVENT_KEY_CATEGORY), MOCKED_CATEGORY);
+                assertEquals(eventMap.get(ACTION_EVENT_KEY_LABEL), MOCKED_LABEL);
+                assertEquals(eventMap.get(ACTION_EVENT_KEY_VALUE), MOCKED_VALUE);
+                assertEquals(eventMap.get(ACTION_EVENT_KEY_SCREEN_ID), MOCKED_SCREEN_ID_1);
+                assertEquals(eventMap.get(ACTION_EVENT_KEY_SCREEN_NAME), MOCKED_SCREEN_NAME_1);
             }
+
         });
+
+        MPTracker.getInstance().trackEvent(MOCKED_PUBLIC_KEY, appInformation, deviceInfo, actionEvent, appContext, TrackingUtil.BATCH_STRATEGY);
     }
 
     @Test
@@ -207,7 +214,7 @@ public class MPTrackerTest {
             }
 
             @Override
-            public void onEventPerformed(Map<String, String> event) {
+            public void onEvent(@NonNull Object event) {
 
             }
         });
@@ -227,7 +234,7 @@ public class MPTrackerTest {
             }
 
             @Override
-            public void onEventPerformed(Map<String, String> event) {
+            public void onEvent(@NonNull Object event) {
 
             }
         });
@@ -258,7 +265,7 @@ public class MPTrackerTest {
             }
 
             @Override
-            public void onEventPerformed(Map<String, String> event) {
+            public void onEvent(@NonNull Object event) {
 
             }
         });
@@ -315,7 +322,7 @@ public class MPTrackerTest {
             }
 
             @Override
-            public void onEventPerformed(Map<String, String> event) {
+            public void onEvent(@NonNull Object event) {
 
             }
         });

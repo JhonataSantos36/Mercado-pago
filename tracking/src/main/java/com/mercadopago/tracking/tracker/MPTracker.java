@@ -89,7 +89,7 @@ public class MPTracker {
         }
     }
 
-    private void trackEventPerformedListener(Map<String, String> eventMap) {
+    private void trackEventPerformedListener(Map<String, Object> eventMap) {
         if (this.mTracksListener != null) {
             this.mTracksListener.onEvent(eventMap);
         }
@@ -181,7 +181,7 @@ public class MPTracker {
 
         if (event.getType().equals(Event.TYPE_ACTION)) {
             ActionEvent actionEvent = (ActionEvent) event;
-            Map<String, String> eventMap = createEventMap(actionEvent);
+            Map<String, Object> eventMap = createEventMap(actionEvent);
             trackEventPerformedListener(eventMap);
         } else if (event.getType().equals(Event.TYPE_SCREEN_VIEW)) {
             ScreenViewEvent screenViewEvent = (ScreenViewEvent) event;
@@ -199,13 +199,13 @@ public class MPTracker {
         return this.database != null;
     }
 
-    private Map<String, String> createEventMap(ActionEvent actionEvent) {
-        Map<String, String> eventMap = new HashMap<>();
+    private Map<String, Object> createEventMap(ActionEvent actionEvent) {
+        Map<String, Object> eventMap = new HashMap<>();
 
         String eventJson = JsonConverter.getInstance().toJson(actionEvent);
-        Type type = new TypeToken<Map<String, String>>() {
+        Type type = new TypeToken<Map<String, Object>>() {
         }.getType();
-        Map<String, String> actionEventDataMap = new Gson().fromJson(eventJson, type);
+        Map<String, Object> actionEventDataMap = new Gson().fromJson(eventJson, type);
 
         eventMap.putAll(actionEventDataMap);
 
