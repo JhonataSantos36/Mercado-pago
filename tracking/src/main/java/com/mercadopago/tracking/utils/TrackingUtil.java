@@ -83,6 +83,9 @@ public class TrackingUtil {
     public static final String PROPERTY_ERROR_STATUS = "error_status";
     public static final String PROPERTY_ERROR_CODE = "error_code";
     public static final String PROPERTY_ERROR_REQUEST = "error_request_origin";
+    public static final String PROPERTY_OPTIONS = "options";
+    public static final String PROPERTY_CARD_ID = "card_id";
+    public static final String PROPERTY_INSTALLMENTS = "installments";
 
     //Default values
     public static final String HAS_SHIPPING_DEFAULT_VALUE = "false";
