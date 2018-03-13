@@ -1,37 +1,28 @@
 package com.mercadopago.review_and_confirm.models;
 
 import android.support.annotation.DrawableRes;
-
 import com.mercadopago.components.CustomComponent;
-
 import java.math.BigDecimal;
 
-public final class ReviewAndConfirmPreferences {
+public class ReviewAndConfirmPreferences {
 
     private final CustomComponent topComponent;
-
     private final CustomComponent bottomComponent;
-
-    private final boolean itemsEnabled;
-
     private final @DrawableRes
     Integer collectorIcon;
-
     private final String quantityLabel;
-
     private final String unitPriceLabel;
-
-    public final BigDecimal productAmount;
-    public final BigDecimal shippingAmount;
-    public final BigDecimal arrearsAmount;
-    public final BigDecimal taxesAmount;
-    public final String disclaimerText;
-    public final BigDecimal chargeAmount;
-    public final BigDecimal discountAmount;
-    public final BigDecimal totalAmount;
-
-    public final String productTitle;
-    public final String disclaimerTextColor;
+    private final BigDecimal productAmount;
+    private final BigDecimal shippingAmount;
+    private final BigDecimal arrearsAmount;
+    private final BigDecimal taxesAmount;
+    private final String disclaimerText;
+    private final BigDecimal chargeAmount;
+    private final BigDecimal discountAmount;
+    private final BigDecimal totalAmount;
+    private final String productTitle;
+    private final String disclaimerTextColor;
+    private final boolean itemsEnabled;
 
     private ReviewAndConfirmPreferences(Builder builder) {
         this.topComponent = builder.topView;
@@ -89,16 +80,55 @@ public final class ReviewAndConfirmPreferences {
         return unitPriceLabel;
     }
 
-    public BigDecimal calculateTotalAmount() {
-        BigDecimal totalAmount = new BigDecimal(0);
+    public BigDecimal getProductAmount() {
+        return productAmount;
+    }
 
+    public BigDecimal getShippingAmount() {
+        return shippingAmount;
+    }
+
+    public BigDecimal getArrearsAmount() {
+        return arrearsAmount;
+    }
+
+    public BigDecimal getTaxesAmount() {
+        return taxesAmount;
+    }
+
+    public String getDisclaimerText() {
+        return disclaimerText;
+    }
+
+    public BigDecimal getChargeAmount() {
+        return chargeAmount;
+    }
+
+    public BigDecimal getDiscountAmount() {
+        return discountAmount;
+    }
+
+    public BigDecimal getTotalAmount() {
+        return totalAmount;
+    }
+
+    public String getProductTitle() {
+        return productTitle;
+    }
+
+    public String getDisclaimerTextColor() {
+        return disclaimerTextColor;
+    }
+
+    private BigDecimal calculateTotalAmount() {
+        BigDecimal totalAmount = new BigDecimal(0);
         totalAmount = (productAmount == null) ? totalAmount.add(new BigDecimal(0)) : totalAmount.add(productAmount);
         totalAmount = (chargeAmount == null) ? totalAmount.add(new BigDecimal(0)) : totalAmount.add(chargeAmount);
         totalAmount = (taxesAmount == null) ? totalAmount.add(new BigDecimal(0)) : totalAmount.add(taxesAmount);
         totalAmount = (shippingAmount == null) ? totalAmount.add(new BigDecimal(0)) : totalAmount.add(shippingAmount);
         totalAmount = (arrearsAmount == null) ? totalAmount.add(new BigDecimal(0)) : totalAmount.add(arrearsAmount);
-        totalAmount = (discountAmount == null) ? totalAmount.subtract(new BigDecimal(0)) : totalAmount.subtract(discountAmount);
-
+        totalAmount =
+            (discountAmount == null) ? totalAmount.subtract(new BigDecimal(0)) : totalAmount.subtract(discountAmount);
         return totalAmount;
     }
 

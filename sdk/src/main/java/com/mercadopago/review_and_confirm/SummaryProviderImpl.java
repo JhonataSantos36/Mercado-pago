@@ -3,17 +3,11 @@ package com.mercadopago.review_and_confirm;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.v4.content.ContextCompat;
-
 import com.mercadopago.R;
 import com.mercadopago.core.CheckoutStore;
-import com.mercadopago.preferences.ReviewScreenPreference;
 import com.mercadopago.review_and_confirm.models.ReviewAndConfirmPreferences;
 
 import static com.mercadopago.util.TextUtils.isEmpty;
-
-/**
- * Created by mromar on 3/5/18.
- */
 
 public class SummaryProviderImpl implements SummaryProvider {
 
@@ -25,11 +19,12 @@ public class SummaryProviderImpl implements SummaryProvider {
 
     @Override
     public String getSummaryProductsTitle() {
-        ReviewAndConfirmPreferences reviewAndConfirmPreferences = CheckoutStore.getInstance().getReviewAndConfirmPreferences();
+        ReviewAndConfirmPreferences reviewAndConfirmPreferences =
+            CheckoutStore.getInstance().getReviewAndConfirmPreferences();
         String summaryProductTitle;
 
-        if (!isEmpty(reviewAndConfirmPreferences.productTitle)) {
-            summaryProductTitle = reviewAndConfirmPreferences.productTitle;
+        if (!isEmpty(reviewAndConfirmPreferences.getProductTitle())) {
+            summaryProductTitle = reviewAndConfirmPreferences.getProductTitle();
         } else {
             summaryProductTitle = context.getString(R.string.mpsdk_review_summary_product);
         }
@@ -48,7 +43,7 @@ public class SummaryProviderImpl implements SummaryProvider {
     }
 
     @Override
-    public int getDiscountTextColor(){
+    public int getDiscountTextColor() {
         return ContextCompat.getColor(context, R.color.mpsdk_summary_discount_color);
     }
 
@@ -58,7 +53,7 @@ public class SummaryProviderImpl implements SummaryProvider {
     }
 
     @Override
-    public String getSummaryTaxesTitle(){
+    public String getSummaryTaxesTitle() {
         return context.getString(R.string.mpsdk_review_summary_taxes);
     }
 
@@ -69,13 +64,14 @@ public class SummaryProviderImpl implements SummaryProvider {
 
     @Override
     public int getDisclaimerTextColor() {
-        ReviewAndConfirmPreferences reviewAndConfirmPreferences = CheckoutStore.getInstance().getReviewAndConfirmPreferences();
+        ReviewAndConfirmPreferences reviewAndConfirmPreferences =
+            CheckoutStore.getInstance().getReviewAndConfirmPreferences();
         int disclaimerTextColor;
 
-        if (isEmpty(reviewAndConfirmPreferences.disclaimerTextColor)) {
+        if (isEmpty(reviewAndConfirmPreferences.getDisclaimerTextColor())) {
             disclaimerTextColor = ContextCompat.getColor(context, R.color.mpsdk_default_disclaimer);
         } else {
-            disclaimerTextColor = Color.parseColor(reviewAndConfirmPreferences.disclaimerTextColor);
+            disclaimerTextColor = Color.parseColor(reviewAndConfirmPreferences.getDisclaimerTextColor());
         }
 
         return disclaimerTextColor;
