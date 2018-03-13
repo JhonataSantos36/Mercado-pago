@@ -12,6 +12,6 @@
         android:layout_gravity="center"
         android:adjustViewBounds="true"
         android:padding="@dimen/mpsdk_xxs_margin"
-        tools:src="@drawable/mpsdk_amex" />
+        tools:src="@drawable/mpsdk_rapipago" />
 
 </FrameLayout>

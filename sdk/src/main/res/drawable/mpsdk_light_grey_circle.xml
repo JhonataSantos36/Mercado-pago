@@ -7,6 +7,6 @@
         android:color="@color/mpsdk_color_light_grey"/>
 
     <size
-        android:width="69dp"
-        android:height="69dp"/>
+        android:width="@dimen/mpsdk_m_height"
+        android:height="@dimen/mpsdk_m_height"/>
 </shape>
