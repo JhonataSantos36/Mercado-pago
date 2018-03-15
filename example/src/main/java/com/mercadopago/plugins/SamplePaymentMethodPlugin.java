@@ -8,8 +8,6 @@ import com.mercadopago.plugins.components.SamplePaymentMethod;
 import com.mercadopago.plugins.components.SampleResourcesProvider;
 import com.mercadopago.plugins.model.PaymentMethodInfo;
 
-import java.util.Map;
-
 /**
  * Created by nfortuna on 12/13/17.
  */

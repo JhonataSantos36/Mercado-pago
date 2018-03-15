@@ -5,13 +5,9 @@ import android.support.annotation.NonNull;
 
 import com.mercadopago.components.RendererFactory;
 import com.mercadopago.model.Payment;
+import com.mercadopago.plugins.PaymentPluginProcessorResultAction;
 import com.mercadopago.plugins.PluginComponent;
-import com.mercadopago.plugins.PluginPaymentResultAction;
-import com.mercadopago.plugins.model.ProcessorPaymentResult;
-
-/**
- * Created by nfortuna on 12/13/17.
- */
+import com.mercadopago.plugins.model.GenericPayment;
 
 public class SamplePayment extends PluginComponent<Void> {
 
@@ -35,13 +31,15 @@ public class SamplePayment extends PluginComponent<Void> {
             @Override
             public void run() {
 
-                final ProcessorPaymentResult result = new ProcessorPaymentResult(
-                    123456l,
-                    Payment.StatusCodes.STATUS_APPROVED,
-                    Payment.StatusCodes.STATUS_DETAIL_APPROVED_PLUGIN_PM,
-                    props.paymentData);
 
-                getDispatcher().dispatch(new PluginPaymentResultAction(result));
+                final GenericPayment result = new GenericPayment(
+                        123456l,
+                        Payment.StatusCodes.STATUS_APPROVED,
+                        Payment.StatusDetail.STATUS_DETAIL_APPROVED_PLUGIN_PM,
+                        props.paymentData);
+                getDispatcher().dispatch(new PaymentPluginProcessorResultAction(result));
+
+
             }
         }, 2000);
     }

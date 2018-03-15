@@ -355,7 +355,7 @@ public class CardVaultPresenterTest {
         PayerCost mockedPayerCost = PayerCosts.getPayerCost();
         Issuer mockedIssuer = Issuers.getIssuerMLA();
         String mockedPaymentStatus = Payment.StatusCodes.STATUS_REJECTED;
-        String mockedPaymentStatusDeatil = Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_CALL_FOR_AUTHORIZE;
+        String mockedPaymentStatusDeatil = Payment.StatusDetail.STATUS_DETAIL_CC_REJECTED_CALL_FOR_AUTHORIZE;
 
         PaymentRecovery mockedPaymentRecovery = new PaymentRecovery(mockedToken, mockedPaymentMethod, mockedPayerCost, mockedIssuer, mockedPaymentStatus, mockedPaymentStatusDeatil);
 
@@ -639,7 +639,7 @@ public class CardVaultPresenterTest {
         PayerCost mockedPayerCost = PayerCosts.getPayerCost();
         Issuer mockedIssuer = Issuers.getIssuerMLA();
         String mockedPaymentStatus = Payment.StatusCodes.STATUS_REJECTED;
-        String mockedPaymentStatusDetail = Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_CALL_FOR_AUTHORIZE;
+        String mockedPaymentStatusDetail = Payment.StatusDetail.STATUS_DETAIL_CC_REJECTED_CALL_FOR_AUTHORIZE;
 
         PaymentRecovery mockedPaymentRecovery = new PaymentRecovery(mockedToken, mockedPaymentMethod, mockedPayerCost, mockedIssuer, mockedPaymentStatus, mockedPaymentStatusDetail);
 

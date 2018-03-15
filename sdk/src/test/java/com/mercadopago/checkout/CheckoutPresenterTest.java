@@ -1288,7 +1288,7 @@ public class CheckoutPresenterTest {
                 .setPaymentData(paymentData)
                 .setPaymentId(1234L)
                 .setPaymentStatus(Payment.StatusCodes.STATUS_APPROVED)
-                .setPaymentStatusDetail(Payment.StatusCodes.STATUS_DETAIL_ACCREDITED)
+                .setPaymentStatusDetail(Payment.StatusDetail.STATUS_DETAIL_ACCREDITED)
                 .build();
 
         presenter.setCheckoutPreference(checkoutPreference);
@@ -1334,7 +1334,7 @@ public class CheckoutPresenterTest {
                 .setPaymentData(paymentData)
                 .setPaymentId(1234L)
                 .setPaymentStatus(Payment.StatusCodes.STATUS_APPROVED)
-                .setPaymentStatusDetail(Payment.StatusCodes.STATUS_DETAIL_ACCREDITED)
+                .setPaymentStatusDetail(Payment.StatusDetail.STATUS_DETAIL_ACCREDITED)
                 .build();
 
         presenter.setCheckoutPreference(checkoutPreference);
@@ -1380,7 +1380,7 @@ public class CheckoutPresenterTest {
                 .setPaymentData(paymentData)
                 .setPaymentId(1234L)
                 .setPaymentStatus(Payment.StatusCodes.STATUS_APPROVED)
-                .setPaymentStatusDetail(Payment.StatusCodes.STATUS_DETAIL_ACCREDITED)
+                .setPaymentStatusDetail(Payment.StatusDetail.STATUS_DETAIL_ACCREDITED)
                 .build();
 
         presenter.setCheckoutPreference(checkoutPreference);
@@ -1578,7 +1578,7 @@ public class CheckoutPresenterTest {
                 .setPaymentData(paymentData)
                 .setPaymentId(1234L)
                 .setPaymentStatus(Payment.StatusCodes.STATUS_REJECTED)
-                .setPaymentStatusDetail(Payment.StatusCodes.STATUS_DETAIL_INVALID_ESC)
+                .setPaymentStatusDetail(Payment.StatusDetail.STATUS_DETAIL_INVALID_ESC)
                 .build();
 
         presenter.setCheckoutPreference(checkoutPreference);
@@ -1624,7 +1624,7 @@ public class CheckoutPresenterTest {
                 .setPaymentData(paymentData)
                 .setPaymentId(1234L)
                 .setPaymentStatus(Payment.StatusCodes.STATUS_REJECTED)
-                .setPaymentStatusDetail(Payment.StatusCodes.STATUS_DETAIL_INVALID_ESC)
+                .setPaymentStatusDetail(Payment.StatusDetail.STATUS_DETAIL_INVALID_ESC)
                 .build();
 
         presenter.setCheckoutPreference(checkoutPreference);

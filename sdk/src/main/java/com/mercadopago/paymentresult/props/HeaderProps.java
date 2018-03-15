@@ -1,14 +1,13 @@
 package com.mercadopago.paymentresult.props;
 
+import android.content.Context;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.mercadopago.paymentresult.formatter.HeaderTitleFormatter;
+import com.mercadopago.plugins.model.BusinessPayment;
 
-
-/**
- * Created by vaserber on 10/20/17.
- */
 
 public class HeaderProps {
 
@@ -25,27 +24,7 @@ public class HeaderProps {
     public final String label;
     public final HeaderTitleFormatter amountFormat;
 
-    public HeaderProps(final String height,
-                       @DrawableRes final int background,
-                       @DrawableRes final int statusBarColor,
-                       @DrawableRes final int iconImage,
-                       @DrawableRes final int badgeImage,
-                       final String iconUrl,
-                       final String title,
-                       final String label,
-                       final HeaderTitleFormatter formatter) {
-        this.height = height;
-        this.background = background;
-        this.statusBarColor = statusBarColor;
-        this.iconImage = iconImage;
-        this.iconUrl = iconUrl;
-        this.badgeImage = badgeImage;
-        this.title = title;
-        this.label = label;
-        this.amountFormat = formatter;
-    }
-
-    public HeaderProps(@NonNull final Builder builder) {
+    private HeaderProps(@NonNull final Builder builder) {
         this.height = builder.height;
         this.background = builder.background;
         this.statusBarColor = builder.statusBarColor;
@@ -55,6 +34,19 @@ public class HeaderProps {
         this.title = builder.title;
         this.label = builder.label;
         this.amountFormat = builder.amountFormat;
+    }
+
+    public static HeaderProps from(@NonNull BusinessPayment businessPayment, @NonNull Context context) {
+        BusinessPayment.Status status = businessPayment.getStatus();
+        return new HeaderProps.Builder()
+                .setHeight(HEADER_MODE_WRAP)
+                .setBackground(status.resColor)
+                .setStatusBarColor(status.resColor)
+                .setIconImage(businessPayment.getIcon())
+                .setBadgeImage(status.badge)
+                .setTitle(businessPayment.getTitle())
+                .setLabel(status.message == 0 ? null : context.getString(status.message))
+                .build();
     }
 
     public Builder toBuilder() {
@@ -71,9 +63,7 @@ public class HeaderProps {
     }
 
     public static class Builder {
-
         //TODO definir los valores default
-
         public String height;
         public int background;
         public int statusBarColor;
@@ -119,7 +109,7 @@ public class HeaderProps {
             return this;
         }
 
-        public Builder setLabel(@NonNull final String label) {
+        public Builder setLabel(@Nullable final String label) {
             this.label = label;
             return this;
         }

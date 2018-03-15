@@ -35,17 +35,13 @@ import java.util.List;
 import java.util.Map;
 
 
-/**
- * Created by mreverter on 1/17/17.
- */
-
 public class MercadoPagoCheckout {
 
-    public static final Integer CHECKOUT_REQUEST_CODE = 5;
-    public static final Integer PAYMENT_DATA_RESULT_CODE = 6;
-    public static final Integer PAYMENT_RESULT_CODE = 7;
-    public static final Integer TIMER_FINISHED_RESULT_CODE = 8;
-    public static final Integer PAYMENT_METHOD_CHANGED_REQUESTED = 9;
+    public static final int CHECKOUT_REQUEST_CODE = 5;
+    public static final int PAYMENT_DATA_RESULT_CODE = 6;
+    public static final int PAYMENT_RESULT_CODE = 7;
+    public static final int TIMER_FINISHED_RESULT_CODE = 8;
+    public static final int PAYMENT_METHOD_CHANGED_REQUESTED = 9;
 
     public static final String PAYMENT_PROCESSOR_KEY = "payment_processor";
 

@@ -1,9 +1,5 @@
 package com.mercadopago.model;
 
-/**
- * Created by mromar on 8/19/16.
- */
-
 public class PaymentRecovery {
     private Token mToken;
     private String mStatusDetail;
@@ -11,7 +7,12 @@ public class PaymentRecovery {
     private PayerCost mPayerCost;
     private Issuer mIssuer;
 
-    public PaymentRecovery(Token token, PaymentMethod paymentMethod, PayerCost payerCost, Issuer issuer, String paymentStatus, String paymentStatusDetail) {
+    public PaymentRecovery(Token token,
+                           PaymentMethod paymentMethod,
+                           PayerCost payerCost,
+                           Issuer issuer,
+                           String paymentStatus,
+                           String paymentStatusDetail) {
 
         validate(token, paymentMethod, payerCost, issuer, paymentStatus, paymentStatusDetail);
         mToken = token;
@@ -38,7 +39,7 @@ public class PaymentRecovery {
             throw new IllegalStateException("issuer is null");
         }
 
-        if (!isRecoverablePaymentStatus(paymentStatus, paymentStatusDetail)) {
+        if (!Payment.StatusDetail.isRecoverablePaymentStatus(paymentStatus, paymentStatusDetail)) {
             throw new IllegalStateException("this payment is not recoverable");
         }
     }
@@ -60,40 +61,19 @@ public class PaymentRecovery {
     }
 
     public boolean isTokenRecoverable() {
-        return isStatusDetailRecoverable(mStatusDetail);
-    }
-
-    private boolean isRecoverablePaymentStatus(String paymentStatus, String paymentStatusDetail) {
-        return Payment.StatusCodes.STATUS_REJECTED.equals(paymentStatus) && isPaymentStatusRecoverable(paymentStatusDetail);
-    }
-
-    private boolean isPaymentStatusRecoverable(String statusDetail) {
-        return Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_BAD_FILLED_OTHER.equals(statusDetail) ||
-                Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_BAD_FILLED_CARD_NUMBER.equals(statusDetail) ||
-                Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_BAD_FILLED_SECURITY_CODE.equals(statusDetail) ||
-                Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_BAD_FILLED_DATE.equals(statusDetail) ||
-                Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_CALL_FOR_AUTHORIZE.equals(statusDetail) ||
-                Payment.StatusCodes.STATUS_DETAIL_INVALID_ESC.equals(statusDetail) ||
-                Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_CARD_DISABLED.equals(statusDetail);
-    }
-
-    private Boolean isStatusDetailRecoverable(String statusDetail) {
-        return statusDetail != null &&
-                (Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_CALL_FOR_AUTHORIZE.equals(statusDetail) ||
-                        Payment.StatusCodes.STATUS_DETAIL_INVALID_ESC.equals(statusDetail) ||
-                        Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_CARD_DISABLED.equals(statusDetail));
+        return Payment.StatusDetail.isStatusDetailRecoverable(mStatusDetail);
     }
 
     public boolean isStatusDetailCallForAuthorize() {
-        return mStatusDetail != null && Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_CALL_FOR_AUTHORIZE.equals(mStatusDetail);
+        return mStatusDetail != null && Payment.StatusDetail.STATUS_DETAIL_CC_REJECTED_CALL_FOR_AUTHORIZE.equals(mStatusDetail);
     }
 
     public boolean isStatusDetailCardDisabled() {
-        return mStatusDetail != null && Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_CARD_DISABLED.equals(mStatusDetail);
+        return mStatusDetail != null && Payment.StatusDetail.STATUS_DETAIL_CC_REJECTED_CARD_DISABLED.equals(mStatusDetail);
     }
 
     public boolean isStatusDetailInvalidESC() {
-        return mStatusDetail != null && Payment.StatusCodes.STATUS_DETAIL_INVALID_ESC.equals(mStatusDetail);
+        return mStatusDetail != null && Payment.StatusDetail.STATUS_DETAIL_INVALID_ESC.equals(mStatusDetail);
     }
 
 }

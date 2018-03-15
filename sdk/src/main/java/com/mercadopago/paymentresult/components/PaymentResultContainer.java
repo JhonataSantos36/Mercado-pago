@@ -6,6 +6,7 @@ import com.mercadopago.R;
 import com.mercadopago.components.ActionDispatcher;
 import com.mercadopago.components.Component;
 import com.mercadopago.components.LoadingComponent;
+import com.mercadopago.components.RendererFactory;
 import com.mercadopago.constants.PaymentMethods;
 import com.mercadopago.constants.PaymentTypes;
 import com.mercadopago.model.Payment;
@@ -22,6 +23,10 @@ import com.mercadopago.paymentresult.props.PaymentResultProps;
  */
 
 public class PaymentResultContainer extends Component<PaymentResultProps, Void> {
+
+    static {
+        RendererFactory.register(PaymentResultContainer.class, PaymentResultRenderer.class);
+    }
 
     public static final int DEFAULT_BACKGROUND_COLOR = R.color.mpsdk_blue_MP;
     public static final int GREEN_BACKGROUND_COLOR = R.color.mpsdk_green_payment_result_background;
@@ -89,13 +94,13 @@ public class PaymentResultContainer extends Component<PaymentResultProps, Void> 
             String statusDetail = props.paymentResult.getPaymentStatusDetail();
 
             if (Payment.StatusCodes.STATUS_REJECTED.equals(status)
-                    && Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_PLUGIN_PM.equals(statusDetail)) {
+                    && Payment.StatusDetail.STATUS_DETAIL_CC_REJECTED_PLUGIN_PM.equals(statusDetail)) {
                 hasBody = false;
             } else if (status != null && statusDetail != null && status.equals(Payment.StatusCodes.STATUS_REJECTED) &&
-                    (statusDetail.equals(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_BAD_FILLED_CARD_NUMBER) ||
-                            statusDetail.equals(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_BAD_FILLED_DATE) ||
-                            statusDetail.equals(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_BAD_FILLED_SECURITY_CODE) ||
-                            statusDetail.equals(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_BAD_FILLED_OTHER))) {
+                    (statusDetail.equals(Payment.StatusDetail.STATUS_DETAIL_CC_REJECTED_BAD_FILLED_CARD_NUMBER) ||
+                            statusDetail.equals(Payment.StatusDetail.STATUS_DETAIL_CC_REJECTED_BAD_FILLED_DATE) ||
+                            statusDetail.equals(Payment.StatusDetail.STATUS_DETAIL_CC_REJECTED_BAD_FILLED_SECURITY_CODE) ||
+                            statusDetail.equals(Payment.StatusDetail.STATUS_DETAIL_CC_REJECTED_BAD_FILLED_OTHER))) {
                 hasBody = false;
             }
         }
@@ -170,20 +175,20 @@ public class PaymentResultContainer extends Component<PaymentResultProps, Void> 
         return (paymentResult.getPaymentStatus().equals(Payment.StatusCodes.STATUS_APPROVED) ||
                 ((paymentResult.getPaymentStatus().equals(Payment.StatusCodes.STATUS_IN_PROCESS) ||
                         paymentResult.getPaymentStatus().equals(Payment.StatusCodes.STATUS_PENDING)) &&
-                        paymentResult.getPaymentStatusDetail().equals(Payment.StatusCodes.STATUS_DETAIL_PENDING_WAITING_PAYMENT)));
+                        paymentResult.getPaymentStatusDetail().equals(Payment.StatusDetail.STATUS_DETAIL_PENDING_WAITING_PAYMENT)));
     }
 
     private boolean isRedBackground(@NonNull final PaymentResult paymentResult) {
         final String status = paymentResult.getPaymentStatus();
         final String statusDetail = paymentResult.getPaymentStatusDetail();
         return Payment.StatusCodes.STATUS_REJECTED.equals(status) &&
-                (Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_OTHER_REASON.equals(statusDetail) ||
-                        Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_PLUGIN_PM.equals(statusDetail) ||
-                        Payment.StatusCodes.STATUS_DETAIL_REJECTED_REJECTED_BY_BANK.equals(statusDetail) ||
-                        Payment.StatusCodes.STATUS_DETAIL_REJECTED_REJECTED_INSUFFICIENT_DATA.equals(statusDetail) ||
-                        Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_DUPLICATED_PAYMENT.equals(statusDetail) ||
-                        Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_MAX_ATTEMPTS.equals(statusDetail) ||
-                        Payment.StatusCodes.STATUS_DETAIL_REJECTED_HIGH_RISK.equals(statusDetail));
+                (Payment.StatusDetail.STATUS_DETAIL_CC_REJECTED_OTHER_REASON.equals(statusDetail) ||
+                        Payment.StatusDetail.STATUS_DETAIL_CC_REJECTED_PLUGIN_PM.equals(statusDetail) ||
+                        Payment.StatusDetail.STATUS_DETAIL_REJECTED_REJECTED_BY_BANK.equals(statusDetail) ||
+                        Payment.StatusDetail.STATUS_DETAIL_REJECTED_REJECTED_INSUFFICIENT_DATA.equals(statusDetail) ||
+                        Payment.StatusDetail.STATUS_DETAIL_CC_REJECTED_DUPLICATED_PAYMENT.equals(statusDetail) ||
+                        Payment.StatusDetail.STATUS_DETAIL_CC_REJECTED_MAX_ATTEMPTS.equals(statusDetail) ||
+                        Payment.StatusDetail.STATUS_DETAIL_REJECTED_HIGH_RISK.equals(statusDetail));
     }
 
     private boolean isOrangeBackground(@NonNull final PaymentResult paymentResult) {
@@ -191,17 +196,17 @@ public class PaymentResultContainer extends Component<PaymentResultProps, Void> 
         final String statusDetail = paymentResult.getPaymentStatusDetail();
         return ((status.equals(Payment.StatusCodes.STATUS_PENDING) ||
                 status.equals(Payment.StatusCodes.STATUS_IN_PROCESS)) &&
-                (statusDetail.equals(Payment.StatusCodes.STATUS_DETAIL_PENDING_CONTINGENCY) ||
-                        statusDetail.equals(Payment.StatusCodes.STATUS_DETAIL_PENDING_REVIEW_MANUAL))) ||
+                (statusDetail.equals(Payment.StatusDetail.STATUS_DETAIL_PENDING_CONTINGENCY) ||
+                        statusDetail.equals(Payment.StatusDetail.STATUS_DETAIL_PENDING_REVIEW_MANUAL))) ||
                 (status.equals(Payment.StatusCodes.STATUS_REJECTED) &&
-                        (statusDetail.equals(Payment.StatusCodes.STATUS_DETAIL_INVALID_ESC) ||
-                                statusDetail.equals(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_CALL_FOR_AUTHORIZE) ||
-                                statusDetail.equals(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_BAD_FILLED_CARD_NUMBER) ||
-                                statusDetail.equals(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_BAD_FILLED_DATE) ||
-                                statusDetail.equals(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_BAD_FILLED_SECURITY_CODE) ||
-                                statusDetail.equals(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_BAD_FILLED_OTHER) ||
-                                statusDetail.equals(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_CARD_DISABLED) ||
-                                statusDetail.equals(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_INSUFFICIENT_AMOUNT)));
+                        (statusDetail.equals(Payment.StatusDetail.STATUS_DETAIL_INVALID_ESC) ||
+                                statusDetail.equals(Payment.StatusDetail.STATUS_DETAIL_CC_REJECTED_CALL_FOR_AUTHORIZE) ||
+                                statusDetail.equals(Payment.StatusDetail.STATUS_DETAIL_CC_REJECTED_BAD_FILLED_CARD_NUMBER) ||
+                                statusDetail.equals(Payment.StatusDetail.STATUS_DETAIL_CC_REJECTED_BAD_FILLED_DATE) ||
+                                statusDetail.equals(Payment.StatusDetail.STATUS_DETAIL_CC_REJECTED_BAD_FILLED_SECURITY_CODE) ||
+                                statusDetail.equals(Payment.StatusDetail.STATUS_DETAIL_CC_REJECTED_BAD_FILLED_OTHER) ||
+                                statusDetail.equals(Payment.StatusDetail.STATUS_DETAIL_CC_REJECTED_CARD_DISABLED) ||
+                                statusDetail.equals(Payment.StatusDetail.STATUS_DETAIL_CC_REJECTED_INSUFFICIENT_AMOUNT)));
 
     }
 
@@ -233,7 +238,7 @@ public class PaymentResultContainer extends Component<PaymentResultProps, Void> 
         final String statusDetail = paymentResult.getPaymentStatusDetail();
         return status.equals(Payment.StatusCodes.STATUS_APPROVED) ||
                 (status.equals(Payment.StatusCodes.STATUS_PENDING) &&
-                        statusDetail.equals(Payment.StatusCodes.STATUS_DETAIL_PENDING_WAITING_PAYMENT));
+                        statusDetail.equals(Payment.StatusDetail.STATUS_DETAIL_PENDING_WAITING_PAYMENT));
     }
 
     private boolean isCardIconImage(@NonNull final PaymentResult paymentResult) {
@@ -256,7 +261,7 @@ public class PaymentResultContainer extends Component<PaymentResultProps, Void> 
     private boolean isPaymentMethodIconImage(@NonNull final PaymentResult paymentResult) {
         final String status = paymentResult.getPaymentStatus();
         final String statusDetail = paymentResult.getPaymentStatusDetail();
-        return ((status.equals(Payment.StatusCodes.STATUS_PENDING) && !statusDetail.equals(Payment.StatusCodes.STATUS_DETAIL_PENDING_WAITING_PAYMENT)) ||
+        return ((status.equals(Payment.StatusCodes.STATUS_PENDING) && !statusDetail.equals(Payment.StatusDetail.STATUS_DETAIL_PENDING_WAITING_PAYMENT)) ||
                 status.equals(Payment.StatusCodes.STATUS_IN_PROCESS) ||
                 status.equals(Payment.StatusCodes.STATUS_REJECTED));
     }
@@ -301,40 +306,40 @@ public class PaymentResultContainer extends Component<PaymentResultProps, Void> 
     private boolean isPendingGreenBadgeImage(@NonNull final PaymentResult paymentResult) {
         return (paymentResult.getPaymentStatus().equals(Payment.StatusCodes.STATUS_PENDING) ||
                 paymentResult.getPaymentStatus().equals(Payment.StatusCodes.STATUS_IN_PROCESS)) &&
-                paymentResult.getPaymentStatusDetail().equals(Payment.StatusCodes.STATUS_DETAIL_PENDING_WAITING_PAYMENT);
+                paymentResult.getPaymentStatusDetail().equals(Payment.StatusDetail.STATUS_DETAIL_PENDING_WAITING_PAYMENT);
     }
 
     private boolean isPendingOrangeBadgeImage(@NonNull final PaymentResult paymentResult) {
         return (paymentResult.getPaymentStatus().equals(Payment.StatusCodes.STATUS_PENDING) ||
                 paymentResult.getPaymentStatus().equals(Payment.StatusCodes.STATUS_IN_PROCESS)) &&
-                (paymentResult.getPaymentStatusDetail().equals(Payment.StatusCodes.STATUS_DETAIL_PENDING_CONTINGENCY) ||
-                        paymentResult.getPaymentStatusDetail().equals(Payment.StatusCodes.STATUS_DETAIL_PENDING_REVIEW_MANUAL));
+                (paymentResult.getPaymentStatusDetail().equals(Payment.StatusDetail.STATUS_DETAIL_PENDING_CONTINGENCY) ||
+                        paymentResult.getPaymentStatusDetail().equals(Payment.StatusDetail.STATUS_DETAIL_PENDING_REVIEW_MANUAL));
     }
 
     private boolean isWarningBadgeImage(@NonNull final PaymentResult paymentResult) {
         final String status = paymentResult.getPaymentStatus();
         final String statusDetail = paymentResult.getPaymentStatusDetail();
-        return status.equals(Payment.StatusCodes.STATUS_REJECTED) && (statusDetail.equals(Payment.StatusCodes.STATUS_DETAIL_INVALID_ESC) ||
-                statusDetail.equals(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_CALL_FOR_AUTHORIZE) ||
-                statusDetail.equals(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_BAD_FILLED_CARD_NUMBER) ||
-                statusDetail.equals(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_BAD_FILLED_OTHER) ||
-                statusDetail.equals(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_BAD_FILLED_SECURITY_CODE) ||
-                statusDetail.equals(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_BAD_FILLED_DATE) ||
-                statusDetail.equals(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_CARD_DISABLED) ||
-                statusDetail.equals(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_INSUFFICIENT_AMOUNT));
+        return status.equals(Payment.StatusCodes.STATUS_REJECTED) && (statusDetail.equals(Payment.StatusDetail.STATUS_DETAIL_INVALID_ESC) ||
+                statusDetail.equals(Payment.StatusDetail.STATUS_DETAIL_CC_REJECTED_CALL_FOR_AUTHORIZE) ||
+                statusDetail.equals(Payment.StatusDetail.STATUS_DETAIL_CC_REJECTED_BAD_FILLED_CARD_NUMBER) ||
+                statusDetail.equals(Payment.StatusDetail.STATUS_DETAIL_CC_REJECTED_BAD_FILLED_OTHER) ||
+                statusDetail.equals(Payment.StatusDetail.STATUS_DETAIL_CC_REJECTED_BAD_FILLED_SECURITY_CODE) ||
+                statusDetail.equals(Payment.StatusDetail.STATUS_DETAIL_CC_REJECTED_BAD_FILLED_DATE) ||
+                statusDetail.equals(Payment.StatusDetail.STATUS_DETAIL_CC_REJECTED_CARD_DISABLED) ||
+                statusDetail.equals(Payment.StatusDetail.STATUS_DETAIL_CC_REJECTED_INSUFFICIENT_AMOUNT));
     }
 
     private boolean isErrorBadgeImage(@NonNull final PaymentResult paymentResult) {
         final String status = paymentResult.getPaymentStatus();
         final String statusDetail = paymentResult.getPaymentStatusDetail();
         return status.equals(Payment.StatusCodes.STATUS_REJECTED) && (
-                statusDetail.equals(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_OTHER_REASON) ||
-                statusDetail.equals(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_PLUGIN_PM) ||
-                statusDetail.equals(Payment.StatusCodes.STATUS_DETAIL_REJECTED_REJECTED_BY_BANK) ||
-                statusDetail.equals(Payment.StatusCodes.STATUS_DETAIL_REJECTED_REJECTED_INSUFFICIENT_DATA) ||
-                statusDetail.equals(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_DUPLICATED_PAYMENT) ||
-                statusDetail.equals(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_MAX_ATTEMPTS) ||
-                statusDetail.equals(Payment.StatusCodes.STATUS_DETAIL_REJECTED_HIGH_RISK));
+                statusDetail.equals(Payment.StatusDetail.STATUS_DETAIL_CC_REJECTED_OTHER_REASON) ||
+                        statusDetail.equals(Payment.StatusDetail.STATUS_DETAIL_CC_REJECTED_PLUGIN_PM) ||
+                        statusDetail.equals(Payment.StatusDetail.STATUS_DETAIL_REJECTED_REJECTED_BY_BANK) ||
+                        statusDetail.equals(Payment.StatusDetail.STATUS_DETAIL_REJECTED_REJECTED_INSUFFICIENT_DATA) ||
+                        statusDetail.equals(Payment.StatusDetail.STATUS_DETAIL_CC_REJECTED_DUPLICATED_PAYMENT) ||
+                        statusDetail.equals(Payment.StatusDetail.STATUS_DETAIL_CC_REJECTED_MAX_ATTEMPTS) ||
+                        statusDetail.equals(Payment.StatusDetail.STATUS_DETAIL_REJECTED_HIGH_RISK));
     }
 
     private String getTitle(@NonNull final PaymentResultProps props) {
@@ -358,28 +363,28 @@ public class PaymentResultContainer extends Component<PaymentResultProps, Void> 
                 return paymentResultProvider.getPendingTitle();
             } else if (status.equals(Payment.StatusCodes.STATUS_REJECTED)) {
 
-                if (Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_OTHER_REASON.equals(statusDetail)
-                        || Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_PLUGIN_PM.equals(statusDetail)) {
+                if (Payment.StatusDetail.STATUS_DETAIL_CC_REJECTED_OTHER_REASON.equals(statusDetail)
+                        || Payment.StatusDetail.STATUS_DETAIL_CC_REJECTED_PLUGIN_PM.equals(statusDetail)) {
                     return paymentResultProvider.getRejectedOtherReasonTitle(paymentMethodName);
-                } else if (statusDetail.equals(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_INSUFFICIENT_AMOUNT)) {
+                } else if (statusDetail.equals(Payment.StatusDetail.STATUS_DETAIL_CC_REJECTED_INSUFFICIENT_AMOUNT)) {
                     return paymentResultProvider.getRejectedInsufficientAmountTitle(paymentMethodName);
-                } else if (statusDetail.equals(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_DUPLICATED_PAYMENT)) {
+                } else if (statusDetail.equals(Payment.StatusDetail.STATUS_DETAIL_CC_REJECTED_DUPLICATED_PAYMENT)) {
                     return paymentResultProvider.getRejectedDuplicatedPaymentTitle(paymentMethodName);
-                } else if (statusDetail.equals(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_CARD_DISABLED)) {
+                } else if (statusDetail.equals(Payment.StatusDetail.STATUS_DETAIL_CC_REJECTED_CARD_DISABLED)) {
                     return paymentResultProvider.getRejectedCardDisabledTitle(paymentMethodName);
-                } else if (statusDetail.equals(Payment.StatusCodes.STATUS_DETAIL_REJECTED_HIGH_RISK)) {
+                } else if (statusDetail.equals(Payment.StatusDetail.STATUS_DETAIL_REJECTED_HIGH_RISK)) {
                     return paymentResultProvider.getRejectedHighRiskTitle();
-                } else if (statusDetail.equals(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_MAX_ATTEMPTS)) {
+                } else if (statusDetail.equals(Payment.StatusDetail.STATUS_DETAIL_CC_REJECTED_MAX_ATTEMPTS)) {
                     return paymentResultProvider.getRejectedMaxAttemptsTitle();
-                } else if (statusDetail.equals(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_BAD_FILLED_OTHER) ||
-                        statusDetail.equals(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_BAD_FILLED_CARD_NUMBER) ||
-                        statusDetail.equals(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_BAD_FILLED_SECURITY_CODE) ||
-                        statusDetail.equals(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_BAD_FILLED_DATE)) {
+                } else if (statusDetail.equals(Payment.StatusDetail.STATUS_DETAIL_CC_REJECTED_BAD_FILLED_OTHER) ||
+                        statusDetail.equals(Payment.StatusDetail.STATUS_DETAIL_CC_REJECTED_BAD_FILLED_CARD_NUMBER) ||
+                        statusDetail.equals(Payment.StatusDetail.STATUS_DETAIL_CC_REJECTED_BAD_FILLED_SECURITY_CODE) ||
+                        statusDetail.equals(Payment.StatusDetail.STATUS_DETAIL_CC_REJECTED_BAD_FILLED_DATE)) {
                     return paymentResultProvider.getRejectedBadFilledCardTitle(paymentMethodName);
-                } else if (statusDetail.equals(Payment.StatusCodes.STATUS_DETAIL_REJECTED_REJECTED_BY_BANK)
-                        || statusDetail.equals(Payment.StatusCodes.STATUS_DETAIL_REJECTED_REJECTED_INSUFFICIENT_DATA)) {
+                } else if (statusDetail.equals(Payment.StatusDetail.STATUS_DETAIL_REJECTED_REJECTED_BY_BANK)
+                        || statusDetail.equals(Payment.StatusDetail.STATUS_DETAIL_REJECTED_REJECTED_INSUFFICIENT_DATA)) {
                     return paymentResultProvider.getRejectedInsufficientDataTitle();
-                } else if (statusDetail.equals(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_CALL_FOR_AUTHORIZE)) {
+                } else if (statusDetail.equals(Payment.StatusDetail.STATUS_DETAIL_CC_REJECTED_CALL_FOR_AUTHORIZE)) {
                     return paymentResultProvider.getRejectedCallForAuthorizeTitle();
                 } else {
                     return paymentResultProvider.getRejectedBadFilledOther();
@@ -411,14 +416,14 @@ public class PaymentResultContainer extends Component<PaymentResultProps, Void> 
         final String statusDetail = paymentResult.getPaymentStatusDetail();
         return status.equals(Payment.StatusCodes.STATUS_APPROVED) || status.equals(Payment.StatusCodes.STATUS_IN_PROCESS) ||
                 (status.equals(Payment.StatusCodes.STATUS_PENDING)
-                        && !statusDetail.equals(Payment.StatusCodes.STATUS_DETAIL_PENDING_WAITING_PAYMENT));
+                        && !statusDetail.equals(Payment.StatusDetail.STATUS_DETAIL_PENDING_WAITING_PAYMENT));
     }
 
     private boolean isLabelPending(@NonNull final PaymentResult paymentResult) {
         final String status = paymentResult.getPaymentStatus();
         final String statusDetail = paymentResult.getPaymentStatusDetail();
         return status.equals(Payment.StatusCodes.STATUS_PENDING)
-                && statusDetail.equals(Payment.StatusCodes.STATUS_DETAIL_PENDING_WAITING_PAYMENT);
+                && statusDetail.equals(Payment.StatusDetail.STATUS_DETAIL_PENDING_WAITING_PAYMENT);
     }
 
     private boolean isLabelError(@NonNull final PaymentResult paymentResult) {

@@ -1,16 +1,14 @@
 package com.mercadopago.plugins;
 
 import android.support.annotation.NonNull;
+
 import com.mercadopago.components.Component;
 import com.mercadopago.components.RendererFactory;
 import com.mercadopago.components.ToolbarComponent;
 import com.mercadopago.model.PaymentData;
 import com.mercadopago.preferences.CheckoutPreference;
-import java.util.Map;
 
-/**
- * Created by nfortuna on 12/13/17.
- */
+import java.util.Map;
 
 public abstract class PluginComponent<T> extends Component<PluginComponent.Props, T> {
 
@@ -48,11 +46,11 @@ public abstract class PluginComponent<T> extends Component<PluginComponent.Props
 
         public Builder toBuilder() {
             return new Builder()
-                .setData(this.data)
-                .setToolbarVisible(this.toolbarVisible)
-                .setToolbarTitle(this.toolbarTitle)
-                .setPaymentData(this.paymentData)
-                .setCheckoutPreference(this.checkoutPreference);
+                    .setData(this.data)
+                    .setToolbarVisible(this.toolbarVisible)
+                    .setToolbarTitle(this.toolbarTitle)
+                    .setPaymentData(this.paymentData)
+                    .setCheckoutPreference(this.checkoutPreference);
         }
 
         public static class Builder {

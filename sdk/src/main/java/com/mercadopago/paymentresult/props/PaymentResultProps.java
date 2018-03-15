@@ -38,13 +38,13 @@ public class PaymentResultProps {
 
     public Builder toBuilder() {
         return new Builder()
-            .setPaymentResult(this.paymentResult)
-            .setHeaderMode(this.headerMode)
-            .setInstruction(this.instruction)
-            .setHeaderAmountFormatter(this.headerAmountFormatter)
-            .setBodyAmountFormatter(this.bodyAmountFormatter)
-            .setLoading(this.loading)
-            .setProcessingMode(this.processingMode);
+                .setPaymentResult(this.paymentResult)
+                .setHeaderMode(this.headerMode)
+                .setInstruction(this.instruction)
+                .setHeaderAmountFormatter(this.headerAmountFormatter)
+                .setBodyAmountFormatter(this.bodyAmountFormatter)
+                .setLoading(this.loading)
+                .setProcessingMode(this.processingMode);
     }
 
     public boolean hasCustomizedTitle() {
@@ -64,8 +64,8 @@ public class PaymentResultProps {
 
     public boolean isPluginPaymentResult(@Nullable final PaymentResult paymentResult) {
         return paymentResult != null &&
-                (Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_PLUGIN_PM.equals(paymentResult.getPaymentStatusDetail())
-                        || Payment.StatusCodes.STATUS_DETAIL_APPROVED_PLUGIN_PM.equals(paymentResult.getPaymentStatusDetail()));
+                (Payment.StatusDetail.STATUS_DETAIL_CC_REJECTED_PLUGIN_PM.equals(paymentResult.getPaymentStatusDetail())
+                        || Payment.StatusDetail.STATUS_DETAIL_APPROVED_PLUGIN_PM.equals(paymentResult.getPaymentStatusDetail()));
     }
 
     public String getPreferenceTitle() {
@@ -96,7 +96,7 @@ public class PaymentResultProps {
 
     private boolean isPendingTitleValidState() {
         return paymentResult != null && ((paymentResult.getPaymentStatus().equals(Payment.StatusCodes.STATUS_PENDING)
-                && !paymentResult.getPaymentStatusDetail().equals(Payment.StatusCodes.STATUS_DETAIL_PENDING_WAITING_PAYMENT)) ||
+                && !paymentResult.getPaymentStatusDetail().equals(Payment.StatusDetail.STATUS_DETAIL_PENDING_WAITING_PAYMENT)) ||
                 paymentResult.getPaymentStatus().equals(Payment.StatusCodes.STATUS_IN_PROCESS));
     }
 
@@ -218,7 +218,7 @@ public class PaymentResultProps {
 
     private boolean isPendingIconValidState() {
         return paymentResult != null && (paymentResult.getPaymentStatus().equals(Payment.StatusCodes.STATUS_PENDING)
-                && paymentResult.getPaymentStatusDetail().equals(Payment.StatusCodes.STATUS_DETAIL_PENDING_WAITING_PAYMENT));
+                && paymentResult.getPaymentStatusDetail().equals(Payment.StatusDetail.STATUS_DETAIL_PENDING_WAITING_PAYMENT));
     }
 
     private boolean isRejectedIconValidState() {

@@ -66,7 +66,7 @@ public class BodyTest {
     private PaymentResultBodyProps getBodyPropsForInstructions(Instruction instruction) {
         return new PaymentResultBodyProps.Builder()
                 .setStatus(Payment.StatusCodes.STATUS_PENDING)
-                .setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_PENDING_WAITING_PAYMENT)
+                .setStatusDetail(Payment.StatusDetail.STATUS_DETAIL_PENDING_WAITING_PAYMENT)
                 .setProcessingMode(ProcessingModes.AGGREGATOR)
                 .setInstruction(instruction)
                 .build();

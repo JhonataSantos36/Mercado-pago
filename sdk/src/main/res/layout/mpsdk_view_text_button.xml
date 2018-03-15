@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.mercadopago.customviews.MPTextView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/text_button_white"
     style="@style/TextLinkButton"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="@dimen/mpsdk_s_margin"
     android:padding="@dimen/mpsdk_xs_margin"
+    android:layout_gravity="center"
     android:clickable="true"
     android:focusable="true"
     android:foreground="?attr/selectableItemBackground"

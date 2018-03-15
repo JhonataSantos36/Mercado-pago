@@ -77,9 +77,11 @@
             android:name=".plugins.PaymentMethodPluginActivity"
             android:theme="@style/Theme.MercadoPagoTheme.NoActionBar" />
         <activity
-            android:name=".plugins.PaymentPluginActivity"
+            android:name=".plugins.PaymentProcessorPluginActivity"
             android:theme="@style/Theme.MercadoPagoTheme.NoActionBar" />
-
+        <activity
+            android:name=".plugins.BusinessPaymentResultActivity"
+            android:theme="@style/Theme.MercadoPagoTheme.NoActionBar" />
         <activity
             android:name=".review_and_confirm.ReviewAndConfirmActivity"
             android:theme="@style/Theme.MercadoPagoTheme.NoActionBar" />
