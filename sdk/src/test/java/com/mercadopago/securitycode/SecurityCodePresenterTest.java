@@ -467,14 +467,14 @@ public class SecurityCodePresenterTest {
         Token mockedToken = Tokens.getTokenWithESC();
         PayerCost mockedPayerCost = PayerCosts.getPayerCost();
         Issuer mockedIssuer = Issuers.getIssuerMLA();
-        return new PaymentRecovery(mockedToken, paymentMethod, mockedPayerCost, mockedIssuer, Payment.StatusCodes.STATUS_REJECTED, Payment.StatusCodes.STATUS_DETAIL_INVALID_ESC);
+        return new PaymentRecovery(mockedToken, paymentMethod, mockedPayerCost, mockedIssuer, Payment.StatusCodes.STATUS_REJECTED, Payment.StatusDetail.STATUS_DETAIL_INVALID_ESC);
     }
 
     private PaymentRecovery getPaymentRecoveryForCallForAuth(PaymentMethod paymentMethod) {
         Token mockedToken = Tokens.getToken();
         PayerCost mockedPayerCost = PayerCosts.getPayerCost();
         Issuer mockedIssuer = Issuers.getIssuerMLA();
-        return new PaymentRecovery(mockedToken, paymentMethod, mockedPayerCost, mockedIssuer, Payment.StatusCodes.STATUS_REJECTED, Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_CALL_FOR_AUTHORIZE);
+        return new PaymentRecovery(mockedToken, paymentMethod, mockedPayerCost, mockedIssuer, Payment.StatusCodes.STATUS_REJECTED, Payment.StatusDetail.STATUS_DETAIL_CC_REJECTED_CALL_FOR_AUTHORIZE);
     }
 
     private MVPStructure<SecurityCodePresenter, SecurityCodeMockedProvider, SecurityCodeMockedView, SecurityCode> getMVPStructure() {

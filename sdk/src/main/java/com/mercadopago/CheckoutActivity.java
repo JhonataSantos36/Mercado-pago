@@ -24,7 +24,9 @@ import com.mercadopago.model.PaymentMethodSearchItem;
 import com.mercadopago.model.PaymentRecovery;
 import com.mercadopago.model.PaymentResult;
 import com.mercadopago.model.Token;
-import com.mercadopago.plugins.PaymentPluginActivity;
+import com.mercadopago.plugins.BusinessPaymentResultActivity;
+import com.mercadopago.plugins.PaymentProcessorPluginActivity;
+import com.mercadopago.plugins.model.BusinessPayment;
 import com.mercadopago.plugins.model.PaymentMethodInfo;
 import com.mercadopago.preferences.CheckoutPreference;
 import com.mercadopago.preferences.FlowPreference;
@@ -56,6 +58,9 @@ public class CheckoutActivity extends MercadoPagoBaseActivity implements Checkou
     private static final String SERVICE_PREFERENCE_BUNDLE = "mServicePreference";
     private static final String RESULT_CODE_BUNDLE = "mRequestedResultCode";
     private static final String PRESENTER_BUNDLE = "mCheckoutPresenter";
+
+    private static final int PLUGIN_PAYMENT_PROCESSOR_REQUEST_CODE = 200;
+    private static final int BUSINESS_REQUEST_CODE = 400;
 
     //Parameters
     protected String mMerchantPublicKey;
@@ -176,43 +181,93 @@ public class CheckoutActivity extends MercadoPagoBaseActivity implements Checkou
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == ErrorUtil.ERROR_REQUEST_CODE) {
-            resolveErrorRequest(resultCode, data);
-        } else if (resultCode == MercadoPagoCheckout.TIMER_FINISHED_RESULT_CODE) {
-            resolveTimerObserverResult(resultCode);
-        } else if (requestCode == MercadoPagoComponents.Activities.PAYMENT_VAULT_REQUEST_CODE) {
-            resolvePaymentVaultRequest(resultCode, data);
-        } else if (requestCode == MercadoPagoComponents.Activities.PAYMENT_RESULT_REQUEST_CODE) {
-            resolvePaymentResultRequest(resultCode, data);
-        } else if (requestCode == MercadoPagoComponents.Activities.CARD_VAULT_REQUEST_CODE) {
-            resolveCardVaultRequest(resultCode, data);
-        } else if (requestCode == MercadoPagoComponents.Activities.REVIEW_AND_CONFIRM_REQUEST_CODE) {
-            resolveReviewAndConfirmRequest(resultCode, data);
-        } else if (requestCode == MercadoPagoComponents.Activities.HOOK_2) {
-            if (resultCode == RESULT_OK) {
-                mCheckoutPresenter.hook2Continue();
-            } else {
-                overrideTransitionOut();
-                cancelCheckout();
-            }
-        } else if (requestCode == MercadoPagoComponents.Activities.HOOK_3) {
-            if (resultCode == RESULT_OK) {
-                mCheckoutPresenter.resolvePaymentDataResponse();
-            } else {
-                backToReviewAndConfirm();
-            }
-            overrideTransitionIn();
-        } else if (requestCode == MercadoPagoComponents.Activities.PLUGIN_PAYMENT_REQUEST_CODE) {
-            if (resultCode == RESULT_OK) {
 
-                final PaymentResult paymentResult = CheckoutStore.getInstance().getPaymentResult();
-                mCheckoutPresenter.checkStartPaymentResultActivity(paymentResult);
+        switch (requestCode) {
+            case ErrorUtil.ERROR_REQUEST_CODE:
+                resolveErrorRequest(resultCode, data);
+                break;
+            case MercadoPagoCheckout.TIMER_FINISHED_RESULT_CODE:
+                resolveTimerObserverResult(resultCode);
+                break;
+            case MercadoPagoComponents.Activities.PAYMENT_VAULT_REQUEST_CODE:
+                resolvePaymentVaultRequest(resultCode, data);
+                break;
+            case MercadoPagoComponents.Activities.PAYMENT_RESULT_REQUEST_CODE:
+                resolvePaymentResultRequest(resultCode, data);
+                break;
+            case MercadoPagoComponents.Activities.CARD_VAULT_REQUEST_CODE:
+                resolveCardVaultRequest(resultCode, data);
+                break;
+            case MercadoPagoComponents.Activities.REVIEW_AND_CONFIRM_REQUEST_CODE:
+                resolveReviewAndConfirmRequest(resultCode, data);
+                break;
+            case MercadoPagoComponents.Activities.HOOK_2:
+                resolveHook2(resultCode);
+                break;
+            case MercadoPagoComponents.Activities.HOOK_3:
+                resolveHook3(resultCode);
+                break;
+            case PLUGIN_PAYMENT_PROCESSOR_REQUEST_CODE:
+                resolvePaymentProcessor(resultCode, data);
+                break;
+            case BUSINESS_REQUEST_CODE:
+                resolveBusinessResultActivity(resultCode, data);
+                break;
+            default:
+                break;
+        }
+    }
 
-            } else {
-                overrideTransitionOut();
-                setResult(RESULT_CANCELED);
-                finish();
-            }
+    private void resolveBusinessResultActivity(final int resultCode, final Intent data) {
+        if (resultCode == RESULT_OK) {
+            setResult(data.getIntExtra(BusinessPaymentResultActivity.EXTRA_CLIENT_RES_CODE, 0));
+            finish();
+        } else {
+            cancelCheckout();
+        }
+    }
+
+    private void resolveHook3(final int resultCode) {
+        if (resultCode == RESULT_OK) {
+            mCheckoutPresenter.resolvePaymentDataResponse();
+        } else {
+            backToReviewAndConfirm();
+        }
+        overrideTransitionIn();
+    }
+
+    private void resolveHook2(final int resultCode) {
+        if (resultCode == RESULT_OK) {
+            mCheckoutPresenter.hook2Continue();
+        } else {
+            overrideTransitionOut();
+            cancelCheckout();
+        }
+    }
+
+    private void resolvePaymentProcessor(final int resultCode, final Intent data) {
+        if (resultCode == RESULT_OK) {
+            paymentResultOk(data);
+        } else {
+            overrideTransitionOut();
+            setResult(RESULT_CANCELED);
+            finish();
+        }
+    }
+
+    /**
+     * Depending on intent data it triggers {@link com.mercadopago.paymentresult.PaymentResultActivity}
+     * flow or {@link BusinessPaymentResultActivity}.
+     *
+     * @param data intent data that can contains a {@link BusinessPayment}
+     */
+    private void paymentResultOk(final Intent data) {
+        if (PaymentProcessorPluginActivity.isBusiness(data)) {
+            BusinessPayment businessPayment = PaymentProcessorPluginActivity.getBusinessPayment(data);
+            BusinessPaymentResultActivity.start(this, businessPayment, BUSINESS_REQUEST_CODE);
+        } else {
+            final PaymentResult paymentResult = CheckoutStore.getInstance().getPaymentResult();
+            mCheckoutPresenter.checkStartPaymentResultActivity(paymentResult);
         }
     }
 
@@ -550,7 +605,7 @@ public class CheckoutActivity extends MercadoPagoBaseActivity implements Checkou
 
     @Override
     public void showPaymentProcessor() {
-        startActivityForResult(PaymentPluginActivity.getIntent(this), MercadoPagoComponents.Activities.PLUGIN_PAYMENT_REQUEST_CODE);
+        startActivityForResult(PaymentProcessorPluginActivity.getIntent(this), PLUGIN_PAYMENT_PROCESSOR_REQUEST_CODE);
         overrideTransitionFadeInFadeOut();
     }
 

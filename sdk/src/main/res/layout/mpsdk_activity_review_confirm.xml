@@ -182,8 +182,8 @@
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#DDDDDD" />
+            android:layout_height="@dimen/mpsdk_xxxs_height"
+            android:background="@color/mpsdk_very_light_gray" />
 
         <FrameLayout
             android:id="@+id/mpsdkCheckoutFloatingConfirmButton"

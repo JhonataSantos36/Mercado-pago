@@ -11,7 +11,6 @@
         android:required="false" />
 
     <application android:allowBackup="true">
-
         <activity
             android:name=".CustomerCardsActivity"
             android:label="@string/mpsdk_title_activity_customer_pms"
@@ -81,9 +80,11 @@
             android:name=".plugins.PaymentMethodPluginActivity"
             android:theme="@style/Theme.MercadoPagoTheme.NoActionBar" />
         <activity
-            android:name=".plugins.PaymentPluginActivity"
+            android:name=".plugins.PaymentProcessorPluginActivity"
             android:theme="@style/Theme.MercadoPagoTheme.NoActionBar" />
-
+        <activity
+            android:name=".plugins.BusinessPaymentResultActivity"
+            android:theme="@style/Theme.MercadoPagoTheme.NoActionBar" />
     </application>
 
 </manifest>

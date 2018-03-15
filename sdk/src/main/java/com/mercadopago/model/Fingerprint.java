@@ -14,6 +14,7 @@ import android.os.Looper;
 import android.os.StatFs;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.text.TextUtils;
 import android.util.Log;
@@ -36,8 +37,6 @@ import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import javax.annotation.Nonnull;
 
 public class Fingerprint {
     private static final String TAG = "Fingerprint";
@@ -408,7 +407,7 @@ public class Fingerprint {
 
         private JSONObject location;
 
-        private Location(@Nonnull JSONObject location) {
+        private Location(@NonNull JSONObject location) {
             this.location = location;
         }
 

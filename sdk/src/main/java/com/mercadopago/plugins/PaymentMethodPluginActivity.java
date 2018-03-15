@@ -19,11 +19,6 @@ import com.mercadopago.plugins.model.PaymentMethodInfo;
 import com.mercadopago.tracker.FlowHandler;
 import com.mercadopago.tracker.MPTrackingContext;
 import com.mercadopago.tracking.model.ScreenViewEvent;
-import com.mercadopago.tracking.utils.TrackingUtil;
-
-/**
- * Created by nfortuna on 12/13/17.
- */
 
 public class PaymentMethodPluginActivity extends AppCompatActivity implements ActionDispatcher {
 

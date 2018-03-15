@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.mercadopago.components.ActionDispatcher;
 import com.mercadopago.components.Component;
+import com.mercadopago.components.RendererFactory;
 import com.mercadopago.paymentresult.props.HeaderProps;
 import com.mercadopago.paymentresult.props.IconProps;
 
@@ -12,6 +13,10 @@ import com.mercadopago.paymentresult.props.IconProps;
  */
 
 public class Header extends Component<HeaderProps, Void> {
+
+    static {
+        RendererFactory.register(Header.class, HeaderRenderer.class);
+    }
 
     public Header(@NonNull final HeaderProps props,
                   @NonNull final ActionDispatcher dispatcher) {

@@ -107,7 +107,7 @@ public class GuessingCardPresenterTest {
         PayerCost mockedPayerCost = PayerCosts.getPayerCost();
         Issuer mockedIssuer = Issuers.getIssuerMLA();
         String paymentStatus = Payment.StatusCodes.STATUS_REJECTED;
-        String paymentStatusDetail = Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_CALL_FOR_AUTHORIZE;
+        String paymentStatusDetail = Payment.StatusDetail.STATUS_DETAIL_CC_REJECTED_CALL_FOR_AUTHORIZE;
         PaymentRecovery mockedPaymentRecovery = new PaymentRecovery(mockedToken, mockedPaymentMethod, mockedPayerCost, mockedIssuer, paymentStatus, paymentStatusDetail);
 
         presenter.setPublicKey("mockedPublicKey");

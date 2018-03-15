@@ -5,10 +5,6 @@ import android.support.annotation.NonNull;
 
 import com.mercadopago.plugins.components.MainPayment;
 
-/**
- * Created by nfortuna on 12/13/17.
- */
-
 public class MainPaymentProcessor extends PaymentProcessor {
 
     @Override

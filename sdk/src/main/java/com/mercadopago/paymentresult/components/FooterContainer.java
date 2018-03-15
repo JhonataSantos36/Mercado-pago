@@ -76,7 +76,7 @@ public class FooterContainer extends Component<FooterContainer.Props, Void> {
 
         } else if (props.paymentResult.isStatusRejected()) {
 
-            if (Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_CALL_FOR_AUTHORIZE
+            if (Payment.StatusDetail.STATUS_DETAIL_CC_REJECTED_CALL_FOR_AUTHORIZE
                     .equals(props.paymentResult.getPaymentStatusDetail())) {
 
                 buttonAction = new Footer.FooterAction(
@@ -86,7 +86,7 @@ public class FooterContainer extends Component<FooterContainer.Props, Void> {
 
                 linkAction = new Footer.FooterAction(resourcesProvider.getCancelPayment());
 
-            } else if (Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_CARD_DISABLED
+            } else if (Payment.StatusDetail.STATUS_DETAIL_CC_REJECTED_CARD_DISABLED
                     .equals(props.paymentResult.getPaymentStatusDetail())) {
 
                 buttonAction = new Footer.FooterAction(
@@ -97,7 +97,7 @@ public class FooterContainer extends Component<FooterContainer.Props, Void> {
                 linkAction = new Footer.FooterAction(resourcesProvider.getChangePaymentMethodLabel(),
                         new ChangePaymentMethodAction());
 
-            } else if (Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_INSUFFICIENT_AMOUNT
+            } else if (Payment.StatusDetail.STATUS_DETAIL_CC_REJECTED_INSUFFICIENT_AMOUNT
                     .equals(props.paymentResult.getPaymentStatusDetail())) {
 
                 buttonAction = new Footer.FooterAction(
@@ -107,15 +107,7 @@ public class FooterContainer extends Component<FooterContainer.Props, Void> {
 
                 linkAction = new Footer.FooterAction(resourcesProvider.getCancelPayment());
 
-            } else if (Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_BAD_FILLED_DATE
-                    .equals(props.paymentResult.getPaymentStatusDetail())
-                    || Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_BAD_FILLED_SECURITY_CODE
-                    .equals(props.paymentResult.getPaymentStatusDetail())
-                    || Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_BAD_FILLED_OTHER
-                    .equals(props.paymentResult.getPaymentStatusDetail())
-                    || Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_BAD_FILLED_CARD_NUMBER
-                    .equals(props.paymentResult.getPaymentStatusDetail())) {
-
+            } else if (Payment.StatusDetail.isBadFilled(props.paymentResult.getPaymentStatusDetail())) {
                 buttonAction = new Footer.FooterAction(
                         resourcesProvider.getRejectedBadFilledCardTitle(),
                         new RecoverPaymentAction()
@@ -124,7 +116,7 @@ public class FooterContainer extends Component<FooterContainer.Props, Void> {
                 linkAction = new Footer.FooterAction(resourcesProvider.getChangePaymentMethodLabel(),
                         new ChangePaymentMethodAction());
 
-            } else if (Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_DUPLICATED_PAYMENT
+            } else if (Payment.StatusDetail.STATUS_DETAIL_CC_REJECTED_DUPLICATED_PAYMENT
                     .equals(props.paymentResult.getPaymentStatusDetail())) {
 
                 buttonAction = null;
@@ -134,8 +126,8 @@ public class FooterContainer extends Component<FooterContainer.Props, Void> {
             } else {
 
                 buttonAction = new Footer.FooterAction(
-                    resourcesProvider.getChangePaymentMethodLabel(),
-                    new ChangePaymentMethodAction()
+                        resourcesProvider.getChangePaymentMethodLabel(),
+                        new ChangePaymentMethodAction()
                 );
 
                 linkAction = new Footer.FooterAction(resourcesProvider.getCancelPayment());
@@ -148,7 +140,7 @@ public class FooterContainer extends Component<FooterContainer.Props, Void> {
         }
 
         return new Footer.Props(
-            buttonAction, linkAction
+                buttonAction, linkAction
         );
     }
 

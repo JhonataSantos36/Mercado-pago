@@ -9,10 +9,6 @@ import com.mercadopago.paymentresult.PaymentMethodProvider;
 import com.mercadopago.paymentresult.props.PaymentMethodProps;
 import com.mercadopago.paymentresult.props.TotalAmountProps;
 
-/**
- * Created by mromar on 11/22/17.
- */
-
 public class PaymentMethod extends Component<PaymentMethodProps, Void> {
 
     private PaymentMethodProvider provider;
@@ -61,7 +57,8 @@ public class PaymentMethod extends Component<PaymentMethodProps, Void> {
     }
 
     private boolean isTokenValid() {
-        return props.token != null && props.token.getLastFourDigits() != null && !props.token.getLastFourDigits().isEmpty();
+        return props.token != null && props.token.getLastFourDigits()
+                != null && !props.token.getLastFourDigits().isEmpty();
     }
 
     private boolean isAccountMoneyPaymentMethod() {

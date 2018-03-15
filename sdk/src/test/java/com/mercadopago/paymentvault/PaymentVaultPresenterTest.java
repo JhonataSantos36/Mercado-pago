@@ -26,8 +26,6 @@ import com.mercadopago.providers.PaymentVaultProvider;
 import com.mercadopago.utils.Discounts;
 import com.mercadopago.views.PaymentVaultView;
 
-import junit.framework.Assert;
-
 import org.junit.Test;
 import org.mockito.Mockito;
 

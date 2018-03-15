@@ -3,6 +3,7 @@ package com.mercadopago.paymentresult.components;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Build;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +23,7 @@ import com.mercadopago.paymentresult.props.HeaderProps;
 public class HeaderRenderer extends Renderer<Header> {
 
     @Override
-    public View render(final Header component, final Context context, final ViewGroup parent) {
+    public View render(@NonNull final Header component, @NonNull final Context context, final ViewGroup parent) {
         final View headerView = inflate(R.layout.mpsdk_payment_result_header, parent);
         final ViewGroup headerContainer = headerView.findViewById(R.id.mpsdkPaymentResultContainerHeader);
         final MPTextView titleTextView = headerView.findViewById(R.id.mpsdkHeaderTitle);

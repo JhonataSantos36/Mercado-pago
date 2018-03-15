@@ -4,14 +4,11 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 
 import com.mercadopago.components.RendererFactory;
-import com.mercadopago.model.Payment;
+import com.mercadopago.examples.R;
+import com.mercadopago.plugins.PaymentPluginProcessorResultAction;
 import com.mercadopago.plugins.PluginComponent;
-import com.mercadopago.plugins.PluginPaymentResultAction;
-import com.mercadopago.plugins.model.ProcessorPaymentResult;
-
-/**
- * Created by nfortuna on 12/13/17.
- */
+import com.mercadopago.plugins.model.BusinessPayment;
+import com.mercadopago.plugins.model.ButtonAction;
 
 public class MainPayment extends PluginComponent<Void> {
 
@@ -35,13 +32,13 @@ public class MainPayment extends PluginComponent<Void> {
             @Override
             public void run() {
 
-                final ProcessorPaymentResult result = new ProcessorPaymentResult(
-                        98723496234l,
-                        Payment.StatusCodes.STATUS_APPROVED,
-                        Payment.StatusCodes.STATUS_DETAIL_APPROVED_PLUGIN_PM,
-                        props.paymentData);
+                BusinessPayment result = new BusinessPayment.Builder(BusinessPayment.Status.REJECTED, R.drawable.mpsdk_icon_card, "ASD")
+                        .setHelp("HELP!")
+                        .setPrimaryButton(new ButtonAction("ASD", 23))
+                        .setSecondaryButton(new ButtonAction("ASD", 34))
+                        .build();
 
-                getDispatcher().dispatch(new PluginPaymentResultAction(result));
+                getDispatcher().dispatch(new PaymentPluginProcessorResultAction(result));
             }
         }, 2000);
     }

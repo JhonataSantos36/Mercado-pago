@@ -7,10 +7,6 @@ import com.mercadopago.components.RendererFactory;
 import com.mercadopago.plugins.PluginComponent;
 import com.mercadopago.util.TextUtils;
 
-/**
- * Created by nfortuna on 12/13/17.
- */
-
 public class SamplePaymentMethod extends PluginComponent<SamplePaymentMethod.SampleState> {
 
     static {

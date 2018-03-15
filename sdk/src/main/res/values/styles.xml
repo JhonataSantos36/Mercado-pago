@@ -198,4 +198,10 @@
         <item name="android:textColor">@color/mpsdk_background_blue</item>
     </style>
 
+    <style name="TextButtonBlue">
+        <item name="android:textSize">@dimen/mpsdk_m_text</item>
+        <item name="android:textColor">@color/mpsdk_blue_button</item>
+        <item name="android:text">@string/mpsdk_change_payment</item>
+    </style>
+
 </resources>

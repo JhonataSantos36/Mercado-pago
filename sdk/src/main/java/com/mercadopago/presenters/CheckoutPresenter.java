@@ -59,7 +59,7 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
     private Boolean mDirectDiscountEnabled;
     private PaymentData mPaymentDataInput;
     private PaymentResult mPaymentResultInput;
-    private Integer mRequestedResult;
+    private int mRequestedResult;
 
     private PaymentMethodSearch mPaymentMethodSearch;
     private Issuer mSelectedIssuer;
@@ -294,13 +294,13 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
         Payer payer = new Payer();
         payer.setAccessToken(mCheckoutPreference.getPayer().getAccessToken());
         getResourcesProvider().getPaymentMethodSearch(
-            getTransactionAmount(),
-            mCheckoutPreference.getExcludedPaymentTypes(),
-            mCheckoutPreference.getExcludedPaymentMethods(),
-            payer,
-            mCheckoutPreference.getSite(),
-            onPaymentMethodSearchRetrieved(),
-            onCustomerRetrieved()
+                getTransactionAmount(),
+                mCheckoutPreference.getExcludedPaymentTypes(),
+                mCheckoutPreference.getExcludedPaymentMethods(),
+                payer,
+                mCheckoutPreference.getSite(),
+                onPaymentMethodSearchRetrieved(),
+                onCustomerRetrieved()
         );
     }
 
@@ -373,15 +373,18 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
         if (hasToContinuePaymentWithoutESC(paymentResult)) {
             continuePaymentWithoutESC();
         } else {
+
             if (hasToStoreESC(paymentResult)) {
                 getResourcesProvider().saveESC(paymentResult.getPaymentData().getToken().getCardId(),
                         paymentResult.getPaymentData().getToken().getEsc());
             }
+
             if (hasToSkipPaymentResultScreen(paymentResult)) {
                 finishCheckout();
             } else {
                 getView().showPaymentResult(paymentResult);
             }
+
         }
     }
 
@@ -409,7 +412,7 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
     private boolean hasToContinuePaymentWithoutESC(final PaymentResult paymentResult) {
         return hasValidParametersForESC(paymentResult) &&
                 paymentResult.getPaymentStatus().equals(Payment.StatusCodes.STATUS_REJECTED) &&
-                paymentResult.getPaymentStatusDetail().equals(Payment.StatusCodes.STATUS_DETAIL_INVALID_ESC);
+                paymentResult.getPaymentStatusDetail().equals(Payment.StatusDetail.STATUS_DETAIL_INVALID_ESC);
     }
 
     private boolean hasToSkipPaymentResultScreen(final PaymentResult paymentResult) {
@@ -523,7 +526,7 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
     }
 
     public void resolvePaymentDataResponse() {
-        if (MercadoPagoCheckout.PAYMENT_DATA_RESULT_CODE.equals(mRequestedResult)) {
+        if (MercadoPagoCheckout.PAYMENT_DATA_RESULT_CODE == mRequestedResult) {
             PaymentData paymentData = createPaymentData();
             getView().finishWithPaymentDataResult(paymentData, mPaymentMethodEdited);
         } else {
@@ -584,7 +587,7 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
     private void continuePaymentWithoutESC() {
         mPaymentRecovery = new PaymentRecovery(mCreatedToken, mSelectedPaymentMethod,
                 mSelectedPayerCost, mSelectedIssuer, Payment.StatusCodes.STATUS_REJECTED,
-                Payment.StatusCodes.STATUS_DETAIL_INVALID_ESC);
+                Payment.StatusDetail.STATUS_DETAIL_INVALID_ESC);
 
         getView().startPaymentRecoveryFlow(mPaymentRecovery);
     }
@@ -655,7 +658,7 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
     private void resolveProcessingPaymentStatus() {
         mCreatedPayment = new Payment();
         mCreatedPayment.setStatus(Payment.StatusCodes.STATUS_IN_PROCESS);
-        mCreatedPayment.setStatusDetail(Payment.StatusCodes.STATUS_DETAIL_PENDING_CONTINGENCY);
+        mCreatedPayment.setStatusDetail(Payment.StatusDetail.STATUS_DETAIL_PENDING_CONTINGENCY);
         PaymentResult paymentResult = createPaymentResult(mCreatedPayment, createPaymentData());
         getView().showPaymentResult(paymentResult);
         cleanTransactionId();

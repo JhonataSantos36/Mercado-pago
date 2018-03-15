@@ -64,7 +64,7 @@ public class PaymentResultTest {
 
         PaymentResult paymentResult = new PaymentResult.Builder()
                 .setPaymentStatus(Payment.StatusCodes.STATUS_REJECTED)
-                .setPaymentStatusDetail(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_OTHER_REASON)
+                .setPaymentStatusDetail(Payment.StatusDetail.STATUS_DETAIL_CC_REJECTED_OTHER_REASON)
                 .setPaymentData(paymentData)
                 .build();
 
@@ -95,7 +95,7 @@ public class PaymentResultTest {
 
         PaymentResult paymentResult = new PaymentResult.Builder()
                 .setPaymentStatus(Payment.StatusCodes.STATUS_REJECTED)
-                .setPaymentStatusDetail(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_CALL_FOR_AUTHORIZE)
+                .setPaymentStatusDetail(Payment.StatusDetail.STATUS_DETAIL_CC_REJECTED_CALL_FOR_AUTHORIZE)
                 .setPaymentData(paymentData)
                 .build();
 
@@ -126,7 +126,7 @@ public class PaymentResultTest {
 
         PaymentResult paymentResult = new PaymentResult.Builder()
                 .setPaymentStatus(Payment.StatusCodes.STATUS_PENDING)
-                .setPaymentStatusDetail(Payment.StatusCodes.STATUS_DETAIL_PENDING_WAITING_PAYMENT)
+                .setPaymentStatusDetail(Payment.StatusDetail.STATUS_DETAIL_PENDING_WAITING_PAYMENT)
                 .setPaymentData(paymentData)
                 .build();
 

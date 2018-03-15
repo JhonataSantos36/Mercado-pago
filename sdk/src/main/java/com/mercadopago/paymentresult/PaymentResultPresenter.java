@@ -151,13 +151,13 @@ public class PaymentResultPresenter extends MvpPresenter<PaymentResultPropsView,
 
     private boolean isCallForAuthorize() {
         return paymentResult.getPaymentStatus().equals(Payment.StatusCodes.STATUS_REJECTED) &&
-                paymentResult.getPaymentStatusDetail().equals(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_CALL_FOR_AUTHORIZE);
+                paymentResult.getPaymentStatusDetail().equals(Payment.StatusDetail.STATUS_DETAIL_CC_REJECTED_CALL_FOR_AUTHORIZE);
     }
 
     private boolean isInstructions() {
         return (paymentResult.getPaymentStatus().equals(Payment.StatusCodes.STATUS_PENDING) ||
                 paymentResult.getPaymentStatus().equals(Payment.StatusCodes.STATUS_IN_PROCESS)) &&
-                paymentResult.getPaymentStatusDetail().equals(Payment.StatusCodes.STATUS_DETAIL_PENDING_WAITING_PAYMENT);
+                paymentResult.getPaymentStatusDetail().equals(Payment.StatusDetail.STATUS_DETAIL_PENDING_WAITING_PAYMENT);
     }
 
     private boolean isPending() {
@@ -188,7 +188,7 @@ public class PaymentResultPresenter extends MvpPresenter<PaymentResultPropsView,
         final String paymentStatus = paymentResult.getPaymentStatus();
         final String paymentStatusDetail = paymentResult.getPaymentStatusDetail();
         return paymentStatus.equals(Payment.StatusCodes.STATUS_PENDING)
-                && paymentStatusDetail.equals(Payment.StatusCodes.STATUS_DETAIL_PENDING_WAITING_PAYMENT);
+                && paymentStatusDetail.equals(Payment.StatusDetail.STATUS_DETAIL_PENDING_WAITING_PAYMENT);
     }
 
     public void setDiscountEnabled(final Boolean discountEnabled) {
