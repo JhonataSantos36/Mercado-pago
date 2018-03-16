@@ -103,7 +103,16 @@ public final class ReviewAndConfirmActivity extends MercadoPagoBaseActivity impl
             }
         });
 
-        scrollView.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
+        ViewTreeObserver viewTreeObserver = scrollView.getViewTreeObserver();
+
+        viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                resolveFloatingButtonVisibility(scrollView);
+            }
+        });
+
+        viewTreeObserver.addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
             @Override
             public void onScrollChanged() {
                 resolveFloatingButtonVisibility(scrollView);
