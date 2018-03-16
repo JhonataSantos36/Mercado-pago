@@ -288,13 +288,15 @@ public class PayerInformationActivity extends MercadoPagoBaseActivity implements
 
     @Override
     public void showProgressBar() {
-        mInputContainer.setVisibility(View.INVISIBLE);
+        mInputContainer.setVisibility(View.GONE);
+        mButtonContainer.setVisibility(View.GONE);
         mProgressLayout.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void hideProgressBar() {
         mInputContainer.setVisibility(View.VISIBLE);
+        mButtonContainer.setVisibility(View.VISIBLE);
         mProgressLayout.setVisibility(View.GONE);
     }
 
@@ -605,22 +607,27 @@ public class PayerInformationActivity extends MercadoPagoBaseActivity implements
             case IDENTIFICATION_LAST_NAME_INPUT:
                 if (mPresenter.validateLastName()) {
                     mIdentificationLastNameInput.setVisibility(View.GONE);
-                    mPresenter.createPayer();
-                    finishWithPayer();
+                    showFinishCardFlow();
                     return true;
                 }
                 return false;
             case IDENTIFICATION_BUSINESS_NAME_INPUT:
                 if (mPresenter.validateBusinessName()) {
                     mIdentificationNameInput.setVisibility(View.GONE);
-                    mPresenter.createPayer();
-                    finishWithPayer();
+                    showFinishCardFlow();
                     return true;
                 }
                 return false;
             default:
                 return false;
         }
+    }
+
+    private void showFinishCardFlow() {
+        LayoutUtil.hideKeyboard(this);
+        showProgressBar();
+        mPresenter.createPayer();
+        finishWithPayer();
     }
 
     private boolean checkIsEmptyOrValid() {

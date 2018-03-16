@@ -1,23 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
+    android:id="@+id/activityFormCardContainer"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".GuessingCardActivity"
-    android:id="@+id/activityFormCardContainer">
+    tools:context=".GuessingCardActivity">
 
     <ScrollView
         android:id="@+id/mpsdkScrollViewContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fillViewport="true"
-        android:background="@color/mpsdk_white">
+        android:background="@color/mpsdk_white"
+        android:fillViewport="true">
+
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
             <FrameLayout
                 android:id="@+id/mpsdkCardBackground"
@@ -32,35 +33,30 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal|top"
-                    android:gravity="center_horizontal"
-                    android:layout_marginTop="45dp" >
-                    </FrameLayout>
+                    android:layout_marginTop="45dp"
+                    android:gravity="center_horizontal">
+                </FrameLayout>
 
                 <FrameLayout
                     android:id="@+id/mpsdkIdentificationCardContainer"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal|top"
-                    android:gravity="center_horizontal"
-                    android:layout_marginTop="45dp" />
-                    <FrameLayout
-                        android:id="@+id/mpsdkDiscount"
-                        android:layout_gravity="bottom"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
+                    android:layout_marginTop="45dp"
+                    android:gravity="center_horizontal"/>
+
+                <FrameLayout
+                    android:id="@+id/mpsdkDiscount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"/>
             </FrameLayout>
 
             <FrameLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:background="@color/mpsdk_white">
-                    <include layout="@layout/mpsdk_form_card_input"/>
-                </LinearLayout>
+                <include layout="@layout/mpsdk_form_card_input"/>
             </FrameLayout>
 
             <include layout="@layout/mpsdk_form_card_button_container"/>
