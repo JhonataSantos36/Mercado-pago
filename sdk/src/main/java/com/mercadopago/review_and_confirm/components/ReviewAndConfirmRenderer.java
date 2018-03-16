@@ -14,6 +14,7 @@ import com.mercadopago.components.RendererFactory;
 import com.mercadopago.review_and_confirm.components.actions.CancelPaymentAction;
 import com.mercadopago.review_and_confirm.components.actions.ChangePaymentMethodAction;
 import com.mercadopago.review_and_confirm.components.actions.ConfirmPaymentAction;
+import com.mercadopago.review_and_confirm.components.items.ReviewItems;
 import com.mercadopago.review_and_confirm.components.payment_method.PaymentMethodComponent;
 import com.mercadopago.review_and_confirm.models.PaymentModel;
 

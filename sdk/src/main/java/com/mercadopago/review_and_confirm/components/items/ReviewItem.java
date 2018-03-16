@@ -1,8 +1,9 @@
-package com.mercadopago.review_and_confirm.components;
+package com.mercadopago.review_and_confirm.components.items;
 
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 
+import android.support.annotation.Nullable;
 import com.mercadopago.components.ActionDispatcher;
 import com.mercadopago.components.Component;
 import com.mercadopago.components.RendererFactory;
@@ -40,9 +41,9 @@ public class ReviewItem extends Component<ReviewItem.Props, Void> {
         final String unitPriceLabel;
 
         public Props(final ItemModel itemModel,
-                     final @DrawableRes Integer icon,
-                     final String quantityLabel,
-                     final String unitPriceLabel) {
+            final @Nullable @DrawableRes Integer icon,
+            final String quantityLabel,
+            final String unitPriceLabel) {
             this.itemModel = itemModel;
             this.icon = icon;
             this.quantityLabel = quantityLabel;

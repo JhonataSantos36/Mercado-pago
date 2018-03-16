@@ -92,7 +92,7 @@ public abstract class Renderer<T extends Component> {
         }
     }
 
-    protected void setText(@NonNull final TextView view, String text) {
+    protected void setText(@NonNull final TextView view, @Nullable final String text) {
         if (TextUtil.isEmpty(text)) {
             view.setVisibility(View.GONE);
         } else {

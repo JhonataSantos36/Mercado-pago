@@ -1,10 +1,8 @@
-package com.mercadopago.review_and_confirm.components;
+package com.mercadopago.review_and_confirm.components.items;
 
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 
-import com.mercadopago.R;
-import com.mercadopago.components.ActionDispatcher;
 import com.mercadopago.components.Component;
 import com.mercadopago.components.RendererFactory;
 import com.mercadopago.review_and_confirm.models.ItemsModel;
@@ -19,30 +17,30 @@ public class ReviewItems extends Component<ReviewItems.Props, Void> {
         super(props);
     }
 
-    public ReviewItems(@NonNull final Props props, @NonNull final ActionDispatcher dispatcher) {
-        super(props, dispatcher);
-    }
-
-    public int getIcon() {
-        return props.collectorIcon == null ? R.drawable.mpsdk_review_item_default : props.collectorIcon;
-    }
-
     public static class Props {
 
+        public ItemsModel getItemsModel() {
+            return itemsModel;
+        }
+
         final ItemsModel itemsModel;
+
+        public Integer getCollectorIcon() {
+            return collectorIcon;
+        }
+
         final @DrawableRes Integer collectorIcon;
         final String quantityLabel;
         final String unitPriceLabel;
 
         public Props(final ItemsModel itemsModel,
-                     final @DrawableRes Integer collectorIcon,
-                     final String quantityLabel,
-                     final String unitPriceLabel) {
+            final @DrawableRes Integer collectorIcon,
+            final String quantityLabel,
+            final String unitPriceLabel) {
             this.itemsModel = itemsModel;
             this.collectorIcon = collectorIcon;
             this.quantityLabel = quantityLabel;
-            this.unitPriceLabel= unitPriceLabel;
+            this.unitPriceLabel = unitPriceLabel;
         }
     }
-
 }

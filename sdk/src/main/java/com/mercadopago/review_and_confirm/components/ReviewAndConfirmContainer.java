@@ -33,7 +33,7 @@ public class ReviewAndConfirmContainer extends Component<ReviewAndConfirmContain
     }
 
     public boolean hasItemsEnabled() {
-        return CheckoutStore.getInstance().getReviewAndConfirmPreferences().hasItemsEnabled();
+        return props.preferences == null || props.preferences.hasItemsEnabled();
     }
 
     public static class Props {

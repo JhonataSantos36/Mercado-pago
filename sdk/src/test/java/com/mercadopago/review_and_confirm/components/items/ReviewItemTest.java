@@ -1,6 +1,5 @@
 package com.mercadopago.review_and_confirm.components.items;
 
-import com.mercadopago.review_and_confirm.components.ReviewItem;
 import com.mercadopago.review_and_confirm.models.ItemModel;
 
 import org.junit.Assert;

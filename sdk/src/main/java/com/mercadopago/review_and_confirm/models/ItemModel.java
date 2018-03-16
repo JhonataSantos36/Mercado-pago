@@ -2,6 +2,7 @@ package com.mercadopago.review_and_confirm.models;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.Nullable;
 import android.support.annotation.VisibleForTesting;
 
 import com.mercadopago.paymentresult.formatter.BodyAmountFormatter;
@@ -23,10 +24,10 @@ public class ItemModel implements Parcelable {
 
     public ItemModel(final String imageUrl,
                      final String title,
-                     final String subtitle,
+                     @Nullable final String subtitle,
                      final Integer quantity,
                      final String currencyId,
-                     final BigDecimal unitPrice) {
+                     @Nullable final BigDecimal unitPrice) {
         this.imageUrl = imageUrl;
         this.title = title;
         this.subtitle = subtitle;

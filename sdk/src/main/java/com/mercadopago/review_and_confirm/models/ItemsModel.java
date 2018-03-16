@@ -13,8 +13,8 @@ public class ItemsModel implements Parcelable {
 
     public final List<ItemModel> itemsModelList;
 
-    public ItemsModel(final String currencyId, List<Item> itemList) {
-        this.itemsModelList = parseItems(itemList, currencyId);
+    public ItemsModel(final String currencyId, final List<Item> itemList) {
+        itemsModelList = parseItems(itemList, currencyId);
     }
 
     protected ItemsModel(Parcel in) {
@@ -71,6 +71,14 @@ public class ItemsModel implements Parcelable {
     @Override
     public void writeToParcel(final Parcel dest, final int flags) {
         dest.writeTypedList(itemsModelList);
+    }
+
+    public boolean hasUniqueItem() {
+        return itemsModelList != null && itemsModelList.size() == 1;
+    }
+
+    public boolean hasMultipleItems() {
+        return itemsModelList != null && itemsModelList.size() > 1;
     }
 
 }
