@@ -42,7 +42,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="@dimen/mpsdk_s_margin"
+            android:layout_marginTop="@dimen/mpsdk_xs_margin"
             android:gravity="center_horizontal"
             android:textColor="@color/mpsdk_brownish_grey"
             android:textSize="@dimen/mpsdk_xs_text"

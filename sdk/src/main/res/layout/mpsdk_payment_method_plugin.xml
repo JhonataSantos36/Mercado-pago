@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -7,12 +8,14 @@
     android:gravity="center"
     android:orientation="vertical"
     android:paddingBottom="@dimen/mpsdk_l_margin"
+    android:paddingEnd="@dimen/mpsdk_m_margin"
+    android:paddingStart="@dimen/mpsdk_m_margin"
     android:paddingTop="@dimen/mpsdk_l_margin">
 
     <include
         layout="@layout/mpsdk_view_rounded_icon"
         android:layout_width="@dimen/mpsdk_m_height"
-        android:layout_height="@dimen/mpsdk_m_height" />
+        android:layout_height="@dimen/mpsdk_m_height"/>
 
     <com.mercadopago.customviews.MPTextView
         android:id="@+id/title"
@@ -20,13 +23,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/mpsdk_s_margin"
-        tools:text="@string/lorem_ipsum" />
+        android:gravity="center_horizontal"
+        tools:text="@string/lorem_ipsum"/>
 
     <ViewStub
         android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/mpsdk_s_margin"
-        android:layout="@layout/mpsdk_view_text_button" />
+        android:layout="@layout/mpsdk_view_text_button"/>
 
 </LinearLayout>
