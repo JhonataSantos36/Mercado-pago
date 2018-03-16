@@ -27,7 +27,6 @@ import org.junit.runner.RunWith;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static org.junit.Assert.*;
 
@@ -85,7 +84,7 @@ public class MPTrackerTest {
         Context appContext = InstrumentationRegistry.getTargetContext();
 
         AppInformation appInformation = new AppInformation.Builder()
-                .setCheckoutVersion(MOCKED_CHECKOUT_VERSION)
+                .setVersion(MOCKED_CHECKOUT_VERSION)
                 .setPlatform(MOCKED_PLATFORM)
                 .build();
 
@@ -132,7 +131,7 @@ public class MPTrackerTest {
         Context appContext = InstrumentationRegistry.getTargetContext();
 
         AppInformation appInformation = new AppInformation.Builder()
-                .setCheckoutVersion(MOCKED_CHECKOUT_VERSION)
+                .setVersion(MOCKED_CHECKOUT_VERSION)
                 .setPlatform(MOCKED_PLATFORM)
                 .build();
 
@@ -185,7 +184,7 @@ public class MPTrackerTest {
         Context appContext = InstrumentationRegistry.getTargetContext();
 
         AppInformation appInformation = new AppInformation.Builder()
-                .setCheckoutVersion(MOCKED_CHECKOUT_VERSION)
+                .setVersion(MOCKED_CHECKOUT_VERSION)
                 .setPlatform(MOCKED_PLATFORM)
                 .build();
 
@@ -288,7 +287,7 @@ public class MPTrackerTest {
         Context appContext = InstrumentationRegistry.getTargetContext();
 
         AppInformation appInformation = new AppInformation.Builder()
-                .setCheckoutVersion(MOCKED_CHECKOUT_VERSION)
+                .setVersion(MOCKED_CHECKOUT_VERSION)
                 .setPlatform(MOCKED_PLATFORM)
                 .build();
 

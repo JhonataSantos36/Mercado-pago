@@ -23,14 +23,14 @@ public class AppInformationTest {
     public void testAppInformationEquals() {
         AppInformation appInformation1 = new AppInformation.Builder()
                 .setFlowId(MOCKED_FLOW_ID_1)
-                .setCheckoutVersion(MOCKED_CHECKOUT_VERSION_1)
+                .setVersion(MOCKED_CHECKOUT_VERSION_1)
                 .setPlatform(MOCKED_PLATFORM)
                 .setEnvironment(MOCKED_ENVIRONMENT)
                 .build();
 
         AppInformation appInformation2 = new AppInformation.Builder()
                 .setFlowId(MOCKED_FLOW_ID_1)
-                .setCheckoutVersion(MOCKED_CHECKOUT_VERSION_1)
+                .setVersion(MOCKED_CHECKOUT_VERSION_1)
                 .setPlatform(MOCKED_PLATFORM)
                 .setEnvironment(MOCKED_ENVIRONMENT)
                 .build();
@@ -42,13 +42,13 @@ public class AppInformationTest {
     public void testAppInformationNotEquals() {
         AppInformation appInformation1 = new AppInformation.Builder()
                 .setFlowId(MOCKED_FLOW_ID_1)
-                .setCheckoutVersion(MOCKED_CHECKOUT_VERSION_1)
+                .setVersion(MOCKED_CHECKOUT_VERSION_1)
                 .setPlatform(MOCKED_PLATFORM)
                 .build();
 
         AppInformation appInformation2 = new AppInformation.Builder()
                 .setFlowId(MOCKED_FLOW_ID_2)
-                .setCheckoutVersion(MOCKED_CHECKOUT_VERSION_2)
+                .setVersion(MOCKED_CHECKOUT_VERSION_2)
                 .setPlatform(MOCKED_PLATFORM)
                 .build();
 

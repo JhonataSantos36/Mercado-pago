@@ -7,7 +7,7 @@ package com.mercadopago.tracking.model;
 public class AppInformation {
 
     private String flowId;
-    private String checkoutVersion;
+    private String version;
     private String platform;
     private String environment;
 
@@ -17,7 +17,7 @@ public class AppInformation {
 
     private AppInformation(Builder builder) {
         this.flowId = builder.flowId;
-        this.checkoutVersion = builder.checkoutVersion;
+        this.version = builder.version;
         this.platform = builder.platform;
         this.environment = builder.environment;
     }
@@ -26,8 +26,8 @@ public class AppInformation {
         return flowId;
     }
 
-    public String getCheckoutVersion() {
-        return checkoutVersion;
+    public String getVersion() {
+        return version;
     }
 
     public String getPlatform() {
@@ -41,7 +41,7 @@ public class AppInformation {
     public static class Builder {
 
         private String flowId;
-        private String checkoutVersion;
+        private String version;
         private String platform;
         private String environment;
 
@@ -50,8 +50,8 @@ public class AppInformation {
             return this;
         }
 
-        public Builder setCheckoutVersion(String checkoutVersion) {
-            this.checkoutVersion = checkoutVersion;
+        public Builder setVersion(String version) {
+            this.version = version;
             return this;
         }
 
@@ -78,7 +78,7 @@ public class AppInformation {
         AppInformation that = (AppInformation) o;
 
         if (!flowId.equals(that.flowId)) return false;
-        if (!checkoutVersion.equals(that.checkoutVersion)) return false;
+        if (!version.equals(that.version)) return false;
         if (!environment.equals(that.environment)) return false;
         return platform.equals(that.platform);
 
@@ -88,7 +88,7 @@ public class AppInformation {
     public int hashCode() {
         int result = flowId.hashCode();
         result = 31 * result + environment.hashCode();
-        result = 31 * result + checkoutVersion.hashCode();
+        result = 31 * result + version.hashCode();
         result = 31 * result + platform.hashCode();
         return result;
     }
@@ -97,7 +97,7 @@ public class AppInformation {
         return new AppInformation.Builder()
                 .setEnvironment(this.environment)
                 .setFlowId(this.flowId)
-                .setCheckoutVersion(this.checkoutVersion)
+                .setVersion(this.version)
                 .setPlatform(this.platform)
                 .build();
     }

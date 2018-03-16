@@ -8,7 +8,6 @@ import com.mercadopago.tracking.model.AppInformation;
 import com.mercadopago.tracking.model.DeviceInfo;
 import com.mercadopago.tracking.model.Event;
 import com.mercadopago.tracking.tracker.MPTracker;
-import com.mercadopago.tracking.utils.TrackingUtil;
 import com.mercadopago.tracking.model.Fingerprint;
 
 /**
@@ -30,15 +29,15 @@ public class MPTrackingContext {
         this.deviceInfo = initializeDeviceInfo();
         this.trackingStrategy = builder.trackingStrategy;
 
-        if (!builder.publicKey.isEmpty() && builder.checkoutVersion != null) {
-            this.appInformation = initializeAppInformation(builder.checkoutVersion);
+        if (!builder.publicKey.isEmpty() && builder.version != null) {
+            this.appInformation = initializeAppInformation(builder.version);
         }
     }
 
-    private AppInformation initializeAppInformation(String checkoutVersion) {
+    private AppInformation initializeAppInformation(String version) {
         return new AppInformation.Builder()
-                .setCheckoutVersion(checkoutVersion)
-                .setPlatform("native/android")
+                .setVersion(version)
+                .setPlatform("mobile/android")
                 .build();
     }
 
@@ -64,7 +63,7 @@ public class MPTrackingContext {
     public static class Builder {
         private Context context;
         private String publicKey;
-        private String checkoutVersion;
+        private String version;
         private String trackingStrategy;
 
         public Builder(Context context, String publicKey) {
@@ -72,8 +71,8 @@ public class MPTrackingContext {
             this.publicKey = publicKey;
         }
 
-        public Builder setCheckoutVersion(String checkoutVersion) {
-            this.checkoutVersion = checkoutVersion;
+        public Builder setVersion(String version) {
+            this.version = version;
             return this;
         }
 

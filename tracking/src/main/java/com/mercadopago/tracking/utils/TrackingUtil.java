@@ -86,6 +86,7 @@ public class TrackingUtil {
     public static final String PROPERTY_OPTIONS = "options";
     public static final String PROPERTY_CARD_ID = "card_id";
     public static final String PROPERTY_INSTALLMENTS = "installments";
+    public static final String PROPERTY_PURCHASE_AMOUNT = "purchase_amount";
 
     //Default values
     public static final String HAS_SHIPPING_DEFAULT_VALUE = "false";
