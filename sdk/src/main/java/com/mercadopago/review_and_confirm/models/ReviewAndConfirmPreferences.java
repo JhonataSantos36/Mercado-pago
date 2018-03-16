@@ -35,9 +35,9 @@ public class ReviewAndConfirmPreferences {
         this.shippingAmount = builder.shippingAmount;
         this.arrearsAmount = builder.arrearsAmount;
         this.taxesAmount = builder.taxesAmount;
-        this.disclaimerText = builder.disclaimerText;
         this.chargeAmount = builder.chargeAmount;
         this.discountAmount = builder.discountAmount;
+        this.disclaimerText = builder.disclaimerText;
         this.productTitle = builder.productTitle;
         this.disclaimerTextColor = builder.disclaimerTextColor;
 
@@ -46,6 +46,15 @@ public class ReviewAndConfirmPreferences {
 
     public boolean hasProductAmount() {
         return productAmount != null && productAmount.compareTo(BigDecimal.ZERO) > 0;
+    }
+
+    public boolean hasExtrasAmount() {
+        return shippingAmount != null && shippingAmount.compareTo(BigDecimal.ZERO) > 0
+                || arrearsAmount != null && arrearsAmount.compareTo(BigDecimal.ZERO) > 0
+                || taxesAmount != null && taxesAmount.compareTo(BigDecimal.ZERO) > 0
+                || chargeAmount != null && chargeAmount.compareTo(BigDecimal.ZERO) > 0
+                || discountAmount != null && discountAmount.compareTo(BigDecimal.ZERO) > 0
+                || productAmount != null && productAmount.compareTo(BigDecimal.ZERO) > 0;
     }
 
     public boolean hasCustomTopView() {

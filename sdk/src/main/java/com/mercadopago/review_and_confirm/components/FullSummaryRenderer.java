@@ -7,12 +7,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+
 import com.mercadopago.R;
 import com.mercadopago.components.Renderer;
 import com.mercadopago.components.RendererFactory;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.uicontrollers.payercosts.PayerCostColumn;
 import com.mercadopago.util.CurrenciesUtil;
+
 import java.math.BigDecimal;
 
 import static com.mercadopago.util.TextUtils.isEmpty;
@@ -46,9 +48,9 @@ public class FullSummaryRenderer extends Renderer<FullSummary> {
         if (component.hasToRenderPayerCost()) {
             //payer cost
             PayerCostColumn payerCostColumn = new PayerCostColumn(context, component.props.summaryModel.currencyId,
-                component.props.summaryModel.siteId, component.props.summaryModel.getInstallmentsRate(),
-                component.props.summaryModel.getInstallments(), component.props.summaryModel.getPayerCostTotalAmount(),
-                component.props.summaryModel.getInstallmentAmount());
+                    component.props.summaryModel.siteId, component.props.summaryModel.getInstallmentsRate(),
+                    component.props.summaryModel.getInstallments(), component.props.summaryModel.getPayerCostTotalAmount(),
+                    component.props.summaryModel.getInstallmentAmount());
             payerCostColumn.inflateInParent(payerCostContainer, true);
             payerCostColumn.initializeControls();
             payerCostColumn.drawPayerCostWithoutTotal();
@@ -66,13 +68,13 @@ public class FullSummaryRenderer extends Renderer<FullSummary> {
         }
 
         //total
-        setText(totalAmountTextView,
-            getFormattedAmount(component.getTotalAmount(), component.props.summaryModel.currencyId));
+        setText(totalAmountTextView, getFormattedAmount(component.getTotalAmount(), component.props.summaryModel.currencyId));
         totalAmountContainer.setVisibility(component.getTotalAmount() == null ? View.GONE : View.VISIBLE);
         secondSeparator.setVisibility(component.getTotalAmount() == null ? View.GONE : View.VISIBLE);
 
         //disclaimer
         setText(disclaimerTextView, component.getSummary().getDisclaimerText());
+        disclaimerTextView.setTextColor(component.getSummary().getDisclaimerColor());
 
         return summaryView;
     }

@@ -3,8 +3,8 @@ package com.mercadopago.review_and_confirm;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.v4.content.ContextCompat;
+
 import com.mercadopago.R;
-import com.mercadopago.core.CheckoutStore;
 import com.mercadopago.review_and_confirm.models.ReviewAndConfirmPreferences;
 
 import static com.mercadopago.util.TextUtils.isEmpty;
@@ -12,15 +12,15 @@ import static com.mercadopago.util.TextUtils.isEmpty;
 public class SummaryProviderImpl implements SummaryProvider {
 
     private final Context context;
+    private final ReviewAndConfirmPreferences reviewAndConfirmPreferences;
 
-    public SummaryProviderImpl(Context context) {
+    public SummaryProviderImpl(Context context, ReviewAndConfirmPreferences reviewAndConfirmPreferences) {
+        this.reviewAndConfirmPreferences = reviewAndConfirmPreferences;
         this.context = context;
     }
 
     @Override
     public String getSummaryProductsTitle() {
-        ReviewAndConfirmPreferences reviewAndConfirmPreferences =
-            CheckoutStore.getInstance().getReviewAndConfirmPreferences();
         String summaryProductTitle;
 
         if (!isEmpty(reviewAndConfirmPreferences.getProductTitle())) {
@@ -64,8 +64,6 @@ public class SummaryProviderImpl implements SummaryProvider {
 
     @Override
     public int getDisclaimerTextColor() {
-        ReviewAndConfirmPreferences reviewAndConfirmPreferences =
-            CheckoutStore.getInstance().getReviewAndConfirmPreferences();
         int disclaimerTextColor;
 
         if (isEmpty(reviewAndConfirmPreferences.getDisclaimerTextColor())) {

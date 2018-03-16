@@ -126,6 +126,14 @@ public class SummaryModel implements Parcelable {
         return this.installments != null ? Integer.valueOf(this.installments) : null;
     }
 
+    public boolean hasMultipleInstallments() {
+        return getInstallments() != null && getInstallments() > 1;
+    }
+
+    public boolean hasCoupon() {
+        return getCouponAmount() != null;
+    }
+
     public static String resolveTitle(List<Item> items, String singularTitle, String pluralTitle) {
         String title;
 

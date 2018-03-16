@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.mercadopago.util.TextUtils.isEmpty;
+import static com.mercadopago.util.TextUtils.isNotEmpty;
 
 public class FullSummary extends Component<SummaryComponent.SummaryProps, Void> {
 
@@ -35,18 +36,22 @@ public class FullSummary extends Component<SummaryComponent.SummaryProps, Void> 
 
     @VisibleForTesting
     BigDecimal getTotalAmount() {
-        BigDecimal totalAmount = null;
+        BigDecimal totalAmount;
 
         if (isCardPaymentMethod()) {
             if (props.summaryModel.getInstallments() == 1) {
                 if (props.summaryModel.getCouponAmount() != null && !isEmptySummaryDetails()) {
                     totalAmount = props.summaryModel.getPayerCostTotalAmount();
+                } else {
+                    totalAmount = props.summaryModel.getTotalAmount();
                 }
             } else {
                 totalAmount = props.summaryModel.getPayerCostTotalAmount();
             }
         } else if (hasDiscount() && !isEmptySummaryDetails()) {
             totalAmount = getSubtotal();
+        } else {
+            totalAmount = props.summaryModel.getTotalAmount();
         }
         return totalAmount;
     }
@@ -74,21 +79,21 @@ public class FullSummary extends Component<SummaryComponent.SummaryProps, Void> 
 
     @VisibleForTesting
     Summary getSummary() {
-        ReviewAndConfirmPreferences reviewScreenPreference = props.reviewAndConfirmPreferences;
+        ReviewAndConfirmPreferences reviewAndConfirmPreferences = props.reviewAndConfirmPreferences;
         Summary.Builder summaryBuilder = new com.mercadopago.model.Summary.Builder();
 
-        if (isValidTotalAmount() && reviewScreenPreference.hasProductAmount()) {
-            summaryBuilder.addSummaryProductDetail(reviewScreenPreference.getProductAmount(), props.summaryModel.title,
+        if (isValidTotalAmount() && reviewAndConfirmPreferences.hasProductAmount()) {
+            summaryBuilder.addSummaryProductDetail(reviewAndConfirmPreferences.getProductAmount(), getItemTitle(),
                     provider.getDefaultTextColor())
-                    .addSummaryShippingDetail(reviewScreenPreference.getShippingAmount(),
+                    .addSummaryShippingDetail(reviewAndConfirmPreferences.getShippingAmount(),
                             provider.getSummaryShippingTitle(), provider.getDefaultTextColor())
-                    .addSummaryArrearsDetail(reviewScreenPreference.getArrearsAmount(), provider.getSummaryArrearTitle(),
+                    .addSummaryArrearsDetail(reviewAndConfirmPreferences.getArrearsAmount(), provider.getSummaryArrearTitle(),
                             provider.getDefaultTextColor())
-                    .addSummaryTaxesDetail(reviewScreenPreference.getTaxesAmount(), provider.getSummaryTaxesTitle(),
+                    .addSummaryTaxesDetail(reviewAndConfirmPreferences.getTaxesAmount(), provider.getSummaryTaxesTitle(),
                             provider.getDefaultTextColor())
                     .addSummaryDiscountDetail(getDiscountAmount(), provider.getSummaryDiscountsTitle(),
                             provider.getDiscountTextColor())
-                    .setDisclaimerText(reviewScreenPreference.getDisclaimerText())
+                    .setDisclaimerText(reviewAndConfirmPreferences.getDisclaimerText())
                     .setDisclaimerColor(provider.getDisclaimerTextColor());
 
             if (getChargesAmount().compareTo(BigDecimal.ZERO) > 0) {
@@ -96,7 +101,7 @@ public class FullSummary extends Component<SummaryComponent.SummaryProps, Void> 
                         provider.getDefaultTextColor());
             }
         } else {
-            summaryBuilder.addSummaryProductDetail(props.summaryModel.getTotalAmount(), props.summaryModel.title,
+            summaryBuilder.addSummaryProductDetail(props.summaryModel.getTotalAmount(), getItemTitle(),
                     provider.getDefaultTextColor());
 
             if (isValidAmount(props.summaryModel.getPayerCostTotalAmount()) &&
@@ -105,8 +110,8 @@ public class FullSummary extends Component<SummaryComponent.SummaryProps, Void> 
                         provider.getDefaultTextColor());
             }
 
-            if (!isEmpty(reviewScreenPreference.getDisclaimerText())) {
-                summaryBuilder.setDisclaimerText(reviewScreenPreference.getDisclaimerText())
+            if (!isEmpty(reviewAndConfirmPreferences.getDisclaimerText())) {
+                summaryBuilder.setDisclaimerText(reviewAndConfirmPreferences.getDisclaimerText())
                         .setDisclaimerColor(provider.getDisclaimerTextColor());
             }
 
@@ -118,6 +123,16 @@ public class FullSummary extends Component<SummaryComponent.SummaryProps, Void> 
         }
 
         return summaryBuilder.build();
+    }
+
+    private String getItemTitle() {
+        String title = props.summaryModel.title;
+
+        if (isNotEmpty(props.reviewAndConfirmPreferences.getProductTitle())) {
+            title = props.reviewAndConfirmPreferences.getProductTitle();
+        }
+
+        return title;
     }
 
     @VisibleForTesting

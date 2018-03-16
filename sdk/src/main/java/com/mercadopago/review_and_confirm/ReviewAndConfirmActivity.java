@@ -133,7 +133,10 @@ public final class ReviewAndConfirmActivity extends MercadoPagoBaseActivity impl
     private void initContent(final ViewGroup mainContent) {
         ReviewAndConfirmContainer.Props props = getActivityParameters();
         final ComponentManager manager = new ComponentManager(this);
-        final ReviewAndConfirmContainer container = new ReviewAndConfirmContainer(props, this, new SummaryProviderImpl(this));
+
+        ReviewAndConfirmPreferences reviewAndConfirmPreferences = CheckoutStore.getInstance().getReviewAndConfirmPreferences();
+        final ReviewAndConfirmContainer container = new ReviewAndConfirmContainer(props, this, new SummaryProviderImpl(this, reviewAndConfirmPreferences));
+
         container.setDispatcher(this);
         manager.render(container, mainContent);
     }
