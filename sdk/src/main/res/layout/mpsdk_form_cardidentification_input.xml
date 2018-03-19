@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout
     android:id="@+id/mpsdkCardIdentificationInput"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="horizontal">
@@ -22,13 +23,13 @@
             android:text="@string/mpsdk_card_identification_type"
             android:textColor="@color/mpsdk_color_new_card_text"
             android:textSize="14dp"
-            app:font_style="light" />
+            app:font_style="light"/>
 
         <!-- spinner -->
         <Spinner
             android:id="@+id/mpsdkCardIdentificationType"
             android:layout_width="100dp"
-            android:layout_height="36dp" />
+            android:layout_height="36dp"/>
 
     </LinearLayout>
 
@@ -65,7 +66,7 @@
                         android:text="@string/mpsdk_card_identification_number"
                         android:textColor="@color/mpsdk_color_new_card_text"
                         android:textSize="14dp"
-                        app:font_style="light" />
+                        app:font_style="light"/>
 
                     <com.mercadopago.customviews.MPEditText
                         android:id="@+id/mpsdkCardIdentificationNumber"
@@ -81,7 +82,7 @@
                         android:textCursorDrawable="@drawable/mpsdk_cursor_input"
                         android:textSize="19dp"
                         app:backgroundTint="@color/mpsdk_input"
-                        app:errorColor="@color/mpsdk_color_red_error" />
+                        app:errorColor="@color/mpsdk_color_red_error"/>
                 </LinearLayout>
 
             </LinearLayout>

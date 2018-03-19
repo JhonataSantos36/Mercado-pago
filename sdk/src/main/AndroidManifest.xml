@@ -1,84 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.mercadopago">
+<manifest package="com.mercadopago"
+          xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <uses-feature
         android:name="android.hardware.location.gps"
-        android:required="false" />
+        android:required="false"/>
 
     <application android:allowBackup="true">
         <activity
             android:name=".CustomerCardsActivity"
             android:label="@string/mpsdk_title_activity_customer_pms"
-            android:theme="@style/Theme.MercadoPagoTheme.NoActionBar" />
+            android:theme="@style/Theme.MercadoPagoTheme.NoActionBar"/>
         <activity
             android:name=".PaymentMethodsActivity"
             android:label="@string/mpsdk_title_activity_payment_methods"
-            android:theme="@style/Theme.MercadoPagoTheme.NoActionBar" />
+            android:theme="@style/Theme.MercadoPagoTheme.NoActionBar"/>
         <activity
             android:name=".BankDealsActivity"
             android:label="@string/mpsdk_title_activity_bank_deals"
-            android:theme="@style/Theme.MercadoPagoTheme.NoActionBar" />
+            android:theme="@style/Theme.MercadoPagoTheme.NoActionBar"/>
         <activity
             android:name=".TermsAndConditionsActivity"
             android:label="@string/mpsdk_title_activity_terms_and_conditions"
-            android:theme="@style/Theme.MercadoPagoTheme.NoActionBar" />
+            android:theme="@style/Theme.MercadoPagoTheme.NoActionBar"/>
         <activity
             android:name=".CheckoutActivity"
-            android:theme="@style/Theme.MercadoPagoTheme.NoActionBar" />
+            android:theme="@style/Theme.MercadoPagoTheme.NoActionBar"/>
         <activity
             android:name=".GuessingCardActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.MercadoPagoTheme.NoActionBar"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustResize"/>
         <activity
             android:name=".PaymentVaultActivity"
-            android:theme="@style/Theme.MercadoPagoTheme.NoActionBar" />
+            android:theme="@style/Theme.MercadoPagoTheme.NoActionBar"/>
         <activity
             android:name=".InstallmentsActivity"
-            android:theme="@style/Theme.MercadoPagoTheme.NoActionBar" />
+            android:theme="@style/Theme.MercadoPagoTheme.NoActionBar"/>
         <activity
             android:name=".IssuersActivity"
-            android:theme="@style/Theme.MercadoPagoTheme.NoActionBar" />
+            android:theme="@style/Theme.MercadoPagoTheme.NoActionBar"/>
         <activity
             android:name=".CardVaultActivity"
-            android:theme="@style/Theme.MercadoPagoTheme.NoActionBar" />
+            android:theme="@style/Theme.MercadoPagoTheme.NoActionBar"/>
         <activity
             android:name=".ErrorActivity"
-            android:theme="@style/Theme.MercadoPagoTheme.NoActionBar" />
+            android:theme="@style/Theme.MercadoPagoTheme.NoActionBar"/>
         <activity
             android:name=".paymentresult.PaymentResultActivity"
-            android:theme="@style/Theme.MercadoPagoTheme.NoActionBar" />
+            android:theme="@style/Theme.MercadoPagoTheme.NoActionBar"/>
         <activity
             android:name=".SecurityCodeActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.MercadoPagoTheme.NoActionBar"
-            android:windowSoftInputMode="stateVisible" />
+            android:windowSoftInputMode="stateVisible"/>
         <activity
             android:name=".PaymentTypesActivity"
-            android:theme="@style/Theme.ProcessMercadoPagoTheme.NoActionbar" />
+            android:theme="@style/Theme.ProcessMercadoPagoTheme.NoActionbar"/>
         <activity
             android:name=".DiscountsActivity"
-            android:theme="@style/Theme.MercadoPagoTheme.Modal" />
+            android:theme="@style/Theme.MercadoPagoTheme.Modal"/>
         <activity
             android:name=".ReviewPaymentMethodsActivity"
-            android:theme="@style/Theme.MercadoPagoTheme.NoActionBar" />
+            android:theme="@style/Theme.MercadoPagoTheme.NoActionBar"/>
         <activity
             android:name=".PayerInformationActivity"
-            android:theme="@style/Theme.ProcessMercadoPagoTheme.NoActionbar" />
+            android:theme="@style/Theme.MercadoPagoTheme.NoActionBar"/>
         <activity
             android:name=".hooks.HookActivity"
-            android:theme="@style/Theme.MercadoPagoTheme.NoActionBar" />
+            android:theme="@style/Theme.MercadoPagoTheme.NoActionBar"/>
         <activity
             android:name=".plugins.PaymentMethodPluginActivity"
-            android:theme="@style/Theme.MercadoPagoTheme.NoActionBar" />
+            android:theme="@style/Theme.MercadoPagoTheme.NoActionBar"/>
         <activity
             android:name=".plugins.PaymentProcessorPluginActivity"
-            android:theme="@style/Theme.MercadoPagoTheme.NoActionBar" />
+            android:theme="@style/Theme.MercadoPagoTheme.NoActionBar"/>
         <activity
             android:name=".plugins.BusinessPaymentResultActivity"
             android:theme="@style/Theme.MercadoPagoTheme.NoActionBar" />

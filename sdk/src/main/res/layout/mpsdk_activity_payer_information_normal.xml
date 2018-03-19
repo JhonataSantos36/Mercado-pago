@@ -1,6 +1,7 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout
     android:id="@+id/activityPayerInformationContainer"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -22,9 +23,9 @@
                 android:id="@+id/mpsdkBackground"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/mpsdk_card_background_height"
-                android:background="@color/mpsdk_background_blue">
+                android:background="@color/mpsdk_background">
 
-                <include layout="@layout/mpsdk_form_card_normal_toolbar" />
+                <include layout="@layout/mpsdk_form_card_normal_toolbar"/>
 
                 <FrameLayout
                     android:id="@+id/mpsdkCardViewContainer"
@@ -42,7 +43,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal|top"
                     android:layout_marginTop="45dp"
-                    android:gravity="center_horizontal" />
+                    android:gravity="center_horizontal"/>
 
             </FrameLayout>
 
@@ -50,11 +51,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
 
-                <include layout="@layout/mpsdk_payer_information_input" />
-                <include layout="@layout/mpsdk_view_progress_bar_small"/>
+                <include layout="@layout/mpsdk_payer_information_input"/>
             </FrameLayout>
 
-            <include layout="@layout/mpsdk_form_card_button_container" />
+            <include layout="@layout/mpsdk_form_card_button_container"/>
 
         </LinearLayout>
     </ScrollView>
