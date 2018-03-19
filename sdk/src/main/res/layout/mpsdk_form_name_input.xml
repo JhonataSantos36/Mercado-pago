@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout
     android:id="@+id/mpsdkNameInput"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="vertical"
@@ -16,7 +17,7 @@
         android:text="@string/mpsdk_name"
         android:textColor="@color/mpsdk_color_new_card_text"
         android:textSize="14dp"
-        app:font_style="light" />
+        app:font_style="light"/>
 
     <com.mercadopago.customviews.MPEditText
         android:id="@+id/mpsdkName"
@@ -32,8 +33,9 @@
         android:privateImeOptions="nm"
         android:singleLine="true"
         android:textColor="@color/mpsdk_real_black"
+        android:textCursorDrawable="@drawable/mpsdk_cursor_input"
         android:textIsSelectable="true"
         android:textSize="19dp"
-        app:errorColor="@color/mpsdk_color_red_error" />
-
+        app:backgroundTint="@color/mpsdk_input"
+        app:errorColor="@color/mpsdk_color_red_error"/>
 </LinearLayout>
