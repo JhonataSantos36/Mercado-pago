@@ -20,7 +20,6 @@ import com.mercadopago.model.Site;
 import com.mercadopago.mvp.MvpPresenter;
 import com.mercadopago.mvp.OnResourcesRetrievedCallback;
 import com.mercadopago.plugins.PaymentMethodPlugin;
-import com.mercadopago.plugins.model.PaymentMethodInfo;
 import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.providers.PaymentVaultProvider;
 import com.mercadopago.util.ApiUtil;
@@ -60,7 +59,6 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
     private boolean hook1Displayed = false;
 
     /**
-     *
      * @deprecated Account money is a plugin now.
      */
     @Deprecated
@@ -261,7 +259,6 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
             Payer payer = new Payer();
             payer.setAccessToken(mPayerAccessToken);
 
-
             getResourcesProvider().getPaymentMethodSearch(getTransactionAmount(), mPaymentPreference, payer, mSite, new OnResourcesRetrievedCallback<PaymentMethodSearch>() {
 
                 @Override
@@ -341,25 +338,9 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
     }
 
     private void showAvailableOptions() {
+        List<PaymentMethodPlugin> paymentMethodPluginList = CheckoutStore.getInstance().getPaymentMethodPluginList();
 
-        final List<PaymentMethodInfo> pluginUpItems = new ArrayList<>();
-        final List<PaymentMethodInfo> pluginDownItems = new ArrayList<>();
-        final List<PaymentMethodPlugin> paymentMethodPlugins = CheckoutStore.getInstance().getPaymentMethodPluginList();
-
-        if (paymentMethodPlugins != null && !paymentMethodPlugins.isEmpty()) {
-            for (PaymentMethodPlugin plugin : paymentMethodPlugins) {
-                final PaymentMethodInfo info = getView().getPaymentMethodInfo(plugin);
-                if (info != null) {
-                    if (PaymentMethodPlugin.POSIION_TOP.equalsIgnoreCase(plugin.displayOrder())) {
-                        pluginUpItems.add(info);
-                    } else if (PaymentMethodPlugin.POSIION_BOTTOM.equalsIgnoreCase(plugin.displayOrder())) {
-                        pluginDownItems.add(info);
-                    }
-                }
-            }
-        }
-
-        getView().showPluginOptions(pluginUpItems);
+        getView().showPluginOptions(paymentMethodPluginList, PaymentMethodPlugin.POSIION_TOP);
 
         if (mPaymentMethodSearch.hasCustomSearchItems()) {
             List<CustomSearchItem> shownCustomItems;
@@ -378,7 +359,7 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
             getView().showSearchItems(mPaymentMethodSearch.getGroups(), getPaymentMethodSearchItemSelectionCallback());
         }
 
-        getView().showPluginOptions(pluginDownItems);
+        getView().showPluginOptions(paymentMethodPluginList, PaymentMethodPlugin.POSIION_BOTTOM);
     }
 
     private OnSelectedCallback<PaymentMethodSearchItem> getPaymentMethodSearchItemSelectionCallback() {
@@ -668,11 +649,11 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
     }
 
     /**
-     *
      * @deprecated Account money is a plugin now.
      */
     @Deprecated
     public PaymentMethod getAccountMoneyPaymentMethod() {
         return accountMoneyPaymentMethod;
     }
+
 }

@@ -28,15 +28,15 @@ public class MPTrackingContext {
         this.trackingStrategy = builder.trackingStrategy;
         this.publicKey = builder.publicKey;
 
-        if (!builder.publicKey.isEmpty() && builder.checkoutVersion != null) {
-            this.appInformation = initializeAppInformation(builder.checkoutVersion);
+        if (!builder.publicKey.isEmpty() && builder.version != null) {
+            this.appInformation = initializeAppInformation(builder.version);
         }
     }
 
-    private AppInformation initializeAppInformation(final String checkoutVersion) {
+    private AppInformation initializeAppInformation(final String version) {
         return new AppInformation.Builder()
-                .setCheckoutVersion(checkoutVersion)
-                .setPlatform("/native/android")
+                .setVersion(version)
+                .setPlatform("/mobile/android")
                 .setEnvironment(Settings.trackingEnvironment)
                 .build();
     }
@@ -63,7 +63,7 @@ public class MPTrackingContext {
     public static class Builder {
         private Context context;
         private String publicKey;
-        private String checkoutVersion;
+        private String version;
         private String trackingStrategy;
 
         public Builder(final Context context, final String publicKey) {
@@ -76,8 +76,8 @@ public class MPTrackingContext {
             return this;
         }
 
-        public Builder setCheckoutVersion(final String checkoutVersion) {
-            this.checkoutVersion = checkoutVersion;
+        public Builder setVersion(final String version) {
+            this.version = version;
             return this;
         }
 

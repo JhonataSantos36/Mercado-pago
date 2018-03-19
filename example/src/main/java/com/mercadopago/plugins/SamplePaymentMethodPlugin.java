@@ -12,10 +12,11 @@ public class SamplePaymentMethodPlugin extends PaymentMethodPlugin {
 
 
     public SamplePaymentMethodPlugin() {
-        super("sample");
+        super("account_money");
     }
 
     @Override
+    @NonNull
     public PaymentMethodInfo getPaymentMethodInfo(@NonNull final Context context) {
         return new PaymentMethodInfo(
                 getId(),

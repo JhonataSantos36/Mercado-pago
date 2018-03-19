@@ -548,8 +548,8 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
                 .setFlowId(FlowHandler.getInstance().getFlowId())
                 .setScreenId(TrackingUtil.SCREEN_ID_IDENTIFICATION)
                 .setScreenName(TrackingUtil.SCREEN_NAME_CARD_FORM_IDENTIFICATION_NUMBER)
-                .addMetaData(TrackingUtil.METADATA_PAYMENT_TYPE_ID, paymentTypeId)
-                .addMetaData(TrackingUtil.METADATA_PAYMENT_METHOD_ID, mPresenter.getPaymentMethod().getId())
+                .addProperty(TrackingUtil.PROPERTY_PAYMENT_TYPE_ID, paymentTypeId)
+                .addProperty(TrackingUtil.PROPERTY_PAYMENT_METHOD_ID, mPresenter.getPaymentMethod().getId())
                 .build();
         mPresenter.getTrackingContext().trackEvent(event);
     }

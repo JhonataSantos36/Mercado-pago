@@ -50,6 +50,7 @@ import com.mercadopago.presenters.PaymentVaultPresenter;
 import com.mercadopago.providers.PaymentVaultProviderImpl;
 import com.mercadopago.tracker.FlowHandler;
 import com.mercadopago.tracker.MPTrackingContext;
+import com.mercadopago.tracker.TrackingFormatter;
 import com.mercadopago.tracking.model.ScreenViewEvent;
 import com.mercadopago.tracking.tracker.MPTracker;
 import com.mercadopago.tracking.utils.TrackingUtil;
@@ -237,14 +238,25 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
 
     @Override
     public void trackInitialScreen() {
+
+        List<PaymentMethodPlugin> paymentMethodPluginList = CheckoutStore.getInstance().getPaymentMethodPluginList();
+        List<PaymentMethodInfo> pluginsPaymentMethodInfo = PaymentMethodInfo.getPluginsPaymentMethodInfo(this, paymentMethodPluginList);
+
         MPTrackingContext mpTrackingContext = new MPTrackingContext.Builder(this, mPublicKey)
-                .setCheckoutVersion(BuildConfig.VERSION_NAME)
+                .setVersion(BuildConfig.VERSION_NAME)
+                .setTrackingStrategy(TrackingUtil.REALTIME_STRATEGY)
                 .build();
+
         ScreenViewEvent event = new ScreenViewEvent.Builder()
                 .setFlowId(FlowHandler.getInstance().getFlowId())
                 .setScreenId(TrackingUtil.SCREEN_ID_PAYMENT_VAULT)
                 .setScreenName(TrackingUtil.SCREEN_NAME_PAYMENT_VAULT)
+                .addProperty(TrackingUtil.PROPERTY_OPTIONS,
+                        TrackingFormatter.getFormattedPaymentMethodsForTracking(mPaymentVaultPresenter.getPaymentMethodSearch(),
+                                pluginsPaymentMethodInfo))
+
                 .build();
+
         mpTrackingContext.trackEvent(event);
     }
 
@@ -255,7 +267,7 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
             String selectedItemId = selectedItem.getId();
 
             MPTrackingContext mpTrackingContext = new MPTrackingContext.Builder(this, mPublicKey)
-                    .setCheckoutVersion(BuildConfig.VERSION_NAME)
+                    .setVersion(BuildConfig.VERSION_NAME)
                     .build();
 
             ScreenViewEvent event = null;
@@ -749,9 +761,18 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
 
 
     @Override
-    public void showPluginOptions(@NonNull final List<PaymentMethodInfo> items) {
+    public void showPluginOptions(@NonNull final List<PaymentMethodPlugin> items, String position) {
+
+        final List<PaymentMethodInfo> toInsert = new ArrayList<>();
+
+        for (PaymentMethodPlugin plugin : items) {
+            if (position.equalsIgnoreCase(plugin.displayOrder())) {
+                toInsert.add(plugin.getPaymentMethodInfo(this));
+            }
+        }
+
         final PaymentMethodSearchItemAdapter adapter = (PaymentMethodSearchItemAdapter) mSearchItemsRecyclerView.getAdapter();
-        final List<PaymentMethodSearchViewController> customViewControllers = createPluginItemsViewControllers(items);
+        final List<PaymentMethodSearchViewController> customViewControllers = createPluginItemsViewControllers(toInsert);
         adapter.addItems(customViewControllers);
         adapter.notifyItemInserted();
     }
@@ -921,10 +942,5 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
     public void showHook(final Hook hook, final int code) {
         startActivityForResult(HookActivity.getIntent(this, hook), code);
         overrideTransitionIn();
-    }
-
-    @Override
-    public PaymentMethodInfo getPaymentMethodInfo(final PaymentMethodPlugin plugin) {
-        return plugin.getPaymentMethodInfo(this);
     }
 }

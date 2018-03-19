@@ -83,9 +83,10 @@ dependencies {
     implementation("com.mercadopago:services:$mercado_pago_services") {
         exclude group: "com.google.code.gson", module: "gson"
         exclude group: "com.mercadopago", module: "tracking"
+
     }
 
     implementation "com.google.code.gson:gson:$gson"
     implementation "com.squareup.picasso:picasso:$picasso"
-    api "com.mercadopago:tracking:3.0.2-noop-2"
+    api "com.mercadopago:tracking:3.0.2-noop-6"
 }

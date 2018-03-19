@@ -236,14 +236,14 @@ public class InstallmentsActivity extends MercadoPagoBaseActivity implements Ins
 
     protected void trackScreen() {
         MPTrackingContext mTrackingContext = new MPTrackingContext.Builder(this, mPublicKey)
-                .setCheckoutVersion(BuildConfig.VERSION_NAME)
+                .setVersion(BuildConfig.VERSION_NAME)
                 .build();
 
         ScreenViewEvent event = new ScreenViewEvent.Builder()
                 .setFlowId(FlowHandler.getInstance().getFlowId())
                 .setScreenId(TrackingUtil.SCREEN_ID_INSTALLMENTS)
                 .setScreenName(TrackingUtil.SCREEN_NAME_CARD_FORM_INSTALLMENTS)
-                .addMetaData(TrackingUtil.METADATA_PAYMENT_METHOD_ID, mPresenter.getPaymentMethod().getId())
+                .addProperty(TrackingUtil.PROPERTY_PAYMENT_METHOD_ID, mPresenter.getPaymentMethod().getId())
                 .build();
 
         mTrackingContext.trackEvent(event);

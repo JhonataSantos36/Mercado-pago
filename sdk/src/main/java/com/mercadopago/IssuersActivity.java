@@ -185,15 +185,15 @@ public class IssuersActivity extends MercadoPagoBaseActivity implements IssuersA
 
     protected void trackScreen() {
         MPTrackingContext mpTrackingContext = new MPTrackingContext.Builder(this, mPublicKey)
-                .setCheckoutVersion(BuildConfig.VERSION_NAME)
+                .setVersion(BuildConfig.VERSION_NAME)
                 .build();
 
         ScreenViewEvent event = new ScreenViewEvent.Builder()
                 .setFlowId(FlowHandler.getInstance().getFlowId())
                 .setScreenId(TrackingUtil.SCREEN_ID_ISSUERS)
                 .setScreenName(TrackingUtil.SCREEN_NAME_CARD_FORM_ISSUERS)
-                .addMetaData(TrackingUtil.METADATA_PAYMENT_TYPE_ID, mPresenter.getPaymentMethod().getPaymentTypeId())
-                .addMetaData(TrackingUtil.METADATA_PAYMENT_METHOD_ID, mPresenter.getPaymentMethod().getId())
+                .addProperty(TrackingUtil.PROPERTY_PAYMENT_TYPE_ID, mPresenter.getPaymentMethod().getPaymentTypeId())
+                .addProperty(TrackingUtil.PROPERTY_PAYMENT_METHOD_ID, mPresenter.getPaymentMethod().getId())
                 .build();
 
         mpTrackingContext.trackEvent(event);

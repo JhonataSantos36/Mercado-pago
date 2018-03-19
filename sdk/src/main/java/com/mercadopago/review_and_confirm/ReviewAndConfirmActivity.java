@@ -168,7 +168,13 @@ public final class ReviewAndConfirmActivity extends MercadoPagoBaseActivity impl
     }
 
     private void confirmPayment() {
-        Tracker.trackCheckoutConfirm(this, getIntent().getStringExtra(EXTRA_PUBLIC_KEY));
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            PaymentModel paymentModel = extras.getParcelable(EXTRA_PAYMENT_MODEL);
+            SummaryModel summaryModel = extras.getParcelable(EXTRA_SUMMARY_MODEL);
+            Tracker.trackCheckoutConfirm(this, getIntent().getStringExtra(EXTRA_PUBLIC_KEY), paymentModel, summaryModel);
+        }
+
         setResult(RESULT_OK);
         finish();
     }

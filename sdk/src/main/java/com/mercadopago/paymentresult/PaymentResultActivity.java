@@ -302,7 +302,7 @@ public class PaymentResultActivity extends AppCompatActivity implements PaymentR
     @Override
     public void trackScreen(ScreenViewEvent event) {
         MPTrackingContext mpTrackingContext = new MPTrackingContext.Builder(this, merchantPublicKey)
-                .setCheckoutVersion(BuildConfig.VERSION_NAME)
+                .setVersion(BuildConfig.VERSION_NAME)
                 .build();
 
         mpTrackingContext.trackEvent(event);

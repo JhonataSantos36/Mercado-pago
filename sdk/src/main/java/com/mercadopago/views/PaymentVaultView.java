@@ -10,14 +10,10 @@ import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentMethodSearchItem;
 import com.mercadopago.mvp.MvpView;
 import com.mercadopago.plugins.PaymentMethodPlugin;
-import com.mercadopago.plugins.model.PaymentMethodInfo;
 
 import java.math.BigDecimal;
 import java.util.List;
 
-/**
- * Created by mreverter on 6/9/16.
- */
 public interface PaymentVaultView extends MvpView {
 
     void startSavedCardFlow(Card card, BigDecimal transactionAmount);
@@ -31,7 +27,7 @@ public interface PaymentVaultView extends MvpView {
     void showCustomOptions(List<CustomSearchItem> customSearchItems,
                            OnSelectedCallback<CustomSearchItem> customSearchItemOnSelectedCallback);
 
-    void showPluginOptions(List<PaymentMethodInfo> items);
+    void showPluginOptions(List<PaymentMethodPlugin> items, String position);
 
     void showSearchItems(List<PaymentMethodSearchItem> searchItems,
                          OnSelectedCallback<PaymentMethodSearchItem> paymentMethodSearchItemSelectionCallback);
@@ -64,8 +60,6 @@ public interface PaymentVaultView extends MvpView {
     void initializeMPTracker();
 
     void showHook(final Hook hook, final int code);
-
-    PaymentMethodInfo getPaymentMethodInfo(final PaymentMethodPlugin plugin);
 
     void showPaymentMethodPluginConfiguration();
 }

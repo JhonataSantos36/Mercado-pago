@@ -57,7 +57,7 @@ public class BankDealsActivity extends MercadoPagoActivity {
 
     protected void trackInitialScreen() {
         MPTrackingContext mpTrackingContext = new MPTrackingContext.Builder(this, mMerchantPublicKey)
-                .setCheckoutVersion(BuildConfig.VERSION_NAME)
+                .setVersion(BuildConfig.VERSION_NAME)
                 .build();
         ScreenViewEvent event = new ScreenViewEvent.Builder()
                 .setFlowId(FlowHandler.getInstance().getFlowId())

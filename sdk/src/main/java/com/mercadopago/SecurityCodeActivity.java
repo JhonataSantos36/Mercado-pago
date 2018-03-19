@@ -45,7 +45,6 @@ import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.MPCardUIUtils;
-import com.mercadopago.util.ScaleUtil;
 import com.mercadopago.views.SecurityCodeActivityView;
 
 
@@ -288,14 +287,14 @@ public class SecurityCodeActivity extends MercadoPagoBaseActivity implements Sec
     @Override
     public void trackScreen() {
         MPTrackingContext mpTrackingContext = new MPTrackingContext.Builder(this, mMerchantPublicKey)
-                .setCheckoutVersion(BuildConfig.VERSION_NAME)
+                .setVersion(BuildConfig.VERSION_NAME)
                 .build();
 
         ScreenViewEvent event = new ScreenViewEvent.Builder()
                 .setFlowId(FlowHandler.getInstance().getFlowId())
                 .setScreenId(TrackingUtil.SCREEN_ID_CARD_FORM + mSecurityCodePresenter.getPaymentMethod().getPaymentTypeId() + TrackingUtil.CARD_SECURITY_CODE_VIEW)
                 .setScreenName(TrackingUtil.SCREEN_NAME_SECURITY_CODE)
-                .addMetaData(TrackingUtil.METADATA_SECURITY_CODE_REASON, mReason)
+                .addProperty(TrackingUtil.PROPERTY_SECURITY_CODE_REASON, mReason)
                 .build();
 
         mpTrackingContext.trackEvent(event);

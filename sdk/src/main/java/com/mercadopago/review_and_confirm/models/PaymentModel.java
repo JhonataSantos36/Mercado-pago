@@ -16,6 +16,7 @@ public class PaymentModel implements Parcelable {
     public final String paymentMethodName;
     private final String paymentType;
     public final long issuerId;
+    private final String cardId;
 
     public PaymentModel(PaymentMethod paymentMethod,
                         Token token,
@@ -28,6 +29,7 @@ public class PaymentModel implements Parcelable {
         this.accreditationTime = paymentMethod.getAccreditationTime();
         //Token and issuer are not always available
         this.lastFourDigits = token != null ? token.getLastFourDigits() : null;
+        this.cardId = token != null ? token.getCardId() : null;
         this.issuerName = issuer != null ? issuer.getName() : null;
         this.issuerId = issuer != null ? issuer.getId() : 0L;
         this.moreThanOnePaymentMethod = moreThanOnePaymentMethod;
@@ -46,6 +48,7 @@ public class PaymentModel implements Parcelable {
         paymentMethodName = in.readString();
         paymentType = in.readString();
         issuerId = in.readLong();
+        cardId = in.readString();
     }
 
     public static final Creator<PaymentModel> CREATOR = new Creator<PaymentModel>() {
@@ -62,6 +65,10 @@ public class PaymentModel implements Parcelable {
 
     public String getPaymentType() {
         return paymentType;
+    }
+
+    public String getCardId() {
+        return cardId;
     }
 
     @Override
@@ -84,5 +91,6 @@ public class PaymentModel implements Parcelable {
         dest.writeString(paymentMethodName);
         dest.writeString(paymentType);
         dest.writeLong(issuerId);
+        dest.writeString(cardId);
     }
 }
