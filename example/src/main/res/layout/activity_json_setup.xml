@@ -1,44 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/setupScrollView"
-        android:layout_height="match_parent"
-        android:layout_width="match_parent">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/setupScrollView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
     <LinearLayout
-            android:id="@+id/activity_json_setup"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            tools:context="com.mercadopago.examples.checkout.JsonSetupActivity">
+        android:id="@+id/activity_json_setup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        tools:context="com.mercadopago.JsonSetupActivity">
 
         <ImageView
-                android:layout_gravity="end"
-                android:gravity="end"
-                android:id="@+id/statusImage"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginStart="10dp"
-                android:layout_width="25dp"
-                android:layout_height="25dp"/>
+            android:id="@+id/statusImage"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_gravity="end"
+            android:layout_marginEnd="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:gravity="end" />
 
         <EditText
-                android:id="@+id/jsonEditText"
-                android:gravity="top|start"
-                android:layout_marginTop="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="300dp"
-                android:inputType="textMultiLine"
-                android:textColor="@color/black"
-                android:hint="Paste Setup JSON here"
-                android:maxLines="400"/>
+            android:id="@+id/jsonEditText"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:layout_marginTop="10dp"
+            android:gravity="top|start"
+            android:hint="Paste Setup JSON here"
+            android:inputType="textMultiLine"
+            android:maxLines="400"
+            android:textColor="@color/black" />
 
         <com.mercadopago.customviews.MPButton
-                android:layout_marginTop="10dp"
-                android:id="@+id/checkoutStartButton"
-                android:layout_width="match_parent"
-                android:layout_height="55dp"
-                android:text="@string/start_checkout_from_json"
-                style="@style/mpsdk_button_normal"/>
+            android:id="@+id/checkoutStartButton"
+            style="@style/mpsdk_button_normal"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_marginTop="10dp"
+            android:text="@string/start_checkout_from_json" />
     </LinearLayout>
 </ScrollView>

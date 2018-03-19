@@ -1,4 +1,4 @@
-package com.mercadopago.examples.checkout;
+package com.mercadopago;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,7 +20,6 @@ import java.util.List;
 import static android.support.v7.widget.RecyclerView.ViewHolder;
 import static com.mercadopago.utils.ExamplesUtils.getOptions;
 import static com.mercadopago.utils.ExamplesUtils.resolveCheckoutResult;
-
 
 public class SelectCheckoutActivity extends AppCompatActivity {
 
@@ -49,6 +48,21 @@ public class SelectCheckoutActivity extends AppCompatActivity {
             this.options = options;
         }
 
+        @Override
+        public ItemHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
+            return new ItemHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.view_option_row, parent, false));
+        }
+
+        @Override
+        public void onBindViewHolder(final ItemHolder holder, final int position) {
+            holder.setOption(options.get(position));
+        }
+
+        @Override
+        public int getItemCount() {
+            return options.size();
+        }
+
         class ItemHolder extends ViewHolder {
 
             private final TextView text;
@@ -68,21 +82,6 @@ public class SelectCheckoutActivity extends AppCompatActivity {
                     }
                 });
             }
-        }
-
-        @Override
-        public ItemHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
-            return new ItemHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.view_option_row, parent, false));
-        }
-
-        @Override
-        public void onBindViewHolder(final ItemHolder holder, final int position) {
-            holder.setOption(options.get(position));
-        }
-
-        @Override
-        public int getItemCount() {
-            return options.size();
         }
     }
 }

@@ -1,4 +1,4 @@
-package com.mercadopago.examples.utils;
+package com.mercadopago.utils;
 /*
  * Copyright 2013 Piotr Adamus
  *
@@ -22,8 +22,21 @@ import android.widget.RelativeLayout;
 
 public class ColorPickerDialog extends AlertDialog {
 
-    private ColorPicker colorPickerView;
     private final OnColorSelectedListener onColorSelectedListener;
+    private ColorPicker colorPickerView;
+    private OnClickListener onClickListener = new DialogInterface.OnClickListener() {
+        public void onClick(DialogInterface dialog, int which) {
+            switch (which) {
+                case BUTTON_POSITIVE:
+                    int selectedColor = colorPickerView.getColor();
+                    onColorSelectedListener.onColorSelected(selectedColor);
+                    break;
+                case BUTTON_NEGATIVE:
+                    dialog.dismiss();
+                    break;
+            }
+        }
+    };
 
     public ColorPickerDialog(Context context, int initialColor, OnColorSelectedListener onColorSelectedListener) {
         super(context);
@@ -45,20 +58,6 @@ public class ColorPickerDialog extends AlertDialog {
         setView(relativeLayout);
 
     }
-
-    private OnClickListener onClickListener = new DialogInterface.OnClickListener() {
-        public void onClick(DialogInterface dialog, int which) {
-            switch (which) {
-                case BUTTON_POSITIVE:
-                    int selectedColor = colorPickerView.getColor();
-                    onColorSelectedListener.onColorSelected(selectedColor);
-                    break;
-                case BUTTON_NEGATIVE:
-                    dialog.dismiss();
-                    break;
-            }
-        }
-    };
 
     public interface OnColorSelectedListener {
         public void onColorSelected(int color);

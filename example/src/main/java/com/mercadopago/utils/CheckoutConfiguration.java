@@ -1,7 +1,6 @@
-package com.mercadopago.examples.utils;
+package com.mercadopago.utils;
 
 import com.google.gson.annotations.SerializedName;
-
 import com.mercadopago.constants.Sites;
 import com.mercadopago.model.Item;
 import com.mercadopago.model.Site;

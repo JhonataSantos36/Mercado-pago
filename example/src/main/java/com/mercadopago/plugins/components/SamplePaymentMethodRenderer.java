@@ -1,8 +1,6 @@
 package com.mercadopago.plugins.components;
 
 import android.content.Context;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,7 +8,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.mercadopago.examples.R;
+import com.mercadopago.example.R;
 import com.mercadopago.plugins.PluginRenderer;
 import com.mercadopago.util.TextUtil;
 

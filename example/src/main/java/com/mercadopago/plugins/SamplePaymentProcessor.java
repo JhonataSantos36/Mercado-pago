@@ -17,8 +17,8 @@ public class SamplePaymentProcessor extends PaymentProcessor {
 
         return new SamplePayment(
                 props.toBuilder()
-                    .setToolbarVisible(false)
-                    .build()
+                        .setToolbarVisible(false)
+                        .build()
         );
     }
 }

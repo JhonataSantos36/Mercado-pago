@@ -10,12 +10,11 @@ import com.mercadopago.plugins.model.PluginPayment;
 
 public class MainPayment extends PluginComponent<Void> {
 
-    private final Handler handler = new Handler();
-
     static {
         RendererFactory.register(MainPayment.class, MainPaymentRenderer.class);
     }
 
+    private final Handler handler = new Handler();
     private final PluginPayment pluginPayment;
 
 

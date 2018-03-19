@@ -5,11 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.mercadopago.components.Renderer;
-import com.mercadopago.examples.R;
-
-/**
- * Created by nfortuna on 12/13/17.
- */
+import com.mercadopago.example.R;
 
 public class SamplePaymentRenderer extends Renderer<SamplePayment> {
 

@@ -1,4 +1,4 @@
-package com.mercadopago.examples.reviewables;
+package com.mercadopago.reviewables;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,13 +7,10 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import com.mercadopago.examples.R;
+import com.mercadopago.example.R;
 import com.mercadopago.model.Reviewable;
 
-/**
- * Created by vaserber on 2/16/17.
- */
-
+@Deprecated
 public class CongratsReview extends Reviewable {
 
     public static final Integer CUSTOM_REVIEW = 98;

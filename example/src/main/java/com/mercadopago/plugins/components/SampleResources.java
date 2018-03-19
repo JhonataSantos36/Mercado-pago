@@ -6,5 +6,6 @@ package com.mercadopago.plugins.components;
 
 public interface SampleResources {
     String getPasswordErrorMessage();
+
     String getPasswordRequiredMessage();
 }
