@@ -1,5 +1,8 @@
 Properties properties = new Properties()
-properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+if(project.rootProject.file('local.properties').exists()) {
+    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+}
 
 ext {
     versionToDeploy = properties.getProperty("version", "4.0.0-beta")
