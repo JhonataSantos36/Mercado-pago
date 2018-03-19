@@ -1,8 +1,9 @@
-package com.mercadopago.components;
+package com.mercadopago.plugins.components;
 
 import android.support.annotation.NonNull;
 
-import com.mercadopago.plugins.components.SampleCustomRenderer;
+import com.mercadopago.components.CustomComponent;
+import com.mercadopago.components.RendererFactory;
 
 /**
  * Created by nfortuna on 1/24/18.

@@ -1,4 +1,4 @@
-package com.mercadopago.examples.utils;
+package com.mercadopago.utils;
 /*
  * Copyright 2013 Piotr Adamus
  *
@@ -323,12 +323,12 @@ public class ColorPicker extends View {
         return super.onTouchEvent(event);
     }
 
-    public void setColor(int color) {
-        Color.colorToHSV(color, colorHSV);
-    }
-
     public int getColor() {
         return Color.HSVToColor(colorHSV);
+    }
+
+    public void setColor(int color) {
+        Color.colorToHSV(color, colorHSV);
     }
 
     @Override

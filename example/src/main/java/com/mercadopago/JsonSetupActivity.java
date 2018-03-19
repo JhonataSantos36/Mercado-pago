@@ -1,13 +1,11 @@
-package com.mercadopago.examples.checkout;
-
-import com.google.gson.JsonSyntaxException;
+package com.mercadopago;
 
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.MotionEvent;
@@ -19,9 +17,10 @@ import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.Toast;
 
+import com.google.gson.JsonSyntaxException;
 import com.mercadopago.core.MercadoPagoCheckout;
-import com.mercadopago.examples.R;
-import com.mercadopago.examples.utils.CheckoutConfiguration;
+import com.mercadopago.example.R;
+import com.mercadopago.utils.CheckoutConfiguration;
 import com.mercadopago.preferences.CheckoutPreference;
 import com.mercadopago.preferences.ServicePreference;
 import com.mercadopago.util.JsonUtil;
