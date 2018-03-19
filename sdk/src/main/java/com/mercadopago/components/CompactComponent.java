@@ -1,9 +1,10 @@
-package com.mercadopago.review_and_confirm.components.payment_method;
+package com.mercadopago.components;
 
 import android.support.annotation.LayoutRes;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -12,6 +13,10 @@ public abstract class CompactComponent<Props, Actions> {
 
     protected Props props;
     private Actions actions;
+
+    public CompactComponent() {
+        this(null, null);
+    }
 
     public CompactComponent(final Props props) {
         this(props, null);
@@ -45,5 +50,20 @@ public abstract class CompactComponent<Props, Actions> {
             container.addView(child);
         }
         return container;
+    }
+
+    @Nonnull
+    public static View compose(@Nonnull final ViewGroup container, @Nonnull final View child) {
+        container.addView(child);
+        return container;
+    }
+
+    @Nonnull
+    public static LinearLayout createLinearContainer(final ViewGroup parent) {
+        LinearLayout linearLayout = new LinearLayout(parent.getContext());
+        linearLayout.setOrientation(LinearLayout.VERTICAL);
+        linearLayout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT));
+        return linearLayout;
     }
 }

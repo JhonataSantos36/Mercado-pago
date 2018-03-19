@@ -3,41 +3,38 @@ package com.mercadopago.review_and_confirm.components.payment_method;
 import android.support.annotation.NonNull;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewStub;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mercadopago.R;
+import com.mercadopago.components.CompactComponent;
 import com.mercadopago.review_and_confirm.models.PaymentModel;
 import com.mercadopago.util.MercadoPagoUtil;
 import com.mercadopago.util.ResourceUtil;
 
-class MethodOff extends CompactComponent<MethodOff.Props, PaymentMethodComponent.Actions> {
+class MethodOff extends CompactComponent<MethodOff.Props, Void> {
 
     static class Props {
 
         final String id;
         final String title;
         final Integer time;
-        final boolean hasChangePaymentMethod;
 
-        private Props(String id, String title, Integer time, boolean hasChangePaymentMethod) {
+        private Props(String id, String title, Integer time) {
             this.id = id;
             this.title = title;
             this.time = time;
-            this.hasChangePaymentMethod = hasChangePaymentMethod;
         }
 
         static Props createFrom(final PaymentModel props) {
             return new Props(props.paymentMethodId,
                     props.paymentMethodName,
-                    props.accreditationTime,
-                    props.moreThanOnePaymentMethod);
+                    props.accreditationTime);
         }
     }
 
-    MethodOff(final Props props, final PaymentMethodComponent.Actions actions) {
-        super(props, actions);
+    MethodOff(final Props props) {
+        super(props);
     }
 
     @Override
@@ -52,19 +49,6 @@ class MethodOff extends CompactComponent<MethodOff.Props, PaymentMethodComponent
 
         ImageView imageView = paymentView.findViewById(R.id.icon);
         imageView.setImageResource(ResourceUtil.getIconResource(imageView.getContext(), props.id));
-
-        ViewStub stub = paymentView.findViewById(R.id.button);
-
-        if (props.hasChangePaymentMethod) {
-            TextView button = (TextView) stub.inflate();
-            button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(final View v) {
-                    if (getActions() != null)
-                        getActions().onPaymentMethodChangeClicked();
-                }
-            });
-        }
 
         return paymentView;
     }

@@ -766,8 +766,8 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
         getView().backToPaymentMethodSelection();
     }
 
-    public void onCustomReviewAndConfirmResponse(final Integer customResultCode, final PaymentData paymentData) {
-        getView().cancelCheckout(customResultCode, paymentData, mPaymentMethodEdited);
+    public void onCustomReviewAndConfirmResponse(final Integer customResultCode) {
+        getView().cancelCheckout(customResultCode, mPaymentMethodEdited);
     }
 
     public void onCustomPaymentResultResponse(final Integer customResultCode) {

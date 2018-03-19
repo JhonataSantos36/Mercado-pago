@@ -5,18 +5,18 @@ import android.support.annotation.NonNull;
 import android.support.annotation.VisibleForTesting;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewStub;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mercadopago.R;
+import com.mercadopago.components.CompactComponent;
 import com.mercadopago.review_and_confirm.models.PaymentModel;
 import com.mercadopago.util.ResourceUtil;
 import com.mercadopago.util.TextUtils;
 
 import java.util.Locale;
 
-class MethodCard extends CompactComponent<MethodCard.Props, PaymentMethodComponent.Actions> {
+class MethodCard extends CompactComponent<MethodCard.Props, Void> {
 
     static class Props {
 
@@ -24,32 +24,28 @@ class MethodCard extends CompactComponent<MethodCard.Props, PaymentMethodCompone
         private final String cardName;
         private final String lastFourDigits;
         private final String bankName;
-        private final boolean hasChangePaymentMethod;
 
         Props(String id,
               String cardName,
               String lastFourDigits,
-              String bankName,
-              boolean hasChangePaymentMethod) {
+              String bankName) {
             this.id = id;
             this.cardName = cardName;
             this.lastFourDigits = lastFourDigits;
             this.bankName = bankName;
-            this.hasChangePaymentMethod = hasChangePaymentMethod;
         }
 
         static Props createFrom(final PaymentModel props) {
             return new Props(props.paymentMethodId,
                     props.paymentMethodName,
                     props.lastFourDigits,
-                    props.issuerName,
-                    props.moreThanOnePaymentMethod);
+                    props.issuerName);
         }
     }
 
 
-    MethodCard(final Props props, final PaymentMethodComponent.Actions actions) {
-        super(props, actions);
+    MethodCard(final Props props) {
+        super(props);
     }
 
 
@@ -68,19 +64,6 @@ class MethodCard extends CompactComponent<MethodCard.Props, PaymentMethodCompone
 
         ImageView imageView = paymentView.findViewById(R.id.icon);
         imageView.setImageResource(ResourceUtil.getIconResource(imageView.getContext(), props.id));
-
-        ViewStub stub = paymentView.findViewById(R.id.button);
-
-        if (props.hasChangePaymentMethod) {
-            TextView button = (TextView) stub.inflate();
-            button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(final View v) {
-                    if (getActions() != null)
-                        getActions().onPaymentMethodChangeClicked();
-                }
-            });
-        }
 
         return paymentView;
     }

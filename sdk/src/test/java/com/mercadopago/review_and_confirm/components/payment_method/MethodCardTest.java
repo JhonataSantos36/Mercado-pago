@@ -12,22 +12,22 @@ public class MethodCardTest {
 
     @Test
     public void when_issuer_name_equals_card_name_then_should_show_is_false() throws Exception {
-        MethodCard.Props props = new MethodCard.Props("1234", "visa", "1235", "visa", false);
-        MethodCard methodCard = new MethodCard(props, null);
+        MethodCard.Props props = new MethodCard.Props("1234", "visa", "1235", "visa");
+        MethodCard methodCard = new MethodCard(props);
         assertFalse(methodCard.shouldShowSubtitle());
     }
 
     @Test
     public void when_issuer_is_empty_then_should_show_is_false() throws Exception {
-        MethodCard.Props props = new MethodCard.Props("1234", "visa", "1235", "", false);
-        MethodCard methodCard = new MethodCard(props, null);
+        MethodCard.Props props = new MethodCard.Props("1234", "visa", "1235", "");
+        MethodCard methodCard = new MethodCard(props);
         assertFalse(methodCard.shouldShowSubtitle());
     }
 
     @Test
     public void when_issuer_different_than_card_name_then_should_show_is_true() throws Exception {
-        MethodCard.Props props = new MethodCard.Props("1234", "visa", "1235", "banco visa", false);
-        MethodCard methodCard = new MethodCard(props, null);
+        MethodCard.Props props = new MethodCard.Props("1234", "visa", "1235", "banco visa");
+        MethodCard methodCard = new MethodCard(props);
         assertTrue(methodCard.shouldShowSubtitle());
     }
 

@@ -18,6 +18,7 @@ import com.mercadopago.components.ActionDispatcher;
 import com.mercadopago.components.ComponentManager;
 import com.mercadopago.core.CheckoutStore;
 import com.mercadopago.core.MercadoPagoComponents;
+import com.mercadopago.plugins.model.ExitAction;
 import com.mercadopago.review_and_confirm.components.ReviewAndConfirmContainer;
 import com.mercadopago.review_and_confirm.components.actions.CancelPaymentAction;
 import com.mercadopago.review_and_confirm.components.actions.ChangePaymentMethodAction;
@@ -40,6 +41,7 @@ public final class ReviewAndConfirmActivity extends MercadoPagoBaseActivity impl
     private static final String EXTRA_SUMMARY_MODEL = "extra_summary_model";
     private static final String EXTRA_PUBLIC_KEY = "extra_public_key";
     private static final String EXTRA_ITEMS = "extra_items";
+
     private View floatingConfirmLayout;
 
     public static void start(final Activity activity,
@@ -181,6 +183,11 @@ public final class ReviewAndConfirmActivity extends MercadoPagoBaseActivity impl
         finish();
     }
 
+    private void processCustomExit(final ExitAction action) {
+        setResult(RESULT_CANCEL_PAYMENT, action.toIntent());
+        super.onBackPressed();
+    }
+
     @Override
     public void dispatch(Action action) {
         if (action instanceof ChangePaymentMethodAction) {
@@ -189,6 +196,8 @@ public final class ReviewAndConfirmActivity extends MercadoPagoBaseActivity impl
             cancelPayment();
         } else if (action instanceof ConfirmPaymentAction) {
             confirmPayment();
+        } else if (action instanceof ExitAction) {
+            processCustomExit((ExitAction) action);
         } else {
             throw new UnsupportedOperationException();
         }

@@ -5,11 +5,11 @@
     style="@style/TextLinkButton"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="@dimen/mpsdk_s_margin"
-    android:padding="@dimen/mpsdk_xs_margin"
     android:layout_gravity="center"
+    android:layout_marginTop="@dimen/mpsdk_s_margin"
     android:clickable="true"
     android:focusable="true"
     android:foreground="?attr/selectableItemBackground"
     android:gravity="center"
+    android:padding="@dimen/mpsdk_xs_margin"
     tools:text="@string/lorem_ipsum" />

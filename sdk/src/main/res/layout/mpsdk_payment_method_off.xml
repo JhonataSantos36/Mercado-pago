@@ -35,11 +35,4 @@
         android:gravity="center"
         tools:text="@string/lorem_ipsum"/>
 
-    <ViewStub
-        android:id="@+id/button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/mpsdk_s_margin"
-        android:layout="@layout/mpsdk_view_text_button"/>
-
 </LinearLayout>

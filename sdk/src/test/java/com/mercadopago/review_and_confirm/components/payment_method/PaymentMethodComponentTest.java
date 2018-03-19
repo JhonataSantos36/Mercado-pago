@@ -1,5 +1,6 @@
 package com.mercadopago.review_and_confirm.components.payment_method;
 
+import com.mercadopago.components.CompactComponent;
 import com.mercadopago.constants.PaymentTypes;
 import com.mercadopago.review_and_confirm.models.PaymentModel;
 
@@ -51,7 +52,7 @@ public class PaymentMethodComponentTest {
 
     @Test
     public void render() throws Exception {
-        //TODO no clue how to test it yet without integration tests
+        //TODO test with integration test.
     }
 
 }

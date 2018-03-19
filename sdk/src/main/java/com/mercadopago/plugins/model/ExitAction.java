@@ -1,18 +1,21 @@
 package com.mercadopago.plugins.model;
 
 
+import android.content.Intent;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
 import com.mercadopago.components.Action;
 
-public class ButtonAction extends Action implements Parcelable {
+public class ExitAction extends Action implements Parcelable {
 
     private final String name;
     private final int resCode;
 
-    public ButtonAction(@NonNull final String name, final int resCode) {
+    public static final String EXTRA_CLIENT_RES_CODE = "extra_res_code";
+
+    public ExitAction(@NonNull final String name, final int resCode) {
         this.name = name;
         this.resCode = resCode;
     }
@@ -21,24 +24,20 @@ public class ButtonAction extends Action implements Parcelable {
         return name;
     }
 
-    public int getResCode() {
-        return resCode;
-    }
-
-    protected ButtonAction(Parcel in) {
+    protected ExitAction(Parcel in) {
         name = in.readString();
         resCode = in.readInt();
     }
 
-    public static final Creator<ButtonAction> CREATOR = new Creator<ButtonAction>() {
+    public static final Creator<ExitAction> CREATOR = new Creator<ExitAction>() {
         @Override
-        public ButtonAction createFromParcel(Parcel in) {
-            return new ButtonAction(in);
+        public ExitAction createFromParcel(Parcel in) {
+            return new ExitAction(in);
         }
 
         @Override
-        public ButtonAction[] newArray(int size) {
-            return new ButtonAction[size];
+        public ExitAction[] newArray(int size) {
+            return new ExitAction[size];
         }
     };
 
@@ -51,5 +50,11 @@ public class ButtonAction extends Action implements Parcelable {
     public void writeToParcel(final Parcel dest, final int flags) {
         dest.writeString(name);
         dest.writeInt(resCode);
+    }
+
+    public Intent toIntent() {
+        Intent intent = new Intent();
+        intent.putExtra(EXTRA_CLIENT_RES_CODE, resCode);
+        return intent;
     }
 }

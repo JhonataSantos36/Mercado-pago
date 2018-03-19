@@ -1,8 +1,35 @@
 package com.mercadopago.examples.utils;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.support.annotation.NonNull;
+import android.support.v4.util.Pair;
+import android.widget.Toast;
+
+import com.mercadopago.components.SampleCustomComponent;
+import com.mercadopago.core.MercadoPagoCheckout;
+import com.mercadopago.core.MercadoPagoCheckout.Builder;
+import com.mercadopago.examples.R;
+import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.model.Issuer;
+import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentMethod;
+import com.mercadopago.plugins.DataInitializationTask;
+import com.mercadopago.plugins.MainPaymentProcessor;
+import com.mercadopago.plugins.model.BusinessPayment;
+import com.mercadopago.plugins.model.ExitAction;
+import com.mercadopago.preferences.CheckoutPreference;
+import com.mercadopago.review_and_confirm.models.ReviewAndConfirmPreferences;
+import com.mercadopago.util.JsonUtil;
+import com.mercadopago.util.LayoutUtil;
+
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static android.app.Activity.RESULT_CANCELED;
 
 public class ExamplesUtils {
 
@@ -52,5 +79,116 @@ public class ExamplesUtils {
         Issuer issuer = new Issuer();
         issuer.setId((long) 338);
         return issuer;
+    }
+
+    public static void resolveCheckoutResult(final Activity context, final int requestCode, final int resultCode, final Intent data) {
+        LayoutUtil.showRegularLayout(context);
+
+        if (requestCode == MercadoPagoCheckout.CHECKOUT_REQUEST_CODE) {
+            if (resultCode == MercadoPagoCheckout.PAYMENT_RESULT_CODE) {
+                Payment payment = JsonUtil.getInstance().fromJson(data.getStringExtra("payment"), Payment.class);
+                Toast.makeText(context, "Pago con status: " + payment.getStatus(), Toast.LENGTH_LONG).show();
+            } else if (resultCode == RESULT_CANCELED) {
+                if (data != null && data.getStringExtra("mercadoPagoError") != null) {
+                    MercadoPagoError mercadoPagoError = JsonUtil.getInstance().fromJson(data.getStringExtra("mercadoPagoError"), MercadoPagoError.class);
+                    Toast.makeText(context, "Error: " + mercadoPagoError.getMessage(), Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(context, new StringBuilder()
+                            .append("Cancel - ")
+                            .append("Requested code: ")
+                            .append(requestCode)
+                            .append(" Result code: ")
+                            .append(resultCode), Toast.LENGTH_LONG)
+                            .show();
+                }
+            } else {
+                Toast.makeText(context, new StringBuilder()
+                        .append("Requested code: ")
+                        .append(requestCode)
+                        .append(" Result code: ")
+                        .append(resultCode), Toast.LENGTH_LONG)
+                        .show();
+            }
+        }
+    }
+
+    public static List<Pair<String, Builder>> getOptions(Activity activity) {
+        List<Pair<String, Builder>> options = new ArrayList<>();
+
+        options.add(new Pair<>("Review and Confirm - Custom exit", customExitReviewAndConfirm(activity)));
+        options.add(new Pair<>("Business - Complete - Rejected", startCompleteRejectedBusiness(activity)));
+        options.add(new Pair<>("Business - Complete - Approved", startCompleteApprovedBusiness(activity)));
+        options.add(new Pair<>("Business - Complete - Pending", startCompletePendingBusiness(activity)));
+        options.add(new Pair<>("Business - No help - Pending", startPendingBusinessNoHelp(activity)));
+
+        return options;
+
+    }
+
+    public static Builder startCompleteRejectedBusiness(Activity activity) {
+        BusinessPayment payment = new BusinessPayment.Builder(BusinessPayment.Status.REJECTED, R.drawable.mpsdk_icon_card, "Title")
+                .setHelp("Help description!")
+                .setPrimaryButton(new ExitAction("ButtonPrimaryName", 23))
+                .setSecondaryButton(new ExitAction("ButtonSecondaryName", 34))
+                .build();
+
+        return customBusinessPayment(activity, payment);
+
+    }
+
+    public static Builder startCompleteApprovedBusiness(Activity activity) {
+        BusinessPayment payment = new BusinessPayment.Builder(BusinessPayment.Status.APPROVED, R.drawable.mpsdk_icon_card, "Title")
+                .setHelp("Help description!")
+                .setPrimaryButton(new ExitAction("ButtonPrimaryName", 23))
+                .setSecondaryButton(new ExitAction("ButtonSecondaryName", 34))
+                .build();
+
+        return customBusinessPayment(activity, payment);
+    }
+
+    public static Builder startCompletePendingBusiness(Activity activity) {
+        BusinessPayment payment = new BusinessPayment.Builder(BusinessPayment.Status.PENDING, R.drawable.mpsdk_icon_card, "Title")
+                .setHelp("Help description!")
+                .setPrimaryButton(new ExitAction("ButtonPrimaryName", 23))
+                .setSecondaryButton(new ExitAction("ButtonSecondaryName", 34))
+                .build();
+
+        return customBusinessPayment(activity, payment);
+    }
+
+    public static Builder startPendingBusinessNoHelp(Activity activity) {
+        BusinessPayment payment = new BusinessPayment.Builder(BusinessPayment.Status.PENDING, R.drawable.mpsdk_icon_card, "Title")
+                .setPrimaryButton(new ExitAction("ButtonPrimaryName", 23))
+                .setSecondaryButton(new ExitAction("ButtonSecondaryName", 34))
+                .build();
+
+        return customBusinessPayment(activity, payment);
+    }
+
+
+    private static Builder customBusinessPayment(Activity activity, BusinessPayment businessPayment) {
+        return createBase(activity).setPaymentProcessor(new MainPaymentProcessor(businessPayment));
+    }
+
+    private static Builder customExitReviewAndConfirm(Activity activity) {
+        ReviewAndConfirmPreferences preferences = new ReviewAndConfirmPreferences.Builder()
+                .setTopComponent(new SampleCustomComponent(null)).build();
+        return createBase(activity).setReviewAndConfirmPreferences(preferences);
+    }
+
+    public static Builder createBase(final Activity activity) {
+        final Map<String, Object> defaultData = new HashMap<>();
+        defaultData.put("amount", 120f);
+
+        return new Builder()
+                .setActivity(activity)
+                .setPublicKey(DUMMY_MERCHANT_PUBLIC_KEY)
+                .setCheckoutPreference(new CheckoutPreference(DUMMY_PREFERENCE_ID_2))
+                .setDataInitializationTask(new DataInitializationTask(defaultData) {
+                    @Override
+                    public void onLoadData(@NonNull final Map<String, Object> data) {
+                        data.put("user", "Nico");
+                    }
+                });
     }
 }

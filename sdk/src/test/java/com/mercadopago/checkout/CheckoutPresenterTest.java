@@ -1953,7 +1953,7 @@ public class CheckoutPresenterTest {
         }
 
         @Override
-        public void cancelCheckout(Integer customResultCode, PaymentData paymentData, Boolean paymentMethodEdited) {
+        public void cancelCheckout(final Integer customResultCode, final Boolean paymentMethodEdited) {
 
         }
 
