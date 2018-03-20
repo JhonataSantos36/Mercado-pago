@@ -112,6 +112,8 @@ bintray {
     user = properties.getProperty("bintray.user", "")
     key = properties.getProperty("bintray.apikey", "")
 
+    override = true
+
     configurations = ['archives']
     pkg {
         repo = 'maven'

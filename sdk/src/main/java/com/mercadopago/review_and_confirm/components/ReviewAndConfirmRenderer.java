@@ -40,7 +40,7 @@ public class ReviewAndConfirmRenderer extends Renderer<ReviewAndConfirmContainer
             CustomComponent topComponent = component.props.preferences.getTopComponent();
             topComponent.setDispatcher(component.getDispatcher());
             Renderer renderer = RendererFactory.create(context, topComponent);
-            renderer.render(parent);
+            renderer.render(linearLayout);
         }
 
         addPaymentMethod(component.props.paymentModel, component.getDispatcher(), linearLayout);
@@ -49,7 +49,7 @@ public class ReviewAndConfirmRenderer extends Renderer<ReviewAndConfirmContainer
             CustomComponent bottomComponent = component.props.preferences.getBottomComponent();
             bottomComponent.setDispatcher(component.getDispatcher());
             Renderer renderer = RendererFactory.create(context, bottomComponent);
-            renderer.render(parent);
+            renderer.render(linearLayout);
         }
 
         if (component.props.termsAndConditionsModel.isActive()) {

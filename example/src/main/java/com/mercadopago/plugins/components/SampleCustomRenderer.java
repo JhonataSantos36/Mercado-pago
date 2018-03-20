@@ -15,7 +15,7 @@ import com.mercadopago.plugins.model.ExitAction;
 public class SampleCustomRenderer extends Renderer<SampleCustomComponent> {
     @Override
     public View render(@NonNull final SampleCustomComponent component, @NonNull final Context context, final ViewGroup parent) {
-        View view = inflate(R.layout.mpsdk_sample_custom_component, null);
+        View view = inflate(R.layout.mpsdk_sample_custom_component, parent);
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
