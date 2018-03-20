@@ -30,7 +30,6 @@ public class CheckoutExampleActivity extends AppCompatActivity {
         Settings.trackingEnvironment = TrackingEnvironments.STAGING;
 
         setContentView(R.layout.activity_checkout_example);
-
         mProgressBar = findViewById(R.id.progressBar);
         mRegularLayout = findViewById(R.id.regularLayout);
 

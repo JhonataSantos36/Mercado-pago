@@ -2,7 +2,6 @@ package com.mercadopago.review_and_confirm.components;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.text.Spanned;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -10,8 +9,6 @@ import com.mercadopago.R;
 import com.mercadopago.components.Renderer;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.util.CurrenciesUtil;
-
-import java.math.BigDecimal;
 
 /**
  * Created by mromar on 2/28/18.

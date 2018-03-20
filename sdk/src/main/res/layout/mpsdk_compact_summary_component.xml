@@ -20,17 +20,20 @@
             android:gravity="center"
             android:includeFontPadding="false"
             android:textColor="@color/mpsdk_base_text"
-            android:textSize="@dimen/mpsdk_xxl_text"
+            android:textSize="@dimen/mpsdk_xxxl_text"
             tools:text="$ 100" />
 
         <com.mercadopago.customviews.MPTextView
             android:id="@+id/mpsdkItemTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
+            android:layout_marginEnd="@dimen/mpsdk_m_margin"
+            android:layout_marginStart="@dimen/mpsdk_m_margin"
             android:layout_marginTop="@dimen/mpsdk_xxs_alternative_margin"
+            android:ellipsize="end"
             android:gravity="center"
             android:includeFontPadding="false"
+            android:maxLines="2"
             android:textColor="@color/mpsdk_summary_text_color"
             android:textSize="@dimen/mpsdk_m_text"
             tools:text="Aysa" />

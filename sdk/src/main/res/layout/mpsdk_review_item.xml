@@ -30,11 +30,11 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="@dimen/mpsdk_s_margin"
+            android:ellipsize="end"
             android:gravity="center_horizontal"
+            android:maxLines="2"
             android:textColor="@color/mpsdk_black"
             android:textSize="@dimen/mpsdk_l_text"
-            android:maxLines="3"
-            android:ellipsize="end"
             tools:text="Titulo" />
 
         <com.mercadopago.customviews.MPTextView
@@ -43,11 +43,11 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="@dimen/mpsdk_xs_margin"
+            android:ellipsize="end"
             android:gravity="center_horizontal"
+            android:maxLines="2"
             android:textColor="@color/mpsdk_brownish_grey"
             android:textSize="@dimen/mpsdk_xs_text"
-            android:ellipsize="end"
-            android:maxLines="3"
             tools:text="Subtitulo" />
 
         <com.mercadopago.customviews.MPTextView

@@ -20,21 +20,19 @@ public class SummaryRenderer extends Renderer<SummaryComponent> {
 
     @Override
     public View render(@NonNull final SummaryComponent component, @NonNull final Context context, final ViewGroup parent) {
-        final View summaryView = inflate(R.layout.mpsdk_summary_component, parent);
-        final LinearLayout summaryContainer = summaryView.findViewById(R.id.mpsdkSummaryContainer);
 
         if ((component.props.summaryModel.hasMultipleInstallments())
                 || component.props.summaryModel.hasCoupon()
                 || component.props.reviewAndConfirmPreferences.hasExtrasAmount()) {
             final Renderer fullSummaryRenderer = RendererFactory.create(context, component.getFullSummary());
             final View fullSummaryView = fullSummaryRenderer.render();
-            summaryContainer.addView(fullSummaryView);
+            parent.addView(fullSummaryView);
         } else {
             final Renderer compactSummaryRenderer = RendererFactory.create(context, component.getCompactSummary());
             final View compactSummaryView = compactSummaryRenderer.render();
-            summaryContainer.addView(compactSummaryView);
+            parent.addView(compactSummaryView);
         }
 
-        return summaryView;
+        return parent;
     }
 }

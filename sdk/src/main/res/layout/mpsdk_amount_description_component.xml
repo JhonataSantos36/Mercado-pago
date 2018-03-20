@@ -4,9 +4,8 @@
     android:id="@+id/mpsdkAmountDescriptionContainer"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:gravity="center"
-    android:layout_marginBottom="@dimen/mpsdk_xxs_margin"
     android:orientation="horizontal"
+    android:paddingBottom="@dimen/mpsdk_xs_margin"
     android:weightSum="1">
 
     <com.mercadopago.customviews.MPTextView
@@ -15,6 +14,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="start"
         android:layout_weight="0.6"
+        android:ellipsize="end"
+        android:gravity="center_vertical|start"
+        android:maxLines="1"
         android:textColor="@color/mpsdk_summary_text_color"
         android:textSize="@dimen/mpsdk_m_text"
         tools:text="Total" />
@@ -24,7 +26,7 @@
         android:layout_width="@dimen/mpsdk_zero_height"
         android:layout_height="wrap_content"
         android:layout_weight="0.4"
-        android:gravity="end"
+        android:gravity="center_vertical|end"
         android:textColor="@color/mpsdk_summary_text_color"
         android:textSize="@dimen/mpsdk_m_text"
         tools:text="$124" />

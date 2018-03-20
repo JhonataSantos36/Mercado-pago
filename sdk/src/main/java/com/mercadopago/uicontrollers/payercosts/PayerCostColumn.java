@@ -113,7 +113,6 @@ public class PayerCostColumn {
         return mView;
     }
 
-
     public View getView() {
         return mView;
     }

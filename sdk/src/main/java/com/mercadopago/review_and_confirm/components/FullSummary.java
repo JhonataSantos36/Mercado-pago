@@ -22,8 +22,6 @@ public class FullSummary extends Component<SummaryComponent.SummaryProps, Void> 
 
     private SummaryProvider provider;
 
-    public static final String CFT = "CFT ";
-
     static {
         RendererFactory.register(FullSummary.class, FullSummaryRenderer.class);
     }
